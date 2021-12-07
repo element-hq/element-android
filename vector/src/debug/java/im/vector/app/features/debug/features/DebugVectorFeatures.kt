@@ -17,50 +17,62 @@
 package im.vector.app.features.debug.features
 
 import android.content.Context
-import android.content.SharedPreferences
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.MutablePreferences
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import im.vector.app.features.DefaultVectorFeatures
 import im.vector.app.features.VectorFeatures
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import kotlin.reflect.KClass
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "debug_features")
 
 class DebugVectorFeatures(
         context: Context,
         private val vectorFeatures: DefaultVectorFeatures
 ) : VectorFeatures {
 
-    private val featurePrefs = context.getSharedPreferences("debug-features", Context.MODE_PRIVATE)
+    private val dataStore = context.dataStore
 
     override fun loginVersion(): VectorFeatures.LoginVersion {
-        return featurePrefs.readEnum<VectorFeatures.LoginVersion>() ?: vectorFeatures.loginVersion()
+        return readPreferences().getEnum<VectorFeatures.LoginVersion>() ?: vectorFeatures.loginVersion()
     }
 
-    fun <T : Enum<T>> hasEnumOverride(type: KClass<T>): Boolean {
-        return featurePrefs.containsEnum(type)
-    }
+    fun <T : Enum<T>> hasEnumOverride(type: KClass<T>) = readPreferences().containsEnum(type)
 
     fun <T : Enum<T>> overrideEnum(value: T?, type: KClass<T>) {
         if (value == null) {
-            featurePrefs.removeEnum(type)
+            updatePreferences { it.removeEnum(type) }
         } else {
-            featurePrefs.putEnum(value, type)
+            updatePreferences { it.putEnum(value, type) }
         }
+    }
+
+    private fun readPreferences() = runBlocking { dataStore.data.first() }
+
+    private fun updatePreferences(block: (MutablePreferences) -> Unit) = runBlocking {
+        dataStore.edit { block(it) }
     }
 }
 
-private fun <T : Enum<T>> SharedPreferences.removeEnum(type: KClass<T>) {
-    edit().remove("enum-${type.simpleName}").apply()
+private fun <T : Enum<T>> MutablePreferences.removeEnum(type: KClass<T>) {
+    remove(enumPreferencesKey(type))
 }
 
-private fun <T : Enum<T>> SharedPreferences.containsEnum(type: KClass<T>): Boolean {
-    return contains("enum-${type.simpleName}")
+private fun <T : Enum<T>> Preferences.containsEnum(type: KClass<T>) = contains(enumPreferencesKey(type))
+
+private fun <T : Enum<T>> MutablePreferences.putEnum(value: T, type: KClass<T>) {
+    this[enumPreferencesKey(type)] = value.name
 }
 
-private inline fun <reified T : Enum<T>> SharedPreferences.readEnum(): T? {
-    val value = T::class.simpleName
-    return getString("enum-$value", null)?.let { enumValueOf<T>(it) }
+private inline fun <reified T : Enum<T>> Preferences.getEnum(): T? {
+    return get(enumPreferencesKey<T>())?.let { enumValueOf<T>(it) }
 }
 
-private fun <T : Enum<T>> SharedPreferences.putEnum(value: T, type: KClass<T>) {
-    edit()
-            .putString("enum-${type.simpleName}", value.name)
-            .apply()
-}
+private inline fun <reified T : Enum<T>> enumPreferencesKey() = enumPreferencesKey(T::class)
+
+private fun <T : Enum<T>> enumPreferencesKey(type: KClass<T>) = stringPreferencesKey("enum-${type.simpleName}")
