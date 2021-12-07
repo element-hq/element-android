@@ -246,6 +246,7 @@ class HomeActivity :
                 is HomeActivityViewEvents.OnNewSession                  -> handleOnNewSession(it)
                 HomeActivityViewEvents.PromptToEnableSessionPush        -> handlePromptToEnablePush()
                 is HomeActivityViewEvents.OnCrossSignedInvalidated      -> handleCrossSigningInvalidated(it)
+                HomeActivityViewEvents.ShowAnalyticsOptIn               -> handleShowAnalyticsOptIn()
             }.exhaustive
         }
         homeActivityViewModel.onEach { renderState(it) }
@@ -270,6 +271,10 @@ class HomeActivity :
         if (isFirstCreation()) {
             handleIntent(intent)
         }
+    }
+
+    private fun handleShowAnalyticsOptIn() {
+        navigator.openAnalyticsOptIn(this)
     }
 
     private fun handleIntent(intent: Intent?) {

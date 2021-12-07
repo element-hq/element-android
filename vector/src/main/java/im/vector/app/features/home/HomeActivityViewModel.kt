@@ -21,11 +21,13 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.config.analyticsConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.analytics.store.AnalyticsStore
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
@@ -59,6 +61,7 @@ class HomeActivityViewModel @AssistedInject constructor(
         @Assisted initialState: HomeActivityViewState,
         private val activeSessionHolder: ActiveSessionHolder,
         private val reAuthHelper: ReAuthHelper,
+        private val analyticsStore: AnalyticsStore,
         private val vectorPreferences: VectorPreferences
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
@@ -77,6 +80,19 @@ class HomeActivityViewModel @AssistedInject constructor(
         observeInitialSync()
         checkSessionPushIsOn()
         observeCrossSigningReset()
+        observeAnalytics()
+    }
+
+    private fun observeAnalytics() {
+        if (analyticsConfig.isEnabled) {
+            analyticsStore.didAskUserConsentFlow
+                    .onEach { didAskUser ->
+                        if (!didAskUser) {
+                            _viewEvents.post(HomeActivityViewEvents.ShowAnalyticsOptIn)
+                        }
+                    }
+                    .launchIn(viewModelScope)
+        }
     }
 
     private fun cleanupFiles() {

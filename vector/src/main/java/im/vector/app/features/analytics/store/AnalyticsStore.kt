@@ -50,6 +50,7 @@ class AnalyticsStore @Inject constructor(
 
     val didAskUserConsentFlow: Flow<Boolean> = context.dataStore.data
             .map { preferences -> preferences[didAskUserConsent].orFalse() }
+            .distinctUntilChanged()
 
     val analyticsIdFlow: Flow<String> = context.dataStore.data
             .map { preferences -> preferences[analyticsId].orEmpty() }
