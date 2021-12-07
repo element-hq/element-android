@@ -31,7 +31,7 @@ import im.vector.app.features.debug.features.DebugVectorFeatures
 interface FeaturesModule {
 
     @Binds
-    fun bindNavigator(navigator: DebugVectorFeatures): VectorFeatures
+    fun bindFeatures(debugFeatures: DebugVectorFeatures): VectorFeatures
 
     companion object {
 
