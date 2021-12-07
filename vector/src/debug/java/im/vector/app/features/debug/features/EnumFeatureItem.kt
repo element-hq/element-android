@@ -53,10 +53,7 @@ abstract class EnumFeatureItem : VectorEpoxyModel<EnumFeatureItem.Holder>() {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     when (position) {
                         0    -> listener?.onOptionSelected(option = null, feature)
-                        else -> {
-                            val option: Any = feature.options[position - 1]
-                            listener?.onOptionSelected(option, feature)
-                        }
+                        else -> feature.onOptionSelected(position - 1)
                     }
                 }
 
@@ -67,12 +64,16 @@ abstract class EnumFeatureItem : VectorEpoxyModel<EnumFeatureItem.Holder>() {
         }
     }
 
+    private fun <T : Enum<T>> Feature.EnumFeature<T>.onOptionSelected(selection: Int) {
+        listener?.onOptionSelected(options[selection], this)
+    }
+
     class Holder : VectorEpoxyHolder() {
         val label by bind<TextView>(im.vector.app.R.id.feature_label)
         val optionsSpinner by bind<Spinner>(im.vector.app.R.id.feature_options)
     }
 
     interface Listener {
-        fun <T : Enum<T>> onOptionSelected(option: Any?, feature: Feature.EnumFeature<T>)
+        fun <T : Enum<T>> onOptionSelected(option: T?, feature: Feature.EnumFeature<T>)
     }
 }

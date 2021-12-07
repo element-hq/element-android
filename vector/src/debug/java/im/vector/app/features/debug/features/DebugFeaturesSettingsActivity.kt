@@ -36,9 +36,8 @@ class DebugFeaturesSettingsActivity : VectorBaseActivity<FragmentGenericRecycler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         controller.listener = object : EnumFeatureItem.Listener {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : Enum<T>> onOptionSelected(option: Any?, feature: Feature.EnumFeature<T>) {
-                debugFeatures.overrideEnum(option as? T, feature.type)
+            override fun <T : Enum<T>> onOptionSelected(option: T?, feature: Feature.EnumFeature<T>) {
+                debugFeatures.overrideEnum(option, feature.type)
             }
         }
         views.genericRecyclerView.configureWith(controller)
