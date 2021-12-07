@@ -17,7 +17,6 @@
 package im.vector.app.features.debug.analytics
 
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
@@ -30,7 +29,7 @@ class DebugAnalyticsActivity : VectorBaseActivity<ActivitySimpleBinding>() {
     override fun initUiAndData() {
         if (isFirstCreation()) {
             addFragment(
-                    R.id.simpleFragmentContainer,
+                    views.simpleFragmentContainer.id,
                     DebugAnalyticsFragment::class.java
             )
         }
