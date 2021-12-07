@@ -38,12 +38,12 @@ allprojects {
 
     repositories {
         // For olm library. This has to be declared first, to ensure that Olm library is not downloaded from another repo
+        maven { url 'https://gitlab.matrix.org/api/v4/projects/27/packages/maven' }
+
         maven {
             url 'https://jitpack.io'
             content {
-                // Use this repo only for olm library
-                includeGroupByRegex "org\\.matrix\\.gitlab\\.matrix-org"
-                // And also for FilePicker
+                // Use this repo only for FilePicker
                 includeGroupByRegex "com\\.github\\.jaiselrahman"
                 // And monarchy
                 includeGroupByRegex "com\\.github\\.Zhuinden"
