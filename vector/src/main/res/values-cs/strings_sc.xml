@@ -122,4 +122,6 @@
     <string name="settings_include_space_members_as_rooms">Zorbazit lidi v prostorech</string>
     <string name="settings_include_space_members_as_rooms_summary">Pokud je zakázáno, můžete stále přidávat přímé zprávy do osobních prostorů. Pokud je povoleno, automaticky se zobrazí všichni, kteří jsou členy daného prostoru.</string>
     <string name="room_list_quick_actions_open_at_bottom">Otevřít na posledních zprávách</string>
+    <string name="settings_enable_space_pager">Přejetím po seznamu chatů změnit prostor</string>
+    <string name="settings_enable_space_pager_summary">Umožnit přepínat mezi hlavními prostory vodorovným přejetím v seznamu chatů</string>
 </resources>
