@@ -80,6 +80,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/messageMemberNameView"
+        android:layout_marginEnd="8dp"
         android:layout_toStartOf="@id/messageSendStateImageView"
         android:layout_toEndOf="@id/messageStartGuideline"
         android:addStatesFromChildren="true">
