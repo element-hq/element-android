@@ -1379,7 +1379,13 @@
     <string name="settings_opt_in_of_analytics_ok">Yes, I want to help!</string>
 
     <!-- analytics v2 -->
-    <string name="analytics_consent_splash">Send anonymous usage data to element.io</string>
+    <string name="analytics_opt_in_title">Help improve Element</string>
+    <!-- The template will be replaced by the value of the resource analytics_opt_in_content_link -->
+    <string name="analytics_opt_in_content">Help us identify issues and improve Element by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.\n\nYou can read all our terms %s.</string>
+    <string name="analytics_opt_in_content_link">here</string>
+    <string name="analytics_opt_in_list_item_1">We <b>don\'t</b> record or profile any account data</string>
+    <string name="analytics_opt_in_list_item_2">We <b>don\'t</b> share information with third parties</string>
+    <string name="analytics_opt_in_list_item_3">You can turn this off anytime in settings</string>
 
     <string name="settings_data_save_mode">Data save mode</string>
     <string name="settings_data_save_mode_summary">Data save mode applies a specific filter so presence updates and typing notifications are filtered out.</string>
@@ -3643,15 +3649,6 @@
     <string name="link_this_email_settings_link">Link this email with your account</string>
     <!-- %s will be replaced by the value of link_this_email_settings_link and styled as a link -->
     <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in Element.</string>
-
-    <!-- Analytics -->
-    <string name="analytics_opt_in_title">Help improve Element</string>
-    <!-- The template will be replaced by the value of the resource analytics_opt_in_content_link -->
-    <string name="analytics_opt_in_content">Help us identify issues and improve Element by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.\n\nYou can read all our terms %s.</string>
-    <string name="analytics_opt_in_content_link">here</string>
-    <string name="analytics_opt_in_list_item_1">We <b>don\'t</b> record or profile any account data</string>
-    <string name="analytics_opt_in_list_item_2">We <b>don\'t</b> share information with third parties</string>
-    <string name="analytics_opt_in_list_item_3">You can turn this off anytime in settings</string>
 
     <!-- Poll -->
     <string name="create_poll_title">Create Poll</string>

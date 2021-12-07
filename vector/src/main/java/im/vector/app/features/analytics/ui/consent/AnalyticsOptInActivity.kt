@@ -20,6 +20,7 @@ import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 
@@ -43,7 +44,7 @@ class AnalyticsOptInActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         viewModel.observeViewEvents {
             when (it) {
                 AnalyticsOptInViewEvents.OnDataSaved -> finish()
-            }
+            }.exhaustive
         }
     }
 }

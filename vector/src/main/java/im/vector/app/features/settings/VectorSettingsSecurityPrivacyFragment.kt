@@ -299,7 +299,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         analyticsConsent.setOnPreferenceChangeListener { _, newValue ->
             val newValueBool = newValue as? Boolean ?: false
             if (newValueBool) {
-                // User want to enable analytics, display the opt in screen
+                // User wants to enable analytics, display the opt in screen
                 navigator.openAnalyticsOptIn(requireContext())
             } else {
                 // Just disable analytics
