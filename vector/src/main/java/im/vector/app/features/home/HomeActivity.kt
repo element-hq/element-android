@@ -271,6 +271,7 @@ class HomeActivity :
         if (isFirstCreation()) {
             handleIntent(intent)
         }
+        homeActivityViewModel.handle(HomeActivityViewActions.ViewStarted)
     }
 
     private fun handleShowAnalyticsOptIn() {

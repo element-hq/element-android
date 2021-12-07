@@ -72,10 +72,13 @@ class HomeActivityViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<HomeActivityViewModel, HomeActivityViewState> by hiltMavericksViewModelFactory()
 
+    private var isInitialized = false
     private var checkBootstrap = false
     private var onceTrusted = false
 
-    init {
+    private fun initialize() {
+        if (isInitialized) return
+        isInitialized = true
         cleanupFiles()
         observeInitialSync()
         checkSessionPushIsOn()
@@ -256,6 +259,9 @@ class HomeActivityViewModel @AssistedInject constructor(
         when (action) {
             HomeActivityViewActions.PushPromptHasBeenReviewed -> {
                 vectorPreferences.setDidAskUserToEnableSessionPush()
+            }
+            HomeActivityViewActions.ViewStarted               -> {
+                initialize()
             }
         }.exhaustive
     }
