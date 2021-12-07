@@ -17,6 +17,7 @@
 package im.vector.app.features.debug.features
 
 import com.airbnb.epoxy.TypedEpoxyController
+import javax.inject.Inject
 import kotlin.reflect.KClass
 
 data class FeaturesState(
@@ -34,7 +35,9 @@ sealed interface Feature {
     ) : Feature
 }
 
-class FeaturesController(private val listener: EnumFeatureItem.Listener) : TypedEpoxyController<FeaturesState>() {
+class FeaturesController @Inject constructor() : TypedEpoxyController<FeaturesState>() {
+
+    var listener: EnumFeatureItem.Listener? = null
 
     override fun buildModels(data: FeaturesState?) {
         if (data == null) return

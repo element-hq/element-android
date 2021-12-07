@@ -17,40 +17,36 @@
 package im.vector.app.features.debug.features
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
-import im.vector.app.features.themes.ActivityOtherThemes
-import im.vector.app.features.themes.ThemeUtils
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class DebugFeaturesSettingsActivity : AppCompatActivity() {
+class DebugFeaturesSettingsActivity : VectorBaseActivity<FragmentGenericRecyclerBinding>() {
 
     @Inject lateinit var debugFeatures: DebugVectorFeatures
     @Inject lateinit var debugFeaturesStateFactory: DebugFeaturesStateFactory
+    @Inject lateinit var controller: FeaturesController
 
-    private lateinit var views: FragmentGenericRecyclerBinding
+    override fun getBinding() = FragmentGenericRecyclerBinding.inflate(layoutInflater)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ThemeUtils.setActivityTheme(this, ActivityOtherThemes.Default)
-        views = FragmentGenericRecyclerBinding.inflate(layoutInflater)
-        setContentView(views.root)
-        val controller = FeaturesController(object : EnumFeatureItem.Listener {
-
+        controller.listener = object : EnumFeatureItem.Listener {
             @Suppress("UNCHECKED_CAST")
             override fun <T : Enum<T>> onOptionSelected(option: Any?, feature: Feature.EnumFeature<T>) {
                 debugFeatures.overrideEnum(option as? T, feature.type)
             }
-        })
+        }
         views.genericRecyclerView.configureWith(controller)
         controller.setData(debugFeaturesStateFactory.create())
     }
 
     override fun onDestroy() {
+        controller.listener = null
         views.genericRecyclerView.cleanup()
         super.onDestroy()
     }
