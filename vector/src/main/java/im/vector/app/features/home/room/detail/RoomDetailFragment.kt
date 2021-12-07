@@ -1322,6 +1322,7 @@ class RoomDetailFragment @Inject constructor(
             override fun onAddAttachment() {
                 if (!::attachmentTypeSelector.isInitialized) {
                     attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@RoomDetailFragment)
+                    attachmentTypeSelector.setAttachmentVisibility(AttachmentTypeSelectorView.Type.POLL, vectorPreferences.labsEnablePolls())
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton, keyboardStateUtils.isKeyboardShowing)
             }

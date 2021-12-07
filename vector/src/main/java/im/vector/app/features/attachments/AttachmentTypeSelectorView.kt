@@ -34,9 +34,11 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import androidx.core.view.doOnNextLayout
+import androidx.core.view.isVisible
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import im.vector.app.R
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.getMeasurements
 import im.vector.app.core.utils.PERMISSIONS_EMPTY
 import im.vector.app.core.utils.PERMISSIONS_FOR_PICKING_CONTACT
@@ -118,6 +120,20 @@ class AttachmentTypeSelectorView(context: Context,
             animateWindowOutCircular(capturedAnchor, contentView)
         } else {
             animateWindowOutTranslate(contentView)
+        }
+    }
+
+    fun setAttachmentVisibility(type: Type, isVisible: Boolean) {
+        when (type) {
+            Type.CAMERA  -> views.attachmentCameraButtonContainer
+            Type.GALLERY -> views.attachmentGalleryButtonContainer
+            Type.FILE    -> views.attachmentFileButtonContainer
+            Type.STICKER -> views.attachmentStickersButtonContainer
+            Type.AUDIO   -> views.attachmentAudioButtonContainer
+            Type.CONTACT -> views.attachmentContactButtonContainer
+            Type.POLL    -> views.attachmentPollButtonContainer
+        }.exhaustive.let {
+            it.isVisible = isVisible
         }
     }
 
