@@ -22,10 +22,11 @@ import io.realm.RealmObjectChangeListener
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
@@ -39,11 +40,6 @@ import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenes
 import timber.log.Timber
 import java.util.Collections
 import java.util.concurrent.atomic.AtomicBoolean
-
-/**
- * This is the value used to fetch on server. It's better to make constant as otherwise we can have weird chunks with disparate and small chunk of data.
- */
-private const val PAGINATION_COUNT = 50
 
 /**
  * This is a wrapper around a ChunkEntity in the database.
@@ -65,6 +61,9 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
                                          private val onBuiltEvents: () -> Unit) {
 
     private val isLastForward = AtomicBoolean(chunkEntity.isLastForward)
+    private val isLastBackward = AtomicBoolean(chunkEntity.isLastBackward)
+    private var prevChunkLatch: CompletableDeferred<Unit>? = null
+    private var nextChunkLatch: CompletableDeferred<Unit>? = null
 
     private val chunkObjectListener = RealmObjectChangeListener<ChunkEntity> { _, changeSet ->
         if (changeSet == null) return@RealmObjectChangeListener
@@ -75,17 +74,16 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
         if (changeSet.isFieldChanged(ChunkEntityFields.IS_LAST_FORWARD)) {
             isLastForward.set(chunkEntity.isLastForward)
         }
+        if (changeSet.isFieldChanged(ChunkEntityFields.IS_LAST_BACKWARD)) {
+            isLastBackward.set(chunkEntity.isLastBackward)
+        }
         if (changeSet.isFieldChanged(ChunkEntityFields.NEXT_CHUNK.`$`)) {
             nextChunk = createTimelineChunk(chunkEntity.nextChunk)
-            timelineScope.launch {
-                nextChunk?.loadMore(PAGINATION_COUNT.toLong(), Timeline.Direction.FORWARDS)
-            }
+            nextChunkLatch?.complete(Unit)
         }
         if (changeSet.isFieldChanged(ChunkEntityFields.PREV_CHUNK.`$`)) {
             prevChunk = createTimelineChunk(chunkEntity.prevChunk)
-            timelineScope.launch {
-                prevChunk?.loadMore(PAGINATION_COUNT.toLong(), Timeline.Direction.BACKWARDS)
-            }
+            prevChunkLatch?.complete(Unit)
         }
     }
 
@@ -128,42 +126,63 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
         return deepBuiltItems
     }
 
-    suspend fun loadMore(count: Long, direction: Timeline.Direction): LoadMoreResult {
-        val loadFromDbCount = loadFromDb(count, direction)
-        Timber.v("Has loaded $loadFromDbCount items from db")
+    /**
+     * This will take care of loading and building events of this chunk for the given direction and count.
+     * If @param fetchFromServerIfNeeded is true, it will try to fetch more events on server to get the right amount of data.
+     * This method will also post a snapshot as soon the data is built from db to avoid waiting for server response.
+     */
+    suspend fun loadMore(count: Int, direction: Timeline.Direction, fetchOnServerIfNeeded: Boolean = true): LoadMoreResult {
+        if (direction == Timeline.Direction.FORWARDS && nextChunk != null) {
+            return nextChunk?.loadMore(count, direction, fetchOnServerIfNeeded) ?: LoadMoreResult.FAILURE
+        } else if (direction == Timeline.Direction.BACKWARDS && prevChunk != null) {
+            return prevChunk?.loadMore(count, direction, fetchOnServerIfNeeded) ?: LoadMoreResult.FAILURE
+        }
+        val loadFromDbCount = loadFromStorage(count, direction)
+        Timber.v("Has loaded $loadFromDbCount items from storage")
         val offsetCount = count - loadFromDbCount
-        // We have built the right amount of data
-        return if (offsetCount == 0L) {
+        return if (direction == Timeline.Direction.FORWARDS && isLastForward.get()) {
+            LoadMoreResult.REACHED_END
+        } else if (direction == Timeline.Direction.BACKWARDS && isLastBackward.get()) {
+            LoadMoreResult.REACHED_END
+        } else if (offsetCount == 0) {
             LoadMoreResult.SUCCESS
         } else {
-            delegateLoadMore(offsetCount, direction)
+            delegateLoadMore(fetchOnServerIfNeeded, offsetCount, direction)
         }
     }
 
-    private suspend fun delegateLoadMore(offsetCount: Long, direction: Timeline.Direction): LoadMoreResult {
+    private suspend fun delegateLoadMore(fetchFromServerIfNeeded: Boolean, offsetCount: Int, direction: Timeline.Direction): LoadMoreResult {
         return if (direction == Timeline.Direction.FORWARDS) {
             val nextChunkEntity = chunkEntity.nextChunk
-            if (nextChunkEntity == null) {
-                // Fetch next chunk from server if not in the db
-                fetchFromServer(chunkEntity.nextToken, direction)
-            } else {
-                // otherwise we delegate to the next chunk
-                if (nextChunk == null) {
-                    nextChunk = createTimelineChunk(nextChunkEntity)
+            when {
+                nextChunkEntity != null -> {
+                    if (nextChunk == null) {
+                        nextChunk = createTimelineChunk(nextChunkEntity)
+                    }
+                    nextChunk?.loadMore(offsetCount, direction, fetchFromServerIfNeeded) ?: LoadMoreResult.FAILURE
                 }
-                nextChunk?.loadMore(offsetCount, direction) ?: LoadMoreResult.FAILURE
+                fetchFromServerIfNeeded -> {
+                    fetchFromServer(offsetCount, chunkEntity.nextToken, direction)
+                }
+                else                    -> {
+                    LoadMoreResult.SUCCESS
+                }
             }
         } else {
             val prevChunkEntity = chunkEntity.prevChunk
-            if (prevChunkEntity == null) {
-                // Fetch prev chunk from server if not in the db
-                fetchFromServer(chunkEntity.prevToken, direction)
-            } else {
-                // otherwise we delegate to the prev chunk
-                if (prevChunk == null) {
-                    prevChunk = createTimelineChunk(prevChunkEntity)
+            when {
+                prevChunkEntity != null -> {
+                    if (prevChunk == null) {
+                        prevChunk = createTimelineChunk(prevChunkEntity)
+                    }
+                    prevChunk?.loadMore(offsetCount, direction, fetchFromServerIfNeeded) ?: LoadMoreResult.FAILURE
                 }
-                prevChunk?.loadMore(offsetCount, direction) ?: LoadMoreResult.FAILURE
+                fetchFromServerIfNeeded -> {
+                    fetchFromServer(offsetCount, chunkEntity.prevToken, direction)
+                }
+                else                    -> {
+                    LoadMoreResult.SUCCESS
+                }
             }
         }
     }
@@ -239,7 +258,9 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
             prevChunk?.close(closeNext = false, closePrev = true)
         }
         nextChunk = null
+        nextChunkLatch?.cancel()
         prevChunk = null
+        prevChunkLatch?.cancel()
         chunkEntity.removeChangeListener(chunkObjectListener)
         timelineEventEntities.removeChangeListener(timelineEventCollectionListener)
     }
@@ -247,7 +268,7 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
     /**
      * This method tries to read events from the current chunk.
      */
-    private suspend fun loadFromDb(count: Long, direction: Timeline.Direction): Long {
+    private suspend fun loadFromStorage(count: Int, direction: Timeline.Direction): Int {
         val displayIndex = getNextDisplayIndex(direction) ?: return 0
         val baseQuery = timelineEventEntities.where()
         val timelineEvents = baseQuery.offsets(direction, count, displayIndex).findAll().orEmpty()
@@ -259,6 +280,9 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
         timelineEvents
                 .mapIndexed { index, timelineEventEntity ->
                     val timelineEvent = timelineEventEntity.buildAndDecryptIfNeeded()
+                    if (timelineEvent.root.type == EventType.STATE_ROOM_CREATE) {
+                        isLastBackward.set(true)
+                    }
                     if (direction == Timeline.Direction.FORWARDS) {
                         builtEventsIndexes[timelineEvent.eventId] = index
                         builtEvents.add(index, timelineEvent)
@@ -268,7 +292,7 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
                     }
                 }
         onBuiltEvents()
-        return timelineEvents.size.toLong()
+        return timelineEvents.size
     }
 
     /**
@@ -309,23 +333,35 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
      * It will take care to update the database by inserting new events and linking new chunk
      * with this one.
      */
-    private suspend fun fetchFromServer(token: String?, direction: Timeline.Direction): LoadMoreResult {
-        val paginationResult = try {
+    private suspend fun fetchFromServer(count: Int, token: String?, direction: Timeline.Direction): LoadMoreResult {
+        val latch = if (direction == Timeline.Direction.FORWARDS) {
+            nextChunkLatch = CompletableDeferred()
+            nextChunkLatch
+        } else {
+            prevChunkLatch = CompletableDeferred()
+            prevChunkLatch
+        }
+        val loadMoreResult = try {
             if (token == null) {
                 if (direction == Timeline.Direction.BACKWARDS || !chunkEntity.hasBeenALastForwardChunk()) return LoadMoreResult.REACHED_END
                 val lastKnownEventId = chunkEntity.sortedTimelineEvents().firstOrNull()?.eventId ?: return LoadMoreResult.FAILURE
-                val taskParams = FetchTokenAndPaginateTask.Params(roomId, lastKnownEventId, direction.toPaginationDirection(), PAGINATION_COUNT)
-                fetchTokenAndPaginateTask.execute(taskParams)
+                val taskParams = FetchTokenAndPaginateTask.Params(roomId, lastKnownEventId, direction.toPaginationDirection(), count)
+                fetchTokenAndPaginateTask.execute(taskParams).toLoadMoreResult()
             } else {
-                Timber.v("Fetch more events on server")
-                val taskParams = PaginationTask.Params(roomId, token, direction.toPaginationDirection(), PAGINATION_COUNT)
-                paginationTask.execute(taskParams)
+                Timber.v("Fetch $count more events on server")
+                val taskParams = PaginationTask.Params(roomId, token, direction.toPaginationDirection(), count)
+                paginationTask.execute(taskParams).toLoadMoreResult()
             }
         } catch (failure: Throwable) {
             Timber.e("Failed to fetch from server: $failure", failure)
-            return LoadMoreResult.FAILURE
+            LoadMoreResult.FAILURE
         }
-        return paginationResult.toLoadMoreResult()
+        return if (loadMoreResult == LoadMoreResult.SUCCESS) {
+            latch?.await()
+            loadMore(count, direction, fetchOnServerIfNeeded = false)
+        } else {
+            loadMoreResult
+        }
     }
 
     private fun TokenChunkEventPersistor.Result.toLoadMoreResult(): LoadMoreResult {
@@ -358,6 +394,9 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
                     .map { it.buildAndDecryptIfNeeded() }
             builtEventsIndexes.entries.filter { it.value >= range.startIndex }.forEach { it.setValue(it.value + range.length) }
             newItems.mapIndexed { index, timelineEvent ->
+                if (timelineEvent.root.type == EventType.STATE_ROOM_CREATE) {
+                    isLastBackward.set(true)
+                }
                 val correctedIndex = range.startIndex + index
                 builtEvents.add(correctedIndex, timelineEvent)
                 builtEventsIndexes[timelineEvent.eventId] = correctedIndex
@@ -421,7 +460,7 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
 
 private fun RealmQuery<TimelineEventEntity>.offsets(
         direction: Timeline.Direction,
-        count: Long,
+        count: Int,
         startDisplayIndex: Int
 ): RealmQuery<TimelineEventEntity> {
     sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
@@ -430,7 +469,7 @@ private fun RealmQuery<TimelineEventEntity>.offsets(
     } else {
         greaterThanOrEqualTo(TimelineEventEntityFields.DISPLAY_INDEX, startDisplayIndex)
     }
-    return limit(count)
+    return limit(count.toLong())
 }
 
 private fun Timeline.Direction.toPaginationDirection(): PaginationDirection {

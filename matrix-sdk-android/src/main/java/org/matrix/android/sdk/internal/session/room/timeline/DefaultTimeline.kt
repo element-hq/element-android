@@ -29,6 +29,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.internal.closeQuietly
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
@@ -47,7 +48,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
                                                     private val realmConfiguration: RealmConfiguration,
                                                     private val loadRoomMembersTask: LoadRoomMembersTask,
                                                     private val readReceiptHandler: ReadReceiptHandler,
-                                                    settings: TimelineSettings,
+                                                    private val settings: TimelineSettings,
                                                     paginationTask: PaginationTask,
                                                     getEventTask: GetContextOfEventTask,
                                                     fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
@@ -83,6 +84,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
             realm = backgroundRealm,
             getContextOfEventTask = getEventTask,
             threadsAwarenessHandler = threadsAwarenessHandler,
+            onLimitedTimeline = this::onLimitedTimeline,
             onEventsUpdated = this::postSnapshot,
             onNewTimelineEvents = this::onNewTimelineEvents
     )
@@ -108,7 +110,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
 
     override fun start() {
         timelineScope.launch {
-            loadRoomMemberIfNeeded()
+            loadRoomMembersIfNeeded()
         }
         timelineScope.launch {
             sequencer.post {
@@ -147,8 +149,19 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
 
     override fun paginate(direction: Timeline.Direction, count: Int) {
         timelineScope.launch {
-            loadMore(count.toLong(), direction)
+            loadMore(count, direction, fetchOnServerIfNeeded = true)
         }
+    }
+
+    override suspend fun awaitPaginate(direction: Timeline.Direction, count: Int): List<TimelineEvent> {
+        withContext(timelineDispatcher) {
+            loadMore(count, direction, fetchOnServerIfNeeded = true)
+        }
+        return awaitSnapshot()
+    }
+
+    override suspend fun awaitSnapshot(): List<TimelineEvent> = withContext(timelineDispatcher) {
+        strategy.buildSnapshot()
     }
 
     override fun getIndexOfEvent(eventId: String?): Int? {
@@ -164,8 +177,8 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         }.get()
     }
 
-    private suspend fun loadMore(count: Long, direction: Timeline.Direction) {
-        val baseLogMessage = "loadMore(count: $count, direction: $direction, roomId: $roomId)"
+    private suspend fun loadMore(count: Int, direction: Timeline.Direction, fetchOnServerIfNeeded: Boolean) {
+        val baseLogMessage = "loadMore(count: $count, direction: $direction, roomId: $roomId, fetchOnServer: $fetchOnServerIfNeeded)"
         Timber.v("$baseLogMessage started")
         if (!isStarted.get()) {
             throw IllegalStateException("You should call start before using timeline")
@@ -182,7 +195,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         updateState(direction) {
             it.copy(loading = true)
         }
-        val loadMoreResult = strategy.loadMore(count, direction)
+        val loadMoreResult = strategy.loadMore(count, direction, fetchOnServerIfNeeded)
         Timber.v("$baseLogMessage: result $loadMoreResult")
         val hasMoreToLoad = loadMoreResult != LoadMoreResult.REACHED_END
         updateState(direction) {
@@ -202,13 +215,29 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         } else {
             buildStrategy(LoadTimelineStrategy.Mode.Permalink(eventId))
         }
+        initPaginationStates(eventId)
+        strategy.onStart()
+        loadMore(
+                count = strategyDependencies.timelineSettings.initialSize,
+                direction = Timeline.Direction.BACKWARDS,
+                fetchOnServerIfNeeded = false
+        )
+    }
+
+    private suspend fun initPaginationStates(eventId: String?) {
         updateState(Timeline.Direction.FORWARDS) {
             it.copy(loading = false, hasMoreToLoad = eventId != null)
         }
         updateState(Timeline.Direction.BACKWARDS) {
             it.copy(loading = false, hasMoreToLoad = true)
         }
-        strategy.onStart()
+    }
+
+    private fun onLimitedTimeline() {
+        timelineScope.launch {
+            initPaginationStates(null)
+            loadMore(settings.initialSize, Timeline.Direction.BACKWARDS, false)
+        }
     }
 
     private fun postSnapshot() {
@@ -239,10 +268,15 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         val currentValue = stateReference.get()
         val newValue = update(currentValue)
         stateReference.set(newValue)
-        withContext(Dispatchers.Main) {
-            listeners.forEach {
-                tryOrNull { it.onStateUpdated(direction, newValue) }
-            }
+        if (newValue != currentValue) {
+            postPaginationState(direction, newValue)
+        }
+    }
+
+    private suspend fun postPaginationState(direction: Timeline.Direction, state: Timeline.PaginationState) = withContext(Dispatchers.Main) {
+        Timber.v("Post $direction pagination state: $state ")
+        listeners.forEach {
+            tryOrNull { it.onStateUpdated(direction, state) }
         }
     }
 
@@ -255,14 +289,14 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         )
     }
 
-    private suspend fun loadRoomMemberIfNeeded() {
+    private suspend fun loadRoomMembersIfNeeded() {
         val loadRoomMembersParam = LoadRoomMembersTask.Params(roomId)
         try {
             loadRoomMembersTask.execute(loadRoomMembersParam)
         } catch (failure: Throwable) {
             Timber.v("Failed to load room members. Retry in 10s.")
             delay(10_000L)
-            loadRoomMemberIfNeeded()
+            loadRoomMembersIfNeeded()
         }
     }
 

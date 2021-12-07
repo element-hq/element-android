@@ -20,7 +20,9 @@ import io.realm.OrderedCollectionChangeSet
 import io.realm.OrderedRealmCollectionChangeListener
 import io.realm.Realm
 import io.realm.RealmResults
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
@@ -73,18 +75,27 @@ internal class LoadTimelineStrategy(
             val timelineEventMapper: TimelineEventMapper,
             val threadsAwarenessHandler: ThreadsAwarenessHandler,
             val onEventsUpdated: () -> Unit,
+            val onLimitedTimeline: () -> Unit,
             val onNewTimelineEvents: (List<String>) -> Unit
     )
 
+    private var getContextLatch: CompletableDeferred<Unit>? = null
     private var chunkEntity: RealmResults<ChunkEntity>? = null
     private var timelineChunk: TimelineChunk? = null
 
     private val chunkEntityListener = OrderedRealmCollectionChangeListener { _: RealmResults<ChunkEntity>, changeSet: OrderedCollectionChangeSet ->
+        // Can be call either when you open a permalink on an unknown event
+        // or when there is a gap in the timeline.
         val shouldRebuildChunk = changeSet.insertions.isNotEmpty()
         if (shouldRebuildChunk) {
             timelineChunk?.close(closeNext = true, closePrev = true)
             timelineChunk = chunkEntity?.createTimelineChunk()
-            dependencies.onEventsUpdated()
+            // If we are waiting for a result of get context, post completion
+            getContextLatch?.complete(Unit)
+            // If we have a gap, just tell the timeline about it.
+            if (timelineChunk?.hasReachedLastForward().orFalse()) {
+                dependencies.onLimitedTimeline()
+            }
         }
     }
 
@@ -95,6 +106,7 @@ internal class LoadTimelineStrategy(
     }
 
     private val timelineInputListener = object : TimelineInput.Listener {
+
         override fun onLocalEchoCreated(roomId: String, timelineEvent: TimelineEvent) {
             if (roomId != this@LoadTimelineStrategy.roomId) {
                 return
@@ -130,7 +142,7 @@ internal class LoadTimelineStrategy(
             onEventsUpdated = dependencies.onEventsUpdated
     )
 
-    suspend fun onStart() {
+    fun onStart() {
         dependencies.eventDecryptor.start()
         dependencies.timelineInput.listeners.add(timelineInputListener)
         val realm = dependencies.realm.get()
@@ -138,9 +150,6 @@ internal class LoadTimelineStrategy(
         chunkEntity = getChunkEntity(realm).also {
             it.addChangeListener(chunkEntityListener)
             timelineChunk = it.createTimelineChunk()
-        }
-        if (mode is Mode.Live) {
-            loadMore(dependencies.timelineSettings.initialSize.toLong(), Timeline.Direction.BACKWARDS)
         }
     }
 
@@ -150,22 +159,25 @@ internal class LoadTimelineStrategy(
         chunkEntity?.removeChangeListener(chunkEntityListener)
         sendingEventsDataSource.stop()
         timelineChunk?.close(closeNext = true, closePrev = true)
+        getContextLatch?.cancel()
         chunkEntity = null
         timelineChunk = null
     }
 
-    suspend fun loadMore(count: Long, direction: Timeline.Direction): LoadMoreResult {
-        return if (mode is Mode.Permalink && timelineChunk == null) {
+    suspend fun loadMore(count: Int, direction: Timeline.Direction, fetchOnServerIfNeeded: Boolean = true): LoadMoreResult {
+        if (mode is Mode.Permalink && timelineChunk == null) {
             val params = GetContextOfEventTask.Params(roomId, mode.originEventId)
             try {
+                getContextLatch = CompletableDeferred()
                 dependencies.getContextOfEventTask.execute(params)
-                LoadMoreResult.SUCCESS
+                // waits for the query to be fulfilled
+                getContextLatch?.await()
+                getContextLatch = null
             } catch (failure: Throwable) {
-                LoadMoreResult.FAILURE
+                return LoadMoreResult.FAILURE
             }
-        } else {
-            timelineChunk?.loadMore(count, direction) ?: LoadMoreResult.FAILURE
         }
+        return timelineChunk?.loadMore(count, direction, fetchOnServerIfNeeded) ?: LoadMoreResult.FAILURE
     }
 
     fun getBuiltEventIndex(eventId: String): Int? {
@@ -198,7 +210,7 @@ internal class LoadTimelineStrategy(
         }
     }
 
-    private fun hasReachedLastForward(): Boolean{
+    private fun hasReachedLastForward(): Boolean {
         return timelineChunk?.hasReachedLastForward().orFalse()
     }
 

@@ -174,7 +174,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     private var inSubmitList: Boolean = false
     private var hasReachedInvite: Boolean = false
     private var hasUTD: Boolean = false
-    private var hasReachedCreateEvent: Boolean = false
     private var positionOfReadMarker: Int? = null
     private var partialState: PartialState = PartialState()
 
@@ -287,7 +286,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
             return
         }
         // Avoid displaying two loaders if there is no elements between them
-        val showBackwardsLoader = (!showingForwardLoader || timelineModels.isNotEmpty()) && !hasReachedCreateEvent
+        val showBackwardsLoader = !showingForwardLoader || timelineModels.isNotEmpty()
         // We can hide the loader but still add the item to controller so it can trigger backwards pagination
         LoadingItem_()
                 .id("backward_loading_item_$timestamp")
@@ -300,6 +299,10 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
 
     override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
         submitSnapshot(snapshot)
+    }
+
+    override fun onStateUpdated(direction: Timeline.Direction, state: Timeline.PaginationState) {
+        requestDelayedModelBuild(0)
     }
 
     private fun submitSnapshot(newSnapshot: List<TimelineEvent>) {
@@ -456,14 +459,10 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     private fun preprocessReverseEvents() {
         receiptsByEvent.clear()
         timelineEventsGroups.clear()
-        hasReachedCreateEvent = false
         val itr = currentSnapshot.listIterator(currentSnapshot.size)
         var lastShownEventId: String? = null
         while (itr.hasPrevious()) {
             val event = itr.previous()
-            if (!hasReachedCreateEvent && event.root.type == EventType.STATE_ROOM_CREATE) {
-                hasReachedCreateEvent = true
-            }
             timelineEventsGroups.addOrIgnore(event)
             val currentReadReceipts = ArrayList(event.readReceipts).filter {
                 it.user.userId != session.myUserId
