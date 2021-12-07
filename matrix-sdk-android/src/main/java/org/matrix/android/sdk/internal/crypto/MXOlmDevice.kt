@@ -136,6 +136,11 @@ internal class MXOlmDevice @Inject constructor(
         return store.getOlmAccount().maxOneTimeKeys()
     }
 
+    /**
+     * Returns an unpublished fallback key
+     * A call to markKeysAsPublished will mark it as published and this
+     * call will return null (until a call to generateFallbackKey is made)
+     */
     fun getFallbackKey(): MutableMap<String, MutableMap<String, String>>? {
         try {
             return store.getOlmAccount().fallbackKey()
@@ -151,6 +156,15 @@ internal class MXOlmDevice @Inject constructor(
             store.saveOlmAccount()
         } catch (e: Exception) {
             Timber.e("## generateFallbackKey() : failed")
+        }
+    }
+
+    fun forgetFallbackKey() {
+        try {
+            store.getOlmAccount().forgetFallbackKey()
+            store.saveOlmAccount()
+        } catch (e: Exception) {
+            Timber.e("## forgetFallbackKey() : failed")
         }
     }
 
