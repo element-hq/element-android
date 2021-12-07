@@ -92,7 +92,6 @@
     <!--        tools:listitem="@layout/item_space_simple"-->
     <!--        tools:orientation="horizontal" />-->
 
-
     <ImageView
         android:id="@+id/rest1"
         android:layout_width="42dp"
@@ -156,7 +155,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?vctr_content_secondary"
         tools:ignore="MissingConstraints" />
-
 
     <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/spacesFlow"

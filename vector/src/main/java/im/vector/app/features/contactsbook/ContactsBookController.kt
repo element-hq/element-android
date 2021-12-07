@@ -41,10 +41,6 @@ class ContactsBookController @Inject constructor(
 
     var callback: Callback? = null
 
-    init {
-        requestModelBuild()
-    }
-
     fun setData(state: ContactsBookViewState) {
         this.state = state
         requestModelBuild()

@@ -61,7 +61,7 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
     }
 
     private fun setupSubmitButton() {
-        views.resetPasswordSubmit.setOnClickListener { submit() }
+        views.resetPasswordSubmit.debouncedClicks { submit() }
         combine(
                 views.resetPasswordEmail.textChanges().map { it.isEmail() },
                 views.passwordField.textChanges().map { it.isNotEmpty() }

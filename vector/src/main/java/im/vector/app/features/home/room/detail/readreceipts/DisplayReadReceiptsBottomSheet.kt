@@ -21,7 +21,6 @@ import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.args
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
@@ -81,12 +80,9 @@ class DisplayReadReceiptsBottomSheet :
 
     companion object {
         fun newInstance(readReceipts: List<ReadReceiptData>): DisplayReadReceiptsBottomSheet {
-            val args = Bundle()
-            val parcelableArgs = DisplayReadReceiptArgs(
-                    readReceipts
-            )
-            args.putParcelable(Mavericks.KEY_ARG, parcelableArgs)
-            return DisplayReadReceiptsBottomSheet().apply { arguments = args }
+            return DisplayReadReceiptsBottomSheet().apply {
+                setArguments(DisplayReadReceiptArgs(readReceipts = readReceipts))
+            }
         }
     }
 }

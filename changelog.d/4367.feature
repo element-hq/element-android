@@ -1,1 +1,0 @@
-Poll Feature - Create Poll Screen (Disabled for now)

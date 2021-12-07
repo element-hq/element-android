@@ -29,6 +29,10 @@ import dagger.hilt.components.SingletonComponent
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.time.Clock
+import im.vector.app.core.time.DefaultClock
+import im.vector.app.features.DefaultVectorFeatures
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.CompileTimeAutoAcceptInvites
 import im.vector.app.features.navigation.DefaultNavigator
@@ -66,6 +70,9 @@ abstract class VectorBindModule {
 
     @Binds
     abstract fun bindAutoAcceptInvites(autoAcceptInvites: CompileTimeAutoAcceptInvites): AutoAcceptInvites
+
+    @Binds
+    abstract fun bindDefaultClock(clock: DefaultClock): Clock
 }
 
 @InstallIn(SingletonComponent::class)
@@ -73,70 +80,64 @@ abstract class VectorBindModule {
 object VectorStaticModule {
 
     @Provides
-    @JvmStatic
     fun providesContext(application: Application): Context {
         return application.applicationContext
     }
 
     @Provides
-    @JvmStatic
     fun providesResources(context: Context): Resources {
         return context.resources
     }
 
     @Provides
-    @JvmStatic
     fun providesSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences("im.vector.riot", MODE_PRIVATE)
     }
 
     @Provides
-    @JvmStatic
     fun providesMatrix(context: Context): Matrix {
         return Matrix.getInstance(context)
     }
 
     @Provides
-    @JvmStatic
     fun providesCurrentSession(activeSessionHolder: ActiveSessionHolder): Session {
         // TODO: handle session injection better
         return activeSessionHolder.getActiveSession()
     }
 
     @Provides
-    @JvmStatic
     fun providesLegacySessionImporter(matrix: Matrix): LegacySessionImporter {
         return matrix.legacySessionImporter()
     }
 
     @Provides
-    @JvmStatic
     fun providesAuthenticationService(matrix: Matrix): AuthenticationService {
         return matrix.authenticationService()
     }
 
     @Provides
-    @JvmStatic
     fun providesRawService(matrix: Matrix): RawService {
         return matrix.rawService()
     }
 
     @Provides
-    @JvmStatic
     fun providesHomeServerHistoryService(matrix: Matrix): HomeServerHistoryService {
         return matrix.homeServerHistoryService()
     }
 
     @Provides
-    @JvmStatic
     @Singleton
     fun providesApplicationCoroutineScope(): CoroutineScope {
         return CoroutineScope(SupervisorJob() + Dispatchers.Main)
     }
 
     @Provides
-    @JvmStatic
     fun providesCoroutineDispatchers(): CoroutineDispatchers {
         return CoroutineDispatchers(io = Dispatchers.IO, computation = Dispatchers.Default)
+    }
+
+    @Provides
+    fun providesFeatures(): VectorFeatures {
+        return DefaultVectorFeatures()
     }
 }

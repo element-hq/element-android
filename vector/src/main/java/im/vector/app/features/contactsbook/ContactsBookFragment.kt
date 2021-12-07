@@ -26,11 +26,11 @@ import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.databinding.FragmentContactsBookBinding
-import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.userdirectory.PendingSelection
 import im.vector.app.features.userdirectory.UserListAction
 import im.vector.app.features.userdirectory.UserListSharedAction
@@ -68,20 +68,25 @@ class ContactsBookFragment @Inject constructor(
         setupConsentView()
         setupOnlyBoundContactsView()
         setupCloseView()
+        contactsBookViewModel.observeViewEvents {
+            when (it) {
+                is ContactsBookViewEvents.Failure             -> showFailure(it.throwable)
+                is ContactsBookViewEvents.OnPoliciesRetrieved -> showConsentDialog(it)
+            }.exhaustive
+        }
     }
 
     private fun setupConsentView() {
-        views.phoneBookSearchForMatrixContacts.setOnClickListener {
-            withState(contactsBookViewModel) { state ->
-                requireContext().showIdentityServerConsentDialog(
-                        state.identityServerUrl,
-                        policyLinkCallback = {
-                            navigator.openSettings(requireContext(), SettingsActivityPayload.DiscoverySettings(expandIdentityPolicies = true))
-                        },
-                        consentCallBack = { contactsBookViewModel.handle(ContactsBookAction.UserConsentGranted) }
-                )
-            }
+        views.phoneBookSearchForMatrixContacts.debouncedClicks {
+            contactsBookViewModel.handle(ContactsBookAction.UserConsentRequest)
         }
+    }
+
+    private fun showConsentDialog(event: ContactsBookViewEvents.OnPoliciesRetrieved) {
+        requireContext().showIdentityServerConsentDialog(
+                event.identityServerWithTerms,
+                consentCallBack = { contactsBookViewModel.handle(ContactsBookAction.UserConsentGranted) }
+        )
     }
 
     private fun setupOnlyBoundContactsView() {

@@ -25,16 +25,12 @@ import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.fdroid.service.FDroidGuardServiceStarter
 import im.vector.app.features.settings.VectorPreferences
 
-@Module
 @InstallIn(SingletonComponent::class)
-abstract class FlavorModule {
+@Module
+object FlavorModule {
 
-    companion object {
-
-        @Provides
-        @JvmStatic
-        fun provideGuardServiceStarter(preferences: VectorPreferences, appContext: Context): GuardServiceStarter {
-            return FDroidGuardServiceStarter(preferences, appContext)
-        }
+    @Provides
+    fun provideGuardServiceStarter(preferences: VectorPreferences, appContext: Context): GuardServiceStarter {
+        return FDroidGuardServiceStarter(preferences, appContext)
     }
 }

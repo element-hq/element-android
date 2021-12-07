@@ -58,8 +58,8 @@ class KeysBackupRestoreFromKeyFragment @Inject constructor() :
             views.keyInputLayout.error = newValue
         }
 
-        views.keysRestoreButton.setOnClickListener { onRestoreFromKey() }
-        views.keysBackupImport.setOnClickListener { onImport() }
+        views.keysRestoreButton.debouncedClicks { onRestoreFromKey() }
+        views.keysBackupImport.debouncedClicks { onImport() }
         views.keyTextEdit.doOnTextChanged { text, _, _, _ -> onRestoreKeyTextEditChange(text) }
     }
 

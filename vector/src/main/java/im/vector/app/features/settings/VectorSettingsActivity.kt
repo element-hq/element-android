@@ -20,7 +20,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
@@ -86,7 +85,6 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
                     replaceFragment(R.id.vector_settings_page, VectorSettingsNotificationPreferenceFragment::class.java, null, FRAGMENT_TAG)
                 }
                 is SettingsActivityPayload.DiscoverySettings          -> {
-                    Log.e("!!!", "SettingsActivityPayload.DiscoverySettings : $payload")
                     replaceFragment(R.id.vector_settings_page, DiscoverySettingsFragment::class.java, payload, FRAGMENT_TAG)
                 }
                 else                                                  ->

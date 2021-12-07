@@ -1,0 +1,1 @@
+Fix lots of integration tests by introducing TestMatrix class and MatrixWorkerFactory.

@@ -24,11 +24,13 @@ import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import org.matrix.android.sdk.api.session.sync.model.GroupsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
+import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.SessionListeners
+import org.matrix.android.sdk.internal.session.dispatchTo
 import org.matrix.android.sdk.internal.session.group.GetGroupDataWorker
 import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
 import org.matrix.android.sdk.internal.session.initsync.reportSubtask
@@ -39,6 +41,7 @@ import org.matrix.android.sdk.internal.session.sync.handler.PresenceSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.SyncResponsePostTreatmentAggregatorHandler
 import org.matrix.android.sdk.internal.session.sync.handler.UserAccountDataSyncHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.RoomSyncHandler
+import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
 import timber.log.Timber
@@ -51,6 +54,7 @@ private const val GET_GROUP_DATA_WORKER = "GET_GROUP_DATA_WORKER"
 internal class SyncResponseHandler @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         @SessionId private val sessionId: String,
+        private val sessionManager: SessionManager,
         private val sessionListeners: SessionListeners,
         private val workManagerProvider: WorkManagerProvider,
         private val roomSyncHandler: RoomSyncHandler,
@@ -62,6 +66,7 @@ internal class SyncResponseHandler @Inject constructor(
         private val tokenStore: SyncTokenStore,
         private val processEventForPushTask: ProcessEventForPushTask,
         private val pushRuleService: PushRuleService,
+        private val threadsAwarenessHandler: ThreadsAwarenessHandler,
         private val presenceSyncHandler: PresenceSyncHandler
 ) {
 
@@ -94,6 +99,10 @@ internal class SyncResponseHandler @Inject constructor(
             Timber.v("Finish handling toDevice in $it ms")
         }
         val aggregator = SyncResponsePostTreatmentAggregator()
+
+        // Prerequisite for thread events handling in RoomSyncHandler
+        threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
+
         // Start one big transaction
         monarchy.awaitTransaction { realm ->
             measureTimeMillis {
@@ -158,8 +167,9 @@ internal class SyncResponseHandler @Inject constructor(
     }
 
     private fun dispatchInvitedRoom(roomsSyncResponse: RoomsSyncResponse) {
+        val session = sessionManager.getSessionComponent(sessionId)?.session()
         roomsSyncResponse.invite.keys.forEach { roomId ->
-            sessionListeners.dispatch { session, listener ->
+            session.dispatchTo(sessionListeners) { session, listener ->
                 listener.onNewInvitedRoom(session, roomId)
             }
         }

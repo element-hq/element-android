@@ -446,7 +446,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
             val importDialog = builder.show()
 
-            views.dialogE2eKeysImportButton.setOnClickListener {
+            views.dialogE2eKeysImportButton.debouncedClicks {
                 val password = views.dialogE2eKeysPassphraseEditText.text.toString()
 
                 displayLoadingView()

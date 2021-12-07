@@ -44,7 +44,6 @@
         tools:drawableLeft="@drawable/ic_missed_video_call"
         tools:text="@string/call_tile_video_incoming" />
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/itemCallAcceptRejectViewGroup"
         android:layout_width="match_parent"
@@ -59,7 +58,7 @@
             android:minWidth="120dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toEndOf="@+id/itemCallRejectView"
+            app:layout_constraintStart_toEndOf="@id/itemCallRejectView"
             app:layout_constraintTop_toTopOf="@id/itemCallRejectView"
             tools:text="@string/join" />
 
@@ -70,12 +69,11 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="4dp"
             android:minWidth="120dp"
-            app:layout_constraintEnd_toStartOf="@+id/itemCallAcceptView"
+            app:layout_constraintEnd_toStartOf="@id/itemCallAcceptView"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/ignore" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

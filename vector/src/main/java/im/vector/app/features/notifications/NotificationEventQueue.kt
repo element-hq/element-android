@@ -18,8 +18,15 @@ package im.vector.app.features.notifications
 
 import timber.log.Timber
 
-class NotificationEventQueue(
-        private val queue: MutableList<NotifiableEvent> = mutableListOf()
+data class NotificationEventQueue(
+        private val queue: MutableList<NotifiableEvent>,
+
+        /**
+         * An in memory FIFO cache of the seen events.
+         * Acts as a notification debouncer to stop already dismissed push notifications from
+         * displaying again when the /sync response is delayed.
+         */
+        private val seenEventIds: CircularCache<String>
 ) {
 
     fun markRedacted(eventIds: List<String>) {
@@ -57,7 +64,7 @@ class NotificationEventQueue(
         queue.clear()
     }
 
-    fun add(notifiableEvent: NotifiableEvent, seenEventIds: CircularCache<String>) {
+    fun add(notifiableEvent: NotifiableEvent) {
         val existing = findExistingById(notifiableEvent)
         val edited = findEdited(notifiableEvent)
         when {

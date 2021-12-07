@@ -28,14 +28,13 @@ import androidx.annotation.CallSuper
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
-import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.EntryPointAccessors
 import im.vector.app.core.di.ActivityEntryPoint
-import im.vector.app.core.flow.throttleFirst
+import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.utils.DimensionConverter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -159,7 +158,7 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
     }
 
     protected fun setArguments(args: Parcelable? = null) {
-        arguments = args?.let { Bundle().apply { putParcelable(Mavericks.KEY_ARG, it) } }
+        arguments = args.toMvRxBundle()
     }
 
     /* ==========================================================================================
@@ -168,7 +167,6 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .throttleFirst(300)
                 .onEach { onClicked() }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }

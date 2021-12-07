@@ -23,6 +23,7 @@ import io.realm.RealmConfiguration
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -33,6 +34,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.util.CancelableBag
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
+import org.matrix.android.sdk.internal.database.mapper.EventMapper
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.RoomEntity
@@ -43,6 +45,7 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
+import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.Debouncer
@@ -72,6 +75,7 @@ internal class DefaultTimeline(
         private val eventDecryptor: TimelineEventDecryptor,
         private val realmSessionProvider: RealmSessionProvider,
         private val loadRoomMembersTask: LoadRoomMembersTask,
+        private val threadsAwarenessHandler: ThreadsAwarenessHandler,
         private val readReceiptHandler: ReadReceiptHandler
 ) : Timeline,
         TimelineInput.Listener,
@@ -577,6 +581,10 @@ internal class DefaultTimeline(
         } else {
             nextDisplayIndex = offsetIndex + 1
         }
+
+        // Prerequisite to in order for the ThreadsAwarenessHandler to work properly
+        fetchRootThreadEventsIfNeeded(offsetResults)
+
         offsetResults.forEach { eventEntity ->
 
             val timelineEvent = buildTimelineEvent(eventEntity)
@@ -599,6 +607,20 @@ internal class DefaultTimeline(
         // For the case where wo reach the lastForward chunk
         updateLoadingStates(timelineEvents)
         return offsetResults.size
+    }
+
+    /**
+     * This function is responsible to fetch and store the root event of a thread event
+     * in order to be able to display the event to the user appropriately
+     */
+    private fun fetchRootThreadEventsIfNeeded(offsetResults: RealmResults<TimelineEventEntity>) = runBlocking {
+        val eventEntityList = offsetResults
+                .mapNotNull {
+                    it?.root
+                }.map {
+                    EventMapper.map(it)
+                }
+        threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(eventEntityList)
     }
 
     private fun buildTimelineEvent(eventEntity: TimelineEventEntity): TimelineEvent {

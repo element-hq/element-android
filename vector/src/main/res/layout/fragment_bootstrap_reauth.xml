@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -24,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layout_constraintBottom_toTopOf="@id/reAuthFailureText"
-        app:layout_constraintTop_toBottomOf="@+id/bootstrapDescriptionText" />
+        app:layout_constraintTop_toBottomOf="@id/bootstrapDescriptionText" />
 
     <TextView
         android:id="@+id/reAuthFailureText"

@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.database.model
 import io.realm.RealmObject
 import io.realm.annotations.Index
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -56,10 +57,10 @@ internal open class EventEntity(@Index var eventId: String = "",
 
     companion object
 
-    fun setDecryptionResult(result: MXEventDecryptionResult) {
+    fun setDecryptionResult(result: MXEventDecryptionResult, clearEvent: JsonDict? = null) {
         assertIsManaged()
         val decryptionResult = OlmDecryptionResult(
-                payload = result.clearEvent,
+                payload = clearEvent ?: result.clearEvent,
                 senderKey = result.senderCurve25519Key,
                 keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
                 forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain

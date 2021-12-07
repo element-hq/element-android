@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-
     <TextView
         android:id="@+id/itemVerificationTitleTextView"
         style="@style/Widget.Vector.TextView.Subtitle"
@@ -19,7 +18,6 @@
         android:textStyle="bold"
         app:drawableStartCompat="@drawable/ic_shield_black"
         tools:text="@string/verification_request" />
-
 
     <TextView
         android:id="@+id/itemVerificationDetailTextView"

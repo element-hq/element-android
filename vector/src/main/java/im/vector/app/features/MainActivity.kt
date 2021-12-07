@@ -41,8 +41,6 @@ import im.vector.app.features.pin.UnlockedActivity
 import im.vector.app.features.popup.PopupAlertManager
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.signout.hard.SignedOutActivity
-import im.vector.app.features.signout.soft.SoftLogoutActivity
-import im.vector.app.features.signout.soft.SoftLogoutActivity2
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.Dispatchers
@@ -116,7 +114,6 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     private fun clearNotifications() {
         // Dismiss all notifications
         notificationDrawerManager.clearAllEvents()
-        notificationDrawerManager.persistInfo()
 
         // Also clear the dynamic shortcuts
         shortcutsHandler.clearShortcuts()
@@ -224,9 +221,11 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 navigator.openLogin(this, null)
                 null
             }
-            args.isSoftLogout                                            ->
+            args.isSoftLogout                                            -> {
                 // The homeserver has invalidated the token, with a soft logout
-                getSoftLogoutActivityIntent()
+                navigator.softLogout(this)
+                null
+            }
             args.isUserLoggedOut                                         ->
                 // the homeserver has invalidated the token (password changed, device deleted, other security reasons)
                 SignedOutActivity.newIntent(this)
@@ -237,7 +236,8 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     HomeActivity.newIntent(this)
                 } else {
                     // The token is still invalid
-                    getSoftLogoutActivityIntent()
+                    navigator.softLogout(this)
+                    null
                 }
             else                                                         -> {
                 // First start, or no active session
@@ -247,13 +247,5 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         }
         intent?.let { startActivity(it) }
         finish()
-    }
-
-    private fun getSoftLogoutActivityIntent(): Intent {
-        return if (resources.getBoolean(R.bool.useLoginV2)) {
-            SoftLogoutActivity2.newIntent(this)
-        } else {
-            SoftLogoutActivity.newIntent(this)
-        }
     }
 }

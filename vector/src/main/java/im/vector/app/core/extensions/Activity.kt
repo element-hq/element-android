@@ -19,6 +19,7 @@ package im.vector.app.core.extensions
 import android.app.Activity
 import android.content.Intent
 import android.os.Parcelable
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -111,4 +112,12 @@ fun AppCompatActivity.hideKeyboard() {
 fun Activity.restart() {
     startActivity(intent)
     finish()
+}
+
+fun Activity.keepScreenOn() {
+    window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+}
+
+fun Activity.endKeepScreenOn() {
+    window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 }

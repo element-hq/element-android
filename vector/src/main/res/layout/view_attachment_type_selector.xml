@@ -45,7 +45,6 @@
 
             </LinearLayout>
 
-
             <LinearLayout
                 android:id="@+id/attachmentGalleryButtonContainer"
                 android:layout_width="match_parent"
@@ -67,7 +66,6 @@
                     android:text="@string/attachment_type_gallery" />
 
             </LinearLayout>
-
 
             <LinearLayout
                 android:id="@+id/attachmentFileButtonContainer"
@@ -123,7 +121,6 @@
 
             </LinearLayout>
 
-
             <LinearLayout
                 android:id="@+id/attachmentContactButtonContainer"
                 android:layout_width="match_parent"
@@ -145,7 +142,6 @@
                     android:text="@string/attachment_type_contact" />
 
             </LinearLayout>
-
 
             <LinearLayout
                 android:id="@+id/attachmentStickersButtonContainer"
@@ -169,7 +165,6 @@
 
             </LinearLayout>
         </LinearLayout>
-
 
         <LinearLayout
             android:layout_width="match_parent"

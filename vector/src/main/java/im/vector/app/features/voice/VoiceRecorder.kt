@@ -16,13 +16,21 @@
 
 package im.vector.app.features.voice
 
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import java.io.File
 
 interface VoiceRecorder {
     /**
-     * Start the recording
+     * Initialize recording with a pre-recorded file.
+     * @param attachmentData data of the recorded file
      */
-    fun startRecord()
+    fun initializeRecord(attachmentData: ContentAttachmentData)
+
+    /**
+     * Start the recording
+     * @param roomId id of the room to start record
+     */
+    fun startRecord(roomId: String)
 
     /**
      * Stop the recording

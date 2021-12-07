@@ -10,7 +10,6 @@
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground">
 
-
     <FrameLayout
         android:id="@+id/roomAvatarContainer"
         android:layout_width="wrap_content"
@@ -38,7 +37,6 @@
         app:layout_constraintTop_toBottomOf="@id/roomAvatarContainer"
         tools:layout_marginStart="20dp" />
 
-
     <View
         android:id="@+id/roomNameView"
         android:layout_width="wrap_content"
@@ -54,7 +52,6 @@
         app:layout_constraintStart_toEndOf="@id/roomAvatarContainer"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <View
         android:id="@+id/roomTypingView"
         android:layout_width="0dp"
@@ -63,8 +60,8 @@
         android:layout_marginEnd="20dp"
         android:background="@drawable/placeholder_shape_8"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/roomNameView"
-        app:layout_constraintTop_toBottomOf="@+id/roomNameView" />
+        app:layout_constraintStart_toStartOf="@id/roomNameView"
+        app:layout_constraintTop_toBottomOf="@id/roomNameView" />
 
     <!-- We use vctr_list_separator_system here for a better rendering -->
     <View

@@ -43,8 +43,8 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
     }
 
     private fun setupViews() {
-        views.loginSignupSigninSubmit.setOnClickListener { submit() }
-        views.loginSignupSigninSignIn.setOnClickListener { signIn() }
+        views.loginSignupSigninSubmit.debouncedClicks { submit() }
+        views.loginSignupSigninSignIn.debouncedClicks { signIn() }
     }
 
     private fun setupUi(state: LoginViewState) {

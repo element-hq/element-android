@@ -59,6 +59,8 @@ internal class DefaultGetEventTask @Inject constructor(
                     }
         }
 
+        event.ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
+
         return event
     }
 }

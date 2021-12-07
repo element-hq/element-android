@@ -18,6 +18,7 @@ package im.vector.app.features.login
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
@@ -361,6 +362,12 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarCo
         fun newIntent(context: Context, loginConfig: LoginConfig?): Intent {
             return Intent(context, LoginActivity::class.java).apply {
                 putExtra(EXTRA_CONFIG, loginConfig)
+            }
+        }
+
+        fun redirectIntent(context: Context, data: Uri?): Intent {
+            return Intent(context, LoginActivity::class.java).apply {
+                setData(data)
             }
         }
     }

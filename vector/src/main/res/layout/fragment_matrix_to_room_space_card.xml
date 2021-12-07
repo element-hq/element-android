@@ -39,7 +39,7 @@
             android:textAlignment="textStart"
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
-            app:layout_constraintTop_toBottomOf="@+id/matrixToCardAvatar"
+            app:layout_constraintTop_toBottomOf="@id/matrixToCardAvatar"
             tools:text="@sample/rooms.json/data/name" />
 
         <TextView
@@ -57,7 +57,6 @@
             app:layout_goneMarginTop="0dp"
             tools:text="@sample/rooms.json/data/alias"
             tools:visibility="visible" />
-
 
         <ImageView
             android:id="@+id/matrixToAccessImage"

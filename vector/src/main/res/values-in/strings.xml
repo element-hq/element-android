@@ -47,7 +47,7 @@
     <string name="read_receipt">Baca</string>
     <string name="create_account">Daftar</string>
     <string name="login">Masuk</string>
-    <string name="logout">Copot akun</string>
+    <string name="logout">Keluar</string>
     <string name="hs_url">URL Homeserver</string>
     <string name="search">Cari</string>
     <string name="start_new_chat">Mulai Obrolan Baru</string>
@@ -334,7 +334,7 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="room_participants_action_leave">Tinggalkan ruang ini</string>
     <string name="room_participants_action_remove">Keluarkan dari ruang ini</string>
     <string name="room_participants_action_ban">Larang</string>
-    <string name="room_participants_action_unban">Hapus Larangan</string>
+    <string name="room_participants_action_unban">Hapus Cekalan</string>
     <string name="room_participants_action_set_default_power_level">Setel ulang ke user biasa</string>
     <string name="room_participants_action_set_moderator">Jadikan moderator</string>
     <string name="room_participants_action_set_admin">Jadikan admin</string>
@@ -403,7 +403,7 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="room_event_action_report_prompt_reason">Alasan laporan konten ini</string>
     <string name="room_event_action_report_prompt_ignore_user">Apa Anda ingin menyembunyikan seluruh pesan dari pengguna ini\?
 \n
-\nHarap diperhatikan bahwa tindakan ini akan me-restart aplikasi dan mungkin akan memakan waktu beberapa saat.</string>
+\nHarap diperhatikan bahwa tindakan ini akan memulai ulang aplikasi dan mungkin akan membutuhkan waktu beberapa saat.</string>
     <string name="room_event_action_cancel_upload">Batalkan Unggahan</string>
     <string name="room_event_action_cancel_download">Batalkan Unduhan</string>
     <string name="search_hint">Cari</string>
@@ -447,7 +447,7 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="room_sliding_menu_version">Versi</string>
     <string name="room_sliding_menu_term_and_conditions">Syarat &amp; ketentuan</string>
     <string name="room_sliding_menu_third_party_notices">Pemberitahuan pihak ketiga</string>
-    <string name="room_sliding_menu_copyright">Hak Cipta</string>
+    <string name="room_sliding_menu_copyright">Hak cipta</string>
     <string name="room_sliding_menu_privacy_policy">Kebijakan privasi</string>
     <string name="settings_profile_picture">Gambar Profil</string>
     <string name="settings_display_name">Nama Layar</string>
@@ -522,7 +522,7 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="unrecognized_command">Perintah tak dikenal: %s</string>
     <string name="command_description_emote">Tunjukkan tindakan</string>
     <string name="command_description_ban_user">Larang user dengan id berikut</string>
-    <string name="command_description_unban_user">Cabut larangan pengguna dengan id berikut</string>
+    <string name="command_description_unban_user">Menghapus cekalan pengguna dengan id berikut</string>
     <string name="command_description_op_user">Tentukan tingkat kuasa seorang pengguna</string>
     <string name="command_description_invite_user">Undang pengguna dengan id berikut bergabung ke ruang ini</string>
     <string name="command_description_join_room">Gabung ke ruangan dengan alamat berikut</string>
@@ -697,7 +697,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \nPeringatan: berkas ini mungkin ikut terhapus bila aplikasi ini dihapus.</string>
     <string name="notification_listening_for_events">Mendengarkan peristiwa</string>
     <string name="settings_third_party_notices">Pemberitahuan pihak ketiga</string>
-    <string name="settings_copyright">Hak Cipta</string>
+    <string name="settings_copyright">Hak cipta</string>
     <string name="settings_privacy_policy">Kebijakan privasi</string>
     <string name="settings_clear_cache">Bersihkan cache</string>
     <string name="settings_clear_media_cache">Bersihkan cache media</string>
@@ -764,7 +764,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_password_updated">Kata sandi Anda telah diperbaharui</string>
     <string name="settings_unignore_user">Tunjukkan semua pesan dari %s\?
 \n
-\nMohon perhatikan bahwa tindakan ini akan me-restart aplikasi dan mungkin akan memakan waktu.</string>
+\nMohon perhatikan bahwa tindakan ini akan me-restart aplikasi dan mungkin akan membutuhkan waktu.</string>
     <string name="settings_delete_notification_targets_confirmation">Apa benar Anda ingin menyingkirkan sasaran pemberitahuan ini?</string>
     <string name="settings_delete_threepid_confirmation">Apa benar Anda ingin menyingkirkan %1$s %2$s?</string>
     <string name="settings_select_country">Pilih negara</string>
@@ -1237,26 +1237,27 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="clear_timeline_send_queue">Bersihkan antrian kiriman</string>
     <string name="event_status_sending_message">Mengirim pesan…</string>
     <string name="event_status_sent_message">Pesan terkirim</string>
-    <string name="initial_sync_start_importing_account_data">Sinkronisasi Awal:
-\nMengimpor Data Akun</string>
-    <string name="initial_sync_start_importing_account_groups">Sinkronisasi Awal:
-\nMengimpor Komunitas</string>
+    <string name="initial_sync_start_importing_account_data">Sinkronisasi awal:
+\nMengimpor data akun</string>
+    <string name="initial_sync_start_importing_account_groups">Sinkronisasi awal:
+\nMengimpor komunitas</string>
     <string name="initial_sync_start_importing_account_left_rooms">Sinkronisasi Awal:
-\nMengimpor Ruangan yang Ditinggalkan</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Sinkronisasi Awal:
-\nMengimpor Ruangan yang Diundang</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">Sinkronisasi Awal:
-\nMengimpor Ruangan Tergabung</string>
-    <string name="initial_sync_start_importing_account_rooms">Sinkronisasi Awal:
-\nMengimpor Ruangan</string>
+\nMengimpor ruangan yang ditinggalkan</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Sinkronisasi awal:
+\nMengimpor ruangan yang diundang</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Sinkronisasi awal:
+\nMemuat obrolan Anda
+\nJika Anda telah bergabung dengan banyak ruangan, ini mungkin membutuhkan waktu yang cukup lama</string>
+    <string name="initial_sync_start_importing_account_rooms">Sinkronisasi awal:
+\nMengimpor ruangan</string>
     <string name="initial_sync_start_importing_account_crypto">Sinkronisasi awal:
-\nMengimpor crypto</string>
+\nMengimpor kripto</string>
     <string name="notice_power_level_changed">%1$s mengubah tingkat daya %2$s.</string>
-    <string name="initial_sync_start_importing_account">Sinkronisasi Awal:
+    <string name="initial_sync_start_importing_account">Sinkronisasi awal:
 \nMengimpor akun…</string>
-    <string name="initial_sync_start_downloading">Sinkronisasi Awal:
+    <string name="initial_sync_start_downloading">Sinkronisasi awal:
 \nMengunduh data…</string>
-    <string name="initial_sync_start_server_computing">Sinkronisasi Awal:
+    <string name="initial_sync_start_server_computing">Sinkronisasi awal:
 \nMenunggu respons server…</string>
     <string name="room_displayname_empty_room_was">Ruangan kosong (tadi adalah %s)</string>
     <plurals name="room_displayname_four_and_more_members">
@@ -1331,7 +1332,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• Server yang cocok dengan IP literal sekarang diizinkan.</string>
     <string name="notice_room_server_acl_updated_was_allowed">• Server yang cocok dengan %s telah dihapus dari daftar izin.</string>
     <string name="notice_room_server_acl_updated_allowed">• Server yang cocok dengan %s sekarang telah diizinkan.</string>
-    <string name="notice_room_server_acl_updated_was_banned">• Server yang cocok dengan %s dihapus dari daftar larangan.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Server yang cocok dengan %s dihapus dari daftar cekalan.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Anda mengubah ACL server untuk ruangan ini.</string>
     <string name="notice_room_server_acl_updated_title">%s mengubah ACL server untuk ruangan ini.</string>
     <string name="notice_room_server_acl_set_ip_literals_allowed">• Server yang cocok dengan IP literal diizinkan.</string>
@@ -1811,8 +1812,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="push_gateway_item_push_key">push_key:</string>
     <string name="push_gateway_item_app_id">app_id:</string>
     <string name="settings_push_gateway_no_pushers">Tidak ada gateway dorong terdaftar</string>
-    <string name="settings_push_rules_no_rules">Tidak ada aturan dorong ditentukan</string>
-    <string name="settings_push_rules">Aturan Dorong</string>
+    <string name="settings_push_rules_no_rules">Tidak ada aturan push yang ditentukan</string>
+    <string name="settings_push_rules">Aturan Push</string>
     <string name="settings_expert">Ahli</string>
     <string name="send_you_invite">Mengirim Anda undangan</string>
     <string name="room_list_empty">Gabung ruangan untuk memulai menggunakan aplikasi.</string>
@@ -1872,7 +1873,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     </plurals>
     <string name="keys_backup_info_keys_all_backup_up">Semua kunci tercadangkan</string>
     <string name="secure_backup_setup">Siapkan Cadangan Aman</string>
-    <string name="keys_backup_banner_in_progress">Mencadangkan kunci Anda. Ini mungkin memakan beberapa menit…</string>
+    <string name="keys_backup_banner_in_progress">Mencadangkan kunci Anda. Ini mungkin membutuhkan beberapa menit…</string>
     <string name="keys_backup_banner_update_line2">Kelola di Cadangan Kunci</string>
     <string name="keys_backup_banner_update_line1">Kunci pesan aman baru</string>
     <string name="new_recovery_method_popup_title">Cadangan Kunci Baru</string>
@@ -1929,11 +1930,11 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="keys_backup_restore_is_getting_backup_version">Mengambil versi cadangan…</string>
     <string name="keys_backup_setup_skip_msg">Anda mungkin kehilangan akses ke pesan Anda jika Anda keluar atau kehilangan perangkat ini.</string>
     <string name="keys_backup_setup_skip_title">Yakin\?</string>
-    <string name="keys_backup_setup_backup_started_message">Kunci enkripsi Anda sekarang sedang dicadangkan di latar belakang ke homeserver Anda. Pencadangan awal dapat memakan waktu beberapa menit.</string>
+    <string name="keys_backup_setup_backup_started_message">Kunci enkripsi Anda sekarang sedang dicadangkan di latar belakang ke homeserver Anda. Pencadangan awal dapat membutuhkan waktu beberapa menit.</string>
     <string name="keys_backup_setup_backup_started_title">Pencadangan Dimulai</string>
     <string name="unexpected_error">Kesalahan tidak terduga</string>
     <string name="recovery_key">Kunci Pemulihan</string>
-    <string name="keys_backup_setup_step3_generating_key_status">Membuat Kunci Pemulihan menggunakan frasa sandi, proses ini bisa memakan beberapa detik.</string>
+    <string name="keys_backup_setup_step3_generating_key_status">Membuat Kunci Pemulihan menggunakan frasa sandi, proses ini bisa membutuhkan beberapa detik.</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Bagikan kunci pemulihan ke…</string>
     <string name="keys_backup_setup_step3_please_make_copy">Mohon membuat salinan</string>
     <string name="keys_backup_setup_override_stop">Berhenti</string>
@@ -2354,7 +2355,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="upgrade_public_room">Tingkatkan ruangan publik</string>
     <string name="upgrade_required">Peningkatan dibutuhkan</string>
     <string name="upgrade">Tingkatkan</string>
-    <string name="it_may_take_some_time">Mohon sabar, ini mungkin memakan waktu yang lama.</string>
+    <string name="it_may_take_some_time">Mohon sabar, ini mungkin membutuhkan waktu yang lama.</string>
     <string name="joining_replacement_room">Bergabung ke ruangan yang diganti</string>
     <string name="teammate_spaces_might_not_join">Saat ini orang-orang mungkin tidak dapat bergabung ke ruangan privat yang Anda buat.
 \n
@@ -2571,7 +2572,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="crypto_error_withheld_blacklisted">Anda tidak dapat mengakses pesan ini karena Anda telah diblokir oleh pengirim</string>
     <string name="notice_crypto_unable_to_decrypt_friendly_desc">Karena enkripsi ujung-ke-ujung, Anda mungkin harus menunggu untuk pesan dari seseorang untuk datang karena kunci enkripsinya tidak dikirim secara benar ke Anda.</string>
     <string name="crypto_utd">Tidak Dapat Mendekripsi</string>
-    <string name="notice_crypto_unable_to_decrypt_friendly">Menunggu untuk pesan ini, mungkin memakan beberapa waktu</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly">Menunggu untuk pesan ini, mungkin membutuhkan beberapa waktu</string>
     <string name="notice_crypto_unable_to_decrypt_final">Anda tidak dapat mengakses pesan ini</string>
     <string name="room_settings_set_avatar">Atur avatar</string>
     <string name="room_settings_save_success">Anda berhasil mengubah pengaturan ruangan</string>
@@ -2629,7 +2630,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="invitations_sent_to_two_users">Undangan terkirim ke %1$s dan %2$s</string>
     <string name="invitation_sent_to_one_user">Undangan terkirim ke %1$s</string>
     <string name="template_invite_friends_rich_title">🔐️ Bergabung dengan saya di ${app_name}</string>
-    <string name="template_invite_friends_text">Hi, bicara dengan saya di ${app_name}: %s</string>
+    <string name="template_invite_friends_text">Halo, bicara dengan saya di ${app_name}: %s</string>
     <string name="invite_friends">Undang teman</string>
     <string name="invite_users_to_room_title">Undang Pengguna</string>
     <string name="inviting_users_to_room">Mengundang pengguna…</string>
@@ -2767,7 +2768,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="bootstrap_finish_title">Anda telah selesai!</string>
     <string name="your_recovery_key">Kunci pemulihan Anda</string>
     <string name="bootstrap_loading_title">Mengatur pemulihan.</string>
-    <string name="bootstrap_loading_text">Ini mungkin memakan beberapa detik, mohon sabar.</string>
+    <string name="bootstrap_loading_text">Ini mungkin membutuhkan beberapa detik, mohon sabar.</string>
     <string name="bootstrap_info_text_2">Masukkan frasa keamanan yang Anda tahu, digunakan untuk mengamankan rahasia di server Anda.</string>
     <string name="bootstrap_dont_reuse_pwd">Jangan menggunakan kata sandi Akun Anda.</string>
     <string name="bootstrap_info_confirm_text">Masukkan %s Anda lagi untuk mengkonfirmasinya.</string>
@@ -2953,4 +2954,26 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="a11y_presence_unavailable">Tidak Tersedia</string>
     <string name="a11y_presence_offline">Offline</string>
     <string name="a11y_presence_online">Online</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Pilih homeserver</string>
+    <string name="login_error_homeserver_from_url_not_found">Tidak dapat menjangkau homeserver di URL %s. Silakan periksa tautan Anda atau pilih sebuah homeserver secara manual.</string>
+    <string name="notification_listening_for_notifications">Mendengarkan notifikasi</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="other">Setidaknya diperlukan %1$s opsi</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">Pertanyaan tidak bisa kosong</string>
+    <string name="create_poll_button">BUAT POLL</string>
+    <string name="create_poll_add_option">TAMBAHKAN OPSI</string>
+    <string name="create_poll_options_hint">Opsi %1$d</string>
+    <string name="create_poll_options_title">Buat opsi</string>
+    <string name="create_poll_question_hint">Pertanyaan atau topik</string>
+    <string name="create_poll_question_title">Pertanyaan atau topik poll</string>
+    <string name="create_poll_title">Buat Poll</string>
+    <string name="attachment_type_poll">Poll</string>
+    <string name="identity_server_consent_dialog_content_2">Untuk menemukan kontak yang sudah ada, Anda memerlukan untuk mengirim informasi kontak ke server identitas Anda.
+\n
+\nKami meng-hash data Anda sebelum mengirim untuk privasi. Apakah Anda terima untuk mengirimkan informasi ini\?</string>
+    <string name="identity_server_consent_dialog_title_2">Kirim email dan nomor telepon ke %s</string>
+    <string name="settings_discovery_consent_notice_off_2">Kontak Anda privat. Untuk menemukan pengguna dari kontak Anda, kami membutuhkan izin untuk mengirim info kontak ke server identitas Anda.</string>
+    <string name="shortcut_disabled_reason_sign_out">Sesinya telah dikeluarkan!</string>
+    <string name="shortcut_disabled_reason_room_left">Ruangannya telah ditinggalkan!</string>
 </resources>

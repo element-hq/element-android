@@ -34,7 +34,7 @@
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/itemAddRoomRoomCheckBox"
+        app:layout_constraintEnd_toStartOf="@id/itemAddRoomRoomCheckBox"
         app:layout_constraintStart_toEndOf="@id/itemAddRoomRoomAvatar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
@@ -51,6 +51,5 @@
         app:layout_constraintStart_toEndOf="@id/itemAddRoomRoomNameText"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/ic_checkbox_on" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -60,7 +60,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/childSpaceAvatar"
+        app:layout_constraintStart_toEndOf="@id/childSpaceAvatar"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@sample/spaces.json/data/name" />
 

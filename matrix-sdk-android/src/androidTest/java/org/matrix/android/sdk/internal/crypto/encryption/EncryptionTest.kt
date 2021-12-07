@@ -40,8 +40,9 @@ import java.util.concurrent.CountDownLatch
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class EncryptionTest : InstrumentedTest {
-    private val mTestHelper = CommonTestHelper(context())
-    private val mCryptoTestHelper = CryptoTestHelper(mTestHelper)
+
+    private val testHelper = CommonTestHelper(context())
+    private val cryptoTestHelper = CryptoTestHelper(testHelper)
 
     @Test
     fun test_EncryptionEvent() {
@@ -69,7 +70,7 @@ class EncryptionTest : InstrumentedTest {
     }
 
     private fun performTest(roomShouldBeEncrypted: Boolean, action: (Room) -> Unit) {
-        val cryptoTestData = mCryptoTestHelper.doE2ETestWithAliceInARoom(encryptedRoom = false)
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(encryptedRoom = false)
 
         val aliceSession = cryptoTestData.firstSession
         val room = aliceSession.getRoom(cryptoTestData.roomId)!!
@@ -101,12 +102,12 @@ class EncryptionTest : InstrumentedTest {
         timeline.addListener(timelineListener)
 
         action.invoke(room)
-
-        mTestHelper.await(latch)
+        testHelper.await(latch)
         timeline.dispose()
-
-        room.isEncrypted() shouldBe roomShouldBeEncrypted
-
-        cryptoTestData.cleanUp(mTestHelper)
+        testHelper.waitWithLatch {
+            room.isEncrypted() shouldBe roomShouldBeEncrypted
+            it.countDown()
+        }
+        cryptoTestData.cleanUp(testHelper)
     }
 }

@@ -1,42 +1,42 @@
-Element adalah perpesanan yang aman dan aplikasi kolaborasi tim produktivitas yang ideal untuk obrolan grup saat bekerja jarak jauh. Aplikasi obrolan ini menggunakan enkripsi ujung-ke-ujung untuk memberikan konferensi video, berbagi file, dan panggilan suara.
+Element adalah perpesanan yang aman dan aplikasi kolaborasi tim produktivitas yang ideal untuk obrolan grup saat bekerja jarak jauh. Aplikasi perpesanan ini menggunakan enkripsi ujung-ke-ujung untuk memberikan konferensi video, pembagian file, dan panggilan suara yang aman.
 
-<b>Fitur Element termasuk:</b>
+<b>Fitur Element termasuk</b>
 - Alat komunikasi online yang canggih
-- Pesan terenkripsi sepenuhnya untuk memungkinkan komunikasi perusahaan yang lebih aman, bahkan untuk pekerja jarak jauh
-- Obrolan terdesentralisasi berdasarkan framework sumber-terbuka Matrix
-- Berbagi file dengan aman dengan data terenkripsi saat mengelola proyek
-- Obrolan video dengan VoIP dan berbagi layar
+- Pesan-pesan yang dienkripsi sepenuhnya untuk memungkinkan komunikasi perusahaan yang lebih aman, bahkan untuk pekerja jarak jauh
+- Obrolan terdesentralisasi berdasarkan kerangka Matrix yang sumber terbuka
+- Pembagian file aman dengan data terenkripsi saat mengelola proyek
+- Obrolan video dengan VoIP dan pembagian layar
 - Integrasi yang mudah dengan alat kolaborasi online favorit Anda, alat manajemen proyek, layanan VoIP dan aplikasi perpesanan tim lainnya
 
-Element benar-benar berbeda dari aplikasi perpesanan dan kolaborasi lainnya. Element beroperasi pada Matrix, jaringan terbuka untuk pengiriman pesan yang aman dan komunikasi terdesentralisasi. Matrix memungkinkan hosting sendiri untuk memberi pengguna kepemilikan maksimum dan kontrol data dan pesan mereka.
+Element benar-benar berbeda dari aplikasi perpesanan dan aplikasi kolaborasi lainnya. Element beroperasi pada Matrix, jaringan terbuka untuk pengiriman pesan yang aman dan komunikasi terdesentralisasi.
 
-<b>Pesan privasi dan terenkripsi</b>
-Element melindungi Anda dari iklan yang tidak diinginkan, penambangan data dan taman berdinding. Element juga mengamankan semua data Anda, komunikasi video dan suara satu-ke-satu melalui enkripsi ujung-ke-ujung dan verifikasi perangkat yang ditandatangani secara silang.
+<b>Perpesanan dengan privasi dan enkripsi</b>
+Element melindungi Anda dari iklan yang tidak diinginkan, penambangan data dan taman berdinding. Element juga mengamankan semua data Anda, komunikasi video dan suara satu-ke-satu dengan enkripsi ujung-ke-ujung dan verifikasi perangkat menggunakan penandatanganan silang.
 
-Element memberi Anda kendali atas privasi Anda sambil memungkinkan Anda untuk berkomunikasi dengan aman dengan siapa pun di jaringan Matrix, atau alat kolaborasi bisnis lainnya dengan mengintegrasikan dengan aplikasi seperti Slack.
+Element memberikan Anda kendali atas privasi Anda sambil memungkinkan Anda untuk berkomunikasi dengan siapa saja secara aman di jaringan Matrix, atau alat kolaborasi bisnis lainnya dengan mengintegrasikan aplikasi-aplikasi seperti Slack.
 
 <b>Element dapat dihost sendiri</b>
-Untuk memungkinkan lebih banyak kendali atas data dan percakapan sensitif Anda, Element bisa dihost sendiri atau Anda dapat memilih host berbasis Matrix - standar untuk komunikasi terdesentralisasi sumber-terbuka. Element memberi Anda privasi, kepatuhan keamanan, dan fleksibilitas integrasi.
+Untuk memungkinkan lebih banyak kendali atas data dan pesan-pesan sensitif Anda, Element dapat dihost sendiri atau Anda dapat memilih host berbasis Matrix, standar untuk komunikasi terdesentralisasi sumber terbuka. Element memberi Anda privasi, kepatuhan keamanan, dan fleksibilitas integrasi.
 
 <b>Miliki data Anda</b>
-Anda memutuskan di mana menyimpan data dan pesan Anda. Tanpa risiko penambangan data atau akses dari pihak ketiga.
+Anda memutuskan di mana untuk menyimpan data dan pesan-pesan Anda, tanpa risiko penambangan data atau akses dari pihak ketiga.
 
 Element menempatkan Anda dalam kendali dengan cara yang berbeda:
 1. Dapatkan akun gratis pada server publik matrix.org yang dihost oleh pengembang Matrix, atau memilih dari ribuan server publik yang dihost oleh sukarelawan
 2. Host sendiri akun Anda dengan menjalankan server pada infrastruktur IT Anda sendiri
-3. Daftar untuk akun di server khusus dengan hanya berlangganan platform hosting Element Matrix Services
+3. Daftar untuk akun di server khusus dengan berlangganan platform hosting Layanan Matrix Element
 
 <b>Pesan terbuka dan kolaborasi</b>
-Anda dapat mengobrol dengan siapa saja di jaringan Matrix, apakah mereka menggunakan Element, aplikasi Matrix lain atau bahkan jika mereka menggunakan aplikasi perpesanan yang berbeda.
+Anda dapat mengobrol dengan siapa saja di jaringan Matrix, jika mereka menggunakan Element, aplikasi Matrix lain atau bahkan menggunakan aplikasi perpesanan yang berbeda.
 
 <b>Sangat aman</b>
-Enkripsi ujung-ke-ujung yang nyata (hanya mereka yang dalam percakapan dapat mendekripsi pesan), dan verifikasi perangkat menggunakan penandatanganan-silang.
+Enkripsi ujung-ke-ujung yang nyata (hanya mereka yang dalam obrolan dapat mendekripsi pesan), dan verifikasi perangkat menggunakan penandatanganan silang.
 
 <b>Komunikasi dan integrasi lengkap</b>
-Perpesanan, panggilan suara dan video, berbagi file, berbagi layar dan banyak integrasi, bot dan widget. Buat ruangan, komunitas, tetap terhubung dan selesaikan hal-hal.
+Perpesanan, panggilan suara dan video, pembagian file, pembagian layar dan banyak integrasi bot dan widget. Buat ruangan dan komunitas, tetap terhubung dan selesaikan hal-hal penting.
 
 <b>Ambil di mana Anda tinggalkan</b>
-Tetap terhubung di mana pun Anda berada dengan riwayat pesan yang sepenuhnya disinkronkan di semua perangkat Anda dan di web di https://app.element.io
+Tetap terhubung di mana Anda berada, dengan riwayat pesan yang disinkronkan di semua perangkat Anda dan web di https://app.element.io
 
-<b>Open source</b>
-Element Android adalah proyek sumber terbuka, di-host oleh GitHub. Silakan melaporkan bug dan/atau membuat kontribusi ke pengembangannya di https://github.com/vector-im/element-android
+<b>Sumber terbuka</b>
+Element Android adalah proyek sumber terbuka, dihost oleh GitHub. Silakan laporkan masalah yang Anda temukan, atau membuat kontribusi ke pengembangannya di https://github.com/vector-im/element-android

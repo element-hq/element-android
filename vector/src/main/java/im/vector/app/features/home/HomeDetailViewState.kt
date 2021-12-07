@@ -42,8 +42,11 @@ data class HomeDetailViewState(
         val syncState: SyncState = SyncState.Idle,
         val incrementalSyncStatus: SyncStatusService.Status.IncrementalSyncStatus = SyncStatusService.Status.IncrementalSyncIdle,
         val pushCounter: Int = 0,
-        val showDialPadTab: Boolean = false
-) : MavericksState
+        val pstnSupportFlag: Boolean = false,
+        val forceDialPadTab: Boolean = false
+) : MavericksState {
+    val showDialPadTab = forceDialPadTab || pstnSupportFlag
+}
 
 sealed class HomeTab(@StringRes val titleRes: Int) {
     data class RoomList(val displayMode: RoomListDisplayMode) : HomeTab(displayMode.titleRes)

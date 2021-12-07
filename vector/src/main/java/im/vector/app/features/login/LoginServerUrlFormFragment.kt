@@ -57,9 +57,9 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment<F
     }
 
     private fun setupViews() {
-        views.loginServerUrlFormLearnMore.setOnClickListener { learnMore() }
-        views.loginServerUrlFormClearHistory.setOnClickListener { clearHistory() }
-        views.loginServerUrlFormSubmit.setOnClickListener { submit() }
+        views.loginServerUrlFormLearnMore.debouncedClicks { learnMore() }
+        views.loginServerUrlFormClearHistory.debouncedClicks { clearHistory() }
+        views.loginServerUrlFormSubmit.debouncedClicks { submit() }
     }
 
     private fun setupHomeServerField() {

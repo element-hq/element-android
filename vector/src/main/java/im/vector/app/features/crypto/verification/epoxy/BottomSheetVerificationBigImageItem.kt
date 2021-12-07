@@ -35,7 +35,7 @@ abstract class BottomSheetVerificationBigImageItem : VectorEpoxyModel<BottomShee
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.image.render(roomEncryptionTrustLevel)
+        holder.image.render(roomEncryptionTrustLevel, borderLess = true)
     }
 
     class Holder : VectorEpoxyHolder() {

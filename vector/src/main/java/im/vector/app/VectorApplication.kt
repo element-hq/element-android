@@ -175,8 +175,7 @@ class VectorApplication :
             }
 
             override fun onPause(owner: LifecycleOwner) {
-                Timber.i("App entered background") // call persistInfo
-                notificationDrawerManager.persistInfo()
+                Timber.i("App entered background")
                 FcmHelper.onEnterBackground(appContext, vectorPreferences, activeSessionHolder)
             }
         })
@@ -221,6 +220,7 @@ class VectorApplication :
 
     override fun getWorkManagerConfiguration(): WorkConfiguration {
         return WorkConfiguration.Builder()
+                .setWorkerFactory(Matrix.getInstance(this.appContext).workerFactory())
                 .setExecutor(Executors.newCachedThreadPool())
                 .build()
     }

@@ -67,13 +67,14 @@
     <string name="initial_sync_start_importing_account_rooms">初始化同步：
 \n正在导入聊天室</string>
     <string name="initial_sync_start_importing_account_joined_rooms">初始化同步：
-\n正在导入已加入的聊天室</string>
+\n正在加载对话
+\n如果你加入了很多论聊天室，这可能需要一段时间</string>
     <string name="initial_sync_start_importing_account_invited_rooms">初始化同步：
 \n正在导入已邀请的聊天室</string>
     <string name="initial_sync_start_importing_account_left_rooms">初始化同步：
 \n正在导入已离开的聊天室</string>
     <string name="initial_sync_start_importing_account_groups">初始化同步：
-\n正在导入社群</string>
+\n正在导入社区</string>
     <string name="initial_sync_start_importing_account_data">初始化同步：
 \n正在导入账号数据</string>
     <string name="notice_room_update">%s 升级了此聊天室。</string>
@@ -2959,4 +2960,26 @@
     <string name="a11y_presence_unavailable">不可用</string>
     <string name="a11y_presence_offline">离线</string>
     <string name="a11y_presence_online">在线</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">选择主服务器</string>
+    <string name="login_error_homeserver_from_url_not_found">无法访问 URL %s 上的主服务器。请检查您的链接或手动选择一个主服务器。</string>
+    <string name="notification_listening_for_notifications">侦听通知</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="other">需要至少 %1$s 个选项</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">问题不能为空</string>
+    <string name="create_poll_button">创建投票</string>
+    <string name="create_poll_add_option">添加选项</string>
+    <string name="create_poll_options_hint">选项 %1$d</string>
+    <string name="create_poll_options_title">创建选项</string>
+    <string name="create_poll_question_hint">问题或主题</string>
+    <string name="create_poll_question_title">投票问题或主题</string>
+    <string name="create_poll_title">创建投票</string>
+    <string name="attachment_type_poll">投票</string>
+    <string name="identity_server_consent_dialog_content_2">要发现现有联系人，您需要将联系信息发送到您的身份服务器。
+\n
+\n我们在发送之前对您的数据进行哈希处理以保护隐私。 您同意发送此信息吗？</string>
+    <string name="identity_server_consent_dialog_title_2">向 %s 发送电子邮件和电话号码</string>
+    <string name="settings_discovery_consent_notice_off_2">您的联系人是私密的。 要从您的联系人中发现用户，我们需要您的许可才能将联系信息发送到您的身份服务器。</string>
+    <string name="shortcut_disabled_reason_sign_out">已退出此会话！</string>
+    <string name="shortcut_disabled_reason_room_left">已离开此聊天室！</string>
 </resources>
