@@ -3671,4 +3671,6 @@
     <string name="end_poll_confirmation_description">Are you sure you want to end this poll? This will stop people from being able to vote and will display the final results of the poll.</string>
     <string name="end_poll_confirmation_approve_button">End poll</string>
     <string name="labs_enable_polls">Enable Polls</string>
+    <string name="poll_response_room_list_preview">Vote casted</string>
+    <string name="poll_end_room_list_preview">Poll ended</string>
 </resources>

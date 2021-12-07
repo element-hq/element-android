@@ -66,6 +66,12 @@ class DisplayableEventFormatter @Inject constructor(
                 return timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.pollCreationInfo?.question?.question
                         ?: stringProvider.getString(R.string.sent_a_poll)
             }
+            EventType.POLL_RESPONSE         -> {
+                return stringProvider.getString(R.string.poll_response_room_list_preview)
+            }
+            EventType.POLL_END              -> {
+                return stringProvider.getString(R.string.poll_end_room_list_preview)
+            }
             EventType.MESSAGE               -> {
                 timelineEvent.getLastMessageContent()?.let { messageContent ->
                     when (messageContent.msgType) {
