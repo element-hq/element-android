@@ -24,13 +24,15 @@ import com.airbnb.mvrx.activityViewModel
 import im.vector.app.R
 import im.vector.app.config.analyticsConfig
 import im.vector.app.core.extensions.setTextWithColoredPart
+import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentAnalyticsOptinBinding
 import javax.inject.Inject
 
 class AnalyticsOptInFragment @Inject constructor(
-) : VectorBaseFragment<FragmentAnalyticsOptinBinding>() {
+) : VectorBaseFragment<FragmentAnalyticsOptinBinding>(),
+        OnBackPressed {
 
     // Share the view model with the Activity so that the Activity
     // can decide what to do when the data has been saved
@@ -63,5 +65,12 @@ class AnalyticsOptInFragment @Inject constructor(
                     openUrlInChromeCustomTab(requireContext(), null, analyticsConfig.policyLink)
                 }
         )
+    }
+
+    override fun onBackPressed(toolbarButton: Boolean): Boolean {
+        // Consider user does not give consent
+        viewModel.handle(AnalyticsConsentViewActions.SetUserConsent(userConsent = false))
+        // And consume the event
+        return true
     }
 }
