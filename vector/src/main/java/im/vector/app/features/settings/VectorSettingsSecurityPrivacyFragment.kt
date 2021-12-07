@@ -288,7 +288,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     }
 
     private fun observeAnalyticsState() {
-        analyticsConsentViewModel.onEach(AnalyticsConsentViewState::shouldCheckTheBox) {
+        analyticsConsentViewModel.onEach(AnalyticsConsentViewState::userConsent) {
             analyticsConsent.isChecked = it
         }
     }
@@ -296,8 +296,15 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     private fun setUpAnalytics() {
         analyticsCategory.isVisible = analyticsConfig.isEnabled
 
-        analyticsConsent.setOnPreferenceClickListener {
-            analyticsConsentViewModel.handle(AnalyticsConsentViewActions.SetUserConsent(analyticsConsent.isChecked))
+        analyticsConsent.setOnPreferenceChangeListener { _, newValue ->
+            val newValueBool = newValue as? Boolean ?: false
+            if (newValueBool) {
+                // User want to enable analytics, display the opt in screen
+                navigator.openAnalyticsOptIn(requireContext())
+            } else {
+                // Just disable analytics
+                analyticsConsentViewModel.handle(AnalyticsConsentViewActions.SetUserConsent(false))
+            }
             true
         }
     }

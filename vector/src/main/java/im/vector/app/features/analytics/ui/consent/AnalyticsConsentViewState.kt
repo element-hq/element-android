@@ -21,12 +21,4 @@ import com.airbnb.mvrx.MavericksState
 data class AnalyticsConsentViewState(
         val userConsent: Boolean = false,
         val didAskUserConsent: Boolean = false
-) : MavericksState {
-    val shouldCheckTheBox: Boolean =
-            if (didAskUserConsent) {
-                userConsent
-            } else {
-                // default value
-                true
-            }
-}
+) : MavericksState
