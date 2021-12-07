@@ -71,7 +71,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
     private val popExitAnim = R.anim.exit_fade_out
 
     private val topFragment: Fragment?
-        get() = supportFragmentManager.findFragmentById(R.id.loginFragmentContainer)
+        get() = supportFragmentManager.findFragmentById(views.loginFragmentContainer.id)
 
     private val commonOption: (FragmentTransaction) -> Unit = { ft ->
         // Find the loginLogo on the current Fragment, this should not return null
@@ -108,7 +108,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
     }
 
     protected open fun addFirstFragment() {
-        addFragment(R.id.loginFragmentContainer, LoginSplashSignUpSignInSelectionFragment2::class.java)
+        addFragment(views.loginFragmentContainer, LoginSplashSignUpSignInSelectionFragment2::class.java)
     }
 
     private fun handleLoginViewEvents(event: LoginViewEvents2) {
@@ -127,7 +127,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
                         // First ask for login and password
                         // I add a tag to indicate that this fragment is a registration stage.
                         // This way it will be automatically popped in when starting the next registration stage
-                        addFragmentToBackstack(R.id.loginFragmentContainer,
+                        addFragmentToBackstack(views.loginFragmentContainer,
                                 LoginFragment2::class.java,
                                 tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                                 option = commonOption
@@ -146,7 +146,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
                 Unit
             }
             is LoginViewEvents2.OpenServerSelection                        ->
-                addFragmentToBackstack(R.id.loginFragmentContainer,
+                addFragmentToBackstack(views.loginFragmentContainer,
                         LoginServerSelectionFragment2::class.java,
                         option = { ft ->
                             findViewById<View?>(R.id.loginSplashLogo)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
@@ -158,12 +158,12 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
                             // ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
                         })
             is LoginViewEvents2.OpenHomeServerUrlFormScreen                -> {
-                addFragmentToBackstack(R.id.loginFragmentContainer,
+                addFragmentToBackstack(views.loginFragmentContainer,
                         LoginServerUrlFormFragment2::class.java,
                         option = commonOption)
             }
             is LoginViewEvents2.OpenSignInEnterIdentifierScreen            -> {
-                addFragmentToBackstack(R.id.loginFragmentContainer,
+                addFragmentToBackstack(views.loginFragmentContainer,
                         LoginFragmentSigninUsername2::class.java,
                         option = { ft ->
                             findViewById<View?>(R.id.loginSplashLogo)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
@@ -176,24 +176,24 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
                         })
             }
             is LoginViewEvents2.OpenSsoOnlyScreen                          -> {
-                addFragmentToBackstack(R.id.loginFragmentContainer,
+                addFragmentToBackstack(views.loginFragmentContainer,
                         LoginSsoOnlyFragment2::class.java,
                         option = commonOption)
             }
             is LoginViewEvents2.OnWebLoginError                            -> onWebLoginError(event)
             is LoginViewEvents2.OpenResetPasswordScreen                    ->
-                addFragmentToBackstack(R.id.loginFragmentContainer,
+                addFragmentToBackstack(views.loginFragmentContainer,
                         LoginResetPasswordFragment2::class.java,
                         option = commonOption)
             is LoginViewEvents2.OnResetPasswordSendThreePidDone            -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
-                addFragmentToBackstack(R.id.loginFragmentContainer,
+                addFragmentToBackstack(views.loginFragmentContainer,
                         LoginResetPasswordMailConfirmationFragment2::class.java,
                         option = commonOption)
             }
             is LoginViewEvents2.OnResetPasswordMailConfirmationSuccess     -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
-                addFragmentToBackstack(R.id.loginFragmentContainer,
+                addFragmentToBackstack(views.loginFragmentContainer,
                         LoginResetPasswordSuccessFragment2::class.java,
                         option = commonOption)
             }
@@ -202,37 +202,37 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
             }
             is LoginViewEvents2.OnSendEmailSuccess                         ->
-                addFragmentToBackstack(R.id.loginFragmentContainer,
+                addFragmentToBackstack(views.loginFragmentContainer,
                         LoginWaitForEmailFragment2::class.java,
                         LoginWaitForEmailFragmentArgument(event.email),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
             is LoginViewEvents2.OpenSigninPasswordScreen                   -> {
-                addFragmentToBackstack(R.id.loginFragmentContainer,
+                addFragmentToBackstack(views.loginFragmentContainer,
                         LoginFragmentSigninPassword2::class.java,
                         tag = FRAGMENT_LOGIN_TAG,
                         option = commonOption)
             }
             is LoginViewEvents2.OpenSignupPasswordScreen                   -> {
-                addFragmentToBackstack(R.id.loginFragmentContainer,
+                addFragmentToBackstack(views.loginFragmentContainer,
                         LoginFragmentSignupPassword2::class.java,
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
             }
             is LoginViewEvents2.OpenSignUpChooseUsernameScreen             -> {
-                addFragmentToBackstack(R.id.loginFragmentContainer,
+                addFragmentToBackstack(views.loginFragmentContainer,
                         LoginFragmentSignupUsername2::class.java,
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
             }
             is LoginViewEvents2.OpenSignInWithAnythingScreen               -> {
-                addFragmentToBackstack(R.id.loginFragmentContainer,
+                addFragmentToBackstack(views.loginFragmentContainer,
                         LoginFragmentToAny2::class.java,
                         tag = FRAGMENT_LOGIN_TAG,
                         option = commonOption)
             }
             is LoginViewEvents2.OnSendMsisdnSuccess                        ->
-                addFragmentToBackstack(R.id.loginFragmentContainer,
+                addFragmentToBackstack(views.loginFragmentContainer,
                         LoginGenericTextInputFormFragment2::class.java,
                         LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, event.msisdn),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
@@ -257,7 +257,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
         if (event.newAccount) {
             // Propose to set avatar and display name
             // Back on this Fragment will finish the Activity
-            addFragmentToBackstack(R.id.loginFragmentContainer,
+            addFragmentToBackstack(views.loginFragmentContainer,
                     AccountCreatedFragment::class.java,
                     option = commonOption)
         } else {
@@ -312,7 +312,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
                 .setTitle(R.string.app_name)
                 .setMessage(getString(R.string.login_registration_not_supported))
                 .setPositiveButton(R.string.yes) { _, _ ->
-                    addFragmentToBackstack(R.id.loginFragmentContainer,
+                    addFragmentToBackstack(views.loginFragmentContainer,
                             LoginWebFragment2::class.java,
                             option = commonOption)
                 }
@@ -325,7 +325,7 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
                 .setTitle(R.string.app_name)
                 .setMessage(getString(R.string.login_mode_not_supported, supportedTypes.joinToString { "'$it'" }))
                 .setPositiveButton(R.string.yes) { _, _ ->
-                    addFragmentToBackstack(R.id.loginFragmentContainer,
+                    addFragmentToBackstack(views.loginFragmentContainer,
                             LoginWebFragment2::class.java,
                             option = commonOption)
                 }
@@ -355,22 +355,22 @@ open class LoginActivity2 : VectorBaseActivity<ActivityLoginBinding>(), ToolbarC
         supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
         when (stage) {
-            is Stage.ReCaptcha -> addFragmentToBackstack(R.id.loginFragmentContainer,
+            is Stage.ReCaptcha -> addFragmentToBackstack(views.loginFragmentContainer,
                     LoginCaptchaFragment2::class.java,
                     LoginCaptchaFragmentArgument(stage.publicKey),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption)
-            is Stage.Email     -> addFragmentToBackstack(R.id.loginFragmentContainer,
+            is Stage.Email     -> addFragmentToBackstack(views.loginFragmentContainer,
                     LoginGenericTextInputFormFragment2::class.java,
                     LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetEmail, stage.mandatory),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption)
-            is Stage.Msisdn    -> addFragmentToBackstack(R.id.loginFragmentContainer,
+            is Stage.Msisdn    -> addFragmentToBackstack(views.loginFragmentContainer,
                     LoginGenericTextInputFormFragment2::class.java,
                     LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption)
-            is Stage.Terms     -> addFragmentToBackstack(R.id.loginFragmentContainer,
+            is Stage.Terms     -> addFragmentToBackstack(views.loginFragmentContainer,
                     LoginTermsFragment2::class.java,
                     LoginTermsFragmentArgument(stage.policies.toLocalizedLoginTerms(getString(R.string.resources_language))),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
