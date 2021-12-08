@@ -31,6 +31,7 @@ import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSigninToAny2Binding
 import im.vector.app.features.login.LoginMode
+import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.SocialLoginButtonsView
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
@@ -124,7 +125,7 @@ class LoginFragmentToAny2 @Inject constructor() : AbstractSSOLoginFragment2<Frag
             views.loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                 override fun onProviderSelected(id: String?) {
                     loginViewModel.getSsoUrl(
-                            redirectUrl = LoginActivity2.VECTOR_REDIRECT_URL,
+                            redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                             deviceId = state.deviceId,
                             providerId = id
                     )

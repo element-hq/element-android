@@ -24,6 +24,7 @@ import androidx.browser.customtabs.CustomTabsSession
 import androidx.viewbinding.ViewBinding
 import com.airbnb.mvrx.withState
 import im.vector.app.core.utils.openUrlInChromeCustomTab
+import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.hasSso
 import im.vector.app.features.login.ssoIdentityProviders
 
@@ -90,7 +91,7 @@ abstract class AbstractSSOLoginFragment2<VB : ViewBinding> : AbstractLoginFragme
             if (state.loginMode.hasSso() && state.loginMode.ssoIdentityProviders().isNullOrEmpty()) {
                 // in this case we can prefetch (not other cases for privacy concerns)
                 loginViewModel.getSsoUrl(
-                        redirectUrl = LoginActivity2.VECTOR_REDIRECT_URL,
+                        redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                         deviceId = state.deviceId,
                         providerId = null
                 )
