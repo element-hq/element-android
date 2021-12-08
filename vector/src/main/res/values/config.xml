@@ -8,11 +8,6 @@
     <string name="piwik_server_url" translatable="false">https://piwik.riot.im</string>
     <string name="bug_report_url" translatable="false">https://riot.im/bugreports/submit</string>
     <string name="fallback_stun_server_url" translatable="false">turn.matrix.org</string>
-    <string-array name="fallback_ice_servers" translatable="false">
-        <item>turn:turn.matrix.org:3478?transport=udp</item>
-        <item>turn:turn.matrix.org:3478?transport=tcp</item>
-        <item>turns:turn.matrix.org:443?transport=tcp</item>
-    </string-array>
 
     <!--
         Pusher config for the application
