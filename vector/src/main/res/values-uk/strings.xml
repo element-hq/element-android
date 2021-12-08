@@ -14,7 +14,7 @@
     <string name="notice_room_join">%1$s приєднується</string>
     <string name="notice_room_leave">%1$s виходить з кімнати</string>
     <string name="notice_room_reject">%1$s відхиляє запрошення</string>
-    <string name="notice_room_kick">%1$s викидає %2$s</string>
+    <string name="notice_room_kick">%1$s вилучає %2$s</string>
     <string name="notice_room_unban">%1$s розблоковує %2$s</string>
     <string name="notice_room_ban">%1$s блокує %2$s</string>
     <string name="notice_room_withdraw">%1$s відкликає запрошення для %2$s</string>
@@ -113,7 +113,7 @@
     <string name="notice_placed_video_call_by_you">Ви починаєте відеовиклик.</string>
     <string name="notice_room_avatar_changed">%1$s змінює аватар кімнати</string>
     <string name="notice_display_name_removed_by_you">Ви прибрали показуване ім\'я (%1$s)</string>
-    <string name="notice_room_kick_by_you">Ви викинули %1$s</string>
+    <string name="notice_room_kick_by_you">Ви вилучили %1$s</string>
     <string name="notice_direct_room_third_party_invite">%1$s запрошує %2$s</string>
     <string name="notice_room_reject_by_you">Ви відхилили запрошення</string>
     <string name="notice_direct_room_join_by_you">Ви приєдналися</string>
@@ -995,7 +995,7 @@
     <string name="command_description_join_room">Приєднує до кімнати із вказаною адресою</string>
     <string name="command_description_part_room">Вийти з кімнати</string>
     <string name="command_description_topic">Встановити тему кімнати</string>
-    <string name="command_description_kick_user">Копнути користувача із вказаним ID</string>
+    <string name="command_description_kick_user">Вилучити користувача із вказаним ID</string>
     <string name="command_description_nick">Змінити Ваш псевдонім</string>
     <string name="command_description_markdown">Увімкнути/Вимкнути розмітку Markdown</string>
     <string name="command_description_clear_scalar_token">Для виправлення керування додатками Matrix</string>
@@ -1027,7 +1027,7 @@
         <item quantity="other"/>
     </plurals>
     <string name="group_no_long_description">Адміністратор спільноти не вказав для неї детальної інформації.</string>
-    <string name="has_been_kicked">%2$s Вас викинув з %1$s</string>
+    <string name="has_been_kicked">%2$s вилучає вас із %1$s</string>
     <string name="has_been_banned">%2$s блокує вас у %1$s</string>
     <string name="reason_colon">Причина: %1$s</string>
     <string name="rejoin">Приєднатися знову</string>
@@ -1075,7 +1075,7 @@
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="call_anyway">Все одно подзвонити</string>
-    <string name="room_participants_action_kick">Викинути</string>
+    <string name="room_participants_action_kick">Вилучити</string>
     <string name="reason_hint">Причина</string>
     <string name="settings_inline_url_preview_summary">Попередній перегляд посилань у чаті, у разі якщо Ваш сервер підтримує таку можливість.</string>
     <string name="settings_send_typing_notifs">Надсилати сповіщення про набір повідомлення</string>
@@ -1085,7 +1085,7 @@
     <string name="settings_show_read_receipts">Показувати підтвердження прочитання</string>
     <string name="settings_show_read_receipts_summary">Натискати на підтвердження прочитання для детального переліку.</string>
     <string name="settings_show_join_leave_messages">Показувати події приєднання та виходу</string>
-    <string name="settings_show_join_leave_messages_summary">Це не стосується запрошень, викидань і блокувань.</string>
+    <string name="settings_show_join_leave_messages_summary">Це не стосується запрошень, вилучень і блокувань.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Показувати події облікових записів</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Містить зміни аватарів та імен.</string>
     <string name="settings_password">Пароль</string>
@@ -1513,7 +1513,7 @@
     <string name="settings_secure_backup_setup">Налаштувати безпечне резервне копіювання</string>
     <string name="settings_secure_backup_manage">Керувати</string>
     <string name="settings_secure_backup_section_title">Безпечне резервне копіювання</string>
-    <string name="settings_show_room_member_state_events_summary">Включає події запрошення/приєднання/виходу/викидання/блокування та зміни аватарів/показуваних імен.</string>
+    <string name="settings_show_room_member_state_events_summary">Включає події запрошення/приєднання/виходу/вилучення/блокування та зміни аватарів/імен.</string>
     <string name="settings_show_room_member_state_events">Показати стан подій учасників кімнати</string>
     <string name="settings_cryptography_manage_keys">Керування криптографічними ключами</string>
     <string name="settings_integrations_summary">Використовуйте менеджер інтеграції для керування ботами, мостами, розширеннями та пакунками наліпок.
@@ -1606,11 +1606,11 @@
     <string name="room_participants_unban_title">Розблокувати користувача</string>
     <string name="room_participants_ban_reason">Причина блокування</string>
     <string name="room_participants_ban_title">Заблокувати користувача</string>
-    <string name="room_participants_kick_prompt_msg">викидання користувачів прибере їх з цієї кімнати.
+    <string name="room_participants_kick_prompt_msg">вилучення користувачів прибере їх з цієї кімнати.
 \n
-\nЩоб запобігти їх повторному приєднанню, замість цього слід заблокувати їх.</string>
-    <string name="room_participants_kick_reason">Причина викидання</string>
-    <string name="room_participants_kick_title">Викинути користувача</string>
+\nЩоб запобігти їхньому повторному приєднанню, замість цього слід заблокувати їх.</string>
+    <string name="room_participants_kick_reason">Причина вилучення</string>
+    <string name="room_participants_kick_title">Вилучити користувача</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Ви впевнені, що бажаєте скасувати запрошення для цього користувача\?</string>
     <string name="room_participants_action_cancel_invite_title">Скасувати запрошення</string>
     <string name="room_participants_action_unignore_prompt_msg">Якщо перестати нехтувати цього користувача, усі його повідомлення стануть знову видимими.</string>
@@ -1757,7 +1757,7 @@
     <string name="room_permissions_notify_everyone">Сповіщати всіх</string>
     <string name="room_permissions_remove_messages_sent_by_others">Вилучати повідомлення, надіслані іншими</string>
     <string name="room_permissions_ban_users">Блокувати користувачів</string>
-    <string name="room_permissions_kick_users">Викидати користувачів</string>
+    <string name="room_permissions_kick_users">Вилучати користувачів</string>
     <string name="room_permissions_change_settings">Змінювати налаштування</string>
     <string name="room_permissions_invite_users">Запрошувати користувачів</string>
     <string name="room_permissions_send_messages">Надсилати повідомлення</string>
@@ -1872,8 +1872,8 @@
     <string name="notice_room_ban_with_reason">%1$s заблоковано %2$s. Причина: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Ви розблокували %1$s. Причина: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s розблоковує %2$s. Причина: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Ви викинули %1$s. Причина: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s викидає %2$s. Причина: %3$s</string>
+    <string name="notice_room_kick_with_reason_by_you">Ви вилучили %1$s. Причина: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s вилучає %2$s. Причина: %3$s</string>
     <string name="call_tile_in_call">Ви берете участь в цьому виклику зараз</string>
     <string name="this_is_the_beginning_of_dm">Це початок історії вашого особистого спілкування з %s.</string>
     <string name="room_profile_encrypted_subtitle">Повідомлення тут захищені наскрізним шифруванням.
@@ -2744,10 +2744,10 @@
     <string name="space_settings_permissions_subtitle">Перегляд та оновлення ролей, необхідних для зміни різних частин простору.</string>
     <string name="space_settings_permissions_title">Дозволи простору</string>
     <string name="space_participants_unban_prompt_msg">Розблокування користувачів дозволить їм знову приєднатися до простору.</string>
-    <string name="space_participants_ban_prompt_msg">Блокування користувачів викине їх із цього простору та не дозволить їм знову приєднатися.</string>
-    <string name="space_participants_kick_prompt_msg">викидання користувачів прибере їх з цього простору.
+    <string name="space_participants_ban_prompt_msg">Блокування користувачів вилучить їх із цього простору та не дозволить їм знову приєднатися.</string>
+    <string name="space_participants_kick_prompt_msg">вилучення користувачів прибере їх з цього простору.
 \n
-\nЩоб запобігти їх повторному приєднанню, замість цього слід заблокувати їх.</string>
+\nЩоб запобігти їхньому повторному приєднанню, замість цього слід заблокувати їх.</string>
     <string name="verification_verify_user">Звірити %s</string>
     <string name="verification_emoji_notice">Порівняйте унікальні емоджі, переконавшись, що їх показано в однаковому порядку.</string>
     <string name="verification_no_scan_emoji_title">Звірити порівнявши емоджі</string>
@@ -3071,4 +3071,7 @@
 \n
 \nМи хешуємо ваші дані перед надсиланням для приватності. Ви згодні надіслати ці дані\?</string>
     <string name="settings_discovery_consent_notice_off_2">Ваші контакти приватні. Щоб дізнаватись про користувачів, відповідних вашим контактам, дозвольте нам надсилати дані ваших контактів серверу ідентифікації.</string>
+    <string name="identity_server_consent_dialog_title_2">Надіслати електронні адреси та номери телефонів %s</string>
+    <string name="shortcut_disabled_reason_sign_out">Сеанс завершено!</string>
+    <string name="shortcut_disabled_reason_room_left">Кімнату залишено!</string>
 </resources>
