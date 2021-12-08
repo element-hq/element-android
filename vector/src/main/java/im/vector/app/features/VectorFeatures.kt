@@ -24,6 +24,7 @@ interface VectorFeatures {
 
     enum class LoginVariant {
         LEGACY,
+        FTUE,
         FTUE_WIP
     }
 

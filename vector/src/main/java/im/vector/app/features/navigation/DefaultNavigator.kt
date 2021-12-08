@@ -50,6 +50,7 @@ import im.vector.app.features.crypto.verification.SupportedVerificationMethodsPr
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.debug.DebugMenuActivity
 import im.vector.app.features.devtools.RoomDevToolActivity
+import im.vector.app.features.ftue.FTUEActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.home.room.detail.search.SearchActivity
@@ -58,7 +59,6 @@ import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.app.features.invite.InviteUsersToRoomActivity
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
-import im.vector.app.features.login2.LoginActivity2
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.BigImageViewerActivity
@@ -112,7 +112,8 @@ class DefaultNavigator @Inject constructor(
     override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
         val intent = when (features.loginVariant()) {
             VectorFeatures.LoginVariant.LEGACY   -> LoginActivity.newIntent(context, loginConfig)
-            VectorFeatures.LoginVariant.FTUE_WIP -> LoginActivity2.newIntent(context, loginConfig)
+            VectorFeatures.LoginVariant.FTUE,
+            VectorFeatures.LoginVariant.FTUE_WIP -> FTUEActivity.newIntent(context, loginConfig)
         }
         intent.addFlags(flags)
         context.startActivity(intent)
@@ -121,7 +122,8 @@ class DefaultNavigator @Inject constructor(
     override fun loginSSORedirect(context: Context, data: Uri?) {
         val intent = when (features.loginVariant()) {
             VectorFeatures.LoginVariant.LEGACY   -> LoginActivity.redirectIntent(context, data)
-            VectorFeatures.LoginVariant.FTUE_WIP -> LoginActivity2.redirectIntent(context, data)
+            VectorFeatures.LoginVariant.FTUE,
+            VectorFeatures.LoginVariant.FTUE_WIP -> FTUEActivity.redirectIntent(context, data)
         }
         context.startActivity(intent)
     }
