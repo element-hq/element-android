@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="0dp"
         android:paddingEnd="8dp"
-        android:textColor="?vctr_content_secondary"
+        android:textColor="?android:textColorLink"
         tools:text="https://element.io/copyright" />
 
     <!-- Do not use drawableEnd on the TextView because of RTL support -->
