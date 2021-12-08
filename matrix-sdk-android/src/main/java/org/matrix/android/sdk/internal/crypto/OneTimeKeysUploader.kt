@@ -29,7 +29,9 @@ import javax.inject.Inject
 import kotlin.math.floor
 import kotlin.math.min
 
-const val FIVE_MINUTES = 5 * 60_000L
+// THe spec recommend a 5mn delay, but due to federation
+// or server down we give it a bit more time (1 hour)
+const val FALLBACK_KEY_FORGET_DELAY = 60 * 60_000L
 
 @SessionScope
 internal class OneTimeKeysUploader @Inject constructor(
@@ -59,8 +61,13 @@ internal class OneTimeKeysUploader @Inject constructor(
         oneTimeKeyCount = currentCount
     }
 
-    fun setNeedsNewFallback() {
-        needNewFallbackKey = true
+    fun needsNewFallback() {
+        if (olmDevice.generateFallbackKeyIfNeeded()) {
+            // As we generated a new one, it's already forgetting one
+            // so we can clear the last publish time
+            // (in case the network calls fails after to avoid calling forgetKey)
+            saveLastFallbackKeyPublishTime(0L)
+        }
     }
 
     /**
@@ -120,9 +127,9 @@ internal class OneTimeKeysUploader @Inject constructor(
 
         // Check if we need to forget a fallback key
         val latestPublishedTime = getLastFallbackKeyPublishTime()
-        if (latestPublishedTime != 0L && System.currentTimeMillis() - latestPublishedTime > FIVE_MINUTES) {
+        if (latestPublishedTime != 0L && System.currentTimeMillis() - latestPublishedTime > FALLBACK_KEY_FORGET_DELAY) {
             // This should be called once you are reasonably certain that you will not receive any more messages
-            // that use the old fallback key (e.g. 5 minutes after the new fallback key has been published)
+            // that use the old fallback key
             Timber.d("## forgetFallbackKey()")
             olmDevice.forgetFallbackKey()
         }
@@ -155,20 +162,9 @@ internal class OneTimeKeysUploader @Inject constructor(
             keysThisLoop = min(keyLimit - keyCount, ONE_TIME_KEY_GENERATION_MAX_NUMBER)
             olmDevice.generateOneTimeKeys(keysThisLoop)
         }
-        if (needNewFallbackKey && !hasUnpublishedFallbackKey()) {
-            // if there is already fallback key, but that hasn't been published yet, we
-            // can use that instead of generating a new one
-            olmDevice.generateFallbackKey()
-            Timber.d("maybeUploadOneTimeKeys: Fallback key generated")
-            // As we generated a new one, it's already forgetting one
-            // so we can clear the last publish time
-            // (in case the network calls fails after to avoid calling forgetKey)
-            saveLastFallbackKeyPublishTime(0L)
-        }
 
-        // not copy paste error we check before sending if there is
-        // an unpublished key in order to saveLastFallbackKeyPublishTime if needed
-        val hadUnpublishedFallbackKey = hasUnpublishedFallbackKey()
+        // We check before sending if there is an unpublished key in order to saveLastFallbackKeyPublishTime if needed
+        val hadUnpublishedFallbackKey = olmDevice.hasUnpublishedFallbackKey()
         val response = uploadOneTimeKeys(olmDevice.getOneTimeKeys())
         olmDevice.markKeysAsPublished()
         if (hadUnpublishedFallbackKey) {
@@ -187,10 +183,6 @@ internal class OneTimeKeysUploader @Inject constructor(
             Timber.e("## uploadOTK() : response for uploading keys does not contain one_time_key_counts.signed_curve25519")
             throw Exception("response for uploading keys does not contain one_time_key_counts.signed_curve25519")
         }
-    }
-
-    private fun hasUnpublishedFallbackKey(): Boolean {
-        return olmDevice.getFallbackKey()?.get(OlmAccount.JSON_KEY_ONE_TIME_KEY).orEmpty().isNotEmpty()
     }
 
     private fun saveLastFallbackKeyPublishTime(timeMillis: Long) {

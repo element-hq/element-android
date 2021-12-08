@@ -437,7 +437,7 @@ internal class DefaultCryptoService @Inject constructor(
                     if (syncResponse.deviceUnusedFallbackKeyTypes != null &&
                             // Generate a fallback key only if the server does not already have an unused fallback key.
                             !syncResponse.deviceUnusedFallbackKeyTypes.contains(KEY_SIGNED_CURVE_25519_TYPE)) {
-                        oneTimeKeysUploader.setNeedsNewFallback()
+                        oneTimeKeysUploader.needsNewFallback()
                     }
 
                     oneTimeKeysUploader.maybeUploadOneTimeKeys()

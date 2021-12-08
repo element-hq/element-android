@@ -150,13 +150,26 @@ internal class MXOlmDevice @Inject constructor(
         return null
     }
 
-    fun generateFallbackKey() {
+    /**
+     * Generates a new fallback key if there is not already
+     * an unpublished one.
+     * @return true if a new key was generated
+     */
+    fun generateFallbackKeyIfNeeded(): Boolean {
         try {
-            store.getOlmAccount().generateFallbackKey()
-            store.saveOlmAccount()
+            if (!hasUnpublishedFallbackKey()) {
+                store.getOlmAccount().generateFallbackKey()
+                store.saveOlmAccount()
+                return true
+            }
         } catch (e: Exception) {
             Timber.e("## generateFallbackKey() : failed")
         }
+        return false
+    }
+
+    internal fun hasUnpublishedFallbackKey(): Boolean {
+        return getFallbackKey()?.get(OlmAccount.JSON_KEY_ONE_TIME_KEY).orEmpty().isNotEmpty()
     }
 
     fun forgetFallbackKey() {
