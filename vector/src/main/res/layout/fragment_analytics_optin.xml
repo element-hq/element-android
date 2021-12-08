@@ -69,8 +69,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.48" />
 
+    <!-- width of this block will be the width of the first referenced text,
+     which has wrap_content, the other have 0dp -->
     <androidx.constraintlayout.helper.widget.Flow
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:constraint_referenced_ids="list_item_1,list_item_2,list_item_3"
@@ -84,7 +86,7 @@
     <TextView
         android:id="@+id/list_item_1"
         style="@style/Widget.Vector.TextView.Body.Medium"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
