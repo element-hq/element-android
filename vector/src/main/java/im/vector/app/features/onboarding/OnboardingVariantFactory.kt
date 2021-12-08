@@ -18,6 +18,7 @@ package im.vector.app.features.onboarding
 
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.login2.LoginViewModel2
+import im.vector.app.features.onboarding.ftueauth.FtueAuthVariant
 import javax.inject.Inject
 
 class OnboardingVariantFactory @Inject constructor(
@@ -29,7 +30,7 @@ class OnboardingVariantFactory @Inject constructor(
                loginViewModel2: Lazy<LoginViewModel2>
     ) = when (vectorFeatures.onboardingVariant()) {
         VectorFeatures.OnboardingVariant.LEGACY   -> error("Legacy is not supported by the FTUE")
-        VectorFeatures.OnboardingVariant.FTUE_AUTH     -> OnboardingAuthVariant(
+        VectorFeatures.OnboardingVariant.FTUE_AUTH     -> FtueAuthVariant(
                 views = activity.getBinding(),
                 onboardingViewModel = onboardingViewModel.value,
                 activity = activity,

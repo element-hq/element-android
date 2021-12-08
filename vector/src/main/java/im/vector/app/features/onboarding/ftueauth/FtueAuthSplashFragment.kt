@@ -26,8 +26,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.databinding.FragmentLoginSplashBinding
-import im.vector.app.features.login.AbstractLoginFragment
-import im.vector.app.features.login.LoginAction
+import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.failure.Failure
 import java.net.UnknownHostException
@@ -38,7 +37,7 @@ import javax.inject.Inject
  */
 class FtueAuthSplashFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences
-) : AbstractLoginFragment<FragmentLoginSplashBinding>() {
+) : AbstractFtueAuthFragment<FragmentLoginSplashBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSplashBinding {
         return FragmentLoginSplashBinding.inflate(inflater, container, false)
@@ -63,7 +62,7 @@ class FtueAuthSplashFragment @Inject constructor(
     }
 
     private fun getStarted() {
-        loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = false))
+        viewModel.handle(OnboardingAction.OnGetStarted(resetLoginConfig = false))
     }
 
     override fun resetViewModel() {
@@ -74,12 +73,12 @@ class FtueAuthSplashFragment @Inject constructor(
         if (throwable is Failure.NetworkConnection &&
                 throwable.ioException is UnknownHostException) {
             // Invalid homeserver from URL config
-            val url = loginViewModel.getInitialHomeServerUrl().orEmpty()
+            val url = viewModel.getInitialHomeServerUrl().orEmpty()
             MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.dialog_title_error)
                     .setMessage(getString(R.string.login_error_homeserver_from_url_not_found, url))
                     .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ ->
-                        loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = true))
+                        viewModel.handle(OnboardingAction.OnGetStarted(resetLoginConfig = true))
                     }
                     .setNegativeButton(R.string.action_cancel, null)
                     .show()
