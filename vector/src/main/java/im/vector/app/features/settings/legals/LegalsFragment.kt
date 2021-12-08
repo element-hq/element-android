@@ -29,7 +29,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
-import im.vector.app.features.discovery.IdentityServerPolicy
+import im.vector.app.features.discovery.ServerPolicy
 import javax.inject.Inject
 
 class LegalsFragment @Inject constructor(
@@ -78,7 +78,7 @@ class LegalsFragment @Inject constructor(
         viewModel.handle(LegalsAction.Refresh)
     }
 
-    override fun openPolicy(policy: IdentityServerPolicy) {
+    override fun openPolicy(policy: ServerPolicy) {
         openUrlInChromeCustomTab(requireContext(), null, policy.url)
     }
 }

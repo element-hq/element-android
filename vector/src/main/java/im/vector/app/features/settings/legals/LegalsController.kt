@@ -26,8 +26,8 @@ import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.discovery.IdentityServerPolicy
-import im.vector.app.features.discovery.IdentityServerWithTerms
+import im.vector.app.features.discovery.ServerPolicy
+import im.vector.app.features.discovery.ServerAndPolicies
 import im.vector.app.features.discovery.discoveryPolicyItem
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.discovery.settingsSectionTitleItem
@@ -75,16 +75,16 @@ class LegalsController @Inject constructor(
         }
     }
 
-    private fun buildPolicy(tag: String, serverWithTerms: Async<IdentityServerWithTerms?>) {
+    private fun buildPolicy(tag: String, serverAndPolicies: Async<ServerAndPolicies?>) {
         val host = this
 
-        when (serverWithTerms) {
+        when (serverAndPolicies) {
             Uninitialized,
             is Loading -> loadingItem {
                 id("loading_$tag")
             }
             is Success -> {
-                val policies = serverWithTerms()?.policies
+                val policies = serverAndPolicies()?.policies
                 if (policies.isNullOrEmpty()) {
                     settingsInfoItem {
                         id("emptyPolicy")
@@ -104,7 +104,7 @@ class LegalsController @Inject constructor(
             is Fail    -> {
                 errorWithRetryItem {
                     id("errorRetry_$tag")
-                    text(host.errorFormatter.toHumanReadable(serverWithTerms.error))
+                    text(host.errorFormatter.toHumanReadable(serverAndPolicies.error))
                     listener { host.listener?.onTapRetry() }
                 }
             }
@@ -113,6 +113,6 @@ class LegalsController @Inject constructor(
 
     interface Listener {
         fun onTapRetry()
-        fun openPolicy(policy: IdentityServerPolicy)
+        fun openPolicy(policy: ServerPolicy)
     }
 }

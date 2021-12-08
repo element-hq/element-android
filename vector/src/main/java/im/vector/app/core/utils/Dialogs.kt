@@ -23,7 +23,7 @@ import android.webkit.WebViewClient
 import android.widget.TextView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
-import im.vector.app.features.discovery.IdentityServerWithTerms
+import im.vector.app.features.discovery.ServerAndPolicies
 import me.gujun.android.span.link
 import me.gujun.android.span.span
 
@@ -45,7 +45,7 @@ fun Context.displayInWebView(url: String) {
             .show()
 }
 
-fun Context.showIdentityServerConsentDialog(identityServerWithTerms: IdentityServerWithTerms?,
+fun Context.showIdentityServerConsentDialog(identityServerWithTerms: ServerAndPolicies?,
                                             consentCallBack: (() -> Unit)) {
     // Build the message
     val content = span {

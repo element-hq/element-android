@@ -204,7 +204,7 @@ class DiscoverySettingsFragment @Inject constructor(
         viewModel.handle(DiscoverySettingsAction.SetPoliciesExpandState(expanded = newExpandedState))
     }
 
-    override fun onPolicyTapped(policy: IdentityServerPolicy) {
+    override fun onPolicyTapped(policy: ServerPolicy) {
         openUrlInChromeCustomTab(requireContext(), null, policy.url)
     }
 

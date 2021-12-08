@@ -20,21 +20,21 @@ import im.vector.app.core.utils.ensureProtocol
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.terms.TermsService
 
-suspend fun Session.fetchIdentityServerWithTerms(userLanguage: String): IdentityServerWithTerms? {
+suspend fun Session.fetchIdentityServerWithTerms(userLanguage: String): ServerAndPolicies? {
     val identityServerUrl = identityService().getCurrentIdentityServerUrl()
     return identityServerUrl?.let {
         fetchTerms(it, TermsService.ServiceType.IdentityService, userLanguage)
     }
 }
 
-suspend fun Session.fetchHomeserverWithTerms(userLanguage: String): IdentityServerWithTerms {
+suspend fun Session.fetchHomeserverWithTerms(userLanguage: String): ServerAndPolicies {
     val homeserverUrl = sessionParams.homeServerUrl
     return fetchTerms(homeserverUrl, TermsService.ServiceType.Homeserver, userLanguage)
 }
 
 private suspend fun Session.fetchTerms(serviceUrl: String,
                                        serviceType: TermsService.ServiceType,
-                                       userLanguage: String): IdentityServerWithTerms {
+                                       userLanguage: String): ServerAndPolicies {
     val terms = getTerms(serviceType, serviceUrl.ensureProtocol())
             .serverResponse
             .getLocalizedTerms(userLanguage)
@@ -44,8 +44,8 @@ private suspend fun Session.fetchTerms(serviceUrl: String,
         if (name == null || url == null) {
             null
         } else {
-            IdentityServerPolicy(name = name, url = url)
+            ServerPolicy(name = name, url = url)
         }
     }
-    return IdentityServerWithTerms(serviceUrl, policyUrls)
+    return ServerAndPolicies(serviceUrl, policyUrls)
 }
