@@ -34,7 +34,7 @@ import javax.inject.Inject
 class FTUEActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarConfigurable, UnlockedActivity {
 
     private val ftueVariant by lifecycleAwareLazy {
-        ftueVariantFactory.create(this, loginViewModel = lazyViewModel(), loginViewModel2 = lazyViewModel())
+        ftueVariantFactory.create(this, ftueViewModel = lazyViewModel(), loginViewModel2 = lazyViewModel())
     }
 
     @Inject lateinit var ftueVariantFactory: FTUEVariantFactory

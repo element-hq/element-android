@@ -17,7 +17,6 @@
 package im.vector.app.features.ftue
 
 import im.vector.app.features.VectorFeatures
-import im.vector.app.features.login.LoginViewModel
 import im.vector.app.features.login2.LoginViewModel2
 import javax.inject.Inject
 
@@ -25,11 +24,11 @@ class FTUEVariantFactory @Inject constructor(
         private val vectorFeatures: VectorFeatures,
 ) {
 
-    fun create(activity: FTUEActivity, loginViewModel: Lazy<LoginViewModel>, loginViewModel2: Lazy<LoginViewModel2>) = when (vectorFeatures.loginVariant()) {
+    fun create(activity: FTUEActivity, ftueViewModel: Lazy<FTUEViewModel>, loginViewModel2: Lazy<LoginViewModel2>) = when (vectorFeatures.loginVariant()) {
         VectorFeatures.LoginVariant.LEGACY   -> error("Legacy is not supported by the FTUE")
         VectorFeatures.LoginVariant.FTUE     -> DefaultFTUEVariant(
                 views = activity.getBinding(),
-                loginViewModel = loginViewModel.value,
+                ftueViewModel = ftueViewModel.value,
                 activity = activity,
                 supportFragmentManager = activity.supportFragmentManager
         )
