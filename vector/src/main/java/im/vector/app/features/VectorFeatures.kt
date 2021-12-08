@@ -20,11 +20,11 @@ import im.vector.app.BuildConfig
 
 interface VectorFeatures {
 
-    fun loginVersion(): LoginVersion
+    fun loginVariant(): LoginVariant
 
-    enum class LoginVersion {
-        V1,
-        V2
+    enum class LoginVariant {
+        LEGACY,
+        FTUE_WIP
     }
 
     enum class NotificationSettingsVersion {
@@ -34,5 +34,5 @@ interface VectorFeatures {
 }
 
 class DefaultVectorFeatures : VectorFeatures {
-    override fun loginVersion(): VectorFeatures.LoginVersion = BuildConfig.LOGIN_VERSION
+    override fun loginVariant(): VectorFeatures.LoginVariant = BuildConfig.LOGIN_VARIANT
 }
