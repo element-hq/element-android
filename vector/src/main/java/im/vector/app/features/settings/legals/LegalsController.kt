@@ -115,7 +115,7 @@ class LegalsController @Inject constructor(
             discoveryPolicyItem {
                 id(tag + policy.url)
                 name(policy.name)
-                url(policy.url)
+                url(policy.url.takeIf { it.startsWith("http") })
                 clickListener { host.listener?.openPolicy(policy) }
             }
         }
