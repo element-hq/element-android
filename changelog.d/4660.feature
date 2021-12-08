@@ -1,0 +1,1 @@
+Create a legal screen in the setting to group all the different policies.
