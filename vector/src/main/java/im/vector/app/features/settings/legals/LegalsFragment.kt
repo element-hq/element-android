@@ -25,7 +25,6 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.core.utils.displayInWebView
@@ -53,14 +52,6 @@ class LegalsFragment @Inject constructor(
 
         controller.listener = this
         views.genericRecyclerView.configureWith(controller)
-
-        viewModel.observeViewEvents {
-            when (it) {
-                is LegalsViewEvents.Failure -> {
-                    displayErrorDialog(it.throwable)
-                }
-            }.exhaustive
-        }
     }
 
     override fun onDestroyView() {

@@ -124,19 +124,19 @@ class LegalsController @Inject constructor(
     private fun buildThirdPartyNotices() {
         val host = this
         settingsSectionTitleItem {
-            id("appTitle")
+            id("thirdTitle")
             titleResId(R.string.legals_third_party_notices)
         }
 
         discoveryPolicyItem {
-            id("elcp1")
+            id("eltpn1")
             name(host.stringProvider.getString(R.string.settings_third_party_notices))
             clickListener { host.listener?.openThirdPartyNotice() }
         }
         // Only on Gplay
         if (resources.getBoolean(R.bool.isGplay)) {
             discoveryPolicyItem {
-                id("elcp2")
+                id("eltpn2")
                 name(host.stringProvider.getString(R.string.settings_other_third_party_notices))
                 clickListener { host.listener?.openThirdPartyNoticeGplay() }
             }

@@ -26,6 +26,7 @@ import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.discovery.fetchHomeserverWithTerms
@@ -37,7 +38,7 @@ class LegalsViewModel @AssistedInject constructor(
         @Assisted initialState: LegalsState,
         private val session: Session,
         private val stringProvider: StringProvider
-) : VectorViewModel<LegalsState, LegalsAction, LegalsViewEvents>(initialState) {
+) : VectorViewModel<LegalsState, LegalsAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<LegalsViewModel, LegalsState> {
