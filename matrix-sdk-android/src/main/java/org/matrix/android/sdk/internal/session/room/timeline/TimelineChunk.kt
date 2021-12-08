@@ -23,7 +23,6 @@ import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
 import kotlinx.coroutines.CompletableDeferred
-import kotlinx.coroutines.CoroutineScope
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -46,19 +45,18 @@ import java.util.concurrent.atomic.AtomicBoolean
  * It does mainly listen to the db timeline events.
  * It also triggers pagination to the server when needed, or dispatch to the prev or next chunk if any.
  */
-internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
-                                         private val timelineScope: CoroutineScope,
-                                         private val timelineSettings: TimelineSettings,
-                                         private val roomId: String,
-                                         private val timelineId: String,
-                                         private val eventDecryptor: TimelineEventDecryptor,
-                                         private val paginationTask: PaginationTask,
-                                         private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
-                                         private val timelineEventMapper: TimelineEventMapper,
-                                         private val uiEchoManager: UIEchoManager? = null,
-                                         private val threadsAwarenessHandler: ThreadsAwarenessHandler,
-                                         private val initialEventId: String?,
-                                         private val onBuiltEvents: () -> Unit) {
+internal class TimelineChunk(private val chunkEntity: ChunkEntity,
+                             private val timelineSettings: TimelineSettings,
+                             private val roomId: String,
+                             private val timelineId: String,
+                             private val eventDecryptor: TimelineEventDecryptor,
+                             private val paginationTask: PaginationTask,
+                             private val fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
+                             private val timelineEventMapper: TimelineEventMapper,
+                             private val uiEchoManager: UIEchoManager? = null,
+                             private val threadsAwarenessHandler: ThreadsAwarenessHandler,
+                             private val initialEventId: String?,
+                             private val onBuiltEvents: () -> Unit) {
 
     private val isLastForward = AtomicBoolean(chunkEntity.isLastForward)
     private val isLastBackward = AtomicBoolean(chunkEntity.isLastBackward)
@@ -442,11 +440,10 @@ internal class TimelineChunk constructor(private val chunkEntity: ChunkEntity,
         if (chunkEntity == null) return null
         return TimelineChunk(
                 chunkEntity = chunkEntity,
-                timelineScope = timelineScope,
                 timelineSettings = timelineSettings,
+                roomId = roomId,
                 timelineId = timelineId,
                 eventDecryptor = eventDecryptor,
-                roomId = roomId,
                 paginationTask = paginationTask,
                 fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
                 timelineEventMapper = timelineEventMapper,

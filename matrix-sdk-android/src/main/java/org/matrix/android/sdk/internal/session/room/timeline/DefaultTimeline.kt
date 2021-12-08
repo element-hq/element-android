@@ -74,18 +74,17 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
     private val sequencer = SemaphoreCoroutineSequencer()
 
     private val strategyDependencies = LoadTimelineStrategy.Dependencies(
-            timelineScope = timelineScope,
-            eventDecryptor = eventDecryptor,
             timelineSettings = settings,
+            realm = backgroundRealm,
+            eventDecryptor = eventDecryptor,
             paginationTask = paginationTask,
             fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
+            getContextOfEventTask = getEventTask,
             timelineInput = timelineInput,
             timelineEventMapper = timelineEventMapper,
-            realm = backgroundRealm,
-            getContextOfEventTask = getEventTask,
             threadsAwarenessHandler = threadsAwarenessHandler,
-            onLimitedTimeline = this::onLimitedTimeline,
             onEventsUpdated = this::postSnapshot,
+            onLimitedTimeline = this::onLimitedTimeline,
             onNewTimelineEvents = this::onNewTimelineEvents
     )
 
