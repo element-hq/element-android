@@ -2278,6 +2278,11 @@
     <string name="preference_root_help_about">Help &amp; About</string>
     <string name="preference_root_legals">Legals</string>
 
+    <string name="preference_help">Help</string>
+    <string name="preference_help_title">Help and support</string>
+    <string name="preference_help_summary">Get help with using Element</string>
+    <string name="preference_versions">Versions</string>
+    <string name="preference_system_settings">System settings</string>
 
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Register token</string>
 

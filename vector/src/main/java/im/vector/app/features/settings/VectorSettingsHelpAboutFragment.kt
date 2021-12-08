@@ -20,8 +20,10 @@ import androidx.preference.Preference
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.preference.VectorPreference
+import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openAppSettingsPage
+import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.version.VersionProvider
 import org.matrix.android.sdk.api.Matrix
 import javax.inject.Inject
@@ -33,7 +35,18 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
     override var titleRes = R.string.preference_root_help_about
     override val preferenceXmlRes = R.xml.vector_settings_help_about
 
+    private val firstThrottler = FirstThrottler(1000)
+
     override fun bindPref() {
+        // Help
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_HELP_PREFERENCE_KEY)!!
+                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
+                openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.HELP)
+            }
+            false
+        }
+
         // preference to start the App info screen, to facilitate App permissions access
         findPreference<VectorPreference>(APP_INFO_LINK_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
