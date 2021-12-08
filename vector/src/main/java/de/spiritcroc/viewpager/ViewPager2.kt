@@ -16,6 +16,7 @@ fun ViewPager2.reduceDragSensitivity(factor: Int) {
         touchSlopField.isAccessible = true
         val touchSlop = touchSlopField.get(recyclerView) as Int
         touchSlopField.set(recyclerView, touchSlop * factor)
+        Timber.i("Reduced viewpager drag sensitivity from $touchSlop by factor $factor")
     } catch (e: Exception) {
         Timber.e("Cannot reduce viewpager drag sensitivity: $e")
     }
