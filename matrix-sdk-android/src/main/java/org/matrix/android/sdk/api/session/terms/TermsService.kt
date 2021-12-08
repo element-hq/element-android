@@ -19,7 +19,12 @@ package org.matrix.android.sdk.api.session.terms
 interface TermsService {
     enum class ServiceType {
         IntegrationManager,
-        IdentityService
+        IdentityService,
+
+        /**
+         * It's only possible to use this value for [getTerms]
+         */
+        Homeserver
     }
 
     suspend fun getTerms(serviceType: ServiceType, baseUrl: String): GetTermsResponse

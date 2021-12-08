@@ -18,10 +18,13 @@ package org.matrix.android.sdk.internal.session.terms
 
 import dagger.Lazy
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
+import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.terms.GetTermsResponse
 import org.matrix.android.sdk.api.session.terms.TermsService
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.network.RetrofitFactory
@@ -48,11 +51,49 @@ internal class DefaultTermsService @Inject constructor(
 
     override suspend fun getTerms(serviceType: TermsService.ServiceType,
                                   baseUrl: String): GetTermsResponse {
-        val url = buildUrl(baseUrl, serviceType)
-        val termsResponse = executeRequest(null) {
-            termsAPI.getTerms("${url}terms")
+        return if (serviceType == TermsService.ServiceType.Homeserver) {
+            getHomeserverTerms(baseUrl)
+        } else {
+            val url = buildUrl(baseUrl, serviceType)
+            val termsResponse = executeRequest(null) {
+                termsAPI.getTerms("${url}terms")
+            }
+            GetTermsResponse(termsResponse, getAlreadyAcceptedTermUrlsFromAccountData())
         }
-        return GetTermsResponse(termsResponse, getAlreadyAcceptedTermUrlsFromAccountData())
+    }
+
+    /**
+     * We use a trick here to get the homeserver T&C, we use the register API
+     */
+    private suspend fun getHomeserverTerms(baseUrl: String): GetTermsResponse {
+        return try {
+            executeRequest(null) {
+                termsAPI.register(baseUrl + NetworkConstants.URI_API_PREFIX_PATH_R0 + "register")
+            }
+            // Return empty result if it succeed, but it should never happen
+            buildEmptyGetTermsResponse()
+        } catch (throwable: Throwable) {
+            @Suppress("UNCHECKED_CAST")
+            ((throwable.toRegistrationFlowResponse()
+                    ?.params?.get(LoginFlowTypes.TERMS) as? JsonDict)
+                    ?.get("policies") as? JsonDict)
+                    ?.let { dict ->
+                        GetTermsResponse(
+                                serverResponse = TermsResponse(
+                                        policies = dict
+                                ),
+                                alreadyAcceptedTermUrls = emptySet()
+                        )
+                    }
+                    ?: buildEmptyGetTermsResponse()
+        }
+    }
+
+    private fun buildEmptyGetTermsResponse(): GetTermsResponse {
+        return GetTermsResponse(
+                serverResponse = TermsResponse(),
+                alreadyAcceptedTermUrls = emptySet()
+        )
     }
 
     override suspend fun agreeToTerms(serviceType: TermsService.ServiceType,
@@ -91,7 +132,9 @@ internal class DefaultTermsService @Inject constructor(
     private fun buildUrl(baseUrl: String, serviceType: TermsService.ServiceType): String {
         val servicePath = when (serviceType) {
             TermsService.ServiceType.IntegrationManager -> NetworkConstants.URI_INTEGRATION_MANAGER_PATH
-            TermsService.ServiceType.IdentityService -> NetworkConstants.URI_IDENTITY_PATH_V2
+            TermsService.ServiceType.IdentityService    -> NetworkConstants.URI_IDENTITY_PATH_V2
+            TermsService.ServiceType.Homeserver         ->
+                error("You cannot use this API with parameter TermsService.ServiceType.Homeserver")
         }
         return "${baseUrl.ensureTrailingSlash()}$servicePath"
     }

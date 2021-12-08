@@ -29,7 +29,7 @@ suspend fun Session.fetchIdentityServerWithTerms(userLanguage: String): Identity
 
 suspend fun Session.fetchHomeserverWithTerms(userLanguage: String): IdentityServerWithTerms {
     val homeserverUrl = sessionParams.homeServerUrl
-    return fetchTerms(homeserverUrl, TermsService.ServiceType.IdentityService, userLanguage)
+    return fetchTerms(homeserverUrl, TermsService.ServiceType.Homeserver, userLanguage)
 }
 
 private suspend fun Session.fetchTerms(serviceUrl: String,

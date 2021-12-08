@@ -53,6 +53,7 @@ class ReviewTermsFragment @Inject constructor(
         termsController.description = when (reviewTermsViewModel.termsArgs.type) {
             TermsService.ServiceType.IdentityService    -> getString(R.string.terms_description_for_identity_server)
             TermsService.ServiceType.IntegrationManager -> getString(R.string.terms_description_for_integration_manager)
+            TermsService.ServiceType.Homeserver         -> error("Homeserver is not supported here")
         }
 
         termsController.listener = this
