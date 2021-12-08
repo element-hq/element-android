@@ -9,27 +9,34 @@
     android:paddingEnd="@dimen/layout_horizontal_margin">
 
     <androidx.constraintlayout.helper.widget.Flow
-        android:id="@+id/flow1"
+        android:id="@+id/flowMain"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:layout_marginBottom="@dimen/layout_vertical_margin"
         android:orientation="vertical"
-        app:constraint_referenced_ids="logo,title,subtitle"
-        app:flow_firstVerticalStyle="spread"
+        app:constraint_referenced_ids="flowHeader,separator,flowItems,flowButtons"
         app:flow_verticalStyle="spread"
-        app:layout_constraintBottom_toTopOf="@id/separator"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flowHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="logo,title,subtitle"
+        app:flow_verticalGap="20dp" />
 
     <ImageView
         android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:importantForAccessibility="no"
-        android:src="@drawable/element_logo_stars"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:src="@drawable/element_logo_stars" />
 
     <TextView
         android:id="@+id/title"
@@ -41,9 +48,7 @@
         android:layout_marginEnd="8dp"
         android:gravity="center"
         android:text="@string/analytics_opt_in_title"
-        android:textColor="?vctr_content_primary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:textColor="?vctr_content_primary" />
 
     <TextView
         android:id="@+id/subtitle"
@@ -55,35 +60,23 @@
         android:layout_marginEnd="8dp"
         android:gravity="center"
         android:textColor="?vctr_content_secondary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         tools:text="@string/analytics_opt_in_content" />
 
     <View
         android:id="@+id/separator"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="?vctr_content_quinary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.48" />
+        android:background="?vctr_content_quinary" />
 
     <!-- width of this block will be the width of the first referenced text,
      which has wrap_content, the other have 0dp -->
     <androidx.constraintlayout.helper.widget.Flow
-        android:id="@+id/flow2"
+        android:id="@+id/flowItems"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:constraint_referenced_ids="list_item_1,list_item_2,list_item_3"
-        app:flow_verticalGap="12dp"
-        app:layout_constraintBottom_toTopOf="@id/submit"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/separator"
-        app:layout_constraintVertical_bias="0.25" />
+        app:flow_verticalGap="12dp" />
 
     <TextView
         android:id="@+id/list_item_1"
@@ -125,15 +118,11 @@
         app:drawableStartCompat="@drawable/ic_list_item_bullet" />
 
     <androidx.constraintlayout.helper.widget.Flow
-        android:id="@+id/flow3"
+        android:id="@+id/flowButtons"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/layout_vertical_margin"
         android:orientation="vertical"
-        app:constraint_referenced_ids="submit,later"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:constraint_referenced_ids="submit,later" />
 
     <Button
         android:id="@+id/submit"
