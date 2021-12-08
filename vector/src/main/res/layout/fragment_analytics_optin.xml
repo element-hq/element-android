@@ -9,6 +9,7 @@
     android:paddingEnd="@dimen/layout_horizontal_margin">
 
     <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow1"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/layout_vertical_margin"
@@ -72,6 +73,7 @@
     <!-- width of this block will be the width of the first referenced text,
      which has wrap_content, the other have 0dp -->
     <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -122,26 +124,30 @@
         android:textColor="?vctr_content_secondary"
         app:drawableStartCompat="@drawable/ic_list_item_bullet" />
 
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flow3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/layout_vertical_margin"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="submit,later"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <Button
         android:id="@+id/submit"
         style="@style/Widget.Vector.Button.CallToAction"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:minHeight="@dimen/layout_touch_size"
-        android:text="@string/action_enable"
-        app:layout_constraintBottom_toTopOf="@id/later"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="@string/action_enable" />
 
     <Button
         android:id="@+id/later"
         style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/layout_vertical_margin"
-        android:text="@string/action_not_now"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:text="@string/action_not_now" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
