@@ -46,7 +46,6 @@ internal class OneTimeKeysUploader @Inject constructor(
     // last OTK check timestamp
     private var lastOneTimeKeyCheck: Long = 0
     private var oneTimeKeyCount: Int? = null
-    private var needNewFallbackKey: Boolean = false
 
     // Simple storage to remember when was uploaded the last fallback key
     private val storage = context.getSharedPreferences("OneTimeKeysUploader_${olmDevice.deviceEd25519Key.hashCode()}", Context.MODE_PRIVATE)
@@ -93,7 +92,7 @@ internal class OneTimeKeysUploader @Inject constructor(
                     Timber.w("maybeUploadOneTimeKeys: Failed to get otk count from server")
                 }
 
-        Timber.d("maybeUploadOneTimeKeys: otk count $oneTimeKeyCountFromSync , needs fallback key $needNewFallbackKey")
+        Timber.d("maybeUploadOneTimeKeys: otk count $oneTimeKeyCountFromSync , unpublished fallback key ${olmDevice.hasUnpublishedFallbackKey()}")
 
         lastOneTimeKeyCheck = System.currentTimeMillis()
 
@@ -150,7 +149,7 @@ internal class OneTimeKeysUploader @Inject constructor(
      * @return the number of uploaded keys
      */
     private suspend fun uploadOTK(keyCount: Int, keyLimit: Int): Int {
-        if (keyLimit <= keyCount && !needNewFallbackKey) {
+        if (keyLimit <= keyCount && !olmDevice.hasUnpublishedFallbackKey()) {
             // If we don't need to generate any more keys then we are done.
             return 0
         }
@@ -171,8 +170,6 @@ internal class OneTimeKeysUploader @Inject constructor(
             // It had an unpublished fallback key that was published just now
             saveLastFallbackKeyPublishTime(System.currentTimeMillis())
         }
-
-        needNewFallbackKey = false
 
         if (response.hasOneTimeKeyCountsForAlgorithm(MXKey.KEY_SIGNED_CURVE_25519_TYPE)) {
             // Maybe upload other keys
