@@ -35,7 +35,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.home.HomeActivity
-import im.vector.app.features.login.LoginAction
 import im.vector.app.features.login.LoginCaptchaFragment
 import im.vector.app.features.login.LoginCaptchaFragmentArgument
 import im.vector.app.features.login.LoginConfig
@@ -50,9 +49,6 @@ import im.vector.app.features.login.LoginServerSelectionFragment
 import im.vector.app.features.login.LoginServerUrlFormFragment
 import im.vector.app.features.login.LoginSignUpSignInSelectionFragment
 import im.vector.app.features.login.LoginSplashFragment
-import im.vector.app.features.login.LoginViewEvents
-import im.vector.app.features.login.LoginViewModel
-import im.vector.app.features.login.LoginViewState
 import im.vector.app.features.login.LoginWaitForEmailFragment
 import im.vector.app.features.login.LoginWaitForEmailFragmentArgument
 import im.vector.app.features.login.LoginWebFragment
@@ -72,7 +68,7 @@ private const val FRAGMENT_LOGIN_TAG = "FRAGMENT_LOGIN_TAG"
 
 class DefaultFTUEVariant(
         private val views: ActivityLoginBinding,
-        private val loginViewModel: LoginViewModel,
+        private val ftueViewModel: FTUEViewModel,
         private val activity: VectorBaseActivity<ActivityLoginBinding>,
         private val supportFragmentManager: FragmentManager
 ) : FTUEVariant {
@@ -103,16 +99,16 @@ class DefaultFTUEVariant(
         }
 
         with(activity) {
-            loginViewModel.onEach {
+            ftueViewModel.onEach {
                 updateWithState(it)
             }
-            loginViewModel.observeViewEvents { handleLoginViewEvents(it) }
+            ftueViewModel.observeViewEvents { handleLoginViewEvents(it) }
         }
 
         // Get config extra
         val loginConfig = activity.intent.getParcelableExtra<LoginConfig?>(FTUEActivity.EXTRA_CONFIG)
         if (isFirstCreation) {
-            loginViewModel.handle(LoginAction.InitWith(loginConfig))
+            ftueViewModel.handle(FTUEAction.InitWith(loginConfig))
         }
     }
 
@@ -124,17 +120,17 @@ class DefaultFTUEVariant(
         activity.addFragment(views.loginFragmentContainer, LoginSplashFragment::class.java)
     }
 
-    private fun handleLoginViewEvents(loginViewEvents: LoginViewEvents) {
-        when (loginViewEvents) {
-            is LoginViewEvents.RegistrationFlowResult                     -> {
+    private fun handleLoginViewEvents(ftueViewEvents: FTUEViewEvents) {
+        when (ftueViewEvents) {
+            is FTUEViewEvents.RegistrationFlowResult                     -> {
                 // Check that all flows are supported by the application
-                if (loginViewEvents.flowResult.missingStages.any { !it.isSupported() }) {
+                if (ftueViewEvents.flowResult.missingStages.any { !it.isSupported() }) {
                     // Display a popup to propose use web fallback
                     onRegistrationStageNotSupported()
                 } else {
-                    if (loginViewEvents.isRegistrationStarted) {
+                    if (ftueViewEvents.isRegistrationStarted) {
                         // Go on with registration flow
-                        handleRegistrationNavigation(loginViewEvents.flowResult)
+                        handleRegistrationNavigation(ftueViewEvents.flowResult)
                     } else {
                         // First ask for login and password
                         // I add a tag to indicate that this fragment is a registration stage.
@@ -147,7 +143,7 @@ class DefaultFTUEVariant(
                     }
                 }
             }
-            is LoginViewEvents.OutdatedHomeserver                         -> {
+            is FTUEViewEvents.OutdatedHomeserver                         -> {
                 MaterialAlertDialogBuilder(activity)
                         .setTitle(R.string.login_error_outdated_homeserver_title)
                         .setMessage(R.string.login_error_outdated_homeserver_warning_content)
@@ -155,7 +151,7 @@ class DefaultFTUEVariant(
                         .show()
                 Unit
             }
-            is LoginViewEvents.OpenServerSelection                        ->
+            is FTUEViewEvents.OpenServerSelection                        ->
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
                         LoginServerSelectionFragment::class.java,
                         option = { ft ->
@@ -167,63 +163,63 @@ class DefaultFTUEVariant(
                             // TODO Disabled because it provokes a flickering
                             // ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
                         })
-            is LoginViewEvents.OnServerSelectionDone                      -> onServerSelectionDone(loginViewEvents)
-            is LoginViewEvents.OnSignModeSelected                         -> onSignModeSelected(loginViewEvents)
-            is LoginViewEvents.OnLoginFlowRetrieved                       ->
+            is FTUEViewEvents.OnServerSelectionDone                      -> onServerSelectionDone(ftueViewEvents)
+            is FTUEViewEvents.OnSignModeSelected                         -> onSignModeSelected(ftueViewEvents)
+            is FTUEViewEvents.OnLoginFlowRetrieved                       ->
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
                         LoginSignUpSignInSelectionFragment::class.java,
                         option = commonOption)
-            is LoginViewEvents.OnWebLoginError                            -> onWebLoginError(loginViewEvents)
-            is LoginViewEvents.OnForgetPasswordClicked                    ->
+            is FTUEViewEvents.OnWebLoginError                            -> onWebLoginError(ftueViewEvents)
+            is FTUEViewEvents.OnForgetPasswordClicked                    ->
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
                         LoginResetPasswordFragment::class.java,
                         option = commonOption)
-            is LoginViewEvents.OnResetPasswordSendThreePidDone            -> {
+            is FTUEViewEvents.OnResetPasswordSendThreePidDone            -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
                         LoginResetPasswordMailConfirmationFragment::class.java,
                         option = commonOption)
             }
-            is LoginViewEvents.OnResetPasswordMailConfirmationSuccess     -> {
+            is FTUEViewEvents.OnResetPasswordMailConfirmationSuccess     -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
                         LoginResetPasswordSuccessFragment::class.java,
                         option = commonOption)
             }
-            is LoginViewEvents.OnResetPasswordMailConfirmationSuccessDone -> {
+            is FTUEViewEvents.OnResetPasswordMailConfirmationSuccessDone -> {
                 // Go back to the login fragment
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
             }
-            is LoginViewEvents.OnSendEmailSuccess                         -> {
+            is FTUEViewEvents.OnSendEmailSuccess                         -> {
                 // Pop the enter email Fragment
                 supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
                         LoginWaitForEmailFragment::class.java,
-                        LoginWaitForEmailFragmentArgument(loginViewEvents.email),
+                        LoginWaitForEmailFragmentArgument(ftueViewEvents.email),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
             }
-            is LoginViewEvents.OnSendMsisdnSuccess                        -> {
+            is FTUEViewEvents.OnSendMsisdnSuccess                        -> {
                 // Pop the enter Msisdn Fragment
                 supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
                         LoginGenericTextInputFormFragment::class.java,
-                        LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, loginViewEvents.msisdn),
+                        LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, ftueViewEvents.msisdn),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
             }
-            is LoginViewEvents.Failure,
-            is LoginViewEvents.Loading                                    ->
+            is FTUEViewEvents.Failure,
+            is FTUEViewEvents.Loading                                    ->
                 // This is handled by the Fragments
                 Unit
         }.exhaustive
     }
 
-    private fun updateWithState(loginViewState: LoginViewState) {
-        if (loginViewState.isUserLogged()) {
+    private fun updateWithState(ftueViewState: FTUEViewState) {
+        if (ftueViewState.isUserLogged()) {
             val intent = HomeActivity.newIntent(
                     activity,
-                    accountCreation = loginViewState.signMode == SignMode.SignUp
+                    accountCreation = ftueViewState.signMode == SignMode.SignUp
             )
             activity.startActivity(intent)
             activity.finish()
@@ -231,10 +227,10 @@ class DefaultFTUEVariant(
         }
 
         // Loading
-        views.loginLoading.isVisible = loginViewState.isLoading()
+        views.loginLoading.isVisible = ftueViewState.isLoading()
     }
 
-    private fun onWebLoginError(onWebLoginError: LoginViewEvents.OnWebLoginError) {
+    private fun onWebLoginError(onWebLoginError: FTUEViewEvents.OnWebLoginError) {
         // Pop the backstack
         supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
@@ -246,7 +242,7 @@ class DefaultFTUEVariant(
                 .show()
     }
 
-    private fun onServerSelectionDone(loginViewEvents: LoginViewEvents.OnServerSelectionDone) {
+    private fun onServerSelectionDone(loginViewEvents: FTUEViewEvents.OnServerSelectionDone) {
         when (loginViewEvents.serverType) {
             ServerType.MatrixOrg -> Unit // In this case, we wait for the login flow
             ServerType.EMS,
@@ -257,7 +253,7 @@ class DefaultFTUEVariant(
         }
     }
 
-    private fun onSignModeSelected(loginViewEvents: LoginViewEvents.OnSignModeSelected) = withState(loginViewModel) { state ->
+    private fun onSignModeSelected(loginViewEvents: FTUEViewEvents.OnSignModeSelected) = withState(ftueViewModel) { state ->
         // state.signMode could not be ready yet. So use value from the ViewEvent
         when (loginViewEvents.signMode) {
             SignMode.Unknown            -> error("Sign mode has to be set before calling this method")
@@ -290,7 +286,7 @@ class DefaultFTUEVariant(
     override fun onNewIntent(intent: Intent?) {
         intent?.data
                 ?.let { tryOrNull { it.getQueryParameter("loginToken") } }
-                ?.let { loginViewModel.handle(LoginAction.LoginWithToken(it)) }
+                ?.let { ftueViewModel.handle(FTUEAction.LoginWithToken(it)) }
     }
 
     private fun onRegistrationStageNotSupported() {
