@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <im.vector.app.core.preference.VectorPreference
@@ -22,14 +21,5 @@
         android:key="SETTINGS_OLM_VERSION_PREFERENCE_KEY"
         android:title="@string/settings_olm_version"
         tools:summary="7.8.9" />
-
-    <im.vector.app.core.preference.VectorPreference
-        android:key="SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY"
-        android:title="@string/settings_third_party_notices" />
-
-    <im.vector.app.core.preference.VectorPreference
-        android:key="SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY"
-        android:title="@string/settings_other_third_party_notices"
-        app:isPreferenceVisible="@bool/isGplay" />
 
 </androidx.preference.PreferenceScreen>

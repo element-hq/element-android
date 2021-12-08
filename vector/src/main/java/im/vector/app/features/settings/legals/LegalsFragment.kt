@@ -27,9 +27,13 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
+import im.vector.app.core.utils.FirstThrottler
+import im.vector.app.core.utils.displayInWebView
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import im.vector.app.features.discovery.ServerPolicy
+import im.vector.app.features.settings.VectorSettingsUrls
+import im.vector.app.openOssLicensesMenuActivity
 import javax.inject.Inject
 
 class LegalsFragment @Inject constructor(
@@ -42,6 +46,7 @@ class LegalsFragment @Inject constructor(
     }
 
     private val viewModel by fragmentViewModel(LegalsViewModel::class)
+    private val firstThrottler = FirstThrottler(1000)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -79,6 +84,27 @@ class LegalsFragment @Inject constructor(
     }
 
     override fun openPolicy(policy: ServerPolicy) {
-        openUrlInChromeCustomTab(requireContext(), null, policy.url)
+        openUrl(policy.url)
+    }
+
+    override fun openThirdPartyNotice() {
+        openUrl(VectorSettingsUrls.THIRD_PARTY_LICENSES)
+    }
+
+    private fun openUrl(url: String) {
+        if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
+            if (url.startsWith("file://")) {
+                activity?.displayInWebView(url)
+            } else {
+                openUrlInChromeCustomTab(requireContext(), null, url)
+            }
+        }
+    }
+
+    override fun openThirdPartyNoticeGplay() {
+        if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
+            // See https://developers.google.com/android/guides/opensource
+            openOssLicensesMenuActivity(requireActivity())
+        }
     }
 }

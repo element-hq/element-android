@@ -1400,6 +1400,7 @@
     <string name="template_legals_application_title">${app_name} policy</string>
     <string name="legals_home_server_title">Your homeserver policy</string>
     <string name="legals_identity_server_title">Your identity server policy</string>
+    <string name="legals_third_party_notices">Third party libraries</string>
     <string name="legals_no_policy_provided">This server does not provide any policy.</string>
 
     <string name="disabled_integration_dialog_title">Integrations are disabled</string>

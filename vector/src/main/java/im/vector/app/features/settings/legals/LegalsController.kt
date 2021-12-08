@@ -15,6 +15,7 @@
  */
 package im.vector.app.features.settings.legals
 
+import android.content.res.Resources
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
@@ -35,6 +36,7 @@ import javax.inject.Inject
 
 class LegalsController @Inject constructor(
         private val stringProvider: StringProvider,
+        private val resources: Resources,
         private val elementLegals: ElementLegals,
         private val errorFormatter: ErrorFormatter
 ) : TypedEpoxyController<LegalsState>() {
@@ -45,6 +47,7 @@ class LegalsController @Inject constructor(
         buildAppSection()
         buildHomeserverSection(data)
         buildIdentityServerSection(data)
+        buildThirdPartyNotices()
     }
 
     private fun buildAppSection() {
@@ -118,8 +121,32 @@ class LegalsController @Inject constructor(
         }
     }
 
+    private fun buildThirdPartyNotices() {
+        val host = this
+        settingsSectionTitleItem {
+            id("appTitle")
+            titleResId(R.string.legals_third_party_notices)
+        }
+
+        discoveryPolicyItem {
+            id("elcp1")
+            name(host.stringProvider.getString(R.string.settings_third_party_notices))
+            clickListener { host.listener?.openThirdPartyNotice() }
+        }
+        // Only on Gplay
+        if (resources.getBoolean(R.bool.isGplay)) {
+            discoveryPolicyItem {
+                id("elcp2")
+                name(host.stringProvider.getString(R.string.settings_other_third_party_notices))
+                clickListener { host.listener?.openThirdPartyNoticeGplay() }
+            }
+        }
+    }
+
     interface Listener {
         fun onTapRetry()
         fun openPolicy(policy: ServerPolicy)
+        fun openThirdPartyNotice()
+        fun openThirdPartyNoticeGplay()
     }
 }

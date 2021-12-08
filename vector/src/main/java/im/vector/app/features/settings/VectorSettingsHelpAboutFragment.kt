@@ -20,12 +20,9 @@ import androidx.preference.Preference
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.preference.VectorPreference
-import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.core.utils.copyToClipboard
-import im.vector.app.core.utils.displayInWebView
 import im.vector.app.core.utils.openAppSettingsPage
 import im.vector.app.features.version.VersionProvider
-import im.vector.app.openOssLicensesMenuActivity
 import org.matrix.android.sdk.api.Matrix
 import javax.inject.Inject
 
@@ -35,8 +32,6 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
 
     override var titleRes = R.string.preference_root_help_about
     override val preferenceXmlRes = R.xml.vector_settings_help_about
-
-    private val firstThrottler = FirstThrottler(1000)
 
     override fun bindPref() {
         // preference to start the App info screen, to facilitate App permissions access
@@ -75,23 +70,6 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
         // olm version
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_OLM_VERSION_PREFERENCE_KEY)!!
                 .summary = session.cryptoService().getCryptoVersion(requireContext(), false)
-
-        // third party notice
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
-                activity?.displayInWebView(VectorSettingsUrls.THIRD_PARTY_LICENSES)
-            }
-            false
-        }
-
-        // Note: preference is not visible on F-Droid build
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            // See https://developers.google.com/android/guides/opensource
-            openOssLicensesMenuActivity(requireActivity())
-            false
-        }
     }
 
     companion object {
