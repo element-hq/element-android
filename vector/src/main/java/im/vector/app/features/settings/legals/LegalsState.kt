@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.discovery
+package im.vector.app.features.settings.legals
 
-// TODO Rename for more generic name
-data class IdentityServerWithTerms(
-        val serverUrl: String,
-        val policies: List<IdentityServerPolicy>
-)
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.Uninitialized
+import im.vector.app.features.discovery.IdentityServerWithTerms
 
-data class IdentityServerPolicy(
-        val name: String,
-        val url: String
-)
+data class LegalsState(
+        val homeServer: Async<IdentityServerWithTerms?> = Uninitialized,
+        val hasIdentityServer: Boolean = false,
+        val identityServer: Async<IdentityServerWithTerms?> = Uninitialized
+) : MavericksState

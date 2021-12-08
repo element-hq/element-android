@@ -53,4 +53,9 @@
         android:title="@string/preference_root_help_about"
         app:fragment="im.vector.app.features.settings.VectorSettingsHelpAboutFragment" />
 
+    <im.vector.app.core.preference.VectorPreference
+        android:icon="@drawable/ic_settings_root_help_about"
+        android:title="@string/preference_root_legals"
+        app:fragment="im.vector.app.features.settings.legals.LegalsFragment" />
+
 </androidx.preference.PreferenceScreen>

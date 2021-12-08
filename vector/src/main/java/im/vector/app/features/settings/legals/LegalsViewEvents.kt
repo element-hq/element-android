@@ -14,15 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.discovery
+package im.vector.app.features.settings.legals
 
-// TODO Rename for more generic name
-data class IdentityServerWithTerms(
-        val serverUrl: String,
-        val policies: List<IdentityServerPolicy>
-)
+import im.vector.app.core.platform.VectorViewEvents
 
-data class IdentityServerPolicy(
-        val name: String,
-        val url: String
-)
+sealed interface LegalsViewEvents : VectorViewEvents {
+    data class Failure(val throwable: Throwable) : LegalsViewEvents
+}

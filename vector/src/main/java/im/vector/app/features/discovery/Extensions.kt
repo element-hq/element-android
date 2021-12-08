@@ -23,18 +23,29 @@ import org.matrix.android.sdk.api.session.terms.TermsService
 suspend fun Session.fetchIdentityServerWithTerms(userLanguage: String): IdentityServerWithTerms? {
     val identityServerUrl = identityService().getCurrentIdentityServerUrl()
     return identityServerUrl?.let {
-        val terms = getTerms(TermsService.ServiceType.IdentityService, identityServerUrl.ensureProtocol())
-                .serverResponse
-                .getLocalizedTerms(userLanguage)
-        val policyUrls = terms.mapNotNull {
-            val name = it.localizedName ?: it.policyName
-            val url = it.localizedUrl
-            if (name == null || url == null) {
-                null
-            } else {
-                IdentityServerPolicy(name = name, url = url)
-            }
-        }
-        IdentityServerWithTerms(identityServerUrl, policyUrls)
+        fetchTerms(it, TermsService.ServiceType.IdentityService, userLanguage)
     }
+}
+
+suspend fun Session.fetchHomeserverWithTerms(userLanguage: String): IdentityServerWithTerms {
+    val homeserverUrl = sessionParams.homeServerUrl
+    return fetchTerms(homeserverUrl, TermsService.ServiceType.IdentityService, userLanguage)
+}
+
+private suspend fun Session.fetchTerms(serviceUrl: String,
+                                       serviceType: TermsService.ServiceType,
+                                       userLanguage: String): IdentityServerWithTerms {
+    val terms = getTerms(serviceType, serviceUrl.ensureProtocol())
+            .serverResponse
+            .getLocalizedTerms(userLanguage)
+    val policyUrls = terms.mapNotNull {
+        val name = it.localizedName ?: it.policyName
+        val url = it.localizedUrl
+        if (name == null || url == null) {
+            null
+        } else {
+            IdentityServerPolicy(name = name, url = url)
+        }
+    }
+    return IdentityServerWithTerms(serviceUrl, policyUrls)
 }
