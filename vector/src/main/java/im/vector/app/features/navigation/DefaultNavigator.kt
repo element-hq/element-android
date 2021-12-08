@@ -80,7 +80,6 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
 import im.vector.app.features.signout.soft.SoftLogoutActivity
-import im.vector.app.features.signout.soft.SoftLogoutActivity2
 import im.vector.app.features.spaces.InviteRoomSpaceChooserBottomSheet
 import im.vector.app.features.spaces.SpaceExploreActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
@@ -128,10 +127,7 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun softLogout(context: Context) {
-        val intent = when (features.loginVersion()) {
-            VectorFeatures.LoginVersion.V1 -> SoftLogoutActivity.newIntent(context)
-            VectorFeatures.LoginVersion.V2 -> SoftLogoutActivity2.newIntent(context)
-        }
+        val intent = SoftLogoutActivity.newIntent(context)
         context.startActivity(intent)
     }
 
