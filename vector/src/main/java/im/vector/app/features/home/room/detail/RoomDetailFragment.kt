@@ -900,7 +900,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun setupJumpToReadMarkerView() {
-        views.jumpToReadMarkerView.setOnClickListener {
+        views.jumpToReadMarkerView.debouncedClicks {
             onJumpToReadMarkerClicked()
         }
         views.jumpToReadMarkerView.setOnCloseIconClickListener {
@@ -956,7 +956,7 @@ class RoomDetailFragment @Inject constructor(
         super.onCreateOptionsMenu(menu, inflater)
         // We use a custom layout for this menu item, so we need to set a ClickListener
         menu.findItem(R.id.open_matrix_apps)?.let { menuItem ->
-            menuItem.actionView.setOnClickListener {
+            menuItem.actionView.debouncedClicks {
                 onOptionsItemSelected(menuItem)
             }
         }
@@ -1466,7 +1466,7 @@ class RoomDetailFragment @Inject constructor(
                 callback = this@RoomDetailFragment
                 isVisible = true
                 render(inviter, VectorInviteView.Mode.LARGE, mainState.changeMembershipState)
-                setOnClickListener { }
+                setOnClickListener(null)
             }
             Unit
         } else if (mainState.asyncInviter.complete) {
