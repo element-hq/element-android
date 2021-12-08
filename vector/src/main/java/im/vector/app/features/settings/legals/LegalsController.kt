@@ -26,8 +26,8 @@ import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.discovery.ServerPolicy
 import im.vector.app.features.discovery.ServerAndPolicies
+import im.vector.app.features.discovery.ServerPolicy
 import im.vector.app.features.discovery.discoveryPolicyItem
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.discovery.settingsSectionTitleItem
@@ -35,6 +35,7 @@ import javax.inject.Inject
 
 class LegalsController @Inject constructor(
         private val stringProvider: StringProvider,
+        private val elementLegals: ElementLegals,
         private val errorFormatter: ErrorFormatter
 ) : TypedEpoxyController<LegalsState>() {
 
@@ -52,7 +53,7 @@ class LegalsController @Inject constructor(
             titleResId(R.string.legals_application_title)
         }
 
-        // TODO
+        buildPolicies("el", elementLegals.getData())
     }
 
     private fun buildHomeserverSection(data: LegalsState) {
@@ -61,7 +62,7 @@ class LegalsController @Inject constructor(
             titleResId(R.string.legals_home_server_title)
         }
 
-        buildPolicy("hs", data.homeServer)
+        buildPolicyAsync("hs", data.homeServer)
     }
 
     private fun buildIdentityServerSection(data: LegalsState) {
@@ -71,11 +72,11 @@ class LegalsController @Inject constructor(
                 titleResId(R.string.legals_identity_server_title)
             }
 
-            buildPolicy("is", data.identityServer)
+            buildPolicyAsync("is", data.identityServer)
         }
     }
 
-    private fun buildPolicy(tag: String, serverAndPolicies: Async<ServerAndPolicies?>) {
+    private fun buildPolicyAsync(tag: String, serverAndPolicies: Async<ServerAndPolicies?>) {
         val host = this
 
         when (serverAndPolicies) {
@@ -91,14 +92,7 @@ class LegalsController @Inject constructor(
                         helperText(host.stringProvider.getString(R.string.legals_no_policy_provided))
                     }
                 } else {
-                    policies.forEach { policy ->
-                        discoveryPolicyItem {
-                            id(policy.url)
-                            name(policy.name)
-                            url(policy.url)
-                            clickListener { host.listener?.openPolicy(policy) }
-                        }
-                    }
+                    buildPolicies(tag, policies)
                 }
             }
             is Fail    -> {
@@ -107,6 +101,19 @@ class LegalsController @Inject constructor(
                     text(host.errorFormatter.toHumanReadable(serverAndPolicies.error))
                     listener { host.listener?.onTapRetry() }
                 }
+            }
+        }
+    }
+
+    private fun buildPolicies(tag: String, policies: List<ServerPolicy>) {
+        val host = this
+
+        policies.forEach { policy ->
+            discoveryPolicyItem {
+                id(tag + policy.url)
+                name(policy.name)
+                url(policy.url)
+                clickListener { host.listener?.openPolicy(policy) }
             }
         }
     }

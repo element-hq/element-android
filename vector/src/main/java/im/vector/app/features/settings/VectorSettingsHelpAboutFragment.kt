@@ -24,7 +24,6 @@ import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.displayInWebView
 import im.vector.app.core.utils.openAppSettingsPage
-import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.version.VersionProvider
 import im.vector.app.openOssLicensesMenuActivity
 import org.matrix.android.sdk.api.Matrix
@@ -76,27 +75,6 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
         // olm version
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_OLM_VERSION_PREFERENCE_KEY)!!
                 .summary = session.cryptoService().getCryptoVersion(requireContext(), false)
-
-        // copyright
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_COPYRIGHT_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.COPYRIGHT)
-            false
-        }
-
-        // terms & conditions
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.TAC)
-            false
-        }
-
-        // privacy policy
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.PRIVACY_POLICY)
-            false
-        }
 
         // third party notice
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY)!!

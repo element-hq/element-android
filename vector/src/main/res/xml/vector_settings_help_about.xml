@@ -24,18 +24,6 @@
         tools:summary="7.8.9" />
 
     <im.vector.app.core.preference.VectorPreference
-        android:key="SETTINGS_COPYRIGHT_PREFERENCE_KEY"
-        android:title="@string/settings_copyright" />
-
-    <im.vector.app.core.preference.VectorPreference
-        android:key="SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY"
-        android:title="@string/settings_app_term_conditions" />
-
-    <im.vector.app.core.preference.VectorPreference
-        android:key="SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY"
-        android:title="@string/settings_privacy_policy" />
-
-    <im.vector.app.core.preference.VectorPreference
         android:key="SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY"
         android:title="@string/settings_third_party_notices" />
 
