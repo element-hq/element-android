@@ -33,7 +33,7 @@ class DebugFeaturesStateFactory @Inject constructor(
                 ),
 
                 Feature.BooleanFeature(
-                        label = "Splash - already has an account",
+                        label = "FTUE Splash - I already have an account",
                         override = debugFeatures.isAlreadyHaveAccountSplashEnabled().takeIf {
                             debugFeatures.hasOverride(DebugFeatureKeys.alreadyHaveAnAccount)
                         },
