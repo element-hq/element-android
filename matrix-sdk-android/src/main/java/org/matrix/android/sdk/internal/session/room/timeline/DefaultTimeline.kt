@@ -448,7 +448,11 @@ internal class DefaultTimeline(
      */
     private fun handleUpdates(results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet) {
         // If changeSet has deletion we are having a gap, so we clear everything
-        if (changeSet.deletionRanges.isNotEmpty()) {
+        // I observed there is a problem with this implementation in the threads timeline upon receiving
+        // a local echo, after adding && !isFromThreadTimeline below fixed the issue.
+        // Maybe there is a deeper problem here even on the main timeline
+
+        if (changeSet.deletionRanges.isNotEmpty() && !isFromThreadTimeline) {
             clearAllValues()
         }
         var postSnapshot = false

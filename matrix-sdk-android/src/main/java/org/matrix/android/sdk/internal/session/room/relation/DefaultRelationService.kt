@@ -168,25 +168,31 @@ internal class DefaultRelationService @AssistedInject constructor(
             msgType: String,
             autoMarkdown: Boolean,
             formattedText: String?,
-            eventReplied: TimelineEvent?): Cancelable {
-        val event = eventReplied?.let {
+            eventReplied: TimelineEvent?): Cancelable? {
+
+        val event = if (eventReplied != null) {
             eventFactory.createReplyTextEvent(
                     roomId = roomId,
                     eventReplied = eventReplied,
                     replyText = replyInThreadText,
                     autoMarkdown = autoMarkdown,
                     rootThreadEventId = rootThreadEventId)
-        } ?: eventFactory.createThreadTextEvent(
-                rootThreadEventId = rootThreadEventId,
-                roomId = roomId,
-                text = replyInThreadText.toString(),
-                msgType = msgType,
-                autoMarkdown = autoMarkdown,
-                formattedText = formattedText)
-//                .also {
-//                    saveLocalEcho(it)
-//                }
-        return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
+                    ?.also {
+                        saveLocalEcho(it)
+                    } ?: return null
+        } else {
+            eventFactory.createThreadTextEvent(
+                    rootThreadEventId = rootThreadEventId,
+                    roomId = roomId,
+                    text = replyInThreadText.toString(),
+                    msgType = msgType,
+                    autoMarkdown = autoMarkdown,
+                    formattedText = formattedText)
+                    .also {
+                        saveLocalEcho(it)
+                    }
+        }
+        return  eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
     }
 
     /**
