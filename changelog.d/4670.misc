@@ -1,0 +1,1 @@
+Add explicit dependency location, regarding the several maven repository. Also update some libraries (flexbox and alerter), and do some cleanup.
