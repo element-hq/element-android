@@ -37,8 +37,13 @@ allprojects {
     apply plugin: "org.jlleitschuh.gradle.ktlint"
 
     repositories {
-        // For olm library. This has to be declared first, to ensure that Olm library is not downloaded from another repo
-        maven { url 'https://gitlab.matrix.org/api/v4/projects/27/packages/maven' }
+        // For olm library.
+        maven {
+            url 'https://gitlab.matrix.org/api/v4/projects/27/packages/maven'
+            content {
+                includeGroup 'org.matrix.android'
+            }
+        }
 
         maven {
             url 'https://jitpack.io'
