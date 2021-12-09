@@ -911,7 +911,13 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleVoteToPoll(action: RoomDetailAction.VoteToPoll) {
         // Do not allow to vote unsent local echo of the poll event
         if (LocalEcho.isLocalEchoId(action.eventId)) return
-        room.voteToPoll(action.eventId, action.optionKey)
+        // Do not allow to vote the same option twice
+        room.getTimeLineEvent(action.eventId)?.let { pollTimelineEvent ->
+            val currentVote = pollTimelineEvent.annotations?.pollResponseSummary?.aggregatedContent?.myVote
+            if (currentVote != action.optionKey) {
+                room.voteToPoll(action.eventId, action.optionKey)
+            }
+        }
     }
 
     private fun handleEndPoll(eventId: String) {

@@ -158,7 +158,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         ),
                         answers = options.mapIndexed { index, option ->
                             PollAnswer(
-                                    id = index.toString(),
+                                    id = "$index-$option",
                                     answer = option
                             )
                         }
