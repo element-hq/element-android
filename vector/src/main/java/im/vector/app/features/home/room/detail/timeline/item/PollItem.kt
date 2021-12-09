@@ -54,13 +54,14 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
         val isEnded = pollResponseSummary?.isClosed.orFalse()
         val didUserVoted = pollResponseSummary?.myVote?.isNotEmpty().orFalse()
         val showVotes = didUserVoted || isEnded
-        val totalVotes = pollResponseSummary?.votes?.map { it.value }?.sum() ?: 0
-        val winnerVoteCount = pollResponseSummary?.votes?.map { it.value }?.maxOrNull() ?: -1
+        val totalVotes = pollResponseSummary?.totalVotes ?: 0
+        val winnerVoteCount = pollResponseSummary?.winnerVoteCount
 
         pollContent?.pollCreationInfo?.answers?.forEach { option ->
-            val isMyVote = pollResponseSummary?.myVote?.let { option.id == it }.orFalse()
-            val voteCount = pollResponseSummary?.votes?.get(option.id) ?: 0
-            val votePercentage = if (voteCount == 0 && totalVotes == 0) 0.0 else voteCount.toDouble() / totalVotes
+            val voteSummary = pollResponseSummary?.votes?.get(option.id)
+            val isMyVote = pollResponseSummary?.myVote == option.id
+            val voteCount = voteSummary?.total ?: 0
+            val votePercentage = voteSummary?.percentage ?: 0.0
 
             holder.optionsContainer.addView(
                     PollOptionItem(holder.view.context).apply {
@@ -73,7 +74,7 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
                                 votePercentage = votePercentage,
                                 callback = object : PollOptionItem.Callback {
                                     override fun onOptionClicked() {
-                                        callback?.onTimelineItemAction(RoomDetailAction.RegisterVoteToPoll(relatedEventId, option.id ?: ""))
+                                        callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, option.id ?: ""))
                                     }
                                 })
                     }

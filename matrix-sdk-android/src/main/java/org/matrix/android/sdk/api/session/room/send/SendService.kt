@@ -91,10 +91,10 @@ interface SendService {
     /**
      * Method to send a poll response.
      * @param pollEventId the poll currently replied to
-     * @param optionKey The option key
+     * @param answerId The id of the answer
      * @return a [Cancelable]
      */
-    fun registerVoteToPoll(pollEventId: String, optionKey: String): Cancelable
+    fun voteToPoll(pollEventId: String, answerId: String): Cancelable
 
     /**
      * End a poll in the room.

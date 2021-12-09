@@ -23,6 +23,10 @@ import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultCon
 
 @JsonClass(generateAdapter = true)
 data class MessagePollContent(
+        /**
+         * Local message type, not from server
+         */
+        @Transient
         override val msgType: String = MessageType.MSGTYPE_POLL_START,
         @Json(name = "body") override val body: String = "",
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,

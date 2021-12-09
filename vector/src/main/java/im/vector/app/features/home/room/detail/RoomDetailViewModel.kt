@@ -289,7 +289,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.IgnoreUser                       -> handleIgnoreUser(action)
             is RoomDetailAction.EnterTrackingUnreadMessagesState -> startTrackingUnreadMessages()
             is RoomDetailAction.ExitTrackingUnreadMessagesState  -> stopTrackingUnreadMessages()
-            is RoomDetailAction.RegisterVoteToPoll               -> handleRegisterVoteToPoll(action)
+            is RoomDetailAction.VoteToPoll                       -> handleVoteToPoll(action)
             is RoomDetailAction.AcceptVerificationRequest        -> handleAcceptVerification(action)
             is RoomDetailAction.DeclineVerificationRequest       -> handleDeclineVerification(action)
             is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
@@ -908,10 +908,10 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleRegisterVoteToPoll(action: RoomDetailAction.RegisterVoteToPoll) {
-        // Do not allow to reply to unsent local echo
+    private fun handleVoteToPoll(action: RoomDetailAction.VoteToPoll) {
+        // Do not allow to vote unsent local echo of the poll event
         if (LocalEcho.isLocalEchoId(action.eventId)) return
-        room.registerVoteToPoll(action.eventId, action.optionKey)
+        room.voteToPoll(action.eventId, action.optionKey)
     }
 
     private fun handleEndPoll(eventId: String) {

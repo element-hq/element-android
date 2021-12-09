@@ -38,7 +38,6 @@ import androidx.core.view.isVisible
 import com.amulyakhare.textdrawable.TextDrawable
 import com.amulyakhare.textdrawable.util.ColorGenerator
 import im.vector.app.R
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.getMeasurements
 import im.vector.app.core.utils.PERMISSIONS_EMPTY
 import im.vector.app.core.utils.PERMISSIONS_FOR_PICKING_CONTACT
@@ -132,7 +131,7 @@ class AttachmentTypeSelectorView(context: Context,
             Type.AUDIO   -> views.attachmentAudioButtonContainer
             Type.CONTACT -> views.attachmentContactButtonContainer
             Type.POLL    -> views.attachmentPollButtonContainer
-        }.exhaustive.let {
+        }.let {
             it.isVisible = isVisible
         }
     }

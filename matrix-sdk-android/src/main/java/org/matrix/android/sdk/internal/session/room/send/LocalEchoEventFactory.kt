@@ -126,14 +126,14 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     fun createPollReplyEvent(roomId: String,
                              pollEventId: String,
-                             optionLabel: String): Event {
+                             answerId: String): Event {
         val content = MessagePollResponseContent(
-                body = optionLabel,
+                body = answerId,
                 relatesTo = RelationDefaultContent(
                         type = RelationType.REFERENCE,
                         eventId = pollEventId),
                 response = PollResponse(
-                        answers = listOf(optionLabel)
+                        answers = listOf(answerId)
                 )
 
         )

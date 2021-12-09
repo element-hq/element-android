@@ -103,8 +103,8 @@ internal class DefaultSendService @AssistedInject constructor(
                 .let { sendEvent(it) }
     }
 
-    override fun registerVoteToPoll(pollEventId: String, optionKey: String): Cancelable {
-        return localEchoEventFactory.createPollReplyEvent(roomId, pollEventId, optionKey)
+    override fun voteToPoll(pollEventId: String, answerId: String): Cancelable {
+        return localEchoEventFactory.createPollReplyEvent(roomId, pollEventId, answerId)
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }
