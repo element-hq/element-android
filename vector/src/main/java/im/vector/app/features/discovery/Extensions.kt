@@ -19,25 +19,27 @@ package im.vector.app.features.discovery
 import im.vector.app.core.utils.ensureProtocol
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.terms.TermsService
+import org.matrix.android.sdk.internal.session.terms.TermsResponse
 
 suspend fun Session.fetchIdentityServerWithTerms(userLanguage: String): ServerAndPolicies? {
-    val identityServerUrl = identityService().getCurrentIdentityServerUrl()
-    return identityServerUrl?.let {
-        fetchTerms(it, TermsService.ServiceType.IdentityService, userLanguage)
-    }
+    return identityService().getCurrentIdentityServerUrl()
+            ?.let { identityServerUrl ->
+                val termsResponse = getTerms(TermsService.ServiceType.IdentityService, identityServerUrl.ensureProtocol())
+                        .serverResponse
+                buildServerAndPolicies(identityServerUrl, termsResponse, userLanguage)
+            }
 }
 
 suspend fun Session.fetchHomeserverWithTerms(userLanguage: String): ServerAndPolicies {
     val homeserverUrl = sessionParams.homeServerUrl
-    return fetchTerms(homeserverUrl, TermsService.ServiceType.Homeserver, userLanguage)
+    val terms = getHomeserverTerms(homeserverUrl.ensureProtocol())
+    return buildServerAndPolicies(homeserverUrl, terms, userLanguage)
 }
 
-private suspend fun Session.fetchTerms(serviceUrl: String,
-                                       serviceType: TermsService.ServiceType,
-                                       userLanguage: String): ServerAndPolicies {
-    val terms = getTerms(serviceType, serviceUrl.ensureProtocol())
-            .serverResponse
-            .getLocalizedTerms(userLanguage)
+private fun buildServerAndPolicies(serviceUrl: String,
+                                   termsResponse: TermsResponse,
+                                   userLanguage: String): ServerAndPolicies {
+    val terms = termsResponse.getLocalizedTerms(userLanguage)
     val policyUrls = terms.mapNotNull {
         val name = it.localizedName ?: it.policyName
         val url = it.localizedUrl
