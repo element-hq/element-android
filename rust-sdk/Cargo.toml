@@ -29,11 +29,11 @@ features = ["lax_deserialize"]
 
 [dependencies.matrix-sdk-common]
 git = "https://github.com/matrix-org/matrix-rust-sdk/"
-rev = "8494f105837af824f4637c05e9e01b0854d7109b"
+rev = "009ead2eeaf365e1fb0f790557f20d4eaf6874ae"
 
 [dependencies.matrix-sdk-crypto]
 git = "https://github.com/matrix-org/matrix-rust-sdk/"
-rev = "8494f105837af824f4637c05e9e01b0854d7109b"
+rev = "009ead2eeaf365e1fb0f790557f20d4eaf6874ae"
 features = ["sled_cryptostore", "qrcode", "backups_v1"]
 
 [dependencies.tokio]
@@ -43,7 +43,7 @@ features = ["rt-multi-thread"]
 
 [dependencies.ruma]
 git = "https://github.com/ruma/ruma"
-rev = "6c4892664"
+rev = "fdbc4d6d1dd273c8a6ac95b329943ed8c68df70d"
 features = ["client-api-c"]
 
 [build-dependencies]

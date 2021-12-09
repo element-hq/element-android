@@ -344,6 +344,7 @@ impl OlmMachine {
         events: &str,
         device_changes: DeviceLists,
         key_counts: HashMap<String, i32>,
+        unused_fallback_keys: Option<Vec<String>>,
     ) -> Result<String, CryptoStoreError> {
         let events: ToDevice = serde_json::from_str(events)?;
         let device_changes: RumaDeviceLists = device_changes.into();
@@ -359,10 +360,14 @@ impl OlmMachine {
             })
             .collect();
 
+        let unused_fallback_keys: Option<Vec<DeviceKeyAlgorithm>> =
+            unused_fallback_keys.map(|u| u.into_iter().map(DeviceKeyAlgorithm::from).collect());
+
         let events = self.runtime.block_on(self.inner.receive_sync_changes(
             events,
             &device_changes,
             &key_counts,
+            unused_fallback_keys.as_deref(),
         ))?;
 
         Ok(serde_json::to_string(&events)?)

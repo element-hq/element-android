@@ -309,7 +309,9 @@ internal class OlmMachine(
                     MoshiProvider.providesMoshi().adapter(ToDeviceSyncResponse::class.java)
             val events = adapter.toJson(toDevice ?: ToDeviceSyncResponse())!!
 
-            adapter.fromJson(inner.receiveSyncChanges(events, devices, counts)) ?: ToDeviceSyncResponse()
+            // TODO once our sync response type parses the unused fallback key
+            // field pass in the list of unused fallback keys here
+            adapter.fromJson(inner.receiveSyncChanges(events, devices, counts, unusedFallbackKeys = null)) ?: ToDeviceSyncResponse()
         }
 
         // We may get cross signing keys over a to-device event, update our listeners.

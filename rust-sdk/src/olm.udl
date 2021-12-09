@@ -244,7 +244,8 @@ interface OlmMachine {
     [Throws=CryptoStoreError]
     string receive_sync_changes([ByRef] string events,
                               DeviceLists device_changes,
-                              record<DOMString, i32> key_counts);
+                              record<DOMString, i32> key_counts,
+                              sequence<string>? unused_fallback_keys);
     [Throws=CryptoStoreError]
     sequence<Request> outgoing_requests();
     [Throws=CryptoStoreError]
