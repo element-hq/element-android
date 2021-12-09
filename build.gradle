@@ -217,6 +217,7 @@ allprojects {
                 includeGroup 'com.amulyakhare'
                 includeGroup 'com.otaliastudios'
                 includeGroup 'com.yqritc'
+                // https://github.com/cmelchior/realmfieldnameshelper/issues/42
                 includeGroup 'dk.ilios'
                 includeGroup 'im.dlg'
                 includeGroup 'me.dm7.barcodescanner'
