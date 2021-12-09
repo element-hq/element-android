@@ -73,7 +73,6 @@ interface Timeline {
     /**
      * This is the same than the regular paginate method but waits for the results instead
      * of relying on the timeline listener.
-     * Note that it will still trigger onTimelineUpdated internally.
      */
     suspend fun awaitPaginate(direction: Direction, count: Int): List<TimelineEvent>
 
@@ -90,7 +89,7 @@ interface Timeline {
     /**
      * Returns a snapshot of the timeline in his current state.
      */
-    suspend fun awaitSnapshot(): List<TimelineEvent>
+    fun getSnapshot(): List<TimelineEvent>
 
     interface Listener {
         /**

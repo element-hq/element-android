@@ -37,15 +37,17 @@ internal class RealmSendingEventsDataSource(
         private val realm: AtomicReference<Realm>,
         private val uiEchoManager: UIEchoManager,
         private val timelineEventMapper: TimelineEventMapper,
-        private val onEventsUpdated: () -> Unit
+        private val onEventsUpdated: (Boolean) -> Unit
 ) : SendingEventsDataSource {
 
     private var roomEntity: RoomEntity? = null
     private var sendingTimelineEvents: RealmList<TimelineEventEntity>? = null
+    private var frozenSendingTimelineEvents: RealmList<TimelineEventEntity>? = null
 
     private val sendingTimelineEventsListener = RealmChangeListener<RealmList<TimelineEventEntity>> { events ->
         uiEchoManager.onSentEventsInDatabase(events.map { it.eventId })
-        onEventsUpdated()
+        frozenSendingTimelineEvents = sendingTimelineEvents?.freeze()
+        onEventsUpdated(false)
     }
 
     override fun start() {
@@ -65,7 +67,7 @@ internal class RealmSendingEventsDataSource(
         val builtSendingEvents = mutableListOf<TimelineEvent>()
         uiEchoManager.getInMemorySendingEvents()
                 .addWithUiEcho(builtSendingEvents)
-        sendingTimelineEvents?.freeze()
+        frozenSendingTimelineEvents
                 ?.filter { timelineEvent ->
                     builtSendingEvents.none { it.eventId == timelineEvent.eventId }
                 }

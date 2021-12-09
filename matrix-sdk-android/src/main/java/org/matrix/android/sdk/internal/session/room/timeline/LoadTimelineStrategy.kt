@@ -71,7 +71,7 @@ internal class LoadTimelineStrategy(
             val timelineInput: TimelineInput,
             val timelineEventMapper: TimelineEventMapper,
             val threadsAwarenessHandler: ThreadsAwarenessHandler,
-            val onEventsUpdated: () -> Unit,
+            val onEventsUpdated: (Boolean) -> Unit,
             val onLimitedTimeline: () -> Unit,
             val onNewTimelineEvents: (List<String>) -> Unit
     )
@@ -110,7 +110,7 @@ internal class LoadTimelineStrategy(
             }
             if (uiEchoManager.onLocalEchoCreated(timelineEvent)) {
                 dependencies.onNewTimelineEvents(listOf(timelineEvent.eventId))
-                dependencies.onEventsUpdated()
+                dependencies.onEventsUpdated(false)
             }
         }
 
@@ -119,7 +119,7 @@ internal class LoadTimelineStrategy(
                 return
             }
             if (uiEchoManager.onSendStateUpdated(eventId, sendState)) {
-                dependencies.onEventsUpdated()
+                dependencies.onEventsUpdated(false)
             }
         }
 

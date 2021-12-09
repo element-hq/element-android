@@ -56,7 +56,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                              private val uiEchoManager: UIEchoManager? = null,
                              private val threadsAwarenessHandler: ThreadsAwarenessHandler,
                              private val initialEventId: String?,
-                             private val onBuiltEvents: () -> Unit) {
+                             private val onBuiltEvents: (Boolean) -> Unit) {
 
     private val isLastForward = AtomicBoolean(chunkEntity.isLastForward)
     private val isLastBackward = AtomicBoolean(chunkEntity.isLastBackward)
@@ -86,6 +86,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
     }
 
     private val timelineEventCollectionListener = OrderedRealmCollectionChangeListener { results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet ->
+        Timber.v("on timeline events chunk update")
         val frozenResults = results.freeze()
         handleDatabaseChangeSet(frozenResults, changeSet)
     }
@@ -135,9 +136,9 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         } else if (direction == Timeline.Direction.BACKWARDS && prevChunk != null) {
             return prevChunk?.loadMore(count, direction, fetchOnServerIfNeeded) ?: LoadMoreResult.FAILURE
         }
-        val loadFromDbCount = loadFromStorage(count, direction)
-        Timber.v("Has loaded $loadFromDbCount items from storage")
-        val offsetCount = count - loadFromDbCount
+        val loadFromStorageCount = loadFromStorage(count, direction)
+        Timber.v("Has loaded $loadFromStorageCount items from storage in $direction")
+        val offsetCount = count - loadFromStorageCount
         return if (direction == Timeline.Direction.FORWARDS && isLastForward.get()) {
             LoadMoreResult.REACHED_END
         } else if (direction == Timeline.Direction.BACKWARDS && isLastBackward.get()) {
@@ -289,7 +290,6 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                         builtEvents.add(timelineEvent)
                     }
                 }
-        onBuiltEvents()
         return timelineEvents.size
     }
 
@@ -412,7 +412,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
             }
         }
         if (insertions.isNotEmpty() || modifications.isNotEmpty()) {
-            onBuiltEvents()
+            onBuiltEvents(true)
         }
     }
 

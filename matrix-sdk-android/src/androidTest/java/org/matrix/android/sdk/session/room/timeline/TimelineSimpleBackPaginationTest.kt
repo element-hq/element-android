@@ -90,7 +90,7 @@ class TimelineSimpleBackPaginationTest : InstrumentedTest {
         assertEquals(false, bobTimeline.hasMoreToLoad(Timeline.Direction.BACKWARDS))
 
         val onlySentEvents = runBlocking {
-            bobTimeline.awaitSnapshot()
+            bobTimeline.getSnapshot()
         }
                 .filter {
                     it.root.isTextMessage()

@@ -24,6 +24,10 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.internal.closeQuietly
@@ -72,6 +76,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
     private val timelineDispatcher = BACKGROUND_HANDLER.asCoroutineDispatcher()
     private val timelineScope = CoroutineScope(SupervisorJob() + timelineDispatcher)
     private val sequencer = SemaphoreCoroutineSequencer()
+    private val postSnapshotSignalFlow = MutableSharedFlow<Unit>(0)
 
     private val strategyDependencies = LoadTimelineStrategy.Dependencies(
             timelineSettings = settings,
@@ -83,7 +88,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
             timelineInput = timelineInput,
             timelineEventMapper = timelineEventMapper,
             threadsAwarenessHandler = threadsAwarenessHandler,
-            onEventsUpdated = this::postSnapshot,
+            onEventsUpdated = this::sendSignalToPostSnapshot,
             onLimitedTimeline = this::onLimitedTimeline,
             onNewTimelineEvents = this::onNewTimelineEvents
     )
@@ -95,7 +100,12 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
 
     override fun addListener(listener: Timeline.Listener): Boolean {
         listeners.add(listener)
-        postSnapshot()
+        timelineScope.launch {
+            val snapshot = strategy.buildSnapshot()
+            withContext(Dispatchers.Main) {
+                tryOrNull { listener.onTimelineUpdated(snapshot) }
+            }
+        }
         return true
     }
 
@@ -117,7 +127,9 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
                     val realm = Realm.getInstance(realmConfiguration)
                     ensureReadReceiptAreLoaded(realm)
                     backgroundRealm.set(realm)
+                    listenToPostSnapshotSignals()
                     openAround(initialEventId)
+                    postSnapshot()
                 }
             }
         }
@@ -148,7 +160,10 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
 
     override fun paginate(direction: Timeline.Direction, count: Int) {
         timelineScope.launch {
-            loadMore(count, direction, fetchOnServerIfNeeded = true)
+            val postSnapshot = loadMore(count, direction, fetchOnServerIfNeeded = true)
+            if (postSnapshot) {
+                postSnapshot()
+            }
         }
     }
 
@@ -156,11 +171,11 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         withContext(timelineDispatcher) {
             loadMore(count, direction, fetchOnServerIfNeeded = true)
         }
-        return awaitSnapshot()
+        return getSnapshot()
     }
 
-    override suspend fun awaitSnapshot(): List<TimelineEvent> = withContext(timelineDispatcher) {
-        strategy.buildSnapshot()
+    override fun getSnapshot(): List<TimelineEvent> {
+        return strategy.buildSnapshot()
     }
 
     override fun getIndexOfEvent(eventId: String?): Int? {
@@ -176,7 +191,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         }.get()
     }
 
-    private suspend fun loadMore(count: Int, direction: Timeline.Direction, fetchOnServerIfNeeded: Boolean) {
+    private suspend fun loadMore(count: Int, direction: Timeline.Direction, fetchOnServerIfNeeded: Boolean): Boolean {
         val baseLogMessage = "loadMore(count: $count, direction: $direction, roomId: $roomId, fetchOnServer: $fetchOnServerIfNeeded)"
         Timber.v("$baseLogMessage started")
         if (!isStarted.get()) {
@@ -185,11 +200,11 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         val currentState = getPaginationState(direction)
         if (!currentState.hasMoreToLoad) {
             Timber.v("$baseLogMessage : nothing more to load")
-            return
+            return false
         }
         if (currentState.loading) {
             Timber.v("$baseLogMessage : already loading")
-            return
+            return false
         }
         updateState(direction) {
             it.copy(loading = true)
@@ -200,6 +215,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         updateState(direction) {
             it.copy(loading = false, hasMoreToLoad = hasMoreToLoad)
         }
+        return true
     }
 
     private suspend fun openAround(eventId: String?) = withContext(timelineDispatcher) {
@@ -221,9 +237,10 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
                 direction = Timeline.Direction.BACKWARDS,
                 fetchOnServerIfNeeded = false
         )
+        Timber.v("$baseLogMessage finished")
     }
 
-    private suspend fun initPaginationStates(eventId: String?) {
+    private fun initPaginationStates(eventId: String?) {
         updateState(Timeline.Direction.FORWARDS) {
             it.copy(loading = false, hasMoreToLoad = eventId != null)
         }
@@ -232,21 +249,40 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         }
     }
 
+    private fun sendSignalToPostSnapshot(withThrottling: Boolean) {
+        timelineScope.launch {
+            if (withThrottling) {
+                postSnapshotSignalFlow.emit(Unit)
+            } else {
+                postSnapshot()
+            }
+        }
+    }
+
+    @Suppress("EXPERIMENTAL_API_USAGE")
+    private fun listenToPostSnapshotSignals() {
+        postSnapshotSignalFlow
+                .sample(150)
+                .onEach {
+                    postSnapshot()
+                }
+                .launchIn(timelineScope)
+    }
+
     private fun onLimitedTimeline() {
         timelineScope.launch {
             initPaginationStates(null)
             loadMore(settings.initialSize, Timeline.Direction.BACKWARDS, false)
+            postSnapshot()
         }
     }
 
-    private fun postSnapshot() {
-        timelineScope.launch {
-            val snapshot = strategy.buildSnapshot()
-            Timber.v("Post snapshot of ${snapshot.size} items")
-            withContext(Dispatchers.Main) {
-                listeners.forEach {
-                    tryOrNull { it.onTimelineUpdated(snapshot) }
-                }
+    private suspend fun postSnapshot() {
+        val snapshot = strategy.buildSnapshot()
+        Timber.v("Post snapshot of ${snapshot.size} events")
+        withContext(Dispatchers.Main) {
+            listeners.forEach {
+                tryOrNull { it.onTimelineUpdated(snapshot) }
             }
         }
     }
@@ -259,7 +295,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         }
     }
 
-    private suspend fun updateState(direction: Timeline.Direction, update: (Timeline.PaginationState) -> Timeline.PaginationState) {
+    private fun updateState(direction: Timeline.Direction, update: (Timeline.PaginationState) -> Timeline.PaginationState) {
         val stateReference = when (direction) {
             Timeline.Direction.FORWARDS  -> forwardState
             Timeline.Direction.BACKWARDS -> backwardState
@@ -272,10 +308,12 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         }
     }
 
-    private suspend fun postPaginationState(direction: Timeline.Direction, state: Timeline.PaginationState) = withContext(Dispatchers.Main) {
-        Timber.v("Post $direction pagination state: $state ")
-        listeners.forEach {
-            tryOrNull { it.onStateUpdated(direction, state) }
+    private fun postPaginationState(direction: Timeline.Direction, state: Timeline.PaginationState) {
+        timelineScope.launch(Dispatchers.Main) {
+            Timber.v("Post $direction pagination state: $state ")
+            listeners.forEach {
+                tryOrNull { it.onStateUpdated(direction, state) }
+            }
         }
     }
 
