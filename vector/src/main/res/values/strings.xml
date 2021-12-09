@@ -2521,6 +2521,7 @@
     <string name="login_splash_text2">Keep conversations private with encryption</string>
     <string name="login_splash_text3">Extend &amp; customise your experience</string>
     <string name="login_splash_submit">Get started</string>
+    <string name="login_splash_already_have_account">I already have an account</string>
 
     <string name="login_server_title">Select a server</string>
     <string name="login_server_text">Just like email, accounts have one home, although you can talk to anyone</string>

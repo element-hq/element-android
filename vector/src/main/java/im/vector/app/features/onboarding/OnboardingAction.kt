@@ -26,7 +26,8 @@ import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 
 sealed class OnboardingAction : VectorViewModelAction {
-    data class OnGetStarted(val resetLoginConfig: Boolean) : OnboardingAction()
+    data class OnGetStarted(val resetLoginConfig: Boolean, val onboardingFlow: OnboardingFlow) : OnboardingAction()
+    data class OnIAlreadyHaveAnAccount(val resetLoginConfig: Boolean, val onboardingFlow: OnboardingFlow) : OnboardingAction()
 
     data class UpdateServerType(val serverType: ServerType) : OnboardingAction()
     data class UpdateHomeServer(val homeServerUrl: String) : OnboardingAction()
