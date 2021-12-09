@@ -64,6 +64,11 @@ allprojects {
             url "https://github.com/vector-im/jitsi_libre_maven/raw/main/android-sdk-3.10.0"
             // Note: to test Jitsi release you can use a local file like this:
             // url "file:///Users/bmarty/workspaces/jitsi_libre_maven/android-sdk-3.10.0"
+            content {
+                includeGroup 'com.facebook.react'
+                includeGroup 'org.jitsi.react'
+                includeGroup 'org.webkit'
+            }
         }
         google()
         mavenCentral()
