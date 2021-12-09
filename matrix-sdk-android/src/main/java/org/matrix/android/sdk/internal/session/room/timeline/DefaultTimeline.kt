@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session.room.timeline
 import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.android.asCoroutineDispatcher
 import kotlinx.coroutines.cancelChildren
@@ -31,6 +30,7 @@ import kotlinx.coroutines.flow.sample
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.internal.closeQuietly
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -53,6 +53,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
                                                     private val loadRoomMembersTask: LoadRoomMembersTask,
                                                     private val readReceiptHandler: ReadReceiptHandler,
                                                     private val settings: TimelineSettings,
+                                                    private val coroutineDispatchers: MatrixCoroutineDispatchers,
                                                     paginationTask: PaginationTask,
                                                     getEventTask: GetContextOfEventTask,
                                                     fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
@@ -102,7 +103,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
         listeners.add(listener)
         timelineScope.launch {
             val snapshot = strategy.buildSnapshot()
-            withContext(Dispatchers.Main) {
+            withContext(coroutineDispatchers.main) {
                 tryOrNull { listener.onTimelineUpdated(snapshot) }
             }
         }
@@ -280,7 +281,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
     private suspend fun postSnapshot() {
         val snapshot = strategy.buildSnapshot()
         Timber.v("Post snapshot of ${snapshot.size} events")
-        withContext(Dispatchers.Main) {
+        withContext(coroutineDispatchers.main) {
             listeners.forEach {
                 tryOrNull { it.onTimelineUpdated(snapshot) }
             }
@@ -288,7 +289,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
     }
 
     private fun onNewTimelineEvents(eventIds: List<String>) {
-        timelineScope.launch(Dispatchers.Main) {
+        timelineScope.launch(coroutineDispatchers.main) {
             listeners.forEach {
                 tryOrNull { it.onNewTimelineEvents(eventIds) }
             }
@@ -309,7 +310,7 @@ internal class DefaultTimeline internal constructor(private val roomId: String,
     }
 
     private fun postPaginationState(direction: Timeline.Direction, state: Timeline.PaginationState) {
-        timelineScope.launch(Dispatchers.Main) {
+        timelineScope.launch(coroutineDispatchers.main) {
             Timber.v("Post $direction pagination state: $state ")
             listeners.forEach {
                 tryOrNull { it.onStateUpdated(direction, state) }

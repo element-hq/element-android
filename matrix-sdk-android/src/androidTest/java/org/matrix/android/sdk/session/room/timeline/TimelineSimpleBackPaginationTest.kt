@@ -43,7 +43,6 @@ class TimelineSimpleBackPaginationTest : InstrumentedTest {
 
     @Test
     fun timeline_backPaginate_shouldReachEndOfTimeline() {
-
         val numberOfMessagesToSent = 200
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
@@ -69,12 +68,12 @@ class TimelineSimpleBackPaginationTest : InstrumentedTest {
         bobTimeline.start()
 
         commonTestHelper.waitWithLatch(timeout = TestConstants.timeOutMillis * 10) {
-
             val listener = object : Timeline.Listener {
 
                 override fun onStateUpdated(direction: Timeline.Direction, state: Timeline.PaginationState) {
-                    if (direction == Timeline.Direction.FORWARDS)
+                    if (direction == Timeline.Direction.FORWARDS) {
                         return
+                    }
                     if (state.hasMoreToLoad && !state.loading) {
                         bobTimeline.paginate(Timeline.Direction.BACKWARDS, 30)
                     } else if (!state.hasMoreToLoad) {

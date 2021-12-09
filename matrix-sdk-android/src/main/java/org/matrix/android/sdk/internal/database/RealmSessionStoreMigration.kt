@@ -414,5 +414,4 @@ internal class RealmSessionStoreMigration @Inject constructor(
             }
         }
     }
-
 }

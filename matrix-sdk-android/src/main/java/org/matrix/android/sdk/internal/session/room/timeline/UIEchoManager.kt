@@ -24,7 +24,6 @@ import org.matrix.android.sdk.api.session.room.model.ReactionAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import timber.log.Timber
 import java.util.Collections
 

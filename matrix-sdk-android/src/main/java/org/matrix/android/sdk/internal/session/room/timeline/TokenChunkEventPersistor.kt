@@ -133,7 +133,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                 if (event.eventId == null || event.senderId == null) {
                     return@forEach
                 }
-                //We check for the timeline event with this id
+                // We check for the timeline event with this id
                 val eventId = event.eventId
                 val existingTimelineEvent = TimelineEventEntity.where(realm, roomId, eventId).findFirst()
                 // If it exists, we want to stop here, just link the prevChunk

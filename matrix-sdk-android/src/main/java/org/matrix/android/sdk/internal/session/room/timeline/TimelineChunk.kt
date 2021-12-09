@@ -85,11 +85,12 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         }
     }
 
-    private val timelineEventCollectionListener = OrderedRealmCollectionChangeListener { results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet ->
-        Timber.v("on timeline events chunk update")
-        val frozenResults = results.freeze()
-        handleDatabaseChangeSet(frozenResults, changeSet)
-    }
+    private val timelineEventsChangeListener =
+            OrderedRealmCollectionChangeListener { results: RealmResults<TimelineEventEntity>, changeSet: OrderedCollectionChangeSet ->
+                Timber.v("on timeline events chunk update")
+                val frozenResults = results.freeze()
+                handleDatabaseChangeSet(frozenResults, changeSet)
+            }
 
     private var timelineEventEntities: RealmResults<TimelineEventEntity> = chunkEntity.sortedTimelineEvents()
     private val builtEvents: MutableList<TimelineEvent> = Collections.synchronizedList(ArrayList())
@@ -99,7 +100,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
     private var prevChunk: TimelineChunk? = null
 
     init {
-        timelineEventEntities.addChangeListener(timelineEventCollectionListener)
+        timelineEventEntities.addChangeListener(timelineEventsChangeListener)
         chunkEntity.addChangeListener(chunkObjectListener)
     }
 
@@ -261,7 +262,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         prevChunk = null
         prevChunkLatch?.cancel()
         chunkEntity.removeChangeListener(chunkObjectListener)
-        timelineEventEntities.removeChangeListener(timelineEventCollectionListener)
+        timelineEventEntities.removeChangeListener(timelineEventsChangeListener)
     }
 
     /**
@@ -311,8 +312,8 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         val timelineEvent = buildTimelineEvent(this)
         val transactionId = timelineEvent.root.unsignedData?.transactionId
         uiEchoManager?.onSyncedEvent(transactionId)
-        if (timelineEvent.isEncrypted()
-                && timelineEvent.root.mxDecryptionResult == null) {
+        if (timelineEvent.isEncrypted() &&
+                timelineEvent.root.mxDecryptionResult == null) {
             timelineEvent.root.eventId?.also { eventDecryptor.requestDecryption(TimelineEventDecryptor.DecryptionRequest(timelineEvent.root, timelineId)) }
         }
         return timelineEvent

@@ -110,7 +110,7 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
             true
         }
     }
-    //numberOfTimelineEvents++
+    // numberOfTimelineEvents++
     timelineEvents.add(timelineEventEntity)
 }
 
@@ -207,11 +207,11 @@ internal fun ChunkEntity.isMoreRecentThan(chunkToCheck: ChunkEntity): Boolean {
     if (this.isLastForward) return true
     if (chunkToCheck.isLastForward) return false
     // Check if the chunk to check is linked to this one
-    if(chunkToCheck.doesNextChunksVerifyCondition { it == this }){
+    if (chunkToCheck.doesNextChunksVerifyCondition { it == this }) {
         return true
     }
     // Otherwise check if this chunk is linked to last forward
-    if(this.doesNextChunksVerifyCondition { it.isLastForward }){
+    if (this.doesNextChunksVerifyCondition { it.isLastForward }) {
         return true
     }
     // We don't know, so we assume it's false

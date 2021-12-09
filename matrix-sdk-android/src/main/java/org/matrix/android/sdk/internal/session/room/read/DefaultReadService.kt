@@ -34,7 +34,6 @@ import org.matrix.android.sdk.internal.database.query.isEventRead
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
-import org.matrix.android.sdk.internal.task.TaskExecutor
 
 internal class DefaultReadService @AssistedInject constructor(
         @Assisted private val roomId: String,
