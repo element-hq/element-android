@@ -35,30 +35,30 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.home.HomeActivity
-import im.vector.app.features.login.LoginCaptchaFragment
-import im.vector.app.features.login.LoginCaptchaFragmentArgument
 import im.vector.app.features.login.LoginConfig
-import im.vector.app.features.login.LoginFragment
-import im.vector.app.features.login.LoginGenericTextInputFormFragment
-import im.vector.app.features.login.LoginGenericTextInputFormFragmentArgument
 import im.vector.app.features.login.LoginMode
-import im.vector.app.features.login.LoginResetPasswordFragment
-import im.vector.app.features.login.LoginResetPasswordMailConfirmationFragment
-import im.vector.app.features.login.LoginResetPasswordSuccessFragment
-import im.vector.app.features.login.LoginServerSelectionFragment
-import im.vector.app.features.login.LoginServerUrlFormFragment
-import im.vector.app.features.login.LoginSignUpSignInSelectionFragment
-import im.vector.app.features.login.LoginSplashFragment
-import im.vector.app.features.login.LoginWaitForEmailFragment
-import im.vector.app.features.login.LoginWaitForEmailFragmentArgument
-import im.vector.app.features.login.LoginWebFragment
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.TextInputFormFragmentMode
 import im.vector.app.features.login.isSupported
-import im.vector.app.features.login.terms.LoginTermsFragment
-import im.vector.app.features.login.terms.LoginTermsFragmentArgument
 import im.vector.app.features.login.terms.toLocalizedLoginTerms
+import im.vector.app.features.onboarding.ftueauth.FtueAuthCaptchaFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthCaptchaFragmentArgument
+import im.vector.app.features.onboarding.ftueauth.FtueAuthGenericTextInputFormFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthGenericTextInputFormFragmentArgument
+import im.vector.app.features.onboarding.ftueauth.FtueAuthLoginFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordMailConfirmationFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordSuccessFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthServerSelectionFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthServerUrlFormFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthSignUpSignInSelectionFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthSplashFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthWaitForEmailFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthWaitForEmailFragmentArgument
+import im.vector.app.features.onboarding.ftueauth.FtueAuthWebFragment
+import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragment
+import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragmentArgument
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -102,7 +102,7 @@ class OnboardingAuthVariant(
             onboardingViewModel.onEach {
                 updateWithState(it)
             }
-            onboardingViewModel.observeViewEvents { handleLoginViewEvents(it) }
+            onboardingViewModel.observeViewEvents { handleOnboardingViewEvents(it) }
         }
 
         // Get config extra
@@ -117,10 +117,10 @@ class OnboardingAuthVariant(
     }
 
     private fun addFirstFragment() {
-        activity.addFragment(views.loginFragmentContainer, LoginSplashFragment::class.java)
+        activity.addFragment(views.loginFragmentContainer, FtueAuthSplashFragment::class.java)
     }
 
-    private fun handleLoginViewEvents(onboardingViewEvents: OnboardingViewEvents) {
+    private fun handleOnboardingViewEvents(onboardingViewEvents: OnboardingViewEvents) {
         when (onboardingViewEvents) {
             is OnboardingViewEvents.RegistrationFlowResult                     -> {
                 // Check that all flows are supported by the application
@@ -136,7 +136,7 @@ class OnboardingAuthVariant(
                         // I add a tag to indicate that this fragment is a registration stage.
                         // This way it will be automatically popped in when starting the next registration stage
                         activity.addFragmentToBackstack(views.loginFragmentContainer,
-                                LoginFragment::class.java,
+                                FtueAuthLoginFragment::class.java,
                                 tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                                 option = commonOption
                         )
@@ -153,7 +153,7 @@ class OnboardingAuthVariant(
             }
             is OnboardingViewEvents.OpenServerSelection                        ->
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
-                        LoginServerSelectionFragment::class.java,
+                        FtueAuthServerSelectionFragment::class.java,
                         option = { ft ->
                             activity.findViewById<View?>(R.id.loginSplashLogo)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
                             // Disable transition of text
@@ -167,23 +167,23 @@ class OnboardingAuthVariant(
             is OnboardingViewEvents.OnSignModeSelected                         -> onSignModeSelected(onboardingViewEvents)
             is OnboardingViewEvents.OnLoginFlowRetrieved                       ->
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
-                        LoginSignUpSignInSelectionFragment::class.java,
+                        FtueAuthSignUpSignInSelectionFragment::class.java,
                         option = commonOption)
             is OnboardingViewEvents.OnWebLoginError                            -> onWebLoginError(onboardingViewEvents)
             is OnboardingViewEvents.OnForgetPasswordClicked                    ->
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
-                        LoginResetPasswordFragment::class.java,
+                        FtueAuthResetPasswordFragment::class.java,
                         option = commonOption)
             is OnboardingViewEvents.OnResetPasswordSendThreePidDone            -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
-                        LoginResetPasswordMailConfirmationFragment::class.java,
+                        FtueAuthResetPasswordMailConfirmationFragment::class.java,
                         option = commonOption)
             }
             is OnboardingViewEvents.OnResetPasswordMailConfirmationSuccess     -> {
                 supportFragmentManager.popBackStack(FRAGMENT_LOGIN_TAG, POP_BACK_STACK_EXCLUSIVE)
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
-                        LoginResetPasswordSuccessFragment::class.java,
+                        FtueAuthResetPasswordSuccessFragment::class.java,
                         option = commonOption)
             }
             is OnboardingViewEvents.OnResetPasswordMailConfirmationSuccessDone -> {
@@ -194,8 +194,8 @@ class OnboardingAuthVariant(
                 // Pop the enter email Fragment
                 supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
-                        LoginWaitForEmailFragment::class.java,
-                        LoginWaitForEmailFragmentArgument(onboardingViewEvents.email),
+                        FtueAuthWaitForEmailFragment::class.java,
+                        FtueAuthWaitForEmailFragmentArgument(onboardingViewEvents.email),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
             }
@@ -203,8 +203,8 @@ class OnboardingAuthVariant(
                 // Pop the enter Msisdn Fragment
                 supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
-                        LoginGenericTextInputFormFragment::class.java,
-                        LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, onboardingViewEvents.msisdn),
+                        FtueAuthGenericTextInputFormFragment::class.java,
+                        FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, onboardingViewEvents.msisdn),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
             }
@@ -242,23 +242,23 @@ class OnboardingAuthVariant(
                 .show()
     }
 
-    private fun onServerSelectionDone(loginViewEvents: OnboardingViewEvents.OnServerSelectionDone) {
-        when (loginViewEvents.serverType) {
+    private fun onServerSelectionDone(OnboardingViewEvents: OnboardingViewEvents.OnServerSelectionDone) {
+        when (OnboardingViewEvents.serverType) {
             ServerType.MatrixOrg -> Unit // In this case, we wait for the login flow
             ServerType.EMS,
             ServerType.Other     -> activity.addFragmentToBackstack(views.loginFragmentContainer,
-                    LoginServerUrlFormFragment::class.java,
+                    FtueAuthServerUrlFormFragment::class.java,
                     option = commonOption)
             ServerType.Unknown   -> Unit /* Should not happen */
         }
     }
 
-    private fun onSignModeSelected(loginViewEvents: OnboardingViewEvents.OnSignModeSelected) = withState(onboardingViewModel) { state ->
+    private fun onSignModeSelected(OnboardingViewEvents: OnboardingViewEvents.OnSignModeSelected) = withState(onboardingViewModel) { state ->
         // state.signMode could not be ready yet. So use value from the ViewEvent
-        when (loginViewEvents.signMode) {
+        when (OnboardingViewEvents.signMode) {
             SignMode.Unknown            -> error("Sign mode has to be set before calling this method")
             SignMode.SignUp             -> {
-                // This is managed by the LoginViewEvents
+                // This is managed by the OnboardingViewEvents
             }
             SignMode.SignIn             -> {
                 // It depends on the LoginMode
@@ -267,14 +267,14 @@ class OnboardingAuthVariant(
                     is LoginMode.Sso      -> error("Developer error")
                     is LoginMode.SsoAndPassword,
                     LoginMode.Password    -> activity.addFragmentToBackstack(views.loginFragmentContainer,
-                            LoginFragment::class.java,
+                            FtueAuthLoginFragment::class.java,
                             tag = FRAGMENT_LOGIN_TAG,
                             option = commonOption)
                     LoginMode.Unsupported -> onLoginModeNotSupported(state.loginModeSupportedTypes)
                 }.exhaustive
             }
             SignMode.SignInWithMatrixId -> activity.addFragmentToBackstack(views.loginFragmentContainer,
-                    LoginFragment::class.java,
+                    FtueAuthLoginFragment::class.java,
                     tag = FRAGMENT_LOGIN_TAG,
                     option = commonOption)
         }.exhaustive
@@ -295,7 +295,7 @@ class OnboardingAuthVariant(
                 .setMessage(activity.getString(R.string.login_registration_not_supported))
                 .setPositiveButton(R.string.yes) { _, _ ->
                     activity.addFragmentToBackstack(views.loginFragmentContainer,
-                            LoginWebFragment::class.java,
+                            FtueAuthWebFragment::class.java,
                             option = commonOption)
                 }
                 .setNegativeButton(R.string.no, null)
@@ -308,7 +308,7 @@ class OnboardingAuthVariant(
                 .setMessage(activity.getString(R.string.login_mode_not_supported, supportedTypes.joinToString { "'$it'" }))
                 .setPositiveButton(R.string.yes) { _, _ ->
                     activity.addFragmentToBackstack(views.loginFragmentContainer,
-                            LoginWebFragment::class.java,
+                            FtueAuthWebFragment::class.java,
                             option = commonOption)
                 }
                 .setNegativeButton(R.string.no, null)
@@ -338,23 +338,23 @@ class OnboardingAuthVariant(
 
         when (stage) {
             is Stage.ReCaptcha -> activity.addFragmentToBackstack(views.loginFragmentContainer,
-                    LoginCaptchaFragment::class.java,
-                    LoginCaptchaFragmentArgument(stage.publicKey),
+                    FtueAuthCaptchaFragment::class.java,
+                    FtueAuthCaptchaFragmentArgument(stage.publicKey),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption)
             is Stage.Email     -> activity.addFragmentToBackstack(views.loginFragmentContainer,
-                    LoginGenericTextInputFormFragment::class.java,
-                    LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetEmail, stage.mandatory),
+                    FtueAuthGenericTextInputFormFragment::class.java,
+                    FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetEmail, stage.mandatory),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption)
             is Stage.Msisdn    -> activity.addFragmentToBackstack(views.loginFragmentContainer,
-                    LoginGenericTextInputFormFragment::class.java,
-                    LoginGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory),
+                    FtueAuthGenericTextInputFormFragment::class.java,
+                    FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.SetMsisdn, stage.mandatory),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption)
             is Stage.Terms     -> activity.addFragmentToBackstack(views.loginFragmentContainer,
-                    LoginTermsFragment::class.java,
-                    LoginTermsFragmentArgument(stage.policies.toLocalizedLoginTerms(activity.getString(R.string.resources_language))),
+                    FtueAuthTermsFragment::class.java,
+                    FtueAuthTermsFragmentArgument(stage.policies.toLocalizedLoginTerms(activity.getString(R.string.resources_language))),
                     tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                     option = commonOption)
             else               -> Unit // Should not happen
