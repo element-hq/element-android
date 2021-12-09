@@ -80,6 +80,7 @@ allprojects {
         }
         mavenCentral {
             content {
+                includeGroup 'com.adevinta.android'
                 includeGroup 'com.airbnb.android'
                 includeGroup 'com.almworks.sqlite4java'
                 includeGroup 'com.arthenica'
@@ -102,6 +103,7 @@ allprojects {
                 includeGroup 'com.github.filippudak.progresspieview'
                 includeGroup 'com.github.javaparser'
                 includeGroup 'com.github.piasy'
+                includeGroup 'com.google'
                 includeGroup 'com.google.auto.service'
                 includeGroup 'com.google.auto.value'
                 includeGroup 'com.google.code.findbugs'
@@ -119,7 +121,9 @@ allprojects {
                 includeGroup 'com.googlecode.json-simple'
                 includeGroup 'com.googlecode.libphonenumber'
                 includeGroup 'com.ibm.icu'
+                includeGroup 'com.jakewharton.android.repackaged'
                 includeGroup 'com.jakewharton.timber'
+                includeGroup 'com.linkedin.dexmaker'
                 includeGroup 'com.nulab-inc'
                 includeGroup 'com.otaliastudios.opengl'
                 includeGroup 'com.parse.bolts'
@@ -185,10 +189,12 @@ allprojects {
                 includeGroup 'org.jetbrains.intellij.deps'
                 includeGroup 'org.jetbrains.kotlin'
                 includeGroup 'org.jetbrains.kotlinx'
+                includeGroup 'org.jsoup'
                 includeGroup 'org.junit'
                 includeGroup 'org.junit.jupiter'
                 includeGroup 'org.junit.platform'
                 includeGroup 'org.jvnet.staxex'
+                includeGroup 'org.mockito'
                 includeGroup 'org.mongodb'
                 includeGroup 'org.objenesis'
                 includeGroup 'org.opentest4j'
