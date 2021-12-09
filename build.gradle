@@ -70,7 +70,14 @@ allprojects {
                 includeGroup 'org.webkit'
             }
         }
-        google()
+        google {
+            content {
+                includeGroupByRegex "androidx\\..*"
+                includeGroupByRegex "com\\.google\\.android\\..*"
+                includeGroup 'com.android.tools.build'
+                includeGroup 'com.google.firebase'
+            }
+        }
         mavenCentral()
         jcenter {
             content {
