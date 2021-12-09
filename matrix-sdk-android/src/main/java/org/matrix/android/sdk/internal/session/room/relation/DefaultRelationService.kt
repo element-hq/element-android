@@ -177,9 +177,10 @@ internal class DefaultRelationService @AssistedInject constructor(
                     replyText = replyInThreadText,
                     autoMarkdown = autoMarkdown,
                     rootThreadEventId = rootThreadEventId)
-                    ?.also {
-                        saveLocalEcho(it)
-                    } ?: return null
+//                    ?.also {
+//                        saveLocalEcho(it)
+//                    }
+                    ?: return null
         } else {
             eventFactory.createThreadTextEvent(
                     rootThreadEventId = rootThreadEventId,
@@ -188,9 +189,9 @@ internal class DefaultRelationService @AssistedInject constructor(
                     msgType = msgType,
                     autoMarkdown = autoMarkdown,
                     formattedText = formattedText)
-                    .also {
-                        saveLocalEcho(it)
-                    }
+//                    .also {
+//                        saveLocalEcho(it)
+//                    }
         }
         return  eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
     }
