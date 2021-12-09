@@ -48,27 +48,14 @@ allprojects {
         maven {
             url 'https://jitpack.io'
             content {
-                // Use this repo only for FilePicker
-                includeGroupByRegex "com\\.github\\.jaiselrahman"
-                // And monarchy
-                includeGroupByRegex "com\\.github\\.Zhuinden"
-                // And ucrop
-                includeGroupByRegex "com\\.github\\.yalantis"
-                // JsonViewer
-                includeGroupByRegex 'com\\.github\\.BillCarsonFr'
-                // PhotoView
-                includeGroupByRegex 'com\\.github\\.chrisbanes'
-                // PFLockScreen-Android
-                includeGroupByRegex 'com\\.github\\.vector-im'
-                // DraggableView
-                includeGroupByRegex 'com\\.github\\.hyuwah'
-
-                // Chat effects
-                includeGroupByRegex 'com\\.github\\.jetradarmobile'
-                includeGroupByRegex 'nl\\.dionsegijn'
-
-                // Voice RecordView
-                includeGroupByRegex 'com\\.github\\.Armen101'
+                includeGroup 'com.github.Armen101'
+                includeGroup 'com.github.BillCarsonFr'
+                includeGroup 'com.github.chrisbanes'
+                includeGroup 'com.github.hyuwah'
+                includeGroup 'com.github.jetradarmobile'
+                includeGroup 'com.github.vector-im'
+                includeGroup 'com.github.yalantis'
+                includeGroup 'com.github.Zhuinden'
             }
         }
         maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
