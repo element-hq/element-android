@@ -160,6 +160,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeMyRoomMember()
         observeActiveRoomWidgets()
         observePowerLevel()
+        setupPreviewUrlObservers()
         room.getRoomSummaryLive()
         viewModelScope.launch(Dispatchers.IO) {
             tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
@@ -261,6 +262,30 @@ class RoomDetailViewModel @AssistedInject constructor(
                 .execute {
                     copy(myRoomMember = it)
                 }
+    }
+
+    private fun setupPreviewUrlObservers() {
+        if (!vectorPreferences.showUrlPreviews()) {
+            return
+        }
+        combine(
+                timelineEvents,
+                room.flow().liveRoomSummary()
+                        .unwrap()
+                        .map { it.isEncrypted }
+                        .distinctUntilChanged()
+        ) { snapshot, isRoomEncrypted ->
+            if (isRoomEncrypted) {
+                return@combine
+            }
+            withContext(Dispatchers.Default) {
+                Timber.v("On new timeline events for urlpreview on ${Thread.currentThread()}")
+                snapshot.forEach {
+                    previewUrlRetriever.getPreviewUrl(it)
+                }
+            }
+        }
+                .launchIn(viewModelScope)
     }
 
     fun getOtherUserIds() = room.roomSummary()?.otherMemberIds
@@ -1030,16 +1055,6 @@ class RoomDetailViewModel @AssistedInject constructor(
         viewModelScope.launch {
             // tryEmit doesn't work with SharedFlow without cache
             timelineEvents.emit(snapshot)
-        }
-        // PreviewUrl
-        if (vectorPreferences.showUrlPreviews()) {
-            withState { state ->
-                snapshot
-                        .takeIf { state.asyncRoomSummary.invoke()?.isEncrypted == false }
-                        ?.forEach {
-                            previewUrlRetriever.getPreviewUrl(it)
-                        }
-            }
         }
     }
 
