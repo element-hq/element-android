@@ -301,10 +301,6 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         submitSnapshot(snapshot)
     }
 
-    override fun onStateUpdated(direction: Timeline.Direction, state: Timeline.PaginationState) {
-        requestDelayedModelBuild(0)
-    }
-
     private fun submitSnapshot(newSnapshot: List<TimelineEvent>) {
         backgroundHandler.post {
             inSubmitList = true
