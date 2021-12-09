@@ -27,10 +27,10 @@ import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 
 @EpoxyModelClass(layout = im.vector.app.R.layout.item_feature)
-abstract class EnumFeatureItem : VectorEpoxyModel<EnumFeatureItem.Holder>() {
+abstract class BooleanFeatureItem : VectorEpoxyModel<BooleanFeatureItem.Holder>() {
 
     @EpoxyAttribute
-    lateinit var feature: Feature.EnumFeature<*>
+    lateinit var feature: Feature.BooleanFeature
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var listener: Listener? = null
@@ -41,19 +41,23 @@ abstract class EnumFeatureItem : VectorEpoxyModel<EnumFeatureItem.Holder>() {
 
         holder.optionsSpinner.apply {
             val arrayAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item)
-            arrayAdapter.add("DEFAULT - ${feature.default.name}")
-            arrayAdapter.addAll(feature.options.map { it.name })
+            val options = listOf(
+                    "DEFAULT - ${feature.default.toEmoji()}",
+                    "✅",
+                    "❌"
+            )
+            arrayAdapter.addAll(options)
             adapter = arrayAdapter
 
             feature.override?.let {
-                setSelection(feature.options.indexOf(it) + 1, false)
+                setSelection(options.indexOf(it.toEmoji()), false)
             }
 
             onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     when (position) {
-                        0    -> listener?.onEnumOptionSelected(option = null, feature)
-                        else -> feature.onOptionSelected(position - 1)
+                        0    -> listener?.onBooleanOptionSelected(option = null, feature)
+                        else -> listener?.onBooleanOptionSelected(options[position].fromEmoji(), feature)
                     }
                 }
 
@@ -64,16 +68,19 @@ abstract class EnumFeatureItem : VectorEpoxyModel<EnumFeatureItem.Holder>() {
         }
     }
 
-    private fun <T : Enum<T>> Feature.EnumFeature<T>.onOptionSelected(selection: Int) {
-        listener?.onEnumOptionSelected(options[selection], this)
-    }
-
     class Holder : VectorEpoxyHolder() {
         val label by bind<TextView>(im.vector.app.R.id.feature_label)
         val optionsSpinner by bind<Spinner>(im.vector.app.R.id.feature_options)
     }
 
     interface Listener {
-        fun <T : Enum<T>> onEnumOptionSelected(option: T?, feature: Feature.EnumFeature<T>)
+        fun onBooleanOptionSelected(option: Boolean?, feature: Feature.BooleanFeature)
     }
+}
+
+private fun Boolean.toEmoji() = if (this) "✅" else "❌"
+private fun String.fromEmoji() = when (this) {
+    "✅"  -> true
+    "❌"  -> false
+    else -> error("unexpected input $this")
 }
