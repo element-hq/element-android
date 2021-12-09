@@ -63,11 +63,11 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.observeViewEvents {
-            handleLoginViewEvents(it)
+            handleOnboardingViewEvents(it)
         }
     }
 
-    private fun handleLoginViewEvents(viewEvents: OnboardingViewEvents) {
+    private fun handleOnboardingViewEvents(viewEvents: OnboardingViewEvents) {
         when (viewEvents) {
             is OnboardingViewEvents.Failure -> showFailure(viewEvents.throwable)
             else                            ->
@@ -178,6 +178,6 @@ abstract class AbstractFtueAuthFragment<VB : ViewBinding> : VectorBaseFragment<V
         // No op by default
     }
 
-    // Reset any modification on the loginViewModel by the current fragment
+    // Reset any modification on the viewModel by the current fragment
     abstract fun resetViewModel()
 }
