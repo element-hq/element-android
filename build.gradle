@@ -75,7 +75,19 @@ allprojects {
         }
         google()
         mavenCentral()
-        jcenter()
+        jcenter {
+            content {
+                includeGroup 'com.amulyakhare'
+                includeGroup 'com.danikula'
+                includeGroup 'com.otaliastudios'
+                includeGroup 'com.tapadoo.android'
+                includeGroup 'com.yqritc'
+                includeGroup 'dk.ilios'
+                includeGroup 'im.dlg'
+                includeGroup 'me.dm7.barcodescanner'
+                includeGroup 'me.gujun.android'
+            }
+        }
     }
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
