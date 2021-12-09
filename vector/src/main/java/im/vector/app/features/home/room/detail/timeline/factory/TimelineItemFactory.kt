@@ -75,7 +75,9 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                 EventType.REACTION,
                 EventType.STATE_SPACE_CHILD,
                 EventType.STATE_SPACE_PARENT,
-                EventType.STATE_ROOM_POWER_LEVELS -> noticeItemFactory.create(params)
+                EventType.STATE_ROOM_POWER_LEVELS,
+                EventType.POLL_RESPONSE,
+                EventType.POLL_END              -> noticeItemFactory.create(params)
                 EventType.STATE_ROOM_WIDGET_LEGACY,
                 EventType.STATE_ROOM_WIDGET     -> widgetItemFactory.create(params)
                 EventType.STATE_ROOM_ENCRYPTION -> encryptionItemFactory.create(params)
