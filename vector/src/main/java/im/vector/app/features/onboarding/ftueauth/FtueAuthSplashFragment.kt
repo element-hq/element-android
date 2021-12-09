@@ -24,9 +24,11 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.databinding.FragmentFtueSplashBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingFlow
 import im.vector.app.features.settings.VectorPreferences
@@ -37,9 +39,11 @@ import javax.inject.Inject
 /**
  * In this screen, the user is viewing an introduction to what he can do with this application
  */
+@AndroidEntryPoint
 class FtueAuthSplashFragment : AbstractFtueAuthFragment<FragmentFtueSplashBinding>() {
 
     @Inject lateinit var vectorPreferences: VectorPreferences
+    @Inject lateinit var vectorFeatures: VectorFeatures
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueSplashBinding {
         return FragmentFtueSplashBinding.inflate(inflater, container, false)
@@ -52,7 +56,10 @@ class FtueAuthSplashFragment : AbstractFtueAuthFragment<FragmentFtueSplashBindin
 
     private fun setupViews() {
         views.loginSplashSubmit.debouncedClicks { getStarted() }
-        views.loginSplashAlreadyHaveAccount.debouncedClicks { alreadyHaveAnAccount() }
+        views.loginSplashAlreadyHaveAccount.apply {
+            isVisible = vectorFeatures.isAlreadyHaveAccountSplashEnabled()
+            debouncedClicks { alreadyHaveAnAccount() }
+        }
 
         if (BuildConfig.DEBUG || vectorPreferences.developerMode()) {
             views.loginSplashVersion.isVisible = true
@@ -65,7 +72,8 @@ class FtueAuthSplashFragment : AbstractFtueAuthFragment<FragmentFtueSplashBindin
     }
 
     private fun getStarted() {
-        viewModel.handle(OnboardingAction.OnGetStarted(resetLoginConfig = false, onboardingFlow = OnboardingFlow.SignUp))
+        val getStartedFlow = if (vectorFeatures.isAlreadyHaveAccountSplashEnabled()) OnboardingFlow.SignUp else OnboardingFlow.SignInSignUp
+        viewModel.handle(OnboardingAction.OnGetStarted(resetLoginConfig = false, onboardingFlow = getStartedFlow))
     }
 
     private fun alreadyHaveAnAccount() {

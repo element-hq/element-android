@@ -25,7 +25,6 @@ import androidx.core.view.isVisible
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.BuildConfig
 import im.vector.app.R
-import im.vector.app.core.epoxy.onClick
 import im.vector.app.databinding.FragmentLoginSplashBinding
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.failure.Failure
