@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.ftue
+package im.vector.app.features.onboarding
 
 import android.content.Context
 import android.net.Uri
@@ -63,8 +63,8 @@ import java.util.concurrent.CancellationException
 /**
  *
  */
-class FTUEViewModel @AssistedInject constructor(
-        @Assisted initialState: FTUEViewState,
+class OnboardingViewModel @AssistedInject constructor(
+        @Assisted initialState: OnboardingViewState,
         private val applicationContext: Context,
         private val authenticationService: AuthenticationService,
         private val activeSessionHolder: ActiveSessionHolder,
@@ -72,14 +72,14 @@ class FTUEViewModel @AssistedInject constructor(
         private val reAuthHelper: ReAuthHelper,
         private val stringProvider: StringProvider,
         private val homeServerHistoryService: HomeServerHistoryService
-) : VectorViewModel<FTUEViewState, FTUEAction, FTUEViewEvents>(initialState) {
+) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory : MavericksAssistedViewModelFactory<FTUEViewModel, FTUEViewState> {
-        override fun create(initialState: FTUEViewState): FTUEViewModel
+    interface Factory : MavericksAssistedViewModelFactory<OnboardingViewModel, OnboardingViewState> {
+        override fun create(initialState: OnboardingViewState): OnboardingViewModel
     }
 
-    companion object : MavericksViewModelFactory<FTUEViewModel, FTUEViewState> by hiltMavericksViewModelFactory()
+    companion object : MavericksViewModelFactory<OnboardingViewModel, OnboardingViewState> by hiltMavericksViewModelFactory()
 
     init {
         getKnownCustomHomeServersUrls()
@@ -92,7 +92,7 @@ class FTUEViewModel @AssistedInject constructor(
     }
 
     // Store the last action, to redo it after user has trusted the untrusted certificate
-    private var lastAction: FTUEAction? = null
+    private var lastAction: OnboardingAction? = null
     private var currentHomeServerConnectionConfig: HomeServerConnectionConfig? = null
 
     private val matrixOrgUrl = stringProvider.getString(R.string.matrix_org_server_url).ensureTrailingSlash()
@@ -119,28 +119,28 @@ class FTUEViewModel @AssistedInject constructor(
             field = value
         }
 
-    override fun handle(action: FTUEAction) {
+    override fun handle(action: OnboardingAction) {
         when (action) {
-            is FTUEAction.OnGetStarted               -> handleOnGetStarted(action)
-            is FTUEAction.UpdateServerType           -> handleUpdateServerType(action)
-            is FTUEAction.UpdateSignMode             -> handleUpdateSignMode(action)
-            is FTUEAction.InitWith                   -> handleInitWith(action)
-            is FTUEAction.UpdateHomeServer           -> handleUpdateHomeserver(action).also { lastAction = action }
-            is FTUEAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
-            is FTUEAction.LoginWithToken             -> handleLoginWithToken(action)
-            is FTUEAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
-            is FTUEAction.ResetPassword              -> handleResetPassword(action)
-            is FTUEAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
-            is FTUEAction.RegisterAction             -> handleRegisterAction(action)
-            is FTUEAction.ResetAction                -> handleResetAction(action)
-            is FTUEAction.SetupSsoForSessionRecovery -> handleSetupSsoForSessionRecovery(action)
-            is FTUEAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
-            FTUEAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
-            is FTUEAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
+            is OnboardingAction.OnGetStarted               -> handleOnGetStarted(action)
+            is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
+            is OnboardingAction.UpdateSignMode             -> handleUpdateSignMode(action)
+            is OnboardingAction.InitWith                   -> handleInitWith(action)
+            is OnboardingAction.UpdateHomeServer           -> handleUpdateHomeserver(action).also { lastAction = action }
+            is OnboardingAction.LoginOrRegister            -> handleLoginOrRegister(action).also { lastAction = action }
+            is OnboardingAction.LoginWithToken             -> handleLoginWithToken(action)
+            is OnboardingAction.WebLoginSuccess            -> handleWebLoginSuccess(action)
+            is OnboardingAction.ResetPassword              -> handleResetPassword(action)
+            is OnboardingAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
+            is OnboardingAction.RegisterAction             -> handleRegisterAction(action)
+            is OnboardingAction.ResetAction                -> handleResetAction(action)
+            is OnboardingAction.SetupSsoForSessionRecovery -> handleSetupSsoForSessionRecovery(action)
+            is OnboardingAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
+            OnboardingAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
+            is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
         }.exhaustive
     }
 
-    private fun handleOnGetStarted(action: FTUEAction.OnGetStarted) {
+    private fun handleOnGetStarted(action: OnboardingAction.OnGetStarted) {
         if (action.resetLoginConfig) {
             loginConfig = null
         }
@@ -152,25 +152,25 @@ class FTUEViewModel @AssistedInject constructor(
             if (homeServerConnectionConfig == null) {
                 // Url is invalid, in this case, just use the regular flow
                 Timber.w("Url from config url was invalid: $configUrl")
-                _viewEvents.post(FTUEViewEvents.OpenServerSelection)
+                _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
             } else {
                 getLoginFlow(homeServerConnectionConfig, ServerType.Other)
             }
         } else {
-            _viewEvents.post(FTUEViewEvents.OpenServerSelection)
+            _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
         }
     }
 
-    private fun handleUserAcceptCertificate(action: FTUEAction.UserAcceptCertificate) {
+    private fun handleUserAcceptCertificate(action: OnboardingAction.UserAcceptCertificate) {
         // It happens when we get the login flow, or during direct authentication.
         // So alter the homeserver config and retrieve again the login flow
         when (val finalLastAction = lastAction) {
-            is FTUEAction.UpdateHomeServer -> {
+            is OnboardingAction.UpdateHomeServer -> {
                 currentHomeServerConnectionConfig
                         ?.let { it.copy(allowedFingerprints = it.allowedFingerprints + action.fingerprint) }
                         ?.let { getLoginFlow(it) }
             }
-            is FTUEAction.LoginOrRegister  ->
+            is OnboardingAction.LoginOrRegister  ->
                 handleDirectLogin(
                         finalLastAction,
                         HomeServerConnectionConfig.Builder()
@@ -192,7 +192,7 @@ class FTUEViewModel @AssistedInject constructor(
         getKnownCustomHomeServersUrls()
     }
 
-    private fun handleLoginWithToken(action: FTUEAction.LoginWithToken) {
+    private fun handleLoginWithToken(action: OnboardingAction.LoginWithToken) {
         val safeLoginWizard = loginWizard
 
         if (safeLoginWizard == null) {
@@ -212,7 +212,7 @@ class FTUEViewModel @AssistedInject constructor(
                 try {
                     safeLoginWizard.loginWithToken(action.loginToken)
                 } catch (failure: Throwable) {
-                    _viewEvents.post(FTUEViewEvents.Failure(failure))
+                    _viewEvents.post(OnboardingViewEvents.Failure(failure))
                     setState {
                         copy(
                                 asyncLoginAction = Fail(failure)
@@ -225,7 +225,7 @@ class FTUEViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleSetupSsoForSessionRecovery(action: FTUEAction.SetupSsoForSessionRecovery) {
+    private fun handleSetupSsoForSessionRecovery(action: OnboardingAction.SetupSsoForSessionRecovery) {
         setState {
             copy(
                     signMode = SignMode.SignIn,
@@ -237,20 +237,20 @@ class FTUEViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleRegisterAction(action: FTUEAction.RegisterAction) {
+    private fun handleRegisterAction(action: OnboardingAction.RegisterAction) {
         when (action) {
-            is FTUEAction.CaptchaDone                  -> handleCaptchaDone(action)
-            is FTUEAction.AcceptTerms                  -> handleAcceptTerms()
-            is FTUEAction.RegisterDummy                -> handleRegisterDummy()
-            is FTUEAction.AddThreePid                  -> handleAddThreePid(action)
-            is FTUEAction.SendAgainThreePid            -> handleSendAgainThreePid()
-            is FTUEAction.ValidateThreePid             -> handleValidateThreePid(action)
-            is FTUEAction.CheckIfEmailHasBeenValidated -> handleCheckIfEmailHasBeenValidated(action)
-            is FTUEAction.StopEmailValidationCheck     -> handleStopEmailValidationCheck()
+            is OnboardingAction.CaptchaDone                  -> handleCaptchaDone(action)
+            is OnboardingAction.AcceptTerms                  -> handleAcceptTerms()
+            is OnboardingAction.RegisterDummy                -> handleRegisterDummy()
+            is OnboardingAction.AddThreePid                  -> handleAddThreePid(action)
+            is OnboardingAction.SendAgainThreePid            -> handleSendAgainThreePid()
+            is OnboardingAction.ValidateThreePid             -> handleValidateThreePid(action)
+            is OnboardingAction.CheckIfEmailHasBeenValidated -> handleCheckIfEmailHasBeenValidated(action)
+            is OnboardingAction.StopEmailValidationCheck     -> handleStopEmailValidationCheck()
         }
     }
 
-    private fun handleCheckIfEmailHasBeenValidated(action: FTUEAction.CheckIfEmailHasBeenValidated) {
+    private fun handleCheckIfEmailHasBeenValidated(action: OnboardingAction.CheckIfEmailHasBeenValidated) {
         // We do not want the common progress bar to be displayed, so we do not change asyncRegistration value in the state
         currentJob = executeRegistrationStep(withLoading = false) {
             it.checkIfEmailHasBeenValidated(action.delayMillis)
@@ -261,7 +261,7 @@ class FTUEViewModel @AssistedInject constructor(
         currentJob = null
     }
 
-    private fun handleValidateThreePid(action: FTUEAction.ValidateThreePid) {
+    private fun handleValidateThreePid(action: OnboardingAction.ValidateThreePid) {
         currentJob = executeRegistrationStep {
             it.handleValidateThreePid(action.code)
         }
@@ -284,7 +284,7 @@ class FTUEViewModel @AssistedInject constructor(
                 */
             } catch (failure: Throwable) {
                 if (failure !is CancellationException) {
-                    _viewEvents.post(FTUEViewEvents.Failure(failure))
+                    _viewEvents.post(OnboardingViewEvents.Failure(failure))
                 }
                 null
             }
@@ -303,13 +303,13 @@ class FTUEViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleAddThreePid(action: FTUEAction.AddThreePid) {
+    private fun handleAddThreePid(action: OnboardingAction.AddThreePid) {
         setState { copy(asyncRegistration = Loading()) }
         currentJob = viewModelScope.launch {
             try {
                 registrationWizard?.addThreePid(action.threePid)
             } catch (failure: Throwable) {
-                _viewEvents.post(FTUEViewEvents.Failure(failure))
+                _viewEvents.post(OnboardingViewEvents.Failure(failure))
             }
             setState {
                 copy(
@@ -325,7 +325,7 @@ class FTUEViewModel @AssistedInject constructor(
             try {
                 registrationWizard?.sendAgainThreePid()
             } catch (failure: Throwable) {
-                _viewEvents.post(FTUEViewEvents.Failure(failure))
+                _viewEvents.post(OnboardingViewEvents.Failure(failure))
             }
             setState {
                 copy(
@@ -347,7 +347,7 @@ class FTUEViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleRegisterWith(action: FTUEAction.LoginOrRegister) {
+    private fun handleRegisterWith(action: OnboardingAction.LoginOrRegister) {
         reAuthHelper.data = action.password
         currentJob = executeRegistrationStep {
             it.createAccount(
@@ -358,25 +358,25 @@ class FTUEViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleCaptchaDone(action: FTUEAction.CaptchaDone) {
+    private fun handleCaptchaDone(action: OnboardingAction.CaptchaDone) {
         currentJob = executeRegistrationStep {
             it.performReCaptcha(action.captchaResponse)
         }
     }
 
-    private fun handleResetAction(action: FTUEAction.ResetAction) {
+    private fun handleResetAction(action: OnboardingAction.ResetAction) {
         // Cancel any request
         currentJob = null
 
         when (action) {
-            FTUEAction.ResetHomeServerType -> {
+            OnboardingAction.ResetHomeServerType -> {
                 setState {
                     copy(
                             serverType = ServerType.Unknown
                     )
                 }
             }
-            FTUEAction.ResetHomeServerUrl  -> {
+            OnboardingAction.ResetHomeServerUrl  -> {
                 viewModelScope.launch {
                     authenticationService.reset()
                     setState {
@@ -391,7 +391,7 @@ class FTUEViewModel @AssistedInject constructor(
                     }
                 }
             }
-            FTUEAction.ResetSignMode       -> {
+            OnboardingAction.ResetSignMode       -> {
                 setState {
                     copy(
                             asyncHomeServerLoginFlowRequest = Uninitialized,
@@ -401,7 +401,7 @@ class FTUEViewModel @AssistedInject constructor(
                     )
                 }
             }
-            FTUEAction.ResetLogin          -> {
+            OnboardingAction.ResetLogin          -> {
                 viewModelScope.launch {
                     authenticationService.cancelPendingLoginOrRegistration()
                     setState {
@@ -412,7 +412,7 @@ class FTUEViewModel @AssistedInject constructor(
                     }
                 }
             }
-            FTUEAction.ResetResetPassword  -> {
+            OnboardingAction.ResetResetPassword  -> {
                 setState {
                     copy(
                             asyncResetPassword = Uninitialized,
@@ -424,7 +424,7 @@ class FTUEViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleUpdateSignMode(action: FTUEAction.UpdateSignMode) {
+    private fun handleUpdateSignMode(action: OnboardingAction.UpdateSignMode) {
         setState {
             copy(
                     signMode = action.signMode
@@ -434,12 +434,12 @@ class FTUEViewModel @AssistedInject constructor(
         when (action.signMode) {
             SignMode.SignUp             -> startRegistrationFlow()
             SignMode.SignIn             -> startAuthenticationFlow()
-            SignMode.SignInWithMatrixId -> _viewEvents.post(FTUEViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
+            SignMode.SignInWithMatrixId -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
             SignMode.Unknown            -> Unit
         }
     }
 
-    private fun handleUpdateServerType(action: FTUEAction.UpdateServerType) {
+    private fun handleUpdateServerType(action: OnboardingAction.UpdateServerType) {
         setState {
             copy(
                     serverType = action.serverType
@@ -450,20 +450,20 @@ class FTUEViewModel @AssistedInject constructor(
             ServerType.Unknown   -> Unit /* Should not happen */
             ServerType.MatrixOrg ->
                 // Request login flow here
-                handle(FTUEAction.UpdateHomeServer(matrixOrgUrl))
+                handle(OnboardingAction.UpdateHomeServer(matrixOrgUrl))
             ServerType.EMS,
-            ServerType.Other     -> _viewEvents.post(FTUEViewEvents.OnServerSelectionDone(action.serverType))
+            ServerType.Other     -> _viewEvents.post(OnboardingViewEvents.OnServerSelectionDone(action.serverType))
         }.exhaustive
     }
 
-    private fun handleInitWith(action: FTUEAction.InitWith) {
+    private fun handleInitWith(action: OnboardingAction.InitWith) {
         loginConfig = action.loginConfig
 
         // If there is a pending email validation continue on this step
         try {
             if (registrationWizard?.isRegistrationStarted == true) {
                 currentThreePid?.let {
-                    handle(FTUEAction.PostViewEvent(FTUEViewEvents.OnSendEmailSuccess(it)))
+                    handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnSendEmailSuccess(it)))
                 }
             }
         } catch (e: Throwable) {
@@ -472,7 +472,7 @@ class FTUEViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleResetPassword(action: FTUEAction.ResetPassword) {
+    private fun handleResetPassword(action: OnboardingAction.ResetPassword) {
         val safeLoginWizard = loginWizard
 
         if (safeLoginWizard == null) {
@@ -509,7 +509,7 @@ class FTUEViewModel @AssistedInject constructor(
                     )
                 }
 
-                _viewEvents.post(FTUEViewEvents.OnResetPasswordSendThreePidDone)
+                _viewEvents.post(OnboardingViewEvents.OnResetPasswordSendThreePidDone)
             }
         }
     }
@@ -550,12 +550,12 @@ class FTUEViewModel @AssistedInject constructor(
                     )
                 }
 
-                _viewEvents.post(FTUEViewEvents.OnResetPasswordMailConfirmationSuccess)
+                _viewEvents.post(OnboardingViewEvents.OnResetPasswordMailConfirmationSuccess)
             }
         }
     }
 
-    private fun handleLoginOrRegister(action: FTUEAction.LoginOrRegister) = withState { state ->
+    private fun handleLoginOrRegister(action: OnboardingAction.LoginOrRegister) = withState { state ->
         when (state.signMode) {
             SignMode.Unknown            -> error("Developer error, invalid sign mode")
             SignMode.SignIn             -> handleLogin(action)
@@ -564,7 +564,7 @@ class FTUEViewModel @AssistedInject constructor(
         }.exhaustive
     }
 
-    private fun handleDirectLogin(action: FTUEAction.LoginOrRegister, homeServerConnectionConfig: HomeServerConnectionConfig?) {
+    private fun handleDirectLogin(action: OnboardingAction.LoginOrRegister, homeServerConnectionConfig: HomeServerConnectionConfig?) {
         setState {
             copy(
                     asyncLoginAction = Loading()
@@ -601,10 +601,10 @@ class FTUEViewModel @AssistedInject constructor(
                     asyncLoginAction = Uninitialized
             )
         }
-        _viewEvents.post(FTUEViewEvents.Failure(Exception(stringProvider.getString(R.string.autodiscover_well_known_error))))
+        _viewEvents.post(OnboardingViewEvents.Failure(Exception(stringProvider.getString(R.string.autodiscover_well_known_error))))
     }
 
-    private suspend fun onWellknownSuccess(action: FTUEAction.LoginOrRegister,
+    private suspend fun onWellknownSuccess(action: OnboardingAction.LoginOrRegister,
                                            wellKnownPrompt: WellknownResult.Prompt,
                                            homeServerConnectionConfig: HomeServerConnectionConfig?) {
         val alteredHomeServerConnectionConfig = homeServerConnectionConfig
@@ -636,7 +636,7 @@ class FTUEViewModel @AssistedInject constructor(
             is MatrixIdFailure.InvalidMatrixId,
             is Failure.UnrecognizedCertificateFailure -> {
                 // Display this error in a dialog
-                _viewEvents.post(FTUEViewEvents.Failure(failure))
+                _viewEvents.post(OnboardingViewEvents.Failure(failure))
                 setState {
                     copy(
                             asyncLoginAction = Uninitialized
@@ -653,7 +653,7 @@ class FTUEViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleLogin(action: FTUEAction.LoginOrRegister) {
+    private fun handleLogin(action: OnboardingAction.LoginOrRegister) {
         val safeLoginWizard = loginWizard
 
         if (safeLoginWizard == null) {
@@ -702,7 +702,7 @@ class FTUEViewModel @AssistedInject constructor(
         // Ensure Wizard is ready
         loginWizard
 
-        _viewEvents.post(FTUEViewEvents.OnSignModeSelected(SignMode.SignIn))
+        _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignIn))
     }
 
     private fun onFlowResponse(flowResult: FlowResult) {
@@ -712,7 +712,7 @@ class FTUEViewModel @AssistedInject constructor(
             handleRegisterDummy()
         } else {
             // Notify the user
-            _viewEvents.post(FTUEViewEvents.RegistrationFlowResult(flowResult, isRegistrationStarted))
+            _viewEvents.post(OnboardingViewEvents.RegistrationFlowResult(flowResult, isRegistrationStarted))
         }
     }
 
@@ -728,7 +728,7 @@ class FTUEViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleWebLoginSuccess(action: FTUEAction.WebLoginSuccess) = withState { state ->
+    private fun handleWebLoginSuccess(action: OnboardingAction.WebLoginSuccess) = withState { state ->
         val homeServerConnectionConfigFinal = homeServerConnectionConfigFactory.create(state.homeServerUrl)
 
         if (homeServerConnectionConfigFinal == null) {
@@ -749,11 +749,11 @@ class FTUEViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleUpdateHomeserver(action: FTUEAction.UpdateHomeServer) {
+    private fun handleUpdateHomeserver(action: OnboardingAction.UpdateHomeServer) {
         val homeServerConnectionConfig = homeServerConnectionConfigFactory.create(action.homeServerUrl)
         if (homeServerConnectionConfig == null) {
             // This is invalid
-            _viewEvents.post(FTUEViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
+            _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Unable to create a HomeServerConnectionConfig")))
         } else {
             getLoginFlow(homeServerConnectionConfig)
         }
@@ -782,7 +782,7 @@ class FTUEViewModel @AssistedInject constructor(
             val data = try {
                 authenticationService.getLoginFlow(homeServerConnectionConfig)
             } catch (failure: Throwable) {
-                _viewEvents.post(FTUEViewEvents.Failure(failure))
+                _viewEvents.post(OnboardingViewEvents.Failure(failure))
                 setState {
                     copy(
                             asyncHomeServerLoginFlowRequest = Uninitialized,
@@ -820,9 +820,9 @@ class FTUEViewModel @AssistedInject constructor(
             if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) ||
                     data.isOutdatedHomeserver) {
                 // Notify the UI
-                _viewEvents.post(FTUEViewEvents.OutdatedHomeserver)
+                _viewEvents.post(OnboardingViewEvents.OutdatedHomeserver)
             }
-            _viewEvents.post(FTUEViewEvents.OnLoginFlowRetrieved)
+            _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
         }
     }
 

@@ -14,25 +14,28 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.ftue
+package im.vector.app.features.onboarding
 
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.login2.LoginViewModel2
 import javax.inject.Inject
 
-class FTUEVariantFactory @Inject constructor(
+class OnboardingVariantFactory @Inject constructor(
         private val vectorFeatures: VectorFeatures,
 ) {
 
-    fun create(activity: FTUEActivity, ftueViewModel: Lazy<FTUEViewModel>, loginViewModel2: Lazy<LoginViewModel2>) = when (vectorFeatures.loginVariant()) {
-        VectorFeatures.LoginVariant.LEGACY   -> error("Legacy is not supported by the FTUE")
-        VectorFeatures.LoginVariant.FTUE     -> DefaultFTUEVariant(
+    fun create(activity: OnboardingActivity,
+               onboardingViewModel: Lazy<OnboardingViewModel>,
+               loginViewModel2: Lazy<LoginViewModel2>
+    ) = when (vectorFeatures.onboardingVariant()) {
+        VectorFeatures.OnboardingVariant.LEGACY   -> error("Legacy is not supported by the FTUE")
+        VectorFeatures.OnboardingVariant.FTUE_AUTH     -> OnboardingAuthVariant(
                 views = activity.getBinding(),
-                ftueViewModel = ftueViewModel.value,
+                onboardingViewModel = onboardingViewModel.value,
                 activity = activity,
                 supportFragmentManager = activity.supportFragmentManager
         )
-        VectorFeatures.LoginVariant.FTUE_WIP -> FTUEWipVariant(
+        VectorFeatures.OnboardingVariant.LOGIN_2 -> Login2Variant(
                 views = activity.getBinding(),
                 loginViewModel = loginViewModel2.value,
                 activity = activity,

@@ -38,6 +38,7 @@ import im.vector.app.core.error.fatalError
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.features.VectorFeatures
+import im.vector.app.features.VectorFeatures.OnboardingVariant
 import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.conference.VectorJitsiActivity
@@ -51,7 +52,6 @@ import im.vector.app.features.crypto.verification.SupportedVerificationMethodsPr
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.debug.DebugMenuActivity
 import im.vector.app.features.devtools.RoomDevToolActivity
-import im.vector.app.features.ftue.FTUEActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.home.room.detail.search.SearchActivity
@@ -64,6 +64,7 @@ import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.BigImageViewerActivity
 import im.vector.app.features.media.VectorAttachmentViewerActivity
+import im.vector.app.features.onboarding.OnboardingActivity
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinArgs
 import im.vector.app.features.pin.PinMode
@@ -111,20 +112,20 @@ class DefaultNavigator @Inject constructor(
 ) : Navigator {
 
     override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
-        val intent = when (features.loginVariant()) {
-            VectorFeatures.LoginVariant.LEGACY   -> LoginActivity.newIntent(context, loginConfig)
-            VectorFeatures.LoginVariant.FTUE,
-            VectorFeatures.LoginVariant.FTUE_WIP -> FTUEActivity.newIntent(context, loginConfig)
+        val intent = when (features.onboardingVariant()) {
+            OnboardingVariant.LEGACY    -> LoginActivity.newIntent(context, loginConfig)
+            OnboardingVariant.LOGIN_2,
+            OnboardingVariant.FTUE_AUTH -> OnboardingActivity.newIntent(context, loginConfig)
         }
         intent.addFlags(flags)
         context.startActivity(intent)
     }
 
     override fun loginSSORedirect(context: Context, data: Uri?) {
-        val intent = when (features.loginVariant()) {
-            VectorFeatures.LoginVariant.LEGACY   -> LoginActivity.redirectIntent(context, data)
-            VectorFeatures.LoginVariant.FTUE,
-            VectorFeatures.LoginVariant.FTUE_WIP -> FTUEActivity.redirectIntent(context, data)
+        val intent = when (features.onboardingVariant()) {
+            OnboardingVariant.LEGACY    -> LoginActivity.redirectIntent(context, data)
+            OnboardingVariant.LOGIN_2,
+            OnboardingVariant.FTUE_AUTH -> OnboardingActivity.redirectIntent(context, data)
         }
         context.startActivity(intent)
     }

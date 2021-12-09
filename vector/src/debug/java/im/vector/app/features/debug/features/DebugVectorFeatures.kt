@@ -38,8 +38,8 @@ class DebugVectorFeatures(
 
     private val dataStore = context.dataStore
 
-    override fun loginVariant(): VectorFeatures.LoginVariant {
-        return readPreferences().getEnum<VectorFeatures.LoginVariant>() ?: vectorFeatures.loginVariant()
+    override fun onboardingVariant(): VectorFeatures.OnboardingVariant {
+        return readPreferences().getEnum<VectorFeatures.OnboardingVariant>() ?: vectorFeatures.onboardingVariant()
     }
 
     fun <T : Enum<T>> hasEnumOverride(type: KClass<T>) = readPreferences().containsEnum(type)

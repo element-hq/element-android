@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.ftue
+package im.vector.app.features.onboarding
 
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.login.LoginConfig
@@ -25,23 +25,23 @@ import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 
-sealed class FTUEAction : VectorViewModelAction {
-    data class OnGetStarted(val resetLoginConfig: Boolean) : FTUEAction()
+sealed class OnboardingAction : VectorViewModelAction {
+    data class OnGetStarted(val resetLoginConfig: Boolean) : OnboardingAction()
 
-    data class UpdateServerType(val serverType: ServerType) : FTUEAction()
-    data class UpdateHomeServer(val homeServerUrl: String) : FTUEAction()
-    data class UpdateSignMode(val signMode: SignMode) : FTUEAction()
-    data class LoginWithToken(val loginToken: String) : FTUEAction()
-    data class WebLoginSuccess(val credentials: Credentials) : FTUEAction()
-    data class InitWith(val loginConfig: LoginConfig?) : FTUEAction()
-    data class ResetPassword(val email: String, val newPassword: String) : FTUEAction()
-    object ResetPasswordMailConfirmed : FTUEAction()
+    data class UpdateServerType(val serverType: ServerType) : OnboardingAction()
+    data class UpdateHomeServer(val homeServerUrl: String) : OnboardingAction()
+    data class UpdateSignMode(val signMode: SignMode) : OnboardingAction()
+    data class LoginWithToken(val loginToken: String) : OnboardingAction()
+    data class WebLoginSuccess(val credentials: Credentials) : OnboardingAction()
+    data class InitWith(val loginConfig: LoginConfig?) : OnboardingAction()
+    data class ResetPassword(val email: String, val newPassword: String) : OnboardingAction()
+    object ResetPasswordMailConfirmed : OnboardingAction()
 
     // Login or Register, depending on the signMode
-    data class LoginOrRegister(val username: String, val password: String, val initialDeviceName: String) : FTUEAction()
+    data class LoginOrRegister(val username: String, val password: String, val initialDeviceName: String) : OnboardingAction()
 
     // Register actions
-    open class RegisterAction : FTUEAction()
+    open class RegisterAction : OnboardingAction()
 
     data class AddThreePid(val threePid: RegisterThreePid) : RegisterAction()
     object SendAgainThreePid : RegisterAction()
@@ -57,7 +57,7 @@ sealed class FTUEAction : VectorViewModelAction {
     object RegisterDummy : RegisterAction()
 
     // Reset actions
-    open class ResetAction : FTUEAction()
+    open class ResetAction : OnboardingAction()
 
     object ResetHomeServerType : ResetAction()
     object ResetHomeServerUrl : ResetAction()
@@ -66,14 +66,14 @@ sealed class FTUEAction : VectorViewModelAction {
     object ResetResetPassword : ResetAction()
 
     // Homeserver history
-    object ClearHomeServerHistory : FTUEAction()
+    object ClearHomeServerHistory : OnboardingAction()
 
     // For the soft logout case
     data class SetupSsoForSessionRecovery(val homeServerUrl: String,
                                           val deviceId: String,
-                                          val ssoIdentityProviders: List<SsoIdentityProvider>?) : FTUEAction()
+                                          val ssoIdentityProviders: List<SsoIdentityProvider>?) : OnboardingAction()
 
-    data class PostViewEvent(val viewEvent: FTUEViewEvents) : FTUEAction()
+    data class PostViewEvent(val viewEvent: OnboardingViewEvents) : OnboardingAction()
 
-    data class UserAcceptCertificate(val fingerprint: Fingerprint) : FTUEAction()
+    data class UserAcceptCertificate(val fingerprint: Fingerprint) : OnboardingAction()
 }

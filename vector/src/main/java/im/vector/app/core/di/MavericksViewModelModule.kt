@@ -37,7 +37,6 @@ import im.vector.app.features.crypto.verification.emoji.VerificationEmojiCodeVie
 import im.vector.app.features.devtools.RoomDevToolViewModel
 import im.vector.app.features.discovery.DiscoverySettingsViewModel
 import im.vector.app.features.discovery.change.SetIdentityServerViewModel
-import im.vector.app.features.ftue.FTUEViewModel
 import im.vector.app.features.home.HomeActivityViewModel
 import im.vector.app.features.home.HomeDetailViewModel
 import im.vector.app.features.home.PromoteRestrictedViewModel
@@ -58,6 +57,7 @@ import im.vector.app.features.login.LoginViewModel
 import im.vector.app.features.login2.LoginViewModel2
 import im.vector.app.features.login2.created.AccountCreatedViewModel
 import im.vector.app.features.matrixto.MatrixToBottomSheetViewModel
+import im.vector.app.features.onboarding.OnboardingViewModel
 import im.vector.app.features.poll.create.CreatePollViewModel
 import im.vector.app.features.rageshake.BugReportViewModel
 import im.vector.app.features.reactions.EmojiSearchResultViewModel
@@ -450,8 +450,8 @@ interface MavericksViewModelModule {
 
     @Binds
     @IntoMap
-    @MavericksViewModelKey(FTUEViewModel::class)
-    fun ftueViewModelFactory(factory: FTUEViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+    @MavericksViewModelKey(OnboardingViewModel::class)
+    fun ftueViewModelFactory(factory: OnboardingViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap

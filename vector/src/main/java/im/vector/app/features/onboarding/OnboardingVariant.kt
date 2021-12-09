@@ -14,26 +14,12 @@
  * limitations under the License.
  */
 
-package im.vector.app.features
+package im.vector.app.features.onboarding
 
-import im.vector.app.BuildConfig
+import android.content.Intent
 
-interface VectorFeatures {
-
-    fun onboardingVariant(): OnboardingVariant
-
-    enum class OnboardingVariant {
-        LEGACY,
-        LOGIN_2,
-        FTUE_AUTH
-    }
-
-    enum class NotificationSettingsVersion {
-        V1,
-        V2
-    }
-}
-
-class DefaultVectorFeatures : VectorFeatures {
-    override fun onboardingVariant(): VectorFeatures.OnboardingVariant = BuildConfig.ONBOARDING_VARIANT
+interface OnboardingVariant {
+    fun onNewIntent(intent: Intent?)
+    fun initUiAndData(isFirstCreation: Boolean)
+    fun setIsLoading(isLoading: Boolean)
 }

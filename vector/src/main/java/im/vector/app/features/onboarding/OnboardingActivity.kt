@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.ftue
+package im.vector.app.features.onboarding
 
 import android.content.Context
 import android.content.Intent
@@ -31,13 +31,13 @@ import im.vector.app.features.pin.UnlockedActivity
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class FTUEActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarConfigurable, UnlockedActivity {
+class OnboardingActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarConfigurable, UnlockedActivity {
 
-    private val ftueVariant by lifecycleAwareLazy {
-        ftueVariantFactory.create(this, ftueViewModel = lazyViewModel(), loginViewModel2 = lazyViewModel())
+    private val onboardingVariant by lifecycleAwareLazy {
+        onboardingVariantFactory.create(this, onboardingViewModel = lazyViewModel(), loginViewModel2 = lazyViewModel())
     }
 
-    @Inject lateinit var ftueVariantFactory: FTUEVariantFactory
+    @Inject lateinit var onboardingVariantFactory: OnboardingVariantFactory
 
     override fun getBinding() = ActivityLoginBinding.inflate(layoutInflater)
 
@@ -49,37 +49,31 @@ class FTUEActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarConfigur
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        ftueVariant.onNewIntent(intent)
+        onboardingVariant.onNewIntent(intent)
     }
 
     override fun initUiAndData() {
-        ftueVariant.initUiAndData(isFirstCreation())
+        onboardingVariant.initUiAndData(isFirstCreation())
     }
 
     // Hack for AccountCreatedFragment
     fun setIsLoading(isLoading: Boolean) {
-        ftueVariant.setIsLoading(isLoading)
+        onboardingVariant.setIsLoading(isLoading)
     }
 
     companion object {
         const val EXTRA_CONFIG = "EXTRA_CONFIG"
 
         fun newIntent(context: Context, loginConfig: LoginConfig?): Intent {
-            return Intent(context, FTUEActivity::class.java).apply {
+            return Intent(context, OnboardingActivity::class.java).apply {
                 putExtra(EXTRA_CONFIG, loginConfig)
             }
         }
 
         fun redirectIntent(context: Context, data: Uri?): Intent {
-            return Intent(context, FTUEActivity::class.java).apply {
+            return Intent(context, OnboardingActivity::class.java).apply {
                 setData(data)
             }
         }
     }
-}
-
-interface FTUEVariant {
-    fun onNewIntent(intent: Intent?)
-    fun initUiAndData(isFirstCreation: Boolean)
-    fun setIsLoading(isLoading: Boolean)
 }

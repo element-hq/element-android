@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.ftue
+package im.vector.app.features.onboarding
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
@@ -26,7 +26,7 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 
-data class FTUEViewState(
+data class OnboardingViewState(
         val asyncLoginAction: Async<Unit> = Uninitialized,
         val asyncHomeServerLoginFlowRequest: Async<Unit> = Uninitialized,
         val asyncResetPassword: Async<Unit> = Uninitialized,
