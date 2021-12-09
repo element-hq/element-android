@@ -44,7 +44,6 @@ allprojects {
                 includeGroup 'org.matrix.android'
             }
         }
-
         maven {
             url 'https://jitpack.io'
             content {
@@ -58,7 +57,6 @@ allprojects {
                 includeGroup 'com.github.Zhuinden'
             }
         }
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         // Jitsi repo
         maven {
             url "https://github.com/vector-im/jitsi_libre_maven/raw/main/android-sdk-3.10.0"
