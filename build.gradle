@@ -215,7 +215,6 @@ allprojects {
         jcenter {
             content {
                 includeGroup 'com.amulyakhare'
-                includeGroup 'com.danikula'
                 includeGroup 'com.otaliastudios'
                 includeGroup 'com.yqritc'
                 includeGroup 'dk.ilios'

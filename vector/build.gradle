@@ -317,11 +317,6 @@ android {
     }
 }
 
-configurations {
-    // videocache includes a sl4j logger which causes mockk to attempt to call the static android Log
-    testImplementation.exclude group: 'org.slf4j', module: 'slf4j-android'
-}
-
 dependencies {
 
     implementation project(":matrix-sdk-android")
@@ -433,7 +428,6 @@ dependencies {
 
     implementation libs.github.glide
     kapt libs.github.glideCompiler
-    implementation 'com.danikula:videocache:2.7.1'
     implementation 'com.github.yalantis:ucrop:2.2.7'
 
     // Badge for compatibility
