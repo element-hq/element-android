@@ -93,4 +93,5 @@
     <string name="settings_aggregate_unread_counts_summary">Compter ou non les discussions non-lues plutôt que les messages individuels dans les espaces et les catégories de salon</string>
     <string name="settings_unimportant_counter_badge_summary_v2">Afficher le nombre de messages silencieux dans la vue d\'ensemble de la discussion</string>
     <string name="settings_aggregate_unread_counts">Compter les discussions au lieu des messages</string>
+    <string name="unifiedpush_getdistributors_dialog_title">Choisissez un distributeur</string>
 </resources>
