@@ -1,0 +1,1 @@
+Add a help section in the settings.

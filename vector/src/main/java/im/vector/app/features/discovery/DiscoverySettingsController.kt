@@ -433,6 +433,6 @@ class DiscoverySettingsController @Inject constructor(
         fun onTapUpdateUserConsent(newValue: Boolean)
         fun onTapRetryToRetrieveBindings()
         fun onPolicyUrlsExpandedStateToggled(newExpandedState: Boolean)
-        fun onPolicyTapped(policy: IdentityServerPolicy)
+        fun onPolicyTapped(policy: ServerPolicy)
     }
 }

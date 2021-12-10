@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.settings
+package im.vector.app.features.settings.legals
 
-object VectorSettingsUrls {
-    const val HELP = "https://element.io/help"
-    const val COPYRIGHT = "https://element.io/copyright"
-    const val TAC = "https://element.io/terms-of-service"
-    const val PRIVACY_POLICY = "https://element.io/privacy"
-    const val DISCLAIMER_URL = "https://element.io/previously-riot"
-    const val THIRD_PARTY_LICENSES = "file:///android_asset/open_source_licenses.html"
+import im.vector.app.core.platform.VectorViewModelAction
+
+sealed interface LegalsAction : VectorViewModelAction {
+    object Refresh : LegalsAction
 }
