@@ -19,9 +19,7 @@ package im.vector.app.core.extensions
 import android.app.Activity
 import android.content.Intent
 import android.os.Parcelable
-import android.view.View
 import android.view.ViewGroup
-import android.view.ViewParent
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.result.ActivityResult
