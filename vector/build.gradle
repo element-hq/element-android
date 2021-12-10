@@ -141,7 +141,6 @@ android {
         resValue "string", "build_number", "\"${buildNumber}\""
 
         buildConfigField "im.vector.app.features.VectorFeatures.LoginVersion", "LOGIN_VERSION", "im.vector.app.features.VectorFeatures.LoginVersion.V1"
-        buildConfigField "im.vector.app.features.VectorFeatures.NotificationSettingsVersion", "NOTIFICATION_SETTINGS_VERSION", "im.vector.app.features.VectorFeatures.NotificationSettingsVersion.V2"
 
         buildConfigField "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy", "outboundSessionKeySharingStrategy", "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy.WhenTyping"
 
@@ -365,7 +364,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.38'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.39'
 
     // FlowBinding
     implementation libs.github.flowBinding

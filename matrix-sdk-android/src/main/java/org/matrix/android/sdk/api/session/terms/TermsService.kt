@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.api.session.terms
 
+import org.matrix.android.sdk.internal.session.terms.TermsResponse
+
 interface TermsService {
     enum class ServiceType {
         IntegrationManager,
@@ -28,4 +30,10 @@ interface TermsService {
                              baseUrl: String,
                              agreedUrls: List<String>,
                              token: String?)
+
+    /**
+     * Get the homeserver terms, from the register API.
+     * Will be updated once https://github.com/matrix-org/matrix-doc/pull/3012 will be implemented.
+     */
+    suspend fun getHomeserverTerms(baseUrl: String): TermsResponse
 }

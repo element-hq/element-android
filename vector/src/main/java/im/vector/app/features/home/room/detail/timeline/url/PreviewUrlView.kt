@@ -19,13 +19,14 @@ package im.vector.app.features.home.room.detail.timeline.url
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import com.google.android.material.card.MaterialCardView
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.databinding.ViewUrlPreviewBinding
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.media.ImageContentRenderer
+import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.media.PreviewUrlData
 
@@ -36,7 +37,7 @@ class PreviewUrlView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr), View.OnClickListener {
+) : MaterialCardView(context, attrs, defStyleAttr), View.OnClickListener {
 
     private lateinit var views: ViewUrlPreviewBinding
 
@@ -44,6 +45,9 @@ class PreviewUrlView @JvmOverloads constructor(
 
     init {
         setupView()
+        radius = resources.getDimensionPixelSize(R.dimen.preview_url_view_corner_radius).toFloat()
+        cardElevation = 0f
+        setCardBackgroundColor(ThemeUtils.getColor(context, R.attr.vctr_system))
     }
 
     private var state: PreviewUrlUiState = PreviewUrlUiState.Unknown
@@ -121,9 +125,15 @@ class PreviewUrlView @JvmOverloads constructor(
 
     private fun renderData(previewUrlData: PreviewUrlData, imageContentRenderer: ImageContentRenderer) {
         isVisible = true
+
         views.urlPreviewTitle.setTextOrHide(previewUrlData.title)
         views.urlPreviewImage.isVisible = previewUrlData.mxcUrl?.let { imageContentRenderer.render(it, views.urlPreviewImage) }.orFalse()
         views.urlPreviewDescription.setTextOrHide(previewUrlData.description)
+        views.urlPreviewDescription.maxLines = when {
+            previewUrlData.mxcUrl != null -> 2
+            previewUrlData.title != null  -> 3
+            else                          -> 5
+        }
         views.urlPreviewSite.setTextOrHide(previewUrlData.siteName.takeIf { it != previewUrlData.title })
     }
 
