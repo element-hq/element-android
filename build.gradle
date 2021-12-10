@@ -41,13 +41,15 @@ allprojects {
         maven {
             url 'https://gitlab.matrix.org/api/v4/projects/27/packages/maven'
             content {
-                includeGroups.maven["gitlab.matrix.org"].each { includeGroup it }
+                groups.olm.regex.each { includeGroupByRegex it }
+                groups.olm.group.each { includeGroup it }
             }
         }
         maven {
             url 'https://jitpack.io'
             content {
-                includeGroups.maven["jitpack.io"].each { includeGroup it }
+                groups.jitpack.regex.each { includeGroupByRegex it }
+                groups.jitpack.group.each { includeGroup it }
             }
         }
         // Jitsi repo
@@ -56,24 +58,27 @@ allprojects {
             // Note: to test Jitsi release you can use a local file like this:
             // url "file:///Users/bmarty/workspaces/jitsi_libre_maven/android-sdk-3.10.0"
             content {
-                includeGroups.maven["github.com/vector-im"].each { includeGroup it }
+                groups.jitsi.regex.each { includeGroupByRegex it }
+                groups.jitsi.group.each { includeGroup it }
             }
         }
         google {
             content {
-                includeGroups.google["all"].each { includeGroup it }
-                includeGroups.google["regex"].each { includeGroupByRegex it }
+                groups.google.regex.each { includeGroupByRegex it }
+                groups.google.group.each { includeGroup it }
             }
         }
         mavenCentral {
             content {
-                includeGroups.mavenCentral["all"].each { includeGroup it }
+                groups.mavenCentral.regex.each { includeGroupByRegex it }
+                groups.mavenCentral.group.each { includeGroup it }
             }
         }
         //noinspection JcenterRepositoryObsolete
         jcenter {
             content {
-                includeGroups.jcenter["all"].each { includeGroup it }
+                groups.jcenter.regex.each { includeGroupByRegex it }
+                groups.jcenter.group.each { includeGroup it }
             }
         }
     }

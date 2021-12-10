@@ -1,6 +1,8 @@
-ext.includeGroups = [
-        maven       : [
-                'jitpack.io'          : [
+ext.groups = [
+        jitpack     : [
+                regex: [
+                ],
+                group: [
                         'com.github.Armen101',
                         'com.github.BillCarsonFr',
                         'com.github.chrisbanes',
@@ -9,32 +11,41 @@ ext.includeGroups = [
                         'com.github.tapadoo',
                         'com.github.vector-im',
                         'com.github.yalantis',
-                        'com.github.Zhuinden'
+                        'com.github.Zhuinden',
+                ]
+        ],
+        olm         : [
+                regex: [
                 ],
-                'gitlab.matrix.org'   : [
-                        'org.matrix.android'
+                group: [
+                        'org.matrix.android',
+                ]
+        ],
+        jitsi       : [
+                regex: [
                 ],
-                'github.com/vector-im': [
+                group: [
                         'com.facebook.react',
                         'org.jitsi.react',
-                        'org.webkit'
+                        'org.webkit',
                 ]
-
         ],
         google      : [
-                'all'  : [
-                        'com.google.firebase',
-                        'com.android',
-                        'com.android.tools'
-                ],
-                'regex': [
+                regex: [
                         'androidx\\..*',
                         'com\\.android\\.tools\\..*',
-                        'com\\.google\\.android\\..*'
+                        'com\\.google\\.android\\..*',
+                ],
+                group: [
+                        'com.google.firebase',
+                        'com.android',
+                        'com.android.tools',
                 ]
         ],
         mavenCentral: [
-                'all': [
+                regex: [
+                ],
+                group: [
                         'com.adevinta.android',
                         'com.airbnb.android',
                         'com.almworks.sqlite4java',
@@ -168,11 +179,13 @@ ext.includeGroups = [
                         'org.testng',
                         'org.threeten',
                         'xerces',
-                        'xml-apis'
+                        'xml-apis',
                 ]
         ],
         jcenter     : [
-                'all': [
+                regex: [
+                ],
+                group: [
                         'com.amulyakhare',
                         'com.otaliastudios',
                         'com.yqritc',
@@ -180,9 +193,8 @@ ext.includeGroups = [
                         'dk.ilios',
                         'im.dlg',
                         'me.dm7.barcodescanner',
-                        'me.gujun.android'
+                        'me.gujun.android',
                 ]
-
         ]
 ]
 
