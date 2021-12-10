@@ -38,6 +38,7 @@ import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.VoicePlayerHelper
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -47,6 +48,7 @@ import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
+import org.matrix.android.sdk.api.session.room.model.RoomEncryptionAlgorithm
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
@@ -55,6 +57,8 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
 class MessageComposerViewModel @AssistedInject constructor(
@@ -74,7 +78,7 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     init {
         loadDraftIfAny()
-        observePowerLevel()
+        observePowerLevelAndEncryption()
         subscribeToStateInternal()
     }
 
@@ -137,12 +141,30 @@ class MessageComposerViewModel @AssistedInject constructor(
         }
     }
 
-    private fun observePowerLevel() {
-        PowerLevelsFlowFactory(room).createFlow()
-                .setOnEach {
-                    val canSendMessage = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
-                    copy(canSendMessage = canSendMessage)
+    private fun observePowerLevelAndEncryption() {
+        combine(
+                PowerLevelsFlowFactory(room).createFlow(),
+                room.flow().liveRoomSummary().unwrap()
+        ) { pl, sum ->
+            val canSendMessage = PowerLevelsHelper(pl).isUserAllowedToSend(session.myUserId, false, EventType.MESSAGE)
+            if (canSendMessage) {
+                val isE2E = sum.isEncrypted
+                if (isE2E) {
+                    val roomEncryptionAlgorithm = sum.roomEncryptionAlgorithm
+                    if (roomEncryptionAlgorithm is RoomEncryptionAlgorithm.UnsupportedAlgorithm) {
+                        CanSendStatus.UnSupportedE2eAlgorithm(roomEncryptionAlgorithm.name)
+                    } else {
+                        CanSendStatus.Allowed
+                    }
+                } else {
+                    CanSendStatus.Allowed
                 }
+            } else {
+                CanSendStatus.NoPermission
+            }
+        }.setOnEach {
+            copy(canSendMessage = it)
+        }
     }
 
     private fun handleEnterQuoteMode(action: MessageComposerAction.EnterQuoteMode) {

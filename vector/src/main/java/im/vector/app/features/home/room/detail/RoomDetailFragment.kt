@@ -133,12 +133,14 @@ import im.vector.app.features.command.Command
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.composer.CanSendStatus
 import im.vector.app.features.home.room.detail.composer.MessageComposerAction
 import im.vector.app.features.home.room.detail.composer.MessageComposerView
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewEvents
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewModel
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewState
 import im.vector.app.features.home.room.detail.composer.SendMode
+import im.vector.app.features.home.room.detail.composer.boolean
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
@@ -392,7 +394,7 @@ class RoomDetailFragment @Inject constructor(
         }
 
         messageComposerViewModel.onEach(MessageComposerViewState::sendMode, MessageComposerViewState::canSendMessage) { mode, canSend ->
-            if (!canSend) {
+            if (!canSend.boolean()) {
                 return@onEach
             }
             when (mode) {
@@ -1268,7 +1270,7 @@ class RoomDetailFragment @Inject constructor(
                     val canSendMessage = withState(messageComposerViewModel) {
                         it.canSendMessage
                     }
-                    if (!canSendMessage) {
+                    if (!canSendMessage.boolean()) {
                         return false
                     }
                     return when (model) {
@@ -1446,10 +1448,18 @@ class RoomDetailFragment @Inject constructor(
                 views.voiceMessageRecorderView.render(messageComposerState.voiceRecordingUiState)
                 views.composerLayout.setRoomEncrypted(summary.isEncrypted)
                 // views.composerLayout.alwaysShowSendButton = false
-                if (messageComposerState.canSendMessage) {
-                    views.notificationAreaView.render(NotificationAreaView.State.Hidden)
-                } else {
-                    views.notificationAreaView.render(NotificationAreaView.State.NoPermissionToPost)
+                when (messageComposerState.canSendMessage) {
+                    CanSendStatus.Allowed                    -> {
+                        NotificationAreaView.State.Hidden
+                    }
+                    CanSendStatus.NoPermission               -> {
+                        NotificationAreaView.State.NoPermissionToPost
+                    }
+                    is CanSendStatus.UnSupportedE2eAlgorithm -> {
+                        NotificationAreaView.State.UnsupportedAlgorithm
+                    }
+                }.let {
+                    views.notificationAreaView.render(it)
                 }
             } else {
                 views.hideComposerViews()

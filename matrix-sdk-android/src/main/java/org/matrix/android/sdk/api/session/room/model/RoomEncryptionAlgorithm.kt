@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2021 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,26 +14,15 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.api.session.room.crypto
+package org.matrix.android.sdk.api.session.room.model
 
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 
-interface RoomCryptoService {
+sealed class RoomEncryptionAlgorithm {
 
-    fun isEncrypted(): Boolean
+    abstract class SupportedAlgorithm(val alg: String) : RoomEncryptionAlgorithm()
 
-    fun encryptionAlgorithm(): String?
+    object Megolm : SupportedAlgorithm(MXCRYPTO_ALGORITHM_MEGOLM)
 
-    fun shouldEncryptForInvitedMembers(): Boolean
-
-    /**
-     * Enable encryption of the room
-     */
-    suspend fun enableEncryption(algorithm: String = MXCRYPTO_ALGORITHM_MEGOLM, force: Boolean = false)
-
-    /**
-     * Ensures all members of the room are loaded and outbound session keys are shared.
-     * If this method is not called, CryptoService will ensure it before sending events.
-     */
-    suspend fun prepareToEncrypt()
+    data class UnsupportedAlgorithm(val name: String?) : RoomEncryptionAlgorithm()
 }

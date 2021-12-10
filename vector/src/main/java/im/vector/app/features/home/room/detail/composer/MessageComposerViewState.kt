@@ -43,9 +43,23 @@ sealed interface SendMode {
     data class Voice(val text: String) : SendMode
 }
 
+sealed class CanSendStatus {
+    object Allowed : CanSendStatus()
+    object NoPermission : CanSendStatus()
+    data class UnSupportedE2eAlgorithm(val algorithm: String?) : CanSendStatus()
+}
+
+fun CanSendStatus.boolean(): Boolean {
+    return when (this) {
+        CanSendStatus.Allowed                    -> true
+        CanSendStatus.NoPermission               -> false
+        is CanSendStatus.UnSupportedE2eAlgorithm -> false
+    }
+}
+
 data class MessageComposerViewState(
         val roomId: String,
-        val canSendMessage: Boolean = true,
+        val canSendMessage: CanSendStatus = CanSendStatus.Allowed,
         val isSendButtonVisible: Boolean = false,
         val sendMode: SendMode = SendMode.Regular("", false),
         val voiceRecordingUiState: VoiceMessageRecorderView.RecordingUiState = VoiceMessageRecorderView.RecordingUiState.Idle
@@ -60,8 +74,8 @@ data class MessageComposerViewState(
 
     val isVoiceMessageIdle = !isVoiceRecording
 
-    val isComposerVisible = canSendMessage && !isVoiceRecording
-    val isVoiceMessageRecorderVisible = canSendMessage && !isSendButtonVisible
+    val isComposerVisible = canSendMessage.boolean() && !isVoiceRecording
+    val isVoiceMessageRecorderVisible = canSendMessage.boolean() && !isSendButtonVisible
 
     @Suppress("UNUSED") // needed by mavericks
     constructor(args: RoomDetailArgs) : this(roomId = args.roomId)

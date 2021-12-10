@@ -121,6 +121,7 @@ class RoomProfileFragment @Inject constructor(
                 is RoomProfileViewEvents.Failure          -> showFailure(it.throwable)
                 is RoomProfileViewEvents.ShareRoomProfile -> onShareRoomProfile(it.permalink)
                 is RoomProfileViewEvents.OnShortcutReady  -> addShortcut(it)
+                RoomProfileViewEvents.DismissLoading      -> dismissLoadingDialog()
             }.exhaustive
         }
         roomListQuickActionsSharedActionViewModel
@@ -297,6 +298,10 @@ class RoomProfileFragment @Inject constructor(
 
     override fun onRoomPermissionsClicked() {
         roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomPermissionsSettings)
+    }
+
+    override fun restoreEncryptionState() {
+        roomProfileViewModel.handle(RoomProfileAction.RestoreEncryptionState)
     }
 
     override fun onRoomIdClicked() {

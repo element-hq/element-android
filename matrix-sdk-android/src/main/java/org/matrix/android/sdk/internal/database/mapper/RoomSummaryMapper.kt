@@ -16,12 +16,14 @@
 
 package org.matrix.android.sdk.internal.database.mapper
 
+import org.matrix.android.sdk.api.session.room.model.RoomEncryptionAlgorithm
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.session.room.model.SpaceParentInfo
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
+import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.presence.toUserPresence
 import javax.inject.Inject
@@ -99,7 +101,13 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                             worldReadable = it.childSummaryEntity?.joinRules == RoomJoinRules.PUBLIC
                     )
                 },
-                flattenParentIds = roomSummaryEntity.flattenParentIds?.split("|") ?: emptyList()
+                flattenParentIds = roomSummaryEntity.flattenParentIds?.split("|") ?: emptyList(),
+                roomEncryptionAlgorithm = when (val alg = roomSummaryEntity.e2eAlgorithm) {
+                    // I should probably use #hasEncryptorClassForAlgorithm but it says it supports
+                    // OLM which is some legacy? Now only megolm allowed in rooms
+                    MXCRYPTO_ALGORITHM_MEGOLM -> RoomEncryptionAlgorithm.Megolm
+                    else                      -> RoomEncryptionAlgorithm.UnsupportedAlgorithm(alg)
+                }
         )
     }
 }

@@ -23,6 +23,7 @@ import im.vector.app.core.epoxy.expandableTextItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericPositiveButtonItem
@@ -30,7 +31,10 @@ import im.vector.app.features.home.ShortcutCreator
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.app.features.settings.VectorPreferences
+import me.gujun.android.span.image
+import me.gujun.android.span.span
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.room.model.RoomEncryptionAlgorithm
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
@@ -38,6 +42,7 @@ class RoomProfileController @Inject constructor(
         private val stringProvider: StringProvider,
         private val colorProvider: ColorProvider,
         private val vectorPreferences: VectorPreferences,
+        private val drawableProvider: DrawableProvider,
         private val shortcutCreator: ShortcutCreator
 ) : TypedEpoxyController<RoomProfileViewState>() {
 
@@ -59,6 +64,7 @@ class RoomProfileController @Inject constructor(
         fun onRoomDevToolsClicked()
         fun onUrlInTopicLongClicked(url: String)
         fun doMigrateToVersion(newVersion: String)
+        fun restoreEncryptionState()
     }
 
     override fun buildModels(data: RoomProfileViewState?) {
@@ -113,15 +119,44 @@ class RoomProfileController @Inject constructor(
             }
         }
 
+        var encryptionMisconfigured = false
         val learnMoreSubtitle = if (roomSummary.isEncrypted) {
-            if (roomSummary.isDirect) R.string.direct_room_profile_encrypted_subtitle else R.string.room_profile_encrypted_subtitle
+            if (roomSummary.roomEncryptionAlgorithm is RoomEncryptionAlgorithm.SupportedAlgorithm) {
+                if (roomSummary.isDirect) R.string.direct_room_profile_encrypted_subtitle else R.string.room_profile_encrypted_subtitle
+            } else {
+                encryptionMisconfigured = true
+                if (roomSummary.isDirect) R.string.direct_room_profile_encrypted_misconfigured_subtitle else R.string.room_profile_encrypted_misconfigured_subtitle
+            }
         } else {
             if (roomSummary.isDirect) R.string.direct_room_profile_not_encrypted_subtitle else R.string.room_profile_not_encrypted_subtitle
         }
         genericFooterItem {
             id("e2e info")
             centered(false)
-            text(host.stringProvider.getString(learnMoreSubtitle))
+            text(
+                    span {
+                        apply {
+                            if (encryptionMisconfigured) {
+                                host.drawableProvider.getDrawable(R.drawable.ic_warning_badge)?.let {
+                                    image(it, "baseline")
+                                }
+                                +" "
+                            }
+                        }
+                        +host.stringProvider.getString(learnMoreSubtitle)
+                    }
+            )
+        }
+
+        if (encryptionMisconfigured && data.canUpdateRoomState) {
+            genericPositiveButtonItem {
+                id("restore_encryption")
+                text(host.stringProvider.getString(R.string.room_profile_section_restore_security))
+                iconRes(R.drawable.ic_shield_black_no_border)
+                buttonClickAction {
+                    host.callback?.restoreEncryptionState()
+                }
+            }
         }
         buildEncryptionAction(data.actionPermissions, roomSummary)
 
