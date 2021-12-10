@@ -1277,7 +1277,7 @@
     <string name="settings_troubleshoot_diagnostic_running_status">Перевірка… (%1$d з %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Перевірити</string>
     <string name="settings_notification_troubleshoot">Полагодити сповіщення</string>
-    <string name="login_splash_text2">Захистити приватність бесід шифруванням</string>
+    <string name="login_splash_text2">Захистіть приватність бесід шифруванням</string>
     <string name="room_filtering_filter_hint">Фільтрувати бесіди…</string>
     <string name="room_list_people_empty_title">Бесіди</string>
     <string name="room_list_catchup_empty_body">У вас більше немає непрочитаних повідомлень</string>
@@ -1793,7 +1793,7 @@
     <string name="verification_conclusion_warning">Не довірений вхід</string>
     <string name="sas_incoming_request_description_2">Звірення цього сеансу позначить його довіреним для вас і для партнера.</string>
     <string name="sas_security_advise">Задля максимальної безпеки ми радимо зробити це під час особистої зустрічі або з використанням інших довірених засобів зв\'язку.</string>
-    <string name="confirm_your_identity">Підтвердьте вашу тотожність, звіривши цей вхід з одного з ваших інших сеансів та надавши йому доступ до зашифрованих повідомлень.</string>
+    <string name="confirm_your_identity">Підтвердьте особу, звіривши цей вхід своїм іншим сеансом і надавши йому доступ до зашифрованих повідомлень.</string>
     <string name="verify_other_sessions">Звірте усі свої сеанси, щоб переконатись у безпечності вашого облікового запису та повідомлень</string>
     <string name="room_member_profile_sessions_section_title">Сеанси</string>
     <string name="room_member_profile_failed_to_get_devices">Не вдалось отримати сеанси</string>
@@ -3103,4 +3103,13 @@
     <string name="room_member_jump_to_read_receipt">Перейти до останнього прочитаного</string>
     <string name="soft_logout_clear_data_dialog_content">Очистити всі дані, збережені на цьому пристрої\?
 \nУвійдіть знову, щоб отримати доступ до даних свого облікового запису й повідомлень.</string>
+    <string name="verify_not_me_self_verification">Щось із перерахованого скомпрометовано:
+\n
+\n- Ваш пароль
+\n- Ваш домашній сервер
+\n- Цей або інший пристрій
+\n- Інтернет-з\'єднання одного з пристроїв
+\n
+\nРадимо негайно змінити пароль і відновлювальний ключ у налаштуваннях.</string>
+    <string name="settings_security_prevent_screenshots_summary">Увімкнення цього параметру додає FLAG_SECURE всім екранам. Зміна потребує перезапуску застосунку.</string>
 </resources>
