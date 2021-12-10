@@ -75,6 +75,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
+import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -87,6 +88,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
+import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.model.tombstone.RoomTombstoneContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.read.ReadService
@@ -193,8 +195,6 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeLocalThreadNotifications()
     }
 
-
-
     private fun observeDataStore() {
         viewModelScope.launch {
             vectorDataStore.pushCounterFlow.collect { nbOfPush ->
@@ -287,14 +287,14 @@ class RoomDetailViewModel @AssistedInject constructor(
     /**
      * Observe local unread threads
      */
-    private fun observeLocalThreadNotifications(){
+    private fun observeLocalThreadNotifications() {
         room.flow()
                 .liveLocalUnreadThreadList()
                 .execute {
                     copy(numberOfLocalUnreadThreads = it.invoke()?.size ?: 0)
                 }
-
     }
+
     fun getOtherUserIds() = room.roomSummary()?.otherMemberIds
 
     fun getRoomSummary() = room.roomSummary()
@@ -448,7 +448,10 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleSendSticker(action: RoomDetailAction.SendSticker) {
-        room.sendEvent(EventType.STICKER, action.stickerContent.toContent())
+        val content = initialState.rootThreadEventId?.let {
+            action.stickerContent.copy(relatesTo = RelationDefaultContent(RelationType.THREAD, it))
+        } ?: action.stickerContent
+        room.sendEvent(EventType.STICKER, content.toContent())
     }
 
     private fun handleStartCall(action: RoomDetailAction.StartCall) {
@@ -1131,13 +1134,14 @@ class RoomDetailViewModel @AssistedInject constructor(
      * Mark the thread as read, while the user navigated within the thread
      * This is a local implementation has nothing to do with APIs
      */
-    private fun markThreadTimelineAsReadLocal(){
-        initialState.rootThreadEventId?.let{
+    private fun markThreadTimelineAsReadLocal() {
+        initialState.rootThreadEventId?.let {
             session.coroutineScope.launch {
                 room.markThreadAsRead(it)
             }
         }
     }
+
     override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
 
         timelineEvents.tryEmit(snapshot)
