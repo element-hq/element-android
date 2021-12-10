@@ -50,51 +50,76 @@ class PollOptionItem @JvmOverloads constructor(
         views.root.setOnClickListener { callback?.onOptionClicked() }
     }
 
-    fun update(optionName: String,
-               isSelected: Boolean,
-               isWinner: Boolean,
-               isEnded: Boolean,
-               showVote: Boolean,
-               voteCount: Int,
-               votePercentage: Double,
-               callback: Callback) {
+    fun render(state: PollOptionViewState, callback: Callback) {
         this.callback = callback
-        views.optionNameTextView.text = optionName
 
-        views.optionCheckImageView.isVisible = !isEnded
+        views.optionNameTextView.text = state.name
 
-        if (isEnded && isWinner) {
-            views.optionBorderImageView.setAttributeTintedImageResource(R.drawable.bg_poll_option, R.attr.colorPrimary)
-            views.optionVoteProgress.progressDrawable = AppCompatResources.getDrawable(context, R.drawable.poll_option_progressbar_checked)
-            views.optionWinnerImageView.isVisible = true
-        } else if (isSelected) {
+        when (state) {
+            is PollOptionViewState.DisabledOptionWithInvisibleVotes -> renderDisabledOptionWithInvisibleVotes()
+            is PollOptionViewState.DisabledOptionWithVisibleVotes   -> renderDisabledOptionWithVisibleVotes(state)
+            is PollOptionViewState.EnabledOptionWithInvisibleVotes  -> renderEnabledOptionWithInvisibleVotes()
+            is PollOptionViewState.EnabledOptionWithVisibleVotes    -> renderEnabledOptionWithVisibleVotes(state)
+        }
+    }
+
+    private fun renderDisabledOptionWithInvisibleVotes() {
+        views.optionCheckImageView.isVisible = false
+        views.optionWinnerImageView.isVisible = false
+        hideVotes()
+        renderVoteSelection(false)
+    }
+
+    private fun renderDisabledOptionWithVisibleVotes(state: PollOptionViewState.DisabledOptionWithVisibleVotes) {
+        views.optionCheckImageView.isVisible = false
+        views.optionWinnerImageView.isVisible = state.isWinner
+        showVotes(state.voteCount, state.votePercentage)
+        renderVoteSelection(state.isWinner)
+    }
+
+    private fun renderEnabledOptionWithInvisibleVotes() {
+        views.optionCheckImageView.isVisible = true
+        views.optionWinnerImageView.isVisible = false
+        hideVotes()
+        renderVoteSelection(false)
+    }
+
+    private fun renderEnabledOptionWithVisibleVotes(state: PollOptionViewState.EnabledOptionWithVisibleVotes) {
+        views.optionCheckImageView.isVisible = true
+        views.optionWinnerImageView.isVisible = false
+        showVotes(state.voteCount, state.votePercentage)
+        renderVoteSelection(state.isSelected)
+    }
+
+    private fun showVotes(voteCount: Int, votePercentage: Double) {
+        views.optionVoteCountTextView.apply {
+            isVisible = true
+            text = resources.getQuantityString(R.plurals.poll_option_vote_count, voteCount, voteCount)
+        }
+        views.optionVoteProgress.apply {
+            val progressValue = (votePercentage * 100).toInt()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                setProgress(progressValue, true)
+            } else {
+                progress = progressValue
+            }
+        }
+    }
+
+    private fun hideVotes() {
+        views.optionVoteCountTextView.isVisible = false
+        views.optionVoteProgress.progress = 0
+    }
+
+    private fun renderVoteSelection(isSelected: Boolean) {
+        if (isSelected) {
             views.optionBorderImageView.setAttributeTintedImageResource(R.drawable.bg_poll_option, R.attr.colorPrimary)
             views.optionVoteProgress.progressDrawable = AppCompatResources.getDrawable(context, R.drawable.poll_option_progressbar_checked)
             views.optionCheckImageView.setImageResource(R.drawable.poll_option_checked)
-            views.optionWinnerImageView.isVisible = false
         } else {
             views.optionBorderImageView.setAttributeTintedImageResource(R.drawable.bg_poll_option, R.attr.vctr_content_quinary)
             views.optionVoteProgress.progressDrawable = AppCompatResources.getDrawable(context, R.drawable.poll_option_progressbar_unchecked)
             views.optionCheckImageView.setImageResource(R.drawable.poll_option_unchecked)
-            views.optionWinnerImageView.isVisible = false
-        }
-
-        if (showVote) {
-            views.optionVoteCountTextView.apply {
-                isVisible = true
-                text = resources.getQuantityString(R.plurals.poll_option_vote_count, voteCount, voteCount)
-            }
-            views.optionVoteProgress.apply {
-                val progressValue = (votePercentage * 100).toInt()
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    setProgress(progressValue, true)
-                } else {
-                    progress = progressValue
-                }
-            }
-        } else {
-            views.optionVoteCountTextView.isVisible = false
-            views.optionVoteProgress.progress = 0
         }
     }
 }

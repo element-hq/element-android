@@ -18,13 +18,12 @@ package org.matrix.android.sdk.api.session.room.model.message
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 
 /**
  * Class representing the org.matrix.msc3381.poll.end event content
  */
 @JsonClass(generateAdapter = true)
 data class MessageEndPollContent(
-        @Json(name = "rel_type") val relationType: String = RelationType.REFERENCE,
-        @Json(name = "event_id") val eventId: String
+        @Json(name = "m.relates_to") val relatesTo: RelationDefaultContent? = null
 )

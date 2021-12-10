@@ -406,7 +406,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                               content: MessageEndPollContent,
                               roomId: String,
                               isLocalEcho: Boolean) {
-        val pollEventId = content.eventId
+        val pollEventId = content.relatesTo?.eventId ?: return
 
         var existing = EventAnnotationsSummaryEntity.where(realm, roomId, pollEventId).findFirst()
         if (existing == null) {

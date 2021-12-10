@@ -178,7 +178,10 @@ internal class LocalEchoEventFactory @Inject constructor(
     fun createEndPollEvent(roomId: String,
                            eventId: String): Event {
         val content = MessageEndPollContent(
-                eventId = eventId
+                relatesTo = RelationDefaultContent(
+                        type = RelationType.REFERENCE,
+                        eventId = eventId
+                )
         )
         val localId = LocalEcho.createLocalEchoId()
         return Event(
@@ -440,7 +443,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         when (content?.msgType) {
             MessageType.MSGTYPE_EMOTE,
             MessageType.MSGTYPE_TEXT,
-            MessageType.MSGTYPE_NOTICE -> {
+            MessageType.MSGTYPE_NOTICE     -> {
                 var formattedText: String? = null
                 if (content is MessageContentWithFormattedBody) {
                     formattedText = content.matrixFormattedBody
@@ -451,11 +454,12 @@ internal class LocalEchoEventFactory @Inject constructor(
                     TextContent(content.body, formattedText)
                 }
             }
-            MessageType.MSGTYPE_FILE   -> return TextContent("sent a file.")
-            MessageType.MSGTYPE_AUDIO  -> return TextContent("sent an audio file.")
-            MessageType.MSGTYPE_IMAGE  -> return TextContent("sent an image.")
-            MessageType.MSGTYPE_VIDEO  -> return TextContent("sent a video.")
-            else                       -> return TextContent(content?.body ?: "")
+            MessageType.MSGTYPE_FILE       -> return TextContent("sent a file.")
+            MessageType.MSGTYPE_AUDIO      -> return TextContent("sent an audio file.")
+            MessageType.MSGTYPE_IMAGE      -> return TextContent("sent an image.")
+            MessageType.MSGTYPE_VIDEO      -> return TextContent("sent a video.")
+            MessageType.MSGTYPE_POLL_START -> return TextContent((content as? MessagePollContent)?.pollCreationInfo?.question?.question ?: "")
+            else                           -> return TextContent(content?.body ?: "")
         }
     }
 

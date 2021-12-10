@@ -179,6 +179,7 @@ class MessageItemFactory @Inject constructor(
                 .attributes(attributes)
                 .eventId(informationData.eventId)
                 .pollResponseSummary(informationData.pollResponseAggregatedSummary)
+                .pollSent(informationData.sendState.isSent())
                 .pollContent(messageContent)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)

@@ -41,6 +41,9 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
     @EpoxyAttribute
     var eventId: String? = null
 
+    @EpoxyAttribute
+    var pollSent: Boolean = false
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         val relatedEventId = eventId ?: return
@@ -53,7 +56,6 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
 
         val isEnded = pollResponseSummary?.isClosed.orFalse()
         val didUserVoted = pollResponseSummary?.myVote?.isNotEmpty().orFalse()
-        val showVotes = didUserVoted || isEnded
         val totalVotes = pollResponseSummary?.totalVotes ?: 0
         val winnerVoteCount = pollResponseSummary?.winnerVoteCount
 
@@ -62,21 +64,30 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
             val isMyVote = pollResponseSummary?.myVote == option.id
             val voteCount = voteSummary?.total ?: 0
             val votePercentage = voteSummary?.percentage ?: 0.0
+            val optionName = option.answer ?: ""
 
             holder.optionsContainer.addView(
                     PollOptionItem(holder.view.context).apply {
-                        update(optionName = option.answer ?: "",
-                                isSelected = isMyVote,
-                                isWinner = voteCount == winnerVoteCount,
-                                isEnded = isEnded,
-                                showVote = showVotes,
-                                voteCount = voteCount,
-                                votePercentage = votePercentage,
-                                callback = object : PollOptionItem.Callback {
-                                    override fun onOptionClicked() {
-                                        callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, option.id ?: ""))
-                                    }
-                                })
+                        val callback = object : PollOptionItem.Callback {
+                            override fun onOptionClicked() {
+                                callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, option.id ?: ""))
+                            }
+                        }
+
+                        if (!pollSent) {
+                            // Poll event is not send yet. Disable option.
+                            render(PollOptionViewState.DisabledOptionWithInvisibleVotes(optionName), callback)
+                        } else if (isEnded) {
+                            // Poll is ended. Disable option, show votes and mark the winner.
+                            val isWinner = winnerVoteCount != 0 && voteCount == winnerVoteCount
+                            render(PollOptionViewState.DisabledOptionWithVisibleVotes(optionName, voteCount, votePercentage, isWinner), callback)
+                        } else if (didUserVoted) {
+                            // User voted to the poll, but poll is not ended. Enable option, show votes and mark the user's selection.
+                            render(PollOptionViewState.EnabledOptionWithVisibleVotes(optionName, voteCount, votePercentage, isMyVote), callback)
+                        } else {
+                            // User didn't voted yet and poll is not ended yet. Enable options, hide votes.
+                            render(PollOptionViewState.EnabledOptionWithInvisibleVotes(optionName), callback)
+                        }
                     }
             )
         }

@@ -399,8 +399,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canReply(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
-        // Only event of type EventType.MESSAGE are supported for the moment
-        if (event.root.getClearType() != EventType.MESSAGE) return false
+        // Only EventType.MESSAGE and EventType.POLL_START event types are supported for the moment
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.POLL_START)) return false
         if (!actionPermissions.canSendMessage) return false
         return when (messageContent?.msgType) {
             MessageType.MSGTYPE_TEXT,
@@ -409,8 +409,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             MessageType.MSGTYPE_IMAGE,
             MessageType.MSGTYPE_VIDEO,
             MessageType.MSGTYPE_AUDIO,
-            MessageType.MSGTYPE_FILE -> true
-            else                     -> false
+            MessageType.MSGTYPE_FILE,
+            MessageType.MSGTYPE_POLL_START -> true
+            else                           -> false
         }
     }
 

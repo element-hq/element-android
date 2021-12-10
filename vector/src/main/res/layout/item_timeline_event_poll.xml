@@ -7,10 +7,10 @@
 
     <TextView
         android:id="@+id/questionTextView"
-        style="@style/Widget.Vector.TextView.HeadlineMedium"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,7 +22,7 @@
         android:id="@+id/optionsContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:divider="@drawable/divider_poll_options"
         android:orientation="vertical"
         android:showDividers="middle"
