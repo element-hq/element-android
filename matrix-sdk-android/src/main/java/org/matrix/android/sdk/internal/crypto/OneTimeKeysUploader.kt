@@ -29,7 +29,7 @@ import javax.inject.Inject
 import kotlin.math.floor
 import kotlin.math.min
 
-// THe spec recommend a 5mn delay, but due to federation
+// The spec recommend a 5mn delay, but due to federation
 // or server downtime we give it a bit more time (1 hour)
 const val FALLBACK_KEY_FORGET_DELAY = 60 * 60_000L
 
