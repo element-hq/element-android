@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+IMPORTANT:
+Only modify msg_godbubble.xml, then run `generate_bubbles.sh` to update all actually used msg_bubble_*.xml drawables.
+Note also that most of the comments should not be changed without checking their use in `generate_bubbles.sh`.
+-->
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Filled for tail -->
+    <item android:right="@dimen/sc_bubble_tail_size">
+        <shape
+            android:shape="rectangle">
+
+            <solid android:color="?sc_message_bg_incoming" />
+
+            <corners android:radius="@dimen/sc_bubble_radius" />
+
+            <corners android:bottomRightRadius="@dimen/sc_bubble_radius"
+                android:bottomLeftRadius="@dimen/sc_bubble_radius"
+                android:topLeftRadius="@dimen/sc_bubble_radius" />
+
+        </shape>
+    </item>
+
+    
+
+    
+
+    <!-- Tail -->
+    <item
+        android:gravity="top|right">
+        <vector
+            android:width="@dimen/sc_bubble_tail_size"
+            android:height="@dimen/sc_bubble_tail_size"
+            android:viewportWidth="10.0"
+            android:viewportHeight="10.0">
+            
+            <path
+                android:pathData="M10,0 L0,10 L0,0 Z"
+                android:fillColor="?sc_message_bg_incoming" />
+            <!-- tail end -->
+        </vector>
+    </item>
+    <!-- Tail end -->
+</layer-list>

@@ -456,18 +456,36 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 val longPadding: Int
                 val shortPadding: Int
                 if (BubbleThemeUtils.drawsActualBubbles(bubbleStyle)) {
-                    if (attributes.informationData.showInformation) {
-                        bubbleView.setBackgroundResource(if (reverseBubble) R.drawable.msg_bubble_outgoing else R.drawable.msg_bubble_incoming)
-                    } else {
-                        bubbleView.setBackgroundResource(if (reverseBubble) R.drawable.msg_bubble2_outgoing else R.drawable.msg_bubble2_incoming)
+                    val bubbleRes = if (attributes.isNotice) { // notice
+                        if (attributes.informationData.showInformation) { // tail
+                            if (reverseBubble) { // outgoing
+                                R.drawable.msg_bubble_notice_outgoing
+                            } else { // incoming
+                                R.drawable.msg_bubble_notice_incoming
+                            }
+                        } else { // notail
+                            if (reverseBubble) { // outgoing
+                                R.drawable.msg_bubble_notice_outgoing_notail
+                            } else { // incoming
+                                R.drawable.msg_bubble_notice_incoming_notail
+                            }
+                        }
+                    } else { // text
+                        if (attributes.informationData.showInformation) { // tail
+                            if (reverseBubble) { // outgoing
+                                R.drawable.msg_bubble_text_outgoing
+                            } else { // incoming
+                                R.drawable.msg_bubble_text_incoming
+                            }
+                        } else { // notail
+                            if (reverseBubble) { // outgoing
+                                R.drawable.msg_bubble_text_outgoing_notail
+                            } else { // incoming
+                                R.drawable.msg_bubble_text_incoming_notail
+                            }
+                        }
                     }
-                    val tintColor = ColorStateList(
-                            arrayOf(intArrayOf(0)),
-                            intArrayOf(ThemeUtils.getColor(bubbleView.context,
-                                    if (attributes.informationData.sentByMe) R.attr.sc_message_bg_outgoing else R.attr.sc_message_bg_incoming)
-                            )
-                    )
-                    bubbleView.backgroundTintList = tintColor
+                    bubbleView.setBackgroundResource(bubbleRes)
                     longPadding = 20
                     shortPadding = 8
                 } else {

@@ -87,6 +87,8 @@
         <item name="android:colorAccent">@color/accent_sc</item>
         <item name="sc_message_bg_incoming">@color/background_floating_sc</item>
         <item name="sc_message_bg_outgoing">@color/background_sc</item>
+        <item name="sc_notice_bg_incoming">@android:color/transparent</item>
+        <item name="sc_notice_bg_outgoing">@android:color/transparent</item>
         <item name="riotx_unread_unimportant_room_badge">@color/background_floating_sc</item>
         <item name="colorAccentPale">@color/accent_sc_pale</item>
         <item name="message_highlight_bg_color">@color/accent_sc_alpha25</item>
