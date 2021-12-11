@@ -1227,7 +1227,7 @@
     <string name="invite_friends">Запросити друзів</string>
     <string name="group_all_communities">Всі спільноти</string>
     <string name="settings_show_redacted_summary">Показувати заглушку на місці видалених повідомлень</string>
-    <string name="settings_general_title">Основні</string>
+    <string name="settings_general_title">Загальні</string>
     <string name="send_suggestion_failed">Не вдалось надіслати пропозицію (%s)</string>
     <string name="send_suggestion_sent">Дякуємо, вашу пропозицію було успішно надіслано</string>
     <string name="send_suggestion_report_placeholder">Опишіть вашу пропозицію тут</string>
@@ -3081,4 +3081,26 @@
 \n - Домашній сервер, до якого під\'єднаний користувач, якого ви перевірили
 \n - Ваше інтернет-з\'єднання або інтернет-з\'єднання вашого користувача
 \n - Ваш пристрій або пристрій іншого користувача</string>
+    <string name="help_space_members">Допоможіть учасникам простору знаходити приватні кімнати</string>
+    <string name="new_let_people_in_spaces_find_and_join">Нове: Дозволити людям у просторах знаходити та приєднуватися до приватних кімнат</string>
+    <string name="invite_just_to_this_room">Лише в цю кімнату</string>
+    <string name="invite_to_space_with_name_desc">Вони зможуть переглядати %s</string>
+    <string name="invite_by_mxid_or_mail">Запрошення за іменем користувача або е-поштою</string>
+    <string name="create_spaces_default_public_room_name">Загальний</string>
+    <string name="share_by_text">Поділитися у тексті</string>
+    <string name="settings_security_pin_code_notifications_summary_off">Показувати лише кількість непрочитаних повідомлень у звичайному сповіщенні.</string>
+    <string name="wrong_pin_message_last_remaining_attempt">Увага! Залишилась остання спроба перед виходом!</string>
+    <string name="identity_server_error_no_current_binding_error">Наразі відсутнє повʼязування з цим ідентифікатором.</string>
+    <string name="identity_server_error_binding_error">Не вдалося повʼязати.</string>
+    <string name="identity_server_error_outdated_home_server">Ця операція неможлива. Домашній сервер застарілий.</string>
+    <string name="enter_secret_storage_passphrase_warning_text">Ви повинні отримувати доступ до таємного сховища лише з надійного пристрою</string>
+    <string name="delete_account_data_warning">Видалити дані облікового запису типу %1$s\?
+\n
+\nКористуйтеся обачно. Це може призвести до несподіваних наслідків.</string>
+    <string name="verification_conclusion_ok_notice">Повідомлення з цим користувачем наскрізно шифровані й не можуть бути прочитані сторонніми.</string>
+    <string name="verification_code_notice">Порівняйте цей код з показаним на екрані іншого користувача кодом.</string>
+    <string name="template_rendering_event_error_exception">${app_name} зіткнувся з проблемою показу вмісту події з ID «%1$s»</string>
+    <string name="room_member_jump_to_read_receipt">Перейти до останнього прочитаного</string>
+    <string name="soft_logout_clear_data_dialog_content">Очистити всі дані, збережені на цьому пристрої\?
+\nУвійдіть знову, щоб отримати доступ до даних свого облікового запису й повідомлень.</string>
 </resources>
