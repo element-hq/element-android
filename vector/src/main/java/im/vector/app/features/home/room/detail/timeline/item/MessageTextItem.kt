@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.detail.timeline.item
 
 import android.content.Context
+import android.graphics.Color
 import android.text.TextUtils
 import android.text.method.MovementMethod
 import android.widget.LinearLayout
@@ -27,6 +28,7 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.FooteredTextView
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
@@ -118,6 +120,9 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         renderSendState(holder.messageView, holder.messageView)
         holder.messageView.onClick(attributes.itemClickListener)
         holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
+        holder.messageView.setTextColor(ColorProvider(holder.messageView.context).getColorFromAttribute(
+                if (attributes.isNotice) R.attr.vctr_content_secondary else R.attr.vctr_content_primary
+        ))
 
         if (canUseTextFuture) {
             holder.messageView.setTextFuture(textFuture)

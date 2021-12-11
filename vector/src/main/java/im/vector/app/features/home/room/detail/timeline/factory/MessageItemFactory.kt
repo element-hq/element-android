@@ -72,6 +72,7 @@ import org.commonmark.node.Document
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -95,6 +96,7 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
+import timber.log.Timber
 import javax.inject.Inject
 
 class MessageItemFactory @Inject constructor(
@@ -557,13 +559,36 @@ class MessageItemFactory @Inject constructor(
                                        informationData: MessageInformationData,
                                        highlight: Boolean,
                                        callback: TimelineEventController.Callback?,
-                                       attributes: AbsMessageItem.Attributes): MessageTextItem? {
+                                       attrs: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
+        val attributes = attrs.copy(isNotice = true)
+
+        // We might want to use the normal text rendering in the future as following (but need to
+        // ensure that notices are easily told apart also from code, ... formatted messages).
+        // Maybe, instead of text coloring, we can come up with some other indicator that catches all cases automatically?
+        /*
+        val noticeAsTextContent = messageContent.toContent().toModel<MessageTextContent>()
+        if (noticeAsTextContent != null && false) {
+            return buildItemForTextContent(
+                    noticeAsTextContent,
+                    informationData,
+                    highlight,
+                    callback,
+                    attributes
+            )
+        }
+        Timber.w("Could not parse notice as text item, using legacy fallback")
+         */
+
         val htmlBody = messageContent.getHtmlBody()
+        // SchildiChat likes to not overwrite message formatting for notices, compared to upstream
+        val formattedBody = htmlBody
+        /*
         val formattedBody = span {
             text = htmlBody
             textColor = colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
             textStyle = "italic"
         }
+         */
 
         val canUseTextFuture = spanUtils.canUseTextFuture(htmlBody)
         val message = formattedBody.linkify(callback)

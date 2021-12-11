@@ -268,6 +268,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
             val avatarCallback: TimelineEventController.AvatarCallback? = null,
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
+            val isNotice: Boolean = false,
             val emojiTypeFace: Typeface? = null
     ) : AbsBaseMessageItem.Attributes {
 
