@@ -177,7 +177,7 @@ class SpaceSummaryController @Inject constructor(
                     if (hasChildren && expanded) {
                         // it's expanded
                         subSpaces?.forEach { child ->
-                            buildSubSpace(summaries, expandedStates, selected, child, 1, 3)
+                            buildSubSpace(groupSummary.roomId, summaries, expandedStates, selected, child, 1, 3)
                         }
                     }
                 }
@@ -188,7 +188,8 @@ class SpaceSummaryController @Inject constructor(
         }
     }
 
-    private fun buildSubSpace(summaries: List<RoomSummary>?,
+    private fun buildSubSpace(idPrefix: String,
+                              summaries: List<RoomSummary>?,
                               expandedStates: Map<String, Boolean>,
                               selected: RoomGroupingMethod,
                               info: SpaceChildInfo, currentDepth: Int, maxDepth: Int) {
@@ -204,9 +205,11 @@ class SpaceSummaryController @Inject constructor(
 
         val useAggregateCounts = vectorPreferences.aggregateUnreadRoomCounts()
 
+        val id = "$idPrefix:${childSummary.roomId}"
+
         subSpaceSummaryItem {
             avatarRenderer(host.avatarRenderer)
-            id(childSummary.roomId)
+            id(id)
             hasChildren(!subSpaces.isNullOrEmpty())
             selected(isSelected)
             expanded(expanded)
@@ -227,7 +230,7 @@ class SpaceSummaryController @Inject constructor(
 
         if (expanded) {
             subSpaces?.forEach {
-                buildSubSpace(summaries, expandedStates, selected, it, currentDepth + 1, maxDepth)
+                buildSubSpace(id, summaries, expandedStates, selected, it, currentDepth + 1, maxDepth)
             }
         }
     }
