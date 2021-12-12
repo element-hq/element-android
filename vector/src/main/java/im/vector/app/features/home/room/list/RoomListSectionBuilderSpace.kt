@@ -178,7 +178,11 @@ class RoomListSectionBuilderSpace(
                 activeSpaceAwareQueries,
                 R.string.bottom_action_favourites,
                 false,
-                RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL,
+                spaceFilterStrategy = if (onlyOrphansInHome) {
+                    RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
+                } else {
+                    RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+                },
                 explicitSpaceId = explicitSpaceId,
         ) {
             it.memberships = listOf(Membership.JOIN)
@@ -259,7 +263,11 @@ class RoomListSectionBuilderSpace(
                 activeSpaceAwareQueries,
                 R.string.bottom_action_favourites,
                 false,
-                RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL,
+                spaceFilterStrategy = if (onlyOrphansInHome) {
+                    RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
+                } else {
+                    RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+                },
                 explicitSpaceId = explicitSpaceId,
         ) {
             it.memberships = listOf(Membership.JOIN)
@@ -410,7 +418,11 @@ class RoomListSectionBuilderSpace(
                 activeSpaceAwareQueries,
                 R.string.bottom_action_favourites,
                 false,
-                RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL,
+                spaceFilterStrategy = if (onlyOrphansInHome) {
+                    RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL
+                } else {
+                    RoomListViewModel.SpaceFilterStrategy.ALL_IF_SPACE_NULL
+                },
                 explicitSpaceId = explicitSpaceId
         ) {
             it.memberships = listOf(Membership.JOIN)
