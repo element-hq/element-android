@@ -59,6 +59,14 @@ data class SyncResponse(
         val deviceOneTimeKeysCount: DeviceOneTimeKeysCountSyncResponse? = null,
 
         /**
+         * The key algorithms for which the server has an unused fallback key for the device.
+         * If the client wants the server to have a fallback key for a given key algorithm,
+         * but that algorithm is not listed in device_unused_fallback_key_types, the client will upload a new key.
+         */
+        @Json(name = "org.matrix.msc2732.device_unused_fallback_key_types")
+        val deviceUnusedFallbackKeyTypes: List<String>? = null,
+
+        /**
          * List of groups.
          */
         @Json(name = "groups") val groups: GroupsSyncResponse? = null

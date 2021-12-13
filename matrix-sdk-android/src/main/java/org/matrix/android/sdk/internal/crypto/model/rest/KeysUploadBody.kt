@@ -40,5 +40,12 @@ internal data class KeysUploadBody(
          * May be absent if no new one-time keys are required.
          */
         @Json(name = "one_time_keys")
-        val oneTimeKeys: JsonDict? = null
+        val oneTimeKeys: JsonDict? = null,
+
+        /**
+         * If the user had previously uploaded a fallback key for a given algorithm, it is replaced.
+         * The server will only keep one fallback key per algorithm for each user.
+         */
+        @Json(name = "org.matrix.msc2732.fallback_keys")
+        val fallbackKeys: JsonDict? = null
 )
