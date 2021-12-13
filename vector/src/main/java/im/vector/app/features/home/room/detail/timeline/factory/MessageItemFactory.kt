@@ -222,7 +222,6 @@ class MessageItemFactory @Inject constructor(
                 .attributes(attributes)
                 .eventId(informationData.eventId)
                 .pollQuestion(pollContent.pollCreationInfo?.question?.question ?: "")
-                .pollResponseSummary(pollResponseSummary)
                 .pollSent(isPollSent)
                 .totalVotesText(totalVotesText)
                 .optionViewStates(optionViewStates)

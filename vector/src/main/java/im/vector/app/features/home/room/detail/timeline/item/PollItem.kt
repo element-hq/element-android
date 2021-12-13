@@ -32,9 +32,6 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
     var pollQuestion: String? = null
 
     @EpoxyAttribute
-    var pollResponseSummary: PollResponseData? = null
-
-    @EpoxyAttribute
     var callback: TimelineEventController.Callback? = null
 
     @EpoxyAttribute
