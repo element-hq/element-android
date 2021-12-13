@@ -27,10 +27,13 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.epoxy.util.preventMutation
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.timeline.item.BindingOptions
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
 import im.vector.app.features.media.ImageContentRenderer
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.util.MatrixItem
 
 /**
@@ -47,6 +50,9 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
 
     @EpoxyAttribute
     lateinit var body: CharSequence
+
+    @EpoxyAttribute
+    var bindingOptions: BindingOptions? = null
 
     @EpoxyAttribute
     var bodyDetails: CharSequence? = null
@@ -77,7 +83,11 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         }
         holder.imagePreview.isVisible = data != null
         holder.body.movementMethod = movementMethod
-        holder.body.text = body
+        holder.body.text = if (bindingOptions?.preventMutation.orFalse()) {
+            body.preventMutation()
+        } else {
+            body
+        }
         holder.bodyDetails.setTextOrHide(bodyDetails)
         body.findPillsAndProcess(coroutineScope) { it.bind(holder.body) }
         holder.timestamp.setTextOrHide(time)

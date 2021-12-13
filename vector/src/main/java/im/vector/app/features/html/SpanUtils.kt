@@ -22,23 +22,42 @@ import android.text.style.MetricAffectingSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.UnderlineSpan
 import androidx.emoji2.text.EmojiCompat
+import im.vector.app.features.home.room.detail.timeline.item.BindingOptions
 import javax.inject.Inject
 
 class SpanUtils @Inject constructor() {
+    fun getBindingOptions(charSequence: CharSequence): BindingOptions {
+        val emojiCharSequence = EmojiCompat.get().process(charSequence)
+
+        if (emojiCharSequence !is Spanned) {
+            return BindingOptions(
+                    canUseTextFuture = true,
+                    preventMutation = false
+            )
+        }
+
+        return BindingOptions(
+                canUseTextFuture = canUseTextFuture(emojiCharSequence),
+                preventMutation = preventMutation(emojiCharSequence)
+        )
+    }
+
     // Workaround for https://issuetracker.google.com/issues/188454876
-    fun canUseTextFuture(charSequence: CharSequence): Boolean {
+    private fun canUseTextFuture(charSequence: Spanned): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             // On old devices, it works correctly
             return true
         }
 
-        val emojiCharSequence = EmojiCompat.get().process(charSequence)
-        if (emojiCharSequence !is Spanned) {
-            return true
-        }
-
-        return emojiCharSequence
-                .getSpans(0, emojiCharSequence.length, Any::class.java)
+        return charSequence
+                .getSpans(0, charSequence.length, Any::class.java)
                 .all { it !is StrikethroughSpan && it !is UnderlineSpan && it !is MetricAffectingSpan }
+    }
+
+    // Workaround for setting text during binding which mutate the text itself
+    private fun preventMutation(spanned: Spanned): Boolean {
+        return spanned
+                .getSpans(0, spanned.length, Any::class.java)
+                .any { it is MetricAffectingSpan }
     }
 }

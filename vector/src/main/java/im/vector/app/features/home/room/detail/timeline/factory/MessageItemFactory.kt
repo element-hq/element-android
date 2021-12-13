@@ -473,7 +473,7 @@ class MessageItemFactory @Inject constructor(
                                      highlight: Boolean,
                                      callback: TimelineEventController.Callback?,
                                      attributes: AbsMessageItem.Attributes): MessageTextItem? {
-        val canUseTextFuture = spanUtils.canUseTextFuture(body)
+        val bindingOptions = spanUtils.getBindingOptions(body)
         val linkifiedBody = body.linkify(callback)
 
         return MessageTextItem_().apply {
@@ -485,7 +485,7 @@ class MessageItemFactory @Inject constructor(
             }
         }
                 .useBigFont(linkifiedBody.length <= MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT * 2 && containsOnlyEmojis(linkifiedBody.toString()))
-                .canUseTextFuture(canUseTextFuture)
+                .bindingOptions(bindingOptions)
                 .searchForPills(isFormatted)
                 .previewUrlRetriever(callback?.getPreviewUrlRetriever())
                 .imageContentRenderer(imageContentRenderer)
@@ -565,7 +565,7 @@ class MessageItemFactory @Inject constructor(
             textStyle = "italic"
         }
 
-        val canUseTextFuture = spanUtils.canUseTextFuture(htmlBody)
+        val bindingOptions = spanUtils.getBindingOptions(htmlBody)
         val message = formattedBody.linkify(callback)
 
         return MessageTextItem_()
@@ -575,7 +575,7 @@ class MessageItemFactory @Inject constructor(
                 .previewUrlCallback(callback)
                 .attributes(attributes)
                 .message(message)
-                .canUseTextFuture(canUseTextFuture)
+                .bindingOptions(bindingOptions)
                 .highlighted(highlight)
                 .movementMethod(createLinkMovementMethod(callback))
     }
