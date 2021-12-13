@@ -58,8 +58,8 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
         holder.questionTextView.text = pollQuestion
         holder.totalVotesTextView.text = totalVotesText
 
-        val cachedViews = mutableMapOf<String, PollOptionItem>()
-        holder.optionsContainer.children.filterIsInstance<PollOptionItem>().forEach { existingPollItemView ->
+        val cachedViews = mutableMapOf<String, PollOptionView>()
+        holder.optionsContainer.children.filterIsInstance<PollOptionView>().forEach { existingPollItemView ->
             cachedViews[existingPollItemView.getTag(STUB_ID)?.toString() ?: ""] = existingPollItemView
         }
 
@@ -68,7 +68,7 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
         optionViewStates?.forEachIndexed { index, option ->
             val tag = relatedEventId + option.optionId
 
-            val pollOptionItem: PollOptionItem = (cachedViews[tag] ?: PollOptionItem(holder.view.context))
+            val pollOptionItem: PollOptionView = (cachedViews[tag] ?: PollOptionView(holder.view.context))
                     .apply {
                         setTag(STUB_ID, tag)
                         render(

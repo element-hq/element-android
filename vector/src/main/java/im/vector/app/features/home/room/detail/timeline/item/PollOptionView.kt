@@ -26,7 +26,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.setAttributeTintedImageResource
 import im.vector.app.databinding.ItemPollOptionBinding
 
-class PollOptionItem @JvmOverloads constructor(
+class PollOptionView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
