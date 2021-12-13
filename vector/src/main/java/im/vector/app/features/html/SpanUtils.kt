@@ -30,15 +30,12 @@ class SpanUtils @Inject constructor() {
         val emojiCharSequence = EmojiCompat.get().process(charSequence)
 
         if (emojiCharSequence !is Spanned) {
-            return BindingOptions(
-                    canUseTextFuture = true,
-                    preventMutation = false
-            )
+            return BindingOptions()
         }
 
         return BindingOptions(
                 canUseTextFuture = canUseTextFuture(emojiCharSequence),
-                preventMutation = preventMutation(emojiCharSequence)
+                preventMutation = mustPreventMutation(emojiCharSequence)
         )
     }
 
@@ -55,7 +52,7 @@ class SpanUtils @Inject constructor() {
     }
 
     // Workaround for setting text during binding which mutate the text itself
-    private fun preventMutation(spanned: Spanned): Boolean {
+    private fun mustPreventMutation(spanned: Spanned): Boolean {
         return spanned
                 .getSpans(0, spanned.length, Any::class.java)
                 .any { it is MetricAffectingSpan }
