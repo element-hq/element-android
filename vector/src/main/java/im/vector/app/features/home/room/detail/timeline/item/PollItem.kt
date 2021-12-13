@@ -66,17 +66,17 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
         holder.optionsContainer.removeAllViews()
 
         optionViewStates?.forEachIndexed { index, option ->
-            val tag = relatedEventId + option.id
+            val tag = relatedEventId + option.optionId
 
             val pollOptionItem: PollOptionItem = (cachedViews[tag] ?: PollOptionItem(holder.view.context))
                     .apply {
                         setTag(STUB_ID, tag)
                         render(
-                                state = optionViewStates?.getOrNull(index) ?: PollOptionViewState.DisabledOptionWithInvisibleVotes(option.id, option.name)
+                                state = optionViewStates?.getOrNull(index) ?: PollOptionViewState.DisabledOptionWithInvisibleVotes(option.optionId, option.optionAnswer)
                         )
                     }
             pollOptionItem.setOnClickListener {
-                callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, option.id))
+                callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, option.optionId))
             }
 
             holder.optionsContainer.addView(pollOptionItem)

@@ -16,39 +16,39 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
-sealed class PollOptionViewState(open val id: String,
-                                 open val name: String) {
+sealed class PollOptionViewState(open val optionId: String,
+                                 open val optionAnswer: String) {
     /**
      * Represents a poll that is not sent to the server yet.
      */
-    data class DisabledOptionWithInvisibleVotes(override val id: String,
-                                                override val name: String
-    ) : PollOptionViewState(id, name)
+    data class DisabledOptionWithInvisibleVotes(override val optionId: String,
+                                                override val optionAnswer: String
+    ) : PollOptionViewState(optionId, optionAnswer)
 
     /**
      * Represents a poll that is sent but not voted by the user
      */
-    data class EnabledOptionWithInvisibleVotes(override val id: String,
-                                               override val name: String
-    ) : PollOptionViewState(id, name)
+    data class EnabledOptionWithInvisibleVotes(override val optionId: String,
+                                               override val optionAnswer: String
+    ) : PollOptionViewState(optionId, optionAnswer)
 
     /**
      * Represents a poll that user already voted.
      */
-    data class EnabledOptionWithVisibleVotes(override val id: String,
-                                             override val name: String,
+    data class EnabledOptionWithVisibleVotes(override val optionId: String,
+                                             override val optionAnswer: String,
                                              val voteCount: Int,
                                              val votePercentage: Double,
                                              val isSelected: Boolean
-    ) : PollOptionViewState(id, name)
+    ) : PollOptionViewState(optionId, optionAnswer)
 
     /**
      * Represents a poll that is ended.
      */
-    data class DisabledOptionWithVisibleVotes(override val id: String,
-                                              override val name: String,
+    data class DisabledOptionWithVisibleVotes(override val optionId: String,
+                                              override val optionAnswer: String,
                                               val voteCount: Int,
                                               val votePercentage: Double,
                                               val isWinner: Boolean
-    ) : PollOptionViewState(id, name)
+    ) : PollOptionViewState(optionId, optionAnswer)
 }

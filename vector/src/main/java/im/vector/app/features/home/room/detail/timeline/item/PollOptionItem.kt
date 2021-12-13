@@ -44,7 +44,7 @@ class PollOptionItem @JvmOverloads constructor(
     }
 
     fun render(state: PollOptionViewState) {
-        views.optionNameTextView.text = state.name
+        views.optionNameTextView.text = state.optionAnswer
 
         when (state) {
             is PollOptionViewState.DisabledOptionWithInvisibleVotes -> renderDisabledOptionWithInvisibleVotes()

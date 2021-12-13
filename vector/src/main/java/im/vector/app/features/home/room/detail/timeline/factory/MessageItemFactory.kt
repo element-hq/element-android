@@ -198,22 +198,22 @@ class MessageItemFactory @Inject constructor(
             val voteCount = voteSummary?.total ?: 0
             val votePercentage = voteSummary?.percentage ?: 0.0
             val optionId = option.id ?: ""
-            val optionName = option.answer ?: ""
+            val optionAnswer = option.answer ?: ""
 
             optionViewStates.add(
                     if (!isPollSent) {
                         // Poll event is not send yet. Disable option.
-                        PollOptionViewState.DisabledOptionWithInvisibleVotes(optionId, optionName)
+                        PollOptionViewState.DisabledOptionWithInvisibleVotes(optionId, optionAnswer)
                     } else if (isEnded) {
                         // Poll is ended. Disable option, show votes and mark the winner.
                         val isWinner = winnerVoteCount != 0 && voteCount == winnerVoteCount
-                        PollOptionViewState.DisabledOptionWithVisibleVotes(optionId, optionName, voteCount, votePercentage, isWinner)
+                        PollOptionViewState.DisabledOptionWithVisibleVotes(optionId, optionAnswer, voteCount, votePercentage, isWinner)
                     } else if (didUserVoted) {
                         // User voted to the poll, but poll is not ended. Enable option, show votes and mark the user's selection.
-                        PollOptionViewState.EnabledOptionWithVisibleVotes(optionId, optionName, voteCount, votePercentage, isMyVote)
+                        PollOptionViewState.EnabledOptionWithVisibleVotes(optionId, optionAnswer, voteCount, votePercentage, isMyVote)
                     } else {
                         // User didn't voted yet and poll is not ended yet. Enable options, hide votes.
-                        PollOptionViewState.EnabledOptionWithInvisibleVotes(optionId, optionName)
+                        PollOptionViewState.EnabledOptionWithInvisibleVotes(optionId, optionAnswer)
                     }
             )
         }
