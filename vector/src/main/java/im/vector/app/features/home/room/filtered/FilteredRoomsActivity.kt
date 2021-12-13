@@ -21,7 +21,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.widget.SearchView
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityFilteredRoomsBinding
@@ -46,7 +45,7 @@ class FilteredRoomsActivity : VectorBaseActivity<ActivityFilteredRoomsBinding>()
         configureToolbar(views.filteredRoomsToolbar)
         if (isFirstCreation()) {
             val params = RoomListParams(RoomListDisplayMode.FILTERED)
-            replaceFragment(R.id.filteredRoomsFragmentContainer, RoomListFragment::class.java, params, FRAGMENT_TAG)
+            replaceFragment(views.filteredRoomsFragmentContainer, RoomListFragment::class.java, params, FRAGMENT_TAG)
         }
         views.filteredRoomsSearchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {

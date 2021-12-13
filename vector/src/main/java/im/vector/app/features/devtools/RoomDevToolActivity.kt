@@ -91,7 +91,7 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
                     val classJava = RoomDevToolFragment::class.java
                     val tag = classJava.name
                     if (supportFragmentManager.findFragmentByTag(tag) == null) {
-                        replaceFragment(R.id.container, RoomDevToolFragment::class.java)
+                        replaceFragment(views.container, RoomDevToolFragment::class.java)
                     } else {
                         supportFragmentManager.popBackStack()
                     }
@@ -155,14 +155,14 @@ class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStac
         if (supportFragmentManager.findFragmentByTag(tag) == null) {
             supportFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
-                    .replace(R.id.container, fragment, tag)
+                    .replace(views.container.id, fragment, tag)
                     .addToBackStack(tag)
                     .commit()
         } else {
             if (!supportFragmentManager.popBackStackImmediate(tag, 0)) {
                 supportFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
-                        .replace(R.id.container, fragment, tag)
+                        .replace(views.container.id, fragment, tag)
                         .addToBackStack(tag)
                         .commit()
             }

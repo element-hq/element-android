@@ -31,8 +31,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
@@ -69,17 +69,11 @@ class SpaceLeaveAdvancedActivity : VectorBaseActivity<ActivitySimpleLoadingBindi
         val args = intent?.getParcelableExtra<SpaceBottomSheetSettingsArgs>(Mavericks.KEY_ARG)
 
         if (isFirstCreation()) {
-            val simpleName = SpaceLeaveAdvancedFragment::class.java.simpleName
-            if (supportFragmentManager.findFragmentByTag(simpleName) == null) {
-                supportFragmentManager.commitTransaction {
-                    replace(
-                            R.id.simpleFragmentContainer,
-                            SpaceLeaveAdvancedFragment::class.java,
-                            Bundle().apply { this.putParcelable(Mavericks.KEY_ARG, args) },
-                            simpleName
-                    )
-                }
-            }
+            replaceFragment(
+                    views.simpleFragmentContainer,
+                    SpaceLeaveAdvancedFragment::class.java,
+                    args
+            )
         }
     }
 

@@ -81,7 +81,7 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
                 .launchIn(lifecycleScope)
         if (isFirstCreation()) {
             addFragment(
-                    R.id.container,
+                    views.container,
                     UserListFragment::class.java,
                     UserListFragmentArgs(
                             title = getString(R.string.invite_users_to_room_title),
@@ -104,13 +104,13 @@ class InviteUsersToRoomActivity : SimpleFragmentActivity() {
     private fun openPhoneBook() {
         // Check permission first
         if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, this, permissionContactLauncher)) {
-            addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
+            addFragmentToBackstack(views.container, ContactsBookFragment::class.java)
         }
     }
 
     private val permissionContactLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
-            doOnPostResume { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
+            doOnPostResume { addFragmentToBackstack(views.container, ContactsBookFragment::class.java) }
         } else if (deniedPermanently) {
             onPermissionDeniedSnackbar(R.string.permissions_denied_add_contact)
         }
