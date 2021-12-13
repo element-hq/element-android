@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.item
 
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.children
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
@@ -58,23 +59,29 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
         holder.questionTextView.text = pollContent?.pollCreationInfo?.question?.question
         holder.totalVotesTextView.text = totalVotesText
 
+        val cachedViews = mutableMapOf<String, PollOptionItem>()
+        holder.optionsContainer.children.filterIsInstance<PollOptionItem>().forEach { existingPollItemView ->
+            cachedViews[existingPollItemView.getTag(STUB_ID)?.toString() ?: ""] = existingPollItemView
+        }
+
         holder.optionsContainer.removeAllViews()
 
         pollContent?.pollCreationInfo?.answers?.forEachIndexed { index, option ->
             val optionName = option.answer ?: ""
+            val tag = relatedEventId + option.id
 
-            holder.optionsContainer.addView(
-                    PollOptionItem(holder.view.context).apply {
+            val pollOptionItem: PollOptionItem = (cachedViews[tag] ?: PollOptionItem(holder.view.context))
+                    .apply {
+                        setTag(STUB_ID, tag)
                         render(
-                                state = optionViewStates?.getOrNull(index) ?: PollOptionViewState.DisabledOptionWithInvisibleVotes(optionName),
-                                callback = object : PollOptionItem.Callback {
-                                    override fun onOptionClicked() {
-                                        callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, option.id ?: ""))
-                                    }
-                                }
+                                state = optionViewStates?.getOrNull(index) ?: PollOptionViewState.DisabledOptionWithInvisibleVotes(optionName)
                         )
                     }
-            )
+            pollOptionItem.setOnClickListener {
+                callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, option.id ?: ""))
+            }
+
+            holder.optionsContainer.addView(pollOptionItem)
         }
     }
 

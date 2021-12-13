@@ -32,12 +32,7 @@ class PollOptionItem @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    interface Callback {
-        fun onOptionClicked()
-    }
-
     private lateinit var views: ItemPollOptionBinding
-    private var callback: Callback? = null
 
     init {
         setupViews()
@@ -46,12 +41,9 @@ class PollOptionItem @JvmOverloads constructor(
     private fun setupViews() {
         inflate(context, R.layout.item_poll_option, this)
         views = ItemPollOptionBinding.bind(this)
-
-        views.root.setOnClickListener { callback?.onOptionClicked() }
     }
 
-    fun render(state: PollOptionViewState, callback: Callback) {
-        this.callback = callback
+    fun render(state: PollOptionViewState) {
 
         views.optionNameTextView.text = state.name
 
