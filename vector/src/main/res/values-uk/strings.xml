@@ -1346,8 +1346,8 @@
     <string name="keys_backup_setup_step3_button_title_no_passphrase">Я створив копію</string>
     <string name="keys_backup_setup_step3_button_title">Готово</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Тримайте відновлювальний ключ у якомусь дуже надійному місці, наприклад, у менеджері паролів (або сейфі)</string>
-    <string name="keys_backup_setup_step3_text_line2">Ваш відновлювальний ключ — це мережа безпеки — ви можете використовувати його для відновлення доступу до ваших зашифрованих повідомлень, якщо ви забудете свою парольну фразу.
-\nТримайте відновлювальний ключ у якомусь дуже надійному місці, наприклад, у менеджері паролів (або сейфі)</string>
+    <string name="keys_backup_setup_step3_text_line2">Відновлювальний ключ підстраховує вас: можете використати його для відновлення доступу до ваших зашифрованих повідомлень, якщо забудете парольну фразу.
+\nТримайте відновлювальний ключ у якомусь дуже надійному місці, наприклад у менеджері паролів (або сейфі)</string>
     <string name="keys_backup_setup_step3_text_line1">Створюється резервна копія ключів.</string>
     <string name="keys_backup_setup_step3_success_title">Успішно !</string>
     <string name="keys_backup_setup_step2_skip_button_title">(Додатково) Налаштування за допомогою ключа відновлення</string>
@@ -3086,7 +3086,7 @@
     <string name="invite_just_to_this_room">Лише в цю кімнату</string>
     <string name="invite_to_space_with_name_desc">Вони зможуть переглядати %s</string>
     <string name="invite_by_mxid_or_mail">Запрошення за іменем користувача або е-поштою</string>
-    <string name="create_spaces_default_public_room_name">Загальний</string>
+    <string name="create_spaces_default_public_room_name">Головне</string>
     <string name="share_by_text">Поділитися у тексті</string>
     <string name="settings_security_pin_code_notifications_summary_off">Показувати лише кількість непрочитаних повідомлень у звичайному сповіщенні.</string>
     <string name="wrong_pin_message_last_remaining_attempt">Увага! Залишилась остання спроба перед виходом!</string>
@@ -3112,4 +3112,86 @@
 \n
 \nРадимо негайно змінити пароль і відновлювальний ключ у налаштуваннях.</string>
     <string name="settings_security_prevent_screenshots_summary">Увімкнення цього параметру додає FLAG_SECURE всім екранам. Зміна потребує перезапуску застосунку.</string>
+    <string name="command_description_discard_session">Примусово відхиляє поточний вихідний сеанс групи в зашифрованій кімнаті</string>
+    <string name="room_alias_preview_not_found">Цей псевдонім наразі недоступний.
+\nСпробуйте згодом або запитайте адміністратора кімнати, чи є у вас доступ.</string>
+    <string name="this_invite_to_this_space_was_sent">Це запрошення до простору надіслане %s, не пов\'язаній із вашим обліковим записом</string>
+    <string name="this_invite_to_this_room_was_sent">Це запрошення до кімнати надіслане %s, не пов\'язаній із вашим обліковим записом</string>
+    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Кімнати можуть лишатися закритими для людей ззовні простору, водночас люди в просторі можуть знаходити їх і приєднуватися. Всі нові кімнати в просторі матимуть цю опцію.</string>
+    <string name="help_people_in_spaces_find_and_join">Допомагає людям у просторах знаходити закриті кімнати й приєднуватися власноруч, без потреби вручну запрошувати всіх.</string>
+    <string name="upgrade_room_for_restricted_note">Зауважте, що поліпшення створить нову версію кімнати. Всі наявні повідомлення залишаться в цій архівованій кімнаті.</string>
+    <string name="upgrade_room_for_restricted_no_param">Будь-хто в батьківському просторі зможемо знайти кімнату й долучитись — нема потреба вручну запрошувати всіх. Можна змінити це в налаштуваннях кімнати будь-коли.</string>
+    <string name="upgrade_room_for_restricted">Будь-хто в %s зможе знайти кімнату й долучитись — нема потреби вручну запрошувати всіх. Можна змінити це в налаштуваннях кімнати будь-коли.</string>
+    <string name="error_voice_message_cannot_reply_or_edit">Не вдалося відповісти чи редагувати, бо голосове повідомлення активне</string>
+    <string name="room_using_unstable_room_version">Кімната — версії %s, яку домашній сервер позначив як нестабільну.</string>
+    <string name="allow_anyone_in_room_to_access">Дозволити будь-кому в %s знаходити й доступатись. Можете також обрати інші простори.</string>
+    <string name="upgrade_room_warning">Поліпшення кімнати — серйозна операція. Її зазвичай радять, коли кімната нестабільна через вади, брак функціоналу чи вразливості безпеки.
+\nЗазвичай це впливає лише на деталі опрацювання кімнати сервером.</string>
+    <string name="teammate_spaces_might_not_join">Можливо, поки що люди не зможуть приєднатись до приватних кімнат, які ви створите.
+\n
+\nУ бета-версіях ми це виправимо, просто бажаємо вас попередити.</string>
+    <string name="teammate_spaces_arent_quite_ready">Командні простори ще в розробці, та ви можете їх спробувати</string>
+    <string name="this_space_has_no_rooms_admin">Деяких кімнат може бути не видно, бо вони закриті й потребують запрошення.</string>
+    <string name="this_space_has_no_rooms_not_admin">Деяких кімнат може бути не видно, бо вони закриті й потребують запрошення.
+\nУ вас нема дозволу додавати кімнати.</string>
+    <string name="space_leave_prompt_msg_as_admin">Ви єдиний адміністратор цього простору. Якщо вийдете, він залишиться без керівництва.</string>
+    <string name="space_leave_prompt_msg_private">Ви не зможете приєднатись, поки вас не запросять знову.</string>
+    <string name="space_leave_prompt_msg_only_you">Ви єдина особа тут. Якщо ви вийдете, більше ніхто не зможе приєднатись, навіть ви ж.</string>
+    <plurals name="space_people_you_know">
+        <item quantity="one">%d із ваших знайомих уже тут</item>
+        <item quantity="few">%d ваші знайомі вже приєдналися</item>
+        <item quantity="many">%d ваших знайомих уже приєдналися</item>
+        <item quantity="other">%d ваших знайомих уже приєдналися</item>
+    </plurals>
+    <string name="suggested_rooms_pills_on_empty_text">Ви ще не приєднувались до кімнат. Ось кілька пропозицій, а ще більше вам покаже зелена кнопка знизу праворуч.</string>
+    <string name="create_space_identity_server_info_none">Зараз ви не використовуєте сервер ідентифікації. Налаштуйте його нижче, щоб запрошувати інших і щоб інші могли вас знаходити.</string>
+    <string name="invite_people_to_your_space_desc">Наразі тут лише ви. %s стане ще краще з іншими.</string>
+    <string name="create_spaces_default_public_random_room_name">Різне</string>
+    <string name="create_spaces_room_private_header_desc">Створімо по кімнаті для кожної теми. Згодом ви зможете додати ще, зокрема створені раніше.</string>
+    <string name="create_spaces_invite_public_header_desc">Надайте потрібним людям доступ до %s. Ви зможете додати інших згодом.</string>
+    <string name="create_spaces_room_public_header_desc">Ми створимо по кімнаті для кожної теми. Згодом ви зможете додати ще.</string>
+    <string name="create_spaces_room_public_header">Що ви бажаєте обговорювати в %s\?</string>
+    <string name="create_spaces_details_private_header">Додайте деталі, щоб люди впізнавали ваш простір. Ви зможете будь-коли редагувати це.</string>
+    <string name="create_spaces_details_public_header">Додайте деталі, щоб ваш простір виділявся. Ви зможете будь-коли редагувати це.</string>
+    <string name="create_spaces_make_sure_access">Надайте потрібним людям доступ до %s. Ви зможете додати інших згодом.</string>
+    <plurals name="entries">
+        <item quantity="one">%d елемент</item>
+        <item quantity="few">%d елементи</item>
+        <item quantity="many">%d елементів</item>
+        <item quantity="other">%d елементів</item>
+    </plurals>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Через наскрізне шифрування вам може бути потрібно зачекати, перш ніж прочитати чиєсь повідомлення, бо ви не отримали коректних ключів шифрування.</string>
+    <string name="set_a_security_phrase_title">Встановіть таємну фразу</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Ввести таємну фразу, відому лише вам, і згенерувати ключ резервного копіювання.</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Використати таємну фразу</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Згенерувати ключ безпеки для зберігання в надійному місці, наприклад у менеджері паролів чи сейфі.</string>
+    <string name="create_room_dm_failure">Не вдалося створити особисте повідомлення. Перевірте користувачів, яких бажаєте запросити, й спробуйте ще.</string>
+    <string name="keys_backup_recovery_key_error_decrypt">Не вдалося розшифрувати резервну копію цим відновлювальним ключем. Звірте, чи правильний ключ ви ввели.</string>
+    <string name="enter_secret_storage_input_key">Оберіть свій відновлювальний ключ, введіть його власноруч чи вставте з буферу обміну</string>
+    <string name="use_recovery_key">Використати відновлювальний ключ</string>
+    <string name="enter_secret_storage_passphrase_or_key">%1$s або %2$s треба для продовження.</string>
+    <string name="bootstrap_migration_backup_recovery_key">Відновлювальний ключ резервного копіювання ключів</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Забули парольну фразу резервного копіювання ключів\? Можете %s.</string>
+    <string name="bootstrap_migration_use_recovery_key">використати відновлювальний ключ резервного копіювання ключів</string>
+    <string name="bootstrap_migration_enter_backup_password">Введіть парольну фразу резервного копіювання ключів, щоб продовжити.</string>
+    <string name="bootstrap_cancel_text">Якщо скасуєте це й загубите пристрій, то втратите зашифровані повідомлення й дані.
+\n
+\nВвімкнути захищене резервне копіювання й керувати своїми ключами можна в налаштуваннях.</string>
+    <string name="bootstrap_skip_text_no_gen_key">Вкажіть відновлювальну парольну фразу, щоб захищати й читати зашифровані повідомлення й робити користувачів довіреними.</string>
+    <string name="bootstrap_skip_text">Вкажіть відновлювальну парольну фразу, щоб захищати й читати зашифровані повідомлення й робити користувачів довіреними.
+\n
+\nЯкщо не бажаєте встановлювати пароль для повідомлень, згенеруйте натомість ключ до повідомлень.</string>
+    <string name="verify_cancel_other">Скасування залишить %1$s (%2$s) без звірки. У їхньому користувацькому профілі можна почати заново.</string>
+    <string name="verify_new_session_notice">Звірте цим сеансом свій новий. Це надасть йому доступ до зашифрованих повідомлень.</string>
+    <string name="verification_profile_device_untrust_info">Надіслані цьому сеансу й цим сеансом повідомлення позначатимуться застереженнями, поки цей користувач йому не довірить. Або ви можете власноруч звірити сеанс.</string>
+    <string name="room_settings_enable_encryption_dialog_content">Якщо ви увімкнете шифрування для кімнати, його неможливо буде вимкнути. Надіслані у зашифровану кімнату повідомлення будуть прочитними тільки для учасників кімнати, натомість для сервера вони будуть непрочитними. Увімкнення шифрування може унеможливити роботу ботів та мостів.</string>
+    <string name="verify_cannot_cross_sign">Не вдалося поширити звірку цього сеансу з вашими іншими.
+\nЗвірка збережеться локально, її поширить майбутня версія застосунку.</string>
+    <string name="verification_request_alert_description">Для додаткової безпеки, звірте %s, порівнявши одноразовий код на обох ваших пристроях.
+\n
+\nНайбезпечніше зробити це вживу.</string>
+    <string name="verify_user_sas_emoji_help_text">Звірте користувача, підтвердивши, що ваші екрани показують такі унікальні емодзі в однаковому порядку.</string>
+    <string name="create_room_disable_federation_description">Можете ввімкнути це, якщо в кімнаті співпрацюватимуть лише внутрішні команди на вашому домашньому сервері. Цього більше не можна буде змінити.</string>
+    <string name="template_soft_logout_sso_not_same_user_error">Цей сеанс — користувача %1$s, а ви надаєте облікові дані користувача %2$s. Це не підтримується в ${app_name}.
+\nБудь ласка, спершу очистіть дані, а тоді ввійдіть в інший обліковий запис.</string>
 </resources>
