@@ -1,5 +1,6 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/Widget.Vector.TextView.Body"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -8,4 +9,5 @@
     android:text="@string/event_redacted"
     android:textColor="?vctr_content_tertiary"
     app:drawableStartCompat="@drawable/ic_trash_16"
-    app:drawableTint="?vctr_content_tertiary" />
+    app:drawableTint="?vctr_content_tertiary"
+    tools:viewBindingIgnore="true" />

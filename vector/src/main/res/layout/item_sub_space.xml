@@ -8,7 +8,8 @@
     android:background="@drawable/bg_space_item"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground"
+    tools:viewBindingIgnore="true">
 
     <Space
         android:id="@+id/indent"
@@ -26,8 +27,8 @@
         android:layout_height="26dp"
         android:layout_gravity="center"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
-        android:importantForAccessibility="no"
         android:duplicateParentState="true"
+        android:importantForAccessibility="no"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/indent"
         app:layout_constraintTop_toTopOf="parent"

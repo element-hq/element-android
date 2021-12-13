@@ -44,7 +44,7 @@ class KeysBackupManageActivity : SimpleFragmentActivity() {
     override fun initUiAndData() {
         super.initUiAndData()
         if (supportFragmentManager.fragments.isEmpty()) {
-            replaceFragment(R.id.container, KeysBackupSettingsFragment::class.java)
+            replaceFragment(views.container, KeysBackupSettingsFragment::class.java)
             viewModel.handle(KeyBackupSettingsAction.Init)
         }
 

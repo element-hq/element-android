@@ -7,7 +7,8 @@
     android:background="?android:colorBackground"
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
-    android:padding="8dp">
+    android:padding="8dp"
+    tools:viewBindingIgnore="true">
 
     <FrameLayout
         android:id="@+id/iconContainer"

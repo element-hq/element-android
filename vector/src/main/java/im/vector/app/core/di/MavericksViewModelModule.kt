@@ -87,6 +87,7 @@ import im.vector.app.features.settings.devtools.KeyRequestListViewModel
 import im.vector.app.features.settings.devtools.KeyRequestViewModel
 import im.vector.app.features.settings.homeserver.HomeserverSettingsViewModel
 import im.vector.app.features.settings.ignored.IgnoredUsersViewModel
+import im.vector.app.features.settings.legals.LegalsViewModel
 import im.vector.app.features.settings.locale.LocalePickerViewModel
 import im.vector.app.features.settings.push.PushGatewaysViewModel
 import im.vector.app.features.settings.threepids.ThreePidsSettingsViewModel
@@ -515,6 +516,11 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(DiscoverySettingsViewModel::class)
     fun discoverySettingsViewModelFactory(factory: DiscoverySettingsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(LegalsViewModel::class)
+    fun legalsViewModelFactory(factory: LegalsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap

@@ -80,7 +80,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                 .launchIn(lifecycleScope)
         if (isFirstCreation()) {
             addFragment(
-                    R.id.container,
+                    views.container,
                     UserListFragment::class.java,
                     UserListFragmentArgs(
                             title = getString(R.string.fab_menu_create_chat),
@@ -95,20 +95,20 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private fun openAddByQrCode() {
         if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, permissionCameraLauncher)) {
-            addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
+            addFragment(views.container, CreateDirectRoomByQrCodeFragment::class.java)
         }
     }
 
     private fun openPhoneBook() {
         // Check permission first
         if (checkPermissions(PERMISSIONS_FOR_MEMBERS_SEARCH, this, permissionReadContactLauncher)) {
-            addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java)
+            addFragmentToBackstack(views.container, ContactsBookFragment::class.java)
         }
     }
 
     private val permissionReadContactLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
-            doOnPostResume { addFragmentToBackstack(R.id.container, ContactsBookFragment::class.java) }
+            doOnPostResume { addFragmentToBackstack(views.container, ContactsBookFragment::class.java) }
         } else if (deniedPermanently) {
             onPermissionDeniedSnackbar(R.string.permissions_denied_add_contact)
         }
@@ -116,7 +116,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private val permissionCameraLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
-            addFragment(R.id.container, CreateDirectRoomByQrCodeFragment::class.java)
+            addFragment(views.container, CreateDirectRoomByQrCodeFragment::class.java)
         } else if (deniedPermanently) {
             onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
         }

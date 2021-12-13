@@ -8,7 +8,8 @@
     android:contentDescription="@string/use_other_session_content_description"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/use_latest_riot"

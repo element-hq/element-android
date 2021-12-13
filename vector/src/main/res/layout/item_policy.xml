@@ -7,7 +7,8 @@
     android:foreground="?attr/selectableItemBackground"
     android:minHeight="72dp"
     android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+    android:paddingEnd="16dp"
+    tools:viewBindingIgnore="true">
 
     <CheckBox
         android:id="@+id/adapter_item_policy_checkbox"

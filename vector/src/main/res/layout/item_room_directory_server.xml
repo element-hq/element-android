@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?vctr_header_background"
-    android:minHeight="?listPreferredItemHeight">
+    android:minHeight="?listPreferredItemHeight"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/itemRoomDirectoryServerName"

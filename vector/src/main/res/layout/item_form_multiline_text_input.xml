@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:colorBackground"
-    android:minHeight="@dimen/item_form_min_height">
+    android:minHeight="@dimen/item_form_min_height"
+    tools:viewBindingIgnore="true">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/formMultiLineTextInputLayout"
