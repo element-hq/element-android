@@ -260,7 +260,7 @@
     <string name="action_historical">Historické</string>
     <string name="action_quick_reply">Rýchla odpoveď</string>
     <string name="action_open">Otvoriť</string>
-    <string name="action_close">Zatvoriť</string>
+    <string name="action_close">Zavrieť</string>
     <string name="copied_to_clipboard">Skopírované do schránky</string>
     <string name="disable">Zakázať</string>
     <string name="dialog_title_confirmation">Potvrdenie</string>
@@ -424,9 +424,9 @@
 \n
 \nPovoľte prístup v ďalších vyskakovacích oknách, aby ste mohli uskutočniť hovor.</string>
     <string name="template_permissions_rationale_msg_contacts">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, ${app_name} potrebuje prístup k vašim kontaktom. Ak si prajete zdieľať váš zoznam kontaktov za týmto účelom, prosím, povoľte prístup na nasledujúcej obrazovke.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, ${app_name} potrebuje prístup k vašim kontaktom.
-
-Chcete aplikácii ${app_name} povoliť prístup k vašim kontaktom?</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} môže skontrolovať váš adresár a nájsť ostatných používateľov Matrixu na základe ich e-mailov a telefónnych čísel.
+\n
+\nSúhlasíte so zdieľaním svojho adresára na tento účel\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Prepáčte, akcia nebola vykonaná kvôli chýbajúcim oprávneniam</string>
     <string name="media_slider_saved">Uložené</string>
     <string name="media_slider_saved_message">Uložiť do priečinka stiahnuté?</string>
@@ -1072,13 +1072,13 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Jeden alebo viac testov zlyhalo, prosím nahláste nám chybu, aby sme sa mohli pokúsiť vypátrať príčinu.</string>
     <string name="settings_troubleshoot_test_system_settings_title">Systémové nastavenia.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Oznámenia sú v systémových nastaveniach povolené.</string>
-    <string name="settings_troubleshoot_test_system_settings_failed">Oznámenia nie sú v systémových nastaveniach povolené.
-Prosím, skontrolujte systémové nastavenia.</string>
+    <string name="settings_troubleshoot_test_system_settings_failed">Oznámenia nie sú v systémových nastaveniach povolené. 
+\nProsím, skontrolujte systémové nastavenia.</string>
     <string name="open_settings">Otvoriť nastavenia</string>
     <string name="settings_troubleshoot_test_account_settings_title">Nastavenia účtu.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Oznámenia pre váš účet sú povolené.</string>
-    <string name="settings_troubleshoot_test_account_settings_failed">Oznámenia pre váš účet nie sú povolené.
-Prosím, skontrolujte nastavenia účtu.</string>
+    <string name="settings_troubleshoot_test_account_settings_failed">Oznámenia pre váš účet nie sú povolené. 
+\nProsím, skontrolujte nastavenia účtu.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Povoliť</string>
     <string name="settings_troubleshoot_test_device_settings_title">Nastavenia relácií.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Oznámenia sú povolené pre túto reláciu.</string>
@@ -1091,18 +1091,18 @@ Prosím, skontrolujte nastavenia účtu.</string>
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Opraviť Služby Play</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
-    <string name="settings_troubleshoot_test_fcm_success">Token FCM úspešne prevzatý:
-%1$s</string>
-    <string name="settings_troubleshoot_test_fcm_failed">Token FCM sa nepodarilo prevziať:
-%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_success">Token FCM úspešne získaný: 
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Token FCM sa nepodarilo získať: 
+\n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">Registrácia tokenu</string>
     <string name="settings_troubleshoot_test_token_registration_success">Token FCM úspešne zaregistrovaný na domovskom servery.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM token sa nepodarilo zaregistrovať na domoskom servery:
 %1$s</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">Služba oznámení</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Služba oznámení je spustená.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Služba oznámení nie je spustená.
-Prosím skúste reštartovať aplikáciu.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Služba oznámení nie je spustená. 
+\nProsím skúste reštartovať aplikáciu.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Spustiť službu</string>
     <string name="settings_troubleshoot_test_service_restart_title">Automatický reštart služby notifikácií</string>
     <string name="settings_troubleshoot_test_service_restart_success">Služba bola automaticky skončená a spustená znovu.</string>
