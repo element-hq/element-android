@@ -23,6 +23,7 @@ import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFact
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
+import im.vector.app.features.home.room.detail.timeline.item.PollVoteSummaryData
 import im.vector.app.features.home.room.detail.timeline.item.ReactionInfoData
 import im.vector.app.features.home.room.detail.timeline.item.ReferencesInfoData
 import im.vector.app.features.home.room.detail.timeline.item.SendStateDecoration
@@ -107,10 +108,15 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 pollResponseAggregatedSummary = event.annotations?.pollResponseSummary?.let {
                     PollResponseData(
                             myVote = it.aggregatedContent?.myVote,
-                            isClosed = it.closedTime ?: Long.MAX_VALUE > System.currentTimeMillis(),
-                            votes = it.aggregatedContent?.votes
-                                    ?.groupBy({ it.optionIndex }, { it.userId })
-                                    ?.mapValues { it.value.size }
+                            isClosed = it.closedTime != null,
+                            votes = it.aggregatedContent?.votesSummary?.mapValues { votesSummary ->
+                                PollVoteSummaryData(
+                                        total = votesSummary.value.total,
+                                        percentage = votesSummary.value.percentage
+                                )
+                            },
+                            winnerVoteCount = it.aggregatedContent?.winnerVoteCount ?: 0,
+                            totalVotes = it.aggregatedContent?.totalVotes ?: 0
                     )
                 },
                 hasBeenEdited = event.hasBeenEdited(),

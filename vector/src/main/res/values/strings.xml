@@ -3664,4 +3664,31 @@
         <item quantity="one">At least %1$s option is required</item>
         <item quantity="other">At least %1$s options are required</item>
     </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d vote</item>
+        <item quantity="other">%1$d votes</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">Based on %1$d vote</item>
+        <item quantity="other">Based on %1$d votes</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="zero">No votes cast</item>
+        <item quantity="one">%1$d vote cast. Vote to the see the results</item>
+        <item quantity="other">%1$d votes cast. Vote to the see the results</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Final result based on %1$d vote</item>
+        <item quantity="other">Final result based on %1$d votes</item>
+    </plurals>
+    <string name="poll_end_action">End poll</string>
+    <string name="a11y_poll_winner_option">winner option</string>
+    <string name="end_poll_confirmation_title">End this poll?</string>
+    <string name="end_poll_confirmation_description">This will stop people from being able to vote and will display the final results of the poll.</string>
+    <string name="end_poll_confirmation_approve_button">End poll</string>
+    <string name="labs_enable_polls">Enable Polls</string>
+    <string name="poll_response_room_list_preview">Vote casted</string>
+    <string name="poll_end_room_list_preview">Poll ended</string>
+    <string name="delete_poll_dialog_title">Remove poll</string>
+    <string name="delete_poll_dialog_content">Are you sure you want to remove this poll? You won\'t be able to recover it once removed.</string>
 </resources>
