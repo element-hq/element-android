@@ -21,7 +21,7 @@ import android.text.Spanned
 import android.text.style.MetricAffectingSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.UnderlineSpan
-import androidx.emoji.text.EmojiCompat
+import androidx.emoji2.text.EmojiCompat
 import javax.inject.Inject
 
 class SpanUtils @Inject constructor() {
