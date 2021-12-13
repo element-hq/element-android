@@ -43,14 +43,14 @@ class SpanUtils @Inject constructor() {
     }
 
     // Workaround for https://issuetracker.google.com/issues/188454876
-    private fun canUseTextFuture(charSequence: Spanned): Boolean {
+    private fun canUseTextFuture(spanned: Spanned): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
             // On old devices, it works correctly
             return true
         }
 
-        return charSequence
-                .getSpans(0, charSequence.length, Any::class.java)
+        return spanned
+                .getSpans(0, spanned.length, Any::class.java)
                 .all { it !is StrikethroughSpan && it !is UnderlineSpan && it !is MetricAffectingSpan }
     }
 
