@@ -97,7 +97,7 @@ class SpanUtilsTest : InstrumentedTest {
     }
 
     @Test
-    fun `test get binding options regular`() {
+    fun testGetBindingOptionsRegular() {
         val string = SpannableString("Text")
         val result = spanUtils.getBindingOptions(string)
         result.canUseTextFuture shouldBeEqualTo true
@@ -105,7 +105,7 @@ class SpanUtilsTest : InstrumentedTest {
     }
 
     @Test
-    fun `test get binding options strikethrough`() {
+    fun testGetBindingOptionsStrikethrough() {
         val string = SpannableString("Text with strikethrough")
         string.setSpan(StrikethroughSpan(), 10, 23, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         val result = spanUtils.getBindingOptions(string)
@@ -114,7 +114,7 @@ class SpanUtilsTest : InstrumentedTest {
     }
 
     @Test
-    fun `test get binding options MetricAffectingSpan`() {
+    fun testGetBindingOptionsMetricAffectingSpan() {
         val string = SpannableString("Emoji \uD83D\uDE2E\u200D\uD83D\uDCA8")
         val result = spanUtils.getBindingOptions(string)
         result.canUseTextFuture shouldBeEqualTo false
