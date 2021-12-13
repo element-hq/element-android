@@ -39,6 +39,10 @@ class SpanUtilsTest : InstrumentedTest {
 
     private val spanUtils = SpanUtils()
 
+    private fun SpanUtils.canUseTextFuture(message: CharSequence): Boolean {
+        return getBindingOptions(message).canUseTextFuture
+    }
+
     @Test
     fun canUseTextFutureString() {
         spanUtils.canUseTextFuture("test").shouldBeTrue()
