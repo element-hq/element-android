@@ -54,6 +54,7 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem_
 import im.vector.app.features.home.room.detail.timeline.item.PollItem
 import im.vector.app.features.home.room.detail.timeline.item.PollItem_
+import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 import im.vector.app.features.home.room.detail.timeline.item.RedactedMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.RedactedMessageItem_
 import im.vector.app.features.home.room.detail.timeline.item.VerificationRequestItem
@@ -70,6 +71,7 @@ import im.vector.app.features.media.VideoContentRenderer
 import me.gujun.android.span.span
 import org.commonmark.node.Document
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -170,17 +172,59 @@ class MessageItemFactory @Inject constructor(
         }
     }
 
-    private fun buildPollContent(messageContent: MessagePollContent,
+    private fun buildPollContent(pollContent: MessagePollContent,
                                  informationData: MessageInformationData,
                                  highlight: Boolean,
                                  callback: TimelineEventController.Callback?,
                                  attributes: AbsMessageItem.Attributes): PollItem? {
+        val optionViewStates = mutableListOf<PollOptionViewState>()
+
+        val pollResponseSummary = informationData.pollResponseAggregatedSummary
+        val isEnded = pollResponseSummary?.isClosed.orFalse()
+        val didUserVoted = pollResponseSummary?.myVote?.isNotEmpty().orFalse()
+        val winnerVoteCount = pollResponseSummary?.winnerVoteCount
+        val isPollSent = informationData.sendState.isSent()
+        val totalVotesText = (pollResponseSummary?.totalVotes ?: 0).let {
+            when {
+                isEnded      -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_after_ended, it, it)
+                didUserVoted -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, it, it)
+                else         -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_not_voted, it, it)
+            }
+        }
+
+        pollContent.pollCreationInfo?.answers?.forEach { option ->
+            val voteSummary = pollResponseSummary?.votes?.get(option.id)
+            val isMyVote = pollResponseSummary?.myVote == option.id
+            val voteCount = voteSummary?.total ?: 0
+            val votePercentage = voteSummary?.percentage ?: 0.0
+            val optionName = option.answer ?: ""
+
+            optionViewStates.add(
+                    if (!isPollSent) {
+                        // Poll event is not send yet. Disable option.
+                        PollOptionViewState.DisabledOptionWithInvisibleVotes(optionName)
+                    } else if (isEnded) {
+                        // Poll is ended. Disable option, show votes and mark the winner.
+                        val isWinner = winnerVoteCount != 0 && voteCount == winnerVoteCount
+                        PollOptionViewState.DisabledOptionWithVisibleVotes(optionName, voteCount, votePercentage, isWinner)
+                    } else if (didUserVoted) {
+                        // User voted to the poll, but poll is not ended. Enable option, show votes and mark the user's selection.
+                        PollOptionViewState.EnabledOptionWithVisibleVotes(optionName, voteCount, votePercentage, isMyVote)
+                    } else {
+                        // User didn't voted yet and poll is not ended yet. Enable options, hide votes.
+                        PollOptionViewState.EnabledOptionWithInvisibleVotes(optionName)
+                    }
+            )
+        }
+
         return PollItem_()
                 .attributes(attributes)
                 .eventId(informationData.eventId)
-                .pollResponseSummary(informationData.pollResponseAggregatedSummary)
-                .pollSent(informationData.sendState.isSent())
-                .pollContent(messageContent)
+                .pollResponseSummary(pollResponseSummary)
+                .pollSent(isPollSent)
+                .pollContent(pollContent)
+                .totalVotesText(totalVotesText)
+                .optionViewStates(optionViewStates)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(callback)

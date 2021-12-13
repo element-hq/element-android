@@ -333,7 +333,21 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             }
 
             if (canRedact(timelineEvent, actionPermissions)) {
-                add(EventSharedAction.Redact(eventId, askForReason = informationData.senderId != session.myUserId))
+                if (timelineEvent.root.getClearType() == EventType.POLL_START) {
+                    add(EventSharedAction.Redact(
+                            eventId,
+                            askForReason = informationData.senderId != session.myUserId,
+                            dialogTitleRes = R.string.delete_poll_dialog_title,
+                            dialogDescriptionRes = R.string.delete_poll_dialog_content
+                    ))
+                } else {
+                    add(EventSharedAction.Redact(
+                            eventId,
+                            askForReason = informationData.senderId != session.myUserId,
+                            dialogTitleRes = R.string.delete_event_dialog_title,
+                            dialogDescriptionRes = R.string.delete_event_dialog_content
+                    ))
+                }
             }
 
             if (canCopy(msgType)) {

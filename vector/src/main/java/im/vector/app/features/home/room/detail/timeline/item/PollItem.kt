@@ -23,7 +23,6 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
@@ -44,6 +43,12 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
     @EpoxyAttribute
     var pollSent: Boolean = false
 
+    @EpoxyAttribute
+    var totalVotesText: String? = null
+
+    @EpoxyAttribute
+    var optionViewStates: List<PollOptionViewState>? = null
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         val relatedEventId = eventId ?: return
@@ -51,53 +56,25 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
         renderSendState(holder.view, holder.questionTextView)
 
         holder.questionTextView.text = pollContent?.pollCreationInfo?.question?.question
+        holder.totalVotesTextView.text = totalVotesText
 
         holder.optionsContainer.removeAllViews()
 
-        val isEnded = pollResponseSummary?.isClosed.orFalse()
-        val didUserVoted = pollResponseSummary?.myVote?.isNotEmpty().orFalse()
-        val totalVotes = pollResponseSummary?.totalVotes ?: 0
-        val winnerVoteCount = pollResponseSummary?.winnerVoteCount
-
-        pollContent?.pollCreationInfo?.answers?.forEach { option ->
-            val voteSummary = pollResponseSummary?.votes?.get(option.id)
-            val isMyVote = pollResponseSummary?.myVote == option.id
-            val voteCount = voteSummary?.total ?: 0
-            val votePercentage = voteSummary?.percentage ?: 0.0
+        pollContent?.pollCreationInfo?.answers?.forEachIndexed { index, option ->
             val optionName = option.answer ?: ""
 
             holder.optionsContainer.addView(
                     PollOptionItem(holder.view.context).apply {
-                        val callback = object : PollOptionItem.Callback {
-                            override fun onOptionClicked() {
-                                callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, option.id ?: ""))
-                            }
-                        }
-
-                        if (!pollSent) {
-                            // Poll event is not send yet. Disable option.
-                            render(PollOptionViewState.DisabledOptionWithInvisibleVotes(optionName), callback)
-                        } else if (isEnded) {
-                            // Poll is ended. Disable option, show votes and mark the winner.
-                            val isWinner = winnerVoteCount != 0 && voteCount == winnerVoteCount
-                            render(PollOptionViewState.DisabledOptionWithVisibleVotes(optionName, voteCount, votePercentage, isWinner), callback)
-                        } else if (didUserVoted) {
-                            // User voted to the poll, but poll is not ended. Enable option, show votes and mark the user's selection.
-                            render(PollOptionViewState.EnabledOptionWithVisibleVotes(optionName, voteCount, votePercentage, isMyVote), callback)
-                        } else {
-                            // User didn't voted yet and poll is not ended yet. Enable options, hide votes.
-                            render(PollOptionViewState.EnabledOptionWithInvisibleVotes(optionName), callback)
-                        }
+                        render(
+                                state = optionViewStates?.getOrNull(index) ?: PollOptionViewState.DisabledOptionWithInvisibleVotes(optionName),
+                                callback = object : PollOptionItem.Callback {
+                                    override fun onOptionClicked() {
+                                        callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, option.id ?: ""))
+                                    }
+                                }
+                        )
                     }
             )
-        }
-
-        holder.totalVotesTextView.apply {
-            text = when {
-                isEnded      -> resources.getQuantityString(R.plurals.poll_total_vote_count_after_ended, totalVotes, totalVotes)
-                didUserVoted -> resources.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, totalVotes, totalVotes)
-                else         -> resources.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_not_voted, totalVotes, totalVotes)
-            }
         }
     }
 

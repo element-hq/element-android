@@ -1580,10 +1580,10 @@ class RoomDetailFragment @Inject constructor(
                 .show(
                         activity = requireActivity(),
                         askForReason = action.askForReason,
-                        confirmationRes = R.string.delete_event_dialog_content,
+                        confirmationRes = action.dialogDescriptionRes,
                         positiveRes = R.string.remove,
                         reasonHintRes = R.string.delete_event_dialog_reason_hint,
-                        titleRes = R.string.delete_event_dialog_title
+                        titleRes = action.dialogTitleRes
                 ) { reason ->
                     roomDetailViewModel.handle(RoomDetailAction.RedactAction(action.eventId, reason))
                 }
