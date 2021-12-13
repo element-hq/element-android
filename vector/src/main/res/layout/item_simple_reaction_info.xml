@@ -18,7 +18,7 @@
         android:layout_marginEnd="8dp"
         android:gravity="center"
         android:lines="1"
-        android:textColor="@color/emoji_color"
+        android:textColor="?vctr_content_primary"
         tools:text="@sample/reactions.json/data/reaction" />
 
     <TextView
