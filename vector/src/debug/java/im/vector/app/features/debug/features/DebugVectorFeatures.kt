@@ -43,8 +43,10 @@ class DebugVectorFeatures(
         return readPreferences().getEnum<VectorFeatures.OnboardingVariant>() ?: vectorFeatures.onboardingVariant()
     }
 
-    override fun isAlreadyHaveAccountSplashEnabled(): Boolean = readPreferences()[DebugFeatureKeys.alreadyHaveAnAccount]
+    override fun isAlreadyHaveAccountSplashEnabled(): Boolean = read(DebugFeatureKeys.alreadyHaveAnAccount)
             ?: vectorFeatures.isAlreadyHaveAccountSplashEnabled()
+
+    override fun isSplashCarouselEnabled(): Boolean = read(DebugFeatureKeys.splashCarousel) ?: vectorFeatures.isSplashCarouselEnabled()
 
     fun <T> override(value: T?, key: Preferences.Key<T>) = updatePreferences {
         if (value == null) {
@@ -65,6 +67,8 @@ class DebugVectorFeatures(
             it.putEnum(value, type)
         }
     }
+
+    private fun read(key: Preferences.Key<Boolean>): Boolean? = readPreferences()[key]
 
     private fun readPreferences() = runBlocking { dataStore.data.first() }
 
@@ -92,6 +96,6 @@ private inline fun <reified T : Enum<T>> enumPreferencesKey() = enumPreferencesK
 private fun <T : Enum<T>> enumPreferencesKey(type: KClass<T>) = stringPreferencesKey("enum-${type.simpleName}")
 
 object DebugFeatureKeys {
-
     val alreadyHaveAnAccount = booleanPreferencesKey("already-have-an-account")
+    val splashCarousel = booleanPreferencesKey("splash-carousel")
 }
