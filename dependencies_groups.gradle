@@ -96,6 +96,7 @@ ext.groups = [
                         'com.parse.bolts',
                         'com.pinterest',
                         'com.pinterest.ktlint',
+                        'com.posthog.android',
                         'com.squareup',
                         'com.squareup.duktape',
                         'com.squareup.moshi',
