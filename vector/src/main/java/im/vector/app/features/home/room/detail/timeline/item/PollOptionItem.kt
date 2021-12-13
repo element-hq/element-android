@@ -32,13 +32,9 @@ class PollOptionItem @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private lateinit var views: ItemPollOptionBinding
+    private val views: ItemPollOptionBinding
 
     init {
-        setupViews()
-    }
-
-    private fun setupViews() {
         inflate(context, R.layout.item_poll_option, this)
         views = ItemPollOptionBinding.bind(this)
     }
