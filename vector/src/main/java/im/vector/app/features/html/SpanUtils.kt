@@ -18,8 +18,10 @@ package im.vector.app.features.html
 
 import android.os.Build
 import android.text.Spanned
+import android.text.style.MetricAffectingSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.UnderlineSpan
+import androidx.emoji.text.EmojiCompat
 import javax.inject.Inject
 
 class SpanUtils @Inject constructor() {
@@ -30,12 +32,13 @@ class SpanUtils @Inject constructor() {
             return true
         }
 
-        if (charSequence !is Spanned) {
+        val emojiCharSequence = EmojiCompat.get().process(charSequence)
+        if (emojiCharSequence !is Spanned) {
             return true
         }
 
-        return charSequence
-                .getSpans(0, charSequence.length, Any::class.java)
-                .all { it !is StrikethroughSpan && it !is UnderlineSpan }
+        return emojiCharSequence
+                .getSpans(0, emojiCharSequence.length, Any::class.java)
+                .all { it !is StrikethroughSpan && it !is UnderlineSpan && it !is MetricAffectingSpan }
     }
 }
