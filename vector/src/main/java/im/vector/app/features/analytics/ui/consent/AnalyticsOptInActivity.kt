@@ -18,7 +18,6 @@ package im.vector.app.features.analytics.ui.consent
 
 import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
@@ -38,7 +37,7 @@ class AnalyticsOptInActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            addFragment(R.id.simpleFragmentContainer, AnalyticsOptInFragment::class.java)
+            addFragment(views.simpleFragmentContainer, AnalyticsOptInFragment::class.java)
         }
 
         viewModel.observeViewEvents {
