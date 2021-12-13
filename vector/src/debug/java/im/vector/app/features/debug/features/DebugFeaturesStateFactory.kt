@@ -40,7 +40,7 @@ class DebugFeaturesStateFactory @Inject constructor(
                         key = DebugFeatureKeys.alreadyHaveAnAccount
                 ),
                 createBooleanFeature(
-                        label = "FTUE Splash - Carousel",
+                        label = "FTUE Splash - carousel",
                         factory = VectorFeatures::isSplashCarouselEnabled,
                         key = DebugFeatureKeys.splashCarousel
                 )
