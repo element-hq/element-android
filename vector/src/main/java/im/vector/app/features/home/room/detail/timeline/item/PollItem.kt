@@ -72,7 +72,7 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
                     .apply {
                         setTag(STUB_ID, tag)
                         render(
-                                state = optionViewStates?.getOrNull(index) ?: PollOptionViewState.DisabledOptionWithInvisibleVotes(option.optionId, option.optionAnswer)
+                                state = optionViewStates?.getOrNull(index) ?: PollOptionViewState.PollSending(option.optionId, option.optionAnswer)
                         )
                     }
             pollOptionItem.setOnClickListener {

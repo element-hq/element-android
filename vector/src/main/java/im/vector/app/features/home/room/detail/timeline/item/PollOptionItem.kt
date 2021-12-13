@@ -47,35 +47,35 @@ class PollOptionItem @JvmOverloads constructor(
         views.optionNameTextView.text = state.optionAnswer
 
         when (state) {
-            is PollOptionViewState.DisabledOptionWithInvisibleVotes -> renderDisabledOptionWithInvisibleVotes()
-            is PollOptionViewState.DisabledOptionWithVisibleVotes   -> renderDisabledOptionWithVisibleVotes(state)
-            is PollOptionViewState.EnabledOptionWithInvisibleVotes  -> renderEnabledOptionWithInvisibleVotes()
-            is PollOptionViewState.EnabledOptionWithVisibleVotes    -> renderEnabledOptionWithVisibleVotes(state)
+            is PollOptionViewState.PollSending -> renderPollSending()
+            is PollOptionViewState.PollEnded   -> renderPollEnded(state)
+            is PollOptionViewState.PollReady   -> renderPollReady()
+            is PollOptionViewState.PollVoted   -> renderPollVoted(state)
         }
     }
 
-    private fun renderDisabledOptionWithInvisibleVotes() {
+    private fun renderPollSending() {
         views.optionCheckImageView.isVisible = false
         views.optionWinnerImageView.isVisible = false
         hideVotes()
         renderVoteSelection(false)
     }
 
-    private fun renderDisabledOptionWithVisibleVotes(state: PollOptionViewState.DisabledOptionWithVisibleVotes) {
+    private fun renderPollEnded(state: PollOptionViewState.PollEnded) {
         views.optionCheckImageView.isVisible = false
         views.optionWinnerImageView.isVisible = state.isWinner
         showVotes(state.voteCount, state.votePercentage)
         renderVoteSelection(state.isWinner)
     }
 
-    private fun renderEnabledOptionWithInvisibleVotes() {
+    private fun renderPollReady() {
         views.optionCheckImageView.isVisible = true
         views.optionWinnerImageView.isVisible = false
         hideVotes()
         renderVoteSelection(false)
     }
 
-    private fun renderEnabledOptionWithVisibleVotes(state: PollOptionViewState.EnabledOptionWithVisibleVotes) {
+    private fun renderPollVoted(state: PollOptionViewState.PollVoted) {
         views.optionCheckImageView.isVisible = true
         views.optionWinnerImageView.isVisible = false
         showVotes(state.voteCount, state.votePercentage)

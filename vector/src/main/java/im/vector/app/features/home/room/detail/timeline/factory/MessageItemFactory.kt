@@ -203,17 +203,17 @@ class MessageItemFactory @Inject constructor(
             optionViewStates.add(
                     if (!isPollSent) {
                         // Poll event is not send yet. Disable option.
-                        PollOptionViewState.DisabledOptionWithInvisibleVotes(optionId, optionAnswer)
+                        PollOptionViewState.PollSending(optionId, optionAnswer)
                     } else if (isEnded) {
                         // Poll is ended. Disable option, show votes and mark the winner.
                         val isWinner = winnerVoteCount != 0 && voteCount == winnerVoteCount
-                        PollOptionViewState.DisabledOptionWithVisibleVotes(optionId, optionAnswer, voteCount, votePercentage, isWinner)
+                        PollOptionViewState.PollEnded(optionId, optionAnswer, voteCount, votePercentage, isWinner)
                     } else if (didUserVoted) {
                         // User voted to the poll, but poll is not ended. Enable option, show votes and mark the user's selection.
-                        PollOptionViewState.EnabledOptionWithVisibleVotes(optionId, optionAnswer, voteCount, votePercentage, isMyVote)
+                        PollOptionViewState.PollVoted(optionId, optionAnswer, voteCount, votePercentage, isMyVote)
                     } else {
                         // User didn't voted yet and poll is not ended yet. Enable options, hide votes.
-                        PollOptionViewState.EnabledOptionWithInvisibleVotes(optionId, optionAnswer)
+                        PollOptionViewState.PollReady(optionId, optionAnswer)
                     }
             )
         }
