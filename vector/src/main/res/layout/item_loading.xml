@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:background="?android:colorBackground"
     android:minHeight="1dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/loadingText"

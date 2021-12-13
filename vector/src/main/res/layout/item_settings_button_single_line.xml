@@ -9,7 +9,8 @@
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="@dimen/layout_vertical_margin"
     android:paddingEnd="@dimen/layout_horizontal_margin"
-    android:paddingBottom="@dimen/layout_vertical_margin">
+    android:paddingBottom="@dimen/layout_vertical_margin"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/settings_item_text"

@@ -7,7 +7,8 @@
     android:background="?attr/selectableItemBackground"
     android:orientation="horizontal"
     android:paddingStart="8dp"
-    android:paddingEnd="8dp">
+    android:paddingEnd="8dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/actionIconImageView"

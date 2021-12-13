@@ -22,8 +22,7 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
-import im.vector.app.core.extensions.commitTransaction
+import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.spaces.preview.SpacePreviewArgs
@@ -45,26 +44,21 @@ class SpacePreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
                 .stream()
                 .onEach { action ->
                     when (action) {
-                        SpacePreviewSharedAction.DismissAction -> finish()
-                        SpacePreviewSharedAction.ShowModalLoading -> showWaitingView()
-                        SpacePreviewSharedAction.HideModalLoading -> hideWaitingView()
+                        SpacePreviewSharedAction.DismissAction       -> finish()
+                        SpacePreviewSharedAction.ShowModalLoading    -> showWaitingView()
+                        SpacePreviewSharedAction.HideModalLoading    -> hideWaitingView()
                         is SpacePreviewSharedAction.ShowErrorMessage -> action.error?.let { showSnackbar(it) }
                     }
                 }
                 .launchIn(lifecycleScope)
 
         if (isFirstCreation()) {
-            val simpleName = SpacePreviewFragment::class.java.simpleName
             val args = intent?.getParcelableExtra<SpacePreviewArgs>(Mavericks.KEY_ARG)
-            if (supportFragmentManager.findFragmentByTag(simpleName) == null) {
-                supportFragmentManager.commitTransaction {
-                    replace(R.id.simpleFragmentContainer,
-                            SpacePreviewFragment::class.java,
-                            Bundle().apply { this.putParcelable(Mavericks.KEY_ARG, args) },
-                            simpleName
-                    )
-                }
-            }
+            replaceFragment(
+                    views.simpleFragmentContainer,
+                    SpacePreviewFragment::class.java,
+                    args
+            )
         }
     }
 

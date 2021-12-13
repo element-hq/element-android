@@ -8,7 +8,8 @@
     android:paddingStart="8dp"
     android:paddingTop="6dp"
     android:paddingEnd="8dp"
-    android:paddingBottom="6dp">
+    android:paddingBottom="6dp"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/commandName"

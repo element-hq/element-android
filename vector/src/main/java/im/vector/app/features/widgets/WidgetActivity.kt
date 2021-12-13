@@ -107,7 +107,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
                 }
                 WidgetStatus.WIDGET_ALLOWED     -> {
                     if (supportFragmentManager.findFragmentByTag(WIDGET_FRAGMENT_TAG) == null) {
-                        addFragment(R.id.fragmentContainer, WidgetFragment::class.java, widgetArgs, WIDGET_FRAGMENT_TAG)
+                        addFragment(views.fragmentContainer, WidgetFragment::class.java, widgetArgs, WIDGET_FRAGMENT_TAG)
                     }
                 }
             }

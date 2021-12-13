@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:background="?android:colorBackground"
     android:paddingStart="@dimen/layout_horizontal_margin"
-    android:paddingEnd="@dimen/layout_horizontal_margin">
+    android:paddingEnd="@dimen/layout_horizontal_margin"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/settings_item_edit_text_description"

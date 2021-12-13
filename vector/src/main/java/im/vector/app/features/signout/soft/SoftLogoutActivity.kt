@@ -87,7 +87,7 @@ class SoftLogoutActivity : LoginActivity() {
     }
 
     override fun addFirstFragment() {
-        replaceFragment(R.id.loginFragmentContainer, SoftLogoutFragment::class.java)
+        replaceFragment(views.loginFragmentContainer, SoftLogoutFragment::class.java)
     }
 
     private fun updateWithState(softLogoutViewState: SoftLogoutViewState) {

@@ -175,8 +175,8 @@ class HomeActivity :
         sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {
-            replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java)
-            replaceFragment(R.id.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
+            replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java)
+            replaceFragment(views.homeDrawerFragmentContainer, HomeDrawerFragment::class.java)
         }
 
         sharedActionViewModel
@@ -192,7 +192,7 @@ class HomeActivity :
                             // When switching from space to group or group to space, we need to reload the fragment
                             // To be removed when dropping legacy groups
                             if (sharedAction.clearFragment) {
-                                replaceFragment(R.id.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
+                                replaceFragment(views.homeDetailFragmentContainer, HomeDetailFragment::class.java, allowStateLoss = true)
                             } else {
                                 // nop
                             }

@@ -16,12 +16,12 @@
 
 package im.vector.app.features.discovery
 
-data class IdentityServerWithTerms(
+data class ServerAndPolicies(
         val serverUrl: String,
-        val policies: List<IdentityServerPolicy>
+        val policies: List<ServerPolicy>
 )
 
-data class IdentityServerPolicy(
+data class ServerPolicy(
         val name: String,
         val url: String
 )

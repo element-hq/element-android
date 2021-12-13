@@ -9,7 +9,8 @@
     android:clipToPadding="false"
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:viewBindingIgnore="true">
 
     <im.vector.app.features.spaces.preview.SpaceTabView
         android:id="@+id/childSpaceTab"

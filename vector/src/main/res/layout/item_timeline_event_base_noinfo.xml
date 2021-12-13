@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:addStatesFromChildren="true"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    tools:viewBindingIgnore="true">
 
     <im.vector.app.core.platform.CheckableView
         android:id="@+id/messageSelectedBackground"
