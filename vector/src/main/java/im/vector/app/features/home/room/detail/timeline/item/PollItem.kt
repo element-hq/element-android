@@ -44,7 +44,7 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
     var totalVotesText: String? = null
 
     @EpoxyAttribute
-    var optionViewStates: List<PollOptionViewState>? = null
+    lateinit var optionViewStates: List<PollOptionViewState>
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -55,28 +55,22 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
         holder.questionTextView.text = pollQuestion
         holder.totalVotesTextView.text = totalVotesText
 
-        val cachedViews = mutableMapOf<String, PollOptionView>()
-        holder.optionsContainer.children.filterIsInstance<PollOptionView>().forEach { existingPollItemView ->
-            cachedViews[existingPollItemView.getTag(STUB_ID)?.toString() ?: ""] = existingPollItemView
+        while (holder.optionsContainer.childCount < optionViewStates.size) {
+            holder.optionsContainer.addView(PollOptionView(holder.view.context))
+        }
+        while (holder.optionsContainer.childCount > optionViewStates.size) {
+            holder.optionsContainer.removeViewAt(0)
         }
 
-        holder.optionsContainer.removeAllViews()
+        val views = holder.optionsContainer.children.toList().filterIsInstance<PollOptionView>()
 
-        optionViewStates?.forEachIndexed { index, option ->
-            val tag = relatedEventId + option.optionId
-
-            val pollOptionItem: PollOptionView = (cachedViews[tag] ?: PollOptionView(holder.view.context))
-                    .apply {
-                        setTag(STUB_ID, tag)
-                        render(
-                                state = optionViewStates?.getOrNull(index) ?: PollOptionViewState.PollSending(option.optionId, option.optionAnswer)
-                        )
-                    }
-            pollOptionItem.setOnClickListener {
-                callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, option.optionId))
+        optionViewStates.forEachIndexed { index, optionViewState ->
+            views.getOrNull(index)?.let {
+                it.render(optionViewState)
+                it.setOnClickListener {
+                    callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, optionViewState.optionId))
+                }
             }
-
-            holder.optionsContainer.addView(pollOptionItem)
         }
     }
 
