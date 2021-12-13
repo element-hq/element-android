@@ -5,7 +5,8 @@
     android:id="@+id/bottom_sheet_message_preview"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:background="#1FF00FF0">
+    tools:background="#1FF00FF0"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/bottom_sheet_message_preview_avatar"

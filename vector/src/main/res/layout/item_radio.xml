@@ -6,10 +6,11 @@
     android:layout_height="wrap_content"
     android:clickable="true"
     android:focusable="true"
-    android:minHeight="64dp"
     android:foreground="?attr/selectableItemBackground"
+    android:minHeight="64dp"
     android:paddingStart="@dimen/layout_horizontal_margin"
-    android:paddingEnd="@dimen/layout_horizontal_margin">
+    android:paddingEnd="@dimen/layout_horizontal_margin"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/actionTitle"
@@ -31,9 +32,9 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:contentDescription="@string/a11y_checked"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingPrefix"
         tools:src="@drawable/ic_radio_on" />
 

@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
     android:minHeight="80dp"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:viewBindingIgnore="true">
 
     <androidx.constraintlayout.helper.widget.Flow
         android:layout_width="0dp"

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:colorBackground"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:viewBindingIgnore="true">
 
     <im.vector.app.core.ui.views.NonScrollingTextView
         android:id="@+id/expandableContent"

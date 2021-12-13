@@ -11,4 +11,5 @@
     android:paddingBottom="@dimen/layout_vertical_margin"
     android:textColor="?vctr_content_secondary"
     android:textStyle="bold"
-    tools:text="@string/room_settings_room_notifications_notify_me" />
+    tools:text="@string/room_settings_room_notifications_notify_me"
+    tools:viewBindingIgnore="true" />
