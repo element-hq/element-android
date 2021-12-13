@@ -24,13 +24,12 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
-import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
 
     @EpoxyAttribute
-    var pollContent: MessagePollContent? = null
+    var pollQuestion: String? = null
 
     @EpoxyAttribute
     var pollResponseSummary: PollResponseData? = null
@@ -56,7 +55,7 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
 
         renderSendState(holder.view, holder.questionTextView)
 
-        holder.questionTextView.text = pollContent?.pollCreationInfo?.question?.question
+        holder.questionTextView.text = pollQuestion
         holder.totalVotesTextView.text = totalVotesText
 
         val cachedViews = mutableMapOf<String, PollOptionItem>()
@@ -66,19 +65,18 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
 
         holder.optionsContainer.removeAllViews()
 
-        pollContent?.pollCreationInfo?.answers?.forEachIndexed { index, option ->
-            val optionName = option.answer ?: ""
+        optionViewStates?.forEachIndexed { index, option ->
             val tag = relatedEventId + option.id
 
             val pollOptionItem: PollOptionItem = (cachedViews[tag] ?: PollOptionItem(holder.view.context))
                     .apply {
                         setTag(STUB_ID, tag)
                         render(
-                                state = optionViewStates?.getOrNull(index) ?: PollOptionViewState.DisabledOptionWithInvisibleVotes(optionName)
+                                state = optionViewStates?.getOrNull(index) ?: PollOptionViewState.DisabledOptionWithInvisibleVotes(option.id, option.name)
                         )
                     }
             pollOptionItem.setOnClickListener {
-                callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, option.id ?: ""))
+                callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, option.id))
             }
 
             holder.optionsContainer.addView(pollOptionItem)

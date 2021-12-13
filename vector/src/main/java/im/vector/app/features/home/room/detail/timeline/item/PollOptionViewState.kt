@@ -16,33 +16,35 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
-sealed class PollOptionViewState(open val name: String) {
+sealed class PollOptionViewState(open val id: String, open val name: String) {
 
     /**
      * Represents a poll that user already voted.
      */
-    data class EnabledOptionWithVisibleVotes(override val name: String,
+    data class EnabledOptionWithVisibleVotes(override val id: String,
+                                             override val name: String,
                                              val voteCount: Int,
                                              val votePercentage: Double,
                                              val isSelected: Boolean
-    ) : PollOptionViewState(name)
+    ) : PollOptionViewState(id, name)
 
     /**
      * Represents a poll that is ended.
      */
-    data class DisabledOptionWithVisibleVotes(override val name: String,
+    data class DisabledOptionWithVisibleVotes(override val id: String,
+                                              override val name: String,
                                               val voteCount: Int,
                                               val votePercentage: Double,
                                               val isWinner: Boolean
-    ) : PollOptionViewState(name)
+    ) : PollOptionViewState(id, name)
 
     /**
      * Represents a poll that is sent but not voted by the user
      */
-    data class EnabledOptionWithInvisibleVotes(override val name: String) : PollOptionViewState(name)
+    data class EnabledOptionWithInvisibleVotes(override val id: String, override val name: String) : PollOptionViewState(id, name)
 
     /**
      * Represents a poll that is not sent to the server yet.
      */
-    data class DisabledOptionWithInvisibleVotes(override val name: String) : PollOptionViewState(name)
+    data class DisabledOptionWithInvisibleVotes(override val id: String, override val name: String) : PollOptionViewState(id, name)
 }

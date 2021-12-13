@@ -44,7 +44,6 @@ class PollOptionItem @JvmOverloads constructor(
     }
 
     fun render(state: PollOptionViewState) {
-
         views.optionNameTextView.text = state.name
 
         when (state) {

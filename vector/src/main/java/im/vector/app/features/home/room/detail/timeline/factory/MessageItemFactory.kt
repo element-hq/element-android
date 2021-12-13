@@ -197,22 +197,23 @@ class MessageItemFactory @Inject constructor(
             val isMyVote = pollResponseSummary?.myVote == option.id
             val voteCount = voteSummary?.total ?: 0
             val votePercentage = voteSummary?.percentage ?: 0.0
+            val optionId = option.id ?: ""
             val optionName = option.answer ?: ""
 
             optionViewStates.add(
                     if (!isPollSent) {
                         // Poll event is not send yet. Disable option.
-                        PollOptionViewState.DisabledOptionWithInvisibleVotes(optionName)
+                        PollOptionViewState.DisabledOptionWithInvisibleVotes(optionId, optionName)
                     } else if (isEnded) {
                         // Poll is ended. Disable option, show votes and mark the winner.
                         val isWinner = winnerVoteCount != 0 && voteCount == winnerVoteCount
-                        PollOptionViewState.DisabledOptionWithVisibleVotes(optionName, voteCount, votePercentage, isWinner)
+                        PollOptionViewState.DisabledOptionWithVisibleVotes(optionId, optionName, voteCount, votePercentage, isWinner)
                     } else if (didUserVoted) {
                         // User voted to the poll, but poll is not ended. Enable option, show votes and mark the user's selection.
-                        PollOptionViewState.EnabledOptionWithVisibleVotes(optionName, voteCount, votePercentage, isMyVote)
+                        PollOptionViewState.EnabledOptionWithVisibleVotes(optionId, optionName, voteCount, votePercentage, isMyVote)
                     } else {
                         // User didn't voted yet and poll is not ended yet. Enable options, hide votes.
-                        PollOptionViewState.EnabledOptionWithInvisibleVotes(optionName)
+                        PollOptionViewState.EnabledOptionWithInvisibleVotes(optionId, optionName)
                     }
             )
         }
@@ -220,9 +221,9 @@ class MessageItemFactory @Inject constructor(
         return PollItem_()
                 .attributes(attributes)
                 .eventId(informationData.eventId)
+                .pollQuestion(pollContent.pollCreationInfo?.question?.question ?: "")
                 .pollResponseSummary(pollResponseSummary)
                 .pollSent(isPollSent)
-                .pollContent(pollContent)
                 .totalVotesText(totalVotesText)
                 .optionViewStates(optionViewStates)
                 .highlighted(highlight)
