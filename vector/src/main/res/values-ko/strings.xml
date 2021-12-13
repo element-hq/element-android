@@ -1516,4 +1516,8 @@
     <string name="settings_security_pin_code_title">PIN 활성화</string>
     <string name="settings_security_application_protection_summary">PIN이나 생체 인증으로 보안 접근을 사용합니다.</string>
     <string name="settings_security_application_protection_title">보안 접근</string>
+    <string name="call_dial_pad_title">키패드</string>
+    <string name="notice_direct_room_created">%1$s가 새로운 토론을 생성함</string>
+    <string name="notice_direct_room_created_by_you">새로운 토론을 생성함</string>
+    <string name="notice_room_created_by_you">새로운 방을 생성함</string>
 </resources>
