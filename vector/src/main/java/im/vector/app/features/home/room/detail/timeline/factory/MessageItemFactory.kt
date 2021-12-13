@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
+import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
@@ -515,7 +516,7 @@ class MessageItemFactory @Inject constructor(
 
     private fun annotateWithEdited(linkifiedBody: CharSequence,
                                    callback: TimelineEventController.Callback?,
-                                   informationData: MessageInformationData): SpannableStringBuilder {
+                                   informationData: MessageInformationData): Spannable {
         val spannable = SpannableStringBuilder()
         spannable.append(linkifiedBody)
         val editedSuffix = stringProvider.getString(R.string.edited_suffix)
