@@ -12,6 +12,6 @@
     <dimen name="sc_bubble_radius">3dp</dimen>
     <dimen name="sc_bubble_radius_in_tail">3dp</dimen>
     <dimen name="sc_bubble_tail_size">12dp</dimen>
-    <dimen name="sc_bubble_stroke">3dp</dimen>
+    <dimen name="sc_bubble_stroke">2dp</dimen>
 
 </resources>
