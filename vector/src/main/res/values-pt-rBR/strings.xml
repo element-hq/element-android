@@ -3141,11 +3141,11 @@
 \n
 \nVocê pode ler todos os nossos termos %s.</string>
     <string name="analytics_opt_in_title">Ajudar a melhorar Element</string>
-    <string name="preference_system_settings">Configurações do sistema</string>
+    <string name="preference_system_settings">Configurações de sistema</string>
     <string name="preference_help_title">Ajuda e suporte</string>
     <string name="preference_help">Ajuda</string>
-    <string name="analytics_opt_in_list_item_3">Você pode desativar isso a qualquer momento nas configurações</string>
-    <string name="analytics_opt_in_list_item_2">Nós <b>não</b> compartilhamos informações com terceiros</string>
+    <string name="analytics_opt_in_list_item_3">Você pode desativar isto a qualquer hora em configurações</string>
+    <string name="analytics_opt_in_list_item_2">Nós <b>não</b> compartilhamos informação com terceiros</string>
     <string name="analytics_opt_in_content_link">aqui</string>
     <string name="action_enable">Habilitar</string>
 </resources>
