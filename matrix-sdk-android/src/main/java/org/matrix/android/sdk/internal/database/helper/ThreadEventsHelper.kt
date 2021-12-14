@@ -103,7 +103,7 @@ internal fun TimelineEventEntity.Companion.findAllThreadsForRoomId(realm: Realm,
         TimelineEventEntity
                 .whereRoomId(realm, roomId = roomId)
                 .equalTo(TimelineEventEntityFields.ROOT.IS_ROOT_THREAD, true)
-                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+                .sort("${TimelineEventEntityFields.ROOT.THREAD_SUMMARY_LATEST_MESSAGE}.${TimelineEventEntityFields.DISPLAY_INDEX}", Sort.DESCENDING)
 
 /**
  * Find the number of all the local notifications for the specified room
@@ -188,7 +188,9 @@ internal fun updateNotificationsNew(roomId: String, realm: Realm, currentUserId:
 
     val readReceiptChunkPosition = readReceiptChunkTimelineEvents.indexOfFirst { it.eventId == readReceipt }
 
-    if (readReceiptChunkPosition != -1 && readReceiptChunkPosition != readReceiptChunkTimelineEvents.lastIndex) {
+    if(readReceiptChunkPosition == -1) return
+
+    if (readReceiptChunkPosition < readReceiptChunkTimelineEvents.lastIndex) {
         // If the read receipt is found inside the chunk
 
         val threadEventsAfterReadReceipt = readReceiptChunkTimelineEvents
