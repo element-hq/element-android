@@ -29,6 +29,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.epoxy.util.preventMutation
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.item.BindingOptions
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
@@ -77,7 +78,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         avatarRenderer.render(matrixItem, holder.avatar)
         holder.avatar.onClick(userClicked)
         holder.sender.onClick(userClicked)
-        holder.sender.setTextOrHide(matrixItem.displayName)
+        holder.sender.setTextOrHide(matrixItem.getBestName())
         data?.let {
             imageContentRenderer?.render(it, ImageContentRenderer.Mode.THUMBNAIL, holder.imagePreview)
         }
