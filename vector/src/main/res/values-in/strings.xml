@@ -2979,4 +2979,46 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="identity_server_consent_dialog_content_question">Apakah Anda setuju untuk mengirimkan info ini\?</string>
     <string name="identity_server_consent_dialog_content_3">Untuk menemukan kontak yang sudah ada, Anda harus mengirim info kontak (email dan nomor telepon) ke server identitas Anda. Kami meng-hash data Anda sebelum mengirim untuk privasi.</string>
     <string name="action_not_now">Nanti</string>
+    <string name="delete_poll_dialog_content">Apakah Anda yakin untuk menghapus poll ini\? Anda tidak akan dapat memulihkannya setelah dihapus.</string>
+    <string name="delete_poll_dialog_title">Hapus poll</string>
+    <string name="poll_end_room_list_preview">Poll berakhir</string>
+    <string name="poll_response_room_list_preview">Suara diberikan</string>
+    <string name="labs_enable_polls">Aktifkan Poll</string>
+    <string name="end_poll_confirmation_approve_button">Akhiri poll</string>
+    <string name="end_poll_confirmation_description">Ini akan menghentikan orang-orang untuk dapat memberikan suara dan akan menampilkan hasil akhir poll.</string>
+    <string name="end_poll_confirmation_title">Akhiri poll ini\?</string>
+    <string name="a11y_poll_winner_option">opsi pemenang</string>
+    <string name="poll_end_action">Akhiri poll</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="other">Hasil akhir berdasarkan oleh %1$d suara</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="other">%1$d suara diberikan. Berikan suara untuk melihat hasilnya</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="other">Berdasarkan oleh %1$d suara</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="other">%1$d suara</item>
+    </plurals>
+    <string name="preference_system_settings">Pengaturan sistem</string>
+    <string name="preference_versions">Versi</string>
+    <string name="preference_help_summary">Dapatkan bantuan dengan menggunakan Element</string>
+    <string name="preference_help_title">Bantuan dan dukungan</string>
+    <string name="preference_help">Bantuan</string>
+    <string name="preference_root_legals">Hukum</string>
+    <string name="legals_no_policy_provided">Server ini tidak memiliki sebuah kebijakan.</string>
+    <string name="legals_third_party_notices">Perpustakaan pihak ketiga</string>
+    <string name="legals_identity_server_title">Kebijakan server identitas Anda</string>
+    <string name="legals_home_server_title">Kebijakan homeserver Anda</string>
+    <string name="template_legals_application_title">Kebijakan ${app_name}</string>
+    <string name="analytics_opt_in_list_item_3">Anda dapat mematikannya kapan saja di pengaturan</string>
+    <string name="analytics_opt_in_list_item_2">Kami <b>tidak</b> membagikan informasi ini dengan pihak ketiga</string>
+    <string name="analytics_opt_in_list_item_1">Kami <b>tidak</b> merekam atau memprofil data akun apapun</string>
+    <string name="analytics_opt_in_content_link">di sini</string>
+    <string name="analytics_opt_in_content">Bantu kami mengidentifikasi masalah-masalah dan membuat Element lebih baik dengan membagikan data penggunaan anonim. Untuk memahami bagaimana orang-orang menggunakan beberapa perangkat-perangkat, kami akan membuat pengenal acak, yang dibagikan oleh perangkat Anda.
+\n
+\nAnda dapat membaca semua kebijakan kami %s.</string>
+    <string name="analytics_opt_in_title">Bantu buat Element lebih baik</string>
+    <string name="action_enable">Aktifkan</string>
 </resources>
