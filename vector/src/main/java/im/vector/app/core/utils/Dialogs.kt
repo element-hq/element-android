@@ -17,10 +17,15 @@
 package im.vector.app.core.utils
 
 import android.content.Context
+import android.text.method.LinkMovementMethod
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.TextView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
+import im.vector.app.features.discovery.ServerAndPolicies
+import me.gujun.android.span.link
+import me.gujun.android.span.span
 
 /**
  * Open a web view above the current activity.
@@ -40,16 +45,36 @@ fun Context.displayInWebView(url: String) {
             .show()
 }
 
-fun Context.showIdentityServerConsentDialog(configuredIdentityServer: String?, policyLinkCallback: () -> Unit, consentCallBack: (() -> Unit)) {
+fun Context.showIdentityServerConsentDialog(identityServerWithTerms: ServerAndPolicies?,
+                                            consentCallBack: (() -> Unit)) {
+    // Build the message
+    val content = span {
+        +getString(R.string.identity_server_consent_dialog_content_3)
+        +"\n\n"
+        if (identityServerWithTerms?.policies?.isNullOrEmpty() == false) {
+            span {
+                textStyle = "bold"
+                text = getString(R.string.settings_privacy_policy)
+            }
+            identityServerWithTerms.policies.forEach {
+                +"\n • "
+                // Use the url as the text too
+                link(it.url, it.url)
+            }
+            +"\n\n"
+        }
+        +getString(R.string.identity_server_consent_dialog_content_question)
+    }
     MaterialAlertDialogBuilder(this)
-            .setTitle(getString(R.string.identity_server_consent_dialog_title_2, configuredIdentityServer ?: ""))
-            .setMessage(R.string.identity_server_consent_dialog_content_2)
-            .setPositiveButton(R.string.yes) { _, _ ->
+            .setTitle(getString(R.string.identity_server_consent_dialog_title_2, identityServerWithTerms?.serverUrl.orEmpty()))
+            .setMessage(content)
+            .setPositiveButton(R.string.reactions_agree) { _, _ ->
                 consentCallBack.invoke()
             }
-            .setNeutralButton(R.string.identity_server_consent_dialog_neutral_policy) { _, _ ->
-                policyLinkCallback.invoke()
-            }
-            .setNegativeButton(R.string.no, null)
+            .setNegativeButton(R.string.action_not_now, null)
             .show()
+            .apply {
+                // Make the link(s) clickable. Must be called after show()
+                (findViewById(android.R.id.message) as? TextView)?.movementMethod = LinkMovementMethod.getInstance()
+            }
 }

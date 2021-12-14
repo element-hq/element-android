@@ -113,45 +113,33 @@
 
         <activity android:name=".features.home.HomeActivity" />
 
-        <!-- exported="true" is required to handle android.intent.action.VIEW for URL redirection-->
+        <activity
+            android:name=".features.login.SSORedirectRouterActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Vector.Black.Transparent">
+
+            <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="connect"
+                    android:scheme="element" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".features.login.LoginActivity"
-            android:enabled="@bool/useLoginV1"
-            android:exported="true"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize">
-            <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+            android:windowSoftInputMode="adjustResize" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="connect"
-                    android:scheme="element" />
-            </intent-filter>
-        </activity>
-
-        <!-- exported="true" is required to handle android.intent.action.VIEW for URL redirection-->
         <activity
             android:name=".features.login2.LoginActivity2"
-            android:enabled="@bool/useLoginV2"
-            android:exported="true"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize">
-            <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="connect"
-                    android:scheme="element" />
-            </intent-filter>
-        </activity>
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite :/ -->
         <activity
@@ -310,6 +298,7 @@
         <activity android:name=".features.terms.ReviewTermsActivity" />
         <activity android:name=".features.widgets.WidgetActivity" />
         <activity android:name=".features.pin.PinActivity" />
+        <activity android:name=".features.analytics.ui.consent.AnalyticsOptInActivity" />
         <activity android:name=".features.home.room.detail.search.SearchActivity" />
         <activity android:name=".features.usercode.UserCodeActivity" />
         <activity android:name=".features.call.transfer.CallTransferActivity" />
@@ -409,6 +398,9 @@
             <meta-data
                 android:name="androidx.work.WorkManagerInitializer"
                 android:value="androidx.startup"
+                tools:node="remove" />
+            <!-- We init the lib ourself in EmojiCompatWrapper -->
+            <meta-data android:name="androidx.emoji2.text.EmojiCompatInitializer"
                 tools:node="remove" />
         </provider>
 

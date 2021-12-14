@@ -23,6 +23,7 @@ import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
 import org.matrix.android.sdk.internal.task.Task
+import timber.log.Timber
 import javax.inject.Inject
 
 internal interface SendEventTask : Task<SendEventTask.Params, String> {
@@ -60,7 +61,9 @@ internal class DefaultSendEventTask @Inject constructor(
                 )
             }
             localEchoRepository.updateSendState(localId, params.event.roomId, SendState.SENT)
-            return response.eventId
+            return response.eventId.also {
+                Timber.d("Event: $it just sent in ${params.event.roomId}")
+            }
         } catch (e: Throwable) {
 //            localEchoRepository.updateSendState(params.event.eventId!!, SendState.UNDELIVERED)
             throw e

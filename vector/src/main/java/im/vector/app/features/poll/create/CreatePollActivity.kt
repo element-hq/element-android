@@ -21,7 +21,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 
@@ -36,7 +35,7 @@ class CreatePollActivity : SimpleFragmentActivity() {
 
         if (isFirstCreation()) {
             addFragment(
-                    R.id.container,
+                    views.container,
                     CreatePollFragment::class.java,
                     createPollArgs
             )

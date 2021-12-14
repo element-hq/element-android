@@ -23,9 +23,11 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.doOnLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import com.visualizer.amplitude.AudioRecordView
 import im.vector.app.R
 import im.vector.app.core.extensions.setAttributeBackground
 import im.vector.app.core.extensions.setAttributeTintedBackground
@@ -154,7 +156,7 @@ class VoiceMessageViews(
 
     fun hideRecordingViews(recordingState: RecordingUiState) {
         // We need to animate the lock image first
-        if (recordingState != RecordingUiState.Locked) {
+        if (recordingState !is RecordingUiState.Locked) {
             views.voiceMessageLockImage.isVisible = false
             views.voiceMessageLockImage.animate().translationY(0f).start()
             views.voiceMessageLockBackground.isVisible = false
@@ -171,7 +173,7 @@ class VoiceMessageViews(
         views.voiceMessageTimerIndicator.isVisible = false
         views.voiceMessageTimer.isVisible = false
 
-        if (recordingState != RecordingUiState.Locked) {
+        if (recordingState !is RecordingUiState.Locked) {
             views.voiceMessageMicButton
                     .animate()
                     .scaleX(1f)
@@ -195,7 +197,7 @@ class VoiceMessageViews(
         }
 
         // Hide toasts if user cancelled recording before the timeout of the toast.
-        if (recordingState == RecordingUiState.Cancelled || recordingState == RecordingUiState.None) {
+        if (recordingState == RecordingUiState.Idle) {
             hideToast()
         }
     }
@@ -258,6 +260,16 @@ class VoiceMessageViews(
         views.voiceMessageToast.isVisible = false
     }
 
+    fun showDraftViews() {
+        hideRecordingViews(RecordingUiState.Idle)
+        views.voiceMessageMicButton.isVisible = false
+        views.voiceMessageSendButton.isVisible = true
+        views.voiceMessagePlaybackLayout.isVisible = true
+        views.voiceMessagePlaybackTimerIndicator.isVisible = false
+        views.voicePlaybackControlButton.isVisible = true
+        views.voicePlaybackWaveform.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
+    }
+
     fun showRecordingLockedViews(recordingState: RecordingUiState) {
         hideRecordingViews(recordingState)
         views.voiceMessagePlaybackLayout.isVisible = true
@@ -268,14 +280,8 @@ class VoiceMessageViews(
         renderToast(resources.getString(R.string.voice_message_tap_to_stop_toast))
     }
 
-    fun showPlaybackViews() {
-        views.voiceMessagePlaybackTimerIndicator.isVisible = false
-        views.voicePlaybackControlButton.isVisible = true
-        views.voicePlaybackWaveform.importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
-    }
-
     fun initViews() {
-        hideRecordingViews(RecordingUiState.None)
+        hideRecordingViews(RecordingUiState.Idle)
         views.voiceMessageMicButton.isVisible = true
         views.voiceMessageSendButton.isVisible = false
         views.voicePlaybackWaveform.post { views.voicePlaybackWaveform.recreate() }
@@ -304,9 +310,9 @@ class VoiceMessageViews(
         views.voiceMessageToast.isVisible = false
     }
 
-    fun renderRecordingTimer(recordingState: RecordingUiState, recordingTimeMillis: Long) {
+    fun renderRecordingTimer(isLocked: Boolean, recordingTimeMillis: Long) {
         val formattedTimerText = DateUtils.formatElapsedTime(recordingTimeMillis)
-        if (recordingState == RecordingUiState.Locked) {
+        if (isLocked) {
             views.voicePlaybackTime.apply {
                 post {
                     text = formattedTimerText
@@ -320,11 +326,9 @@ class VoiceMessageViews(
     }
 
     fun renderRecordingWaveform(amplitudeList: Array<Int>) {
-        views.voicePlaybackWaveform.post {
-            views.voicePlaybackWaveform.apply {
-                amplitudeList.iterator().forEach {
-                    update(it)
-                }
+        views.voicePlaybackWaveform.doOnLayout { waveFormView ->
+            amplitudeList.iterator().forEach {
+                (waveFormView as AudioRecordView).update(it)
             }
         }
     }

@@ -16,20 +16,21 @@
 
 package im.vector.app.features.contactsbook
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.R
 import im.vector.app.core.contacts.ContactsDataSource
 import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.discovery.fetchIdentityServerWithTerms
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
@@ -37,11 +38,12 @@ import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
 
-class ContactsBookViewModel @AssistedInject constructor(@Assisted
-                                                        initialState: ContactsBookViewState,
-                                                        private val contactsDataSource: ContactsDataSource,
-                                                        private val session: Session) :
-    VectorViewModel<ContactsBookViewState, ContactsBookAction, EmptyViewEvents>(initialState) {
+class ContactsBookViewModel @AssistedInject constructor(
+        @Assisted initialState: ContactsBookViewState,
+        private val contactsDataSource: ContactsDataSource,
+        private val stringProvider: StringProvider,
+        private val session: Session
+) : VectorViewModel<ContactsBookViewState, ContactsBookAction, ContactsBookViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<ContactsBookViewModel, ContactsBookViewState> {
@@ -162,7 +164,20 @@ class ContactsBookViewModel @AssistedInject constructor(@Assisted
             is ContactsBookAction.FilterWith        -> handleFilterWith(action)
             is ContactsBookAction.OnlyBoundContacts -> handleOnlyBoundContacts(action)
             ContactsBookAction.UserConsentGranted   -> handleUserConsentGranted()
+            ContactsBookAction.UserConsentRequest   -> handleUserConsentRequest()
         }.exhaustive
+    }
+
+    private fun handleUserConsentRequest() {
+        viewModelScope.launch {
+            val event = try {
+                val result = session.fetchIdentityServerWithTerms(stringProvider.getString(R.string.resources_language))
+                ContactsBookViewEvents.OnPoliciesRetrieved(result)
+            } catch (throwable: Throwable) {
+                ContactsBookViewEvents.Failure(throwable)
+            }
+            _viewEvents.post(event)
+        }
     }
 
     private fun handleUserConsentGranted() {

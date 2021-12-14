@@ -1,0 +1,2 @@
+Modifiche principali in questa versione: correzioni riguardo le notifiche.
+Cronologia completa: https://github.com/vector-im/element-android/releases/tag/v1.3.7-RC2

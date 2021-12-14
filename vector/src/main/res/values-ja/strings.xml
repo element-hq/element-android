@@ -169,7 +169,7 @@
     <string name="today">今日</string>
     <string name="room_info_room_name">部屋名</string>
     <string name="call_ended">通話終了</string>
-    <string name="call_ring">呼出中…</string>
+    <string name="call_ring">呼び出し中です…</string>
     <string name="yes">はい</string>
     <string name="no">いいえ</string>
     <string name="_continue">続ける</string>
@@ -241,7 +241,7 @@
     <string name="settings_messages_in_one_to_one">会話で発言されたとき</string>
     <string name="settings_messages_in_group_chat">部屋で発言されたとき</string>
     <string name="settings_invited_to_room">部屋へ招待されたとき</string>
-    <string name="settings_call_invitations">通話の呼出があったとき</string>
+    <string name="settings_call_invitations">通話の呼び出しがあったとき</string>
     <string name="settings_messages_sent_by_bot">自動発言プログラム(Bot)が発言した時</string>
     <string name="settings_start_on_boot">端末起動時に開始</string>
     <string name="settings_background_sync">アプリを閉じているときの動作</string>
@@ -1390,11 +1390,12 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="notice_direct_room_leave_with_reason">%1$sが退出しました。理由: %2$s</string>
     <string name="notice_room_leave_with_reason_by_you">あなたがこのルームを退出しました。理由: %1$s</string>
     <string name="initial_sync_start_importing_account_left_rooms">初期同期:
-\n退出したルームのインポート</string>
+\n退出したルームをインポートしています</string>
     <string name="initial_sync_start_importing_account_invited_rooms">初期同期：
-\n招待されたルームのインポート</string>
+\n招待されたルームをインポートしています</string>
     <string name="initial_sync_start_importing_account_joined_rooms">初期同期:
-\n参加したルームのインポート</string>
+\n会話を読み込んでいます
+\n多くのルームに参加している場合、読み込みに時間がかかるかもしれません</string>
     <string name="notice_room_leave_with_reason">%1$sがこのルームを退出しました。理由: %2$s</string>
     <string name="notice_direct_room_join_with_reason_by_you">あなたがこのルームに参加しました。理由: %1$s</string>
     <string name="notice_direct_room_join_with_reason">%1$sがこのルームに参加しました。理由: %2$s</string>
@@ -1409,13 +1410,13 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="event_status_sending_message">メッセージを送っています…</string>
     <string name="event_status_sent_message">メッセージを送りました</string>
     <string name="initial_sync_start_importing_account_data">初期同期:
-\nアカウントデータをインポート</string>
+\nアカウントデータをインポートしています</string>
     <string name="initial_sync_start_importing_account_groups">初期同期:
-\nコミュニティをインポート</string>
+\nコミュニティをインポートしています</string>
     <string name="initial_sync_start_importing_account_rooms">初期同期:
-\nルームをインポート</string>
+\nルームをインポートしています</string>
     <string name="initial_sync_start_importing_account_crypto">初期同期:
-\n暗号をインポート</string>
+\n暗号をインポートしています</string>
     <string name="initial_sync_start_importing_account">初期同期:
 \nアカウントをインポートしています…</string>
     <string name="initial_sync_start_downloading">初期同期:
@@ -1621,12 +1622,12 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
 \n
 \n新しい復元方法を設定しなかった場合、攻撃者がアカウントへアクセスしようとしている可能性があります。アカウントを守るために、設定ですぐにアカウントのパスワードを変更し新しい復元方法を設定してください。</string>
     <string name="new_recovery_method_popup_title">新しい暗号鍵バックアップ</string>
-    <string name="keys_backup_settings_delete_confirm_message">バックアップされた暗号鍵をサーバーから削除しますか？現在の復元鍵を使用して暗号化されたメッセージ履歴を読むことができなくなります。</string>
+    <string name="keys_backup_settings_delete_confirm_message">バックアップされた暗号鍵をサーバーから削除しますか？　現在のリカバリーキーを使って、暗号化されたメッセージの履歴を読むことができなくなります。</string>
     <string name="keys_backup_settings_delete_confirm_title">バックアップを削除</string>
     <string name="keys_backup_settings_checking_backup_state">バックアップの状態を確認中</string>
     <string name="keys_backup_settings_delete_backup_error">バックアップの削除に失敗しました（%s）</string>
     <string name="keys_backup_settings_deleting_backup">バックアップを削除中…</string>
-    <string name="keys_backup_settings_untrusted_backup">このセッションで暗号鍵バックアップを使用するには、今パスフレーズまたは復元鍵でバックアップを復元してください。</string>
+    <string name="keys_backup_settings_untrusted_backup">このセッションで暗号鍵のバックアップを使用するには、パスフレーズまたはリカバリーキーでバックアップを復元してください。</string>
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">バックアップは%sという未検証セッションによる不正なしょめいがあります</string>
     <string name="keys_backup_settings_invalid_signature_from_verified_device">バックアップは%sという検証されたセッションによる不正な署名があります</string>
     <string name="keys_backup_settings_valid_signature_from_unverified_device">バックアップは%sという未検証セッションによる有効な署名があります</string>
@@ -1644,48 +1645,48 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
         <item quantity="other">%d個のキーが含まれたバックアップを復元しました。</item>
     </plurals>
     <string name="keys_backup_restore_success_title">バックアップが復元されました %s！</string>
-    <string name="keys_backup_recovery_code_error_decrypt">この復元鍵ではバックアップを復号できませんでした。正しい復元鍵を入力したことを確認してください。</string>
-    <string name="keys_backup_recovery_code_empty_error_message">復元鍵を入力してください</string>
+    <string name="keys_backup_recovery_code_error_decrypt">このリカバリーキーではバックアップを復号できませんでした。正しいリカバリーキーを入力したことを確認してください。</string>
+    <string name="keys_backup_recovery_code_empty_error_message">リカバリーキーを入力してください</string>
     <string name="keys_backup_unlock_button">履歴をアンロック</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">鍵をインポート中…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">鍵をダウンロード中…</string>
-    <string name="keys_backup_restoring_computing_key_waiting_message">復元鍵を計算中…</string>
+    <string name="keys_backup_restoring_computing_key_waiting_message">リカバリーキーを計算しています…</string>
     <string name="keys_backup_restoring_waiting_message">バックアップを復元:</string>
     <string name="network_error_please_check_and_retry">ネットワークエラー: 接続を確認して再試行してください。</string>
     <string name="keys_backup_passphrase_error_decrypt">このパスフレーズではバックアップを復号できませんでした。正しい復元パスフレーズを入力したことを確認してください。</string>
-    <string name="keys_backup_restore_with_key_helper">復元鍵を喪失しましたか？設定で新しいのを設定できます。</string>
+    <string name="keys_backup_restore_with_key_helper">リカバリーキーを喪失しましたか？　設定で新しいリカバリーキーを設定できます。</string>
     <string name="keys_backup_restore_setup_recovery_key">メッセージの復元</string>
     <string name="keys_backup_restore_is_getting_backup_version">バックアップのバージョンを取得中…</string>
     <string name="keys_backup_restore_with_passphrase">暗号化されたメッセージ履歴のロックを解除するには、復元パスフレーズを使用してください</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">復元パスフレーズをご存知でなければ、%sができます。</string>
-    <string name="keys_backup_restore_with_recovery_key">復元鍵を使用して暗号化されたメッセージ履歴をアンロックします</string>
-    <string name="keys_backup_restore_key_enter_hint">復元鍵を入力</string>
-    <string name="keys_backup_restore_use_recovery_key">復元鍵を使用</string>
+    <string name="keys_backup_restore_with_recovery_key">リカバリーキーを使用して暗号化されたメッセージ履歴をアンロックします</string>
+    <string name="keys_backup_restore_key_enter_hint">リカバリーキーを入力</string>
+    <string name="keys_backup_restore_use_recovery_key">リカバリーキーを使用</string>
     <string name="keys_backup_setup_skip_msg">ログアウトしたりこの端末を失くしたりすればメッセージへのアクセスを失う可能性があります。</string>
     <string name="keys_backup_setup_skip_title">本当によろしいですか？</string>
     <string name="keys_backup_setup_backup_started_message">暗号鍵が現在バックグラウンドでホームサーバーへバックアップされています。初期バックアップは数分かかることがあります。</string>
     <string name="keys_backup_setup_backup_started_title">バックアップが開始されました</string>
     <string name="unexpected_error">予期せぬエラー</string>
-    <string name="recovery_key">復元鍵</string>
-    <string name="keys_backup_setup_step3_generating_key_status">パスフレーズを使用して復元鍵を生成中です。数秒かかることがあります。</string>
+    <string name="recovery_key">リカバリーキー</string>
+    <string name="keys_backup_setup_step3_generating_key_status">パスフレーズを使用してリカバリーキーを生成中です。数秒かかることがあります。</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">リカバリーキーを共有…</string>
     <string name="keys_backup_setup_step3_please_make_copy">コピーをしてください</string>
     <string name="keys_backup_setup_override_stop">中止</string>
     <string name="keys_backup_setup_override_replace">上書き</string>
     <string name="keys_backup_setup_override_backup_prompt_description">違うセッションにより設定されたキーのバックアップが存在してます。上書きしますか？</string>
     <string name="keys_backup_setup_override_backup_prompt_tile">ホームサーバにバックアップが存在しています</string>
-    <string name="recovery_key_export_saved">復元鍵が保存されました。</string>
-    <string name="recovery_key_export_saved_as_warning">復号鍵が%sに保存されました。
+    <string name="recovery_key_export_saved">リカバリーキーが保存されました。</string>
+    <string name="recovery_key_export_saved_as_warning">リカバリーキーが%sに保存されました。
 \n
-\n注意: アプリケーションが削除された場合、削除される可能性があります。</string>
-    <string name="keys_backup_setup_step3_copy_button_title">復号鍵を保存</string>
+\n注意: アプリケーションを削除した場合、ファイルは削除される可能性があります。</string>
+    <string name="keys_backup_setup_step3_copy_button_title">リカバリーキーを保存</string>
     <string name="keys_backup_setup_step3_button_title_no_passphrase">コピーをしました</string>
-    <string name="keys_backup_setup_step3_text_line2_no_passphrase">復元鍵はパスワードマネージャーや金庫のような、非常に安全なばしょで保管してください</string>
-    <string name="keys_backup_setup_step3_text_line2">復元鍵が安全網となります。パスフレーズを忘れた場合でも、暗号化されたメッセージへのアクセスを可能とするのです。
-\n復元鍵はパスワードマネージャーや金庫のような、非常に安全な場所で保管してください。</string>
+    <string name="keys_backup_setup_step3_text_line2_no_passphrase">リカバリーキーはパスワードマネージャー（もしくは金庫）のような、非常に安全な場所で保管してください</string>
+    <string name="keys_backup_setup_step3_text_line2">リカバリーキーはセーフティーネットとなります。パスフレーズを忘れた場合でも、リカバリーキーを使えば、暗号化されたメッセージにアクセスすることができます。
+\nリカバリーキーは、パスワードマネージャー（もしくは金庫）のような、非常に安全な場所で保管してください。</string>
     <string name="keys_backup_setup_step3_text_line1">暗号鍵がバックアップ中です。</string>
-    <string name="keys_backup_setup_step2_skip_button_title">（高度）復元鍵を使用して設定</string>
-    <string name="keys_backup_setup_step1_recovery_key_alternative">または、リカバリーキーでバックアップを保護し、安全な場所に保存します。</string>
+    <string name="keys_backup_setup_step2_skip_button_title">（高度）リカバリーキーを使用して設定</string>
+    <string name="keys_backup_setup_step1_recovery_key_alternative">または、リカバリーキーでバックアップを保護し、安全な場所に保存してください。</string>
     <string name="keys_backup_setup_step2_text_description">暗号鍵のコピーを暗号化してホームサーバに保存します。バックアップを保護するためにパスフレーズを設定してください。
 \n
 \n最高度のセキュリティのために、アカウントのパスワードと異なることが大切です。</string>
@@ -1696,7 +1697,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="keys_backup_setup_step1_advanced">（高度）</string>
     <string name="keys_backup_setup_step1_title">暗号されたメッセージを絶対に失わないために</string>
     <string name="keys_backup_no_session_error">利用可能なMatrixセッションがありません</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">${app_name}による復号鍵の生成を望む場合、パスフレーズを削除してください。</string>
+    <string name="template_keys_backup_passphrase_not_empty_error_message">${app_name}によるリカバリーキーの生成を望む場合、パスフレーズを削除してください。</string>
     <string name="markdown_has_been_disabled">マークダウンが無効です。</string>
     <string name="markdown_has_been_enabled">マークダウンが有効です。</string>
     <string name="command_problem_with_parameters">”%s”とのコマンドはいくつかのパラメータが欠けているか不正です。</string>
@@ -2050,4 +2051,38 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="push_gateway_item_format">フォーマット:</string>
     <string name="push_gateway_item_url">URL:</string>
     <string name="push_gateway_item_device_name">セッション名:</string>
+    <string name="verify_not_me_self_verification">以下のうちいずれかが流出、あるいはハッキングされた恐れがあります。
+\n
+\n- あなたのパスワード
+\n- あなたのホームサーバー
+\n- あなたの端末
+\n- あなたの端末が使用しているインターネット接続
+\n
+\n設定画面からパスワードとリカバリーキーを早急に変更することを推奨します。</string>
+    <string name="login_reset_password_email_hint">Eメール</string>
+    <string name="login_server_url_form_other_hint">アドレス</string>
+    <string name="login_continue">継続する</string>
+    <string name="uploads_files_title">ファイル</string>
+    <string name="space_participants_kick_prompt_msg">ユーザーをキックすると、このスペースから削除されます。
+\n
+\n再参加を防ぐには、代わりにブロックしてください。</string>
+    <string name="call_remove_jitsi_widget_progress">通話を終了しています…</string>
+    <string name="notification_listening_for_notifications">通知を待機しています</string>
+    <string name="settings_mentions_at_room">\@room</string>
+    <string name="settings_messages_containing_keywords">キーワード</string>
+    <string name="a11y_stop_voice_message">録音を停止</string>
+    <string name="a11y_play_voice_message">音声メッセージを再生</string>
+    <string name="create_poll_add_option">選択肢を追加</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="other">%1$s個以上の選択肢が必要です</item>
+    </plurals>
+    <string name="call_ended_user_busy_description">呼び出したユーザーは話し中です。</string>
+    <string name="call_ended_user_busy_title">話し中です</string>
+    <string name="audio_call_with_participant">%sとの音声通話</string>
+    <string name="video_call_with_participant">%sとのビデオ通話</string>
+    <string name="call_ringing">呼び出しています…</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">ホームサーバーを選択</string>
+    <string name="login_error_homeserver_from_url_not_found">%s のURLにあるホームサーバーに接続できません。リンクをチェックするか、手動でホームサーバーを選択してください。</string>
+    <string name="action_not_now">後で</string>
+    <string name="spaces">スペース</string>
 </resources>

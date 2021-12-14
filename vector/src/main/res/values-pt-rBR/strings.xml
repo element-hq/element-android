@@ -2122,7 +2122,7 @@
     <string name="initialize_cross_signing">Inicializar AssinaturaCruzada</string>
     <string name="reset_cross_signing">Resettar Chaves</string>
     <string name="a11y_qr_code_for_verification">QR code</string>
-    <string name="qr_code_scanned_by_other_notice">Quase lá! %s está mostrando o mesmo escudo\?</string>
+    <string name="qr_code_scanned_by_other_notice">Quase lá! %s está mostrando um tick (✓)\?</string>
     <string name="qr_code_scanned_by_other_yes">Sim</string>
     <string name="qr_code_scanned_by_other_no">Não</string>
     <string name="no_connectivity_to_the_server_indicator">Conectividade ao servidor tem sido perdida</string>
@@ -2234,7 +2234,7 @@
     <string name="encryption_unknown_algorithm_tile_description">A encriptação usada por esta sala não é suportada</string>
     <string name="room_created_summary_item">%s criou e configurou a sala.</string>
     <string name="room_created_summary_item_by_you">Você criou e configurou a sala.</string>
-    <string name="qr_code_scanned_self_verif_notice">Quase lá! O outro dispositivo está mostrando o mesmo escudo\?</string>
+    <string name="qr_code_scanned_self_verif_notice">Quase lá! O outro dispositivo está mostrando um tick (✓)\?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Quase lá! Esperando por confirmação…</string>
     <string name="error_failed_to_import_keys">Falha para importar chaves</string>
     <string name="settings_messages_at_room">Mensagens contendo @room</string>
@@ -3079,4 +3079,27 @@
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Escolher servidorcasa</string>
     <string name="login_error_homeserver_from_url_not_found">Não dá para alcançar um servidorcasa na URL %s. Por favor cheque seu link ou escolha um servidorcasa manualmente.</string>
     <string name="notification_listening_for_notifications">À escuta por notificações</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">Pelo menos %1$s opção é requerida</item>
+        <item quantity="other">Pelo menos %1$s opções são requeridas</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">Pergunta não pode estar vazia</string>
+    <string name="create_poll_button">CRIAR SONDAGEM</string>
+    <string name="create_poll_add_option">ADICIONAR OPÇÃO</string>
+    <string name="create_poll_options_hint">Opção %1$d</string>
+    <string name="create_poll_options_title">Criar opções</string>
+    <string name="create_poll_question_hint">Pergunta ou tópico</string>
+    <string name="create_poll_question_title">Sondar pergunta ou tópico</string>
+    <string name="create_poll_title">Criar Sondagem</string>
+    <string name="attachment_type_poll">Sondagem</string>
+    <string name="identity_server_consent_dialog_content_2">Para descobrir contatos existentes, você precisa envir info de contato a seu servidor de identidade.
+\n
+\nNós hashamos seus dados antes de enviar por privacidade. Você consente para enviar esta info\?</string>
+    <string name="identity_server_consent_dialog_title_2">Enviar emails e números de telefone para %s</string>
+    <string name="settings_discovery_consent_notice_off_2">Seus contatos são privados. Para descobrir usuárias(os) de seus contatos, você precisa de permissão para enviar info de contato a seu servidor de identidade.</string>
+    <string name="shortcut_disabled_reason_sign_out">O signout desta sessão tem sido feito!</string>
+    <string name="shortcut_disabled_reason_room_left">Esta sala tem sido saída!</string>
+    <string name="identity_server_consent_dialog_content_question">Você concorda em enviar esta info\?</string>
+    <string name="identity_server_consent_dialog_content_3">Para descobrir contatos existentes, você precisa enviar info de contato (emails e números de telefone) para seu servidor de identidade. Nós hashamos seus dados antes de enviar por privacidade.</string>
+    <string name="action_not_now">Não agora</string>
 </resources>

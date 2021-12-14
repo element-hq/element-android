@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler
 
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -32,6 +33,8 @@ import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
 import timber.log.Timber
 import javax.inject.Inject
 
+private val loggerTag = LoggerTag("CryptoSyncHandler", LoggerTag.CRYPTO)
+
 internal class CryptoSyncHandler @Inject constructor(private val cryptoService: DefaultCryptoService,
                                                      private val verificationService: DefaultVerificationService) {
 
@@ -40,11 +43,11 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
         toDevice.events?.forEachIndexed { index, event ->
             progressReporter?.reportProgress(index * 100F / total)
             // Decrypt event if necessary
-            Timber.i("## CRYPTO | To device event from ${event.senderId} of type:${event.type}")
+            Timber.tag(loggerTag.value).i("To device event from ${event.senderId} of type:${event.type}")
             decryptToDeviceEvent(event, null)
             if (event.getClearType() == EventType.MESSAGE &&
                     event.getClearContent()?.toModel<MessageContent>()?.msgType == "m.bad.encrypted") {
-                Timber.e("## CRYPTO | handleToDeviceEvent() : Warning: Unable to decrypt to-device event : ${event.content}")
+                Timber.tag(loggerTag.value).e("handleToDeviceEvent() : Warning: Unable to decrypt to-device event : ${event.content}")
             } else {
                 verificationService.onToDeviceEvent(event)
                 cryptoService.onToDeviceEvent(event)

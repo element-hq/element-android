@@ -54,10 +54,6 @@ class SearchResultController @Inject constructor(
         fun loadMore()
     }
 
-    init {
-        setData(null)
-    }
-
     override fun buildModels(data: SearchViewState?) {
         data ?: return
 

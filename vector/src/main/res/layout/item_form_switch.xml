@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:background="?android:colorBackground"
     android:foreground="?attr/selectableItemBackground"
-    android:minHeight="@dimen/item_form_min_height">
+    android:minHeight="@dimen/item_form_min_height"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/formSwitchTitle"
@@ -17,8 +18,8 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:duplicateParentState="true"
         android:textColor="?vctr_content_primary"
-        app:layout_constraintBottom_toTopOf="@+id/formSwitchSummary"
-        app:layout_constraintEnd_toStartOf="@+id/formSwitchSwitch"
+        app:layout_constraintBottom_toTopOf="@id/formSwitchSummary"
+        app:layout_constraintEnd_toStartOf="@id/formSwitchSwitch"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
@@ -32,9 +33,9 @@
         android:layout_marginEnd="8dp"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/formSwitchSwitch"
-        app:layout_constraintStart_toStartOf="@+id/formSwitchTitle"
-        app:layout_constraintTop_toBottomOf="@+id/formSwitchTitle"
+        app:layout_constraintEnd_toStartOf="@id/formSwitchSwitch"
+        app:layout_constraintStart_toStartOf="@id/formSwitchTitle"
+        app:layout_constraintTop_toBottomOf="@id/formSwitchTitle"
         tools:text="@string/create_room_public_description" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial

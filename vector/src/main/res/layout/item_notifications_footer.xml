@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Widget.Vector.TextView.Body"
     android:id="@+id/footerText"
+    style="@style/Widget.Vector.TextView.Body"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="@dimen/layout_horizontal_margin"
@@ -10,4 +10,5 @@
     android:paddingEnd="@dimen/layout_horizontal_margin"
     android:paddingBottom="@dimen/layout_vertical_margin"
     android:textColor="?vctr_content_secondary"
-    tools:text="@string/room_settings_room_notifications_encryption_notice" />
+    tools:text="@string/room_settings_room_notifications_encryption_notice"
+    tools:viewBindingIgnore="true" />

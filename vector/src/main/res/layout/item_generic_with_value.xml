@@ -8,7 +8,8 @@
     android:minHeight="40dp"
     android:orientation="horizontal"
     android:paddingStart="@dimen/layout_horizontal_margin"
-    android:paddingEnd="@dimen/layout_horizontal_margin">
+    android:paddingEnd="@dimen/layout_horizontal_margin"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/itemGenericWithValueTitleIcon"
@@ -27,7 +28,6 @@
         android:layout_weight="1"
         android:textColor="?vctr_content_primary"
         tools:text="Label" />
-
 
     <TextView
         android:id="@+id/itemGenericWithValueValueText"

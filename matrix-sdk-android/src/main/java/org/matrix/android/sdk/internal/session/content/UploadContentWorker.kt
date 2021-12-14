@@ -33,6 +33,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.util.MimeTypes
+import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
 import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
@@ -63,8 +64,8 @@ private data class NewAttachmentAttributes(
  * Possible previous worker: None
  * Possible next worker    : Always [MultipleEventSendingDispatcherWorker]
  */
-internal class UploadContentWorker(val context: Context, params: WorkerParameters) :
-        SessionSafeCoroutineWorker<UploadContentWorker.Params>(context, params, Params::class.java) {
+internal class UploadContentWorker(val context: Context, params: WorkerParameters, sessionManager: SessionManager) :
+        SessionSafeCoroutineWorker<UploadContentWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
@@ -279,6 +280,11 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
                     Timber.e(failure, "## Failed to update file cache")
                 }
 
+                // Delete the temporary voice message file
+                if (params.attachment.type == ContentAttachmentData.Type.VOICE_MESSAGE) {
+                    context.contentResolver.delete(params.attachment.queryUri, null, null)
+                }
+
                 val uploadThumbnailResult = dealWithThumbnail(params)
 
                 handleSuccess(params,
@@ -298,11 +304,6 @@ internal class UploadContentWorker(val context: Context, params: WorkerParameter
             // Delete all temporary files
             filesToDelete.forEach {
                 tryOrNull { it.delete() }
-            }
-
-            // Delete the temporary voice message file
-            if (params.attachment.type == ContentAttachmentData.Type.AUDIO && params.attachment.mimeType == MimeTypes.Ogg) {
-                context.contentResolver.delete(params.attachment.queryUri, null, null)
             }
         }
     }

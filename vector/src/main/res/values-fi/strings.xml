@@ -2669,4 +2669,36 @@
     <string name="missing_permissions_title">Puuttuvat oikeudet</string>
     <string name="spaces">Avaruudet</string>
     <string name="learn_more">Lue lisää</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">Vähintään %1$s valinta vaaditaan</item>
+        <item quantity="other">Vähintään %1$s valintaa vaaditaan</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">Kysymys ei voi olla tyhjä</string>
+    <string name="create_poll_button">LUO KYSELY</string>
+    <string name="create_poll_add_option">LISÄÄ VALINTA</string>
+    <string name="create_poll_options_hint">Valinta %1$d</string>
+    <string name="create_poll_options_title">Luo valinnat</string>
+    <string name="create_poll_question_hint">Kysymys tai aihe</string>
+    <string name="create_poll_question_title">Kyselyn kysymys tai aihe</string>
+    <string name="create_poll_title">Luo kysely</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">Määritä</string>
+    <string name="bottom_sheet_setup_secure_backup_title">Turvallinen varmuuskopio</string>
+    <string name="settings_setup_secure_backup">Määritä turvallinen varmuuskopio</string>
+    <string name="media_file_added_to_gallery">Mediatiedosto lisätty galleriaan</string>
+    <string name="secure_backup_setup">Määritä turvallinen varmuuskopio</string>
+    <string name="secure_backup_banner_setup_line1">Turvallinen varmuuskopio</string>
+    <string name="directory_your_server">Palvelimesi</string>
+    <string name="room_alias_local_address_empty">Tällä huoneella ei ole paikallisia osoitteita</string>
+    <string name="room_alias_published_alias_add_manually">Julkaise uusi osoite manuaalisesti</string>
+    <string name="space_settings_alias_title">Avaruuden osoitteet</string>
+    <string name="room_settings_alias_title">Huoneen osoitteet</string>
+    <string name="settings_secure_backup_enter_to_setup">Määritä tälle laitteelle</string>
+    <string name="settings_secure_backup_reset">Nollaa turvallinen varmuuskopio</string>
+    <string name="settings_secure_backup_setup">Määritä turvallinen varmuuskopio</string>
+    <string name="settings_secure_backup_manage">Hallitse</string>
+    <string name="settings_secure_backup_section_title">Turvallinen varmuuskopio</string>
+    <string name="shortcut_disabled_reason_sign_out">Istunto on kirjattu ulos!</string>
+    <string name="room_permissions_send_m_room_server_acl_events">Lähetä m.room.server_acl-tapahtumia</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Valitse kotipalvelin</string>
+    <string name="action_not_now">Ei nyt</string>
 </resources>

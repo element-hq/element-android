@@ -16,13 +16,13 @@
 
 package im.vector.app.features.home.room.detail.composer
 
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -30,8 +30,8 @@ import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.home.room.detail.ChatEffect
-import im.vector.app.features.home.room.detail.RoomDetailFragment
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
+import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.toMessageType
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
@@ -41,6 +41,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -84,17 +85,18 @@ class MessageComposerViewModel @AssistedInject constructor(
             is MessageComposerAction.EnterQuoteMode                 -> handleEnterQuoteMode(action)
             is MessageComposerAction.EnterRegularMode               -> handleEnterRegularMode(action)
             is MessageComposerAction.EnterReplyMode                 -> handleEnterReplyMode(action)
-            is MessageComposerAction.SaveDraft                      -> handleSaveDraft(action)
             is MessageComposerAction.SendMessage                    -> handleSendMessage(action)
             is MessageComposerAction.UserIsTyping                   -> handleUserIsTyping(action)
             is MessageComposerAction.OnTextChanged                  -> handleOnTextChanged(action)
             is MessageComposerAction.OnVoiceRecordingUiStateChanged -> handleOnVoiceRecordingUiStateChanged(action)
-            MessageComposerAction.StartRecordingVoiceMessage        -> handleStartRecordingVoiceMessage()
+            is MessageComposerAction.StartRecordingVoiceMessage     -> handleStartRecordingVoiceMessage()
             is MessageComposerAction.EndRecordingVoiceMessage       -> handleEndRecordingVoiceMessage(action.isCancelled)
             is MessageComposerAction.PlayOrPauseVoicePlayback       -> handlePlayOrPauseVoicePlayback(action)
             MessageComposerAction.PauseRecordingVoiceMessage        -> handlePauseRecordingVoiceMessage()
             MessageComposerAction.PlayOrPauseRecordingPlayback      -> handlePlayOrPauseRecordingPlayback()
             is MessageComposerAction.EndAllVoiceActions             -> handleEndAllVoiceActions(action.deleteRecord)
+            is MessageComposerAction.InitializeVoiceRecorder        -> handleInitializeVoiceRecorder(action.attachmentData)
+            is MessageComposerAction.OnEntersBackground             -> handleEntersBackground(action.composerText)
         }
     }
 
@@ -118,7 +120,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun updateIsSendButtonVisibility(triggerAnimation: Boolean) = setState {
-        val isSendButtonVisible = isComposerVisible && (sendMode !is SendMode.REGULAR || currentComposerText.isNotBlank())
+        val isSendButtonVisible = isComposerVisible && (sendMode !is SendMode.Regular || currentComposerText.isNotBlank())
         if (this.isSendButtonVisible != isSendButtonVisible && triggerAnimation) {
             _viewEvents.post(MessageComposerViewEvents.AnimateSendButtonVisibility(isSendButtonVisible))
         }
@@ -126,12 +128,12 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleEnterRegularMode(action: MessageComposerAction.EnterRegularMode) = setState {
-        copy(sendMode = SendMode.REGULAR(action.text, action.fromSharing))
+        copy(sendMode = SendMode.Regular(action.text, action.fromSharing))
     }
 
     private fun handleEnterEditMode(action: MessageComposerAction.EnterEditMode) {
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
-            setState { copy(sendMode = SendMode.EDIT(timelineEvent, timelineEvent.getTextEditableContent())) }
+            setState { copy(sendMode = SendMode.Edit(timelineEvent, timelineEvent.getTextEditableContent())) }
         }
     }
 
@@ -145,20 +147,20 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     private fun handleEnterQuoteMode(action: MessageComposerAction.EnterQuoteMode) {
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
-            setState { copy(sendMode = SendMode.QUOTE(timelineEvent, action.text)) }
+            setState { copy(sendMode = SendMode.Quote(timelineEvent, action.text)) }
         }
     }
 
     private fun handleEnterReplyMode(action: MessageComposerAction.EnterReplyMode) {
         room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
-            setState { copy(sendMode = SendMode.REPLY(timelineEvent, action.text)) }
+            setState { copy(sendMode = SendMode.Reply(timelineEvent, action.text)) }
         }
     }
 
     private fun handleSendMessage(action: MessageComposerAction.SendMessage) {
         withState { state ->
             when (state.sendMode) {
-                is SendMode.REGULAR -> {
+                is SendMode.Regular -> {
                     when (val slashCommandResult = CommandParser.parseSplashCommand(action.text)) {
                         is ParsedCommand.ErrorNotACommand         -> {
                             // Send the text message to the room
@@ -380,7 +382,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                         }
                     }.exhaustive
                 }
-                is SendMode.EDIT    -> {
+                is SendMode.Edit    -> {
                     // is original event a reply?
                     val inReplyTo = state.sendMode.timelineEvent.getRelationContent()?.inReplyTo?.eventId
                     if (inReplyTo != null) {
@@ -403,29 +405,32 @@ class MessageComposerViewModel @AssistedInject constructor(
                     _viewEvents.post(MessageComposerViewEvents.MessageSent)
                     popDraft()
                 }
-                is SendMode.QUOTE   -> {
+                is SendMode.Quote   -> {
                     room.sendQuotedTextMessage(state.sendMode.timelineEvent, action.text.toString(), action.autoMarkdown)
                     _viewEvents.post(MessageComposerViewEvents.MessageSent)
                     popDraft()
                 }
-                is SendMode.REPLY   -> {
+                is SendMode.Reply   -> {
                     state.sendMode.timelineEvent.let {
                         room.replyToMessage(it, action.text.toString(), action.autoMarkdown)
                         _viewEvents.post(MessageComposerViewEvents.MessageSent)
                         popDraft()
                     }
                 }
+                is SendMode.Voice   -> {
+                    // do nothing
+                }
             }.exhaustive
         }
     }
 
     private fun popDraft() = withState {
-        if (it.sendMode is SendMode.REGULAR && it.sendMode.fromSharing) {
+        if (it.sendMode is SendMode.Regular && it.sendMode.fromSharing) {
             // If we were sharing, we want to get back our last value from draft
             loadDraftIfAny()
         } else {
             // Otherwise we clear the composer and remove the draft from db
-            setState { copy(sendMode = SendMode.REGULAR("", false)) }
+            setState { copy(sendMode = SendMode.Regular("", false)) }
             viewModelScope.launch {
                 room.deleteDraft()
             }
@@ -438,24 +443,25 @@ class MessageComposerViewModel @AssistedInject constructor(
             copy(
                     // Create a sendMode from a draft and retrieve the TimelineEvent
                     sendMode = when (currentDraft) {
-                        is UserDraft.REGULAR -> SendMode.REGULAR(currentDraft.text, false)
-                        is UserDraft.QUOTE   -> {
+                        is UserDraft.Regular -> SendMode.Regular(currentDraft.content, false)
+                        is UserDraft.Quote   -> {
                             room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
-                                SendMode.QUOTE(timelineEvent, currentDraft.text)
+                                SendMode.Quote(timelineEvent, currentDraft.content)
                             }
                         }
-                        is UserDraft.REPLY   -> {
+                        is UserDraft.Reply   -> {
                             room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
-                                SendMode.REPLY(timelineEvent, currentDraft.text)
+                                SendMode.Reply(timelineEvent, currentDraft.content)
                             }
                         }
-                        is UserDraft.EDIT    -> {
+                        is UserDraft.Edit    -> {
                             room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
-                                SendMode.EDIT(timelineEvent, currentDraft.text)
+                                SendMode.Edit(timelineEvent, currentDraft.content)
                             }
                         }
+                        is UserDraft.Voice   -> SendMode.Voice(currentDraft.content)
                         else                 -> null
-                    } ?: SendMode.REGULAR("", fromSharing = false)
+                    } ?: SendMode.Regular("", fromSharing = false)
             )
         }
     }
@@ -658,24 +664,24 @@ class MessageComposerViewModel @AssistedInject constructor(
     /**
      * Convert a send mode to a draft and save the draft
      */
-    private fun handleSaveDraft(action: MessageComposerAction.SaveDraft) = withState {
+    private fun handleSaveTextDraft(draft: String) = withState {
         session.coroutineScope.launch {
             when {
-                it.sendMode is SendMode.REGULAR && !it.sendMode.fromSharing -> {
-                    setState { copy(sendMode = it.sendMode.copy(action.draft)) }
-                    room.saveDraft(UserDraft.REGULAR(action.draft))
+                it.sendMode is SendMode.Regular && !it.sendMode.fromSharing -> {
+                    setState { copy(sendMode = it.sendMode.copy(text = draft)) }
+                    room.saveDraft(UserDraft.Regular(draft))
                 }
-                it.sendMode is SendMode.REPLY                               -> {
-                    setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
-                    room.saveDraft(UserDraft.REPLY(it.sendMode.timelineEvent.root.eventId!!, action.draft))
+                it.sendMode is SendMode.Reply                               -> {
+                    setState { copy(sendMode = it.sendMode.copy(text = draft)) }
+                    room.saveDraft(UserDraft.Reply(it.sendMode.timelineEvent.root.eventId!!, draft))
                 }
-                it.sendMode is SendMode.QUOTE                               -> {
-                    setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
-                    room.saveDraft(UserDraft.QUOTE(it.sendMode.timelineEvent.root.eventId!!, action.draft))
+                it.sendMode is SendMode.Quote                               -> {
+                    setState { copy(sendMode = it.sendMode.copy(text = draft)) }
+                    room.saveDraft(UserDraft.Quote(it.sendMode.timelineEvent.root.eventId!!, draft))
                 }
-                it.sendMode is SendMode.EDIT                                -> {
-                    setState { copy(sendMode = it.sendMode.copy(text = action.draft)) }
-                    room.saveDraft(UserDraft.EDIT(it.sendMode.timelineEvent.root.eventId!!, action.draft))
+                it.sendMode is SendMode.Edit                                -> {
+                    setState { copy(sendMode = it.sendMode.copy(text = draft)) }
+                    room.saveDraft(UserDraft.Edit(it.sendMode.timelineEvent.root.eventId!!, draft))
                 }
             }
         }
@@ -683,7 +689,7 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     private fun handleStartRecordingVoiceMessage() {
         try {
-            voiceMessageHelper.startRecording()
+            voiceMessageHelper.startRecording(room.roomId)
         } catch (failure: Throwable) {
             _viewEvents.post(MessageComposerViewEvents.VoicePlaybackOrRecordingFailure(failure))
         }
@@ -694,14 +700,15 @@ class MessageComposerViewModel @AssistedInject constructor(
         if (isCancelled) {
             voiceMessageHelper.deleteRecording()
         } else {
-            voiceMessageHelper.stopRecording()?.let { audioType ->
+            voiceMessageHelper.stopRecording(convertForSending = true)?.let { audioType ->
                 if (audioType.duration > 1000) {
-                    room.sendMedia(audioType.toContentAttachmentData(), false, emptySet())
+                    room.sendMedia(audioType.toContentAttachmentData(isVoiceMessage = true), false, emptySet())
                 } else {
                     voiceMessageHelper.deleteRecording()
                 }
             }
         }
+        handleEnterRegularMode(MessageComposerAction.EnterRegularMode(text = "", fromSharing = false))
     }
 
     private fun handlePlayOrPauseVoicePlayback(action: MessageComposerAction.PlayOrPauseVoicePlayback) {
@@ -724,11 +731,33 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleEndAllVoiceActions(deleteRecord: Boolean) {
+        voiceMessageHelper.clearTracker()
         voiceMessageHelper.stopAllVoiceActions(deleteRecord)
+    }
+
+    private fun handleInitializeVoiceRecorder(attachmentData: ContentAttachmentData) {
+        voiceMessageHelper.initializeRecorder(attachmentData)
+        setState { copy(voiceRecordingUiState = VoiceMessageRecorderView.RecordingUiState.Draft) }
     }
 
     private fun handlePauseRecordingVoiceMessage() {
         voiceMessageHelper.pauseRecording()
+    }
+
+    private fun handleEntersBackground(composerText: String) {
+        val isVoiceRecording = com.airbnb.mvrx.withState(this) { it.isVoiceRecording }
+        if (isVoiceRecording) {
+            voiceMessageHelper.clearTracker()
+            viewModelScope.launch {
+                voiceMessageHelper.stopAllVoiceActions(deleteRecord = false)?.toContentAttachmentData()?.let { voiceDraft ->
+                    val content = voiceDraft.toJsonString()
+                    room.saveDraft(UserDraft.Voice(content))
+                    setState { copy(sendMode = SendMode.Voice(content)) }
+                }
+            }
+        } else {
+            handleSaveTextDraft(draft = composerText)
+        }
     }
 
     private fun launchSlashCommandFlowSuspendable(block: suspend () -> Unit) {
@@ -746,23 +775,9 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: MessageComposerViewState): MessageComposerViewModel
+    interface Factory : MavericksAssistedViewModelFactory<MessageComposerViewModel, MessageComposerViewState> {
+        override fun create(initialState: MessageComposerViewState): MessageComposerViewModel
     }
 
-    /**
-     * We're unable to create this ViewModel with `by hiltMavericksViewModelFactory()` due to the
-     * VoiceMessagePlaybackTracker being ActivityScoped
-     *
-     * This factory allows us to provide the ViewModel instance from the Fragment directly
-     * bypassing the Singleton scope requirement
-     */
-    companion object : MavericksViewModelFactory<MessageComposerViewModel, MessageComposerViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: MessageComposerViewState): MessageComposerViewModel {
-            val fragment: RoomDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.messageComposerViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<MessageComposerViewModel, MessageComposerViewState> by hiltMavericksViewModelFactory()
 }

@@ -27,10 +27,9 @@ import org.commonmark.node.Document
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageOptionsContent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
-import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_BUTTONS
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
@@ -88,26 +87,7 @@ class DisplayableEventFormatter @Inject constructor(
                             simpleFormat(senderName, stringProvider.getString(R.string.sent_a_video), appendAuthor)
                         }
                         MessageType.MSGTYPE_FILE                 -> {
-                            return simpleFormat(senderName, stringProvider.getString(R.string.sent_a_file), appendAuthor)
-                        }
-                        MessageType.MSGTYPE_RESPONSE             -> {
-                            // do not show that?
-                            span { }
-                        }
-                        MessageType.MSGTYPE_OPTIONS              -> {
-                            when (messageContent) {
-                                is MessageOptionsContent -> {
-                                    val previewText = if (messageContent.optionType == OPTION_TYPE_BUTTONS) {
-                                        stringProvider.getString(R.string.sent_a_bot_buttons)
-                                    } else {
-                                        stringProvider.getString(R.string.sent_a_poll)
-                                    }
-                                    simpleFormat(senderName, previewText, appendAuthor)
-                                }
-                                else                     -> {
-                                    span { }
-                                }
-                            }
+                            simpleFormat(senderName, stringProvider.getString(R.string.sent_a_file), appendAuthor)
                         }
                         else                                     -> {
                             simpleFormat(senderName, messageContent.body, appendAuthor)
@@ -136,6 +116,16 @@ class DisplayableEventFormatter @Inject constructor(
             EventType.KEY_VERIFICATION_READY,
             EventType.CALL_CANDIDATES       -> {
                 span { }
+            }
+            EventType.POLL_START                     -> {
+                timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.pollCreationInfo?.question?.question
+                        ?: stringProvider.getString(R.string.sent_a_poll)
+            }
+            EventType.POLL_RESPONSE                  -> {
+                stringProvider.getString(R.string.poll_response_room_list_preview)
+            }
+            EventType.POLL_END                       -> {
+                stringProvider.getString(R.string.poll_end_room_list_preview)
             }
             else                            -> {
                 span {

@@ -20,7 +20,7 @@
             app:scrimAnimationDuration="250"
             app:scrimVisibleHeightTrigger="120dp"
             app:titleEnabled="false"
-            app:toolbarId="@+id/toolbar">
+            app:toolbarId="@id/toolbar">
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:layout_width="match_parent"
@@ -49,7 +49,6 @@
 
             </com.google.android.material.appbar.MaterialToolbar>
 
-
             <!--            <com.google.android.material.appbar.MaterialToolbar-->
             <!--                android:id="@+id/toolbar"-->
             <!--                android:layout_width="match_parent"-->
@@ -63,7 +62,6 @@
             <!--                android:layout_height="wrap_content"-->
             <!--                android:text="@string/decide_which_spaces_can_access" />-->
 
-
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <androidx.appcompat.widget.SearchView
@@ -74,7 +72,6 @@
             android:layout_marginBottom="8dp"
             app:queryHint="@string/search_hint_room_name" />
     </com.google.android.material.appbar.AppBarLayout>
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -101,6 +98,5 @@
             android:layout_height="wrap_content"
             android:text="@string/ok" />
     </LinearLayout>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

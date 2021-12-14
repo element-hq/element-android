@@ -24,7 +24,6 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
 import com.google.zxing.ResultMetadataType
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
@@ -39,7 +38,7 @@ class QrCodeScannerActivity : VectorBaseActivity<ActivitySimpleBinding>() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (isFirstCreation()) {
-            replaceFragment(R.id.simpleFragmentContainer, QrCodeScannerFragment::class.java)
+            replaceFragment(views.simpleFragmentContainer, QrCodeScannerFragment::class.java)
         }
     }
 

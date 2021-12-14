@@ -7,7 +7,8 @@
     android:background="?android:colorBackground"
     android:minHeight="64dp"
     android:paddingStart="@dimen/layout_horizontal_margin"
-    android:paddingEnd="@dimen/layout_horizontal_margin">
+    android:paddingEnd="@dimen/layout_horizontal_margin"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/item_settings_three_pid_icon"
@@ -17,7 +18,7 @@
         android:importantForAccessibility="no"
         android:scaleType="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/item_settings_three_pid_title"
+        app:layout_constraintEnd_toStartOf="@id/item_settings_three_pid_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?vctr_content_secondary"
@@ -32,8 +33,8 @@
         android:layout_marginBottom="4dp"
         android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/item_settings_three_pid_delete"
-        app:layout_constraintStart_toEndOf="@+id/item_settings_three_pid_icon"
+        app:layout_constraintEnd_toStartOf="@id/item_settings_three_pid_delete"
+        app:layout_constraintStart_toEndOf="@id/item_settings_three_pid_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="alice@email-provider.org" />
 

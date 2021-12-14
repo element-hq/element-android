@@ -17,8 +17,8 @@ package im.vector.app
 
 import android.content.Context
 import androidx.core.provider.FontRequest
-import androidx.emoji.text.EmojiCompat
-import androidx.emoji.text.FontRequestEmojiCompatConfig
+import androidx.emoji2.text.EmojiCompat
+import androidx.emoji2.text.FontRequestEmojiCompatConfig
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -52,7 +52,7 @@ class EmojiCompatWrapper @Inject constructor(private val context: Context) {
     fun safeEmojiSpanify(sequence: CharSequence): CharSequence {
         if (initialized) {
             try {
-                return EmojiCompat.get().process(sequence)
+                return EmojiCompat.get().process(sequence) ?: sequence
             } catch (throwable: Throwable) {
                 // Defensive coding against error (should not happend as it is initialized)
                 Timber.e(throwable, "Failed to init EmojiCompat")

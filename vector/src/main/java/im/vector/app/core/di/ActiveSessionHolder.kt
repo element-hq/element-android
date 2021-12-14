@@ -71,6 +71,7 @@ class ActiveSessionHolder @Inject constructor(private val sessionObservableStore
         keyRequestHandler.stop()
         incomingVerificationRequestHandler.stop()
         pushRuleTriggerListener.stop()
+        guardServiceStarter.stop()
     }
 
     fun hasActiveSession(): Boolean {

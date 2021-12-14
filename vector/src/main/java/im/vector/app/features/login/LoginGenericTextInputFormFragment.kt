@@ -78,8 +78,8 @@ class LoginGenericTextInputFormFragment @Inject constructor() : AbstractLoginFra
     }
 
     private fun setupViews() {
-        views.loginGenericTextInputFormOtherButton.setOnClickListener { onOtherButtonClicked() }
-        views.loginGenericTextInputFormSubmit.setOnClickListener { submit() }
+        views.loginGenericTextInputFormOtherButton.debouncedClicks { onOtherButtonClicked() }
+        views.loginGenericTextInputFormSubmit.debouncedClicks { submit() }
     }
 
     private fun setupAutoFill() {

@@ -34,10 +34,6 @@ class RoomNotificationSettingsController @Inject constructor() : TypedEpoxyContr
 
     var callback: Callback? = null
 
-    init {
-        setData(null)
-    }
-
     override fun buildModels(data: RoomNotificationSettingsViewState?) {
         val host = this
         data ?: return

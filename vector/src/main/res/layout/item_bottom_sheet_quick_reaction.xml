@@ -5,7 +5,8 @@
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp">
+    android:padding="8dp"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/quickReaction0"
@@ -32,7 +33,6 @@
         android:padding="4dp"
         android:textColor="@color/emoji_black"
         tools:text="😀" />
-
 
     <TextView
         android:id="@+id/quickReaction3"

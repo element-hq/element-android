@@ -1554,7 +1554,7 @@
 \nVi rekommenderar att du ändrar ditt lösenord och återställningsnyckel i inställningarna omedelbart.</string>
     <string name="bootstrap_crosssigning_progress_key_backup">Sätter upp nyckelsäkerhetskopiering</string>
     <string name="bootstrap_crosssigning_save_usb">Spara den på ett USB-minne eller en säkerhetskopieringsenhet</string>
-    <string name="qr_code_scanned_self_verif_notice">Nästan färdigt! Visar den andra enheten samma sköld\?</string>
+    <string name="qr_code_scanned_self_verif_notice">Nästan färdigt! Visar den andra enheten en bock\?</string>
     <string name="error_failed_to_import_keys">Misslyckades att importera nycklar</string>
     <string name="setup_cross_signing">Aktivera korssignering</string>
     <string name="bootstrap_progress_checking_backup">Kollar säkerhetskopieringsnyckel</string>
@@ -2179,7 +2179,7 @@
     <string name="initialize_cross_signing">Initierar korssignering</string>
     <string name="reset_cross_signing">Återställ nycklar</string>
     <string name="a11y_qr_code_for_verification">QR-kod</string>
-    <string name="qr_code_scanned_by_other_notice">Nästan färdigt! Ser %s samma sköld\?</string>
+    <string name="qr_code_scanned_by_other_notice">Nästan färdigt! Ser %s en bock\?</string>
     <string name="qr_code_scanned_by_other_yes">Ja</string>
     <string name="qr_code_scanned_by_other_no">Nej</string>
     <string name="no_connectivity_to_the_server_indicator">Anslutningen till servern har tappats</string>
@@ -3009,4 +3009,27 @@
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Välj hemserver</string>
     <string name="login_error_homeserver_from_url_not_found">Kan inte nå en hemserver på URL:en %s. Vänligen kontrollera din länk eller välj en hemserver manuellt.</string>
     <string name="notification_listening_for_notifications">Lyssnar efter aviseringar</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">Minst %1$s alternativ krävs</item>
+        <item quantity="other">Minst %1$s alternativ krävs</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">Frågan kan inte vara tom</string>
+    <string name="create_poll_button">SKAPA OMRÖSTNING</string>
+    <string name="create_poll_add_option">LÄGG TILL ALTERNATIV</string>
+    <string name="create_poll_options_hint">Alternativ %1$d</string>
+    <string name="create_poll_options_title">Skapa alternativ</string>
+    <string name="create_poll_question_hint">Fråga eller ämne</string>
+    <string name="create_poll_question_title">Omröstningens fråga eller ämne</string>
+    <string name="create_poll_title">Skapa omröstning</string>
+    <string name="attachment_type_poll">Omröstning</string>
+    <string name="identity_server_consent_dialog_content_2">För att upptäcka befintliga kontakter så behöver du skicka kontaktinfo till din identitetsserver.
+\n
+\nVi hashar din data innan den skickas av sekretesskäl. Godkänner du att denna information skickas\?</string>
+    <string name="identity_server_consent_dialog_title_2">Skicka e-postadresser och telefonnummer till %s</string>
+    <string name="settings_discovery_consent_notice_off_2">Dina kontakter är privata. För att upptäcka användare från dina kontakter så behöver vi ditt tillstånd att skicka kontaktinfo till din identitetsserver.</string>
+    <string name="shortcut_disabled_reason_sign_out">Sessionen har loggats ut!</string>
+    <string name="shortcut_disabled_reason_room_left">Rummet har lämnats!</string>
+    <string name="action_not_now">Inte nu</string>
+    <string name="identity_server_consent_dialog_content_3">För att hitta existerande kontakter så behöver du skicka kontaktinfo (e-postadresser och telefonnummer) till din identitetsserver. Vi hashar din data innan den skickas av sekretesskäl.</string>
+    <string name="identity_server_consent_dialog_content_question">Går du med på att skicka den här infon\?</string>
 </resources>

@@ -5,7 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
-    android:padding="16dp">
+    android:minHeight="80dp"
+    android:padding="16dp"
+    tools:viewBindingIgnore="true">
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="discovery_policy_name,discovery_policy_url"
+        app:flow_verticalGap="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/discovery_policy_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/discovery_policy_name"
@@ -16,10 +29,7 @@
         android:paddingEnd="8dp"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@id/discovery_policy_arrow"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Integration manager" />
+        tools:text="Copyright" />
 
     <TextView
         android:id="@+id/discovery_policy_url"
@@ -28,11 +38,8 @@
         android:layout_height="wrap_content"
         android:paddingStart="0dp"
         android:paddingEnd="8dp"
-        android:textColor="?vctr_content_secondary"
-        app:layout_constraintEnd_toStartOf="@id/discovery_policy_arrow"
-        app:layout_constraintStart_toStartOf="@+id/discovery_policy_name"
-        app:layout_constraintTop_toBottomOf="@+id/discovery_policy_name"
-        tools:text="Use bots, bridges, widget and sticker packs." />
+        android:textColor="?android:textColorLink"
+        tools:text="https://element.io/copyright" />
 
     <!-- Do not use drawableEnd on the TextView because of RTL support -->
     <ImageView

@@ -10,5 +10,6 @@
     android:layout_marginEnd="@dimen/layout_horizontal_margin"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/phoneBookFilterContainer"
-    tools:text="@string/matrix_only_filter" />
+    app:layout_constraintTop_toBottomOf="@id/phoneBookFilterContainer"
+    tools:text="@string/matrix_only_filter"
+    tools:viewBindingIgnore="true" />

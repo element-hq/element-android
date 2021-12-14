@@ -21,7 +21,6 @@ import android.content.Intent
 import com.airbnb.mvrx.Mavericks
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
@@ -45,7 +44,7 @@ class PinActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigur
     override fun initUiAndData() {
         if (isFirstCreation()) {
             val fragmentArgs: PinArgs = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return
-            addFragment(R.id.simpleFragmentContainer, PinFragment::class.java, fragmentArgs)
+            addFragment(views.simpleFragmentContainer, PinFragment::class.java, fragmentArgs)
         }
     }
 

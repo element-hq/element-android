@@ -21,13 +21,15 @@ import com.squareup.moshi.JsonClass
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 
-/**
- * Ref: https://github.com/matrix-org/matrix-doc/pull/2192
- */
 @JsonClass(generateAdapter = true)
 data class MessagePollResponseContent(
-        @Json(name = MessageContent.MSG_TYPE_JSON_KEY) override val msgType: String = MessageType.MSGTYPE_RESPONSE,
-        @Json(name = "body") override val body: String,
+        /**
+         * Local message type, not from server
+         */
+        @Transient
+        override val msgType: String = MessageType.MSGTYPE_POLL_RESPONSE,
+        @Json(name = "body") override val body: String = "",
         @Json(name = "m.relates_to") override val relatesTo: RelationDefaultContent? = null,
-        @Json(name = "m.new_content") override val newContent: Content? = null
+        @Json(name = "m.new_content") override val newContent: Content? = null,
+        @Json(name = "org.matrix.msc3381.poll.response") val response: PollResponse? = null
 ) : MessageContent

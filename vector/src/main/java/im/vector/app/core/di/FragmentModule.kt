@@ -24,6 +24,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityComponent
 import dagger.multibindings.IntoMap
+import im.vector.app.features.analytics.ui.consent.AnalyticsOptInFragment
 import im.vector.app.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
@@ -133,6 +134,7 @@ import im.vector.app.features.settings.devtools.KeyRequestsFragment
 import im.vector.app.features.settings.devtools.OutgoingKeyRequestListFragment
 import im.vector.app.features.settings.homeserver.HomeserverSettingsFragment
 import im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment
+import im.vector.app.features.settings.legals.LegalsFragment
 import im.vector.app.features.settings.locale.LocalePickerFragment
 import im.vector.app.features.settings.notifications.VectorSettingsAdvancedNotificationPreferenceFragment
 import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment
@@ -521,6 +523,11 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(AnalyticsOptInFragment::class)
+    fun bindAnalyticsOptInFragment(fragment: AnalyticsOptInFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(EmojiChooserFragment::class)
     fun bindEmojiChooserFragment(fragment: EmojiChooserFragment): Fragment
 
@@ -698,6 +705,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(DiscoverySettingsFragment::class)
     fun bindDiscoverySettingsFragment(fragment: DiscoverySettingsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LegalsFragment::class)
+    fun bindLegalsFragment(fragment: LegalsFragment): Fragment
 
     @Binds
     @IntoMap

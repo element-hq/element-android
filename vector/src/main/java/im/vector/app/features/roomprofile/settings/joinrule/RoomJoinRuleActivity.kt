@@ -61,7 +61,7 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         roomProfileArgs = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return
         if (isFirstCreation()) {
             addFragment(
-                    R.id.simpleFragmentContainer,
+                    views.simpleFragmentContainer,
                     RoomJoinRuleFragment::class.java,
                     roomProfileArgs
             )
@@ -121,7 +121,7 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>() {
         supportFragmentManager.commitTransaction {
             setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
             val tag = RoomJoinRuleChooseRestrictedFragment::class.simpleName
-            replace(R.id.simpleFragmentContainer,
+            replace(views.simpleFragmentContainer.id,
                     RoomJoinRuleChooseRestrictedFragment::class.java,
                     this@RoomJoinRuleActivity.roomProfileArgs.toMvRxBundle(),
                     tag

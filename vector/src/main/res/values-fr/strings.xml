@@ -1930,7 +1930,7 @@
     <string name="initialize_cross_signing">Initialiser la signature croisée</string>
     <string name="reset_cross_signing">Réinitialiser les clés</string>
     <string name="a11y_qr_code_for_verification">Code QR</string>
-    <string name="qr_code_scanned_by_other_notice">On y est presque ! Est-ce que %s affiche le même bouclier \?</string>
+    <string name="qr_code_scanned_by_other_notice">On y est presque ! Est-ce que %s affiche une marque cochée \?</string>
     <string name="qr_code_scanned_by_other_yes">Oui</string>
     <string name="qr_code_scanned_by_other_no">Non</string>
     <string name="no_connectivity_to_the_server_indicator">La connexion avec le serveur a été perdue</string>
@@ -2029,7 +2029,7 @@
     <string name="encryption_not_enabled">Chiffrement désactivé</string>
     <string name="encryption_unknown_algorithm_tile_description">Le chiffrement utilisé par ce salon n’est pas pris en charge</string>
     <string name="room_created_summary_item">%s a créé et configuré ce salon.</string>
-    <string name="qr_code_scanned_self_verif_notice">On y est presque ! L’autre appareil affiche-t-il le même bouclier \?</string>
+    <string name="qr_code_scanned_self_verif_notice">On y est presque ! L’autre appareil affiche-t-il une marque cochée \?</string>
     <string name="qr_code_scanned_verif_waiting_notice">On y est presque ! En attente de la confirmation…</string>
     <string name="qr_code_scanned_verif_waiting">En attente de %s…</string>
     <string name="error_failed_to_import_keys">Échec de l’importation des clés</string>
@@ -3016,4 +3016,27 @@
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Choisir un serveur d’accueil</string>
     <string name="login_error_homeserver_from_url_not_found">Impossible de contacter un serveur d’accueil à l’URL %s. Veuillez vérifier votre lien ou choisir manuellement un serveur d’accueil.</string>
     <string name="notification_listening_for_notifications">Écoute des notifications</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">Au moins %1$s choix est nécessaire</item>
+        <item quantity="other">Au moins %1$s choix sont nécessaires</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">La question ne peut pas être vide</string>
+    <string name="create_poll_button">Créer le sondage</string>
+    <string name="create_poll_add_option">Ajouter un choix</string>
+    <string name="create_poll_options_hint">Choix %1$d</string>
+    <string name="create_poll_options_title">Créer des choix</string>
+    <string name="create_poll_question_hint">Question ou sujet</string>
+    <string name="create_poll_question_title">Question ou sujet du sondage</string>
+    <string name="create_poll_title">Créer un sondage</string>
+    <string name="attachment_type_poll">Sondage</string>
+    <string name="identity_server_consent_dialog_content_2">Pour découvrir des contacts existants, il vous faut envoyer des informations de contacts à votre serveur d’identité.
+\n
+\nPour votre vie privée, les données sont condensées avant l’envoi. Consentez-vous à l’envoi de ces informations \?</string>
+    <string name="identity_server_consent_dialog_title_2">Envoyer des courriels et des numéros de téléphone à %s</string>
+    <string name="settings_discovery_consent_notice_off_2">Vos contacts sont personnels et privés. Pour découvrir des utilisateurs à partir de vos contacts, nous avons besoin de votre permission pour envoyer les informations des contacts à votre serveur d’identité.</string>
+    <string name="shortcut_disabled_reason_sign_out">La session a été déconnectée !</string>
+    <string name="shortcut_disabled_reason_room_left">Le salon a été quitté !</string>
+    <string name="identity_server_consent_dialog_content_question">Êtes vous d’accord d’envoyer ces informations \?</string>
+    <string name="identity_server_consent_dialog_content_3">Pour découvrir des contacts existants, il vous faut envoyer les informations de contact (adresses de courriel et numéros de téléphone) à votre serveur d’identité. Les données seront condensées avant l’envoi pour respecter la vie privée.</string>
+    <string name="action_not_now">Pas maintenant</string>
 </resources>

@@ -1442,7 +1442,7 @@
     <string name="not_trusted">بدون اعتماد</string>
     <string name="reset_cross_signing">بازنشانی کلیدها</string>
     <string name="a11y_qr_code_for_verification">رمز QR</string>
-    <string name="qr_code_scanned_by_other_notice">تقریباً تمام شد! آیا %s همین سپر را نشان می‌دهد؟</string>
+    <string name="qr_code_scanned_by_other_notice">تقریباً تمام شد! آیا %s تیکی را نشان می‌دهد؟</string>
     <string name="qr_code_scanned_by_other_yes">بله</string>
     <string name="qr_code_scanned_by_other_no">خیر</string>
     <string name="no_connectivity_to_the_server_indicator">اتّصال به کارساز از دست رفت</string>
@@ -1586,7 +1586,7 @@
     <string name="error_failed_to_import_keys">شکست در درون‌ریزی کلیدها</string>
     <string name="qr_code_scanned_verif_waiting">منتظر %s…</string>
     <string name="qr_code_scanned_verif_waiting_notice">تقریباً تمام! منتظر تأیید…</string>
-    <string name="qr_code_scanned_self_verif_notice">تقریباً تمام! آیا افزارهٔ دیگر، همین سپر را نشان می‌دهد؟</string>
+    <string name="qr_code_scanned_self_verif_notice">تقریباً تمام! آیا افزارهٔ دیگر، تیکی را نشان می‌دهد؟</string>
     <string name="direct_room_created_summary_item_by_you">پیوستید.</string>
     <string name="direct_room_created_summary_item">%s پیوست.</string>
     <string name="room_created_summary_item_by_you">اتاق را ساخته و پیکربندی کردید.</string>
@@ -3009,4 +3009,27 @@
     <string name="login_error_homeserver_from_url_not_found_enter_manual">گزینش کارساز خانگی</string>
     <string name="login_error_homeserver_from_url_not_found">نتوانست در نشانی %s به کارساز خاتگی‌ای برسد. لطفاً پیوندتان را بررسی کرده یا کارساز خانگی‌ای را به صورت دستی برگزینید.</string>
     <string name="notification_listening_for_notifications">شنود کردن برای آگاهی‌ها</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">کمینه %1$s گزینه لازم است</item>
+        <item quantity="other">کمینه %1$s گزینه لازم است</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">پرسش نمی‌تواند خالی باشد</string>
+    <string name="create_poll_button">ایجاد نظرسنجی</string>
+    <string name="create_poll_add_option">افزودن گزینه</string>
+    <string name="create_poll_options_hint">گزینهٔ %1$d</string>
+    <string name="create_poll_options_title">ایجاد گزینه‌ها</string>
+    <string name="create_poll_question_hint">پرسش یا موضوع</string>
+    <string name="create_poll_question_title">پرسش یا موضوع نظرسنجی</string>
+    <string name="create_poll_title">ایجاد نظرسنجی</string>
+    <string name="attachment_type_poll">نظرسنجی</string>
+    <string name="identity_server_consent_dialog_content_2">برای کشف آشنایان موجود، لازم است اطّلاعات آشنا به کارساز هوییتان فرستاده شود.
+\n
+\nپیش از فرستادن، داده‌هایتان را برای محرمانگی در هم می‌ریزیم. راضی به فرستادن این اطّلاعات هستید؟</string>
+    <string name="identity_server_consent_dialog_title_2">فرستادن رایانامه‌ّا و شماره‌های تلفن به %s</string>
+    <string name="settings_discovery_consent_notice_off_2">آشنایانتان خصوصی هستند. برای کشف کاربران از آشنایانتان، نیاز به اجازه‌تان برای فرستادن اطّلاعات آشنا به کارساز هویتتان داریم.</string>
+    <string name="shortcut_disabled_reason_sign_out">نشست خارج شده است!</string>
+    <string name="shortcut_disabled_reason_room_left">اتاق ترک شده است!</string>
+    <string name="identity_server_consent_dialog_content_question">با فرستادن این اطّلاعات موافقید؟</string>
+    <string name="action_not_now">اکنون نه</string>
+    <string name="identity_server_consent_dialog_content_3">برای کشف آشنایان موجود، لازم است اطلاعات آشنایان (رایانامه‌ها و شماره تلفن‌ها) را به کارساز هویتتان بفرستید. برای محرمانگیتان، داده‌هایتان را پیش از فرستادن، در هم می‌ریزیم.</string>
 </resources>

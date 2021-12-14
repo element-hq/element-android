@@ -1,0 +1,2 @@
+Hlavné zmeny v tejto verzii: Opravy chýb týkajúce sa najmä oznámení.
+Úplný zoznam zmien: https://github.com/vector-im/element-android/releases/tag/v1.3.7-RC2

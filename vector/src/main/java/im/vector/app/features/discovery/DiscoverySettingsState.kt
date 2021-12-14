@@ -21,7 +21,7 @@ import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 
 data class DiscoverySettingsState(
-        val identityServer: Async<IdentityServerWithTerms?> = Uninitialized,
+        val identityServer: Async<ServerAndPolicies?> = Uninitialized,
         val emailList: Async<List<PidInfo>> = Uninitialized,
         val phoneNumbersList: Async<List<PidInfo>> = Uninitialized,
         // Can be true if terms are updated
@@ -29,10 +29,3 @@ data class DiscoverySettingsState(
         val userConsent: Boolean = false,
         val isIdentityPolicyUrlsExpanded: Boolean = false
 ) : MavericksState
-
-data class IdentityServerWithTerms(
-        val serverUrl: String,
-        val policies: List<IdentityServerPolicy>
-)
-
-data class IdentityServerPolicy(val name: String, val url: String)

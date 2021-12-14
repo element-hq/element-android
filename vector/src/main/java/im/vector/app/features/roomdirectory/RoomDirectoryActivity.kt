@@ -23,7 +23,6 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.popBackstack
@@ -66,14 +65,14 @@ class RoomDirectoryActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matri
                             // Transmit the filter to the CreateRoomFragment
                             withState(roomDirectoryViewModel) {
                                 addFragmentToBackstack(
-                                        R.id.simpleFragmentContainer,
+                                        views.simpleFragmentContainer,
                                         CreateRoomFragment::class.java,
                                         CreateRoomArgs(it.currentFilter)
                                 )
                             }
                         }
                         is RoomDirectorySharedAction.ChangeProtocol ->
-                            addFragmentToBackstack(R.id.simpleFragmentContainer, RoomDirectoryPickerFragment::class.java)
+                            addFragmentToBackstack(views.simpleFragmentContainer, RoomDirectoryPickerFragment::class.java)
                         is RoomDirectorySharedAction.Close          -> finish()
                     }
                 }
@@ -82,7 +81,7 @@ class RoomDirectoryActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matri
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            addFragment(R.id.simpleFragmentContainer, PublicRoomsFragment::class.java)
+            addFragment(views.simpleFragmentContainer, PublicRoomsFragment::class.java)
         }
     }
 
