@@ -3194,4 +3194,58 @@
     <string name="create_room_disable_federation_description">Можете ввімкнути це, якщо в кімнаті співпрацюватимуть лише внутрішні команди на вашому домашньому сервері. Цього більше не можна буде змінити.</string>
     <string name="template_soft_logout_sso_not_same_user_error">Цей сеанс — користувача %1$s, а ви надаєте облікові дані користувача %2$s. Це не підтримується в ${app_name}.
 \nБудь ласка, спершу очистіть дані, а тоді ввійдіть в інший обліковий запис.</string>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">%1$d голос. Проголосуйте, щоб побачити результати</item>
+        <item quantity="few">%1$d голоси. Проголосуйте, щоб побачити результати</item>
+        <item quantity="many">%1$d голосів. Проголосуйте, щоб побачити результати</item>
+        <item quantity="other">%1$d голосів. Проголосуйте, щоб побачити результати</item>
+    </plurals>
+    <string name="delete_poll_dialog_content">Точно видалити опитування\? Ви не зможете відновити опитування після видалення.</string>
+    <string name="delete_poll_dialog_title">Видалити опитування</string>
+    <string name="poll_end_room_list_preview">Голосування завершене</string>
+    <string name="poll_response_room_list_preview">Голос надіслано</string>
+    <string name="labs_enable_polls">Увімкнути опитування</string>
+    <string name="end_poll_confirmation_approve_button">Завершити опитування</string>
+    <string name="end_poll_confirmation_description">Люди більше не зможуть голосувати, і будуть показані остаточні результати опитування.</string>
+    <string name="end_poll_confirmation_title">Завершити це опитування\?</string>
+    <string name="a11y_poll_winner_option">варіант-переможець</string>
+    <string name="poll_end_action">Завершити опитування</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Остаточний результат на підставі %1$d голосу</item>
+        <item quantity="few">Остаточний результат на підставі %1$d голосів</item>
+        <item quantity="many">Остаточний результат на підставі %1$d голосів</item>
+        <item quantity="other">Остаточний результат на підставі %1$d голосів</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">На підставі %1$d голосу</item>
+        <item quantity="few">На підставі %1$d голосів</item>
+        <item quantity="many">На підставі %1$d голосів</item>
+        <item quantity="other">На підставі %1$d голосів</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d голос</item>
+        <item quantity="few">%1$d голоси</item>
+        <item quantity="many">%1$d голосів</item>
+        <item quantity="other">%1$d голосів</item>
+    </plurals>
+    <string name="preference_system_settings">Системні налаштування</string>
+    <string name="preference_versions">Версії</string>
+    <string name="preference_help_summary">Отримати допомогу в використанні Element</string>
+    <string name="preference_help_title">Довідка й підтримка</string>
+    <string name="preference_help">Довідка</string>
+    <string name="preference_root_legals">Юридичне</string>
+    <string name="legals_no_policy_provided">Цей сервер не надає політики.</string>
+    <string name="legals_third_party_notices">Бібліотеки сторонніх осіб</string>
+    <string name="legals_identity_server_title">Політика вашого сервера ідентифікації</string>
+    <string name="legals_home_server_title">Політика вашого домашнього сервера</string>
+    <string name="template_legals_application_title">Політика ${app_name}</string>
+    <string name="analytics_opt_in_list_item_3">Можете вимкнути це коли завгодно в налаштуваннях</string>
+    <string name="analytics_opt_in_list_item_2">Ми <b>не</b> передаємо даних стороннім особам</string>
+    <string name="analytics_opt_in_list_item_1">Ми <b>не</b> записуємо й <b>не</b> аналізуємо жодних даних облікового запису</string>
+    <string name="analytics_opt_in_content_link">тут</string>
+    <string name="analytics_opt_in_content">Допомагайте нам визначати проблеми й удосконалювати Element, надсилаючи анонімні дані про використання. Щоб розуміти, як люди використовують кілька пристроїв, ми створимо спільний для ваших пристроїв випадковий ідентифікатор.
+\n
+\nМожете прочитати всі наші умови %s.</string>
+    <string name="analytics_opt_in_title">Допоможіть покращити Element</string>
+    <string name="action_enable">Ввімкнути</string>
 </resources>
