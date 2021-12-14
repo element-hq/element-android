@@ -3233,9 +3233,9 @@
     <string name="preference_help_summary">Отримати допомогу в використанні Element</string>
     <string name="preference_help_title">Довідка й підтримка</string>
     <string name="preference_help">Довідка</string>
-    <string name="preference_root_legals">Юридичне</string>
+    <string name="preference_root_legals">Правові положення</string>
     <string name="legals_no_policy_provided">Цей сервер не надає політики.</string>
-    <string name="legals_third_party_notices">Бібліотеки сторонніх осіб</string>
+    <string name="legals_third_party_notices">Сторонні бібліотеки</string>
     <string name="legals_identity_server_title">Політика вашого сервера ідентифікації</string>
     <string name="legals_home_server_title">Політика вашого домашнього сервера</string>
     <string name="template_legals_application_title">Політика ${app_name}</string>
@@ -3247,5 +3247,5 @@
 \n
 \nМожете прочитати всі наші умови %s.</string>
     <string name="analytics_opt_in_title">Допоможіть покращити Element</string>
-    <string name="action_enable">Ввімкнути</string>
+    <string name="action_enable">Увімкнути</string>
 </resources>
