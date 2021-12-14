@@ -16,7 +16,7 @@
 
 package im.vector.app.features.home.room.list
 
-import io.reactivex.functions.Predicate
+import androidx.core.util.Predicate
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 

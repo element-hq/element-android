@@ -17,16 +17,17 @@
 package im.vector.app.features.home
 
 import androidx.lifecycle.asFlow
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.config.analyticsConfig
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.analytics.store.AnalyticsStore
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
@@ -58,35 +59,46 @@ import kotlin.coroutines.resumeWithException
 
 class HomeActivityViewModel @AssistedInject constructor(
         @Assisted initialState: HomeActivityViewState,
-        @Assisted private val args: HomeActivityArgs,
         private val activeSessionHolder: ActiveSessionHolder,
         private val reAuthHelper: ReAuthHelper,
+        private val analyticsStore: AnalyticsStore,
         private val vectorPreferences: VectorPreferences
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: HomeActivityViewState, args: HomeActivityArgs): HomeActivityViewModel
+    interface Factory : MavericksAssistedViewModelFactory<HomeActivityViewModel, HomeActivityViewState> {
+        override fun create(initialState: HomeActivityViewState): HomeActivityViewModel
     }
 
-    companion object : MavericksViewModelFactory<HomeActivityViewModel, HomeActivityViewState> {
+    companion object : MavericksViewModelFactory<HomeActivityViewModel, HomeActivityViewState> by hiltMavericksViewModelFactory()
 
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: HomeActivityViewState): HomeActivityViewModel? {
-            val activity: HomeActivity = viewModelContext.activity()
-            val args: HomeActivityArgs? = activity.intent.getParcelableExtra(Mavericks.KEY_ARG)
-            return activity.viewModelFactory.create(state, args ?: HomeActivityArgs(clearNotification = false, accountCreation = false))
-        }
-    }
-
+    private var isInitialized = false
     private var checkBootstrap = false
     private var onceTrusted = false
 
-    init {
+    private fun initialize() {
+        if (isInitialized) return
+        isInitialized = true
         cleanupFiles()
         observeInitialSync()
         checkSessionPushIsOn()
         observeCrossSigningReset()
+        // Disable Analytics opt-in automatic display
+        // Waiting for translation and for analytic events to be actually sent
+        // observeAnalytics()
+    }
+
+    @Suppress("unused")
+    private fun observeAnalytics() {
+        if (analyticsConfig.isEnabled) {
+            analyticsStore.didAskUserConsentFlow
+                    .onEach { didAskUser ->
+                        if (!didAskUser) {
+                            _viewEvents.post(HomeActivityViewEvents.ShowAnalyticsOptIn)
+                        }
+                    }
+                    .launchIn(viewModelScope)
+        }
     }
 
     private fun cleanupFiles() {
@@ -250,6 +262,9 @@ class HomeActivityViewModel @AssistedInject constructor(
         when (action) {
             HomeActivityViewActions.PushPromptHasBeenReviewed -> {
                 vectorPreferences.setDidAskUserToEnableSessionPush()
+            }
+            HomeActivityViewActions.ViewStarted               -> {
+                initialize()
             }
         }.exhaustive
     }

@@ -37,7 +37,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
-import org.matrix.android.sdk.api.session.room.model.message.OptionItem
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.send.SendService
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -98,14 +97,20 @@ internal class DefaultSendService @AssistedInject constructor(
                 .let { sendEvent(it) }
     }
 
-    override fun sendPoll(question: String, options: List<OptionItem>): Cancelable {
+    override fun sendPoll(question: String, options: List<String>): Cancelable {
         return localEchoEventFactory.createPollEvent(roomId, question, options)
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }
 
-    override fun sendOptionsReply(pollEventId: String, optionIndex: Int, optionValue: String): Cancelable {
-        return localEchoEventFactory.createOptionsReplyEvent(roomId, pollEventId, optionIndex, optionValue)
+    override fun voteToPoll(pollEventId: String, answerId: String): Cancelable {
+        return localEchoEventFactory.createPollReplyEvent(roomId, pollEventId, answerId)
+                .also { createLocalEcho(it) }
+                .let { sendEvent(it) }
+    }
+
+    override fun endPoll(pollEventId: String): Cancelable {
+        return localEchoEventFactory.createEndPollEvent(roomId, pollEventId)
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }

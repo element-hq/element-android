@@ -56,6 +56,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/passphrase_enter_passphrase"
+                android:inputType="textPassword"
                 android:maxLines="3"
                 android:singleLine="false" />
 
@@ -71,7 +72,7 @@
             android:textColor="?vctr_content_secondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/keys_backup_passphrase_enter_til"
+            app:layout_constraintTop_toBottomOf="@id/keys_backup_passphrase_enter_til"
             tools:text="@string/keys_backup_restore_with_passphrase_helper_with_link" />
 
         <Button
@@ -84,7 +85,7 @@
             android:text="@string/keys_backup_unlock_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/helperTextWithLink" />
+            app:layout_constraintTop_toBottomOf="@id/helperTextWithLink" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

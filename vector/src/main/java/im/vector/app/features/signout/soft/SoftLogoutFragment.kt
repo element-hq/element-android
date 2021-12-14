@@ -55,7 +55,7 @@ class SoftLogoutFragment @Inject constructor(
 
         setupRecyclerView()
 
-        softLogoutViewModel.subscribe(this) { softLogoutViewState ->
+        softLogoutViewModel.onEach { softLogoutViewState ->
             softLogoutController.update(softLogoutViewState)
             when (val mode = softLogoutViewState.asyncHomeServerLoginFlowRequest.invoke()) {
                 is LoginMode.SsoAndPassword -> {

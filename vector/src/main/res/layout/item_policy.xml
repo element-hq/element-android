@@ -7,7 +7,8 @@
     android:foreground="?attr/selectableItemBackground"
     android:minHeight="72dp"
     android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+    android:paddingEnd="16dp"
+    tools:viewBindingIgnore="true">
 
     <CheckBox
         android:id="@+id/adapter_item_policy_checkbox"
@@ -24,9 +25,9 @@
         android:layout_height="wrap_content"
         android:drawablePadding="8dp"
         android:textColor="?vctr_content_primary"
-        app:layout_constraintBottom_toTopOf="@+id/adapter_item_policy_subtitle"
-        app:layout_constraintEnd_toStartOf="@+id/adapter_item_policy_arrow"
-        app:layout_constraintStart_toEndOf="@+id/adapter_item_policy_checkbox"
+        app:layout_constraintBottom_toTopOf="@id/adapter_item_policy_subtitle"
+        app:layout_constraintEnd_toStartOf="@id/adapter_item_policy_arrow"
+        app:layout_constraintStart_toEndOf="@id/adapter_item_policy_checkbox"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="Policy title" />
@@ -40,9 +41,9 @@
         android:drawablePadding="8dp"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/adapter_item_policy_arrow"
-        app:layout_constraintStart_toEndOf="@+id/adapter_item_policy_checkbox"
-        app:layout_constraintTop_toBottomOf="@+id/adapter_item_policy_title"
+        app:layout_constraintEnd_toStartOf="@id/adapter_item_policy_arrow"
+        app:layout_constraintStart_toEndOf="@id/adapter_item_policy_checkbox"
+        app:layout_constraintTop_toBottomOf="@id/adapter_item_policy_title"
         tools:text="matrix.org" />
 
     <!-- Do not use drawableEnd on the TextView because of RTL support -->

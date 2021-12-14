@@ -24,14 +24,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.autofill.HintConstants
 import androidx.core.view.isVisible
-import com.jakewharton.rxbinding3.widget.textChanges
+import androidx.lifecycle.lifecycleScope
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSignupUsername2Binding
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.SocialLoginButtonsView
-import io.reactivex.rxkotlin.subscribeBy
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 /**
@@ -111,12 +114,12 @@ class LoginFragmentSignupUsername2 @Inject constructor() : AbstractSSOLoginFragm
         views.loginSubmit.setOnClickListener { submit() }
         views.loginField.textChanges()
                 .map { it.trim() }
-                .subscribeBy { text ->
+                .onEach { text ->
                     val isNotEmpty = text.isNotEmpty()
                     views.loginFieldTil.error = null
                     views.loginSubmit.isEnabled = isNotEmpty
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     override fun resetViewModel() {

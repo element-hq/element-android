@@ -49,7 +49,6 @@ import javax.inject.Inject
  * - the account has been created and we propose the user to set an avatar and a display name
  */
 class AccountCreatedFragment @Inject constructor(
-        val accountCreatedViewModelFactory: AccountCreatedViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
         private val dateFormatter: VectorDateFormatter,
         private val matrixItemColorProvider: MatrixItemColorProvider,
@@ -86,11 +85,11 @@ class AccountCreatedFragment @Inject constructor(
     }
 
     private fun setupClickListener() {
-        views.loginAccountCreatedMessage.setOnClickListener {
+        views.loginAccountCreatedMessage.debouncedClicks {
             // Update display name
             displayDialog()
         }
-        views.loginAccountCreatedAvatar.setOnClickListener {
+        views.loginAccountCreatedAvatar.debouncedClicks {
             galleryOrCameraDialogHelper.show()
         }
     }
@@ -121,8 +120,8 @@ class AccountCreatedFragment @Inject constructor(
     }
 
     private fun setupSubmitButton() {
-        views.loginAccountCreatedLater.setOnClickListener { terminate() }
-        views.loginAccountCreatedDone.setOnClickListener { terminate() }
+        views.loginAccountCreatedLater.debouncedClicks { terminate() }
+        views.loginAccountCreatedDone.debouncedClicks { terminate() }
     }
 
     private fun terminate() {

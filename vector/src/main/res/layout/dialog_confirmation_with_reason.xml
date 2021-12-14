@@ -26,7 +26,7 @@
         android:checked="true"
         android:text="@string/delete_event_dialog_reason_checkbox"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialogConfirmationText" />
+        app:layout_constraintTop_toBottomOf="@id/dialogConfirmationText" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/dialogReasonTextInputLayout"
@@ -36,7 +36,7 @@
         app:counterMaxLength="240"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialogReasonCheck"
+        app:layout_constraintTop_toBottomOf="@id/dialogReasonCheck"
         tools:hint="@string/delete_event_dialog_reason_hint">
 
         <com.google.android.material.textfield.TextInputEditText

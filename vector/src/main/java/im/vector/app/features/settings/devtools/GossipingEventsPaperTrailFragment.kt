@@ -34,7 +34,6 @@ import org.matrix.android.sdk.api.session.events.model.Event
 import javax.inject.Inject
 
 class GossipingEventsPaperTrailFragment @Inject constructor(
-        val viewModelFactory: GossipingEventsPaperTrailViewModel.Factory,
         private val epoxyController: GossipingTrailPagedEpoxyController,
         private val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),

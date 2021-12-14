@@ -21,23 +21,23 @@ import androidx.annotation.IdRes
 import androidx.lifecycle.asFlow
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
-import com.jakewharton.rxrelay2.BehaviorRelay
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.flow.chunk
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.features.attachments.toContentAttachmentData
+import im.vector.app.core.utils.BehaviorDataSource
 import im.vector.app.features.call.conference.ConferenceEvent
 import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.call.conference.JitsiService
@@ -46,7 +46,6 @@ import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy
 import im.vector.app.features.crypto.verification.SupportedVerificationMethodsProvider
-import im.vector.app.features.home.room.detail.composer.VoiceMessageHelper
 import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandler
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
@@ -55,14 +54,13 @@ import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
-import im.vector.app.features.voice.VoicePlayerHelper
-import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -102,7 +100,6 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
 class RoomDetailViewModel @AssistedInject constructor(
@@ -119,16 +116,14 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val directRoomHelper: DirectRoomHelper,
         private val jitsiService: JitsiService,
         private val activeConferenceHolder: JitsiActiveConferenceHolder,
-        private val voiceMessageHelper: VoiceMessageHelper,
-        private val voicePlayerHelper: VoicePlayerHelper,
         timelineFactory: TimelineFactory
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
 
     private val room = session.getRoom(initialState.roomId)!!
     private val eventId = initialState.eventId
-    private val invisibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsInvisible>()
-    private val visibleEventsObservable = BehaviorRelay.create<RoomDetailAction.TimelineEventTurnsVisible>()
+    private val invisibleEventsSource = BehaviorDataSource<RoomDetailAction.TimelineEventTurnsInvisible>()
+    private val visibleEventsSource = BehaviorDataSource<RoomDetailAction.TimelineEventTurnsVisible>()
     private var timelineEvents = MutableSharedFlow<List<TimelineEvent>>(0)
     val timeline = timelineFactory.createTimeline(viewModelScope, room, eventId)
 
@@ -147,20 +142,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     private var prepareToEncrypt: Async<Unit> = Uninitialized
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: RoomDetailViewState): RoomDetailViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
+        override fun create(initialState: RoomDetailViewState): RoomDetailViewModel
     }
 
-    companion object : MavericksViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
-
+    companion object : MavericksViewModelFactory<RoomDetailViewModel, RoomDetailViewState> by hiltMavericksViewModelFactory() {
         const val PAGINATION_COUNT = 50
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomDetailViewState): RoomDetailViewModel? {
-            val fragment: TimelineFragment = (viewModelContext as FragmentViewModelContext).fragment()
-
-            return fragment.roomDetailViewModelFactory.create(state)
-        }
     }
 
     init {
@@ -198,14 +185,10 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeDataStore() {
-        viewModelScope.launch {
-            vectorDataStore.pushCounterFlow.collect { nbOfPush ->
-                setState {
-                    copy(
-                            pushCounter = nbOfPush
-                    )
-                }
-            }
+        vectorDataStore.pushCounterFlow.setOnEach { nbOfPush ->
+            copy(
+                    pushCounter = nbOfPush
+            )
         }
     }
 
@@ -332,7 +315,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.IgnoreUser                       -> handleIgnoreUser(action)
             is RoomDetailAction.EnterTrackingUnreadMessagesState -> startTrackingUnreadMessages()
             is RoomDetailAction.ExitTrackingUnreadMessagesState  -> stopTrackingUnreadMessages()
-            is RoomDetailAction.ReplyToOptions                   -> handleReplyToOptions(action)
+            is RoomDetailAction.VoteToPoll                       -> handleVoteToPoll(action)
             is RoomDetailAction.AcceptVerificationRequest        -> handleAcceptVerification(action)
             is RoomDetailAction.DeclineVerificationRequest       -> handleDeclineVerification(action)
             is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
@@ -366,18 +349,13 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.DoNotShowPreviewUrlFor           -> handleDoNotShowPreviewUrlFor(action)
             RoomDetailAction.RemoveAllFailedMessages             -> handleRemoveAllFailedMessages()
             RoomDetailAction.ResendAll                           -> handleResendAll()
-            RoomDetailAction.StartRecordingVoiceMessage          -> handleStartRecordingVoiceMessage()
-            is RoomDetailAction.EndRecordingVoiceMessage         -> handleEndRecordingVoiceMessage(action.isCancelled)
-            is RoomDetailAction.PlayOrPauseVoicePlayback         -> handlePlayOrPauseVoicePlayback(action)
-            RoomDetailAction.PauseRecordingVoiceMessage          -> handlePauseRecordingVoiceMessage()
-            RoomDetailAction.PlayOrPauseRecordingPlayback        -> handlePlayOrPauseRecordingPlayback()
-            is RoomDetailAction.EndAllVoiceActions               -> handleEndAllVoiceActions(action.deleteRecord)
             is RoomDetailAction.RoomUpgradeSuccess               -> {
                 setState {
                     copy(joinUpgradedRoomAsync = Success(action.replacementRoomId))
                 }
                 _viewEvents.post(RoomDetailViewEvents.OpenRoom(action.replacementRoomId, closeCurrentRoom = true))
             }
+            is RoomDetailAction.EndPoll                          -> handleEndPoll(action.eventId)
         }.exhaustive
     }
 
@@ -589,7 +567,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleEventInvisible(action: RoomDetailAction.TimelineEventTurnsInvisible) {
-        invisibleEventsObservable.accept(action)
+        invisibleEventsSource.post(action)
     }
 
     fun getMember(userId: String): RoomMemberSummary? {
@@ -636,60 +614,6 @@ class RoomDetailViewModel @AssistedInject constructor(
                 }
             }
         }
-    }
-
-    private fun handleStartRecordingVoiceMessage() {
-        try {
-            voiceMessageHelper.startRecording()
-        } catch (failure: Throwable) {
-            _viewEvents.post(RoomDetailViewEvents.Failure(failure))
-        }
-    }
-
-    private fun handleEndRecordingVoiceMessage(isCancelled: Boolean) {
-        voiceMessageHelper.stopPlayback()
-        if (isCancelled) {
-            voiceMessageHelper.deleteRecording()
-        } else {
-            voiceMessageHelper.stopRecording()?.let { audioType ->
-                if (audioType.duration > 1000) {
-                    room.sendMedia(
-                            attachment = audioType.toContentAttachmentData(),
-                            compressBeforeSending = false,
-                            roomIds = emptySet(),
-                            rootThreadEventId = initialState.rootThreadEventId)
-                } else {
-                    voiceMessageHelper.deleteRecording()
-                }
-            }
-        }
-    }
-
-    private fun handlePlayOrPauseVoicePlayback(action: RoomDetailAction.PlayOrPauseVoicePlayback) {
-        viewModelScope.launch(Dispatchers.IO) {
-            try {
-                // Download can fail
-                val audioFile = session.fileService().downloadFile(action.messageAudioContent)
-                // Conversion can fail, fallback to the original file in this case and let the player fail for us
-                val convertedFile = voicePlayerHelper.convertFile(audioFile) ?: audioFile
-                // Play can fail
-                voiceMessageHelper.startOrPausePlayback(action.eventId, convertedFile)
-            } catch (failure: Throwable) {
-                _viewEvents.post(RoomDetailViewEvents.Failure(failure))
-            }
-        }
-    }
-
-    private fun handlePlayOrPauseRecordingPlayback() {
-        voiceMessageHelper.startOrPauseRecordingPlayback()
-    }
-
-    private fun handleEndAllVoiceActions(deleteRecord: Boolean) {
-        voiceMessageHelper.stopAllVoiceActions(deleteRecord)
-    }
-
-    private fun handlePauseRecordingVoiceMessage() {
-        voiceMessageHelper.pauseRecording()
     }
 
     private fun isIntegrationEnabled() = session.integrationManagerService().isIntegrationEnabled()
@@ -757,12 +681,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun handleEventVisible(action: RoomDetailAction.TimelineEventTurnsVisible) {
         viewModelScope.launch(Dispatchers.Default) {
             if (action.event.root.sendState.isSent()) { // ignore pending/local events
-                visibleEventsObservable.accept(action)
+                visibleEventsSource.post(action)
             }
             // We need to update this with the related m.replace also (to move read receipt)
             action.event.annotations?.editSummary?.sourceEvents?.forEach {
                 room.getTimeLineEvent(it)?.let { event ->
-                    visibleEventsObservable.accept(RoomDetailAction.TimelineEventTurnsVisible(event))
+                    visibleEventsSource.post(RoomDetailAction.TimelineEventTurnsVisible(event))
                 }
             }
 
@@ -910,11 +834,13 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun observeEventDisplayedActions() {
         // We are buffering scroll events for one second
         // and keep the most recent one to set the read receipt on.
-        visibleEventsObservable
-                .buffer(1, TimeUnit.SECONDS)
+
+        visibleEventsSource
+                .stream()
+                .chunk(1000)
                 .filter { it.isNotEmpty() }
-                .subscribeBy(onNext = { actions ->
-                    val bufferedMostRecentDisplayedEvent = actions.maxByOrNull { it.event.displayIndex }?.event ?: return@subscribeBy
+                .onEach { actions ->
+                    val bufferedMostRecentDisplayedEvent = actions.maxByOrNull { it.event.displayIndex }?.event ?: return@onEach
                     val globalMostRecentDisplayedEvent = mostRecentDisplayedEvent
                     if (trackUnreadMessages.get()) {
                         if (globalMostRecentDisplayedEvent == null) {
@@ -928,8 +854,9 @@ class RoomDetailViewModel @AssistedInject constructor(
                             tryOrNull { room.setReadReceipt(eventId) }
                         }
                     }
-                })
-                .disposeOnClear()
+                }
+                .flowOn(Dispatchers.Default)
+                .launchIn(viewModelScope)
     }
 
     private fun handleMarkAllAsRead() {
@@ -1025,10 +952,20 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleReplyToOptions(action: RoomDetailAction.ReplyToOptions) {
-        // Do not allow to reply to unsent local echo
+    private fun handleVoteToPoll(action: RoomDetailAction.VoteToPoll) {
+        // Do not allow to vote unsent local echo of the poll event
         if (LocalEcho.isLocalEchoId(action.eventId)) return
-        room.sendOptionsReply(action.eventId, action.optionIndex, action.optionValue)
+        // Do not allow to vote the same option twice
+        room.getTimeLineEvent(action.eventId)?.let { pollTimelineEvent ->
+            val currentVote = pollTimelineEvent.annotations?.pollResponseSummary?.aggregatedContent?.myVote
+            if (currentVote != action.optionKey) {
+                room.voteToPoll(action.eventId, action.optionKey)
+            }
+        }
+    }
+
+    private fun handleEndPoll(eventId: String) {
+        room.endPoll(eventId)
     }
 
     private fun observeSyncState() {
@@ -1152,9 +1089,10 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-
-        timelineEvents.tryEmit(snapshot)
-
+        viewModelScope.launch {
+            // tryEmit doesn't work with SharedFlow without cache
+            timelineEvents.emit(snapshot)
+        }
         // PreviewUrl
         if (vectorPreferences.showUrlPreviews()) {
             withState { state ->

@@ -85,12 +85,14 @@ internal class DefaultRoomService @Inject constructor(
         return roomSummaryDataSource.getRoomSummary(roomIdOrAlias)
     }
 
-    override fun getRoomSummaries(queryParams: RoomSummaryQueryParams): List<RoomSummary> {
-        return roomSummaryDataSource.getRoomSummaries(queryParams)
+    override fun getRoomSummaries(queryParams: RoomSummaryQueryParams,
+                                  sortOrder: RoomSortOrder): List<RoomSummary> {
+        return roomSummaryDataSource.getRoomSummaries(queryParams, sortOrder)
     }
 
-    override fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams): LiveData<List<RoomSummary>> {
-        return roomSummaryDataSource.getRoomSummariesLive(queryParams)
+    override fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams,
+                                      sortOrder: RoomSortOrder): LiveData<List<RoomSummary>> {
+        return roomSummaryDataSource.getRoomSummariesLive(queryParams, sortOrder)
     }
 
     override fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,

@@ -94,13 +94,15 @@ interface RoomService {
      * Get a snapshot list of room summaries.
      * @return the immutable list of [RoomSummary]
      */
-    fun getRoomSummaries(queryParams: RoomSummaryQueryParams): List<RoomSummary>
+    fun getRoomSummaries(queryParams: RoomSummaryQueryParams,
+                         sortOrder: RoomSortOrder = RoomSortOrder.NONE): List<RoomSummary>
 
     /**
      * Get a live list of room summaries. This list is refreshed as soon as the data changes.
      * @return the [LiveData] of List[RoomSummary]
      */
-    fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams): LiveData<List<RoomSummary>>
+    fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams,
+                             sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY): LiveData<List<RoomSummary>>
 
     /**
      * Get a snapshot list of Breadcrumbs

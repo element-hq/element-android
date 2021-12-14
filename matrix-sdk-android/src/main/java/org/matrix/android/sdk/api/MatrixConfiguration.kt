@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.api
 
+import okhttp3.ConnectionSpec
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import java.net.Proxy
 
@@ -44,6 +45,10 @@ data class MatrixConfiguration(
          * You can create one using for instance Proxy(proxyType, InetSocketAddress.createUnresolved(hostname, port).
          */
         val proxy: Proxy? = null,
+        /**
+         * TLS versions and cipher suites limitation for unauthenticated requests
+         */
+        val connectionSpec: ConnectionSpec = ConnectionSpec.RESTRICTED_TLS,
         /**
          * True to advertise support for call transfers to other parties on Matrix calls.
          */

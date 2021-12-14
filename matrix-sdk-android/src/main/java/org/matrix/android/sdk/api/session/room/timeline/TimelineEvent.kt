@@ -27,9 +27,12 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
+import org.matrix.android.sdk.api.util.ContentUtils
 import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromReply
 
 /**
@@ -124,25 +127,11 @@ fun TimelineEvent.getEditedEventId(): String? {
  * Get last MessageContent, after a possible edition
  */
 fun TimelineEvent.getLastMessageContent(): MessageContent? {
-    return if (root.getClearType() == EventType.STICKER) {
-        root.getClearContent().toModel<MessageStickerContent>()
-    } else {
-        (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
+    return when (root.getClearType()) {
+        EventType.STICKER    -> root.getClearContent().toModel<MessageStickerContent>()
+        EventType.POLL_START -> root.getClearContent().toModel<MessagePollContent>()
+        else                 -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
     }
-}
-
-/**
- * Get last Message body, after a possible edition
- */
-fun TimelineEvent.getLastMessageBody(): String? {
-    val lastMessageContent = getLastMessageContent()
-
-    if (lastMessageContent != null) {
-        return lastMessageContent.newContent?.toModel<MessageContent>()?.body
-                ?: lastMessageContent.body
-    }
-
-    return null
 }
 
 /**
@@ -156,11 +145,25 @@ fun TimelineEvent.isEdition(): Boolean {
     return root.isEdition()
 }
 
-fun TimelineEvent.getTextEditableContent(): String? {
-    val lastContent = getLastMessageContent()
+/**
+ * Get the latest message body, after a possible edition, stripping the reply prefix if necessary
+ */
+fun TimelineEvent.getTextEditableContent(): String {
+    val lastContentBody = getLastMessageContent()?.body ?: return ""
     return if (isReply()) {
-        return extractUsefulTextFromReply(lastContent?.body ?: "")
+        extractUsefulTextFromReply(lastContentBody)
     } else {
-        lastContent?.body ?: ""
+        lastContentBody
     }
+}
+
+/**
+ * Get the latest displayable content.
+ * Will take care to hide spoiler text
+ */
+fun MessageContent.getTextDisplayableContent(): String {
+    return newContent?.toModel<MessageTextContent>()?.matrixFormattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
+            ?: newContent?.toModel<MessageContent>()?.body
+            ?: (this as MessageTextContent?)?.matrixFormattedBody?.let { ContentUtils.formatSpoilerTextFromHtml(it) }
+            ?: body
 }

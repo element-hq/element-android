@@ -16,13 +16,12 @@
 
 package im.vector.app.features.auth
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.session.Session
@@ -35,20 +34,11 @@ class ReAuthViewModel @AssistedInject constructor(
 ) : VectorViewModel<ReAuthState, ReAuthActions, ReAuthEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: ReAuthState): ReAuthViewModel
+    interface Factory : MavericksAssistedViewModelFactory<ReAuthViewModel, ReAuthState> {
+        override fun create(initialState: ReAuthState): ReAuthViewModel
     }
 
-    companion object : MavericksViewModelFactory<ReAuthViewModel, ReAuthState> {
-
-        override fun create(viewModelContext: ViewModelContext, state: ReAuthState): ReAuthViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<ReAuthViewModel, ReAuthState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: ReAuthActions) = withState { state ->
         when (action) {

@@ -20,7 +20,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.view.isVisible
+import androidx.core.view.isInvisible
 import im.vector.app.R
 import im.vector.app.features.home.room.detail.timeline.item.SendStateDecoration
 import im.vector.app.features.themes.ThemeUtils
@@ -38,28 +38,28 @@ class SendStateImageView @JvmOverloads constructor(
     }
 
     fun render(sendState: SendStateDecoration) {
-        isVisible = when (sendState) {
+        isInvisible = when (sendState) {
             SendStateDecoration.SENDING_NON_MEDIA -> {
                 setImageResource(R.drawable.ic_sending_message)
                 imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(context, R.attr.vctr_content_tertiary))
                 contentDescription = context.getString(R.string.event_status_a11y_sending)
-                true
+                false
             }
             SendStateDecoration.SENT              -> {
                 setImageResource(R.drawable.ic_message_sent)
                 imageTintList = ColorStateList.valueOf(ThemeUtils.getColor(context, R.attr.vctr_content_tertiary))
                 contentDescription = context.getString(R.string.event_status_a11y_sent)
-                true
+                false
             }
             SendStateDecoration.FAILED            -> {
                 setImageResource(R.drawable.ic_sending_message_failed)
                 imageTintList = null
                 contentDescription = context.getString(R.string.event_status_a11y_failed)
-                true
+                false
             }
             SendStateDecoration.SENDING_MEDIA,
             SendStateDecoration.NONE              -> {
-                false
+                true
             }
         }
     }

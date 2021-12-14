@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground"
+    android:paddingStart="@dimen/layout_horizontal_margin"
+    android:paddingEnd="@dimen/layout_horizontal_margin">
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flowMain"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:layout_marginBottom="@dimen/layout_vertical_margin"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="flowHeader,separator,flowItems,flowButtons"
+        app:flow_verticalStyle="spread"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="@dimen/width_percent" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flowHeader"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="logo,title,subtitle"
+        app:flow_verticalGap="20dp" />
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:importantForAccessibility="no"
+        android:src="@drawable/element_logo_stars" />
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/Widget.Vector.TextView.Title.Medium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:text="@string/analytics_opt_in_title"
+        android:textColor="?vctr_content_primary" />
+
+    <TextView
+        android:id="@+id/subtitle"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="center"
+        android:textColor="?vctr_content_secondary"
+        tools:text="@string/analytics_opt_in_content" />
+
+    <View
+        android:id="@+id/separator"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?vctr_content_quinary" />
+
+    <!-- width of this block will be the width of the first referenced text,
+     which has wrap_content, the other have 0dp -->
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flowItems"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="list_item_1,list_item_2,list_item_3"
+        app:flow_verticalGap="12dp" />
+
+    <TextView
+        android:id="@+id/list_item_1"
+        style="@style/Widget.Vector.TextView.Body.Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:text="@string/analytics_opt_in_list_item_1"
+        android:textColor="?vctr_content_secondary"
+        app:drawableStartCompat="@drawable/ic_list_item_bullet" />
+
+    <TextView
+        android:id="@+id/list_item_2"
+        style="@style/Widget.Vector.TextView.Body.Medium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:text="@string/analytics_opt_in_list_item_2"
+        android:textColor="?vctr_content_secondary"
+        app:drawableStartCompat="@drawable/ic_list_item_bullet" />
+
+    <TextView
+        android:id="@+id/list_item_3"
+        style="@style/Widget.Vector.TextView.Body.Medium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:drawablePadding="10dp"
+        android:gravity="center_vertical"
+        android:text="@string/analytics_opt_in_list_item_3"
+        android:textColor="?vctr_content_secondary"
+        app:drawableStartCompat="@drawable/ic_list_item_bullet" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/flowButtons"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="submit,later" />
+
+    <Button
+        android:id="@+id/submit"
+        style="@style/Widget.Vector.Button.CallToAction"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/layout_touch_size"
+        android:text="@string/action_enable" />
+
+    <Button
+        android:id="@+id/later"
+        style="@style/Widget.Vector.Button.Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/action_not_now" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

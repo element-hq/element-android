@@ -16,49 +16,46 @@
 
 package org.matrix.android.sdk.internal.util
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
-import org.matrix.android.sdk.internal.di.MatrixScope
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import timber.log.Timber
-import javax.inject.Inject
 
-/**
- * To be attached to ProcessLifecycleOwner lifecycle
- */
-@MatrixScope
-internal class BackgroundDetectionObserver @Inject constructor() : LifecycleObserver {
+interface BackgroundDetectionObserver : DefaultLifecycleObserver {
+    val isInBackground: Boolean
 
-    var isInBackground: Boolean = false
+    fun register(listener: Listener)
+    fun unregister(listener: Listener)
+
+    interface Listener {
+        fun onMoveToForeground()
+        fun onMoveToBackground()
+    }
+}
+
+internal class DefaultBackgroundDetectionObserver : BackgroundDetectionObserver {
+
+    override var isInBackground: Boolean = true
         private set
 
-    private
-    val listeners = LinkedHashSet<Listener>()
+    private val listeners = LinkedHashSet<BackgroundDetectionObserver.Listener>()
 
-    fun register(listener: Listener) {
+    override fun register(listener: BackgroundDetectionObserver.Listener) {
         listeners.add(listener)
     }
 
-    fun unregister(listener: Listener) {
+    override fun unregister(listener: BackgroundDetectionObserver.Listener) {
         listeners.remove(listener)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
-    fun onMoveToForeground() {
+    override fun onStart(owner: LifecycleOwner) {
         Timber.v("App returning to foreground…")
         isInBackground = false
         listeners.forEach { it.onMoveToForeground() }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    fun onMoveToBackground() {
+    override fun onStop(owner: LifecycleOwner) {
         Timber.v("App going to background…")
         isInBackground = true
         listeners.forEach { it.onMoveToBackground() }
-    }
-
-    interface Listener {
-        fun onMoveToForeground()
-        fun onMoveToBackground()
     }
 }

@@ -19,6 +19,7 @@ package org.matrix.android.sdk.api.session.space
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.internal.session.space.peeking.SpacePeekResult
@@ -74,9 +75,11 @@ interface SpaceService {
      * Get a live list of space summaries. This list is refreshed as soon as the data changes.
      * @return the [LiveData] of List[SpaceSummary]
      */
-    fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams): LiveData<List<RoomSummary>>
+    fun getSpaceSummariesLive(queryParams: SpaceSummaryQueryParams,
+                              sortOrder: RoomSortOrder = RoomSortOrder.NONE): LiveData<List<RoomSummary>>
 
-    fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams): List<RoomSummary>
+    fun getSpaceSummaries(spaceSummaryQueryParams: SpaceSummaryQueryParams,
+                          sortOrder: RoomSortOrder = RoomSortOrder.NONE): List<RoomSummary>
 
     suspend fun joinSpace(spaceIdOrAlias: String,
                           reason: String? = null,

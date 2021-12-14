@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -31,7 +30,6 @@
         android:padding="4dp"
         android:textColor="?vctr_notice_secondary"
         tools:text="HHWJ Y8DK RDR4\nBQEN FQ4V M4F8\nBQEN FQ4V M4A8" />
-
 
     <View
         android:layout_width="match_parent"
@@ -82,6 +80,5 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?vctr_list_separator_on_surface" />
-
 
 </LinearLayout>

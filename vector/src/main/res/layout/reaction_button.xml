@@ -6,8 +6,8 @@
     android:layout_height="26dp"
     android:background="@drawable/reaction_rounded_rect_shape"
     android:clipChildren="false"
-    android:minWidth="44dp"
     android:gravity="center"
+    android:minWidth="44dp"
     tools:parentTag="android.widget.LinearLayout">
 
     <!--<View-->

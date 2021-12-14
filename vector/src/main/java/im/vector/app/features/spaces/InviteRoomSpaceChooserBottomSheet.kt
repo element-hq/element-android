@@ -23,14 +23,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.args
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetSpaceInviteChooserBinding
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class InviteRoomSpaceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetSpaceInviteChooserBinding>() {
 
     @Parcelize
@@ -52,10 +53,6 @@ class InviteRoomSpaceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<Bo
     }
 
     var interactionListener: InteractionListener? = null
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetSpaceInviteChooserBinding {
         return BottomSheetSpaceInviteChooserBinding.inflate(inflater, container, false)

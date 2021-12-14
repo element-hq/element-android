@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -43,12 +44,13 @@ import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.databinding.FragmentRoomListBinding
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
-import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -64,7 +66,6 @@ data class RoomListParams(
 
 class RoomListFragment @Inject constructor(
         private val pagedControllerFactory: RoomSummaryPagedControllerFactory,
-        val roomListViewModelFactory: RoomListViewModel.Factory,
         private val notificationDrawerManager: NotificationDrawerManager,
         private val footerController: RoomListFooterController,
         private val userPreferencesProvider: UserPreferencesProvider
@@ -119,9 +120,9 @@ class RoomListFragment @Inject constructor(
         views.createChatFabMenu.listener = this
 
         sharedActionViewModel
-                .observe()
-                .subscribe { handleQuickActions(it) }
-                .disposeOnDestroyView()
+                .stream()
+                .onEach { handleQuickActions(it) }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         roomListViewModel.onEach(RoomListViewState::roomMembershipChanges) { ms ->
             // it's for invites local echo
@@ -474,13 +475,13 @@ class RoomListFragment @Inject constructor(
             footerController.setData(it)
         }
         RoomListQuickActionsBottomSheet
-                .newInstance(room.roomId, RoomListActionsArgs.Mode.FULL)
+                .newInstance(room.roomId)
                 .show(childFragmentManager, "ROOM_LIST_QUICK_ACTIONS")
         return true
     }
 
     override fun onAcceptRoomInvitation(room: RoomSummary) {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(room.roomId)
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(room.roomId) }
         roomListViewModel.handle(RoomListAction.AcceptInvitation(room))
     }
 
@@ -493,7 +494,7 @@ class RoomListFragment @Inject constructor(
     }
 
     override fun onRejectRoomInvitation(room: RoomSummary) {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(room.roomId)
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(room.roomId) }
         roomListViewModel.handle(RoomListAction.RejectInvitation(room))
     }
 }

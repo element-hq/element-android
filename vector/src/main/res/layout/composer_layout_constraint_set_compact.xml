@@ -115,7 +115,7 @@
         android:contentDescription="@string/option_send_files"
         android:src="@drawable/ic_attachment"
         app:layout_constraintBottom_toBottomOf="@id/sendButton"
-        app:layout_constraintEnd_toStartOf="@+id/composerEditTextOuterBorder"
+        app:layout_constraintEnd_toStartOf="@id/composerEditTextOuterBorder"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/sendButton"
         app:layout_goneMarginBottom="57dp"
@@ -142,8 +142,8 @@
         android:nextFocusLeft="@id/composerEditText"
         android:nextFocusUp="@id/composerEditText"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/composerEmojiButton"
-        app:layout_constraintStart_toStartOf="@+id/composerEditTextOuterBorder"
+        app:layout_constraintEnd_toStartOf="@id/composerEmojiButton"
+        app:layout_constraintStart_toStartOf="@id/composerEditTextOuterBorder"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@tools:sample/lorem/random" />
 
@@ -156,7 +156,7 @@
         android:contentDescription="@string/a11y_open_emoji_picker"
         android:src="@drawable/ic_insert_emoji"
         app:layout_constraintBottom_toBottomOf="@id/attachmentButton"
-        app:layout_constraintEnd_toEndOf="@+id/composerEditTextOuterBorder"
+        app:layout_constraintEnd_toEndOf="@id/composerEditTextOuterBorder"
         app:layout_constraintStart_toEndOf="@id/composerEditText"
         app:layout_constraintTop_toTopOf="@id/attachmentButton"
         app:layout_goneMarginEnd="8dp"

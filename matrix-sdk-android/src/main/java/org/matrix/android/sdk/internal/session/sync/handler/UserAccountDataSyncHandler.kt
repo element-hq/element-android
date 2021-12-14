@@ -166,7 +166,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(
                     roomSummaryEntity.directUserId = userId
                     // Also update the avatar and displayname, there is a specific treatment for DMs
                     roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(realm, roomId)
-                    roomSummaryEntity.displayName = roomDisplayNameResolver.resolve(realm, roomId)
+                    roomSummaryEntity.setDisplayName(roomDisplayNameResolver.resolve(realm, roomId))
                 }
             }
         }
@@ -178,7 +178,7 @@ internal class UserAccountDataSyncHandler @Inject constructor(
                     it.directUserId = null
                     // Also update the avatar and displayname, there was a specific treatment for DMs
                     it.avatarUrl = roomAvatarResolver.resolve(realm, it.roomId)
-                    it.displayName = roomDisplayNameResolver.resolve(realm, it.roomId)
+                    it.setDisplayName(roomDisplayNameResolver.resolve(realm, it.roomId))
                 }
     }
 

@@ -23,7 +23,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
@@ -57,15 +56,12 @@ import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DI
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
-import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import javax.inject.Inject
 
 class HomeDetailFragment @Inject constructor(
-        val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
-        private val serverBackupStatusViewModelFactory: ServerBackupStatusViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
         private val colorProvider: ColorProvider,
         private val alertManager: PopupAlertManager,
@@ -74,8 +70,7 @@ class HomeDetailFragment @Inject constructor(
         private val appStateHandler: AppStateHandler
 ) : VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
-        CurrentCallsView.Callback,
-        ServerBackupStatusViewModel.Factory {
+        CurrentCallsView.Callback {
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
@@ -303,7 +298,7 @@ class HomeDetailFragment @Inject constructor(
 
     private fun setupKeysBackupBanner() {
         serverBackupStatusViewModel
-                .subscribe(this) {
+                .onEach {
                     when (val banState = it.bannerState.invoke()) {
                         is BannerState.Setup  -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
                         BannerState.BackingUp -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
@@ -502,9 +497,5 @@ class HomeDetailFragment @Inject constructor(
             }
         }
         return this
-    }
-
-    override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
-        return serverBackupStatusViewModelFactory.create(initialState)
     }
 }

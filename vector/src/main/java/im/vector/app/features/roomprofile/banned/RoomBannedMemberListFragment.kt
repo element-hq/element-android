@@ -39,7 +39,6 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
 class RoomBannedMemberListFragment @Inject constructor(
-        val viewModelFactory: RoomBannedMemberListViewModel.Factory,
         private val roomMemberListController: RoomBannedMemberListController,
         private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentRoomSettingGenericBinding>(),

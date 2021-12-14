@@ -17,7 +17,7 @@ package im.vector.app.gplay.features.settings.troubleshoot
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.google.firebase.messaging.FirebaseMessaging
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
@@ -30,7 +30,7 @@ import javax.inject.Inject
 /*
 * Test that app can successfully retrieve a token via firebase
  */
-class TestFirebaseToken @Inject constructor(private val context: AppCompatActivity,
+class TestFirebaseToken @Inject constructor(private val context: FragmentActivity,
                                             private val stringProvider: StringProvider) : TroubleshootTest(R.string.settings_troubleshoot_test_fcm_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {

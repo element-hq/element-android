@@ -44,7 +44,6 @@ class PopupAlertManager @Inject constructor() {
 
     companion object {
         const val INCOMING_CALL_PRIORITY = Int.MAX_VALUE
-        const val JITSI_CALL_PRIORITY = INCOMING_CALL_PRIORITY - 1
     }
 
     private var weakCurrentActivity: WeakReference<Activity>? = null
@@ -105,7 +104,7 @@ class PopupAlertManager @Inject constructor() {
         // we want to remove existing popup on previous activity and display it on new one
         if (currentAlerter != null) {
             weakCurrentActivity?.get()?.let {
-                Alerter.clearCurrent(it, null)
+                Alerter.clearCurrent(it, null, null)
                 if (currentAlerter?.isLight == false) {
                     setLightStatusBar()
                 }

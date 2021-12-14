@@ -17,14 +17,14 @@
 package im.vector.app.features.settings.push
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
@@ -38,21 +38,14 @@ data class PushGatewayViewState(
 
 class PushGatewaysViewModel @AssistedInject constructor(@Assisted initialState: PushGatewayViewState,
                                                         private val session: Session) :
-    VectorViewModel<PushGatewayViewState, PushGatewayAction, PushGatewayViewEvents>(initialState) {
+        VectorViewModel<PushGatewayViewState, PushGatewayAction, PushGatewayViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: PushGatewayViewState): PushGatewaysViewModel
+    interface Factory : MavericksAssistedViewModelFactory<PushGatewaysViewModel, PushGatewayViewState> {
+        override fun create(initialState: PushGatewayViewState): PushGatewaysViewModel
     }
 
-    companion object : MavericksViewModelFactory<PushGatewaysViewModel, PushGatewayViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: PushGatewayViewState): PushGatewaysViewModel? {
-            val fragment: PushGatewaysFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.pushGatewaysViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<PushGatewaysViewModel, PushGatewayViewState> by hiltMavericksViewModelFactory()
 
     init {
         observePushers()

@@ -4,7 +4,10 @@
     package="im.vector.app">
 
     <!-- Needed for VOIP call to detect and switch to headset-->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -40,7 +43,7 @@
         tools:node="remove" />
 
     <!-- Jitsi SDK is now API23+ -->
-    <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,com.learnium.RNDeviceInfo,com.reactnativecommunity.asyncstorage,com.ocetnik.timer,com.calendarevents,com.reactnativecommunity.netinfo,com.kevinresol.react_native_default_preference,com.rnimmersive,com.corbt.keepawake,com.BV.LinearGradient,com.horcrux.svg" />
+    <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,com.learnium.RNDeviceInfo,com.reactnativecommunity.asyncstorage,com.ocetnik.timer,com.calendarevents,com.reactnativecommunity.netinfo,com.kevinresol.react_native_default_preference,com.rnimmersive,com.corbt.keepawake,com.BV.LinearGradient,com.horcrux.svg,com.oblador.performance,com.reactnativecommunity.slider,com.brentvatne.react" />
 
     <!-- Adding CAMERA permission prevents Chromebooks to see the application on the PlayStore -->
     <!-- Tell that the Camera is not mandatory to install the application -->
@@ -110,45 +113,33 @@
 
         <activity android:name=".features.home.HomeActivity" />
 
-        <!-- exported="true" is required to handle android.intent.action.VIEW for URL redirection-->
+        <activity
+            android:name=".features.login.SSORedirectRouterActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Vector.Black.Transparent">
+
+            <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="connect"
+                    android:scheme="element" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".features.login.LoginActivity"
-            android:enabled="@bool/useLoginV1"
-            android:exported="true"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize">
-            <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
+            android:windowSoftInputMode="adjustResize" />
 
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="connect"
-                    android:scheme="element" />
-            </intent-filter>
-        </activity>
-
-        <!-- exported="true" is required to handle android.intent.action.VIEW for URL redirection-->
         <activity
             android:name=".features.login2.LoginActivity2"
-            android:enabled="@bool/useLoginV2"
-            android:exported="true"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize">
-            <!-- Add intent filter to handle redirection URL after SSO login in external browser -->
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="connect"
-                    android:scheme="element" />
-            </intent-filter>
-        </activity>
+            android:windowSoftInputMode="adjustResize" />
 
         <!-- Add tools:ignore="Instantiatable" for the error reported only by Buildkite :/ -->
         <activity
@@ -309,6 +300,7 @@
         <activity android:name=".features.terms.ReviewTermsActivity" />
         <activity android:name=".features.widgets.WidgetActivity" />
         <activity android:name=".features.pin.PinActivity" />
+        <activity android:name=".features.analytics.ui.consent.AnalyticsOptInActivity" />
         <activity android:name=".features.home.room.detail.search.SearchActivity" />
         <activity android:name=".features.usercode.UserCodeActivity" />
         <activity android:name=".features.call.transfer.CallTransferActivity" />
@@ -341,6 +333,7 @@
         <activity android:name=".features.spaces.manage.SpaceManageActivity" />
         <activity android:name=".features.spaces.people.SpacePeopleActivity" />
         <activity android:name=".features.spaces.leave.SpaceLeaveAdvancedActivity" />
+        <activity android:name=".features.poll.create.CreatePollActivity" />
 
         <!-- Services -->
 
@@ -408,6 +401,9 @@
                 android:name="androidx.work.WorkManagerInitializer"
                 android:value="androidx.startup"
                 tools:node="remove" />
+            <!-- We init the lib ourself in EmojiCompatWrapper -->
+            <meta-data android:name="androidx.emoji2.text.EmojiCompatInitializer"
+                tools:node="remove" />
         </provider>
 
         <provider
@@ -419,6 +415,14 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/sdk_provider_paths" />
         </provider>
+
+        <!-- Temporary fix for Android 12. android:exported has to be explicitly set when targeting Android 12
+        Do it for services coming from dependencies - BEGIN -->
+        <service
+            android:name="androidx.sharetarget.ChooserTargetServiceCompat"
+            android:exported="false"
+            tools:node="merge" />
+        <!-- Temporary fix for Android 12 change - END -->
     </application>
 
 </manifest>

@@ -8,7 +8,8 @@
     android:background="?android:colorBackground"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/itemRoomDirectoryAvatar"
@@ -37,8 +38,8 @@
         android:maxLines="2"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/itemRoomDirectoryDescription"
-        app:layout_constraintEnd_toStartOf="@+id/itemRoomDirectoryChecked"
+        app:layout_constraintBottom_toTopOf="@id/itemRoomDirectoryDescription"
+        app:layout_constraintEnd_toStartOf="@id/itemRoomDirectoryChecked"
         app:layout_constraintStart_toEndOf="@id/itemRoomDirectoryAvatar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
@@ -58,7 +59,7 @@
         android:textColor="?vctr_content_primary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/itemRoomDirectoryChecked"
+        app:layout_constraintEnd_toStartOf="@id/itemRoomDirectoryChecked"
         app:layout_constraintStart_toEndOf="@id/itemRoomDirectoryAvatar"
         app:layout_constraintTop_toBottomOf="@id/itemRoomDirectoryName"
         app:layout_goneMarginEnd="@dimen/layout_horizontal_margin"

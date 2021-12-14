@@ -16,14 +16,13 @@
 
 package im.vector.app.features.rageshake
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -36,18 +35,11 @@ class BugReportViewModel @AssistedInject constructor(
 ) : VectorViewModel<BugReportState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: BugReportState): BugReportViewModel
+    interface Factory : MavericksAssistedViewModelFactory<BugReportViewModel, BugReportState> {
+        override fun create(initialState: BugReportState): BugReportViewModel
     }
 
-    companion object : MavericksViewModelFactory<BugReportViewModel, BugReportState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: BugReportState): BugReportViewModel? {
-            val activity: BugReportActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return activity.bugReportViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<BugReportViewModel, BugReportState>  by hiltMavericksViewModelFactory()
 
     init {
         fetchHomeserverVersion()

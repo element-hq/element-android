@@ -28,10 +28,10 @@ import androidx.fragment.app.FragmentOnAttachListener
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.extensions.commitTransaction
+import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.features.crypto.recover.SetupMode
@@ -39,6 +39,7 @@ import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
+@AndroidEntryPoint
 class SharedSecureStorageActivity :
         SimpleFragmentActivity(),
         VectorBaseBottomSheetDialogFragment.ResultListener,
@@ -52,13 +53,7 @@ class SharedSecureStorageActivity :
     ) : Parcelable
 
     private val viewModel: SharedSecureStorageViewModel by viewModel()
-    @Inject lateinit var viewModelFactory: SharedSecureStorageViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +63,7 @@ class SharedSecureStorageActivity :
 
         viewModel.observeViewEvents { observeViewEvents(it) }
 
-        viewModel.subscribe(this) { renderState(it) }
+        viewModel.onEach { renderState(it) }
     }
 
     override fun onDestroy() {
@@ -89,7 +84,7 @@ class SharedSecureStorageActivity :
                     SharedSecureStorageViewState.Step.ResetAll        -> SharedSecuredStorageResetAllFragment::class
                 }
 
-        showFragment(fragment, Bundle())
+        showFragment(fragment)
     }
 
     private fun observeViewEvents(it: SharedSecureStorageViewEvent?) {
@@ -136,15 +131,14 @@ class SharedSecureStorageActivity :
         }
     }
 
-    private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
+    private fun showFragment(fragmentClass: KClass<out Fragment>) {
         if (supportFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
-            supportFragmentManager.commitTransaction {
-                replace(R.id.container,
-                        fragmentClass.java,
-                        bundle,
-                        fragmentClass.simpleName
-                )
-            }
+            replaceFragment(
+                    views.container,
+                    fragmentClass.java,
+                    null,
+                    fragmentClass.simpleName
+            )
         }
     }
 

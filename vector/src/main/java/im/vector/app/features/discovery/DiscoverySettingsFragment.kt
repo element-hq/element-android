@@ -45,8 +45,7 @@ import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 
 class DiscoverySettingsFragment @Inject constructor(
-        private val controller: DiscoverySettingsController,
-        val viewModelFactory: DiscoverySettingsViewModel.Factory
+        private val controller: DiscoverySettingsController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         DiscoverySettingsController.Listener {
 
@@ -168,10 +167,11 @@ class DiscoverySettingsFragment @Inject constructor(
             val pidList = state.emailList().orEmpty() + state.phoneNumbersList().orEmpty()
             val hasBoundIds = pidList.any { it.isShared() == SharedState.SHARED }
 
+            val serverUrl = state.identityServer()?.serverUrl.orEmpty()
             val message = if (hasBoundIds) {
-                getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer())
+                getString(R.string.settings_discovery_disconnect_with_bound_pid, serverUrl, serverUrl)
             } else {
-                getString(R.string.disconnect_identity_server_dialog_content, state.identityServer())
+                getString(R.string.disconnect_identity_server_dialog_content, serverUrl)
             }
 
             MaterialAlertDialogBuilder(requireActivity())
@@ -187,8 +187,7 @@ class DiscoverySettingsFragment @Inject constructor(
         if (newValue) {
             withState(viewModel) { state ->
                 requireContext().showIdentityServerConsentDialog(
-                        state.identityServer.invoke()?.serverUrl,
-                        policyLinkCallback = { viewModel.handle(DiscoverySettingsAction.SetPoliciesExpandState(expanded = true)) },
+                        state.identityServer.invoke(),
                         consentCallBack = { viewModel.handle(DiscoverySettingsAction.UpdateUserConsent(true)) }
                 )
             }
@@ -205,7 +204,7 @@ class DiscoverySettingsFragment @Inject constructor(
         viewModel.handle(DiscoverySettingsAction.SetPoliciesExpandState(expanded = newExpandedState))
     }
 
-    override fun onPolicyTapped(policy: IdentityServerPolicy) {
+    override fun onPolicyTapped(policy: ServerPolicy) {
         openUrlInChromeCustomTab(requireContext(), null, policy.url)
     }
 

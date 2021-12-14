@@ -17,6 +17,7 @@
 package im.vector.app.features.room
 
 import com.airbnb.mvrx.MavericksState
+import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.roommemberprofile.RoomMemberProfileArgs
 import im.vector.app.features.roomprofile.RoomProfileArgs
 
@@ -24,7 +25,7 @@ data class RequireActiveMembershipViewState(
         val roomId: String? = null
 ) : MavericksState {
 
-    // No constructor for RoomDetailArgs because of intent for Shortcut
+    constructor(args: RoomDetailArgs) : this(roomId = args.roomId)
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 

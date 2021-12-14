@@ -25,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -56,26 +57,40 @@ interface PinCodeStore {
      * Will reset the counters
      */
     fun resetCounters()
+
+    fun addListener(listener: PinCodeStoreListener)
+    fun removeListener(listener: PinCodeStoreListener)
 }
 
-class SharedPrefPinCodeStore @Inject constructor(private val sharedPreferences: SharedPreferences) : PinCodeStore {
+interface PinCodeStoreListener {
+    fun onPinSetUpChange(isConfigured: Boolean)
+}
 
-    override suspend fun storeEncodedPin(encodePin: String) = withContext(Dispatchers.IO) {
-        sharedPreferences.edit {
-            putString(ENCODED_PIN_CODE_KEY, encodePin)
+@Singleton
+class SharedPrefPinCodeStore @Inject constructor(private val sharedPreferences: SharedPreferences) : PinCodeStore {
+    private val listeners = mutableSetOf<PinCodeStoreListener>()
+
+    override suspend fun storeEncodedPin(encodePin: String) {
+        withContext(Dispatchers.IO) {
+            sharedPreferences.edit {
+                putString(ENCODED_PIN_CODE_KEY, encodePin)
+            }
         }
+        listeners.forEach { it.onPinSetUpChange(isConfigured = true) }
     }
 
-    override suspend fun deleteEncodedPin() = withContext(Dispatchers.IO) {
-        // Also reset the counters
-        resetCounters()
-        sharedPreferences.edit {
-            remove(ENCODED_PIN_CODE_KEY)
+    override suspend fun deleteEncodedPin() {
+        withContext(Dispatchers.IO) {
+            // Also reset the counters
+            resetCounters()
+            sharedPreferences.edit {
+                remove(ENCODED_PIN_CODE_KEY)
+            }
+            awaitPinCodeCallback<Boolean> {
+                PFSecurityManager.getInstance().pinCodeHelper.delete(it)
+            }
         }
-        awaitPinCodeCallback<Boolean> {
-            PFSecurityManager.getInstance().pinCodeHelper.delete(it)
-        }
-        return@withContext
+        listeners.forEach { it.onPinSetUpChange(isConfigured = false) }
     }
 
     override fun getEncodedPin(): String? {
@@ -122,6 +137,14 @@ class SharedPrefPinCodeStore @Inject constructor(private val sharedPreferences: 
             remove(REMAINING_PIN_CODE_ATTEMPTS_KEY)
             remove(REMAINING_BIOMETRICS_ATTEMPTS_KEY)
         }
+    }
+
+    override fun addListener(listener: PinCodeStoreListener) {
+        listeners.add(listener)
+    }
+
+    override fun removeListener(listener: PinCodeStoreListener) {
+        listeners.remove(listener)
     }
 
     private suspend inline fun <T> awaitPinCodeCallback(crossinline callback: (PFPinCodeHelperCallback<T>) -> Unit) = suspendCoroutine<PFResult<T>> { cont ->

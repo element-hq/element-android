@@ -16,18 +16,17 @@
 
 package im.vector.app.features.roomdirectory.picker
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -46,18 +45,11 @@ class RoomDirectoryPickerViewModel @AssistedInject constructor(
 ) : VectorViewModel<RoomDirectoryPickerViewState, RoomDirectoryPickerAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: RoomDirectoryPickerViewState): RoomDirectoryPickerViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomDirectoryPickerViewModel, RoomDirectoryPickerViewState> {
+        override fun create(initialState: RoomDirectoryPickerViewState): RoomDirectoryPickerViewModel
     }
 
-    companion object : MavericksViewModelFactory<RoomDirectoryPickerViewModel, RoomDirectoryPickerViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomDirectoryPickerViewState): RoomDirectoryPickerViewModel? {
-            val fragment: RoomDirectoryPickerFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.roomDirectoryPickerViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomDirectoryPickerViewModel, RoomDirectoryPickerViewState> by hiltMavericksViewModelFactory()
 
     init {
         observeAndCompute()

@@ -17,7 +17,7 @@ package im.vector.app.gplay.features.settings.troubleshoot
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
@@ -33,7 +33,7 @@ import javax.inject.Inject
 /**
  * Force registration of the token to HomeServer
  */
-class TestTokenRegistration @Inject constructor(private val context: AppCompatActivity,
+class TestTokenRegistration @Inject constructor(private val context: FragmentActivity,
                                                 private val stringProvider: StringProvider,
                                                 private val pushersManager: PushersManager,
                                                 private val activeSessionHolder: ActiveSessionHolder) :

@@ -9,6 +9,7 @@
         tools:visible="true"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_edit"
+        app:iconTint="?vctr_content_secondary"
         android:title="@string/edit" />
 
     <item
@@ -17,6 +18,7 @@
         tools:visible="true"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_send"
+        app:iconTint="?vctr_content_secondary"
         android:title="@string/send" />
 
 </menu>

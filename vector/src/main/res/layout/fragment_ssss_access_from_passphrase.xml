@@ -19,9 +19,9 @@
             android:layout_marginStart="@dimen/layout_horizontal_margin"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_security_phrase_24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/ssss_restore_with_passphrase"
+            app:layout_constraintBottom_toBottomOf="@id/ssss_restore_with_passphrase"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/ssss_restore_with_passphrase"
+            app:layout_constraintTop_toTopOf="@id/ssss_restore_with_passphrase"
             app:tint="?vctr_content_primary"
             tools:ignore="MissingPrefix" />
 
@@ -70,9 +70,9 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/passphrase_enter_passphrase"
                 android:imeOptions="actionDone"
+                android:inputType="textPassword"
                 android:maxLines="3"
-                android:singleLine="false"
-                tools:inputType="textPassword" />
+                android:singleLine="false" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -84,7 +84,7 @@
             android:layout_marginEnd="@dimen/layout_horizontal_margin"
             android:text="@string/_continue"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ssss_passphrase_enter_til" />
+            app:layout_constraintTop_toBottomOf="@id/ssss_passphrase_enter_til" />
 
         <TextView
             android:id="@+id/ssss_passphrase_or"
@@ -96,7 +96,7 @@
             android:textColor="?vctr_content_primary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ssss_passphrase_submit" />
+            app:layout_constraintTop_toBottomOf="@id/ssss_passphrase_submit" />
 
         <Button
             android:id="@+id/ssss_passphrase_use_key"
@@ -106,10 +106,10 @@
             android:layout_marginTop="16dp"
             android:text="@string/use_recovery_key"
             app:icon="@drawable/ic_security_key_24dp"
-            app:layout_constraintBottom_toTopOf="@+id/ssss_passphrase_reset"
+            app:layout_constraintBottom_toTopOf="@id/ssss_passphrase_reset"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ssss_passphrase_or"
+            app:layout_constraintTop_toBottomOf="@id/ssss_passphrase_or"
             tools:ignore="MissingPrefix" />
 
         <im.vector.app.core.ui.views.BottomSheetActionButton

@@ -21,16 +21,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.parentFragmentViewModel
 import com.airbnb.mvrx.withState
-import com.jakewharton.rxbinding3.widget.editorActionEvents
-import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentBootstrapEnterPassphraseBinding
 import im.vector.app.features.settings.VectorLocale
-import io.reactivex.android.schedulers.AndroidSchedulers
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import reactivecircus.flowbinding.android.widget.editorActionEvents
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class BootstrapEnterPassphraseFragment @Inject constructor() :
@@ -53,22 +55,21 @@ class BootstrapEnterPassphraseFragment @Inject constructor() :
             views.ssssPassphraseEnterEdittext.setText(it.passphrase ?: "")
         }
         views.ssssPassphraseEnterEdittext.editorActionEvents()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .throttleFirst(300)
+                .onEach {
                     if (it.actionId == EditorInfo.IME_ACTION_DONE) {
                         submit()
                     }
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.ssssPassphraseEnterEdittext.textChanges()
-                .subscribe {
+                .onEach {
                     // ssss_passphrase_enter_til.error = null
-                    sharedViewModel.handle(BootstrapActions.UpdateCandidatePassphrase(it?.toString() ?: ""))
+                    sharedViewModel.handle(BootstrapActions.UpdateCandidatePassphrase(it.toString()))
 //                    ssss_passphrase_submit.isEnabled = it.isNotBlank()
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         sharedViewModel.observeViewEvents {
             //            when (it) {

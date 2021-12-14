@@ -1,4 +1,4 @@
-Element-i është si aplikacion shkëmbyes i sigurt mesazhesh, ashtu edhe bashkëpunimi prodhimtar ekipi, i cili është ideal për fjalosje në grup, teksa punohet së largët. Ky aplikacion fjalosjeje përdor fshehtëzim skaj-më-skaj për të furnizuar konferencë video, shkëmbim kartelash dhe thirrje me zë të fuqishme.
+Element-i është si aplikacion shkëmbyes i sigurt mesazhesh, ashtu edhe bashkëpunimi prodhimtar ekipi, i cili është ideal për fjalosje në grup, teksa punohet së largëti. Ky aplikacion fjalosjeje përdor fshehtëzim skaj-më-skaj për të furnizuar konferencë video, shkëmbim kartelash dhe thirrje me zë të fuqishme.
 
 <b>Në veçoritë e Element-it përfshihen:</b>
 - Mjete të thelluara komunikimi internetor
@@ -8,7 +8,7 @@ Element-i është si aplikacion shkëmbyes i sigurt mesazhesh, ashtu edhe bashk�
 - Fjalosje video të llojit VoIP dhe tregim ekrani
 - Integrim i kollajtë me mjetet tuaja të parapëlqyera të bashkëpunimit internetor, mjete administrimi projektesh, shërbime VoIP dhe aplikacione të tjera shkëmbimi mesazhesh në ekip
 
-Element-i është plotësisht i ndryshëm nga aplikacione të tjera shkëmbimi mesazhesh dhe bashkëpunimi. Funksionimi i tij bazohet në Matrix, një rrjet i hapët për mesazhe të siguruar dhe komunikim të decentralizuar. Lejon vetëstrehim, për t’u lejuar përdoruesve pronësi dhe kontroll maksimal të të dhënave dhe mesazheve të tyre.
+Element-i është plotësisht i ndryshëm nga aplikacione të tjera shkëmbimi mesazhesh dhe bashkëpunimi. Funksionimi i tij bazohet në Matrix, një rrjet i hapët për mesazhe të siguruar dhe komunikim të decentralizuar. Lejon vetëstrehim, për t’u dhënë përdoruesve pronësi dhe kontroll maksimal të të dhënave dhe mesazheve të tyre.
 
 <b>Privatësi dhe shkëmbim mesazhesh të fshehtëzuar</b>
 Element-i ju mbron nga reklama të padëshiruara, shfrytëzim të dhënash dhe vatha dixhitale. Ai siguron gjithashtu krejt të dhënat tuaja, komunikime tek-për-tek me video dhe me zë, përmes fshehtëzimi skaj-më-skaj dhe verifikim “cross-signed” pajisjesh.
@@ -37,3 +37,6 @@ Shkëmbim mesazhesh, thirrje me zë dhe me video, shkëmbim kartelash, tregim ek
 
 <b>Rifillojani atje ku e latë</b>
 Jini në dijeni, kudo ku gjendeni, me historik plotësisht të njëkohësuar mesazhesh nëpër krejt pajisjet tuaja dhe në internet te https://app.element.io
+
+<b>Me burim të hapët</b>
+Element-i për Android është një projekt me burim të hapët, strehuar në GitHub. Ju lutemi, njoftoni të meta dhe/ose jepni ndihmesë në zhvillimin e tij te https://github.com/vector-im/element-android

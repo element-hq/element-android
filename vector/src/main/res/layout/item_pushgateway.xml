@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/pushGatewayKind"
@@ -25,7 +26,6 @@
         android:text="@string/push_gateway_item_app_id"
         android:textStyle="bold" />
 
-
     <TextView
         android:id="@+id/pushGatewayAppIdValue"
         style="@style/Widget.Vector.TextView.Body"
@@ -43,7 +43,6 @@
         android:layout_marginBottom="4dp"
         android:text="@string/push_gateway_item_push_key"
         android:textStyle="bold" />
-
 
     <TextView
         android:id="@+id/pushGatewayKeyValue"
@@ -63,7 +62,6 @@
         android:text="@string/push_gateway_item_app_display_name"
         android:textStyle="bold" />
 
-
     <TextView
         android:id="@+id/pushGatewayAppNameValue"
         style="@style/Widget.Vector.TextView.Body"
@@ -82,7 +80,6 @@
         android:text="@string/push_gateway_item_device_name"
         android:textStyle="bold" />
 
-
     <TextView
         android:id="@+id/pushGatewayDeviceNameValue"
         style="@style/Widget.Vector.TextView.Body"
@@ -91,7 +88,6 @@
         android:layout_marginBottom="16dp"
         android:textStyle=""
         tools:text="EBMDOLFJD" />
-
 
     <TextView
         android:id="@+id/pushGatewayURL"

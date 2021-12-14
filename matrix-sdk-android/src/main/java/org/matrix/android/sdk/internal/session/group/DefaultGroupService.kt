@@ -30,12 +30,16 @@ import org.matrix.android.sdk.internal.database.model.GroupSummaryEntity
 import org.matrix.android.sdk.internal.database.model.GroupSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.query.QueryStringValueProcessor
 import org.matrix.android.sdk.internal.query.process
 import org.matrix.android.sdk.internal.util.fetchCopyMap
 import javax.inject.Inject
 
-internal class DefaultGroupService @Inject constructor(@SessionDatabase private val monarchy: Monarchy,
-                                                       private val groupFactory: GroupFactory) : GroupService {
+internal class DefaultGroupService @Inject constructor(
+        @SessionDatabase private val monarchy: Monarchy,
+        private val groupFactory: GroupFactory,
+        private val queryStringValueProcessor: QueryStringValueProcessor,
+) : GroupService {
 
     override fun getGroup(groupId: String): Group? {
         return Realm.getInstance(monarchy.realmConfiguration).use { realm ->
@@ -67,8 +71,10 @@ internal class DefaultGroupService @Inject constructor(@SessionDatabase private 
     }
 
     private fun groupSummariesQuery(realm: Realm, queryParams: GroupSummaryQueryParams): RealmQuery<GroupSummaryEntity> {
-        return GroupSummaryEntity.where(realm)
-                .process(GroupSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
-                .process(GroupSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
+        return with(queryStringValueProcessor) {
+            GroupSummaryEntity.where(realm)
+                    .process(GroupSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
+                    .process(GroupSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
+        }
     }
 }

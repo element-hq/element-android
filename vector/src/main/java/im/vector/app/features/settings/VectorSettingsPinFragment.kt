@@ -55,7 +55,7 @@ class VectorSettingsPinFragment @Inject constructor(
 
         useCompleteNotificationPref.setOnPreferenceChangeListener { _, _ ->
             // Refresh the drawer for an immediate effect of this change
-            notificationDrawerManager.refreshNotificationDrawer()
+            notificationDrawerManager.notificationStyleChanged()
             true
         }
     }

@@ -24,9 +24,9 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
 import androidx.core.content.getSystemService
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
@@ -34,7 +34,10 @@ import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivityDebugMenuBinding
+import im.vector.app.features.debug.analytics.DebugAnalyticsActivity
+import im.vector.app.features.debug.features.DebugFeaturesSettingsActivity
 import im.vector.app.features.debug.sas.DebugSasEmojiActivity
+import im.vector.app.features.debug.settings.DebugPrivateSettingsActivity
 import im.vector.app.features.qrcode.QrCodeScannerActivity
 import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkDefaultActivity
 import im.vector.lib.ui.styles.debug.DebugMaterialThemeDarkTestActivity
@@ -50,16 +53,13 @@ import org.matrix.android.sdk.internal.crypto.verification.qrcode.toQrCodeData
 import timber.log.Timber
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
 
     override fun getBinding() = ActivityDebugMenuBinding.inflate(layoutInflater)
 
     @Inject
     lateinit var activeSessionHolder: ActiveSessionHolder
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     private lateinit var buffer: ByteArray
 
@@ -78,6 +78,11 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
     }
 
     private fun setupViews() {
+        views.debugFeatures.setOnClickListener { startActivity(Intent(this, DebugFeaturesSettingsActivity::class.java)) }
+        views.debugPrivateSetting.setOnClickListener { openPrivateSettings() }
+        views.debugAnalytics.setOnClickListener {
+            startActivity(Intent(this, DebugAnalyticsActivity::class.java))
+        }
         views.debugTestTextViewLink.setOnClickListener { testTextViewLink() }
         views.debugOpenButtonStylesLight.setOnClickListener {
             startActivity(Intent(this, DebugVectorButtonStylesLightActivity::class.java))
@@ -116,6 +121,10 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
         views.debugPermission.setOnClickListener {
             startActivity(Intent(this, DebugPermissionActivity::class.java))
         }
+    }
+
+    private fun openPrivateSettings() {
+        startActivity(Intent(this, DebugPrivateSettingsActivity::class.java))
     }
 
     private fun renderQrCode(text: String) {

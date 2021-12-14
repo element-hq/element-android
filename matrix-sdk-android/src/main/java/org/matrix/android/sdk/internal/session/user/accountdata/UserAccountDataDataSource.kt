@@ -41,7 +41,7 @@ internal class UserAccountDataDataSource @Inject constructor(@SessionDatabase pr
 
     fun getLiveAccountDataEvent(type: String): LiveData<Optional<UserAccountDataEvent>> {
         return Transformations.map(getLiveAccountDataEvents(setOf(type))) {
-            it.firstOrNull()?.toOptional()
+            it.firstOrNull().toOptional()
         }
     }
 

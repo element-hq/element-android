@@ -17,14 +17,9 @@
 package im.vector.app.core.extensions
 
 import android.content.Context
-import im.vector.app.core.di.HasVectorInjector
-import im.vector.app.core.di.VectorComponent
+import dagger.hilt.EntryPoints
+import im.vector.app.core.di.SingletonEntryPoint
 
-fun Context.vectorComponent(): VectorComponent {
-    val appContext = applicationContext
-    if (appContext is HasVectorInjector) {
-        return appContext.injector()
-    } else {
-        throw IllegalStateException("Your application context doesn't implement HasVectorInjector")
-    }
+fun Context.singletonEntryPoint(): SingletonEntryPoint {
+    return EntryPoints.get(applicationContext, SingletonEntryPoint::class.java)
 }

@@ -16,10 +16,15 @@
 
 package im.vector.app.features.notifications
 
-import org.matrix.android.sdk.api.pushrules.Action
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.pushrules.PushEvents
 import org.matrix.android.sdk.api.pushrules.PushRuleService
+import org.matrix.android.sdk.api.pushrules.getActions
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.events.model.Event
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -31,44 +36,34 @@ class PushRuleTriggerListener @Inject constructor(
 ) : PushRuleService.PushRuleListener {
 
     private var session: Session? = null
+    private val scope: CoroutineScope = CoroutineScope(SupervisorJob())
 
-    override fun onMatchRule(event: Event, actions: List<Action>) {
-        Timber.v("Push rule match for event ${event.eventId}")
-        val safeSession = session ?: return Unit.also {
-            Timber.e("Called without active session")
+    override fun onEvents(pushEvents: PushEvents) {
+        scope.launch {
+            session?.let { session ->
+                val notifiableEvents = createNotifiableEvents(pushEvents, session)
+                notificationDrawerManager.updateEvents { queuedEvents ->
+                    notifiableEvents.forEach { notifiableEvent ->
+                        queuedEvents.onNotifiableEventReceived(notifiableEvent)
+                    }
+                    queuedEvents.syncRoomEvents(roomsLeft = pushEvents.roomsLeft, roomsJoined = pushEvents.roomsJoined)
+                    queuedEvents.markRedacted(pushEvents.redactedEventIds)
+                }
+            } ?: Timber.e("Called without active session")
         }
+    }
 
-        val notificationAction = actions.toNotificationAction()
-        if (notificationAction.shouldNotify) {
-            val notifiableEvent = resolver.resolveEvent(event, safeSession)
-            if (notifiableEvent == null) {
-                Timber.v("## Failed to resolve event")
-                // TODO
+    private suspend fun createNotifiableEvents(pushEvents: PushEvents, session: Session): List<NotifiableEvent> {
+        return pushEvents.matchedEvents.mapNotNull { (event, pushRule) ->
+            Timber.v("Push rule match for event ${event.eventId}")
+            val action = pushRule.getActions().toNotificationAction()
+            if (action.shouldNotify) {
+                resolver.resolveEvent(event, session, isNoisy = !action.soundName.isNullOrBlank())
             } else {
-                notifiableEvent.noisy = !notificationAction.soundName.isNullOrBlank()
-                Timber.v("New event to notify")
-                notificationDrawerManager.onNotifiableEventReceived(notifiableEvent)
+                Timber.v("Matched push rule is set to not notify")
+                null
             }
-        } else {
-            Timber.v("Matched push rule is set to not notify")
         }
-    }
-
-    override fun onRoomLeft(roomId: String) {
-        notificationDrawerManager.clearMessageEventOfRoom(roomId)
-        notificationDrawerManager.clearMemberShipNotificationForRoom(roomId)
-    }
-
-    override fun onRoomJoined(roomId: String) {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(roomId)
-    }
-
-    override fun onEventRedacted(redactedEventId: String) {
-        notificationDrawerManager.onEventRedacted(redactedEventId)
-    }
-
-    override fun batchFinish() {
-        notificationDrawerManager.refreshNotificationDrawer()
     }
 
     fun startWithSession(session: Session) {
@@ -80,6 +75,7 @@ class PushRuleTriggerListener @Inject constructor(
     }
 
     fun stop() {
+        scope.coroutineContext.cancelChildren(CancellationException("PushRuleTriggerListener stopping"))
         session?.removePushRuleListener(this)
         session = null
         notificationDrawerManager.clearAllEvents()

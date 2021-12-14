@@ -7,6 +7,8 @@ on:
 jobs:
   sync-emojis:
     runs-on: ubuntu-latest
+    # Skip in forks
+    if: github.repository == 'vector-im/element-android'
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
@@ -39,6 +41,8 @@ jobs:
 
   sync-sas-strings:
     runs-on: ubuntu-latest
+    # Skip in forks
+    if: github.repository == 'vector-im/element-android'
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
@@ -66,4 +70,27 @@ jobs:
           body: |
             - Update SAS Strings from matrix-doc.
           branch: sync-sas-strings
+          base: develop
+
+  sync-analytics-plan:
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: github.repository == 'vector-im/element-android'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run analytics import script
+        run: ./tools/import_analytic_plan.sh
+      - name: Create Pull Request for analytics plan
+        uses: peter-evans/create-pull-request@v3
+        with:
+          commit-message: Sync analytics plan
+          title: Sync analytics plan
+          body: |
+            ### Update analytics plan
+            Reviewers:
+            - [ ] Please remove usage of Event or Enum which may have been removed or updated
+            - [ ] please ensure new Events or new Enums are used to send analytics by pushing new commit(s) to this PR.
+
+            *Note*: Change are coming from [this project](https://github.com/matrix-org/matrix-analytics-events)
+          branch: sync-analytics-plan
           base: develop

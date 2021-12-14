@@ -1543,4 +1543,106 @@
     <string name="audio_call_with_participant">Cuộc gọi âm thanh với %s</string>
     <string name="video_call_with_participant">Cuộc gọi video với %s</string>
     <string name="call_ringing">Cuộc gọi đang reo…</string>
+    <string name="room_settings_space_access_public_description">Ai có thể tìm và tham gia không gian</string>
+    <string name="room_settings_space_access_title">Truy cập không gian</string>
+    <string name="room_settings_access_rules_pref_dialog_title">Ai có quyền truy cập\?</string>
+    <string name="account_email_validation_error">Không thể hoàn thành xác nhận email. Vui lòng kiểm tra email của bạn và bấm vào đường liên kết trong đó. Một khi đã xong, bấm tiếp tục.</string>
+    <string name="account_email_validation_message">Vui lòng kiểm tra email và bấm vào liên kết trong đó. Một khi xong, bấm tiếp tục.</string>
+    <string name="settings_data_save_mode_summary">Chế độ tiết kiệm dữ liệu sẽ dừng việc đưa ra các thông báo đang có mặt và đang gõ.</string>
+    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} cần phải giữ kết nối mạng liên tục dưới nền để đạt hiệu quả thông báo cao nhất:
+\nỞ màn hình tiếp theo ban sẽ được hỏi để cho phép ${app_name} hoạt động liên tục dưới nền, hãy nhấn cho phép.</string>
+    <string name="template_startup_notification_privacy_message">${app_name} sẽ chạy dưới nền để quản lý các thông báo của bạn một cách chính xác và riêng tư. Điều này sẽ có thể ảnh hưởng đến thời lượng pin.</string>
+    <string name="startup_notification_privacy_title">Thông báo riêng tư</string>
+    <string name="settings_integrations_summary">Sử dụng trình quản lý chung để quản lý bot, các cầu nối, widget và các gói nhãn dán.
+\nTrình quản lý chung sẽ nhận được dữ liệu hiệu chỉnh, và sẽ có thể điều chỉnh các widget, gửi lời mời vào phòng và thiết lập các mốc quyền lợi theo ý bạn.</string>
+    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} sẽ đồng bộ hóa dưới nền trong một khoảng thời gian nhất định (có thể điều chỉnh thời gian).
+\nViệc này sẽ làm ảnh hưởng tới khả năng thu phát và sử dụng pin, sẽ xuất hiện một thông báo cho biết lúc nào ${app_name} đang hoạt động.</string>
+    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} sẽ đồng bộ dưới nền và sẽ sử dụng các tài nguyên như pin một cách tiết kiệm.
+\nTùy vào các tài nguyên có sẵn trên thiết bị, việc đồng bộ hóa có thể sẽ bị ngăn cản bởi hệ điều hành.</string>
+    <string name="settings_troubleshoot_test_battery_failed">Nếu người dùng để thiết bị đã tháo sạc và đang chờ trong khoảng thời gian, với màn hình tắt, thiết bị sẽ khởi động chế độ Doze. Việc này ngăn cản các ứng dụng sử dụng mạng và dừng lại các hoạt động đồng bộ hóa, kể cả các báo thức.</string>
+    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Giới hạn dưới nền đã được bật cho ${app_name}.
+\nCác hoạt động của ứng dụng sẽ bị giới hạn nặng nề khi chạy dưới nền, điều này có thể ảnh hưởng đến cách thông báo của ứng dụng.
+\n%1$s</string>
+    <string name="template_settings_troubleshoot_test_bg_restricted_success">Các giới hạn dưới nền đã được tắt cho ${app_name}. Bài kiểm tra này sẽ được chạy khi sử dụng dữ liệu di động (không Wi-Fi).
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_title">Kiểm tra giới hạn dưới nền</string>
+    <string name="settings_troubleshoot_test_service_boot_quickfix">Bật khởi động cùng hệ thống</string>
+    <string name="template_settings_troubleshoot_test_service_boot_failed">Dịch vụ sẽ không khởi động sau khi thiết bị đã khởi động lại, bạn sẽ không nhận được bất kỳ thông báo nào cho tới khi ${app_name} được mở một lần.</string>
+    <string name="settings_troubleshoot_test_service_boot_success">Dịch vụ sẽ bắt đầu ngay khi thiết bị được khởi động lại.</string>
+    <string name="settings_troubleshoot_test_service_boot_title">Khởi động cùng hệ thống</string>
+    <string name="settings_troubleshoot_test_service_restart_failed">Dịch vụ không thể khởi động</string>
+    <string name="settings_troubleshoot_test_service_restart_success">Dịch vụ đã bị đóng và tự động khởi động lại.</string>
+    <string name="settings_troubleshoot_test_service_restart_title">Tụ động khởi động lại dịch vụ thông báo</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Bắt đầu</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_failed">Dịch vụ thông báo đang không hoạt động:
+\nHãy thử khởi động lại ứng dụng.</string>
+    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Dịch vụ thông báo đang chạy.</string>
+    <string name="settings_troubleshoot_test_foreground_service_started_title">Dịch vụ thông báo</string>
+    <string name="settings_troubleshoot_test_notification_notification_clicked">Thông báo đã được bấm!</string>
+    <string name="settings_troubleshoot_test_notification_notice">Hãy bấm vào thông báo. Nếu bạn không thấy bất kỳ thông báo nào, vui lòng kiểm tra cài đặt hệ thống.</string>
+    <string name="settings_troubleshoot_test_notification_title">Hiển thị thông báo</string>
+    <string name="settings_troubleshoot_test_push_notification_content">Bạn đang xem thông báo này! Bấm tôi đi!</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">Đẩy không thành công. Giải pháp có thể là cài đặt lại ứng dụng.</string>
+    <string name="settings_troubleshoot_test_push_loop_success">Ứng dụng đang được ĐẨY</string>
+    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Ứng dụng đang chờ được ĐẨY</string>
+    <string name="settings_troubleshoot_test_push_loop_title">Đẩy thử</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">Khai báo token FCM với máy chủ không thành công:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_success">Đăng ký token FCM thành công tới máy chủ.</string>
+    <string name="settings_troubleshoot_test_token_registration_title">Đăng ký token</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Thêm tài khoản</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s
+\nLỗi này đã vượt khỏi tầm kiểm soát của ${app_name}. Không phát hiện thấy tài khoản Google trên thiết bị. Vui lòng thêm một tài khoản.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s
+\nLỗi này đã vượt ra khỏi tầm kiểm soát của ${app_name}. Nó có thể xảy ra vì vài lý do. Có thể nó sẽ hoạt động nếu bạn thử lại sau, bạn cũng có thể kiểm rằng các dịch vụ của Google Play không bị giới hạn quyền sử dụng data trong cài đặt hệ thống, hoặc đồng hồ trên thiết bị của bạn bị sai, hoặc là do bản ROM custom của bạn.</string>
+    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s
+\nLỗi này đã vượt ra khỏi tầm kiểm soát của ${app_name} và theo như Google thông báo, lỗi này chỉ ra rằng thiết bị đã có quá nhiều ứng dụng được đăng ký với FCM. Lỗi này chỉ xảy ra khi có quá nhiều ứng dụng hoạt động, vì vậy có thể sẽ không ảnh hưởng đến trải nghiệm người dùng cơ bản.</string>
+    <string name="settings_troubleshoot_test_fcm_failed">Lấy token FCM thất bại:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_success">Lấy token FCM thành công:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_fcm_title">Token Firebase</string>
+    <string name="settings_troubleshoot_test_play_services_quickfix">Sửa dịch vụ của Google Play</string>
+    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} sử dụng Dịch vụ của Google Play nhằm đưa ra cái thông báo đẩy nhưng có vẻ nó đã không được căn chỉnh đúng cách:
+\n%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_success">Dịch vụ của Google Play APK đang hoạt động và đã được nâng cấp lên phiên bản mới nhất.</string>
+    <string name="settings_troubleshoot_test_play_services_title">Kiểm tra dịch vụ của Google Play</string>
+    <string name="settings_troubleshoot_test_bing_settings_quickfix">Kiểm tra các cài đặt</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Không thể thiết lập các thay đổi nâng cao, vui lòng thử lại.</string>
+    <string name="settings_troubleshoot_test_bing_settings_failed">Bạn đã tắt một vài thông báo trong cài đặt nâng cao.</string>
+    <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Một vài thông báo tin nhắn đã được thiết lập thành im lặng (sẽ thông báo nhưng không có âm thanh).</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Một hoặc nhiều phép thử đã thất bại, vui lòng gửi một bản báo cáo lỗi để giúp chúng tôi điều tra.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Một hoặc nhiều phép thử đã thất bại, hãy thử (các) phương pháp được đề xuất sau.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Kết quả phân tích cơ bản là OK. Nếu bạn vẫn không thể nhận thông báo, vui lòng gửi cho chúng tôi một bản báo cáo lỗi để giúp chúng tôi điều tra.</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">Đang chạy… (%1$d of %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_run_button_title">Chạy thử</string>
+    <string name="settings_troubleshoot_diagnostic">Chuẩn đoán khắc phục sự cố</string>
+    <string name="settings_notification_emails_enable_for_email">Bật thông báo qua email cho %s</string>
+    <string name="settings_notification_emails_no_emails">Để được nhận thông báo qua email, hãy liên kết một địa chỉ mail với tài khoản Matrix của bạn</string>
+    <string name="settings_notification_emails_category">Thông báo qua email</string>
+    <string name="malformed_id">ID không hợp lệ. ID hợp lệ có thể là một địa chỉ email hoặc một ID Matrix như \'@localpart:domain\'</string>
+    <string name="room_permissions_upgrade_the_space">Nâng cấp không gian</string>
+    <string name="room_permissions_change_space_name">Thay đổi tên không gian</string>
+    <string name="room_permissions_enable_space_encryption">Bật mã hóa không gian</string>
+    <string name="room_permissions_change_main_address_for_the_space">Đổi địa chỉ chính cho không gian</string>
+    <string name="room_permissions_change_space_avatar">Đổi ảnh đại diện của không gian</string>
+    <string name="space_permissions_notice_read_only">Bạn không có quyền thay đổi các vai trò cần thiết để thay đổi các phần trong không gian này</string>
+    <string name="space_permissions_notice">Chọn các vai trò cần thiết để thay đổi các phần của không gian này</string>
+    <string name="space_settings_permissions_subtitle">Xem và cập nhật các vai trò cần thiết để thay đổi các phần trong không gian.</string>
+    <string name="room_settings_permissions_subtitle">Xem và cập nhật các vai trò cần thiết khi thay đổi các phần trong phòng.</string>
+    <string name="space_settings_permissions_title">Các quyền trong không gian</string>
+    <string name="room_settings_permissions_title">Các quyền trong phòng</string>
+    <string name="ssl_only_accept">Chỉ chấp nhận sử dụng chứng chỉ nếu quản trị viên máy chủ đã đăng tải một dấu vân tay trùng khớp với dấu ở trên.</string>
+    <string name="ssl_expected_existing_expl">Chứng chỉ này đã thay đổi từ một chứng chỉ được tin cậy trước đây sang một chứng chỉ không được tin cậy. Phía máy chủ có thể đã làm mới chứng chỉ. Liên hệ quản trị viên của máy chủ để được cấp dấu vân tay.</string>
+    <string name="ssl_unexpected_existing_expl">Chứng chỉ đã bị thay đổi từ một thiết bị được tin cậy của bạn. Điều này RẤT BẤT THƯỜNG. Chúng tôi khuyên bạn KHÔNG NÊN CHẤP NHẬN chứng chỉ mới này.</string>
+    <string name="ssl_cert_new_account_expl">Nếu quản trị viên của máy chủ đã nói rằng điều này có thể xảy ra, hãy chắc chắn rằng dấu vân tay phía dưới trùng với dấu vân tay được họ cung cấp.</string>
+    <string name="space_participants_unban_prompt_msg">Hủy cấm người dùng sẽ cho phép họ tham gia không gian này lần nữa.</string>
+    <string name="space_participants_ban_prompt_msg">Cấm người dùng này sẽ đá họ khỏi không gian này và ngăn chặn họ tiếp tục tham gia.</string>
+    <string name="space_participants_kick_prompt_msg">hành động của bạn sẽ xóa họ khỏi không gian này.
+\n
+\nTrong trường hợp không muốn họ quay lại, bạn nên cấm họ tham gia lần nữa.</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' không phải là định dạng phù hợp</string>
+    <string name="room_settings_addresses_invalid_format_dialog_title">Định dạng không phù hợp</string>
+    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' không phải là một ID cộng đồng hợp lệ</string>
+    <string name="room_settings_invalid_group_format_dialog_title">ID cộng đồng không hợp lệ</string>
 </resources>

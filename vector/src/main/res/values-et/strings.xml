@@ -61,21 +61,22 @@
         <item quantity="other">%1$s ja %2$d muud</item>
     </plurals>
     <string name="room_displayname_empty_room">Tühi jututuba</string>
-    <string name="initial_sync_start_importing_account">Alglaadimine:
+    <string name="initial_sync_start_importing_account">Esmane laadimine:
 \nImpordin kontot…</string>
-    <string name="initial_sync_start_importing_account_crypto">Alglaadimine:
+    <string name="initial_sync_start_importing_account_crypto">Esmane laadimine:
 \nImpordin krüptoseadistusi</string>
-    <string name="initial_sync_start_importing_account_rooms">Alglaadimine:
+    <string name="initial_sync_start_importing_account_rooms">Esmane laadimine:
 \nImpordin jututubasid</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">Alglaadimine:
-\nImpordin liitutud jututubasid</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Alglaadimine:
+    <string name="initial_sync_start_importing_account_joined_rooms">Esmane laadimine:
+\nLaadin sinu vestluste ja jtututubade andmeid
+\nKui sa oled liitunud paljude jututubadega, siis kulub natuke aega</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Esmane laadimine:
 \nImpordin kutsutud jututubasid</string>
-    <string name="initial_sync_start_importing_account_left_rooms">Alglaadimine:
+    <string name="initial_sync_start_importing_account_left_rooms">Esmane laadimine:
 \nImpordin lahkutud jututubasid</string>
-    <string name="initial_sync_start_importing_account_groups">Alglaadimine:
+    <string name="initial_sync_start_importing_account_groups">Esmane laadimine:
 \nImpordin kogukondi</string>
-    <string name="initial_sync_start_importing_account_data">Alglaadimine:
+    <string name="initial_sync_start_importing_account_data">Esmane laadimine:
 \nImpordin kontoandmeid</string>
     <string name="event_status_sending_message">Saadan sõnumit…</string>
     <string name="clear_timeline_send_queue">Tühjenda saatmisjärjekord</string>
@@ -1556,7 +1557,7 @@
     <string name="command_description_op_user">Määra kasutaja õigused</string>
     <string name="command_description_deop_user">Eemalda antud tunnusega kasutajalt haldusõigused selles jututoas</string>
     <string name="command_description_invite_user">Kutsub nimetatud kasutajatunnusega kasutaja sellesse jututuppa</string>
-    <string name="command_description_join_room">Liitu antud aadressiga jututoaga</string>
+    <string name="command_description_join_room">Liitu sellise aadressiga jututoaga</string>
     <string name="command_description_part_room">Lahku jututoast</string>
     <string name="command_description_topic">Määra jututoa teema</string>
     <string name="command_description_kick_user">Müksa selle tunnusega kasutaja jututoast välja</string>
@@ -3002,4 +3003,33 @@
     <string name="command_description_room_name">Määrab jututoa nime</string>
     <string name="command_description_unignore_user">Lõpeta kasutaja eiramine ja näita edaspidi tema sõnumeid</string>
     <string name="command_description_ignore_user">Eirab kasutajat peites kõik tema sõnumid sinu eest</string>
+    <string name="a11y_presence_unavailable">Pole leitav</string>
+    <string name="a11y_presence_offline">Võrgust väljas</string>
+    <string name="a11y_presence_online">Võrgus</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Vali koduserver</string>
+    <string name="login_error_homeserver_from_url_not_found">Ei õnnestu ühendus koduserveriga aadressil %s. Palun kontrolli kas link on õige või lisa koduserver käsitsi.</string>
+    <string name="notification_listening_for_notifications">Vaatan, kas leidub teavitusi</string>
+    <string name="shortcut_disabled_reason_sign_out">Sa oled sessioonist välja loginud!</string>
+    <string name="shortcut_disabled_reason_room_left">Sa pole enam selles jututoas!</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">Nõutav on vähemalt %1$s valik</item>
+        <item quantity="other">Nõutav on vähemalt %1$s valikut</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">Küsimus ei saa lisamata jääda</string>
+    <string name="create_poll_button">KOOSTA KÜSITLUS</string>
+    <string name="create_poll_add_option">LISA VALIK</string>
+    <string name="create_poll_options_hint">Valik %1$d</string>
+    <string name="create_poll_options_title">Koosta valikud</string>
+    <string name="create_poll_question_hint">Küsimus või teema</string>
+    <string name="create_poll_question_title">Küsitluse küsimus või teema</string>
+    <string name="create_poll_title">Koosta üks küsitlus</string>
+    <string name="attachment_type_poll">Küsitlus</string>
+    <string name="identity_server_consent_dialog_content_2">Sinu telefoniraamatus leiduvate kontaktisikute hulgast Matrix\'i kasutajate leidmiseks me peame saatma nende teabe isikutuvastusserverisse.
+\n
+\nAndmed saadame mitte tekstina, vaid räsituna. Kas sa nõustud sellega\?</string>
+    <string name="identity_server_consent_dialog_title_2">Saada e-posti aadressid ja telefoninumbrid %s serverisse</string>
+    <string name="settings_discovery_consent_notice_off_2">Sinu kontaktid on vaid sinu teada. Kui tahad nende hulgast leida Matrix\'i kasutajaid, siis me vajame sinu luba nende andmete saatmiseks räsitud kujul isikutuvastusserverisse.</string>
+    <string name="identity_server_consent_dialog_content_3">Selleks et leida tuttavaid, sa peaksid saatma oma kontaktteavet (telefoninumbreid ja/või e-posti aadresse) siin rakenduses seadistatud isikutuvastusserverile. Parema andmeturvalisuse nimel me ei saada teavet mitte loetava tekstina, vaid räsina.</string>
+    <string name="identity_server_consent_dialog_content_question">Kas sa oled nõus selle teabe edastamisega\?</string>
+    <string name="action_not_now">Mitte praegu</string>
 </resources>

@@ -8,7 +8,8 @@
     android:background="?android:colorBackground"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground"
+    tools:viewBindingIgnore="true">
 
     <View
         android:id="@+id/breadcrumbsUnreadIndicator"
@@ -46,7 +47,7 @@
         android:minHeight="18dp"
         android:textColor="?colorOnError"
         android:visibility="gone"
-        app:layout_constraintCircle="@+id/breadcrumbsImageView"
+        app:layout_constraintCircle="@id/breadcrumbsImageView"
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="28dp"
         tools:background="@drawable/bg_unread_highlight"
@@ -66,7 +67,7 @@
         android:textColor="?colorOnPrimary"
         android:textStyle="bold"
         android:visibility="gone"
-        app:layout_constraintCircle="@+id/breadcrumbsImageView"
+        app:layout_constraintCircle="@id/breadcrumbsImageView"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="28dp"
         tools:ignore="MissingConstraints"
@@ -81,7 +82,7 @@
         android:padding="3dp"
         android:src="@drawable/ic_edit"
         android:visibility="gone"
-        app:layout_constraintCircle="@+id/breadcrumbsImageView"
+        app:layout_constraintCircle="@id/breadcrumbsImageView"
         app:layout_constraintCircleAngle="225"
         app:layout_constraintCircleRadius="28dp"
         tools:ignore="MissingConstraints"

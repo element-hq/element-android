@@ -13,7 +13,8 @@
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
     android:paddingEnd="@dimen/layout_horizontal_margin"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/itemVerificationLeftIcon"
@@ -30,7 +31,6 @@
         tools:src="@drawable/ic_share"
         tools:visibility="visible" />
 
-
     <TextView
         android:id="@+id/itemVerificationActionTitle"
         style="@style/Widget.Vector.TextView.Subtitle"
@@ -39,9 +39,9 @@
         android:layout_marginStart="8dp"
         android:textColor="?colorPrimary"
         app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toTopOf="@+id/itemVerificationActionSubTitle"
-        app:layout_constraintEnd_toStartOf="@+id/itemVerificationActionIcon"
-        app:layout_constraintStart_toEndOf="@+id/itemVerificationLeftIcon"
+        app:layout_constraintBottom_toTopOf="@id/itemVerificationActionSubTitle"
+        app:layout_constraintEnd_toStartOf="@id/itemVerificationActionIcon"
+        app:layout_constraintStart_toEndOf="@id/itemVerificationLeftIcon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_goneMarginStart="0dp"
@@ -57,9 +57,9 @@
         android:visibility="gone"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/itemVerificationActionIcon"
-        app:layout_constraintStart_toStartOf="@+id/itemVerificationActionTitle"
-        app:layout_constraintTop_toBottomOf="@+id/itemVerificationActionTitle"
+        app:layout_constraintEnd_toStartOf="@id/itemVerificationActionIcon"
+        app:layout_constraintStart_toStartOf="@id/itemVerificationActionTitle"
+        app:layout_constraintTop_toBottomOf="@id/itemVerificationActionTitle"
         tools:text="For maximum security, do this in person"
         tools:visibility="visible" />
 

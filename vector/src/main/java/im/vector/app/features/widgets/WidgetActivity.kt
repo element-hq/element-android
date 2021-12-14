@@ -23,8 +23,8 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
@@ -32,18 +32,14 @@ import im.vector.app.databinding.ActivityWidgetBinding
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewEvents
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewModel
-import im.vector.app.features.widgets.permissions.RoomWidgetPermissionViewState
 import org.matrix.android.sdk.api.session.events.model.Content
 import java.io.Serializable
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
-        ToolbarConfigurable,
-        WidgetViewModel.Factory,
-        RoomWidgetPermissionViewModel.Factory {
+        ToolbarConfigurable {
 
     companion object {
-
         private const val WIDGET_FRAGMENT_TAG = "WIDGET_FRAGMENT_TAG"
         private const val WIDGET_PERMISSION_FRAGMENT_TAG = "WIDGET_PERMISSION_FRAGMENT_TAG"
         private const val EXTRA_RESULT = "EXTRA_RESULT"
@@ -59,15 +55,12 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
             return intent.extras?.getSerializable(EXTRA_RESULT) as? Content
         }
 
-        fun createResultIntent(content: Content): Intent {
+        private fun createResultIntent(content: Content): Intent {
             return Intent().apply {
                 putExtra(EXTRA_RESULT, content as Serializable)
             }
         }
     }
-
-    @Inject lateinit var viewModelFactory: WidgetViewModel.Factory
-    @Inject lateinit var permissionsViewModelFactory: RoomWidgetPermissionViewModel.Factory
 
     private val viewModel: WidgetViewModel by viewModel()
     private val permissionViewModel: RoomWidgetPermissionViewModel by viewModel()
@@ -77,10 +70,6 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
     override fun getMenuRes() = R.menu.menu_widget
 
     override fun getTitleRes() = R.string.room_widget_activity_title
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun initUiAndData() {
         val widgetArgs: WidgetArgs? = intent?.extras?.getParcelable(Mavericks.KEY_ARG)
@@ -118,7 +107,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
                 }
                 WidgetStatus.WIDGET_ALLOWED     -> {
                     if (supportFragmentManager.findFragmentByTag(WIDGET_FRAGMENT_TAG) == null) {
-                        addFragment(R.id.fragmentContainer, WidgetFragment::class.java, widgetArgs, WIDGET_FRAGMENT_TAG)
+                        addFragment(views.fragmentContainer, WidgetFragment::class.java, widgetArgs, WIDGET_FRAGMENT_TAG)
                     }
                 }
             }
@@ -131,14 +120,6 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
         viewModel.onEach(WidgetViewState::canManageWidgets) {
             invalidateOptionsMenu()
         }
-    }
-
-    override fun create(initialState: WidgetViewState): WidgetViewModel {
-        return viewModelFactory.create(initialState)
-    }
-
-    override fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel {
-        return permissionsViewModelFactory.create(initialState)
     }
 
     private fun handleClose(event: WidgetViewEvents.Close) {

@@ -53,7 +53,7 @@ data class LoginViewState(
         val loginMode: LoginMode = LoginMode.Unknown,
         // Supported types for the login. We cannot use a sealed class for LoginType because it is not serializable
         @PersistState
-val loginModeSupportedTypes: List<String> = emptyList(),
+        val loginModeSupportedTypes: List<String> = emptyList(),
         val knownCustomHomeServersUrls: List<String> = emptyList()
 ) : MavericksState {
 

@@ -42,7 +42,6 @@
             app:layout_constraintBottom_toTopOf="@id/ssss_reset_other_devices"
             app:layout_constraintTop_toBottomOf="@id/reset_title" />
 
-
         <TextView
             android:id="@+id/ssss_reset_other_devices"
             style="@style/Widget.Vector.TextView.Subtitle"

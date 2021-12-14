@@ -197,16 +197,16 @@
     <string name="room_displayname_empty_room">Empty room</string>
     <string name="room_displayname_empty_room_was">Empty room (was %s)</string>
 
-    <string name="initial_sync_start_server_computing">Initial Sync:\nWaiting for server response…</string>
-    <string name="initial_sync_start_downloading">Initial Sync:\nDownloading data…</string>
-    <string name="initial_sync_start_importing_account">Initial Sync:\nImporting account…</string>
-    <string name="initial_sync_start_importing_account_crypto">Initial Sync:\nImporting crypto</string>
-    <string name="initial_sync_start_importing_account_rooms">Initial Sync:\nImporting Rooms</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">Initial Sync:\nImporting Joined Rooms</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Initial Sync:\nImporting Invited Rooms</string>
-    <string name="initial_sync_start_importing_account_left_rooms">Initial Sync:\nImporting Left Rooms</string>
-    <string name="initial_sync_start_importing_account_groups">Initial Sync:\nImporting Communities</string>
-    <string name="initial_sync_start_importing_account_data">Initial Sync:\nImporting Account Data</string>
+    <string name="initial_sync_start_server_computing">Initial sync:\nWaiting for server response…</string>
+    <string name="initial_sync_start_downloading">Initial sync:\nDownloading data…</string>
+    <string name="initial_sync_start_importing_account">Initial sync:\nImporting account…</string>
+    <string name="initial_sync_start_importing_account_crypto">Initial sync:\nImporting crypto</string>
+    <string name="initial_sync_start_importing_account_rooms">Initial sync:\nImporting rooms</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Initial sync:\nLoading your conversations\nIf you\'ve joined lots of rooms, this might take a while</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Initial sync:\nImporting invited rooms</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Initial sync:\nImporting left rooms</string>
+    <string name="initial_sync_start_importing_account_groups">Initial sync:\nImporting communities</string>
+    <string name="initial_sync_start_importing_account_data">Initial sync:\nImporting account data</string>
 
 
     <string name="event_status_sent_message">Message sent</string>
@@ -322,6 +322,7 @@
     <string name="notification_sync_init">Initializing service</string>
     <string name="notification_sync_in_progress">Synchronising…</string>
     <string name="notification_listening_for_events">Listening for events</string>
+    <string name="notification_listening_for_notifications">Listening for notifications</string>
     <string name="notification_noisy_notifications">Noisy notifications</string>
     <string name="notification_silent_notifications">Silent notifications</string>
 
@@ -456,6 +457,8 @@
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="disable">Disable</string>
     <string name="action_return">Return</string>
+    <string name="action_enable">Enable</string>
+    <string name="action_not_now">Not now</string>
 
     <!-- actions threads -->
     <string name="action_thread_view_in_room">View in room</string>
@@ -663,6 +666,8 @@
     <string name="login_error_unknown_host">This URL is not reachable, please check it</string>
     <string name="login_error_no_homeserver_found">This is not a valid Matrix server address</string>
     <string name="login_error_homeserver_not_found">Cannot reach a homeserver at this URL, please check it</string>
+    <string name="login_error_homeserver_from_url_not_found">Cannot reach a homeserver at the URL %s. Please check your link or choose a homeserver manually.</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Choose homeserver</string>
     <string name="login_error_ssl_peer_unverified">"SSL Error: the peer's identity has not been verified."</string>
     <string name="login_error_ssl_other">"SSL Error."</string>
     <string name="login_error_ssl_handshake">Your device is using an outdated TLS security protocol, vulnerable to attack, for your security you will not be able to connect</string>
@@ -1093,6 +1098,9 @@
     <string name="room_settings_forget">Forget</string>
     <string name="room_settings_add_homescreen_shortcut">Add to Home screen</string>
 
+    <string name="shortcut_disabled_reason_room_left">The room has been left!</string>
+    <string name="shortcut_disabled_reason_sign_out">The session has been signed out!</string>
+
     <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Messages</string>
     <string name="room_sliding_menu_settings">Settings</string>
@@ -1386,6 +1394,15 @@
     <string name="template_settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Yes, I want to help!</string>
 
+    <!-- analytics v2 -->
+    <string name="analytics_opt_in_title">Help improve Element</string>
+    <!-- The template will be replaced by the value of the resource analytics_opt_in_content_link -->
+    <string name="analytics_opt_in_content">Help us identify issues and improve Element by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.\n\nYou can read all our terms %s.</string>
+    <string name="analytics_opt_in_content_link">here</string>
+    <string name="analytics_opt_in_list_item_1">We <b>don\'t</b> record or profile any account data</string>
+    <string name="analytics_opt_in_list_item_2">We <b>don\'t</b> share information with third parties</string>
+    <string name="analytics_opt_in_list_item_3">You can turn this off anytime in settings</string>
+
     <string name="settings_data_save_mode">Data save mode</string>
     <string name="settings_data_save_mode_summary">Data save mode applies a specific filter so presence updates and typing notifications are filtered out.</string>
 
@@ -1405,6 +1422,12 @@
     <string name="settings_identity_server">Identity server</string>
     <string name="settings_integration_allow">Allow integrations</string>
     <string name="settings_integration_manager">Integration manager</string>
+
+    <string name="template_legals_application_title">${app_name} policy</string>
+    <string name="legals_home_server_title">Your homeserver policy</string>
+    <string name="legals_identity_server_title">Your identity server policy</string>
+    <string name="legals_third_party_notices">Third party libraries</string>
+    <string name="legals_no_policy_provided">This server does not provide any policy.</string>
 
     <string name="disabled_integration_dialog_title">Integrations are disabled</string>
     <string name="disabled_integration_dialog_content">"Enable 'Allow integrations' in Settings to do this."</string>
@@ -1854,7 +1877,7 @@
     <string name="command_description_deop_user">Deops user with given id</string>
     <string name="command_description_room_name">Sets the room name</string>
     <string name="command_description_invite_user">Invites user with given id to current room</string>
-    <string name="command_description_join_room">Joins room with given alias</string>
+    <string name="command_description_join_room">Joins room with given address</string>
     <string name="command_description_part_room">Leave room</string>
     <string name="command_description_topic">Set the room topic</string>
     <string name="command_description_kick_user">Kicks user with given id</string>
@@ -2206,7 +2229,9 @@
     <string name="room_list_rooms_empty_body">Your rooms will be displayed here. Tap the + bottom right to find existing ones or start some of your own.</string>
 
     <string name="title_activity_emoji_reaction_picker">Reactions</string>
+    <!-- TODO weblate sync: rename to "action_agree"-->
     <string name="reactions_agree">Agree</string>
+    <!-- TODO weblate sync: rename to "action_like"-->
     <string name="reactions_like">Like</string>
     <string name="message_add_reaction">Add Reaction</string>
     <string name="message_view_reaction">View Reactions</string>
@@ -2281,7 +2306,13 @@
 
     <string name="preference_voice_and_video">Voice &amp; Video</string>
     <string name="preference_root_help_about">Help &amp; About</string>
+    <string name="preference_root_legals">Legals</string>
 
+    <string name="preference_help">Help</string>
+    <string name="preference_help_title">Help and support</string>
+    <string name="preference_help_summary">Get help with using Element</string>
+    <string name="preference_versions">Versions</string>
+    <string name="preference_system_settings">System settings</string>
 
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Register token</string>
 
@@ -2383,11 +2414,16 @@
     <string name="settings_discovery_consent_title">Send emails and phone numbers</string>
     <string name="settings_discovery_consent_notice_on">You have given your consent to send emails and phone numbers to this identity server to discover other users from your contacts.</string>
     <string name="settings_discovery_consent_notice_off">You have not given your consent to send emails and phone numbers to this identity server to discover other users from your contacts.</string>
+    <string name="settings_discovery_consent_notice_off_2">Your contacts are private. To discover users from your contacts, we need your permission to send contact info to your identity server.</string>
     <string name="settings_discovery_consent_action_revoke">Revoke my consent</string>
     <string name="settings_discovery_consent_action_give_consent">Give consent</string>
 
     <string name="identity_server_consent_dialog_title">Send emails and phone numbers</string>
+    <string name="identity_server_consent_dialog_title_2">Send emails and phone numbers to %s</string>
     <string name="identity_server_consent_dialog_content">In order to discover existing contacts you know, do you accept to send your contact data (phone numbers and/or emails) to the configured identity server (%1$s)?\n\nFor more privacy, the sent data will be hashed before being sent.</string>
+    <string name="identity_server_consent_dialog_content_2">To discover existing contacts, you need to send contact info to your identity server.\n\nWe hash your data before sending for privacy. Do you consent to send this info?</string>
+    <string name="identity_server_consent_dialog_content_3">To discover existing contacts, you need to send contact info (emails and phone numbers) to your identity server. We hash your data before sending for privacy.</string>
+    <string name="identity_server_consent_dialog_content_question">Do you agree to send this info?</string>
     <string name="identity_server_consent_dialog_neutral_policy">Policy</string>
 
     <string name="settings_discovery_enter_identity_server">Enter an identity server URL</string>
@@ -2449,6 +2485,7 @@
     <string name="attachment_type_audio">"Audio"</string>
     <string name="attachment_type_gallery">"Gallery"</string>
     <string name="attachment_type_sticker">"Sticker"</string>
+    <string name="attachment_type_poll">Poll</string>
     <string name="rotate_and_crop_screen_title">Rotate and crop</string>
     <string name="error_handling_incoming_share">Couldn\'t handle share data</string>
 
@@ -2908,7 +2945,7 @@
 
     <string name="a11y_qr_code_for_verification">QR code</string>
 
-    <string name="qr_code_scanned_by_other_notice">Almost there! Is %s showing the same shield?</string>
+    <string name="qr_code_scanned_by_other_notice">Almost there! Is %s showing a tick?</string>
     <string name="qr_code_scanned_by_other_yes">Yes</string>
     <string name="qr_code_scanned_by_other_no">No</string>
 
@@ -3061,7 +3098,7 @@
     <string name="add_a_topic_link_text">Add a topic</string>
     <string name="topic_prefix">"Topic: "</string>
 
-    <string name="qr_code_scanned_self_verif_notice">Almost there! Is the other device showing the same shield?</string>
+    <string name="qr_code_scanned_self_verif_notice">Almost there! Is the other device showing a tick?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Almost there! Waiting for confirmation…</string>
     <string name="qr_code_scanned_verif_waiting">Waiting for %s…</string>
 
@@ -3571,7 +3608,6 @@
     <string name="space_manage_rooms_and_spaces">Manage rooms and spaces</string>
 
 
-
     <string name="preference_show_all_rooms_in_home">Show all rooms in Home</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">All rooms you’re in will be shown in Home.</string>
 
@@ -3644,4 +3680,45 @@
     <string name="link_this_email_settings_link">Link this email with your account</string>
     <!-- %s will be replaced by the value of link_this_email_settings_link and styled as a link -->
     <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in Element.</string>
+
+    <!-- Poll -->
+    <string name="create_poll_title">Create Poll</string>
+    <string name="create_poll_question_title">Poll question or topic</string>
+    <string name="create_poll_question_hint">Question or topic</string>
+    <string name="create_poll_options_title">Create options</string>
+    <string name="create_poll_options_hint">Option %1$d</string>
+    <string name="create_poll_add_option">ADD OPTION</string>
+    <string name="create_poll_button">CREATE POLL</string>
+    <string name="create_poll_empty_question_error">Question cannot be empty</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">At least %1$s option is required</item>
+        <item quantity="other">At least %1$s options are required</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d vote</item>
+        <item quantity="other">%1$d votes</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">Based on %1$d vote</item>
+        <item quantity="other">Based on %1$d votes</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="zero">No votes cast</item>
+        <item quantity="one">%1$d vote cast. Vote to the see the results</item>
+        <item quantity="other">%1$d votes cast. Vote to the see the results</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Final result based on %1$d vote</item>
+        <item quantity="other">Final result based on %1$d votes</item>
+    </plurals>
+    <string name="poll_end_action">End poll</string>
+    <string name="a11y_poll_winner_option">winner option</string>
+    <string name="end_poll_confirmation_title">End this poll?</string>
+    <string name="end_poll_confirmation_description">This will stop people from being able to vote and will display the final results of the poll.</string>
+    <string name="end_poll_confirmation_approve_button">End poll</string>
+    <string name="labs_enable_polls">Enable Polls</string>
+    <string name="poll_response_room_list_preview">Vote casted</string>
+    <string name="poll_end_room_list_preview">Poll ended</string>
+    <string name="delete_poll_dialog_title">Remove poll</string>
+    <string name="delete_poll_dialog_content">Are you sure you want to remove this poll? You won\'t be able to recover it once removed.</string>
 </resources>

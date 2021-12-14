@@ -53,6 +53,7 @@ import androidx.core.view.forEach
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -68,8 +69,6 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.jakewharton.rxbinding3.view.focusChanges
-import com.jakewharton.rxbinding3.widget.textChanges
 import com.vanniktech.emoji.EmojiPopup
 import im.vector.app.BuildConfig
 import im.vector.app.R
@@ -92,6 +91,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.lifecycleAwareLazy
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.time.Clock
 import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.CurrentCallsViewPresenter
 import im.vector.app.core.ui.views.FailedMessagesWarningView
@@ -138,13 +138,14 @@ import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.UnreadMessagesSharedViewModel
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
+import im.vector.app.features.home.room.detail.composer.MessageComposerAction
+import im.vector.app.features.home.room.detail.composer.MessageComposerView
+import im.vector.app.features.home.room.detail.composer.MessageComposerViewEvents
+import im.vector.app.features.home.room.detail.composer.MessageComposerViewModel
+import im.vector.app.features.home.room.detail.composer.MessageComposerViewState
 import im.vector.app.features.home.room.detail.composer.SendMode
-import im.vector.app.features.home.room.detail.composer.TextComposerAction
-import im.vector.app.features.home.room.detail.composer.TextComposerView
-import im.vector.app.features.home.room.detail.composer.TextComposerViewEvents
-import im.vector.app.features.home.room.detail.composer.TextComposerViewModel
-import im.vector.app.features.home.room.detail.composer.TextComposerViewState
-import im.vector.app.features.home.room.detail.composer.VoiceMessageRecorderView
+import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
+import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
@@ -190,6 +191,10 @@ import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgs
 import im.vector.app.features.widgets.WidgetKind
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
@@ -204,6 +209,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
@@ -220,10 +226,11 @@ import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
+import reactivecircus.flowbinding.android.view.focusChanges
+import reactivecircus.flowbinding.android.widget.textChanges
 import timber.log.Timber
 import java.net.URL
 import java.util.UUID
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class TimelineFragment @Inject constructor(
@@ -233,8 +240,6 @@ class TimelineFragment @Inject constructor(
         autoCompleterFactory: AutoCompleter.Factory,
         private val permalinkHandler: PermalinkHandler,
         private val notificationDrawerManager: NotificationDrawerManager,
-        val roomDetailViewModelFactory: RoomDetailViewModel.Factory,
-        val textComposerViewModelFactory: TextComposerViewModel.Factory,
         private val eventHtmlRenderer: EventHtmlRenderer,
         private val vectorPreferences: VectorPreferences,
         private val colorProvider: ColorProvider,
@@ -245,7 +250,8 @@ class TimelineFragment @Inject constructor(
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val callManager: WebRtcCallManager,
-        private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker
+        private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
+        private val clock: Clock
 ) :
         VectorBaseFragment<FragmentRoomDetailBinding>(),
         TimelineEventController.Callback,
@@ -288,8 +294,7 @@ class TimelineFragment @Inject constructor(
     }
 
     private val roomDetailViewModel: RoomDetailViewModel by fragmentViewModel()
-    private val textComposerViewModel: TextComposerViewModel by fragmentViewModel()
-
+    private val messageComposerViewModel: MessageComposerViewModel by fragmentViewModel()
     private val debouncer = Debouncer(createUIHandler())
 
     private lateinit var scrollOnNewMessageCallback: ScrollOnNewMessageCallback
@@ -368,11 +373,11 @@ class TimelineFragment @Inject constructor(
         }
 
         sharedActionViewModel
-                .observe()
-                .subscribe {
+                .stream()
+                .onEach {
                     handleActions(it)
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         knownCallsViewModel
                 .liveKnownCalls
@@ -385,15 +390,16 @@ class TimelineFragment @Inject constructor(
             updateJumpToReadMarkerViewVisibility()
         }
 
-        textComposerViewModel.onEach(TextComposerViewState::sendMode, TextComposerViewState::canSendMessage) { mode, canSend ->
+        messageComposerViewModel.onEach(MessageComposerViewState::sendMode, MessageComposerViewState::canSendMessage) { mode, canSend ->
             if (!canSend) {
                 return@onEach
             }
             when (mode) {
-                is SendMode.REGULAR -> renderRegularMode(mode.text)
-                is SendMode.EDIT    -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text)
-                is SendMode.QUOTE   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.quote, mode.text)
-                is SendMode.REPLY   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, R.string.reply, mode.text)
+                is SendMode.Regular -> renderRegularMode(mode.text)
+                is SendMode.Edit    -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text)
+                is SendMode.Quote   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.quote, mode.text)
+                is SendMode.Reply   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, R.string.reply, mode.text)
+                is SendMode.Voice   -> renderVoiceMessageMode(mode.text)
             }
         }
 
@@ -410,25 +416,26 @@ class TimelineFragment @Inject constructor(
             )
         }
 
-        textComposerViewModel.observeViewEvents {
+        messageComposerViewModel.observeViewEvents {
             when (it) {
-                is TextComposerViewEvents.JoinRoomCommandSuccess      -> handleJoinedToAnotherRoom(it)
-                is TextComposerViewEvents.SendMessageResult           -> renderSendMessageResult(it)
-                is TextComposerViewEvents.ShowMessage                 -> showSnackWithMessage(it.message)
-                is TextComposerViewEvents.ShowRoomUpgradeDialog       -> handleShowRoomUpgradeDialog(it)
-                is TextComposerViewEvents.AnimateSendButtonVisibility -> handleSendButtonVisibilityChanged(it)
-                is TextComposerViewEvents.OpenRoomMemberProfile       -> openRoomMemberProfile(it.userId)
-            }.exhaustive
-        }
-
-        roomDetailViewModel.observeViewEvents {
-            when (it) {
-                is RoomDetailViewEvents.Failure                          -> {
+                is MessageComposerViewEvents.JoinRoomCommandSuccess          -> handleJoinedToAnotherRoom(it)
+                is MessageComposerViewEvents.SendMessageResult               -> renderSendMessageResult(it)
+                is MessageComposerViewEvents.ShowMessage                     -> showSnackWithMessage(it.message)
+                is MessageComposerViewEvents.ShowRoomUpgradeDialog           -> handleShowRoomUpgradeDialog(it)
+                is MessageComposerViewEvents.AnimateSendButtonVisibility     -> handleSendButtonVisibilityChanged(it)
+                is MessageComposerViewEvents.OpenRoomMemberProfile           -> openRoomMemberProfile(it.userId)
+                is MessageComposerViewEvents.VoicePlaybackOrRecordingFailure -> {
                     if (it.throwable is VoiceFailure.UnableToRecord) {
                         onCannotRecord()
                     }
                     showErrorInSnackbar(it.throwable)
                 }
+            }.exhaustive
+        }
+
+        roomDetailViewModel.observeViewEvents {
+            when (it) {
+                is RoomDetailViewEvents.Failure                          -> showErrorInSnackbar(it.throwable)
                 is RoomDetailViewEvents.OnNewTimelineEvents              -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
                 is RoomDetailViewEvents.ActionSuccess                    -> displayRoomDetailActionSuccess(it)
                 is RoomDetailViewEvents.ActionFailure                    -> displayRoomDetailActionFailure(it)
@@ -468,7 +475,14 @@ class TimelineFragment @Inject constructor(
         }
     }
 
-    private fun handleSendButtonVisibilityChanged(event: TextComposerViewEvents.AnimateSendButtonVisibility) {
+    private fun renderVoiceMessageMode(content: String) {
+        ContentAttachmentData.fromJsonString(content)?.let { audioAttachmentData ->
+            views.voiceMessageRecorderView.isVisible = true
+            messageComposerViewModel.handle(MessageComposerAction.InitializeVoiceRecorder(audioAttachmentData))
+        }
+    }
+
+    private fun handleSendButtonVisibilityChanged(event: MessageComposerViewEvents.AnimateSendButtonVisibility) {
         if (event.isVisible) {
             views.voiceMessageRecorderView.isVisible = false
             views.composerLayout.views.sendButton.alpha = 0f
@@ -504,7 +518,7 @@ class TimelineFragment @Inject constructor(
 
     private fun onCannotRecord() {
         // Update the UI, cancel the animation
-        views.voiceMessageRecorderView.initVoiceRecordingViews()
+        messageComposerViewModel.handle(MessageComposerAction.OnVoiceRecordingUiStateChanged(RecordingUiState.Idle))
     }
 
     private fun acceptIncomingCall(event: RoomDetailViewEvents.DisplayAndAcceptCall) {
@@ -523,7 +537,7 @@ class TimelineFragment @Inject constructor(
         JoinReplacementRoomBottomSheet().show(childFragmentManager, tag)
     }
 
-    private fun handleShowRoomUpgradeDialog(roomDetailViewEvents: TextComposerViewEvents.ShowRoomUpgradeDialog) {
+    private fun handleShowRoomUpgradeDialog(roomDetailViewEvents: MessageComposerViewEvents.ShowRoomUpgradeDialog) {
         val tag = MigrateRoomBottomSheet::javaClass.name
         MigrateRoomBottomSheet.newInstance(timelineArgs.roomId, roomDetailViewEvents.newVersion)
                 .show(parentFragmentManager, tag)
@@ -642,13 +656,25 @@ class TimelineFragment @Inject constructor(
                         setImageResource(R.drawable.ic_keyboard)
                     }
                 }
-                .setOnEmojiPopupDismissListener {
+                .setOnEmojiPopupDismissListenerLifecycleAware {
                     views.composerLayout.views.composerEmojiButton.apply {
                         contentDescription = getString(R.string.a11y_open_emoji_picker)
                         setImageResource(R.drawable.ic_insert_emoji)
                     }
                 }
                 .build(views.composerLayout.views.composerEditText)
+    }
+
+    /**
+     *  Ensure dismiss actions only trigger when the fragment is in the started state
+     *  EmojiPopup by default dismisses onViewDetachedFromWindow, this can cause race conditions with onDestroyView
+     */
+    private fun EmojiPopup.Builder.setOnEmojiPopupDismissListenerLifecycleAware(action: () -> Unit): EmojiPopup.Builder {
+        return setOnEmojiPopupDismissListener {
+            if (lifecycle.currentState == Lifecycle.State.STARTED) {
+                action()
+            }
+        }
     }
 
     private val permissionVoiceMessageLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
@@ -679,32 +705,59 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun setupVoiceMessageView() {
-        views.voiceMessageRecorderView.voiceMessagePlaybackTracker = voiceMessagePlaybackTracker
-
+        voiceMessagePlaybackTracker.track(VoiceMessagePlaybackTracker.RECORDING_ID, views.voiceMessageRecorderView)
         views.voiceMessageRecorderView.callback = object : VoiceMessageRecorderView.Callback {
-            override fun onVoiceRecordingStarted(): Boolean {
-                return if (checkPermissions(PERMISSIONS_FOR_VOICE_MESSAGE, requireActivity(), permissionVoiceMessageLauncher)) {
-                    roomDetailViewModel.handle(RoomDetailAction.StartRecordingVoiceMessage)
-                    textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingStateChanged(true))
+
+            override fun onVoiceRecordingStarted() {
+                if (checkPermissions(PERMISSIONS_FOR_VOICE_MESSAGE, requireActivity(), permissionVoiceMessageLauncher)) {
+                    messageComposerViewModel.handle(MessageComposerAction.StartRecordingVoiceMessage)
                     vibrate(requireContext())
-                    true
-                } else {
-                    // Permission dialog is displayed
-                    false
+                    updateRecordingUiState(RecordingUiState.Recording(clock.epochMillis()))
                 }
             }
 
-            override fun onVoiceRecordingEnded(isCancelled: Boolean) {
-                roomDetailViewModel.handle(RoomDetailAction.EndRecordingVoiceMessage(isCancelled))
-                textComposerViewModel.handle(TextComposerAction.OnVoiceRecordingStateChanged(false))
-            }
-
-            override fun onVoiceRecordingPlaybackModeOn() {
-                roomDetailViewModel.handle(RoomDetailAction.PauseRecordingVoiceMessage)
-            }
-
             override fun onVoicePlaybackButtonClicked() {
-                roomDetailViewModel.handle(RoomDetailAction.PlayOrPauseRecordingPlayback)
+                messageComposerViewModel.handle(MessageComposerAction.PlayOrPauseRecordingPlayback)
+            }
+
+            override fun onVoiceRecordingCancelled() {
+                messageComposerViewModel.handle(MessageComposerAction.EndRecordingVoiceMessage(isCancelled = true))
+                vibrate(requireContext())
+                updateRecordingUiState(RecordingUiState.Idle)
+            }
+
+            override fun onVoiceRecordingLocked() {
+                val startedState = withState(messageComposerViewModel) { it.voiceRecordingUiState as? RecordingUiState.Recording }
+                val startTime = startedState?.recordingStartTimestamp ?: clock.epochMillis()
+                updateRecordingUiState(RecordingUiState.Locked(startTime))
+            }
+
+            override fun onVoiceRecordingEnded() {
+                onSendVoiceMessage()
+            }
+
+            override fun onSendVoiceMessage() {
+                messageComposerViewModel.handle(MessageComposerAction.EndRecordingVoiceMessage(isCancelled = false))
+                updateRecordingUiState(RecordingUiState.Idle)
+            }
+
+            override fun onDeleteVoiceMessage() {
+                messageComposerViewModel.handle(MessageComposerAction.EndRecordingVoiceMessage(isCancelled = true))
+                updateRecordingUiState(RecordingUiState.Idle)
+            }
+
+            override fun onRecordingLimitReached() {
+                messageComposerViewModel.handle(MessageComposerAction.PauseRecordingVoiceMessage)
+                updateRecordingUiState(RecordingUiState.Draft)
+            }
+
+            override fun onRecordingWaveformClicked() {
+                messageComposerViewModel.handle(MessageComposerAction.PauseRecordingVoiceMessage)
+                updateRecordingUiState(RecordingUiState.Draft)
+            }
+
+            private fun updateRecordingUiState(state: RecordingUiState) {
+                messageComposerViewModel.handle(MessageComposerAction.OnVoiceRecordingUiStateChanged(state))
             }
         }
     }
@@ -781,7 +834,7 @@ class TimelineFragment @Inject constructor(
                 .show()
     }
 
-    private fun handleJoinedToAnotherRoom(action: TextComposerViewEvents.JoinRoomCommandSuccess) {
+    private fun handleJoinedToAnotherRoom(action: MessageComposerViewEvents.JoinRoomCommandSuccess) {
         views.composerLayout.setTextIfDifferent("")
         lockSendButton = false
         navigator.openRoom(vectorBaseActivity, action.roomId)
@@ -790,7 +843,7 @@ class TimelineFragment @Inject constructor(
     private fun handleShareData() {
         when (val sharedData = timelineArgs.sharedData) {
             is SharedData.Text        -> {
-                textComposerViewModel.handle(TextComposerAction.EnterRegularMode(sharedData.text, fromSharing = true))
+                messageComposerViewModel.handle(MessageComposerAction.EnterRegularMode(sharedData.text, fromSharing = true))
             }
             is SharedData.Attachments -> {
                 // open share edition
@@ -848,7 +901,7 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun setupJumpToReadMarkerView() {
-        views.jumpToReadMarkerView.setOnClickListener {
+        views.jumpToReadMarkerView.debouncedClicks {
             onJumpToReadMarkerClicked()
         }
         views.jumpToReadMarkerView.setOnCloseIconClickListener {
@@ -904,7 +957,7 @@ class TimelineFragment @Inject constructor(
         super.onCreateOptionsMenu(menu, inflater)
         // We use a custom layout for this menu item, so we need to set a ClickListener
         menu.findItem(R.id.open_matrix_apps)?.let { menuItem ->
-            menuItem.actionView.setOnClickListener {
+            menuItem.actionView.debouncedClicks {
                 onOptionsItemSelected(menuItem)
             }
         }
@@ -1085,10 +1138,10 @@ class TimelineFragment @Inject constructor(
                 .show()
     }
 
-    private fun renderRegularMode(text: String) {
+    private fun renderRegularMode(content: String) {
         autoCompleter.exitSpecialMode()
         views.composerLayout.collapse()
-        views.composerLayout.setTextIfDifferent(text)
+        views.composerLayout.setTextIfDifferent(content)
         views.composerLayout.views.sendButton.contentDescription = getString(R.string.send)
     }
 
@@ -1107,6 +1160,8 @@ class TimelineFragment @Inject constructor(
         val nonFormattedBody = if (messageContent is MessageAudioContent && messageContent.voiceMessageIndicator != null) {
             val formattedDuration = DateUtils.formatElapsedTime(((messageContent.audioInfo?.duration ?: 0) / 1000).toLong())
             getString(R.string.voice_message_reply_content, formattedDuration)
+        } else if (messageContent is MessagePollContent) {
+            messageContent.pollCreationInfo?.question?.question
         } else {
             messageContent?.body ?: ""
         }
@@ -1124,8 +1179,11 @@ class TimelineFragment @Inject constructor(
             imageContentRenderer.render(data, ImageContentRenderer.Mode.THUMBNAIL, views.composerLayout.views.composerRelatedMessageImage)
             true
         } else {
+            imageContentRenderer.clear(views.composerLayout.views.composerRelatedMessageImage)
             false
         }
+
+        views.composerLayout.views.composerRelatedMessageImage.isVisible = isImageVisible
 
         views.composerLayout.setTextIfDifferent(defaultContent)
 
@@ -1169,14 +1227,14 @@ class TimelineFragment @Inject constructor(
 
     override fun onPause() {
         super.onPause()
-
         notificationDrawerManager.setCurrentRoom(null)
+        voiceMessagePlaybackTracker.unTrack(VoiceMessagePlaybackTracker.RECORDING_ID)
 
-        textComposerViewModel.handle(TextComposerAction.SaveDraft(views.composerLayout.text.toString()))
-
-        // We should improve the UX to support going into playback mode when paused and delete the media when the view is destroyed.
-        roomDetailViewModel.handle(RoomDetailAction.EndAllVoiceActions(deleteRecord = false))
-        views.voiceMessageRecorderView.initVoiceRecordingViews()
+        if (withState(messageComposerViewModel) { it.isVoiceRecording } && requireActivity().isChangingConfigurations) {
+            // we're rotating, maintain any active recordings
+        } else {
+            messageComposerViewModel.handle(MessageComposerAction.OnEntersBackground(views.composerLayout.text.toString()))
+        }
     }
 
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {
@@ -1291,12 +1349,12 @@ class TimelineFragment @Inject constructor(
                 override fun performQuickReplyOnHolder(model: EpoxyModel<*>) {
                     (model as? AbsMessageItem)?.attributes?.informationData?.let {
                         val eventId = it.eventId
-                        textComposerViewModel.handle(TextComposerAction.EnterReplyMode(eventId, views.composerLayout.text.toString()))
+                        messageComposerViewModel.handle(MessageComposerAction.EnterReplyMode(eventId, views.composerLayout.text.toString()))
                     }
                 }
 
                 override fun canSwipeModel(model: EpoxyModel<*>): Boolean {
-                    val canSendMessage = withState(textComposerViewModel) {
+                    val canSendMessage = withState(messageComposerViewModel) {
                         it.canSendMessage
                     }
                     if (!canSendMessage) {
@@ -1385,10 +1443,11 @@ class TimelineFragment @Inject constructor(
 
         views.composerLayout.views.composerEmojiButton.isVisible = vectorPreferences.showEmojiKeyboard()
 
-        views.composerLayout.callback = object : TextComposerView.Callback {
+        views.composerLayout.callback = object : MessageComposerView.Callback {
             override fun onAddAttachment() {
                 if (!::attachmentTypeSelector.isInitialized) {
                     attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@TimelineFragment)
+                    attachmentTypeSelector.setAttachmentVisibility(AttachmentTypeSelectorView.Type.POLL, vectorPreferences.labsEnablePolls())
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton, keyboardStateUtils.isKeyboardShowing)
             }
@@ -1398,7 +1457,7 @@ class TimelineFragment @Inject constructor(
             }
 
             override fun onCloseRelatedMessage() {
-                textComposerViewModel.handle(TextComposerAction.EnterRegularMode(views.composerLayout.text.toString(), false))
+                messageComposerViewModel.handle(MessageComposerAction.EnterRegularMode(views.composerLayout.text.toString(), false))
             }
 
             override fun onRichContentSelected(contentUri: Uri): Boolean {
@@ -1406,7 +1465,7 @@ class TimelineFragment @Inject constructor(
             }
 
             override fun onTextChanged(text: CharSequence) {
-                textComposerViewModel.handle(TextComposerAction.OnTextChanged(text))
+                messageComposerViewModel.handle(MessageComposerAction.OnTextChanged(text))
             }
         }
     }
@@ -1420,7 +1479,7 @@ class TimelineFragment @Inject constructor(
             // We collapse ASAP, if not there will be a slight annoying delay
             views.composerLayout.collapse(true)
             lockSendButton = true
-            textComposerViewModel.handle(TextComposerAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
+            messageComposerViewModel.handle(MessageComposerAction.SendMessage(text, vectorPreferences.isMarkdownEnabled()))
             emojiPopup.dismiss()
         }
     }
@@ -1428,19 +1487,19 @@ class TimelineFragment @Inject constructor(
     private fun observerUserTyping() {
         views.composerLayout.views.composerEditText.textChanges()
                 .skipInitialValue()
-                .debounce(300, TimeUnit.MILLISECONDS)
+                .debounce(300)
                 .map { it.isNotEmpty() }
-                .subscribe {
+                .onEach {
                     Timber.d("Typing: User is typing: $it")
-                    textComposerViewModel.handle(TextComposerAction.UserIsTyping(it))
+                    messageComposerViewModel.handle(MessageComposerAction.UserIsTyping(it))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.composerLayout.views.composerEditText.focusChanges()
-                .subscribe {
+                .onEach {
                     roomDetailViewModel.handle(RoomDetailAction.ComposerFocusChange(it))
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun sendUri(uri: Uri): Boolean {
@@ -1452,7 +1511,7 @@ class TimelineFragment @Inject constructor(
         return isHandled
     }
 
-    override fun invalidate() = withState(roomDetailViewModel, textComposerViewModel) { mainState, textComposerState ->
+    override fun invalidate() = withState(roomDetailViewModel, messageComposerViewModel) { mainState, messageComposerState ->
         invalidateOptionsMenu()
         val summary = mainState.asyncRoomSummary()
         renderToolbar(summary, mainState.formattedTypingUsers)
@@ -1469,12 +1528,13 @@ class TimelineFragment @Inject constructor(
             timelineEventController.update(mainState)
             lazyLoadedViews.inviteView(false)?.isVisible = false
             if (mainState.tombstoneEvent == null) {
-                views.composerLayout.isInvisible = !textComposerState.isComposerVisible
-                views.voiceMessageRecorderView.isVisible = !textComposerState.isSendButtonVisible
-                views.composerLayout.views.sendButton.isInvisible = !textComposerState.isSendButtonVisible
+                views.composerLayout.isInvisible = !messageComposerState.isComposerVisible
+                views.voiceMessageRecorderView.isVisible = messageComposerState.isVoiceMessageRecorderVisible
+                views.composerLayout.views.sendButton.isInvisible = !messageComposerState.isSendButtonVisible
+                views.voiceMessageRecorderView.render(messageComposerState.voiceRecordingUiState)
                 views.composerLayout.setRoomEncrypted(summary.isEncrypted)
                 // views.composerLayout.alwaysShowSendButton = false
-                if (textComposerState.canSendMessage) {
+                if (messageComposerState.canSendMessage) {
                     views.notificationAreaView.render(NotificationAreaView.State.Hidden)
                 } else {
                     views.notificationAreaView.render(NotificationAreaView.State.NoPermissionToPost)
@@ -1489,7 +1549,7 @@ class TimelineFragment @Inject constructor(
                 callback = this@TimelineFragment
                 isVisible = true
                 render(inviter, VectorInviteView.Mode.LARGE, mainState.changeMembershipState)
-                setOnClickListener { }
+                setOnClickListener(null)
             }
             Unit
         } else if (mainState.asyncInviter.complete) {
@@ -1544,24 +1604,27 @@ class TimelineFragment @Inject constructor(
         }
     }
 
-    private fun renderSendMessageResult(sendMessageResult: TextComposerViewEvents.SendMessageResult) {
+    private fun renderSendMessageResult(sendMessageResult: MessageComposerViewEvents.SendMessageResult) {
         when (sendMessageResult) {
-            is TextComposerViewEvents.SlashCommandHandled               -> {
-                sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
+            is MessageComposerViewEvents.SlashCommandLoading        -> {
+                showLoading(null)
             }
-            is TextComposerViewEvents.SlashCommandError                 -> {
+            is MessageComposerViewEvents.SlashCommandError          -> {
                 displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
             }
-            is TextComposerViewEvents.SlashCommandUnknown               -> {
+            is MessageComposerViewEvents.SlashCommandUnknown        -> {
                 displayCommandError(getString(R.string.unrecognized_command, sendMessageResult.command))
             }
-            is TextComposerViewEvents.SlashCommandResultOk              -> {
+            is MessageComposerViewEvents.SlashCommandResultOk       -> {
+                dismissLoadingDialog()
                 views.composerLayout.setTextIfDifferent("")
+                sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
             }
-            is TextComposerViewEvents.SlashCommandResultError           -> {
+            is MessageComposerViewEvents.SlashCommandResultError    -> {
+                dismissLoadingDialog()
                 displayCommandError(errorFormatter.toHumanReadable(sendMessageResult.throwable))
             }
-            is TextComposerViewEvents.SlashCommandNotImplemented        -> {
+            is MessageComposerViewEvents.SlashCommandNotImplemented -> {
                 displayCommandError(getString(R.string.not_implemented))
             }
             is TextComposerViewEvents.SlashCommandNotSupportedInThreads -> {
@@ -1615,10 +1678,10 @@ class TimelineFragment @Inject constructor(
                 .show(
                         activity = requireActivity(),
                         askForReason = action.askForReason,
-                        confirmationRes = R.string.delete_event_dialog_content,
+                        confirmationRes = action.dialogDescriptionRes,
                         positiveRes = R.string.remove,
                         reasonHintRes = R.string.delete_event_dialog_reason_hint,
-                        titleRes = R.string.delete_event_dialog_title
+                        titleRes = action.dialogTitleRes
                 ) { reason ->
                     roomDetailViewModel.handle(RoomDetailAction.RedactAction(action.eventId, reason))
                 }
@@ -1686,10 +1749,11 @@ class TimelineFragment @Inject constructor(
             is RoomDetailAction.ResumeVerification        -> {
                 val otherUserId = data.otherUserId ?: return
                 VerificationBottomSheet().apply {
-                    arguments = Bundle().apply {
-                        putParcelable(Mavericks.KEY_ARG, VerificationBottomSheet.VerificationArgs(
-                                otherUserId, data.transactionId, roomId = timelineArgs.roomId))
-                    }
+                    setArguments(VerificationBottomSheet.VerificationArgs(
+                            otherUserId = otherUserId,
+                            verificationId = data.transactionId,
+                            roomId = timelineArgs.roomId
+                    ))
                 }.show(parentFragmentManager, "REQ")
             }
         }
@@ -1959,7 +2023,7 @@ class TimelineFragment @Inject constructor(
     }
 
     override fun onVoiceControlButtonClicked(eventId: String, messageAudioContent: MessageAudioContent) {
-        roomDetailViewModel.handle(RoomDetailAction.PlayOrPauseVoicePlayback(eventId, messageAudioContent))
+        messageComposerViewModel.handle(MessageComposerAction.PlayOrPauseVoicePlayback(eventId, messageAudioContent))
     }
 
     private fun onShareActionClicked(action: EventSharedAction.Share) {
@@ -2064,18 +2128,18 @@ class TimelineFragment @Inject constructor(
                 roomDetailViewModel.handle(RoomDetailAction.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
             }
             is EventSharedAction.Edit                       -> {
-                if (!views.voiceMessageRecorderView.isActive()) {
-                    textComposerViewModel.handle(TextComposerAction.EnterEditMode(action.eventId, views.composerLayout.text.toString()))
+                if (withState(messageComposerViewModel) { it.isVoiceMessageIdle }) {
+                    messageComposerViewModel.handle(MessageComposerAction.EnterEditMode(action.eventId, views.composerLayout.text.toString()))
                 } else {
                     requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
                 }
             }
             is EventSharedAction.Quote                      -> {
-                textComposerViewModel.handle(TextComposerAction.EnterQuoteMode(action.eventId, views.composerLayout.text.toString()))
+                messageComposerViewModel.handle(MessageComposerAction.EnterQuoteMode(action.eventId, views.composerLayout.text.toString()))
             }
             is EventSharedAction.Reply                      -> {
-                if (!views.voiceMessageRecorderView.isActive()) {
-                    textComposerViewModel.handle(TextComposerAction.EnterReplyMode(action.eventId, views.composerLayout.text.toString()))
+                if (withState(messageComposerViewModel) { it.isVoiceMessageIdle }) {
+                    messageComposerViewModel.handle(MessageComposerAction.EnterReplyMode(action.eventId, views.composerLayout.text.toString()))
                 } else {
                     requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
                 }
@@ -2136,7 +2200,21 @@ class TimelineFragment @Inject constructor(
                     startActivity(KeysBackupRestoreActivity.intent(it))
                 }
             }
+            is EventSharedAction.EndPoll                    -> {
+                askConfirmationToEndPoll(action.eventId)
+            }
         }
+    }
+
+    private fun askConfirmationToEndPoll(eventId: String) {
+        MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Vector_MaterialAlertDialog)
+                .setTitle(R.string.end_poll_confirmation_title)
+                .setMessage(R.string.end_poll_confirmation_description)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.end_poll_confirmation_approve_button) { _, _ ->
+                    roomDetailViewModel.handle(RoomDetailAction.EndPoll(eventId))
+                }
+                .show()
     }
 
     private fun askConfirmationToIgnoreUser(senderId: String) {
@@ -2252,12 +2330,12 @@ class TimelineFragment @Inject constructor(
 // VectorInviteView.Callback
 
     override fun onAcceptInvite() {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(timelineArgs.roomId)
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(timelineArgs.roomId) }
         roomDetailViewModel.handle(RoomDetailAction.AcceptInvite)
     }
 
     override fun onRejectInvite() {
-        notificationDrawerManager.clearMemberShipNotificationForRoom(timelineArgs.roomId)
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(timelineArgs.roomId) }
         roomDetailViewModel.handle(RoomDetailAction.RejectInvite)
     }
 
@@ -2308,6 +2386,7 @@ class TimelineFragment @Inject constructor(
             AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(attachmentAudioActivityResultLauncher)
             AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
             AttachmentTypeSelectorView.Type.STICKER -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)
+            AttachmentTypeSelectorView.Type.POLL    -> navigator.openCreatePoll(requireContext(), roomDetailArgs.roomId)
         }.exhaustive
     }
 
@@ -2332,7 +2411,7 @@ class TimelineFragment @Inject constructor(
     override fun onContactAttachmentReady(contactAttachment: ContactAttachment) {
         super.onContactAttachmentReady(contactAttachment)
         val formattedContact = contactAttachment.toHumanReadable()
-        textComposerViewModel.handle(TextComposerAction.SendMessage(formattedContact, false))
+        messageComposerViewModel.handle(MessageComposerAction.SendMessage(formattedContact, false))
     }
 
     private fun onViewWidgetsClicked() {

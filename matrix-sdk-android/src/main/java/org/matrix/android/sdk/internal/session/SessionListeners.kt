@@ -18,15 +18,11 @@ package org.matrix.android.sdk.internal.session
 
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.internal.SessionManager
-import org.matrix.android.sdk.internal.di.SessionId
 import timber.log.Timber
 import javax.inject.Inject
 
 @SessionScope
-internal class SessionListeners @Inject constructor(
-        @SessionId private val sessionId: String,
-        private val sessionManager: SessionManager) {
+internal class SessionListeners @Inject constructor() {
 
     private val listeners = mutableSetOf<Session.Listener>()
 
@@ -42,18 +38,19 @@ internal class SessionListeners @Inject constructor(
         }
     }
 
-    fun dispatch(block: (Session, Session.Listener) -> Unit) {
+    fun dispatch(session: Session, block: (Session, Session.Listener) -> Unit) {
         synchronized(listeners) {
-            val session = getSession() ?: return Unit.also {
-                Timber.w("You don't have any attached session")
-            }
             listeners.forEach {
                 tryOrNull { block(session, it) }
             }
         }
     }
+}
 
-    private fun getSession(): Session? {
-        return sessionManager.getSessionComponent(sessionId)?.session()
+internal fun Session?.dispatchTo(sessionListeners: SessionListeners, block: (Session, Session.Listener) -> Unit) {
+    if (this == null) {
+        Timber.w("You don't have any attached session")
+        return
     }
+    sessionListeners.dispatch(this, block)
 }

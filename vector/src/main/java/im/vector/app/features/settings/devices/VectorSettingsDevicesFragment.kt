@@ -47,7 +47,6 @@ import javax.inject.Inject
  * Display the list of the user's device
  */
 class VectorSettingsDevicesFragment @Inject constructor(
-        val devicesViewModelFactory: DevicesViewModel.Factory,
         private val devicesController: DevicesController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         DevicesController.Callback {

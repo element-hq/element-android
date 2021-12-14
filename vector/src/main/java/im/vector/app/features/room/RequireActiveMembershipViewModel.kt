@@ -16,14 +16,13 @@
 
 package im.vector.app.features.room
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -55,21 +54,11 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
     VectorViewModel<RequireActiveMembershipViewState, RequireActiveMembershipAction, RequireActiveMembershipViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RequireActiveMembershipViewModel, RequireActiveMembershipViewState> {
+        override fun create(initialState: RequireActiveMembershipViewState): RequireActiveMembershipViewModel
     }
 
-    companion object : MavericksViewModelFactory<RequireActiveMembershipViewModel, RequireActiveMembershipViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RequireActiveMembershipViewState): RequireActiveMembershipViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<RequireActiveMembershipViewModel, RequireActiveMembershipViewState> by hiltMavericksViewModelFactory()
 
     private val roomIdFlow = MutableStateFlow(Optional.from(initialState.roomId))
 
@@ -88,8 +77,8 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
                     room.flow()
                             .liveRoomSummary()
                             .unwrap()
-                            .flowOn(Dispatchers.Default)
                             .map { mapToLeftViewEvent(room, it) }
+                            .flowOn(Dispatchers.Default)
                 }
                 .unwrap()
                 .onEach { event ->

@@ -43,11 +43,11 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
     }
 
     private fun initViews() {
-        views.loginServerChoiceEmsLearnMore.setOnClickListener { learnMore() }
-        views.loginServerChoiceMatrixOrg.setOnClickListener { selectMatrixOrg() }
-        views.loginServerChoiceEms.setOnClickListener { selectEMS() }
-        views.loginServerChoiceOther.setOnClickListener { selectOther() }
-        views.loginServerIKnowMyIdSubmit.setOnClickListener { loginWithMatrixId() }
+        views.loginServerChoiceEmsLearnMore.debouncedClicks { learnMore() }
+        views.loginServerChoiceMatrixOrg.debouncedClicks { selectMatrixOrg() }
+        views.loginServerChoiceEms.debouncedClicks { selectEMS() }
+        views.loginServerChoiceOther.debouncedClicks { selectOther() }
+        views.loginServerIKnowMyIdSubmit.debouncedClicks { loginWithMatrixId() }
     }
 
     private fun updateSelectedChoice(state: LoginViewState) {
@@ -87,10 +87,5 @@ class LoginServerSelectionFragment @Inject constructor() : AbstractLoginFragment
 
     override fun updateWithState(state: LoginViewState) {
         updateSelectedChoice(state)
-
-        if (state.loginMode != LoginMode.Unknown) {
-            // LoginFlow for matrix.org has been retrieved
-            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved))
-        }
     }
 }

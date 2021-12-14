@@ -5,7 +5,10 @@
     <application>
         <activity android:name=".features.debug.TestLinkifyActivity" />
         <activity android:name=".features.debug.DebugPermissionActivity" />
+        <activity android:name=".features.debug.analytics.DebugAnalyticsActivity" />
+        <activity android:name=".features.debug.settings.DebugPrivateSettingsActivity" />
         <activity android:name=".features.debug.sas.DebugSasEmojiActivity" />
+        <activity android:name=".features.debug.features.DebugFeaturesSettingsActivity" />
     </application>
 
 </manifest>

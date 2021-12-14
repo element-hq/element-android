@@ -418,7 +418,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                     }
                 }
 
-                updateButton.setOnClickListener {
+                updateButton.debouncedClicks {
                     // Hide passwords during processing
                     views.changePasswordOldPwdText.hidePassword()
                     views.changePasswordNewPwdText.hidePassword()

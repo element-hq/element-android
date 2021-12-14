@@ -57,7 +57,7 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
 
     lateinit var session: Session
 
-    var keyVersionResult: MutableLiveData<KeysVersionResult> = MutableLiveData()
+    var keyVersionResult: MutableLiveData<KeysVersionResult?> = MutableLiveData(null)
 
     var keySourceModel: MutableLiveData<KeySource> = MutableLiveData()
 
@@ -69,16 +69,10 @@ class KeysBackupRestoreSharedViewModel @Inject constructor(
     val navigateEvent: LiveData<LiveEvent<String>>
         get() = _navigateEvent
 
-    var loadingEvent: MutableLiveData<WaitingViewData> = MutableLiveData()
+    var loadingEvent: MutableLiveData<WaitingViewData?> = MutableLiveData(null)
 
     var importKeyResult: ImportRoomKeysResult? = null
     var importRoomKeysFinishWithResult: MutableLiveData<LiveEvent<ImportRoomKeysResult>> = MutableLiveData()
-
-    init {
-        keyVersionResult.value = null
-        _keyVersionResultError.value = null
-        loadingEvent.value = null
-    }
 
     fun initSession(session: Session) {
         this.session = session

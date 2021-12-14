@@ -16,13 +16,12 @@
 
 package im.vector.app.core.utils
 
-import com.jakewharton.rxrelay2.BehaviorRelay
-import com.jakewharton.rxrelay2.PublishRelay
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 interface DataSource<T> {
-    fun observe(): Observable<T>
+    fun stream(): Flow<T>
 }
 
 interface MutableDataSource<T> : DataSource<T> {
@@ -34,25 +33,17 @@ interface MutableDataSource<T> : DataSource<T> {
  */
 open class BehaviorDataSource<T>(private val defaultValue: T? = null) : MutableDataSource<T> {
 
-    private val behaviorRelay = createRelay()
+    private val mutableFlow = MutableSharedFlow<T>(replay = 1)
 
     val currentValue: T?
-        get() = behaviorRelay.value
+        get() = mutableFlow.replayCache.firstOrNull()
 
-    override fun observe(): Observable<T> {
-        return behaviorRelay.hide().observeOn(AndroidSchedulers.mainThread())
+    override fun stream(): Flow<T> {
+        return mutableFlow
     }
 
     override fun post(value: T) {
-        behaviorRelay.accept(value!!)
-    }
-
-    private fun createRelay(): BehaviorRelay<T> {
-        return if (defaultValue == null) {
-            BehaviorRelay.create()
-        } else {
-            BehaviorRelay.createDefault(defaultValue)
-        }
+        mutableFlow.tryEmit(value)
     }
 }
 
@@ -61,13 +52,13 @@ open class BehaviorDataSource<T>(private val defaultValue: T? = null) : MutableD
  */
 open class PublishDataSource<T> : MutableDataSource<T> {
 
-    private val publishRelay = PublishRelay.create<T>()
+    private val mutableFlow = MutableSharedFlow<T>(replay = 0, extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-    override fun observe(): Observable<T> {
-        return publishRelay.hide().observeOn(AndroidSchedulers.mainThread())
+    override fun stream(): Flow<T> {
+        return mutableFlow
     }
 
     override fun post(value: T) {
-        publishRelay.accept(value!!)
+        mutableFlow.tryEmit(value)
     }
 }

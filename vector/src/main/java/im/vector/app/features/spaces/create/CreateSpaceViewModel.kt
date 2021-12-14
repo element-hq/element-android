@@ -16,10 +16,7 @@
 
 package im.vector.app.features.spaces.create
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
@@ -29,6 +26,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.isEmail
@@ -76,8 +75,8 @@ class CreateSpaceViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: CreateSpaceState): CreateSpaceViewModel
+    interface Factory : MavericksAssistedViewModelFactory<CreateSpaceViewModel, CreateSpaceState> {
+        override fun create(initialState: CreateSpaceState): CreateSpaceViewModel
     }
 
     private fun startListenToIdentityManager() {
@@ -93,17 +92,9 @@ class CreateSpaceViewModel @AssistedInject constructor(
         super.onCleared()
     }
 
-    companion object : MavericksViewModelFactory<CreateSpaceViewModel, CreateSpaceState> {
+    companion object : MavericksViewModelFactory<CreateSpaceViewModel, CreateSpaceState> by hiltMavericksViewModelFactory() {
 
-        override fun create(viewModelContext: ViewModelContext, state: CreateSpaceState): CreateSpaceViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-
-        override fun initialState(viewModelContext: ViewModelContext): CreateSpaceState? {
+        override fun initialState(viewModelContext: ViewModelContext): CreateSpaceState {
             return CreateSpaceState(
                     defaultRooms = mapOf(
                             0 to viewModelContext.activity.getString(R.string.create_spaces_default_public_room_name),

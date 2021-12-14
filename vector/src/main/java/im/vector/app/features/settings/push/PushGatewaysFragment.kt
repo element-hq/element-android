@@ -36,7 +36,6 @@ import javax.inject.Inject
 
 // Referenced in vector_settings_notifications.xml
 class PushGatewaysFragment @Inject constructor(
-        val pushGatewaysViewModelFactory: PushGatewaysViewModel.Factory,
         private val epoxyController: PushGateWayController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>() {
 

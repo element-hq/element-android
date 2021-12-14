@@ -173,21 +173,10 @@ object CommandParser {
                     }
                 }
                 Command.PART.command                         -> {
-                    if (messageParts.size >= 2) {
-                        val roomAlias = messageParts[1]
-
-                        if (roomAlias.isNotEmpty()) {
-                            ParsedCommand.PartRoom(
-                                    roomAlias,
-                                    textMessage.substring(Command.PART.length + roomAlias.length)
-                                            .trim()
-                                            .takeIf { it.isNotBlank() }
-                            )
-                        } else {
-                            ParsedCommand.ErrorSyntax(Command.PART)
-                        }
-                    } else {
-                        ParsedCommand.ErrorSyntax(Command.PART)
+                    when (messageParts.size) {
+                        1    -> ParsedCommand.PartRoom(null)
+                        2    -> ParsedCommand.PartRoom(messageParts[1])
+                        else -> ParsedCommand.ErrorSyntax(Command.PART)
                     }
                 }
                 Command.ROOM_NAME.command                    -> {
@@ -370,15 +359,6 @@ object CommandParser {
                     val message = textMessage.substring(Command.LENNY.command.length).trim()
 
                     ParsedCommand.SendLenny(message)
-                }
-                Command.POLL.command                         -> {
-                    val rawCommand = textMessage.substring(Command.POLL.command.length).trim()
-                    val split = rawCommand.split("|").map { it.trim() }
-                    if (split.size > 2) {
-                        ParsedCommand.SendPoll(split[0], split.subList(1, split.size))
-                    } else {
-                        ParsedCommand.ErrorSyntax(Command.POLL)
-                    }
                 }
                 Command.DISCARD_SESSION.command              -> {
                     ParsedCommand.DiscardSession

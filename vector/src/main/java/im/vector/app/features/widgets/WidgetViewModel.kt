@@ -17,16 +17,15 @@
 package im.vector.app.features.widgets
 
 import android.net.Uri
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.widgets.permissions.WidgetPermissionsHelper
@@ -57,21 +56,11 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
         IntegrationManagerService.Listener {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: WidgetViewState): WidgetViewModel
+    interface Factory : MavericksAssistedViewModelFactory<WidgetViewModel, WidgetViewState> {
+        override fun create(initialState: WidgetViewState): WidgetViewModel
     }
 
-    companion object : MavericksViewModelFactory<WidgetViewModel, WidgetViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: WidgetViewState): WidgetViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<WidgetViewModel, WidgetViewState> by hiltMavericksViewModelFactory()
 
     private val room = session.getRoom(initialState.roomId)
     private val widgetService = session.widgetService()

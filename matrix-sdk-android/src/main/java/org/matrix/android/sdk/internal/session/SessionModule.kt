@@ -163,6 +163,7 @@ internal abstract class SessionModule {
         @JvmStatic
         @Provides
         @SessionFilesDirectory
+        @SessionScope
         fun providesFilesDir(@UserMd5 userMd5: String,
                              @SessionId sessionId: String,
                              context: Context): File {

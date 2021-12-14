@@ -17,16 +17,15 @@
 package im.vector.app.features.workers.signout
 
 import androidx.lifecycle.MutableLiveData
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -34,6 +33,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.sample
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -67,21 +67,11 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
         VectorViewModel<ServerBackupStatusViewState, EmptyAction, EmptyViewEvents>(initialState), KeysBackupStateListener {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel
+    interface Factory : MavericksAssistedViewModelFactory<ServerBackupStatusViewModel, ServerBackupStatusViewState> {
+        override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel
     }
 
-    companion object : MavericksViewModelFactory<ServerBackupStatusViewModel, ServerBackupStatusViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: ServerBackupStatusViewState): ServerBackupStatusViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<ServerBackupStatusViewModel, ServerBackupStatusViewState> by hiltMavericksViewModelFactory()
 
     // Keys exported manually
     val keysExportedToFile = MutableLiveData<Boolean>()
@@ -110,7 +100,7 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
             if (
                     crossSigningInfo.getOrNull() == null ||
                     (crossSigningInfo.getOrNull()?.isTrusted() == true &&
-                    pInfo.getOrNull()?.allKnown().orFalse())
+                            pInfo.getOrNull()?.allKnown().orFalse())
             ) {
                 // So 4S is not setup and we have local secrets,
                 return@combine BannerState.Setup(numberOfKeys = getNumberOfKeysToBackup())
@@ -125,7 +115,9 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
                     )
                 }
 
-        keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().state)
+        viewModelScope.launch {
+            keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().state)
+        }
     }
 
     /**
@@ -155,7 +147,9 @@ class ServerBackupStatusViewModel @AssistedInject constructor(@Assisted initialS
     }
 
     override fun onStateChange(newState: KeysBackupState) {
-        keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().state)
+        viewModelScope.launch {
+            keyBackupFlow.tryEmit(session.cryptoService().keysBackupService().state)
+        }
         keysBackupState.value = newState
     }
 

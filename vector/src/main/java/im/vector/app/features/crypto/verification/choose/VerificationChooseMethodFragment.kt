@@ -40,7 +40,6 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class VerificationChooseMethodFragment @Inject constructor(
-        val verificationChooseMethodViewModelFactory: VerificationChooseMethodViewModel.Factory,
         val controller: VerificationChooseMethodController
 ) : VectorBaseFragment<BottomSheetVerificationChildFragmentBinding>(),
         VerificationChooseMethodController.Listener {

@@ -23,26 +23,22 @@ import androidx.activity.result.ActivityResultLauncher
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
 import com.google.zxing.ResultMetadataType
-import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 
+@AndroidEntryPoint
 class QrCodeScannerActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (isFirstCreation()) {
-            replaceFragment(R.id.simpleFragmentContainer, QrCodeScannerFragment::class.java)
+            replaceFragment(views.simpleFragmentContainer, QrCodeScannerFragment::class.java)
         }
     }
 

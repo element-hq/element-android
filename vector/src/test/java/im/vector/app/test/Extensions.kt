@@ -20,27 +20,33 @@ import com.airbnb.mvrx.MavericksState
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
-import io.reactivex.observers.TestObserver
+import kotlinx.coroutines.CoroutineScope
 import org.amshove.kluent.shouldBeEqualTo
 
 fun String.trimIndentOneLine() = trimIndent().replace("\n", "")
 
-fun <S : MavericksState, VA : VectorViewModelAction, VE : VectorViewEvents> VectorViewModel<S, VA, VE>.test(): ViewModelTest<S, VE> {
+fun <S : MavericksState, VA : VectorViewModelAction, VE : VectorViewEvents> VectorViewModel<S, VA, VE>.test(coroutineScope: CoroutineScope): ViewModelTest<S, VE> {
     val state = { com.airbnb.mvrx.withState(this) { it } }
-    val viewEvents = viewEvents.observe().test()
+    val viewEvents = viewEvents.stream().test(coroutineScope)
     return ViewModelTest(state, viewEvents)
 }
 
 class ViewModelTest<S, VE>(
         val state: () -> S,
-        val viewEvents: TestObserver<VE>
+        val viewEvents: FlowTestObserver<VE>
 ) {
 
-    fun assertEvents(vararg expected: VE) {
+    fun assertEvents(vararg expected: VE): ViewModelTest<S, VE> {
         viewEvents.assertValues(*expected)
+        return this
     }
 
-    fun assertState(expected: S) {
+    fun assertState(expected: S): ViewModelTest<S, VE> {
         state() shouldBeEqualTo expected
+        return this
+    }
+
+    fun finish() {
+        viewEvents.finish()
     }
 }

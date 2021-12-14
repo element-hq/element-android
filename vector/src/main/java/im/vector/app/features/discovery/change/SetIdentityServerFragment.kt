@@ -24,10 +24,10 @@ import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -37,11 +37,13 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.databinding.FragmentSetIdentityServerBinding
 import im.vector.app.features.discovery.DiscoverySharedViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.terms.TermsService
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class SetIdentityServerFragment @Inject constructor(
-        val viewModelFactory: SetIdentityServerViewModel.Factory,
         val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentSetIdentityServerBinding>() {
 
@@ -91,11 +93,11 @@ class SetIdentityServerFragment @Inject constructor(
 
         views.identityServerSetDefaultAlternativeTextInput
                 .textChanges()
-                .subscribe {
+                .onEach {
                     views.identityServerSetDefaultAlternativeTil.error = null
                     views.identityServerSetDefaultAlternativeSubmit.isEnabled = it.isNotEmpty()
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.identityServerSetDefaultSubmit.debouncedClicks {
             viewModel.handle(SetIdentityServerAction.UseDefaultIdentityServer)

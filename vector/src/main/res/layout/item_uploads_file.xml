@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="?selectableItemBackground"
-    android:minHeight="64dp">
+    android:minHeight="64dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/uploadsFileIcon"
@@ -30,9 +31,9 @@
         android:maxLines="2"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/uploadsFileSubtitle"
-        app:layout_constraintEnd_toStartOf="@+id/uploadsFileActionDownload"
-        app:layout_constraintStart_toEndOf="@+id/uploadsFileIcon"
+        app:layout_constraintBottom_toTopOf="@id/uploadsFileSubtitle"
+        app:layout_constraintEnd_toStartOf="@id/uploadsFileActionDownload"
+        app:layout_constraintStart_toEndOf="@id/uploadsFileIcon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="Filename.file" />
@@ -46,9 +47,9 @@
         android:ellipsize="end"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/uploadsFileTitle"
-        app:layout_constraintStart_toStartOf="@+id/uploadsFileTitle"
-        app:layout_constraintTop_toBottomOf="@+id/uploadsFileTitle"
+        app:layout_constraintEnd_toEndOf="@id/uploadsFileTitle"
+        app:layout_constraintStart_toStartOf="@id/uploadsFileTitle"
+        app:layout_constraintTop_toBottomOf="@id/uploadsFileTitle"
         tools:text="Username at 12:00 on 01/01/01" />
 
     <ImageView
@@ -59,7 +60,7 @@
         android:scaleType="center"
         android:src="@drawable/ic_download"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/uploadsFileActionShare"
+        app:layout_constraintEnd_toStartOf="@id/uploadsFileActionShare"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?colorSecondary"
         tools:ignore="MissingPrefix" />

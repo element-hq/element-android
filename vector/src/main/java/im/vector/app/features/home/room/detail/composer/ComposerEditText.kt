@@ -17,13 +17,15 @@
 
 package im.vector.app.features.home.room.detail.composer
 
+import android.content.ClipData
 import android.content.Context
 import android.net.Uri
-import android.os.Build
 import android.text.Editable
 import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import androidx.core.view.OnReceiveContentListener
+import androidx.core.view.ViewCompat
 import androidx.core.view.inputmethod.EditorInfoCompat
 import androidx.core.view.inputmethod.InputConnectionCompat
 import com.vanniktech.emoji.EmojiEditText
@@ -33,7 +35,7 @@ import im.vector.app.features.html.PillImageSpan
 import timber.log.Timber
 
 class ComposerEditText @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = android.R.attr.editTextStyle) :
-    EmojiEditText(context, attrs, defStyleAttr) {
+        EmojiEditText(context, attrs, defStyleAttr) {
 
     interface Callback {
         fun onRichContentSelected(contentUri: Uri): Boolean
@@ -43,23 +45,35 @@ class ComposerEditText @JvmOverloads constructor(context: Context, attrs: Attrib
     var callback: Callback? = null
 
     override fun onCreateInputConnection(editorInfo: EditorInfo): InputConnection? {
-        val ic = super.onCreateInputConnection(editorInfo) ?: return null
-        EditorInfoCompat.setContentMimeTypes(editorInfo, arrayOf("*/*"))
+        var ic = super.onCreateInputConnection(editorInfo) ?: return null
+        val mimeTypes = ViewCompat.getOnReceiveContentMimeTypes(this) ?: arrayOf("image/*")
 
-        val callback =
-                InputConnectionCompat.OnCommitContentListener { inputContentInfo, flags, _ ->
-                    val lacksPermission = (flags and
-                            InputConnectionCompat.INPUT_CONTENT_GRANT_READ_URI_PERMISSION) != 0
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N_MR1 && lacksPermission) {
-                        try {
-                            inputContentInfo.requestPermission()
-                        } catch (e: Exception) {
-                            return@OnCommitContentListener false
-                        }
-                    }
-                    callback?.onRichContentSelected(inputContentInfo.contentUri) ?: false
+        EditorInfoCompat.setContentMimeTypes(editorInfo, mimeTypes)
+        ic = InputConnectionCompat.createWrapper(this, ic, editorInfo)
+
+        val onReceiveContentListener = OnReceiveContentListener { _, payload ->
+            val split = payload.partition { item -> item.uri != null }
+            val uriContent = split.first
+            val remaining = split.second
+
+            if (uriContent != null) {
+                val clip: ClipData = uriContent.clip
+                for (i in 0 until clip.itemCount) {
+                    val uri = clip.getItemAt(i).uri
+                    // ... app-specific logic to handle the URI ...
+                    callback?.onRichContentSelected(uri)
                 }
-        return InputConnectionCompat.createWrapper(ic, editorInfo, callback)
+            }
+            // Return anything that we didn't handle ourselves. This preserves the default platform
+            // behavior for text and anything else for which we are not implementing custom handling.
+            // Return anything that we didn't handle ourselves. This preserves the default platform
+            // behavior for text and anything else for which we are not implementing custom handling.
+            remaining
+        }
+
+        ViewCompat.setOnReceiveContentListener(this, mimeTypes, onReceiveContentListener)
+
+        return ic
     }
 
     init {

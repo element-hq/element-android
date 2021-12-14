@@ -31,8 +31,7 @@ import im.vector.app.features.home.room.detail.RoomDetailSharedActionViewModel
 import javax.inject.Inject
 
 class BreadcrumbsFragment @Inject constructor(
-        private val breadcrumbsController: BreadcrumbsController,
-        val breadcrumbsViewModelFactory: BreadcrumbsViewModel.Factory
+        private val breadcrumbsController: BreadcrumbsController
 ) : VectorBaseFragment<FragmentBreadcrumbsBinding>(),
         BreadcrumbsController.Listener {
 

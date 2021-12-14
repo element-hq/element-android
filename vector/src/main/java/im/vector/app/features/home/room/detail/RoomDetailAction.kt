@@ -21,7 +21,6 @@ import android.view.View
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.call.conference.ConferenceEvent
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
-import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
@@ -53,7 +52,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class RemoveFailedEcho(val eventId: String) : RoomDetailAction()
     data class CancelSend(val eventId: String, val force: Boolean) : RoomDetailAction()
 
-    data class ReplyToOptions(val eventId: String, val optionIndex: Int, val optionValue: String) : RoomDetailAction()
+    data class VoteToPoll(val eventId: String, val optionKey: String) : RoomDetailAction()
 
     data class ReportContent(
             val eventId: String,
@@ -109,11 +108,6 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     data class RoomUpgradeSuccess(val replacementRoomId: String) : RoomDetailAction()
 
-    // Voice Message
-    object StartRecordingVoiceMessage : RoomDetailAction()
-    data class EndRecordingVoiceMessage(val isCancelled: Boolean) : RoomDetailAction()
-    object PauseRecordingVoiceMessage : RoomDetailAction()
-    data class PlayOrPauseVoicePlayback(val eventId: String, val messageAudioContent: MessageAudioContent) : RoomDetailAction()
-    object PlayOrPauseRecordingPlayback : RoomDetailAction()
-    data class EndAllVoiceActions(val deleteRecord: Boolean = true) : RoomDetailAction()
+    // Poll
+    data class EndPoll(val eventId: String) : RoomDetailAction()
 }

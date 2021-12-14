@@ -37,7 +37,6 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 import javax.inject.Inject
 
 class AccountDataFragment @Inject constructor(
-        val viewModelFactory: AccountDataViewModel.Factory,
         private val epoxyController: AccountDataEpoxyController,
         private val colorProvider: ColorProvider
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),

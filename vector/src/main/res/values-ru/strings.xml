@@ -312,7 +312,7 @@
     <string name="view_decrypted_source">Просмотр расшифрованного исходного кода</string>
     <string name="delete">Удалить</string>
     <string name="rename">Переименовать</string>
-    <string name="report_content">Содержание отчёта</string>
+    <string name="report_content">Пожаловаться на содержимое</string>
     <string name="active_call">Активный вызов</string>
     <string name="ongoing_conference_call">Ongoing conference call.
 \nПрисоединиться как %1$s или %2$s</string>
@@ -349,7 +349,7 @@
     <string name="bottom_action_rooms">Комнаты</string>
     <!-- Home screen -->
     <string name="home_filter_placeholder_home">Фильтр названия комнаты</string>
-    <string name="home_filter_placeholder_favorites">Фильтр избраного</string>
+    <string name="home_filter_placeholder_favorites">Фильтр избранного</string>
     <string name="home_filter_placeholder_people">Фильтр людей</string>
     <string name="home_filter_placeholder_rooms">Фильтр названия комнаты</string>
     <!-- Home fragment -->
@@ -425,7 +425,7 @@
     <string name="auth_invalid_phone">Введен некорректный номер телефона</string>
     <string name="auth_email_already_defined">Этот адрес электронной почты уже используется.</string>
     <string name="auth_missing_email">Отсутствует email</string>
-    <string name="auth_missing_phone">Отстутсвует номер телефона</string>
+    <string name="auth_missing_phone">Отсутствует номер телефона</string>
     <string name="auth_missing_email_or_phone">Отсутствует номер телефона или email</string>
     <string name="auth_invalid_token">Токен не действителен</string>
     <string name="auth_password_dont_match">Пароли не совпадают</string>
@@ -468,7 +468,7 @@
     <string name="read_receipts_list">Чтение списка вступивших</string>
     <!-- accounts list Screen -->
     <!-- image size selection -->
-    <string name="compression_options">Откравить как </string>
+    <string name="compression_options">Отправить как</string>
     <string name="compression_opt_list_original">Оригинал</string>
     <string name="compression_opt_list_large">Крупный</string>
     <string name="compression_opt_list_medium">Средний</string>
@@ -769,7 +769,7 @@
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Все у кого есть ссылка на комнату, кроме гостей</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Все у кого есть ссылка на комнату, включая гостей</string>
     <!-- Room settings: banned users -->
-    <string name="room_settings_banned_users_title">Забаненые пользователи</string>
+    <string name="room_settings_banned_users_title">Забаненные пользователи</string>
     <!-- advanced -->
     <string name="room_settings_category_advanced_title">Дополнительно</string>
     <string name="room_settings_room_internal_id">Внутренний ID комнаты</string>
@@ -807,7 +807,7 @@
     <string name="encryption_information_curve25519_identity_key">Curve25519 идентификационный ключ</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">Необходим отпечаток Ed25519-ключа</string>
     <string name="encryption_information_algorithm">Алгоритм</string>
-    <string name="encryption_information_session_id">ID сесии</string>
+    <string name="encryption_information_session_id">ID сессии</string>
     <string name="encryption_information_decryption_error">Ошибка дешифровки</string>
     <string name="encryption_information_sender_device_information">Информация о сессии отправителя</string>
     <string name="encryption_information_device_name">Публичное имя</string>
@@ -1120,7 +1120,7 @@
     <string name="room_tombstone_continuation_link">Этот разговор продолжается здесь</string>
     <string name="room_tombstone_continuation_description">Эта комната является продолжением другого разговора</string>
     <string name="room_tombstone_predecessor_link">Нажмите здесь для просмотра старых сообщений</string>
-    <string name="command_description_join_room">Присоединиться к комнате с указанным псевдонимом</string>
+    <string name="command_description_join_room">Присоединиться к комнате с указанным адресом</string>
     <string name="command_description_clear_scalar_token">Для исправления управления приложениями Matrix</string>
     <string name="missing_permissions_error">Из-за отсутствия разрешений это действие невозможно.</string>
     <plurals name="format_time_s">
@@ -1284,7 +1284,7 @@
     <string name="settings_show_avatar_display_name_changes_messages">Показывать события аккаунта</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Включает изменения аватара и отображаемого имени.</string>
     <string name="template_startup_notification_fdroid_battery_optim_message">Необходимо минимизировать влияние на фоновое соединение для надёжности уведомлений.
-\nНа следующем экране вам будет предложено разрешить Райоту всегда работать в фоновом режиме, пожалуйста, примите.</string>
+\nНа следующем экране вам будет предложено разрешить ${app_name} всегда работать в фоновом режиме, пожалуйста, примите.</string>
     <string name="settings_labs_native_camera_summary">Использовать системную камеру вместо камеры Element.</string>
     <string name="settings_info_area_show">Показать информацию</string>
     <string name="generic_label">%1$s:</string>
@@ -1494,7 +1494,7 @@
 \nЕсли вы не открывали новую сессию - проигнорируйте этот запрос.</string>
     <string name="start_verification_short_label">Подтвердить</string>
     <string name="share_without_verifying_short_label">Поделиться</string>
-    <string name="key_share_request">Запрос поделится ключем</string>
+    <string name="key_share_request">Запрос поделится ключом</string>
     <string name="ignore_request_short_label">Игнорировать</string>
     <string name="autodiscover_invalid_response">Ошибка отклика сервера</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Дополнить параметры сервера</string>
@@ -1505,7 +1505,7 @@
     <string name="sas_verify_start_button_title">Начать проверку</string>
     <string name="sas_incoming_request_title">Входящий запрос о проверке</string>
     <string name="sas_incoming_request_description">Проверьте эту сессию, чтобы отметить её как доверенную. Доверие сессиям партнеров позволяет быть уверенным в надёжности сквозного шифрования сообщений.</string>
-    <string name="sas_incoming_request_description_2">Потдверждение этой сессии пометит её доверенной для вас и вашего партнёра.</string>
+    <string name="sas_incoming_request_description_2">Подтверждение этой сессии пометит её доверенной для вас и вашего партнёра.</string>
     <string name="sas_emoji_description">Подтвердите эту сессию, убедившись, что следующие смайлики появляются на экране партнера</string>
     <string name="sas_decimal_description">Подтвердите эту сессию, убедившись, что следующие цифры появляются на экране партнера</string>
     <string name="sas_incoming_verification_request_dialog">Вы получили входящий запрос на подтверждение.</string>
@@ -2028,7 +2028,7 @@
 \n
 \nВы можете отменить это действие в любое время в общих настройках.</string>
     <string name="room_participants_action_unignore_title">Перестать игнорировать пользователя</string>
-    <string name="room_participants_action_unignore_prompt_msg">Если вы перестаните игнорировать этого пользователя, то все его сообщения вновь будут отображаться.</string>
+    <string name="room_participants_action_unignore_prompt_msg">Если вы перестанете игнорировать этого пользователя, то все его сообщения вновь будут отображаться.</string>
     <string name="room_participants_action_cancel_invite_title">Отменить приглашение</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Вы уверены, что хотите отменить приглашение для этого пользователя\?</string>
     <string name="room_participants_kick_title">Выгнать пользователя</string>
@@ -2124,7 +2124,7 @@
     <string name="verification_request_you_cancelled">Вы отменили</string>
     <string name="verification_request_other_accepted">%s принято</string>
     <string name="verification_request_you_accepted">Вы приняли</string>
-    <string name="verification_sent">Подтверждениие отправлено</string>
+    <string name="verification_sent">Подтверждение отправлено</string>
     <string name="verification_request">Запрос на подтверждение</string>
     <string name="verification_verify_device">Подтвердите эту сессию</string>
     <string name="verification_verify_device_manually">Подтверждение вручную</string>
@@ -2175,7 +2175,7 @@
     <string name="verification_emoji_notice">Сравните уникальные эмодзи, убедившись, что они появились в том же порядке.</string>
     <string name="verification_code_notice">Сравните код с тем, который отображается на экране другого пользователя.</string>
     <string name="verification_conclusion_ok_notice">Сообщения с этим пользователем полностью зашифрованы и не могут быть прочитаны третьими лицами.</string>
-    <string name="verification_conclusion_ok_self_notice">Ваша новая сесия теперь подтверждена. Она имеет доступ к вашим зашифрованным сообщениям, и другие пользователи будут считать её надежной.</string>
+    <string name="verification_conclusion_ok_self_notice">Ваша новая сессия теперь подтверждена. Она имеет доступ к вашим зашифрованным сообщениям, и другие пользователи будут считать её надежной.</string>
     <string name="encryption_information_cross_signing_state">Кросс-подпись</string>
     <string name="encryption_information_dg_xsigning_complete">Кросс-подпись включена
 \nПриватные ключи хранятся на устройстве.</string>
@@ -2220,7 +2220,7 @@
     <string name="settings_setup_secure_backup">Настроить безопасное резервное копирование</string>
     <string name="bottom_sheet_setup_secure_backup_title">Безопасное резервное копирование</string>
     <string name="settings_active_sessions_verified_device_desc">Эта сессия является доверенной для безопасного обмена сообщениями, потому что вы проверили её:</string>
-    <string name="settings_active_sessions_unverified_device_desc">Подтвердите эту сессию, чтобы пометить её доверенной и предоставить ей доступ к зашифрованным сообщениям. Если вы не входили в эту сессю, ваша учетная запись может быть скомпрометирована:</string>
+    <string name="settings_active_sessions_unverified_device_desc">Подтвердите эту сессию, чтобы пометить её доверенной и предоставить ей доступ к зашифрованным сообщениям. Если вы не входили в эту сессию, ваша учетная запись может быть скомпрометирована:</string>
     <string name="crosssigning_other_user_not_trust">Другие пользователи могут не доверять ему</string>
     <string name="complete_security">Завершите настройку безопасности</string>
     <string name="verification_profile_verify">Верифицировать</string>
@@ -2810,7 +2810,7 @@
     <string name="room_list_quick_actions_room_settings">Настройки комнаты</string>
     <string name="jitsi_leave_conf_to_join_another_one_content">Покинуть текущую конференцию и перейти к другой\?</string>
     <string name="room_settings_room_version_title">Версия комнаты</string>
-    <string name="settings_room_directory_show_all_rooms_summary">Показать все команты в списке комнат, в том числе с чувствительным содержанием.</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Показать все комнаты в списке комнат, в том числе с чувствительным содержанием.</string>
     <string name="settings_room_directory_show_all_rooms">Показать комнаты с деликатным содержанием</string>
     <string name="settings_category_room_directory">Список комнат</string>
     <string name="dialog_edit_hint">Новое значение</string>
@@ -2852,7 +2852,7 @@
     <string name="space_manage_rooms_and_spaces">Управление комнатами и пространствами</string>
     <string name="space_mark_as_not_suggested">Отметить как не рекомендуется</string>
     <string name="space_mark_as_suggested">Отметить как рекомендуется</string>
-    <string name="space_suggested">Предложенно</string>
+    <string name="space_suggested">Предложено</string>
     <string name="make_this_space_public">Сделайте это пространство публичным</string>
     <string name="space_settings_manage_rooms">Управление комнатами</string>
     <string name="looking_for_someone_not_in_space">Ищете кого-то не в %s\?</string>
@@ -2924,7 +2924,7 @@
     <string name="create_spaces_type_header">Пространства - это новый способ группировки комнат и людей</string>
     <string name="your_private_space">Ваше приватное пространство</string>
     <string name="your_public_space">Ваше публичное пространство</string>
-    <string name="add_space">Добавить простанство</string>
+    <string name="add_space">Добавить пространство</string>
     <string name="private_space">Приватное пространство</string>
     <string name="public_space">Публичное пространство</string>
     <string name="command_description_upgrade_room">Обновляет комнату до новой версии</string>
@@ -3150,7 +3150,7 @@
     <string name="a11y_stop_voice_message">Остановить запись</string>
     <string name="command_description_lenny">Добавляет ( ͡° ͜ʖ ͡°) к текстовому сообщению</string>
     <string name="identity_server_consent_dialog_neutral_policy">Правила</string>
-    <string name="settings_discovery_no_policy_provided">Отсутствие политики, предоставляемой сервером идентификации</string>
+    <string name="settings_discovery_no_policy_provided">Нет правил, предоставляемых сервером идентификации</string>
     <string name="settings_discovery_hide_identity_server_policy_title">Скрыть правила сервера идентификации</string>
     <string name="settings_discovery_show_identity_server_policy_title">Показать правила сервера идентификации</string>
     <string name="command_description_whois">Отображает информацию о пользователе</string>
@@ -3160,4 +3160,7 @@
     <string name="command_description_room_name">Устанавливает имя комнаты</string>
     <string name="command_description_unignore_user">Прекращение игнорирования пользователя, показывает его сообщения в дальнейшем</string>
     <string name="command_description_ignore_user">Игнорирует пользователя, скрывая его сообщения от вас</string>
+    <string name="a11y_presence_unavailable">Недоступен</string>
+    <string name="a11y_presence_offline">Не в сети</string>
+    <string name="a11y_presence_online">В сети</string>
 </resources>

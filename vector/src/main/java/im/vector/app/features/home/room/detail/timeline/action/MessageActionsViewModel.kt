@@ -15,15 +15,15 @@
  */
 package im.vector.app.features.home.room.detail.timeline.action
 
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.Lazy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.canReact
 import im.vector.app.core.platform.EmptyViewEvents
@@ -50,6 +50,7 @@ import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
@@ -86,17 +87,11 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private val eventIdFlow = MutableStateFlow(initialState.eventId)
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: MessageActionState): MessageActionsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<MessageActionsViewModel, MessageActionState> {
+        override fun create(initialState: MessageActionState): MessageActionsViewModel
     }
 
-    companion object : MavericksViewModelFactory<MessageActionsViewModel, MessageActionState> {
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: MessageActionState): MessageActionsViewModel? {
-            val fragment: MessageActionsBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.messageActionViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<MessageActionsViewModel, MessageActionState> by hiltMavericksViewModelFactory()
 
     init {
         observeEvent()
@@ -212,6 +207,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                     EventType.CALL_HANGUP,
                     EventType.CALL_ANSWER -> {
                         noticeEventFormatter.format(timelineEvent, room?.roomSummary()?.isDirect.orFalse())
+                    }
+                    EventType.POLL_START  -> {
+                        timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.pollCreationInfo?.question?.question ?: ""
                     }
                     else                  -> null
                 }
@@ -335,12 +333,30 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.ViewInRoom)
             }
 
+            if (canEndPoll(timelineEvent, actionPermissions)) {
+                add(EventSharedAction.EndPoll(timelineEvent.eventId))
+            }
+
             if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
                 add(EventSharedAction.Edit(eventId))
             }
 
             if (canRedact(timelineEvent, actionPermissions)) {
-                add(EventSharedAction.Redact(eventId, askForReason = informationData.senderId != session.myUserId))
+                if (timelineEvent.root.getClearType() == EventType.POLL_START) {
+                    add(EventSharedAction.Redact(
+                            eventId,
+                            askForReason = informationData.senderId != session.myUserId,
+                            dialogTitleRes = R.string.delete_poll_dialog_title,
+                            dialogDescriptionRes = R.string.delete_poll_dialog_content
+                    ))
+                } else {
+                    add(EventSharedAction.Redact(
+                            eventId,
+                            askForReason = informationData.senderId != session.myUserId,
+                            dialogTitleRes = R.string.delete_event_dialog_title,
+                            dialogDescriptionRes = R.string.delete_event_dialog_content
+                    ))
+                }
             }
 
             if (canCopy(msgType)) {
@@ -406,8 +422,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canReply(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
-        // Only event of type EventType.MESSAGE are supported for the moment
-        if (event.root.getClearType() != EventType.MESSAGE) return false
+        // Only EventType.MESSAGE and EventType.POLL_START event types are supported for the moment
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.POLL_START)) return false
         if (!actionPermissions.canSendMessage) return false
         return when (messageContent?.msgType) {
             MessageType.MSGTYPE_TEXT,
@@ -416,8 +432,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             MessageType.MSGTYPE_IMAGE,
             MessageType.MSGTYPE_VIDEO,
             MessageType.MSGTYPE_AUDIO,
-            MessageType.MSGTYPE_FILE -> true
-            else                     -> false
+            MessageType.MSGTYPE_FILE,
+            MessageType.MSGTYPE_POLL_START -> true
+            else                           -> false
         }
     }
 
@@ -488,8 +505,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canRedact(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
-        // Only event of type EventType.MESSAGE or EventType.STICKER are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER)) return false
+        // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START are supported for the moment
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.POLL_START)) return false
         // Message sent by the current user can always be redacted
         if (event.root.senderId == session.myUserId) return true
         // Check permission for messages sent by other users
@@ -503,8 +520,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canViewReactions(event: TimelineEvent): Boolean {
-        // Only event of type EventType.MESSAGE and EventType.STICKER are supported for the moment
-        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER)) return false
+        // Only event of type EventType.MESSAGE, EventType.STICKER and EventType.POLL_START are supported for the moment
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.POLL_START)) return false
         return event.annotations?.reactionsSummary?.isNotEmpty() ?: false
     }
 
@@ -552,5 +569,11 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             MessageType.MSGTYPE_FILE -> true
             else                     -> false
         }
+    }
+
+    private fun canEndPoll(event: TimelineEvent, actionPermissions: ActionPermissions): Boolean {
+        return event.root.getClearType() == EventType.POLL_START &&
+                canRedact(event, actionPermissions) &&
+                event.annotations?.pollResponseSummary?.closedTime == null
     }
 }

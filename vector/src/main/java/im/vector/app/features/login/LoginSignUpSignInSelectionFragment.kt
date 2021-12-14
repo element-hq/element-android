@@ -43,8 +43,8 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
     }
 
     private fun setupViews() {
-        views.loginSignupSigninSubmit.setOnClickListener { submit() }
-        views.loginSignupSigninSignIn.setOnClickListener { signIn() }
+        views.loginSignupSigninSubmit.debouncedClicks { submit() }
+        views.loginSignupSigninSignIn.debouncedClicks { signIn() }
     }
 
     private fun setupUi(state: LoginViewState) {
@@ -72,7 +72,7 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
         when (state.loginMode) {
             is LoginMode.SsoAndPassword -> {
                 views.loginSignupSigninSignInSocialLoginContainer.isVisible = true
-                views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders()
+                views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders()?.sorted()
                 views.loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                     override fun onProviderSelected(id: String?) {
                         loginViewModel.getSsoUrl(

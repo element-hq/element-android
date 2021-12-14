@@ -26,7 +26,7 @@ import com.bumptech.glide.load.model.ModelLoader
 import com.bumptech.glide.load.model.ModelLoaderFactory
 import com.bumptech.glide.load.model.MultiModelLoaderFactory
 import com.bumptech.glide.signature.ObjectKey
-import im.vector.app.core.extensions.vectorComponent
+import im.vector.app.core.extensions.singletonEntryPoint
 import org.matrix.android.sdk.api.util.MatrixItem
 
 data class AvatarPlaceholder(val matrixItem: MatrixItem)
@@ -57,7 +57,7 @@ class AvatarPlaceholderModelLoader(private val context: Context) :
 class AvatarPlaceholderDataFetcher(context: Context, private val data: AvatarPlaceholder) :
     DataFetcher<Drawable> {
 
-    private val avatarRenderer = context.vectorComponent().avatarRenderer()
+    private val avatarRenderer = context.singletonEntryPoint().avatarRenderer()
 
     override fun loadData(priority: Priority, callback: DataFetcher.DataCallback<in Drawable>) {
         val avatarPlaceholder = avatarRenderer.getPlaceholderDrawable(data.matrixItem)

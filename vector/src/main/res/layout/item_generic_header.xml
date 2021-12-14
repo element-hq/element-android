@@ -11,4 +11,5 @@
     android:paddingBottom="4dp"
     android:textColor="?vctr_notice_text_color"
     android:textStyle="bold"
-    tools:text="Today" />
+    tools:text="Today"
+    tools:viewBindingIgnore="true" />

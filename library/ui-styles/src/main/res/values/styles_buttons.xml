@@ -10,6 +10,11 @@
         <item name="lineHeight">24sp</item>
     </style>
 
+    <style name="Widget.Vector.Button.CallToAction" parent="Widget.Vector.Button">
+        <item name="android:backgroundTint">@color/button_background_tint_selector</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
     <style name="Widget.Vector.Button.Destructive">
         <item name="android:minWidth">94dp</item>
         <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayDestructive</item>

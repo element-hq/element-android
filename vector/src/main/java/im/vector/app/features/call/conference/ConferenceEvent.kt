@@ -20,9 +20,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.facebook.react.bridge.JavaOnlyMap
 import org.jitsi.meet.sdk.BroadcastEmitter
@@ -42,7 +41,7 @@ sealed class ConferenceEvent(open val data: Map<String, Any>) {
     }
 }
 
-class ConferenceEventEmitter(private val context: Context)  {
+class ConferenceEventEmitter(private val context: Context) {
 
     fun emitConferenceEnded() {
         val broadcastEventData = JavaOnlyMap.of(CONFERENCE_URL_DATA_KEY, JitsiMeet.getCurrentConference())
@@ -52,7 +51,7 @@ class ConferenceEventEmitter(private val context: Context)  {
 
 class ConferenceEventObserver(private val context: Context,
                               private val onBroadcastEvent: (ConferenceEvent) -> Unit) :
-    LifecycleObserver {
+        DefaultLifecycleObserver {
 
     // See https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-android-sdk#listening-for-broadcasted-events
     private val broadcastReceiver = object : BroadcastReceiver() {
@@ -61,8 +60,7 @@ class ConferenceEventObserver(private val context: Context,
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    fun unregisterForBroadcastMessages() {
+    override fun onDestroy(owner: LifecycleOwner) {
         try {
             LocalBroadcastManager.getInstance(context).unregisterReceiver(broadcastReceiver)
         } catch (throwable: Throwable) {
@@ -70,8 +68,7 @@ class ConferenceEventObserver(private val context: Context,
         }
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun registerForBroadcastMessages() {
+    override fun onCreate(owner: LifecycleOwner) {
         val intentFilter = IntentFilter()
         for (type in BroadcastEvent.Type.values()) {
             intentFilter.addAction(type.action)

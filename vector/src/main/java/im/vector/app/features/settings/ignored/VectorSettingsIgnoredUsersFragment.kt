@@ -36,7 +36,6 @@ import im.vector.app.databinding.FragmentGenericRecyclerBinding
 import javax.inject.Inject
 
 class VectorSettingsIgnoredUsersFragment @Inject constructor(
-        val ignoredUsersViewModelFactory: IgnoredUsersViewModel.Factory,
         private val ignoredUsersController: IgnoredUsersController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>(),
         IgnoredUsersController.Callback {

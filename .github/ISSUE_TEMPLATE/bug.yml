@@ -23,7 +23,7 @@ body:
   - type: textarea
     id: result
     attributes:
-      label: Intended result and actual result
+      label: Outcome
       placeholder: Tell us what went wrong
       value: |
         #### What did you expect?

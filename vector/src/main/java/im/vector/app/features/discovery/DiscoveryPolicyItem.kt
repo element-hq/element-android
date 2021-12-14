@@ -24,6 +24,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.extensions.setTextOrHide
 
 @EpoxyModelClass(layout = R.layout.item_discovery_policy)
 abstract class DiscoveryPolicyItem : EpoxyModelWithHolder<DiscoveryPolicyItem.Holder>() {
@@ -40,7 +41,7 @@ abstract class DiscoveryPolicyItem : EpoxyModelWithHolder<DiscoveryPolicyItem.Ho
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.title.text = name
-        holder.url.text = url
+        holder.url.setTextOrHide(url)
         holder.view.onClick(clickListener)
     }
 

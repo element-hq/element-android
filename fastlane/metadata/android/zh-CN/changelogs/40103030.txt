@@ -1,0 +1,2 @@
+此版本中的主要更改：使身份服务器策略在设置中可见。 暂时移除 Android Auto 支持。
+完整更新日志：https://github.com/vector-im/element-android/releases/tag/v1.3.3

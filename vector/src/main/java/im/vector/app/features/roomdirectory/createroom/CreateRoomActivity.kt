@@ -19,19 +19,22 @@ package im.vector.app.features.roomdirectory.createroom
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.appbar.MaterialToolbar
-import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 /**
  * Simple container for [CreateRoomFragment]
  */
+@AndroidEntryPoint
 class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable {
 
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
@@ -44,14 +47,10 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarC
         configureToolbar(toolbar)
     }
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
     override fun initUiAndData() {
         if (isFirstCreation()) {
             addFragment(
-                    R.id.simpleFragmentContainer,
+                    views.simpleFragmentContainer,
                     CreateRoomFragment::class.java,
                     CreateRoomArgs(
                             intent?.getStringExtra(INITIAL_NAME) ?: "",
@@ -65,14 +64,14 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarC
         super.onCreate(savedInstanceState)
         sharedActionViewModel = viewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         sharedActionViewModel
-                .observe()
-                .subscribe { sharedAction ->
+                .stream()
+                .onEach { sharedAction ->
                     when (sharedAction) {
                         is RoomDirectorySharedAction.Back,
                         is RoomDirectorySharedAction.Close -> finish()
                     }
                 }
-                .disposeOnDestroy()
+                .launchIn(lifecycleScope)
     }
 
     companion object {

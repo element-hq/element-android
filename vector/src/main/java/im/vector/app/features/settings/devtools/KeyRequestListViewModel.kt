@@ -17,17 +17,16 @@
 package im.vector.app.features.settings.devtools
 
 import androidx.lifecycle.asFlow
-import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -43,7 +42,7 @@ data class KeyRequestListViewState(
 
 class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState: KeyRequestListViewState,
                                                           private val session: Session) :
-    VectorViewModel<KeyRequestListViewState, EmptyAction, EmptyViewEvents>(initialState) {
+        VectorViewModel<KeyRequestListViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     init {
         refresh()
@@ -67,19 +66,9 @@ class KeyRequestListViewModel @AssistedInject constructor(@Assisted initialState
     override fun handle(action: EmptyAction) {}
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: KeyRequestListViewState): KeyRequestListViewModel
+    interface Factory : MavericksAssistedViewModelFactory<KeyRequestListViewModel, KeyRequestListViewState> {
+        override fun create(initialState: KeyRequestListViewState): KeyRequestListViewModel
     }
 
-    companion object : MavericksViewModelFactory<KeyRequestListViewModel, KeyRequestListViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: KeyRequestListViewState): KeyRequestListViewModel? {
-            val context = viewModelContext as FragmentViewModelContext
-            val factory = (context.fragment as? IncomingKeyRequestListFragment)?.viewModelFactory
-                    ?: (context.fragment as? OutgoingKeyRequestListFragment)?.viewModelFactory
-
-            return factory?.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<KeyRequestListViewModel, KeyRequestListViewState> by hiltMavericksViewModelFactory()
 }

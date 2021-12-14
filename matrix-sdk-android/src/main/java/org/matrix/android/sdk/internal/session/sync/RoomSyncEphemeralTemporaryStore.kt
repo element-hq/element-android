@@ -39,8 +39,11 @@ internal class RoomSyncEphemeralTemporaryStoreFile @Inject constructor(
         moshi: Moshi
 ) : RoomSyncEphemeralTemporaryStore {
 
-    private val workingDir = File(fileDirectory, "rr")
-            .also { it.mkdirs() }
+    private val workingDir: File by lazy {
+        File(fileDirectory, "rr").also {
+            it.mkdirs()
+        }
+    }
 
     private val roomSyncEphemeralAdapter = moshi.adapter(RoomSyncEphemeral::class.java)
 

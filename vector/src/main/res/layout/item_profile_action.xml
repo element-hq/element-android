@@ -12,7 +12,8 @@
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
     android:paddingEnd="@dimen/layout_horizontal_margin"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/actionIcon"
@@ -40,8 +41,8 @@
         android:maxLines="2"
         android:textColor="?vctr_content_primary"
         app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toTopOf="@+id/actionSubtitle"
-        app:layout_constraintEnd_toStartOf="@+id/actionEditable"
+        app:layout_constraintBottom_toTopOf="@id/actionSubtitle"
+        app:layout_constraintEnd_toStartOf="@id/actionEditable"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/actionIcon"
         app:layout_constraintTop_toTopOf="parent"
@@ -60,7 +61,7 @@
         android:textColor="?vctr_content_secondary"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/actionSecondaryAccessory"
+        app:layout_constraintEnd_toStartOf="@id/actionSecondaryAccessory"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/actionIcon"
         app:layout_constraintTop_toBottomOf="@id/actionTitle"
@@ -75,11 +76,10 @@
         android:importantForAccessibility="no"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/actionEditable"
+        app:layout_constraintEnd_toStartOf="@id/actionEditable"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/ic_shield_warning"
         tools:visibility="visible" />
-
 
     <ImageView
         android:id="@+id/actionEditable"

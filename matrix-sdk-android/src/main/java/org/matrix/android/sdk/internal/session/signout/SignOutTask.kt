@@ -43,6 +43,7 @@ internal class DefaultSignOutTask @Inject constructor(
     override suspend fun execute(params: SignOutTask.Params) {
         // It should be done even after a soft logout, to be sure the deviceId is deleted on the
         if (params.signOutFromHomeserver) {
+            cleanupSession.stopActiveTasks()
             Timber.d("SignOut: send request...")
             try {
                 executeRequest(globalErrorReceiver) {
@@ -67,6 +68,6 @@ internal class DefaultSignOutTask @Inject constructor(
                 .onFailure { Timber.w(it, "Unable to disconnect identity server") }
 
         Timber.d("SignOut: cleanup session...")
-        cleanupSession.handle()
+        cleanupSession.cleanup()
     }
 }

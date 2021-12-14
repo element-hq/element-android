@@ -51,7 +51,6 @@ data class SearchArgs(
 ) : Parcelable
 
 class SearchFragment @Inject constructor(
-        val viewModelFactory: SearchViewModel.Factory,
         private val controller: SearchResultController
 ) : VectorBaseFragment<FragmentSearchBinding>(),
         StateView.EventCallback,

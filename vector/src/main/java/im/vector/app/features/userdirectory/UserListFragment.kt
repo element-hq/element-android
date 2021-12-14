@@ -31,7 +31,6 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.chip.Chip
-import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
@@ -43,16 +42,18 @@ import im.vector.app.core.utils.showIdentityServerConsentDialog
 import im.vector.app.core.utils.startSharePlainTextIntent
 import im.vector.app.databinding.FragmentUserListBinding
 import im.vector.app.features.homeserver.HomeServerCapabilitiesViewModel
-import im.vector.app.features.navigation.SettingsActivityPayload
 import im.vector.app.features.settings.VectorSettingsActivity
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.user.model.User
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 class UserListFragment @Inject constructor(
         private val userListController: UserListController,
         private val dimensionConverter: DimensionConverter,
-        val homeServerCapabilitiesViewModelFactory: HomeServerCapabilitiesViewModel.Factory
 ) : VectorBaseFragment<FragmentUserListBinding>(),
         UserListController.Callback {
 
@@ -101,6 +102,8 @@ class UserListFragment @Inject constructor(
                             extraTitle = getString(R.string.invite_friends_rich_title)
                     )
                 }
+                is UserListViewEvents.Failure               -> showFailure(it.throwable)
+                is UserListViewEvents.OnPoliciesRetrieved   -> showConsentDialog(it)
             }
         }
     }
@@ -134,8 +137,8 @@ class UserListFragment @Inject constructor(
     private fun setupSearchView() {
         views.userListSearch
                 .textChanges()
-                .startWith(views.userListSearch.text)
-                .subscribe { text ->
+                .onStart { emit(views.userListSearch.text) }
+                .onEach { text ->
                     val searchValue = text.trim()
                     val action = if (searchValue.isBlank()) {
                         UserListAction.ClearSearchUsers
@@ -144,7 +147,7 @@ class UserListFragment @Inject constructor(
                     }
                     viewModel.handle(action)
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.userListSearch.setupAsSearch()
         views.userListSearch.requestFocus()
@@ -223,16 +226,20 @@ class UserListFragment @Inject constructor(
         )
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.handle(UserListAction.Resumed)
+    }
+
     override fun giveIdentityServerConsent() {
-        withState(viewModel) { state ->
-            requireContext().showIdentityServerConsentDialog(
-                    state.configuredIdentityServer,
-                    policyLinkCallback = {
-                        navigator.openSettings(requireContext(), SettingsActivityPayload.DiscoverySettings(expandIdentityPolicies = true))
-                    },
-                    consentCallBack = { viewModel.handle(UserListAction.UpdateUserConsent(true)) }
-            )
-        }
+        viewModel.handle(UserListAction.UserConsentRequest)
+    }
+
+    private fun showConsentDialog(event: UserListViewEvents.OnPoliciesRetrieved) {
+        requireContext().showIdentityServerConsentDialog(
+                event.identityServerWithTerms,
+                consentCallBack = { viewModel.handle(UserListAction.UpdateUserConsent(true)) }
+        )
     }
 
     override fun onUseQRCode() {

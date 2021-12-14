@@ -33,6 +33,7 @@ import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.query.QueryStringValueProcessor
 import org.matrix.android.sdk.internal.query.process
 import org.matrix.android.sdk.internal.session.room.membership.admin.MembershipAdminTask
 import org.matrix.android.sdk.internal.session.room.membership.joining.InviteTask
@@ -51,7 +52,8 @@ internal class DefaultMembershipService @AssistedInject constructor(
         private val leaveRoomTask: LeaveRoomTask,
         private val membershipAdminTask: MembershipAdminTask,
         @UserId
-        private val userId: String
+        private val userId: String,
+        private val queryStringValueProcessor: QueryStringValueProcessor
 ) : MembershipService {
 
     @AssistedFactory
@@ -94,15 +96,17 @@ internal class DefaultMembershipService @AssistedInject constructor(
     }
 
     private fun roomMembersQuery(realm: Realm, queryParams: RoomMemberQueryParams): RealmQuery<RoomMemberSummaryEntity> {
-        return RoomMemberHelper(realm, roomId).queryRoomMembersEvent()
-                .process(RoomMemberSummaryEntityFields.USER_ID, queryParams.userId)
-                .process(RoomMemberSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
-                .process(RoomMemberSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
-                .apply {
-                    if (queryParams.excludeSelf) {
-                        notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
+        return with(queryStringValueProcessor) {
+            RoomMemberHelper(realm, roomId).queryRoomMembersEvent()
+                    .process(RoomMemberSummaryEntityFields.USER_ID, queryParams.userId)
+                    .process(RoomMemberSummaryEntityFields.MEMBERSHIP_STR, queryParams.memberships)
+                    .process(RoomMemberSummaryEntityFields.DISPLAY_NAME, queryParams.displayName)
+                    .apply {
+                        if (queryParams.excludeSelf) {
+                            notEqualTo(RoomMemberSummaryEntityFields.USER_ID, userId)
+                        }
                     }
-                }
+        }
     }
 
     override fun getNumberOfJoinedMembers(): Int {

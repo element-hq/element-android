@@ -15,16 +15,15 @@
  */
 package im.vector.app.features.terms
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import kotlinx.coroutines.launch
@@ -37,18 +36,11 @@ class ReviewTermsViewModel @AssistedInject constructor(
 ) : VectorViewModel<ReviewTermsViewState, ReviewTermsAction, ReviewTermsViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: ReviewTermsViewState): ReviewTermsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<ReviewTermsViewModel, ReviewTermsViewState> {
+        override fun create(initialState: ReviewTermsViewState): ReviewTermsViewModel
     }
 
-    companion object : MavericksViewModelFactory<ReviewTermsViewModel, ReviewTermsViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: ReviewTermsViewState): ReviewTermsViewModel? {
-            val activity: ReviewTermsActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return activity.viewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<ReviewTermsViewModel, ReviewTermsViewState> by hiltMavericksViewModelFactory()
 
     lateinit var termsArgs: ServiceTermsArgs
 

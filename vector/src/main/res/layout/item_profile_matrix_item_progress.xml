@@ -12,7 +12,8 @@
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
     android:paddingEnd="@dimen/layout_horizontal_margin"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/matrixItemAvatar"
@@ -30,7 +31,7 @@
         android:id="@+id/matrixItemAvatarDecoration"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        app:layout_constraintCircle="@+id/matrixItemAvatar"
+        app:layout_constraintCircle="@id/matrixItemAvatar"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="16dp"
         tools:ignore="MissingConstraints" />
@@ -46,8 +47,8 @@
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
         app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toTopOf="@+id/matrixItemSubtitle"
-        app:layout_constraintEnd_toStartOf="@+id/matrixItemProgress"
+        app:layout_constraintBottom_toTopOf="@id/matrixItemSubtitle"
+        app:layout_constraintEnd_toStartOf="@id/matrixItemProgress"
         app:layout_constraintStart_toEndOf="@id/matrixItemAvatar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_goneMarginEnd="80dp"
@@ -65,7 +66,7 @@
         android:textColor="?vctr_content_secondary"
         app:layout_constrainedWidth="true"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/matrixItemProgress"
+        app:layout_constraintEnd_toStartOf="@id/matrixItemProgress"
         app:layout_constraintStart_toEndOf="@id/matrixItemAvatar"
         app:layout_constraintTop_toBottomOf="@id/matrixItemTitle"
         app:layout_goneMarginEnd="8dp"

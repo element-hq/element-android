@@ -26,7 +26,6 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NA
 import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.flow.flow
-import org.matrix.android.sdk.rx.SecretsSynchronisationInfo
 
 data class SecretsSynchronisationInfo(
         val isBackupSetup: Boolean,

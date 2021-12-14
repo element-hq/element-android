@@ -50,7 +50,6 @@ import javax.inject.Inject
  * The user can select multiple rooms to send the data to
  */
 class IncomingShareFragment @Inject constructor(
-        val incomingShareViewModelFactory: IncomingShareViewModel.Factory,
         private val incomingShareController: IncomingShareController,
         private val sessionHolder: ActiveSessionHolder
 ) :
@@ -119,7 +118,7 @@ class IncomingShareFragment @Inject constructor(
                 return true
             }
         })
-        views.sendShareButton.setOnClickListener {
+        views.sendShareButton.debouncedClicks {
             handleSendShare()
         }
     }

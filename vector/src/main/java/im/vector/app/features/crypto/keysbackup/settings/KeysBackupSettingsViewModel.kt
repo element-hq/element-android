@@ -15,16 +15,16 @@
  */
 package im.vector.app.features.crypto.keysbackup.settings
 
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.MatrixCallback
@@ -41,18 +41,11 @@ class KeysBackupSettingsViewModel @AssistedInject constructor(@Assisted initialS
         KeysBackupStateListener {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: KeysBackupSettingViewState): KeysBackupSettingsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<KeysBackupSettingsViewModel, KeysBackupSettingViewState> {
+        override fun create(initialState: KeysBackupSettingViewState): KeysBackupSettingsViewModel
     }
 
-    companion object : MavericksViewModelFactory<KeysBackupSettingsViewModel, KeysBackupSettingViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: KeysBackupSettingViewState): KeysBackupSettingsViewModel? {
-            val activity: KeysBackupManageActivity = (viewModelContext as ActivityViewModelContext).activity()
-            return activity.keysBackupSettingsViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<KeysBackupSettingsViewModel, KeysBackupSettingViewState> by hiltMavericksViewModelFactory()
 
     private val keysBackupService: KeysBackupService = session.cryptoService().keysBackupService()
 

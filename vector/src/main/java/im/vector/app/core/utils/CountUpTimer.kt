@@ -16,23 +16,36 @@
 
 package im.vector.app.core.utils
 
-import io.reactivex.Observable
-import java.util.concurrent.TimeUnit
+import im.vector.app.core.flow.tickerFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
 class CountUpTimer(private val intervalInMs: Long = 1_000) {
 
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
     private val elapsedTime: AtomicLong = AtomicLong()
     private val resumed: AtomicBoolean = AtomicBoolean(false)
 
-    private val disposable = Observable.interval(intervalInMs / 10, TimeUnit.MILLISECONDS)
-            .filter { resumed.get() }
-            .map { elapsedTime.addAndGet(intervalInMs / 10) }
-            .filter { it % intervalInMs == 0L }
-            .subscribe {
-                tickListener?.onTick(it)
-            }
+    init {
+        startCounter()
+    }
+
+    private fun startCounter() {
+        tickerFlow(coroutineScope, intervalInMs / 10)
+                .filter { resumed.get() }
+                .map { elapsedTime.addAndGet(intervalInMs / 10) }
+                .filter { it % intervalInMs == 0L }
+                .onEach {
+                    tickListener?.onTick(it)
+                }.launchIn(coroutineScope)
+    }
 
     var tickListener: TickListener? = null
 
@@ -49,7 +62,7 @@ class CountUpTimer(private val intervalInMs: Long = 1_000) {
     }
 
     fun stop() {
-        disposable.dispose()
+        coroutineScope.cancel()
     }
 
     interface TickListener {

@@ -16,12 +16,12 @@
 
 package im.vector.app.features.share
 
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
@@ -46,18 +46,11 @@ class IncomingShareViewModel @AssistedInject constructor(
     VectorViewModel<IncomingShareViewState, IncomingShareAction, IncomingShareViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: IncomingShareViewState): IncomingShareViewModel
+    interface Factory : MavericksAssistedViewModelFactory<IncomingShareViewModel, IncomingShareViewState> {
+        override fun create(initialState: IncomingShareViewState): IncomingShareViewModel
     }
 
-    companion object : MavericksViewModelFactory<IncomingShareViewModel, IncomingShareViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: IncomingShareViewState): IncomingShareViewModel? {
-            val fragment: IncomingShareFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.incomingShareViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<IncomingShareViewModel, IncomingShareViewState> by hiltMavericksViewModelFactory()
 
     private val filterStream = MutableStateFlow("")
 

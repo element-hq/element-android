@@ -35,12 +35,12 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.internal.di.Authenticated
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.ProgressRequestBody
 import org.matrix.android.sdk.internal.network.awaitResponse
 import org.matrix.android.sdk.internal.network.toFailure
-import org.matrix.android.sdk.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import org.matrix.android.sdk.internal.util.TemporaryFileCreator
 import java.io.File
 import java.io.FileNotFoundException
@@ -50,7 +50,7 @@ import javax.inject.Inject
 internal class FileUploader @Inject constructor(
         @Authenticated private val okHttpClient: OkHttpClient,
         private val globalErrorReceiver: GlobalErrorReceiver,
-        private val homeServerCapabilitiesService: DefaultHomeServerCapabilitiesService,
+        private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
         private val context: Context,
         private val temporaryFileCreator: TemporaryFileCreator,
         contentUrlResolver: ContentUrlResolver,

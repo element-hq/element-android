@@ -30,8 +30,8 @@ import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.platform.ButtonStateView
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.core.utils.toast
@@ -43,7 +43,8 @@ import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetInvitedToSpaceBinding>(), SpaceInviteBottomSheetViewModel.Factory {
+@AndroidEntryPoint
+class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetInvitedToSpaceBinding>() {
 
     interface InteractionListener {
         fun spaceInviteBottomSheetOnAccept(spaceId: String)
@@ -57,21 +58,10 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
             val spaceId: String
     ) : Parcelable
 
-    @Inject
-    lateinit var avatarRenderer: AvatarRenderer
-
-    @Inject
-    lateinit var spaceCardRenderer: SpaceCardRenderer
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var spaceCardRenderer: SpaceCardRenderer
 
     private val viewModel: SpaceInviteBottomSheetViewModel by fragmentViewModel(SpaceInviteBottomSheetViewModel::class)
-
-    @Inject lateinit var viewModelFactory: SpaceInviteBottomSheetViewModel.Factory
-
-    override fun create(initialState: SpaceInviteBottomSheetState) = viewModelFactory.create(initialState)
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override val showExpanded = true
 

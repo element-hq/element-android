@@ -15,13 +15,13 @@
  */
 package im.vector.app.features.settings.devices
 
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
@@ -31,14 +31,16 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 
 class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@Assisted initialState: DeviceVerificationInfoBottomSheetViewState,
-                                                                             @Assisted val deviceId: String,
                                                                              val session: Session
 ) : VectorViewModel<DeviceVerificationInfoBottomSheetViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: DeviceVerificationInfoBottomSheetViewState, deviceId: String): DeviceVerificationInfoBottomSheetViewModel
+    interface Factory : MavericksAssistedViewModelFactory<DeviceVerificationInfoBottomSheetViewModel, DeviceVerificationInfoBottomSheetViewState> {
+        override fun create(initialState: DeviceVerificationInfoBottomSheetViewState): DeviceVerificationInfoBottomSheetViewModel
     }
+
+    companion object : MavericksViewModelFactory<DeviceVerificationInfoBottomSheetViewModel, DeviceVerificationInfoBottomSheetViewState>
+    by hiltMavericksViewModelFactory()
 
     init {
 
@@ -59,7 +61,7 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
 
         session.flow().liveUserCryptoDevices(session.myUserId)
                 .map { list ->
-                    list.firstOrNull { it.deviceId == deviceId }
+                    list.firstOrNull { it.deviceId == initialState.deviceId }
                 }
                 .execute {
                     copy(
@@ -82,22 +84,11 @@ class DeviceVerificationInfoBottomSheetViewModel @AssistedInject constructor(@As
 
         session.flow().liveMyDevicesInfo()
                 .map { devices ->
-                    devices.firstOrNull { it.deviceId == deviceId } ?: DeviceInfo(deviceId = deviceId)
+                    devices.firstOrNull { it.deviceId == initialState.deviceId } ?: DeviceInfo(deviceId = initialState.deviceId)
                 }
                 .execute {
                     copy(deviceInfo = it)
                 }
-    }
-
-    companion object : MavericksViewModelFactory<DeviceVerificationInfoBottomSheetViewModel, DeviceVerificationInfoBottomSheetViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: DeviceVerificationInfoBottomSheetViewState):
-                DeviceVerificationInfoBottomSheetViewModel? {
-            val fragment: DeviceVerificationInfoBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-            val args = viewModelContext.args<DeviceVerificationInfoArgs>()
-            return fragment.deviceVerificationInfoViewModelFactory.create(state, args.deviceId)
-        }
     }
 
     override fun handle(action: EmptyAction) {

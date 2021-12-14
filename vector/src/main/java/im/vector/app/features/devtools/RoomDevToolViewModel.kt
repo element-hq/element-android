@@ -16,19 +16,17 @@
 
 package im.vector.app.features.devtools
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import com.squareup.moshi.Types
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
@@ -51,21 +49,11 @@ class RoomDevToolViewModel @AssistedInject constructor(
 ) : VectorViewModel<RoomDevToolViewState, RoomDevToolAction, DevToolsViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: RoomDevToolViewState): RoomDevToolViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomDevToolViewModel, RoomDevToolViewState> {
+        override fun create(initialState: RoomDevToolViewState): RoomDevToolViewModel
     }
 
-    companion object : MavericksViewModelFactory<RoomDevToolViewModel, RoomDevToolViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomDevToolViewState): RoomDevToolViewModel {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomDevToolViewModel, RoomDevToolViewState> by hiltMavericksViewModelFactory()
 
     init {
         session.getRoom(initialState.roomId)

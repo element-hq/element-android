@@ -6,7 +6,8 @@
     android:layout_height="wrap_content"
     android:background="?android:colorBackground"
     android:paddingStart="@dimen/layout_horizontal_margin"
-    android:paddingEnd="@dimen/layout_horizontal_margin">
+    android:paddingEnd="@dimen/layout_horizontal_margin"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/settings_item_edit_text_description"
@@ -27,7 +28,7 @@
         app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/settings_item_edit_text_description">
+        app:layout_constraintTop_toBottomOf="@id/settings_item_edit_text_description">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/settings_item_edit_text"

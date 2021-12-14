@@ -16,13 +16,13 @@
 
 package im.vector.app.features.roomprofile.permissions
 
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
@@ -42,18 +42,11 @@ class RoomPermissionsViewModel @AssistedInject constructor(@Assisted initialStat
     VectorViewModel<RoomPermissionsViewState, RoomPermissionsAction, RoomPermissionsViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: RoomPermissionsViewState): RoomPermissionsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomPermissionsViewModel, RoomPermissionsViewState> {
+        override fun create(initialState: RoomPermissionsViewState): RoomPermissionsViewModel
     }
 
-    companion object : MavericksViewModelFactory<RoomPermissionsViewModel, RoomPermissionsViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomPermissionsViewState): RoomPermissionsViewModel? {
-            val fragment: RoomPermissionsFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomPermissionsViewModel, RoomPermissionsViewState> by hiltMavericksViewModelFactory()
 
     private val room = session.getRoom(initialState.roomId)!!
 

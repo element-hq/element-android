@@ -19,11 +19,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
@@ -35,17 +34,13 @@ import javax.inject.Inject
 /**
  * Bottom sheet displaying list of edits for a given event ordered by timestamp
  */
+@AndroidEntryPoint
 class ViewEditHistoryBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>() {
 
     private val viewModel: ViewEditHistoryViewModel by fragmentViewModel(ViewEditHistoryViewModel::class)
 
-    @Inject lateinit var viewEditHistoryViewModelFactory: ViewEditHistoryViewModel.Factory
     @Inject lateinit var epoxyController: ViewEditHistoryEpoxyController
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListWithTitleBinding {
         return BottomSheetGenericListWithTitleBinding.inflate(inflater, container, false)
@@ -72,14 +67,13 @@ class ViewEditHistoryBottomSheet :
 
     companion object {
         fun newInstance(roomId: String, informationData: MessageInformationData): ViewEditHistoryBottomSheet {
-            val args = Bundle()
-            val parcelableArgs = TimelineEventFragmentArgs(
-                    informationData.eventId,
-                    roomId,
-                    informationData
-            )
-            args.putParcelable(Mavericks.KEY_ARG, parcelableArgs)
-            return ViewEditHistoryBottomSheet().apply { arguments = args }
+            return ViewEditHistoryBottomSheet().apply {
+                setArguments(TimelineEventFragmentArgs(
+                        eventId = informationData.eventId,
+                        roomId = roomId,
+                        informationData = informationData
+                ))
+            }
         }
     }
 }

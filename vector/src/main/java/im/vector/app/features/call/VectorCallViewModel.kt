@@ -21,10 +21,11 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.call.audio.CallAudioManager
@@ -341,16 +342,9 @@ class VectorCallViewModel @AssistedInject constructor(
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: VectorCallViewState): VectorCallViewModel
+    interface Factory : MavericksAssistedViewModelFactory<VectorCallViewModel, VectorCallViewState> {
+        override fun create(initialState: VectorCallViewState): VectorCallViewModel
     }
 
-    companion object : MavericksViewModelFactory<VectorCallViewModel, VectorCallViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: VectorCallViewState): VectorCallViewModel {
-            val callActivity: VectorCallActivity = viewModelContext.activity()
-            return callActivity.viewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<VectorCallViewModel, VectorCallViewState> by hiltMavericksViewModelFactory()
 }

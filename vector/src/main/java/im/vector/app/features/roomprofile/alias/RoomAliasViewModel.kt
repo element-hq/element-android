@@ -17,15 +17,15 @@
 package im.vector.app.features.roomprofile.alias
 
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
@@ -45,21 +45,14 @@ import org.matrix.android.sdk.flow.unwrap
 
 class RoomAliasViewModel @AssistedInject constructor(@Assisted initialState: RoomAliasViewState,
                                                      private val session: Session) :
-    VectorViewModel<RoomAliasViewState, RoomAliasAction, RoomAliasViewEvents>(initialState) {
+        VectorViewModel<RoomAliasViewState, RoomAliasAction, RoomAliasViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: RoomAliasViewState): RoomAliasViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomAliasViewModel, RoomAliasViewState> {
+        override fun create(initialState: RoomAliasViewState): RoomAliasViewModel
     }
 
-    companion object : MavericksViewModelFactory<RoomAliasViewModel, RoomAliasViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomAliasViewState): RoomAliasViewModel? {
-            val fragment: RoomAliasFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.viewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomAliasViewModel, RoomAliasViewState> by hiltMavericksViewModelFactory()
 
     private val room = session.getRoom(initialState.roomId)!!
 

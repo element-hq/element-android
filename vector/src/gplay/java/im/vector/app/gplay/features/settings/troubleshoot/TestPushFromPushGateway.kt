@@ -17,7 +17,7 @@ package im.vector.app.gplay.features.settings.troubleshoot
 
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
@@ -36,7 +36,7 @@ import javax.inject.Inject
 /**
  * Test Push by asking the Push Gateway to send a Push back
  */
-class TestPushFromPushGateway @Inject constructor(private val context: AppCompatActivity,
+class TestPushFromPushGateway @Inject constructor(private val context: FragmentActivity,
                                                   private val stringProvider: StringProvider,
                                                   private val errorFormatter: ErrorFormatter,
                                                   private val pushersManager: PushersManager,

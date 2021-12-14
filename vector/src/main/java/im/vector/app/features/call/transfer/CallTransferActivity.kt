@@ -23,15 +23,11 @@ import android.os.Parcelable
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityCallTransferBinding
-import im.vector.app.features.contactsbook.ContactsBookViewModel
-import im.vector.app.features.contactsbook.ContactsBookViewState
-import im.vector.app.features.userdirectory.UserListViewModel
-import im.vector.app.features.userdirectory.UserListViewState
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -40,14 +36,9 @@ data class CallTransferArgs(val callId: String) : Parcelable
 
 private const val USER_LIST_FRAGMENT_TAG = "USER_LIST_FRAGMENT_TAG"
 
-class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(),
-        CallTransferViewModel.Factory,
-        UserListViewModel.Factory,
-        ContactsBookViewModel.Factory {
+@AndroidEntryPoint
+class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
 
-    @Inject lateinit var userListViewModelFactory: UserListViewModel.Factory
-    @Inject lateinit var callTransferViewModelFactory: CallTransferViewModel.Factory
-    @Inject lateinit var contactsBookViewModelFactory: ContactsBookViewModel.Factory
     @Inject lateinit var errorFormatter: ErrorFormatter
 
     private lateinit var sectionsPagerAdapter: CallTransferPagerAdapter
@@ -57,22 +48,6 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>(),
     override fun getBinding() = ActivityCallTransferBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.vectorCoordinatorLayout
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
-    override fun create(initialState: UserListViewState): UserListViewModel {
-        return userListViewModelFactory.create(initialState)
-    }
-
-    override fun create(initialState: CallTransferViewState): CallTransferViewModel {
-        return callTransferViewModelFactory.create(initialState)
-    }
-
-    override fun create(initialState: ContactsBookViewState): ContactsBookViewModel {
-        return contactsBookViewModelFactory.create(initialState)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

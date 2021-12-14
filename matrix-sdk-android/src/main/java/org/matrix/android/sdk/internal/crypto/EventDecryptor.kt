@@ -28,6 +28,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.crypto.actions.EnsureOlmSessionsForDevicesAction
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
+import org.matrix.android.sdk.internal.crypto.model.MXOlmSessionResult
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.event.OlmEventContent
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -36,7 +37,8 @@ import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.jvm.Throws
+
+private const val SEND_TO_DEVICE_RETRY_COUNT = 3
 
 @SessionScope
 internal class EventDecryptor @Inject constructor(
@@ -146,29 +148,36 @@ internal class EventDecryptor @Inject constructor(
 
         // offload this from crypto thread (?)
         cryptoCoroutineScope.launch(coroutineDispatchers.computation) {
-            val ensured = ensureOlmSessionsForDevicesAction.handle(mapOf(senderId to listOf(deviceInfo)), force = true)
+            runCatching { ensureOlmSessionsForDevicesAction.handle(mapOf(senderId to listOf(deviceInfo)), force = true) }.fold(
+                    onSuccess = { sendDummyToDevice(ensured = it, deviceInfo, senderId) },
+                    onFailure = {
+                        Timber.e("## CRYPTO | markOlmSessionForUnwedging() : failed to ensure device info ${senderId}${deviceInfo.deviceId}")
+                    }
+            )
+        }
+    }
 
-            Timber.i("## CRYPTO | markOlmSessionForUnwedging() : ensureOlmSessionsForDevicesAction isEmpty:${ensured.isEmpty}")
+    private suspend fun sendDummyToDevice(ensured: MXUsersDevicesMap<MXOlmSessionResult>, deviceInfo: CryptoDeviceInfo, senderId: String) {
+        Timber.i("## CRYPTO | markOlmSessionForUnwedging() : ensureOlmSessionsForDevicesAction isEmpty:${ensured.isEmpty}")
 
-            // Now send a blank message on that session so the other side knows about it.
-            // (The keyshare request is sent in the clear so that won't do)
-            // We send this first such that, as long as the toDevice messages arrive in the
-            // same order we sent them, the other end will get this first, set up the new session,
-            // then get the keyshare request and send the key over this new session (because it
-            // is the session it has most recently received a message on).
-            val payloadJson = mapOf<String, Any>("type" to EventType.DUMMY)
+        // Now send a blank message on that session so the other side knows about it.
+        // (The keyshare request is sent in the clear so that won't do)
+        // We send this first such that, as long as the toDevice messages arrive in the
+        // same order we sent them, the other end will get this first, set up the new session,
+        // then get the keyshare request and send the key over this new session (because it
+        // is the session it has most recently received a message on).
+        val payloadJson = mapOf<String, Any>("type" to EventType.DUMMY)
 
-            val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
-            val sendToDeviceMap = MXUsersDevicesMap<Any>()
-            sendToDeviceMap.setObject(senderId, deviceInfo.deviceId, encodedPayload)
-            Timber.i("## CRYPTO | markOlmSessionForUnwedging() : sending dummy to $senderId:${deviceInfo.deviceId}")
-            withContext(coroutineDispatchers.io) {
-                val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
-                try {
-                    sendToDeviceTask.execute(sendToDeviceParams)
-                } catch (failure: Throwable) {
-                    Timber.e(failure, "## CRYPTO | markOlmSessionForUnwedging() : failed to send dummy to $senderId:${deviceInfo.deviceId}")
-                }
+        val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
+        val sendToDeviceMap = MXUsersDevicesMap<Any>()
+        sendToDeviceMap.setObject(senderId, deviceInfo.deviceId, encodedPayload)
+        Timber.i("## CRYPTO | markOlmSessionForUnwedging() : sending dummy to $senderId:${deviceInfo.deviceId}")
+        withContext(coroutineDispatchers.io) {
+            val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
+            try {
+                sendToDeviceTask.executeRetry(sendToDeviceParams, remainingRetry = SEND_TO_DEVICE_RETRY_COUNT)
+            } catch (failure: Throwable) {
+                Timber.e(failure, "## CRYPTO | markOlmSessionForUnwedging() : failed to send dummy to $senderId:${deviceInfo.deviceId}")
             }
         }
     }

@@ -95,7 +95,7 @@ class DiscoverySettingsController @Inject constructor(
         } else {
             settingsInfoItem {
                 id("idConsentInfo")
-                helperTextResId(R.string.settings_discovery_consent_notice_off)
+                helperTextResId(R.string.settings_discovery_consent_notice_off_2)
             }
             settingsButtonItem {
                 id("idConsentButton")
@@ -433,6 +433,6 @@ class DiscoverySettingsController @Inject constructor(
         fun onTapUpdateUserConsent(newValue: Boolean)
         fun onTapRetryToRetrieveBindings()
         fun onPolicyUrlsExpandedStateToggled(newExpandedState: Boolean)
-        fun onPolicyTapped(policy: IdentityServerPolicy)
+        fun onPolicyTapped(policy: ServerPolicy)
     }
 }

@@ -20,7 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
 import com.google.android.material.appbar.MaterialToolbar
-import im.vector.app.R
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
@@ -51,6 +51,7 @@ data class RoomPreviewData(
         get() = MatrixItem.RoomItem(roomId, roomName ?: roomAlias, avatarUrl)
 }
 
+@AndroidEntryPoint
 class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable {
 
     companion object {
@@ -92,9 +93,9 @@ class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), Toolbar
                 // TODO Room preview: Note: M does not recommend to use /events anymore, so for now we just display the room preview
                 // TODO the same way if it was not world readable
                 Timber.d("just display the room preview the same way if it was not world readable")
-                addFragment(R.id.simpleFragmentContainer, RoomPreviewNoPreviewFragment::class.java, args)
+                addFragment(views.simpleFragmentContainer, RoomPreviewNoPreviewFragment::class.java, args)
             } else {
-                addFragment(R.id.simpleFragmentContainer, RoomPreviewNoPreviewFragment::class.java, args)
+                addFragment(views.simpleFragmentContainer, RoomPreviewNoPreviewFragment::class.java, args)
             }
         }
     }

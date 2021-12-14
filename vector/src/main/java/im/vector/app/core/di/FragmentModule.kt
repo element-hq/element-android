@@ -21,7 +21,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dagger.multibindings.IntoMap
+import im.vector.app.features.analytics.ui.consent.AnalyticsOptInFragment
 import im.vector.app.features.attachments.preview.AttachmentsPreviewFragment
 import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsFragment
@@ -93,6 +96,7 @@ import im.vector.app.features.login2.terms.LoginTermsFragment2
 import im.vector.app.features.matrixto.MatrixToRoomSpaceFragment
 import im.vector.app.features.matrixto.MatrixToUserFragment
 import im.vector.app.features.pin.PinFragment
+import im.vector.app.features.poll.create.CreatePollFragment
 import im.vector.app.features.qrcode.QrCodeScannerFragment
 import im.vector.app.features.reactions.EmojiChooserFragment
 import im.vector.app.features.reactions.EmojiSearchResultFragment
@@ -110,8 +114,8 @@ import im.vector.app.features.roomprofile.members.RoomMemberListFragment
 import im.vector.app.features.roomprofile.notifications.RoomNotificationSettingsFragment
 import im.vector.app.features.roomprofile.permissions.RoomPermissionsFragment
 import im.vector.app.features.roomprofile.settings.RoomSettingsFragment
-import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleChooseRestrictedFragment
 import im.vector.app.features.roomprofile.settings.joinrule.RoomJoinRuleFragment
+import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedFragment
 import im.vector.app.features.roomprofile.uploads.RoomUploadsFragment
 import im.vector.app.features.roomprofile.uploads.files.RoomUploadsFilesFragment
 import im.vector.app.features.roomprofile.uploads.media.RoomUploadsMediaFragment
@@ -131,6 +135,7 @@ import im.vector.app.features.settings.devtools.KeyRequestsFragment
 import im.vector.app.features.settings.devtools.OutgoingKeyRequestListFragment
 import im.vector.app.features.settings.homeserver.HomeserverSettingsFragment
 import im.vector.app.features.settings.ignored.VectorSettingsIgnoredUsersFragment
+import im.vector.app.features.settings.legals.LegalsFragment
 import im.vector.app.features.settings.locale.LocalePickerFragment
 import im.vector.app.features.settings.notifications.VectorSettingsAdvancedNotificationPreferenceFragment
 import im.vector.app.features.settings.notifications.VectorSettingsNotificationPreferenceFragment
@@ -158,6 +163,7 @@ import im.vector.app.features.usercode.ShowUserCodeFragment
 import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.widgets.WidgetFragment
 
+@InstallIn(ActivityComponent::class)
 @Module
 interface FragmentModule {
     /**
@@ -518,6 +524,11 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(AnalyticsOptInFragment::class)
+    fun bindAnalyticsOptInFragment(fragment: AnalyticsOptInFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(EmojiChooserFragment::class)
     fun bindEmojiChooserFragment(fragment: EmojiChooserFragment): Fragment
 
@@ -698,6 +709,11 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(LegalsFragment::class)
+    fun bindLegalsFragment(fragment: LegalsFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(ReviewTermsFragment::class)
     fun bindReviewTermsFragment(fragment: ReviewTermsFragment): Fragment
 
@@ -840,4 +856,9 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(ThreadListFragment::class)
     fun bindRoomThreadDetailFragment(fragment: ThreadListFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(CreatePollFragment::class)
+    fun bindCreatePollFragment(fragment: CreatePollFragment): Fragment
 }

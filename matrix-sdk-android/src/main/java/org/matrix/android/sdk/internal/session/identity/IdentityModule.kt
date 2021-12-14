@@ -21,6 +21,7 @@ import dagger.Module
 import dagger.Provides
 import io.realm.RealmConfiguration
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.session.identity.IdentityService
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.di.AuthenticatedIdentity
 import org.matrix.android.sdk.internal.di.IdentityDatabase
@@ -74,6 +75,9 @@ internal abstract class IdentityModule {
                     .build()
         }
     }
+
+    @Binds
+    abstract fun bindIdentityService(service: DefaultIdentityService): IdentityService
 
     @Binds
     @AuthenticatedIdentity
