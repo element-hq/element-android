@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:viewBindingIgnore="true">
 
     <LinearLayout
         android:id="@+id/mergedUTDTile"
@@ -33,7 +34,6 @@
             app:drawableStartCompat="@drawable/ic_clock"
             app:drawableTint="?vctr_content_secondary" />
 
-
         <TextView
             android:id="@+id/itemVerificationDoneDetailTextView"
             style="@style/Widget.Vector.TextView.Caption"
@@ -47,7 +47,6 @@
             android:text="@string/notice_crypto_unable_to_decrypt_friendly_desc"
             android:textColor="?vctr_content_secondary"
             android:textStyle="italic" />
-
 
         <TextView
             android:id="@+id/itemMergedExpandTextView"
@@ -72,7 +71,7 @@
         android:id="@+id/itemMergedSeparatorView"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/mergedUTDTile"
+        android:layout_below="@id/mergedUTDTile"
         android:layout_marginTop="4dp"
         android:background="?vctr_list_separator" />
 

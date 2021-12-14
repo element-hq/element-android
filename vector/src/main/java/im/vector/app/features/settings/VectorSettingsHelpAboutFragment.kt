@@ -22,11 +22,9 @@ import im.vector.app.R
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.utils.FirstThrottler
 import im.vector.app.core.utils.copyToClipboard
-import im.vector.app.core.utils.displayInWebView
 import im.vector.app.core.utils.openAppSettingsPage
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.features.version.VersionProvider
-import im.vector.app.openOssLicensesMenuActivity
 import org.matrix.android.sdk.api.Matrix
 import javax.inject.Inject
 
@@ -40,6 +38,15 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
     private val firstThrottler = FirstThrottler(1000)
 
     override fun bindPref() {
+        // Help
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_HELP_PREFERENCE_KEY)!!
+                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
+                openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.HELP)
+            }
+            false
+        }
+
         // preference to start the App info screen, to facilitate App permissions access
         findPreference<VectorPreference>(APP_INFO_LINK_PREFERENCE_KEY)!!
                 .onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -76,44 +83,6 @@ class VectorSettingsHelpAboutFragment @Inject constructor(
         // olm version
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_OLM_VERSION_PREFERENCE_KEY)!!
                 .summary = session.cryptoService().getCryptoVersion(requireContext(), false)
-
-        // copyright
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_COPYRIGHT_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.COPYRIGHT)
-            false
-        }
-
-        // terms & conditions
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.TAC)
-            false
-        }
-
-        // privacy policy
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            openUrlInChromeCustomTab(requireContext(), null, VectorSettingsUrls.PRIVACY_POLICY)
-            false
-        }
-
-        // third party notice
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            if (firstThrottler.canHandle() is FirstThrottler.CanHandlerResult.Yes) {
-                activity?.displayInWebView(VectorSettingsUrls.THIRD_PARTY_LICENSES)
-            }
-            false
-        }
-
-        // Note: preference is not visible on F-Droid build
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY)!!
-                .onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            // See https://developers.google.com/android/guides/opensource
-            openOssLicensesMenuActivity(requireActivity())
-            false
-        }
     }
 
     companion object {

@@ -28,6 +28,10 @@ class RoomDevToolRootController @Inject constructor(
 
     var interactionListener: DevToolsInteractionListener? = null
 
+    init {
+        requestModelBuild()
+    }
+
     override fun buildModels() {
         val host = this
         genericButtonItem {

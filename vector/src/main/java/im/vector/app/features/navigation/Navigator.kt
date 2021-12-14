@@ -19,6 +19,7 @@ package im.vector.app.features.navigation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.view.View
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
@@ -40,6 +41,10 @@ import org.matrix.android.sdk.api.util.MatrixItem
 interface Navigator {
 
     fun openLogin(context: Context, loginConfig: LoginConfig? = null, flags: Int = 0)
+
+    fun loginSSORedirect(context: Context, data: Uri?)
+
+    fun softLogout(context: Context)
 
     fun openRoom(context: Context, roomId: String, eventId: String? = null, buildTask: Boolean = false)
 
@@ -104,6 +109,8 @@ interface Navigator {
     }
 
     fun openBigImageViewer(activity: Activity, sharedElement: View?, mxcUrl: String?, title: String?)
+
+    fun openAnalyticsOptIn(context: Context)
 
     fun openPinCode(context: Context,
                     activityResultLauncher: ActivityResultLauncher<Intent>,

@@ -7,8 +7,8 @@
     android:background="?android:colorBackground"
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="8dp"
+    tools:viewBindingIgnore="true">
 
     <FrameLayout
         android:id="@+id/iconContainer"
@@ -53,10 +53,10 @@
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/itemDescription"
+        app:layout_constraintBottom_toTopOf="@id/itemDescription"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/iconContainer"
+        app:layout_constraintStart_toEndOf="@id/iconContainer"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="foo@example.com" />
 
@@ -72,7 +72,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="@+id/itemTitle"
-        app:layout_constraintTop_toBottomOf="@+id/itemTitle" />
+        app:layout_constraintStart_toStartOf="@id/itemTitle"
+        app:layout_constraintTop_toBottomOf="@id/itemTitle" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

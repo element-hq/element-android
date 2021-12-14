@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    tools:viewBindingIgnore="true">
 
     <im.vector.app.features.spaces.preview.SpaceTabView
         android:id="@+id/spaceChildTabView"
@@ -52,10 +52,10 @@
             android:maxLines="1"
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/childRoomTopic"
+            app:layout_constraintBottom_toTopOf="@id/childRoomTopic"
             app:layout_constraintEnd_toStartOf="@id/spaceChildMemberCountIcon"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/childRoomAvatar"
+            app:layout_constraintStart_toEndOf="@id/childRoomAvatar"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@sample/rooms.json/data/name" />
 
@@ -69,8 +69,8 @@
             app:layout_constraintBottom_toBottomOf="@id/spaceChildBarrier"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="@+id/childRoomName"
-            app:layout_constraintTop_toBottomOf="@+id/childRoomName"
+            app:layout_constraintStart_toStartOf="@id/childRoomName"
+            app:layout_constraintTop_toBottomOf="@id/childRoomName"
             tools:text="@sample/rooms.json/data/topic" />
 
         <ImageView
@@ -80,9 +80,9 @@
             android:layout_marginEnd="4dp"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_room_profile_member_list"
-            app:layout_constraintBottom_toBottomOf="@+id/spaceChildMemberCountText"
-            app:layout_constraintEnd_toStartOf="@+id/spaceChildMemberCountText"
-            app:layout_constraintTop_toTopOf="@+id/spaceChildMemberCountText"
+            app:layout_constraintBottom_toBottomOf="@id/spaceChildMemberCountText"
+            app:layout_constraintEnd_toStartOf="@id/spaceChildMemberCountText"
+            app:layout_constraintTop_toTopOf="@id/spaceChildMemberCountText"
             app:tint="?vctr_content_secondary" />
 
         <TextView
@@ -111,7 +111,6 @@
             android:layout_height="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/spaceChildBarrier" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

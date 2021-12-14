@@ -32,7 +32,6 @@
     <dimen name="call_pip_width">88dp</dimen>
     <dimen name="call_pip_radius">8dp</dimen>
 
-
     <dimen name="item_form_min_height">76dp</dimen>
 
     <!-- Max width for some buttons -->
@@ -41,4 +40,6 @@
     <!-- Navigation Drawer -->
     <dimen name="navigation_drawer_max_width">320dp</dimen>
 
+    <!--  Preview Url  -->
+    <dimen name="preview_url_view_corner_radius">8dp</dimen>
 </resources>

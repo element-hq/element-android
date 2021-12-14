@@ -8,7 +8,8 @@
     android:background="@drawable/bg_space_item"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground"
+    tools:viewBindingIgnore="true">
 
     <Space
         android:id="@+id/indent"
@@ -26,8 +27,8 @@
         android:layout_height="26dp"
         android:layout_gravity="center"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
-        android:importantForAccessibility="no"
         android:duplicateParentState="true"
+        android:importantForAccessibility="no"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/indent"
         app:layout_constraintTop_toTopOf="parent"
@@ -47,13 +48,12 @@
         android:paddingEnd="4dp"
         android:textColor="?colorOnError"
         android:visibility="gone"
-        app:layout_constraintCircle="@+id/groupAvatarImageView"
+        app:layout_constraintCircle="@id/groupAvatarImageView"
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="14dp"
         tools:background="@drawable/bg_unread_highlight"
         tools:text="147"
         tools:visibility="visible" />
-
 
     <TextView
         android:id="@+id/groupNameView"
@@ -67,8 +67,8 @@
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/groupChildrenCollapse"
-        app:layout_constraintStart_toEndOf="@+id/groupAvatarImageView"
+        app:layout_constraintEnd_toStartOf="@id/groupChildrenCollapse"
+        app:layout_constraintStart_toEndOf="@id/groupAvatarImageView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="@tools:sample/lorem/random" />
@@ -84,7 +84,7 @@
         android:src="@drawable/ic_expand_less"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/groupTmpLeave"
+        app:layout_constraintEnd_toStartOf="@id/groupTmpLeave"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?vctr_content_primary"
         tools:ignore="MissingPrefix"
@@ -113,7 +113,7 @@
         android:importantForAccessibility="no"
         android:src="@drawable/ic_arrow_right"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/groupBottomSeparator"
+        app:layout_constraintBottom_toTopOf="@id/groupBottomSeparator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?vctr_content_primary"

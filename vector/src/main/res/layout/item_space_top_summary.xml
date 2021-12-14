@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/spaceSummaryMemberCountIcon"
@@ -12,8 +13,8 @@
         android:layout_height="16dp"
         android:importantForAccessibility="no"
         android:src="@drawable/ic_room_profile_member_list"
-        app:layout_constraintBottom_toBottomOf="@+id/spaceSummaryMemberCountText"
-        app:layout_constraintStart_toEndOf="@+id/spaceSummaryMemberCountText"
+        app:layout_constraintBottom_toBottomOf="@id/spaceSummaryMemberCountText"
+        app:layout_constraintStart_toEndOf="@id/spaceSummaryMemberCountText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?vctr_content_secondary"
@@ -28,7 +29,7 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?vctr_content_secondary"
-        app:layout_constraintBottom_toBottomOf="@+id/spaceSummaryMemberCountIcon"
+        app:layout_constraintBottom_toBottomOf="@id/spaceSummaryMemberCountIcon"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/spaceSummaryMemberCountIcon"
         app:layout_constraintTop_toTopOf="parent"

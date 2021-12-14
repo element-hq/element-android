@@ -44,7 +44,7 @@
             android:paddingEnd="36dp"
             android:text="@string/auth_accept_policies"
             android:textColor="?vctr_content_secondary"
-            app:layout_constraintTop_toBottomOf="@+id/loginTermsTitle" />
+            app:layout_constraintTop_toBottomOf="@id/loginTermsTitle" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/loginTermsPolicyList"
@@ -52,8 +52,8 @@
             android:layout_height="0dp"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toTopOf="@+id/loginTermsSubmit"
-            app:layout_constraintTop_toBottomOf="@+id/loginTermsNotice"
+            app:layout_constraintBottom_toTopOf="@id/loginTermsSubmit"
+            app:layout_constraintTop_toBottomOf="@id/loginTermsNotice"
             tools:listitem="@layout/item_policy" />
 
         <Button

@@ -79,7 +79,7 @@ class ReAuthActivity : SimpleFragmentActivity() {
         // so we assume that after the user close the tab we return success and let caller retry the UIA flow :/
         if (isFirstCreation()) {
             addFragment(
-                    R.id.container,
+                    views.container,
                     PromptFragment::class.java
             )
         }

@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:viewBindingIgnore="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/creationTile"
@@ -56,7 +57,7 @@
             app:iconPadding="0dp"
             app:iconSize="20dp"
             app:iconTint="?vctr_content_primary"
-            app:layout_constraintCircle="@+id/creationTileRoomAvatarImageView"
+            app:layout_constraintCircle="@id/creationTileRoomAvatarImageView"
             app:layout_constraintCircleAngle="135"
             app:layout_constraintCircleRadius="34dp"
             tools:ignore="MissingConstraints" />
@@ -142,7 +143,7 @@
         android:id="@+id/mergedSumContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/creationTile"
+        android:layout_below="@id/creationTile"
         android:layout_marginTop="8dp">
 
         <ImageView
@@ -170,7 +171,6 @@
             android:textStyle="italic"
             tools:text="@string/room_created_summary_item" />
 
-
         <TextView
             android:id="@+id/itemMergedExpandTextView"
             style="@style/Widget.Vector.TextView.Body"
@@ -192,7 +192,7 @@
         android:id="@+id/itemMergedSeparatorView"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/mergedSumContainer"
+        android:layout_below="@id/mergedSumContainer"
         android:layout_marginTop="4dp"
         android:background="?vctr_list_separator" />
 

@@ -70,25 +70,25 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
 
             when (val payload = readPayload<SettingsActivityPayload>(SettingsActivityPayload.Root)) {
                 SettingsActivityPayload.General                       ->
-                    replaceFragment(R.id.vector_settings_page, VectorSettingsGeneralFragment::class.java, null, FRAGMENT_TAG)
+                    replaceFragment(views.vectorSettingsPage, VectorSettingsGeneralFragment::class.java, null, FRAGMENT_TAG)
                 SettingsActivityPayload.AdvancedSettings              ->
-                    replaceFragment(R.id.vector_settings_page, VectorSettingsAdvancedSettingsFragment::class.java, null, FRAGMENT_TAG)
+                    replaceFragment(views.vectorSettingsPage, VectorSettingsAdvancedSettingsFragment::class.java, null, FRAGMENT_TAG)
                 SettingsActivityPayload.SecurityPrivacy               ->
-                    replaceFragment(R.id.vector_settings_page, VectorSettingsSecurityPrivacyFragment::class.java, null, FRAGMENT_TAG)
+                    replaceFragment(views.vectorSettingsPage, VectorSettingsSecurityPrivacyFragment::class.java, null, FRAGMENT_TAG)
                 SettingsActivityPayload.SecurityPrivacyManageSessions ->
-                    replaceFragment(R.id.vector_settings_page,
+                    replaceFragment(views.vectorSettingsPage,
                             VectorSettingsDevicesFragment::class.java,
                             null,
                             FRAGMENT_TAG)
                 SettingsActivityPayload.Notifications                 -> {
                     requestHighlightPreferenceKeyOnResume(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)
-                    replaceFragment(R.id.vector_settings_page, VectorSettingsNotificationPreferenceFragment::class.java, null, FRAGMENT_TAG)
+                    replaceFragment(views.vectorSettingsPage, VectorSettingsNotificationPreferenceFragment::class.java, null, FRAGMENT_TAG)
                 }
                 is SettingsActivityPayload.DiscoverySettings          -> {
-                    replaceFragment(R.id.vector_settings_page, DiscoverySettingsFragment::class.java, payload, FRAGMENT_TAG)
+                    replaceFragment(views.vectorSettingsPage, DiscoverySettingsFragment::class.java, payload, FRAGMENT_TAG)
                 }
                 else                                                  ->
-                    replaceFragment(R.id.vector_settings_page, VectorSettingsRootFragment::class.java, null, FRAGMENT_TAG)
+                    replaceFragment(views.vectorSettingsPage, VectorSettingsRootFragment::class.java, null, FRAGMENT_TAG)
             }
         }
 
@@ -123,7 +123,7 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
             // Replace the existing Fragment with the new Fragment
             supportFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.right_in, R.anim.fade_out, R.anim.fade_in, R.anim.right_out)
-                    .replace(R.id.vector_settings_page, oFragment, pref.title.toString())
+                    .replace(views.vectorSettingsPage.id, oFragment, pref.title.toString())
                     .addToBackStack(null)
                     .commit()
             return true
@@ -154,7 +154,7 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
     fun <T : Fragment> navigateTo(fragmentClass: Class<T>, arguments: Bundle? = null) {
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.right_in, R.anim.fade_out, R.anim.fade_in, R.anim.right_out)
-                .replace(R.id.vector_settings_page, fragmentClass, arguments)
+                .replace(views.vectorSettingsPage.id, fragmentClass, arguments)
                 .addToBackStack(null)
                 .commit()
     }

@@ -456,6 +456,7 @@
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="disable">Disable</string>
     <string name="action_return">Return</string>
+    <string name="action_enable">Enable</string>
     <string name="action_not_now">Not now</string>
 
     <!-- dialog titles -->
@@ -1377,6 +1378,15 @@
     <string name="template_settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Yes, I want to help!</string>
 
+    <!-- analytics v2 -->
+    <string name="analytics_opt_in_title">Help improve Element</string>
+    <!-- The template will be replaced by the value of the resource analytics_opt_in_content_link -->
+    <string name="analytics_opt_in_content">Help us identify issues and improve Element by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.\n\nYou can read all our terms %s.</string>
+    <string name="analytics_opt_in_content_link">here</string>
+    <string name="analytics_opt_in_list_item_1">We <b>don\'t</b> record or profile any account data</string>
+    <string name="analytics_opt_in_list_item_2">We <b>don\'t</b> share information with third parties</string>
+    <string name="analytics_opt_in_list_item_3">You can turn this off anytime in settings</string>
+
     <string name="settings_data_save_mode">Data save mode</string>
     <string name="settings_data_save_mode_summary">Data save mode applies a specific filter so presence updates and typing notifications are filtered out.</string>
 
@@ -1396,6 +1406,12 @@
     <string name="settings_identity_server">Identity server</string>
     <string name="settings_integration_allow">Allow integrations</string>
     <string name="settings_integration_manager">Integration manager</string>
+
+    <string name="template_legals_application_title">${app_name} policy</string>
+    <string name="legals_home_server_title">Your homeserver policy</string>
+    <string name="legals_identity_server_title">Your identity server policy</string>
+    <string name="legals_third_party_notices">Third party libraries</string>
+    <string name="legals_no_policy_provided">This server does not provide any policy.</string>
 
     <string name="disabled_integration_dialog_title">Integrations are disabled</string>
     <string name="disabled_integration_dialog_content">"Enable 'Allow integrations' in Settings to do this."</string>
@@ -2270,7 +2286,13 @@
 
     <string name="preference_voice_and_video">Voice &amp; Video</string>
     <string name="preference_root_help_about">Help &amp; About</string>
+    <string name="preference_root_legals">Legals</string>
 
+    <string name="preference_help">Help</string>
+    <string name="preference_help_title">Help and support</string>
+    <string name="preference_help_summary">Get help with using Element</string>
+    <string name="preference_versions">Versions</string>
+    <string name="preference_system_settings">System settings</string>
 
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Register token</string>
 
@@ -3566,7 +3588,6 @@
     <string name="space_manage_rooms_and_spaces">Manage rooms and spaces</string>
 
 
-
     <string name="preference_show_all_rooms_in_home">Show all rooms in Home</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">All rooms you’re in will be shown in Home.</string>
 
@@ -3653,4 +3674,31 @@
         <item quantity="one">At least %1$s option is required</item>
         <item quantity="other">At least %1$s options are required</item>
     </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d vote</item>
+        <item quantity="other">%1$d votes</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">Based on %1$d vote</item>
+        <item quantity="other">Based on %1$d votes</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="zero">No votes cast</item>
+        <item quantity="one">%1$d vote cast. Vote to the see the results</item>
+        <item quantity="other">%1$d votes cast. Vote to the see the results</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Final result based on %1$d vote</item>
+        <item quantity="other">Final result based on %1$d votes</item>
+    </plurals>
+    <string name="poll_end_action">End poll</string>
+    <string name="a11y_poll_winner_option">winner option</string>
+    <string name="end_poll_confirmation_title">End this poll?</string>
+    <string name="end_poll_confirmation_description">This will stop people from being able to vote and will display the final results of the poll.</string>
+    <string name="end_poll_confirmation_approve_button">End poll</string>
+    <string name="labs_enable_polls">Enable Polls</string>
+    <string name="poll_response_room_list_preview">Vote casted</string>
+    <string name="poll_end_room_list_preview">Poll ended</string>
+    <string name="delete_poll_dialog_title">Remove poll</string>
+    <string name="delete_poll_dialog_content">Are you sure you want to remove this poll? You won\'t be able to recover it once removed.</string>
 </resources>

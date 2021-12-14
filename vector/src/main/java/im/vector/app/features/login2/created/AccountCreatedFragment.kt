@@ -85,11 +85,11 @@ class AccountCreatedFragment @Inject constructor(
     }
 
     private fun setupClickListener() {
-        views.loginAccountCreatedMessage.setOnClickListener {
+        views.loginAccountCreatedMessage.debouncedClicks {
             // Update display name
             displayDialog()
         }
-        views.loginAccountCreatedAvatar.setOnClickListener {
+        views.loginAccountCreatedAvatar.debouncedClicks {
             galleryOrCameraDialogHelper.show()
         }
     }
@@ -120,8 +120,8 @@ class AccountCreatedFragment @Inject constructor(
     }
 
     private fun setupSubmitButton() {
-        views.loginAccountCreatedLater.setOnClickListener { terminate() }
-        views.loginAccountCreatedDone.setOnClickListener { terminate() }
+        views.loginAccountCreatedLater.debouncedClicks { terminate() }
+        views.loginAccountCreatedDone.debouncedClicks { terminate() }
     }
 
     private fun terminate() {

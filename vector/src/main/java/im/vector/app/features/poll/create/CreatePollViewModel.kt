@@ -81,7 +81,7 @@ class CreatePollViewModel @AssistedInject constructor(
                 _viewEvents.post(CreatePollViewEvents.NotEnoughOptionsError(requiredOptionsCount = MIN_OPTIONS_COUNT))
             }
             else                                     -> {
-                room.sendPoll(state.question, state.options)
+                room.sendPoll(state.question, nonEmptyOptions)
                 _viewEvents.post(CreatePollViewEvents.Success)
             }
         }

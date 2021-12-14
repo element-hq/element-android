@@ -8,7 +8,8 @@
     android:contentDescription="@string/use_other_session_content_description"
     android:paddingStart="16dp"
     android:paddingEnd="16dp"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/use_latest_riot"
@@ -22,7 +23,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <ImageView
         android:id="@+id/monitorIcon"
         android:layout_width="40dp"
@@ -33,7 +33,7 @@
         android:src="@drawable/ic_monitor"
         app:layout_constraintEnd_toStartOf="@id/smartphoneIcon"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/use_latest_riot"
+        app:layout_constraintTop_toBottomOf="@id/use_latest_riot"
         app:tint="?vctr_notice_secondary"
         tools:ignore="MissingPrefix" />
 
@@ -47,10 +47,9 @@
         android:src="@drawable/ic_smartphone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/monitorIcon"
-        app:layout_constraintTop_toBottomOf="@+id/use_latest_riot"
+        app:layout_constraintTop_toBottomOf="@id/use_latest_riot"
         app:tint="?vctr_notice_secondary"
         tools:ignore="MissingPrefix" />
-
 
     <TextView
         android:id="@+id/app_desktop_web"
@@ -84,7 +83,6 @@
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
         app:constraint_referenced_ids="app_ios_android,app_desktop_web" />
-
 
     <TextView
         style="@style/Widget.Vector.TextView.Caption"

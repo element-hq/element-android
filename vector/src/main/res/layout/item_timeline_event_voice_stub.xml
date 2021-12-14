@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/voiceLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:viewBindingIgnore="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/voicePlaybackLayout"
@@ -59,9 +60,7 @@
             app:layout_constraintStart_toEndOf="@id/voicePlaybackTime"
             app:layout_constraintTop_toTopOf="parent" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <include
         android:id="@+id/messageFileUploadProgressLayout"
@@ -75,7 +74,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/voicePlaybackLayout"
+        app:layout_constraintTop_toBottomOf="@id/voicePlaybackLayout"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

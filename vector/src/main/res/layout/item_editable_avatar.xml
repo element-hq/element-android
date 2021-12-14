@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:colorBackground"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:viewBindingIgnore="true">
 
     <!-- I cannot do what I want using layer-list, do it manually here-->
     <FrameLayout
@@ -47,8 +48,8 @@
         android:scaleType="center"
         android:src="@drawable/ic_delete"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/itemEditableAvatarImageContainer"
-        app:layout_constraintTop_toTopOf="@+id/itemEditableAvatarImageContainer"
+        app:layout_constraintEnd_toEndOf="@id/itemEditableAvatarImageContainer"
+        app:layout_constraintTop_toTopOf="@id/itemEditableAvatarImageContainer"
         app:tint="?colorError"
         tools:ignore="MissingPrefix"
         tools:visibility="visible" />

@@ -42,10 +42,6 @@ class RoomBannedMemberListController @Inject constructor(
 
     var callback: Callback? = null
 
-    init {
-        setData(null)
-    }
-
     override fun buildModels(data: RoomBannedMemberListViewState?) {
         val bannedList = data?.bannedMemberSummaries?.invoke() ?: return
         val host = this

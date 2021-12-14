@@ -15,7 +15,6 @@
 
     </View>
 
-
     <ImageView
         android:id="@+id/overlayBackButton"
         android:layout_width="44dp"
@@ -84,7 +83,6 @@
         app:srcCompat="@drawable/ic_share"
         app:tint="?colorOnPrimary"
         tools:ignore="MissingPrefix" />
-
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/overlayVideoControlsGroup"

@@ -81,7 +81,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
     }
 
     private fun setupForgottenPasswordButton() {
-        views.forgetPasswordButton.setOnClickListener { forgetPasswordClicked() }
+        views.forgetPasswordButton.debouncedClicks { forgetPasswordClicked() }
     }
 
     private fun setupAutoFill(state: LoginViewState) {
@@ -226,7 +226,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
     }
 
     private fun setupSubmitButton() {
-        views.loginSubmit.setOnClickListener { submit() }
+        views.loginSubmit.debouncedClicks { submit() }
         combine(
                 views.loginField.textChanges().map { it.trim().isNotEmpty() },
                 views.passwordField.textChanges().map { it.isNotEmpty() }

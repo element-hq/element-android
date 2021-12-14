@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.rest.GossipingToDeviceObject
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyShareRequest
@@ -37,9 +38,8 @@ import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import timber.log.Timber
 import javax.inject.Inject
 
-internal class SendGossipRequestWorker(context: Context,
-                                       params: WorkerParameters) :
-    SessionSafeCoroutineWorker<SendGossipRequestWorker.Params>(context, params, Params::class.java) {
+internal class SendGossipRequestWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
+    SessionSafeCoroutineWorker<SendGossipRequestWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(

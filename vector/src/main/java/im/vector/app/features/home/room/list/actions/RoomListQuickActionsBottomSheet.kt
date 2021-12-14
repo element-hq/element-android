@@ -43,15 +43,8 @@ import javax.inject.Inject
 
 @Parcelize
 data class RoomListActionsArgs(
-        val roomId: String,
-        val mode: Mode
-) : Parcelable {
-
-    enum class Mode {
-        FULL,
-        NOTIFICATIONS
-    }
-}
+        val roomId: String
+) : Parcelable
 
 /**
  * Bottom sheet fragment that shows room information with list of contextual actions
@@ -124,9 +117,9 @@ class RoomListQuickActionsBottomSheet :
     }
 
     companion object {
-        fun newInstance(roomId: String, mode: RoomListActionsArgs.Mode): RoomListQuickActionsBottomSheet {
+        fun newInstance(roomId: String): RoomListQuickActionsBottomSheet {
             return RoomListQuickActionsBottomSheet().apply {
-                setArguments(RoomListActionsArgs(roomId, mode))
+                setArguments(RoomListActionsArgs(roomId))
             }
         }
     }

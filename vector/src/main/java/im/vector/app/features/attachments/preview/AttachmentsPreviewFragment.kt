@@ -79,7 +79,7 @@ class AttachmentsPreviewFragment @Inject constructor(
         applyInsets()
         setupRecyclerViews()
         setupToolbar(views.attachmentPreviewerToolbar)
-        views.attachmentPreviewerSendButton.setOnClickListener {
+        views.attachmentPreviewerSendButton.debouncedClicks {
             setResultAndFinish()
         }
     }

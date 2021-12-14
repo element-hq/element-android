@@ -63,10 +63,6 @@ class RoomAliasController @Inject constructor(
 
     var callback: Callback? = null
 
-    init {
-        setData(null)
-    }
-
     override fun buildModels(data: RoomAliasViewState?) {
         data ?: return
 

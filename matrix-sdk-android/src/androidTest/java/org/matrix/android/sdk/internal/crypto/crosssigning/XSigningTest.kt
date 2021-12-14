@@ -45,14 +45,14 @@ import kotlin.coroutines.resume
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 class XSigningTest : InstrumentedTest {
 
-    private val mTestHelper = CommonTestHelper(context())
-    private val mCryptoTestHelper = CryptoTestHelper(mTestHelper)
+    private val testHelper = CommonTestHelper(context())
+    private val cryptoTestHelper = CryptoTestHelper(testHelper)
 
     @Test
     fun test_InitializeAndStoreKeys() {
-        val aliceSession = mTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
+        val aliceSession = testHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
 
-        mTestHelper.doSync<Unit> {
+        testHelper.doSync<Unit> {
             aliceSession.cryptoService().crossSigningService()
                     .initializeCrossSigning(object : UserInteractiveAuthInterceptor {
                         override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
@@ -79,12 +79,12 @@ class XSigningTest : InstrumentedTest {
 
         assertTrue("Signing Keys should be trusted", aliceSession.cryptoService().crossSigningService().checkUserTrust(aliceSession.myUserId).isVerified())
 
-        mTestHelper.signOutAndClose(aliceSession)
+        testHelper.signOutAndClose(aliceSession)
     }
 
     @Test
     fun test_CrossSigningCheckBobSeesTheKeys() {
-        val cryptoTestData = mCryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
@@ -98,21 +98,21 @@ class XSigningTest : InstrumentedTest {
                 password = TestConstants.PASSWORD
         )
 
-        mTestHelper.doSync<Unit> {
+        testHelper.doSync<Unit> {
             aliceSession.cryptoService().crossSigningService().initializeCrossSigning(object : UserInteractiveAuthInterceptor {
                 override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                     promise.resume(aliceAuthParams)
                 }
             }, it)
         }
-        mTestHelper.doSync<Unit> { bobSession.cryptoService().crossSigningService().initializeCrossSigning(object : UserInteractiveAuthInterceptor {
+        testHelper.doSync<Unit> { bobSession.cryptoService().crossSigningService().initializeCrossSigning(object : UserInteractiveAuthInterceptor {
             override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                 promise.resume(bobAuthParams)
             }
         }, it) }
 
         // Check that alice can see bob keys
-        mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> { aliceSession.cryptoService().downloadKeys(listOf(bobSession.myUserId), true, it) }
+        testHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> { aliceSession.cryptoService().downloadKeys(listOf(bobSession.myUserId), true, it) }
 
         val bobKeysFromAlicePOV = aliceSession.cryptoService().crossSigningService().getUserCrossSigningKeys(bobSession.myUserId)
         assertNotNull("Alice can see bob Master key", bobKeysFromAlicePOV!!.masterKey())
@@ -124,13 +124,13 @@ class XSigningTest : InstrumentedTest {
 
         assertFalse("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV.isTrusted())
 
-        mTestHelper.signOutAndClose(aliceSession)
-        mTestHelper.signOutAndClose(bobSession)
+        testHelper.signOutAndClose(aliceSession)
+        testHelper.signOutAndClose(bobSession)
     }
 
     @Test
     fun test_CrossSigningTestAliceTrustBobNewDevice() {
-        val cryptoTestData = mCryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession
         val bobSession = cryptoTestData.secondSession
@@ -144,12 +144,12 @@ class XSigningTest : InstrumentedTest {
                 password = TestConstants.PASSWORD
         )
 
-        mTestHelper.doSync<Unit> { aliceSession.cryptoService().crossSigningService().initializeCrossSigning(object : UserInteractiveAuthInterceptor {
+        testHelper.doSync<Unit> { aliceSession.cryptoService().crossSigningService().initializeCrossSigning(object : UserInteractiveAuthInterceptor {
             override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                 promise.resume(aliceAuthParams)
             }
         }, it) }
-        mTestHelper.doSync<Unit> { bobSession.cryptoService().crossSigningService().initializeCrossSigning(object : UserInteractiveAuthInterceptor {
+        testHelper.doSync<Unit> { bobSession.cryptoService().crossSigningService().initializeCrossSigning(object : UserInteractiveAuthInterceptor {
             override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                 promise.resume(bobAuthParams)
             }
@@ -157,21 +157,21 @@ class XSigningTest : InstrumentedTest {
 
         // Check that alice can see bob keys
         val bobUserId = bobSession.myUserId
-        mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> { aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true, it) }
+        testHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> { aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true, it) }
 
         val bobKeysFromAlicePOV = aliceSession.cryptoService().crossSigningService().getUserCrossSigningKeys(bobUserId)
         assertTrue("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV?.isTrusted() == false)
 
-        mTestHelper.doSync<Unit> { aliceSession.cryptoService().crossSigningService().trustUser(bobUserId, it) }
+        testHelper.doSync<Unit> { aliceSession.cryptoService().crossSigningService().trustUser(bobUserId, it) }
 
         // Now bobs logs in on a new device and verifies it
         // We will want to test that in alice POV, this new device would be trusted by cross signing
 
-        val bobSession2 = mTestHelper.logIntoAccount(bobUserId, SessionTestParams(true))
+        val bobSession2 = testHelper.logIntoAccount(bobUserId, SessionTestParams(true))
         val bobSecondDeviceId = bobSession2.sessionParams.deviceId!!
 
         // Check that bob first session sees the new login
-        val data = mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
+        val data = testHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
             bobSession.cryptoService().downloadKeys(listOf(bobUserId), true, it)
         }
 
@@ -183,12 +183,12 @@ class XSigningTest : InstrumentedTest {
         assertNotNull("Bob Second device should be known and persisted from first", bobSecondDevicePOVFirstDevice)
 
         // Manually mark it as trusted from first session
-        mTestHelper.doSync<Unit> {
+        testHelper.doSync<Unit> {
             bobSession.cryptoService().crossSigningService().trustDevice(bobSecondDeviceId, it)
         }
 
         // Now alice should cross trust bob's second device
-        val data2 = mTestHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
+        val data2 = testHelper.doSync<MXUsersDevicesMap<CryptoDeviceInfo>> {
             aliceSession.cryptoService().downloadKeys(listOf(bobUserId), true, it)
         }
 
@@ -200,8 +200,8 @@ class XSigningTest : InstrumentedTest {
         val result = aliceSession.cryptoService().crossSigningService().checkDeviceTrust(bobUserId, bobSecondDeviceId, null)
         assertTrue("Bob second device should be trusted from alice POV", result.isCrossSignedVerified())
 
-        mTestHelper.signOutAndClose(aliceSession)
-        mTestHelper.signOutAndClose(bobSession)
-        mTestHelper.signOutAndClose(bobSession2)
+        testHelper.signOutAndClose(aliceSession)
+        testHelper.signOutAndClose(bobSession)
+        testHelper.signOutAndClose(bobSession2)
     }
 }

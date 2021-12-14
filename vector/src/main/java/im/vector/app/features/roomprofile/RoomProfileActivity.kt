@@ -25,7 +25,6 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
@@ -86,13 +85,13 @@ class RoomProfileActivity :
         if (isFirstCreation()) {
             when (intent?.extras?.getInt(EXTRA_DIRECT_ACCESS, EXTRA_DIRECT_ACCESS_ROOM_ROOT)) {
                 EXTRA_DIRECT_ACCESS_ROOM_SETTINGS -> {
-                    addFragment(R.id.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
-                    addFragmentToBackstack(R.id.simpleFragmentContainer, RoomSettingsFragment::class.java, roomProfileArgs)
+                    addFragment(views.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
+                    addFragmentToBackstack(views.simpleFragmentContainer, RoomSettingsFragment::class.java, roomProfileArgs)
                 }
                 EXTRA_DIRECT_ACCESS_ROOM_MEMBERS -> {
-                    addFragment(R.id.simpleFragmentContainer, RoomMemberListFragment::class.java, roomProfileArgs)
+                    addFragment(views.simpleFragmentContainer, RoomMemberListFragment::class.java, roomProfileArgs)
                 }
-                else -> addFragment(R.id.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
+                else -> addFragment(views.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
             }
         }
         sharedActionViewModel
@@ -132,31 +131,31 @@ class RoomProfileActivity :
     }
 
     private fun openRoomUploads() {
-        addFragmentToBackstack(R.id.simpleFragmentContainer, RoomUploadsFragment::class.java, roomProfileArgs)
+        addFragmentToBackstack(views.simpleFragmentContainer, RoomUploadsFragment::class.java, roomProfileArgs)
     }
 
     private fun openRoomSettings() {
-        addFragmentToBackstack(R.id.simpleFragmentContainer, RoomSettingsFragment::class.java, roomProfileArgs)
+        addFragmentToBackstack(views.simpleFragmentContainer, RoomSettingsFragment::class.java, roomProfileArgs)
     }
 
     private fun openRoomAlias() {
-        addFragmentToBackstack(R.id.simpleFragmentContainer, RoomAliasFragment::class.java, roomProfileArgs)
+        addFragmentToBackstack(views.simpleFragmentContainer, RoomAliasFragment::class.java, roomProfileArgs)
     }
 
     private fun openRoomPermissions() {
-        addFragmentToBackstack(R.id.simpleFragmentContainer, RoomPermissionsFragment::class.java, roomProfileArgs)
+        addFragmentToBackstack(views.simpleFragmentContainer, RoomPermissionsFragment::class.java, roomProfileArgs)
     }
 
     private fun openRoomMembers() {
-        addFragmentToBackstack(R.id.simpleFragmentContainer, RoomMemberListFragment::class.java, roomProfileArgs)
+        addFragmentToBackstack(views.simpleFragmentContainer, RoomMemberListFragment::class.java, roomProfileArgs)
     }
 
     private fun openBannedRoomMembers() {
-        addFragmentToBackstack(R.id.simpleFragmentContainer, RoomBannedMemberListFragment::class.java, roomProfileArgs)
+        addFragmentToBackstack(views.simpleFragmentContainer, RoomBannedMemberListFragment::class.java, roomProfileArgs)
     }
 
     private fun openRoomNotificationSettings() {
-        addFragmentToBackstack(R.id.simpleFragmentContainer, RoomNotificationSettingsFragment::class.java, roomProfileArgs)
+        addFragmentToBackstack(views.simpleFragmentContainer, RoomNotificationSettingsFragment::class.java, roomProfileArgs)
     }
 
     override fun configure(toolbar: MaterialToolbar) {

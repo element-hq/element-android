@@ -71,9 +71,17 @@ data class ReadReceiptData(
 
 @Parcelize
 data class PollResponseData(
-        val myVote: Int?,
-        val votes: Map<Int, Int>?,
+        val myVote: String?,
+        val votes: Map<String, PollVoteSummaryData>?,
+        val totalVotes: Int = 0,
+        val winnerVoteCount: Int = 0,
         val isClosed: Boolean = false
+) : Parcelable
+
+@Parcelize
+data class PollVoteSummaryData(
+        val total: Int = 0,
+        val percentage: Double = 0.0
 ) : Parcelable
 
 enum class E2EDecoration {
