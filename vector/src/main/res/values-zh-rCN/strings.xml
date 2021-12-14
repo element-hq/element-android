@@ -2985,4 +2985,46 @@
     <string name="identity_server_consent_dialog_content_question">你同意发送此信息吗？</string>
     <string name="identity_server_consent_dialog_content_3">要发现现有的联系人，您需要将联系人信息(电子邮件和电话号码)发送到您的身份服务器。出乎隐私考量，我们会在发送前对您的数据进行散列处理。</string>
     <string name="action_not_now">不是现在</string>
+    <string name="delete_poll_dialog_content">您确定要删除此投票吗？一旦移除，就无法恢复。</string>
+    <string name="delete_poll_dialog_title">删除投票</string>
+    <string name="poll_end_room_list_preview">投票已结束</string>
+    <string name="poll_response_room_list_preview">已投票</string>
+    <string name="labs_enable_polls">启用投票</string>
+    <string name="end_poll_confirmation_approve_button">结束投票</string>
+    <string name="end_poll_confirmation_description">这将使人们无法再投票，并将显示投票的最终结果。</string>
+    <string name="end_poll_confirmation_title">结束此投票？</string>
+    <string name="a11y_poll_winner_option">赢家选项</string>
+    <string name="poll_end_action">结束投票</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="other">基于 %1$d 票的最终结果</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="other">已投了 %1$d 票。投票查看结果</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="other">基于 %1$d 票</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="other">%1$d 票</item>
+    </plurals>
+    <string name="preference_system_settings">系统设置</string>
+    <string name="preference_versions">版本</string>
+    <string name="preference_help_summary">获取使用 Element 的帮助</string>
+    <string name="preference_help_title">帮助和支持</string>
+    <string name="preference_help">帮助</string>
+    <string name="preference_root_legals">法律</string>
+    <string name="legals_no_policy_provided">此服务器不提供任何政策。</string>
+    <string name="legals_third_party_notices">第三方库</string>
+    <string name="legals_identity_server_title">你的身份服务器政策</string>
+    <string name="analytics_opt_in_list_item_1">我们<b>不</b>记录任何账户数据或绘制任何账户数据的画像</string>
+    <string name="legals_home_server_title">你的主服务器政策</string>
+    <string name="template_legals_application_title">${app_name} 政策</string>
+    <string name="analytics_opt_in_list_item_3">你可以随时在设置中关闭它</string>
+    <string name="analytics_opt_in_list_item_2">我们<b>不</b>与第三方共享信息</string>
+    <string name="analytics_opt_in_content_link">此处</string>
+    <string name="analytics_opt_in_content">通过共享匿名使用数据，帮助我们识别问题并改进 Element。为了理解人们如何使用多台设备，我们将生成一个随机标识符，由您的设备共享。
+\n
+\n你可以阅读我们所有的条款 %s。</string>
+    <string name="analytics_opt_in_title">帮助改进 Element</string>
+    <string name="action_enable">启用</string>
 </resources>
