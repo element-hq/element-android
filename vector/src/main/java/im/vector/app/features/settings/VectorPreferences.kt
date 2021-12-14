@@ -162,9 +162,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM = "SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM"
         const val SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB = "SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB"
 
-        // analytics
-        const val SETTINGS_USE_ANALYTICS_KEY = "SETTINGS_USE_ANALYTICS_KEY"
-
         // Rageshake
         const val SETTINGS_USE_RAGE_SHAKE_KEY = "SETTINGS_USE_RAGE_SHAKE_KEY"
         const val SETTINGS_RAGE_SHAKE_DETECTION_THRESHOLD_KEY = "SETTINGS_RAGE_SHAKE_DETECTION_THRESHOLD_KEY"
@@ -819,32 +816,12 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     /**
-     * Tells if the analytics tracking is authorized (piwik, matomo, etc.).
-     *
-     * @return true if the analytics tracking is authorized
-     */
-    fun useAnalytics(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_USE_ANALYTICS_KEY, false)
-    }
-
-    /**
      * Tells if the user wants to see URL previews in the timeline
      *
      * @return true if the user wants to see URL previews in the timeline
      */
     fun showUrlPreviews(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SHOW_URL_PREVIEW_KEY, true)
-    }
-
-    /**
-     * Enable or disable the analytics tracking.
-     *
-     * @param useAnalytics true to enable the analytics tracking
-     */
-    fun setUseAnalytics(useAnalytics: Boolean) {
-        defaultPrefs.edit {
-            putBoolean(SETTINGS_USE_ANALYTICS_KEY, useAnalytics)
-        }
     }
 
     /**

@@ -42,6 +42,7 @@ import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
+import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.navigation.Navigator
 import im.vector.lib.ui.styles.dialogs.MaterialProgressDialog
 import kotlinx.coroutines.flow.launchIn
@@ -60,6 +61,7 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
      * ========================================================================================== */
 
     protected lateinit var navigator: Navigator
+    protected lateinit var analytics: VectorAnalytics
     protected lateinit var errorFormatter: ErrorFormatter
     protected lateinit var unrecognizedCertificateDialog: UnrecognizedCertificateDialog
 
@@ -96,6 +98,7 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
         val activityEntryPoint = EntryPointAccessors.fromActivity(vectorBaseActivity, ActivityEntryPoint::class.java)
         navigator = singletonEntryPoint.navigator()
         errorFormatter = singletonEntryPoint.errorFormatter()
+        analytics = singletonEntryPoint.analytics()
         unrecognizedCertificateDialog = singletonEntryPoint.unrecognizedCertificateDialog()
         viewModelFactory = activityEntryPoint.viewModelFactory()
         childFragmentManager.fragmentFactory = activityEntryPoint.fragmentFactory()

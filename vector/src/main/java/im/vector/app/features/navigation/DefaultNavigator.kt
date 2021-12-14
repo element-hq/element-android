@@ -38,6 +38,7 @@ import im.vector.app.core.error.fatalError
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.features.VectorFeatures
+import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.conference.VectorJitsiActivity
 import im.vector.app.features.call.transfer.CallTransferActivity
@@ -422,6 +423,10 @@ class DefaultNavigator @Inject constructor(
                     }
                     activity.startActivity(intent, options?.toBundle())
                 }
+    }
+
+    override fun openAnalyticsOptIn(context: Context) {
+        context.startActivity(Intent(context, AnalyticsOptInActivity::class.java))
     }
 
     override fun openTerms(context: Context,
