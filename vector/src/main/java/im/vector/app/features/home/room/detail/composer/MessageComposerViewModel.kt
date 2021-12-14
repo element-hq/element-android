@@ -406,13 +406,13 @@ class MessageComposerViewModel @AssistedInject constructor(
                     popDraft()
                 }
                 is SendMode.Quote   -> {
-                    room.sendQuotedTextMessage(state.sendMode.timelineEvent, action.text.toString(), action.autoMarkdown)
+                    room.sendQuotedTextMessage(state.sendMode.timelineEvent, action.text.toString())
                     _viewEvents.post(MessageComposerViewEvents.MessageSent)
                     popDraft()
                 }
                 is SendMode.Reply   -> {
                     state.sendMode.timelineEvent.let {
-                        room.replyToMessage(it, action.text.toString(), action.autoMarkdown)
+                        room.replyToMessage(it, action.text.toString())
                         _viewEvents.post(MessageComposerViewEvents.MessageSent)
                         popDraft()
                     }

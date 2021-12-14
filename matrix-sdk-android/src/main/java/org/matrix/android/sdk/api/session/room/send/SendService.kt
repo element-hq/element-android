@@ -64,7 +64,7 @@ interface SendService {
      * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
      * @return a [Cancelable]
      */
-    fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean = false): Cancelable
+    fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String): Cancelable
 
     /**
      * Method to send a media asynchronously.
