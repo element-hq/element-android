@@ -45,32 +45,36 @@
             tools:src="@drawable/ic_presence_offline"
             tools:visibility="visible" />
 
-        <im.vector.app.core.ui.views.ShieldImageView
-            android:id="@+id/memberProfileDecorationImageView"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintBottom_toBottomOf="@id/memberProfileNameView"
-            app:layout_constraintEnd_toStartOf="@id/memberProfileNameView"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/memberProfileNameView" />
-
-        <TextView
-            android:id="@+id/memberProfileNameView"
-            style="@style/Widget.Vector.TextView.Title"
+        <LinearLayout
+            android:id="@+id/memberProfileLinearLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:gravity="center"
-            android:textStyle="bold"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toTopOf="@id/memberProfileIdView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/memberProfileDecorationImageView"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/memberProfileAvatarView"
-            tools:text="@sample/users.json/data/displayName" />
+            android:gravity="center">
+
+            <im.vector.app.core.ui.views.ShieldImageView
+                android:id="@+id/memberProfileDecorationImageView"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginEnd="8dp" />
+
+            <TextView
+                android:id="@+id/memberProfileNameView"
+                style="@style/Widget.Vector.TextView.Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:gravity="center|start"
+                android:textStyle="bold"
+                tools:text=" dezdezdzedez dezjdioezdiozeiodzendez" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/memberProfileIdView"
@@ -84,7 +88,7 @@
             app:layout_constraintBottom_toTopOf="@id/memberProfilePowerLevelView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/memberProfileNameView"
+            app:layout_constraintTop_toBottomOf="@id/memberProfileLinearLayout"
             tools:text="@sample/users.json/data/id" />
 
         <TextView
