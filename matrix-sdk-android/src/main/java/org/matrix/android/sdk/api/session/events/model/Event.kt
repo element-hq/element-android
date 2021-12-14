@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -336,10 +337,19 @@ fun Event.isAttachmentMessage(): Boolean {
 }
 
 fun Event.getRelationContent(): RelationDefaultContent? {
+    if(eventId?.contains("MgPN5Bqb") == true)
+        Timber.i(":D")
     return if (isEncrypted()) {
         content.toModel<EncryptedEventContent>()?.relatesTo
     } else {
-        content.toModel<MessageContent>()?.relatesTo
+            content.toModel<MessageContent>()?.relatesTo ?: run{
+                // Special case to handle stickers, while there is only a local msgtype for stickers
+                if (getClearType() == EventType.STICKER) {
+                    getClearContent().toModel<MessageStickerContent>()?.relatesTo
+                } else{
+                    null
+                }
+            }
     }
 }
 
