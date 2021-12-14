@@ -1,1 +1,0 @@
-Setup Analytics framework using PostHog. Analytics are disabled by default. Opt-in screen not automatically displayed yet.

@@ -1,3 +1,40 @@
+Changes in Element v1.3.10 (2021-12-14)
+=======================================
+
+Features ✨
+----------
+ - Poll Feature - Render in timeline ([#4653](https://github.com/vector-im/element-android/issues/4653))
+ - Updates URL previews to match latest designs ([#4278](https://github.com/vector-im/element-android/issues/4278))
+ - Setup Analytics framework using PostHog. Analytics are disabled by default. Opt-in screen not automatically displayed yet. ([#4559](https://github.com/vector-im/element-android/issues/4559))
+ - Create a legal screen in the setting to group all the different policies. ([#4660](https://github.com/vector-im/element-android/issues/4660))
+ - Add a help section in the settings. ([#4638](https://github.com/vector-im/element-android/issues/4638))
+ - MSC2732: Olm fallback keys ([#3473](https://github.com/vector-im/element-android/issues/3473))
+
+Bugfixes 🐛
+----------
+ - Fixes message menu showing when copying message urls ([#4324](https://github.com/vector-im/element-android/issues/4324))
+ - Fix lots of integration tests by introducing TestMatrix class and MatrixWorkerFactory. ([#4546](https://github.com/vector-im/element-android/issues/4546))
+ - Fix empty Dev Tools screen issue. ([#4592](https://github.com/vector-im/element-android/issues/4592))
+ - Fix for outgoing voip call via sip bridge failing after 1 minute. ([#4621](https://github.com/vector-im/element-android/issues/4621))
+ - Update log warning for call selection during voip calls. ([#4636](https://github.com/vector-im/element-android/issues/4636))
+ - Fix possible crash when having identical subspaces in multiple root spaces ([#4693](https://github.com/vector-im/element-android/issues/4693))
+ - Fix a crash in the timeline with some Emojis. Also migrate to androidx.emoji2 ([#4698](https://github.com/vector-im/element-android/issues/4698))
+ - At the very first room search after opening the app sometimes no results are displayed ([#4600](https://github.com/vector-im/element-android/issues/4600))
+
+Other changes
+-------------
+ - Upgrade OLM to v3.2.7 and get it from our maven repository. ([#4647](https://github.com/vector-im/element-android/issues/4647))
+ - Add explicit dependency location, regarding the several maven repository. Also update some libraries (flexbox and alerter), and do some cleanup. ([#4670](https://github.com/vector-im/element-android/issues/4670))
+ - Introducing feature flagging to the login and notification settings flows ([#4626](https://github.com/vector-im/element-android/issues/4626))
+ - There is no need to call job.cancel() when we are using viewModelScope() ([#4602](https://github.com/vector-im/element-android/issues/4602))
+ - Debounce some clicks ([#4645](https://github.com/vector-im/element-android/issues/4645))
+ - Improve issue automation workflows ([#4617](https://github.com/vector-im/element-android/issues/4617))
+ - Add automation to move message bubbles issues to message bubbles board. ([#4666](https://github.com/vector-im/element-android/issues/4666))
+ - Fix graphql warning in issue workflow automation ([#4671](https://github.com/vector-im/element-android/issues/4671))
+ - Cleanup the layout files ([#4604](https://github.com/vector-im/element-android/issues/4604))
+ - Cleanup id ref. Use type views instead ([#4650](https://github.com/vector-im/element-android/issues/4650))
+
+
 Changes in Element v1.3.9 (2021-12-01)
 ======================================
 
