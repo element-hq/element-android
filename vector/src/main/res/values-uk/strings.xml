@@ -3118,12 +3118,12 @@
     <string name="this_invite_to_this_space_was_sent">Це запрошення до простору надіслане %s, не пов\'язаній із вашим обліковим записом</string>
     <string name="this_invite_to_this_room_was_sent">Це запрошення до кімнати надіслане %s, не пов\'язаній із вашим обліковим записом</string>
     <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Кімнати можуть лишатися закритими для людей ззовні простору, водночас люди в просторі можуть знаходити їх і приєднуватися. Всі нові кімнати в просторі матимуть цю опцію.</string>
-    <string name="help_people_in_spaces_find_and_join">Допомагає людям у просторах знаходити закриті кімнати й приєднуватися власноруч, без потреби вручну запрошувати всіх.</string>
+    <string name="help_people_in_spaces_find_and_join">Допомагає людям у просторах знаходити закриті кімнати й приєднуватися самостійно, без потреби вручну запрошувати всіх.</string>
     <string name="upgrade_room_for_restricted_note">Зауважте, що поліпшення створить нову версію кімнати. Всі наявні повідомлення залишаться в цій архівованій кімнаті.</string>
     <string name="upgrade_room_for_restricted_no_param">Будь-хто в батьківському просторі зможемо знайти кімнату й долучитись — нема потреба вручну запрошувати всіх. Можна змінити це в налаштуваннях кімнати будь-коли.</string>
     <string name="upgrade_room_for_restricted">Будь-хто в %s зможе знайти кімнату й долучитись — нема потреби вручну запрошувати всіх. Можна змінити це в налаштуваннях кімнати будь-коли.</string>
     <string name="error_voice_message_cannot_reply_or_edit">Не вдалося відповісти чи редагувати, бо голосове повідомлення активне</string>
-    <string name="room_using_unstable_room_version">Кімната — версії %s, яку домашній сервер позначив як нестабільну.</string>
+    <string name="room_using_unstable_room_version">Кімната — версії %s, яку домашній сервер позначив нестабільною.</string>
     <string name="allow_anyone_in_room_to_access">Дозволити будь-кому в %s знаходити й доступатись. Можете також обрати інші простори.</string>
     <string name="upgrade_room_warning">Поліпшення кімнати — серйозна операція. Її зазвичай радять, коли кімната нестабільна через вади, брак функціоналу чи вразливості безпеки.
 \nЗазвичай це впливає лише на деталі опрацювання кімнати сервером.</string>
@@ -3167,7 +3167,7 @@
     <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Згенерувати ключ безпеки для зберігання в надійному місці, наприклад у менеджері паролів чи сейфі.</string>
     <string name="create_room_dm_failure">Не вдалося створити особисте повідомлення. Перевірте користувачів, яких бажаєте запросити, й спробуйте ще.</string>
     <string name="keys_backup_recovery_key_error_decrypt">Не вдалося розшифрувати резервну копію цим відновлювальним ключем. Звірте, чи правильний ключ ви ввели.</string>
-    <string name="enter_secret_storage_input_key">Оберіть свій відновлювальний ключ, введіть його власноруч чи вставте з буферу обміну</string>
+    <string name="enter_secret_storage_input_key">Оберіть свій ключ відновлення, введіть його власноруч або вставте з буфера обміну</string>
     <string name="use_recovery_key">Використати відновлювальний ключ</string>
     <string name="enter_secret_storage_passphrase_or_key">%1$s або %2$s треба для продовження.</string>
     <string name="bootstrap_migration_backup_recovery_key">Відновлювальний ключ резервного копіювання ключів</string>
