@@ -55,7 +55,7 @@ class ThreadListController @Inject constructor(
                     it.timelineEvent
                 }
                 ?.forEach { timelineEvent ->
-                    val date = dateFormatter.format(timelineEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
+                    val date = dateFormatter.format(timelineEvent.root.threadDetails?.lastMessageTimestamp, DateFormatKind.ROOM_LIST)
                     threadList {
                         id(timelineEvent.eventId)
                         avatarRenderer(host.avatarRenderer)
