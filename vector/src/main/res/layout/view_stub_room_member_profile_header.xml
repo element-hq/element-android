@@ -23,7 +23,7 @@
             android:layout_height="128dp"
             android:layout_marginBottom="16dp"
             android:contentDescription="@string/avatar"
-            app:layout_constraintBottom_toTopOf="@id/memberProfileNameView"
+            app:layout_constraintBottom_toTopOf="@id/memberProfileLinearLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
-                android:gravity="center|start"
+                android:gravity="center"
                 android:textStyle="bold"
                 tools:text=" dezdezdzedez dezjdioezdiozeiodzendez" />
 
