@@ -194,6 +194,27 @@
                     android:importantForAccessibility="no"
                     android:text="@string/attachment_type_poll" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/attachmentLocationButtonContainer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageButton
+                    android:id="@+id/attachmentLocationButton"
+                    style="@style/AttachmentTypeSelectorButton"
+                    android:contentDescription="@string/attachment_type_location"
+                    android:src="@drawable/ic_attachment_location_white"
+                    tools:background="?colorPrimary" />
+
+                <TextView
+                    style="@style/AttachmentTypeSelectorLabel"
+                    android:importantForAccessibility="no"
+                    android:text="@string/attachment_type_location" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>

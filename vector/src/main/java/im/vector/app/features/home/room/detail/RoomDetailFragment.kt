@@ -2207,18 +2207,19 @@ class RoomDetailFragment @Inject constructor(
 
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
-            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera(
+            AttachmentTypeSelectorView.Type.CAMERA   -> attachmentsHelper.openCamera(
                     activity = requireActivity(),
                     vectorPreferences = vectorPreferences,
                     cameraActivityResultLauncher = attachmentCameraActivityResultLauncher,
                     cameraVideoActivityResultLauncher = attachmentCameraVideoActivityResultLauncher
             )
-            AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(attachmentAudioActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.STICKER -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)
-            AttachmentTypeSelectorView.Type.POLL    -> navigator.openCreatePoll(requireContext(), roomDetailArgs.roomId)
+            AttachmentTypeSelectorView.Type.FILE     -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.GALLERY  -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.AUDIO    -> attachmentsHelper.selectAudio(attachmentAudioActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.CONTACT  -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.STICKER  -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)
+            AttachmentTypeSelectorView.Type.POLL     -> navigator.openCreatePoll(requireContext(), roomDetailArgs.roomId)
+            AttachmentTypeSelectorView.Type.LOCATION -> Timber.d("On location attachment clicked")
         }.exhaustive
     }
 

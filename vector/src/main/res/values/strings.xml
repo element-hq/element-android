@@ -2466,6 +2466,7 @@
     <string name="attachment_type_gallery">"Gallery"</string>
     <string name="attachment_type_sticker">"Sticker"</string>
     <string name="attachment_type_poll">Poll</string>
+    <string name="attachment_type_location">Location</string>
     <string name="rotate_and_crop_screen_title">Rotate and crop</string>
     <string name="error_handling_incoming_share">Couldn\'t handle share data</string>
 

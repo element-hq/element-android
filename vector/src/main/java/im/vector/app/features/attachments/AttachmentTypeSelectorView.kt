@@ -40,6 +40,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator
 import im.vector.app.R
 import im.vector.app.core.extensions.getMeasurements
 import im.vector.app.core.utils.PERMISSIONS_EMPTY
+import im.vector.app.core.utils.PERMISSIONS_FOR_LOCATION_SHARING
 import im.vector.app.core.utils.PERMISSIONS_FOR_PICKING_CONTACT
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.databinding.ViewAttachmentTypeSelectorBinding
@@ -77,6 +78,7 @@ class AttachmentTypeSelectorView(context: Context,
         views.attachmentAudioButton.configure(Type.AUDIO)
         views.attachmentContactButton.configure(Type.CONTACT)
         views.attachmentPollButton.configure(Type.POLL)
+        views.attachmentLocationButton.configure(Type.LOCATION)
         width = LinearLayout.LayoutParams.MATCH_PARENT
         height = LinearLayout.LayoutParams.WRAP_CONTENT
         animationStyle = 0
@@ -110,7 +112,8 @@ class AttachmentTypeSelectorView(context: Context,
         animateButtonIn(views.attachmentAudioButton, 0)
         animateButtonIn(views.attachmentContactButton, ANIMATION_DURATION / 4)
         animateButtonIn(views.attachmentStickersButton, ANIMATION_DURATION / 2)
-        animateButtonIn(views.attachmentPollButton, ANIMATION_DURATION / 4)
+        animateButtonIn(views.attachmentPollButton, ANIMATION_DURATION / 2)
+        animateButtonIn(views.attachmentLocationButton, ANIMATION_DURATION / 4)
     }
 
     override fun dismiss() {
@@ -124,13 +127,14 @@ class AttachmentTypeSelectorView(context: Context,
 
     fun setAttachmentVisibility(type: Type, isVisible: Boolean) {
         when (type) {
-            Type.CAMERA  -> views.attachmentCameraButtonContainer
-            Type.GALLERY -> views.attachmentGalleryButtonContainer
-            Type.FILE    -> views.attachmentFileButtonContainer
-            Type.STICKER -> views.attachmentStickersButtonContainer
-            Type.AUDIO   -> views.attachmentAudioButtonContainer
-            Type.CONTACT -> views.attachmentContactButtonContainer
-            Type.POLL    -> views.attachmentPollButtonContainer
+            Type.CAMERA   -> views.attachmentCameraButtonContainer
+            Type.GALLERY  -> views.attachmentGalleryButtonContainer
+            Type.FILE     -> views.attachmentFileButtonContainer
+            Type.STICKER  -> views.attachmentStickersButtonContainer
+            Type.AUDIO    -> views.attachmentAudioButtonContainer
+            Type.CONTACT  -> views.attachmentContactButtonContainer
+            Type.POLL     -> views.attachmentPollButtonContainer
+            Type.LOCATION -> views.attachmentLocationButtonContainer
         }.let {
             it.isVisible = isVisible
         }
@@ -230,6 +234,7 @@ class AttachmentTypeSelectorView(context: Context,
         STICKER(PERMISSIONS_EMPTY),
         AUDIO(PERMISSIONS_EMPTY),
         CONTACT(PERMISSIONS_FOR_PICKING_CONTACT),
-        POLL(PERMISSIONS_EMPTY)
+        POLL(PERMISSIONS_EMPTY),
+        LOCATION(PERMISSIONS_FOR_LOCATION_SHARING)
     }
 }
