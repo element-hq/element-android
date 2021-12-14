@@ -3066,4 +3066,9 @@
     <string name="shortcut_disabled_reason_room_left">Raum verlassen!</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Heimserver auswählen</string>
     <string name="login_error_homeserver_from_url_not_found">Es konnte kein Heimserver mit der Adresse %s gefunden werden. Bitte überprüfe die Adresse oder wähle den Heimserver manuell.</string>
+    <string name="space_add_space_to_any_space_you_manage">Untergeordneten Space hinzufügen</string>
+    <string name="identity_server_consent_dialog_content_question">Bist du dir wirklich sicher, dass du diese Informationen senden willst\?</string>
+    <string name="identity_server_consent_dialog_title_2">E-Mail-Adressen und Telefonnummern an %s senden</string>
+    <string name="action_not_now">Nicht jetzt</string>
+    <string name="notification_listening_for_notifications">Auf Benachrichtigungen warten</string>
 </resources>

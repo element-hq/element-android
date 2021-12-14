@@ -1918,7 +1918,7 @@
     <string name="initialize_cross_signing">初始化交叉簽署</string>
     <string name="reset_cross_signing">重設金鑰</string>
     <string name="a11y_qr_code_for_verification">QR code</string>
-    <string name="qr_code_scanned_by_other_notice">就快完成了！%s 有顯示相同的盾牌嗎？</string>
+    <string name="qr_code_scanned_by_other_notice">就快完成了！%s 有顯示打勾嗎？</string>
     <string name="qr_code_scanned_by_other_yes">是</string>
     <string name="qr_code_scanned_by_other_no">否</string>
     <string name="no_connectivity_to_the_server_indicator">到伺服器的連線已遺失</string>
@@ -2014,7 +2014,7 @@
     <string name="encryption_not_enabled">加密未啟用</string>
     <string name="encryption_unknown_algorithm_tile_description">用於此聊天室的加密未受支援</string>
     <string name="room_created_summary_item">%s 建立並設定聊天室。</string>
-    <string name="qr_code_scanned_self_verif_notice">就快完成了！其他裝置有顯示相同的盾牌嗎？</string>
+    <string name="qr_code_scanned_self_verif_notice">就快完成了！其他裝置有顯示打勾嗎？</string>
     <string name="qr_code_scanned_verif_waiting_notice">就快完成了！正在等待確認……</string>
     <string name="qr_code_scanned_verif_waiting">正在等待 %s……</string>
     <string name="error_failed_to_import_keys">匯入金鑰失敗</string>
@@ -2972,4 +2972,7 @@
     <string name="settings_discovery_consent_notice_off_2">您的通訊錄是私人的。要從您的通訊錄中探索使用者，我們需要您的權限來傳送聯絡人資訊到您的身份識別伺服器。</string>
     <string name="shortcut_disabled_reason_sign_out">已登出工作階段！</string>
     <string name="shortcut_disabled_reason_room_left">已離開聊天室！</string>
+    <string name="identity_server_consent_dialog_content_question">您同意傳送此資訊嗎？</string>
+    <string name="identity_server_consent_dialog_content_3">要探索現有聯絡人，您必須傳送聯絡人資訊（電子郵件與電話號碼）到您的身份識別伺服器。我們會在傳送前對您的資料進行雜湊處理以保護隱私。</string>
+    <string name="action_not_now">現在不要</string>
 </resources>
