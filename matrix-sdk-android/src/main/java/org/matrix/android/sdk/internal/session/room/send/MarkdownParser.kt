@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.send
 
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
+import org.matrix.android.sdk.internal.session.room.SimpleCommonmarkParser
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
 import javax.inject.Inject
 
@@ -27,7 +28,8 @@ import javax.inject.Inject
  * If any change is required, please add a test covering the problem and make sure all the tests are still passing.
  */
 internal class MarkdownParser @Inject constructor(
-        private val parser: Parser,
+        private val advancedParser: Parser,
+        @SimpleCommonmarkParser private val simpleParser: Parser,
         private val htmlRenderer: HtmlRenderer,
         private val textPillsUtils: TextPillsUtils
 ) {
@@ -40,7 +42,7 @@ internal class MarkdownParser @Inject constructor(
      * @param force Skips the check for detecting if the input contains markdown and always converts to html.
      * @return TextContent containing the plain text and the formatted html if generated.
      */
-    fun parse(text: CharSequence, force: Boolean = false): TextContent {
+    fun parse(text: CharSequence, force: Boolean = false, advanced: Boolean = true): TextContent {
         val source = textPillsUtils.processSpecialSpansToMarkdown(text) ?: text.toString()
 
         // If no special char are detected, just return plain text
@@ -48,7 +50,7 @@ internal class MarkdownParser @Inject constructor(
             return TextContent(source)
         }
 
-        val document = parser.parse(source)
+        val document = if (advanced) advancedParser.parse(source) else simpleParser.parse(source)
         val htmlText = htmlRenderer.render(document)
 
         // Cleanup extra paragraph

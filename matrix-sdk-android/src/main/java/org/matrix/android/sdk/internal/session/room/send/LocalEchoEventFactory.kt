@@ -91,9 +91,9 @@ internal class LocalEchoEventFactory @Inject constructor(
         return createMessageEvent(roomId, content)
     }
 
-    private fun createTextContent(text: CharSequence, autoMarkdown: Boolean, forceMarkdownParse: Boolean = false): TextContent {
+    private fun createTextContent(text: CharSequence, autoMarkdown: Boolean): TextContent {
         if (autoMarkdown) {
-            return markdownParser.parse(text, force = forceMarkdownParse)
+            return markdownParser.parse(text)
         } else {
             // Try to detect pills
             textPillsUtils.processSpecialSpansToHtml(text)?.let {
@@ -206,9 +206,9 @@ internal class LocalEchoEventFactory @Inject constructor(
 
         val body = bodyForReply(originalEvent.getLastMessageContent(), originalEvent.isReply())
         // As we always supply formatted body for replies we should force the MarkdownParser to produce html.
-        val newBodyFormatted = createTextContent(newBodyText, true, forceMarkdownParse = true).takeFormatted()
+        val newBodyFormatted = markdownParser.parse(newBodyText, force = true, advanced = false).takeFormatted()
         // Body of the original message may not have formatted version, so may also have to convert to html.
-        val bodyFormatted = body.formattedText ?: createTextContent(body.text, true, forceMarkdownParse = true).takeFormatted()
+        val bodyFormatted = body.formattedText ?: markdownParser.parse(newBodyText, force = true, advanced = false).takeFormatted()
         val replyFormatted = REPLY_PATTERN.format(
                 permalink,
                 userLink,
@@ -396,9 +396,9 @@ internal class LocalEchoEventFactory @Inject constructor(
         val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.isReply())
 
         // As we always supply formatted body for replies we should force the MarkdownParser to produce html.
-        val replyTextFormatted = createTextContent(replyText, true, forceMarkdownParse = true).takeFormatted()
+        val replyTextFormatted = markdownParser.parse(replyText, force = true, advanced = false).takeFormatted()
         // Body of the original message may not have formatted version, so may also have to convert to html.
-        val bodyFormatted = body.formattedText ?: createTextContent(body.text, true, forceMarkdownParse = true).takeFormatted()
+        val bodyFormatted = body.formattedText ?: markdownParser.parse(replyText, force = true, advanced = false).takeFormatted()
         val replyFormatted = REPLY_PATTERN.format(
                 permalink,
                 userLink,
@@ -514,7 +514,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         val messageContent = quotedEvent.getLastMessageContent()
         val textMsg = messageContent?.body
         val quoteText = legacyRiotQuoteText(textMsg, text)
-        return createFormattedTextEvent(roomId, createTextContent(quoteText, autoMarkdown=true, forceMarkdownParse = true), MessageType.MSGTYPE_TEXT)
+        return createFormattedTextEvent(roomId, markdownParser.parse(quoteText, force = true, advanced = false), MessageType.MSGTYPE_TEXT)
     }
 
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {

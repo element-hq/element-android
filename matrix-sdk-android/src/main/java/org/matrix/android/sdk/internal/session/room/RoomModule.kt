@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.room
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import org.commonmark.node.BlockQuote
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.session.file.FileService
@@ -98,6 +99,14 @@ import org.matrix.android.sdk.internal.session.room.version.DefaultRoomVersionUp
 import org.matrix.android.sdk.internal.session.room.version.RoomVersionUpgradeTask
 import org.matrix.android.sdk.internal.session.space.DefaultSpaceService
 import retrofit2.Retrofit
+import javax.inject.Qualifier
+
+/**
+ * Used to inject the simple commonmark Parser
+ */
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class SimpleCommonmarkParser
 
 @Module
 internal abstract class RoomModule {
@@ -122,6 +131,17 @@ internal abstract class RoomModule {
         @JvmStatic
         fun providesParser(): Parser {
             return Parser.builder().build()
+        }
+
+        @Provides
+        @SimpleCommonmarkParser
+        @JvmStatic
+        fun providesSimpleParser(): Parser {
+            // The simple parser disables all blocks but quotes.
+            // Inline parsing(bold, italic, etc) is also enabled and is not easy to disable in commonmark currently.
+            return Parser.builder()
+                    .enabledBlockTypes(setOf(BlockQuote::class.java))
+                    .build()
         }
 
         @Provides
