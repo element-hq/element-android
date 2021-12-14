@@ -84,7 +84,7 @@ interface TimelineService {
      * Returns whether or not the current user is participating in the thread
      * @param rootThreadEventId the eventId of the current thread
      */
-    fun isUserParticipatingInThread(rootThreadEventId: String, senderId: String): Boolean
+    fun isUserParticipatingInThread(rootThreadEventId: String): Boolean
 
     /**
      * Marks the current thread as read. This is a local implementation

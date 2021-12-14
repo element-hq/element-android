@@ -20,10 +20,10 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
-import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.threads.ThreadTimelineEvent
 
 data class ThreadListViewState(
-        val rootThreadEventList: Async<List<TimelineEvent>> = Uninitialized,
+        val rootThreadEventList: Async<List<ThreadTimelineEvent>> = Uninitialized,
         val shouldFilterThreads: Boolean = false,
         val roomId: String
 ) : MavericksState{

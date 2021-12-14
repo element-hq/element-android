@@ -29,6 +29,7 @@ import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.threads.ThreadTimelineEvent
 import org.matrix.android.sdk.flow.flow
 
 class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState: ThreadListViewState,
@@ -52,28 +53,29 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
     }
 
     init {
-        observeThreadsList(initialState.shouldFilterThreads)
+        observeThreadsList()
     }
 
     override fun handle(action: EmptyAction) {}
 
-    private fun observeThreadsList(shouldFilterThreads: Boolean) =
-            room?.flow()
-                    ?.liveThreadList()
-                    ?.map {
-                        if (!shouldFilterThreads) return@map it
-                        it.filter { timelineEvent ->
-                            room.isUserParticipatingInThread(timelineEvent.eventId, session.myUserId)
-                        }
+    private fun observeThreadsList() {
+        room?.flow()
+                ?.liveThreadList()
+                ?.map {
+                    it.map { timelineEvent ->
+                        val isParticipating = room.isUserParticipatingInThread(timelineEvent.eventId)
+                        ThreadTimelineEvent(timelineEvent, isParticipating)
                     }
-                    ?.flowOn(room.coroutineDispatchers.io)
-                    ?.execute { asyncThreads ->
-                        copy(
-                                rootThreadEventList = asyncThreads,
-                                shouldFilterThreads = shouldFilterThreads)
-                    }
+                }
+                ?.flowOn(room.coroutineDispatchers.io)
+                ?.execute { asyncThreads ->
+                    copy(rootThreadEventList = asyncThreads)
+                }
+    }
 
     fun applyFiltering(shouldFilterThreads: Boolean) {
-        observeThreadsList(shouldFilterThreads)
+        setState {
+            copy(shouldFilterThreads = shouldFilterThreads)
+        }
     }
 }

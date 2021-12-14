@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.database.model
 import io.realm.RealmObject
 import io.realm.annotations.Index
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -46,7 +47,7 @@ internal open class EventEntity(@Index var eventId: String = "",
                                 @Index var isRootThread: Boolean = false,
                                 @Index var rootThreadEventId: String? = null,
                                 var numberOfThreads: Int = 0,
-                                var hasUnreadThreadMessages: Boolean = false,
+//                                var threadNotificationState: Boolean = false,
                                 var threadSummaryLatestMessage: TimelineEventEntity? = null
 
 ) : RealmObject() {
@@ -59,6 +60,15 @@ internal open class EventEntity(@Index var eventId: String = "",
         }
         set(value) {
             sendStateStr = value.name
+        }
+
+    private var threadNotificationStateStr: String = ThreadNotificationState.NO_NEW_MESSAGE.name
+    var threadNotificationState: ThreadNotificationState
+        get() {
+            return ThreadNotificationState.valueOf(threadNotificationStateStr)
+        }
+        set(value) {
+            threadNotificationStateStr = value.name
         }
 
     companion object

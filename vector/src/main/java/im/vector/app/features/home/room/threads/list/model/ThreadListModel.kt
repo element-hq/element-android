@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.threads.list.model
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -32,6 +33,7 @@ import im.vector.app.core.extensions.setLeftDrawable
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
+import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass(layout = R.layout.item_thread_list)
@@ -43,7 +45,7 @@ abstract class ThreadListModel : VectorEpoxyModel<ThreadListModel.Holder>() {
     @EpoxyAttribute lateinit var date: String
     @EpoxyAttribute lateinit var rootMessage: String
     @EpoxyAttribute lateinit var lastMessage: String
-    @EpoxyAttribute  var unreadMessage: Boolean = false
+    @EpoxyAttribute var threadNotificationState: ThreadNotificationState = ThreadNotificationState.NO_NEW_MESSAGE
     @EpoxyAttribute lateinit var lastMessageCounter: String
     @EpoxyAttribute var rootMessageDeleted: Boolean = false
     @EpoxyAttribute var lastMessageMatrixItem: MatrixItem? = null
@@ -56,11 +58,11 @@ abstract class ThreadListModel : VectorEpoxyModel<ThreadListModel.Holder>() {
         holder.avatarImageView.contentDescription = matrixItem.getBestName()
         holder.titleTextView.text = title
         holder.dateTextView.text = date
-        if (rootMessageDeleted){
+        if (rootMessageDeleted) {
             holder.rootMessageTextView.text = holder.view.context.getString(R.string.event_redacted)
             holder.rootMessageTextView.setLeftDrawable(R.drawable.ic_trash_16, R.attr.colorOnPrimary)
             holder.rootMessageTextView.compoundDrawablePadding = DimensionConverter(holder.view.context.resources).dpToPx(10)
-        }else{
+        } else {
             holder.rootMessageTextView.text = rootMessage
             holder.rootMessageTextView.clearDrawables()
         }
@@ -71,7 +73,24 @@ abstract class ThreadListModel : VectorEpoxyModel<ThreadListModel.Holder>() {
         holder.lastMessageAvatarImageView.contentDescription = lastMessageMatrixItem?.getBestName()
         holder.lastMessageTextView.text = lastMessage
         holder.lastMessageCounterTextView.text = lastMessageCounter
-        holder.unreadImageView.isVisible = unreadMessage
+        renderNotificationState(holder)
+    }
+
+    private fun renderNotificationState(holder: Holder) {
+
+        when (threadNotificationState) {
+            ThreadNotificationState.NEW_MESSAGE             -> {
+                holder.unreadImageView.isVisible = true
+                holder.unreadImageView.setColorFilter(ContextCompat.getColor(holder.view.context, R.color.palette_gray_200));
+            }
+            ThreadNotificationState.NEW_HIGHLIGHTED_MESSAGE -> {
+                holder.unreadImageView.isVisible = true
+                holder.unreadImageView.setColorFilter(ContextCompat.getColor(holder.view.context, R.color.palette_vermilion));
+            }
+            else                                            -> {
+                holder.unreadImageView.isVisible = false
+            }
+        }
     }
 
     class Holder : VectorEpoxyHolder() {
@@ -83,7 +102,6 @@ abstract class ThreadListModel : VectorEpoxyModel<ThreadListModel.Holder>() {
         val lastMessageCounterTextView by bind<TextView>(R.id.messageThreadSummaryCounterTextView)
         val lastMessageTextView by bind<TextView>(R.id.messageThreadSummaryInfoTextView)
         val unreadImageView by bind<ImageView>(R.id.threadSummaryUnreadImageView)
-
         val rootView by bind<ConstraintLayout>(R.id.threadSummaryRootConstraintLayout)
     }
 }

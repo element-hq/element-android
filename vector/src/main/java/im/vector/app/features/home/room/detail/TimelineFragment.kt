@@ -1031,8 +1031,8 @@ class TimelineFragment @Inject constructor(
         val badgeFrameLayout = menuThreadList.findViewById<FrameLayout>(R.id.threadNotificationBadgeFrameLayout)
         val badgeTextView = menuThreadList.findViewById<TextView>(R.id.threadNotificationBadgeTextView)
 
-        val unreadThreadMessages = state.numberOfLocalUnreadThreads
-        val userIsMentioned = false
+        val unreadThreadMessages = state.threadNotificationBadgeState.numberOfLocalUnreadThreads
+        val userIsMentioned = state.threadNotificationBadgeState.isUserMentioned
 
         if (unreadThreadMessages > 0) {
             badgeFrameLayout.isVisible = true

@@ -16,16 +16,13 @@
 
 package org.matrix.android.sdk.api.session.threads
 
-import org.matrix.android.sdk.api.session.room.sender.SenderInfo
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 /**
- * This class contains all the details needed for threads.
- * Is is mainly used from within an Event.
+ * This class contains a thread TimelineEvent along with a boolean that
+ * determines if the current user has participated in that event
  */
-data class ThreadDetails(
-        val isRootThread: Boolean = false,
-        val numberOfThreads: Int = 0,
-        val threadSummarySenderInfo: SenderInfo? = null,
-        val threadSummaryLatestTextMessage: String? = null,
-        var threadNotificationState: ThreadNotificationState = ThreadNotificationState.NO_NEW_MESSAGE
+data class ThreadTimelineEvent(
+        val timelineEvent: TimelineEvent,
+        val isParticipating: Boolean
 )

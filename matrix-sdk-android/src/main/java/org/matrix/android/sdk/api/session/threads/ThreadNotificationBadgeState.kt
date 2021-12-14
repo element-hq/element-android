@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,16 +16,10 @@
 
 package org.matrix.android.sdk.api.session.threads
 
-import org.matrix.android.sdk.api.session.room.sender.SenderInfo
-
 /**
- * This class contains all the details needed for threads.
- * Is is mainly used from within an Event.
+ * This class defines the state of a thread notification badge
  */
-data class ThreadDetails(
-        val isRootThread: Boolean = false,
-        val numberOfThreads: Int = 0,
-        val threadSummarySenderInfo: SenderInfo? = null,
-        val threadSummaryLatestTextMessage: String? = null,
-        var threadNotificationState: ThreadNotificationState = ThreadNotificationState.NO_NEW_MESSAGE
+data class ThreadNotificationBadgeState(
+        val numberOfLocalUnreadThreads: Int = 0,
+        val isUserMentioned: Boolean = false
 )

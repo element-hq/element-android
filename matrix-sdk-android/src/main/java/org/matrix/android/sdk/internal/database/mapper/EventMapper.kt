@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.threads.ThreadDetails
+import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -55,9 +56,9 @@ internal object EventMapper {
         eventEntity.decryptionErrorReason = event.mCryptoErrorReason
         eventEntity.decryptionErrorCode = event.mCryptoError?.name
         eventEntity.isRootThread = event.threadDetails?.isRootThread ?: false
-        eventEntity.hasUnreadThreadMessages = event.threadDetails?.hasUnreadMessage ?: false
         eventEntity.rootThreadEventId = event.getRootThreadEventId()
         eventEntity.numberOfThreads = event.threadDetails?.numberOfThreads ?: 0
+        eventEntity.threadNotificationState = event.threadDetails?.threadNotificationState ?: ThreadNotificationState.NO_NEW_MESSAGE
         return eventEntity
     }
 
@@ -100,7 +101,6 @@ internal object EventMapper {
                 MXCryptoError.ErrorType.valueOf(errorCode)
             }
             it.mCryptoErrorReason = eventEntity.decryptionErrorReason
-
             it.threadDetails = ThreadDetails(
                     isRootThread = eventEntity.isRootThread,
                     numberOfThreads = eventEntity.numberOfThreads,
@@ -112,7 +112,7 @@ internal object EventMapper {
                                 avatarUrl = timelineEventEntity.senderAvatar
                         )
                     },
-                    hasUnreadMessage = eventEntity.hasUnreadThreadMessages,
+                    threadNotificationState = eventEntity.threadNotificationState,
                     threadSummaryLatestTextMessage = eventEntity.threadSummaryLatestMessage?.root?.asDomain()?.getDecryptedTextSummary().orEmpty()
             )
         }

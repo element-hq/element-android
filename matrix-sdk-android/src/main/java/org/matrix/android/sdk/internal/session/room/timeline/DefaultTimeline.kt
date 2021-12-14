@@ -169,7 +169,7 @@ internal class DefaultTimeline(
                             .whereRoomId(realm, roomId = roomId)
                             .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, it)
                             .or()
-                            .equalTo(TimelineEventEntityFields.ROOT.EVENT_ID, rootThreadEventId)
+                            .equalTo(TimelineEventEntityFields.ROOT.EVENT_ID, it)
                             .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
                             .findAll()
 

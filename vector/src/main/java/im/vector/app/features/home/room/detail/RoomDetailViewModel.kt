@@ -94,6 +94,8 @@ import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.threads.ThreadNotificationBadgeState
+import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.flow.flow
@@ -291,7 +293,14 @@ class RoomDetailViewModel @AssistedInject constructor(
         room.flow()
                 .liveLocalUnreadThreadList()
                 .execute {
-                    copy(numberOfLocalUnreadThreads = it.invoke()?.size ?: 0)
+                    val threadList = it.invoke()
+                    val isUserMentioned = threadList?.firstOrNull { timelineEvent ->
+                        timelineEvent.root.threadDetails?.threadNotificationState == ThreadNotificationState.NEW_HIGHLIGHTED_MESSAGE
+                    }?.let { true } ?: false
+                    val numberOfLocalUnreadThreads = threadList?.size ?: 0
+                    copy(threadNotificationBadgeState = ThreadNotificationBadgeState(
+                            numberOfLocalUnreadThreads = numberOfLocalUnreadThreads,
+                            isUserMentioned = isUserMentioned))
                 }
     }
 
@@ -1178,6 +1187,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         chatEffectManager.delegate = null
         chatEffectManager.dispose()
         callManager.removeProtocolsCheckerListener(this)
+        markThreadTimelineAsReadLocal()
         super.onCleared()
     }
 }

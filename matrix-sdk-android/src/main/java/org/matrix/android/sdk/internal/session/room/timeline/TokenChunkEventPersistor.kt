@@ -18,10 +18,7 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
-import io.realm.kotlin.createObject
-import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.session.events.model.EventType
-import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -44,8 +41,8 @@ import org.matrix.android.sdk.internal.database.query.findAllIncludingEvents
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
-import org.matrix.android.sdk.internal.database.query.whereRootThreadEventId
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.summary.RoomSummaryEventsHelper
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import timber.log.Timber
@@ -54,7 +51,9 @@ import javax.inject.Inject
 /**
  * Insert Chunk in DB, and eventually merge with existing chunk event
  */
-internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase private val monarchy: Monarchy) {
+internal class TokenChunkEventPersistor @Inject constructor(
+                                                            @SessionDatabase private val monarchy: Monarchy,
+                                                            @UserId private val userId: String) {
 
     /**
      * <pre>
@@ -213,7 +212,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
         }
         val eventIds = ArrayList<String>(eventList.size)
 
-        val optimizedThreadSummaryMap = hashMapOf<String,EventEntity>()
+        val optimizedThreadSummaryMap = hashMapOf<String, EventEntity>()
         eventList.forEach { event ->
             if (event.eventId == null || event.senderId == null) {
                 return@forEach
@@ -260,16 +259,12 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
         val shouldUpdateSummary = roomSummaryEntity.latestPreviewableEvent == null ||
                 (chunksToDelete.isNotEmpty() && currentChunk.isLastForward && direction == PaginationDirection.FORWARDS)
         if (shouldUpdateSummary) {
-            // TODO maybe add support to view latest thread message
             roomSummaryEntity.latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
         }
         if (currentChunk.isValid) {
             RoomEntity.where(realm, roomId).findFirst()?.addIfNecessary(currentChunk)
         }
 
-        // passing isInitialSync = true because we want to disable local notifications
-        // they do not work properly without the API
-        optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(true)
-
+        optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(roomId = roomId, realm = realm, currentUserId = userId)
     }
 }

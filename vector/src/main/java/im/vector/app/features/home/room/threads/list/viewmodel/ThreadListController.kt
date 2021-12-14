@@ -22,6 +22,7 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.threads.list.model.threadList
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
@@ -44,6 +45,15 @@ class ThreadListController @Inject constructor(
         val host = this
 
         safeViewState.rootThreadEventList.invoke()
+                ?.filter {
+                    if (safeViewState.shouldFilterThreads) {
+                        it.isParticipating
+                    } else {
+                        true
+                    }
+                }?.map {
+                    it.timelineEvent
+                }
                 ?.forEach { timelineEvent ->
                     val date = dateFormatter.format(timelineEvent.root.originServerTs, DateFormatKind.ROOM_LIST)
                     threadList {
@@ -53,7 +63,7 @@ class ThreadListController @Inject constructor(
                         title(timelineEvent.senderInfo.displayName)
                         date(date)
                         rootMessageDeleted(timelineEvent.root.isRedacted())
-                        unreadMessage(timelineEvent.root.threadDetails?.hasUnreadMessage ?: false)
+                        threadNotificationState(timelineEvent.root.threadDetails?.threadNotificationState ?: ThreadNotificationState.NO_NEW_MESSAGE)
                         rootMessage(timelineEvent.root.getDecryptedTextSummary())
                         lastMessage(timelineEvent.root.threadDetails?.threadSummaryLatestTextMessage.orEmpty())
                         lastMessageCounter(timelineEvent.root.threadDetails?.numberOfThreads.toString())
