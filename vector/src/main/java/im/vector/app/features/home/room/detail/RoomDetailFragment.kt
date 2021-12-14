@@ -165,6 +165,7 @@ import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
 import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.invite.VectorInviteView
+import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -2219,7 +2220,9 @@ class RoomDetailFragment @Inject constructor(
             AttachmentTypeSelectorView.Type.CONTACT  -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
             AttachmentTypeSelectorView.Type.STICKER  -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)
             AttachmentTypeSelectorView.Type.POLL     -> navigator.openCreatePoll(requireContext(), roomDetailArgs.roomId)
-            AttachmentTypeSelectorView.Type.LOCATION -> Timber.d("On location attachment clicked")
+            AttachmentTypeSelectorView.Type.LOCATION -> {
+                navigator.openLocationSharing(requireContext(), roomDetailArgs.roomId, LocationSharingMode.STATIC_SHARING)
+            }
         }.exhaustive
     }
 

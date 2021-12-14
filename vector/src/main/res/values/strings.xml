@@ -3702,4 +3702,8 @@
     <string name="poll_end_room_list_preview">Poll ended</string>
     <string name="delete_poll_dialog_title">Remove poll</string>
     <string name="delete_poll_dialog_content">Are you sure you want to remove this poll? You won\'t be able to recover it once removed.</string>
+
+    <!-- Location -->
+    <string name="location_activity_title_static_sharing">Share location</string>
+    <string name="location_activity_title_preview">Location</string>
 </resources>

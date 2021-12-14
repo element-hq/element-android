@@ -57,6 +57,9 @@ import im.vector.app.features.home.room.detail.search.SearchActivity
 import im.vector.app.features.home.room.detail.search.SearchArgs
 import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.app.features.invite.InviteUsersToRoomActivity
+import im.vector.app.features.location.LocationSharingActivity
+import im.vector.app.features.location.LocationSharingArgs
+import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login2.LoginActivity2
@@ -529,6 +532,14 @@ class DefaultNavigator @Inject constructor(
         val intent = CreatePollActivity.getIntent(
                 context,
                 CreatePollArgs(roomId = roomId)
+        )
+        context.startActivity(intent)
+    }
+
+    override fun openLocationSharing(context: Context, roomId: String, mode: LocationSharingMode) {
+        val intent = LocationSharingActivity.getIntent(
+                context,
+                LocationSharingArgs(roomId = roomId, mode = mode)
         )
         context.startActivity(intent)
     }
