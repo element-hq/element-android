@@ -54,6 +54,16 @@ data class Screen(
         Home,
 
         /**
+         * The screen that displays the user's breadcrumbs.
+         */
+        MobileBreadcrumbs,
+
+        /**
+         * The tab on mobile that displays the dialpad.
+         */
+        MobileDialpad,
+
+        /**
          * The Favourites tab on mobile that lists your favourite people/rooms.
          */
         MobileFavourites,
@@ -62,6 +72,11 @@ data class Screen(
          * The screen shown to share a link to download the app.
          */
         MobileInviteFriends,
+
+        /**
+         * The screen that displays the login flow.
+         */
+        MobileLogin,
 
         /**
          * The People tab on mobile that lists all the DM rooms you have joined.
@@ -124,6 +139,11 @@ data class Screen(
         RoomDirectory,
 
         /**
+         * The screen that lists all the user's rooms and let them filter the rooms.
+         */
+        RoomFilter,
+
+        /**
          * The screen that displays the list of members that are part of a room.
          */
         RoomMembers,
@@ -169,7 +189,7 @@ data class Screen(
         SettingsSecurity,
 
         /**
-         * The screen shown to create a new (non-direct) room.
+         * The screen shown to create a new direct room.
          */
         StartChat,
 
