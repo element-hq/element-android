@@ -116,6 +116,8 @@ import im.vector.app.core.utils.startInstallFromSourceIntent
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogReportContentBinding
 import im.vector.app.databinding.FragmentRoomDetailBinding
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.Click
 import im.vector.app.features.attachments.AttachmentTypeSelectorView
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.ContactAttachment
@@ -257,6 +259,7 @@ class RoomDetailFragment @Inject constructor(
         private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val callManager: WebRtcCallManager,
+        private val analyticsTracker: AnalyticsTracker,
         private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
         private val clock: Clock
 ) :
@@ -1395,6 +1398,7 @@ class RoomDetailFragment @Inject constructor(
             return
         }
         if (text.isNotBlank()) {
+            analyticsTracker.capture(Click(name = Click.Name.SendMessageButton))
             // We collapse ASAP, if not there will be a slight annoying delay
             views.composerLayout.collapse(true)
             lockSendButton = true
