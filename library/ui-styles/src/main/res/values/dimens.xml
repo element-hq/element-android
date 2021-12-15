@@ -49,5 +49,6 @@
     <dimen name="composer_attachment_margin">1dp</dimen>
 
     <!--  Onboarding   -->
-    <dimen name="ftue_auth_gutter">16dp</dimen>
+    <item name="ftue_auth_gutter_start_percent" format="float" type="dimen">0.05</item>
+    <item name="ftue_auth_gutter_end_percent" format="float" type="dimen">0.95</item>
 </resources>

@@ -16,6 +16,7 @@
 
 package im.vector.app.features.onboarding.ftueauth
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -70,22 +71,26 @@ class FtueAuthSplashCarouselFragment : AbstractFtueAuthFragment<FragmentFtueSpla
                         SplashCarouselState.Item(
                                 stringProvider.getString(R.string.ftue_auth_carousel_1_title),
                                 stringProvider.getString(R.string.ftue_auth_carousel_1_body),
-                                R.drawable.onboarding_carousel_conversations
+                                R.drawable.onboarding_carousel_conversations,
+                                R.drawable.bg_carousel_page_1
                         ),
                         SplashCarouselState.Item(
                                 stringProvider.getString(R.string.ftue_auth_carousel_2_title),
                                 stringProvider.getString(R.string.ftue_auth_carousel_2_body),
-                                R.drawable.onboarding_carousel_ems
+                                R.drawable.onboarding_carousel_ems,
+                                R.drawable.bg_carousel_page_2
                         ),
                         SplashCarouselState.Item(
                                 stringProvider.getString(R.string.ftue_auth_carousel_3_title),
                                 stringProvider.getString(R.string.ftue_auth_carousel_3_body),
-                                R.drawable.onboarding_carousel_connect
+                                R.drawable.onboarding_carousel_connect,
+                                R.drawable.bg_carousel_page_3
                         ),
                         SplashCarouselState.Item(
                                 stringProvider.getString(R.string.ftue_auth_carousel_4_title),
                                 stringProvider.getString(R.string.ftue_auth_carousel_4_body),
-                                R.drawable.onboarding_carousel_universal
+                                R.drawable.onboarding_carousel_universal,
+                                R.drawable.bg_carousel_page_4
                         )
                 )
         ))
@@ -97,12 +102,11 @@ class FtueAuthSplashCarouselFragment : AbstractFtueAuthFragment<FragmentFtueSpla
         }
 
         if (BuildConfig.DEBUG || vectorPreferences.developerMode()) {
-//            views.loginSplashVersion.isVisible = true
-//            @SuppressLint("SetTextI18n")
-//            views.loginSplashVersion.text = "Version : ${BuildConfig.VERSION_NAME}\n" +
-//                    "Branch: ${BuildConfig.GIT_BRANCH_NAME}\n" +
-//                    "Build: ${BuildConfig.BUILD_NUMBER}"
-//            views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
+            views.loginSplashVersion.isVisible = true
+            @SuppressLint("SetTextI18n")
+            views.loginSplashVersion.text = "Version : ${BuildConfig.VERSION_NAME}#${BuildConfig.BUILD_NUMBER}\n" +
+                    "Branch: ${BuildConfig.GIT_BRANCH_NAME}"
+            views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
         }
     }
 
@@ -145,7 +149,8 @@ data class SplashCarouselState(
     data class Item(
             val title: String,
             val body: String,
-            @DrawableRes val image: Int
+            @DrawableRes val image: Int,
+            @DrawableRes val pageBackground: Int
     )
 }
 
@@ -167,6 +172,7 @@ abstract class SplashCarouselItem : VectorEpoxyModel<SplashCarouselItem.Holder>(
     lateinit var item: SplashCarouselState.Item
 
     override fun bind(holder: Holder) {
+        holder.view.setBackgroundResource(item.pageBackground)
         holder.image.setImageResource(item.image)
         holder.title.text = item.title
         holder.body.text = item.body

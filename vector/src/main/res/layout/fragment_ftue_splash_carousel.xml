@@ -4,18 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground"
-    android:paddingTop="@dimen/layout_vertical_margin"
-    android:paddingBottom="@dimen/layout_vertical_margin">
+    android:background="@null">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/splashCarousel"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/loginSplashSubmit"
-        app:layout_constraintHeight_percent="0.65"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0" />
+        android:layout_height="match_parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/splashCarouselFloatingSection"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.65" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/carouselIndicator"
@@ -23,7 +24,7 @@
         android:layout_height="wrap_content"
         android:background="@null"
         app:layout_constraintBottom_toTopOf="@id/loginSplashButtonsSpace"
-        app:layout_constraintTop_toBottomOf="@id/splashCarousel"
+        app:layout_constraintTop_toBottomOf="@id/splashCarouselFloatingSection"
         app:layout_constraintVertical_chainStyle="spread"
         app:tabBackground="@drawable/indicator_onboarding_carousel_selector"
         app:tabGravity="center"
@@ -36,14 +37,14 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="@dimen/ftue_auth_gutter" />
+        app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_start_percent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/splashCarouselGutterEnd"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="@dimen/ftue_auth_gutter" />
+        app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_end_percent" />
 
     <Space
         android:id="@+id/loginSplashButtonsSpace"
@@ -93,7 +94,7 @@
 
     <TextView
         android:id="@+id/loginSplashVersion"
-        style="@style/Widget.Vector.TextView.Caption"
+        style="@style/Widget.Vector.TextView.Micro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:drawablePadding="12dp"
