@@ -55,7 +55,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 19L
+        const val SESSION_STORE_SCHEMA_VERSION = 20L
     }
 
     /**

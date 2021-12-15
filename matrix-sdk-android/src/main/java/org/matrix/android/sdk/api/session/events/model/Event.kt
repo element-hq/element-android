@@ -205,6 +205,7 @@ data class Event(
             isAudioMessage()       -> "sent an audio file."
             isImageMessage()       -> "sent an image."
             isVideoMessage()       -> "sent a video."
+            isPoll()               -> "created a poll."
             else                   -> text
         }
     }
@@ -337,7 +338,7 @@ fun Event.isAttachmentMessage(): Boolean {
             }
 }
 
-fun Event.isPoll(): Boolean = getClearType() == EventType.POLL_START ||  getClearType() == EventType.POLL_END
+fun Event.isPoll(): Boolean = getClearType() == EventType.POLL_START || getClearType() == EventType.POLL_END
 
 fun Event.isSticker(): Boolean = getClearType() == EventType.STICKER
 
