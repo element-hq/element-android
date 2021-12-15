@@ -65,7 +65,9 @@ import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
-import im.vector.app.features.analytics.VectorAnalytics
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.screen.ScreenEvent
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.consent.ConsentNotGivenHelper
 import im.vector.app.features.navigation.Navigator
@@ -90,6 +92,15 @@ import timber.log.Timber
 import javax.inject.Inject
 
 abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), MavericksView {
+    /* ==========================================================================================
+     * Analytics
+     * ========================================================================================== */
+
+    protected var analyticsScreenName: Screen.ScreenName? = null
+    private var screenEvent: ScreenEvent? = null
+
+    protected lateinit var analyticsTracker: AnalyticsTracker
+
     /* ==========================================================================================
      * View
      * ========================================================================================== */
@@ -133,7 +144,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     private lateinit var sessionListener: SessionListener
     protected lateinit var bugReporter: BugReporter
     private lateinit var pinLocker: PinLocker
-    protected lateinit var analytics: VectorAnalytics
 
     @Inject
     lateinit var rageShake: RageShake
@@ -189,7 +199,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         configurationViewModel = viewModelProvider.get(ConfigurationViewModel::class.java)
         bugReporter = singletonEntryPoint.bugReporter()
         pinLocker = singletonEntryPoint.pinLocker()
-        analytics = singletonEntryPoint.analytics()
+        analyticsTracker = singletonEntryPoint.analyticsTracker()
         navigator = singletonEntryPoint.navigator()
         activeSessionHolder = singletonEntryPoint.activeSessionHolder()
         vectorPreferences = singletonEntryPoint.vectorPreferences()
@@ -324,7 +334,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     override fun onResume() {
         super.onResume()
         Timber.i("onResume Activity ${javaClass.simpleName}")
-
+        screenEvent = analyticsScreenName?.let { ScreenEvent(it) }
         configurationViewModel.onActivityResumed()
 
         if (this !is BugReportActivity && vectorPreferences.useRageshake()) {
@@ -363,6 +373,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     override fun onPause() {
         super.onPause()
+        screenEvent?.send(analyticsTracker)
         Timber.i("onPause Activity ${javaClass.simpleName}")
 
         rageShake.stop()

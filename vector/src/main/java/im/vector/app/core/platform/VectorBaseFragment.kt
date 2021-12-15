@@ -42,7 +42,9 @@ import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
-import im.vector.app.features.analytics.VectorAnalytics
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.screen.ScreenEvent
 import im.vector.app.features.navigation.Navigator
 import im.vector.lib.ui.styles.dialogs.MaterialProgressDialog
 import kotlinx.coroutines.flow.launchIn
@@ -51,6 +53,18 @@ import reactivecircus.flowbinding.android.view.clicks
 import timber.log.Timber
 
 abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView {
+    /* ==========================================================================================
+     * Analytics
+     * ========================================================================================== */
+
+    protected var analyticsScreenName: Screen.ScreenName? = null
+    private var screenEvent: ScreenEvent? = null
+
+    protected lateinit var analyticsTracker: AnalyticsTracker
+
+    /* ==========================================================================================
+     * Activity
+     * ========================================================================================== */
 
     protected val vectorBaseActivity: VectorBaseActivity<*> by lazy {
         activity as VectorBaseActivity<*>
@@ -61,7 +75,6 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
      * ========================================================================================== */
 
     protected lateinit var navigator: Navigator
-    protected lateinit var analytics: VectorAnalytics
     protected lateinit var errorFormatter: ErrorFormatter
     protected lateinit var unrecognizedCertificateDialog: UnrecognizedCertificateDialog
 
@@ -98,7 +111,7 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
         val activityEntryPoint = EntryPointAccessors.fromActivity(vectorBaseActivity, ActivityEntryPoint::class.java)
         navigator = singletonEntryPoint.navigator()
         errorFormatter = singletonEntryPoint.errorFormatter()
-        analytics = singletonEntryPoint.analytics()
+        analyticsTracker = singletonEntryPoint.analyticsTracker()
         unrecognizedCertificateDialog = singletonEntryPoint.unrecognizedCertificateDialog()
         viewModelFactory = activityEntryPoint.viewModelFactory()
         childFragmentManager.fragmentFactory = activityEntryPoint.fragmentFactory()
@@ -125,12 +138,14 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
     override fun onResume() {
         super.onResume()
         Timber.i("onResume Fragment ${javaClass.simpleName}")
+        screenEvent = analyticsScreenName?.let { ScreenEvent(it) }
     }
 
     @CallSuper
     override fun onPause() {
         super.onPause()
         Timber.i("onPause Fragment ${javaClass.simpleName}")
+        screenEvent?.send(analyticsTracker)
     }
 
     @CallSuper
