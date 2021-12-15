@@ -1488,6 +1488,7 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun observerUserTyping() {
+        if(isThreadTimeLine()) return
         views.composerLayout.views.composerEditText.textChanges()
                 .skipInitialValue()
                 .debounce(300)
