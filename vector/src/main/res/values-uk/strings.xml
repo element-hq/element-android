@@ -1200,7 +1200,7 @@
     <string name="settings_developer_mode">Режим розробника</string>
     <string name="settings_advanced_settings">Додаткові налаштування</string>
     <string name="settings_notification_advanced">Розширені налаштування сповіщень</string>
-    <string name="preference_voice_and_video">Голос та відео</string>
+    <string name="preference_voice_and_video">Голос і відео</string>
     <string name="room_list_quick_actions_settings">Налаштування</string>
     <string name="devices_other_devices">Інші сеанси</string>
     <string name="devices_current_device">Поточний сеанс</string>
@@ -1356,7 +1356,7 @@
     <string name="keys_backup_setup_step2_button_title">Встановіть парольну фразу</string>
     <string name="keys_backup_setup_step2_text_description">Ми збережемо зашифровану копію ваших ключів на вашому домашньому сервері. Захистіть свою резервну копію парольною фразою, щоб захистити її.
 \n
-\nДля максимальної безпеки фраза повинна відрізнятися від паролю вашого облікового запису.</string>
+\nДля максимальної безпеки фраза повинна відрізнятися від пароля вашого облікового запису.</string>
     <string name="keys_backup_setup_step2_text_title">Захистіть свою резервну копію за допомогою парольної фрази.</string>
     <string name="keys_backup_setup_step1_manual_export">Експорт ключів вручну</string>
     <string name="keys_backup_setup">Почати використовувати резервне копіювання ключів</string>
