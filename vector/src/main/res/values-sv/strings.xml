@@ -3032,4 +3032,13 @@
     <string name="action_not_now">Inte nu</string>
     <string name="identity_server_consent_dialog_content_3">För att hitta existerande kontakter så behöver du skicka kontaktinfo (e-postadresser och telefonnummer) till din identitetsserver. Vi hashar din data innan den skickas av sekretesskäl.</string>
     <string name="identity_server_consent_dialog_content_question">Går du med på att skicka den här infon\?</string>
+    <string name="analytics_opt_in_list_item_3">Du kan stänga av detta när som helst i inställningarna</string>
+    <string name="analytics_opt_in_list_item_2">Vi delar <b>inte</b> information med tredje parter</string>
+    <string name="analytics_opt_in_list_item_1">Vi spelar <b>inte</b> in eller profilerar någon kontodata</string>
+    <string name="analytics_opt_in_content_link">här</string>
+    <string name="analytics_opt_in_content">Hjälp oss att identifiera problem och förbättra Element genom att dela anonym användningsdata. För att förstå hur personer använder multipla enheter så generar vi en slumpmässig identifierare som delas mellan dina enheter.
+\n
+\nDu kan läsa alla våra villkor %s.</string>
+    <string name="analytics_opt_in_title">Hjälp att förbättra Element</string>
+    <string name="action_enable">Aktivera</string>
 </resources>
