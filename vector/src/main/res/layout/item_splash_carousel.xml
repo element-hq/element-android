@@ -3,26 +3,53 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingStart="@dimen/ftue_auth_gutter"
+    android:paddingEnd="@dimen/ftue_auth_gutter">
 
-    <ImageView
-        android:id="@+id/carousel_item_image"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_gravity="center"
-        android:adjustViewBounds="true"
-        android:contentDescription="@null" />
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/carousel_item_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:contentDescription="@null" />
+
+    </FrameLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.05" />
 
     <TextView
-        android:id="@+id/carousel_item_body"
+        android:id="@+id/carousel_item_title"
         style="@style/Widget.Vector.TextView.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:gravity="center"
         android:textColor="?vctr_content_primary"
+        tools:text="Login version" />
+
+    <TextView
+        android:id="@+id/carousel_item_body"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textColor="?vctr_content_secondary"
         tools:text="Login version" />
 
 </LinearLayout>

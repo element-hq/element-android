@@ -16,7 +16,6 @@
 
 package im.vector.app.features.onboarding.ftueauth
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -36,6 +35,7 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentFtueSplashCarouselBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.onboarding.OnboardingAction
@@ -51,6 +51,7 @@ class FtueAuthSplashCarouselFragment : AbstractFtueAuthFragment<FragmentFtueSpla
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var vectorFeatures: VectorFeatures
     @Inject lateinit var carouselController: SplashCarouselController
+    @Inject lateinit var stringProvider: StringProvider
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueSplashCarouselBinding {
         return FragmentFtueSplashCarouselBinding.inflate(inflater, container, false)
@@ -64,27 +65,29 @@ class FtueAuthSplashCarouselFragment : AbstractFtueAuthFragment<FragmentFtueSpla
     private fun setupViews() {
         views.splashCarousel.adapter = carouselController.adapter
         TabLayoutMediator(views.carouselIndicator, views.splashCarousel) { _, _ -> }.attach()
-
         carouselController.setData(SplashCarouselState(
                 items = listOf(
                         SplashCarouselState.Item(
-                                "hello world",
-                                R.drawable.element_logo_green
+                                stringProvider.getString(R.string.ftue_auth_carousel_1_title),
+                                stringProvider.getString(R.string.ftue_auth_carousel_1_body),
+                                R.drawable.onboarding_carousel_conversations
                         ),
                         SplashCarouselState.Item(
-                                "2",
-                                R.drawable.element_logo_green
+                                stringProvider.getString(R.string.ftue_auth_carousel_2_title),
+                                stringProvider.getString(R.string.ftue_auth_carousel_2_body),
+                                R.drawable.onboarding_carousel_ems
                         ),
                         SplashCarouselState.Item(
-                                "3",
-                                R.drawable.element_logo_green
+                                stringProvider.getString(R.string.ftue_auth_carousel_3_title),
+                                stringProvider.getString(R.string.ftue_auth_carousel_3_body),
+                                R.drawable.onboarding_carousel_connect
                         ),
                         SplashCarouselState.Item(
-                                "4",
-                                R.drawable.element_logo_green
+                                stringProvider.getString(R.string.ftue_auth_carousel_4_title),
+                                stringProvider.getString(R.string.ftue_auth_carousel_4_body),
+                                R.drawable.onboarding_carousel_universal
                         )
-                ),
-                currentPage = 0
+                )
         ))
 
         views.loginSplashSubmit.debouncedClicks { getStarted() }
@@ -94,12 +97,12 @@ class FtueAuthSplashCarouselFragment : AbstractFtueAuthFragment<FragmentFtueSpla
         }
 
         if (BuildConfig.DEBUG || vectorPreferences.developerMode()) {
-            views.loginSplashVersion.isVisible = true
-            @SuppressLint("SetTextI18n")
-            views.loginSplashVersion.text = "Version : ${BuildConfig.VERSION_NAME}\n" +
-                    "Branch: ${BuildConfig.GIT_BRANCH_NAME}\n" +
-                    "Build: ${BuildConfig.BUILD_NUMBER}"
-            views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
+//            views.loginSplashVersion.isVisible = true
+//            @SuppressLint("SetTextI18n")
+//            views.loginSplashVersion.text = "Version : ${BuildConfig.VERSION_NAME}\n" +
+//                    "Branch: ${BuildConfig.GIT_BRANCH_NAME}\n" +
+//                    "Build: ${BuildConfig.BUILD_NUMBER}"
+//            views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
         }
     }
 
@@ -137,10 +140,13 @@ class FtueAuthSplashCarouselFragment : AbstractFtueAuthFragment<FragmentFtueSpla
 }
 
 data class SplashCarouselState(
-        val items: List<Item>,
-        val currentPage: Int
+        val items: List<Item>
 ) {
-    data class Item(val body: String, @DrawableRes val image: Int)
+    data class Item(
+            val title: String,
+            val body: String,
+            @DrawableRes val image: Int
+    )
 }
 
 class SplashCarouselController @Inject constructor() : TypedEpoxyController<SplashCarouselState>() {
@@ -162,11 +168,13 @@ abstract class SplashCarouselItem : VectorEpoxyModel<SplashCarouselItem.Holder>(
 
     override fun bind(holder: Holder) {
         holder.image.setImageResource(item.image)
+        holder.title.text = item.title
         holder.body.text = item.body
     }
 
     class Holder : VectorEpoxyHolder() {
         val image by bind<ImageView>(im.vector.app.R.id.carousel_item_image)
+        val title by bind<TextView>(im.vector.app.R.id.carousel_item_title)
         val body by bind<TextView>(im.vector.app.R.id.carousel_item_body)
     }
 }

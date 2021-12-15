@@ -47,4 +47,7 @@
     <dimen name="composer_min_height">56dp</dimen>
     <dimen name="composer_attachment_size">52dp</dimen>
     <dimen name="composer_attachment_margin">1dp</dimen>
+
+    <!--  Onboarding   -->
+    <dimen name="ftue_auth_gutter">16dp</dimen>
 </resources>

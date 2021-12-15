@@ -13,16 +13,18 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/loginSplashSubmit"
-        app:layout_constraintHeight_percent="0.5"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintHeight_percent="0.65"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0" />
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/carouselIndicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@null"
-        app:layout_constraintBottom_toTopOf="@id/loginSplashSubmit"
+        app:layout_constraintBottom_toTopOf="@id/loginSplashButtonsSpace"
         app:layout_constraintTop_toBottomOf="@id/splashCarousel"
+        app:layout_constraintVertical_chainStyle="spread"
         app:tabBackground="@drawable/indicator_onboarding_carousel_selector"
         app:tabGravity="center"
         app:tabIndicatorHeight="0dp"
@@ -34,14 +36,24 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="36dp" />
+        app:layout_constraintGuide_begin="@dimen/ftue_auth_gutter" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/splashCarouselGutterEnd"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintGuide_end="36dp" />
+        app:layout_constraintGuide_end="@dimen/ftue_auth_gutter" />
+
+    <Space
+        android:id="@+id/loginSplashButtonsSpace"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/loginSplashSubmit"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.01"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/carouselIndicator" />
 
     <Button
         android:id="@+id/loginSplashSubmit"
@@ -54,7 +66,7 @@
         app:layout_constraintBottom_toTopOf="@id/loginSplashAlreadyHaveAccount"
         app:layout_constraintEnd_toEndOf="@id/splashCarouselGutterEnd"
         app:layout_constraintStart_toStartOf="@id/splashCarouselGutterStart"
-        app:layout_constraintTop_toBottomOf="@id/carouselIndicator" />
+        app:layout_constraintTop_toBottomOf="@id/loginSplashButtonsSpace" />
 
     <TextView
         android:id="@+id/loginSplashAlreadyHaveAccount"
@@ -64,10 +76,20 @@
         android:text="@string/login_splash_already_have_account"
         android:textAllCaps="true"
         android:transitionName="loginSubmitTransition"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/loginSplashBottomSpace"
         app:layout_constraintEnd_toEndOf="@id/splashCarouselGutterEnd"
         app:layout_constraintStart_toStartOf="@id/splashCarouselGutterStart"
         app:layout_constraintTop_toBottomOf="@id/loginSplashSubmit" />
+
+    <Space
+        android:id="@+id/loginSplashBottomSpace"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/loginSplashAlreadyHaveAccount" />
 
     <TextView
         android:id="@+id/loginSplashVersion"
