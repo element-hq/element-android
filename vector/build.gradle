@@ -488,6 +488,7 @@ dependencies {
 
     // MapTiler
     implementation 'org.maplibre.gl:android-sdk:9.5.2'
+    implementation 'org.maplibre.gl:android-plugin-annotation-v9:1.0.0'
 
 
     // TESTS

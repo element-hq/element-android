@@ -3706,4 +3706,6 @@
     <!-- Location -->
     <string name="location_activity_title_static_sharing">Share location</string>
     <string name="location_activity_title_preview">Location</string>
+    <string name="a11y_location_share_icon">Share location</string>
+    <string name="location_share">Share location</string>
 </resources>
