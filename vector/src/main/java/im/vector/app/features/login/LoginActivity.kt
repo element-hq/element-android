@@ -40,6 +40,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
+import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.terms.LoginTermsFragment
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
@@ -82,6 +83,8 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarCo
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun initUiAndData() {
+        analyticsScreenName = Screen.ScreenName.MobileLogin
+
         if (isFirstCreation()) {
             addFirstFragment()
         }
