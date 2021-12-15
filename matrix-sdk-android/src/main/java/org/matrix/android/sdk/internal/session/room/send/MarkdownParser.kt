@@ -40,6 +40,7 @@ internal class MarkdownParser @Inject constructor(
      * Parses some input text and produces html.
      * @param text An input CharSequence to be parsed.
      * @param force Skips the check for detecting if the input contains markdown and always converts to html.
+     * @param advanced Whether to use the full markdown support or the simple version.
      * @return TextContent containing the plain text and the formatted html if generated.
      */
     fun parse(text: CharSequence, force: Boolean = false, advanced: Boolean = true): TextContent {
