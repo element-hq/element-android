@@ -37,7 +37,9 @@ import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.BehaviorDataSource
+import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.DecryptionFailureTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
 import im.vector.app.features.call.conference.ConferenceEvent
 import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.call.conference.JitsiService
@@ -112,6 +114,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val chatEffectManager: ChatEffectManager,
         private val directRoomHelper: DirectRoomHelper,
         private val jitsiService: JitsiService,
+        private val analyticsTracker: AnalyticsTracker,
         private val activeConferenceHolder: JitsiActiveConferenceHolder,
         private val decryptionFailureTracker: DecryptionFailureTracker,
         timelineFactory: TimelineFactory
@@ -709,7 +712,10 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun handleAcceptInvite() {
         viewModelScope.launch {
-            tryOrNull { room.join() }
+            tryOrNull {
+                room.join()
+                analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom())
+            }
         }
     }
 
