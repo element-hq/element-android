@@ -226,6 +226,18 @@ class MessageItemFactory @Inject constructor(
             )
         }
 
+        return PollItem_()
+                .attributes(attributes)
+                .eventId(informationData.eventId)
+                .pollQuestion(pollContent.pollCreationInfo?.question?.question ?: "")
+                .pollSent(isPollSent)
+                .totalVotesText(totalVotesText)
+                .optionViewStates(optionViewStates)
+                .highlighted(highlight)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .callback(callback)
+    }
+
     private fun buildAudioMessageItem(messageContent: MessageAudioContent,
                                       @Suppress("UNUSED_PARAMETER")
                                       informationData: MessageInformationData,

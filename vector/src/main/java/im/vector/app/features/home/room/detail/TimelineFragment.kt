@@ -721,7 +721,7 @@ class TimelineFragment @Inject constructor(
             }
 
             override fun onVoiceRecordingCancelled() {
-                messageComposerViewModel.handle(MessageComposerAction.EndRecordingVoiceMessage(isCancelled = true))
+                messageComposerViewModel.handle(MessageComposerAction.EndRecordingVoiceMessage(isCancelled = true, rootThreadEventId = getRootThreadEventId()))
                 vibrate(requireContext())
                 updateRecordingUiState(RecordingUiState.Idle)
             }
@@ -737,12 +737,12 @@ class TimelineFragment @Inject constructor(
             }
 
             override fun onSendVoiceMessage() {
-                messageComposerViewModel.handle(MessageComposerAction.EndRecordingVoiceMessage(isCancelled = false))
+                messageComposerViewModel.handle(MessageComposerAction.EndRecordingVoiceMessage(isCancelled = false, rootThreadEventId = getRootThreadEventId()))
                 updateRecordingUiState(RecordingUiState.Idle)
             }
 
             override fun onDeleteVoiceMessage() {
-                messageComposerViewModel.handle(MessageComposerAction.EndRecordingVoiceMessage(isCancelled = true))
+                messageComposerViewModel.handle(MessageComposerAction.EndRecordingVoiceMessage(isCancelled = true, rootThreadEventId = getRootThreadEventId()))
                 updateRecordingUiState(RecordingUiState.Idle)
             }
 
@@ -1388,6 +1388,7 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun updateJumpToReadMarkerViewVisibility() {
+        if(isThreadTimeLine()) return
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             withState(roomDetailViewModel) {
                 val showJumpToUnreadBanner = when (it.unreadState) {
@@ -1606,28 +1607,28 @@ class TimelineFragment @Inject constructor(
 
     private fun renderSendMessageResult(sendMessageResult: MessageComposerViewEvents.SendMessageResult) {
         when (sendMessageResult) {
-            is MessageComposerViewEvents.SlashCommandLoading        -> {
+            is MessageComposerViewEvents.SlashCommandLoading               -> {
                 showLoading(null)
             }
-            is MessageComposerViewEvents.SlashCommandError          -> {
+            is MessageComposerViewEvents.SlashCommandError                 -> {
                 displayCommandError(getString(R.string.command_problem_with_parameters, sendMessageResult.command.command))
             }
-            is MessageComposerViewEvents.SlashCommandUnknown        -> {
+            is MessageComposerViewEvents.SlashCommandUnknown               -> {
                 displayCommandError(getString(R.string.unrecognized_command, sendMessageResult.command))
             }
-            is MessageComposerViewEvents.SlashCommandResultOk       -> {
+            is MessageComposerViewEvents.SlashCommandResultOk              -> {
                 dismissLoadingDialog()
                 views.composerLayout.setTextIfDifferent("")
                 sendMessageResult.messageRes?.let { showSnackWithMessage(getString(it)) }
             }
-            is MessageComposerViewEvents.SlashCommandResultError    -> {
+            is MessageComposerViewEvents.SlashCommandResultError           -> {
                 dismissLoadingDialog()
                 displayCommandError(errorFormatter.toHumanReadable(sendMessageResult.throwable))
             }
-            is MessageComposerViewEvents.SlashCommandNotImplemented -> {
+            is MessageComposerViewEvents.SlashCommandNotImplemented        -> {
                 displayCommandError(getString(R.string.not_implemented))
             }
-            is TextComposerViewEvents.SlashCommandNotSupportedInThreads -> {
+            is MessageComposerViewEvents.SlashCommandNotSupportedInThreads -> {
                 displayCommandError(getString(R.string.command_not_supported_in_threads, sendMessageResult.command))
             }
         } // .exhaustive
@@ -2145,14 +2146,14 @@ class TimelineFragment @Inject constructor(
                 }
             }
             is EventSharedAction.ReplyInThread              -> {
-                if (!views.voiceMessageRecorderView.isActive()) {
+                if (withState(messageComposerViewModel) { it.isVoiceMessageIdle }) {
                     navigateToThreadTimeline(action.eventId)
                 } else {
                     requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
                 }
             }
             is EventSharedAction.ViewInRoom                 -> {
-                if (!views.voiceMessageRecorderView.isActive()) {
+                if (withState(messageComposerViewModel) { it.isVoiceMessageIdle }) {
                     handleViewInRoomAction()
                 } else {
                     requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
@@ -2386,7 +2387,7 @@ class TimelineFragment @Inject constructor(
             AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(attachmentAudioActivityResultLauncher)
             AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
             AttachmentTypeSelectorView.Type.STICKER -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)
-            AttachmentTypeSelectorView.Type.POLL    -> navigator.openCreatePoll(requireContext(), roomDetailArgs.roomId)
+            AttachmentTypeSelectorView.Type.POLL    -> navigator.openCreatePoll(requireContext(), timelineArgs.roomId)
         }.exhaustive
     }
 

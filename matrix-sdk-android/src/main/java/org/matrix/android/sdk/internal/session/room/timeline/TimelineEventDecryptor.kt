@@ -17,6 +17,7 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import io.realm.Realm
 import io.realm.RealmConfiguration
+import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -114,11 +115,17 @@ internal class TimelineEventDecryptor @Inject constructor(
                         .findFirst()
 
                 eventEntity?.apply {
-                    val decryptedPayload = threadsAwarenessHandler.handleIfNeededDuringDecryption(
-                            it,
-                            roomId = event.roomId,
-                            event,
-                            result)
+
+                    val decryptedPayload =
+                            if (!BuildConfig.THREADING_ENABLED) {
+                                threadsAwarenessHandler.handleIfNeededDuringDecryption(
+                                        it,
+                                        roomId = event.roomId,
+                                        event,
+                                        result)
+                            } else {
+                                null
+                            }
                     setDecryptionResult(result, decryptedPayload)
                 }
             }

@@ -19,15 +19,10 @@ package im.vector.app.features.home.room.threads
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
-import androidx.core.view.ViewCompat
-import androidx.core.view.children
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.appbar.MaterialToolbar
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ToolbarConfigurable
@@ -42,6 +37,7 @@ import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>(), ToolbarConfigurable {
 
     @Inject
@@ -55,10 +51,6 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>(), ToolbarCon
     override fun getBinding() = ActivityThreadsBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,14 +75,14 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>(), ToolbarCon
 
     private fun initThreadListFragment(threadListArgs: ThreadListArgs) {
         replaceFragment(
-                R.id.threadsActivityFragmentContainer,
+                views.threadsActivityFragmentContainer,
                 ThreadListFragment::class.java,
                 threadListArgs)
     }
 
     private fun initThreadTimelineFragment(threadTimelineArgs: ThreadTimelineArgs) =
             replaceFragment(
-                    R.id.threadsActivityFragmentContainer,
+                    views.threadsActivityFragmentContainer,
                     TimelineFragment::class.java,
                     TimelineArgs(
                             roomId = threadTimelineArgs.roomId,
@@ -113,7 +105,7 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>(), ToolbarCon
             it.setCustomAnimations(R.anim.animation_slide_in_right, R.anim.animation_slide_out_left, R.anim.animation_slide_in_left, R.anim.animation_slide_out_right)
         }
         addFragmentToBackstack(
-                frameId = R.id.threadsActivityFragmentContainer,
+                container = views.threadsActivityFragmentContainer,
                 fragmentClass = TimelineFragment::class.java,
                 params = TimelineArgs(
                         roomId = timelineEvent.roomId,

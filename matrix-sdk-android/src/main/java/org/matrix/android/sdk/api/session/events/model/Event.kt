@@ -36,7 +36,6 @@ import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.presence.model.PresenceContent
-import org.matrix.android.sdk.internal.session.room.send.removeInReplyFallbacks
 import timber.log.Timber
 
 typealias Content = JsonDict
@@ -338,20 +337,22 @@ fun Event.isAttachmentMessage(): Boolean {
             }
 }
 
+fun Event.isPoll(): Boolean = getClearType() == EventType.POLL_START ||  getClearType() == EventType.POLL_END
+
+fun Event.isSticker(): Boolean = getClearType() == EventType.STICKER
+
 fun Event.getRelationContent(): RelationDefaultContent? {
-    if(eventId?.contains("MgPN5Bqb") == true)
-        Timber.i(":D")
     return if (isEncrypted()) {
         content.toModel<EncryptedEventContent>()?.relatesTo
     } else {
-            content.toModel<MessageContent>()?.relatesTo ?: run{
-                // Special case to handle stickers, while there is only a local msgtype for stickers
-                if (getClearType() == EventType.STICKER) {
-                    getClearContent().toModel<MessageStickerContent>()?.relatesTo
-                } else{
-                    null
-                }
+        content.toModel<MessageContent>()?.relatesTo ?: run {
+            // Special case to handle stickers, while there is only a local msgtype for stickers
+            if (getClearType() == EventType.STICKER) {
+                getClearContent().toModel<MessageStickerContent>()?.relatesTo
+            } else {
+                null
             }
+        }
     }
 }
 

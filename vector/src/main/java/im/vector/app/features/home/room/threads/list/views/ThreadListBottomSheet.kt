@@ -39,7 +39,7 @@ class ThreadListBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetThr
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        threadListViewModel.subscribe(this) {
+        threadListViewModel.onEach {
             renderState(it)
         }
         views.threadListModalAllThreads.views.bottomSheetActionClickableZone.debouncedClicks {

@@ -93,7 +93,7 @@ class MessageComposerViewModel @AssistedInject constructor(
             is MessageComposerAction.OnTextChanged                  -> handleOnTextChanged(action)
             is MessageComposerAction.OnVoiceRecordingUiStateChanged -> handleOnVoiceRecordingUiStateChanged(action)
             is MessageComposerAction.StartRecordingVoiceMessage     -> handleStartRecordingVoiceMessage()
-            is MessageComposerAction.EndRecordingVoiceMessage       -> handleEndRecordingVoiceMessage(action.isCancelled)
+            is MessageComposerAction.EndRecordingVoiceMessage       -> handleEndRecordingVoiceMessage(action.isCancelled, action.rootThreadEventId)
             is MessageComposerAction.PlayOrPauseVoicePlayback       -> handlePlayOrPauseVoicePlayback(action)
             MessageComposerAction.PauseRecordingVoiceMessage        -> handlePauseRecordingVoiceMessage()
             MessageComposerAction.PlayOrPauseRecordingPlayback      -> handlePlayOrPauseRecordingPlayback()
@@ -188,7 +188,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandUnknown(slashCommandResult.slashCommand))
                         }
                         is ParsedCommand.ErrorCommandNotSupportedInThreads -> {
-                            _viewEvents.post(TextComposerViewEvents.SlashCommandNotSupportedInThreads(slashCommandResult.slashCommand))
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandNotSupportedInThreads(slashCommandResult.slashCommand))
                         }
                         is ParsedCommand.SendPlainText                     -> {
                             // Send the text message to the room, without markdown
@@ -491,7 +491,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                                 eventReplied = timelineEvent)
                     } ?: room.replyToMessage(timelineEvent, action.text.toString(), action.autoMarkdown)
 
-                    _viewEvents.post(TextComposerViewEvents.MessageSent)
+                    _viewEvents.post(MessageComposerViewEvents.MessageSent)
                     popDraft()
                 }
                 is SendMode.Voice   -> {
@@ -774,14 +774,18 @@ class MessageComposerViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleEndRecordingVoiceMessage(isCancelled: Boolean) {
+    private fun handleEndRecordingVoiceMessage(isCancelled: Boolean, rootThreadEventId: String? = null) {
         voiceMessageHelper.stopPlayback()
         if (isCancelled) {
             voiceMessageHelper.deleteRecording()
         } else {
             voiceMessageHelper.stopRecording(convertForSending = true)?.let { audioType ->
                 if (audioType.duration > 1000) {
-                    room.sendMedia(audioType.toContentAttachmentData(isVoiceMessage = true), false, emptySet())
+                    room.sendMedia(
+                            attachment = audioType.toContentAttachmentData(isVoiceMessage = true),
+                            compressBeforeSending = false,
+                            roomIds = emptySet(),
+                            rootThreadEventId = rootThreadEventId)
                 } else {
                     voiceMessageHelper.deleteRecording()
                 }

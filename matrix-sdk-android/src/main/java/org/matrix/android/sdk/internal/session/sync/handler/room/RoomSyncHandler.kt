@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.sync.handler.room
 
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -375,10 +376,12 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 decryptIfNeeded(event, roomId)
             }
 
-            threadsAwarenessHandler.handleIfNeeded(
-                    realm = realm,
-                    roomId = roomId,
-                    event = event)
+            if(!BuildConfig.THREADING_ENABLED) {
+                threadsAwarenessHandler.handleIfNeeded(
+                        realm = realm,
+                        roomId = roomId,
+                        event = event)
+            }
 
             val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
             val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)

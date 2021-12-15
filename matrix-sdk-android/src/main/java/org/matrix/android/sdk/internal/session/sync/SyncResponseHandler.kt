@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.sync
 
 import androidx.work.ExistingPeriodicWorkPolicy
 import com.zhuinden.monarchy.Monarchy
+import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
@@ -101,7 +102,9 @@ internal class SyncResponseHandler @Inject constructor(
         val aggregator = SyncResponsePostTreatmentAggregator()
 
         // Prerequisite for thread events handling in RoomSyncHandler
-        threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
+        if(!BuildConfig.THREADING_ENABLED) {
+            threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
+        }
 
         // Start one big transaction
         monarchy.awaitTransaction { realm ->

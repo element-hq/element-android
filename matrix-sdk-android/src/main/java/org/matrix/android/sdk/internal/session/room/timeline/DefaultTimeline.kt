@@ -24,6 +24,7 @@ import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
 import kotlinx.coroutines.runBlocking
+import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -639,7 +640,9 @@ internal class DefaultTimeline(
                 }.map {
                     EventMapper.map(it)
                 }
-        threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(eventEntityList)
+        if(!BuildConfig.THREADING_ENABLED) {
+            threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(eventEntityList)
+        }
     }
 
     private fun buildTimelineEvent(eventEntity: TimelineEventEntity): TimelineEvent {

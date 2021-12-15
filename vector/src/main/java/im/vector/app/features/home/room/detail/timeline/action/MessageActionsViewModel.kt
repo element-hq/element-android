@@ -60,6 +60,8 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
+import org.matrix.android.sdk.api.session.room.timeline.isPoll
+import org.matrix.android.sdk.api.session.room.timeline.isSticker
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 
@@ -442,14 +444,14 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
      * Determine whether or not the Reply In Thread bottom sheet setting will be visible
      * to the user
      */
-    // TODO handle reply in thread for images etc
     private fun canReplyInThread(event: TimelineEvent,
                                  messageContent: MessageContent?,
                                  actionPermissions: ActionPermissions): Boolean {
         // Only event of type EventType.MESSAGE are supported for the moment
         if (!BuildConfig.THREADING_ENABLED) return false
         if (initialState.isFromThreadTimeline) return false
-        if (event.root.getClearType() != EventType.MESSAGE) return false
+        if (event.root.getClearType() != EventType.MESSAGE &&
+                !event.isSticker() && !event.isPoll()) return false
         if (!actionPermissions.canSendMessage) return false
         return when (messageContent?.msgType) {
             MessageType.MSGTYPE_TEXT,
@@ -458,8 +460,10 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             MessageType.MSGTYPE_IMAGE,
             MessageType.MSGTYPE_VIDEO,
             MessageType.MSGTYPE_AUDIO,
-            MessageType.MSGTYPE_FILE -> true
-            else                     -> false
+            MessageType.MSGTYPE_FILE,
+            MessageType.MSGTYPE_POLL_START,
+            MessageType.MSGTYPE_STICKER_LOCAL -> true
+            else                              -> false
         }
     }
 
@@ -468,12 +472,13 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
      * a thread timeline
      */
     private fun canViewInRoom(event: TimelineEvent,
-                                 messageContent: MessageContent?,
-                                 actionPermissions: ActionPermissions): Boolean {
+                              messageContent: MessageContent?,
+                              actionPermissions: ActionPermissions): Boolean {
         // Only event of type EventType.MESSAGE are supported for the moment
         if (!BuildConfig.THREADING_ENABLED) return false
-        if (!initialState.isFromThreadTimeline) return  false
-        if (event.root.getClearType() != EventType.MESSAGE) return false
+        if (!initialState.isFromThreadTimeline) return false
+        if (event.root.getClearType() != EventType.MESSAGE &&
+                !event.isSticker() && !event.isPoll()) return false
         if (!actionPermissions.canSendMessage) return false
 
         return when (messageContent?.msgType) {
@@ -483,11 +488,12 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             MessageType.MSGTYPE_IMAGE,
             MessageType.MSGTYPE_VIDEO,
             MessageType.MSGTYPE_AUDIO,
-            MessageType.MSGTYPE_FILE -> event.root.threadDetails?.isRootThread ?: false
-            else                     -> false
+            MessageType.MSGTYPE_FILE,
+            MessageType.MSGTYPE_POLL_START,
+            MessageType.MSGTYPE_STICKER_LOCAL -> event.root.threadDetails?.isRootThread ?: false
+            else                              -> false
         }
     }
-
 
     private fun canQuote(event: TimelineEvent, messageContent: MessageContent?, actionPermissions: ActionPermissions): Boolean {
         // Only event of type EventType.MESSAGE are supported for the moment

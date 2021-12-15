@@ -35,6 +35,7 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import javax.inject.Inject
 
@@ -86,33 +87,17 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
 
                 val rootThreadEventId = permalinkData.eventId?.let { eventId ->
                     val room = roomId?.let { session?.getRoom(it) }
-                    // Root thread will be opened in timeline
-//                    if(room?.getTimeLineEvent(eventId)?.root?.threadDetails?.isRootThread == true){
-//                        room.getTimeLineEvent(eventId)?.root?.eventId
-//                    }else{
                     room?.getTimeLineEvent(eventId)?.root?.getRootThreadEventId()
-//                    }
-
                 }
-                // MERGE FROM DEVELOP CONFLICT A.K.
-//                openRoom(
-//                        navigationInterceptor,
-//                        context = context,
-//                        roomId = roomId,
-//                        permalinkData = permalinkData,
-//                        rawLink = rawLink,
-//                        buildTask = buildTask
-//                )
-                if (navigationInterceptor?.navToRoom(roomId, permalinkData.eventId, rawLink,rootThreadEventId) != true) {
-                    openRoom(
-                            context = context,
-                            roomId = roomId,
-                            permalinkData = permalinkData,
-                            rawLink = rawLink,
-                            buildTask = buildTask,
-                            rootThreadEventId = rootThreadEventId
-                    )
-                }
+                openRoom(
+                        navigationInterceptor,
+                        context = context,
+                        roomId = roomId,
+                        permalinkData = permalinkData,
+                        rawLink = rawLink,
+                        buildTask = buildTask,
+                        rootThreadEventId = rootThreadEventId
+                )
                 true
             }
             is PermalinkData.GroupLink           -> {
@@ -170,14 +155,13 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
      * Open room either joined, or not
      */
     private fun openRoom(
-            // A.K. conflict
-//            navigationInterceptor: NavigationInterceptor?,
+            navigationInterceptor: NavigationInterceptor?,
             context: Context,
             roomId: String?,
             permalinkData: PermalinkData.RoomLink,
             rawLink: Uri,
             buildTask: Boolean,
-            rootThreadEventId: String? =null
+            rootThreadEventId: String? = null
     ) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         if (roomId == null) {
@@ -194,13 +178,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
             membership?.isActive().orFalse() -> {
                 if (!isSpace && membership == Membership.JOIN) {
                     // If it's a room you're in, let's just open it, you can tap back if needed
-                    // A.K. Conflict
-//                    navigationInterceptor.openJoinedRoomScreen(buildTask, roomId, eventId, rawLink, context)
-                    rootThreadEventId?.let {
-                        val threadTimelineArgs = ThreadTimelineArgs(roomId, displayName = roomSummary.displayName, roomSummary.avatarUrl, it)
-                        navigator.openThread(context, threadTimelineArgs, eventId)
-                    } ?: navigator.openRoom(context, roomId, eventId, buildTask)
-
+                    navigationInterceptor.openJoinedRoomScreen(buildTask, roomId, eventId, rawLink, context, rootThreadEventId, roomSummary)
                 } else {
                     // maybe open space preview navigator.openSpacePreview(context, roomId)? if already joined?
                     navigator.openMatrixToBottomSheet(context, rawLink.toString())
@@ -213,9 +191,19 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
         }
     }
 
-    private fun NavigationInterceptor?.openJoinedRoomScreen(buildTask: Boolean, roomId: String, eventId: String?, rawLink: Uri, context: Context) {
-        if (this?.navToRoom(roomId, eventId, rawLink) != true) {
-            navigator.openRoom(context, roomId, eventId, buildTask)
+    private fun NavigationInterceptor?.openJoinedRoomScreen(buildTask: Boolean,
+                                                            roomId: String,
+                                                            eventId: String?,
+                                                            rawLink: Uri,
+                                                            context: Context,
+                                                            rootThreadEventId: String?,
+                                                            roomSummary: RoomSummary
+    ) {
+        if (this?.navToRoom(roomId, eventId, rawLink, rootThreadEventId) != true) {
+            rootThreadEventId?.let {
+                val threadTimelineArgs = ThreadTimelineArgs(roomId, displayName = roomSummary.displayName, roomSummary.avatarUrl, it)
+                navigator.openThread(context, threadTimelineArgs, eventId)
+            } ?: navigator.openRoom(context, roomId, eventId, buildTask)
         }
     }
 
