@@ -319,7 +319,7 @@
     <string name="action_global_search">Pesquisa global</string>
     <string name="action_mark_all_as_read">Marcar tudo como lido</string>
     <string name="action_historical">Histórico</string>
-    <string name="action_quick_reply">Responder rápido</string>
+    <string name="action_quick_reply">Resposta rápida</string>
     <string name="action_open">Abrir</string>
     <string name="action_close">Fechar</string>
     <string name="copied_to_clipboard">Copiado para clipboard</string>
