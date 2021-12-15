@@ -52,11 +52,6 @@ class HomeDrawerFragment @Inject constructor(
         return FragmentHomeDrawerBinding.inflate(inflater, container, false)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        analyticsScreenName = Screen.ScreenName.MobileSidebar
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
