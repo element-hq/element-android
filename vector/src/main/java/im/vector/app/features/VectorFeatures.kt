@@ -36,5 +36,5 @@ interface VectorFeatures {
 class DefaultVectorFeatures : VectorFeatures {
     override fun onboardingVariant(): VectorFeatures.OnboardingVariant = BuildConfig.ONBOARDING_VARIANT
     override fun isAlreadyHaveAccountSplashEnabled() = true
-    override fun isSplashCarouselEnabled() = true
+    override fun isSplashCarouselEnabled() = false
 }
