@@ -25,12 +25,12 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
  * Triggered when an error occurred
  */
 data class Error(
-    /**
-     * Context - client defined, can be used for debugging
-     */
-    val context: String? = null,
-    val domain: Domain,
-    val name: Name,
+        /**
+         * Context - client defined, can be used for debugging
+         */
+        val context: String? = null,
+        val domain: Domain,
+        val name: Name,
 ) : VectorAnalyticsEvent {
 
     enum class Domain {
