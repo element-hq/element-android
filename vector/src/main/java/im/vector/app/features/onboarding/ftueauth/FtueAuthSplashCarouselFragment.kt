@@ -21,21 +21,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.annotation.DrawableRes
 import androidx.core.view.isVisible
-import com.airbnb.epoxy.EpoxyAttribute
-import com.airbnb.epoxy.EpoxyModelClass
-import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
 import im.vector.app.R
-import im.vector.app.core.epoxy.VectorEpoxyHolder
-import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentFtueSplashCarouselBinding
 import im.vector.app.features.VectorFeatures
@@ -140,47 +132,5 @@ class FtueAuthSplashCarouselFragment : AbstractFtueAuthFragment<FragmentFtueSpla
         } else {
             super.onError(throwable)
         }
-    }
-}
-
-data class SplashCarouselState(
-        val items: List<Item>
-) {
-    data class Item(
-            val title: String,
-            val body: String,
-            @DrawableRes val image: Int,
-            @DrawableRes val pageBackground: Int
-    )
-}
-
-class SplashCarouselController @Inject constructor() : TypedEpoxyController<SplashCarouselState>() {
-    override fun buildModels(data: SplashCarouselState) {
-        data.items.forEachIndexed { index, item ->
-            splashCarouselItem {
-                id(index)
-                item(item)
-            }
-        }
-    }
-}
-
-@EpoxyModelClass(layout = im.vector.app.R.layout.item_splash_carousel)
-abstract class SplashCarouselItem : VectorEpoxyModel<SplashCarouselItem.Holder>() {
-
-    @EpoxyAttribute
-    lateinit var item: SplashCarouselState.Item
-
-    override fun bind(holder: Holder) {
-        holder.view.setBackgroundResource(item.pageBackground)
-        holder.image.setImageResource(item.image)
-        holder.title.text = item.title
-        holder.body.text = item.body
-    }
-
-    class Holder : VectorEpoxyHolder() {
-        val image by bind<ImageView>(im.vector.app.R.id.carousel_item_image)
-        val title by bind<TextView>(im.vector.app.R.id.carousel_item_title)
-        val body by bind<TextView>(im.vector.app.R.id.carousel_item_body)
     }
 }
