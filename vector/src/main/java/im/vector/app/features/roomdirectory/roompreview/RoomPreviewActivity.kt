@@ -40,6 +40,7 @@ data class RoomPreviewData(
         val roomAlias: String? = null,
         val roomType: String? = null,
         val topic: String? = null,
+        val numJoinedMembers: Int? = null,
         val worldReadable: Boolean = false,
         val avatarUrl: String? = null,
         val homeServers: List<String> = emptyList(),
@@ -69,6 +70,7 @@ class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), Toolbar
                     roomName = publicRoom.name,
                     roomAlias = publicRoom.getPrimaryAlias(),
                     topic = publicRoom.topic,
+                    numJoinedMembers = publicRoom.numJoinedMembers,
                     worldReadable = publicRoom.worldReadable,
                     avatarUrl = publicRoom.avatarUrl,
                     homeServers = listOfNotNull(roomDirectoryData.homeServer)
