@@ -486,6 +486,9 @@ dependencies {
     }
     implementation 'commons-codec:commons-codec:1.15'
 
+    // MapTiler
+    implementation 'org.maplibre.gl:android-sdk:9.5.2'
+
 
     // TESTS
     testImplementation libs.tests.junit

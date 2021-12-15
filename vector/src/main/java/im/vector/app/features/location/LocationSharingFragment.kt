@@ -21,6 +21,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.activityViewModel
+import com.mapbox.mapboxsdk.Mapbox
+import im.vector.app.BuildConfig
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentLocationSharingBinding
 import javax.inject.Inject
@@ -34,7 +36,24 @@ class LocationSharingFragment @Inject constructor() :
         return FragmentLocationSharingBinding.inflate(inflater, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Initialize Mapbox before inflating mapView
+        Mapbox.getInstance(requireContext())
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initMapView(savedInstanceState)
+    }
+
+    private fun initMapView(savedInstanceState: Bundle?) {
+        val key = BuildConfig.mapTilerKey
+        val styleUrl = "https://api.maptiler.com/maps/streets/style.json?key=${key}"
+        views.mapView.onCreate(savedInstanceState)
+        views.mapView.getMapAsync { map ->
+            map.setStyle(styleUrl)
+        }
     }
 }
