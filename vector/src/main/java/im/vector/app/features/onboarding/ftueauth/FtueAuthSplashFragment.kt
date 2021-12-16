@@ -27,7 +27,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
 import im.vector.app.R
-import im.vector.app.databinding.FragmentFtueSplashBinding
+import im.vector.app.databinding.FragmentFtueAuthSplashBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingFlow
@@ -40,13 +40,13 @@ import javax.inject.Inject
  * In this screen, the user is viewing an introduction to what he can do with this application
  */
 @AndroidEntryPoint
-class FtueAuthSplashFragment : AbstractFtueAuthFragment<FragmentFtueSplashBinding>() {
+class FtueAuthSplashFragment : AbstractFtueAuthFragment<FragmentFtueAuthSplashBinding>() {
 
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var vectorFeatures: VectorFeatures
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueSplashBinding {
-        return FragmentFtueSplashBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueAuthSplashBinding {
+        return FragmentFtueAuthSplashBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
