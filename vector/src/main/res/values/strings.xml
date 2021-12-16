@@ -962,7 +962,8 @@
     <string name="room_delete_unsent_messages">Delete unsent messages</string>
     <string name="room_message_file_not_found">File not found</string>
     <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room.</string>
-    <string name="room_unsupported_e2e_algorithm">Encryption has been misconfigured. You can\'t send messages, please contact an admin to restore the room to a valid state.</string>
+    <string name="room_unsupported_e2e_algorithm">Encryption has been misconfigured so you can\'t send messages. Please contact an admin to restore encryption to a valid state.</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">Encryption has been misconfigured so you can\'t send messages. Click to open settings.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d new message</item>
         <item quantity="other">%d new messages</item>
