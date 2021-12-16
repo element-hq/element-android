@@ -27,7 +27,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.app.BuildConfig
 import im.vector.app.R
-import im.vector.app.core.resources.StringProvider
 import im.vector.app.databinding.FragmentFtueSplashCarouselBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.onboarding.OnboardingAction
@@ -40,8 +39,7 @@ import javax.inject.Inject
 class FtueAuthSplashCarouselFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val vectorFeatures: VectorFeatures,
-        private val carouselController: SplashCarouselController,
-        private val stringProvider: StringProvider
+        private val carouselController: SplashCarouselController
 ) : AbstractFtueAuthFragment<FragmentFtueSplashCarouselBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueSplashCarouselBinding {
@@ -59,26 +57,26 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
         carouselController.setData(SplashCarouselState(
                 items = listOf(
                         SplashCarouselState.Item(
-                                stringProvider.getString(R.string.ftue_auth_carousel_1_title),
-                                stringProvider.getString(R.string.ftue_auth_carousel_1_body),
+                                getString(R.string.ftue_auth_carousel_1_title),
+                                getString(R.string.ftue_auth_carousel_1_body),
                                 R.drawable.onboarding_carousel_conversations,
                                 R.drawable.bg_carousel_page_1
                         ),
                         SplashCarouselState.Item(
-                                stringProvider.getString(R.string.ftue_auth_carousel_2_title),
-                                stringProvider.getString(R.string.ftue_auth_carousel_2_body),
+                                getString(R.string.ftue_auth_carousel_2_title),
+                                getString(R.string.ftue_auth_carousel_2_body),
                                 R.drawable.onboarding_carousel_ems,
                                 R.drawable.bg_carousel_page_2
                         ),
                         SplashCarouselState.Item(
-                                stringProvider.getString(R.string.ftue_auth_carousel_3_title),
-                                stringProvider.getString(R.string.ftue_auth_carousel_3_body),
+                                getString(R.string.ftue_auth_carousel_3_title),
+                                getString(R.string.ftue_auth_carousel_3_body),
                                 R.drawable.onboarding_carousel_connect,
                                 R.drawable.bg_carousel_page_3
                         ),
                         SplashCarouselState.Item(
-                                stringProvider.getString(R.string.ftue_auth_carousel_4_title),
-                                stringProvider.getString(R.string.ftue_auth_carousel_4_body),
+                                getString(R.string.ftue_auth_carousel_4_title),
+                                getString(R.string.ftue_auth_carousel_4_body),
                                 R.drawable.onboarding_carousel_universal,
                                 R.drawable.bg_carousel_page_4
                         )
