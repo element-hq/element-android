@@ -151,6 +151,7 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
     override fun onDestroyView() {
         Timber.i("onDestroyView Fragment ${javaClass.simpleName}")
         _binding = null
+        dismissLoadingDialog()
         super.onDestroyView()
     }
 
