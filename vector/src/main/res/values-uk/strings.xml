@@ -354,7 +354,7 @@
     <string name="login_error_login_email_not_yet">Ви не перейшли за посиланням в електронному листі</string>
     <!-- crypto warnings -->
     <!-- read receipts list Screen -->
-    <string name="read_receipts_list">Перегляд списку вступників</string>
+    <string name="read_receipts_list">Список міток прочитання</string>
     <!-- accounts list Screen -->
     <!-- image size selection -->
     <string name="compression_options">Надіслати як </string>
@@ -842,16 +842,16 @@
 \n
 \nДодати зараз\?</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">%d активний участник</item>
-        <item quantity="few">%d активних участника</item>
-        <item quantity="many">%d активних участників</item>
-        <item quantity="other"/>
+        <item quantity="one">%d активний учасник</item>
+        <item quantity="few">%d активні учасники</item>
+        <item quantity="many">%d активних учасників</item>
+        <item quantity="other">%d активних учасників</item>
     </plurals>
     <plurals name="room_title_members">
-        <item quantity="one">%d участник</item>
-        <item quantity="few">%d участника</item>
-        <item quantity="many">%d участників</item>
-        <item quantity="other"/>
+        <item quantity="one">%d учасник</item>
+        <item quantity="few">%d учасники</item>
+        <item quantity="many">%d учасників</item>
+        <item quantity="other">%d учасників</item>
     </plurals>
     <string name="room_participants_ban_prompt_msg">Заблокованих користувачів буде вилучено з цієї кімнати й вони не зможуть приєднатися знову.</string>
     <plurals name="room_new_messages_notification">
@@ -2875,7 +2875,7 @@
     <string name="labs_use_restricted_join_rule_desc">Попередження: вимагає підтримки сервера та експериментальної версії кімнати</string>
     <string name="spaces_feeling_experimental_subspace">Бажаєте поекспериментувати\?
 \nМожете додати наявні простори до простору.</string>
-    <string name="labs_use_restricted_join_rule">Експериментальний простір - обмежена кімната.</string>
+    <string name="labs_use_restricted_join_rule">Експериментально: доступ до кімнати для будь-кого в просторі.</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Усі кімнати, у яких ви перебуваєте, буде показано на сторінці Домівка.</string>
     <string name="preference_show_all_rooms_in_home">Показувати у Домівці</string>
     <string name="verification_cancelled">Перевірку скасовано</string>
