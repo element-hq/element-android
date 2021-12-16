@@ -31,7 +31,7 @@ Note also that most of the comments should not be changed without checking their
             <corners android:bottomRightRadius="@dimen/sc_bubble_radius"
                 android:bottomLeftRadius="@dimen/sc_bubble_radius"
                 android:topLeftRadius="@dimen/sc_bubble_radius"
-                android:topRightRadius="@dimen/sc_bubble_radius_in_tail" />
+                android:topRightRadius="@dimen/sc_bubble_radius" />
 
         </shape>
     </item>

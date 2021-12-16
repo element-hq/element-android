@@ -14,8 +14,6 @@ Note also that most of the comments should not be changed without checking their
 
             <solid android:color="?sc_notice_bg_incoming" />
 
-            <corners android:radius="@dimen/sc_bubble_radius" />
-
             <corners android:bottomRightRadius="@dimen/sc_bubble_radius"
                 android:bottomLeftRadius="@dimen/sc_bubble_radius"
                 android:topLeftRadius="@dimen/sc_bubble_radius" />

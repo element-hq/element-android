@@ -67,6 +67,7 @@ function create_msg_bubble() {
         mised 's|<!-- Filled for tail -->.*\(<!-- Filled for no tail -->\)|\1|' "$out_bubble"
         mised 's|<!-- Tail -->.*<!-- Tail end -->||' "$out_bubble"
         mised 's|<!-- Outer radius -->.*\(<!-- Inner radius -->\)|\1|' "$out_bubble"
+        sed -i 's|sc_bubble_radius_in_tail|sc_bubble_radius|g' "$out_bubble"
     fi
     # Modify fill
     if !((is_notice)); then
