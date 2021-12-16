@@ -602,8 +602,11 @@ internal class DefaultTimeline(
             nextDisplayIndex = offsetIndex + 1
         }
 
-        // Prerequisite to in order for the ThreadsAwarenessHandler to work properly
-        fetchRootThreadEventsIfNeeded(offsetResults)
+
+        if(!BuildConfig.THREADING_ENABLED) {
+            // Prerequisite to in order for the ThreadsAwarenessHandler to work properly
+            fetchRootThreadEventsIfNeeded(offsetResults)
+        }
 
         offsetResults.forEach { eventEntity ->
 
@@ -640,9 +643,7 @@ internal class DefaultTimeline(
                 }.map {
                     EventMapper.map(it)
                 }
-        if(!BuildConfig.THREADING_ENABLED) {
             threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(eventEntityList)
-        }
     }
 
     private fun buildTimelineEvent(eventEntity: TimelineEventEntity): TimelineEvent {

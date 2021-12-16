@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
+import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntityFields
@@ -403,6 +404,9 @@ internal class RealmSessionStoreMigration @Inject constructor(
                 ?.addField(EventEntityFields.ROOT_THREAD_EVENT_ID, String::class.java, FieldAttribute.INDEXED)
                 ?.addField(EventEntityFields.NUMBER_OF_THREADS, Int::class.java)
                 ?.addField(EventEntityFields.THREAD_NOTIFICATION_STATE_STR, String::class.java)
+                ?.transform {
+                    it.setString(EventEntityFields.THREAD_NOTIFICATION_STATE_STR, ThreadNotificationState.NO_NEW_MESSAGE.name)
+                }
                 ?.addRealmObjectField(EventEntityFields.THREAD_SUMMARY_LATEST_MESSAGE.`$`, eventEntity)
     }
 }
