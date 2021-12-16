@@ -308,7 +308,7 @@ fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
     val sendIntent = ShareCompat.IntentBuilder(context)
             .setType(mediaMimeType)
             .setStream(mediaUri)
-            .getIntent()
+            .intent
 
     sendShareIntent(context, sendIntent)
 }
