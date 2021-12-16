@@ -198,6 +198,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                                  eventReplaced: TimelineEvent,
                                  originalEvent: TimelineEvent,
                                  newBodyText: String,
+                                 autoMarkdown: Boolean,
                                  msgType: String,
                                  compatibilityText: String): Event {
         val permalink = permalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "", false)
@@ -205,9 +206,9 @@ internal class LocalEchoEventFactory @Inject constructor(
 
         val body = bodyForReply(originalEvent.getLastMessageContent(), originalEvent.isReply())
         // As we always supply formatted body for replies we should force the MarkdownParser to produce html.
-        val newBodyFormatted = markdownParser.parse(newBodyText, force = true, advanced = false).takeFormatted()
+        val newBodyFormatted = markdownParser.parse(newBodyText, force = true, advanced = autoMarkdown).takeFormatted()
         // Body of the original message may not have formatted version, so may also have to convert to html.
-        val bodyFormatted = body.formattedText ?: markdownParser.parse(newBodyText, force = true, advanced = false).takeFormatted()
+        val bodyFormatted = body.formattedText ?: markdownParser.parse(body.text, force = true, advanced = autoMarkdown).takeFormatted()
         val replyFormatted = buildFormattedReply(
                 permalink,
                 userLink,
@@ -384,7 +385,8 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     fun createReplyTextEvent(roomId: String,
                              eventReplied: TimelineEvent,
-                             replyText: CharSequence): Event? {
+                             replyText: CharSequence,
+                             autoMarkdown: Boolean): Event? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
         val permalink = permalinkFactory.createPermalink(eventReplied.root, false) ?: return null
@@ -394,9 +396,9 @@ internal class LocalEchoEventFactory @Inject constructor(
         val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.isReply())
 
         // As we always supply formatted body for replies we should force the MarkdownParser to produce html.
-        val replyTextFormatted = markdownParser.parse(replyText, force = true, advanced = false).takeFormatted()
+        val replyTextFormatted = markdownParser.parse(replyText, force = true, advanced = autoMarkdown).takeFormatted()
         // Body of the original message may not have formatted version, so may also have to convert to html.
-        val bodyFormatted = body.formattedText ?: markdownParser.parse(replyText, force = true, advanced = false).takeFormatted()
+        val bodyFormatted = body.formattedText ?: markdownParser.parse(body.text, force = true, advanced = autoMarkdown).takeFormatted()
         val replyFormatted = buildFormattedReply(
                 permalink,
                 userLink,
@@ -517,11 +519,12 @@ internal class LocalEchoEventFactory @Inject constructor(
             roomId: String,
             quotedEvent: TimelineEvent,
             text: String,
+            autoMarkdown: Boolean,
     ): Event {
         val messageContent = quotedEvent.getLastMessageContent()
         val textMsg = messageContent?.body
         val quoteText = legacyRiotQuoteText(textMsg, text)
-        return createFormattedTextEvent(roomId, markdownParser.parse(quoteText, force = true, advanced = false), MessageType.MSGTYPE_TEXT)
+        return createFormattedTextEvent(roomId, markdownParser.parse(quoteText, force = true, advanced = autoMarkdown), MessageType.MSGTYPE_TEXT)
     }
 
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {

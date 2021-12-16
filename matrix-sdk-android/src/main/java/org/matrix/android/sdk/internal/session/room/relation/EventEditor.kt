@@ -67,7 +67,7 @@ internal class EventEditor @Inject constructor(private val eventSenderProcessor:
         val roomId = replyToEdit.roomId
         if (replyToEdit.root.sendState.hasFailed()) {
             // We create a new in memory event for the EventSenderProcessor but we keep the eventId of the failed event.
-            val editedEvent = eventFactory.createReplyTextEvent(roomId, originalTimelineEvent, newBodyText)?.copy(
+            val editedEvent = eventFactory.createReplyTextEvent(roomId, originalTimelineEvent, newBodyText, false)?.copy(
                     eventId = replyToEdit.eventId
             ) ?: return NoOpCancellable
             updateFailedEchoWithEvent(roomId, replyToEdit.eventId, editedEvent)
@@ -78,6 +78,7 @@ internal class EventEditor @Inject constructor(private val eventSenderProcessor:
                     replyToEdit,
                     originalTimelineEvent,
                     newBodyText,
+                    true,
                     MessageType.MSGTYPE_TEXT,
                     compatibilityBodyText
             )

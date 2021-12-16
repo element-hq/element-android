@@ -104,9 +104,11 @@ interface RelationService {
      * by the sdk into pills.
      * @param eventReplied the event referenced by the reply
      * @param replyText the reply text
+     * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
      */
     fun replyToMessage(eventReplied: TimelineEvent,
-                       replyText: CharSequence): Cancelable?
+                       replyText: CharSequence,
+                       autoMarkdown: Boolean = false): Cancelable?
 
     /**
      * Get the current EventAnnotationsSummary

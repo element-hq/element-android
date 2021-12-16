@@ -131,8 +131,8 @@ internal class DefaultRelationService @AssistedInject constructor(
         return fetchEditHistoryTask.execute(FetchEditHistoryTask.Params(roomId, eventId))
     }
 
-    override fun replyToMessage(eventReplied: TimelineEvent, replyText: CharSequence): Cancelable? {
-        val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText)
+    override fun replyToMessage(eventReplied: TimelineEvent, replyText: CharSequence, autoMarkdown: Boolean): Cancelable? {
+        val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText, autoMarkdown)
                 ?.also { saveLocalEcho(it) }
                 ?: return null
 
