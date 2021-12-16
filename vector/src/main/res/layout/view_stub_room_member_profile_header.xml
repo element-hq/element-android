@@ -49,12 +49,12 @@
             android:id="@+id/memberProfileLinearLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintBottom_toTopOf="@id/memberProfileIdView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/memberProfileAvatarView"
-            android:gravity="center">
+            app:layout_constraintTop_toBottomOf="@id/memberProfileAvatarView">
 
             <im.vector.app.core.ui.views.ShieldImageView
                 android:id="@+id/memberProfileDecorationImageView"
@@ -72,7 +72,7 @@
                 android:layout_marginEnd="8dp"
                 android:gravity="center"
                 android:textStyle="bold"
-                tools:text=" dezdezdzedez dezjdioezdiozeiodzendez" />
+                tools:text="@sample/users.json/data/displayName" />
 
         </LinearLayout>
 
