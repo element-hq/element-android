@@ -208,12 +208,11 @@ internal class LocalEchoEventFactory @Inject constructor(
         val newBodyFormatted = markdownParser.parse(newBodyText, force = true, advanced = false).takeFormatted()
         // Body of the original message may not have formatted version, so may also have to convert to html.
         val bodyFormatted = body.formattedText ?: markdownParser.parse(newBodyText, force = true, advanced = false).takeFormatted()
-        val replyFormatted = REPLY_PATTERN.format(
+        val replyFormatted = buildFormattedReply(
                 permalink,
                 userLink,
                 originalEvent.senderInfo.disambiguatedDisplayName,
-                // Remove inner mx_reply tags if any
-                bodyFormatted.replace(MX_REPLY_REGEX, ""),
+                bodyFormatted,
                 newBodyFormatted
         )
         //
@@ -398,12 +397,11 @@ internal class LocalEchoEventFactory @Inject constructor(
         val replyTextFormatted = markdownParser.parse(replyText, force = true, advanced = false).takeFormatted()
         // Body of the original message may not have formatted version, so may also have to convert to html.
         val bodyFormatted = body.formattedText ?: markdownParser.parse(replyText, force = true, advanced = false).takeFormatted()
-        val replyFormatted = REPLY_PATTERN.format(
+        val replyFormatted = buildFormattedReply(
                 permalink,
                 userLink,
                 userId,
-                // Remove inner mx_reply tags if any
-                bodyFormatted.replace(MX_REPLY_REGEX, ""),
+                bodyFormatted,
                 replyTextFormatted
         )
         //
@@ -422,6 +420,16 @@ internal class LocalEchoEventFactory @Inject constructor(
         return createMessageEvent(roomId, content)
     }
 
+    private fun buildFormattedReply(permalink: String, userLink: String, userId: String, bodyFormatted: String, newBodyFormatted: String): String {
+        return REPLY_PATTERN.format(
+                permalink,
+                userLink,
+                userId,
+                // Remove inner mx_reply tags if any
+                bodyFormatted.replace(MX_REPLY_REGEX, ""),
+                newBodyFormatted
+        )
+    }
     private fun buildReplyFallback(body: TextContent, originalSenderId: String?, newBodyText: String): String {
         return buildString {
             append("> <")
