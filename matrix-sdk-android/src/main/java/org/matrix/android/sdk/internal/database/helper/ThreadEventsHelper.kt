@@ -113,9 +113,11 @@ internal fun TimelineEventEntity.Companion.findAllLocalThreadNotificationsForRoo
         TimelineEventEntity
                 .whereRoomId(realm, roomId = roomId)
                 .equalTo(TimelineEventEntityFields.ROOT.IS_ROOT_THREAD, true)
+                .beginGroup()
                 .equalTo(TimelineEventEntityFields.ROOT.THREAD_NOTIFICATION_STATE_STR, ThreadNotificationState.NEW_MESSAGE.name)
                 .or()
                 .equalTo(TimelineEventEntityFields.ROOT.THREAD_NOTIFICATION_STATE_STR, ThreadNotificationState.NEW_HIGHLIGHTED_MESSAGE.name)
+                .endGroup()
 
 /**
  * Returns whether or not the given user is participating in a current thread
