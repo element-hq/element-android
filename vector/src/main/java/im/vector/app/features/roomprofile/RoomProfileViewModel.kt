@@ -71,10 +71,10 @@ class RoomProfileViewModel @AssistedInject constructor(
         observeRoomCreateContent(flowRoom)
         observeBannedRoomMembers(flowRoom)
         observePermissions()
-        obeservePowerLevels()
+        observePowerLevels()
     }
 
-    private fun obeservePowerLevels() {
+    private fun observePowerLevels() {
         val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
         powerLevelsContentLive
                 .onEach {
@@ -208,6 +208,7 @@ class RoomProfileViewModel @AssistedInject constructor(
                 room.enableEncryption(force = true)
             } catch (failure: Throwable) {
                 Timber.e(failure, "Failed to restore encryption state in room ${room.roomId}")
+                _viewEvents.post(RoomProfileViewEvents.Failure(failure))
             } finally {
                 _viewEvents.post(RoomProfileViewEvents.DismissLoading)
             }

@@ -43,10 +43,10 @@ sealed interface SendMode {
     data class Voice(val text: String) : SendMode
 }
 
-sealed class CanSendStatus {
-    object Allowed : CanSendStatus()
-    object NoPermission : CanSendStatus()
-    data class UnSupportedE2eAlgorithm(val algorithm: String?) : CanSendStatus()
+sealed interface CanSendStatus {
+    object Allowed : CanSendStatus
+    object NoPermission : CanSendStatus
+    data class UnSupportedE2eAlgorithm(val algorithm: String?) : CanSendStatus
 }
 
 fun CanSendStatus.boolean(): Boolean {
