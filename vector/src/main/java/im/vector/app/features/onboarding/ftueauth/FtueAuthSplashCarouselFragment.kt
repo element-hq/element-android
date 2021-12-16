@@ -25,7 +25,6 @@ import androidx.core.view.isVisible
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
-import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
@@ -38,13 +37,12 @@ import org.matrix.android.sdk.api.failure.Failure
 import java.net.UnknownHostException
 import javax.inject.Inject
 
-@AndroidEntryPoint
-class FtueAuthSplashCarouselFragment : AbstractFtueAuthFragment<FragmentFtueSplashCarouselBinding>() {
-
-    @Inject lateinit var vectorPreferences: VectorPreferences
-    @Inject lateinit var vectorFeatures: VectorFeatures
-    @Inject lateinit var carouselController: SplashCarouselController
-    @Inject lateinit var stringProvider: StringProvider
+class FtueAuthSplashCarouselFragment @Inject constructor(
+        private val vectorPreferences: VectorPreferences,
+        private val vectorFeatures: VectorFeatures,
+        private val carouselController: SplashCarouselController,
+        private val stringProvider: StringProvider
+) : AbstractFtueAuthFragment<FragmentFtueSplashCarouselBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueSplashCarouselBinding {
         return FragmentFtueSplashCarouselBinding.inflate(inflater, container, false)
