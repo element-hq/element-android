@@ -30,16 +30,16 @@ import org.matrix.android.sdk.api.failure.is401
 import javax.inject.Inject
 
 @Parcelize
-data class LoginWaitForEmailFragmentArgument(
+data class FtueAuthWaitForEmailFragmentArgument(
         val email: String
 ) : Parcelable
 
 /**
  * In this screen, the user is asked to check his emails
  */
-class LoginWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentLoginWaitForEmailBinding>() {
+class FtueAuthWaitForEmailFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentLoginWaitForEmailBinding>() {
 
-    private val params: LoginWaitForEmailFragmentArgument by args()
+    private val params: FtueAuthWaitForEmailFragmentArgument by args()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginWaitForEmailBinding {
         return FragmentLoginWaitForEmailBinding.inflate(inflater, container, false)
