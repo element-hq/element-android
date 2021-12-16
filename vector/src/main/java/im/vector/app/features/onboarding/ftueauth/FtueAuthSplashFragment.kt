@@ -24,7 +24,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.databinding.FragmentFtueAuthSplashBinding
@@ -39,11 +38,10 @@ import javax.inject.Inject
 /**
  * In this screen, the user is viewing an introduction to what he can do with this application
  */
-@AndroidEntryPoint
-class FtueAuthSplashFragment : AbstractFtueAuthFragment<FragmentFtueAuthSplashBinding>() {
-
-    @Inject lateinit var vectorPreferences: VectorPreferences
-    @Inject lateinit var vectorFeatures: VectorFeatures
+class FtueAuthSplashFragment @Inject constructor(
+        private val vectorPreferences: VectorPreferences,
+        private val vectorFeatures: VectorFeatures
+) : AbstractFtueAuthFragment<FragmentFtueAuthSplashBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueAuthSplashBinding {
         return FragmentFtueAuthSplashBinding.inflate(inflater, container, false)
