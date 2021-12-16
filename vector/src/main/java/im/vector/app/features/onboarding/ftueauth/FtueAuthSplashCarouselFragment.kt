@@ -22,19 +22,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.extensions.incrementAndWrap
+import im.vector.app.core.extensions.setCurrentItem
+import im.vector.app.core.flow.tickerFlow
 import im.vector.app.databinding.FragmentFtueSplashCarouselBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingFlow
 import im.vector.app.features.settings.VectorPreferences
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.failure.Failure
 import java.net.UnknownHostException
 import javax.inject.Inject
+
+private const val CAROUSEL_ROTATION_DELAY_MS = 5000L
+private const val CAROUSEL_TRANSITION_TIME_MS = 500L
 
 class FtueAuthSplashCarouselFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
@@ -52,7 +61,8 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
     }
 
     private fun setupViews() {
-        views.splashCarousel.adapter = carouselController.adapter
+        val carouselAdapter = carouselController.adapter
+        views.splashCarousel.adapter = carouselAdapter
         TabLayoutMediator(views.carouselIndicator, views.splashCarousel) { _, _ -> }.attach()
         carouselController.setData(SplashCarouselState())
 
@@ -68,6 +78,13 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
             views.loginSplashVersion.text = "Version : ${BuildConfig.VERSION_NAME}#${BuildConfig.BUILD_NUMBER}\n" +
                     "Branch: ${BuildConfig.GIT_BRANCH_NAME}"
             views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
+        }
+
+        views.splashCarousel.apply {
+            val itemCount = carouselAdapter.itemCount
+            tickerFlow(lifecycleScope, delayMillis = CAROUSEL_ROTATION_DELAY_MS)
+                    .onEach { setCurrentItem(currentItem.incrementAndWrap(max = itemCount - 1), duration = CAROUSEL_TRANSITION_TIME_MS) }
+                    .launchIn(lifecycleScope)
         }
     }
 
