@@ -173,9 +173,11 @@ internal class DefaultTimeline(
                     TimelineEventEntity
                             .whereRoomId(realm, roomId = roomId)
                             .equalTo(TimelineEventEntityFields.CHUNK.IS_LAST_FORWARD, true)
+                            .beginGroup()
                             .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, it)
                             .or()
                             .equalTo(TimelineEventEntityFields.ROOT.EVENT_ID, it)
+                            .endGroup()
                             .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
                             .findAll()
 
