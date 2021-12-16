@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.database.mapper
 
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.model.RoomEncryptionAlgorithm
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -70,7 +71,9 @@ internal class RoomSummaryMapper @Inject constructor(private val timelineEventMa
                 isEncrypted = roomSummaryEntity.isEncrypted,
                 encryptionEventTs = roomSummaryEntity.encryptionEventTs,
                 breadcrumbsIndex = roomSummaryEntity.breadcrumbsIndex,
-                roomEncryptionTrustLevel = roomSummaryEntity.roomEncryptionTrustLevel,
+                roomEncryptionTrustLevel = if (roomSummaryEntity.isEncrypted && roomSummaryEntity.e2eAlgorithm != MXCRYPTO_ALGORITHM_MEGOLM) {
+                    RoomEncryptionTrustLevel.E2EWithUnsupportedAlgorithm
+                } else roomSummaryEntity.roomEncryptionTrustLevel,
                 inviterId = roomSummaryEntity.inviterId,
                 hasFailedSending = roomSummaryEntity.hasFailedSending,
                 roomType = roomSummaryEntity.roomType,

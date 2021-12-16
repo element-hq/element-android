@@ -110,7 +110,7 @@ class NotificationAreaView @JvmOverloads constructor(
 
     private fun renderUnsupportedAlgorithm(e2eState: State.UnsupportedAlgorithm) {
         visibility = View.VISIBLE
-        views.roomNotificationIcon.setImageResource(R.drawable.ic_shield_warning_small)
+        views.roomNotificationIcon.setImageResource(R.drawable.ic_warning_badge)
         val text = if (e2eState.canRestore) {
             R.string.room_unsupported_e2e_algorithm_as_admin
         } else R.string.room_unsupported_e2e_algorithm
