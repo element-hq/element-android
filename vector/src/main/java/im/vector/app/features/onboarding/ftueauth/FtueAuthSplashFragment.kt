@@ -81,7 +81,7 @@ class FtueAuthSplashFragment @Inject constructor(
                     .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ ->
                         loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = true))
                     }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .show()
         } else {
             super.onError(throwable)

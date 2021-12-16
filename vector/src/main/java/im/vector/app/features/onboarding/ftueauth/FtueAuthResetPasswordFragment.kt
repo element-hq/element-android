@@ -90,7 +90,7 @@ class FtueAuthResetPasswordFragment @Inject constructor() : AbstractFtueAuthFrag
                     .setPositiveButton(R.string.login_reset_password_warning_submit) { _, _ ->
                         doSubmit()
                     }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .show()
         } else {
             doSubmit()
