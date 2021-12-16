@@ -314,10 +314,10 @@ fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
 }
 
 fun shareText(context: Context, text: String) {
-    val sendIntent = Intent()
-    sendIntent.action = Intent.ACTION_SEND
-    sendIntent.type = "text/plain"
-    sendIntent.putExtra(Intent.EXTRA_TEXT, text)
+    val sendIntent = ShareCompat.IntentBuilder(context)
+            .setType("text/plain")
+            .setText(text)
+            .intent
 
     sendShareIntent(context, sendIntent)
 }
