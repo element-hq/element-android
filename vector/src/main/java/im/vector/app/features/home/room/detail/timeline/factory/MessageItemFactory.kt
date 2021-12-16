@@ -482,6 +482,11 @@ class MessageItemFactory @Inject constructor(
             } else {
                 message(linkifiedBody)
             }
+            if (informationData.sentByMe) {
+                layout(R.layout.item_timeline_event_bubble_outgoing_base)
+            } else {
+                layout(R.layout.item_timeline_event_bubble_incoming_base)
+            }
         }
                 .useBigFont(linkifiedBody.length <= MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT * 2 && containsOnlyEmojis(linkifiedBody.toString()))
                 .canUseTextFuture(canUseTextFuture)

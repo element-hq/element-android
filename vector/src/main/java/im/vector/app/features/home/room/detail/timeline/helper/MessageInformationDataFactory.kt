@@ -57,6 +57,8 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         val event = params.event
         val nextDisplayableEvent = params.nextDisplayableEvent
         val eventId = event.eventId
+        val isSentByMe = event.root.senderId == session.myUserId
+        val roomSummary = params.partialState.roomSummary
 
         val date = event.root.localDateTime()
         val nextDate = nextDisplayableEvent?.root?.localDateTime()
@@ -65,20 +67,18 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 ?: false
 
         val showInformation =
-                addDaySeparator ||
+                (addDaySeparator ||
                         event.senderInfo.avatarUrl != nextDisplayableEvent?.senderInfo?.avatarUrl ||
                         event.senderInfo.disambiguatedDisplayName != nextDisplayableEvent?.senderInfo?.disambiguatedDisplayName ||
                         nextDisplayableEvent.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.ENCRYPTED) ||
                         isNextMessageReceivedMoreThanOneHourAgo ||
                         isTileTypeMessage(nextDisplayableEvent) ||
-                        nextDisplayableEvent.isEdition()
+                        nextDisplayableEvent.isEdition() ) && !isSentByMe
 
         val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
-        val roomSummary = params.partialState.roomSummary
         val e2eDecoration = getE2EDecoration(roomSummary, event)
 
         // SendState Decoration
-        val isSentByMe = event.root.senderId == session.myUserId
         val sendStateDecoration = if (isSentByMe) {
             getSendStateDecoration(
                     event = event,
@@ -97,8 +97,9 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 ageLocalTS = event.root.ageLocalTs,
                 avatarUrl = event.senderInfo.avatarUrl,
                 memberName = event.senderInfo.disambiguatedDisplayName,
-                showInformation = showInformation,
-                forceShowTimestamp = vectorPreferences.alwaysShowTimeStamps(),
+                showAvatar = showInformation,
+                showDisplayName = showInformation,
+                showTimestamp = true,
                 orderedReactionList = event.annotations?.reactionsSummary
                         // ?.filter { isSingleEmoji(it.key) }
                         ?.map {

@@ -21,10 +21,10 @@ import javax.inject.Inject
 
 class AvatarSizeProvider @Inject constructor(private val dimensionConverter: DimensionConverter) {
 
-    private val avatarStyle = AvatarStyle.SMALL
+    private val avatarStyle = AvatarStyle.X_SMALL
 
     val leftGuideline: Int by lazy {
-        dimensionConverter.dpToPx(avatarStyle.avatarSizeDP + 8)
+        dimensionConverter.dpToPx(avatarStyle.avatarSizeDP)
     }
 
     val avatarSize: Int by lazy {
@@ -37,6 +37,7 @@ class AvatarSizeProvider @Inject constructor(private val dimensionConverter: Dim
             BIG(50),
             MEDIUM(40),
             SMALL(30),
+            X_SMALL(24),
             NONE(0)
         }
     }

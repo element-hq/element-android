@@ -23,6 +23,6 @@
         android:layout_marginBottom="4dp"
         android:foreground="?attr/selectableItemBackground"
         android:visibility="gone"
-        tools:visibility="visible" />
+        tools:visibility="gone" />
 
 </LinearLayout>

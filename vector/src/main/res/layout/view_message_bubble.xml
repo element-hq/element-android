@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:addStatesFromChildren="true"
-    android:background="?attr/selectableItemBackground"
+    tools:parentTag="android.widget.RelativeLayout"
     tools:viewBindingIgnore="true">
 
     <im.vector.app.core.platform.CheckableView
@@ -31,28 +30,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
-        android:layout_toStartOf="@id/messageTimeView"
         android:layout_toEndOf="@id/messageStartGuideline"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         tools:text="@sample/users.json/data/displayName" />
-
-    <TextView
-        android:id="@+id/messageTimeView"
-        style="@style/Widget.Vector.TextView.Caption"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/messageMemberNameView"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:textColor="?vctr_content_secondary"
-        tools:text="@tools:sample/date/hhmm" />
 
     <View
         android:id="@+id/messageStartGuideline"
@@ -70,28 +56,63 @@
         android:id="@+id/messageE2EDecoration"
         android:layout_width="16dp"
         android:layout_height="16dp"
-        android:layout_alignTop="@id/viewStubContainer"
+        android:layout_alignTop="@id/bubbleWrapper"
         android:layout_alignEnd="@id/decorationSpace"
         android:layout_marginTop="7dp"
         android:visibility="gone"
         tools:visibility="visible" />
 
-    <include
-        android:id="@+id/viewStubContainer"
-        android:layout_width="0dp"
+    <FrameLayout
+        android:id="@+id/bubbleWrapper"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/item_timeline_event_view_stubs_container"
         android:layout_below="@id/messageMemberNameView"
-        android:layout_marginEnd="8dp"
         android:layout_toStartOf="@id/messageSendStateImageView"
         android:layout_toEndOf="@id/messageStartGuideline"
-        android:addStatesFromChildren="true"/>
+        android:addStatesFromChildren="true"
+        android:clipChildren="false"
+        android:clipToPadding="false">
+
+        <RelativeLayout
+            android:id="@+id/bubbleView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="4dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            android:addStatesFromChildren="true"
+            android:background="@drawable/bg_timeline_incoming_message"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            tools:ignore="UselessParent">
+
+            <include
+                android:id="@+id/viewStubContainer"
+                layout="@layout/item_timeline_event_view_stubs_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:addStatesFromChildren="true" />
+
+            <TextView
+                android:id="@+id/messageTimeView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/viewStubContainer"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="4dp"
+                android:layout_toEndOf="@id/viewStubContainer"
+                android:textColor="?vctr_content_tertiary"
+                android:textSize="10sp"
+                tools:text="@tools:sample/date/hhmm" />
+
+        </RelativeLayout>
+    </FrameLayout>
 
     <im.vector.app.core.ui.views.SendStateImageView
         android:id="@+id/messageSendStateImageView"
         android:layout_width="@dimen/item_event_message_state_size"
         android:layout_height="@dimen/item_event_message_state_size"
-        android:layout_alignBottom="@id/viewStubContainer"
+        android:layout_alignBottom="@id/bubbleWrapper"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
@@ -106,7 +127,7 @@
         android:id="@+id/eventSendingIndicator"
         android:layout_width="@dimen/item_event_message_state_size"
         android:layout_height="@dimen/item_event_message_state_size"
-        android:layout_alignBottom="@id/viewStubContainer"
+        android:layout_alignBottom="@id/bubbleWrapper"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
@@ -121,7 +142,7 @@
         android:id="@+id/informationBottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/viewStubContainer"
+        android:layout_below="@id/bubbleWrapper"
         android:layout_toEndOf="@id/messageStartGuideline"
         android:addStatesFromChildren="true"
         android:orientation="vertical">
@@ -146,4 +167,4 @@
         </com.google.android.flexbox.FlexboxLayout>
     </LinearLayout>
 
-</RelativeLayout>
+</merge>

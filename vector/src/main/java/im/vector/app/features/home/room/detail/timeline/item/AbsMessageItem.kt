@@ -22,7 +22,6 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.annotation.IdRes
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.app.R
@@ -63,38 +62,37 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
 
     override fun bind(holder: H) {
         super.bind(holder)
-        if (attributes.informationData.showInformation) {
+        if (attributes.informationData.showAvatar) {
             holder.avatarImageView.layoutParams = holder.avatarImageView.layoutParams?.apply {
                 height = attributes.avatarSize
                 width = attributes.avatarSize
             }
-            holder.avatarImageView.visibility = View.VISIBLE
-            holder.avatarImageView.onClick(_avatarClickListener)
-            holder.memberNameView.visibility = View.VISIBLE
-            holder.memberNameView.onClick(_memberNameClickListener)
-            holder.timeView.visibility = View.VISIBLE
-            holder.timeView.text = attributes.informationData.time
-            holder.memberNameView.text = attributes.informationData.memberName
-            holder.memberNameView.setTextColor(attributes.getMemberNameColor())
             attributes.avatarRenderer.render(attributes.informationData.matrixItem, holder.avatarImageView)
             holder.avatarImageView.setOnLongClickListener(attributes.itemLongClickListener)
-            holder.memberNameView.setOnLongClickListener(attributes.itemLongClickListener)
+            holder.avatarImageView.isVisible = true
+            holder.avatarImageView.onClick(_avatarClickListener)
         } else {
             holder.avatarImageView.setOnClickListener(null)
-            holder.memberNameView.setOnClickListener(null)
-            holder.avatarImageView.visibility = View.GONE
-            if (attributes.informationData.forceShowTimestamp) {
-                holder.memberNameView.isInvisible = true
-                holder.timeView.isVisible = true
-                holder.timeView.text = attributes.informationData.time
-            } else {
-                holder.memberNameView.isVisible = false
-                holder.timeView.isVisible = false
-            }
             holder.avatarImageView.setOnLongClickListener(null)
-            holder.memberNameView.setOnLongClickListener(null)
+            holder.avatarImageView.isVisible = false
         }
-
+        if (attributes.informationData.showDisplayName) {
+            holder.memberNameView.isVisible = true
+            holder.memberNameView.text = attributes.informationData.memberName
+            holder.memberNameView.setTextColor(attributes.getMemberNameColor())
+            holder.memberNameView.onClick(_memberNameClickListener)
+            holder.memberNameView.setOnLongClickListener(attributes.itemLongClickListener)
+        } else {
+            holder.memberNameView.setOnClickListener(null)
+            holder.memberNameView.setOnLongClickListener(null)
+            holder.memberNameView.isVisible = false
+        }
+        if (attributes.informationData.showTimestamp) {
+            holder.timeView.isVisible = true
+            holder.timeView.text = attributes.informationData.time
+        } else {
+            holder.timeView.isVisible = false
+        }
         // Render send state indicator
         holder.sendStateImageView.render(attributes.informationData.sendStateDecoration)
         holder.eventSendingIndicator.isVisible = attributes.informationData.sendStateDecoration == SendStateDecoration.SENDING_MEDIA
