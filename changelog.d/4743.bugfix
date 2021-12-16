@@ -1,0 +1,1 @@
+Fixes crash when launching rooms which contain emojis in the notice content on android 12+
