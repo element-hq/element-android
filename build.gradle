@@ -154,7 +154,7 @@ project(":diff-match-patch") {
 
 // Global configurations across all modules
 ext {
-    isThreadingEnabled = true
+    isThreadingEnabled = false
 }
 
 //project(":matrix-sdk-android") {

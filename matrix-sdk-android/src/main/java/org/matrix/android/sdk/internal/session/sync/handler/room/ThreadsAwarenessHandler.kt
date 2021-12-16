@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.api.util.JsonDict
@@ -43,6 +44,7 @@ import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.timeline.GetEventTask
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -84,7 +86,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
         if (eventList.isNullOrEmpty()) return
 
         val threadsToFetch = emptyMap<String, String>().toMutableMap()
-        Realm.getInstance(monarchy.realmConfiguration).use {  realm ->
+        Realm.getInstance(monarchy.realmConfiguration).use { realm ->
             eventList.asSequence()
                     .filter {
                         isThreadEvent(it) && it.roomId != null
@@ -176,11 +178,29 @@ internal class ThreadsAwarenessHandler @Inject constructor(
         if (!isThreadEvent(event)) return null
         val rootThreadEventId = getRootThreadEventId(event) ?: return null
         val payload = decryptedResult?.toMutableMap() ?: return null
-        val body = getValueFromPayload(payload, "body") ?: return null
+        var body = getValueFromPayload(payload, "body") ?: return null
         val msgType = getValueFromPayload(payload, "msgtype") ?: return null
         val rootThreadEvent = getEventFromDB(realm, rootThreadEventId) ?: return null
         val rootThreadEventSenderId = rootThreadEvent.senderId ?: return null
 
+        // Check the event type
+        when (msgType) {
+            MessageType.MSGTYPE_STICKER_LOCAL -> {
+                body = "sent a sticker from within a thread"
+            }
+            MessageType.MSGTYPE_FILE     -> {
+                body = "sent a file from within a thread"
+            }
+            MessageType.MSGTYPE_VIDEO    -> {
+                body = "Sent a video from within a thread"
+            }
+            MessageType.MSGTYPE_IMAGE    -> {
+                body = "sent an image from within a thread"
+            }
+            MessageType.MSGTYPE_AUDIO    -> {
+                body = "sent an audio file from within a thread"
+            }
+        }
         decryptIfNeeded(rootThreadEvent, roomId)
 
         val rootThreadEventBody = getValueFromPayload(rootThreadEvent.mxDecryptionResult?.payload?.toMutableMap(), "body")
@@ -197,7 +217,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
                 body)
 
         val messageTextContent = MessageTextContent(
-                msgType = msgType,
+                msgType = "m.text",
                 format = MessageFormat.FORMAT_MATRIX_HTML,
                 body = body,
                 formattedBody = replyFormatted
