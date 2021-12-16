@@ -21,6 +21,7 @@ import io.realm.Realm
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -179,7 +180,13 @@ internal class ThreadsAwarenessHandler @Inject constructor(
         val rootThreadEventId = getRootThreadEventId(event) ?: return null
         val payload = decryptedResult?.toMutableMap() ?: return null
         var body = getValueFromPayload(payload, "body") ?: return null
-        val msgType = getValueFromPayload(payload, "msgtype") ?: return null
+        val msgType = getValueFromPayload(payload, "msgtype") ?: run {
+            if (payload["type"]?.toString() == EventType.STICKER) {
+                MessageType.MSGTYPE_STICKER_LOCAL
+            } else {
+                return null
+            }
+        }
         val rootThreadEvent = getEventFromDB(realm, rootThreadEventId) ?: return null
         val rootThreadEventSenderId = rootThreadEvent.senderId ?: return null
 
@@ -188,16 +195,16 @@ internal class ThreadsAwarenessHandler @Inject constructor(
             MessageType.MSGTYPE_STICKER_LOCAL -> {
                 body = "sent a sticker from within a thread"
             }
-            MessageType.MSGTYPE_FILE     -> {
+            MessageType.MSGTYPE_FILE          -> {
                 body = "sent a file from within a thread"
             }
-            MessageType.MSGTYPE_VIDEO    -> {
+            MessageType.MSGTYPE_VIDEO         -> {
                 body = "Sent a video from within a thread"
             }
-            MessageType.MSGTYPE_IMAGE    -> {
+            MessageType.MSGTYPE_IMAGE         -> {
                 body = "sent an image from within a thread"
             }
-            MessageType.MSGTYPE_AUDIO    -> {
+            MessageType.MSGTYPE_AUDIO         -> {
                 body = "sent an audio file from within a thread"
             }
         }
