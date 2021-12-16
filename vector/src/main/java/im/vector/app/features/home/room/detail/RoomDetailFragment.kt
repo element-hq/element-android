@@ -461,7 +461,8 @@ class RoomDetailFragment @Inject constructor(
                 is RoomDetailViewEvents.OpenRoom                         -> handleOpenRoom(it)
                 RoomDetailViewEvents.OpenInvitePeople                    -> navigator.openInviteUsersToRoom(requireContext(), roomDetailArgs.roomId)
                 RoomDetailViewEvents.OpenSetRoomAvatarDialog             -> galleryOrCameraDialogHelper.show()
-                RoomDetailViewEvents.OpenRoomSettings                    -> handleOpenRoomSettings()
+                RoomDetailViewEvents.OpenRoomSettings                    -> handleOpenRoomSettings(RoomProfileActivity.EXTRA_DIRECT_ACCESS_ROOM_SETTINGS)
+                RoomDetailViewEvents.OpenRoomProfile                     -> handleOpenRoomSettings()
                 is RoomDetailViewEvents.ShowRoomAvatarFullScreen         -> it.matrixItem?.let { item ->
                     navigator.openBigImageViewer(requireActivity(), it.view, item)
                 }
@@ -585,11 +586,11 @@ class RoomDetailFragment @Inject constructor(
         )
     }
 
-    private fun handleOpenRoomSettings() {
+    private fun handleOpenRoomSettings(directAccess: Int? = null) {
         navigator.openRoomProfile(
                 requireContext(),
                 roomDetailArgs.roomId,
-                RoomProfileActivity.EXTRA_DIRECT_ACCESS_ROOM_SETTINGS
+                directAccess
         )
     }
 
@@ -948,6 +949,10 @@ class RoomDetailFragment @Inject constructor(
         views.notificationAreaView.delegate = object : NotificationAreaView.Delegate {
             override fun onTombstoneEventClicked() {
                 roomDetailViewModel.handle(RoomDetailAction.JoinAndOpenReplacementRoom)
+            }
+
+            override fun onMisconfiguredEncryptionClicked() {
+                roomDetailViewModel.handle(RoomDetailAction.OnClickMisconfiguredEncryption)
             }
         }
     }

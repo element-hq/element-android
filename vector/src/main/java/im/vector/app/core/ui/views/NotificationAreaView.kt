@@ -25,6 +25,7 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.text.italic
 import im.vector.app.R
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.error.ResourceLimitErrorFormatter
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.utils.DimensionConverter
@@ -115,6 +116,9 @@ class NotificationAreaView @JvmOverloads constructor(
                 +resources.getString(R.string.room_unsupported_e2e_algorithm)
             }
         }
+        views.roomNotificationMessage.onClick {
+            delegate?.onMisconfiguredEncryptionClicked()
+        }
         views.roomNotificationMessage.text = message
         views.roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_secondary))
     }
@@ -193,5 +197,6 @@ class NotificationAreaView @JvmOverloads constructor(
      */
     interface Delegate {
         fun onTombstoneEventClicked()
+        fun onMisconfiguredEncryptionClicked()
     }
 }
