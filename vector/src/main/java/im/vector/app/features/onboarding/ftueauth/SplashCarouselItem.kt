@@ -31,6 +31,7 @@ abstract class SplashCarouselItem : VectorEpoxyModel<SplashCarouselItem.Holder>(
     lateinit var item: SplashCarouselState.Item
 
     override fun bind(holder: Holder) {
+        super.bind(holder)
         holder.view.setBackgroundResource(item.pageBackground)
         holder.image.setImageResource(item.image)
         holder.title.text = item.title
