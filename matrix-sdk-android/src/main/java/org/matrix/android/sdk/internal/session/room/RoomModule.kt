@@ -108,6 +108,13 @@ import javax.inject.Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 internal annotation class SimpleCommonmarkParser
 
+/**
+ * Used to inject the advanced commonmark Parser
+ */
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class AdvancedCommonmarkParser
+
 @Module
 internal abstract class RoomModule {
 
@@ -128,8 +135,9 @@ internal abstract class RoomModule {
         }
 
         @Provides
+        @AdvancedCommonmarkParser
         @JvmStatic
-        fun providesParser(): Parser {
+        fun providesAdvancedParser(): Parser {
             return Parser.builder().build()
         }
 

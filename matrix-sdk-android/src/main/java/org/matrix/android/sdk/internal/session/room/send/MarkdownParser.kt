@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.send
 
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
+import org.matrix.android.sdk.internal.session.room.AdvancedCommonmarkParser
 import org.matrix.android.sdk.internal.session.room.SimpleCommonmarkParser
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
 import javax.inject.Inject
@@ -28,7 +29,7 @@ import javax.inject.Inject
  * If any change is required, please add a test covering the problem and make sure all the tests are still passing.
  */
 internal class MarkdownParser @Inject constructor(
-        private val advancedParser: Parser,
+        @AdvancedCommonmarkParser private val advancedParser: Parser,
         @SimpleCommonmarkParser private val simpleParser: Parser,
         private val htmlRenderer: HtmlRenderer,
         private val textPillsUtils: TextPillsUtils
