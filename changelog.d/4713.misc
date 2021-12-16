@@ -1,0 +1,1 @@
+Avoids leaking the activity windows when loading dialogs are displaying
