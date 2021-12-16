@@ -1461,7 +1461,7 @@ class RoomDetailFragment @Inject constructor(
                         NotificationAreaView.State.NoPermissionToPost
                     }
                     is CanSendStatus.UnSupportedE2eAlgorithm -> {
-                        NotificationAreaView.State.UnsupportedAlgorithm
+                        NotificationAreaView.State.UnsupportedAlgorithm(mainState.isAllowedToSetupEncryption)
                     }
                 }.let {
                     views.notificationAreaView.render(it)

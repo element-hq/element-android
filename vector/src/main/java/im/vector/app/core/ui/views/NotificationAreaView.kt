@@ -74,7 +74,7 @@ class NotificationAreaView @JvmOverloads constructor(
             is State.Default                    -> renderDefault()
             is State.Hidden                     -> renderHidden()
             is State.NoPermissionToPost         -> renderNoPermissionToPost()
-            is State.UnsupportedAlgorithm       -> renderUnsupportedAlgorithm()
+            is State.UnsupportedAlgorithm       -> renderUnsupportedAlgorithm(newState)
             is State.Tombstone                  -> renderTombstone()
             is State.ResourceLimitExceededError -> renderResourceLimitExceededError(newState)
         }.exhaustive
@@ -108,12 +108,15 @@ class NotificationAreaView @JvmOverloads constructor(
         views.roomNotificationMessage.setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_secondary))
     }
 
-    private fun renderUnsupportedAlgorithm() {
+    private fun renderUnsupportedAlgorithm(e2eState: State.UnsupportedAlgorithm) {
         visibility = View.VISIBLE
         views.roomNotificationIcon.setImageResource(R.drawable.ic_shield_warning_small)
+        val text = if (e2eState.canRestore) {
+            R.string.room_unsupported_e2e_algorithm_as_admin
+        } else R.string.room_unsupported_e2e_algorithm
         val message = span {
             italic {
-                +resources.getString(R.string.room_unsupported_e2e_algorithm)
+                +resources.getString(text)
             }
         }
         views.roomNotificationMessage.onClick {
@@ -180,7 +183,7 @@ class NotificationAreaView @JvmOverloads constructor(
 
         // User can't post messages to room because his power level doesn't allow it.
         object NoPermissionToPost : State()
-        object UnsupportedAlgorithm : State()
+        data class UnsupportedAlgorithm(val canRestore: Boolean) : State()
 
         // View will be Gone
         object Hidden : State()
