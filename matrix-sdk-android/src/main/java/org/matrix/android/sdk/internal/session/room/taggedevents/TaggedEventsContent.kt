@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.room.tagged_events
+package org.matrix.android.sdk.internal.session.room.taggedevents
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
