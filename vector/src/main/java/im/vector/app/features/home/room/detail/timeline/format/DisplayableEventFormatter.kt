@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.detail.timeline.format
 
 import dagger.Lazy
-import im.vector.app.EmojiCompatWrapper
+import im.vector.app.EmojiSpanify
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
@@ -39,7 +39,7 @@ import javax.inject.Inject
 class DisplayableEventFormatter @Inject constructor(
         private val stringProvider: StringProvider,
         private val colorProvider: ColorProvider,
-        private val emojiCompatWrapper: EmojiCompatWrapper,
+        private val emojiSpanify: EmojiSpanify,
         private val noticeEventFormatter: NoticeEventFormatter,
         private val htmlRenderer: Lazy<EventHtmlRenderer>
 ) {
@@ -100,7 +100,7 @@ class DisplayableEventFormatter @Inject constructor(
             }
             EventType.REACTION              -> {
                 timelineEvent.root.getClearContent().toModel<ReactionContent>()?.relatesTo?.let {
-                    val emojiSpanned = emojiCompatWrapper.safeEmojiSpanify(stringProvider.getString(R.string.sent_a_reaction, it.key))
+                    val emojiSpanned = emojiSpanify.spanify(stringProvider.getString(R.string.sent_a_reaction, it.key))
                     simpleFormat(senderName, emojiSpanned, appendAuthor)
                 } ?: span { }
             }
