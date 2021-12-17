@@ -21,13 +21,15 @@ import android.text.Spanned
 import android.text.style.MetricAffectingSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.UnderlineSpan
-import androidx.emoji2.text.EmojiCompat
+import im.vector.app.EmojiCompatWrapper
 import im.vector.app.features.home.room.detail.timeline.item.BindingOptions
 import javax.inject.Inject
 
-class SpanUtils @Inject constructor() {
+class SpanUtils @Inject constructor(
+        private val emojiCompat: EmojiCompatWrapper
+) {
     fun getBindingOptions(charSequence: CharSequence): BindingOptions {
-        val emojiCharSequence = EmojiCompat.get().process(charSequence)
+        val emojiCharSequence = emojiCompat.safeEmojiSpanify(charSequence)
 
         if (emojiCharSequence !is Spanned) {
             return BindingOptions()
