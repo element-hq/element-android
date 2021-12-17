@@ -1,0 +1,1 @@
+Fixes unable to render messages by allowing them to render whilst the emoji library is initialising
