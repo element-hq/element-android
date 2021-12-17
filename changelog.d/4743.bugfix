@@ -1,1 +1,1 @@
-Fixes crash when launching rooms which contain emojis in the notice content on android 12+
+Fixes crash when launching rooms which contain emojis in the emote content on android 12+
