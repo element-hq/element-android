@@ -377,6 +377,12 @@ internal abstract class SessionModule {
     abstract fun bindOpenIdTokenService(service: DefaultOpenIdService): OpenIdService
 
     @Binds
+    abstract fun bindToDeviceService(service: DefaultToDeviceService): ToDeviceService
+
+    @Binds
+    abstract fun bindEventStreamService(service: DefaultEventStreamService): EventStreamService
+
+    @Binds
     abstract fun bindTypingUsersTracker(tracker: DefaultTypingUsersTracker): TypingUsersTracker
 
     @Binds
@@ -384,10 +390,4 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindEventSenderProcessor(processor: EventSenderProcessorCoroutine): EventSenderProcessor
-
-    @Binds
-    abstract fun bindToDeviceService(deviceService: DefaultToDeviceService): ToDeviceService
-
-    @Binds
-    abstract fun bindEventStreamService(deviceService: DefaultEventStreamService): EventStreamService
 }

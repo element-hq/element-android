@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addStateEvent
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.mapper.toEntity
@@ -36,6 +37,7 @@ import org.matrix.android.sdk.internal.database.query.find
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.session.StreamEventsManager
+import org.matrix.android.sdk.internal.util.awaitTransaction
 import timber.log.Timber
 import javax.inject.Inject
 

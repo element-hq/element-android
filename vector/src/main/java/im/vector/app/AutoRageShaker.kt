@@ -170,7 +170,6 @@ class AutoRageShaker @Inject constructor(
                     }
 
                     override fun onUploadSucceed(reportUrl: String?) {
-                        Timber.w("## VALR Report URL is $reportUrl")
                         // we need to send the toDevice message to the sender
 
                         coroutineScope.launch {
@@ -190,7 +189,7 @@ class AutoRageShaker @Inject constructor(
                                         ).toContent()
                                 )
                             } catch (failure: Throwable) {
-                                Timber.w("## VALR : failed to send auto-uisi to device")
+                                Timber.w("failed to send auto-uisi to device")
                             }
                         }
                     }

@@ -22,12 +22,11 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.crypto.actions.MessageEncrypter
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
-import org.matrix.android.sdk.internal.crypto.tasks.DefaultSendToDeviceTask
 import org.matrix.android.sdk.internal.crypto.tasks.SendToDeviceTask
 import javax.inject.Inject
 
 internal class DefaultToDeviceService @Inject constructor(
-        private val sendToDeviceTask: DefaultSendToDeviceTask,
+        private val sendToDeviceTask: SendToDeviceTask,
         private val messageEncrypter: MessageEncrypter,
         private val cryptoStore: IMXCryptoStore
 ) : ToDeviceService {

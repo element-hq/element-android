@@ -35,17 +35,15 @@ internal class StreamEventsManager @Inject constructor() {
     private val listeners = mutableListOf<LiveEventListener>()
 
     fun addLiveEventListener(listener: LiveEventListener) {
-        Timber.v("## VALR: addLiveEventListener")
         listeners.add(listener)
     }
 
     fun removeLiveEventListener(listener: LiveEventListener) {
-        Timber.v("## VALR: removeLiveEventListener")
         listeners.remove(listener)
     }
 
     fun dispatchLiveEventReceived(event: Event, roomId: String, initialSync: Boolean) {
-        Timber.v("## VALR: dispatchLiveEventReceived ${event.eventId}")
+        Timber.v("## dispatchLiveEventReceived ${event.eventId}")
         coroutineScope.launch {
             if (!initialSync) {
                 listeners.forEach {
@@ -58,7 +56,7 @@ internal class StreamEventsManager @Inject constructor() {
     }
 
     fun dispatchPaginatedEventReceived(event: Event, roomId: String) {
-        Timber.v("## VALR: dispatchPaginatedEventReceived ${event.eventId}")
+        Timber.v("## dispatchPaginatedEventReceived ${event.eventId}")
         coroutineScope.launch {
             listeners.forEach {
                 tryOrNull {
@@ -69,7 +67,7 @@ internal class StreamEventsManager @Inject constructor() {
     }
 
     fun dispatchLiveEventDecrypted(event: Event, result: MXEventDecryptionResult) {
-        Timber.v("## VALR: dispatchLiveEventDecrypted ${event.eventId}")
+        Timber.v("## dispatchLiveEventDecrypted ${event.eventId}")
         coroutineScope.launch {
             listeners.forEach {
                 tryOrNull {
@@ -80,7 +78,7 @@ internal class StreamEventsManager @Inject constructor() {
     }
 
     fun dispatchLiveEventDecryptionFailed(event: Event, error: Throwable) {
-        Timber.v("## VALR: dispatchLiveEventDecryptionFailed ${event.eventId}")
+        Timber.v("## dispatchLiveEventDecryptionFailed ${event.eventId}")
         coroutineScope.launch {
             listeners.forEach {
                 tryOrNull {
@@ -91,7 +89,7 @@ internal class StreamEventsManager @Inject constructor() {
     }
 
     fun dispatchOnLiveToDevice(event: Event) {
-        Timber.v("## VALR: dispatchOnLiveToDevice ${event.eventId}")
+        Timber.v("## dispatchOnLiveToDevice ${event.eventId}")
         coroutineScope.launch {
             listeners.forEach {
                 tryOrNull {
