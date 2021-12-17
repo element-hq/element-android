@@ -1,3 +1,20 @@
+Changes in Element v1.3.11 (2021-12-17)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fixing proximity sensor still being active after a call ([#2467](https://github.com/vector-im/element-android/issues/2467))
+ - Fix name and shield are truncated in the room detail screen ([#4700](https://github.com/vector-im/element-android/issues/4700))
+ - Call banner: center text vertically ([#4710](https://github.com/vector-im/element-android/issues/4710))
+ - Fixes unable to render messages by allowing them to render whilst the emoji library is initialising ([#4733](https://github.com/vector-im/element-android/issues/4733))
+ - Fix app crash uppon long press on a reply event ([#4742](https://github.com/vector-im/element-android/issues/4742))
+ - Fixes crash when launching rooms which contain emojis in the emote content on android 12+ ([#4743](https://github.com/vector-im/element-android/issues/4743))
+
+Other changes
+-------------
+ - Avoids leaking the activity windows when loading dialogs are displaying ([#4713](https://github.com/vector-im/element-android/issues/4713))
+
+
 Changes in Element v1.3.10 (2021-12-14)
 =======================================
 
