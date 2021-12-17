@@ -32,6 +32,7 @@ import org.matrix.android.sdk.api.session.room.model.message.AudioInfo
 import org.matrix.android.sdk.api.session.room.model.message.AudioWaveformInfo
 import org.matrix.android.sdk.api.session.room.model.message.FileInfo
 import org.matrix.android.sdk.api.session.room.model.message.ImageInfo
+import org.matrix.android.sdk.api.session.room.model.message.LocationInfo
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
@@ -39,6 +40,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollConte
 import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
@@ -192,6 +194,22 @@ internal class LocalEchoEventFactory @Inject constructor(
                 type = EventType.POLL_END,
                 content = content.toContent(),
                 unsignedData = UnsignedData(age = null, transactionId = localId))
+    }
+
+    fun createLocationEvent(roomId: String,
+                            latitude: Double,
+                            longitude: Double,
+                            uncertainty: Double?): Event {
+        val geoUri = buildGeoUri(latitude, longitude, uncertainty)
+        val content = MessageLocationContent(
+                geoUri = geoUri,
+                body = geoUri,
+                locationInfo = LocationInfo(
+                        geoUri = geoUri,
+                        description = geoUri
+                )
+        )
+        return createMessageEvent(roomId, content)
     }
 
     fun createReplaceTextOfReply(roomId: String,
@@ -460,6 +478,23 @@ internal class LocalEchoEventFactory @Inject constructor(
             MessageType.MSGTYPE_VIDEO      -> return TextContent("sent a video.")
             MessageType.MSGTYPE_POLL_START -> return TextContent((content as? MessagePollContent)?.pollCreationInfo?.question?.question ?: "")
             else                           -> return TextContent(content?.body ?: "")
+        }
+    }
+
+    /**
+     * Returns RFC5870 formatted geo uri 'geo:latitude,longitude;uncertainty' like 'geo:40.05,29.24;30'
+     * Uncertainty of the location is in meters and not required.
+     */
+    private fun buildGeoUri(latitude: Double, longitude: Double, uncertainty: Double?): String {
+        return buildString {
+            append("geo:")
+            append(latitude)
+            append(",")
+            append(longitude)
+            uncertainty?.let {
+                append(";")
+                append(it)
+            }
         }
     }
 

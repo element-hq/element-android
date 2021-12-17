@@ -27,7 +27,8 @@ enum class LocationSharingMode(@StringRes val titleRes: Int) {
 
 data class LocationSharingViewState(
         val roomId: String,
-        val mode: LocationSharingMode
+        val mode: LocationSharingMode,
+        val lastKnownLocation: LocationData? = null
 ) : MavericksState {
 
     constructor(locationSharingArgs: LocationSharingArgs) : this(

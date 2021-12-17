@@ -115,6 +115,12 @@ internal class DefaultSendService @AssistedInject constructor(
                 .let { sendEvent(it) }
     }
 
+    override fun sendLocation(latitude: Double, longitude: Double, uncertainty: Double?): Cancelable {
+        return localEchoEventFactory.createLocationEvent(roomId, latitude, longitude, uncertainty)
+                .also { createLocalEcho(it) }
+                .let { sendEvent(it) }
+    }
+
     override fun redactEvent(event: Event, reason: String?): Cancelable {
         // TODO manage media/attachements?
         val redactionEcho = localEchoEventFactory.createRedactEvent(roomId, event.eventId!!, reason)

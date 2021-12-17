@@ -27,7 +27,7 @@ class LocationTracker @Inject constructor(
         private val context: Context) : LocationListener {
 
     interface Callback {
-        fun onLocationUpdate(latitude: Double, longitude: Double)
+        fun onLocationUpdate(locationData: LocationData)
     }
 
     private var locationManager: LocationManager? = null
@@ -51,7 +51,7 @@ class LocationTracker @Inject constructor(
 
             // Send last known location without waiting location updates
             it.getLastKnownLocation(provider)?.let { lastKnownLocation ->
-                callback?.onLocationUpdate(lastKnownLocation.latitude, lastKnownLocation.longitude)
+                callback?.onLocationUpdate(LocationData(lastKnownLocation.latitude, lastKnownLocation.longitude, lastKnownLocation.accuracy.toDouble()))
             }
 
             it.requestLocationUpdates(
@@ -70,7 +70,7 @@ class LocationTracker @Inject constructor(
     }
 
     override fun onLocationChanged(location: Location) {
-        callback?.onLocationUpdate(location.latitude, location.longitude)
+        callback?.onLocationUpdate(LocationData(location.latitude, location.longitude, location.accuracy.toDouble()))
     }
 
     companion object {

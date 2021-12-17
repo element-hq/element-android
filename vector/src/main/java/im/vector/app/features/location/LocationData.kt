@@ -16,9 +16,9 @@
 
 package im.vector.app.features.location
 
-import im.vector.app.core.platform.VectorViewModelAction
+data class LocationData(
+        val latitude: Double,
+        val longitude: Double,
+        val uncertainty: Double?
+)
 
-sealed class LocationSharingAction : VectorViewModelAction {
-    data class OnLocationUpdate(val locationData: LocationData) : LocationSharingAction()
-    object OnShareLocation : LocationSharingAction()
-}

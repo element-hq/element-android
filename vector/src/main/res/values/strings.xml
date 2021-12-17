@@ -3708,4 +3708,6 @@
     <string name="location_activity_title_preview">Location</string>
     <string name="a11y_location_share_icon">Share location</string>
     <string name="location_share">Share location</string>
+    <string name="location_not_available_dialog_title">Element could not access your location</string>
+    <string name="location_not_available_dialog_content">Element could not access your location. Please try again later.</string>
 </resources>

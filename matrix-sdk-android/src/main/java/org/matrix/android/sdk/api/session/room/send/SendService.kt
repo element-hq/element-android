@@ -123,6 +123,14 @@ interface SendService {
     fun resendMediaMessage(localEcho: TimelineEvent): Cancelable
 
     /**
+     * Send a location event to the room
+     * @param latitude required latitude of the location
+     * @param longitude required longitude of the location
+     * @param uncertainty Accuracy of the location in meters
+     */
+    fun sendLocation(latitude: Double, longitude: Double, uncertainty: Double?): Cancelable
+
+    /**
      * Remove this failed message from the timeline
      * @param localEcho the unsent local echo
      */

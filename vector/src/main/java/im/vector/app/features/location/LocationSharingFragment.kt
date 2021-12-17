@@ -26,6 +26,7 @@ import androidx.core.content.ContextCompat
 import com.airbnb.mvrx.activityViewModel
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
@@ -79,6 +80,17 @@ class LocationSharingFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         initMapView(savedInstanceState)
+
+        views.shareLocationContainer.debouncedClicks {
+            viewModel.handle(LocationSharingAction.OnShareLocation)
+        }
+
+        viewModel.observeViewEvents {
+            when (it) {
+                LocationSharingViewEvents.LocationNotAvailableError    -> handleLocationNotAvailableError()
+                LocationSharingViewEvents.Close                        -> activity?.finish()
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -126,10 +138,10 @@ class LocationSharingFragment @Inject constructor(
         }
     }
 
-    override fun onLocationUpdate(latitude: Double, longitude: Double) {
+    override fun onLocationUpdate(locationData: LocationData) {
         lastZoomValue = if (lastZoomValue == -1.0) INITIAL_ZOOM else map?.cameraPosition?.zoom ?: INITIAL_ZOOM
 
-        val latLng = LatLng(latitude, longitude)
+        val latLng = LatLng(locationData.latitude, locationData.longitude)
 
         map?.cameraPosition = CameraPosition.Builder()
                 .target(latLng)
@@ -144,10 +156,20 @@ class LocationSharingFragment @Inject constructor(
                         .withIconImage(USER_PIN_NAME)
                         .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
         )
+
+        viewModel.handle(LocationSharingAction.OnLocationUpdate(locationData))
+    }
+
+    private fun handleLocationNotAvailableError() {
+        MaterialAlertDialogBuilder(requireActivity())
+                .setTitle(R.string.location_not_available_dialog_title)
+                .setMessage(R.string.location_not_available_dialog_content)
+                .setPositiveButton(R.string.ok, null)
+                .show()
     }
 
     companion object {
-        const val INITIAL_ZOOM = 12.0
+        const val INITIAL_ZOOM = 15.0
         const val USER_PIN_NAME = "USER_PIN_NAME"
     }
 }

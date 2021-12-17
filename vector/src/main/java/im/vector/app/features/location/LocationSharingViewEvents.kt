@@ -20,4 +20,5 @@ import im.vector.app.core.platform.VectorViewEvents
 
 sealed class LocationSharingViewEvents : VectorViewEvents {
     object Close : LocationSharingViewEvents()
+    object LocationNotAvailableError : LocationSharingViewEvents()
 }

@@ -23,10 +23,14 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import org.matrix.android.sdk.api.session.Session
 
 class LocationSharingViewModel @AssistedInject constructor(
-        @Assisted private val initialState: LocationSharingViewState
+        @Assisted private val initialState: LocationSharingViewState,
+        session: Session
 ) : VectorViewModel<LocationSharingViewState, LocationSharingAction, LocationSharingViewEvents>(initialState) {
+
+    private val room = session.getRoom(initialState.roomId)!!
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<LocationSharingViewModel, LocationSharingViewState> {
@@ -37,5 +41,28 @@ class LocationSharingViewModel @AssistedInject constructor(
     }
 
     override fun handle(action: LocationSharingAction) {
+        when (action) {
+            is LocationSharingAction.OnLocationUpdate -> handleLocationUpdate(action.locationData)
+            LocationSharingAction.OnShareLocation     -> handleShareLocation()
+        }
+    }
+
+    private fun handleShareLocation() = withState { state ->
+        state.lastKnownLocation?.let { location ->
+            room.sendLocation(
+                    latitude = location.latitude,
+                    longitude = location.longitude,
+                    uncertainty = location.uncertainty
+            )
+            _viewEvents.post(LocationSharingViewEvents.Close)
+        } ?: run {
+            _viewEvents.post(LocationSharingViewEvents.LocationNotAvailableError)
+        }
+    }
+
+    private fun handleLocationUpdate(locationData: LocationData) {
+        setState {
+            copy(lastKnownLocation = locationData)
+        }
     }
 }
