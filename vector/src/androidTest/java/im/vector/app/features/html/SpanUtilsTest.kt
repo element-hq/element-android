@@ -24,6 +24,7 @@ import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.UnderlineSpan
+import androidx.emoji2.text.EmojiCompat
 import im.vector.app.InstrumentedTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeTrue
@@ -32,12 +33,18 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 class SpanUtilsTest : InstrumentedTest {
 
-    private val spanUtils = SpanUtils()
+    private val spanUtils = SpanUtils {
+        val emojiCompat = EmojiCompat.get()
+        emojiCompat.waitForInit()
+        emojiCompat.process(it) ?: it
+    }
 
     private fun SpanUtils.canUseTextFuture(message: CharSequence): Boolean {
         return getBindingOptions(message).canUseTextFuture
@@ -122,4 +129,17 @@ class SpanUtilsTest : InstrumentedTest {
     }
 
     private fun trueIfAlwaysAllowed() = Build.VERSION.SDK_INT < Build.VERSION_CODES.P
+
+    private fun EmojiCompat.waitForInit() {
+        val latch = CountDownLatch(1)
+        registerInitCallback(object : EmojiCompat.InitCallback() {
+            override fun onInitialized() = latch.countDown()
+            override fun onFailed(throwable: Throwable?) {
+                latch.countDown()
+                throw RuntimeException(throwable)
+            }
+        })
+        EmojiCompat.init(context())
+        latch.await(30, TimeUnit.SECONDS)
+    }
 }

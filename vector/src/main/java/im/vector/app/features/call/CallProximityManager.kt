@@ -93,7 +93,9 @@ class CallProximityManager @Inject constructor(
         if (wakeLock == null) {
             wakeLock = powerManager.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, generateWakeLockTag())
         }
-        wakeLock?.acquire(WAKE_LOCK_TIMEOUT_MILLIS)
+        wakeLock
+                ?.takeIf { !it.isHeld }
+                ?.acquire(WAKE_LOCK_TIMEOUT_MILLIS)
     }
 
     private fun onProximityFar() {
