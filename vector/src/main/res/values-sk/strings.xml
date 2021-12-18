@@ -102,9 +102,9 @@
         <item quantity="other">%1$s pridal/a adresy %2$s pre túto miestnosť.</item>
     </plurals>
     <plurals name="notice_room_aliases_removed">
-        <item quantity="one">%1$s odstránil/a adresu %2$s pre túto miestnosť.</item>
-        <item quantity="few">%1$s odstránil/a adresy %3$s pre túto miestnosť.</item>
-        <item quantity="other">%1$s odstránil/a adresy %3$s pre túto miestnosť.</item>
+        <item quantity="one">%1$s odstránil/a %2$s adresu pre túto miestnosť.</item>
+        <item quantity="few">%1$s odstránil/a %2$s adries pre túto miestnosť.</item>
+        <item quantity="other">%1$s odstránil/a %2$s adresy pre túto miestnosť.</item>
     </plurals>
     <string name="notice_room_aliases_added_and_removed">%1$s pridal/a adresy %2$s a odstránil/a adresy %3$s pre túto miestnosť.</string>
     <string name="notice_room_canonical_alias_set">%1$s nastavil/a hlavnú adresu tejto miestnosti %2$s.</string>
@@ -608,8 +608,8 @@
     <string name="devices_details_device_name">Aktualizovať verejné meno</string>
     <string name="devices_details_last_seen_title">Naposledy videné</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-    <string name="devices_delete_dialog_text">Táto operácia si vyžaduje dodatočné overenie.
-Ak chcete pokračovať, prosím zadajte vaše heslo.</string>
+    <string name="devices_delete_dialog_text">Táto operácia si vyžaduje dodatočné overenie. 
+\nAk chcete pokračovať, zadajte prosím vaše heslo.</string>
     <string name="devices_delete_dialog_title">Overenie</string>
     <string name="devices_delete_pswd">Heslo:</string>
     <string name="devices_delete_submit_button_label">Odoslať</string>
@@ -631,9 +631,9 @@ Ak chcete pokračovať, prosím zadajte vaše heslo.</string>
     <string name="settings_confirm_password">Potvrdiť nové heslo</string>
     <string name="settings_fail_to_update_password">Nepodarilo sa zmeniť heslo</string>
     <string name="settings_password_updated">Úspešne ste si zmenili heslo</string>
-    <string name="settings_unignore_user">Zobraziť všetky správy od používateľa %s?
-
-Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie môže chvíľu trvať.</string>
+    <string name="settings_unignore_user">Zobraziť všetky správy od %s\?
+\n
+\nUpozorňujeme, že táto akcia spôsobí reštart aplikácie a môže chvíľu trvať.</string>
     <string name="settings_delete_notification_targets_confirmation">Ste si istí, že chcete odstrániť tento cieľ oznámení?</string>
     <string name="settings_delete_threepid_confirmation">Ste si istí, že chcete odstrániť %1$s %2$s?</string>
     <string name="settings_select_country">Vyberte krajnu</string>
@@ -696,7 +696,7 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="room_settings_addresses_e2e_enabled">V tejto miestnosti je povolené šifrovanie.</string>
     <string name="room_settings_addresses_e2e_disabled">V tejto miestnosti nie je povolené šifrovanie.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Povoliť šifrovanie 
-(Pozor: Nie je viac možné zakázať!)</string>
+\n(Pozor: nie je možné ho znova vypnúť!)</string>
     <string name="directory_title">Adresár</string>
     <string name="settings_theme">Vzhľad</string>
     <string name="failed_to_load_timeline_position">%s sa pokúšal zobraziť konkrétny bod v histórii tejto miestnosti, no zodpovedajúcu udalosť sa nepodarilo nájsť.</string>
@@ -721,9 +721,9 @@ Pozor! Vykonaním tejto akcie reštartujete aplikáciu a opätovné načítanie 
     <string name="encryption_export_export">Exportovať</string>
     <string name="passphrase_enter_passphrase">Zadajte heslo</string>
     <string name="passphrase_confirm_passphrase">Potvrďte heslo</string>
-    <string name="encryption_export_saved_as">Šifrovacie kľúče miestností boli uložené do %s
-
-Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikácii Element.</string>
+    <string name="encryption_export_saved_as">Kľúče od miestnosti E2E boli uložené do \'%s\'.
+\n
+\nUpozornenie: Tento súbor sa môže vymazať, ak sa aplikácia odinštaluje.</string>
     <string name="encryption_import_e2e_room_keys">Importovať E2E kľúče miestností</string>
     <string name="encryption_import_room_keys">Importovať kľúče miestností</string>
     <string name="encryption_import_room_keys_summary">Importovať kľúče z lokálneho súboru</string>
@@ -938,11 +938,11 @@ Pozor: tento súbor môže byť automaticky zmazaný po odinštalovaní aplikác
     <string name="dialog_user_consent_content">Ak chcete aj naďalej používať domovský server %1$s , mali by ste si prečítať a odsúhlasiť naše zmluvné podmienky.</string>
     <string name="dialog_user_consent_submit">Prečítať teraz</string>
     <string name="deactivate_account_title">Deaktivovať účet</string>
-    <string name="deactivate_account_content">Toto spôsobí, že váš účet nebude viac použiteľný. Nebudete sa môcť opätovne prihlásiť a nikto sa nebude môcť znovu zaregistrovať s rovnakým používateľským ID. Deaktiváciou účtu opustíte všetky miestnosti, do ktorých ste kedy vstúpili a vaše kontaktné údaje budú odstránené zo servera totožností. <b>Túto akciu nie je možné vrátiť späť.</b>.
-
-Pri deaktivácii účtu <b>predvolene neodstraňujeme vami odoslané správy.</b> Ak si želáte uplatniť právo zabudnutia, zaškrtnite prosím zodpovedajúce pole nižšie.
-
-Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť správ elektronickej pošty. To, že zabudneme vaše správy v skutočnosti znamená, že správy ktoré ste už odoslali nebudú čitateľné pre nových alebo neregistrovaných používateľov, no registrovaní používatelia, ktorí už prístup k vašim správam majú, budú aj naďalej bez zmeny môcť pristupovať k ich vlastným kópiám vašich správ.</string>
+    <string name="deactivate_account_content">Tým sa vaše konto stane trvalo nepoužiteľným. Nebudete sa môcť prihlásiť a nikto nebude môcť opätovne zaregistrovať rovnaké ID používateľa. To spôsobí, že váš účet opustí všetky miestnosti, ktorých sa zúčastňuje, a odstráni údaje o vašom účte zo servera identity. <b>Táto akcia je nezvratná</b>.
+\n
+\nDeaktivácia vášho účtu <b>nezapríčiní štandardne, že zabudneme na správy, ktoré ste odoslali</b>. Ak chcete, aby sme vaše správy zabudli, označte nižšie uvedené políčko.
+\n
+\nViditeľnosť správ v Matrixe je podobná ako v prípade e-mailu. Naše zabudnutie vašich správ znamená, že správy, ktoré ste poslali, nebudú sprístupnené žiadnym novým alebo neregistrovaným používateľom, ale registrovaní používatelia, ktorí už majú prístup k týmto správam, budú mať stále prístup k ich kópii.</string>
     <string name="deactivate_account_delete_checkbox">Spolu s deaktivovaním účtu si želám odstrániť všetky mnou odoslané správy (Pozor: Môže sa stať, že noví používatelia uvidia neúplnú históriu konverzácií)</string>
     <string name="deactivate_account_prompt_password">Aby ste mohli pokračovať, prosím zadajte svoje heslo:</string>
     <string name="deactivate_account_submit">Deaktivovať účet</string>
@@ -1020,7 +1020,7 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
         <item quantity="few">%d miestnosti</item>
         <item quantity="other">%d miestností</item>
     </plurals>
-    <string name="room_tombstone_versioned_description">Táto miestnosť bola nahradená inou a nie je viac aktívna</string>
+    <string name="room_tombstone_versioned_description">Táto miestnosť bola nahradená inou a nie je viac aktívna.</string>
     <string name="room_tombstone_continuation_link">Konverzácia pokračuje tu</string>
     <string name="room_tombstone_continuation_description">Táto miestnosť je pokračovaním predchádzajúcej konverzácii</string>
     <string name="room_tombstone_predecessor_link">Staršie správy zobrazíte kliknutím sem</string>
@@ -1097,8 +1097,8 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">Registrácia tokenu</string>
     <string name="settings_troubleshoot_test_token_registration_success">Token FCM úspešne zaregistrovaný na domovskom servery.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">FCM token sa nepodarilo zaregistrovať na domoskom servery:
-%1$s</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">FCM token sa nepodarilo zaregistrovať na domovskom serveri:
+\n %1$s</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">Služba oznámení</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Služba oznámení je spustená.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_failed">Služba oznámení nie je spustená. 
@@ -1112,11 +1112,11 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <string name="template_settings_troubleshoot_test_service_boot_failed">Služba sa automaticky nespustí po reštarte zariadenia a nedostanete po reštarte žiadne oznámenia, kým nespustíte ${app_name} aspoň raz.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Povoliť spustenie služby po reštarte</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Kontrola obmedzenia spustenia na pozadí</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">Obmedzenie spustenia na pozadí nie je aktívne pre ${app_name}. Tento test je potrebné spustiť cez mobilné dáta (nie cez wifi).
-%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Obmedzenie spustenia na pozadí je aktívne pre ${app_name}.
-Činnosť aplikácii bude agresívne obmedzovaná operačným systémom, keď je ${app_name} na pozadí. Môže to mať negatívny vplyv na doručovanie oznámení.
-%1$s</string>
+    <string name="template_settings_troubleshoot_test_bg_restricted_success">Obmedzenie spustenia na pozadí nie je aktívne pre ${app_name}. Tento test je potrebné spustiť cez mobilné dáta (nie cez wifi). 
+\n%1$s</string>
+    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Pre ${app_name} sú povolené obmedzenia na pozadí.
+\nPráca, ktorú sa aplikácia pokúsi vykonať, bude agresívne obmedzená, keď je na pozadí, čo môže ovplyvniť oznámenia.
+\n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Deaktivovať obmedzenia</string>
     <string name="settings_troubleshoot_test_battery_title">Optimalizácia batérie</string>
     <string name="template_settings_troubleshoot_test_battery_success">Chod ${app_name} nie je ovplyvnený nastavením optimalizácie batérie.</string>
@@ -1134,8 +1134,8 @@ Viditeľnosť správ odoslaných cez matrix funguje podobne ako viditeľnosť sp
     <string name="settings_show_avatar_display_name_changes_messages">Zobrazovať udalosti účtu</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Zahŕňa zmeny zobrazovaného mena a obrázka v profile.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Pripojenie na pozadí</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} potrebuje na pozadí udržovať aktívne nenáročné spojenie, aby spoľahlivo fungovali oznámenia.
-Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí pre ${app_name}. Prosím povoľte ho.</string>
+    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} potrebuje na pozadí udržovať aktívne nenáročné spojenie, aby spoľahlivo fungovali oznámenia. 
+\nNa ďalšej obrazovke budete vyzvaní, aby ste povolili aplikácii ${názov_aplikácie}, aby sa vždy spúšťala na pozadí, prosím, prijmite.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Udeliť oprávnenie</string>
     <string name="account_email_error">Pri pokuse overiť vašu emailovú adresu sa vyskytla chyba.</string>
     <string name="settings_password">Heslo</string>
@@ -1303,7 +1303,7 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="settings_add_3pid_confirm_password_title">Potvrdiť vaše heslo</string>
     <string name="template_settings_add_3pid_flow_not_supported">Toto nie je možné urobiť cez mobilnú aplikáciu ${app_name}</string>
     <string name="settings_add_3pid_authentication_needed">Je požadované overenie</string>
-    <string name="settings_background_fdroid_sync_mode">Režim synchronizácie na pozadí (Experimentálne)</string>
+    <string name="settings_background_fdroid_sync_mode">Režim synchronizácie na pozadí</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimalizovaný na využívanie batérie</string>
     <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} sa bude synchronizovať na pozadí s cieľom ušetriť limitované zdroje (batériu).
 \nV závislosti od kapacity prostriedkov zariadenia môže byť synchronizácia odložená operačným systémom na neskôr.</string>
@@ -1565,9 +1565,9 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="room_list_catchup_welcome_title">Vitajte doma!</string>
     <string name="room_list_catchup_welcome_body">Tu nájdete neprečítané správy</string>
     <string name="room_list_people_empty_title">Konverzácie</string>
-    <string name="room_list_people_empty_body">Tu sa zobrazia priame konverzácie</string>
+    <string name="room_list_people_empty_body">Tu sa budú zobrazovať vaše konverzácie v priamych správach. Ťuknutím na + vpravo dole niektorú z nich spustíte.</string>
     <string name="room_list_rooms_empty_title">Miestnosti</string>
-    <string name="room_list_rooms_empty_body">Tu sa zobrazia vaše miestnosti</string>
+    <string name="room_list_rooms_empty_body">Tu sa zobrazia vaše miestnosti. Ťuknutím na + vpravo dole nájdete existujúce miestnosti alebo si môžete založiť vlastnú.</string>
     <string name="title_activity_emoji_reaction_picker">Reakcie</string>
     <string name="reactions_agree">Súhlasím</string>
     <string name="reactions_like">Páči sa mi</string>
@@ -1687,4 +1687,42 @@ Na ďalšej obrazovke vás systém požiada o povolenie vždy bežať na pozadí
     <string name="settings_agree_to_terms">Odsúhlaste podmienky používania služieb servera totožností (%s), aby vás ostatní mohli nájsť podľa emailovej adresy alebo telefónneho čísla.</string>
     <string name="labs_allow_extended_logging">Povoliť podrobné záznamy.</string>
     <string name="labs_allow_extended_logging_summary">Podrobné záznamy pomôžu vývojárom poskytnúť viac detailov, keď posielate hlásenie o chybe. Aj keď je toto zapnuté, aplikácia nezaznamenáva obsah správ ani žiadne iné súkromné údaje.</string>
+    <string name="room_profile_section_more_notifications">Oznámenia</string>
+    <string name="room_profile_section_more">Viac</string>
+    <string name="room_profile_section_security">Zabezpečenie</string>
+    <string name="verification_request_waiting">Čakanie…</string>
+    <string name="send_a_sticker">Nálepka</string>
+    <string name="sent_a_file">Súbor</string>
+    <string name="sent_an_audio_file">Audio</string>
+    <string name="sent_an_image">Obrázok.</string>
+    <string name="sent_a_video">Video.</string>
+    <string name="settings">Nastavenia</string>
+    <string name="soft_logout_signin_password_hint">Heslo</string>
+    <string name="login_signup_cancel_confirmation_title">Upozornenie</string>
+    <string name="login_signup_submit">Ďalej</string>
+    <string name="login_signup_password_hint">Heslo</string>
+    <string name="login_signup_username_hint">Používateľské meno</string>
+    <string name="login_msisdn_confirm_submit">Ďalej</string>
+    <string name="login_set_msisdn_submit">Ďalej</string>
+    <string name="login_set_email_submit">Ďalej</string>
+    <string name="login_set_email_mandatory_hint">Email</string>
+    <string name="login_reset_password_cancel_confirmation_title">Upozornenie</string>
+    <string name="login_reset_password_success_title">Úspech!</string>
+    <string name="login_reset_password_warning_submit">Pokračovať</string>
+    <string name="login_reset_password_warning_title">Upozornenie!</string>
+    <string name="login_reset_password_email_hint">Email</string>
+    <string name="login_reset_password_submit">Ďalej</string>
+    <string name="login_server_url_form_other_hint">Adresa</string>
+    <string name="login_continue">Pokračovať</string>
+    <string name="login_server_other_title">Ďalšie</string>
+    <string name="room_list_quick_actions_settings">Nastavenia</string>
+    <string name="room_list_quick_actions_notifications_mute">Stlmiť</string>
+    <string name="uploads_files_title">SÚBORY</string>
+    <string name="attachment_type_sticker">Nálepka</string>
+    <string name="attachment_type_gallery">Galéria</string>
+    <string name="attachment_type_audio">Audio</string>
+    <string name="attachment_type_camera">Kamera</string>
+    <string name="attachment_type_contact">Kontakt</string>
+    <string name="attachment_type_file">Súbor</string>
+    <string name="settings_notification_other">Ďalšie</string>
 </resources>
