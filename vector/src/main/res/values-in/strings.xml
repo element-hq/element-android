@@ -290,7 +290,7 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="list_members">Daftar Anggota</string>
     <string name="open_chat_header">Buka kop</string>
     <string name="room_sync_in_progress">Menyinkronkan…</string>
-    <string name="room_jump_to_first_unread">Arahkan ke yang belum terbaca</string>
+    <string name="room_jump_to_first_unread">Arahkan ke pesan yang belum dibaca</string>
     <string name="room_preview_invitation_format">Anda telah diundang untuk bergabung ke ruang ini oleh %s</string>
     <string name="room_preview_unlinked_email_warning">Undangan ini dikirim oleh %s, yang tidak terhubung dengan akun ini.
 \nAnda mungkin ingin masuk dengan akun lain, atau tambahkan email ini ke akun Anda.</string>
@@ -617,10 +617,10 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="directory_server_native_rooms">Semua ruang bawaan %s</string>
     <string name="lock_screen_hint">Ketik di sini…</string>
     <plurals name="notification_unread_notified_messages">
-        <item quantity="other">%d pesan pemberitahuan yang belum terbaca</item>
+        <item quantity="other">%d pesan pemberitahuan yang belum dibaca</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-        <item quantity="other">%d pesan pemberitahuan yang belum terbaca</item>
+        <item quantity="other">%d pesan pemberitahuan yang belum dibaca</item>
     </plurals>
     <string name="room_settings_tag_pref_entry_low_priority">Prioritas rendah</string>
     <string name="room_settings_tag_pref_entry_none">Tidak Ada</string>
@@ -714,7 +714,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_contacts_phonebook_country">Negara Nomor Telepon</string>
     <string name="settings_home_display">Tampilan halaman awal</string>
     <string name="settings_pin_missed_notifications">Semat ruang yang pemberitahuannya terlewatkan</string>
-    <string name="settings_pin_unread_messages">Semat ruang yang pesannya belum terbaca</string>
+    <string name="settings_pin_unread_messages">Pin ruangan dengan pesan yang belum dibaca</string>
     <string name="settings_devices_list">Perangkat</string>
     <string name="settings_inline_url_preview">Pratinjau URL dalam obrolan</string>
     <string name="settings_always_show_timestamps">Tampilkan waktu kirim untuk seluruh pesan</string>
@@ -1122,7 +1122,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="action_switch">Ganti</string>
     <string name="action_add">Tambah</string>
     <string name="action_copy">Salin</string>
-    <string name="action_mark_room_read">Tandai sebagai terbaca</string>
+    <string name="action_mark_room_read">Tandai sebagai dibaca</string>
     <string name="call_notification_hangup">Tutup Telepon</string>
     <string name="call_notification_reject">Tolak</string>
     <string name="call_notification_answer">Terima</string>
@@ -1393,7 +1393,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="active_widgets_title">Widget aktif</string>
     <string name="active_widget_view_action">LIHAT</string>
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
-    <string name="notification_inline_reply_failed">** Gagal mengirim - mohon buka ruangan</string>
+    <string name="notification_inline_reply_failed">** Gagal mengirim — mohon buka ruangan</string>
     <string name="notification_sender_me">Saya</string>
     <string name="notification_new_invitation">Undangan Baru</string>
     <string name="notification_new_messages">Pesan Baru</string>
@@ -1626,7 +1626,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="login_splash_title">Ini adalah percakapan Anda. Miliki percakapan Anda.</string>
     <string name="login_splash_text2">Jaga percakapan tetap pribadi dengan enkripsi</string>
     <string name="login_splash_text1">Chat dengan orang-orang secara langsung atau dalam grup</string>
-    <string name="timeline_unread_messages">Pesan belum terbaca</string>
+    <string name="timeline_unread_messages">Pesan yang belum dibaca</string>
     <string name="direct_room_join_rules_invite_by_you">Anda membuatnya khusus undangan.</string>
     <string name="direct_room_join_rules_invite">%1$s membuatnya khusus undangan.</string>
     <string name="room_join_rules_invite_by_you">Anda membuat akses ruangan khusus undangan.</string>
@@ -2323,8 +2323,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="help_people_in_spaces_find_and_join">Bantu orang-orang di space untuk menemukan dan bergabung ruangan privat sendiri, tidak perlu mengundang semua secara manual.</string>
     <string name="new_let_people_in_spaces_find_and_join">Baru: Izinkan orang-orang di space untuk menemukan dan bergabung ruangan privat</string>
     <string name="upgrade_room_for_restricted_note">Dicatat bahwa meningkatkan akan membuat versi baru dari ruangannya. Semua pesan saat ini akan tetap di ruangan yang diarsip.</string>
-    <string name="upgrade_room_for_restricted_no_param">Siapa saja di induk ruangan dapat menemukan dan bergabung ke ruangan ini - tidak perlu mengundang semua secara manual. Anda dapat mengubahnya di pengaturan ruangan kapan saja.</string>
-    <string name="upgrade_room_for_restricted">Siapa saja di %s dapat menemukan dan bergabung ke ruangan ini - tidak perlu mengundang semua secara manual. Anda dapat mengubahnya di pengaturan ruangan kapan saja.</string>
+    <string name="upgrade_room_for_restricted_no_param">Siapa saja di induk ruangan dapat menemukan dan bergabung ke ruangan ini — tidak perlu mengundang semua secara manual. Anda dapat mengubahnya di pengaturan ruangan kapan saja.</string>
+    <string name="upgrade_room_for_restricted">Siapa saja di %s dapat menemukan dan bergabung ke ruangan ini — tidak perlu mengundang semua secara manual. Anda dapat mengubahnya di pengaturan ruangan kapan saja.</string>
     <string name="voice_message_reply_content">Pesan Suara (%1$s)</string>
     <string name="error_voice_message_cannot_reply_or_edit">Tidak dapat membalas atau mengedit saat pesan suara aktif</string>
     <string name="error_voice_message_unable_to_record">Tidak dapat merekam sebuah pesan suara</string>
@@ -2641,7 +2641,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="external_link_confirmation_message">Tautan ini %1$s akan membawa Anda ke situs lain: %2$s.
 \n
 \nApakah Anda yakin untuk melanjutkan\?</string>
-    <string name="labs_use_restricted_join_rule">Space Eksperimental - Ruangan yang Dibatasi.</string>
+    <string name="labs_use_restricted_join_rule">Space Eksperimental — Ruangan yang Dibatasi.</string>
     <string name="space_add_space_to_any_space_you_manage">Tambahkan sebuah space ke space apa saja yang Anda bisa kelola.</string>
     <string name="create_space_error_empty_field_space_name">Beri nama untuk melanjutkan.</string>
     <string name="create_pin_confirm_failure">Gagal untuk memvalidasi PIN, mohon ketuk yang baru.</string>
@@ -2890,7 +2890,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="command_description_poll">Membuat poll sederhana</string>
     <string name="poll_item_selected_aria">Opsi yang Dipilih</string>
     <plurals name="poll_info_final">
-        <item quantity="other">%d suara - Hasil akhir</item>
+        <item quantity="other">%d suara — Hasil akhir</item>
     </plurals>
     <plurals name="poll_info">
         <item quantity="other">%d suara</item>
@@ -3003,7 +3003,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     </plurals>
     <string name="preference_system_settings">Pengaturan sistem</string>
     <string name="preference_versions">Versi</string>
-    <string name="preference_help_summary">Dapatkan bantuan dengan menggunakan Element</string>
+    <string name="preference_help_summary">Dapatkan bantuan dalam menggunakan Element</string>
     <string name="preference_help_title">Bantuan dan dukungan</string>
     <string name="preference_help">Bantuan</string>
     <string name="preference_root_legals">Hukum</string>
