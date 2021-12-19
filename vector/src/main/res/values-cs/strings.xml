@@ -925,8 +925,8 @@
     <string name="settings_other">Ostatní</string>
     <string name="settings_advanced">Pokročilé</string>
     <string name="settings_integrations">Integrace</string>
-    <string name="settings_integrations_summary">Použijte správce integrací ke správě botů, můstků, widgetů a nálepkových sad.
-\nSprávci integrací obdrží konfigurační data a mohou změnit widgety, poslat pozvánky do místností a nastavit power levels Vaším jménem.</string>
+    <string name="settings_integrations_summary">Pomocí správce integrace můžete spravovat boty, propojení, widgety a balíčky nálepek.
+\nSprávci integrací přijímají konfigurační data a mohou vaším jménem upravovat widgety, odesílat pozvánky do místností a nastavovat úrovně oprávnění.</string>
     <string name="settings_cryptography">Kryptografie</string>
     <string name="settings_cryptography_manage_keys">Správa kryprografických klíčů</string>
     <string name="settings_notifications_targets">Cíle oznámení</string>
@@ -1625,7 +1625,7 @@
     <string name="terms_of_service">Všeobecné podmínky</string>
     <string name="review_terms">Pročíst všeobecné podmínky</string>
     <string name="terms_description_for_identity_server">Nechte se najít druhými</string>
-    <string name="terms_description_for_integration_manager">Použijte boty, můstky, widgety a nálepkové sady</string>
+    <string name="terms_description_for_integration_manager">Použijte boty, propojení, widgety a balíčky nálepek</string>
     <string name="read_at">Čtěte na</string>
     <string name="identity_server">Server pro identity</string>
     <string name="disconnect_identity_server">Odpojit server pro identity</string>
@@ -1944,7 +1944,7 @@
     <string name="room_settings_enable_encryption">Zapnout koncové šifrování…</string>
     <string name="room_settings_enable_encryption_warning">Jakmile zapnuto, šifrování nelze vypnout.</string>
     <string name="room_settings_enable_encryption_dialog_title">Zapnout šifrování\?</string>
-    <string name="room_settings_enable_encryption_dialog_content">Jakmile zapnuto, šifrování místnosti nelze vypnout. Zprávy odeslané v zašifrované místnosti nemohou být čteny serverem, ale pouze účastníky místnosti. Zapnutím šifrování mohou boty a můstky přestat správně pracovat.</string>
+    <string name="room_settings_enable_encryption_dialog_content">Jakmile je šifrování místnosti zapnuto, nelze jej vypnout. Zprávy odeslané v zašifrované místnosti nemohou být čteny serverem, ale pouze účastníky místnosti. Zapnutí šifrování může zabránit správnému fungování mnoha botů a propojení.</string>
     <string name="room_settings_enable_encryption_dialog_submit">Zapnout šifrování</string>
     <string name="verification_request_notice">Za účelem bezpečnosti ověřte %s kontrolou jednorázového kódu.</string>
     <string name="verification_request_start_notice">Za účelem bezpečnosti to proveďte osobně nebo použijte jiný způsob komunikace.</string>
