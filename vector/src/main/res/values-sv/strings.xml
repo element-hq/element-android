@@ -3041,4 +3041,37 @@
 \nDu kan läsa alla våra villkor %s.</string>
     <string name="analytics_opt_in_title">Hjälp att förbättra Element</string>
     <string name="action_enable">Aktivera</string>
+    <string name="delete_poll_dialog_content">Är du säker på att du vill ta bort den här omröstningen\? Du kommer inte kunna få tillbaka den när den har tagits bort.</string>
+    <string name="delete_poll_dialog_title">Ta bort omröstning</string>
+    <string name="poll_end_room_list_preview">Omröstning avslutad</string>
+    <string name="poll_response_room_list_preview">Röst avgiven</string>
+    <string name="labs_enable_polls">Aktivera omröstningar</string>
+    <string name="end_poll_confirmation_approve_button">Avsluta omröstningen</string>
+    <string name="end_poll_confirmation_description">Det här kommer att stoppa personer från att rösta och visa det slutgiltiga resultatet av omröstningen.</string>
+    <string name="end_poll_confirmation_title">Avsluta den här omröstningen\?</string>
+    <string name="a11y_poll_winner_option">vinnande alternativ</string>
+    <string name="poll_end_action">Avsluta omröstning</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Slutgiltigt resultat baserat på %1$d röst</item>
+        <item quantity="other">Slutgiltigt resultat baserat på %1$d röster</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">Baserat på %1$d röst</item>
+        <item quantity="other">Baserat på %1$d röster</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d röst</item>
+        <item quantity="other">%1$d röster</item>
+    </plurals>
+    <string name="preference_system_settings">Systeminställningar</string>
+    <string name="preference_versions">Versioner</string>
+    <string name="preference_help_summary">Få hjälp med att använda Element</string>
+    <string name="preference_help_title">Hjälp och support</string>
+    <string name="preference_help">Hjälp</string>
+    <string name="preference_root_legals">Legalt</string>
+    <string name="legals_no_policy_provided">Den här servern förser ingen policy.</string>
+    <string name="legals_third_party_notices">Tredjepartsbibliotek</string>
+    <string name="legals_identity_server_title">Din identitetsservers policy</string>
+    <string name="template_legals_application_title">${app_name}s policy</string>
+    <string name="legals_home_server_title">Din hemservers policy</string>
 </resources>
