@@ -1,3 +1,11 @@
+Changes in Element v1.3.12 (2021-12-20)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fixing emoji related crashes on android 8.1.1 and below ([#4769](https://github.com/vector-im/element-android/issues/4769))
+
+
 Changes in Element v1.3.11 (2021-12-17)
 =======================================
 
