@@ -87,24 +87,21 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
                 it.bind(holder.messageView)
             }
         }
-        val textFuture = if (bindingOptions?.canUseTextFuture.orFalse()) {
-            PrecomputedTextCompat.getTextFuture(
-                    message ?: "",
-                    TextViewCompat.getTextMetricsParams(holder.messageView),
-                    null)
-        } else {
-            null
-        }
         super.bind(holder)
         holder.messageView.movementMethod = movementMethod
         renderSendState(holder.messageView, holder.messageView)
         holder.messageView.onClick(attributes.itemClickListener)
         holder.messageView.onLongClickIgnoringLinks(attributes.itemLongClickListener)
 
+        message?.let { holder.messageView.setTextWithEmojiSupport(it, bindingOptions) }
+    }
+
+    private fun AppCompatTextView.setTextWithEmojiSupport(message: CharSequence, bindingOptions: BindingOptions?) {
         if (bindingOptions?.canUseTextFuture.orFalse()) {
-            holder.messageView.setTextFuture(textFuture)
+            val textFuture = PrecomputedTextCompat.getTextFuture(message, TextViewCompat.getTextMetricsParams(this), null)
+            setTextFuture(textFuture)
         } else {
-            holder.messageView.text = if (bindingOptions?.preventMutation.orFalse()) {
+            text = if (bindingOptions?.preventMutation.orFalse()) {
                 message.preventMutation()
             } else {
                 message
