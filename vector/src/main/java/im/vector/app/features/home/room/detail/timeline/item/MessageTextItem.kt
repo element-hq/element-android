@@ -92,27 +92,23 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
                 it.bind(holder.messageView)
             }
         }
-        val textFuture = if (bindingOptions?.canUseTextFuture.orFalse()) {
-            PrecomputedTextCompat.getTextFuture(
-                    message?.charSequence ?: "",
-                    TextViewCompat.getTextMetricsParams(holder.messageView),
-                    null)
-        } else {
-            null
-        }
-        markwonPlugins?.forEach { plugin -> plugin.beforeSetText(holder.messageView, message?.charSequence as Spanned) }
         super.bind(holder)
         holder.messageView.movementMethod = movementMethod
         renderSendState(holder.messageView, holder.messageView)
         holder.messageView.onClick(attributes.itemClickListener)
         holder.messageView.onLongClickIgnoringLinks(attributes.itemLongClickListener)
 
-        if (bindingOptions?.canUseTextFuture.orFalse()) {
-            holder.messageView.setTextFuture(textFuture)
-        } else {
-            holder.messageView.text = message?.charSequence
-        }
+        message?.let { holder.messageView.setTextWithEmojiSupport(it.charSequence, bindingOptions) }
         markwonPlugins?.forEach { plugin -> plugin.afterSetText(holder.messageView) }
+    }
+
+    private fun AppCompatTextView.setTextWithEmojiSupport(message: CharSequence, bindingOptions: BindingOptions?) {
+        if (bindingOptions?.canUseTextFuture.orFalse()) {
+            val textFuture = PrecomputedTextCompat.getTextFuture(message, TextViewCompat.getTextMetricsParams(this), null)
+            setTextFuture(textFuture)
+        } else {
+            text = message
+        }
     }
 
     override fun unbind(holder: Holder) {
