@@ -216,7 +216,7 @@
     <string name="missing_permissions_title_to_start_conf_call">Не вдалося здійснити виклик</string>
     <string name="device_information">Інформація про пристрій</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Конференц-дзвінки не підтримуються у зашифрованих кімнатах</string>
-    <string name="send_anyway">Все одно надіслати</string>
+    <string name="send_anyway">Усе одно надіслати</string>
     <string name="or">або</string>
     <string name="invite">Запрошення</string>
     <string name="offline">Не в мережі</string>
@@ -472,7 +472,7 @@
     <string name="room_unsent_messages_notification">Повідомлення не надіслані. %1$s або %2$s зараз?</string>
     <string name="room_unknown_devices_messages_notification">Повідомлення не надіслані через присутність невідомих сеансів. %1$s або %2$s зараз\?</string>
     <string name="room_prompt_resend">Повторити надсилання</string>
-    <string name="room_prompt_cancel">скасувати все</string>
+    <string name="room_prompt_cancel">Скасувати все</string>
     <string name="room_resend_unsent_messages">Надіслати ненадіслані повідомлення знову</string>
     <string name="room_delete_unsent_messages">Видалити не надіслані повідомлення</string>
     <string name="room_message_file_not_found">Файл не знайдено</string>
@@ -604,7 +604,7 @@
     <string name="devices_delete_dialog_title">Аутентифікація</string>
     <string name="devices_delete_pswd">Пароль:</string>
     <string name="devices_delete_submit_button_label">Надіслати</string>
-    <string name="settings_logged_in">Залоговано як</string>
+    <string name="settings_logged_in">Ви увійшли як</string>
     <string name="settings_home_server">Домашній сервер</string>
     <string name="settings_identity_server">Сервер ідентифікації</string>
     <string name="settings_user_interface">Інтерфейс користувача</string>
@@ -1074,7 +1074,7 @@
     <string name="generic_label_and_value">%1$s: %2$s</string>
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
-    <string name="call_anyway">Все одно подзвонити</string>
+    <string name="call_anyway">Усе одно зателефонувати</string>
     <string name="room_participants_action_kick">Вилучити</string>
     <string name="reason_hint">Причина</string>
     <string name="settings_inline_url_preview_summary">Попередній перегляд посилань у чаті, у разі якщо Ваш сервер підтримує таку можливість.</string>
@@ -1281,7 +1281,7 @@
     <string name="room_filtering_filter_hint">Фільтрувати бесіди…</string>
     <string name="room_list_people_empty_title">Бесіди</string>
     <string name="room_list_catchup_empty_body">У вас більше немає непрочитаних повідомлень</string>
-    <string name="room_list_catchup_empty_title">Все прочитано!</string>
+    <string name="room_list_catchup_empty_title">Усе прочитано!</string>
     <string name="settings_notification_advanced_summary">Встановти важливість сповіщень за подіями</string>
     <string name="hide_advanced">Сховати розширені</string>
     <string name="show_advanced">Показати розширені</string>
@@ -1834,7 +1834,7 @@
     <string name="keys_backup_passphrase_error_decrypt">Не вдалося розшифрувати резервну копію цією парольною фразою: переконайтесь, що вказано правильну парольну фразу відновлення.</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Не знаєте вашої відновлювальної парольної фрази\? Ви можете %s.</string>
     <string name="backup_recovery_passphrase">Парольна фраза відновлення</string>
-    <string name="bad_passphrase_key_reset_all_action">Забули або втратили усі можливості для відновлення\? Скинути все</string>
+    <string name="bad_passphrase_key_reset_all_action">Забули або втратили всі можливості для відновлення\? Скинути все</string>
     <string name="use_file">Використати файл</string>
     <string name="verification_cannot_access_other_session">Скористатись парольною фразою відновлення або ключем</string>
     <string name="keys_backup_restore_with_passphrase">Скористатись відновлювальними парольною фразою або ключем</string>
@@ -2191,7 +2191,7 @@
     <string name="room_settings_room_access_entry_unknown">Невідоме налаштування доступу (%s)</string>
     <string name="room_settings_room_access_entry_knock">Будь-хто може попроситися до кімнати, учасники можуть прийняти або відхилити</string>
     <string name="suggested_rooms_pills_on_empty_header">Вітаємо в %1$s, %2$s.</string>
-    <string name="join_anyway">Все одно приєднатися</string>
+    <string name="join_anyway">Усе одно приєднатися</string>
     <string name="create_space">Створити Простір</string>
     <string name="join_space">Приєднатися до Простору</string>
     <string name="invite_by_link">Поділитися посиланням</string>
