@@ -272,7 +272,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
      * @param event
      */
     private fun isThreadEvent(event: Event): Boolean =
-            event.content.toModel<MessageRelationContent>()?.relatesTo?.type == RelationType.THREAD
+            event.content.toModel<MessageRelationContent>()?.relatesTo?.type == RelationType.IO_THREAD
 
     /**
      * Returns the root thread eventId or null otherwise

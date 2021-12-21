@@ -376,4 +376,15 @@ internal interface RoomAPI {
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "im.nheko.summary/rooms/{roomIdOrAlias}/summary")
     suspend fun getRoomSummary(@Path("roomIdOrAlias") roomidOrAlias: String,
                                @Query("via") viaServers: List<String>?): RoomStrippedState
+
+    // TODO add doc
+    /**
+     */
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "rooms/{roomId}/messages")
+    suspend fun getRoomThreadMessages(@Path("roomId") roomId: String,
+                                      @Query("from") from: String,
+                                      @Query("dir") dir: String,
+                                      @Query("limit") limit: Int,
+                                      @Query("filter") filter: String?
+    ): PaginationResponse
 }

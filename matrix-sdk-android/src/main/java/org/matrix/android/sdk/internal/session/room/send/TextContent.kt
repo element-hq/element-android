@@ -48,7 +48,7 @@ fun TextContent.toThreadTextContent(rootThreadEventId: String, msgType: String =
             msgType = msgType,
             format = MessageFormat.FORMAT_MATRIX_HTML.takeIf { formattedText != null },
             body = text,
-            relatesTo = RelationDefaultContent(RelationType.THREAD, rootThreadEventId),
+            relatesTo = RelationDefaultContent(RelationType.IO_THREAD, rootThreadEventId),
             formattedBody = formattedText
     )
 }

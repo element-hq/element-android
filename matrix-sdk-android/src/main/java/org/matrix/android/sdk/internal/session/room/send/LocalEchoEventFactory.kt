@@ -290,7 +290,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         size = attachment.size
                 ),
                 url = attachment.queryUri.toString(),
-                relatesTo = rootThreadEventId?.let { RelationDefaultContent(RelationType.THREAD, it) }
+                relatesTo = rootThreadEventId?.let { RelationDefaultContent(RelationType.IO_THREAD, it) }
         )
         return createMessageEvent(roomId, content)
     }
@@ -327,7 +327,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         thumbnailInfo = thumbnailInfo
                 ),
                 url = attachment.queryUri.toString(),
-                relatesTo = rootThreadEventId?.let { RelationDefaultContent(RelationType.THREAD, it) }
+                relatesTo = rootThreadEventId?.let { RelationDefaultContent(RelationType.IO_THREAD, it) }
         )
         return createMessageEvent(roomId, content)
     }
@@ -351,7 +351,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         waveform = waveformSanitizer.sanitize(attachment.waveform)
                 ),
                 voiceMessageIndicator = if (!isVoiceMessage) null else emptyMap(),
-                relatesTo = rootThreadEventId?.let { RelationDefaultContent(RelationType.THREAD, it) }
+                relatesTo = rootThreadEventId?.let { RelationDefaultContent(RelationType.IO_THREAD, it) }
         )
         return createMessageEvent(roomId, content)
     }
@@ -365,7 +365,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                         size = attachment.size
                 ),
                 url = attachment.queryUri.toString(),
-                relatesTo = rootThreadEventId?.let { RelationDefaultContent(RelationType.THREAD, it) }
+                relatesTo = rootThreadEventId?.let { RelationDefaultContent(RelationType.IO_THREAD, it) }
         )
         return createMessageEvent(roomId, content)
     }
@@ -454,7 +454,7 @@ internal class LocalEchoEventFactory @Inject constructor(
     private fun generateReplyRelationContent(eventId: String, rootThreadEventId: String? = null): RelationDefaultContent =
             rootThreadEventId?.let {
                 RelationDefaultContent(
-                        type = RelationType.THREAD,
+                        type = RelationType.IO_THREAD,
                         eventId = it,
                         inReplyTo = ReplyToContent(eventId))
             } ?: RelationDefaultContent(null, null, ReplyToContent(eventId))
