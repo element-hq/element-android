@@ -25,9 +25,9 @@
         android:layout_height="17dp"
         android:layout_marginStart="5dp"
         android:layout_marginTop="2dp"
-        app:layout_constraintBottom_toBottomOf="@+id/roomToolbarTitleView"
-        app:layout_constraintStart_toEndOf="@+id/roomToolbarAvatarImageView"
-        app:layout_constraintTop_toTopOf="@+id/roomToolbarTitleView" />
+        app:layout_constraintBottom_toBottomOf="@id/roomToolbarTitleView"
+        app:layout_constraintStart_toEndOf="@id/roomToolbarAvatarImageView"
+        app:layout_constraintTop_toTopOf="@id/roomToolbarTitleView" />
 
     <im.vector.app.core.ui.views.PresenceStateImageView
         android:id="@+id/roomToolbarPresenceImageView"
@@ -36,7 +36,7 @@
         android:background="@drawable/background_circle"
         android:padding="2dp"
         android:visibility="gone"
-        app:layout_constraintCircle="@+id/roomToolbarAvatarImageView"
+        app:layout_constraintCircle="@id/roomToolbarAvatarImageView"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="20dp"
         tools:ignore="MissingConstraints"
@@ -53,7 +53,7 @@
         android:padding="1dp"
         android:src="@drawable/ic_public_room"
         android:visibility="gone"
-        app:layout_constraintCircle="@+id/roomToolbarAvatarImageView"
+        app:layout_constraintCircle="@id/roomToolbarAvatarImageView"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="20dp"
         tools:ignore="MissingConstraints"
@@ -69,10 +69,10 @@
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
-        app:layout_constraintBottom_toTopOf="@+id/roomToolbarSubtitleView"
+        app:layout_constraintBottom_toTopOf="@id/roomToolbarSubtitleView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/roomToolbarDecorationImageView"
+        app:layout_constraintStart_toEndOf="@id/roomToolbarDecorationImageView"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_goneMarginStart="7dp"
@@ -91,8 +91,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/roomToolbarAvatarImageView"
-        app:layout_constraintTop_toBottomOf="@+id/roomToolbarTitleView"
+        app:layout_constraintStart_toEndOf="@id/roomToolbarAvatarImageView"
+        app:layout_constraintTop_toBottomOf="@id/roomToolbarTitleView"
         tools:text="@sample/rooms.json/data/topic"
         tools:visibility="visible" />
 

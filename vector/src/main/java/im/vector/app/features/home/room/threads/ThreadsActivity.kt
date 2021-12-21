@@ -102,7 +102,11 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>(), ToolbarCon
                 avatarUrl = timelineEvent.senderInfo.avatarUrl,
                 rootThreadEventId = timelineEvent.eventId)
         val commonOption: (FragmentTransaction) -> Unit = {
-            it.setCustomAnimations(R.anim.animation_slide_in_right, R.anim.animation_slide_out_left, R.anim.animation_slide_in_left, R.anim.animation_slide_out_right)
+            it.setCustomAnimations(
+                    R.anim.animation_slide_in_right,
+                    R.anim.animation_slide_out_left,
+                    R.anim.animation_slide_in_left,
+                    R.anim.animation_slide_out_right)
         }
         addFragmentToBackstack(
                 container = views.threadsActivityFragmentContainer,
