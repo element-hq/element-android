@@ -2366,7 +2366,7 @@
     <string name="notice_crypto_unable_to_decrypt_final">Nemůžete číst tuto zprávu</string>
     <string name="notice_crypto_unable_to_decrypt_friendly">Čekám na tuto zprávu, může to chvíli trvat</string>
     <string name="crypto_utd">Nelze dešifrovat</string>
-    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Vzhledem ke koncovému se může stát, že budete muset počkat, než zpráva dorazí, protože vám nebyly správně odeslány šifrovací klíče.</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Jelikož se používá koncové šifrování, může se stát, že budete muset počkat, než zpráva dorazí, protože vám nebyly správně odeslány šifrovací klíče.</string>
     <string name="crypto_error_withheld_blacklisted">Nemůžete číst tuto zprávu, protože odesílatel Vás blokuje</string>
     <string name="crypto_error_withheld_unverified">Nemůžete číst tuto zprávu, protože Vaše relace není pro odesílatele důvěryhodná</string>
     <string name="crypto_error_withheld_generic">Nemůžete číst tuto zprávu, protože odesílatel účelově neposlal klíče</string>
