@@ -620,7 +620,7 @@ class MessageItemFactory @Inject constructor(
         val formattedBody = SpannableStringBuilder()
         formattedBody.append("* ${informationData.memberName} ")
         formattedBody.append(messageContent.getHtmlBody())
-
+        val bindingOptions = spanUtils.getBindingOptions(formattedBody)
         val message = formattedBody.linkify(callback)
 
         return MessageTextItem_()
@@ -632,6 +632,7 @@ class MessageItemFactory @Inject constructor(
                         message(message)
                     }
                 }
+                .bindingOptions(bindingOptions)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .previewUrlRetriever(callback?.getPreviewUrlRetriever())
                 .imageContentRenderer(imageContentRenderer)
