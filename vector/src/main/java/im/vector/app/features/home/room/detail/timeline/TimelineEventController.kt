@@ -105,7 +105,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 rootThreadEventId = state.rootThreadEventId
         )
 
-        fun isFromThreadTimeline():Boolean = rootThreadEventId != null
+        fun isFromThreadTimeline(): Boolean = rootThreadEventId != null
     }
 
     interface Callback :
@@ -200,7 +200,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 // it's sent by the same user so we are sure we have up to date information.
                 val invalidatedSenderId: String? = currentSnapshot.getOrNull(position)?.senderInfo?.userId
                 val prevDisplayableEventIndex = currentSnapshot.subList(0, position).indexOfLast {
-                    timelineEventVisibilityHelper.shouldShowEvent(it, partialState.highlightedEventId, partialState.isFromThreadTimeline()  )
+                    timelineEventVisibilityHelper.shouldShowEvent(it, partialState.highlightedEventId, partialState.isFromThreadTimeline())
                 }
                 if (prevDisplayableEventIndex != -1 && currentSnapshot[prevDisplayableEventIndex].senderInfo.userId == invalidatedSenderId) {
                     modelCache[prevDisplayableEventIndex] = null

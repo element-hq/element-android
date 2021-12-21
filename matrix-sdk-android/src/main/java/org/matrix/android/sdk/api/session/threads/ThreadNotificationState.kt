@@ -30,5 +30,4 @@ enum class ThreadNotificationState {
     // The is at least one new message that should bi highlighted
     // ex. "Hello @aris.kotsomitopoulos"
     NEW_HIGHLIGHTED_MESSAGE;
-
 }

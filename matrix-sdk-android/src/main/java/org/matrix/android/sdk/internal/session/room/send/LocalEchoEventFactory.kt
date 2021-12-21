@@ -397,7 +397,6 @@ internal class LocalEchoEventFactory @Inject constructor(
             msgType: String,
             autoMarkdown: Boolean,
             formattedText: String?): Event {
-
         val content = formattedText?.let { TextContent(text, it) } ?: createTextContent(text, autoMarkdown)
         return createEvent(
                 roomId,

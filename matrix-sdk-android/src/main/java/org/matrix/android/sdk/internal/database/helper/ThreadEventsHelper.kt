@@ -37,13 +37,10 @@ import org.matrix.android.sdk.internal.database.query.whereRoomId
  * of threads included. If there is no root thread event no action is done
  */
 internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded(roomId: String, realm: Realm, currentUserId: String) {
-
     if (!BuildConfig.THREADING_ENABLED) return
 
     for ((rootThreadEventId, eventEntity) in this) {
-
         eventEntity.findAllThreadsForRootEventId(eventEntity.realm, rootThreadEventId).let {
-
             if (it.isNullOrEmpty()) return@let
 
             val latestMessage = it.firstOrNull()
@@ -55,7 +52,6 @@ internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded(roomId: String
                     threadsCounted = it.size,
                     latestMessageTimelineEventEntity = latestMessage
             )
-
         }
     }
 
@@ -175,7 +171,6 @@ internal fun isUserMentioned(currentUserId: String, timelineEventEntity: Timelin
  * immediately so we should not display wrong notifications
  */
 internal fun updateNotificationsNew(roomId: String, realm: Realm, currentUserId: String) {
-
     val readReceipt = findMyReadReceipt(realm, roomId, currentUserId) ?: return
 
     val readReceiptChunk = ChunkEntity
@@ -190,7 +185,7 @@ internal fun updateNotificationsNew(roomId: String, realm: Realm, currentUserId:
 
     val readReceiptChunkPosition = readReceiptChunkTimelineEvents.indexOfFirst { it.eventId == readReceipt }
 
-    if(readReceiptChunkPosition == -1) return
+    if (readReceiptChunkPosition == -1) return
 
     if (readReceiptChunkPosition < readReceiptChunkTimelineEvents.lastIndex) {
         // If the read receipt is found inside the chunk

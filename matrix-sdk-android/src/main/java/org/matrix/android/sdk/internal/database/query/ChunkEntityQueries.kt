@@ -46,9 +46,6 @@ internal fun ChunkEntity.Companion.findLastForwardChunkOfRoom(realm: Realm, room
             .findFirst()
 }
 
-
-
-
 internal fun ChunkEntity.Companion.findAllIncludingEvents(realm: Realm, eventIds: List<String>): RealmResults<ChunkEntity> {
     return realm.where<ChunkEntity>()
             .`in`(ChunkEntityFields.TIMELINE_EVENTS.EVENT_ID, eventIds.toTypedArray())
@@ -58,7 +55,6 @@ internal fun ChunkEntity.Companion.findAllIncludingEvents(realm: Realm, eventIds
 internal fun ChunkEntity.Companion.findIncludingEvent(realm: Realm, eventId: String): ChunkEntity? {
     return findAllIncludingEvents(realm, listOf(eventId)).firstOrNull()
 }
-
 
 internal fun ChunkEntity.Companion.create(
         realm: Realm,

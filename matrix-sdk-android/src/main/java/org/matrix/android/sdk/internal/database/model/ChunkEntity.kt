@@ -44,7 +44,6 @@ internal open class ChunkEntity(@Index var prevToken: String? = null,
     val room: RealmResults<RoomEntity>? = null
 
     companion object
-
 }
 
 internal fun ChunkEntity.deleteOnCascade(deleteStateEvents: Boolean, canDeleteRoot: Boolean) {

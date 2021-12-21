@@ -26,7 +26,7 @@ data class ThreadListViewState(
         val rootThreadEventList: Async<List<ThreadTimelineEvent>> = Uninitialized,
         val shouldFilterThreads: Boolean = false,
         val roomId: String
-) : MavericksState{
+) : MavericksState {
 
     constructor(args: ThreadListArgs) : this(roomId = args.roomId)
 }

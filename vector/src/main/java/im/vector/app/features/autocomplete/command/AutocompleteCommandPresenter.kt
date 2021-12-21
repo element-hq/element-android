@@ -25,10 +25,7 @@ import im.vector.app.BuildConfig
 import im.vector.app.features.autocomplete.AutocompleteClickListener
 import im.vector.app.features.autocomplete.RecyclerViewPresenter
 import im.vector.app.features.command.Command
-import im.vector.app.features.home.room.detail.AutoCompleter
 import im.vector.app.features.settings.VectorPreferences
-import timber.log.Timber
-import javax.inject.Inject
 
 class AutocompleteCommandPresenter @AssistedInject constructor(
         @Assisted val isInThreadTimeline: Boolean,
@@ -62,8 +59,9 @@ class AutocompleteCommandPresenter @AssistedInject constructor(
                 .filter {
                     if (BuildConfig.THREADING_ENABLED && isInThreadTimeline) {
                         it.isThreadCommand
-                    } else
+                    } else {
                         true
+                    }
                 }
                 .filter {
                     if (query.isNullOrEmpty()) {

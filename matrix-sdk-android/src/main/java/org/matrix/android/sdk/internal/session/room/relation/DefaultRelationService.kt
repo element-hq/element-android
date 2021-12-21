@@ -169,7 +169,6 @@ internal class DefaultRelationService @AssistedInject constructor(
             autoMarkdown: Boolean,
             formattedText: String?,
             eventReplied: TimelineEvent?): Cancelable? {
-
         val event = if (eventReplied != null) {
             eventFactory.createReplyTextEvent(
                     roomId = roomId,

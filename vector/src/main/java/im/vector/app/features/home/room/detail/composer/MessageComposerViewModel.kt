@@ -30,7 +30,6 @@ import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
 import im.vector.app.features.home.room.detail.ChatEffect
-import im.vector.app.features.home.room.detail.TimelineFragment
 import im.vector.app.features.home.room.detail.composer.rainbow.RainbowGenerator
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.toMessageType
@@ -167,13 +166,14 @@ class MessageComposerViewModel @AssistedInject constructor(
                     when (val slashCommandResult = CommandParser.parseSplashCommand(action.text, state.isInThreadTimeline())) {
                         is ParsedCommand.ErrorNotACommand                  -> {
                             // Send the text message to the room
-                            if (state.rootThreadEventId != null)
+                            if (state.rootThreadEventId != null) {
                                 room.replyInThread(
                                         rootThreadEventId = state.rootThreadEventId,
                                         replyInThreadText = action.text.toString(),
                                         autoMarkdown = action.autoMarkdown)
-                            else
+                            } else {
                                 room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
+                            }
 
                             _viewEvents.post(MessageComposerViewEvents.MessageSent)
                             popDraft()
@@ -192,13 +192,14 @@ class MessageComposerViewModel @AssistedInject constructor(
                         }
                         is ParsedCommand.SendPlainText                     -> {
                             // Send the text message to the room, without markdown
-                            if (state.rootThreadEventId != null)
+                            if (state.rootThreadEventId != null) {
                                 room.replyInThread(
                                         rootThreadEventId = state.rootThreadEventId,
                                         replyInThreadText = action.text.toString(),
                                         autoMarkdown = false)
-                            else
+                            } else {
                                 room.sendTextMessage(slashCommandResult.message, autoMarkdown = false)
+                            }
                             _viewEvents.post(MessageComposerViewEvents.MessageSent)
                             popDraft()
                         }
@@ -258,7 +259,6 @@ class MessageComposerViewModel @AssistedInject constructor(
                             popDraft()
                         }
                         is ParsedCommand.SendRainbow                       -> {
-
                             val message = slashCommandResult.message.toString()
                             state.rootThreadEventId?.let {
                                 room.replyInThread(
@@ -283,7 +283,6 @@ class MessageComposerViewModel @AssistedInject constructor(
                             popDraft()
                         }
                         is ParsedCommand.SendSpoiler                       -> {
-
                             val text = "[${stringProvider.getString(R.string.spoiler)}](${slashCommandResult.message})"
                             val formattedText = "<span data-mx-spoiler>${slashCommandResult.message}</span>"
                             state.rootThreadEventId?.let {
@@ -299,7 +298,6 @@ class MessageComposerViewModel @AssistedInject constructor(
                             popDraft()
                         }
                         is ParsedCommand.SendShrug                         -> {
-
                             sendPrefixedMessage("¯\\_(ツ)_/¯", slashCommandResult.message, state.rootThreadEventId)
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
                             popDraft()

@@ -63,8 +63,6 @@ import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.OnModelBuildFinishedListener
 import com.airbnb.epoxy.addGlidePreloader
 import com.airbnb.epoxy.glidePreloader
-import com.airbnb.mvrx.Mavericks
-import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -136,7 +134,6 @@ import im.vector.app.features.command.Command
 import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivity
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.UnreadMessagesSharedViewModel
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.composer.MessageComposerAction
 import im.vector.app.features.home.room.detail.composer.MessageComposerView
@@ -975,7 +972,6 @@ class TimelineFragment @Inject constructor(
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-
         menu.forEach {
             it.isVisible = roomDetailViewModel.isMenuItemVisible(it.itemId)
         }
@@ -1014,7 +1010,6 @@ class TimelineFragment @Inject constructor(
 
             // Handle custom threads badge notification
             updateMenuThreadNotificationBadge(menu, state)
-
         }
     }
 
@@ -1057,7 +1052,6 @@ class TimelineFragment @Inject constructor(
                     val permalink = session.permalinkService().createPermalink(timelineArgs.roomId, it)
                     copyToClipboard(requireContext(), permalink, false)
                     showSnackWithMessage(getString(R.string.copied_to_clipboard))
-
                 }
                 true
             }
@@ -1109,7 +1103,6 @@ class TimelineFragment @Inject constructor(
                 val int = RoomDetailActivity.newIntent(con, newRoom)
                 int.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                 con.startActivity(int)
-
             }
         }
     }
@@ -1388,7 +1381,7 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun updateJumpToReadMarkerViewVisibility() {
-        if(isThreadTimeLine()) return
+        if (isThreadTimeLine()) return
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
             withState(roomDetailViewModel) {
                 val showJumpToUnreadBanner = when (it.unreadState) {
@@ -1488,7 +1481,7 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun observerUserTyping() {
-        if(isThreadTimeLine()) return
+        if (isThreadTimeLine()) return
         views.composerLayout.views.composerEditText.textChanges()
                 .skipInitialValue()
                 .debounce(300)
@@ -1774,7 +1767,6 @@ class TimelineFragment @Inject constructor(
                             if (roomId != timelineArgs.roomId) return false
                             // Navigation to same room
                             if (!isThreadTimeLine()) {
-
                                 if (rootThreadEventId != null) {
                                     // Thread link, so PermalinkHandler will handle the navigation
                                     return false

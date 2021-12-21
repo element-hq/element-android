@@ -258,7 +258,6 @@ internal class DefaultSendService @AssistedInject constructor(
                            roomIds: Set<String>,
                            rootThreadEventId: String?
     ): Cancelable {
-
         // Ensure that the event will not be send in a thread if we are a different flow.
         // Like sending files to multiple rooms
         val rootThreadId = if (roomIds.isNotEmpty()) null else rootThreadEventId

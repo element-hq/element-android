@@ -95,5 +95,4 @@ internal open class EventEntity(@Index var eventId: String = "",
     }
 
     fun isThread(): Boolean = rootThreadEventId != null
-
 }

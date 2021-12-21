@@ -91,5 +91,4 @@ interface TimelineService {
      * @param rootThreadEventId the eventId of the current thread
      */
     suspend fun markThreadAsRead(rootThreadEventId: String)
-
 }

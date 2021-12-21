@@ -102,7 +102,7 @@ internal class SyncResponseHandler @Inject constructor(
         val aggregator = SyncResponsePostTreatmentAggregator()
 
         // Prerequisite for thread events handling in RoomSyncHandler
-        if(!BuildConfig.THREADING_ENABLED) {
+        if (!BuildConfig.THREADING_ENABLED) {
             threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
         }
 

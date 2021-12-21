@@ -180,7 +180,6 @@ internal class DefaultTimeline(
                             .endGroup()
                             .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
                             .findAll()
-
                 } ?: buildEventQuery(realm).sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
 
                 timelineEvents.addChangeListener(eventsChangeListener)
@@ -332,7 +331,6 @@ internal class DefaultTimeline(
         val firstCacheEvent = results.firstOrNull()
         val chunkEntity = getLiveChunk()
 
-
         updateState(Timeline.Direction.FORWARDS) {
             it.copy(
                     hasMoreInCache = !builtEventsIdMap.containsKey(firstCacheEvent?.eventId),   // what is in DB
@@ -340,7 +338,6 @@ internal class DefaultTimeline(
             )
         }
         updateState(Timeline.Direction.BACKWARDS) {
-
             it.copy(
                     hasMoreInCache = !builtEventsIdMap.containsKey(lastCacheEvent?.eventId),
                     hasReachedEnd = if (isFromThreadTimeline) true else chunkEntity?.isLastBackward ?: false || lastCacheEvent?.root?.type == EventType.STATE_ROOM_CREATE
@@ -497,7 +494,6 @@ internal class DefaultTimeline(
      * This has to be called on TimelineThread as it accesses realm live results
      */
     private fun executePaginationTask(direction: Timeline.Direction, limit: Int) {
-
         val currentChunk = getLiveChunk()
         val token = if (direction == Timeline.Direction.BACKWARDS) currentChunk?.prevToken else currentChunk?.nextToken
         if (token == null) {
@@ -604,8 +600,7 @@ internal class DefaultTimeline(
             nextDisplayIndex = offsetIndex + 1
         }
 
-
-        if(!BuildConfig.THREADING_ENABLED) {
+        if (!BuildConfig.THREADING_ENABLED) {
             // Prerequisite to in order for the ThreadsAwarenessHandler to work properly
             fetchRootThreadEventsIfNeeded(offsetResults)
         }

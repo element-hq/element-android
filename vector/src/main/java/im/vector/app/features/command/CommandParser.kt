@@ -64,14 +64,14 @@ object CommandParser {
 
             // If the command is not supported by threads return error
 
-            if(BuildConfig.THREADING_ENABLED && isInThreadTimeline){
+            if (BuildConfig.THREADING_ENABLED && isInThreadTimeline) {
                 val slashCommand = messageParts.first()
                 val notSupportedCommandsInThreads = Command.values().filter {
                     !it.isThreadCommand
                 }.map {
                     it.command
                 }
-                if(notSupportedCommandsInThreads.contains(slashCommand)){
+                if (notSupportedCommandsInThreads.contains(slashCommand)) {
                     return ParsedCommand.ErrorCommandNotSupportedInThreads(slashCommand)
                 }
             }

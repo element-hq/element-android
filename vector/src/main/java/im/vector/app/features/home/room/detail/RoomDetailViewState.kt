@@ -89,5 +89,4 @@ data class RoomDetailViewState(
     fun isDm() = asyncRoomSummary()?.isDirect == true
 
     fun isThreadTimeline() = rootThreadEventId != null
-
 }

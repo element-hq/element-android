@@ -26,7 +26,6 @@ import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
-import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.EditionOfEventFields
@@ -89,7 +88,6 @@ internal class RealmSessionStoreMigration @Inject constructor(
         if (oldVersion <= 17) migrateTo18(realm)
         if (oldVersion <= 18) migrateTo19(realm)
         if (oldVersion <= 19) migrateTo20(realm)
-
     }
 
     private fun migrateTo1(realm: DynamicRealm) {

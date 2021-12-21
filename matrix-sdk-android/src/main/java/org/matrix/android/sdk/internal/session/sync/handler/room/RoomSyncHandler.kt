@@ -376,7 +376,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 decryptIfNeeded(event, roomId)
             }
 
-            if(!BuildConfig.THREADING_ENABLED) {
+            if (!BuildConfig.THREADING_ENABLED) {
                 threadsAwarenessHandler.handleIfNeeded(
                         realm = realm,
                         roomId = roomId,

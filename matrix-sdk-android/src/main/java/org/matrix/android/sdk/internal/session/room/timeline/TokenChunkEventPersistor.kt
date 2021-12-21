@@ -238,7 +238,6 @@ internal class TokenChunkEventPersistor @Inject constructor(
                 // This is a normal event or a root thread one
                 optimizedThreadSummaryMap[eventEntity.eventId] = eventEntity
             }
-
         }
 
         // Find all the chunks which contain at least one event from the list of eventIds

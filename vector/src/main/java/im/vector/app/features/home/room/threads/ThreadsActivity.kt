@@ -29,8 +29,8 @@ import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityThreadsBinding
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.TimelineFragment
+import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
@@ -152,7 +152,6 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>(), ToolbarCon
                 putExtra(THREAD_TIMELINE_ARGS, threadTimelineArgs)
                 putExtra(THREAD_EVENT_ID_TO_NAVIGATE, eventIdToNavigate)
                 putExtra(THREAD_LIST_ARGS, threadListArgs)
-
             }
         }
     }

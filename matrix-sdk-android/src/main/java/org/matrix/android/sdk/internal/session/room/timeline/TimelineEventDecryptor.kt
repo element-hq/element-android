@@ -115,7 +115,6 @@ internal class TimelineEventDecryptor @Inject constructor(
                         .findFirst()
 
                 eventEntity?.apply {
-
                     val decryptedPayload =
                             if (!BuildConfig.THREADING_ENABLED) {
                                 threadsAwarenessHandler.handleIfNeededDuringDecryption(
