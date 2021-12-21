@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
-import android.text.Spanned
 import android.text.method.MovementMethod
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
