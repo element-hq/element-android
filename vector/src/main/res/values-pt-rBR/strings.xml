@@ -665,7 +665,7 @@
     <string name="settings_set_sync_timeout">Timeout de requisição de sinc</string>
     <string name="settings_set_sync_delay">Delay entre casa Sinc</string>
     <string name="settings_version">Versão</string>
-    <string name="settings_olm_version">versão de olm</string>
+    <string name="settings_olm_version">Versão de olm</string>
     <string name="settings_app_term_conditions">Termos &amp; condições</string>
     <string name="settings_third_party_notices">Notas de terceiros</string>
     <string name="settings_copyright">Copyright</string>
