@@ -28,13 +28,19 @@ import android.widget.TextView
 import androidx.annotation.AttrRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.text.PrecomputedTextCompat
 import androidx.core.view.isVisible
+import androidx.core.widget.TextViewCompat
 import im.vector.app.R
+import im.vector.app.core.epoxy.util.preventMutation
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.utils.copyToClipboard
+import im.vector.app.features.home.room.detail.timeline.item.BindingOptions
 import im.vector.app.features.themes.ThemeUtils
+import org.matrix.android.sdk.api.extensions.orFalse
 
 /**
  * Set a text in the TextView, or set visibility to GONE if the text is null
@@ -137,5 +143,28 @@ fun TextView.copyOnLongClick() {
                     view.showOptimizedSnackbar(view.resources.getString(R.string.copied_to_clipboard))
                 }
         true
+    }
+}
+
+/**
+ * Safely set text containing emojis whilst still enabling text optimisations
+ * For use in epoxy models
+ */
+fun AppCompatTextView.setTextWithEmojiSupport(message: CharSequence?, bindingOptions: BindingOptions?) {
+    setTextFuture(null)
+    when {
+        message == null                            -> {
+            text = null
+        }
+        bindingOptions?.canUseTextFuture.orFalse() -> {
+            val textFuture = PrecomputedTextCompat.getTextFuture(message, TextViewCompat.getTextMetricsParams(this), null)
+            setTextFuture(textFuture)
+        }
+        bindingOptions?.preventMutation.orFalse()  -> {
+            text = message.preventMutation()
+        }
+        else                                       -> {
+            text = message
+        }
     }
 }

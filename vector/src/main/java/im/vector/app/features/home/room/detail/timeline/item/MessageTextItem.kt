@@ -18,22 +18,19 @@ package im.vector.app.features.home.room.detail.timeline.item
 
 import android.text.method.MovementMethod
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.text.PrecomputedTextCompat
 import androidx.core.view.isVisible
-import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.epoxy.onLongClickIgnoringLinks
-import im.vector.app.core.epoxy.util.preventMutation
+import im.vector.app.core.extensions.setTextWithEmojiSupport
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlUiState
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlView
 import im.vector.app.features.media.ImageContentRenderer
-import org.matrix.android.sdk.api.extensions.orFalse
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
@@ -92,22 +89,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         renderSendState(holder.messageView, holder.messageView)
         holder.messageView.onClick(attributes.itemClickListener)
         holder.messageView.onLongClickIgnoringLinks(attributes.itemLongClickListener)
-
-        message?.let { holder.messageView.setTextWithEmojiSupport(it, bindingOptions) }
-    }
-
-    private fun AppCompatTextView.setTextWithEmojiSupport(message: CharSequence, bindingOptions: BindingOptions?) {
-        if (bindingOptions?.canUseTextFuture.orFalse()) {
-            val textFuture = PrecomputedTextCompat.getTextFuture(message, TextViewCompat.getTextMetricsParams(this), null)
-            setTextFuture(textFuture)
-        } else {
-            setTextFuture(null)
-            text = if (bindingOptions?.preventMutation.orFalse()) {
-                message.preventMutation()
-            } else {
-                message
-            }
-        }
+        holder.messageView.setTextWithEmojiSupport(message, bindingOptions)
     }
 
     override fun unbind(holder: Holder) {
