@@ -104,6 +104,7 @@ class HomeActivity :
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
+
     @Suppress("UNUSED")
     private val analyticsAccountDataViewModel: AnalyticsAccountDataViewModel by viewModel()
 
@@ -569,7 +570,7 @@ class HomeActivity :
 
             return Intent(context, HomeActivity::class.java)
                     .apply {
-                        putExtra(Mavericks.KEY_ARG, args)
+                        putExtras(Bundle().also { it.putParcelable(Mavericks.KEY_ARG, args) })
                     }
         }
     }
