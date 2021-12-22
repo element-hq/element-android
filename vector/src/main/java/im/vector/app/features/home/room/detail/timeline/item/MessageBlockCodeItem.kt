@@ -17,11 +17,13 @@
 package im.vector.app.features.home.room.detail.timeline.item
 
 import android.widget.TextView
+import androidx.appcompat.widget.AppCompatTextView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.core.extensions.setTextWithEmojiSupport
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
@@ -31,11 +33,14 @@ abstract class MessageBlockCodeItem : AbsMessageItem<MessageBlockCodeItem.Holder
     var message: CharSequence? = null
 
     @EpoxyAttribute
+    var bindingOptions: BindingOptions? = null
+
+    @EpoxyAttribute
     var editedSpan: CharSequence? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.messageView.text = message
+        holder.messageView.setTextWithEmojiSupport(message, bindingOptions)
         renderSendState(holder.messageView, holder.messageView)
         holder.messageView.onClick(attributes.itemClickListener)
         holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
@@ -46,7 +51,7 @@ abstract class MessageBlockCodeItem : AbsMessageItem<MessageBlockCodeItem.Holder
     override fun getViewType() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
-        val messageView by bind<TextView>(R.id.codeBlockTextView)
+        val messageView by bind<AppCompatTextView>(R.id.codeBlockTextView)
         val editedView by bind<TextView>(R.id.codeBlockEditedView)
     }
 

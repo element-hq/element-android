@@ -525,7 +525,7 @@ class MessageItemFactory @Inject constructor(
                                    informationData: MessageInformationData,
                                    highlight: Boolean,
                                    callback: TimelineEventController.Callback?,
-                                   attributes: AbsMessageItem.Attributes): MessageBlockCodeItem? {
+                                   attributes: AbsMessageItem.Attributes): MessageBlockCodeItem {
         return MessageBlockCodeItem_()
                 .apply {
                     if (informationData.hasBeenEdited) {
@@ -533,6 +533,7 @@ class MessageItemFactory @Inject constructor(
                         editedSpan(spannable)
                     }
                 }
+                .bindingOptions(spanUtils.getBindingOptions(formattedBody))
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
