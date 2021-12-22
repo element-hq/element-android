@@ -26,6 +26,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.MessageInformatio
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
+import im.vector.app.features.html.VectorCharSequenceFactory
 import im.vector.app.features.settings.VectorPreferences
 import me.gujun.android.span.image
 import me.gujun.android.span.span
@@ -42,7 +43,8 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                                                private val avatarSizeProvider: AvatarSizeProvider,
                                                private val drawableProvider: DrawableProvider,
                                                private val attributesFactory: MessageItemAttributesFactory,
-                                               private val vectorPreferences: VectorPreferences) {
+                                               private val vectorPreferences: VectorPreferences,
+                                               private val vectorCharSequenceFactory: VectorCharSequenceFactory) {
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event
@@ -110,7 +112,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                         .leftGuideline(avatarSizeProvider.leftGuideline)
                         .highlighted(params.isHighlighted)
                         .attributes(attributes)
-                        .message(spannableStr)
+                        .message(vectorCharSequenceFactory.create(spannableStr))
                         .movementMethod(createLinkMovementMethod(params.callback))
             }
             else                                             -> null

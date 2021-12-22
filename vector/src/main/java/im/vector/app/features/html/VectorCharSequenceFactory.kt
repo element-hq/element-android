@@ -24,20 +24,22 @@ import im.vector.app.EmojiSpanify
 import im.vector.app.features.home.room.detail.timeline.item.BindingOptions
 import javax.inject.Inject
 
-class SpanUtils @Inject constructor(
+data class VectorCharSequence(val value: CharSequence, val bindingOptions: BindingOptions)
+
+class VectorCharSequenceFactory @Inject constructor(
         private val emojiSpanify: EmojiSpanify
 ) {
-    fun getBindingOptions(charSequence: CharSequence): BindingOptions {
-        val emojiCharSequence = emojiSpanify.spanify(charSequence)
-
-        if (emojiCharSequence !is Spanned) {
-            return BindingOptions()
+    fun create(input: CharSequence): VectorCharSequence {
+        val emojiCharSequence = emojiSpanify.spanify(input)
+        val bindingOptions = if (emojiCharSequence !is Spanned) {
+            BindingOptions()
+        } else {
+            BindingOptions(
+                    canUseTextFuture = canUseTextFuture(emojiCharSequence),
+                    preventMutation = mustPreventMutation(emojiCharSequence)
+            )
         }
-
-        return BindingOptions(
-                canUseTextFuture = canUseTextFuture(emojiCharSequence),
-                preventMutation = mustPreventMutation(emojiCharSequence)
-        )
+        return VectorCharSequence(emojiCharSequence, bindingOptions)
     }
 
     /**

@@ -37,7 +37,7 @@ import im.vector.app.features.home.room.detail.timeline.image.buildImageContentR
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
-import im.vector.app.features.html.SpanUtils
+import im.vector.app.features.html.VectorCharSequenceFactory
 import im.vector.app.features.media.ImageContentRenderer
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
@@ -54,7 +54,7 @@ class MessageActionsEpoxyController @Inject constructor(
         private val imageContentRenderer: ImageContentRenderer,
         private val dimensionConverter: DimensionConverter,
         private val errorFormatter: ErrorFormatter,
-        private val spanUtils: SpanUtils,
+        private val vectorCharSequenceFactory: VectorCharSequenceFactory,
         private val eventDetailsFormatter: EventDetailsFormatter,
         private val dateFormatter: VectorDateFormatter
 ) : TypedEpoxyController<MessageActionState>() {
@@ -66,8 +66,7 @@ class MessageActionsEpoxyController @Inject constructor(
         // Message preview
         val date = state.timelineEvent()?.root?.originServerTs
         val formattedDate = dateFormatter.format(date, DateFormatKind.MESSAGE_DETAIL)
-        val body = state.messageBody.linkify(host.listener)
-        val bindingOptions = spanUtils.getBindingOptions(body)
+        val body = vectorCharSequenceFactory.create(state.messageBody.linkify(host.listener))
         bottomSheetMessagePreviewItem {
             id("preview")
             avatarRenderer(host.avatarRenderer)
@@ -76,7 +75,6 @@ class MessageActionsEpoxyController @Inject constructor(
             imageContentRenderer(host.imageContentRenderer)
             data(state.timelineEvent()?.buildImageContentRendererData(host.dimensionConverter.dpToPx(66)))
             userClicked { host.listener?.didSelectMenuAction(EventSharedAction.OpenUserProfile(state.informationData.senderId)) }
-            bindingOptions(bindingOptions)
             body(body)
             bodyDetails(host.eventDetailsFormatter.format(state.timelineEvent()?.root))
             time(formattedDate)

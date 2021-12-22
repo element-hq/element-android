@@ -38,9 +38,8 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.util.preventMutation
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.utils.copyToClipboard
-import im.vector.app.features.home.room.detail.timeline.item.BindingOptions
+import im.vector.app.features.html.VectorCharSequence
 import im.vector.app.features.themes.ThemeUtils
-import org.matrix.android.sdk.api.extensions.orFalse
 
 /**
  * Set a text in the TextView, or set visibility to GONE if the text is null
@@ -147,24 +146,24 @@ fun TextView.copyOnLongClick() {
 }
 
 /**
- * Safely set text containing emojis whilst still enabling text optimisations
+ * Safely set text with optimisations containing spans and emojis
  * For use in epoxy models
  */
-fun AppCompatTextView.setTextWithEmojiSupport(message: CharSequence?, bindingOptions: BindingOptions?) {
+fun AppCompatTextView.setVectorText(message: VectorCharSequence?) {
     setTextFuture(null)
     when {
-        message == null                            -> {
+        message?.value == null                  -> {
             text = null
         }
-        bindingOptions?.canUseTextFuture.orFalse() -> {
-            val textFuture = PrecomputedTextCompat.getTextFuture(message, TextViewCompat.getTextMetricsParams(this), null)
+        message.bindingOptions.canUseTextFuture -> {
+            val textFuture = PrecomputedTextCompat.getTextFuture(message.value, TextViewCompat.getTextMetricsParams(this), null)
             setTextFuture(textFuture)
         }
-        bindingOptions?.preventMutation.orFalse()  -> {
-            text = message.preventMutation()
+        message.bindingOptions.preventMutation  -> {
+            text = message.value.preventMutation()
         }
-        else                                       -> {
-            text = message
+        else                                    -> {
+            text = message.value
         }
     }
 }

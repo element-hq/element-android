@@ -65,7 +65,7 @@ import im.vector.app.features.home.room.detail.timeline.tools.linkify
 import im.vector.app.features.html.CodeVisitor
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillsPostProcessor
-import im.vector.app.features.html.SpanUtils
+import im.vector.app.features.html.VectorCharSequenceFactory
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
@@ -114,7 +114,7 @@ class MessageItemFactory @Inject constructor(
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
-        private val spanUtils: SpanUtils,
+        private val vectorCharSequenceFactory: VectorCharSequenceFactory,
         private val session: Session,
         private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker) {
 
@@ -498,19 +498,17 @@ class MessageItemFactory @Inject constructor(
                                      highlight: Boolean,
                                      callback: TimelineEventController.Callback?,
                                      attributes: AbsMessageItem.Attributes): MessageTextItem? {
-        val bindingOptions = spanUtils.getBindingOptions(body)
         val linkifiedBody = body.linkify(callback)
 
         return MessageTextItem_().apply {
             if (informationData.hasBeenEdited) {
-                val spannable = annotateWithEdited(linkifiedBody, callback, informationData)
+                val spannable = vectorCharSequenceFactory.create(annotateWithEdited(linkifiedBody, callback, informationData))
                 message(spannable)
             } else {
-                message(linkifiedBody)
+                message(vectorCharSequenceFactory.create(linkifiedBody))
             }
         }
                 .useBigFont(linkifiedBody.length <= MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT * 2 && containsOnlyEmojis(linkifiedBody.toString()))
-                .bindingOptions(bindingOptions)
                 .searchForPills(isFormatted)
                 .previewUrlRetriever(callback?.getPreviewUrlRetriever())
                 .imageContentRenderer(imageContentRenderer)
@@ -533,11 +531,10 @@ class MessageItemFactory @Inject constructor(
                         editedSpan(spannable)
                     }
                 }
-                .bindingOptions(spanUtils.getBindingOptions(formattedBody))
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
-                .message(formattedBody)
+                .message(vectorCharSequenceFactory.create(formattedBody))
     }
 
     private fun annotateWithEdited(linkifiedBody: CharSequence,
@@ -591,7 +588,6 @@ class MessageItemFactory @Inject constructor(
             textStyle = "italic"
         }
 
-        val bindingOptions = spanUtils.getBindingOptions(htmlBody)
         val message = formattedBody.linkify(callback)
 
         return MessageTextItem_()
@@ -600,8 +596,7 @@ class MessageItemFactory @Inject constructor(
                 .imageContentRenderer(imageContentRenderer)
                 .previewUrlCallback(callback)
                 .attributes(attributes)
-                .message(message)
-                .bindingOptions(bindingOptions)
+                .message(vectorCharSequenceFactory.create(message))
                 .highlighted(highlight)
                 .movementMethod(createLinkMovementMethod(callback))
     }
@@ -614,19 +609,17 @@ class MessageItemFactory @Inject constructor(
         val formattedBody = SpannableStringBuilder()
         formattedBody.append("* ${informationData.memberName} ")
         formattedBody.append(messageContent.getHtmlBody())
-        val bindingOptions = spanUtils.getBindingOptions(formattedBody)
         val message = formattedBody.linkify(callback)
 
         return MessageTextItem_()
                 .apply {
                     if (informationData.hasBeenEdited) {
                         val spannable = annotateWithEdited(message, callback, informationData)
-                        message(spannable)
+                        message(vectorCharSequenceFactory.create(spannable))
                     } else {
-                        message(message)
+                        message(vectorCharSequenceFactory.create(message))
                     }
                 }
-                .bindingOptions(bindingOptions)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .previewUrlRetriever(callback?.getPreviewUrlRetriever())
                 .imageContentRenderer(imageContentRenderer)

@@ -23,24 +23,22 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.core.extensions.setTextWithEmojiSupport
+import im.vector.app.core.extensions.setVectorText
+import im.vector.app.features.html.VectorCharSequence
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageBlockCodeItem : AbsMessageItem<MessageBlockCodeItem.Holder>() {
 
     @EpoxyAttribute
-    var message: CharSequence? = null
-
-    @EpoxyAttribute
-    var bindingOptions: BindingOptions? = null
+    var message: VectorCharSequence? = null
 
     @EpoxyAttribute
     var editedSpan: CharSequence? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.messageView.setTextWithEmojiSupport(message, bindingOptions)
+        holder.messageView.setVectorText(message)
         renderSendState(holder.messageView, holder.messageView)
         holder.messageView.onClick(attributes.itemClickListener)
         holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)

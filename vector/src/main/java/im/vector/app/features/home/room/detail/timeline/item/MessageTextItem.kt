@@ -24,12 +24,13 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.epoxy.onLongClickIgnoringLinks
-import im.vector.app.core.extensions.setTextWithEmojiSupport
+import im.vector.app.core.extensions.setVectorText
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlUiState
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlView
+import im.vector.app.features.html.VectorCharSequence
 import im.vector.app.features.media.ImageContentRenderer
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
@@ -39,10 +40,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     var searchForPills: Boolean = false
 
     @EpoxyAttribute
-    var message: CharSequence? = null
-
-    @EpoxyAttribute
-    var bindingOptions: BindingOptions? = null
+    var message: VectorCharSequence? = null
 
     @EpoxyAttribute
     var useBigFont: Boolean = false
@@ -79,7 +77,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             holder.messageView.textSize = 14F
         }
         if (searchForPills) {
-            message?.findPillsAndProcess(coroutineScope) {
+            message?.value?.findPillsAndProcess(coroutineScope) {
                 // mmm.. not sure this is so safe in regards to cell reuse
                 it.bind(holder.messageView)
             }
@@ -89,7 +87,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         renderSendState(holder.messageView, holder.messageView)
         holder.messageView.onClick(attributes.itemClickListener)
         holder.messageView.onLongClickIgnoringLinks(attributes.itemLongClickListener)
-        holder.messageView.setTextWithEmojiSupport(message, bindingOptions)
+        holder.messageView.setVectorText(message)
     }
 
     override fun unbind(holder: Holder) {

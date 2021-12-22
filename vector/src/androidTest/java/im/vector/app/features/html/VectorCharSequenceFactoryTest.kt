@@ -38,26 +38,26 @@ import java.util.concurrent.TimeUnit
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
-class SpanUtilsTest : InstrumentedTest {
+class VectorCharSequenceFactoryTest : InstrumentedTest {
 
-    private val spanUtils = SpanUtils {
+    private val factory = VectorCharSequenceFactory {
         val emojiCompat = EmojiCompat.get()
         emojiCompat.waitForInit()
         emojiCompat.process(it) ?: it
     }
 
-    private fun SpanUtils.canUseTextFuture(message: CharSequence): Boolean {
-        return getBindingOptions(message).canUseTextFuture
+    private fun VectorCharSequenceFactory.canUseTextFuture(message: CharSequence): Boolean {
+        return create(message).bindingOptions.canUseTextFuture
     }
 
     @Test
     fun canUseTextFutureString() {
-        spanUtils.canUseTextFuture("test").shouldBeTrue()
+        factory.canUseTextFuture("test").shouldBeTrue()
     }
 
     @Test
     fun canUseTextFutureCharSequenceOK() {
-        spanUtils.canUseTextFuture(SpannableStringBuilder().append("hello")).shouldBeTrue()
+        factory.canUseTextFuture(SpannableStringBuilder().append("hello")).shouldBeTrue()
     }
 
     @Test
@@ -65,7 +65,7 @@ class SpanUtilsTest : InstrumentedTest {
         val string = SpannableString("Text with strikethrough, underline, red spans")
         string.setSpan(ForegroundColorSpan(Color.RED), 36, 39, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        spanUtils.canUseTextFuture(string) shouldBeEqualTo true
+        factory.canUseTextFuture(string) shouldBeEqualTo true
     }
 
     @Test
@@ -73,7 +73,7 @@ class SpanUtilsTest : InstrumentedTest {
         val string = SpannableString("Text with strikethrough, underline, red spans")
         string.setSpan(StrikethroughSpan(), 10, 23, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        spanUtils.canUseTextFuture(string) shouldBeEqualTo trueIfAlwaysAllowed()
+        factory.canUseTextFuture(string) shouldBeEqualTo trueIfAlwaysAllowed()
     }
 
     @Test
@@ -81,7 +81,7 @@ class SpanUtilsTest : InstrumentedTest {
         val string = SpannableString("Text with strikethrough, underline, red spans")
         string.setSpan(UnderlineSpan(), 25, 34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        spanUtils.canUseTextFuture(string) shouldBeEqualTo trueIfAlwaysAllowed()
+        factory.canUseTextFuture(string) shouldBeEqualTo trueIfAlwaysAllowed()
     }
 
     @Test
@@ -90,7 +90,7 @@ class SpanUtilsTest : InstrumentedTest {
         string.setSpan(StrikethroughSpan(), 10, 23, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         string.setSpan(UnderlineSpan(), 25, 34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        spanUtils.canUseTextFuture(string) shouldBeEqualTo trueIfAlwaysAllowed()
+        factory.canUseTextFuture(string) shouldBeEqualTo trueIfAlwaysAllowed()
     }
 
     @Test
@@ -100,32 +100,32 @@ class SpanUtilsTest : InstrumentedTest {
         string.setSpan(UnderlineSpan(), 25, 34, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         string.setSpan(ForegroundColorSpan(Color.RED), 36, 39, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        spanUtils.canUseTextFuture(string) shouldBeEqualTo trueIfAlwaysAllowed()
+        factory.canUseTextFuture(string) shouldBeEqualTo trueIfAlwaysAllowed()
     }
 
     @Test
     fun testGetBindingOptionsRegular() {
         val string = SpannableString("Text")
-        val result = spanUtils.getBindingOptions(string)
-        result.canUseTextFuture shouldBeEqualTo true
-        result.preventMutation shouldBeEqualTo false
+        val result = factory.create(string)
+        result.bindingOptions.canUseTextFuture shouldBeEqualTo true
+        result.bindingOptions.preventMutation shouldBeEqualTo false
     }
 
     @Test
     fun testGetBindingOptionsStrikethrough() {
         val string = SpannableString("Text with strikethrough")
         string.setSpan(StrikethroughSpan(), 10, 23, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        val result = spanUtils.getBindingOptions(string)
-        result.canUseTextFuture shouldBeEqualTo false
-        result.preventMutation shouldBeEqualTo false
+        val result = factory.create(string)
+        result.bindingOptions.canUseTextFuture shouldBeEqualTo false
+        result.bindingOptions.preventMutation shouldBeEqualTo false
     }
 
     @Test
     fun testGetBindingOptionsMetricAffectingSpan() {
         val string = SpannableString("Emoji \uD83D\uDE2E\u200D\uD83D\uDCA8")
-        val result = spanUtils.getBindingOptions(string)
-        result.canUseTextFuture shouldBeEqualTo false
-        result.preventMutation shouldBeEqualTo true
+        val result = factory.create(string)
+        result.bindingOptions.canUseTextFuture shouldBeEqualTo false
+        result.bindingOptions.preventMutation shouldBeEqualTo true
     }
 
     private fun trueIfAlwaysAllowed() = Build.VERSION.SDK_INT < Build.VERSION_CODES.P
