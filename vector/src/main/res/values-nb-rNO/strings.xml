@@ -1758,4 +1758,15 @@
     <string name="upgrade_room_for_restricted">Alle i %s vil kunne finne og bli med i dette rommet - du trenger ikke å invitere alle manuelt. Du kan når som helst endre dette i rominnstillingene.</string>
     <string name="notice_room_unban_by_you">Du opphevet utestengingen av %1$s</string>
     <string name="notice_room_unban">%1$s opphevet utestengingen av %2$s</string>
+    <string name="notice_room_visibility_world_readable">hvem som helst.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">Du gjorde framtidige meldinger synlige til %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s gjorde framtidige meldinger synlige til %2$s</string>
+    <string name="notice_room_name_changed_by_you">Du endret romnavnet til: %1$s</string>
+    <string name="notice_display_name_removed">%1$s fjernet visningsnavnet sitt (det var %2$s)</string>
+    <string name="notice_display_name_changed_from_by_you">Du endret visningsnavnet ditt fra %1$s til %2$s</string>
+    <string name="notice_display_name_changed_from">%1$s endret visningsnavnet sitt fra %2$s til %3$s</string>
+    <string name="notice_display_name_set_by_you">Du endret visningsnavnet ditt til %1$s</string>
+    <string name="notice_display_name_set">%1$s endret visningsnavnet sitt til %2$s</string>
+    <string name="notice_room_ban">%1$s utestengte %2$s</string>
+    <string name="notice_room_invite_no_invitee">%ss invitasjon</string>
 </resources>
