@@ -1614,7 +1614,7 @@
 \nAutorisez l’accès dans le prochaine fenêtre pour pouvoir exporter vos clés manuellement.</string>
     <string name="no_network_indicator">Il n’y a aucune connexion au réseau pour le moment</string>
     <string name="settings_add_3pid_confirm_password_title">Confirmez votre mot de passe</string>
-    <string name="settings_add_3pid_flow_not_supported">Vous ne pouvez pas faire cela depuis SchildiChat mobile</string>
+    <string name="settings_add_3pid_flow_not_supported">Vous ne pouvez pas faire cela depuis Element mobile</string>
     <string name="settings_add_3pid_authentication_needed">Une authentification est nécessaire</string>
     <string name="settings_integrations">Intégrations</string>
     <string name="settings_integrations_summary">Utilisez un gestionnaire d’intégrations pour gérer les robots, les passerelles, les widgets et les jeux d’autocollants.
@@ -1682,7 +1682,7 @@
     <string name="login_server_url_form_modular_hint">Adresse Element Matrix Services</string>
     <string name="login_server_url_form_other_hint">Adresse</string>
     <string name="login_server_url_form_modular_text">Hébergement privé pour les organisations</string>
-    <string name="login_server_url_form_modular_notice">Saisir l’adresse de SchildiChat ou du serveur de Modular que vous voulez utiliser</string>
+    <string name="login_server_url_form_modular_notice">Saisir l’adresse de Element ou du serveur de Modular que vous voulez utiliser</string>
     <string name="login_sso_error_message">Une erreur est survenue pendant le chargement de la page : %1$s (%2$d)</string>
     <string name="login_mode_not_supported">L’application ne peut pas s’authentifier sur ce serveur d’accueil. Le serveur d’accueil prend en charge le(s) type(s) d’authentification suivant(s) : %1$s.
 \n
@@ -2214,7 +2214,7 @@
     <string name="disclaimer_positive_button">EN SAVOIR PLUS</string>
     <string name="disclaimer_negative_button">COMPRIS</string>
     <string name="disclaimer_content">Nous sommes heureux de vous annoncer que nous avons un nouveau nom ! Votre application est à jour et vous êtes connectés à votre compte.</string>
-    <string name="disclaimer_title">Riot est désormais SchildiChat !</string>
+    <string name="disclaimer_title">Riot est désormais Element !</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Attente de l’historique du chiffrement</string>
     <string name="crypto_error_withheld_generic">Impossible d’accéder à ce message car l’envoyeur n’a intentionnellement pas envoyé les clés</string>
     <string name="crypto_error_withheld_unverified">Vous ne pouvez pas accéder à ce message car l’envoyeur n’a pas confiance en votre session</string>
@@ -2898,7 +2898,7 @@
     <string name="settings_notification_other">Autre</string>
     <string name="settings_notification_mentions_and_keywords">Mentions et mots-clés</string>
     <string name="settings_notification_default">Notifications par défaut</string>
-    <string name="link_this_email_with_your_account">%s dans les paramètres pour recevoir les invitations directement dans SchildiChat.</string>
+    <string name="link_this_email_with_your_account">%s dans les paramètres pour recevoir les invitations directement dans Element.</string>
     <string name="link_this_email_settings_link">Lier cet e-mail à votre compte</string>
     <string name="this_invite_to_this_space_was_sent">Cette invitation à cette espace a été envoyée à %s qui n’est pas associé à votre compte</string>
     <string name="this_invite_to_this_room_was_sent">Cette invitation à ce salon a été envoyée à %s qui n’est pas associé à votre compte</string>

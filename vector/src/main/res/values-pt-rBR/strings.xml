@@ -1860,7 +1860,7 @@
     <string name="login_server_url_form_modular_hint">Endereço de Element Matrix Services</string>
     <string name="login_server_url_form_other_hint">Endereço</string>
     <string name="login_server_url_form_modular_text">Hospedagem premium para organizações</string>
-    <string name="login_server_url_form_modular_notice">Entre o endereço do Modular SchildiChat ou Servidor que você quer usar</string>
+    <string name="login_server_url_form_modular_notice">Entre o endereço do Modular Element ou Servidor que você quer usar</string>
     <string name="login_server_url_form_common_notice">Entre o endereço do servidor que você quer usar</string>
     <string name="login_sso_error_message">Um erro ocorreu quando carregando a página: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">O aplicativo não é capaz de fazer signin a este servidorcasa. O servidorcasa suporta o(s) seguinte(s) tipo(s) de signin: %1$s.
@@ -2361,7 +2361,7 @@
     <string name="crypto_error_withheld_unverified">Você não pode acessar esta mensagem porque sua sessão não é confiada pelo(a) enviador(a)</string>
     <string name="crypto_error_withheld_generic">Você não pode acessar esta mensagem porque o/a enviador(a) propositalmente não enviou as chaves</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Esperando por histórico de encriptação</string>
-    <string name="disclaimer_title">Riot agora é SchildiChat!</string>
+    <string name="disclaimer_title">Riot agora é Element!</string>
     <string name="disclaimer_content">Nós estamos animados em anunciar que nós temos mudado de nome! Seu app está atualizado e você está com signin feito a sua conta.</string>
     <string name="disclaimer_negative_button">ENTENDI</string>
     <string name="disclaimer_positive_button">SABER MAIS</string>
@@ -2961,7 +2961,7 @@
     <string name="settings_notification_other">Outras</string>
     <string name="settings_notification_mentions_and_keywords">Menções e Palavrachaves</string>
     <string name="settings_notification_default">Notificações Default</string>
-    <string name="link_this_email_with_your_account">%s em Configurações para receber convites diretamente em SchildiChat.</string>
+    <string name="link_this_email_with_your_account">%s em Configurações para receber convites diretamente em Element.</string>
     <string name="link_this_email_settings_link">Linkar este email com sua conta</string>
     <string name="this_invite_to_this_space_was_sent">Este convite para este espaço foi enviado para %s que não está associado com sua conta</string>
     <string name="this_invite_to_this_room_was_sent">Este convite para esta sala foi enviado para %s que não está associado com sua conta</string>

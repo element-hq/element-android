@@ -1008,7 +1008,7 @@
     <string name="login_server_url_form_modular_hint">Element Matrix Services teenuse aadress</string>
     <string name="login_server_url_form_other_hint">Aadress</string>
     <string name="login_server_url_form_modular_text">Tasuline Matrix\'i majutusteenus organisatsioonidele</string>
-    <string name="login_server_url_form_modular_notice">Sisesta Modular SchildiChat teenuse või muu serveri aadress, mida sa soovid kasutada</string>
+    <string name="login_server_url_form_modular_notice">Sisesta Modular Element teenuse või muu serveri aadress, mida sa soovid kasutada</string>
     <string name="login_server_url_form_common_notice">Sisesta serveri aadress, mida sa soovid kasutada</string>
     <string name="login_sso_error_message">Lehe laadimisel tekkis viga %1$s (%2$d)</string>
     <string name="login_mode_not_supported">See rakendus ei saa sisse logida antud koduserverisse. See koduserver toetab järgmisi sisselogimise tüüp(e): %1$s.
@@ -1249,7 +1249,7 @@
     <string name="settings_troubleshoot_test_foreground_service_started_title">Teavituste teenus</string>
     <string name="settings_troubleshoot_test_foreground_service_startedt_success">Teavituste teenus töötab.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_failed">Teavituste teenus ei tööta.
-\nProovi, kas SchildiChat\'i uuesti käivitamine aitab.</string>
+\nProovi, kas Element\'i uuesti käivitamine aitab.</string>
     <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Käivita teenus</string>
     <string name="settings_troubleshoot_test_service_restart_title">Teavituste teenuse automaatne taaskäivitamine</string>
     <string name="settings_troubleshoot_test_service_restart_success">Teenus suleti ja käivitati automaatselt uuesti.</string>
@@ -2018,7 +2018,7 @@
     <string name="crypto_error_withheld_unverified">Sa ei saa seda sõnumit lugeda, kuna saatja ei usalda sinu sessiooni</string>
     <string name="crypto_error_withheld_generic">Sa ei saa seda sõnumit lugeda, kuna saatja teadlikult ei saatnud vajalikke võtmeid</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Ootan krüptimise ajalugu</string>
-    <string name="disclaimer_title">Riot\'i uus nimi on SchildiChat!</string>
+    <string name="disclaimer_title">Riot\'i uus nimi on Element!</string>
     <string name="disclaimer_content">Meil on hea meel teatada, et oleme muutnud nime! Sinu rakendus on uuendatud ning sa oled oma kontole sisse logitud.</string>
     <string name="disclaimer_negative_button">Selge lugu</string>
     <string name="disclaimer_positive_button">Vaata lisateavet</string>
@@ -2892,7 +2892,7 @@
     <string name="upgrade_room_for_restricted_no_param">Kõik hõlmava kogukonna liikmed saavad antud jututuba leida ja sellega liituda - sa ei pea kedagi ükshaaval kutsuma. Neid jututoa seadistusi saad igal hetkel muuta.</string>
     <string name="upgrade_room_for_restricted">Kõik %s jututoa liikmed saavad antud jututuba leida ja sellega liituda - sa ei pea kedagi ükshaaval kutsuma. Neid jututoa seadistusi saad igal hetkel muuta.</string>
     <string name="call_tap_to_return">%1$s - tagasipöördumiseks klõpsi</string>
-    <string name="link_this_email_with_your_account">%s ja saa kutsed otse SchildiChat\'i.</string>
+    <string name="link_this_email_with_your_account">%s ja saa kutsed otse Element\'i.</string>
     <string name="link_this_email_settings_link">Seo see e-posti aadress oma kasutajakontoga</string>
     <string name="this_invite_to_this_space_was_sent">See kutse siia kogukonnakeskusesse saadeti aadressile %s, mis ei ole seotud sinu kontoga</string>
     <string name="this_invite_to_this_room_was_sent">See kutse siia jututuppa saadeti aadressile %s, mis ei ole seotud sinu kontoga</string>

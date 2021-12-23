@@ -2004,7 +2004,7 @@
     <string name="reply">Відповісти</string>
     <string name="edit">Редагувати</string>
     <string name="disclaimer_negative_button">Зрозуміло</string>
-    <string name="disclaimer_title">Riot тепер називається SchildiChat!</string>
+    <string name="disclaimer_title">Riot тепер називається Element!</string>
     <string name="downloaded_file">Файл %1$s було звантажено!</string>
     <string name="downloading_file">Звантаження файлу %1$s…</string>
     <string name="send_file_step_sending_file">Надсилання файлу (%1$s / %2$s)</string>
@@ -2146,7 +2146,7 @@
     <string name="create_room_in_progress">Створення кімнати…</string>
     <string name="creating_direct_room">Створення кімнати…</string>
     <string name="settings_hs_admin_e2e_disabled">Адміністратор вашого сервера вимкнув автоматичне наскрізне шифрування для приватних кімнат та особистих повідомлень.</string>
-    <string name="link_this_email_with_your_account">%s у налаштуваннях, щоб отримувати запрошення безпосередньо в SchildiChat.</string>
+    <string name="link_this_email_with_your_account">%s у налаштуваннях, щоб отримувати запрошення безпосередньо в Element.</string>
     <string name="settings_encrypted_direct_messages">Зашифровані особисті повідомлення</string>
     <string name="settings_messages_direct_messages">Особисті повідомлення</string>
     <string name="recovery_key_empty_error_message">Введіть ключ відновлення</string>
@@ -2653,7 +2653,7 @@
     <string name="login_registration_disabled">Перепрошуємо, сервер не приймає нових облікових записів.</string>
     <string name="login_sso_error_message">Сталася помилка під час завантаження сторінки: %1$s (%2$d)</string>
     <string name="login_server_url_form_common_notice">Введіть адресу сервера, який ви хочете використовувати</string>
-    <string name="login_server_url_form_modular_notice">Введіть адресу Modular SchildiChat або сервера, який ви хочете використовувати</string>
+    <string name="login_server_url_form_modular_notice">Введіть адресу Modular Element або сервера, який ви хочете використовувати</string>
     <string name="login_reset_password_success_title">Успіх!</string>
     <string name="login_reset_password_success_notice">Ваш пароль скинуто.</string>
     <string name="login_reset_password_mail_confirmation_submit">Мною перевірено адресу е-пошти</string>

@@ -1673,7 +1673,7 @@
     <string name="login_server_url_form_modular_hint">Element Matrix Services 位置</string>
     <string name="login_server_url_form_other_hint">位置</string>
     <string name="login_server_url_form_modular_text">組織有專業主機</string>
-    <string name="login_server_url_form_modular_notice">輸入 Modular SchildiChat 或您想要使用的伺服器位置</string>
+    <string name="login_server_url_form_modular_notice">輸入 Modular Element 或您想要使用的伺服器位置</string>
     <string name="login_sso_error_message">載入頁面時發生錯誤：%1$s (%2$d)</string>
     <string name="login_mode_not_supported">應用程式無法登入此家伺服器。家伺服器支援以下登入類型：%1$s。
 \n
@@ -2249,7 +2249,7 @@
     <string name="crypto_error_withheld_unverified">您無法存取此訊息，因為您的工作階段未被傳送者所信任</string>
     <string name="crypto_error_withheld_generic">您無法存取此訊息，因為傳送者刻意未傳送金鑰</string>
     <string name="notice_crypto_unable_to_decrypt_merged">正在等待加密歷史</string>
-    <string name="disclaimer_title">Riot 現在是 SchildiChat 了！</string>
+    <string name="disclaimer_title">Riot 現在是 Element 了！</string>
     <string name="disclaimer_content">我們很高興地我們已變更名稱！您的應用程式是最新的，而您也登入了您的帳號。</string>
     <string name="disclaimer_negative_button">知道了</string>
     <string name="disclaimer_positive_button">取得更多資訊</string>
@@ -2836,7 +2836,7 @@
     <string name="settings_notification_other">其他</string>
     <string name="settings_notification_mentions_and_keywords">提及與關鍵字</string>
     <string name="settings_notification_default">預設通知</string>
-    <string name="link_this_email_with_your_account">設定中的 %s 可直接在 SchildiChat 中接收邀請。</string>
+    <string name="link_this_email_with_your_account">設定中的 %s 可直接在 Element 中接收邀請。</string>
     <string name="link_this_email_settings_link">將此電子郵件與您的帳號連結</string>
     <string name="this_invite_to_this_space_was_sent">此空間的邀請已傳送給與您的帳號無關的 %s</string>
     <string name="this_invite_to_this_room_was_sent">此聊天室的邀請已傳送給與您的帳號無關的 %s</string>

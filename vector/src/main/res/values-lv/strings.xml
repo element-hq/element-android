@@ -456,7 +456,7 @@
     <string name="call_error_answered_elsewhere">zvans atbildēts uz citas ierīces</string>
     <string name="media_picker_both_capture_title">Uzņemt foto vai video</string>
     <string name="media_picker_cannot_record_video">Neizdodas ierakstīt video</string>
-    <string name="permissions_rationale_popup_title">SchildiChat informācija</string>
+    <string name="permissions_rationale_popup_title">Element informācija</string>
     <string name="template_permissions_rationale_msg_storage">${app_name} nepieciešama atļauja piekļūt jūsu fotoattēlu un video bibliotēkai, lai nosūtītu un saglabātu pielikumus.
 \n
 \nLūdzu, atļaujiet piekļuvi nākamajā uznirstošajā logā, lai varētu nosūtīt failus no sava tālruņa.</string>
@@ -1601,7 +1601,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
 \nVai vēlaties pierakstīties, izmantojot tīmekļa klientu\?</string>
     <string name="login_sso_error_message">Radās kļūda, ielādējot lapu: %1$s (%2$d)</string>
     <string name="login_server_url_form_common_notice">Ievadiet servera adresi, kuru vēlaties izmantot</string>
-    <string name="login_server_url_form_modular_notice">Ievadiet Modular SchildiChat vai servera adresi, kuru vēlaties izmantot</string>
+    <string name="login_server_url_form_modular_notice">Ievadiet Modular Element vai servera adresi, kuru vēlaties izmantot</string>
     <string name="login_server_url_form_modular_text">Premium hostings organizācijām</string>
     <string name="login_server_url_form_other_hint">Adrese</string>
     <string name="login_server_url_form_modular_hint">Element Matrix Services adrese</string>
@@ -1697,7 +1697,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="disclaimer_positive_button">UZZINĀT VAIRĀK</string>
     <string name="disclaimer_negative_button">SAPRATU</string>
     <string name="disclaimer_content">Esam priecīgi paziņot, ka mēs esam mainījuši nosaukumu! Jūsu lietotne ir atjaunināta un esat pierakstījies savā kontā.</string>
-    <string name="disclaimer_title">Riot tagad saucas SchildiChat!</string>
+    <string name="disclaimer_title">Riot tagad saucas Element!</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Gaida šifrēšanas vēsturi</string>
     <string name="room_settings_save_success">Jūs veiksmīgi nomainījāt istabas iestatījumus</string>
     <string name="power_level_title">Loma</string>

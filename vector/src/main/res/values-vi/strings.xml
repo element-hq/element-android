@@ -468,7 +468,7 @@
     <string name="disclaimer_positive_button">TÌM HIỂU THÊM</string>
     <string name="disclaimer_negative_button">HIỂU RỒI</string>
     <string name="disclaimer_content">Chúng tôi rất háo hức muốn tuyên bố rằng chúng tôi đã đổi tên! Ứng dụng của bạn đã được cập nhật và bạn đã đăng nhập vào tài khoản của bạn.</string>
-    <string name="disclaimer_title">Riot bây giờ là SchildiChat!</string>
+    <string name="disclaimer_title">Riot bây giờ là Element!</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Đang đợi lịch sử mã hoá</string>
     <string name="crypto_error_withheld_generic">Bạn không thể truy cập tin nhắn này vì người gửi đã cố tình không gửi các mã khoá</string>
     <string name="crypto_error_withheld_unverified">Bạn không thể truy cập tin nhắn này vì phiên làm việc của bạn không được người gửi tin cậy</string>
@@ -1285,7 +1285,7 @@
     <string name="login_terms_title">Chấp nhận điều khoản để tiếp tục</string>
     <string name="login_a11y_captcha_container">Hãy thực hiện thách thức captcha</string>
     <string name="login_a11y_choose_other">Chọn một máy chủ khác</string>
-    <string name="login_a11y_choose_modular">Chọn Dịch vụ SchildiChat Matrix</string>
+    <string name="login_a11y_choose_modular">Chọn Dịch vụ Element Matrix</string>
     <string name="login_a11y_choose_matrix_org">Chọn matrix.org</string>
     <string name="login_signup_cancel_confirmation_content">Tài khoản của bạn chưa được tạo.
 \n
@@ -1339,7 +1339,7 @@
     <string name="login_reset_password_on">Đặt lại mật khẩu ở %1$s</string>
     <string name="login_login_with_email_error">Địa chỉ email này không có trong hệ thống.</string>
     <string name="login_server_url_form_other_hint">Địa chỉ</string>
-    <string name="login_server_url_form_modular_hint">Địa chỉ Dịch vụ SchildiChat Matrix</string>
+    <string name="login_server_url_form_modular_hint">Địa chỉ Dịch vụ Element Matrix</string>
     <string name="login_clear_homeserver_history">Xóa lịch sử</string>
     <string name="login_signin_sso">Tiếp tục với SSO</string>
     <string name="login_signin">Đăng Nhập</string>

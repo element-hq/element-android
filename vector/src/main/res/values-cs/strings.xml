@@ -1741,7 +1741,7 @@
     <string name="login_server_url_form_modular_hint">Adresa Element Matrix Services</string>
     <string name="login_server_url_form_other_hint">Adresa</string>
     <string name="login_server_url_form_modular_text">Prémiový hosting pro organizace</string>
-    <string name="login_server_url_form_modular_notice">Zadejte adresu Modular SchildiChat nebo serveru, který chcete použít</string>
+    <string name="login_server_url_form_modular_notice">Zadejte adresu Modular Element nebo serveru, který chcete použít</string>
     <string name="login_sso_error_message">Při načítání stránky došlo k chybě: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Aplikace se nemůže přihlásit k tomuto homeserveru. Homeserver podporuje následující typy přihlášení: %1$s.
 \n
@@ -2371,7 +2371,7 @@
     <string name="crypto_error_withheld_unverified">Nemůžete číst tuto zprávu, protože Vaše relace není pro odesílatele důvěryhodná</string>
     <string name="crypto_error_withheld_generic">Nemůžete číst tuto zprávu, protože odesílatel účelově neposlal klíče</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Čekám na historii šifrování</string>
-    <string name="disclaimer_title">Riot je nyní SchildiChat!</string>
+    <string name="disclaimer_title">Riot je nyní Element!</string>
     <string name="disclaimer_content">Jsme nadšení, že smíme oznámit změnu jména! Vaše app je aktuální a jste přihlášeni do svého účtu.</string>
     <string name="disclaimer_negative_button">ROZUMÍM</string>
     <string name="disclaimer_positive_button">DOZVĚDĚT SE VÍCE</string>
@@ -2946,7 +2946,7 @@
     <string name="settings_notification_other">Další</string>
     <string name="settings_notification_mentions_and_keywords">Zmínky a klíčová slova</string>
     <string name="settings_notification_default">Výchozí oznámení</string>
-    <string name="link_this_email_with_your_account">%s v Nastavení pro příjem pozvánek přímo v SchildiChatu.</string>
+    <string name="link_this_email_with_your_account">%s v Nastavení pro příjem pozvánek přímo v Elementu.</string>
     <string name="link_this_email_settings_link">Propojte tento e-mail se svým účtem</string>
     <string name="this_invite_to_this_room_was_sent">Pozvánka do této místnosti byla odeslána na adresu %s, která není spojena s vaším účtem</string>
     <string name="this_invite_to_this_space_was_sent">Pozvánka do tohoto prostoru byla odeslána na adresu %s, která není spojena s vaším účtem</string>

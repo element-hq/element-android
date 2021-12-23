@@ -1707,16 +1707,16 @@
     <string name="login_server_other_text">自定义 &amp; 高级设置</string>
     <string name="login_continue">继续</string>
     <string name="login_connect_to">连接到 %1$s</string>
-    <string name="login_connect_to_modular">连接到 SchildiChat Matrix 服务</string>
+    <string name="login_connect_to_modular">连接到 Element Matrix 服务</string>
     <string name="login_connect_to_a_custom_server">连接到自定义服务器</string>
     <string name="login_signin_to">登录 %1$s</string>
     <string name="login_signup">注册</string>
     <string name="login_signin">登录</string>
     <string name="login_signin_sso">使用单点登录继续</string>
-    <string name="login_server_url_form_modular_hint">SchildiChat Matrix 服务地址</string>
+    <string name="login_server_url_form_modular_hint">Element Matrix 服务地址</string>
     <string name="login_server_url_form_other_hint">地址</string>
     <string name="login_server_url_form_modular_text">面向组织的高级托管</string>
-    <string name="login_server_url_form_modular_notice">输入 Modular SchildiChat 或你想使用的服务器地址</string>
+    <string name="login_server_url_form_modular_notice">输入 Modular Element 或你想使用的服务器地址</string>
     <string name="login_server_url_form_common_notice">输入你想使用的服务器的地址</string>
     <string name="login_sso_error_message">载入页面时出错：%1$s (%2$d)</string>
     <string name="login_mode_not_supported">应用无法登录到此主服务器。主服务器支持以下登录类型：%1$s。
@@ -2213,7 +2213,7 @@
     <string name="crypto_error_withheld_unverified">你无法访问此消息，因为你的会话不被发送者信任</string>
     <string name="crypto_error_withheld_generic">你无法访问此消息因为发送者有意不发送密钥</string>
     <string name="notice_crypto_unable_to_decrypt_merged">正在等待加密历史</string>
-    <string name="disclaimer_title">Riot 现已成为 SchildiChat！</string>
+    <string name="disclaimer_title">Riot 现已成为 Element！</string>
     <string name="disclaimer_content">我们很高兴地宣布我们改名了！你的应用已经更新到最新版本，并且你已登录你的账号。</string>
     <string name="disclaimer_negative_button">明白了</string>
     <string name="disclaimer_positive_button">了解更多</string>
@@ -2848,7 +2848,7 @@
     <string name="settings_notification_default">默认通知</string>
     <string name="call_tile_video_active">活跃视频通话</string>
     <string name="call_tile_voice_active">活跃语音通话</string>
-    <string name="link_this_email_with_your_account">在 SchildiChat 中直接接收邀请的设置 %s。</string>
+    <string name="link_this_email_with_your_account">在 Element 中直接接收邀请的设置 %s。</string>
     <string name="link_this_email_settings_link">将此邮箱与您的账户相链接</string>
     <string name="this_invite_to_this_space_was_sent">加入这个空间的邀请被发送至 %s，此邮箱未与您的账户相关联</string>
     <string name="this_invite_to_this_room_was_sent">加入这个聊天室的邀请被发送至 %s，此邮箱未与您的账户相关联</string>

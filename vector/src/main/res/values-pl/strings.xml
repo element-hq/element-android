@@ -1547,7 +1547,7 @@
     <string name="login_server_url_form_modular_hint">Adres Element Matrix Services</string>
     <string name="login_server_url_form_other_hint">Adres</string>
     <string name="login_server_url_form_modular_text">Hosting premium dla organizacji</string>
-    <string name="login_server_url_form_modular_notice">Wprowadź adres SchildiChat Modular lub serwera którego chcesz użyć</string>
+    <string name="login_server_url_form_modular_notice">Wprowadź adres Element Modular lub serwera którego chcesz użyć</string>
     <string name="login_sso_error_message">Wystąpił błąd podczas ładowania strony: %1$s (%2$d)</string>
     <string name="login_mode_not_supported">Aplikacja nie jest w stanie zalogować się do tego serwera domowego. Serwer domowy obsluguje następujące metody logowania: %1$s.
 \n
@@ -1900,7 +1900,7 @@
     <string name="save_recovery_key_chooser_hint">Zapisz klucz odzyskiwania w</string>
     <string name="disclaimer_positive_button">DOWIEDZ SIĘ WIĘCEJ</string>
     <string name="disclaimer_content">Jesteśmy podekscytowani mogąc oznajmić, że zmieniliśmy nazwę! Twoja aplikacja jest aktualna i jesteś zalogowany(-a) do swojego konta.</string>
-    <string name="disclaimer_title">Riot nazywa się teraz SchildiChat!</string>
+    <string name="disclaimer_title">Riot nazywa się teraz Element!</string>
     <string name="crypto_error_withheld_generic">Nie masz dostępu do tej wiadomości ponieważ nadawca celowo nie wysłał jej kluczy</string>
     <string name="crypto_error_withheld_unverified">Nie masz dostępu do tej wiadomości ponieważ nadawca nie ufa Twojej sesji</string>
     <string name="crypto_error_withheld_blacklisted">Nie masz dostępu do tej wiadomości ponieważ zostałeś zablokowany przez jej nadawcę</string>

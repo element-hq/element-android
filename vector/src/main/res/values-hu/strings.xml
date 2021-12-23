@@ -1639,7 +1639,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="login_server_url_form_modular_hint">Element Matrix Services Cím</string>
     <string name="login_server_url_form_other_hint">Cím</string>
     <string name="login_server_url_form_modular_text">Prémium szerverüzemeltetés szervezetek részére</string>
-    <string name="login_server_url_form_modular_notice">Add meg az általad használt Modular szerver, vagy a hozzá tartozó SchildiChat címét</string>
+    <string name="login_server_url_form_modular_notice">Add meg az általad használt Modular szerver, vagy a hozzá tartozó Element címét</string>
     <string name="login_sso_error_message">Az oldal betöltésekor hiba történt: %1$s (%2$d)</string>
     <string name="login_registration_disabled">Ne haragudj, ez a szerver nem fogad új fiókokat.</string>
     <string name="login_login_with_email_error">Ez az e-mail cím egyik fiókhoz sincs társítva.</string>
@@ -2247,7 +2247,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="crypto_error_withheld_unverified">Nem érheted el ezt az üzenetet, mert a feladó nem bízik a munkamenetedben</string>
     <string name="crypto_error_withheld_generic">Nem érheted el ezt az üzenetet, mert a feladó szándékosan nem küldte el a kulcsokat</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Várakozás a titkosítási előzményekre</string>
-    <string name="disclaimer_title">A Riot mostantól SchildiChat!</string>
+    <string name="disclaimer_title">A Riot mostantól Element!</string>
     <string name="disclaimer_content">Örömmel jelentjük be, hogy nevet változtattunk! Az alkalmazás naprakész, és be vagy jelentkezve a fiókodba.</string>
     <string name="disclaimer_negative_button">ÉRTEM</string>
     <string name="disclaimer_positive_button">TOVÁBBI INFORMÁCIÓK</string>
