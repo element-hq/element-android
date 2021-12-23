@@ -1654,7 +1654,7 @@
     <string name="notice_requested_voip_conference_by_you">Du ba om en VoIP-konferanse</string>
     <string name="notice_requested_voip_conference">%1$s ba om en VoIP-konferanse</string>
     <string name="notice_room_update_by_you">Du oppgraderte dette rommet.</string>
-    <string name="notice_room_update">%s oppgradert dette rommet.</string>
+    <string name="notice_room_update">%s oppgraderte dette rommet.</string>
     <string name="notice_end_to_end_by_you">Du har slått på end-to-end-kryptering (%1$s)</string>
     <string name="notice_end_to_end">%1$s slo på ende-til-ende-kryptering (%2$s)</string>
     <string name="notice_made_future_room_visibility_by_you">Du gjorde fremtidig romhistorie synlig for %1$s</string>
@@ -1756,4 +1756,6 @@
     <string name="a11y_pause_voice_message">Pause talemelding</string>
     <string name="a11y_recording_voice_message">Tar opp talemelding</string>
     <string name="upgrade_room_for_restricted">Alle i %s vil kunne finne og bli med i dette rommet - du trenger ikke å invitere alle manuelt. Du kan når som helst endre dette i rominnstillingene.</string>
+    <string name="notice_room_unban_by_you">Du opphevet utestengingen av %1$s</string>
+    <string name="notice_room_unban">%1$s opphevet utestengingen av %2$s</string>
 </resources>
