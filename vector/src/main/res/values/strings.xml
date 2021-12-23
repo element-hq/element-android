@@ -1379,9 +1379,9 @@
     <string name="settings_opt_in_of_analytics_ok">Yes, I want to help!</string>
 
     <!-- analytics v2 -->
-    <string name="analytics_opt_in_title">Help improve Element</string>
+    <string name="analytics_opt_in_title">Help improve SchildiChat</string>
     <!-- The template will be replaced by the value of the resource analytics_opt_in_content_link -->
-    <string name="analytics_opt_in_content">Help us identify issues and improve Element by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.\n\nYou can read all our terms %s.</string>
+    <string name="analytics_opt_in_content">Help us identify issues and improve SchildiChat by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.\n\nYou can read all our terms %s.</string>
     <string name="analytics_opt_in_content_link">here</string>
     <string name="analytics_opt_in_list_item_1">We <b>don\'t</b> record or profile any account data</string>
     <string name="analytics_opt_in_list_item_2">We <b>don\'t</b> share information with third parties</string>
@@ -2290,7 +2290,7 @@
 
     <string name="preference_help">Help</string>
     <string name="preference_help_title">Help and support</string>
-    <string name="preference_help_summary">Get help with using Element</string>
+    <string name="preference_help_summary">Get help with using SchildiChat</string>
     <string name="preference_versions">Versions</string>
     <string name="preference_system_settings">System settings</string>
 
@@ -2567,7 +2567,7 @@
     <string name="login_server_url_form_modular_hint">Element Matrix Services Address</string>
     <string name="login_server_url_form_other_hint">Address</string>
     <string name="login_server_url_form_modular_text">Premium hosting for organisations</string>
-    <string name="login_server_url_form_modular_notice">Enter the address of the Modular Element or Server you want to use</string>
+    <string name="login_server_url_form_modular_notice">Enter the address of the Modular SchildiChat or Server you want to use</string>
     <string name="login_server_url_form_common_notice">Enter the address of the server you want to use</string>
 
     <string name="login_sso_error_message">An error occurred when loading the page: %1$s (%2$d)</string>
@@ -3117,7 +3117,7 @@
     <string name="bootstrap_progress_generating_ssss_with_info">Generating SSSS key from passphrase (%s)</string>
     <string name="bootstrap_progress_generating_ssss_recovery">Generating SSSS key from recovery key</string>
     <string name="bootstrap_progress_storing_in_sss">Storing keybackup secret in SSSS</string>
-    <!-- To produce things like 'Element Android (IQDHUVJTTV)' -->
+    <!-- To produce things like 'SchildiChat Android (IQDHUVJTTV)' -->
     <string name="new_session_review_with_info">%1$s (%2$s)</string>
 
     <string name="bootstrap_migration_enter_backup_password">Enter your Key Backup Passphrase to continue.</string>
@@ -3282,7 +3282,7 @@
     <string name="crypto_error_withheld_generic">You cannot access this message because the sender purposely did not send the keys</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Waiting for encryption history</string>
 
-    <string name="disclaimer_title">Riot is now Element!</string>
+    <string name="disclaimer_title">Riot is now SchildiChat!</string>
     <string name="disclaimer_content">We’re excited to announce we’ve changed name! Your app is up to date and you’re signed in to your account.</string>
     <string name="disclaimer_negative_button">GOT IT</string>
     <string name="disclaimer_positive_button">LEARN MORE</string>
@@ -3659,7 +3659,7 @@
 
     <string name="link_this_email_settings_link">Link this email with your account</string>
     <!-- %s will be replaced by the value of link_this_email_settings_link and styled as a link -->
-    <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in Element.</string>
+    <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in SchildiChat.</string>
 
     <!-- Poll -->
     <string name="create_poll_title">Create Poll</string>
