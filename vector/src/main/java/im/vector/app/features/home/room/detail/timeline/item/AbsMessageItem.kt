@@ -447,6 +447,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         val defaultRtl = defaultDirection == View.LAYOUT_DIRECTION_RTL
         val reverseDirection = if (defaultRtl) View.LAYOUT_DIRECTION_LTR else View.LAYOUT_DIRECTION_RTL
 
+        // Notice formatting - also relevant if no actual bubbles are shown
+        bubbleView.alpha = if (attributes.isNotice) 0.6f else 1f
+
         when (bubbleStyle) {
             BubbleThemeUtils.BUBBLE_STYLE_START,
             BubbleThemeUtils.BUBBLE_STYLE_BOTH,
@@ -470,7 +473,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                         }
                     }
                     bubbleView.setBackgroundResource(bubbleRes)
-                    bubbleView.alpha = if (attributes.isNotice) 0.6f else 1f
                     longPadding = 20
                     shortPadding = 8
                 } else {
