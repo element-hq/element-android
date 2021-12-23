@@ -31,7 +31,6 @@ import com.airbnb.mvrx.args
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.animations.AppBarStateChangeListener
 import im.vector.app.core.animations.MatrixItemAppBarStateChangeListener
@@ -49,8 +48,6 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailPendingAction
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
-import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
-import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -69,7 +66,7 @@ data class RoomProfileArgs(
 class RoomProfileFragment @Inject constructor(
         private val roomProfileController: RoomProfileController,
         private val avatarRenderer: AvatarRenderer,
-        private val roomDetailPendingActionStore: RoomDetailPendingActionStore,
+        private val roomDetailPendingActionStore: RoomDetailPendingActionStore
 ) :
         VectorBaseFragment<FragmentMatrixProfileBinding>(),
         RoomProfileController.Callback {
@@ -145,12 +142,12 @@ class RoomProfileFragment @Inject constructor(
                 headerViews.roomProfileNameView,
                 views.matrixProfileToolbarTitleView
         ).forEach {
-            it.setOnClickListener {
+            it.debouncedClicks {
                 roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomSettings)
             }
         }
         // Shortcut to room alias
-        headerViews.roomProfileAliasView.setOnClickListener {
+        headerViews.roomProfileAliasView.debouncedClicks {
             roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomAliasesSettings)
         }
         // Open Avatar
@@ -158,7 +155,7 @@ class RoomProfileFragment @Inject constructor(
                 headerViews.roomProfileAvatarView,
                 views.matrixProfileToolbarAvatarImageView
         ).forEach { view ->
-            view.setOnClickListener { onAvatarClicked(view) }
+            view.debouncedClicks { onAvatarClicked(view) }
         }
     }
 
@@ -258,13 +255,7 @@ class RoomProfileFragment @Inject constructor(
     }
 
     override fun onNotificationsClicked() {
-        if (BuildConfig.USE_NOTIFICATION_SETTINGS_V2) {
-            roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomNotificationSettings)
-        } else {
-            RoomListQuickActionsBottomSheet
-                    .newInstance(roomProfileArgs.roomId, RoomListActionsArgs.Mode.NOTIFICATIONS)
-                    .show(childFragmentManager, "ROOM_PROFILE_NOTIFICATIONS")
-        }
+        roomProfileSharedActionViewModel.post(RoomProfileSharedAction.OpenRoomNotificationSettings)
     }
 
     override fun onUploadsClicked() {

@@ -42,7 +42,7 @@ class SignedOutActivity : VectorBaseActivity<ActivitySignedOutBinding>() {
     }
 
     private fun setupViews() {
-        views.signedOutSubmit.setOnClickListener { submit() }
+        views.signedOutSubmit.debouncedClicks { submit() }
     }
 
     private fun submit() {

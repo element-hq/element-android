@@ -62,10 +62,10 @@ import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
-import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.consent.ConsentNotGivenHelper
 import im.vector.app.features.navigation.Navigator
@@ -121,7 +121,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .throttleFirst(300)
                 .onEach { onClicked() }
                 .launchIn(lifecycleScope)
     }
@@ -134,6 +133,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     private lateinit var sessionListener: SessionListener
     protected lateinit var bugReporter: BugReporter
     private lateinit var pinLocker: PinLocker
+    protected lateinit var analytics: VectorAnalytics
 
     @Inject
     lateinit var rageShake: RageShake
@@ -189,6 +189,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         configurationViewModel = viewModelProvider.get(ConfigurationViewModel::class.java)
         bugReporter = singletonEntryPoint.bugReporter()
         pinLocker = singletonEntryPoint.pinLocker()
+        analytics = singletonEntryPoint.analytics()
         navigator = singletonEntryPoint.navigator()
         activeSessionHolder = singletonEntryPoint.activeSessionHolder()
         vectorPreferences = singletonEntryPoint.vectorPreferences()

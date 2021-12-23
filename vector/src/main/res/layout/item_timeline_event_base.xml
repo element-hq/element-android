@@ -6,13 +6,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:addStatesFromChildren="true"
-    android:background="?attr/selectableItemBackground">
+    android:background="?attr/selectableItemBackground"
+    tools:viewBindingIgnore="true">
 
     <im.vector.app.core.platform.CheckableView
         android:id="@+id/messageSelectedBackground"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignBottom="@+id/informationBottom"
+        android:layout_alignBottom="@id/informationBottom"
         android:layout_alignParentTop="true"
         android:background="@drawable/highlighted_message_background" />
 
@@ -34,8 +35,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
-        android:layout_toStartOf="@+id/messageTimeView"
-        android:layout_toEndOf="@+id/messageStartGuideline"
+        android:layout_toStartOf="@id/messageTimeView"
+        android:layout_toEndOf="@id/messageStartGuideline"
         android:ellipsize="end"
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
@@ -47,7 +48,7 @@
         style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/messageMemberNameView"
+        android:layout_alignBaseline="@id/messageMemberNameView"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
@@ -82,6 +83,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/messageMemberNameView"
+        android:layout_marginEnd="8dp"
         android:layout_toStartOf="@id/messageSendStateImageView"
         android:layout_toEndOf="@id/messageStartGuideline"
         android:layout_marginHorizontal="8dp"
@@ -119,7 +121,7 @@
                 android:id="@+id/bubbleMessageTimeView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/bubbleMessageMemberNameView"
+                android:layout_alignBaseline="@id/bubbleMessageMemberNameView"
                 android:layout_alignEnd="@id/viewStubContainer"
                 android:layout_marginBottom="4dp"
                 android:maxLines="1"
@@ -173,24 +175,15 @@
                     android:layout="@layout/item_timeline_event_redacted_stub" />
 
                 <ViewStub
-                    android:id="@+id/messagePollStub"
-                    style="@style/TimelineContentStubBaseParams"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="56dp"
-                    android:layout="@layout/item_timeline_event_poll_stub" />
-
-                <ViewStub
-                    android:id="@+id/messageOptionsStub"
-                    style="@style/TimelineContentStubBaseParams"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="56dp"
-                    android:layout="@layout/item_timeline_event_option_buttons_stub" />
-
-                <ViewStub
                     android:id="@+id/messageContentVoiceStub"
                     style="@style/TimelineContentStubBaseParams"
                     android:layout="@layout/item_timeline_event_voice_stub"
                     tools:visibility="gone" />
+
+                <ViewStub
+                    android:id="@+id/messageContentPollStub"
+                    style="@style/TimelineContentStubBaseParams"
+                    android:layout="@layout/item_timeline_event_poll" />
 
             </FrameLayout>
 
@@ -254,14 +247,14 @@
         android:id="@+id/messageSendStateImageView"
         android:layout_width="@dimen/item_event_message_state_size"
         android:layout_height="@dimen/item_event_message_state_size"
-        android:layout_alignBottom="@+id/bubbleWrapper"
+        android:layout_alignBottom="@id/bubbleWrapper"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
         android:contentDescription="@string/event_status_a11y_sending"
         android:src="@drawable/ic_sending_message"
-        android:visibility="gone"
+        android:visibility="invisible"
         tools:tint="?vctr_content_tertiary"
         tools:visibility="visible" />
 
@@ -269,7 +262,7 @@
         android:id="@+id/eventSendingIndicator"
         android:layout_width="@dimen/item_event_message_state_size"
         android:layout_height="@dimen/item_event_message_state_size"
-        android:layout_alignBottom="@+id/bubbleWrapper"
+        android:layout_alignBottom="@id/bubbleWrapper"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
@@ -284,8 +277,8 @@
         android:id="@+id/informationBottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/bubbleWrapper"
-        android:layout_toEndOf="@+id/messageStartGuideline"
+        android:layout_below="@id/bubbleWrapper"
+        android:layout_toEndOf="@id/messageStartGuideline"
         android:addStatesFromChildren="true"
         android:orientation="vertical">
 

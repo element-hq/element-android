@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/itemHelpPicto"
@@ -14,7 +15,7 @@
         android:importantForAccessibility="no"
         android:src="@drawable/ic_idea"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/itemHelpText"
+        app:layout_constraintEnd_toStartOf="@id/itemHelpText"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -32,7 +33,7 @@
         android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/itemHelpPicto"
+        app:layout_constraintStart_toEndOf="@id/itemHelpPicto"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/help_long_click_on_room_for_more_options" />
 

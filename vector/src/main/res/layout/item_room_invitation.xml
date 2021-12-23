@@ -8,7 +8,8 @@
     android:background="?android:colorBackground"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/roomInvitationAvatarImageView"
@@ -27,7 +28,7 @@
         android:layout_width="0dp"
         android:layout_height="12dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roomInvitationAvatarImageView"
+        app:layout_constraintTop_toBottomOf="@id/roomInvitationAvatarImageView"
         tools:layout_marginStart="20dp" />
 
     <TextView
@@ -61,9 +62,9 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:textColor="?vctr_content_secondary"
-        app:layout_constraintEnd_toEndOf="@+id/roomInvitationNameView"
-        app:layout_constraintStart_toStartOf="@+id/roomInvitationNameView"
-        app:layout_constraintTop_toBottomOf="@+id/roomInvitationNameView"
+        app:layout_constraintEnd_toEndOf="@id/roomInvitationNameView"
+        app:layout_constraintStart_toStartOf="@id/roomInvitationNameView"
+        app:layout_constraintTop_toBottomOf="@id/roomInvitationNameView"
         tools:text="@sample/rooms.json/data/topic" />
 
     <!-- Margin bottom does not work, so I use space -->
@@ -72,7 +73,7 @@
         android:layout_width="0dp"
         android:layout_height="7dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roomInvitationSubTitle"
+        app:layout_constraintTop_toBottomOf="@id/roomInvitationSubTitle"
         tools:layout_marginStart="120dp" />
 
     <im.vector.app.core.platform.ButtonStateView
@@ -84,8 +85,8 @@
         app:bsv_button_text="@string/accept"
         app:bsv_loaded_image_src="@drawable/ic_tick"
         app:bsv_use_flat_button="false"
-        app:layout_constraintEnd_toEndOf="@+id/roomInvitationNameView"
-        app:layout_constraintTop_toBottomOf="@+id/roomLastEventBottomSpace" />
+        app:layout_constraintEnd_toEndOf="@id/roomInvitationNameView"
+        app:layout_constraintTop_toBottomOf="@id/roomLastEventBottomSpace" />
 
     <im.vector.app.core.platform.ButtonStateView
         android:id="@+id/roomInvitationReject"
@@ -96,8 +97,8 @@
         app:bsv_button_text="@string/reject"
         app:bsv_loaded_image_src="@drawable/ic_tick"
         app:bsv_use_flat_button="true"
-        app:layout_constraintEnd_toStartOf="@+id/roomInvitationAccept"
-        app:layout_constraintTop_toTopOf="@+id/roomInvitationAccept" />
+        app:layout_constraintEnd_toStartOf="@id/roomInvitationAccept"
+        app:layout_constraintTop_toTopOf="@id/roomInvitationAccept" />
 
     <!-- We use vctr_list_separator_system here for a better rendering -->
     <View
@@ -109,6 +110,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roomInvitationAccept" />
+        app:layout_constraintTop_toBottomOf="@id/roomInvitationAccept" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

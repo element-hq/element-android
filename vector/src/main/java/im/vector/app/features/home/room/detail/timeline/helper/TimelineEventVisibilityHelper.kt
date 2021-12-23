@@ -120,6 +120,8 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
             if ((diff.isJoin || diff.isPart) && !userPreferencesProvider.shouldShowJoinLeaves()) return true
             if ((diff.isAvatarChange || diff.isDisplaynameChange) && !userPreferencesProvider.shouldShowAvatarDisplayNameChanges()) return true
             if (diff.isNoChange) return true
+        } else if (root.getClearType() == EventType.POLL_START && !userPreferencesProvider.shouldShowPolls()) {
+            return true
         }
         return false
     }

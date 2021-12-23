@@ -42,7 +42,7 @@
                 android:textColor="?vctr_content_secondary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginServerTitle" />
+                app:layout_constraintTop_toBottomOf="@id/loginServerTitle" />
 
             <!-- Use a CheckableConstraintLayout to keep the pressed state when retrieving login flow -->
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -143,7 +143,7 @@
                 android:paddingEnd="@dimen/layout_horizontal_margin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceOther">
+                app:layout_constraintTop_toBottomOf="@id/loginServerChoiceOther">
 
                 <ImageView
                     android:id="@+id/loginServerChoiceMatrixOrgIcon"
@@ -151,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ic_logo_matrix_org"
-                    app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceMatrixOrgText"
+                    app:layout_constraintBottom_toTopOf="@id/loginServerChoiceMatrixOrgText"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed"
@@ -170,7 +170,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceMatrixOrgIcon" />
+                    app:layout_constraintTop_toBottomOf="@id/loginServerChoiceMatrixOrgIcon" />
 
             </im.vector.app.core.platform.CheckableConstraintLayout>
 
@@ -187,7 +187,7 @@
                 android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceMatrixOrg">
+                app:layout_constraintTop_toBottomOf="@id/loginServerChoiceMatrixOrg">
 
                 <ImageView
                     android:id="@+id/loginServerChoiceEmsIcon"
@@ -195,7 +195,7 @@
                     android:layout_height="wrap_content"
                     android:importantForAccessibility="no"
                     android:src="@drawable/ic_logo_element_matrix_services"
-                    app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceEmsText"
+                    app:layout_constraintBottom_toTopOf="@id/loginServerChoiceEmsText"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed"
@@ -212,9 +212,9 @@
                     android:text="@string/login_server_modular_text"
                     android:textColor="?vctr_content_secondary"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/loginServerChoiceEmsLearnMore"
+                    app:layout_constraintEnd_toStartOf="@id/loginServerChoiceEmsLearnMore"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceEmsIcon" />
+                    app:layout_constraintTop_toBottomOf="@id/loginServerChoiceEmsIcon" />
 
                 <TextView
                     android:id="@+id/loginServerChoiceEmsLearnMore"
@@ -224,9 +224,9 @@
                     android:padding="16dp"
                     android:text="@string/login_server_modular_learn_more"
                     android:textColor="?colorPrimary"
-                    app:layout_constraintBottom_toBottomOf="@+id/loginServerChoiceEmsText"
+                    app:layout_constraintBottom_toBottomOf="@id/loginServerChoiceEmsText"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/loginServerChoiceEmsText" />
+                    app:layout_constraintTop_toTopOf="@id/loginServerChoiceEmsText" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -243,7 +243,7 @@
                 android:paddingEnd="@dimen/layout_horizontal_margin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceEms">
+                app:layout_constraintTop_toBottomOf="@id/loginServerChoiceEms">
 
                 <TextView
                     android:id="@+id/loginServerChoiceOtherTitle"
@@ -253,7 +253,7 @@
                     android:gravity="start"
                     android:text="@string/login_server_other_title"
                     android:textColor="?vctr_content_primary"
-                    app:layout_constraintBottom_toTopOf="@+id/loginServerChoiceOtherText"
+                    app:layout_constraintBottom_toTopOf="@id/loginServerChoiceOtherText"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed" />
@@ -270,7 +270,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceOtherTitle" />
+                    app:layout_constraintTop_toBottomOf="@id/loginServerChoiceOtherTitle" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -285,7 +285,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/loginServerChoiceOther" />
+                app:layout_constraintTop_toBottomOf="@id/loginServerChoiceOther" />
                 -->
 
         </androidx.constraintlayout.widget.ConstraintLayout>

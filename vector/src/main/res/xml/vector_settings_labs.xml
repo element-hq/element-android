@@ -80,13 +80,17 @@
         android:title="@string/settings_enable_space_pager"
         android:summary="@string/settings_enable_space_pager_summary" />
 
-
     <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="false"
         android:key="SETTINGS_LABS_USE_RESTRICTED_JOIN_RULE"
         android:title="@string/labs_use_restricted_join_rule"
         android:summary="@string/labs_use_restricted_join_rule_desc"/>
     <!--</im.vector.app.core.preference.VectorPreferenceCategory>-->
+
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="false"
+        android:key="SETTINGS_LABS_ENABLE_POLLS"
+        android:title="@string/labs_enable_polls" />
 
 
 </androidx.preference.PreferenceScreen>

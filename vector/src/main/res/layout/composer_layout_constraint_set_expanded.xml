@@ -23,7 +23,7 @@
         android:layout_height="1dp"
         android:background="?vctr_list_separator"
         app:layout_constraintEnd_toEndOf="@id/related_message_background"
-        app:layout_constraintStart_toStartOf="@+id/related_message_background"
+        app:layout_constraintStart_toStartOf="@id/related_message_background"
         app:layout_constraintTop_toTopOf="@id/related_message_background" />
 
     <View
@@ -44,7 +44,7 @@
         android:layout_marginBottom="8dp"
         android:importantForAccessibility="no"
         app:layout_constraintBottom_toTopOf="@id/composerRelatedMessageActionIcon"
-        app:layout_constraintEnd_toStartOf="@+id/composerRelatedMessageTitle"
+        app:layout_constraintEnd_toStartOf="@id/composerRelatedMessageTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/composerRelatedMessageTitle"
         tools:src="@sample/user_round_avatars" />
@@ -69,8 +69,8 @@
         android:importantForAccessibility="no"
         android:scaleType="centerCrop"
         android:visibility="gone"
-        app:layout_constraintStart_toStartOf="@+id/composerRelatedMessageTitle"
-        app:layout_constraintTop_toBottomOf="@+id/composerRelatedMessageTitle"
+        app:layout_constraintStart_toStartOf="@id/composerRelatedMessageTitle"
+        app:layout_constraintTop_toBottomOf="@id/composerRelatedMessageTitle"
         tools:ignore="MissingPrefix"
         tools:src="@tools:sample/backgrounds/scenic"
         tools:visibility="visible" />
@@ -137,7 +137,7 @@
         android:contentDescription="@string/option_send_files"
         android:src="@drawable/ic_attachment"
         app:tint="?android:textColorHint"
-        app:layout_constraintEnd_toStartOf="@+id/sendButton"
+        app:layout_constraintEnd_toStartOf="@id/sendButton"
         app:layout_constraintTop_toBottomOf="parent"
         tools:ignore="MissingPrefix" />
 
@@ -163,8 +163,8 @@
         android:nextFocusLeft="@id/composerEditText"
         android:nextFocusUp="@id/composerEditText"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/sendButton"
-        app:layout_constraintStart_toEndOf="@+id/composerEmojiButton"
+        app:layout_constraintEnd_toStartOf="@id/sendButton"
+        app:layout_constraintStart_toEndOf="@id/composerEmojiButton"
         app:layout_constraintTop_toBottomOf="@id/composer_preview_barrier"
         app:layout_goneMarginStart="8dp"
         tools:text="@tools:sample/lorem/random" />
@@ -177,9 +177,9 @@
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="@string/a11y_open_emoji_picker"
         android:src="@drawable/ic_insert_emoji"
-        app:layout_constraintTop_toTopOf="@+id/sendButton"
-        app:layout_constraintBottom_toBottomOf="@+id/sendButton"
-        app:layout_constraintEnd_toStartOf="@+id/composerEditText"
+        app:layout_constraintTop_toTopOf="@id/sendButton"
+        app:layout_constraintBottom_toBottomOf="@id/sendButton"
+        app:layout_constraintEnd_toStartOf="@id/composerEditText"
         app:layout_constraintStart_toStartOf="parent"
         app:tint="?android:textColorHint"
         tools:ignore="MissingPrefix" />

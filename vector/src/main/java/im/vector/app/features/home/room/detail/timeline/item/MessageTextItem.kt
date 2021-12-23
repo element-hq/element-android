@@ -28,6 +28,8 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.epoxy.onLongClickIgnoringLinks
+import im.vector.app.core.epoxy.util.preventMutation
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.views.FooteredTextView
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -36,6 +38,7 @@ import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlUiState
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlView
 import im.vector.app.features.media.ImageContentRenderer
+import org.matrix.android.sdk.api.extensions.orFalse
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
@@ -47,7 +50,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     var message: CharSequence? = null
 
     @EpoxyAttribute
-    var canUseTextFuture: Boolean = true
+    var bindingOptions: BindingOptions? = null
 
     @EpoxyAttribute
     var useBigFont: Boolean = false
@@ -106,7 +109,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             m = TextUtils.concat(m, "\u202f")
         }
 
-        val textFuture = if (canUseTextFuture) {
+        val textFuture = if (bindingOptions?.canUseTextFuture.orFalse()) {
             PrecomputedTextCompat.getTextFuture(
                     m ?: "",
                     TextViewCompat.getTextMetricsParams(holder.messageView),
@@ -116,20 +119,25 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         }
         super.bind(holder)
         holder.messageView.movementMethod = movementMethod
-
         renderSendState(holder.messageView, holder.messageView)
         holder.messageView.onClick(attributes.itemClickListener)
-        holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
+        holder.messageView.onLongClickIgnoringLinks(attributes.itemLongClickListener)
+
         holder.messageView.setTextColor(ColorProvider(holder.messageView.context).getColorFromAttribute(
                 if (attributes.isNotice) R.attr.vctr_content_secondary else R.attr.vctr_content_primary
         ))
 
-        if (canUseTextFuture) {
+        if (bindingOptions?.canUseTextFuture.orFalse()) {
             holder.messageView.setTextFuture(textFuture)
         } else {
             // Remove possible previously set futures that might overwrite our text
             holder.messageView.setTextFuture(null)
-            holder.messageView.text = message
+
+            holder.messageView.text = if (bindingOptions?.preventMutation.orFalse()) {
+                m.preventMutation()
+            } else {
+                m
+            }
         }
     }
 
@@ -175,6 +183,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             //*/
         }
     }
+
     companion object {
         private const val STUB_ID = R.id.messageContentTextStub
     }

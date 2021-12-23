@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingTop="8dp"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    tools:viewBindingIgnore="true">
 
     <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/messageFilee2eIcon"
@@ -23,7 +24,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="4dp"
-        app:layout_constraintStart_toEndOf="@+id/messageFilee2eIcon"
+        app:layout_constraintStart_toEndOf="@id/messageFilee2eIcon"
         app:layout_constraintTop_toTopOf="parent">
 
         <include layout="@layout/view_file_icon" />
@@ -34,7 +35,7 @@
     <!--        android:layout_width="@dimen/chat_avatar_size"-->
     <!--        android:layout_height="@dimen/chat_avatar_size"-->
     <!--        android:layout_marginStart="4dp"-->
-    <!--        app:layout_constraintStart_toEndOf="@+id/messageFilee2eIcon"-->
+    <!--        app:layout_constraintStart_toEndOf="@id/messageFilee2eIcon"-->
     <!--        app:layout_constraintTop_toTopOf="parent"-->
     <!--        tools:src="@drawable/filetype_attachment" />-->
 
@@ -52,10 +53,9 @@
         app:layout_constrainedWidth="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@+id/messageFileImageView"
+        app:layout_constraintStart_toEndOf="@id/messageFileImageView"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="A filename here" />
-
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/horizontalBarrier"
@@ -74,7 +74,7 @@
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/horizontalBarrier"
+        app:layout_constraintTop_toBottomOf="@id/horizontalBarrier"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -489,7 +489,7 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
         <item quantity="other">%d ruangan</item>
     </plurals>
     <string name="notification_unread_notified_messages_in_room">%1$s dalam %2$s</string>
-    <string name="historical_placeholder">Cari sejarah</string>
+    <string name="historical_placeholder">Cari riwayat</string>
     <string name="widget_no_power_to_manage">Anda butuh permisi untuk mengurus widget di ruang ini</string>
     <string name="widget_creation_failure">Pembuatan widget gagal</string>
     <string name="settings_labs_create_conference_with_jitsi">Buat panggilan konferensi dengan jitsi</string>
@@ -628,8 +628,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_settings_directory_visibility">Daftarkan ruang ini di direktori ruang</string>
     <string name="room_settings_room_notifications_title">Pemberitahuan</string>
     <string name="room_settings_room_access_rules_pref_title">Akses Ruangan</string>
-    <string name="room_settings_room_read_history_rules_pref_title">Singkapan Sejarah Ruangan</string>
-    <string name="room_settings_room_read_history_rules_pref_dialog_title">Siapa yang bisa membaca sejarah?</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Singkapan Riwayat Ruangan</string>
+    <string name="room_settings_room_read_history_rules_pref_dialog_title">Siapa yang bisa membaca riwayat\?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Siapa yang bisa mengakses ruang ini?</string>
     <string name="room_settings_read_history_entry_anyone">Siapapun</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Hanya anggota (dimulai sejak opsi ini dipilih)</string>
@@ -1014,7 +1014,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_permissions_ban_users">Mencekal pengguna</string>
     <string name="room_permissions_change_permissions">Mengubah izin</string>
     <string name="room_permissions_change_room_name">Mengubah nama ruangan</string>
-    <string name="room_permissions_change_history_visibility">Mengubah visibilitas sejarah</string>
+    <string name="room_permissions_change_history_visibility">Mengubah visibilitas riwayat</string>
     <string name="room_permissions_enable_room_encryption">Mengaktifkan enkripsi ruangan</string>
     <string name="room_permissions_change_main_address_for_the_room">Mengubah alamat utama untuk ruangan ini</string>
     <string name="room_permissions_change_room_avatar">Mengubah avatar ruangan</string>
@@ -1105,7 +1105,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \nAtau, Anda dapat mencoba menggunakan server publik di %2$s, tetapi ini tidak akan dapat diandalkan, dan itu akan membagikan alamat IP Anda dengan server itu. Anda juga dapat mengelola ini dalam Pengaturan.</string>
     <string name="call_failed_no_ice_title">Panggilan gagal karena konfigurasi server yang salah</string>
     <string name="hs_client_url">URL API homeserver</string>
-    <string name="send_bug_report_include_key_share_history">Kirim sejarah permintaan pemberian kunci</string>
+    <string name="send_bug_report_include_key_share_history">Kirim riwayat permintaan pemberian kunci</string>
     <string name="spaces_header">Space</string>
     <string name="spaces_invited_header">Undangan</string>
     <string name="settings_room_directory_show_all_rooms_summary">Tampilkan semua ruangan di direktori ruangan, termasuk ruangan dengan konten eksplisit.</string>
@@ -1477,7 +1477,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_settings_alias_title">Alamat ruangan</string>
     <string name="room_settings_guest_access_title">Izinkan tamu untuk bergabung</string>
     <string name="room_settings_room_access_title">Akses ruangan</string>
-    <string name="room_settings_room_read_history_dialog_subtitle">Perubahan siapa yang dapat membaca riwayat hanya akan berlaku untuk pesan berikutnya di ruang ini. Visibilitas sejarah yang ada tidak akan berubah.</string>
+    <string name="room_settings_room_read_history_dialog_subtitle">Perubahan siapa yang dapat membaca riwayat hanya akan berlaku untuk pesan berikutnya di ruang ini. Visibilitas riwayat yang ada tidak akan berubah.</string>
     <string name="room_settings_room_notifications_account_settings">Pengaturan akun</string>
     <string name="room_settings_room_notifications_manage_notifications">Anda dapat mengelola notifikasi di %1$s.</string>
     <string name="room_settings_room_notifications_encryption_notice">Harap dicatat bahwa sebutan &amp; pemberitahuan keyword tidak tersedia di ruangan terenkripsi di ponsel.</string>
@@ -1755,7 +1755,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="terms_description_for_identity_server">Bisa ditemukan oleh lain</string>
     <string name="review_terms">Lihat Persyaratan</string>
     <string name="terms_of_service">Persyaratan Layanan</string>
-    <string name="message_view_edit_history">Tampilkan Sejarah Editan</string>
+    <string name="message_view_edit_history">Tampilkan Riwayat Editan</string>
     <string name="joining_room">Menggabung ruangan…</string>
     <string name="direct_room_user_list_suggestions_title">Saran</string>
     <string name="direct_room_user_list_contacts_title">Kontak</string>
@@ -1789,7 +1789,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="send_file_step_encrypting_thumbnail">Mengenkripsi gambar mini…</string>
     <string name="send_file_step_idle">Menunggu…</string>
     <string name="bottom_action_people_x">Pesan Langsung</string>
-    <string name="settings_labs_show_complete_history_in_encrypted_room">Tampilkan sejarah lengkap di ruangan terenkripsi</string>
+    <string name="settings_labs_show_complete_history_in_encrypted_room">Tampilkan riwayat lengkap di ruangan terenkripsi</string>
     <string name="give_feedback">Beri Masukan</string>
     <string name="feedback_failed">Masukan gagal dikirim (%s)</string>
     <string name="send_suggestion_sent">Terima kasih, saran Anda telah dikirim</string>
@@ -1913,7 +1913,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="keys_backup_restore_success_title">Cadangan Dipulihkan %s!</string>
     <string name="keys_backup_recovery_code_error_decrypt">Cadangan tidak dapat didekripsi dengan frasa sandi ini: mohon cek bahwa Anda memasukkan frasa sandi pemulihan yang benar.</string>
     <string name="keys_backup_recovery_code_empty_error_message">Mohon masukkan kunci pemulihan</string>
-    <string name="keys_backup_unlock_button">Akses Sejarah</string>
+    <string name="keys_backup_unlock_button">Akses Riwayat</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Mengimpor kunci…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Mengunduh kunci…</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Mengkomputasikan kunci pemulihan…</string>
@@ -2566,7 +2566,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="disclaimer_negative_button">MENGERTI</string>
     <string name="disclaimer_content">Kami senang mengumumkan kami telah mengubah nama! Aplikasi Anda mutakhir dan Anda telah masuk ke akun Anda.</string>
     <string name="disclaimer_title">Riot sekarang telah menjadi Element!</string>
-    <string name="notice_crypto_unable_to_decrypt_merged">Menunggu untuk sejarah enkripsi</string>
+    <string name="notice_crypto_unable_to_decrypt_merged">Menunggu untuk riwayat enkripsi</string>
     <string name="crypto_error_withheld_generic">Anda tidak dapat mengakses pesan ini karena pengirim telah sengaja tidak mengirim kuncinya</string>
     <string name="crypto_error_withheld_unverified">Anda tidak dapat mengakses pesan ini karena sesi Anda tidak dipercayai oleh pengirim</string>
     <string name="crypto_error_withheld_blacklisted">Anda tidak dapat mengakses pesan ini karena Anda telah diblokir oleh pengirim</string>
@@ -2671,7 +2671,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
         <item quantity="other">Tampilkan %d perangkat Anda dapat memverifikasi sekarang</item>
     </plurals>
-    <string name="secure_backup_reset_no_history">Anda akan memulai ulang dengan tidak ada sejarah, tidak ada pesan, perangkat yang dipercayai atau pengguna yang dipercayai</string>
+    <string name="secure_backup_reset_no_history">Anda akan memulai ulang dengan tidak ada riwayat, tidak ada pesan, perangkat yang dipercayai atau pengguna yang dipercayai</string>
     <string name="secure_backup_reset_if_you_reset_all">Jika Anda mengatur ulang semuanya</string>
     <string name="secure_backup_reset_all_no_other_devices">Hanya lakukan ini jika Anda tidak memiliki perangkat yang lain Anda yang bisa pakai untuk memverifikasi perangkat ini.</string>
     <string name="secure_backup_reset_all">Atur ulang semuanya</string>
@@ -2726,11 +2726,11 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="error_failed_to_import_keys">Gagal mengimpor kunci</string>
     <string name="qr_code_scanned_verif_waiting">Menunggu untuk %s…</string>
     <string name="qr_code_scanned_verif_waiting_notice">Hampir selesai! Menunggu untuk konfirmasi…</string>
-    <string name="qr_code_scanned_self_verif_notice">Hampir selesai! Apakah perangkat yang lain menunjukkan perisai yang sama\?</string>
+    <string name="qr_code_scanned_self_verif_notice">Hampir selesai! Apakah perangkat yang lain menunjukkan centang yang sama\?</string>
     <string name="topic_prefix">"Topik: "</string>
     <string name="add_a_topic_link_text">Tambahkan topik</string>
     <string name="room_created_summary_no_topic_creation_text">%s untuk memberi tahu orang-orang tentang ruangan ini.</string>
-    <string name="this_is_the_beginning_of_dm">Ini adalah awalnya dari sejarah pesan langsung dengan %s.</string>
+    <string name="this_is_the_beginning_of_dm">Ini adalah awalnya dari riwayat pesan langsung dengan %s.</string>
     <string name="this_is_the_beginning_of_room_no_name">Ini adalah awalnya dari percakapan ini.</string>
     <string name="this_is_the_beginning_of_room">Ini adalah awalnya dari %s.</string>
     <string name="direct_room_created_summary_item_by_you">Anda bergabung.</string>
@@ -2798,7 +2798,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="new_session_review">Ketuk untuk menampilkan &amp; verifikasi</string>
     <string name="new_session">Login baru. Apakah itu Anda\?</string>
     <string name="refresh">Segarkan</string>
-    <string name="e2e_use_keybackup">Akses sejarah pesan terenkripsi</string>
+    <string name="e2e_use_keybackup">Akses riwayat pesan terenkripsi</string>
     <string name="settings_export_trail">Ekspor Audit</string>
     <string name="settings_key_requests">Permintaan Kunci</string>
     <string name="template_login_default_session_public_name">${app_name} Android</string>
@@ -2904,7 +2904,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="no_connectivity_to_the_server_indicator">Koneksi ke server telah hilang</string>
     <string name="qr_code_scanned_by_other_no">Tidak</string>
     <string name="qr_code_scanned_by_other_yes">Ya</string>
-    <string name="qr_code_scanned_by_other_notice">Hampir selesai! Apakah %s menampilkan perisai yang sama\?</string>
+    <string name="qr_code_scanned_by_other_notice">Hampir selesai! Apakah %s menampilkan centang yang sama\?</string>
     <string name="a11y_qr_code_for_verification">Kode QR</string>
     <string name="reset_cross_signing">Atur Ulang Kunci</string>
     <string name="initialize_cross_signing">Memulai Tanda Tangan Silang</string>
@@ -2976,4 +2976,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_discovery_consent_notice_off_2">Kontak Anda privat. Untuk menemukan pengguna dari kontak Anda, kami membutuhkan izin untuk mengirim info kontak ke server identitas Anda.</string>
     <string name="shortcut_disabled_reason_sign_out">Sesinya telah dikeluarkan!</string>
     <string name="shortcut_disabled_reason_room_left">Ruangannya telah ditinggalkan!</string>
+    <string name="identity_server_consent_dialog_content_question">Apakah Anda setuju untuk mengirimkan info ini\?</string>
+    <string name="identity_server_consent_dialog_content_3">Untuk menemukan kontak yang sudah ada, Anda harus mengirim info kontak (email dan nomor telepon) ke server identitas Anda. Kami meng-hash data Anda sebelum mengirim untuk privasi.</string>
+    <string name="action_not_now">Nanti</string>
 </resources>

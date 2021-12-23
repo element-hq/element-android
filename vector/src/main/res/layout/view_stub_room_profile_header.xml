@@ -14,7 +14,7 @@
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/avatar"
         android:transitionName="roomProfileAvatarView"
-        app:layout_constraintBottom_toTopOf="@+id/roomProfileNameView"
+        app:layout_constraintBottom_toTopOf="@id/roomProfileNameView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -28,7 +28,7 @@
         android:importantForAccessibility="no"
         android:padding="3dp"
         android:visibility="gone"
-        app:layout_constraintCircle="@+id/roomProfileAvatarView"
+        app:layout_constraintCircle="@id/roomProfileAvatarView"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="64dp"
         tools:ignore="MissingConstraints"
@@ -45,7 +45,7 @@
         android:src="@drawable/ic_public_room"
         android:visibility="gone"
         app:tint="?vctr_content_secondary"
-        app:layout_constraintCircle="@+id/roomProfileAvatarView"
+        app:layout_constraintCircle="@id/roomProfileAvatarView"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="64dp"
         tools:ignore="MissingConstraints"
@@ -57,11 +57,11 @@
         android:layout_height="30dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/roomProfileNameView"
-        app:layout_constraintEnd_toStartOf="@+id/roomProfileNameView"
+        app:layout_constraintBottom_toBottomOf="@id/roomProfileNameView"
+        app:layout_constraintEnd_toStartOf="@id/roomProfileNameView"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/roomProfileNameView"/>
+        app:layout_constraintTop_toTopOf="@id/roomProfileNameView"/>
 
     <TextView
         android:id="@+id/roomProfileNameView"
@@ -70,10 +70,10 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/roomProfileAliasView"
+        app:layout_constraintBottom_toTopOf="@id/roomProfileAliasView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/roomProfileDecorationImageView"
-        app:layout_constraintTop_toBottomOf="@+id/roomProfileAvatarView"
+        app:layout_constraintStart_toEndOf="@id/roomProfileDecorationImageView"
+        app:layout_constraintTop_toBottomOf="@id/roomProfileAvatarView"
         tools:text="@sample/rooms.json/data/name" />
 
     <TextView
@@ -88,7 +88,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/roomProfileNameView"
+        app:layout_constraintTop_toBottomOf="@id/roomProfileNameView"
         tools:text="@sample/rooms.json/data/alias" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,17 +20,24 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
-import de.spiritcroc.preference.ScPreferenceFragment
+import androidx.lifecycle.lifecycleScope
+import androidx.preference.PreferenceFragmentCompat
+import com.airbnb.mvrx.MavericksView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import de.spiritcroc.preference.ScPreferenceFragment
 import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
+import im.vector.app.features.analytics.VectorAnalytics
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.Session
+import reactivecircus.flowbinding.android.view.clicks
 import timber.log.Timber
 
-abstract class VectorSettingsBaseFragment : ScPreferenceFragment() {
+abstract class VectorSettingsBaseFragment : ScPreferenceFragment(), MavericksView {
 
     val vectorActivity: VectorBaseActivity<*> by lazy {
         activity as VectorBaseActivity<*>
@@ -41,6 +48,17 @@ abstract class VectorSettingsBaseFragment : ScPreferenceFragment() {
     // members
     protected lateinit var session: Session
     protected lateinit var errorFormatter: ErrorFormatter
+    protected lateinit var analytics: VectorAnalytics
+
+    /* ==========================================================================================
+     * Views
+     * ========================================================================================== */
+
+    protected fun View.debouncedClicks(onClicked: () -> Unit) {
+        clicks()
+                .onEach { onClicked() }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
 
     abstract val preferenceXmlRes: Int
 
@@ -55,6 +73,7 @@ abstract class VectorSettingsBaseFragment : ScPreferenceFragment() {
         super.onAttach(context)
         session = singletonEntryPoint.activeSessionHolder().getActiveSession()
         errorFormatter = singletonEntryPoint.errorFormatter()
+        analytics = singletonEntryPoint.analytics()
     }
 
     override fun onResume() {
@@ -144,5 +163,9 @@ abstract class VectorSettingsBaseFragment : ScPreferenceFragment() {
                 .setMessage(errorMessage)
                 .setPositiveButton(R.string.ok, null)
                 .show()
+    }
+
+    override fun invalidate() {
+        // No op by default
     }
 }

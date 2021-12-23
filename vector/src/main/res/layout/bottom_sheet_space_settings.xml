@@ -37,13 +37,12 @@
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
             app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toTopOf="@+id/spaceDescription"
+            app:layout_constraintBottom_toTopOf="@id/spaceDescription"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/spaceAvatarImageView"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="@sample/spaces.json/data/name" />
-
 
         <TextView
             android:id="@+id/spaceDescription"
@@ -60,7 +59,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/spaceAvatarImageView"
-            app:layout_constraintTop_toBottomOf="@+id/spaceNameView"
+            app:layout_constraintTop_toBottomOf="@id/spaceNameView"
             tools:text="@sample/spaces.json/data/topic"
             tools:visibility="visible" />
 
@@ -108,7 +107,6 @@
         app:tint="?vctr_content_primary"
         app:titleTextColor="?vctr_content_primary"
         tools:actionDescription="" />
-
 
     <im.vector.app.core.ui.views.BottomSheetActionButton
         android:id="@+id/addRooms"

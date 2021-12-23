@@ -22,7 +22,6 @@ import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
@@ -51,7 +50,7 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarC
     override fun initUiAndData() {
         if (isFirstCreation()) {
             addFragment(
-                    R.id.simpleFragmentContainer,
+                    views.simpleFragmentContainer,
                     CreateRoomFragment::class.java,
                     CreateRoomArgs(
                             intent?.getStringExtra(INITIAL_NAME) ?: "",

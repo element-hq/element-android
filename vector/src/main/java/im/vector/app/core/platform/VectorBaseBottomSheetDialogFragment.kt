@@ -34,9 +34,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.EntryPointAccessors
 import im.vector.app.core.di.ActivityEntryPoint
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
-import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.features.analytics.VectorAnalytics
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.view.clicks
@@ -83,6 +84,8 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
 
     open val showExpanded = false
 
+    protected lateinit var analytics: VectorAnalytics
+
     interface ResultListener {
         fun onBottomSheetResult(resultCode: Int, data: Any?)
 
@@ -120,6 +123,8 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
     override fun onAttach(context: Context) {
         val activityEntryPoint = EntryPointAccessors.fromActivity(vectorBaseActivity, ActivityEntryPoint::class.java)
         viewModelFactory = activityEntryPoint.viewModelFactory()
+        val singletonEntryPoint = context.singletonEntryPoint()
+        analytics = singletonEntryPoint.analytics()
         super.onAttach(context)
     }
 
@@ -168,7 +173,6 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .throttleFirst(300)
                 .onEach { onClicked() }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }

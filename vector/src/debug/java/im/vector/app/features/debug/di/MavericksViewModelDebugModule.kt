@@ -23,11 +23,17 @@ import dagger.multibindings.IntoMap
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.MavericksViewModelComponent
 import im.vector.app.core.di.MavericksViewModelKey
+import im.vector.app.features.debug.analytics.DebugAnalyticsViewModel
 import im.vector.app.features.debug.settings.DebugPrivateSettingsViewModel
 
 @InstallIn(MavericksViewModelComponent::class)
 @Module
 interface MavericksViewModelDebugModule {
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(DebugAnalyticsViewModel::class)
+    fun debugAnalyticsViewModelFactory(factory: DebugAnalyticsViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap

@@ -6,7 +6,8 @@
     android:background="?android:colorBackground"
     android:foreground="?attr/selectableItemBackground"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="8dp"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/itemAutocompleteEmoji"

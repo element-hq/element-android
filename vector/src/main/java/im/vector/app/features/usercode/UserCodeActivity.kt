@@ -117,7 +117,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
         if (supportFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
             supportFragmentManager.commitTransaction {
                 setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
-                replace(R.id.simpleFragmentContainer,
+                replace(views.simpleFragmentContainer.id,
                         fragmentClass.java,
                         bundle,
                         fragmentClass.simpleName

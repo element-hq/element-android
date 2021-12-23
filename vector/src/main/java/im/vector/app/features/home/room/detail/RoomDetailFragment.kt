@@ -205,6 +205,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
@@ -914,7 +915,7 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun setupJumpToReadMarkerView() {
-        views.jumpToReadMarkerView.setOnClickListener {
+        views.jumpToReadMarkerView.debouncedClicks {
             onJumpToReadMarkerClicked()
         }
         views.jumpToReadMarkerView.setOnCloseIconClickListener {
@@ -975,7 +976,7 @@ class RoomDetailFragment @Inject constructor(
         super.onCreateOptionsMenu(menu, inflater)
         // We use a custom layout for this menu item, so we need to set a ClickListener
         menu.findItem(R.id.open_matrix_apps)?.let { menuItem ->
-            menuItem.actionView.setOnClickListener {
+            menuItem.actionView.debouncedClicks {
                 onOptionsItemSelected(menuItem)
             }
         }
@@ -1117,6 +1118,8 @@ class RoomDetailFragment @Inject constructor(
         val nonFormattedBody = if (messageContent is MessageAudioContent && messageContent.voiceMessageIndicator != null) {
             val formattedDuration = DateUtils.formatElapsedTime(((messageContent.audioInfo?.duration ?: 0) / 1000).toLong())
             getString(R.string.voice_message_reply_content, formattedDuration)
+        } else if (messageContent is MessagePollContent) {
+            messageContent.pollCreationInfo?.question?.question
         } else {
             messageContent?.body ?: ""
         }
@@ -1418,6 +1421,7 @@ class RoomDetailFragment @Inject constructor(
             override fun onAddAttachment() {
                 if (!::attachmentTypeSelector.isInitialized) {
                     attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@RoomDetailFragment)
+                    attachmentTypeSelector.setAttachmentVisibility(AttachmentTypeSelectorView.Type.POLL, vectorPreferences.labsEnablePolls())
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton, keyboardStateUtils.isKeyboardShowing)
             }
@@ -1527,7 +1531,7 @@ class RoomDetailFragment @Inject constructor(
                 callback = this@RoomDetailFragment
                 isVisible = true
                 render(inviter, VectorInviteView.Mode.LARGE, mainState.changeMembershipState)
-                setOnClickListener { }
+                setOnClickListener(null)
             }
             Unit
         } else if (mainState.asyncInviter.complete) {
@@ -1640,10 +1644,10 @@ class RoomDetailFragment @Inject constructor(
                 .show(
                         activity = requireActivity(),
                         askForReason = action.askForReason,
-                        confirmationRes = R.string.delete_event_dialog_content,
+                        confirmationRes = action.dialogDescriptionRes,
                         positiveRes = R.string.remove,
                         reasonHintRes = R.string.delete_event_dialog_reason_hint,
-                        titleRes = R.string.delete_event_dialog_title
+                        titleRes = action.dialogTitleRes
                 ) { reason ->
                     roomDetailViewModel.handle(RoomDetailAction.RedactAction(action.eventId, reason))
                 }
@@ -2125,7 +2129,21 @@ class RoomDetailFragment @Inject constructor(
                     startActivity(KeysBackupRestoreActivity.intent(it))
                 }
             }
+            is EventSharedAction.EndPoll                    -> {
+                askConfirmationToEndPoll(action.eventId)
+            }
         }
+    }
+
+    private fun askConfirmationToEndPoll(eventId: String) {
+        MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Vector_MaterialAlertDialog)
+                .setTitle(R.string.end_poll_confirmation_title)
+                .setMessage(R.string.end_poll_confirmation_description)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.end_poll_confirmation_approve_button) { _, _ ->
+                    roomDetailViewModel.handle(RoomDetailAction.EndPoll(eventId))
+                }
+                .show()
     }
 
     private fun askConfirmationToIgnoreUser(senderId: String) {

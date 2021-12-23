@@ -19,13 +19,14 @@ package im.vector.app.features.home.room.detail.timeline.url
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import com.google.android.material.card.MaterialCardView
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.databinding.ViewUrlPreviewBinding
+import im.vector.app.databinding.ViewUrlPreviewScBinding
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.media.ImageContentRenderer
+import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.media.PreviewUrlData
 
@@ -36,9 +37,9 @@ class PreviewUrlView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr), View.OnClickListener {
+) : MaterialCardView(context, attrs, defStyleAttr), View.OnClickListener {
 
-    private lateinit var views: ViewUrlPreviewBinding
+    private lateinit var views: ViewUrlPreviewScBinding
 
     var footerWidth: Int = 0
     var footerHeight: Int = 0
@@ -47,6 +48,9 @@ class PreviewUrlView @JvmOverloads constructor(
 
     init {
         setupView()
+        radius = resources.getDimensionPixelSize(R.dimen.preview_url_view_corner_radius).toFloat()
+        cardElevation = 0f
+        setCardBackgroundColor(ThemeUtils.getColor(context, R.attr.vctr_system))
     }
 
     private var state: PreviewUrlUiState = PreviewUrlUiState.Unknown
@@ -127,8 +131,8 @@ class PreviewUrlView @JvmOverloads constructor(
     // PRIVATE METHODS ****************************************************************************************************************************************
 
     private fun setupView() {
-        inflate(context, R.layout.view_url_preview, this)
-        views = ViewUrlPreviewBinding.bind(this)
+        inflate(context, R.layout.view_url_preview_sc, this)
+        views = ViewUrlPreviewScBinding.bind(this)
 
         setOnClickListener(this)
         views.urlPreviewImage.setOnClickListener { onImageClick() }
@@ -150,9 +154,15 @@ class PreviewUrlView @JvmOverloads constructor(
         updateFooterSpaceInternal(siteText)
 
         isVisible = true
+
         views.urlPreviewTitle.setTextOrHide(previewUrlData.title)
         views.urlPreviewImage.isVisible = previewUrlData.mxcUrl?.let { imageContentRenderer.render(it, views.urlPreviewImage, hideOnFail = true) }.orFalse()
         views.urlPreviewDescription.setTextOrHide(previewUrlData.description)
+        views.urlPreviewDescription.maxLines = when {
+            previewUrlData.mxcUrl != null -> 2
+            previewUrlData.title != null  -> 3
+            else                          -> 5
+        }
         views.urlPreviewSite.setTextOrHide(siteText)
     }
 

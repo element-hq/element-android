@@ -48,7 +48,6 @@ import im.vector.app.databinding.FragmentRoomListBinding
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.app.features.home.room.list.RoomListSectionBuilderSpace.Companion.SPACE_ID_FOLLOW_APP
-import im.vector.app.features.home.room.list.actions.RoomListActionsArgs
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedAction
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
@@ -531,7 +530,7 @@ class RoomListFragment @Inject constructor(
             footerController.setData(it)
         }
         RoomListQuickActionsBottomSheet
-                .newInstance(room.roomId, RoomListActionsArgs.Mode.FULL)
+                .newInstance(room.roomId)
                 .show(childFragmentManager, "ROOM_LIST_QUICK_ACTIONS")
         return true
     }

@@ -22,42 +22,30 @@
 
         <im.vector.app.core.preference.VectorPreference
             android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
-            android:key="SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY"
-            android:persistent="false"
-            android:summary="@string/settings_notification_advanced_summary"
-            android:title="@string/settings_notification_advanced"
-            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsAdvancedNotificationPreferenceFragment"
-            app:isPreferenceVisible="@bool/useNotificationSettingsV1" />
-
-        <im.vector.app.core.preference.VectorPreference
-            android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
             android:key="SETTINGS_NOTIFICATION_DEFAULT_PREFERENCE_KEY"
             android:persistent="false"
             android:title="@string/settings_notification_default"
-            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsDefaultNotificationPreferenceFragment"
-            app:isPreferenceVisible="@bool/useNotificationSettingsV2"/>
+            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsDefaultNotificationPreferenceFragment" />
 
         <im.vector.app.core.preference.VectorPreference
             android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
             android:key="SETTINGS_NOTIFICATION_KEYWORD_AND_MENTIONS_PREFERENCE_KEY"
             android:persistent="false"
             android:title="@string/settings_notification_mentions_and_keywords"
-            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsKeywordAndMentionsNotificationPreferenceFragment"
-            app:isPreferenceVisible="@bool/useNotificationSettingsV2"/>
+            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsKeywordAndMentionsNotificationPreferenceFragment" />
 
         <im.vector.app.core.preference.VectorPreference
             android:dependency="SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
             android:key="SETTINGS_NOTIFICATION_OTHER_PREFERENCE_KEY"
             android:persistent="false"
             android:title="@string/settings_notification_other"
-            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsOtherNotificationPreferenceFragment"
-            app:isPreferenceVisible="@bool/useNotificationSettingsV2"/>
+            app:fragment="im.vector.app.features.settings.notifications.VectorSettingsOtherNotificationPreferenceFragment" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_EMAIL_NOTIFICATION_CATEGORY_PREFERENCE_KEY"
-        android:title="@string/settings_notification_emails_category"/>
+        android:title="@string/settings_notification_emails_category" />
 
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:persistent="false"
@@ -103,14 +91,14 @@
 
         <im.vector.app.core.preference.VectorEditTextPreference
             android:inputType="numberDecimal"
-            android:persistent="false"
             android:key="SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY"
+            android:persistent="false"
             android:title="@string/settings_set_sync_delay" />
 
         <im.vector.app.core.preference.VectorEditTextPreference
             android:inputType="numberDecimal"
-            android:persistent="false"
             android:key="SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY"
+            android:persistent="false"
             android:title="@string/settings_set_sync_timeout" />
 
         <im.vector.app.core.preference.VectorSwitchPreference

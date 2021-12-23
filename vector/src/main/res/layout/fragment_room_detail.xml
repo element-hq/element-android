@@ -49,9 +49,9 @@
                     android:layout_height="17dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="2dp"
-                    app:layout_constraintBottom_toBottomOf="@+id/roomToolbarTitleView"
-                    app:layout_constraintStart_toEndOf="@+id/roomToolbarAvatarImageView"
-                    app:layout_constraintTop_toTopOf="@+id/roomToolbarTitleView" />
+                    app:layout_constraintBottom_toBottomOf="@id/roomToolbarTitleView"
+                    app:layout_constraintStart_toEndOf="@id/roomToolbarAvatarImageView"
+                    app:layout_constraintTop_toTopOf="@id/roomToolbarTitleView" />
 
                 <im.vector.app.core.ui.views.PresenceStateImageView
                     android:id="@+id/roomToolbarPresenceImageView"
@@ -60,7 +60,7 @@
                     android:background="@drawable/toolbar_background_circle"
                     android:padding="2dp"
                     android:visibility="gone"
-                    app:layout_constraintCircle="@+id/roomToolbarAvatarImageView"
+                    app:layout_constraintCircle="@id/roomToolbarAvatarImageView"
                     app:layout_constraintCircleAngle="135"
                     app:layout_constraintCircleRadius="20dp"
                     tools:ignore="MissingConstraints"
@@ -78,7 +78,7 @@
                     android:src="@drawable/ic_public_room"
                     android:visibility="gone"
                     app:tint="?vctr_content_secondary"
-                    app:layout_constraintCircle="@+id/roomToolbarAvatarImageView"
+                    app:layout_constraintCircle="@id/roomToolbarAvatarImageView"
                     app:layout_constraintCircleAngle="135"
                     app:layout_constraintCircleRadius="20dp"
                     tools:ignore="MissingConstraints"
@@ -94,10 +94,10 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textColor="?vctr_content_primary"
-                    app:layout_constraintBottom_toTopOf="@+id/roomToolbarSubtitleView"
+                    app:layout_constraintBottom_toTopOf="@id/roomToolbarSubtitleView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/roomToolbarDecorationImageView"
+                    app:layout_constraintStart_toEndOf="@id/roomToolbarDecorationImageView"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_chainStyle="packed"
                     app:layout_goneMarginStart="7dp"
@@ -116,8 +116,8 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/roomToolbarAvatarImageView"
-                    app:layout_constraintTop_toBottomOf="@+id/roomToolbarTitleView"
+                    app:layout_constraintStart_toEndOf="@id/roomToolbarAvatarImageView"
+                    app:layout_constraintTop_toBottomOf="@id/roomToolbarTitleView"
                     tools:text="@sample/rooms.json/data/topic"
                     tools:visibility="visible" />
 
@@ -151,13 +151,12 @@
         android:visibility="visible"
         app:layout_constraintTop_toBottomOf="@id/syncStateView" />
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/timelineRecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:overScrollMode="always"
-        app:layout_constraintBottom_toTopOf="@+id/timelineRecyclerViewBarrier"
+        app:layout_constraintBottom_toTopOf="@id/timelineRecyclerViewBarrier"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/removeJitsiWidgetView"
@@ -179,7 +178,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/removeJitsiWidgetView"
         tools:visibility="visible" />
-
 
     <im.vector.app.core.ui.views.NotificationAreaView
         android:id="@+id/notificationAreaView"
@@ -232,7 +230,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
     <androidx.constraintlayout.widget.Barrier
         android:id="@+id/badgeBarrier"

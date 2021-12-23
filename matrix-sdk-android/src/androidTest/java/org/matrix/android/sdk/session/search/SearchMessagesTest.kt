@@ -24,14 +24,10 @@ import org.junit.runners.JUnit4
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.events.model.toModel
-import org.matrix.android.sdk.api.session.room.model.message.MessageContent
-import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.api.session.search.SearchResult
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestData
 import org.matrix.android.sdk.common.CryptoTestHelper
-import java.util.concurrent.CountDownLatch
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -84,23 +80,11 @@ class SearchMessagesTest : InstrumentedTest {
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId
         val roomFromAlicePOV = aliceSession.getRoom(aliceRoomId)!!
-        val aliceTimeline = roomFromAlicePOV.createTimeline(null, TimelineSettings(10))
-        aliceTimeline.start()
-
-        val lock = CountDownLatch(1)
-
-        val eventListener = commonTestHelper.createEventListener(lock) { snapshot ->
-            snapshot.count { it.root.content.toModel<MessageContent>()?.body?.startsWith(MESSAGE).orFalse() } == 2
-        }
-
-        aliceTimeline.addListener(eventListener)
 
         commonTestHelper.sendTextMessage(
                 roomFromAlicePOV,
                 MESSAGE,
                 2)
-
-        commonTestHelper.await(lock)
 
         val data = commonTestHelper.runBlockingTest {
             block.invoke(cryptoTestData)
@@ -114,7 +98,6 @@ class SearchMessagesTest : InstrumentedTest {
                         }.orFalse()
         )
 
-        aliceTimeline.removeAllListeners()
         cryptoTestData.cleanUp(commonTestHelper)
     }
 }

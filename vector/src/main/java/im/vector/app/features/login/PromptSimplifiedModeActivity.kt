@@ -20,7 +20,6 @@ import android.content.Context
 import android.content.Intent
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
@@ -34,7 +33,7 @@ open class PromptSimplifiedModeActivity : VectorBaseActivity<ActivityLoginBindin
     override fun getBinding() = ActivityLoginBinding.inflate(layoutInflater)
 
     override fun initUiAndData() {
-        addFragment(R.id.loginFragmentContainer, PromptSimplifiedModeFragment::class.java)
+        addFragment(views.loginFragmentContainer, PromptSimplifiedModeFragment::class.java)
     }
 
     companion object {

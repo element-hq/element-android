@@ -301,7 +301,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.IgnoreUser                       -> handleIgnoreUser(action)
             is RoomDetailAction.EnterTrackingUnreadMessagesState -> startTrackingUnreadMessages()
             is RoomDetailAction.ExitTrackingUnreadMessagesState  -> stopTrackingUnreadMessages()
-            is RoomDetailAction.ReplyToOptions                   -> handleReplyToOptions(action)
+            is RoomDetailAction.VoteToPoll                       -> handleVoteToPoll(action)
             is RoomDetailAction.AcceptVerificationRequest        -> handleAcceptVerification(action)
             is RoomDetailAction.DeclineVerificationRequest       -> handleDeclineVerification(action)
             is RoomDetailAction.RequestVerification              -> handleRequestVerification(action)
@@ -341,6 +341,7 @@ class RoomDetailViewModel @AssistedInject constructor(
                 }
                 _viewEvents.post(RoomDetailViewEvents.OpenRoom(action.replacementRoomId, closeCurrentRoom = true))
             }
+            is RoomDetailAction.EndPoll                          -> handleEndPoll(action.eventId)
         }.exhaustive
     }
 
@@ -925,10 +926,20 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleReplyToOptions(action: RoomDetailAction.ReplyToOptions) {
-        // Do not allow to reply to unsent local echo
+    private fun handleVoteToPoll(action: RoomDetailAction.VoteToPoll) {
+        // Do not allow to vote unsent local echo of the poll event
         if (LocalEcho.isLocalEchoId(action.eventId)) return
-        room.sendOptionsReply(action.eventId, action.optionIndex, action.optionValue)
+        // Do not allow to vote the same option twice
+        room.getTimeLineEvent(action.eventId)?.let { pollTimelineEvent ->
+            val currentVote = pollTimelineEvent.annotations?.pollResponseSummary?.aggregatedContent?.myVote
+            if (currentVote != action.optionKey) {
+                room.voteToPoll(action.eventId, action.optionKey)
+            }
+        }
+    }
+
+    private fun handleEndPoll(eventId: String) {
+        room.endPoll(eventId)
     }
 
     private fun observeSyncState() {

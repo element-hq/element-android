@@ -45,8 +45,8 @@ class KeysBackupSetupStep1Fragment @Inject constructor() : VectorBaseFragment<Fr
             views.keysBackupSetupStep1ManualExportButton.visibility = if (showOption) View.VISIBLE else View.GONE
         }
 
-        views.keysBackupSetupStep1Button.setOnClickListener { onButtonClick() }
-        views.keysBackupSetupStep1ManualExportButton.setOnClickListener { onManualExportClick() }
+        views.keysBackupSetupStep1Button.debouncedClicks { onButtonClick() }
+        views.keysBackupSetupStep1ManualExportButton.debouncedClicks { onManualExportClick() }
     }
 
     private fun onButtonClick() {

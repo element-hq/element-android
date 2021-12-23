@@ -31,7 +31,7 @@
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/incomingCallRejectView"
+        app:layout_constraintEnd_toStartOf="@id/incomingCallRejectView"
         app:layout_constraintStart_toEndOf="@id/incomingCallAvatar"
         app:layout_constraintTop_toTopOf="@id/incomingCallAvatar"
         tools:text="@sample/users.json/data/displayName" />
@@ -48,7 +48,7 @@
         android:maxLines="1"
         android:textColor="?vctr_content_secondary"
         app:drawableTint="?vctr_content_secondary"
-        app:layout_constraintEnd_toStartOf="@+id/incomingCallRejectView"
+        app:layout_constraintEnd_toStartOf="@id/incomingCallRejectView"
         app:layout_constraintStart_toStartOf="@id/incomingCallNameView"
         app:layout_constraintTop_toBottomOf="@id/incomingCallNameView"
         tools:drawableStart="@drawable/ic_call_audio_small"

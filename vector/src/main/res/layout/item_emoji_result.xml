@@ -9,7 +9,8 @@
     android:minHeight="48dp"
     android:orientation="horizontal"
     android:paddingStart="@dimen/layout_horizontal_margin"
-    android:paddingEnd="@dimen/layout_horizontal_margin">
+    android:paddingEnd="@dimen/layout_horizontal_margin"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/item_emoji_tv"

@@ -26,7 +26,7 @@ Element menempatkan Anda dalam kendali dengan cara yang berbeda:
 2. Host sendiri akun Anda dengan menjalankan server pada infrastruktur IT Anda sendiri
 3. Daftar untuk akun di server khusus dengan berlangganan platform hosting Layanan Matrix Element
 
-<b>Pesan terbuka dan kolaborasi</b>
+<b>Perpesanan dan kolaborasi terbuka</b>
 Anda dapat mengobrol dengan siapa saja di jaringan Matrix, jika mereka menggunakan Element, aplikasi Matrix lain atau bahkan menggunakan aplikasi perpesanan yang berbeda.
 
 <b>Sangat aman</b>

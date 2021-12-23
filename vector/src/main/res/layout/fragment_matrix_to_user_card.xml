@@ -31,7 +31,7 @@
         android:singleLine="true"
         android:textAlignment="center"
         android:textColor="?vctr_content_primary"
-        app:layout_constraintTop_toBottomOf="@+id/matrixToCardAvatar"
+        app:layout_constraintTop_toBottomOf="@id/matrixToCardAvatar"
         tools:text="@sample/users.json/data/displayName" />
 
     <TextView

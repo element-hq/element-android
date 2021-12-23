@@ -51,8 +51,6 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     lateinit var dimensionConverter: DimensionConverter
 
-    protected var ignoreSendStatusVisibility = false
-
     @CallSuper
     override fun bind(holder: H) {
         super.bind(holder)
@@ -61,14 +59,6 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
                 this.marginStart = 0
             } else {
                 this.marginStart = leftGuideline
-            }
-        }
-        // Ignore visibility of the send status icon?
-        holder.contentContainer.updateLayoutParams<RelativeLayout.LayoutParams> {
-            if (ignoreSendStatusVisibility) {
-                addRule(RelativeLayout.ALIGN_PARENT_END)
-            } else {
-                removeRule(RelativeLayout.ALIGN_PARENT_END)
             }
         }
         holder.checkableBackground.isChecked = highlighted

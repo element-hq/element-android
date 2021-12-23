@@ -8,7 +8,8 @@
     android:background="@drawable/rounded_rect_shape_8"
     android:backgroundTint="?vctr_reaction_background_off"
     android:orientation="horizontal"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/itemGenericPillImage"

@@ -18,10 +18,13 @@ package org.matrix.android.sdk.internal.session.terms
 
 import dagger.Lazy
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
+import org.matrix.android.sdk.api.failure.toRegistrationFlowResponse
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.terms.GetTermsResponse
 import org.matrix.android.sdk.api.session.terms.TermsService
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.network.NetworkConstants
 import org.matrix.android.sdk.internal.network.RetrofitFactory
@@ -53,6 +56,27 @@ internal class DefaultTermsService @Inject constructor(
             termsAPI.getTerms("${url}terms")
         }
         return GetTermsResponse(termsResponse, getAlreadyAcceptedTermUrlsFromAccountData())
+    }
+
+    /**
+     * We use a trick here to get the homeserver T&C, we use the register API
+     */
+    override suspend fun getHomeserverTerms(baseUrl: String): TermsResponse {
+        return try {
+            executeRequest(null) {
+                termsAPI.register(baseUrl + NetworkConstants.URI_API_PREFIX_PATH_R0 + "register")
+            }
+            // Return empty result if it succeed, but it should never happen
+            TermsResponse()
+        } catch (throwable: Throwable) {
+            @Suppress("UNCHECKED_CAST")
+            TermsResponse(
+                    policies = (throwable.toRegistrationFlowResponse()
+                            ?.params
+                            ?.get(LoginFlowTypes.TERMS) as? JsonDict)
+                            ?.get("policies") as? JsonDict
+            )
+        }
     }
 
     override suspend fun agreeToTerms(serviceType: TermsService.ServiceType,
@@ -91,7 +115,7 @@ internal class DefaultTermsService @Inject constructor(
     private fun buildUrl(baseUrl: String, serviceType: TermsService.ServiceType): String {
         val servicePath = when (serviceType) {
             TermsService.ServiceType.IntegrationManager -> NetworkConstants.URI_INTEGRATION_MANAGER_PATH
-            TermsService.ServiceType.IdentityService -> NetworkConstants.URI_IDENTITY_PATH_V2
+            TermsService.ServiceType.IdentityService    -> NetworkConstants.URI_IDENTITY_PATH_V2
         }
         return "${baseUrl.ensureTrailingSlash()}$servicePath"
     }

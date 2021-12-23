@@ -32,7 +32,8 @@ object RoomSummaryConstants {
             EventType.CALL_ANSWER,
             EventType.ENCRYPTED,
             EventType.STICKER,
-            EventType.REACTION
+            EventType.REACTION,
+            EventType.POLL_START
     )
 
     // SC addition | this is the Element behaviour previous to Element v1.0.7

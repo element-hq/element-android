@@ -7,7 +7,8 @@
     android:background="?android:colorBackground"
     android:paddingStart="32dp"
     android:paddingTop="16dp"
-    android:paddingEnd="32dp">
+    android:paddingEnd="32dp"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/itemLoginErrorRetryText"
@@ -30,7 +31,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemLoginErrorRetryText" />
-
+        app:layout_constraintTop_toBottomOf="@id/itemLoginErrorRetryText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

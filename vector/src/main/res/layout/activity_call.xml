@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!-- tools:ignore is needed because lint thinks this can be replaced with a merge. Replacing this
      with a merge causes the fullscreen SurfaceView not to be centered. -->
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -33,10 +31,10 @@
         android:id="@+id/pipContainer"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/callControlsView"
+        app:layout_constraintBottom_toTopOf="@id/callControlsView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/callToolbar">
+        app:layout_constraintTop_toBottomOf="@id/callToolbar">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/pipRendererWrapper"
@@ -93,7 +91,6 @@
         </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/callToolbar"

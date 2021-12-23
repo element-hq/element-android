@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:addStatesFromChildren="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:viewBindingIgnore="true">
 
     <!-- Layout gravity left: fixes long display name pills moving text out:
         https://github.com/SchildiChat/SchildiChat-android/issues/66

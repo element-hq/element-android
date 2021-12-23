@@ -39,10 +39,6 @@ import im.vector.app.features.themes.BubbleThemeUtils
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
 
-    init {
-        ignoreSendStatusVisibility = true
-    }
-
     @EpoxyAttribute
     var mxcUrl: String = ""
 

@@ -60,7 +60,7 @@ class CreatePollController @Inject constructor(
             hint(host.stringProvider.getString(R.string.create_poll_question_hint))
             singleLine(true)
             imeOptions(questionImeAction)
-            maxLength(500)
+            maxLength(340)
             onTextChange {
                 host.callback?.onQuestionChanged(it)
             }
@@ -80,6 +80,7 @@ class CreatePollController @Inject constructor(
                 hint(host.stringProvider.getString(R.string.create_poll_options_hint, (index + 1)))
                 singleLine(true)
                 imeOptions(imeOptions)
+                maxLength(340)
                 onTextChange {
                     host.callback?.onOptionChanged(index, it)
                 }

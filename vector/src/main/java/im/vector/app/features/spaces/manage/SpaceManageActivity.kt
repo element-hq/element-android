@@ -30,8 +30,8 @@ import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragmentToBackstack
-import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.hideKeyboard
+import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleLoadingBinding
@@ -100,28 +100,26 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
                     ManageType.AddRoomsOnlySpaces -> {
                         val simpleName = SpaceAddRoomFragment::class.java.simpleName
                         if (supportFragmentManager.findFragmentByTag(simpleName) == null) {
-                            supportFragmentManager.commitTransaction {
-                                replace(R.id.simpleFragmentContainer,
-                                        SpaceAddRoomFragment::class.java,
-                                        Bundle().apply { this.putParcelable(Mavericks.KEY_ARG, args) },
-                                        simpleName
-                                )
-                            }
+                            replaceFragment(
+                                    views.simpleFragmentContainer,
+                                    SpaceAddRoomFragment::class.java,
+                                    args,
+                                    simpleName
+                            )
                         }
                     }
-                    ManageType.Settings    -> {
+                    ManageType.Settings           -> {
                         val simpleName = SpaceSettingsFragment::class.java.simpleName
                         if (supportFragmentManager.findFragmentByTag(simpleName) == null && args?.spaceId != null) {
-                            supportFragmentManager.commitTransaction {
-                                replace(R.id.simpleFragmentContainer,
-                                        SpaceSettingsFragment::class.java,
-                                        Bundle().apply { this.putParcelable(Mavericks.KEY_ARG, RoomProfileArgs(args.spaceId)) },
-                                        simpleName
-                                )
-                            }
+                            replaceFragment(
+                                    views.simpleFragmentContainer,
+                                    SpaceSettingsFragment::class.java,
+                                    RoomProfileArgs(args.spaceId),
+                                    simpleName
+                            )
                         }
                     }
-                    ManageType.ManageRooms -> {
+                    ManageType.ManageRooms        -> {
                         // no direct access for now
                     }
                 }
@@ -141,22 +139,22 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
                 }
                 SpaceManagedSharedViewEvents.NavigateToCreateRoom         -> {
                     addFragmentToBackstack(
-                            R.id.simpleFragmentContainer,
+                            views.simpleFragmentContainer,
                             CreateRoomFragment::class.java,
                             CreateRoomArgs("", parentSpaceId = args?.spaceId)
                     )
                 }
-                SpaceManagedSharedViewEvents.NavigateToCreateSpace -> {
+                SpaceManagedSharedViewEvents.NavigateToCreateSpace        -> {
                     addFragmentToBackstack(
-                            R.id.simpleFragmentContainer,
+                            views.simpleFragmentContainer,
                             CreateRoomFragment::class.java,
                             CreateRoomArgs("", parentSpaceId = args?.spaceId, isSpace = true)
                     )
                 }
-                SpaceManagedSharedViewEvents.NavigateToManageRooms -> {
+                SpaceManagedSharedViewEvents.NavigateToManageRooms        -> {
                     args?.spaceId?.let { spaceId ->
                         addFragmentToBackstack(
-                                R.id.simpleFragmentContainer,
+                                views.simpleFragmentContainer,
                                 SpaceManageRoomsFragment::class.java,
                                 SpaceManageArgs(spaceId, ManageType.ManageRooms)
                         )
@@ -165,7 +163,7 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
                 SpaceManagedSharedViewEvents.NavigateToAliasSettings      -> {
                     args?.spaceId?.let { spaceId ->
                         addFragmentToBackstack(
-                                R.id.simpleFragmentContainer,
+                                views.simpleFragmentContainer,
                                 RoomAliasFragment::class.java,
                                 RoomProfileArgs(spaceId)
                         )
@@ -174,7 +172,7 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
                 SpaceManagedSharedViewEvents.NavigateToPermissionSettings -> {
                     args?.spaceId?.let { spaceId ->
                         addFragmentToBackstack(
-                                R.id.simpleFragmentContainer, RoomPermissionsFragment::class.java,
+                                views.simpleFragmentContainer, RoomPermissionsFragment::class.java,
                                 RoomProfileArgs(spaceId)
                         )
                     }

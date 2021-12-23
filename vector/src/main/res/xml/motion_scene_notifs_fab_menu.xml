@@ -4,14 +4,14 @@
 
     <!-- Click on main FAB: toggle -->
     <Transition
-        motion:constraintSetEnd="@+id/constraint_set_fab_menu_open"
-        motion:constraintSetStart="@+id/constraint_set_fab_menu_close"
+        motion:constraintSetEnd="@id/constraint_set_fab_menu_open"
+        motion:constraintSetStart="@id/constraint_set_fab_menu_close"
         motion:duration="300"
         motion:motionInterpolator="easeInOut">
 
         <OnClick
             motion:clickAction="toggle"
-            motion:targetId="@+id/createRoomButton" />
+            motion:targetId="@id/createRoomButton" />
 
         <KeyFrameSet>
 
@@ -61,10 +61,10 @@
             android:visibility="invisible"
             motion:backgroundTint="#FFFFFF"
             motion:fabCustomSize="48dp"
-            motion:layout_constraintBottom_toBottomOf="@+id/createRoomButton"
-            motion:layout_constraintEnd_toEndOf="@+id/createRoomButton"
-            motion:layout_constraintStart_toStartOf="@+id/createRoomButton"
-            motion:layout_constraintTop_toTopOf="@+id/createRoomButton"
+            motion:layout_constraintBottom_toBottomOf="@id/createRoomButton"
+            motion:layout_constraintEnd_toEndOf="@id/createRoomButton"
+            motion:layout_constraintStart_toStartOf="@id/createRoomButton"
+            motion:layout_constraintTop_toTopOf="@id/createRoomButton"
             motion:maxImageSize="26dp"
             motion:tint="@android:color/black" />
 
@@ -75,9 +75,9 @@
             android:layout_marginEnd="8dp"
             android:text="@string/fab_menu_create_room"
             android:visibility="invisible"
-            motion:layout_constraintBottom_toBottomOf="@+id/createRoomItemGroup"
-            motion:layout_constraintEnd_toEndOf="@+id/createRoomItemGroup"
-            motion:layout_constraintTop_toTopOf="@+id/createRoomItemGroup" />
+            motion:layout_constraintBottom_toBottomOf="@id/createRoomItemGroup"
+            motion:layout_constraintEnd_toEndOf="@id/createRoomItemGroup"
+            motion:layout_constraintTop_toTopOf="@id/createRoomItemGroup" />
 
         <!-- Sub menu item 1 -->
         <Constraint
@@ -89,10 +89,10 @@
             android:visibility="invisible"
             motion:backgroundTint="#FFFFFF"
             motion:fabCustomSize="48dp"
-            motion:layout_constraintBottom_toBottomOf="@+id/createRoomButton"
-            motion:layout_constraintEnd_toEndOf="@+id/createRoomButton"
-            motion:layout_constraintStart_toStartOf="@+id/createRoomButton"
-            motion:layout_constraintTop_toTopOf="@+id/createRoomButton"
+            motion:layout_constraintBottom_toBottomOf="@id/createRoomButton"
+            motion:layout_constraintEnd_toEndOf="@id/createRoomButton"
+            motion:layout_constraintStart_toStartOf="@id/createRoomButton"
+            motion:layout_constraintTop_toTopOf="@id/createRoomButton"
             motion:maxImageSize="29dp"
             motion:tint="@android:color/black" />
 
@@ -103,9 +103,9 @@
             android:layout_marginEnd="8dp"
             android:text="@string/fab_menu_create_chat"
             android:visibility="invisible"
-            motion:layout_constraintBottom_toBottomOf="@+id/createRoomItemChat"
-            motion:layout_constraintEnd_toEndOf="@+id/createRoomItemChat"
-            motion:layout_constraintTop_toTopOf="@+id/createRoomItemChat" />
+            motion:layout_constraintBottom_toBottomOf="@id/createRoomItemChat"
+            motion:layout_constraintEnd_toEndOf="@id/createRoomItemChat"
+            motion:layout_constraintTop_toTopOf="@id/createRoomItemChat" />
 
         <!-- Menu -->
         <Constraint
@@ -139,9 +139,9 @@
             android:src="@drawable/ic_fab_add_room"
             motion:backgroundTint="#FFFFFF"
             motion:fabCustomSize="48dp"
-            motion:layout_constraintBottom_toTopOf="@+id/createRoomItemChat"
-            motion:layout_constraintEnd_toEndOf="@+id/createRoomButton"
-            motion:layout_constraintStart_toStartOf="@+id/createRoomButton"
+            motion:layout_constraintBottom_toTopOf="@id/createRoomItemChat"
+            motion:layout_constraintEnd_toEndOf="@id/createRoomButton"
+            motion:layout_constraintStart_toStartOf="@id/createRoomButton"
             motion:maxImageSize="26dp"
             motion:tint="@android:color/black" />
 
@@ -151,9 +151,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:text="@string/fab_menu_create_room"
-            motion:layout_constraintBottom_toBottomOf="@+id/createRoomItemGroup"
-            motion:layout_constraintEnd_toStartOf="@+id/createRoomItemGroup"
-            motion:layout_constraintTop_toTopOf="@+id/createRoomItemGroup" />
+            motion:layout_constraintBottom_toBottomOf="@id/createRoomItemGroup"
+            motion:layout_constraintEnd_toStartOf="@id/createRoomItemGroup"
+            motion:layout_constraintTop_toTopOf="@id/createRoomItemGroup" />
 
         <!-- Sub menu item 1 -->
         <Constraint
@@ -165,9 +165,9 @@
             android:src="@drawable/ic_fab_add_chat"
             motion:backgroundTint="#FFFFFF"
             motion:fabCustomSize="48dp"
-            motion:layout_constraintBottom_toTopOf="@+id/createRoomButton"
-            motion:layout_constraintEnd_toEndOf="@+id/createRoomButton"
-            motion:layout_constraintStart_toStartOf="@+id/createRoomButton"
+            motion:layout_constraintBottom_toTopOf="@id/createRoomButton"
+            motion:layout_constraintEnd_toEndOf="@id/createRoomButton"
+            motion:layout_constraintStart_toStartOf="@id/createRoomButton"
             motion:maxImageSize="29dp"
             motion:tint="@android:color/black" />
 
@@ -177,9 +177,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:text="@string/fab_menu_create_chat"
-            motion:layout_constraintBottom_toBottomOf="@+id/createRoomItemChat"
-            motion:layout_constraintEnd_toStartOf="@+id/createRoomItemChat"
-            motion:layout_constraintTop_toTopOf="@+id/createRoomItemChat" />
+            motion:layout_constraintBottom_toBottomOf="@id/createRoomItemChat"
+            motion:layout_constraintEnd_toStartOf="@id/createRoomItemChat"
+            motion:layout_constraintTop_toTopOf="@id/createRoomItemChat" />
 
         <!-- Menu -->
         <Constraint

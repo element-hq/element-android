@@ -250,7 +250,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 .forEachIndexed { i, v ->
                     v.isChecked = i == index
 
-                    v.setOnClickListener {
+                    v.debouncedClicks {
                         dialog.dismiss()
                         FontScale.updateFontScale(activity, i)
                         vectorConfiguration.applyToApplicationContext()
