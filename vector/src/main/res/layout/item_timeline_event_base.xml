@@ -83,7 +83,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/messageMemberNameView"
-        android:layout_marginEnd="8dp"
         android:layout_toStartOf="@id/messageSendStateImageView"
         android:layout_toEndOf="@id/messageStartGuideline"
         android:layout_marginHorizontal="8dp"
@@ -99,7 +98,8 @@
             android:layout_marginVertical="4dp"
             android:clipChildren="false"
             android:clipToPadding="false"
-            tools:background="@drawable/msg_bubble_incoming">
+            tools:background="@drawable/msg_bubble_text_incoming"
+            tools:ignore="UselessParent">
 
             <!--
             <im.vector.app.core.platform.EllipsizingTextView
@@ -254,7 +254,7 @@
         android:layout_marginBottom="4dp"
         android:contentDescription="@string/event_status_a11y_sending"
         android:src="@drawable/ic_sending_message"
-        android:visibility="invisible"
+        android:visibility="gone"
         tools:tint="?vctr_content_tertiary"
         tools:visibility="visible" />
 

@@ -212,7 +212,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         // Render send state indicator
         if (contentInBubble) {
             // Bubbles have their own decoration in the anonymous read receipt (in the message footer)
-            holder.sendStateImageView.render(SendStateDecoration.NONE)
+            holder.sendStateImageView.isVisible = false
             holder.eventSendingIndicator.isVisible = false
         } else {
             holder.sendStateImageView.render(attributes.informationData.sendStateDecoration)
