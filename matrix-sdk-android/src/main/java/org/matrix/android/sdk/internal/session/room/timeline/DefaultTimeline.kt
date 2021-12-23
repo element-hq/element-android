@@ -177,7 +177,6 @@ internal class DefaultTimeline(
                     val threadTimelineEvents = TimelineEventEntity
                             .whereRoomId(realm, roomId = roomId)
                             .equalTo(TimelineEventEntityFields.CHUNK.IS_LAST_FORWARD, true)
-//                            .`in`("${TimelineEventEntityFields.CHUNK.TIMELINE_EVENTS}.${TimelineEventEntityFields.EVENT_ID}", arrayOf(it))
                             .beginGroup()
                             .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, it)
                             .or()
@@ -192,8 +191,6 @@ internal class DefaultTimeline(
                         threadTimelineEvents
                     }
                 } ?: buildEventQuery(realm).sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
-                if (isFromThreadTimeline)
-                    Timber.i("----> timelineEvents.size: ${timelineEvents.size}")
 
                 timelineEvents.addChangeListener(eventsChangeListener)
                 handleInitialLoad()
@@ -343,8 +340,6 @@ internal class DefaultTimeline(
         val lastCacheEvent = results.lastOrNull()
         val firstCacheEvent = results.firstOrNull()
         val chunkEntity = getLiveChunk()
-        if (isFromThreadTimeline)
-            Timber.i("----> results.size: ${results.size} | contains root thread ${results.map { it.eventId }.contains(rootThreadEventId)}")
 
         updateState(Timeline.Direction.FORWARDS) { state ->
             state.copy(

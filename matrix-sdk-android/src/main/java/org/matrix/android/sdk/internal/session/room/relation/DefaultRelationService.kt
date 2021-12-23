@@ -220,74 +220,8 @@ internal class DefaultRelationService @AssistedInject constructor(
         return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
     }
 
-    private fun decryptIfNeeded(event: Event, roomId: String) {
-        try {
-            // Event from sync does not have roomId, so add it to the event first
-            val result = cryptoService.decryptEvent(event.copy(roomId = roomId), "")
-            event.mxDecryptionResult = OlmDecryptionResult(
-                    payload = result.clearEvent,
-                    senderKey = result.senderCurve25519Key,
-                    keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
-                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-            )
-        } catch (e: MXCryptoError) {
-            if (e is MXCryptoError.Base) {
-                event.mCryptoError = e.errorType
-                event.mCryptoErrorReason = e.technicalMessage.takeIf { it.isNotEmpty() } ?: e.detailedErrorDescription
-            }
-        }
-    }
-
     override suspend fun fetchThreadTimeline(rootThreadEventId: String): List<Event> {
-        val results = fetchThreadTimelineTask.execute(FetchThreadTimelineTask.Params(roomId, rootThreadEventId))
-        var counter = 0
-//
-//        monarchy
-//                .awaitTransaction { realm ->
-//                    val chunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId)
-//
-//                    val optimizedThreadSummaryMap = hashMapOf<String, EventEntity>()
-//                    for (event in results.reversed()) {
-//                        if (event.eventId == null || event.senderId == null || event.type == null) {
-//                            continue
-//                        }
-//
-//                        // skip if event already exists
-//                        if (EventEntity.where(realm, event.eventId).findFirst() != null) {
-//                            counter++
-//                            continue
-//                        }
-//
-//                        if (event.isEncrypted()) {
-//                            decryptIfNeeded(event, roomId)
-//                        }
-//
-//                        val ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
-//                        val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.INCREMENTAL_SYNC)
-//                        if (event.stateKey != null) {
-//                            CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
-//                                eventId = event.eventId
-//                                root = eventEntity
-//                            }
-//                        }
-//                        chunk?.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS)
-//                        eventEntity.rootThreadEventId?.let {
-//                            // This is a thread event
-//                            optimizedThreadSummaryMap[it] = eventEntity
-//                        } ?: run {
-//                            // This is a normal event or a root thread one
-//                            optimizedThreadSummaryMap[eventEntity.eventId] = eventEntity
-//                        }
-//                    }
-//
-//                    optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(
-//                            roomId = roomId,
-//                            realm = realm,
-//                            currentUserId = userId)
-//                }
-        Timber.i("----> size: ${results.size} | skipped: $counter | threads: ${results.map{ it.eventId}}")
-
-        return results
+        return fetchThreadTimelineTask.execute(FetchThreadTimelineTask.Params(roomId, rootThreadEventId))
     }
 
     /**

@@ -308,17 +308,6 @@ class RoomDetailViewModel @AssistedInject constructor(
                 }
     }
 
-//    /**
-//     * Fetch all the thread replies for the current thread
-//     */
-//    private fun fetchThreadTimeline() {
-//        initialState.rootThreadEventId?.let {
-//            viewModelScope.launch(Dispatchers.IO) {
-//                room.fetchThreadTimeline(it)
-//            }
-//        }
-//    }
-
     fun getOtherUserIds() = room.roomSummary()?.otherMemberIds
 
     fun getRoomSummary() = room.roomSummary()
