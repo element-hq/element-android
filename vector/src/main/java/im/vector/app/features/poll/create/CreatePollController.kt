@@ -94,7 +94,7 @@ class CreatePollController @Inject constructor(
             genericButtonItem {
                 id("add_option")
                 text(host.stringProvider.getString(R.string.create_poll_add_option))
-                textColor(host.colorProvider.getColor(R.color.palette_element_green))
+                textColor(host.colorProvider.getColorFromAttribute(R.attr.colorAccent))
                 gravity(Gravity.START)
                 bold(true)
                 buttonClickAction {
