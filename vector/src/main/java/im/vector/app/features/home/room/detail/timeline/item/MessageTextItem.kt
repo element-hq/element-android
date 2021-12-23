@@ -17,10 +17,8 @@
 package im.vector.app.features.home.room.detail.timeline.item
 
 import android.content.Context
-import android.graphics.Color
 import android.text.TextUtils
 import android.text.method.MovementMethod
-import android.widget.LinearLayout
 import androidx.core.text.PrecomputedTextCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.TextViewCompat
@@ -36,7 +34,7 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlUiState
-import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlView
+import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlViewSc
 import im.vector.app.features.media.ImageContentRenderer
 import org.matrix.android.sdk.api.extensions.orFalse
 
@@ -152,11 +150,11 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val messageView by bind<FooteredTextView>(R.id.messageTextView)
-        val previewUrlView by bind<PreviewUrlView>(R.id.messageUrlPreview)
+        val previewUrlView by bind<PreviewUrlViewSc>(R.id.messageUrlPreview)
     }
 
     inner class PreviewUrlViewUpdater : PreviewUrlRetriever.PreviewUrlRetrieverListener {
-        var previewUrlView: PreviewUrlView? = null
+        var previewUrlView: PreviewUrlViewSc? = null
         var holder: Holder? = null
         var imageContentRenderer: ImageContentRenderer? = null
 
