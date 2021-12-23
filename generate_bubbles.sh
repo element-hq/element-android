@@ -85,11 +85,13 @@ function create_msg_bubble() {
 
 for is_outgoing in 0 1; do
     for is_rtl in 0 1; do
-        for is_notice in 0 1; do
+        # Notices are handled via transparency and do not need own drawables right now
+        is_notice=0
+        #for is_notice in 0 1; do
             for has_tail in 0 1; do
                 create_msg_bubble "$is_outgoing" "$is_rtl" "$is_notice" "$has_tail"
             done
-        done
+        #done
     done
 done
 

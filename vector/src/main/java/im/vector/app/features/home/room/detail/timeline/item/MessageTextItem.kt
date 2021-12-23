@@ -121,10 +121,6 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         holder.messageView.onClick(attributes.itemClickListener)
         holder.messageView.onLongClickIgnoringLinks(attributes.itemLongClickListener)
 
-        holder.messageView.setTextColor(ColorProvider(holder.messageView.context).getColorFromAttribute(
-                if (attributes.isNotice) R.attr.vctr_content_secondary else R.attr.vctr_content_primary
-        ))
-
         if (bindingOptions?.canUseTextFuture.orFalse()) {
             holder.messageView.setTextFuture(textFuture)
         } else {

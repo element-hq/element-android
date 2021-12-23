@@ -456,36 +456,21 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 val longPadding: Int
                 val shortPadding: Int
                 if (BubbleThemeUtils.drawsActualBubbles(bubbleStyle)) {
-                    val bubbleRes = if (attributes.isNotice) { // notice
-                        if (attributes.informationData.showInformation) { // tail
-                            if (reverseBubble) { // outgoing
-                                R.drawable.msg_bubble_notice_outgoing
-                            } else { // incoming
-                                R.drawable.msg_bubble_notice_incoming
-                            }
-                        } else { // notail
-                            if (reverseBubble) { // outgoing
-                                R.drawable.msg_bubble_notice_outgoing_notail
-                            } else { // incoming
-                                R.drawable.msg_bubble_notice_incoming_notail
-                            }
+                    val bubbleRes = if (attributes.informationData.showInformation) { // tail
+                        if (reverseBubble) { // outgoing
+                            R.drawable.msg_bubble_text_outgoing
+                        } else { // incoming
+                            R.drawable.msg_bubble_text_incoming
                         }
-                    } else { // text
-                        if (attributes.informationData.showInformation) { // tail
-                            if (reverseBubble) { // outgoing
-                                R.drawable.msg_bubble_text_outgoing
-                            } else { // incoming
-                                R.drawable.msg_bubble_text_incoming
-                            }
-                        } else { // notail
-                            if (reverseBubble) { // outgoing
-                                R.drawable.msg_bubble_text_outgoing_notail
-                            } else { // incoming
-                                R.drawable.msg_bubble_text_incoming_notail
-                            }
+                    } else { // notail
+                        if (reverseBubble) { // outgoing
+                            R.drawable.msg_bubble_text_outgoing_notail
+                        } else { // incoming
+                            R.drawable.msg_bubble_text_incoming_notail
                         }
                     }
                     bubbleView.setBackgroundResource(bubbleRes)
+                    bubbleView.alpha = if (attributes.isNotice) 0.6f else 1f
                     longPadding = 20
                     shortPadding = 8
                 } else {
