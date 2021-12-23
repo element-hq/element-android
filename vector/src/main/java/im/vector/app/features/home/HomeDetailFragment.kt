@@ -65,6 +65,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.math.abs
 
 class HomeDetailFragment @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
@@ -542,7 +543,10 @@ class HomeDetailFragment @Inject constructor(
                         if (selectedIndex != views.roomListContainerPager.currentItem) {
                             // post() mitigates a case where we could end up in an endless loop circling around the same few spaces
                             views.roomListContainerPager.post {
-                                views.roomListContainerPager.currentItem = selectedIndex
+                                // Do not smooth scroll large distances to avoid loading unnecessary many room lists
+                                val diff = selectedIndex - views.roomListContainerPager.currentItem
+                                val smoothScroll = abs(diff) <= 1
+                                views.roomListContainerPager.setCurrentItem(selectedIndex, smoothScroll)
                             }
                         }
                         return
