@@ -567,7 +567,8 @@ class HomeDetailFragment @Inject constructor(
         initialPageSelected = false
         pendingSpaceIds.clear()
 
-        views.roomListContainerPager.offscreenPageLimit = 2
+        // OFFSCREEN_PAGE_LIMIT_DEFAULT: default recyclerview caching mechanism instead of explicit fixed prefetching
+        //views.roomListContainerPager.offscreenPageLimit = 2
 
         val adapter = object: FragmentStateAdapter(this@HomeDetailFragment) {
             override fun getItemCount(): Int {
