@@ -21,26 +21,48 @@ import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.realm.Realm
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.model.relation.RelationService
+import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.NoOpCancellable
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
+import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
+import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
+import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
+import org.matrix.android.sdk.internal.database.helper.updateThreadSummaryIfNeeded
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
+import org.matrix.android.sdk.internal.database.mapper.toEntity
+import org.matrix.android.sdk.internal.database.model.ChunkEntity
+import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
+import org.matrix.android.sdk.internal.database.model.EventEntity
+import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
+import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
+import org.matrix.android.sdk.internal.database.query.findIncludingEvent
+import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
+import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.where
+import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
+import org.matrix.android.sdk.internal.session.room.timeline.PaginationDirection
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
+import org.matrix.android.sdk.internal.util.awaitTransaction
 import org.matrix.android.sdk.internal.util.fetchCopyMap
 import timber.log.Timber
 
@@ -50,9 +72,12 @@ internal class DefaultRelationService @AssistedInject constructor(
         private val eventSenderProcessor: EventSenderProcessor,
         private val eventFactory: LocalEchoEventFactory,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
+        private val cryptoService: DefaultCryptoService,
         private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
         private val fetchEditHistoryTask: FetchEditHistoryTask,
+        private val fetchThreadTimelineTask: FetchThreadTimelineTask,
         private val timelineEventMapper: TimelineEventMapper,
+        @UserId private val userId: String,
         @SessionDatabase private val monarchy: Monarchy,
         private val taskExecutor: TaskExecutor) :
         RelationService {
@@ -192,7 +217,77 @@ internal class DefaultRelationService @AssistedInject constructor(
                         saveLocalEcho(it)
                     }
         }
-        return  eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
+        return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
+    }
+
+    private fun decryptIfNeeded(event: Event, roomId: String) {
+        try {
+            // Event from sync does not have roomId, so add it to the event first
+            val result = cryptoService.decryptEvent(event.copy(roomId = roomId), "")
+            event.mxDecryptionResult = OlmDecryptionResult(
+                    payload = result.clearEvent,
+                    senderKey = result.senderCurve25519Key,
+                    keysClaimed = result.claimedEd25519Key?.let { k -> mapOf("ed25519" to k) },
+                    forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+            )
+        } catch (e: MXCryptoError) {
+            if (e is MXCryptoError.Base) {
+                event.mCryptoError = e.errorType
+                event.mCryptoErrorReason = e.technicalMessage.takeIf { it.isNotEmpty() } ?: e.detailedErrorDescription
+            }
+        }
+    }
+
+    override suspend fun fetchThreadTimeline(rootThreadEventId: String): List<Event> {
+        val results = fetchThreadTimelineTask.execute(FetchThreadTimelineTask.Params(roomId, rootThreadEventId))
+        var counter = 0
+//
+//        monarchy
+//                .awaitTransaction { realm ->
+//                    val chunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId)
+//
+//                    val optimizedThreadSummaryMap = hashMapOf<String, EventEntity>()
+//                    for (event in results.reversed()) {
+//                        if (event.eventId == null || event.senderId == null || event.type == null) {
+//                            continue
+//                        }
+//
+//                        // skip if event already exists
+//                        if (EventEntity.where(realm, event.eventId).findFirst() != null) {
+//                            counter++
+//                            continue
+//                        }
+//
+//                        if (event.isEncrypted()) {
+//                            decryptIfNeeded(event, roomId)
+//                        }
+//
+//                        val ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
+//                        val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.INCREMENTAL_SYNC)
+//                        if (event.stateKey != null) {
+//                            CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
+//                                eventId = event.eventId
+//                                root = eventEntity
+//                            }
+//                        }
+//                        chunk?.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS)
+//                        eventEntity.rootThreadEventId?.let {
+//                            // This is a thread event
+//                            optimizedThreadSummaryMap[it] = eventEntity
+//                        } ?: run {
+//                            // This is a normal event or a root thread one
+//                            optimizedThreadSummaryMap[eventEntity.eventId] = eventEntity
+//                        }
+//                    }
+//
+//                    optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(
+//                            roomId = roomId,
+//                            realm = realm,
+//                            currentUserId = userId)
+//                }
+        Timber.i("----> size: ${results.size} | skipped: $counter | threads: ${results.map{ it.eventId}}")
+
+        return results
     }
 
     /**

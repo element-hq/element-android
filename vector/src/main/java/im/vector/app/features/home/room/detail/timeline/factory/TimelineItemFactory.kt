@@ -42,8 +42,17 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*> {
         val event = params.event
         val computedModel = try {
-            if (!timelineEventVisibilityHelper.shouldShowEvent(event, params.highlightedEventId, params.isFromThreadTimeline())) {
-                return buildEmptyItem(event, params.prevEvent, params.highlightedEventId, params.isFromThreadTimeline())
+            if (!timelineEventVisibilityHelper.shouldShowEvent(
+                            timelineEvent = event,
+                            highlightedEventId = params.highlightedEventId,
+                            isFromThreadTimeline = params.isFromThreadTimeline(),
+                            rootThreadEventId = params.rootThreadEventId)) {
+                return buildEmptyItem(
+                        event,
+                        params.prevEvent,
+                        params.highlightedEventId,
+                        params.rootThreadEventId,
+                        params.isFromThreadTimeline())
             }
             when (event.root.getClearType()) {
                 // Message itemsX
@@ -112,11 +121,24 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
             Timber.e(throwable, "failed to create message item")
             defaultItemFactory.create(params, throwable)
         }
-        return computedModel ?: buildEmptyItem(event, params.prevEvent, params.highlightedEventId, params.isFromThreadTimeline())
+        return computedModel ?: buildEmptyItem(
+                event,
+                params.prevEvent,
+                params.highlightedEventId,
+                params.rootThreadEventId,
+                params.isFromThreadTimeline())
     }
 
-    private fun buildEmptyItem(timelineEvent: TimelineEvent, prevEvent: TimelineEvent?, highlightedEventId: String?, isFromThreadTimeline: Boolean): TimelineEmptyItem {
-        val isNotBlank = prevEvent == null || timelineEventVisibilityHelper.shouldShowEvent(prevEvent, highlightedEventId, isFromThreadTimeline)
+    private fun buildEmptyItem(timelineEvent: TimelineEvent,
+                               prevEvent: TimelineEvent?,
+                               highlightedEventId: String?,
+                               rootThreadEventId: String?,
+                               isFromThreadTimeline: Boolean): TimelineEmptyItem {
+        val isNotBlank = prevEvent == null || timelineEventVisibilityHelper.shouldShowEvent(
+                timelineEvent = prevEvent,
+                highlightedEventId = highlightedEventId,
+                isFromThreadTimeline = isFromThreadTimeline,
+                rootThreadEventId = rootThreadEventId)
         return TimelineEmptyItem_()
                 .id(timelineEvent.localId)
                 .eventId(timelineEvent.eventId)

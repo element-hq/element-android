@@ -82,7 +82,7 @@ internal fun ChunkEntity.addStateEvent(roomId: String, stateEvent: EventEntity, 
 internal fun ChunkEntity.addTimelineEvent(roomId: String,
                                           eventEntity: EventEntity,
                                           direction: PaginationDirection,
-                                          roomMemberContentsByUser: Map<String, RoomMemberContent?>) {
+                                          roomMemberContentsByUser: Map<String, RoomMemberContent?>? = null) {
     val eventId = eventEntity.eventId
     if (timelineEvents.find(eventId) != null) {
         return
@@ -102,7 +102,7 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
                 ?.also { it.cleanUp(eventEntity.sender) }
         this.readReceipts = readReceiptsSummaryEntity
         this.displayIndex = displayIndex
-        val roomMemberContent = roomMemberContentsByUser[senderId]
+        val roomMemberContent = roomMemberContentsByUser?.get(senderId)
         this.senderAvatar = roomMemberContent?.avatarUrl
         this.senderName = roomMemberContent?.displayName
         isUniqueDisplayName = if (roomMemberContent?.displayName != null) {

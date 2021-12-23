@@ -53,6 +53,7 @@ import org.matrix.android.sdk.internal.util.Debouncer
 import org.matrix.android.sdk.internal.util.createBackgroundHandler
 import org.matrix.android.sdk.internal.util.createUIHandler
 import timber.log.Timber
+import java.lang.Thread.sleep
 import java.util.Collections
 import java.util.UUID
 import java.util.concurrent.CopyOnWriteArrayList
@@ -107,6 +108,7 @@ internal class DefaultTimeline(
     private val backwardsState = AtomicReference(TimelineState())
     private val forwardsState = AtomicReference(TimelineState())
     private var isFromThreadTimeline = false
+    private var rootThreadEventId: String? = null
     override val timelineID = UUID.randomUUID().toString()
 
     override val isLive
@@ -151,9 +153,11 @@ internal class DefaultTimeline(
     override fun start(rootThreadEventId: String?) {
         if (isStarted.compareAndSet(false, true)) {
             isFromThreadTimeline = rootThreadEventId != null
+            this@DefaultTimeline.rootThreadEventId = rootThreadEventId
             Timber.v("Start timeline for roomId: $roomId and eventId: $initialEventId")
             timelineInput.listeners.add(this)
             BACKGROUND_HANDLER.post {
+
                 eventDecryptor.start()
                 val realm = Realm.getInstance(realmConfiguration)
                 backgroundRealm.set(realm)
@@ -170,9 +174,10 @@ internal class DefaultTimeline(
                 }
 
                 timelineEvents = rootThreadEventId?.let {
-                    TimelineEventEntity
+                    val threadTimelineEvents = TimelineEventEntity
                             .whereRoomId(realm, roomId = roomId)
                             .equalTo(TimelineEventEntityFields.CHUNK.IS_LAST_FORWARD, true)
+//                            .`in`("${TimelineEventEntityFields.CHUNK.TIMELINE_EVENTS}.${TimelineEventEntityFields.EVENT_ID}", arrayOf(it))
                             .beginGroup()
                             .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, it)
                             .or()
@@ -180,7 +185,15 @@ internal class DefaultTimeline(
                             .endGroup()
                             .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
                             .findAll()
+                    if (threadTimelineEvents.isNullOrEmpty()) {
+                        // When there no threads in the last forward chunk get all events and hide them
+                        buildEventQuery(realm).sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
+                    } else {
+                        threadTimelineEvents
+                    }
                 } ?: buildEventQuery(realm).sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
+                if (isFromThreadTimeline)
+                    Timber.i("----> timelineEvents.size: ${timelineEvents.size}")
 
                 timelineEvents.addChangeListener(eventsChangeListener)
                 handleInitialLoad()
@@ -330,17 +343,19 @@ internal class DefaultTimeline(
         val lastCacheEvent = results.lastOrNull()
         val firstCacheEvent = results.firstOrNull()
         val chunkEntity = getLiveChunk()
+        if (isFromThreadTimeline)
+            Timber.i("----> results.size: ${results.size} | contains root thread ${results.map { it.eventId }.contains(rootThreadEventId)}")
 
-        updateState(Timeline.Direction.FORWARDS) {
-            it.copy(
+        updateState(Timeline.Direction.FORWARDS) { state ->
+            state.copy(
                     hasMoreInCache = !builtEventsIdMap.containsKey(firstCacheEvent?.eventId),   // what is in DB
                     hasReachedEnd = if (isFromThreadTimeline) true else chunkEntity?.isLastForward ?: false // if you neeed fetch more
             )
         }
-        updateState(Timeline.Direction.BACKWARDS) {
-            it.copy(
+        updateState(Timeline.Direction.BACKWARDS) { state ->
+            state.copy(
                     hasMoreInCache = !builtEventsIdMap.containsKey(lastCacheEvent?.eventId),
-                    hasReachedEnd = if (isFromThreadTimeline) true else chunkEntity?.isLastBackward ?: false || lastCacheEvent?.root?.type == EventType.STATE_ROOM_CREATE
+                    hasReachedEnd = if (isFromThreadTimeline && results.map { it.eventId }.contains(rootThreadEventId)) true else (chunkEntity?.isLastBackward ?: false || lastCacheEvent?.root?.type == EventType.STATE_ROOM_CREATE)
             )
         }
     }
@@ -640,7 +655,7 @@ internal class DefaultTimeline(
                 }.map {
                     EventMapper.map(it)
                 }
-            threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(eventEntityList)
+        threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(eventEntityList)
     }
 
     private fun buildTimelineEvent(eventEntity: TimelineEventEntity): TimelineEvent {

@@ -180,6 +180,15 @@ class RoomDetailViewModel @AssistedInject constructor(
         if (OutboundSessionKeySharingStrategy.WhenEnteringRoom == BuildConfig.outboundSessionKeySharingStrategy && room.isEncrypted()) {
             prepareForEncryption()
         }
+
+        // Threads
+        initThreads()
+    }
+
+    /**
+     * Threads specific initialization
+     */
+    private fun initThreads() {
         markThreadTimelineAsReadLocal()
         observeLocalThreadNotifications()
     }
@@ -270,6 +279,18 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     /**
+     * Mark the thread as read, while the user navigated within the thread
+     * This is a local implementation has nothing to do with APIs
+     */
+    private fun markThreadTimelineAsReadLocal() {
+        initialState.rootThreadEventId?.let {
+            session.coroutineScope.launch {
+                room.markThreadAsRead(it)
+            }
+        }
+    }
+
+    /**
      * Observe local unread threads
      */
     private fun observeLocalThreadNotifications() {
@@ -286,6 +307,17 @@ class RoomDetailViewModel @AssistedInject constructor(
                             isUserMentioned = isUserMentioned))
                 }
     }
+
+//    /**
+//     * Fetch all the thread replies for the current thread
+//     */
+//    private fun fetchThreadTimeline() {
+//        initialState.rootThreadEventId?.let {
+//            viewModelScope.launch(Dispatchers.IO) {
+//                room.fetchThreadTimeline(it)
+//            }
+//        }
+//    }
 
     fun getOtherUserIds() = room.roomSummary()?.otherMemberIds
 
@@ -1076,18 +1108,6 @@ class RoomDetailViewModel @AssistedInject constructor(
         }
     }
 
-    /**
-     * Mark the thread as read, while the user navigated within the thread
-     * This is a local implementation has nothing to do with APIs
-     */
-    private fun markThreadTimelineAsReadLocal() {
-        initialState.rootThreadEventId?.let {
-            session.coroutineScope.launch {
-                room.markThreadAsRead(it)
-            }
-        }
-    }
-
     override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
         viewModelScope.launch {
             // tryEmit doesn't work with SharedFlow without cache
@@ -1125,6 +1145,8 @@ class RoomDetailViewModel @AssistedInject constructor(
         chatEffectManager.delegate = null
         chatEffectManager.dispose()
         callManager.removeProtocolsCheckerListener(this)
+        // we should also mark it as read here, for the scenario that the user
+        // is already in the thread timeline
         markThreadTimelineAsReadLocal()
         super.onCleared()
     }

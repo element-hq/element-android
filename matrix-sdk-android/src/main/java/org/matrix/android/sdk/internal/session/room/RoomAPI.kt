@@ -226,7 +226,8 @@ internal interface RoomAPI {
     suspend fun getRelations(@Path("roomId") roomId: String,
                              @Path("eventId") eventId: String,
                              @Path("relationType") relationType: String,
-                             @Path("eventType") eventType: String
+                             @Path("eventType") eventType: String,
+                             @Query("limit") limit: Int?= null
     ): RelationsResponse
 
     /**
@@ -377,14 +378,4 @@ internal interface RoomAPI {
     suspend fun getRoomSummary(@Path("roomIdOrAlias") roomidOrAlias: String,
                                @Query("via") viaServers: List<String>?): RoomStrippedState
 
-    // TODO add doc
-    /**
-     */
-    @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "rooms/{roomId}/messages")
-    suspend fun getRoomThreadMessages(@Path("roomId") roomId: String,
-                                      @Query("from") from: String,
-                                      @Query("dir") dir: String,
-                                      @Query("limit") limit: Int,
-                                      @Query("filter") filter: String?
-    ): PaginationResponse
 }

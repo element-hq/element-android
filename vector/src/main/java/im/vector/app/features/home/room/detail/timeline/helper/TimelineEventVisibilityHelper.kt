@@ -40,7 +40,13 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
      *
      * @return a list of timeline events which have sequentially the same type following the next direction.
      */
-    private fun nextSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int, eventIdToHighlight: String?, isFromThreadTimeline: Boolean): List<TimelineEvent> {
+    private fun nextSameTypeEvents(
+            timelineEvents: List<TimelineEvent>,
+            index: Int,
+            minSize: Int,
+            eventIdToHighlight: String?,
+            rootThreadEventId: String?,
+            isFromThreadTimeline: Boolean): List<TimelineEvent> {
         if (index >= timelineEvents.size - 1) {
             return emptyList()
         }
@@ -62,11 +68,18 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         } else {
             nextSameDayEvents.subList(0, indexOfFirstDifferentEventType)
         }
-        val filteredSameTypeEvents = sameTypeEvents.filter { shouldShowEvent(it, eventIdToHighlight, isFromThreadTimeline) }
+        val filteredSameTypeEvents = sameTypeEvents.filter {
+            shouldShowEvent(
+                    timelineEvent = it,
+                    highlightedEventId = eventIdToHighlight,
+                    isFromThreadTimeline = isFromThreadTimeline,
+                    rootThreadEventId = rootThreadEventId
+            )
+        }
         if (filteredSameTypeEvents.size < minSize) {
             return emptyList()
         }
-        return  filteredSameTypeEvents
+        return filteredSameTypeEvents
     }
 
     /**
@@ -77,12 +90,12 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
      *
      * @return a list of timeline events which have sequentially the same type following the prev direction.
      */
-    fun prevSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int, eventIdToHighlight: String?, isFromThreadTimeline: Boolean): List<TimelineEvent> {
+    fun prevSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int, eventIdToHighlight: String?, rootThreadEventId: String?, isFromThreadTimeline: Boolean): List<TimelineEvent> {
         val prevSub = timelineEvents.subList(0, index + 1)
         return prevSub
                 .reversed()
                 .let {
-                    nextSameTypeEvents(it, 0, minSize, eventIdToHighlight, isFromThreadTimeline)
+                    nextSameTypeEvents(it, 0, minSize, eventIdToHighlight, rootThreadEventId, isFromThreadTimeline)
                 }
     }
 
@@ -92,7 +105,12 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
      * @param rootThreadEventId if this param is null it means we are in the original timeline
      * @return true if the event should be shown in the timeline.
      */
-    fun shouldShowEvent(timelineEvent: TimelineEvent, highlightedEventId: String?, isFromThreadTimeline: Boolean): Boolean {
+    fun shouldShowEvent(
+            timelineEvent: TimelineEvent,
+            highlightedEventId: String?,
+            isFromThreadTimeline: Boolean,
+            rootThreadEventId: String?
+    ): Boolean {
         // If show hidden events is true we should always display something
         if (userPreferencesProvider.shouldShowHiddenEvents()) {
             return true
@@ -106,14 +124,14 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         }
 
         // Check for special case where we should hide the event, like redacted, relation, memberships... according to user preferences.
-        return !timelineEvent.shouldBeHidden(isFromThreadTimeline)
+        return !timelineEvent.shouldBeHidden(rootThreadEventId, isFromThreadTimeline)
     }
 
     private fun TimelineEvent.isDisplayable(): Boolean {
         return TimelineDisplayableEvents.DISPLAYABLE_TYPES.contains(root.getClearType())
     }
 
-    private fun TimelineEvent.shouldBeHidden(isFromThreadTimeline: Boolean): Boolean {
+    private fun TimelineEvent.shouldBeHidden(rootThreadEventId: String?, isFromThreadTimeline: Boolean): Boolean {
         if (root.isRedacted() && !userPreferencesProvider.shouldShowRedactedMessages()) {
             return true
         }
@@ -128,8 +146,16 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
             return true
         }
 
-        if (BuildConfig.THREADING_ENABLED && !isFromThreadTimeline && root.isThread() && root.getRootThreadEventId() != null) {
+        if (BuildConfig.THREADING_ENABLED && !isFromThreadTimeline && root.isThread()) {
             return true
+        }
+
+        if (BuildConfig.THREADING_ENABLED && isFromThreadTimeline) {
+
+            ////
+            return if (root.getRootThreadEventId() == rootThreadEventId) {
+                false
+            } else root.eventId != rootThreadEventId
         }
 
         return false
