@@ -8,7 +8,6 @@
     android:clickable="true"
     android:focusable="true"
     android:foreground="?attr/selectableItemBackground"
-    android:background="?android:colorBackground"
     android:minHeight="50dp"
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
