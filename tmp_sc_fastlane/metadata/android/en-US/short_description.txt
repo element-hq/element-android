@@ -1,1 +1,0 @@
-Secure messenger for Matrix with a traditional instant messaging experience

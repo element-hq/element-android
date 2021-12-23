@@ -1,0 +1,60 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:android)
+
+platform :android do
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta do
+    gradle(task: "clean assembleRelease")
+    crashlytics
+  
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    gradle(task: "clean assembleRelease")
+    upload_to_play_store
+  end
+
+  desc "Deploy Google Play metadata"
+  lane :deployMeta do
+    # Doc: https://docs.fastlane.tools/actions/upload_to_play_store/
+    upload_to_play_store(
+        skip_upload_apk: true,
+        skip_upload_aab: true,
+        skip_upload_images: true,
+        skip_upload_screenshots: true,
+        skip_upload_changelogs: true,
+        # Set to true to not update the PlayStore
+        validate_only: false
+    )
+  end
+
+  desc "Get version code"
+  lane :getVersionCode do
+    versions = google_play_track_version_codes(track: "production")
+    puts(versions)
+    version_code = versions[0]
+    puts(version_code)
+  end
+end
