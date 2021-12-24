@@ -45,6 +45,7 @@ import org.matrix.android.sdk.internal.database.query.findAllInRoomWithSendState
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
+import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import org.matrix.android.sdk.internal.task.TaskExecutor
@@ -78,6 +79,7 @@ internal class DefaultTimeline(
         private val realmSessionProvider: RealmSessionProvider,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val threadsAwarenessHandler: ThreadsAwarenessHandler,
+        private val fetchThreadTimelineTask: FetchThreadTimelineTask,
         private val readReceiptHandler: ReadReceiptHandler
 ) : Timeline,
         TimelineInput.Listener,
@@ -130,6 +132,9 @@ internal class DefaultTimeline(
                 return@post
             }
             Timber.v("Paginate $direction of $count items")
+            if(isFromThreadTimeline){
+                Timber.v("----> Paginate $direction of $count items")
+            }
             val startDisplayIndex = if (direction == Timeline.Direction.BACKWARDS) prevDisplayIndex else nextDisplayIndex
             val shouldPostSnapshot = paginateInternal(startDisplayIndex, direction, count)
             if (shouldPostSnapshot) {
@@ -150,7 +155,7 @@ internal class DefaultTimeline(
         }
     }
 
-    override fun start(rootThreadEventId: String?) {
+    override fun start(rootThreadEventId: String?, shouldFetchThreadTimeline: Boolean) {
         if (isStarted.compareAndSet(false, true)) {
             isFromThreadTimeline = rootThreadEventId != null
             this@DefaultTimeline.rootThreadEventId = rootThreadEventId
@@ -174,10 +179,12 @@ internal class DefaultTimeline(
                 }
 
                 timelineEvents = rootThreadEventId?.let {
-                    val threadTimelineEvents = TimelineEventEntity
+                    if(shouldFetchThreadTimeline) {
+                        fetchThreadTimeline(it)
+                    }
+                    TimelineEventEntity
                             .whereRoomId(realm, roomId = roomId)
                             .equalTo(TimelineEventEntityFields.CHUNK.IS_LAST_FORWARD, true)
-//                            .`in`("${TimelineEventEntityFields.CHUNK.TIMELINE_EVENTS}.${TimelineEventEntityFields.EVENT_ID}", arrayOf(it))
                             .beginGroup()
                             .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, it)
                             .or()
@@ -185,12 +192,6 @@ internal class DefaultTimeline(
                             .endGroup()
                             .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
                             .findAll()
-                    if (threadTimelineEvents.isNullOrEmpty()) {
-                        // When there no threads in the last forward chunk get all events and hide them
-                        buildEventQuery(realm).sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
-                    } else {
-                        threadTimelineEvents
-                    }
                 } ?: buildEventQuery(realm).sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING).findAll()
                 if (isFromThreadTimeline)
                     Timber.i("----> timelineEvents.size: ${timelineEvents.size}")
@@ -248,7 +249,7 @@ internal class DefaultTimeline(
     override fun restartWithEventId(eventId: String?) {
         dispose()
         initialEventId = eventId
-        start()
+        start(rootThreadEventId, false)
         postSnapshot()
     }
 
@@ -343,8 +344,13 @@ internal class DefaultTimeline(
         val lastCacheEvent = results.lastOrNull()
         val firstCacheEvent = results.firstOrNull()
         val chunkEntity = getLiveChunk()
-        if (isFromThreadTimeline)
-            Timber.i("----> results.size: ${results.size} | contains root thread ${results.map { it.eventId }.contains(rootThreadEventId)}")
+        if (isFromThreadTimeline) {
+            Timber.i("----> ----> ----> ----> ----> ----> ----> ----> ----> ")
+            Timber.i("----> lastCacheEvent: ${lastCacheEvent?.eventId}")
+            Timber.i("----> firstCacheEvent: ${firstCacheEvent?.eventId}")
+            Timber.i("----> LOADING_STATE results.size: ${results.size} | contains root thread (END BACKWORDS) ${results.map { it.eventId }.contains(rootThreadEventId)}")
+            Timber.i("----> LOADING_STATE builtEventsIdMap.size: $builtEventsIdMap |: $builtEventsIdMap")
+        }
 
         updateState(Timeline.Direction.FORWARDS) { state ->
             state.copy(
@@ -784,5 +790,34 @@ internal class DefaultTimeline(
 
     private fun Timeline.Direction.toPaginationDirection(): PaginationDirection {
         return if (this == Timeline.Direction.BACKWARDS) PaginationDirection.BACKWARDS else PaginationDirection.FORWARDS
+    }
+
+    // Threads
+    private fun fetchThreadTimeline(rootThreadEventId: String) {
+        val params = FetchThreadTimelineTask.Params(roomId, rootThreadEventId)
+        cancelableBag += fetchThreadTimelineTask
+                .configureWith(params) {
+                    this.callback = fetchThreadTimelineCallback()
+                }
+                .executeBy(taskExecutor)
+    }
+
+    private fun fetchThreadTimelineCallback(): MatrixCallback<Boolean> {
+        return object : MatrixCallback<Boolean> {
+            override fun onSuccess(data: Boolean) {
+                if (data == false) {
+                    Timber.i("----> Restarting thread timeline $rootThreadEventId ")
+                    // TODO FIX THE PROBLEM HERE need to go back and front to display correctly
+                    postSnapshot()
+                    restartWithEventId(null)
+                }
+            }
+
+            override fun onFailure(failure: Throwable) {
+//                updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
+//                postSnapshot()
+//                Timber.v("Failure fetching $limit items $direction from pagination request")
+            }
+        }
     }
 }

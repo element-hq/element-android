@@ -36,7 +36,11 @@ import org.matrix.android.sdk.internal.database.query.whereRoomId
  * Finds the root thread event and update it with the latest message summary along with the number
  * of threads included. If there is no root thread event no action is done
  */
-internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded(roomId: String, realm: Realm, currentUserId: String) {
+internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded(roomId: String,
+                                                                  realm: Realm,
+                                                                  currentUserId: String,
+                                                                  shouldUpdateNotifications: Boolean = true
+) {
     if (!BuildConfig.THREADING_ENABLED) return
 
     for ((rootThreadEventId, eventEntity) in this) {
@@ -54,8 +58,8 @@ internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded(roomId: String
             )
         }
     }
-
-    updateNotificationsNew(roomId, realm, currentUserId)
+    if(shouldUpdateNotifications)
+        updateNotificationsNew(roomId, realm, currentUserId)
 }
 
 /**
