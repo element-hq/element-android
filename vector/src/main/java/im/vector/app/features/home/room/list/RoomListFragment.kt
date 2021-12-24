@@ -132,7 +132,12 @@ class RoomListFragment @Inject constructor(
 
         sharedActionViewModel
                 .stream()
-                .onEach { handleQuickActions(it) }
+                .onEach {
+                    // We might have multiple RoomListFragments, we only want to handle the action once though
+                    if (isResumed || roomListParams.explicitSpaceId == SPACE_ID_FOLLOW_APP) {
+                        handleQuickActions(it)
+                    }
+                }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
 
         roomListViewModel.onEach(RoomListViewState::roomMembershipChanges) { ms ->
