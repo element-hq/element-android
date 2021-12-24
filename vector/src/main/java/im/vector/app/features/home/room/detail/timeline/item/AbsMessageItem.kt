@@ -448,7 +448,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         val reverseDirection = if (defaultRtl) View.LAYOUT_DIRECTION_LTR else View.LAYOUT_DIRECTION_RTL
 
         // Notice formatting - also relevant if no actual bubbles are shown
-        bubbleView.alpha = if (attributes.isNotice) 0.6f else 1f
+        bubbleView.alpha = if (attributes.isNotice) 0.65f else 1f
 
         when (bubbleStyle) {
             BubbleThemeUtils.BUBBLE_STYLE_START,
