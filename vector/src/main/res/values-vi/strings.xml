@@ -3009,4 +3009,10 @@
     <string name="push_gateway_item_device_name">session_name:</string>
     <string name="push_gateway_item_app_display_name">app_display_name:</string>
     <string name="push_gateway_item_push_key">push_key:</string>
+    <plurals name="send_videos_with_original_size">
+        <item quantity="other">Gửi video với kích thước gốc</item>
+    </plurals>
+    <plurals name="send_images_with_original_size">
+        <item quantity="other">Gửi ảnh với kích thước gốc</item>
+    </plurals>
 </resources>
