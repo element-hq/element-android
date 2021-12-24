@@ -173,7 +173,6 @@ import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
 import im.vector.app.features.reactions.EmojiReactionPickerActivity
-import im.vector.app.features.roomprofile.members.RoomMemberListActivity
 import im.vector.app.features.roomprofile.RoomProfileActivity
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
@@ -1047,7 +1046,7 @@ class RoomDetailFragment @Inject constructor(
                 true
             }
             R.id.show_participants -> {
-                startActivity(RoomMemberListActivity.newIntent(requireContext(), roomDetailArgs.roomId))
+                navigator.openRoomProfile(requireContext(), roomDetailArgs.roomId, RoomProfileActivity.EXTRA_DIRECT_ACCESS_ROOM_MEMBERS)
                 true
             }
             R.id.show_room_info -> {

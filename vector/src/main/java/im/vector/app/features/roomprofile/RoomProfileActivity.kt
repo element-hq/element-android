@@ -46,7 +46,7 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @AndroidEntryPoint
-open class RoomProfileActivity :
+class RoomProfileActivity :
         VectorBaseActivity<ActivitySimpleBinding>(),
         ToolbarConfigurable {
 
@@ -68,7 +68,7 @@ open class RoomProfileActivity :
     }
 
     private lateinit var sharedActionViewModel: RoomProfileSharedActionViewModel
-    protected lateinit var roomProfileArgs: RoomProfileArgs
+    private lateinit var roomProfileArgs: RoomProfileArgs
 
     private val requireActiveMembershipViewModel: RequireActiveMembershipViewModel by viewModel()
 
@@ -83,7 +83,16 @@ open class RoomProfileActivity :
         sharedActionViewModel = viewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
         roomProfileArgs = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return
         if (isFirstCreation()) {
-            addInitialFragment()
+            when (intent?.extras?.getInt(EXTRA_DIRECT_ACCESS, EXTRA_DIRECT_ACCESS_ROOM_ROOT)) {
+                EXTRA_DIRECT_ACCESS_ROOM_SETTINGS -> {
+                    addFragment(views.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
+                    addFragmentToBackstack(views.simpleFragmentContainer, RoomSettingsFragment::class.java, roomProfileArgs)
+                }
+                EXTRA_DIRECT_ACCESS_ROOM_MEMBERS -> {
+                    addFragment(views.simpleFragmentContainer, RoomMemberListFragment::class.java, roomProfileArgs)
+                }
+                else -> addFragment(views.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
+            }
         }
         sharedActionViewModel
                 .stream()
@@ -104,19 +113,6 @@ open class RoomProfileActivity :
             when (it) {
                 is RequireActiveMembershipViewEvents.RoomLeft -> handleRoomLeft(it)
             }
-        }
-    }
-
-    open fun addInitialFragment() {
-        when (intent?.extras?.getInt(EXTRA_DIRECT_ACCESS, EXTRA_DIRECT_ACCESS_ROOM_ROOT)) {
-            EXTRA_DIRECT_ACCESS_ROOM_SETTINGS -> {
-                addFragment(views.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
-                addFragmentToBackstack(views.simpleFragmentContainer, RoomSettingsFragment::class.java, roomProfileArgs)
-            }
-            EXTRA_DIRECT_ACCESS_ROOM_MEMBERS -> {
-                addFragment(views.simpleFragmentContainer, RoomMemberListFragment::class.java, roomProfileArgs)
-            }
-            else -> addFragment(views.simpleFragmentContainer, RoomProfileFragment::class.java, roomProfileArgs)
         }
     }
 

@@ -270,8 +270,6 @@
         <activity android:name=".features.roomprofile.RoomProfileActivity" />
         <activity android:name=".features.roomprofile.settings.joinrule.RoomJoinRuleActivity" />
 
-        <activity android:name=".features.roomprofile.members.RoomMemberListActivity" />
-
         <activity android:name=".features.signout.hard.SignedOutActivity" />
         <activity
             android:name=".features.signout.soft.SoftLogoutActivity"
