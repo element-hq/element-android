@@ -809,7 +809,7 @@ internal class DefaultTimeline(
                     Timber.i("----> Restarting thread timeline $rootThreadEventId ")
                     // TODO FIX THE PROBLEM HERE need to go back and front to display correctly
                     postSnapshot()
-                    restartWithEventId(null)
+//                    restartWithEventId(null)
                 }
             }
 
