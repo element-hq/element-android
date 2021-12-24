@@ -518,7 +518,7 @@ class HomeDetailFragment @Inject constructor(
 
     private fun setupViewPager(roomGroupingMethod: RoomGroupingMethod, spaces: List<RoomSummary>?, tab: HomeTab) {
         val oldAdapter = views.roomListContainerPager.adapter as? FragmentStateAdapter
-        val pagingAllowed = vectorPreferences.enableSpacePager()
+        val pagingAllowed = vectorPreferences.enableSpacePager() && tab is HomeTab.RoomList
         if (DEBUG_VIEW_PAGER) Timber.i("Home pager: setup, old adapter: $oldAdapter")
         val unsafeSpaces = spaces?.map { it.roomId } ?: listOf()
         val selectedSpaceId = (roomGroupingMethod as? RoomGroupingMethod.BySpace)?.spaceSummary?.roomId
