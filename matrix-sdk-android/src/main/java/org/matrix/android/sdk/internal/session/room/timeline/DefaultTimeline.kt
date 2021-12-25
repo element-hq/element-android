@@ -342,13 +342,17 @@ internal class DefaultTimeline(
         updateState(Timeline.Direction.FORWARDS) { state ->
             state.copy(
                     hasMoreInCache = !builtEventsIdMap.containsKey(firstCacheEvent?.eventId),   // what is in DB
-                    hasReachedEnd = if (isFromThreadTimeline) true else chunkEntity?.isLastForward ?: false // if you neeed fetch more
+                    hasReachedEnd = if (isFromThreadTimeline) true else chunkEntity?.isLastForward ?: false // if you need fetch more
             )
         }
         updateState(Timeline.Direction.BACKWARDS) { state ->
             state.copy(
                     hasMoreInCache = !builtEventsIdMap.containsKey(lastCacheEvent?.eventId),
-                    hasReachedEnd = if (isFromThreadTimeline && results.map { it.eventId }.contains(rootThreadEventId)) true else (chunkEntity?.isLastBackward ?: false || lastCacheEvent?.root?.type == EventType.STATE_ROOM_CREATE)
+                    hasReachedEnd = if (isFromThreadTimeline && results.map { it.eventId }.contains(rootThreadEventId)) {
+                        true
+                    } else {
+                        (chunkEntity?.isLastBackward ?: false || lastCacheEvent?.root?.type == EventType.STATE_ROOM_CREATE)
+                    }
             )
         }
     }

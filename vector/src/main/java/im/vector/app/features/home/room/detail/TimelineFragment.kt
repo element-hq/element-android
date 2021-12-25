@@ -734,27 +734,32 @@ class TimelineFragment @Inject constructor(
             }
 
             override fun onSendVoiceMessage() {
-                messageComposerViewModel.handle(MessageComposerAction.EndRecordingVoiceMessage(isCancelled = false, rootThreadEventId = getRootThreadEventId()))
+                messageComposerViewModel.handle(
+                        MessageComposerAction.EndRecordingVoiceMessage(isCancelled = false, rootThreadEventId = getRootThreadEventId()))
                 updateRecordingUiState(RecordingUiState.Idle)
             }
 
             override fun onDeleteVoiceMessage() {
-                messageComposerViewModel.handle(MessageComposerAction.EndRecordingVoiceMessage(isCancelled = true, rootThreadEventId = getRootThreadEventId()))
+                messageComposerViewModel.handle(
+                        MessageComposerAction.EndRecordingVoiceMessage(isCancelled = true, rootThreadEventId = getRootThreadEventId()))
                 updateRecordingUiState(RecordingUiState.Idle)
             }
 
             override fun onRecordingLimitReached() {
-                messageComposerViewModel.handle(MessageComposerAction.PauseRecordingVoiceMessage)
+                messageComposerViewModel.handle(
+                        MessageComposerAction.PauseRecordingVoiceMessage)
                 updateRecordingUiState(RecordingUiState.Draft)
             }
 
             override fun onRecordingWaveformClicked() {
-                messageComposerViewModel.handle(MessageComposerAction.PauseRecordingVoiceMessage)
+                messageComposerViewModel.handle(
+                        MessageComposerAction.PauseRecordingVoiceMessage)
                 updateRecordingUiState(RecordingUiState.Draft)
             }
 
             private fun updateRecordingUiState(state: RecordingUiState) {
-                messageComposerViewModel.handle(MessageComposerAction.OnVoiceRecordingUiStateChanged(state))
+                messageComposerViewModel.handle(
+                        MessageComposerAction.OnVoiceRecordingUiStateChanged(state))
             }
         }
     }
