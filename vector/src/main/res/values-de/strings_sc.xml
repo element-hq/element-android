@@ -87,4 +87,6 @@
     <string name="sc_accent_bluelight">Hellblau</string>
     <string name="setting_sc_accent_color_light">Akzentfarbe für helle Themen</string>
     <string name="setting_sc_accent_color_dark">Akzentfarbe für dunkle Themen</string>
+    <string name="settings_unread_counter">Anzahl ungelesener Nachrichten</string>
+    <string name="settings_unimportant_counter_badge_v2">Stummgeschaltete Nachrichten zählen</string>
 </resources>
