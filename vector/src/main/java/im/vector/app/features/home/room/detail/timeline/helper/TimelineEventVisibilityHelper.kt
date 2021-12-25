@@ -90,7 +90,13 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
      *
      * @return a list of timeline events which have sequentially the same type following the prev direction.
      */
-    fun prevSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int, eventIdToHighlight: String?, rootThreadEventId: String?, isFromThreadTimeline: Boolean): List<TimelineEvent> {
+    fun prevSameTypeEvents(
+            timelineEvents: List<TimelineEvent>,
+            index: Int,
+            minSize: Int,
+            eventIdToHighlight: String?,
+            rootThreadEventId: String?,
+            isFromThreadTimeline: Boolean): List<TimelineEvent> {
         val prevSub = timelineEvents.subList(0, index + 1)
         return prevSub
                 .reversed()
