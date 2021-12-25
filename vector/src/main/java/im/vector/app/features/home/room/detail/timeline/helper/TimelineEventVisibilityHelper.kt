@@ -157,8 +157,7 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         }
 
         if (BuildConfig.THREADING_ENABLED && isFromThreadTimeline) {
-
-            ////
+            // //
             return if (root.getRootThreadEventId() == rootThreadEventId) {
                 false
             } else root.eventId != rootThreadEventId

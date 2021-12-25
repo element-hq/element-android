@@ -146,9 +146,6 @@ interface RelationService {
                       formattedText: String? = null,
                       eventReplied: TimelineEvent? = null): Cancelable?
 
-
-
-
     /**
      * Get all the thread replies for the specified rootThreadEventId
      * The return list will contain the original root thread event and all the thread replies to that event

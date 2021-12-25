@@ -227,7 +227,7 @@ internal interface RoomAPI {
                              @Path("eventId") eventId: String,
                              @Path("relationType") relationType: String,
                              @Path("eventType") eventType: String,
-                             @Query("limit") limit: Int?= null
+                             @Query("limit") limit: Int? = null
     ): RelationsResponse
 
     /**
@@ -377,5 +377,4 @@ internal interface RoomAPI {
     @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "im.nheko.summary/rooms/{roomIdOrAlias}/summary")
     suspend fun getRoomSummary(@Path("roomIdOrAlias") roomidOrAlias: String,
                                @Query("via") viaServers: List<String>?): RoomStrippedState
-
 }

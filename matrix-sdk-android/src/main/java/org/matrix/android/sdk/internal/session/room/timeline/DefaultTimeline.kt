@@ -53,7 +53,6 @@ import org.matrix.android.sdk.internal.util.Debouncer
 import org.matrix.android.sdk.internal.util.createBackgroundHandler
 import org.matrix.android.sdk.internal.util.createUIHandler
 import timber.log.Timber
-import java.lang.Thread.sleep
 import java.util.Collections
 import java.util.UUID
 import java.util.concurrent.CopyOnWriteArrayList
@@ -157,7 +156,6 @@ internal class DefaultTimeline(
             Timber.v("Start timeline for roomId: $roomId and eventId: $initialEventId")
             timelineInput.listeners.add(this)
             BACKGROUND_HANDLER.post {
-
                 eventDecryptor.start()
                 val realm = Realm.getInstance(realmConfiguration)
                 backgroundRealm.set(realm)
