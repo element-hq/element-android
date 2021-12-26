@@ -40,8 +40,8 @@ data class RoomNotificationSettingsViewState(
  */
 val RoomNotificationSettingsViewState.notificationStateMapped: Async<RoomNotificationState>
     get() {
-        if ((roomSummary()?.isEncrypted == true && notificationState() == RoomNotificationState.MENTIONS_ONLY) ||
-                notificationState() == RoomNotificationState.ALL_MESSAGES) {
+        if ((roomSummary()?.isEncrypted == true && notificationState() == RoomNotificationState.MENTIONS_ONLY) /*||
+                notificationState() == RoomNotificationState.ALL_MESSAGES*/) {
             /** if in an encrypted room, mentions notifications are not supported so show "All Messages" as selected.
              * Also in the new settings there is no notion of notifications without sound so it maps to noisy also
              */
@@ -56,8 +56,10 @@ val RoomNotificationSettingsViewState.notificationStateMapped: Async<RoomNotific
 val RoomNotificationSettingsViewState.notificationOptions: List<RoomNotificationState>
     get() {
         return if (roomSummary()?.isEncrypted == true) {
-            listOf(RoomNotificationState.ALL_MESSAGES_NOISY, RoomNotificationState.MUTE)
+            // SC note: ALL_MESSAGES = default
+            listOf(RoomNotificationState.ALL_MESSAGES, RoomNotificationState.ALL_MESSAGES_NOISY, RoomNotificationState.MUTE)
         } else {
-            listOf(RoomNotificationState.ALL_MESSAGES_NOISY, RoomNotificationState.MENTIONS_ONLY, RoomNotificationState.MUTE)
+            // SC note: ALL_MESSAGES = default
+            listOf(RoomNotificationState.ALL_MESSAGES, RoomNotificationState.ALL_MESSAGES_NOISY, RoomNotificationState.MENTIONS_ONLY, RoomNotificationState.MUTE)
         }
     }

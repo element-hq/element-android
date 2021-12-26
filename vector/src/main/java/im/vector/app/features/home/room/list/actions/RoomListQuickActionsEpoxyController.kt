@@ -106,6 +106,7 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
 
     @StringRes
     private fun titleForNotificationState(notificationState: RoomNotificationState): Int? = when (notificationState) {
+        RoomNotificationState.ALL_MESSAGES       -> R.string.room_settings_default // SC addition to allow this again
         RoomNotificationState.ALL_MESSAGES_NOISY -> R.string.room_settings_all_messages
         RoomNotificationState.MENTIONS_ONLY      -> R.string.room_settings_mention_and_keyword_only
         RoomNotificationState.MUTE               -> R.string.room_settings_none
@@ -114,8 +115,12 @@ class RoomListQuickActionsEpoxyController @Inject constructor(
 
     @DrawableRes
     private fun iconForNotificationState(notificationState: RoomNotificationState): Int? = when (notificationState) {
-        RoomNotificationState.ALL_MESSAGES_NOISY -> R.drawable.ic_room_actions_notifications_all_noisy
-        RoomNotificationState.ALL_MESSAGES       -> R.drawable.ic_room_actions_notifications_all
+        // Yeah, ALL_MESSAGES and ALL_MESSAGES_NOISY is confusing, blame upstream.
+        // RoomNotificationState.ALL_MESSAGES_NOISY = explicit push rule to notify for all
+        // RoomNotificationState.ALL_MESSAGES = no explicit push rule, follow default
+        // To follow desktops icons, we also need to exchange both icons...
+        RoomNotificationState.ALL_MESSAGES       -> R.drawable.ic_room_actions_notifications_all_noisy // default
+        RoomNotificationState.ALL_MESSAGES_NOISY -> R.drawable.ic_room_actions_notifications_all // actually all
         RoomNotificationState.MENTIONS_ONLY      -> R.drawable.ic_room_actions_notifications_mentions
         RoomNotificationState.MUTE               -> R.drawable.ic_room_actions_notifications_mutes
         else -> null

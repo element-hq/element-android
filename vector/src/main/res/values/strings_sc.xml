@@ -154,4 +154,6 @@
     <string name="settings_enable_space_pager">Swipe chat list to switch space</string>
     <string name="settings_enable_space_pager_summary">Allow to switch between root spaces by swiping horizontally in the chat list</string>
 
+    <!-- Default notification rule -->
+    <string name="room_settings_default">Default</string>
 </resources>
