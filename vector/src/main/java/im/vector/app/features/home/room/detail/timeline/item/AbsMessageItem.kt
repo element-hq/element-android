@@ -456,8 +456,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             BubbleThemeUtils.BUBBLE_STYLE_BOTH_HIDDEN,
             BubbleThemeUtils.BUBBLE_STYLE_START_HIDDEN -> {
                 // Padding for bubble content: long for side with tail, short for other sides
-                val longPadding: Int
-                val shortPadding: Int
+                val longPaddingDp: Int
+                val shortPaddingDp: Int
                 if (BubbleThemeUtils.drawsActualBubbles(bubbleStyle)) {
                     val bubbleRes = if (attributes.informationData.showInformation) { // tail
                         if (reverseBubble) { // outgoing
@@ -473,11 +473,11 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                         }
                     }
                     bubbleView.setBackgroundResource(bubbleRes)
-                    longPadding = 20
-                    shortPadding = 8
+                    longPaddingDp = bubbleView.resources.getDimensionPixelSize(R.dimen.sc_bubble_inner_padding_long_side)
+                    shortPaddingDp = bubbleView.resources.getDimensionPixelSize(R.dimen.sc_bubble_inner_padding_short_side)
                 } else {
-                    longPadding = 10
-                    shortPadding = 0//if (attributes.informationData.showInformation && !hideSenderInformation()) { 8 } else { 0 }
+                    longPaddingDp = bubbleView.resources.getDimensionPixelSize(R.dimen.sc_bubble_tail_size)
+                    shortPaddingDp = 0//if (attributes.informationData.showInformation && !hideSenderInformation()) { 8 } else { 0 }
                 }
                 val density = bubbleView.resources.displayMetrics.density
                 if (reverseBubble != defaultRtl) {
@@ -493,8 +493,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                 (bubbleView.layoutParams as RelativeLayout.LayoutParams).topMargin = round(8*density).toInt()
                 (bubbleView.layoutParams as RelativeLayout.LayoutParams).bottomMargin = round(8*density).toInt()
                  */
-                val shortPaddingDp = round(shortPadding * density).toInt()
-                val longPaddingDp = round(longPadding * density).toInt()
                 if (reverseBubble != defaultRtl) {
                     // Use left/right instead of start/end: bubbleView is always LTR
                     bubbleView.setPadding(

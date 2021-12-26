@@ -13,5 +13,8 @@
     <dimen name="sc_bubble_radius_in_tail">3dp</dimen>
     <dimen name="sc_bubble_tail_size">12dp</dimen>
     <dimen name="sc_bubble_stroke">2dp</dimen>
+    <dimen name="sc_bubble_inner_padding_short_side">8dp</dimen>
+    <!-- long_side = short_side + tail -->
+    <dimen name="sc_bubble_inner_padding_long_side">20dp</dimen>
 
 </resources>
