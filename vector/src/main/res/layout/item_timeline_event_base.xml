@@ -212,7 +212,8 @@
                 tools:layout_marginEnd="1dp"
                 tools:layout_alignBottom="@id/viewStubContainer"
                 tools:layout_alignEnd="@id/viewStubContainer"
-                tools:paddingTop="4dp"
+                tools:paddingTop="@dimen/sc_footer_noverlay_padding_top"
+                tools:paddingBottom="@dimen/sc_footer_noverlay_padding_bottom"
                 android:id="@+id/bubbleFootView">
                 <TextView
                     android:id="@+id/bubbleFooterMessageTimeView"

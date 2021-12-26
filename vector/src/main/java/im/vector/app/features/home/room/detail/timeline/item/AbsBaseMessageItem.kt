@@ -124,9 +124,8 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
             BubbleThemeUtils.BUBBLE_STYLE_BOTH,
             BubbleThemeUtils.BUBBLE_STYLE_BOTH_HIDDEN,
             BubbleThemeUtils.BUBBLE_STYLE_START_HIDDEN -> {
-                val density = holder.informationBottom.resources.displayMetrics.density
                 // Padding for views that align with the bubble (should be roughly the bubble tail width)
-                val bubbleStartAlignWidth = round(12 * density).toInt()
+                val bubbleStartAlignWidth = holder.informationBottom.resources.getDimensionPixelSize(R.dimen.sc_bubble_tail_size)
                 if (reverseBubble) {
                     // Align reactions container to bubble
                     holder.informationBottom.setPaddingRelative(

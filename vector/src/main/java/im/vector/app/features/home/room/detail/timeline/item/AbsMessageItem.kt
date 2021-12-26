@@ -479,7 +479,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                     longPaddingDp = bubbleView.resources.getDimensionPixelSize(R.dimen.sc_bubble_tail_size)
                     shortPaddingDp = 0//if (attributes.informationData.showInformation && !hideSenderInformation()) { 8 } else { 0 }
                 }
-                val density = bubbleView.resources.displayMetrics.density
                 if (reverseBubble != defaultRtl) {
                     // Use left/right instead of start/end: bubbleView is always LTR
                     (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).leftMargin = getBubbleMargin(bubbleView.resources, bubbleStyle, reverseBubble)
@@ -488,11 +487,6 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                     (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).leftMargin = 0
                     (bubbleView.layoutParams as ViewGroup.MarginLayoutParams).rightMargin = getBubbleMargin(bubbleView.resources, bubbleStyle, reverseBubble)
                 }
-                /*
-                (bubbleView.layoutParams as RelativeLayout.LayoutParams).marginStart = round(20*density).toInt()
-                (bubbleView.layoutParams as RelativeLayout.LayoutParams).topMargin = round(8*density).toInt()
-                (bubbleView.layoutParams as RelativeLayout.LayoutParams).bottomMargin = round(8*density).toInt()
-                 */
                 if (reverseBubble != defaultRtl) {
                     // Use left/right instead of start/end: bubbleView is always LTR
                     bubbleView.setPadding(
@@ -531,8 +525,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                     val endOf = if(defaultRtl) RelativeLayout.LEFT_OF else RelativeLayout.RIGHT_OF
 
                     val footerLayoutParams = holder.bubbleFootView.layoutParams as RelativeLayout.LayoutParams
-                    var footerMarginStartDp = 4
-                    var footerMarginEndDp = 1
+                    var footerMarginStartDp = holder.bubbleFootView.resources.getDimensionPixelSize(R.dimen.sc_footer_margin_start)
+                    var footerMarginEndDp = holder.bubbleFootView.resources.getDimensionPixelSize(R.dimen.sc_footer_margin_end)
                     if (allowFooterOverlay(holder)) {
                         footerLayoutParams.addRule(RelativeLayout.ALIGN_BOTTOM, R.id.viewStubContainer)
                         footerLayoutParams.addRule(alignEnd, R.id.viewStubContainer)
@@ -542,7 +536,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                         footerLayoutParams.removeRule(startOf)
                         if (needsFooterReservation(holder)) {
                             // Remove style used when not having reserved space
-                            removeFooterOverlayStyle(holder, density)
+                            removeFooterOverlayStyle(holder)
 
                             // Calculate required footer space
                             val footerMeasures = getFooterMeasures(holder, anonymousReadReceipt)
@@ -552,7 +546,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                             reserveFooterSpace(holder, footerWidth, footerHeight)
                         } else {
                             // We have no reserved space -> style it to ensure readability on arbitrary backgrounds
-                            styleFooterOverlay(holder, density)
+                            styleFooterOverlay(holder)
                         }
                     } else {
                         when {
@@ -574,9 +568,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                                 footerLayoutParams.removeRule(startOf)
                                 footerLayoutParams.removeRule(RelativeLayout.BELOW)
                                 // Reverse margins
-                                footerMarginStartDp = 1
-                                // 4 as previously the start margin, +4 to compensate the missing inner padding for the textView which we have on the other side
-                                footerMarginEndDp = 8
+                                footerMarginStartDp = holder.bubbleFootView.resources.getDimensionPixelSize(R.dimen.sc_footer_reverse_margin_start)
+                                footerMarginEndDp = holder.bubbleFootView.resources.getDimensionPixelSize(R.dimen.sc_footer_reverse_margin_end)
                             }
                             else                     -> /* footer on the right / at the end */ {
                                 footerLayoutParams.addRule(endOf, R.id.viewStubContainer)
@@ -588,15 +581,15 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
                                 footerLayoutParams.removeRule(RelativeLayout.START_OF)
                             }
                         }
-                        removeFooterOverlayStyle(holder, density)
+                        removeFooterOverlayStyle(holder)
                     }
                     if (defaultRtl) {
-                        footerLayoutParams.rightMargin = round(footerMarginStartDp * density).toInt()
-                        footerLayoutParams.leftMargin = round(footerMarginEndDp * density).toInt()
+                        footerLayoutParams.rightMargin = footerMarginStartDp
+                        footerLayoutParams.leftMargin = footerMarginEndDp
                         holder.bubbleMemberNameView.gravity = Gravity.RIGHT
                     } else {
-                        footerLayoutParams.leftMargin = round(footerMarginStartDp * density).toInt()
-                        footerLayoutParams.rightMargin = round(footerMarginEndDp * density).toInt()
+                        footerLayoutParams.leftMargin = footerMarginStartDp
+                        footerLayoutParams.rightMargin = footerMarginEndDp
                         holder.bubbleMemberNameView.gravity = Gravity.LEFT
                     }
                 }
@@ -653,26 +646,27 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         holder.bubbleFooterTimeView.setTextColor(tintList)
     }
 
-    private fun styleFooterOverlay(holder: H, density: Float) {
+    private fun styleFooterOverlay(holder: H) {
         holder.bubbleFootView.setBackgroundResource(R.drawable.timestamp_overlay)
         tintFooter(holder, ThemeUtils.getColor(holder.bubbleFootView.context, R.attr.timestamp_overlay_fg))
-        val padding = round(2*density).toInt()
+        val padding = holder.bubbleFootView.resources.getDimensionPixelSize(R.dimen.sc_footer_overlay_padding)
         holder.bubbleFootView.setPaddingRelative(
                 padding,
                 padding,
-                padding + round(4*density).toInt(), // compensate from inner view padding on the other side
+                // compensate from inner view padding on the other side
+                padding + holder.bubbleFootView.resources.getDimensionPixelSize(R.dimen.sc_footer_padding_compensation),
                 padding
         )
     }
 
-    private fun removeFooterOverlayStyle(holder: H, density: Float) {
+    private fun removeFooterOverlayStyle(holder: H) {
         holder.bubbleFootView.background = null
         tintFooter(holder, ThemeUtils.getColor(holder.bubbleFootView.context, R.attr.vctr_content_secondary))
         holder.bubbleFootView.setPaddingRelative(
                 0,
-                round(4*density).toInt(),
+                holder.bubbleFootView.resources.getDimensionPixelSize(R.dimen.sc_footer_noverlay_padding_top),
                 0,
-                -round(1.5*density).toInt()
+                holder.bubbleFootView.resources.getDimensionPixelSize(R.dimen.sc_footer_noverlay_padding_bottom)
         )
     }
 }

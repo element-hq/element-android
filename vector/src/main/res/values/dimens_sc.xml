@@ -16,5 +16,20 @@
     <dimen name="sc_bubble_inner_padding_short_side">8dp</dimen>
     <!-- long_side = short_side + tail -->
     <dimen name="sc_bubble_inner_padding_long_side">20dp</dimen>
+    <!-- inner_padding_short_side + inner_padding_long_side (+ some extra to make sure?) -->
+    <dimen name="sc_bubble_guess_minimum_width_padding">32dp</dimen>
+
+    <!-- Footer dimensions -->
+    <dimen name="sc_footer_overlay_padding">2dp</dimen>
+    <dimen name="sc_footer_noverlay_padding_top">4dp</dimen>
+    <dimen name="sc_footer_noverlay_padding_bottom">-1.5dp</dimen>
+    <!-- to compensate the missing inner padding padding for the textView which we have on the other side -->
+    <dimen name="sc_footer_padding_compensation">4dp</dimen>
+    <dimen name="sc_footer_margin_start">4dp</dimen>
+    <dimen name="sc_footer_margin_end">1dp</dimen>
+    <dimen name="sc_footer_reverse_margin_start">@dimen/sc_footer_margin_end</dimen>
+    <!-- sc_footer_margin_start + sc_footer_padding_compensation -->
+    <dimen name="sc_footer_reverse_margin_end">8dp</dimen>
+    <dimen name="sc_footer_rtl_mismatch_extra_padding">4dp</dimen>
 
 </resources>

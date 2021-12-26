@@ -6,6 +6,7 @@ import android.graphics.Rect
 import android.text.Layout
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
+import im.vector.app.R
 import kotlin.math.ceil
 import kotlin.math.max
 
@@ -82,7 +83,12 @@ class FooteredTextView @JvmOverloads constructor(
         val widthLastLine = layout.getLineWidth(lastLine)
 
         // Required width if putting footer in the same line as the last line
-        val widthWithHorizontalFooter = (if (looksLikeRtl == viewIsRtl) widthLastLine else (maxLineWidth + 4*resources.displayMetrics.density)) + footerWidth
+        val widthWithHorizontalFooter = (
+                if (looksLikeRtl == viewIsRtl)
+                    widthLastLine
+                else
+                    (maxLineWidth + resources.getDimensionPixelSize(R.dimen.sc_footer_rtl_mismatch_extra_padding))
+                ) + footerWidth
 
         // Is there space for a horizontal footer?
         if (widthWithHorizontalFooter <= widthLimit) {

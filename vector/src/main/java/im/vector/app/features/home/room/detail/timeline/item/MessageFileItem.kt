@@ -109,10 +109,12 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
         val superVal = super.getViewStubMinimumWidth(holder, contentInBubble, showInformation)
 
         // Guess text width for name and time
-        val density = holder.filenameView.resources.displayMetrics.density
         // On first call, holder.fileImageView.width is not initialized yet
         val imageWidth = holder.fileImageView.resources.getDimensionPixelSize(R.dimen.chat_avatar_size)
-        val minimumWidthWithText = ceil(BubbleThemeUtils.guessTextWidth(holder.filenameView, filename)).toInt() + imageWidth + 32*density.toInt()
+        val minimumWidthWithText =
+                ceil(BubbleThemeUtils.guessTextWidth(holder.filenameView, filename)).toInt() +
+                imageWidth +
+                holder.filenameView.resources.getDimensionPixelSize(R.dimen.sc_bubble_guess_minimum_width_padding)
         val absoluteMinimumWidth = imageWidth*3
         return max(max(absoluteMinimumWidth, minimumWidthWithText), superVal)
     }
