@@ -3081,4 +3081,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \n
 \nElolvashatod a feltételeinket %s.</string>
     <string name="analytics_opt_in_title">Segíts az Element-et jobbá tenni</string>
+    <string name="a11y_poll_winner_option">nyerő válasz</string>
+    <string name="preference_root_legals">Jogi dolgok</string>
 </resources>
