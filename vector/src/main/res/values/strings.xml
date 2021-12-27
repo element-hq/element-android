@@ -3711,4 +3711,5 @@
     <string name="location_not_available_dialog_title">Element could not access your location</string>
     <string name="location_not_available_dialog_content">Element could not access your location. Please try again later.</string>
     <string name="location_share_external">Open with</string>
+    <string name="settings_enable_location_sharing">Enable location sharing</string>
 </resources>

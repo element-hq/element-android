@@ -185,6 +185,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
         private const val DID_PROMOTE_NEW_RESTRICTED_JOIN_RULE = "DID_PROMOTE_NEW_RESTRICTED_JOIN_RULE"
 
+        // Location Sharing
+        private const val SETTINGS_PREF_ENABLE_LOCATION_SHARING = "SETTINGS_PREF_ENABLE_LOCATION_SHARING"
+
         private const val MEDIA_SAVING_3_DAYS = 0
         private const val MEDIA_SAVING_1_WEEK = 1
         private const val MEDIA_SAVING_1_MONTH = 2
@@ -989,5 +992,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun labsEnablePolls(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_POLLS, false)
+    }
+
+    fun isLocationSharingEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_PREF_ENABLE_LOCATION_SHARING, true)
     }
 }
