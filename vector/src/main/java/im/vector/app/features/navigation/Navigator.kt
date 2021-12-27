@@ -25,6 +25,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.media.AttachmentData
@@ -151,5 +152,9 @@ interface Navigator {
 
     fun openCreatePoll(context: Context, roomId: String)
 
-    fun openLocationSharing(context: Context, roomId: String, mode: LocationSharingMode)
+    fun openLocationSharing(context: Context,
+                            roomId: String,
+                            mode: LocationSharingMode,
+                            initialLocationData: LocationData?,
+                            locationOwnerId: String)
 }

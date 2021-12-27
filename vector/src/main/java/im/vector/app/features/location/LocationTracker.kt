@@ -67,6 +67,7 @@ class LocationTracker @Inject constructor(
 
     fun stop() {
         locationManager?.removeUpdates(this)
+        callback = null
     }
 
     override fun onLocationChanged(location: Location) {

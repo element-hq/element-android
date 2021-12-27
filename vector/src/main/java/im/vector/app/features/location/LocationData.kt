@@ -16,9 +16,56 @@
 
 package im.vector.app.features.location
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class LocationData(
         val latitude: Double,
         val longitude: Double,
         val uncertainty: Double?
-)
+) : Parcelable {
+
+    fun toGeoUri(): String {
+        return buildString {
+            append("geo:")
+            append(latitude)
+            append(",")
+            append(longitude)
+            append("?q=")
+            append(latitude)
+            append(",")
+            append(longitude)
+        }
+    }
+
+    companion object {
+
+        /**
+         * Creates location data from geo uri
+         * @param geoUri geo:latitude,longitude;uncertainty
+         * @return location data or null if geo uri is not valid
+         */
+        fun create(geoUri: String): LocationData? {
+            val geoParts = geoUri
+                    .split(":")
+                    .takeIf { it.firstOrNull() == "geo" }
+                    ?.getOrNull(1)
+                    ?.split(",")
+
+            val latitude = geoParts?.firstOrNull()
+            val geoTailParts = geoParts?.getOrNull(1)?.split(";")
+            val longitude = geoTailParts?.firstOrNull()
+            val uncertainty = geoTailParts?.getOrNull(1)
+
+            return if (latitude != null && longitude != null) {
+                LocationData(
+                        latitude = latitude.toDouble(),
+                        longitude = longitude.toDouble(),
+                        uncertainty = uncertainty?.toDouble()
+                )
+            } else null
+        }
+    }
+}
 

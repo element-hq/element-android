@@ -465,6 +465,7 @@ class RoomDetailFragment @Inject constructor(
                 RoomDetailViewEvents.StopChatEffects                     -> handleStopChatEffects()
                 is RoomDetailViewEvents.DisplayAndAcceptCall             -> acceptIncomingCall(it)
                 RoomDetailViewEvents.RoomReplacementStarted              -> handleRoomReplacement()
+                is RoomDetailViewEvents.ShowLocation                     -> handleShowLocationPreview(it)
             }.exhaustive
         }
 
@@ -594,6 +595,17 @@ class RoomDetailFragment @Inject constructor(
         if (openRoom.closeCurrentRoom) {
             requireActivity().finish()
         }
+    }
+
+    private fun handleShowLocationPreview(viewEvent: RoomDetailViewEvents.ShowLocation) {
+        navigator
+                .openLocationSharing(
+                        context = requireContext(),
+                        roomId = roomDetailArgs.roomId,
+                        mode = LocationSharingMode.PREVIEW,
+                        initialLocationData = viewEvent.locationData,
+                        locationOwnerId = viewEvent.userId
+                )
     }
 
     private fun requestNativeWidgetPermission(it: RoomDetailViewEvents.RequestNativeWidgetPermission) {
@@ -2221,7 +2233,14 @@ class RoomDetailFragment @Inject constructor(
             AttachmentTypeSelectorView.Type.STICKER  -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)
             AttachmentTypeSelectorView.Type.POLL     -> navigator.openCreatePoll(requireContext(), roomDetailArgs.roomId)
             AttachmentTypeSelectorView.Type.LOCATION -> {
-                navigator.openLocationSharing(requireContext(), roomDetailArgs.roomId, LocationSharingMode.STATIC_SHARING)
+                navigator
+                        .openLocationSharing(
+                                context = requireContext(),
+                                roomId = roomDetailArgs.roomId,
+                                mode = LocationSharingMode.STATIC_SHARING,
+                                initialLocationData = null,
+                                locationOwnerId = session.myUserId
+                        )
             }
         }.exhaustive
     }

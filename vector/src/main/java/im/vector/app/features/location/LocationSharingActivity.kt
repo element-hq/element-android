@@ -30,7 +30,9 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class LocationSharingArgs(
         val roomId: String,
-        val mode: LocationSharingMode
+        val mode: LocationSharingMode,
+        val initialLocationData: LocationData?,
+        val locationOwnerId: String
 ) : Parcelable
 
 @AndroidEntryPoint
@@ -62,6 +64,11 @@ class LocationSharingActivity : VectorBaseActivity<ActivityLocationSharingBindin
                     )
                 }
                 LocationSharingMode.PREVIEW        -> {
+                    addFragment(
+                            views.fragmentContainer,
+                            LocationPreviewFragment::class.java,
+                            locationSharingArgs
+                    )
                 }
             }
         }

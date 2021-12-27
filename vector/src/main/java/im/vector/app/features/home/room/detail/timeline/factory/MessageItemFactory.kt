@@ -37,6 +37,7 @@ import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
+import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttributesFactory
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
@@ -49,6 +50,8 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
+import im.vector.app.features.home.room.detail.timeline.item.MessageLocationItem
+import im.vector.app.features.home.room.detail.timeline.item.MessageLocationItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem
@@ -67,6 +70,7 @@ import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.html.VectorHtmlCompressor
+import im.vector.app.features.location.LocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import me.gujun.android.span.span
@@ -82,6 +86,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithF
 import org.matrix.android.sdk.api.session.room.model.message.MessageEmoteContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageNoticeContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
@@ -116,7 +121,8 @@ class MessageItemFactory @Inject constructor(
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
         private val spanUtils: SpanUtils,
         private val session: Session,
-        private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker) {
+        private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
+        private val locationPinProvider: LocationPinProvider) {
 
     // TODO inject this properly?
     private var roomId: String = ""
@@ -168,16 +174,36 @@ class MessageItemFactory @Inject constructor(
                 }
             }
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessagePollContent                -> buildPollContent(messageContent, informationData, highlight, callback, attributes)
+            is MessagePollContent                -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageLocationContent            -> buildLocationItem(messageContent, informationData, highlight, callback, attributes)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
     }
 
-    private fun buildPollContent(pollContent: MessagePollContent,
-                                 informationData: MessageInformationData,
-                                 highlight: Boolean,
-                                 callback: TimelineEventController.Callback?,
-                                 attributes: AbsMessageItem.Attributes): PollItem? {
+    private fun buildLocationItem(locationContent: MessageLocationContent,
+                                  informationData: MessageInformationData,
+                                  highlight: Boolean,
+                                  callback: TimelineEventController.Callback?,
+                                  attributes: AbsMessageItem.Attributes): MessageLocationItem? {
+
+        val geoUri = locationContent.locationInfo?.geoUri ?: locationContent.geoUri
+        val locationData = LocationData.create(geoUri)
+
+        return MessageLocationItem_()
+                .attributes(attributes)
+                .locationData(locationData)
+                .userId(informationData.senderId)
+                .locationPinProvider(locationPinProvider)
+                .highlighted(highlight)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .callback(callback)
+    }
+
+    private fun buildPollItem(pollContent: MessagePollContent,
+                              informationData: MessageInformationData,
+                              highlight: Boolean,
+                              callback: TimelineEventController.Callback?,
+                              attributes: AbsMessageItem.Attributes): PollItem? {
         val optionViewStates = mutableListOf<PollOptionViewState>()
 
         val pollResponseSummary = informationData.pollResponseAggregatedSummary

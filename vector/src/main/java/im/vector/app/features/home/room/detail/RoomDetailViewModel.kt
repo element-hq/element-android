@@ -50,6 +50,7 @@ import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandle
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
+import im.vector.app.features.location.LocationData
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorDataStore
@@ -330,7 +331,12 @@ class RoomDetailViewModel @AssistedInject constructor(
                 _viewEvents.post(RoomDetailViewEvents.OpenRoom(action.replacementRoomId, closeCurrentRoom = true))
             }
             is RoomDetailAction.EndPoll                          -> handleEndPoll(action.eventId)
+            is RoomDetailAction.ShowLocation                     -> handleShowLocation(action.locationData, action.userId)
         }.exhaustive
+    }
+
+    private fun handleShowLocation(locationData: LocationData, userId: String) {
+        _viewEvents.post(RoomDetailViewEvents.ShowLocation(locationData, userId))
     }
 
     private fun handleJitsiCallJoinStatus(action: RoomDetailAction.UpdateJoinJitsiCallStatus) = withState { state ->

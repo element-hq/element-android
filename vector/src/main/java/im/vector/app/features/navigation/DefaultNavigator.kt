@@ -57,6 +57,7 @@ import im.vector.app.features.home.room.detail.search.SearchActivity
 import im.vector.app.features.home.room.detail.search.SearchArgs
 import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.app.features.invite.InviteUsersToRoomActivity
+import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationSharingActivity
 import im.vector.app.features.location.LocationSharingArgs
 import im.vector.app.features.location.LocationSharingMode
@@ -536,10 +537,14 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
-    override fun openLocationSharing(context: Context, roomId: String, mode: LocationSharingMode) {
+    override fun openLocationSharing(context: Context,
+                                     roomId: String,
+                                     mode: LocationSharingMode,
+                                     initialLocationData: LocationData?,
+                                     locationOwnerId: String) {
         val intent = LocationSharingActivity.getIntent(
                 context,
-                LocationSharingArgs(roomId = roomId, mode = mode)
+                LocationSharingArgs(roomId = roomId, mode = mode, initialLocationData = initialLocationData, locationOwnerId = locationOwnerId)
         )
         context.startActivity(intent)
     }
