@@ -20,7 +20,7 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
-import im.vector.app.EmojiCompatWrapper
+import im.vector.app.EmojiSpanify
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
@@ -32,8 +32,8 @@ import javax.inject.Inject
  */
 class ViewReactionsEpoxyController @Inject constructor(
         private val stringProvider: StringProvider,
-        private val emojiCompatWrapper: EmojiCompatWrapper) :
-    TypedEpoxyController<DisplayReactionsViewState>() {
+        private val emojiSpanify: EmojiSpanify) :
+        TypedEpoxyController<DisplayReactionsViewState>() {
 
     var listener: Listener? = null
 
@@ -56,7 +56,7 @@ class ViewReactionsEpoxyController @Inject constructor(
                     reactionInfoSimpleItem {
                         id(reactionInfo.eventId)
                         timeStamp(reactionInfo.timestamp)
-                        reactionKey(host.emojiCompatWrapper.safeEmojiSpanify(reactionInfo.reactionKey))
+                        reactionKey(host.emojiSpanify.spanify(reactionInfo.reactionKey))
                         authorDisplayName(reactionInfo.authorName ?: reactionInfo.authorId)
                         userClicked { host.listener?.didSelectUser(reactionInfo.authorId) }
                     }

@@ -83,9 +83,12 @@ class HomeActivityViewModel @AssistedInject constructor(
         observeInitialSync()
         checkSessionPushIsOn()
         observeCrossSigningReset()
-        observeAnalytics()
+        // Disable Analytics opt-in automatic display
+        // Waiting for translation and for analytic events to be actually sent
+        // observeAnalytics()
     }
 
+    @Suppress("unused")
     private fun observeAnalytics() {
         if (analyticsConfig.isEnabled) {
             analyticsStore.didAskUserConsentFlow

@@ -23,8 +23,12 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
+fun interface EmojiSpanify {
+    fun spanify(sequence: CharSequence): CharSequence
+}
+
 @Singleton
-class EmojiCompatWrapper @Inject constructor(private val context: Context) {
+class EmojiCompatWrapper @Inject constructor(private val context: Context) : EmojiSpanify {
 
     private var initialized = false
 
@@ -49,7 +53,7 @@ class EmojiCompatWrapper @Inject constructor(private val context: Context) {
                 })
     }
 
-    fun safeEmojiSpanify(sequence: CharSequence): CharSequence {
+    override fun spanify(sequence: CharSequence): CharSequence {
         if (initialized) {
             try {
                 return EmojiCompat.get().process(sequence) ?: sequence
