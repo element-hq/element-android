@@ -68,4 +68,3 @@ data class LocationData(
         }
     }
 }
-

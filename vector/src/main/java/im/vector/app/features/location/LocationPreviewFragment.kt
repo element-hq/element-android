@@ -16,21 +16,18 @@
 
 package im.vector.app.features.location
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import im.vector.app.core.platform.VectorBaseFragment
-import im.vector.app.databinding.FragmentLocationPreviewBinding
-import javax.inject.Inject
 import com.airbnb.mvrx.args
 import im.vector.app.R
+import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openLocation
+import im.vector.app.databinding.FragmentLocationPreviewBinding
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
-import org.matrix.android.sdk.api.extensions.tryOrNull
+import javax.inject.Inject
 
 class LocationPreviewFragment @Inject constructor(
         private val locationPinProvider: LocationPinProvider

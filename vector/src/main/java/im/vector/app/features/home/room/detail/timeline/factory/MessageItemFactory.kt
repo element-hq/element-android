@@ -185,7 +185,6 @@ class MessageItemFactory @Inject constructor(
                                   highlight: Boolean,
                                   callback: TimelineEventController.Callback?,
                                   attributes: AbsMessageItem.Attributes): MessageLocationItem? {
-
         val geoUri = locationContent.locationInfo?.geoUri ?: locationContent.geoUri
         val locationData = LocationData.create(geoUri)
 

@@ -39,8 +39,6 @@ import im.vector.app.features.location.MapTilerMapView
 import im.vector.app.features.location.VectorMapListener
 import im.vector.app.features.media.ImageContentRenderer
 import org.matrix.android.sdk.api.extensions.orFalse
-import org.matrix.android.sdk.api.session.room.model.message.LocationInfo
-import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 import org.matrix.android.sdk.api.util.MatrixItem
 
 /**

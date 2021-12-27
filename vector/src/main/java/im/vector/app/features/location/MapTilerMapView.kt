@@ -19,7 +19,6 @@ package im.vector.app.features.location
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import com.mapbox.mapboxsdk.Mapbox
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapView
