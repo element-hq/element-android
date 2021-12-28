@@ -27,12 +27,17 @@ import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvid
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.MapTilerMapView
 import im.vector.app.features.location.VectorMapListener
+import im.vector.app.features.location.VectorMapView
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>() {
 
+    interface Callback {
+        fun onMapReady(mapView: VectorMapView)
+    }
+
     @EpoxyAttribute
-    var callback: TimelineEventController.Callback? = null
+    var callback: Callback? = null
 
     @EpoxyAttribute
     var locationData: LocationData? = null
@@ -50,20 +55,20 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
         val location = locationData ?: return
         val locationOwnerId = userId ?: return
 
-        holder.mapView.initialize(object : VectorMapListener {
-            override fun onMapReady() {
-                holder.mapView.zoomToLocation(location.latitude, location.longitude, INITIAL_ZOOM)
+        holder.mapView.apply {
+            initialize(object : VectorMapListener {
+                override fun onMapReady() {
+                    zoomToLocation(location.latitude, location.longitude, INITIAL_ZOOM)
 
-                locationPinProvider?.create(locationOwnerId) { pinDrawable ->
-                    holder.mapView.addPinToMap(locationOwnerId, pinDrawable)
-                    holder.mapView.updatePinLocation(locationOwnerId, location.latitude, location.longitude)
-                }
+                    locationPinProvider?.create(locationOwnerId) { pinDrawable ->
+                        addPinToMap(locationOwnerId, pinDrawable)
+                        updatePinLocation(locationOwnerId, location.latitude, location.longitude)
+                    }
 
-                holder.mapView.onClick {
-                    callback?.onTimelineItemAction(RoomDetailAction.ShowLocation(location, locationOwnerId))
+                    callback?.onMapReady(this@apply)
                 }
-            }
-        })
+            })
+        }
     }
 
     override fun getViewType() = STUB_ID

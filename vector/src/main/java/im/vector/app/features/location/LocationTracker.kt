@@ -24,6 +24,7 @@ import android.location.LocationManager
 import androidx.annotation.RequiresPermission
 import timber.log.Timber
 import javax.inject.Inject
+import androidx.core.content.getSystemService
 
 class LocationTracker @Inject constructor(
         private val context: Context) : LocationListener {
@@ -36,7 +37,7 @@ class LocationTracker @Inject constructor(
     var callback: Callback? = null
 
     fun start() {
-        val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as? LocationManager
+        val locationManager = context.getSystemService<LocationManager>()
 
         locationManager?.let {
             val isGpsEnabled = it.isProviderEnabled(LocationManager.GPS_PROVIDER)

@@ -33,6 +33,7 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.containsOnlyEmojis
+import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
@@ -71,6 +72,7 @@ import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.VectorMapView
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import me.gujun.android.span.span
@@ -188,6 +190,16 @@ class MessageItemFactory @Inject constructor(
         val geoUri = locationContent.locationInfo?.geoUri ?: locationContent.geoUri
         val locationData = LocationData.create(geoUri)
 
+        val mapCallback: MessageLocationItem.Callback = object: MessageLocationItem.Callback {
+            override fun onMapReady(mapView: VectorMapView) {
+                mapView.onClick {
+                    locationData?.let {
+                        callback?.onTimelineItemAction(RoomDetailAction.ShowLocation(it, informationData.senderId))
+                    }
+                }
+            }
+        }
+
         return MessageLocationItem_()
                 .attributes(attributes)
                 .locationData(locationData)
@@ -195,7 +207,7 @@ class MessageItemFactory @Inject constructor(
                 .locationPinProvider(locationPinProvider)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
-                .callback(callback)
+                .callback(mapCallback)
     }
 
     private fun buildPollItem(pollContent: MessagePollContent,
