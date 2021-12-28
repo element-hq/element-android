@@ -150,6 +150,8 @@ android {
         //  This *must* only be set in trusted environments.
         buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
 
+        buildConfigField "String", "mapTilerKey", "\"DUMMY_KEY\""
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // Keep abiFilter for the universalApk
