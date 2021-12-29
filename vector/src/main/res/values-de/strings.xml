@@ -79,7 +79,8 @@
     <string name="initial_sync_start_importing_account_rooms">Erste Synchronisation:
 \nImportiere Räume</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Erste Synchronisation:
-\nImportiere betretene Räume</string>
+\nLade deine Konversationen
+\nWenn du vielen Räumen beigetreten bist, kann das eine Weile dauern</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Erste Synchronisation:
 \nImportiere eingeladene Räume</string>
     <string name="initial_sync_start_importing_account_left_rooms">Erste Synchronisation:
@@ -1156,7 +1157,7 @@
     <string name="settings_send_markdown_summary">Formatiere Nachrichten mittels Markdown-Syntax, bevor sie gesendet werden. Dies erlaubt erweiterte Formatierungen wie Sternchen (*), um kursiven Text anzuzeigen.</string>
     <string name="settings_show_read_receipts">Lesebestätigungen zeigen</string>
     <string name="settings_show_read_receipts_summary">Klicke auf die Lesebestätigungen für eine detailliertere Liste.</string>
-    <string name="settings_show_join_leave_messages_summary">Einladungen, Kicks und Banns bleiben unberührt.</string>
+    <string name="settings_show_join_leave_messages_summary">Einladungen, Kicks und Banns werden weiterhin angezeigt.</string>
     <string name="settings_password">Passwort</string>
     <string name="settings_labs_native_camera_summary">Starte die System-Kamera anstelle der angepassten Kamera.</string>
     <string name="settings_labs_enable_send_voice_summary">Diese Option erfordert eine externe Anwendung um Sprachnachrichten aufzuzeichnen.</string>
@@ -2016,7 +2017,7 @@
     <string name="initialize_cross_signing">Initialisiere Cross-Signing</string>
     <string name="reset_cross_signing">Schlüssel zurücksetzen</string>
     <string name="a11y_qr_code_for_verification">QR-Code</string>
-    <string name="qr_code_scanned_by_other_notice">Fast geschafft! Zeigt %s dasselbe Schild an\?</string>
+    <string name="qr_code_scanned_by_other_notice">Fast geschafft! Zeigt %s ein Häkchen\?</string>
     <string name="qr_code_scanned_by_other_yes">Ja</string>
     <string name="qr_code_scanned_by_other_no">Nein</string>
     <string name="no_connectivity_to_the_server_indicator">Verbindung zum Server wurde unterbrochen</string>
@@ -2121,7 +2122,7 @@
     <string name="set_recovery_passphrase">%s setzen</string>
     <string name="settings_troubleshoot_title">Fehlerbehebung</string>
     <string name="room_created_summary_item">%s hat den Raum erstellt und konfiguriert.</string>
-    <string name="qr_code_scanned_self_verif_notice">Fast geschafft! Zeigt das andere Gerät das gleiche Schild an\?</string>
+    <string name="qr_code_scanned_self_verif_notice">Fast geschafft! Zeigt das andere Gerät ein Häkchen an\?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Fast geschafft! Warte auf Bestätigung…</string>
     <string name="settings_messages_in_e2e_one_to_one">Verschlüsselte Direktnachrichten</string>
     <string name="room_message_placeholder">Nachricht…</string>
@@ -2658,7 +2659,7 @@
     <string name="call_tile_call_back">Zurückrufen</string>
     <string name="call_tile_ended">Dieser Anruf wurde beendet</string>
     <string name="call_tile_other_declined">%1$s hat diesen Anruf abgelehnt</string>
-    <string name="call_tile_you_declined">Du hast diesen Anruf %s abgelehnt</string>
+    <string name="call_tile_you_declined">Du hast diesen Anruf abgelehnt %s</string>
     <string name="call_tile_in_call">Du nimmst zur Zeit an diesem Anruf teil</string>
     <string name="call_tile_other_started_call">%1$s hat einen Anruf gestartet</string>
     <string name="call_tile_you_started_call">Du hast einen Anruf gestartet</string>
@@ -3066,9 +3067,31 @@
     <string name="shortcut_disabled_reason_room_left">Raum verlassen!</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Heimserver auswählen</string>
     <string name="login_error_homeserver_from_url_not_found">Es konnte kein Heimserver mit der Adresse %s gefunden werden. Bitte überprüfe die Adresse oder wähle den Heimserver manuell.</string>
-    <string name="space_add_space_to_any_space_you_manage">Untergeordneten Space hinzufügen</string>
+    <string name="space_add_space_to_any_space_you_manage">Untergeordneten Space hinzufügen.</string>
     <string name="identity_server_consent_dialog_content_question">Bist du dir wirklich sicher, dass du diese Informationen senden willst\?</string>
     <string name="identity_server_consent_dialog_title_2">E-Mail-Adressen und Telefonnummern an %s senden</string>
     <string name="action_not_now">Nicht jetzt</string>
     <string name="notification_listening_for_notifications">Auf Benachrichtigungen warten</string>
+    <string name="legals_third_party_notices">Externe Bibliotheken</string>
+    <string name="analytics_opt_in_list_item_3">Du kannst dies jederzeit in den Einstellungen deaktivieren</string>
+    <string name="analytics_opt_in_list_item_2">Wir teilen <b>keine</b> Informationen mit Drittpersonen</string>
+    <string name="analytics_opt_in_list_item_1">Wir erfassen und analysieren <b>keine</b> Accountdaten</string>
+    <string name="analytics_opt_in_content">Hilf uns dabei Probleme zu identifizieren und Element zu verbessern, indem du anonyme Nutzungsdaten teilst. Um zu verstehen, wie Personen mehrere Geräte benutzen, werden wir eine zufällige Kennung generieren, die zwischen deinen Geräten geteilt wird.
+\n
+\nDu kannst alle unsere Bedingungen lesen %s.</string>
+    <string name="create_spaces_invite_public_header_desc">Stelle sicher, dass die richtigen Personen Zugriff auf %s haben. Du kannst jederzeit weitere Personen einladen.</string>
+    <string name="create_spaces_invite_public_header">Wer ist Mitglied deines Teams\?</string>
+    <string name="settings_discovery_no_policy_provided">Der Identitätsserver gibt keine Bedingungen an</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Bedingungen des Identitätsservers ausblenden</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Bedingungen des Identitätsservers anzeigen</string>
+    <string name="preference_system_settings">Systemeinstellungen</string>
+    <string name="preference_versions">Versionen</string>
+    <string name="preference_help_summary">Erhalte Hilfe bei der Bedienung von Element</string>
+    <string name="preference_help_title">Hilfe und Unterstützung</string>
+    <string name="preference_help">Hilfe</string>
+    <string name="preference_root_legals">Rechtliches</string>
+    <string name="decide_which_spaces_can_access">Entscheide, welche Spaces Zugriff auf den Raum haben sollen. Die Mitglieder der Spaces können diesen Räumen beitreten.</string>
+    <string name="analytics_opt_in_content_link">hier</string>
+    <string name="analytics_opt_in_title">Hilf mit, Element zu verbessern</string>
+    <string name="action_enable">Aktivieren</string>
 </resources>
