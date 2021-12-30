@@ -2,17 +2,15 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?android:colorBackground"
-    android:paddingTop="12dp"
-    android:paddingBottom="12dp">
+    android:layout_height="@dimen/composer_min_height"
+    android:background="?android:colorBackground">
 
     <ImageButton
         android:id="@+id/attachmentCloseButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:background="@drawable/circle"
+        android:layout_width="@dimen/composer_attachment_size"
+        android:layout_height="@dimen/composer_attachment_size"
+        android:layout_margin="@dimen/composer_attachment_margin"
+        android:background="@null"
         android:contentDescription="@string/action_close"
         android:src="@drawable/ic_attachment_close"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -22,7 +20,7 @@
     <HorizontalScrollView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="4dp"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -32,77 +30,80 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/attachmentGalleryButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/layout_touch_size"
+                android:layout_height="@dimen/layout_touch_size"
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@string/attachment_type_gallery"
                 android:src="@drawable/ic_attachment_gallery" />
 
             <ImageButton
                 android:id="@+id/attachmentStickersButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_width="@dimen/layout_touch_size"
+                android:layout_height="@dimen/layout_touch_size"
+                android:layout_marginStart="2dp"
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@string/attachment_type_sticker"
-                android:src="@drawable/ic_attachment_sticker" />
+                android:src="@drawable/ic_attachment_sticker"
+                app:tint="?colorPrimary" />
 
             <ImageButton
                 android:id="@+id/attachmentFileButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_width="@dimen/layout_touch_size"
+                android:layout_height="@dimen/layout_touch_size"
+                android:layout_marginStart="2dp"
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@string/attachment_type_file"
-                android:src="@drawable/ic_attachment_file" />
+                android:src="@drawable/ic_attachment_file"
+                app:tint="?colorPrimary" />
 
             <ImageButton
                 android:id="@+id/attachmentPollButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_width="@dimen/layout_touch_size"
+                android:layout_height="@dimen/layout_touch_size"
+                android:layout_marginStart="2dp"
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@string/attachment_type_poll"
-                android:src="@drawable/ic_attachment_poll" />
+                android:src="@drawable/ic_attachment_poll"
+                app:tint="?colorPrimary" />
 
             <ImageButton
                 android:id="@+id/attachmentCameraButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_width="@dimen/layout_touch_size"
+                android:layout_height="@dimen/layout_touch_size"
+                android:layout_marginStart="2dp"
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@string/attachment_type_camera"
-                android:src="@drawable/ic_attachment_camera" />
+                android:src="@drawable/ic_attachment_camera"
+                app:tint="?colorPrimary" />
 
-            <!-- TODO. Request for new icon and remove tint color later -->
+            <!-- TODO. Request for new icon -->
             <ImageButton
                 android:id="@+id/attachmentAudioButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_width="@dimen/layout_touch_size"
+                android:layout_height="@dimen/layout_touch_size"
+                android:layout_marginStart="2dp"
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@string/attachment_type_audio"
                 android:src="@drawable/ic_attachment_audio_white_24dp"
                 app:tint="?colorPrimary" />
 
-            <!-- TODO. Request for new icon and remove tint color later -->
+            <!-- TODO. Request for new icon -->
             <ImageButton
                 android:id="@+id/attachmentContactButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_width="@dimen/layout_touch_size"
+                android:layout_height="@dimen/layout_touch_size"
+                android:layout_marginStart="2dp"
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@string/attachment_type_contact"
                 android:src="@drawable/ic_attachment_contact_white_24dp"
                 app:tint="?colorPrimary" />
 
         </LinearLayout>
+
     </HorizontalScrollView>
 
 
