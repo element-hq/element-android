@@ -44,6 +44,11 @@ data class Screen(
         DeactivateAccount,
 
         /**
+         * The form for the forgot password use case
+         */
+        ForgotPassword,
+
+        /**
          * Legacy: The screen that shows information about a specific group.
          */
         Group,
@@ -52,6 +57,11 @@ data class Screen(
          * The Home tab on iOS | possibly the same on Android? | The Home space on Web?
          */
         Home,
+
+        /**
+         * The screen that displays the login flow (when the user already has an account).
+         */
+        Login,
 
         /**
          * The screen that displays the user's breadcrumbs.
@@ -72,11 +82,6 @@ data class Screen(
          * The screen shown to share a link to download the app.
          */
         MobileInviteFriends,
-
-        /**
-         * The screen that displays the login flow.
-         */
-        MobileLogin,
 
         /**
          * The People tab on mobile that lists all the DM rooms you have joined.
@@ -122,6 +127,11 @@ data class Screen(
          * Legacy: The screen that shows all groups/communities you have joined.
          */
         MyGroups,
+
+        /**
+         * The screen that displays the registration flow (when the user wants to create an account)
+         */
+        Register,
 
         /**
          * The screen that displays the messages and events received in a room.
@@ -211,22 +221,7 @@ data class Screen(
         /**
          * ?
          */
-        WebForgotPassword,
-
-        /**
-         * ?
-         */
         WebLoading,
-
-        /**
-         * ?
-         */
-        WebLogin,
-
-        /**
-         * ?
-         */
-        WebRegister,
 
         /**
          * ?
@@ -234,9 +229,9 @@ data class Screen(
         WebSoftLogout,
 
         /**
-         * ?
+         * The splash screen.
          */
-        WebWelcome,
+        Welcome,
     }
 
     override fun getName() = screenName.name

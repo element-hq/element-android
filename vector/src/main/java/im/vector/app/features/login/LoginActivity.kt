@@ -83,7 +83,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarCo
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun initUiAndData() {
-        analyticsScreenName = Screen.ScreenName.MobileLogin
+        analyticsScreenName = Screen.ScreenName.Login
 
         if (isFirstCreation()) {
             addFirstFragment()
@@ -203,6 +203,10 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarCo
 
     private fun updateWithState(loginViewState: LoginViewState) {
         if (loginViewState.isUserLogged()) {
+            if (loginViewState.signMode == SignMode.SignUp) {
+                // change the screen name
+                analyticsScreenName = Screen.ScreenName.Register
+            }
             val intent = HomeActivity.newIntent(
                     this,
                     accountCreation = loginViewState.signMode == SignMode.SignUp

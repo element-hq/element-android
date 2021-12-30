@@ -373,7 +373,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     override fun onPause() {
         super.onPause()
-        screenEvent?.send(analyticsTracker)
+        screenEvent?.send(analyticsTracker, analyticsScreenName)
         Timber.i("onPause Activity ${javaClass.simpleName}")
 
         rageShake.stop()

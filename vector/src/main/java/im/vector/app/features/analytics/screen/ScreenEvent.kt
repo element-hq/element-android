@@ -30,7 +30,11 @@ class ScreenEvent(val screenName: Screen.ScreenName) {
     // Protection to avoid multiple sending
     private var isSent = false
 
-    fun send(analyticsTracker: AnalyticsTracker) {
+    /**
+     * @param screenNameOverride can be used to override the screen name passed in constructor parameter
+     */
+    fun send(analyticsTracker: AnalyticsTracker,
+             screenNameOverride: Screen.ScreenName? = null) {
         if (isSent) {
             Timber.w("Event $screenName Already sent!")
             return
@@ -38,7 +42,7 @@ class ScreenEvent(val screenName: Screen.ScreenName) {
         isSent = true
         analyticsTracker.screen(
                 Screen(
-                        screenName = screenName,
+                        screenName = screenNameOverride ?: screenName,
                         durationMs = (SystemClock.elapsedRealtime() - startTime).toInt()
                 )
         )
