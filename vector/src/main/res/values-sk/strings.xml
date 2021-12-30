@@ -72,8 +72,8 @@
     <string name="initial_sync_start_importing_account_joined_rooms">Úvodná synchronizácia:
 \nNačítanie konverzácií
 \nAk ste sa pripojili k mnohým miestnostiam, môže to chvíľu trvať</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Úvodná synchronizácia:
-\nPrebieha import pozvaní</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Počiatočná synchronizácia:
+\nImport pozvaných miestností</string>
     <string name="initial_sync_start_importing_account_left_rooms">Úvodná synchronizácia:
 \nPrebieha import opustených miestností</string>
     <string name="initial_sync_start_importing_account_groups">Úvodná synchronizácia:
@@ -236,7 +236,7 @@
     <string name="view_decrypted_source">Zobraziť dešifrovaný zdroj</string>
     <string name="delete">Vymazať</string>
     <string name="rename">Premenovať</string>
-    <string name="report_content">Ohlásiť obsah</string>
+    <string name="report_content">Nahlásiť obsah</string>
     <string name="active_call">Aktívny hovor</string>
     <string name="ongoing_conference_call">Prebiehajúci konferenčný hovor.
 \nPripojte sa ako %1$s alebo %2$s</string>
@@ -310,8 +310,8 @@
     <string name="create_account">Vytvoriť účet</string>
     <string name="login">Prihlásiť sa</string>
     <string name="logout">Odhlásiť sa</string>
-    <string name="hs_url">Adresa domovského servera</string>
-    <string name="identity_url">Adresa servera totožností</string>
+    <string name="hs_url">URL adresa domovského servera</string>
+    <string name="identity_url">URL adresa servera totožností</string>
     <string name="search">Hľadať</string>
     <string name="start_new_chat">Začať novú konverzáciu</string>
     <string name="start_voice_call">Uskutočniť audio hovor</string>
@@ -690,7 +690,7 @@
     <string name="room_settings_addresses_disable_main_address_prompt_msg">Nebude určená hlavná adresa tejto miestnosti.</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">Upozornenie - Hlavná adresa</string>
     <string name="room_settings_set_main_address">Nastaviť ako hlavnú adresu</string>
-    <string name="room_settings_unset_main_address">Zrušiť nastavenie ako hlavná adresa</string>
+    <string name="room_settings_unset_main_address">Zrušiť nastavenie ako hlavnej adresy</string>
     <string name="room_settings_copy_room_id">Kopírovať ID miestnosti</string>
     <string name="room_settings_copy_room_address">Kopírovať adresu miestnosti</string>
     <string name="room_settings_addresses_e2e_enabled">V tejto miestnosti je povolené šifrovanie.</string>
@@ -752,7 +752,7 @@
     <string name="select_room_directory">Vyberte adresár miestností</string>
     <string name="directory_server_fail_to_retrieve_server">Server môže byť nedostupný alebo preťažený</string>
     <string name="directory_server_type_homeserver">Zadajte adresu domovského servera, z ktorého sa načíta zoznam verejných miestností</string>
-    <string name="directory_server_placeholder">URL adresa domovského servera</string>
+    <string name="directory_server_placeholder">Názov servera</string>
     <string name="directory_server_all_rooms_on_server">Všetky miestnosti na serveri %s</string>
     <string name="directory_server_native_rooms">Všetky Matrix miestnosti na serveri %s</string>
     <string name="historical_placeholder">Hľadať historické</string>
@@ -818,7 +818,7 @@
     <string name="room_settings_all_messages">Všetky správy</string>
     <string name="room_settings_mention_only">Len zmienky</string>
     <string name="room_settings_mute">Umlčať</string>
-    <string name="room_settings_add_homescreen_shortcut">Pridať odkaz na domovskú obrazovku</string>
+    <string name="room_settings_add_homescreen_shortcut">Pridať na domovskú obrazovku</string>
     <string name="settings_inline_url_preview">Náhľady URL adries</string>
     <string name="settings_vibrate_on_mention">Vibrovať keď spomeniete iného používateľa</string>
     <string name="settings_flair">Príslušnosť ku komunitám</string>
@@ -852,9 +852,9 @@
     <string name="actions">Akcie</string>
     <string name="send_bug_report_rage_shake">Oznámiť chybu zatrasením zariadenia</string>
     <plurals name="membership_changes">
-        <item quantity="one">1 zmena stavu</item>
-        <item quantity="few">%d zmeny stavu</item>
-        <item quantity="other">%d zmien stavu</item>
+        <item quantity="one">1 zmena členstva</item>
+        <item quantity="few">%d zmeny členstva</item>
+        <item quantity="other">%d zmien členstva</item>
     </plurals>
     <string name="list_members">Zobraziť členov</string>
     <string name="open_chat_header">Otvoriť záhlavie</string>
@@ -890,9 +890,9 @@
         <item quantity="other">%d neprečítaných správ</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_msgs">
-        <item quantity="one">1 neprečítaná správa</item>
-        <item quantity="few">%d neprečítané správy</item>
-        <item quantity="other">%d neprečítaných správ</item>
+        <item quantity="one">1 neprečítaná oznámená správa</item>
+        <item quantity="few">%d neprečítané oznámené správy</item>
+        <item quantity="other">%d neprečítaných oznámených správ</item>
     </plurals>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">1 miestnosť</item>
@@ -1096,7 +1096,7 @@
     <string name="settings_troubleshoot_test_fcm_failed">Token FCM sa nepodarilo získať: 
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">Registrácia tokenu</string>
-    <string name="settings_troubleshoot_test_token_registration_success">Token FCM úspešne zaregistrovaný na domovskom servery.</string>
+    <string name="settings_troubleshoot_test_token_registration_success">Token FCM úspešne zaregistrovaný na domovskom serveri.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM token sa nepodarilo zaregistrovať na domovskom serveri:
 \n %1$s</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">Služba oznámení</string>
@@ -1184,7 +1184,7 @@
     <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nV zariadení nemáte nastavený účet Google. Prosím, pridajte si účet cez správcu účtov. Konfigurácia ${app_name} nemá vplyv na zobrazenie tejto chyby.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Pridať účet</string>
-    <string name="settings_notification_privacy_no_background_sync">Aplikácia sa <b>nepotrebuje</b> pripájať k domovskému serveru, keď beží na pozadí, čo môže predĺžiť výdrž batérie</string>
+    <string name="settings_notification_privacy_no_background_sync">Aplikácia sa <b>nemusí</b> pripájať k domovskému serveru, keď beží na pozadí, čo môže predĺžiť výdrž batérie</string>
     <string name="settings_noisy_notifications_preferences">Nastaviť hlučné oznámenia</string>
     <string name="settings_call_notifications_preferences">Nastaviť oznámenia prichádzajúceho hovoru</string>
     <string name="settings_silent_notifications_preferences">Nastaviť tiché oznámenia</string>
@@ -1275,7 +1275,7 @@
     <string name="settings_call_show_confirmation_dialog_title">Zabrániť neúmyselnému telefonovaniu</string>
     <string name="settings_call_show_confirmation_dialog_summary">Žiadať potvrdenie pred uskutočnením hovoru</string>
     <string name="settings_call_ringtone_use_default_stun">Povoliť záložný server pre nadviazanie hovoru</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Ak váš domovský server neponúka adresu servera turn, na nadviazanie hovorov sa použije %s (počas hovoru zdieľate svoju adresu IP)</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Použije sa %s ako asistencia, keď ju váš domovský server neponúka (vaša IP adresa bude zdieľaná počas hovoru)</string>
     <string name="active_call_with_duration">Prebiehajúci hovor (%s)</string>
     <string name="return_to_call">Návrat k hovoru</string>
     <string name="invite_no_identity_server_error">Na uskutočnenie tejto akcie si prosím v nastaveniach pridajte server totožností.</string>
@@ -1317,8 +1317,8 @@
     <string name="settings_set_workmanager_delay_summary">%s
 \nSynchronizácia môže byť odložená vzávislosti od kapacity zariadenia (batéria a režim spánku).</string>
     <string name="settings_integrations">Integrácie</string>
-    <string name="settings_integrations_summary">Použite správcu integrácií na nastavenie botov, mostov, widgetov a balíčkov s nálepkami.
-\nSprávci integrácií zbierajú údaje konfigurácie, môžu meniť widgety, posielať pozvania vstúpiť do miestnosti a nastavovať úroveň moci vo vašom mene.</string>
+    <string name="settings_integrations_summary">Použite správcu integrácií na nastavenie botov, premostení, widgetov a balíčkov s nálepkami.
+\nSprávcovia integrácie dostávajú konfiguračné údaje a môžu vo vašom mene upravovať widgety, posielať pozvánky do miestnosti a nastavovať úrovne oprávnení.</string>
     <string name="settings_secure_backup_section_title">Bezpečné zálohovanie</string>
     <string name="settings_secure_backup_manage">Spravovať</string>
     <string name="settings_secure_backup_setup">Nastaviť bezpečné zálohovanie</string>
@@ -1423,7 +1423,7 @@
 \n
 \nPozor: Keď odinštalujete aplikáciu Element, môže dôjsť k zmazaniu tohoto súboru.</string>
     <string name="recovery_key_export_saved">Kľúč obnovenia bol uložený.</string>
-    <string name="keys_backup_setup_override_backup_prompt_tile">Záloha už existuje na domovskom servery</string>
+    <string name="keys_backup_setup_override_backup_prompt_tile">Záloha už existuje na vašom domovskom serveri</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Zdá sa, že ste si už zálohovanie kľúčov nastavili z inej relácie. Chcete ho nahradiť zálohou, ktorú vytvárate teraz\?</string>
     <string name="keys_backup_setup_override_replace">Nahradiť</string>
     <string name="keys_backup_setup_override_stop">Zastaviť</string>
@@ -1593,7 +1593,7 @@
     <string name="fab_menu_create_chat">Priame konverzácie</string>
     <string name="create_room_title">Nová miestnosť</string>
     <string name="create_room_action_create">VYTVORIŤ</string>
-    <string name="create_room_name_hint">Názov miestnosti</string>
+    <string name="create_room_name_hint">Názov</string>
     <string name="create_room_public_title">Verejná</string>
     <string name="create_room_public_description">Ktokoľvek môže vstúpiť do tejto miestnosti</string>
     <string name="create_room_directory_title">Adresár miestností</string>
@@ -1725,4 +1725,121 @@
     <string name="attachment_type_contact">Kontakt</string>
     <string name="attachment_type_file">Súbor</string>
     <string name="settings_notification_other">Ďalšie</string>
+    <string name="room_profile_section_more_settings">Nastavenia miestnosti</string>
+    <string name="room_profile_section_security_learn_more">Zistiť viac</string>
+    <string name="verification_verified_user">Overený %s</string>
+    <string name="verification_verify_user">Overiť %s</string>
+    <string name="verification_verify_device_manually">Manuálne overiť</string>
+    <string name="verification_request">Žiadosť o overenie</string>
+    <string name="verification_sent">Overenie odoslané</string>
+    <string name="verification_request_you_accepted">Prijali ste</string>
+    <string name="verification_request_you_cancelled">Zrušili ste overenie</string>
+    <string name="verification_request_other_cancelled">%s bolo zrušené</string>
+    <string name="verification_conclusion_not_secure">Nezabezpečené</string>
+    <string name="verification_sas_match">Zhodujú sa</string>
+    <string name="create_room_encryption_title">Povoliť šifrovanie</string>
+    <string name="settings_developer_mode">Režim pre vývojárov</string>
+    <string name="settings_advanced_settings">Pokročilé nastavenia</string>
+    <string name="notification_initial_sync">Úvodná synchronizácia…</string>
+    <string name="soft_logout_signin_submit">Prihlásiť sa</string>
+    <string name="soft_logout_signin_title">Prihlásiť sa</string>
+    <string name="login_signin_matrix_id_hint">Matrix ID</string>
+    <string name="login_error_outdated_homeserver_title">Zastaralý domovský server</string>
+    <string name="login_msisdn_confirm_send_again">Poslať znova</string>
+    <string name="login_msisdn_confirm_hint">Zadať kód</string>
+    <string name="login_set_msisdn_mandatory_hint">Telefónne číslo</string>
+    <string name="login_set_email_optional_hint">Email (voliteľné)</string>
+    <string name="login_reset_password_password_hint">Nové heslo</string>
+    <string name="login_signin">Prihlásiť sa</string>
+    <string name="login_signup">Zaregistrovať sa</string>
+    <string name="login_server_modular_learn_more">Zistiť viac</string>
+    <string name="timeline_unread_messages">Neprečítané správy</string>
+    <string name="room_list_quick_actions_notifications_mentions">Len zmienky</string>
+    <string name="room_list_quick_actions_notifications_all">Všetky správy</string>
+    <string name="message_ignore_user">Ignorovať používateľa</string>
+    <string name="block_user">IGNOROVAŤ POUŽÍVATEĽA</string>
+    <string name="report_content_spam">Je to nevyžiadaná správa</string>
+    <string name="one_user_read">%s prečítané</string>
+    <string name="a11y_hide_password">Skryť heslo</string>
+    <string name="a11y_show_password">Zobraziť heslo</string>
+    <string name="send_attachment">Poslať prílohu</string>
+    <string name="preference_versions">Verzie</string>
+    <string name="preference_help">Pomocník</string>
+    <string name="preference_root_legals">Právne informácie</string>
+    <string name="analytics_opt_in_content_link">tu</string>
+    <string name="action_enable">Povoliť</string>
+    <string name="attachment_type_poll">Anketa</string>
+    <string name="a11y_presence_unavailable">Nedostupný</string>
+    <string name="a11y_presence_offline">Nedostupný</string>
+    <string name="a11y_presence_online">Pripojený</string>
+    <string name="settings_messages_containing_keywords">Kľúčové slová</string>
+    <string name="settings_mentions_at_room">\@miestnosť</string>
+    <string name="room_settings_none">Žiadne</string>
+    <string name="spaces">Priestory</string>
+    <string name="sent_a_voice_message">Hlas</string>
+    <string name="upgrade">Aktualizovať</string>
+    <string name="settings_server_room_version_unstable">nestabilná</string>
+    <string name="settings_server_room_version_stable">stabilná</string>
+    <string name="feedback">Spätná väzba</string>
+    <string name="space_suggested">Navrhované</string>
+    <string name="create_space_topic_hint">Popis</string>
+    <string name="create_spaces_default_public_random_room_name">Náhodné</string>
+    <string name="create_spaces_default_public_room_name">Všeobecné</string>
+    <string name="space_type_private">Súkromný</string>
+    <string name="space_type_public">Verejný</string>
+    <string name="room_settings_room_access_public_title">Verejná</string>
+    <string name="room_settings_room_access_private_title">Súkromná</string>
+    <string name="spaces_header">Priestory</string>
+    <string name="spaces_invited_header">Pozvánky</string>
+    <string name="event_status_a11y_failed">Zlyhalo</string>
+    <string name="event_status_a11y_sent">Odoslané</string>
+    <string name="event_status_a11y_sending">Odosielanie</string>
+    <string name="dev_tools_form_hint_type">Typ</string>
+    <string name="a11y_selected">Vybrané</string>
+    <string name="a11y_video">Video</string>
+    <string name="a11y_image">Obrázok</string>
+    <string name="a11y_screenshot">Snímka obrazovky</string>
+    <string name="action_switch">Prepnúť</string>
+    <string name="call_transfer_users_tab_title">Používatelia</string>
+    <string name="call_hold_action">Podržať</string>
+    <string name="login_social_continue">alebo</string>
+    <string name="room_permissions_title">Povolenia</string>
+    <string name="room_alias_published_alias_add_manually_submit">Zverejniť</string>
+    <string name="action_unpublish">Zrušiť zverejnenie</string>
+    <string name="action_add">Pridať</string>
+    <string name="topic_prefix">"Téma: "</string>
+    <string name="direct_room_user_list_suggestions_title">Návrhy</string>
+    <string name="direct_room_user_list_contacts_title">Kontakty</string>
+    <string name="direct_room_user_list_recent_title">Nedávne</string>
+    <string name="create_room_topic_hint">Téma</string>
+    <string name="direct_room_profile_section_more_leave">Opustiť</string>
+    <string name="direct_room_profile_section_more_settings">Nastavenia</string>
+    <string name="reset">Obnoviť predvolené</string>
+    <string name="sent_a_poll">Anketa</string>
+    <string name="settings_text_message_sent_hint">Kód</string>
+    <string name="room_settings_topic_hint">Téma</string>
+    <string name="power_level_title">Rola</string>
+    <string name="identity_server_set_alternative_submit">Odoslať</string>
+    <string name="invite_users_to_room_action_invite">POZVAŤ</string>
+    <string name="unencrypted">Nešifrované</string>
+    <string name="room_message_placeholder">Správa…</string>
+    <string name="finish">Koniec</string>
+    <string name="refresh">Obnoviť</string>
+    <string name="message_action_item_redact">Odstrániť…</string>
+    <string name="enter_secret_storage_passphrase_warning">Upozornenie:</string>
+    <string name="qr_code_scanned_by_other_no">Nie</string>
+    <string name="qr_code_scanned_by_other_yes">Áno</string>
+    <string name="trusted">Dôveryhodné</string>
+    <string name="verification_profile_warning">Upozornenie</string>
+    <string name="verification_profile_verified">Overený</string>
+    <string name="verification_profile_verify">Overiť</string>
+    <string name="encryption_information_cross_signing_state">Krížové podpisovanie</string>
+    <string name="settings_category_timeline">Časová os</string>
+    <string name="unignore">Prestať ignorovať</string>
+    <string name="room_member_power_level_users">Používatelia</string>
+    <string name="room_member_power_level_invites">Pozvánky</string>
+    <string name="room_member_power_level_custom">Vlastná úroveň</string>
+    <string name="room_member_power_level_moderators">Moderátori</string>
+    <string name="room_member_power_level_admins">Správcovia</string>
+    <string name="room_profile_section_more_uploads">Nahrané súbory</string>
 </resources>
