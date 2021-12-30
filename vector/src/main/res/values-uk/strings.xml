@@ -1083,7 +1083,7 @@
     <string name="settings_send_markdown">Форматування Markdown</string>
     <string name="settings_send_markdown_summary">Форматувати повідомлення з використанням синтаксису Markdown перед надсиланням. Це дає можливість розгорнутого форматування, як-от використання зірочок для показу курсивного тексту.</string>
     <string name="settings_show_read_receipts">Показувати підтвердження прочитання</string>
-    <string name="settings_show_read_receipts_summary">Натискати на підтвердження прочитання для детального переліку.</string>
+    <string name="settings_show_read_receipts_summary">Натискайте мітки прочитання для детального переліку.</string>
     <string name="settings_show_join_leave_messages">Показувати події приєднання та виходу</string>
     <string name="settings_show_join_leave_messages_summary">Це не стосується запрошень, вилучень і блокувань.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Показувати події облікових записів</string>
