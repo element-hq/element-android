@@ -84,7 +84,21 @@ class AttachmentTypeSelectorView(context: Context,
         }
     }
 
+    private fun animateOpen() {
+        views.attachmentCloseButton.animate()
+                .setDuration(200)
+                .rotation(135f)
+    }
+
+    private fun animateClose() {
+        views.attachmentCloseButton.animate()
+                .setDuration(200)
+                .rotation(0f)
+    }
+
     fun show(anchor: View) {
+        animateOpen()
+
         this.anchor = anchor
         val anchorCoordinates = IntArray(2)
         anchor.getLocationOnScreen(anchorCoordinates)
@@ -96,6 +110,8 @@ class AttachmentTypeSelectorView(context: Context,
     }
 
     override fun dismiss() {
+        animateClose()
+
         val capturedAnchor = anchor
         if (capturedAnchor != null) {
             animateWindowOutCircular(capturedAnchor, contentView)
