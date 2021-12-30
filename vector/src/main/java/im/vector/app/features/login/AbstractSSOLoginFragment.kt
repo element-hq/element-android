@@ -88,7 +88,7 @@ abstract class AbstractSSOLoginFragment<VB : ViewBinding> : AbstractLoginFragmen
             if (state.loginMode.hasSso() && state.loginMode.ssoIdentityProviders().isNullOrEmpty()) {
                 // in this case we can prefetch (not other cases for privacy concerns)
                 loginViewModel.getSsoUrl(
-                        redirectUrl = LoginActivity.VECTOR_REDIRECT_URL,
+                        redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                         deviceId = state.deviceId,
                         providerId = null
                 )
