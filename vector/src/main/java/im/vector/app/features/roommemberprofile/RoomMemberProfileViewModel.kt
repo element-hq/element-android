@@ -174,10 +174,14 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
     }
 
     private fun handleSetUserColorOverride(action: RoomMemberProfileAction.SetUserColorOverride) {
-        val newOverrideColorSpecs = session.accountDataService().getUserAccountDataEvent(UserAccountDataTypes.TYPE_OVERRIDE_COLORS)
-                ?.content?.toMap().orEmpty().toMutableMap()
-        if (matrixItemColorProvider.setOverrideColor(initialState.userId, action.newColor)) {
-            newOverrideColorSpecs[initialState.userId] = action.newColor
+        val newOverrideColorSpecs = session.accountDataService()
+                .getUserAccountDataEvent(UserAccountDataTypes.TYPE_OVERRIDE_COLORS)
+                ?.content
+                ?.toModel<Map<String, String>>()
+                .orEmpty()
+                .toMutableMap()
+        if (matrixItemColorProvider.setOverrideColor(initialState.userId, action.newColorSpec)) {
+            newOverrideColorSpecs[initialState.userId] = action.newColorSpec
         } else {
             newOverrideColorSpecs.remove(initialState.userId)
         }

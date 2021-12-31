@@ -179,7 +179,7 @@ class RoomMemberProfileController @Inject constructor(
                 editable = false,
                 title = stringProvider.getString(R.string.room_member_override_nick_color),
                 subtitle = state.userColorOverride,
-                divider = false,
+                divider = !state.isMine,
                 action = { callback?.onOverrideColorClicked() }
         )
 
