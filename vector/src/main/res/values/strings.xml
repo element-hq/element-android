@@ -3661,6 +3661,8 @@
     <!-- %s will be replaced by the value of link_this_email_settings_link and styled as a link -->
     <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in Element.</string>
 
+   <string name="labs_enable_latex_maths">Enable LaTeX mathematics</string>
+
     <!-- Poll -->
     <string name="create_poll_title">Create Poll</string>
     <string name="create_poll_question_title">Poll question or topic</string>
