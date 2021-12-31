@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.helper
 
+import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.VisibleForTesting
@@ -69,10 +70,10 @@ class MatrixItemColorProvider @Inject constructor(
             null
         } else {
             try {
-                if (colorText.first() == '#') {
-                    (colorText.substring(1).toLong(radix = 16) or 0xff000000L).toInt()
-                } else {
+                if (colorText.length == 1) {
                     colorProvider.getColor(getUserColorByIndex(colorText.toInt()))
+                } else {
+                    Color.parseColor(colorText)
                 }
             } catch (e: Throwable) {
                 Timber.e(e, "Unable to parse color $colorText")
