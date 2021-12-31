@@ -48,7 +48,7 @@ sealed class LoginViewEvents2 : VectorViewEvents {
     object OnResetPasswordMailConfirmationSuccess : LoginViewEvents2()
     object OnResetPasswordMailConfirmationSuccessDone : LoginViewEvents2()
 
-    object CancelRegistration: LoginViewEvents2()
+    object CancelRegistration : LoginViewEvents2()
 
     data class OnLoginModeNotSupported(val supportedTypes: List<String>) : LoginViewEvents2()
 
@@ -57,7 +57,7 @@ sealed class LoginViewEvents2 : VectorViewEvents {
 
     data class OnWebLoginError(val errorCode: Int, val description: String, val failingUrl: String) : LoginViewEvents2()
 
-    data class OnSessionCreated(val newAccount: Boolean): LoginViewEvents2()
+    data class OnSessionCreated(val newAccount: Boolean) : LoginViewEvents2()
 
     object Finish : LoginViewEvents2()
 }

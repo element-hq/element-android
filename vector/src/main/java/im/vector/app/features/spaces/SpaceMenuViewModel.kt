@@ -16,22 +16,23 @@
 
 package im.vector.app.features.spaces
 
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.session.Session
@@ -40,7 +41,7 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 class SpaceMenuViewModel @AssistedInject constructor(
@@ -50,21 +51,11 @@ class SpaceMenuViewModel @AssistedInject constructor(
 ) : VectorViewModel<SpaceMenuState, SpaceLeaveViewAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: SpaceMenuState): SpaceMenuViewModel
+    interface Factory : MavericksAssistedViewModelFactory<SpaceMenuViewModel, SpaceMenuState> {
+        override fun create(initialState: SpaceMenuState): SpaceMenuViewModel
     }
 
-    companion object : MvRxViewModelFactory<SpaceMenuViewModel, SpaceMenuState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: SpaceMenuState): SpaceMenuViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<SpaceMenuViewModel, SpaceMenuState> by hiltMavericksViewModelFactory()
 
     init {
         val roomSummary = session.getRoomSummary(initialState.spaceId)
@@ -75,7 +66,7 @@ class SpaceMenuViewModel @AssistedInject constructor(
 
         session.getRoom(initialState.spaceId)?.let { room ->
 
-            room.rx().liveRoomSummary().subscribe {
+            room.flow().liveRoomSummary().onEach {
                 it.getOrNull()?.let {
                     if (it.membership == Membership.LEAVE) {
                         setState { copy(leavingState = Success(Unit)) }
@@ -85,11 +76,11 @@ class SpaceMenuViewModel @AssistedInject constructor(
                         }
                     }
                 }
-            }.disposeOnClear()
+            }.launchIn(viewModelScope)
 
-            PowerLevelsObservableFactory(room)
-                    .createObservable()
-                    .subscribe {
+            PowerLevelsFlowFactory(room)
+                    .createFlow()
+                    .onEach {
                         val powerLevelsHelper = PowerLevelsHelper(it)
 
                         val canInvite = powerLevelsHelper.isUserAbleToInvite(session.myUserId)
@@ -114,8 +105,7 @@ class SpaceMenuViewModel @AssistedInject constructor(
                                     isLastAdmin = isLastAdmin
                             )
                         }
-                    }
-                    .disposeOnClear()
+                    }.launchIn(viewModelScope)
         }
     }
 

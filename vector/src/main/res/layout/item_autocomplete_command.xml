@@ -8,7 +8,8 @@
     android:paddingStart="8dp"
     android:paddingTop="6dp"
     android:paddingEnd="8dp"
-    android:paddingBottom="6dp">
+    android:paddingBottom="6dp"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/commandName"
@@ -28,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginStart="5dp"
-        android:layout_toEndOf="@+id/commandName"
+        android:layout_toEndOf="@id/commandName"
         android:maxLines="1"
         android:textColor="?vctr_content_secondary"
         android:textStyle="italic"
@@ -39,7 +40,7 @@
         style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/commandName"
+        android:layout_below="@id/commandName"
         android:layout_alignParentStart="true"
         android:layout_gravity="center_vertical"
         android:maxLines="2"

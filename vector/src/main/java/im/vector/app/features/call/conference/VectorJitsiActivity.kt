@@ -28,13 +28,13 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.viewModel
 import com.facebook.react.modules.core.PermissionListener
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityJitsiBinding
@@ -48,8 +48,8 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.util.JsonDict
 import timber.log.Timber
 import java.net.URL
-import javax.inject.Inject
 
+@AndroidEntryPoint
 class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMeetActivityInterface {
 
     @Parcelize
@@ -61,20 +61,14 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
 
     override fun getBinding() = ActivityJitsiBinding.inflate(layoutInflater)
 
-    @Inject lateinit var viewModelFactory: JitsiCallViewModel.Factory
-
     private var jitsiMeetView: JitsiMeetView? = null
 
     private val jitsiViewModel: JitsiCallViewModel by viewModel()
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        jitsiViewModel.subscribe(this) {
+        jitsiViewModel.onEach {
             renderState(it)
         }
 
@@ -205,8 +199,8 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
         JitsiMeetActivityDelegate.onNewIntent(intent)
 
         // Is it a switch to another conf?
-        intent?.takeIf { it.hasExtra(MvRx.KEY_ARG) }
-                ?.let { intent.getParcelableExtra<Args>(MvRx.KEY_ARG) }
+        intent?.takeIf { it.hasExtra(Mavericks.KEY_ARG) }
+                ?.let { intent.getParcelableExtra<Args>(Mavericks.KEY_ARG) }
                 ?.let {
                     jitsiViewModel.handle(JitsiCallViewActions.SwitchTo(it, true))
                 }
@@ -242,7 +236,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
     companion object {
         fun newIntent(context: Context, roomId: String, widgetId: String, enableVideo: Boolean): Intent {
             return Intent(context, VectorJitsiActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, Args(roomId, widgetId, enableVideo))
+                putExtra(Mavericks.KEY_ARG, Args(roomId, widgetId, enableVideo))
             }
         }
     }

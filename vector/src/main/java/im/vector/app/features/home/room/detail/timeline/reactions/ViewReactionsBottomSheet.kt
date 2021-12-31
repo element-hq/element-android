@@ -20,11 +20,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.MvRx
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
@@ -33,26 +32,21 @@ import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
 import im.vector.app.features.home.room.detail.timeline.action.MessageSharedActionViewModel
 import im.vector.app.features.home.room.detail.timeline.action.TimelineEventFragmentArgs
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
-
 import javax.inject.Inject
 
 /**
  * Bottom sheet displaying list of reactions for a given event ordered by timestamp
  */
+@AndroidEntryPoint
 class ViewReactionsBottomSheet :
         VectorBaseBottomSheetDialogFragment<BottomSheetGenericListWithTitleBinding>(),
         ViewReactionsEpoxyController.Listener {
 
     private val viewModel: ViewReactionsViewModel by fragmentViewModel(ViewReactionsViewModel::class)
 
-    @Inject lateinit var viewReactionsViewModelFactory: ViewReactionsViewModel.Factory
     private lateinit var sharedActionViewModel: MessageSharedActionViewModel
 
     @Inject lateinit var epoxyController: ViewReactionsEpoxyController
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetGenericListWithTitleBinding {
         return BottomSheetGenericListWithTitleBinding.inflate(inflater, container, false)
@@ -87,14 +81,13 @@ class ViewReactionsBottomSheet :
 
     companion object {
         fun newInstance(roomId: String, informationData: MessageInformationData): ViewReactionsBottomSheet {
-            val args = Bundle()
-            val parcelableArgs = TimelineEventFragmentArgs(
-                    informationData.eventId,
-                    roomId,
-                    informationData
-            )
-            args.putParcelable(MvRx.KEY_ARG, parcelableArgs)
-            return ViewReactionsBottomSheet().apply { arguments = args }
+            return ViewReactionsBottomSheet().apply {
+                setArguments(TimelineEventFragmentArgs(
+                        eventId = informationData.eventId,
+                        roomId = roomId,
+                        informationData = informationData
+                ))
+            }
         }
     }
 }

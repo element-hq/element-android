@@ -27,8 +27,8 @@ import javax.inject.Inject
  * Test that the application is started on boot
  */
 class TestAutoStartBoot @Inject constructor(private val vectorPreferences: VectorPreferences,
-                                            private val stringProvider: StringProvider)
-    : TroubleshootTest(R.string.settings_troubleshoot_test_service_boot_title) {
+                                            private val stringProvider: StringProvider) :
+    TroubleshootTest(R.string.settings_troubleshoot_test_service_boot_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         if (vectorPreferences.autoStartOnBoot()) {

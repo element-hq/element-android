@@ -53,7 +53,6 @@ dependencies {
     implementation libs.rx.rxKotlin
     implementation libs.rx.rxAndroid
 
-    implementation libs.jetbrains.kotlinStdlib
     implementation libs.androidx.core
     implementation libs.androidx.appCompat
     implementation libs.androidx.recyclerview

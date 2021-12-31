@@ -9,7 +9,8 @@
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="8dp">
+    android:padding="8dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/itemUserAvatar"
@@ -32,9 +33,9 @@
         android:maxLines="1"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/itemUserName"
+        app:layout_constraintBottom_toTopOf="@id/itemUserName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/itemUserAvatar"
+        app:layout_constraintStart_toEndOf="@id/itemUserAvatar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
         tools:text="@sample/users.json/data/id" />
@@ -51,8 +52,8 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/itemUserAvatar"
-        app:layout_constraintTop_toBottomOf="@+id/itemUserId"
+        app:layout_constraintStart_toEndOf="@id/itemUserAvatar"
+        app:layout_constraintTop_toBottomOf="@id/itemUserId"
         tools:text="@sample/users.json/data/displayName"
         tools:visibility="visible" />
 

@@ -16,7 +16,7 @@
 
 package im.vector.app.features.auth
 
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 
 data class ReAuthState(
         val title: String? = null,
@@ -25,7 +25,7 @@ data class ReAuthState(
         val ssoFallbackPageWasShown: Boolean = false,
         val lastErrorCode: String? = null,
         val resultKeyStoreAlias: String = ""
-) : MvRxState {
+) : MavericksState {
     constructor(args: ReAuthActivity.Args) : this(
             args.title,
             args.session,

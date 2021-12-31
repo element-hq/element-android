@@ -34,7 +34,7 @@
     <ImageButton
         android:id="@+id/voiceMessageSendButton"
         android:layout_width="56dp"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/composer_min_height"
         android:background="@drawable/bg_send"
         android:contentDescription="@string/send"
         android:scaleType="center"
@@ -95,6 +95,7 @@
 
     <!-- Slide to cancel text should go under this view -->
     <View
+        android:id="@+id/voiceMessageSlideToCancelDivider"
         android:layout_width="48dp"
         android:layout_height="0dp"
         android:background="?android:colorBackground"
@@ -107,7 +108,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
-        android:contentDescription="@string/a11y_lock_voice_message"
+        android:importantForAccessibility="no"
         android:src="@drawable/ic_voice_message_unlocked"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/voiceMessageMicButton"
@@ -135,11 +136,10 @@
         android:id="@+id/voiceMessagePlaybackLayout"
         android:layout_width="0dp"
         android:layout_height="44dp"
-        android:layout_marginEnd="16dp"
         android:layout_marginBottom="4dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/voiceMessageMicButton"
+        app:layout_constraintEnd_toStartOf="@id/voiceMessageSendButton"
         app:layout_constraintStart_toStartOf="parent"
         tools:layout_marginBottom="120dp"
         tools:visibility="visible">
@@ -215,6 +215,8 @@
                 android:layout_height="0dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:contentDescription="@string/a11y_stop_voice_message"
+                android:importantForAccessibility="no"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/voicePlaybackTime"
@@ -230,6 +232,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="84dp"
+        android:accessibilityLiveRegion="polite"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

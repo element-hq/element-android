@@ -38,7 +38,6 @@ android {
 }
 
 dependencies {
-    implementation libs.jetbrains.kotlinStdlibJdk7
     implementation libs.androidx.appCompat
     implementation libs.androidx.fragmentKtx
     implementation libs.androidx.exifinterface

@@ -26,6 +26,8 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.epoxy.onLongClickIgnoringLinks
+import im.vector.app.core.epoxy.util.preventMutation
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
@@ -33,6 +35,7 @@ import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlUiState
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlView
 import im.vector.app.features.media.ImageContentRenderer
 import io.noties.markwon.MarkwonPlugin
+import org.matrix.android.sdk.api.extensions.orFalse
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
@@ -44,7 +47,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     var message: CharSequence? = null
 
     @EpoxyAttribute
-    var canUseTextFuture: Boolean = true
+    var bindingOptions: BindingOptions? = null
 
     @EpoxyAttribute
     var useBigFont: Boolean = false
@@ -89,7 +92,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
                 it.bind(holder.messageView)
             }
         }
-        val textFuture = if (canUseTextFuture) {
+        val textFuture = if (bindingOptions?.canUseTextFuture.orFalse()) {
             PrecomputedTextCompat.getTextFuture(
                     message ?: "",
                     TextViewCompat.getTextMetricsParams(holder.messageView),
@@ -100,15 +103,18 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         markwonPlugins?.forEach { plugin -> plugin.beforeSetText(holder.messageView, message as Spanned) }
         super.bind(holder)
         holder.messageView.movementMethod = movementMethod
-
         renderSendState(holder.messageView, holder.messageView)
         holder.messageView.onClick(attributes.itemClickListener)
-        holder.messageView.setOnLongClickListener(attributes.itemLongClickListener)
+        holder.messageView.onLongClickIgnoringLinks(attributes.itemLongClickListener)
 
-        if (canUseTextFuture) {
+        if (bindingOptions?.canUseTextFuture.orFalse()) {
             holder.messageView.setTextFuture(textFuture)
         } else {
-            holder.messageView.text = message
+            holder.messageView.text = if (bindingOptions?.preventMutation.orFalse()) {
+                message.preventMutation()
+            } else {
+                message
+            }
         }
         markwonPlugins?.forEach { plugin -> plugin.afterSetText(holder.messageView) }
     }
@@ -140,6 +146,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             previewUrlView?.render(state, safeImageContentRenderer)
         }
     }
+
     companion object {
         private const val STUB_ID = R.id.messageContentTextStub
     }

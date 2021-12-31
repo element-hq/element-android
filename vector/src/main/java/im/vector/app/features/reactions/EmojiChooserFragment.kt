@@ -23,7 +23,6 @@ import androidx.lifecycle.lifecycleScope
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.EmojiChooserFragmentBinding
-
 import javax.inject.Inject
 
 class EmojiChooserFragment @Inject constructor(

@@ -18,7 +18,7 @@ package im.vector.app
 
 import android.net.Uri
 import androidx.lifecycle.Observer
-import im.vector.app.ui.UiTestBase
+import im.vector.app.ui.robot.OnboardingRobot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -39,7 +39,7 @@ abstract class VerificationTestBase {
     val password = "password"
     val homeServerUrl: String = "http://10.0.2.2:8080"
 
-    protected val uiTestBase = UiTestBase()
+    protected val uiTestBase = OnboardingRobot()
 
     fun createAccountAndSync(matrix: Matrix,
                              userName: String,

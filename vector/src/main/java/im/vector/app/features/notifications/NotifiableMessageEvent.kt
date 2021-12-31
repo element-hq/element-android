@@ -15,43 +15,33 @@
  */
 package im.vector.app.features.notifications
 
-import androidx.core.app.NotificationCompat
+import android.net.Uri
 import org.matrix.android.sdk.api.session.events.model.EventType
 
 data class NotifiableMessageEvent(
         override val eventId: String,
         override val editedEventId: String?,
-        override var noisy: Boolean,
-        override val timestamp: Long,
-        var senderName: String?,
-        var senderId: String?,
-        var body: String?,
-        var roomId: String,
-        var roomName: String?,
-        var roomIsDirect: Boolean = false
+        override val canBeReplaced: Boolean,
+        val noisy: Boolean,
+        val timestamp: Long,
+        val senderName: String?,
+        val senderId: String?,
+        val body: String?,
+        val imageUri: Uri?,
+        val roomId: String,
+        val roomName: String?,
+        val roomIsDirect: Boolean = false,
+        val roomAvatarPath: String? = null,
+        val senderAvatarPath: String? = null,
+        val matrixID: String? = null,
+        val soundName: String? = null,
+        // This is used for >N notification, as the result of a smart reply
+        val outGoingMessage: Boolean = false,
+        val outGoingMessageFailed: Boolean = false,
+        override val isRedacted: Boolean = false
 ) : NotifiableEvent {
 
-    override var matrixID: String? = null
-    override var soundName: String? = null
-    override var lockScreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
-    override var hasBeenDisplayed: Boolean = false
-    override var isRedacted: Boolean = false
-
-    var roomAvatarPath: String? = null
-    var senderAvatarPath: String? = null
-
-    override var isPushGatewayEvent: Boolean = false
-
-    override val type: String
-        get() = EventType.MESSAGE
-
-    override val description: String?
-        get() = body ?: ""
-
-    override val title: String
-        get() = senderName ?: ""
-
-    // This is used for >N notification, as the result of a smart reply
-    var outGoingMessage = false
-    var outGoingMessageFailed = false
+    val type: String = EventType.MESSAGE
+    val description: String = body ?: ""
+    val title: String = senderName ?: ""
 }

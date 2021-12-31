@@ -1,0 +1,2 @@
+此版本主要更改：使用空间组织你的聊天室！
+完整更新日志：https://github.com/vector-im/element-android/releases/tag/v1.3.0

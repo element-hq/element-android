@@ -17,9 +17,6 @@
 package org.matrix.android.sdk.internal.crypto.keysbackup
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.api.listeners.ProgressListener
-import org.matrix.android.sdk.common.assertByteArrayNotEqual
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -28,6 +25,9 @@ import org.junit.FixMethodOrder
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
+import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.api.listeners.ProgressListener
+import org.matrix.android.sdk.common.assertByteArrayNotEqual
 import org.matrix.olm.OlmManager
 import org.matrix.olm.OlmPkDecryption
 

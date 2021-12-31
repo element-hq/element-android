@@ -16,16 +16,18 @@
 
 package im.vector.app.features.home
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import androidx.lifecycle.asFlow
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
-import im.vector.app.core.di.HasScreenInjector
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.extensions.singletonEntryPoint
+import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.call.lookup.CallProtocolsChecker
@@ -35,9 +37,12 @@ import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.showInvites
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.ui.UiStateRepository
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
@@ -47,44 +52,37 @@ import org.matrix.android.sdk.api.session.room.RoomSortOrder
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.rx.asObservable
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 /**
  * View model used to update the home bottom bar notification counts, observe the sync state and
  * change the selected room list view
  */
-class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: HomeDetailViewState,
-                                                      private val session: Session,
-                                                      private val uiStateRepository: UiStateRepository,
-                                                      private val vectorDataStore: VectorDataStore,
-                                                      private val callManager: WebRtcCallManager,
-                                                      private val directRoomHelper: DirectRoomHelper,
-                                                      private val appStateHandler: AppStateHandler,
-                                                      private val autoAcceptInvites: AutoAcceptInvites)
-    : VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
+class HomeDetailViewModel @AssistedInject constructor(
+        @Assisted initialState: HomeDetailViewState,
+        private val session: Session,
+        private val uiStateRepository: UiStateRepository,
+        private val vectorDataStore: VectorDataStore,
+        private val callManager: WebRtcCallManager,
+        private val directRoomHelper: DirectRoomHelper,
+        private val appStateHandler: AppStateHandler,
+        private val autoAcceptInvites: AutoAcceptInvites
+) : VectorViewModel<HomeDetailViewState, HomeDetailAction, HomeDetailViewEvents>(initialState),
         CallProtocolsChecker.Listener {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: HomeDetailViewState): HomeDetailViewModel
+    interface Factory : MavericksAssistedViewModelFactory<HomeDetailViewModel, HomeDetailViewState> {
+        override fun create(initialState: HomeDetailViewState): HomeDetailViewModel
     }
 
-    companion object : MvRxViewModelFactory<HomeDetailViewModel, HomeDetailViewState> {
+    companion object : MavericksViewModelFactory<HomeDetailViewModel, HomeDetailViewState> by hiltMavericksViewModelFactory() {
 
-        override fun initialState(viewModelContext: ViewModelContext): HomeDetailViewState? {
-            val uiStateRepository = (viewModelContext.activity as HasScreenInjector).injector().uiStateRepository()
+        override fun initialState(viewModelContext: ViewModelContext): HomeDetailViewState {
+            val uiStateRepository = viewModelContext.activity.singletonEntryPoint().uiStateRepository()
             return HomeDetailViewState(
                     currentTab = HomeTab.RoomList(uiStateRepository.getDisplayMode())
             )
-        }
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: HomeDetailViewState): HomeDetailViewModel? {
-            val fragment: HomeDetailFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.homeDetailViewModelFactory.create(state)
         }
     }
 
@@ -92,10 +90,10 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
         observeSyncState()
         observeRoomGroupingMethod()
         observeRoomSummaries()
-        updateShowDialPadTab()
+        updatePstnSupportFlag()
         observeDataStore()
         callManager.addProtocolsCheckerListener(this)
-        session.rx().liveUser(session.myUserId).execute {
+        session.flow().liveUser(session.myUserId).execute {
             copy(
                     myMatrixItem = it.invoke()?.getOrNull()?.toMatrixItem()
             )
@@ -103,14 +101,16 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     }
 
     private fun observeDataStore() {
-        viewModelScope.launch {
-            vectorDataStore.pushCounterFlow.collect { nbOfPush ->
-                setState {
-                    copy(
-                            pushCounter = nbOfPush
-                    )
-                }
-            }
+        vectorDataStore.pushCounterFlow.setOnEach { nbOfPush ->
+            copy(
+                    pushCounter = nbOfPush
+            )
+        }
+
+        vectorDataStore.forceDialPadDisplayFlow.setOnEach { force ->
+            copy(
+                    forceDialPadTab = force
+            )
         }
     }
 
@@ -152,12 +152,12 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     }
 
     override fun onPSTNSupportUpdated() {
-        updateShowDialPadTab()
+        updatePstnSupportFlag()
     }
 
-    private fun updateShowDialPadTab() {
+    private fun updatePstnSupportFlag() {
         setState {
-            copy(showDialPadTab = callManager.supportsPSTNProtocol)
+            copy(pstnSupportFlag = callManager.supportsPSTNProtocol)
         }
     }
 
@@ -182,41 +182,31 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
     }
 
     private fun observeSyncState() {
-        session.rx()
+        session.flow()
                 .liveSyncState()
-                .subscribe { syncState ->
-                    setState {
-                        copy(syncState = syncState)
-                    }
+                .setOnEach { syncState ->
+                    copy(syncState = syncState)
                 }
-                .disposeOnClear()
 
         session.getSyncStatusLive()
-                .asObservable()
-                .subscribe {
-                    if (it is SyncStatusService.Status.IncrementalSyncStatus) {
-                        setState {
-                            copy(incrementalSyncStatus = it)
-                        }
-                    }
+                .asFlow()
+                .filterIsInstance<SyncStatusService.Status.IncrementalSyncStatus>()
+                .setOnEach {
+                    copy(incrementalSyncStatus = it)
                 }
-                .disposeOnClear()
     }
 
     private fun observeRoomGroupingMethod() {
         appStateHandler.selectedRoomGroupingObservable
-                .subscribe {
-                    setState {
-                        copy(
-                                roomGroupingMethod = it.orNull() ?: RoomGroupingMethod.BySpace(null)
-                        )
-                    }
+                .setOnEach {
+                    copy(
+                            roomGroupingMethod = it.orNull() ?: RoomGroupingMethod.BySpace(null)
+                    )
                 }
-                .disposeOnClear()
     }
 
     private fun observeRoomSummaries() {
-        appStateHandler.selectedRoomGroupingObservable.distinctUntilChanged().switchMap {
+        appStateHandler.selectedRoomGroupingObservable.distinctUntilChanged().flatMapLatest {
             // we use it as a trigger to all changes in room, but do not really load
             // the actual models
             session.getPagedRoomSummariesLive(
@@ -224,11 +214,10 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                         memberships = Membership.activeMemberships()
                     },
                     sortOrder = RoomSortOrder.NONE
-            ).asObservable()
+            ).asFlow()
         }
-                .observeOn(Schedulers.computation())
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .subscribe {
+                .throttleFirst(300)
+                .onEach {
                     when (val groupingMethod = appStateHandler.getCurrentRoomGroupingMethod()) {
                         is RoomGroupingMethod.ByLegacyGroup -> {
                             // TODO!!
@@ -285,6 +274,6 @@ class HomeDetailViewModel @AssistedInject constructor(@Assisted initialState: Ho
                         }
                     }
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
     }
 }

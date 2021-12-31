@@ -25,6 +25,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.common.TestRoomDisplayNameFallbackProvider
+import org.matrix.android.sdk.internal.session.displayname.DisplayNameResolver
 import org.matrix.android.sdk.internal.session.room.send.pills.MentionLinkSpecComparator
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
 
@@ -48,7 +51,14 @@ class MarkdownParserTest : InstrumentedTest {
     private val markdownParser = MarkdownParser(
             Parser.builder().build(),
             HtmlRenderer.builder().softbreak("<br />").build(),
-            TextPillsUtils(MentionLinkSpecComparator())
+            TextPillsUtils(
+                    MentionLinkSpecComparator(),
+                    DisplayNameResolver(
+                            MatrixConfiguration(
+                                    applicationFlavor = "TestFlavor",
+                                    roomDisplayNameFallbackProvider = TestRoomDisplayNameFallbackProvider()
+                            )
+                    ))
     )
 
     @Test

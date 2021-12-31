@@ -16,6 +16,6 @@
 
 package im.vector.app.core.ui.bottomsheet
 
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 
-abstract class BottomSheetGenericState : MvRxState
+abstract class BottomSheetGenericState : MavericksState

@@ -51,7 +51,6 @@ import javax.inject.Inject
  * Note: this Fragment is also used for world readable room for the moment
  */
 class RoomPreviewNoPreviewFragment @Inject constructor(
-        val roomPreviewViewModelFactory: RoomPreviewViewModel.Factory,
         private val avatarRenderer: AvatarRenderer
 ) : VectorBaseFragment<FragmentRoomPreviewNoPreviewBinding>() {
 

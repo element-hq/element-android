@@ -15,6 +15,8 @@
  */
 package im.vector.app.core.ui.list
 
+import android.graphics.Typeface
+import android.view.Gravity
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import com.airbnb.epoxy.EpoxyAttribute
@@ -47,6 +49,12 @@ abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>() 
     @DrawableRes
     var iconRes: Int? = null
 
+    @EpoxyAttribute
+    var gravity: Int = Gravity.CENTER
+
+    @EpoxyAttribute
+    var bold: Boolean = false
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.button.text = text
@@ -57,6 +65,10 @@ abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>() 
         } else {
             holder.button.icon = null
         }
+
+        holder.button.gravity = gravity or Gravity.CENTER_VERTICAL
+        val textStyle = if (bold) Typeface.BOLD else Typeface.NORMAL
+        holder.button.setTypeface(null, textStyle)
 
         holder.button.onClick(buttonClickAction)
     }

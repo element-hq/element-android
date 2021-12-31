@@ -29,8 +29,8 @@ import javax.inject.Inject
  */
 class TestNotification @Inject constructor(private val context: Context,
                                            private val notificationUtils: NotificationUtils,
-                                           private val stringProvider: StringProvider)
-    : TroubleshootTest(R.string.settings_troubleshoot_test_notification_title) {
+                                           private val stringProvider: StringProvider) :
+    TroubleshootTest(R.string.settings_troubleshoot_test_notification_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         // Display the notification right now

@@ -379,7 +379,8 @@ internal interface IMXCryptoStore {
 
     fun getOrAddOutgoingSecretShareRequest(secretName: String, recipients: Map<String, List<String>>): OutgoingSecretRequest?
 
-    fun saveGossipingEvent(event: Event)
+    fun saveGossipingEvent(event: Event) = saveGossipingEvents(listOf(event))
+
     fun saveGossipingEvents(events: List<Event>)
 
     fun updateGossipingRequestState(request: IncomingShareRequestCommon, state: GossipingRequestState) {

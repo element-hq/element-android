@@ -16,17 +16,18 @@
 
 package im.vector.app.features.spaces.share
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.powerlevel.PowerLevelsObservableFactory
+import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
@@ -36,19 +37,11 @@ class ShareSpaceViewModel @AssistedInject constructor(
         private val session: Session) : VectorViewModel<ShareSpaceViewState, ShareSpaceAction, ShareSpaceViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: ShareSpaceViewState): ShareSpaceViewModel
+    interface Factory : MavericksAssistedViewModelFactory<ShareSpaceViewModel, ShareSpaceViewState> {
+        override fun create(initialState: ShareSpaceViewState): ShareSpaceViewModel
     }
 
-    companion object : MvRxViewModelFactory<ShareSpaceViewModel, ShareSpaceViewState> {
-        override fun create(viewModelContext: ViewModelContext, state: ShareSpaceViewState): ShareSpaceViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<ShareSpaceViewModel, ShareSpaceViewState> by hiltMavericksViewModelFactory()
 
     init {
         val roomSummary = session.getRoomSummary(initialState.spaceId)
@@ -63,9 +56,9 @@ class ShareSpaceViewModel @AssistedInject constructor(
 
     private fun observePowerLevel() {
         val room = session.getRoom(initialState.spaceId) ?: return
-        PowerLevelsObservableFactory(room)
-                .createObservable()
-                .subscribe { powerLevelContent ->
+        PowerLevelsFlowFactory(room)
+                .createFlow()
+                .onEach { powerLevelContent ->
                     val powerLevelsHelper = PowerLevelsHelper(powerLevelContent)
                     setState {
                         copy(
@@ -73,7 +66,7 @@ class ShareSpaceViewModel @AssistedInject constructor(
                         )
                     }
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
     }
 
     override fun handle(action: ShareSpaceAction) {

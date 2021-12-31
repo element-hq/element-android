@@ -16,20 +16,18 @@
 
 package im.vector.app.features.roomprofile.notifications
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.rx.rx
-import org.matrix.android.sdk.rx.unwrap
+import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 
 class RoomNotificationSettingsViewModel @AssistedInject constructor(
         @Assisted initialState: RoomNotificationSettingsViewState,
@@ -37,24 +35,11 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
 ) : VectorViewModel<RoomNotificationSettingsViewState, RoomNotificationSettingsAction, RoomNotificationSettingsViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: RoomNotificationSettingsViewState): RoomNotificationSettingsViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomNotificationSettingsViewModel, RoomNotificationSettingsViewState> {
+       override fun create(initialState: RoomNotificationSettingsViewState): RoomNotificationSettingsViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomNotificationSettingsViewModel, RoomNotificationSettingsViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomNotificationSettingsViewState): RoomNotificationSettingsViewModel {
-            val fragmentModelContext = (viewModelContext as FragmentViewModelContext)
-            return if (fragmentModelContext.fragment is RoomNotificationSettingsFragment) {
-                val fragment: RoomNotificationSettingsFragment = fragmentModelContext.fragment()
-                fragment.viewModelFactory.create(state)
-            } else {
-                val fragment: RoomListQuickActionsBottomSheet = fragmentModelContext.fragment()
-                fragment.roomNotificationSettingsViewModelFactory.create(state)
-            }
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomNotificationSettingsViewModel, RoomNotificationSettingsViewState> by hiltMavericksViewModelFactory()
 
     private val room = session.getRoom(initialState.roomId)!!
 
@@ -64,7 +49,7 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
     }
 
     private fun observeSummary() {
-        room.rx().liveRoomSummary()
+        room.flow().liveRoomSummary()
                 .unwrap()
                 .execute { async ->
                     copy(roomSummary = async)
@@ -72,7 +57,7 @@ class RoomNotificationSettingsViewModel @AssistedInject constructor(
     }
 
     private fun observeNotificationState() {
-        room.rx()
+        room.flow()
                 .liveNotificationState()
                 .execute {
                     copy(notificationState = it)

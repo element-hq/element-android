@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_sheet_message_preview"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/bottomSheetRoomPreviewAvatar"
@@ -36,8 +37,8 @@
         android:singleLine="true"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/bottomSheetRoomPreviewAvatar"
-        app:layout_constraintEnd_toStartOf="@+id/bottomSheetRoomPreviewLowPriority"
+        app:layout_constraintBottom_toBottomOf="@id/bottomSheetRoomPreviewAvatar"
+        app:layout_constraintEnd_toStartOf="@id/bottomSheetRoomPreviewLowPriority"
         app:layout_constraintStart_toEndOf="@id/bottomSheetRoomPreviewAvatar"
         app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar"
         tools:fontFamily="sans-serif"
@@ -51,8 +52,8 @@
         android:contentDescription="@string/room_list_quick_actions_low_priority_add"
         android:scaleType="centerInside"
         android:src="@drawable/ic_low_priority_24"
-        app:layout_constraintBottom_toBottomOf="@+id/bottomSheetRoomPreviewAvatar"
-        app:layout_constraintEnd_toStartOf="@+id/bottomSheetRoomPreviewFavorite"
+        app:layout_constraintBottom_toBottomOf="@id/bottomSheetRoomPreviewAvatar"
+        app:layout_constraintEnd_toStartOf="@id/bottomSheetRoomPreviewFavorite"
         app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar"
         tools:contentDescription="@string/room_list_quick_actions_low_priority_add"
         tools:tint="?vctr_content_secondary" />
@@ -64,8 +65,8 @@
         android:background="?attr/selectableItemBackground"
         android:contentDescription="@string/room_list_quick_actions_favorite_add"
         android:scaleType="centerInside"
-        app:layout_constraintBottom_toBottomOf="@+id/bottomSheetRoomPreviewAvatar"
-        app:layout_constraintEnd_toStartOf="@+id/bottomSheetRoomPreviewSettings"
+        app:layout_constraintBottom_toBottomOf="@id/bottomSheetRoomPreviewAvatar"
+        app:layout_constraintEnd_toStartOf="@id/bottomSheetRoomPreviewSettings"
         app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar"
         tools:src="@drawable/ic_star_24dp"
         tools:tint="?vctr_content_secondary" />
@@ -78,7 +79,7 @@
         android:contentDescription="@string/room_list_quick_actions_settings"
         android:scaleType="centerInside"
         android:src="@drawable/ic_room_actions_settings"
-        app:layout_constraintBottom_toBottomOf="@+id/bottomSheetRoomPreviewAvatar"
+        app:layout_constraintBottom_toBottomOf="@id/bottomSheetRoomPreviewAvatar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/bottomSheetRoomPreviewAvatar"
         app:tint="?vctr_content_secondary"

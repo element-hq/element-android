@@ -117,8 +117,8 @@ internal class DefaultIdentityBulkLookupTask @Inject constructor(
         return withOlmUtility { olmUtility ->
             threePids.map { threePid ->
                 base64ToBase64Url(
-                        olmUtility.sha256(threePid.value.lowercase(Locale.ROOT)
-                                + " " + threePid.toMedium() + " " + pepper)
+                        olmUtility.sha256(threePid.value.lowercase(Locale.ROOT) +
+                                " " + threePid.toMedium() + " " + pepper)
                 )
             }
         }

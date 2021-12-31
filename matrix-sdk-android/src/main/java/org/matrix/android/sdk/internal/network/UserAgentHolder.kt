@@ -73,8 +73,8 @@ internal class UserAgentHolder @Inject constructor(private val context: Context,
 
         // if there is no user agent or cannot parse it
         if (null == systemUserAgent || systemUserAgent.lastIndexOf(")") == -1 || !systemUserAgent.contains("(")) {
-            userAgent = (appName + "/" + appVersion + " ( Flavour " + flavorDescription
-                    + "; MatrixAndroidSdk2 " + BuildConfig.SDK_VERSION + ")")
+            userAgent = (appName + "/" + appVersion + " ( Flavour " + flavorDescription +
+                    "; MatrixAndroidSdk2 " + BuildConfig.SDK_VERSION + ")")
         } else {
             // update
             userAgent = appName + "/" + appVersion + " " +

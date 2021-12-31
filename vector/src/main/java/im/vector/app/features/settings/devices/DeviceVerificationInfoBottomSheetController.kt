@@ -33,8 +33,8 @@ import javax.inject.Inject
 
 class DeviceVerificationInfoBottomSheetController @Inject constructor(
         private val stringProvider: StringProvider,
-        private val colorProvider: ColorProvider)
-    : TypedEpoxyController<DeviceVerificationInfoBottomSheetViewState>() {
+        private val colorProvider: ColorProvider) :
+    TypedEpoxyController<DeviceVerificationInfoBottomSheetViewState>() {
 
     var callback: Callback? = null
 

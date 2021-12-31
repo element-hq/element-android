@@ -1,0 +1,2 @@
+Modifiche principali in questa versione: molti miglioramenti nel VoIP e negli Spazi (ancora in beta).
+Cronologia completa: https://github.com/vector-im/element-android/releases/tag/v1.2.1

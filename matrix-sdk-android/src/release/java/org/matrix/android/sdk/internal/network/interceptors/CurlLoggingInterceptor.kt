@@ -26,8 +26,8 @@ import javax.inject.Inject
  * No op interceptor
  */
 @MatrixScope
-internal class CurlLoggingInterceptor @Inject constructor()
-    : Interceptor {
+internal class CurlLoggingInterceptor @Inject constructor() :
+    Interceptor {
 
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {

@@ -1,0 +1,2 @@
+Ndryshimet kryesore në këtë version: Mesazh Zanor është i aktivizuar, si parazgjedhje.
+Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases/tag/v1.2.0

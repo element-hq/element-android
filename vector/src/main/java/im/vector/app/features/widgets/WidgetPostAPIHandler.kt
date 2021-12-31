@@ -18,8 +18,8 @@ package im.vector.app.features.widgets
 
 import android.text.TextUtils
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.session.coroutineScope

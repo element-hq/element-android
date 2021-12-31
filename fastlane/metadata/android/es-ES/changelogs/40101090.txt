@@ -1,0 +1,2 @@
+Principales cambios en esta versión: agregar soporte para la red gitter.im.
+Registro de cambios completo: https://github.com/vector-im/element-android/releases/tag/v1.1.9

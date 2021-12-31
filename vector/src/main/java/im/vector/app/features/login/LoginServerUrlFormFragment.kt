@@ -25,16 +25,18 @@ import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputLayout
-import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentLoginServerUrlFormBinding
-
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.failure.Failure
+import reactivecircus.flowbinding.android.widget.textChanges
 import java.net.UnknownHostException
 import javax.inject.Inject
 
@@ -55,18 +57,18 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment<F
     }
 
     private fun setupViews() {
-        views.loginServerUrlFormLearnMore.setOnClickListener { learnMore() }
-        views.loginServerUrlFormClearHistory.setOnClickListener { clearHistory() }
-        views.loginServerUrlFormSubmit.setOnClickListener { submit() }
+        views.loginServerUrlFormLearnMore.debouncedClicks { learnMore() }
+        views.loginServerUrlFormClearHistory.debouncedClicks { clearHistory() }
+        views.loginServerUrlFormSubmit.debouncedClicks { submit() }
     }
 
     private fun setupHomeServerField() {
         views.loginServerUrlFormHomeServerUrl.textChanges()
-                .subscribe {
+                .onEach {
                     views.loginServerUrlFormHomeServerUrlTil.error = null
                     views.loginServerUrlFormSubmit.isEnabled = it.isNotBlank()
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         views.loginServerUrlFormHomeServerUrl.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
@@ -144,8 +146,8 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment<F
     }
 
     override fun onError(throwable: Throwable) {
-        views.loginServerUrlFormHomeServerUrlTil.error = if (throwable is Failure.NetworkConnection
-                && throwable.ioException is UnknownHostException) {
+        views.loginServerUrlFormHomeServerUrlTil.error = if (throwable is Failure.NetworkConnection &&
+                throwable.ioException is UnknownHostException) {
             // Invalid homeserver?
             getString(R.string.login_error_homeserver_not_found)
         } else {
@@ -157,10 +159,5 @@ class LoginServerUrlFormFragment @Inject constructor() : AbstractLoginFragment<F
         setupUi(state)
 
         views.loginServerUrlFormClearHistory.isInvisible = state.knownCustomHomeServersUrls.isEmpty()
-
-        if (state.loginMode != LoginMode.Unknown) {
-            // The homeserver url is valid
-            loginViewModel.handle(LoginAction.PostViewEvent(LoginViewEvents.OnLoginFlowRetrieved))
-        }
     }
 }

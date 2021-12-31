@@ -43,7 +43,7 @@ internal interface JoinRoomTask : Task<JoinRoomTask.Params, Unit> {
             val roomIdOrAlias: String,
             val reason: String?,
             val viaServers: List<String> = emptyList(),
-            val thirdPartySigned : SignInvitationResult? = null
+            val thirdPartySigned: SignInvitationResult? = null
     )
 }
 

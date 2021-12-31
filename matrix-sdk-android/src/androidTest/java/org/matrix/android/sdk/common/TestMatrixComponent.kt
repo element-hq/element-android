@@ -34,11 +34,12 @@ import org.matrix.android.sdk.internal.util.system.SystemModule
     NetworkModule::class,
     AuthModule::class,
     RawModule::class,
-    SystemModule::class,
-    TestNetworkModule::class
+    SystemModule::class
 ])
 @MatrixScope
 internal interface TestMatrixComponent : MatrixComponent {
+
+    fun inject(matrix: TestMatrix)
 
     @Component.Factory
     interface Factory {

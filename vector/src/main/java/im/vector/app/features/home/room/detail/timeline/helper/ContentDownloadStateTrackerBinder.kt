@@ -19,16 +19,16 @@ package im.vector.app.features.home.room.detail.timeline.helper
 import android.graphics.drawable.Drawable
 import androidx.vectordrawable.graphics.drawable.Animatable2Compat
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
+import dagger.hilt.android.scopes.ActivityScoped
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.ScreenScope
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
 import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import javax.inject.Inject
 
-@ScreenScope
+@ActivityScoped
 class ContentDownloadStateTrackerBinder @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
                                                             private val messageColorProvider: MessageColorProvider,
                                                             private val errorFormatter: ErrorFormatter) {

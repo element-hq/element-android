@@ -26,11 +26,11 @@ class RoomDevToolRootController @Inject constructor(
         private val stringProvider: StringProvider
 ) : EpoxyController() {
 
+    var interactionListener: DevToolsInteractionListener? = null
+
     init {
         requestModelBuild()
     }
-
-    var interactionListener: DevToolsInteractionListener? = null
 
     override fun buildModels() {
         val host = this

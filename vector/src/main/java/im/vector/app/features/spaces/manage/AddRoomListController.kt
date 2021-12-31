@@ -43,8 +43,8 @@ class AddRoomListController @Inject constructor(
 
             override fun areContentsTheSame(oldItem: RoomSummary, newItem: RoomSummary): Boolean {
                 // for this use case we can test less things
-                return oldItem.displayName == newItem.displayName
-                        && oldItem.avatarUrl == newItem.avatarUrl
+                return oldItem.displayName == newItem.displayName &&
+                        oldItem.avatarUrl == newItem.avatarUrl
             }
         }
 ) {

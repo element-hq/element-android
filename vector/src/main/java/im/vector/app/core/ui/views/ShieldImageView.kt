@@ -36,21 +36,30 @@ class ShieldImageView @JvmOverloads constructor(
         }
     }
 
-    fun render(roomEncryptionTrustLevel: RoomEncryptionTrustLevel?) {
+    fun render(roomEncryptionTrustLevel: RoomEncryptionTrustLevel?, borderLess: Boolean = false) {
         isVisible = roomEncryptionTrustLevel != null
 
         when (roomEncryptionTrustLevel) {
             RoomEncryptionTrustLevel.Default -> {
                 contentDescription = context.getString(R.string.a11y_trust_level_default)
-                setImageResource(R.drawable.ic_shield_black)
+                setImageResource(
+                        if (borderLess) R.drawable.ic_shield_black_no_border
+                        else R.drawable.ic_shield_black
+                )
             }
             RoomEncryptionTrustLevel.Warning -> {
                 contentDescription = context.getString(R.string.a11y_trust_level_warning)
-                setImageResource(R.drawable.ic_shield_warning)
+                setImageResource(
+                        if (borderLess) R.drawable.ic_shield_warning_no_border
+                        else R.drawable.ic_shield_warning
+                )
             }
             RoomEncryptionTrustLevel.Trusted -> {
                 contentDescription = context.getString(R.string.a11y_trust_level_trusted)
-                setImageResource(R.drawable.ic_shield_trusted)
+                setImageResource(
+                        if (borderLess) R.drawable.ic_shield_trusted_no_border
+                        else R.drawable.ic_shield_trusted
+                )
             }
         }
     }

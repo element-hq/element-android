@@ -267,8 +267,8 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("device", Build.MODEL.trim())
                             .addFormDataPart("verbose_log", vectorPreferences.labAllowedExtendedLogging().toOnOff())
                             .addFormDataPart("multi_window", inMultiWindowMode.toOnOff())
-                            .addFormDataPart("os", Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ") "
-                                    + Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME)
+                            .addFormDataPart("os", Build.VERSION.RELEASE + " (API " + Build.VERSION.SDK_INT + ") " +
+                                    Build.VERSION.INCREMENTAL + "-" + Build.VERSION.CODENAME)
                             .addFormDataPart("locale", Locale.getDefault().toString())
                             .addFormDataPart("app_language", VectorLocale.applicationLocale.toString())
                             .addFormDataPart("default_app_language", systemLocaleProvider.getSystemLocale().toString())

@@ -16,11 +16,11 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import org.matrix.android.sdk.internal.database.model.ReferencesAggregatedSummaryEntity
-import org.matrix.android.sdk.internal.database.model.ReferencesAggregatedSummaryEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
+import org.matrix.android.sdk.internal.database.model.ReferencesAggregatedSummaryEntity
+import org.matrix.android.sdk.internal.database.model.ReferencesAggregatedSummaryEntityFields
 
 internal fun ReferencesAggregatedSummaryEntity.Companion.where(realm: Realm, eventId: String): RealmQuery<ReferencesAggregatedSummaryEntity> {
     val query = realm.where<ReferencesAggregatedSummaryEntity>()

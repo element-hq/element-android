@@ -17,7 +17,7 @@
 package im.vector.app.features.devtools
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.session.events.model.Event
 
@@ -31,7 +31,7 @@ data class RoomDevToolViewState(
         val editedContent: String? = null,
         val modalLoading: Async<Unit> = Uninitialized,
         val sendEventDraft: SendEventDraft? = null
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: RoomDevToolActivity.Args) : this(roomId = args.roomId, displayMode = Mode.Root)
 

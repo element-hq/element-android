@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.detail.timeline.action
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.core.extensions.canReact
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
@@ -50,7 +50,7 @@ data class MessageActionState(
         val actions: List<EventSharedAction> = emptyList(),
         val expendedReportContentMenu: Boolean = false,
         val actionPermissions: ActionPermissions = ActionPermissions()
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: TimelineEventFragmentArgs) : this(roomId = args.roomId, eventId = args.eventId, informationData = args.informationData)
 

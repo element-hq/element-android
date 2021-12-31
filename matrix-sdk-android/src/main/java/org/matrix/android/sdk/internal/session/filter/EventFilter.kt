@@ -50,10 +50,10 @@ data class EventFilter(
         @Json(name = "not_types") val notTypes: List<String>? = null
 ) {
     fun hasData(): Boolean {
-        return limit != null
-                || senders != null
-                || notSenders != null
-                || types != null
-                || notTypes != null
+        return limit != null ||
+                senders != null ||
+                notSenders != null ||
+                types != null ||
+                notTypes != null
     }
 }

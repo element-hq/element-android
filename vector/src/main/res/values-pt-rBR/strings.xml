@@ -124,22 +124,23 @@
     <string name="notice_power_level_changed_by_you">Você mudou o nível de poder de %1$s.</string>
     <string name="notice_power_level_changed">%1$s mudou o nível de poder de %2$s.</string>
     <string name="notice_power_level_diff">%1$s de %2$s para %3$s</string>
-    <string name="initial_sync_start_importing_account">Sinc Inicial:
+    <string name="initial_sync_start_importing_account">Sinc inicial:
 \nImportando conta…</string>
-    <string name="initial_sync_start_importing_account_crypto">Sinc Inicial:
+    <string name="initial_sync_start_importing_account_crypto">Sinc inicial:
 \nImportando crypto</string>
-    <string name="initial_sync_start_importing_account_rooms">Sinc Inicial:
+    <string name="initial_sync_start_importing_account_rooms">Sinc inicial:
 \nImportando Salas</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">Sinc Inicial:
-\nImportando Salas Que Você Se Juntou</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Sinc Inicial:
-\nImportando Salas Que Você Foi Convidada(o)</string>
-    <string name="initial_sync_start_importing_account_left_rooms">Sinc Inicial:
-\nImportando Salas de Que Você Saiu</string>
-    <string name="initial_sync_start_importing_account_groups">Sinc Inicial:
-\nImportando Comunidades</string>
-    <string name="initial_sync_start_importing_account_data">Sinc Inicial:
-\nImportando Dados de Conta</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">Sinc inicial:
+\nCarregando suas conversas
+\nSe você tem se juntado a um monte de salas, isto poderia levar um momento</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Sinc inicial:
+\nImportando salas convidadas</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Sinc inicial:
+\nImportando salas saídas</string>
+    <string name="initial_sync_start_importing_account_groups">Sinc inicial:
+\nImportando comunidades</string>
+    <string name="initial_sync_start_importing_account_data">Sinc inicial:
+\nImportando dados de conta</string>
     <string name="event_status_sending_message">Enviando mensagem…</string>
     <string name="clear_timeline_send_queue">Limpar fila de envio</string>
     <string name="notice_room_invite_no_invitee_with_reason">Convite de %1$s. Razão: %2$s</string>
@@ -296,7 +297,7 @@
     <string name="view_decrypted_source">Visualizar Fonte Decriptada</string>
     <string name="delete">Deletar</string>
     <string name="rename">Renomear</string>
-    <string name="report_content">Reportar conteúdo</string>
+    <string name="report_content">Reportar Conteúdo</string>
     <string name="active_call">Chamada ativa</string>
     <string name="ongoing_conference_call">Chamada de conferência em curso.
 \nJunte-se como %1$s ou %2$s</string>
@@ -1094,7 +1095,7 @@
     <string name="command_description_op_user">Define nível de poder de um/uma usuário(a)</string>
     <string name="command_description_deop_user">Desopa usuária(o) com id dada</string>
     <string name="command_description_invite_user">Convida usuária(o) com id dada para esta sala</string>
-    <string name="command_description_join_room">Junta-se a sala com alias dado</string>
+    <string name="command_description_join_room">Junta-se a sala com endereço dado</string>
     <string name="command_description_part_room">Sair de sala</string>
     <string name="command_description_topic">Definir o tópico da sala</string>
     <string name="command_description_kick_user">Expulsa a(o) usuária(o) com id dada</string>
@@ -2121,7 +2122,7 @@
     <string name="initialize_cross_signing">Inicializar AssinaturaCruzada</string>
     <string name="reset_cross_signing">Resettar Chaves</string>
     <string name="a11y_qr_code_for_verification">QR code</string>
-    <string name="qr_code_scanned_by_other_notice">Quase lá! %s está mostrando o mesmo escudo\?</string>
+    <string name="qr_code_scanned_by_other_notice">Quase lá! %s está mostrando um tick (✓)\?</string>
     <string name="qr_code_scanned_by_other_yes">Sim</string>
     <string name="qr_code_scanned_by_other_no">Não</string>
     <string name="no_connectivity_to_the_server_indicator">Conectividade ao servidor tem sido perdida</string>
@@ -2233,7 +2234,7 @@
     <string name="encryption_unknown_algorithm_tile_description">A encriptação usada por esta sala não é suportada</string>
     <string name="room_created_summary_item">%s criou e configurou a sala.</string>
     <string name="room_created_summary_item_by_you">Você criou e configurou a sala.</string>
-    <string name="qr_code_scanned_self_verif_notice">Quase lá! O outro dispositivo está mostrando o mesmo escudo\?</string>
+    <string name="qr_code_scanned_self_verif_notice">Quase lá! O outro dispositivo está mostrando um tick (✓)\?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Quase lá! Esperando por confirmação…</string>
     <string name="error_failed_to_import_keys">Falha para importar chaves</string>
     <string name="settings_messages_at_room">Mensagens contendo @room</string>
@@ -2567,7 +2568,6 @@
     <string name="direct_room_user_list_known_title">Usuárias(os) Conhecidas(os)</string>
     <string name="qr_code">QR code</string>
     <string name="add_by_qr_code">Adicionar por QR code</string>
-    <string name="user_directory_search_hint">Pesquisar por nome ou ID</string>
     <string name="permissions_denied_add_contact">Aceitar permissão para acessar seus contatos.</string>
     <string name="permissions_denied_qr_code">Para scannear um QR code, você precisa permitir acesso a câmera.</string>
     <string name="start_chatting">Começar a Conversar</string>
@@ -2698,9 +2698,9 @@
     <string name="settings_category_room_directory">Diretório de salas</string>
     <string name="dialog_edit_hint">Novo valor</string>
     <string name="action_switch">Alterar</string>
-    <string name="initial_sync_start_downloading">Sinc Inicial:
+    <string name="initial_sync_start_downloading">Sinc inicial:
 \nFazendo download de dados…</string>
-    <string name="initial_sync_start_server_computing">Sinc Inicial:
+    <string name="initial_sync_start_server_computing">Sinc inicial:
 \nEsperando por resposta de servidor…</string>
     <string name="a11y_trust_level_trusted">Nível de confiança confiado</string>
     <string name="a11y_trust_level_warning">Nível de confiança alerta</string>
@@ -2812,11 +2812,9 @@
     <string name="spaces_beta_welcome_to_spaces">Boas-vindas a Espaços!</string>
     <string name="space_add_rooms">Adicionar salas</string>
     <string name="space_add_existing_rooms">Adicionar salas e espaços existentes</string>
-    <string name="space_leave_prompt_msg_as_admin">Você é admin deste espaço, assegure-se que você tem transferido direito de admin a um outro membro antes de sair.</string>
-    <string name="space_leave_prompt_msg_private">Este espaço não é público. Você não vai ser capaz de se rejuntar sem um convite.</string>
+    <string name="space_leave_prompt_msg_as_admin">Você é a/o única(o) admin deste espaço. Sair dele vai significar que ninguém tem controle sobre ele.</string>
+    <string name="space_leave_prompt_msg_private">Você não vai ser capaz de se rejuntar a menos que você seja re-convidada(o).</string>
     <string name="space_leave_prompt_msg_only_you">Você é a única pessoa aqui. Se você sair, ninguém vai ser capaz de se juntar no futuro, incluindo você.</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">Você tem certeza que você quer sair do espaço\?</string>
     <string name="leave_space">Sair de Espaço</string>
     <string name="space_add_child_title">Adicionar salas</string>
     <string name="space_explore_activity_title">Explorar salas</string>
@@ -2929,13 +2927,13 @@
     <string name="voice_message_tap_to_stop_toast">Toque em sua gravação para parar ou escutar</string>
     <string name="voice_message_n_seconds_warning_toast">%1$ds restando</string>
     <string name="voice_message_release_to_send_toast">Segure para gravar, solte para enviar</string>
-    <string name="a11y_delete_recorded_voice_message">Deletar mensagem de voz gravada</string>
+    <string name="a11y_delete_recorded_voice_message">Deletar gravação</string>
     <string name="a11y_recording_voice_message">Gravando mensagem de voz</string>
     <string name="a11y_pause_voice_message">Pausar Mensagem de Voz</string>
     <string name="a11y_play_voice_message">Tocar Mensagem de Voz</string>
     <string name="a11y_lock_voice_message">Cadeado de Mensagem de Voz</string>
     <string name="voice_message_slide_to_cancel">Deslize para cancelar</string>
-    <string name="a11y_start_voice_message">Começar Mensagem de Voz</string>
+    <string name="a11y_start_voice_message">Gravar Mensagem de Voz</string>
     <string name="allow_anyone_in_room_to_access">Permitir qualquer pessoa em %s a encontrar e acessar. Você pode selecionar outros espaços também.</string>
     <string name="upgrade_required">Upgrade Requerido</string>
     <string name="sent_a_voice_message">Voz</string>
@@ -3017,4 +3015,91 @@
     <string name="call_ringing">Chamada tocando…</string>
     <string name="spaces">Espaços</string>
     <string name="learn_more">Saber Mais</string>
+    <string name="space_add_space_to_any_space_you_manage">Adicione um espaço a qualquer espaço que você gerencia.</string>
+    <string name="space_add_existing_spaces">Adicionar espaços existentes</string>
+    <string name="space_add_existing_rooms_only">Adicionar salas existentes</string>
+    <string name="pick_tings_to_leave">Escolha coisas para sair</string>
+    <string name="leave_specific_ones">Sair de salas e espaços específicos…</string>
+    <string name="dont_leave_any">Não sair de nenhuma sala ou espaço</string>
+    <string name="you_will_leave_all_in">Você vai sair de todas as salas e espaços em %s.</string>
+    <string name="leave_all_rooms_and_spaces">Sair de todas as salas e espaços</string>
+    <string name="space_leave_prompt_msg_with_name">Você tem certeza que você quer sair de %s\?</string>
+    <string name="discovery_section">Descoberta (%s)</string>
+    <string name="finish_setup">Terminar configuração</string>
+    <string name="discovery_invite">Convidar por email, encontrar contatos e mais…</string>
+    <string name="finish_setting_up_discovery">Termine de configurar descoberta.</string>
+    <string name="create_space_identity_server_info_none">Você não está atualmente usando um servidor de identidade. A fim de convidar colegas e ser descobertável por elas(es), configure um abaixo.</string>
+    <string name="invite_by_mxid_or_mail">Convidar por nome de usuária(o) ou mail</string>
+    <string name="create_spaces_invite_public_header_desc">Assegure que as pessoas certas têm acesso a companhia %s. Você pode convidar outras mais tarde.</string>
+    <string name="create_spaces_invite_public_header">Quem são suas/seus colegas\?</string>
+    <string name="command_description_add_to_space">Adicionar ao dado Espaço</string>
+    <string name="create_space_in_progress">Criando espaço…</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">Mostrar certa info útil para ajudar a fazer debugging do aplicativo</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">Mostrar info de debug em tela</string>
+    <string name="does_not_look_like_valid_email">Não parece com um endereço de email válido</string>
+    <string name="open_discovery_settings">Abrir Configurações de Descoberta</string>
+    <string name="user_directory_search_hint_2">Pesquisar por nome, ID ou mail</string>
+    <string name="create_new_space">Criar Novo Espaço</string>
+    <string name="room_settings_space_access_public_description">Qualquer pessoa pode encontrar o espaço e se juntar</string>
+    <string name="room_settings_space_access_title">Acesso a espaço</string>
+    <string name="room_settings_access_rules_pref_dialog_title">Quem pode acessar\?</string>
+    <string name="settings_notification_emails_enable_for_email">Habilitar notificações de email para %s</string>
+    <string name="settings_notification_emails_no_emails">Para receber email com notificação, por favor associe um email a sua conta Matrix</string>
+    <string name="settings_notification_emails_category">Notificação de email</string>
+    <string name="room_permissions_upgrade_the_space">Fazer upgrade do espaço</string>
+    <string name="room_permissions_change_space_name">Mudar nome de espaço</string>
+    <string name="room_permissions_enable_space_encryption">Habilitar encriptação de espaço</string>
+    <string name="room_permissions_change_main_address_for_the_space">Mudar endereço principal para o espaço</string>
+    <string name="room_permissions_change_space_avatar">Mudar avatar de espaço</string>
+    <string name="space_permissions_notice_read_only">Você não tem permissão para atualizar os papéis requeridos para mudar várias partes deste espaço</string>
+    <string name="space_permissions_notice">Selecione os papéis requeridos para mudar várias partes deste espaço</string>
+    <string name="space_settings_permissions_subtitle">Veja e atualize os papéis requeridos para mudar várias partes do espaço.</string>
+    <string name="space_settings_permissions_title">Permissões de espaço</string>
+    <string name="space_participants_unban_prompt_msg">Desbanir usuária(o) vai permiti-la(o) se juntar ao espaço de novo.</string>
+    <string name="space_participants_ban_prompt_msg">Banir usuária(o) vai expulsá-la(o) deste espaço e preveni-la de se juntar de novo.</string>
+    <string name="space_participants_kick_prompt_msg">expulsar usuária(o) vai removê-la(o) deste espaço.
+\n
+\nPara preveni-la(o) de se juntar de novo, você devia bani-la(o) em vez disso.</string>
+    <string name="a11y_stop_voice_message">Parar de Gravar</string>
+    <string name="command_description_lenny">Prepende ( ͡° ͜ʖ ͡°) a uma mensagem de texto puro</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Política</string>
+    <string name="settings_discovery_no_policy_provided">Nenhuma política provida pelo servidor de identidade</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Esconder política de servidor de identidade</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Mostrar política de servidor de identidade</string>
+    <string name="command_description_whois">Exibe informação sobre um/uma usuário(a)</string>
+    <string name="command_description_avatar_for_room">Muda seu avatar nesta sala atual somente</string>
+    <string name="command_description_room_avatar">Muda o avatar da sala atual</string>
+    <string name="command_description_nick_for_room">Muda seu apelido de exibição na sala atual somente</string>
+    <string name="command_description_room_name">Define o nome da sala</string>
+    <string name="command_description_unignore_user">Para de ignorar um/uma usuário(a), mostrando as mensagens dele/dela de agora em diante</string>
+    <string name="command_description_ignore_user">Ignora um/uma usuário(a), escondendo as mensagens dele/dela de você</string>
+    <string name="a11y_presence_unavailable">Indisponível</string>
+    <string name="a11y_presence_offline">Offline</string>
+    <string name="a11y_presence_online">Online</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Escolher servidorcasa</string>
+    <string name="login_error_homeserver_from_url_not_found">Não dá para alcançar um servidorcasa na URL %s. Por favor cheque seu link ou escolha um servidorcasa manualmente.</string>
+    <string name="notification_listening_for_notifications">À escuta por notificações</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">Pelo menos %1$s opção é requerida</item>
+        <item quantity="other">Pelo menos %1$s opções são requeridas</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">Pergunta não pode estar vazia</string>
+    <string name="create_poll_button">CRIAR SONDAGEM</string>
+    <string name="create_poll_add_option">ADICIONAR OPÇÃO</string>
+    <string name="create_poll_options_hint">Opção %1$d</string>
+    <string name="create_poll_options_title">Criar opções</string>
+    <string name="create_poll_question_hint">Pergunta ou tópico</string>
+    <string name="create_poll_question_title">Sondar pergunta ou tópico</string>
+    <string name="create_poll_title">Criar Sondagem</string>
+    <string name="attachment_type_poll">Sondagem</string>
+    <string name="identity_server_consent_dialog_content_2">Para descobrir contatos existentes, você precisa envir info de contato a seu servidor de identidade.
+\n
+\nNós hashamos seus dados antes de enviar por privacidade. Você consente para enviar esta info\?</string>
+    <string name="identity_server_consent_dialog_title_2">Enviar emails e números de telefone para %s</string>
+    <string name="settings_discovery_consent_notice_off_2">Seus contatos são privados. Para descobrir usuárias(os) de seus contatos, você precisa de permissão para enviar info de contato a seu servidor de identidade.</string>
+    <string name="shortcut_disabled_reason_sign_out">O signout desta sessão tem sido feito!</string>
+    <string name="shortcut_disabled_reason_room_left">Esta sala tem sido saída!</string>
+    <string name="identity_server_consent_dialog_content_question">Você concorda em enviar esta info\?</string>
+    <string name="identity_server_consent_dialog_content_3">Para descobrir contatos existentes, você precisa enviar info de contato (emails e números de telefone) para seu servidor de identidade. Nós hashamos seus dados antes de enviar por privacidade.</string>
+    <string name="action_not_now">Não agora</string>
 </resources>

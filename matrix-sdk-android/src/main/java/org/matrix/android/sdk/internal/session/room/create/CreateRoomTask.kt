@@ -81,13 +81,13 @@ internal class DefaultCreateRoomTask @Inject constructor(
             }
         } catch (throwable: Throwable) {
             if (throwable is Failure.ServerError) {
-                if (throwable.httpCode == 403
-                        && throwable.error.code == MatrixError.M_FORBIDDEN
-                        && throwable.error.message.startsWith("Federation denied with")) {
+                if (throwable.httpCode == 403 &&
+                        throwable.error.code == MatrixError.M_FORBIDDEN &&
+                        throwable.error.message.startsWith("Federation denied with")) {
                     throw CreateRoomFailure.CreatedWithFederationFailure(throwable.error)
-                } else if (throwable.httpCode == 400
-                        && throwable.error.code == MatrixError.M_UNKNOWN
-                        && throwable.error.message == "Invalid characters in room alias") {
+                } else if (throwable.httpCode == 400 &&
+                        throwable.error.code == MatrixError.M_UNKNOWN &&
+                        throwable.error.message == "Invalid characters in room alias") {
                     throw CreateRoomFailure.AliasError(RoomAliasError.AliasInvalid)
                 }
             }
@@ -138,8 +138,8 @@ internal class DefaultCreateRoomTask @Inject constructor(
      * @return true if it is a direct chat
      */
     private fun CreateRoomParams.isDirect(): Boolean {
-        return preset == CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT
-                && isDirect == true
+        return preset == CreateRoomPreset.PRESET_TRUSTED_PRIVATE_CHAT &&
+                isDirect == true
     }
 
     /**

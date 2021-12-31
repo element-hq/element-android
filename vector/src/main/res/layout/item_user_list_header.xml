@@ -9,4 +9,5 @@
     android:fontFamily="sans-serif-medium"
     android:padding="8dp"
     android:textColor="?vctr_content_primary"
-    tools:text="Recents | Contacts" />
+    tools:text="Recents | Contacts"
+    tools:viewBindingIgnore="true" />

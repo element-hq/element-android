@@ -59,24 +59,6 @@ else
   removeShortDes_si=1
 fi
 
-if [[ -f "./fastlane/metadata/android/sq/short_description.txt" ]]; then
-  echo "It appears that file ./fastlane/metadata/android/sq/short_description.txt now exists. This can be removed."
-  removeShortDes_sq=0
-else
-  echo "Copy default short description to ./fastlane/metadata/android/sq"
-  cp ./fastlane/metadata/android/en-US/short_description.txt ./fastlane/metadata/android/sq
-  removeShortDes_sq=1
-fi
-
-if [[ -f "./fastlane/metadata/android/sq/full_description.txt" ]]; then
-  echo "It appears that file ./fastlane/metadata/android/sq/full_description.txt now exists. This can be removed."
-  removeFullDes_sq=0
-else
-  echo "Copy default full description to ./fastlane/metadata/android/sq"
-  cp ./fastlane/metadata/android/en-US/full_description.txt ./fastlane/metadata/android/sq
-  removeFullDes_sq=1
-fi
-
 if [[ -f "./fastlane/metadata/android/th/full_description.txt" ]]; then
   echo "It appears that file ./fastlane/metadata/android/th/full_description.txt now exists. This can be removed."
   removeFullDes_th=0
@@ -84,15 +66,6 @@ else
   echo "Copy default full description to ./fastlane/metadata/android/th"
   cp ./fastlane/metadata/android/en-US/full_description.txt ./fastlane/metadata/android/th
   removeFullDes_th=1
-fi
-
-if [[ -f "./fastlane/metadata/android/vi/full_description.txt" ]]; then
-  echo "It appears that file ./fastlane/metadata/android/vi/full_description.txt now exists. This can be removed."
-  removeFullDes_vi=0
-else
-  echo "Copy default full description to ./fastlane/metadata/android/vi"
-  cp ./fastlane/metadata/android/en-US/full_description.txt ./fastlane/metadata/android/vi
-  removeFullDes_vi=1
 fi
 
 # Run fastlane
@@ -117,20 +90,8 @@ if [[ ${removeShortDes_si} -eq 1 ]]; then
   rm ./fastlane/metadata/android/si-LK/short_description.txt
 fi
 
-if [[ ${removeShortDes_sq} -eq 1 ]]; then
-  rm ./fastlane/metadata/android/sq/short_description.txt
-fi
-
 if [[ ${removeFullDes_th} -eq 1 ]]; then
   rm ./fastlane/metadata/android/th/full_description.txt
-fi
-
-if [[ ${removeFullDes_sq} -eq 1 ]]; then
-  rm ./fastlane/metadata/android/sq/full_description.txt
-fi
-
-if [[ ${removeFullDes_vi} -eq 1 ]]; then
-  rm ./fastlane/metadata/android/vi/full_description.txt
 fi
 
 echo "Success!"

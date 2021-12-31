@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:colorBackground"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground"
+    tools:viewBindingIgnore="true">
 
     <FrameLayout
         android:id="@+id/roomAvatarContainer"
@@ -25,7 +26,6 @@
             tools:src="@sample/room_round_avatars" />
 
     </FrameLayout>
-
 
     <!-- Margin bottom does not work, so I use space -->
     <Space
@@ -50,7 +50,7 @@
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         app:layout_constrainedWidth="true"
-        app:layout_constraintEnd_toStartOf="@+id/joinSuggestedRoomButton"
+        app:layout_constraintEnd_toStartOf="@id/joinSuggestedRoomButton"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toEndOf="@id/roomAvatarContainer"
@@ -68,8 +68,8 @@
         android:maxLines="1"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintEnd_toStartOf="@id/joinSuggestedRoomButton"
-        app:layout_constraintStart_toStartOf="@+id/roomNameView"
-        app:layout_constraintTop_toBottomOf="@+id/roomNameView"
+        app:layout_constraintStart_toStartOf="@id/roomNameView"
+        app:layout_constraintTop_toBottomOf="@id/roomNameView"
         tools:text="@sample/rooms.json/data/topic" />
 
     <Button
@@ -111,7 +111,7 @@
         android:padding="8dp"
         android:textColor="?colorError"
         app:drawableStartCompat="@drawable/ic_warning_badge"
-        app:layout_constraintTop_toBottomOf="@+id/roomBottomBarrier"
+        app:layout_constraintTop_toBottomOf="@id/roomBottomBarrier"
         tools:text="An error occured while joining" />
 
     <!-- We use vctr_list_separator_system here for a better rendering -->
@@ -123,6 +123,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inlineErrorText" />
+        app:layout_constraintTop_toBottomOf="@id/inlineErrorText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

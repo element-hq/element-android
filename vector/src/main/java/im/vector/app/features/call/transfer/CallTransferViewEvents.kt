@@ -20,6 +20,6 @@ import im.vector.app.core.platform.VectorViewEvents
 
 sealed class CallTransferViewEvents : VectorViewEvents {
     object Dismiss : CallTransferViewEvents()
-    object Loading: CallTransferViewEvents()
+    object Loading : CallTransferViewEvents()
     object FailToTransfer : CallTransferViewEvents()
 }

@@ -20,22 +20,23 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import androidx.exifinterface.media.ExifInterface
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.TemporaryFileCreator
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
 internal class ImageCompressor @Inject constructor(
-        private val temporaryFileCreator: TemporaryFileCreator
+        private val temporaryFileCreator: TemporaryFileCreator,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) {
     suspend fun compress(
             imageFile: File,
             desiredWidth: Int,
             desiredHeight: Int,
             desiredQuality: Int = 80): File {
-        return withContext(Dispatchers.IO) {
+        return withContext(coroutineDispatchers.io) {
             val compressedBitmap = BitmapFactory.Options().run {
                 inJustDecodeBounds = true
                 decodeBitmap(imageFile, this)
@@ -52,6 +53,8 @@ internal class ImageCompressor @Inject constructor(
                 destinationFile.outputStream().use {
                     compressedBitmap.compress(Bitmap.CompressFormat.JPEG, desiredQuality, it)
                 }
+            }.onFailure {
+                return@withContext imageFile
             }
 
             destinationFile

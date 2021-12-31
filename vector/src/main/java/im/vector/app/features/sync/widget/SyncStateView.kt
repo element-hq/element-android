@@ -27,8 +27,8 @@ import im.vector.app.databinding.ViewSyncStateBinding
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.sync.SyncState
 
-class SyncStateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
-    : LinearLayout(context, attrs, defStyle) {
+class SyncStateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
+    LinearLayout(context, attrs, defStyle) {
 
     private val views: ViewSyncStateBinding
 

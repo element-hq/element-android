@@ -25,7 +25,7 @@ interface SyncStatusService {
         /**
          * For initial sync
          */
-        abstract class InitialSyncStatus: Status()
+        abstract class InitialSyncStatus : Status()
 
         object Idle : InitialSyncStatus()
         data class Progressing(
@@ -36,7 +36,7 @@ interface SyncStatusService {
         /**
          * For incremental sync
          */
-        abstract class IncrementalSyncStatus: Status()
+        abstract class IncrementalSyncStatus : Status()
 
         object IncrementalSyncIdle : IncrementalSyncStatus()
         data class IncrementalSyncParsing(

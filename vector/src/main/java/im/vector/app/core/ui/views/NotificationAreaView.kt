@@ -30,7 +30,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewNotificationAreaBinding
 import im.vector.app.features.themes.ThemeUtils
-
 import me.gujun.android.span.span
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import org.matrix.android.sdk.api.failure.MatrixError
@@ -50,7 +49,7 @@ class NotificationAreaView @JvmOverloads constructor(
     var delegate: Delegate? = null
     private var state: State = State.Initial
 
-    private lateinit var views : ViewNotificationAreaBinding
+    private lateinit var views: ViewNotificationAreaBinding
 
     init {
         setupView()

@@ -35,6 +35,7 @@ import javax.inject.Inject
 class VectorPreferences @Inject constructor(private val context: Context) {
 
     companion object {
+        const val SETTINGS_HELP_PREFERENCE_KEY = "SETTINGS_HELP_PREFERENCE_KEY"
         const val SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY = "SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY"
         const val SETTINGS_VERSION_PREFERENCE_KEY = "SETTINGS_VERSION_PREFERENCE_KEY"
         const val SETTINGS_SDK_VERSION_PREFERENCE_KEY = "SETTINGS_SDK_VERSION_PREFERENCE_KEY"
@@ -42,13 +43,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         const val SETTINGS_LOGGED_IN_PREFERENCE_KEY = "SETTINGS_LOGGED_IN_PREFERENCE_KEY"
         const val SETTINGS_HOME_SERVER_PREFERENCE_KEY = "SETTINGS_HOME_SERVER_PREFERENCE_KEY"
         const val SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY = "SETTINGS_IDENTITY_SERVER_PREFERENCE_KEY"
-        const val SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY = "SETTINGS_APP_TERM_CONDITIONS_PREFERENCE_KEY"
-        const val SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY = "SETTINGS_PRIVACY_POLICY_PREFERENCE_KEY"
+        const val SETTINGS_DISCOVERY_PREFERENCE_KEY = "SETTINGS_DISCOVERY_PREFERENCE_KEY"
+        const val SETTINGS_EMAILS_AND_PHONE_NUMBERS_PREFERENCE_KEY = "SETTINGS_EMAILS_AND_PHONE_NUMBERS_PREFERENCE_KEY"
 
-        const val SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY = "SETTINGS_NOTIFICATION_ADVANCED_PREFERENCE_KEY"
-        const val SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY = "SETTINGS_THIRD_PARTY_NOTICES_PREFERENCE_KEY"
-        const val SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY = "SETTINGS_OTHER_THIRD_PARTY_NOTICES_PREFERENCE_KEY"
-        const val SETTINGS_COPYRIGHT_PREFERENCE_KEY = "SETTINGS_COPYRIGHT_PREFERENCE_KEY"
         const val SETTINGS_CLEAR_CACHE_PREFERENCE_KEY = "SETTINGS_CLEAR_CACHE_PREFERENCE_KEY"
         const val SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY = "SETTINGS_CLEAR_MEDIA_CACHE_PREFERENCE_KEY"
         const val SETTINGS_USER_SETTINGS_PREFERENCE_KEY = "SETTINGS_USER_SETTINGS_PREFERENCE_KEY"
@@ -118,6 +115,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         // notifications
         const val SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY = "SETTINGS_ENABLE_ALL_NOTIF_PREFERENCE_KEY"
         const val SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY = "SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY"
+        const val SETTINGS_EMAIL_NOTIFICATION_CATEGORY_PREFERENCE_KEY = "SETTINGS_EMAIL_NOTIFICATION_CATEGORY_PREFERENCE_KEY"
 
         //    public static final String SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY = "SETTINGS_TURN_SCREEN_ON_PREFERENCE_KEY";
         const val SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY = "SETTINGS_SYSTEM_CALL_NOTIFICATION_PREFERENCE_KEY"
@@ -166,9 +164,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM = "SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM"
         const val SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB = "SETTINGS_LABS_UNREAD_NOTIFICATIONS_AS_TAB"
 
-        // analytics
-        const val SETTINGS_USE_ANALYTICS_KEY = "SETTINGS_USE_ANALYTICS_KEY"
-
         // Rageshake
         const val SETTINGS_USE_RAGE_SHAKE_KEY = "SETTINGS_USE_RAGE_SHAKE_KEY"
         const val SETTINGS_RAGE_SHAKE_DETECTION_THRESHOLD_KEY = "SETTINGS_RAGE_SHAKE_DETECTION_THRESHOLD_KEY"
@@ -200,6 +195,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_UNKNOWN_DEVICE_DISMISSED_LIST = "SETTINGS_UNKNWON_DEVICE_DISMISSED_LIST"
 
         private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
+
+        private const val SETTINGS_LABS_ENABLE_POLLS = "SETTINGS_LABS_ENABLE_POLLS"
 
         // Possible values for TAKE_PHOTO_VIDEO_MODE
         const val TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK = 0
@@ -825,32 +822,12 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     /**
-     * Tells if the analytics tracking is authorized (piwik, matomo, etc.).
-     *
-     * @return true if the analytics tracking is authorized
-     */
-    fun useAnalytics(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_USE_ANALYTICS_KEY, false)
-    }
-
-    /**
      * Tells if the user wants to see URL previews in the timeline
      *
      * @return true if the user wants to see URL previews in the timeline
      */
     fun showUrlPreviews(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SHOW_URL_PREVIEW_KEY, true)
-    }
-
-    /**
-     * Enable or disable the analytics tracking.
-     *
-     * @param useAnalytics true to enable the analytics tracking
-     */
-    fun setUseAnalytics(useAnalytics: Boolean) {
-        defaultPrefs.edit {
-            putBoolean(SETTINGS_USE_ANALYTICS_KEY, useAnalytics)
-        }
     }
 
     /**
@@ -936,8 +913,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * Return true if Pin code is disabled, or if user set the settings to see full notification content
      */
     fun useCompleteNotificationFormat(): Boolean {
-        return !useFlagPinCode()
-                || defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG, true)
+        return !useFlagPinCode() ||
+                defaultPrefs.getBoolean(SETTINGS_SECURITY_USE_COMPLETE_NOTIFICATIONS_FLAG, true)
     }
 
     fun backgroundSyncTimeOut(): Int {
@@ -1014,5 +991,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         return defaultPrefs.edit {
             putInt(TAKE_PHOTO_VIDEO_MODE, mode)
         }
+    }
+
+    fun labsEnablePolls(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_POLLS, false)
     }
 }

@@ -78,7 +78,6 @@ class ShortcutCreator @Inject constructor(
                 .setLongLived(true)
                 .setRank(rank)
                 .setCategories(categories)
-
                 .build()
     }
 

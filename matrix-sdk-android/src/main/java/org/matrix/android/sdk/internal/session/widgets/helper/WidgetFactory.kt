@@ -20,11 +20,14 @@ import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
+import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetContent
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
+import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.session.displayname.DisplayNameResolver
 import org.matrix.android.sdk.internal.session.room.membership.RoomMemberHelper
 import org.matrix.android.sdk.internal.session.user.UserDataSource
 import java.net.URLEncoder
@@ -32,6 +35,7 @@ import javax.inject.Inject
 
 internal class WidgetFactory @Inject constructor(private val userDataSource: UserDataSource,
                                                  private val realmSessionProvider: RealmSessionProvider,
+                                                 private val displayNameResolver: DisplayNameResolver,
                                                  private val urlResolver: ContentUrlResolver,
                                                  @UserId private val userId: String) {
 
@@ -68,13 +72,13 @@ internal class WidgetFactory @Inject constructor(private val userDataSource: Use
     // Ref: https://github.com/matrix-org/matrix-widget-api/blob/master/src/templating/url-template.ts#L29-L33
     fun computeURL(widget: Widget, isLightTheme: Boolean): String? {
         var computedUrl = widget.widgetContent.url ?: return null
-        val myUser = userDataSource.getUser(userId)
+        val myUser = userDataSource.getUser(userId) ?: User(userId)
 
         val keyValue = widget.widgetContent.data.mapKeys { "\$${it.key}" }.toMutableMap()
 
         keyValue[WIDGET_PATTERN_MATRIX_USER_ID] = userId
-        keyValue[WIDGET_PATTERN_MATRIX_DISPLAY_NAME] = myUser?.getBestName() ?: userId
-        keyValue[WIDGET_PATTERN_MATRIX_AVATAR_URL] = urlResolver.resolveFullSize(myUser?.avatarUrl) ?: ""
+        keyValue[WIDGET_PATTERN_MATRIX_DISPLAY_NAME] = displayNameResolver.getBestName(myUser.toMatrixItem())
+        keyValue[WIDGET_PATTERN_MATRIX_AVATAR_URL] = urlResolver.resolveFullSize(myUser.avatarUrl) ?: ""
         keyValue[WIDGET_PATTERN_MATRIX_WIDGET_ID] = widget.widgetId
         keyValue[WIDGET_PATTERN_MATRIX_ROOM_ID] = widget.event.roomId ?: ""
         keyValue[WIDGET_PATTERN_THEME] = getTheme(isLightTheme)

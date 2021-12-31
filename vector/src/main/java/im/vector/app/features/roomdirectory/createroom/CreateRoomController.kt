@@ -29,6 +29,8 @@ import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditableAvatarItem
 import im.vector.app.features.form.formSubmitButtonItem
 import im.vector.app.features.form.formSwitchItem
+import org.matrix.android.sdk.api.MatrixConstants
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
 import javax.inject.Inject
@@ -140,6 +142,7 @@ class CreateRoomController @Inject constructor(
                 value(viewState.aliasLocalPart)
                 suffixText(":" + viewState.homeServerName)
                 prefixText("#")
+                maxLength(MatrixConstants.maxAliasLocalPartLength(viewState.homeServerName))
                 hint(host.stringProvider.getString(R.string.room_alias_address_hint))
                 errorMessage(
                         host.roomAliasErrorFormatter.format(
@@ -165,7 +168,8 @@ class CreateRoomController @Inject constructor(
                             host.stringProvider.getString(R.string.create_room_encryption_description)
                         }
                 )
-                switchChecked(viewState.isEncrypted)
+
+                switchChecked(viewState.isEncrypted ?: viewState.defaultEncrypted[viewState.roomJoinRules].orFalse())
 
                 listener { value ->
                     host.listener?.setIsEncrypted(value)

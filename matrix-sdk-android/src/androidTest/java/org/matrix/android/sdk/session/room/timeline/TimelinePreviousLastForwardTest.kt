@@ -16,6 +16,13 @@
 
 package org.matrix.android.sdk.session.room.timeline
 
+import org.amshove.kluent.shouldBeFalse
+import org.amshove.kluent.shouldBeTrue
+import org.junit.FixMethodOrder
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -26,13 +33,6 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.checkSendOrder
-import org.amshove.kluent.shouldBeFalse
-import org.amshove.kluent.shouldBeTrue
-import org.junit.FixMethodOrder
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-import org.junit.runners.MethodSorters
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
 
@@ -107,8 +107,8 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                 }
 
                 // Ok, we have the 10 last messages from Alice. This will be our future previous lastForward chunk
-                snapshot.size == 10
-                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(firstMessage).orFalse() }
+                snapshot.size == 10 &&
+                        snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(firstMessage).orFalse() }
             }
 
             bobTimeline.addListener(eventsListener)
@@ -141,8 +141,8 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                 }
 
                 // Ok, we have the 10 last messages from Alice. This will be our future previous lastForward chunk
-                snapshot.size == 10
-                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(secondMessage).orFalse() }
+                snapshot.size == 10 &&
+                        snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(secondMessage).orFalse() }
             }
 
             bobTimeline.addListener(eventsListener)
@@ -216,11 +216,11 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
                 }
 
                 // Bob can see the first event of the room (so Back pagination has worked)
-                snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE
+                snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE &&
                         // 8 for room creation item 60 message from Alice
-                        && snapshot.size == 68 // 8 + 60
-                        && snapshot.checkSendOrder(secondMessage, 30, 0)
-                        && snapshot.checkSendOrder(firstMessage, 30, 30)
+                        snapshot.size == 68 && // 8 + 60
+                        snapshot.checkSendOrder(secondMessage, 30, 0) &&
+                        snapshot.checkSendOrder(firstMessage, 30, 30)
             }
 
             bobTimeline.addListener(eventsListener)

@@ -44,14 +44,14 @@ import org.junit.runner.RunWith
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
+import org.matrix.android.sdk.api.auth.UserPasswordAuth
+import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.verification.SasVerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationMethod
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationService
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTransaction
 import org.matrix.android.sdk.api.session.crypto.verification.VerificationTxState
-import org.matrix.android.sdk.api.auth.UserPasswordAuth
-import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
 

@@ -67,7 +67,8 @@
     <string name="initial_sync_start_importing_account_rooms">初始化同步：
 \n正在匯入聊天室</string>
     <string name="initial_sync_start_importing_account_joined_rooms">初始化同步：
-\n正在匯入已加入的聊天室</string>
+\n正在載入您的對話
+\n若您加入了很多聊天室，這可能會花一點時間</string>
     <string name="initial_sync_start_importing_account_invited_rooms">初始化同步：
 \n正在匯入已邀請的聊天室</string>
     <string name="initial_sync_start_importing_account_left_rooms">初始化同步：
@@ -988,7 +989,7 @@
     <string name="command_description_op_user">定義使用者的權限等級</string>
     <string name="command_description_deop_user">取消指定 id 的使用者的管理權</string>
     <string name="command_description_invite_user">邀請指定 id 的使用者到目前的聊天室</string>
-    <string name="command_description_join_room">加入指定別名的聊天室</string>
+    <string name="command_description_join_room">加入指定地址的聊天室</string>
     <string name="command_description_part_room">離開聊天室</string>
     <string name="command_description_topic">設定聊天室主題</string>
     <string name="command_description_kick_user">踢除指定 id 的使用者</string>
@@ -1917,7 +1918,7 @@
     <string name="initialize_cross_signing">初始化交叉簽署</string>
     <string name="reset_cross_signing">重設金鑰</string>
     <string name="a11y_qr_code_for_verification">QR code</string>
-    <string name="qr_code_scanned_by_other_notice">就快完成了！%s 有顯示相同的盾牌嗎？</string>
+    <string name="qr_code_scanned_by_other_notice">就快完成了！%s 有顯示打勾嗎？</string>
     <string name="qr_code_scanned_by_other_yes">是</string>
     <string name="qr_code_scanned_by_other_no">否</string>
     <string name="no_connectivity_to_the_server_indicator">到伺服器的連線已遺失</string>
@@ -2013,7 +2014,7 @@
     <string name="encryption_not_enabled">加密未啟用</string>
     <string name="encryption_unknown_algorithm_tile_description">用於此聊天室的加密未受支援</string>
     <string name="room_created_summary_item">%s 建立並設定聊天室。</string>
-    <string name="qr_code_scanned_self_verif_notice">就快完成了！其他裝置有顯示相同的盾牌嗎？</string>
+    <string name="qr_code_scanned_self_verif_notice">就快完成了！其他裝置有顯示打勾嗎？</string>
     <string name="qr_code_scanned_verif_waiting_notice">就快完成了！正在等待確認……</string>
     <string name="qr_code_scanned_verif_waiting">正在等待 %s……</string>
     <string name="error_failed_to_import_keys">匯入金鑰失敗</string>
@@ -2449,7 +2450,6 @@
     <string name="direct_room_user_list_recent_title">最近</string>
     <string name="qr_code">QR code</string>
     <string name="add_by_qr_code">透過 QR code 新增</string>
-    <string name="user_directory_search_hint">使用名稱或 ID 搜尋</string>
     <string name="permissions_denied_add_contact">允許存取您聯絡人的權限。</string>
     <string name="permissions_denied_qr_code">要掃描 QR code，您必須允許存取攝影機。</string>
     <string name="start_chatting">開始聊天</string>
@@ -2628,8 +2628,6 @@
     <string name="spaces_beta_welcome_to_spaces_desc">空間是將聊天室與人們分組的新方式。</string>
     <string name="spaces_beta_welcome_to_spaces">歡迎使用空間！</string>
     <string name="space_add_existing_rooms">新增既有的聊天室與空間</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">您確定您想要離開空間嗎？</string>
     <string name="leave_space">離開空間</string>
     <string name="space_add_child_title">新增聊天室</string>
     <string name="space_explore_activity_title">探索聊天室</string>
@@ -2728,8 +2726,8 @@
     <string name="spaces_feeling_experimental_subspace">想要做點實驗嗎？
 \n您可以將既有的空間新增至其他空間中。</string>
     <string name="space_add_rooms">新增聊天室</string>
-    <string name="space_leave_prompt_msg_as_admin">您是此空間的管理員，請確保在您離開前已將管理權轉交給另一個成員。</string>
-    <string name="space_leave_prompt_msg_private">此空間並非公開。您將無法在無邀請的狀況下重新加入。</string>
+    <string name="space_leave_prompt_msg_as_admin">您是此空間唯一的管理員。若離開將意味著沒有人可以控制它。</string>
+    <string name="space_leave_prompt_msg_private">除非被重新邀請，否則您將無法重新加入。</string>
     <string name="space_leave_prompt_msg_only_you">您是這裡唯一的人。如果您離開，包含您在內的所有人都將無法加入。</string>
     <string name="invite_to_space">邀請至 %s</string>
     <string name="a11y_beta">此功能仍在測試版</string>
@@ -2804,13 +2802,13 @@
     <string name="voice_message_tap_to_stop_toast">點擊您的錄音以停止或收聽</string>
     <string name="voice_message_n_seconds_warning_toast">剩下%1$d秒</string>
     <string name="voice_message_release_to_send_toast">按住以錄製，放開以傳送</string>
-    <string name="a11y_delete_recorded_voice_message">刪除已錄製的語音訊息</string>
+    <string name="a11y_delete_recorded_voice_message">刪除錄音</string>
     <string name="a11y_recording_voice_message">正在錄製語音訊息</string>
     <string name="a11y_pause_voice_message">暫停語音訊息</string>
     <string name="a11y_play_voice_message">播放語音訊息</string>
     <string name="a11y_lock_voice_message">語音訊息鎖定</string>
     <string name="voice_message_slide_to_cancel">滑動以取消</string>
-    <string name="a11y_start_voice_message">開始語音訊息</string>
+    <string name="a11y_start_voice_message">錄製語音訊息</string>
     <string name="allow_anyone_in_room_to_access">允許任何在 %s 中的人都可以找到並存取。您也可以選取其他空間。</string>
     <string name="upgrade_required">必須升級</string>
     <string name="sent_a_voice_message">語音</string>
@@ -2891,4 +2889,90 @@
     <string name="call_ringing">通話響鈴中……</string>
     <string name="spaces">空間</string>
     <string name="learn_more">取得更多資訊</string>
+    <string name="space_add_space_to_any_space_you_manage">新增空間至您管理的任何空間。</string>
+    <string name="space_add_existing_spaces">新增既有的空間</string>
+    <string name="space_add_existing_rooms_only">新增既有的聊天室</string>
+    <string name="pick_tings_to_leave">挑選要離開的對象</string>
+    <string name="leave_specific_ones">離開特定的聊天室與空間……</string>
+    <string name="dont_leave_any">不要離開任何聊天室與空間</string>
+    <string name="you_will_leave_all_in">您將離開所有 %s 中的聊天室與空間。</string>
+    <string name="leave_all_rooms_and_spaces">離開所有聊天室與空間</string>
+    <string name="space_leave_prompt_msg_with_name">您確定您想要離開 %s？</string>
+    <string name="discovery_section">探索 (%s)</string>
+    <string name="finish_setup">結束設定</string>
+    <string name="discovery_invite">透過電子郵件邀請、尋找聯絡人以及更多……</string>
+    <string name="finish_setting_up_discovery">完成探索設定。</string>
+    <string name="create_space_identity_server_info_none">您目前並未使用身份認證伺服器。為了邀請隊友並被他們探索，請在下方設定一個。</string>
+    <string name="invite_by_mxid_or_mail">透過使用者名稱或電子郵件邀請</string>
+    <string name="create_spaces_invite_public_header_desc">確保合適的人可以存取 %s 公司。您可以稍後再邀請。</string>
+    <string name="create_spaces_invite_public_header">誰是您的隊友？</string>
+    <string name="command_description_add_to_space">新增至指定的空間</string>
+    <string name="create_space_in_progress">正在建立空間……</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">顯示一些有用的資訊以協助應用程式除錯</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">在畫面上顯示除錯資訊</string>
+    <string name="does_not_look_like_valid_email">看起來不是有效的電子郵件地址</string>
+    <string name="open_discovery_settings">開啟探索設定</string>
+    <string name="user_directory_search_hint_2">以名稱、ID 或電子郵件搜尋</string>
+    <string name="create_new_space">建立新空間</string>
+    <string name="room_settings_space_access_public_description">任何人都可以找到空間並加入</string>
+    <string name="room_settings_space_access_title">空間存取</string>
+    <string name="room_settings_access_rules_pref_dialog_title">誰可以存取？</string>
+    <string name="settings_notification_emails_enable_for_email">啟用 %s 的電子郵件通知</string>
+    <string name="settings_notification_emails_no_emails">要收到通知用的電子郵件，請將電子郵件關聯至您的 Matrix 帳號</string>
+    <string name="settings_notification_emails_category">電子郵件通知</string>
+    <string name="room_permissions_upgrade_the_space">升級空間</string>
+    <string name="room_permissions_change_space_name">變更空間名稱</string>
+    <string name="room_permissions_enable_space_encryption">啟用空間加密</string>
+    <string name="room_permissions_change_main_address_for_the_space">變更空間的主要位置</string>
+    <string name="room_permissions_change_space_avatar">變更空間大頭照</string>
+    <string name="space_permissions_notice_read_only">您無權更新變更此空間各部份所需角色的權限</string>
+    <string name="space_permissions_notice">選取變更此空間各部份所需的角色</string>
+    <string name="space_settings_permissions_subtitle">檢視並更新變更空間各部份所需的角色。</string>
+    <string name="space_settings_permissions_title">空間權限</string>
+    <string name="space_participants_unban_prompt_msg">取消封鎖使用者將讓他們可以再次加入空間。</string>
+    <string name="space_participants_ban_prompt_msg">封鎖使用者會將他們踢出此空間並防止他們再次加入。</string>
+    <string name="space_participants_kick_prompt_msg">踢除使用者將會將他們從此空間中移除。
+\n
+\n為了防止他們再加入，您應該封鎖他們。</string>
+    <string name="a11y_stop_voice_message">停止錄製</string>
+    <string name="command_description_lenny">將 ( ͡° ͜ʖ ͡°) 附加至純文字訊息</string>
+    <string name="identity_server_consent_dialog_neutral_policy">政策</string>
+    <string name="settings_discovery_no_policy_provided">身份伺服器未提供政策</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">隱藏身份伺服器政策</string>
+    <string name="settings_discovery_show_identity_server_policy_title">顯示身份伺服器政策</string>
+    <string name="command_description_whois">顯示關於使用者的資訊</string>
+    <string name="command_description_avatar_for_room">僅在目前的聊天室中變更您的大頭照</string>
+    <string name="command_description_room_avatar">變更目前聊天室的大頭照</string>
+    <string name="command_description_nick_for_room">僅在目前的聊天室變更您的顯示暱稱</string>
+    <string name="command_description_room_name">設定聊天室名稱</string>
+    <string name="command_description_unignore_user">停止忽略使用者，繼續顯示他們的訊息</string>
+    <string name="command_description_ignore_user">忽略使用者，為您隱藏他們的訊息</string>
+    <string name="a11y_presence_unavailable">不可用</string>
+    <string name="a11y_presence_offline">離線</string>
+    <string name="a11y_presence_online">線上</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">選擇家伺服器</string>
+    <string name="login_error_homeserver_from_url_not_found">無法存取 URL %s 的家伺服器。請檢查您的連結或手動選擇家伺服器。</string>
+    <string name="notification_listening_for_notifications">監聽通知</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="other">需要至少 %1$s 選項</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">問題不能為空</string>
+    <string name="create_poll_button">建立投票</string>
+    <string name="create_poll_add_option">新增選項</string>
+    <string name="create_poll_options_hint">選項 %1$d</string>
+    <string name="create_poll_options_title">建立選項</string>
+    <string name="create_poll_question_hint">問題或主題</string>
+    <string name="create_poll_question_title">投票問題或主題</string>
+    <string name="create_poll_title">建立投票</string>
+    <string name="attachment_type_poll">投票</string>
+    <string name="identity_server_consent_dialog_content_2">要探索既有的聯絡人，您必須傳送聯絡人資訊到您的身份識別伺服器。
+\n
+\n我們會在傳送前雜湊您的資料以保護隱私。您同意傳送此資訊嗎？</string>
+    <string name="identity_server_consent_dialog_title_2">向 %s 傳送電子郵件與電話號碼</string>
+    <string name="settings_discovery_consent_notice_off_2">您的通訊錄是私人的。要從您的通訊錄中探索使用者，我們需要您的權限來傳送聯絡人資訊到您的身份識別伺服器。</string>
+    <string name="shortcut_disabled_reason_sign_out">已登出工作階段！</string>
+    <string name="shortcut_disabled_reason_room_left">已離開聊天室！</string>
+    <string name="identity_server_consent_dialog_content_question">您同意傳送此資訊嗎？</string>
+    <string name="identity_server_consent_dialog_content_3">要探索現有聯絡人，您必須傳送聯絡人資訊（電子郵件與電話號碼）到您的身份識別伺服器。我們會在傳送前對您的資料進行雜湊處理以保護隱私。</string>
+    <string name="action_not_now">現在不要</string>
 </resources>

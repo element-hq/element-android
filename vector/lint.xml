@@ -21,12 +21,12 @@
     <!-- Accessibility -->
     <issue id="LabelFor" severity="error" />
     <issue id="ContentDescription" severity="error" />
+    <issue id="SpUsage" severity="error" />
 
     <!-- Layout -->
     <issue id="UnknownIdInLayout" severity="error" />
     <issue id="StringFormatCount" severity="error" />
     <issue id="HardcodedText" severity="error" />
-    <issue id="SpUsage" severity="error" />
     <issue id="ObsoleteLayoutParam" severity="error" />
     <issue id="InefficientWeight" severity="error" />
     <issue id="DisableBaselineAlignment" severity="error" />
@@ -68,6 +68,7 @@
     <!-- Timber -->
     <!--    This rule is failing on CI because it's marked as unknwown rule id :/-->
     <!--    <issue id="BinaryOperationInTimber" severity="error" />-->
+    <issue id="LogNotTimber" severity="error" />
 
     <!-- Wording -->
     <issue id="Typos" severity="error" />
@@ -83,4 +84,7 @@
     <!-- Bug in lint agp 4.1 incorrectly thinks kotlin forEach is using java 8 API's. -->
     <!-- FIXME this workaround should be removed in a near future -->
     <issue id="NewApi" severity="warning" />
+
+    <!-- DI -->
+    <issue id="JvmStaticProvidesInObjectDetector" severity="error" />
 </lint>

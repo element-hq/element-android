@@ -21,7 +21,6 @@ import im.vector.app.features.userdirectory.PendingSelection
 
 sealed class CreateDirectRoomAction : VectorViewModelAction {
     data class CreateRoomAndInviteSelectedUsers(
-            val selections: Set<PendingSelection>,
-            val existingDmRoomId: String?
+            val selections: Set<PendingSelection>
     ) : CreateDirectRoomAction()
 }

@@ -16,11 +16,11 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import org.matrix.android.sdk.internal.database.model.UserDraftsEntity
-import org.matrix.android.sdk.internal.database.model.UserDraftsEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
+import org.matrix.android.sdk.internal.database.model.UserDraftsEntity
+import org.matrix.android.sdk.internal.database.model.UserDraftsEntityFields
 
 internal fun UserDraftsEntity.Companion.where(realm: Realm, roomId: String? = null): RealmQuery<UserDraftsEntity> {
     val query = realm.where<UserDraftsEntity>()

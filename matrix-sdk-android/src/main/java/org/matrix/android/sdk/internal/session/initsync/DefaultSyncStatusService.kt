@@ -23,8 +23,8 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import javax.inject.Inject
 
 @SessionScope
-internal class DefaultSyncStatusService @Inject constructor()
-    : SyncStatusService,
+internal class DefaultSyncStatusService @Inject constructor() :
+    SyncStatusService,
         ProgressReporter {
 
     private val status = MutableLiveData<SyncStatusService.Status>()

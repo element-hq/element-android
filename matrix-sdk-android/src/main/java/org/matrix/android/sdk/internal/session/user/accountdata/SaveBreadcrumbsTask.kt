@@ -16,6 +16,7 @@
 package org.matrix.android.sdk.internal.session.user.accountdata
 
 import com.zhuinden.monarchy.Monarchy
+import io.realm.RealmList
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.internal.database.model.BreadcrumbsEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
@@ -25,7 +26,6 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.awaitTransaction
-import io.realm.RealmList
 import javax.inject.Inject
 
 /**

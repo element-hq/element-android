@@ -51,7 +51,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/userListClose"
+                    app:layout_constraintStart_toEndOf="@id/userListClose"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -69,7 +69,7 @@
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout"
         app:maxHeight="64dp">
 
         <com.google.android.material.chip.ChipGroup
@@ -89,7 +89,7 @@
         android:background="@null"
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
-        android:hint="@string/user_directory_search_hint"
+        android:hint="@string/user_directory_search_hint_2"
         android:importantForAutofill="no"
         android:inputType="text"
         android:maxHeight="80dp"
@@ -97,7 +97,7 @@
         android:paddingBottom="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chipGroupScrollView" />
+        app:layout_constraintTop_toBottomOf="@id/chipGroupScrollView" />
 
     <View
         android:id="@+id/userListFilterDivider"
@@ -106,8 +106,7 @@
         android:background="?vctr_list_separator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userListSearch" />
-
+        app:layout_constraintTop_toBottomOf="@id/userListSearch" />
 
     <TextView
         android:id="@+id/userListE2EbyDefaultDisabled"
@@ -133,7 +132,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userListE2EbyDefaultDisabled"
+        app:layout_constraintTop_toBottomOf="@id/userListE2EbyDefaultDisabled"
         tools:listitem="@layout/item_known_user" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

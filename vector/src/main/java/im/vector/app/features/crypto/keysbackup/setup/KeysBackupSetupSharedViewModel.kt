@@ -68,23 +68,15 @@ class KeysBackupSetupSharedViewModel @Inject constructor() : ViewModel() {
     // Step 3
     // Var to ignore events from previous request(s) to generate a recovery key
     private var currentRequestId: MutableLiveData<Long> = MutableLiveData()
-    var recoveryKey: MutableLiveData<String> = MutableLiveData()
-    var prepareRecoverFailError: MutableLiveData<Throwable> = MutableLiveData()
+    var recoveryKey: MutableLiveData<String?> = MutableLiveData(null)
+    var prepareRecoverFailError: MutableLiveData<Throwable?> = MutableLiveData(null)
     var megolmBackupCreationInfo: MegolmBackupCreationInfo? = null
     var copyHasBeenMade = false
-    var isCreatingBackupVersion: MutableLiveData<Boolean> = MutableLiveData()
-    var creatingBackupError: MutableLiveData<Throwable> = MutableLiveData()
+    var isCreatingBackupVersion: MutableLiveData<Boolean> = MutableLiveData(false)
+    var creatingBackupError: MutableLiveData<Throwable?> = MutableLiveData(null)
     var keysVersion: MutableLiveData<KeysVersion> = MutableLiveData()
 
-    var loadingStatus: MutableLiveData<WaitingViewData> = MutableLiveData()
-
-    init {
-        recoveryKey.value = null
-        isCreatingBackupVersion.value = false
-        prepareRecoverFailError.value = null
-        creatingBackupError.value = null
-        loadingStatus.value = null
-    }
+    var loadingStatus: MutableLiveData<WaitingViewData?> = MutableLiveData(null)
 
     fun initSession(session: Session) {
         this.session = session

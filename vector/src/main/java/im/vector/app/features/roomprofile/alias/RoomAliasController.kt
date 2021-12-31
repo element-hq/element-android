@@ -36,6 +36,7 @@ import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formSwitchItem
 import im.vector.app.features.roomdirectory.createroom.RoomAliasErrorFormatter
+import org.matrix.android.sdk.api.MatrixConstants
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomType
@@ -61,10 +62,6 @@ class RoomAliasController @Inject constructor(
     }
 
     var callback: Callback? = null
-
-    init {
-        setData(null)
-    }
 
     override fun buildModels(data: RoomAliasViewState?) {
         data ?: return
@@ -174,6 +171,7 @@ class RoomAliasController @Inject constructor(
                 formEditTextItem {
                     id("publishManuallyEdit")
                     value(data.publishManuallyState.value)
+                    maxLength(MatrixConstants.ALIAS_MAX_LENGTH)
                     hint(host.stringProvider.getString(R.string.room_alias_address_hint))
                     inputType(InputType.TYPE_CLASS_TEXT)
                     onTextChange { text ->
@@ -253,6 +251,7 @@ class RoomAliasController @Inject constructor(
                     value(data.newLocalAliasState.value)
                     suffixText(":" + data.homeServerName)
                     prefixText("#")
+                    maxLength(MatrixConstants.maxAliasLocalPartLength(data.homeServerName))
                     hint(host.stringProvider.getString(R.string.room_alias_address_hint))
                     errorMessage(host.roomAliasErrorFormatter.format((data.newLocalAliasState.asyncRequest as? Fail)?.error as? RoomAliasError))
                     onTextChange { value ->

@@ -22,9 +22,9 @@ import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.view.isVisible
+import dagger.hilt.android.scopes.ActivityScoped
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.di.ScreenScope
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.utils.TextUtils
@@ -33,7 +33,7 @@ import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
 import org.matrix.android.sdk.api.session.room.send.SendState
 import javax.inject.Inject
 
-@ScreenScope
+@ActivityScoped
 class ContentUploadStateTrackerBinder @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
                                                           private val messageColorProvider: MessageColorProvider,
                                                           private val errorFormatter: ErrorFormatter) {

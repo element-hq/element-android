@@ -3,8 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-
+    android:orientation="vertical"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/itemVerificationDoneTitleTextView"
@@ -18,7 +18,6 @@
         android:textStyle="bold"
         tools:drawableStart="@drawable/ic_shield_trusted"
         tools:text="@string/sas_verified" />
-
 
     <TextView
         android:id="@+id/itemVerificationDoneDetailTextView"

@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room.prune
 
+import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
@@ -29,7 +30,6 @@ import org.matrix.android.sdk.internal.database.query.findWithSenderMembershipEv
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
-import io.realm.Realm
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -70,7 +70,8 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
         } else {
             when (typeToPrune) {
                 EventType.ENCRYPTED,
-                EventType.MESSAGE -> {
+                EventType.MESSAGE,
+                EventType.POLL_START -> {
                     Timber.d("REDACTION for message ${eventToPrune.eventId}")
                     val unsignedData = EventMapper.map(eventToPrune).unsignedData
                             ?: UnsignedData(null, null)

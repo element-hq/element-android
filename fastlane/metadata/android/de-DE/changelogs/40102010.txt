@@ -1,0 +1,2 @@
+VoIP und Spaces verbessert
+Vollständige Änderungsliste: https://github.com/vector-im/element-android/releases/tag/v1.2.1

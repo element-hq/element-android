@@ -50,7 +50,7 @@ class CreateSpaceAdd3pidInvitesFragment @Inject constructor(
         views.recyclerView.configureWith(epoxyController)
         epoxyController.listener = this
 
-        sharedViewModel.subscribe(this) {
+        sharedViewModel.onEach {
             invalidateState(it)
         }
 

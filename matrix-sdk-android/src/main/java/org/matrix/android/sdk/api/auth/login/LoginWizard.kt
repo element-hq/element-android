@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.auth.login
 
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.util.JsonDict
 
 /**
  * Set of methods to be able to login to an existing account on a homeserver.
@@ -34,12 +35,14 @@ interface LoginWizard {
      *
      * @param login the login field. Can be a user name, or a msisdn (email or phone number) associated to the account
      * @param password the password of the account
-     * @param deviceName the initial device name
+     * @param initialDeviceName the initial device name
+     * @param deviceId the device id, optional. If not provided or null, the server will generate one.
      * @return a [Session] if the login is successful
      */
     suspend fun login(login: String,
                       password: String,
-                      deviceName: String): Session
+                      initialDeviceName: String,
+                      deviceId: String? = null): Session
 
     /**
      * Exchange a login token to an access token.
@@ -48,6 +51,12 @@ interface LoginWizard {
      * @return a [Session] if the login is successful
      */
     suspend fun loginWithToken(loginToken: String): Session
+
+    /**
+     * Login to the homeserver by sending a custom JsonDict.
+     * The data should contain at least one entry "type" with a String value.
+     */
+    suspend fun loginCustom(data: JsonDict): Session
 
     /**
      * Ask the homeserver to reset the user password. The password will not be reset until

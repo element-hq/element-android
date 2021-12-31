@@ -32,6 +32,7 @@ import org.matrix.android.sdk.api.session.crypto.crosssigning.SELF_SIGNING_KEY_S
 import org.matrix.android.sdk.api.session.crypto.crosssigning.USER_SIGNING_KEY_SSSS_NAME
 import org.matrix.android.sdk.api.session.group.GroupSummaryQueryParams
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
+import org.matrix.android.sdk.api.session.identity.FoundThreePid
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import org.matrix.android.sdk.api.session.room.RoomSummaryQueryParams
@@ -238,6 +239,10 @@ class RxSession(private val session: Session) {
                 }
         )
                 .distinctUntilChanged()
+    }
+
+    fun lookupThreePid(threePid: ThreePid): Single<Optional<FoundThreePid>> = rxSingle {
+        session.identityService().lookUp(listOf(threePid)).firstOrNull().toOptional()
     }
 }
 

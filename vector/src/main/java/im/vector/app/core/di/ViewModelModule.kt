@@ -20,6 +20,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 import dagger.multibindings.IntoMap
 import im.vector.app.core.platform.ConfigurationViewModel
 import im.vector.app.features.call.SharedKnownCallsViewModel
@@ -42,6 +44,7 @@ import im.vector.app.features.spaces.SpacePreviewSharedActionViewModel
 import im.vector.app.features.spaces.people.SpacePeopleSharedActionViewModel
 import im.vector.app.features.userdirectory.UserListSharedActionViewModel
 
+@InstallIn(ActivityComponent::class)
 @Module
 interface ViewModelModule {
 

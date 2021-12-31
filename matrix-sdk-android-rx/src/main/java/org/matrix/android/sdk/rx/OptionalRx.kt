@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk.rx
 
-import org.matrix.android.sdk.api.util.Optional
 import io.reactivex.Observable
+import org.matrix.android.sdk.api.util.Optional
 
 fun <T : Any> Observable<Optional<T>>.unwrap(): Observable<T> {
     return filter { it.hasValue() }.map { it.get() }

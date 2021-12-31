@@ -132,7 +132,7 @@ interface IdentityService {
      * the identity server offers some crypto functionality to help in accepting invitations.
      * This is less secure than the client doing it itself, but may be useful where this isn't possible.
      */
-    suspend fun sign3pidInvitation(identiyServer: String, token: String, secret: String) : SignInvitationResult
+    suspend fun sign3pidInvitation(identiyServer: String, token: String, secret: String): SignInvitationResult
 
     fun addListener(listener: IdentityServiceListener)
 

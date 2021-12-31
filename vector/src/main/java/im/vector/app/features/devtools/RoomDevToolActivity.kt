@@ -18,7 +18,6 @@ package im.vector.app.features.devtools
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
@@ -27,17 +26,16 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.replaceFragment
-import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.createJSonViewerStyleProvider
@@ -45,10 +43,9 @@ import kotlinx.parcelize.Parcelize
 import org.billcarsonfr.jsonviewer.JSonViewerFragment
 import javax.inject.Inject
 
-class RoomDevToolActivity : SimpleFragmentActivity(), RoomDevToolViewModel.Factory,
-        FragmentManager.OnBackStackChangedListener {
+@AndroidEntryPoint
+class RoomDevToolActivity : SimpleFragmentActivity(), FragmentManager.OnBackStackChangedListener {
 
-    @Inject lateinit var viewModelFactory: RoomDevToolViewModel.Factory
     @Inject lateinit var colorProvider: ColorProvider
 
     //    private lateinit var viewModel: RoomDevToolViewModel
@@ -65,18 +62,9 @@ class RoomDevToolActivity : SimpleFragmentActivity(), RoomDevToolViewModel.Facto
             val roomId: String
     ) : Parcelable
 
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
-
-    override fun create(initialState: RoomDevToolViewState): RoomDevToolViewModel {
-        return viewModelFactory.create(initialState)
-    }
-
     override fun initUiAndData() {
         super.initUiAndData()
-        viewModel.subscribe(this) {
+        viewModel.onEach {
             renderState(it)
         }
 
@@ -103,7 +91,7 @@ class RoomDevToolActivity : SimpleFragmentActivity(), RoomDevToolViewModel.Facto
                     val classJava = RoomDevToolFragment::class.java
                     val tag = classJava.name
                     if (supportFragmentManager.findFragmentByTag(tag) == null) {
-                        replaceFragment(R.id.container, RoomDevToolFragment::class.java)
+                        replaceFragment(views.container, RoomDevToolFragment::class.java)
                     } else {
                         supportFragmentManager.popBackStack()
                     }
@@ -119,15 +107,15 @@ class RoomDevToolActivity : SimpleFragmentActivity(), RoomDevToolViewModel.Facto
                 }
                 RoomDevToolViewState.Mode.StateEventList,
                 RoomDevToolViewState.Mode.StateEventListByType -> {
-                    val frag = createFragment(RoomDevToolStateEventListFragment::class.java, Bundle().toMvRxBundle())
+                    val frag = createFragment(RoomDevToolStateEventListFragment::class.java)
                     navigateTo(frag)
                 }
                 RoomDevToolViewState.Mode.EditEventContent     -> {
-                    val frag = createFragment(RoomDevToolEditFragment::class.java, Bundle().toMvRxBundle())
+                    val frag = createFragment(RoomDevToolEditFragment::class.java)
                     navigateTo(frag)
                 }
                 is RoomDevToolViewState.Mode.SendEventForm     -> {
-                    val frag = createFragment(RoomDevToolSendFormFragment::class.java, Bundle().toMvRxBundle())
+                    val frag = createFragment(RoomDevToolSendFormFragment::class.java)
                     navigateTo(frag)
                 }
             }
@@ -167,14 +155,14 @@ class RoomDevToolActivity : SimpleFragmentActivity(), RoomDevToolViewModel.Facto
         if (supportFragmentManager.findFragmentByTag(tag) == null) {
             supportFragmentManager.beginTransaction()
                     .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
-                    .replace(R.id.container, fragment, tag)
+                    .replace(views.container.id, fragment, tag)
                     .addToBackStack(tag)
                     .commit()
         } else {
             if (!supportFragmentManager.popBackStackImmediate(tag, 0)) {
                 supportFragmentManager.beginTransaction()
                         .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
-                        .replace(R.id.container, fragment, tag)
+                        .replace(views.container.id, fragment, tag)
                         .addToBackStack(tag)
                         .commit()
             }
@@ -194,8 +182,8 @@ class RoomDevToolActivity : SimpleFragmentActivity(), RoomDevToolViewModel.Facto
                     state.displayMode is RoomDevToolViewState.Mode.StateEventDetail
                 }
                 R.id.menuItemSend -> {
-                    state.displayMode is RoomDevToolViewState.Mode.EditEventContent
-                            || state.displayMode is RoomDevToolViewState.Mode.SendEventForm
+                    state.displayMode is RoomDevToolViewState.Mode.EditEventContent ||
+                            state.displayMode is RoomDevToolViewState.Mode.SendEventForm
                 }
                 else              -> true
             }
@@ -208,7 +196,7 @@ class RoomDevToolActivity : SimpleFragmentActivity(), RoomDevToolViewModel.Facto
 
         fun intent(context: Context, roomId: String): Intent {
             return Intent(context, RoomDevToolActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, Args(roomId))
+                putExtra(Mavericks.KEY_ARG, Args(roomId))
             }
         }
     }

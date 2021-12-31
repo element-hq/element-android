@@ -23,7 +23,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.core.view.iterator
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
@@ -57,15 +56,12 @@ import im.vector.app.features.settings.VectorSettingsActivity.Companion.EXTRA_DI
 import im.vector.app.features.themes.ThemeUtils
 import im.vector.app.features.workers.signout.BannerState
 import im.vector.app.features.workers.signout.ServerBackupStatusViewModel
-import im.vector.app.features.workers.signout.ServerBackupStatusViewState
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import javax.inject.Inject
 
 class HomeDetailFragment @Inject constructor(
-        val homeDetailViewModelFactory: HomeDetailViewModel.Factory,
-        private val serverBackupStatusViewModelFactory: ServerBackupStatusViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
         private val colorProvider: ColorProvider,
         private val alertManager: PopupAlertManager,
@@ -74,8 +70,7 @@ class HomeDetailFragment @Inject constructor(
         private val appStateHandler: AppStateHandler
 ) : VectorBaseFragment<FragmentHomeDetailBinding>(),
         KeysBackupBanner.Delegate,
-        CurrentCallsView.Callback,
-        ServerBackupStatusViewModel.Factory {
+        CurrentCallsView.Callback {
 
     private val viewModel: HomeDetailViewModel by fragmentViewModel()
     private val unknownDeviceDetectorSharedViewModel: UnknownDeviceDetectorSharedViewModel by activityViewModel()
@@ -108,9 +103,9 @@ class HomeDetailFragment @Inject constructor(
 
     override fun onPrepareOptionsMenu(menu: Menu) {
         withState(viewModel) { state ->
-            menu.iterator().forEach { it.isVisible = state.currentTab is HomeTab.RoomList }
+            val isRoomList = state.currentTab is HomeTab.RoomList
+            menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = isRoomList && hasUnreadRooms
         }
-        menu.findItem(R.id.menu_home_mark_all_as_read).isVisible = hasUnreadRooms
         super.onPrepareOptionsMenu(menu)
     }
 
@@ -134,7 +129,7 @@ class HomeDetailFragment @Inject constructor(
             views.bottomNavigationView.selectedItemId = it.currentTab.toMenuId()
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::roomGroupingMethod) { roomGroupingMethod ->
+        viewModel.onEach(HomeDetailViewState::roomGroupingMethod) { roomGroupingMethod ->
             when (roomGroupingMethod) {
                 is RoomGroupingMethod.ByLegacyGroup -> {
                     onGroupChange(roomGroupingMethod.groupSummary)
@@ -145,23 +140,23 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::currentTab) { currentTab ->
+        viewModel.onEach(HomeDetailViewState::currentTab) { currentTab ->
             updateUIForTab(currentTab)
         }
 
-        viewModel.selectSubscribe(this, HomeDetailViewState::showDialPadTab) { showDialPadTab ->
+        viewModel.onEach(HomeDetailViewState::showDialPadTab) { showDialPadTab ->
             updateTabVisibilitySafely(R.id.bottom_action_dial_pad, showDialPadTab)
         }
 
         viewModel.observeViewEvents { viewEvent ->
             when (viewEvent) {
-                HomeDetailViewEvents.CallStarted   -> dismissLoadingDialog()
+                HomeDetailViewEvents.CallStarted   -> handleCallStarted()
                 is HomeDetailViewEvents.FailToCall -> showFailure(viewEvent.failure)
                 HomeDetailViewEvents.Loading       -> showLoadingDialog()
             }
         }
 
-        unknownDeviceDetectorSharedViewModel.subscribe { state ->
+        unknownDeviceDetectorSharedViewModel.onEach { state ->
             state.unknownSessions.invoke()?.let { unknownDevices ->
 //                Timber.v("## Detector Triggerred in fragment - ${unknownDevices.firstOrNull()}")
                 if (unknownDevices.firstOrNull()?.currentSessionTrust == true) {
@@ -179,7 +174,7 @@ class HomeDetailFragment @Inject constructor(
             }
         }
 
-        unreadMessagesSharedViewModel.subscribe { state ->
+        unreadMessagesSharedViewModel.onEach { state ->
             views.drawerUnreadCounterBadgeView.render(
                     UnreadCounterBadgeView.State(
                             count = state.otherSpacesUnread.totalCount,
@@ -190,10 +185,16 @@ class HomeDetailFragment @Inject constructor(
 
         sharedCallActionViewModel
                 .liveKnownCalls
-                .observe(viewLifecycleOwner, {
+                .observe(viewLifecycleOwner) {
                     currentCallsViewPresenter.updateCall(callManager.getCurrentCall(), callManager.getCalls())
                     invalidateOptionsMenu()
-                })
+                }
+    }
+
+    private fun handleCallStarted() {
+        dismissLoadingDialog()
+        val fragmentTag = HomeTab.DialPad.toFragmentTag()
+        (childFragmentManager.findFragmentByTag(fragmentTag) as? DialPadFragment)?.clear()
     }
 
     override fun onDestroyView() {
@@ -297,7 +298,7 @@ class HomeDetailFragment @Inject constructor(
 
     private fun setupKeysBackupBanner() {
         serverBackupStatusViewModel
-                .subscribe(this) {
+                .onEach {
                     when (val banState = it.bannerState.invoke()) {
                         is BannerState.Setup  -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.Setup(banState.numberOfKeys), false)
                         BannerState.BackingUp -> views.homeKeysBackupBanner.render(KeysBackupBanner.State.BackingUp, false)
@@ -370,8 +371,10 @@ class HomeDetailFragment @Inject constructor(
         invalidateOptionsMenu()
     }
 
+    private fun HomeTab.toFragmentTag() = "FRAGMENT_TAG_$this"
+
     private fun updateSelectedFragment(tab: HomeTab) {
-        val fragmentTag = "FRAGMENT_TAG_$tab"
+        val fragmentTag = tab.toFragmentTag()
         val fragmentToShow = childFragmentManager.findFragmentByTag(fragmentTag)
         childFragmentManager.commitTransaction {
             childFragmentManager.fragments
@@ -494,9 +497,5 @@ class HomeDetailFragment @Inject constructor(
             }
         }
         return this
-    }
-
-    override fun create(initialState: ServerBackupStatusViewState): ServerBackupStatusViewModel {
-        return serverBackupStatusViewModelFactory.create(initialState)
     }
 }

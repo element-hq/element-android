@@ -25,8 +25,8 @@ cd jitsi-meet
 # This is commit after version 2.2.2, which does not compile
 # git checkout 5a934c071a5cbe64de275a25d0ed62d8193cdd03
 
-# Version android-sdk-3.1.0, commit 7a64bf006ea027b77564d8847570e1ac46ff0ec0
-git checkout android-sdk-3.1.0
+# Version android-sdk-3.10.0, commit 99e56e229dfa3c490096e37c3e5b76d2a3f23e32
+git checkout android-sdk-3.10.0
 
 echo
 echo "##################################################"

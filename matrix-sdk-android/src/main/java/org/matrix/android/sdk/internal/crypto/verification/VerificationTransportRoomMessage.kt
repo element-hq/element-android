@@ -294,8 +294,8 @@ internal class VerificationTransportRoomMessage(
                               hash: String,
                               commitment: String,
                               messageAuthenticationCode: String,
-                              shortAuthenticationStrings: List<String>)
-            : VerificationInfoAccept = MessageVerificationAcceptContent.create(
+                              shortAuthenticationStrings: List<String>): VerificationInfoAccept =
+            MessageVerificationAcceptContent.create(
             tid,
             keyAgreementProtocol,
             hash,

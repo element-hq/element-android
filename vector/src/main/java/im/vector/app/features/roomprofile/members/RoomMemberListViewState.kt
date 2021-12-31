@@ -18,7 +18,7 @@ package im.vector.app.features.roomprofile.members
 
 import androidx.annotation.StringRes
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.platform.GenericIdArgs
@@ -36,7 +36,7 @@ data class RoomMemberListViewState(
         val threePidInvites: Async<List<Event>> = Uninitialized,
         val trustLevelMap: Async<Map<String, RoomEncryptionTrustLevel?>> = Uninitialized,
         val actionsPermissions: ActionPermissions = ActionPermissions()
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)
 

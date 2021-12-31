@@ -17,10 +17,10 @@
 package org.matrix.android.sdk.internal.session.call
 
 import io.realm.Realm
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.internal.database.model.EventInsertType
-import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.internal.session.EventInsertLiveProcessor
 import org.matrix.android.sdk.internal.session.SessionScope
 import timber.log.Timber
@@ -29,8 +29,8 @@ import javax.inject.Inject
 private val loggerTag = LoggerTag("CallEventProcessor", LoggerTag.VOIP)
 
 @SessionScope
-internal class CallEventProcessor @Inject constructor(private val callSignalingHandler: CallSignalingHandler)
-    : EventInsertLiveProcessor {
+internal class CallEventProcessor @Inject constructor(private val callSignalingHandler: CallSignalingHandler) :
+    EventInsertLiveProcessor {
 
     private val allowedTypes = listOf(
             EventType.CALL_ANSWER,

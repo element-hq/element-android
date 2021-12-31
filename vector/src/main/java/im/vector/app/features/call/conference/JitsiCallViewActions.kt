@@ -25,5 +25,5 @@ sealed class JitsiCallViewActions : VectorViewModelAction {
     /**
      * The ViewModel will either ask the View to finish, or to join another conf.
      */
-    object OnConferenceLeft: JitsiCallViewActions()
+    object OnConferenceLeft : JitsiCallViewActions()
 }

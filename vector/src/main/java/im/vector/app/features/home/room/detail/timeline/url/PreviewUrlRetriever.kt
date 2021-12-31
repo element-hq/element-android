@@ -146,7 +146,7 @@ class PreviewUrlRetriever(session: Session,
 
     companion object {
         // One week in millis
-        private const val CACHE_VALIDITY: Long = 7 * 24 * 3_600 * 1_000
+        private const val CACHE_VALIDITY = 604_800_000L // 7 * 24 * 3_600 * 1_000
 
         private val blockedDomains = listOf(
                 "https://matrix.to",

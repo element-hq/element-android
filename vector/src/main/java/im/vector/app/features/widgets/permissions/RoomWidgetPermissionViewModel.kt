@@ -15,29 +15,29 @@
  */
 package im.vector.app.features.widgets.permissions
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 import java.net.URL
 
 class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val initialState: RoomWidgetPermissionViewState,
-                                                                private val session: Session)
-    : VectorViewModel<RoomWidgetPermissionViewState, RoomWidgetPermissionActions, RoomWidgetPermissionViewEvents>(initialState) {
+                                                                private val session: Session) :
+    VectorViewModel<RoomWidgetPermissionViewState, RoomWidgetPermissionActions, RoomWidgetPermissionViewEvents>(initialState) {
 
     private val widgetService = session.widgetService()
     private val integrationManagerService = session.integrationManagerService()
@@ -48,7 +48,7 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
 
     private fun observeWidget() {
         val widgetId = initialState.widgetId ?: return
-        session.rx()
+        session.flow()
                 .liveRoomWidgets(initialState.roomId, QueryStringValue.Equals(widgetId))
                 .filter { it.isNotEmpty() }
                 .map {
@@ -140,19 +140,9 @@ class RoomWidgetPermissionViewModel @AssistedInject constructor(@Assisted val in
     }
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomWidgetPermissionViewModel, RoomWidgetPermissionViewState> {
+        override fun create(initialState: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomWidgetPermissionViewModel, RoomWidgetPermissionViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomWidgetPermissionViewState): RoomWidgetPermissionViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomWidgetPermissionViewModel, RoomWidgetPermissionViewState> by hiltMavericksViewModelFactory()
 }

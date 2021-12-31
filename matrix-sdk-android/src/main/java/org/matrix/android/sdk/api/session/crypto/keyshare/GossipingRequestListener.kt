@@ -16,8 +16,8 @@
 
 package org.matrix.android.sdk.api.session.crypto.keyshare
 
-import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
 import org.matrix.android.sdk.internal.crypto.IncomingRequestCancellation
+import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
 import org.matrix.android.sdk.internal.crypto.IncomingSecretShareRequest
 
 /**

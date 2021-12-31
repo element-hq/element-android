@@ -15,9 +15,9 @@
  */
 package org.matrix.android.sdk.internal.database.model
 
-import org.matrix.android.sdk.api.pushrules.RuleKind
 import io.realm.RealmList
 import io.realm.RealmObject
+import org.matrix.android.sdk.api.pushrules.RuleKind
 import org.matrix.android.sdk.internal.extensions.clearWith
 
 internal open class PushRulesEntity(

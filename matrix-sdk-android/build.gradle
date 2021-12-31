@@ -9,7 +9,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "io.realm:realm-gradle-plugin:10.8.0"
+        classpath "io.realm:realm-gradle-plugin:10.9.0"
     }
 }
 
@@ -31,7 +31,7 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-        buildConfigField "String", "SDK_VERSION", "\"1.2.2\""
+        buildConfigField "String", "SDK_VERSION", "\"1.3.13\""
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         resValue "string", "git_sdk_revision", "\"${gitRevision()}\""
@@ -44,6 +44,7 @@ android {
     }
 
     testOptions {
+        // Comment to run on Android 12
         execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
@@ -100,22 +101,21 @@ static def gitRevisionDate() {
 }
 
 dependencies {
-
-    implementation libs.jetbrains.kotlinStdlibJdk7
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
 
     implementation libs.androidx.appCompat
     implementation libs.androidx.core
 
-    implementation libs.androidx.lifecycleExtensions
-    implementation  libs.androidx.lifecycleJava8
+    // Lifecycle
+    implementation libs.androidx.lifecycleCommon
+    implementation libs.androidx.lifecycleProcess
 
     // Network
     implementation libs.squareup.retrofit
     implementation libs.squareup.retrofitMoshi
 
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.1"))
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.3"))
     implementation 'com.squareup.okhttp3:okhttp'
     implementation 'com.squareup.okhttp3:logging-interceptor'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection'
@@ -130,6 +130,7 @@ dependencies {
 
     // Database
     implementation 'com.github.Zhuinden:realm-monarchy:0.7.1'
+
     kapt 'dk.ilios:realmfieldnameshelper:2.0.0'
 
     // Work
@@ -139,8 +140,8 @@ dependencies {
     implementation libs.arrow.core
     implementation libs.arrow.instances
 
-    // olm lib is now hosted by jitpack: https://jitpack.io/#org.matrix.gitlab.matrix-org/olm
-    implementation 'org.matrix.gitlab.matrix-org:olm:3.2.4'
+    // olm lib is now hosted by maven at https://gitlab.matrix.org/api/v4/projects/27/packages/maven
+    implementation 'org.matrix.android:olm:3.2.7'
 
     // DI
     implementation libs.dagger.dagger
@@ -153,11 +154,14 @@ dependencies {
     // Video compression
     implementation 'com.otaliastudios:transcoder:0.10.4'
 
+    // Exif data handling
+    implementation libs.apache.commonsImaging
+
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.33'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.40'
 
     testImplementation libs.tests.junit
-    testImplementation 'org.robolectric:robolectric:4.6.1'
+    testImplementation 'org.robolectric:robolectric:4.7.3'
     //testImplementation 'org.robolectric:shadows-support-v4:3.0'
     // Note: version sticks to 1.9.2 due to https://github.com/mockk/mockk/issues/281
     testImplementation libs.mockk.mockk
@@ -165,6 +169,8 @@ dependencies {
     implementation libs.jetbrains.coroutinesAndroid
     // Plant Timber tree for test
     testImplementation 'net.lachlanmckee:timber-junit-rule:1.0.1'
+    // Transitively required for mocking realm as monarchy doesn't expose Rx
+    testImplementation libs.rx.rxKotlin
 
     kaptAndroidTest libs.dagger.daggerCompiler
     androidTestImplementation libs.androidx.testCore

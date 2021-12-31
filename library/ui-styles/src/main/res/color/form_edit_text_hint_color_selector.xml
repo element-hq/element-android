@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="?vctr_content_tertiary" android:state_enabled="false" />
+    <item android:color="?vctr_content_tertiary" android:state_focused="false" />
+    <item android:color="?colorPrimary" />
+</selector>

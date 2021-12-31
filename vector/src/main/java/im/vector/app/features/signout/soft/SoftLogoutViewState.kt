@@ -18,7 +18,7 @@ package im.vector.app.features.signout.soft
 
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.login.LoginMode
@@ -32,11 +32,11 @@ data class SoftLogoutViewState(
         val userDisplayName: String,
         val hasUnsavedKeys: Boolean,
         val enteredPassword: String = ""
-) : MvRxState {
+) : MavericksState {
 
     fun isLoading(): Boolean {
-        return asyncLoginAction is Loading
+        return asyncLoginAction is Loading ||
                 // Keep loading when it is success because of the delay to switch to the next Activity
-                || asyncLoginAction is Success
+                asyncLoginAction is Success
     }
 }

@@ -20,7 +20,7 @@ package im.vector.app.features.attachments.preview
 import android.content.Context
 import android.content.Intent
 import com.google.android.material.appbar.MaterialToolbar
-import im.vector.app.R
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
@@ -28,6 +28,7 @@ import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.themes.ActivityOtherThemes
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 
+@AndroidEntryPoint
 class AttachmentsPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable {
 
     companion object {
@@ -59,7 +60,7 @@ class AttachmentsPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), 
     override fun initUiAndData() {
         if (isFirstCreation()) {
             val fragmentArgs: AttachmentsPreviewArgs = intent?.extras?.getParcelable(EXTRA_FRAGMENT_ARGS) ?: return
-            addFragment(R.id.simpleFragmentContainer, AttachmentsPreviewFragment::class.java, fragmentArgs)
+            addFragment(views.simpleFragmentContainer, AttachmentsPreviewFragment::class.java, fragmentArgs)
         }
     }
 

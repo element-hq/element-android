@@ -62,21 +62,22 @@
     </plurals>
     <string name="room_displayname_empty_room">اتاق خالی</string>
     <string name="initial_sync_start_importing_account">همگام‌سازی نخستین:
-\nدر حال درون‌ریزی حساب…</string>
+\nدرون‌ریزی حساب…</string>
     <string name="initial_sync_start_importing_account_crypto">همگام‌سازی نخستین:
-\nدر حال درون‌ریزی رمزنگاری</string>
+\nدرون‌ریزی رمزنگاری</string>
     <string name="initial_sync_start_importing_account_rooms">همگام‌سازی نخستین:
-\nدر حال درون‌ریزی اتاق‌ها</string>
+\nدرون‌ریزی اتاق‌ها</string>
     <string name="initial_sync_start_importing_account_joined_rooms">همگام‌سازی نخستین:
-\nدر حال درون‌ریزی اتاق‌های پیوسته</string>
+\nبار کردن گفت‌وگوهایتان
+\nاگر به اتاق‌های زیادی پیوسته‌اید، ممکن است کمی طول بکشد</string>
     <string name="initial_sync_start_importing_account_invited_rooms">همگام‌سازی نخستین:
-\nدر حال درون‌ریزی اتاق‌های دعوت‌شده</string>
+\nدرون‌ریزی اتاق‌های دعوت‌شده</string>
     <string name="initial_sync_start_importing_account_left_rooms">همگام‌سازی نخستین:
-\nدر حال درون‌ریزی اتاق‌های ترک‌شده</string>
+\nدرون‌ریزی اتاق‌های ترک شده</string>
     <string name="initial_sync_start_importing_account_groups">همگام‌سازی نخستین:
-\nدر حال درون‌ریزی انجمن‌ها</string>
+\nدرون‌ریزی اجتماع‌ها</string>
     <string name="initial_sync_start_importing_account_data">همگام‌سازی نخستین:
-\nدر حال درون‌ریزی داده‌های حساب</string>
+\nدرون‌ریزی داده‌های حساب</string>
     <string name="event_status_sending_message">در حال فرستادن پیام…</string>
     <string name="clear_timeline_send_queue">پاک‌سازی صفِ در حال ارسال</string>
     <string name="notice_room_invite_no_invitee_with_reason">دعوت %1$s. دلیل: %2$s</string>
@@ -1441,7 +1442,7 @@
     <string name="not_trusted">بدون اعتماد</string>
     <string name="reset_cross_signing">بازنشانی کلیدها</string>
     <string name="a11y_qr_code_for_verification">رمز QR</string>
-    <string name="qr_code_scanned_by_other_notice">تقریباً تمام شد! آیا %s همین سپر را نشان می‌دهد؟</string>
+    <string name="qr_code_scanned_by_other_notice">تقریباً تمام شد! آیا %s تیکی را نشان می‌دهد؟</string>
     <string name="qr_code_scanned_by_other_yes">بله</string>
     <string name="qr_code_scanned_by_other_no">خیر</string>
     <string name="no_connectivity_to_the_server_indicator">اتّصال به کارساز از دست رفت</string>
@@ -1585,7 +1586,7 @@
     <string name="error_failed_to_import_keys">شکست در درون‌ریزی کلیدها</string>
     <string name="qr_code_scanned_verif_waiting">منتظر %s…</string>
     <string name="qr_code_scanned_verif_waiting_notice">تقریباً تمام! منتظر تأیید…</string>
-    <string name="qr_code_scanned_self_verif_notice">تقریباً تمام! آیا افزارهٔ دیگر، همین سپر را نشان می‌دهد؟</string>
+    <string name="qr_code_scanned_self_verif_notice">تقریباً تمام! آیا افزارهٔ دیگر، تیکی را نشان می‌دهد؟</string>
     <string name="direct_room_created_summary_item_by_you">پیوستید.</string>
     <string name="direct_room_created_summary_item">%s پیوست.</string>
     <string name="room_created_summary_item_by_you">اتاق را ساخته و پیکربندی کردید.</string>
@@ -2260,7 +2261,7 @@
     <string name="command_description_kick_user">اخراج کاربر با شناسه داده شده</string>
     <string name="command_description_topic">تنظیم موضوع اتاق</string>
     <string name="command_description_part_room">ترک اتاق</string>
-    <string name="command_description_join_room">با نام مستعار داده‌شده به اتاق بپیوندید</string>
+    <string name="command_description_join_room">به اتاق با نشانی داده شده می‌پیوندد</string>
     <string name="command_description_invite_user">کاربر با شناسه داده شده را به این اتاق دعوت می کند</string>
     <string name="command_description_deop_user">کاربر با شناسه داده شده را غیر‌فعال می‌کند</string>
     <string name="command_description_op_user">سطح قدرت کاربر را تعریف می‌کند</string>
@@ -2437,7 +2438,6 @@
     <string name="direct_room_user_list_recent_title">اخیر</string>
     <string name="qr_code">رمز QR</string>
     <string name="add_by_qr_code">افزودن با رمز QR</string>
-    <string name="user_directory_search_hint">جست‌وجو با نام یا شناسه</string>
     <string name="permissions_denied_add_contact">دادن اجازهٔ دسترسی به آشنایانتان.</string>
     <string name="permissions_denied_qr_code">برای پویش یک رمز QR نیاز است دسترسی به دوربین را مجاز کنید.</string>
     <string name="start_chatting">آغاز به گپ</string>
@@ -2447,7 +2447,7 @@
 \n
 \nبرای محرمانگی بیش‌تر، داده‌ها پیش از ارسال، درهم ریخته می‌شوند.</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">یک کلید امنیتی ایجاد کنید تا در مکانی امن مانند سامانه مدیریت رمز عبور یا گاوصندوق آن را ذخیره کنید.</string>
-    <string name="identity_server_error_no_current_binding_error">در حال حاضر هیچ ارتباطی با این شناسه وجود ندارد.</string>
+    <string name="identity_server_error_no_current_binding_error">ارتباطی با این شناسه وجود ندارد.</string>
     <string name="confirm_your_identity_quad_s">هویت خود را تأیید کنید تا به پیام‌های رمز شده دسترسی پیدا کنید.</string>
     <string name="confirm_your_identity">هویت خود را با تأیید این ورود به سیستم از یکی دیگر از نشست‌های خود، تأیید کنید تا به پیام‌های رمز شده دسترسی پیدا کنید.</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
@@ -2634,7 +2634,7 @@
         <item quantity="one">%1$s یک نشانی جایگزین %2$s را برای این اتاق اضافه کرد.</item>
         <item quantity="other">%1$s نشانی‌های جایگزین %2$s را برای این اتاق اضافه کرد.</item>
     </plurals>
-    <string name="initial_sync_start_downloading">همگام‌سازی اولیه:
+    <string name="initial_sync_start_downloading">همگام‌سازی نخستین:
 \nبارگیری داده‌ها…</string>
     <string name="initial_sync_start_server_computing">همگام‌سازی نخستین:
 \nمنتظر پاسخ کارساز…</string>
@@ -2679,8 +2679,6 @@
     <string name="spaces_beta_welcome_to_spaces_desc">فضاها شیوه‌ای جدید برای گروه‌بندی اتاق‌ها و افراد است.</string>
     <string name="spaces_beta_welcome_to_spaces">به فضاها خوش آمدید!</string>
     <string name="space_add_existing_rooms">افزودن فضا و اتاق‌های موجود</string>
-    <!-- TO BE REMOVED -->
-    <string name="space_leave_prompt_msg">مطمئنید که می‌خواهید فضا را ترک کنید؟</string>
     <string name="leave_space">ترک فضا</string>
     <string name="space_add_child_title">افزودن اتاق</string>
     <string name="space_explore_activity_title">کاوش در اتاق‌ها</string>
@@ -2795,8 +2793,8 @@
     <string name="spaces_no_server_support_description">لطفاً برای اطّلاعات بیش‌تر، با مدیر کارسازتان تماس بگیرید</string>
     <string name="spaces_no_server_support_title">به نظر کارساز خانگیتان هنوز از فضاها پشتیبانی نمی‌کند</string>
     <string name="space_add_rooms">افزودن اتاق‌ها</string>
-    <string name="space_leave_prompt_msg_as_admin">شما مدیر این فضایید. پیش از ترک، مطمئن شوید حق مدیریت را به عضو دیگری منتقل کرده‌اید.</string>
-    <string name="space_leave_prompt_msg_private">این فضا عمومی نیست. بدون دعوت نخواهید توانست دوباره بپیوندید.</string>
+    <string name="space_leave_prompt_msg_as_admin">شما تنها مدیر این فضایید. ترک این فضا، به معنی واپایش نداشتن هیچ‌کسی رویش است.</string>
+    <string name="space_leave_prompt_msg_private">بدون دعوت نخواهید توانست دوباره بپیوندید.</string>
     <string name="space_leave_prompt_msg_only_you">شما تنها فرد حاضرید. اگر خارج شوید، هیچ‌کس از جمله خوتان قادر به پیوستن در آینده نخواهد بود.</string>
     <string name="continue_anyway">به هر حال ادامه بده</string>
     <string name="you_may_contact_me">اگر پرسش دیگری دارید، می‌توانید با من در تماس باشید</string>
@@ -2847,13 +2845,13 @@
     <string name="voice_message_tap_to_stop_toast">برای توقّف یا شمیدن، روی ضبطتان بزنید</string>
     <string name="voice_message_n_seconds_warning_toast">%1$dث مانده</string>
     <string name="voice_message_release_to_send_toast">برای ضبط نگه دارید. برای فرستادن رها کنید</string>
-    <string name="a11y_delete_recorded_voice_message">حذف پیام صوتی ضبط‌شده</string>
+    <string name="a11y_delete_recorded_voice_message">حذف ضبط</string>
     <string name="a11y_recording_voice_message">ضبط کردن پیام صوتی</string>
     <string name="a11y_pause_voice_message">مکث پیام صوتی</string>
     <string name="a11y_play_voice_message">پخش پیام صوتی</string>
     <string name="a11y_lock_voice_message">قفل پیام صوتی</string>
     <string name="voice_message_slide_to_cancel">برای لغو، بکشید</string>
-    <string name="a11y_start_voice_message">آغاز پیام صوتی</string>
+    <string name="a11y_start_voice_message">ضبط پیام صوتی</string>
     <string name="upgrade_required">نیازمند ارتقا</string>
     <string name="sent_a_voice_message">صدا</string>
     <string name="other_spaces_or_rooms_you_might_not_know">دیگر فضاها یا اتاق‌هایی که ممکن است نشناسید</string>
@@ -2947,4 +2945,91 @@
     <string name="call_ringing">زنگ خوردن تماس…</string>
     <string name="spaces">فضاها</string>
     <string name="learn_more">بیش‌تر بدانید</string>
+    <string name="space_add_space_to_any_space_you_manage">افزودن فضایی به هر فضایی که مدیریت می‌کنید.</string>
+    <string name="space_add_existing_spaces">افزودن فضاهای موجود</string>
+    <string name="space_add_existing_rooms_only">افزودن اتاق‌های موجود</string>
+    <string name="pick_tings_to_leave">گزینش خارج شدن‌ها</string>
+    <string name="leave_specific_ones">خارج شدن از اتاق‌ها و فضاهایی خاص…</string>
+    <string name="dont_leave_any">از هیچ اتاق و فضایی خارج نشو</string>
+    <string name="you_will_leave_all_in">از تمامی اتاق‌ها و فضاهای %s خارج خواهید شد.</string>
+    <string name="leave_all_rooms_and_spaces">ترک تمامی اتاق‌ها و فضاها</string>
+    <string name="space_leave_prompt_msg_with_name">مطمئنید می‌خواهید %s را ترک کنید؟</string>
+    <string name="discovery_section">کشف (%s)</string>
+    <string name="finish_setup">پایان برپایی</string>
+    <string name="discovery_invite">دعوت با رایانامه، یافتن آشنایان و بیش‌تر…</string>
+    <string name="finish_setting_up_discovery">پایان برپا سازی کشف.</string>
+    <string name="create_spaces_invite_public_header">همگروهی‌هایتان کیند؟</string>
+    <string name="create_space_identity_server_info_none">در حال حاضر از کارساز هویتی استفاده نمی‌کنید. برای دعوت همگروهی‌ها و قابل کشف بودن به دستشان، در پایین یکی پیکربندی کنید.</string>
+    <string name="invite_by_mxid_or_mail">دعوت با نام کاربری یا نامه</string>
+    <string name="create_spaces_invite_public_header_desc">مطمئن شوید افراد درستی به %s دسترسی دارند. بعداً می‌توانید تفراد بیش‌تری را دعوت‌کنید.</string>
+    <string name="command_description_add_to_space">افزودن به فضای داده شده</string>
+    <string name="create_space_in_progress">ایجاد کردن فضا…</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">نمایش اطلاعاتی مغید برای کمک به رفع اشکال برنامه</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">نمایش اطلاعات رفع اشکال روی صفحه</string>
+    <string name="does_not_look_like_valid_email">نشانی رایانامه‌ای معتبر به نظر نمی‌رسد</string>
+    <string name="open_discovery_settings">گشودن تنظیمات کشف</string>
+    <string name="user_directory_search_hint_2">جست‌وجو با نام، شناسه یا رایانامه</string>
+    <string name="create_new_space">ایجاد فضای جدید</string>
+    <string name="room_settings_space_access_public_description">هرکسی می تواند فضا را یافته و بپیوندد</string>
+    <string name="room_settings_space_access_title">دسترسی فضا</string>
+    <string name="room_settings_access_rules_pref_dialog_title">چه کسی می‌تواند دسترسی داشته باشد؟</string>
+    <string name="settings_notification_emails_enable_for_email">به کار انداختن آگاهی‌های رایانامه‌ای برای %s</string>
+    <string name="settings_notification_emails_no_emails">برای دریافت رایانامه با آگاهی، لطفاً رایانامه‌ای را به حساب ماتریکستان وصل کنید</string>
+    <string name="settings_notification_emails_category">آگاهی رایانامه‌ای</string>
+    <string name="room_permissions_upgrade_the_space">ارتقای فضا</string>
+    <string name="room_permissions_change_space_name">تغییر نام فضا</string>
+    <string name="room_permissions_enable_space_encryption">به کار انداختن رمزنگاری فضا</string>
+    <string name="room_permissions_change_main_address_for_the_space">تغییر نشانی اصلی فضا</string>
+    <string name="room_permissions_change_space_avatar">تغییر چهرک فضا</string>
+    <string name="space_permissions_notice_read_only">اجازهٔ به‌روز رسانی نقش‌های لازم برای تغییر بخش‌های مختلف این فضا را ندارید</string>
+    <string name="space_permissions_notice">گزینش اجازه‌های لازم برای تغییر بخش‌های مختلف این فضا</string>
+    <string name="space_settings_permissions_subtitle">دیدن و به‌روز رسانی نقش‌های لازم برای تغییر بخش‌های مختلف فضا.</string>
+    <string name="space_settings_permissions_title">اجازه‌های فضا</string>
+    <string name="space_participants_unban_prompt_msg">لغو تحریم کاربر، اجازهٔ پیوستن دوباره‌اش به فضا را می‌دهد.</string>
+    <string name="space_participants_ban_prompt_msg">تحریم کاربر، او را از این فضا اخراج کرده و از پیوستن دوباره‌اش جلوگیری می‌کند.</string>
+    <string name="space_participants_kick_prompt_msg">اخراج کاربر، از این فضا برش می‌دارد.
+\n
+\nبرای پیش‌گیری از پیوستن دوباره، باید تحریمش کنید.</string>
+    <string name="a11y_stop_voice_message">پایان ضبط</string>
+    <string name="command_description_lenny">( ͡° ͜ʖ ͡°) را به ابتدای پیام‌های متنی خام می‌افزاید</string>
+    <string name="identity_server_consent_dialog_neutral_policy">سیاست</string>
+    <string name="settings_discovery_no_policy_provided">سیاستی از سوری کارساز هویت فراهم نشده</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">نهفتن سیاست کارساز هویت</string>
+    <string name="settings_discovery_show_identity_server_policy_title">نمایش سیاست کارساز هویت</string>
+    <string name="command_description_whois">اطّلاعات را دربارهٔ کاربر نشان می‌دهد</string>
+    <string name="command_description_avatar_for_room">چهرکتان را فقط در این اتاق تغییر می‌دهد</string>
+    <string name="command_description_room_avatar">چهرک اتاق کنونی را تفییر می‌دهد</string>
+    <string name="command_description_nick_for_room">نام نمایشیتان را فقط در اتاق کنونی تغییر می‌دهد</string>
+    <string name="command_description_room_name">نام اتاق را تنظیم می‌کند</string>
+    <string name="command_description_unignore_user">به کاربری چشم گشوده و پیام‌های بعدیش را نشان می‌دهد</string>
+    <string name="command_description_ignore_user">از کاربری چشم‌پوشی کرده و پیام‌هایش را از شما پنهان می‌کند</string>
+    <string name="a11y_presence_unavailable">ناموجود</string>
+    <string name="a11y_presence_offline">برون‌خط</string>
+    <string name="a11y_presence_online">برخط</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">گزینش کارساز خانگی</string>
+    <string name="login_error_homeserver_from_url_not_found">نتوانست در نشانی %s به کارساز خاتگی‌ای برسد. لطفاً پیوندتان را بررسی کرده یا کارساز خانگی‌ای را به صورت دستی برگزینید.</string>
+    <string name="notification_listening_for_notifications">شنود کردن برای آگاهی‌ها</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">کمینه %1$s گزینه لازم است</item>
+        <item quantity="other">کمینه %1$s گزینه لازم است</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">پرسش نمی‌تواند خالی باشد</string>
+    <string name="create_poll_button">ایجاد نظرسنجی</string>
+    <string name="create_poll_add_option">افزودن گزینه</string>
+    <string name="create_poll_options_hint">گزینهٔ %1$d</string>
+    <string name="create_poll_options_title">ایجاد گزینه‌ها</string>
+    <string name="create_poll_question_hint">پرسش یا موضوع</string>
+    <string name="create_poll_question_title">پرسش یا موضوع نظرسنجی</string>
+    <string name="create_poll_title">ایجاد نظرسنجی</string>
+    <string name="attachment_type_poll">نظرسنجی</string>
+    <string name="identity_server_consent_dialog_content_2">برای کشف آشنایان موجود، لازم است اطّلاعات آشنا به کارساز هوییتان فرستاده شود.
+\n
+\nپیش از فرستادن، داده‌هایتان را برای محرمانگی در هم می‌ریزیم. راضی به فرستادن این اطّلاعات هستید؟</string>
+    <string name="identity_server_consent_dialog_title_2">فرستادن رایانامه‌ّا و شماره‌های تلفن به %s</string>
+    <string name="settings_discovery_consent_notice_off_2">آشنایانتان خصوصی هستند. برای کشف کاربران از آشنایانتان، نیاز به اجازه‌تان برای فرستادن اطّلاعات آشنا به کارساز هویتتان داریم.</string>
+    <string name="shortcut_disabled_reason_sign_out">نشست خارج شده است!</string>
+    <string name="shortcut_disabled_reason_room_left">اتاق ترک شده است!</string>
+    <string name="identity_server_consent_dialog_content_question">با فرستادن این اطّلاعات موافقید؟</string>
+    <string name="action_not_now">اکنون نه</string>
+    <string name="identity_server_consent_dialog_content_3">برای کشف آشنایان موجود، لازم است اطلاعات آشنایان (رایانامه‌ها و شماره تلفن‌ها) را به کارساز هویتتان بفرستید. برای محرمانگیتان، داده‌هایتان را پیش از فرستادن، در هم می‌ریزیم.</string>
 </resources>

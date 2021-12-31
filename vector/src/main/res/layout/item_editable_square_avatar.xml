@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:colorBackground"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:viewBindingIgnore="true">
 
     <!-- I cannot do what I want using layer-list, do it manually here-->
     <FrameLayout
@@ -19,7 +20,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
 
         <ImageView
             android:id="@+id/itemEditableAvatarImage"
@@ -41,13 +41,12 @@
         android:scaleType="center"
         android:src="@drawable/ic_delete"
         android:visibility="gone"
-        app:layout_constraintCircle="@+id/itemEditableAvatarImageContainer"
+        app:layout_constraintCircle="@id/itemEditableAvatarImageContainer"
         app:layout_constraintCircleAngle="45"
         app:layout_constraintCircleRadius="48dp"
         app:tint="?colorError"
         tools:ignore="MissingConstraints,MissingPrefix"
         tools:visibility="visible" />
-
 
     <ImageView
         android:layout_width="32dp"
@@ -57,11 +56,10 @@
         android:contentDescription="@string/a11y_change_avatar"
         android:padding="8dp"
         android:src="@drawable/ic_camera_plain"
-        app:layout_constraintCircle="@+id/itemEditableAvatarImageContainer"
+        app:layout_constraintCircle="@id/itemEditableAvatarImageContainer"
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="48dp"
         app:tint="?vctr_content_secondary"
         tools:ignore="MissingConstraints,MissingPrefix" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

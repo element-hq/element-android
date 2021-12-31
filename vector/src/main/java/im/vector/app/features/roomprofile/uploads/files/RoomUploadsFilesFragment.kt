@@ -35,7 +35,6 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericStateViewRecyclerBinding
 import im.vector.app.features.roomprofile.uploads.RoomUploadsAction
 import im.vector.app.features.roomprofile.uploads.RoomUploadsViewModel
-
 import org.matrix.android.sdk.api.session.room.uploads.UploadEvent
 import javax.inject.Inject
 

@@ -22,13 +22,13 @@ import android.os.Bundle
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRx
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.commitTransaction
@@ -40,36 +40,28 @@ import im.vector.app.features.home.room.detail.upgrade.MigrateRoomBottomSheet
 import im.vector.app.features.roomprofile.RoomProfileArgs
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedActions
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedEvents
+import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedFragment
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedState
 import im.vector.app.features.roomprofile.settings.joinrule.advanced.RoomJoinRuleChooseRestrictedViewModel
 import javax.inject.Inject
 
-class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>(),
-        RoomJoinRuleChooseRestrictedViewModel.Factory {
+@AndroidEntryPoint
+class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     private lateinit var roomProfileArgs: RoomProfileArgs
 
     @Inject
-    lateinit var allowListViewModelFactory: RoomJoinRuleChooseRestrictedViewModel.Factory
-
-    @Inject
     lateinit var errorFormatter: ErrorFormatter
 
     val viewModel: RoomJoinRuleChooseRestrictedViewModel by viewModel()
 
-    override fun create(initialState: RoomJoinRuleChooseRestrictedState) = allowListViewModelFactory.create(initialState)
-
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
-    }
-
     override fun initUiAndData() {
-        roomProfileArgs = intent?.extras?.getParcelable(MvRx.KEY_ARG) ?: return
+        roomProfileArgs = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return
         if (isFirstCreation()) {
             addFragment(
-                    R.id.simpleFragmentContainer,
+                    views.simpleFragmentContainer,
                     RoomJoinRuleFragment::class.java,
                     roomProfileArgs
             )
@@ -78,7 +70,7 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.selectSubscribe(this, RoomJoinRuleChooseRestrictedState::updatingStatus) {
+        viewModel.onEach(RoomJoinRuleChooseRestrictedState::updatingStatus) {
             when (it) {
                 Uninitialized -> {
                     // nop
@@ -129,7 +121,7 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>(),
         supportFragmentManager.commitTransaction {
             setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
             val tag = RoomJoinRuleChooseRestrictedFragment::class.simpleName
-            replace(R.id.simpleFragmentContainer,
+            replace(views.simpleFragmentContainer.id,
                     RoomJoinRuleChooseRestrictedFragment::class.java,
                     this@RoomJoinRuleActivity.roomProfileArgs.toMvRxBundle(),
                     tag
@@ -142,7 +134,7 @@ class RoomJoinRuleActivity : VectorBaseActivity<ActivitySimpleBinding>(),
         fun newIntent(context: Context, roomId: String): Intent {
             val roomProfileArgs = RoomProfileArgs(roomId)
             return Intent(context, RoomJoinRuleActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, roomProfileArgs)
+                putExtra(Mavericks.KEY_ARG, roomProfileArgs)
             }
         }
     }

@@ -28,13 +28,8 @@ class KeysBackupRestoreFromPassphraseViewModel @Inject constructor(
         private val stringProvider: StringProvider
 ) : ViewModel() {
 
-    var passphrase: MutableLiveData<String> = MutableLiveData()
-    var passphraseErrorText: MutableLiveData<String> = MutableLiveData()
-
-    init {
-        passphrase.value = null
-        passphraseErrorText.value = null
-    }
+    var passphrase: MutableLiveData<String?> = MutableLiveData(null)
+    var passphraseErrorText: MutableLiveData<String?> = MutableLiveData(null)
 
     // ========= Actions =========
 

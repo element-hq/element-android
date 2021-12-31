@@ -20,8 +20,8 @@ import im.vector.app.R
 import im.vector.app.core.preference.VectorPreferenceCategory
 import org.matrix.android.sdk.api.pushrules.RuleIds
 
-class VectorSettingsDefaultNotificationPreferenceFragment
-    : VectorSettingsPushRuleNotificationPreferenceFragment() {
+class VectorSettingsDefaultNotificationPreferenceFragment :
+    VectorSettingsPushRuleNotificationPreferenceFragment() {
 
     override var titleRes: Int = R.string.settings_notification_default
 

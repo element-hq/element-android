@@ -16,21 +16,25 @@
 
 package im.vector.app.features.home
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.MvRx
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import androidx.lifecycle.asFlow
+import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.config.analyticsConfig
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.analytics.store.AnalyticsStore
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
@@ -44,11 +48,10 @@ import org.matrix.android.sdk.api.session.initsync.SyncStatusService
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
 import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.util.awaitCallback
-import org.matrix.android.sdk.rx.asObservable
-import org.matrix.android.sdk.rx.rx
 import timber.log.Timber
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.resume
@@ -56,35 +59,46 @@ import kotlin.coroutines.resumeWithException
 
 class HomeActivityViewModel @AssistedInject constructor(
         @Assisted initialState: HomeActivityViewState,
-        @Assisted private val args: HomeActivityArgs,
         private val activeSessionHolder: ActiveSessionHolder,
         private val reAuthHelper: ReAuthHelper,
+        private val analyticsStore: AnalyticsStore,
         private val vectorPreferences: VectorPreferences
 ) : VectorViewModel<HomeActivityViewState, HomeActivityViewActions, HomeActivityViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: HomeActivityViewState, args: HomeActivityArgs): HomeActivityViewModel
+    interface Factory : MavericksAssistedViewModelFactory<HomeActivityViewModel, HomeActivityViewState> {
+        override fun create(initialState: HomeActivityViewState): HomeActivityViewModel
     }
 
-    companion object : MvRxViewModelFactory<HomeActivityViewModel, HomeActivityViewState> {
+    companion object : MavericksViewModelFactory<HomeActivityViewModel, HomeActivityViewState> by hiltMavericksViewModelFactory()
 
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: HomeActivityViewState): HomeActivityViewModel? {
-            val activity: HomeActivity = viewModelContext.activity()
-            val args: HomeActivityArgs? = activity.intent.getParcelableExtra(MvRx.KEY_ARG)
-            return activity.viewModelFactory.create(state, args ?: HomeActivityArgs(clearNotification = false, accountCreation = false))
-        }
-    }
-
+    private var isInitialized = false
     private var checkBootstrap = false
     private var onceTrusted = false
 
-    init {
+    private fun initialize() {
+        if (isInitialized) return
+        isInitialized = true
         cleanupFiles()
         observeInitialSync()
         checkSessionPushIsOn()
         observeCrossSigningReset()
+        // Disable Analytics opt-in automatic display
+        // Waiting for translation and for analytic events to be actually sent
+        // observeAnalytics()
+    }
+
+    @Suppress("unused")
+    private fun observeAnalytics() {
+        if (analyticsConfig.isEnabled) {
+            analyticsStore.didAskUserConsentFlow
+                    .onEach { didAskUser ->
+                        if (!didAskUser) {
+                            _viewEvents.post(HomeActivityViewEvents.ShowAnalyticsOptIn)
+                        }
+                    }
+                    .launchIn(viewModelScope)
+        }
     }
 
     private fun cleanupFiles() {
@@ -100,9 +114,9 @@ class HomeActivityViewModel @AssistedInject constructor(
                 .crossSigningService().allPrivateKeysKnown()
 
         safeActiveSession
-                .rx()
+                .flow()
                 .liveCrossSigningInfo(safeActiveSession.myUserId)
-                .subscribe {
+                .onEach {
                     val isVerified = it.getOrNull()?.isTrusted() ?: false
                     if (!isVerified && onceTrusted) {
                         // cross signing keys have been reset
@@ -116,15 +130,15 @@ class HomeActivityViewModel @AssistedInject constructor(
                     }
                     onceTrusted = isVerified
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
     }
 
     private fun observeInitialSync() {
         val session = activeSessionHolder.getSafeActiveSession() ?: return
 
         session.getSyncStatusLive()
-                .asObservable()
-                .subscribe { status ->
+                .asFlow()
+                .onEach { status ->
                     when (status) {
                         is SyncStatusService.Status.Progressing -> {
                             // Schedule a check of the bootstrap when the init sync will be finished
@@ -145,7 +159,7 @@ class HomeActivityViewModel @AssistedInject constructor(
                         )
                     }
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
     }
 
     /**
@@ -218,9 +232,9 @@ class HomeActivityViewModel @AssistedInject constructor(
                                 object : UserInteractiveAuthInterceptor {
                                     override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                                         // We missed server grace period or it's not setup, see if we remember locally password
-                                        if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD
-                                                && errCode == null
-                                                && reAuthHelper.data != null) {
+                                        if (flowResponse.nextUncompletedStage() == LoginFlowTypes.PASSWORD &&
+                                                errCode == null &&
+                                                reAuthHelper.data != null) {
                                             promise.resume(
                                                     UserPasswordAuth(
                                                             session = flowResponse.session,
@@ -248,6 +262,9 @@ class HomeActivityViewModel @AssistedInject constructor(
         when (action) {
             HomeActivityViewActions.PushPromptHasBeenReviewed -> {
                 vectorPreferences.setDidAskUserToEnableSessionPush()
+            }
+            HomeActivityViewActions.ViewStarted               -> {
+                initialize()
             }
         }.exhaustive
     }

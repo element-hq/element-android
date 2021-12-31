@@ -1,0 +1,42 @@
+Element jest bezpiecznym komunikatorem oraz narzędziem do komunikacji w zespole które jest idealna do pracy zdalnej. Nasza aplikacja korzysta z szyfrowania end-to-end aby rozmowy wideo, udostępnianie plików oraz rozmowy głosowe były bezpieczne.
+
+<b>Funkcje Element'a:</b>
+- Zaawansowane narzędzia komunikacji online
+- W pełni szyfrowane wiadomości które umożliwiają bezpieczniejszą komunikacje dla firm, a nawet dla pracowników zdalnych.
+- Zdecentralizowany czat bazowany na otwartym protokole Matrix
+- Bezpieczne udostępnianie plików wraz z szyfrowaniem danych podczas zarządzania projektami
+- Rozmowy z Voice over IP wraz z udostępnianiem ekranu
+- Prosta konfiguracja z ulubionymi narzędziami do kolaboracji, narzędziami do zarządzania projektami usługami VoIP oraz innymi aplikacjami do komunikacji w grupie
+
+Element jest całkowicie inny od innych komunikatorów i aplikacji do kolaboracji. Pracuje na protokole Matrix, otwarto źródłowej sieci stworzonej dla bezpiecznych wiadomości i zdecentralizowanej komunikacji. Pozwala ona na własny hosting serwera dla maksymalnej własności i kontroli nad danymi oraz wiadomościami. 
+
+<b>Prywatność i szyfrowane wiadomości</b>
+Element broni cie przez niechcianymi wiadomościami, kopaniem informacji oraz cenzurą. Zabezpiecza wszystkie twoje dane, wideo które pozostaje wiadome tylko dla rozmawiających przez szyfrowanie end-to-end i weryfikacją krzyżową urządzeń.
+
+Element daje kontrole nad twoją prywatnością i umożliwia bezpieczną komunikacje z kimkolwiek w sieci Matrix, lub z innymi firmami przez narzędzia do komunikacji integrując aplikacje takie jak Slack.
+
+<b>Element może być hostowany samemu</b>
+Pozwala to na kontrolę nad twoimi wrażliwymi danymi oraz rozmowami, Element może być hostowany samemu lub pozwala wybrać dowolnego hosta bazowanego na Matrix'ie - otwarto-źródłowym standardzie, dla zdecentralizowanej komunikacji. Element daje tobie prywatność, bezpieczeństwo oraz elastyczność w integracji.
+
+<b>Posiadaj naprawdę swoje dane</b>
+Ty decydujesz gdzie trzymasz swoje dane i wiadomości. Bez ryzyka wycieku lub dostępu firm trzecich.
+
+Element daje ci kontrolę na wiele sposobów: 
+1. Utwórz darmowe konto na publicznym serwerze matrix.org hostowanym przez twórców Matrix'a lub wybierz którykolwiek z tysięcy serwerów hostowanych przez wolontariuszy
+2. Hostuj samemu swoje konto przez własny serwer na twojej infrastrukturze
+3. Zarejestruj się na specjalnym serwerze poprzez subskrybowanie hostingu na platformie Element Martix Services
+
+<b>Otwarte wiadomości i kolaboracja</b>
+Możesz rozmawiać z kimkolwiek w sieci Matrix, nie ważne czy korzystają z Element'a, czy z innej aplikacji wspierającej protokół Matrix, a nawet z osobami korzystającymi z innych komunikatorów.
+
+<b>Niesamowicie bezpieczny</b>
+Prawdziwe szyfrowanie end-to-end (tylko osoby w konwersacji mogą odszyfrować wiadomości), a także krzyżowa weryfikacja urządzeń.
+
+<b>Pełna komunikacja i integracja</b>
+Wiadomości, rozmowy głosowe i wideo, udostępnianie plików, ekranu, a nawet integracja z botami i widżetami. Twórz pokoje, społeczności, pozostań w kontakcie i załatwiaj to co chcesz.
+
+<b>Kontynuuj gdzie skończyłeś</b>
+Pozostań zawsze w kontakcie poprzez pełną synchornizację między urządzeniami oraz w sieci na https://app.element.io
+
+<b>Otwarto źródłowy</b>
+Element Android jest otwarto-źródłowym projektem, hostowanym na platformie GitHub. Prosimy o zgłaszanie wszelkich błędów i/lub wsparcie w tworzeniu naszego projektu na https://github.com/vector-im/element-android

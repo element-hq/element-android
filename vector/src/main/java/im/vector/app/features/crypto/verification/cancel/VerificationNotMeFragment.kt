@@ -27,7 +27,6 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.BottomSheetVerificationChildFragmentBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
-
 import javax.inject.Inject
 
 class VerificationNotMeFragment @Inject constructor(

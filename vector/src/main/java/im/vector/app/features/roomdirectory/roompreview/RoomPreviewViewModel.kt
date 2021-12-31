@@ -16,20 +16,21 @@
 
 package im.vector.app.features.roomdirectory.roompreview
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.roomdirectory.JoinState
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -40,26 +41,19 @@ import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.session.room.roomSummaryQueryParams
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
 
 class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val initialState: RoomPreviewViewState,
-                                                       private val session: Session)
-    : VectorViewModel<RoomPreviewViewState, RoomPreviewAction, EmptyViewEvents>(initialState) {
+                                                       private val session: Session) :
+    VectorViewModel<RoomPreviewViewState, RoomPreviewAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: RoomPreviewViewState): RoomPreviewViewModel
+    interface Factory : MavericksAssistedViewModelFactory<RoomPreviewViewModel, RoomPreviewViewState> {
+        override fun create(initialState: RoomPreviewViewState): RoomPreviewViewModel
     }
 
-    companion object : MvRxViewModelFactory<RoomPreviewViewModel, RoomPreviewViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomPreviewViewState): RoomPreviewViewModel? {
-            val fragment: RoomPreviewNoPreviewFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.roomPreviewViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomPreviewViewModel, RoomPreviewViewState> by hiltMavericksViewModelFactory()
 
     init {
         // Observe joined room (from the sync)
@@ -165,9 +159,9 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
             excludeType = null
         }
         session
-                .rx()
+                .flow()
                 .liveRoomSummaries(queryParams)
-                .subscribe { list ->
+                .onEach { list ->
                     val isRoomJoined = list.any {
                         it.membership == Membership.JOIN
                     }
@@ -180,13 +174,13 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
                         setState { copy(roomJoinState = JoinState.JOINED) }
                     }
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
     }
 
     private fun observeMembershipChanges() {
-        session.rx()
+        session.flow()
                 .liveRoomChangeMembershipState()
-                .subscribe {
+                .onEach {
                     val changeMembership = it[initialState.roomId] ?: ChangeMembershipState.Unknown
                     val joinState = when (changeMembership) {
                         is ChangeMembershipState.Joining       -> JoinState.JOINING
@@ -198,7 +192,7 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
                         setState { copy(roomJoinState = joinState) }
                     }
                 }
-                .disposeOnClear()
+                .launchIn(viewModelScope)
     }
 
     override fun handle(action: RoomPreviewAction) {

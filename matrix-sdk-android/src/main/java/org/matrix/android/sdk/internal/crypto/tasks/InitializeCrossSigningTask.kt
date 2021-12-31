@@ -125,8 +125,8 @@ internal class DefaultInitializeCrossSigningTask @Inject constructor(
             try {
                 uploadSigningKeysTask.execute(uploadSigningKeysParams)
             } catch (failure: Throwable) {
-                if (params.interactiveAuthInterceptor == null
-                        || !handleUIA(
+                if (params.interactiveAuthInterceptor == null ||
+                        !handleUIA(
                                 failure = failure,
                                 interceptor = params.interactiveAuthInterceptor,
                                 retryBlock = { authUpdate ->

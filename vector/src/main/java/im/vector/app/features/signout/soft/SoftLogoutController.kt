@@ -45,12 +45,6 @@ class SoftLogoutController @Inject constructor(
 
     private var viewState: SoftLogoutViewState? = null
 
-    init {
-        // We are requesting a model build directly as the first build of epoxy is on the main thread.
-        // It avoids to build the whole list of breadcrumbs on the main thread.
-        requestModelBuild()
-    }
-
     fun update(viewState: SoftLogoutViewState) {
         this.viewState = viewState
         requestModelBuild()

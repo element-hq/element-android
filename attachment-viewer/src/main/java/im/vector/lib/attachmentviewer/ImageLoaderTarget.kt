@@ -36,8 +36,8 @@ interface ImageLoaderTarget {
     fun onResourceReady(uid: String, resource: Drawable)
 }
 
-internal class DefaultImageLoaderTarget(val holder: AnimatedImageViewHolder, private val contextView: ImageView)
-    : ImageLoaderTarget {
+internal class DefaultImageLoaderTarget(val holder: AnimatedImageViewHolder, private val contextView: ImageView) :
+    ImageLoaderTarget {
     override fun contextView(): ImageView {
         return contextView
     }

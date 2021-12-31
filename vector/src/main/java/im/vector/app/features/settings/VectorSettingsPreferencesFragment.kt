@@ -142,7 +142,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
         // Take photo or video
         updateTakePhotoOrVideoPreferenceSummary()
         takePhotoOrVideoPreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            PhotoOrVideoDialog(requireActivity(), vectorPreferences).showForSettings(object: PhotoOrVideoDialog.PhotoOrVideoDialogSettingsListener {
+            PhotoOrVideoDialog(requireActivity(), vectorPreferences).showForSettings(object : PhotoOrVideoDialog.PhotoOrVideoDialogSettingsListener {
                 override fun onUpdated() {
                     updateTakePhotoOrVideoPreferenceSummary()
                 }
@@ -197,7 +197,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 .forEachIndexed { i, v ->
                     v.isChecked = i == index
 
-                    v.setOnClickListener {
+                    v.debouncedClicks {
                         dialog.dismiss()
                         FontScale.updateFontScale(activity, i)
                         vectorConfiguration.applyToApplicationContext()

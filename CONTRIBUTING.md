@@ -9,7 +9,7 @@ Android support can be found in this [![Element Android Matrix room #element-and
 ## Android Studio settings
 
 Please set the "hard wrap" setting of Android Studio to 160 chars, this is the setting we use internally to format the source code (Menu `Settings/Editor/Code Style` then `Hard wrap at`).
-Please ensure that your using the project formatting rules (which are in the project at .idea/codeStyles/), and format the file before committing them.
+Please ensure that you're using the project formatting rules (which are in the project at .idea/codeStyles/), and format the file before committing them.
 
 ### Template
 
@@ -80,14 +80,13 @@ Make sure the following commands execute without any error:
 #### ktlint
 
 <pre>
-curl -sSLO https://github.com/pinterest/ktlint/releases/download/0.34.2/ktlint && chmod a+x ktlint
-./ktlint --android --experimental -v
+./gradlew ktlintCheck --continue
 </pre>
 
 Note that you can run
 
 <pre>
-./ktlint --android --experimental -v -F
+./gradlew ktlintFormat
 </pre>
 
 For ktlint to fix some detected errors for you (you still have to check and commit the fix of course)
@@ -147,6 +146,8 @@ The string will be removed during the next sync with Weblate.
 ### Accessibility
 
 Please consider accessibility as an important point. As a minimum requirement, in layout XML files please use attributes such as `android:contentDescription` and `android:importantForAccessibility`, and test with a screen reader if it's working well. You can add new string resources, dedicated to accessibility, in this case, please prefix theirs id with `a11y_`.
+
+For instance, when updating the image `src` of an ImageView, please also consider updating its `contentDescription`. A good example is a play pause button.
 
 ### Layout
 

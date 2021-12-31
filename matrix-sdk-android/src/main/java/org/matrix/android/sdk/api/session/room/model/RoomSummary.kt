@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.api.session.room.model
 
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
+import org.matrix.android.sdk.api.session.presence.model.UserPresence
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.session.room.sender.SenderInfo
@@ -38,6 +39,7 @@ data class RoomSummary(
         val joinRules: RoomJoinRules? = null,
         val isDirect: Boolean = false,
         val directUserId: String? = null,
+        val directUserPresence: UserPresence? = null,
         val joinedMembersCount: Int? = 0,
         val invitedMembersCount: Int? = 0,
         val latestPreviewableEvent: TimelineEvent? = null,

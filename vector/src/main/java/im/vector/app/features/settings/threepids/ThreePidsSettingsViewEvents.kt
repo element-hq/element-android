@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.auth.registration.RegistrationFlowResponse
 
 sealed class ThreePidsSettingsViewEvents : VectorViewEvents {
     data class Failure(val throwable: Throwable) : ThreePidsSettingsViewEvents()
+
 //    object RequestPassword : ThreePidsSettingsViewEvents()
     data class RequestReAuth(val registrationFlowResponse: RegistrationFlowResponse, val lastErrorCode: String?) : ThreePidsSettingsViewEvents()
 }

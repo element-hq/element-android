@@ -17,7 +17,7 @@
 package im.vector.app.features.settings.threepids
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.core.utils.ReadOnceTrue
 import org.matrix.android.sdk.api.session.identity.ThreePid
@@ -30,4 +30,4 @@ data class ThreePidsSettingsViewState(
         val msisdnValidationRequests: Map<String, Async<Unit>> = emptyMap(),
         val editTextReinitiator: ReadOnceTrue = ReadOnceTrue(),
         val msisdnValidationReinitiator: Map<ThreePid, ReadOnceTrue> = emptyMap()
-) : MvRxState
+) : MavericksState

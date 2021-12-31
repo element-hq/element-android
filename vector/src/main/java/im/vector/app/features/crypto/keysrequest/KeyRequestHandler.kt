@@ -226,9 +226,9 @@ class KeyRequestHandler @Inject constructor(
 
         val alertMgrUniqueKey = alertManagerId(userId, deviceId)
         alertsToRequests[alertMgrUniqueKey]?.removeAll {
-            it.deviceId == request.deviceId
-                    && it.userId == request.userId
-                    && it.requestId == request.requestId
+            it.deviceId == request.deviceId &&
+                    it.userId == request.userId &&
+                    it.requestId == request.requestId
         }
         if (alertsToRequests[alertMgrUniqueKey]?.isEmpty() == true) {
             popupAlertManager.cancelAlert(alertMgrUniqueKey)

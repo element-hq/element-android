@@ -36,6 +36,7 @@ import im.vector.app.features.autocomplete.group.AutocompleteGroupPresenter
 import im.vector.app.features.autocomplete.member.AutocompleteMemberPresenter
 import im.vector.app.features.autocomplete.room.AutocompleteRoomPresenter
 import im.vector.app.features.command.Command
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.html.PillImageSpan
 import im.vector.app.features.themes.ThemeUtils
@@ -180,8 +181,8 @@ class AutoCompleter @AssistedInject constructor(
                 .with(backgroundDrawable)
                 .with(object : AutocompleteCallback<String> {
                     override fun onPopupItemClicked(editable: Editable, item: String): Boolean {
-                        // Detect last ":" and remove it
-                        var startIndex = editable.lastIndexOf(":")
+                        // Infer that the last ":" before the current cursor position is the original popup trigger
+                        var startIndex = editable.subSequence(0, editText.selectionStart).lastIndexOf(":")
                         if (startIndex == -1) {
                             startIndex = 0
                         }
@@ -193,7 +194,8 @@ class AutoCompleter @AssistedInject constructor(
                         }
 
                         // Replace the word by its completion
-                        editable.replace(startIndex, endIndex, item)
+                        editable.delete(startIndex, endIndex)
+                        editable.insert(startIndex, item)
                         return true
                     }
 
@@ -219,8 +221,15 @@ class AutoCompleter @AssistedInject constructor(
         // Replace the word by its completion
         val displayName = matrixItem.getBestName()
 
-        // with a trailing space
-        editable.replace(startIndex, endIndex, "$displayName ")
+        // Adding trailing space " " or ": " if the user started mention someone
+        val displayNameSuffix =
+                if (firstChar == "@" && startIndex == 0) {
+                    ": "
+                } else {
+                    " "
+                }
+
+        editable.replace(startIndex, endIndex, "$displayName$displayNameSuffix")
 
         // Add the span
         val span = PillImageSpan(

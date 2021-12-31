@@ -24,7 +24,6 @@ import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.LiveEvent
 import im.vector.app.databinding.FragmentKeysBackupRestoreSuccessBinding
-
 import javax.inject.Inject
 
 class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupRestoreSuccessBinding>() {
@@ -53,7 +52,7 @@ class KeysBackupRestoreSuccessFragment @Inject constructor() : VectorBaseFragmen
             views.successText.text = context?.getString(R.string.keys_backup_restore_success_title_already_up_to_date)
             views.successDetailsText.isVisible = false
         }
-        views.keysBackupSetupDoneButton.setOnClickListener { onDone() }
+        views.keysBackupSetupDoneButton.debouncedClicks { onDone() }
     }
 
     private fun onDone() {

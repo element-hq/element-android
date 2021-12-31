@@ -1700,7 +1700,6 @@
     <string name="settings_category_timeline">Cronologia</string>
     <string name="timeline_unread_messages">Missatges no llegits</string>
     <string name="labs_swipe_to_reply_in_timeline">Activa lliscar per respondre a la cronologia</string>
-    <string name="user_directory_search_hint">Cerca a partir del nom o l\'ID</string>
     <string name="room_directory_search_hint">Nom o ID (#exemple:matrix.org)</string>
     <string name="room_filtering_footer_open_room_directory">Mostra el directori de la sales</string>
     <string name="room_filtering_footer_create_new_room">Crea una nova sala</string>

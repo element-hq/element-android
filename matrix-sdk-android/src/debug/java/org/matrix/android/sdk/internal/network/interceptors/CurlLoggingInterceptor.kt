@@ -17,10 +17,10 @@
 
 package org.matrix.android.sdk.internal.network.interceptors
 
-import org.matrix.android.sdk.internal.di.MatrixScope
 import okhttp3.Interceptor
 import okhttp3.Response
 import okio.Buffer
+import org.matrix.android.sdk.internal.di.MatrixScope
 import timber.log.Timber
 import java.io.IOException
 import java.nio.charset.Charset
@@ -36,8 +36,8 @@ import javax.inject.Inject
  * non-production environment.
  */
 @MatrixScope
-internal class CurlLoggingInterceptor @Inject constructor()
-    : Interceptor {
+internal class CurlLoggingInterceptor @Inject constructor() :
+    Interceptor {
 
     /**
      * Set any additional curl command options (see 'curl --help').
@@ -90,8 +90,8 @@ internal class CurlLoggingInterceptor @Inject constructor()
 
         curlCmd += ((if (compressed) " --compressed " else " ") + "'" + request.url.toString()
                 // Replace localhost for emulator by localhost for shell
-                .replace("://10.0.2.2:8080/".toRegex(), "://127.0.0.1:8080/")
-                + "'")
+                .replace("://10.0.2.2:8080/".toRegex(), "://127.0.0.1:8080/") +
+                "'")
 
         // Add Json formatting
         curlCmd += " | python -m json.tool"

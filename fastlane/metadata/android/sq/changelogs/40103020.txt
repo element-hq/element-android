@@ -1,0 +1,2 @@
+Ndryshime kryesore në këtë version: Shtim mbulimi për Android Auto. Plot ndreqje të metash!
+Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases/tag/v1.3.2

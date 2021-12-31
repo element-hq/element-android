@@ -39,7 +39,6 @@
         android:textColor="?vctr_content_secondary"
         tools:text="@string/help_people_in_spaces_find_and_join" />
 
-
     <ImageView
         android:id="@+id/imageHint"
         android:layout_width="match_parent"
@@ -61,7 +60,6 @@
         android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         tools:visibility="visible" />
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -87,6 +85,5 @@
             android:text="@string/learn_more"
             android:textAllCaps="true" />
     </LinearLayout>
-
 
 </LinearLayout>

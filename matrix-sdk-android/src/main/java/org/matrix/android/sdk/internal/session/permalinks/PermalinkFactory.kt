@@ -16,7 +16,11 @@
 
 package org.matrix.android.sdk.internal.session.permalinks
 
+import org.matrix.android.sdk.api.MatrixConfiguration
+import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.permalinks.PermalinkData
+import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService.Companion.MATRIX_TO_URL_BASE
 import org.matrix.android.sdk.internal.di.UserId
 import javax.inject.Inject
@@ -24,28 +28,44 @@ import javax.inject.Inject
 internal class PermalinkFactory @Inject constructor(
         @UserId
         private val userId: String,
-        private val viaParameterFinder: ViaParameterFinder
+        private val viaParameterFinder: ViaParameterFinder,
+        private val matrixConfiguration: MatrixConfiguration
 ) {
 
-    fun createPermalink(event: Event): String? {
+    fun createPermalink(event: Event, forceMatrixTo: Boolean): String? {
         if (event.roomId.isNullOrEmpty() || event.eventId.isNullOrEmpty()) {
             return null
         }
-        return createPermalink(event.roomId, event.eventId)
+        return createPermalink(event.roomId, event.eventId, forceMatrixTo)
     }
 
-    fun createPermalink(id: String): String? {
-        return if (id.isEmpty()) {
-            null
-        } else MATRIX_TO_URL_BASE + escape(id)
+    fun createPermalink(id: String, forceMatrixTo: Boolean): String? {
+        return when {
+            id.isEmpty()                    -> null
+            !useClientFormat(forceMatrixTo) -> MATRIX_TO_URL_BASE + escape(id)
+            else                            -> {
+                buildString {
+                    append(matrixConfiguration.clientPermalinkBaseUrl)
+                    when {
+                        MatrixPatterns.isRoomId(id) || MatrixPatterns.isRoomAlias(id) -> append(ROOM_PATH)
+                        MatrixPatterns.isUserId(id)                                   -> append(USER_PATH)
+                        MatrixPatterns.isGroupId(id)                                  -> append(GROUP_PATH)
+                    }
+                    append(escape(id))
+                }
+            }
+        }
     }
 
-    fun createRoomPermalink(roomId: String, via: List<String>? = null): String? {
+    fun createRoomPermalink(roomId: String, via: List<String>? = null, forceMatrixTo: Boolean): String? {
         return if (roomId.isEmpty()) {
             null
         } else {
             buildString {
-                append(MATRIX_TO_URL_BASE)
+                append(baseUrl(forceMatrixTo))
+                if (useClientFormat(forceMatrixTo)) {
+                    append(ROOM_PATH)
+                }
                 append(escape(roomId))
                 append(
                         via?.takeIf { it.isNotEmpty() }?.let { viaParameterFinder.asUrlViaParameters(it) }
@@ -55,16 +75,34 @@ internal class PermalinkFactory @Inject constructor(
         }
     }
 
-    fun createPermalink(roomId: String, eventId: String): String {
-        return MATRIX_TO_URL_BASE + escape(roomId) + "/" + escape(eventId) + viaParameterFinder.computeViaParams(userId, roomId)
+    fun createPermalink(roomId: String, eventId: String, forceMatrixTo: Boolean): String {
+        return buildString {
+            append(baseUrl(forceMatrixTo))
+            if (useClientFormat(forceMatrixTo)) {
+                append(ROOM_PATH)
+            }
+            append(escape(roomId))
+            append("/")
+            append(escape(eventId))
+            append(viaParameterFinder.computeViaParams(userId, roomId))
+        }
     }
 
     fun getLinkedId(url: String): String? {
-        val isSupported = url.startsWith(MATRIX_TO_URL_BASE)
-
-        return if (isSupported) {
-            url.substring(MATRIX_TO_URL_BASE.length)
-        } else null
+        val clientBaseUrl = matrixConfiguration.clientPermalinkBaseUrl
+        return when {
+            url.startsWith(MATRIX_TO_URL_BASE)                     -> url.substring(MATRIX_TO_URL_BASE.length)
+            clientBaseUrl != null && url.startsWith(clientBaseUrl) -> {
+                when (PermalinkParser.parse(url)) {
+                    is PermalinkData.GroupLink -> url.substring(clientBaseUrl.length + GROUP_PATH.length)
+                    is PermalinkData.RoomLink  -> url.substring(clientBaseUrl.length + ROOM_PATH.length)
+                    is PermalinkData.UserLink  -> url.substring(clientBaseUrl.length + USER_PATH.length)
+                    else                       -> null
+                }
+            }
+            else                                                   -> null
+        }
+                ?.substringBeforeLast("?")
     }
 
     /**
@@ -85,5 +123,29 @@ internal class PermalinkFactory @Inject constructor(
      */
     private fun unescape(id: String): String {
         return id.replace("%2F", "/")
+    }
+
+    /**
+     * Get the permalink base URL according to the potential one in [MatrixConfiguration.clientPermalinkBaseUrl]
+     * and the [forceMatrixTo] parameter.
+     *
+     * @param forceMatrixTo whether we should force using matrix.to base URL.
+     *
+     * @return the permalink base URL.
+     */
+    private fun baseUrl(forceMatrixTo: Boolean): String {
+        return matrixConfiguration.clientPermalinkBaseUrl
+                ?.takeUnless { forceMatrixTo }
+                ?: MATRIX_TO_URL_BASE
+    }
+
+    private fun useClientFormat(forceMatrixTo: Boolean): Boolean {
+        return !forceMatrixTo && matrixConfiguration.clientPermalinkBaseUrl != null
+    }
+
+    companion object {
+        private const val ROOM_PATH = "room/"
+        private const val USER_PATH = "user/"
+        private const val GROUP_PATH = "group/"
     }
 }

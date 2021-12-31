@@ -23,6 +23,7 @@ import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFact
 import im.vector.app.features.home.room.detail.timeline.item.E2EDecoration
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
 import im.vector.app.features.home.room.detail.timeline.item.PollResponseData
+import im.vector.app.features.home.room.detail.timeline.item.PollVoteSummaryData
 import im.vector.app.features.home.room.detail.timeline.item.ReactionInfoData
 import im.vector.app.features.home.room.detail.timeline.item.ReferencesInfoData
 import im.vector.app.features.home.room.detail.timeline.item.SendStateDecoration
@@ -65,13 +66,13 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 ?: false
 
         val showInformation =
-                addDaySeparator
-                        || event.senderInfo.avatarUrl != nextDisplayableEvent?.senderInfo?.avatarUrl
-                        || event.senderInfo.disambiguatedDisplayName != nextDisplayableEvent?.senderInfo?.disambiguatedDisplayName
-                        || nextDisplayableEvent.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.ENCRYPTED)
-                        || isNextMessageReceivedMoreThanOneHourAgo
-                        || isTileTypeMessage(nextDisplayableEvent)
-                        || nextDisplayableEvent.isEdition()
+                addDaySeparator ||
+                        event.senderInfo.avatarUrl != nextDisplayableEvent?.senderInfo?.avatarUrl ||
+                        event.senderInfo.disambiguatedDisplayName != nextDisplayableEvent?.senderInfo?.disambiguatedDisplayName ||
+                        nextDisplayableEvent.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.ENCRYPTED) ||
+                        isNextMessageReceivedMoreThanOneHourAgo ||
+                        isTileTypeMessage(nextDisplayableEvent) ||
+                        nextDisplayableEvent.isEdition()
 
         val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
         val roomSummary = params.partialState.roomSummary
@@ -107,10 +108,15 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 pollResponseAggregatedSummary = event.annotations?.pollResponseSummary?.let {
                     PollResponseData(
                             myVote = it.aggregatedContent?.myVote,
-                            isClosed = it.closedTime ?: Long.MAX_VALUE > System.currentTimeMillis(),
-                            votes = it.aggregatedContent?.votes
-                                    ?.groupBy({ it.optionIndex }, { it.userId })
-                                    ?.mapValues { it.value.size }
+                            isClosed = it.closedTime != null,
+                            votes = it.aggregatedContent?.votesSummary?.mapValues { votesSummary ->
+                                PollVoteSummaryData(
+                                        total = votesSummary.value.total,
+                                        percentage = votesSummary.value.percentage
+                                )
+                            },
+                            winnerVoteCount = it.aggregatedContent?.winnerVoteCount ?: 0,
+                            totalVotes = it.aggregatedContent?.totalVotes ?: 0
                     )
                 },
                 hasBeenEdited = event.hasBeenEdited(),
@@ -143,10 +149,10 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
 
     private fun getE2EDecoration(roomSummary: RoomSummary?, event: TimelineEvent): E2EDecoration {
         return if (
-                event.root.sendState == SendState.SYNCED
-                && roomSummary?.isEncrypted.orFalse()
+                event.root.sendState == SendState.SYNCED &&
+                roomSummary?.isEncrypted.orFalse() &&
                 // is user verified
-                && session.cryptoService().crossSigningService().getUserCrossSigningKeys(event.root.senderId ?: "")?.isTrusted() == true) {
+                session.cryptoService().crossSigningService().getUserCrossSigningKeys(event.root.senderId ?: "")?.isTrusted() == true) {
             val ts = roomSummary?.encryptionEventTs ?: 0
             val eventTs = event.root.originServerTs ?: 0
             if (event.isEncrypted()) {

@@ -18,7 +18,9 @@ package org.matrix.android.sdk.api.session
 
 import androidx.annotation.MainThread
 import androidx.lifecycle.LiveData
+import kotlinx.coroutines.flow.SharedFlow
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.federation.FederationService
@@ -29,6 +31,7 @@ import org.matrix.android.sdk.api.session.cache.CacheService
 import org.matrix.android.sdk.api.session.call.CallSignalingService
 import org.matrix.android.sdk.api.session.content.ContentUploadStateTracker
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.session.contentscanner.ContentScannerService
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
@@ -41,6 +44,7 @@ import org.matrix.android.sdk.api.session.integrationmanager.IntegrationManagerS
 import org.matrix.android.sdk.api.session.media.MediaService
 import org.matrix.android.sdk.api.session.openid.OpenIdService
 import org.matrix.android.sdk.api.session.permalinks.PermalinkService
+import org.matrix.android.sdk.api.session.presence.PresenceService
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.pushers.PushersService
 import org.matrix.android.sdk.api.session.room.RoomDirectoryService
@@ -52,6 +56,7 @@ import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.api.session.space.SpaceService
 import org.matrix.android.sdk.api.session.sync.FilterService
 import org.matrix.android.sdk.api.session.sync.SyncState
+import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.thirdparty.ThirdPartyService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
@@ -73,12 +78,15 @@ interface Session :
         TermsService,
         EventService,
         ProfileService,
+        PresenceService,
         PushRuleService,
         PushersService,
         SyncStatusService,
         HomeServerCapabilitiesService,
         SecureStorageService,
         AccountService {
+
+    val coroutineDispatchers: MatrixCoroutineDispatchers
 
     /**
      * The params associated to the session
@@ -113,9 +121,11 @@ interface Session :
     fun requireBackgroundSync()
 
     /**
-     * Launches infinite periodic background syncs
-     * This does not work in doze mode :/
-     * If battery optimization is on it can work in app standby but that's all :/
+     * Launches infinite self rescheduling background syncs via the WorkManager
+     *
+     * While dozing, syncs will only occur during maintenance windows
+     * For reliability it's recommended to also start a long running foreground service
+     * along with disabling battery optimizations
      */
     fun startAutomaticBackgroundSync(timeOutInSeconds: Long, repeatDelayInSeconds: Long)
 
@@ -142,6 +152,11 @@ interface Session :
      * @return the current [SyncState].
      */
     fun getSyncState(): SyncState
+
+    /**
+     * This method returns a flow of SyncResponse. New value will be pushed through the sync thread.
+     */
+    fun syncFlow(): SharedFlow<SyncResponse>
 
     /**
      * This methods return true if an initial sync has been processed
@@ -177,6 +192,11 @@ interface Session :
      * Returns the cryptoService associated with the session
      */
     fun cryptoService(): CryptoService
+
+    /**
+     * Returns the ContentScannerService associated with the session
+     */
+    fun contentScannerService(): ContentScannerService
 
     /**
      * Returns the identity service associated with the session

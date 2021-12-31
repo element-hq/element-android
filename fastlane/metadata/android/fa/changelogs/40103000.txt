@@ -1,0 +1,2 @@
+تغییرات عمده در این نگارش: سازمان‌دهی اتاق‌هایتان با استفاده از فضاها
+گزارش دگرگونی کامل: https://github.com/vector-im/element-android/releases/tag/v1.3.0

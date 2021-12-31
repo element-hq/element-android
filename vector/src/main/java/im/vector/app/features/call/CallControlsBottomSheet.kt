@@ -23,10 +23,12 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.activityViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetCallControlsBinding
 
+@AndroidEntryPoint
 class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetCallControlsBinding>() {
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetCallControlsBinding {
         return BottomSheetCallControlsBinding.inflate(inflater, container, false)
@@ -37,7 +39,7 @@ class CallControlsBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetC
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        callViewModel.subscribe(this) {
+        callViewModel.onEach {
             renderState(it)
         }
 

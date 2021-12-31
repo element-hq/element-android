@@ -17,7 +17,7 @@
 package im.vector.app.features.roomdirectory
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
@@ -36,4 +36,4 @@ data class PublicRoomsViewState(
         // keys are room alias or roomId
         val changeMembershipStates: Map<String, ChangeMembershipState> = emptyMap(),
         val roomDirectoryData: RoomDirectoryData = RoomDirectoryData()
-) : MvRxState
+) : MavericksState

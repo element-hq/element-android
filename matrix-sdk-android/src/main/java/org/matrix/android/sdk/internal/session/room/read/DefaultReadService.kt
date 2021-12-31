@@ -18,10 +18,10 @@ package org.matrix.android.sdk.internal.session.room.read
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
-import dagger.assisted.AssistedFactory
 import com.zhuinden.monarchy.Monarchy
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.util.Optional

@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.room
 
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.internal.session.SessionScope
@@ -66,7 +67,8 @@ internal class DefaultRoomFactory @Inject constructor(private val cryptoService:
                                                       private val roomAccountDataServiceFactory: DefaultRoomAccountDataService.Factory,
                                                       private val sendStateTask: SendStateTask,
                                                       private val viaParameterFinder: ViaParameterFinder,
-                                                      private val searchTask: SearchTask) :
+                                                      private val searchTask: SearchTask,
+                                                      private val coroutineDispatchers: MatrixCoroutineDispatchers) :
         RoomFactory {
 
     override fun create(roomId: String): Room {
@@ -92,7 +94,8 @@ internal class DefaultRoomFactory @Inject constructor(private val cryptoService:
                 roomVersionService = roomVersionServiceFactory.create(roomId),
                 sendStateTask = sendStateTask,
                 searchTask = searchTask,
-                viaParameterFinder = viaParameterFinder
+                viaParameterFinder = viaParameterFinder,
+                coroutineDispatchers = coroutineDispatchers
         )
     }
 }
