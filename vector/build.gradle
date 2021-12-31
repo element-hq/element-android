@@ -150,7 +150,7 @@ android {
         //  This *must* only be set in trusted environments.
         buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
 
-        buildConfigField "String", "mapTilerKey", "\"DUMMY_KEY\""
+        buildConfigField "String", "mapTilerKey", "\"KF6tcY7YuKFgJSZ1EFQ2\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
