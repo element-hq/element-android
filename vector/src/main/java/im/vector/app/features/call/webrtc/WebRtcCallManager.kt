@@ -22,6 +22,9 @@ import androidx.lifecycle.LifecycleOwner
 import im.vector.app.ActiveSessionDataSource
 import im.vector.app.BuildConfig
 import im.vector.app.core.services.CallService
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.CallEnded
+import im.vector.app.features.analytics.plan.CallStarted
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.audio.CallAudioManager
 import im.vector.app.features.call.lookup.CallProtocolsChecker
@@ -68,7 +71,8 @@ private val loggerTag = LoggerTag("WebRtcCallManager", LoggerTag.VOIP)
 @Singleton
 class WebRtcCallManager @Inject constructor(
         private val context: Context,
-        private val activeSessionDataSource: ActiveSessionDataSource
+        private val activeSessionDataSource: ActiveSessionDataSource,
+        private val analyticsTracker: AnalyticsTracker
 ) : CallListener,
         DefaultLifecycleObserver {
 
@@ -237,6 +241,7 @@ class WebRtcCallManager @Inject constructor(
         val currentCall = getCurrentCall().takeIf { it != call }
         currentCall?.updateRemoteOnHold(onHold = true)
         audioManager.setMode(if (call.mxCall.isVideoCall) CallAudioManager.Mode.VIDEO_CALL else CallAudioManager.Mode.AUDIO_CALL)
+        call.trackCallStarted()
         this.currentCall.setAndNotify(call)
     }
 
@@ -245,6 +250,7 @@ class WebRtcCallManager @Inject constructor(
         val webRtcCall = callsByCallId.remove(callId) ?: return Unit.also {
             Timber.tag(loggerTag.value).v("On call ended for unknown call $callId")
         }
+        webRtcCall.trackCallEnded()
         CallService.onCallTerminated(context, callId, endCallReason, rejected)
         callsByRoomId[webRtcCall.signalingRoomId]?.remove(webRtcCall)
         callsByRoomId[webRtcCall.nativeRoomId]?.remove(webRtcCall)
@@ -442,5 +448,29 @@ class WebRtcCallManager @Inject constructor(
                     Timber.tag(loggerTag.value).w("onCallAssertedIdentityReceived for non active call? ${callAssertedIdentityContent.callId}")
                 }
         call.onCallAssertedIdentityReceived(callAssertedIdentityContent)
+    }
+
+    /**
+     * Analytics
+     */
+    private fun WebRtcCall.trackCallStarted() {
+        analyticsTracker.capture(
+                CallStarted(
+                        isVideo = mxCall.isVideoCall,
+                        numParticipants = 2,
+                        placed = mxCall.isOutgoing
+                )
+        )
+    }
+
+    private fun WebRtcCall.trackCallEnded() {
+        analyticsTracker.capture(
+                CallEnded(
+                        durationMs = durationMillis(),
+                        isVideo = mxCall.isVideoCall,
+                        numParticipants = 2,
+                        placed = mxCall.isOutgoing
+                )
+        )
     }
 }
