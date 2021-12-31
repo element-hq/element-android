@@ -186,10 +186,14 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
             newOverrideColorSpecs.remove(initialState.userId)
         }
         viewModelScope.launch {
-            session.accountDataService().updateUserAccountData(
-                    type = UserAccountDataTypes.TYPE_OVERRIDE_COLORS,
-                    content = newOverrideColorSpecs
-            )
+            try {
+                session.accountDataService().updateUserAccountData(
+                        type = UserAccountDataTypes.TYPE_OVERRIDE_COLORS,
+                        content = newOverrideColorSpecs
+                )
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
+            }
         }
     }
 
