@@ -24,7 +24,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
@@ -56,10 +55,8 @@ import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.roommemberprofile.devices.DeviceListBottomSheet
 import im.vector.app.features.roommemberprofile.powerlevel.EditPowerLevelDialogs
-import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
-import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -328,36 +325,20 @@ class RoomMemberProfileFragment @Inject constructor(
         navigator.openBigImageViewer(requireActivity(), view, userMatrixItem)
     }
 
-    override fun onOverrideColorClicked(): Unit = withState(viewModel)  { state ->
+    override fun onOverrideColorClicked(): Unit = withState(viewModel) { state ->
         val inflater = requireActivity().layoutInflater
         val layout = inflater.inflate(R.layout.dialog_base_edit_text, null)
         val views = DialogBaseEditTextBinding.bind(layout)
-        val session = injector().activeSessionHolder().getActiveSession()
-        val overrideColorsSetting = session.accountDataService().getUserAccountDataEvent(UserAccountDataTypes.TYPE_OVERRIDE_COLORS)
-        val overrideColorSpecs = overrideColorsSetting?.content?.toMap().orEmpty()
-        val userId = state.userId
-        val overrideColorSpec : String? = overrideColorSpecs[userId]?.toString()
-        views.editText.setText(overrideColorSpec)
+        views.editText.setText(state.userColorOverride)
         views.editText.hint = "#000000"
 
         MaterialAlertDialogBuilder(requireContext())
                 .setTitle(R.string.room_member_override_nick_color)
                 .setView(layout)
                 .setPositiveButton(R.string.ok) { _, _ ->
-                    val newOverrideColorSpec = views.editText.text.toString()
-                    if (newOverrideColorSpec != overrideColorSpec) {
-                        val newOverrideColorSpecs = overrideColorSpecs.toMutableMap()
-                        if (matrixItemColorProvider.setOverrideColor(userId, newOverrideColorSpec)) {
-                            newOverrideColorSpecs[userId] = newOverrideColorSpec
-                        } else {
-                            newOverrideColorSpecs.remove(userId)
-                        }
-                        viewModel.viewModelScope.launch {
-                            session.accountDataService().updateUserAccountData(
-                                    type = UserAccountDataTypes.TYPE_OVERRIDE_COLORS,
-                                    content = newOverrideColorSpecs)
-                        }
-                        invalidate()
+                    val newColor = views.editText.text.toString()
+                    if (newColor != state.userColorOverride) {
+                        viewModel.handle(RoomMemberProfileAction.SetUserColorOverride(newColor))
                     }
                 }
                 .setNegativeButton(R.string.cancel, null)
