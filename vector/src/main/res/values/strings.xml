@@ -3662,6 +3662,7 @@
     <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in Element.</string>
 
    <string name="labs_enable_latex_maths">Enable LaTeX mathematics</string>
+   <string name="restart_the_application_to_apply_changes">Restart the application for the change to take effect.</string>
 
     <!-- Poll -->
     <string name="create_poll_title">Create Poll</string>
