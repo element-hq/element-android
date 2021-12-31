@@ -42,6 +42,7 @@ class RoomMemberProfileController @Inject constructor(
         fun onShowDeviceList()
         fun onShowDeviceListNoCrossSigning()
         fun onOpenDmClicked()
+        fun onOverrideColorClicked()
         fun onJumpToReadReceiptClicked()
         fun onMentionClicked()
         fun onEditPowerLevel(currentRole: Role)
@@ -171,10 +172,18 @@ class RoomMemberProfileController @Inject constructor(
 
     private fun buildMoreSection(state: RoomMemberProfileViewState) {
         // More
+        buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
+
+        buildProfileAction(
+                id = "overrideColor",
+                editable = false,
+                title = stringProvider.getString(R.string.room_member_override_nick_color),
+                divider = false,
+                action = { callback?.onOverrideColorClicked() }
+        )
+
         if (!state.isMine) {
             val membership = state.asyncMembership() ?: return
-
-            buildProfileSection(stringProvider.getString(R.string.room_profile_section_more))
 
             buildProfileAction(
                     id = "direct",
