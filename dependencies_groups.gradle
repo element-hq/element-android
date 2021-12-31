@@ -12,13 +12,19 @@ ext.groups = [
                         'com.github.vector-im',
                         'com.github.yalantis',
                         'com.github.Zhuinden',
+                        'com.github.Zhuinden',
+                        // Get Olm From Jitpack
+                        'org.matrix.gitlab.matrix-org',
                 ]
         ],
         olm         : [
                 regex: [
                 ],
                 group: [
-                        'org.matrix.android',
+                        // Altered, to ensure there is no mistake.
+                        // If I just comment it, the list of groups will be empty,
+                        // and this repo will be used to look for evey dependencies
+                        'ALTERED.org.matrix.android.ATLERED',
                 ]
         ],
         jitsi       : [

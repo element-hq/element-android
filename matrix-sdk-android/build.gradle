@@ -141,7 +141,9 @@ dependencies {
     implementation libs.arrow.instances
 
     // olm lib is now hosted by maven at https://gitlab.matrix.org/api/v4/projects/27/packages/maven
-    implementation 'org.matrix.android:olm:3.2.7'
+    // implementation 'org.matrix.android:olm:3.2.7'
+    // Get Olm from Jitpack
+    implementation 'org.matrix.gitlab.matrix-org:olm:3.2.7'
 
     // DI
     implementation libs.dagger.dagger
