@@ -39,7 +39,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -131,8 +130,8 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
 
     private fun observeAccountData() {
         session.flow()
-                .liveUserAccountData(setOf(UserAccountDataTypes.TYPE_OVERRIDE_COLORS))
-                .mapNotNull { it.firstOrNull() }
+                .liveUserAccountData(UserAccountDataTypes.TYPE_OVERRIDE_COLORS)
+                .unwrap()
                 .map { it.content.toModel<Map<String, String>>() }
                 .map { userColorAccountDataContent ->
                     userColorAccountDataContent?.get(initialState.userId)

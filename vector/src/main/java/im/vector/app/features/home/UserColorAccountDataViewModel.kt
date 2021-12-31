@@ -29,12 +29,12 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.flow.flow
+import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
 data class DummyState(
@@ -60,8 +60,8 @@ class UserColorAccountDataViewModel @AssistedInject constructor(
 
     private fun observeAccountData() {
         session.flow()
-                .liveUserAccountData(setOf(UserAccountDataTypes.TYPE_OVERRIDE_COLORS))
-                .mapNotNull { it.firstOrNull() }
+                .liveUserAccountData(UserAccountDataTypes.TYPE_OVERRIDE_COLORS)
+                .unwrap()
                 .map { it.content.toModel<Map<String, String>>() }
                 .onEach { userColorAccountDataContent ->
                     if (userColorAccountDataContent == null) {
