@@ -35,9 +35,11 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class EventHtmlRenderer @Inject constructor(htmlConfigure: MatrixHtmlPluginConfigure,
-                                            context: Context,
-                                            private val vectorPreferences: VectorPreferences) {
+class EventHtmlRenderer @Inject constructor(
+        htmlConfigure: MatrixHtmlPluginConfigure,
+        context: Context,
+        vectorPreferences: VectorPreferences
+) {
 
     interface PostProcessor {
         fun afterRender(renderedText: Spannable)
