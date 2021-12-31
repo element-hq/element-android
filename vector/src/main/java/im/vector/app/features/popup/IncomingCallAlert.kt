@@ -22,6 +22,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.setLeftDrawable
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.databinding.AlerterIncomingCallLayoutBinding
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 

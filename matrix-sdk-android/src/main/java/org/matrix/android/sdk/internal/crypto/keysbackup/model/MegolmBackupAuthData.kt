@@ -51,7 +51,7 @@ data class MegolmBackupAuthData(
          * userId -> (deviceSignKeyId -> signature)
          */
         @Json(name = "signatures")
-        val signatures: Map<String, Map<String, String>>
+        val signatures: Map<String, Map<String, String>>? = null
 ) {
 
     fun toJsonDict(): JsonDict {

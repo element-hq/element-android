@@ -25,7 +25,6 @@ import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.databinding.ViewKeysBackupBannerBinding
-
 import timber.log.Timber
 
 /**
@@ -137,8 +136,8 @@ class KeysBackupBanner @JvmOverloads constructor(
     }
 
     private fun renderSetup(nbOfKeys: Int) {
-        if (nbOfKeys == 0
-                || DefaultSharedPreferences.getInstance(context).getBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, false)) {
+        if (nbOfKeys == 0 ||
+                DefaultSharedPreferences.getInstance(context).getBoolean(BANNER_SETUP_DO_NOT_SHOW_AGAIN, false)) {
             // Do not display the setup banner if there is no keys to backup, or if the user has already closed it
             isVisible = false
         } else {

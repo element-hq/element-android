@@ -23,8 +23,11 @@ import androidx.core.content.FileProvider
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.completeWith
 import kotlinx.coroutines.withContext
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.file.FileService
@@ -33,7 +36,6 @@ import org.matrix.android.sdk.internal.crypto.attachments.MXEncryptedAttachments
 import org.matrix.android.sdk.internal.di.SessionDownloadsDirectory
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificateWithProgress
 import org.matrix.android.sdk.internal.session.download.DownloadProgressInterceptor.Companion.DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.util.file.AtomicFileCreator
 import org.matrix.android.sdk.internal.util.md5
 import org.matrix.android.sdk.internal.util.writeToFile
@@ -118,12 +120,24 @@ internal class DefaultFileService @Inject constructor(
                 val cachedFiles = getFiles(url, fileName, mimeType, elementToDecrypt != null)
 
                 if (!cachedFiles.file.exists()) {
-                    val resolvedUrl = contentUrlResolver.resolveFullSize(url) ?: throw IllegalArgumentException("url is null")
+                    val resolvedUrl = contentUrlResolver.resolveForDownload(url, elementToDecrypt) ?: throw IllegalArgumentException("url is null")
 
-                    val request = Request.Builder()
-                            .url(resolvedUrl)
-                            .header(DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER, url)
-                            .build()
+                    val request = when (resolvedUrl) {
+                        is ContentUrlResolver.ResolvedMethod.GET -> {
+                            Request.Builder()
+                                    .url(resolvedUrl.url)
+                                    .header(DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER, url)
+                                    .build()
+                        }
+
+                        is ContentUrlResolver.ResolvedMethod.POST -> {
+                            Request.Builder()
+                                    .url(resolvedUrl.url)
+                                    .header(DOWNLOAD_PROGRESS_INTERCEPTOR_HEADER, url)
+                                    .post(resolvedUrl.jsonBody.toRequestBody("application/json".toMediaType()))
+                                    .build()
+                        }
+                    }
 
                     val response = try {
                         okHttpClient.newCall(request).execute()

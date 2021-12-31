@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: Lisasime otsevestlustele kasutaja võrguolekute toe (matrix.org puhul on välja lülitatud) ja uuesti lisasime Android Auto toe.
+Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases/tag/v1.3.6

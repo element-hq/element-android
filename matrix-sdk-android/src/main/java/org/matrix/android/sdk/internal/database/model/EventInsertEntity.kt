@@ -23,7 +23,12 @@ import io.realm.RealmObject
  * in EventEntity table.
  */
 internal open class EventInsertEntity(var eventId: String = "",
-                                      var eventType: String = ""
+                                      var eventType: String = "",
+                                      /**
+                                       * This flag will be used to filter EventInsertEntity in EventInsertLiveObserver.
+                                       * Currently it's set to false when the event content is encrypted.
+                                       */
+                                      var canBeProcessed: Boolean = true
 ) : RealmObject() {
 
     private var insertTypeStr: String = EventInsertType.INCREMENTAL_SYNC.name

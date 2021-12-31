@@ -16,12 +16,20 @@
 
 package im.vector.app.core.extensions
 
+import android.graphics.drawable.Drawable
 import android.text.InputType
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
+import androidx.annotation.AttrRes
+import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.isVisible
 import im.vector.app.R
+import im.vector.app.features.themes.ThemeUtils
 
 /**
  * Remove left margin of a SearchView
@@ -49,4 +57,26 @@ fun View.getMeasurements(): Pair<Int, Int> {
     val width = measuredWidth
     val height = measuredHeight
     return width to height
+}
+
+fun ImageView.setDrawableOrHide(drawableRes: Drawable?) {
+    setImageDrawable(drawableRes)
+    isVisible = drawableRes != null
+}
+
+fun View.setAttributeTintedBackground(@DrawableRes drawableRes: Int, @AttrRes tint: Int) {
+    val drawable = ContextCompat.getDrawable(context, drawableRes)!!
+    DrawableCompat.setTint(drawable, ThemeUtils.getColor(context, tint))
+    background = drawable
+}
+
+fun ImageView.setAttributeTintedImageResource(@DrawableRes drawableRes: Int, @AttrRes tint: Int) {
+    val drawable = ContextCompat.getDrawable(context, drawableRes)!!
+    DrawableCompat.setTint(drawable, ThemeUtils.getColor(context, tint))
+    setImageDrawable(drawable)
+}
+
+fun View.setAttributeBackground(@AttrRes attributeId: Int) {
+    val attribute = ThemeUtils.getAttribute(context, attributeId)!!
+    setBackgroundResource(attribute.resourceId)
 }

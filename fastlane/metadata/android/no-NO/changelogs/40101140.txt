@@ -1,0 +1,2 @@
+Hovedendringer i denne versjonen: Løs et problem om krypterte meldinger.
+Full endringslogg: https://github.com/vector-im/element-android/releases/tag/v1.1.14

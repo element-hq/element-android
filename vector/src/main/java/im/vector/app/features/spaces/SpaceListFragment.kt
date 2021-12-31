@@ -39,12 +39,11 @@ import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import javax.inject.Inject
 
 class SpaceListFragment @Inject constructor(
-        val spaceListViewModelFactory: SpacesListViewModel.Factory,
         private val spaceController: SpaceSummaryController
 ) : VectorBaseFragment<FragmentGroupListBinding>(), SpaceSummaryController.Callback {
 
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
-    private val viewModel: SpacesListViewModel by fragmentViewModel()
+    private val viewModel: SpaceListViewModel by fragmentViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentGroupListBinding {
         return FragmentGroupListBinding.inflate(inflater, container, false)

@@ -17,7 +17,7 @@
 package im.vector.app.features.home.room.detail.upgrade
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 
 data class MigrateRoomViewState(
@@ -36,7 +36,7 @@ data class MigrateRoomViewState(
         val upgradingProgressIndeterminate: Boolean = true,
         val migrationReason: MigrateRoomBottomSheet.MigrationReason = MigrateRoomBottomSheet.MigrationReason.MANUAL,
         val autoMigrateMembersAndParents: Boolean = false
-) : MvRxState {
+) : MavericksState {
     constructor(args: MigrateRoomBottomSheet.Args) : this(
             roomId = args.roomId,
             newVersion = args.newVersion,

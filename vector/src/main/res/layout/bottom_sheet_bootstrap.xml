@@ -41,7 +41,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/bootstrapIcon"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/bootstrapIcon"
+            app:layout_constraintStart_toEndOf="@id/bootstrapIcon"
             app:layout_constraintTop_toTopOf="@id/bootstrapIcon"
             tools:text="@string/bottom_sheet_setup_secure_backup_title" />
 

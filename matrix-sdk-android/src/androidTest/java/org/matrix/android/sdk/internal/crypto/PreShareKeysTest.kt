@@ -36,12 +36,12 @@ import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyContent
 @FixMethodOrder(MethodSorters.JVM)
 class PreShareKeysTest : InstrumentedTest {
 
-    private val mTestHelper = CommonTestHelper(context())
-    private val mCryptoTestHelper = CryptoTestHelper(mTestHelper)
+    private val testHelper = CommonTestHelper(context())
+    private val cryptoTestHelper = CryptoTestHelper(testHelper)
 
     @Test
     fun ensure_outbound_session_happy_path() {
-        val testData = mCryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
+        val testData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
         val e2eRoomID = testData.roomId
         val aliceSession = testData.firstSession
         val bobSession = testData.secondSession!!
@@ -50,31 +50,31 @@ class PreShareKeysTest : InstrumentedTest {
         aliceSession.cryptoService().discardOutboundSession(e2eRoomID)
 
         val preShareCount = bobSession.cryptoService().getGossipingEvents().count {
-            it.senderId == aliceSession.myUserId
-                    && it.getClearType() == EventType.ROOM_KEY
+            it.senderId == aliceSession.myUserId &&
+                    it.getClearType() == EventType.ROOM_KEY
         }
 
         assertEquals("Bob should not have receive any key from alice at this point", 0, preShareCount)
         Log.d("#Test", "Room Key Received from alice $preShareCount")
 
         // Force presharing of new outbound key
-        mTestHelper.doSync<Unit> {
+        testHelper.doSync<Unit> {
             aliceSession.cryptoService().prepareToEncrypt(e2eRoomID, it)
         }
 
-        mTestHelper.waitWithLatch { latch ->
-            mTestHelper.retryPeriodicallyWithLatch(latch) {
+        testHelper.waitWithLatch { latch ->
+            testHelper.retryPeriodicallyWithLatch(latch) {
                 val newGossipCount = bobSession.cryptoService().getGossipingEvents().count {
-                    it.senderId == aliceSession.myUserId
-                            && it.getClearType() == EventType.ROOM_KEY
+                    it.senderId == aliceSession.myUserId &&
+                            it.getClearType() == EventType.ROOM_KEY
                 }
                 newGossipCount > preShareCount
             }
         }
 
         val latest = bobSession.cryptoService().getGossipingEvents().lastOrNull {
-            it.senderId == aliceSession.myUserId
-                    && it.getClearType() == EventType.ROOM_KEY
+            it.senderId == aliceSession.myUserId &&
+                    it.getClearType() == EventType.ROOM_KEY
         }
 
         val content = latest?.getClearContent().toModel<RoomKeyContent>()
@@ -88,16 +88,16 @@ class PreShareKeysTest : InstrumentedTest {
         assertEquals("The session received by bob should match what alice sent", 0, sharedIndex)
 
         // Just send a real message as test
-        val sentEvent = mTestHelper.sendTextMessage(aliceSession.getRoom(e2eRoomID)!!, "Allo", 1).first()
+        val sentEvent = testHelper.sendTextMessage(aliceSession.getRoom(e2eRoomID)!!, "Allo", 1).first()
 
         assertEquals(megolmSessionId, sentEvent.root.content.toModel<EncryptedEventContent>()?.sessionId, "Unexpected megolm session")
-        mTestHelper.waitWithLatch { latch ->
-            mTestHelper.retryPeriodicallyWithLatch(latch) {
+        testHelper.waitWithLatch { latch ->
+            testHelper.retryPeriodicallyWithLatch(latch) {
                 bobSession.getRoom(e2eRoomID)?.getTimeLineEvent(sentEvent.eventId)?.root?.getClearType() == EventType.MESSAGE
             }
         }
 
-        mTestHelper.signOutAndClose(aliceSession)
-        mTestHelper.signOutAndClose(bobSession)
+        testHelper.signOutAndClose(aliceSession)
+        testHelper.signOutAndClose(bobSession)
     }
 }

@@ -28,6 +28,8 @@ sealed class CreateSpaceAction : VectorViewModelAction {
     object OnBackPressed : CreateSpaceAction()
     object NextFromDetails : CreateSpaceAction()
     object NextFromDefaultRooms : CreateSpaceAction()
+    object NextFromAdd3pid : CreateSpaceAction()
     data class DefaultRoomNameChanged(val index: Int, val name: String) : CreateSpaceAction()
+    data class DefaultInvite3pidChanged(val index: Int, val email: String) : CreateSpaceAction()
     data class SetSpaceTopology(val topology: SpaceTopology) : CreateSpaceAction()
 }

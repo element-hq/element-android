@@ -224,7 +224,7 @@ public class BugReporterMultipartBody extends RequestBody {
         }
 
         public static Part createFormData(String name, String value) {
-            return createFormData(name, null, RequestBody.create(null, value));
+            return createFormData(name, null, RequestBody.create(value, null));
         }
 
         public static Part createFormData(String name, String filename, RequestBody body) {

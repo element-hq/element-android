@@ -19,7 +19,8 @@ package org.matrix.android.sdk.api.session.permalinks
 import org.matrix.android.sdk.api.session.events.model.Event
 
 /**
- * Useful methods to create Matrix permalink (matrix.to links).
+ * Useful methods to create permalink (like matrix.to links or client permalinks).
+ * See [org.matrix.android.sdk.api.MatrixConfiguration.clientPermalinkBaseUrl] to setup a custom permalink base url.
  */
 interface PermalinkService {
 
@@ -32,10 +33,11 @@ interface PermalinkService {
      * Ex: "https://matrix.to/#/!nbzmcXAqpxBXjAdgoX:matrix.org/$1531497316352799BevdV:matrix.org"
      *
      * @param event the event
+     * @param forceMatrixTo whether we should force using matrix.to base URL
      *
      * @return the permalink, or null in case of error
      */
-    fun createPermalink(event: Event): String?
+    fun createPermalink(event: Event, forceMatrixTo: Boolean = false): String?
 
     /**
      * Creates a permalink for an id (can be a user Id, etc.).
@@ -43,18 +45,21 @@ interface PermalinkService {
      * Ex: "https://matrix.to/#/@benoit:matrix.org"
      *
      * @param id the id
+     * @param forceMatrixTo whether we should force using matrix.to base URL
+     *
      * @return the permalink, or null in case of error
      */
-    fun createPermalink(id: String): String?
+    fun createPermalink(id: String, forceMatrixTo: Boolean = false): String?
 
     /**
      * Creates a permalink for a roomId, including the via parameters
      *
      * @param roomId the room id
+     * @param forceMatrixTo whether we should force using matrix.to base URL
      *
      * @return the permalink, or null in case of error
      */
-    fun createRoomPermalink(roomId: String, viaServers: List<String>? = null): String?
+    fun createRoomPermalink(roomId: String, viaServers: List<String>? = null, forceMatrixTo: Boolean = false): String?
 
     /**
      * Creates a permalink for an event. If you have an event you can use [createPermalink]
@@ -62,10 +67,11 @@ interface PermalinkService {
      *
      * @param roomId  the id of the room
      * @param eventId the id of the event
+     * @param forceMatrixTo whether we should force using matrix.to base URL
      *
      * @return the permalink
      */
-    fun createPermalink(roomId: String, eventId: String): String
+    fun createPermalink(roomId: String, eventId: String, forceMatrixTo: Boolean = false): String
 
     /**
      * Extract the linked id from the universal link

@@ -16,6 +16,14 @@
 
 package org.matrix.android.sdk.session.room.timeline
 
+import org.amshove.kluent.shouldBeFalse
+import org.amshove.kluent.shouldBeTrue
+import org.junit.Assert.assertTrue
+import org.junit.FixMethodOrder
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.junit.runners.JUnit4
+import org.junit.runners.MethodSorters
 import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -26,14 +34,6 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.common.CommonTestHelper
 import org.matrix.android.sdk.common.CryptoTestHelper
 import org.matrix.android.sdk.common.checkSendOrder
-import org.amshove.kluent.shouldBeFalse
-import org.amshove.kluent.shouldBeTrue
-import org.junit.Assert.assertTrue
-import org.junit.FixMethodOrder
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
-import org.junit.runners.MethodSorters
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
 
@@ -111,8 +111,8 @@ class TimelineBackToPreviousLastForwardTest : InstrumentedTest {
                 }
 
                 // Ok, we have the 10 last messages from Alice.
-                snapshot.size == 10
-                        && snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(messageRoot).orFalse() }
+                snapshot.size == 10 &&
+                        snapshot.all { it.root.content.toModel<MessageContent>()?.body?.startsWith(messageRoot).orFalse() }
             }
 
             bobTimeline.addListener(eventsListener)
@@ -160,10 +160,10 @@ class TimelineBackToPreviousLastForwardTest : InstrumentedTest {
                 }
 
                 // Bob can see the first event of the room (so Back pagination has worked)
-                snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE
+                snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE &&
                         // 8 for room creation item, and 30 for the forward pagination
-                        && snapshot.size == 38
-                        && snapshot.checkSendOrder(messageRoot, 30, 0)
+                        snapshot.size == 38 &&
+                        snapshot.checkSendOrder(messageRoot, 30, 0)
             }
 
             bobTimeline.addListener(eventsListener)

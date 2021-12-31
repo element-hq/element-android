@@ -17,24 +17,12 @@
 package im.vector.app.features.settings
 
 import im.vector.app.R
-import im.vector.app.core.preference.VectorSwitchPreference
-import im.vector.app.features.MainActivity
-import im.vector.app.features.MainActivityArgs
 import javax.inject.Inject
 
-class VectorSettingsLabsFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences
-) : VectorSettingsBaseFragment() {
+class VectorSettingsLabsFragment @Inject constructor() : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.room_settings_labs_pref_title
     override val preferenceXmlRes = R.xml.vector_settings_labs
 
-    override fun bindPref() {
-        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_SPACES_HOME_AS_ORPHAN)!!.let { pref ->
-            pref.setOnPreferenceChangeListener { _, _ ->
-                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = false))
-                true
-            }
-        }
-    }
+    override fun bindPref() {}
 }

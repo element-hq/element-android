@@ -1,0 +1,2 @@
+Main changes in this version: Add Presence support, for Direct Message room (note: presence is disabled on matrix.org). Add again Android Auto support.
+Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.3.6

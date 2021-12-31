@@ -7,5 +7,5 @@
         app:iconTint="?vctr_content_primary"
         android:title="@string/search"
         app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="collapseActionView|ifRoom" />
+        app:showAsAction="collapseActionView|always" />
 </menu>

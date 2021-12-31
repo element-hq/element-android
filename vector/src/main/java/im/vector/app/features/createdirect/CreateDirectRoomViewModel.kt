@@ -16,16 +16,14 @@
 
 package im.vector.app.features.createdirect
 
-import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
@@ -41,25 +39,15 @@ import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                                                             initialState: CreateDirectRoomViewState,
                                                             private val rawService: RawService,
-                                                            val session: Session)
-    : VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
+                                                            val session: Session) :
+    VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: CreateDirectRoomViewState): CreateDirectRoomViewModel
+    interface Factory : MavericksAssistedViewModelFactory<CreateDirectRoomViewModel, CreateDirectRoomViewState> {
+        override fun create(initialState: CreateDirectRoomViewState): CreateDirectRoomViewModel
     }
 
-    companion object : MvRxViewModelFactory<CreateDirectRoomViewModel, CreateDirectRoomViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: CreateDirectRoomViewState): CreateDirectRoomViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<CreateDirectRoomViewModel, CreateDirectRoomViewState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: CreateDirectRoomAction) {
         when (action) {
@@ -71,10 +59,13 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
      * If users already have a DM room then navigate to it instead of creating a new room.
      */
     private fun onSubmitInvitees(action: CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers) {
-        if (action.existingDmRoomId != null) {
+        val existingRoomId = action.selections.singleOrNull()?.getMxId()?.let { userId ->
+            session.getExistingDirectRoomWithUser(userId)
+        }
+        if (existingRoomId != null) {
             // Do not create a new DM, just tell that the creation is successful by passing the existing roomId
             setState {
-                copy(createAndInviteState = Success(action.existingDmRoomId))
+                copy(createAndInviteState = Success(existingRoomId))
             }
         } else {
             // Create the DM

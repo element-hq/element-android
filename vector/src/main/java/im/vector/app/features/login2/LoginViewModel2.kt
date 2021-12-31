@@ -18,17 +18,16 @@ package im.vector.app.features.login2
 
 import android.content.Context
 import android.net.Uri
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.viewModelScope
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.tryAsync
@@ -72,9 +71,11 @@ class LoginViewModel2 @AssistedInject constructor(
 ) : VectorViewModel<LoginViewState2, LoginAction2, LoginViewEvents2>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: LoginViewState2): LoginViewModel2
+    interface Factory : MavericksAssistedViewModelFactory<LoginViewModel2, LoginViewState2> {
+        override fun create(initialState: LoginViewState2): LoginViewModel2
     }
+
+    companion object : MavericksViewModelFactory<LoginViewModel2, LoginViewState2> by hiltMavericksViewModelFactory()
 
     init {
         getKnownCustomHomeServersUrls()
@@ -83,18 +84,6 @@ class LoginViewModel2 @AssistedInject constructor(
     private fun getKnownCustomHomeServersUrls() {
         setState {
             copy(knownCustomHomeServersUrls = homeServerHistoryService.getKnownServersUrls())
-        }
-    }
-
-    companion object : MvRxViewModelFactory<LoginViewModel2, LoginViewState2> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: LoginViewState2): LoginViewModel2? {
-            return when (val activity: FragmentActivity = (viewModelContext as ActivityViewModelContext).activity()) {
-                is LoginActivity2 -> activity.loginViewModelFactory.create(state)
-                // TODO is SoftLogoutActivity -> activity.loginViewModelFactory.create(state)
-                else              -> error("Invalid Activity")
-            }
         }
     }
 
@@ -558,7 +547,7 @@ class LoginViewModel2 @AssistedInject constructor(
                     safeLoginWizard.login(
                             login = login,
                             password = password,
-                            deviceName = stringProvider.getString(R.string.login_default_session_public_name)
+                            initialDeviceName = stringProvider.getString(R.string.login_default_session_public_name)
                     )
                 } catch (failure: Throwable) {
                     _viewEvents.post(LoginViewEvents2.Failure(failure))
@@ -587,16 +576,16 @@ class LoginViewModel2 @AssistedInject constructor(
                 return@launch
             }
             when (data) {
-                is WellknownResult.Prompt          ->
+                is WellknownResult.Prompt     ->
                     onWellknownSuccess(action, data, homeServerConnectionConfig)
-                is WellknownResult.FailPrompt      ->
+                is WellknownResult.FailPrompt ->
                     // Relax on IS discovery if homeserver is valid
                     if (data.homeServerUrl != null && data.wellKnown != null) {
                         onWellknownSuccess(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), homeServerConnectionConfig)
                     } else {
                         onWellKnownError()
                     }
-                else                               -> {
+                else                          -> {
                     onWellKnownError()
                 }
             }.exhaustive
@@ -630,11 +619,11 @@ class LoginViewModel2 @AssistedInject constructor(
         } ?: return
 
         val loginMode = when {
-            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                    && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-            else                                                                  -> LoginMode.Unsupported
+            data.supportedLoginTypes.contains(LoginFlowTypes.SSO) &&
+                    data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+            data.supportedLoginTypes.contains(LoginFlowTypes.SSO)              -> LoginMode.Sso(data.ssoIdentityProviders)
+            data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)         -> LoginMode.Password
+            else                                                               -> LoginMode.Unsupported
         }
 
         val viewEvent = when (loginMode) {
@@ -662,8 +651,8 @@ class LoginViewModel2 @AssistedInject constructor(
             )
         }
 
-        if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
-                || data.isOutdatedHomeserver) {
+        if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) ||
+                data.isOutdatedHomeserver) {
             // Notify the UI
             _viewEvents.post(LoginViewEvents2.OutdatedHomeserver)
         }
@@ -688,8 +677,8 @@ class LoginViewModel2 @AssistedInject constructor(
 
     private fun onFlowResponse(flowResult: FlowResult) {
         // If dummy stage is mandatory, and password is already sent, do the dummy stage now
-        if (isRegistrationStarted
-                && flowResult.missingStages.any { it is Stage.Dummy && it.mandatory }) {
+        if (isRegistrationStarted &&
+                flowResult.missingStages.any { it is Stage.Dummy && it.mandatory }) {
             handleRegisterDummy()
         } else {
             // Notify the user
@@ -757,11 +746,11 @@ class LoginViewModel2 @AssistedInject constructor(
             rememberHomeServer(homeServerConnectionConfig.homeServerUri.toString())
 
             val loginMode = when {
-                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)
-                        && data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
-                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)                 -> LoginMode.Sso(data.ssoIdentityProviders)
-                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)            -> LoginMode.Password
-                else                                                                  -> LoginMode.Unsupported
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO) &&
+                        data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD) -> LoginMode.SsoAndPassword(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.SSO)              -> LoginMode.Sso(data.ssoIdentityProviders)
+                data.supportedLoginTypes.contains(LoginFlowTypes.PASSWORD)         -> LoginMode.Password
+                else                                                               -> LoginMode.Unsupported
             }
 
             val viewEvent = when (loginMode) {
@@ -802,8 +791,8 @@ class LoginViewModel2 @AssistedInject constructor(
             }
             viewEvent?.let { _viewEvents.post(it) }
 
-            if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported)
-                    || data.isOutdatedHomeserver) {
+            if ((loginMode == LoginMode.Password && !data.isLoginAndRegistrationSupported) ||
+                    data.isOutdatedHomeserver) {
                 // Notify the UI
                 _viewEvents.post(LoginViewEvents2.OutdatedHomeserver)
             }

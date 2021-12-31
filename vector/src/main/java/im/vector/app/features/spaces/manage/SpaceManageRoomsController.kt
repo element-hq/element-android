@@ -17,6 +17,7 @@
 package im.vector.app.features.spaces.manage
 
 import com.airbnb.epoxy.TypedEpoxyController
+import com.airbnb.epoxy.VisibilityState
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import im.vector.app.R
@@ -39,6 +40,7 @@ class SpaceManageRoomsController @Inject constructor(
     interface Listener {
         fun toggleSelection(childInfo: SpaceChildInfo)
         fun retry()
+        fun loadAdditionalItemsIfNeeded()
     }
 
     var listener: Listener? = null
@@ -60,7 +62,7 @@ class SpaceManageRoomsController @Inject constructor(
             return
         }
 
-        val roomList = roomListAsync?.invoke() ?: return
+        val roomList = roomListAsync?.invoke()?.children ?: return
 
         val directChildren = roomList.filter {
             it.parentRoomId == data.spaceId
@@ -78,12 +80,39 @@ class SpaceManageRoomsController @Inject constructor(
             filteredResult.forEach { childInfo ->
                 roomManageSelectionItem {
                     id(childInfo.childRoomId)
-                    matrixItem(childInfo.toMatrixItem())
+                    matrixItem(
+                            data.knownRoomSummaries.firstOrNull { it.roomId == childInfo.childRoomId }?.toMatrixItem()
+                                    ?: childInfo.toMatrixItem()
+                    )
                     avatarRenderer(host.avatarRenderer)
                     suggested(childInfo.suggested ?: false)
                     selected(data.selectedRooms.contains(childInfo.childRoomId))
                     itemClickListener {
                         host.listener?.toggleSelection(childInfo)
+                    }
+                }
+            }
+        }
+        val nextToken = roomListAsync.invoke()?.nextToken
+        if (nextToken != null) {
+            // show loading item
+            val paginationStatus = data.paginationStatus
+            if (paginationStatus is Fail) {
+                errorWithRetryItem {
+                    id("error_$nextToken")
+                    text(host.errorFormatter.toHumanReadable(paginationStatus.error))
+                    listener { host.listener?.loadAdditionalItemsIfNeeded() }
+                }
+            } else {
+                loadingItem {
+                    id("pagination_$nextToken")
+                    showLoader(true)
+                    onVisibilityStateChanged { _, _, visibilityState ->
+                        // Do something with the new visibility state
+                        if (visibilityState == VisibilityState.VISIBLE) {
+                            // we can trigger a seamless load of additional items
+                            host.listener?.loadAdditionalItemsIfNeeded()
+                        }
                     }
                 }
             }

@@ -1,0 +1,2 @@
+تغییرهای اصلی در این نگارش: پیام صوتی به صورت پیش‌گزیده به کار افتاده.
+گزارش دگرگونی کامل: https://github.com/vector-im/element-android/releases/tag/v1.2.0

@@ -529,7 +529,7 @@
     <string name="preview">Previsualitza</string>
     <string name="reject">Rebutja</string>
     <!-- Room -->
-    <string name="room_jump_to_first_unread">Salta fins al primer missatge no llegit.</string>
+    <string name="room_jump_to_first_unread">Vés fins al primer no llegit</string>
     <!-- Room Preview -->
     <string name="room_preview_invitation_format">L\'usuari %s t\'ha convidat a unir-te a aquesta sala</string>
     <string name="room_preview_unlinked_email_warning">Aquesta invitació s\'ha enviat a %s, que no està associat amb aquest compte.
@@ -593,7 +593,7 @@
     <string name="room_resend_unsent_messages">Reenvia els missatges no enviats</string>
     <string name="room_delete_unsent_messages">Elimina els missatges no enviats</string>
     <string name="room_message_file_not_found">No s\'ha trobat el fitxer</string>
-    <string name="room_do_not_have_permission_to_post">No tens permís per publicar res en aquesta sala</string>
+    <string name="room_do_not_have_permission_to_post">No tens permís per publicar en aquesta sala.</string>
     <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confia</string>
     <string name="ssl_do_not_trust">No hi confiïs</string>
@@ -1119,7 +1119,7 @@
     <string name="deactivate_account_prompt_password">Per a continuar, si us plau escriviu la vostra contrasenya:</string>
     <string name="deactivate_account_submit">Desactivar el compte</string>
     <string name="error_empty_field_your_password">Si us plau escriviu la vostra contrasenya.</string>
-    <string name="room_tombstone_versioned_description">Aquesta sala s\'ha substituït i ja no està activa</string>
+    <string name="room_tombstone_versioned_description">Aquesta sala s\'ha substituït i ja no està activa.</string>
     <string name="room_tombstone_continuation_link">El xat segueix aquí</string>
     <string name="room_tombstone_continuation_description">Aquesta sala és un continuació d\'un altre xat</string>
     <string name="room_tombstone_predecessor_link">Feu clic aquí per veure els missatges antics</string>
@@ -1700,7 +1700,6 @@
     <string name="settings_category_timeline">Cronologia</string>
     <string name="timeline_unread_messages">Missatges no llegits</string>
     <string name="labs_swipe_to_reply_in_timeline">Activa lliscar per respondre a la cronologia</string>
-    <string name="user_directory_search_hint">Cerca a partir del nom o l\'ID</string>
     <string name="room_directory_search_hint">Nom o ID (#exemple:matrix.org)</string>
     <string name="room_filtering_footer_open_room_directory">Mostra el directori de la sales</string>
     <string name="room_filtering_footer_create_new_room">Crea una nova sala</string>

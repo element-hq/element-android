@@ -17,7 +17,7 @@
 package im.vector.app.features.matrixto
 
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
@@ -31,7 +31,7 @@ data class MatrixToBottomSheetState(
         val startChattingState: Async<Unit> = Uninitialized,
         val roomPeekResult: Async<RoomInfoResult> = Uninitialized,
         val peopleYouKnow: Async<List<MatrixItem.UserItem>> = Uninitialized
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: MatrixToBottomSheet.MatrixToArgs) : this(
             deepLink = args.matrixToLink,

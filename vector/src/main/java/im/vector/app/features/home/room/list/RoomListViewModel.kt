@@ -17,22 +17,27 @@
 package im.vector.app.features.home.room.list
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.ViewModelContext
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -41,21 +46,22 @@ import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.state.isPublic
-import org.matrix.android.sdk.rx.rx
+import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.flow.flow
 import timber.log.Timber
-import javax.inject.Inject
 
-class RoomListViewModel @Inject constructor(
-        initialState: RoomListViewState,
+class RoomListViewModel @AssistedInject constructor(
+        @Assisted initialState: RoomListViewState,
         private val session: Session,
-        private val stringProvider: StringProvider,
-        private val appStateHandler: AppStateHandler,
-        private val vectorPreferences: VectorPreferences,
-        private val autoAcceptInvites: AutoAcceptInvites
+        stringProvider: StringProvider,
+        appStateHandler: AppStateHandler,
+        vectorPreferences: VectorPreferences,
+        autoAcceptInvites: AutoAcceptInvites
 ) : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
 
-    interface Factory {
-        fun create(initialState: RoomListViewState): RoomListViewModel
+    @AssistedFactory
+    interface Factory : MavericksAssistedViewModelFactory<RoomListViewModel, RoomListViewState> {
+        override fun create(initialState: RoomListViewState): RoomListViewModel
     }
 
     private var updatableQuery: UpdatableLivePageResult? = null
@@ -72,11 +78,13 @@ class RoomListViewModel @Inject constructor(
          * If current space is null, will return orphan rooms only
          */
         ORPHANS_IF_SPACE_NULL,
+
         /**
          * Special case when we don't want to discriminate rooms when current space is null.
          * In this case return all.
          */
         ALL_IF_SPACE_NULL,
+
         /** Do not filter based on space*/
         NONE
     }
@@ -92,8 +100,8 @@ class RoomListViewModel @Inject constructor(
                     )
                 }
 
-        session.rx().liveUser(session.myUserId)
-                .map { it.getOrNull()?.getBestName() }
+        session.flow().liveUser(session.myUserId)
+                .map { it.getOrNull()?.toMatrixItem()?.getBestName() }
                 .distinctUntilChanged()
                 .execute {
                     copy(
@@ -103,22 +111,14 @@ class RoomListViewModel @Inject constructor(
     }
 
     private fun observeMembershipChanges() {
-        session.rx()
+        session.flow()
                 .liveRoomChangeMembershipState()
-                .subscribe {
-                    setState { copy(roomMembershipChanges = it) }
+                .setOnEach {
+                    copy(roomMembershipChanges = it)
                 }
-                .disposeOnClear()
     }
 
-    companion object : MvRxViewModelFactory<RoomListViewModel, RoomListViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: RoomListViewState): RoomListViewModel? {
-            val fragment: RoomListFragment = (viewModelContext as FragmentViewModelContext).fragment()
-            return fragment.roomListViewModelFactory.create(state)
-        }
-    }
+    companion object : MavericksViewModelFactory<RoomListViewModel, RoomListViewState> by hiltMavericksViewModelFactory()
 
     private val roomListSectionBuilder = if (appStateHandler.getCurrentRoomGroupingMethod() is RoomGroupingMethod.BySpace) {
         RoomListSectionBuilderSpace(
@@ -131,10 +131,11 @@ class RoomListViewModel @Inject constructor(
                     updatableQuery = it
                 },
                 suggestedRoomJoiningState,
-                vectorPreferences.labsSpacesOnlyOrphansInHome()
+                !vectorPreferences.prefSpacesShowAllRoomInHome()
         )
     } else {
         RoomListSectionBuilderGroup(
+                viewModelScope,
                 session,
                 stringProvider,
                 appStateHandler,
@@ -191,7 +192,7 @@ class RoomListViewModel @Inject constructor(
         }
         updatableQuery?.updateQuery {
             it.copy(
-                    displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
+                    displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.NORMALIZED)
             )
         }
     }
@@ -320,7 +321,7 @@ class RoomListViewModel @Inject constructor(
 
     private fun String.otherTag(): String? {
         return when (this) {
-            RoomTag.ROOM_TAG_FAVOURITE -> RoomTag.ROOM_TAG_LOW_PRIORITY
+            RoomTag.ROOM_TAG_FAVOURITE    -> RoomTag.ROOM_TAG_LOW_PRIORITY
             RoomTag.ROOM_TAG_LOW_PRIORITY -> RoomTag.ROOM_TAG_FAVOURITE
             else                          -> null
         }
@@ -334,10 +335,5 @@ class RoomListViewModel @Inject constructor(
                     .fold({ RoomListViewEvents.Done }, { RoomListViewEvents.Failure(it) })
             _viewEvents.post(value)
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        roomListSectionBuilder.dispose()
     }
 }

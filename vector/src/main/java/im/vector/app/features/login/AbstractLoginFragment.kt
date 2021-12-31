@@ -37,7 +37,7 @@ import javax.net.ssl.HttpsURLConnection
 /**
  * Parent Fragment for all the login/registration screens
  */
-abstract class AbstractLoginFragment<VB: ViewBinding> : VectorBaseFragment<VB>(), OnBackPressed {
+abstract class AbstractLoginFragment<VB : ViewBinding> : VectorBaseFragment<VB>(), OnBackPressed {
 
     protected val loginViewModel: LoginViewModel by activityViewModel()
 
@@ -83,8 +83,8 @@ abstract class AbstractLoginFragment<VB: ViewBinding> : VectorBaseFragment<VB>()
                 /* Ignore this error, user has cancelled the action */
                 Unit
             is Failure.ServerError                    ->
-                if (throwable.error.code == MatrixError.M_FORBIDDEN
-                        && throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
+                if (throwable.error.code == MatrixError.M_FORBIDDEN &&
+                        throwable.httpCode == HttpsURLConnection.HTTP_FORBIDDEN /* 403 */) {
                     MaterialAlertDialogBuilder(requireActivity())
                             .setTitle(R.string.dialog_title_error)
                             .setMessage(getString(R.string.login_registration_disabled))

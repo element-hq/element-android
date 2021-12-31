@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
-    android:minHeight="50dp">
+    android:minHeight="50dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/item_generic_title_image"
@@ -35,8 +36,8 @@
         android:textStyle="bold"
         android:visibility="gone"
         app:layout_constrainedWidth="true"
-        app:layout_constraintBottom_toTopOf="@+id/item_generic_description_text"
-        app:layout_constraintEnd_toStartOf="@+id/item_generic_barrier"
+        app:layout_constraintBottom_toTopOf="@id/item_generic_description_text"
+        app:layout_constraintEnd_toStartOf="@id/item_generic_barrier"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/item_generic_title_image"
         app:layout_constraintTop_toTopOf="parent"
@@ -57,9 +58,9 @@
         android:textColor="?vctr_content_secondary"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/item_generic_action_button"
-        app:layout_constraintEnd_toStartOf="@+id/item_generic_barrier"
+        app:layout_constraintEnd_toStartOf="@id/item_generic_barrier"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/item_generic_title_text"
+        app:layout_constraintTop_toBottomOf="@id/item_generic_title_text"
         tools:maxLines="3"
         tools:text="@tools:sample/lorem/random"
         tools:visibility="visible" />
@@ -79,9 +80,9 @@
         android:layout_margin="16dp"
         android:importantForAccessibility="no"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/item_generic_description_text"
+        app:layout_constraintBottom_toBottomOf="@id/item_generic_description_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/item_generic_title_text"
+        app:layout_constraintTop_toTopOf="@id/item_generic_title_text"
         tools:srcCompat="@drawable/e2e_warning"
         tools:visibility="visible" />
 
@@ -92,9 +93,9 @@
         android:layout_height="20dp"
         android:layout_margin="16dp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/item_generic_description_text"
+        app:layout_constraintBottom_toBottomOf="@id/item_generic_description_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/item_generic_title_text"
+        app:layout_constraintTop_toTopOf="@id/item_generic_title_text"
         tools:visibility="visible" />
 
     <!-- Set a max width because the text can be long -->
@@ -107,9 +108,9 @@
         android:layout_marginBottom="16dp"
         android:maxWidth="@dimen/button_max_width"
         android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/item_generic_destructive_action_button"
-        app:layout_constraintEnd_toStartOf="@+id/item_generic_barrier"
-        app:layout_constraintTop_toBottomOf="@+id/item_generic_description_text"
+        app:layout_constraintBottom_toTopOf="@id/item_generic_destructive_action_button"
+        app:layout_constraintEnd_toStartOf="@id/item_generic_barrier"
+        app:layout_constraintTop_toBottomOf="@id/item_generic_description_text"
         tools:text="@string/settings_troubleshoot_test_device_settings_quickfix"
         tools:visibility="visible" />
 
@@ -124,8 +125,8 @@
         android:maxWidth="@dimen/button_max_width"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/item_generic_barrier"
-        app:layout_constraintTop_toBottomOf="@+id/item_generic_action_button"
+        app:layout_constraintEnd_toStartOf="@id/item_generic_barrier"
+        app:layout_constraintTop_toBottomOf="@id/item_generic_action_button"
         tools:text="@string/delete"
         tools:visibility="visible" />
 

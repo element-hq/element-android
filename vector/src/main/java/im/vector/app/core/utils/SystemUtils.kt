@@ -48,8 +48,8 @@ import im.vector.app.features.notifications.NotificationUtils
  */
 fun isIgnoringBatteryOptimizations(context: Context): Boolean {
     // no issue before Android M, battery optimisations did not exist
-    return Build.VERSION.SDK_INT < Build.VERSION_CODES.M
-            || context.getSystemService<PowerManager>()?.isIgnoringBatteryOptimizations(context.packageName) == true
+    return Build.VERSION.SDK_INT < Build.VERSION_CODES.M ||
+            context.getSystemService<PowerManager>()?.isIgnoringBatteryOptimizations(context.packageName) == true
 }
 
 fun isAirplaneModeOn(context: Context): Boolean {

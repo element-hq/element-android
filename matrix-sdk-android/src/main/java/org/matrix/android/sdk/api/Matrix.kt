@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.work.Configuration
 import androidx.work.WorkManager
+import androidx.work.WorkerFactory
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -33,6 +34,7 @@ import org.matrix.android.sdk.internal.di.DaggerMatrixComponent
 import org.matrix.android.sdk.internal.network.ApiInterceptor
 import org.matrix.android.sdk.internal.network.UserAgentHolder
 import org.matrix.android.sdk.internal.util.BackgroundDetectionObserver
+import org.matrix.android.sdk.internal.worker.MatrixWorkerFactory
 import org.matrix.olm.OlmManager
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
@@ -53,12 +55,17 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     @Inject internal lateinit var sessionManager: SessionManager
     @Inject internal lateinit var homeServerHistoryService: HomeServerHistoryService
     @Inject internal lateinit var apiInterceptor: ApiInterceptor
+    @Inject internal lateinit var matrixWorkerFactory: MatrixWorkerFactory
 
     init {
         Monarchy.init(context)
         DaggerMatrixComponent.factory().create(context, matrixConfiguration).inject(this)
         if (context.applicationContext !is Configuration.Provider) {
-            WorkManager.initialize(context, Configuration.Builder().setExecutor(Executors.newCachedThreadPool()).build())
+            val configuration = Configuration.Builder()
+                    .setExecutor(Executors.newCachedThreadPool())
+                    .setWorkerFactory(matrixWorkerFactory)
+                    .build()
+            WorkManager.initialize(context, configuration)
         }
         ProcessLifecycleOwner.get().lifecycle.addObserver(backgroundDetectionObserver)
     }
@@ -76,6 +83,8 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
     fun legacySessionImporter(): LegacySessionImporter {
         return legacySessionImporter
     }
+
+    fun workerFactory(): WorkerFactory = matrixWorkerFactory
 
     fun registerApiInterceptorListener(path: ApiPath, listener: ApiInterceptorListener) {
         apiInterceptor.addListener(path, listener)
@@ -111,7 +120,7 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
         }
 
         fun getSdkVersion(): String {
-            return BuildConfig.VERSION_NAME + " (" + BuildConfig.GIT_SDK_REVISION + ")"
+            return BuildConfig.SDK_VERSION + " (" + BuildConfig.GIT_SDK_REVISION + ")"
         }
     }
 }

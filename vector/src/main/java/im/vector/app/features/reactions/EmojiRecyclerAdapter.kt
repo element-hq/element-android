@@ -15,6 +15,7 @@
  */
 package im.vector.app.features.reactions
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Trace
 import android.text.Layout
@@ -30,7 +31,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import im.vector.app.R
-import im.vector.app.features.reactions.data.EmojiDataSource
+import im.vector.app.features.reactions.data.EmojiData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -43,13 +44,13 @@ import kotlin.math.abs
  * TODO: Performances
  * TODO: Scroll to section - Find a way to snap section to the top
  */
-class EmojiRecyclerAdapter @Inject constructor(
-        private val dataSource: EmojiDataSource
-) :
+class EmojiRecyclerAdapter @Inject constructor() :
         RecyclerView.Adapter<EmojiRecyclerAdapter.ViewHolder>() {
 
     var reactionClickListener: ReactionClickListener? = null
     var interactionListener: InteractionListener? = null
+
+    private var rawData: EmojiData = EmojiData(emptyList(), emptyMap(), emptyMap())
     private var mRecyclerView: RecyclerView? = null
 
     private var currentFirstVisibleSection = 0
@@ -59,6 +60,12 @@ class EmojiRecyclerAdapter @Inject constructor(
         DRAGGING,
         SETTLING,
         UNKNOWN
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun update(emojiData: EmojiData) {
+        rawData = emojiData
+        notifyDataSetChanged()
     }
 
     private var scrollState = ScrollState.UNKNOWN
@@ -71,10 +78,10 @@ class EmojiRecyclerAdapter @Inject constructor(
             if (itemPosition != RecyclerView.NO_POSITION) {
                 val sectionNumber = getSectionForAbsoluteIndex(itemPosition)
                 if (!isSection(itemPosition)) {
-                    val sectionMojis = dataSource.rawData.categories[sectionNumber].emojis
+                    val sectionMojis = rawData.categories[sectionNumber].emojis
                     val sectionOffset = getSectionOffset(sectionNumber)
                     val emoji = sectionMojis[itemPosition - sectionOffset]
-                    val item = dataSource.rawData.emojis.getValue(emoji).emoji
+                    val item = rawData.emojis.getValue(emoji).emoji
                     reactionClickListener?.onReactionSelected(item)
                 }
             }
@@ -115,7 +122,7 @@ class EmojiRecyclerAdapter @Inject constructor(
     }
 
     fun scrollToSection(section: Int) {
-        if (section < 0 || section >= dataSource.rawData.categories.size) {
+        if (section < 0 || section >= rawData.categories.size) {
             // ignore
             return
         }
@@ -149,7 +156,7 @@ class EmojiRecyclerAdapter @Inject constructor(
     private fun isSection(position: Int): Boolean {
         var sectionOffset = 1
         var lastItemInSection: Int
-        dataSource.rawData.categories.forEach { category ->
+        rawData.categories.forEach { category ->
             lastItemInSection = sectionOffset + category.emojis.size - 1
             if (position == sectionOffset - 1) return true
             sectionOffset = lastItemInSection + 2
@@ -161,7 +168,7 @@ class EmojiRecyclerAdapter @Inject constructor(
         var sectionOffset = 1
         var lastItemInSection: Int
         var index = 0
-        dataSource.rawData.categories.forEach { category ->
+        rawData.categories.forEach { category ->
             lastItemInSection = sectionOffset + category.emojis.size - 1
             if (position <= lastItemInSection) return index
             sectionOffset = lastItemInSection + 2
@@ -174,7 +181,7 @@ class EmojiRecyclerAdapter @Inject constructor(
         // Todo cache this for fast access
         var sectionOffset = 1
         var lastItemInSection: Int
-        dataSource.rawData.categories.forEachIndexed { index, category ->
+        rawData.categories.forEachIndexed { index, category ->
             lastItemInSection = sectionOffset + category.emojis.size - 1
             if (section == index) return sectionOffset
             sectionOffset = lastItemInSection + 2
@@ -186,12 +193,12 @@ class EmojiRecyclerAdapter @Inject constructor(
         Trace.beginSection("MyAdapter.onBindViewHolder")
         val sectionNumber = getSectionForAbsoluteIndex(position)
         if (isSection(position)) {
-            holder.bind(dataSource.rawData.categories[sectionNumber].name)
+            holder.bind(rawData.categories[sectionNumber].name)
         } else {
-            val sectionMojis = dataSource.rawData.categories[sectionNumber].emojis
+            val sectionMojis = rawData.categories[sectionNumber].emojis
             val sectionOffset = getSectionOffset(sectionNumber)
             val emoji = sectionMojis[position - sectionOffset]
-            val item = dataSource.rawData.emojis[emoji]!!.emoji
+            val item = rawData.emojis[emoji]!!.emoji
             (holder as EmojiViewHolder).data = item
             if (scrollState != ScrollState.SETTLING || !isFastScroll) {
 //                    Log.i("PERF","Bind with draw at position:$position")
@@ -220,7 +227,7 @@ class EmojiRecyclerAdapter @Inject constructor(
         super.onViewRecycled(holder)
     }
 
-    override fun getItemCount() = dataSource.rawData.categories
+    override fun getItemCount() = rawData.categories
             .sumOf { emojiCategory -> 1 /* Section */ + emojiCategory.emojis.size }
 
     abstract class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -33,6 +33,7 @@ import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsFi
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoomsParams
 import org.matrix.android.sdk.api.session.room.peeking.PeekResult
 import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.internal.session.room.GetRoomSummaryTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
 import org.matrix.android.sdk.internal.session.room.directory.GetPublicRoomTask
 import org.matrix.android.sdk.internal.session.room.directory.GetRoomDirectoryVisibilityTask
@@ -49,6 +50,7 @@ internal class DefaultPeekRoomTask @Inject constructor(
         private val getRoomIdByAliasTask: GetRoomIdByAliasTask,
         private val getRoomDirectoryVisibilityTask: GetRoomDirectoryVisibilityTask,
         private val getPublicRoomTask: GetPublicRoomTask,
+        private val getRoomSummaryTask: GetRoomSummaryTask,
         private val resolveRoomStateTask: ResolveRoomStateTask
 ) : PeekRoomTask {
 
@@ -68,6 +70,25 @@ internal class DefaultPeekRoomTask @Inject constructor(
         } else {
             roomId = params.roomIdOrAlias
             serverList = emptyList()
+        }
+
+        // If the room summary API is available on the Home Server we should try it first
+        val strippedState = tryOrNull("Failed to get room stripped state roomId:$roomId") {
+            getRoomSummaryTask.execute(GetRoomSummaryTask.Params(roomId, serverList))
+        }
+        if (strippedState != null) {
+            return PeekResult.Success(
+                    roomId = strippedState.roomId,
+                    alias = strippedState.getPrimaryAlias() ?: params.roomIdOrAlias.takeIf { isAlias },
+                    avatarUrl = strippedState.avatarUrl,
+                    name = strippedState.name,
+                    topic = strippedState.topic,
+                    numJoinedMembers = strippedState.numJoinedMembers,
+                    viaServers = serverList,
+                    roomType = strippedState.roomType,
+                    someMembers = null,
+                    isPublic = strippedState.worldReadable
+            )
         }
 
         // Is it a public room?

@@ -27,29 +27,30 @@ import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.annotation.MainThread
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
-import com.airbnb.mvrx.BaseMvRxFragment
+import com.airbnb.mvrx.MavericksView
 import com.bumptech.glide.util.Util.assertMainThread
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.jakewharton.rxbinding3.view.clicks
+import dagger.hilt.android.EntryPointAccessors
 import im.vector.app.R
-import im.vector.app.core.di.DaggerScreenComponent
-import im.vector.app.core.di.HasScreenInjector
-import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.di.ActivityEntryPoint
 import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
+import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.navigation.Navigator
 import im.vector.lib.ui.styles.dialogs.MaterialProgressDialog
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import reactivecircus.flowbinding.android.view.clicks
 import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
-abstract class VectorBaseFragment<VB : ViewBinding> : BaseMvRxFragment(), HasScreenInjector {
+abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView {
 
     protected val vectorBaseActivity: VectorBaseActivity<*> by lazy {
         activity as VectorBaseActivity<*>
@@ -59,9 +60,8 @@ abstract class VectorBaseFragment<VB : ViewBinding> : BaseMvRxFragment(), HasScr
      * Navigator and other common objects
      * ========================================================================================== */
 
-    private lateinit var screenComponent: ScreenComponent
-
     protected lateinit var navigator: Navigator
+    protected lateinit var analytics: VectorAnalytics
     protected lateinit var errorFormatter: ErrorFormatter
     protected lateinit var unrecognizedCertificateDialog: UnrecognizedCertificateDialog
 
@@ -94,12 +94,14 @@ abstract class VectorBaseFragment<VB : ViewBinding> : BaseMvRxFragment(), HasScr
      * ========================================================================================== */
 
     override fun onAttach(context: Context) {
-        screenComponent = DaggerScreenComponent.factory().create(vectorBaseActivity.getVectorComponent(), vectorBaseActivity)
-        navigator = screenComponent.navigator()
-        errorFormatter = screenComponent.errorFormatter()
-        unrecognizedCertificateDialog = screenComponent.unrecognizedCertificateDialog()
-        viewModelFactory = screenComponent.viewModelFactory()
-        childFragmentManager.fragmentFactory = screenComponent.fragmentFactory()
+        val singletonEntryPoint = context.singletonEntryPoint()
+        val activityEntryPoint = EntryPointAccessors.fromActivity(vectorBaseActivity, ActivityEntryPoint::class.java)
+        navigator = singletonEntryPoint.navigator()
+        errorFormatter = singletonEntryPoint.errorFormatter()
+        analytics = singletonEntryPoint.analytics()
+        unrecognizedCertificateDialog = singletonEntryPoint.unrecognizedCertificateDialog()
+        viewModelFactory = activityEntryPoint.viewModelFactory()
+        childFragmentManager.fragmentFactory = activityEntryPoint.fragmentFactory()
         super.onAttach(context)
     }
 
@@ -148,20 +150,15 @@ abstract class VectorBaseFragment<VB : ViewBinding> : BaseMvRxFragment(), HasScr
     @CallSuper
     override fun onDestroyView() {
         Timber.i("onDestroyView Fragment ${javaClass.simpleName}")
-        uiDisposables.clear()
         _binding = null
+        dismissLoadingDialog()
         super.onDestroyView()
     }
 
     @CallSuper
     override fun onDestroy() {
         Timber.i("onDestroy Fragment ${javaClass.simpleName}")
-        uiDisposables.dispose()
         super.onDestroy()
-    }
-
-    override fun injector(): ScreenComponent {
-        return screenComponent
     }
 
     /* ==========================================================================================
@@ -226,28 +223,17 @@ abstract class VectorBaseFragment<VB : ViewBinding> : BaseMvRxFragment(), HasScr
     }
 
     /* ==========================================================================================
-     * Disposable
-     * ========================================================================================== */
-
-    private val uiDisposables = CompositeDisposable()
-
-    protected fun Disposable.disposeOnDestroyView() {
-        uiDisposables.add(this)
-    }
-
-    /* ==========================================================================================
      * ViewEvents
      * ========================================================================================== */
 
     protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
         viewEvents
-                .observe()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+                .stream()
+                .onEach {
                     dismissLoadingDialog()
                     observer(it)
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     /* ==========================================================================================
@@ -256,10 +242,8 @@ abstract class VectorBaseFragment<VB : ViewBinding> : BaseMvRxFragment(), HasScr
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .throttleFirst(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { onClicked() }
-                .disposeOnDestroyView()
+                .onEach { onClicked() }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     /* ==========================================================================================

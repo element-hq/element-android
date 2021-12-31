@@ -51,6 +51,10 @@ class PopupAlertManager @Inject constructor() {
 
     private val alertQueue = mutableListOf<VectorAlert>()
 
+    fun hasAlertsToShow(): Boolean {
+        return currentAlerter != null || alertQueue.isNotEmpty()
+    }
+
     fun postVectorAlert(alert: VectorAlert) {
         synchronized(alertQueue) {
             alertQueue.add(alert)
@@ -100,7 +104,7 @@ class PopupAlertManager @Inject constructor() {
         // we want to remove existing popup on previous activity and display it on new one
         if (currentAlerter != null) {
             weakCurrentActivity?.get()?.let {
-                Alerter.clearCurrent(it, null)
+                Alerter.clearCurrent(it, null, null)
                 if (currentAlerter?.isLight == false) {
                     setLightStatusBar()
                 }
@@ -293,10 +297,10 @@ class PopupAlertManager @Inject constructor() {
     }
 
     private fun shouldBeDisplayedIn(alert: VectorAlert?, activity: Activity): Boolean {
-        return alert != null
-                && activity !is PinActivity
-                && activity !is SignedOutActivity
-                && activity is VectorBaseActivity<*>
-                && alert.shouldBeDisplayedIn.invoke(activity)
+        return alert != null &&
+                activity !is PinActivity &&
+                activity !is SignedOutActivity &&
+                activity is VectorBaseActivity<*> &&
+                alert.shouldBeDisplayedIn.invoke(activity)
     }
 }

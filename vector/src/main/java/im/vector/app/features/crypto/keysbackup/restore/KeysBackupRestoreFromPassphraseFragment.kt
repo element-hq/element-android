@@ -27,7 +27,6 @@ import androidx.core.widget.doOnTextChanged
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentKeysBackupRestoreFromPassphraseBinding
-
 import javax.inject.Inject
 
 class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBaseFragment<FragmentKeysBackupRestoreFromPassphraseBinding>() {
@@ -59,8 +58,8 @@ class KeysBackupRestoreFromPassphraseFragment @Inject constructor() : VectorBase
             return@setOnEditorActionListener false
         }
 
-        views.helperTextWithLink.setOnClickListener { onUseRecoveryKey() }
-        views.keysBackupRestoreWithPassphraseSubmit.setOnClickListener { onRestoreBackup() }
+        views.helperTextWithLink.debouncedClicks { onUseRecoveryKey() }
+        views.keysBackupRestoreWithPassphraseSubmit.debouncedClicks { onRestoreBackup() }
         views.keysBackupPassphraseEnterEdittext.doOnTextChanged { text, _, _, _ -> onPassphraseTextEditChange(text) }
     }
 

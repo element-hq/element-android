@@ -16,9 +16,8 @@
 
 package im.vector.app
 
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import arrow.core.Option
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.utils.BehaviorDataSource
@@ -29,7 +28,13 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancelChildren
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
@@ -60,19 +65,32 @@ class AppStateHandler @Inject constructor(
         private val matrixItemColorProvider: MatrixItemColorProvider,
         private val uiStateRepository: UiStateRepository,
         private val activeSessionHolder: ActiveSessionHolder
-) : LifecycleObserver {
+) : DefaultLifecycleObserver {
 
-    private val compositeDisposable = CompositeDisposable()
+    private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val selectedSpaceDataSource = BehaviorDataSource<Option<RoomGroupingMethod>>(Option.empty())
 
-    val selectedRoomGroupingObservable = selectedSpaceDataSource.observe()
+    val selectedRoomGroupingObservable = selectedSpaceDataSource.stream()
 
-    fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? = selectedSpaceDataSource.currentValue?.orNull()
+    fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? {
+        // XXX we should somehow make it live :/ just a work around
+        // For example just after creating a space and switching to it the
+        // name in the app Bar could show Empty Room, and it will not update unless you
+        // switch space
+        return selectedSpaceDataSource.currentValue?.orNull()?.let {
+            if (it is RoomGroupingMethod.BySpace) {
+                // try to refresh sum?
+                it.spaceSummary?.roomId?.let { activeSessionHolder.getSafeActiveSession()?.getRoomSummary(it) }?.let {
+                    RoomGroupingMethod.BySpace(it)
+                } ?: it
+            } else it
+        }
+    }
 
     fun setCurrentSpace(spaceId: String?, session: Session? = null) {
         val uSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
-        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.BySpace
-                && spaceId == selectedSpaceDataSource.currentValue?.orNull()?.space()?.roomId) return
+        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.BySpace &&
+                spaceId == selectedSpaceDataSource.currentValue?.orNull()?.space()?.roomId) return
         val spaceSum = spaceId?.let { uSession.getRoomSummary(spaceId) }
         selectedSpaceDataSource.post(Option.just(RoomGroupingMethod.BySpace(spaceSum)))
         if (spaceId != null) {
@@ -86,8 +104,8 @@ class AppStateHandler @Inject constructor(
 
     fun setCurrentGroup(groupId: String?, session: Session? = null) {
         val uSession = session ?: activeSessionHolder.getSafeActiveSession() ?: return
-        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.ByLegacyGroup
-                && groupId == selectedSpaceDataSource.currentValue?.orNull()?.group()?.groupId) return
+        if (selectedSpaceDataSource.currentValue?.orNull() is RoomGroupingMethod.ByLegacyGroup &&
+                groupId == selectedSpaceDataSource.currentValue?.orNull()?.group()?.groupId) return
         val activeGroup = groupId?.let { uSession.getGroupSummary(groupId) }
         selectedSpaceDataSource.post(Option.just(RoomGroupingMethod.ByLegacyGroup(activeGroup)))
         if (groupId != null) {
@@ -100,9 +118,9 @@ class AppStateHandler @Inject constructor(
     }
 
     private fun observeActiveSession() {
-        sessionDataSource.observe()
+        sessionDataSource.stream()
                 .distinctUntilChanged()
-                .subscribe {
+                .onEach {
                     // sessionDataSource could already return a session while activeSession holder still returns null
                     it.orNull()?.let { session ->
                         if (uiStateRepository.isGroupingMethodSpace(session.sessionId)) {
@@ -111,9 +129,8 @@ class AppStateHandler @Inject constructor(
                             setCurrentGroup(uiStateRepository.getSelectedGroup(session.sessionId), session)
                         }
                     }
-                }.also {
-                    compositeDisposable.add(it)
                 }
+                .launchIn(coroutineScope)
     }
 
     fun safeActiveSpaceId(): String? {
@@ -127,12 +144,14 @@ class AppStateHandler @Inject constructor(
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     fun entersForeground() {
         observeUserAccountData()
+    }
+
+    override fun onResume(owner: LifecycleOwner) {
         observeActiveSession()
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun entersBackground() {
-        compositeDisposable.clear()
+    override fun onPause(owner: LifecycleOwner) {
+        coroutineScope.coroutineContext.cancelChildren()
         val session = activeSessionHolder.getSafeActiveSession() ?: return
         when (val currentMethod = selectedSpaceDataSource.currentValue?.orNull() ?: RoomGroupingMethod.BySpace(null)) {
             is RoomGroupingMethod.BySpace       -> {

@@ -170,8 +170,10 @@ class DialPadFragment : Fragment(), TextWatcher {
         }
     }
 
-    private fun clear() {
-        digits.setText("")
+    fun clear() {
+        if (::digits.isInitialized) {
+            digits.setText("")
+        }
     }
 
     private fun formatNumber(dialString: String): String {

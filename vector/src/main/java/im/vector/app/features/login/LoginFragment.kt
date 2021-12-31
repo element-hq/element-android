@@ -25,22 +25,24 @@ import android.view.inputmethod.EditorInfo
 import androidx.autofill.HintConstants
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
-import com.jakewharton.rxbinding3.widget.textChanges
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginBinding
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.subscribeBy
-
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.isInvalidPassword
+import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
 /**
@@ -79,7 +81,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
     }
 
     private fun setupForgottenPasswordButton() {
-        views.forgetPasswordButton.setOnClickListener { forgetPasswordClicked() }
+        views.forgetPasswordButton.debouncedClicks { forgetPasswordClicked() }
     }
 
     private fun setupAutoFill(state: LoginViewState) {
@@ -194,11 +196,11 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
 
             if (state.loginMode is LoginMode.SsoAndPassword) {
                 views.loginSocialLoginContainer.isVisible = true
-                views.loginSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders
+                views.loginSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders?.sorted()
                 views.loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                     override fun onProviderSelected(id: String?) {
                         loginViewModel.getSsoUrl(
-                                redirectUrl = LoginActivity.VECTOR_REDIRECT_URL,
+                                redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                                 deviceId = state.deviceId,
                                 providerId = id
                         )
@@ -224,21 +226,19 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
     }
 
     private fun setupSubmitButton() {
-        views.loginSubmit.setOnClickListener { submit() }
-        Observable
-                .combineLatest(
-                        views.loginField.textChanges().map { it.trim().isNotEmpty() },
-                        views.passwordField.textChanges().map { it.isNotEmpty() },
-                        { isLoginNotEmpty, isPasswordNotEmpty ->
-                            isLoginNotEmpty && isPasswordNotEmpty
-                        }
-                )
-                .subscribeBy {
+        views.loginSubmit.debouncedClicks { submit() }
+        combine(
+                views.loginField.textChanges().map { it.trim().isNotEmpty() },
+                views.passwordField.textChanges().map { it.isNotEmpty() }
+        ) { isLoginNotEmpty, isPasswordNotEmpty ->
+            isLoginNotEmpty && isPasswordNotEmpty
+        }
+                .onEach {
                     views.loginFieldTil.error = null
                     views.passwordFieldTil.error = null
                     views.loginSubmit.isEnabled = it
                 }
-                .disposeOnDestroyView()
+                .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
     private fun forgetPasswordClicked() {
@@ -251,8 +251,8 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
 
     override fun onError(throwable: Throwable) {
         // Show M_WEAK_PASSWORD error in the password field
-        if (throwable is Failure.ServerError
-                && throwable.error.code == MatrixError.M_WEAK_PASSWORD) {
+        if (throwable is Failure.ServerError &&
+                throwable.error.code == MatrixError.M_WEAK_PASSWORD) {
             views.passwordFieldTil.error = errorFormatter.toHumanReadable(throwable)
         } else {
             views.loginFieldTil.error = errorFormatter.toHumanReadable(throwable)
@@ -275,9 +275,9 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
             }
             is Fail    -> {
                 val error = state.asyncLoginAction.error
-                if (error is Failure.ServerError
-                        && error.error.code == MatrixError.M_FORBIDDEN
-                        && error.error.message.isEmpty()) {
+                if (error is Failure.ServerError &&
+                        error.error.code == MatrixError.M_FORBIDDEN &&
+                        error.error.message.isEmpty()) {
                     // Login with email, but email unknown
                     views.loginFieldTil.error = getString(R.string.login_login_with_email_error)
                 } else {

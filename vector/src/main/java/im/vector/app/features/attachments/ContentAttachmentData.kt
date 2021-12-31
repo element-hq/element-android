@@ -27,9 +27,9 @@ private val listOfPreviewableMimeTypes = listOf(
 
 fun ContentAttachmentData.isPreviewable(): Boolean {
     // Preview supports image and video
-    return (type == ContentAttachmentData.Type.IMAGE
-            && listOfPreviewableMimeTypes.contains(getSafeMimeType() ?: ""))
-            || type == ContentAttachmentData.Type.VIDEO
+    return (type == ContentAttachmentData.Type.IMAGE &&
+            listOfPreviewableMimeTypes.contains(getSafeMimeType() ?: "")) ||
+            type == ContentAttachmentData.Type.VIDEO
 }
 
 data class GroupedContentAttachmentData(

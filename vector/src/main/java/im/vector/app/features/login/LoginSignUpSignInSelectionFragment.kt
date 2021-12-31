@@ -25,7 +25,6 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSignupSigninSelectionBinding
-
 import javax.inject.Inject
 
 /**
@@ -44,8 +43,8 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
     }
 
     private fun setupViews() {
-        views.loginSignupSigninSubmit.setOnClickListener { submit() }
-        views.loginSignupSigninSignIn.setOnClickListener { signIn() }
+        views.loginSignupSigninSubmit.debouncedClicks { submit() }
+        views.loginSignupSigninSignIn.debouncedClicks { signIn() }
     }
 
     private fun setupUi(state: LoginViewState) {
@@ -73,11 +72,11 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
         when (state.loginMode) {
             is LoginMode.SsoAndPassword -> {
                 views.loginSignupSigninSignInSocialLoginContainer.isVisible = true
-                views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders()
+                views.loginSignupSigninSocialLoginButtons.ssoIdentityProviders = state.loginMode.ssoIdentityProviders()?.sorted()
                 views.loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                     override fun onProviderSelected(id: String?) {
                         loginViewModel.getSsoUrl(
-                                redirectUrl = LoginActivity.VECTOR_REDIRECT_URL,
+                                redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                                 deviceId = state.deviceId,
                                 providerId = id
                         )
@@ -110,7 +109,7 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
     private fun submit() = withState(loginViewModel) { state ->
         if (state.loginMode is LoginMode.Sso) {
             loginViewModel.getSsoUrl(
-                    redirectUrl = LoginActivity.VECTOR_REDIRECT_URL,
+                    redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = state.deviceId,
                     providerId = null
             )

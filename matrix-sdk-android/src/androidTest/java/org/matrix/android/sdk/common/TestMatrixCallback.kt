@@ -17,8 +17,8 @@
 package org.matrix.android.sdk.common
 
 import androidx.annotation.CallSuper
-import org.matrix.android.sdk.api.MatrixCallback
 import org.junit.Assert.fail
+import org.matrix.android.sdk.api.MatrixCallback
 import timber.log.Timber
 import java.util.concurrent.CountDownLatch
 

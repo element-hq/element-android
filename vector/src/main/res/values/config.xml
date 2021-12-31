@@ -26,4 +26,15 @@
         <item>gitter.im</item>
     </string-array>
 
+    <!-- Permalink config -->
+    <string-array name="permalink_supported_hosts" translatable="false">
+        <!-- Regular Element Web instance -->
+        <item>app.element.io</item>
+        <!-- Other known instances of Element Web -->
+        <item>develop.element.io</item>
+        <item>staging.element.io</item>
+        <!-- Previous Web instance, kept for compatibility reason -->
+        <item>riot.im</item>
+    </string-array>
+
 </resources>

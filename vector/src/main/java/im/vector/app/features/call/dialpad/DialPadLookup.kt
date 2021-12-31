@@ -30,8 +30,8 @@ class DialPadLookup @Inject constructor(
         private val directRoomHelper: DirectRoomHelper
 ) {
     sealed class Failure : Throwable() {
-        object NoResult: Failure()
-        object NumberIsYours: Failure()
+        object NoResult : Failure()
+        object NumberIsYours : Failure()
     }
 
     data class Result(val userId: String, val roomId: String)
@@ -39,15 +39,21 @@ class DialPadLookup @Inject constructor(
     suspend fun lookupPhoneNumber(phoneNumber: String): Result {
         session.vectorCallService.protocolChecker.awaitCheckProtocols()
         val thirdPartyUser = session.pstnLookup(phoneNumber, webRtcCallManager.supportedPSTNProtocol).firstOrNull() ?: throw Failure.NoResult
-        // check to see if this is a virtual user, in which case we should find the native user
-        val nativeUserId = if (webRtcCallManager.supportsVirtualRooms) {
-            val nativeLookupResults = session.sipNativeLookup(thirdPartyUser.userId)
-            nativeLookupResults.firstOrNull()?.userId ?: thirdPartyUser.userId
+        val sipUserId = thirdPartyUser.userId
+        val nativeLookupResults = session.sipNativeLookup(thirdPartyUser.userId)
+        // If I have a native user I check for an existing native room with him...
+        val roomId = if (nativeLookupResults.isNotEmpty()) {
+            val nativeUserId = nativeLookupResults.first().userId
+            if (nativeUserId == session.myUserId) {
+                throw Failure.NumberIsYours
+            }
+            session.getExistingDirectRoomWithUser(nativeUserId)
+            // if there is not, just create a DM with the sip user
+            ?: directRoomHelper.ensureDMExists(sipUserId)
         } else {
-            thirdPartyUser.userId
+            // do the same if there is no corresponding native user.
+            directRoomHelper.ensureDMExists(sipUserId)
         }
-        if (nativeUserId == session.myUserId) throw Failure.NumberIsYours
-        val roomId = directRoomHelper.ensureDMExists(nativeUserId)
-        return Result(userId = nativeUserId, roomId = roomId)
+        return Result(userId = sipUserId, roomId = roomId)
     }
 }

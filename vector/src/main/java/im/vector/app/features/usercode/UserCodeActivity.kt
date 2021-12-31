@@ -24,11 +24,12 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import com.airbnb.mvrx.MvRx
+import androidx.fragment.app.FragmentManager
+import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
 import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
@@ -36,14 +37,11 @@ import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import kotlinx.parcelize.Parcelize
-import javax.inject.Inject
 import kotlin.reflect.KClass
 
+@AndroidEntryPoint
 class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
-        UserCodeSharedViewModel.Factory,
         MatrixToBottomSheet.InteractionListener {
-
-    @Inject lateinit var viewModelFactory: UserCodeSharedViewModel.Factory
 
     val sharedViewModel: UserCodeSharedViewModel by viewModel()
 
@@ -56,25 +54,38 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
-    override fun injectWith(injector: ScreenComponent) {
-        injector.inject(this)
+    private val fragmentLifecycleCallbacks = object : FragmentManager.FragmentLifecycleCallbacks() {
+        override fun onFragmentResumed(fm: FragmentManager, f: Fragment) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = this@UserCodeActivity
+            }
+            super.onFragmentResumed(fm, f)
+        }
+
+        override fun onFragmentPaused(fm: FragmentManager, f: Fragment) {
+            if (f is MatrixToBottomSheet) {
+                f.interactionListener = null
+            }
+            super.onFragmentPaused(fm, f)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
 
         if (isFirstCreation()) {
             // should be there early for shared element transition
             showFragment(ShowUserCodeFragment::class, Bundle.EMPTY)
         }
 
-        sharedViewModel.selectSubscribe(this, UserCodeState::mode) { mode ->
+        sharedViewModel.onEach(UserCodeState::mode) { mode ->
             when (mode) {
                 UserCodeState.Mode.SHOW      -> showFragment(ShowUserCodeFragment::class, Bundle.EMPTY)
                 UserCodeState.Mode.SCAN      -> showFragment(ScanUserCodeFragment::class, Bundle.EMPTY)
                 is UserCodeState.Mode.RESULT -> {
                     showFragment(ShowUserCodeFragment::class, Bundle.EMPTY)
-                    MatrixToBottomSheet.withLink(mode.rawLink, this).show(supportFragmentManager, "MatrixToBottomSheet")
+                    MatrixToBottomSheet.withLink(mode.rawLink).show(supportFragmentManager, "MatrixToBottomSheet")
                 }
             }
         }
@@ -97,11 +108,16 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
         }
     }
 
+    override fun onDestroy() {
+        supportFragmentManager.unregisterFragmentLifecycleCallbacks(fragmentLifecycleCallbacks)
+        super.onDestroy()
+    }
+
     private fun showFragment(fragmentClass: KClass<out Fragment>, bundle: Bundle) {
         if (supportFragmentManager.findFragmentByTag(fragmentClass.simpleName) == null) {
             supportFragmentManager.commitTransaction {
                 setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
-                replace(R.id.simpleFragmentContainer,
+                replace(views.simpleFragmentContainer.id,
                         fragmentClass.java,
                         bundle,
                         fragmentClass.simpleName
@@ -110,9 +126,11 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
         }
     }
 
-    override fun navigateToRoom(roomId: String) {
+    override fun mxToBottomSheetNavigateToRoom(roomId: String) {
         navigator.openRoom(this, roomId)
     }
+
+    override fun mxToBottomSheetSwitchToSpace(spaceId: String) {}
 
     override fun onBackPressed() = withState(sharedViewModel) {
         when (it.mode) {
@@ -122,13 +140,10 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
         }.exhaustive
     }
 
-    override fun create(initialState: UserCodeState) =
-            viewModelFactory.create(initialState)
-
     companion object {
         fun newIntent(context: Context, userId: String): Intent {
             return Intent(context, UserCodeActivity::class.java).apply {
-                putExtra(MvRx.KEY_ARG, Args(userId))
+                putExtra(Mavericks.KEY_ARG, Args(userId))
             }
         }
     }

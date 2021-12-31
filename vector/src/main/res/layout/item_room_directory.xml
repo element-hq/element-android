@@ -8,7 +8,8 @@
     android:background="?android:colorBackground"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?attr/selectableItemBackground">
+    android:foreground="?attr/selectableItemBackground"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/itemRoomDirectoryAvatar"
@@ -18,7 +19,7 @@
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:background="@drawable/circle"
-        android:contentDescription="@string/avatar"
+        android:importantForAccessibility="no"
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,8 +38,8 @@
         android:maxLines="2"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/itemRoomDirectoryDescription"
-        app:layout_constraintEnd_toStartOf="@+id/itemRoomDirectoryChecked"
+        app:layout_constraintBottom_toTopOf="@id/itemRoomDirectoryDescription"
+        app:layout_constraintEnd_toStartOf="@id/itemRoomDirectoryChecked"
         app:layout_constraintStart_toEndOf="@id/itemRoomDirectoryAvatar"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
@@ -58,7 +59,7 @@
         android:textColor="?vctr_content_primary"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/itemRoomDirectoryChecked"
+        app:layout_constraintEnd_toStartOf="@id/itemRoomDirectoryChecked"
         app:layout_constraintStart_toEndOf="@id/itemRoomDirectoryAvatar"
         app:layout_constraintTop_toBottomOf="@id/itemRoomDirectoryName"
         app:layout_goneMarginEnd="@dimen/layout_horizontal_margin"
@@ -71,7 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/layout_horizontal_margin"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        android:contentDescription="@string/avatar"
+        android:contentDescription="@string/a11y_selected"
         android:padding="8dp"
         android:src="@drawable/ic_check_on"
         android:visibility="gone"

@@ -23,7 +23,6 @@ import android.view.View
 import android.view.ViewGroup
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentLoadingBinding
-
 import javax.inject.Inject
 
 class LoadingFragment @Inject constructor() : VectorBaseFragment<FragmentLoadingBinding>() {

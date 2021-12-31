@@ -60,9 +60,11 @@ abstract class RoomDirectoryItem : VectorEpoxyModel<RoomDirectoryItem.Holder>() 
         // Avatar
         GlideApp.with(holder.avatarView)
                 .load(directoryAvatarUrl)
-                .apply {
+                .let {
                     if (!includeAllNetworks) {
-                        placeholder(R.drawable.network_matrix)
+                        it.placeholder(R.drawable.network_matrix)
+                    } else {
+                        it
                     }
                 }
                 .into(holder.avatarView)

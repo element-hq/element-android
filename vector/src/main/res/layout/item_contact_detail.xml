@@ -7,7 +7,8 @@
     android:background="?android:colorBackground"
     android:foreground="?attr/selectableItemBackground"
     android:minHeight="60dp"
-    android:padding="8dp">
+    android:padding="8dp"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/contactDetailName"
@@ -38,8 +39,8 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/contactDetailName"
-        app:layout_constraintTop_toBottomOf="@+id/contactDetailName"
+        app:layout_constraintStart_toStartOf="@id/contactDetailName"
+        app:layout_constraintTop_toBottomOf="@id/contactDetailName"
         tools:text="@sample/users.json/data/id"
         tools:visibility="visible" />
 

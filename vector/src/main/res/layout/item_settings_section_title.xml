@@ -12,4 +12,5 @@
     android:paddingBottom="@dimen/layout_vertical_margin"
     android:textColor="?vctr_content_primary"
     android:textStyle="bold"
-    tools:text="Title" />
+    tools:text="Title"
+    tools:viewBindingIgnore="true" />

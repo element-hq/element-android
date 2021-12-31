@@ -75,9 +75,9 @@ class WellKnown {
                     (config as? Map<*, *>)?.let { map ->
                         val apiUrl = map["api_url"] as? String
                         val uiUrl = map["ui_url"] as? String ?: apiUrl
-                        if (apiUrl != null
-                                && apiUrl.startsWith("https://")
-                                && uiUrl!!.startsWith("https://")) {
+                        if (apiUrl != null &&
+                                apiUrl.startsWith("https://") &&
+                                uiUrl!!.startsWith("https://")) {
                             managers.add(WellKnownManagerConfig(
                                     apiUrl = apiUrl,
                                     uiUrl = uiUrl

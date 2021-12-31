@@ -38,6 +38,7 @@ import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.session.identity.model.SignInvitationResult
 import org.matrix.android.sdk.internal.session.room.alias.DeleteRoomAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.GetRoomIdByAliasTask
 import org.matrix.android.sdk.internal.session.room.alias.RoomAliasDescription
@@ -84,21 +85,25 @@ internal class DefaultRoomService @Inject constructor(
         return roomSummaryDataSource.getRoomSummary(roomIdOrAlias)
     }
 
-    override fun getRoomSummaries(queryParams: RoomSummaryQueryParams): List<RoomSummary> {
-        return roomSummaryDataSource.getRoomSummaries(queryParams)
+    override fun getRoomSummaries(queryParams: RoomSummaryQueryParams,
+                                  sortOrder: RoomSortOrder): List<RoomSummary> {
+        return roomSummaryDataSource.getRoomSummaries(queryParams, sortOrder)
     }
 
-    override fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams): LiveData<List<RoomSummary>> {
-        return roomSummaryDataSource.getRoomSummariesLive(queryParams)
+    override fun getRoomSummariesLive(queryParams: RoomSummaryQueryParams,
+                                      sortOrder: RoomSortOrder): LiveData<List<RoomSummary>> {
+        return roomSummaryDataSource.getRoomSummariesLive(queryParams, sortOrder)
     }
 
-    override fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config, sortOrder: RoomSortOrder)
-            : LiveData<PagedList<RoomSummary>> {
+    override fun getPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
+                                           pagedListConfig: PagedList.Config,
+                                           sortOrder: RoomSortOrder): LiveData<PagedList<RoomSummary>> {
         return roomSummaryDataSource.getSortedPagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
     }
 
-    override fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams, pagedListConfig: PagedList.Config, sortOrder: RoomSortOrder)
-            : UpdatableLivePageResult {
+    override fun getFilteredPagedRoomSummariesLive(queryParams: RoomSummaryQueryParams,
+                                                   pagedListConfig: PagedList.Config,
+                                                   sortOrder: RoomSortOrder): UpdatableLivePageResult {
         return roomSummaryDataSource.getUpdatablePagedRoomSummariesLive(queryParams, pagedListConfig, sortOrder)
     }
 
@@ -120,6 +125,12 @@ internal class DefaultRoomService @Inject constructor(
 
     override suspend fun joinRoom(roomIdOrAlias: String, reason: String?, viaServers: List<String>) {
         joinRoomTask.execute(JoinRoomTask.Params(roomIdOrAlias, reason, viaServers))
+    }
+
+    override suspend fun joinRoom(roomId: String,
+                                  reason: String?,
+                                  thirdPartySigned: SignInvitationResult) {
+        joinRoomTask.execute(JoinRoomTask.Params(roomId, reason, thirdPartySigned = thirdPartySigned))
     }
 
     override suspend fun markAllAsRead(roomIds: List<String>) {

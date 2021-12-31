@@ -8,7 +8,8 @@
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
     android:paddingEnd="@dimen/layout_horizontal_margin"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/itemBottomSheetTitleTitle"
@@ -17,7 +18,7 @@
         android:layout_height="wrap_content"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/itemBottomSheetTitleSubtitle"
+        app:layout_constraintBottom_toTopOf="@id/itemBottomSheetTitleSubtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -34,7 +35,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemBottomSheetTitleTitle"
+        app:layout_constraintTop_toBottomOf="@id/itemBottomSheetTitleTitle"
         tools:text="@string/room_settings_room_read_history_dialog_subtitle"
         tools:visibility="visible" />
 

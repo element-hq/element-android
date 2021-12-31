@@ -23,6 +23,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -31,8 +32,10 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
+import im.vector.app.config.analyticsConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.queryExportKeys
@@ -43,10 +46,14 @@ import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
+import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openFileSelection
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogImportE2eKeysBinding
+import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewActions
+import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewModel
+import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewState
 import im.vector.app.features.crypto.keys.KeysExporter
 import im.vector.app.features.crypto.keys.KeysImporter
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
@@ -58,31 +65,31 @@ import im.vector.app.features.pin.PinMode
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
 import im.vector.app.features.themes.ThemeUtils
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.extensions.getFingerprintHumanReadable
+import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.internal.crypto.crosssigning.isVerified
 import org.matrix.android.sdk.internal.crypto.model.rest.DeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
-import org.matrix.android.sdk.rx.SecretsSynchronisationInfo
-import org.matrix.android.sdk.rx.rx
 import javax.inject.Inject
 
 class VectorSettingsSecurityPrivacyFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences,
         private val activeSessionHolder: ActiveSessionHolder,
         private val pinCodeStore: PinCodeStore,
         private val keysExporter: KeysExporter,
         private val keysImporter: KeysImporter,
+        private val rawService: RawService,
         private val navigator: Navigator
 ) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.settings_security_and_privacy
     override val preferenceXmlRes = R.xml.vector_settings_security_privacy
-    private var disposables = mutableListOf<Disposable>()
+
+    private val analyticsConsentViewModel: AnalyticsConsentViewModel by fragmentViewModel()
 
     // cryptography
     private val mCryptographyCategory by lazy {
@@ -130,6 +137,14 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         findPreference<VectorPreference>("SETTINGS_SECURITY_PIN")!!
     }
 
+    private val analyticsCategory by lazy {
+        findPreference<VectorPreferenceCategory>("SETTINGS_ANALYTICS_PREFERENCE_KEY")!!
+    }
+
+    private val analyticsConsent by lazy {
+        findPreference<VectorSwitchPreference>("SETTINGS_USER_ANALYTICS_CONSENT_KEY")!!
+    }
+
     override fun onCreateRecyclerView(inflater: LayoutInflater?, parent: ViewGroup?, savedInstanceState: Bundle?): RecyclerView {
         return super.onCreateRecyclerView(inflater, parent, savedInstanceState).also {
             // Insert animation are really annoying the first time the list is shown
@@ -144,19 +159,16 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         // My device name may have been updated
         refreshMyDevice()
         refreshXSigningStatus()
-        session.rx().liveSecretSynchronisationInfo()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
+        session.liveSecretSynchronisationInfo()
+                .onEach {
                     refresh4SSection(it)
                     refreshXSigningStatus()
-                }.also {
-                    disposables.add(it)
                 }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
 
         lifecycleScope.launchWhenResumed {
             findPreference<VectorPreference>(VectorPreferences.SETTINGS_CRYPTOGRAPHY_HS_ADMIN_DISABLED_E2E_DEFAULT)?.isVisible =
-                    vectorActivity.getVectorComponent()
-                            .rawService()
+                    rawService
                             .getElementWellknown(session.sessionParams)
                             ?.isE2EByDefault() == false
         }
@@ -171,14 +183,6 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 //    private val secureBackupResetPreference by lazy {
 //        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SECURE_BACKUP_RESET_PREFERENCE_KEY)
 //    }
-
-    override fun onPause() {
-        super.onPause()
-        disposables.forEach {
-            it.dispose()
-        }
-        disposables.clear()
-    }
 
     private fun refresh4SSection(info: SecretsSynchronisationInfo) {
         // it's a lot of if / else if / else
@@ -250,18 +254,9 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         refreshKeysManagementSection()
 
         // Analytics
+        setUpAnalytics()
 
-        // Analytics tracking management
-        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_USE_ANALYTICS_KEY)!!.let {
-            // On if the analytics tracking is activated
-            it.isChecked = vectorPreferences.useAnalytics()
-
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                vectorPreferences.setUseAnalytics(newValue as Boolean)
-                true
-            }
-        }
-
+        // Pin code
         openPinCodeSettingsPref.setOnPreferenceClickListener {
             openPinCodePreferenceScreen()
             true
@@ -283,6 +278,34 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                 text = getString(R.string.settings_hs_admin_e2e_disabled)
                 textColor = ThemeUtils.getColor(requireContext(), R.attr.colorError)
             }
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        observeAnalyticsState()
+    }
+
+    private fun observeAnalyticsState() {
+        analyticsConsentViewModel.onEach(AnalyticsConsentViewState::userConsent) {
+            analyticsConsent.isChecked = it
+        }
+    }
+
+    private fun setUpAnalytics() {
+        analyticsCategory.isVisible = analyticsConfig.isEnabled
+
+        analyticsConsent.setOnPreferenceChangeListener { _, newValue ->
+            val newValueBool = newValue as? Boolean ?: false
+            if (newValueBool) {
+                // User wants to enable analytics, display the opt in screen
+                navigator.openAnalyticsOptIn(requireContext())
+            } else {
+                // Just disable analytics
+                analyticsConsentViewModel.handle(AnalyticsConsentViewActions.SetUserConsent(false))
+            }
+            true
         }
     }
 
@@ -458,7 +481,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
             val importDialog = builder.show()
 
-            views.dialogE2eKeysImportButton.setOnClickListener {
+            views.dialogE2eKeysImportButton.debouncedClicks {
                 val password = views.dialogE2eKeysPassphraseEditText.text.toString()
 
                 displayLoadingView()

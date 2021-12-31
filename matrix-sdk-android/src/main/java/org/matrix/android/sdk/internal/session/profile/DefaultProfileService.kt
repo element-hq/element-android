@@ -22,6 +22,7 @@ import androidx.lifecycle.LiveData
 import com.zhuinden.monarchy.Monarchy
 import io.realm.kotlin.where
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.profile.ProfileService
@@ -35,7 +36,6 @@ import org.matrix.android.sdk.internal.session.content.FileUploader
 import org.matrix.android.sdk.internal.session.user.UserStore
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.configureWith
-import org.matrix.android.sdk.internal.util.MatrixCoroutineDispatchers
 import javax.inject.Inject
 
 internal class DefaultProfileService @Inject constructor(private val taskExecutor: TaskExecutor,
@@ -68,7 +68,7 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
     }
 
     override suspend fun updateAvatar(userId: String, newAvatarUri: Uri, fileName: String) {
-        withContext(coroutineDispatchers.main) {
+        withContext(coroutineDispatchers.io) {
             val response = fileUploader.uploadFromUri(newAvatarUri, fileName, MimeTypes.Jpeg)
             setAvatarUrlTask.execute(SetAvatarUrlTask.Params(userId = userId, newAvatarUrl = response.contentUri))
             userStore.updateAvatar(userId, response.contentUri)

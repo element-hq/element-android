@@ -16,14 +16,14 @@
 
 package org.matrix.android.sdk.internal.crypto.keysbackup.util
 
-import org.matrix.android.sdk.MatrixTest
 import org.junit.Assert.assertArrayEquals
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
+import org.matrix.android.sdk.MatrixTest
 
-class RecoveryKeyTest: MatrixTest {
+class RecoveryKeyTest : MatrixTest {
 
     private val curve25519Key = byteArrayOf(
             0x77.toByte(), 0x07.toByte(), 0x6D.toByte(), 0x0A.toByte(), 0x73.toByte(), 0x18.toByte(), 0xA5.toByte(), 0x7D.toByte(),

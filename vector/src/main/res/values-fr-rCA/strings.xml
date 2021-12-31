@@ -343,7 +343,6 @@
     <string name="link_copied_to_clipboard">Lien copié dans le presse-papiers</string>
     <string name="labs_show_unread_notifications_as_tab">Ajouter un onglet dédié aux notifications non-lues sur l’écran principal.</string>
     <string name="labs_swipe_to_reply_in_timeline">Activer le balayage pour répondre dans l’historique</string>
-    <string name="user_directory_search_hint">Chercher par nom ou identifiant</string>
     <string name="room_directory_search_hint">Nom ou identifiant (#exemple:matrix.org)</string>
     <string name="room_filtering_footer_open_room_directory">Voir le répertoire des salons</string>
     <string name="room_filtering_footer_create_new_direct_message">Envoyer un nouveau message privé</string>
@@ -2730,7 +2729,6 @@
     <string name="spaces_no_server_support_title">Il semble que votre serveur d’accueil ne prend pas encore en charge les espaces</string>
     <string name="spaces_feeling_experimental_subspace">Envie d’expérimenter\?
 \nVous pouvez ajouter des espaces existants à un espace.</string>
-    <string name="labs_space_show_orphan_in_home">Espace expérimental – afficher seulement les orphelins dans Accueil</string>
     <string name="space_manage_rooms_and_spaces">Gérer les salons et les espaces</string>
     <string name="space_mark_as_not_suggested">Marquer comme non recommandé</string>
     <string name="space_mark_as_suggested">Marquer comme recommandé</string>
@@ -2749,7 +2747,6 @@
     <string name="space_leave_prompt_msg_as_admin">Vous êtes admin de cet espace, assurez-vous d’avoir transféré les droits d’admin à un autre membre avant de partir.</string>
     <string name="space_leave_prompt_msg_private">Cet espace n’est pas public. Vous ne pourrez pas le rejoindre sans invitation.</string>
     <string name="space_leave_prompt_msg_only_you">Vous êtes la seule personne ici. Si vous partez, personne ne pourra entrer à l’avenir, même pas vous.</string>
-    <string name="space_leave_prompt_msg">Voulez-vous vraiment quitter l’espace\?</string>
     <string name="leave_space">Quitter l’espace</string>
     <string name="space_add_child_title">Ajouter des salons</string>
     <string name="space_explore_activity_title">Parcourir les salons</string>

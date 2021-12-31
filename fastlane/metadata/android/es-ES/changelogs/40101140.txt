@@ -1,0 +1,2 @@
+Principales cambios en esta versión: arreglado un problema con los mensajes encriptados.
+Conjunto de cambios completo: https://github.com/vector-im/element-android/releases/tag/v1.1.14

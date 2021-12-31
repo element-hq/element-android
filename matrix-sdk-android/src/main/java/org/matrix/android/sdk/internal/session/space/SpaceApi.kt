@@ -17,27 +17,25 @@
 package org.matrix.android.sdk.internal.session.space
 
 import org.matrix.android.sdk.internal.network.NetworkConstants
-import retrofit2.http.Body
-import retrofit2.http.POST
+import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 internal interface SpaceApi {
 
     /**
-     *
-     * POST /_matrix/client/r0/rooms/{roomID}/spaces
-     *  {
-     *    "max_rooms_per_space": 5,      // The maximum number of rooms/subspaces to return for a given space, if negative unbounded. default: -1.
-     *    "auto_join_only": true,        // If true, only return m.space.child events with auto_join:true, default: false, which returns all events.
-     *    "limit": 100,                  // The maximum number of rooms/subspaces to return, server can override this, default: 100.
-     *    "batch": "opaque_string"       // A token to use if this is a subsequent HTTP hit, default: "".
-     *  }
-     *
-     * Ref:
-     * - MSC 2946 https://github.com/matrix-org/matrix-doc/blob/kegan/spaces-summary/proposals/2946-spaces-summary.md
-     * - https://hackmd.io/fNYh4tjUT5mQfR1uuRzWDA
+     * @param suggestedOnly Optional. If true, return only child events and rooms where the m.space.child event has suggested: true.
+     * @param limit: Optional: a client-defined limit to the maximum number of rooms to return per page. Must be a non-negative integer.
+     * @param maxDepth: Optional: The maximum depth in the tree (from the root room) to return.
+     * The deepest depth returned will not include children events. Defaults to no-limit. Must be a non-negative integer.
+     * @param from: Optional. Pagination token given to retrieve the next set of rooms.
+     * Note that if a pagination token is provided, then the parameters given for suggested_only and max_depth must be the same.
      */
-    @POST(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2946/rooms/{roomId}/spaces")
-    suspend fun getSpaces(@Path("roomId") spaceId: String,
-                  @Body params: SpaceSummaryParams): SpacesResponse
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2946/rooms/{roomId}/hierarchy")
+    suspend fun getSpaceHierarchy(
+            @Path("roomId") spaceId: String,
+            @Query("suggested_only") suggestedOnly: Boolean?,
+            @Query("limit") limit: Int?,
+            @Query("max_depth") maxDepth: Int?,
+            @Query("from") from: String?): SpacesResponse
 }

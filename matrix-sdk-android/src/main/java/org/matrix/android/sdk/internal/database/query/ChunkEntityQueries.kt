@@ -16,13 +16,13 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import org.matrix.android.sdk.internal.database.model.ChunkEntity
-import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.kotlin.createObject
 import io.realm.kotlin.where
+import org.matrix.android.sdk.internal.database.model.ChunkEntity
+import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 
 internal fun ChunkEntity.Companion.where(realm: Realm, roomId: String): RealmQuery<ChunkEntity> {
     return realm.where<ChunkEntity>()

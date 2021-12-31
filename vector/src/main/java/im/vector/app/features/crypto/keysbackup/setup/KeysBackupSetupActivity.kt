@@ -23,8 +23,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.observeEvent
 import im.vector.app.core.extensions.queryExportKeys
@@ -36,6 +37,7 @@ import im.vector.app.features.crypto.keys.KeysExporter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class KeysBackupSetupActivity : SimpleFragmentActivity() {
 
     override fun getTitleRes() = R.string.title_activity_keys_backup_setup
@@ -43,16 +45,16 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
     private lateinit var viewModel: KeysBackupSetupSharedViewModel
 
     @Inject lateinit var keysExporter: KeysExporter
+    @Inject lateinit var activeSessionHolder: ActiveSessionHolder
 
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
+    private val session by lazy {
+        activeSessionHolder.getActiveSession()
     }
 
     override fun initUiAndData() {
         super.initUiAndData()
         if (isFirstCreation()) {
-            replaceFragment(R.id.container, KeysBackupSetupStep1Fragment::class.java)
+            replaceFragment(views.container, KeysBackupSetupStep1Fragment::class.java)
         }
 
         viewModel = viewModelProvider.get(KeysBackupSetupSharedViewModel::class.java)
@@ -78,11 +80,11 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
             when (uxStateEvent) {
                 KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_2      -> {
                     supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                    replaceFragment(R.id.container, KeysBackupSetupStep2Fragment::class.java)
+                    replaceFragment(views.container, KeysBackupSetupStep2Fragment::class.java)
                 }
                 KeysBackupSetupSharedViewModel.NAVIGATE_TO_STEP_3      -> {
                     supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
-                    replaceFragment(R.id.container, KeysBackupSetupStep3Fragment::class.java)
+                    replaceFragment(views.container, KeysBackupSetupStep3Fragment::class.java)
                 }
                 KeysBackupSetupSharedViewModel.NAVIGATE_FINISH         -> {
                     val resultIntent = Intent()

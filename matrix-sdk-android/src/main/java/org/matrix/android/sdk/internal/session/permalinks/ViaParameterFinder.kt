@@ -78,6 +78,10 @@ internal class ViaParameterFinder @Inject constructor(
                 .toSet()
     }
 
+    // not used much for now but as per MSC1772
+    // the via parameter of m.space.child must contain a via key which gives a list of candidate servers that can be used to join the room.
+    // It is possible for the list of candidate servers and the list of authorised servers to diverge.
+    // It may not be possible for a user to join a room if there's no overlap between these
     fun computeViaParamsForRestricted(roomId: String, max: Int): List<String> {
         val userThatCanInvite = roomGetterProvider.get().getRoom(roomId)
                 ?.getRoomMembers(roomMemberQueryParams { memberships = listOf(Membership.JOIN) })

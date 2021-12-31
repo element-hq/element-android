@@ -24,11 +24,15 @@ data class RoomJoinRuleState(
         val currentRoomJoinRule: RoomJoinRules = RoomJoinRules.INVITE,
         val allowedJoinedRules: List<JoinRulesOptionSupport> =
                 listOf(RoomJoinRules.INVITE, RoomJoinRules.PUBLIC).map { it.toOption(true) },
-        val currentGuestAccess: GuestAccess? = null
+        val currentGuestAccess: GuestAccess? = null,
+        val isSpace: Boolean = false,
+        val parentSpaceName: String?
 ) : BottomSheetGenericState() {
 
     constructor(args: RoomJoinRuleBottomSheetArgs) : this(
             currentRoomJoinRule = args.currentRoomJoinRule,
-            allowedJoinedRules = args.allowedJoinedRules
+            allowedJoinedRules = args.allowedJoinedRules,
+            isSpace = args.isSpace,
+            parentSpaceName = args.parentSpaceName
     )
 }

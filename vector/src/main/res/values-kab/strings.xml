@@ -1244,8 +1244,8 @@
     <string name="bottom_sheet_setup_secure_backup_security_key_title">Seqdec tasarut n tɣellist</string>
     <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Sirew tasarut n tɣellist ara tḥerzeḍ deg wadeg yettwaḍemnen, am yimsefrak n wawalen uufiren neɣ deg usenduq.</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_title">Sbadu tafyirt taɣelsant</string>
-    <string name="bottom_sheet_save_your_recovery_key_content">Kles tasarut-ik·im n tɣellist deg wadeg yettwaḍemnen, am umsefrak n wawalen uffiren neɣ neɣ usenduq.</string>
-    <string name="save_your_security_key_notice">Kles tasarut-ik·im n tɣellist deg wadeg yettwaḍemnen, am umsefrak n wawalen uffiren neɣ neɣ usenduq.</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">Kles tasarut n tɣellist deg wadeg yettwaḍemnen, am umsefrak n wawalen uffiren neɣ usenduq.</string>
+    <string name="save_your_security_key_notice">Kles tasarut n tɣellist deg wadeg yettwaḍemnen, am umsefrak n wawalen uffiren neɣ usenduq.</string>
     <string name="room_settings_save_success">Tbeddleḍ iɣewwaren n texxamt akken iwata</string>
     <string name="notice_crypto_unable_to_decrypt_final">Ur tezmireḍ ara ad tkecmeḍ ɣer izen-a</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Aṛaǧu i umazray n uwgelhen</string>
@@ -1327,7 +1327,6 @@
 \n
 \nMa ulac aɣilif sireg anekcum ɣer isfuyla udhimen i d-iteddun i wakken tizmireḍ ad tessiwleḍ."</string>
     <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} yesra tasiregt n unekcum ɣer temkarḍit-inek·inem n tewlafin d tvidyut i tuzna d usekles n tceqqufin yeddan.
-\n 
 \n
 \nMa ulac aɣilif sireg anekcum deg yisfuyla udhimen i d-iteddun i wakken ad tizmireḍ ad tazneḍ ifuyla seg tiliɣri-inek·inem.</string>
     <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} yezmer ad issenqed adlis-inek·inem n tansiwin i wakken ad d-yaf iseqdacen-nniḍen n Matrix s usenned ɣer yimaylen d wuṭṭunen n tiliɣri nsen.
@@ -1372,7 +1371,7 @@
     <string name="settings_messages_in_one_to_one">Iznan deg usqerdec gar sin kan</string>
     <string name="settings_messages_in_group_chat">Iznan n yisqerdicen n ugraw</string>
     <string name="settings_background_sync">Amtawi n ugilal</string>
-    <string name="settings_background_fdroid_sync_mode">Askar n umatawi n ugilal (D armitan)</string>
+    <string name="settings_background_fdroid_sync_mode">Askar n umatawi n ugilal</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Ulac amtawi n ugilal</string>
     <string name="settings_start_on_boot">Bdu seg usenker</string>
     <string name="settings_enable_background_sync">Rmed amtawi n ugilal</string>
@@ -1401,7 +1400,8 @@
     <string name="room_widget_permission_added_by">Awiǧit-a yettwarna sɣur:</string>
     <string name="room_widget_permission_webview_shared_info_title">Aseqdec-is yezmer ad yesbadu inagan n tuqqna yerna ad yebḍu isefka d %s:</string>
     <string name="room_widget_permission_shared_info_title">Aseqdec-is yezmer ad yebḍu isefka d %s:</string>
-    <string name="room_widget_failed_to_load">Ur yeddi ara usali n yiwiǧit%s</string>
+    <string name="room_widget_failed_to_load">Ur yeddi ara usali n yiwiǧit.
+\n%s</string>
     <string name="room_widget_reload">Ales asali n yiwiǧit</string>
     <string name="room_widget_open_in_browser">Ldi deg yiminig</string>
     <string name="room_widget_revoke_access">Sefesex anekcum i nekk</string>
@@ -1643,7 +1643,6 @@
 \n%1$s</string>
     <string name="template_settings_troubleshoot_test_bg_restricted_failed">Ilugan n ugilal ttwaremden i ${app_name}.
 \nAmahil i yettaɛraḍ usnas ad t-yeg yesɛa talast ma mazal-it yella ɣef ugilal, aya yezmer ad d-yawi ugur i yilɣa.
-\n
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Sens ilugan</string>
     <string name="settings_troubleshoot_test_battery_title">Asefrer n tbatrit</string>
@@ -1836,7 +1835,7 @@
     <string name="keys_backup_settings_delete_confirm_message">Kkes tisura-inek·inem n uwgelhen yettwaḥerzen ɣef uqeddac\? Ur tettuɣaleḍ ara ad tizmireḍ ad tesqedceḍ tasarut-ik·im n tririt i tɣuri n umazray n yiznan yettwawgelhen.</string>
     <string name="new_recovery_method_popup_description">Aḥraz n tsarut amaynut n yizen aɣelsan tettwaf-d.
 \n
-\nMa yella ur tesbaduḍ ara tarrayt n tririt tamaynut, amker yezmer ad yeɛreḍ ad yekcem ɣer umiḍan-ik·im. Snifel awal uffir n umiḍan-ik·im syen sbadu tarrayt n tririt tamaynut din din deg yiɣewwaren.</string>
+\nMa yella ur tesbaduḍ ara tarrayt n tririt tamaynut, amker yezmer ad yeɛreḍ ad yekcem ɣer umiḍan-ik·im. Snifel awal uffir n umiḍan-ik·im syen sbadu tarrayt n tririt tamaynut din-din deg yiɣewwaren.</string>
     <string name="secure_backup_banner_setup_line1">Aḥraz aɣelsan</string>
     <string name="secure_backup_banner_setup_line2">Seḥbiber iman-ik·im mgal asruḥu n unekcum ɣer yiznann &amp; yisefka yettwawgelhen</string>
     <string name="keys_backup_banner_update_line1">Tisura timaynutin n yizen aɣelsan</string>
@@ -2151,7 +2150,7 @@
 \n- Ibenk-a, neɣ ibenk-nniḍen
 \n- Tuqqna ɣer internet yettuseqdacen seg yal ibenk
 \n
-\nAd ak·akem-nwelleh ad tesnifleḍ awal-ik·im uffir &amp; tsarut n tririt deg yiɣewwaren tura tura.</string>
+\nAd ak·akem-nwelleh ad tesnifleḍ awal-ik·im uffir &amp; tsarut n tririt deg yiɣewwaren tura.</string>
     <string name="verify_cancelled_notice">Senqed ibenkan-ik·im seg yiɣewwaren.</string>
     <string name="verification_cancelled">Yettwasefsex usenqed</string>
     <string name="recovery_passphrase">Tefyirt tuffirt n tririt</string>

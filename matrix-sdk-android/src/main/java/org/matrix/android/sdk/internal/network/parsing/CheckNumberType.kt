@@ -20,7 +20,6 @@ import androidx.annotation.Nullable
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonReader
 import com.squareup.moshi.JsonWriter
-
 import com.squareup.moshi.Moshi
 import java.io.IOException
 import java.lang.reflect.Type

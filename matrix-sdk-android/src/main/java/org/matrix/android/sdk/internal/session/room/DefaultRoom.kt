@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room
 
 import androidx.lifecycle.LiveData
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.Room
@@ -71,7 +72,8 @@ internal class DefaultRoom(override val roomId: String,
                            private val roomVersionService: RoomVersionService,
                            private val sendStateTask: SendStateTask,
                            private val viaParameterFinder: ViaParameterFinder,
-                           private val searchTask: SearchTask
+                           private val searchTask: SearchTask,
+                           override val coroutineDispatchers: MatrixCoroutineDispatchers
 ) :
         Room,
         TimelineService by timelineService,

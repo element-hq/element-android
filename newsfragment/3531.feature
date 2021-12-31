@@ -1,1 +1,0 @@
-Introduces AutoAcceptInvites which can be enabled at compile time.

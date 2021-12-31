@@ -17,9 +17,6 @@
 package org.matrix.android.sdk.internal.crypto
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import org.matrix.android.sdk.InstrumentedTest
-import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
-import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import io.realm.Realm
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
@@ -27,6 +24,9 @@ import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.matrix.android.sdk.InstrumentedTest
+import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
+import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.olm.OlmAccount
 import org.matrix.olm.OlmManager
 import org.matrix.olm.OlmSession

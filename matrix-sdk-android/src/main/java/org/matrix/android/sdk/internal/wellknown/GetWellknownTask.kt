@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.wellknown
 
 import android.util.MalformedJsonException
 import dagger.Lazy
+import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.WellKnown
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
@@ -31,7 +32,6 @@ import org.matrix.android.sdk.internal.session.homeserver.CapabilitiesAPI
 import org.matrix.android.sdk.internal.session.identity.IdentityAuthAPI
 import org.matrix.android.sdk.internal.task.Task
 import org.matrix.android.sdk.internal.util.isValidUrl
-import okhttp3.OkHttpClient
 import java.io.EOFException
 import javax.inject.Inject
 import javax.net.ssl.HttpsURLConnection

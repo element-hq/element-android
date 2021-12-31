@@ -16,7 +16,7 @@
 
 package im.vector.app.features.usercode
 
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import org.matrix.android.sdk.api.util.MatrixItem
 
 data class UserCodeState(
@@ -24,7 +24,7 @@ data class UserCodeState(
         val matrixItem: MatrixItem? = null,
         val shareLink: String? = null,
         val mode: Mode = Mode.SHOW
-) : MvRxState {
+) : MavericksState {
     sealed class Mode {
         object SHOW : Mode()
         object SCAN : Mode()

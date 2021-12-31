@@ -99,7 +99,6 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
             Toast.makeText(requireContext(), R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
             requireActivity().finish()
         } else {
-            val existingDm = viewModel.session.getExistingDirectRoomWithUser(mxid)
             // The following assumes MXIDs are case insensitive
             if (mxid.equals(other = viewModel.session.myUserId, ignoreCase = true)) {
                 Toast.makeText(requireContext(), R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
@@ -109,7 +108,7 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
                 val qrInvitee = if (viewModel.session.getUser(mxid) != null) viewModel.session.getUser(mxid)!! else User(mxid, null, null)
 
                 viewModel.handle(
-                        CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingSelection.UserPendingSelection(qrInvitee)), existingDm)
+                        CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers(setOf(PendingSelection.UserPendingSelection(qrInvitee)))
                 )
             }
         }

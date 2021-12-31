@@ -8,6 +8,7 @@
         <attr name="actionDescription" format="string" />
         <attr name="leftIcon" format="reference" />
         <attr name="rightIcon" format="reference" />
+        <attr name="betaAction" format="boolean" />
         <attr name="forceStartPadding" format="boolean" />
     </declare-styleable>
 

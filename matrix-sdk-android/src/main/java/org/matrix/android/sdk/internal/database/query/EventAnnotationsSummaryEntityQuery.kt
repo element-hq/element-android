@@ -16,12 +16,12 @@
 
 package org.matrix.android.sdk.internal.database.query
 
-import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
-import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntityFields
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.kotlin.where
+import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
+import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntityFields
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 
 internal fun EventAnnotationsSummaryEntity.Companion.where(realm: Realm, roomId: String, eventId: String): RealmQuery<EventAnnotationsSummaryEntity> {
     return realm.where<EventAnnotationsSummaryEntity>()

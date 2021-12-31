@@ -7,9 +7,9 @@
     android:background="?attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:minHeight="64dp"
-    android:orientation="horizontal"
     android:paddingStart="@dimen/layout_horizontal_margin"
-    android:paddingEnd="@dimen/layout_horizontal_margin">
+    android:paddingEnd="@dimen/layout_horizontal_margin"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/roomWidgetAvatar"
@@ -57,6 +57,5 @@
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?vctr_content_secondary"
         tools:ignore="MissingPrefix" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

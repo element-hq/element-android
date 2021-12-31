@@ -34,8 +34,8 @@ sealed class MatrixItem(
 ) {
     data class UserItem(override val id: String,
                         override val displayName: String? = null,
-                        override val avatarUrl: String? = null)
-        : MatrixItem(id, displayName?.removeSuffix(ircPattern), avatarUrl) {
+                        override val avatarUrl: String? = null) :
+        MatrixItem(id, displayName?.removeSuffix(ircPattern), avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -45,8 +45,8 @@ sealed class MatrixItem(
 
     data class EventItem(override val id: String,
                          override val displayName: String? = null,
-                         override val avatarUrl: String? = null)
-        : MatrixItem(id, displayName, avatarUrl) {
+                         override val avatarUrl: String? = null) :
+        MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -56,8 +56,8 @@ sealed class MatrixItem(
 
     data class RoomItem(override val id: String,
                         override val displayName: String? = null,
-                        override val avatarUrl: String? = null)
-        : MatrixItem(id, displayName, avatarUrl) {
+                        override val avatarUrl: String? = null) :
+        MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -67,8 +67,8 @@ sealed class MatrixItem(
 
     data class SpaceItem(override val id: String,
                          override val displayName: String? = null,
-                         override val avatarUrl: String? = null)
-        : MatrixItem(id, displayName, avatarUrl) {
+                         override val avatarUrl: String? = null) :
+        MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -78,34 +78,24 @@ sealed class MatrixItem(
 
     data class RoomAliasItem(override val id: String,
                              override val displayName: String? = null,
-                             override val avatarUrl: String? = null)
-        : MatrixItem(id, displayName, avatarUrl) {
+                             override val avatarUrl: String? = null) :
+        MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
-
-        // Best name is the id, and we keep the displayName of the room for the case we need the first letter
-        override fun getBestName() = id
 
         override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
     }
 
     data class GroupItem(override val id: String,
                          override val displayName: String? = null,
-                         override val avatarUrl: String? = null)
-        : MatrixItem(id, displayName, avatarUrl) {
+                         override val avatarUrl: String? = null) :
+        MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
 
-        // Best name is the id, and we keep the displayName of the room for the case we need the first letter
-        override fun getBestName() = id
-
         override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
-    }
-
-    open fun getBestName(): String {
-        return displayName?.takeIf { it.isNotBlank() } ?: id
     }
 
     protected fun checkId() {

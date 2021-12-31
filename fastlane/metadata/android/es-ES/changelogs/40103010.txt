@@ -1,0 +1,2 @@
+Principales cambios en esta versión: ¡Organiza tus habitaciones usando Spaces! v1.3.1 está arreglando un bloqueo que puede ocurrir en v1.3.0.
+Registro de cambios completo: https://github.com/vector-im/element-android/releases/tag/v1.3.1

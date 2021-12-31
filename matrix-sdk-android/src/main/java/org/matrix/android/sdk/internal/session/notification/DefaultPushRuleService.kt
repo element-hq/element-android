@@ -15,8 +15,11 @@
  */
 package org.matrix.android.sdk.internal.session.notification
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.pushrules.Action
+import org.matrix.android.sdk.api.pushrules.PushEvents
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.pushrules.RuleKind
 import org.matrix.android.sdk.api.pushrules.RuleScope
@@ -26,6 +29,7 @@ import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.pushrules.rest.RuleSet
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.internal.database.mapper.PushRulesMapper
+import org.matrix.android.sdk.internal.database.model.PushRuleEntity
 import org.matrix.android.sdk.internal.database.model.PushRulesEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -117,8 +121,8 @@ internal class DefaultPushRuleService @Inject constructor(
         updatePushRuleActionsTask.execute(UpdatePushRuleActionsTask.Params(kind, ruleId, enable, actions))
     }
 
-    override suspend fun removePushRule(kind: RuleKind, pushRule: PushRule) {
-        removePushRuleTask.execute(RemovePushRuleTask.Params(kind, pushRule))
+    override suspend fun removePushRule(kind: RuleKind, ruleId: String) {
+        removePushRuleTask.execute(RemovePushRuleTask.Params(kind, ruleId))
     }
 
     override fun removePushRuleListener(listener: PushRuleService.PushRuleListener) {
@@ -139,74 +143,28 @@ internal class DefaultPushRuleService @Inject constructor(
         return pushRuleFinder.fulfilledBingRule(event, rules)?.getActions().orEmpty()
     }
 
-//    fun processEvents(events: List<Event>) {
-//        var hasDoneSomething = false
-//        events.forEach { event ->
-//            fulfilledBingRule(event)?.let {
-//                hasDoneSomething = true
-//                dispatchBing(event, it)
-//            }
-//        }
-//        if (hasDoneSomething)
-//            dispatchFinish()
-//    }
-
-    fun dispatchBing(event: Event, rule: PushRule) {
-        synchronized(listeners) {
-            val actionsList = rule.getActions()
-            listeners.forEach {
-                try {
-                    it.onMatchRule(event, actionsList)
-                } catch (e: Throwable) {
-                    Timber.e(e, "Error while dispatching bing")
+    override fun getKeywords(): LiveData<Set<String>> {
+        // Keywords are all content rules that don't start with '.'
+        val liveData = monarchy.findAllMappedWithChanges(
+                { realm ->
+                    PushRulesEntity.where(realm, RuleScope.GLOBAL, RuleSetKey.CONTENT)
+                },
+                { result ->
+                    result.pushRules.map(PushRuleEntity::ruleId).filter { !it.startsWith(".") }
                 }
-            }
+        )
+        return Transformations.map(liveData) { results ->
+            results.firstOrNull().orEmpty().toSet()
         }
     }
 
-    fun dispatchRoomJoined(roomId: String) {
+    fun dispatchEvents(pushEvents: PushEvents) {
         synchronized(listeners) {
             listeners.forEach {
                 try {
-                    it.onRoomJoined(roomId)
+                    it.onEvents(pushEvents)
                 } catch (e: Throwable) {
-                    Timber.e(e, "Error while dispatching room joined")
-                }
-            }
-        }
-    }
-
-    fun dispatchRoomLeft(roomId: String) {
-        synchronized(listeners) {
-            listeners.forEach {
-                try {
-                    it.onRoomLeft(roomId)
-                } catch (e: Throwable) {
-                    Timber.e(e, "Error while dispatching room left")
-                }
-            }
-        }
-    }
-
-    fun dispatchRedactedEventId(redactedEventId: String) {
-        synchronized(listeners) {
-            listeners.forEach {
-                try {
-                    it.onEventRedacted(redactedEventId)
-                } catch (e: Throwable) {
-                    Timber.e(e, "Error while dispatching redacted event")
-                }
-            }
-        }
-    }
-
-    fun dispatchFinish() {
-        synchronized(listeners) {
-            listeners.forEach {
-                try {
-                    it.batchFinish()
-                } catch (e: Throwable) {
-                    Timber.e(e, "Error while dispatching finish")
+                    Timber.e(e, "Error while dispatching push events")
                 }
             }
         }

@@ -27,8 +27,8 @@ import com.google.android.material.button.MaterialButton
 import im.vector.app.R
 import org.matrix.android.sdk.api.auth.data.SsoIdentityProvider
 
-class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
-    : LinearLayout(context, attrs, defStyle) {
+class SocialLoginButtonsView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
+    LinearLayout(context, attrs, defStyle) {
 
     interface InteractionListener {
         fun onProviderSelected(id: String?)

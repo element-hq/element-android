@@ -20,8 +20,8 @@ import android.content.Context
 import android.text.Spannable
 import android.text.Spanned
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.AvatarRenderer
@@ -35,8 +35,8 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 class PillsPostProcessor @AssistedInject constructor(@Assisted private val roomId: String?,
                                                      private val context: Context,
                                                      private val avatarRenderer: AvatarRenderer,
-                                                     private val sessionHolder: ActiveSessionHolder)
-    : EventHtmlRenderer.PostProcessor {
+                                                     private val sessionHolder: ActiveSessionHolder) :
+    EventHtmlRenderer.PostProcessor {
 
     @AssistedFactory
     interface Factory {

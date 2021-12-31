@@ -46,8 +46,8 @@ class RoomMemberProfileController @Inject constructor(
         fun onJumpToReadReceiptClicked()
         fun onMentionClicked()
         fun onEditPowerLevel(currentRole: Role)
-        fun onKickClicked()
-        fun onBanClicked(isUserBanned: Boolean)
+        fun onKickClicked(isSpace: Boolean)
+        fun onBanClicked(isSpace: Boolean, isUserBanned: Boolean)
         fun onCancelInviteClicked()
         fun onInviteClicked()
     }
@@ -86,7 +86,9 @@ class RoomMemberProfileController @Inject constructor(
     }
 
     private fun buildRoomMemberActions(state: RoomMemberProfileViewState) {
-        buildSecuritySection(state)
+        if (!state.isSpace) {
+            buildSecuritySection(state)
+        }
         buildMoreSection(state)
         buildAdminSection(state)
     }
@@ -190,7 +192,7 @@ class RoomMemberProfileController @Inject constructor(
                     action = { callback?.onOpenDmClicked() }
             )
 
-            if (state.hasReadReceipt) {
+            if (!state.isSpace && state.hasReadReceipt) {
                 buildProfileAction(
                         id = "read_receipt",
                         editable = false,
@@ -200,16 +202,18 @@ class RoomMemberProfileController @Inject constructor(
             }
 
             val ignoreActionTitle = state.buildIgnoreActionTitle()
-
-            buildProfileAction(
-                    id = "mention",
-                    title = stringProvider.getString(R.string.room_participants_action_mention),
-                    editable = false,
-                    divider = ignoreActionTitle != null,
-                    action = { callback?.onMentionClicked() }
-            )
+            if (!state.isSpace) {
+                buildProfileAction(
+                        id = "mention",
+                        title = stringProvider.getString(R.string.room_participants_action_mention),
+                        editable = false,
+                        divider = ignoreActionTitle != null,
+                        action = { callback?.onMentionClicked() }
+                )
+            }
 
             val canInvite = state.actionPermissions.canInvite
+
             if (canInvite && (membership == Membership.LEAVE || membership == Membership.KNOCK)) {
                 buildProfileAction(
                         id = "invite",
@@ -270,7 +274,7 @@ class RoomMemberProfileController @Inject constructor(
                             divider = canBan,
                             destructive = true,
                             title = stringProvider.getString(R.string.room_participants_action_kick),
-                            action = { callback?.onKickClicked() }
+                            action = { callback?.onKickClicked(state.isSpace) }
                     )
                 }
                 Membership.INVITE -> {
@@ -297,7 +301,7 @@ class RoomMemberProfileController @Inject constructor(
                     editable = false,
                     destructive = true,
                     title = banActionTitle,
-                    action = { callback?.onBanClicked(membership == Membership.BAN) }
+                    action = { callback?.onBanClicked(state.isSpace, membership == Membership.BAN) }
             )
         }
     }

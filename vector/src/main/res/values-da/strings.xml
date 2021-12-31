@@ -541,4 +541,5 @@ Er du sikker?</string>
     <string name="summary_you_sent_sticker">Du har sendt et klistermærke.</string>
     <string name="summary_user_sent_sticker">%1$s har sendt et klistermærke.</string>
     <string name="summary_you_sent_image">Du har sendt et billede.</string>
+    <string name="link_this_email_settings_link">Forbind denne email med din konto</string>
 </resources>

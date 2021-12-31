@@ -16,11 +16,11 @@
 
 package org.matrix.android.sdk.internal.database.mapper
 
+import io.realm.RealmList
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.PollResponseAggregatedSummary
 import org.matrix.android.sdk.internal.database.model.PollResponseAggregatedSummaryEntity
-import io.realm.RealmList
 
 internal object PollResponseAggregatedSummaryEntityMapper {
 

@@ -19,6 +19,7 @@ package im.vector.app.features.navigation
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.view.View
 import android.view.Window
@@ -36,6 +37,8 @@ import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.fatalError
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
+import im.vector.app.features.VectorFeatures
+import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.conference.VectorJitsiActivity
 import im.vector.app.features.call.transfer.CallTransferActivity
@@ -48,6 +51,7 @@ import im.vector.app.features.crypto.verification.SupportedVerificationMethodsPr
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.debug.DebugMenuActivity
 import im.vector.app.features.devtools.RoomDevToolActivity
+import im.vector.app.features.ftue.FTUEActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
 import im.vector.app.features.home.room.detail.search.SearchActivity
@@ -56,7 +60,6 @@ import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
 import im.vector.app.features.invite.InviteUsersToRoomActivity
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
-import im.vector.app.features.login2.LoginActivity2
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.BigImageViewerActivity
@@ -64,6 +67,8 @@ import im.vector.app.features.media.VectorAttachmentViewerActivity
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinArgs
 import im.vector.app.features.pin.PinMode
+import im.vector.app.features.poll.create.CreatePollActivity
+import im.vector.app.features.poll.create.CreatePollArgs
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import im.vector.app.features.roomdirectory.RoomDirectoryData
 import im.vector.app.features.roomdirectory.createroom.CreateRoomActivity
@@ -75,6 +80,7 @@ import im.vector.app.features.roomprofile.RoomProfileActivity
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
+import im.vector.app.features.signout.soft.SoftLogoutActivity
 import im.vector.app.features.spaces.InviteRoomSpaceChooserBottomSheet
 import im.vector.app.features.spaces.SpaceExploreActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
@@ -86,6 +92,7 @@ import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgsBuilder
 import im.vector.app.space
 import org.matrix.android.sdk.api.session.crypto.verification.IncomingSasVerificationTransaction
+import org.matrix.android.sdk.api.session.permalinks.PermalinkData
 import org.matrix.android.sdk.api.session.room.model.roomdirectory.PublicRoom
 import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.api.session.widgets.model.Widget
@@ -99,16 +106,31 @@ class DefaultNavigator @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val widgetArgsBuilder: WidgetArgsBuilder,
         private val appStateHandler: AppStateHandler,
-        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider
+        private val supportedVerificationMethodsProvider: SupportedVerificationMethodsProvider,
+        private val features: VectorFeatures
 ) : Navigator {
 
     override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
-        val intent = if (context.resources.getBoolean(R.bool.useLoginV2)) {
-            LoginActivity2.newIntent(context, loginConfig)
-        } else {
-            LoginActivity.newIntent(context, loginConfig)
+        val intent = when (features.loginVariant()) {
+            VectorFeatures.LoginVariant.LEGACY   -> LoginActivity.newIntent(context, loginConfig)
+            VectorFeatures.LoginVariant.FTUE,
+            VectorFeatures.LoginVariant.FTUE_WIP -> FTUEActivity.newIntent(context, loginConfig)
         }
         intent.addFlags(flags)
+        context.startActivity(intent)
+    }
+
+    override fun loginSSORedirect(context: Context, data: Uri?) {
+        val intent = when (features.loginVariant()) {
+            VectorFeatures.LoginVariant.LEGACY   -> LoginActivity.redirectIntent(context, data)
+            VectorFeatures.LoginVariant.FTUE,
+            VectorFeatures.LoginVariant.FTUE_WIP -> FTUEActivity.redirectIntent(context, data)
+        }
+        context.startActivity(intent)
+    }
+
+    override fun softLogout(context: Context) {
+        val intent = SoftLogoutActivity.newIntent(context)
         context.startActivity(intent)
     }
 
@@ -249,24 +271,18 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
-    override fun openRoomPreview(context: Context, roomPreviewData: RoomPreviewData) {
+    override fun openRoomPreview(context: Context, roomPreviewData: RoomPreviewData, fromEmailInviteLink: PermalinkData.RoomEmailInviteLink?) {
         val intent = RoomPreviewActivity.newIntent(context, roomPreviewData)
         context.startActivity(intent)
     }
 
     override fun openMatrixToBottomSheet(context: Context, link: String) {
         if (context is AppCompatActivity) {
-            val listener = object : MatrixToBottomSheet.InteractionListener {
-                override fun navigateToRoom(roomId: String) {
-                    openRoom(context, roomId)
-                }
-
-                override fun switchToSpace(spaceId: String) {
-                    this@DefaultNavigator.switchToSpace(context, spaceId, Navigator.PostSwitchSpaceAction.None)
-                }
+            if (context !is MatrixToBottomSheet.InteractionListener) {
+                fatalError("Caller context should implement MatrixToBottomSheet.InteractionListener", vectorPreferences.failFast())
             }
             // TODO check if there is already one??
-            MatrixToBottomSheet.withLink(link, listener)
+            MatrixToBottomSheet.withLink(link)
                     .show(context.supportFragmentManager, "HA#MatrixToBottomSheet")
         }
     }
@@ -358,6 +374,11 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
+    override fun openSettings(context: Context, payload: SettingsActivityPayload) {
+        val intent = VectorSettingsActivity.getIntent(context, payload)
+        context.startActivity(intent)
+    }
+
     override fun openDebug(context: Context) {
         context.startActivity(Intent(context, DebugMenuActivity::class.java))
     }
@@ -365,8 +386,8 @@ class DefaultNavigator @Inject constructor(
     override fun openKeysBackupSetup(context: Context, showManualExport: Boolean) {
         // if cross signing is enabled and trusted or not set up at all we should propose full 4S
         sessionHolder.getSafeActiveSession()?.let { session ->
-            if (session.cryptoService().crossSigningService().getMyCrossSigningKeys() == null
-                    || session.cryptoService().crossSigningService().canCrossSign()) {
+            if (session.cryptoService().crossSigningService().getMyCrossSigningKeys() == null ||
+                    session.cryptoService().crossSigningService().canCrossSign()) {
                 (context as? AppCompatActivity)?.let {
                     BootstrapBottomSheet.show(it.supportFragmentManager, SetupMode.NORMAL)
                 }
@@ -400,6 +421,10 @@ class DefaultNavigator @Inject constructor(
                     }
                     activity.startActivity(intent, options?.toBundle())
                 }
+    }
+
+    override fun openAnalyticsOptIn(context: Context) {
+        context.startActivity(Intent(context, AnalyticsOptInActivity::class.java))
     }
 
     override fun openTerms(context: Context,
@@ -495,6 +520,14 @@ class DefaultNavigator @Inject constructor(
 
     override fun openCallTransfer(context: Context, callId: String) {
         val intent = CallTransferActivity.newIntent(context, callId)
+        context.startActivity(intent)
+    }
+
+    override fun openCreatePoll(context: Context, roomId: String) {
+        val intent = CreatePollActivity.getIntent(
+                context,
+                CreatePollArgs(roomId = roomId)
+        )
         context.startActivity(intent)
     }
 

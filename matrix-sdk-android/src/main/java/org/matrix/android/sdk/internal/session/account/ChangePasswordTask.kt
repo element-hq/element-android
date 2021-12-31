@@ -45,9 +45,9 @@ internal class DefaultChangePasswordTask @Inject constructor(
         } catch (throwable: Throwable) {
             val registrationFlowResponse = throwable.toRegistrationFlowResponse()
 
-            if (registrationFlowResponse != null
+            if (registrationFlowResponse != null &&
                     /* Avoid infinite loop */
-                    && changePasswordParams.auth?.session == null) {
+                    changePasswordParams.auth?.session == null) {
                 // Retry with authentication
                 executeRequest(globalErrorReceiver) {
                     accountAPI.changePassword(

@@ -17,6 +17,7 @@
 package im.vector.app.core.epoxy
 
 import android.view.View
+import android.widget.TextView
 import im.vector.app.core.utils.DebouncedClickListener
 
 /**
@@ -29,6 +30,26 @@ fun View.onClick(listener: ClickListener?) {
         setOnClickListener(null)
     } else {
         setOnClickListener(DebouncedClickListener(listener))
+    }
+}
+
+fun TextView.onLongClickIgnoringLinks(listener: View.OnLongClickListener?) {
+    if (listener == null) {
+        setOnLongClickListener(null)
+    } else {
+        setOnLongClickListener(object : View.OnLongClickListener {
+            override fun onLongClick(v: View): Boolean {
+                if (hasLongPressedLink()) {
+                    return false
+                }
+                return listener.onLongClick(v)
+            }
+
+            /**
+             * Infer that a Clickable span has been click by the presence of a selection
+             */
+            private fun hasLongPressedLink() = selectionStart != -1 || selectionEnd != -1
+        })
     }
 }
 

@@ -19,8 +19,8 @@ package im.vector.app.features.home.room.detail
 import android.net.Uri
 import android.view.View
 import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.features.call.conference.ConferenceEvent
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
-import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
@@ -29,10 +29,7 @@ import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.util.MatrixItem
 
 sealed class RoomDetailAction : VectorViewModelAction {
-    data class UserIsTyping(val isTyping: Boolean) : RoomDetailAction()
-    data class SaveDraft(val draft: String) : RoomDetailAction()
     data class SendSticker(val stickerContent: MessageStickerContent) : RoomDetailAction()
-    data class SendMessage(val text: CharSequence, val autoMarkdown: Boolean) : RoomDetailAction()
     data class SendMedia(val attachments: List<ContentAttachmentData>, val compressBeforeSending: Boolean) : RoomDetailAction()
     data class TimelineEventTurnsVisible(val event: TimelineEvent) : RoomDetailAction()
     data class TimelineEventTurnsInvisible(val event: TimelineEvent) : RoomDetailAction()
@@ -51,16 +48,11 @@ sealed class RoomDetailAction : VectorViewModelAction {
     object EnterTrackingUnreadMessagesState : RoomDetailAction()
     object ExitTrackingUnreadMessagesState : RoomDetailAction()
 
-    data class EnterEditMode(val eventId: String, val text: String) : RoomDetailAction()
-    data class EnterQuoteMode(val eventId: String, val text: String) : RoomDetailAction()
-    data class EnterReplyMode(val eventId: String, val text: String) : RoomDetailAction()
-    data class EnterRegularMode(val text: String, val fromSharing: Boolean) : RoomDetailAction()
-
     data class ResendMessage(val eventId: String) : RoomDetailAction()
     data class RemoveFailedEcho(val eventId: String) : RoomDetailAction()
     data class CancelSend(val eventId: String, val force: Boolean) : RoomDetailAction()
 
-    data class ReplyToOptions(val eventId: String, val optionIndex: Int, val optionValue: String) : RoomDetailAction()
+    data class VoteToPoll(val eventId: String, val optionKey: String) : RoomDetailAction()
 
     data class ReportContent(
             val eventId: String,
@@ -74,7 +66,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     object ResendAll : RoomDetailAction()
 
     data class StartCall(val isVideo: Boolean) : RoomDetailAction()
-    data class AcceptCall(val callId: String): RoomDetailAction()
+    data class AcceptCall(val callId: String) : RoomDetailAction()
     object EndCall : RoomDetailAction()
 
     data class AcceptVerificationRequest(val transactionId: String, val otherUserId: String) : RoomDetailAction()
@@ -89,9 +81,14 @@ sealed class RoomDetailAction : VectorViewModelAction {
     object ManageIntegrations : RoomDetailAction()
     data class AddJitsiWidget(val withVideo: Boolean) : RoomDetailAction()
     data class RemoveWidget(val widgetId: String) : RoomDetailAction()
+
+    object JoinJitsiCall : RoomDetailAction()
+    object LeaveJitsiCall : RoomDetailAction()
+
     data class EnsureNativeWidgetAllowed(val widget: Widget,
                                          val userJustAccepted: Boolean,
                                          val grantedEvents: RoomDetailViewEvents) : RoomDetailAction()
+    data class UpdateJoinJitsiCallStatus(val conferenceEvent: ConferenceEvent) : RoomDetailAction()
 
     data class OpenOrCreateDm(val userId: String) : RoomDetailAction()
     data class JumpToReadReceipt(val userId: String) : RoomDetailAction()
@@ -109,13 +106,8 @@ sealed class RoomDetailAction : VectorViewModelAction {
     // Failed messages
     object RemoveAllFailedMessages : RoomDetailAction()
 
-    data class RoomUpgradeSuccess(val replacementRoomId: String): RoomDetailAction()
+    data class RoomUpgradeSuccess(val replacementRoomId: String) : RoomDetailAction()
 
-    // Voice Message
-    object StartRecordingVoiceMessage : RoomDetailAction()
-    data class EndRecordingVoiceMessage(val isCancelled: Boolean) : RoomDetailAction()
-    object PauseRecordingVoiceMessage : RoomDetailAction()
-    data class PlayOrPauseVoicePlayback(val eventId: String, val messageAudioContent: MessageAudioContent) : RoomDetailAction()
-    object PlayOrPauseRecordingPlayback : RoomDetailAction()
-    object EndAllVoiceActions : RoomDetailAction()
+    // Poll
+    data class EndPoll(val eventId: String) : RoomDetailAction()
 }

@@ -1,0 +1,2 @@
+此版本中的主要更改：默认启用语音消息。
+完整更新日志：https://github.com/vector-im/element-android/releases/tag/v1.2.0

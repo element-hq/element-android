@@ -18,7 +18,7 @@ package im.vector.app.features.userdirectory
 
 import androidx.paging.PagedList
 import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.core.contacts.MappedContact
 import org.matrix.android.sdk.api.session.user.model.User
@@ -27,13 +27,15 @@ data class UserListViewState(
         val excludedUserIds: Set<String>? = null,
         val knownUsers: Async<PagedList<User>> = Uninitialized,
         val directoryUsers: Async<List<User>> = Uninitialized,
+        val matchingEmail: Async<ThreePidUser?> = Uninitialized,
         val filteredMappedContacts: List<MappedContact> = emptyList(),
         val pendingSelections: Set<PendingSelection> = emptySet(),
         val searchTerm: String = "",
         val singleSelection: Boolean,
+        val configuredIdentityServer: String? = null,
         private val showInviteActions: Boolean,
         val showContactBookAction: Boolean
-) : MvRxState {
+) : MavericksState {
 
     constructor(args: UserListFragmentArgs) : this(
             excludedUserIds = args.excludedUserIds,

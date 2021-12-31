@@ -25,7 +25,6 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditableSquareAvatarItem
 import im.vector.app.features.form.formMultiLineEditTextItem
-import im.vector.app.features.form.formSwitchItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.settings.RoomSettingsViewState
 import im.vector.app.features.settings.VectorPreferences
@@ -53,6 +52,7 @@ class SpaceSettingsController @Inject constructor(
         fun onManageRooms()
         fun setIsPublic(public: Boolean)
         fun onRoomAliasesClicked()
+        fun onRoomPermissionsClicked()
     }
 
     var callback: Callback? = null
@@ -105,27 +105,35 @@ class SpaceSettingsController @Inject constructor(
         }
 
         val isPublic = (data.newRoomJoinRules.newJoinRules ?: data.currentRoomJoinRules) == RoomJoinRules.PUBLIC
-        if (vectorPreferences.labsUseExperimentalRestricted()) {
-            buildProfileAction(
-                    id = "joinRule",
-                    title = stringProvider.getString(R.string.room_settings_room_access_title),
-                    subtitle = data.getJoinRuleWording(stringProvider),
-                    divider = false,
-                    editable = data.actionPermissions.canChangeJoinRule,
-                    action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
-            )
-        } else {
-            formSwitchItem {
-                id("isPublic")
-                enabled(data.actionPermissions.canChangeJoinRule)
-                title(host.stringProvider.getString(R.string.make_this_space_public))
-                switchChecked(isPublic)
-
-                listener { value ->
-                    host.callback?.setIsPublic(value)
-                }
-            }
-        }
+        buildProfileAction(
+                id = "joinRule",
+                title = stringProvider.getString(R.string.room_settings_space_access_title),
+                subtitle = data.getJoinRuleWording(stringProvider),
+                divider = true,
+                editable = data.actionPermissions.canChangeJoinRule,
+                action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
+        )
+//        if (vectorPreferences.labsUseExperimentalRestricted()) {
+//            buildProfileAction(
+//                    id = "joinRule",
+//                    title = stringProvider.getString(R.string.room_settings_room_access_title),
+//                    subtitle = data.getJoinRuleWording(stringProvider),
+//                    divider = false,
+//                    editable = data.actionPermissions.canChangeJoinRule,
+//                    action = { if (data.actionPermissions.canChangeJoinRule) callback?.onJoinRuleClicked() }
+//            )
+//        } else {
+//            formSwitchItem {
+//                id("isPublic")
+//                enabled(data.actionPermissions.canChangeJoinRule)
+//                title(host.stringProvider.getString(R.string.make_this_space_public))
+//                switchChecked(isPublic)
+//
+//                listener { value ->
+//                    host.callback?.setIsPublic(value)
+//                }
+//            }
+//        }
         dividerItem {
             id("divider")
         }
@@ -134,7 +142,7 @@ class SpaceSettingsController @Inject constructor(
                 id = "manage_rooms",
                 title = stringProvider.getString(R.string.space_settings_manage_rooms),
                 // subtitle = data.getJoinRuleWording(stringProvider),
-                divider = vectorPreferences.developerMode() || isPublic,
+                divider = true,
                 editable = data.actionPermissions.canAddChildren,
                 action = {
                     if (data.actionPermissions.canAddChildren) callback?.onManageRooms()
@@ -146,11 +154,20 @@ class SpaceSettingsController @Inject constructor(
                     id = "alias",
                     title = stringProvider.getString(R.string.space_settings_alias_title),
                     subtitle = stringProvider.getString(R.string.space_settings_alias_subtitle),
-                    divider = vectorPreferences.developerMode(),
+                    divider = true,
                     editable = true,
                     action = { callback?.onRoomAliasesClicked() }
             )
         }
+
+        buildProfileAction(
+                id = "permissions",
+                title = stringProvider.getString(R.string.space_settings_permissions_title),
+                subtitle = stringProvider.getString(R.string.space_settings_permissions_subtitle),
+                divider = vectorPreferences.developerMode(),
+                editable = true,
+                action = { callback?.onRoomPermissionsClicked() }
+        )
 
         if (vectorPreferences.developerMode()) {
             buildProfileAction(

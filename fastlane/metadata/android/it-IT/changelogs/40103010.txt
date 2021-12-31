@@ -1,0 +1,2 @@
+Modifiche principali in questa versione: organizza le tue stanze usando gli Spazi! v1.3.1 corregge un errore della v1.3.0.
+Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.3.1

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Widget.Vector.TextView.Caption.Toast">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:background">@drawable/bg_round_corner_8dp</item>
+        <item name="android:backgroundTint">?vctr_toast_background</item>
+        <item name="android:textColor">@color/palette_white</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+</resources>

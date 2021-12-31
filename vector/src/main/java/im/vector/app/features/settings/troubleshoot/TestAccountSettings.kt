@@ -33,8 +33,8 @@ import javax.inject.Inject
  * Check that the main pushRule (RULE_ID_DISABLE_ALL) is correctly setup
  */
 class TestAccountSettings @Inject constructor(private val stringProvider: StringProvider,
-                                              private val activeSessionHolder: ActiveSessionHolder)
-    : TroubleshootTest(R.string.settings_troubleshoot_test_account_settings_title) {
+                                              private val activeSessionHolder: ActiveSessionHolder) :
+    TroubleshootTest(R.string.settings_troubleshoot_test_account_settings_title) {
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         val session = activeSessionHolder.getSafeActiveSession() ?: return

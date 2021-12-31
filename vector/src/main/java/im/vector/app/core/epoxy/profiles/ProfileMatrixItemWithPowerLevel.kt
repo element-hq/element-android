@@ -17,7 +17,6 @@
 
 package im.vector.app.core.epoxy.profiles
 
-import android.widget.TextView
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -25,7 +24,7 @@ import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
 
 @EpoxyModelClass(layout = R.layout.item_profile_matrix_item)
-abstract class ProfileMatrixItemWithPowerLevel : BaseProfileMatrixItem<ProfileMatrixItemWithPowerLevel.Holder>() {
+abstract class ProfileMatrixItemWithPowerLevel : ProfileMatrixItem() {
 
     @EpoxyAttribute var powerLevelLabel: CharSequence? = null
 
@@ -33,9 +32,5 @@ abstract class ProfileMatrixItemWithPowerLevel : BaseProfileMatrixItem<ProfileMa
         super.bind(holder)
         holder.editableView.isVisible = false
         holder.powerLabel.setTextOrHide(powerLevelLabel)
-    }
-
-    class Holder : ProfileMatrixItem.Holder() {
-        val powerLabel by bind<TextView>(R.id.matrixItemPowerLevelLabel)
     }
 }

@@ -17,12 +17,13 @@
 package im.vector.app.features.share
 
 import com.google.android.material.appbar.MaterialToolbar
-import im.vector.app.R
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 
+@AndroidEntryPoint
 class IncomingShareActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable {
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
@@ -31,7 +32,7 @@ class IncomingShareActivity : VectorBaseActivity<ActivitySimpleBinding>(), Toolb
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
-            addFragment(R.id.simpleFragmentContainer, IncomingShareFragment::class.java)
+            addFragment(views.simpleFragmentContainer, IncomingShareFragment::class.java)
         }
     }
 

@@ -27,6 +27,7 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.extensions.setAttributeTintedImageResource
 import im.vector.app.core.extensions.setTextOrHide
 
 /**
@@ -62,7 +63,7 @@ abstract class BottomSheetRadioActionItem : VectorEpoxyModel<BottomSheetRadioAct
         holder.descriptionText.setTextOrHide(description)
 
         if (selected) {
-            holder.radioImage.setImageDrawable(ContextCompat.getDrawable(holder.view.context, R.drawable.ic_radio_on))
+            holder.radioImage.setAttributeTintedImageResource(R.drawable.ic_radio_on, R.attr.colorPrimary)
             holder.radioImage.contentDescription = holder.view.context.getString(R.string.a11y_checked)
         } else {
             holder.radioImage.setImageDrawable(ContextCompat.getDrawable(holder.view.context, R.drawable.ic_radio_off))

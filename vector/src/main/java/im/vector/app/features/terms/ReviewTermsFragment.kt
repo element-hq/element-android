@@ -33,7 +33,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.FragmentReviewTermsBinding
-
 import org.matrix.android.sdk.api.session.terms.TermsService
 import javax.inject.Inject
 

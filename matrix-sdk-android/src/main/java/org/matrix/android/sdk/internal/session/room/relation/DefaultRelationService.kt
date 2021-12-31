@@ -54,8 +54,8 @@ internal class DefaultRelationService @AssistedInject constructor(
         private val fetchEditHistoryTask: FetchEditHistoryTask,
         private val timelineEventMapper: TimelineEventMapper,
         @SessionDatabase private val monarchy: Monarchy,
-        private val taskExecutor: TaskExecutor)
-    : RelationService {
+        private val taskExecutor: TaskExecutor) :
+    RelationService {
 
     @AssistedFactory
     interface Factory {

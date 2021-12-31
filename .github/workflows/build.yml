@@ -5,6 +5,12 @@ on:
   push:
     branches: [ main, develop ]
 
+# Enrich gradle.properties for CI/CD
+env:
+  CI_GRADLE_ARG_PROPERTIES: >
+    -Porg.gradle.jvmargs=-Xmx2g
+    -Porg.gradle.parallel=false
+
 jobs:
   debug:
     name: Build debug APKs (${{ matrix.target }})
@@ -25,7 +31,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Assemble ${{ matrix.target }} debug apk
-        run: ./gradlew assemble${{ matrix.target }}Debug --stacktrace
+        run: ./gradlew assemble${{ matrix.target }}Debug $CI_GRADLE_ARG_PROPERTIES --stacktrace
       - name: Upload ${{ matrix.target }} debug APKs
         uses: actions/upload-artifact@v2
         with:
@@ -48,7 +54,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Assemble GPlay unsigned apk
-        run: ./gradlew clean assembleGplayRelease --stacktrace
+        run: ./gradlew clean assembleGplayRelease $CI_GRADLE_ARG_PROPERTIES  --stacktrace
       - name: Upload Gplay unsigned APKs
         uses: actions/upload-artifact@v2
         with:

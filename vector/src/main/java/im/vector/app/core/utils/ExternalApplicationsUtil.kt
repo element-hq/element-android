@@ -36,6 +36,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.browser.customtabs.CustomTabColorSchemeParams
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.browser.customtabs.CustomTabsSession
+import androidx.core.app.ShareCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
 import im.vector.app.BuildConfig
@@ -297,23 +298,19 @@ fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
 }
 
 fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
-    var mediaUri: Uri? = null
-    try {
-        mediaUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file)
+    val mediaUri = try {
+        FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file)
     } catch (e: Exception) {
         Timber.e(e, "onMediaAction Selected File cannot be shared")
+        return
     }
 
-    if (null != mediaUri) {
-        val sendIntent = Intent()
-        sendIntent.action = Intent.ACTION_SEND
-        // Grant temporary read permission to the content URI
-        sendIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        sendIntent.type = mediaMimeType
-        sendIntent.putExtra(Intent.EXTRA_STREAM, mediaUri)
+    val sendIntent = ShareCompat.IntentBuilder(context)
+            .setType(mediaMimeType)
+            .setStream(mediaUri)
+            .getIntent()
 
-        sendShareIntent(context, sendIntent)
-    }
+    sendShareIntent(context, sendIntent)
 }
 
 fun shareText(context: Context, text: String) {

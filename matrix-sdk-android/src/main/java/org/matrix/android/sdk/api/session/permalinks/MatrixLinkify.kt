@@ -50,11 +50,11 @@ object MatrixLinkify {
                 if (startPos == 0 || text[startPos - 1] != '/') {
                     val endPos = match.range.last + 1
                     var url = text.substring(match.range)
-                    if (MatrixPatterns.isUserId(url)
-                            || MatrixPatterns.isRoomAlias(url)
-                            || MatrixPatterns.isRoomId(url)
-                            || MatrixPatterns.isGroupId(url)
-                            || MatrixPatterns.isEventId(url)) {
+                    if (MatrixPatterns.isUserId(url) ||
+                            MatrixPatterns.isRoomAlias(url) ||
+                            MatrixPatterns.isRoomId(url) ||
+                            MatrixPatterns.isGroupId(url) ||
+                            MatrixPatterns.isEventId(url)) {
                         url = PermalinkService.MATRIX_TO_URL_BASE  + url
                     }
                     val span = MatrixPermalinkSpan(url, callback)

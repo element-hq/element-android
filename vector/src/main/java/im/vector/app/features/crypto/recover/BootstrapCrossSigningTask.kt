@@ -81,9 +81,9 @@ class BootstrapCrossSigningTask @Inject constructor(
         Timber.d("## BootstrapCrossSigningTask: mode:${params.setupMode} Starting...")
         // Ensure cross-signing is initialized. Due to migration it is maybe not always correctly initialized
 
-        val shouldSetCrossSigning = !crossSigningService.isCrossSigningInitialized()
-                || (params.setupMode == SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET && !crossSigningService.allPrivateKeysKnown())
-                || (params.setupMode == SetupMode.HARD_RESET)
+        val shouldSetCrossSigning = !crossSigningService.isCrossSigningInitialized() ||
+                (params.setupMode == SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET && !crossSigningService.allPrivateKeysKnown()) ||
+                (params.setupMode == SetupMode.HARD_RESET)
         if (shouldSetCrossSigning) {
             Timber.d("## BootstrapCrossSigningTask: Cross signing not enabled, so initialize")
             params.progressListener?.onProgress(
@@ -227,9 +227,9 @@ class BootstrapCrossSigningTask @Inject constructor(
 
             val knownMegolmSecret = session.cryptoService().keysBackupService().getKeyBackupRecoveryKeyInfo()
             val isMegolmBackupSecretKnown = knownMegolmSecret != null && knownMegolmSecret.version == serverVersion?.version
-            val shouldCreateKeyBackup = serverVersion == null
-                    || (params.setupMode == SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET && !isMegolmBackupSecretKnown)
-                    || (params.setupMode == SetupMode.HARD_RESET)
+            val shouldCreateKeyBackup = serverVersion == null ||
+                    (params.setupMode == SetupMode.PASSPHRASE_AND_NEEDED_SECRETS_RESET && !isMegolmBackupSecretKnown) ||
+                    (params.setupMode == SetupMode.HARD_RESET)
             if (shouldCreateKeyBackup) {
                 // clear all existing backups
                 while (serverVersion != null) {

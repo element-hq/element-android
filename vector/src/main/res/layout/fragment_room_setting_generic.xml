@@ -31,7 +31,7 @@
                     android:layout_height="40dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:contentDescription="@string/avatar"
+                    android:importantForAccessibility="no"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -41,7 +41,7 @@
                     android:id="@+id/roomSettingsDecorationToolbarAvatarImageView"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    app:layout_constraintCircle="@+id/roomSettingsToolbarAvatarImageView"
+                    app:layout_constraintCircle="@id/roomSettingsToolbarAvatarImageView"
                     app:layout_constraintCircleAngle="135"
                     app:layout_constraintCircleRadius="20dp"
                     tools:ignore="MissingConstraints" />
@@ -58,7 +58,7 @@
                     android:textColor="?vctr_content_primary"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/roomSettingsToolbarAvatarImageView"
+                    app:layout_constraintStart_toEndOf="@id/roomSettingsToolbarAvatarImageView"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="@sample/rooms.json/data/name" />
 
@@ -75,7 +75,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/roomSettingsRecyclerView"

@@ -50,10 +50,6 @@ class SpacePeopleListController @Inject constructor(
 
     var listener: InteractionListener? = null
 
-    init {
-        setData(null)
-    }
-
     override fun buildModels(data: RoomMemberListViewState?) {
         val host = this
         val memberSummaries = data?.roomMemberSummaries?.invoke()

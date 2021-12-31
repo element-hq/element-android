@@ -16,12 +16,14 @@
 
 package org.matrix.android.sdk.internal.database.model
 
+import io.realm.RealmObject
+import io.realm.annotations.Index
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.MXEventDecryptionResult
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.di.MoshiProvider
-import io.realm.RealmObject
-import io.realm.annotations.Index
+import org.matrix.android.sdk.internal.extensions.assertIsManaged
 
 internal open class EventEntity(@Index var eventId: String = "",
                                 @Index var roomId: String = "",
@@ -55,16 +57,23 @@ internal open class EventEntity(@Index var eventId: String = "",
 
     companion object
 
-    fun setDecryptionResult(result: MXEventDecryptionResult) {
+    fun setDecryptionResult(result: MXEventDecryptionResult, clearEvent: JsonDict? = null) {
+        assertIsManaged()
         val decryptionResult = OlmDecryptionResult(
-                payload = result.clearEvent,
+                payload = clearEvent ?: result.clearEvent,
                 senderKey = result.senderCurve25519Key,
                 keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
                 forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
         )
-        val adapter = MoshiProvider.providesMoshi().adapter<OlmDecryptionResult>(OlmDecryptionResult::class.java)
+        val adapter = MoshiProvider.providesMoshi().adapter(OlmDecryptionResult::class.java)
         decryptionResultJson = adapter.toJson(decryptionResult)
         decryptionErrorCode = null
         decryptionErrorReason = null
+
+        // If we have an EventInsertEntity for the eventId we make sures it can be processed now.
+        realm.where(EventInsertEntity::class.java)
+                .equalTo(EventInsertEntityFields.EVENT_ID, eventId)
+                .findFirst()
+                ?.canBeProcessed = true
     }
 }

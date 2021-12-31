@@ -1,0 +1,2 @@
+Ky version i ri përmban kryesisht përmirësime të ndërfaqes dhe punimit të përdoruesit. Tani mund të ftoni shokë, dhe të krijoni MD shumë shpejt, përmes skanimit të kodesh QR.
+Regjistër i plotë ndryshimesh: https://github.com/vector-im/element-android/releases/tag/v1.0.11

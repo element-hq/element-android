@@ -33,11 +33,12 @@ import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.FragmentLoginAccountCreatedBinding
+import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.ftue.FTUEActivity
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.login2.AbstractLoginFragment2
 import im.vector.app.features.login2.LoginAction2
-import im.vector.app.features.login2.LoginActivity2
 import im.vector.app.features.login2.LoginViewState2
 import org.matrix.android.sdk.api.util.MatrixItem
 import java.util.UUID
@@ -48,7 +49,6 @@ import javax.inject.Inject
  * - the account has been created and we propose the user to set an avatar and a display name
  */
 class AccountCreatedFragment @Inject constructor(
-        val accountCreatedViewModelFactory: AccountCreatedViewModel.Factory,
         private val avatarRenderer: AvatarRenderer,
         private val dateFormatter: VectorDateFormatter,
         private val matrixItemColorProvider: MatrixItemColorProvider,
@@ -71,7 +71,7 @@ class AccountCreatedFragment @Inject constructor(
         setupSubmitButton()
         observeViewEvents()
 
-        viewModel.subscribe { invalidateState(it) }
+        viewModel.onEach { invalidateState(it) }
 
         views.loginAccountCreatedTime.text = dateFormatter.format(System.currentTimeMillis(), DateFormatKind.MESSAGE_SIMPLE)
     }
@@ -85,11 +85,11 @@ class AccountCreatedFragment @Inject constructor(
     }
 
     private fun setupClickListener() {
-        views.loginAccountCreatedMessage.setOnClickListener {
+        views.loginAccountCreatedMessage.debouncedClicks {
             // Update display name
             displayDialog()
         }
-        views.loginAccountCreatedAvatar.setOnClickListener {
+        views.loginAccountCreatedAvatar.debouncedClicks {
             galleryOrCameraDialogHelper.show()
         }
     }
@@ -120,8 +120,8 @@ class AccountCreatedFragment @Inject constructor(
     }
 
     private fun setupSubmitButton() {
-        views.loginAccountCreatedLater.setOnClickListener { terminate() }
-        views.loginAccountCreatedDone.setOnClickListener { terminate() }
+        views.loginAccountCreatedLater.debouncedClicks { terminate() }
+        views.loginAccountCreatedDone.debouncedClicks { terminate() }
     }
 
     private fun terminate() {
@@ -130,7 +130,7 @@ class AccountCreatedFragment @Inject constructor(
 
     private fun invalidateState(state: AccountCreatedViewState) {
         // Ugly hack...
-        (activity as? LoginActivity2)?.setIsLoading(state.isLoading)
+        (activity as? FTUEActivity)?.setIsLoading(state.isLoading)
 
         views.loginAccountCreatedSubtitle.text = getString(R.string.login_account_created_subtitle, state.userId)
 

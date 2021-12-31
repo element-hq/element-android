@@ -1,0 +1,2 @@
+تغییرات اصلی در این نگارش: تعمیرات فوری برای 1.1.4
+گزارش دگرگونی کامل: https://github.com/vector-im/element-android/releases/tag/v1.1.5

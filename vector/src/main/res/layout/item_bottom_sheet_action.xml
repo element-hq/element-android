@@ -12,7 +12,8 @@
     android:paddingStart="@dimen/layout_horizontal_margin"
     android:paddingTop="8dp"
     android:paddingEnd="@dimen/layout_horizontal_margin"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    tools:viewBindingIgnore="true">
 
     <!-- Used for sub items -->
     <Space
@@ -34,8 +35,8 @@
         android:importantForAccessibility="no"
         android:scaleType="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/actionTitleContainer"
-        app:layout_constraintStart_toEndOf="@+id/actionStartSpace"
+        app:layout_constraintEnd_toStartOf="@id/actionTitleContainer"
+        app:layout_constraintStart_toEndOf="@id/actionStartSpace"
         app:layout_constraintTop_toTopOf="parent"
         app:tint="?vctr_content_secondary"
         tools:ignore="MissingPrefix"
@@ -47,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/actionSelected"
+        app:layout_constraintEnd_toStartOf="@id/actionSelected"
         app:layout_constraintStart_toEndOf="@id/actionIcon"
         app:layout_constraintTop_toTopOf="parent">
 

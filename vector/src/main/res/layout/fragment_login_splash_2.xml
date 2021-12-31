@@ -16,7 +16,7 @@
         android:id="@+id/loginSplashSpace1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/loginSplashLogoContainer"
+        app:layout_constraintBottom_toTopOf="@id/loginSplashLogoContainer"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="spread_inside"
         app:layout_constraintVertical_weight="4" />
@@ -27,10 +27,10 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/loginSplashSpace2"
+        app:layout_constraintBottom_toTopOf="@id/loginSplashSpace2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginSplashSpace1">
+        app:layout_constraintTop_toBottomOf="@id/loginSplashSpace1">
 
         <ImageView
             android:id="@+id/loginSplashLogo"
@@ -56,8 +56,8 @@
         android:id="@+id/loginSplashSpace2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/loginSplashTitle"
-        app:layout_constraintTop_toBottomOf="@+id/loginSplashLogoContainer"
+        app:layout_constraintBottom_toTopOf="@id/loginSplashTitle"
+        app:layout_constraintTop_toBottomOf="@id/loginSplashLogoContainer"
         app:layout_constraintVertical_weight="1" />
 
     <TextView
@@ -69,27 +69,27 @@
         android:text="@string/login_splash_title"
         android:textColor="?vctr_content_primary"
         android:transitionName="loginTitleTransition"
-        app:layout_constraintBottom_toTopOf="@+id/loginSplashSpace25"
+        app:layout_constraintBottom_toTopOf="@id/loginSplashSpace25"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginSplashSpace2" />
+        app:layout_constraintTop_toBottomOf="@id/loginSplashSpace2" />
 
     <Space
         android:id="@+id/loginSplashSpace25"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/loginSplashContent"
-        app:layout_constraintTop_toBottomOf="@+id/loginSplashTitle"
+        app:layout_constraintBottom_toTopOf="@id/loginSplashContent"
+        app:layout_constraintTop_toBottomOf="@id/loginSplashTitle"
         app:layout_constraintVertical_weight="3" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/loginSplashContent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/loginSplashSpace3"
+        app:layout_constraintBottom_toTopOf="@id/loginSplashSpace3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginSplashSpace25">
+        app:layout_constraintTop_toBottomOf="@id/loginSplashSpace25">
 
         <ImageView
             android:id="@+id/loginSplashPicto1"
@@ -99,7 +99,7 @@
             android:importantForAccessibility="no"
             android:src="@drawable/ic_login_splash_message_circle"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/loginSplashText1"
+            app:layout_constraintTop_toTopOf="@id/loginSplashText1"
             app:tint="?vctr_content_secondary"
             tools:ignore="MissingPrefix" />
 
@@ -112,7 +112,7 @@
             android:gravity="start"
             android:text="@string/login_splash_text1"
             android:textColor="?vctr_content_secondary"
-            app:layout_constraintBottom_toTopOf="@+id/loginSplashText2"
+            app:layout_constraintBottom_toTopOf="@id/loginSplashText2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/loginSplashPicto1"
             app:layout_constraintTop_toTopOf="parent" />
@@ -124,7 +124,7 @@
             android:importantForAccessibility="no"
             android:src="@drawable/ic_login_splash_lock"
             app:layout_constraintStart_toStartOf="@id/loginSplashPicto1"
-            app:layout_constraintTop_toTopOf="@+id/loginSplashText2"
+            app:layout_constraintTop_toTopOf="@id/loginSplashText2"
             app:tint="?vctr_content_secondary"
             tools:ignore="MissingPrefix" />
 
@@ -140,7 +140,7 @@
             app:layout_constraintBottom_toTopOf="@id/loginSplashText3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/loginSplashText1"
-            app:layout_constraintTop_toBottomOf="@+id/loginSplashText1" />
+            app:layout_constraintTop_toBottomOf="@id/loginSplashText1" />
 
         <ImageView
             android:id="@+id/loginSplashPicto3"
@@ -148,8 +148,8 @@
             android:layout_height="wrap_content"
             android:importantForAccessibility="no"
             android:src="@drawable/ic_login_splash_sliders"
-            app:layout_constraintStart_toStartOf="@+id/loginSplashPicto1"
-            app:layout_constraintTop_toTopOf="@+id/loginSplashText3"
+            app:layout_constraintStart_toStartOf="@id/loginSplashPicto1"
+            app:layout_constraintTop_toTopOf="@id/loginSplashText3"
             app:tint="?vctr_content_secondary"
             tools:ignore="MissingPrefix" />
 
@@ -164,8 +164,8 @@
             android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/loginSplashText1"
-            app:layout_constraintTop_toBottomOf="@+id/loginSplashText2" />
+            app:layout_constraintStart_toStartOf="@id/loginSplashText1"
+            app:layout_constraintTop_toBottomOf="@id/loginSplashText2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -173,8 +173,8 @@
         android:id="@+id/loginSplashSpace3"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/loginFormContent"
-        app:layout_constraintTop_toBottomOf="@+id/loginSplashContent"
+        app:layout_constraintBottom_toTopOf="@id/loginFormContent"
+        app:layout_constraintTop_toBottomOf="@id/loginSplashContent"
         app:layout_constraintVertical_weight="3" />
 
     <LinearLayout
@@ -182,10 +182,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/loginSplashSpace5"
+        app:layout_constraintBottom_toTopOf="@id/loginSplashSpace5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginSplashSpace3">
+        app:layout_constraintTop_toBottomOf="@id/loginSplashSpace3">
 
         <Button
             android:id="@+id/loginSignupSigninSignUp"
@@ -211,7 +211,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginFormContent"
+        app:layout_constraintTop_toBottomOf="@id/loginFormContent"
         app:layout_constraintVertical_weight="6" />
 
     <TextView

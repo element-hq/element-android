@@ -11,4 +11,5 @@
     android:textColor="?vctr_content_primary"
     android:textSize="28sp"
     android:textStyle="bold"
-    tools:text="1234-4320-3905" />
+    tools:text="1234-4320-3905"
+    tools:viewBindingIgnore="true" />

@@ -50,13 +50,17 @@ internal class API21AudioDeviceDetector(private val context: Context,
 
     private fun getAvailableSoundDevices(): Set<CallAudioManager.Device> {
         return HashSet<CallAudioManager.Device>().apply {
-            if (isBluetoothHeadsetOn()) add(CallAudioManager.Device.WIRELESS_HEADSET)
-            if (isWiredHeadsetOn()) {
-                add(CallAudioManager.Device.HEADSET)
-            } else {
-                add(CallAudioManager.Device.PHONE)
+            if (isBluetoothHeadsetOn()) {
+                connectedBlueToothHeadset?.connectedDevices?.forEach {
+                    add(CallAudioManager.Device.WirelessHeadset(it.name))
+                }
             }
-            add(CallAudioManager.Device.SPEAKER)
+            if (isWiredHeadsetOn()) {
+                add(CallAudioManager.Device.Headset)
+            } else {
+                add(CallAudioManager.Device.Phone)
+            }
+            add(CallAudioManager.Device.Speaker)
         }
     }
 

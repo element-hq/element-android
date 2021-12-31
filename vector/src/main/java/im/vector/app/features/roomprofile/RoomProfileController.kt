@@ -94,11 +94,11 @@ class RoomProfileController @Inject constructor(
 
         // Upgrade warning
         val roomVersion = data.roomCreateContent()?.roomVersion
-        if (data.canUpgradeRoom
-                && !data.isTombstoned
-                && roomVersion != null
-                && data.isUsingUnstableRoomVersion
-                && data.recommendedRoomVersion != null) {
+        if (data.canUpgradeRoom &&
+                !data.isTombstoned &&
+                roomVersion != null &&
+                data.isUsingUnstableRoomVersion &&
+                data.recommendedRoomVersion != null) {
             genericFooterItem {
                 id("version_warning")
                 text(host.stringProvider.getString(R.string.room_using_unstable_room_version, roomVersion))

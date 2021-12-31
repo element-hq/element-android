@@ -1,0 +1,2 @@
+Những thay đổi chính trong phiên bản này: xem trước URL, bàn phím Emoji mới, các khả năng cài đặt phòng mới và tuyết cho Giáng Sinh!
+Log thay đổi đầy đủ: https://github.com/vector-im/element-android/releases/tag/v1.0.12

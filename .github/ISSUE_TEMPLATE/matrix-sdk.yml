@@ -1,0 +1,20 @@
+name: Matrix SDK bug or enhancement
+description: Report issue or ask for a feature in the [Android Matrix SDK](https://github.com/matrix-org/matrix-android-sdk2)
+title: "[SDK] "
+labels: [matrix-sdk]
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this issue!
+
+        Please report security issues by email to security@matrix.org
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Report issue or ask for a feature in the [Android Matrix SDK](https://github.com/matrix-org/matrix-android-sdk2)
+      placeholder: This issue template should be used by third party application maintainers, to report a bug or to request a feature on the SDK module of the Element Android application.
+    validations:
+      required: true

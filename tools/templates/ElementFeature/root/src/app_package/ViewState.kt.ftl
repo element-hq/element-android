@@ -1,5 +1,5 @@
 package ${escapeKotlinIdentifiers(packageName)}
 
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 
-data class ${viewStateClass}() : MvRxState
+data class ${viewStateClass}() : MavericksState

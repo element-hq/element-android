@@ -60,7 +60,7 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
     data class Remove(val eventId: String) :
             EventSharedAction(R.string.remove, R.drawable.ic_trash, true)
 
-    data class Redact(val eventId: String, val askForReason: Boolean) :
+    data class Redact(val eventId: String, val askForReason: Boolean, val dialogTitleRes: Int, val dialogDescriptionRes: Int) :
             EventSharedAction(R.string.message_action_item_redact, R.drawable.ic_delete, true)
 
     data class Cancel(val eventId: String, val force: Boolean) :
@@ -112,4 +112,7 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
 
     object UseKeyBackup :
             EventSharedAction(R.string.e2e_use_keybackup, R.drawable.shield)
+
+    data class EndPoll(val eventId: String) :
+            EventSharedAction(R.string.poll_end_action, R.drawable.ic_check_on)
 }

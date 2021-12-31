@@ -27,11 +27,9 @@ import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
-
 import javax.inject.Inject
 
 class IncomingKeyRequestListFragment @Inject constructor(
-        val viewModelFactory: KeyRequestListViewModel.Factory,
         private val epoxyController: IncomingKeyRequestPagedController
 ) : VectorBaseFragment<FragmentGenericRecyclerBinding>() {
 

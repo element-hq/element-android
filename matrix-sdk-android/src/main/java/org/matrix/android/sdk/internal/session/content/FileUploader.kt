@@ -35,12 +35,12 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.internal.di.Authenticated
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.ProgressRequestBody
 import org.matrix.android.sdk.internal.network.awaitResponse
 import org.matrix.android.sdk.internal.network.toFailure
-import org.matrix.android.sdk.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import org.matrix.android.sdk.internal.util.TemporaryFileCreator
 import java.io.File
 import java.io.FileNotFoundException
@@ -50,7 +50,7 @@ import javax.inject.Inject
 internal class FileUploader @Inject constructor(
         @Authenticated private val okHttpClient: OkHttpClient,
         private val globalErrorReceiver: GlobalErrorReceiver,
-        private val homeServerCapabilitiesService: DefaultHomeServerCapabilitiesService,
+        private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
         private val context: Context,
         private val temporaryFileCreator: TemporaryFileCreator,
         contentUrlResolver: ContentUrlResolver,
@@ -67,8 +67,8 @@ internal class FileUploader @Inject constructor(
         // Check size limit
         val maxUploadFileSize = homeServerCapabilitiesService.getHomeServerCapabilities().maxUploadFileSize
 
-        if (maxUploadFileSize != HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN
-                && file.length() > maxUploadFileSize) {
+        if (maxUploadFileSize != HomeServerCapabilities.MAX_UPLOAD_FILE_SIZE_UNKNOWN &&
+                file.length() > maxUploadFileSize) {
             // Known limitation and file too big for the server, save the pain to upload it
             throw Failure.ServerError(
                     error = MatrixError(
@@ -109,15 +109,20 @@ internal class FileUploader @Inject constructor(
                               filename: String?,
                               mimeType: String?,
                               progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
-        val inputStream = withContext(Dispatchers.IO) {
-            context.contentResolver.openInputStream(uri)
-        } ?: throw FileNotFoundException()
-        val workingFile = temporaryFileCreator.create()
-        workingFile.outputStream().use {
-            inputStream.copyTo(it)
-        }
+        val workingFile = context.copyUriToTempFile(uri)
         return uploadFile(workingFile, filename, mimeType, progressListener).also {
             tryOrNull { workingFile.delete() }
+        }
+    }
+
+    private suspend fun Context.copyUriToTempFile(uri: Uri): File {
+        return withContext(Dispatchers.IO) {
+            val inputStream = contentResolver.openInputStream(uri) ?: throw FileNotFoundException()
+            val workingFile = temporaryFileCreator.create()
+            workingFile.outputStream().use {
+                inputStream.copyTo(it)
+            }
+            workingFile
         }
     }
 

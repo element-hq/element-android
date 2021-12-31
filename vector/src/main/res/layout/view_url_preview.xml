@@ -1,89 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/informationUrlPreviewContainer"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+    tools:parentTag="com.google.android.material.card.MaterialCardView">
 
-    <View
-        android:id="@+id/url_preview_left_border"
-        android:layout_width="2dp"
-        android:layout_height="0dp"
-        android:background="?vctr_content_tertiary"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/url_preview_title"
-        style="@style/Widget.Vector.TextView.Body"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:textColor="?vctr_content_primary"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/url_preview_close"
-        app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="Jo Malone denounces her former brand's John Boyega decision" />
+        android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/url_preview_image"
-        android:layout_width="0dp"
-        android:layout_height="157dp"
-        android:layout_marginTop="16dp"
-        android:importantForAccessibility="no"
-        android:scaleType="fitStart"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/url_preview_title"
-        app:layout_constraintTop_toBottomOf="@+id/url_preview_title"
-        tools:src="@tools:sample/backgrounds/scenic" />
+        <ImageView
+            android:id="@+id/url_preview_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:importantForAccessibility="no"
+            android:maxHeight="200dp"
+            android:scaleType="fitXY"
+            tools:src="@tools:sample/backgrounds/scenic" />
 
-    <TextView
-        android:id="@+id/url_preview_description"
-        style="@style/Widget.Vector.TextView.Body"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="8dp"
-        android:ellipsize="end"
-        android:maxLines="4"
-        android:textColor="?vctr_content_secondary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"
-        app:layout_constraintTop_toBottomOf="@+id/url_preview_image"
-        tools:text="The British perfumer says removing actor John Boyega from his own advert was “utterly despicable”." />
+        <TextView
+            android:id="@+id/url_preview_site"
+            style="@style/Widget.Vector.TextView.Caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="?vctr_content_secondary"
+            tools:text="BBC News" />
 
-    <TextView
-        android:id="@+id/url_preview_site"
-        style="@style/Widget.Vector.TextView.Body"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="4dp"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:singleLine="true"
-        android:textColor="?vctr_content_tertiary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/url_preview_left_border"
-        app:layout_constraintTop_toBottomOf="@+id/url_preview_description"
-        tools:text="BBC News" />
+        <TextView
+            android:id="@+id/url_preview_title"
+            style="@style/Widget.Vector.TextView.Body.Medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="@dimen/layout_touch_size"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="?vctr_content_primary"
+            android:textStyle="bold"
+            tools:text="Jo Malone denounces her former brand's John Boyega decision" />
+
+        <TextView
+            android:id="@+id/url_preview_description"
+            style="@style/Widget.Vector.TextView.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:ellipsize="end"
+            android:textColor="?vctr_content_secondary"
+            tools:text="The British perfumer says removing actor John Boyega from his own advert was “utterly despicable”." />
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/url_preview_close"
         android:layout_width="@dimen/layout_touch_size"
         android:layout_height="@dimen/layout_touch_size"
+        android:layout_gravity="top|end"
         android:contentDescription="@string/action_close"
         android:scaleType="center"
-        android:src="@drawable/ic_close_24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="?vctr_content_secondary"
+        android:src="@drawable/ic_close_with_circular_bg"
         tools:ignore="MissingPrefix" />
 
 </merge>

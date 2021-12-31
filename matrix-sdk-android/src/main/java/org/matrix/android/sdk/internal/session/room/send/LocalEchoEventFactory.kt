@@ -35,16 +35,19 @@ import org.matrix.android.sdk.api.session.room.model.message.ImageInfo
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
+import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageOptionsContent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
-import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_POLL
-import org.matrix.android.sdk.api.session.room.model.message.OptionItem
+import org.matrix.android.sdk.api.session.room.model.message.PollAnswer
+import org.matrix.android.sdk.api.session.room.model.message.PollCreationInfo
+import org.matrix.android.sdk.api.session.room.model.message.PollQuestion
+import org.matrix.android.sdk.api.session.room.model.message.PollResponse
 import org.matrix.android.sdk.api.session.room.model.message.ThumbnailInfo
 import org.matrix.android.sdk.api.session.room.model.message.VideoInfo
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
@@ -121,41 +124,74 @@ internal class LocalEchoEventFactory @Inject constructor(
                 ))
     }
 
-    fun createOptionsReplyEvent(roomId: String,
-                                pollEventId: String,
-                                optionIndex: Int,
-                                optionLabel: String): Event {
-        return createMessageEvent(roomId,
-                MessagePollResponseContent(
-                        body = optionLabel,
-                        relatesTo = RelationDefaultContent(
-                                type = RelationType.RESPONSE,
-                                option = optionIndex,
-                                eventId = pollEventId)
+    fun createPollReplyEvent(roomId: String,
+                             pollEventId: String,
+                             answerId: String): Event {
+        val content = MessagePollResponseContent(
+                body = answerId,
+                relatesTo = RelationDefaultContent(
+                        type = RelationType.REFERENCE,
+                        eventId = pollEventId),
+                response = PollResponse(
+                        answers = listOf(answerId)
+                )
 
-                ))
+        )
+        val localId = LocalEcho.createLocalEchoId()
+        return Event(
+                roomId = roomId,
+                originServerTs = dummyOriginServerTs(),
+                senderId = userId,
+                eventId = localId,
+                type = EventType.POLL_RESPONSE,
+                content = content.toContent(),
+                unsignedData = UnsignedData(age = null, transactionId = localId))
     }
 
     fun createPollEvent(roomId: String,
                         question: String,
-                        options: List<OptionItem>): Event {
-        val compatLabel = buildString {
-            append("[Poll] ")
-            append(question)
-            options.forEach {
-                append("\n")
-                append(it.value)
-            }
-        }
-        return createMessageEvent(
-                roomId,
-                MessageOptionsContent(
-                        body = compatLabel,
-                        label = question,
-                        optionType = OPTION_TYPE_POLL,
-                        options = options.toList()
+                        options: List<String>): Event {
+        val content = MessagePollContent(
+                pollCreationInfo = PollCreationInfo(
+                        question = PollQuestion(
+                                question = question
+                        ),
+                        answers = options.mapIndexed { index, option ->
+                            PollAnswer(
+                                    id = "$index-$option",
+                                    answer = option
+                            )
+                        }
                 )
         )
+        val localId = LocalEcho.createLocalEchoId()
+        return Event(
+                roomId = roomId,
+                originServerTs = dummyOriginServerTs(),
+                senderId = userId,
+                eventId = localId,
+                type = EventType.POLL_START,
+                content = content.toContent(),
+                unsignedData = UnsignedData(age = null, transactionId = localId))
+    }
+
+    fun createEndPollEvent(roomId: String,
+                           eventId: String): Event {
+        val content = MessageEndPollContent(
+                relatesTo = RelationDefaultContent(
+                        type = RelationType.REFERENCE,
+                        eventId = eventId
+                )
+        )
+        val localId = LocalEcho.createLocalEchoId()
+        return Event(
+                roomId = roomId,
+                originServerTs = dummyOriginServerTs(),
+                senderId = userId,
+                eventId = localId,
+                type = EventType.POLL_END,
+                content = content.toContent(),
+                unsignedData = UnsignedData(age = null, transactionId = localId))
     }
 
     fun createReplaceTextOfReply(roomId: String,
@@ -165,8 +201,8 @@ internal class LocalEchoEventFactory @Inject constructor(
                                  newBodyAutoMarkdown: Boolean,
                                  msgType: String,
                                  compatibilityText: String): Event {
-        val permalink = permalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "")
-        val userLink = originalEvent.root.senderId?.let { permalinkFactory.createPermalink(it) } ?: ""
+        val permalink = permalinkFactory.createPermalink(roomId, originalEvent.root.eventId ?: "", false)
+        val userLink = originalEvent.root.senderId?.let { permalinkFactory.createPermalink(it, false) } ?: ""
 
         val body = bodyForReply(originalEvent.getLastMessageContent(), originalEvent.isReply())
         val replyFormatted = REPLY_PATTERN.format(
@@ -199,10 +235,11 @@ internal class LocalEchoEventFactory @Inject constructor(
 
     fun createMediaEvent(roomId: String, attachment: ContentAttachmentData): Event {
         return when (attachment.type) {
-            ContentAttachmentData.Type.IMAGE -> createImageEvent(roomId, attachment)
-            ContentAttachmentData.Type.VIDEO -> createVideoEvent(roomId, attachment)
-            ContentAttachmentData.Type.AUDIO -> createAudioEvent(roomId, attachment)
-            ContentAttachmentData.Type.FILE  -> createFileEvent(roomId, attachment)
+            ContentAttachmentData.Type.IMAGE         -> createImageEvent(roomId, attachment)
+            ContentAttachmentData.Type.VIDEO         -> createVideoEvent(roomId, attachment)
+            ContentAttachmentData.Type.AUDIO         -> createAudioEvent(roomId, attachment, isVoiceMessage = false)
+            ContentAttachmentData.Type.VOICE_MESSAGE -> createAudioEvent(roomId, attachment, isVoiceMessage = true)
+            ContentAttachmentData.Type.FILE          -> createFileEvent(roomId, attachment)
         }
     }
 
@@ -290,8 +327,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         return createMessageEvent(roomId, content)
     }
 
-    private fun createAudioEvent(roomId: String, attachment: ContentAttachmentData): Event {
-        val isVoiceMessage = attachment.waveform != null
+    private fun createAudioEvent(roomId: String, attachment: ContentAttachmentData, isVoiceMessage: Boolean): Event {
         val content = MessageAudioContent(
                 msgType = MessageType.MSGTYPE_AUDIO,
                 body = attachment.name ?: "audio",
@@ -350,9 +386,9 @@ internal class LocalEchoEventFactory @Inject constructor(
                              autoMarkdown: Boolean): Event? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
-        val permalink = permalinkFactory.createPermalink(eventReplied.root) ?: return null
+        val permalink = permalinkFactory.createPermalink(eventReplied.root, false) ?: return null
         val userId = eventReplied.root.senderId ?: return null
-        val userLink = permalinkFactory.createPermalink(userId) ?: return null
+        val userLink = permalinkFactory.createPermalink(userId, false) ?: return null
 
         val body = bodyForReply(eventReplied.getLastMessageContent(), eventReplied.isReply())
         val replyFormatted = REPLY_PATTERN.format(
@@ -407,7 +443,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         when (content?.msgType) {
             MessageType.MSGTYPE_EMOTE,
             MessageType.MSGTYPE_TEXT,
-            MessageType.MSGTYPE_NOTICE -> {
+            MessageType.MSGTYPE_NOTICE     -> {
                 var formattedText: String? = null
                 if (content is MessageContentWithFormattedBody) {
                     formattedText = content.matrixFormattedBody
@@ -418,11 +454,12 @@ internal class LocalEchoEventFactory @Inject constructor(
                     TextContent(content.body, formattedText)
                 }
             }
-            MessageType.MSGTYPE_FILE   -> return TextContent("sent a file.")
-            MessageType.MSGTYPE_AUDIO  -> return TextContent("sent an audio file.")
-            MessageType.MSGTYPE_IMAGE  -> return TextContent("sent an image.")
-            MessageType.MSGTYPE_VIDEO  -> return TextContent("sent a video.")
-            else                       -> return TextContent(content?.body ?: "")
+            MessageType.MSGTYPE_FILE       -> return TextContent("sent a file.")
+            MessageType.MSGTYPE_AUDIO      -> return TextContent("sent an audio file.")
+            MessageType.MSGTYPE_IMAGE      -> return TextContent("sent an image.")
+            MessageType.MSGTYPE_VIDEO      -> return TextContent("sent a video.")
+            MessageType.MSGTYPE_POLL_START -> return TextContent((content as? MessagePollContent)?.pollCreationInfo?.question?.question ?: "")
+            else                           -> return TextContent(content?.body ?: "")
         }
     }
 

@@ -15,6 +15,9 @@
  */
 package org.matrix.android.sdk.internal.database.query
 
+import io.realm.Realm
+import io.realm.RealmQuery
+import io.realm.kotlin.where
 import org.matrix.android.sdk.api.pushrules.RuleKind
 import org.matrix.android.sdk.internal.database.model.PushRuleEntity
 import org.matrix.android.sdk.internal.database.model.PushRuleEntityFields
@@ -22,9 +25,6 @@ import org.matrix.android.sdk.internal.database.model.PushRulesEntity
 import org.matrix.android.sdk.internal.database.model.PushRulesEntityFields
 import org.matrix.android.sdk.internal.database.model.PusherEntity
 import org.matrix.android.sdk.internal.database.model.PusherEntityFields
-import io.realm.Realm
-import io.realm.RealmQuery
-import io.realm.kotlin.where
 
 internal fun PusherEntity.Companion.where(realm: Realm,
                                           pushKey: String? = null): RealmQuery<PusherEntity> {

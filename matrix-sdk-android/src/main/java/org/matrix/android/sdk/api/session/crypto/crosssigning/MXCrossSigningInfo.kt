@@ -24,8 +24,8 @@ data class MXCrossSigningInfo(
         val crossSigningKeys: List<CryptoCrossSigningKey>
 ) {
 
-    fun isTrusted(): Boolean = masterKey()?.trustLevel?.isVerified() == true
-            && selfSigningKey()?.trustLevel?.isVerified() == true
+    fun isTrusted(): Boolean = masterKey()?.trustLevel?.isVerified() == true &&
+            selfSigningKey()?.trustLevel?.isVerified() == true
 
     fun masterKey(): CryptoCrossSigningKey? = crossSigningKeys
             .firstOrNull { it.usages?.contains(KeyUsage.MASTER.value) == true }

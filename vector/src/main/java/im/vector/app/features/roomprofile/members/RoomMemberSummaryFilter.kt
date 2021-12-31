@@ -16,7 +16,7 @@
 
 package im.vector.app.features.roomprofile.members
 
-import io.reactivex.functions.Predicate
+import androidx.core.util.Predicate
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import javax.inject.Inject
@@ -31,9 +31,9 @@ class RoomMemberSummaryFilter @Inject constructor() : Predicate<RoomMemberSummar
         }
         // if filter is "Jo Do", it should match "John Doe"
         return filter.split(" ").all {
-            roomMemberSummary.displayName?.contains(it, ignoreCase = true).orFalse()
+            roomMemberSummary.displayName?.contains(it, ignoreCase = true).orFalse() ||
                     // We should maybe exclude the domain from the userId
-                    || roomMemberSummary.userId.contains(it, ignoreCase = true)
+                    roomMemberSummary.userId.contains(it, ignoreCase = true)
         }
     }
 }

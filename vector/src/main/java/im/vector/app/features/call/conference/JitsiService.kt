@@ -22,6 +22,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureProtocol
 import im.vector.app.core.utils.toBase32String
 import im.vector.app.features.call.conference.jwt.JitsiJWTFactory
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.settings.VectorLocale
 import im.vector.app.features.themes.ThemeProvider
@@ -44,12 +45,16 @@ class JitsiService @Inject constructor(
         private val rawService: RawService,
         private val stringProvider: StringProvider,
         private val themeProvider: ThemeProvider,
-        private val jitsiWidgetPropertiesFactory: JitsiWidgetPropertiesFactory,
         private val jitsiJWTFactory: JitsiJWTFactory) {
 
     companion object {
         const val JITSI_OPEN_ID_TOKEN_JWT_AUTH = "openidtoken-jwt"
-        private const val JITSI_AUTH_KEY = "auth"
+    }
+
+    private val jitsiWidgetDataFactory by lazy {
+        JitsiWidgetDataFactory(stringProvider.getString(R.string.preferred_jitsi_domain)) { widget ->
+            session.widgetService().getWidgetComputedUrl(widget, themeProvider.isLightTheme())
+        }
     }
 
     suspend fun createJitsiWidget(roomId: String, withVideo: Boolean): Widget {
@@ -85,17 +90,11 @@ class JitsiService @Inject constructor(
         val widgetEventContent = mapOf(
                 "url" to url,
                 "type" to WidgetType.Jitsi.legacy,
-                "data" to mapOf(
-                        "conferenceId" to confId,
-                        "domain" to jitsiDomain,
-                        "isAudioOnly" to !withVideo,
-                        JITSI_AUTH_KEY to jitsiAuth
-                ),
+                "data" to JitsiWidgetData(jitsiDomain, confId, !withVideo, jitsiAuth),
                 "creatorUserId" to session.myUserId,
                 "id" to widgetId,
                 "name" to "jitsi"
         )
-
         return session.widgetService().createRoomWidget(roomId, widgetId, widgetEventContent)
     }
 
@@ -108,26 +107,30 @@ class JitsiService @Inject constructor(
             this.avatar = userAvatar?.let { URL(it) }
         }
         val roomName = session.getRoomSummary(roomId)?.displayName
-        val properties = session.widgetService().getWidgetComputedUrl(jitsiWidget, themeProvider.isLightTheme())
-                ?.let { url -> jitsiWidgetPropertiesFactory.create(url) } ?: throw IllegalStateException()
-
-        val token = if (jitsiWidget.isOpenIdJWTAuthenticationRequired()) {
-            getOpenIdJWTToken(roomId, properties.domain, userDisplayName ?: session.myUserId, userAvatar ?: "")
+        val widgetData = jitsiWidgetDataFactory.create(jitsiWidget)
+        val token = if (widgetData.isOpenIdJWTAuthenticationRequired()) {
+            getOpenIdJWTToken(roomId, widgetData.domain, userDisplayName ?: session.myUserId, userAvatar ?: "")
         } else {
             null
         }
         return JitsiCallViewEvents.JoinConference(
                 enableVideo = enableVideo,
-                jitsiUrl = properties.domain.ensureProtocol(),
+                jitsiUrl = widgetData.domain.ensureProtocol(),
                 subject = roomName ?: "",
-                confId = properties.confId ?: "",
+                confId = widgetData.confId,
                 userInfo = userInfo,
                 token = token
         )
     }
 
-    private fun Widget.isOpenIdJWTAuthenticationRequired(): Boolean {
-        return widgetContent.data[JITSI_AUTH_KEY] == JITSI_OPEN_ID_TOKEN_JWT_AUTH
+    fun extractJitsiWidgetData(widget: Widget): JitsiWidgetData? {
+        return tryOrNull {
+            jitsiWidgetDataFactory.create(widget)
+        }
+    }
+
+    private fun JitsiWidgetData.isOpenIdJWTAuthenticationRequired(): Boolean {
+        return auth == JITSI_OPEN_ID_TOKEN_JWT_AUTH
     }
 
     private suspend fun getOpenIdJWTToken(roomId: String, domain: String, userDisplayName: String, userAvatar: String): String {

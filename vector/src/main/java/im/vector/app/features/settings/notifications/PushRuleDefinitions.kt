@@ -86,6 +86,12 @@ fun getStandardAction(ruleId: String, index: NotificationIndex): StandardActions
                 NotificationIndex.SILENT -> StandardActions.Notify
                 NotificationIndex.NOISY  -> StandardActions.Highlight
             }
+        RuleIds.RULE_ID_KEYWORDS                    ->
+            when (index) {
+                NotificationIndex.OFF    -> StandardActions.Disabled
+                NotificationIndex.SILENT -> StandardActions.Notify
+                NotificationIndex.NOISY  -> StandardActions.HighlightDefaultSound
+            }
         else                                        -> null
     }
 }

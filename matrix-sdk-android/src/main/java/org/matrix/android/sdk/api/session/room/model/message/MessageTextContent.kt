@@ -26,7 +26,7 @@ data class MessageTextContent(
         /**
          * Required. Must be 'm.text'.
          */
-        @Json(name = "msgtype") override val msgType: String,
+        @Json(name = MessageContent.MSG_TYPE_JSON_KEY) override val msgType: String,
 
         /**
          * Required. The body of the message.

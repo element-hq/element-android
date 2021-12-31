@@ -17,10 +17,10 @@
 package org.matrix.android.sdk.internal.util
 
 import androidx.annotation.VisibleForTesting
-import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
+import org.matrix.android.sdk.internal.di.MoshiProvider
 import timber.log.Timber
 import java.util.TreeSet
 

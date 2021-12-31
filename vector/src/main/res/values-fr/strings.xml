@@ -68,7 +68,8 @@
     <string name="initial_sync_start_importing_account_rooms">Synchronisation initiale :
 \nImportation des salons</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Synchronisation initiale :
-\nImportation des salons que vous avez rejoints</string>
+\nChargement des conversations
+\nCela peut prendre du temps si vous avez rejoint beaucoup de salons</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Synchronisation initiale :
 \nImportation des salons où vous avez été invité</string>
     <string name="initial_sync_start_importing_account_left_rooms">Synchronisation initiale :
@@ -984,7 +985,7 @@
     <string name="command_description_op_user">Définit le rang d’un utilisateur</string>
     <string name="command_description_deop_user">Rétrograde l’utilisateur avec l’identifiant fourni</string>
     <string name="command_description_invite_user">Invite l’utilisateur avec l’identifiant fourni dans le salon actuel</string>
-    <string name="command_description_join_room">Rejoint le salon avec l’alias fourni</string>
+    <string name="command_description_join_room">Rejoint le salon avec l’adresse fournie</string>
     <string name="command_description_part_room">Quitte le salon</string>
     <string name="command_description_topic">Définit le sujet du salon</string>
     <string name="command_description_kick_user">Expulse l’utilisateur avec l’identifiant fourni</string>
@@ -1929,7 +1930,7 @@
     <string name="initialize_cross_signing">Initialiser la signature croisée</string>
     <string name="reset_cross_signing">Réinitialiser les clés</string>
     <string name="a11y_qr_code_for_verification">Code QR</string>
-    <string name="qr_code_scanned_by_other_notice">On y est presque ! Est-ce que %s affiche le même bouclier \?</string>
+    <string name="qr_code_scanned_by_other_notice">On y est presque ! Est-ce que %s affiche une marque cochée \?</string>
     <string name="qr_code_scanned_by_other_yes">Oui</string>
     <string name="qr_code_scanned_by_other_no">Non</string>
     <string name="no_connectivity_to_the_server_indicator">La connexion avec le serveur a été perdue</string>
@@ -2028,7 +2029,7 @@
     <string name="encryption_not_enabled">Chiffrement désactivé</string>
     <string name="encryption_unknown_algorithm_tile_description">Le chiffrement utilisé par ce salon n’est pas pris en charge</string>
     <string name="room_created_summary_item">%s a créé et configuré ce salon.</string>
-    <string name="qr_code_scanned_self_verif_notice">On y est presque ! L’autre appareil affiche-t-il le même bouclier \?</string>
+    <string name="qr_code_scanned_self_verif_notice">On y est presque ! L’autre appareil affiche-t-il une marque cochée \?</string>
     <string name="qr_code_scanned_verif_waiting_notice">On y est presque ! En attente de la confirmation…</string>
     <string name="qr_code_scanned_verif_waiting">En attente de %s…</string>
     <string name="error_failed_to_import_keys">Échec de l’importation des clés</string>
@@ -2452,7 +2453,6 @@
     <string name="direct_room_user_list_recent_title">Récent</string>
     <string name="qr_code">code QR</string>
     <string name="add_by_qr_code">Ajouter avec un code QR</string>
-    <string name="user_directory_search_hint">Chercher par nom ou identifiant</string>
     <string name="permissions_denied_add_contact">Autoriser l’accès à vos contacts.</string>
     <string name="permissions_denied_qr_code">Pour scanner un code QR, vous devez autoriser l’accès à votre appareil photo.</string>
     <string name="start_chatting">Commencer une conversation</string>
@@ -2509,7 +2509,7 @@
     <string name="a11y_trust_level_default">Niveau de confiance par défaut</string>
     <string name="a11y_selected">Sélectionné</string>
     <string name="a11y_video">Vidéo</string>
-    <string name="a11y_unsent_draft">Ce salon a des brouillons non envoyés</string>
+    <string name="a11y_unsent_draft">a des brouillons non envoyés</string>
     <string name="a11y_error_some_message_not_sent">Certains messages n’ont pas été envoyés</string>
     <string name="a11y_delete_avatar">Supprimer l’avatar</string>
     <string name="a11y_change_avatar">Changer l’avatar</string>
@@ -2539,7 +2539,7 @@
     <string name="call_tile_call_back">Rappeler</string>
     <string name="call_tile_ended">Cet appel est terminé</string>
     <string name="call_tile_other_declined">%1$s a refusé cet appel</string>
-    <string name="call_tile_you_declined">Vous avez refusé cet appel %1$s</string>
+    <string name="call_tile_you_declined">Vous avez refusé cet appel %s</string>
     <string name="call_tile_in_call">Vous êtes actuellement dans cet appel</string>
     <string name="call_tile_other_started_call">%1$s a lancé un appel</string>
     <string name="call_tile_you_started_call">Vous avez lancé un appel</string>
@@ -2708,7 +2708,6 @@
     <string name="spaces_beta_welcome_to_spaces_desc">Les espaces sont une nouvelle manière de regrouper les salons et les gens.</string>
     <string name="spaces_beta_welcome_to_spaces">Bienvenue dans les espaces !</string>
     <string name="space_add_existing_rooms">Ajouter des salons et espaces existants</string>
-    <string name="space_leave_prompt_msg">Voulez-vous vraiment quitter l’espace \?</string>
     <string name="leave_space">Quitter l’espace</string>
     <string name="space_add_child_title">Ajouter des salons</string>
     <string name="space_explore_activity_title">Parcourir les salons</string>
@@ -2772,14 +2771,13 @@
     <string name="space_settings_manage_rooms">Gérer les salons</string>
     <string name="looking_for_someone_not_in_space">Vous cherchez quelqu’un qui n’est pas dans %s \?</string>
     <string name="user_invites_you">%s vous invite</string>
-    <string name="a11y_public_room">Ce salon est public</string>
+    <string name="a11y_public_room">Salon public</string>
     <string name="send_images_and_video_with_original_size">Envoyer le média en taille d’origine</string>
     <plurals name="send_videos_with_original_size">
         <item quantity="one">Envoyer la vidéo en taille originale</item>
         <item quantity="other">Envoyer les vidéos en taille originale</item>
     </plurals>
-    <string name="labs_space_show_orphan_in_home">Espace expérimental – afficher seulement les orphelins dans Accueil</string>
-    <string name="space_leave_prompt_msg_as_admin">Vous êtes administrateur de cet espace, assurez-vous d’avoir transféré les droits d’administration à un autre membre avant de partir.</string>
+    <string name="space_leave_prompt_msg_as_admin">Vous êtes le seul administrateur de cet espace. En le quittant, plus personne n’aura le contrôle dessus.</string>
     <string name="send_feedback_space_info">Vous utilisez une version bêta des espaces. Vos remarques aideront à concevoir les prochaines versions. Votre plateforme et votre nom d’utilisateur seront marqués pour nous aider à utiliser vos remarques autant que possible.</string>
     <string name="this_space_has_no_rooms_admin">Il se peut que certains salons soient masqués parce qu’ils sont privés et vous avez besoin d’une invitation.</string>
     <string name="this_space_has_no_rooms_not_admin">Il se peut que certains salons soient masqués parce qu’ils sont privés et vous avez besoin d’une invitation.
@@ -2790,7 +2788,7 @@
     <string name="spaces_feeling_experimental_subspace">Envie d’expérimenter \?
 \nVous pouvez ajouter des espaces existants à un espace.</string>
     <string name="space_add_rooms">Ajouter des salons</string>
-    <string name="space_leave_prompt_msg_private">Cet espace n’est pas public. Vous ne pourrez pas le rejoindre sans invitation.</string>
+    <string name="space_leave_prompt_msg_private">Il vous sera impossible de revenir à moins d’y être réinvité.</string>
     <string name="space_leave_prompt_msg_only_you">Vous êtes la seule personne ici. Si vous partez, personne ne pourra entrer à l’avenir, même pas vous.</string>
     <string name="invite_to_space">Inviter à %s</string>
     <string name="a11y_beta">Cette fonctionnalité est en bêta</string>
@@ -2804,7 +2802,7 @@
     <string name="unnamed_room">Salon sans nom</string>
     <string name="private_space">Espace privé</string>
     <string name="public_space">Espace public</string>
-    <string name="a11y_public_space">Cet espace est public</string>
+    <string name="a11y_public_space">Espace public</string>
     <string name="call_transfer_unknown_person">Personne inconnue</string>
     <string name="call_transfer_transfer_to_title">Transférer à %1$s</string>
     <string name="directory_add_a_new_server_error_already_added">Ce serveur fait déjà partie de la liste</string>
@@ -2827,7 +2825,7 @@
     <string name="upgrade_room_no_power_to_manage">Vous devez avoir le droit de mettre à jour ce salon</string>
     <string name="upgrade_room_update_parent_space">Mettre à jour automatiquement l’espace parent</string>
     <string name="upgrade_room_auto_invite">Inviter automatiquement des utilisateurs</string>
-    <string name="upgrade_public_room_from_to">Vous allez mettre à jour ce salon de %s à %s.</string>
+    <string name="upgrade_public_room_from_to">Vous allez mettre à jour ce salon de %1$s à %2$s.</string>
     <string name="upgrade_room_warning">La mise-à-jour d’un salon est une action avancée et n’est normalement recommandé que si un salon est instable à cause de bogues, fonctionnalités manquantes, ou failles de sécurité.
 \nCela n’affecte normalement que la manière dont le salon est géré par le serveur.</string>
     <string name="upgrade_private_room">Mettre à jour un salon privé</string>
@@ -2866,13 +2864,13 @@
     <string name="voice_message_tap_to_stop_toast">Touchez l’enregistrement pour l’arrêter ou l’écouter</string>
     <string name="voice_message_n_seconds_warning_toast">%1$ds restant</string>
     <string name="voice_message_release_to_send_toast">Maintenir pour enregistrer, relâcher pour envoyer</string>
-    <string name="a11y_delete_recorded_voice_message">Supprimer l’enregistrement du message vocal</string>
+    <string name="a11y_delete_recorded_voice_message">Supprimer l’enregistrement</string>
     <string name="a11y_recording_voice_message">Enregistrement du message vocal</string>
     <string name="a11y_pause_voice_message">Mettre en pause le message vocal</string>
     <string name="a11y_play_voice_message">Lire le message vocal</string>
     <string name="a11y_lock_voice_message">Verrou de message vocal</string>
     <string name="voice_message_slide_to_cancel">Glisser pour annuler</string>
-    <string name="a11y_start_voice_message">Démarrer un message vocal</string>
+    <string name="a11y_start_voice_message">Enregistrer un message vocal</string>
     <string name="allow_anyone_in_room_to_access">Autoriser quiconque dans %s à trouver et venir. Vous pouvez également sélectionner d’autres espaces.</string>
     <string name="upgrade_required">Mise-à-jour nécessaire</string>
     <string name="sent_a_voice_message">Vocal</string>
@@ -2887,4 +2885,158 @@
     <string name="room_create_member_of_space_name_can_join">Les membres de l’espace %s peuvent trouver, prévisualiser et venir.</string>
     <string name="room_settings_room_access_private_invite_only_title">Privé (seulement sur invitation)</string>
     <string name="denied_permission_voice_message">Pour envoyer des messages vocaux, veuillez accorder la permission Microphone.</string>
+    <string name="settings_room_upgrades">Les mises-à-jour de salon</string>
+    <string name="settings_messages_by_bot">Les messages envoyés par un robot</string>
+    <string name="settings_room_invitations">Les invitations à des salons</string>
+    <string name="settings_encrypted_group_messages">Les conversations de groupe chiffrées</string>
+    <string name="settings_group_messages">Les conversations de groupe</string>
+    <string name="settings_encrypted_direct_messages">Les conversations privées chiffrées</string>
+    <string name="settings_messages_direct_messages">Les conversations privées</string>
+    <string name="settings_messages_containing_username">Mon nom d’utilisateur</string>
+    <string name="settings_messages_containing_display_name">Mon nom d’affichage</string>
+    <string name="settings_notification_notify_me_for">Me notifier pour</string>
+    <string name="settings_notification_other">Autre</string>
+    <string name="settings_notification_mentions_and_keywords">Mentions et mots-clés</string>
+    <string name="settings_notification_default">Notifications par défaut</string>
+    <string name="link_this_email_with_your_account">%s dans les paramètres pour recevoir les invitations directement dans Element.</string>
+    <string name="link_this_email_settings_link">Lier cet e-mail à votre compte</string>
+    <string name="this_invite_to_this_space_was_sent">Cette invitation à cette espace a été envoyée à %s qui n’est pas associé à votre compte</string>
+    <string name="this_invite_to_this_room_was_sent">Cette invitation à ce salon a été envoyée à %s qui n’est pas associé à votre compte</string>
+    <string name="to_help_space_members_find_and_join">Pour aider les membres de l’espace à trouver des salons privés, allez aux paramètres du salons en touchant l’avatar.</string>
+    <string name="help_space_members">Aidez les membres de l’espace à trouver des salons privés</string>
+    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Cela permet de garder facilement un salon privé dans un espace, tout en laissant la possibilité aux gens de trouver l’espace et de le rejoindre. Tous les nouveaux salons de cet espace auront cette option disponible.</string>
+    <string name="help_people_in_spaces_find_and_join">Aide les personnes dans les espaces à trouver et rejoindre des salons privés tout seuls, sans avoir à les inviter manuellement.</string>
+    <string name="new_let_people_in_spaces_find_and_join">Nouveau : aidez les personnes dans les espaces à trouver et rejoindre des salons privés</string>
+    <string name="call_jitsi_started">L’appel de groupe a démarré</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">Tous les salons dans lesquels vous vous trouvez seront affichés sur l’Accueil.</string>
+    <string name="preference_show_all_rooms_in_home">Montrer tous les salons dans Accueil</string>
+    <string name="call_slide_to_end_conference">Faire glisser pour terminer l’appel</string>
+    <string name="call_tap_to_return">%1$s Toucher pour revenir</string>
+    <string name="call_one_active">Appel en cours (%1$s) ·</string>
+    <string name="call_tile_video_active">Appel vidéo en cours</string>
+    <string name="call_tile_voice_active">Appel vocal en cours</string>
+    <plurals name="call_active_status">
+        <item quantity="one">Appel en cours ·</item>
+        <item quantity="other">%1$d appels en cours ·</item>
+    </plurals>
+    <string name="call_tile_connection_failed">Connexion échouée</string>
+    <string name="call_tile_no_answer">Pas de réponse</string>
+    <string name="call_tile_video_missed">Appel vidéo manqué</string>
+    <string name="call_tile_voice_missed">Appel vocal manqué</string>
+    <string name="call_tile_video_declined">Appel vidéo refusé</string>
+    <string name="call_tile_voice_declined">Appel vocal refusé</string>
+    <string name="call_tile_video_call_has_ended">Appel vidéo terminé • %1$s</string>
+    <string name="call_tile_voice_call_has_ended">Appel vocal terminé • %1$s</string>
+    <string name="call_tile_video_incoming">Appel vidéo entrant</string>
+    <string name="call_tile_voice_incoming">Appel vocal entrant</string>
+    <string name="call_tile_you_declined_this_call">Vous avez refusé cet appel</string>
+    <string name="room_settings_room_notifications_account_settings">Paramètres du compte</string>
+    <string name="room_settings_room_notifications_manage_notifications">Vous pouvez gérer les notifications dans %1$s.</string>
+    <string name="room_settings_room_notifications_encryption_notice">Veuillez noter que les notifications sur mentions et mots-clés ne sont pas disponible dans les salons chiffrés sur mobile.</string>
+    <string name="room_settings_room_notifications_notify_me">Me notifier pour</string>
+    <string name="settings_mentions_and_keywords_encryption_notice">Vous n’aurez aucune notifications sur mentions et mots-clés dans les salons chiffrés sur mobile.</string>
+    <string name="settings_messages_containing_keywords">Mots-clés</string>
+    <string name="settings_mentions_at_room">\@room</string>
+    <string name="settings_notification_keyword_contains_invalid_character">Les mots-clés ne peuvent pas contenir « %s »</string>
+    <string name="settings_notification_keyword_contains_dot">Les mots-clés ne peuvent pas commencer par « . »</string>
+    <string name="settings_notification_new_keyword">Ajouter un mot clé</string>
+    <string name="settings_notification_your_keywords">Vos mots-clés</string>
+    <string name="room_settings_none">Aucun</string>
+    <string name="room_settings_mention_and_keyword_only">Mentions et mots-clés seulement</string>
+    <string name="call_remove_jitsi_widget_progress">Fin de l’appel…</string>
+    <string name="call_ended_invite_timeout_title">Pas de réponse</string>
+    <string name="call_ended_user_busy_description">L’utilisateur que vous avez appelé est occupé.</string>
+    <string name="call_ended_user_busy_title">Utilisateur occupé</string>
+    <string name="audio_call_with_participant">Appel audio avec %s</string>
+    <string name="video_call_with_participant">Appel vidéo avec %s</string>
+    <string name="call_ringing">Appel en cours…</string>
+    <string name="spaces">Espaces</string>
+    <string name="learn_more">En savoir plus</string>
+    <string name="a11y_stop_voice_message">Arrêter l’enregistrement</string>
+    <string name="space_add_space_to_any_space_you_manage">Ajouter un espace à un espace que vous gérez.</string>
+    <string name="space_add_existing_spaces">Ajouter des espaces existants</string>
+    <string name="space_add_existing_rooms_only">Ajouter des salons existants</string>
+    <string name="pick_tings_to_leave">Choisissez les endroits à quitter</string>
+    <string name="leave_specific_ones">Quitter certains salons et espaces…</string>
+    <string name="dont_leave_any">Ne quitter aucun salon ni espace</string>
+    <string name="you_will_leave_all_in">Vous allez quitter tous les salons et espaces de %s.</string>
+    <string name="leave_all_rooms_and_spaces">Quitter tous les salons et espaces</string>
+    <string name="space_leave_prompt_msg_with_name">Voulez-vous vraiment quitter %s \?</string>
+    <string name="discovery_section">Découverte (%s)</string>
+    <string name="finish_setup">Terminer le réglage</string>
+    <string name="discovery_invite">Inviter par courriel, trouver des contacts et plus…</string>
+    <string name="finish_setting_up_discovery">Terminer le réglage de la découverte.</string>
+    <string name="create_space_identity_server_info_none">Vous n’utilisez actuellement pas de serveur d’identité. Pour inviter des proches et qu’ils puissent vous trouver, configurez-en un ci-dessous.</string>
+    <string name="create_spaces_invite_public_header">Qui sont vos proches \?</string>
+    <string name="invite_by_mxid_or_mail">Inviter par nom d’utilisateur ou courriel</string>
+    <string name="create_spaces_invite_public_header_desc">Assurez-vous que l’accès à la société %s est accordé aux bonnes personnes. Vous pourrez en inviter d’autres plus tard.</string>
+    <string name="command_description_add_to_space">Ajouter à l’espace mentionné</string>
+    <string name="create_space_in_progress">Création de l’espace…</string>
+    <string name="command_description_lenny">Ajoute ( ͡° ͜ʖ ͡°) devant un message en texte brut</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">Affiche des informations nécessaire au débogage de l’application</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">Afficher les informations de débogage à l’écran</string>
+    <string name="does_not_look_like_valid_email">Ceci ne ressemble pas à une adresse de courriel valide</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Politique</string>
+    <string name="settings_discovery_no_policy_provided">Aucune politique fournie par le serveur d’identité</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Cacher la politique du serveur d’identité</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Afficher la politique du serveur d’identité</string>
+    <string name="open_discovery_settings">Ouvrir les réglages de découverte</string>
+    <string name="user_directory_search_hint_2">Rechercher par nom, identifiant ou courriel</string>
+    <string name="create_new_space">Créer un nouvel espace</string>
+    <string name="command_description_whois">Affiche des informations à propos de l’utilisateur</string>
+    <string name="command_description_avatar_for_room">Change votre avatar seulement dans le salon actuel</string>
+    <string name="command_description_room_avatar">Change l’avatar du salon actuel</string>
+    <string name="command_description_nick_for_room">Change votre nom d’affichage seulement dans le salon actuel</string>
+    <string name="command_description_room_name">Définit le nom du salon</string>
+    <string name="command_description_unignore_user">Arrêter d’ignorer un utilisateur, en affichant ses messages à partir de maintenant</string>
+    <string name="command_description_ignore_user">Ignore un utilisateur, en masquant ses messages</string>
+    <string name="room_settings_space_access_public_description">Tout le monde peut trouver cet espace et le rejoindre</string>
+    <string name="room_settings_space_access_title">Accès à l’espace</string>
+    <string name="room_settings_access_rules_pref_dialog_title">Qui peut accéder \?</string>
+    <string name="settings_notification_emails_enable_for_email">Activer les notifications par courriel pour %s</string>
+    <string name="settings_notification_emails_no_emails">Pour recevoir des courriels de notification, veuillez associer une adresse de courriel à votre compte Matrix</string>
+    <string name="settings_notification_emails_category">Notification par courriel</string>
+    <string name="room_permissions_upgrade_the_space">Mettre-à-jour l’espace</string>
+    <string name="room_permissions_change_space_name">Changer le nom de l’espace</string>
+    <string name="room_permissions_enable_space_encryption">Activer le chiffrement de l’espace</string>
+    <string name="room_permissions_change_main_address_for_the_space">Changer l’adresse principale de l’espace</string>
+    <string name="room_permissions_change_space_avatar">Changer l’avatar de l’espace</string>
+    <string name="space_permissions_notice_read_only">Vous n’avez pas la permission de changer les rôles requis pour changer différentes parties de cet espace</string>
+    <string name="space_permissions_notice">Sélectionner les rôles nécessaires pour modifier les différentes parties de cet espace</string>
+    <string name="space_settings_permissions_subtitle">Voir et mettre-à-jour les rôles requis pour changer différentes parties de l’espace.</string>
+    <string name="space_settings_permissions_title">Permissions de l’espace</string>
+    <string name="space_participants_unban_prompt_msg">Annuler l’exclusion des utilisateurs leur permettra de revenir dans cet espace.</string>
+    <string name="space_participants_ban_prompt_msg">L’exclusion des utilisateurs va les expulser de cet espace et les empêcher de revenir.</string>
+    <string name="space_participants_kick_prompt_msg">L’expulsion des utilisateurs va les supprimer de cet espace
+\n
+\nPour les empêcher de revenir, vous devriez les exclure.</string>
+    <string name="a11y_presence_unavailable">Indisponible</string>
+    <string name="a11y_presence_offline">Hors ligne</string>
+    <string name="a11y_presence_online">En ligne</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Choisir un serveur d’accueil</string>
+    <string name="login_error_homeserver_from_url_not_found">Impossible de contacter un serveur d’accueil à l’URL %s. Veuillez vérifier votre lien ou choisir manuellement un serveur d’accueil.</string>
+    <string name="notification_listening_for_notifications">Écoute des notifications</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">Au moins %1$s choix est nécessaire</item>
+        <item quantity="other">Au moins %1$s choix sont nécessaires</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">La question ne peut pas être vide</string>
+    <string name="create_poll_button">Créer le sondage</string>
+    <string name="create_poll_add_option">Ajouter un choix</string>
+    <string name="create_poll_options_hint">Choix %1$d</string>
+    <string name="create_poll_options_title">Créer des choix</string>
+    <string name="create_poll_question_hint">Question ou sujet</string>
+    <string name="create_poll_question_title">Question ou sujet du sondage</string>
+    <string name="create_poll_title">Créer un sondage</string>
+    <string name="attachment_type_poll">Sondage</string>
+    <string name="identity_server_consent_dialog_content_2">Pour découvrir des contacts existants, il vous faut envoyer des informations de contacts à votre serveur d’identité.
+\n
+\nPour votre vie privée, les données sont condensées avant l’envoi. Consentez-vous à l’envoi de ces informations \?</string>
+    <string name="identity_server_consent_dialog_title_2">Envoyer des courriels et des numéros de téléphone à %s</string>
+    <string name="settings_discovery_consent_notice_off_2">Vos contacts sont personnels et privés. Pour découvrir des utilisateurs à partir de vos contacts, nous avons besoin de votre permission pour envoyer les informations des contacts à votre serveur d’identité.</string>
+    <string name="shortcut_disabled_reason_sign_out">La session a été déconnectée !</string>
+    <string name="shortcut_disabled_reason_room_left">Le salon a été quitté !</string>
+    <string name="identity_server_consent_dialog_content_question">Êtes vous d’accord d’envoyer ces informations \?</string>
+    <string name="identity_server_consent_dialog_content_3">Pour découvrir des contacts existants, il vous faut envoyer les informations de contact (adresses de courriel et numéros de téléphone) à votre serveur d’identité. Les données seront condensées avant l’envoi pour respecter la vie privée.</string>
+    <string name="action_not_now">Pas maintenant</string>
 </resources>

@@ -40,8 +40,8 @@ internal class LiveTimelineEvent(private val monarchy: Monarchy,
                                  private val coroutineScope: CoroutineScope,
                                  private val timelineEventMapper: TimelineEventMapper,
                                  private val roomId: String,
-                                 private val eventId: String)
-    : MediatorLiveData<Optional<TimelineEvent>>() {
+                                 private val eventId: String) :
+    MediatorLiveData<Optional<TimelineEvent>>() {
 
     init {
         buildAndObserveQuery()

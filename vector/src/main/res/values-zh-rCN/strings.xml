@@ -67,13 +67,14 @@
     <string name="initial_sync_start_importing_account_rooms">初始化同步：
 \n正在导入聊天室</string>
     <string name="initial_sync_start_importing_account_joined_rooms">初始化同步：
-\n正在导入已加入的聊天室</string>
+\n正在加载对话
+\n如果你加入了很多论聊天室，这可能需要一段时间</string>
     <string name="initial_sync_start_importing_account_invited_rooms">初始化同步：
 \n正在导入已邀请的聊天室</string>
     <string name="initial_sync_start_importing_account_left_rooms">初始化同步：
 \n正在导入已离开的聊天室</string>
     <string name="initial_sync_start_importing_account_groups">初始化同步：
-\n正在导入社群</string>
+\n正在导入社区</string>
     <string name="initial_sync_start_importing_account_data">初始化同步：
 \n正在导入账号数据</string>
     <string name="notice_room_update">%s 升级了此聊天室。</string>
@@ -543,7 +544,7 @@
     <string name="later">稍后再说</string>
     <string name="permalink">永久链接</string>
     <string name="rename">重命名</string>
-    <string name="report_content">举报消息</string>
+    <string name="report_content">举报内容</string>
     <string name="active_call">当前通话</string>
     <string name="ongoing_conference_call">正在进行电话会议。
 \n请以 %1$s 或 %2$s 的形式加入</string>
@@ -948,7 +949,7 @@
     <string name="command_description_op_user">设置用户的权限等级</string>
     <string name="command_description_deop_user">按照 ID 取消用户管理员权限</string>
     <string name="command_description_invite_user">按照 ID 邀请用户进入当前聊天室</string>
-    <string name="command_description_join_room">按照别名加入聊天室</string>
+    <string name="command_description_join_room">用给定地址加入聊天室</string>
     <string name="command_description_part_room">离开聊天室</string>
     <string name="command_description_topic">设置聊天室主题</string>
     <string name="command_description_kick_user">按照 ID 踢出用户</string>
@@ -1692,7 +1693,7 @@
     <string name="room_join_rules_invite">%1$s 将聊天室设为仅限邀请。</string>
     <string name="room_join_rules_invite_by_you">你将聊天室设为仅限邀请。</string>
     <string name="timeline_unread_messages">未读消息</string>
-    <string name="login_splash_title">这是你的对话。拥有它。</string>
+    <string name="login_splash_title">这是你的对话。它只属于你。</string>
     <string name="login_splash_text1">与人们私聊或群聊</string>
     <string name="login_splash_text2">通过加密保证对话私密</string>
     <string name="login_splash_text3">扩展 &amp; 自定义你的体验</string>
@@ -1972,7 +1973,7 @@
     <string name="initialize_cross_signing">初始化交叉签名</string>
     <string name="reset_cross_signing">重置密钥</string>
     <string name="a11y_qr_code_for_verification">二维码</string>
-    <string name="qr_code_scanned_by_other_notice">快要完成了！%s 显示相同的盾牌了吗？</string>
+    <string name="qr_code_scanned_by_other_notice">快要完成了！%s 显示对勾了吗？</string>
     <string name="qr_code_scanned_by_other_yes">使</string>
     <string name="qr_code_scanned_by_other_no">否</string>
     <string name="no_connectivity_to_the_server_indicator">到服务器的连接已丢失</string>
@@ -2078,7 +2079,7 @@
     <string name="encryption_unknown_algorithm_tile_description">不支持本聊天室使用的加密方式</string>
     <string name="room_created_summary_item">%s 创建并配置了聊天室。</string>
     <string name="room_created_summary_item_by_you">你创建并配置了聊天室。</string>
-    <string name="qr_code_scanned_self_verif_notice">接近完成！另外的设备是否正显示相同的盾牌图标？</string>
+    <string name="qr_code_scanned_self_verif_notice">接近完成！另外的设备是否正显示对勾？</string>
     <string name="qr_code_scanned_verif_waiting_notice">接近完成！等候确认……</string>
     <string name="qr_code_scanned_verif_waiting">正在等候 %s…</string>
     <string name="error_failed_to_import_keys">导入密钥失败</string>
@@ -2172,7 +2173,7 @@
     <string name="identity_server_error_terms_not_signed">请先在设置中接受身份服务器的条款。</string>
     <string name="template_identity_server_error_bulk_sha256_not_supported">为了你的隐私，${app_name} 仅支持发送用户电子邮件和电话号码的哈希值。</string>
     <string name="identity_server_error_binding_error">关联失败。</string>
-    <string name="identity_server_error_no_current_binding_error">目前与此标识符没有关联。</string>
+    <string name="identity_server_error_no_current_binding_error">当前与此标识符没有关联。</string>
     <string name="identity_server_set_default_notice">你的主服务器（%1$s）建议使用 %2$s 作为你的身份服务器</string>
     <string name="identity_server_set_default_submit">使用 %1$s</string>
     <string name="identity_server_set_alternative_notice">或者，你可以输入任何其他身份服务器 URL</string>
@@ -2419,7 +2420,6 @@
     <string name="direct_room_user_list_recent_title">最近</string>
     <string name="qr_code">二维码</string>
     <string name="add_by_qr_code">通过二维码添加</string>
-    <string name="user_directory_search_hint">通过名称或 ID 搜索</string>
     <string name="create_room_settings_section">聊天室设置</string>
     <string name="create_room_topic_hint">主题</string>
     <string name="create_room_topic_section">聊天室话题（可选）</string>
@@ -2570,7 +2570,7 @@
     <string name="a11y_rule_notify_off">关闭通知</string>
     <string name="a11y_rule_notify_silent">无声通知</string>
     <string name="a11y_rule_notify_noisy">有声通知</string>
-    <string name="a11y_unsent_draft">此聊天室有未发送的草稿</string>
+    <string name="a11y_unsent_draft">有未发送的草稿</string>
     <string name="a11y_error_some_message_not_sent">有些消息未被发送</string>
     <string name="a11y_import_key_from_file">从文件中导入密钥</string>
     <string name="a11y_error_message_not_sent">发生错误，消息未能发送</string>
@@ -2583,7 +2583,6 @@
     <string name="spaces_no_server_support_title">看来你的主服务器尚未支持空间</string>
     <string name="spaces_feeling_experimental_subspace">想要做点实验？
 \n你可以将现有的空间添加到其他空间中。</string>
-    <string name="labs_space_show_orphan_in_home">实验性空间 - 仅在首页显示无人看管的聊天室</string>
     <string name="space_manage_rooms_and_spaces">管理聊天室和空间</string>
     <string name="space_mark_as_not_suggested">标记为不建议</string>
     <string name="space_mark_as_suggested">标记为建议</string>
@@ -2600,10 +2599,9 @@
     <string name="spaces_beta_welcome_to_spaces">欢迎来到空间！</string>
     <string name="space_add_rooms">添加聊天室</string>
     <string name="space_add_existing_rooms">添加现有聊天室和空间</string>
-    <string name="space_leave_prompt_msg_as_admin">你是此空间的管理员，请确保你在离开前已将管理权限转让给另一位成员。</string>
-    <string name="space_leave_prompt_msg_private">此空间并非公开空间。你将无法在没有邀请的情况下重新加入。</string>
+    <string name="space_leave_prompt_msg_as_admin">你是此空间唯一的管理员。离开就意味着没人能控制它。</string>
+    <string name="space_leave_prompt_msg_private">除非你被重新邀请，否则你将无法重新加入。</string>
     <string name="space_leave_prompt_msg_only_you">你是这唯一的人。如果你离开，包括你在内的所有人都将无法加入此空间。</string>
-    <string name="space_leave_prompt_msg">你确定你想要离开此空间吗？</string>
     <string name="leave_space">离开空间</string>
     <string name="space_add_child_title">添加聊天室</string>
     <string name="space_explore_activity_title">探索聊天室</string>
@@ -2661,7 +2659,7 @@
     <string name="command_description_leave_room">离开指定 id 的聊天室（如果为空值则为当前所处的聊天室）</string>
     <string name="command_description_join_space">使用指定的 id 加入空间</string>
     <string name="command_description_create_space">创建空间</string>
-    <string name="a11y_public_room">此聊天室为公开聊天室</string>
+    <string name="a11y_public_room">公开聊天室</string>
     <string name="a11y_unchecked">未检查</string>
     <string name="a11y_open_widget">开启挂件</string>
     <string name="a11y_screenshot">屏幕截图</string>
@@ -2674,7 +2672,7 @@
     <string name="call_dial_pad_lookup_error">查找电话号码时发生了错误</string>
     <string name="call_tile_ended">此通话已结束</string>
     <string name="call_tile_other_declined">%1$s 拒绝了此通话</string>
-    <string name="call_tile_you_declined">你拒绝了此通话 %1$s</string>
+    <string name="call_tile_you_declined">你拒绝了此通话 %s</string>
     <string name="call_tile_in_call">你当前正处于此通话中</string>
     <string name="warning_unsaved_change">有未保存的更改。要放弃更改吗？</string>
     <string name="warning_room_not_created_yet">聊天室尚未创建。取消创建聊天室？</string>
@@ -2754,7 +2752,7 @@
     <string name="unnamed_room">未命名的聊天室</string>
     <string name="private_space">私有空间</string>
     <string name="public_space">公开空间</string>
-    <string name="a11y_public_space">此空间为公开空间</string>
+    <string name="a11y_public_space">公开空间</string>
     <string name="call_transfer_unknown_person">陌生人</string>
     <string name="call_transfer_transfer_to_title">转移给 %1$s</string>
     <string name="call_transfer_consulting_with">与 %1$s 商量</string>
@@ -2777,7 +2775,7 @@
     <string name="upgrade_room_no_power_to_manage">您需要权限才能升级聊天室</string>
     <string name="upgrade_room_update_parent_space">自动更新空间父级</string>
     <string name="upgrade_room_auto_invite">自动邀请用户</string>
-    <string name="upgrade_public_room_from_to">你将把此聊天室从 %s 升级到 %s。</string>
+    <string name="upgrade_public_room_from_to">你将把此聊天室从 %1$s 升级到 %2$s。</string>
     <string name="upgrade_room_warning">升级聊天室是一项高级操作，通常建议在由于错误、缺少功能或安全漏洞造成聊天室不稳定时进行此操作。
 \n这通常只会影响此服务器如何处理该聊天室。</string>
     <string name="upgrade_private_room">升级私人聊天室</string>
@@ -2814,13 +2812,13 @@
     <string name="voice_message_tap_to_stop_toast">点按您的录音以停止或收听</string>
     <string name="voice_message_n_seconds_warning_toast">剩余 %1$d秒</string>
     <string name="voice_message_release_to_send_toast">按住录音，松开发送</string>
-    <string name="a11y_delete_recorded_voice_message">删除录制的语音消息</string>
+    <string name="a11y_delete_recorded_voice_message">删除录音</string>
     <string name="a11y_recording_voice_message">录制语音消息</string>
     <string name="a11y_pause_voice_message">暂停语音消息</string>
     <string name="a11y_play_voice_message">播放语音消息</string>
     <string name="a11y_lock_voice_message">语音消息锁</string>
     <string name="voice_message_slide_to_cancel">滑动取消</string>
-    <string name="a11y_start_voice_message">开始语音消息</string>
+    <string name="a11y_start_voice_message">录制语音消息</string>
     <string name="allow_anyone_in_room_to_access">允许 %s 中的任何人查找和访问。 您也可以选择其他空间。</string>
     <string name="upgrade_required">需要升级</string>
     <string name="sent_a_voice_message">语音</string>
@@ -2835,4 +2833,156 @@
     <string name="room_create_member_of_space_name_can_join">%s 空间的成员可找到、预览和加入。</string>
     <string name="room_settings_room_access_private_invite_only_title">私人（仅限邀请）</string>
     <string name="denied_permission_voice_message">要发送语音消息，请授予麦克风权限。</string>
+    <string name="settings_room_upgrades">聊天室升级</string>
+    <string name="settings_messages_by_bot">机器人消息</string>
+    <string name="settings_room_invitations">聊天室邀请</string>
+    <string name="settings_encrypted_group_messages">加密的群组消息</string>
+    <string name="settings_group_messages">群组消息</string>
+    <string name="settings_encrypted_direct_messages">加密的私信</string>
+    <string name="settings_messages_direct_messages">私信</string>
+    <string name="settings_messages_containing_username">我的用户名</string>
+    <string name="settings_messages_containing_display_name">我的显示名称</string>
+    <string name="settings_notification_notify_me_for">通知事项</string>
+    <string name="settings_notification_other">其他</string>
+    <string name="settings_notification_mentions_and_keywords">提及和关键词</string>
+    <string name="settings_notification_default">默认通知</string>
+    <string name="call_tile_video_active">活跃视频通话</string>
+    <string name="call_tile_voice_active">活跃语音通话</string>
+    <string name="link_this_email_with_your_account">在 Element 中直接接收邀请的设置 %s。</string>
+    <string name="link_this_email_settings_link">将此邮箱与您的账户相链接</string>
+    <string name="this_invite_to_this_space_was_sent">加入这个空间的邀请被发送至 %s，此邮箱未与您的账户相关联</string>
+    <string name="this_invite_to_this_room_was_sent">加入这个聊天室的邀请被发送至 %s，此邮箱未与您的账户相关联</string>
+    <string name="to_help_space_members_find_and_join">要帮助空间成员找到并加入一个私人聊天室，只需点击头像进入聊天室设置。</string>
+    <string name="help_space_members">帮助空间成员找到私人聊天室</string>
+    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">这使聊天室很容易在空间中保持私密性，同时让空间中的人们找到并加入它们。空间中的所有新聊天室都有这个选项。</string>
+    <string name="help_people_in_spaces_find_and_join">帮助空间里的人们自己找到和加入私人房间，不需要手动邀请每个人。</string>
+    <string name="new_let_people_in_spaces_find_and_join">新：让人们在空间中找到并加入私人聊天室</string>
+    <string name="call_jitsi_started">群通话已启动</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">你所在的全部聊天室将显示在主页上。</string>
+    <string name="preference_show_all_rooms_in_home">在主页上显示所有聊天室</string>
+    <string name="call_slide_to_end_conference">滑动结束通话</string>
+    <string name="call_tap_to_return">%1$s 轻按返回</string>
+    <string name="call_one_active">活跃通话 (%1$s) ·</string>
+    <plurals name="call_active_status">
+        <item quantity="other">%1$d 个活跃通话·</item>
+    </plurals>
+    <string name="call_tile_connection_failed">连接失败</string>
+    <string name="call_tile_no_answer">无应答</string>
+    <string name="call_tile_video_missed">未接视频通话</string>
+    <string name="call_tile_voice_missed">未接语音通话</string>
+    <string name="call_tile_video_declined">视频通话被拒绝</string>
+    <string name="call_tile_voice_declined">语音通话被拒绝</string>
+    <string name="call_tile_video_call_has_ended">视频通话结束了 • %1$s</string>
+    <string name="call_tile_voice_call_has_ended">语音通话结束了 • %1$s</string>
+    <string name="call_tile_video_incoming">视频来电</string>
+    <string name="call_tile_voice_incoming">语音来电</string>
+    <string name="call_tile_you_declined_this_call">你拒绝了此通话</string>
+    <string name="room_settings_room_notifications_account_settings">账户设置</string>
+    <string name="room_settings_room_notifications_manage_notifications">你可以管理 %1$s 中的通知。</string>
+    <string name="room_settings_room_notifications_encryption_notice">请注意，提及和关键字通知在移动端的加密聊天室中不可用。</string>
+    <string name="room_settings_room_notifications_notify_me">通知事项</string>
+    <string name="settings_mentions_and_keywords_encryption_notice">在移动端的加密房间里，你不会收到提及和关键字的通知。</string>
+    <string name="settings_messages_containing_keywords">关键词</string>
+    <string name="settings_mentions_at_room">\@聊天室</string>
+    <string name="settings_notification_keyword_contains_invalid_character">关键词不能包含 \'%s\'</string>
+    <string name="settings_notification_keyword_contains_dot">关键词不能以 \'.\' 开头</string>
+    <string name="settings_notification_new_keyword">添加新关键词</string>
+    <string name="settings_notification_your_keywords">你的关键词</string>
+    <string name="room_settings_none">无</string>
+    <string name="room_settings_mention_and_keyword_only">仅提及 &amp; 关键词</string>
+    <string name="call_remove_jitsi_widget_progress">正结束通话…</string>
+    <string name="call_ended_invite_timeout_title">无应答</string>
+    <string name="call_ended_user_busy_description">你呼叫的用户正忙。</string>
+    <string name="call_ended_user_busy_title">用户忙</string>
+    <string name="audio_call_with_participant">与 %s 音频通话</string>
+    <string name="video_call_with_participant">和 %s 视频通话</string>
+    <string name="call_ringing">来电响铃中…</string>
+    <string name="spaces">空间</string>
+    <string name="learn_more">了解更多</string>
+    <string name="space_add_space_to_any_space_you_manage">将一个空间添加到您管理的任何空间。</string>
+    <string name="space_add_existing_spaces">添加现有空间</string>
+    <string name="space_add_existing_rooms_only">添加现有聊天室</string>
+    <string name="pick_tings_to_leave">选择要离开的项目</string>
+    <string name="leave_specific_ones">离开特定聊天室和空间…</string>
+    <string name="dont_leave_any">不要离开任何聊天室和空间</string>
+    <string name="you_will_leave_all_in">你将离开 %s 中的所有聊天室和空间。</string>
+    <string name="leave_all_rooms_and_spaces">离开所有聊天室和空间</string>
+    <string name="space_leave_prompt_msg_with_name">你确定要离开 %s 吗？</string>
+    <string name="discovery_section">发现 (%s)</string>
+    <string name="finish_setup">完成设置</string>
+    <string name="discovery_invite">通过电子邮件邀请、寻找联系人和更多…</string>
+    <string name="finish_setting_up_discovery">设置“发现”已毕。</string>
+    <string name="create_space_identity_server_info_none">您目前没有使用身份服务器。为了邀请队友并被他们发现，请在下方配置一个这样的服务器。</string>
+    <string name="invite_by_mxid_or_mail">通过用户名或邮件邀请</string>
+    <string name="create_spaces_invite_public_header_desc">确保只有合适的人能访问 %s 空间。稍后你可以邀请更多的人加入。</string>
+    <string name="create_spaces_invite_public_header">谁是你的队友？</string>
+    <string name="command_description_add_to_space">添加至规定的空间</string>
+    <string name="create_space_in_progress">创建空间中…</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">显示一些有用的信息以帮助调试应用程序</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">在屏幕商显示调试信息</string>
+    <string name="does_not_look_like_valid_email">看起来不像是有效的邮箱地址</string>
+    <string name="open_discovery_settings">打开“发现”设置</string>
+    <string name="user_directory_search_hint_2">按名称、ID或邮箱搜索</string>
+    <string name="create_new_space">创建新空间</string>
+    <string name="room_settings_space_access_public_description">任何人均可找到此空间并加入</string>
+    <string name="room_settings_space_access_title">空间访问</string>
+    <string name="room_settings_access_rules_pref_dialog_title">谁可以访问？</string>
+    <string name="settings_notification_emails_enable_for_email">启用 %s 的电邮通知</string>
+    <string name="settings_notification_emails_no_emails">要接收通知邮件，请将一个电子邮箱关联到你的 Matrix 账户</string>
+    <string name="settings_notification_emails_category">电子邮件通知</string>
+    <string name="room_permissions_upgrade_the_space">升级空间</string>
+    <string name="room_permissions_change_space_name">更改空间名称</string>
+    <string name="room_permissions_enable_space_encryption">启用空间加密</string>
+    <string name="room_permissions_change_main_address_for_the_space">更改空间主地址</string>
+    <string name="room_permissions_change_space_avatar">更改空间头像</string>
+    <string name="space_permissions_notice_read_only">您没有权限更新更改该空间的各个部分所需的角色</string>
+    <string name="space_permissions_notice">选择更改该空间的各个部分所需的角色</string>
+    <string name="space_settings_permissions_subtitle">查看和更新更改空间的各个部分所需的角色。</string>
+    <string name="space_settings_permissions_title">空间权限</string>
+    <string name="space_participants_unban_prompt_msg">解除禁令将允许被封禁的用户再次加入空间。</string>
+    <string name="space_participants_ban_prompt_msg">封禁用户将把他们踢出这个空间，并阻止他们再次加入。</string>
+    <string name="space_participants_kick_prompt_msg">把用户踢出也会从这个空间删除他们。
+\n
+\n为了防止他们再次加入，你应该封禁他们。</string>
+    <string name="a11y_stop_voice_message">停止录制</string>
+    <string name="command_description_lenny">预置 ( ͡° ͜ʖ ͡°) 到纯文本消息</string>
+    <string name="identity_server_consent_dialog_neutral_policy">政策</string>
+    <string name="settings_discovery_no_policy_provided">身份服务器未提供政策</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">隐藏身份服务器政策</string>
+    <string name="settings_discovery_show_identity_server_policy_title">显示身份服务器策略</string>
+    <string name="command_description_whois">显示用户信息</string>
+    <string name="command_description_avatar_for_room">仅更改您在当前聊天室的头像</string>
+    <string name="command_description_room_avatar">更改当前聊天室的头像</string>
+    <string name="command_description_nick_for_room">仅在当前聊天室更改您的显示昵称</string>
+    <string name="command_description_room_name">设置聊天室名称</string>
+    <string name="command_description_unignore_user">停止忽略用户，继续显示他们的消息</string>
+    <string name="command_description_ignore_user">忽略用户，隐藏他们的消息</string>
+    <string name="a11y_presence_unavailable">不可用</string>
+    <string name="a11y_presence_offline">离线</string>
+    <string name="a11y_presence_online">在线</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">选择主服务器</string>
+    <string name="login_error_homeserver_from_url_not_found">无法访问 URL %s 上的主服务器。请检查您的链接或手动选择一个主服务器。</string>
+    <string name="notification_listening_for_notifications">侦听通知</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="other">需要至少 %1$s 个选项</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">问题不能为空</string>
+    <string name="create_poll_button">创建投票</string>
+    <string name="create_poll_add_option">添加选项</string>
+    <string name="create_poll_options_hint">选项 %1$d</string>
+    <string name="create_poll_options_title">创建选项</string>
+    <string name="create_poll_question_hint">问题或主题</string>
+    <string name="create_poll_question_title">投票问题或主题</string>
+    <string name="create_poll_title">创建投票</string>
+    <string name="attachment_type_poll">投票</string>
+    <string name="identity_server_consent_dialog_content_2">要发现现有联系人，您需要将联系信息发送到您的身份服务器。
+\n
+\n我们在发送之前对您的数据进行哈希处理以保护隐私。 您同意发送此信息吗？</string>
+    <string name="identity_server_consent_dialog_title_2">向 %s 发送电子邮件和电话号码</string>
+    <string name="settings_discovery_consent_notice_off_2">您的联系人是私密的。 要从您的联系人中发现用户，我们需要您的许可才能将联系信息发送到您的身份服务器。</string>
+    <string name="shortcut_disabled_reason_sign_out">已退出此会话！</string>
+    <string name="shortcut_disabled_reason_room_left">已离开此聊天室！</string>
+    <string name="identity_server_consent_dialog_content_question">你同意发送此信息吗？</string>
+    <string name="identity_server_consent_dialog_content_3">要发现现有的联系人，您需要将联系人信息(电子邮件和电话号码)发送到您的身份服务器。出乎隐私考量，我们会在发送前对您的数据进行散列处理。</string>
+    <string name="action_not_now">不是现在</string>
 </resources>

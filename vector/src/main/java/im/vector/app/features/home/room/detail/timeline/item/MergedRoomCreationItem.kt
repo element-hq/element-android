@@ -143,7 +143,8 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
         val topic = roomSummary?.topic
         if (topic.isNullOrBlank()) {
             // do not show hint for DMs or group DMs
-            if (!isDirect) {
+            val canSetTopic = attributes.canChangeTopic && !isDirect
+            if (canSetTopic) {
                 val addTopicLink = holder.view.resources.getString(R.string.add_a_topic_link_text)
                 val styledText = SpannableString(holder.view.resources.getString(R.string.room_created_summary_no_topic_creation_text, addTopicLink))
                 holder.roomTopicText.setTextOrHide(styledText.tappableMatchingText(addTopicLink, object : ClickableSpan() {
@@ -165,9 +166,9 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
         holder.roomTopicText.movementMethod = movementMethod
 
         val roomItem = roomSummary?.toMatrixItem()
-        val shouldSetAvatar = attributes.canChangeAvatar
-                && (roomSummary?.isDirect == false || (isDirect && membersCount >= 2))
-                && roomItem?.avatarUrl.isNullOrBlank()
+        val shouldSetAvatar = attributes.canChangeAvatar &&
+                (roomSummary?.isDirect == false || (isDirect && membersCount >= 2)) &&
+                roomItem?.avatarUrl.isNullOrBlank()
 
         holder.roomAvatarImageView.isVisible = roomItem != null
         if (roomItem != null) {
@@ -189,8 +190,9 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             }
         }
 
-        holder.addPeopleButton.isVisible = !isDirect
-        if (!isDirect) {
+        val canInvite = attributes.canInvite && !isDirect
+        holder.addPeopleButton.isVisible = canInvite
+        if (canInvite) {
             holder.addPeopleButton.onClick {
                 attributes.callback?.onTimelineItemAction(RoomDetailAction.QuickActionInvitePeople)
             }
@@ -227,6 +229,7 @@ abstract class MergedRoomCreationItem : BasedMergedItem<MergedRoomCreationItem.H
             val hasEncryptionEvent: Boolean,
             val isEncryptionAlgorithmSecure: Boolean,
             val roomSummary: RoomSummary?,
+            val canInvite: Boolean = false,
             val canChangeAvatar: Boolean = false,
             val canChangeName: Boolean = false,
             val canChangeTopic: Boolean = false

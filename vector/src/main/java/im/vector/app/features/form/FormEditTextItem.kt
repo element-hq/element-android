@@ -17,6 +17,8 @@
 package im.vector.app.features.form
 
 import android.text.Editable
+import android.text.InputFilter
+import android.text.InputType
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
@@ -77,6 +79,9 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
     @EpoxyAttribute
     var suffixText: String? = null
 
+    @EpoxyAttribute
+    var maxLength: Int? = null
+
     private val onTextChangeListener = object : SimpleTextWatcher() {
         override fun afterTextChanged(s: Editable) {
             onTextChange?.invoke(s.toString())
@@ -102,13 +107,53 @@ abstract class FormEditTextItem : VectorEpoxyModel<FormEditTextItem.Holder>() {
         }
 
         holder.textInputEditText.isEnabled = enabled
-        inputType?.let { holder.textInputEditText.inputType = it }
-        holder.textInputEditText.isSingleLine = singleLine
-        holder.textInputEditText.imeOptions = imeOptions ?: EditorInfo.IME_ACTION_NONE
+
+        configureInputType(holder)
+        configureImeOptions(holder)
 
         holder.textInputEditText.addTextChangedListenerOnce(onTextChangeListener)
         holder.textInputEditText.setOnEditorActionListener(editorActionListener)
         holder.textInputEditText.onFocusChangeListener = onFocusChangedListener
+
+        if (maxLength != null) {
+            holder.textInputEditText.filters = arrayOf(InputFilter.LengthFilter(maxLength!!))
+            holder.textInputLayout.isCounterEnabled = true
+            holder.textInputLayout.counterMaxLength = maxLength!!
+        } else {
+            holder.textInputEditText.filters = arrayOf()
+            holder.textInputLayout.isCounterEnabled = false
+        }
+    }
+
+    /**
+     * Configure the inputType of the EditText, input type should be always defined
+     * especially when we want to use a single line, we set the InputType to InputType.TYPE_CLASS_TEXT
+     * while the default for the EditText is InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+     */
+    private fun configureInputType(holder: Holder) {
+        val newInputType =
+                inputType ?: when (singleLine) {
+                    true  -> InputType.TYPE_CLASS_TEXT
+                    false -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+                }
+
+        // This is a must in order to avoid extreme lag in some devices, on fast typing
+        if (holder.textInputEditText.inputType != newInputType) {
+            holder.textInputEditText.inputType = newInputType
+        }
+    }
+
+    /**
+     * Configure the imeOptions of the EditText, when imeOptions are not defined by the developer
+     * EditorInfo.IME_ACTION_NEXT will be used for singleLine EditTexts to disable "new line"
+     * while EditorInfo.IME_ACTION_NONE will be used for all the other cases
+     */
+    private fun configureImeOptions(holder: Holder) {
+        holder.textInputEditText.imeOptions =
+                imeOptions ?: when (singleLine) {
+                    true  -> EditorInfo.IME_ACTION_NEXT
+                    false -> EditorInfo.IME_ACTION_NONE
+                }
     }
 
     override fun shouldSaveViewState(): Boolean {

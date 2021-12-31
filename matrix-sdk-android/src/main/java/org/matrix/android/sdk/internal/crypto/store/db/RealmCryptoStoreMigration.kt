@@ -55,7 +55,7 @@ internal object RealmCryptoStoreMigration : RealmMigration {
     // 0, 1, 2: legacy Riot-Android
     // 3: migrate to RiotX schema
     // 4, 5, 6, 7, 8, 9: migrations from RiotX (which was previously 1, 2, 3, 4, 5, 6)
-    const val CRYPTO_STORE_SCHEMA_VERSION = 13L
+    const val CRYPTO_STORE_SCHEMA_VERSION = 14L
 
     private fun RealmObjectSchema.addFieldIfNotExists(fieldName: String, fieldType: Class<*>): RealmObjectSchema {
         if (!hasField(fieldName)) {
@@ -94,6 +94,7 @@ internal object RealmCryptoStoreMigration : RealmMigration {
         if (oldVersion <= 10) migrateTo11(realm)
         if (oldVersion <= 11) migrateTo12(realm)
         if (oldVersion <= 12) migrateTo13(realm)
+        if (oldVersion <= 13) migrateTo14(realm)
     }
 
     private fun migrateTo1Legacy(realm: DynamicRealm) {
@@ -553,5 +554,22 @@ internal object RealmCryptoStoreMigration : RealmMigration {
         if (mainCounter != deviceInfoCounter + keyInfoCounter + deleteCounter) {
             Timber.e("TrustLevelEntity cleanup: Something is not correct...")
         }
+    }
+
+    // Version 14L Update the way we remember key sharing
+    private fun migrateTo14(realm: DynamicRealm) {
+        Timber.d("Step 13 -> 14")
+        realm.schema.get("SharedSessionEntity")
+                ?.addField(SharedSessionEntityFields.DEVICE_IDENTITY_KEY, String::class.java)
+                ?.addIndex(SharedSessionEntityFields.DEVICE_IDENTITY_KEY)
+                ?.transform {
+                    val sharedUserId = it.getString(SharedSessionEntityFields.USER_ID)
+                    val sharedDeviceId = it.getString(SharedSessionEntityFields.DEVICE_ID)
+                    val knownDevice = realm.where("DeviceInfoEntity")
+                            .equalTo(DeviceInfoEntityFields.USER_ID, sharedUserId)
+                            .equalTo(DeviceInfoEntityFields.DEVICE_ID, sharedDeviceId)
+                            .findFirst()
+                    it.setString(SharedSessionEntityFields.DEVICE_IDENTITY_KEY, knownDevice?.getString(DeviceInfoEntityFields.IDENTITY_KEY))
+                }
     }
 }

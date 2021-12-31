@@ -36,8 +36,8 @@ import im.vector.app.databinding.FragmentPinBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.settings.VectorPreferences
-import kotlinx.parcelize.Parcelize
 import kotlinx.coroutines.launch
+import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
 @Parcelize

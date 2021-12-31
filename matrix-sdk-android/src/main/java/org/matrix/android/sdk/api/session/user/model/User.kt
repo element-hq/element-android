@@ -23,13 +23,8 @@ package org.matrix.android.sdk.api.session.user.model
 data class User(
         val userId: String,
         /**
-         * For usage in UI, consider using [getBestName]
+         * For usage in UI, consider converting to MatrixItem and call getBestName()
          */
         val displayName: String? = null,
         val avatarUrl: String? = null
-) {
-    /**
-     * Return the display name or the user id
-     */
-    fun getBestName() = displayName?.takeIf { it.isNotEmpty() } ?: userId
-}
+)

@@ -17,6 +17,8 @@
 package org.matrix.android.sdk.api
 
 import org.matrix.android.sdk.BuildConfig
+import org.matrix.android.sdk.internal.util.removeInvalidRoomNameChars
+import org.matrix.android.sdk.internal.util.replaceSpaceChars
 import timber.log.Timber
 
 /**
@@ -128,10 +130,10 @@ object MatrixPatterns {
      * @return true if the string is a valid event id.
      */
     fun isEventId(str: String?): Boolean {
-        return str != null
-                && (str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER
-                || str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V3
-                || str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V4)
+        return str != null &&
+                (str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER ||
+                        str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V3 ||
+                        str matches PATTERN_CONTAIN_MATRIX_EVENT_IDENTIFIER_V4)
     }
 
     /**
@@ -162,10 +164,11 @@ object MatrixPatterns {
         return order != null && order.length < 50 && order matches ORDER_STRING_REGEX
     }
 
-    fun candidateAliasFromRoomName(name: String): String {
-        return Regex("\\s").replace(name.lowercase(), "_").let {
-            "[^a-z0-9._%#@=+-]".toRegex().replace(it, "")
-        }
+    fun candidateAliasFromRoomName(roomName: String, domain: String): String {
+        return roomName.lowercase()
+                .replaceSpaceChars(replacement = "_")
+                .removeInvalidRoomNameChars()
+                .take(MatrixConstants.maxAliasLocalPartLength(domain))
     }
 
     /**

@@ -37,3 +37,7 @@ internal annotation class CryptoDatabase
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
 internal annotation class IdentityDatabase
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class ContentScannerDatabase

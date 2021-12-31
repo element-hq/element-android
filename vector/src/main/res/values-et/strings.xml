@@ -61,21 +61,22 @@
         <item quantity="other">%1$s ja %2$d muud</item>
     </plurals>
     <string name="room_displayname_empty_room">Tühi jututuba</string>
-    <string name="initial_sync_start_importing_account">Alglaadimine:
+    <string name="initial_sync_start_importing_account">Esmane laadimine:
 \nImpordin kontot…</string>
-    <string name="initial_sync_start_importing_account_crypto">Alglaadimine:
+    <string name="initial_sync_start_importing_account_crypto">Esmane laadimine:
 \nImpordin krüptoseadistusi</string>
-    <string name="initial_sync_start_importing_account_rooms">Alglaadimine:
+    <string name="initial_sync_start_importing_account_rooms">Esmane laadimine:
 \nImpordin jututubasid</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">Alglaadimine:
-\nImpordin liitutud jututubasid</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Alglaadimine:
+    <string name="initial_sync_start_importing_account_joined_rooms">Esmane laadimine:
+\nLaadin sinu vestluste ja jtututubade andmeid
+\nKui sa oled liitunud paljude jututubadega, siis kulub natuke aega</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Esmane laadimine:
 \nImpordin kutsutud jututubasid</string>
-    <string name="initial_sync_start_importing_account_left_rooms">Alglaadimine:
+    <string name="initial_sync_start_importing_account_left_rooms">Esmane laadimine:
 \nImpordin lahkutud jututubasid</string>
-    <string name="initial_sync_start_importing_account_groups">Alglaadimine:
+    <string name="initial_sync_start_importing_account_groups">Esmane laadimine:
 \nImpordin kogukondi</string>
-    <string name="initial_sync_start_importing_account_data">Alglaadimine:
+    <string name="initial_sync_start_importing_account_data">Esmane laadimine:
 \nImpordin kontoandmeid</string>
     <string name="event_status_sending_message">Saadan sõnumit…</string>
     <string name="clear_timeline_send_queue">Tühjenda saatmisjärjekord</string>
@@ -267,7 +268,7 @@
     <string name="black_theme">Must teema</string>
     <string name="notification_sync_init">Käivitan teenuse</string>
     <string name="notification_sync_in_progress">Sünkroniseerin…</string>
-    <string name="notification_listening_for_events">Kuulan, kas leidub sündmusi</string>
+    <string name="notification_listening_for_events">Vaatan serverist uut teavet</string>
     <string name="notification_noisy_notifications">Lärmakad teavitused</string>
     <string name="notification_silent_notifications">Vaiksed teavitused</string>
     <string name="title_activity_home">Sõnumid</string>
@@ -1556,7 +1557,7 @@
     <string name="command_description_op_user">Määra kasutaja õigused</string>
     <string name="command_description_deop_user">Eemalda antud tunnusega kasutajalt haldusõigused selles jututoas</string>
     <string name="command_description_invite_user">Kutsub nimetatud kasutajatunnusega kasutaja sellesse jututuppa</string>
-    <string name="command_description_join_room">Liitu antud aadressiga jututoaga</string>
+    <string name="command_description_join_room">Liitu sellise aadressiga jututoaga</string>
     <string name="command_description_part_room">Lahku jututoast</string>
     <string name="command_description_topic">Määra jututoa teema</string>
     <string name="command_description_kick_user">Müksa selle tunnusega kasutaja jututoast välja</string>
@@ -2497,7 +2498,6 @@
     <string name="direct_room_user_list_recent_title">Hiljutised</string>
     <string name="qr_code">QR-kood</string>
     <string name="add_by_qr_code">Lisa QR-koodi abil</string>
-    <string name="user_directory_search_hint">Otsi nime või Matrix\'i tunnuse alusel</string>
     <string name="permissions_denied_add_contact">Anna õigused oma kontakte lugeda.</string>
     <string name="permissions_denied_qr_code">QR-koodi lugemiseks pead selleks kaamerale õigused andma.</string>
     <string name="start_chatting">Alusta vestlust</string>
@@ -2597,7 +2597,7 @@
     <string name="call_tile_call_back">Helista tagasi</string>
     <string name="call_tile_ended">See kõne on lõppenud</string>
     <string name="call_tile_other_declined">%1$s keeldus kõnest</string>
-    <string name="call_tile_you_declined">Sa keeldusid %1$s kõnest</string>
+    <string name="call_tile_you_declined">Sa keeldusid %s kõnest</string>
     <string name="call_tile_in_call">Sul on parasjagu see kõne pooleli</string>
     <string name="call_tile_other_started_call">%1$s alustas kõnet</string>
     <string name="call_tile_you_started_call">Sa alustasid kõnet</string>
@@ -2635,7 +2635,7 @@
     <string name="a11y_trust_level_default">Vaikmisi usaldusmäär</string>
     <string name="a11y_selected">Valitud</string>
     <string name="a11y_video">Video</string>
-    <string name="a11y_unsent_draft">Selles jututoas on ärasaatmata sõnumimustand</string>
+    <string name="a11y_unsent_draft">ärasaatmata sõnumimustand</string>
     <string name="a11y_error_some_message_not_sent">Mõned sõnumid on saatmata</string>
     <string name="a11y_delete_avatar">Kustuta tunnuspilt</string>
     <string name="a11y_change_avatar">Muuda tunnuspilti</string>
@@ -2679,7 +2679,6 @@
     <string name="spaces_beta_welcome_to_spaces_desc">Kogukonnakeskused on uus võimalus siduda jututubasid ja inimesi.</string>
     <string name="spaces_beta_welcome_to_spaces">Tere tulemast kasutama kogukonnakeskuseid!</string>
     <string name="space_add_existing_rooms">Lisa olemasolevaid jututubasid ja kogukonnakeskuseid</string>
-    <string name="space_leave_prompt_msg">Kas oled kindel, et soovid lahkuda kogukonnakeskusest\?</string>
     <string name="leave_space">Lahku kogukonnakeskusest</string>
     <string name="space_add_child_title">Lisa jututuba</string>
     <string name="space_explore_activity_title">Uuri jututubasid</string>
@@ -2760,7 +2759,7 @@
     <string name="space_settings_manage_rooms">Halda jututubasid</string>
     <string name="looking_for_someone_not_in_space">Kas sa otsid kedagi, kes ei leidu %s kogukonnas\?</string>
     <string name="user_invites_you">%s kutsus sind</string>
-    <string name="a11y_public_room">See jututuba on avalik</string>
+    <string name="a11y_public_room">Avalik jututuba</string>
     <string name="send_images_and_video_with_original_size">Saada meedia algses suuruses</string>
     <plurals name="send_videos_with_original_size">
         <item quantity="one">Saada videofail algses suuruses</item>
@@ -2779,10 +2778,9 @@
     <string name="spaces_no_server_support_title">Tundub, et sinu koduserver veel ei võimalda kogukonnakeskuste kasutamist</string>
     <string name="spaces_feeling_experimental_subspace">Kas sa tahad katsetada\?
 \nSa võid kogukonnakeskusele lisada ka teisi kogukonnakeskuseid.</string>
-    <string name="labs_space_show_orphan_in_home">Katseline kogukonnakeskus, mis näitab avalehel vaid hüljatud jututube</string>
     <string name="space_add_rooms">Lisa jututube</string>
-    <string name="space_leave_prompt_msg_as_admin">Sa oled selle kogukonnakeskuse haldaja. Enne oma lahkumist palun lisa siia veel vähemalt üks uus haldaja.</string>
-    <string name="space_leave_prompt_msg_private">See ei ole avalik kogukonnakeskus. Ilma kutseta sa ei saa uuesti liituda.</string>
+    <string name="space_leave_prompt_msg_as_admin">Sa oled selle kogukonna ainus haldaja. Kui lahkud, siis ei leidu enam kedagi, kellel oleks seal haldusõigusi.</string>
+    <string name="space_leave_prompt_msg_private">Ilma uue kutseta sa ei saa uuesti liituda.</string>
     <string name="space_leave_prompt_msg_only_you">Sa oled siin viimane osaleja. Kui sa nüüd lahkud, siis mitte keegi, kaasa arvatud sa ise, ei saa hiljem enam liituda.</string>
     <string name="invite_to_space">Kutse kogukonnakeskusesse %s</string>
     <string name="a11y_beta">Tegemist on beeta-taseme funktsionaalsusega</string>
@@ -2797,7 +2795,7 @@
     <string name="unnamed_room">Nimetu jututuba</string>
     <string name="private_space">Privaatne kogukonnakeskus</string>
     <string name="public_space">Avalik kogukonnakeskus</string>
-    <string name="a11y_public_space">See kogukonnakeskus on avalik</string>
+    <string name="a11y_public_space">Avalik kogukonnakeskus</string>
     <string name="call_transfer_unknown_person">Tundmatu isik</string>
     <string name="call_transfer_transfer_to_title">Suuna kasutajale %1$s</string>
     <string name="call_transfer_consulting_with">Pean nõu kasutajaga %1$s</string>
@@ -2822,7 +2820,7 @@
     <string name="upgrade_room_no_power_to_manage">Jututoa versiooni uuendamiseks on sul vaja õigusi</string>
     <string name="upgrade_room_update_parent_space">Uuenda automaatselt ka kogukonnakeskust, kus jututuba osaleb</string>
     <string name="upgrade_room_auto_invite">Kutsu automaatselt kasutajaid</string>
-    <string name="upgrade_public_room_from_to">Sa oled uuendamas jututoa versiooni: %s -&gt; %s.</string>
+    <string name="upgrade_public_room_from_to">Sa oled uuendamas jututoa versiooni: %1$s -&gt; %2$s.</string>
     <string name="upgrade_room_warning">Jututoa versiooni uuendamine on erandlik tegevus ning soovitame seda vaid siis kui ta on vigade tõttu raskestikasutatav, tal puuduvad uued funktsionaalsused või temas leidub turvavigu.
 \nTavaliselt versiooniuuendus mõjutab vaid seda viisi kuidas andmeid töödeldakse serveris.</string>
     <string name="upgrade_private_room">Uuenda omavaheline jututuba</string>
@@ -2860,4 +2858,178 @@
     <string name="allow_space_member_to_find_and_access">Luba kogukonna liikmetel leida ja vaadata.</string>
     <string name="room_settings_room_access_private_invite_only_title">Privaatne (vaid kutse alusel)</string>
     <string name="denied_permission_voice_message">Häälsõnumite saatmiseks palun anna rakendusele õigus mikrofoni kasutada.</string>
+    <string name="a11y_start_voice_message">Salvesta häälsõnum</string>
+    <string name="voice_message_slide_to_cancel">Tühistamiseks viipa</string>
+    <string name="a11y_lock_voice_message">Häälsõnumi lukustus</string>
+    <string name="a11y_pause_voice_message">Peata häälsõnumi esitus</string>
+    <string name="a11y_play_voice_message">Esita häälsõnumit</string>
+    <string name="a11y_recording_voice_message">Salvestan häälsõnumit</string>
+    <string name="a11y_delete_recorded_voice_message">Kustuta salvestus</string>
+    <string name="voice_message_release_to_send_toast">Salvestamiseks vajuta nuppu, saatmiseks lase nupp lahti</string>
+    <string name="voice_message_n_seconds_warning_toast">Jäänud on %1$d s</string>
+    <string name="voice_message_tap_to_stop_toast">Salvestuse peatamiseks ja taasesituseks vajuta salvestuse vaadet</string>
+    <string name="labs_use_voice_message">Võta häälsõnumid kasutusele</string>
+    <string name="error_voice_message_unable_to_play">Selle häälsõnumi esitamine ei õnnestu</string>
+    <string name="error_voice_message_unable_to_record">Häälsõnumi salvestamine ei õnnestu</string>
+    <string name="error_voice_message_cannot_reply_or_edit">Kui häälsõnum on esitamisel, siis sa ei saa talle vastata ega teda muuta</string>
+    <string name="voice_message_reply_content">Häälsõnum (%1$s)</string>
+    <string name="upgrade_room_for_restricted_note">Palun arvesta, et uuendusega tehakse jututoast uus variant. Kõik senised sõnumid jäävad sellesse jututuppa arhiveeritud olekus.</string>
+    <string name="sent_a_voice_message">Häälkõne</string>
+    <string name="settings_room_upgrades">Jututubade versiooniuuendused</string>
+    <string name="settings_messages_by_bot">Robotite saadetud sõnumid</string>
+    <string name="settings_room_invitations">Kutsed jututubadesse</string>
+    <string name="settings_encrypted_group_messages">Krüptitud rühmavestlused</string>
+    <string name="settings_group_messages">Rühmavestlused</string>
+    <string name="settings_encrypted_direct_messages">Krüptitud otsevestlused</string>
+    <string name="settings_messages_direct_messages">Otsevestlused</string>
+    <string name="settings_messages_containing_username">Minu kasutajatunnus</string>
+    <string name="settings_messages_containing_display_name">Minu kuvatav nimi</string>
+    <string name="settings_notification_notify_me_for">Teavita mind</string>
+    <string name="settings_notification_other">Muud</string>
+    <string name="settings_notification_mentions_and_keywords">Mainimised ja märksõnad</string>
+    <string name="settings_notification_default">Vaikimisi teavitused</string>
+    <string name="allow_anyone_in_room_to_access">Kõik %s kogukonna liikmed saavad antud jututuba leida ja sellega liituda. Sa võid lisada ka teisi kogukondi.</string>
+    <string name="upgrade_room_for_restricted_no_param">Kõik hõlmava kogukonna liikmed saavad antud jututuba leida ja sellega liituda - sa ei pea kedagi ükshaaval kutsuma. Neid jututoa seadistusi saad igal hetkel muuta.</string>
+    <string name="upgrade_room_for_restricted">Kõik %s jututoa liikmed saavad antud jututuba leida ja sellega liituda - sa ei pea kedagi ükshaaval kutsuma. Neid jututoa seadistusi saad igal hetkel muuta.</string>
+    <string name="call_tap_to_return">%1$s - tagasipöördumiseks klõpsi</string>
+    <string name="link_this_email_with_your_account">%s ja saa kutsed otse Element\'i.</string>
+    <string name="link_this_email_settings_link">Seo see e-posti aadress oma kasutajakontoga</string>
+    <string name="this_invite_to_this_space_was_sent">See kutse siia kogukonnakeskusesse saadeti aadressile %s, mis ei ole seotud sinu kontoga</string>
+    <string name="this_invite_to_this_room_was_sent">See kutse siia jututuppa saadeti aadressile %s, mis ei ole seotud sinu kontoga</string>
+    <string name="to_help_space_members_find_and_join">Selleks, et kogukonnakeskuse liikmed saaks privaatseid jututube leida ning nendega liituda ava tunnuspildile klõpsides jututoa seadistused.</string>
+    <string name="help_space_members">Aita kogukonnakeskuse liitmetel leida privaatseid jututube</string>
+    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">See muudab lihtsaks, et jututoad jääksid kogukonnakeskuse piires privaatseks, kuid lasevad kogukonnakeskuses viibivatel inimestel need üles leida ja nendega liituda. Kõik kogukonnakeskuse uued jututoad on selle võimalusega.</string>
+    <string name="help_people_in_spaces_find_and_join">Aita kogukonnakeskuse liikmetel endil leida privaatseid jututube ning nendega liituda nii et sa ei pea kõigile eraldi kutset saatma.</string>
+    <string name="new_let_people_in_spaces_find_and_join">Uus funktsionaalsus: Võimalda kogukonnakeskuse liikmetel leida privaatseid jututube ning nendega liituda</string>
+    <string name="call_jitsi_started">Rühmakõne algas</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">Kõik sinu jututoad on nähtavad avalehel.</string>
+    <string name="preference_show_all_rooms_in_home">Näita kõiki jututubasid avalehel</string>
+    <string name="call_slide_to_end_conference">Kõne lõpetamiseks viipa</string>
+    <string name="call_one_active">Kõne on pooleli (%1$s) ·</string>
+    <plurals name="call_active_status">
+        <item quantity="one">Kõne on pooleli ·</item>
+        <item quantity="other">%1$d kõnet on pooleli ·</item>
+    </plurals>
+    <string name="call_tile_connection_failed">Ühendus ebaõnnestus</string>
+    <string name="call_tile_no_answer">Keegi ei vasta kõnele</string>
+    <string name="call_tile_video_missed">Vastamata videokõne</string>
+    <string name="call_tile_voice_missed">Vastamata kõne</string>
+    <string name="call_tile_video_declined">Loobusid videokõnest</string>
+    <string name="call_tile_voice_declined">Loobusid kõnest</string>
+    <string name="call_tile_video_call_has_ended">Videokõne lõppes • %1$s</string>
+    <string name="call_tile_voice_call_has_ended">Kõne lõppes • %1$s</string>
+    <string name="call_tile_video_active">Pooleliolev videokõne</string>
+    <string name="call_tile_voice_active">Pooleliolev kõne</string>
+    <string name="call_tile_video_incoming">Saabuv videokõne</string>
+    <string name="call_tile_voice_incoming">Saabuv häälkõne</string>
+    <string name="call_tile_you_declined_this_call">Sa keeldusid sellest kõnest</string>
+    <string name="room_settings_room_notifications_account_settings">Kasutajakonto seadistused</string>
+    <string name="room_settings_room_notifications_manage_notifications">Sa võid hallata teavitusi %1$s jututoas.</string>
+    <string name="room_settings_room_notifications_encryption_notice">Teavitused mainimiste ja märksõnade esinemise puhul pole mobiilirakenduses krüptitud jututoas saadaval.</string>
+    <string name="call_remove_jitsi_widget_progress">Kõne lõpp…</string>
+    <string name="call_ended_invite_timeout_title">Keegi ei vasta kõnele</string>
+    <string name="audio_call_with_participant">Häälkõne kasutajaga %s</string>
+    <string name="video_call_with_participant">Videokõne kasutajaga %s</string>
+    <string name="call_ringing">Sulle on kõne…</string>
+    <string name="room_settings_room_notifications_notify_me">Teavita mind</string>
+    <string name="settings_mentions_and_keywords_encryption_notice">Mobiilseadmes ei toimi krüptitud jututubades mainimiste ja märksõnade alusel tehtavad teavitused.</string>
+    <string name="settings_messages_containing_keywords">Märksõnad</string>
+    <string name="settings_mentions_at_room">\@jututuba</string>
+    <string name="settings_notification_keyword_contains_invalid_character">„%s“ ei tohi sisalduda märksõnas</string>
+    <string name="settings_notification_keyword_contains_dot">Märksõna alguses ei saa olla punkt „.“</string>
+    <string name="settings_notification_new_keyword">Lisa uus märksõna</string>
+    <string name="settings_notification_your_keywords">Sinu märksõnad</string>
+    <string name="room_settings_none">Ei midagi</string>
+    <string name="room_settings_mention_and_keyword_only">Vaid mainimised ja märksõnad</string>
+    <string name="call_ended_user_busy_description">Kasutaja, kellele sa helistasid, on hõivatud.</string>
+    <string name="call_ended_user_busy_title">Kasutaja on hõivatud</string>
+    <string name="spaces">Kogukonnakeskused</string>
+    <string name="learn_more">Lisateave</string>
+    <string name="space_add_space_to_any_space_you_manage">Lisa kogukond ükspuha millisesse kogukonda, mida sa juba haldad.</string>
+    <string name="space_add_existing_spaces">Lisa olemasolevaid kogukondi</string>
+    <string name="space_add_existing_rooms_only">Lisa olemasolevaid jututubasid</string>
+    <string name="pick_tings_to_leave">Vali, kust soovid lahkuda</string>
+    <string name="leave_specific_ones">Lahku neist jututubadest ja kogukondadest…</string>
+    <string name="dont_leave_any">Ära lahku ainsamastki jututoast ega kogukonnast</string>
+    <string name="you_will_leave_all_in">Sa lahkud kõikidest %s jututubadest ja kogukondadest.</string>
+    <string name="leave_all_rooms_and_spaces">Lahku kõikidest jututubadest ja kogukondadest</string>
+    <string name="space_leave_prompt_msg_with_name">Kas oled kindel, et soovid lahkuda %s kogukonnast\?</string>
+    <string name="discovery_section">Isikutuvastuse server (%s)</string>
+    <string name="finish_setup">Lõpeta seadistamine</string>
+    <string name="discovery_invite">Kutsu e-posti aadressi alusel, leia tuttavaid, jne…</string>
+    <string name="finish_setting_up_discovery">Lõpeta leitavuse seadistamine.</string>
+    <string name="create_space_identity_server_info_none">Hetkel sa ei kasuta isikutuvastusserverit. Kaaslastele kutse saatmiseks ning end teistele leitavaks tegemiseks palun seadista ta alljärgnevalt.</string>
+    <string name="invite_by_mxid_or_mail">Kutsu kasutajanime või e-posti aadressi alusel</string>
+    <string name="create_spaces_invite_public_header_desc">Kontrolli, et vajalikel inimestel oleks ligipääs %s kogukonda. Teistele võid kutse saata ka hiljem.</string>
+    <string name="create_spaces_invite_public_header">Kes on su kaasteelised\?</string>
+    <string name="command_description_add_to_space">Lisa näidatud kogukonnakeskusesse</string>
+    <string name="create_space_in_progress">Loon kogukonnakeskust…</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">Näita sellist teavet, millest võib kasu olla rakenduse silumisel ja veaotsingul</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">Näita ekraanil silumisteateid</string>
+    <string name="does_not_look_like_valid_email">See ei tundu olema e-posti aadressi moodi</string>
+    <string name="open_discovery_settings">Ava leitavuse seadistused</string>
+    <string name="user_directory_search_hint_2">Otsi nime, Matrixi kasutajatunnuse või e-posti aadressi alusel</string>
+    <string name="create_new_space">Loo kogukonnakeskus</string>
+    <string name="room_settings_space_access_public_description">Kõik võivad kogukonda leida ja sellega liituda</string>
+    <string name="room_settings_space_access_title">Ligipääs siia kogukonda</string>
+    <string name="room_settings_access_rules_pref_dialog_title">Kes pääsevad ligi siia jututuppa\?</string>
+    <string name="settings_notification_emails_enable_for_email">Saada teavitusi %s e-posti aadressile</string>
+    <string name="settings_notification_emails_no_emails">Kui soovi e-posti teel saada teavitusi, siis palun seosta oma e-posti aadress oma Matrix\'i kasutajakontoga</string>
+    <string name="settings_notification_emails_category">E-posti teel saadetavad teavitused</string>
+    <string name="room_permissions_upgrade_the_space">Uuenda kogukonda</string>
+    <string name="room_permissions_change_space_name">Muuda kogukonna nime</string>
+    <string name="room_permissions_enable_space_encryption">Võta kogukonnas kasutusele krüptimine</string>
+    <string name="room_permissions_change_main_address_for_the_space">Muuda kogukonna põhiaadressi</string>
+    <string name="room_permissions_change_space_avatar">Muuda kogukonna tunnuspilti</string>
+    <string name="space_permissions_notice_read_only">Sul pole õigust uuenda rolle, mis on vajalikud kogukonna eri osade muutmiseks</string>
+    <string name="space_permissions_notice">Vali rollid, mis on vajalikud kogukonna eri osade muutmiseks</string>
+    <string name="space_settings_permissions_subtitle">Vaata ja uuenda rolle, mis on vajalikud kogukonnakeskuse eri osade muutmiseks.</string>
+    <string name="space_settings_permissions_title">Õigused kogukonnakeskuses</string>
+    <string name="space_participants_unban_prompt_msg">Suhtluskeelu eemaldamine võimaldab kogukonnaga uuesti liituda.</string>
+    <string name="space_participants_ban_prompt_msg">Sellele kasutajale suhtluskeelu seadmine tõstab ta kogukonnast välja ning ei võimalda uuesti liitumist.</string>
+    <string name="space_participants_kick_prompt_msg">kogukonnast välja müksamine eemaldab ta praeguseks sellest kogukonnast.
+\n
+\nKui soovid, et ta ei saaks uuesti liituda, siis peaksid seadma suhtluskeelu.</string>
+    <string name="a11y_stop_voice_message">Lõpeta salvestamine</string>
+    <string name="command_description_lenny">Lisa ( ͡° ͜ʖ ͡°) smaili vormindamata sõnumi algusesse</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Reeglid</string>
+    <string name="settings_discovery_no_policy_provided">Isikutuvastusserveril pole reegleid kirjeldatud</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Peida isikutuvastusserveri reeglid</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Näita isikutuvastusserveri reegleid</string>
+    <string name="command_description_whois">Näitab teavet kasutaja kohta</string>
+    <string name="command_description_avatar_for_room">Muudab sinu tunnuspilti vaid selles jututoas</string>
+    <string name="command_description_room_avatar">Muudab selle jututoa tunnuspilti</string>
+    <string name="command_description_nick_for_room">Muudab sinu hüüdnime vaid selles jututoas</string>
+    <string name="command_description_room_name">Määrab jututoa nime</string>
+    <string name="command_description_unignore_user">Lõpeta kasutaja eiramine ja näita edaspidi tema sõnumeid</string>
+    <string name="command_description_ignore_user">Eirab kasutajat peites kõik tema sõnumid sinu eest</string>
+    <string name="a11y_presence_unavailable">Pole leitav</string>
+    <string name="a11y_presence_offline">Võrgust väljas</string>
+    <string name="a11y_presence_online">Võrgus</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Vali koduserver</string>
+    <string name="login_error_homeserver_from_url_not_found">Ei õnnestu ühendus koduserveriga aadressil %s. Palun kontrolli kas link on õige või lisa koduserver käsitsi.</string>
+    <string name="notification_listening_for_notifications">Vaatan, kas leidub teavitusi</string>
+    <string name="shortcut_disabled_reason_sign_out">Sa oled sessioonist välja loginud!</string>
+    <string name="shortcut_disabled_reason_room_left">Sa pole enam selles jututoas!</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">Nõutav on vähemalt %1$s valik</item>
+        <item quantity="other">Nõutav on vähemalt %1$s valikut</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">Küsimus ei saa lisamata jääda</string>
+    <string name="create_poll_button">KOOSTA KÜSITLUS</string>
+    <string name="create_poll_add_option">LISA VALIK</string>
+    <string name="create_poll_options_hint">Valik %1$d</string>
+    <string name="create_poll_options_title">Koosta valikud</string>
+    <string name="create_poll_question_hint">Küsimus või teema</string>
+    <string name="create_poll_question_title">Küsitluse küsimus või teema</string>
+    <string name="create_poll_title">Koosta üks küsitlus</string>
+    <string name="attachment_type_poll">Küsitlus</string>
+    <string name="identity_server_consent_dialog_content_2">Sinu telefoniraamatus leiduvate kontaktisikute hulgast Matrix\'i kasutajate leidmiseks me peame saatma nende teabe isikutuvastusserverisse.
+\n
+\nAndmed saadame mitte tekstina, vaid räsituna. Kas sa nõustud sellega\?</string>
+    <string name="identity_server_consent_dialog_title_2">Saada e-posti aadressid ja telefoninumbrid %s serverisse</string>
+    <string name="settings_discovery_consent_notice_off_2">Sinu kontaktid on vaid sinu teada. Kui tahad nende hulgast leida Matrix\'i kasutajaid, siis me vajame sinu luba nende andmete saatmiseks räsitud kujul isikutuvastusserverisse.</string>
+    <string name="identity_server_consent_dialog_content_3">Selleks et leida tuttavaid, sa peaksid saatma oma kontaktteavet (telefoninumbreid ja/või e-posti aadresse) siin rakenduses seadistatud isikutuvastusserverile. Parema andmeturvalisuse nimel me ei saada teavet mitte loetava tekstina, vaid räsina.</string>
+    <string name="identity_server_consent_dialog_content_question">Kas sa oled nõus selle teabe edastamisega\?</string>
+    <string name="action_not_now">Mitte praegu</string>
 </resources>

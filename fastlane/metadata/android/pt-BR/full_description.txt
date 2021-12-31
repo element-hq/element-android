@@ -1,4 +1,4 @@
-Element é tanto um mensageiro seguro como um app de colaboração de time de produtividade que é ideal para chats de grupo enquanto se trabalha remotamente. Este app de chat usa encriptação ponta-a-ponta para prover conferência de vídeo, compartilhamento de arquivo e chamadas de voz poderasos.
+Element é tanto um mensageiro seguro como um app de colaboração de time de produtividade que é ideal para chats de grupo enquanto se trabalha remotamente. Este app de chat usa encriptação ponta-a-ponta para prover conferência de vídeo, compartilhamento de arquivo e chamadas de voz poderosos.
 
 <b>As funções de Element incluem:</b>
 - Ferramentas de comunicação online avançadas
@@ -22,9 +22,9 @@ Para permitir mais controle de seus dados e conversas sensíveis, Element pode s
 Você decide onde manter seus dados e mensagens. Sem o risco de data mining ou acesso de terceiros.
 
 Element põe você em controle de diferentes maneiras:
-1. Pegar uma conta grátis no servidor público matrix.org hospedado pelos desenvolvedores Matrix, ou escolha de milhares de servidores públicos hospedados por pessoas se voluntariando
-2. Auto-hospedar sua conta ao rodar um servidor em sua própria infraestrutura de TI
-3. Fazer signup para uma conta num servidor personalizado ao simplesmente assinar a plataforma de hospedagem Element Matrix Services
+1. Pegue uma conta grátis no servidor público matrix.org hospedado pelos desenvolvedores Matrix, ou escolha de milhares de servidores públicos hospedados por pessoas se voluntariando
+2. Auto-hospede sua conta ao rodar um servidor em sua própria infraestrutura de TI
+3. Faça signup para uma conta num servidor personalizado ao simplesmente assinar a plataforma de hospedagem Element Matrix Services
 
 <b>Mensageria e colaboração abertos</b>
 Você pode fazer chat com qualquer pessoa na rede Matrix, caso ela esteja usando Element, um outro app de Matrix ou mesmo se ela estiver usando um app de mensageria diferente.
@@ -37,3 +37,6 @@ Messageria, chamadas de voz e vídeo, compartilhamento de arquivo, compartilhame
 
 <b>Continue de onde você parou</b>
 Fique em contato onde quer que você esteja com histórico de mensagem completamente sincronizado por todos os seus dispositivos e na web em https://app.element.io
+
+<b>Open source</b>
+Element Android é um projeto open source, hospedado por GitHub. Por favor reporte bugs e/ou contribua para seu desenvolvimento em https://github.com/vector-im/element-android

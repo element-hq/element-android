@@ -73,14 +73,14 @@ data class RoomEventFilter(
     }
 
     fun hasData(): Boolean {
-        return (limit != null
-                || notSenders != null
-                || notTypes != null
-                || senders != null
-                || types != null
-                || rooms != null
-                || notRooms != null
-                || containsUrl != null
-                || lazyLoadMembers != null)
+        return (limit != null ||
+                notSenders != null ||
+                notTypes != null ||
+                senders != null ||
+                types != null ||
+                rooms != null ||
+                notRooms != null ||
+                containsUrl != null ||
+                lazyLoadMembers != null)
     }
 }

@@ -27,5 +27,5 @@ interface UIABaseAuth {
 
     fun copyWithSession(session: String): UIABaseAuth
 
-    fun asMap() : Map<String, *>
+    fun asMap(): Map<String, *>
 }

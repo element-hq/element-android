@@ -62,22 +62,23 @@
     <string name="notice_event_redacted_with_reason">Mesazh i hequr [arsye: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">Mesazh i hequr nga %1$s [arsye: %2$s]</string>
     <string name="notice_room_update">%s e përmirësoi këtë dhomë.</string>
-    <string name="initial_sync_start_importing_account">Njëkohësimi Fillestar:
+    <string name="initial_sync_start_importing_account">Njëkohësimi fillestar:
 \nPo importohet llogaria…</string>
-    <string name="initial_sync_start_importing_account_crypto">Njëkohësimi Fillestar:
+    <string name="initial_sync_start_importing_account_crypto">Njëkohësimi fillestar:
 \nPo importohet kriptografi</string>
-    <string name="initial_sync_start_importing_account_rooms">Njëkohësimi Fillestar:
+    <string name="initial_sync_start_importing_account_rooms">Njëkohësimi fillestar:
 \nPo importohen Dhoma</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Njëkohësimi Fillestar:
-\nPo importohen Dhoma Ku Është Bërë Hyrje</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Njëkohësimi Fillestar:
-\nPo importohen Dhoma Me Ftesë</string>
-    <string name="initial_sync_start_importing_account_left_rooms">Njëkohësimi Fillestar:
-\nPo importohen Dhoma të Braktisura</string>
-    <string name="initial_sync_start_importing_account_groups">Njëkohësimi Fillestar:
-\nPo importohen Bashkësi</string>
-    <string name="initial_sync_start_importing_account_data">Njëkohësimi Fillestar:
-\nPo importohet të Dhëna Llogarie</string>
+\nPo ngarkohen bisedat tuaja
+\nNëse keni hyrë në shumë dhoma, kjo mund të zgjasë ca</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Njëkohësimi fillestar:
+\nPo importohen dhoma me ftesë</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Njëkohësimi fillestar:
+\nPo importohen dhoma të braktisura</string>
+    <string name="initial_sync_start_importing_account_groups">Njëkohësimi fillestar:
+\nPo importohen bashkësi</string>
+    <string name="initial_sync_start_importing_account_data">Njëkohësimi fillestar:
+\nPo importohet të dhëna llogarie</string>
     <string name="event_status_sending_message">Po dërgohet mesazh…</string>
     <string name="clear_timeline_send_queue">Spastro radhë pritjeje</string>
     <string name="notice_room_third_party_revoked_invite">%1$s shfuqizoi ftesën për %2$s për pjesëmarrje te dhoma</string>
@@ -289,7 +290,7 @@
     <string name="view_decrypted_source">Shihni Burim të Shfshehtëzuar</string>
     <string name="delete">Fshije</string>
     <string name="rename">Riemërtojeni</string>
-    <string name="report_content">Raportoni lëndë</string>
+    <string name="report_content">Raportoni Lëndë</string>
     <string name="active_call">Thirrje aktive</string>
     <string name="cannot_start_call">S’fillohet dot thirrja, ju lutemi, riprovoni më vonë</string>
     <string name="missing_permissions_title_to_start_conf_call">S’fillohet dot thirrja</string>
@@ -807,7 +808,7 @@
     <string name="command_description_ban_user">Dëbon përdoruesin me ID-në e dhënë</string>
     <string name="command_description_unban_user">I heq dëbimin përdoruesit me ID-në e dhënë</string>
     <string name="command_description_op_user">Përcaktoni shkallë pushteti të një përdoruesi</string>
-    <string name="command_description_join_room">Hyn në dhomë me aliasin e dhënë</string>
+    <string name="command_description_join_room">Hyn te dhoma me adresën e dhënë</string>
     <string name="command_description_part_room">Dilni nga dhoma</string>
     <string name="command_description_topic">Caktoni temë dhome</string>
     <string name="command_description_kick_user">Përzë përdoruesin me ID-në e dhënë</string>
@@ -2483,7 +2484,6 @@
     <string name="direct_room_user_list_known_title">Përdorues të Ditur</string>
     <string name="qr_code">Kod QR</string>
     <string name="add_by_qr_code">Shtoni përmes kodi QR</string>
-    <string name="user_directory_search_hint">Kërkoni sipas emri ose ID-je</string>
     <string name="permissions_denied_qr_code">Që të skanoni një kod QR, lypset të lejoni përdorim kamere.</string>
     <string name="start_chatting">Filloni të Llafoseni</string>
     <string name="permissions_denied_add_contact">Jepni leje për hyrje te kontaktet tuaja.</string>
@@ -2545,7 +2545,7 @@
     <string name="call_tile_call_back">Ktheji thirrjen</string>
     <string name="call_tile_ended">Kjo thirrje ka përfunduar</string>
     <string name="call_tile_other_declined">%1$s hodhi poshtë këtë thirrje</string>
-    <string name="call_tile_you_declined">Hodhët poshtë këtë thirrje %1$s</string>
+    <string name="call_tile_you_declined">Hodhët poshtë këtë thirrje %s</string>
     <string name="call_tile_in_call">Gjendeni në këtë thirrje</string>
     <string name="call_tile_other_started_call">%1$s nisi një thirrje</string>
     <string name="call_tile_you_started_call">Filluat një thirrje</string>
@@ -2631,7 +2631,7 @@
     <string name="a11y_trust_level_default">Shkallë besimi parazgjedhje</string>
     <string name="a11y_selected">Të përzgjedhura</string>
     <string name="a11y_video">Video</string>
-    <string name="a11y_unsent_draft">Kjo dhomë ka skicë të padërguar</string>
+    <string name="a11y_unsent_draft">ka skicë të padërguar</string>
     <string name="a11y_error_some_message_not_sent">Disa nga mesazhet s’janë dërguar</string>
     <string name="a11y_delete_avatar">Fshije avatarin</string>
     <string name="a11y_change_avatar">Ndërroni avatarin</string>
@@ -2658,9 +2658,9 @@
     <string name="action_return">Kthehuni</string>
     <string name="action_switch">Ndërroje</string>
     <string name="event_status_sent_message">Mesazh i dërguar</string>
-    <string name="initial_sync_start_downloading">Njëkohësimi Fillestar:
+    <string name="initial_sync_start_downloading">Njëkohësimi fillestar:
 \nPo shkarkohen të dhëna…</string>
-    <string name="initial_sync_start_server_computing">Njëkohësimi Fillestar:
+    <string name="initial_sync_start_server_computing">Njëkohësimi fillestar:
 \nPo pritet për përgjigje nga shërbyesi…</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Hapësirat janë mënyra për të grupuar dhoma dhe persona.</string>
     <string name="labs_use_restricted_join_rule_desc">Sinjalizimi lyp mbulim nga shërbyesi dhe version eksperimental dhome</string>
@@ -2668,7 +2668,6 @@
     <string name="you_are_invited">Jeni ftuar</string>
     <string name="spaces_beta_welcome_to_spaces">Mirë se vini te Hapësira!</string>
     <string name="space_add_existing_rooms">Shtoni dhoma ekzistuese dhe hapësira</string>
-    <string name="space_leave_prompt_msg">Jeni i sigurt se doni të dilni nga hapësira\?</string>
     <string name="leave_space">Braktiseni Hapësirën</string>
     <string name="space_add_child_title">Shtoni dhoma</string>
     <string name="space_explore_activity_title">Eksploroni dhoma</string>
@@ -2748,7 +2747,7 @@
     <string name="space_settings_manage_rooms">Administroni dhoma</string>
     <string name="looking_for_someone_not_in_space">Po kërkoni për dikë jo në %s\?</string>
     <string name="user_invites_you">%s ju fton</string>
-    <string name="a11y_public_room">Kjo dhomë është publike</string>
+    <string name="a11y_public_room">Dhomë publike</string>
     <string name="a11y_unchecked">E pakontrolluar</string>
     <string name="a11y_checked">U kontrollua</string>
     <string name="send_images_and_video_with_original_size">Dërgoje median në madhësinë origjinale</string>
@@ -2769,10 +2768,9 @@
     <string name="spaces_no_server_support_title">Duket sikur shërbyesi juaj Home nuk mbulon ende Hapësira</string>
     <string name="spaces_feeling_experimental_subspace">Ndiheni eksperimentues\?
 \nMund të shtoni te një hapësirë hapësira ekzistuese.</string>
-    <string name="labs_space_show_orphan_in_home">Hapësirë Eksperimentale - Shfaq jetimë te Kreu</string>
     <string name="space_add_rooms">Shtoni dhoma</string>
-    <string name="space_leave_prompt_msg_as_admin">Jeni përgjegjës i kësaj hapësirë, sigurohuni se keni shpërngulur të drejt përgjegjësi te një anëtar tjetër, përpara braktisjes.</string>
-    <string name="space_leave_prompt_msg_private">Kjo hapësirë s’është publike. S’do të jeni në gjendje të rihyni pa një ftesë.</string>
+    <string name="space_leave_prompt_msg_as_admin">Jeni përgjegjësi i vetëm i kësaj hapësire. Braktisja e saj do të thotë se askush s’do të ketë kontroll mbi të.</string>
+    <string name="space_leave_prompt_msg_private">S’do të jeni në gjendje të rihyni pa një ftesë.</string>
     <string name="space_leave_prompt_msg_only_you">Jeni personi i vetëm këtu. Nëse ikni, askush s’do të jetë në gjendje të marrë pjesë në të ardhmen, përfshi ju.</string>
     <string name="invite_to_space">Ftojeni te %s</string>
     <string name="a11y_beta">Kjo veçori është në fazë beta</string>
@@ -2787,7 +2785,7 @@
     <string name="unnamed_room">Dhomë e Paemërtuar</string>
     <string name="private_space">Hapësirë private</string>
     <string name="public_space">Hapësirë publike</string>
-    <string name="a11y_public_space">Kjo Hapësirë është publike</string>
+    <string name="a11y_public_space">Hapësirë publike</string>
     <string name="call_transfer_unknown_person">Person i panjohur</string>
     <string name="call_transfer_transfer_to_title">Shpërngule te %1$s</string>
     <string name="call_transfer_consulting_with">Po konsultohet me %1$s</string>
@@ -2810,7 +2808,7 @@
     <string name="upgrade_room_no_power_to_manage">Ju duhen leje për të përmirësua një dhomë</string>
     <string name="upgrade_room_update_parent_space">Përditëso automatikisht mëmë hapësire</string>
     <string name="upgrade_room_auto_invite">Fto përdorues automatikisht</string>
-    <string name="upgrade_public_room_from_to">Do ta përmirësoni këtë dhomë nga %s në %s.</string>
+    <string name="upgrade_public_room_from_to">Do ta përmirësoni këtë dhomë nga %1$s në %2$s.</string>
     <string name="upgrade_room_warning">Përmirësimi i një dhome është një veprim i thelluar dhe zakonisht i rekomanduar kur një dhomë është e paqëndrueshme për shkak të metash, veçorish që mungojnë ose cenueshmëri sigurie.
 \nZakonisht kjo prek vetëm mënyrën se si trajtohet dhoma te shërbyesi.</string>
     <string name="upgrade_private_room">Përmirësoni dhomë private</string>
@@ -2849,13 +2847,13 @@
     <string name="voice_message_tap_to_stop_toast">Që ta ndalni ose ta dëgjoni, prekni mbi incizimin tuaj</string>
     <string name="voice_message_n_seconds_warning_toast">Edhe %1$ds</string>
     <string name="voice_message_release_to_send_toast">Mbajeni, që të incizojë, lëshojeni që të dërgohet</string>
-    <string name="a11y_delete_recorded_voice_message">Fshije mesazhin zanor të incizuar</string>
+    <string name="a11y_delete_recorded_voice_message">Fshije incizimin</string>
     <string name="a11y_recording_voice_message">Po incizohet mesazh zanor</string>
     <string name="a11y_pause_voice_message">Ndalni Mesazh Zanor</string>
     <string name="a11y_play_voice_message">Luani Mesazh Zanor</string>
     <string name="a11y_lock_voice_message">Kyçje Mesazhi Zanor</string>
     <string name="voice_message_slide_to_cancel">Rrëshqiteni që të anulohet</string>
-    <string name="a11y_start_voice_message">Nisni Mesazh Zanor</string>
+    <string name="a11y_start_voice_message">Incizoni Mesazh Zanor</string>
     <string name="allow_anyone_in_room_to_access">Lejo cilindo te %s ta gjejë dhe hyjë. Mund të përzgjidhni edhe hapësira të tjera.</string>
     <string name="upgrade_required">Lypset Domosdo Përmirësim</string>
     <string name="sent_a_voice_message">Zë</string>
@@ -2870,4 +2868,155 @@
     <string name="room_create_member_of_space_name_can_join">Anëtarë të Hapësirës %s mund ta gjejnë, parashohin dhe hyjnë në të.</string>
     <string name="room_settings_room_access_private_invite_only_title">Private (Vetëm Me Ftesa)</string>
     <string name="denied_permission_voice_message">Për të dërguar mesazhe zanorë, ju lutemi, akordoni leje Mikrofoni.</string>
+    <string name="settings_room_upgrades">Përmirësime dhome</string>
+    <string name="settings_messages_by_bot">Mesazhe nga roboti</string>
+    <string name="settings_room_invitations">Ftesa për në dhoma</string>
+    <string name="settings_encrypted_group_messages">Mesazhe të fshehtëzuar grupi</string>
+    <string name="settings_group_messages">Mesazhe grupi</string>
+    <string name="settings_encrypted_direct_messages">Mesazhe të drejtpërdrejtë të fshehtëzuar</string>
+    <string name="settings_messages_direct_messages">Mesazhe të drejtpërdrejtë</string>
+    <string name="settings_messages_containing_username">Emri im i përdoruesit</string>
+    <string name="settings_messages_containing_display_name">Emri im në ekran</string>
+    <string name="settings_notification_notify_me_for">Njoftomë për</string>
+    <string name="settings_notification_other">Tjetër</string>
+    <string name="settings_notification_mentions_and_keywords">Përmendje dhe Fjalëkyçe</string>
+    <string name="settings_notification_default">Njoftime Parazgjedhje</string>
+    <string name="link_this_email_with_your_account">%s te Rregullimet, që të merrni ftesa drejt e në Element.</string>
+    <string name="link_this_email_settings_link">Lidheni këtë email me llogarinë tuaj</string>
+    <string name="this_invite_to_this_space_was_sent">Kjo ftesë për te kjo hapësirë u dërgua te %s që s’është i përshoqëruar me llogarinë tuaj</string>
+    <string name="this_invite_to_this_room_was_sent">Kjo ftesë për te kjo dhomë qe dërguar për %s që s’është i përshoqëruar me llogarinë tuaj</string>
+    <string name="to_help_space_members_find_and_join">Për t’i ndihmuar anëtarët të gjejnë dhe hyjnë në një dhomë private, kaloni te rregullimet e asaj dhome duke prekur mbi avatarin.</string>
+    <string name="help_space_members">Ndihmoni anëtarë hapësirash të gjejnë dhoma private</string>
+    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Kjo e bën të lehtë mbajtjen private të dhomave në një hapësirë, ndërkohë që u lejon njerëzve në hapësirë të gjejnë dhe hyjnë në të tilla. Krejt dhomat e reja në një hapësirë do ta ofrojnë këtë mundësi.</string>
+    <string name="help_people_in_spaces_find_and_join">Ndihmojini njerëzit në hapësira të gjejnë dhe hyjnë vetë në dhoma private, pa pasur nevojë për ftesë dorazi të gjithkujt.</string>
+    <string name="new_let_people_in_spaces_find_and_join">E re: Lejoni persona në hapësira të gjejnë dhe hyjnë në dhoma private</string>
+    <string name="call_jitsi_started">U fillua thirrje grupi</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">Krejt dhomat ku gjendeni do të shfaqen te Home.</string>
+    <string name="preference_show_all_rooms_in_home">Shfaq krejt dhomat te Home</string>
+    <string name="call_slide_to_end_conference">Rrëshqiteni, që të përfundohet thirrja</string>
+    <string name="call_tap_to_return">%1$s Prekeni që të kthehet</string>
+    <string name="call_one_active">Thirrje aktive (%1$s) ·</string>
+    <plurals name="call_active_status">
+        <item quantity="one">Thirrje aktive</item>
+        <item quantity="other">%1$d thirrje aktive</item>
+    </plurals>
+    <string name="call_tile_connection_failed">Lidhja dështoi</string>
+    <string name="call_tile_no_answer">S’ka përgjigje</string>
+    <string name="call_tile_video_missed">Thirrje video e humbur</string>
+    <string name="call_tile_voice_missed">Thirrje zanore e humbur</string>
+    <string name="call_tile_video_declined">Thirrja video u hodh poshtë</string>
+    <string name="call_tile_voice_declined">U hodh poshtë thirrje zanore</string>
+    <string name="call_tile_video_call_has_ended">Thirrja video përfundoi • %1$s</string>
+    <string name="call_tile_voice_call_has_ended">Thirrja zanore përfundoi • %1$s</string>
+    <string name="call_tile_video_active">Thirrje video aktive</string>
+    <string name="call_tile_voice_active">Thirrje zanore aktive</string>
+    <string name="call_tile_video_incoming">Thirrje video ardhëse</string>
+    <string name="call_tile_voice_incoming">Thirrje zanore ardhëse</string>
+    <string name="call_tile_you_declined_this_call">Hodhët poshtë këtë thirrje</string>
+    <string name="room_settings_room_notifications_account_settings">Rregullime llogarie</string>
+    <string name="room_settings_room_notifications_manage_notifications">Njoftimet mund t’i administroni te %1$s.</string>
+    <string name="room_settings_room_notifications_encryption_notice">Ju lutemi, kini parasysh se në celular njoftimet për përmendje &amp; fjalëkyçe nuk funksionojnë për dhoma të fshehtëzuara.</string>
+    <string name="room_settings_room_notifications_notify_me">Njoftomë për</string>
+    <string name="settings_mentions_and_keywords_encryption_notice">Në celular s’do të merrni njoftime për përmendje &amp; fjalëkyçe në dhoma të fshehtëzuara.</string>
+    <string name="settings_messages_containing_keywords">Fjalëkyçe</string>
+    <string name="settings_notification_keyword_contains_invalid_character">Fjalëkyçet s’mund të përmbajnë \'%s\'</string>
+    <string name="settings_notification_keyword_contains_dot">Fjalëkyçet s’mund të fillojnë me \'.\'</string>
+    <string name="settings_notification_new_keyword">Shtoni fjalëkyç të ri</string>
+    <string name="settings_notification_your_keywords">Fjalëkyçet tuaja</string>
+    <string name="room_settings_none">Asnjë</string>
+    <string name="room_settings_mention_and_keyword_only">Vetëm Përmendje &amp; Fjalëkyçe</string>
+    <string name="call_remove_jitsi_widget_progress">Po përfundohet thirrja…</string>
+    <string name="call_ended_invite_timeout_title">S’ka përgjigje</string>
+    <string name="call_ended_user_busy_description">Përdoruesi që thirrët është i zënë.</string>
+    <string name="call_ended_user_busy_title">Përdoruesi është i zënë</string>
+    <string name="audio_call_with_participant">Thirrje audio me %s</string>
+    <string name="video_call_with_participant">Thirrje video me %s</string>
+    <string name="call_ringing">Po i bihet ziles…</string>
+    <string name="spaces">Hapësira</string>
+    <string name="learn_more">Mësoni Më Tepër</string>
+    <string name="space_add_space_to_any_space_you_manage">Shtoni një hapësirë te cilado hapësirë që administroni.</string>
+    <string name="space_add_existing_spaces">Shtoni hapësira ekzistuese</string>
+    <string name="space_add_existing_rooms_only">Shtoni dhoma ekzistuese</string>
+    <string name="pick_tings_to_leave">Zgjidhni gjëra që duhen braktisur</string>
+    <string name="leave_specific_ones">Braktisni dhoma dhe hapësira të përcaktuara…</string>
+    <string name="dont_leave_any">Mos braktis ndonjë dhomë dhe hapësirë</string>
+    <string name="you_will_leave_all_in">Do të braktisni krejt dhomat dhe hapësirat te %s.</string>
+    <string name="leave_all_rooms_and_spaces">Braktis krejt dhomat dhe hapësirat</string>
+    <string name="space_leave_prompt_msg_with_name">Jeni i sigurt se doni të dilni nga \'%s\?</string>
+    <string name="discovery_section">Zbulim (%S)</string>
+    <string name="finish_setup">Përfundoje ujdisjen</string>
+    <string name="discovery_invite">Ftoni me email, gjeni kontakte, etj…</string>
+    <string name="finish_setting_up_discovery">Përfundo ujdisjen e zbulimit.</string>
+    <string name="create_space_identity_server_info_none">Aktualisht nuk përdorni ndonjë shërbyes identitetesh. Që të ftoni shokë të ekipit dhe të jeni i zbulueshëm prej tyre, formësoni një të tillë më poshtë.</string>
+    <string name="invite_by_mxid_or_mail">Ftoni me emër përdoruesi ose email</string>
+    <string name="create_spaces_invite_public_header_desc">Sigurohuni se te %s e shoqërisë kanë hyrje personat e duhur. Më vonë mund të ftoni të tjerë.</string>
+    <string name="create_spaces_invite_public_header">Cilët janë shokët tuaj të ekipit\?</string>
+    <string name="command_description_add_to_space">Shtoni te Hapësira e dhënë</string>
+    <string name="create_space_in_progress">Po krijohet hapësirë…</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">Shfaqni ca hollësira të dobishme, për të ndihmuar në diagnostikimin e aplikacionit</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">Shfaq në ekran të dhëna diagnostikimi</string>
+    <string name="does_not_look_like_valid_email">S’duket si adresë email e vlefshme</string>
+    <string name="open_discovery_settings">Hapni Rregullime Zbulimi</string>
+    <string name="user_directory_search_hint_2">Kërkoni sipas emri , ID-je ose email-i</string>
+    <string name="create_new_space">Krijoni Hapësirë të Re</string>
+    <string name="room_settings_space_access_public_description">Hapësirën mund ta gjejë kushdo dhe hyjë në të</string>
+    <string name="room_settings_space_access_title">Hyrje në hapësirë</string>
+    <string name="room_settings_access_rules_pref_dialog_title">Kush mund të hyjë\?</string>
+    <string name="settings_notification_emails_enable_for_email">Aktivizo njoftime me email për %s</string>
+    <string name="settings_notification_emails_no_emails">Që të merrni email me njoftim, ju lutemi, përshoqërojini llogarisë tuaj Matrix një email</string>
+    <string name="settings_notification_emails_category">Njoftim me email</string>
+    <string name="room_permissions_upgrade_the_space">Të përmirësojë hapësirën</string>
+    <string name="room_permissions_change_space_name">Të ndryshojë emrin e hapësirës</string>
+    <string name="room_permissions_enable_space_encryption">Të aktivizojë fshehtëzimin e hapësirës</string>
+    <string name="room_permissions_change_main_address_for_the_space">Të ndryshojë adresë kryesore për hapësirën</string>
+    <string name="room_permissions_change_space_avatar">Të ndryshojë avatarin e hapësirës</string>
+    <string name="space_permissions_notice_read_only">S’keni leje të përditësoni rolet e domosdoshëm për të ndryshuar anë të ndryshme të kësaj hapësire</string>
+    <string name="space_permissions_notice">Të përzgjedhë rolet e domosdoshme për të ndryshuar anë të ndryshme të kësaj hapësire</string>
+    <string name="space_settings_permissions_subtitle">Të shohë dhe përditësojë role të domosdoshëm për të ndryshuar anë të ndryshme të hapësirës.</string>
+    <string name="space_settings_permissions_title">Leje hapësire</string>
+    <string name="space_participants_unban_prompt_msg">Heqja e dëbimit përdoruesit do t’i lejojë të marrë pjesë sërish në hapësirë.</string>
+    <string name="space_participants_ban_prompt_msg">Dëbimi i përdoruesit do ta përzërë atë nga kjo hapësirë dhe do t’i pengojë atij rihyrjen.</string>
+    <string name="space_participants_kick_prompt_msg">Përzënia e përdoruesit do ta heqë prej kësaj hapësire.
+\n
+\nQë të pengohet pjesëmarrja sërish e tij, duhet ta dëboni.</string>
+    <string name="a11y_stop_voice_message">Ndale Regjistrimin</string>
+    <string name="command_description_lenny">I shton ( ͡° ͜ʖ ͡°) një mesazhi tekst të thjeshtë përpara</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Rregulla</string>
+    <string name="settings_discovery_no_policy_provided">S’ka rregulla të dhëna nga shërbyesi i identiteteve</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">Fshih rregulla shërbyesi identitetesh</string>
+    <string name="settings_discovery_show_identity_server_policy_title">Shfaq rregulla shërbyesi identitetesh</string>
+    <string name="command_description_whois">Shfaq hollësi mbi një përdorues</string>
+    <string name="command_description_avatar_for_room">Ndryshon avatarin tuaj vetëm në këtë dhomë</string>
+    <string name="command_description_room_avatar">Ndryshon avatarin e dhomës së tanishme</string>
+    <string name="command_description_nick_for_room">Ndryshon nofkën e shfaqur për ju vetëm në dhomën e tanishme</string>
+    <string name="command_description_room_name">Cakton emrin e dhomës</string>
+    <string name="command_description_unignore_user">E ndal shpërfilljen e një përdoruesi, duke i shfaqur mesazhet e tyre pas kësaj</string>
+    <string name="command_description_ignore_user">Shpërfill një përdorues, duke fshehur mesazhet e tij prej jush</string>
+    <string name="a11y_presence_offline">Jo në linjë</string>
+    <string name="a11y_presence_online">Në linjë</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Zgjidhni shërbyes Home</string>
+    <string name="login_error_homeserver_from_url_not_found">Te URL-ja %s s’kapet dot një shërbyes Home. Ju lutemi, kontrolloni lidhjen tuaj, ose zgjidheni një shërbyes Home dorazi.</string>
+    <string name="notification_listening_for_notifications">Po dëgjohet për njoftime</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">Është e domosdoshme të paktën %1$s mundësi</item>
+        <item quantity="other">Janë të domosdoshme të paktën %1$s mundësi</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">Pyetja s’mund të jetë e zbrazët</string>
+    <string name="create_poll_button">KRIJOJE PYETËSORIN</string>
+    <string name="create_poll_add_option">SHTONI MUNDËSI</string>
+    <string name="create_poll_options_hint">Mundësia %1$d</string>
+    <string name="create_poll_options_title">Krijo mundësi</string>
+    <string name="create_poll_question_hint">Pyetje ose temë</string>
+    <string name="create_poll_question_title">Pyetje ose temë pyetësori</string>
+    <string name="create_poll_title">Krijoni Pyetësor</string>
+    <string name="identity_server_consent_dialog_content_question">A pranoni të dërgohen këto hollësi\?</string>
+    <string name="identity_server_consent_dialog_content_3">Për të zbuluar kontakte ekzistuese, duhet të dërgoni hollësi kontakti (email-e dhe numra telefonash) te shërbyesi juaj i identiteteve. Para dërgimit, i fshehtëzojmë të dhënat tuaja, për privatësi.</string>
+    <string name="identity_server_consent_dialog_content_2">Për të zbuluar kontakte ekzistuese, duhet të dërgoni hollësi kontakti te shërbyesi juaj i identiteteve.
+\n
+\nI fshehtëzojmë të dhënat tuaja përpara dërgimit, për privatësi. A pranoni të dërgohen këto hollësi\?</string>
+    <string name="identity_server_consent_dialog_title_2">Dërgo email-e dhe numra telefonash te %s</string>
+    <string name="settings_discovery_consent_notice_off_2">Kontaktet tuaja janë private. Për të zbuluar përdorues prej kontakteve tuaja, na duhet leja juaj për të dërguar hollësi kontakti te shërbyesi juaj i identiteteve.</string>
+    <string name="shortcut_disabled_reason_sign_out">Është bërë dalja nga sesioni!</string>
+    <string name="shortcut_disabled_reason_room_left">U dol nga dhoma!</string>
+    <string name="action_not_now">Jo tani</string>
 </resources>

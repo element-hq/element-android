@@ -24,13 +24,13 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.di.ScreenComponent
-import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.platform.SimpleFragmentActivity
 import im.vector.app.features.spaces.create.ChoosePrivateSpaceTypeFragment
 import im.vector.app.features.spaces.create.ChooseSpaceTypeFragment
 import im.vector.app.features.spaces.create.CreateSpaceAction
+import im.vector.app.features.spaces.create.CreateSpaceAdd3pidInvitesFragment
 import im.vector.app.features.spaces.create.CreateSpaceDefaultRoomsFragment
 import im.vector.app.features.spaces.create.CreateSpaceDetailsFragment
 import im.vector.app.features.spaces.create.CreateSpaceEvents
@@ -38,16 +38,9 @@ import im.vector.app.features.spaces.create.CreateSpaceState
 import im.vector.app.features.spaces.create.CreateSpaceViewModel
 import im.vector.app.features.spaces.create.SpaceTopology
 import im.vector.app.features.spaces.create.SpaceType
-import javax.inject.Inject
 
-class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Factory {
-
-    @Inject lateinit var viewModelFactory: CreateSpaceViewModel.Factory
-
-    override fun injectWith(injector: ScreenComponent) {
-        super.injectWith(injector)
-        injector.inject(this)
-    }
+@AndroidEntryPoint
+class SpaceCreationActivity : SimpleFragmentActivity() {
 
     val viewModel: CreateSpaceViewModel by viewModel()
 
@@ -55,17 +48,20 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
         super.onCreate(savedInstanceState)
         if (isFirstCreation()) {
             when (withState(viewModel) { it.step }) {
-                CreateSpaceState.Step.ChooseType        -> {
+                CreateSpaceState.Step.ChooseType         -> {
                     navigateToFragment(ChooseSpaceTypeFragment::class.java)
                 }
-                CreateSpaceState.Step.SetDetails        -> {
+                CreateSpaceState.Step.SetDetails         -> {
                     navigateToFragment(ChooseSpaceTypeFragment::class.java)
                 }
-                CreateSpaceState.Step.AddRooms          -> {
+                CreateSpaceState.Step.AddRooms           -> {
                     navigateToFragment(CreateSpaceDefaultRoomsFragment::class.java)
                 }
-                CreateSpaceState.Step.ChoosePrivateType -> {
+                CreateSpaceState.Step.ChoosePrivateType  -> {
                     navigateToFragment(ChoosePrivateSpaceTypeFragment::class.java)
+                }
+                CreateSpaceState.Step.AddEmailsOrInvites -> {
+                    navigateToFragment(CreateSpaceAdd3pidInvitesFragment::class.java)
                 }
             }
         }
@@ -74,7 +70,7 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
     override fun initUiAndData() {
         super.initUiAndData()
 
-        viewModel.subscribe(this) {
+        viewModel.onEach {
             renderState(it)
         }
 
@@ -91,6 +87,9 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
                 }
                 CreateSpaceEvents.NavigateToAddRooms          -> {
                     navigateToFragment(CreateSpaceDefaultRoomsFragment::class.java)
+                }
+                CreateSpaceEvents.NavigateToAdd3Pid           -> {
+                    navigateToFragment(CreateSpaceAdd3pidInvitesFragment::class.java)
                 }
                 CreateSpaceEvents.NavigateToChoosePrivateType -> {
                     navigateToFragment(ChoosePrivateSpaceTypeFragment::class.java)
@@ -121,10 +120,10 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
     }
 
     private fun navigateToFragment(fragmentClass: Class<out Fragment>) {
-        val frag = supportFragmentManager.findFragmentByTag(fragmentClass.name) ?: createFragment(fragmentClass, Bundle().toMvRxBundle())
+        val frag = supportFragmentManager.findFragmentByTag(fragmentClass.name) ?: createFragment(fragmentClass)
         supportFragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.fade_in, R.anim.fade_out, R.anim.fade_in, R.anim.fade_out)
-                .replace(R.id.container,
+                .replace(views.container.id,
                         frag,
                         fragmentClass.name
                 )
@@ -143,6 +142,7 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
                 if (state.spaceType == SpaceType.Public) R.string.your_public_space
                 else R.string.your_private_space
             }
+            CreateSpaceState.Step.AddEmailsOrInvites,
             CreateSpaceState.Step.ChoosePrivateType -> R.string.your_private_space
         }
         supportActionBar?.let {
@@ -163,7 +163,7 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
 
         fun newIntent(context: Context): Intent {
             return Intent(context, SpaceCreationActivity::class.java).apply {
-                // putExtra(MvRx.KEY_ARG, SpaceDirectoryArgs(spaceId))
+                // putExtra(Mavericks.KEY_ARG, SpaceDirectoryArgs(spaceId))
             }
         }
 
@@ -179,6 +179,4 @@ class SpaceCreationActivity : SimpleFragmentActivity(), CreateSpaceViewModel.Fac
             return data?.extras?.getBoolean(RESULT_DATA_CREATED_SPACE_IS_JUST_ME, false) == true
         }
     }
-
-    override fun create(initialState: CreateSpaceState): CreateSpaceViewModel = viewModelFactory.create(initialState)
 }

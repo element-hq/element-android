@@ -32,5 +32,5 @@ data class AudioWaveformInfo(
          * List of integers between zero and 1024, inclusive.
          */
         @Json(name = "waveform")
-        val waveform: List<Int>? = null
+        val waveform: List<Int?>? = null
 )

@@ -16,12 +16,12 @@
 
 package im.vector.app.features.login.terms
 
-import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.MavericksState
 import org.matrix.android.sdk.internal.auth.registration.LocalizedFlowDataLoginTerms
 
 data class LoginTermsViewState(
         val localizedFlowDataLoginTermsChecked: List<LocalizedFlowDataLoginTermsChecked>
-) : MvRxState {
+) : MavericksState {
     fun check(data: LocalizedFlowDataLoginTerms) {
         localizedFlowDataLoginTermsChecked.find { it.localizedFlowDataLoginTerms == data }?.checked = true
     }

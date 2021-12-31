@@ -34,6 +34,6 @@ sealed class JitsiCallViewEvents : VectorViewEvents {
     ) : JitsiCallViewEvents()
 
     object LeaveConference : JitsiCallViewEvents()
-    object FailJoiningConference: JitsiCallViewEvents()
+    object FailJoiningConference : JitsiCallViewEvents()
     object Finish : JitsiCallViewEvents()
 }

@@ -25,14 +25,16 @@ import android.view.KeyEvent
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.media.session.MediaButtonReceiver
-import com.airbnb.mvrx.MvRx
-import im.vector.app.core.extensions.vectorComponent
+import com.airbnb.mvrx.Mavericks
+import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.features.call.CallArgs
 import im.vector.app.features.call.VectorCallActivity
 import im.vector.app.features.call.telecom.CallConnection
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.call.webrtc.getOpponentAsMatrixItem
+import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.popup.IncomingCallAlert
@@ -41,23 +43,25 @@ import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.room.model.call.EndCallReason
 import org.matrix.android.sdk.api.util.MatrixItem
 import timber.log.Timber
+import javax.inject.Inject
 
 private val loggerTag = LoggerTag("CallService", LoggerTag.VOIP)
 
 /**
  * Foreground service to manage calls
  */
+@AndroidEntryPoint
 class CallService : VectorService() {
 
     private val connections = mutableMapOf<String, CallConnection>()
-    private val knownCalls = mutableSetOf<CallInformation>()
+    private val knownCalls = mutableMapOf<String, CallInformation>()
     private val connectedCallIds = mutableSetOf<String>()
 
-    private lateinit var notificationManager: NotificationManagerCompat
-    private lateinit var notificationUtils: NotificationUtils
-    private lateinit var callManager: WebRtcCallManager
-    private lateinit var avatarRenderer: AvatarRenderer
-    private lateinit var alertManager: PopupAlertManager
+    lateinit var notificationManager: NotificationManagerCompat
+    @Inject lateinit var notificationUtils: NotificationUtils
+    @Inject lateinit var callManager: WebRtcCallManager
+    @Inject lateinit var avatarRenderer: AvatarRenderer
+    @Inject lateinit var alertManager: PopupAlertManager
 
     private var callRingPlayerIncoming: CallRingPlayerIncoming? = null
     private var callRingPlayerOutgoing: CallRingPlayerOutgoing? = null
@@ -79,10 +83,6 @@ class CallService : VectorService() {
     override fun onCreate() {
         super.onCreate()
         notificationManager = NotificationManagerCompat.from(this)
-        notificationUtils = vectorComponent().notificationUtils()
-        callManager = vectorComponent().webRtcCallManager()
-        avatarRenderer = vectorComponent().avatarRenderer()
-        alertManager = vectorComponent().alertManager()
         callRingPlayerIncoming = CallRingPlayerIncoming(applicationContext, notificationUtils)
         callRingPlayerOutgoing = CallRingPlayerOutgoing(applicationContext)
     }
@@ -165,7 +165,7 @@ class CallService : VectorService() {
         val incomingCallAlert = IncomingCallAlert(callId,
                 shouldBeDisplayedIn = { activity ->
                     if (activity is VectorCallActivity) {
-                        activity.intent.getParcelableExtra<CallArgs>(MvRx.KEY_ARG)?.callId != call.callId
+                        activity.intent.getParcelableExtra<CallArgs>(Mavericks.KEY_ARG)?.callId != call.callId
                     } else true
                 }
         ).apply {
@@ -190,7 +190,7 @@ class CallService : VectorService() {
         } else {
             notificationManager.notify(callId.hashCode(), notification)
         }
-        knownCalls.add(callInformation)
+        knownCalls[callId] = callInformation
     }
 
     private fun handleCallTerminated(intent: Intent) {
@@ -198,20 +198,22 @@ class CallService : VectorService() {
         val endCallReason = intent.getSerializableExtra(EXTRA_END_CALL_REASON) as EndCallReason
         val rejected = intent.getBooleanExtra(EXTRA_END_CALL_REJECTED, false)
         alertManager.cancelAlert(callId)
-        val terminatedCall = knownCalls.firstOrNull { it.callId == callId }
+        val terminatedCall = knownCalls.remove(callId)
         if (terminatedCall == null) {
-            Timber.tag(loggerTag.value).v("Call terminated for unknown call $callId$")
+            Timber.tag(loggerTag.value).v("Call terminated for unknown call $callId")
             handleUnexpectedState(callId)
             return
         }
-        knownCalls.remove(terminatedCall)
+        val notification = notificationUtils.buildCallEndedNotification(false)
+        val notificationId = callId.hashCode()
+        startForeground(notificationId, notification)
         if (knownCalls.isEmpty()) {
+            Timber.tag(loggerTag.value).v("No more call, stop the service")
+            stopForeground(true)
             mediaSession?.isActive = false
             myStopSelf()
         }
         val wasConnected = connectedCallIds.remove(callId)
-        val notification = notificationUtils.buildCallEndedNotification(terminatedCall.isVideoCall)
-        notificationManager.notify(callId.hashCode(), notification)
         if (!wasConnected && !terminatedCall.isOutgoing && !rejected && endCallReason != EndCallReason.ANSWERED_ELSEWHERE) {
             val missedCallNotification = notificationUtils.buildCallMissedNotification(terminatedCall)
             notificationManager.notify(MISSED_CALL_TAG, terminatedCall.nativeRoomId.hashCode(), missedCallNotification)
@@ -243,7 +245,7 @@ class CallService : VectorService() {
         } else {
             notificationManager.notify(callId.hashCode(), notification)
         }
-        knownCalls.add(callInformation)
+        knownCalls[callId] = callInformation
     }
 
     /**
@@ -267,18 +269,19 @@ class CallService : VectorService() {
         } else {
             notificationManager.notify(callId.hashCode(), notification)
         }
-        knownCalls.add(callInformation)
+        knownCalls[callId] = callInformation
     }
 
     private fun handleUnexpectedState(callId: String?) {
         Timber.tag(loggerTag.value).v("Fallback to clear everything")
         callRingPlayerIncoming?.stop()
         callRingPlayerOutgoing?.stop()
-        if (callId != null) {
-            notificationManager.cancel(callId.hashCode())
-        }
         val notification = notificationUtils.buildCallEndedNotification(false)
-        startForeground(DEFAULT_NOTIFICATION_ID, notification)
+        if (callId != null) {
+            startForeground(callId.hashCode(), notification)
+        } else {
+            startForeground(DEFAULT_NOTIFICATION_ID, notification)
+        }
         if (knownCalls.isEmpty()) {
             mediaSession?.isActive = false
             myStopSelf()
@@ -294,7 +297,7 @@ class CallService : VectorService() {
                 callId = this.callId,
                 nativeRoomId = this.nativeRoomId,
                 opponentUserId = this.mxCall.opponentUserId,
-                opponentMatrixItem = vectorComponent().activeSessionHolder().getSafeActiveSession()?.let {
+                opponentMatrixItem = singletonEntryPoint().activeSessionHolder().getSafeActiveSession()?.let {
                     this.getOpponentAsMatrixItem(it)
                 },
                 isVideoCall = this.mxCall.isVideoCall,
@@ -371,7 +374,7 @@ class CallService : VectorService() {
                         putExtra(EXTRA_END_CALL_REASON, endCallReason)
                         putExtra(EXTRA_END_CALL_REJECTED, rejected)
                     }
-            ContextCompat.startForegroundService(context, intent)
+            context.startService(intent)
         }
     }
 

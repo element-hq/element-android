@@ -16,45 +16,37 @@
 
 package im.vector.app.features.invite
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
+import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.userdirectory.PendingSelection
-import io.reactivex.Observable
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.rx.rx
 
 class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
                                                              initialState: InviteUsersToRoomViewState,
                                                              session: Session,
-                                                             val stringProvider: StringProvider)
-    : VectorViewModel<InviteUsersToRoomViewState, InviteUsersToRoomAction, InviteUsersToRoomViewEvents>(initialState) {
+                                                             val stringProvider: StringProvider) :
+    VectorViewModel<InviteUsersToRoomViewState, InviteUsersToRoomAction, InviteUsersToRoomViewEvents>(initialState) {
 
     private val room = session.getRoom(initialState.roomId)!!
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: InviteUsersToRoomViewState): InviteUsersToRoomViewModel
+    interface Factory : MavericksAssistedViewModelFactory<InviteUsersToRoomViewModel, InviteUsersToRoomViewState> {
+        override fun create(initialState: InviteUsersToRoomViewState): InviteUsersToRoomViewModel
     }
 
-    companion object : MvRxViewModelFactory<InviteUsersToRoomViewModel, InviteUsersToRoomViewState> {
-
-        @JvmStatic
-        override fun create(viewModelContext: ViewModelContext, state: InviteUsersToRoomViewState): InviteUsersToRoomViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
-            }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
-        }
-    }
+    companion object : MavericksViewModelFactory<InviteUsersToRoomViewModel, InviteUsersToRoomViewState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: InviteUsersToRoomAction) {
         when (action) {
@@ -63,32 +55,33 @@ class InviteUsersToRoomViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun inviteUsersToRoom(selections: Set<PendingSelection>) {
-        _viewEvents.post(InviteUsersToRoomViewEvents.Loading)
-
-        Observable.fromIterable(selections).flatMapCompletable { user ->
-            when (user) {
-                is PendingSelection.UserPendingSelection     -> room.rx().invite(user.user.userId, null)
-                is PendingSelection.ThreePidPendingSelection -> room.rx().invite3pid(user.threePid)
-            }
-        }.subscribe(
-                {
-                    val successMessage = when (selections.size) {
-                        1    -> stringProvider.getString(R.string.invitation_sent_to_one_user,
-                                selections.first().getBestName())
-                        2    -> stringProvider.getString(R.string.invitations_sent_to_two_users,
-                                selections.first().getBestName(),
-                                selections.last().getBestName())
-                        else -> stringProvider.getQuantityString(R.plurals.invitations_sent_to_one_and_more_users,
-                                selections.size - 1,
-                                selections.first().getBestName(),
-                                selections.size - 1)
+        viewModelScope.launch {
+            _viewEvents.post(InviteUsersToRoomViewEvents.Loading)
+            selections.asFlow()
+                    .map { user ->
+                        when (user) {
+                            is PendingSelection.UserPendingSelection     -> room.invite(user.user.userId, null)
+                            is PendingSelection.ThreePidPendingSelection -> room.invite3pid(user.threePid)
+                        }
                     }
-                    _viewEvents.post(InviteUsersToRoomViewEvents.Success(successMessage))
-                },
-                {
-                    _viewEvents.post(InviteUsersToRoomViewEvents.Failure(it))
-                })
-                .disposeOnClear()
+                    .catch { cause ->
+                        _viewEvents.post(InviteUsersToRoomViewEvents.Failure(cause))
+                    }
+                    .collect {
+                        val successMessage = when (selections.size) {
+                            1    -> stringProvider.getString(R.string.invitation_sent_to_one_user,
+                                    selections.first().getBestName())
+                            2    -> stringProvider.getString(R.string.invitations_sent_to_two_users,
+                                    selections.first().getBestName(),
+                                    selections.last().getBestName())
+                            else -> stringProvider.getQuantityString(R.plurals.invitations_sent_to_one_and_more_users,
+                                    selections.size - 1,
+                                    selections.first().getBestName(),
+                                    selections.size - 1)
+                        }
+                        _viewEvents.post(InviteUsersToRoomViewEvents.Success(successMessage))
+                    }
+        }
     }
 
     fun getUserIdsOfRoomMembers(): Set<String> {

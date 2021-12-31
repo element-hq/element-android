@@ -16,18 +16,17 @@
 
 package im.vector.app.features.matrixto
 
-import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.FragmentViewModelContext
 import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.MvRxViewModelFactory
+import com.airbnb.mvrx.MavericksViewModelFactory
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
-import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
@@ -50,13 +49,15 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
         private val session: Session,
         private val stringProvider: StringProvider,
         private val directRoomHelper: DirectRoomHelper,
-        private val errorFormatter: ErrorFormatter)
-    : VectorViewModel<MatrixToBottomSheetState, MatrixToAction, MatrixToViewEvents>(initialState) {
+        private val errorFormatter: ErrorFormatter) :
+    VectorViewModel<MatrixToBottomSheetState, MatrixToAction, MatrixToViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: MatrixToBottomSheetState): MatrixToBottomSheetViewModel
+    interface Factory : MavericksAssistedViewModelFactory<MatrixToBottomSheetViewModel, MatrixToBottomSheetState> {
+        override fun create(initialState: MatrixToBottomSheetState): MatrixToBottomSheetViewModel
     }
+
+    companion object : MavericksViewModelFactory<MatrixToBottomSheetViewModel, MatrixToBottomSheetState> by hiltMavericksViewModelFactory()
 
     init {
         when (initialState.linkType) {
@@ -183,6 +184,7 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
                 // not yet supported
                 _viewEvents.post(MatrixToViewEvents.Dismiss)
             }
+            is PermalinkData.RoomEmailInviteLink,
             is PermalinkData.FallbackLink -> {
                 _viewEvents.post(MatrixToViewEvents.Dismiss)
             }
@@ -242,14 +244,6 @@ class MatrixToBottomSheetViewModel @AssistedInject constructor(
      */
     private suspend fun resolveRoom(roomIdOrAlias: String): PeekResult {
         return session.peekRoom(roomIdOrAlias)
-    }
-
-    companion object : MvRxViewModelFactory<MatrixToBottomSheetViewModel, MatrixToBottomSheetState> {
-        override fun create(viewModelContext: ViewModelContext, state: MatrixToBottomSheetState): MatrixToBottomSheetViewModel? {
-            val fragment: MatrixToBottomSheet = (viewModelContext as FragmentViewModelContext).fragment()
-
-            return fragment.matrixToBottomSheetViewModelFactory.create(state)
-        }
     }
 
     override fun handle(action: MatrixToAction) {

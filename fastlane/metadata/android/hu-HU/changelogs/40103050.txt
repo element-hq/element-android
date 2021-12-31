@@ -1,0 +1,2 @@
+Fő változás ebben a verzióban: Állapot állítási lehetőség közvetlen beszélgetéseknél (megj.: a matrix.org-on az állapot jelzés ki van kapcsolva). Újra elérhető az Android Auto.
+Teljes változásnapló: https://github.com/vector-im/element-android/releases/tag/v1.3.5

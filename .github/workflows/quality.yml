@@ -14,16 +14,21 @@ jobs:
       - name: Run code quality check suite
         run: ./tools/check/check_code_quality.sh
 
-  klint:
+  ktlint:
     name: Kotlin Linter
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Run klint
+      - name: Run ktlint
         run: |
-          curl -sSLO https://github.com/pinterest/ktlint/releases/download/0.36.0/ktlint && chmod a+x ktlint
-          ./ktlint --android --experimental -v
+          ./gradlew ktlintCheck --continue
+      - name: Upload reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: ktlinting-report
+          path: vector/build/reports/ktlint/*.*
 
+# Lint for main module and all the other modules
   android-lint:
     name: Android Linter
     runs-on: ubuntu-latest
@@ -37,14 +42,16 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Lint analysis of the SDK
-        run: ./gradlew clean :matrix-sdk-android:lintRelease --stacktrace
+      - name: Lint analysis
+        run: ./gradlew clean :vector:lint --stacktrace
       - name: Upload reports
         uses: actions/upload-artifact@v2
         with:
-          name: linting-report-android-sdk
-          path: matrix-sdk-android/build/reports/*.*
+          name: lint-report
+          path: |
+            vector/build/reports/*.*
 
+# Lint for Gplay and Fdroid release APK
   apk-lint:
     name: Lint APK (${{ matrix.target }})
     runs-on: ubuntu-latest
@@ -69,6 +76,6 @@ jobs:
         uses: actions/upload-artifact@v2
         if: always()
         with:
-          name: release-debug-linting-report-${{ matrix.target }}
+          name: release-lint-report-${{ matrix.target }}
           path: |
             vector/build/reports/*.*

@@ -26,6 +26,8 @@ class PushGateWayController @Inject constructor(
         private val stringProvider: StringProvider
 ) : TypedEpoxyController<PushGatewayViewState>() {
 
+    var interactionListener: PushGatewayItemInteractions? = null
+
     override fun buildModels(data: PushGatewayViewState?) {
         val host = this
         data?.pushGateways?.invoke()?.let { pushers ->
@@ -39,6 +41,9 @@ class PushGateWayController @Inject constructor(
                     pushGatewayItem {
                         id("${it.pushKey}_${it.appId}")
                         pusher(it)
+                        host.interactionListener?.let {
+                            interactions(it)
+                        }
                     }
                 }
             }

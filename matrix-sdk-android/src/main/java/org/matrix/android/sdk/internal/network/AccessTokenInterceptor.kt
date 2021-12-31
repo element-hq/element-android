@@ -16,9 +16,9 @@
 
 package org.matrix.android.sdk.internal.network
 
-import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 import okhttp3.Interceptor
 import okhttp3.Response
+import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 
 internal class AccessTokenInterceptor(private val accessTokenProvider: AccessTokenProvider) : Interceptor {
 

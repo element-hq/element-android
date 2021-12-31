@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:viewBindingIgnore="true">
 
     <ImageView
         android:id="@+id/emptyItemImageView"
@@ -50,10 +51,10 @@
         android:maxWidth="300dp"
         android:maxLines="10"
         android:textColor="?vctr_content_secondary"
-        app:layout_constraintBottom_toTopOf="@+id/emptyItemButton"
+        app:layout_constraintBottom_toTopOf="@id/emptyItemButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emptyItemTitleView"
+        app:layout_constraintTop_toBottomOf="@id/emptyItemTitleView"
         tools:text="@string/this_space_has_no_rooms_admin" />
 
     <Button

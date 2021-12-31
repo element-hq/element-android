@@ -28,8 +28,8 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.databinding.ViewButtonStateBinding
 
-class ButtonStateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0)
-    : FrameLayout(context, attrs, defStyle) {
+class ButtonStateView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) :
+    FrameLayout(context, attrs, defStyle) {
 
     sealed class State {
         object Button : State()

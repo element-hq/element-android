@@ -30,15 +30,12 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.restart
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentLocalePickerBinding
-
 import java.util.Locale
 import javax.inject.Inject
 
 class LocalePickerFragment @Inject constructor(
-        private val viewModelFactory: LocalePickerViewModel.Factory,
         private val controller: LocalePickerController
 ) : VectorBaseFragment<FragmentLocalePickerBinding>(),
-        LocalePickerViewModel.Factory by viewModelFactory,
         LocalePickerController.Listener {
 
     private val viewModel: LocalePickerViewModel by fragmentViewModel()

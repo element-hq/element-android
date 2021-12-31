@@ -22,9 +22,10 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.Operation
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
@@ -36,7 +37,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
-import org.matrix.android.sdk.api.session.room.model.message.OptionItem
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.send.SendService
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -97,14 +97,20 @@ internal class DefaultSendService @AssistedInject constructor(
                 .let { sendEvent(it) }
     }
 
-    override fun sendPoll(question: String, options: List<OptionItem>): Cancelable {
+    override fun sendPoll(question: String, options: List<String>): Cancelable {
         return localEchoEventFactory.createPollEvent(roomId, question, options)
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }
 
-    override fun sendOptionsReply(pollEventId: String, optionIndex: Int, optionValue: String): Cancelable {
-        return localEchoEventFactory.createOptionsReplyEvent(roomId, pollEventId, optionIndex, optionValue)
+    override fun voteToPoll(pollEventId: String, answerId: String): Cancelable {
+        return localEchoEventFactory.createPollReplyEvent(roomId, pollEventId, answerId)
+                .also { createLocalEcho(it) }
+                .let { sendEvent(it) }
+    }
+
+    override fun endPoll(pollEventId: String): Cancelable {
+        return localEchoEventFactory.createEndPollEvent(roomId, pollEventId)
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }
@@ -130,7 +136,7 @@ internal class DefaultSendService @AssistedInject constructor(
             val messageContent = clearContent?.toModel<MessageContent>() as? MessageWithAttachmentContent ?: return NoOpCancellable
 
             val url = messageContent.getFileUrl() ?: return NoOpCancellable
-            if (url.startsWith("mxc://")) {
+            if (url.isMxcUrl()) {
                 // We need to resend only the message as the attachment is ok
                 localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                 return sendEvent(localEcho.root)
@@ -185,7 +191,7 @@ internal class DefaultSendService @AssistedInject constructor(
                             name = messageContent.body,
                             queryUri = Uri.parse(messageContent.url),
                             type = ContentAttachmentData.Type.AUDIO,
-                            waveform = messageContent.audioWaveformInfo?.waveform
+                            waveform = messageContent.audioWaveformInfo?.waveform?.filterNotNull()
                     )
                     localEchoRepository.updateSendState(localEcho.eventId, roomId, SendState.UNSENT)
                     internalSendMedia(listOf(localEcho.root), attachmentData, true)

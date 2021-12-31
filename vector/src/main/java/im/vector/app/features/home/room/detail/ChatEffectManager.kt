@@ -105,8 +105,8 @@ class ChatEffectManager @Inject constructor() {
     }
 
     private fun hasAlreadyPlayed(event: TimelineEvent): Boolean {
-        return alreadyPlayed.contains(event.eventId)
-                || (event.root.unsignedData?.transactionId?.let { alreadyPlayed.contains(it) } ?: false)
+        return alreadyPlayed.contains(event.eventId) ||
+                (event.root.unsignedData?.transactionId?.let { alreadyPlayed.contains(it) } ?: false)
     }
 
     private fun findEffect(content: MessageContent, event: TimelineEvent): ChatEffect? {

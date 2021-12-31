@@ -25,12 +25,18 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
+import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.room.failure.CreateRoomFailure
+import org.matrix.android.sdk.api.session.room.model.GuestAccess
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomDirectoryVisibility
+import org.matrix.android.sdk.api.session.room.model.RoomHistoryVisibility
 import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesAllowEntry
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomPreset
 import org.matrix.android.sdk.api.session.room.model.create.RestrictedRoomPreset
+import org.matrix.android.sdk.api.session.room.powerlevels.Role
+import org.matrix.android.sdk.api.session.space.CreateSpaceParams
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -49,7 +55,8 @@ data class CreateSpaceTaskParams(
         val spaceAvatar: Uri? = null,
         val spaceAlias: String? = null,
         val isPublic: Boolean,
-        val defaultRooms: List<String> = emptyList()
+        val defaultRooms: List<String> = emptyList(),
+        val defaultEmailToInvite: List<String> = emptyList()
 )
 
 class CreateSpaceViewModelTask @Inject constructor(
@@ -60,13 +67,31 @@ class CreateSpaceViewModelTask @Inject constructor(
 
     override suspend fun execute(params: CreateSpaceTaskParams): CreateSpaceTaskResult {
         val spaceID = try {
-            session.spaceService().createSpace(
-                    params.spaceName,
-                    params.spaceTopic,
-                    params.spaceAvatar,
-                    params.isPublic,
-                    params.spaceAlias
-            )
+            session.spaceService().createSpace(CreateSpaceParams().apply {
+                this.name = params.spaceName
+                this.topic = params.spaceTopic
+                this.avatarUri = params.spaceAvatar
+                if (params.isPublic) {
+                    this.roomAliasName = params.spaceAlias
+                    this.powerLevelContentOverride = (powerLevelContentOverride ?: PowerLevelsContent()).copy(
+                            invite = Role.Default.value
+                    )
+                    this.preset = CreateRoomPreset.PRESET_PUBLIC_CHAT
+                    this.historyVisibility = RoomHistoryVisibility.WORLD_READABLE
+                    this.guestAccess = GuestAccess.CanJoin
+                } else {
+                    this.preset = CreateRoomPreset.PRESET_PRIVATE_CHAT
+                    visibility = RoomDirectoryVisibility.PRIVATE
+                    this.invite3pids.addAll(
+                            params.defaultEmailToInvite.map {
+                                ThreePid.Email(it)
+                            }
+                    )
+                    this.powerLevelContentOverride = (powerLevelContentOverride ?: PowerLevelsContent()).copy(
+                            invite = Role.Moderator.value
+                    )
+                }
+            })
         } catch (failure: Throwable) {
             return CreateSpaceTaskResult.FailedToCreateSpace(failure)
         }
@@ -111,10 +136,7 @@ class CreateSpaceViewModelTask @Inject constructor(
                                         this.featurePreset = RestrictedRoomPreset(
                                                 homeServerCapabilities,
                                                 listOf(
-                                                        RoomJoinRulesAllowEntry(
-                                                                spaceID = spaceID,
-                                                                via = session.sessionParams.homeServerHost?.let { listOf(it) } ?: emptyList()
-                                                        )
+                                                        RoomJoinRulesAllowEntry.restrictedToRoom(spaceID)
                                                 )
                                         )
                                         if (e2eByDefault) {
@@ -137,7 +159,7 @@ class CreateSpaceViewModelTask @Inject constructor(
                             timeout.roomID
                         }
                         val via = session.sessionParams.homeServerHost?.let { listOf(it) } ?: emptyList()
-                        createdSpace!!.addChildren(roomId, via, null, autoJoin = false, suggested = true)
+                        createdSpace!!.addChildren(roomId, via, null, suggested = true)
                         // set canonical
                         session.spaceService().setSpaceParent(
                                 roomId,

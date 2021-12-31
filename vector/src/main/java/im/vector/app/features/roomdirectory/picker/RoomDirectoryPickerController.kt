@@ -160,8 +160,8 @@ class RoomDirectoryPickerController @Inject constructor(
     }
 
     private fun getErrorMessage(error: Throwable): String {
-        return if (error is Failure.ServerError
-                && error.httpCode == HttpsURLConnection.HTTP_INTERNAL_ERROR /* 500 */) {
+        return if (error is Failure.ServerError &&
+                error.httpCode == HttpsURLConnection.HTTP_INTERNAL_ERROR /* 500 */) {
             stringProvider.getString(R.string.directory_add_a_new_server_error)
         } else {
             errorFormatter.toHumanReadable(error)

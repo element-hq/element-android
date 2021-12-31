@@ -28,8 +28,8 @@ internal open class CryptoRoomEntity(
         // to avoid re-create and re-share at each startup (if rotation not needed..)
         // This is specific to megolm but not sure how to model it better
         var outboundSessionInfo: OutboundGroupSessionInfoEntity? = null
-        )
-    : RealmObject() {
+        ) :
+    RealmObject() {
 
     companion object
 }

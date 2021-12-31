@@ -37,3 +37,6 @@ Element 透過不同的方式讓您掌控一切：
 
 <b>從上次離開的地方開始</b>
 無論您身在何處，都可以透過在您所有裝置與網頁 https://app.element.io 間完全同步的訊息歷史保持聯絡
+
+<b>開放原始碼</b>
+Android 版的 Element 是開放原始碼專案，託管於 GitHub 上。請在 https://github.com/vector-im/element-android 上回報臭蟲及/或貢獻其開發

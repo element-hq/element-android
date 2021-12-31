@@ -26,7 +26,6 @@ import im.vector.app.core.utils.PERMISSIONS_FOR_VIDEO_IP_CALL
 import im.vector.app.core.utils.checkPermissions
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.settings.VectorPreferences
-import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 
 class StartCallActionsHandler(
         private val roomId: String,
@@ -36,7 +35,7 @@ class StartCallActionsHandler(
         private val roomDetailViewModel: RoomDetailViewModel,
         private val startCallActivityResultLauncher: ActivityResultLauncher<Array<String>>,
         private val showDialogWithMessage: (String) -> Unit,
-        private val onTapToReturnToCall: () -> Unit)  {
+        private val onTapToReturnToCall: () -> Unit) {
 
     fun onVideoCallClicked() {
         handleCallRequest(true)
@@ -61,16 +60,8 @@ class StartCallActionsHandler(
             }
             2    -> {
                 val currentCall = callManager.getCurrentCall()
-                if (currentCall != null) {
-                    // resume existing if same room, if not prompt to kill and then restart new call?
-                    if (currentCall.signalingRoomId == roomId) {
-                        onTapToReturnToCall()
-                    }
-                    //                        else {
-                    // TODO might not work well, and should prompt
-                    //                            webRtcPeerConnectionManager.endCall()
-                    //                            safeStartCall(it, isVideoCall)
-                    //                        }
+                if (currentCall?.signalingRoomId == roomId) {
+                    onTapToReturnToCall()
                 } else if (!state.isAllowedToStartWebRTCCall) {
                     showDialogWithMessage(fragment.getString(
                             if (state.isDm()) {
@@ -96,9 +87,8 @@ class StartCallActionsHandler(
                             }
                     ))
                 } else {
-                    if (state.activeRoomWidgets()?.filter { it.type == WidgetType.Jitsi }?.any() == true) {
-                        // A conference is already in progress!
-                        showDialogWithMessage(fragment.getString(R.string.conference_call_in_progress))
+                    if (state.hasActiveJitsiWidget()) {
+                        // A conference is already in progress, return
                     } else {
                         MaterialAlertDialogBuilder(fragment.requireContext())
                                 .setTitle(if (isVideoCall) R.string.video_meeting else R.string.audio_meeting)

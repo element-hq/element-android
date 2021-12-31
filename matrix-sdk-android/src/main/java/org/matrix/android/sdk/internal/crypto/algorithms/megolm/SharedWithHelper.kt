@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 
+import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 
@@ -28,7 +29,13 @@ internal class SharedWithHelper(
         return cryptoStore.getSharedWithInfo(roomId, sessionId)
     }
 
-    fun markedSessionAsShared(userId: String, deviceId: String, chainIndex: Int) {
-        cryptoStore.markedSessionAsShared(roomId, sessionId, userId, deviceId, chainIndex)
+    fun markedSessionAsShared(deviceInfo: CryptoDeviceInfo, chainIndex: Int) {
+        cryptoStore.markedSessionAsShared(
+                roomId = roomId,
+                sessionId = sessionId,
+                userId = deviceInfo.userId,
+                deviceId = deviceInfo.deviceId,
+                deviceIdentityKey = deviceInfo.identityKey() ?: "",
+                chainIndex = chainIndex)
     }
 }

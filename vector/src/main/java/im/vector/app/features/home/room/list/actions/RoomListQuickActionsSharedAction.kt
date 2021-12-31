@@ -23,9 +23,9 @@ import im.vector.app.core.platform.VectorSharedAction
 
 sealed class RoomListQuickActionsSharedAction(
         @StringRes val titleRes: Int,
-        @DrawableRes val iconResId: Int,
-        val destructive: Boolean = false)
-    : VectorSharedAction {
+        @DrawableRes val iconResId: Int?,
+        val destructive: Boolean = false) :
+    VectorSharedAction {
 
     data class NotificationsAllNoisy(val roomId: String) : RoomListQuickActionsSharedAction(
             R.string.room_list_quick_actions_notifications_all_noisy,
@@ -60,9 +60,9 @@ sealed class RoomListQuickActionsSharedAction(
             R.string.room_list_quick_actions_favorite_add,
             R.drawable.ic_star_24dp)
 
-    data class Leave(val roomId: String) : RoomListQuickActionsSharedAction(
+    data class Leave(val roomId: String, val showIcon: Boolean = true) : RoomListQuickActionsSharedAction(
             R.string.room_list_quick_actions_leave,
-            R.drawable.ic_room_actions_leave,
+            if (showIcon) R.drawable.ic_room_actions_leave else null,
             true
     )
 }

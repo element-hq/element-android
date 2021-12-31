@@ -16,74 +16,155 @@
 
 package im.vector.app.features.userdirectory
 
-import com.airbnb.mvrx.ActivityViewModelContext
-import com.airbnb.mvrx.FragmentViewModelContext
-import com.airbnb.mvrx.MvRxViewModelFactory
-import com.airbnb.mvrx.ViewModelContext
-import com.jakewharton.rxrelay2.BehaviorRelay
+import androidx.lifecycle.asFlow
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.MavericksViewModelFactory
+import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
-import dagger.assisted.AssistedInject
 import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import im.vector.app.R
+import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.toggle
 import im.vector.app.core.platform.VectorViewModel
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.discovery.fetchIdentityServerWithTerms
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.identity.IdentityServiceError
+import org.matrix.android.sdk.api.session.identity.IdentityServiceListener
+import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.user.model.User
 import org.matrix.android.sdk.api.util.toMatrixItem
-import org.matrix.android.sdk.api.util.toOptional
-import org.matrix.android.sdk.rx.rx
-import java.util.concurrent.TimeUnit
 
-private typealias KnownUsersSearch = String
-private typealias DirectoryUsersSearch = String
+data class ThreePidUser(
+        val email: String,
+        val user: User?
+)
 
-class UserListViewModel @AssistedInject constructor(@Assisted initialState: UserListViewState,
-                                                    private val session: Session)
-    : VectorViewModel<UserListViewState, UserListAction, UserListViewEvents>(initialState) {
+class UserListViewModel @AssistedInject constructor(
+        @Assisted initialState: UserListViewState,
+        private val stringProvider: StringProvider,
+        private val session: Session
+) : VectorViewModel<UserListViewState, UserListAction, UserListViewEvents>(initialState) {
 
-    private val knownUsersSearch = BehaviorRelay.create<KnownUsersSearch>()
-    private val directoryUsersSearch = BehaviorRelay.create<DirectoryUsersSearch>()
+    private val knownUsersSearch = MutableStateFlow("")
+    private val directoryUsersSearch = MutableStateFlow("")
+    private val identityServerUsersSearch = MutableStateFlow(UserSearch(searchTerm = ""))
 
     @AssistedFactory
-    interface Factory {
-        fun create(initialState: UserListViewState): UserListViewModel
+    interface Factory : MavericksAssistedViewModelFactory<UserListViewModel, UserListViewState> {
+        override fun create(initialState: UserListViewState): UserListViewModel
     }
 
-    companion object : MvRxViewModelFactory<UserListViewModel, UserListViewState> {
+    companion object : MavericksViewModelFactory<UserListViewModel, UserListViewState> by hiltMavericksViewModelFactory()
 
-        override fun create(viewModelContext: ViewModelContext, state: UserListViewState): UserListViewModel? {
-            val factory = when (viewModelContext) {
-                is FragmentViewModelContext -> viewModelContext.fragment as? Factory
-                is ActivityViewModelContext -> viewModelContext.activity as? Factory
+    private val identityServerListener = object : IdentityServiceListener {
+        override fun onIdentityServerChange() {
+            withState {
+                identityServerUsersSearch.tryEmit(UserSearch(it.searchTerm))
+                val identityServerURL = cleanISURL(session.identityService().getCurrentIdentityServerUrl())
+                setState {
+                    copy(configuredIdentityServer = identityServerURL)
+                }
             }
-            return factory?.create(state) ?: error("You should let your activity/fragment implements Factory interface")
         }
     }
 
     init {
         observeUsers()
+        setState {
+            copy(
+                    configuredIdentityServer = cleanISURL(session.identityService().getCurrentIdentityServerUrl())
+            )
+        }
+        session.identityService().addListener(identityServerListener)
+    }
+
+    private fun cleanISURL(url: String?): String? {
+        return url?.removePrefix("https://")
+    }
+
+    override fun onCleared() {
+        session.identityService().removeListener(identityServerListener)
+        super.onCleared()
     }
 
     override fun handle(action: UserListAction) {
         when (action) {
-            is UserListAction.SearchUsers -> handleSearchUsers(action.value)
-            is UserListAction.ClearSearchUsers -> handleClearSearchUsers()
-            is UserListAction.AddPendingSelection -> handleSelectUser(action)
-            is UserListAction.RemovePendingSelection -> handleRemoveSelectedUser(action)
+            is UserListAction.SearchUsers                -> handleSearchUsers(action.value)
+            is UserListAction.ClearSearchUsers           -> handleClearSearchUsers()
+            is UserListAction.AddPendingSelection        -> handleSelectUser(action)
+            is UserListAction.RemovePendingSelection     -> handleRemoveSelectedUser(action)
             UserListAction.ComputeMatrixToLinkForSharing -> handleShareMyMatrixToLink()
+            UserListAction.UserConsentRequest            -> handleUserConsentRequest()
+            is UserListAction.UpdateUserConsent          -> handleISUpdateConsent(action)
+            UserListAction.Resumed                       -> handleResumed()
         }.exhaustive
+    }
+
+    private fun handleUserConsentRequest() {
+        viewModelScope.launch {
+            val event = try {
+                val result = session.fetchIdentityServerWithTerms(stringProvider.getString(R.string.resources_language))
+                UserListViewEvents.OnPoliciesRetrieved(result)
+            } catch (throwable: Throwable) {
+                UserListViewEvents.Failure(throwable)
+            }
+            _viewEvents.post(event)
+        }
+    }
+
+    private fun handleISUpdateConsent(action: UserListAction.UpdateUserConsent) {
+        session.identityService().setUserConsent(action.consent)
+        withState {
+            retryUserSearch(it)
+        }
+    }
+
+    private fun handleResumed() {
+        withState {
+            if (it.hasNoIdentityServerConfigured()) {
+                retryUserSearch(it)
+            }
+        }
+    }
+
+    private fun retryUserSearch(state: UserListViewState) {
+        identityServerUsersSearch.tryEmit(UserSearch(state.searchTerm, cacheBuster = System.currentTimeMillis()))
     }
 
     private fun handleSearchUsers(searchTerm: String) {
         setState {
-            copy(searchTerm = searchTerm)
+            copy(
+                    searchTerm = searchTerm
+            )
         }
-        knownUsersSearch.accept(searchTerm)
-        directoryUsersSearch.accept(searchTerm)
+        if (searchTerm.isEmail().not()) {
+            // if it's not an email reset to uninitialized
+            // because the flow won't be triggered and result would stay
+            setState {
+                copy(
+                        matchingEmail = Uninitialized
+                )
+            }
+        }
+        identityServerUsersSearch.tryEmit(UserSearch(searchTerm))
+        knownUsersSearch.tryEmit(searchTerm)
+        directoryUsersSearch.tryEmit(searchTerm)
     }
 
     private fun handleShareMyMatrixToLink() {
@@ -93,80 +174,91 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
     }
 
     private fun handleClearSearchUsers() {
-        knownUsersSearch.accept("")
-        directoryUsersSearch.accept("")
+        knownUsersSearch.tryEmit("")
+        directoryUsersSearch.tryEmit("")
+        identityServerUsersSearch.tryEmit(UserSearch(""))
         setState {
             copy(searchTerm = "")
         }
     }
 
     private fun observeUsers() = withState { state ->
+        identityServerUsersSearch
+                .filter { it.searchTerm.isEmail() }
+                .sample(300)
+                .onEach { search ->
+                    executeSearchEmail(search.searchTerm)
+                }.launchIn(viewModelScope)
+
         knownUsersSearch
-                .throttleLast(300, TimeUnit.MILLISECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .switchMap {
-                    session.rx().livePagedUsers(it, state.excludedUserIds)
+                .sample(300)
+                .flatMapLatest { search ->
+                    session.getPagedUsersLive(search, state.excludedUserIds).asFlow()
                 }
-                .execute { async ->
-                    copy(knownUsers = async)
+                .execute {
+                    copy(knownUsers = it)
                 }
 
         directoryUsersSearch
-                .debounce(300, TimeUnit.MILLISECONDS)
-                .switchMapSingle { search ->
-                    val stream = if (search.isBlank()) {
-                        Single.just(emptyList<User>())
-                    } else {
-                        val searchObservable = session.rx()
-                                .searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
-                                .map { users ->
-                                    users.sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
-                                }
-                        // If it's a valid user id try to use Profile API
-                        // because directory only returns users that are in public rooms or share a room with you, where as
-                        // profile will work other federations
-                        if (!MatrixPatterns.isUserId(search)) {
-                            searchObservable
-                        } else {
-                            val profileObservable = session.rx().getProfileInfo(search)
-                                    .map { json ->
-                                        User(
-                                                userId = search,
-                                                displayName = json[ProfileService.DISPLAY_NAME_KEY] as? String,
-                                                avatarUrl = json[ProfileService.AVATAR_URL_KEY] as? String
-                                        ).toOptional()
-                                    }
-                                    .onErrorReturn {
-                                        // Profile API can be restricted and doesn't have to return result.
-                                        // In this case allow inviting valid user ids.
-                                        User(
-                                                userId = search,
-                                                displayName = null,
-                                                avatarUrl = null
-                                        ).toOptional()
-                                    }
+                .debounce(300)
+                .onEach { search ->
+                    executeSearchDirectory(state, search)
+                }.launchIn(viewModelScope)
+    }
 
-                            Single.zip(
-                                    searchObservable,
-                                    profileObservable,
-                                    { searchResults, optionalProfile ->
-                                        val profile = optionalProfile.getOrNull() ?: return@zip searchResults
-                                        val searchContainsProfile = searchResults.any { it.userId == profile.userId }
-                                        if (searchContainsProfile) {
-                                            searchResults
-                                        } else {
-                                            listOf(profile) + searchResults
-                                        }
-                                    }
+    private suspend fun executeSearchEmail(search: String) {
+        suspend {
+            val params = listOf(ThreePid.Email(search))
+            val foundThreePid = session.identityService().lookUp(params).firstOrNull()
+            if (foundThreePid == null) {
+                ThreePidUser(email = search, user = null)
+            } else {
+                try {
+                    val json = session.getProfile(foundThreePid.matrixId)
+                    ThreePidUser(
+                            email = search,
+                            user = User(
+                                    userId = foundThreePid.matrixId,
+                                    displayName = json[ProfileService.DISPLAY_NAME_KEY] as? String,
+                                    avatarUrl = json[ProfileService.AVATAR_URL_KEY] as? String
                             )
-                        }
-                    }
-                    stream.toAsync {
-                        copy(directoryUsers = it)
-                    }
+                    )
+                } catch (failure: Throwable) {
+                    ThreePidUser(email = search, user = User(foundThreePid.matrixId))
                 }
-                .subscribe()
-                .disposeOnClear()
+            }
+        }.execute {
+            copy(matchingEmail = it)
+        }
+    }
+
+    private suspend fun executeSearchDirectory(state: UserListViewState, search: String) {
+        suspend {
+            if (search.isBlank()) {
+                emptyList()
+            } else {
+                val searchResult = session
+                        .searchUsersDirectory(search, 50, state.excludedUserIds.orEmpty())
+                        .sortedBy { it.toMatrixItem().firstLetterOfDisplayName() }
+                val userProfile = if (MatrixPatterns.isUserId(search)) {
+                    val json = tryOrNull { session.getProfile(search) }
+                    User(
+                            userId = search,
+                            displayName = json?.get(ProfileService.DISPLAY_NAME_KEY) as? String,
+                            avatarUrl = json?.get(ProfileService.AVATAR_URL_KEY) as? String
+                    )
+                } else {
+                    null
+                }
+                if (userProfile == null || searchResult.any { it.userId == userProfile.userId }) {
+                    searchResult
+                } else {
+                    listOf(userProfile) + searchResult
+                }
+            }
+        }.execute {
+            copy(directoryUsers = it)
+        }
     }
 
     private fun handleSelectUser(action: UserListAction.AddPendingSelection) = withState { state ->
@@ -179,3 +271,10 @@ class UserListViewModel @AssistedInject constructor(@Assisted initialState: User
         setState { copy(pendingSelections = selections) }
     }
 }
+
+private fun UserListViewState.hasNoIdentityServerConfigured() = matchingEmail is Fail && matchingEmail.error == IdentityServiceError.NoIdentityServerConfigured
+
+/**
+ * Wrapper class to allow identical search terms to be re-emitted
+ */
+private data class UserSearch(val searchTerm: String, val cacheBuster: Long = 0)

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:colorBackground"
+    android:foreground="?attr/selectableItemBackground"
+    android:gravity="center_vertical"
+    android:padding="8dp"
+    tools:viewBindingIgnore="true">
+
+    <FrameLayout
+        android:id="@+id/iconContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/rounded_rect_shape_8"
+        android:backgroundTint="?colorPrimary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/itemAvatar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:importantForAccessibility="no"
+            android:padding="4dp"
+            android:src="@drawable/ic_mail"
+            android:visibility="gone"
+            app:tint="@android:color/white"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/itemAvatarChecked"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="@string/a11y_checked"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_material_done"
+            app:tint="@android:color/white"
+            tools:ignore="MissingPrefix" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/itemTitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="12dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="?vctr_content_primary"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/itemDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@id/iconContainer"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="foo@example.com" />
+
+    <TextView
+        android:id="@+id/itemDescription"
+        style="@style/Widget.Vector.TextView.Body"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/invite_by_email"
+        android:textColor="?vctr_content_secondary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/itemTitle"
+        app:layout_constraintTop_toBottomOf="@id/itemTitle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
