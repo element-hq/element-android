@@ -22,6 +22,7 @@ import androidx.annotation.VisibleForTesting
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import org.matrix.android.sdk.api.util.MatrixItem
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.abs
@@ -45,35 +46,38 @@ class MatrixItemColorProvider @Inject constructor(
     }
 
     fun setOverrideColors(overrideColors: Map<String, String>?) {
-        overrideColors?.forEach() {
+        cache.clear()
+        overrideColors?.forEach {
             setOverrideColor(it.key, it.value)
         }
     }
 
-    fun setOverrideColor(id: String, colorSpec: String?) : Boolean {
+    fun setOverrideColor(id: String, colorSpec: String?): Boolean {
         val color = parseUserColorSpec(colorSpec)
-        if (color == null) {
+        return if (color == null) {
             cache.remove(id)
-            return false
+            false
         } else {
-            cache.put(id, color)
-            return true
+            cache[id] = color
+            true
         }
     }
 
     @ColorInt
     private fun parseUserColorSpec(colorText: String?): Int? {
-        if (colorText.isNullOrBlank()) {
-            return null
-        }
-        try {
-            if (colorText.first() == '#') {
-                return (colorText.substring(1).toLong(radix = 16) or 0xff000000L).toInt()
-            } else {
-                return colorProvider.getColor(getUserColorByIndex(colorText.toInt()))
+        return if (colorText.isNullOrBlank()) {
+            null
+        } else {
+            try {
+                if (colorText.first() == '#') {
+                    (colorText.substring(1).toLong(radix = 16) or 0xff000000L).toInt()
+                } else {
+                    colorProvider.getColor(getUserColorByIndex(colorText.toInt()))
+                }
+            } catch (e: Throwable) {
+                Timber.e(e, "Unable to parse color $colorText")
+                null
             }
-        } catch (e: Throwable) {
-            return null
         }
     }
 
