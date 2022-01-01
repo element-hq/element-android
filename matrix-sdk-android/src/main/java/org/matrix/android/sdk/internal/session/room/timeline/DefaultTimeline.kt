@@ -132,7 +132,7 @@ internal class DefaultTimeline(
                 return@post
             }
             Timber.v("Paginate $direction of $count items")
-            if(isFromThreadTimeline){
+            if (isFromThreadTimeline) {
                 Timber.v("----> Paginate $direction of $count items")
             }
             val startDisplayIndex = if (direction == Timeline.Direction.BACKWARDS) prevDisplayIndex else nextDisplayIndex
@@ -179,7 +179,7 @@ internal class DefaultTimeline(
                 }
 
                 timelineEvents = rootThreadEventId?.let {
-                    if(shouldFetchThreadTimeline) {
+                    if (shouldFetchThreadTimeline) {
                         fetchThreadTimeline(it)
                     }
                     TimelineEventEntity
@@ -344,13 +344,13 @@ internal class DefaultTimeline(
         val lastCacheEvent = results.lastOrNull()
         val firstCacheEvent = results.firstOrNull()
         val chunkEntity = getLiveChunk()
-        if (isFromThreadTimeline) {
-            Timber.i("----> ----> ----> ----> ----> ----> ----> ----> ----> ")
-            Timber.i("----> lastCacheEvent: ${lastCacheEvent?.eventId}")
-            Timber.i("----> firstCacheEvent: ${firstCacheEvent?.eventId}")
-            Timber.i("----> LOADING_STATE results.size: ${results.size} | contains root thread (END BACKWORDS) ${results.map { it.eventId }.contains(rootThreadEventId)}")
-            Timber.i("----> LOADING_STATE builtEventsIdMap.size: $builtEventsIdMap |: $builtEventsIdMap")
-        }
+//        if (isFromThreadTimeline) {
+//            Timber.i("----> ----> ----> ----> ----> ----> ----> ----> ----> ")
+//            Timber.i("----> lastCacheEvent: ${lastCacheEvent?.eventId}")
+//            Timber.i("----> firstCacheEvent: ${firstCacheEvent?.eventId}")
+//            Timber.i("----> LOADING_STATE results.size: ${results.size} | contains root thread (END BACKWORDS) ${results.map { it.eventId }.contains(rootThreadEventId)}")
+//            Timber.i("----> LOADING_STATE builtEventsIdMap.size: $builtEventsIdMap |: $builtEventsIdMap")
+//        }
 
         updateState(Timeline.Direction.FORWARDS) { state ->
             state.copy(
@@ -361,7 +361,11 @@ internal class DefaultTimeline(
         updateState(Timeline.Direction.BACKWARDS) { state ->
             state.copy(
                     hasMoreInCache = !builtEventsIdMap.containsKey(lastCacheEvent?.eventId),
-                    hasReachedEnd = if (isFromThreadTimeline && results.map { it.eventId }.contains(rootThreadEventId)) true else (chunkEntity?.isLastBackward ?: false || lastCacheEvent?.root?.type == EventType.STATE_ROOM_CREATE)
+                    hasReachedEnd = if (isFromThreadTimeline && results.map { it.eventId }.contains(rootThreadEventId)) {
+                        true
+                    } else if (isFromThreadTimeline) {
+                        false
+                    } else (chunkEntity?.isLastBackward ?: false || lastCacheEvent?.root?.type == EventType.STATE_ROOM_CREATE)
             )
         }
     }
@@ -805,18 +809,13 @@ internal class DefaultTimeline(
     private fun fetchThreadTimelineCallback(): MatrixCallback<Boolean> {
         return object : MatrixCallback<Boolean> {
             override fun onSuccess(data: Boolean) {
-                if (data == false) {
-                    Timber.i("----> Restarting thread timeline $rootThreadEventId ")
-                    // TODO FIX THE PROBLEM HERE need to go back and front to display correctly
+                if (!data) {
+                    Timber.i("----> New events founds for thread: $rootThreadEventId ")
                     postSnapshot()
-//                    restartWithEventId(null)
                 }
             }
 
             override fun onFailure(failure: Throwable) {
-//                updateState(direction) { it.copy(isPaginating = false, requestedPaginationCount = 0) }
-//                postSnapshot()
-//                Timber.v("Failure fetching $limit items $direction from pagination request")
             }
         }
     }
