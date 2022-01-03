@@ -20,7 +20,8 @@ import org.commonmark.node.Delimited
 
 class InlineMaths(private val delimiter: InlineDelimiter) : CustomNode(), Delimited {
     enum class InlineDelimiter {
-        SINGLE_DOLLAR, ROUND_BRACKET_ESCAPED
+        SINGLE_DOLLAR,
+        ROUND_BRACKET_ESCAPED
     }
 
     override fun getOpeningDelimiter(): String {
