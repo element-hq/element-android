@@ -45,7 +45,7 @@ android {
 
     testOptions {
         // Comment to run on Android 12
-        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+//        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
 
     buildTypes {
@@ -64,6 +64,7 @@ android {
 
     adbOptions {
         installOptions "-g"
+        timeOutInMs 180 * 1000
     }
 
     compileOptions {

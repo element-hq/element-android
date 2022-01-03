@@ -154,8 +154,6 @@ class SecurityBootstrapTest : VerificationTestBase() {
         onView(withId(R.id.recoveryCopy))
                 .perform(click())
 
-        Thread.sleep(1000)
-
         // Dismiss dialog
         onView(withText(R.string.ok)).inRoot(RootMatchers.isDialog()).perform(click())
 

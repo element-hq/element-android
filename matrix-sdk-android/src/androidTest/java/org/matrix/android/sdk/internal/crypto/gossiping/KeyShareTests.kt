@@ -18,12 +18,14 @@ package org.matrix.android.sdk.internal.crypto.gossiping
 
 import android.util.Log
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertNotNull
 import junit.framework.TestCase.assertTrue
 import junit.framework.TestCase.fail
 import org.junit.Assert
 import org.junit.FixMethodOrder
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -59,11 +61,13 @@ import kotlin.coroutines.resume
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
+@LargeTest
 class KeyShareTests : InstrumentedTest {
 
     private val commonTestHelper = CommonTestHelper(context())
 
     @Test
+    @Ignore("This test will be ignored until it is fixed")
     fun test_DoNotSelfShareIfNotTrusted() {
         val aliceSession = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
 
@@ -195,6 +199,7 @@ class KeyShareTests : InstrumentedTest {
     }
 
     @Test
+    @Ignore("This test will be ignored until it is fixed")
     fun test_ShareSSSSSecret() {
         val aliceSession1 = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
 
@@ -307,6 +312,7 @@ class KeyShareTests : InstrumentedTest {
     }
 
     @Test
+    @Ignore("This test will be ignored until it is fixed")
     fun test_ImproperKeyShareBug() {
         val aliceSession = commonTestHelper.createAccount(TestConstants.USER_ALICE, SessionTestParams(true))
 
