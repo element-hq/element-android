@@ -67,9 +67,9 @@ jobs:
       - name: Start synapse server
         run: |
           git clone -b develop https://github.com/matrix-org/synapse.git
-          source .synapse/env/bin/activate
-          pip install -e .synapse
-          .synapse/demo/start.sh --no-rate-limit
+          source synapse/env/bin/activate
+          pip install -e synapse
+          synapse/demo/start.sh --no-rate-limit
 #          python3 -m venv .synapse
 #          source .synapse/bin/activate
 #          pip install synapse matrix-synapse
