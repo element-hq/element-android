@@ -48,9 +48,7 @@ internal open class EventEntity(@Index var eventId: String = "",
                                 @Index var isRootThread: Boolean = false,
                                 @Index var rootThreadEventId: String? = null,
                                 var numberOfThreads: Int = 0,
-//                                var threadNotificationState: Boolean = false,
                                 var threadSummaryLatestMessage: TimelineEventEntity? = null
-
 ) : RealmObject() {
 
     private var sendStateStr: String = SendState.UNKNOWN.name
