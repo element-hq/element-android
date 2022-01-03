@@ -184,16 +184,71 @@ class CommonTestHelper(context: Context) {
     /**
      * Will send nb of messages provided by count parameter but waits a bit every 10 messages to avoid gap in sync
      */
-    private fun sendTextMessagesBatched(room: Room, message: String, count: Int) {
+    private fun sendTextMessagesBatched(room: Room, message: String, count: Int, rootThreadEventId: String? = null) {
         (1 until count + 1)
                 .map { "$message #$it" }
                 .chunked(10)
                 .forEach { batchedMessages ->
                     batchedMessages.forEach { formattedMessage ->
-                        room.sendTextMessage(formattedMessage)
+                        if (rootThreadEventId != null) {
+                            room.replyInThread(
+                                    rootThreadEventId = rootThreadEventId,
+                                    replyInThreadText = formattedMessage)
+                        } else {
+                            room.sendTextMessage(formattedMessage)
+                        }
                     }
                     Thread.sleep(1_000L)
                 }
+    }
+
+    /**
+     * Reply in a thread
+     * @param room         the room where to send the messages
+     * @param message      the message to send
+     * @param numberOfMessages the number of time the message will be sent
+     */
+    fun replyInThreadMessage(
+            room: Room,
+            message: String,
+            numberOfMessages: Int,
+            rootThreadEventId: String,
+            timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
+
+        val sentEvents = ArrayList<TimelineEvent>(numberOfMessages)
+        val timeline = room.createTimeline(null, TimelineSettings(10))
+        timeline.start()
+        waitWithLatch(timeout + 1_000L * numberOfMessages) { latch ->
+            val timelineListener = object : Timeline.Listener {
+                override fun onTimelineFailure(throwable: Throwable) {
+                }
+
+                override fun onNewTimelineEvents(eventIds: List<String>) {
+                    // noop
+                }
+
+                override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                    val newMessages = snapshot
+                            .filter { it.root.sendState == SendState.SYNCED }
+                            .filter { it.root.getClearType() == EventType.MESSAGE }
+                            .filter { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(message) == true }
+
+                    Timber.v("New synced message size: ${newMessages.size}")
+                    if (newMessages.size == numberOfMessages) {
+                        sentEvents.addAll(newMessages)
+                        // Remove listener now, if not at the next update sendEvents could change
+                        timeline.removeListener(this)
+                        latch.countDown()
+                    }
+                }
+            }
+            timeline.addListener(timelineListener)
+            sendTextMessagesBatched(room, message, numberOfMessages, rootThreadEventId)
+        }
+        timeline.dispose()
+        // Check that all events has been created
+        assertEquals("Message number do not match $sentEvents", numberOfMessages.toLong(), sentEvents.size.toLong())
+        return sentEvents
     }
 
     // PRIVATE METHODS *****************************************************************************
