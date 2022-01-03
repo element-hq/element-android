@@ -84,6 +84,6 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822
-          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedCheck --stacktrace
-#          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES -Pandroid.testInstrumentationRunnerArguments.class=org.matrix.android.sdk.session.room.threads.ThreadMessagingTest matrix-sdk-android:connectedAndroidTest --info
+#          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedCheck --stacktrace
+          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES -Pandroid.testInstrumentationRunnerArguments.class=org.matrix.android.sdk.session.room.threads.ThreadMessagingTest matrix-sdk-android:connectedAndroidTest --info
 
