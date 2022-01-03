@@ -64,9 +64,10 @@ jobs:
 #          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
 #          restore-keys: |
 #            ${{ runner.os }}-gradle-
-      - uses: actions/checkout@develop
+      - uses: actions/checkout@v2
         with:
           repository: matrix-org/synapse
+          ref: develop
       - name: Start synapse server
         run: |
           cd synapse
