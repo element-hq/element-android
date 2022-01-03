@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.session.room.timeline
 
+import kotlinx.coroutines.runBlocking
+import org.amshove.kluent.internal.assertEquals
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
 import org.junit.FixMethodOrder
@@ -123,54 +125,29 @@ class TimelineForwardPaginationTest : InstrumentedTest {
         // Alice paginates BACKWARD and FORWARD of 50 events each
         // Then she can only navigate FORWARD
         run {
-            val lock = CountDownLatch(1)
-            val aliceEventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
-                Timber.e("Alice timeline updated: with ${snapshot.size} events:")
-                snapshot.forEach {
-                    Timber.w(" event ${it.root.content}")
-                }
-
-                // Alice can see the first event of the room (so Back pagination has worked)
-                snapshot.lastOrNull()?.root?.getClearType() == EventType.STATE_ROOM_CREATE &&
-                        // 6 for room creation item (backward pagination), 1 for the context, and 50 for the forward pagination
-                        snapshot.size == 57 // 6 + 1 + 50
+            val snapshot = runBlocking {
+                aliceTimeline.awaitPaginate(Timeline.Direction.BACKWARDS, 50)
+                aliceTimeline.awaitPaginate(Timeline.Direction.FORWARDS, 50)
             }
-
-            aliceTimeline.addListener(aliceEventsListener)
-
-            // Restart the timeline to the first sent event
-            // We ask to load event backward and forward
-            aliceTimeline.paginate(Timeline.Direction.BACKWARDS, 50)
-            aliceTimeline.paginate(Timeline.Direction.FORWARDS, 50)
-
-            commonTestHelper.await(lock)
-            aliceTimeline.removeAllListeners()
-
             aliceTimeline.hasMoreToLoad(Timeline.Direction.FORWARDS).shouldBeTrue()
             aliceTimeline.hasMoreToLoad(Timeline.Direction.BACKWARDS).shouldBeFalse()
+
+            assertEquals(EventType.STATE_ROOM_CREATE, snapshot.lastOrNull()?.root?.getClearType())
+            // 6 for room creation item (backward pagination), 1 for the context, and 50 for the forward pagination
+            // 6 + 1 + 50
+            assertEquals(57, snapshot.size)
         }
 
         // Alice paginates once again FORWARD for 50 events
         // All the timeline is retrieved, she cannot paginate anymore in both direction
         run {
-            val lock = CountDownLatch(1)
-            val aliceEventsListener = commonTestHelper.createEventListener(lock) { snapshot ->
-                Timber.e("Alice timeline updated: with ${snapshot.size} events:")
-                snapshot.forEach {
-                    Timber.w(" event ${it.root.content}")
-                }
-                // 6 for room creation item (backward pagination),and numberOfMessagesToSend (all the message of the room)
-                snapshot.size == 6 + numberOfMessagesToSend &&
-                        snapshot.checkSendOrder(message, numberOfMessagesToSend, 0)
-            }
-
-            aliceTimeline.addListener(aliceEventsListener)
-
             // Ask for a forward pagination
-            aliceTimeline.paginate(Timeline.Direction.FORWARDS, 50)
-
-            commonTestHelper.await(lock)
-            aliceTimeline.removeAllListeners()
+            val snapshot = runBlocking {
+                aliceTimeline.awaitPaginate(Timeline.Direction.FORWARDS, 50)
+            }
+            // 6 for room creation item (backward pagination),and numberOfMessagesToSend (all the message of the room)
+            snapshot.size == 6 + numberOfMessagesToSend &&
+                    snapshot.checkSendOrder(message, numberOfMessagesToSend, 0)
 
             // The timeline is fully loaded
             aliceTimeline.hasMoreToLoad(Timeline.Direction.FORWARDS).shouldBeFalse()

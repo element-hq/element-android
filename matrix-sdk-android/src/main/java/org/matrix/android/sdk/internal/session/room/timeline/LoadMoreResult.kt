@@ -16,9 +16,8 @@
 
 package org.matrix.android.sdk.internal.session.room.timeline
 
-internal data class TimelineState(
-        val hasReachedEnd: Boolean = false,
-        val hasMoreInCache: Boolean = true,
-        val isPaginating: Boolean = false,
-        val requestedPaginationCount: Int = 0
-)
+internal enum class LoadMoreResult {
+    REACHED_END,
+    SUCCESS,
+    FAILURE
+}

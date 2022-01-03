@@ -184,11 +184,13 @@ import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgs
 import im.vector.app.features.widgets.WidgetKind
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
@@ -1307,27 +1309,28 @@ class RoomDetailFragment @Inject constructor(
 
     private fun updateJumpToReadMarkerViewVisibility() {
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-            withState(roomDetailViewModel) {
-                val showJumpToUnreadBanner = when (it.unreadState) {
-                    UnreadState.Unknown,
-                    UnreadState.HasNoUnread            -> false
-                    is UnreadState.ReadMarkerNotLoaded -> true
-                    is UnreadState.HasUnread           -> {
-                        if (it.canShowJumpToReadMarker) {
-                            val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
-                            val positionOfReadMarker = timelineEventController.getPositionOfReadMarker()
-                            if (positionOfReadMarker == null) {
-                                false
-                            } else {
-                                positionOfReadMarker > lastVisibleItem
-                            }
-                        } else {
-                            false
+            val state = roomDetailViewModel.awaitState()
+            val showJumpToUnreadBanner = when (state.unreadState) {
+                UnreadState.Unknown,
+                UnreadState.HasNoUnread            -> false
+                is UnreadState.ReadMarkerNotLoaded -> true
+                is UnreadState.HasUnread           -> {
+                    if (state.canShowJumpToReadMarker) {
+                        val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
+                        val positionOfReadMarker = withContext(Dispatchers.Default) {
+                            timelineEventController.getPositionOfReadMarker()
                         }
+                        if (positionOfReadMarker == null) {
+                            false
+                        } else {
+                            positionOfReadMarker > lastVisibleItem
+                        }
+                    } else {
+                        false
                     }
                 }
-                views.jumpToReadMarkerView.isVisible = showJumpToUnreadBanner
             }
+            views.jumpToReadMarkerView.isVisible = showJumpToUnreadBanner
         }
     }
 

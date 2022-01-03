@@ -24,14 +24,10 @@ import org.matrix.android.sdk.api.session.room.model.ReactionAggregatedSummary
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import timber.log.Timber
 import java.util.Collections
 
-internal class UIEchoManager(
-        private val settings: TimelineSettings,
-        private val listener: Listener
-) {
+internal class UIEchoManager(private val listener: Listener) {
 
     interface Listener {
         fun rebuildEvent(eventId: String, builder: (TimelineEvent) -> TimelineEvent?): Boolean
@@ -70,13 +66,12 @@ internal class UIEchoManager(
         return existingState != sendState
     }
 
-    fun onLocalEchoCreated(timelineEvent: TimelineEvent)  {
-        // Manage some ui echos (do it before filter because actual event could be filtered out)
+    fun onLocalEchoCreated(timelineEvent: TimelineEvent): Boolean  {
         when (timelineEvent.root.getClearType()) {
             EventType.REDACTION -> {
             }
             EventType.REACTION -> {
-                val content = timelineEvent.root.content?.toModel<ReactionContent>()
+                val content: ReactionContent? = timelineEvent.root.content?.toModel<ReactionContent>()
                 if (RelationType.ANNOTATION == content?.relatesTo?.type) {
                     val reaction = content.relatesTo.key
                     val relatedEventID = content.relatesTo.eventId
@@ -96,11 +91,12 @@ internal class UIEchoManager(
         }
         Timber.v("On local echo created: ${timelineEvent.eventId}")
         inMemorySendingEvents.add(0, timelineEvent)
+        return true
     }
 
-    fun decorateEventWithReactionUiEcho(timelineEvent: TimelineEvent): TimelineEvent? {
+    fun decorateEventWithReactionUiEcho(timelineEvent: TimelineEvent): TimelineEvent {
         val relatedEventID = timelineEvent.eventId
-        val contents = inMemoryReactions[relatedEventID] ?: return null
+        val contents = inMemoryReactions[relatedEventID] ?: return timelineEvent
 
         var existingAnnotationSummary = timelineEvent.annotations ?: EventAnnotationsSummary(
                 relatedEventID
