@@ -47,20 +47,20 @@ import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 
-internal class DefaultTimeline internal constructor(private val roomId: String,
-                                                    private val initialEventId: String?,
-                                                    private val realmConfiguration: RealmConfiguration,
-                                                    private val loadRoomMembersTask: LoadRoomMembersTask,
-                                                    private val readReceiptHandler: ReadReceiptHandler,
-                                                    private val settings: TimelineSettings,
-                                                    private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                                    paginationTask: PaginationTask,
-                                                    getEventTask: GetContextOfEventTask,
-                                                    fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
-                                                    timelineEventMapper: TimelineEventMapper,
-                                                    timelineInput: TimelineInput,
-                                                    threadsAwarenessHandler: ThreadsAwarenessHandler,
-                                                    eventDecryptor: TimelineEventDecryptor) : Timeline {
+internal class DefaultTimeline(private val roomId: String,
+                               private val initialEventId: String?,
+                               private val realmConfiguration: RealmConfiguration,
+                               private val loadRoomMembersTask: LoadRoomMembersTask,
+                               private val readReceiptHandler: ReadReceiptHandler,
+                               private val settings: TimelineSettings,
+                               private val coroutineDispatchers: MatrixCoroutineDispatchers,
+                               paginationTask: PaginationTask,
+                               getEventTask: GetContextOfEventTask,
+                               fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
+                               timelineEventMapper: TimelineEventMapper,
+                               timelineInput: TimelineInput,
+                               threadsAwarenessHandler: ThreadsAwarenessHandler,
+                               eventDecryptor: TimelineEventDecryptor) : Timeline {
 
     companion object {
         val BACKGROUND_HANDLER = createBackgroundHandler("DefaultTimeline_Thread")

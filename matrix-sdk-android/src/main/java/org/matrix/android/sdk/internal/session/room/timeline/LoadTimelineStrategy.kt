@@ -48,9 +48,9 @@ internal class LoadTimelineStrategy(
         private val mode: Mode,
         private val dependencies: Dependencies) {
 
-    sealed class Mode {
-        object Live : Mode()
-        data class Permalink(val originEventId: String) : Mode()
+    sealed interface Mode {
+        object Live : Mode
+        data class Permalink(val originEventId: String) : Mode
 
         fun originEventId(): String? {
             return if (this is Permalink) {
