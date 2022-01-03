@@ -70,7 +70,9 @@ jobs:
           ref: develop
       - name: Start synapse server
         run: |
+          pwd
           cd synapse
+          pwd
           source env/bin/activate
           pip install -e .
           demo/start.sh --no-rate-limit
