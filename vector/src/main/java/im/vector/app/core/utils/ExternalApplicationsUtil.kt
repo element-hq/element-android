@@ -305,26 +305,28 @@ fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
         return
     }
 
-    val sendIntent = ShareCompat.IntentBuilder(context)
+    val chooserIntent = ShareCompat.IntentBuilder(context)
             .setType(mediaMimeType)
             .setStream(mediaUri)
-            .getIntent()
+            .setChooserTitle(R.string.share)
+            .createChooserIntent()
 
-    sendShareIntent(context, sendIntent)
+    createChooser(context, chooserIntent)
 }
 
 fun shareText(context: Context, text: String) {
-    val sendIntent = Intent()
-    sendIntent.action = Intent.ACTION_SEND
-    sendIntent.type = "text/plain"
-    sendIntent.putExtra(Intent.EXTRA_TEXT, text)
+    val chooserIntent = ShareCompat.IntentBuilder(context)
+            .setType("text/plain")
+            .setText(text)
+            .setChooserTitle(R.string.share)
+            .createChooserIntent()
 
-    sendShareIntent(context, sendIntent)
+    createChooser(context, chooserIntent)
 }
 
-private fun sendShareIntent(context: Context, intent: Intent) {
+private fun createChooser(context: Context, intent: Intent) {
     try {
-        context.startActivity(Intent.createChooser(intent, context.getString(R.string.share)))
+        context.startActivity(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
         context.toast(R.string.error_no_external_application_found)
     }
