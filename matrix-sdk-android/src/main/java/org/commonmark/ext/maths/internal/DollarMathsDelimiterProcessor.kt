@@ -22,17 +22,11 @@ import org.commonmark.parser.delimiter.DelimiterProcessor
 import org.commonmark.parser.delimiter.DelimiterRun
 
 class DollarMathsDelimiterProcessor : DelimiterProcessor {
-    override fun getOpeningCharacter(): Char {
-        return '$'
-    }
+    override fun getOpeningCharacter() = '$'
 
-    override fun getClosingCharacter(): Char {
-        return '$'
-    }
+    override fun getClosingCharacter() = '$'
 
-    override fun getMinLength(): Int {
-        return 1
-    }
+    override fun getMinLength() = 1
 
     override fun getDelimiterUse(opener: DelimiterRun, closer: DelimiterRun): Int {
         return if (opener.length() == 1 && closer.length() == 1) 1 // inline
@@ -41,7 +35,11 @@ class DollarMathsDelimiterProcessor : DelimiterProcessor {
     }
 
     override fun process(opener: Text, closer: Text, delimiterUse: Int) {
-        val maths = if (delimiterUse == 1) InlineMaths(InlineMaths.InlineDelimiter.SINGLE_DOLLAR) else DisplayMaths(DisplayMaths.DisplayDelimiter.DOUBLE_DOLLAR)
+        val maths = if (delimiterUse == 1) {
+            InlineMaths(InlineMaths.InlineDelimiter.SINGLE_DOLLAR)
+        } else {
+            DisplayMaths(DisplayMaths.DisplayDelimiter.DOUBLE_DOLLAR)
+        }
         var tmp = opener.next
         while (tmp != null && tmp !== closer) {
             val next = tmp.next
