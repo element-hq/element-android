@@ -70,7 +70,7 @@ jobs:
           source .synapse/bin/activate
           pip install synapse matrix-synapse
           pwd
-          cd synapse
+          cd .synapse
           pwd
           curl https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh -o start.sh
           ls
