@@ -87,3 +87,4 @@ jobs:
 #          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedCheck --stacktrace
           script: ./gradlew $CI_GRADLE_ARG_PROPERTIES -Pandroid.testInstrumentationRunnerArguments.class=org.matrix.android.sdk.session.room.threads.ThreadMessagingTest matrix-sdk-android:connectedAndroidTest --info
 
+
