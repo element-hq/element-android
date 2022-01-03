@@ -51,6 +51,7 @@ import im.vector.app.features.crypto.verification.SupportedVerificationMethodsPr
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.debug.DebugMenuActivity
 import im.vector.app.features.devtools.RoomDevToolActivity
+import im.vector.app.features.ftue.FTUEActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.search.SearchActivity
@@ -62,7 +63,6 @@ import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.invite.InviteUsersToRoomActivity
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
-import im.vector.app.features.login2.LoginActivity2
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.BigImageViewerActivity
@@ -84,7 +84,6 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
 import im.vector.app.features.signout.soft.SoftLogoutActivity
-import im.vector.app.features.signout.soft.SoftLogoutActivity2
 import im.vector.app.features.spaces.InviteRoomSpaceChooserBottomSheet
 import im.vector.app.features.spaces.SpaceExploreActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
@@ -115,27 +114,26 @@ class DefaultNavigator @Inject constructor(
 ) : Navigator {
 
     override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
-        val intent = when (features.loginVersion()) {
-            VectorFeatures.LoginVersion.V1 -> LoginActivity.newIntent(context, loginConfig)
-            VectorFeatures.LoginVersion.V2 -> LoginActivity2.newIntent(context, loginConfig)
+        val intent = when (features.loginVariant()) {
+            VectorFeatures.LoginVariant.LEGACY   -> LoginActivity.newIntent(context, loginConfig)
+            VectorFeatures.LoginVariant.FTUE,
+            VectorFeatures.LoginVariant.FTUE_WIP -> FTUEActivity.newIntent(context, loginConfig)
         }
         intent.addFlags(flags)
         context.startActivity(intent)
     }
 
     override fun loginSSORedirect(context: Context, data: Uri?) {
-        val intent = when (features.loginVersion()) {
-            VectorFeatures.LoginVersion.V1 -> LoginActivity.redirectIntent(context, data)
-            VectorFeatures.LoginVersion.V2 -> LoginActivity2.redirectIntent(context, data)
+        val intent = when (features.loginVariant()) {
+            VectorFeatures.LoginVariant.LEGACY   -> LoginActivity.redirectIntent(context, data)
+            VectorFeatures.LoginVariant.FTUE,
+            VectorFeatures.LoginVariant.FTUE_WIP -> FTUEActivity.redirectIntent(context, data)
         }
         context.startActivity(intent)
     }
 
     override fun softLogout(context: Context) {
-        val intent = when (features.loginVersion()) {
-            VectorFeatures.LoginVersion.V1 -> SoftLogoutActivity.newIntent(context)
-            VectorFeatures.LoginVersion.V2 -> SoftLogoutActivity2.newIntent(context)
-        }
+        val intent = SoftLogoutActivity.newIntent(context)
         context.startActivity(intent)
     }
 

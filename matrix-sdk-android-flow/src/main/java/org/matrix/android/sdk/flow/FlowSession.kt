@@ -152,6 +152,13 @@ class FlowSession(private val session: Session) {
                 }
     }
 
+    fun liveUserAccountData(type: String): Flow<Optional<UserAccountDataEvent>> {
+        return session.accountDataService().getLiveUserAccountDataEvent(type).asFlow()
+                .startWith(session.coroutineDispatchers.io) {
+                    session.accountDataService().getUserAccountDataEvent(type).toOptional()
+                }
+    }
+
     fun liveRoomAccountData(types: Set<String>): Flow<List<RoomAccountDataEvent>> {
         return session.accountDataService().getLiveRoomAccountDataEvents(types).asFlow()
                 .startWith(session.coroutineDispatchers.io) {

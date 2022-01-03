@@ -114,7 +114,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomPowerLevels(event: Event, disambiguatedDisplayName: String): CharSequence? {
-        val powerLevelsContent: PowerLevelsContent = event.getClearContent().toModel() ?: return null
+        val powerLevelsContent: PowerLevelsContent = event.content.toModel() ?: return null
         val previousPowerLevelsContent: PowerLevelsContent = event.resolvedPrevContent().toModel() ?: return null
         val userIds = HashSet<String>()
         userIds.addAll(powerLevelsContent.users.orEmpty().keys)
@@ -142,7 +142,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatWidgetEvent(event: Event, disambiguatedDisplayName: String): CharSequence? {
-        val widgetContent: WidgetContent = event.getClearContent().toModel() ?: return null
+        val widgetContent: WidgetContent = event.content.toModel() ?: return null
         val previousWidgetContent: WidgetContent? = event.resolvedPrevContent().toModel()
         return if (widgetContent.isActive()) {
             val widgetName = widgetContent.getHumanName()
@@ -198,7 +198,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomCreateEvent(event: Event, isDm: Boolean): CharSequence? {
-        return event.getClearContent().toModel<RoomCreateContent>()
+        return event.content.toModel<RoomCreateContent>()
                 ?.takeIf { it.creator.isNullOrBlank().not() }
                 ?.let {
                     if (event.isSentByCurrentUser()) {
@@ -210,7 +210,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomNameEvent(event: Event, senderName: String?): CharSequence? {
-        val content = event.getClearContent().toModel<RoomNameContent>() ?: return null
+        val content = event.content.toModel<RoomNameContent>() ?: return null
         return if (content.name.isNullOrBlank()) {
             if (event.isSentByCurrentUser()) {
                 sp.getString(R.string.notice_room_name_removed_by_you)
@@ -235,7 +235,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomTopicEvent(event: Event, senderName: String?): CharSequence? {
-        val content = event.getClearContent().toModel<RoomTopicContent>() ?: return null
+        val content = event.content.toModel<RoomTopicContent>() ?: return null
         return if (content.topic.isNullOrEmpty()) {
             if (event.isSentByCurrentUser()) {
                 sp.getString(R.string.notice_room_topic_removed_by_you)
@@ -252,7 +252,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomAvatarEvent(event: Event, senderName: String?): CharSequence? {
-        val content = event.getClearContent().toModel<RoomAvatarContent>() ?: return null
+        val content = event.content.toModel<RoomAvatarContent>() ?: return null
         return if (content.avatarUrl.isNullOrEmpty()) {
             if (event.isSentByCurrentUser()) {
                 sp.getString(R.string.notice_room_avatar_removed_by_you)
@@ -269,7 +269,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomHistoryVisibilityEvent(event: Event, senderName: String?, isDm: Boolean): CharSequence? {
-        val historyVisibility = event.getClearContent().toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
+        val historyVisibility = event.content.toModel<RoomHistoryVisibilityContent>()?.historyVisibility ?: return null
 
         val historyVisibilitySuffix = roomHistoryVisibilityFormatter.getNoticeSuffix(historyVisibility)
         return if (event.isSentByCurrentUser()) {
@@ -282,7 +282,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomThirdPartyInvite(event: Event, senderName: String?, isDm: Boolean): CharSequence? {
-        val content = event.getClearContent().toModel<RoomThirdPartyInviteContent>()
+        val content = event.content.toModel<RoomThirdPartyInviteContent>()
         val prevContent = event.resolvedPrevContent()?.toModel<RoomThirdPartyInviteContent>()
 
         return when {
@@ -363,7 +363,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomMemberEvent(event: Event, senderName: String?, isDm: Boolean): String? {
-        val eventContent: RoomMemberContent? = event.getClearContent().toModel()
+        val eventContent: RoomMemberContent? = event.content.toModel()
         val prevEventContent: RoomMemberContent? = event.resolvedPrevContent().toModel()
         val isMembershipEvent = prevEventContent?.membership != eventContent?.membership ||
                 eventContent?.membership == Membership.LEAVE
@@ -375,7 +375,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomAliasesEvent(event: Event, senderName: String?): String? {
-        val eventContent: RoomAliasesContent? = event.getClearContent().toModel()
+        val eventContent: RoomAliasesContent? = event.content.toModel()
         val prevEventContent: RoomAliasesContent? = event.resolvedPrevContent()?.toModel()
 
         val addedAliases = eventContent?.aliases.orEmpty() - prevEventContent?.aliases.orEmpty()
@@ -408,7 +408,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomServerAclEvent(event: Event, senderName: String?): String? {
-        val eventContent = event.getClearContent().toModel<RoomServerAclContent>() ?: return null
+        val eventContent = event.content.toModel<RoomServerAclContent>() ?: return null
         val prevEventContent = event.resolvedPrevContent()?.toModel<RoomServerAclContent>()
 
         return buildString {
@@ -481,7 +481,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomCanonicalAliasEvent(event: Event, senderName: String?): String? {
-        val eventContent: RoomCanonicalAliasContent? = event.getClearContent().toModel()
+        val eventContent: RoomCanonicalAliasContent? = event.content.toModel()
         val prevContent: RoomCanonicalAliasContent? = event.resolvedPrevContent().toModel()
         val canonicalAlias = eventContent?.canonicalAlias?.takeIf { it.isNotEmpty() }
         val prevCanonicalAlias = prevContent?.canonicalAlias?.takeIf { it.isNotEmpty() }
@@ -551,7 +551,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatRoomGuestAccessEvent(event: Event, senderName: String?, isDm: Boolean): String? {
-        val eventContent: RoomGuestAccessContent? = event.getClearContent().toModel()
+        val eventContent: RoomGuestAccessContent? = event.content.toModel()
         return when (eventContent?.guestAccess) {
             GuestAccess.CanJoin   ->
                 if (event.isSentByCurrentUser()) {
@@ -815,7 +815,7 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatJoinRulesEvent(event: Event, senderName: String?, isDm: Boolean): CharSequence? {
-        val content = event.getClearContent().toModel<RoomJoinRulesContent>() ?: return null
+        val content = event.content.toModel<RoomJoinRulesContent>() ?: return null
         return when (content.joinRules) {
             RoomJoinRules.INVITE ->
                 if (event.isSentByCurrentUser()) {

@@ -76,7 +76,7 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
                 views.loginSignupSigninSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                     override fun onProviderSelected(id: String?) {
                         loginViewModel.getSsoUrl(
-                                redirectUrl = LoginActivity.VECTOR_REDIRECT_URL,
+                                redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                                 deviceId = state.deviceId,
                                 providerId = id
                         )
@@ -109,7 +109,7 @@ class LoginSignUpSignInSelectionFragment @Inject constructor() : AbstractSSOLogi
     private fun submit() = withState(loginViewModel) { state ->
         if (state.loginMode is LoginMode.Sso) {
             loginViewModel.getSsoUrl(
-                    redirectUrl = LoginActivity.VECTOR_REDIRECT_URL,
+                    redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                     deviceId = state.deviceId,
                     providerId = null
             )

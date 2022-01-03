@@ -1450,7 +1450,7 @@ class TimelineFragment @Inject constructor(
                             AttachmentTypeSelectorView.Type.POLL,
                             vectorPreferences.labsEnablePolls() && !isThreadTimeLine())
                 }
-                attachmentTypeSelector.show(views.composerLayout.views.attachmentButton, keyboardStateUtils.isKeyboardShowing)
+                attachmentTypeSelector.show(views.composerLayout.views.attachmentButton)
             }
 
             override fun onSendMessage(text: CharSequence) {

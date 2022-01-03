@@ -34,11 +34,11 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.FragmentLoginAccountCreatedBinding
 import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.ftue.FTUEActivity
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.login2.AbstractLoginFragment2
 import im.vector.app.features.login2.LoginAction2
-import im.vector.app.features.login2.LoginActivity2
 import im.vector.app.features.login2.LoginViewState2
 import org.matrix.android.sdk.api.util.MatrixItem
 import java.util.UUID
@@ -130,7 +130,7 @@ class AccountCreatedFragment @Inject constructor(
 
     private fun invalidateState(state: AccountCreatedViewState) {
         // Ugly hack...
-        (activity as? LoginActivity2)?.setIsLoading(state.isLoading)
+        (activity as? FTUEActivity)?.setIsLoading(state.isLoading)
 
         views.loginAccountCreatedSubtitle.text = getString(R.string.login_account_created_subtitle, state.userId)
 

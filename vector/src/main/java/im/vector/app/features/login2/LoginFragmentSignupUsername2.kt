@@ -30,6 +30,7 @@ import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSignupUsername2Binding
 import im.vector.app.features.login.LoginMode
+import im.vector.app.features.login.SSORedirectRouterActivity
 import im.vector.app.features.login.SocialLoginButtonsView
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -97,7 +98,7 @@ class LoginFragmentSignupUsername2 @Inject constructor() : AbstractSSOLoginFragm
             views.loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                 override fun onProviderSelected(id: String?) {
                     loginViewModel.getSsoUrl(
-                            redirectUrl = LoginActivity2.VECTOR_REDIRECT_URL,
+                            redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                             deviceId = state.deviceId,
                             providerId = id
                     )
