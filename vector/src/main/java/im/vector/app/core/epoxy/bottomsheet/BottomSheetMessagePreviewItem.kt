@@ -26,6 +26,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.epoxy.util.preventMutation
 import im.vector.app.core.extensions.setTextOrHide
@@ -50,13 +51,13 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
     lateinit var matrixItem: MatrixItem
 
     @EpoxyAttribute
-    lateinit var body: CharSequence
+    lateinit var body: EpoxyCharSequence
 
     @EpoxyAttribute
     var bindingOptions: BindingOptions? = null
 
     @EpoxyAttribute
-    var bodyDetails: CharSequence? = null
+    var bodyDetails: EpoxyCharSequence? = null
 
     @EpoxyAttribute
     var imageContentRenderer: ImageContentRenderer? = null
@@ -65,7 +66,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
     var data: ImageContentRenderer.Data? = null
 
     @EpoxyAttribute
-    var time: CharSequence? = null
+    var time: String? = null
 
     @EpoxyAttribute
     var movementMethod: MovementMethod? = null
@@ -85,12 +86,12 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         holder.imagePreview.isVisible = data != null
         holder.body.movementMethod = movementMethod
         holder.body.text = if (bindingOptions?.preventMutation.orFalse()) {
-            body.preventMutation()
+            body.charSequence.preventMutation()
         } else {
-            body
+            body.charSequence
         }
-        holder.bodyDetails.setTextOrHide(bodyDetails)
-        body.findPillsAndProcess(coroutineScope) { it.bind(holder.body) }
+        holder.bodyDetails.setTextOrHide(bodyDetails?.charSequence)
+        body.charSequence.findPillsAndProcess(coroutineScope) { it.bind(holder.body) }
         holder.timestamp.setTextOrHide(time)
     }
 

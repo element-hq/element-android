@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.roomprofile.settings.joinrule
+package im.vector.app.core.epoxy.charsequence
 
-import im.vector.app.core.ui.bottomsheet.BottomSheetGenericRadioAction
-import org.matrix.android.sdk.api.session.room.model.RoomJoinRules
-
-class RoomJoinRuleRadioAction(
-        val roomJoinRule: RoomJoinRules,
-        title: String,
-        description: String,
-        isSelected: Boolean
-) : BottomSheetGenericRadioAction(
-        title = title,
-        isSelected = isSelected,
-        description = description
-)
+/**
+ * Extensions to wrap CharSequence to EpoxyCharSequence
+ */
+fun CharSequence.toEpoxyCharSequence() = EpoxyCharSequence(this)

@@ -39,10 +39,10 @@ import im.vector.app.core.extensions.setTextOrHide
 abstract class GenericEmptyWithActionItem : VectorEpoxyModel<GenericEmptyWithActionItem.Holder>() {
 
     @EpoxyAttribute
-    var title: CharSequence? = null
+    var title: String? = null
 
     @EpoxyAttribute
-    var description: CharSequence? = null
+    var description: String? = null
 
     @EpoxyAttribute
     @DrawableRes

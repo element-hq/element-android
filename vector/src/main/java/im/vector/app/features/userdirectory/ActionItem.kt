@@ -31,7 +31,7 @@ import im.vector.app.core.extensions.setTextOrHide
 @EpoxyModelClass(layout = R.layout.item_contact_action)
 abstract class ActionItem : VectorEpoxyModel<ActionItem.Holder>() {
 
-    @EpoxyAttribute var title: CharSequence? = null
+    @EpoxyAttribute var title: String? = null
     @EpoxyAttribute @DrawableRes var actionIconRes: Int? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var clickAction: ClickListener? = null
 

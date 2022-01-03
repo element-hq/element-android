@@ -26,6 +26,7 @@ import com.airbnb.epoxy.VisibilityState
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.StringProvider
@@ -118,7 +119,7 @@ val text = ((event.content?.get("m.new_content") as? Content) ?: event.content)?
                     .id(eventAndSender.event.eventId)
                     .avatarRenderer(avatarRenderer)
                     .formattedDate(dateFormatter.format(event.originServerTs, DateFormatKind.MESSAGE_SIMPLE))
-                    .spannable(spannable)
+                    .spannable(spannable.toEpoxyCharSequence())
                     .sender(eventAndSender.sender
                             ?: eventAndSender.event.senderId?.let { session.getRoomMember(it, data.roomId) }?.toMatrixItem())
                     .listener { listener?.onItemClicked(eventAndSender.event) }

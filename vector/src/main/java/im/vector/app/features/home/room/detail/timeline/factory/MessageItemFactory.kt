@@ -28,6 +28,7 @@ import dagger.Lazy
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
@@ -501,14 +502,14 @@ class MessageItemFactory @Inject constructor(
         val bindingOptions = spanUtils.getBindingOptions(body)
         val linkifiedBody = body.linkify(callback)
 
-        return MessageTextItem_().apply {
-            if (informationData.hasBeenEdited) {
-                val spannable = annotateWithEdited(linkifiedBody, callback, informationData)
-                message(spannable)
-            } else {
-                message(linkifiedBody)
-            }
-        }
+        return MessageTextItem_()
+                .message(
+                        if (informationData.hasBeenEdited) {
+                            annotateWithEdited(linkifiedBody, callback, informationData)
+                        } else {
+                            linkifiedBody
+                        }.toEpoxyCharSequence()
+                )
                 .useBigFont(linkifiedBody.length <= MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT * 2 && containsOnlyEmojis(linkifiedBody.toString()))
                 .bindingOptions(bindingOptions)
                 .searchForPills(isFormatted)
@@ -530,13 +531,13 @@ class MessageItemFactory @Inject constructor(
                 .apply {
                     if (informationData.hasBeenEdited) {
                         val spannable = annotateWithEdited("", callback, informationData)
-                        editedSpan(spannable)
+                        editedSpan(spannable.toEpoxyCharSequence())
                     }
                 }
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
-                .message(formattedBody)
+                .message(formattedBody.toEpoxyCharSequence())
     }
 
     private fun annotateWithEdited(linkifiedBody: CharSequence,
@@ -599,7 +600,7 @@ class MessageItemFactory @Inject constructor(
                 .imageContentRenderer(imageContentRenderer)
                 .previewUrlCallback(callback)
                 .attributes(attributes)
-                .message(message)
+                .message(message.toEpoxyCharSequence())
                 .bindingOptions(bindingOptions)
                 .highlighted(highlight)
                 .movementMethod(createLinkMovementMethod(callback))
@@ -617,14 +618,13 @@ class MessageItemFactory @Inject constructor(
         val message = formattedBody.linkify(callback)
 
         return MessageTextItem_()
-                .apply {
-                    if (informationData.hasBeenEdited) {
-                        val spannable = annotateWithEdited(message, callback, informationData)
-                        message(spannable)
-                    } else {
-                        message(message)
-                    }
-                }
+                .message(
+                        if (informationData.hasBeenEdited) {
+                            annotateWithEdited(message, callback, informationData)
+                        } else {
+                            message
+                        }.toEpoxyCharSequence()
+                )
                 .bindingOptions(bindingOptions)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .previewUrlRetriever(callback?.getPreviewUrlRetriever())

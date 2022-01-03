@@ -30,7 +30,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 abstract class BottomSheetVerificationDecimalCodeItem : VectorEpoxyModel<BottomSheetVerificationDecimalCodeItem.Holder>() {
 
     @EpoxyAttribute
-    var code: CharSequence = ""
+    var code: String = ""
 
     override fun bind(holder: Holder) {
         super.bind(holder)

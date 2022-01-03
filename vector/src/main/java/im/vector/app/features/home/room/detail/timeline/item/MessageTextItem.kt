@@ -24,6 +24,7 @@ import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.epoxy.onLongClickIgnoringLinks
 import im.vector.app.core.epoxy.util.preventMutation
@@ -42,7 +43,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     var searchForPills: Boolean = false
 
     @EpoxyAttribute
-    var message: CharSequence? = null
+    var message: EpoxyCharSequence? = null
 
     @EpoxyAttribute
     var bindingOptions: BindingOptions? = null
@@ -82,14 +83,14 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             holder.messageView.textSize = 14F
         }
         if (searchForPills) {
-            message?.findPillsAndProcess(coroutineScope) {
+            message?.charSequence?.findPillsAndProcess(coroutineScope) {
                 // mmm.. not sure this is so safe in regards to cell reuse
                 it.bind(holder.messageView)
             }
         }
         val textFuture = if (bindingOptions?.canUseTextFuture.orFalse()) {
             PrecomputedTextCompat.getTextFuture(
-                    message ?: "",
+                    message?.charSequence ?: "",
                     TextViewCompat.getTextMetricsParams(holder.messageView),
                     null)
         } else {
@@ -105,9 +106,9 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             holder.messageView.setTextFuture(textFuture)
         } else {
             holder.messageView.text = if (bindingOptions?.preventMutation.orFalse()) {
-                message.preventMutation()
+                message?.charSequence.preventMutation()
             } else {
-                message
+                message?.charSequence
             }
         }
     }

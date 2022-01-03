@@ -18,6 +18,7 @@ package im.vector.app.features.crypto.verification.qrconfirmation
 
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationBigImageItem
@@ -45,7 +46,7 @@ class VerificationQRWaitingController @Inject constructor(
         bottomSheetVerificationNoticeItem {
             id("notice")
             apply {
-                notice(host.stringProvider.getString(R.string.qr_code_scanned_verif_waiting_notice))
+                notice(host.stringProvider.getString(R.string.qr_code_scanned_verif_waiting_notice).toEpoxyCharSequence())
             }
         }
 
