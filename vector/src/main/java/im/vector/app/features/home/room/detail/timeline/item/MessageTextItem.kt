@@ -27,7 +27,6 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.epoxy.onLongClickIgnoringLinks
-import im.vector.app.core.epoxy.util.preventMutation
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
@@ -105,11 +104,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         if (bindingOptions?.canUseTextFuture.orFalse()) {
             holder.messageView.setTextFuture(textFuture)
         } else {
-            holder.messageView.text = if (bindingOptions?.preventMutation.orFalse()) {
-                message?.charSequence.preventMutation()
-            } else {
-                message?.charSequence
-            }
+            holder.messageView.text = message?.charSequence
         }
     }
 

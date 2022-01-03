@@ -26,7 +26,6 @@ import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
 import im.vector.app.core.epoxy.onClick
-import im.vector.app.core.epoxy.util.preventMutation
 
 /**
  * Item displaying an emoji reaction (single line with emoji, author, time)
@@ -48,7 +47,7 @@ abstract class ReactionInfoSimpleItem : EpoxyModelWithHolder<ReactionInfoSimpleI
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.emojiReactionView.text = reactionKey.charSequence.preventMutation()
+        holder.emojiReactionView.text = reactionKey.charSequence
         holder.displayNameView.text = authorDisplayName
         timeStamp?.let {
             holder.timeStampView.text = it

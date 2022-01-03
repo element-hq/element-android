@@ -108,7 +108,6 @@ class SpanUtilsTest : InstrumentedTest {
         val string = SpannableString("Text")
         val result = spanUtils.getBindingOptions(string)
         result.canUseTextFuture shouldBeEqualTo true
-        result.preventMutation shouldBeEqualTo false
     }
 
     @Test
@@ -117,7 +116,6 @@ class SpanUtilsTest : InstrumentedTest {
         string.setSpan(StrikethroughSpan(), 10, 23, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         val result = spanUtils.getBindingOptions(string)
         result.canUseTextFuture shouldBeEqualTo false
-        result.preventMutation shouldBeEqualTo false
     }
 
     @Test
@@ -125,7 +123,6 @@ class SpanUtilsTest : InstrumentedTest {
         val string = SpannableString("Emoji \uD83D\uDE2E\u200D\uD83D\uDCA8")
         val result = spanUtils.getBindingOptions(string)
         result.canUseTextFuture shouldBeEqualTo false
-        result.preventMutation shouldBeEqualTo true
     }
 
     private fun trueIfAlwaysAllowed() = Build.VERSION.SDK_INT < Build.VERSION_CODES.P
