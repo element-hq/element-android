@@ -70,7 +70,7 @@ jobs:
           source .synapse/bin/activate
           pip install synapse matrix-synapse
           curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh \
-            | sed s/127.0.0.1/0.0.0.0/g | bash -s --no-rate-limit
+            | sed s/127.0.0.1/0.0.0.0/g | bash -sL --no-rate-limit
 #          curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh | bash -s --no-rate-limit
       - name: Run integration tests on API ${{ matrix.api-level }}
         uses: reactivecircus/android-emulator-runner@v2
