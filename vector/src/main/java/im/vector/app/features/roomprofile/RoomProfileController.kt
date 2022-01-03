@@ -120,15 +120,29 @@ class RoomProfileController @Inject constructor(
         }
 
         var encryptionMisconfigured = false
-        val learnMoreSubtitle = if (roomSummary.isEncrypted) {
+        val e2eInfoText = if (roomSummary.isEncrypted) {
             if (roomSummary.roomEncryptionAlgorithm is RoomEncryptionAlgorithm.SupportedAlgorithm) {
-                if (roomSummary.isDirect) R.string.direct_room_profile_encrypted_subtitle else R.string.room_profile_encrypted_subtitle
+                stringProvider.getString(
+                        if (roomSummary.isDirect) R.string.direct_room_profile_encrypted_subtitle
+                        else R.string.room_profile_encrypted_subtitle
+                )
             } else {
                 encryptionMisconfigured = true
-                if (roomSummary.isDirect) R.string.direct_room_profile_encrypted_misconfigured_subtitle else R.string.room_profile_encrypted_misconfigured_subtitle
+                buildString {
+                    append(stringProvider.getString(R.string.encryption_has_been_misconfigured))
+                    append(" ")
+                    apply {
+                        if (!data.canUpdateRoomState) {
+                            append(stringProvider.getString(R.string.contact_admin_to_restore_encryption))
+                        }
+                    }
+                }
             }
         } else {
-            if (roomSummary.isDirect) R.string.direct_room_profile_not_encrypted_subtitle else R.string.room_profile_not_encrypted_subtitle
+            stringProvider.getString(
+                    if (roomSummary.isDirect) R.string.direct_room_profile_not_encrypted_subtitle
+                    else R.string.room_profile_not_encrypted_subtitle
+            )
         }
         genericFooterItem {
             id("e2e info")
@@ -143,7 +157,7 @@ class RoomProfileController @Inject constructor(
                                 +" "
                             }
                         }
-                        +host.stringProvider.getString(learnMoreSubtitle)
+                        +e2eInfoText
                     }
             )
         }
