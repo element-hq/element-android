@@ -199,12 +199,16 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                         val deviceId: String = it.deviceId ?: ""
 
                         if (!isDeviceKnown) {
-                            description(host.stringProvider.getString(R.string.keys_backup_settings_signature_from_unknown_device, deviceId).toEpoxyCharSequence())
+                            description(host.stringProvider
+                                    .getString(R.string.keys_backup_settings_signature_from_unknown_device, deviceId)
+                                    .toEpoxyCharSequence())
                             endIconResourceId(R.drawable.e2e_warning)
                         } else {
                             if (isSignatureValid) {
                                 if (host.session.sessionParams.deviceId == it.deviceId) {
-                                    description(host.stringProvider.getString(R.string.keys_backup_settings_valid_signature_from_this_device).toEpoxyCharSequence())
+                                    description(host.stringProvider
+                                            .getString(R.string.keys_backup_settings_valid_signature_from_this_device)
+                                            .toEpoxyCharSequence())
                                     endIconResourceId(R.drawable.e2e_verified)
                                 } else {
                                     if (isDeviceVerified) {
