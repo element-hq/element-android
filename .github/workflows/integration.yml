@@ -56,41 +56,35 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
             ${{ runner.os }}-
-#      - uses: actions/cache@v2
-#        with:
-#          path: |
-#            ~/.gradle/caches
-#            ~/.gradle/wrapper
-#          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-#          restore-keys: |
-#            ${{ runner.os }}-gradle-
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       - uses: actions/checkout@v2
         with:
           repository: matrix-org/synapse
           ref: develop
       - name: Start synapse server
         run: |
-          pwd
-          cd synapse
-          pwd
-          source env/bin/activate
-          pip install -e .
-          demo/start.sh --no-rate-limit
-#          python3 -m venv .synapse
-#          source .synapse/bin/activate
-#          pip install synapse matrix-synapse
-#          curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh --no-rate-limit \
-#            | sed s/127.0.0.1/0.0.0.0/g | bash
-#      - name: Run integration tests on API ${{ matrix.api-level }}
-#        uses: reactivecircus/android-emulator-runner@v2
-#        with:
-#          api-level: ${{ matrix.api-level }}
-#          #arch: x86_64
-#          #disable-animations: true
-#          # script: ./gradlew -PallWarningsAsErrors=false vector:connectedAndroidTest matrix-sdk-android:connectedAndroidTest
-#          arch: x86
-#          profile: Nexus 5X
-#          force-avd-creation: false
-#          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
-#          emulator-build: 7425822
-#          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedCheck --stacktrace
+          python3 -m venv .synapse
+          source .synapse/bin/activate
+          pip install synapse matrix-synapse
+          curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh \
+            | sed s/127.0.0.1/0.0.0.0/g | bash --no-rate-limit
+      - name: Run integration tests on API ${{ matrix.api-level }}
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          #arch: x86_64
+          #disable-animations: true
+          # script: ./gradlew -PallWarningsAsErrors=false vector:connectedAndroidTest matrix-sdk-android:connectedAndroidTest
+          arch: x86
+          profile: Nexus 5X
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-build: 7425822
+          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedCheck --stacktrace
