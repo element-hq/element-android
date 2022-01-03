@@ -100,6 +100,7 @@ class ThreadMessagingTest : InstrumentedTest {
             timeline.addListener(eventsListener)
             commonTestHelper.await(lock, 600_000)
         }
+
         aliceSession.stopSync()
     }
 
