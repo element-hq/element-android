@@ -16,26 +16,44 @@
 
 package im.vector.app.features.html
 
-import android.os.Build
 import android.text.Spanned
+import android.text.style.MetricAffectingSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.UnderlineSpan
+import im.vector.app.EmojiSpanify
+import im.vector.app.features.home.room.detail.timeline.item.BindingOptions
 import javax.inject.Inject
 
-class SpanUtils @Inject constructor() {
-    // Workaround for https://issuetracker.google.com/issues/188454876
-    fun canUseTextFuture(charSequence: CharSequence): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-            // On old devices, it works correctly
-            return true
+class SpanUtils @Inject constructor(
+        private val emojiSpanify: EmojiSpanify
+) {
+    fun getBindingOptions(charSequence: CharSequence): BindingOptions {
+        val emojiCharSequence = emojiSpanify.spanify(charSequence)
+
+        if (emojiCharSequence !is Spanned) {
+            return BindingOptions()
         }
 
-        if (charSequence !is Spanned) {
-            return true
-        }
+        return BindingOptions(
+                canUseTextFuture = canUseTextFuture(emojiCharSequence),
+                preventMutation = mustPreventMutation(emojiCharSequence)
+        )
+    }
 
-        return charSequence
-                .getSpans(0, charSequence.length, Any::class.java)
-                .all { it !is StrikethroughSpan && it !is UnderlineSpan }
+    /**
+     * TextFutures do not support StrikethroughSpan, UnderlineSpan or MetricAffectingSpan
+     * Workaround for https://issuetracker.google.com/issues/188454876
+     */
+    private fun canUseTextFuture(spanned: Spanned): Boolean {
+        return spanned
+                .getSpans(0, spanned.length, Any::class.java)
+                .all { it !is StrikethroughSpan && it !is UnderlineSpan && it !is MetricAffectingSpan }
+    }
+
+    // Workaround for setting text during binding which mutate the text itself
+    private fun mustPreventMutation(spanned: Spanned): Boolean {
+        return spanned
+                .getSpans(0, spanned.length, Any::class.java)
+                .any { it is MetricAffectingSpan }
     }
 }

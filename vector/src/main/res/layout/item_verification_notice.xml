@@ -10,4 +10,5 @@
     android:paddingEnd="@dimen/layout_horizontal_margin"
     android:paddingBottom="8dp"
     android:textColor="?vctr_content_primary"
-    tools:text="todo" />
+    tools:text="todo"
+    tools:viewBindingIgnore="true" />

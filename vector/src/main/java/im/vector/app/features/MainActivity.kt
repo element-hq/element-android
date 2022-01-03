@@ -32,6 +32,7 @@ import im.vector.app.core.extensions.startSyncing
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.deleteAllFiles
 import im.vector.app.databinding.ActivityMainBinding
+import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -96,6 +97,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     @Inject lateinit var pinCodeStore: PinCodeStore
     @Inject lateinit var pinLocker: PinLocker
     @Inject lateinit var popupAlertManager: PopupAlertManager
+    @Inject lateinit var vectorAnalytics: VectorAnalytics
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -190,6 +192,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             uiStateRepository.reset()
             pinLocker.unlock()
             pinCodeStore.deleteEncodedPin()
+            vectorAnalytics.onSignOut()
         }
         withContext(Dispatchers.IO) {
             // On BG thread

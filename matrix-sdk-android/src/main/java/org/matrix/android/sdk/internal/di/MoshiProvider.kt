@@ -25,7 +25,6 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageNoticeContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageOptionsContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
@@ -57,8 +56,7 @@ object MoshiProvider {
                     .registerSubtype(MessageLocationContent::class.java, MessageType.MSGTYPE_LOCATION)
                     .registerSubtype(MessageFileContent::class.java, MessageType.MSGTYPE_FILE)
                     .registerSubtype(MessageVerificationRequestContent::class.java, MessageType.MSGTYPE_VERIFICATION_REQUEST)
-                    .registerSubtype(MessageOptionsContent::class.java, MessageType.MSGTYPE_OPTIONS)
-                    .registerSubtype(MessagePollResponseContent::class.java, MessageType.MSGTYPE_RESPONSE)
+                    .registerSubtype(MessagePollResponseContent::class.java, MessageType.MSGTYPE_POLL_RESPONSE)
             )
             .add(SerializeNulls.JSON_ADAPTER_FACTORY)
             .build()

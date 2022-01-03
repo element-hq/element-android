@@ -3029,4 +3029,7 @@
 \nAndmed saadame mitte tekstina, vaid räsituna. Kas sa nõustud sellega\?</string>
     <string name="identity_server_consent_dialog_title_2">Saada e-posti aadressid ja telefoninumbrid %s serverisse</string>
     <string name="settings_discovery_consent_notice_off_2">Sinu kontaktid on vaid sinu teada. Kui tahad nende hulgast leida Matrix\'i kasutajaid, siis me vajame sinu luba nende andmete saatmiseks räsitud kujul isikutuvastusserverisse.</string>
+    <string name="identity_server_consent_dialog_content_3">Selleks et leida tuttavaid, sa peaksid saatma oma kontaktteavet (telefoninumbreid ja/või e-posti aadresse) siin rakenduses seadistatud isikutuvastusserverile. Parema andmeturvalisuse nimel me ei saada teavet mitte loetava tekstina, vaid räsina.</string>
+    <string name="identity_server_consent_dialog_content_question">Kas sa oled nõus selle teabe edastamisega\?</string>
+    <string name="action_not_now">Mitte praegu</string>
 </resources>

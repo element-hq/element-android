@@ -65,6 +65,7 @@ import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.consent.ConsentNotGivenHelper
 import im.vector.app.features.navigation.Navigator
@@ -104,7 +105,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     protected val viewModelProvider
         get() = ViewModelProvider(this, viewModelFactory)
 
-    protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
+    fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
         viewEvents
                 .stream()
                 .onEach {
@@ -132,6 +133,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     private lateinit var sessionListener: SessionListener
     protected lateinit var bugReporter: BugReporter
     private lateinit var pinLocker: PinLocker
+    protected lateinit var analytics: VectorAnalytics
 
     @Inject
     lateinit var rageShake: RageShake
@@ -187,6 +189,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         configurationViewModel = viewModelProvider.get(ConfigurationViewModel::class.java)
         bugReporter = singletonEntryPoint.bugReporter()
         pinLocker = singletonEntryPoint.pinLocker()
+        analytics = singletonEntryPoint.analytics()
         navigator = singletonEntryPoint.navigator()
         activeSessionHolder = singletonEntryPoint.activeSessionHolder()
         vectorPreferences = singletonEntryPoint.vectorPreferences()

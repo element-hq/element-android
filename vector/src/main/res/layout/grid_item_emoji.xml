@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="40dp"
     android:layout_height="40dp"
-    tools:showIn="@layout/activity_emoji_reaction_picker">
+    tools:showIn="@layout/activity_emoji_reaction_picker"
+    tools:viewBindingIgnore="true">
 
     <View
         android:id="@+id/grid_item_place_holder"

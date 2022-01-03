@@ -15,7 +15,7 @@ kapt {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 3
-ext.versionPatch = 10
+ext.versionPatch = 13
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -140,7 +140,7 @@ android {
         buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
         resValue "string", "build_number", "\"${buildNumber}\""
 
-        buildConfigField "im.vector.app.features.VectorFeatures.LoginVersion", "LOGIN_VERSION", "im.vector.app.features.VectorFeatures.LoginVersion.V1"
+        buildConfigField "im.vector.app.features.VectorFeatures.LoginVariant", "LOGIN_VARIANT", "im.vector.app.features.VectorFeatures.LoginVariant.LEGACY"
 
         buildConfigField "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy", "outboundSessionKeySharingStrategy", "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy.WhenTyping"
 
@@ -316,11 +316,6 @@ android {
     }
 }
 
-configurations {
-    // videocache includes a sl4j logger which causes mockk to attempt to call the static android Log
-    testImplementation.exclude group: 'org.slf4j', module: 'slf4j-android'
-}
-
 dependencies {
 
     implementation project(":matrix-sdk-android")
@@ -364,7 +359,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.39'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.40'
 
     // FlowBinding
     implementation libs.github.flowBinding
@@ -397,7 +392,7 @@ dependencies {
     implementation libs.markwon.html
     implementation 'com.googlecode.htmlcompressor:htmlcompressor:1.5.2'
     implementation 'me.saket:better-link-movement-method:2.2.0'
-    implementation 'com.google.android:flexbox:2.0.1'
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
     implementation libs.androidx.autoFill
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta12'
@@ -414,7 +409,7 @@ dependencies {
     implementation 'com.arthenica:ffmpeg-kit-audio:4.5.LTS'
 
     // Alerter
-    implementation 'com.tapadoo.android:alerter:7.0.1'
+    implementation 'com.github.tapadoo:alerter:7.2.4'
 
     implementation 'com.otaliastudios:autocomplete:1.1.0'
 
@@ -432,7 +427,6 @@ dependencies {
 
     implementation libs.github.glide
     kapt libs.github.glideCompiler
-    implementation 'com.danikula:videocache:2.7.1'
     implementation 'com.github.yalantis:ucrop:2.2.7'
 
     // Badge for compatibility
@@ -445,6 +439,9 @@ dependencies {
     implementation libs.dagger.hilt
     kapt libs.dagger.hiltCompiler
 
+    // Analytics
+    implementation 'com.posthog.android:posthog:1.1.2'
+
     // gplay flavor only
     gplayImplementation('com.google.firebase:firebase-messaging:23.0.0') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
@@ -455,7 +452,7 @@ dependencies {
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
-    implementation "androidx.emoji:emoji-appcompat:1.1.0"
+    implementation "androidx.emoji2:emoji2:1.0.0"
     implementation('com.github.BillCarsonFr:JsonViewer:0.7')
 
     // WebRTC

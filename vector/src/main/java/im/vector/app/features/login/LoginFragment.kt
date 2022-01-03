@@ -200,7 +200,7 @@ class LoginFragment @Inject constructor() : AbstractSSOLoginFragment<FragmentLog
                 views.loginSocialLoginButtons.listener = object : SocialLoginButtonsView.InteractionListener {
                     override fun onProviderSelected(id: String?) {
                         loginViewModel.getSsoUrl(
-                                redirectUrl = LoginActivity.VECTOR_REDIRECT_URL,
+                                redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                                 deviceId = state.deviceId,
                                 providerId = id
                         )

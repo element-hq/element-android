@@ -17,6 +17,7 @@
 package im.vector.app.features.form
 
 import android.text.Editable
+import android.text.InputFilter
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageButton
 import com.airbnb.epoxy.EpoxyAttribute
@@ -51,6 +52,9 @@ abstract class FormEditTextWithDeleteItem : VectorEpoxyModel<FormEditTextWithDel
     @EpoxyAttribute
     var imeOptions: Int? = null
 
+    @EpoxyAttribute
+    var maxLength: Int? = null
+
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var onTextChange: TextListener? = null
 
@@ -68,6 +72,12 @@ abstract class FormEditTextWithDeleteItem : VectorEpoxyModel<FormEditTextWithDel
         holder.textInputLayout.isEnabled = enabled
         holder.textInputLayout.hint = hint
 
+        if (maxLength != null) {
+            holder.textInputEditText.filters = arrayOf(InputFilter.LengthFilter(maxLength!!))
+            holder.textInputLayout.counterMaxLength = maxLength!!
+        } else {
+            holder.textInputEditText.filters = arrayOf()
+        }
         holder.textInputEditText.setTextIfDifferent(value)
 
         holder.textInputEditText.isEnabled = enabled

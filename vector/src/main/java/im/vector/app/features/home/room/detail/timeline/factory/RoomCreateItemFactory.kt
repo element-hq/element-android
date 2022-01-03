@@ -34,7 +34,7 @@ class RoomCreateItemFactory @Inject constructor(private val stringProvider: Stri
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event
-        val createRoomContent = event.root.getClearContent().toModel<RoomCreateContent>() ?: return null
+        val createRoomContent = event.root.content.toModel<RoomCreateContent>() ?: return null
         val predecessorId = createRoomContent.predecessor?.roomId ?: return defaultRendering(params)
         val roomLink = session.permalinkService().createRoomPermalink(predecessorId) ?: return null
         val text = span {

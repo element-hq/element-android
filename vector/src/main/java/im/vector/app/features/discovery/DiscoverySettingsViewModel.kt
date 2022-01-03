@@ -78,7 +78,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     init {
         setState {
             copy(
-                    identityServer = Success(identityService.getCurrentIdentityServerUrl()?.let { IdentityServerWithTerms(it, emptyList()) }),
+                    identityServer = Success(identityService.getCurrentIdentityServerUrl()?.let { ServerAndPolicies(it, emptyList()) }),
                     userConsent = identityService.getUserConsent()
             )
         }
@@ -151,7 +151,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                 val data = session.identityService().setNewIdentityServer(action.url)
                 setState {
                     copy(
-                            identityServer = Success(IdentityServerWithTerms(data, emptyList())),
+                            identityServer = Success(ServerAndPolicies(data, emptyList())),
                             userConsent = false
                     )
                 }
@@ -401,7 +401,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
         }
     }
 
-    private suspend fun fetchIdentityServerWithTerms(): IdentityServerWithTerms? {
+    private suspend fun fetchIdentityServerWithTerms(): ServerAndPolicies? {
         return session.fetchIdentityServerWithTerms(stringProvider.getString(R.string.resources_language))
     }
 }

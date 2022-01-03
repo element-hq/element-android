@@ -29,7 +29,6 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.endKeepScreenOn
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.keepScreenOn
@@ -108,8 +107,8 @@ class RoomDetailActivity :
         currentRoomId = roomDetailArgs.roomId
 
         if (isFirstCreation()) {
-            replaceFragment(R.id.roomDetailContainer, RoomDetailFragment::class.java, roomDetailArgs)
-            replaceFragment(R.id.roomDetailDrawerContainer, BreadcrumbsFragment::class.java)
+            replaceFragment(views.roomDetailContainer, RoomDetailFragment::class.java, roomDetailArgs)
+            replaceFragment(views.roomDetailDrawerContainer, BreadcrumbsFragment::class.java)
         }
 
         sharedActionViewModel = viewModelProvider.get(RoomDetailSharedActionViewModel::class.java)
@@ -146,7 +145,7 @@ class RoomDetailActivity :
         if (currentRoomId != switchToRoom.roomId) {
             currentRoomId = switchToRoom.roomId
             requireActiveMembershipViewModel.handle(RequireActiveMembershipAction.ChangeRoom(switchToRoom.roomId))
-            replaceFragment(R.id.roomDetailContainer, RoomDetailFragment::class.java, RoomDetailArgs(switchToRoom.roomId))
+            replaceFragment(views.roomDetailContainer, RoomDetailFragment::class.java, RoomDetailArgs(switchToRoom.roomId))
         }
     }
 

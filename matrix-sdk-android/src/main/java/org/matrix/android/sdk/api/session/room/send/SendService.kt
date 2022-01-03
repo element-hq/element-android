@@ -91,11 +91,17 @@ interface SendService {
     /**
      * Method to send a poll response.
      * @param pollEventId the poll currently replied to
-     * @param optionIndex The reply index
-     * @param optionValue The option value (for compatibility)
+     * @param answerId The id of the answer
      * @return a [Cancelable]
      */
-    fun sendOptionsReply(pollEventId: String, optionIndex: Int, optionValue: String): Cancelable
+    fun voteToPoll(pollEventId: String, answerId: String): Cancelable
+
+    /**
+     * End a poll in the room.
+     * @param pollEventId event id of the poll
+     * @return a [Cancelable]
+     */
+    fun endPoll(pollEventId: String): Cancelable
 
     /**
      * Redact (delete) the given event.

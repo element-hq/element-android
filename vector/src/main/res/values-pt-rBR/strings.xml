@@ -2122,7 +2122,7 @@
     <string name="initialize_cross_signing">Inicializar AssinaturaCruzada</string>
     <string name="reset_cross_signing">Resettar Chaves</string>
     <string name="a11y_qr_code_for_verification">QR code</string>
-    <string name="qr_code_scanned_by_other_notice">Quase lá! %s está mostrando o mesmo escudo\?</string>
+    <string name="qr_code_scanned_by_other_notice">Quase lá! %s está mostrando um tick (✓)\?</string>
     <string name="qr_code_scanned_by_other_yes">Sim</string>
     <string name="qr_code_scanned_by_other_no">Não</string>
     <string name="no_connectivity_to_the_server_indicator">Conectividade ao servidor tem sido perdida</string>
@@ -2234,7 +2234,7 @@
     <string name="encryption_unknown_algorithm_tile_description">A encriptação usada por esta sala não é suportada</string>
     <string name="room_created_summary_item">%s criou e configurou a sala.</string>
     <string name="room_created_summary_item_by_you">Você criou e configurou a sala.</string>
-    <string name="qr_code_scanned_self_verif_notice">Quase lá! O outro dispositivo está mostrando o mesmo escudo\?</string>
+    <string name="qr_code_scanned_self_verif_notice">Quase lá! O outro dispositivo está mostrando um tick (✓)\?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Quase lá! Esperando por confirmação…</string>
     <string name="error_failed_to_import_keys">Falha para importar chaves</string>
     <string name="settings_messages_at_room">Mensagens contendo @room</string>
@@ -3099,4 +3099,7 @@
     <string name="settings_discovery_consent_notice_off_2">Seus contatos são privados. Para descobrir usuárias(os) de seus contatos, você precisa de permissão para enviar info de contato a seu servidor de identidade.</string>
     <string name="shortcut_disabled_reason_sign_out">O signout desta sessão tem sido feito!</string>
     <string name="shortcut_disabled_reason_room_left">Esta sala tem sido saída!</string>
+    <string name="identity_server_consent_dialog_content_question">Você concorda em enviar esta info\?</string>
+    <string name="identity_server_consent_dialog_content_3">Para descobrir contatos existentes, você precisa enviar info de contato (emails e números de telefone) para seu servidor de identidade. Nós hashamos seus dados antes de enviar por privacidade.</string>
+    <string name="action_not_now">Não agora</string>
 </resources>
