@@ -100,7 +100,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         } else {
             null
         }
-        markwonPlugins?.forEach { plugin -> plugin.beforeSetText(holder.messageView, message as Spanned) }
+        markwonPlugins?.forEach { plugin -> plugin.beforeSetText(holder.messageView, message?.charSequence as Spanned) }
         super.bind(holder)
         holder.messageView.movementMethod = movementMethod
         renderSendState(holder.messageView, holder.messageView)
