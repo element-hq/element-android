@@ -3032,4 +3032,50 @@
     <string name="action_not_now">Inte nu</string>
     <string name="identity_server_consent_dialog_content_3">För att hitta existerande kontakter så behöver du skicka kontaktinfo (e-postadresser och telefonnummer) till din identitetsserver. Vi hashar din data innan den skickas av sekretesskäl.</string>
     <string name="identity_server_consent_dialog_content_question">Går du med på att skicka den här infon\?</string>
+    <string name="analytics_opt_in_list_item_3">Du kan stänga av detta när som helst i inställningarna</string>
+    <string name="analytics_opt_in_list_item_2">Vi delar <b>inte</b> information med tredje parter</string>
+    <string name="analytics_opt_in_list_item_1">Vi spelar <b>inte</b> in eller profilerar någon kontodata</string>
+    <string name="analytics_opt_in_content_link">här</string>
+    <string name="analytics_opt_in_content">Hjälp oss att identifiera problem och förbättra Element genom att dela anonym användningsdata. För att förstå hur personer använder multipla enheter så generar vi en slumpmässig identifierare som delas mellan dina enheter.
+\n
+\nDu kan läsa alla våra villkor %s.</string>
+    <string name="analytics_opt_in_title">Hjälp att förbättra Element</string>
+    <string name="action_enable">Aktivera</string>
+    <string name="delete_poll_dialog_content">Är du säker på att du vill ta bort den här omröstningen\? Du kommer inte kunna få tillbaka den när den har tagits bort.</string>
+    <string name="delete_poll_dialog_title">Ta bort omröstning</string>
+    <string name="poll_end_room_list_preview">Omröstning avslutad</string>
+    <string name="poll_response_room_list_preview">Röst avgiven</string>
+    <string name="labs_enable_polls">Aktivera omröstningar</string>
+    <string name="end_poll_confirmation_approve_button">Avsluta omröstningen</string>
+    <string name="end_poll_confirmation_description">Det här kommer att stoppa personer från att rösta och visa det slutgiltiga resultatet av omröstningen.</string>
+    <string name="end_poll_confirmation_title">Avsluta den här omröstningen\?</string>
+    <string name="a11y_poll_winner_option">vinnande alternativ</string>
+    <string name="poll_end_action">Avsluta omröstning</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Slutgiltigt resultat baserat på %1$d röst</item>
+        <item quantity="other">Slutgiltigt resultat baserat på %1$d röster</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">Baserat på %1$d röst</item>
+        <item quantity="other">Baserat på %1$d röster</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d röst</item>
+        <item quantity="other">%1$d röster</item>
+    </plurals>
+    <string name="preference_system_settings">Systeminställningar</string>
+    <string name="preference_versions">Versioner</string>
+    <string name="preference_help_summary">Få hjälp med att använda Element</string>
+    <string name="preference_help_title">Hjälp och support</string>
+    <string name="preference_help">Hjälp</string>
+    <string name="preference_root_legals">Legalt</string>
+    <string name="legals_no_policy_provided">Den här servern förser ingen policy.</string>
+    <string name="legals_third_party_notices">Tredjepartsbibliotek</string>
+    <string name="legals_identity_server_title">Din identitetsservers policy</string>
+    <string name="template_legals_application_title">${app_name}s policy</string>
+    <string name="legals_home_server_title">Din hemservers policy</string>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">%1$d röst avgiven. Rösta för att se resultatet</item>
+        <item quantity="other">%1$d röster avgivna. Rösta för att se resultatet</item>
+    </plurals>
 </resources>

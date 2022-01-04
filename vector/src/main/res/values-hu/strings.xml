@@ -1217,7 +1217,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törlik.</s
     <string name="error_empty_field_enter_user_name">Kérlek add meg a felhasználói nevedet.</string>
     <string name="keys_backup_setup">Kulcs Mentés használatának megkezdése</string>
     <string name="keys_backup_setup_step1_advanced">(Haladó)</string>
-    <string name="keys_backup_setup_step1_manual_export">Kulcsok kimentése kézzel</string>
+    <string name="keys_backup_setup_step1_manual_export">Kulcsok exportálása kézzel</string>
     <string name="keys_backup_setup_step2_text_title">Védd a mentésedet jelmondattal.</string>
     <string name="keys_backup_setup_step2_text_description">A kulcsaid másolatait titkosítva a Matrix szervereden fogjuk tárolni. Védd jelszóval a mentést, a biztonság érdekében.
 \n
@@ -1798,7 +1798,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="a13n_qr_code_description">QR kód kép</string>
     <string name="verification_verify_user">Ellenőrzés: %s</string>
     <string name="verification_verified_user">Ellenőrizve: %s</string>
-    <string name="verification_request_waiting_for">Várakozás erre: %s…</string>
+    <string name="verification_request_waiting_for">Várakozás %s felhasználóra…</string>
     <string name="verification_request_alert_description">A nagyobb biztonsághoz ellenőrizd ezt: %s az egyszeri kód összehasonlításával mindkét eszközön.
 \n
 \nA legnagyobb biztonság érdekében ezt tedd meg személyesen.</string>
@@ -1885,7 +1885,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="verification_profile_device_new_signing">%1$s (%2$s) új munkamenetet használva jelentkezett be:</string>
     <string name="verification_profile_device_untrust_info">Amíg a felhasználó nem jelöli megbízhatónak ezt a munkamenetet addig a munkamenetből küldött és a munkamenetbe érkező üzenetek figyelmeztetéssel lesznek ellátva. Vagy te is ellenőrizheted a munkamenetet.</string>
     <string name="initialize_cross_signing">Eszközök közötti hitelesítés inicializálása</string>
-    <string name="reset_cross_signing">Visszaállítási Kulcsok</string>
+    <string name="reset_cross_signing">Kulcsok alaphelyzetbe állítása</string>
     <string name="a11y_qr_code_for_verification">QR kód</string>
     <string name="qr_code_scanned_by_other_notice">Majdnem kész! %s is ugyanazt a pipát mutatja\?</string>
     <string name="qr_code_scanned_by_other_yes">Igen</string>
@@ -1988,7 +1988,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="room_created_summary_item">%s elkészítette és beállította a szobát.</string>
     <string name="qr_code_scanned_self_verif_notice">Majdnem kész! A másik eszközöd is ugyanazt a pipát mutatja\?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Majdnem kész! Várakozás a megerősítésre…</string>
-    <string name="qr_code_scanned_verif_waiting">Várakozás erre: %s…</string>
+    <string name="qr_code_scanned_verif_waiting">Várakozás %s felhasználóra…</string>
     <string name="error_failed_to_import_keys">A kulcsok betöltése sikertelen</string>
     <string name="settings_notification_configuration">Értesítések beállítása</string>
     <string name="settings_messages_at_room">Az üzenetek „@room”-ot tartalmaznak</string>
@@ -2483,7 +2483,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="labs_use_restricted_join_rule_desc">Figyelmeztetés szerver oldali támogatás és kísérleti szoba verzió szükséges</string>
     <string name="labs_use_restricted_join_rule">Kísérleti Tér - Korlátozott szobák.</string>
     <string name="you_are_invited">Meghívtak</string>
-    <string name="spaces_beta_welcome_to_spaces_desc">Szobák és emberek csoportosításának új lehetősége a Terek használata.</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">A Terek használata egy új lehetőség a szobák és felhasználók csoportosítására.</string>
     <string name="spaces_beta_welcome_to_spaces">Üdv a Terekben!</string>
     <string name="space_add_rooms">Szobák hozzáadása</string>
     <string name="space_add_existing_rooms">Létező szobák és tér hozzáadása</string>
@@ -2526,12 +2526,12 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="create_spaces_room_public_header_desc">Készítünk szobákat számukra. Később még adhatsz hozzájuk.</string>
     <string name="create_spaces_room_public_header">Milyen beszélgetéseket szeretnél itt: %s\?</string>
     <string name="create_space_error_empty_field_space_name">A folytatáshoz adj neki nevet.</string>
-    <string name="create_spaces_details_private_header">Adj hozzá információkat amik segítenek az embereknek beazonosítani. Bármikor megváltoztathatod.</string>
+    <string name="create_spaces_details_private_header">Adj hozzá információkat amik segítenek felismerni ezt a teret. Bármikor megváltoztathatod.</string>
     <string name="create_spaces_details_public_header">Adj hozzá pár információt, hogy tűnjön ki. Bármikor megváltoztathatod.</string>
     <string name="activity_create_space_title">Tér készítése</string>
     <string name="space_type_private_desc">Csak meghívóval, saját célra és csoportoknak ideális</string>
     <string name="space_type_private">Privát</string>
-    <string name="space_type_public_desc">Nyílt tér mindenkinek, a legjobb a közösségeknek</string>
+    <string name="space_type_public_desc">Mindenki számára szabadon hozzáférhető, a közösségeknek ajánlott</string>
     <string name="space_type_public">Nyilvános</string>
     <string name="create_spaces_private_teammates">Privát tér neked és a csoporttársaidnak</string>
     <string name="create_spaces_me_and_teammates">Én és a csoporttársaim</string>
@@ -2543,7 +2543,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="create_spaces_join_info_help">Létező térbe való belépéshez meghívó szükséges.</string>
     <string name="create_spaces_you_can_change_later">Ezt később meg lehet változtatni</string>
     <string name="create_spaces_choose_type_label">Milyen típusú teret szeretnél készíteni\?</string>
-    <string name="create_spaces_type_header">Szobák és emberek csoportosításának új lehetősége a Terek használata</string>
+    <string name="create_spaces_type_header">A Terek használata egy új lehetőség a szobák és felhasználók csoportosítására</string>
     <string name="your_private_space">Privát tér</string>
     <string name="your_public_space">Nyilvános tér</string>
     <string name="add_space">Tér hozzáadása</string>
@@ -2643,7 +2643,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="settings_security_pin_code_change_pin_summary">Jelenlegi PIN kód megváltoztatása</string>
     <string name="settings_security_pin_code_change_pin_title">PIN megváltoztatása</string>
     <string name="template_settings_security_pin_code_grace_period_summary_off">${app_name} megnyitásához mindig PIN kód szükséges.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">Ha nem használsz ilyent: ${app_name} akkor 2 perc elteltével PIN kód megadása szükséges.</string>
+    <string name="template_settings_security_pin_code_grace_period_summary_on">Ha 2 percnél hosszabb ideig nem használod az ${app_name} Element alkalmazást, PIN kódot fog kérni.</string>
     <string name="settings_security_pin_code_grace_period_title">2 perc elteltével PIN szükséges</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Eszköz specifikus biometrikus azonosítás engedélyezése, mint ujjlenyomat vagy arcfelismerés.</string>
     <plurals name="entries">
@@ -2707,7 +2707,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="login_social_continue_with">Folytatás ezzel: %s</string>
     <string name="login_social_continue">Vagy</string>
     <string name="room_alias_local_address_subtitle">Állíts be címet ehhez a szobához, hogy a felhasználók a matrix szervereden megtalálhassák (%1$s)</string>
-    <string name="direct_room_join_rules_invite_by_you">Meghívásossá tetted.</string>
+    <string name="direct_room_join_rules_invite_by_you">Meghívásossá tetted ezt a beszélgetést.</string>
     <string name="direct_room_join_rules_invite">%1$s meghívásossá tette.</string>
     <string name="room_list_quick_actions_room_settings">Szoba beállításai</string>
     <string name="room_list_quick_actions_low_priority_remove">Alacsony prioritásúak közül kivesz</string>
@@ -2730,7 +2730,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="send_file_step_compressing_video">Videó tömörítése (%d%%)</string>
     <string name="send_file_step_compressing_image">Kép tömörítése…</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">Teljes tartalom megmutatása titkosított szobákban</string>
-    <string name="give_feedback">Visszajelzés adása</string>
+    <string name="give_feedback">Visszajelzés küldése</string>
     <string name="feedback_failed">A visszajelzésed nem sikerült elküldeni (%s)</string>
     <string name="feedback_sent">Köszönjük, a visszajelzésed sikeresen elküldésre került</string>
     <string name="you_may_contact_me">Ha további kérdés merülne fel, kapcsolatba léphetnek velem</string>
@@ -2922,7 +2922,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="call_tile_video_declined">Videóhívás elutasítva</string>
     <string name="call_tile_voice_declined">Hanghívás elutasítva</string>
     <string name="call_tile_video_call_has_ended">Videóhívás befejeződött • %1$s</string>
-    <string name="call_tile_voice_call_has_ended">Videóhívás befejeződött • %1$s</string>
+    <string name="call_tile_voice_call_has_ended">Hívás befejeződött • %1$s</string>
     <string name="call_tile_video_active">Videó hívás folyamatban</string>
     <string name="call_tile_voice_active">Hanghívás folyamatban</string>
     <string name="call_tile_video_incoming">Bejövő videó hívás</string>
@@ -3037,4 +3037,50 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="identity_server_consent_dialog_content_3">A meglévő kapcsolatok felderítéséhez információkat (e-mail cím és telefonszám) kell elküldeni az azonosítási szolgáltatónak. Az adatok az adatvédelem miatt hashelve lesznek elküldve.</string>
     <string name="identity_server_consent_dialog_content_question">Beleegyezel az információk elküldésébe\?</string>
     <string name="action_not_now">Nem most</string>
+    <string name="action_enable">Engedélyezés</string>
+    <string name="delete_poll_dialog_content">Biztosan törlöd ezt a szavazást\? Ezt a műveletet később nem lehet visszavonni.</string>
+    <string name="delete_poll_dialog_title">Szavazás törlése</string>
+    <string name="poll_end_room_list_preview">Szavazás lezárva</string>
+    <string name="poll_response_room_list_preview">Szavazat leadva</string>
+    <string name="labs_enable_polls">Szavazások bekapcsolása</string>
+    <string name="end_poll_confirmation_approve_button">Szavazás lezárása</string>
+    <string name="end_poll_confirmation_description">Ez megszünteti az új szavazatok leadásának lehetőségét, és kijelzi a végleges eredményt.</string>
+    <string name="end_poll_confirmation_title">Lezárod a szavazást\?</string>
+    <string name="poll_end_action">Szavazás lezárása</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Eredmény %1$d szavazat alapján</item>
+        <item quantity="other">Eredmény %1$d szavazat alapján</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">Nem szavazott senki</item>
+        <item quantity="other">%1$d leadott szavazat. Szavazz az eredmények megtekintéséhez</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">%1$d szavazat alapján</item>
+        <item quantity="other">%1$d szavazat alapján</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d szavazat</item>
+        <item quantity="other">%1$d szavazat</item>
+    </plurals>
+    <string name="preference_system_settings">Rendszerbeállítások</string>
+    <string name="preference_versions">Verziók</string>
+    <string name="preference_help_summary">Segítség az Element használatában</string>
+    <string name="preference_help_title">Segítség és támogatás</string>
+    <string name="preference_help">Segítség</string>
+    <string name="legals_no_policy_provided">Ez a szerver nem adott meg szabályzatot.</string>
+    <string name="legals_third_party_notices">Harmadik féltől származó programkönyvtárak</string>
+    <string name="legals_identity_server_title">Az azonosítási szervered szabályzata</string>
+    <string name="legals_home_server_title">A Matrix szervered szabályzata</string>
+    <string name="template_legals_application_title">${app_name} szabályzat</string>
+    <string name="analytics_opt_in_list_item_3">Később akármikor kikapcsolhatod a beállításokban</string>
+    <string name="analytics_opt_in_list_item_2"><b>Nem</b> osztjuk meg az információt harmadik féllel</string>
+    <string name="analytics_opt_in_list_item_1"><b>Nem</b> küldünk és nem profilozunk semmilyen fiók adatot</string>
+    <string name="analytics_opt_in_content_link">itt</string>
+    <string name="analytics_opt_in_content">Segíts észrevennünk a hibákat, és jobbá tenni az Element-et a névtelen használati adatok küldése által. Ahhoz, hogy megértsük, hogyan használnak a felhasználók egyszerre több eszközt, egy véletlenszerű azonosítót generálunk, ami az eszközeid között meg lesz osztva.
+\n
+\nElolvashatod a feltételeinket %s.</string>
+    <string name="analytics_opt_in_title">Segíts az Element-et jobbá tenni</string>
+    <string name="a11y_poll_winner_option">nyerő válasz</string>
+    <string name="preference_root_legals">Jogi dolgok</string>
 </resources>

@@ -319,7 +319,7 @@
     <string name="action_global_search">Pesquisa global</string>
     <string name="action_mark_all_as_read">Marcar tudo como lido</string>
     <string name="action_historical">Histórico</string>
-    <string name="action_quick_reply">Responder rápido</string>
+    <string name="action_quick_reply">Resposta rápida</string>
     <string name="action_open">Abrir</string>
     <string name="action_close">Fechar</string>
     <string name="copied_to_clipboard">Copiado para clipboard</string>
@@ -665,7 +665,7 @@
     <string name="settings_set_sync_timeout">Timeout de requisição de sinc</string>
     <string name="settings_set_sync_delay">Delay entre casa Sinc</string>
     <string name="settings_version">Versão</string>
-    <string name="settings_olm_version">versão de olm</string>
+    <string name="settings_olm_version">Versão de olm</string>
     <string name="settings_app_term_conditions">Termos &amp; condições</string>
     <string name="settings_third_party_notices">Notas de terceiros</string>
     <string name="settings_copyright">Copyright</string>
@@ -3102,4 +3102,50 @@
     <string name="identity_server_consent_dialog_content_question">Você concorda em enviar esta info\?</string>
     <string name="identity_server_consent_dialog_content_3">Para descobrir contatos existentes, você precisa enviar info de contato (emails e números de telefone) para seu servidor de identidade. Nós hashamos seus dados antes de enviar por privacidade.</string>
     <string name="action_not_now">Não agora</string>
+    <string name="delete_poll_dialog_content">Você tem certeza que você quer remover esta sondagem\? Você não vai ser capaz de recuperá-la uma vez removida.</string>
+    <string name="delete_poll_dialog_title">Remover sondagem</string>
+    <string name="poll_end_room_list_preview">Sondagem terminada</string>
+    <string name="poll_response_room_list_preview">Voto lançado</string>
+    <string name="labs_enable_polls">Habilitar Sondagens</string>
+    <string name="end_poll_confirmation_approve_button">Terminar sondagem</string>
+    <string name="end_poll_confirmation_description">Isto vai parar pessoas de serem capazes de votar e vai exibir os resultados finais da sondagem.</string>
+    <string name="end_poll_confirmation_title">Terminar esta sondagem\?</string>
+    <string name="a11y_poll_winner_option">opção vencedora</string>
+    <string name="poll_end_action">Terminar sondagem</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Resultado final baseado em %1$d voto</item>
+        <item quantity="other">Resultado final baseado em %1$d votos</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">%1$d voto lançado. Vote para ver os resultados</item>
+        <item quantity="other">%1$d votos lançados. Vote para ver os resultados</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">Baseado em %1$d voto</item>
+        <item quantity="other">Baseado em %1$d votos</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d voto</item>
+        <item quantity="other">%1$d votos</item>
+    </plurals>
+    <string name="preference_versions">Versões</string>
+    <string name="preference_help_summary">Conseguir ajuda com uso de Element</string>
+    <string name="preference_root_legals">Jurídicos</string>
+    <string name="legals_no_policy_provided">Este servidor não provê nenhuma política.</string>
+    <string name="legals_third_party_notices">Bibliotecas de terceiros</string>
+    <string name="legals_identity_server_title">A política de seu servidor de identidade</string>
+    <string name="legals_home_server_title">A política de seu servidorcasa</string>
+    <string name="template_legals_application_title">Política de ${app_name}</string>
+    <string name="analytics_opt_in_list_item_1">Nós <b>não</b> gravamos ou perfilamos quaisquer dados de conta</string>
+    <string name="analytics_opt_in_content">Ajude-nos a identificar problemas e melhorar Element ao compartilhar dados de uso anônimos. Para entender como pessoas usam seus múltiplos dispositivos, nós vamos gerar um identificador aleatório, compartilhado por seus dispositivos.
+\n
+\nVocê pode ler todos os nossos termos %s.</string>
+    <string name="analytics_opt_in_title">Ajudar a melhorar Element</string>
+    <string name="preference_system_settings">Configurações de sistema</string>
+    <string name="preference_help_title">Ajuda e suporte</string>
+    <string name="preference_help">Ajuda</string>
+    <string name="analytics_opt_in_list_item_3">Você pode desativar isto a qualquer hora em configurações</string>
+    <string name="analytics_opt_in_list_item_2">Nós <b>não</b> compartilhamos informação com terceiros</string>
+    <string name="analytics_opt_in_content_link">aqui</string>
+    <string name="action_enable">Habilitar</string>
 </resources>

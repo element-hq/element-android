@@ -1021,4 +1021,5 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="pause_video">Pause</string>
     <string name="bottom_action_people_x">Folk</string>
     <string name="fab_menu_create_chat">Folk</string>
+    <string name="summary_you_sent_image">Du sende eit bilde.</string>
 </resources>
