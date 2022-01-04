@@ -1501,8 +1501,8 @@
     <string name="room_list_rooms_empty_title">Sales</string>
     <string name="room_list_rooms_empty_body">Les teves sales es mostraran aquí. Clica el + de la part inferior dreta per buscar-ne d\'existents o per crear-ne una.</string>
     <string name="title_activity_emoji_reaction_picker">Reaccions</string>
-    <string name="reactions_agree">Confirmar</string>
-    <string name="reactions_like">M\'agrada</string>
+    <string name="action_agree">Confirmar</string>
+    <string name="action_like">M\'agrada</string>
     <string name="message_add_reaction">Afegir reacció</string>
     <string name="message_view_reaction">Veure reaccions</string>
     <string name="reactions">Reaccions</string>

@@ -1836,8 +1836,8 @@
     <string name="room_list_catchup_empty_body">Nie masz więcej nieprzeczytanych wiadomości</string>
     <string name="room_list_catchup_welcome_title">Witaj w domu!</string>
     <string name="title_activity_emoji_reaction_picker">Reakcje</string>
-    <string name="reactions_agree">Zgoda</string>
-    <string name="reactions_like">Lubię to</string>
+    <string name="action_agree">Zgoda</string>
+    <string name="action_like">Lubię to</string>
     <string name="message_view_reaction">Zobacz Reakcje</string>
     <string name="event_redacted_by_user_reason">Zdarzenie usunięte przez użytkownika</string>
     <string name="event_redacted_by_admin_reason">Zdarzenie moderowane przez administratora pokoju</string>

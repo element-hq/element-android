@@ -1419,8 +1419,8 @@
     <string name="room_list_rooms_empty_title">Kamers</string>
     <string name="room_list_rooms_empty_body">Je kamers zullen hier worden weergegeven. Gebruik de + knop rechtsonder om een bestaande kamer te openen of een nieuwe aan te maken.</string>
     <string name="title_activity_emoji_reaction_picker">Reacties</string>
-    <string name="reactions_agree">Bevestigen</string>
-    <string name="reactions_like">Leuk vinden</string>
+    <string name="action_agree">Bevestigen</string>
+    <string name="action_like">Leuk vinden</string>
     <string name="message_add_reaction">Reactie Toevoegen</string>
     <string name="message_view_reaction">Reacties Bekijken</string>
     <string name="reactions">Reacties</string>

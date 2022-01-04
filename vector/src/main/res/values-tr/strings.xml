@@ -1234,8 +1234,8 @@
     <string name="room_list_rooms_empty_title">Odalar</string>
     <string name="room_list_rooms_empty_body">Odalar burada görünecek. Mevcut odaları görmek ya da kendi odanızı kurmak için aşağıdan + butonuna tıklayın.</string>
     <string name="title_activity_emoji_reaction_picker">Tepkiler</string>
-    <string name="reactions_agree">Bencede</string>
-    <string name="reactions_like">Beğendim</string>
+    <string name="action_agree">Bencede</string>
+    <string name="action_like">Beğendim</string>
     <string name="message_add_reaction">Bir Tepki Ekle</string>
     <string name="message_view_reaction">Tekpileri Görüntüle</string>
     <string name="reactions">Tepkiler</string>

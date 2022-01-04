@@ -787,8 +787,8 @@
     <string name="sas_error_m_timeout">Verifitseerimisprotsess aegus</string>
     <string name="room_list_rooms_empty_body">Sinu jututoad kuvatakse siin. Olemasolevate jututubade leidmiseks või uute tegemiseks klõpsi all paremal nurgas asuvat + nuppu.</string>
     <string name="title_activity_emoji_reaction_picker">Reageerimised</string>
-    <string name="reactions_agree">Nõus</string>
-    <string name="reactions_like">Meeldib</string>
+    <string name="action_agree">Nõus</string>
+    <string name="action_like">Meeldib</string>
     <string name="message_add_reaction">Lisa reaktsioon</string>
     <string name="reactions">Reageerimised</string>
     <string name="event_redacted">Sõnum on kustutatud</string>

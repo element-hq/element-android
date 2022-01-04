@@ -1492,8 +1492,8 @@
     <string name="room_list_rooms_empty_title">Stanze</string>
     <string name="room_list_rooms_empty_body">Le tue stanze verranno mostrate qui. Tocca il pulsante + per trovare quelle esistenti o crearne di nuove.</string>
     <string name="title_activity_emoji_reaction_picker">Reazioni</string>
-    <string name="reactions_agree">D\'accordo</string>
-    <string name="reactions_like">Piace</string>
+    <string name="action_agree">D\'accordo</string>
+    <string name="action_like">Piace</string>
     <string name="message_add_reaction">Aggiungi reazione</string>
     <string name="message_view_reaction">Vedi le reazioni</string>
     <string name="reactions">Reazioni</string>

@@ -1730,8 +1730,8 @@
     <string name="reactions">תגובות</string>
     <string name="message_view_reaction">צפה בתגובות</string>
     <string name="message_add_reaction">הוסף תגובה</string>
-    <string name="reactions_like">אהבתי</string>
-    <string name="reactions_agree">מסכים</string>
+    <string name="action_like">אהבתי</string>
+    <string name="action_agree">מסכים</string>
     <string name="title_activity_emoji_reaction_picker">תגובות</string>
     <string name="room_list_rooms_empty_body">החדרים שלך יוצגו כאן. הקש על + שמאל למטה כדי למצוא את הקיים או התחל כמה משלך.</string>
     <string name="room_list_rooms_empty_title">חדרים</string>

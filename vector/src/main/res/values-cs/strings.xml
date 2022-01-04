@@ -1542,8 +1542,8 @@
     <string name="room_list_rooms_empty_title">Místnosti</string>
     <string name="room_list_rooms_empty_body">Tady budou zobrazeny Vaše místnosti. K vyhledání existujících místností nebo založení nové klepněte na + vpravo dole.</string>
     <string name="title_activity_emoji_reaction_picker">Reakce</string>
-    <string name="reactions_agree">Souhlasit</string>
-    <string name="reactions_like">Líbí se</string>
+    <string name="action_agree">Souhlasit</string>
+    <string name="action_like">Líbí se</string>
     <string name="message_add_reaction">Přidat reakci</string>
     <string name="message_view_reaction">Ukázat reakce</string>
     <string name="reactions">Reakce</string>

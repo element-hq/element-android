@@ -1560,8 +1560,8 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="room_list_rooms_empty_body">Zure gelak hemen bistaratuko dira</string>
 
     <string name="title_activity_emoji_reaction_picker">Erreakzioak</string>
-    <string name="reactions_agree">Ados</string>
-    <string name="reactions_like">Gogokoa</string>
+    <string name="action_agree">Ados</string>
+    <string name="action_like">Gogokoa</string>
     <string name="message_add_reaction">Gehitu erreakzioa</string>
     <string name="message_view_reaction">Ikusi errekzioak</string>
     <string name="reactions">Erreakzioak</string>

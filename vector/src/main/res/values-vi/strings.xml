@@ -2482,8 +2482,8 @@
     <string name="reactions">Phản ứng</string>
     <string name="message_view_reaction">Xem phản ứng</string>
     <string name="message_add_reaction">Thêm phản ứng</string>
-    <string name="reactions_like">Thích</string>
-    <string name="reactions_agree">Đồng ý</string>
+    <string name="action_like">Thích</string>
+    <string name="action_agree">Đồng ý</string>
     <string name="title_activity_emoji_reaction_picker">Phản ứng</string>
     <string name="room_list_rooms_empty_title">Phòng</string>
     <string name="room_list_people_empty_body">Các cuộc hội thoại tin nhắn trực tiếp của bạn sẽ được hiển thị tại đây. Nhấp vào dấu + dưới cùng bên phải để bắt đầu.</string>

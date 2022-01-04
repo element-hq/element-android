@@ -1925,8 +1925,8 @@
     <string name="room_list_catchup_welcome_body">Kom ikapp med olästa meddelanden här</string>
     <string name="room_list_people_empty_title">Konversationer</string>
     <string name="title_activity_emoji_reaction_picker">Reaktioner</string>
-    <string name="reactions_agree">Acceptera</string>
-    <string name="reactions_like">Gilla</string>
+    <string name="action_agree">Acceptera</string>
+    <string name="action_like">Gilla</string>
     <string name="message_add_reaction">Lägg till reaktion</string>
     <string name="message_view_reaction">Visa reaktioner</string>
     <string name="reactions">Reaktioner</string>

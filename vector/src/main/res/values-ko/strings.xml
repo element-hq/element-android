@@ -1228,8 +1228,8 @@
     <string name="room_list_rooms_empty_title">방</string>
     <string name="room_list_rooms_empty_body">방이 여기 표시됩니다</string>
     <string name="title_activity_emoji_reaction_picker">리액션</string>
-    <string name="reactions_agree">동의</string>
-    <string name="reactions_like">좋아요</string>
+    <string name="action_agree">동의</string>
+    <string name="action_like">좋아요</string>
     <string name="message_add_reaction">리액션 추가</string>
     <string name="message_view_reaction">리액션 보기</string>
     <string name="reactions">리액션</string>

@@ -290,7 +290,7 @@
     <string name="global_retry">Prøv igjen</string>
     <string name="invited_by">Invitert av %s</string>
     <string name="title_activity_emoji_reaction_picker">Reaksjoner</string>
-    <string name="reactions_like">Liker</string>
+    <string name="action_like">Liker</string>
     <string name="reactions">Reaksjoner</string>
     <string name="action_change">Endre</string>
     <string name="please_wait">Vennligst vent …</string>
@@ -1179,7 +1179,7 @@
     <string name="room_list_catchup_welcome_title">Velkommen hjem!</string>
     <string name="room_list_people_empty_body">Dine direktemeldinger vises her. Trykk på + nederst til høyre for å starte noen.</string>
     <string name="room_list_rooms_empty_body">Rommene dine vises her. Trykk på + nederst til høyre for å finne eksisterende eller start din egen.</string>
-    <string name="reactions_agree">Godta</string>
+    <string name="action_agree">Godta</string>
     <string name="message_view_reaction">Se reaksjoner</string>
     <string name="event_redacted_by_user_reason">Arrangement slettet av bruker</string>
     <string name="last_edited_info_message">Sist redigert av %1$s på %2$s</string>

@@ -436,8 +436,8 @@
     <string name="call_notification_hangup">Hang Up</string>
 
     <!-- actions -->
-    <string name="action_exit">Exit</string>
     <string name="actions">Actions</string>
+    <string name="action_exit">Exit</string>
     <string name="action_sign_out">Sign out</string>
     <string name="action_sign_out_confirmation_simple">Are you sure you want to sign out?</string>
     <string name="action_voice_call">Voice Call</string>
@@ -453,11 +453,15 @@
     <string name="action_add">Add</string>
     <string name="action_switch">Switch</string>
     <string name="action_unpublish">Unpublish</string>
-    <string name="copied_to_clipboard">Copied to clipboard</string>
-    <string name="disable">Disable</string>
     <string name="action_return">Return</string>
     <string name="action_enable">Enable</string>
     <string name="action_not_now">Not now</string>
+    <string name="action_agree">Agree</string>
+    <string name="action_like">Like</string>
+    <string name="action_change">"Change"</string>
+
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+    <string name="disable">Disable</string>
 
     <!-- dialog titles -->
     <string name="dialog_title_confirmation">Confirmation</string>
@@ -2210,10 +2214,6 @@
     <string name="room_list_rooms_empty_body">Your rooms will be displayed here. Tap the + bottom right to find existing ones or start some of your own.</string>
 
     <string name="title_activity_emoji_reaction_picker">Reactions</string>
-    <!-- TODO weblate sync: rename to "action_agree"-->
-    <string name="reactions_agree">Agree</string>
-    <!-- TODO weblate sync: rename to "action_like"-->
-    <string name="reactions_like">Like</string>
     <string name="message_add_reaction">Add Reaction</string>
     <string name="message_view_reaction">View Reactions</string>
     <string name="reactions">Reactions</string>
@@ -2230,7 +2230,6 @@
     <string name="create_new_room">Create New Room</string>
     <string name="create_new_space">Create New Space</string>
     <string name="error_no_network">No network. Please check your Internet connection.</string>
-    <string name="action_change">"Change"</string>
     <string name="change_room_directory_network">"Change network"</string>
     <string name="please_wait">"Please wait…"</string>
     <string name="group_all_communities">"All Communities"</string>

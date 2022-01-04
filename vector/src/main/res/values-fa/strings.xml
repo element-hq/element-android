@@ -674,8 +674,8 @@
     <string name="room_list_rooms_empty_title">اتاق‌ها</string>
     <string name="room_list_rooms_empty_body">اتاق‌هایتان این‌جا نشان داده خواهند شد. برای یافتن موارد موجود یا ایجاد خودتان روی + در پایین سمت راست بزنید.</string>
     <string name="title_activity_emoji_reaction_picker">بازخودها</string>
-    <string name="reactions_agree">موافقت</string>
-    <string name="reactions_like">پسند</string>
+    <string name="action_agree">موافقت</string>
+    <string name="action_like">پسند</string>
     <string name="message_add_reaction">افزودن بازخورد</string>
     <string name="message_view_reaction">دیدن بازخوردها</string>
     <string name="reactions">بازخوردها</string>

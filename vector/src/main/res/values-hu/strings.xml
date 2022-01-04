@@ -1366,8 +1366,8 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="room_list_rooms_empty_title">Szobák</string>
     <string name="room_list_rooms_empty_body">A szobáidat itt láthatod. Koppints a + -ra jobbra lent a meglévők kereséséhez vagy egy saját indításához.</string>
     <string name="title_activity_emoji_reaction_picker">Reakciók</string>
-    <string name="reactions_agree">Egyetértek</string>
-    <string name="reactions_like">Kedvelem</string>
+    <string name="action_agree">Egyetértek</string>
+    <string name="action_like">Kedvelem</string>
     <string name="message_add_reaction">Reakció hozzáadása</string>
     <string name="message_view_reaction">Reakciók megjelenítése</string>
     <string name="reactions">Reakciók</string>

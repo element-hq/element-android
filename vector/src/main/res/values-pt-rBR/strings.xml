@@ -1645,8 +1645,8 @@
     <string name="room_list_rooms_empty_title">Salas</string>
     <string name="room_list_rooms_empty_body">Suas salas vão ser exibidas aqui. Toque no + à direita fundo para encontrar umas existentes ou começar algumas propriamente suas.</string>
     <string name="title_activity_emoji_reaction_picker">Reações</string>
-    <string name="reactions_agree">Concordo</string>
-    <string name="reactions_like">Curtir</string>
+    <string name="action_agree">Concordo</string>
+    <string name="action_like">Curtir</string>
     <string name="message_add_reaction">Adicionar Reação</string>
     <string name="message_view_reaction">Visualizar Reações</string>
     <string name="reactions">Reações</string>

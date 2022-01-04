@@ -1558,8 +1558,8 @@
     <string name="room_list_rooms_empty_title">Комнаты</string>
     <string name="room_list_rooms_empty_body">Здесь будут отображаться ваши комнаты. Коснитесь + внизу справа, чтобы найти существующие или создать свои.</string>
     <string name="title_activity_emoji_reaction_picker">Реакции</string>
-    <string name="reactions_agree">Принять</string>
-    <string name="reactions_like">Нравиться</string>
+    <string name="action_agree">Принять</string>
+    <string name="action_like">Нравиться</string>
     <string name="message_add_reaction">Добавить реакцию</string>
     <string name="message_view_reaction">Просмотреть реакции</string>
     <string name="settings_integration_manager">Менеджер интеграции</string>

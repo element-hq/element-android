@@ -1492,8 +1492,8 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="room_list_rooms_empty_title">Salas</string>
     <string name="room_list_rooms_empty_body">Tus salas se mostrarán aquí. Pulsa el botón + abajo a la derecha para buscar o crear salas propias.</string>
     <string name="title_activity_emoji_reaction_picker">Reacciones</string>
-    <string name="reactions_agree">De acuerdo</string>
-    <string name="reactions_like">Me gusta</string>
+    <string name="action_agree">De acuerdo</string>
+    <string name="action_like">Me gusta</string>
     <string name="message_add_reaction">Añadir reacción</string>
     <string name="message_view_reaction">Ver reacciones</string>
     <string name="reactions">Reacciones</string>

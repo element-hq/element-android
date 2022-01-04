@@ -1062,8 +1062,8 @@
     <string name="sas_cancelled_dialog_title">Asuter yettwasefsex</string>
     <string name="sas_error_unknown">Tuccḍa tarussint</string>
     <string name="invited_by">Yettwanced-d sɣur %s</string>
-    <string name="reactions_agree">Qbel</string>
-    <string name="reactions_like">Ḥemmel</string>
+    <string name="action_agree">Qbel</string>
+    <string name="action_like">Ḥemmel</string>
     <string name="create_new_room">Rnu taxxamt tamaynut</string>
     <string name="change_room_directory_network">Snifel azeṭṭa</string>
     <string name="group_all_communities">Meṛṛa timɣiwnin</string>

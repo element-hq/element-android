@@ -1387,8 +1387,8 @@
     <string name="room_list_rooms_empty_title">Стаи</string>
     <string name="room_list_rooms_empty_body">Вашите стаи се показват тук</string>
     <string name="title_activity_emoji_reaction_picker">Реакции</string>
-    <string name="reactions_agree">Съгласен съм</string>
-    <string name="reactions_like">Харесвам</string>
+    <string name="action_agree">Съгласен съм</string>
+    <string name="action_like">Харесвам</string>
     <string name="message_add_reaction">Добави реакция</string>
     <string name="message_view_reaction">Виж реакциите</string>
     <string name="reactions">Реакции</string>

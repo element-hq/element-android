@@ -1139,8 +1139,8 @@
     <string name="reactions">Reagoj</string>
     <string name="message_view_reaction">Vidi reagojn</string>
     <string name="message_add_reaction">Aldoni reagon</string>
-    <string name="reactions_like">Ŝati</string>
-    <string name="reactions_agree">Konsenti</string>
+    <string name="action_like">Ŝati</string>
+    <string name="action_agree">Konsenti</string>
     <string name="title_activity_emoji_reaction_picker">Reagoj</string>
     <string name="room_list_rooms_empty_body">Viaj ĉambroj montriĝos ĉi tie. Tuŝetu al la «+» dekstre sube por trovi jam ekzistantajn, aŭ fari viajn proprajn.</string>
     <string name="room_list_rooms_empty_title">Ĉambroj</string>

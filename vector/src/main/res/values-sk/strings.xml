@@ -1569,8 +1569,8 @@
     <string name="room_list_rooms_empty_title">Miestnosti</string>
     <string name="room_list_rooms_empty_body">Tu sa zobrazia vaše miestnosti. Ťuknutím na + vpravo dole nájdete existujúce miestnosti alebo si môžete založiť vlastnú.</string>
     <string name="title_activity_emoji_reaction_picker">Reakcie</string>
-    <string name="reactions_agree">Súhlasím</string>
-    <string name="reactions_like">Páči sa mi</string>
+    <string name="action_agree">Súhlasím</string>
+    <string name="action_like">Páči sa mi</string>
     <string name="message_add_reaction">Pridať reakciu</string>
     <string name="message_view_reaction">Zobraziť reakcie</string>
     <string name="reactions">Reakcie</string>

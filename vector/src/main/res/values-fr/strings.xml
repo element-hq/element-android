@@ -1412,8 +1412,8 @@
     <string name="room_list_rooms_empty_title">Salons</string>
     <string name="room_list_rooms_empty_body">Vos salons seront affichés ici. Appuyez sur le « + » en bas à droite pour trouver ceux existant ou en créer de nouveaux.</string>
     <string name="title_activity_emoji_reaction_picker">Réactions</string>
-    <string name="reactions_agree">D’accord</string>
-    <string name="reactions_like">J’aime</string>
+    <string name="action_agree">D’accord</string>
+    <string name="action_like">J’aime</string>
     <string name="message_add_reaction">Ajouter une réaction</string>
     <string name="message_view_reaction">Voir les réactions</string>
     <string name="reactions">Réactions</string>

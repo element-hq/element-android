@@ -1790,8 +1790,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_show_redacted">Rādīt izdzēstās ziņas</string>
     <string name="message_view_reaction">Apskatīt Reakcijas</string>
     <string name="message_add_reaction">Pievienot Reakciju</string>
-    <string name="reactions_like">Patīk</string>
-    <string name="reactions_agree">Piekrist</string>
+    <string name="action_like">Patīk</string>
+    <string name="action_agree">Piekrist</string>
     <string name="room_list_people_empty_body">Jūsu sarunas tiks parādītas šeit. Nospiediet + ekrāna labējā, apakšējā stūrī, lai sāktu sarunas.</string>
     <string name="room_list_catchup_welcome_body">Apskatiet nelasītas ziņas šeit</string>
     <string name="room_list_catchup_welcome_title">Laipni lūgti mājās!</string>

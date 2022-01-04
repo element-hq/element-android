@@ -1893,8 +1893,8 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="reactions">リアクション</string>
     <string name="message_view_reaction">リアクションを見る</string>
     <string name="message_add_reaction">リアクションを追加する</string>
-    <string name="reactions_like">いいね</string>
-    <string name="reactions_agree">同意</string>
+    <string name="action_like">いいね</string>
+    <string name="action_agree">同意</string>
     <string name="title_activity_emoji_reaction_picker">リアクション</string>
     <string name="room_list_rooms_empty_body">ルームがここに表示されます。右下の[+]をタップして、既存のルームを検索するか、独自のルームを開始します。</string>
     <string name="room_list_people_empty_body">ダイレクトメッセージの会話がここに表示されます。右下の[+]をタップして開始します。</string>

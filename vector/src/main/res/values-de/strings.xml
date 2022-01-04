@@ -1479,8 +1479,8 @@
     <string name="room_list_rooms_empty_title">Räume</string>
     <string name="room_list_rooms_empty_body">Deine Räume werden hier angezeigt. Drück auf das + unten rechts, um bestehende zu durchstöbern oder neue zu eröffnen.</string>
     <string name="title_activity_emoji_reaction_picker">Reaktionen</string>
-    <string name="reactions_agree">Zustimmen</string>
-    <string name="reactions_like">Mag ich</string>
+    <string name="action_agree">Zustimmen</string>
+    <string name="action_like">Mag ich</string>
     <string name="message_add_reaction">Reaktion hinzufügen</string>
     <string name="message_view_reaction">Reaktionen ansehen</string>
     <string name="reactions">Reaktionen</string>

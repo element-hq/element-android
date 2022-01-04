@@ -1925,8 +1925,8 @@
     <string name="set_recovery_passphrase">Зазначити %s</string>
     <string name="account_password">Пароль облікового запису</string>
     <string name="message_key">Ключ повідомлення</string>
-    <string name="reactions_like">Подобається</string>
-    <string name="reactions_agree">Гаразд</string>
+    <string name="action_like">Подобається</string>
+    <string name="action_agree">Гаразд</string>
     <string name="title_activity_emoji_reaction_picker">Реакції</string>
     <string name="direct_room_created_summary_item_by_you">Ви приєднались.</string>
     <string name="inviting_users_to_room">Запрошування користувачів…</string>

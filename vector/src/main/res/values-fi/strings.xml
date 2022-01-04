@@ -1416,8 +1416,8 @@
     <string name="room_list_rooms_empty_title">Huoneet</string>
     <string name="room_list_rooms_empty_body">Huoneesi näytetään tässä. Napsauta + oikeasta alakulmasta aloittaaksesi.</string>
     <string name="title_activity_emoji_reaction_picker">Reaktiot</string>
-    <string name="reactions_agree">Samaa mieltä</string>
-    <string name="reactions_like">Tykkää</string>
+    <string name="action_agree">Samaa mieltä</string>
+    <string name="action_like">Tykkää</string>
     <string name="message_add_reaction">Lisää reaktio</string>
     <string name="message_view_reaction">Näytä reaktiot</string>
     <string name="reactions">Reaktiot</string>

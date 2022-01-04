@@ -1424,8 +1424,8 @@
     <string name="room_list_rooms_empty_title">Dhoma</string>
     <string name="room_list_rooms_empty_body">Dhomat tuaja do të shfaqen këtu. Prekni + poshtë djathtas që të gjeni të tilla ekzistuese ose që të nisni një tuajën.</string>
     <string name="title_activity_emoji_reaction_picker">Reagime</string>
-    <string name="reactions_agree">Pajtohem</string>
-    <string name="reactions_like">E pëlqej</string>
+    <string name="action_agree">Pajtohem</string>
+    <string name="action_like">E pëlqej</string>
     <string name="message_add_reaction">Shtoni Reagim</string>
     <string name="message_view_reaction">Shihni Reagime</string>
     <string name="reactions">Reagime</string>

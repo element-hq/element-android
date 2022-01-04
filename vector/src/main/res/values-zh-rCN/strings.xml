@@ -1337,8 +1337,8 @@
     <string name="room_list_people_empty_title">对话</string>
     <string name="room_list_rooms_empty_title">聊天室</string>
     <string name="title_activity_emoji_reaction_picker">响应</string>
-    <string name="reactions_agree">同意</string>
-    <string name="reactions_like">喜欢</string>
+    <string name="action_agree">同意</string>
+    <string name="action_like">喜欢</string>
     <string name="message_add_reaction">响应</string>
     <string name="message_view_reaction">查看响应</string>
     <string name="reactions">响应</string>

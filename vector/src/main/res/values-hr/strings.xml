@@ -934,8 +934,8 @@
     <string name="room_list_rooms_empty_title">Sobe</string>
     <string name="room_list_rooms_empty_body">Ovdje će biti prikazane Vaše sobe</string>
     <string name="title_activity_emoji_reaction_picker">Reakcije</string>
-    <string name="reactions_agree">Složi se</string>
-    <string name="reactions_like">Sviđa mi se</string>
+    <string name="action_agree">Složi se</string>
+    <string name="action_like">Sviđa mi se</string>
     <string name="message_add_reaction">Dodaj reakciju</string>
     <string name="message_view_reaction">Pogledaj reakcije</string>
     <string name="reactions">Reakcije</string>

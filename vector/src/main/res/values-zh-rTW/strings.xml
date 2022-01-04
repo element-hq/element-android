@@ -1402,8 +1402,8 @@
     <string name="room_list_rooms_empty_title">聊天室</string>
     <string name="room_list_rooms_empty_body">您的聊天室將會在此顯示。點擊右下角的 + 來尋找既有的或開始您自己的。</string>
     <string name="title_activity_emoji_reaction_picker">反應</string>
-    <string name="reactions_agree">同意</string>
-    <string name="reactions_like">喜歡</string>
+    <string name="action_agree">同意</string>
+    <string name="action_like">喜歡</string>
     <string name="message_add_reaction">新增反應</string>
     <string name="message_view_reaction">檢視反應</string>
     <string name="reactions">反應</string>

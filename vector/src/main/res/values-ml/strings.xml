@@ -713,8 +713,8 @@
     <string name="fab_menu_create_room">മുറികൾ</string>
     <string name="action_change">മാറ്റുക</string>
     <string name="reactions">പ്രതികരണങ്ങൾ</string>
-    <string name="reactions_like">ലൈക്ക്</string>
-    <string name="reactions_agree">സമ്മതിക്കുക</string>
+    <string name="action_like">ലൈക്ക്</string>
+    <string name="action_agree">സമ്മതിക്കുക</string>
     <string name="title_activity_emoji_reaction_picker">പ്രതികരണങ്ങൾ</string>
     <string name="room_list_rooms_empty_title">മുറികൾ</string>
     <string name="room_list_people_empty_title">സംഭാഷണങ്ങൾ</string>
