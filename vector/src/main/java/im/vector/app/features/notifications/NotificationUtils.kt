@@ -691,7 +691,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
 
                     addAction(
                             R.drawable.vector_notification_reject_invitation,
-                            stringProvider.getString(R.string.reject),
+                            stringProvider.getString(R.string.action_reject),
                             rejectIntentPendingIntent
                     )
 
@@ -708,7 +708,7 @@ class NotificationUtils @Inject constructor(private val context: Context,
                     )
                     addAction(
                             R.drawable.vector_notification_accept_invitation,
-                            stringProvider.getString(R.string.join),
+                            stringProvider.getString(R.string.action_join),
                             joinIntentPendingIntent
                     )
 

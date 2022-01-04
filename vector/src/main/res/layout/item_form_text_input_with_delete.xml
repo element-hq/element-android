@@ -34,7 +34,7 @@
         android:layout_height="24dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
         android:background="@drawable/circle"
-        android:contentDescription="@string/delete"
+        android:contentDescription="@string/action_delete"
         android:scaleType="center"
         android:src="@drawable/ic_delete_10dp"
         app:layout_constraintBottom_toBottomOf="@id/formTextInputTextInputLayout"

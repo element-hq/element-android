@@ -72,7 +72,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 )
                 .buttonLabel(
                         if (error != null) stringProvider.getString(R.string.global_retry)
-                        else stringProvider.getString(R.string.join)
+                        else stringProvider.getString(R.string.action_join)
                 )
                 .loading(suggestedRoomJoiningStates[spaceChildInfo.childRoomId] is Loading)
                 .memberCount(spaceChildInfo.activeMemberCount ?: 0)

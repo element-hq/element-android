@@ -168,7 +168,7 @@ class RoomMemberProfileFragment @Inject constructor(
                                 .withArgs(roomId = null, otherUserId = startVerification.userId)
                                 .show(parentFragmentManager, "VERIF")
                     }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .show()
         }
     }

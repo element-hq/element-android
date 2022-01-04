@@ -107,7 +107,7 @@ class AccountCreatedFragment @Inject constructor(
                     val newName = views.editText.text.toString()
                     viewModel.handle(AccountCreatedAction.SetDisplayName(newName))
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 

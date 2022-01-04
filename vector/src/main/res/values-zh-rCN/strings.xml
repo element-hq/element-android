@@ -210,10 +210,10 @@
     <string name="call_notification_answer">接受</string>
     <string name="call_notification_reject">拒绝</string>
     <string name="call_notification_hangup">挂断</string>
-    <string name="resend">重新发送</string>
-    <string name="quote">引用</string>
-    <string name="share">分享</string>
-    <string name="forward">转发</string>
+    <string name="action_resend">重新发送</string>
+    <string name="action_quote">引用</string>
+    <string name="action_share">分享</string>
+    <string name="action_forward">转发</string>
     <string name="action_voice_call">语音通话</string>
     <string name="action_video_call">视频通话</string>
     <string name="action_mark_all_as_read">全部标记为已读</string>
@@ -238,9 +238,9 @@
     <string name="media_picker_cannot_record_video">无法录制视频</string>
     <string name="media_slider_saved">已保存</string>
     <string name="_continue">继续</string>
-    <string name="join">加入</string>
-    <string name="preview">查看</string>
-    <string name="reject">拒绝</string>
+    <string name="action_join">加入</string>
+    <string name="action_preview">查看</string>
+    <string name="action_reject">拒绝</string>
     <string name="room_preview_invitation_format">%s 邀请你加入这个聊天室</string>
     <string name="room_creation_title">新的聊天</string>
     <string name="room_creation_add_member">添加成员</string>
@@ -255,14 +255,14 @@
     <string name="title_activity_room">聊天室</string>
     <string name="title_activity_settings">设置</string>
     <string name="title_activity_member_details">成员信息</string>
-    <string name="save">保存</string>
-    <string name="leave">离开</string>
-    <string name="send">发送</string>
+    <string name="action_save">保存</string>
+    <string name="action_leave">离开</string>
+    <string name="action_send">发送</string>
     <string name="view_source">查看源代码</string>
     <string name="view_decrypted_source">查看解密后的源代码</string>
     <string name="or">或</string>
     <string name="action_sign_out">登出</string>
-    <string name="disable">禁用</string>
+    <string name="action_disable">禁用</string>
     <string name="dialog_title_warning">警告</string>
     <string name="send_bug_report_description">请描述你遇到的问题。你做了什么？你期望发生什么？实际上发生了什么？</string>
     <string name="send_bug_report_placeholder">在这里描述你的问题</string>
@@ -364,8 +364,8 @@
     <string name="encryption_information_ed25519_fingerprint">Ed25519 指纹</string>
     <string name="encryption_import_import">导入</string>
     <string name="encryption_information_verified">已验证</string>
-    <string name="cancel">取消</string>
-    <string name="delete">删除</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_delete">删除</string>
     <string name="cannot_start_call">无法开始通话，请稍后重试</string>
     <string name="missing_permissions_warning">由于缺少权限，某些功能将无法使用…</string>
     <string name="missing_permissions_title_to_start_conf_call">无法发起通话</string>
@@ -537,7 +537,7 @@
     <string name="unknown_devices_alert_title">聊天室包含未知设备</string>
     <string name="later">稍后再说</string>
     <string name="permalink">永久链接</string>
-    <string name="rename">重命名</string>
+    <string name="action_rename">重命名</string>
     <string name="report_content">举报内容</string>
     <string name="active_call">当前通话</string>
     <string name="ongoing_conference_call">正在进行电话会议。
@@ -582,7 +582,7 @@
 \n请在接下来的弹出窗口中授权允许访问，以便进行通话。</string>
     <string name="permissions_action_not_performed_missing_permissions">对不起。因为权限不足，操作已取消</string>
     <string name="media_slider_saved_message">保存至下载？</string>
-    <string name="remove">移除</string>
+    <string name="action_remove">移除</string>
     <string name="room_preview_unlinked_email_warning">此邀请已发送至未与此账号关联的 %s。
 \n你可能希望用一个不同的账号登录，或者把这个电子邮箱加入到你的账号。</string>
     <string name="room_preview_room_interactions_disabled">这是此聊天室的预览。与聊天室的交互已禁用。</string>
@@ -632,7 +632,7 @@
     <string name="encryption_information_block">列入黑名单</string>
     <string name="encryption_information_unblock">移出黑名单</string>
     <string name="ok">确认</string>
-    <string name="redact">移除</string>
+    <string name="action_redact">移除</string>
     <string name="send_bug_report_alert_message">你似乎沮丧地摇了摇手机。你想打开问题反馈界面吗？</string>
     <string name="send_files_in">发送至</string>
     <string name="read_receipts_list">已读标签清单</string>
@@ -675,7 +675,7 @@
 \n
 \n未知设备：</string>
     <string name="title_activity_historical">历史消息</string>
-    <string name="invite">邀请</string>
+    <string name="action_invite">邀请</string>
     <string name="action_global_search">全局搜索</string>
     <string name="bottom_action_home">主页</string>
     <string name="bottom_action_favourites">收藏夹</string>
@@ -904,8 +904,8 @@
     <string name="dialog_user_consent_content">要想继续使用主服务器 %1$s 你必须阅读并同意其服务条款。</string>
     <string name="dialog_user_consent_submit">现在阅读</string>
     <string name="dialog_title_third_party_licences">第三方开源协议</string>
-    <string name="download">下载</string>
-    <string name="clear">清除</string>
+    <string name="action_download">下载</string>
+    <string name="action_clear">清除</string>
     <string name="option_send_voice">发送语音消息</string>
     <string name="go_on_with">使用…打开</string>
     <string name="error_no_external_application_found">对不起，没有可完成此操作的外部应用。</string>
@@ -916,7 +916,7 @@
     <string name="lock_screen_hint">在此输入…</string>
     <string name="settings_labs_enable_send_voice">发送语音消息</string>
     <string name="error_empty_field_your_password">请输入你的密码。</string>
-    <string name="speak">发言</string>
+    <string name="action_speak">发言</string>
     <string name="send_bug_report_description_in_english">如果可能的话，请使用英文撰写问题描述。</string>
     <string name="room_message_placeholder_reply_to_encrypted">发送加密回复…</string>
     <string name="room_message_placeholder_reply_to_not_encrypted">发送回复（未加密）…</string>
@@ -981,7 +981,7 @@
     <string name="resource_limit_hard_contact">请 %s 以继续使用本服务。</string>
     <string name="resource_limit_soft_contact">请 %s 以增加此限制的额度。</string>
     <string name="call_anyway">仍然呼叫</string>
-    <string name="accept">接受</string>
+    <string name="action_accept">接受</string>
     <string name="dialog_title_error">错误</string>
     <string name="auth_accept_policies">请审阅并接受此主服务器的政策：</string>
     <string name="settings_call_category">通话</string>
@@ -1105,10 +1105,10 @@
     <string name="are_you_sure">确定吗？</string>
     <string name="backup">备份</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">如果你在登出账号之前不备份密钥，你将失去你的已加密消息的访问权。</string>
-    <string name="stay">留下</string>
-    <string name="skip">跳过</string>
+    <string name="action_stay">留下</string>
+    <string name="action_skip">跳过</string>
     <string name="done">完成</string>
-    <string name="abort">中止</string>
+    <string name="action_abort">中止</string>
     <string name="action_sign_out_confirmation_simple">你确定要登出账号吗？</string>
     <string name="settings_notification_advanced">高级通知设置</string>
     <string name="settings_notification_by_event">事件的通知重要程度</string>
@@ -1237,7 +1237,7 @@
     <string name="keys_backup_info_title_version">版本</string>
     <string name="keys_backup_info_title_algorithm">算法</string>
     <string name="keys_backup_info_title_signature">签名</string>
-    <string name="ignore">忽略</string>
+    <string name="action_ignore">忽略</string>
     <string name="auth_login_sso">以单点登录方式登录</string>
     <string name="login_error_unknown_host">无法连接到此 URL，请检查</string>
     <string name="login_error_ssl_handshake">你的设备使用了过时的 TLS 安全协议，容易受到攻击，为保证安全，你将无法进行连接</string>
@@ -1350,10 +1350,10 @@
     <string name="preference_root_help_about">帮助和关于</string>
     <string name="edited_suffix">（已编辑）</string>
     <string name="none">无</string>
-    <string name="revoke">撤消</string>
-    <string name="disconnect">断开连接</string>
-    <string name="review">检查</string>
-    <string name="decline">拒绝</string>
+    <string name="action_revoke">撤消</string>
+    <string name="action_disconnect">断开连接</string>
+    <string name="action_review">检查</string>
+    <string name="action_decline">拒绝</string>
     <string name="people_no_identity_server">没有设置身份服务器。</string>
     <string name="call_failed_no_ice_title">服务器的错误配置导致通话失败</string>
     <string name="call_failed_no_ice_description">请要求你的主服务器 (%1$s) 的管理员配置 TURN 服务器，以使通话可靠地工作。
@@ -1368,9 +1368,9 @@
     <string name="login_error_no_homeserver_found">這不是有效的 Matrix 服务器位置</string>
     <string name="login_error_homeserver_not_found">无法在此 URL 找到主服务器，请检查</string>
     <string name="settings_call_ringtone_use_default_stun">允许后备呼叫协助服务器</string>
-    <string name="play_video">播放</string>
-    <string name="pause_video">暂停</string>
-    <string name="dismiss">忽略</string>
+    <string name="action_play">播放</string>
+    <string name="action_pause">暂停</string>
+    <string name="action_dismiss">忽略</string>
     <string name="action_copy">复制</string>
     <string name="dialog_title_success">成功</string>
     <string name="bottom_action_notification">通知</string>
@@ -2318,7 +2318,7 @@
     <string name="search_banned_user_hint">过滤被封禁的用户</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">你没有权限发起通话</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">你没有权限发起会议通话</string>
-    <string name="reset">重置</string>
+    <string name="action_reset">重置</string>
     <string name="permissions_denied_add_contact">允许访问你的联系人。</string>
     <string name="permissions_denied_qr_code">如需扫描二维码，你须允许相机访问权限。</string>
     <string name="no_more_results">没有更多结果</string>

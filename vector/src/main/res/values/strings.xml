@@ -357,34 +357,13 @@
 
     <!-- button names -->
     <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="save">Save</string>
-    <string name="leave">Leave</string>
-    <string name="stay">Stay</string>
-    <string name="send">Send</string>
-    <string name="resend">Resend</string>
-    <string name="redact">Remove</string>
-    <string name="quote">Quote</string>
-    <string name="download">Download</string>
-    <string name="share">Share</string>
-    <string name="speak">Speak</string>
-    <string name="clear">Clear</string>
     <string name="later">Later</string>
-    <string name="forward">Forward</string>
     <string name="permalink">Permalink</string>
     <string name="view_source">View Source</string>
     <string name="view_decrypted_source">View Decrypted Source</string>
-    <string name="delete">Delete</string>
-    <string name="rename">Rename</string>
     <string name="none">None</string>
-    <string name="revoke">Revoke</string>
-    <string name="disconnect">Disconnect</string>
     <string name="report_content">Report Content</string>
     <string name="active_call">Active call</string>
-    <string name="play_video">Play</string>
-    <string name="pause_video">Pause</string>
-    <string name="dismiss">Dismiss</string>
-    <string name="reset">Reset</string>
     <string name="start_chatting">Start Chatting</string>
     <string name="learn_more">Learn More</string>
     <string name="spaces">Spaces</string>
@@ -421,15 +400,8 @@
     <string name="call_anyway">Call Anyway</string>
     <string name="send_anyway">Send Anyway</string>
     <string name="or">or</string>
-    <string name="invite">Invite</string>
     <string name="offline">Offline</string>
-    <string name="accept">Accept</string>
-    <string name="skip">Skip</string>
     <string name="done">Done</string>
-    <string name="abort">Abort</string>
-    <string name="ignore">Ignore</string>
-    <string name="review">Review</string>
-    <string name="decline">Decline</string>
 
     <string name="call_notification_answer">Accept</string>
     <string name="call_notification_reject">Decline</string>
@@ -459,9 +431,41 @@
     <string name="action_agree">Agree</string>
     <string name="action_like">Like</string>
     <string name="action_change">"Change"</string>
+    <string name="action_remove">Remove</string>
+    <string name="action_join">Join</string>
+    <string name="action_preview">Preview</string>
+    <string name="action_reject">Reject</string>
+    <string name="action_disable">Disable</string>
+    <string name="action_accept">Accept</string>
+    <string name="action_skip">Skip</string>
+    <string name="action_abort">Abort</string>
+    <string name="action_ignore">Ignore</string>
+    <string name="action_review">Review</string>
+    <string name="action_decline">Decline</string>
+    <string name="action_invite">Invite</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_save">Save</string>
+    <string name="action_leave">Leave</string>
+    <string name="action_stay">Stay</string>
+    <string name="action_send">Send</string>
+    <string name="action_resend">Resend</string>
+    <string name="action_redact">Remove</string>
+    <string name="action_quote">Quote</string>
+    <string name="action_download">Download</string>
+    <string name="action_share">Share</string>
+    <string name="action_speak">Speak</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_forward">Forward</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_rename">Rename</string>
+    <string name="action_revoke">Revoke</string>
+    <string name="action_disconnect">Disconnect</string>
+    <string name="action_play">Play</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_dismiss">Dismiss</string>
+    <string name="action_reset">Reset</string>
 
     <string name="copied_to_clipboard">Copied to clipboard</string>
-    <string name="disable">Disable</string>
 
     <!-- dialog titles -->
     <string name="dialog_title_confirmation">Confirmation</string>
@@ -805,12 +809,6 @@
     <string name="no">NO</string>
     <string name="_continue">Continue</string>
     <string name="continue_anyway">Continue Anyway</string>
-
-    <!-- Actions -->
-    <string name="remove">Remove</string>
-    <string name="join">Join</string>
-    <string name="preview">Preview</string>
-    <string name="reject">Reject</string>
 
     <!-- Room -->
     <string name="list_members">List members</string>

@@ -43,7 +43,7 @@ class SignOutUiWorker(private val activity: FragmentActivity) {
                     .setPositiveButton(R.string.action_sign_out) { _, _ ->
                         doSignOut()
                     }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .show()
         }
     }

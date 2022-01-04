@@ -93,7 +93,7 @@ class VerificationRequestController @Inject constructor(
 
             bottomSheetVerificationActionItem {
                 id("skip")
-                title(host.stringProvider.getString(R.string.skip))
+                title(host.stringProvider.getString(R.string.action_skip))
                 titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
                 iconRes(R.drawable.ic_arrow_right)
                 iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))

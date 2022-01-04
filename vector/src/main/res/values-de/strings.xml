@@ -272,21 +272,21 @@
     <string name="call_notification_reject">Ablehnen</string>
     <string name="call_notification_hangup">Anruf beenden</string>
     <string name="ok">Ok</string>
-    <string name="cancel">Abbrechen</string>
-    <string name="save">Speichern</string>
-    <string name="leave">Verlassen</string>
-    <string name="send">Senden</string>
-    <string name="resend">Erneut senden</string>
-    <string name="redact">Entfernen</string>
-    <string name="quote">Zitieren</string>
-    <string name="share">Teilen</string>
+    <string name="action_cancel">Abbrechen</string>
+    <string name="action_save">Speichern</string>
+    <string name="action_leave">Verlassen</string>
+    <string name="action_send">Senden</string>
+    <string name="action_resend">Erneut senden</string>
+    <string name="action_redact">Entfernen</string>
+    <string name="action_quote">Zitieren</string>
+    <string name="action_share">Teilen</string>
     <string name="later">Später</string>
-    <string name="forward">Weiterleiten</string>
+    <string name="action_forward">Weiterleiten</string>
     <string name="permalink">Permalink</string>
     <string name="view_source">Rohdaten anzeigen</string>
     <string name="view_decrypted_source">Entschlüsselte Rohdaten anzeigen</string>
-    <string name="delete">Löschen</string>
-    <string name="rename">Umbenennen</string>
+    <string name="action_delete">Löschen</string>
+    <string name="action_rename">Umbenennen</string>
     <string name="report_content">Inhalt melden</string>
     <string name="active_call">Aktives Gespräch</string>
     <string name="ongoing_conference_call">Laufendes Konferenzgespräch
@@ -301,7 +301,7 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Konferenzgespräche in verschlüsselten Räumen werden nicht unterstützt</string>
     <string name="send_anyway">Trotzdem senden</string>
     <string name="or">oder</string>
-    <string name="invite">Einladen</string>
+    <string name="action_invite">Einladen</string>
     <string name="action_sign_out">Abmelden</string>
     <string name="action_voice_call">Sprachanruf</string>
     <string name="action_video_call">Videoanruf</string>
@@ -312,7 +312,7 @@
     <string name="action_open">Öffnen</string>
     <string name="action_close">Schließen</string>
     <string name="copied_to_clipboard">In Zwischenablage kopiert</string>
-    <string name="disable">Deaktivieren</string>
+    <string name="action_disable">Deaktivieren</string>
     <string name="dialog_title_confirmation">Bestätigung</string>
     <string name="dialog_title_warning">Warnung</string>
     <string name="bottom_action_home">Home</string>
@@ -476,10 +476,10 @@
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="_continue">Fortsetzen</string>
-    <string name="remove">Entfernen</string>
-    <string name="join">Betreten</string>
-    <string name="preview">Vorschau</string>
-    <string name="reject">Ablehnen</string>
+    <string name="action_remove">Entfernen</string>
+    <string name="action_join">Betreten</string>
+    <string name="action_preview">Vorschau</string>
+    <string name="action_reject">Ablehnen</string>
     <string name="room_jump_to_first_unread">Zur ersten ungelesenen Nachricht</string>
     <string name="room_preview_invitation_format">Du wurdest von %s in diesen Raum eingeladen</string>
     <string name="room_preview_unlinked_email_warning">Diese Einladung wurde an %s gesendet, welche nicht mit diesem Konto verknüpft ist.
@@ -969,9 +969,9 @@
     <string name="deactivate_account_prompt_password">Um fortzufahren, bitte Passwort eingeben:</string>
     <string name="deactivate_account_submit">Account deaktivieren</string>
     <string name="dialog_title_third_party_licences">Drittanbieter-Lizenzen</string>
-    <string name="download">Download</string>
-    <string name="speak">Sprechen</string>
-    <string name="clear">Leeren</string>
+    <string name="action_download">Download</string>
+    <string name="action_speak">Sprechen</string>
+    <string name="action_clear">Leeren</string>
     <string name="e2e_re_request_encryption_key">Schlüssel von deinen anderen Sitzungen erneut anfordern.</string>
     <string name="e2e_re_request_encryption_key_sent">Schlüsselanfrage gesendet.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Anfrage gesendet</string>
@@ -1092,7 +1092,7 @@
     <string name="template_settings_call_ringtone_use_app_ringtone">Nutze den Standard-Klingelton von ${app_name} für eingehende Anrufe</string>
     <string name="settings_call_ringtone_title">Klingelton für eingehende Anrufe</string>
     <string name="settings_call_ringtone_dialog_title">Wähle Klingelton für Anrufe:</string>
-    <string name="accept">Akzeptieren</string>
+    <string name="action_accept">Akzeptieren</string>
     <string name="auth_accept_policies">Bitte lese und akzeptiere die Richtlinien dieses Home-Servers:</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Tests ausführen</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Läuft… (%1$d von %2$d)</string>
@@ -1165,7 +1165,7 @@
     <string name="title_activity_keys_backup_setup">Schlüsselsicherung</string>
     <string name="title_activity_keys_backup_restore">Schlüsselsicherung verwenden</string>
     <string name="keys_backup_is_not_finished_please_wait">Schlüsselsicherung ist nicht abgeschlossen. Bitte warten…</string>
-    <string name="skip">Überspringen</string>
+    <string name="action_skip">Überspringen</string>
     <string name="done">Fertig</string>
     <string name="settings_notification_advanced">Erweiterte Benachrichtigungseinstellungen</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Angepasste Einstellungen.</string>
@@ -1263,8 +1263,8 @@
     <string name="are_you_sure">Sicher\?</string>
     <string name="backup">Sicherung</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Alle verschlüsselten Nachrichten gehen verloren, wenn Du dich abmeldest ohne die Schlüssel gesichert zu haben.</string>
-    <string name="stay">Bleiben</string>
-    <string name="abort">Abbrechen</string>
+    <string name="action_stay">Bleiben</string>
+    <string name="action_abort">Abbrechen</string>
     <string name="action_sign_out_confirmation_simple">Wirklich abmelden\?</string>
     <string name="encryption_message_recovery">Wiederherstellung verschlüsselter Nachrichten</string>
     <string name="error_empty_field_enter_user_name">Bitte gib einen Benutzernamen ein.</string>
@@ -1309,7 +1309,7 @@
     <string name="keys_backup_restoring_computing_key_waiting_message">Berechne Wiederherstellungsschlüssel…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Lade Schlüssel herunter…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Importiere Schlüssel…</string>
-    <string name="ignore">Ignorieren</string>
+    <string name="action_ignore">Ignorieren</string>
     <string name="auth_login_sso">Mit Single-Sign-On anmelden</string>
     <string name="login_error_unknown_host">Diese URL ist nicht erreichbar, bitte prüfen</string>
     <string name="login_error_ssl_handshake">Dein Gerät nutzt eine veraltetes TLS-Sicherheitsprotokoll, das anfällig für Angriffe ist. Zu deiner Sicherheit wirst du nicht in der Lage sein, dich zu verbinden</string>
@@ -1496,12 +1496,12 @@
     <string name="direct_room_start_search">Beginne mit der Eingabe, um Ergebnisse zu erhalten</string>
     <string name="direct_room_filter_hint">Filtern nach Benutzername oder ID…</string>
     <string name="joining_room">Raum betreten…</string>
-    <string name="decline">Ablehnen</string>
+    <string name="action_decline">Ablehnen</string>
     <string name="push_gateway_item_app_id">App-ID:</string>
-    <string name="review">Überprüfung</string>
+    <string name="action_review">Überprüfung</string>
     <string name="none">Keine</string>
-    <string name="revoke">Widerrufen</string>
-    <string name="disconnect">Trennen</string>
+    <string name="action_revoke">Widerrufen</string>
+    <string name="action_disconnect">Trennen</string>
     <string name="people_no_identity_server">Kein Identitätsserver konfiguriert.</string>
     <string name="call_failed_no_ice_title">Anruf aufgrund eines Serverfehlers fehlgeschlagen</string>
     <string name="call_failed_no_ice_use_alt">Versuche es mit %s</string>
@@ -2112,12 +2112,12 @@
         <item quantity="other">Einladungen gesendet an %1$s und %2$d weitere Benutzer</item>
     </plurals>
     <string name="invite_users_to_room_failure">Wir konnten den Benutzer nicht einladen. Bitte überprüfe den Benutzernamen, welchen du einladen möchtest und versuche es erneut.</string>
-    <string name="pause_video">Pause</string>
+    <string name="action_pause">Pause</string>
     <string name="action_copy">Kopieren</string>
     <string name="bottom_action_notification">Benachrichtigungen</string>
     <string name="template_call_failed_no_connection">${app_name}-Anruf fehlgeschlagen</string>
-    <string name="play_video">Abspielen</string>
-    <string name="dismiss">Ablehnen</string>
+    <string name="action_play">Abspielen</string>
+    <string name="action_dismiss">Ablehnen</string>
     <string name="dialog_title_success">Erfolg</string>
     <string name="call_failed_no_connection_description">Echtzeitverbindung konnte nicht hergestellt werden.
 \nBitte den Administrator deines Home-Servers, einen TURN-Server zu konfigurieren, dass Anrufe zuverlässig funktionieren.</string>
@@ -2353,7 +2353,7 @@
     <string name="delete_account_data_warning">Kontodaten vom Typ %1$s löschen\?
 \n
 \nVorsicht! Es kann zu unerwartetem Verhalten führen.</string>
-    <string name="reset">Zurücksetzen</string>
+    <string name="action_reset">Zurücksetzen</string>
     <string name="settings_troubleshoot_test_push_loop_failed">Pushempfang fehlgeschlagen. Lösung könnte eine Neuinstallation der Applikation sein.</string>
     <string name="settings_troubleshoot_test_push_loop_success">Die Applikation empfängt den PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Die Applikation wartet auf den PUSH</string>

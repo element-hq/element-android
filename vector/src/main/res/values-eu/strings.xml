@@ -142,21 +142,21 @@
     <string name="title_activity_historical">Historiala</string>
 
     <string name="ok">Ados</string>
-    <string name="cancel">Utzi</string>
-    <string name="save">Gorde</string>
-    <string name="leave">Atera</string>
-    <string name="send">Bidali</string>
-    <string name="resend">Birbidali</string>
-    <string name="redact">Kendu</string>
-    <string name="quote">Aipua</string>
-    <string name="share">Partekatu</string>
+    <string name="action_cancel">Utzi</string>
+    <string name="action_save">Gorde</string>
+    <string name="action_leave">Atera</string>
+    <string name="action_send">Bidali</string>
+    <string name="action_resend">Birbidali</string>
+    <string name="action_redact">Kendu</string>
+    <string name="action_quote">Aipua</string>
+    <string name="action_share">Partekatu</string>
     <string name="later">Geroago</string>
-    <string name="forward">Birbidali</string>
+    <string name="action_forward">Birbidali</string>
     <string name="permalink">Esteka iraunkorra</string>
     <string name="view_source">Ikusi iturburua</string>
     <string name="view_decrypted_source">Ikusi deszifratutako iturburua</string>
-    <string name="delete">Ezabatu</string>
-    <string name="rename">Aldatu izena</string>
+    <string name="action_delete">Ezabatu</string>
+    <string name="action_rename">Aldatu izena</string>
     <string name="report_content">Salatu edukia</string>
     <string name="active_call">Dei aktiboa</string>
     <string name="ongoing_conference_call">Konferentzia deia abian.
@@ -171,7 +171,7 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Konferentzia deiak ez daude onartuta zifratutako geletan</string>
     <string name="send_anyway">Bidali hala ere</string>
     <string name="or">edo</string>
-    <string name="invite">Gonbidatu</string>
+    <string name="action_invite">Gonbidatu</string>
 
     <string name="action_sign_out">Amaitu saioa</string>
     <string name="action_voice_call">Ahots deia</string>
@@ -183,7 +183,7 @@
     <string name="action_open">Ireki</string>
     <string name="action_close">Itxi</string>
     <string name="copied_to_clipboard">Arbelera kopiatuta</string>
-    <string name="disable">Desgaitu</string>
+    <string name="action_disable">Desgaitu</string>
 
     <string name="dialog_title_confirmation">Berrespena</string>
     <string name="dialog_title_warning">Abisua</string>
@@ -368,10 +368,10 @@ Baimendu sarbidea hurrengo laster-leihoan deia egin ahal izateko.</string>
     <string name="no">EZ</string>
     <string name="_continue">Jarraitu</string>
 
-    <string name="remove">Kendu</string>
-    <string name="join">Elkartu</string>
-    <string name="preview">Aurreikusi</string>
-    <string name="reject">Baztertu</string>
+    <string name="action_remove">Kendu</string>
+    <string name="action_join">Elkartu</string>
+    <string name="action_preview">Aurreikusi</string>
+    <string name="action_reject">Baztertu</string>
 
     <string name="room_jump_to_first_unread">Jauzi irakurri gabeko lehen mezura.</string>
 
@@ -979,9 +979,9 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
     <string name="deactivate_account_prompt_password">Jarraitzeko, sartu zure pasahitza:</string>
     <string name="dialog_title_third_party_licences">Hirugarrengoen lizentziak</string>
 
-    <string name="download">Deskargatu</string>
-    <string name="speak">Hitz egin</string>
-    <string name="clear">Garbitu</string>
+    <string name="action_download">Deskargatu</string>
+    <string name="action_speak">Hitz egin</string>
+    <string name="action_clear">Garbitu</string>
     <string name="e2e_re_request_encryption_key">Eskatu berriro zifratze-gakoak zure beste saioetatik.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Gako eskaria bidalita.</string>
@@ -1134,7 +1134,7 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
     <string name="markdown_has_been_enabled">Markdown aktibatu da.</string>
     <string name="markdown_has_been_disabled">Markdown desaktibatu da.</string>
 
-    <string name="accept">Onartu</string>
+    <string name="action_accept">Onartu</string>
 
     <string name="auth_accept_policies">Irakurri eta onartu hasiera-zerbitzari honen baldintzak:</string>
 
@@ -1227,7 +1227,7 @@ Hurrengo pantailan ${app_name}-i bigarren planoan aritzeko baimena eskatuko zaiz
     <string name="title_activity_keys_backup_restore">Erabili gakoen babes-kopia</string>
     <string name="keys_backup_is_not_finished_please_wait">Gakoen babes-kopia ez da amaitu, itxaron mesedez…</string>
 
-    <string name="skip">Saltatu</string>
+    <string name="action_skip">Saltatu</string>
     <string name="done">Egina</string>
 
     <string name="settings_notification_advanced">Jakinarazpenen ezarpen aurreratuak</string>
@@ -1354,9 +1354,9 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="notification_sync_init">Zerbitzua hasieratzen</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Zure mezu zifratuetara sarbidea galduko duzu ez baduzu gakoen babes-kopia egiten saioa amaitu aurretik.</string>
 
-    <string name="stay">Geratu</string>
-    <string name="abort">Abortatu</string>
-    <string name="ignore">Ezikusi</string>
+    <string name="action_stay">Geratu</string>
+    <string name="action_abort">Abortatu</string>
+    <string name="action_ignore">Ezikusi</string>
 
     <string name="action_sign_out_confirmation_simple">Ziur saioa amaitu nahi duzula\?</string>
     <string name="auth_login_sso">Hasi saioa Single sign-on bidez</string>
@@ -1657,10 +1657,10 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="message_view_edit_history">Ikusi edizioen historiala</string>
 
     <string name="none">Bat ere ez</string>
-    <string name="revoke">Indargabetu</string>
-    <string name="disconnect">Deskonektatu</string>
-    <string name="review">Berrikusi</string>
-    <string name="decline">Ukatu</string>
+    <string name="action_revoke">Indargabetu</string>
+    <string name="action_disconnect">Deskonektatu</string>
+    <string name="action_review">Berrikusi</string>
+    <string name="action_decline">Ukatu</string>
 
     <string name="people_no_identity_server">Ez da identitate-zerbitzaririk konfiguratu.</string>
 

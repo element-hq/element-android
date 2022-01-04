@@ -187,7 +187,7 @@ class VectorSettingsPreferencesFragment @Inject constructor(
                 .setTitle(R.string.font_size)
                 .setView(layout)
                 .setPositiveButton(R.string.ok, null)
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
 
         val index = FontScale.getFontScaleValue(activity).index

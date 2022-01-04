@@ -36,7 +36,7 @@
         android:layout_width="56dp"
         android:layout_height="@dimen/composer_min_height"
         android:background="@drawable/bg_send"
-        android:contentDescription="@string/send"
+        android:contentDescription="@string/action_send"
         android:scaleType="center"
         android:src="@drawable/ic_send"
         android:visibility="gone"

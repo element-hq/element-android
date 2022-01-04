@@ -333,10 +333,10 @@
     <string name="space_settings_manage_rooms">Administrează camerele</string>
     <string name="room_participants_action_unignore_title">Revocați ignorarea utilizatorului</string>
     <string name="ongoing_conference_call_video">Video</string>
-    <string name="delete">Șterge</string>
-    <string name="leave">Părăsește</string>
-    <string name="save">Salvează</string>
-    <string name="cancel">Anulează</string>
+    <string name="action_delete">Șterge</string>
+    <string name="action_leave">Părăsește</string>
+    <string name="action_save">Salvează</string>
+    <string name="action_cancel">Anulează</string>
     <string name="title_activity_verify_device">Verificați sesiunea</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Invitația ta. Motivul: %1$s</string>
     <string name="notice_room_invite_no_invitee_with_reason">Invitația trimisă de %1$s. Motivul: %2$s</string>

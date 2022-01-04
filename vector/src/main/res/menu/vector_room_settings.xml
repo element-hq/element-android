@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/roomSettingsSaveAction"
-        android:title="@string/save"
+        android:title="@string/action_save"
         app:iconTint="?colorSecondary"
         app:showAsAction="ifRoom" />
 </menu>

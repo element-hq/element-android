@@ -53,10 +53,10 @@
     <string name="room_participants_offline">Atsijungę</string>
     <string name="room_participants_create">Sukurti</string>
     <string name="room_sync_in_progress">Sinchronizuojama…</string>
-    <string name="reject">Atmesti</string>
-    <string name="preview">Peržiūra</string>
-    <string name="join">Prisijungti</string>
-    <string name="remove">Pašalinti</string>
+    <string name="action_reject">Atmesti</string>
+    <string name="action_preview">Peržiūra</string>
+    <string name="action_join">Prisijungti</string>
+    <string name="action_remove">Pašalinti</string>
     <string name="_continue">Tęsti</string>
     <string name="no">NE</string>
     <string name="yes">TAIP</string>

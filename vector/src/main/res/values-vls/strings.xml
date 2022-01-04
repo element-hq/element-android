@@ -138,6 +138,6 @@
     <string name="loading">Loadn…</string>
 
     <string name="ok">Oké</string>
-    <string name="cancel">Annuleern</string>
-    <string name="save">Ipsloan</string>
+    <string name="action_cancel">Annuleern</string>
+    <string name="action_save">Ipsloan</string>
 </resources>

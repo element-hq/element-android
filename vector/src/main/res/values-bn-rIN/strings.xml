@@ -226,25 +226,25 @@
     <string name="loading">লোড হচ্ছে…</string>
 
     <string name="ok">ঠিক</string>
-    <string name="cancel">বাতিল</string>
-    <string name="save">সংরক্ষিত</string>
-    <string name="leave">ত্যাগ</string>
-    <string name="stay">থাক</string>
-    <string name="send">পাঠান</string>
-    <string name="resend">আবার পাঠান</string>
-    <string name="redact">অপসারণ</string>
-    <string name="quote">উদ্ধৃতি</string>
-    <string name="download">ডাউনলোড</string>
-    <string name="share">ভাগ</string>
-    <string name="speak">বলা</string>
-    <string name="clear">পরিষ্কার</string>
+    <string name="action_cancel">বাতিল</string>
+    <string name="action_save">সংরক্ষিত</string>
+    <string name="action_leave">ত্যাগ</string>
+    <string name="action_stay">থাক</string>
+    <string name="action_send">পাঠান</string>
+    <string name="action_resend">আবার পাঠান</string>
+    <string name="action_redact">অপসারণ</string>
+    <string name="action_quote">উদ্ধৃতি</string>
+    <string name="action_download">ডাউনলোড</string>
+    <string name="action_share">ভাগ</string>
+    <string name="action_speak">বলা</string>
+    <string name="action_clear">পরিষ্কার</string>
     <string name="later">পরে</string>
-    <string name="forward">ফরওয়ার্ড</string>
+    <string name="action_forward">ফরওয়ার্ড</string>
     <string name="permalink">পার্মালিঙ্ক</string>
     <string name="view_source">সোর্স দেখুন</string>
     <string name="view_decrypted_source">ডিক্রিপ্টেড সোর্স দেখুন</string>
-    <string name="delete">মুছুন</string>
-    <string name="rename">পুনঃনামকরণ</string>
+    <string name="action_delete">মুছুন</string>
+    <string name="action_rename">পুনঃনামকরণ</string>
     <string name="report_content">কন্টেন্ট রিপোর্ট করুন</string>
     <string name="active_call">সক্রিয় কল</string>
     <string name="ongoing_conference_call">চলমান সম্মেলন কল। 
@@ -261,13 +261,13 @@
     <string name="call_anyway">যেকোন ভাবেই কল করুন</string>
     <string name="send_anyway">যেকোন ভাবেই পাঠাও</string>
     <string name="or">বা</string>
-    <string name="invite">আমন্ত্রণ</string>
+    <string name="action_invite">আমন্ত্রণ</string>
     <string name="offline">অফলাইন</string>
-    <string name="accept">স্বীকার</string>
-    <string name="skip">বাদ</string>
+    <string name="action_accept">স্বীকার</string>
+    <string name="action_skip">বাদ</string>
     <string name="done">সম্পন্ন</string>
-    <string name="abort">বাতিল</string>
-    <string name="ignore">উপেক্ষা</string>
+    <string name="action_abort">বাতিল</string>
+    <string name="action_ignore">উপেক্ষা</string>
 
     <string name="action_exit">প্রস্থান</string>
     <string name="actions">ক্রিয়াকলাপ</string>
@@ -282,7 +282,7 @@
     <string name="action_open">খুলুন</string>
     <string name="action_close">বন্ধ</string>
     <string name="copied_to_clipboard">ক্লিপবোর্ডে অনুলিপি করা হয়েছে</string>
-    <string name="disable">অক্ষম</string>
+    <string name="action_disable">অক্ষম</string>
 
     <string name="dialog_title_confirmation">প্রতিপাদন</string>
     <string name="dialog_title_warning">সতর্কতা</string>
@@ -529,10 +529,10 @@
     <string name="no">না</string>
     <string name="_continue">প্রলম্বিত</string>
 
-    <string name="remove">অপসারণ</string>
-    <string name="join">যোগদান</string>
-    <string name="preview">প্রিভিউ</string>
-    <string name="reject">প্রত্যাখ্যান</string>
+    <string name="action_remove">অপসারণ</string>
+    <string name="action_join">যোগদান</string>
+    <string name="action_preview">প্রিভিউ</string>
+    <string name="action_reject">প্রত্যাখ্যান</string>
 
     <string name="list_members">সদস্যদের তালিকা</string>
     <string name="open_chat_header">হেডার খোলো</string>
@@ -1248,10 +1248,10 @@
     <string name="command_description_emote">কর্ম প্রদর্শন করে</string>
     <string name="command_description_ban_user">দেওয়া আইডি সঙ্গে ব্যবহারকারী কে নিষিদ্ধ করে</string>
     <string name="none">কোনটা না</string>
-    <string name="revoke">রদ কর</string>
-    <string name="disconnect">বিযুক্ত</string>
-    <string name="review">পর্যালোচনা</string>
-    <string name="decline">পতন</string>
+    <string name="action_revoke">রদ কর</string>
+    <string name="action_disconnect">বিযুক্ত</string>
+    <string name="action_review">পর্যালোচনা</string>
+    <string name="action_decline">পতন</string>
 
     <string name="people_no_identity_server">কোনও পরিচয় সার্ভার কনফিগার করা নেই।</string>
 
@@ -1415,9 +1415,9 @@
     <string name="resource_limit_soft_mau"> এই হোমসার্ভারটি তার মাসিক অ্যাক্টিভ ব্যবহারকারীর সীমাটিতে আঘাত করেছে তাই <b> কিছু ব্যবহারকারী লগ ইন করতে পারবেন না </b>।</string>
     <string name="resource_limit_hard_mau">এই হোমসার্ভারটি তার মাসিক সক্রিয় ব্যবহারকারীর সীমাতে ছুঁয়েছে।</string>
 
-    <string name="play_video">চালু</string>
-    <string name="pause_video">থামাও</string>
-    <string name="dismiss">বাতিল</string>
+    <string name="action_play">চালু</string>
+    <string name="action_pause">থামাও</string>
+    <string name="action_dismiss">বাতিল</string>
 
 
     <string name="action_copy">অনুলিপি</string>

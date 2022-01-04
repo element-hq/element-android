@@ -56,7 +56,7 @@ object ConfirmationDialogBuilder {
                             ?.takeIf { it.isNotBlank() }
                     confirmation(reason)
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 }
