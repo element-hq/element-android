@@ -99,7 +99,7 @@
     <string name="notice_placed_video_call_by_you">Jūs pradėjote vaizdo skambutį.</string>
     <string name="notice_placed_video_call">%s pradėjo vaizdo skambutį.</string>
     <string name="notice_room_name_changed">%1$s pakeitė kambario pavadinimą į %2$s</string>
-    <string name="notice_room_avatar_changed_by_you">Jūs pakeitėte kambario nuotrauka</string>
+    <string name="notice_room_avatar_changed_by_you">Jūs pakeitėte kambario nuotrauką</string>
     <string name="notice_room_topic_changed_by_you">Jūs pakeitėte temą į %1$s</string>
     <string name="notice_room_topic_changed">%1$s pakeitė temą į: %2$s</string>
     <string name="notice_display_name_changed_from_by_you">Jūs pakeitėte savo vardą iš %1$s į %2$s</string>
@@ -108,4 +108,22 @@
     <string name="notice_display_name_set">%1$s pakeitė savo vardą į %2$s</string>
     <string name="notice_avatar_url_changed_by_you">Jūs pakeitėte savo profilio nuotrauką</string>
     <string name="notice_avatar_url_changed">%1$s pakeitė savo profilio nuotrauką</string>
+    <string name="or">arba</string>
+    <string name="no_more_results">Daugiau rezultatų nėra</string>
+    <string name="no_result_placeholder">Rezultatų nėra</string>
+    <string name="notice_call_candidates">%s išsiuntė duomenis pokalbio nustatymui.</string>
+    <string name="notice_room_name_changed_by_you">Jūs pakeitėte kambario pavadinimą į: %1$s</string>
+    <string name="notice_room_invite_with_reason_by_you">Jūs pakvietėte %1$s. Priežastis: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s pakvietė %2$s. Priežastis: %3$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Jūsų pakvietimas. Priežastis: %1$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason">%1$s\'s pakvietimas. Priežastis: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s pakvietė jus. Priežastis: %2$s</string>
+    <string name="notice_avatar_changed_too">(profilio nuotrauka taip pat buvo pakeista)</string>
+    <string name="notice_display_name_removed_by_you">Jūs pašalinote savo vardą (buvo %1$s)</string>
+    <string name="notice_display_name_removed">%1$s pašalino savo vardą (buvo %2$s)</string>
+    <string name="notice_room_visibility_joined">Visi kambario dalyviai, nuo tada, kai jie prisijungė prie kambario.</string>
+    <string name="notice_ended_call_by_you">Jūs baigėte skambutį.</string>
+    <string name="notice_placed_voice_call_by_you">Jūs pradėjote balso skambutį.</string>
+    <string name="notice_room_avatar_changed">%1$s pakeitė kambario nuotrauką</string>
+    <string name="no_public_room_placeholder">Nėra prieinamų viešųjų kambarių</string>
 </resources>

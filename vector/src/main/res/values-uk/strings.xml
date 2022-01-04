@@ -216,7 +216,7 @@
     <string name="missing_permissions_title_to_start_conf_call">Не вдалося здійснити виклик</string>
     <string name="device_information">Інформація про пристрій</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Конференц-дзвінки не підтримуються у зашифрованих кімнатах</string>
-    <string name="send_anyway">Все одно надіслати</string>
+    <string name="send_anyway">Усе одно надіслати</string>
     <string name="or">або</string>
     <string name="invite">Запрошення</string>
     <string name="offline">Не в мережі</string>
@@ -354,7 +354,7 @@
     <string name="login_error_login_email_not_yet">Ви не перейшли за посиланням в електронному листі</string>
     <!-- crypto warnings -->
     <!-- read receipts list Screen -->
-    <string name="read_receipts_list">Перегляд списку вступників</string>
+    <string name="read_receipts_list">Список міток прочитання</string>
     <!-- accounts list Screen -->
     <!-- image size selection -->
     <string name="compression_options">Надіслати як </string>
@@ -472,7 +472,7 @@
     <string name="room_unsent_messages_notification">Повідомлення не надіслані. %1$s або %2$s зараз?</string>
     <string name="room_unknown_devices_messages_notification">Повідомлення не надіслані через присутність невідомих сеансів. %1$s або %2$s зараз\?</string>
     <string name="room_prompt_resend">Повторити надсилання</string>
-    <string name="room_prompt_cancel">скасувати все</string>
+    <string name="room_prompt_cancel">Скасувати все</string>
     <string name="room_resend_unsent_messages">Надіслати ненадіслані повідомлення знову</string>
     <string name="room_delete_unsent_messages">Видалити не надіслані повідомлення</string>
     <string name="room_message_file_not_found">Файл не знайдено</string>
@@ -604,7 +604,7 @@
     <string name="devices_delete_dialog_title">Аутентифікація</string>
     <string name="devices_delete_pswd">Пароль:</string>
     <string name="devices_delete_submit_button_label">Надіслати</string>
-    <string name="settings_logged_in">Залоговано як</string>
+    <string name="settings_logged_in">Ви увійшли як</string>
     <string name="settings_home_server">Домашній сервер</string>
     <string name="settings_identity_server">Сервер ідентифікації</string>
     <string name="settings_user_interface">Інтерфейс користувача</string>
@@ -842,16 +842,16 @@
 \n
 \nДодати зараз\?</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">%d активний участник</item>
-        <item quantity="few">%d активних участника</item>
-        <item quantity="many">%d активних участників</item>
-        <item quantity="other"/>
+        <item quantity="one">%d активний учасник</item>
+        <item quantity="few">%d активні учасники</item>
+        <item quantity="many">%d активних учасників</item>
+        <item quantity="other">%d активних учасників</item>
     </plurals>
     <plurals name="room_title_members">
-        <item quantity="one">%d участник</item>
-        <item quantity="few">%d участника</item>
-        <item quantity="many">%d участників</item>
-        <item quantity="other"/>
+        <item quantity="one">%d учасник</item>
+        <item quantity="few">%d учасники</item>
+        <item quantity="many">%d учасників</item>
+        <item quantity="other">%d учасників</item>
     </plurals>
     <string name="room_participants_ban_prompt_msg">Заблокованих користувачів буде вилучено з цієї кімнати й вони не зможуть приєднатися знову.</string>
     <plurals name="room_new_messages_notification">
@@ -1074,7 +1074,7 @@
     <string name="generic_label_and_value">%1$s: %2$s</string>
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
-    <string name="call_anyway">Все одно подзвонити</string>
+    <string name="call_anyway">Усе одно зателефонувати</string>
     <string name="room_participants_action_kick">Вилучити</string>
     <string name="reason_hint">Причина</string>
     <string name="settings_inline_url_preview_summary">Попередній перегляд посилань у чаті, у разі якщо Ваш сервер підтримує таку можливість.</string>
@@ -1083,7 +1083,7 @@
     <string name="settings_send_markdown">Форматування Markdown</string>
     <string name="settings_send_markdown_summary">Форматувати повідомлення з використанням синтаксису Markdown перед надсиланням. Це дає можливість розгорнутого форматування, як-от використання зірочок для показу курсивного тексту.</string>
     <string name="settings_show_read_receipts">Показувати підтвердження прочитання</string>
-    <string name="settings_show_read_receipts_summary">Натискати на підтвердження прочитання для детального переліку.</string>
+    <string name="settings_show_read_receipts_summary">Натискайте мітки прочитання для детального переліку.</string>
     <string name="settings_show_join_leave_messages">Показувати події приєднання та виходу</string>
     <string name="settings_show_join_leave_messages_summary">Це не стосується запрошень, вилучень і блокувань.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Показувати події облікових записів</string>
@@ -1200,7 +1200,7 @@
     <string name="settings_developer_mode">Режим розробника</string>
     <string name="settings_advanced_settings">Додаткові налаштування</string>
     <string name="settings_notification_advanced">Розширені налаштування сповіщень</string>
-    <string name="preference_voice_and_video">Голос та відео</string>
+    <string name="preference_voice_and_video">Голос і відео</string>
     <string name="room_list_quick_actions_settings">Налаштування</string>
     <string name="devices_other_devices">Інші сеанси</string>
     <string name="devices_current_device">Поточний сеанс</string>
@@ -1281,7 +1281,7 @@
     <string name="room_filtering_filter_hint">Фільтрувати бесіди…</string>
     <string name="room_list_people_empty_title">Бесіди</string>
     <string name="room_list_catchup_empty_body">У вас більше немає непрочитаних повідомлень</string>
-    <string name="room_list_catchup_empty_title">Все прочитано!</string>
+    <string name="room_list_catchup_empty_title">Усе прочитано!</string>
     <string name="settings_notification_advanced_summary">Встановти важливість сповіщень за подіями</string>
     <string name="hide_advanced">Сховати розширені</string>
     <string name="show_advanced">Показати розширені</string>
@@ -1354,9 +1354,9 @@
     <string name="keys_backup_setup_step1_recovery_key_alternative">Або захистіть свою резервну копію за допомогою ключа відновлення, зберігаючи її десь у безпеці.</string>
     <string name="keys_backup_setup_creating_backup">Створення резервної копії</string>
     <string name="keys_backup_setup_step2_button_title">Встановіть парольну фразу</string>
-    <string name="keys_backup_setup_step2_text_description">Ми збережемо зашифровану копію ваших ключів на вашому домашньому сервері. Захистіть свою резервну копію парольною фразою, щоб захистити її.
+    <string name="keys_backup_setup_step2_text_description">Ми збережемо зашифровану копію ваших ключів на вашому домашньому сервері. Захистіть свою резервну копію парольною фразою.
 \n
-\nДля максимальної безпеки він повинен відрізнятися від пароля вашого облікового запису.</string>
+\nДля максимальної безпеки фраза повинна відрізнятися від пароля вашого облікового запису.</string>
     <string name="keys_backup_setup_step2_text_title">Захистіть свою резервну копію за допомогою парольної фрази.</string>
     <string name="keys_backup_setup_step1_manual_export">Експорт ключів вручну</string>
     <string name="keys_backup_setup">Почати використовувати резервне копіювання ключів</string>
@@ -1834,7 +1834,7 @@
     <string name="keys_backup_passphrase_error_decrypt">Не вдалося розшифрувати резервну копію цією парольною фразою: переконайтесь, що вказано правильну парольну фразу відновлення.</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Не знаєте вашої відновлювальної парольної фрази\? Ви можете %s.</string>
     <string name="backup_recovery_passphrase">Парольна фраза відновлення</string>
-    <string name="bad_passphrase_key_reset_all_action">Забули або втратили усі можливості для відновлення\? Скинути все</string>
+    <string name="bad_passphrase_key_reset_all_action">Забули або втратили всі можливості для відновлення\? Скинути все</string>
     <string name="use_file">Використати файл</string>
     <string name="verification_cannot_access_other_session">Скористатись парольною фразою відновлення або ключем</string>
     <string name="keys_backup_restore_with_passphrase">Скористатись відновлювальними парольною фразою або ключем</string>
@@ -2191,7 +2191,7 @@
     <string name="room_settings_room_access_entry_unknown">Невідоме налаштування доступу (%s)</string>
     <string name="room_settings_room_access_entry_knock">Будь-хто може попроситися до кімнати, учасники можуть прийняти або відхилити</string>
     <string name="suggested_rooms_pills_on_empty_header">Вітаємо в %1$s, %2$s.</string>
-    <string name="join_anyway">Все одно приєднатися</string>
+    <string name="join_anyway">Усе одно приєднатися</string>
     <string name="create_space">Створити Простір</string>
     <string name="join_space">Приєднатися до Простору</string>
     <string name="invite_by_link">Поділитися посиланням</string>
@@ -2875,7 +2875,7 @@
     <string name="labs_use_restricted_join_rule_desc">Попередження: вимагає підтримки сервера та експериментальної версії кімнати</string>
     <string name="spaces_feeling_experimental_subspace">Бажаєте поекспериментувати\?
 \nМожете додати наявні простори до простору.</string>
-    <string name="labs_use_restricted_join_rule">Експериментальний простір - обмежена кімната.</string>
+    <string name="labs_use_restricted_join_rule">Експериментально: доступ до кімнати для будь-кого в просторі.</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Усі кімнати, у яких ви перебуваєте, буде показано на сторінці Домівка.</string>
     <string name="preference_show_all_rooms_in_home">Показувати у Домівці</string>
     <string name="verification_cancelled">Перевірку скасовано</string>
@@ -3118,12 +3118,12 @@
     <string name="this_invite_to_this_space_was_sent">Це запрошення до простору надіслане %s, не пов\'язаній із вашим обліковим записом</string>
     <string name="this_invite_to_this_room_was_sent">Це запрошення до кімнати надіслане %s, не пов\'язаній із вашим обліковим записом</string>
     <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Кімнати можуть лишатися закритими для людей ззовні простору, водночас люди в просторі можуть знаходити їх і приєднуватися. Всі нові кімнати в просторі матимуть цю опцію.</string>
-    <string name="help_people_in_spaces_find_and_join">Допомагає людям у просторах знаходити закриті кімнати й приєднуватися власноруч, без потреби вручну запрошувати всіх.</string>
+    <string name="help_people_in_spaces_find_and_join">Допомагає людям у просторах знаходити закриті кімнати й приєднуватися самостійно, без потреби вручну запрошувати всіх.</string>
     <string name="upgrade_room_for_restricted_note">Зауважте, що поліпшення створить нову версію кімнати. Всі наявні повідомлення залишаться в цій архівованій кімнаті.</string>
     <string name="upgrade_room_for_restricted_no_param">Будь-хто в батьківському просторі зможемо знайти кімнату й долучитись — нема потреба вручну запрошувати всіх. Можна змінити це в налаштуваннях кімнати будь-коли.</string>
     <string name="upgrade_room_for_restricted">Будь-хто в %s зможе знайти кімнату й долучитись — нема потреби вручну запрошувати всіх. Можна змінити це в налаштуваннях кімнати будь-коли.</string>
     <string name="error_voice_message_cannot_reply_or_edit">Не вдалося відповісти чи редагувати, бо голосове повідомлення активне</string>
-    <string name="room_using_unstable_room_version">Кімната — версії %s, яку домашній сервер позначив як нестабільну.</string>
+    <string name="room_using_unstable_room_version">Кімната — версії %s, яку домашній сервер позначив нестабільною.</string>
     <string name="allow_anyone_in_room_to_access">Дозволити будь-кому в %s знаходити й доступатись. Можете також обрати інші простори.</string>
     <string name="upgrade_room_warning">Поліпшення кімнати — серйозна операція. Її зазвичай радять, коли кімната нестабільна через вади, брак функціоналу чи вразливості безпеки.
 \nЗазвичай це впливає лише на деталі опрацювання кімнати сервером.</string>
@@ -3167,7 +3167,7 @@
     <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">Згенерувати ключ безпеки для зберігання в надійному місці, наприклад у менеджері паролів чи сейфі.</string>
     <string name="create_room_dm_failure">Не вдалося створити особисте повідомлення. Перевірте користувачів, яких бажаєте запросити, й спробуйте ще.</string>
     <string name="keys_backup_recovery_key_error_decrypt">Не вдалося розшифрувати резервну копію цим відновлювальним ключем. Звірте, чи правильний ключ ви ввели.</string>
-    <string name="enter_secret_storage_input_key">Оберіть свій відновлювальний ключ, введіть його власноруч чи вставте з буферу обміну</string>
+    <string name="enter_secret_storage_input_key">Оберіть свій ключ відновлення, введіть його власноруч або вставте з буфера обміну</string>
     <string name="use_recovery_key">Використати відновлювальний ключ</string>
     <string name="enter_secret_storage_passphrase_or_key">%1$s або %2$s треба для продовження.</string>
     <string name="bootstrap_migration_backup_recovery_key">Відновлювальний ключ резервного копіювання ключів</string>
@@ -3194,4 +3194,58 @@
     <string name="create_room_disable_federation_description">Можете ввімкнути це, якщо в кімнаті співпрацюватимуть лише внутрішні команди на вашому домашньому сервері. Цього більше не можна буде змінити.</string>
     <string name="template_soft_logout_sso_not_same_user_error">Цей сеанс — користувача %1$s, а ви надаєте облікові дані користувача %2$s. Це не підтримується в ${app_name}.
 \nБудь ласка, спершу очистіть дані, а тоді ввійдіть в інший обліковий запис.</string>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">%1$d голос. Проголосуйте, щоб побачити результати</item>
+        <item quantity="few">%1$d голоси. Проголосуйте, щоб побачити результати</item>
+        <item quantity="many">%1$d голосів. Проголосуйте, щоб побачити результати</item>
+        <item quantity="other">%1$d голосів. Проголосуйте, щоб побачити результати</item>
+    </plurals>
+    <string name="delete_poll_dialog_content">Точно видалити опитування\? Ви не зможете відновити опитування після видалення.</string>
+    <string name="delete_poll_dialog_title">Видалити опитування</string>
+    <string name="poll_end_room_list_preview">Голосування завершене</string>
+    <string name="poll_response_room_list_preview">Голос надіслано</string>
+    <string name="labs_enable_polls">Увімкнути опитування</string>
+    <string name="end_poll_confirmation_approve_button">Завершити опитування</string>
+    <string name="end_poll_confirmation_description">Люди більше не зможуть голосувати, і будуть показані остаточні результати опитування.</string>
+    <string name="end_poll_confirmation_title">Завершити це опитування\?</string>
+    <string name="a11y_poll_winner_option">варіант-переможець</string>
+    <string name="poll_end_action">Завершити опитування</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Остаточний результат на підставі %1$d голосу</item>
+        <item quantity="few">Остаточний результат на підставі %1$d голосів</item>
+        <item quantity="many">Остаточний результат на підставі %1$d голосів</item>
+        <item quantity="other">Остаточний результат на підставі %1$d голосів</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">На підставі %1$d голосу</item>
+        <item quantity="few">На підставі %1$d голосів</item>
+        <item quantity="many">На підставі %1$d голосів</item>
+        <item quantity="other">На підставі %1$d голосів</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d голос</item>
+        <item quantity="few">%1$d голоси</item>
+        <item quantity="many">%1$d голосів</item>
+        <item quantity="other">%1$d голосів</item>
+    </plurals>
+    <string name="preference_system_settings">Системні налаштування</string>
+    <string name="preference_versions">Версії</string>
+    <string name="preference_help_summary">Отримати допомогу в використанні Element</string>
+    <string name="preference_help_title">Довідка й підтримка</string>
+    <string name="preference_help">Довідка</string>
+    <string name="preference_root_legals">Правові положення</string>
+    <string name="legals_no_policy_provided">Цей сервер не надає політики.</string>
+    <string name="legals_third_party_notices">Сторонні бібліотеки</string>
+    <string name="legals_identity_server_title">Політика вашого сервера ідентифікації</string>
+    <string name="legals_home_server_title">Політика вашого домашнього сервера</string>
+    <string name="template_legals_application_title">Політика ${app_name}</string>
+    <string name="analytics_opt_in_list_item_3">Можете вимкнути це коли завгодно в налаштуваннях</string>
+    <string name="analytics_opt_in_list_item_2">Ми <b>не</b> передаємо даних стороннім особам</string>
+    <string name="analytics_opt_in_list_item_1">Ми <b>не</b> записуємо й <b>не</b> аналізуємо жодних даних облікового запису</string>
+    <string name="analytics_opt_in_content_link">тут</string>
+    <string name="analytics_opt_in_content">Допомагайте нам визначати проблеми й удосконалювати Element, надсилаючи анонімні дані про використання. Щоб розуміти, як люди використовують кілька пристроїв, ми створимо спільний для ваших пристроїв випадковий ідентифікатор.
+\n
+\nМожете прочитати всі наші умови %s.</string>
+    <string name="analytics_opt_in_title">Допоможіть покращити Element</string>
+    <string name="action_enable">Увімкнути</string>
 </resources>

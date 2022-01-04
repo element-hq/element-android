@@ -825,10 +825,10 @@
     <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s ב %2$s ו %3$s</string>
     <string name="notification_unread_notified_messages_in_room">%1$s ב %2$s</string>
     <plurals name="notification_compat_summary_title">
-        <item quantity="one">d%</item>
-        <item quantity="two">d%</item>
-        <item quantity="many">d%</item>
-        <item quantity="other">d%</item>
+        <item quantity="one">%d</item>
+        <item quantity="two">%d</item>
+        <item quantity="many">%d</item>
+        <item quantity="other">%d</item>
     </plurals>
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">הודעה %1$s: %2$d</item>

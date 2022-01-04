@@ -1968,7 +1968,7 @@
     <string name="error_failed_to_import_keys">Nie udało się zaimportować kluczy</string>
     <string name="qr_code_scanned_verif_waiting">Oczekiwanie na %s…</string>
     <string name="qr_code_scanned_verif_waiting_notice">Prawie gotowe! Oczekiwanie na potwierdzenie…</string>
-    <string name="qr_code_scanned_self_verif_notice">Prawie gotowe! Czy drugie urządzenie pokazuje taką samą tarczę\?</string>
+    <string name="qr_code_scanned_self_verif_notice">Prawie gotowe! Czy drugie urządzenie pokazuje tarczę\?</string>
     <string name="topic_prefix">"Temat: "</string>
     <string name="add_a_topic_link_text">Dodaj temat</string>
     <string name="room_created_summary_no_topic_creation_text">%s aby poinformować innych czego dotyczy konwersacja w tym pokoju.</string>
@@ -2063,7 +2063,7 @@
     <string name="call_notification_hangup">Zakończ rozmowę</string>
     <string name="reset">Zresetuj</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Tryb samolotowy jest włączony</string>
-    <string name="qr_code_scanned_by_other_notice">Prawie gotowe! Czy %s pokazuje taką samą tarczę\?</string>
+    <string name="qr_code_scanned_by_other_notice">Prawie gotowe! Czy %s pokazuje tarczę\?</string>
     <string name="settings_hs_admin_e2e_disabled">Twój administrator serwera zablokował domyślne szyfrowanie punkt-punkt (e2e) w pokojach prywatnych w Wiadomościach Bezpośrednich.</string>
     <string name="room_settings_enable_encryption_no_permission">Nie masz uprawnień żeby uaktywnić szyfrowanie w tym pokoju.</string>
     <string name="room_member_open_or_create_dm">Wiadomość bezpośrednia</string>
@@ -2480,8 +2480,8 @@
     <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
         <item quantity="one">Usunąłeś(aś) alternatywny adres %1$s dla tego pokoju.</item>
         <item quantity="few">Usunąłeś(aś) alternatywne adresy %1$s dla tego pokoju.</item>
-        <item quantity="many"/>
-        <item quantity="other"/>
+        <item quantity="many">Usunąłeś(aś) alternatywne adresy %1$s dla tego pokoju.</item>
+        <item quantity="other">Usunąłeś(aś) alternatywne adresy %1$s dla tego pokoju.</item>
     </plurals>
     <string name="notice_room_canonical_alias_set">%1$s ustawił(a) główny adres tego pokoju na %2$s.</string>
     <plurals name="notice_room_aliases_added">
@@ -3056,4 +3056,39 @@
     <string name="link_this_email_settings_link">Powiąż ten email ze swoim kontem</string>
     <string name="create_spaces_room_private_header_desc">Stwórzmy pokój dla każdego z nich. Możesz potem dodać kolejne, także te już istniejące.</string>
     <string name="create_spaces_room_private_header">Nad czym pracujesz\?</string>
+    <string name="delete_poll_dialog_content">Czy na pewno chcesz usunąć ankietę\? Nie będziesz w stanie jej odzyskać po usunięciu.</string>
+    <plurals name="call_active_status">
+        <item quantity="one">Aktywne połączenie ·</item>
+        <item quantity="few">%1$d aktywnych połączeń ·</item>
+        <item quantity="many">%1$d aktywnych połączeń ·</item>
+        <item quantity="other">%1$d aktywnych połączeń ·</item>
+    </plurals>
+    <plurals name="call_only_paused">
+        <item quantity="one">Nieaktywne połączenie</item>
+        <item quantity="few">%1$d nieaktywnych połączeń</item>
+        <item quantity="many">%1$d nieaktywnych połączeń</item>
+        <item quantity="other">%1$d nieaktywnych połączeń</item>
+    </plurals>
+    <string name="identity_server_consent_dialog_content_question">Zgadzasz się na wysłanie tych informacji\?</string>
+    <string name="preference_system_settings">Ustawienia systemu</string>
+    <string name="preference_versions">Wersje</string>
+    <string name="preference_help_title">Pomoc i wsparcie</string>
+    <string name="preference_help">Pomoc</string>
+    <string name="legals_third_party_notices">Biblioteki zewnętrzne</string>
+    <string name="analytics_opt_in_list_item_3">Możesz to wyłączyć kiedy zechcesz w ustawieniach</string>
+    <string name="analytics_opt_in_list_item_2"><b>Nie udostępniamy</b> informacji podmiotom trzecim</string>
+    <string name="analytics_opt_in_list_item_1"><b> Nie zbieramy i nie profilujemy </b> danych użytkownika</string>
+    <string name="analytics_opt_in_content_link">tutaj</string>
+    <string name="analytics_opt_in_content">Pomóż nam znaleźć błędy i ulepszyć Element poprzez udostępnianie anonimowych danych użytkowania. Aby lepiej zrozumieć jak użytkownicy wykorzystują wiele urządzeń wygenerujemy losowy identyfikator dzielony pomiędzy Twoimi urządzeniami.
+\n
+\nWięcej informacji %s.</string>
+    <string name="analytics_opt_in_title">Pomóż usprawnić Element</string>
+    <string name="action_not_now">Nie teraz</string>
+    <string name="action_enable">Włącz</string>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">Usunąłeś(aś) %1$s jako adres tego pokoju.</item>
+        <item quantity="few">Usunąłeś(aś) %1$s jako adresy tego pokoju.</item>
+        <item quantity="many">Usunąłeś(aś) %1$s jako adresy tego pokoju.</item>
+        <item quantity="other">Usunąłeś(aś) %1$s jako adresy tego pokoju.</item>
+    </plurals>
 </resources>

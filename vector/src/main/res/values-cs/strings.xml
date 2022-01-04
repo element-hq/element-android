@@ -925,8 +925,8 @@
     <string name="settings_other">Ostatní</string>
     <string name="settings_advanced">Pokročilé</string>
     <string name="settings_integrations">Integrace</string>
-    <string name="settings_integrations_summary">Použijte správce integrací ke správě botů, můstků, widgetů a nálepkových sad.
-\nSprávci integrací obdrží konfigurační data a mohou změnit widgety, poslat pozvánky do místností a nastavit power levels Vaším jménem.</string>
+    <string name="settings_integrations_summary">Pomocí správce integrace můžete spravovat boty, propojení, widgety a balíčky nálepek.
+\nSprávci integrací přijímají konfigurační data a mohou vaším jménem upravovat widgety, odesílat pozvánky do místností a nastavovat úrovně oprávnění.</string>
     <string name="settings_cryptography">Kryptografie</string>
     <string name="settings_cryptography_manage_keys">Správa kryprografických klíčů</string>
     <string name="settings_notifications_targets">Cíle oznámení</string>
@@ -1625,7 +1625,7 @@
     <string name="terms_of_service">Všeobecné podmínky</string>
     <string name="review_terms">Pročíst všeobecné podmínky</string>
     <string name="terms_description_for_identity_server">Nechte se najít druhými</string>
-    <string name="terms_description_for_integration_manager">Použijte boty, můstky, widgety a nálepkové sady</string>
+    <string name="terms_description_for_integration_manager">Použijte boty, propojení, widgety a balíčky nálepek</string>
     <string name="read_at">Čtěte na</string>
     <string name="identity_server">Server pro identity</string>
     <string name="disconnect_identity_server">Odpojit server pro identity</string>
@@ -1944,7 +1944,7 @@
     <string name="room_settings_enable_encryption">Zapnout koncové šifrování…</string>
     <string name="room_settings_enable_encryption_warning">Jakmile zapnuto, šifrování nelze vypnout.</string>
     <string name="room_settings_enable_encryption_dialog_title">Zapnout šifrování\?</string>
-    <string name="room_settings_enable_encryption_dialog_content">Jakmile zapnuto, šifrování místnosti nelze vypnout. Zprávy odeslané v zašifrované místnosti nemohou být čteny serverem, ale pouze účastníky místnosti. Zapnutím šifrování mohou boty a můstky přestat správně pracovat.</string>
+    <string name="room_settings_enable_encryption_dialog_content">Jakmile je šifrování místnosti zapnuto, nelze jej vypnout. Zprávy odeslané v zašifrované místnosti nemohou být čteny serverem, ale pouze účastníky místnosti. Zapnutí šifrování může zabránit správnému fungování mnoha botů a propojení.</string>
     <string name="room_settings_enable_encryption_dialog_submit">Zapnout šifrování</string>
     <string name="verification_request_notice">Za účelem bezpečnosti ověřte %s kontrolou jednorázového kódu.</string>
     <string name="verification_request_start_notice">Za účelem bezpečnosti to proveďte osobně nebo použijte jiný způsob komunikace.</string>
@@ -2366,7 +2366,7 @@
     <string name="notice_crypto_unable_to_decrypt_final">Nemůžete číst tuto zprávu</string>
     <string name="notice_crypto_unable_to_decrypt_friendly">Čekám na tuto zprávu, může to chvíli trvat</string>
     <string name="crypto_utd">Nelze dešifrovat</string>
-    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Vzhledem ke koncovému se může stát, že budete muset počkat, než zpráva dorazí, protože vám nebyly správně odeslány šifrovací klíče.</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">Jelikož se používá koncové šifrování, může se stát, že budete muset počkat, než zpráva dorazí, protože vám nebyly správně odeslány šifrovací klíče.</string>
     <string name="crypto_error_withheld_blacklisted">Nemůžete číst tuto zprávu, protože odesílatel Vás blokuje</string>
     <string name="crypto_error_withheld_unverified">Nemůžete číst tuto zprávu, protože Vaše relace není pro odesílatele důvěryhodná</string>
     <string name="crypto_error_withheld_generic">Nemůžete číst tuto zprávu, protože odesílatel účelově neposlal klíče</string>
@@ -3089,4 +3089,54 @@
     <string name="identity_server_consent_dialog_content_question">Souhlasíte se zasíláním těchto informací\?</string>
     <string name="identity_server_consent_dialog_content_3">Pro nalezení existujících kontaktů, je třeba odeslat kontaktní informace (e-maily a telefonní čísla) na server identity. Před odesláním vaše údaje zaheslujeme kvůli ochraně osobních údajů.</string>
     <string name="action_not_now">Nyní ne</string>
+    <string name="delete_poll_dialog_content">Opravdu chcete toto hlasování odstranit\? Po odstranění ho již nebude možné obnovit.</string>
+    <string name="delete_poll_dialog_title">Odstranit hlasování</string>
+    <string name="poll_end_room_list_preview">Hlasování skončilo</string>
+    <string name="poll_response_room_list_preview">Hlas odeslán</string>
+    <string name="labs_enable_polls">Povolit hlasování</string>
+    <string name="end_poll_confirmation_approve_button">Ukončit hlasování</string>
+    <string name="end_poll_confirmation_description">Toto zastaví možnost hlasování a zobrazí se konečné výsledky.</string>
+    <string name="end_poll_confirmation_title">Ukončit toto hlasování\?</string>
+    <string name="a11y_poll_winner_option">vítězná volba</string>
+    <string name="poll_end_action">Ukončit hlasování</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Konečný výsledek na základě %1$d hlasu</item>
+        <item quantity="few">Konečný výsledek na základě %1$d hlasů</item>
+        <item quantity="other">Konečný výsledek na základě %1$d hlasů</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">Nikdo nehlasoval</item>
+        <item quantity="few">%1$d hlasů. Hlasujte pro zobrazení výsledků</item>
+        <item quantity="other">%1$d hlasů. Hlasujte pro zobrazení výsledků</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">Na základě %1$d hlasu</item>
+        <item quantity="few">Na základě %1$d hlasů</item>
+        <item quantity="other">Na základě %1$d hlasů</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d hlas</item>
+        <item quantity="few">%1$d hlasy</item>
+        <item quantity="other">%1$d hlasů</item>
+    </plurals>
+    <string name="preference_system_settings">Systémová nastavení</string>
+    <string name="preference_versions">Verze</string>
+    <string name="preference_help_summary">Získejte pomoc při používání Elementu</string>
+    <string name="preference_help_title">Nápověda a podpora</string>
+    <string name="preference_help">Nápověda</string>
+    <string name="preference_root_legals">Právní dokumenty</string>
+    <string name="legals_no_policy_provided">Tento server neposkytuje žádné zásady.</string>
+    <string name="legals_third_party_notices">Knihovny třetích stran</string>
+    <string name="legals_identity_server_title">Zásady vašeho serveru identit</string>
+    <string name="legals_home_server_title">Zásady vašeho domovského serveru</string>
+    <string name="template_legals_application_title">Zásady aplikace ${app_name}</string>
+    <string name="analytics_opt_in_list_item_3">Tuto funkci můžete kdykoli vypnout v nastavení</string>
+    <string name="analytics_opt_in_list_item_2"><b>Nesdílíme</b> informace s třetími stranami</string>
+    <string name="analytics_opt_in_list_item_1"><b>Nezaznamenáváme ani neprofilujeme</b> žádné údaje o účtu</string>
+    <string name="analytics_opt_in_content_link">zde</string>
+    <string name="analytics_opt_in_content">Pomozte nám identifikovat problémy a vylepšit Element sdílením anonymních údajů o používání. Abychom pochopili, jak lidé používají více zařízení, vygenerujeme náhodný identifikátor sdílený vašimi zařízeními.
+\n
+\nMůžete si přečíst všechny naše podmínky %s.</string>
+    <string name="analytics_opt_in_title">Pomozte vylepšit Element</string>
+    <string name="action_enable">Povolit</string>
 </resources>
