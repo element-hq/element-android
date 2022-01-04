@@ -18,6 +18,7 @@ package im.vector.app.features.devtools
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
@@ -48,8 +49,8 @@ class RoomStateListController @Inject constructor(
                     stateEventsGroups.forEach { entry ->
                         genericItem {
                             id(entry.key)
-                            title(entry.key)
-                            description(host.stringProvider.getQuantityString(R.plurals.entries, entry.value.size, entry.value.size))
+                            title(entry.key.toEpoxyCharSequence())
+                            description(host.stringProvider.getQuantityString(R.plurals.entries, entry.value.size, entry.value.size).toEpoxyCharSequence())
                             itemClickAction {
                                 host.interactionListener?.processAction(RoomDevToolAction.ShowStateEventType(entry.key))
                             }
@@ -88,8 +89,8 @@ class RoomStateListController @Inject constructor(
                                     text = stateEvent.stateKey.let { "\"$it\"" }
                                     textStyle = "normal"
                                 }
-                            })
-                            description(contentJson)
+                            }.toEpoxyCharSequence())
+                            description(contentJson.toEpoxyCharSequence())
                             itemClickAction {
                                 host.interactionListener?.processAction(RoomDevToolAction.ShowStateEvent(stateEvent))
                             }

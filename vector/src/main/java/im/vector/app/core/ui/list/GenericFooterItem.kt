@@ -38,7 +38,7 @@ import im.vector.app.features.themes.ThemeUtils
 abstract class GenericFooterItem : VectorEpoxyModel<GenericFooterItem.Holder>() {
 
     @EpoxyAttribute
-    var text: CharSequence? = null
+    var text: String? = null
 
     @EpoxyAttribute
     var style: ItemStyle = ItemStyle.NORMAL_TEXT

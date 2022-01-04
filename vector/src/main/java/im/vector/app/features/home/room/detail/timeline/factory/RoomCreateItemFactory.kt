@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.factory
 
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.room.detail.timeline.item.RoomCreateItem_
@@ -46,7 +47,7 @@ class RoomCreateItemFactory @Inject constructor(private val stringProvider: Stri
             }
         }
         return RoomCreateItem_()
-                .text(text)
+                .text(text.toEpoxyCharSequence())
     }
 
     private fun defaultRendering(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
