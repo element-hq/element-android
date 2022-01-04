@@ -428,14 +428,6 @@
     <string name="tab_title_search_rooms">الغرف</string>
     <string name="tab_title_search_messages">الرسائل</string>
     <string name="tab_title_search_files">الملفات</string>
-    <string name="room_recents_directory">الدليل</string>
-    <string name="room_recents_favourites">المفضلة</string>
-    <string name="room_recents_conversations">الغرف</string>
-    <string name="room_recents_invites">الدعوات</string>
-    <string name="room_recents_create_room">أنشئ غرفة</string>
-    <string name="room_recents_join_room">انضم إلى غرفة</string>
-    <string name="room_recents_join_room_title">انضم إلى غرفة</string>
-    <string name="room_recents_join_room_prompt">اكتب معرّف غرفة أو اختصارها</string>
     <string name="directory_searching_title">يبحث في الدليل..</string>
     <string name="room_settings_leave_conversation">اترك المحادثة</string>
     <string name="room_settings_forget">انسَ</string>
@@ -737,7 +729,6 @@
     <string name="search_hint">ابحث</string>
     <string name="search_members_hint">رشّح أعضاء الغرفة</string>
     <string name="tab_title_search_people">الناس</string>
-    <string name="room_recents_low_priority">أولوية منخفضة</string>
     <string name="room_settings_all_messages_noisy">كل الرسائل (مزعج)</string>
     <string name="room_settings_all_messages">كل الرسائل</string>
     <string name="room_settings_mention_only">الإشارات فقط</string>
@@ -875,8 +866,6 @@
     <string name="ssl_cert_not_trust">قد يعني هذا بأن أحدهم يعترض الاتصال بعدوانية، أو أن هاتفك لا يثق بالشهادة التي قدّمها الخادوم البعيد.</string>
     <string name="ssl_cert_new_account_expl">إن قال مدير الخادوم بأن هذا متوقع، فتأكد من أن البصمة أدناه تطابق البصمة التي وفّرها.</string>
     <string name="ssl_expected_existing_expl">تغيّرت الشهادة من شهادة كنت تثق بها إلى شهادة لا تثق بها. لربما جدّد الخادوم شهادته. راسل إدارة الخادوم واسألهم عن البصمة المتوقعة.</string>
-    <string name="room_recents_join">انضم</string>
-    <string name="room_recents_start_chat">ابدأ دردشة</string>
     <string name="directory_search_results_title">تصفح الدليل</string>
     <plurals name="directory_search_rooms_for">
         <item quantity="zero">لم يُعثر على غرف تطابق ‏⁨%2$s⁩</item>

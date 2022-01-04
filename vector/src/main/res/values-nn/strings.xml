@@ -436,17 +436,6 @@
     <string name="tab_title_search_messages">MELDINGAR</string>
     <string name="tab_title_search_people">FOLK</string>
     <string name="tab_title_search_files">FILER</string>
-    <string name="room_recents_join">VERT MED</string>
-    <string name="room_recents_directory">UTVAL</string>
-    <string name="room_recents_favourites">YNDLINGAR</string>
-    <string name="room_recents_conversations">ROM</string>
-    <string name="room_recents_low_priority">LÅGRETT</string>
-    <string name="room_recents_invites">INNBJODINGAR</string>
-    <string name="room_recents_start_chat">Start samtale</string>
-    <string name="room_recents_create_room">Laga eit rom</string>
-    <string name="room_recents_join_room">Vert med i romet</string>
-    <string name="room_recents_join_room_title">Vert med i eit rom</string>
-    <string name="room_recents_join_room_prompt">Skriv inn ein rom-ID eller eit romalias</string>
     <string name="directory_search_results_title">Bla gjennom katalog</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">%d rom</item>

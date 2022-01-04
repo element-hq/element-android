@@ -554,17 +554,6 @@
     <string name="tab_title_search_messages">MESAZHE</string>
     <string name="tab_title_search_people">PERSONA</string>
     <string name="tab_title_search_files">KARTELA</string>
-    <string name="room_recents_join">MERRNI PJESË</string>
-    <string name="room_recents_directory">DREJTORI</string>
-    <string name="room_recents_favourites">TË PARAPËLQYERA</string>
-    <string name="room_recents_conversations">DHOMA</string>
-    <string name="room_recents_low_priority">ME PËRPARËSI TË ULËT</string>
-    <string name="room_recents_invites">FTESA</string>
-    <string name="room_recents_start_chat">Filloni fjalosje</string>
-    <string name="room_recents_create_room">Krijo dhomë</string>
-    <string name="room_recents_join_room">Hyni në dhomë</string>
-    <string name="room_recents_join_room_title">Hyni në një dhomë</string>
-    <string name="room_recents_join_room_prompt">Shtypni një ID ose alias dhome</string>
     <string name="directory_search_results_title">Shfletoni në drejtori</string>
     <string name="directory_searching_title">Po kërkohet në drejtori…</string>
     <string name="room_settings_all_messages_noisy">Krejt mesazhet (e zhurmshme)</string>

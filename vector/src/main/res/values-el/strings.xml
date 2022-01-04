@@ -89,7 +89,6 @@
     <string name="rooms_directory_header">Ευρετήριο</string>
     <string name="send">Αποστολή</string>
     <string name="send_bug_report_include_logs">Αποστολή πληροφοριών</string>
-    <string name="room_recents_start_chat">Έναρξη συνομιλίας</string>
     <string name="directory_server_fail_to_retrieve_server">Ο διακομιστής είναι μη διαθέσιμος ή υπερφορτωμένος</string>
     <string name="view_decrypted_source">Προβολή αποκρυπτογραφημένου κώδικα</string>
     <string name="view_source">Προβολή κώδικα</string>
@@ -594,13 +593,6 @@
     <string name="room_details_settings">Ρυθμίσεις</string>
     <string name="room_details_title">Λεπτομέρειες Δωματίου</string>
     <string name="room_details_people_invited_group_name">ΚΑΛΕΣΜΕΝΟΣ/Η</string>
-    <string name="room_recents_join_room_prompt">Πληκτρολογείστε ταυτότητα (ID) δωματίου ή ψευδώνυμο δωματίου</string>
-    <string name="room_recents_join_room">Ένταξη στο δωμάτιο</string>
-    <string name="room_recents_create_room">Δημιουργία δωματίου</string>
-    <string name="room_recents_invites">ΠΡΟΣΚΛΗΣΕΙΣ</string>
-    <string name="room_recents_low_priority">ΧΑΜΗΛΗ ΠΡΟΤΕΡΑΙΟΤΗΤΑ</string>
-    <string name="room_recents_conversations">ΔΩΜΑΤΙΑ</string>
-    <string name="room_recents_join">ΣΥΜΜΕΤΟΧΗ</string>
     <string name="search_is_not_supported_in_e2e_room">Η αναζήτηση σε κρυπτογραφημένα δωμάτια δεν υποστηρίζεται ακόμα.</string>
     <string name="tab_title_search_files">ΑΡΧΕΙΑ</string>
     <string name="tab_title_search_messages">ΜΗΝΥΜΑΤΑ</string>

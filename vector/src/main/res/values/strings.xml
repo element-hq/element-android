@@ -1047,19 +1047,6 @@
     <string name="tab_title_search_files">FILES</string>
     <string name="search_is_not_supported_in_e2e_room">Searching in encrypted rooms is not supported yet.</string>
 
-    <!-- Room recents -->
-    <string name="room_recents_join">JOIN</string>
-    <string name="room_recents_directory">DIRECTORY</string>
-    <string name="room_recents_favourites">FAVORITES</string>
-    <string name="room_recents_conversations">ROOMS</string>
-    <string name="room_recents_low_priority">LOW PRIORITY</string>
-    <string name="room_recents_invites">INVITES</string>
-    <string name="room_recents_start_chat">Start chat</string>
-    <string name="room_recents_create_room">Create room</string>
-    <string name="room_recents_join_room">Join room</string>
-    <string name="room_recents_join_room_title">Join a room</string>
-    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
-
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory</string>
     <plurals name="directory_search_rooms">

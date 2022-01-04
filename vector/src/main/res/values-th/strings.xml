@@ -173,7 +173,6 @@
     <plurals name="directory_search_rooms">
         <item quantity="other">%d ห้อง</item>
     </plurals>
-    <string name="room_recents_join">เข้าร่วม</string>
     <string name="search_is_not_supported_in_e2e_room">ยังไม่รองรับการค้นหาในห้องที่เข้ารหัส</string>
     <string name="tab_title_search_files">ไฟล์</string>
     <string name="tab_title_search_people">ผู้คน</string>
@@ -289,12 +288,6 @@
     <string name="login_signup">ลงทะเบียน</string>
     <string name="directory_searching_title">กำลังค้นหาไดเรกทอรี…</string>
     <string name="directory_search_results_title">เรียกดูไดเรกทอรี</string>
-    <string name="room_recents_join_room_title">เข้าร่วมห้อง</string>
-    <string name="room_recents_join_room">เข้าร่วมห้อง</string>
-    <string name="room_recents_create_room">สร้างห้อง</string>
-    <string name="room_recents_start_chat">เริ่มแชท</string>
-    <string name="room_recents_conversations">ห้อง</string>
-    <string name="room_recents_directory">ไดเรกทอรี</string>
     <string name="room_details_people_present_group_name">เข้าร่วมแล้ว</string>
     <string name="people_search_user_directory">ไดเรกทอรีผู้ใช้ (%s)</string>
     <string name="room_participants_action_set_admin">ทำให้เป็นผู้ดูแล</string>
@@ -309,7 +302,6 @@
     <string name="clear">ล้าง</string>
     <string name="room_sync_in_progress">กำลังซิงค์…</string>
     <string name="remove">เอาออก</string>
-    <string name="room_recents_favourites">รายการโปรด</string>
     <string name="settings_password">รหัสผ่าน</string>
     <string name="settings_change_password">เปลี่ยนรหัสผ่าน</string>
     <string name="settings_category_timeline">เส้นเวลา</string>

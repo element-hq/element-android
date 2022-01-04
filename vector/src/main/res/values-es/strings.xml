@@ -612,18 +612,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="tab_title_search_messages">MENSAJES</string>
     <string name="tab_title_search_people">PERSONAS</string>
     <string name="tab_title_search_files">ARCHIVOS</string>
-    <!-- Room recents -->
-    <string name="room_recents_join">UNIRSE</string>
-    <string name="room_recents_directory">DIRECTORIO</string>
-    <string name="room_recents_favourites">FAVORITOS</string>
-    <string name="room_recents_conversations">SALAS</string>
-    <string name="room_recents_low_priority">PRIORIDAD BAJA</string>
-    <string name="room_recents_invites">INVITACIONES</string>
-    <string name="room_recents_start_chat">Iniciar conversación</string>
-    <string name="room_recents_create_room">Crear sala</string>
-    <string name="room_recents_join_room">Unirse a la sala</string>
-    <string name="room_recents_join_room_title">Unirse a una sala</string>
-    <string name="room_recents_join_room_prompt">Escribe una ID o alias de sala</string>
     <!-- Directory -->
     <string name="directory_search_results_title">Explorar directorio</string>
     <string name="directory_searching_title">Buscando directorio…</string>

@@ -629,18 +629,6 @@
     <string name="tab_title_search_messages">MISSATGES</string>
     <string name="tab_title_search_people">PARTICIPANTS</string>
     <string name="tab_title_search_files">FITXERS</string>
-    <!-- Room recents -->
-    <string name="room_recents_join">UNEIX-TE</string>
-    <string name="room_recents_directory">DIRECTORI</string>
-    <string name="room_recents_favourites">PREFERITS</string>
-    <string name="room_recents_conversations">SALES</string>
-    <string name="room_recents_low_priority">PRIORITAT BAIXA</string>
-    <string name="room_recents_invites">CONVIDA</string>
-    <string name="room_recents_start_chat">Inicia un xat</string>
-    <string name="room_recents_create_room">Crea una sala</string>
-    <string name="room_recents_join_room">Uneix-te a la sala</string>
-    <string name="room_recents_join_room_title">Uneix-te a una sala</string>
-    <string name="room_recents_join_room_prompt">Escriviu un id de sala o un àlies de sala</string>
     <!-- Directory -->
     <string name="directory_search_results_title">Navega pel directori</string>
     <string name="directory_searching_title">S\'està cercant al directori…</string>

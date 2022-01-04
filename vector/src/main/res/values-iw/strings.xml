@@ -684,17 +684,6 @@
         <item quantity="other">%d חדרים</item>
     </plurals>
     <string name="directory_search_results_title">חפש בתיקיות</string>
-    <string name="room_recents_join_room_prompt">הקלד מזהה חדר או כינוי לחדר</string>
-    <string name="room_recents_join_room_title">הצטרף לחדר</string>
-    <string name="room_recents_join_room">הצטרף לחדר</string>
-    <string name="room_recents_create_room">צור חדר</string>
-    <string name="room_recents_start_chat">התחלת שיחת צ\'אט</string>
-    <string name="room_recents_invites">הזמנות</string>
-    <string name="room_recents_low_priority">עדיפות נמוכה</string>
-    <string name="room_recents_conversations">חדרים</string>
-    <string name="room_recents_favourites">מועדפים</string>
-    <string name="room_recents_directory">תיקייה ראשית</string>
-    <string name="room_recents_join">הצטרף</string>
     <string name="search_is_not_supported_in_e2e_room">עדיין אין תמיכה בחיפוש בחדרים מוצפנים.</string>
     <string name="tab_title_search_files">קבצים</string>
     <string name="tab_title_search_people">אנשים</string>

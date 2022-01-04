@@ -489,18 +489,6 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="tab_title_search_people">JENDEA</string>
     <string name="tab_title_search_files">FITXATEGIAK</string>
 
-    <string name="room_recents_join">ELKARTU</string>
-    <string name="room_recents_directory">DIREKTORIOA</string>
-    <string name="room_recents_favourites">GOGOKOAK</string>
-    <string name="room_recents_conversations">GELAK</string>
-    <string name="room_recents_low_priority">LEHENTASUN BAXUA</string>
-    <string name="room_recents_invites">GONBIDAPENAK</string>
-    <string name="room_recents_start_chat">Hasi txata</string>
-    <string name="room_recents_create_room">Sortu gela</string>
-    <string name="room_recents_join_room">Elkartu gelara</string>
-    <string name="room_recents_join_room_title">Elkartu gela batetara</string>
-    <string name="room_recents_join_room_prompt">Idatzi gelaren IDa edo ezizena</string>
-
     <string name="directory_search_results_title">Arakatu direktorioa</string>
     <string name="directory_searching_title">Direktorioa bilatzen…</string>
 

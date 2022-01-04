@@ -447,17 +447,6 @@
     <string name="tab_title_search_messages">MESAJLAR</string>
     <string name="tab_title_search_people">KİŞİLER</string>
     <string name="tab_title_search_files">DOSYALAR</string>
-    <string name="room_recents_join">KATIL</string>
-    <string name="room_recents_directory">DİZİN</string>
-    <string name="room_recents_favourites">FAVORİLER</string>
-    <string name="room_recents_conversations">ODALAR</string>
-    <string name="room_recents_low_priority">DÜŞÜK ÖNCELİK</string>
-    <string name="room_recents_invites">DAVETLER</string>
-    <string name="room_recents_start_chat">Sohbet başlat</string>
-    <string name="room_recents_create_room">Oda oluştur</string>
-    <string name="room_recents_join_room">Odaya katıl</string>
-    <string name="room_recents_join_room_title">Bir odaya katıl</string>
-    <string name="room_recents_join_room_prompt">Oda ID\'si ya da takma adı girin</string>
     <string name="directory_search_results_title">Dizinlere gözat</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">1 oda</item>

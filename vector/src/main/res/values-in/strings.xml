@@ -413,17 +413,6 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="tab_title_search_messages">PESAN</string>
     <string name="tab_title_search_people">ORANG</string>
     <string name="tab_title_search_files">BERKAS</string>
-    <string name="room_recents_join">GABUNG</string>
-    <string name="room_recents_directory">DIREKTORI</string>
-    <string name="room_recents_favourites">FAVORIT</string>
-    <string name="room_recents_conversations">RUANG</string>
-    <string name="room_recents_low_priority">PRIORITAS RENDAH</string>
-    <string name="room_recents_invites">UNDANGAN</string>
-    <string name="room_recents_start_chat">Mulai percakapan</string>
-    <string name="room_recents_create_room">Buat ruang</string>
-    <string name="room_recents_join_room">Gabung ke ruang</string>
-    <string name="room_recents_join_room_title">Gabung ke ruang</string>
-    <string name="room_recents_join_room_prompt">Ketik id atau alias ruang</string>
     <string name="directory_search_results_title">Jelajahi direktori</string>
     <plurals name="directory_search_rooms">
         <item quantity="other">%d ruangan</item>

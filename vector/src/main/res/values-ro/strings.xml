@@ -183,12 +183,10 @@
         <item quantity="few">%d camere</item>
         <item quantity="other">%d de camere</item>
     </plurals>
-    <string name="room_recents_conversations">CAMERE</string>
     <string name="tab_title_search_rooms">CAMERE</string>
     <string name="rooms_header">Camere</string>
     <string name="suggested_header">Camere sugerate</string>
     <string name="bottom_action_rooms">Camere</string>
-    <string name="room_recents_favourites">FAVORITE</string>
     <string name="bottom_action_favourites">Favorite</string>
     <string name="settings_preferences">Preferințe</string>
     <string name="medium_email">Adresă de e-mail</string>

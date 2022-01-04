@@ -395,17 +395,6 @@
         <item quantity="other">%d ঘরগুলি</item>
     </plurals>
     <string name="directory_search_results_title">ব্রাউস নির্দেশনা</string>
-    <string name="room_recents_join_room_prompt">আদর্শ ঘরের পরিচয় অথবা একটা ঘর আর উপনাম</string>
-    <string name="room_recents_join_room_title">যোগকরুন একটা ঘর</string>
-    <string name="room_recents_join_room">যোগদান করুন ঘরে</string>
-    <string name="room_recents_create_room">ঘর তৈরিকরা</string>
-    <string name="room_recents_start_chat">চ্যাট শুরু করুন</string>
-    <string name="room_recents_invites">আমন্ত্রণ</string>
-    <string name="room_recents_low_priority">কম গুরুত্ব</string>
-    <string name="room_recents_conversations">ঘরগুলি</string>
-    <string name="room_recents_favourites">প্রিয়</string>
-    <string name="room_recents_directory">নির্দেশক</string>
-    <string name="room_recents_join">যোগদান</string>
     <string name="tab_title_search_files">নথি</string>
     <string name="tab_title_search_people">লোকজন</string>
     <string name="tab_title_search_messages">বার্তাগুলি</string>

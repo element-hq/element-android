@@ -627,18 +627,6 @@
     <string name="tab_title_search_messages">СООБЩЕНИЯ</string>
     <string name="tab_title_search_people">ЛЮДИ</string>
     <string name="tab_title_search_files">ФАЙЛЫ</string>
-    <!-- Room recents -->
-    <string name="room_recents_join">ПРИСОЕДИНИЛИСЬ</string>
-    <string name="room_recents_directory">КАТАЛОГ</string>
-    <string name="room_recents_favourites">ИЗБРАННОЕ</string>
-    <string name="room_recents_conversations">КОМНАТЫ</string>
-    <string name="room_recents_low_priority">МАЛОВАЖНЫЕ</string>
-    <string name="room_recents_invites">ПРИГЛАШЕНИЯ</string>
-    <string name="room_recents_start_chat">Начать чат</string>
-    <string name="room_recents_create_room">Создать комнату</string>
-    <string name="room_recents_join_room">Войти в комнату</string>
-    <string name="room_recents_join_room_title">Войти в комнату</string>
-    <string name="room_recents_join_room_prompt">Введите ID комнаты или псевдоним</string>
     <!-- Directory -->
     <string name="directory_search_results_title">Просмотр каталога</string>
     <string name="directory_searching_title">Поиск в каталоге…</string>

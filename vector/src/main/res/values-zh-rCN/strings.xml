@@ -329,10 +329,6 @@
     <string name="tab_title_search_rooms">聊天室</string>
     <string name="tab_title_search_messages">消息</string>
     <string name="tab_title_search_files">文件</string>
-    <string name="room_recents_join">加入</string>
-    <string name="room_recents_conversations">聊天室</string>
-    <string name="room_recents_start_chat">开始聊天</string>
-    <string name="room_recents_create_room">创建聊天室</string>
     <string name="room_settings_direct_chat">私聊</string>
     <string name="room_sliding_menu_messages">消息</string>
     <string name="room_sliding_menu_settings">设置</string>
@@ -448,8 +444,6 @@
 \n注意，此操作会重启应用并将花费一些时间。</string>
     <string name="room_event_action_cancel_upload">取消上传</string>
     <string name="room_event_action_cancel_download">取消下载</string>
-    <string name="room_recents_favourites">收藏夹</string>
-    <string name="room_recents_low_priority">低优先级</string>
     <string name="room_settings_de_prioritize">降低优先级</string>
     <string name="room_settings_leave_conversation">退出对话</string>
     <string name="room_sliding_menu_copyright">版权</string>
@@ -598,8 +592,6 @@
     <string name="ssl_cert_not_trust">这可能意味着有人正在恶意劫持你的流量，或者你的手机不信任远程服务器提供的数字证书。</string>
     <string name="ssl_cert_new_account_expl">如果服务器管理员说这是预期的情况，请确保下面的指纹与管理员提供的指纹相匹配。</string>
     <string name="room_event_action_report_prompt_reason">报告这个内容的原因</string>
-    <string name="room_recents_directory">目录</string>
-    <string name="room_recents_invites">邀请</string>
     <string name="directory_search_results_title">浏览目录</string>
     <string name="directory_searching_title">正在搜索目录…</string>
     <string name="room_settings_favourite">收藏夹</string>
@@ -723,9 +715,6 @@
     <string name="historical_placeholder">搜索历史</string>
     <string name="action_historical">历史消息</string>
     <string name="people_search_invite_by_id"><u>用 ID 邀请</u></string>
-    <string name="room_recents_join_room">进入聊天室</string>
-    <string name="room_recents_join_room_title">进入一个聊天室</string>
-    <string name="room_recents_join_room_prompt">输入聊天室 ID 或者聊天室别名</string>
     <string name="room_jump_to_first_unread">跳到未读</string>
     <string name="settings_home_display">主页显示</string>
     <string name="settings_pin_missed_notifications">固定含错过通知的聊天室</string>

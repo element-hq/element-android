@@ -357,17 +357,6 @@
     <string name="tab_title_search_messages">WIADOMOŚCI</string>
     <string name="tab_title_search_people">LUDZIE</string>
     <string name="tab_title_search_files">PLIKI</string>
-    <string name="room_recents_join">DOŁĄCZ</string>
-    <string name="room_recents_directory">KATALOG</string>
-    <string name="room_recents_favourites">ULUBIONE</string>
-    <string name="room_recents_conversations">POKÓJ</string>
-    <string name="room_recents_low_priority">NISKI PRIORYTET</string>
-    <string name="room_recents_invites">ZAPROSZENIA</string>
-    <string name="room_recents_start_chat">Rozpocznij rozmowę</string>
-    <string name="room_recents_create_room">Utwórz pokój</string>
-    <string name="room_recents_join_room">Dołącz do pokoju</string>
-    <string name="room_recents_join_room_title">Dołącz do pokoju</string>
-    <string name="room_recents_join_room_prompt">Wprowadź ID lub nazwę pokoju</string>
     <string name="directory_search_results_title">Przeglądaj katalog</string>
     <string name="directory_searching_title">Przeszukiwanie katalogu…</string>
     <string name="room_settings_favourite">Dodaj do ulubionych</string>

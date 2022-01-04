@@ -610,18 +610,6 @@
     <string name="tab_title_search_messages">MESSAGGI</string>
     <string name="tab_title_search_people">UTENTI</string>
     <string name="tab_title_search_files">FILE</string>
-    <!-- Room recents -->
-    <string name="room_recents_join">ENTRA</string>
-    <string name="room_recents_directory">ELENCO</string>
-    <string name="room_recents_favourites">PREFERITI</string>
-    <string name="room_recents_conversations">STANZE</string>
-    <string name="room_recents_low_priority">BASSA PRIORITÀ</string>
-    <string name="room_recents_invites">INVITI</string>
-    <string name="room_recents_start_chat">Avvia chat</string>
-    <string name="room_recents_create_room">Crea stanza</string>
-    <string name="room_recents_join_room">Entra nella stanza</string>
-    <string name="room_recents_join_room_title">Entra in una stanza</string>
-    <string name="room_recents_join_room_prompt">Digita l\'ID stanza o il suo nome</string>
     <!-- Directory -->
     <string name="directory_search_results_title">Esplora l\'elenco</string>
     <string name="directory_searching_title">Ricerca negli elenchi…</string>

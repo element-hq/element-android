@@ -450,14 +450,6 @@
     <string name="tab_title_search_people">参加者</string>
     <string name="tab_title_search_files">ファイル</string>
     <string name="tab_title_search_rooms">部屋</string>
-    <string name="room_recents_favourites">お気に入り</string>
-    <string name="room_recents_conversations">部屋</string>
-    <string name="room_recents_low_priority">低優先度</string>
-    <string name="room_recents_start_chat">会話を開始</string>
-    <string name="room_recents_create_room">部屋を作成</string>
-    <string name="room_recents_join_room">部屋へ参加</string>
-    <string name="room_recents_join_room_title">部屋へ参加</string>
-    <string name="room_recents_join">参加</string>
     <string name="directory_search_results_title">部屋一覧を見る</string>
     <string name="room_settings_leave_conversation">退室</string>
     <string name="room_sliding_menu_messages">会話</string>
@@ -602,9 +594,6 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="room_event_action_cancel_download">ダウンロードをキャンセルする</string>
     <string name="search_hint">検索</string>
     <string name="tab_title_search_messages">メッセージ</string>
-    <string name="room_recents_directory">ディレクトリ</string>
-    <string name="room_recents_invites">招待</string>
-    <string name="room_recents_join_room_prompt">部屋のIDまたは部屋のエイリアスを入力してください</string>
     <string name="directory_searching_title">ディレクトリを検索中…</string>
     <string name="room_sliding_menu_third_party_notices">サードパーティの通知</string>
     <string name="settings_app_info_link_summary">このアプリのシステムの情報を見る。</string>

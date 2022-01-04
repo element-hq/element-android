@@ -527,17 +527,6 @@
     <string name="tab_title_search_messages">SPRÁVY</string>
     <string name="tab_title_search_people">ĽUDIA</string>
     <string name="tab_title_search_files">SÚBORY</string>
-    <string name="room_recents_join">VSTÚPIŤ</string>
-    <string name="room_recents_directory">ADRESÁR</string>
-    <string name="room_recents_favourites">OBĽÚBENÉ</string>
-    <string name="room_recents_conversations">MIESTNOSTI</string>
-    <string name="room_recents_low_priority">NÍZKA PRIORITA</string>
-    <string name="room_recents_invites">POZVANIA</string>
-    <string name="room_recents_start_chat">Začať konverzáciu</string>
-    <string name="room_recents_create_room">Vytvoriť miestnosť</string>
-    <string name="room_recents_join_room">Vstúpiť do miestnosti</string>
-    <string name="room_recents_join_room_title">Vstúpiť do miestnosti</string>
-    <string name="room_recents_join_room_prompt">Zadajte alias alebo ID miestnosti</string>
     <string name="directory_search_results_title">Prezrieť adresár</string>
     <string name="directory_searching_title">Vyhľadávanie v adresári…</string>
     <string name="room_settings_favourite">Do obľúbených</string>

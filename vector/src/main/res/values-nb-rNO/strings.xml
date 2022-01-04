@@ -146,7 +146,6 @@
     <string name="room_event_action_cancel_download">Avbryt nedlasting</string>
     <string name="search_no_results">Ingen treff</string>
     <string name="tab_title_search_rooms">ROM</string>
-    <string name="room_recents_conversations">ROM</string>
     <string name="room_settings_mute">Demp</string>
     <string name="room_settings_direct_chat">Direktesamtale</string>
     <string name="room_settings_forget">Glem</string>
@@ -698,9 +697,6 @@
     <string name="room_details_people_invited_group_name">INVITERT</string>
     <string name="tab_title_search_messages">MELDINGER</string>
     <string name="tab_title_search_files">FILER</string>
-    <string name="room_recents_create_room">Opprett et rom</string>
-    <string name="room_recents_join_room">Bli med i rommet</string>
-    <string name="room_recents_join_room_title">Bli med i et rom</string>
     <string name="room_sliding_menu_term_and_conditions">Betingelser og vilkår</string>
     <string name="room_sliding_menu_privacy_policy">Personvernregler</string>
     <string name="settings_add_email_address">Legg til E-postadresse</string>
@@ -1023,12 +1019,6 @@
         <item quantity="other">%1$s rom funnet for %2$s</item>
     </plurals>
     <string name="directory_search_results_title">Bla gjennom katalogen</string>
-    <string name="room_recents_join_room_prompt">Skriv inn et rom-ID eller et romalias</string>
-    <string name="room_recents_start_chat">Start chat</string>
-    <string name="room_recents_low_priority">LAV PRIORITET</string>
-    <string name="room_recents_favourites">FAVORITTER</string>
-    <string name="room_recents_directory">KATALOG</string>
-    <string name="room_recents_join">BLI MED</string>
     <string name="search_is_not_supported_in_e2e_room">Søking i krypterte rom støttes ikke ennå.</string>
     <string name="tab_title_search_people">FOLK</string>
     <string name="room_event_action_report_prompt_reason">Årsak til å rapportere dette innholdet</string>
@@ -1613,7 +1603,6 @@
     <string name="settings_troubleshoot_test_foreground_service_started_title">Varslingstjeneste</string>
     <string name="settings_troubleshoot_test_play_services_title">Play Tjenester Sjekk</string>
     <string name="directory_searching_title">Søker i katalogen…</string>
-    <string name="room_recents_invites">INVITASJONER</string>
     <string name="dev_tools_error_no_content">Ikke noe innhold</string>
     <string name="event_status_a11y_sending">Sender</string>
     <string name="event_status_a11y_failed">Mislyktes</string>

@@ -407,14 +407,6 @@ Er du sikker?</string>
     <string name="tab_title_search_messages">MEDDELELSER</string>
     <string name="tab_title_search_people">FOLK</string>
     <string name="tab_title_search_files">FILER</string>
-    <string name="room_recents_directory">OVERSIGT</string>
-    <string name="room_recents_favourites">FAVORITTER</string>
-    <string name="room_recents_conversations">RUM</string>
-    <string name="room_recents_low_priority">LAV PRIORITET</string>
-    <string name="room_recents_invites">INVITATIONER</string>
-    <string name="room_recents_start_chat">Start chat</string>
-    <string name="room_recents_create_room">Opret rum</string>
-    <string name="room_recents_join_room_prompt">Indtast ID eller alias på et rum</string>
     <string name="directory_search_results_title">Gennemse oversigt</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">1 rum</item>

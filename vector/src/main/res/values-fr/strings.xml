@@ -444,16 +444,6 @@
     <string name="tab_title_search_messages">MESSAGES</string>
     <string name="tab_title_search_people">PARTICIPANTS</string>
     <string name="tab_title_search_files">FICHIERS</string>
-    <string name="room_recents_join">REJOINDRE</string>
-    <string name="room_recents_directory">RÉPERTOIRE</string>
-    <string name="room_recents_favourites">FAVORIS</string>
-    <string name="room_recents_conversations">SALONS</string>
-    <string name="room_recents_low_priority">PRIORITÉ BASSE</string>
-    <string name="room_recents_invites">INVITATIONS</string>
-    <string name="room_recents_start_chat">Nouvelle discussion</string>
-    <string name="room_recents_create_room">Créer un salon</string>
-    <string name="room_recents_join_room">Rejoindre le salon</string>
-    <string name="room_recents_join_room_title">Rejoindre un salon</string>
     <string name="directory_search_results_title">Parcourir le répertoire</string>
     <string name="directory_searching_title">Recherche dans le répertoire…</string>
     <string name="room_settings_favourite">Favori</string>
@@ -694,7 +684,6 @@
     <string name="room_event_action_report_prompt_ignore_user">Voulez-vous cacher tous les messages de cet utilisateur \?
 \n
 \nVeuillez noter que cette action redémarrera l’application et pourra prendre un certain temps.</string>
-    <string name="room_recents_join_room_prompt">Saisissez un identifiant ou un alias de salon</string>
     <string name="settings_turn_screen_on">Allumer l’écran pendant 3 secondes</string>
     <string name="settings_invited_to_room">Quand je suis invité sur un salon</string>
     <string name="settings_user_settings">Paramètres utilisateur</string>

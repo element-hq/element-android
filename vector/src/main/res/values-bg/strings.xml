@@ -517,17 +517,6 @@
     <string name="tab_title_search_messages">СЪОБЩЕНИЯ</string>
     <string name="tab_title_search_people">ХОРА</string>
     <string name="tab_title_search_files">ФАЙЛОВЕ</string>
-    <string name="room_recents_join">ВЛЕЗ</string>
-    <string name="room_recents_directory">ДИРЕКТОРИЯ</string>
-    <string name="room_recents_favourites">ЛЮБИМИ</string>
-    <string name="room_recents_conversations">СТАИ</string>
-    <string name="room_recents_low_priority">НИСЪК ПРИОРИТЕТ</string>
-    <string name="room_recents_invites">ПОКАНИ</string>
-    <string name="room_recents_start_chat">Започни чат</string>
-    <string name="room_recents_create_room">Създай стая</string>
-    <string name="room_recents_join_room">Присъедини се към стая</string>
-    <string name="room_recents_join_room_title">Присъединяване към стая</string>
-    <string name="room_recents_join_room_prompt">Напишете ID или псевдоним на стая</string>
     <string name="directory_search_results_title">Прегледай директорията</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">%d стая</item>

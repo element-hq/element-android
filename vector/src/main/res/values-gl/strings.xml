@@ -482,11 +482,6 @@
     <string name="tab_title_search_messages">MENSAXES</string>
     <string name="tab_title_search_people">XENTE</string>
     <string name="tab_title_search_files">FICHEIROS</string>
-    <string name="room_recents_invites">Convites</string>
-    <string name="room_recents_start_chat">Iniciar conversa</string>
-    <string name="room_recents_create_room">Crear sala</string>
-    <string name="room_recents_join_room">Unirse á sala</string>
-    <string name="room_recents_join_room_title">Unirse á sala</string>
     <string name="directory_searching_title">Buscando cartafol…</string>
     <string name="room_settings_all_messages_noisy">Todas as mensaxes (alto)</string>
     <string name="room_settings_all_messages">Todas as mensaxes</string>
@@ -779,11 +774,6 @@
     <string name="room_details_people_present_group_name">UNIUSE</string>
     <string name="room_event_action_cancel_upload">Cancelar a subida</string>
     <string name="room_event_action_cancel_download">Cancelar a descarga</string>
-    <string name="room_recents_join">UNIRSE</string>
-    <string name="room_recents_directory">DIRECTORIO</string>
-    <string name="room_recents_favourites">FAVORITOS</string>
-    <string name="room_recents_conversations">SALAS</string>
-    <string name="room_recents_low_priority">BAIXA PRIORIDADE</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">1 sala</item>
         <item quantity="other">%d salas</item>

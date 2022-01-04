@@ -506,17 +506,6 @@
     <string name="tab_title_search_messages">메시지</string>
     <string name="tab_title_search_people">사람</string>
     <string name="tab_title_search_files">파일</string>
-    <string name="room_recents_join">참가</string>
-    <string name="room_recents_directory">목록</string>
-    <string name="room_recents_favourites">즐겨찾기</string>
-    <string name="room_recents_conversations">방</string>
-    <string name="room_recents_low_priority">중요하지 않음</string>
-    <string name="room_recents_invites">초대</string>
-    <string name="room_recents_start_chat">대화 시작</string>
-    <string name="room_recents_create_room">방 만들기</string>
-    <string name="room_recents_join_room">방 참가하기</string>
-    <string name="room_recents_join_room_title">방 참가하기</string>
-    <string name="room_recents_join_room_prompt">방 ID나 방 별칭을 입력</string>
     <string name="directory_search_results_title">목록 찾기</string>
     <plurals name="directory_search_rooms">
         <item quantity="other">%d개의 방</item>

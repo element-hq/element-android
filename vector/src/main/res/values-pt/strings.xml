@@ -405,18 +405,6 @@ Note que esta acção irá reiniciar a aplicação e poderá levar algum tempo.<
     <string name="tab_title_search_messages">MENSAGENS</string>
     <string name="tab_title_search_people">PESSOAS</string>
     <string name="tab_title_search_files">FICHEIROS</string>
-    <!-- Room recents -->
-    <string name="room_recents_join">ENTRAR</string>
-    <string name="room_recents_directory">LISTAGEM</string>
-    <string name="room_recents_favourites">FAVORITOS</string>
-    <string name="room_recents_conversations">SALAS</string>
-    <string name="room_recents_low_priority">BAIXA PRIORIDADE</string>
-    <string name="room_recents_invites">CONVITES</string>
-    <string name="room_recents_start_chat">Iniciar conversa</string>
-    <string name="room_recents_create_room">Criar sala</string>
-    <string name="room_recents_join_room">Entrar na sala</string>
-    <string name="room_recents_join_room_title">Entrar numa sala</string>
-    <string name="room_recents_join_room_prompt">Insira o id ou o pseudónimo da sala</string>
     <!-- Directory -->
     <string name="directory_search_results_title">Navegar diretório</string>
     <string name="directory_searching_title">A pesquisar o directório…</string>

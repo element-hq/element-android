@@ -323,8 +323,6 @@
     <string name="search_hint">Nadi</string>
     <string name="search_members_hint">Sizdeg iɛeggalen n texxamt</string>
     <string name="search_no_results">Ulac igmad</string>
-    <string name="room_recents_start_chat">Bdu adiwenni</string>
-    <string name="room_recents_create_room">Rnu taxxamt</string>
     <string name="room_settings_all_messages_noisy">Iznan i meṛṛa (sɛan ṣṣut)</string>
     <string name="room_settings_all_messages">Iznan i meṛṛa</string>
     <string name="room_settings_mute">Sens imesli</string>
@@ -866,15 +864,6 @@
     <string name="tab_title_search_messages">IZNAN</string>
     <string name="tab_title_search_people">IMDANEN</string>
     <string name="tab_title_search_files">IFUYLA</string>
-    <string name="room_recents_join">RNU</string>
-    <string name="room_recents_directory">AKARAM</string>
-    <string name="room_recents_favourites">INURIFEN</string>
-    <string name="room_recents_conversations">TIXXAMIN</string>
-    <string name="room_recents_low_priority">TAZWART TADDAYT</string>
-    <string name="room_recents_invites">INEBGAWEN</string>
-    <string name="room_recents_join_room">Rnu ɣer texxamt</string>
-    <string name="room_recents_join_room_title">Rnu ɣer texxamt</string>
-    <string name="room_recents_join_room_prompt">Aru asulay n texxamt neɣ isem yettunefken i texxamt</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">1 texxamt</item>
         <item quantity="other">%d texxamin</item>

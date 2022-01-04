@@ -647,7 +647,6 @@
     <string name="room_participants_action_ignore">Ignorera</string>
     <string name="search_members_hint">Filtrera rumsmedlemmar</string>
     <string name="tab_title_search_rooms">RUM</string>
-    <string name="room_recents_conversations">RUM</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">%d rum</item>
         <item quantity="other">%d rum</item>
@@ -1292,16 +1291,6 @@
     <string name="search_hint">Sök</string>
     <string name="search_no_results">Inga resultat</string>
     <string name="tab_title_search_messages">MEDDELANDEN</string>
-    <string name="room_recents_join">GÅ MED</string>
-    <string name="room_recents_directory">KATALOG</string>
-    <string name="room_recents_favourites">FAVORITER</string>
-    <string name="room_recents_low_priority">LÅG PRIORITET</string>
-    <string name="room_recents_invites">INBJUDNINGAR</string>
-    <string name="room_recents_start_chat">Starta chatt</string>
-    <string name="room_recents_create_room">Skapa rum</string>
-    <string name="room_recents_join_room">Gå med i rum</string>
-    <string name="room_recents_join_room_title">Gå med i ett rum</string>
-    <string name="room_recents_join_room_prompt">Skriv ett rums-ID eller ett rumsalias</string>
     <string name="directory_search_results_title">Bläddra i katalogen</string>
     <string name="directory_searching_title">Söker i katalog…</string>
     <string name="room_settings_favourite">Favorit</string>

@@ -456,18 +456,6 @@
     <string name="tab_title_search_messages">BERICHTEN</string>
     <string name="tab_title_search_people">PERSONEN</string>
     <string name="tab_title_search_files">BESTANDEN</string>
-    <!-- Room recents -->
-    <string name="room_recents_join">TOETREDEN</string>
-    <string name="room_recents_directory">CATALOGUS</string>
-    <string name="room_recents_favourites">FAVORIETEN</string>
-    <string name="room_recents_conversations">GESPREKKEN</string>
-    <string name="room_recents_low_priority">LAGE PRIORITEIT</string>
-    <string name="room_recents_invites">UITNODIGINGEN</string>
-    <string name="room_recents_start_chat">Gesprek beginnen</string>
-    <string name="room_recents_create_room">Gesprek aanmaken</string>
-    <string name="room_recents_join_room">Gesprek toetreden</string>
-    <string name="room_recents_join_room_title">Treed een gesprek toe</string>
-    <string name="room_recents_join_room_prompt">Voer een gespreks(bij)naam in</string>
     <!-- Directory -->
     <string name="directory_search_results_title">Catalogus doorbladeren</string>
     <string name="directory_searching_title">Catalogus wordt doorzocht…</string>

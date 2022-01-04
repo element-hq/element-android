@@ -578,17 +578,6 @@ Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespē
     <string name="tab_title_search_messages">ZIŅAS</string>
     <string name="tab_title_search_people">CILVĒKI</string>
     <string name="tab_title_search_files">FAILI</string>
-    <string name="room_recents_join">PIEVIENOTIES</string>
-    <string name="room_recents_directory">KATALOGS</string>
-    <string name="room_recents_favourites">IZLASE</string>
-    <string name="room_recents_conversations">ISTABAS</string>
-    <string name="room_recents_low_priority">ZEMA PRIORITĀTE</string>
-    <string name="room_recents_invites">UZAICINĀJUMI</string>
-    <string name="room_recents_start_chat">Sākt saraksti</string>
-    <string name="room_recents_create_room">Izveidot istabu</string>
-    <string name="room_recents_join_room">Ieiet istabā</string>
-    <string name="room_recents_join_room_title">Ieiet istabā</string>
-    <string name="room_recents_join_room_prompt">Ievadiet istabas ID vai aliasu</string>
     <string name="directory_search_results_title">Pārlūkot katalogu</string>
     <string name="directory_searching_title">Meklē katalogā…</string>
     <string name="room_settings_all_messages_noisy">Visas ziņas (ar skaņu)</string>

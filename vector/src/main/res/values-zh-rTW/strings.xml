@@ -622,17 +622,6 @@
     <string name="tab_title_search_messages">訊息</string>
     <string name="tab_title_search_people">聯絡人</string>
     <string name="tab_title_search_files">檔案</string>
-    <string name="room_recents_join">加入</string>
-    <string name="room_recents_directory">目錄</string>
-    <string name="room_recents_favourites">最愛</string>
-    <string name="room_recents_conversations">聊天室</string>
-    <string name="room_recents_low_priority">低優先度</string>
-    <string name="room_recents_invites">邀請</string>
-    <string name="room_recents_start_chat">開始聊天</string>
-    <string name="room_recents_create_room">新建聊天室</string>
-    <string name="room_recents_join_room">加入聊天室</string>
-    <string name="room_recents_join_room_title">加入聊天室</string>
-    <string name="room_recents_join_room_prompt">輸入聊天室 ID 或聊天室別名</string>
     <string name="directory_search_results_title">瀏覽目錄</string>
     <plurals name="directory_search_rooms">
         <item quantity="other">%d 個聊天室</item>

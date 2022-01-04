@@ -259,16 +259,6 @@
     <string name="tab_title_search_messages">SKILABOÐ</string>
     <string name="tab_title_search_people">FÓLK</string>
     <string name="tab_title_search_files">SKRÁR</string>
-    <string name="room_recents_join">TAKA ÞÁTT</string>
-    <string name="room_recents_directory">MAPPA</string>
-    <string name="room_recents_favourites">EFTIRLÆTI</string>
-    <string name="room_recents_conversations">SPJALLRÁSIR</string>
-    <string name="room_recents_low_priority">LÍTILL FORGANGUR</string>
-    <string name="room_recents_invites">BOÐSGESTIR</string>
-    <string name="room_recents_start_chat">Hefja spjall</string>
-    <string name="room_recents_create_room">Búa til spjallrás</string>
-    <string name="room_recents_join_room">Taka þátt í spjallrás</string>
-    <string name="room_recents_join_room_title">Taka þátt í spjallrás</string>
     <string name="directory_search_results_title">Vafra í möppu</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">%d spjallrás</item>
@@ -626,7 +616,6 @@
     <string name="people_search_invite_by_id"><u>Bjóða miðað við auðkenni</u></string>
     <string name="people_search_local_contacts">TENGILIÐIR Á TÆKI (%d)</string>
     <string name="people_search_invite_by_id_dialog_title">Bjóða notendum miðað við auðkenni</string>
-    <string name="room_recents_join_room_prompt">Settu inn auðkenni eða samheiti spjallrásar</string>
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%1$s spjallrás fannst fyrir %2$s</item>
         <item quantity="other">%1$s spjallrásir fundust fyrir %2$s</item>

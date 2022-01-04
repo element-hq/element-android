@@ -348,17 +348,6 @@
     <string name="tab_title_search_people">ప్రజలు</string>
     <string name="tab_title_search_files">దస్త్రాలు</string>
 
-    <string name="room_recents_join">చేరు</string>
-    <string name="room_recents_directory">డైరెక్టరీ</string>
-    <string name="room_recents_conversations">గదులు</string>
-    <string name="room_recents_low_priority">తక్కువ ప్రాధాన్యత</string>
-    <string name="room_recents_invites">ఆహ్వానాలు</string>
-    <string name="room_recents_start_chat">చాట్ ప్రారంభించండి</string>
-    <string name="room_recents_create_room">గదిని సృష్టించండి</string>
-    <string name="room_recents_join_room">గదిలో చేరండి</string>
-    <string name="room_recents_join_room_title">ఒక గదిలో చేరండి</string>
-    <string name="room_recents_join_room_prompt">ఒక గది id లేదా ఒక గది alias టైప్ చేయండి</string>
-
     <string name="directory_search_results_title">డైరెక్టరీలో విహరించండి</string>
     <string name="directory_searching_title">డైరెక్టరీని వెతుకుతున్నాం..</string>
 

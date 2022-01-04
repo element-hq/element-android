@@ -519,7 +519,6 @@
     <string name="room_message_placeholder_reply_to_not_encrypted">فرستادن یک پاسخ (رمزنشده)…</string>
     <string name="search_members_hint">پالایش اعضای اتاق</string>
     <string name="tab_title_search_rooms">اتاق‌ها</string>
-    <string name="room_recents_conversations">اتاق‌ها</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">%d اتاق</item>
         <item quantity="other">%d اتاق</item>
@@ -940,16 +939,6 @@
     <string name="search_hint">جست‌وجو</string>
     <string name="tab_title_search_people">افراد</string>
     <string name="tab_title_search_files">پرونده‌ها</string>
-    <string name="room_recents_join">پیوستن</string>
-    <string name="room_recents_directory">شاخه</string>
-    <string name="room_recents_favourites">محبوب‌ها</string>
-    <string name="room_recents_low_priority">کم‌اهمیت</string>
-    <string name="room_recents_invites">دعوت‌ها</string>
-    <string name="room_recents_start_chat">شروع گپ</string>
-    <string name="room_recents_create_room">ایجاد اتاق</string>
-    <string name="room_recents_join_room">پیوستن به اتاق</string>
-    <string name="room_recents_join_room_title">پیوستن به یک اتاق</string>
-    <string name="room_recents_join_room_prompt">شناسهٔ اتاق یا نام مستعارش را بنویسید</string>
     <string name="directory_search_results_title">مرور شاخه</string>
     <string name="directory_searching_title">جست‌وجو کردن شاخه…</string>
     <string name="room_settings_all_messages_noisy">تمام پیام‌ها (پرصدا)</string>

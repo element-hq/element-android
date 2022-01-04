@@ -410,18 +410,6 @@
     <string name="tab_title_search_messages">MENSAJES</string>
     <string name="tab_title_search_people">PERSONAS</string>
     <string name="tab_title_search_files">ARCHIVOS</string>
-    <!-- Room recents -->
-    <string name="room_recents_join">ENTRAR</string>
-    <string name="room_recents_directory">DIRECTORIO</string>
-    <string name="room_recents_favourites">FAVORITOS</string>
-    <string name="room_recents_conversations">SALAS</string>
-    <string name="room_recents_low_priority">BAJA PRIORIDAD</string>
-    <string name="room_recents_invites">INVITACIONES</string>
-    <string name="room_recents_start_chat">Comenzar chat</string>
-    <string name="room_recents_create_room">Crear sala</string>
-    <string name="room_recents_join_room">Unirse a la sala</string>
-    <string name="room_recents_join_room_title">Unirse a una sala</string>
-    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
     <!-- Directory -->
     <string name="directory_search_results_title">Buscar directorio</string>
     <string name="directory_searching_title">Buscando directorio…</string>

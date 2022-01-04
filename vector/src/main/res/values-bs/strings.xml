@@ -318,17 +318,6 @@ Da li ste sigurani?</string>
     <string name="tab_title_search_messages">PORUKE</string>
     <string name="tab_title_search_people">LJUDI</string>
     <string name="tab_title_search_files">FAJLOVI</string>
-    <string name="room_recents_join">PRIDRUŽI SE</string>
-    <string name="room_recents_directory">DIREKTORIJ</string>
-    <string name="room_recents_favourites">FAVORITI</string>
-    <string name="room_recents_conversations">SOBE</string>
-    <string name="room_recents_low_priority">NISKI PRIORITET</string>
-    <string name="room_recents_invites">POZIVI</string>
-    <string name="room_recents_start_chat">Započni razgovor</string>
-    <string name="room_recents_create_room">Napravi sobu</string>
-    <string name="room_recents_join_room">Pridruži se sobi</string>
-    <string name="room_recents_join_room_title">Pridriži se u sobu</string>
-    <string name="room_recents_join_room_prompt">Upišite ID sobe ili alias sobe</string>
     <string name="directory_search_results_title">Pretražite imenik</string>
     <string name="directory_searching_title">Traži direktorij..</string>
     <string name="room_settings_favourite">Favorit</string>

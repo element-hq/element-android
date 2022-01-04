@@ -500,17 +500,6 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe."<
     <string name="tab_title_search_messages">ÜZENETEK</string>
     <string name="tab_title_search_people">EMBEREK</string>
     <string name="tab_title_search_files">FÁJLOK</string>
-    <string name="room_recents_join">BELÉPÉS</string>
-    <string name="room_recents_directory">KÖNYVTÁR</string>
-    <string name="room_recents_favourites">KEDVENCEK</string>
-    <string name="room_recents_conversations">SZOBÁK</string>
-    <string name="room_recents_low_priority">ALACSONY PRIORITÁSÚ</string>
-    <string name="room_recents_invites">MEGHÍVÁSOK</string>
-    <string name="room_recents_start_chat">Csevegés indítása</string>
-    <string name="room_recents_create_room">Szoba létrehozása</string>
-    <string name="room_recents_join_room">Csatlakozás szobához</string>
-    <string name="room_recents_join_room_title">Csatlakozás egy szobához</string>
-    <string name="room_recents_join_room_prompt">Írd be a szoba azonosítóját vagy nevét</string>
     <string name="directory_search_results_title">Könyvtár böngészése</string>
     <string name="directory_searching_title">Könyvtár keresése…</string>
     <string name="room_settings_favourite">Kedvenc</string>

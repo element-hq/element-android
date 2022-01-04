@@ -285,7 +285,6 @@
     <string name="room_details_settings">Agordoj</string>
     <string name="tab_title_search_people">PERSONOJ</string>
     <string name="tab_title_search_files">DOSIEROJ</string>
-    <string name="room_recents_join">ALIĜI</string>
     <string name="group_details_people">Personoj</string>
     <string name="group_details_rooms">Ĉambroj</string>
     <string name="no_users_placeholder">Neniuj uzantoj</string>
@@ -482,13 +481,6 @@
     <string name="search_no_results">Neniuj rezultoj</string>
     <string name="tab_title_search_rooms">ĈAMBROJ</string>
     <string name="tab_title_search_messages">MESAĜOJ</string>
-    <string name="room_recents_favourites">ELSTARIGITAJ</string>
-    <string name="room_recents_conversations">ĈAMBROJ</string>
-    <string name="room_recents_invites">INVITOJ</string>
-    <string name="room_recents_start_chat">Komenci babilon</string>
-    <string name="room_recents_create_room">Krei ĉambron</string>
-    <string name="room_recents_join_room">Aliĝi al ĉambro</string>
-    <string name="room_recents_join_room_title">Aliĝi al ĉambro</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">%d ĉambro</item>
         <item quantity="other">%d ĉambroj</item>
@@ -1877,8 +1869,6 @@
         <item quantity="one">%1$s ĉambro trovita por %2$s</item>
         <item quantity="other">%1$s ĉambroj trovitaj por %2$s</item>
     </plurals>
-    <string name="room_recents_join_room_prompt">Entajpu identigilon de ĉambro aŭ kromnomon de ĉambro</string>
-    <string name="room_recents_low_priority">MALALTA PRIORITATO</string>
     <string name="search_is_not_supported_in_e2e_room">Serĉado en ĉifritaj ĉambroj ankoraŭ en estas subtenata.</string>
     <string name="search_banned_user_hint">Filtri forbaritajn uzantojn</string>
     <string name="ssl_only_accept">Akceptu la atestilon nur se administranto de la servilo publikigis fingrospuron akordan kun tiu ĉi-supre.</string>
@@ -2351,7 +2341,6 @@
     <string name="room_settings_directory_visibility">Inkluzivigi la ĉambron en katalogo de ĉambroj</string>
     <string name="directory_searching_title">Serĉante tra katalogo…</string>
     <string name="directory_search_results_title">Foliumi katalogon</string>
-    <string name="room_recents_directory">KATALOGO</string>
     <string name="people_search_user_directory">KATALOGO DE UZANTOJ (%s)</string>
     <string name="user_directory_header">Katalogo de uzantoj</string>
     <string name="warning_room_not_created_yet">La ĉambro ankoraŭ ne kreiĝis. Ĉu nuligi kreadon de la ĉambro\?</string>

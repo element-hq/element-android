@@ -268,7 +268,6 @@
     <string name="room_sliding_menu_settings">ക്രമീകരണങ്ങൾ</string>
     <string name="room_sliding_menu_messages">സന്ദേശങ്ങൾ</string>
     <string name="room_settings_forget">മറക്കൂ</string>
-    <string name="room_recents_conversations">മുറികൾ</string>
     <string name="tab_title_search_files">ഫയലുകൾ</string>
     <string name="tab_title_search_people">ആളുകൾ</string>
     <string name="tab_title_search_messages">സന്ദേശങ്ങൾ</string>
@@ -382,10 +381,6 @@
         <item quantity="one">%d മുറി</item>
         <item quantity="other">%d മുറികൾ</item>
     </plurals>
-    <string name="room_recents_join_room_title">ഒരു മുറിയിൽ ചേരുക</string>
-    <string name="room_recents_join_room">മുറിയിൽ ചേരുക</string>
-    <string name="room_recents_create_room">മുറി സൃഷ്ടിക്കൂ</string>
-    <string name="room_recents_start_chat">ചാറ്റ് ആരംഭിക്കുക</string>
     <string name="search_no_results">ഫലങ്ങളൊന്നുമില്ല</string>
     <string name="room_details_title">മുറി വിശദാംശങ്ങൾ</string>
     <string name="room_permissions_change_topic">വിഷയം മാറ്റുക</string>
@@ -802,8 +797,6 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">പ്രാപ്തമാക്കുക</string>
     <string name="room_sliding_menu_copyright">പകർപ്പാവകാശം</string>
     <string name="room_settings_mute">നിശബ്ദമാക്കുക</string>
-    <string name="room_recents_invites">കഷണങ്ങൾ</string>
-    <string name="room_recents_join">ചേരുക</string>
     <string name="search_hint">തിരയുക</string>
     <string name="ssl_remain_offline">അവഗണിക്കുക</string>
     <string name="room_participants_action_unban">നിരോധനം മാറ്റുക</string>
@@ -890,7 +883,6 @@
     <string name="room_settings_direct_chat">നേരിട്ടുള്ള ചാറ്റ്</string>
     <string name="directory_searching_title">ഡയറക്‌ടറിയിൽ തിരയുന്നു…</string>
     <string name="directory_search_results_title">ഡയറക്ടറി ബ്രൗസ് ചെയ്യുക</string>
-    <string name="room_recents_low_priority">കുറഞ്ഞ മുൻ‌ഗണന</string>
     <string name="room_event_action_cancel_download">ഡൗൺലോഡ് റദ്ദാക്കുക</string>
     <string name="room_event_action_cancel_upload">അപ്‌ലോഡ് റദ്ദാക്കുക</string>
     <plurals name="room_details_selected">

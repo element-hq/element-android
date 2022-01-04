@@ -1448,17 +1448,6 @@
     <string name="room_settings_all_messages_noisy">Notification sonore pour chaque message</string>
     <string name="directory_searching_title">Recherche dans le répertoire…</string>
     <string name="directory_search_results_title">Parcourir le répertoire</string>
-    <string name="room_recents_join_room_prompt">Saisissez un identifiant ou un alias de salon</string>
-    <string name="room_recents_join_room_title">Rejoindre un salon</string>
-    <string name="room_recents_join_room">Rejoindre le salon</string>
-    <string name="room_recents_create_room">Créer un salon</string>
-    <string name="room_recents_start_chat">Nouvelle discussion</string>
-    <string name="room_recents_invites">INVITATIONS</string>
-    <string name="room_recents_low_priority">PRIORITÉ BASSE</string>
-    <string name="room_recents_conversations">SALONS</string>
-    <string name="room_recents_favourites">FAVORIS</string>
-    <string name="room_recents_directory">RÉPERTOIRE</string>
-    <string name="room_recents_join">REJOINDRE</string>
     <string name="search_is_not_supported_in_e2e_room">La recherche dans les salons chiffrés n\'est pas encore prise en charge.</string>
     <string name="tab_title_search_files">FICHIERS</string>
     <string name="tab_title_search_people">PARTICIPANTS</string>

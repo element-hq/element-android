@@ -560,19 +560,6 @@
     <string name="tab_title_search_messages">VIESTIT</string>
     <string name="tab_title_search_people">HENKILÖT</string>
     <string name="tab_title_search_files">TIEDOSTOT</string>
-    <!-- Room recents -->
-    <string name="room_recents_join">LIITY</string>
-    <string name="room_recents_directory">LUETTELO</string>
-    <string name="room_recents_favourites">SUOSIKIT</string>
-    <string name="room_recents_conversations">HUONEET</string>
-    <string name="room_recents_low_priority">MATALA TÄRKEYS</string>
-    <!-- ??? doesn't sound quite right, but -->
-    <string name="room_recents_invites">KUTSUT</string>
-    <string name="room_recents_start_chat">Aloita keskustelu</string>
-    <string name="room_recents_create_room">Luo huone</string>
-    <string name="room_recents_join_room">Liity huoneeseen</string>
-    <string name="room_recents_join_room_title">Liity huoneeseen</string>
-    <string name="room_recents_join_room_prompt">Syötä huonetunniste tai -alias</string>
     <!-- Directory -->
     <string name="directory_search_results_title">Selaa luetteloa</string>
     <string name="directory_searching_title">Haetaan luettelosta…</string>

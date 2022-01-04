@@ -859,11 +859,6 @@
     <string name="settings_profile_picture">Profylôfbylding</string>
     <string name="room_sliding_menu_version_x">Ferzje %s</string>
     <string name="room_sliding_menu_version">Ferzje</string>
-    <string name="room_recents_invites">ÚTNÛGINGEN</string>
-    <string name="room_recents_low_priority">LEGE PRIORITEIT</string>
-    <string name="room_recents_conversations">KEAMERS</string>
-    <string name="room_recents_favourites">FAVORITEN</string>
-    <string name="room_recents_directory">MAP</string>
     <string name="tab_title_search_rooms">KEAMERS</string>
     <string name="search_no_results">Gjin resultaten</string>
     <string name="room_event_action_cancel_download">Download annulearje</string>
@@ -1416,12 +1411,6 @@
         <item quantity="other">%d keamers</item>
     </plurals>
     <string name="directory_search_results_title">Katalogus trochblêdzje</string>
-    <string name="room_recents_join_room_prompt">Fier in petear(by)namme yn</string>
-    <string name="room_recents_join_room_title">In keamer yngean</string>
-    <string name="room_recents_join_room">De keamer yngean</string>
-    <string name="room_recents_create_room">Petear oanmeitsje</string>
-    <string name="room_recents_start_chat">Petear starte</string>
-    <string name="room_recents_join">LID WURDE</string>
     <string name="search_is_not_supported_in_e2e_room">Sykjen yn fersifere keamers wurdt op dit stuit net stipe.</string>
     <string name="tab_title_search_files">BESTANNEN</string>
     <string name="tab_title_search_people">PERSOANEN</string>

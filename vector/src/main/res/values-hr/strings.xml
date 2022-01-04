@@ -454,17 +454,6 @@
     <string name="tab_title_search_messages">PORUKE</string>
     <string name="tab_title_search_people">OSOBE</string>
     <string name="tab_title_search_files">DATOTEKE</string>
-    <string name="room_recents_join">PRIDRUŽILI SE</string>
-    <string name="room_recents_directory">POPIS</string>
-    <string name="room_recents_favourites">OMILJENO</string>
-    <string name="room_recents_conversations">SOBE</string>
-    <string name="room_recents_low_priority">NISKI PRIORITET</string>
-    <string name="room_recents_invites">POZIVNICE</string>
-    <string name="room_recents_start_chat">Započni ćaskanje</string>
-    <string name="room_recents_create_room">Izradi sobu</string>
-    <string name="room_recents_join_room">Pridruži se sobi</string>
-    <string name="room_recents_join_room_title">Pridruži se sobi</string>
-    <string name="room_recents_join_room_prompt">Unesite identitet ili alternativni naziv sobe</string>
     <string name="directory_search_results_title">Pregledaj popis</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">%d soba</item>

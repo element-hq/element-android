@@ -1432,17 +1432,6 @@
         <item quantity="other">%d phòng</item>
     </plurals>
     <string name="directory_search_results_title">Duyệt danh mục phòng</string>
-    <string name="room_recents_join_room_prompt">Nhập ID hoặc tên phòng</string>
-    <string name="room_recents_join_room_title">Tham gia phòng</string>
-    <string name="room_recents_join_room">Tham gia phòng</string>
-    <string name="room_recents_create_room">Tạo phòng</string>
-    <string name="room_recents_start_chat">Bắt đầu chat</string>
-    <string name="room_recents_invites">LỜI MỜI</string>
-    <string name="room_recents_low_priority">ƯU TIÊN THẤP</string>
-    <string name="room_recents_conversations">PHÒNG</string>
-    <string name="room_recents_favourites">YÊU THÍCH</string>
-    <string name="room_recents_directory">DANH MỤC</string>
-    <string name="room_recents_join">THAM GIA</string>
     <string name="search_is_not_supported_in_e2e_room">Tìm kiếm trong phòng mã hóa chưa được hỗ trợ.</string>
     <string name="tab_title_search_files">FILES</string>
     <string name="tab_title_search_people">NGƯỜI</string>

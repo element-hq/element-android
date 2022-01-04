@@ -636,16 +636,6 @@
     <string name="tab_title_search_messages">SÕNUMID</string>
     <string name="tab_title_search_people">INIMESED</string>
     <string name="tab_title_search_files">FAILID</string>
-    <string name="room_recents_join">LIITU</string>
-    <string name="room_recents_favourites">LEMMIKUD</string>
-    <string name="room_recents_conversations">JUTUTOAD</string>
-    <string name="room_recents_low_priority">VÄHETÄHTIS</string>
-    <string name="room_recents_invites">KUTSED</string>
-    <string name="room_recents_start_chat">Alusta vestlust</string>
-    <string name="room_recents_create_room">Loo jututuba</string>
-    <string name="room_recents_join_room">Liitu jututoaga</string>
-    <string name="room_recents_join_room_title">Liitu jututoaga</string>
-    <string name="room_recents_join_room_prompt">Sisesta jututoa tunnus, nimi või alias</string>
     <string name="directory_search_results_title">Sirvi kataloogi</string>
     <string name="room_settings_direct_chat">Otsevestlus</string>
     <string name="active_widget_view_action">VAATA</string>
@@ -1209,7 +1199,6 @@
     <string name="ssl_remain_offline">Eira</string>
     <string name="ssl_fingerprint_hash">Sõrmejälg (%s):</string>
     <string name="ssl_could_not_verify">Serveri õigsust ei olnud võimalik kontrollida.</string>
-    <string name="room_recents_directory">LOEND</string>
     <string name="settings_notification_troubleshoot">Lahenda teavitustega seotud vigu</string>
     <string name="settings_troubleshoot_diagnostic">Vigade tuvastamine</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Käivita testid</string>
