@@ -19,6 +19,7 @@ package im.vector.app.features.crypto.verification.conclusion
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
 import im.vector.app.core.epoxy.bottomSheetDividerItem
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
@@ -53,7 +54,8 @@ class VerificationConclusionController @Inject constructor(
                     id("notice")
                     notice(host.stringProvider.getString(
                             if (state.isSelfVerification) R.string.verification_conclusion_ok_self_notice
-                            else R.string.verification_conclusion_ok_notice))
+                            else R.string.verification_conclusion_ok_notice)
+                            .toEpoxyCharSequence())
                 }
 
                 bottomSheetVerificationBigImageItem {
@@ -66,7 +68,7 @@ class VerificationConclusionController @Inject constructor(
             ConclusionState.WARNING   -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
-                    notice(host.stringProvider.getString(R.string.verification_conclusion_not_secure))
+                    notice(host.stringProvider.getString(R.string.verification_conclusion_not_secure).toEpoxyCharSequence())
                 }
 
                 bottomSheetVerificationBigImageItem {
@@ -76,7 +78,7 @@ class VerificationConclusionController @Inject constructor(
 
                 bottomSheetVerificationNoticeItem {
                     id("warning_notice")
-                    notice(host.eventHtmlRenderer.render(host.stringProvider.getString(R.string.verification_conclusion_compromised)))
+                    notice(host.eventHtmlRenderer.render(host.stringProvider.getString(R.string.verification_conclusion_compromised)).toEpoxyCharSequence())
                 }
 
                 bottomDone()
@@ -84,7 +86,7 @@ class VerificationConclusionController @Inject constructor(
             ConclusionState.CANCELLED -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice_cancelled")
-                    notice(host.stringProvider.getString(R.string.verify_cancelled_notice))
+                    notice(host.stringProvider.getString(R.string.verify_cancelled_notice).toEpoxyCharSequence())
                 }
 
                 bottomSheetDividerItem {

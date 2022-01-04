@@ -2008,7 +2008,7 @@
     <string name="initialize_cross_signing">Inizializza la firma incrociata</string>
     <string name="reset_cross_signing">Reimposta chiavi</string>
     <string name="a11y_qr_code_for_verification">Codice QR</string>
-    <string name="qr_code_scanned_by_other_notice">Quasi fatto! %s sta mostrando lo stesso badge\?</string>
+    <string name="qr_code_scanned_by_other_notice">Quasi fatto! %s sta mostrando una spunta\?</string>
     <string name="qr_code_scanned_by_other_yes">Sì</string>
     <string name="qr_code_scanned_by_other_no">No</string>
     <string name="no_connectivity_to_the_server_indicator">La connessione al server è stata persa</string>
@@ -2107,7 +2107,7 @@
     <string name="encryption_not_enabled">Crittografia non attiva</string>
     <string name="encryption_unknown_algorithm_tile_description">La crittografia usata in questa stanza non è supportata</string>
     <string name="room_created_summary_item">%s ha creato e configurato la stanza.</string>
-    <string name="qr_code_scanned_self_verif_notice">Quasi fatto! L\'altro dispositivo sta mostrando lo stesso badge\?</string>
+    <string name="qr_code_scanned_self_verif_notice">Quasi fatto! L\'altro dispositivo sta mostrando una spunta\?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Quasi fatto! In attesa della conferma…</string>
     <string name="qr_code_scanned_verif_waiting">In attesa di %s…</string>
     <string name="error_failed_to_import_keys">Importazione chiavi fallita</string>
@@ -3082,4 +3082,53 @@
     <string name="settings_discovery_consent_notice_off_2">I tuoi contatti sono privati. Per trovare utenti dai tuoi contatti, ci serve l\'autorizzazione per inviare le informazioni dei contatti al tuo server d\'identità.</string>
     <string name="shortcut_disabled_reason_sign_out">La sessione è stata disconnessa!</string>
     <string name="shortcut_disabled_reason_room_left">La stanza è stata lasciata!</string>
+    <string name="identity_server_consent_dialog_content_question">Sei d\'accordo con l\'invio di queste informazioni\?</string>
+    <string name="identity_server_consent_dialog_content_3">Per trovare i contatti esistenti, devi inviare le informazioni dei contatti (email e numeri di telefono) al tuo server d\'identità. Facciamo un hash dei dati prima di inviarli per privacy.</string>
+    <string name="action_not_now">Non ora</string>
+    <string name="delete_poll_dialog_content">Vuoi davvero rimuovere questo sondaggio\? Non potrai recuperarlo una volta rimosso.</string>
+    <string name="delete_poll_dialog_title">Rimuovi sondaggio</string>
+    <string name="poll_end_room_list_preview">Sondaggio terminato</string>
+    <string name="poll_response_room_list_preview">Voto inviato</string>
+    <string name="labs_enable_polls">Attiva sondaggi</string>
+    <string name="end_poll_confirmation_approve_button">Termina sondaggio</string>
+    <string name="end_poll_confirmation_description">Ciò impedirà alle persone di poter votare e mostrerà i risultati finali del sondaggio.</string>
+    <string name="end_poll_confirmation_title">Terminare questo sondaggio\?</string>
+    <string name="a11y_poll_winner_option">opzione vincente</string>
+    <string name="poll_end_action">Termina sondaggio</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Risultato finale basato su %1$d voto</item>
+        <item quantity="other">Risultato finale basato su %1$d voti</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">Nessun voto</item>
+        <item quantity="other">%1$d voti. Vota per vedere i risultati</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">Basato su %1$d voto</item>
+        <item quantity="other">Basato su %1$d voti</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d voto</item>
+        <item quantity="other">%1$d voti</item>
+    </plurals>
+    <string name="preference_system_settings">Impostazioni di sistema</string>
+    <string name="preference_versions">Versioni</string>
+    <string name="preference_help_summary">Ricevi aiuto nell\'uso di Element</string>
+    <string name="preference_help_title">Aiuto e supporto</string>
+    <string name="preference_help">Aiuto</string>
+    <string name="preference_root_legals">Informazioni legali</string>
+    <string name="legals_no_policy_provided">Questo server non presenta alcuna informativa.</string>
+    <string name="legals_third_party_notices">Librerie di terze parti</string>
+    <string name="legals_identity_server_title">L\'informativa del tuo server d\'identità</string>
+    <string name="legals_home_server_title">L\'informativa del tuo homeserver</string>
+    <string name="template_legals_application_title">Informativa di ${app_name}</string>
+    <string name="analytics_opt_in_list_item_3">Puoi disattivarlo in qualsiasi momento nelle impostazioni</string>
+    <string name="analytics_opt_in_list_item_2"><b>Non</b> condividiamo informazioni con terze parti</string>
+    <string name="analytics_opt_in_list_item_1"><b>Non</b> registriamo o profiliamo alcun dato dell\'account</string>
+    <string name="analytics_opt_in_content_link">qui</string>
+    <string name="analytics_opt_in_content">Aiutaci a identificare problemi e a migliorare Element condividendo dati di utilizzo anonimi. Per capire come le persone usano diversi dispositivi, genereremo un identificativo casuale, condiviso dai tuoi dispositivi.
+\n
+\nPuoi leggere i nostri termini di servizio %s.</string>
+    <string name="analytics_opt_in_title">Aiuta a migliorare Element</string>
+    <string name="action_enable">Attiva</string>
 </resources>

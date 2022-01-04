@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
+import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
@@ -27,6 +28,7 @@ import dagger.Lazy
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
@@ -48,12 +50,13 @@ import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
-import im.vector.app.features.home.room.detail.timeline.item.MessageOptionsItem_
-import im.vector.app.features.home.room.detail.timeline.item.MessagePollItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageTextItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageVoiceItem_
+import im.vector.app.features.home.room.detail.timeline.item.PollItem
+import im.vector.app.features.home.room.detail.timeline.item.PollItem_
+import im.vector.app.features.home.room.detail.timeline.item.PollOptionViewState
 import im.vector.app.features.home.room.detail.timeline.item.RedactedMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.RedactedMessageItem_
 import im.vector.app.features.home.room.detail.timeline.item.VerificationRequestItem
@@ -70,6 +73,7 @@ import im.vector.app.features.media.VideoContentRenderer
 import me.gujun.android.span.span
 import org.commonmark.node.Document
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -80,14 +84,11 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageEmoteContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageNoticeContent
-import org.matrix.android.sdk.api.session.room.model.message.MessageOptionsContent
-import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
-import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_BUTTONS
-import org.matrix.android.sdk.api.session.room.model.message.OPTION_TYPE_POLL
 import org.matrix.android.sdk.api.session.room.model.message.getFileName
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
@@ -168,41 +169,67 @@ class MessageItemFactory @Inject constructor(
                 }
             }
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageOptionsContent             -> buildOptionsMessageItem(messageContent, informationData, highlight, callback, attributes)
-            is MessagePollResponseContent        -> noticeItemFactory.create(params)
+            is MessagePollContent                -> buildPollContent(messageContent, informationData, highlight, callback, attributes)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
     }
 
-    private fun buildOptionsMessageItem(messageContent: MessageOptionsContent,
-                                        informationData: MessageInformationData,
-                                        highlight: Boolean,
-                                        callback: TimelineEventController.Callback?,
-                                        attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
-        return when (messageContent.optionType) {
-            OPTION_TYPE_POLL    -> {
-                MessagePollItem_()
-                        .attributes(attributes)
-                        .callback(callback)
-                        .informationData(informationData)
-                        .leftGuideline(avatarSizeProvider.leftGuideline)
-                        .optionsContent(messageContent)
-                        .highlighted(highlight)
-            }
-            OPTION_TYPE_BUTTONS -> {
-                MessageOptionsItem_()
-                        .attributes(attributes)
-                        .callback(callback)
-                        .informationData(informationData)
-                        .leftGuideline(avatarSizeProvider.leftGuideline)
-                        .optionsContent(messageContent)
-                        .highlighted(highlight)
-            }
-            else                -> {
-                // Not supported optionType
-                buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
+    private fun buildPollContent(pollContent: MessagePollContent,
+                                 informationData: MessageInformationData,
+                                 highlight: Boolean,
+                                 callback: TimelineEventController.Callback?,
+                                 attributes: AbsMessageItem.Attributes): PollItem? {
+        val optionViewStates = mutableListOf<PollOptionViewState>()
+
+        val pollResponseSummary = informationData.pollResponseAggregatedSummary
+        val isEnded = pollResponseSummary?.isClosed.orFalse()
+        val didUserVoted = pollResponseSummary?.myVote?.isNotEmpty().orFalse()
+        val winnerVoteCount = pollResponseSummary?.winnerVoteCount
+        val isPollSent = informationData.sendState.isSent()
+        val totalVotesText = (pollResponseSummary?.totalVotes ?: 0).let {
+            when {
+                isEnded      -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_after_ended, it, it)
+                didUserVoted -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, it, it)
+                else         -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_not_voted, it, it)
             }
         }
+
+        pollContent.pollCreationInfo?.answers?.forEach { option ->
+            val voteSummary = pollResponseSummary?.votes?.get(option.id)
+            val isMyVote = pollResponseSummary?.myVote == option.id
+            val voteCount = voteSummary?.total ?: 0
+            val votePercentage = voteSummary?.percentage ?: 0.0
+            val optionId = option.id ?: ""
+            val optionAnswer = option.answer ?: ""
+
+            optionViewStates.add(
+                    if (!isPollSent) {
+                        // Poll event is not send yet. Disable option.
+                        PollOptionViewState.PollSending(optionId, optionAnswer)
+                    } else if (isEnded) {
+                        // Poll is ended. Disable option, show votes and mark the winner.
+                        val isWinner = winnerVoteCount != 0 && voteCount == winnerVoteCount
+                        PollOptionViewState.PollEnded(optionId, optionAnswer, voteCount, votePercentage, isWinner)
+                    } else if (didUserVoted) {
+                        // User voted to the poll, but poll is not ended. Enable option, show votes and mark the user's selection.
+                        PollOptionViewState.PollVoted(optionId, optionAnswer, voteCount, votePercentage, isMyVote)
+                    } else {
+                        // User didn't voted yet and poll is not ended yet. Enable options, hide votes.
+                        PollOptionViewState.PollReady(optionId, optionAnswer)
+                    }
+            )
+        }
+
+        return PollItem_()
+                .attributes(attributes)
+                .eventId(informationData.eventId)
+                .pollQuestion(pollContent.pollCreationInfo?.question?.question ?: "")
+                .pollSent(isPollSent)
+                .totalVotesText(totalVotesText)
+                .optionViewStates(optionViewStates)
+                .highlighted(highlight)
+                .leftGuideline(avatarSizeProvider.leftGuideline)
+                .callback(callback)
     }
 
     private fun buildAudioMessageItem(messageContent: MessageAudioContent,
@@ -472,24 +499,26 @@ class MessageItemFactory @Inject constructor(
                                      highlight: Boolean,
                                      callback: TimelineEventController.Callback?,
                                      attributes: AbsMessageItem.Attributes): MessageTextItem? {
-        val canUseTextFuture = spanUtils.canUseTextFuture(body)
+        val bindingOptions = spanUtils.getBindingOptions(body)
         val linkifiedBody = body.linkify(callback)
 
-        return MessageTextItem_().apply {
-            if (informationData.hasBeenEdited) {
-                val spannable = annotateWithEdited(linkifiedBody, callback, informationData)
-                message(spannable)
-            } else {
-                message(linkifiedBody)
-            }
-            if (informationData.sentByMe) {
-                layout(R.layout.item_timeline_event_bubble_outgoing_base)
-            } else {
-                layout(R.layout.item_timeline_event_bubble_incoming_base)
-            }
-        }
+        return MessageTextItem_()
+                .message(
+                        if (informationData.hasBeenEdited) {
+                            annotateWithEdited(linkifiedBody, callback, informationData)
+                        } else {
+                            linkifiedBody
+                        }.toEpoxyCharSequence()
+                )
+                .layout(
+                        if (informationData.sentByMe) {
+                            R.layout.item_timeline_event_bubble_outgoing_base
+                        } else {
+                            R.layout.item_timeline_event_bubble_incoming_base
+                        }
+                )
                 .useBigFont(linkifiedBody.length <= MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT * 2 && containsOnlyEmojis(linkifiedBody.toString()))
-                .canUseTextFuture(canUseTextFuture)
+                .bindingOptions(bindingOptions)
                 .searchForPills(isFormatted)
                 .previewUrlRetriever(callback?.getPreviewUrlRetriever())
                 .imageContentRenderer(imageContentRenderer)
@@ -509,18 +538,18 @@ class MessageItemFactory @Inject constructor(
                 .apply {
                     if (informationData.hasBeenEdited) {
                         val spannable = annotateWithEdited("", callback, informationData)
-                        editedSpan(spannable)
+                        editedSpan(spannable.toEpoxyCharSequence())
                     }
                 }
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)
-                .message(formattedBody)
+                .message(formattedBody.toEpoxyCharSequence())
     }
 
     private fun annotateWithEdited(linkifiedBody: CharSequence,
                                    callback: TimelineEventController.Callback?,
-                                   informationData: MessageInformationData): SpannableStringBuilder {
+                                   informationData: MessageInformationData): Spannable {
         val spannable = SpannableStringBuilder()
         spannable.append(linkifiedBody)
         val editedSuffix = stringProvider.getString(R.string.edited_suffix)
@@ -569,7 +598,7 @@ class MessageItemFactory @Inject constructor(
             textStyle = "italic"
         }
 
-        val canUseTextFuture = spanUtils.canUseTextFuture(htmlBody)
+        val bindingOptions = spanUtils.getBindingOptions(htmlBody)
         val message = formattedBody.linkify(callback)
 
         return MessageTextItem_()
@@ -578,8 +607,8 @@ class MessageItemFactory @Inject constructor(
                 .imageContentRenderer(imageContentRenderer)
                 .previewUrlCallback(callback)
                 .attributes(attributes)
-                .message(message)
-                .canUseTextFuture(canUseTextFuture)
+                .message(message.toEpoxyCharSequence())
+                .bindingOptions(bindingOptions)
                 .highlighted(highlight)
                 .movementMethod(createLinkMovementMethod(callback))
     }
@@ -592,18 +621,18 @@ class MessageItemFactory @Inject constructor(
         val formattedBody = SpannableStringBuilder()
         formattedBody.append("* ${informationData.memberName} ")
         formattedBody.append(messageContent.getHtmlBody())
-
+        val bindingOptions = spanUtils.getBindingOptions(formattedBody)
         val message = formattedBody.linkify(callback)
 
         return MessageTextItem_()
-                .apply {
-                    if (informationData.hasBeenEdited) {
-                        val spannable = annotateWithEdited(message, callback, informationData)
-                        message(spannable)
-                    } else {
-                        message(message)
-                    }
-                }
+                .message(
+                        if (informationData.hasBeenEdited) {
+                            annotateWithEdited(message, callback, informationData)
+                        } else {
+                            message
+                        }.toEpoxyCharSequence()
+                )
+                .bindingOptions(bindingOptions)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .previewUrlRetriever(callback?.getPreviewUrlRetriever())
                 .imageContentRenderer(imageContentRenderer)

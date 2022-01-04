@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.isTokenError
 import org.matrix.android.sdk.api.logger.LoggerTag
@@ -71,6 +72,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
     private var isStarted = false
     private var isTokenValid = true
     private var retryNoNetworkTask: TimerTask? = null
+    private var previousSyncResponseHasToDevice = false
 
     private val activeCallListObserver = Observer<MutableList<MxCall>> { activeCalls ->
         if (activeCalls.isEmpty() && backgroundDetectionObserver.isInBackground) {
@@ -171,12 +173,15 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                 if (state !is SyncState.Running) {
                     updateStateTo(SyncState.Running(afterPause = true))
                 }
-                // No timeout after a pause
-                val timeout = state.let { if (it is SyncState.Running && it.afterPause) 0 else DEFAULT_LONG_POOL_TIMEOUT }
+                val timeout = when {
+                    previousSyncResponseHasToDevice                        -> 0L /* Force timeout to 0 */
+                    state.let { it is SyncState.Running && it.afterPause } -> 0L /* No timeout after a pause */
+                    else                                                   -> DEFAULT_LONG_POOL_TIMEOUT
+                }
                 Timber.tag(loggerTag.value).d("Execute sync request with timeout $timeout")
                 val params = SyncTask.Params(timeout, SyncPresence.Online)
                 val sync = syncScope.launch {
-                    doSync(params)
+                    previousSyncResponseHasToDevice = doSync(params)
                 }
                 runBlocking {
                     sync.join()
@@ -203,10 +208,14 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
         }
     }
 
-    private suspend fun doSync(params: SyncTask.Params) {
-        try {
+    /**
+     * Will return true if the sync response contains some toDevice events.
+     */
+    private suspend fun doSync(params: SyncTask.Params): Boolean {
+        return try {
             val syncResponse = syncTask.execute(params)
             _syncFlow.emit(syncResponse)
+            syncResponse.toDevice?.events?.isNotEmpty().orFalse()
         } catch (failure: Throwable) {
             if (failure is Failure.NetworkConnection) {
                 canReachServer = false
@@ -229,6 +238,7 @@ internal class SyncThread @Inject constructor(private val syncTask: SyncTask,
                     delay(RETRY_WAIT_TIME_MS)
                 }
             }
+            false
         } finally {
             state.let {
                 if (it is SyncState.Running && it.afterPause) {

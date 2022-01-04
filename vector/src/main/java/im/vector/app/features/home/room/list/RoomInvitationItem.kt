@@ -39,7 +39,7 @@ abstract class RoomInvitationItem : VectorEpoxyModel<RoomInvitationItem.Holder>(
 
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
-    @EpoxyAttribute var secondLine: CharSequence? = null
+    @EpoxyAttribute var secondLine: String? = null
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
     @EpoxyAttribute lateinit var changeMembershipState: ChangeMembershipState
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var acceptListener: ClickListener? = null

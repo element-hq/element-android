@@ -22,6 +22,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
@@ -67,7 +68,7 @@ class AccountDataEpoxyController @Inject constructor(
                     dataList.forEach { accountData ->
                         genericWithValueItem {
                             id(accountData.type)
-                            title(accountData.type)
+                            title(accountData.type.toEpoxyCharSequence())
                             itemClickAction {
                                 host.interactionListener?.didTap(accountData)
                             }

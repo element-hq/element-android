@@ -32,7 +32,8 @@ internal interface UploadKeysTask : Task<UploadKeysTask.Params, KeysUploadRespon
             // the device keys to send.
             val deviceKeys: DeviceKeys?,
             // the one-time keys to send.
-            val oneTimeKeys: JsonDict?
+            val oneTimeKeys: JsonDict?,
+            val fallbackKeys: JsonDict?
     )
 }
 
@@ -44,7 +45,8 @@ internal class DefaultUploadKeysTask @Inject constructor(
     override suspend fun execute(params: UploadKeysTask.Params): KeysUploadResponse {
         val body = KeysUploadBody(
                 deviceKeys = params.deviceKeys,
-                oneTimeKeys = params.oneTimeKeys
+                oneTimeKeys = params.oneTimeKeys,
+                fallbackKeys = params.fallbackKeys
         )
 
         Timber.i("## Uploading device keys -> $body")

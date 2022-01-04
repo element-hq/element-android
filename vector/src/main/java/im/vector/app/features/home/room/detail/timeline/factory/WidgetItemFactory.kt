@@ -41,7 +41,7 @@ class WidgetItemFactory @Inject constructor(
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event
-        val widgetContent: WidgetContent = event.root.getClearContent().toModel() ?: return null
+        val widgetContent: WidgetContent = event.root.content.toModel() ?: return null
         val previousWidgetContent: WidgetContent? = event.root.resolvedPrevContent().toModel()
 
         return when (WidgetType.fromString(widgetContent.type ?: previousWidgetContent?.type ?: "")) {

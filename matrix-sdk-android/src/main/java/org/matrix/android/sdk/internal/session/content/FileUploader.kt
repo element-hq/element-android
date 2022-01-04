@@ -109,15 +109,20 @@ internal class FileUploader @Inject constructor(
                               filename: String?,
                               mimeType: String?,
                               progressListener: ProgressRequestBody.Listener? = null): ContentUploadResponse {
-        val inputStream = withContext(Dispatchers.IO) {
-            context.contentResolver.openInputStream(uri)
-        } ?: throw FileNotFoundException()
-        val workingFile = temporaryFileCreator.create()
-        workingFile.outputStream().use {
-            inputStream.copyTo(it)
-        }
+        val workingFile = context.copyUriToTempFile(uri)
         return uploadFile(workingFile, filename, mimeType, progressListener).also {
             tryOrNull { workingFile.delete() }
+        }
+    }
+
+    private suspend fun Context.copyUriToTempFile(uri: Uri): File {
+        return withContext(Dispatchers.IO) {
+            val inputStream = contentResolver.openInputStream(uri) ?: throw FileNotFoundException()
+            val workingFile = temporaryFileCreator.create()
+            workingFile.outputStream().use {
+                inputStream.copyTo(it)
+            }
+            workingFile
         }
     }
 

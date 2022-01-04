@@ -23,6 +23,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -31,8 +32,10 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
+import im.vector.app.config.analyticsConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.ExportKeysDialog
 import im.vector.app.core.extensions.queryExportKeys
@@ -43,10 +46,14 @@ import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
+import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openFileSelection
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogImportE2eKeysBinding
+import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewActions
+import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewModel
+import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewState
 import im.vector.app.features.crypto.keys.KeysExporter
 import im.vector.app.features.crypto.keys.KeysImporter
 import im.vector.app.features.crypto.keysbackup.settings.KeysBackupManageActivity
@@ -71,7 +78,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.DevicesListResponse
 import javax.inject.Inject
 
 class VectorSettingsSecurityPrivacyFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences,
         private val activeSessionHolder: ActiveSessionHolder,
         private val pinCodeStore: PinCodeStore,
         private val keysExporter: KeysExporter,
@@ -82,6 +88,8 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     override var titleRes = R.string.settings_security_and_privacy
     override val preferenceXmlRes = R.xml.vector_settings_security_privacy
+
+    private val analyticsConsentViewModel: AnalyticsConsentViewModel by fragmentViewModel()
 
     // cryptography
     private val mCryptographyCategory by lazy {
@@ -127,6 +135,14 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     private val openPinCodeSettingsPref by lazy {
         findPreference<VectorPreference>("SETTINGS_SECURITY_PIN")!!
+    }
+
+    private val analyticsCategory by lazy {
+        findPreference<VectorPreferenceCategory>("SETTINGS_ANALYTICS_PREFERENCE_KEY")!!
+    }
+
+    private val analyticsConsent by lazy {
+        findPreference<VectorSwitchPreference>("SETTINGS_USER_ANALYTICS_CONSENT_KEY")!!
     }
 
     override fun onCreateRecyclerView(inflater: LayoutInflater?, parent: ViewGroup?, savedInstanceState: Bundle?): RecyclerView {
@@ -238,18 +254,9 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
         refreshKeysManagementSection()
 
         // Analytics
+        setUpAnalytics()
 
-        // Analytics tracking management
-        findPreference<SwitchPreference>(VectorPreferences.SETTINGS_USE_ANALYTICS_KEY)!!.let {
-            // On if the analytics tracking is activated
-            it.isChecked = vectorPreferences.useAnalytics()
-
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                vectorPreferences.setUseAnalytics(newValue as Boolean)
-                true
-            }
-        }
-
+        // Pin code
         openPinCodeSettingsPref.setOnPreferenceClickListener {
             openPinCodePreferenceScreen()
             true
@@ -271,6 +278,34 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
                 text = getString(R.string.settings_hs_admin_e2e_disabled)
                 textColor = ThemeUtils.getColor(requireContext(), R.attr.colorError)
             }
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        observeAnalyticsState()
+    }
+
+    private fun observeAnalyticsState() {
+        analyticsConsentViewModel.onEach(AnalyticsConsentViewState::userConsent) {
+            analyticsConsent.isChecked = it
+        }
+    }
+
+    private fun setUpAnalytics() {
+        analyticsCategory.isVisible = analyticsConfig.isEnabled
+
+        analyticsConsent.setOnPreferenceChangeListener { _, newValue ->
+            val newValueBool = newValue as? Boolean ?: false
+            if (newValueBool) {
+                // User wants to enable analytics, display the opt in screen
+                navigator.openAnalyticsOptIn(requireContext())
+            } else {
+                // Just disable analytics
+                analyticsConsentViewModel.handle(AnalyticsConsentViewActions.SetUserConsent(false))
+            }
+            true
         }
     }
 

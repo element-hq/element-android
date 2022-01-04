@@ -19,6 +19,7 @@ package im.vector.app.features.crypto.verification.qrconfirmation
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
 import im.vector.app.core.epoxy.bottomSheetDividerItem
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewState
@@ -51,10 +52,10 @@ class VerificationQrScannedByOtherController @Inject constructor(
             id("notice")
             apply {
                 if (state.isMe) {
-                    notice(host.stringProvider.getString(R.string.qr_code_scanned_self_verif_notice))
+                    notice(host.stringProvider.getString(R.string.qr_code_scanned_self_verif_notice).toEpoxyCharSequence())
                 } else {
                     val name = state.otherUserMxItem?.getBestName() ?: ""
-                    notice(host.stringProvider.getString(R.string.qr_code_scanned_by_other_notice, name))
+                    notice(host.stringProvider.getString(R.string.qr_code_scanned_by_other_notice, name).toEpoxyCharSequence())
                 }
             }
         }

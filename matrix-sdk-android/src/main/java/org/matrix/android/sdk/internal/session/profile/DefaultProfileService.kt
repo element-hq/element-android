@@ -68,7 +68,7 @@ internal class DefaultProfileService @Inject constructor(private val taskExecuto
     }
 
     override suspend fun updateAvatar(userId: String, newAvatarUri: Uri, fileName: String) {
-        withContext(coroutineDispatchers.main) {
+        withContext(coroutineDispatchers.io) {
             val response = fileUploader.uploadFromUri(newAvatarUri, fileName, MimeTypes.Jpeg)
             setAvatarUrlTask.execute(SetAvatarUrlTask.Params(userId = userId, newAvatarUrl = response.contentUri))
             userStore.updateAvatar(userId, response.contentUri)

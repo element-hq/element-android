@@ -20,6 +20,7 @@ import android.view.Gravity
 import android.view.inputmethod.EditorInfo
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.ItemStyle
@@ -49,7 +50,7 @@ class CreatePollController @Inject constructor(
         genericItem {
             id("question_title")
             style(ItemStyle.BIG_TEXT)
-            title(host.stringProvider.getString(R.string.create_poll_question_title))
+            title(host.stringProvider.getString(R.string.create_poll_question_title).toEpoxyCharSequence())
         }
 
         val questionImeAction = if (currentState.options.isEmpty()) EditorInfo.IME_ACTION_DONE else EditorInfo.IME_ACTION_NEXT
@@ -60,7 +61,7 @@ class CreatePollController @Inject constructor(
             hint(host.stringProvider.getString(R.string.create_poll_question_hint))
             singleLine(true)
             imeOptions(questionImeAction)
-            maxLength(500)
+            maxLength(340)
             onTextChange {
                 host.callback?.onQuestionChanged(it)
             }
@@ -69,7 +70,7 @@ class CreatePollController @Inject constructor(
         genericItem {
             id("options_title")
             style(ItemStyle.BIG_TEXT)
-            title(host.stringProvider.getString(R.string.create_poll_options_title))
+            title(host.stringProvider.getString(R.string.create_poll_options_title).toEpoxyCharSequence())
         }
 
         currentState.options.forEachIndexed { index, option ->
@@ -80,6 +81,7 @@ class CreatePollController @Inject constructor(
                 hint(host.stringProvider.getString(R.string.create_poll_options_hint, (index + 1)))
                 singleLine(true)
                 imeOptions(imeOptions)
+                maxLength(340)
                 onTextChange {
                     host.callback?.onOptionChanged(index, it)
                 }

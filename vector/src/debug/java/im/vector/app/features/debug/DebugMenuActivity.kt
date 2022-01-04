@@ -34,6 +34,7 @@ import im.vector.app.core.utils.checkPermissions
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.ActivityDebugMenuBinding
+import im.vector.app.features.debug.analytics.DebugAnalyticsActivity
 import im.vector.app.features.debug.features.DebugFeaturesSettingsActivity
 import im.vector.app.features.debug.sas.DebugSasEmojiActivity
 import im.vector.app.features.debug.settings.DebugPrivateSettingsActivity
@@ -79,6 +80,9 @@ class DebugMenuActivity : VectorBaseActivity<ActivityDebugMenuBinding>() {
     private fun setupViews() {
         views.debugFeatures.setOnClickListener { startActivity(Intent(this, DebugFeaturesSettingsActivity::class.java)) }
         views.debugPrivateSetting.setOnClickListener { openPrivateSettings() }
+        views.debugAnalytics.setOnClickListener {
+            startActivity(Intent(this, DebugAnalyticsActivity::class.java))
+        }
         views.debugTestTextViewLink.setOnClickListener { testTextViewLink() }
         views.debugOpenButtonStylesLight.setOnClickListener {
             startActivity(Intent(this, DebugVectorButtonStylesLightActivity::class.java))

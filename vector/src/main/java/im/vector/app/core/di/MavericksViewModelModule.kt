@@ -20,6 +20,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.multibindings.IntoMap
+import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
+import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewModel
 import im.vector.app.features.auth.ReAuthViewModel
 import im.vector.app.features.call.VectorCallViewModel
 import im.vector.app.features.call.conference.JitsiCallViewModel
@@ -454,6 +456,16 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(LoginViewModel::class)
     fun loginViewModelFactory(factory: LoginViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(AnalyticsConsentViewModel::class)
+    fun analyticsConsentViewModelFactory(factory: AnalyticsConsentViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(AnalyticsAccountDataViewModel::class)
+    fun analyticsAccountDataViewModelFactory(factory: AnalyticsAccountDataViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap

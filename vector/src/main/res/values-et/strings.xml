@@ -3029,4 +3029,52 @@
 \nAndmed saadame mitte tekstina, vaid räsituna. Kas sa nõustud sellega\?</string>
     <string name="identity_server_consent_dialog_title_2">Saada e-posti aadressid ja telefoninumbrid %s serverisse</string>
     <string name="settings_discovery_consent_notice_off_2">Sinu kontaktid on vaid sinu teada. Kui tahad nende hulgast leida Matrix\'i kasutajaid, siis me vajame sinu luba nende andmete saatmiseks räsitud kujul isikutuvastusserverisse.</string>
+    <string name="identity_server_consent_dialog_content_3">Selleks et leida tuttavaid, sa peaksid saatma oma kontaktteavet (telefoninumbreid ja/või e-posti aadresse) siin rakenduses seadistatud isikutuvastusserverile. Parema andmeturvalisuse nimel me ei saada teavet mitte loetava tekstina, vaid räsina.</string>
+    <string name="identity_server_consent_dialog_content_question">Kas sa oled nõus selle teabe edastamisega\?</string>
+    <string name="action_not_now">Mitte praegu</string>
+    <string name="poll_response_room_list_preview">Hääletatud</string>
+    <string name="delete_poll_dialog_content">Kas sa oled kindel, et soovid küsitlust kustutada\? Seda tegevust sa ei saa hiljem tagasi pöörata.</string>
+    <string name="delete_poll_dialog_title">Kustuta küsitlus</string>
+    <string name="poll_end_room_list_preview">Küsitlus on lõppenud</string>
+    <string name="labs_enable_polls">Võta küsitlused kasutusele</string>
+    <string name="end_poll_confirmation_approve_button">Lõpeta küsitlus</string>
+    <string name="end_poll_confirmation_description">Sellega ei saa enam keegi oma arvamust avaldada ning kuvame lõplikud tulemused.</string>
+    <string name="end_poll_confirmation_title">Kas lõpetame selle küsitluse\?</string>
+    <string name="poll_end_action">Lõpeta küsitlus</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">%1$d\'l häälel põhinev lõpptulemus</item>
+        <item quantity="other">%1$d\'l häälel põhinev lõpptulemus</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">Juba on %1$d hääletanu. Tulemuste nägemiseks pead hääletama</item>
+        <item quantity="other">Juba on %1$d hääletanut. Tulemuste nägemiseks pead hääletama</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">Põhineb %1$d\'l häälel</item>
+        <item quantity="other">Põhineb %1$d\'l häälel</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d hääl</item>
+        <item quantity="other">%1$d häält</item>
+    </plurals>
+    <string name="preference_system_settings">Süsteemiseadistused</string>
+    <string name="preference_versions">Versioonid</string>
+    <string name="preference_help_summary">Element\'i kasutamiseks vajalik abiteave</string>
+    <string name="preference_help_title">Abiteave ja kasutajatugi</string>
+    <string name="preference_help">Abiteave</string>
+    <string name="preference_root_legals">Juriidiline teave</string>
+    <string name="legals_no_policy_provided">Sellel serveril puuduvad kasutustingimused.</string>
+    <string name="legals_identity_server_title">Sinu isikutuvastusserveri kasutustingimused</string>
+    <string name="legals_third_party_notices">Kolmandate osapoolte litsentsid</string>
+    <string name="legals_home_server_title">Sinu koduserveri kasutustingimused</string>
+    <string name="template_legals_application_title">${app_name} kasutustingimused</string>
+    <string name="analytics_opt_in_list_item_3">Seadistustest saad alati määrata, et see funktsionaalsus pole kasutusel</string>
+    <string name="analytics_opt_in_list_item_2">Meie <b>ei</b> jaga teavet kolmandate osapooltega</string>
+    <string name="analytics_opt_in_list_item_1">Meie <b>ei</b> salvesta ega profileeri sinu kasutajakonto andmeid</string>
+    <string name="analytics_opt_in_content_link">siit</string>
+    <string name="analytics_opt_in_content">Võimalike vigade leidmiseks ja Element\'i arendamiseks jaga meiega anonüümseid andmeid. Selleks, et mõistaksime, kuidas kasutajad erinevaid seadmeid pruugivad me loome sinu seadmetele ühise juhusliku tunnuse.
+\n
+\nMeie kasutustingimused leiad siit - %s.</string>
+    <string name="analytics_opt_in_title">Aita Element\'i arendamisel</string>
+    <string name="action_enable">Võta kasutusele</string>
 </resources>

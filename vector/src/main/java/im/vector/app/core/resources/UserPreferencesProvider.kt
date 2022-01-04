@@ -48,4 +48,8 @@ class UserPreferencesProvider @Inject constructor(private val vectorPreferences:
     fun shouldShowAvatarDisplayNameChanges(): Boolean {
         return vectorPreferences.showAvatarDisplayNameChangeMessages()
     }
+
+    fun shouldShowPolls(): Boolean {
+        return vectorPreferences.labsEnablePolls()
+    }
 }

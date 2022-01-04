@@ -67,6 +67,7 @@ import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
 import org.matrix.android.sdk.internal.crypto.model.MXDeviceInfo
 import org.matrix.android.sdk.internal.crypto.model.MXEncryptEventContentResult
+import org.matrix.android.sdk.internal.crypto.model.MXKey.Companion.KEY_SIGNED_CURVE_25519_TYPE
 import org.matrix.android.sdk.internal.crypto.model.MXUsersDevicesMap
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.model.event.RoomKeyContent
@@ -428,9 +429,27 @@ internal class DefaultCryptoService @Inject constructor(
                     val currentCount = syncResponse.deviceOneTimeKeysCount.signedCurve25519 ?: 0
                     oneTimeKeysUploader.updateOneTimeKeyCount(currentCount)
                 }
-                if (isStarted()) {
+                // There is a limit of to_device events returned per sync.
+                // If we are in a case of such limited to_device sync we can't try to generate/upload
+                // new otk now, because there might be some pending olm pre-key to_device messages that would fail if we rotate
+                // the old otk too early. In this case we want to wait for the pending to_device before doing anything
+                // As per spec:
+                // If there is a large queue of send-to-device messages, the server should limit the number sent in each /sync response.
+                // 100 messages is recommended as a reasonable limit.
+                // The limit is not part of the spec, so it's probably safer to handle that when there are no more to_device ( so we are sure
+                // that there are no pending to_device
+                val toDevices = syncResponse.toDevice?.events.orEmpty()
+                if (isStarted() && toDevices.isEmpty()) {
                     // Make sure we process to-device messages before generating new one-time-keys #2782
                     deviceListManager.refreshOutdatedDeviceLists()
+                    // The presence of device_unused_fallback_key_types indicates that the server supports fallback keys.
+                    // If there's no unused signed_curve25519 fallback key we need a new one.
+                    if (syncResponse.deviceUnusedFallbackKeyTypes != null &&
+                            // Generate a fallback key only if the server does not already have an unused fallback key.
+                            !syncResponse.deviceUnusedFallbackKeyTypes.contains(KEY_SIGNED_CURVE_25519_TYPE)) {
+                        oneTimeKeysUploader.needsNewFallback()
+                    }
+
                     oneTimeKeysUploader.maybeUploadOneTimeKeys()
                     incomingGossipingRequestManager.processReceivedGossipingRequests()
                 }
@@ -928,7 +947,7 @@ internal class DefaultCryptoService @Inject constructor(
                 signatures = objectSigner.signObject(canonicalJson)
         )
 
-        val uploadDeviceKeysParams = UploadKeysTask.Params(rest, null)
+        val uploadDeviceKeysParams = UploadKeysTask.Params(rest, null, null)
         uploadKeysTask.execute(uploadDeviceKeysParams)
 
         cryptoStore.setDeviceKeysUploaded(true)

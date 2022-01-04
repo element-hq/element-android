@@ -24,6 +24,7 @@ import androidx.core.widget.TextViewCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.epoxy.onLongClickIgnoringLinks
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -32,6 +33,7 @@ import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlUiState
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlView
 import im.vector.app.features.media.ImageContentRenderer
+import org.matrix.android.sdk.api.extensions.orFalse
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
@@ -40,10 +42,10 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     var searchForPills: Boolean = false
 
     @EpoxyAttribute
-    var message: CharSequence? = null
+    var message: EpoxyCharSequence? = null
 
     @EpoxyAttribute
-    var canUseTextFuture: Boolean = true
+    var bindingOptions: BindingOptions? = null
 
     @EpoxyAttribute
     var useBigFont: Boolean = false
@@ -80,14 +82,14 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             holder.messageView.textSize = 14F
         }
         if (searchForPills) {
-            message?.findPillsAndProcess(coroutineScope) {
+            message?.charSequence?.findPillsAndProcess(coroutineScope) {
                 // mmm.. not sure this is so safe in regards to cell reuse
                 it.bind(holder.messageView)
             }
         }
-        val textFuture = if (canUseTextFuture) {
+        val textFuture = if (bindingOptions?.canUseTextFuture.orFalse()) {
             PrecomputedTextCompat.getTextFuture(
-                    message ?: "",
+                    message?.charSequence ?: "",
                     TextViewCompat.getTextMetricsParams(holder.messageView),
                     null)
         } else {
@@ -99,10 +101,10 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         holder.messageView.onClick(attributes.itemClickListener)
         holder.messageView.onLongClickIgnoringLinks(attributes.itemLongClickListener)
 
-        if (canUseTextFuture) {
+        if (bindingOptions?.canUseTextFuture.orFalse()) {
             holder.messageView.setTextFuture(textFuture)
         } else {
-            holder.messageView.text = message
+            holder.messageView.text = message?.charSequence
         }
     }
 

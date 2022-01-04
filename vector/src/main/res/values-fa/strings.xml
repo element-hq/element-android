@@ -1442,7 +1442,7 @@
     <string name="not_trusted">بدون اعتماد</string>
     <string name="reset_cross_signing">بازنشانی کلیدها</string>
     <string name="a11y_qr_code_for_verification">رمز QR</string>
-    <string name="qr_code_scanned_by_other_notice">تقریباً تمام شد! آیا %s همین سپر را نشان می‌دهد؟</string>
+    <string name="qr_code_scanned_by_other_notice">تقریباً تمام شد! آیا %s تیکی را نشان می‌دهد؟</string>
     <string name="qr_code_scanned_by_other_yes">بله</string>
     <string name="qr_code_scanned_by_other_no">خیر</string>
     <string name="no_connectivity_to_the_server_indicator">اتّصال به کارساز از دست رفت</string>
@@ -1586,7 +1586,7 @@
     <string name="error_failed_to_import_keys">شکست در درون‌ریزی کلیدها</string>
     <string name="qr_code_scanned_verif_waiting">منتظر %s…</string>
     <string name="qr_code_scanned_verif_waiting_notice">تقریباً تمام! منتظر تأیید…</string>
-    <string name="qr_code_scanned_self_verif_notice">تقریباً تمام! آیا افزارهٔ دیگر، همین سپر را نشان می‌دهد؟</string>
+    <string name="qr_code_scanned_self_verif_notice">تقریباً تمام! آیا افزارهٔ دیگر، تیکی را نشان می‌دهد؟</string>
     <string name="direct_room_created_summary_item_by_you">پیوستید.</string>
     <string name="direct_room_created_summary_item">%s پیوست.</string>
     <string name="room_created_summary_item_by_you">اتاق را ساخته و پیکربندی کردید.</string>
@@ -3029,4 +3029,53 @@
     <string name="settings_discovery_consent_notice_off_2">آشنایانتان خصوصی هستند. برای کشف کاربران از آشنایانتان، نیاز به اجازه‌تان برای فرستادن اطّلاعات آشنا به کارساز هویتتان داریم.</string>
     <string name="shortcut_disabled_reason_sign_out">نشست خارج شده است!</string>
     <string name="shortcut_disabled_reason_room_left">اتاق ترک شده است!</string>
+    <string name="identity_server_consent_dialog_content_question">با فرستادن این اطّلاعات موافقید؟</string>
+    <string name="action_not_now">اکنون نه</string>
+    <string name="identity_server_consent_dialog_content_3">برای کشف آشنایان موجود، لازم است اطلاعات آشنایان (رایانامه‌ها و شماره تلفن‌ها) را به کارساز هویتتان بفرستید. برای محرمانگیتان، داده‌هایتان را پیش از فرستادن، در هم می‌ریزیم.</string>
+    <string name="analytics_opt_in_content">با هم‌رسانی داده‌ّای استفادهٔ ناشناس، در تشخیص مشکل‌ها و بهبود المنت یاریمان کنید. برای درک چگونگی استفادهٔ مردم از چندین افزاره، شناسه‌ای کاتوره‌ای بین افزاره‌هایتان هم‌رسانی خواهیم کرد.
+\n
+\nمی‌توانید از %s قوانینمان را بخوانید.</string>
+    <string name="delete_poll_dialog_content">مطمئنید که می خواهید این نظرسنجی را بردارید؟ پس از این کار، قادر به بازگردانیش نیستید.</string>
+    <string name="delete_poll_dialog_title">برداشتن نظرسنجی</string>
+    <string name="poll_end_room_list_preview">نظرسنجی پایان یافت</string>
+    <string name="poll_response_room_list_preview">رأی داده شد</string>
+    <string name="labs_enable_polls">به کار انداختن نظرسنجی‌ها</string>
+    <string name="end_poll_confirmation_approve_button">پایان نظرسنجی</string>
+    <string name="end_poll_confirmation_description">این کار اجازهٔ رأی دادن افراد را پایان داده و نتیجهٔ نهایی نظرسنجی را نمایش خواهد داد.</string>
+    <string name="end_poll_confirmation_title">پایان این نظرسنجی؟</string>
+    <string name="a11y_poll_winner_option">گزینهٔ غالب</string>
+    <string name="poll_end_action">پایان نظرسنجی</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">نتیجهٔ نهایی بر مبنای %1$d رأی</item>
+        <item quantity="other">نتیجهٔ نهایی بر مبنای %1$d رأی</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">رأیی داده نشده</item>
+        <item quantity="other">%1$d رأی داده شده. برای دیدن نتیجه، رأی دهید</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">بر مبنای %1$d رأی</item>
+        <item quantity="other">بر مبنای %1$d رأی</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d رأی</item>
+        <item quantity="other">%1$d رأی</item>
+    </plurals>
+    <string name="preference_system_settings">تنظیمات سامانه</string>
+    <string name="preference_versions">نگارش‌ها</string>
+    <string name="preference_help_summary">کمک در استفاده از المنت</string>
+    <string name="preference_help_title">کمک و پشتیانی</string>
+    <string name="preference_help">کمک</string>
+    <string name="preference_root_legals">موارد حقوقی</string>
+    <string name="legals_no_policy_provided">این کارساز هیچ سیاستی فراهم نکرده.</string>
+    <string name="legals_third_party_notices">کتاب‌خانه‌های سوم شخص</string>
+    <string name="legals_identity_server_title">سیاست کارساز هویتتان</string>
+    <string name="legals_home_server_title">سیاست کارساز خانگیتان</string>
+    <string name="template_legals_application_title">سیاست ${app_name}</string>
+    <string name="analytics_opt_in_list_item_3">می‌توانید هر زمان، در تنظیمات خاموشش کنید</string>
+    <string name="analytics_opt_in_list_item_2">ما اطّلاعات را با سوم‌شخص‌ها هم‌رسانی <b>نمی‌کنیم</b></string>
+    <string name="analytics_opt_in_list_item_1">ما هیچ دادهٔ حسابی را ذخیره یا نمایه <b>نمی‌کنیم</b></string>
+    <string name="analytics_opt_in_content_link">این‌جا</string>
+    <string name="analytics_opt_in_title">کمک به بهبود المنت</string>
+    <string name="action_enable">به کار انداختن</string>
 </resources>

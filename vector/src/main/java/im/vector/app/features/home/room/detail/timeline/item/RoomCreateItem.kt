@@ -22,17 +22,18 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
 import me.saket.bettermovementmethod.BetterLinkMovementMethod
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_create)
 abstract class RoomCreateItem : VectorEpoxyModel<RoomCreateItem.Holder>() {
 
-    @EpoxyAttribute lateinit var text: CharSequence
+    @EpoxyAttribute lateinit var text: EpoxyCharSequence
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.description.movementMethod = BetterLinkMovementMethod.getInstance()
-        holder.description.text = text
+        holder.description.text = text.charSequence
     }
 
     class Holder : VectorEpoxyHolder() {

@@ -1930,7 +1930,7 @@
     <string name="initialize_cross_signing">Initialiser la signature croisée</string>
     <string name="reset_cross_signing">Réinitialiser les clés</string>
     <string name="a11y_qr_code_for_verification">Code QR</string>
-    <string name="qr_code_scanned_by_other_notice">On y est presque ! Est-ce que %s affiche le même bouclier \?</string>
+    <string name="qr_code_scanned_by_other_notice">On y est presque ! Est-ce que %s affiche une marque cochée \?</string>
     <string name="qr_code_scanned_by_other_yes">Oui</string>
     <string name="qr_code_scanned_by_other_no">Non</string>
     <string name="no_connectivity_to_the_server_indicator">La connexion avec le serveur a été perdue</string>
@@ -2029,7 +2029,7 @@
     <string name="encryption_not_enabled">Chiffrement désactivé</string>
     <string name="encryption_unknown_algorithm_tile_description">Le chiffrement utilisé par ce salon n’est pas pris en charge</string>
     <string name="room_created_summary_item">%s a créé et configuré ce salon.</string>
-    <string name="qr_code_scanned_self_verif_notice">On y est presque ! L’autre appareil affiche-t-il le même bouclier \?</string>
+    <string name="qr_code_scanned_self_verif_notice">On y est presque ! L’autre appareil affiche-t-il une marque cochée \?</string>
     <string name="qr_code_scanned_verif_waiting_notice">On y est presque ! En attente de la confirmation…</string>
     <string name="qr_code_scanned_verif_waiting">En attente de %s…</string>
     <string name="error_failed_to_import_keys">Échec de l’importation des clés</string>
@@ -3036,4 +3036,53 @@
     <string name="settings_discovery_consent_notice_off_2">Vos contacts sont personnels et privés. Pour découvrir des utilisateurs à partir de vos contacts, nous avons besoin de votre permission pour envoyer les informations des contacts à votre serveur d’identité.</string>
     <string name="shortcut_disabled_reason_sign_out">La session a été déconnectée !</string>
     <string name="shortcut_disabled_reason_room_left">Le salon a été quitté !</string>
+    <string name="identity_server_consent_dialog_content_question">Êtes vous d’accord d’envoyer ces informations \?</string>
+    <string name="identity_server_consent_dialog_content_3">Pour découvrir des contacts existants, il vous faut envoyer les informations de contact (adresses de courriel et numéros de téléphone) à votre serveur d’identité. Les données seront condensées avant l’envoi pour respecter la vie privée.</string>
+    <string name="action_not_now">Pas maintenant</string>
+    <string name="delete_poll_dialog_content">Êtes-vous sûr de vouloir retirer ce sondage \? Vous ne pourrez plus le récupérer une fois supprimé.</string>
+    <string name="delete_poll_dialog_title">Supprimer le sondage</string>
+    <string name="poll_end_room_list_preview">Sondage terminé</string>
+    <string name="poll_response_room_list_preview">Vote exprimé</string>
+    <string name="labs_enable_polls">Activer les sondages</string>
+    <string name="end_poll_confirmation_approve_button">Terminer le sondage</string>
+    <string name="end_poll_confirmation_description">Cela empêchera les gens de voter et affichera le résultat final du sondage.</string>
+    <string name="end_poll_confirmation_title">Terminer ce sondage \?</string>
+    <string name="a11y_poll_winner_option">option gagnante</string>
+    <string name="poll_end_action">Terminer le sondage</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Résultat final sur la base de %1$d vote</item>
+        <item quantity="other">Résultat final sur la base de %1$d votes</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">Aucun vote exprimé</item>
+        <item quantity="other">%1$d votes exprimés. Votez pour voir les résultats</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">Sur la base de %1$d vote</item>
+        <item quantity="other">Sur la base de %1$d votes</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d vote</item>
+        <item quantity="other">%1$d votes</item>
+    </plurals>
+    <string name="preference_system_settings">Paramètres système</string>
+    <string name="preference_versions">Versions</string>
+    <string name="preference_help_summary">Obtenir de l’aide pour utiliser Element</string>
+    <string name="preference_help_title">Aide et support</string>
+    <string name="preference_help">Aide</string>
+    <string name="preference_root_legals">Mentions légales</string>
+    <string name="legals_no_policy_provided">Ce serveur ne fournit aucune politique.</string>
+    <string name="legals_third_party_notices">Bibliothèques tierces</string>
+    <string name="legals_identity_server_title">La politique de votre serveur d’identité</string>
+    <string name="legals_home_server_title">La politique de votre serveur d’accueil</string>
+    <string name="template_legals_application_title">Politique de ${app_name}</string>
+    <string name="analytics_opt_in_list_item_3">Vous pouvez désactiver ceci à tout moment dans les paramètres</string>
+    <string name="analytics_opt_in_list_item_2">Nous <b>ne</b> partageons <b>pas</b> d’information avec des tierces parties</string>
+    <string name="analytics_opt_in_list_item_1">Nous <b>n’</b>enregistrons ou ne profilons <b>aucune</b> donnée du compte</string>
+    <string name="analytics_opt_in_content_link">ici</string>
+    <string name="analytics_opt_in_content">Aidez nous à identifier les problèmes et améliorer Element en envoyant des rapports d’usage anonymes. Pour comprendre de quelle manière les gens utilisent Element sur plusieurs appareils, nous créeront un identifiant aléatoire commun à tous vos appareils.
+\n
+\nVous pouvez lire toutes les conditions %s.</string>
+    <string name="analytics_opt_in_title">Aider à améliorer Element</string>
+    <string name="action_enable">Activer</string>
 </resources>

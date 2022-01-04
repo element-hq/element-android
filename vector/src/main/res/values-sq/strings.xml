@@ -1943,7 +1943,7 @@
     <string name="verification_profile_device_verified_because">Ky sesion është i besuar për shkëmbim të sigurt të mesazheve, ngaqë e verifikoi %1$s (%2$s):</string>
     <string name="initialize_cross_signing">Gatit <em>CrossSigning</em></string>
     <string name="reset_cross_signing">Zeroji Kyçet</string>
-    <string name="qr_code_scanned_by_other_notice">Thuaje mbërritëm! A shfaq %s të njëjtën mburojë\?</string>
+    <string name="qr_code_scanned_by_other_notice">Thuaje mbërritëm! A shfaq %s një shenjë\?</string>
     <string name="qr_code_scanned_by_other_no">Jo</string>
     <string name="no_connectivity_to_the_server_indicator">Humbi lidhja me shërbyesin</string>
     <string name="login_signup_username_hint">Emër përdoruesi</string>
@@ -2041,7 +2041,7 @@
     <string name="encryption_not_enabled">Fshehtëzim jo i aktivizuar</string>
     <string name="encryption_unknown_algorithm_tile_description">Fshehtëzimi i përdorur nga kjo dhomë nuk mbulohet</string>
     <string name="room_created_summary_item">%s krijoi dhe formësoi dhomën.</string>
-    <string name="qr_code_scanned_self_verif_notice">Thuajse mbërritëm! A shfaq pajisja juaj tjetër të njëjtën mburojë\?</string>
+    <string name="qr_code_scanned_self_verif_notice">Thuajse mbërritëm! A shfaq pajisja juaj tjetër një shenjë\?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Thuajse mbërritëm! Po pritet për ripohim…</string>
     <string name="qr_code_scanned_verif_waiting">Po pritet për %s…</string>
     <string name="error_failed_to_import_keys">S’u arrit të importohen kyçe</string>
@@ -2997,4 +2997,69 @@
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Zgjidhni shërbyes Home</string>
     <string name="login_error_homeserver_from_url_not_found">Te URL-ja %s s’kapet dot një shërbyes Home. Ju lutemi, kontrolloni lidhjen tuaj, ose zgjidheni një shërbyes Home dorazi.</string>
     <string name="notification_listening_for_notifications">Po dëgjohet për njoftime</string>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">Është e domosdoshme të paktën %1$s mundësi</item>
+        <item quantity="other">Janë të domosdoshme të paktën %1$s mundësi</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">Pyetja s’mund të jetë e zbrazët</string>
+    <string name="create_poll_button">KRIJOJE PYETËSORIN</string>
+    <string name="create_poll_add_option">SHTONI MUNDËSI</string>
+    <string name="create_poll_options_hint">Mundësia %1$d</string>
+    <string name="create_poll_options_title">Krijo mundësi</string>
+    <string name="create_poll_question_hint">Pyetje ose temë</string>
+    <string name="create_poll_question_title">Pyetje ose temë pyetësori</string>
+    <string name="create_poll_title">Krijoni Pyetësor</string>
+    <string name="identity_server_consent_dialog_content_question">A pranoni të dërgohen këto hollësi\?</string>
+    <string name="identity_server_consent_dialog_content_3">Për të zbuluar kontakte ekzistuese, duhet të dërgoni hollësi kontakti (email-e dhe numra telefonash) te shërbyesi juaj i identiteteve. Para dërgimit, i fshehtëzojmë të dhënat tuaja, për privatësi.</string>
+    <string name="identity_server_consent_dialog_content_2">Për të zbuluar kontakte ekzistuese, duhet të dërgoni hollësi kontakti te shërbyesi juaj i identiteteve.
+\n
+\nI fshehtëzojmë të dhënat tuaja përpara dërgimit, për privatësi. A pranoni të dërgohen këto hollësi\?</string>
+    <string name="identity_server_consent_dialog_title_2">Dërgo email-e dhe numra telefonash te %s</string>
+    <string name="settings_discovery_consent_notice_off_2">Kontaktet tuaja janë private. Për të zbuluar përdorues prej kontakteve tuaja, na duhet leja juaj për të dërguar hollësi kontakti te shërbyesi juaj i identiteteve.</string>
+    <string name="shortcut_disabled_reason_sign_out">Është bërë dalja nga sesioni!</string>
+    <string name="shortcut_disabled_reason_room_left">U dol nga dhoma!</string>
+    <string name="action_not_now">Jo tani</string>
+    <string name="delete_poll_dialog_content">Jeni i sigurt se doni të hiqet ky pyetësor\? Po u hoq, s’do të jeni në gjendje ta rimerrni.</string>
+    <string name="delete_poll_dialog_title">Hiqe pyetësorin</string>
+    <string name="poll_end_room_list_preview">Pyetësori përfundoi</string>
+    <string name="poll_response_room_list_preview">U votua</string>
+    <string name="labs_enable_polls">Aktivizo Pyetësorë</string>
+    <string name="end_poll_confirmation_approve_button">Përfundoje pyetësorin</string>
+    <string name="end_poll_confirmation_description">Kjo do t’ua bëjë njerëzve të pamundur të votojnë dhe do të shfaqë rezultatet përfundimtare të pyetësorit.</string>
+    <string name="end_poll_confirmation_title">Të përfundohet pyetësori\?</string>
+    <string name="poll_end_action">Përfundoje pyetësorin</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Rezultati përfundimtar, bazua në %1$d votë</item>
+        <item quantity="other">Rezultati përfundimtar, bazua në %1$d vota</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">Bazuar në %1$d votë</item>
+        <item quantity="other">Bazuar në %1$d vota</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d votë</item>
+        <item quantity="other">%1$d vota</item>
+    </plurals>
+    <string name="a11y_presence_unavailable">Jo i passhëm</string>
+    <string name="attachment_type_poll">Pyetësor</string>
+    <string name="preference_system_settings">Rregullime sistemi</string>
+    <string name="preference_versions">Versione</string>
+    <string name="preference_help_summary">Merrni ndihmë për përdorimin e Element-it</string>
+    <string name="preference_help_title">Ndihmë dhe asistencë</string>
+    <string name="preference_help">Ndihmë</string>
+    <string name="preference_root_legals">Ligjore</string>
+    <string name="legals_no_policy_provided">Ky shërbyes nuk jep ndonjë palë rregullash.</string>
+    <string name="legals_third_party_notices">Biblioteka prej palësh të treta</string>
+    <string name="legals_identity_server_title">Rregulla të shërbyesit tuaj të identiteteve</string>
+    <string name="legals_home_server_title">Rregulla të shërbyesit tuaj Home</string>
+    <string name="template_legals_application_title">Rregulla për ${app_name}</string>
+    <string name="analytics_opt_in_list_item_3">Këtë mund të çaktivizoni në çfarëdo kohe, që nga rregullimet</string>
+    <string name="analytics_opt_in_list_item_2"><b>Nuk</b> u japin hollësi palëve të treta</string>
+    <string name="analytics_opt_in_list_item_1"><b>Nuk</b> regjistrojmë ose profilizojmë ndonjë të dhënë llogarie</string>
+    <string name="analytics_opt_in_content_link">këtu</string>
+    <string name="analytics_opt_in_content">Ndihmonani të identifikojmë probleme dhe të përmirësojmë Element-in, duke ndarë me ne të dhëna anonime përdorimi. Për të kuptuar se si i përdorin njerëzit disa pajisje njëherësh, do të prodhojmë një identifikues kuturu, të përbashkët për pajisjet tuaja.
+\n
+\nMund të lexoni krejt kushtet tona %s.</string>
+    <string name="analytics_opt_in_title">Ndihmoni të përmirësohet Element-in</string>
+    <string name="action_enable">Aktivizoje</string>
 </resources>

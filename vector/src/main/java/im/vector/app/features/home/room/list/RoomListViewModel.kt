@@ -53,10 +53,10 @@ import timber.log.Timber
 class RoomListViewModel @AssistedInject constructor(
         @Assisted initialState: RoomListViewState,
         private val session: Session,
-        private val stringProvider: StringProvider,
-        private val appStateHandler: AppStateHandler,
-        private val vectorPreferences: VectorPreferences,
-        private val autoAcceptInvites: AutoAcceptInvites
+        stringProvider: StringProvider,
+        appStateHandler: AppStateHandler,
+        vectorPreferences: VectorPreferences,
+        autoAcceptInvites: AutoAcceptInvites
 ) : VectorViewModel<RoomListViewState, RoomListAction, RoomListViewEvents>(initialState) {
 
     @AssistedFactory

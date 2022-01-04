@@ -26,11 +26,15 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import im.vector.app.EmojiCompatWrapper
+import im.vector.app.EmojiSpanify
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.time.Clock
 import im.vector.app.core.time.DefaultClock
+import im.vector.app.features.analytics.VectorAnalytics
+import im.vector.app.features.analytics.impl.DefaultVectorAnalytics
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.CompileTimeAutoAcceptInvites
 import im.vector.app.features.navigation.DefaultNavigator
@@ -58,6 +62,9 @@ abstract class VectorBindModule {
     abstract fun bindNavigator(navigator: DefaultNavigator): Navigator
 
     @Binds
+    abstract fun bindVectorAnalytics(analytics: DefaultVectorAnalytics): VectorAnalytics
+
+    @Binds
     abstract fun bindErrorFormatter(formatter: DefaultErrorFormatter): ErrorFormatter
 
     @Binds
@@ -71,6 +78,9 @@ abstract class VectorBindModule {
 
     @Binds
     abstract fun bindDefaultClock(clock: DefaultClock): Clock
+
+    @Binds
+    abstract fun bindEmojiSpanify(emojiCompatWrapper: EmojiCompatWrapper): EmojiSpanify
 }
 
 @InstallIn(SingletonComponent::class)

@@ -18,6 +18,7 @@ package im.vector.app.features.home
 
 import im.vector.app.core.platform.VectorViewModelAction
 
-sealed class HomeActivityViewActions : VectorViewModelAction {
-    object PushPromptHasBeenReviewed : HomeActivityViewActions()
+sealed interface HomeActivityViewActions : VectorViewModelAction {
+    object ViewStarted : HomeActivityViewActions
+    object PushPromptHasBeenReviewed : HomeActivityViewActions
 }
