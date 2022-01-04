@@ -41,6 +41,7 @@ typealias TaggedEvents = Map<String, TaggedEvent>
  */
 @JsonClass(generateAdapter = true)
 data class TaggedEventsContent(
+        @Json(name = "tags")
         var tags: TaggedEvents = emptyMap()
 ) {
     val favouriteEvents
@@ -50,36 +51,28 @@ data class TaggedEventsContent(
         get() = tags[TAG_HIDDEN].orEmpty()
 
     fun tagEvent(eventId: String, info: TaggedEventInfo, tag: String) {
-        val tagMap = HashMap<String, TaggedEventInfo>(tags[tag] ?: emptyMap())
-        tagMap[eventId] = info
-
-        val updatedTags = HashMap<String, Map<String, TaggedEventInfo>>(tags)
-        updatedTags[tag] = tagMap
-        tags = updatedTags
+        val taggedEvents = tags[tag].orEmpty().plus(eventId to info)
+        tags = tags.plus(tag to taggedEvents)
     }
 
     fun untagEvent(eventId: String, tag: String) {
-        val tagMap = HashMap<String, TaggedEventInfo>(tags[tag] ?: emptyMap())
-        tagMap.remove(eventId)
-
-        val updatedTags = HashMap<String, Map<String, TaggedEventInfo>>(tags)
-        updatedTags[tag] = tagMap
-        tags = updatedTags
+        val taggedEvents = tags[tag]?.minus(eventId).orEmpty()
+        tags = tags.plus(tag to taggedEvents)
     }
 
     companion object {
-        const val TAGS_KEY = "tags"
         const val TAG_FAVOURITE = "m.favourite"
         const val TAG_HIDDEN = "m.hidden"
     }
 }
 
 data class TaggedEventInfo(
-        var keywords: List<String>? = null,
+        @Json(name = "keywords")
+        val keywords: List<String>? = null,
 
         @Json(name = "origin_server_ts")
         val originServerTs: Long? = null,
 
         @Json(name = "tagged_at")
-        var taggedAt: Long? = null
+        val taggedAt: Long? = null
 )
