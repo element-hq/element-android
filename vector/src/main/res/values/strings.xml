@@ -169,6 +169,7 @@
 
     <!-- room error messages -->
     <string name="room_error_join_failed_empty_room">It is not currently possible to re-join an empty room.</string>
+    <string name="room_error_access_unauthorized">You are not allowed to join this room</string>
 
     <!-- medium friendly name -->
     <string name="medium_email">Email address</string>
