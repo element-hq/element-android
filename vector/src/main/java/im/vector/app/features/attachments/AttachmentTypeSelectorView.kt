@@ -208,12 +208,12 @@ class AttachmentTypeSelectorView(context: Context,
      * The all possible types to pick with their required permissions and tooltip resource
      */
     enum class Type(val permissions: List<String>, @StringRes val tooltipRes: Int) {
-        CAMERA(PERMISSIONS_FOR_TAKING_PHOTO, R.string.option_take_photo_video),
-        GALLERY(PERMISSIONS_EMPTY, R.string.tooltip_select_item_from_gallery),
-        FILE(PERMISSIONS_EMPTY, R.string.tooltip_select_file),
-        STICKER(PERMISSIONS_EMPTY, R.string.option_send_sticker),
-        AUDIO(PERMISSIONS_EMPTY, R.string.tooltip_select_audio_file),
-        CONTACT(PERMISSIONS_FOR_PICKING_CONTACT, R.string.tooltip_select_contact),
-        POLL(PERMISSIONS_EMPTY, R.string.create_poll_title)
+        CAMERA(PERMISSIONS_FOR_TAKING_PHOTO, R.string.tooltip_attachment_photo),
+        GALLERY(PERMISSIONS_EMPTY, R.string.tooltip_attachment_gallery),
+        FILE(PERMISSIONS_EMPTY, R.string.tooltip_attachment_file),
+        STICKER(PERMISSIONS_EMPTY, R.string.tooltip_attachment_sticker),
+        AUDIO(PERMISSIONS_EMPTY, R.string.tooltip_attachment_audio),
+        CONTACT(PERMISSIONS_FOR_PICKING_CONTACT, R.string.tooltip_attachment_contact),
+        POLL(PERMISSIONS_EMPTY, R.string.tooltip_attachment_poll)
     }
 }
