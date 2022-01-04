@@ -2243,7 +2243,6 @@
     <string name="no_connectivity_to_the_server_indicator_airplane">Lennurežiim on kasutusel</string>
     <string name="settings_dev_tools">Arendaja töövahendid</string>
     <string name="settings_account_data">Kasutajakonto andmed</string>
-    <string name="poll_item_selected_aria">Tehtud valik</string>
     <string name="command_description_poll">Loob lihtsa hääletuse</string>
     <string name="verification_cannot_access_other_session">Kasuta taastamiseks mõeldud paroolifraasi või võtit</string>
     <string name="verification_use_passphrase">Kui sa ei pääse ligi olemasolevale sessioonile</string>
@@ -2363,7 +2362,6 @@
     <string name="settings_show_room_member_state_events">Näita jututoa liikmete olekusündmusi</string>
     <string name="settings_show_room_member_state_events_summary">Sealhulgas kutsumisi, liitumisi, lahkumisi, müksamisi, keelamisi ning tunnuspildi ja kuvatava nime muutusi.</string>
     <string name="sent_a_poll">Küsitlus</string>
-    <string name="sent_a_bot_buttons">Robotinupud</string>
     <string name="sent_a_reaction">Reageeris: %s</string>
     <string name="sent_verification_conclusion">Verifitseerimise tulemus</string>
     <string name="universal_link_malformed">Link oli vigane</string>

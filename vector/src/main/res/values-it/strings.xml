@@ -2015,7 +2015,6 @@
     <string name="login_signup_username_hint">Nome utente</string>
     <string name="settings_dev_tools">Strumenti per sviluppatori</string>
     <string name="settings_account_data">Dati account</string>
-    <string name="poll_item_selected_aria">Opzione selezionata</string>
     <string name="command_description_poll">Crea un semplice sondaggio</string>
     <string name="verification_cannot_access_other_session">Usa una Passphrase o un codice di recupero</string>
     <string name="verification_use_passphrase">Se non puoi accedere a una sessione esistente</string>
@@ -2417,7 +2416,6 @@
     <string name="settings_show_room_member_state_events">Mostra eventi di stato dei membri della stanza</string>
     <string name="settings_show_room_member_state_events_summary">Includi eventi di invito/entrata/uscita/kick/ban e modifiche di avatar/nome.</string>
     <string name="sent_a_poll">Sondaggio</string>
-    <string name="sent_a_bot_buttons">Pulsanti bot</string>
     <string name="sent_a_reaction">Reagito con: %s</string>
     <string name="sent_verification_conclusion">Verifica conclusa</string>
     <string name="delete_account_data_warning">Vuoi eliminare i dati dell\'account di tipo %1$s\?

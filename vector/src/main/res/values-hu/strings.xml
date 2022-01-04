@@ -1894,7 +1894,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="login_signup_username_hint">Felhasználónév</string>
     <string name="settings_dev_tools">Fejlesztői Eszközök</string>
     <string name="settings_account_data">Fiók Adatok</string>
-    <string name="poll_item_selected_aria">Kiválasztott Beállítások</string>
     <string name="command_description_poll">Egyszerű szavazás készítése</string>
     <string name="verification_cannot_access_other_session">Használd a visszaállítási eljárást</string>
     <string name="verification_use_passphrase">Ha nem érsz el létező munkamenetet</string>
@@ -2684,7 +2683,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \nAz üzeneteidet zárolással vannak biztosítva és csak neked és a címzetteknek van meg a kulcs hozzá.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Itt az üzenetek nincsenek végponttól végpontig titkosítva.</string>
     <string name="sent_verification_conclusion">Azonosítás eredménye</string>
-    <string name="sent_a_bot_buttons">Bot Gomb</string>
     <string name="sent_a_poll">Szavazás</string>
     <string name="create_room_in_progress">Szoba létrehozása…</string>
     <string name="create_room_alias_invalid">Néhány karakter nem engedélyezett</string>

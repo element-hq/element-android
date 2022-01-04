@@ -2755,7 +2755,6 @@
     <string name="sent_a_file">File</string>
     <string name="send_a_sticker">Sticker</string>
     <string name="sent_a_poll">Poll</string>
-    <string name="sent_a_bot_buttons">Bot Buttons</string>
     <string name="sent_a_reaction">Reacted with: %s</string>
     <string name="sent_verification_conclusion">Verification Conclusion</string>
 
@@ -2935,7 +2934,6 @@
     <string name="settings_account_data">Account Data</string>
     <string name="delete_account_data_warning">Delete the account data of type %1$s?\n\nUse with caution, it may lead to unexpected behavior.</string>
 
-    <string name="poll_item_selected_aria">Selected Option</string>
     <string name="command_description_poll">Creates a simple poll</string>
     <string name="verification_cannot_access_other_session">Use a Recovery Passphrase or Key</string>
     <string name="verification_use_passphrase">If you can’t access an existing session</string>

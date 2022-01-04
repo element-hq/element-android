@@ -1925,7 +1925,6 @@
     <string name="login_signup_username_hint">使用者名稱</string>
     <string name="settings_dev_tools">開發者工具</string>
     <string name="settings_account_data">帳號資料</string>
-    <string name="poll_item_selected_aria">已選取的選項</string>
     <string name="command_description_poll">建立簡易投票</string>
     <string name="verification_cannot_access_other_session">使用復原通關密語或金鑰</string>
     <string name="verification_use_passphrase">如果您無法存取既有的工作階段的話</string>
@@ -2319,7 +2318,6 @@
     <string name="settings_show_room_member_state_events">顯示聊天室成員狀態活動</string>
     <string name="settings_show_room_member_state_events_summary">包含邀請／加入／離開／踢除／封鎖事件與大頭貼／顯示名稱變更等。</string>
     <string name="sent_a_poll">投票</string>
-    <string name="sent_a_bot_buttons">機器人按鈕</string>
     <string name="sent_a_reaction">反應：%s</string>
     <string name="sent_verification_conclusion">驗證結論</string>
     <string name="universal_link_malformed">連結格式錯誤</string>

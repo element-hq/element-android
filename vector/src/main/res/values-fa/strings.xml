@@ -1367,7 +1367,6 @@
     <string name="sent_a_file">پرونده</string>
     <string name="send_a_sticker">برچسب</string>
     <string name="sent_a_poll">نظرسنجی</string>
-    <string name="sent_a_bot_buttons">دکمه‌های بات</string>
     <string name="sent_a_reaction">واکنش داده با: %s</string>
     <string name="sent_verification_conclusion">نتیجه‌گیری تأیید</string>
     <string name="verification_request_waiting">در حال انتظار…</string>
@@ -1448,7 +1447,6 @@
     <string name="no_connectivity_to_the_server_indicator">اتّصال به کارساز از دست رفت</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">حالت هواپیما روشن است</string>
     <string name="settings_account_data">داده‌های حساب</string>
-    <string name="poll_item_selected_aria">انتخاب گزیده</string>
     <string name="command_description_poll">ایجاد نظرسنجی‌ای ساده</string>
     <string name="verification_cannot_access_other_session">استفاده از یک کلید یا عبارت بازیابی</string>
     <string name="verification_use_passphrase">اگر به نشست‌های موجود دسترسی ندارید</string>

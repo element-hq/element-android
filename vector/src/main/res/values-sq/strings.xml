@@ -1950,7 +1950,6 @@
     <string name="verification_verified_user">%s i verifikuar</string>
     <string name="settings_dev_tools">Mjete Zhvilluesi</string>
     <string name="settings_account_data">Të dhëna Llogarie</string>
-    <string name="poll_item_selected_aria">Mundësi e Përzgjedhur</string>
     <string name="command_description_poll">Krijoni një pyetësor të thjeshtë</string>
     <string name="verification_cannot_access_other_session">Përdorni Frazëkalim Rikthimesh ose Kyç</string>
     <string name="verification_use_passphrase">Nëse s’hyni dot në një sesion ekzistues</string>
@@ -2269,7 +2268,6 @@
     <string name="login_signin_matrix_id_password_notice">Nëse s’e dini fjalëkalimin, kthehuni mbrapsht që ta ricaktoni.</string>
     <string name="send_a_sticker">Ngjitës</string>
     <string name="sent_a_poll">Pyetësor</string>
-    <string name="sent_a_bot_buttons">Butona Roboti</string>
     <string name="sent_a_reaction">Reagoi me: %s</string>
     <string name="sent_verification_conclusion">Përfundim Verifikimi</string>
     <string name="room_profile_section_admin">Veprime Përgjegjësi</string>

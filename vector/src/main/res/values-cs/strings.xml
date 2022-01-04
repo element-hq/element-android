@@ -1996,7 +1996,6 @@
     <string name="no_connectivity_to_the_server_indicator">Spojení k serveru bylo ztraceno</string>
     <string name="settings_dev_tools">Vývojářské nástroje</string>
     <string name="settings_account_data">Údaje účtu</string>
-    <string name="poll_item_selected_aria">Zvolená možnost</string>
     <string name="command_description_poll">Vytvoří jednoduché hlasování</string>
     <string name="verification_cannot_access_other_session">Použijte metodu obnovy</string>
     <string name="verification_use_passphrase">Pokud se nemůžete dostat do existující relace</string>
@@ -2407,7 +2406,6 @@
     <string name="settings_show_room_member_state_events">Zobrazit stavové události účastníků v místnosti</string>
     <string name="settings_show_room_member_state_events_summary">Zahrnuje události pozvat/vstoupit/opustit/vykopnout/vykázat a změny avatara/veřejného jména.</string>
     <string name="sent_a_poll">Hlasování</string>
-    <string name="sent_a_bot_buttons">Tlačítka botů</string>
     <string name="sent_a_reaction">Reagoval(a): %s</string>
     <string name="sent_verification_conclusion">Výsledek ověření</string>
     <string name="universal_link_malformed">Odkaz byl chybně zformován</string>

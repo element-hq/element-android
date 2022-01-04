@@ -2129,7 +2129,6 @@
     <string name="no_connectivity_to_the_server_indicator_airplane">Modo avião está ligado</string>
     <string name="settings_dev_tools">Ferramentas Dev</string>
     <string name="settings_account_data">Dados de Conta</string>
-    <string name="poll_item_selected_aria">Opção Selecionada</string>
     <string name="command_description_poll">Cria uma sondagem simples</string>
     <string name="verification_cannot_access_other_session">Use uma Chave ou a Frasepasse de Recuperação</string>
     <string name="verification_use_passphrase">Se você não pode acessar uma sessão existente</string>
@@ -2435,7 +2434,6 @@
     <string name="auth_msisdn_already_defined">Este número de telefone já está definido.</string>
     <string name="settings_show_room_member_state_events">Mostrar eventos de estado de membros de sala</string>
     <string name="sent_a_poll">Sondagem</string>
-    <string name="sent_a_bot_buttons">Botões de Bot</string>
     <string name="sent_a_reaction">Reagiu com: %s</string>
     <string name="sent_verification_conclusion">Conclusão de Verificação</string>
     <string name="delete_account_data_warning">Deletar os dados de conta de tipo %1$s\?

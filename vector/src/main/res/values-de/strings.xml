@@ -2024,7 +2024,6 @@
     <string name="settings_dev_tools">Entwicklerwerkzeuge</string>
     <string name="settings_account_data">Kontodaten</string>
     <string name="command_description_poll">Erstellt eine einfache Umfrage</string>
-    <string name="poll_item_selected_aria">Ausgewählte Option</string>
     <string name="verification_cannot_access_other_session">Nutze eine Wiederherstellungsmethode</string>
     <string name="verification_use_passphrase">Wenn du auf keine existierende Sitzung zugreifen kannst</string>
     <string name="new_signin">Neue Anmeldung</string>
@@ -2426,7 +2425,6 @@
     <string name="settings_show_room_member_state_events">Status-Ereignisse der Raummitglieder zeigen</string>
     <string name="settings_show_room_member_state_events_summary">Bezieht Einladungs-/Beitritts-/Verlassen-/Entfernen-/Verbannen-Ereignisse und Avatar-/Anzeigenamen-Wechsel mit ein.</string>
     <string name="sent_a_poll">Umfrage</string>
-    <string name="sent_a_bot_buttons">Bot-Schaltflächen</string>
     <string name="sent_a_reaction">Reagierte mit: %s</string>
     <string name="universal_link_malformed">Der Link war fehlerhaft</string>
     <string name="no_permissions_to_start_webrtc_call">Du bist nicht berechtigt, einen Anruf in diesem Raum zu starten</string>

@@ -2253,7 +2253,6 @@
     <string name="verification_request_waiting">Đang chờ…</string>
     <string name="sent_verification_conclusion">Kết luận xác minh</string>
     <string name="sent_a_reaction">Phản ứng với: %s</string>
-    <string name="sent_a_bot_buttons">Nút Bot</string>
     <string name="sent_a_poll">Thăm dò ý kiến</string>
     <string name="send_a_sticker">Sticker</string>
     <string name="sent_a_file">Tệp</string>
@@ -2692,7 +2691,6 @@
     <string name="verification_use_passphrase">Nếu bạn không thể truy nhập phiên hiện có</string>
     <string name="verification_cannot_access_other_session">Sử dụng Cụm mật khẩu hoặc Khóa phục hồi</string>
     <string name="command_description_poll">Tạo một cuộc thăm dò ý kiến đơn giản</string>
-    <string name="poll_item_selected_aria">Tùy chọn đã chọn</string>
     <string name="delete_account_data_warning">Xóa dữ liệu tài khoản của loại %1$s\?
 \n
 \nSử dụng một cách thận trọng, nó có thể dẫn đến hành vi bất ngờ.</string>

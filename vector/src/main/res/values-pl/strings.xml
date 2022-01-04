@@ -1791,7 +1791,6 @@
     <string name="qr_code_scanned_by_other_no">Nie</string>
     <string name="settings_dev_tools">Narzędzia programistyczne</string>
     <string name="settings_account_data">Dane konta</string>
-    <string name="poll_item_selected_aria">Wybrana Opcja</string>
     <string name="command_description_poll">Tworzy prostą ankietę</string>
     <string name="verification_cannot_access_other_session">Użyj hasła odzyskiwania lub klucza</string>
     <string name="verification_use_passphrase">Użyj klucza odzyskiwania lub hasła</string>
@@ -2067,7 +2066,6 @@
     <string name="direct_room_profile_not_encrypted_subtitle">Wiadomości tutaj nie są zaszyfrowane w trybie punkt-punkt (e2e).</string>
     <string name="sent_verification_conclusion">Weryfikacja wniosków</string>
     <string name="sent_a_reaction">Zareagowano: %s</string>
-    <string name="sent_a_bot_buttons">Przyciski botów</string>
     <string name="create_room_in_progress">Tworzenie pokoju…</string>
     <string name="create_room_alias_invalid">Niektóre znaki nie są dozwolone</string>
     <string name="create_room_alias_empty">Podaj adres pokoju</string>

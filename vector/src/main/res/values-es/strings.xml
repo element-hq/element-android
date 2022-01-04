@@ -1966,7 +1966,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="no_connectivity_to_the_server_indicator_airplane">Modo Avión Activado</string>
     <string name="settings_dev_tools">Herramientas de desarrollo</string>
     <string name="settings_account_data">Datos de cuenta</string>
-    <string name="poll_item_selected_aria">Seleccionar Opcion</string>
     <string name="new_signin">Nuevo inicio de sesión</string>
     <string name="enter_secret_storage_passphrase_warning">Advertencia:</string>
     <string name="message_action_item_redact">Eliminar…</string>
@@ -2430,7 +2429,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
 \n
 \nTus mensajes están asegurados con un candado. Solo tú y tú destinatario tenéis las llaves especiales para descifrarlos.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Los mensajes aquí no están cifrados Extremo-a-Extremo.</string>
-    <string name="sent_a_bot_buttons">Botones de Bot</string>
     <string name="sent_a_poll">Encuesta</string>
     <string name="room_list_quick_actions_low_priority_remove">Eliminar de baja prioridad</string>
     <string name="room_list_quick_actions_low_priority_add">Añadir a Baja prioridad</string>

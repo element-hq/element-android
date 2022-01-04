@@ -803,7 +803,6 @@
     <string name="verification_request_waiting">Atendante…</string>
     <string name="sent_verification_conclusion">Rezulto de kontrolo</string>
     <string name="sent_a_reaction">Reagis per: %s</string>
-    <string name="sent_a_bot_buttons">Butonoj de robotoj</string>
     <string name="sent_a_poll">Enketo</string>
     <string name="send_a_sticker">Glumarko</string>
     <string name="sent_a_file">Dosiero</string>
@@ -2232,7 +2231,6 @@
     <string name="verification_use_passphrase">Se vi ne povas aliri jaman salutaĵon</string>
     <string name="verification_cannot_access_other_session">Uzi rehavan pasfrazon aŭ ŝlosilon</string>
     <string name="command_description_poll">Faras simplan enketon</string>
-    <string name="poll_item_selected_aria">Elektita elekteblo</string>
     <string name="delete_account_data_warning">Ĉu forigi la datumojn de konto de la speco «%1$s»\?
 \n
 \nForu tion zorge, ĝi povus kaŭzi neatenditan konduton.</string>

@@ -1283,7 +1283,6 @@
     <string name="keys_backup_setup_step3_button_title_no_passphrase">הכנתי עותק</string>
     <string name="sent_verification_conclusion">מסקנת אימות</string>
     <string name="sent_a_reaction">הגיב עם: %s</string>
-    <string name="sent_a_bot_buttons">כפתורי בוט</string>
     <string name="sent_a_poll">משאל</string>
     <string name="send_a_sticker">מדבקה</string>
     <string name="sent_a_file">קובץ</string>
@@ -2021,7 +2020,6 @@
     <string name="verification_use_passphrase">אם אינך יכול לגשת להפעלה קיימת</string>
     <string name="verification_cannot_access_other_session">השתמש בביטוי סיסמה או מפתח שחזור</string>
     <string name="command_description_poll">יוצר סקר פשוט</string>
-    <string name="poll_item_selected_aria">אפשרות נבחרת</string>
     <string name="delete_account_data_warning">למחוק את נתוני החשבון מסוג %1$s\?
 \n
 \nהשתמש בזהירות, זה עלול להוביל להתנהגות בלתי צפויה.</string>

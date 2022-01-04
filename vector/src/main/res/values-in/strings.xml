@@ -2173,7 +2173,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="verification_request_waiting">Menunggu…</string>
     <string name="sent_verification_conclusion">Kesimpulan Verifikasi</string>
     <string name="sent_a_reaction">Bereaksi dengan: %s</string>
-    <string name="sent_a_bot_buttons">Tombol Bot</string>
     <string name="sent_a_poll">Poll</string>
     <string name="send_a_sticker">Stiker</string>
     <string name="sent_a_file">File</string>
@@ -2888,7 +2887,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="new_signin">Sign In Baru</string>
     <string name="verification_cannot_access_other_session">Gunakan Frasa Sandi Pemulihan atau Kunci</string>
     <string name="command_description_poll">Membuat poll sederhana</string>
-    <string name="poll_item_selected_aria">Opsi yang Dipilih</string>
     <string name="delete_account_data_warning">Hapus data akun dengan tipe %1$s\?
 \n
 \nHati-hati menggunakannya, ini dapat menyebabkan perilaku yang tidak terduga.</string>

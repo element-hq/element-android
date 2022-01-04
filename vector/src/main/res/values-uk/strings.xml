@@ -2585,7 +2585,6 @@
     <string name="settings_discovery_confirm_mail">Ми надіслали вам електронний лист для підтвердження на %s, відкрийте свою е-пошту та клацніть на посилання для підтвердження</string>
     <string name="settings_discovery_confirm_mail_not_clicked">Ми надіслали вам електронний лист для підтвердження на %s, відкрийте свою е-пошту та клацніть на посилання для підтвердження</string>
     <string name="you">Ви</string>
-    <string name="sent_a_bot_buttons">Кнопки бота</string>
     <string name="sent_a_poll">Опитування</string>
     <string name="sent_a_file">Файл</string>
     <string name="sent_a_voice_message">Голосове</string>
@@ -2753,7 +2752,6 @@
     <string name="verification_no_scan_emoji_title">Звірити порівнявши емоджі</string>
     <string name="verification_profile_verify">Звірити</string>
     <string name="command_description_poll">Створює просте опитування</string>
-    <string name="poll_item_selected_aria">Вибрана опція</string>
     <string name="initialize_cross_signing">Ініціалізувати перехресне підписування</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) входить за допомогою нового сеансу:</string>
     <string name="settings_server_room_version_unstable">нестабільна</string>

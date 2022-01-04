@@ -62,7 +62,6 @@
     <string name="verification_use_passphrase">Si vous n’avez pas accès à une session existante</string>
     <string name="verification_cannot_access_other_session">Utiliser une phrase secrète ou une clé de récupération</string>
     <string name="command_description_poll">Crée un sondage simple</string>
-    <string name="poll_item_selected_aria">Option sélectionnée</string>
     <string name="delete_account_data_warning">Supprimer les données du compte de type %1$s \?
 \n
 \nÀ utiliser avec précaution, ceci peut entraîner des comportements inattendus.</string>
@@ -190,7 +189,6 @@
     <string name="verification_request_waiting">En attente…</string>
     <string name="sent_verification_conclusion">Conclusion de la vérification</string>
     <string name="sent_a_reaction">A réagi avec : %s</string>
-    <string name="sent_a_bot_buttons">Boutons de robot</string>
     <string name="sent_a_poll">Sondage</string>
     <string name="send_a_sticker">Autocollants</string>
     <string name="sent_a_file">Fichier</string>

@@ -1937,7 +1937,6 @@
     <string name="login_signup_username_hint">Nom d’utilisateur</string>
     <string name="settings_dev_tools">Outils de développement</string>
     <string name="settings_account_data">Données du compte</string>
-    <string name="poll_item_selected_aria">Option sélectionnée</string>
     <string name="command_description_poll">Crée un sondage simple</string>
     <string name="verification_cannot_access_other_session">Utiliser une phrase secrète ou une clé de récupération</string>
     <string name="verification_use_passphrase">Si vous n’avez pas accès à une session existante</string>
@@ -2244,7 +2243,6 @@
     <string name="direct_room_profile_encrypted_subtitle">Les messages ici sont chiffrés de bout en bout.
 \n
 \nVos messages sont sécurisés avec des verrous et seuls vous et le destinataire en possédez la clé unique pour les déverrouiller.</string>
-    <string name="sent_a_bot_buttons">Boutons de robot</string>
     <string name="send_a_sticker">Autocollants</string>
     <string name="login_error_outdated_homeserver_warning_content">Ce serveur d\'accueil utilise une version obsolète. Demandez à l’administrateur de votre serveur d\'accueil de le mettre à jour. Vous pouvez continuer, mais certaines fonctionnalités peuvent ne pas fonctionner correctement.</string>
     <string name="login_server_url_form_common_notice">Entrez l’adresse du serveur que vous voulez utiliser</string>

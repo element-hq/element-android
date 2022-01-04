@@ -2252,7 +2252,6 @@
     <string name="verification_use_passphrase">Si no pots accedir a una sessió existent</string>
     <string name="verification_cannot_access_other_session">Utilitza una frase de recuperació o una clau</string>
     <string name="command_description_poll">Crea una votació simple</string>
-    <string name="poll_item_selected_aria">Opció seleccionada</string>
     <string name="delete_account_data_warning">Vols eliminar les dades del compte de tipus %1$s\?
 \n
 \nVés en compte, pot ser que provoqui comportaments inesperats.</string>
@@ -2514,7 +2513,6 @@
     <string name="verification_request_waiting">Esperant…</string>
     <string name="sent_verification_conclusion">Conclusió de la verificació</string>
     <string name="sent_a_reaction">Ha reaccionat amb: %s</string>
-    <string name="sent_a_bot_buttons">Botons de bot</string>
     <string name="sent_a_poll">Votació</string>
     <string name="send_a_sticker">Adhesiu</string>
     <string name="sent_an_image">Imatge.</string>

@@ -1453,7 +1453,6 @@
     <string name="verification_request_waiting_for">Ittraju %s…</string>
     <string name="room_profile_section_more_uploads">Isuli-d</string>
     <string name="settings_account_data">Isefka n umiḍan</string>
-    <string name="poll_item_selected_aria">Taxtirit yettefernen</string>
     <string name="new_signin">Anekcum amaynut</string>
     <string name="enter_secret_storage_passphrase">Sekcem tasarut tuffirt n uḥraz uffir</string>
     <string name="enter_secret_storage_passphrase_warning">Ɣur-k·m:</string>
@@ -2287,7 +2286,6 @@
         <item quantity="other">%d n tsintin</item>
     </plurals>
     <string name="settings_show_room_member_state_events">Sken tidyanin n waddad n uɛeggal n texxamt</string>
-    <string name="sent_a_bot_buttons">Tiqeffalin n uṛubut</string>
     <string name="sent_verification_conclusion">Taggrayt n usenqed</string>
     <string name="universal_link_malformed">Aseɣwen ur yemsil ara akken iwata</string>
     <string name="no_permissions_to_start_webrtc_call">Ur tesɛiḍ ara tasiregt ad tebduḍ asiwel deg texxamt-a</string>

@@ -1921,7 +1921,6 @@
     <string name="verification_request_waiting">Изчакване…</string>
     <string name="sent_verification_conclusion">Резултат от проверка</string>
     <string name="sent_a_reaction">Реагира с: %s</string>
-    <string name="sent_a_bot_buttons">Бот бутони</string>
     <string name="sent_a_poll">Анкета</string>
     <string name="send_a_sticker">Стикер</string>
     <string name="sent_a_file">Файл</string>
@@ -2065,7 +2064,6 @@
     <string name="verification_use_passphrase">Ако не можете да достъпите съществуваща сесия</string>
     <string name="verification_cannot_access_other_session">Използвай парола или ключ за възстановяване</string>
     <string name="command_description_poll">Създава проста анкета</string>
-    <string name="poll_item_selected_aria">Избрана опция</string>
     <string name="delete_account_data_warning">Изтриване на профилните данни от тип %1$s\?
 \n
 \nВнимавайте с това - може да доведе до неочаквано поведение.</string>

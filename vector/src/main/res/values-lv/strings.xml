@@ -1275,7 +1275,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_list_sharing_header_other_rooms">Citas istabas</string>
     <string name="room_list_sharing_header_recent_rooms">Nesenās istabas</string>
     <string name="sent_verification_conclusion">Verifikācijas slēdziens</string>
-    <string name="sent_a_bot_buttons">Bota pogas</string>
     <string name="sent_a_poll">Aptauja</string>
     <string name="send_a_sticker">Uzlīme</string>
     <string name="verification_conclusion_compromised">Kāds no uzskaitītajiem var būt kompromitēts:
@@ -2159,7 +2158,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Atslēgas jau ir atjauninātas!</string>
     <string name="event_redacted_by_admin_reason_with_reason">Pasākumu moderē telpas administrators, iemesls: %1$s</string>
     <string name="event_redacted_by_user_reason_with_reason">Lietotājs izdzēsa notikumu, iemesls: %1$s</string>
-    <string name="poll_item_selected_aria">Izvēlētā Opcija</string>
     <string name="delete_account_data_warning">Dzēst %1$s tipa konta datus\?
 \n
 \nLietojiet piesardzīgi, tas var izraisīt neparedzētu uzvedību.</string>

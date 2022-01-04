@@ -2184,7 +2184,6 @@
     <string name="qr_code_scanned_by_other_no">Nej</string>
     <string name="no_connectivity_to_the_server_indicator">Anslutningen till servern har tappats</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Flygplansläge är på</string>
-    <string name="poll_item_selected_aria">Valt alternativ</string>
     <string name="command_description_poll">Skapar en enkel omröstning</string>
     <string name="verification_cannot_access_other_session">Använd en återställningslösenfras eller -nyckel</string>
     <string name="new_signin">Ny inloggning</string>
@@ -2363,7 +2362,6 @@
     <string name="settings_show_room_member_state_events">Visa statushändelser angående rumsmedlemmar</string>
     <string name="settings_show_room_member_state_events_summary">Inkluderar när personer bjuds in, går med, lämnar, kickas, bannas eller byter sin avatar eller sitt namn.</string>
     <string name="sent_a_poll">Omröstning</string>
-    <string name="sent_a_bot_buttons">Bottknappar</string>
     <string name="sent_a_reaction">Reagerade med: %s</string>
     <string name="sent_verification_conclusion">Verifieringsavslutning</string>
     <string name="universal_link_malformed">Länken var felformaterad</string>
