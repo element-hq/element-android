@@ -39,7 +39,7 @@
     <string name="notice_room_third_party_invite">%1$s meghívót küldött %2$s számára, hogy csatlakozzon a szobához</string>
     <string name="notice_room_third_party_registered_invite">%1$s elfogadta a meghívót ebbe: %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Visszafejtés sikertelen: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">A küldő eszköze nem küldte el a kulcsokat ehhez az üzenethez.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">A küldő eszköze nem küldte el a kulcsokat ehhez az üzenethez.</string>
     <string name="could_not_redact">Kitakarás sikertelen</string>
     <string name="unable_to_send_message">Üzenet küldése sikertelen</string>
     <string name="message_failed_to_upload">Kép feltöltése sikertelen</string>
@@ -2020,7 +2020,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \n${app_name} Desktop</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">"vagy más eszközök közötti hitelesítést támogató  Matrix-klienst"</string>
+    <string name="or_other_mx_capable_client">"vagy más eszközök közötti hitelesítést támogató  Matrix-klienst"</string>
     <string name="template_use_latest_app">Az ${app_name} legújabb kliensét használd a többi eszközödön:</string>
     <string name="command_description_discard_session">A jelenlegi csoport munkamenet törlését kikényszeríti a titkosított szobában</string>
     <string name="command_description_discard_session_not_handled">Csak a titkosított szobákban támogatott</string>
@@ -2502,7 +2502,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="invite_to_space_with_name_desc">Felfedezhetik ezt: %s</string>
     <string name="invite_to_space_with_name">Meghívó ide: %s</string>
     <string name="invite_by_link">Megosztás hivatkozás</string>
-    <string name="invite_by_mxid">Meghívás felhasználónévvel</string>
+    <string name="invite_by_username">Meghívás felhasználónévvel</string>
     <string name="invite_by_email">Meghívás e-maillel</string>
     <string name="invite_people_to_your_space_desc">Egyelőre csak te vagy itt, %s még jobb lehet másokkal együtt.</string>
     <string name="invite_to_space">Meghívó ide: %s</string>
@@ -2954,7 +2954,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="discovery_invite">E-mail alapú meghívás, kapcsolatok megtalálása és sok más…</string>
     <string name="finish_setting_up_discovery">Felderíthetőségi beállítás befejezése.</string>
     <string name="create_space_identity_server_info_none">Jelenleg nem használsz azonosítási szolgáltatást. Ahhoz, hogy a csoporttársaidat meghívd vagy megtaláljanak állíts be egyet alább.</string>
-    <string name="invite_by_mxid_or_mail">Meghívás felhasználói névvel vagy e-mail címmel</string>
+    <string name="invite_by_username_or_mail">Meghívás felhasználói névvel vagy e-mail címmel</string>
     <string name="create_spaces_invite_public_header_desc">Ellenőrizd, hogy a megfelelő személyeknek van hozzáférése ehhez a céghez: %s. Később meghívhatsz másokat is.</string>
     <string name="create_spaces_invite_public_header">Kik a csoporttársaid\?</string>
     <string name="command_description_add_to_space">A megadott térhez adás</string>

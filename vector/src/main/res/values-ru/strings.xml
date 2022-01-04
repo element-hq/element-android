@@ -39,7 +39,7 @@
     <string name="notice_room_third_party_invite">%1$s отправил(а) приглашение %2$s присоединиться к комнате</string>
     <string name="notice_room_third_party_registered_invite">%1$s принял(а) приглашение от %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Невозможно расшифровать: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Устройство отправителя не предоставило нам ключ для расшифровки этого сообщения.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Устройство отправителя не предоставило нам ключ для расшифровки этого сообщения.</string>
     <!-- Room Screen -->
     <string name="could_not_redact">Не удалось изменить</string>
     <string name="unable_to_send_message">Не удалось отправить сообщение</string>
@@ -2335,7 +2335,7 @@
 \n${app_name} для ПК</string>
     <string name="template_app_ios_android">${app_name} для iOS
 \n${app_name} для Android</string>
-    <string name="or_other_mx_capabale_client">или другой, поддерживаемый кросс-подпись Matrix клиент</string>
+    <string name="or_other_mx_capable_client">или другой, поддерживаемый кросс-подпись Matrix клиент</string>
     <string name="command_description_discard_session">Принудительно отбрасывает текущую групповую сессию для отправки сообщений в зашифрованную комнату</string>
     <string name="enter_secret_storage_passphrase_or_key">Чтобы продолжить, используйте ваш %1$s или используйте ваш %2$s.</string>
     <string name="use_recovery_key">Используйте ключ восстановления</string>
@@ -2878,7 +2878,7 @@
     <string name="invite_to_space_with_name_desc">Они смогут изучить %s</string>
     <string name="invite_to_space_with_name">Пригласить в %s</string>
     <string name="invite_by_link">Поделиться ссылкой</string>
-    <string name="invite_by_mxid">Пригласить по имени пользователя</string>
+    <string name="invite_by_username">Пригласить по имени пользователя</string>
     <string name="invite_by_email">Пригласить по электронной почте</string>
     <string name="invite_people_to_your_space_desc">На данный момент здесь только вы. С другими в %s будет ещё лучше.</string>
     <string name="invite_to_space">Пригласить в %s</string>
@@ -3104,7 +3104,7 @@
     <string name="discovery_invite">Приглашение по электронной почте, поиск контактов и многое другое…</string>
     <string name="finish_setting_up_discovery">Завершите настройку обнаружения.</string>
     <string name="create_space_identity_server_info_none">В настоящее время вы не используете сервер идентификации. Чтобы приглашать членов команды и быть доступным для них, настройте один из них ниже.</string>
-    <string name="invite_by_mxid_or_mail">Приглашение по имени пользователя или по почте</string>
+    <string name="invite_by_username_or_mail">Приглашение по имени пользователя или по почте</string>
     <string name="create_spaces_invite_public_header_desc">Убедитесь, что нужные люди имеют доступ к %s. Вы можете пригласить больше людей позже.</string>
     <string name="create_spaces_invite_public_header">Кто ваши члены команды\?</string>
     <string name="command_description_add_to_space">Добавить в данное пространство</string>

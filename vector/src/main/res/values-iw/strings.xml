@@ -2123,7 +2123,7 @@
     <string name="command_description_discard_session_not_handled">נתמך רק בחדרים מוצפנים</string>
     <string name="command_description_discard_session">מכריח את ההפעלה הקבוצתית החוצה הנוכחית בחדר מוצפן להיזרק</string>
     <string name="template_use_latest_app">השתמש באלמנט האחרון במכשירים האחרים שלך:</string>
-    <string name="or_other_mx_capabale_client">או לקוח מטריקס אחר עם יכולת חתימה צולבת</string>
+    <string name="or_other_mx_capable_client">או לקוח מטריקס אחר עם יכולת חתימה צולבת</string>
     <string name="template_app_ios_android">אלמנט iOS
 \nאלמנט אנדרואיד</string>
     <string name="template_app_desktop_web">רשת האינטרנט

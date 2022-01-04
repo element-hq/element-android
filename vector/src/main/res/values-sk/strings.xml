@@ -39,7 +39,7 @@
     <string name="notice_room_third_party_invite">%1$s pozval/a %2$s vstúpiť do miestnosti</string>
     <string name="notice_room_third_party_registered_invite">%1$s prijal/a pozvanie pre %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Nie je možné dešifrovať: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Zo zariadenia odosieľateľa nebolo možné získať kľúče potrebné na dešifrovanie tejto správy.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Zo zariadenia odosieľateľa nebolo možné získať kľúče potrebné na dešifrovanie tejto správy.</string>
     <string name="could_not_redact">Nie je možné vymazať</string>
     <string name="unable_to_send_message">Nie je možné odoslať správu</string>
     <string name="message_failed_to_upload">Nepodarilo sa nahrať obrázok</string>

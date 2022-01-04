@@ -40,7 +40,7 @@
     <string name="notice_room_third_party_invite">%1$s do této místnosti pozvali %2$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s přijali pozvání pro %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Nelze dešifrovat: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Odesílatelovo zařízení nám neposlalo klíče pro tuto zprávu.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Odesílatelovo zařízení nám neposlalo klíče pro tuto zprávu.</string>
     <string name="could_not_redact">Nelze vymazat</string>
     <string name="unable_to_send_message">Zprávu nelze odeslat</string>
     <string name="message_failed_to_upload">Obrázek nelze nahrát</string>
@@ -2144,7 +2144,7 @@
 \n${app_name} Desktop</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">nebo jiný Matrix klient schopný křížového podepisování</string>
+    <string name="or_other_mx_capable_client">nebo jiný Matrix klient schopný křížového podepisování</string>
     <string name="template_use_latest_app">Použijte na svých zařízeních nejnovější ${app_name}:</string>
     <string name="command_description_discard_session">Vynutí zahození probíhající skupinové relace v šifrované místnosti</string>
     <string name="command_description_discard_session_not_handled">Podporováno jen v šifrovaných místnostech</string>
@@ -2747,7 +2747,7 @@
     <string name="invite_to_space_with_name_desc">Budou moci %s prozkoumat</string>
     <string name="invite_to_space_with_name">Pozvat do %s</string>
     <string name="invite_by_link">Sdílet odkaz</string>
-    <string name="invite_by_mxid">Pozvat podle uživatelského jména</string>
+    <string name="invite_by_username">Pozvat podle uživatelského jména</string>
     <string name="invite_by_email">Pozvat emailem</string>
     <string name="invite_people_to_your_space_desc">V tomto okamžiku jste to jen Vy. %s bude s dalšími lepší.</string>
     <string name="invite_people_menu">Pozvat lidi</string>
@@ -3003,7 +3003,7 @@
     <string name="discovery_invite">Pozvání e-mailem, vyhledávání kontaktů a další…</string>
     <string name="finish_setting_up_discovery">Dokončit nastavení objevování.</string>
     <string name="create_space_identity_server_info_none">V současné době nepoužíváte server identit. Chcete-li pozvat kolegy a být pro ně zjistitelní, nakonfigurujte jej níže.</string>
-    <string name="invite_by_mxid_or_mail">Pozvat pomocí uživatelského jména nebo e-mailu</string>
+    <string name="invite_by_username_or_mail">Pozvat pomocí uživatelského jména nebo e-mailu</string>
     <string name="create_spaces_invite_public_header_desc">Zajistěte, aby měli do společnosti %s přístup ti správní lidé. Další můžete pozvat později.</string>
     <string name="create_spaces_invite_public_header">Kdo jsou vaši kolegové\?</string>
     <string name="command_description_add_to_space">Přidat do daného prostoru</string>

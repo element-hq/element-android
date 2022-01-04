@@ -99,7 +99,7 @@
     <string name="notice_power_level_changed">%1$s %2$s এর পাওয়ার স্তর পরিবর্তন করেছে।</string>
     <string name="notice_power_level_diff">%1$s %2$s থেকে %3$s পর্যন্ত</string>
     <string name="notice_crypto_unable_to_decrypt">** ডিক্রিপ্ট করতে অক্ষম: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">প্রেরকের ডিভাইস আমাদের এই বার্তার জন্য কীগুলি প্রেরণ করেনি।</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">প্রেরকের ডিভাইস আমাদের এই বার্তার জন্য কীগুলি প্রেরণ করেনি।</string>
     <string name="could_not_redact">পুনরায় প্রতিক্রিয়া করতে পারেনি</string>
     <string name="unable_to_send_message">বার্তা পাঠাতে অক্ষম</string>
     <string name="message_failed_to_upload">চিত্র আপলোড করতে ব্যর্থ</string>

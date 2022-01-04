@@ -43,7 +43,7 @@
     <string name="notice_room_third_party_registered_invite">%1$s erabiltzaileak %2$s gelarako gonbidapena onartu du</string>
 
     <string name="notice_crypto_unable_to_decrypt">** Ezin izan da deszifratu: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Igorlearen gailuak ez dizkigu mezu honetarako gakoak bidali.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Igorlearen gailuak ez dizkigu mezu honetarako gakoak bidali.</string>
 
     <string name="could_not_redact">Ezin izan da kendu</string>
     <string name="unable_to_send_message">Ezin izan da mezua bidali</string>
@@ -2408,7 +2408,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 \n${app_name} Desktop</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">edo zeharka sinatzeko gaitasuna duen beste Matrix bezero bat</string>
+    <string name="or_other_mx_capable_client">edo zeharka sinatzeko gaitasuna duen beste Matrix bezero bat</string>
     <string name="template_use_latest_app">Erabili azken ${app_name} bertsioa zure beste gailuetan:</string>
     <string name="command_description_discard_session">Uneko irteerako talde saioa zifratutako gela batean baztertzera behartzen du</string>
     <string name="command_description_discard_session_not_handled">Zifratutako gelatan onartzen da soilik</string>

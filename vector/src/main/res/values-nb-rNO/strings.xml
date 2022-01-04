@@ -1629,7 +1629,7 @@
     <string name="network_error">Nettverksfeil</string>
     <string name="message_failed_to_upload">Kunne ikke laste opp bildet</string>
     <string name="unable_to_send_message">Kan ikke sende melding</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Avsenderens enhet har ikke sendt oss nøklene til denne meldingen.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Avsenderens enhet har ikke sendt oss nøklene til denne meldingen.</string>
     <string name="notice_crypto_unable_to_decrypt">** Kan ikke dekryptere: %s **</string>
     <string name="power_level_custom_no_value">Tilpasset</string>
     <string name="power_level_custom">Tilpasset (%1$d)</string>

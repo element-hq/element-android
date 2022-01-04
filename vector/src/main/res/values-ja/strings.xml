@@ -47,7 +47,7 @@
     <string name="notice_room_third_party_invite">%1$s は %2$s にルームに参加するよう招待状を送りました</string>
     <string name="notice_room_third_party_registered_invite">%1$sは%2$sの招待を受け入れました</string>
     <string name="notice_crypto_unable_to_decrypt">** 解読できません: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">送信者の端末からこのメッセージのキーが送信されていません。</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">送信者の端末からこのメッセージのキーが送信されていません。</string>
     <string name="could_not_redact">修正できませんでした</string>
     <string name="unable_to_send_message">メッセージを送信できません</string>
     <string name="message_failed_to_upload">画像のアップロードに失敗しました</string>
@@ -1811,7 +1811,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="login_set_msisdn_submit">次に</string>
     <string name="login_set_email_submit">次に</string>
     <string name="login_reset_password_submit">次に</string>
-    <string name="invite_by_mxid">ユーザー名で招待</string>
+    <string name="invite_by_username">ユーザー名で招待</string>
     <string name="error_empty_field_choose_user_name">ユーザー名を選択してください。</string>
     <string name="auth_invalid_login_param_space_in_password">ユーザー名やパスワードが正しくありません。 入力したパスワードは、スペースで開始または終了しますので、ご確認ください。</string>
     <string name="login_signup_error_user_in_use">そのユーザー名は既に使用されています</string>

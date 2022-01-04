@@ -42,7 +42,7 @@
     <string name="notice_room_third_party_invite">%1$s envioulle un convite a %2$s para que entre na sala</string>
     <string name="notice_room_third_party_registered_invite">%1$s aceptou o convite para %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Imposíbel descifrar: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">O dispositivo do que envía non enviou as chaves desta mensaxe.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">O dispositivo do que envía non enviou as chaves desta mensaxe.</string>
     <string name="could_not_redact">Non se puido redactar</string>
     <string name="unable_to_send_message">Non foi posíbel enviar a mensaxe</string>
     <string name="network_error">Erro da conexión</string>

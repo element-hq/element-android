@@ -39,7 +39,7 @@
     <string name="notice_room_third_party_invite">%1$s enviou um convite para que %2$s se junte à sala</string>
     <string name="notice_room_third_party_registered_invite">%1$s aceitou o convite para %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Impossível decifrar: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">O dispositivo de quem enviou a mensagem não nos enviou as chaves para esta mensagem.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">O dispositivo de quem enviou a mensagem não nos enviou as chaves para esta mensagem.</string>
     <!-- Room Screen -->
     <string name="could_not_redact">Não foi possível apagar</string>
     <string name="unable_to_send_message">Não foi possível enviar a mensagem</string>

@@ -56,7 +56,7 @@
     <string name="notice_profile_change_redacted">%1$s zaktualizował swój profil %2$s</string>
     <string name="notice_room_third_party_invite">%1$s wysłał(a) zaproszenie do %2$s aby dołączył(a) do tego pokoju</string>
     <string name="notice_room_third_party_registered_invite">%1$s zaakceptował(a) zaproszenie dla %2$s</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Urządzenie nadawcy nie wysłało nam kluczy do tej wiadomości.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Urządzenie nadawcy nie wysłało nam kluczy do tej wiadomości.</string>
     <string name="could_not_redact">Nie można zredagować</string>
     <string name="room_error_join_failed_empty_room">Obecnie nie jest możliwe ponowne dołączenie do pustego pokoju.</string>
     <string name="notice_event_redacted">Wiadomość usunięta</string>
@@ -2718,8 +2718,8 @@
     <string name="invite_to_space_with_name_desc">Będą w stanie przeglądać %s</string>
     <string name="invite_to_space_with_name">Zaproś do %s</string>
     <string name="invite_by_link">Udostępnij link</string>
-    <string name="invite_by_mxid_or_mail">Zaproś przez nazwę użytkownika lub email</string>
-    <string name="invite_by_mxid">Zaproś przez nazwę użytkownika</string>
+    <string name="invite_by_username_or_mail">Zaproś przez nazwę użytkownika lub email</string>
+    <string name="invite_by_username">Zaproś przez nazwę użytkownika</string>
     <string name="invite_by_email">Zaproś przez email</string>
     <string name="invite_people_to_your_space_desc">Aktualnie jesteś tylko Ty. %s będzie jeszcze lepsza kiedy dołączą inni.</string>
     <string name="invite_to_space">Zaproś do %s</string>
@@ -2859,7 +2859,7 @@
     <string name="feedback">Opinie</string>
     <string name="bootstrap_crosssigning_progress_save_ssk">Synchronizacja klucza samopodpisującego (Self Signing key)</string>
     <string name="cross_signing_verify_by_text">Weryfikacja ręczna poprzez tekst</string>
-    <string name="or_other_mx_capabale_client">lub innego klienta Matrix z krzyżową weryfikacją nowych sesji logowania</string>
+    <string name="or_other_mx_capable_client">lub innego klienta Matrix z krzyżową weryfikacją nowych sesji logowania</string>
     <string name="upgrade_room_no_power_to_manage">Nie masz uprawnień do zmiany poziomu pokoju</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Oczekiwanie na historię szyfrowania</string>
     <string name="room_using_unstable_room_version">Ten pokój pracuje na wersji pokoju %s, którą serwer domowy oznaczył jako niestabilną.</string>

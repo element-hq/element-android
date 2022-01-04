@@ -389,7 +389,7 @@
     <string name="message_failed_to_upload">A apărut o eroare în timpul incărcării imaginii</string>
     <string name="unable_to_send_message">Nu s-a putut trimite mesajul</string>
     <string name="could_not_redact">Nu se poate redacta</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Dispozitivul expeditorului nu a trimis cheile de decriptare pentru acest mesaj.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Dispozitivul expeditorului nu a trimis cheile de decriptare pentru acest mesaj.</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">Acum sunt blocate serverele ce au adrese IP ce se potrivesc.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">Acum sunt permise serverele ce au adrese IP ce se potrivesc.</string>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">Sunt blocate serverele ce au adrese IP ce se potrivesc.</string>

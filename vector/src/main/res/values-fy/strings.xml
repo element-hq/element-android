@@ -1163,7 +1163,7 @@
     <string name="notice_room_reject_with_reason">%1$s hat de útnûging wegere. Reden: %2$s</string>
     <string name="initial_sync_start_importing_account_crypto">Inisjele syngronisaasje:
 \nKryptografy ymportearje</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">It apparaat fan de ôfstjoerder hat gjin kaaien foar dit berjocht stjoerd.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">It apparaat fan de ôfstjoerder hat gjin kaaien foar dit berjocht stjoerd.</string>
     <string name="notice_power_level_diff">%1$s fan %2$s nei %3$s</string>
     <string name="notice_power_level_changed">%1$s hat it machtigingsnivo fan %2$s oanpast.</string>
     <string name="notice_power_level_changed_by_you">Jo hawwe it machtigingsnivo fan %1$s oanpast.</string>

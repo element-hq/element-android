@@ -46,7 +46,7 @@
     <string name="notice_profile_change_redacted">%1$s uppfærði notandasniðið sitt %2$s</string>
     <string name="notice_room_third_party_invite">%1$s sendi boð til %2$s um þátttöku í spjallrásinni</string>
     <string name="notice_room_third_party_registered_invite">%1$s samþykkti boð um að taka þátt í %2$s</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Tæki sendandans hefur ekki sent okkur dulritunarlyklana fyrir þessi skilaboð.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Tæki sendandans hefur ekki sent okkur dulritunarlyklana fyrir þessi skilaboð.</string>
     <string name="could_not_redact">Gat ekki ritstýrt</string>
     <string name="room_error_join_failed_empty_room">Ekki er í augnablikinu hægt að taka aftur þátt í spjallrás sem er tóm.</string>
     <string name="room_displayname_room_invite">Boð á spjallrás</string>

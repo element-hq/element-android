@@ -43,7 +43,7 @@
     <string name="notice_room_third_party_registered_invite">%1$s aceptó la invitación de %2$s</string>
 
     <string name="notice_crypto_unable_to_decrypt">** No se puede descifrar: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">El dispositivo del remitente no nos ha enviado las claves de este mensaje.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">El dispositivo del remitente no nos ha enviado las claves de este mensaje.</string>
 
     <!-- Room Screen -->
     <string name="could_not_redact">No se pudo redactar</string>

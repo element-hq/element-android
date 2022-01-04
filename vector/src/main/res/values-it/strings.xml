@@ -39,7 +39,7 @@
     <string name="notice_room_third_party_invite">%1$s ha mandato un invito a %2$s per entrare alla stanza</string>
     <string name="notice_room_third_party_registered_invite">%1$s ha accettato l\'invito a %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Impossibile decriptare: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Il dispositivo del mittente non ha inviato le chiavi per questo messaggio.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Il dispositivo del mittente non ha inviato le chiavi per questo messaggio.</string>
     <string name="could_not_redact">Impossibile riscrivere</string>
     <string name="unable_to_send_message">Impossibile inviare il messaggio</string>
     <string name="message_failed_to_upload">Invio dell\'immagine fallito</string>
@@ -2142,7 +2142,7 @@
 \n${app_name} Desktop</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">o un altro client Matrix che supporti la firma incrociata</string>
+    <string name="or_other_mx_capable_client">o un altro client Matrix che supporti la firma incrociata</string>
     <string name="template_use_latest_app">Usa l\'ultima versione di ${app_name} anche sui tuoi altri dispositivi:</string>
     <string name="command_description_discard_session">Forza l\'attuale sessione di gruppo in uscita in una stanza cifrata ad essere scartata</string>
     <string name="command_description_discard_session_not_handled">Supportato solo nelle stanze criptate</string>
@@ -2743,7 +2743,7 @@
     <string name="invite_to_space_with_name_desc">Potranno esplorare %s</string>
     <string name="invite_to_space_with_name">Invita in %s</string>
     <string name="invite_by_link">Condividi link</string>
-    <string name="invite_by_mxid">Invita per nome utente</string>
+    <string name="invite_by_username">Invita per nome utente</string>
     <string name="invite_by_email">Invita per email</string>
     <string name="invite_people_to_your_space_desc">Al momento ci sei solo tu. Con più persone %s sarà ancora migliore.</string>
     <string name="invite_people_menu">Invita persone</string>
@@ -3003,7 +3003,7 @@
     <string name="finish_setup">Termina configurazione</string>
     <string name="discovery_invite">Invita per email, trova contatti e altro…</string>
     <string name="create_space_identity_server_info_none">Attualmente non stai usando un server d\'identità. Per poter invitare compagni ed essere individuabile da loro, configurane uno sotto.</string>
-    <string name="invite_by_mxid_or_mail">Invita per nome utente o email</string>
+    <string name="invite_by_username_or_mail">Invita per nome utente o email</string>
     <string name="create_spaces_invite_public_header_desc">Assicurati che le persone giuste abbiano accesso a %s. Puoi invitarne altre dopo.</string>
     <string name="create_spaces_invite_public_header">Chi sono i tuoi compagni di squadra\?</string>
     <string name="command_description_add_to_space">Aggiungi allo spazio scelto</string>

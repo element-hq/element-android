@@ -39,7 +39,7 @@
     <string name="notice_room_third_party_invite">%1$s heeft een uitnodiging naar %2$s gestuurd om het gesprek toe te treden</string>
     <string name="notice_room_third_party_registered_invite">%1$s heeft de uitnodiging voor %2$s aanvaard</string>
     <string name="notice_crypto_unable_to_decrypt">** Kan niet ontsleutelen: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Het apparaat van de afzender heeft geen sleutels voor dit bericht gestuurd.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Het apparaat van de afzender heeft geen sleutels voor dit bericht gestuurd.</string>
     <!-- Room Screen -->
     <string name="could_not_redact">Kon niet verwijderd worden</string>
     <string name="unable_to_send_message">Kan bericht niet verzenden</string>

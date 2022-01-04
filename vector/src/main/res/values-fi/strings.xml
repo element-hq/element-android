@@ -38,7 +38,7 @@
     <string name="notice_room_third_party_invite">%1$s lähetti liittymiskutsun huoneeseen käyttäjälle %2$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s hyväksyi kutsun käyttäjän %2$s puolesta</string>
     <string name="notice_crypto_unable_to_decrypt">** Salauksen purku epäonnistui: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Lähettäjän laite ei ole lähettänyt avaimia tähän viestiin.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Lähettäjän laite ei ole lähettänyt avaimia tähän viestiin.</string>
     <string name="unable_to_send_message">Viestin lähetys epäonnistui</string>
     <string name="message_failed_to_upload">Kuvan lataaminen epäonnistui</string>
     <string name="network_error">Verkkovirhe</string>
@@ -2318,8 +2318,8 @@
     <string name="invite_to_space_with_name_desc">He voivat selata avaruutta %s</string>
     <string name="invite_to_space_with_name">Kutsu avaruuteen %s</string>
     <string name="invite_by_link">Jaa linkki</string>
-    <string name="invite_by_mxid_or_mail">Kutsu käyttäjänimellä tai sähköpostilla</string>
-    <string name="invite_by_mxid">Kutsu käyttäjänimellä</string>
+    <string name="invite_by_username_or_mail">Kutsu käyttäjänimellä tai sähköpostilla</string>
+    <string name="invite_by_username">Kutsu käyttäjänimellä</string>
     <string name="invite_by_email">Kutsu sähköpostitse</string>
     <string name="invite_to_space">Kutsu avaruuteen %s</string>
     <string name="invite_people_menu">Kutsu ihmisiä</string>

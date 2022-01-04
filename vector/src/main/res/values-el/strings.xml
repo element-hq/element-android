@@ -38,7 +38,7 @@
     <string name="notice_room_third_party_registered_invite">Ο/Η %1$s δέχτηκε την πρόσκληση για το %2$s</string>
 
     <string name="notice_crypto_unable_to_decrypt">** Αδυναμία αποκρυπτογράφησης: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Η συσκευή του/της αποστολέα δεν μας έχει στείλει τα κλειδιά για αυτό το μήνυμα.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Η συσκευή του/της αποστολέα δεν μας έχει στείλει τα κλειδιά για αυτό το μήνυμα.</string>
 
     <string name="unable_to_send_message">Αποτυχία αποστολής μηνύματος</string>
 

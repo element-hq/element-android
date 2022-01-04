@@ -32,7 +32,7 @@
     <string name="notice_profile_change_redacted">حدَّثَ %1$s ملفه الشخصي %2$s</string>
     <string name="notice_room_third_party_invite">أرسلَ %1$s دعوة إلى %2$s للإنضمام إلى الغُرفة</string>
     <string name="notice_crypto_unable_to_decrypt">** يتعذَّر فك التشفير: ⁨%s⁩ **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">لم يُرسل جِهاز المُرسل مفاتيحًا لهذه الرِّسالة.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">لم يُرسل جِهاز المُرسل مفاتيحًا لهذه الرِّسالة.</string>
     <string name="unable_to_send_message">تعذَّر إرسال الرِّسالة</string>
     <string name="message_failed_to_upload">فَشلَ رفع الصُّورة</string>
     <string name="network_error">خطأ في الشَّبكة</string>

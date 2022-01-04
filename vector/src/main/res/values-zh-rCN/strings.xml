@@ -33,7 +33,7 @@
     <string name="notice_room_name_removed">%1$s 移除了聊天室名称</string>
     <string name="notice_room_topic_removed">%1$s 移除了聊天室主题</string>
     <string name="notice_crypto_unable_to_decrypt">** 无法解密：%s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">发送者的设备没有向我们发送此消息的密钥。</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">发送者的设备没有向我们发送此消息的密钥。</string>
     <string name="unable_to_send_message">无法发送消息</string>
     <string name="message_failed_to_upload">上传图像失败</string>
     <string name="network_error">网络错误</string>
@@ -2119,7 +2119,7 @@
 \n${app_name} Desktop</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">或其他能够交叉签名的 Matrix 客户端</string>
+    <string name="or_other_mx_capable_client">或其他能够交叉签名的 Matrix 客户端</string>
     <string name="template_use_latest_app">在你的其他设备上使用最新的 ${app_name}：</string>
     <string name="command_description_discard_session">强制丢弃加密聊天室中的当前出站群组会话</string>
     <string name="command_description_discard_session_not_handled">仅在加密聊天室中支持</string>
@@ -2614,7 +2614,7 @@
     <string name="invite_to_space_with_name_desc">他们将可以探索 %s</string>
     <string name="invite_to_space_with_name">邀请至 %s</string>
     <string name="invite_by_link">分享链接</string>
-    <string name="invite_by_mxid">通过用户名进行邀请</string>
+    <string name="invite_by_username">通过用户名进行邀请</string>
     <string name="invite_by_email">通过电子邮件进行邀请</string>
     <string name="invite_people_to_your_space_desc">此刻仅有你自己。%s 与他人一道会更好。</string>
     <string name="invite_to_space">邀请至 %s</string>
@@ -2905,7 +2905,7 @@
     <string name="discovery_invite">通过电子邮件邀请、寻找联系人和更多…</string>
     <string name="finish_setting_up_discovery">设置“发现”已毕。</string>
     <string name="create_space_identity_server_info_none">您目前没有使用身份服务器。为了邀请队友并被他们发现，请在下方配置一个这样的服务器。</string>
-    <string name="invite_by_mxid_or_mail">通过用户名或邮件邀请</string>
+    <string name="invite_by_username_or_mail">通过用户名或邮件邀请</string>
     <string name="create_spaces_invite_public_header_desc">确保只有合适的人能访问 %s 空间。稍后你可以邀请更多的人加入。</string>
     <string name="create_spaces_invite_public_header">谁是你的队友？</string>
     <string name="command_description_add_to_space">添加至规定的空间</string>

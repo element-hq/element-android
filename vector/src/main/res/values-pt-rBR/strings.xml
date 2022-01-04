@@ -39,7 +39,7 @@
     <string name="notice_room_third_party_invite">%1$s enviou um convite para %2$s para se juntar à sala</string>
     <string name="notice_room_third_party_registered_invite">%1$s aceitou o convite para %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Incapaz de decriptar: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">O dispositivo do/da enviador(a) não nos enviou as chaves para esta mensagem.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">O dispositivo do/da enviador(a) não nos enviou as chaves para esta mensagem.</string>
     <!-- Room Screen -->
     <string name="could_not_redact">Não foi possível redigir</string>
     <string name="unable_to_send_message">Não foi possível enviar mensagem</string>
@@ -2264,7 +2264,7 @@
 \n${app_name} Desktop</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">ou um outro cliente Matrix capaz de assinatura cruzada</string>
+    <string name="or_other_mx_capable_client">ou um outro cliente Matrix capaz de assinatura cruzada</string>
     <string name="template_use_latest_app">Use o ${app_name} mais recente em seus outros dispositivos:</string>
     <string name="command_description_discard_session">Força a atual sessão de grupo de saída em uma sala encriptada a ser descartada</string>
     <string name="command_description_discard_session_not_handled">Somente suportado em salas encriptadas</string>
@@ -2777,7 +2777,7 @@
     <string name="invite_just_to_this_room_desc">Elas não vão fazer parte de %s</string>
     <string name="invite_just_to_this_room">Só a esta sala</string>
     <string name="invite_by_link">Compartilhar link</string>
-    <string name="invite_by_mxid">Convidar por nome de usuária(o)</string>
+    <string name="invite_by_username">Convidar por nome de usuária(o)</string>
     <string name="invite_by_email">Convidar por email</string>
     <string name="invite_people_menu">Convidar pessoas</string>
     <string name="suggested_rooms_pills_on_empty_header">Boas-vindas a %1$s, %2$s.</string>
@@ -3019,7 +3019,7 @@
     <string name="discovery_invite">Convidar por email, encontrar contatos e mais…</string>
     <string name="finish_setting_up_discovery">Termine de configurar descoberta.</string>
     <string name="create_space_identity_server_info_none">Você não está atualmente usando um servidor de identidade. A fim de convidar colegas e ser descobertável por elas(es), configure um abaixo.</string>
-    <string name="invite_by_mxid_or_mail">Convidar por nome de usuária(o) ou mail</string>
+    <string name="invite_by_username_or_mail">Convidar por nome de usuária(o) ou mail</string>
     <string name="create_spaces_invite_public_header_desc">Assegure que as pessoas certas têm acesso a companhia %s. Você pode convidar outras mais tarde.</string>
     <string name="create_spaces_invite_public_header">Quem são suas/seus colegas\?</string>
     <string name="command_description_add_to_space">Adicionar ao dado Espaço</string>

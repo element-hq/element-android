@@ -1273,7 +1273,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="message_failed_to_upload">Tidak dapat mengunggah gambar</string>
     <string name="could_not_redact">Tidak dapat dihapus</string>
     <string name="unable_to_send_message">Tidak dapat mengirim pesan</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Perangkat pengirim belum mengirimi kami kunci untuk pesan ini.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Perangkat pengirim belum mengirimi kami kunci untuk pesan ini.</string>
     <string name="notice_crypto_unable_to_decrypt">** Tidak dapat mendekripsi: %s **</string>
     <string name="notice_power_level_diff">%1$s dari %2$s ke %3$s</string>
     <string name="notice_power_level_changed_by_you">Anda mengubah tingkat daya %1$s.</string>
@@ -2421,8 +2421,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="invite_to_space_with_name_desc">Mereka akan dapat menjelajahi %s</string>
     <string name="invite_to_space_with_name">Undang ke %s</string>
     <string name="invite_by_link">Bagikan tautan</string>
-    <string name="invite_by_mxid_or_mail">Undang dari nama pengguna atau email</string>
-    <string name="invite_by_mxid">Undang dari nama pengguna</string>
+    <string name="invite_by_username_or_mail">Undang dari nama pengguna atau email</string>
+    <string name="invite_by_username">Undang dari nama pengguna</string>
     <string name="invite_by_email">Undang dari email</string>
     <string name="invite_people_to_your_space_desc">Hanya Anda saja saat ini. %s akan lebih baik dengan orang lain.</string>
     <string name="invite_to_space">Undang ke %s</string>
@@ -2683,7 +2683,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="command_description_discard_session">Memaksa sesi kelompok outbound saat ini di ruang terenkripsi untuk dihapus</string>
     <string name="template_use_latest_app">Gunakan ${app_name} di perangkat Anda yang lain:</string>
     <string name="template_use_other_session_content_description">Gunakan ${app_name} di perangkat Anda yang lain, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} untuk Android, atau client Matrix lainnya yang mendukung tanda tangan silang</string>
-    <string name="or_other_mx_capabale_client">atau client Matrix lainnya yang mendukung tanda tangan silang</string>
+    <string name="or_other_mx_capable_client">atau client Matrix lainnya yang mendukung tanda tangan silang</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
     <string name="template_app_desktop_web">${app_name} Web

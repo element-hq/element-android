@@ -39,7 +39,7 @@
     <string name="notice_room_third_party_invite">%1$s hat eine Einladung an %2$s gesendet</string>
     <string name="notice_room_third_party_registered_invite">%1$s hat die Einladung in %2$s akzeptiert</string>
     <string name="notice_crypto_unable_to_decrypt">** Nicht entschlüsselbar: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Das absendende Gerät hat uns keine Schlüssel für diese Nachricht übermittelt.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Das absendende Gerät hat uns keine Schlüssel für diese Nachricht übermittelt.</string>
     <!-- Room Screen -->
     <string name="could_not_redact">Entfernen nicht möglich</string>
     <string name="unable_to_send_message">Nachricht kann nicht gesendet werden</string>
@@ -2152,7 +2152,7 @@
 \n${app_name} Desktop</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">oder einen anderen cross-signing-fähigen Matrix Client</string>
+    <string name="or_other_mx_capable_client">oder einen anderen cross-signing-fähigen Matrix Client</string>
     <string name="template_use_latest_app">Nutze die neueste Version von ${app_name} auf deinen anderen Geräten:</string>
     <string name="command_description_discard_session">Erzwingt das Verwerfen der aktuell ausgehende Gruppensitzung in einem verschlüsseltem Raum</string>
     <string name="command_description_discard_session_not_handled">Wird nur in verschlüsselten Räumen unterstützt</string>
@@ -2770,7 +2770,7 @@
     <string name="invite_just_to_this_room">Nur zu diesem Raum</string>
     <string name="invite_to_space_with_name">In Space \"%s\" einladen</string>
     <string name="invite_by_link">Link teilen</string>
-    <string name="invite_by_mxid">Mithilfe eines Benutzernamens einladen</string>
+    <string name="invite_by_username">Mithilfe eines Benutzernamens einladen</string>
     <string name="invite_by_email">Mithilfe einer E-Mail-Adresse einladen</string>
     <string name="invite_people_menu">Personen einladen</string>
     <string name="invite_people_to_your_space">Lade Personen in deinen Space ein</string>
@@ -2993,7 +2993,7 @@
     <string name="you_will_leave_all_in">Du wirst alle Räume und Spaces in %s verlassen.</string>
     <string name="leave_all_rooms_and_spaces">Alle Räume und Spaces verlassen</string>
     <string name="space_leave_prompt_msg_with_name">Willst du %s wirklich verlassen\?</string>
-    <string name="invite_by_mxid_or_mail">Mit Benutzername oder E-Mail einladen</string>
+    <string name="invite_by_username_or_mail">Mit Benutzername oder E-Mail einladen</string>
     <string name="command_description_add_to_space">Zum ausgewählten Space hinzufügen</string>
     <string name="create_space_in_progress">Erstelle Space…</string>
     <string name="settings_developer_mode_show_info_on_screen_summary">Hilfreiche Informationen zur Fehlersuche anzeigen</string>

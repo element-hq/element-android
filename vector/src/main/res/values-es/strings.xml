@@ -39,7 +39,7 @@
     <string name="notice_room_third_party_invite">%1$s invitó a %2$s a unirse a la sala</string>
     <string name="notice_room_third_party_registered_invite">%1$s aceptó la invitación para %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** No es posible descifrar: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">El dispositivo emisor no nos ha enviado las claves para este mensaje.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">El dispositivo emisor no nos ha enviado las claves para este mensaje.</string>
     <!-- Room Screen -->
     <string name="could_not_redact">No se pudo redactar</string>
     <string name="unable_to_send_message">No es posible enviar el mensaje</string>
@@ -2333,7 +2333,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
 \n${app_name} de escritorio</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">u otro cliente Matrix con capacidad de firma cruzada</string>
+    <string name="or_other_mx_capable_client">u otro cliente Matrix con capacidad de firma cruzada</string>
     <string name="template_use_latest_app">Utilice la última versión de ${app_name} en sus otros dispositivos:</string>
     <string name="command_description_discard_session">Obliga a descartar la sesión de grupo saliente actual en una sala cifrada</string>
     <string name="command_description_discard_session_not_handled">Solo se admite en salas cifradas</string>
@@ -2616,7 +2616,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="invite_just_to_this_room">Sólo a esta sala</string>
     <string name="invite_to_space_with_name">Invitar a %s</string>
     <string name="invite_by_link">Compartir enlace</string>
-    <string name="invite_by_mxid">Invitar por nombre de usuario</string>
+    <string name="invite_by_username">Invitar por nombre de usuario</string>
     <string name="invite_by_email">Invitar por correo electrónico</string>
     <string name="invite_to_space">Invitar a %s</string>
     <string name="invite_people_to_your_space">Invitar gente a tu espacio</string>
@@ -2920,7 +2920,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="discovery_invite">Invitar por correo electrónico, buscar contactos y más…</string>
     <string name="finish_setting_up_discovery">Terminé de configurar el descubrimiento.</string>
     <string name="create_space_identity_server_info_none">Actualmente no está utilizando un servidor de identidad. Para invitar a compañeros de equipo y ser detectado por ellos, configure uno a continuación.</string>
-    <string name="invite_by_mxid_or_mail">Invitar por nombre de usuario o correo</string>
+    <string name="invite_by_username_or_mail">Invitar por nombre de usuario o correo</string>
     <string name="create_spaces_invite_public_header_desc">Asegúrate que las personas adecuadas tengan acceso a %s. Puede invitar a más persona más tarde.</string>
     <string name="create_spaces_invite_public_header">¿Quiénes son tus compañeros de equipo\?</string>
     <string name="command_description_add_to_space">Agregar al espacio dado</string>

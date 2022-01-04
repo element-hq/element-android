@@ -47,7 +47,7 @@
     <string name="room_error_join_failed_empty_room">В момента не е възможно да се присъедините отново към празна стая.</string>
     <string name="medium_email">Имейл адрес</string>
     <string name="medium_phone_number">Телефонен номер</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Устройството на подателя не изпрати ключовете за това съобщение.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Устройството на подателя не изпрати ключовете за това съобщение.</string>
     <string name="summary_user_sent_sticker">%1$s изпрати стикер.</string>
     <string name="room_displayname_invite_from">Покана от %s</string>
     <string name="room_displayname_room_invite">Покана за стая</string>
@@ -2164,7 +2164,7 @@
     <string name="command_description_discard_session_not_handled">Поддържа се само в шифровани стаи</string>
     <string name="command_description_discard_session">Принудително премахва текущата изходяща групова сесия от шифрованата стая</string>
     <string name="template_use_latest_app">Използвайте последната версия на ${app_name} за устройствата си:</string>
-    <string name="or_other_mx_capabale_client">или друг Matrix клиент поддържаш кръстосано-подписване</string>
+    <string name="or_other_mx_capable_client">или друг Matrix клиент поддържаш кръстосано-подписване</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
     <string name="template_app_desktop_web">${app_name} Web

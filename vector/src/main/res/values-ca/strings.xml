@@ -38,7 +38,7 @@
     <string name="notice_room_third_party_invite">%1$s ha enviat una invitació a %2$s perquè s\'uneixi a la sala</string>
     <string name="notice_room_third_party_registered_invite">%1$s ha acceptat la invitació de %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** No s\'ha pogut desxifrar: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">El dispositiu del remitent no ens ha enviat les claus per aquest missatge.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">El dispositiu del remitent no ens ha enviat les claus per aquest missatge.</string>
     <string name="could_not_redact">No s\'ha pogut redactar</string>
     <string name="unable_to_send_message">No s\'ha pogut enviar el missatge</string>
     <string name="message_failed_to_upload">No s\'ha pogut pujar la imatge</string>
@@ -2025,7 +2025,7 @@
     <string name="a11y_open_chat">Obre el xat</string>
     <string name="a11y_mute_microphone">Silencia el micròfon</string>
     <string name="template_settings_security_pin_code_use_biometrics_summary_off">El codi PIN és l\'única manera de desbloquejar ${app_name}.</string>
-    <string name="or_other_mx_capabale_client">o un altre client Matrix compatible amb la signatura creuada</string>
+    <string name="or_other_mx_capable_client">o un altre client Matrix compatible amb la signatura creuada</string>
     <string name="encryption_information_dg_xsigning_disabled">La signatura creuada no està activada</string>
     <string name="encryption_information_dg_xsigning_not_trusted">La signatura creuada està activada
 \nClaus no fiables</string>

@@ -39,7 +39,7 @@
     <string name="notice_room_third_party_invite">%1$s nosūtīja %2$s uzaicinājumu pievienoties istabai</string>
     <string name="notice_room_third_party_registered_invite">%1$s pieņēma uzaicinājumu %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Neizdodas atšifrēt: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Sūtītāja ierīce mums nav nenosūtījusi atslēgas priekš šīs ziņas.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Sūtītāja ierīce mums nav nenosūtījusi atslēgas priekš šīs ziņas.</string>
     <string name="could_not_redact">Nevarēja rediģēt</string>
     <string name="unable_to_send_message">Neizdodas nosūtīt ziņu</string>
     <string name="message_failed_to_upload">Neizdevās augšuplādēt attēlu</string>
@@ -960,7 +960,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="verify_other_sessions">Verificējiet visas savas sesijas, lai nodrošinātos, ka jūsu konts un ziņas ir drošībā</string>
     <string name="review_logins">Pārskatiet savas pierakstīšanās</string>
     <string name="unencrypted">Nešifrēts</string>
-    <string name="or_other_mx_capabale_client">vai kādu citu Matrix lietotni ar cross-signing atbalstu</string>
+    <string name="or_other_mx_capable_client">vai kādu citu Matrix lietotni ar cross-signing atbalstu</string>
     <string name="auth_invalid_login_deactivated_account">Šis konts ir deaktivizēts.</string>
     <string name="settings_messages_in_e2e_group_chat">Šifrētas ziņas grupas čatos</string>
     <string name="settings_messages_in_e2e_one_to_one">Šifrētas ziņas viens-pret-vienu čatos</string>
@@ -2349,8 +2349,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="invite_to_space_with_name_desc">Viņi varēs izpētīt %s</string>
     <string name="invite_to_space_with_name">Uzaicināt uz %s</string>
     <string name="invite_by_link">Kopīgot saiti</string>
-    <string name="invite_by_mxid_or_mail">Ielūgt pēc lietotājvārda vai pa e-pastu</string>
-    <string name="invite_by_mxid">Ielūgt pēc lietotājvārda</string>
+    <string name="invite_by_username_or_mail">Ielūgt pēc lietotājvārda vai pa e-pastu</string>
+    <string name="invite_by_username">Ielūgt pēc lietotājvārda</string>
     <string name="invite_by_email">Ielūgt pa e-pastu</string>
     <string name="invite_people_to_your_space_desc">Šobrīd esi tikai tu. %s būs vēl labāk kopā ar citiem.</string>
     <string name="invite_to_space">Uzaicināt uz %s</string>

@@ -808,7 +808,7 @@
     <string name="command_description_discard_session_not_handled">Seulement pris en charge dans les salons chiffrés</string>
     <string name="command_description_discard_session">Force la session de groupe sortante actuelle dans un salon chiffré à être abandonnée</string>
     <string name="template_use_latest_app">Utilisez la dernière version de ${app_name} sur vos autres appareils :</string>
-    <string name="or_other_mx_capabale_client">ou un autre client Matrix qui prend en charge la signature croisée</string>
+    <string name="or_other_mx_capable_client">ou un autre client Matrix qui prend en charge la signature croisée</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
     <string name="template_app_desktop_web">${app_name} Web
@@ -2365,7 +2365,7 @@
     <string name="network_error">Erreur de réseau</string>
     <string name="unable_to_send_message">Envoi du message impossible</string>
     <string name="could_not_redact">Effacement impossible</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">L’appareil de l’expéditeur ne nous a pas envoyé les clés pour ce message.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">L’appareil de l’expéditeur ne nous a pas envoyé les clés pour ce message.</string>
     <string name="notice_crypto_unable_to_decrypt">** Déchiffrement impossible : %s **</string>
     <string name="notice_power_level_diff">%1$s de %2$s à %3$s</string>
     <string name="notice_power_level_changed">%1$s a modifié le rang de %2$s.</string>
@@ -2758,7 +2758,7 @@
     <string name="invite_to_space_with_name_desc">Permettra de parcourir les salons de %s</string>
     <string name="invite_to_space_with_name">Inviter dans %s</string>
     <string name="invite_by_link">Partager le lien</string>
-    <string name="invite_by_mxid">Inviter par nom d’utilisateur</string>
+    <string name="invite_by_username">Inviter par nom d’utilisateur</string>
     <string name="invite_by_email">Inviter par courriel</string>
     <string name="invite_people_to_your_space_desc">Vous êtes seul·e pour l’instant. %s sera plus agréable avec de la compagnie.</string>
     <string name="invite_to_space">Inviter à %s</string>

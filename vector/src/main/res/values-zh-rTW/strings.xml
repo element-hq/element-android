@@ -39,7 +39,7 @@
     <string name="notice_room_third_party_invite">%1$s 傳送加入房間的邀請給 %2$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s 接受 %2$s 的邀請</string>
     <string name="notice_crypto_unable_to_decrypt">** 無法解密：%s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">傳送者的裝置並未在此訊息傳送他們的金鑰。</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">傳送者的裝置並未在此訊息傳送他們的金鑰。</string>
     <string name="could_not_redact">無法編輯</string>
     <string name="unable_to_send_message">無法傳送訊息</string>
     <string name="message_failed_to_upload">上傳圖片失敗</string>
@@ -2051,7 +2051,7 @@
 \n${app_name} 桌面版</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">或其他有交叉簽章功能的 Matrix 客戶端</string>
+    <string name="or_other_mx_capable_client">或其他有交叉簽章功能的 Matrix 客戶端</string>
     <string name="template_use_latest_app">在您的其他裝置上使用最新的 ${app_name}：</string>
     <string name="command_description_discard_session">強制丟棄目前在加密聊天室中的外發群組工作階段</string>
     <string name="command_description_discard_session_not_handled">僅在加密聊天室中支援</string>
@@ -2640,7 +2640,7 @@
     <string name="invite_to_space_with_name_desc">他們將可以探索 %s</string>
     <string name="invite_to_space_with_name">邀請至 %s</string>
     <string name="invite_by_link">分享連結</string>
-    <string name="invite_by_mxid">透過使用者名稱邀請</string>
+    <string name="invite_by_username">透過使用者名稱邀請</string>
     <string name="invite_by_email">透過電子郵件邀請</string>
     <string name="invite_people_to_your_space_desc">此刻只有您。%s 與其他人一起會更好。</string>
     <string name="invite_people_menu">邀請夥伴</string>
@@ -2895,7 +2895,7 @@
     <string name="discovery_invite">透過電子郵件邀請、尋找聯絡人以及更多……</string>
     <string name="finish_setting_up_discovery">完成探索設定。</string>
     <string name="create_space_identity_server_info_none">您目前並未使用身份認證伺服器。為了邀請隊友並被他們探索，請在下方設定一個。</string>
-    <string name="invite_by_mxid_or_mail">透過使用者名稱或電子郵件邀請</string>
+    <string name="invite_by_username_or_mail">透過使用者名稱或電子郵件邀請</string>
     <string name="create_spaces_invite_public_header_desc">確保合適的人可以存取 %s 公司。您可以稍後再邀請。</string>
     <string name="create_spaces_invite_public_header">誰是您的隊友？</string>
     <string name="command_description_add_to_space">新增至指定的空間</string>

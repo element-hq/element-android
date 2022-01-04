@@ -45,7 +45,7 @@
     <string name="notice_room_third_party_invite">%1$s надсилає запрошення %2$s приєднатися до кімнати</string>
     <string name="notice_room_third_party_registered_invite">%1$s приймає запрошення до %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Неможливо розшифрувати: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Пристрій відправника не надіслав нам ключ для цього повідомлення.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Пристрій відправника не надіслав нам ключ для цього повідомлення.</string>
     <string name="could_not_redact">Не вдається редагувати</string>
     <string name="unable_to_send_message">Не вдалося надіслати повідомлення</string>
     <string name="message_failed_to_upload">Не вдалося завантажити зображення</string>
@@ -1850,7 +1850,7 @@
     <string name="new_session">Новий вхід. Це були ви\?</string>
     <string name="refresh">Оновити</string>
     <string name="reset_cross_signing">Скинути ключі</string>
-    <string name="or_other_mx_capabale_client">або будь-який інший, здатний до перехресного підписування, Matrix-клієнт</string>
+    <string name="or_other_mx_capable_client">або будь-який інший, здатний до перехресного підписування, Matrix-клієнт</string>
     <string name="encryption_information_dg_xsigning_disabled">Перехресне підписування не ввімкнене</string>
     <string name="encryption_information_dg_xsigning_not_trusted">Перехресне підписування увімкнено.
 \nКлючі не є довіреними</string>
@@ -2195,7 +2195,7 @@
     <string name="create_space">Створити Простір</string>
     <string name="join_space">Приєднатися до Простору</string>
     <string name="invite_by_link">Поділитися посиланням</string>
-    <string name="invite_by_mxid">Запросити за користувацьким іменем</string>
+    <string name="invite_by_username">Запросити за користувацьким іменем</string>
     <string name="invite_by_email">Запросити електронним листом</string>
     <string name="voice_message_slide_to_cancel">Проведіть пальцем, щоб скасувати</string>
     <string name="a11y_start_voice_message">Записати голосове повідомлення</string>
@@ -3071,7 +3071,7 @@
     <string name="new_let_people_in_spaces_find_and_join">Нове: Дозволити людям у просторах знаходити та приєднуватися до приватних кімнат</string>
     <string name="invite_just_to_this_room">Лише в цю кімнату</string>
     <string name="invite_to_space_with_name_desc">Вони зможуть переглядати %s</string>
-    <string name="invite_by_mxid_or_mail">Запрошення за іменем користувача або е-поштою</string>
+    <string name="invite_by_username_or_mail">Запрошення за іменем користувача або е-поштою</string>
     <string name="create_spaces_default_public_room_name">Головне</string>
     <string name="share_by_text">Поділитися у тексті</string>
     <string name="settings_security_pin_code_notifications_summary_off">Показувати лише кількість непрочитаних повідомлень у звичайному сповіщенні.</string>

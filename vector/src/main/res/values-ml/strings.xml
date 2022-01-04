@@ -607,7 +607,7 @@
     <string name="message_failed_to_upload">ചിത്രം അപ്‌ലോഡുചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു</string>
     <string name="unable_to_send_message">സന്ദേശം അയയ്‌ക്കാനായില്ല</string>
     <string name="could_not_redact">പുനഃക്രമീകരിക്കാൻ കഴിഞ്ഞില്ല</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">അയച്ചയാളുടെ ഉപകരണം ഈ സന്ദേശത്തിനുള്ള കീകൾ ഞങ്ങൾക്ക് അയച്ചിട്ടില്ല.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">അയച്ചയാളുടെ ഉപകരണം ഈ സന്ദേശത്തിനുള്ള കീകൾ ഞങ്ങൾക്ക് അയച്ചിട്ടില്ല.</string>
     <string name="notice_crypto_unable_to_decrypt">** ഡീക്രിപ്റ്റ് ചെയ്യാൻ കഴിഞ്ഞില്ല: %s **</string>
     <string name="notice_power_level_changed">%1$s %2$s ന്റെ അധികാര നില മാറ്റി.</string>
     <string name="notice_power_level_changed_by_you">നിങ്ങൾ %1$s ന്റെ അധികാര നില മാറ്റി.</string>

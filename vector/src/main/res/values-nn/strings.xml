@@ -40,7 +40,7 @@
     <string name="notice_room_third_party_invite">%1$s inviterte %2$s til rommet</string>
     <string name="notice_room_third_party_registered_invite">%1$s sa ja til innbjodingi til %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Fekk ikkje til å dekryptera: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Avsendareiningi hev ikkje sendt oss nyklane fyr denna meldingi.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Avsendareiningi hev ikkje sendt oss nyklane fyr denna meldingi.</string>
     <string name="could_not_redact">Kunde ikkje gjera um</string>
     <string name="unable_to_send_message">Fekk ikkje til å senda meldingi</string>
     <string name="message_failed_to_upload">Fekk ikkje til å lasta biletet upp</string>

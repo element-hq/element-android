@@ -327,7 +327,7 @@
     <string name="message_failed_to_upload">Tải hình ảnh lên thất bại</string>
     <string name="unable_to_send_message">Không thể gửi tin nhắn</string>
     <string name="could_not_redact">Không thể rút lại</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Thiết bị của người gửi chưa gửi cho chúng tôi mã khoá cho tin nhắn này.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Thiết bị của người gửi chưa gửi cho chúng tôi mã khoá cho tin nhắn này.</string>
     <string name="notice_crypto_unable_to_decrypt">** Không thể giải mã: %s **</string>
     <string name="notice_power_level_diff">%1$s từ %2$s thành %3$s</string>
     <string name="power_level_custom_no_value">Tuỳ chỉnh</string>
@@ -1825,8 +1825,8 @@
     <string name="create_space">Tạo Space</string>
     <string name="skip_for_now">Bỏ qua ngay bây giờ</string>
     <string name="share_space_link_message">Gia nhập Space của tôi %1$s %2$s</string>
-    <string name="invite_by_mxid_or_mail">Mời theo tên người dùng hoặc thư</string>
-    <string name="invite_by_mxid">Mời theo tên người dùng</string>
+    <string name="invite_by_username_or_mail">Mời theo tên người dùng hoặc thư</string>
+    <string name="invite_by_username">Mời theo tên người dùng</string>
     <string name="invite_by_email">Mời qua email</string>
     <string name="invite_people_to_your_space_desc">Chỉ có anh lúc này thôi. %s sẽ còn tốt hơn với những người khác.</string>
     <string name="invite_to_space">Mời đến %s</string>
@@ -2052,7 +2052,7 @@
     <string name="command_description_discard_session_not_handled">Chỉ được hỗ trợ trong các phòng được mã hóa</string>
     <string name="command_description_discard_session">Buộc nhóm phiên hướng ra hiện tại trong một căn phòng được mã hóa phải bị loại bỏ</string>
     <string name="template_use_latest_app">Sử dụng ${app_name mới nhất} trên các thiết bị khác của bạn:</string>
-    <string name="or_other_mx_capabale_client">hoặc một máy khách Matrix có khả năng xác thực chéo khác</string>
+    <string name="or_other_mx_capable_client">hoặc một máy khách Matrix có khả năng xác thực chéo khác</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
     <string name="template_app_desktop_web">${app_name} Web

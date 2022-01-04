@@ -147,7 +147,7 @@
     <string name="notice_power_level_diff">%1$s from %2$s to %3$s</string>
 
     <string name="notice_crypto_unable_to_decrypt">** Unable to decrypt: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
 
     <!-- Messages -->
 
@@ -3129,7 +3129,7 @@
     <string name="template_app_desktop_web">${app_name} Web\n${app_name} Desktop</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_app_ios_android">${app_name} iOS\n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">or another cross-signing capable Matrix client</string>
+    <string name="or_other_mx_capable_client">or another cross-signing capable Matrix client</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_use_latest_app">Use the latest ${app_name} on your other devices:</string>
     <string name="command_description_discard_session">Forces the current outbound group session in an encrypted room to be discarded</string>
@@ -3506,8 +3506,8 @@
     <string name="invite_to_space">Invite to %s</string>
     <string name="invite_people_to_your_space_desc">It’s just you at the moment.  %s will be even better with others.</string>
     <string name="invite_by_email">Invite by email</string>
-    <string name="invite_by_mxid">Invite by username</string>
-    <string name="invite_by_mxid_or_mail">Invite by username or mail</string>
+    <string name="invite_by_username">Invite by username</string>
+    <string name="invite_by_username_or_mail">Invite by username or mail</string>
     <string name="invite_by_link">Share link</string>
     <string name="invite_to_space_with_name">Invite to %s</string>
     <string name="invite_to_space_with_name_desc">"They’ll be able to explore %s"</string>

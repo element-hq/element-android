@@ -38,7 +38,7 @@
     <string name="notice_room_third_party_registered_invite">%2$sకోసం %1$s ఆహ్వానాన్ని అంగీకరించారు</string>
 
     <string name="notice_crypto_unable_to_decrypt">** వ్యక్తీకరించడానికి సాధ్యం కాలేదు: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">ఈ సందేశానికి పంపేవారి పరికరం మాకు కీలను పంపలేదు.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">ఈ సందేశానికి పంపేవారి పరికరం మాకు కీలను పంపలేదు.</string>
 
     <string name="could_not_redact">గది స్క్రీన్</string>
     <string name="unable_to_send_message">సందేశం పంపడం సాధ్యం కాలేదు</string>

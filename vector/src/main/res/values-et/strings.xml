@@ -44,7 +44,7 @@
     <string name="notice_room_third_party_revoked_invite">%1$s võttis tagasi jututoaga liitumise kutse kasutajalt %2$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s võttis vastu kutse %2$s nimel</string>
     <string name="notice_crypto_unable_to_decrypt">** Ei õnnestu dekrüptida: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Sõnumi saatja seade ei ole selle sõnumi jaoks saatnud dekrüptimisvõtmeid.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Sõnumi saatja seade ei ole selle sõnumi jaoks saatnud dekrüptimisvõtmeid.</string>
     <string name="could_not_redact">Ei saanud muuta sõnumit</string>
     <string name="unable_to_send_message">Sõnumi saatmine ei õnnestunud</string>
     <string name="message_failed_to_upload">Pildi üleslaadimine ei õnnestunud</string>
@@ -2327,7 +2327,7 @@
 \n${app_name} Desktop</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">või mõnda teist Matrix\'i klienti, mis oskab risttunnustamist</string>
+    <string name="or_other_mx_capable_client">või mõnda teist Matrix\'i klienti, mis oskab risttunnustamist</string>
     <string name="template_use_latest_app">Kasuta oma muus seadmes kõige uuemat ${app_name}\'i versiooni:</string>
     <string name="command_description_discard_session">Sunnib loobuma praeguse krüptitud jututoa rühmavestluse seansist</string>
     <string name="command_description_discard_session_not_handled">Funktsionaalsus on toetatud ainult krüptitud jututubades</string>
@@ -2690,7 +2690,7 @@
     <string name="invite_to_space_with_name_desc">Nad saavad tutvuda %s kogukonnakeskusega</string>
     <string name="invite_to_space_with_name">Kutse kasutajale %s</string>
     <string name="invite_by_link">Jaga linki</string>
-    <string name="invite_by_mxid">Kutsu kasutajanime alusel</string>
+    <string name="invite_by_username">Kutsu kasutajanime alusel</string>
     <string name="invite_by_email">Saada kutse e-kirjaga</string>
     <string name="invite_people_to_your_space_desc">Hetkel oled siin vaid sina. Aga %s läheb aina paremaks, kui teised liituvad.</string>
     <string name="invite_people_menu">Kutsu teisi kasutajaid</string>
@@ -2949,7 +2949,7 @@
     <string name="discovery_invite">Kutsu e-posti aadressi alusel, leia tuttavaid, jne…</string>
     <string name="finish_setting_up_discovery">Lõpeta leitavuse seadistamine.</string>
     <string name="create_space_identity_server_info_none">Hetkel sa ei kasuta isikutuvastusserverit. Kaaslastele kutse saatmiseks ning end teistele leitavaks tegemiseks palun seadista ta alljärgnevalt.</string>
-    <string name="invite_by_mxid_or_mail">Kutsu kasutajanime või e-posti aadressi alusel</string>
+    <string name="invite_by_username_or_mail">Kutsu kasutajanime või e-posti aadressi alusel</string>
     <string name="create_spaces_invite_public_header_desc">Kontrolli, et vajalikel inimestel oleks ligipääs %s kogukonda. Teistele võid kutse saata ka hiljem.</string>
     <string name="create_spaces_invite_public_header">Kes on su kaasteelised\?</string>
     <string name="command_description_add_to_space">Lisa näidatud kogukonnakeskusesse</string>

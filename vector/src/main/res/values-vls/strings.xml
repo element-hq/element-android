@@ -48,7 +48,7 @@
     <string name="notice_room_third_party_registered_invite">%1$s èt d’uutnodigienge vo %2$s anveird</string>
 
     <string name="notice_crypto_unable_to_decrypt">** Kun nie ountsleuteln: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">’t Toestel van den afzender èt geen sleutels vo da bericht hier gesteurd.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">’t Toestel van den afzender èt geen sleutels vo da bericht hier gesteurd.</string>
 
     <string name="could_not_redact">Kosteg nie verwyderd wordn</string>
     <string name="unable_to_send_message">Kosteg ’t bericht nie verzendn</string>

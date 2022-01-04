@@ -39,7 +39,7 @@
     <string name="notice_room_third_party_invite">%1$s a envoyé une invitation à %2$s pour rejoindre le salon</string>
     <string name="notice_room_third_party_registered_invite">%1$s a accepté l’invitation de %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Déchiffrement impossible : %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">L’appareil de l’expéditeur ne nous a pas envoyé les clés pour ce message.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">L’appareil de l’expéditeur ne nous a pas envoyé les clés pour ce message.</string>
     <string name="could_not_redact">Effacement impossible</string>
     <string name="unable_to_send_message">Envoi du message impossible</string>
     <string name="message_failed_to_upload">L’envoi de l’image a échoué</string>
@@ -2064,7 +2064,7 @@
 \n${app_name} pour Bureau</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">ou un autre client Matrix qui prend en charge la signature croisée</string>
+    <string name="or_other_mx_capable_client">ou un autre client Matrix qui prend en charge la signature croisée</string>
     <string name="template_use_latest_app">Utilisez la dernière version de ${app_name} sur vos autres appareils :</string>
     <string name="command_description_discard_session">Force la session de groupe sortante actuelle dans un salon chiffré à être abandonnée</string>
     <string name="command_description_discard_session_not_handled">Seulement pris en charge dans les salons chiffrés</string>
@@ -2719,7 +2719,7 @@
     <string name="invite_to_space_with_name_desc">Permettra de parcourir les salons de %s</string>
     <string name="invite_to_space_with_name">Inviter dans %s</string>
     <string name="invite_by_link">Partager le lien</string>
-    <string name="invite_by_mxid">Inviter par nom d’utilisateur</string>
+    <string name="invite_by_username">Inviter par nom d’utilisateur</string>
     <string name="invite_by_email">Inviter par e-mail</string>
     <string name="invite_people_to_your_space_desc">Vous êtes seul pour l’instant. %s sera plus agréable avec de la compagnie.</string>
     <string name="invite_people_to_your_space">Invitez des personnes dans votre espace</string>
@@ -2958,7 +2958,7 @@
     <string name="finish_setting_up_discovery">Terminer le réglage de la découverte.</string>
     <string name="create_space_identity_server_info_none">Vous n’utilisez actuellement pas de serveur d’identité. Pour inviter des proches et qu’ils puissent vous trouver, configurez-en un ci-dessous.</string>
     <string name="create_spaces_invite_public_header">Qui sont vos proches \?</string>
-    <string name="invite_by_mxid_or_mail">Inviter par nom d’utilisateur ou courriel</string>
+    <string name="invite_by_username_or_mail">Inviter par nom d’utilisateur ou courriel</string>
     <string name="create_spaces_invite_public_header_desc">Assurez-vous que l’accès à la société %s est accordé aux bonnes personnes. Vous pourrez en inviter d’autres plus tard.</string>
     <string name="command_description_add_to_space">Ajouter à l’espace mentionné</string>
     <string name="create_space_in_progress">Création de l’espace…</string>

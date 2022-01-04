@@ -45,7 +45,7 @@
     <string name="notice_room_third_party_revoked_invite">%1$s دعوت پیوستن به اتاق %2$s را باطل کرد</string>
     <string name="notice_room_third_party_registered_invite">%1$s دعوت برای %2$s را پذیرفت</string>
     <string name="notice_crypto_unable_to_decrypt">** ناتوان در رمزگشایی: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">دستگاه فرستنده، کلیدهای این پیام را برایمان نفرستاده است.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">دستگاه فرستنده، کلیدهای این پیام را برایمان نفرستاده است.</string>
     <string name="unable_to_send_message">ناتوان در فرستادن پیام</string>
     <string name="message_failed_to_upload">شکست در بارگذاری تصویر</string>
     <string name="network_error">خطای شبکه</string>
@@ -1596,7 +1596,7 @@
     <string name="enter_secret_storage_passphrase_or_key">برای ادامه از %1$s یا %2$sتان استفاده کنید.</string>
     <string name="command_description_discard_session_not_handled">پشتیبانی‌شده فقط در اتاق‌های رمزشده</string>
     <string name="template_use_latest_app">از آخرین نگارش المنت روی دیگر افزاره‌تان استفاده کنید:</string>
-    <string name="or_other_mx_capabale_client">یا دیگر کاره‌های ماتریکس دادای قابلیت ورود چندگانه</string>
+    <string name="or_other_mx_capable_client">یا دیگر کاره‌های ماتریکس دادای قابلیت ورود چندگانه</string>
     <string name="cross_signing_verify_by_text">تأیید دستی با متن</string>
     <string name="verify_this_session">تأیید ورود جدیدی که به حسابتان دسترسی دارد: %1$s</string>
     <string name="verify_other_sessions">تأیید همهٔ نشست‌هایتان برای اطمینان از این که حساب و پیام‌هایتان امنند</string>
@@ -2690,7 +2690,7 @@
     <string name="invite_to_space_with_name_desc">آنها قادر به کاوش در %s خواهند بود</string>
     <string name="invite_to_space_with_name">دعوت به %s</string>
     <string name="invite_by_link">به اشتراک‌گذاری لینک</string>
-    <string name="invite_by_mxid">دعوت با شناسه‌کاربری</string>
+    <string name="invite_by_username">دعوت با شناسه‌کاربری</string>
     <string name="invite_by_email">دعوت با ایمیل</string>
     <string name="invite_people_to_your_space_desc">در حال حاضر فقط شما هستید. %s با دیگران حتی بهتر خواهد بود.</string>
     <string name="invite_people_menu">دعوت افراد</string>
@@ -2950,7 +2950,7 @@
     <string name="finish_setting_up_discovery">پایان برپا سازی کشف.</string>
     <string name="create_spaces_invite_public_header">همگروهی‌هایتان کیند؟</string>
     <string name="create_space_identity_server_info_none">در حال حاضر از کارساز هویتی استفاده نمی‌کنید. برای دعوت همگروهی‌ها و قابل کشف بودن به دستشان، در پایین یکی پیکربندی کنید.</string>
-    <string name="invite_by_mxid_or_mail">دعوت با نام کاربری یا نامه</string>
+    <string name="invite_by_username_or_mail">دعوت با نام کاربری یا نامه</string>
     <string name="create_spaces_invite_public_header_desc">مطمئن شوید افراد درستی به %s دسترسی دارند. بعداً می‌توانید تفراد بیش‌تری را دعوت‌کنید.</string>
     <string name="command_description_add_to_space">افزودن به فضای داده شده</string>
     <string name="create_space_in_progress">ایجاد کردن فضا…</string>

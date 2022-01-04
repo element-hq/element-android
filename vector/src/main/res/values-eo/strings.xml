@@ -14,7 +14,7 @@
     <string name="notice_room_withdraw">%1$s nuligis inviton por %2$s</string>
     <string name="notice_avatar_url_changed">%1$s ŝanĝis sian profilbildon</string>
     <string name="notice_crypto_unable_to_decrypt">** Ne eblas malĉifri: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">La aparato de la sendinto ne sendis al ni la ŝlosilojn por tiu mesaĝo.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">La aparato de la sendinto ne sendis al ni la ŝlosilojn por tiu mesaĝo.</string>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="notice_display_name_set">%1$s ŝanĝis sian prezentan nomon al %2$s</string>
     <string name="notice_display_name_changed_from">%1$s ŝanĝis sian prezentan nomon de %2$s al %3$s</string>
@@ -2139,7 +2139,7 @@
     <string name="enter_secret_storage_passphrase_or_key">Por daŭrigi, necesas via %1$s aŭ via %2$s.</string>
     <string name="command_description_discard_session_not_handled">Subtenata nur en ĉifritaj ĉambroj</string>
     <string name="template_use_latest_app">Uzu la plej freŝan version de ${app_name} per aliaj viaj aparatoj:</string>
-    <string name="or_other_mx_capabale_client">aŭ alian klienton de Matrix kapablan je delegaj subskriboj</string>
+    <string name="or_other_mx_capable_client">aŭ alian klienton de Matrix kapablan je delegaj subskriboj</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
     <string name="template_app_desktop_web">${app_name} Web (por TTT)
@@ -2684,7 +2684,7 @@
     <string name="invite_to_space_with_name_desc">Oni povos esplori en %s</string>
     <string name="invite_to_space_with_name">Inviti al %s</string>
     <string name="invite_by_link">Havigi ligilon</string>
-    <string name="invite_by_mxid">Inviti per uzantonomo</string>
+    <string name="invite_by_username">Inviti per uzantonomo</string>
     <string name="invite_by_email">Inviti per retpoŝto</string>
     <string name="invite_people_to_your_space_desc">Nun ĉeestas nur vi. %s eĉ pli bonos kun aliuloj.</string>
     <string name="invite_to_space">Inviti al %s</string>
@@ -2867,7 +2867,7 @@
     <string name="leave_all_rooms_and_spaces">Foriri de ĉiuj ĉambroj kaj aroj</string>
     <string name="space_leave_prompt_msg_with_name">Ĉu vi certe volas foriri de %s\?</string>
     <string name="discovery_section">Trovado (%s)</string>
-    <string name="invite_by_mxid_or_mail">Inviti laŭ uzantonomo aŭ retpoŝtadreso</string>
+    <string name="invite_by_username_or_mail">Inviti laŭ uzantonomo aŭ retpoŝtadreso</string>
     <string name="command_description_add_to_space">Aldoni al la aro</string>
     <string name="call_one_active">Aktiva voko (%1$s) ·</string>
     <plurals name="call_active_status">

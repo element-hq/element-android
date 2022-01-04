@@ -30,7 +30,7 @@
     <string name="notice_profile_change_redacted">%1$s përditësoi profilin e tij %2$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s pranoi ftesën tuaj për %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** S’arrihet të shfshehtëzohet: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Pajisja e dërguesit nuk na ka dërguar kyçet për këtë mesazh.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Pajisja e dërguesit nuk na ka dërguar kyçet për këtë mesazh.</string>
     <string name="could_not_redact">S’u redaktua dot</string>
     <string name="unable_to_send_message">S’arrihet të dërgohet mesazh</string>
     <string name="message_failed_to_upload">Ngarkimi i figurës dështoi</string>
@@ -2077,7 +2077,7 @@
 \n${app_name} Desktop</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">ose një tjetër klient Matrix i aftë për &lt;em&gt;cross-signing&lt;/em</string>
+    <string name="or_other_mx_capable_client">ose një tjetër klient Matrix i aftë për &lt;em&gt;cross-signing&lt;/em</string>
     <string name="template_use_latest_app">Përdorni ${app_name}-in më të ri në pajisjet tuaja të tjera:</string>
     <string name="command_description_discard_session_not_handled">Mbulohet vetëm për dhoma të fshehtëzuara</string>
     <string name="enter_secret_storage_passphrase_or_key">Përdorni %1$s tuaj ose përdorni %2$s tuaj që të vazhdohet.</string>
@@ -2679,7 +2679,7 @@
     <string name="invite_to_space_with_name_desc">Do të jenë në gjendje të eksplorojnë %s</string>
     <string name="invite_to_space_with_name">Ftojeni në %s</string>
     <string name="invite_by_link">Jepuni lidhjen</string>
-    <string name="invite_by_mxid">Ftoni përmes emri përdoruesi</string>
+    <string name="invite_by_username">Ftoni përmes emri përdoruesi</string>
     <string name="invite_by_email">Ftoni përmes email-i</string>
     <string name="invite_people_to_your_space_desc">Vetëm ju, hëpërhë. %s do të jetë edhe më mirë me të tjerë.</string>
     <string name="invite_people_menu">Ftoni njerëz</string>
@@ -2938,7 +2938,7 @@
     <string name="discovery_invite">Ftoni me email, gjeni kontakte, etj…</string>
     <string name="finish_setting_up_discovery">Përfundo ujdisjen e zbulimit.</string>
     <string name="create_space_identity_server_info_none">Aktualisht nuk përdorni ndonjë shërbyes identitetesh. Që të ftoni shokë të ekipit dhe të jeni i zbulueshëm prej tyre, formësoni një të tillë më poshtë.</string>
-    <string name="invite_by_mxid_or_mail">Ftoni me emër përdoruesi ose email</string>
+    <string name="invite_by_username_or_mail">Ftoni me emër përdoruesi ose email</string>
     <string name="create_spaces_invite_public_header_desc">Sigurohuni se te %s e shoqërisë kanë hyrje personat e duhur. Më vonë mund të ftoni të tjerë.</string>
     <string name="create_spaces_invite_public_header">Cilët janë shokët tuaj të ekipit\?</string>
     <string name="command_description_add_to_space">Shtoni te Hapësira e dhënë</string>
