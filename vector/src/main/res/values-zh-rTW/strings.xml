@@ -1925,12 +1925,6 @@
     <string name="login_signup_username_hint">使用者名稱</string>
     <string name="settings_dev_tools">開發者工具</string>
     <string name="settings_account_data">帳號資料</string>
-    <plurals name="poll_info">
-        <item quantity="other">%d 投票</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="other">%d 投票 - 最後結果</item>
-    </plurals>
     <string name="poll_item_selected_aria">已選取的選項</string>
     <string name="command_description_poll">建立簡易投票</string>
     <string name="verification_cannot_access_other_session">使用復原通關密語或金鑰</string>

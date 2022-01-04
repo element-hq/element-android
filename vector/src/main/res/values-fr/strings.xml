@@ -1937,14 +1937,6 @@
     <string name="login_signup_username_hint">Nom d’utilisateur</string>
     <string name="settings_dev_tools">Outils de développement</string>
     <string name="settings_account_data">Données du compte</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d vote</item>
-        <item quantity="other">%d votes</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d vote − Résultats finaux</item>
-        <item quantity="other">%d votes − Résultats finaux</item>
-    </plurals>
     <string name="poll_item_selected_aria">Option sélectionnée</string>
     <string name="command_description_poll">Crée un sondage simple</string>
     <string name="verification_cannot_access_other_session">Utiliser une phrase secrète ou une clé de récupération</string>

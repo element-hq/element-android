@@ -2563,16 +2563,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
         <item quantity="one">Sūtīt attēlu ar oriģinālo izmēru</item>
         <item quantity="other">Sūtīt attēlus ar oriģinālo izmēru</item>
     </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="zero">%d balsu - Galīgie rezultāti</item>
-        <item quantity="one">%d balss - Galīgie rezultāti</item>
-        <item quantity="other">%d balsis - Galīgie rezultāti</item>
-    </plurals>
-    <plurals name="poll_info">
-        <item quantity="zero">%d balsu</item>
-        <item quantity="one">%d balss</item>
-        <item quantity="other">%d balsis</item>
-    </plurals>
     <string name="settings_server_room_version_unstable">nestabila</string>
     <string name="settings_server_room_version_stable">stabila</string>
     <string name="settings_server_default_room_version">Noklusējuma versija</string>

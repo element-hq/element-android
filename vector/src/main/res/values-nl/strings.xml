@@ -1641,10 +1641,6 @@
     <string name="settings_key_requests">Sleutelverzoeken</string>
     <string name="delete_event_dialog_title">Verwijderen Bevestigen</string>
     <string name="poll_item_selected_aria">Gekozen Optie</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d stem</item>
-        <item quantity="other">%d stemmen</item>
-    </plurals>
     <string name="settings_account_data">Accountgegevens</string>
     <string name="settings_dev_tools">Dev Tools</string>
     <string name="a11y_qr_code_for_verification">QR-code</string>

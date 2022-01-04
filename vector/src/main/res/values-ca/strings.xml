@@ -2253,14 +2253,6 @@
     <string name="verification_cannot_access_other_session">Utilitza una frase de recuperació o una clau</string>
     <string name="command_description_poll">Crea una votació simple</string>
     <string name="poll_item_selected_aria">Opció seleccionada</string>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d vot - Resultat final</item>
-        <item quantity="other">%d vots - Resultat final</item>
-    </plurals>
-    <plurals name="poll_info">
-        <item quantity="one">%d vot</item>
-        <item quantity="other">%d vots</item>
-    </plurals>
     <string name="delete_account_data_warning">Vols eliminar les dades del compte de tipus %1$s\?
 \n
 \nVés en compte, pot ser que provoqui comportaments inesperats.</string>

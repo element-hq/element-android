@@ -2232,16 +2232,6 @@
     <string name="not_trusted">Недоверенные</string>
     <string name="verification_profile_device_verified_because">Эта сессия является доверенной для безопасного обмена сообщениями, так как %1$s (%2$s) проверил(а) его:</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) вошел(ла), используя новую сессию:</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d голос</item>
-        <item quantity="few">%d голоса</item>
-        <item quantity="many">%d голосов</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d голос - финальные результаты</item>
-        <item quantity="few">%d голоса - финальные результаты</item>
-        <item quantity="many">%d голосов - финальные результаты</item>
-    </plurals>
     <string name="poll_item_selected_aria">Выберите вариант</string>
     <string name="command_description_poll">Создать простой опрос</string>
     <string name="new_signin">Новый вход</string>

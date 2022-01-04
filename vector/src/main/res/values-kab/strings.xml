@@ -2112,14 +2112,6 @@
     <string name="no_connectivity_to_the_server_indicator">Tuqqna ɣer uqeddac truḥ</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Askar n usafag yermed</string>
     <string name="settings_dev_tools">Ifecka n tneflit</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d tafrant</item>
-        <item quantity="other">%d tifranin</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d tafrant - Igmaḍ n taggara</item>
-        <item quantity="other">%d tifranin - Igmaḍ n taggara</item>
-    </plurals>
     <string name="command_description_poll">Yerna assenqed afessas</string>
     <string name="verification_cannot_access_other_session">Seqdec tafyirt tuffirt n tririt neɣ tasarut</string>
     <string name="verification_use_passphrase">Ma yella ur tezmireḍ ara ad tkecmeḍ ɣer tɣimit i yellan</string>

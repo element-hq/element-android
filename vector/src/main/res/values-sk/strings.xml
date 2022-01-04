@@ -2080,11 +2080,6 @@
     <string name="message_key">Kľúč správy</string>
     <string name="verification_cancelled">Overovanie zrušené</string>
     <string name="delete_event_dialog_title">Potvrdiť odstránenie</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d hlas</item>
-        <item quantity="few">%d hlasy</item>
-        <item quantity="other">%d hlasov</item>
-    </plurals>
     <string name="settings_account_data">Údaje o účte</string>
     <string name="settings_dev_tools">Vývojárske nástroje</string>
     <string name="a11y_qr_code_for_verification">QR kód</string>

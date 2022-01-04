@@ -1894,14 +1894,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="login_signup_username_hint">Felhasználónév</string>
     <string name="settings_dev_tools">Fejlesztői Eszközök</string>
     <string name="settings_account_data">Fiók Adatok</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d szavazat</item>
-        <item quantity="other">%d szavazat</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d szavazat – Végeredmény</item>
-        <item quantity="other">%d szavazat – Végeredmény</item>
-    </plurals>
     <string name="poll_item_selected_aria">Kiválasztott Beállítások</string>
     <string name="command_description_poll">Egyszerű szavazás készítése</string>
     <string name="verification_cannot_access_other_session">Használd a visszaállítási eljárást</string>

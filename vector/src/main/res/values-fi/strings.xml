@@ -1954,14 +1954,6 @@
     <string name="qr_code_scanned_by_other_no">Ei</string>
     <string name="no_connectivity_to_the_server_indicator">Yhteys kotipalvelimeen on poikki</string>
     <string name="settings_dev_tools">Kehittäjätyökalut</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d ääni</item>
-        <item quantity="other">%d ääntä</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d ääni - lopulliset tulokset</item>
-        <item quantity="other">%d ääntä - lopulliset tulokset</item>
-    </plurals>
     <string name="command_description_poll">Luo yksinkertaisen äänestyksen</string>
     <string name="verification_use_passphrase">Jos et pääse käsiksi olemassaolevaan istuntoon</string>
     <string name="new_signin">Uusi sisäänkirjautuminen</string>

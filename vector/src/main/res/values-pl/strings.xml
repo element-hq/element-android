@@ -1791,16 +1791,6 @@
     <string name="qr_code_scanned_by_other_no">Nie</string>
     <string name="settings_dev_tools">Narzędzia programistyczne</string>
     <string name="settings_account_data">Dane konta</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d głos</item>
-        <item quantity="few">%d głosów</item>
-        <item quantity="many"/>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d głos - wyniki końcowe</item>
-        <item quantity="few">%d głosów - wyniki końcowe</item>
-        <item quantity="many"/>
-    </plurals>
     <string name="poll_item_selected_aria">Wybrana Opcja</string>
     <string name="command_description_poll">Tworzy prostą ankietę</string>
     <string name="verification_cannot_access_other_session">Użyj hasła odzyskiwania lub klucza</string>

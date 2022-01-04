@@ -2233,14 +2233,6 @@
     <string name="verification_cannot_access_other_session">Uzi rehavan pasfrazon aŭ ŝlosilon</string>
     <string name="command_description_poll">Faras simplan enketon</string>
     <string name="poll_item_selected_aria">Elektita elekteblo</string>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d voĉo – finaj rezultoj</item>
-        <item quantity="other">%d voĉoj – finaj rezultoj</item>
-    </plurals>
-    <plurals name="poll_info">
-        <item quantity="one">%d voĉo</item>
-        <item quantity="other">%d voĉoj</item>
-    </plurals>
     <string name="delete_account_data_warning">Ĉu forigi la datumojn de konto de la speco «%1$s»\?
 \n
 \nForu tion zorge, ĝi povus kaŭzi neatenditan konduton.</string>

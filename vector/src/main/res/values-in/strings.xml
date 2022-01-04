@@ -2889,12 +2889,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="verification_cannot_access_other_session">Gunakan Frasa Sandi Pemulihan atau Kunci</string>
     <string name="command_description_poll">Membuat poll sederhana</string>
     <string name="poll_item_selected_aria">Opsi yang Dipilih</string>
-    <plurals name="poll_info_final">
-        <item quantity="other">%d suara — Hasil akhir</item>
-    </plurals>
-    <plurals name="poll_info">
-        <item quantity="other">%d suara</item>
-    </plurals>
     <string name="delete_account_data_warning">Hapus data akun dengan tipe %1$s\?
 \n
 \nHati-hati menggunakannya, ini dapat menyebabkan perilaku yang tidak terduga.</string>

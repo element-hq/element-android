@@ -2243,14 +2243,6 @@
     <string name="no_connectivity_to_the_server_indicator_airplane">Lennurežiim on kasutusel</string>
     <string name="settings_dev_tools">Arendaja töövahendid</string>
     <string name="settings_account_data">Kasutajakonto andmed</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d hääl</item>
-        <item quantity="other">%d häält</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d hääl - lõplikud tulemused</item>
-        <item quantity="other">%d häält - lõplikud tulemused</item>
-    </plurals>
     <string name="poll_item_selected_aria">Tehtud valik</string>
     <string name="command_description_poll">Loob lihtsa hääletuse</string>
     <string name="verification_cannot_access_other_session">Kasuta taastamiseks mõeldud paroolifraasi või võtit</string>

@@ -2233,14 +2233,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="login_signup_username_hint">Erabiltzaile-izena</string>
     <string name="settings_dev_tools">Garapen tresnak</string>
     <string name="settings_account_data">Kontuaren datuak</string>
-    <plurals name="poll_info">
-        <item quantity="one">boto %d</item>
-        <item quantity="other">%d boto</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">boto %d - Azken emaitza</item>
-        <item quantity="other">%d boto - Azken emaitza</item>
-    </plurals>
     <string name="poll_item_selected_aria">Hautatutako aukera</string>
     <string name="command_description_poll">Inkesta sinplea sortzen du</string>
     <string name="verification_cannot_access_other_session">Erabili berreskuratze metodo bat</string>

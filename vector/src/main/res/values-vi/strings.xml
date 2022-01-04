@@ -1661,12 +1661,6 @@
     <plurals name="secure_backup_reset_devices_you_can_verify">
         <item quantity="other">Hiển thị %d thiết bị bạn có thể xác minh ngay bây giờ</item>
     </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="other">%d phiếu bầu - Kết quả cuối cùng</item>
-    </plurals>
-    <plurals name="poll_info">
-        <item quantity="other">%d phiếu bầu</item>
-    </plurals>
     <plurals name="settings_active_sessions_count">
         <item quantity="other">%d phiên đang hoạt động</item>
     </plurals>

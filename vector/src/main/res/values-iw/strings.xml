@@ -2042,12 +2042,6 @@
     <string name="bottom_sheet_setup_secure_backup_security_key_title">השתמש במפתח אבטחה</string>
     <string name="bottom_sheet_setup_secure_backup_submit">התקן</string>
     <string name="bottom_sheet_setup_secure_backup_subtitle">הגן מפני אובדן גישה להודעות ונתונים מוצפנים על ידי גיבוי של מפתחות הצפנה בשרת שלך.</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d הצבעה</item>
-        <item quantity="two">%d הצבעות</item>
-        <item quantity="many">%d הצבעות</item>
-        <item quantity="other">%d הצבעות</item>
-    </plurals>
     <string name="settings_dev_tools">כלי מפתחים</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">מצב טיסה פועל</string>
     <string name="no_connectivity_to_the_server_indicator">הקישוריות לשרת אבדה</string>
@@ -2249,12 +2243,6 @@
         <item quantity="two">שלח תמוננות בגודל המקורי</item>
         <item quantity="many">שלח תמונות בגודל המקורי</item>
         <item quantity="other">שלח תמונות בגודל המקורי</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d הצבעה - תוצאות סופיות</item>
-        <item quantity="two">%d הצבעות - תוצאות סופיות</item>
-        <item quantity="many">%d הצבעעות - תוצאות סופיות</item>
-        <item quantity="other">%d הצבעות - תוצאות סופיות</item>
     </plurals>
     <string name="create_pin_title">בחר PIN לאבטחה</string>
     <string name="too_many_pin_failures">שגיאות רבות מדי, יצאת מהחשבון</string>

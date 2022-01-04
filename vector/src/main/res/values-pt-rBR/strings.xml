@@ -2129,14 +2129,6 @@
     <string name="no_connectivity_to_the_server_indicator_airplane">Modo avião está ligado</string>
     <string name="settings_dev_tools">Ferramentas Dev</string>
     <string name="settings_account_data">Dados de Conta</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d voto</item>
-        <item quantity="other">%d votos</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d voto - Resultados finais</item>
-        <item quantity="other">%d votos - Resultados finais</item>
-    </plurals>
     <string name="poll_item_selected_aria">Opção Selecionada</string>
     <string name="command_description_poll">Cria uma sondagem simples</string>
     <string name="verification_cannot_access_other_session">Use uma Chave ou a Frasepasse de Recuperação</string>

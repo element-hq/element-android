@@ -2066,14 +2066,6 @@
     <string name="verification_cannot_access_other_session">Използвай парола или ключ за възстановяване</string>
     <string name="command_description_poll">Създава проста анкета</string>
     <string name="poll_item_selected_aria">Избрана опция</string>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d глас - Финални резултати</item>
-        <item quantity="other">%d гласа - Финални резултати</item>
-    </plurals>
-    <plurals name="poll_info">
-        <item quantity="one">%d глас</item>
-        <item quantity="other">%d гласа</item>
-    </plurals>
     <string name="delete_account_data_warning">Изтриване на профилните данни от тип %1$s\?
 \n
 \nВнимавайте с това - може да доведе до неочаквано поведение.</string>

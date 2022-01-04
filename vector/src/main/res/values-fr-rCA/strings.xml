@@ -518,14 +518,6 @@
         <item quantity="one">Envoyer l’image en taille originale</item>
         <item quantity="other">Envoyer les images en taille originale</item>
     </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d vote − Résultats finaux</item>
-        <item quantity="other">%d votes − Résultats finaux</item>
-    </plurals>
-    <plurals name="poll_info">
-        <item quantity="one">%d vote</item>
-        <item quantity="other">%d votes</item>
-    </plurals>
     <plurals name="settings_active_sessions_count">
         <item quantity="one">%d session active</item>
         <item quantity="other">%d sessions actives</item>

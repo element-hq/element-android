@@ -1448,14 +1448,6 @@
     <string name="no_connectivity_to_the_server_indicator">اتّصال به کارساز از دست رفت</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">حالت هواپیما روشن است</string>
     <string name="settings_account_data">داده‌های حساب</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d رأی</item>
-        <item quantity="other">%d رأی</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d رأی - نتایج نهایی</item>
-        <item quantity="other">%d رأی - نتایج نهایی</item>
-    </plurals>
     <string name="poll_item_selected_aria">انتخاب گزیده</string>
     <string name="command_description_poll">ایجاد نظرسنجی‌ای ساده</string>
     <string name="verification_cannot_access_other_session">استفاده از یک کلید یا عبارت بازیابی</string>

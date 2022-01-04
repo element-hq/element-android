@@ -1980,12 +1980,6 @@
     <string name="no_connectivity_to_the_server_indicator_airplane">飞行模式已打开</string>
     <string name="settings_dev_tools">开发工具</string>
     <string name="settings_account_data">账号数据</string>
-    <plurals name="poll_info">
-        <item quantity="other">%d 票</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="other">%d 票 - 最终结果</item>
-    </plurals>
     <string name="poll_item_selected_aria">已选选项</string>
     <string name="command_description_poll">创建简单调查</string>
     <string name="verification_cannot_access_other_session">使用恢复密语或密钥</string>

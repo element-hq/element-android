@@ -2226,14 +2226,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="verification_profile_device_new_signing">%1$s (%2$s) iniciado sesión con una nueva sesión:</string>
     <string name="verification_profile_device_untrust_info">Hasta que este usuario confíe en esta sesión, los mensajes enviados hacia y desde ella se etiquetan con advertencias. Alternativamente, puede verificarlo manualmente.</string>
     <string name="qr_code_scanned_by_other_notice">¡Casi ahí! ¿Es %s muestra el mismo escudo\?</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d voto</item>
-        <item quantity="other">%d votos</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d voto - Resultados finales</item>
-        <item quantity="other">%d votos - Resultados finales</item>
-    </plurals>
     <string name="command_description_poll">Crea una encuesta simple</string>
     <string name="verification_cannot_access_other_session">Use una contraseña o clave de recuperación</string>
     <string name="verification_use_passphrase">Si no puede acceder a una sesión existente</string>

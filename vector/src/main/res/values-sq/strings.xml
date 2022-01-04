@@ -1950,14 +1950,6 @@
     <string name="verification_verified_user">%s i verifikuar</string>
     <string name="settings_dev_tools">Mjete Zhvilluesi</string>
     <string name="settings_account_data">Të dhëna Llogarie</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d votë</item>
-        <item quantity="other">%d vota</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d votë - Përfundimet finale</item>
-        <item quantity="other">%d vota - Përfundimet finale</item>
-    </plurals>
     <string name="poll_item_selected_aria">Mundësi e Përzgjedhur</string>
     <string name="command_description_poll">Krijoni një pyetësor të thjeshtë</string>
     <string name="verification_cannot_access_other_session">Përdorni Frazëkalim Rikthimesh ose Kyç</string>

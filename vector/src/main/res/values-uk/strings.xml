@@ -2754,18 +2754,6 @@
     <string name="verification_profile_verify">Звірити</string>
     <string name="command_description_poll">Створює просте опитування</string>
     <string name="poll_item_selected_aria">Вибрана опція</string>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d голос - Підсумок</item>
-        <item quantity="few">%d голоси - Підсумок</item>
-        <item quantity="many">%d голосів - Підсумок</item>
-        <item quantity="other">%d голосів - Підсумок</item>
-    </plurals>
-    <plurals name="poll_info">
-        <item quantity="one">%d голос</item>
-        <item quantity="few">%d голоси</item>
-        <item quantity="many">%d голосів</item>
-        <item quantity="other">%d голосів</item>
-    </plurals>
     <string name="initialize_cross_signing">Ініціалізувати перехресне підписування</string>
     <string name="verification_profile_device_new_signing">%1$s (%2$s) входить за допомогою нового сеансу:</string>
     <string name="settings_server_room_version_unstable">нестабільна</string>

@@ -2935,14 +2935,6 @@
     <string name="settings_account_data">Account Data</string>
     <string name="delete_account_data_warning">Delete the account data of type %1$s?\n\nUse with caution, it may lead to unexpected behavior.</string>
 
-    <plurals name="poll_info">
-        <item quantity="zero">%d vote</item>
-        <item quantity="other">%d votes</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="zero">%d vote - Final results</item>
-        <item quantity="other">%d votes - Final results</item>
-    </plurals>
     <string name="poll_item_selected_aria">Selected Option</string>
     <string name="command_description_poll">Creates a simple poll</string>
     <string name="verification_cannot_access_other_session">Use a Recovery Passphrase or Key</string>

@@ -2023,16 +2023,8 @@
     <string name="no_connectivity_to_the_server_indicator">Verbindung zum Server wurde unterbrochen</string>
     <string name="settings_dev_tools">Entwicklerwerkzeuge</string>
     <string name="settings_account_data">Kontodaten</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d Stimme</item>
-        <item quantity="other">%d Stimmen</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d Stimme - Endergebnis</item>
-        <item quantity="other">%d Stimmen - Endergebnis</item>
-    </plurals>
-    <string name="poll_item_selected_aria">Ausgewählte Option</string>
     <string name="command_description_poll">Erstellt eine einfache Umfrage</string>
+    <string name="poll_item_selected_aria">Ausgewählte Option</string>
     <string name="verification_cannot_access_other_session">Nutze eine Wiederherstellungsmethode</string>
     <string name="verification_use_passphrase">Wenn du auf keine existierende Sitzung zugreifen kannst</string>
     <string name="new_signin">Neue Anmeldung</string>

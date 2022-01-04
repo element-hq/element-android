@@ -2184,14 +2184,6 @@
     <string name="qr_code_scanned_by_other_no">Nej</string>
     <string name="no_connectivity_to_the_server_indicator">Anslutningen till servern har tappats</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Flygplansläge är på</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d röst</item>
-        <item quantity="other">%d röster</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d röst - Slutgiltigt resultat</item>
-        <item quantity="other">%d röster - Slutgiltigt resultat</item>
-    </plurals>
     <string name="poll_item_selected_aria">Valt alternativ</string>
     <string name="command_description_poll">Skapar en enkel omröstning</string>
     <string name="verification_cannot_access_other_session">Använd en återställningslösenfras eller -nyckel</string>
