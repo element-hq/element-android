@@ -32,6 +32,8 @@
 import static
 
 ### Rubbish from merge. Please delete those lines (sometimes in comment)
+<<<<<<<
+>>>>>>>
 
 ### carry return before "}". Please remove empty lines.
 \n\s*\n\s*\}
