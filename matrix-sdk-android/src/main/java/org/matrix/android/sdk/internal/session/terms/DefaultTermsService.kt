@@ -36,6 +36,7 @@ import org.matrix.android.sdk.internal.session.sync.model.accountdata.AcceptedTe
 import org.matrix.android.sdk.internal.session.user.accountdata.UpdateUserAccountDataTask
 import org.matrix.android.sdk.internal.session.user.accountdata.UserAccountDataDataSource
 import org.matrix.android.sdk.internal.util.ensureTrailingSlash
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class DefaultTermsService @Inject constructor(
@@ -63,19 +64,28 @@ internal class DefaultTermsService @Inject constructor(
      */
     override suspend fun getHomeserverTerms(baseUrl: String): TermsResponse {
         return try {
+            val request = baseUrl + NetworkConstants.URI_API_PREFIX_PATH_R0 + "register"
             executeRequest(null) {
-                termsAPI.register(baseUrl + NetworkConstants.URI_API_PREFIX_PATH_R0 + "register")
+                termsAPI.register(request)
             }
             // Return empty result if it succeed, but it should never happen
+            Timber.w("Request $request succeeded, it should never happen")
             TermsResponse()
         } catch (throwable: Throwable) {
-            @Suppress("UNCHECKED_CAST")
-            TermsResponse(
-                    policies = (throwable.toRegistrationFlowResponse()
-                            ?.params
-                            ?.get(LoginFlowTypes.TERMS) as? JsonDict)
-                            ?.get("policies") as? JsonDict
-            )
+            val registrationFlowResponse = throwable.toRegistrationFlowResponse()
+            if (registrationFlowResponse != null) {
+                @Suppress("UNCHECKED_CAST")
+                TermsResponse(
+                        policies = (registrationFlowResponse
+                                .params
+                                ?.get(LoginFlowTypes.TERMS) as? JsonDict)
+                                ?.get("policies") as? JsonDict
+                )
+            } else {
+                // Other error
+                Timber.e(throwable, "Error while getting homeserver terms")
+                throw throwable
+            }
         }
     }
 
