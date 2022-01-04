@@ -3681,7 +3681,6 @@
     <string name="tooltip_attachment_gallery">Send images and videos</string>
     <string name="tooltip_attachment_file">Upload file</string>
     <string name="tooltip_attachment_sticker">Send sticker</string>
-    <string name="tooltip_attachment_audio">WILL BE REMOVED</string>
     <string name="tooltip_attachment_contact">Open contacts</string>
     <string name="tooltip_attachment_poll">Create poll</string>
 

@@ -69,7 +69,6 @@ class AttachmentTypeSelectorView(context: Context,
         views.attachmentCameraButton.configure(Type.CAMERA)
         views.attachmentFileButton.configure(Type.FILE)
         views.attachmentStickersButton.configure(Type.STICKER)
-        views.attachmentAudioButton.configure(Type.AUDIO)
         views.attachmentContactButton.configure(Type.CONTACT)
         views.attachmentPollButton.configure(Type.POLL)
         width = LinearLayout.LayoutParams.MATCH_PARENT
@@ -128,7 +127,6 @@ class AttachmentTypeSelectorView(context: Context,
             Type.GALLERY -> views.attachmentGalleryButton
             Type.FILE    -> views.attachmentFileButton
             Type.STICKER -> views.attachmentStickersButton
-            Type.AUDIO   -> views.attachmentAudioButton
             Type.CONTACT -> views.attachmentContactButton
             Type.POLL    -> views.attachmentPollButton
         }.let {
@@ -212,7 +210,6 @@ class AttachmentTypeSelectorView(context: Context,
         GALLERY(PERMISSIONS_EMPTY, R.string.tooltip_attachment_gallery),
         FILE(PERMISSIONS_EMPTY, R.string.tooltip_attachment_file),
         STICKER(PERMISSIONS_EMPTY, R.string.tooltip_attachment_sticker),
-        AUDIO(PERMISSIONS_EMPTY, R.string.tooltip_attachment_audio),
         CONTACT(PERMISSIONS_FOR_PICKING_CONTACT, R.string.tooltip_attachment_contact),
         POLL(PERMISSIONS_EMPTY, R.string.tooltip_attachment_poll)
     }
