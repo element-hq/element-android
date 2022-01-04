@@ -772,7 +772,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="settings_labs_create_conference_with_jitsi">Sortu konferentzia deiak Jitsi bidez</string>
     <string name="widget_delete_message_confirmation">Ziur trepeta ezabatu nahi duzula gela honetatik?</string>
 
-    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Ezin izan da trepeta sortu.</string>
     <string name="widget_integration_failed_to_send_request">Eskariaren bidalketak huts egin du.</string>
     <string name="widget_integration_positive_power_level">Botere maila osoko zenbaki positibo bat izan behar da.</string>
@@ -791,22 +790,18 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="settings_labs_native_camera">Erabili kamera natiboa</string>
 
-    <!-- share keys -->
     <string name="you_added_a_new_device">\'%s\' saio berria gehitu duzu, eta zifratze-gakoak eskatzen ari da.</string>
     <string name="your_unverified_device_requesting">Egiaztatu gabeko zure \'%s\' saioa zifratze-gakoak eskatzen ari da.</string>
     <string name="start_verification">Hasi egiaztaketa</string>
     <string name="share_without_verifying">Partekatu egiaztatu gabe</string>
     <string name="ignore_request">Ezikusi eskaria</string>
 
-    <!-- conference call -->
     <string name="conference_call_warning_title">Abisua!</string>
     <string name="conference_call_warning_message">Konferentzia deiak garapenean daude eta agian ez dabiltza behar bezala.</string>
 
-    <!-- slash commands -->
     <string name="command_error">Komandoaren errorea</string>
     <string name="unrecognized_command">Komando ezezaguna: %s</string>
 
-    <!-- notification statuses -->
     <string name="notification_off">Ez</string>
     <string name="notification_noisy">Zaratatsua</string>
 
@@ -861,7 +856,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="community_id">Komunitatearen IDa</string>
     <string name="community_id_hint">adibidea</string>
 
-    <!-- group details -->
     <string name="group_details_home">Hasiera</string>
     <string name="group_details_people">Jendea</string>
     <string name="group_details_rooms">Gelak</string>
@@ -934,7 +928,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
         <item quantity="other">%d trepeta aktibo</item>
     </plurals>
 
-    <!-- Widget Integration Manager -->
     <string name="receipt_avatar">Hartzailearen abatarra</string>
     <string name="notice_avatar">Jakinarazpen abatarra</string>
     <string name="avatar">Abatarra</string>

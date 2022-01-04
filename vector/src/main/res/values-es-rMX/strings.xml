@@ -45,32 +45,24 @@
     <string name="notice_crypto_unable_to_decrypt">** No se puede descifrar: %s **</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">El dispositivo del remitente no nos ha enviado las claves de este mensaje.</string>
 
-    <!-- Room Screen -->
     <string name="could_not_redact">No se pudo redactar</string>
     <string name="unable_to_send_message">No se puede enviar el mensaje</string>
 
     <string name="message_failed_to_upload">La subida de la imagen falló</string>
 
-    <!-- general errors -->
     <string name="network_error">Error de la red</string>
     <string name="matrix_error">Error de Matrix</string>
 
-    <!-- Home Screen -->
 
-    <!-- Last seen time -->
 
-    <!-- call events -->
 
-    <!-- room error messages -->
     <string name="room_error_join_failed_empty_room">No es posible volver a unirse a una sala vacía.</string>
 
-    <!-- medium friendly name -->
     <string name="medium_email">Correo electrónico</string>
     <string name="medium_phone_number">Número telefónico</string>
 
     <string name="summary_user_sent_sticker">%1$s envió una calcomanía.</string>
 
-    <!-- Room display name -->
     <string name="room_displayname_invite_from">Invitación de %s</string>
     <string name="room_displayname_room_invite">Invitación de Sala</string>
     <string name="room_displayname_two_members">%1$s y %2$s</string>
@@ -86,13 +78,11 @@
     <string name="notice_event_redacted_by">Mensaje eliminado por %1$s</string>
     <string name="notice_event_redacted_with_reason">Mensaje eliminado [motivo: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">Mensaje eliminado por %1$s [motivo: %2$s]</string>
-    <!-- titles -->
     <string name="title_activity_home">Mensajes</string>
     <string name="title_activity_room">Sala</string>
     <string name="title_activity_settings">Configuraciones</string>
     <string name="title_activity_member_details">Detalles de los miembros</string>
     <string name="title_activity_historical">Historial</string>
-    <!-- button names -->
     <string name="ok">OK</string>
     <string name="cancel">Cancelar</string>
     <string name="save">Guardar</string>
@@ -123,7 +113,6 @@
     <string name="send_anyway">Enviar de todos modos</string>
     <string name="or">o</string>
     <string name="invite">Invitar</string>
-    <!-- actions -->
     <string name="action_sign_out">Cerrar la sesión</string>
     <string name="action_voice_call">Llamada de Voz</string>
     <string name="action_video_call">Llamada de Video</string>
@@ -135,30 +124,24 @@
     <string name="action_close">Cerrar</string>
     <string name="copied_to_clipboard">Copiado</string>
     <string name="disable">Desactivar</string>
-    <!-- dialog titles -->
     <string name="dialog_title_confirmation">Confirmación</string>
     <string name="dialog_title_warning">Advertencia</string>
-    <!-- Bottom navigation buttons -->
     <string name="bottom_action_home">Home</string>
     <string name="bottom_action_favourites">Favoritos</string>
     <string name="bottom_action_people">Personas</string>
     <string name="bottom_action_rooms">Salas</string>
-    <!-- Home screen -->
     <string name="home_filter_placeholder_home">Filtrar salas</string>
     <string name="home_filter_placeholder_favorites">Filtrar favoritos</string>
     <string name="home_filter_placeholder_people">Filtrar personas</string>
     <string name="home_filter_placeholder_rooms">Filtrar salas</string>
-    <!-- Home fragment -->
     <string name="invitations_header">Invitaciones</string>
     <string name="low_priority_header">Prioridad baja</string>
-    <!-- People fragment -->
     <string name="direct_chats_header">Conversaciones</string>
     <string name="local_address_book_header">Libreta local de direcciones</string>
     <string name="matrix_only_filter">Solamente contactos Matrix</string>
     <string name="no_conversation_placeholder">Sin conversaciones</string>
     <string name="template_no_contact_access_placeholder">No ha permitido a ${app_name} acceder a sus contactos locales</string>
     <string name="no_result_placeholder">Sin resultados</string>
-    <!-- Rooms fragment -->
     <string name="rooms_header">Salas</string>
     <string name="rooms_directory_header">Directorio de salas</string>
     <string name="no_room_placeholder">Sin salas</string>
@@ -194,7 +177,6 @@
     <string name="start_video_call">Comenzar Llamada de video</string>
     <string name="option_send_files">Enviar archivos</string>
     <string name="option_take_photo_video">Tomar foto o video</string>
-    <!-- Authentication -->
     <string name="auth_login">Iniciar sesión</string>
     <string name="auth_register">Crear cuenta</string>
     <string name="auth_submit">Entregar</string>
@@ -238,7 +220,6 @@
     <string name="auth_reset_password_email_validation_message">Un correo fue enviado a %s. Una vez que sigas el enlace, seleccione abajo.</string>
     <string name="auth_reset_password_error_unauthorized">Falló la verificación de correo electrónico: asegúrese de haber hecho clic en el correo</string>
     <string name="auth_reset_password_success_message">Su contraseña fue actualizada.\n\nHaz sido desconectado de todos tus dispositivos y las notificaciones están apagadas. Para encender las notificaciones, entre su cuenta en cada dispositivo.</string>
-    <!-- Login Screen -->
     <string name="login_error_must_start_http">El enlace sólo puede comenzar con http[s]://</string>
     <string name="login_error_network_error">Sesión falló: Error con la red</string>
     <string name="login_error_unable_login">Sesión falló</string>
@@ -253,28 +234,20 @@
     <string name="login_error_limit_exceeded">Demasiadas peticiones enviadas</string>
     <string name="login_error_user_in_use">Este nombre de usuario ya está reservado para otra persona</string>
     <string name="login_error_login_email_not_yet">El enlace que no siguió</string>
-    <!-- crypto warnings -->
-    <!-- read receipts list Screen -->
     <string name="read_receipts_list">Lista de Recibos de Lectura</string>
-    <!-- accounts list Screen -->
-    <!-- image size selection -->
     <string name="compression_options">Enviar como </string>
     <string name="compression_opt_list_original">Original</string>
     <string name="compression_opt_list_large">Grande</string>
     <string name="compression_opt_list_medium">Mediano</string>
     <string name="compression_opt_list_small">Chico</string>
-    <!-- media upload / download messages -->
     <string name="attachment_cancel_download">"¿Cancelar la descarga?</string>
     <string name="attachment_cancel_upload">¿Cancelar la subida?</string>
     <string name="attachment_remaining_time_seconds">%d s</string>
     <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
-    <!-- room creation dialog Screen -->
     <string name="yesterday">Ayer</string>
     <string name="today">Hoy</string>
-    <!-- room info dialog Screen -->
     <string name="room_info_room_name">Nombre de la Sala</string>
     <string name="room_info_room_topic">Tema de la Sala</string>
-    <!-- call string -->
     <string name="call_connected">Llamada conectada</string>
     <string name="call_connecting">La llamada se está conectando…</string>
     <string name="call_ended">Llamada finalizada</string>
@@ -287,10 +260,8 @@
     <string name="call_error_ice_failed">Conexión de media falló</string>
     <string name="call_error_camera_init_failed">La cámara no se pudo encender</string>
     <string name="call_error_answered_elsewhere">llamada fue contestada en otra parte</string>
-    <!-- medias picker string -->
     <string name="media_picker_both_capture_title">Tomar una foto o grabar un video"</string>
     <string name="media_picker_cannot_record_video">No pudo grabar video"</string>
-    <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Información</string>
     <string name="template_permissions_rationale_msg_storage">${app_name} necesita tu permiso para entrar en tu almacenaje de fotos y videos para enviar y guardar archivos.\n\nPor favor permite el acceso en el siguiente mensaje para poder enviar archivos desde su dispostivo.</string>
     <string name="template_permissions_rationale_msg_camera">${app_name} necesita tu permiso para usar tu cámara para tomar fotos y hacer llamadas de video.</string>
@@ -303,30 +274,24 @@
 
 ¿Permitir el acceso a ${app_name} para leer tus contactos ?</string>
     <string name="permissions_action_not_performed_missing_permissions">Perdón. Operación no realizada debido a permisos faltantes</string>
-    <!-- medias slider string -->
     <string name="media_slider_saved">Guardado</string>
     <string name="media_slider_saved_message">¿Guardar en Descargas\?</string>
     <string name="yes">SÍ</string>
     <string name="no">NO</string>
     <string name="_continue">Continuar</string>
-    <!-- Actions -->
     <string name="remove">Retirar</string>
     <string name="join">Entrar</string>
     <string name="preview">Preestreno</string>
     <string name="reject">Rechazar</string>
-    <!-- Room -->
     <string name="room_jump_to_first_unread">Saltar al primer mensaje no leído.</string>
-    <!-- Room Preview -->
     <string name="room_preview_invitation_format">Has sido invitado por %s a entrar a esta sala</string>
     <string name="room_preview_unlinked_email_warning">Esta invitación fue enviado a %s, que no esta asociado con esta cuenta.\nTal vez desea entrar con otra cuenta, o añadir este correo electrónico a esta cuenta.</string>
     <string name="room_preview_try_join_an_unknown_room">Estás intentando entrar a %s. ¿Desea entrar para participar en la conversación?</string>
     <string name="room_preview_try_join_an_unknown_room_default">una sala</string>
     <string name="room_preview_room_interactions_disabled">Esto es un preestreno de esta sala. Los interacciones están impedidos.</string>
-    <!-- Chat creation -->
     <string name="room_creation_title">Chat Nuevo</string>
     <string name="room_creation_add_member">Añadir miembro</string>
     <string name="room_title_one_member">1 miembro</string>
-    <!--  Chat participants -->
     <string name="room_participants_leave_prompt_title">Salir de la sala</string>
     <string name="room_participants_leave_prompt_msg">¿Estás seguro que quieres salir de la sala?</string>
     <string name="room_participants_remove_prompt_msg">¿Estás seguro que quieres quitar a %s de este chat?</string>
@@ -353,14 +318,12 @@
     <string name="room_participants_action_devices_list">Mostrar lista de dispositivos</string>
     <string name="room_participants_power_level_prompt">No podrás deshacer este cambio porque estás provocando que el usuario tenga el mismo poder que el tuyo.\n¿Estás seguro?</string>
     <string name="room_participants_invite_prompt_msg">"¿Estás seguro que quieres invitar a %s que entre en este chat?"</string>
-    <!-- invitation -->
     <string name="people_search_invite_by_id"><u>Invitado por ID</u></string>
     <string name="people_search_local_contacts">CONTACTOS LOCALES (%d)</string>
     <string name="people_search_filter_text">Solmente usuarios de Matrix</string>
     <string name="people_search_invite_by_id_dialog_title">Invitar usuario por ID</string>
     <string name="people_search_invite_by_id_dialog_description">Ingrese una o varias direcciones de correo o ID Matrix</string>
     <string name="people_search_invite_by_id_dialog_hint">Correo o ID Matrix</string>
-    <!--  Chat -->
     <string name="room_menu_search">Buscar</string>
     <string name="room_one_user_is_typing">%s está escribiendo…</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s están escribiendo…</string>
@@ -376,7 +339,6 @@
     <string name="room_delete_unsent_messages">Borrar mensajes no enviados</string>
     <string name="room_message_file_not_found">No se pudo encontrar el archivo</string>
     <string name="room_do_not_have_permission_to_post">No tienes permiso para enviar en esta sala</string>
-    <!-- unrecognized SSL certificate -->
     <string name="ssl_trust">Confiar</string>
     <string name="ssl_do_not_trust">No confiar</string>
     <string name="ssl_logout_account">Salir</string>
@@ -388,7 +350,6 @@
     <string name="ssl_unexpected_existing_expl">El certificado cambio de el que confiaba tu dispositivo. Esto es MUY RARO. Se recomienda que no aceptes el certificado nuevo.</string>
     <string name="ssl_expected_existing_expl">El certificado cambio de uno que confiaba tu dispositivo a un certificado desconfiado. El servidor posiblemente actualizo su certificado. Pongase en contacto con el administrador de el servidor para la huella esperada.</string>
     <string name="ssl_only_accept">SOLAMENTE acepta el certificado de arriba si coincide con el certificado que publicó el administrador de el servidor.</string>
-    <!-- Room Details -->
     <string name="room_details_title">Detalles de la Sala</string>
     <string name="room_details_people">Personas</string>
     <string name="room_details_files">Archivos</string>
@@ -396,13 +357,11 @@
     <string name="malformed_id">Identificación malformada. Debe ser correo electrónico o identificación de Matrix como \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">INVITADO</string>
     <string name="room_details_people_present_group_name">ENTRO</string>
-    <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Razón por reportar este contenido</string>
     <string name="room_event_action_report_prompt_ignore_user">¿Desea ocultar todos los mensajes de este usuario\?
 \nConsidere que esta acción reiniciará la aplicación y tardar un tiempo.</string>
     <string name="room_event_action_cancel_upload">Cancelar Subida</string>
     <string name="room_event_action_cancel_download">Cancelar Descarga</string>
-    <!-- Search -->
     <string name="search_hint">Buscar</string>
     <string name="search_members_hint">Buscar miembros</string>
     <string name="search_no_results">No hay resultados</string>
@@ -410,16 +369,13 @@
     <string name="tab_title_search_messages">MENSAJES</string>
     <string name="tab_title_search_people">PERSONAS</string>
     <string name="tab_title_search_files">ARCHIVOS</string>
-    <!-- Directory -->
     <string name="directory_search_results_title">Buscar directorio</string>
     <string name="directory_searching_title">Buscando directorio…</string>
-    <!-- home room settings -->
     <string name="room_settings_favourite">Destacar</string>
     <string name="room_settings_de_prioritize">Despriorizar</string>
     <string name="room_settings_direct_chat">Chat Directo</string>
     <string name="room_settings_leave_conversation">Salir de la Conversacion</string>
     <string name="room_settings_forget">Forget</string>
-    <!-- home sliding menu -->
     <string name="room_sliding_menu_messages">Mensajes</string>
     <string name="room_sliding_menu_settings">Configuraciones</string>
     <string name="room_sliding_menu_version">Versión </string>
@@ -427,7 +383,6 @@
     <string name="room_sliding_menu_third_party_notices">Avisos de partidos terceros</string>
     <string name="room_sliding_menu_copyright">Derechos de autor</string>
     <string name="room_sliding_menu_privacy_policy">Políticas de privacidad</string>
-    <!-- Vector Settings -->
     <string name="settings_profile_picture">Foto de Perfil</string>
     <string name="settings_display_name">Nombre Visible</string>
     <string name="settings_email_address">Correo Electrónico</string>
@@ -455,7 +410,6 @@
     <string name="settings_copyright">Derechos de autor</string>
     <string name="settings_privacy_policy">Políticas de privacidad</string>
     <string name="settings_clear_cache">Borrar memoria cache</string>
-    <!--string name="settings_room_privacy_label">Privacy</string-->
     <string name="settings_user_settings">Configuraciones de Usuario</string>
     <string name="settings_notifications">Notificaciones</string>
     <string name="settings_ignored_users">Usuarios ignorados</string>
@@ -508,37 +462,29 @@
     <string name="settings_phone_number_verification_error_empty_code">Escribe un código de activación</string>
     <string name="settings_phone_number_verification_error">Error en la validación de tu número telefónico</string>
     <string name="settings_phone_number_code">Código</string>
-    <!-- Room Settings -->
-    <!-- room global settings-->
     <string name="room_settings_room_photo">Foto de la Sala</string>
     <string name="room_settings_room_name">Nombre de la Sala</string>
     <string name="room_settings_topic">Tema</string>
     <string name="room_settings_room_tag">Etiqueta de la Sala</string>
     <string name="room_settings_tag_pref_dialog_title">Etiquetado como:</string>
-    <!-- Room settings: Room tag -->
     <string name="room_settings_tag_pref_entry_favourite">Destacar</string>
     <string name="room_settings_tag_pref_entry_low_priority">Baja prioridad</string>
     <string name="room_settings_tag_pref_entry_none">Ninguno</string>
-    <!-- room settings : access and visibility -->
     <string name="room_settings_category_access_visibility_title">Acceso y Visibilidad</string>
     <string name="room_settings_directory_visibility">Inscribir esta sala en el directorio de salas</string>
     <string name="room_settings_room_access_rules_pref_title">Acceso a la Sala</string>
     <string name="room_settings_room_read_history_rules_pref_title">Historial y Legibilidad de la Sala</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">¿Quien puede leer el historial?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">¿Quien puede entrar a la sala?</string>
-    <!-- Room settings, access and visibility : WHO CAN READ HISTORY? (read rule) -->
     <string name="room_settings_read_history_entry_anyone">Todos</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Solamente miembros (desde seleccionar esta opción)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Solamente miembros (desde su invitación)</string>
     <string name="room_settings_read_history_entry_members_only_joined">Solamente miembros (desde entrar a la sala)</string>
-    <!-- Room settings: "Who can access this room?" (access rule) -->
     <string name="room_settings_room_access_warning">Para hacer enlace a una sala debe tener una dirección.</string>
     <string name="room_settings_room_access_entry_only_invited">Solamente los invitados</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Los que saben el enlace de esta sala, excepto húespedes</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Los que saben el enlace de la sala, incluso húespedes</string>
-    <!-- Room settings: banned users -->
     <string name="room_settings_banned_users_title">Usuarios prohibidos</string>
-    <!-- advanced -->
     <string name="room_settings_category_advanced_title">Avanzado</string>
     <string name="room_settings_room_internal_id">La identificación interna de esta sala</string>
     <string name="room_settings_addresses_pref_title">Direcciones</string>
@@ -549,7 +495,6 @@
     <string name="room_settings_labs_end_to_end_warnings">Necesitas salir de tu cuenta para encender el cifrado.</string>
     <string name="room_settings_never_send_to_unverified_devices_title">Cifrar solamente para dispositivos verificados</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">Nunca enviar mensajes cifrados a dispositivos no verificados en esta sala de este dispositivo.</string>
-    <!-- Room settings: advanced addresses -->
     <string name="room_settings_addresses_no_local_addresses">Esta sala no tiene direcciones locales</string>
     <string name="room_settings_addresses_add_new_address">Dirección nueva (e.g #foo:matrix.org")</string>
     <string name="room_settings_addresses_invalid_format_dialog_title">Formato de alias no válido</string>
@@ -563,11 +508,8 @@
     <string name="room_settings_addresses_e2e_enabled">La cifración está encendida en esta sala.</string>
     <string name="room_settings_addresses_e2e_disabled">La cifración está apagada en esta sala.</string>
     <string name="room_settings_addresses_e2e_encryption_warning">Encender cifración \n(¡Aviso: no se puede apagar!)</string>
-    <!-- Directory -->
     <string name="directory_title">Directorio</string>
-    <!-- matrix error -->
     <string name="failed_to_load_timeline_position">%s estuvo intentando cargar un punto especifico en el historial de esta sala pero no lo pudo encontrar.</string>
-    <!-- encryption dialog -->
     <string name="encryption_information_title">Información de la cifración de Persona-a-Persona</string>
     <string name="encryption_information_device_info">Información de eventos</string>
     <string name="encryption_information_user_id">Identificación de usuario</string>
@@ -609,21 +551,18 @@
     <string name="encryption_information_verify_device_warning">Para verificar que este dispositivo es confiable, por favor contacte el dueño de este dispositivo por otro medio (e.g. cara-a-cara o por llamada) y verifique que la clave de este dispositivo que ellos ven en su página de configuraciones coincide con el de abajo:</string>
     <string name="encryption_information_verify_device_warning2">Si coinciden, seleccione Verificar. Si no, otro esta interceptando este dispositivo y vas a querer bloquearlo.\nEn el futuro, este procceso será mas sofisticado.</string>
     <string name="encryption_information_verify_key_match">Verifico que las claves coinciden</string>
-    <!-- unknown devices management -->
     <string name="unknown_devices_alert_title">Esta sala contiene dispositivos desconocidos</string>
     <string name="unknown_devices_alert_message">Esta sala contiene dispositivos desconocidos que no se han verificado.
 Esto significa que no se garantiza que los dispositivos pertenezcan a las personas que dicen de que son.
 Recomendamos que los verifiques todos antes de continuar. Sin embargo, puedes reenviar el mensaje sin verificarlos si prefieres.
 
 Dispositivos desconocidos:</string>
-    <!-- directory activity  -->
     <string name="select_room_directory">Select a room directory</string>
     <string name="directory_server_fail_to_retrieve_server">The server may be unavailable or overloaded</string>
     <string name="directory_server_type_homeserver">Type a homeserver to list public rooms from</string>
     <string name="directory_server_placeholder">Homeserver URL</string>
     <string name="directory_server_all_rooms_on_server">All rooms on %s server</string>
     <string name="directory_server_native_rooms">All native %s rooms</string>
-    <!-- historical -->
     <string name="historical_placeholder">Search for historical</string>
     <string name="notification_sync_in_progress">Sincronizando…</string>
     <string name="loading">Cargando…</string>

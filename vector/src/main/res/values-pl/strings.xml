@@ -527,9 +527,7 @@
     <string name="group_details_people">Ludzie</string>
     <string name="community_name_hint">Przykład</string>
     <string name="community_id_hint">przykład</string>
-    <!-- group details -->
     <string name="encrypted_message">Wiadomość zaszyfrowana</string>
-    <!-- groups creation -->
     <string name="create">Utwórz</string>
     <string name="notification_off">Wyłączone</string>
     <string name="conference_call_warning_title">Uwaga!</string>

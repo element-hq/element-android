@@ -640,15 +640,11 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="room_unknown_devices_messages_notification">不明なデバイスが存在しているため、メッセージを送ることができませんでした。今 %1$s または %2$s しますか？</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">要求されたフィンガープリントキー Ed25519</string>
     <string name="settings_labs_create_conference_with_jitsi">jitsiを用いて会議通話を始める</string>
-    <!-- Widget Integration Manager -->
     <string name="settings_labs_native_camera">端末のカメラを使う</string>
-    <!-- share keys -->
     <string name="conference_call_warning_title">警告！</string>
     <string name="conference_call_warning_message">ビデオ会議は開発中であり、確実でない可能性があります。</string>
-    <!-- slash commands -->
     <string name="command_error">コマンドエラー</string>
     <string name="unrecognized_command">認識されないコマンド: %s</string>
-    <!-- notification statuses -->
     <string name="notification_off">切</string>
     <string name="notification_noisy">音量大</string>
     <string name="encrypted_message">暗号化されたメッセージ</string>
@@ -687,7 +683,6 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="community_name_hint">例</string>
     <string name="community_id">コミュニティID</string>
     <string name="community_id_hint">例</string>
-    <!-- group details -->
     <string name="group_details_home">ホーム</string>
     <string name="group_details_people">参加者</string>
     <string name="group_details_rooms">部屋</string>

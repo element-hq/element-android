@@ -212,7 +212,6 @@
     <string name="notice_direct_room_created_by_you">Създадохте дискусията</string>
     <string name="notice_direct_room_created">%1$s създаде дискусията</string>
     <string name="encrypted_message">Шифровано съобщение</string>
-    <!-- groups creation -->
     <string name="light_theme">Светла тема</string>
     <string name="dark_theme">Тъмна тема</string>
     <string name="black_theme">Черна тема</string>
@@ -748,7 +747,6 @@
         <item quantity="one">%d активно приспособление</item>
         <item quantity="other">%d активни приспособления</item>
     </plurals>
-    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Неуспешно създаване на приспособление.</string>
     <string name="widget_integration_failed_to_send_request">Неуспешно изпращане на заявката.</string>
     <string name="widget_integration_positive_power_level">Нивото на достъп трябва да бъде позитивно число.</string>
@@ -850,19 +848,15 @@
     <string name="largest">Най-голям</string>
     <string name="huge">Огромен</string>
     <string name="settings_labs_native_camera">Използване на камерата на телефона</string>
-    <!-- share keys -->
     <string name="you_added_a_new_device">Добавихте ново устройство \'%s\', което изисква ключове за шифроване.</string>
     <string name="your_unverified_device_requesting">Вашето непотвърдено устройство \'%s\' изисква ключове за шифроване.</string>
     <string name="start_verification">Започни потвърждението</string>
     <string name="share_without_verifying">Сподели без потвърждение</string>
     <string name="ignore_request">Игнорирай поканата</string>
-    <!-- conference call -->
     <string name="conference_call_warning_title">Предупреждение!</string>
     <string name="conference_call_warning_message">Груповите разговори са в процес на разработка и не са надеждни.</string>
-    <!-- slash commands -->
     <string name="command_error">Грешка в командата</string>
     <string name="unrecognized_command">Неразпозната команда: %s</string>
-    <!-- notification statuses -->
     <string name="notification_off">Изключено</string>
     <string name="notification_noisy">Шумно</string>
     <string name="create">Създай</string>
@@ -871,7 +865,6 @@
     <string name="community_name_hint">Пример</string>
     <string name="community_id">ID на общност</string>
     <string name="community_id_hint">пример</string>
-    <!-- group details -->
     <string name="group_details_home">Начало</string>
     <string name="group_details_people">Хора</string>
     <string name="group_details_rooms">Стаи</string>

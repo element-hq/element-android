@@ -518,7 +518,6 @@
     <string name="widget_integration_must_be_in_room">لست في هذه الغرفة.</string>
     <string name="widget_integration_no_permission_in_room">ليس لديك تصريح لفعل هذا في هذه الغرفة.</string>
     <string name="settings_labs_native_camera">استخدم الكمرة الأصيلة</string>
-    <!-- share keys -->
     <string name="conference_call_warning_title">تحذير!</string>
     <string name="room_unknown_devices_messages_notification">لم تُرسل الرسائل بسبب وجود أجهزة مجهولة. ماذا أفعل؟ %1$s. ‏%2$s.</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">ليس ’⁨%s⁩‘ تنسيقا صالحا لاختصار</string>
@@ -578,10 +577,8 @@
     <string name="widget_integration_room_not_visible">الغرفة ⁨%s⁩ غير ظاهرة.</string>
     <string name="you_added_a_new_device">لقد أضفت جهازا جديدا ’⁨%s⁩‘ يطلب مفاتيح التعمية.</string>
     <string name="ignore_request">تجاهل الطلب</string>
-    <!-- conference call -->
     <string name="command_error">خطأ في الأمر</string>
     <string name="unrecognized_command">لم يُفهم الأمر: ⁨%s⁩</string>
-    <!-- notification statuses -->
     <string name="redact">أزل</string>
     <string name="missing_permissions_to_start_conf_call">تحتاج تصريح الدعوة لبدء اجتماع في هذه الغرفة</string>
     <string name="or">أو</string>
@@ -765,13 +762,11 @@
         <item quantity="many">%d ودجة نشطة</item>
         <item quantity="other">%d ودجة نشطة</item>
     </plurals>
-    <!-- Widget Integration Manager -->
     <string name="room_add_matrix_apps">أضِف تطبيقات ماترِكس</string>
     <string name="your_unverified_device_requesting">يطلب جهازك غير المؤكّد ”‏⁨%s⁩“ مفاتيح التعمية.</string>
     <string name="start_verification">ابدأ التأكيد</string>
     <string name="share_without_verifying">شارِك دون تأكيد</string>
     <string name="encrypted_message">رسالة معمّاة</string>
-    <!-- groups creation -->
     <string name="create">أنشئ</string>
     <string name="community_name">اسم المجتمع</string>
     <string name="community_id">معرّف المجتمع</string>
@@ -844,7 +839,6 @@
     <string name="notification_off">معطّل</string>
     <string name="notification_noisy">مزعج</string>
     <string name="conference_call_warning_message">ما زالت مكالمات الاجتماعات قيد التطوير وقد لا يُعتمد عليها.</string>
-    <!-- slash commands -->
     <string name="unknown_devices_alert_message">تحتوي هذه الغرفة أجهزة مجهولة لم يُتأكّد منها.
 يعني هذا عدم وجود أي ضمانات بأن الأجهزة هي فعلا ملك لمن يستخدمها.
 ننصحك بأن تبدأ عملية التأكيد لكل جهاز وذلك قبل أن تتابع. يمكنك طبعا إرسال الرسالة دون تأكيد إن أردت ذلك.
@@ -907,7 +901,6 @@
     <string name="widget_integration_positive_power_level">يجب أن يكون مستوى السلطة عددا صحيحا موجبا.</string>
     <string name="community_name_hint">مثال</string>
     <string name="community_id_hint">مثال</string>
-    <!-- group details -->
     <string name="title_activity_room">الغرفة</string>
     <string name="groups_invite_header">دعوة</string>
     <string name="send_files_in">أرسل إلى</string>

@@ -757,7 +757,6 @@
     <string name="widget_creation_failure">Nie je možné vytvoriť widget</string>
     <string name="settings_labs_create_conference_with_jitsi">Konferenčné hovory uskutočňovať použitím jitsi</string>
     <string name="widget_delete_message_confirmation">Ste si istí, že chcete odstrániť widget z tejto miestnosti?</string>
-    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Nie je možné vytvoriť widget.</string>
     <string name="widget_integration_failed_to_send_request">Nepodarilo sa odoslať požiadavku.</string>
     <string name="widget_integration_positive_power_level">Úroveň moci musí byť kladné celé číslo.</string>
@@ -767,7 +766,6 @@
     <string name="widget_integration_missing_user_id">V požiadavke chýba user_id.</string>
     <string name="widget_integration_room_not_visible">Miestnosť %s nie je viditeľná.</string>
     <string name="room_add_matrix_apps">Pridať Matrix aplikácie</string>
-    <!-- share keys -->
     <string name="you_added_a_new_device">Pridali ste novú reláciu \'%s\', ktorá požaduje šifrovacie kľúče.</string>
     <string name="your_unverified_device_requesting">Vaša neoverená relácia \'%s\' požaduje šifrovacie kľúče.</string>
     <string name="start_verification">Spustiť overenie</string>
@@ -780,13 +778,10 @@
     <string name="option_take_video">Poslať video</string>
     <string name="settings_analytics">Štatistika</string>
     <string name="settings_labs_native_camera">Používať vstavaný fotoaparát a kameru</string>
-    <!-- share keys -->
     <string name="conference_call_warning_title">Upozornenie!</string>
     <string name="conference_call_warning_message">Konferenčné hovory sú stále vo vývoji a nemusia byť úplne spoľahlivé.</string>
-    <!-- slash commands -->
     <string name="command_error">Chybný príkaz</string>
     <string name="unrecognized_command">Nerozpoznaný príkaz: %s</string>
-    <!-- notification statuses -->
     <string name="notification_off">Vypnuté</string>
     <string name="notification_noisy">Hlasné</string>
     <string name="encrypted_message">Šifrovaná správa</string>
@@ -822,7 +817,6 @@
     <string name="community_name_hint">Príklad</string>
     <string name="community_id">ID komunity</string>
     <string name="community_id_hint">príklad</string>
-    <!-- group details -->
     <string name="group_details_home">Domov</string>
     <string name="group_details_people">Ľudia</string>
     <string name="group_details_rooms">Miestnosti</string>
@@ -894,7 +888,6 @@
         <item quantity="few">%d aktívne widgety</item>
         <item quantity="other">%d aktívnych widgetov</item>
     </plurals>
-    <!-- Widget Integration Manager -->
     <string name="receipt_avatar">Potvrdenie o prečítaní</string>
     <string name="notice_avatar">Obrázok oznámenia</string>
     <string name="avatar">Obrázok</string>

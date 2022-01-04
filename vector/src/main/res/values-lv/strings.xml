@@ -879,7 +879,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
         <item quantity="one">%d aktīvi vidžeti</item>
         <item quantity="other">%d aktīvu vidžetu</item>
     </plurals>
-    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Neizdevās uzstādīt vidžetu.</string>
     <string name="widget_integration_failed_to_send_request">Neizdevās nosūtīt pieprasījumu.</string>
     <string name="widget_integration_positive_power_level">Pieejas līmenim jābūt lielākam par 0.</string>
@@ -890,30 +889,24 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="widget_integration_room_not_visible">Istaba %s ir neredzama.</string>
     <string name="room_add_matrix_apps">Pievienot Matrix lietotnes</string>
     <string name="settings_labs_native_camera">Lietot iebūvēto kameru</string>
-    <!-- share keys -->
     <string name="you_added_a_new_device">Tu pievienoji jaunu ierīci \'%s\', kura pieprasa šifrēšanas atslēgas.</string>
     <string name="your_unverified_device_requesting">Tava neverificētā ierīce \'%s\' pieprasa šifrēšanas atslēgas.</string>
     <string name="start_verification">Sākt tās verifikāciju</string>
     <string name="share_without_verifying">Dalīties bez verificēšanas</string>
     <string name="ignore_request">Ignorēt pieprasījumu</string>
-    <!-- conference call -->
     <string name="conference_call_warning_title">Uzmanību!</string>
     <string name="conference_call_warning_message">Konferences zvans ir izstrādes stadijā un var nebūt uzticams.</string>
-    <!-- slash commands -->
     <string name="command_error">Komandas kļūda</string>
     <string name="unrecognized_command">Nepazīstama komanda: %s</string>
-    <!-- notification statuses -->
     <string name="notification_off">Izslēgts</string>
     <string name="notification_noisy">Ar skaņu</string>
     <string name="encrypted_message">Šifrēta ziņa</string>
-    <!-- groups creation -->
     <string name="create">Izveidot</string>
     <string name="create_community">Izveidot kopienu</string>
     <string name="community_name">Kopienas nosaukums</string>
     <string name="community_name_hint">Piemērs</string>
     <string name="community_id">Kopienas Id</string>
     <string name="community_id_hint">piemērs</string>
-    <!-- group details -->
     <string name="group_details_home">Sākums</string>
     <string name="group_details_people">Cilvēki</string>
     <string name="group_details_rooms">Istabas</string>

@@ -734,7 +734,6 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="widget_creation_failure">Kisalkalmazás létrehozása sikertelen</string>
     <string name="settings_labs_create_conference_with_jitsi">Hozz létre konferencia hívást a jitsi segítségével</string>
     <string name="widget_delete_message_confirmation">Biztos vagy benne hogy törölni akarod ezt a kisalkalmazást ebből a szobából?</string>
-    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Kisalkalmazás létrehozása sikertelen.</string>
     <string name="widget_integration_failed_to_send_request">Felkérés elküldése sikertelen.</string>
     <string name="widget_integration_positive_power_level">Az erősségi szintnek egy pozitív egész számnak kell lennie.</string>
@@ -760,14 +759,11 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="option_take_video">Videofelvétel</string>
     <string name="settings_analytics">Elemzés</string>
     <string name="settings_labs_native_camera">Beépített kamera használata</string>
-    <!-- share keys -->
     <string name="title_activity_bug_report">Hibajelentés</string>
     <string name="conference_call_warning_title">Figyelmeztetés!</string>
     <string name="conference_call_warning_message">A konferenciabeszélgetés fejlesztés alatt van, elképzelhető, hogy nem működik még megfelelően.</string>
-    <!-- slash commands -->
     <string name="command_error">Utasítás hiba</string>
     <string name="unrecognized_command">Ismeretlen utasítás: %s</string>
-    <!-- notification statuses -->
     <string name="notification_off">Ki</string>
     <string name="notification_noisy">Hangos</string>
     <string name="encrypted_message">Titkosított üzenet</string>
@@ -800,7 +796,6 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="community_name_hint">Példa</string>
     <string name="community_id">Közösség azonosító</string>
     <string name="community_id_hint">példa</string>
-    <!-- group details -->
     <string name="group_details_rooms">Szobák</string>
     <string name="group_details_people">Emberek</string>
     <string name="no_users_placeholder">Nincsenek felhasználók</string>
@@ -865,7 +860,6 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
         <item quantity="one">%d aktív kisalkalmazás</item>
         <item quantity="other">%d aktív kisalkalmazás</item>
     </plurals>
-    <!-- Widget Integration Manager -->
     <string name="avatar">Profilkép</string>
     <string name="receipt_avatar">Címzett profilképe</string>
     <string name="notice_avatar">Észlelési profilkép</string>

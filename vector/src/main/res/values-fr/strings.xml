@@ -778,7 +778,6 @@
     <string name="widget_creation_failure">La création du widget a échoué</string>
     <string name="settings_labs_create_conference_with_jitsi">Créer des appels en téléconférence avec jitsi</string>
     <string name="widget_delete_message_confirmation">Voulez-vous vraiment supprimer le widget de ce salon ?</string>
-    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Impossible de créer le widget.</string>
     <string name="widget_integration_failed_to_send_request">Échec de l’envoi de la requête.</string>
     <string name="widget_integration_positive_power_level">Le rang doit être un entier positif.</string>
@@ -802,14 +801,11 @@
     <string name="option_take_video">Prendre une vidéo</string>
     <string name="settings_analytics">Statistiques d’utilisation</string>
     <string name="settings_labs_native_camera">Utiliser la caméra de l’appareil</string>
-    <!-- share keys -->
     <string name="title_activity_bug_report">Rapport d’anomalie</string>
     <string name="conference_call_warning_title">Attention !</string>
     <string name="conference_call_warning_message">L’appel en téléconférence est en cours de développement et peut ne pas être fiable.</string>
-    <!-- slash commands -->
     <string name="command_error">Erreur de commande</string>
     <string name="unrecognized_command">Commande non reconnue : %s</string>
-    <!-- notification statuses -->
     <string name="notification_off">Désactivé</string>
     <string name="notification_noisy">Notification sonore</string>
     <string name="encrypted_message">Message chiffré</string>
@@ -844,7 +840,6 @@
     <string name="community_name_hint">Exemple</string>
     <string name="community_id">Identifiant de communauté</string>
     <string name="community_id_hint">Exemple</string>
-    <!-- group details -->
     <string name="group_details_home">Accueil</string>
     <string name="group_details_people">Personnes</string>
     <string name="group_details_rooms">Salons</string>
@@ -902,7 +897,6 @@
         <item quantity="one">%d widgets actif</item>
         <item quantity="other">%d widgets actifs</item>
     </plurals>
-    <!-- Widget Integration Manager -->
     <string name="avatar">Avatar</string>
     <plurals name="membership_changes">
         <item quantity="one">%d changement de statut</item>

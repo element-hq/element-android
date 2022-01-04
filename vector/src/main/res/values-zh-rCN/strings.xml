@@ -685,17 +685,14 @@
     <string name="home_filter_placeholder_favorites">按收藏夹过滤</string>
     <string name="home_filter_placeholder_people">按联系人过滤</string>
     <string name="home_filter_placeholder_rooms">按聊天室名称过滤</string>
-    <!-- Home fragment -->
     <string name="invitations_header">邀请</string>
     <string name="low_priority_header">低优先级</string>
-    <!-- People fragment -->
     <string name="direct_chats_header">对话</string>
     <string name="local_address_book_header">本地通讯录</string>
     <string name="matrix_only_filter">只显示 Matrix 联系人</string>
     <string name="no_conversation_placeholder">没有对话</string>
     <string name="no_result_placeholder">没有结果</string>
     <string name="template_no_contact_access_placeholder">你没有授予 ${app_name} 访问本地通讯录的权限</string>
-    <!-- Rooms fragment -->
     <string name="rooms_header">聊天室</string>
     <string name="rooms_directory_header">聊天室目录</string>
     <string name="no_room_placeholder">没有聊天室</string>
@@ -704,14 +701,12 @@
     <string name="people_search_invite_by_id_dialog_description">请输入一个或多个电子邮箱地址或 Matrix ID</string>
     <string name="people_search_invite_by_id_dialog_hint">电子邮箱地址或 Matrix ID</string>
     <string name="room_settings_forget">忘记</string>
-    <!-- directory activity  -->
     <string name="select_room_directory">选择一个聊天室目录</string>
     <string name="directory_server_fail_to_retrieve_server">服务器可能不可用或过载</string>
     <string name="directory_server_type_homeserver">请输入一个要列出公共聊天室的主服务器</string>
     <string name="directory_server_placeholder">服务器名称</string>
     <string name="directory_server_all_rooms_on_server">%s 服务器上的所有聊天室</string>
     <string name="directory_server_native_rooms">所有本地 %s 聊天室</string>
-    <!-- historical -->
     <string name="historical_placeholder">搜索历史</string>
     <string name="action_historical">历史消息</string>
     <string name="people_search_invite_by_id"><u>用 ID 邀请</u></string>
@@ -752,7 +747,6 @@
     <string name="widget_creation_failure">创建挂件失败</string>
     <string name="settings_labs_create_conference_with_jitsi">用 jitsi 创建会议通话</string>
     <string name="widget_delete_message_confirmation">你确定要删除这个挂件吗？</string>
-    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">无法创建挂件。</string>
     <string name="widget_integration_failed_to_send_request">发送请求失败。</string>
     <string name="widget_integration_positive_power_level">特权级别必须是正整数。</string>
@@ -776,13 +770,10 @@
     <string name="option_take_photo">拍摄照片</string>
     <string name="option_take_video">拍摄视频</string>
     <string name="settings_labs_native_camera">使用原生相机</string>
-    <!-- share keys -->
     <string name="conference_call_warning_title">警告！</string>
     <string name="conference_call_warning_message">会议通话正在开发中，可能不可靠。</string>
-    <!-- slash commands -->
     <string name="command_error">命令错误</string>
     <string name="unrecognized_command">不可识别的命令：%s</string>
-    <!-- notification statuses -->
     <string name="notification_off">关闭</string>
     <string name="encrypted_message">已加密消息</string>
     <string name="notification_noisy_notifications">响铃通知</string>
@@ -849,7 +840,6 @@
     <plurals name="active_widgets">
         <item quantity="other">已启用 %d 个挂件</item>
     </plurals>
-    <!-- Widget Integration Manager -->
     <string name="community_name">社群名称</string>
     <string name="community_id">社群 ID</string>
     <string name="group_details_home">主页</string>
