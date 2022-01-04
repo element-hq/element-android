@@ -15,9 +15,8 @@
  */
 package org.commonmark.ext.maths.internal
 
-import org.commonmark.ext.maths.InlineMaths
 import org.commonmark.ext.maths.DisplayMaths
-import org.commonmark.ext.maths.internal.MathsNodeRenderer
+import org.commonmark.ext.maths.InlineMaths
 import org.commonmark.node.Node
 import org.commonmark.renderer.NodeRenderer
 import java.util.HashSet

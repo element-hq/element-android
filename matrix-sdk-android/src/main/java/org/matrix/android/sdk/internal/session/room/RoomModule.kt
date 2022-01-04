@@ -106,7 +106,8 @@ internal abstract class RoomModule {
 
     @Module
     companion object {
-        private val extensions : List<Extension> = listOf(MathsExtension.create())
+        private val extensions: List<Extension> = listOf(MathsExtension.create())
+
         @Provides
         @JvmStatic
         @SessionScope
