@@ -2,14 +2,14 @@ name: Move labelled issues to correct boards and columns
 
 on:
   issues:
-    types: [ labeled ]
+    types: [labeled]
 
 jobs:
   move_needs_info_issues:
     name: X-Needs-Info issues to Need info column on triage board
     runs-on: ubuntu-latest
-    if: |
-      github.repository == 'vector-im/element-android' # Skip in forks
+    # Skip in forks
+    if: github.repository == 'vector-im/element-android'
     steps:
       - uses: konradpabjan/move-labeled-or-milestoned-issue@219d384e03fa4b6460cd24f9f37d19eb033a4338
         with:
@@ -21,8 +21,9 @@ jobs:
   add_priority_design_issues_to_project:
     name: P1 X-Needs-Design to Design project board
     runs-on: ubuntu-latest
-    if: |
-      github.repository == 'vector-im/element-android' && # Skip in forks
+    # Skip in forks
+    if: >
+      github.repository == 'vector-im/element-android' &&
       contains(github.event.issue.labels.*.name, 'X-Needs-Design') &&
       (contains(github.event.issue.labels.*.name, 'S-Critical') &&
         (contains(github.event.issue.labels.*.name, 'O-Frequent') ||
@@ -53,8 +54,9 @@ jobs:
   #  delight_issues_to_board:
   #    name: Spaces issues to new Delight project board
   #    runs-on: ubuntu-latest
-  #    if: |
-  #      github.repository == 'vector-im/element-android' && # Skip in forks
+  #    # Skip in forks
+  #    if: >
+  #      github.repository == 'vector-im/element-android' &&
   #      contains(github.event.issue.labels.*.name, 'A-Spaces') ||
   #      contains(github.event.issue.labels.*.name, 'A-Space-Settings') ||
   #      contains(github.event.issue.labels.*.name, 'A-Subspaces')
@@ -79,8 +81,9 @@ jobs:
   move_voice-message_issues:
     name: A-Voice Messages to voice message board
     runs-on: ubuntu-latest
-    if: |
-      github.repository == 'vector-im/element-android' && # Skip in forks
+    # Skip in forks
+    if: >
+      github.repository == 'vector-im/element-android' &&
       contains(github.event.issue.labels.*.name, 'A-Voice Messages')
     steps:
       - uses: octokit/graphql-action@v2.x
@@ -103,8 +106,9 @@ jobs:
   move_threads_issues:
     name: A-Threads to Thread board
     runs-on: ubuntu-latest
-    if: |
-      github.repository == 'vector-im/element-android' && # Skip in forks
+    # Skip in forks
+    if: >
+      github.repository == 'vector-im/element-android' &&
       contains(github.event.issue.labels.*.name, 'A-Threads')
     steps:
       - uses: octokit/graphql-action@v2.x
@@ -127,8 +131,9 @@ jobs:
   move_message_bubbles_issues:
     name: A-Message-Bubbles to Message bubbles board
     runs-on: ubuntu-latest
-    if: |
-      github.repository == 'vector-im/element-android' && # Skip in forks
+    # Skip in forks
+    if: >
+      github.repository == 'vector-im/element-android' &&
       contains(github.event.issue.labels.*.name, 'A-Message-Bubbles')
     steps:
       - uses: octokit/graphql-action@v2.x
