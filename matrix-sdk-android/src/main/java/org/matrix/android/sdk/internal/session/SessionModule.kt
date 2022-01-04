@@ -47,7 +47,6 @@ import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorage
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultRedactEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.RedactEventTask
 import org.matrix.android.sdk.internal.crypto.verification.VerificationMessageProcessor
-import org.matrix.android.sdk.internal.database.DatabaseCleaner
 import org.matrix.android.sdk.internal.database.EventInsertLiveObserver
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.SessionRealmConfigurationFactory
@@ -338,10 +337,6 @@ internal abstract class SessionModule {
     @Binds
     @IntoSet
     abstract fun bindIdentityService(service: DefaultIdentityService): SessionLifecycleObserver
-
-    @Binds
-    @IntoSet
-    abstract fun bindDatabaseCleaner(cleaner: DatabaseCleaner): SessionLifecycleObserver
 
     @Binds
     @IntoSet

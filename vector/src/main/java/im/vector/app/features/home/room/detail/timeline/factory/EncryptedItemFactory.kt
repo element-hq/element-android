@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.timeline.factory
 
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.DrawableProvider
 import im.vector.app.core.resources.StringProvider
@@ -55,7 +56,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                 val spannableStr = if (vectorPreferences.developerMode()) {
                     val errorDescription =
                             if (cryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
-                                stringProvider.getString(R.string.notice_crypto_error_unkwown_inbound_session_id)
+                                stringProvider.getString(R.string.notice_crypto_error_unknown_inbound_session_id)
                             } else {
                                 // TODO i18n
                                 cryptoError?.name
@@ -110,7 +111,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                         .leftGuideline(avatarSizeProvider.leftGuideline)
                         .highlighted(params.isHighlighted)
                         .attributes(attributes)
-                        .message(spannableStr)
+                        .message(spannableStr.toEpoxyCharSequence())
                         .movementMethod(createLinkMovementMethod(params.callback))
             }
             else                                             -> null

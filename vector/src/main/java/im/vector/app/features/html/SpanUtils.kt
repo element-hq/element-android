@@ -35,8 +35,7 @@ class SpanUtils @Inject constructor(
         }
 
         return BindingOptions(
-                canUseTextFuture = canUseTextFuture(emojiCharSequence),
-                preventMutation = mustPreventMutation(emojiCharSequence)
+                canUseTextFuture = canUseTextFuture(emojiCharSequence)
         )
     }
 
@@ -48,12 +47,5 @@ class SpanUtils @Inject constructor(
         return spanned
                 .getSpans(0, spanned.length, Any::class.java)
                 .all { it !is StrikethroughSpan && it !is UnderlineSpan && it !is MetricAffectingSpan }
-    }
-
-    // Workaround for setting text during binding which mutate the text itself
-    private fun mustPreventMutation(spanned: Spanned): Boolean {
-        return spanned
-                .getSpans(0, spanned.length, Any::class.java)
-                .any { it is MetricAffectingSpan }
     }
 }

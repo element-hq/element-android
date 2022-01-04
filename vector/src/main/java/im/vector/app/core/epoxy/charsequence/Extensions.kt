@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.session.room.timeline
+package im.vector.app.core.epoxy.charsequence
 
-internal data class TimelineState(
-        val hasReachedEnd: Boolean = false,
-        val hasMoreInCache: Boolean = true,
-        val isPaginating: Boolean = false,
-        val requestedPaginationCount: Int = 0
-)
+/**
+ * Extensions to wrap CharSequence to EpoxyCharSequence
+ */
+fun CharSequence.toEpoxyCharSequence() = EpoxyCharSequence(this)

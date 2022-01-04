@@ -1,0 +1,2 @@
+此版本中的主要變動：新增對語音訊息草稿的支援。許多臭蟲修復！
+完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.3.9

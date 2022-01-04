@@ -22,6 +22,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
@@ -143,14 +144,14 @@ class HomeserverSettingsController @Inject constructor(
 
                 genericWithValueItem {
                     id("room_version_default")
-                    title(host.stringProvider.getString(R.string.settings_server_default_room_version))
+                    title(host.stringProvider.getString(R.string.settings_server_default_room_version).toEpoxyCharSequence())
                     value(roomCapabilities.defaultRoomVersion)
                 }
 
                 roomCapabilities.supportedVersion.forEach {
                     genericWithValueItem {
                         id("room_version_${it.version}")
-                        title(it.version)
+                        title(it.version.toEpoxyCharSequence())
                         value(
                                 host.stringProvider.getString(
                                         when (it.status) {
