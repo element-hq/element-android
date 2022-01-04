@@ -72,6 +72,7 @@
 
     <!-- Wording -->
     <issue id="Typos" severity="error" />
+    <issue id="TypographyDashes" severity="error" />
 
     <!-- Ignore lint issue in generated resource file from templates.
      https://github.com/LikeTheSalad/android-string-reference generates string from the default language
