@@ -56,7 +56,7 @@
     <string name="notice_profile_change_redacted">%1$s zaktualizował swój profil %2$s</string>
     <string name="notice_room_third_party_invite">%1$s wysłał(a) zaproszenie do %2$s aby dołączył(a) do tego pokoju</string>
     <string name="notice_room_third_party_registered_invite">%1$s zaakceptował(a) zaproszenie dla %2$s</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Urządzenie nadawcy nie wysłało nam kluczy do tej wiadomości.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Urządzenie nadawcy nie wysłało nam kluczy do tej wiadomości.</string>
     <string name="could_not_redact">Nie można zredagować</string>
     <string name="room_error_join_failed_empty_room">Obecnie nie jest możliwe ponowne dołączenie do pustego pokoju.</string>
     <string name="notice_event_redacted">Wiadomość usunięta</string>
@@ -89,21 +89,21 @@
     <string name="title_activity_member_details">Informacje o użytkowniku</string>
     <string name="title_activity_historical">Archiwum</string>
     <string name="ok">OK</string>
-    <string name="cancel">Anuluj</string>
-    <string name="save">Zapisz</string>
-    <string name="leave">Opuść</string>
-    <string name="send">Wyślij</string>
-    <string name="resend">Wyślij ponownie</string>
-    <string name="redact">Usuń</string>
-    <string name="quote">Cytuj</string>
-    <string name="share">Udostępnij</string>
+    <string name="action_cancel">Anuluj</string>
+    <string name="action_save">Zapisz</string>
+    <string name="action_leave">Opuść</string>
+    <string name="action_send">Wyślij</string>
+    <string name="action_resend">Wyślij ponownie</string>
+    <string name="action_redact">Usuń</string>
+    <string name="action_quote">Cytuj</string>
+    <string name="action_share">Udostępnij</string>
     <string name="later">Później</string>
-    <string name="forward">Przekaż</string>
+    <string name="action_forward">Przekaż</string>
     <string name="permalink">Odnośnik bezpośredni</string>
     <string name="view_source">Wyświetl źródło</string>
     <string name="view_decrypted_source">Wyświetl odszyfrowane źródło</string>
-    <string name="delete">Usuń</string>
-    <string name="rename">Zmień nazwę</string>
+    <string name="action_delete">Usuń</string>
+    <string name="action_rename">Zmień nazwę</string>
     <string name="report_content">Zgłoś treść</string>
     <string name="active_call">Aktywne połączenie</string>
     <string name="ongoing_conference_call">Przychodzące połączenie grupowe.
@@ -118,7 +118,7 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Połączenia grupowe nie są obsługiwane w szyfrowanych pokojach</string>
     <string name="send_anyway">Wyślij mimo to</string>
     <string name="or">i</string>
-    <string name="invite">Zaproś</string>
+    <string name="action_invite">Zaproś</string>
     <string name="offline">Offline</string>
     <string name="action_sign_out">Wyloguj się</string>
     <string name="action_voice_call">Połączenie głosowe</string>
@@ -130,7 +130,7 @@
     <string name="action_open">Otwórz</string>
     <string name="action_close">Zamknij</string>
     <string name="copied_to_clipboard">Skopiowano do schowka</string>
-    <string name="disable">Wyłącz</string>
+    <string name="action_disable">Wyłącz</string>
     <string name="dialog_title_confirmation">Potwierdzenie</string>
     <string name="dialog_title_warning">Ostrzeżenie</string>
     <string name="bottom_action_home">Home</string>
@@ -275,10 +275,10 @@
     <string name="yes">TAK</string>
     <string name="no">NIE</string>
     <string name="_continue">Kontynuuj</string>
-    <string name="remove">Usuń</string>
-    <string name="join">Dołącz</string>
-    <string name="preview">Podgląd</string>
-    <string name="reject">Odrzuć</string>
+    <string name="action_remove">Usuń</string>
+    <string name="action_join">Dołącz</string>
+    <string name="action_preview">Podgląd</string>
+    <string name="action_reject">Odrzuć</string>
     <string name="room_jump_to_first_unread">Przejdź do pierwszej nieprzeczytanej wiadomości</string>
     <string name="room_preview_invitation_format">Zostałeś(-aś) zaproszony(-a) do tego pokoju przez %s</string>
     <string name="room_preview_try_join_an_unknown_room">Próbujesz uzyskać dostęp do %s. Czy chcesz dołączyć do pokoju, aby wziąć udział w dyskusji?</string>
@@ -357,17 +357,6 @@
     <string name="tab_title_search_messages">WIADOMOŚCI</string>
     <string name="tab_title_search_people">LUDZIE</string>
     <string name="tab_title_search_files">PLIKI</string>
-    <string name="room_recents_join">DOŁĄCZ</string>
-    <string name="room_recents_directory">KATALOG</string>
-    <string name="room_recents_favourites">ULUBIONE</string>
-    <string name="room_recents_conversations">POKÓJ</string>
-    <string name="room_recents_low_priority">NISKI PRIORYTET</string>
-    <string name="room_recents_invites">ZAPROSZENIA</string>
-    <string name="room_recents_start_chat">Rozpocznij rozmowę</string>
-    <string name="room_recents_create_room">Utwórz pokój</string>
-    <string name="room_recents_join_room">Dołącz do pokoju</string>
-    <string name="room_recents_join_room_title">Dołącz do pokoju</string>
-    <string name="room_recents_join_room_prompt">Wprowadź ID lub nazwę pokoju</string>
     <string name="directory_search_results_title">Przeglądaj katalog</string>
     <string name="directory_searching_title">Przeszukiwanie katalogu…</string>
     <string name="room_settings_favourite">Dodaj do ulubionych</string>
@@ -538,9 +527,7 @@
     <string name="group_details_people">Ludzie</string>
     <string name="community_name_hint">Przykład</string>
     <string name="community_id_hint">przykład</string>
-    <!-- group details -->
     <string name="encrypted_message">Wiadomość zaszyfrowana</string>
-    <!-- groups creation -->
     <string name="create">Utwórz</string>
     <string name="notification_off">Wyłączone</string>
     <string name="conference_call_warning_title">Uwaga!</string>
@@ -698,8 +685,8 @@
     <string name="encryption_export_room_keys_summary">Eksportuj klucze do pliku lokalnego</string>
     <string name="rejoin">Dołącz ponownie</string>
     <string name="forget_room">Zapomnij pokój</string>
-    <string name="download">Pobierz</string>
-    <string name="clear">Wyczyść</string>
+    <string name="action_download">Pobierz</string>
+    <string name="action_clear">Wyczyść</string>
     <string name="option_send_sticker">Wyślij naklejkę</string>
     <string name="e2e_re_request_encryption_key"><u>Poproś ponownie o klucze szyfrujące</u> z innych Twoich sesji.</string>
     <string name="e2e_re_request_encryption_key_sent">Prośba o klucz wysłana.</string>
@@ -766,7 +753,7 @@
     </plurals>
     <string name="widget_integration_room_not_visible">Pokój %s nie jest widoczny.</string>
     <string name="settings_labs_native_camera">Użyj natywnej kamery</string>
-    <string name="speak">Mów</string>
+    <string name="action_speak">Mów</string>
     <string name="option_send_voice">Wyślij głos</string>
     <string name="no_sticker_application_dialog_content">Nie masz obecnie aktywnych żadnych pakietów naklejek.
 \n
@@ -959,7 +946,7 @@
     <string name="settings_show_read_receipts_summary">Kliknij na potwierdzenie odbioru, aby wyświetlić szczegółową listę.</string>
     <string name="command_problem_with_parameters">Komenda „%s” potrzebuje więcej parametrów lub niektóre parametry są niepoprawne.</string>
     <string name="settings_info_area_show">Pokaż obszar informacyjny</string>
-    <string name="accept">Akceptuj</string>
+    <string name="action_accept">Akceptuj</string>
     <string name="auth_accept_policies">Przeczytaj i zaakceptuj zasady tego serwera domowego:</string>
     <string name="settings_labs_enable_send_voice_summary">Ta opcja wymaga aplikacji osoby trzeciej do nagrywania wiadomości.</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Uruchom Testy</string>
@@ -998,19 +985,19 @@
     <string name="video_call_in_progress">Połączenie wideo trwa…</string>
     <string name="title_activity_keys_backup_setup">Kopia Zapasowa Klucza</string>
     <string name="keys_backup_is_not_finished_please_wait">Kopia zapasowa kluczy nie jest zakończona, proszę czekać…</string>
-    <string name="skip">Pomiń</string>
+    <string name="action_skip">Pomiń</string>
     <string name="settings_notification_advanced">Zaawansowane ustawienia powiadomień</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Sprawdź ustawienia</string>
     <string name="keys_backup_info_title_algorithm">Algorytm</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Stracisz zaszyfrowane wiadomości, jeśli się teraz wylogujesz</string>
     <string name="are_you_sure">Jesteś pewien?</string>
-    <string name="abort">Przerwij</string>
+    <string name="action_abort">Przerwij</string>
     <string name="action_sign_out_confirmation_simple">Czy na pewno chcesz się wylogować?</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Trwa tworzenie kopii zapasowej klucza. Jeśli wylogujesz się teraz utracisz dostęp do zaszyfrowanych wiadomości.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Nie chcę moich zaszyfrowanych wiadomości</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Utracisz dostęp do zaszyfrowanych wiadomości, chyba że wykonasz kopię zapasową kluczy przed wylogowaniem się.</string>
-    <string name="stay">Zostań</string>
-    <string name="ignore">Ignoruj</string>
+    <string name="action_stay">Zostań</string>
+    <string name="action_ignore">Ignoruj</string>
     <string name="settings_default_compression">Domyślna kompresja</string>
     <string name="settings_noisy_notifications_preferences">Konfiguruj głośne powiadomienia</string>
     <string name="settings_silent_notifications_preferences">Konfiguruj ciche powiadomienia</string>
@@ -1094,8 +1081,8 @@
 \nJeżeli nie ustawiałeś nowej metody odzyskiwania, atakujący mogą uzyskać dostęp do Twojego konta. Zmień hasło konta i ustaw nową metodę odzyskiwania jak najszybciej w Ustawieniach.</string>
     <string name="room_list_catchup_empty_title">Jesteś na bieżąco!</string>
     <string name="login_error_unknown_host">Ten adres URL jest nieosiągalny, proszę sprawdź jego poprawność</string>
-    <string name="revoke">Unieważnij</string>
-    <string name="disconnect">Rozłącz</string>
+    <string name="action_revoke">Unieważnij</string>
+    <string name="action_disconnect">Rozłącz</string>
     <string name="call_failed_dont_ask_again">Nie pytaj ponownie</string>
     <string name="login_error_no_homeserver_found">To nie jest prawidłowy adres serwera Matrix</string>
     <string name="settings_add_3pid_confirm_password_title">Potwierdź swoje hasło</string>
@@ -1791,17 +1778,6 @@
     <string name="qr_code_scanned_by_other_no">Nie</string>
     <string name="settings_dev_tools">Narzędzia programistyczne</string>
     <string name="settings_account_data">Dane konta</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d głos</item>
-        <item quantity="few">%d głosów</item>
-        <item quantity="many"/>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d głos - wyniki końcowe</item>
-        <item quantity="few">%d głosów - wyniki końcowe</item>
-        <item quantity="many"/>
-    </plurals>
-    <string name="poll_item_selected_aria">Wybrana Opcja</string>
     <string name="command_description_poll">Tworzy prostą ankietę</string>
     <string name="verification_cannot_access_other_session">Użyj hasła odzyskiwania lub klucza</string>
     <string name="verification_use_passphrase">Użyj klucza odzyskiwania lub hasła</string>
@@ -1824,8 +1800,8 @@
     <string name="event_redacted_by_user_reason_with_reason">Wydarzenie usunięte przez użytkownika, przyczyna: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Wydarzenie moderowane przez administratora pokoju, przyczyna: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Klucze są już aktualne!</string>
-    <string name="review">Sprawdź</string>
-    <string name="decline">Zrezygnuj</string>
+    <string name="action_review">Sprawdź</string>
+    <string name="action_decline">Zrezygnuj</string>
     <string name="sas_error_m_key_mismatch">Niezgodność klucza</string>
     <string name="sas_error_m_user_error">Niezgodność użytkowników</string>
     <string name="identity_server_not_defined">Nie korzystasz z serwera tożsamości</string>
@@ -1836,8 +1812,8 @@
     <string name="room_list_catchup_empty_body">Nie masz więcej nieprzeczytanych wiadomości</string>
     <string name="room_list_catchup_welcome_title">Witaj w domu!</string>
     <string name="title_activity_emoji_reaction_picker">Reakcje</string>
-    <string name="reactions_agree">Zgoda</string>
-    <string name="reactions_like">Lubię to</string>
+    <string name="action_agree">Zgoda</string>
+    <string name="action_like">Lubię to</string>
     <string name="message_view_reaction">Zobacz Reakcje</string>
     <string name="event_redacted_by_user_reason">Zdarzenie usunięte przez użytkownika</string>
     <string name="event_redacted_by_admin_reason">Zdarzenie moderowane przez administratora pokoju</string>
@@ -1868,9 +1844,9 @@
     <string name="refresh">Odśwież</string>
     <string name="verify_new_session_notice">Użyj tej sesji do weryfikacji nowej, nadając jej dostęp do zaszyfrowanych wiadomości.</string>
     <string name="verify_new_session_was_not_me">To nie ja</string>
-    <string name="dismiss">Zamknij</string>
-    <string name="pause_video">Wstrzymaj</string>
-    <string name="play_video">Odtwórz</string>
+    <string name="action_dismiss">Zamknij</string>
+    <string name="action_pause">Wstrzymaj</string>
+    <string name="action_play">Odtwórz</string>
     <string name="no_permissions_to_start_webrtc_call">Nie posiadasz wymaganych uprawnień do rozpoczęcia połączenia w tym pokoju</string>
     <string name="call_notification_answer">Odbierz</string>
     <string name="failed_to_remove_widget">Usuwanie widżetu nie powiodło się</string>
@@ -2061,7 +2037,7 @@
     <string name="action_add">Dodaj</string>
     <string name="action_copy">Kopiuj</string>
     <string name="call_notification_hangup">Zakończ rozmowę</string>
-    <string name="reset">Zresetuj</string>
+    <string name="action_reset">Zresetuj</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Tryb samolotowy jest włączony</string>
     <string name="qr_code_scanned_by_other_notice">Prawie gotowe! Czy %s pokazuje tarczę\?</string>
     <string name="settings_hs_admin_e2e_disabled">Twój administrator serwera zablokował domyślne szyfrowanie punkt-punkt (e2e) w pokojach prywatnych w Wiadomościach Bezpośrednich.</string>
@@ -2077,7 +2053,6 @@
     <string name="direct_room_profile_not_encrypted_subtitle">Wiadomości tutaj nie są zaszyfrowane w trybie punkt-punkt (e2e).</string>
     <string name="sent_verification_conclusion">Weryfikacja wniosków</string>
     <string name="sent_a_reaction">Zareagowano: %s</string>
-    <string name="sent_a_bot_buttons">Przyciski botów</string>
     <string name="create_room_in_progress">Tworzenie pokoju…</string>
     <string name="create_room_alias_invalid">Niektóre znaki nie są dozwolone</string>
     <string name="create_room_alias_empty">Podaj adres pokoju</string>
@@ -2730,8 +2705,8 @@
     <string name="invite_to_space_with_name_desc">Będą w stanie przeglądać %s</string>
     <string name="invite_to_space_with_name">Zaproś do %s</string>
     <string name="invite_by_link">Udostępnij link</string>
-    <string name="invite_by_mxid_or_mail">Zaproś przez nazwę użytkownika lub email</string>
-    <string name="invite_by_mxid">Zaproś przez nazwę użytkownika</string>
+    <string name="invite_by_username_or_mail">Zaproś przez nazwę użytkownika lub email</string>
+    <string name="invite_by_username">Zaproś przez nazwę użytkownika</string>
     <string name="invite_by_email">Zaproś przez email</string>
     <string name="invite_people_to_your_space_desc">Aktualnie jesteś tylko Ty. %s będzie jeszcze lepsza kiedy dołączą inni.</string>
     <string name="invite_to_space">Zaproś do %s</string>
@@ -2871,7 +2846,7 @@
     <string name="feedback">Opinie</string>
     <string name="bootstrap_crosssigning_progress_save_ssk">Synchronizacja klucza samopodpisującego (Self Signing key)</string>
     <string name="cross_signing_verify_by_text">Weryfikacja ręczna poprzez tekst</string>
-    <string name="or_other_mx_capabale_client">lub innego klienta Matrix z krzyżową weryfikacją nowych sesji logowania</string>
+    <string name="or_other_mx_capable_client">lub innego klienta Matrix z krzyżową weryfikacją nowych sesji logowania</string>
     <string name="upgrade_room_no_power_to_manage">Nie masz uprawnień do zmiany poziomu pokoju</string>
     <string name="notice_crypto_unable_to_decrypt_merged">Oczekiwanie na historię szyfrowania</string>
     <string name="room_using_unstable_room_version">Ten pokój pracuje na wersji pokoju %s, którą serwer domowy oznaczył jako niestabilną.</string>

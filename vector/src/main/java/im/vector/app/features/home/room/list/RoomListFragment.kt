@@ -404,10 +404,10 @@ class RoomListFragment @Inject constructor(
         MaterialAlertDialogBuilder(requireContext(), if (isPublicRoom) 0 else R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setTitle(R.string.room_participants_leave_prompt_title)
                 .setMessage(message)
-                .setPositiveButton(R.string.leave) { _, _ ->
+                .setPositiveButton(R.string.action_leave) { _, _ ->
                     roomListViewModel.handle(RoomListAction.LeaveRoom(roomId))
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 

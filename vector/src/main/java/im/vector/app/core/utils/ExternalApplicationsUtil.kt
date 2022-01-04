@@ -308,7 +308,7 @@ fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
     val chooserIntent = ShareCompat.IntentBuilder(context)
             .setType(mediaMimeType)
             .setStream(mediaUri)
-            .setChooserTitle(R.string.share)
+            .setChooserTitle(R.string.action_share)
             .createChooserIntent()
 
     createChooser(context, chooserIntent)
@@ -318,7 +318,7 @@ fun shareText(context: Context, text: String) {
     val chooserIntent = ShareCompat.IntentBuilder(context)
             .setType("text/plain")
             .setText(text)
-            .setChooserTitle(R.string.share)
+            .setChooserTitle(R.string.action_share)
             .createChooserIntent()
 
     createChooser(context, chooserIntent)

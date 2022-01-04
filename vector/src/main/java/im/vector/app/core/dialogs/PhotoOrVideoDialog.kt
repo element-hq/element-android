@@ -57,7 +57,7 @@ class PhotoOrVideoDialog(
                         .setPositiveButton(R.string._continue) { _, _ ->
                             submit(views, vectorPreferences, listener)
                         }
-                        .setNegativeButton(R.string.cancel, null)
+                        .setNegativeButton(R.string.action_cancel, null)
                         .show()
             }
         }
@@ -98,11 +98,11 @@ class PhotoOrVideoDialog(
         MaterialAlertDialogBuilder(activity)
                 .setTitle(R.string.option_take_photo_video)
                 .setView(dialogLayout)
-                .setPositiveButton(R.string.save) { _, _ ->
+                .setPositiveButton(R.string.action_save) { _, _ ->
                     submitSettings(views)
                     listener.onUpdated()
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 

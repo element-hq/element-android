@@ -209,7 +209,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     .setTitle(R.string.dialog_title_error)
                     .setMessage(errorFormatter.toHumanReadable(failure))
                     .setPositiveButton(R.string.global_retry) { _, _ -> doCleanUp() }
-                    .setNegativeButton(R.string.cancel) { _, _ -> startNextActivityAndFinish(ignoreClearCredentials = true) }
+                    .setNegativeButton(R.string.action_cancel) { _, _ -> startNextActivityAndFinish(ignoreClearCredentials = true) }
                     .setCancelable(false)
                     .show()
         }

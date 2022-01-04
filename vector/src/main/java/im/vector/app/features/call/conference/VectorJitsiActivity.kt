@@ -135,7 +135,7 @@ class VectorJitsiActivity : VectorBaseActivity<ActivityJitsiBinding>(), JitsiMee
                 .setPositiveButton(R.string.action_switch) { _, _ ->
                     jitsiViewModel.handle(JitsiCallViewActions.SwitchTo(action.args, false))
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 

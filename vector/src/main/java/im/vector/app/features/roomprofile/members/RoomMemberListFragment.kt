@@ -126,8 +126,8 @@ class RoomMemberListFragment @Inject constructor(
             MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.three_pid_revoke_invite_dialog_title)
                     .setMessage(getString(R.string.three_pid_revoke_invite_dialog_content, content.displayName))
-                    .setNegativeButton(R.string.cancel, null)
-                    .setPositiveButton(R.string.revoke) { _, _ ->
+                    .setNegativeButton(R.string.action_cancel, null)
+                    .setPositiveButton(R.string.action_revoke) { _, _ ->
                         viewModel.handle(RoomMemberListAction.RevokeThreePidInvite(stateKey))
                     }
                     .show()

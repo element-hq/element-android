@@ -156,7 +156,7 @@ class SpaceDirectoryController @Inject constructor(
                                 when {
                                     error != null -> host.stringProvider.getString(R.string.global_retry)
                                     isJoined      -> host.stringProvider.getString(R.string.action_open)
-                                    else          -> host.stringProvider.getString(R.string.join)
+                                    else          -> host.stringProvider.getString(R.string.action_join)
                                 }
                         )
                         apply {

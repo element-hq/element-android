@@ -19,7 +19,7 @@
     <string name="rooms_header">Phòng</string>
     <string name="no_more_results">Không còn kết quả nào nữa</string>
     <string name="home_filter_placeholder_favorites">Lọc danh sách yêu thích</string>
-    <string name="ignore">Bỏ qua</string>
+    <string name="action_ignore">Bỏ qua</string>
     <string name="conference_call_in_progress">Đã có một cuộc hội thoại đang diễn ra!</string>
     <string name="no_result_placeholder">Không có kết quả nào</string>
     <string name="template_no_contact_access_placeholder">Bạn chưa cho phép ${app_name} truy cập danh bạ của bạn</string>
@@ -35,7 +35,7 @@
     <string name="home_filter_placeholder_rooms">Lọc tên phòng</string>
     <string name="home_filter_placeholder_people">Lọc người</string>
     <string name="dialog_title_confirmation">Xác nhận</string>
-    <string name="disable">Tắt</string>
+    <string name="action_disable">Tắt</string>
     <string name="home_filter_placeholder_home">Lọc tên phòng</string>
     <string name="bottom_action_groups">Cộng đồng</string>
     <string name="bottom_action_rooms">Phòng</string>
@@ -63,9 +63,9 @@
     <string name="call_notification_hangup">Cúp máy</string>
     <string name="call_notification_reject">Từ chối</string>
     <string name="call_notification_answer">Đồng ý</string>
-    <string name="decline">Từ chối</string>
-    <string name="abort">Huỷ bỏ</string>
-    <string name="skip">Bỏ qua</string>
+    <string name="action_decline">Từ chối</string>
+    <string name="action_abort">Huỷ bỏ</string>
+    <string name="action_skip">Bỏ qua</string>
     <string name="offline">Ngoại tuyến</string>
     <string name="or">hoặc</string>
     <string name="call_anyway">Vẫn gọi</string>
@@ -73,8 +73,8 @@
     <string name="missing_permissions_title_to_start_conf_call">Không thể bắt đầu cuộc gọi</string>
     <string name="audio_meeting">Bắt đầu cuộc họp âm thanh</string>
     <string name="done">Xong</string>
-    <string name="accept">Đồng ý</string>
-    <string name="invite">Mời</string>
+    <string name="action_accept">Đồng ý</string>
+    <string name="action_invite">Mời</string>
     <string name="send_anyway">Vẫn gửi</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Gọi hội thoại không được hỗ trợ trong phòng chat được mã hoá</string>
     <string name="device_information">Thông tin phiên</string>
@@ -94,34 +94,34 @@
     <string name="ongoing_conference_call">Có cuộc gọi đến.
 \nTham gia với tư cách %1$s hoặc %2$s</string>
     <string name="start_chatting">Bắt đầu trò chuyện</string>
-    <string name="reset">Cài lại</string>
-    <string name="dismiss">Bỏ</string>
-    <string name="pause_video">Tạm dừng</string>
-    <string name="play_video">Chạy</string>
+    <string name="action_reset">Cài lại</string>
+    <string name="action_dismiss">Bỏ</string>
+    <string name="action_pause">Tạm dừng</string>
+    <string name="action_play">Chạy</string>
     <string name="active_call">Cuộc gọi đang hoạt động</string>
     <string name="report_content">Báo cáo nội dung</string>
-    <string name="disconnect">Ngắt kết nối</string>
-    <string name="revoke">Rút lại</string>
+    <string name="action_disconnect">Ngắt kết nối</string>
+    <string name="action_revoke">Rút lại</string>
     <string name="none">Trống</string>
-    <string name="rename">Đặt lại tên</string>
-    <string name="delete">Xoá</string>
+    <string name="action_rename">Đặt lại tên</string>
+    <string name="action_delete">Xoá</string>
     <string name="view_decrypted_source">Xem nguồn đã được giải mã</string>
     <string name="view_source">Xem nguồn</string>
     <string name="permalink">Đường dẫn</string>
-    <string name="forward">Chuyển tiếp</string>
+    <string name="action_forward">Chuyển tiếp</string>
     <string name="later">Để sau</string>
-    <string name="clear">Xoá</string>
-    <string name="speak">Nói</string>
-    <string name="share">Chia sẻ</string>
-    <string name="download">Tải xuống</string>
-    <string name="quote">Trích</string>
-    <string name="redact">Xoá</string>
-    <string name="resend">Gửi lại</string>
-    <string name="send">Gửi</string>
-    <string name="stay">Ở lại</string>
-    <string name="leave">Thoát</string>
-    <string name="save">Lưu</string>
-    <string name="cancel">Huỷ</string>
+    <string name="action_clear">Xoá</string>
+    <string name="action_speak">Nói</string>
+    <string name="action_share">Chia sẻ</string>
+    <string name="action_download">Tải xuống</string>
+    <string name="action_quote">Trích</string>
+    <string name="action_redact">Xoá</string>
+    <string name="action_resend">Gửi lại</string>
+    <string name="action_send">Gửi</string>
+    <string name="action_stay">Ở lại</string>
+    <string name="action_leave">Thoát</string>
+    <string name="action_save">Lưu</string>
+    <string name="action_cancel">Huỷ</string>
     <string name="ok">OK</string>
     <string name="loading">Đang tải…</string>
     <string name="dialog_title_third_party_licences">Giấy phép bên thứ ba</string>
@@ -327,7 +327,7 @@
     <string name="message_failed_to_upload">Tải hình ảnh lên thất bại</string>
     <string name="unable_to_send_message">Không thể gửi tin nhắn</string>
     <string name="could_not_redact">Không thể rút lại</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Thiết bị của người gửi chưa gửi cho chúng tôi mã khoá cho tin nhắn này.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Thiết bị của người gửi chưa gửi cho chúng tôi mã khoá cho tin nhắn này.</string>
     <string name="notice_crypto_unable_to_decrypt">** Không thể giải mã: %s **</string>
     <string name="notice_power_level_diff">%1$s từ %2$s thành %3$s</string>
     <string name="power_level_custom_no_value">Tuỳ chỉnh</string>
@@ -504,7 +504,7 @@
     <string name="action_unpublish">Huỷ xuất bản</string>
     <string name="failed_to_remove_widget">Xoá tiện ích thất bại</string>
     <string name="failed_to_add_widget">Thêm tiện ích thất bại</string>
-    <string name="review">Xem xét</string>
+    <string name="action_review">Xem xét</string>
     <string name="action_switch">Chuyển</string>
     <string name="encryption_information_blocked">Đã cho vào danh sách đen</string>
     <string name="encryption_information_verified">Đã xác minh</string>
@@ -583,10 +583,10 @@
     <string name="room_sync_in_progress">Đang đồng bộ…</string>
     <string name="open_chat_header">Mở tiêu đề</string>
     <string name="list_members">Liệt kê các thành viên</string>
-    <string name="reject">Từ chối</string>
-    <string name="preview">Xem trước</string>
-    <string name="join">Tham gia</string>
-    <string name="remove">Xoá</string>
+    <string name="action_reject">Từ chối</string>
+    <string name="action_preview">Xem trước</string>
+    <string name="action_join">Tham gia</string>
+    <string name="action_remove">Xoá</string>
     <string name="_continue">Tiếp tục</string>
     <string name="no">KHÔNG</string>
     <string name="yes">CÓ</string>
@@ -856,20 +856,20 @@
     <string name="settings_mentions_at_room">\@room</string>
     <string name="settings_encrypted_group_messages">Tin nhắn trong chat nhóm được mã hóa</string>
     <string name="settings_group_messages">Tin nhắn trong chat nhóm</string>
-    <string name="settings_encrypted_direct_messages">Tin nhắn trực tiếp 1-1 được mã hóa</string>
-    <string name="settings_messages_direct_messages">Tin nhắn trực tiếp 1-1</string>
+    <string name="settings_encrypted_direct_messages">Tin nhắn trực tiếp 1–1 được mã hóa</string>
+    <string name="settings_messages_direct_messages">Tin nhắn trực tiếp 1–1</string>
     <string name="settings_messages_containing_username">Tên đăng nhập của tôi</string>
     <string name="settings_messages_containing_display_name">Tên hiển thị của tôi</string>
     <string name="settings_messages_at_room">Tin nhắn chứa @room</string>
     <string name="settings_messages_sent_by_bot">Tin nhắn được gửi bởi bot</string>
     <string name="settings_invited_to_room">Khi tôi được mời vào phòng</string>
     <string name="settings_messages_in_group_chat">Tin nhắn trong phòng chat nhóm</string>
-    <string name="settings_messages_in_one_to_one">Tin nhắn trong phòng chat 1-1</string>
+    <string name="settings_messages_in_one_to_one">Tin nhắn trong phòng chat 1–1</string>
     <string name="settings_containing_my_user_name">Tin nhắn chứa tên đăng nhập của tôi</string>
     <string name="settings_containing_my_display_name">Tin nhắn chứa trên tôi</string>
     <string name="settings_when_rooms_are_upgraded">Khi phòng được nâng cấp phiên bản</string>
     <string name="settings_messages_in_e2e_group_chat">Tin nhắn mã hóa trong phòng chat nhóm</string>
-    <string name="settings_messages_in_e2e_one_to_one">Tin nhắn mã hóa trong phòng chat 1-1</string>
+    <string name="settings_messages_in_e2e_one_to_one">Tin nhắn mã hóa trong phòng chat 1–1</string>
     <string name="settings_system_preferences_summary">Chọn màu LED, rung, âm thanh…</string>
     <string name="settings_silent_notifications_preferences">Cấu hình thông báo im lặng</string>
     <string name="settings_call_notifications_preferences">Cấu hình thông báo cuộc gọi</string>
@@ -1095,9 +1095,9 @@
     <string name="a11y_show_password">Hiện mật khẩu</string>
     <string name="a11y_close_keys_backup_banner">Đóng banner sao lưu khóa</string>
     <string name="a11y_create_room">Tạo phòng chat mới</string>
-    <string name="a11y_create_direct_message_by_qr_code">Tạo phòng chat 1-1 bằng cách quét mã QR</string>
-    <string name="a11y_create_direct_message_by_mxid">Tạo mới phòng chat 1-1 theo ID Matrix</string>
-    <string name="a11y_create_direct_message">Tạo mới phòng chat 1-1</string>
+    <string name="a11y_create_direct_message_by_qr_code">Tạo phòng chat 1–1 bằng cách quét mã QR</string>
+    <string name="a11y_create_direct_message_by_mxid">Tạo mới phòng chat 1–1 theo ID Matrix</string>
+    <string name="a11y_create_direct_message">Tạo mới phòng chat 1–1</string>
     <string name="a11y_create_menu_close">Đóng menu tạo phòng…</string>
     <string name="a11y_create_menu_open">Mở menu tạo phòng</string>
     <string name="send_attachment">Gửi tệp đính kèm</string>
@@ -1127,7 +1127,7 @@
     <string name="search_hint_room_name">Tìm Tên</string>
     <string name="room_directory_search_hint">Tên hoặc ID</string>
     <string name="room_filtering_footer_open_room_directory">Xem danh mục phòng chat</string>
-    <string name="room_filtering_footer_create_new_direct_message">Gửi tin nhắn tới phòng 1-1</string>
+    <string name="room_filtering_footer_create_new_direct_message">Gửi tin nhắn tới phòng 1–1</string>
     <string name="room_filtering_footer_create_new_room">Tạo phòng chat mới</string>
     <string name="room_filtering_footer_title">Không tìm thấy kết quả cần tìm\?</string>
     <string name="direct_room_no_known_users">Không tìm thấy, sử dụng chức năng thêm thành viên bằng username.</string>
@@ -1432,17 +1432,6 @@
         <item quantity="other">%d phòng</item>
     </plurals>
     <string name="directory_search_results_title">Duyệt danh mục phòng</string>
-    <string name="room_recents_join_room_prompt">Nhập ID hoặc tên phòng</string>
-    <string name="room_recents_join_room_title">Tham gia phòng</string>
-    <string name="room_recents_join_room">Tham gia phòng</string>
-    <string name="room_recents_create_room">Tạo phòng</string>
-    <string name="room_recents_start_chat">Bắt đầu chat</string>
-    <string name="room_recents_invites">LỜI MỜI</string>
-    <string name="room_recents_low_priority">ƯU TIÊN THẤP</string>
-    <string name="room_recents_conversations">PHÒNG</string>
-    <string name="room_recents_favourites">YÊU THÍCH</string>
-    <string name="room_recents_directory">DANH MỤC</string>
-    <string name="room_recents_join">THAM GIA</string>
     <string name="search_is_not_supported_in_e2e_room">Tìm kiếm trong phòng mã hóa chưa được hỗ trợ.</string>
     <string name="tab_title_search_files">FILES</string>
     <string name="tab_title_search_people">NGƯỜI</string>
@@ -1661,12 +1650,6 @@
     <plurals name="secure_backup_reset_devices_you_can_verify">
         <item quantity="other">Hiển thị %d thiết bị bạn có thể xác minh ngay bây giờ</item>
     </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="other">%d phiếu bầu - Kết quả cuối cùng</item>
-    </plurals>
-    <plurals name="poll_info">
-        <item quantity="other">%d phiếu bầu</item>
-    </plurals>
     <plurals name="settings_active_sessions_count">
         <item quantity="other">%d phiên đang hoạt động</item>
     </plurals>
@@ -1831,8 +1814,8 @@
     <string name="create_space">Tạo Space</string>
     <string name="skip_for_now">Bỏ qua ngay bây giờ</string>
     <string name="share_space_link_message">Gia nhập Space của tôi %1$s %2$s</string>
-    <string name="invite_by_mxid_or_mail">Mời theo tên người dùng hoặc thư</string>
-    <string name="invite_by_mxid">Mời theo tên người dùng</string>
+    <string name="invite_by_username_or_mail">Mời theo tên người dùng hoặc thư</string>
+    <string name="invite_by_username">Mời theo tên người dùng</string>
     <string name="invite_by_email">Mời qua email</string>
     <string name="invite_people_to_your_space_desc">Chỉ có anh lúc này thôi. %s sẽ còn tốt hơn với những người khác.</string>
     <string name="invite_to_space">Mời đến %s</string>
@@ -2058,7 +2041,7 @@
     <string name="command_description_discard_session_not_handled">Chỉ được hỗ trợ trong các phòng được mã hóa</string>
     <string name="command_description_discard_session">Buộc nhóm phiên hướng ra hiện tại trong một căn phòng được mã hóa phải bị loại bỏ</string>
     <string name="template_use_latest_app">Sử dụng ${app_name mới nhất} trên các thiết bị khác của bạn:</string>
-    <string name="or_other_mx_capabale_client">hoặc một máy khách Matrix có khả năng xác thực chéo khác</string>
+    <string name="or_other_mx_capable_client">hoặc một máy khách Matrix có khả năng xác thực chéo khác</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
     <string name="template_app_desktop_web">${app_name} Web
@@ -2259,7 +2242,6 @@
     <string name="verification_request_waiting">Đang chờ…</string>
     <string name="sent_verification_conclusion">Kết luận xác minh</string>
     <string name="sent_a_reaction">Phản ứng với: %s</string>
-    <string name="sent_a_bot_buttons">Nút Bot</string>
     <string name="sent_a_poll">Thăm dò ý kiến</string>
     <string name="send_a_sticker">Sticker</string>
     <string name="sent_a_file">Tệp</string>
@@ -2482,8 +2464,8 @@
     <string name="reactions">Phản ứng</string>
     <string name="message_view_reaction">Xem phản ứng</string>
     <string name="message_add_reaction">Thêm phản ứng</string>
-    <string name="reactions_like">Thích</string>
-    <string name="reactions_agree">Đồng ý</string>
+    <string name="action_like">Thích</string>
+    <string name="action_agree">Đồng ý</string>
     <string name="title_activity_emoji_reaction_picker">Phản ứng</string>
     <string name="room_list_rooms_empty_title">Phòng</string>
     <string name="room_list_people_empty_body">Các cuộc hội thoại tin nhắn trực tiếp của bạn sẽ được hiển thị tại đây. Nhấp vào dấu + dưới cùng bên phải để bắt đầu.</string>
@@ -2698,7 +2680,6 @@
     <string name="verification_use_passphrase">Nếu bạn không thể truy nhập phiên hiện có</string>
     <string name="verification_cannot_access_other_session">Sử dụng Cụm mật khẩu hoặc Khóa phục hồi</string>
     <string name="command_description_poll">Tạo một cuộc thăm dò ý kiến đơn giản</string>
-    <string name="poll_item_selected_aria">Tùy chọn đã chọn</string>
     <string name="delete_account_data_warning">Xóa dữ liệu tài khoản của loại %1$s\?
 \n
 \nSử dụng một cách thận trọng, nó có thể dẫn đến hành vi bất ngờ.</string>
@@ -2779,7 +2760,7 @@
 \nHủy kích hoạt tài khoản của bạn <b>does không theo mặc định khiến chúng tôi quên tin nhắn bạn đã gửi</b>. Nếu bạn muốn chúng tôi quên tin nhắn của bạn, vui lòng đánh dấu vào hộp bên dưới.
 \n
 \nKhả năng hiển thị tin nhắn trong Matrix tương tự như email. Chúng tôi quên tin nhắn của bạn có nghĩa là tin nhắn bạn đã gửi sẽ không được chia sẻ với bất kỳ người dùng mới hoặc chưa đăng ký nào, nhưng người dùng đã đăng ký đã có quyền truy cập vào các tin nhắn này vẫn sẽ có quyền truy cập vào bản sao của họ.</string>
-    <string name="dialog_user_consent_content">Để tiếp tục sử dụng homeserver %1$, bạn phải xem xét và đồng ý với các điều khoản và điều kiện.</string>
+    <string name="dialog_user_consent_content">Để tiếp tục sử dụng homeserver %1$s, bạn phải xem xét và đồng ý với các điều khoản và điều kiện.</string>
     <string name="avatar">Avatar</string>
     <string name="notice_avatar">Chú ý avatar</string>
     <string name="receipt_avatar">Nhận avatar</string>

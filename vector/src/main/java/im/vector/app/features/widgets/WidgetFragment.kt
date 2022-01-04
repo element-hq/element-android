@@ -309,10 +309,10 @@ class WidgetFragment @Inject constructor() :
     private fun deleteWidget() {
         MaterialAlertDialogBuilder(requireContext())
                 .setMessage(R.string.widget_delete_message_confirmation)
-                .setPositiveButton(R.string.remove) { _, _ ->
+                .setPositiveButton(R.string.action_remove) { _, _ ->
                     viewModel.handle(WidgetAction.DeleteWidget)
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 

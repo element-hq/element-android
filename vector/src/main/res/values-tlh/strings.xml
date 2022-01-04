@@ -20,21 +20,21 @@
     <string name="loading">vIcha\'rupbeHmoHltaH…</string>
 
     <string name="ok">luq</string>
-    <string name="cancel">qIl</string>
-    <string name="save">choq</string>
-    <string name="leave">mej</string>
-    <string name="send">ngeH</string>
-    <string name="resend">ngeHqa\'</string>
-    <string name="quote">jatlhqa\'</string>
-    <string name="download">lI\'</string>
-    <string name="share">bon</string>
-    <string name="speak">jatlh</string>
-    <string name="clear">HuvmoH</string>
+    <string name="action_cancel">qIl</string>
+    <string name="action_save">choq</string>
+    <string name="action_leave">mej</string>
+    <string name="action_send">ngeH</string>
+    <string name="action_resend">ngeHqa\'</string>
+    <string name="action_quote">jatlhqa\'</string>
+    <string name="action_download">lI\'</string>
+    <string name="action_share">bon</string>
+    <string name="action_speak">jatlh</string>
+    <string name="action_clear">HuvmoH</string>
     <string name="later">SIbI\'Ha\'</string>
     <string name="view_source">Hal legh</string>
     <string name="view_decrypted_source">So\'be\'lu\'bogh Hal legh</string>
-    <string name="delete">Qaw\'</string>
-    <string name="rename">pongqa\'</string>
+    <string name="action_delete">Qaw\'</string>
+    <string name="action_rename">pongqa\'</string>
     <string name="active_call">QumchuqtaH</string>
     <string name="ongoing_conference_call_voice">ghogh</string>
     <string name="ongoing_conference_call_video">mIllogh</string>
@@ -45,7 +45,7 @@
     <string name="missing_permissions_title_to_start_conf_call">jIrI\'laHbe\'</string>
     <string name="device_information">jan De\'</string>
     <string name="or">ghap</string>
-    <string name="invite">ruSvep ngeH</string>
+    <string name="action_invite">ruSvep ngeH</string>
     <string name="actions">Qu\'</string>
     <string name="title_activity_bug_report">Qagh ja\'</string>
     <string name="dialog_title_third_party_licences" />
@@ -66,7 +66,7 @@
 
     <string name="action_exit">mejchu\'</string>
     <string name="action_global_search">Dat nej</string>
-    <string name="disable">Qotlh</string>
+    <string name="action_disable">Qotlh</string>
 
     <string name="bottom_action_people">nuvpu\'</string>
     <string name="bottom_action_rooms">pa\'mey</string>
@@ -147,7 +147,7 @@
     <string name="room_settings_leave_conversation">ja\'chuq \'e\' mev</string>
     <string name="room_tombstone_continuation_link">naDev ja\'chuqqa\'</string>
     <string name="room_tombstone_continuation_description">pa\'vamDaq ja\'chuqqa\'</string>
-    <string name="redact">Qaw\'</string>
+    <string name="action_redact">Qaw\'</string>
     <string name="send_bug_report">Qagh ja\'</string>
     <string name="send_bug_report_description">Qagh yIDel! nuq DanID? nuq DapIH? qaS nuq?</string>
     <string name="send_bug_report_logs_description">Qagh tu\'meH, janvamvo\' Qagh De\' ghajboghQonoSmey ngeHlu\'. Qaghvam De\', QonoS, jIH mIllogh je leghlaHbe\' vay\'. Dung ngutlhmey neH ngeH DaneHchugh, \'aplo\'vam yISIj:</string>

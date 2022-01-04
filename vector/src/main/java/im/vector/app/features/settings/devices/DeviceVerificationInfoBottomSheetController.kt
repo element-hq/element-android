@@ -272,7 +272,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
         }
         bottomSheetVerificationActionItem {
             id("rename")
-            title(host.stringProvider.getString(R.string.rename))
+            title(host.stringProvider.getString(R.string.action_rename))
             titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
             iconRes(R.drawable.ic_arrow_right)
             iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
