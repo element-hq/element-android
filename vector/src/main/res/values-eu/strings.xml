@@ -43,7 +43,7 @@
     <string name="notice_room_third_party_registered_invite">%1$s erabiltzaileak %2$s gelarako gonbidapena onartu du</string>
 
     <string name="notice_crypto_unable_to_decrypt">** Ezin izan da deszifratu: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Igorlearen gailuak ez dizkigu mezu honetarako gakoak bidali.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Igorlearen gailuak ez dizkigu mezu honetarako gakoak bidali.</string>
 
     <string name="could_not_redact">Ezin izan da kendu</string>
     <string name="unable_to_send_message">Ezin izan da mezua bidali</string>
@@ -142,21 +142,21 @@
     <string name="title_activity_historical">Historiala</string>
 
     <string name="ok">Ados</string>
-    <string name="cancel">Utzi</string>
-    <string name="save">Gorde</string>
-    <string name="leave">Atera</string>
-    <string name="send">Bidali</string>
-    <string name="resend">Birbidali</string>
-    <string name="redact">Kendu</string>
-    <string name="quote">Aipua</string>
-    <string name="share">Partekatu</string>
+    <string name="action_cancel">Utzi</string>
+    <string name="action_save">Gorde</string>
+    <string name="action_leave">Atera</string>
+    <string name="action_send">Bidali</string>
+    <string name="action_resend">Birbidali</string>
+    <string name="action_redact">Kendu</string>
+    <string name="action_quote">Aipua</string>
+    <string name="action_share">Partekatu</string>
     <string name="later">Geroago</string>
-    <string name="forward">Birbidali</string>
+    <string name="action_forward">Birbidali</string>
     <string name="permalink">Esteka iraunkorra</string>
     <string name="view_source">Ikusi iturburua</string>
     <string name="view_decrypted_source">Ikusi deszifratutako iturburua</string>
-    <string name="delete">Ezabatu</string>
-    <string name="rename">Aldatu izena</string>
+    <string name="action_delete">Ezabatu</string>
+    <string name="action_rename">Aldatu izena</string>
     <string name="report_content">Salatu edukia</string>
     <string name="active_call">Dei aktiboa</string>
     <string name="ongoing_conference_call">Konferentzia deia abian.
@@ -171,7 +171,7 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Konferentzia deiak ez daude onartuta zifratutako geletan</string>
     <string name="send_anyway">Bidali hala ere</string>
     <string name="or">edo</string>
-    <string name="invite">Gonbidatu</string>
+    <string name="action_invite">Gonbidatu</string>
 
     <string name="action_sign_out">Amaitu saioa</string>
     <string name="action_voice_call">Ahots deia</string>
@@ -183,7 +183,7 @@
     <string name="action_open">Ireki</string>
     <string name="action_close">Itxi</string>
     <string name="copied_to_clipboard">Arbelera kopiatuta</string>
-    <string name="disable">Desgaitu</string>
+    <string name="action_disable">Desgaitu</string>
 
     <string name="dialog_title_confirmation">Berrespena</string>
     <string name="dialog_title_warning">Abisua</string>
@@ -368,10 +368,10 @@ Baimendu sarbidea hurrengo laster-leihoan deia egin ahal izateko.</string>
     <string name="no">EZ</string>
     <string name="_continue">Jarraitu</string>
 
-    <string name="remove">Kendu</string>
-    <string name="join">Elkartu</string>
-    <string name="preview">Aurreikusi</string>
-    <string name="reject">Baztertu</string>
+    <string name="action_remove">Kendu</string>
+    <string name="action_join">Elkartu</string>
+    <string name="action_preview">Aurreikusi</string>
+    <string name="action_reject">Baztertu</string>
 
     <string name="room_jump_to_first_unread">Jauzi irakurri gabeko lehen mezura.</string>
 
@@ -488,18 +488,6 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
     <string name="tab_title_search_messages">MEZUAK</string>
     <string name="tab_title_search_people">JENDEA</string>
     <string name="tab_title_search_files">FITXATEGIAK</string>
-
-    <string name="room_recents_join">ELKARTU</string>
-    <string name="room_recents_directory">DIREKTORIOA</string>
-    <string name="room_recents_favourites">GOGOKOAK</string>
-    <string name="room_recents_conversations">GELAK</string>
-    <string name="room_recents_low_priority">LEHENTASUN BAXUA</string>
-    <string name="room_recents_invites">GONBIDAPENAK</string>
-    <string name="room_recents_start_chat">Hasi txata</string>
-    <string name="room_recents_create_room">Sortu gela</string>
-    <string name="room_recents_join_room">Elkartu gelara</string>
-    <string name="room_recents_join_room_title">Elkartu gela batetara</string>
-    <string name="room_recents_join_room_prompt">Idatzi gelaren IDa edo ezizena</string>
 
     <string name="directory_search_results_title">Arakatu direktorioa</string>
     <string name="directory_searching_title">Direktorioa bilatzen…</string>
@@ -784,7 +772,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="settings_labs_create_conference_with_jitsi">Sortu konferentzia deiak Jitsi bidez</string>
     <string name="widget_delete_message_confirmation">Ziur trepeta ezabatu nahi duzula gela honetatik?</string>
 
-    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Ezin izan da trepeta sortu.</string>
     <string name="widget_integration_failed_to_send_request">Eskariaren bidalketak huts egin du.</string>
     <string name="widget_integration_positive_power_level">Botere maila osoko zenbaki positibo bat izan behar da.</string>
@@ -803,22 +790,18 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="settings_labs_native_camera">Erabili kamera natiboa</string>
 
-    <!-- share keys -->
     <string name="you_added_a_new_device">\'%s\' saio berria gehitu duzu, eta zifratze-gakoak eskatzen ari da.</string>
     <string name="your_unverified_device_requesting">Egiaztatu gabeko zure \'%s\' saioa zifratze-gakoak eskatzen ari da.</string>
     <string name="start_verification">Hasi egiaztaketa</string>
     <string name="share_without_verifying">Partekatu egiaztatu gabe</string>
     <string name="ignore_request">Ezikusi eskaria</string>
 
-    <!-- conference call -->
     <string name="conference_call_warning_title">Abisua!</string>
     <string name="conference_call_warning_message">Konferentzia deiak garapenean daude eta agian ez dabiltza behar bezala.</string>
 
-    <!-- slash commands -->
     <string name="command_error">Komandoaren errorea</string>
     <string name="unrecognized_command">Komando ezezaguna: %s</string>
 
-    <!-- notification statuses -->
     <string name="notification_off">Ez</string>
     <string name="notification_noisy">Zaratatsua</string>
 
@@ -873,7 +856,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="community_id">Komunitatearen IDa</string>
     <string name="community_id_hint">adibidea</string>
 
-    <!-- group details -->
     <string name="group_details_home">Hasiera</string>
     <string name="group_details_people">Jendea</string>
     <string name="group_details_rooms">Gelak</string>
@@ -946,7 +928,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
         <item quantity="other">%d trepeta aktibo</item>
     </plurals>
 
-    <!-- Widget Integration Manager -->
     <string name="receipt_avatar">Hartzailearen abatarra</string>
     <string name="notice_avatar">Jakinarazpen abatarra</string>
     <string name="avatar">Abatarra</string>
@@ -998,9 +979,9 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
     <string name="deactivate_account_prompt_password">Jarraitzeko, sartu zure pasahitza:</string>
     <string name="dialog_title_third_party_licences">Hirugarrengoen lizentziak</string>
 
-    <string name="download">Deskargatu</string>
-    <string name="speak">Hitz egin</string>
-    <string name="clear">Garbitu</string>
+    <string name="action_download">Deskargatu</string>
+    <string name="action_speak">Hitz egin</string>
+    <string name="action_clear">Garbitu</string>
     <string name="e2e_re_request_encryption_key">Eskatu berriro zifratze-gakoak zure beste saioetatik.</string>
 
     <string name="e2e_re_request_encryption_key_sent">Gako eskaria bidalita.</string>
@@ -1153,7 +1134,7 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
     <string name="markdown_has_been_enabled">Markdown aktibatu da.</string>
     <string name="markdown_has_been_disabled">Markdown desaktibatu da.</string>
 
-    <string name="accept">Onartu</string>
+    <string name="action_accept">Onartu</string>
 
     <string name="auth_accept_policies">Irakurri eta onartu hasiera-zerbitzari honen baldintzak:</string>
 
@@ -1246,7 +1227,7 @@ Hurrengo pantailan ${app_name}-i bigarren planoan aritzeko baimena eskatuko zaiz
     <string name="title_activity_keys_backup_restore">Erabili gakoen babes-kopia</string>
     <string name="keys_backup_is_not_finished_please_wait">Gakoen babes-kopia ez da amaitu, itxaron mesedez…</string>
 
-    <string name="skip">Saltatu</string>
+    <string name="action_skip">Saltatu</string>
     <string name="done">Egina</string>
 
     <string name="settings_notification_advanced">Jakinarazpenen ezarpen aurreratuak</string>
@@ -1373,9 +1354,9 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="notification_sync_init">Zerbitzua hasieratzen</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Zure mezu zifratuetara sarbidea galduko duzu ez baduzu gakoen babes-kopia egiten saioa amaitu aurretik.</string>
 
-    <string name="stay">Geratu</string>
-    <string name="abort">Abortatu</string>
-    <string name="ignore">Ezikusi</string>
+    <string name="action_stay">Geratu</string>
+    <string name="action_abort">Abortatu</string>
+    <string name="action_ignore">Ezikusi</string>
 
     <string name="action_sign_out_confirmation_simple">Ziur saioa amaitu nahi duzula\?</string>
     <string name="auth_login_sso">Hasi saioa Single sign-on bidez</string>
@@ -1560,8 +1541,8 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="room_list_rooms_empty_body">Zure gelak hemen bistaratuko dira</string>
 
     <string name="title_activity_emoji_reaction_picker">Erreakzioak</string>
-    <string name="reactions_agree">Ados</string>
-    <string name="reactions_like">Gogokoa</string>
+    <string name="action_agree">Ados</string>
+    <string name="action_like">Gogokoa</string>
     <string name="message_add_reaction">Gehitu erreakzioa</string>
     <string name="message_view_reaction">Ikusi errekzioak</string>
     <string name="reactions">Erreakzioak</string>
@@ -1676,10 +1657,10 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="message_view_edit_history">Ikusi edizioen historiala</string>
 
     <string name="none">Bat ere ez</string>
-    <string name="revoke">Indargabetu</string>
-    <string name="disconnect">Deskonektatu</string>
-    <string name="review">Berrikusi</string>
-    <string name="decline">Ukatu</string>
+    <string name="action_revoke">Indargabetu</string>
+    <string name="action_disconnect">Deskonektatu</string>
+    <string name="action_review">Berrikusi</string>
+    <string name="action_decline">Ukatu</string>
 
     <string name="people_no_identity_server">Ez da identitate-zerbitzaririk konfiguratu.</string>
 
@@ -2233,15 +2214,6 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
     <string name="login_signup_username_hint">Erabiltzaile-izena</string>
     <string name="settings_dev_tools">Garapen tresnak</string>
     <string name="settings_account_data">Kontuaren datuak</string>
-    <plurals name="poll_info">
-        <item quantity="one">boto %d</item>
-        <item quantity="other">%d boto</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">boto %d - Azken emaitza</item>
-        <item quantity="other">%d boto - Azken emaitza</item>
-    </plurals>
-    <string name="poll_item_selected_aria">Hautatutako aukera</string>
     <string name="command_description_poll">Inkesta sinplea sortzen du</string>
     <string name="verification_cannot_access_other_session">Erabili berreskuratze metodo bat</string>
     <string name="verification_use_passphrase">Ezin baduzu badagoen saio bat erabili</string>
@@ -2417,7 +2389,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 \n${app_name} Desktop</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">edo zeharka sinatzeko gaitasuna duen beste Matrix bezero bat</string>
+    <string name="or_other_mx_capable_client">edo zeharka sinatzeko gaitasuna duen beste Matrix bezero bat</string>
     <string name="template_use_latest_app">Erabili azken ${app_name} bertsioa zure beste gailuetan:</string>
     <string name="command_description_discard_session">Uneko irteerako talde saioa zifratutako gela batean baztertzera behartzen du</string>
     <string name="command_description_discard_session_not_handled">Zifratutako gelatan onartzen da soilik</string>

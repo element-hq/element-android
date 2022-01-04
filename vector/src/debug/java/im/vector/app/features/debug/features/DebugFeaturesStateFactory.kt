@@ -28,8 +28,8 @@ class DebugFeaturesStateFactory @Inject constructor(
         return FeaturesState(listOf(
                 createEnumFeature(
                         label = "Login version",
-                        selection = debugFeatures.loginVersion(),
-                        default = defaultFeatures.loginVersion()
+                        selection = debugFeatures.loginVariant(),
+                        default = defaultFeatures.loginVariant()
                 )
         ))
     }

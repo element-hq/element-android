@@ -68,7 +68,7 @@ fun Context.showIdentityServerConsentDialog(identityServerWithTerms: ServerAndPo
     MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.identity_server_consent_dialog_title_2, identityServerWithTerms?.serverUrl.orEmpty()))
             .setMessage(content)
-            .setPositiveButton(R.string.reactions_agree) { _, _ ->
+            .setPositiveButton(R.string.action_agree) { _, _ ->
                 consentCallBack.invoke()
             }
             .setNegativeButton(R.string.action_not_now, null)

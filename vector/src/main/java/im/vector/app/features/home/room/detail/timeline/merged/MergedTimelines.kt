@@ -133,26 +133,8 @@ class MergedTimelines(
         secondaryTimeline.paginate(direction, count)
     }
 
-    override fun pendingEventCount(): Int {
-        return mainTimeline.pendingEventCount() + secondaryTimeline.pendingEventCount()
-    }
-
-    override fun failedToDeliverEventCount(): Int {
-        return mainTimeline.pendingEventCount() + secondaryTimeline.pendingEventCount()
-    }
-
-    override fun getTimelineEventAtIndex(index: Int): TimelineEvent? {
-        return mergedEvents.getOrNull(index)
-    }
-
     override fun getIndexOfEvent(eventId: String?): Int? {
         return positionsMapping[eventId]
-    }
-
-    override fun getTimelineEventWithId(eventId: String?): TimelineEvent? {
-        return positionsMapping[eventId]?.let {
-            getTimelineEventAtIndex(it)
-        }
     }
 
     private fun processTimelineUpdates(isInit: KMutableProperty0<Boolean>, eventsRef: MutableList<TimelineEvent>, newData: List<TimelineEvent>) {

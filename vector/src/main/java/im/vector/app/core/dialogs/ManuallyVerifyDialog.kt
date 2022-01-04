@@ -34,7 +34,7 @@ object ManuallyVerifyDialog {
                 .setPositiveButton(R.string.encryption_information_verify) { _, _ ->
                     onVerified()
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
 
         views.encryptedDeviceInfoDeviceName.text = cryptoDeviceInfo.displayName()
         views.encryptedDeviceInfoDeviceId.text = cryptoDeviceInfo.deviceId

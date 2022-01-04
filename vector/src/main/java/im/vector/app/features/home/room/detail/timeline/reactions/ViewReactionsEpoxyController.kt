@@ -22,6 +22,7 @@ import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Success
 import im.vector.app.EmojiSpanify
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericLoaderItem
@@ -56,7 +57,7 @@ class ViewReactionsEpoxyController @Inject constructor(
                     reactionInfoSimpleItem {
                         id(reactionInfo.eventId)
                         timeStamp(reactionInfo.timestamp)
-                        reactionKey(host.emojiSpanify.spanify(reactionInfo.reactionKey))
+                        reactionKey(host.emojiSpanify.spanify(reactionInfo.reactionKey).toEpoxyCharSequence())
                         authorDisplayName(reactionInfo.authorName ?: reactionInfo.authorId)
                         userClicked { host.listener?.didSelectUser(reactionInfo.authorId) }
                     }

@@ -44,7 +44,7 @@ class EncryptionItemFactory @Inject constructor(
         if (!event.root.isStateEvent()) {
             return null
         }
-        val algorithm = event.root.getClearContent().toModel<EncryptionEventContent>()?.algorithm
+        val algorithm = event.root.content.toModel<EncryptionEventContent>()?.algorithm
         val informationData = informationDataFactory.create(params)
         val attributes = messageItemAttributesFactory.create(null, informationData, params.callback)
 

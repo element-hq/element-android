@@ -18,6 +18,7 @@ package im.vector.app.features.settings.devtools
 
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.paging.PagedListEpoxyController
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.ui.list.GenericItem_
 import im.vector.app.core.utils.createUIHandler
 import me.gujun.android.span.span
@@ -40,7 +41,7 @@ class OutgoingKeyRequestPagedController @Inject constructor() : PagedListEpoxyCo
 
         return GenericItem_().apply {
             id(roomKeyRequest.requestId)
-            title(roomKeyRequest.requestId)
+            title(roomKeyRequest.requestId.toEpoxyCharSequence())
             description(
                     span {
                         span("roomId: ") {
@@ -56,7 +57,7 @@ class OutgoingKeyRequestPagedController @Inject constructor() : PagedListEpoxyCo
                             textStyle = "bold"
                         }
                         +roomKeyRequest.state.name
-                    }
+                    }.toEpoxyCharSequence()
             )
         }
     }

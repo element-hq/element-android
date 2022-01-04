@@ -40,8 +40,6 @@ internal open class EventEntity(@Index var eventId: String = "",
                                 var unsignedData: String? = null,
                                 var redacts: String? = null,
                                 var decryptionResultJson: String? = null,
-                                var decryptionErrorCode: String? = null,
-                                var decryptionErrorReason: String? = null,
                                 var ageLocalTs: Long? = null
 ) : RealmObject() {
 
@@ -53,6 +51,16 @@ internal open class EventEntity(@Index var eventId: String = "",
         }
         set(value) {
             sendStateStr = value.name
+        }
+
+    var decryptionErrorCode: String? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
+    var decryptionErrorReason: String? = null
+        set(value) {
+            if (value != field) field = value
         }
 
     companion object

@@ -136,7 +136,7 @@ class VectorSettingsDevicesFragment @Inject constructor(
 
                     viewModel.handle(DevicesAction.Rename(deviceInfo.deviceId!!, newName))
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 

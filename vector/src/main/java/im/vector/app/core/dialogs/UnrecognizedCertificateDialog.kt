@@ -151,7 +151,7 @@ class UnrecognizedCertificateDialog @Inject constructor(
             }
             builder.setNeutralButton(R.string.ssl_logout_account) { _, _ -> callback.onReject() }
         } else {
-            builder.setNegativeButton(R.string.cancel) { _, _ -> callback.onReject() }
+            builder.setNegativeButton(R.string.action_cancel) { _, _ -> callback.onReject() }
         }
 
         builder.setOnDismissListener {

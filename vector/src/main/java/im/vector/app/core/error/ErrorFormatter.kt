@@ -100,6 +100,10 @@ class DefaultErrorFormatter @Inject constructor(
                     throwable.error.code == MatrixError.M_THREEPID_AUTH_FAILED    -> {
                         stringProvider.getString(R.string.error_threepid_auth_failed)
                     }
+                    throwable.error.code == MatrixError.M_UNKNOWN &&
+                            throwable.error.message == "Not allowed to join this room" -> {
+                        stringProvider.getString(R.string.room_error_access_unauthorized)
+                    }
                     else                                                          -> {
                         throwable.error.message.takeIf { it.isNotEmpty() }
                                 ?: throwable.error.code.takeIf { it.isNotEmpty() }
