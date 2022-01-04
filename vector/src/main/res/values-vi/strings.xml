@@ -2779,7 +2779,7 @@
 \nHủy kích hoạt tài khoản của bạn <b>does không theo mặc định khiến chúng tôi quên tin nhắn bạn đã gửi</b>. Nếu bạn muốn chúng tôi quên tin nhắn của bạn, vui lòng đánh dấu vào hộp bên dưới.
 \n
 \nKhả năng hiển thị tin nhắn trong Matrix tương tự như email. Chúng tôi quên tin nhắn của bạn có nghĩa là tin nhắn bạn đã gửi sẽ không được chia sẻ với bất kỳ người dùng mới hoặc chưa đăng ký nào, nhưng người dùng đã đăng ký đã có quyền truy cập vào các tin nhắn này vẫn sẽ có quyền truy cập vào bản sao của họ.</string>
-    <string name="dialog_user_consent_content">Để tiếp tục sử dụng homeserver %1$, bạn phải xem xét và đồng ý với các điều khoản và điều kiện.</string>
+    <string name="dialog_user_consent_content">Để tiếp tục sử dụng homeserver %1$s, bạn phải xem xét và đồng ý với các điều khoản và điều kiện.</string>
     <string name="avatar">Avatar</string>
     <string name="notice_avatar">Chú ý avatar</string>
     <string name="receipt_avatar">Nhận avatar</string>
