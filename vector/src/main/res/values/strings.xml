@@ -3676,4 +3676,8 @@
     <string name="poll_end_room_list_preview">Poll ended</string>
     <string name="delete_poll_dialog_title">Remove poll</string>
     <string name="delete_poll_dialog_content">Are you sure you want to remove this poll? You won\'t be able to recover it once removed.</string>
+    <string name="tooltip_select_item_from_gallery">Select photos and videos from your device</string>
+    <string name="tooltip_select_file">Select any files from your device</string>
+    <string name="tooltip_select_audio_file">Select audio file from your device</string>
+    <string name="tooltip_select_contact">Select contact from your device</string>
 </resources>
