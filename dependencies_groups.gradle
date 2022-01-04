@@ -179,6 +179,7 @@ ext.groups = [
                         'org.sonatype.oss',
                         'org.testng',
                         'org.threeten',
+                        'ru.noties',
                         'xerces',
                         'xml-apis',
                 ]
