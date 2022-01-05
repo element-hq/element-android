@@ -106,6 +106,8 @@ class HomeActivity :
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
     @Suppress("UNUSED")
     private val analyticsAccountDataViewModel: AnalyticsAccountDataViewModel by viewModel()
+    @Suppress("UNUSED")
+    private val userColorAccountDataViewModel: UserColorAccountDataViewModel by viewModel()
 
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
     private val promoteRestrictedViewModel: PromoteRestrictedViewModel by viewModel()

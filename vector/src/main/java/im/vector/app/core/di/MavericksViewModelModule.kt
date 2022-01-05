@@ -42,6 +42,7 @@ import im.vector.app.features.home.HomeDetailViewModel
 import im.vector.app.features.home.PromoteRestrictedViewModel
 import im.vector.app.features.home.UnknownDeviceDetectorSharedViewModel
 import im.vector.app.features.home.UnreadMessagesSharedViewModel
+import im.vector.app.features.home.UserColorAccountDataViewModel
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsViewModel
 import im.vector.app.features.home.room.detail.RoomDetailViewModel
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewModel
@@ -411,6 +412,11 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(RoomMemberProfileViewModel::class)
     fun roomMemberProfileViewModelFactory(factory: RoomMemberProfileViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(UserColorAccountDataViewModel::class)
+    fun userColorAccountDataViewModelFactory(factory: UserColorAccountDataViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap

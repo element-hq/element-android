@@ -16,12 +16,14 @@
 
 package im.vector.app.features.home.room.detail.timeline.helper
 
+import android.graphics.Color
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.VisibleForTesting
 import im.vector.app.R
 import im.vector.app.core.resources.ColorProvider
 import org.matrix.android.sdk.api.util.MatrixItem
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.math.abs
@@ -44,6 +46,42 @@ class MatrixItemColorProvider @Inject constructor(
         }
     }
 
+    fun setOverrideColors(overrideColors: Map<String, String>?) {
+        cache.clear()
+        overrideColors?.forEach {
+            setOverrideColor(it.key, it.value)
+        }
+    }
+
+    fun setOverrideColor(id: String, colorSpec: String?): Boolean {
+        val color = parseUserColorSpec(colorSpec)
+        return if (color == null) {
+            cache.remove(id)
+            false
+        } else {
+            cache[id] = color
+            true
+        }
+    }
+
+    @ColorInt
+    private fun parseUserColorSpec(colorText: String?): Int? {
+        return if (colorText.isNullOrBlank()) {
+            null
+        } else {
+            try {
+                if (colorText.length == 1) {
+                    colorProvider.getColor(getUserColorByIndex(colorText.toInt()))
+                } else {
+                    Color.parseColor(colorText)
+                }
+            } catch (e: Throwable) {
+                Timber.e(e, "Unable to parse color $colorText")
+                null
+            }
+        }
+    }
+
     companion object {
         @ColorRes
         @VisibleForTesting
@@ -52,7 +90,12 @@ class MatrixItemColorProvider @Inject constructor(
 
             userId?.toList()?.map { chr -> hash = (hash shl 5) - hash + chr.code }
 
-            return when (abs(hash) % 8) {
+            return getUserColorByIndex(abs(hash))
+        }
+
+        @ColorRes
+        private fun getUserColorByIndex(index: Int): Int {
+            return when (index % 8) {
                 1    -> R.color.element_name_02
                 2    -> R.color.element_name_03
                 3    -> R.color.element_name_04
