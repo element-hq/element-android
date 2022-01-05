@@ -108,6 +108,7 @@ import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.core.utils.registerForPermissionsResult
+import im.vector.app.core.utils.safeStartActivity
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.core.utils.shareMedia
 import im.vector.app.core.utils.shareText
@@ -784,11 +785,7 @@ class RoomDetailFragment @Inject constructor(
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
         }
 
-        if (intent.resolveActivity(requireActivity().packageManager) != null) {
-            requireActivity().startActivity(intent)
-        } else {
-            requireActivity().toast(R.string.error_no_external_application_found)
-        }
+        requireActivity().safeStartActivity(intent)
     }
 
     private fun installApk(action: RoomDetailViewEvents.OpenFile) {
