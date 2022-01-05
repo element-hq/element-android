@@ -30,6 +30,8 @@ import android.view.animation.TranslateAnimation
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.PopupWindow
+import androidx.annotation.StringRes
+import androidx.appcompat.widget.TooltipCompat
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
@@ -67,7 +69,6 @@ class AttachmentTypeSelectorView(context: Context,
         views.attachmentCameraButton.configure(Type.CAMERA)
         views.attachmentFileButton.configure(Type.FILE)
         views.attachmentStickersButton.configure(Type.STICKER)
-        views.attachmentAudioButton.configure(Type.AUDIO)
         views.attachmentContactButton.configure(Type.CONTACT)
         views.attachmentPollButton.configure(Type.POLL)
         width = LinearLayout.LayoutParams.MATCH_PARENT
@@ -126,7 +127,6 @@ class AttachmentTypeSelectorView(context: Context,
             Type.GALLERY -> views.attachmentGalleryButton
             Type.FILE    -> views.attachmentFileButton
             Type.STICKER -> views.attachmentStickersButton
-            Type.AUDIO   -> views.attachmentAudioButton
             Type.CONTACT -> views.attachmentContactButton
             Type.POLL    -> views.attachmentPollButton
         }.let {
@@ -190,6 +190,7 @@ class AttachmentTypeSelectorView(context: Context,
 
     private fun ImageButton.configure(type: Type): ImageButton {
         this.setOnClickListener(TypeClickListener(type))
+        TooltipCompat.setTooltipText(this, context.getString(type.tooltipRes))
         return this
     }
 
@@ -202,15 +203,14 @@ class AttachmentTypeSelectorView(context: Context,
     }
 
     /**
-     * The all possible types to pick with their required permissions.
+     * The all possible types to pick with their required permissions and tooltip resource
      */
-    enum class Type(val permissions: List<String>) {
-        CAMERA(PERMISSIONS_FOR_TAKING_PHOTO),
-        GALLERY(PERMISSIONS_EMPTY),
-        FILE(PERMISSIONS_EMPTY),
-        STICKER(PERMISSIONS_EMPTY),
-        AUDIO(PERMISSIONS_EMPTY),
-        CONTACT(PERMISSIONS_FOR_PICKING_CONTACT),
-        POLL(PERMISSIONS_EMPTY)
+    enum class Type(val permissions: List<String>, @StringRes val tooltipRes: Int) {
+        CAMERA(PERMISSIONS_FOR_TAKING_PHOTO, R.string.tooltip_attachment_photo),
+        GALLERY(PERMISSIONS_EMPTY, R.string.tooltip_attachment_gallery),
+        FILE(PERMISSIONS_EMPTY, R.string.tooltip_attachment_file),
+        STICKER(PERMISSIONS_EMPTY, R.string.tooltip_attachment_sticker),
+        CONTACT(PERMISSIONS_FOR_PICKING_CONTACT, R.string.tooltip_attachment_contact),
+        POLL(PERMISSIONS_EMPTY, R.string.tooltip_attachment_poll)
     }
 }

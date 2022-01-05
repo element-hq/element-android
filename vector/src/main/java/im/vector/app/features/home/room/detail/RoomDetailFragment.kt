@@ -1163,12 +1163,6 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private val attachmentAudioActivityResultLauncher = registerStartForActivityResult {
-        if (it.resultCode == Activity.RESULT_OK) {
-            attachmentsHelper.onAudioResult(it.data)
-        }
-    }
-
     private val attachmentContactActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
             attachmentsHelper.onContactResult(it.data)
@@ -2218,7 +2212,6 @@ class RoomDetailFragment @Inject constructor(
             )
             AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
             AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(attachmentAudioActivityResultLauncher)
             AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
             AttachmentTypeSelectorView.Type.STICKER -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)
             AttachmentTypeSelectorView.Type.POLL    -> navigator.openCreatePoll(requireContext(), roomDetailArgs.roomId)
