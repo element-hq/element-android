@@ -341,7 +341,7 @@ class RoomMemberProfileFragment @Inject constructor(
                         viewModel.handle(RoomMemberProfileAction.SetUserColorOverride(newColor))
                     }
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 
