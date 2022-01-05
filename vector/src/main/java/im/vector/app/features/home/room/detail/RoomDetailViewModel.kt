@@ -38,6 +38,7 @@ import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.BehaviorDataSource
+import im.vector.app.features.analytics.DecryptionFailureTracker
 import im.vector.app.features.call.conference.ConferenceEvent
 import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.call.conference.JitsiService
@@ -112,6 +113,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val directRoomHelper: DirectRoomHelper,
         private val jitsiService: JitsiService,
         private val activeConferenceHolder: JitsiActiveConferenceHolder,
+        private val decryptionFailureTracker: DecryptionFailureTracker,
         timelineFactory: TimelineFactory
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
@@ -1083,6 +1085,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     override fun onCleared() {
         timeline.dispose()
         timeline.removeAllListeners()
+        decryptionFailureTracker.onTimeLineDisposed(room.roomId)
         if (vectorPreferences.sendTypingNotifs()) {
             room.userStopsTyping()
         }
