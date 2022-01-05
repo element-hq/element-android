@@ -2002,7 +2002,7 @@
     <string name="finish">Fine</string>
     <string name="bootstrap_save_key_description">Usa questa %1$s come una rete di salvataggio in caso dimenticassi la tua %2$s.</string>
     <string name="bootstrap_crosssigning_progress_initializing">Pubblicazione delle chiavi di identità create</string>
-    <string name="bootstrap_crosssigning_progress_pbkdf2">Generazione di una chiave sicura basata sulla Passphrase</string>
+    <string name="bootstrap_crosssigning_progress_pbkdf2">Generazione chiave sicura dalla frase di sicurezza</string>
     <string name="bootstrap_crosssigning_progress_default_key">Definizione della chiave predefinita SSSS</string>
     <string name="bootstrap_crosssigning_progress_save_msk">Sincronizzazione della chiave principale</string>
     <string name="bootstrap_crosssigning_progress_save_usk">Sincronizzazione della chiave utente</string>
@@ -2015,9 +2015,9 @@
     <string name="bootstrap_crosssigning_save_usb">Salvala in una penna USB o disco di backup</string>
     <string name="bootstrap_crosssigning_save_cloud">Copiala sul Cloud</string>
     <string name="auth_flow_not_supported">Non puoi farlo dallo smartphone</string>
-    <string name="bootstrap_skip_text">Impostare una Passphrase di ripristino ti consente di proteggere e sbloccare i messaggi criptati e le verifiche.
+    <string name="bootstrap_skip_text">Impostare una frase di sicurezza di ripristino ti consente di proteggere e sbloccare i messaggi criptati e le verifiche.
 \n
-\nSe non vuoi impostare una Password dei messaggi puoi generare una chiave dei messaggi.</string>
+\nSe non vuoi impostare una Password dei Messaggi, puoi generare una Chiave dei Messaggi.</string>
     <string name="bootstrap_skip_text_no_gen_key">Impostare una Passphrase di ripristino ti consente di proteggere e sbloccare i messaggi criptati e le verifiche.</string>
     <string name="encryption_enabled">Crittografia attiva</string>
     <string name="encryption_enabled_tile_description">I messaggi in questa stanza sono crittografati E2E. Maggiori info e verifica degli utenti nel loro profilo.</string>
@@ -2056,7 +2056,7 @@
     <string name="new_session_review_with_info">%1$s (%2$s)</string>
     <string name="bootstrap_migration_enter_backup_password">Per continuare inserisci la Passphrase del backup delle chiavi.</string>
     <string name="bootstrap_migration_use_recovery_key">usare la chiave di ripristino del backup chiavi</string>
-    <string name="bootstrap_migration_with_passphrase_helper_with_link">Non conosci la Passphrase del backup delle chiavi, puoi %s.</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">Non conosci la frase di sicurezza del backup delle chiavi, puoi %s.</string>
     <string name="bootstrap_migration_backup_recovery_key">Chiave di ripristino del backup chiavi</string>
     <string name="settings_security_prevent_screenshots_title">Impedisci la cattura di schermate dell\'app</string>
     <string name="settings_security_prevent_screenshots_summary">Attivandolo verrà aggiunto FLAG_SECURE a tutte le attività. Riavvia l\'applicazione per applicare le modifiche.</string>
@@ -3047,4 +3047,7 @@
 \nPuoi leggere i nostri termini di servizio %s.</string>
     <string name="analytics_opt_in_title">Aiuta a migliorare Element</string>
     <string name="action_enable">Attiva</string>
+    <string name="restart_the_application_to_apply_changes">Riavvia l\'applicazione per applicare le modifiche.</string>
+    <string name="labs_enable_latex_maths">Attiva la matematica LaTeX</string>
+    <string name="room_error_access_unauthorized">Non ti è permesso entrare in questa stanza</string>
 </resources>
