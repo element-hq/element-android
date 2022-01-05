@@ -3116,4 +3116,7 @@
 \nMůžete si přečíst všechny naše podmínky %s.</string>
     <string name="analytics_opt_in_title">Pomozte vylepšit Element</string>
     <string name="action_enable">Povolit</string>
+    <string name="restart_the_application_to_apply_changes">Restartujte aplikaci, aby se změna projevila.</string>
+    <string name="labs_enable_latex_maths">Povolit matematické výrazy LaTeXu</string>
+    <string name="room_error_access_unauthorized">Do této místnosti vám není dovoleno vstoupit</string>
 </resources>
