@@ -246,8 +246,7 @@ class CryptoTestHelper(private val testHelper: CommonTestHelper) {
             val bobRoomSummariesLive = bob.getRoomSummariesLive(roomSummaryQueryParams { })
             val newRoomObserver = object : Observer<List<RoomSummary>> {
                 override fun onChanged(t: List<RoomSummary>?) {
-                    val indexOfFirst = t?.indexOfFirst { it.roomId == roomId } ?: -1
-                    if (indexOfFirst != -1) {
+                    if (t?.any { it.roomId == roomId }.orFalse()) {
                         bobRoomSummariesLive.removeObserver(this)
                         latch.countDown()
                     }
