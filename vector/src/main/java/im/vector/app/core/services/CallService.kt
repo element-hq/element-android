@@ -84,7 +84,7 @@ class CallService : VectorService() {
         super.onCreate()
         notificationManager = NotificationManagerCompat.from(this)
         callRingPlayerIncoming = CallRingPlayerIncoming(applicationContext, notificationUtils)
-        callRingPlayerOutgoing = CallRingPlayerOutgoing(applicationContext)
+        callRingPlayerOutgoing = CallRingPlayerOutgoing(applicationContext, callManager)
     }
 
     override fun onDestroy() {
