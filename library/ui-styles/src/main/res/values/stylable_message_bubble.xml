@@ -3,6 +3,8 @@
 
     <declare-styleable name="MessageBubble">
         <attr name="incoming_style" format="boolean" />
+        <attr name="is_first" format="boolean" />
+        <attr name="is_last" format="boolean" />
     </declare-styleable>
 
 </resources>

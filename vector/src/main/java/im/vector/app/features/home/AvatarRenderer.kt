@@ -145,6 +145,7 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                         }
                         else                    -> {
                             it.apply(RequestOptions.circleCropTransform())
+
                         }
                     }
                 }

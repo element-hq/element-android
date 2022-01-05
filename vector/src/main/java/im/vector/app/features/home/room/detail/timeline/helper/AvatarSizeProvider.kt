@@ -24,7 +24,7 @@ class AvatarSizeProvider @Inject constructor(private val dimensionConverter: Dim
     private val avatarStyle = AvatarStyle.X_SMALL
 
     val leftGuideline: Int by lazy {
-        dimensionConverter.dpToPx(avatarStyle.avatarSizeDP)
+        dimensionConverter.dpToPx(avatarStyle.avatarSizeDP + 4)
     }
 
     val avatarSize: Int by lazy {
@@ -37,7 +37,7 @@ class AvatarSizeProvider @Inject constructor(private val dimensionConverter: Dim
             BIG(50),
             MEDIUM(40),
             SMALL(30),
-            X_SMALL(24),
+            X_SMALL(28),
             NONE(0)
         }
     }

@@ -19,9 +19,12 @@
         android:id="@+id/messageAvatarImageView"
         android:layout_width="44dp"
         android:layout_height="44dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="12dp"
         android:layout_marginTop="4dp"
+        android:padding="2dp"
+        android:background="@drawable/bg_avatar_border"
         android:contentDescription="@string/avatar"
+        android:elevation="2dp"
         tools:src="@sample/user_round_avatars" />
 
     <TextView
@@ -31,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="12dp"
         android:layout_marginEnd="4dp"
         android:layout_toEndOf="@id/messageStartGuideline"
         android:ellipsize="end"
@@ -46,6 +49,13 @@
         android:layout_height="0dp"
         tools:layout_marginStart="52dp" />
 
+    <View
+        android:id="@+id/messageEndGuideline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="64dp" />
+
     <Space
         android:id="@+id/decorationSpace"
         android:layout_width="4dp"
@@ -59,6 +69,7 @@
         android:layout_alignTop="@id/bubbleWrapper"
         android:layout_alignEnd="@id/decorationSpace"
         android:layout_marginTop="7dp"
+        android:elevation="2dp"
         android:visibility="gone"
         tools:visibility="visible" />
 
@@ -67,45 +78,49 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/messageMemberNameView"
-        android:layout_toStartOf="@id/messageSendStateImageView"
+        android:layout_toStartOf="@id/messageEndGuideline"
         android:layout_toEndOf="@id/messageStartGuideline"
         android:addStatesFromChildren="true"
         android:clipChildren="false"
         android:clipToPadding="false">
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bubbleView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="4dp"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
             android:addStatesFromChildren="true"
             android:background="@drawable/bg_timeline_incoming_message"
-            android:clipChildren="false"
-            android:clipToPadding="false"
-            tools:ignore="UselessParent">
+            android:paddingStart="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <include
                 android:id="@+id/viewStubContainer"
                 layout="@layout/item_timeline_event_view_stubs_container"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:addStatesFromChildren="true" />
+                android:addStatesFromChildren="true"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintEnd_toStartOf="@id/messageTimeView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_max="300dp" />
 
             <TextView
                 android:id="@+id/messageTimeView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/viewStubContainer"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="4dp"
-                android:layout_toEndOf="@id/viewStubContainer"
                 android:textColor="?vctr_content_tertiary"
                 android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="@id/viewStubContainer"
+                app:layout_constraintEnd_toEndOf="parent"
                 tools:text="@tools:sample/date/hhmm" />
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 
     <im.vector.app.core.ui.views.SendStateImageView
@@ -143,6 +158,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/bubbleWrapper"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_toStartOf="@id/messageEndGuideline"
         android:layout_toEndOf="@id/messageStartGuideline"
         android:addStatesFromChildren="true"
         android:orientation="vertical">
@@ -151,7 +169,6 @@
             android:id="@+id/reactionsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginBottom="4dp"
             app:dividerDrawable="@drawable/reaction_divider"
             app:flexWrap="wrap"
