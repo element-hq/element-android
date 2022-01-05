@@ -454,7 +454,7 @@ dependencies {
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
-    implementation "androidx.emoji2:emoji2:1.0.0"
+    implementation "androidx.emoji2:emoji2:1.0.1"
     implementation('com.github.BillCarsonFr:JsonViewer:0.7')
 
     // WebRTC
