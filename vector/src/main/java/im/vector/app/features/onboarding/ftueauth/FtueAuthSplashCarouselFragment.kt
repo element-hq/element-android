@@ -28,7 +28,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
 import im.vector.app.BuildConfig
 import im.vector.app.R
-import im.vector.app.core.extensions.incrementAndWrap
+import im.vector.app.core.extensions.incrementByOneAndWrap
 import im.vector.app.core.extensions.setCurrentItem
 import im.vector.app.core.flow.tickerFlow
 import im.vector.app.databinding.FragmentFtueSplashCarouselBinding
@@ -83,7 +83,7 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
         views.splashCarousel.apply {
             val itemCount = carouselAdapter.itemCount
             tickerFlow(lifecycleScope, delayMillis = CAROUSEL_ROTATION_DELAY_MS)
-                    .onEach { setCurrentItem(currentItem.incrementAndWrap(max = itemCount - 1), duration = CAROUSEL_TRANSITION_TIME_MS) }
+                    .onEach { setCurrentItem(currentItem.incrementByOneAndWrap(max = itemCount - 1), duration = CAROUSEL_TRANSITION_TIME_MS) }
                     .launchIn(lifecycleScope)
         }
     }
