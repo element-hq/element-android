@@ -96,13 +96,12 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         renderSendState(holder.messageView, holder.messageView)
         holder.messageView.onClick(attributes.itemClickListener)
         holder.messageView.onLongClickIgnoringLinks(attributes.itemLongClickListener)
-
-        message?.let { holder.messageView.setTextWithEmojiSupport(it.charSequence, bindingOptions) }
+        holder.messageView.setTextWithEmojiSupport(message?.charSequence, bindingOptions)
         markwonPlugins?.forEach { plugin -> plugin.afterSetText(holder.messageView) }
     }
 
-    private fun AppCompatTextView.setTextWithEmojiSupport(message: CharSequence, bindingOptions: BindingOptions?) {
-        if (bindingOptions?.canUseTextFuture.orFalse()) {
+    private fun AppCompatTextView.setTextWithEmojiSupport(message: CharSequence?, bindingOptions: BindingOptions?) {
+        if (bindingOptions?.canUseTextFuture.orFalse() && message != null) {
             val textFuture = PrecomputedTextCompat.getTextFuture(message, TextViewCompat.getTextMetricsParams(this), null)
             setTextFuture(textFuture)
         } else {
