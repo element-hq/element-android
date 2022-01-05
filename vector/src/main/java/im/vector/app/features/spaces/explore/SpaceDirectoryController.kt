@@ -24,6 +24,7 @@ import com.airbnb.mvrx.Incomplete
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
@@ -87,7 +88,7 @@ class SpaceDirectoryController @Inject constructor(
                                 span(host.stringProvider.getString(R.string.spaces_no_server_support_description)) {
                                     textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 }
-                            }
+                            }.toEpoxyCharSequence()
                     )
                 }
             } else {
@@ -155,7 +156,7 @@ class SpaceDirectoryController @Inject constructor(
                                 when {
                                     error != null -> host.stringProvider.getString(R.string.global_retry)
                                     isJoined      -> host.stringProvider.getString(R.string.action_open)
-                                    else          -> host.stringProvider.getString(R.string.join)
+                                    else          -> host.stringProvider.getString(R.string.action_join)
                                 }
                         )
                         apply {

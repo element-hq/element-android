@@ -135,7 +135,7 @@ class RoomAliasFragment @Inject constructor(
         MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setTitle(R.string.dialog_title_confirmation)
                 .setMessage(getString(R.string.room_alias_unpublish_confirmation, alias))
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .setPositiveButton(R.string.action_unpublish) { _, _ ->
                     viewModel.handle(RoomAliasAction.UnpublishAlias(alias))
                 }
@@ -190,8 +190,8 @@ class RoomAliasFragment @Inject constructor(
         MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setTitle(R.string.dialog_title_confirmation)
                 .setMessage(getString(R.string.room_alias_delete_confirmation, alias))
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.delete) { _, _ ->
+                .setNegativeButton(R.string.action_cancel, null)
+                .setPositiveButton(R.string.action_delete) { _, _ ->
                     viewModel.handle(RoomAliasAction.RemoveLocalAlias(alias))
                 }
                 .show()

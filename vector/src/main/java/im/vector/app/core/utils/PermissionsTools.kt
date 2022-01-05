@@ -168,6 +168,6 @@ fun FragmentActivity.onPermissionDeniedDialog(@StringRes rationaleMessage: Int) 
             .setPositiveButton(R.string.open_settings) { _, _ ->
                 openAppSettingsPage(this)
             }
-            .setNegativeButton(R.string.cancel, null)
+            .setNegativeButton(R.string.action_cancel, null)
             .show()
 }

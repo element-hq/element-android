@@ -20,6 +20,7 @@ import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.paging.PagedListEpoxyController
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.ui.list.GenericItem_
 import im.vector.app.core.utils.createUIHandler
 import me.gujun.android.span.span
@@ -45,7 +46,7 @@ class IncomingKeyRequestPagedController @Inject constructor(
 
         return GenericItem_().apply {
             id(roomKeyRequest.requestId)
-            title(roomKeyRequest.requestId)
+            title(roomKeyRequest.requestId?.toEpoxyCharSequence())
             description(
                     span {
                         span("From: ") {
@@ -65,7 +66,7 @@ class IncomingKeyRequestPagedController @Inject constructor(
                             textStyle = "bold"
                         }
                         +roomKeyRequest.state.name
-                    }
+                    }.toEpoxyCharSequence()
             )
         }
     }

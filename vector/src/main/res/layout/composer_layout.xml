@@ -72,7 +72,7 @@
         android:layout_width="22dp"
         android:layout_height="22dp"
         android:background="?android:attr/selectableItemBackground"
-        android:contentDescription="@string/cancel"
+        android:contentDescription="@string/action_cancel"
         android:src="@drawable/ic_close_round"
         app:tint="?colorError"
         tools:ignore="MissingConstraints,MissingPrefix" />
@@ -127,7 +127,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/bg_send"
-        android:contentDescription="@string/send"
+        android:contentDescription="@string/action_send"
         android:src="@drawable/ic_send"
         tools:ignore="MissingConstraints" />
 

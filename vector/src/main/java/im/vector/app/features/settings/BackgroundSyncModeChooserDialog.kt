@@ -35,7 +35,7 @@ class BackgroundSyncModeChooserDialog : DialogFragment() {
         val dialog = MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.settings_background_fdroid_sync_mode)
                 .setView(view)
-                .setPositiveButton(R.string.cancel, null)
+                .setPositiveButton(R.string.action_cancel, null)
                 .create()
 
         views.backgroundSyncModeBattery.setOnClickListener {

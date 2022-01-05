@@ -13,12 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.commonmark.ext.maths.internal
 
-package org.matrix.android.sdk.internal.session.room.timeline
+import org.commonmark.ext.maths.DisplayMaths
+import org.commonmark.ext.maths.InlineMaths
+import org.commonmark.node.Node
+import org.commonmark.renderer.NodeRenderer
+import java.util.HashSet
 
-internal data class TimelineState(
-        val hasReachedEnd: Boolean = false,
-        val hasMoreInCache: Boolean = true,
-        val isPaginating: Boolean = false,
-        val requestedPaginationCount: Int = 0
-)
+abstract class MathsNodeRenderer : NodeRenderer {
+    override fun getNodeTypes(): Set<Class<out Node>> {
+        val types: MutableSet<Class<out Node>> = HashSet()
+        types.add(InlineMaths::class.java)
+        types.add(DisplayMaths::class.java)
+        return types
+    }
+}

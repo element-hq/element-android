@@ -168,10 +168,8 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
 
             bobTimeline.addListener(eventsListener)
 
-            // Restart the timeline to the first sent event, and paginate in both direction
+            // Restart the timeline to the first sent event
             bobTimeline.restartWithEventId(firstMessageFromAliceId)
-            bobTimeline.paginate(Timeline.Direction.BACKWARDS, 50)
-            bobTimeline.paginate(Timeline.Direction.FORWARDS, 50)
 
             commonTestHelper.await(lock)
             bobTimeline.removeAllListeners()

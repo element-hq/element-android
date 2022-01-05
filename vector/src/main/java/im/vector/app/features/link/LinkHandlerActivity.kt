@@ -121,7 +121,7 @@ class LinkHandlerActivity : VectorBaseActivity<ActivityProgressBinding>() {
                 .setMessage(R.string.error_user_already_logged_in)
                 .setCancelable(false)
                 .setPositiveButton(R.string.logout) { _, _ -> safeSignout(uri) }
-                .setNegativeButton(R.string.cancel) { _, _ -> finish() }
+                .setNegativeButton(R.string.action_cancel) { _, _ -> finish() }
                 .show()
     }
 

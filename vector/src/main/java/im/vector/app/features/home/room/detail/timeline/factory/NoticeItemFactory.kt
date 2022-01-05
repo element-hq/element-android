@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
+import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.format.NoticeEventFormatter
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
@@ -37,7 +38,7 @@ class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEv
         val attributes = NoticeItem.Attributes(
                 avatarRenderer = avatarRenderer,
                 informationData = informationData,
-                noticeText = formattedText,
+                noticeText = EpoxyCharSequence(formattedText),
                 itemLongClickListener = { view ->
                     params.callback?.onEventLongClicked(informationData, null, view) ?: false
                 },

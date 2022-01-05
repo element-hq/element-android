@@ -33,7 +33,7 @@ import im.vector.app.core.extensions.setAttributeTintedImageResource
 abstract class RadioButtonItem : VectorEpoxyModel<RadioButtonItem.Holder>() {
 
     @EpoxyAttribute
-    var title: CharSequence? = null
+    var title: String? = null
 
     @StringRes
     @EpoxyAttribute

@@ -19,6 +19,7 @@ package im.vector.app.features.crypto.verification.choose
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
 import im.vector.app.core.epoxy.bottomSheetDividerItem
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
@@ -60,7 +61,7 @@ class VerificationChooseMethodController @Inject constructor(
 
             bottomSheetVerificationNoticeItem {
                 id("notice")
-                notice(scanCodeInstructions)
+                notice(scanCodeInstructions.toEpoxyCharSequence())
             }
 
             if (state.otherCanScanQrCode && !state.qrCodeText.isNullOrBlank()) {

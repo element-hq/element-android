@@ -42,7 +42,7 @@
         android:id="@+id/item_settings_three_pid_delete"
         android:layout_width="@dimen/layout_touch_size"
         android:layout_height="@dimen/layout_touch_size"
-        android:contentDescription="@string/delete"
+        android:contentDescription="@string/action_delete"
         android:scaleType="center"
         android:src="@drawable/ic_trash_24"
         app:layout_constraintBottom_toBottomOf="parent"

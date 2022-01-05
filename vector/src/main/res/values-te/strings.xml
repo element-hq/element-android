@@ -38,7 +38,7 @@
     <string name="notice_room_third_party_registered_invite">%2$sకోసం %1$s ఆహ్వానాన్ని అంగీకరించారు</string>
 
     <string name="notice_crypto_unable_to_decrypt">** వ్యక్తీకరించడానికి సాధ్యం కాలేదు: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">ఈ సందేశానికి పంపేవారి పరికరం మాకు కీలను పంపలేదు.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">ఈ సందేశానికి పంపేవారి పరికరం మాకు కీలను పంపలేదు.</string>
 
     <string name="could_not_redact">గది స్క్రీన్</string>
     <string name="unable_to_send_message">సందేశం పంపడం సాధ్యం కాలేదు</string>
@@ -69,32 +69,32 @@
     <string name="title_activity_room">గది</string>
     <string name="ok">అలాగే</string>
     <string name="title_activity_member_details">సభ్యుని వివరాలు</string>
-    <string name="save">దాచు</string>
+    <string name="action_save">దాచు</string>
     <string name="auth_forgot_password">సంకేతపదం మరచిపోయారా?</string>
-    <string name="send">పంపు</string>
-    <string name="redact">చెరిపేయి</string>
-    <string name="share">పంచుకొను</string>
-    <string name="delete">తొలగించు</string>
-    <string name="invite">ఆహ్వానము</string>
+    <string name="action_send">పంపు</string>
+    <string name="action_redact">చెరిపేయి</string>
+    <string name="action_share">పంచుకొను</string>
+    <string name="action_delete">తొలగించు</string>
+    <string name="action_invite">ఆహ్వానము</string>
 
     <string name="action_open">తెరువు</string>
     <string name="title_activity_historical">చారిత్రిక</string>
 
-    <string name="leave">వదిలివేయు</string>
-    <string name="resend">తిరిగిపంపు</string>
+    <string name="action_leave">వదిలివేయు</string>
+    <string name="action_resend">తిరిగిపంపు</string>
     <string name="title_activity_home">సందేశాలు</string>
     <string name="title_activity_settings">అమరికలు</string>
-    <string name="cancel">రద్దుచేయి</string>
+    <string name="action_cancel">రద్దుచేయి</string>
     <string name="later">తరువాత</string>
     <string name="view_source">మూలాన్ని వీక్షించండి</string>
-    <string name="rename">పేరు మార్చండి</string>
+    <string name="action_rename">పేరు మార్చండి</string>
     <string name="cannot_start_call">కాల్ను ప్రారంభించలేరు, దయచేసి తరువాత ప్రయత్నించండి</string>
     <string name="device_information">పరికర సమాచారం</string>
     <string name="or">లేదా</string>
     <string name="action_video_call">విడియో కాల్</string>
     <string name="action_close">మూసివేయు</string>
     <string name="copied_to_clipboard">క్లిప్బోర్డ్కు నకలు చేయబడింది</string>
-    <string name="disable">అచేతనపరచు</string>
+    <string name="action_disable">అచేతనపరచు</string>
 
     <string name="dialog_title_confirmation">నిర్ధారణ</string>
     <string name="dialog_title_warning">హెచ్చరిక</string>
@@ -133,8 +133,8 @@
     <string name="send_bug_report">బగ్ నివేదిక</string>
     <string name="send_bug_report_description">దయచేసి బగ్ను వివరించండి. మీరు ఎం చేసారు? మీరు ఏమి జరిగే అవకాశము ఉందనుకున్నారు? వాస్తవానికి ఏం జరిగింది?</string>
     <string name="send_bug_report_placeholder">ఇక్కడ మీ సమస్యను వివరించండి</string>
-    <string name="quote">కోట్</string>
-    <string name="forward">ముందుకు</string>
+    <string name="action_quote">కోట్</string>
+    <string name="action_forward">ముందుకు</string>
     <string name="permalink">పెర్మాలింక్</string>
     <string name="view_decrypted_source">డెక్రిప్టెడ్ మూలాన్ని చూడండి</string>
     <string name="report_content">నివేదిక వివరాలు</string>
@@ -253,9 +253,9 @@
     <string name="no">కాదు</string>
     <string name="_continue">కొనసాగించండి</string>
 
-    <string name="remove">తీసివేయి</string>
-    <string name="join">చేరండి</string>
-    <string name="reject">తిరస్కరించు</string>
+    <string name="action_remove">తీసివేయి</string>
+    <string name="action_join">చేరండి</string>
+    <string name="action_reject">తిరస్కరించు</string>
 
     <string name="room_jump_to_first_unread">మొదటి చదవని సందేశానికి వెళ్ళు.</string>
 
@@ -347,17 +347,6 @@
     <string name="tab_title_search_messages">సందేశాలు</string>
     <string name="tab_title_search_people">ప్రజలు</string>
     <string name="tab_title_search_files">దస్త్రాలు</string>
-
-    <string name="room_recents_join">చేరు</string>
-    <string name="room_recents_directory">డైరెక్టరీ</string>
-    <string name="room_recents_conversations">గదులు</string>
-    <string name="room_recents_low_priority">తక్కువ ప్రాధాన్యత</string>
-    <string name="room_recents_invites">ఆహ్వానాలు</string>
-    <string name="room_recents_start_chat">చాట్ ప్రారంభించండి</string>
-    <string name="room_recents_create_room">గదిని సృష్టించండి</string>
-    <string name="room_recents_join_room">గదిలో చేరండి</string>
-    <string name="room_recents_join_room_title">ఒక గదిలో చేరండి</string>
-    <string name="room_recents_join_room_prompt">ఒక గది id లేదా ఒక గది alias టైప్ చేయండి</string>
 
     <string name="directory_search_results_title">డైరెక్టరీలో విహరించండి</string>
     <string name="directory_searching_title">డైరెక్టరీని వెతుకుతున్నాం..</string>
@@ -559,7 +548,7 @@
     <string name="template_permissions_rationale_msg_camera_and_audio">"మీ కెమెరాను మరియు మీ శబ్ద ప్రసారిణి సాంగత్యం చేయడానికి రియోట్కు అనుమతి అవసరం.
 \n
 \nదయచేసి   పిలుపు చేయడానికి వీలుగా తదుపరి పాప్-అప్ల్లో ప్రాప్యతను అనుమతించండి."</string>
-    <string name="preview">ప్రత్యేక ప్రదర్శన</string>
+    <string name="action_preview">ప్రత్యేక ప్రదర్శన</string>
     <string name="room_preview_room_interactions_disabled">ఇది ఈ గది యొక్క పరిదృశ్యం. గది పరస్పర చర్యలు నిలిపివేయబడ్డాయి.</string>
 
     <string name="encryption_information_verify_device_warning2">ఇది సరిపోలితే, దిగువ ధృవీకరించు బటన్ను నొక్కండి. అది కాకపోతే, అప్పుడు ఎవరో ఈ పరికరాన్ని అడ్డుకుంటున్నారు మరియు మీరు బహుశా బ్లాక్ బటన్ను నొక్కాలనుకుంటున్నారు.

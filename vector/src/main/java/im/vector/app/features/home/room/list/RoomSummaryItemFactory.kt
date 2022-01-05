@@ -23,6 +23,7 @@ import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
@@ -71,7 +72,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 )
                 .buttonLabel(
                         if (error != null) stringProvider.getString(R.string.global_retry)
-                        else stringProvider.getString(R.string.join)
+                        else stringProvider.getString(R.string.action_join)
                 )
                 .loading(suggestedRoomJoiningStates[spaceChildInfo.childRoomId] is Loading)
                 .memberCount(spaceChildInfo.activeMemberCount ?: 0)
@@ -111,7 +112,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
         val showHighlighted = roomSummary.highlightCount > 0
         val showSelected = selectedRoomIds.contains(roomSummary.roomId)
         var latestFormattedEvent: CharSequence = ""
-        var latestEventTime: CharSequence = ""
+        var latestEventTime = ""
         val latestEvent = roomSummary.latestPreviewableEvent
         if (latestEvent != null) {
             latestFormattedEvent = displayableEventFormatter.format(latestEvent, roomSummary.isDirect, roomSummary.isDirect.not())
@@ -129,8 +130,7 @@ class RoomSummaryItemFactory @Inject constructor(private val displayableEventFor
                 .matrixItem(roomSummary.toMatrixItem())
                 .lastEventTime(latestEventTime)
                 .typingMessage(typingMessage)
-                .lastEvent(latestFormattedEvent.toString())
-                .lastFormattedEvent(latestFormattedEvent)
+                .lastFormattedEvent(latestFormattedEvent.toEpoxyCharSequence())
                 .showHighlighted(showHighlighted)
                 .showSelected(showSelected)
                 .hasFailedSending(roomSummary.hasFailedSending)

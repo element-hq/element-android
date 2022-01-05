@@ -46,7 +46,7 @@
     <string name="notice_profile_change_redacted">%1$s uppfærði notandasniðið sitt %2$s</string>
     <string name="notice_room_third_party_invite">%1$s sendi boð til %2$s um þátttöku í spjallrásinni</string>
     <string name="notice_room_third_party_registered_invite">%1$s samþykkti boð um að taka þátt í %2$s</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Tæki sendandans hefur ekki sent okkur dulritunarlyklana fyrir þessi skilaboð.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Tæki sendandans hefur ekki sent okkur dulritunarlyklana fyrir þessi skilaboð.</string>
     <string name="could_not_redact">Gat ekki ritstýrt</string>
     <string name="room_error_join_failed_empty_room">Ekki er í augnablikinu hægt að taka aftur þátt í spjallrás sem er tóm.</string>
     <string name="room_displayname_room_invite">Boð á spjallrás</string>
@@ -73,24 +73,24 @@
     <string name="title_activity_group_details">Nánar um samfélag</string>
     <string name="loading">Hleð inn…</string>
     <string name="ok">Í lagi</string>
-    <string name="cancel">Hætta við</string>
-    <string name="save">Vista</string>
-    <string name="leave">Fara út</string>
-    <string name="send">Senda</string>
-    <string name="resend">Endursenda</string>
-    <string name="redact">Ritstýra</string>
-    <string name="quote">Tilvitnun</string>
-    <string name="share">Deila</string>
+    <string name="action_cancel">Hætta við</string>
+    <string name="action_save">Vista</string>
+    <string name="action_leave">Fara út</string>
+    <string name="action_send">Senda</string>
+    <string name="action_resend">Endursenda</string>
+    <string name="action_redact">Ritstýra</string>
+    <string name="action_quote">Tilvitnun</string>
+    <string name="action_share">Deila</string>
     <string name="later">Seinna</string>
-    <string name="forward">Áframsenda</string>
+    <string name="action_forward">Áframsenda</string>
     <string name="permalink">Varanlegur tengill</string>
     <string name="view_source">Skoða frumkóða</string>
-    <string name="delete">Eyða</string>
-    <string name="rename">Endurnefna</string>
+    <string name="action_delete">Eyða</string>
+    <string name="action_rename">Endurnefna</string>
     <string name="device_information">Upplýsingar um tæki</string>
     <string name="send_anyway">Senda samt</string>
     <string name="or">eða</string>
-    <string name="invite">Bjóða</string>
+    <string name="action_invite">Bjóða</string>
     <string name="offline">Ónettengt</string>
     <string name="action_exit">Fara út</string>
     <string name="actions">Aðgerðir</string>
@@ -103,7 +103,7 @@
     <string name="action_open">Opna</string>
     <string name="action_close">Loka</string>
     <string name="copied_to_clipboard">Afritað á klippispjald</string>
-    <string name="disable">Gera óvirkt</string>
+    <string name="action_disable">Gera óvirkt</string>
     <string name="dialog_title_confirmation">Staðfesting</string>
     <string name="dialog_title_warning">Aðvörun</string>
     <string name="bottom_action_home">Heim</string>
@@ -199,10 +199,10 @@
     <string name="yes">JÁ</string>
     <string name="no">NEI</string>
     <string name="_continue">Halda áfram</string>
-    <string name="remove">Fjarlægja</string>
-    <string name="join">Taka þátt</string>
-    <string name="preview">Forskoðun</string>
-    <string name="reject">Hafna</string>
+    <string name="action_remove">Fjarlægja</string>
+    <string name="action_join">Taka þátt</string>
+    <string name="action_preview">Forskoðun</string>
+    <string name="action_reject">Hafna</string>
     <string name="list_members">Listi yfir meðlimi</string>
     <string name="open_chat_header">Opna haus</string>
     <string name="room_sync_in_progress">Samstilli…</string>
@@ -259,16 +259,6 @@
     <string name="tab_title_search_messages">SKILABOÐ</string>
     <string name="tab_title_search_people">FÓLK</string>
     <string name="tab_title_search_files">SKRÁR</string>
-    <string name="room_recents_join">TAKA ÞÁTT</string>
-    <string name="room_recents_directory">MAPPA</string>
-    <string name="room_recents_favourites">EFTIRLÆTI</string>
-    <string name="room_recents_conversations">SPJALLRÁSIR</string>
-    <string name="room_recents_low_priority">LÍTILL FORGANGUR</string>
-    <string name="room_recents_invites">BOÐSGESTIR</string>
-    <string name="room_recents_start_chat">Hefja spjall</string>
-    <string name="room_recents_create_room">Búa til spjallrás</string>
-    <string name="room_recents_join_room">Taka þátt í spjallrás</string>
-    <string name="room_recents_join_room_title">Taka þátt í spjallrás</string>
     <string name="directory_search_results_title">Vafra í möppu</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">%d spjallrás</item>
@@ -402,22 +392,18 @@
         <item quantity="one">%d virkur viðmótshluti</item>
         <item quantity="other">%d virkir viðmótshlutar</item>
     </plurals>
-    <!-- Widget Integration Manager -->
     <string name="widget_integration_must_be_in_room">Þú ert ekki á þessari spjallrás.</string>
     <string name="widget_integration_no_permission_in_room">Þú hefur ekki réttindi til þess að gera þetta á þessari spjallrás.</string>
     <string name="widget_integration_room_not_visible">Spjallrásin %s er ekki sýnileg.</string>
     <string name="conference_call_warning_title">Aðvörun!</string>
     <string name="command_error">Skipanavilla</string>
     <string name="unrecognized_command">Óþekkt skipun: %s</string>
-    <!-- notification statuses -->
     <string name="notification_off">Slökkt</string>
     <string name="notification_noisy">Hávært</string>
     <string name="encrypted_message">Dulrituð skilaboð</string>
-    <!-- groups creation -->
     <string name="create">Búa til</string>
     <string name="community_name_hint">Dæmi</string>
     <string name="community_id_hint">dæmi</string>
-    <!-- group details -->
     <string name="group_details_home">Heim</string>
     <string name="group_details_people">Fólk</string>
     <string name="group_details_rooms">Spjallrásir</string>
@@ -465,7 +451,6 @@
     <string name="call_error_answered_elsewhere">samtali svarað annars staðar</string>
     <string name="settings_call_invitations">Boð um samtal</string>
     <string name="settings_labs_native_camera">Nota innbyggða myndavél</string>
-    <!-- share keys -->
     <string name="create_community">Búa til samfélag</string>
     <string name="community_name">Heiti samfélags</string>
     <string name="community_id">Auðkenni samfélags</string>
@@ -502,7 +487,6 @@
     <string name="start_verification">Hefja sannvottun</string>
     <string name="share_without_verifying">Deila án sannvottunar</string>
     <string name="ignore_request">Hunsa beiðni</string>
-    <!-- conference call -->
     <string name="has_been_kicked">Þér hefur verið sparkað úr %1$s af %2$s</string>
     <string name="has_been_banned">Þú hefur verið settur í bann á %1$s af %2$s</string>
     <string name="room_settings_labs_pref_title">Tilraunir</string>
@@ -626,7 +610,6 @@
     <string name="people_search_invite_by_id"><u>Bjóða miðað við auðkenni</u></string>
     <string name="people_search_local_contacts">TENGILIÐIR Á TÆKI (%d)</string>
     <string name="people_search_invite_by_id_dialog_title">Bjóða notendum miðað við auðkenni</string>
-    <string name="room_recents_join_room_prompt">Settu inn auðkenni eða samheiti spjallrásar</string>
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%1$s spjallrás fannst fyrir %2$s</item>
         <item quantity="other">%1$s spjallrásir fundust fyrir %2$s</item>
@@ -681,7 +664,6 @@
     <string name="you_added_a_new_device">Þú bættir við nýju tæki \'%s\', sem er að krefjast dulritunarlykla.</string>
     <string name="your_unverified_device_requesting">ósannvottaða tækið þitt \'%s\' er að krefjast dulritunarlykla.</string>
     <string name="conference_call_warning_message">Símafundir eru í þróun og gætu verið óáreiðanlegir.</string>
-    <!-- slash commands -->
     <string name="group_no_long_description">Kerfisstjóri samfélagsins hefur ekki gefið upp ítarlega lýsingu fyrir þetta samfélag.</string>
     <string name="directory_server_type_homeserver">Skrifaðu heimanetþjón til að telja upp opinberar spjallrásir á</string>
     <string name="widget_integration_missing_room_id">Vantar spjallrásarauðkenni í beiðni.</string>

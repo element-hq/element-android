@@ -389,6 +389,8 @@ dependencies {
     implementation libs.google.material
     implementation 'me.gujun.android:span:1.7'
     implementation libs.markwon.core
+    implementation libs.markwon.extLatex
+    implementation libs.markwon.inlineParser
     implementation libs.markwon.html
     implementation 'com.googlecode.htmlcompressor:htmlcompressor:1.5.2'
     implementation 'me.saket:better-link-movement-method:2.2.0'
@@ -452,7 +454,7 @@ dependencies {
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
-    implementation "androidx.emoji2:emoji2:1.0.0"
+    implementation "androidx.emoji2:emoji2:1.0.1"
     implementation('com.github.BillCarsonFr:JsonViewer:0.7')
 
     // WebRTC

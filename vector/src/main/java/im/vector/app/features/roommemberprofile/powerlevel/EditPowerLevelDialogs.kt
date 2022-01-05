@@ -61,7 +61,7 @@ object EditPowerLevelDialogs {
                     }
                     listener(newValue)
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .setOnKeyListener(DialogInterface.OnKeyListener
                 { dialog, keyCode, event ->
                     if (event.action == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
@@ -96,7 +96,7 @@ object EditPowerLevelDialogs {
                 .setPositiveButton(R.string.room_participants_power_level_demote) { _, _ ->
                     onValidate()
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 }

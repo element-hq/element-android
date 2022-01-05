@@ -134,10 +134,10 @@ class ElementRobot {
             activity.runOnUiThread { popup.performClick() }
 
             waitUntilViewVisible(withId(R.id.bottomSheetFragmentContainer))
-            waitUntilViewVisible(ViewMatchers.withText(R.string.skip))
-            clickOn(R.string.skip)
+            waitUntilViewVisible(ViewMatchers.withText(R.string.action_skip))
+            clickOn(R.string.action_skip)
             assertDisplayed(R.string.are_you_sure)
-            clickOn(R.string.skip)
+            clickOn(R.string.action_skip)
             waitUntilViewVisible(withId(R.id.bottomSheetFragmentContainer))
         }.onFailure { Timber.w("Verification popup missing", it) }
     }

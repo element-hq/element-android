@@ -101,7 +101,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
-        app:bsv_button_text="@string/join"
+        app:bsv_button_text="@string/action_join"
         app:bsv_loaded_image_src="@drawable/ic_tick"
         app:bsv_use_flat_button="true"
         app:layout_constraintEnd_toEndOf="parent"

@@ -312,7 +312,7 @@ class RoomMemberProfileController @Inject constructor(
         return if (isIgnored) {
             stringProvider.getString(R.string.unignore)
         } else {
-            stringProvider.getString(R.string.ignore)
+            stringProvider.getString(R.string.action_ignore)
         }
     }
 }

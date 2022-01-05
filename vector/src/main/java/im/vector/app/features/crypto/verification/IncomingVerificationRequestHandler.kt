@@ -92,7 +92,7 @@ class IncomingVerificationRequestHandler @Inject constructor(
                                 tx.cancel()
                             }
                             addButton(
-                                    context.getString(R.string.ignore),
+                                    context.getString(R.string.action_ignore),
                                     { tx.cancel() }
                             )
                             addButton(

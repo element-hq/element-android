@@ -136,7 +136,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0 ||
                 // avoid this call if we are sure there are unread events
-                !isEventRead(realm.configuration, userId, roomId, latestPreviewableEvent?.eventId)
+                latestPreviewableEvent?.let { !isEventRead(realm.configuration, userId, roomId, it.eventId) } ?: false
 
         roomSummaryEntity.setDisplayName(roomDisplayNameResolver.resolve(realm, roomId))
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(realm, roomId)

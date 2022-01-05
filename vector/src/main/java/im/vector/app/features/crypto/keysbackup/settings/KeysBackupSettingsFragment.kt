@@ -78,7 +78,7 @@ class KeysBackupSettingsFragment @Inject constructor(private val keysBackupSetti
                     .setPositiveButton(R.string.keys_backup_settings_delete_confirm_title) { _, _ ->
                         viewModel.handle(KeyBackupSettingsAction.DeleteKeyBackup)
                     }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .setCancelable(true)
                     .show()
         }
