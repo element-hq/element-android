@@ -132,14 +132,11 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         session.flow()
                 .liveUserAccountData(UserAccountDataTypes.TYPE_OVERRIDE_COLORS)
                 .unwrap()
-                .map { it.content.toModel<Map<String, String>>() }
-                .map { userColorAccountDataContent ->
-                    userColorAccountDataContent?.get(initialState.userId)
-                }
                 .onEach {
+                    val newUserColor = it.content.toModel<Map<String, String>>()?.get(initialState.userId)
                     setState {
                         copy(
-                                userColorOverride = it
+                                userColorOverride = newUserColor
                         )
                     }
                 }
