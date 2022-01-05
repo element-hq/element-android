@@ -196,10 +196,9 @@ jobs:
             ## Integration Tests Results:
             - `[org.matrix.android.sdk.session]`<br>${{ steps.get-comment-body-session.outputs.session }}
             - `[org.matrix.android.sdk.account]`<br>${{ steps.get-comment-body-account.outputs.account }}
-            - `[org.matrix.android.sdk.intrernal]`<br>${{ steps.get-comment-body-intrernal.outputs.intrernal }}
+            - `[org.matrix.android.sdk.internal]`<br>${{ steps.get-comment-body-internal.outputs.internal }}
             - `[org.matrix.android.sdk.ordering]`<br>${{ steps.get-comment-body-ordering.outputs.ordering }}
             - `[org.matrix.android.sdk.PermalinkParserTest]`<br>${{ steps.get-comment-body-permalink.outputs.permalink }}
-          reactions: rocket
           edit-mode: replace
 ## Useful commands
 #          script: ./integration_tests_script.sh
