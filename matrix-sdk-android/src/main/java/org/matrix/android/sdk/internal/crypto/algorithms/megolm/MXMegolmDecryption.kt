@@ -136,8 +136,8 @@ internal class MXMegolmDecryption(private val userId: String,
 
                                     throw MXCryptoError.Base(
                                             MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX,
-                                            throwable.olmException.message ?: "",
-                                            throwable.olmException.message)
+                                            "UNKNOWN_MESSAGE_INDEX",
+                                            null)
                                 }
 
                                 val reason = String.format(MXCryptoError.OLM_REASON, throwable.olmException.message)

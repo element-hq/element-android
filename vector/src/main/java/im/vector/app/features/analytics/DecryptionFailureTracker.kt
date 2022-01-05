@@ -17,6 +17,7 @@
 package im.vector.app.features.analytics
 
 import im.vector.app.core.flow.tickerFlow
+import im.vector.app.core.time.Clock
 import im.vector.app.features.analytics.plan.Error
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -26,17 +27,19 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 import javax.inject.Singleton
 
-data class DecryptionFailure(
-        val timeStamp: Long = System.currentTimeMillis(),
+private data class DecryptionFailure(
+        val timeStamp: Long,
         val roomId: String,
         val failedEventId: String,
         val error: MXCryptoError.ErrorType
 )
 
-private const val GRACE_PERIOD_MILLIS = 20_000
+private const val GRACE_PERIOD_MILLIS = 4_000
+private const val CHECK_INTERVAL = 2_000L
 
 /**
  * Tracks decryption errors that are visible to the user.
@@ -45,7 +48,8 @@ private const val GRACE_PERIOD_MILLIS = 20_000
  */
 @Singleton
 class DecryptionFailureTracker @Inject constructor(
-        private val vectorAnalytics: VectorAnalytics
+        private val vectorAnalytics: VectorAnalytics,
+        private val clock: Clock
 ) {
 
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob())
@@ -57,7 +61,7 @@ class DecryptionFailureTracker @Inject constructor(
     }
 
     fun start() {
-        tickerFlow(scope, 5_000)
+        tickerFlow(scope, CHECK_INTERVAL)
                 .onEach {
                     checkFailures()
                 }.launchIn(scope)
@@ -67,12 +71,13 @@ class DecryptionFailureTracker @Inject constructor(
         scope.cancel()
     }
 
-    fun e2eEventDisplayedInTimeline(roomId: String, eventId: String, error: MXCryptoError.ErrorType?) {
+    fun e2eEventDisplayedInTimeline(event: TimelineEvent) {
         scope.launch(Dispatchers.Default) {
-            if (error != null) {
-                addDecryptionFailure(DecryptionFailure(roomId = roomId, failedEventId = eventId, error = error))
+            val mCryptoError = event.root.mCryptoError
+            if (mCryptoError != null) {
+                addDecryptionFailure(DecryptionFailure(clock.epochMillis(), event.roomId, event.eventId, mCryptoError))
             } else {
-                removeFailureForEventId(eventId)
+                removeFailureForEventId(event.eventId)
             }
         }
     }
@@ -92,7 +97,7 @@ class DecryptionFailureTracker @Inject constructor(
     private fun addDecryptionFailure(failure: DecryptionFailure) {
         // de duplicate
         synchronized(failures) {
-            if (failures.indexOfFirst { it.failedEventId == failure.failedEventId } == -1) {
+            if (failures.none { it.failedEventId == failure.failedEventId }) {
                 failures.add(failure)
             }
         }
@@ -105,7 +110,7 @@ class DecryptionFailureTracker @Inject constructor(
     }
 
     private fun checkFailures() {
-        val now = System.currentTimeMillis()
+        val now = clock.epochMillis()
         val aggregatedErrors: Map<Error.Name, List<String>>
         synchronized(failures) {
             val toReport = mutableListOf<DecryptionFailure>()

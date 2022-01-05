@@ -126,7 +126,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                     }
                 }.also {
                     if (it != null && event.isEncrypted()) {
-                        decryptionFailureTracker.e2eEventDisplayedInTimeline(event.roomId, event.eventId, event.root.mCryptoError)
+                        decryptionFailureTracker.e2eEventDisplayedInTimeline(event)
                     }
                 }
             }
