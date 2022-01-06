@@ -457,7 +457,7 @@ interface MavericksViewModelModule {
     @Binds
     @IntoMap
     @MavericksViewModelKey(OnboardingViewModel::class)
-    fun ftueViewModelFactory(factory: OnboardingViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+    fun onboardingViewModelFactory(factory: OnboardingViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap
