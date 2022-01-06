@@ -35,6 +35,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureTrailingSlash
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.login.HomeServerConnectionConfigFactory
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
@@ -71,7 +72,8 @@ class OnboardingViewModel @AssistedInject constructor(
         private val homeServerConnectionConfigFactory: HomeServerConnectionConfigFactory,
         private val reAuthHelper: ReAuthHelper,
         private val stringProvider: StringProvider,
-        private val homeServerHistoryService: HomeServerHistoryService
+        private val homeServerHistoryService: HomeServerHistoryService,
+        private val vectorFeatures: VectorFeatures
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
     @AssistedFactory
@@ -154,13 +156,22 @@ class OnboardingViewModel @AssistedInject constructor(
             if (homeServerConnectionConfig == null) {
                 // Url is invalid, in this case, just use the regular flow
                 Timber.w("Url from config url was invalid: $configUrl")
-                _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
+                continueToPageAfterSplash()
             } else {
                 getLoginFlow(homeServerConnectionConfig, ServerType.Other)
             }
         } else {
-            _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
+            continueToPageAfterSplash()
         }
+    }
+
+    private fun continueToPageAfterSplash() {
+        val nextOnboardingStep = if (vectorFeatures.isOnboardingUseCaseEnabled()) {
+            OnboardingViewEvents.OpenUseCaseSelection
+        } else {
+            OnboardingViewEvents.OpenServerSelection
+        }
+        _viewEvents.post(nextOnboardingStep)
     }
 
     private fun handleUserAcceptCertificate(action: OnboardingAction.UserAcceptCertificate) {

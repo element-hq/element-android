@@ -15,6 +15,7 @@
  */
 
 package im.vector.app.features.onboarding.ftueauth
+
 import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
@@ -109,7 +110,7 @@ class FtueAuthVariant(
     }
 
     private fun addFirstFragment() {
-        val splashFragment = when (vectorFeatures.isSplashCarouselEnabled()) {
+        val splashFragment = when (vectorFeatures.isOnboardingSplashCarouselEnabled()) {
             true -> FtueAuthSplashCarouselFragment::class.java
             else -> FtueAuthSplashFragment::class.java
         }
@@ -208,6 +209,9 @@ class FtueAuthVariant(
             is OnboardingViewEvents.Loading                                    ->
                 // This is handled by the Fragments
                 Unit
+            OnboardingViewEvents.OpenUseCaseSelection                          -> {
+                TODO()
+            }
         }.exhaustive
     }
 
