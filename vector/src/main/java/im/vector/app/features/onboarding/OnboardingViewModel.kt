@@ -121,7 +121,8 @@ class OnboardingViewModel @AssistedInject constructor(
 
     override fun handle(action: OnboardingAction) {
         when (action) {
-            is OnboardingAction.OnGetStarted               -> handleOnGetStarted(action)
+            is OnboardingAction.OnGetStarted               -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
+            is OnboardingAction.OnIAlreadyHaveAnAccount    -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
             is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
             is OnboardingAction.UpdateSignMode             -> handleUpdateSignMode(action)
             is OnboardingAction.InitWith                   -> handleInitWith(action)
@@ -140,10 +141,11 @@ class OnboardingViewModel @AssistedInject constructor(
         }.exhaustive
     }
 
-    private fun handleOnGetStarted(action: OnboardingAction.OnGetStarted) {
-        if (action.resetLoginConfig) {
+    private fun handleSplashAction(resetConfig: Boolean, onboardingFlow: OnboardingFlow) {
+        if (resetConfig) {
             loginConfig = null
         }
+        setState { copy(onboardingFlow = onboardingFlow) }
 
         val configUrl = loginConfig?.homeServerUrl?.takeIf { it.isNotEmpty() }
         if (configUrl != null) {
@@ -822,7 +824,17 @@ class OnboardingViewModel @AssistedInject constructor(
                 // Notify the UI
                 _viewEvents.post(OnboardingViewEvents.OutdatedHomeserver)
             }
-            _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
+
+            withState {
+                when (it.onboardingFlow) {
+                    OnboardingFlow.SignIn -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignIn))
+                    OnboardingFlow.SignUp -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignUp))
+                    OnboardingFlow.SignInSignUp,
+                    null                  -> {
+                        _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
+                    }
+                }
+            }
         }
     }
 

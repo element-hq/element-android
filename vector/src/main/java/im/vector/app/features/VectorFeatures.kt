@@ -22,6 +22,8 @@ interface VectorFeatures {
 
     fun onboardingVariant(): OnboardingVariant
 
+    fun isAlreadyHaveAccountSplashEnabled(): Boolean
+
     enum class OnboardingVariant {
         LEGACY,
         LOGIN_2,
@@ -36,4 +38,5 @@ interface VectorFeatures {
 
 class DefaultVectorFeatures : VectorFeatures {
     override fun onboardingVariant(): VectorFeatures.OnboardingVariant = BuildConfig.ONBOARDING_VARIANT
+    override fun isAlreadyHaveAccountSplashEnabled() = true
 }

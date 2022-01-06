@@ -33,6 +33,9 @@ data class OnboardingViewState(
         val asyncResetMailConfirmed: Async<Unit> = Uninitialized,
         val asyncRegistration: Async<Unit> = Uninitialized,
 
+        @PersistState
+        val onboardingFlow: OnboardingFlow? = null,
+
         // User choices
         @PersistState
         val serverType: ServerType = ServerType.Unknown,
@@ -73,4 +76,10 @@ data class OnboardingViewState(
     fun isUserLogged(): Boolean {
         return asyncLoginAction is Success
     }
+}
+
+enum class OnboardingFlow {
+    SignIn,
+    SignUp,
+    SignInSignUp
 }

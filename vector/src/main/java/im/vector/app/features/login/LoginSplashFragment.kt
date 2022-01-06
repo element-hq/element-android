@@ -57,6 +57,7 @@ class LoginSplashFragment @Inject constructor(
             views.loginSplashVersion.text = "Version : ${BuildConfig.VERSION_NAME}\n" +
                     "Branch: ${BuildConfig.GIT_BRANCH_NAME}\n" +
                     "Build: ${BuildConfig.BUILD_NUMBER}"
+            views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
         }
     }
 

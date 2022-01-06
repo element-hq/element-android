@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.onboarding
+package im.vector.app.features.onboarding.ftueauth
 
 import android.content.Intent
 import android.view.View
@@ -42,21 +42,12 @@ import im.vector.app.features.login.SignMode
 import im.vector.app.features.login.TextInputFormFragmentMode
 import im.vector.app.features.login.isSupported
 import im.vector.app.features.login.terms.toLocalizedLoginTerms
-import im.vector.app.features.onboarding.ftueauth.FtueAuthCaptchaFragment
-import im.vector.app.features.onboarding.ftueauth.FtueAuthCaptchaFragmentArgument
-import im.vector.app.features.onboarding.ftueauth.FtueAuthGenericTextInputFormFragment
-import im.vector.app.features.onboarding.ftueauth.FtueAuthGenericTextInputFormFragmentArgument
-import im.vector.app.features.onboarding.ftueauth.FtueAuthLoginFragment
-import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordFragment
-import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordMailConfirmationFragment
-import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordSuccessFragment
-import im.vector.app.features.onboarding.ftueauth.FtueAuthServerSelectionFragment
-import im.vector.app.features.onboarding.ftueauth.FtueAuthServerUrlFormFragment
-import im.vector.app.features.onboarding.ftueauth.FtueAuthSignUpSignInSelectionFragment
-import im.vector.app.features.onboarding.ftueauth.FtueAuthSplashFragment
-import im.vector.app.features.onboarding.ftueauth.FtueAuthWaitForEmailFragment
-import im.vector.app.features.onboarding.ftueauth.FtueAuthWaitForEmailFragmentArgument
-import im.vector.app.features.onboarding.ftueauth.FtueAuthWebFragment
+import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.onboarding.OnboardingActivity
+import im.vector.app.features.onboarding.OnboardingVariant
+import im.vector.app.features.onboarding.OnboardingViewEvents
+import im.vector.app.features.onboarding.OnboardingViewModel
+import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragment
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragmentArgument
 import org.matrix.android.sdk.api.auth.registration.FlowResult
@@ -66,7 +57,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 private const val FRAGMENT_REGISTRATION_STAGE_TAG = "FRAGMENT_REGISTRATION_STAGE_TAG"
 private const val FRAGMENT_LOGIN_TAG = "FRAGMENT_LOGIN_TAG"
 
-class OnboardingAuthVariant(
+class FtueAuthVariant(
         private val views: ActivityLoginBinding,
         private val onboardingViewModel: OnboardingViewModel,
         private val activity: VectorBaseActivity<ActivityLoginBinding>,
@@ -120,17 +111,17 @@ class OnboardingAuthVariant(
         activity.addFragment(views.loginFragmentContainer, FtueAuthSplashFragment::class.java)
     }
 
-    private fun handleOnboardingViewEvents(onboardingViewEvents: OnboardingViewEvents) {
-        when (onboardingViewEvents) {
+    private fun handleOnboardingViewEvents(viewEvents: OnboardingViewEvents) {
+        when (viewEvents) {
             is OnboardingViewEvents.RegistrationFlowResult                     -> {
                 // Check that all flows are supported by the application
-                if (onboardingViewEvents.flowResult.missingStages.any { !it.isSupported() }) {
+                if (viewEvents.flowResult.missingStages.any { !it.isSupported() }) {
                     // Display a popup to propose use web fallback
                     onRegistrationStageNotSupported()
                 } else {
-                    if (onboardingViewEvents.isRegistrationStarted) {
+                    if (viewEvents.isRegistrationStarted) {
                         // Go on with registration flow
-                        handleRegistrationNavigation(onboardingViewEvents.flowResult)
+                        handleRegistrationNavigation(viewEvents.flowResult)
                     } else {
                         // First ask for login and password
                         // I add a tag to indicate that this fragment is a registration stage.
@@ -163,13 +154,13 @@ class OnboardingAuthVariant(
                             // TODO Disabled because it provokes a flickering
                             // ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
                         })
-            is OnboardingViewEvents.OnServerSelectionDone                      -> onServerSelectionDone(onboardingViewEvents)
-            is OnboardingViewEvents.OnSignModeSelected                         -> onSignModeSelected(onboardingViewEvents)
+            is OnboardingViewEvents.OnServerSelectionDone                      -> onServerSelectionDone(viewEvents)
+            is OnboardingViewEvents.OnSignModeSelected                         -> onSignModeSelected(viewEvents)
             is OnboardingViewEvents.OnLoginFlowRetrieved                       ->
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
                         FtueAuthSignUpSignInSelectionFragment::class.java,
                         option = commonOption)
-            is OnboardingViewEvents.OnWebLoginError                            -> onWebLoginError(onboardingViewEvents)
+            is OnboardingViewEvents.OnWebLoginError                            -> onWebLoginError(viewEvents)
             is OnboardingViewEvents.OnForgetPasswordClicked                    ->
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
                         FtueAuthResetPasswordFragment::class.java,
@@ -195,7 +186,7 @@ class OnboardingAuthVariant(
                 supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
                         FtueAuthWaitForEmailFragment::class.java,
-                        FtueAuthWaitForEmailFragmentArgument(onboardingViewEvents.email),
+                        FtueAuthWaitForEmailFragmentArgument(viewEvents.email),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
             }
@@ -204,7 +195,7 @@ class OnboardingAuthVariant(
                 supportFragmentManager.popBackStack(FRAGMENT_REGISTRATION_STAGE_TAG, FragmentManager.POP_BACK_STACK_INCLUSIVE)
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
                         FtueAuthGenericTextInputFormFragment::class.java,
-                        FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, onboardingViewEvents.msisdn),
+                        FtueAuthGenericTextInputFormFragmentArgument(TextInputFormFragmentMode.ConfirmMsisdn, true, viewEvents.msisdn),
                         tag = FRAGMENT_REGISTRATION_STAGE_TAG,
                         option = commonOption)
             }
@@ -215,11 +206,11 @@ class OnboardingAuthVariant(
         }.exhaustive
     }
 
-    private fun updateWithState(onboardingViewState: OnboardingViewState) {
-        if (onboardingViewState.isUserLogged()) {
+    private fun updateWithState(viewState: OnboardingViewState) {
+        if (viewState.isUserLogged()) {
             val intent = HomeActivity.newIntent(
                     activity,
-                    accountCreation = onboardingViewState.signMode == SignMode.SignUp
+                    accountCreation = viewState.signMode == SignMode.SignUp
             )
             activity.startActivity(intent)
             activity.finish()
@@ -227,7 +218,7 @@ class OnboardingAuthVariant(
         }
 
         // Loading
-        views.loginLoading.isVisible = onboardingViewState.isLoading()
+        views.loginLoading.isVisible = viewState.isLoading()
     }
 
     private fun onWebLoginError(onWebLoginError: OnboardingViewEvents.OnWebLoginError) {

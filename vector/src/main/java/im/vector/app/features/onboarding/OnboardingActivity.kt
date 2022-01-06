@@ -34,7 +34,7 @@ import javax.inject.Inject
 class OnboardingActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarConfigurable, UnlockedActivity {
 
     private val onboardingVariant by lifecycleAwareLazy {
-        onboardingVariantFactory.create(this, onboardingViewModel = lazyViewModel(), loginViewModel2 = lazyViewModel())
+        onboardingVariantFactory.create(this, views = views, onboardingViewModel = lazyViewModel(), loginViewModel2 = lazyViewModel())
     }
 
     @Inject lateinit var onboardingVariantFactory: OnboardingVariantFactory

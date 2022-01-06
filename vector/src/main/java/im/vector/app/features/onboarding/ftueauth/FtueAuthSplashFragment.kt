@@ -22,12 +22,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.BuildConfig
 import im.vector.app.R
-import im.vector.app.databinding.FragmentLoginSplashBinding
-import im.vector.app.features.login.AbstractLoginFragment
-import im.vector.app.features.login.LoginAction
+import im.vector.app.databinding.FragmentFtueAuthSplashBinding
+import im.vector.app.features.VectorFeatures
+import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.onboarding.OnboardingFlow
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.failure.Failure
 import java.net.UnknownHostException
@@ -37,21 +39,25 @@ import javax.inject.Inject
  * In this screen, the user is viewing an introduction to what he can do with this application
  */
 class FtueAuthSplashFragment @Inject constructor(
-        private val vectorPreferences: VectorPreferences
-) : AbstractLoginFragment<FragmentLoginSplashBinding>() {
+        private val vectorPreferences: VectorPreferences,
+        private val vectorFeatures: VectorFeatures
+) : AbstractFtueAuthFragment<FragmentFtueAuthSplashBinding>() {
 
-    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginSplashBinding {
-        return FragmentLoginSplashBinding.inflate(inflater, container, false)
+    override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueAuthSplashBinding {
+        return FragmentFtueAuthSplashBinding.inflate(inflater, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupViews()
     }
 
     private fun setupViews() {
         views.loginSplashSubmit.debouncedClicks { getStarted() }
+        views.loginSplashAlreadyHaveAccount.apply {
+            isVisible = vectorFeatures.isAlreadyHaveAccountSplashEnabled()
+            debouncedClicks { alreadyHaveAnAccount() }
+        }
 
         if (BuildConfig.DEBUG || vectorPreferences.developerMode()) {
             views.loginSplashVersion.isVisible = true
@@ -59,11 +65,17 @@ class FtueAuthSplashFragment @Inject constructor(
             views.loginSplashVersion.text = "Version : ${BuildConfig.VERSION_NAME}\n" +
                     "Branch: ${BuildConfig.GIT_BRANCH_NAME}\n" +
                     "Build: ${BuildConfig.BUILD_NUMBER}"
+            views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
         }
     }
 
     private fun getStarted() {
-        loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = false))
+        val getStartedFlow = if (vectorFeatures.isAlreadyHaveAccountSplashEnabled()) OnboardingFlow.SignUp else OnboardingFlow.SignInSignUp
+        viewModel.handle(OnboardingAction.OnGetStarted(resetLoginConfig = false, onboardingFlow = getStartedFlow))
+    }
+
+    private fun alreadyHaveAnAccount() {
+        viewModel.handle(OnboardingAction.OnIAlreadyHaveAnAccount(resetLoginConfig = false, onboardingFlow = OnboardingFlow.SignIn))
     }
 
     override fun resetViewModel() {
@@ -74,12 +86,13 @@ class FtueAuthSplashFragment @Inject constructor(
         if (throwable is Failure.NetworkConnection &&
                 throwable.ioException is UnknownHostException) {
             // Invalid homeserver from URL config
-            val url = loginViewModel.getInitialHomeServerUrl().orEmpty()
+            val url = viewModel.getInitialHomeServerUrl().orEmpty()
             MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.dialog_title_error)
                     .setMessage(getString(R.string.login_error_homeserver_from_url_not_found, url))
                     .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ ->
-                        loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = true))
+                        val flow = withState(viewModel) { it.onboardingFlow } ?: OnboardingFlow.SignInSignUp
+                        viewModel.handle(OnboardingAction.OnGetStarted(resetLoginConfig = true, flow))
                     }
                     .setNegativeButton(R.string.action_cancel, null)
                     .show()
