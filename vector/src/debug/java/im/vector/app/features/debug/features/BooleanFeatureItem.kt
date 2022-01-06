@@ -42,14 +42,14 @@ abstract class BooleanFeatureItem : VectorEpoxyModel<BooleanFeatureItem.Holder>(
         holder.optionsSpinner.apply {
             val arrayAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item)
             val options = listOf(
-                    "DEFAULT - ${feature.default.toEmoji()}",
+                    "DEFAULT - ${feature.featureDefault.toEmoji()}",
                     "✅",
                     "❌"
             )
             arrayAdapter.addAll(options)
             adapter = arrayAdapter
 
-            feature.override?.let {
+            feature.featureOverride?.let {
                 setSelection(options.indexOf(it.toEmoji()), false)
             }
 

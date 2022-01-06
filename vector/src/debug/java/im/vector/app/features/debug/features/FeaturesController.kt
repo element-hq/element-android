@@ -37,8 +37,8 @@ sealed interface Feature {
 
     data class BooleanFeature(
             val label: String,
-            val override: Boolean?,
-            val default: Boolean,
+            val featureOverride: Boolean?,
+            val featureDefault: Boolean,
             val key: Preferences.Key<Boolean>
     ) : Feature
 }
