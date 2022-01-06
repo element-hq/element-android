@@ -57,8 +57,11 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
     fun create(params: TimelineItemFactoryParams): MessageInformationData {
         val event = params.event
         val nextDisplayableEvent = params.nextDisplayableEvent
+        val prevEvent = params.prevEvent
         val eventId = event.eventId
         val isSentByMe = event.root.senderId == session.myUserId
+        val isFirstFromThisSender = nextDisplayableEvent?.root?.senderId != event.root.senderId
+        val isLastFromThisSender = prevEvent?.root?.senderId != event.root.senderId
         val roomSummary = params.partialState.roomSummary
 
         val date = event.root.localDateTime()
@@ -128,6 +131,8 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                     ReferencesInfoData(verificationState)
                 },
                 sentByMe = isSentByMe,
+                isFirstFromThisSender = isFirstFromThisSender,
+                isLastFromThisSender = isLastFromThisSender,
                 e2eDecoration = e2eDecoration,
                 sendStateDecoration = sendStateDecoration
         )

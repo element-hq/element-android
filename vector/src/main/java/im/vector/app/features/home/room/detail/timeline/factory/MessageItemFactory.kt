@@ -389,6 +389,13 @@ class MessageItemFactory @Inject constructor(
                 allowNonMxcUrls = informationData.sendState.isSending()
         )
         return MessageImageVideoItem_()
+                .layout(
+                        if (informationData.sentByMe) {
+                            R.layout.item_timeline_event_bubble_outgoing_base
+                        } else {
+                            R.layout.item_timeline_event_bubble_incoming_base
+                        }
+                )
                 .attributes(attributes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .imageContentRenderer(imageContentRenderer)

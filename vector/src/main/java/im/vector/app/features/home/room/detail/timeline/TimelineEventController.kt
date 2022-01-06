@@ -355,12 +355,12 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         (0 until modelCache.size).forEach { position ->
             val event = currentSnapshot[position]
             val nextEvent = currentSnapshot.nextOrNull(position)
-            val prevEvent = currentSnapshot.prevOrNull(position)
-            val nextDisplayableEvent = currentSnapshot.subList(position + 1, currentSnapshot.size).firstOrNull {
-                timelineEventVisibilityHelper.shouldShowEvent(it, partialState.highlightedEventId)
-            }
             // Should be build if not cached or if model should be refreshed
             if (modelCache[position] == null || modelCache[position]?.isCacheable(partialState) == false) {
+                val prevEvent = currentSnapshot.prevOrNull(position)
+                val nextDisplayableEvent = currentSnapshot.subList(position + 1, currentSnapshot.size).firstOrNull {
+                    timelineEventVisibilityHelper.shouldShowEvent(it, partialState.highlightedEventId)
+                }
                 val timelineEventsGroup = timelineEventsGroups.getOrNull(event)
                 val params = TimelineItemFactoryParams(
                         event = event,

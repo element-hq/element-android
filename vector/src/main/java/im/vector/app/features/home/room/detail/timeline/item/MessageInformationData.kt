@@ -42,7 +42,9 @@ data class MessageInformationData(
         val referencesInfoData: ReferencesInfoData? = null,
         val sentByMe: Boolean,
         val e2eDecoration: E2EDecoration = E2EDecoration.NONE,
-        val sendStateDecoration: SendStateDecoration = SendStateDecoration.NONE
+        val sendStateDecoration: SendStateDecoration = SendStateDecoration.NONE,
+        val isFirstFromThisSender: Boolean = false,
+        val isLastFromThisSender: Boolean = false
 ) : Parcelable {
 
     val matrixItem: MatrixItem

@@ -20,9 +20,10 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import android.widget.RelativeLayout
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
 import androidx.core.view.updateLayoutParams
@@ -33,34 +34,61 @@ import im.vector.app.R
 import im.vector.app.core.utils.DimensionConverter
 
 class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
-                                                  defStyleAttr: Int = 0) : RelativeLayout(context, attrs, defStyleAttr) {
+                                                  defStyleAttr: Int = 0)
+    : RelativeLayout(context, attrs, defStyleAttr), MessageViewConfiguration {
 
-    var incoming: Boolean = false
-    var isFirst: Boolean = false
-    var isLast: Boolean = false
-    var cornerRadius = DimensionConverter(resources).dpToPx(12).toFloat()
+    override var isIncoming: Boolean = false
+        set(value) {
+            field = value
+            render()
+        }
+
+    override var isFirstFromSender: Boolean = false
+        set(value) {
+            field = value
+            render()
+        }
+    override var isLastFromSender: Boolean = false
+        set(value) {
+            field = value
+            render()
+        }
+
+    override var displayBorder: Boolean = true
+        set(value) {
+            field = value
+            render()
+        }
+
+    private val cornerRadius = DimensionConverter(resources).dpToPx(12).toFloat()
 
     init {
         inflate(context, R.layout.view_message_bubble, this)
         context.withStyledAttributes(attrs, R.styleable.MessageBubble) {
-            incoming = getBoolean(R.styleable.MessageBubble_incoming_style, false)
-            isFirst = getBoolean(R.styleable.MessageBubble_is_first, false)
-            isLast = getBoolean(R.styleable.MessageBubble_is_last, false)
+            isIncoming = getBoolean(R.styleable.MessageBubble_incoming_style, false)
+            displayBorder = getBoolean(R.styleable.MessageBubble_show_background, true)
+            isFirstFromSender = getBoolean(R.styleable.MessageBubble_is_first, false)
+            isLastFromSender = getBoolean(R.styleable.MessageBubble_is_last, false)
         }
     }
 
     override fun onFinishInflate() {
         super.onFinishInflate()
+        render()
+    }
+
+    private fun render() {
         val currentLayoutDirection = layoutDirection
-        findViewById<ViewGroup>(R.id.bubbleView).apply {
+        val bubbleView: ConstraintLayout = findViewById(R.id.bubbleView)
+        bubbleView.apply {
             background = createBackgroundDrawable()
             outlineProvider = ViewOutlineProvider.BACKGROUND
             clipToOutline = true
         }
-        if (incoming) {
+        if (isIncoming) {
             findViewById<View>(R.id.informationBottom).layoutDirection = currentLayoutDirection
             findViewById<View>(R.id.bubbleWrapper).layoutDirection = currentLayoutDirection
-            findViewById<View>(R.id.bubbleView).layoutDirection = currentLayoutDirection
+            bubbleView.layoutDirection = currentLayoutDirection
             findViewById<View>(R.id.messageEndGuideline).updateLayoutParams<LayoutParams> {
                 marginEnd = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_end)
             }
@@ -73,21 +101,37 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
 
             findViewById<View>(R.id.informationBottom).layoutDirection = oppositeLayoutDirection
             findViewById<View>(R.id.bubbleWrapper).layoutDirection = oppositeLayoutDirection
-            findViewById<View>(R.id.bubbleView).layoutDirection = currentLayoutDirection
+            bubbleView.layoutDirection = currentLayoutDirection
             findViewById<View>(R.id.messageEndGuideline).updateLayoutParams<LayoutParams> {
                 marginEnd = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_start)
             }
         }
+        ConstraintSet().apply {
+            clone(bubbleView)
+            clear(R.id.viewStubContainer, ConstraintSet.END)
+            if (displayBorder) {
+                connect(R.id.viewStubContainer, ConstraintSet.END, R.id.messageTimeView, ConstraintSet.START, 0)
+            } else {
+                connect(R.id.viewStubContainer, ConstraintSet.END, R.id.parent, ConstraintSet.END, 0)
+            }
+            applyTo(bubbleView)
+        }
     }
 
     private fun createBackgroundDrawable(): Drawable {
-        val topCornerFamily = if (isFirst) CornerFamily.ROUNDED else CornerFamily.CUT
-        val bottomCornerFamily = if (isLast) CornerFamily.ROUNDED else CornerFamily.CUT
-        val topRadius = if (isFirst) cornerRadius else 0f
-        val bottomRadius = if (isLast) cornerRadius else 0f
+        val (topCornerFamily, topRadius) = if (isFirstFromSender) {
+            Pair(CornerFamily.ROUNDED, cornerRadius)
+        } else {
+            Pair(CornerFamily.CUT, 0f)
+        }
+        val (bottomCornerFamily, bottomRadius) = if (isLastFromSender) {
+            Pair(CornerFamily.ROUNDED, cornerRadius)
+        } else {
+            Pair(CornerFamily.CUT, 0f)
+        }
         val shapeAppearanceModelBuilder = ShapeAppearanceModel().toBuilder()
         val backgroundColor: Int
-        if (incoming) {
+        if (isIncoming) {
             backgroundColor = R.color.bubble_background_incoming
             shapeAppearanceModelBuilder
                     .setTopRightCorner(CornerFamily.ROUNDED, cornerRadius)
@@ -104,7 +148,11 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
         }
         val shapeAppearanceModel = shapeAppearanceModelBuilder.build()
         val shapeDrawable = MaterialShapeDrawable(shapeAppearanceModel)
-        shapeDrawable.fillColor = ContextCompat.getColorStateList(context, backgroundColor)
+        if (displayBorder) {
+            shapeDrawable.fillColor = ContextCompat.getColorStateList(context, backgroundColor)
+        } else {
+            shapeDrawable.fillColor = ContextCompat.getColorStateList(context, android.R.color.transparent)
+        }
         return shapeDrawable
     }
 }
