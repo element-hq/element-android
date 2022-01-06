@@ -185,7 +185,7 @@ class AutoRageShaker @Inject constructor(
                                                 "device_id" to target.senderDeviceId,
                                                 "user_id" to target.senderUserId,
                                                 "sender_key" to target.senderKey,
-                                                "matching_issue" to reportUrl
+                                                "recipient_rageshake" to reportUrl
                                         ).toContent()
                                 )
                             } catch (failure: Throwable) {
@@ -212,7 +212,7 @@ class AutoRageShaker @Inject constructor(
         val deviceId = event.content?.get("device_id")
         val userId = event.content?.get("user_id")
         val senderKey = event.content?.get("sender_key")
-        val matchingIssue = event.content?.get("matching_issue")?.toString() ?: ""
+        val matchingIssue = event.content?.get("recipient_rageshake")?.toString() ?: ""
 
         bugReporter.sendBugReport(
                 context = context,
@@ -233,7 +233,7 @@ class AutoRageShaker @Inject constructor(
                             append("\nuserId: $userId")
                             append("\nsessionId: $sessionId")
                         },
-                        "matching_issue" to matchingIssue
+                        "recipient_rageshake" to matchingIssue
                 ),
                 listener = null
         )

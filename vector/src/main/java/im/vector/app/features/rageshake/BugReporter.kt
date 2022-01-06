@@ -340,13 +340,9 @@ class BugReporter @Inject constructor(
                         }
                         ReportType.SUGGESTION          -> builder.addFormDataPart("label", "[Suggestion]")
                         ReportType.SPACE_BETA_FEEDBACK -> builder.addFormDataPart("label", "spaces-feedback")
-                        ReportType.AUTO_UISI           -> {
-                            builder.addFormDataPart("label", "auto-uisis-receiver")
-                            builder.addFormDataPart("label", "auto-uisis")
-                        }
+                        ReportType.AUTO_UISI,
                         ReportType.AUTO_UISI_SENDER    -> {
-                            builder.addFormDataPart("label", "auto-uisis-sender")
-                            builder.addFormDataPart("label", "auto-uisis")
+                            builder.addFormDataPart("label", "Z-UISI")
                         }
                     }
 
