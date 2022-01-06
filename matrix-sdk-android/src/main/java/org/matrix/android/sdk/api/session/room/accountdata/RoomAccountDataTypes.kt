@@ -21,4 +21,5 @@ object RoomAccountDataTypes {
     const val EVENT_TYPE_TAG = "m.tag"
     const val EVENT_TYPE_FULLY_READ = "m.fully_read"
     const val EVENT_TYPE_SPACE_ORDER = "org.matrix.msc3230.space_order" // m.space_order
+    const val EVENT_TYPE_TAGGED_EVENTS = "m.tagged_events"
 }
