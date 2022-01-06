@@ -66,6 +66,7 @@ data class TaggedEventsContent(
     }
 }
 
+@JsonClass(generateAdapter = true)
 data class TaggedEventInfo(
         @Json(name = "keywords")
         val keywords: List<String>? = null,
