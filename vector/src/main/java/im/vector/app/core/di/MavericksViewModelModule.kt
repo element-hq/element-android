@@ -58,6 +58,7 @@ import im.vector.app.features.login.LoginViewModel
 import im.vector.app.features.login2.LoginViewModel2
 import im.vector.app.features.login2.created.AccountCreatedViewModel
 import im.vector.app.features.matrixto.MatrixToBottomSheetViewModel
+import im.vector.app.features.onboarding.OnboardingViewModel
 import im.vector.app.features.poll.create.CreatePollViewModel
 import im.vector.app.features.rageshake.BugReportViewModel
 import im.vector.app.features.reactions.EmojiSearchResultViewModel
@@ -452,6 +453,11 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(AccountCreatedViewModel::class)
     fun accountCreatedViewModelFactory(factory: AccountCreatedViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(OnboardingViewModel::class)
+    fun ftueViewModelFactory(factory: OnboardingViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap

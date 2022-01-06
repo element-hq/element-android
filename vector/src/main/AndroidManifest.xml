@@ -137,7 +137,7 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name=".features.ftue.FTUEActivity"
+            android:name=".features.onboarding.OnboardingActivity"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize" />
 

@@ -27,9 +27,9 @@ class DebugFeaturesStateFactory @Inject constructor(
     fun create(): FeaturesState {
         return FeaturesState(listOf(
                 createEnumFeature(
-                        label = "Login version",
-                        selection = debugFeatures.loginVariant(),
-                        default = defaultFeatures.loginVariant()
+                        label = "Onboarding variant",
+                        selection = debugFeatures.onboardingVariant(),
+                        default = defaultFeatures.onboardingVariant()
                 )
         ))
     }
