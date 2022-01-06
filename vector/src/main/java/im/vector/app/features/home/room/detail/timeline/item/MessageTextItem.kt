@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
+import android.text.Spanned
 import android.text.method.MovementMethod
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
@@ -90,6 +91,9 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
                 // mmm.. not sure this is so safe in regards to cell reuse
                 it.bind(holder.messageView)
             }
+        }
+        message?.charSequence.let { charSequence ->
+            markwonPlugins?.forEach { plugin -> plugin.beforeSetText(holder.messageView, charSequence as Spanned) }
         }
         super.bind(holder)
         holder.messageView.movementMethod = movementMethod
