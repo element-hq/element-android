@@ -95,6 +95,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          cores: 1
           arch: x86
           profile: Nexus 5X
           force-avd-creation: false
@@ -113,6 +114,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          cores: 1
           arch: x86
           profile: Nexus 5X
           force-avd-creation: false
@@ -131,6 +133,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          cores: 1
           arch: x86
           profile: Nexus 5X
           force-avd-creation: false
@@ -149,6 +152,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          cores: 1
           arch: x86
           profile: Nexus 5X
           force-avd-creation: false
@@ -167,6 +171,7 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          cores: 1
           arch: x86
           profile: Nexus 5X
           force-avd-creation: false
