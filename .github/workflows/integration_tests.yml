@@ -98,7 +98,7 @@ jobs:
           cores: 1
           arch: x86
           profile: Nexus 5X
-          force-avd-creation: false
+          force-avd-creation: true
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822
           script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.session' matrix-sdk-android:connectedDebugAndroidTest
@@ -117,7 +117,7 @@ jobs:
           cores: 1
           arch: x86
           profile: Nexus 5X
-          force-avd-creation: false
+          force-avd-creation: true
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822
           script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.account' matrix-sdk-android:connectedDebugAndroidTest
@@ -136,7 +136,7 @@ jobs:
           cores: 1
           arch: x86
           profile: Nexus 5X
-          force-avd-creation: false
+          force-avd-creation: true
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822
           script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.internal' matrix-sdk-android:connectedDebugAndroidTest
@@ -155,7 +155,7 @@ jobs:
           cores: 1
           arch: x86
           profile: Nexus 5X
-          force-avd-creation: false
+          force-avd-creation: true
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822
           script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.ordering' matrix-sdk-android:connectedDebugAndroidTest
@@ -174,7 +174,7 @@ jobs:
           cores: 1
           arch: x86
           profile: Nexus 5X
-          force-avd-creation: false
+          force-avd-creation: true
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822
           script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.class='org.matrix.android.sdk.PermalinkParserTest' matrix-sdk-android:connectedDebugAndroidTest
