@@ -210,7 +210,9 @@ class FtueAuthVariant(
                 // This is handled by the Fragments
                 Unit
             OnboardingViewEvents.OpenUseCaseSelection                          -> {
-                TODO()
+                activity.addFragmentToBackstack(views.loginFragmentContainer,
+                        FtueAuthUseCaseFragment::class.java,
+                        option = commonOption)
             }
         }.exhaustive
     }

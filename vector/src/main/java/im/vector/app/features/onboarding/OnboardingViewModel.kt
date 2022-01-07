@@ -125,6 +125,7 @@ class OnboardingViewModel @AssistedInject constructor(
         when (action) {
             is OnboardingAction.OnGetStarted               -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
             is OnboardingAction.OnIAlreadyHaveAnAccount    -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
+            is OnboardingAction.UpdateUseCase              -> handleUpdateUseCase(action)
             is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
             is OnboardingAction.UpdateSignMode             -> handleUpdateSignMode(action)
             is OnboardingAction.InitWith                   -> handleInitWith(action)
@@ -450,6 +451,12 @@ class OnboardingViewModel @AssistedInject constructor(
             SignMode.SignInWithMatrixId -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
             SignMode.Unknown            -> Unit
         }
+    }
+
+    private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
+        // TODO act on the use case selection
+        action.todo
+        _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
     }
 
     private fun handleUpdateServerType(action: OnboardingAction.UpdateServerType) {
