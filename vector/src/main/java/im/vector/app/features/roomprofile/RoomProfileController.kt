@@ -19,6 +19,7 @@ package im.vector.app.features.roomprofile
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.expandableTextItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
@@ -107,7 +108,7 @@ class RoomProfileController @Inject constructor(
                 data.recommendedRoomVersion != null) {
             genericFooterItem {
                 id("version_warning")
-                text(host.stringProvider.getString(R.string.room_using_unstable_room_version, roomVersion))
+                text(host.stringProvider.getString(R.string.room_using_unstable_room_version, roomVersion).toEpoxyCharSequence())
                 textColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
                 centered(false)
             }
@@ -158,7 +159,7 @@ class RoomProfileController @Inject constructor(
                             }
                         }
                         +e2eInfoText
-                    }
+                    }.toEpoxyCharSequence()
             )
         }
 

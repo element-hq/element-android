@@ -19,6 +19,7 @@ package im.vector.app.features.roommemberprofile
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.resources.StringProvider
@@ -150,7 +151,7 @@ class RoomMemberProfileController @Inject constructor(
 
                     genericFooterItem {
                         id("verify_footer")
-                        text(host.stringProvider.getString(R.string.room_profile_encrypted_subtitle))
+                        text(host.stringProvider.getString(R.string.room_profile_encrypted_subtitle).toEpoxyCharSequence())
                         centered(false)
                     }
                 }
@@ -171,7 +172,7 @@ class RoomMemberProfileController @Inject constructor(
 
             genericFooterItem {
                 id("verify_footer_not_encrypted")
-                text(host.stringProvider.getString(R.string.room_profile_not_encrypted_subtitle))
+                text(host.stringProvider.getString(R.string.room_profile_not_encrypted_subtitle).toEpoxyCharSequence())
                 centered(false)
             }
         }

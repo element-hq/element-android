@@ -54,7 +54,7 @@ class AccountDataEpoxyController @Inject constructor(
             is Fail    -> {
                 genericFooterItem {
                     id("fail")
-                    text(data.accountData.error.localizedMessage)
+                    text(data.accountData.error.localizedMessage.toEpoxyCharSequence())
                 }
             }
             is Success -> {
@@ -62,7 +62,7 @@ class AccountDataEpoxyController @Inject constructor(
                 if (dataList.isEmpty()) {
                     genericFooterItem {
                         id("noResults")
-                        text(host.stringProvider.getString(R.string.no_result_placeholder))
+                        text(host.stringProvider.getString(R.string.no_result_placeholder).toEpoxyCharSequence())
                     }
                 } else {
                     dataList.forEach { accountData ->

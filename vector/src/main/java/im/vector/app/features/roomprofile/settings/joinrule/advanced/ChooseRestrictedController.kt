@@ -22,6 +22,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.resources.StringProvider
@@ -76,7 +77,7 @@ class ChooseRestrictedController @Inject constructor(
         // when no filters
         genericFooterItem {
             id("h1")
-            text(host.stringProvider.getString(R.string.space_you_know_that_contains_this_room))
+            text(host.stringProvider.getString(R.string.space_you_know_that_contains_this_room).toEpoxyCharSequence())
             centered(false)
         }
 
@@ -93,7 +94,7 @@ class ChooseRestrictedController @Inject constructor(
         if (data.unknownRestricted.isNotEmpty()) {
             genericFooterItem {
                 id("others")
-                text(host.stringProvider.getString(R.string.other_spaces_or_rooms_you_might_not_know))
+                text(host.stringProvider.getString(R.string.other_spaces_or_rooms_you_might_not_know).toEpoxyCharSequence())
                 centered(false)
             }
 
