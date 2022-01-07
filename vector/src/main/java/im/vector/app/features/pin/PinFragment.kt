@@ -162,7 +162,7 @@ class PinFragment @Inject constructor(
                 .setPositiveButton(getString(R.string.auth_pin_new_pin_action)) { _, _ ->
                     launchResetPinFlow()
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 

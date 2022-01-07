@@ -42,4 +42,13 @@
 
     <!--  Preview Url  -->
     <dimen name="preview_url_view_corner_radius">8dp</dimen>
+
+    <!-- Composer -->
+    <dimen name="composer_min_height">56dp</dimen>
+    <dimen name="composer_attachment_size">52dp</dimen>
+    <dimen name="composer_attachment_margin">1dp</dimen>
+
+    <!--  Onboarding   -->
+    <item name="ftue_auth_gutter_start_percent" format="float" type="dimen">0.05</item>
+    <item name="ftue_auth_gutter_end_percent" format="float" type="dimen">0.95</item>
 </resources>

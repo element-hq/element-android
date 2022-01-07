@@ -168,11 +168,8 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         }
     }
 
-    private fun renderCreationSuccess(roomId: String?) {
-        // Navigate to freshly created room
-        if (roomId != null) {
-            navigator.openRoom(this, roomId)
-        }
+    private fun renderCreationSuccess(roomId: String) {
+        navigator.openRoom(this, roomId)
         finish()
     }
 

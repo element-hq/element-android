@@ -108,6 +108,7 @@ import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.core.utils.registerForPermissionsResult
+import im.vector.app.core.utils.safeStartActivity
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.core.utils.shareMedia
 import im.vector.app.core.utils.shareText
@@ -184,11 +185,13 @@ import im.vector.app.features.widgets.WidgetActivity
 import im.vector.app.features.widgets.WidgetArgs
 import im.vector.app.features.widgets.WidgetKind
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
@@ -395,7 +398,7 @@ class RoomDetailFragment @Inject constructor(
             when (mode) {
                 is SendMode.Regular -> renderRegularMode(mode.text)
                 is SendMode.Edit    -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_edit, R.string.edit, mode.text)
-                is SendMode.Quote   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.quote, mode.text)
+                is SendMode.Quote   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_quote, R.string.action_quote, mode.text)
                 is SendMode.Reply   -> renderSpecialMode(mode.timelineEvent, R.drawable.ic_reply, R.string.reply, mode.text)
                 is SendMode.Voice   -> renderVoiceMessageMode(mode.text)
             }
@@ -782,11 +785,7 @@ class RoomDetailFragment @Inject constructor(
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_ACTIVITY_NEW_TASK)
         }
 
-        if (intent.resolveActivity(requireActivity().packageManager) != null) {
-            requireActivity().startActivity(intent)
-        } else {
-            requireActivity().toast(R.string.error_no_external_application_found)
-        }
+        requireActivity().safeStartActivity(intent)
     }
 
     private fun installApk(action: RoomDetailViewEvents.OpenFile) {
@@ -1052,7 +1051,7 @@ class RoomDetailFragment @Inject constructor(
                 .setPositiveButton(R.string.settings) { _, _ ->
                     navigator.openSettings(requireActivity(), VectorSettingsActivity.EXTRA_DIRECT_ACCESS_GENERAL)
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 
@@ -1060,7 +1059,7 @@ class RoomDetailFragment @Inject constructor(
         autoCompleter.exitSpecialMode()
         views.composerLayout.collapse()
         views.composerLayout.setTextIfDifferent(content)
-        views.composerLayout.views.sendButton.contentDescription = getString(R.string.send)
+        views.composerLayout.views.sendButton.contentDescription = getString(R.string.action_send)
     }
 
     private fun renderSpecialMode(event: TimelineEvent,
@@ -1158,12 +1157,6 @@ class RoomDetailFragment @Inject constructor(
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
             attachmentsHelper.onFileResult(it.data)
-        }
-    }
-
-    private val attachmentAudioActivityResultLauncher = registerStartForActivityResult {
-        if (it.resultCode == Activity.RESULT_OK) {
-            attachmentsHelper.onAudioResult(it.data)
         }
     }
 
@@ -1307,27 +1300,28 @@ class RoomDetailFragment @Inject constructor(
 
     private fun updateJumpToReadMarkerViewVisibility() {
         viewLifecycleOwner.lifecycleScope.launchWhenResumed {
-            withState(roomDetailViewModel) {
-                val showJumpToUnreadBanner = when (it.unreadState) {
-                    UnreadState.Unknown,
-                    UnreadState.HasNoUnread            -> false
-                    is UnreadState.ReadMarkerNotLoaded -> true
-                    is UnreadState.HasUnread           -> {
-                        if (it.canShowJumpToReadMarker) {
-                            val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
-                            val positionOfReadMarker = timelineEventController.getPositionOfReadMarker()
-                            if (positionOfReadMarker == null) {
-                                false
-                            } else {
-                                positionOfReadMarker > lastVisibleItem
-                            }
-                        } else {
-                            false
+            val state = roomDetailViewModel.awaitState()
+            val showJumpToUnreadBanner = when (state.unreadState) {
+                UnreadState.Unknown,
+                UnreadState.HasNoUnread            -> false
+                is UnreadState.ReadMarkerNotLoaded -> true
+                is UnreadState.HasUnread           -> {
+                    if (state.canShowJumpToReadMarker) {
+                        val lastVisibleItem = layoutManager.findLastCompletelyVisibleItemPosition()
+                        val positionOfReadMarker = withContext(Dispatchers.Default) {
+                            timelineEventController.getPositionOfReadMarker()
                         }
+                        if (positionOfReadMarker == null) {
+                            false
+                        } else {
+                            positionOfReadMarker > lastVisibleItem
+                        }
+                    } else {
+                        false
                     }
                 }
-                views.jumpToReadMarkerView.isVisible = showJumpToUnreadBanner
             }
+            views.jumpToReadMarkerView.isVisible = showJumpToUnreadBanner
         }
     }
 
@@ -1367,7 +1361,7 @@ class RoomDetailFragment @Inject constructor(
                     attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@RoomDetailFragment)
                     attachmentTypeSelector.setAttachmentVisibility(AttachmentTypeSelectorView.Type.POLL, vectorPreferences.labsEnablePolls())
                 }
-                attachmentTypeSelector.show(views.composerLayout.views.attachmentButton, keyboardStateUtils.isKeyboardShowing)
+                attachmentTypeSelector.show(views.composerLayout.views.attachmentButton)
             }
 
             override fun onSendMessage(text: CharSequence) {
@@ -1571,7 +1565,7 @@ class RoomDetailFragment @Inject constructor(
                     val reason = views.dialogReportContentInput.text.toString()
                     roomDetailViewModel.handle(RoomDetailAction.ReportContent(action.eventId, action.senderId, reason))
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 
@@ -1581,7 +1575,7 @@ class RoomDetailFragment @Inject constructor(
                         activity = requireActivity(),
                         askForReason = action.askForReason,
                         confirmationRes = action.dialogDescriptionRes,
-                        positiveRes = R.string.remove,
+                        positiveRes = R.string.action_remove,
                         reasonHintRes = R.string.delete_event_dialog_reason_hint,
                         titleRes = action.dialogTitleRes
                 ) { reason ->
@@ -1701,7 +1695,7 @@ class RoomDetailFragment @Inject constructor(
                             .setPositiveButton(R.string._continue) { _, _ ->
                                 openUrlInExternalBrowser(requireContext(), url)
                             }
-                            .setNegativeButton(R.string.cancel, null)
+                            .setNegativeButton(R.string.action_cancel, null)
                             .show()
                 } else {
                     // Open in external browser, in a new Tab
@@ -2073,7 +2067,7 @@ class RoomDetailFragment @Inject constructor(
         MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Vector_MaterialAlertDialog)
                 .setTitle(R.string.end_poll_confirmation_title)
                 .setMessage(R.string.end_poll_confirmation_description)
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .setPositiveButton(R.string.end_poll_confirmation_approve_button) { _, _ ->
                     roomDetailViewModel.handle(RoomDetailAction.EndPoll(eventId))
                 }
@@ -2084,7 +2078,7 @@ class RoomDetailFragment @Inject constructor(
         MaterialAlertDialogBuilder(requireContext(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setTitle(R.string.room_participants_action_ignore_title)
                 .setMessage(R.string.room_participants_action_ignore_prompt_msg)
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .setPositiveButton(R.string.room_participants_action_ignore) { _, _ ->
                     roomDetailViewModel.handle(RoomDetailAction.IgnoreUser(senderId))
                 }
@@ -2215,7 +2209,6 @@ class RoomDetailFragment @Inject constructor(
             )
             AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
             AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.AUDIO   -> attachmentsHelper.selectAudio(attachmentAudioActivityResultLauncher)
             AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
             AttachmentTypeSelectorView.Type.STICKER -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)
             AttachmentTypeSelectorView.Type.POLL    -> navigator.openCreatePoll(requireContext(), roomDetailArgs.roomId)

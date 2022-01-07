@@ -24,6 +24,7 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
+import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
 import im.vector.app.core.epoxy.onClick
 
 /**
@@ -33,20 +34,20 @@ import im.vector.app.core.epoxy.onClick
 abstract class ReactionInfoSimpleItem : EpoxyModelWithHolder<ReactionInfoSimpleItem.Holder>() {
 
     @EpoxyAttribute
-    lateinit var reactionKey: CharSequence
+    lateinit var reactionKey: EpoxyCharSequence
 
     @EpoxyAttribute
-    lateinit var authorDisplayName: CharSequence
+    lateinit var authorDisplayName: String
 
     @EpoxyAttribute
-    var timeStamp: CharSequence? = null
+    var timeStamp: String? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var userClicked: ClickListener? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.emojiReactionView.text = reactionKey
+        holder.emojiReactionView.text = reactionKey.charSequence
         holder.displayNameView.text = authorDisplayName
         timeStamp?.let {
             holder.timeStampView.text = it

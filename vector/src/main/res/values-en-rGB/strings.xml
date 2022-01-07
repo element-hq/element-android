@@ -4,7 +4,6 @@
     <string name="home_filter_placeholder_favorites">Filter favourites</string>
     <string name="room_list_quick_actions_favorite_remove">Remove from favourites</string>
     <string name="room_list_quick_actions_favorite_add">Add to favourites</string>
-    <string name="room_recents_favourites">FAVOURITES</string>
     <string name="bootstrap_crosssigning_progress_save_ssk">Synchronising Self Signing key</string>
     <string name="bootstrap_crosssigning_progress_save_usk">Synchronising User key</string>
     <string name="bootstrap_crosssigning_progress_save_msk">Synchronising Master key</string>

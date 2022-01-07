@@ -26,6 +26,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import im.vector.app.EmojiCompatWrapper
+import im.vector.app.EmojiSpanify
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
@@ -76,6 +78,9 @@ abstract class VectorBindModule {
 
     @Binds
     abstract fun bindDefaultClock(clock: DefaultClock): Clock
+
+    @Binds
+    abstract fun bindEmojiSpanify(emojiCompatWrapper: EmojiCompatWrapper): EmojiSpanify
 }
 
 @InstallIn(SingletonComponent::class)

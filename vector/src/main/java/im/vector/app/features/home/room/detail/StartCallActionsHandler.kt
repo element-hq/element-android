@@ -97,7 +97,7 @@ class StartCallActionsHandler(
                                     // create the widget, then navigate to it..
                                     roomDetailViewModel.handle(RoomDetailAction.AddJitsiWidget(isVideoCall))
                                 }
-                                .setNegativeButton(fragment.getString(R.string.cancel), null)
+                                .setNegativeButton(fragment.getString(R.string.action_cancel), null)
                                 .show()
                     }
                 }
@@ -112,7 +112,7 @@ class StartCallActionsHandler(
                     .setPositiveButton(if (isVideoCall) R.string.start_video_call else R.string.start_voice_call) { _, _ ->
                         safeStartCall2(isVideoCall)
                     }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .show()
         } else {
             safeStartCall2(isVideoCall)

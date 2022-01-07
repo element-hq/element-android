@@ -183,12 +183,10 @@
         <item quantity="few">%d camere</item>
         <item quantity="other">%d de camere</item>
     </plurals>
-    <string name="room_recents_conversations">CAMERE</string>
     <string name="tab_title_search_rooms">CAMERE</string>
     <string name="rooms_header">Camere</string>
     <string name="suggested_header">Camere sugerate</string>
     <string name="bottom_action_rooms">Camere</string>
-    <string name="room_recents_favourites">FAVORITE</string>
     <string name="bottom_action_favourites">Favorite</string>
     <string name="settings_preferences">Preferințe</string>
     <string name="medium_email">Adresă de e-mail</string>
@@ -335,10 +333,10 @@
     <string name="space_settings_manage_rooms">Administrează camerele</string>
     <string name="room_participants_action_unignore_title">Revocați ignorarea utilizatorului</string>
     <string name="ongoing_conference_call_video">Video</string>
-    <string name="delete">Șterge</string>
-    <string name="leave">Părăsește</string>
-    <string name="save">Salvează</string>
-    <string name="cancel">Anulează</string>
+    <string name="action_delete">Șterge</string>
+    <string name="action_leave">Părăsește</string>
+    <string name="action_save">Salvează</string>
+    <string name="action_cancel">Anulează</string>
     <string name="title_activity_verify_device">Verificați sesiunea</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Invitația ta. Motivul: %1$s</string>
     <string name="notice_room_invite_no_invitee_with_reason">Invitația trimisă de %1$s. Motivul: %2$s</string>
@@ -389,7 +387,7 @@
     <string name="message_failed_to_upload">A apărut o eroare în timpul incărcării imaginii</string>
     <string name="unable_to_send_message">Nu s-a putut trimite mesajul</string>
     <string name="could_not_redact">Nu se poate redacta</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Dispozitivul expeditorului nu a trimis cheile de decriptare pentru acest mesaj.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Dispozitivul expeditorului nu a trimis cheile de decriptare pentru acest mesaj.</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">Acum sunt blocate serverele ce au adrese IP ce se potrivesc.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">Acum sunt permise serverele ce au adrese IP ce se potrivesc.</string>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">Sunt blocate serverele ce au adrese IP ce se potrivesc.</string>

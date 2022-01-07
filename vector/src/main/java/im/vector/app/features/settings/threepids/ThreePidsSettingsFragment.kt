@@ -184,10 +184,10 @@ class ThreePidsSettingsFragment @Inject constructor(
     override fun deleteThreePid(threePid: ThreePid) {
         MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                 .setMessage(getString(R.string.settings_remove_three_pid_confirmation_content, threePid.getFormattedValue()))
-                .setPositiveButton(R.string.remove) { _, _ ->
+                .setPositiveButton(R.string.action_remove) { _, _ ->
                     viewModel.handle(ThreePidsSettingsAction.DeleteThreePid(threePid))
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 

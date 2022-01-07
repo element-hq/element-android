@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/layout_vertical_margin"
-        android:text="@string/cancel"
+        android:text="@string/action_cancel"
         tools:ignore="MissingConstraints" />
 
     <Button

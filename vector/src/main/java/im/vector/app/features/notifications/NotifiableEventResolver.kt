@@ -66,12 +66,10 @@ class NotifiableEventResolver @Inject constructor(
             return resolveStateRoomEvent(event, session, canBeReplaced = false, isNoisy = isNoisy)
         }
         val timelineEvent = session.getRoom(roomID)?.getTimeLineEvent(eventId) ?: return null
-        when (event.getClearType()) {
-            EventType.MESSAGE   -> {
-                return resolveMessageEvent(timelineEvent, session, canBeReplaced = false, isNoisy = isNoisy)
-            }
+        return when (event.getClearType()) {
+            EventType.MESSAGE,
             EventType.ENCRYPTED -> {
-                return resolveMessageEvent(timelineEvent, session, canBeReplaced = false, isNoisy = isNoisy)
+                resolveMessageEvent(timelineEvent, session, canBeReplaced = false, isNoisy = isNoisy)
             }
             else                -> {
                 // If the event can be displayed, display it as is
@@ -79,7 +77,7 @@ class NotifiableEventResolver @Inject constructor(
                 // TODO Better event text display
                 val bodyPreview = event.type ?: EventType.MISSING_TYPE
 
-                return SimpleNotifiableEvent(
+                SimpleNotifiableEvent(
                         session.myUserId,
                         eventId = event.eventId!!,
                         editedEventId = timelineEvent.getEditedEventId(),
@@ -126,18 +124,18 @@ class NotifiableEventResolver @Inject constructor(
         }
     }
 
-    private suspend fun resolveMessageEvent(event: TimelineEvent, session: Session, canBeReplaced: Boolean, isNoisy: Boolean): NotifiableEvent {
+    private suspend fun resolveMessageEvent(event: TimelineEvent, session: Session, canBeReplaced: Boolean, isNoisy: Boolean): NotifiableEvent? {
         // The event only contains an eventId, and roomId (type is m.room.*) , we need to get the displayable content (names, avatar, text, etc...)
         val room = session.getRoom(event.root.roomId!! /*roomID cannot be null*/)
 
-        if (room == null) {
+        return if (room == null) {
             Timber.e("## Unable to resolve room for eventId [$event]")
             // Ok room is not known in store, but we can still display something
             val body = displayableEventFormatter.format(event, isDm = false, appendAuthor = false)
             val roomName = stringProvider.getString(R.string.notification_unknown_room_name)
             val senderDisplayName = event.senderInfo.disambiguatedDisplayName
 
-            return NotifiableMessageEvent(
+            NotifiableMessageEvent(
                     eventId = event.root.eventId!!,
                     editedEventId = event.getEditedEventId(),
                     canBeReplaced = canBeReplaced,
@@ -152,51 +150,60 @@ class NotifiableEventResolver @Inject constructor(
                     matrixID = session.myUserId
             )
         } else {
-            if (event.root.isEncrypted() && event.root.mxDecryptionResult == null) {
-                // TODO use a global event decryptor? attache to session and that listen to new sessionId?
-                // for now decrypt sync
-                try {
-                    val result = session.cryptoService().decryptEvent(event.root, event.root.roomId + UUID.randomUUID().toString())
-                    event.root.mxDecryptionResult = OlmDecryptionResult(
-                            payload = result.clearEvent,
-                            senderKey = result.senderCurve25519Key,
-                            keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                            forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+            event.attemptToDecryptIfNeeded(session)
+            // only convert encrypted messages to NotifiableMessageEvents
+            when (event.root.getClearType()) {
+                EventType.MESSAGE -> {
+                    val body = displayableEventFormatter.format(event, isDm = room.roomSummary()?.isDirect.orFalse(), appendAuthor = false).toString()
+                    val roomName = room.roomSummary()?.displayName ?: ""
+                    val senderDisplayName = event.senderInfo.disambiguatedDisplayName
+
+                    NotifiableMessageEvent(
+                            eventId = event.root.eventId!!,
+                            editedEventId = event.getEditedEventId(),
+                            canBeReplaced = canBeReplaced,
+                            timestamp = event.root.originServerTs ?: 0,
+                            noisy = isNoisy,
+                            senderName = senderDisplayName,
+                            senderId = event.root.senderId,
+                            body = body,
+                            imageUri = event.fetchImageIfPresent(session),
+                            roomId = event.root.roomId!!,
+                            roomName = roomName,
+                            roomIsDirect = room.roomSummary()?.isDirect ?: false,
+                            roomAvatarPath = session.contentUrlResolver()
+                                    .resolveThumbnail(room.roomSummary()?.avatarUrl,
+                                            250,
+                                            250,
+                                            ContentUrlResolver.ThumbnailMethod.SCALE),
+                            senderAvatarPath = session.contentUrlResolver()
+                                    .resolveThumbnail(event.senderInfo.avatarUrl,
+                                            250,
+                                            250,
+                                            ContentUrlResolver.ThumbnailMethod.SCALE),
+                            matrixID = session.myUserId,
+                            soundName = null
                     )
-                } catch (e: MXCryptoError) {
                 }
+                else              -> null
             }
+        }
+    }
 
-            val body = displayableEventFormatter.format(event, isDm = room.roomSummary()?.isDirect.orFalse(), appendAuthor = false).toString()
-            val roomName = room.roomSummary()?.displayName ?: ""
-            val senderDisplayName = event.senderInfo.disambiguatedDisplayName
-
-            return NotifiableMessageEvent(
-                    eventId = event.root.eventId!!,
-                    editedEventId = event.getEditedEventId(),
-                    canBeReplaced = canBeReplaced,
-                    timestamp = event.root.originServerTs ?: 0,
-                    noisy = isNoisy,
-                    senderName = senderDisplayName,
-                    senderId = event.root.senderId,
-                    body = body,
-                    imageUri = event.fetchImageIfPresent(session),
-                    roomId = event.root.roomId!!,
-                    roomName = roomName,
-                    roomIsDirect = room.roomSummary()?.isDirect ?: false,
-                    roomAvatarPath = session.contentUrlResolver()
-                            .resolveThumbnail(room.roomSummary()?.avatarUrl,
-                                    250,
-                                    250,
-                                    ContentUrlResolver.ThumbnailMethod.SCALE),
-                    senderAvatarPath = session.contentUrlResolver()
-                            .resolveThumbnail(event.senderInfo.avatarUrl,
-                                    250,
-                                    250,
-                                    ContentUrlResolver.ThumbnailMethod.SCALE),
-                    matrixID = session.myUserId,
-                    soundName = null
-            )
+    private fun TimelineEvent.attemptToDecryptIfNeeded(session: Session) {
+        if (root.isEncrypted() && root.mxDecryptionResult == null) {
+            // TODO use a global event decryptor? attache to session and that listen to new sessionId?
+            // for now decrypt sync
+            try {
+                val result = session.cryptoService().decryptEvent(root, root.roomId + UUID.randomUUID().toString())
+                root.mxDecryptionResult = OlmDecryptionResult(
+                        payload = result.clearEvent,
+                        senderKey = result.senderCurve25519Key,
+                        keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
+                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                )
+            } catch (e: MXCryptoError) {
+            }
         }
     }
 

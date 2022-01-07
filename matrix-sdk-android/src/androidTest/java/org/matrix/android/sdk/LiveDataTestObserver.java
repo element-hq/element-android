@@ -208,4 +208,4 @@ public final class LiveDataTestObserver<T> implements Observer<T> {
     liveData.observeForever(observer);
     return observer;
   }
-} 
+}

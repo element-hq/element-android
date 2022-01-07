@@ -15,7 +15,7 @@ kapt {
 // Note: 2 digits max for each value
 ext.versionMajor = 1
 ext.versionMinor = 3
-ext.versionPatch = 10
+ext.versionPatch = 13
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -140,7 +140,7 @@ android {
         buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
         resValue "string", "build_number", "\"${buildNumber}\""
 
-        buildConfigField "im.vector.app.features.VectorFeatures.LoginVersion", "LOGIN_VERSION", "im.vector.app.features.VectorFeatures.LoginVersion.V1"
+        buildConfigField "im.vector.app.features.VectorFeatures.OnboardingVariant", "ONBOARDING_VARIANT", "im.vector.app.features.VectorFeatures.OnboardingVariant.FTUE_AUTH"
 
         buildConfigField "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy", "outboundSessionKeySharingStrategy", "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy.WhenTyping"
 
@@ -359,7 +359,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.39'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.40'
 
     // FlowBinding
     implementation libs.github.flowBinding
@@ -389,6 +389,8 @@ dependencies {
     implementation libs.google.material
     implementation 'me.gujun.android:span:1.7'
     implementation libs.markwon.core
+    implementation libs.markwon.extLatex
+    implementation libs.markwon.inlineParser
     implementation libs.markwon.html
     implementation 'com.googlecode.htmlcompressor:htmlcompressor:1.5.2'
     implementation 'me.saket:better-link-movement-method:2.2.0'
@@ -452,7 +454,7 @@ dependencies {
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
-    implementation "androidx.emoji2:emoji2:1.0.0"
+    implementation "androidx.emoji2:emoji2:1.0.1"
     implementation('com.github.BillCarsonFr:JsonViewer:0.7')
 
     // WebRTC

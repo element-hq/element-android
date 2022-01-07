@@ -1,199 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingStart="8dp"
-    android:paddingEnd="8dp">
+    android:layout_height="@dimen/composer_min_height"
+    android:background="?android:colorBackground">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ImageButton
+        android:id="@+id/attachmentCloseButton"
+        android:layout_width="@dimen/composer_attachment_size"
+        android:layout_height="@dimen/composer_attachment_size"
+        android:layout_margin="@dimen/composer_attachment_margin"
+        android:background="@null"
+        android:contentDescription="@string/action_close"
+        android:src="@drawable/ic_attachment"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:rotation="135" />
+
+    <HorizontalScrollView
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_attachment_type_selector"
-        android:orientation="vertical"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        tools:ignore="UselessParent">
+        android:layout_marginStart="4dp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/attachmentCloseButton"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="16dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:weightSum="3">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:id="@+id/attachmentCameraButtonContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/attachmentGalleryButton"
+                android:layout_width="@dimen/layout_touch_size"
+                android:layout_height="@dimen/layout_touch_size"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/attachment_type_gallery"
+                android:src="@drawable/ic_attachment_gallery" />
 
-                <ImageButton
-                    android:id="@+id/attachmentCameraButton"
-                    style="@style/AttachmentTypeSelectorButton"
-                    android:contentDescription="@string/attachment_type_camera"
-                    android:src="@drawable/ic_attachment_camera_white_24dp"
-                    tools:background="?colorPrimary" />
+            <ImageButton
+                android:id="@+id/attachmentStickersButton"
+                android:layout_width="@dimen/layout_touch_size"
+                android:layout_height="@dimen/layout_touch_size"
+                android:layout_marginStart="2dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/attachment_type_sticker"
+                android:src="@drawable/ic_attachment_sticker"
+                app:tint="?colorPrimary" />
 
-                <TextView
-                    style="@style/AttachmentTypeSelectorLabel"
-                    android:importantForAccessibility="no"
-                    android:text="@string/attachment_type_camera" />
+            <ImageButton
+                android:id="@+id/attachmentFileButton"
+                android:layout_width="@dimen/layout_touch_size"
+                android:layout_height="@dimen/layout_touch_size"
+                android:layout_marginStart="2dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/attachment_type_file"
+                android:src="@drawable/ic_attachment_file"
+                app:tint="?colorPrimary" />
 
-            </LinearLayout>
+            <ImageButton
+                android:id="@+id/attachmentPollButton"
+                android:layout_width="@dimen/layout_touch_size"
+                android:layout_height="@dimen/layout_touch_size"
+                android:layout_marginStart="2dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/attachment_type_poll"
+                android:src="@drawable/ic_attachment_poll"
+                app:tint="?colorPrimary" />
 
-            <LinearLayout
-                android:id="@+id/attachmentGalleryButtonContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
+            <ImageButton
+                android:id="@+id/attachmentCameraButton"
+                android:layout_width="@dimen/layout_touch_size"
+                android:layout_height="@dimen/layout_touch_size"
+                android:layout_marginStart="2dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/attachment_type_camera"
+                android:src="@drawable/ic_attachment_camera"
+                app:tint="?colorPrimary" />
 
-                <ImageButton
-                    android:id="@+id/attachmentGalleryButton"
-                    style="@style/AttachmentTypeSelectorButton"
-                    android:contentDescription="@string/attachment_type_gallery"
-                    android:src="@drawable/ic_attachment_gallery_white_24dp"
-                    tools:background="?colorPrimary" />
-
-                <TextView
-                    style="@style/AttachmentTypeSelectorLabel"
-                    android:importantForAccessibility="no"
-                    android:text="@string/attachment_type_gallery" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/attachmentFileButtonContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/attachmentFileButton"
-                    style="@style/AttachmentTypeSelectorButton"
-                    android:contentDescription="@string/attachment_type_file"
-                    android:src="@drawable/ic_attachment_file_white_24dp"
-                    tools:background="?colorPrimary" />
-
-                <TextView
-                    style="@style/AttachmentTypeSelectorLabel"
-                    android:importantForAccessibility="no"
-                    android:text="@string/attachment_type_file" />
-
-            </LinearLayout>
+            <!-- TODO. Request for new icon -->
+            <ImageButton
+                android:id="@+id/attachmentContactButton"
+                android:layout_width="@dimen/layout_touch_size"
+                android:layout_height="@dimen/layout_touch_size"
+                android:layout_marginStart="2dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/attachment_type_contact"
+                android:src="@drawable/ic_attachment_contact_white_24dp"
+                app:tint="?colorPrimary" />
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="16dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:weightSum="3">
+    </HorizontalScrollView>
 
-            <LinearLayout
-                android:id="@+id/attachmentAudioButtonContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
 
-                <ImageButton
-                    android:id="@+id/attachmentAudioButton"
-                    style="@style/AttachmentTypeSelectorButton"
-                    android:contentDescription="@string/attachment_type_audio"
-                    android:src="@drawable/ic_attachment_audio_white_24dp"
-                    tools:background="?colorPrimary" />
-
-                <TextView
-                    style="@style/AttachmentTypeSelectorLabel"
-                    android:importantForAccessibility="no"
-                    android:text="@string/attachment_type_audio" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/attachmentContactButtonContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/attachmentContactButton"
-                    style="@style/AttachmentTypeSelectorButton"
-                    android:contentDescription="@string/attachment_type_contact"
-                    android:src="@drawable/ic_attachment_contact_white_24dp"
-                    tools:background="?colorPrimary" />
-
-                <TextView
-                    style="@style/AttachmentTypeSelectorLabel"
-                    android:importantForAccessibility="no"
-                    android:text="@string/attachment_type_contact" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/attachmentStickersButtonContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/attachmentStickersButton"
-                    style="@style/AttachmentTypeSelectorButton"
-                    android:contentDescription="@string/attachment_type_sticker"
-                    android:src="@drawable/ic_attachment_stickers_white_24dp"
-                    tools:background="?colorPrimary" />
-
-                <TextView
-                    style="@style/AttachmentTypeSelectorLabel"
-                    android:importantForAccessibility="no"
-                    android:text="@string/attachment_type_sticker" />
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="16dp"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            android:weightSum="3">
-
-            <LinearLayout
-                android:id="@+id/attachmentPollButtonContainer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <ImageButton
-                    android:id="@+id/attachmentPollButton"
-                    style="@style/AttachmentTypeSelectorButton"
-                    android:contentDescription="@string/attachment_type_poll"
-                    android:src="@drawable/ic_attachment_poll_white_24dp"
-                    tools:background="?colorPrimary" />
-
-                <TextView
-                    style="@style/AttachmentTypeSelectorLabel"
-                    android:importantForAccessibility="no"
-                    android:text="@string/attachment_type_poll" />
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

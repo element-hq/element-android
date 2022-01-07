@@ -108,7 +108,7 @@ class MatrixToRoomSpaceFragment @Inject constructor(
                                 views.matrixToCardMainButton.isVisible = true
                                 views.matrixToCardSecondaryButton.isVisible = true
                                 views.matrixToCardMainButton.button.text = getString(joinTextRes)
-                                views.matrixToCardSecondaryButton.button.text = getString(R.string.decline)
+                                views.matrixToCardSecondaryButton.button.text = getString(R.string.action_decline)
                             }
                             Membership.JOIN   -> {
                                 views.matrixToCardMainButton.isVisible = true

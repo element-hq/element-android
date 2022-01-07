@@ -133,6 +133,11 @@ internal class MXMegolmDecryption(private val userId: String,
                                     if (requestKeysOnFail) {
                                         requestKeysForEvent(event, false)
                                     }
+
+                                    throw MXCryptoError.Base(
+                                            MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX,
+                                            "UNKNOWN_MESSAGE_INDEX",
+                                            null)
                                 }
 
                                 val reason = String.format(MXCryptoError.OLM_REASON, throwable.olmException.message)

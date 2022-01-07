@@ -1,0 +1,2 @@
+版本的主要变化:增加了对语音信息草稿的支持。许多修正!
+完整更新日志：https://github.com/vector-im/element-android/releases/tag/v1.3.9

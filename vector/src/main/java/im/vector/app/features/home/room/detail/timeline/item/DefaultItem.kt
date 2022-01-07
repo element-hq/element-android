@@ -56,7 +56,7 @@ abstract class DefaultItem : BaseEventItem<DefaultItem.Holder>() {
     data class Attributes(
             val avatarRenderer: AvatarRenderer,
             val informationData: MessageInformationData,
-            val text: CharSequence,
+            val text: String,
             val itemLongClickListener: View.OnLongClickListener? = null
     )
 

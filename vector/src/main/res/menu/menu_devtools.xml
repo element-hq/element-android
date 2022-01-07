@@ -19,6 +19,6 @@
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_send"
         app:iconTint="?vctr_content_secondary"
-        android:title="@string/send" />
+        android:title="@string/action_send" />
 
 </menu>

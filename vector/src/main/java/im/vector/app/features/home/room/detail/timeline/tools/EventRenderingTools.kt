@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.tools
 
+import android.text.SpannableStringBuilder
 import android.text.style.ClickableSpan
 import android.view.MotionEvent
 import android.widget.TextView
@@ -44,7 +45,8 @@ fun CharSequence.findPillsAndProcess(scope: CoroutineScope, processBlock: (PillI
 
 fun CharSequence.linkify(callback: TimelineEventController.UrlClickCallback?): CharSequence {
     val text = this.toString()
-    val spannable = toSpannable()
+    // SpannableStringBuilder is used to avoid Epoxy throwing ImmutableModelException
+    val spannable = SpannableStringBuilder(this)
     MatrixLinkify.addLinks(spannable, object : MatrixPermalinkSpan.Callback {
         override fun onUrlClicked(url: String) {
             callback?.onUrlClicked(url, text)

@@ -31,7 +31,7 @@ import im.vector.app.features.themes.ThemeUtils
 @EpoxyModelClass(layout = R.layout.item_form_advanced_toggle)
 abstract class FormAdvancedToggleItem : VectorEpoxyModel<FormAdvancedToggleItem.Holder>() {
 
-    @EpoxyAttribute lateinit var title: CharSequence
+    @EpoxyAttribute lateinit var title: String
     @EpoxyAttribute var expanded: Boolean = false
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
 

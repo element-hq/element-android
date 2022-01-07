@@ -47,7 +47,7 @@
     <string name="room_error_join_failed_empty_room">В момента не е възможно да се присъедините отново към празна стая.</string>
     <string name="medium_email">Имейл адрес</string>
     <string name="medium_phone_number">Телефонен номер</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Устройството на подателя не изпрати ключовете за това съобщение.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Устройството на подателя не изпрати ключовете за това съобщение.</string>
     <string name="summary_user_sent_sticker">%1$s изпрати стикер.</string>
     <string name="room_displayname_invite_from">Покана от %s</string>
     <string name="room_displayname_room_invite">Покана за стая</string>
@@ -212,7 +212,6 @@
     <string name="notice_direct_room_created_by_you">Създадохте дискусията</string>
     <string name="notice_direct_room_created">%1$s създаде дискусията</string>
     <string name="encrypted_message">Шифровано съобщение</string>
-    <!-- groups creation -->
     <string name="light_theme">Светла тема</string>
     <string name="dark_theme">Тъмна тема</string>
     <string name="black_theme">Черна тема</string>
@@ -272,20 +271,20 @@
     <string name="title_activity_group_details">Информация за общността</string>
     <string name="loading">Зареждане…</string>
     <string name="ok">ОК</string>
-    <string name="cancel">Откажи</string>
-    <string name="save">Запази</string>
-    <string name="leave">Напусни</string>
-    <string name="send">Изпрати</string>
-    <string name="resend">Изпрати отново</string>
-    <string name="redact">Премахни</string>
-    <string name="quote">Цитирай</string>
-    <string name="share">Сподели</string>
+    <string name="action_cancel">Откажи</string>
+    <string name="action_save">Запази</string>
+    <string name="action_leave">Напусни</string>
+    <string name="action_send">Изпрати</string>
+    <string name="action_resend">Изпрати отново</string>
+    <string name="action_redact">Премахни</string>
+    <string name="action_quote">Цитирай</string>
+    <string name="action_share">Сподели</string>
     <string name="later">По-късно</string>
-    <string name="forward">Препрати</string>
+    <string name="action_forward">Препрати</string>
     <string name="permalink">Permalink</string>
     <string name="view_source">Виж източника</string>
-    <string name="delete">Изтрий</string>
-    <string name="rename">Преименувай</string>
+    <string name="action_delete">Изтрий</string>
+    <string name="action_rename">Преименувай</string>
     <string name="report_content">Докладвай съдържанието</string>
     <string name="active_call">Активен разговор</string>
     <string name="notification_listening_for_events">Следене за събития</string>
@@ -305,7 +304,7 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Групови разговори не се поддържат в шифровани стаи</string>
     <string name="send_anyway">Изпрати въпреки това</string>
     <string name="or">или</string>
-    <string name="invite">Покани</string>
+    <string name="action_invite">Покани</string>
     <string name="offline">Офлайн</string>
     <string name="action_exit">Изход</string>
     <string name="actions">Действия</string>
@@ -318,7 +317,7 @@
     <string name="action_quick_reply">Бърз отговор</string>
     <string name="action_open">Отвори</string>
     <string name="action_close">Затвори</string>
-    <string name="disable">Изключи</string>
+    <string name="action_disable">Изключи</string>
     <string name="dialog_title_confirmation">Потвърждение</string>
     <string name="dialog_title_warning">Предупреждение</string>
     <string name="bottom_action_home">Начало</string>
@@ -517,17 +516,6 @@
     <string name="tab_title_search_messages">СЪОБЩЕНИЯ</string>
     <string name="tab_title_search_people">ХОРА</string>
     <string name="tab_title_search_files">ФАЙЛОВЕ</string>
-    <string name="room_recents_join">ВЛЕЗ</string>
-    <string name="room_recents_directory">ДИРЕКТОРИЯ</string>
-    <string name="room_recents_favourites">ЛЮБИМИ</string>
-    <string name="room_recents_conversations">СТАИ</string>
-    <string name="room_recents_low_priority">НИСЪК ПРИОРИТЕТ</string>
-    <string name="room_recents_invites">ПОКАНИ</string>
-    <string name="room_recents_start_chat">Започни чат</string>
-    <string name="room_recents_create_room">Създай стая</string>
-    <string name="room_recents_join_room">Присъедини се към стая</string>
-    <string name="room_recents_join_room_title">Присъединяване към стая</string>
-    <string name="room_recents_join_room_prompt">Напишете ID или псевдоним на стая</string>
     <string name="directory_search_results_title">Прегледай директорията</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">%d стая</item>
@@ -759,7 +747,6 @@
         <item quantity="one">%d активно приспособление</item>
         <item quantity="other">%d активни приспособления</item>
     </plurals>
-    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Неуспешно създаване на приспособление.</string>
     <string name="widget_integration_failed_to_send_request">Неуспешно изпращане на заявката.</string>
     <string name="widget_integration_positive_power_level">Нивото на достъп трябва да бъде позитивно число.</string>
@@ -793,10 +780,10 @@
     <string name="yes">ДА</string>
     <string name="no">НЕ</string>
     <string name="_continue">Продължи</string>
-    <string name="remove">Премахни</string>
-    <string name="join">Влез</string>
-    <string name="preview">Прегледай</string>
-    <string name="reject">Откажи</string>
+    <string name="action_remove">Премахни</string>
+    <string name="action_join">Влез</string>
+    <string name="action_preview">Прегледай</string>
+    <string name="action_reject">Откажи</string>
     <string name="rejoin">Повторно присъединяване</string>
     <string name="forget_room">Забрави стаята</string>
     <string name="avatar">Профилна снимка</string>
@@ -861,19 +848,15 @@
     <string name="largest">Най-голям</string>
     <string name="huge">Огромен</string>
     <string name="settings_labs_native_camera">Използване на камерата на телефона</string>
-    <!-- share keys -->
     <string name="you_added_a_new_device">Добавихте ново устройство \'%s\', което изисква ключове за шифроване.</string>
     <string name="your_unverified_device_requesting">Вашето непотвърдено устройство \'%s\' изисква ключове за шифроване.</string>
     <string name="start_verification">Започни потвърждението</string>
     <string name="share_without_verifying">Сподели без потвърждение</string>
     <string name="ignore_request">Игнорирай поканата</string>
-    <!-- conference call -->
     <string name="conference_call_warning_title">Предупреждение!</string>
     <string name="conference_call_warning_message">Груповите разговори са в процес на разработка и не са надеждни.</string>
-    <!-- slash commands -->
     <string name="command_error">Грешка в командата</string>
     <string name="unrecognized_command">Неразпозната команда: %s</string>
-    <!-- notification statuses -->
     <string name="notification_off">Изключено</string>
     <string name="notification_noisy">Шумно</string>
     <string name="create">Създай</string>
@@ -882,7 +865,6 @@
     <string name="community_name_hint">Пример</string>
     <string name="community_id">ID на общност</string>
     <string name="community_id_hint">пример</string>
-    <!-- group details -->
     <string name="group_details_home">Начало</string>
     <string name="group_details_people">Хора</string>
     <string name="group_details_rooms">Стаи</string>
@@ -937,9 +919,9 @@
     <string name="deactivate_account_prompt_password">За да продължите, моля въведете паролата си:</string>
     <string name="deactivate_account_submit">Деактивирай акаунта</string>
     <string name="dialog_title_third_party_licences">Лицензи от трети страни</string>
-    <string name="download">Изтегли</string>
-    <string name="speak">Говори</string>
-    <string name="clear">Изчисти</string>
+    <string name="action_download">Изтегли</string>
+    <string name="action_speak">Говори</string>
+    <string name="action_clear">Изчисти</string>
     <string name="e2e_re_request_encryption_key"><u>Изисквай повторно ключове за шифроване</u> от другите ми устройства.</string>
     <string name="e2e_re_request_encryption_key_sent">Заявката за ключове беше изпратена.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Изпратена заявка</string>
@@ -1037,7 +1019,7 @@
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="call_anyway">Звънни въпреки това</string>
-    <string name="accept">Приемам</string>
+    <string name="action_accept">Приемам</string>
     <string name="auth_accept_policies">Моля прегледайте и приемете политиките на сървъра:</string>
     <string name="settings_call_category">Обаждания</string>
     <string name="template_settings_call_ringtone_use_app_ringtone">Използвай мелодията по подразбиране на ${app_name} за входящи повиквания</string>
@@ -1133,7 +1115,7 @@
     <string name="title_activity_keys_backup_setup">Резервно копие на ключовете</string>
     <string name="title_activity_keys_backup_restore">Използвай резервно копие на ключовете</string>
     <string name="keys_backup_is_not_finished_please_wait">Резервното копиране на ключовете не е завършило. Моля почакайте…</string>
-    <string name="skip">Пропусни</string>
+    <string name="action_skip">Пропусни</string>
     <string name="done">Готово</string>
     <string name="settings_notification_advanced">Разширени настройки за известия</string>
     <string name="settings_notification_by_event">Важност на известията според типа събитие</string>
@@ -1230,8 +1212,8 @@
     <string name="are_you_sure">Сигурни ли сте?</string>
     <string name="backup">Резервно копие</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Ако не направите резервно копие на ключовете преди да излезете, ще загубите достъп до шифрованите съобщения.</string>
-    <string name="stay">Остани</string>
-    <string name="abort">Прекрати</string>
+    <string name="action_stay">Остани</string>
+    <string name="action_abort">Прекрати</string>
     <string name="action_sign_out_confirmation_simple">Сигурни ли сте, че искате да се отпишете\?</string>
     <string name="settings_data_save_mode_summary">Режим икономия на данни игнорира уведомленията за пишещи хора, както и информация за онлайн статуса на потребители.</string>
     <string name="encryption_message_recovery">Възстановяване на шифровани съобщения</string>
@@ -1277,7 +1259,7 @@
     <string name="keys_backup_restoring_computing_key_waiting_message">Изчисляване на ключ за възстановяване…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Изтегляне на ключове…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Импортиране на ключове…</string>
-    <string name="ignore">Отхвърли</string>
+    <string name="action_ignore">Отхвърли</string>
     <string name="login_error_unknown_host">URL адресът не е достъпен, моля проверете</string>
     <string name="login_error_ssl_handshake">Устройството Ви използва остарял TLS протокол за сигурност, който е уязвим към атаки. За ваша безопасност няма да може да се свържете</string>
     <string name="settings_send_message_with_enter">Изпращай съобщения с Enter</string>
@@ -1387,8 +1369,8 @@
     <string name="room_list_rooms_empty_title">Стаи</string>
     <string name="room_list_rooms_empty_body">Вашите стаи се показват тук</string>
     <string name="title_activity_emoji_reaction_picker">Реакции</string>
-    <string name="reactions_agree">Съгласен съм</string>
-    <string name="reactions_like">Харесвам</string>
+    <string name="action_agree">Съгласен съм</string>
+    <string name="action_like">Харесвам</string>
     <string name="message_add_reaction">Добави реакция</string>
     <string name="message_view_reaction">Виж реакциите</string>
     <string name="reactions">Реакции</string>
@@ -1470,8 +1452,8 @@
     <string name="direct_room_filter_hint">Филтрирай по потребител или ID…</string>
     <string name="joining_room">Присъединяване в стая…</string>
     <string name="message_view_edit_history">Виж историята на редакциите</string>
-    <string name="review">Прегледай</string>
-    <string name="decline">Откажи</string>
+    <string name="action_review">Прегледай</string>
+    <string name="action_decline">Откажи</string>
     <string name="widget_integration_review_terms">За да продължите трябва да приемете условията за използване на услугата.</string>
     <string name="terms_of_service">Условия за ползване</string>
     <string name="review_terms">Прегледай условията</string>
@@ -1479,8 +1461,8 @@
     <string name="terms_description_for_integration_manager">Използвайте ботове, връзки с други мрежи, приспособления и стикери</string>
     <string name="read_at">Прочетете на</string>
     <string name="none">Нищо</string>
-    <string name="revoke">Оттегли</string>
-    <string name="disconnect">Прекъсни</string>
+    <string name="action_revoke">Оттегли</string>
+    <string name="action_disconnect">Прекъсни</string>
     <string name="people_no_identity_server">Не е настроен сървър за самоличност.</string>
     <string name="call_failed_no_ice_title">Обаждането се провали поради грешно настроен сървър</string>
     <string name="call_failed_no_ice_description">Попитайте администратора на сървъра (%1$s) да конфигурира TURN сървър за да може разговорите да работят надеждно.
@@ -1782,8 +1764,8 @@
     <string name="event_redacted">Съобщението беше изтрито</string>
     <string name="settings_show_redacted">Показвай премахнатите съобщения</string>
     <string name="settings_show_redacted_summary">Показвай индикатор на мястото на премахнатите съобщения</string>
-    <string name="play_video">Възпроизведи</string>
-    <string name="pause_video">Пауза</string>
+    <string name="action_play">Възпроизведи</string>
+    <string name="action_pause">Пауза</string>
     <string name="room_participants_kick_reason">Причина за изгонване</string>
     <string name="room_participants_kick_title">Изгонване на потребител</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Сигурни ли сте, че искате да откажете изпратената към този потребител покана\?</string>
@@ -1836,8 +1818,8 @@
     <string name="no_permissions_to_start_webrtc_call">Нямате привилегии да започнете разговор в тази стая</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Нямате привилегии да започнете конферентен разговор</string>
     <string name="no_permissions_to_start_conf_call">Нямате привилегии да стартирате конферентен разговор в тази стая</string>
-    <string name="reset">Нулирай</string>
-    <string name="dismiss">Затвори</string>
+    <string name="action_reset">Нулирай</string>
+    <string name="action_dismiss">Затвори</string>
     <string name="encryption_information_cross_signing_state">Кръстосано-подписване</string>
     <string name="verification_conclusion_ok_self_notice">Новата ви сесия вече е потвърдена и има достъп до шифрованите съобщения. Другите потребители ще я виждат като доверена.</string>
     <string name="verification_conclusion_ok_notice">Съобщенията с този потребител са шифровани от-край-до-край и не могат да бъдат разчетени от трети страни.</string>
@@ -1921,7 +1903,6 @@
     <string name="verification_request_waiting">Изчакване…</string>
     <string name="sent_verification_conclusion">Резултат от проверка</string>
     <string name="sent_a_reaction">Реагира с: %s</string>
-    <string name="sent_a_bot_buttons">Бот бутони</string>
     <string name="sent_a_poll">Анкета</string>
     <string name="send_a_sticker">Стикер</string>
     <string name="sent_a_file">Файл</string>
@@ -2065,15 +2046,6 @@
     <string name="verification_use_passphrase">Ако не можете да достъпите съществуваща сесия</string>
     <string name="verification_cannot_access_other_session">Използвай парола или ключ за възстановяване</string>
     <string name="command_description_poll">Създава проста анкета</string>
-    <string name="poll_item_selected_aria">Избрана опция</string>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d глас - Финални резултати</item>
-        <item quantity="other">%d гласа - Финални резултати</item>
-    </plurals>
-    <plurals name="poll_info">
-        <item quantity="one">%d глас</item>
-        <item quantity="other">%d гласа</item>
-    </plurals>
     <string name="delete_account_data_warning">Изтриване на профилните данни от тип %1$s\?
 \n
 \nВнимавайте с това - може да доведе до неочаквано поведение.</string>
@@ -2174,7 +2146,7 @@
     <string name="command_description_discard_session_not_handled">Поддържа се само в шифровани стаи</string>
     <string name="command_description_discard_session">Принудително премахва текущата изходяща групова сесия от шифрованата стая</string>
     <string name="template_use_latest_app">Използвайте последната версия на ${app_name} за устройствата си:</string>
-    <string name="or_other_mx_capabale_client">или друг Matrix клиент поддържаш кръстосано-подписване</string>
+    <string name="or_other_mx_capable_client">или друг Matrix клиент поддържаш кръстосано-подписване</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
     <string name="template_app_desktop_web">${app_name} Web

@@ -42,6 +42,7 @@ import im.vector.app.features.home.HomeDetailViewModel
 import im.vector.app.features.home.PromoteRestrictedViewModel
 import im.vector.app.features.home.UnknownDeviceDetectorSharedViewModel
 import im.vector.app.features.home.UnreadMessagesSharedViewModel
+import im.vector.app.features.home.UserColorAccountDataViewModel
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsViewModel
 import im.vector.app.features.home.room.detail.RoomDetailViewModel
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewModel
@@ -57,6 +58,7 @@ import im.vector.app.features.login.LoginViewModel
 import im.vector.app.features.login2.LoginViewModel2
 import im.vector.app.features.login2.created.AccountCreatedViewModel
 import im.vector.app.features.matrixto.MatrixToBottomSheetViewModel
+import im.vector.app.features.onboarding.OnboardingViewModel
 import im.vector.app.features.poll.create.CreatePollViewModel
 import im.vector.app.features.rageshake.BugReportViewModel
 import im.vector.app.features.reactions.EmojiSearchResultViewModel
@@ -414,6 +416,11 @@ interface MavericksViewModelModule {
 
     @Binds
     @IntoMap
+    @MavericksViewModelKey(UserColorAccountDataViewModel::class)
+    fun userColorAccountDataViewModelFactory(factory: UserColorAccountDataViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
     @MavericksViewModelKey(RoomPreviewViewModel::class)
     fun roomPreviewViewModelFactory(factory: RoomPreviewViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
@@ -446,6 +453,11 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(AccountCreatedViewModel::class)
     fun accountCreatedViewModelFactory(factory: AccountCreatedViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(OnboardingViewModel::class)
+    fun onboardingViewModelFactory(factory: OnboardingViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap

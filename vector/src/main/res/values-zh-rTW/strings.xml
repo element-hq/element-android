@@ -39,7 +39,7 @@
     <string name="notice_room_third_party_invite">%1$s 傳送加入房間的邀請給 %2$s</string>
     <string name="notice_room_third_party_registered_invite">%1$s 接受 %2$s 的邀請</string>
     <string name="notice_crypto_unable_to_decrypt">** 無法解密：%s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">傳送者的裝置並未在此訊息傳送他們的金鑰。</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">傳送者的裝置並未在此訊息傳送他們的金鑰。</string>
     <string name="could_not_redact">無法編輯</string>
     <string name="unable_to_send_message">無法傳送訊息</string>
     <string name="message_failed_to_upload">上傳圖片失敗</string>
@@ -266,27 +266,27 @@
     <string name="title_activity_settings">設定</string>
     <string name="title_activity_member_details">會員訊息</string>
     <string name="title_activity_bug_report">錯誤回報</string>
-    <string name="cancel">取消</string>
+    <string name="action_cancel">取消</string>
     <string name="ok">確定</string>
-    <string name="leave">離開</string>
-    <string name="save">儲存</string>
+    <string name="action_leave">離開</string>
+    <string name="action_save">儲存</string>
     <string name="loading">載入中…</string>
-    <string name="send">發送</string>
-    <string name="resend">重新發送</string>
-    <string name="share">分享</string>
+    <string name="action_send">發送</string>
+    <string name="action_resend">重新發送</string>
+    <string name="action_share">分享</string>
     <string name="view_source">查看源代碼</string>
     <string name="notification_noisy_notifications">通知音效</string>
     <string name="notification_silent_notifications">靜音通知</string>
     <string name="title_activity_historical">歷史</string>
     <string name="title_activity_group_details">社群細節</string>
-    <string name="redact">移除</string>
-    <string name="quote">引用</string>
+    <string name="action_redact">移除</string>
+    <string name="action_quote">引用</string>
     <string name="later">稍後</string>
-    <string name="forward">轉寄</string>
+    <string name="action_forward">轉寄</string>
     <string name="permalink">永久連結</string>
     <string name="view_decrypted_source">檢視解密的來源</string>
-    <string name="delete">刪除</string>
-    <string name="rename">重新命名</string>
+    <string name="action_delete">刪除</string>
+    <string name="action_rename">重新命名</string>
     <string name="report_content">回報內容</string>
     <string name="active_call">進行中的通話</string>
     <string name="ongoing_conference_call">正在進行會議通話。 
@@ -301,7 +301,7 @@
     <string name="room_no_conference_call_in_encrypted_rooms">不支援在加密聊天室的會議通話</string>
     <string name="send_anyway">無論如何都要傳送</string>
     <string name="or">或</string>
-    <string name="invite">邀請</string>
+    <string name="action_invite">邀請</string>
     <string name="offline">離線</string>
     <string name="action_exit">離開</string>
     <string name="actions">動作</string>
@@ -315,7 +315,7 @@
     <string name="action_open">開啟</string>
     <string name="action_close">關閉</string>
     <string name="copied_to_clipboard">複製到剪貼簿</string>
-    <string name="disable">停用</string>
+    <string name="action_disable">停用</string>
     <string name="dialog_title_confirmation">確認</string>
     <string name="dialog_title_warning">警告</string>
     <string name="bottom_action_home">首頁</string>
@@ -496,10 +496,10 @@
     <string name="yes">是</string>
     <string name="no">否</string>
     <string name="_continue">繼續</string>
-    <string name="remove">移除</string>
-    <string name="join">加入</string>
-    <string name="preview">預覽</string>
-    <string name="reject">拒絕</string>
+    <string name="action_remove">移除</string>
+    <string name="action_join">加入</string>
+    <string name="action_preview">預覽</string>
+    <string name="action_reject">拒絕</string>
     <string name="list_members">列出成員</string>
     <string name="open_chat_header">打開標頭</string>
     <string name="room_sync_in_progress">正在同步……</string>
@@ -586,9 +586,9 @@
     <string name="ssl_unexpected_existing_expl">你的手機曾經信任的憑證已經變動。這非常不尋常。建議你不要接受此新的憑證。</string>
     <string name="title_activity_choose_sticker">發送貼圖</string>
     <string name="dialog_title_third_party_licences">第三方開放原始碼授權</string>
-    <string name="download">下載</string>
-    <string name="speak">說話</string>
-    <string name="clear">清除</string>
+    <string name="action_download">下載</string>
+    <string name="action_speak">說話</string>
+    <string name="action_clear">清除</string>
     <string name="option_send_voice">發送語音訊息</string>
     <string name="option_send_sticker">發送貼圖</string>
     <string name="no_sticker_application_dialog_content">您目前沒有任何貼圖。 
@@ -622,17 +622,6 @@
     <string name="tab_title_search_messages">訊息</string>
     <string name="tab_title_search_people">聯絡人</string>
     <string name="tab_title_search_files">檔案</string>
-    <string name="room_recents_join">加入</string>
-    <string name="room_recents_directory">目錄</string>
-    <string name="room_recents_favourites">最愛</string>
-    <string name="room_recents_conversations">聊天室</string>
-    <string name="room_recents_low_priority">低優先度</string>
-    <string name="room_recents_invites">邀請</string>
-    <string name="room_recents_start_chat">開始聊天</string>
-    <string name="room_recents_create_room">新建聊天室</string>
-    <string name="room_recents_join_room">加入聊天室</string>
-    <string name="room_recents_join_room_title">加入聊天室</string>
-    <string name="room_recents_join_room_prompt">輸入聊天室 ID 或聊天室別名</string>
     <string name="directory_search_results_title">瀏覽目錄</string>
     <plurals name="directory_search_rooms">
         <item quantity="other">%d 個聊天室</item>
@@ -1080,7 +1069,7 @@
     <string name="template_settings_call_ringtone_use_app_ringtone">為來電使用預設的 ${app_name} 鈴聲</string>
     <string name="settings_call_ringtone_title">來電鈴聲</string>
     <string name="settings_call_ringtone_dialog_title">選取通話鈴聲：</string>
-    <string name="accept">接受</string>
+    <string name="action_accept">接受</string>
     <string name="auth_accept_policies">請審閱並接受此家伺服器的政策：</string>
     <string name="settings_notification_troubleshoot">疑難排解通知</string>
     <string name="settings_troubleshoot_diagnostic">疑難排解診斷</string>
@@ -1153,7 +1142,7 @@
     <string name="title_activity_keys_backup_setup">金鑰備份</string>
     <string name="title_activity_keys_backup_restore">使用金鑰備份</string>
     <string name="keys_backup_is_not_finished_please_wait">金鑰備份尚未完成，請稍候……</string>
-    <string name="skip">略過</string>
+    <string name="action_skip">略過</string>
     <string name="done">完成</string>
     <string name="settings_notification_advanced">進階通知設定</string>
     <string name="settings_notification_by_event">活動通知重要程度</string>
@@ -1248,8 +1237,8 @@
     <string name="are_you_sure">您確定嗎？</string>
     <string name="backup">備份</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">除非您在登出前備份您的金鑰，否則您將會失去對您的加密訊息的存取權。</string>
-    <string name="stay">保留</string>
-    <string name="abort">放棄</string>
+    <string name="action_stay">保留</string>
+    <string name="action_abort">放棄</string>
     <string name="action_sign_out_confirmation_simple">您想要登出嗎？</string>
     <string name="settings_data_save_mode_summary">數據節省模式會套用特定的過濾器，這樣狀態更新與輸入通知就會被過濾掉。</string>
     <string name="encryption_message_recovery">加密訊息復原</string>
@@ -1294,7 +1283,7 @@
     <string name="keys_backup_restoring_computing_key_waiting_message">正在計算復原金鑰……</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">正在下載金鑰……</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">正在匯出金鑰……</string>
-    <string name="ignore">忽略</string>
+    <string name="action_ignore">忽略</string>
     <string name="auth_login_sso">使用單一登入系統登入</string>
     <string name="login_error_unknown_host">這個 URL 不可用，請檢查</string>
     <string name="login_error_ssl_handshake">您的裝置正在使用過期的 TLS 安全協定，容易遭受攻擊，為了您的安全將不會連線</string>
@@ -1402,8 +1391,8 @@
     <string name="room_list_rooms_empty_title">聊天室</string>
     <string name="room_list_rooms_empty_body">您的聊天室將會在此顯示。點擊右下角的 + 來尋找既有的或開始您自己的。</string>
     <string name="title_activity_emoji_reaction_picker">反應</string>
-    <string name="reactions_agree">同意</string>
-    <string name="reactions_like">喜歡</string>
+    <string name="action_agree">同意</string>
+    <string name="action_like">喜歡</string>
     <string name="message_add_reaction">新增反應</string>
     <string name="message_view_reaction">檢視反應</string>
     <string name="reactions">反應</string>
@@ -1485,8 +1474,8 @@
     <string name="direct_room_filter_hint">透過使用者名稱或 ID 過濾……</string>
     <string name="joining_room">正在加入聊天室……</string>
     <string name="message_view_edit_history">檢視編輯歷史</string>
-    <string name="review">審閱</string>
-    <string name="decline">婉拒</string>
+    <string name="action_review">審閱</string>
+    <string name="action_decline">婉拒</string>
     <string name="widget_integration_review_terms">要繼續，您必須接受此服務的條款。</string>
     <string name="terms_of_service">服務條款</string>
     <string name="review_terms">審閱條款</string>
@@ -1494,8 +1483,8 @@
     <string name="terms_description_for_integration_manager">使用機器人、橋接、小工具與貼紙包</string>
     <string name="read_at">閱讀於</string>
     <string name="none">無</string>
-    <string name="revoke">撤銷</string>
-    <string name="disconnect">斷線</string>
+    <string name="action_revoke">撤銷</string>
+    <string name="action_disconnect">斷線</string>
     <string name="people_no_identity_server">未設定身份識別伺服器。</string>
     <string name="call_failed_no_ice_title">因為錯誤設定的伺服器導致通話失敗</string>
     <string name="call_failed_no_ice_description">請要求您家伺服器 (%1$s) 的管理員設定 TURN 伺服器以讓通話正常運作。
@@ -1925,13 +1914,6 @@
     <string name="login_signup_username_hint">使用者名稱</string>
     <string name="settings_dev_tools">開發者工具</string>
     <string name="settings_account_data">帳號資料</string>
-    <plurals name="poll_info">
-        <item quantity="other">%d 投票</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="other">%d 投票 - 最後結果</item>
-    </plurals>
-    <string name="poll_item_selected_aria">已選取的選項</string>
     <string name="command_description_poll">建立簡易投票</string>
     <string name="verification_cannot_access_other_session">使用復原通關密語或金鑰</string>
     <string name="verification_use_passphrase">如果您無法存取既有的工作階段的話</string>
@@ -2058,7 +2040,7 @@
 \n${app_name} 桌面版</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">或其他有交叉簽章功能的 Matrix 客戶端</string>
+    <string name="or_other_mx_capable_client">或其他有交叉簽章功能的 Matrix 客戶端</string>
     <string name="template_use_latest_app">在您的其他裝置上使用最新的 ${app_name}：</string>
     <string name="command_description_discard_session">強制丟棄目前在加密聊天室中的外發群組工作階段</string>
     <string name="command_description_discard_session_not_handled">僅在加密聊天室中支援</string>
@@ -2131,9 +2113,9 @@
     <string name="identity_server_set_alternative_notice">或者您可以輸入任何身份識別伺服器 URL</string>
     <string name="identity_server_set_alternative_notice_no_default">輸入身份識別伺服器 URL</string>
     <string name="identity_server_set_alternative_submit">遞交</string>
-    <string name="play_video">播放</string>
-    <string name="pause_video">暫停</string>
-    <string name="dismiss">忽略</string>
+    <string name="action_play">播放</string>
+    <string name="action_pause">暫停</string>
+    <string name="action_dismiss">忽略</string>
     <string name="action_copy">複製</string>
     <string name="dialog_title_success">成功</string>
     <string name="bottom_action_notification">通知</string>
@@ -2325,7 +2307,6 @@
     <string name="settings_show_room_member_state_events">顯示聊天室成員狀態活動</string>
     <string name="settings_show_room_member_state_events_summary">包含邀請／加入／離開／踢除／封鎖事件與大頭貼／顯示名稱變更等。</string>
     <string name="sent_a_poll">投票</string>
-    <string name="sent_a_bot_buttons">機器人按鈕</string>
     <string name="sent_a_reaction">反應：%s</string>
     <string name="sent_verification_conclusion">驗證結論</string>
     <string name="universal_link_malformed">連結格式錯誤</string>
@@ -2382,7 +2363,7 @@
     <string name="search_banned_user_hint">過濾被封鎖的使用者</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">您沒有開始通話的權限</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">您沒有開始會議通話的權限</string>
-    <string name="reset">重設</string>
+    <string name="action_reset">重設</string>
     <string name="settings_security_pin_code_use_biometrics_title">啟用生物識別技術</string>
     <string name="warning_unsaved_change_discard">放棄變更</string>
     <string name="warning_unsaved_change">有未儲存的變更。要放棄變更嗎？</string>
@@ -2648,7 +2629,7 @@
     <string name="invite_to_space_with_name_desc">他們將可以探索 %s</string>
     <string name="invite_to_space_with_name">邀請至 %s</string>
     <string name="invite_by_link">分享連結</string>
-    <string name="invite_by_mxid">透過使用者名稱邀請</string>
+    <string name="invite_by_username">透過使用者名稱邀請</string>
     <string name="invite_by_email">透過電子郵件邀請</string>
     <string name="invite_people_to_your_space_desc">此刻只有您。%s 與其他人一起會更好。</string>
     <string name="invite_people_menu">邀請夥伴</string>
@@ -2903,7 +2884,7 @@
     <string name="discovery_invite">透過電子郵件邀請、尋找聯絡人以及更多……</string>
     <string name="finish_setting_up_discovery">完成探索設定。</string>
     <string name="create_space_identity_server_info_none">您目前並未使用身份認證伺服器。為了邀請隊友並被他們探索，請在下方設定一個。</string>
-    <string name="invite_by_mxid_or_mail">透過使用者名稱或電子郵件邀請</string>
+    <string name="invite_by_username_or_mail">透過使用者名稱或電子郵件邀請</string>
     <string name="create_spaces_invite_public_header_desc">確保合適的人可以存取 %s 公司。您可以稍後再邀請。</string>
     <string name="create_spaces_invite_public_header">誰是您的隊友？</string>
     <string name="command_description_add_to_space">新增至指定的空間</string>
@@ -2975,4 +2956,46 @@
     <string name="identity_server_consent_dialog_content_question">您同意傳送此資訊嗎？</string>
     <string name="identity_server_consent_dialog_content_3">要探索現有聯絡人，您必須傳送聯絡人資訊（電子郵件與電話號碼）到您的身份識別伺服器。我們會在傳送前對您的資料進行雜湊處理以保護隱私。</string>
     <string name="action_not_now">現在不要</string>
+    <string name="delete_poll_dialog_content">您確定要移除此投票？移除後將無法復原。</string>
+    <string name="delete_poll_dialog_title">移除投票</string>
+    <string name="poll_end_room_list_preview">投票已結束</string>
+    <string name="poll_response_room_list_preview">投票</string>
+    <string name="labs_enable_polls">啟用投票</string>
+    <string name="end_poll_confirmation_approve_button">結束投票</string>
+    <string name="end_poll_confirmation_description">這將阻止人們投票並顯示投票的最終結果。</string>
+    <string name="end_poll_confirmation_title">結束此投票？</string>
+    <string name="a11y_poll_winner_option">獲勝選項</string>
+    <string name="poll_end_action">結束投票</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="other">以 %1$d 票為基礎的最終結果</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="other">已投 %1$d 票。投票以檢視結果</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="other">以 %1$d 票為基礎</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="other">%1$d 票</item>
+    </plurals>
+    <string name="preference_system_settings">系統設定</string>
+    <string name="preference_versions">版本</string>
+    <string name="preference_help_summary">取得關於使用 Element 的協助</string>
+    <string name="preference_help_title">說明與支援</string>
+    <string name="preference_help">說明</string>
+    <string name="preference_root_legals">法律</string>
+    <string name="legals_no_policy_provided">此伺服器並未提供任何政策。</string>
+    <string name="legals_third_party_notices">第三方函式庫</string>
+    <string name="legals_identity_server_title">您的身份識別伺服器政策</string>
+    <string name="legals_home_server_title">您的家伺服器政策</string>
+    <string name="template_legals_application_title">${app_name} 政策</string>
+    <string name="analytics_opt_in_list_item_3">您隨時可以在設定中關閉此功能</string>
+    <string name="analytics_opt_in_list_item_2">我們<b>不會</b>與第三方分享資訊</string>
+    <string name="analytics_opt_in_list_item_1">我們<b>不會</b>記錄或分析任何帳號資料</string>
+    <string name="analytics_opt_in_content_link">這裡</string>
+    <string name="analytics_opt_in_content">透過分享匿名使用資料協助我們找出問題並改善 Element。為了了解人們如何使用多裝置，我們將會產生隨機識別字串，在您的裝置間共享。
+\n
+\n您可以閱讀我們的條款 %s。</string>
+    <string name="analytics_opt_in_title">協助改善 Element</string>
+    <string name="action_enable">啟用</string>
 </resources>

@@ -42,10 +42,10 @@ abstract class BottomSheetVerificationActionItem : VectorEpoxyModel<BottomSheetV
     var iconRes: Int = -1
 
     @EpoxyAttribute
-    var title: CharSequence = ""
+    var title: String = ""
 
     @EpoxyAttribute
-    var subTitle: CharSequence? = null
+    var subTitle: String? = null
 
     @EpoxyAttribute
     var titleColor: Int = 0

@@ -16,7 +16,7 @@
 
     <item
         android:id="@+id/invite"
-        android:title="@string/invite"
+        android:title="@string/action_invite"
         app:showAsAction="never" />
 
     <item
@@ -38,7 +38,7 @@
         tools:visible="true" />
 
     <item android:id="@+id/join_conference"
-        android:title="@string/join"
+        android:title="@string/action_join"
         app:actionLayout="@layout/layout_join_conference_action"
         app:showAsAction="always"
         />

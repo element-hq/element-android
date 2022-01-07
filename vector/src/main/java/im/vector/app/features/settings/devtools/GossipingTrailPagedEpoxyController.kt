@@ -21,8 +21,8 @@ import com.airbnb.epoxy.paging.PagedListEpoxyController
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
-import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.GenericItem_
 import im.vector.app.core.utils.createUIHandler
 import me.gujun.android.span.span
@@ -38,7 +38,6 @@ import org.matrix.android.sdk.internal.crypto.model.rest.SecretShareRequest
 import javax.inject.Inject
 
 class GossipingTrailPagedEpoxyController @Inject constructor(
-        private val stringProvider: StringProvider,
         private val vectorDateFormatter: VectorDateFormatter,
         private val colorProvider: ColorProvider
 ) : PagedListEpoxyController<Event>(
@@ -63,7 +62,7 @@ class GossipingTrailPagedEpoxyController @Inject constructor(
                         "${event.getClearType()} [encrypted]"
                     } else {
                         event.type
-                    }
+                    }?.toEpoxyCharSequence()
             )
             description(
                     span {
@@ -157,11 +156,11 @@ class GossipingTrailPagedEpoxyController @Inject constructor(
                                 +"${content?.requestingDeviceId}"
                             } else if (event.getClearType() == EventType.ENCRYPTED) {
                                 span("**Failed to Decrypt** ${event.mCryptoError}") {
-                                        textColor = host.colorProvider.getColorFromAttribute(R.attr.colorError)
-                                    }
+                                    textColor = host.colorProvider.getColorFromAttribute(R.attr.colorError)
+                                }
                             }
                         }
-                    }
+                    }.toEpoxyCharSequence()
             )
         }
     }
