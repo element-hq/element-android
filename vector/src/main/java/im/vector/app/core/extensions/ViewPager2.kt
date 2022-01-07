@@ -27,7 +27,7 @@ fun ViewPager2.setCurrentItem(
         item: Int,
         duration: Long,
         interpolator: TimeInterpolator = AccelerateDecelerateInterpolator(),
-        pagePxWidth: Int = width // Default value taken from getWidth() from ViewPager2 view
+        pagePxWidth: Int = width,
 ) {
     val pxToDrag: Int = pagePxWidth * (item - currentItem)
     val animator = ValueAnimator.ofInt(0, pxToDrag)
@@ -47,10 +47,12 @@ fun ViewPager2.setCurrentItem(
     }
     animator.addListener(object : Animator.AnimatorListener {
         override fun onAnimationStart(animation: Animator?) {
+            isUserInputEnabled = false
             beginFakeDrag()
         }
 
         override fun onAnimationEnd(animation: Animator?) {
+            isUserInputEnabled = true
             endFakeDrag()
         }
 
