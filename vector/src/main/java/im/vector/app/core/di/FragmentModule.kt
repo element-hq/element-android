@@ -103,6 +103,7 @@ import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordMailConfi
 import im.vector.app.features.onboarding.ftueauth.FtueAuthResetPasswordSuccessFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthServerSelectionFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthSignUpSignInSelectionFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthSplashCarouselFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthSplashFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthWaitForEmailFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthWebFragment
@@ -443,6 +444,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(FtueAuthSplashFragment::class)
     fun bindFtueAuthSplashFragment(fragment: FtueAuthSplashFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthSplashCarouselFragment::class)
+    fun bindFtueAuthSplashCarouselFragment(fragment: FtueAuthSplashCarouselFragment): Fragment
 
     @Binds
     @IntoMap

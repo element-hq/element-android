@@ -14,27 +14,18 @@
  * limitations under the License.
  */
 
-package im.vector.app.features
+package im.vector.app.features.onboarding.ftueauth
 
-import im.vector.app.BuildConfig
+import com.airbnb.epoxy.TypedEpoxyController
+import javax.inject.Inject
 
-interface VectorFeatures {
-
-    fun onboardingVariant(): OnboardingVariant
-
-    fun isAlreadyHaveAccountSplashEnabled(): Boolean
-
-    fun isSplashCarouselEnabled(): Boolean
-
-    enum class OnboardingVariant {
-        LEGACY,
-        LOGIN_2,
-        FTUE_AUTH
+class SplashCarouselController @Inject constructor() : TypedEpoxyController<SplashCarouselState>() {
+    override fun buildModels(data: SplashCarouselState) {
+        data.items.forEachIndexed { index, item ->
+            splashCarouselItem {
+                id(index)
+                item(item)
+            }
+        }
     }
-}
-
-class DefaultVectorFeatures : VectorFeatures {
-    override fun onboardingVariant(): VectorFeatures.OnboardingVariant = BuildConfig.ONBOARDING_VARIANT
-    override fun isAlreadyHaveAccountSplashEnabled() = true
-    override fun isSplashCarouselEnabled() = false
 }
