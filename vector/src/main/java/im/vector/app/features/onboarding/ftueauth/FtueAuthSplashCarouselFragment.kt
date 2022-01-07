@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.viewpager2.widget.ViewPager2
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayoutMediator
@@ -30,14 +31,14 @@ import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.extensions.incrementByOneAndWrap
 import im.vector.app.core.extensions.setCurrentItem
-import im.vector.app.core.flow.tickerFlow
 import im.vector.app.databinding.FragmentFtueSplashCarouselBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingFlow
 import im.vector.app.features.settings.VectorPreferences
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.failure.Failure
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -81,10 +82,22 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
         }
 
         views.splashCarousel.apply {
-            val itemCount = carouselAdapter.itemCount
-            tickerFlow(lifecycleScope, delayMillis = CAROUSEL_ROTATION_DELAY_MS)
-                    .onEach { setCurrentItem(currentItem.incrementByOneAndWrap(max = itemCount - 1), duration = CAROUSEL_TRANSITION_TIME_MS) }
-                    .launchIn(lifecycleScope)
+            var scheduledTransition: Job? = null
+            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    scheduledTransition?.cancel()
+                    scheduledTransition = scheduleCarouselTransition()
+                }
+            })
+            scheduledTransition = scheduleCarouselTransition()
+        }
+    }
+
+    private fun ViewPager2.scheduleCarouselTransition(): Job {
+        val itemCount = adapter?.itemCount ?: throw IllegalStateException("An adapter must be set")
+        return lifecycleScope.launch {
+            delay(CAROUSEL_ROTATION_DELAY_MS)
+            setCurrentItem(currentItem.incrementByOneAndWrap(max = itemCount - 1), duration = CAROUSEL_TRANSITION_TIME_MS)
         }
     }
 
