@@ -50,6 +50,7 @@ class MarkdownParserTest : InstrumentedTest {
      */
     private val markdownParser = MarkdownParser(
             Parser.builder().build(),
+            Parser.builder().build(),
             HtmlRenderer.builder().softbreak("<br />").build(),
             TextPillsUtils(
                     MentionLinkSpecComparator(),
