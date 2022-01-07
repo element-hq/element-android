@@ -24,6 +24,7 @@ import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
+import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.exhaustive
@@ -67,13 +68,17 @@ class ContactsBookFragment @Inject constructor(
         setupFilterView()
         setupConsentView()
         setupOnlyBoundContactsView()
-        setupCloseView()
         contactsBookViewModel.observeViewEvents {
             when (it) {
                 is ContactsBookViewEvents.Failure             -> showFailure(it.throwable)
                 is ContactsBookViewEvents.OnPoliciesRetrieved -> showConsentDialog(it)
             }.exhaustive
         }
+        configureToolbar(views.phoneBookToolbar)
+                .withTitle(R.string.contacts_book_title)
+                .allowBack(true)
+                .withCustomBackIcon(R.drawable.ic_x_18dp)
+                .configure()
     }
 
     private fun setupConsentView() {
@@ -117,12 +122,6 @@ class ContactsBookFragment @Inject constructor(
     private fun setupRecyclerView() {
         contactsBookController.callback = this
         views.phoneBookRecyclerView.configureWith(contactsBookController)
-    }
-
-    private fun setupCloseView() {
-        views.phoneBookClose.debouncedClicks {
-            sharedActionViewModel.post(UserListSharedAction.GoBack)
-        }
     }
 
     override fun invalidate() = withState(contactsBookViewModel) { state ->

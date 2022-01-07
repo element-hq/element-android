@@ -42,6 +42,7 @@ import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
+import im.vector.app.core.utils.ToolbarConfig
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.navigation.Navigator
 import im.vector.lib.ui.styles.dialogs.MaterialProgressDialog
@@ -221,6 +222,10 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
             parentActivity.configure(toolbar)
         }
     }
+
+    //we need to decide if we want to use vectorBaseActivity here
+    //the problem is that it casts getActivity() result to non nullable type, so in case if it will return null, NullPointerException will be thrown
+    protected fun configureToolbar(toolbar: MaterialToolbar) = (activity as? VectorBaseActivity<*>)?.configureToolbar(toolbar) ?: ToolbarConfig(null, toolbar)
 
     /* ==========================================================================================
      * ViewEvents
