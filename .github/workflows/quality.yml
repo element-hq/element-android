@@ -89,6 +89,7 @@ jobs:
       - name: Lint analysis
         run: ./gradlew clean :vector:lint --stacktrace
       - name: Upload reports
+        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: lint-report
@@ -117,6 +118,7 @@ jobs:
       - name: Lint ${{ matrix.target }} release
         run: ./gradlew clean lint${{ matrix.target }}Release --stacktrace
       - name: Upload ${{ matrix.target }} linting report
+        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: release-lint-report-${{ matrix.target }}
