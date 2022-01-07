@@ -15,7 +15,6 @@
  */
 
 package im.vector.app.features.onboarding.ftueauth
-
 import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +33,7 @@ import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
@@ -61,7 +61,8 @@ class FtueAuthVariant(
         private val views: ActivityLoginBinding,
         private val onboardingViewModel: OnboardingViewModel,
         private val activity: VectorBaseActivity<ActivityLoginBinding>,
-        private val supportFragmentManager: FragmentManager
+        private val supportFragmentManager: FragmentManager,
+        private val vectorFeatures: VectorFeatures
 ) : OnboardingVariant {
 
     private val enterAnim = R.anim.enter_fade_in
@@ -108,7 +109,11 @@ class FtueAuthVariant(
     }
 
     private fun addFirstFragment() {
-        activity.addFragment(views.loginFragmentContainer, FtueAuthSplashFragment::class.java)
+        val splashFragment = when (vectorFeatures.isSplashCarouselEnabled()) {
+            true -> FtueAuthSplashCarouselFragment::class.java
+            else -> FtueAuthSplashFragment::class.java
+        }
+        activity.addFragment(views.loginFragmentContainer, splashFragment)
     }
 
     private fun handleOnboardingViewEvents(viewEvents: OnboardingViewEvents) {

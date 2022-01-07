@@ -2516,6 +2516,16 @@
     <string name="direct_room_join_rules_invite_by_you">You made this invite only.</string>
     <string name="timeline_unread_messages">Unread messages</string>
 
+    <!--  Onboarding -->
+    <string name="ftue_auth_carousel_1_title">Own your conversions.</string>
+    <string name="ftue_auth_carousel_1_body">End-to-end encrypted messaging for secure and independent communication, connected via Matrix.</string>
+    <string name="ftue_auth_carousel_2_title">You\'re in control.</string>
+    <string name="ftue_auth_carousel_2_body">Element lets you choose where you messages are stored, keeping you in control of your data.</string>
+    <string name="ftue_auth_carousel_3_title">Connect with anyone.</string>
+    <string name="ftue_auth_carousel_3_body">Element works with all Matrix-based apps and can even bridge into proprietary messengers.</string>
+    <string name="ftue_auth_carousel_4_title">Cut the slack from teams.</string>
+    <string name="ftue_auth_carousel_4_body">As universal as email, Element is a completely new type of collaboration.</string>
+
     <string name="login_splash_title">It\'s your conversation. Own it.</string>
     <string name="login_splash_text1">Chat with people directly or in groups</string>
     <string name="login_splash_text2">Keep conversations private with encryption</string>

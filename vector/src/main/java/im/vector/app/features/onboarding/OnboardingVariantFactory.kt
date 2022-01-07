@@ -36,7 +36,8 @@ class OnboardingVariantFactory @Inject constructor(
                 views = views,
                 onboardingViewModel = onboardingViewModel.value,
                 activity = activity,
-                supportFragmentManager = activity.supportFragmentManager
+                supportFragmentManager = activity.supportFragmentManager,
+                vectorFeatures = vectorFeatures
         )
         VectorFeatures.OnboardingVariant.LOGIN_2   -> Login2Variant(
                 views = views,

@@ -50,6 +50,17 @@ It's also possible for any icon to go to the main component by right-clicking on
  - open the created vector drawable
  - optionally update the color(s) to "#FF0000" (red) to ensure that the drawable is correctly tinted at runtime.
 
+### Images
+
+Android 4.3 (18+) fully supports the WebP image format which can often provide smaller image sizes without drastically impacting image quality (depending on the output encoding quality).
+When importing non vector images, WebP is the preferred format.
+
+Images can be converted to the WebP within Android Studio by
+ - right clicking the image file within the project file explorer
+ - select `Convert to WebP`
+
+https://developer.android.com/studio/write/convert-webp
+
 ## Figma links
 
 Figma links can be included in the layout, for future reference, but it is also OK to add a paragraph below here, to centralize the information
