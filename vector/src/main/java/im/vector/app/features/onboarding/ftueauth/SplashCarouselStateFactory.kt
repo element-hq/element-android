@@ -35,25 +35,25 @@ class SplashCarouselStateFactory @Inject constructor(
             SplashCarouselState.Item(
                     R.string.ftue_auth_carousel_1_title.colorTerminatingFullStop(R.attr.colorAccent),
                     R.string.ftue_auth_carousel_1_body,
-                    R.drawable.onboarding_carousel_conversations,
+                    R.drawable.ic_splash_conversations,
                     R.drawable.bg_carousel_page_1
             ),
             SplashCarouselState.Item(
                     R.string.ftue_auth_carousel_2_title.colorTerminatingFullStop(R.attr.colorAccent),
                     R.string.ftue_auth_carousel_2_body,
-                    R.drawable.onboarding_carousel_ems,
+                    R.drawable.ic_splash_control,
                     R.drawable.bg_carousel_page_2
             ),
             SplashCarouselState.Item(
                     R.string.ftue_auth_carousel_3_title.colorTerminatingFullStop(R.attr.colorAccent),
                     R.string.ftue_auth_carousel_3_body,
-                    R.drawable.onboarding_carousel_connect,
+                    R.drawable.ic_splash_secure,
                     R.drawable.bg_carousel_page_3
             ),
             SplashCarouselState.Item(
                     R.string.ftue_auth_carousel_4_title.colorTerminatingFullStop(R.attr.colorAccent),
                     R.string.ftue_auth_carousel_4_body,
-                    R.drawable.onboarding_carousel_universal,
+                    R.drawable.ic_splash_collaboration,
                     R.drawable.bg_carousel_page_4
             )
     ))
