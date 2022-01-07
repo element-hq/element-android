@@ -61,7 +61,7 @@ class SplashCarouselStateFactory @Inject constructor(
     private fun Int.colorTerminatingFullStop(@AttrRes color: Int): EpoxyCharSequence {
         val string = stringProvider.getString(this)
         val fullStop = "."
-        return (if (string.endsWith(fullStop)) {
+        val charSequence = if (string.endsWith(fullStop)) {
             span {
                 +string.removeSuffix(fullStop)
                 span(fullStop) {
@@ -70,6 +70,7 @@ class SplashCarouselStateFactory @Inject constructor(
             }
         } else {
             string
-        }).toEpoxyCharSequence()
+        }
+        return charSequence.toEpoxyCharSequence()
     }
 }
