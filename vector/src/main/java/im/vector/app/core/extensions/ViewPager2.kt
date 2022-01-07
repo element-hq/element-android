@@ -19,6 +19,7 @@ package im.vector.app.core.extensions
 import android.animation.Animator
 import android.animation.TimeInterpolator
 import android.animation.ValueAnimator
+import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.viewpager2.widget.ViewPager2
 
@@ -31,11 +32,16 @@ fun ViewPager2.setCurrentItem(
     val pxToDrag: Int = pagePxWidth * (item - currentItem)
     val animator = ValueAnimator.ofInt(0, pxToDrag)
     var previousValue = 0
+    val isRtl = this.layoutDirection == View.LAYOUT_DIRECTION_RTL
+
     animator.addUpdateListener { valueAnimator ->
         val currentValue = valueAnimator.animatedValue as Int
         val currentPxToDrag = (currentValue - previousValue).toFloat()
         kotlin.runCatching {
-            fakeDragBy(-currentPxToDrag)
+            when {
+                isRtl -> fakeDragBy(currentPxToDrag)
+                else  -> fakeDragBy(-currentPxToDrag)
+            }
             previousValue = currentValue
         }.onFailure { animator.cancel() }
     }
