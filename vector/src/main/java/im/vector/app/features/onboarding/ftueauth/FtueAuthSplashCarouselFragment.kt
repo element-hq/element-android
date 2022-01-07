@@ -54,34 +54,7 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
     private fun setupViews() {
         views.splashCarousel.adapter = carouselController.adapter
         TabLayoutMediator(views.carouselIndicator, views.splashCarousel) { _, _ -> }.attach()
-        carouselController.setData(SplashCarouselState(
-                items = listOf(
-                        SplashCarouselState.Item(
-                                getString(R.string.ftue_auth_carousel_1_title),
-                                getString(R.string.ftue_auth_carousel_1_body),
-                                R.drawable.onboarding_carousel_conversations,
-                                R.drawable.bg_carousel_page_1
-                        ),
-                        SplashCarouselState.Item(
-                                getString(R.string.ftue_auth_carousel_2_title),
-                                getString(R.string.ftue_auth_carousel_2_body),
-                                R.drawable.onboarding_carousel_ems,
-                                R.drawable.bg_carousel_page_2
-                        ),
-                        SplashCarouselState.Item(
-                                getString(R.string.ftue_auth_carousel_3_title),
-                                getString(R.string.ftue_auth_carousel_3_body),
-                                R.drawable.onboarding_carousel_connect,
-                                R.drawable.bg_carousel_page_3
-                        ),
-                        SplashCarouselState.Item(
-                                getString(R.string.ftue_auth_carousel_4_title),
-                                getString(R.string.ftue_auth_carousel_4_body),
-                                R.drawable.onboarding_carousel_universal,
-                                R.drawable.bg_carousel_page_4
-                        )
-                )
-        ))
+        carouselController.setData(SplashCarouselState())
 
         views.loginSplashSubmit.debouncedClicks { getStarted() }
         views.loginSplashAlreadyHaveAccount.apply {

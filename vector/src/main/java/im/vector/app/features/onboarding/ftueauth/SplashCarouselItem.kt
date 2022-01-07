@@ -32,10 +32,11 @@ abstract class SplashCarouselItem : VectorEpoxyModel<SplashCarouselItem.Holder>(
 
     override fun bind(holder: Holder) {
         super.bind(holder)
+
         holder.view.setBackgroundResource(item.pageBackground)
         holder.image.setImageResource(item.image)
-        holder.title.text = item.title
-        holder.body.text = item.body
+        holder.title.setText(item.title)
+        holder.body.setText(item.body)
     }
 
     class Holder : VectorEpoxyHolder() {

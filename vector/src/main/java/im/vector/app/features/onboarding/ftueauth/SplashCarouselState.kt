@@ -17,13 +17,40 @@
 package im.vector.app.features.onboarding.ftueauth
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
+import im.vector.app.R
 
 data class SplashCarouselState(
-        val items: List<Item>
+        val items: List<Item> = listOf(
+                Item(
+                        R.string.ftue_auth_carousel_1_title,
+                        R.string.ftue_auth_carousel_1_body,
+                        R.drawable.onboarding_carousel_conversations,
+                        R.drawable.bg_carousel_page_1
+                ),
+                Item(
+                        R.string.ftue_auth_carousel_2_title,
+                        R.string.ftue_auth_carousel_2_body,
+                        R.drawable.onboarding_carousel_ems,
+                        R.drawable.bg_carousel_page_2
+                ),
+                Item(
+                        R.string.ftue_auth_carousel_3_title,
+                        R.string.ftue_auth_carousel_3_body,
+                        R.drawable.onboarding_carousel_connect,
+                        R.drawable.bg_carousel_page_3
+                ),
+                Item(
+                        R.string.ftue_auth_carousel_4_title,
+                        R.string.ftue_auth_carousel_4_body,
+                        R.drawable.onboarding_carousel_universal,
+                        R.drawable.bg_carousel_page_4
+                )
+        )
 ) {
     data class Item(
-            val title: String,
-            val body: String,
+            @StringRes val title: Int,
+            @StringRes val body: Int,
             @DrawableRes val image: Int,
             @DrawableRes val pageBackground: Int
     )
