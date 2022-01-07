@@ -100,7 +100,7 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822
-          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.session' matrix-sdk-android:connectedDebugAndroidTest --info
+          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.session' matrix-sdk-android:connectedDebugAndroidTest
       - name: Read Results [org.matrix.android.sdk.session]
         continue-on-error: true
         id: get-comment-body-session
@@ -118,7 +118,7 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822
-          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.account' matrix-sdk-android:connectedDebugAndroidTest --info
+          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.account' matrix-sdk-android:connectedDebugAndroidTest
       - name: Read Results [org.matrix.android.sdk.account]
         continue-on-error: true
         id: get-comment-body-account
@@ -136,7 +136,7 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822
-          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.internal' matrix-sdk-android:connectedDebugAndroidTest --info
+          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.internal' matrix-sdk-android:connectedDebugAndroidTest
       - name: Read Results [org.matrix.android.sdk.internal]
         continue-on-error: true
         id: get-comment-body-internal
@@ -154,7 +154,7 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822
-          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.ordering' matrix-sdk-android:connectedDebugAndroidTest --info
+          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.ordering' matrix-sdk-android:connectedDebugAndroidTest
       - name: Read Results [org.matrix.android.sdk.ordering]
         continue-on-error: true
         id: get-comment-body-ordering
@@ -172,7 +172,7 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822
-          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.class='org.matrix.android.sdk.PermalinkParserTest' matrix-sdk-android:connectedDebugAndroidTest --info
+          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.class='org.matrix.android.sdk.PermalinkParserTest' matrix-sdk-android:connectedDebugAndroidTest
       - name: Read Results [org.matrix.android.sd.PermalinkParserTest]
         continue-on-error: true
         id: get-comment-body-permalink
