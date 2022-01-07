@@ -27,18 +27,27 @@ class DebugFeaturesStateFactory @Inject constructor(
     fun create(): FeaturesState {
         return FeaturesState(listOf(
                 createEnumFeature(
-                        label = "Login version",
-                        selection = debugFeatures.loginVariant(),
-                        default = defaultFeatures.loginVariant()
+                        label = "Onboarding variant",
+                        featureOverride = debugFeatures.onboardingVariant(),
+                        featureDefault = defaultFeatures.onboardingVariant()
+                ),
+
+                Feature.BooleanFeature(
+                        label = "FTUE Splash - I already have an account",
+                        featureOverride = debugFeatures.isAlreadyHaveAccountSplashEnabled().takeIf {
+                            debugFeatures.hasOverride(DebugFeatureKeys.alreadyHaveAnAccount)
+                        },
+                        featureDefault = defaultFeatures.isAlreadyHaveAccountSplashEnabled(),
+                        key = DebugFeatureKeys.alreadyHaveAnAccount
                 )
         ))
     }
 
-    private inline fun <reified T : Enum<T>> createEnumFeature(label: String, selection: T, default: T): Feature {
+    private inline fun <reified T : Enum<T>> createEnumFeature(label: String, featureOverride: T, featureDefault: T): Feature {
         return Feature.EnumFeature(
                 label = label,
-                selection = selection.takeIf { debugFeatures.hasEnumOverride(T::class) },
-                default = default,
+                override = featureOverride.takeIf { debugFeatures.hasEnumOverride(T::class) },
+                default = featureDefault,
                 options = enumValues<T>().toList(),
                 type = T::class
         )

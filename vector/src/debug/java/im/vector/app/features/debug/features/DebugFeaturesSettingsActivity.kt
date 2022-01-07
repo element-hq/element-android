@@ -35,9 +35,13 @@ class DebugFeaturesSettingsActivity : VectorBaseActivity<FragmentGenericRecycler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        controller.listener = object : EnumFeatureItem.Listener {
-            override fun <T : Enum<T>> onOptionSelected(option: T?, feature: Feature.EnumFeature<T>) {
+        controller.listener = object : FeaturesController.Listener {
+            override fun <T : Enum<T>> onEnumOptionSelected(option: T?, feature: Feature.EnumFeature<T>) {
                 debugFeatures.overrideEnum(option, feature.type)
+            }
+
+            override fun onBooleanOptionSelected(option: Boolean?, feature: Feature.BooleanFeature) {
+                debugFeatures.override(option, feature.key)
             }
         }
         views.genericRecyclerView.configureWith(controller)

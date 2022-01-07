@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.factory
 import im.vector.app.core.epoxy.TimelineEmptyItem
 import im.vector.app.core.epoxy.TimelineEmptyItem_
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.features.analytics.DecryptionFailureTracker
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisibilityHelper
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -34,6 +35,7 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                                               private val widgetItemFactory: WidgetItemFactory,
                                               private val verificationConclusionItemFactory: VerificationItemFactory,
                                               private val callItemFactory: CallItemFactory,
+                                              private val decryptionFailureTracker: DecryptionFailureTracker,
                                               private val timelineEventVisibilityHelper: TimelineEventVisibilityHelper) {
 
     /**
@@ -130,6 +132,10 @@ class TimelineItemFactory @Inject constructor(private val messageItemFactory: Me
                         // Should only happen when shouldShowHiddenEvents() settings is ON
                         Timber.v("Type ${event.root.getClearType()} not handled")
                         defaultItemFactory.create(params)
+                    }
+                }.also {
+                    if (it != null && event.isEncrypted()) {
+                        decryptionFailureTracker.e2eEventDisplayedInTimeline(event)
                     }
                 }
             }

@@ -57,6 +57,7 @@ class LoginSplashFragment @Inject constructor(
             views.loginSplashVersion.text = "Version : ${BuildConfig.VERSION_NAME}\n" +
                     "Branch: ${BuildConfig.GIT_BRANCH_NAME}\n" +
                     "Build: ${BuildConfig.BUILD_NUMBER}"
+            views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
         }
     }
 
@@ -79,7 +80,7 @@ class LoginSplashFragment @Inject constructor(
                     .setPositiveButton(R.string.login_error_homeserver_from_url_not_found_enter_manual) { _, _ ->
                         loginViewModel.handle(LoginAction.OnGetStarted(resetLoginConfig = true))
                     }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .show()
         } else {
             super.onError(throwable)

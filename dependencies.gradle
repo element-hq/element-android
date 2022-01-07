@@ -95,6 +95,8 @@ ext.libs = [
         ],
         markwon     : [
                 'core'                   : "io.noties.markwon:core:$markwon",
+                'extLatex'               : "io.noties.markwon:ext-latex:$markwon",
+                'inlineParser'           : "io.noties.markwon:inline-parser:$markwon",
                 'html'                   : "io.noties.markwon:html:$markwon"
         ],
         airbnb      : [

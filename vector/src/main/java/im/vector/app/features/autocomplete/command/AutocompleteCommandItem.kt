@@ -29,13 +29,13 @@ import im.vector.app.core.epoxy.onClick
 abstract class AutocompleteCommandItem : VectorEpoxyModel<AutocompleteCommandItem.Holder>() {
 
     @EpoxyAttribute
-    var name: CharSequence? = null
+    var name: String? = null
 
     @EpoxyAttribute
-    var parameters: CharSequence? = null
+    var parameters: String? = null
 
     @EpoxyAttribute
-    var description: CharSequence? = null
+    var description: String? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var clickListener: ClickListener? = null

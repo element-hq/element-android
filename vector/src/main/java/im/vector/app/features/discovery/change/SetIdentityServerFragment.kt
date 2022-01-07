@@ -119,7 +119,7 @@ class SetIdentityServerFragment @Inject constructor(
                             .setPositiveButton(R.string._continue) { _, _ ->
                                 processIdentityServerChange()
                             }
-                            .setNegativeButton(R.string.cancel, null)
+                            .setNegativeButton(R.string.action_cancel, null)
                             .show()
                     Unit
                 }

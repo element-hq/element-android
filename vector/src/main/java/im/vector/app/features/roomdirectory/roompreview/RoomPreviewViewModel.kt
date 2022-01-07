@@ -46,7 +46,7 @@ import timber.log.Timber
 
 class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val initialState: RoomPreviewViewState,
                                                        private val session: Session) :
-    VectorViewModel<RoomPreviewViewState, RoomPreviewAction, EmptyViewEvents>(initialState) {
+        VectorViewModel<RoomPreviewViewState, RoomPreviewAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<RoomPreviewViewModel, RoomPreviewViewState> {
@@ -71,7 +71,7 @@ class RoomPreviewViewModel @AssistedInject constructor(@Assisted private val ini
                         .getThreePids()
                         .filterIsInstance<ThreePid.Email>()
 
-                val status = if (threePids.indexOfFirst { it.email == initialState.fromEmailInvite.email } != -1) {
+                val status = if (threePids.any { it.email == initialState.fromEmailInvite.email }) {
                     try {
                         session.identityService().getShareStatus(threePids)
                     } catch (failure: Throwable) {

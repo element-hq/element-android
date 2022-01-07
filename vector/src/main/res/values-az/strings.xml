@@ -50,7 +50,7 @@
     <string name="notice_room_third_party_registered_invite">%1$s %2$s üçün dəvəti qəbul etdi</string>
 
     <string name="notice_crypto_unable_to_decrypt">** Şifrəni aça bilmir: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Göndərənin cihazı bu mesaj üçün açarları bizə göndərməyib.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Göndərənin cihazı bu mesaj üçün açarları bizə göndərməyib.</string>
 
     <string name="could_not_redact">Redaktə etmək olmur</string>
     <string name="unable_to_send_message">Mesaj göndərmək olmur</string>

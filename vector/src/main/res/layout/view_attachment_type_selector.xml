@@ -84,17 +84,6 @@
 
             <!-- TODO. Request for new icon -->
             <ImageButton
-                android:id="@+id/attachmentAudioButton"
-                android:layout_width="@dimen/layout_touch_size"
-                android:layout_height="@dimen/layout_touch_size"
-                android:layout_marginStart="2dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:contentDescription="@string/attachment_type_audio"
-                android:src="@drawable/ic_attachment_audio_white_24dp"
-                app:tint="?colorPrimary" />
-
-            <!-- TODO. Request for new icon -->
-            <ImageButton
                 android:id="@+id/attachmentContactButton"
                 android:layout_width="@dimen/layout_touch_size"
                 android:layout_height="@dimen/layout_touch_size"

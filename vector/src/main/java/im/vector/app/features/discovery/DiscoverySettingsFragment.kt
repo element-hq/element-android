@@ -153,7 +153,7 @@ class DiscoverySettingsFragment @Inject constructor(
                     .setTitle(R.string.change_identity_server)
                     .setMessage(getString(R.string.settings_discovery_disconnect_with_bound_pid, state.identityServer(), state.identityServer()))
                     .setPositiveButton(R.string._continue) { _, _ -> navigateToChangeIdentityServerFragment() }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .show()
             Unit
         } else {
@@ -177,8 +177,8 @@ class DiscoverySettingsFragment @Inject constructor(
             MaterialAlertDialogBuilder(requireActivity())
                     .setTitle(R.string.disconnect_identity_server)
                     .setMessage(message)
-                    .setPositiveButton(R.string.disconnect) { _, _ -> viewModel.handle(DiscoverySettingsAction.DisconnectIdentityServer) }
-                    .setNegativeButton(R.string.cancel, null)
+                    .setPositiveButton(R.string.action_disconnect) { _, _ -> viewModel.handle(DiscoverySettingsAction.DisconnectIdentityServer) }
+                    .setNegativeButton(R.string.action_cancel, null)
                     .show()
         }
     }

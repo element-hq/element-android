@@ -17,6 +17,7 @@ package im.vector.app.features.settings.crosssigning
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericButtonItem
@@ -47,7 +48,7 @@ class CrossSigningSettingsController @Inject constructor(
                 genericItem {
                     id("can")
                     titleIconResourceId(R.drawable.ic_shield_trusted)
-                    title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_complete))
+                    title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_complete).toEpoxyCharSequence())
                 }
                 genericButtonItem {
                     id("Reset")
@@ -61,7 +62,7 @@ class CrossSigningSettingsController @Inject constructor(
                 genericItem {
                     id("trusted")
                     titleIconResourceId(R.drawable.ic_shield_custom)
-                    title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_trusted))
+                    title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_trusted).toEpoxyCharSequence())
                 }
                 genericButtonItem {
                     id("Reset")
@@ -75,7 +76,7 @@ class CrossSigningSettingsController @Inject constructor(
                 genericItem {
                     id("enable")
                     titleIconResourceId(R.drawable.ic_shield_black)
-                    title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_not_trusted))
+                    title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_not_trusted).toEpoxyCharSequence())
                 }
                 genericButtonItem {
                     id("Reset")
@@ -88,7 +89,7 @@ class CrossSigningSettingsController @Inject constructor(
             else                           -> {
                 genericItem {
                     id("not")
-                    title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_disabled))
+                    title(host.stringProvider.getString(R.string.encryption_information_dg_xsigning_disabled).toEpoxyCharSequence())
                 }
 
                 genericPositiveButtonItem {
@@ -115,7 +116,7 @@ class CrossSigningSettingsController @Inject constructor(
                                 textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(12)
                             }
-                        }
+                        }.toEpoxyCharSequence()
                 )
             }
         }
@@ -131,7 +132,7 @@ class CrossSigningSettingsController @Inject constructor(
                                 textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(12)
                             }
-                        }
+                        }.toEpoxyCharSequence()
                 )
             }
         }
@@ -147,7 +148,7 @@ class CrossSigningSettingsController @Inject constructor(
                                 textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(12)
                             }
-                        }
+                        }.toEpoxyCharSequence()
                 )
             }
         }

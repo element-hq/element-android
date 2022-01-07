@@ -47,7 +47,7 @@
     <string name="notice_room_third_party_invite">%1$s は %2$s にルームに参加するよう招待状を送りました</string>
     <string name="notice_room_third_party_registered_invite">%1$sは%2$sの招待を受け入れました</string>
     <string name="notice_crypto_unable_to_decrypt">** 解読できません: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">送信者の端末からこのメッセージのキーが送信されていません。</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">送信者の端末からこのメッセージのキーが送信されていません。</string>
     <string name="could_not_redact">修正できませんでした</string>
     <string name="unable_to_send_message">メッセージを送信できません</string>
     <string name="message_failed_to_upload">画像のアップロードに失敗しました</string>
@@ -86,17 +86,17 @@
     <string name="title_activity_settings">設定</string>
     <string name="title_activity_historical">履歴</string>
     <string name="ok">OK</string>
-    <string name="cancel">キャンセル</string>
-    <string name="save">保存</string>
-    <string name="leave">退室</string>
-    <string name="send">送信</string>
-    <string name="resend">再送信</string>
-    <string name="redact">削除</string>
-    <string name="share">共有</string>
-    <string name="delete">削除</string>
+    <string name="action_cancel">キャンセル</string>
+    <string name="action_save">保存</string>
+    <string name="action_leave">退室</string>
+    <string name="action_send">送信</string>
+    <string name="action_resend">再送信</string>
+    <string name="action_redact">削除</string>
+    <string name="action_share">共有</string>
+    <string name="action_delete">削除</string>
     <string name="device_information">端末情報</string>
     <string name="room_no_conference_call_in_encrypted_rooms">暗号化された部屋での多人数通話はサポートされていません</string>
-    <string name="invite">招待</string>
+    <string name="action_invite">招待</string>
     <string name="action_mark_all_as_read">全ての発言を既読にする</string>
     <string name="action_historical">履歴</string>
     <string name="action_quick_reply">すぐに返信</string>
@@ -193,18 +193,18 @@
     <string name="notification_sync_in_progress">同期中…</string>
     <string name="title_activity_home">メッセージ</string>
     <string name="title_activity_member_details">メンバー詳細</string>
-    <string name="quote">引用</string>
+    <string name="action_quote">引用</string>
     <string name="later">後で</string>
-    <string name="forward">転送</string>
+    <string name="action_forward">転送</string>
     <string name="permalink">直リンク</string>
     <string name="view_source">ソースコードを表示</string>
     <string name="or">または</string>
     <string name="dialog_title_confirmation">確認</string>
-    <string name="disable">無効にする</string>
+    <string name="action_disable">無効にする</string>
     <string name="send_bug_report_progress">送信中 (%s%%)</string>
     <string name="login_error_user_in_use">このユーザ名はすでに使用されています</string>
-    <string name="remove">削除</string>
-    <string name="join">参加</string>
+    <string name="action_remove">削除</string>
+    <string name="action_join">参加</string>
     <string name="room_preview_invitation_format">あなたは %s さんに呼ばれてこの部屋へ参加しました</string>
     <string name="room_creation_title">新しい会話</string>
     <string name="room_creation_add_member">参加者を追加</string>
@@ -347,7 +347,7 @@
     <string name="huge">巨大</string>
     <string name="notification_listening_for_events">発言更新を確認</string>
     <string name="view_decrypted_source">暗号解除されたソースコードを表示</string>
-    <string name="rename">名前変更</string>
+    <string name="action_rename">名前変更</string>
     <string name="offline">切断中</string>
     <string name="start_new_chat">会話を開始</string>
     <string name="start_voice_call">音声通話を開始</string>
@@ -424,8 +424,8 @@
     <string name="media_picker_both_capture_title">写真または動画の撮影</string>
     <string name="media_picker_cannot_record_video">動画を記録できません</string>
     <string name="media_slider_saved">保存</string>
-    <string name="preview">試写</string>
-    <string name="reject">拒否</string>
+    <string name="action_preview">試写</string>
+    <string name="action_reject">拒否</string>
     <string name="room_participants_header_admin_tools">管理者権限操作</string>
     <string name="room_participants_header_call">通話</string>
     <string name="room_participants_header_direct_chats">ダイレクトメッセージ</string>
@@ -450,14 +450,6 @@
     <string name="tab_title_search_people">参加者</string>
     <string name="tab_title_search_files">ファイル</string>
     <string name="tab_title_search_rooms">部屋</string>
-    <string name="room_recents_favourites">お気に入り</string>
-    <string name="room_recents_conversations">部屋</string>
-    <string name="room_recents_low_priority">低優先度</string>
-    <string name="room_recents_start_chat">会話を開始</string>
-    <string name="room_recents_create_room">部屋を作成</string>
-    <string name="room_recents_join_room">部屋へ参加</string>
-    <string name="room_recents_join_room_title">部屋へ参加</string>
-    <string name="room_recents_join">参加</string>
     <string name="directory_search_results_title">部屋一覧を見る</string>
     <string name="room_settings_leave_conversation">退室</string>
     <string name="room_sliding_menu_messages">会話</string>
@@ -602,9 +594,6 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="room_event_action_cancel_download">ダウンロードをキャンセルする</string>
     <string name="search_hint">検索</string>
     <string name="tab_title_search_messages">メッセージ</string>
-    <string name="room_recents_directory">ディレクトリ</string>
-    <string name="room_recents_invites">招待</string>
-    <string name="room_recents_join_room_prompt">部屋のIDまたは部屋のエイリアスを入力してください</string>
     <string name="directory_searching_title">ディレクトリを検索中…</string>
     <string name="room_sliding_menu_third_party_notices">サードパーティの通知</string>
     <string name="settings_app_info_link_summary">このアプリのシステムの情報を見る。</string>
@@ -651,15 +640,11 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="room_unknown_devices_messages_notification">不明なデバイスが存在しているため、メッセージを送ることができませんでした。今 %1$s または %2$s しますか？</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">要求されたフィンガープリントキー Ed25519</string>
     <string name="settings_labs_create_conference_with_jitsi">jitsiを用いて会議通話を始める</string>
-    <!-- Widget Integration Manager -->
     <string name="settings_labs_native_camera">端末のカメラを使う</string>
-    <!-- share keys -->
     <string name="conference_call_warning_title">警告！</string>
     <string name="conference_call_warning_message">ビデオ会議は開発中であり、確実でない可能性があります。</string>
-    <!-- slash commands -->
     <string name="command_error">コマンドエラー</string>
     <string name="unrecognized_command">認識されないコマンド: %s</string>
-    <!-- notification statuses -->
     <string name="notification_off">切</string>
     <string name="notification_noisy">音量大</string>
     <string name="encrypted_message">暗号化されたメッセージ</string>
@@ -698,7 +683,6 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="community_name_hint">例</string>
     <string name="community_id">コミュニティID</string>
     <string name="community_id_hint">例</string>
-    <!-- group details -->
     <string name="group_details_home">ホーム</string>
     <string name="group_details_people">参加者</string>
     <string name="group_details_rooms">部屋</string>
@@ -745,9 +729,9 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="settings_notification_privacy_metadata">• 通知はメタデータのみを含みます</string>
     <string name="title_activity_choose_sticker">スタンプを送る</string>
     <string name="dialog_title_third_party_licences">サードパーティーライセンス</string>
-    <string name="download">ダウンロード</string>
-    <string name="speak">話す</string>
-    <string name="clear">消去</string>
+    <string name="action_download">ダウンロード</string>
+    <string name="action_speak">話す</string>
+    <string name="action_clear">消去</string>
     <string name="missing_permissions_error">許可がないため、この操作を実行できません。</string>
     <string name="actions">実行</string>
     <string name="system_alerts_header">システムアラート</string>
@@ -886,7 +870,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="merged_events_collapse">畳む</string>
     <string name="show_info_area_messages_and_errors">メッセージとエラーの場合</string>
     <string name="call_anyway">とにかく通話する</string>
-    <string name="accept">了承</string>
+    <string name="action_accept">了承</string>
     <string name="auth_accept_policies">このホームサーバーの方針を閲覧し承認してください:</string>
     <string name="settings_call_category">通話設定画面</string>
     <string name="template_settings_call_ringtone_use_app_ringtone">着信に${app_name}の既定の着信音を使う</string>
@@ -956,7 +940,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="settings_troubleshoot_test_bing_settings_title">カスタム設定。</string>
     <string name="settings_troubleshoot_test_service_boot_title">起動時の実行</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">バックグラウンド制限の確認</string>
-    <string name="stay">とどまる</string>
+    <string name="action_stay">とどまる</string>
     <string name="edit">編集</string>
     <string name="reply">返信</string>
     <string name="event_redacted">削除済みのメッセージ</string>
@@ -1053,21 +1037,21 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="encryption_enabled_tile_description">この部屋内でのメッセージはエンドツーエンド暗号化されます。詳細の確認や検証はユーザーのプロフィールをご確認ください。</string>
     <string name="encryption_not_enabled">暗号化が有効化されていません</string>
     <string name="settings_notification_configuration">通知設定</string>
-    <string name="disconnect">切断</string>
+    <string name="action_disconnect">切断</string>
     <string name="action_sign_out_confirmation_simple">ログアウトしますか？</string>
     <string name="action_mark_room_read">既読にする</string>
     <string name="action_copy">コピー</string>
     <string name="dialog_title_success">成功</string>
     <string name="bottom_action_notification">通知</string>
     <string name="call_failed_no_ice_title">サーバーの設定ミスにより通話に失敗しました</string>
-    <string name="revoke">破棄</string>
-    <string name="play_video">再生</string>
-    <string name="pause_video">一時停止</string>
-    <string name="dismiss">消去</string>
-    <string name="skip">スキップ</string>
+    <string name="action_revoke">破棄</string>
+    <string name="action_play">再生</string>
+    <string name="action_pause">一時停止</string>
+    <string name="action_dismiss">消去</string>
+    <string name="action_skip">スキップ</string>
     <string name="done">完了</string>
-    <string name="ignore">無視</string>
-    <string name="review">レビュー</string>
+    <string name="action_ignore">無視</string>
+    <string name="action_review">レビュー</string>
     <string name="send_file_step_idle">待機中…</string>
     <string name="send_file_step_encrypting_thumbnail">サムネイル暗号化中…</string>
     <string name="send_file_step_sending_thumbnail">サムネイル送信中 (%1$s / %2$s)</string>
@@ -1138,7 +1122,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="verification_scan_notice">相手ユーザーのデバイスのコードをスキャンし、相互に安全性を検証します</string>
     <string name="verification_scan_their_code">相手のコードをスキャン</string>
     <string name="verification_scan_emoji_title">スキャンできません</string>
-    <string name="decline">断る</string>
+    <string name="action_decline">断る</string>
     <string name="sas_incoming_request_notif_title">検証リクエスト</string>
     <string name="settings_call_show_confirmation_dialog_summary">通話の開始前に確認する</string>
     <string name="settings_call_show_confirmation_dialog_title">意図しない通話を阻止する</string>
@@ -1168,7 +1152,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="call_notification_hangup">終了</string>
     <string name="call_notification_reject">拒否</string>
     <string name="call_notification_answer">承諾</string>
-    <string name="abort">中止</string>
+    <string name="action_abort">中止</string>
     <string name="failed_to_remove_widget">ウィジェットを削除できませんでした</string>
     <string name="failed_to_add_widget">ウィジェットを追加できませんでした</string>
     <string name="video_meeting">ビデオ通話を開始</string>
@@ -1176,7 +1160,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">通話を開始する権限がありません</string>
     <string name="no_permissions_to_start_webrtc_call">このルームで通話を開始する権限がありません</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">グループ通話を開始する権限がありません</string>
-    <string name="reset">リセット</string>
+    <string name="action_reset">リセット</string>
     <string name="none">なし</string>
     <string name="room_settings_topic_hint">トピック</string>
     <string name="room_settings_name_hint">ルーム名</string>
@@ -1811,7 +1795,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="login_set_msisdn_submit">次に</string>
     <string name="login_set_email_submit">次に</string>
     <string name="login_reset_password_submit">次に</string>
-    <string name="invite_by_mxid">ユーザー名で招待</string>
+    <string name="invite_by_username">ユーザー名で招待</string>
     <string name="error_empty_field_choose_user_name">ユーザー名を選択してください。</string>
     <string name="auth_invalid_login_param_space_in_password">ユーザー名やパスワードが正しくありません。 入力したパスワードは、スペースで開始または終了しますので、ご確認ください。</string>
     <string name="login_signup_error_user_in_use">そのユーザー名は既に使用されています</string>
@@ -1893,8 +1877,8 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="reactions">リアクション</string>
     <string name="message_view_reaction">リアクションを見る</string>
     <string name="message_add_reaction">リアクションを追加する</string>
-    <string name="reactions_like">いいね</string>
-    <string name="reactions_agree">同意</string>
+    <string name="action_like">いいね</string>
+    <string name="action_agree">同意</string>
     <string name="title_activity_emoji_reaction_picker">リアクション</string>
     <string name="room_list_rooms_empty_body">ルームがここに表示されます。右下の[+]をタップして、既存のルームを検索するか、独自のルームを開始します。</string>
     <string name="room_list_people_empty_body">ダイレクトメッセージの会話がここに表示されます。右下の[+]をタップして開始します。</string>

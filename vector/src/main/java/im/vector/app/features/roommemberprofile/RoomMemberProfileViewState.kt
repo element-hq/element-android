@@ -41,6 +41,7 @@ data class RoomMemberProfileViewState(
         val allDevicesAreCrossSignedTrusted: Boolean = false,
         val asyncMembership: Async<Membership> = Uninitialized,
         val hasReadReceipt: Boolean = false,
+        val userColorOverride: String? = null,
         val actionPermissions: ActionPermissions = ActionPermissions()
 ) : MavericksState {
 

@@ -348,18 +348,17 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                      syncLocalTimestampMillis: Long,
                                      aggregator: SyncResponsePostTreatmentAggregator): ChunkEntity {
         val lastChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomEntity.roomId)
-
+        if (isLimited && lastChunk != null) {
+            lastChunk.deleteOnCascade(deleteStateEvents = true, canDeleteRoot = true)
+        }
         val chunkEntity = if (!isLimited && lastChunk != null) {
-            // There are no more events to fetch
             lastChunk
         } else {
-            realm.createObject<ChunkEntity>().apply { this.prevToken = prevToken }
+            realm.createObject<ChunkEntity>().apply {
+                this.prevToken = prevToken
+                this.isLastForward = true
+            }
         }
-
-        // Only one chunk has isLastForward set to true
-        lastChunk?.isLastForward = false
-        chunkEntity.isLastForward = true
-
         val eventIds = ArrayList<String>(eventList.size)
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
 

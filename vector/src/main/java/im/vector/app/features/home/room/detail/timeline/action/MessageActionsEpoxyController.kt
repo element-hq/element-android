@@ -27,6 +27,7 @@ import im.vector.app.core.epoxy.bottomsheet.bottomSheetActionItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetMessagePreviewItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetQuickReactionsItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetSendStateItem
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DimensionConverter
@@ -77,8 +78,8 @@ class MessageActionsEpoxyController @Inject constructor(
             data(state.timelineEvent()?.buildImageContentRendererData(host.dimensionConverter.dpToPx(66)))
             userClicked { host.listener?.didSelectMenuAction(EventSharedAction.OpenUserProfile(state.informationData.senderId)) }
             bindingOptions(bindingOptions)
-            body(body)
-            bodyDetails(host.eventDetailsFormatter.format(state.timelineEvent()?.root))
+            body(body.toEpoxyCharSequence())
+            bodyDetails(host.eventDetailsFormatter.format(state.timelineEvent()?.root)?.toEpoxyCharSequence())
             time(formattedDate)
         }
 

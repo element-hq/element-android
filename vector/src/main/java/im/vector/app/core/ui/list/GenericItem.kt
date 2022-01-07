@@ -28,6 +28,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 
@@ -41,10 +42,10 @@ import im.vector.app.core.extensions.setTextOrHide
 abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
 
     @EpoxyAttribute
-    var title: CharSequence? = null
+    var title: EpoxyCharSequence? = null
 
     @EpoxyAttribute
-    var description: CharSequence? = null
+    var description: EpoxyCharSequence? = null
 
     @EpoxyAttribute
     var style: ItemStyle = ItemStyle.NORMAL_TEXT
@@ -71,7 +72,7 @@ abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.titleText.setTextOrHide(title)
+        holder.titleText.setTextOrHide(title?.charSequence)
 
         if (titleIconResourceId != -1) {
             holder.titleIcon.setImageResource(titleIconResourceId)
@@ -82,7 +83,7 @@ abstract class GenericItem : VectorEpoxyModel<GenericItem.Holder>() {
 
         holder.titleText.textSize = style.toTextSize()
 
-        holder.descriptionText.setTextOrHide(description)
+        holder.descriptionText.setTextOrHide(description?.charSequence)
 
         if (hasIndeterminateProcess) {
             holder.progressBar.isVisible = true

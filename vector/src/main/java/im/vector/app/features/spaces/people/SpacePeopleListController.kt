@@ -18,6 +18,7 @@ package im.vector.app.features.spaces.people
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.profiles.profileMatrixItemWithPowerLevel
@@ -128,7 +129,7 @@ class SpacePeopleListController @Inject constructor(
                         span {
                             +"\n"
                             +host.stringProvider.getString(R.string.no_result_placeholder)
-                        }
+                        }.toEpoxyCharSequence()
                 )
                 description(
                         span {
@@ -138,7 +139,7 @@ class SpacePeopleListController @Inject constructor(
                                 textColor = host.colorProvider.getColorFromAttribute(R.attr.colorPrimary)
                                 textStyle = "bold"
                             }
-                        }
+                        }.toEpoxyCharSequence()
                 )
                 itemClickAction {
                     host.listener?.onInviteToSpaceSelected()

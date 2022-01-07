@@ -23,7 +23,7 @@
         android:id="@+id/messageMediaPlayView"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:contentDescription="@string/play_video"
+        android:contentDescription="@string/action_play"
         android:src="@drawable/ic_material_play_circle"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/messageThumbnailView"

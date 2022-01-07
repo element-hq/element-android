@@ -102,7 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/layout_vertical_margin"
-            android:text="@string/decline"
+            android:text="@string/action_decline"
             android:textAllCaps="true" />
 
         <Button

@@ -145,36 +145,9 @@ class CommonTestHelper(context: Context) {
      * @param nbOfMessages the number of time the message will be sent
      */
     fun sendTextMessage(room: Room, message: String, nbOfMessages: Int, timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
-        val sentEvents = ArrayList<TimelineEvent>(nbOfMessages)
         val timeline = room.createTimeline(null, TimelineSettings(10))
         timeline.start()
-        waitWithLatch(timeout + 1_000L * nbOfMessages) { latch ->
-            val timelineListener = object : Timeline.Listener {
-                override fun onTimelineFailure(throwable: Throwable) {
-                }
-
-                override fun onNewTimelineEvents(eventIds: List<String>) {
-                    // noop
-                }
-
-                override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
-                    val newMessages = snapshot
-                            .filter { it.root.sendState == SendState.SYNCED }
-                            .filter { it.root.getClearType() == EventType.MESSAGE }
-                            .filter { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(message) == true }
-
-                    Timber.v("New synced message size: ${newMessages.size}")
-                    if (newMessages.size == nbOfMessages) {
-                        sentEvents.addAll(newMessages)
-                        // Remove listener now, if not at the next update sendEvents could change
-                        timeline.removeListener(this)
-                        latch.countDown()
-                    }
-                }
-            }
-            timeline.addListener(timelineListener)
-            sendTextMessagesBatched(room, message, nbOfMessages)
-        }
+        val sentEvents = sendTextMessagesBatched(timeline, room, message, nbOfMessages, timeout)
         timeline.dispose()
         // Check that all events has been created
         assertEquals("Message number do not match $sentEvents", nbOfMessages.toLong(), sentEvents.size.toLong())
@@ -182,9 +155,10 @@ class CommonTestHelper(context: Context) {
     }
 
     /**
-     * Will send nb of messages provided by count parameter but waits a bit every 10 messages to avoid gap in sync
+     * Will send nb of messages provided by count parameter but waits every 10 messages to avoid gap in sync
      */
-    private fun sendTextMessagesBatched(room: Room, message: String, count: Int, rootThreadEventId: String? = null) {
+    private fun sendTextMessagesBatched(timeline: Timeline, room: Room, message: String, count: Int, timeout: Long,rootThreadEventId: String? = null): List<TimelineEvent> {
+        val sentEvents = ArrayList<TimelineEvent>(count)
         (1 until count + 1)
                 .map { "$message #$it" }
                 .chunked(10)
@@ -198,8 +172,34 @@ class CommonTestHelper(context: Context) {
                             room.sendTextMessage(formattedMessage)
                         }
                     }
-                    Thread.sleep(1_000L)
+                    waitWithLatch(timeout) { latch ->
+                        val timelineListener = object : Timeline.Listener {
+
+                            override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
+                                val allSentMessages = snapshot
+                                        .filter { it.root.sendState == SendState.SYNCED }
+                                        .filter { it.root.getClearType() == EventType.MESSAGE }
+                                        .filter { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(message) == true }
+
+                                val hasSyncedAllBatchedMessages = allSentMessages
+                                        .map {
+                                            it.root.getClearContent().toModel<MessageContent>()?.body
+                                        }
+                                        .containsAll(batchedMessages)
+
+                                if (allSentMessages.size == count) {
+                                    sentEvents.addAll(allSentMessages)
+                                }
+                                if (hasSyncedAllBatchedMessages) {
+                                    timeline.removeListener(this)
+                                    latch.countDown()
+                                }
+                            }
+                        }
+                        timeline.addListener(timelineListener)
+                    }
                 }
+        return sentEvents
     }
 
     /**
@@ -387,13 +387,6 @@ class CommonTestHelper(context: Context) {
 
     fun createEventListener(latch: CountDownLatch, predicate: (List<TimelineEvent>) -> Boolean): Timeline.Listener {
         return object : Timeline.Listener {
-            override fun onTimelineFailure(throwable: Throwable) {
-                // noop
-            }
-
-            override fun onNewTimelineEvents(eventIds: List<String>) {
-                // noop
-            }
 
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
                 if (predicate(snapshot)) {

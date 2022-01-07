@@ -46,3 +46,9 @@ If you would like to receive releases more quickly (bearing in mind that they ma
 Please refer to [CONTRIBUTING.md](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md) if you want to contribute on Matrix Android projects!
 
 Come chat with the community in the dedicated Matrix [room](https://matrix.to/#/#element-android:matrix.org).
+
+## Triaging issues
+
+Issues are triaged by community members and the Android App Team, following the [triage process](https://github.com/vector-im/element-meta/wiki/Triage-process).
+
+We use [issue labels](https://github.com/vector-im/element-meta/wiki/Issue-labelling) to sort all incoming issues.

@@ -62,6 +62,10 @@ class ScanUserCodeFragment @Inject constructor() :
         views.userCodeOpenGalleryButton.debouncedClicks {
             MultiPicker.get(MultiPicker.IMAGE).single().startWith(pickImageActivityResultLauncher)
         }
+
+        views.userCodeClose.debouncedClicks {
+            requireActivity().onBackPressed()
+        }
     }
 
     private val openCameraActivityResultLauncher = registerForPermissionsResult { allGranted, _ ->

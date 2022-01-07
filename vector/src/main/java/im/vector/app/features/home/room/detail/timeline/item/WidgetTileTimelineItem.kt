@@ -73,7 +73,7 @@ abstract class WidgetTileTimelineItem : AbsBaseMessageItem<WidgetTileTimelineIte
      * This class holds all the common attributes for timeline items.
      */
     data class Attributes(
-            val title: CharSequence,
+            val title: String,
             @DrawableRes
             val drawableStart: Int,
             override val informationData: MessageInformationData,

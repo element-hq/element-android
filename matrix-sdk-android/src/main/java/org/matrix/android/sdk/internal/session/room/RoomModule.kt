@@ -19,6 +19,8 @@ package org.matrix.android.sdk.internal.session.room
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import org.commonmark.Extension
+import org.commonmark.ext.maths.MathsExtension
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.session.file.FileService
@@ -106,6 +108,8 @@ internal abstract class RoomModule {
 
     @Module
     companion object {
+        private val extensions: List<Extension> = listOf(MathsExtension.create())
+
         @Provides
         @JvmStatic
         @SessionScope
@@ -123,7 +127,7 @@ internal abstract class RoomModule {
         @Provides
         @JvmStatic
         fun providesParser(): Parser {
-            return Parser.builder().build()
+            return Parser.builder().extensions(extensions).build()
         }
 
         @Provides
@@ -131,6 +135,7 @@ internal abstract class RoomModule {
         fun providesHtmlRenderer(): HtmlRenderer {
             return HtmlRenderer
                     .builder()
+                    .extensions(extensions)
                     .softbreak("<br />")
                     .build()
         }

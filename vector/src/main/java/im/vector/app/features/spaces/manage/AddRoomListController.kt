@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.airbnb.epoxy.EpoxyModel
 import com.airbnb.epoxy.paging.PagedListEpoxyController
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.ui.list.GenericPillItem_
 import im.vector.app.core.utils.createUIHandler
 import im.vector.app.features.home.AvatarRenderer
@@ -56,7 +57,7 @@ class AddRoomListController @Inject constructor(
     var listener: Listener? = null
     var ignoreRooms: List<String>? = null
 
-    var subHeaderText: CharSequence? = null
+    var subHeaderText: String? = null
 
     var initialLoadOccurred = false
 
@@ -130,7 +131,7 @@ class AddRoomListController @Inject constructor(
                 add(
                         GenericPillItem_().apply {
                             id("sub_header")
-                            text(host.subHeaderText)
+                            text(host.subHeaderText?.toEpoxyCharSequence())
                             imageRes(R.drawable.ic_info)
                         }
                 )
