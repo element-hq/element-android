@@ -2086,4 +2086,7 @@
     <string name="identity_server_consent_dialog_neutral_policy">Zásady</string>
     <string name="call_resume_action">Pokračovať</string>
     <string name="settings_rageshake">Zúrivé trasenie</string>
+    <string name="create_spaces_just_me">Iba ja</string>
+    <string name="disclaimer_title">Riot je teraz Element!</string>
+    <string name="login_wait_for_email_title">Skontrolujte prosím svoj e-mail</string>
 </resources>
