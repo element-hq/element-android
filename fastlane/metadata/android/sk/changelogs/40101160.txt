@@ -1,0 +1,2 @@
+Hlavné zmeny v tejto verzii: Oprava chyby pri odosielaní zašifrovanej správy, ak sa niekto v miestnosti odhlási.
+Úplný zoznam zmien: https://github.com/vector-im/element-android/releases/tag/v1.1.16
