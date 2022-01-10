@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appBarLayout2"
+        android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -27,7 +27,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout2" />
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
     <!-- TODO In the future we could add a toggle to switch the flash, and other possible settings -->
 
