@@ -3562,10 +3562,10 @@
     <string name="spaces_beta_welcome_to_spaces_desc">Spaces are a new way to group rooms and people.</string>
     <string name="you_are_invited">You are invited</string>
 
-
+    <!-- TO BE REMOVED -->
     <string name="labs_use_restricted_join_rule">Experimental Space - Restricted Room.</string>
+    <!-- TO BE REMOVED -->
     <string name="labs_use_restricted_join_rule_desc">Warning requires server support and experimental room version</string>
-
 
     <string name="labs_auto_report_uisi">Auto Report Decryption Errors.</string>
     <string name="labs_auto_report_uisi_desc">Your system will automatically send logs when an unable to decrypt error occurs</string>
