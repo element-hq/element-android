@@ -127,7 +127,7 @@ class CreateSpaceViewModelTask @Inject constructor(
 
                                 val createRestricted = when (restrictedSupport) {
                                     HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED          -> true
-                                    HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED_UNSTABLE -> vectorPreferences.labsUseExperimentalRestricted()
+//                                    HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED_UNSTABLE -> vectorPreferences.labsUseExperimentalRestricted()
                                     else                                                            -> false
                                 }
                                 if (createRestricted) {

@@ -72,7 +72,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
         val restrictedSupport = session.getHomeServerCapabilities().isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
         val createRestricted = when (restrictedSupport) {
             HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED          -> true
-            HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED_UNSTABLE -> vectorPreferences.labsUseExperimentalRestricted()
+//            HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED_UNSTABLE -> vectorPreferences.labsUseExperimentalRestricted()
             else                                                            -> false
         }
 
