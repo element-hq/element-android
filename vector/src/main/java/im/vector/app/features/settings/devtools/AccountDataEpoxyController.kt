@@ -54,7 +54,7 @@ class AccountDataEpoxyController @Inject constructor(
             is Fail    -> {
                 genericFooterItem {
                     id("fail")
-                    text(data.accountData.error.localizedMessage.toEpoxyCharSequence())
+                    text(data.accountData.error.localizedMessage?.toEpoxyCharSequence())
                 }
             }
             is Success -> {

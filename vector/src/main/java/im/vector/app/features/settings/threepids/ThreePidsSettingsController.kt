@@ -87,7 +87,7 @@ class ThreePidsSettingsController @Inject constructor(
             is Fail    -> {
                 genericFooterItem {
                     id("fail")
-                    text(data.threePids.error.localizedMessage.toEpoxyCharSequence())
+                    text(data.threePids.error.localizedMessage?.toEpoxyCharSequence())
                 }
             }
             is Success -> {
