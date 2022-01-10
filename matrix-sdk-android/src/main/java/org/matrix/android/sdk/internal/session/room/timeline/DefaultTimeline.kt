@@ -136,7 +136,7 @@ internal class DefaultTimeline(private val roomId: String,
                     ensureReadReceiptAreLoaded(realm)
                     backgroundRealm.set(realm)
                     listenToPostSnapshotSignals()
-                    openAround(initialEventId)
+                    openAround(initialEventId, rootThreadEventId)
                     postSnapshot()
                 }
             }
@@ -157,7 +157,7 @@ internal class DefaultTimeline(private val roomId: String,
 
     override fun restartWithEventId(eventId: String?) {
         timelineScope.launch {
-            openAround(eventId)
+            openAround(eventId,rootThreadEventId)
             postSnapshot()
         }
     }
@@ -226,18 +226,20 @@ internal class DefaultTimeline(private val roomId: String,
         return true
     }
 
-    private suspend fun openAround(eventId: String?) = withContext(timelineDispatcher) {
+    private suspend fun openAround(eventId: String?, rootThreadEventId: String?) = withContext(timelineDispatcher) {
         val baseLogMessage = "openAround(eventId: $eventId)"
         Timber.v("$baseLogMessage started")
         if (!isStarted.get()) {
             throw IllegalStateException("You should call start before using timeline")
         }
         strategy.onStop()
-        strategy = if (eventId == null) {
-            buildStrategy(LoadTimelineStrategy.Mode.Live)
-        } else {
-            buildStrategy(LoadTimelineStrategy.Mode.Permalink(eventId))
+
+        strategy = when {
+            rootThreadEventId != null -> buildStrategy(LoadTimelineStrategy.Mode.Thread(rootThreadEventId))
+            eventId == null           -> buildStrategy(LoadTimelineStrategy.Mode.Live)
+            else                      -> buildStrategy(LoadTimelineStrategy.Mode.Permalink(eventId))
         }
+
         initPaginationStates(eventId)
         strategy.onStart()
         loadMore(

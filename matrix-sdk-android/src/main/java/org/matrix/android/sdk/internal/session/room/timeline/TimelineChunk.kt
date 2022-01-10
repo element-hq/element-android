@@ -23,6 +23,7 @@ import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
 import kotlinx.coroutines.CompletableDeferred
+import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -271,7 +272,24 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
     private suspend fun loadFromStorage(count: Int, direction: Timeline.Direction): Int {
         val displayIndex = getNextDisplayIndex(direction) ?: return 0
         val baseQuery = timelineEventEntities.where()
-        val timelineEvents = baseQuery.offsets(direction, count, displayIndex).findAll().orEmpty()
+
+        val timelineEvents = if (timelineSettings.rootThreadEventId != null) {
+            baseQuery
+                    .beginGroup()
+                    .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, timelineSettings.rootThreadEventId)
+                    .or()
+                    .equalTo(TimelineEventEntityFields.ROOT.EVENT_ID, timelineSettings.rootThreadEventId)
+                    .endGroup()
+                    .offsets(direction, count, displayIndex)
+                    .findAll()
+                    .orEmpty()
+        } else {
+            baseQuery
+                    .offsets(direction, count, displayIndex)
+                    .findAll()
+                    .orEmpty()
+        }
+
         if (timelineEvents.isEmpty()) return 0
         fetchRootThreadEventsIfNeeded(timelineEvents)
         if (direction == Timeline.Direction.FORWARDS) {
@@ -299,6 +317,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
      * in order to be able to display the event to the user appropriately
      */
     private suspend fun fetchRootThreadEventsIfNeeded(offsetResults: List<TimelineEventEntity>) {
+        if (BuildConfig.THREADING_ENABLED) return
         val eventEntityList = offsetResults
                 .mapNotNull {
                     it.root

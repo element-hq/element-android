@@ -51,6 +51,7 @@ internal class LoadTimelineStrategy(
     sealed interface Mode {
         object Live : Mode
         data class Permalink(val originEventId: String) : Mode
+        data class Thread(val rootThreadEventId: String) : Mode
 
         fun originEventId(): String? {
             return if (this is Permalink) {
@@ -59,6 +60,14 @@ internal class LoadTimelineStrategy(
                 null
             }
         }
+
+//        fun getRootThreadEventId(): String? {
+//            return if (this is Thread) {
+//                rootThreadEventId
+//            } else {
+//                null
+//            }
+//        }
     }
 
     data class Dependencies(
@@ -162,6 +171,7 @@ internal class LoadTimelineStrategy(
     }
 
     suspend fun loadMore(count: Int, direction: Timeline.Direction, fetchOnServerIfNeeded: Boolean = true): LoadMoreResult {
+        ///
         if (mode is Mode.Permalink && timelineChunk == null) {
             val params = GetContextOfEventTask.Params(roomId, mode.originEventId)
             try {
@@ -198,12 +208,21 @@ internal class LoadTimelineStrategy(
     }
 
     private fun getChunkEntity(realm: Realm): RealmResults<ChunkEntity> {
-        return if (mode is Mode.Permalink) {
-            ChunkEntity.findAllIncludingEvents(realm, listOf(mode.originEventId))
-        } else {
-            ChunkEntity.where(realm, roomId)
-                    .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
-                    .findAll()
+
+        return when (mode) {
+            is Mode.Live      -> {
+                ChunkEntity.where(realm, roomId)
+                        .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
+                        .findAll()
+            }
+            is Mode.Permalink -> {
+                ChunkEntity.findAllIncludingEvents(realm, listOf(mode.originEventId))
+            }
+            is Mode.Thread    -> {
+                ChunkEntity.where(realm, roomId)
+                        .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
+                        .findAll()
+            }
         }
     }
 
