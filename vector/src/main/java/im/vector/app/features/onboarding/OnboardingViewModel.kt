@@ -157,20 +157,24 @@ class OnboardingViewModel @AssistedInject constructor(
             if (homeServerConnectionConfig == null) {
                 // Url is invalid, in this case, just use the regular flow
                 Timber.w("Url from config url was invalid: $configUrl")
-                continueToPageAfterSplash()
+                continueToPageAfterSplash(onboardingFlow)
             } else {
                 getLoginFlow(homeServerConnectionConfig, ServerType.Other)
             }
         } else {
-            continueToPageAfterSplash()
+            continueToPageAfterSplash(onboardingFlow)
         }
     }
 
-    private fun continueToPageAfterSplash() {
-        val nextOnboardingStep = if (vectorFeatures.isOnboardingUseCaseEnabled()) {
-            OnboardingViewEvents.OpenUseCaseSelection
-        } else {
-            OnboardingViewEvents.OpenServerSelection
+    private fun continueToPageAfterSplash(onboardingFlow: OnboardingFlow) {
+        val nextOnboardingStep = when (onboardingFlow) {
+            OnboardingFlow.SignUp       -> if (vectorFeatures.isOnboardingUseCaseEnabled()) {
+                OnboardingViewEvents.OpenUseCaseSelection
+            } else {
+                OnboardingViewEvents.OpenServerSelection
+            }
+            OnboardingFlow.SignIn,
+            OnboardingFlow.SignInSignUp -> OnboardingViewEvents.OpenServerSelection
         }
         _viewEvents.post(nextOnboardingStep)
     }
