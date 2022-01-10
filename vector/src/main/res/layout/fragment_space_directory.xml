@@ -60,9 +60,7 @@
         android:layout_marginBottom="16dp "
         android:contentDescription="@string/a11y_create_room"
         android:scaleType="center"
-        app:maxImageSize="20dp"
         android:src="@drawable/ic_fab_add"
-        android:visibility="visible"
-        tools:visibility="visible" />
+        app:maxImageSize="20dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

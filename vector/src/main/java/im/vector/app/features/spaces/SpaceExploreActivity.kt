@@ -26,17 +26,15 @@ import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
-import im.vector.app.core.extensions.commitTransaction
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.matrixto.MatrixToBottomSheet
-import im.vector.app.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.app.features.navigation.Navigator
+import im.vector.app.features.roomdirectory.createroom.CreateRoomActivity
 import im.vector.app.features.spaces.explore.SpaceDirectoryArgs
 import im.vector.app.features.spaces.explore.SpaceDirectoryFragment
-import im.vector.app.features.spaces.explore.SpaceDirectoryState
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewAction
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewEvents
 import im.vector.app.features.spaces.explore.SpaceDirectoryViewModel
@@ -52,7 +50,7 @@ class SpaceExploreActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matrix
 
     private val createRoomResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
-            activityResult.data?.extras?.getString(CreateRoomActivity.RESULT_CREATED_ROOM_ID)?.let {
+            CreateRoomActivity.getCreatedRoomId(activityResult.data)?.let {
                 // we want to refresh from API
                 sharedViewModel.handle(SpaceDirectoryViewAction.RefreshUntilFound(it))
             }

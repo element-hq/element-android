@@ -83,7 +83,7 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarC
 
     companion object {
 
-        const val RESULT_CREATED_ROOM_ID = "RESULT_CREATED_ROOM_ID"
+        private const val RESULT_CREATED_ROOM_ID = "RESULT_CREATED_ROOM_ID"
 
         fun getIntent(context: Context,
                       initialName: String = "",
@@ -98,6 +98,10 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarC
                         parentSpaceId = currentSpaceId
                 ))
             }
+        }
+
+        fun getCreatedRoomId(data: Intent?): String? {
+            return data?.extras?.getString(RESULT_CREATED_ROOM_ID)
         }
     }
 }
