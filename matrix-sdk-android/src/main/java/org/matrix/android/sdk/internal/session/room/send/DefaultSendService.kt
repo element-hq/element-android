@@ -97,6 +97,12 @@ internal class DefaultSendService @AssistedInject constructor(
                 .let { sendEvent(it) }
     }
 
+    override fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean): Cancelable {
+        return localEchoEventFactory.createQuotedTextEvent(roomId, quotedEvent, text, autoMarkdown)
+                .also { createLocalEcho(it) }
+                .let { sendEvent(it) }
+    }
+
     override fun sendPoll(question: String, options: List<String>): Cancelable {
         return localEchoEventFactory.createPollEvent(roomId, question, options)
                 .also { createLocalEcho(it) }

@@ -39,8 +39,6 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.voice.VoicePlayerHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.commonmark.parser.Parser
-import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
@@ -448,34 +446,39 @@ class MessageComposerViewModel @AssistedInject constructor(
                     _viewEvents.post(MessageComposerViewEvents.MessageSent)
                     popDraft()
                 }
+//                is SendMode.Quote   -> {
+//                    val messageContent = state.sendMode.timelineEvent.getLastMessageContent()
+//                    val textMsg = messageContent?.body
+//
+//                    val finalText = legacyRiotQuoteText(textMsg, action.text.toString())
+//
+//                    // TODO check for pills?
+//
+//                    // TODO Refactor this, just temporary for quotes
+//                    val parser = Parser.builder().build()
+//                    val document = parser.parse(finalText)
+//                    val renderer = HtmlRenderer.builder().build()
+//                    val htmlText = renderer.render(document)
+//
+//                    if (finalText == htmlText) {
+//                        state.rootThreadEventId?.let {
+//                            room.replyInThread(
+//                                    rootThreadEventId = it,
+//                                    replyInThreadText = finalText)
+//                        } ?: room.sendTextMessage(finalText)
+//                    } else {
+//                        state.rootThreadEventId?.let {
+//                            room.replyInThread(
+//                                    rootThreadEventId = it,
+//                                    replyInThreadText = finalText,
+//                                    formattedText = htmlText)
+//                        } ?: room.sendFormattedTextMessage(finalText, htmlText)
+//                    }
+//                    _viewEvents.post(MessageComposerViewEvents.MessageSent)
+//                    popDraft()
+//                }
                 is SendMode.Quote   -> {
-                    val messageContent = state.sendMode.timelineEvent.getLastMessageContent()
-                    val textMsg = messageContent?.body
-
-                    val finalText = legacyRiotQuoteText(textMsg, action.text.toString())
-
-                    // TODO check for pills?
-
-                    // TODO Refactor this, just temporary for quotes
-                    val parser = Parser.builder().build()
-                    val document = parser.parse(finalText)
-                    val renderer = HtmlRenderer.builder().build()
-                    val htmlText = renderer.render(document)
-
-                    if (finalText == htmlText) {
-                        state.rootThreadEventId?.let {
-                            room.replyInThread(
-                                    rootThreadEventId = it,
-                                    replyInThreadText = finalText)
-                        } ?: room.sendTextMessage(finalText)
-                    } else {
-                        state.rootThreadEventId?.let {
-                            room.replyInThread(
-                                    rootThreadEventId = it,
-                                    replyInThreadText = finalText,
-                                    formattedText = htmlText)
-                        } ?: room.sendFormattedTextMessage(finalText, htmlText)
-                    }
+                    room.sendQuotedTextMessage(state.sendMode.timelineEvent, action.text.toString(), action.autoMarkdown)
                     _viewEvents.post(MessageComposerViewEvents.MessageSent)
                     popDraft()
                 }
