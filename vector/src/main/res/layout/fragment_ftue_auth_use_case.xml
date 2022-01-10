@@ -25,7 +25,7 @@
         android:id="@+id/useCaseHeaderIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="52dp"
         android:contentDescription="@null"
         android:src="@drawable/ic_onboarding_use_case_icon"
         app:layout_constraintBottom_toTopOf="@id/useCaseHeaderTitle"
