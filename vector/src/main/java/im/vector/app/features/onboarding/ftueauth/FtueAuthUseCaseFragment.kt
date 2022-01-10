@@ -20,12 +20,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.annotation.StringRes
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.databinding.FragmentFtueAuthUseCaseBinding
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.onboarding.OnboardingAction
-import me.saket.bettermovementmethod.BetterLinkMovementMethod
+import im.vector.app.features.onboarding.OnboardingAction.UpdateUseCase.UseCase
 import javax.inject.Inject
 
 class FtueAuthUseCaseFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueAuthUseCaseBinding>() {
@@ -40,15 +42,9 @@ class FtueAuthUseCaseFragment @Inject constructor() : AbstractFtueAuthFragment<F
     }
 
     private fun setupViews() {
-        views.useCaseOptionOne.debouncedClicks {
-            viewModel.handle(OnboardingAction.UpdateUseCase("todo"))
-        }
-        views.useCaseOptionTwo.debouncedClicks {
-            viewModel.handle(OnboardingAction.UpdateUseCase("todo"))
-        }
-        views.useCaseOptionThree.debouncedClicks {
-            viewModel.handle(OnboardingAction.UpdateUseCase("todo"))
-        }
+        views.useCaseOptionOne.setUseCase(R.string.ftue_auth_use_case_option_one, UseCase.FRIENDS_FAMILY)
+        views.useCaseOptionTwo.setUseCase(R.string.ftue_auth_use_case_option_two, UseCase.TEAMS)
+        views.useCaseOptionThree.setUseCase(R.string.ftue_auth_use_case_option_three, UseCase.COMMUNITIES)
 
         val partial = getString(R.string.ftue_auth_use_case_skip_partial)
         views.useCaseSkip.setTextWithColoredPart(
@@ -56,7 +52,7 @@ class FtueAuthUseCaseFragment @Inject constructor() : AbstractFtueAuthFragment<F
                 partial,
                 underline = false,
                 colorAttribute = R.attr.colorAccent,
-                onClick = { viewModel.handle(OnboardingAction.UpdateUseCase("todo")) }
+                onClick = { viewModel.handle(OnboardingAction.UpdateUseCase(UseCase.SKIP)) }
         )
 
         views.useCaseConnectToServer.setOnClickListener {
@@ -66,5 +62,12 @@ class FtueAuthUseCaseFragment @Inject constructor() : AbstractFtueAuthFragment<F
 
     override fun resetViewModel() {
         // Nothing to do
+    }
+
+    private fun TextView.setUseCase(@StringRes label: Int, useCase: UseCase) {
+        setText(label)
+        debouncedClicks {
+            viewModel.handle(OnboardingAction.UpdateUseCase(useCase))
+        }
     }
 }

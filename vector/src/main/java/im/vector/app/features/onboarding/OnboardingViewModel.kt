@@ -459,7 +459,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
         // TODO act on the use case selection
-        action.todo
+        action.useCase
         _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
     }
 
