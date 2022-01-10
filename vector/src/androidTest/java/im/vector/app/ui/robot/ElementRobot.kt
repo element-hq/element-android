@@ -43,6 +43,8 @@ class ElementRobot {
     fun signUp(userId: String) {
         val onboardingRobot = OnboardingRobot()
         onboardingRobot.createAccount(userId = userId)
+        val analyticsRobot = AnalyticsRobot()
+        analyticsRobot.optOut()
         waitForHome()
     }
 
