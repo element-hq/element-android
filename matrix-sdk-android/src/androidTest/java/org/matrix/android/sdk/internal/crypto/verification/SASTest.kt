@@ -546,8 +546,6 @@ class SASTest : InstrumentedTest {
         val bobDeviceInfoFromAlicePOV: CryptoDeviceInfo? = aliceSession.cryptoService().getDeviceInfo(bobUserId, bobDeviceId)
         val aliceDeviceInfoFromBobPOV: CryptoDeviceInfo? = bobSession.cryptoService().getDeviceInfo(aliceSession.myUserId, aliceSession.cryptoService().getMyDevice().deviceId)
 
-        // latch wait a bit again
-
         assertTrue("alice device should be verified from bob point of view", aliceDeviceInfoFromBobPOV!!.isVerified)
         assertTrue("bob device should be verified from alice point of view", bobDeviceInfoFromAlicePOV!!.isVerified)
         cryptoTestData.cleanUp(testHelper)
