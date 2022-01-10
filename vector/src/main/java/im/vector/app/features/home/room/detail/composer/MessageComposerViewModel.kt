@@ -242,7 +242,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             handleJoinToAnotherRoomSlashCommand(slashCommandResult)
                             popDraft()
                         }
-                        is ParsedCommand.PartRoom                 -> {
+                        is ParsedCommand.PartRoom                          -> {
                             handlePartSlashCommand(slashCommandResult)
                         }
                         is ParsedCommand.SendEmote                         -> {
@@ -325,7 +325,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                         is ParsedCommand.ChangeAvatarForRoom               -> {
                             handleChangeAvatarForRoomSlashCommand(slashCommandResult)
                         }
-                        is ParsedCommand.ShowUser                 -> {
+                        is ParsedCommand.ShowUser                          -> {
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
                             handleWhoisSlashCommand(slashCommandResult)
                             popDraft()
@@ -343,7 +343,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                                 )
                             }
                         }
-                        is ParsedCommand.CreateSpace              -> {
+                        is ParsedCommand.CreateSpace                       -> {
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandLoading)
                             viewModelScope.launch(Dispatchers.IO) {
                                 try {
@@ -367,7 +367,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             }
                             Unit
                         }
-                        is ParsedCommand.AddToSpace               -> {
+                        is ParsedCommand.AddToSpace                        -> {
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandLoading)
                             viewModelScope.launch(Dispatchers.IO) {
                                 try {
@@ -386,7 +386,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             }
                             Unit
                         }
-                        is ParsedCommand.JoinSpace                -> {
+                        is ParsedCommand.JoinSpace                         -> {
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandLoading)
                             viewModelScope.launch(Dispatchers.IO) {
                                 try {
@@ -399,7 +399,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             }
                             Unit
                         }
-                        is ParsedCommand.LeaveRoom                -> {
+                        is ParsedCommand.LeaveRoom                         -> {
                             viewModelScope.launch(Dispatchers.IO) {
                                 try {
                                     session.getRoom(slashCommandResult.roomId)?.leave(null)
@@ -411,7 +411,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             }
                             Unit
                         }
-                        is ParsedCommand.UpgradeRoom              -> {
+                        is ParsedCommand.UpgradeRoom                       -> {
                             _viewEvents.post(
                                     MessageComposerViewEvents.ShowRoomUpgradeDialog(
                                             slashCommandResult.newVersion,
@@ -446,39 +446,12 @@ class MessageComposerViewModel @AssistedInject constructor(
                     _viewEvents.post(MessageComposerViewEvents.MessageSent)
                     popDraft()
                 }
-//                is SendMode.Quote   -> {
-//                    val messageContent = state.sendMode.timelineEvent.getLastMessageContent()
-//                    val textMsg = messageContent?.body
-//
-//                    val finalText = legacyRiotQuoteText(textMsg, action.text.toString())
-//
-//                    // TODO check for pills?
-//
-//                    // TODO Refactor this, just temporary for quotes
-//                    val parser = Parser.builder().build()
-//                    val document = parser.parse(finalText)
-//                    val renderer = HtmlRenderer.builder().build()
-//                    val htmlText = renderer.render(document)
-//
-//                    if (finalText == htmlText) {
-//                        state.rootThreadEventId?.let {
-//                            room.replyInThread(
-//                                    rootThreadEventId = it,
-//                                    replyInThreadText = finalText)
-//                        } ?: room.sendTextMessage(finalText)
-//                    } else {
-//                        state.rootThreadEventId?.let {
-//                            room.replyInThread(
-//                                    rootThreadEventId = it,
-//                                    replyInThreadText = finalText,
-//                                    formattedText = htmlText)
-//                        } ?: room.sendFormattedTextMessage(finalText, htmlText)
-//                    }
-//                    _viewEvents.post(MessageComposerViewEvents.MessageSent)
-//                    popDraft()
-//                }
                 is SendMode.Quote   -> {
-                    room.sendQuotedTextMessage(state.sendMode.timelineEvent, action.text.toString(), action.autoMarkdown)
+                    room.sendQuotedTextMessage(
+                            quotedEvent = state.sendMode.timelineEvent,
+                            text = action.text.toString(),
+                            autoMarkdown = action.autoMarkdown,
+                            rootThreadEventId = state.rootThreadEventId)
                     _viewEvents.post(MessageComposerViewEvents.MessageSent)
                     popDraft()
                 }

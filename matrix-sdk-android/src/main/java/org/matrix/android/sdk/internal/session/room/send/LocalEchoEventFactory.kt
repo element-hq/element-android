@@ -476,6 +476,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 newBodyFormatted
         )
     }
+
     private fun buildReplyFallback(body: TextContent, originalSenderId: String?, newBodyText: String): String {
         return buildString {
             append("> <")
@@ -564,11 +565,25 @@ internal class LocalEchoEventFactory @Inject constructor(
             quotedEvent: TimelineEvent,
             text: String,
             autoMarkdown: Boolean,
+            rootThreadEventId: String?
     ): Event {
         val messageContent = quotedEvent.getLastMessageContent()
         val textMsg = messageContent?.body
         val quoteText = legacyRiotQuoteText(textMsg, text)
-        return createFormattedTextEvent(roomId, markdownParser.parse(quoteText, force = true, advanced = autoMarkdown), MessageType.MSGTYPE_TEXT)
+
+        return if (rootThreadEventId != null) {
+            createMessageEvent(
+                    roomId,
+                    markdownParser
+                            .parse(quoteText, force = true, advanced = autoMarkdown)
+                            .toThreadTextContent(rootThreadEventId, MessageType.MSGTYPE_TEXT)
+            )
+        } else {
+            createFormattedTextEvent(
+                    roomId,
+                    markdownParser.parse(quoteText, force = true, advanced = autoMarkdown),
+                    MessageType.MSGTYPE_TEXT)
+        }
     }
 
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {
