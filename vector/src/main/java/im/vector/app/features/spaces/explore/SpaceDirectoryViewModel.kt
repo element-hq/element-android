@@ -55,7 +55,9 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
         override fun create(initialState: SpaceDirectoryState): SpaceDirectoryViewModel
     }
 
-    companion object : MavericksViewModelFactory<SpaceDirectoryViewModel, SpaceDirectoryState> by hiltMavericksViewModelFactory()
+    companion object : MavericksViewModelFactory<SpaceDirectoryViewModel, SpaceDirectoryState> by hiltMavericksViewModelFactory() {
+        private const val PAGE_LENGTH = 10
+    }
 
     init {
 
@@ -78,7 +80,7 @@ class SpaceDirectoryViewModel @AssistedInject constructor(
         // A we prefer to use known summaries to have better name resolution
         // it's important to have them up to date. Particularly after creation where
         // resolved name is sometimes just "New Room"
-        session.rx().liveRoomSummaries(
+        session.flow().liveRoomSummaries(
                 roomSummaryQueryParams {
                     memberships = listOf(Membership.JOIN)
                     includeType = null
