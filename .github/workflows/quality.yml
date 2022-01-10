@@ -32,13 +32,13 @@ jobs:
             */build/reports/ktlint/ktlint*/ktlint*.txt
       - name: Handle Results
         if: always()
-        id: get-comment-body
+        id: ktlint-results
         run: |
           results="$(cat */*/build/reports/ktlint/ktlint*/ktlint*.txt */build/reports/ktlint/ktlint*/ktlint*.txt | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g")"
           if [ -z  "$results" ]; then
-            body="👍 ✅ 👍"
+            echo "::set-output name=add_comment::false"
           else
-            body="👎 ❌ 👎 \`Failed${results}\`"
+            body="👎\`Failed${results}\`"
             body="${body//'%'/'%25'}"
             body="${body//$'\n'/'%0A'}"
             body="${body//$'\r'/'%0D'}"
@@ -50,8 +50,9 @@ jobs:
             body="$( echo $body | sed 's/im\/vector\/lib\///g')"
             body="$( echo $body | sed 's/org\/matrix\/android\/sdk\///g')"
             body="$( echo $body | sed 's/\/src\/androidTest\/java\// 🔸 /g')"
+            echo "::set-output name=add_comment::true"
+            echo "::set-output name=body::$body"
           fi
-          echo "::set-output name=body::$body"
       - name: Find Comment
         if: always()
         uses: peter-evans/find-comment@v1
@@ -60,8 +61,8 @@ jobs:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
           body-includes: Ktlint Results
-      - name: Publish ktlint results to PR
-        if: always()
+      - name: Add comment if needed
+        if: always() && steps.ktlint-results.outputs.add_comment == 'true'
         uses: peter-evans/create-or-update-comment@v1
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
@@ -69,8 +70,18 @@ jobs:
           body: |
             ### Ktlint Results
 
-            ${{ steps.get-comment-body.outputs.body }}
+            ${{ steps.ktlint-results.outputs.body }}
           edit-mode: replace
+      - name: Delete comment if needed
+        if: always() && steps.fc.outputs.comment-id != '' && steps.ktlint-results.outputs.add_comment == 'false'
+        uses: actions/github-script@v3
+        with:
+          script: |
+            github.issues.deleteComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: ${{ steps.fc.outputs.comment-id }}
+            })
 
 # Lint for main module
   android-lint:
