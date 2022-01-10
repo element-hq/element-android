@@ -40,7 +40,7 @@ class CreatePollViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<CreatePollViewModel, CreatePollViewState> by hiltMavericksViewModelFactory() {
 
         const val MIN_OPTIONS_COUNT = 2
-        private const val MAX_OPTIONS_COUNT = 20
+        const val MAX_OPTIONS_COUNT = 20
     }
 
     init {
