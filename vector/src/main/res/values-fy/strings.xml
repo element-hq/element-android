@@ -393,8 +393,6 @@
     <string name="network_error">Netwurkflater</string>
     <string name="unable_to_send_message">Kin it berjocht net ferstjoere</string>
     <string name="notice_event_redacted">Berjocht fuortsmiten</string>
-    <string name="labs_use_restricted_join_rule_desc">Warskôging hat serverstipe en in eksperimintele keamer nedich</string>
-    <string name="labs_use_restricted_join_rule">Eksperimintele romte - Beheinde keamer.</string>
     <string name="you_are_invited">Jo binne útnûge</string>
     <string name="notice_room_visibility_world_readable">elkenien.</string>
     <string name="notice_made_future_direct_room_visibility_by_you">Jo hawwe takomstige berjochten foar %1$s sichtber makke</string>

@@ -2783,10 +2783,8 @@
     <string name="command_description_nick_for_room">Змінює ваше показуване ім\'я лише у поточній кімнаті</string>
     <string name="command_description_room_name">Установлює назву кімнати</string>
     <string name="settings_discovery_no_policy_provided">Сервер ідентифікації не надав жодних правил</string>
-    <string name="labs_use_restricted_join_rule_desc">Попередження: вимагає підтримки сервера та експериментальної версії кімнати</string>
     <string name="spaces_feeling_experimental_subspace">Бажаєте поекспериментувати\?
 \nМожете додати наявні простори до простору.</string>
-    <string name="labs_use_restricted_join_rule">Експериментально: доступ до кімнати для будь-кого в просторі.</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Усі кімнати, у яких ви перебуваєте, буде показано на сторінці Домівка.</string>
     <string name="preference_show_all_rooms_in_home">Показувати у Домівці</string>
     <string name="verification_cancelled">Перевірку скасовано</string>

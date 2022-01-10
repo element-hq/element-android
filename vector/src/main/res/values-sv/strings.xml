@@ -2710,8 +2710,6 @@
     <string name="skip_for_now">Hoppa över för tillfället</string>
     <string name="share_space_link_message">Gå med i mitt utrymme %1$s %2$s</string>
     <string name="invite_just_to_this_room_desc">De kommer inte att bli en del av %s</string>
-    <string name="labs_use_restricted_join_rule_desc">Varning kräver serverstöd och experimentell rumsversion</string>
-    <string name="labs_use_restricted_join_rule">Experimentellt utrymme - Begränsat rum.</string>
     <string name="you_are_invited">Du är inbjuden</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Utrymmen är ett nytt sätt att gruppera rum och personer.</string>
     <string name="spaces_beta_welcome_to_spaces">Välkommen till utrymmen!</string>

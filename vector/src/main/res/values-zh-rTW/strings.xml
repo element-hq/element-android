@@ -2603,8 +2603,6 @@
     <string name="settings_room_directory_show_all_rooms">顯示帶有明確內容的聊天室</string>
     <string name="settings_category_room_directory">聊天室目錄</string>
     <string name="event_status_sent_message">訊息已傳送</string>
-    <string name="labs_use_restricted_join_rule_desc">警告需要伺服器支援與實驗性聊天室版本</string>
-    <string name="labs_use_restricted_join_rule">實驗性空間 - 受限制的聊天室。</string>
     <string name="you_are_invited">您被邀請了</string>
     <string name="spaces_beta_welcome_to_spaces_desc">空間是將聊天室與人們分組的新方式。</string>
     <string name="spaces_beta_welcome_to_spaces">歡迎使用空間！</string>

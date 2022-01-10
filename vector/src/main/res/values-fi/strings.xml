@@ -2193,7 +2193,6 @@
     <string name="make_this_space_public">Tee tästä avaruudesta julkinen</string>
     <string name="space_settings_manage_rooms">Hallitse huoneita</string>
     <string name="user_invites_you">%s kutsuu sinut</string>
-    <string name="labs_use_restricted_join_rule">Kokeellinen avaruus - Rajattu huone.</string>
     <string name="you_are_invited">Sinut on kutsuttu</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Avaruudet ovat uusi tapa ryhmitellä huoneita ja ihmisiä.</string>
     <string name="spaces_beta_welcome_to_spaces">Tervetuloa avaruuksien pariin!</string>

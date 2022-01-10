@@ -2368,7 +2368,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="space_settings_manage_rooms">Kelola ruangan</string>
     <string name="looking_for_someone_not_in_space">Mencari seseorang yang tidak ada di %s\?</string>
     <string name="user_invites_you">%s mengundang Anda</string>
-    <string name="labs_use_restricted_join_rule_desc">Peringatan membutuhkan dukungan server dan versi ruangan yang eksperimental</string>
     <string name="you_are_invited">Anda telah diundang</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Space adalah cara baru untuk mengelompokkan ruangan dan pengguna.</string>
     <string name="spaces_beta_welcome_to_spaces">Selamat Datang ke Space!</string>
@@ -2629,7 +2628,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="external_link_confirmation_message">Tautan ini %1$s akan membawa Anda ke situs lain: %2$s.
 \n
 \nApakah Anda yakin untuk melanjutkan\?</string>
-    <string name="labs_use_restricted_join_rule">Space Eksperimental — Ruangan yang Dibatasi.</string>
     <string name="space_add_space_to_any_space_you_manage">Tambahkan sebuah space ke space apa saja yang Anda bisa kelola.</string>
     <string name="create_space_error_empty_field_space_name">Beri nama untuk melanjutkan.</string>
     <string name="create_pin_confirm_failure">Gagal untuk memvalidasi PIN, mohon ketuk yang baru.</string>

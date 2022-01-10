@@ -2642,8 +2642,6 @@
     <string name="initial_sync_start_server_computing">Njëkohësimi fillestar:
 \nPo pritet për përgjigje nga shërbyesi…</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Hapësirat janë mënyra për të grupuar dhoma dhe persona.</string>
-    <string name="labs_use_restricted_join_rule_desc">Sinjalizimi lyp mbulim nga shërbyesi dhe version eksperimental dhome</string>
-    <string name="labs_use_restricted_join_rule">Hapësirë Eksperimentale - Dhomë e Kufizuar.</string>
     <string name="you_are_invited">Jeni ftuar</string>
     <string name="spaces_beta_welcome_to_spaces">Mirë se vini te Hapësira!</string>
     <string name="space_add_existing_rooms">Shtoni dhoma ekzistuese dhe hapësira</string>
