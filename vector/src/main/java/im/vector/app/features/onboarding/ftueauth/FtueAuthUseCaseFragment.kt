@@ -20,9 +20,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import im.vector.app.R
+import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.databinding.FragmentFtueAuthUseCaseBinding
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.onboarding.OnboardingAction
+import me.saket.bettermovementmethod.BetterLinkMovementMethod
 import javax.inject.Inject
 
 class FtueAuthUseCaseFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueAuthUseCaseBinding>() {
@@ -45,6 +48,19 @@ class FtueAuthUseCaseFragment @Inject constructor() : AbstractFtueAuthFragment<F
         }
         views.useCaseOptionThree.debouncedClicks {
             viewModel.handle(OnboardingAction.UpdateUseCase("todo"))
+        }
+
+        val partial = getString(R.string.ftue_auth_use_case_skip_partial)
+        views.useCaseSkip.setTextWithColoredPart(
+                getString(R.string.ftue_auth_use_case_skip, partial),
+                partial,
+                underline = false,
+                colorAttribute = R.attr.colorAccent,
+                onClick = { viewModel.handle(OnboardingAction.UpdateUseCase("todo")) }
+        )
+
+        views.useCaseConnectToServer.setOnClickListener {
+            viewModel.handle(OnboardingAction.UpdateServerType(ServerType.Other))
         }
     }
 

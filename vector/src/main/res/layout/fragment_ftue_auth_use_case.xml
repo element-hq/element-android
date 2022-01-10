@@ -25,6 +25,7 @@
         android:id="@+id/useCaseHeaderIcon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
         android:contentDescription="@null"
         android:src="@drawable/ic_onboarding_use_case_icon"
         app:layout_constraintBottom_toTopOf="@id/useCaseHeaderTitle"
@@ -34,10 +35,13 @@
 
     <TextView
         android:id="@+id/useCaseHeaderTitle"
+        style="@style/Widget.Vector.TextView.Title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="Who will you chat to the most?"
+        android:text="@string/ftue_auth_use_case_title"
+        android:textColor="?vctr_content_primary"
         app:layout_constraintBottom_toTopOf="@id/useCaseHeaderSubtitle"
         app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
         app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
@@ -45,17 +49,29 @@
 
     <TextView
         android:id="@+id/useCaseHeaderSubtitle"
+        style="@style/Widget.Vector.TextView.Body"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="We\'ll help you get connect."
-        app:layout_constraintBottom_toTopOf="@id/useCaseOptionOne"
+        android:text="@string/ftue_auth_use_case_subtitle"
+        android:textColor="?vctr_content_secondary"
+        app:layout_constraintBottom_toTopOf="@id/titleContentSpacing"
         app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
         app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
         app:layout_constraintTop_toBottomOf="@id/useCaseHeaderTitle" />
 
+    <Space
+        android:id="@+id/titleContentSpacing"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/useCaseOptionOne"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintTop_toBottomOf="@id/useCaseHeaderSubtitle" />
+
     <TextView
         android:id="@+id/useCaseOptionOne"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -63,15 +79,17 @@
         android:drawablePadding="16dp"
         android:gravity="center_vertical"
         android:padding="16dp"
-        android:text="Friends and family"
+        android:text="@string/ftue_auth_use_case_option_one"
+        android:textColor="?vctr_content_primary"
         app:drawableStartCompat="@drawable/ic_friends_and_family"
         app:layout_constraintBottom_toTopOf="@id/useCaseOptionTwo"
         app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
         app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
-        app:layout_constraintTop_toBottomOf="@id/useCaseHeaderSubtitle" />
+        app:layout_constraintTop_toBottomOf="@id/titleContentSpacing" />
 
     <TextView
         android:id="@+id/useCaseOptionTwo"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -79,7 +97,8 @@
         android:drawablePadding="16dp"
         android:gravity="center_vertical"
         android:padding="16dp"
-        android:text="Teams"
+        android:text="@string/ftue_auth_use_case_option_two"
+        android:textColor="?vctr_content_primary"
         app:drawableStartCompat="@drawable/ic_teams"
         app:layout_constraintBottom_toTopOf="@id/useCaseOptionThree"
         app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
@@ -88,6 +107,7 @@
 
     <TextView
         android:id="@+id/useCaseOptionThree"
+        style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -95,7 +115,8 @@
         android:drawablePadding="16dp"
         android:gravity="center_vertical"
         android:padding="16dp"
-        android:text="Communities"
+        android:text="@string/ftue_auth_use_case_option_three"
+        android:textColor="?vctr_content_primary"
         app:drawableStartCompat="@drawable/ic_communities"
         app:layout_constraintBottom_toTopOf="@id/useCaseSkip"
         app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
@@ -107,7 +128,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Not sure yet? You can skip this question"
+        android:clickable="true"
         app:layout_constraintBottom_toTopOf="@id/contentFooterSpacing"
         app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
         app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
@@ -125,7 +146,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="Looking to join an existing server?"
+        android:text="@string/ftue_auth_use_case_join_existing_server"
         app:layout_constraintBottom_toTopOf="@id/useCaseConnectToServer"
         app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
         app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
@@ -133,9 +154,11 @@
 
     <TextView
         android:id="@+id/useCaseConnectToServer"
+        style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="CONNECT TO SERVER"
+        android:text="@string/ftue_auth_use_case_connect_to_server"
+        android:textAllCaps="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
         app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
