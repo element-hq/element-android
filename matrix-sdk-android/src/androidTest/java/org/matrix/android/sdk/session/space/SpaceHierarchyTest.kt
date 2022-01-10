@@ -542,7 +542,7 @@ class SpaceHierarchyTest : InstrumentedTest {
                     ?.setUserPowerLevel(aliceSession.myUserId, Role.Admin.value)
                     ?.toContent()
 
-            room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, newPowerLevelsContent!!)
+            room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, stateKey = "", newPowerLevelsContent!!)
             it.countDown()
         }
 
