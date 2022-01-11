@@ -1,0 +1,2 @@
+Hlavné zmeny v tejto verzii: hlavne aktualizácia stability a opravy chýb.
+Úplný zoznam zmien: https://github.com/vector-im/element-android/releases/tag/v1.1.13
