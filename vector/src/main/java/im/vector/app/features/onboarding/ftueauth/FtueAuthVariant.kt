@@ -15,6 +15,7 @@
  */
 
 package im.vector.app.features.onboarding.ftueauth
+
 import android.content.Intent
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,7 @@ import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.platform.ScreenOrientationLocker
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.VectorFeatures
@@ -62,7 +64,8 @@ class FtueAuthVariant(
         private val onboardingViewModel: OnboardingViewModel,
         private val activity: VectorBaseActivity<ActivityLoginBinding>,
         private val supportFragmentManager: FragmentManager,
-        private val vectorFeatures: VectorFeatures
+        private val vectorFeatures: VectorFeatures,
+        private val orientationLocker: ScreenOrientationLocker,
 ) : OnboardingVariant {
 
     private val enterAnim = R.anim.enter_fade_in
@@ -91,6 +94,7 @@ class FtueAuthVariant(
         }
 
         with(activity) {
+            orientationLocker.lockPhonesToPortrait(this)
             onboardingViewModel.onEach {
                 updateWithState(it)
             }
