@@ -2666,8 +2666,6 @@
     <string name="space_settings_manage_rooms">Zarządzaj pokojami</string>
     <string name="looking_for_someone_not_in_space">Szukasz kogoś , kto nie jest w %s\?</string>
     <string name="user_invites_you">%s Cię zaprasza</string>
-    <string name="labs_use_restricted_join_rule_desc">Ostrzeżenie! Wymaga wsparcia serwera oraz eksperymentalnej wersji pokoju</string>
-    <string name="labs_use_restricted_join_rule">Przestrzeń eksperymentalna - Pokój ograniczony.</string>
     <string name="you_are_invited">Zostałeś zaproszony</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Przestrzenie są nową metodą na zarządzanie pokojami i osobami.</string>
     <string name="spaces_beta_welcome_to_spaces">Witamy w Przestrzeniach!</string>

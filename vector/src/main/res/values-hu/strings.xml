@@ -2454,8 +2454,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="space_settings_manage_rooms">Szobák kezelése</string>
     <string name="looking_for_someone_not_in_space">Olyant keresel aki még nincs itt: %s\?</string>
     <string name="user_invites_you">%s meghívott</string>
-    <string name="labs_use_restricted_join_rule_desc">Figyelmeztetés szerver oldali támogatás és kísérleti szoba verzió szükséges</string>
-    <string name="labs_use_restricted_join_rule">Kísérleti Tér - Korlátozott szobák.</string>
     <string name="you_are_invited">Meghívtak</string>
     <string name="spaces_beta_welcome_to_spaces_desc">A Terek használata egy új lehetőség a szobák és felhasználók csoportosítására.</string>
     <string name="spaces_beta_welcome_to_spaces">Üdv a Terekben!</string>

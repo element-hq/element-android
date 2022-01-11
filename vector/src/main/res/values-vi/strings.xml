@@ -1781,8 +1781,6 @@
     <string name="space_settings_manage_rooms">Quản lý phòng</string>
     <string name="looking_for_someone_not_in_space">Tìm kiếm một người không có trong %s\?</string>
     <string name="user_invites_you">%s mời bạn</string>
-    <string name="labs_use_restricted_join_rule_desc">Cảnh báo yêu cầu hỗ trợ máy chủ và phiên bản phòng thử nghiệm</string>
-    <string name="labs_use_restricted_join_rule">Space thử nghiệm - Phòng hạn chế.</string>
     <string name="you_are_invited">Bạn được mời</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Space là một cách mới để nhóm phòng và con người.</string>
     <string name="spaces_beta_welcome_to_spaces">Chào mừng đến Space!</string>

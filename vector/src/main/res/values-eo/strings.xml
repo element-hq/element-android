@@ -2642,8 +2642,6 @@
     <string name="space_settings_manage_rooms">Administri ĉambrojn</string>
     <string name="looking_for_someone_not_in_space">Ĉu vi serĉas iun, kiu ne estas en %s\?</string>
     <string name="user_invites_you">%s invitas vin</string>
-    <string name="labs_use_restricted_join_rule_desc">Averto: bezonas subtenon de servilo kaj eksperimentan version de ĉambro</string>
-    <string name="labs_use_restricted_join_rule">Eksperimenta aro – limigita ĉambro.</string>
     <string name="you_are_invited">Vi estas invitita</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Aroj prezentas novan manieron grupigi ĉambrojn kaj personojn.</string>
     <string name="spaces_beta_welcome_to_spaces">Bonvenu al aroj!</string>
