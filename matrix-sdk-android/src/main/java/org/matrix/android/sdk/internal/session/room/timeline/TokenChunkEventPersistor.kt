@@ -25,7 +25,6 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addStateEvent
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
-import org.matrix.android.sdk.internal.database.helper.merge
 import org.matrix.android.sdk.internal.database.helper.updateThreadSummaryIfNeeded
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
