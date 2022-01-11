@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.timeline
 
 import com.zhuinden.monarchy.Monarchy
+import dagger.Lazy
 import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -38,6 +39,7 @@ import org.matrix.android.sdk.internal.database.query.find
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.session.StreamEventsManager
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import timber.log.Timber
 import javax.inject.Inject
@@ -47,7 +49,8 @@ import javax.inject.Inject
  */
 internal class TokenChunkEventPersistor @Inject constructor(
                                                             @SessionDatabase private val monarchy: Monarchy,
-                                                            @UserId private val userId: String) {
+                                                            @UserId private val userId: String,
+                                                            private val liveEventManager: Lazy<StreamEventsManager> ) {
 
     enum class Result {
         SHOULD_FETCH_MORE,
@@ -177,6 +180,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
                     }
                     roomMemberContentsByUser[event.stateKey] = contentToUse.toModel<RoomMemberContent>()
                 }
+                liveEventManager.get().dispatchPaginatedEventReceived(event, roomId)
                 currentChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberContentsByUser)
                 eventEntity.rootThreadEventId?.let {
                     // This is a thread event

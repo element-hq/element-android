@@ -45,7 +45,11 @@ class OnboardingRobot {
                             homeServerUrl: String) {
         waitUntilViewVisible(withId(R.id.loginSplashSubmit))
         assertDisplayed(R.id.loginSplashSubmit, R.string.login_splash_submit)
-        clickOn(R.id.loginSplashSubmit)
+        if (createAccount) {
+            clickOn(R.id.loginSplashSubmit)
+        } else {
+            clickOn(R.id.loginSplashAlreadyHaveAccount)
+        }
         assertDisplayed(R.id.loginServerTitle, R.string.login_server_title)
         // Chose custom server
         clickOn(R.id.loginServerChoiceOther)
@@ -54,17 +58,7 @@ class OnboardingRobot {
         assertEnabled(R.id.loginServerUrlFormSubmit)
         closeSoftKeyboard()
         clickOn(R.id.loginServerUrlFormSubmit)
-        onView(isRoot()).perform(waitForView(withId(R.id.loginSignupSigninSubmit)))
-
-        if (createAccount) {
-            // Click on the signup button
-            assertDisplayed(R.id.loginSignupSigninSubmit)
-            clickOn(R.id.loginSignupSigninSubmit)
-        } else {
-            // Click on the signin button
-            assertDisplayed(R.id.loginSignupSigninSignIn)
-            clickOn(R.id.loginSignupSigninSignIn)
-        }
+        onView(isRoot()).perform(waitForView(withId(R.id.loginField)))
 
         // Ensure password flow supported
         assertDisplayed(R.id.loginField)

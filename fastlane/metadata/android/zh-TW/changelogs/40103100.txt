@@ -1,0 +1,2 @@
+此版本中的主要變動：新增對投票（在實驗室中）的支援。新的 URL 預覽設計。
+完整的變更紀錄：https://github.com/vector-im/element-android/releases/tag/v1.3.10
