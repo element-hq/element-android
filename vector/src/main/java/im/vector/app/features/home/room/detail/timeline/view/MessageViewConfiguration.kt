@@ -20,5 +20,5 @@ interface MessageViewConfiguration {
     var isIncoming: Boolean
     var isFirstFromSender: Boolean
     var isLastFromSender: Boolean
-    var displayBorder: Boolean
+    var showTimeAsOverlay: Boolean
 }

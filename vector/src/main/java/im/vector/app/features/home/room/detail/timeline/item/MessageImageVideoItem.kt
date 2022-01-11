@@ -29,7 +29,6 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
-import im.vector.app.features.home.room.detail.timeline.view.MessageBubbleView
 import im.vector.app.features.home.room.detail.timeline.view.MessageViewConfiguration
 import im.vector.app.features.media.ImageContentRenderer
 
@@ -72,7 +71,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         holder.mediaContentView.onClick(attributes.itemClickListener)
         holder.mediaContentView.setOnLongClickListener(attributes.itemLongClickListener)
         holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
-        (holder.view as? MessageViewConfiguration)?.displayBorder = false
+        (holder.view as? MessageViewConfiguration)?.showTimeAsOverlay = false
     }
 
     override fun unbind(holder: Holder) {

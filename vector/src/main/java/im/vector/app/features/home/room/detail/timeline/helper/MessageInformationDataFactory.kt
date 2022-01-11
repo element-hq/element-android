@@ -57,18 +57,20 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
     fun create(params: TimelineItemFactoryParams): MessageInformationData {
         val event = params.event
         val nextDisplayableEvent = params.nextDisplayableEvent
-        val prevEvent = params.prevEvent
+        val prevDisplayableEvent = params.prevDisplayableEvent
         val eventId = event.eventId
         val isSentByMe = event.root.senderId == session.myUserId
-        val isFirstFromThisSender = nextDisplayableEvent?.root?.senderId != event.root.senderId
-        val isLastFromThisSender = prevEvent?.root?.senderId != event.root.senderId
         val roomSummary = params.partialState.roomSummary
 
         val date = event.root.localDateTime()
         val nextDate = nextDisplayableEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
+
         val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
                 ?: false
+
+        val isFirstFromThisSender = nextDisplayableEvent?.root?.senderId != event.root.senderId || addDaySeparator
+        val isLastFromThisSender = prevDisplayableEvent?.root?.senderId != event.root.senderId || prevDisplayableEvent?.root?.localDateTime()?.toLocalDate() != date.toLocalDate()
 
         val showInformation =
                 (addDaySeparator ||
@@ -77,7 +79,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                         nextDisplayableEvent.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.ENCRYPTED) ||
                         isNextMessageReceivedMoreThanOneHourAgo ||
                         isTileTypeMessage(nextDisplayableEvent) ||
-                        nextDisplayableEvent.isEdition() ) && !isSentByMe
+                        nextDisplayableEvent.isEdition()) && !isSentByMe
 
         val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
         val e2eDecoration = getE2EDecoration(roomSummary, event)

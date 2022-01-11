@@ -54,7 +54,7 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
             render()
         }
 
-    override var displayBorder: Boolean = true
+    override var showTimeAsOverlay: Boolean = true
         set(value) {
             field = value
             render()
@@ -66,7 +66,7 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
         inflate(context, R.layout.view_message_bubble, this)
         context.withStyledAttributes(attrs, R.styleable.MessageBubble) {
             isIncoming = getBoolean(R.styleable.MessageBubble_incoming_style, false)
-            displayBorder = getBoolean(R.styleable.MessageBubble_show_background, true)
+            showTimeAsOverlay = getBoolean(R.styleable.MessageBubble_show_time_overlay, true)
             isFirstFromSender = getBoolean(R.styleable.MessageBubble_is_first, false)
             isLastFromSender = getBoolean(R.styleable.MessageBubble_is_last, false)
         }
@@ -109,13 +109,14 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
         ConstraintSet().apply {
             clone(bubbleView)
             clear(R.id.viewStubContainer, ConstraintSet.END)
-            if (displayBorder) {
+            if (showTimeAsOverlay) {
                 connect(R.id.viewStubContainer, ConstraintSet.END, R.id.messageTimeView, ConstraintSet.START, 0)
             } else {
                 connect(R.id.viewStubContainer, ConstraintSet.END, R.id.parent, ConstraintSet.END, 0)
             }
             applyTo(bubbleView)
         }
+
     }
 
     private fun createBackgroundDrawable(): Drawable {
@@ -147,12 +148,8 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
                     .setBottomRightCorner(bottomCornerFamily, bottomRadius)
         }
         val shapeAppearanceModel = shapeAppearanceModelBuilder.build()
-        val shapeDrawable = MaterialShapeDrawable(shapeAppearanceModel)
-        if (displayBorder) {
-            shapeDrawable.fillColor = ContextCompat.getColorStateList(context, backgroundColor)
-        } else {
-            shapeDrawable.fillColor = ContextCompat.getColorStateList(context, android.R.color.transparent)
+        return MaterialShapeDrawable(shapeAppearanceModel).apply {
+            fillColor = ContextCompat.getColorStateList(context, backgroundColor)
         }
-        return shapeDrawable
     }
 }
