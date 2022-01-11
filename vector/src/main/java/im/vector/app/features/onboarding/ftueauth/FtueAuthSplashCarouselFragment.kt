@@ -80,17 +80,27 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
                     "Branch: ${BuildConfig.GIT_BRANCH_NAME}"
             views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
         }
+        views.splashCarousel.registerAutomaticUntilInteractionTransitions()
+    }
 
-        views.splashCarousel.apply {
-            var scheduledTransition: Job? = null
-            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    scheduledTransition?.cancel()
+    private fun ViewPager2.registerAutomaticUntilInteractionTransitions() {
+        var scheduledTransition: Job? = null
+        registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            private var hasUserManuallyInteractedWithCarousel: Boolean = false
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                hasUserManuallyInteractedWithCarousel = !isFakeDragging
+            }
+
+            override fun onPageSelected(position: Int) {
+                scheduledTransition?.cancel()
+                if (hasUserManuallyInteractedWithCarousel) {
+                    // stop the automatic transitions
+                } else {
                     scheduledTransition = scheduleCarouselTransition()
                 }
-            })
-            scheduledTransition = scheduleCarouselTransition()
-        }
+            }
+        })
     }
 
     private fun ViewPager2.scheduleCarouselTransition(): Job {
