@@ -1,1 +1,0 @@
-Fixing encrypted non message events showing up as notification messages (eg when a participant joins, mutes or leaves a voice call)
