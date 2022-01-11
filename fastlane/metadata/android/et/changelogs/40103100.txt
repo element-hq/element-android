@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: katseline küsitluste tugi ja linkide eelvaate uus visuaal.
+Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases/tag/v1.3.10
