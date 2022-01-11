@@ -3160,4 +3160,22 @@
     <string name="restart_the_application_to_apply_changes">Перезапустіть застосунок, щоб зміни набули чинності.</string>
     <string name="labs_enable_latex_maths">Увімкнути підтримку LaTeX</string>
     <string name="room_error_access_unauthorized">Вам не дозволено приєднуватися до цієї кімнати</string>
+    <string name="tooltip_attachment_poll">Створити опитування</string>
+    <string name="tooltip_attachment_contact">Відкрити контакти</string>
+    <string name="tooltip_attachment_sticker">Надіслати наліпку</string>
+    <string name="tooltip_attachment_file">Вивантажити файл</string>
+    <string name="tooltip_attachment_gallery">Надіслати зображення й відео</string>
+    <string name="tooltip_attachment_photo">Відкрити камеру</string>
+    <string name="labs_auto_report_uisi_desc">Ваша система автоматично надсилатиме журнали, коли виникне помилка неможливості розшифрування</string>
+    <string name="labs_auto_report_uisi">Автозвіт про помилки шифрування.</string>
+    <string name="room_member_override_nick_color">Замінити колір псевдоніма</string>
+    <string name="login_splash_already_have_account">Я вже маю обліковий запис</string>
+    <string name="ftue_auth_carousel_4_body">Універсальний, як електронна пошта, Element — це абсолютно новий тип співпраці.</string>
+    <string name="ftue_auth_carousel_4_title">Удоскональте спілкування в команді.</string>
+    <string name="ftue_auth_carousel_3_body">Element працює з усіма застосунками на базі Matrix і може навіть з\'єднуватися з власницькими месенджерами.</string>
+    <string name="ftue_auth_carousel_3_title">З\'єднуйтеся з будь-ким.</string>
+    <string name="ftue_auth_carousel_2_body">Element дає змогу обрати де зберігати повідомлення, надаючи вам контроль над вашими даними.</string>
+    <string name="ftue_auth_carousel_2_title">Ви контролюєте все.</string>
+    <string name="ftue_auth_carousel_1_body">Наскрізно зашифроване спілкування для безпечного та незалежного зв’язку, під\'єднаного через Matrix.</string>
+    <string name="ftue_auth_carousel_1_title">Володійте своїми розмовами.</string>
 </resources>
