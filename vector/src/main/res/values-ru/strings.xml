@@ -2766,8 +2766,6 @@
     <string name="space_settings_manage_rooms">Управление комнатами</string>
     <string name="looking_for_someone_not_in_space">Ищете кого-то не в %s\?</string>
     <string name="user_invites_you">%s приглашает вас</string>
-    <string name="labs_use_restricted_join_rule_desc">Предупреждение: требует поддержки сервера и экспериментальной версии комнаты</string>
-    <string name="labs_use_restricted_join_rule">Экспериментальное пространство - Ограниченная комната.</string>
     <string name="you_are_invited">Вы приглашены</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Пространства - это новый способ группировки комнат и людей.</string>
     <string name="spaces_beta_welcome_to_spaces">Добро пожаловать в Пространства!</string>

@@ -2562,8 +2562,6 @@
     <string name="space_settings_manage_rooms">管理聊天室</string>
     <string name="looking_for_someone_not_in_space">正在寻找不在 %s 中的人？</string>
     <string name="user_invites_you">%s 邀请了你</string>
-    <string name="labs_use_restricted_join_rule_desc">警告！需要服务支持实验性聊天室版本</string>
-    <string name="labs_use_restricted_join_rule">实验性空间 - 受限的聊天室。</string>
     <string name="you_are_invited">你被邀请</string>
     <string name="create_spaces_type_header">空间是一种将聊天室和人们进行分组的新方式</string>
     <string name="spaces_beta_welcome_to_spaces_desc">空间是一种将聊天室和人们进行重新分组的新方式。</string>

@@ -2652,8 +2652,6 @@
     <string name="settings_room_directory_show_all_rooms">نمایش‌ها همه‌ی اتاق‌ها</string>
     <string name="settings_category_room_directory">فهرست اتاق‌ها</string>
     <string name="event_status_sent_message">پیام فرستاده شد</string>
-    <string name="labs_use_restricted_join_rule_desc">هشدار: نیاز به پشتیبانی کارساز و نگارش اتاق آزمایشی</string>
-    <string name="labs_use_restricted_join_rule">فضای آزمایشی - اتاق محدود.</string>
     <string name="you_are_invited">دعوت شده‌اید</string>
     <string name="spaces_beta_welcome_to_spaces_desc">فضاها شیوه‌ای جدید برای گروه‌بندی اتاق‌ها و افراد است.</string>
     <string name="spaces_beta_welcome_to_spaces">به فضاها خوش آمدید!</string>

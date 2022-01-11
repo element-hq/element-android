@@ -2701,7 +2701,6 @@
     <string name="invite_people_menu">Convidar pessoas</string>
     <string name="suggested_rooms_pills_on_empty_header">Boas-vindas a %1$s, %2$s.</string>
     <string name="you_are_invited">Você está convidada(o)</string>
-    <string name="labs_use_restricted_join_rule_desc">Aviso requer suporte de servidor e versão de sala experimental</string>
     <string name="user_invites_you">%s convida você</string>
     <string name="unnamed_room">Sala Não-Nomeada</string>
     <string name="this_space_has_no_rooms_admin">Algumas salas podem estar escondidas porque elas são privadas e você precisa de um convite.</string>
@@ -2716,7 +2715,6 @@
     <string name="make_this_space_public">Fazer este espaço público</string>
     <string name="space_settings_manage_rooms">Gerenciar salas</string>
     <string name="looking_for_someone_not_in_space">Procurando por alguém que não está em %s\?</string>
-    <string name="labs_use_restricted_join_rule">Espaço Experimental - Sala Restringida.</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Espaços são uma nova forma de agrupar salas e pessoas.</string>
     <string name="spaces_beta_welcome_to_spaces">Boas-vindas a Espaços!</string>
     <string name="space_add_rooms">Adicionar salas</string>

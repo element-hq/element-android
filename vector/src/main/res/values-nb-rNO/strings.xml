@@ -1715,7 +1715,6 @@
     <string name="spaces_beta_welcome_to_spaces">Velkommen til Mellomrom!</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Mellomrom er en ny måte å gruppere rom og mennesker på.</string>
     <string name="you_are_invited">Du er invitert</string>
-    <string name="labs_use_restricted_join_rule_desc">Advarsel krever serverstøtte og eksperimentell romversjon</string>
     <string name="user_invites_you">%s inviterer deg</string>
     <string name="looking_for_someone_not_in_space">Leter du etter noen som ikke er i %s\?</string>
     <string name="space_settings_manage_rooms">Administrer rom</string>

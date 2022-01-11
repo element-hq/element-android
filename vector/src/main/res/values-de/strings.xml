@@ -2666,8 +2666,6 @@
     <string name="invite_just_to_this_room_desc">Diese werden kein Teil von %s sein</string>
     <string name="share_space_link_message">Tritt meinem Space %1$s %2$s bei</string>
     <string name="suggested_rooms_pills_on_empty_header">Willkommen zu %1$s, %2$s.</string>
-    <string name="labs_use_restricted_join_rule_desc">Warnung: benötigt Server-Unterstützung und eine experimentelle Raumversion</string>
-    <string name="labs_use_restricted_join_rule">Experimenteller Space - Zugangsbeschränkter Raum.</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Mit Spaces kannst du Personen und Räume gruppieren.</string>
     <string name="spaces_beta_welcome_to_spaces">Sag hallo zu Spaces!</string>
     <string name="space_add_existing_rooms">Füge bereits existierende Räume und Spaces hinzu</string>
