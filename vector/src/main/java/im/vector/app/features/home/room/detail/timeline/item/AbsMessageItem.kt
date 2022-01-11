@@ -62,7 +62,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
 
     override fun bind(holder: H) {
         super.bind(holder)
-        if (attributes.informationData.showAvatar) {
+        if (attributes.informationData.messageLayout.showAvatar) {
             holder.avatarImageView.layoutParams = holder.avatarImageView.layoutParams?.apply {
                 height = attributes.avatarSize
                 width = attributes.avatarSize
@@ -76,7 +76,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             holder.avatarImageView.setOnLongClickListener(null)
             holder.avatarImageView.isVisible = false
         }
-        if (attributes.informationData.showDisplayName) {
+        if (attributes.informationData.messageLayout.showDisplayName) {
             holder.memberNameView.isVisible = true
             holder.memberNameView.text = attributes.informationData.memberName
             holder.memberNameView.setTextColor(attributes.getMemberNameColor())
@@ -87,7 +87,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             holder.memberNameView.setOnLongClickListener(null)
             holder.memberNameView.isVisible = false
         }
-        if (attributes.informationData.showTimestamp) {
+        if (attributes.informationData.messageLayout.showTimestamp) {
             holder.timeView.isVisible = true
             holder.timeView.text = attributes.informationData.time
         } else {

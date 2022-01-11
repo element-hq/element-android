@@ -154,7 +154,7 @@ class MessageItemFactory @Inject constructor(
 
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
-        return when (messageContent) {
+        val messageItem = when (messageContent) {
             is MessageEmoteContent               -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageTextContent                -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
             is MessageImageInfoContent           -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
@@ -171,6 +171,9 @@ class MessageItemFactory @Inject constructor(
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessagePollContent                -> buildPollContent(messageContent, informationData, highlight, callback, attributes)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
+        }
+        return messageItem?.apply {
+            layout(informationData.messageLayout.layoutRes)
         }
     }
 
@@ -389,13 +392,6 @@ class MessageItemFactory @Inject constructor(
                 allowNonMxcUrls = informationData.sendState.isSending()
         )
         return MessageImageVideoItem_()
-                .layout(
-                        if (informationData.sentByMe) {
-                            R.layout.item_timeline_event_bubble_outgoing_base
-                        } else {
-                            R.layout.item_timeline_event_bubble_incoming_base
-                        }
-                )
                 .attributes(attributes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .imageContentRenderer(imageContentRenderer)
@@ -516,13 +512,6 @@ class MessageItemFactory @Inject constructor(
                         } else {
                             linkifiedBody
                         }.toEpoxyCharSequence()
-                )
-                .layout(
-                        if (informationData.sentByMe) {
-                            R.layout.item_timeline_event_bubble_outgoing_base
-                        } else {
-                            R.layout.item_timeline_event_bubble_incoming_base
-                        }
                 )
                 .useBigFont(linkifiedBody.length <= MAX_NUMBER_OF_EMOJI_FOR_BIG_FONT * 2 && containsOnlyEmojis(linkifiedBody.toString()))
                 .bindingOptions(bindingOptions)

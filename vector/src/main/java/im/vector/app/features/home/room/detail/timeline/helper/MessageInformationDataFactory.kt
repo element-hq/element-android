@@ -27,7 +27,7 @@ import im.vector.app.features.home.room.detail.timeline.item.PollVoteSummaryData
 import im.vector.app.features.home.room.detail.timeline.item.ReactionInfoData
 import im.vector.app.features.home.room.detail.timeline.item.ReferencesInfoData
 import im.vector.app.features.home.room.detail.timeline.item.SendStateDecoration
-import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayoutFactory
 import org.matrix.android.sdk.api.crypto.VerificationState
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
@@ -41,7 +41,6 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
-import org.matrix.android.sdk.api.session.room.timeline.isEdition
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import javax.inject.Inject
 
@@ -51,8 +50,7 @@ import javax.inject.Inject
  */
 class MessageInformationDataFactory @Inject constructor(private val session: Session,
                                                         private val dateFormatter: VectorDateFormatter,
-                                                        private val visibilityHelper: TimelineEventVisibilityHelper,
-                                                        private val vectorPreferences: VectorPreferences) {
+                                                        private val messageLayoutFactory: TimelineMessageLayoutFactory) {
 
     fun create(params: TimelineItemFactoryParams): MessageInformationData {
         val event = params.event
@@ -66,20 +64,8 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         val nextDate = nextDisplayableEvent?.root?.localDateTime()
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
 
-        val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
-                ?: false
-
         val isFirstFromThisSender = nextDisplayableEvent?.root?.senderId != event.root.senderId || addDaySeparator
         val isLastFromThisSender = prevDisplayableEvent?.root?.senderId != event.root.senderId || prevDisplayableEvent?.root?.localDateTime()?.toLocalDate() != date.toLocalDate()
-
-        val showInformation =
-                (addDaySeparator ||
-                        event.senderInfo.avatarUrl != nextDisplayableEvent?.senderInfo?.avatarUrl ||
-                        event.senderInfo.disambiguatedDisplayName != nextDisplayableEvent?.senderInfo?.disambiguatedDisplayName ||
-                        nextDisplayableEvent.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.ENCRYPTED) ||
-                        isNextMessageReceivedMoreThanOneHourAgo ||
-                        isTileTypeMessage(nextDisplayableEvent) ||
-                        nextDisplayableEvent.isEdition()) && !isSentByMe
 
         val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
         val e2eDecoration = getE2EDecoration(roomSummary, event)
@@ -95,6 +81,8 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
             SendStateDecoration.NONE
         }
 
+        val messageLayout = messageLayoutFactory.create(params)
+
         return MessageInformationData(
                 eventId = eventId,
                 senderId = event.root.senderId ?: "",
@@ -103,9 +91,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 ageLocalTS = event.root.ageLocalTs,
                 avatarUrl = event.senderInfo.avatarUrl,
                 memberName = event.senderInfo.disambiguatedDisplayName,
-                showAvatar = showInformation,
-                showDisplayName = showInformation,
-                showTimestamp = true,
+                messageLayout = messageLayout,
                 orderedReactionList = event.annotations?.reactionsSummary
                         // ?.filter { isSingleEmoji(it.key) }
                         ?.map {
