@@ -629,7 +629,7 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun storeRoomAlgorithm(roomId: String, algorithm: String) {
+    override fun storeRoomAlgorithm(roomId: String, algorithm: String?) {
         doRealmTransaction(realmConfiguration) {
             CryptoRoomEntity.getOrCreate(it, roomId).algorithm = algorithm
         }

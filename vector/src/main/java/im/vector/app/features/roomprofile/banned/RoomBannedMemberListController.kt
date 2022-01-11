@@ -18,6 +18,7 @@ package im.vector.app.features.roomprofile.banned
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.epoxy.profiles.profileMatrixItemWithProgress
@@ -53,7 +54,7 @@ class RoomBannedMemberListController @Inject constructor(
 
             genericFooterItem {
                 id("footer")
-                text(quantityString)
+                text(quantityString.toEpoxyCharSequence())
             }
         } else {
             buildProfileSection(quantityString)

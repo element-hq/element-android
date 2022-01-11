@@ -119,15 +119,15 @@ internal class DefaultRoom(override val roomId: String,
         }
     }
 
-    override suspend fun enableEncryption(algorithm: String) {
+    override suspend fun enableEncryption(algorithm: String, force: Boolean) {
         when {
-            isEncrypted()                          -> {
+            (!force && isEncrypted() && encryptionAlgorithm() == MXCRYPTO_ALGORITHM_MEGOLM) -> {
                 throw IllegalStateException("Encryption is already enabled for this room")
             }
-            algorithm != MXCRYPTO_ALGORITHM_MEGOLM -> {
+            (!force && algorithm != MXCRYPTO_ALGORITHM_MEGOLM)                              -> {
                 throw InvalidParameterException("Only MXCRYPTO_ALGORITHM_MEGOLM algorithm is supported")
             }
-            else                                   -> {
+            else                                                                            -> {
                 val params = SendStateTask.Params(
                         roomId = roomId,
                         stateKey = null,

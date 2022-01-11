@@ -33,6 +33,7 @@ data class RoomMemberProfileViewState(
         val isMine: Boolean = false,
         val isIgnored: Async<Boolean> = Uninitialized,
         val isRoomEncrypted: Boolean = false,
+        val isAlgorithmSupported: Boolean = true,
         val powerLevelsContent: PowerLevelsContent? = null,
         val userPowerLevelString: Async<String> = Uninitialized,
         val userMatrixItem: Async<MatrixItem> = Uninitialized,

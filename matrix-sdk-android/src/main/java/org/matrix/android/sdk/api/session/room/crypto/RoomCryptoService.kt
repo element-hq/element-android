@@ -27,9 +27,12 @@ interface RoomCryptoService {
     fun shouldEncryptForInvitedMembers(): Boolean
 
     /**
-     * Enable encryption of the room
+     * Enable encryption of the room.
+     * @param Use force to ensure that this algorithm will be used. Otherwise this call
+     * will throw if encryption is already setup or if the algorithm is not supported. Only to
+     * be used by admins to fix misconfigured encryption.
      */
-    suspend fun enableEncryption(algorithm: String = MXCRYPTO_ALGORITHM_MEGOLM)
+    suspend fun enableEncryption(algorithm: String = MXCRYPTO_ALGORITHM_MEGOLM, force: Boolean = false)
 
     /**
      * Ensures all members of the room are loaded and outbound session keys are shared.
