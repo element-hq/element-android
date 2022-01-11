@@ -38,6 +38,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                         label = "FTUE Splash - I already have an account",
                         factory = VectorFeatures::isAlreadyHaveAccountSplashEnabled,
                         key = DebugFeatureKeys.alreadyHaveAnAccount
+                ),
+                createBooleanFeature(
+                        label = "FTUE Splash - Carousel",
+                        factory = VectorFeatures::isSplashCarouselEnabled,
+                        key = DebugFeatureKeys.splashCarousel
                 )
         ))
     }
