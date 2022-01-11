@@ -50,7 +50,7 @@ import javax.inject.Inject
 internal class TokenChunkEventPersistor @Inject constructor(
                                                             @SessionDatabase private val monarchy: Monarchy,
                                                             @UserId private val userId: String,
-                                                            private val liveEventManager: Lazy<StreamEventsManager> ) {
+                                                            private val liveEventManager: Lazy<StreamEventsManager>) {
 
     enum class Result {
         SHOULD_FETCH_MORE,

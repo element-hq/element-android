@@ -216,7 +216,7 @@ class CommonTestHelper(context: Context) {
             timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
         val timeline = room.createTimeline(null, TimelineSettings(10))
         timeline.start()
-        val sentEvents = sendTextMessagesBatched(timeline, room, message, numberOfMessages, timeout,rootThreadEventId)
+        val sentEvents = sendTextMessagesBatched(timeline, room, message, numberOfMessages, timeout, rootThreadEventId)
         timeline.dispose()
         // Check that all events has been created
         assertEquals("Message number do not match $sentEvents", numberOfMessages.toLong(), sentEvents.size.toLong())

@@ -138,8 +138,8 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         } else if (direction == Timeline.Direction.BACKWARDS && prevChunk != null) {
             return prevChunk?.loadMore(count, direction, fetchOnServerIfNeeded) ?: LoadMoreResult.FAILURE
         }
-        val loadFromStorage = loadFromStorage(count, direction).also{
-            logLoadedFromStorage(it,direction)
+        val loadFromStorage = loadFromStorage(count, direction).also {
+            logLoadedFromStorage(it, direction)
         }
 
         val offsetCount = count - loadFromStorage.numberOfEvents

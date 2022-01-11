@@ -261,7 +261,6 @@ class ThreadMessagingTest : InstrumentedTest {
         val firstMessage = sentMessages[0]
         val secondMessage = sentMessages[1]
 
-
         // Alice will reply in thread to the second message 35 times
         val aliceThreadRepliesInSecondMessage = commonTestHelper.replyInThreadMessage(
                 room = aliceRoom,
@@ -287,7 +286,6 @@ class ThreadMessagingTest : InstrumentedTest {
                 message = "Another Bob reply In the above second thread message",
                 numberOfMessages = 20,
                 rootThreadEventId = secondMessage.root.eventId.orEmpty())
-
 
         aliceThreadRepliesInSecondMessage.forEach {
             it.root.isThread().shouldBeTrue()
@@ -337,5 +335,4 @@ class ThreadMessagingTest : InstrumentedTest {
         }
         aliceSession.stopSync()
     }
-
 }

@@ -127,11 +127,10 @@ internal class DefaultTimeline(private val roomId: String,
         }
         timelineScope.launch {
             sequencer.post {
-
                 if (isStarted.compareAndSet(false, true)) {
                     isFromThreadTimeline = rootThreadEventId != null
                     this@DefaultTimeline.rootThreadEventId = rootThreadEventId
-                    ///
+                    // /
                     val realm = Realm.getInstance(realmConfiguration)
                     ensureReadReceiptAreLoaded(realm)
                     backgroundRealm.set(realm)
@@ -157,7 +156,7 @@ internal class DefaultTimeline(private val roomId: String,
 
     override fun restartWithEventId(eventId: String?) {
         timelineScope.launch {
-            openAround(eventId,rootThreadEventId)
+            openAround(eventId, rootThreadEventId)
             postSnapshot()
         }
     }

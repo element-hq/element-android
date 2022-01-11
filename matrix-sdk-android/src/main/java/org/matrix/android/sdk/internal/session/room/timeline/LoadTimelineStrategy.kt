@@ -171,7 +171,7 @@ internal class LoadTimelineStrategy(
     }
 
     suspend fun loadMore(count: Int, direction: Timeline.Direction, fetchOnServerIfNeeded: Boolean = true): LoadMoreResult {
-        ///
+        // /
         if (mode is Mode.Permalink && timelineChunk == null) {
             val params = GetContextOfEventTask.Params(roomId, mode.originEventId)
             try {
@@ -208,7 +208,6 @@ internal class LoadTimelineStrategy(
     }
 
     private fun getChunkEntity(realm: Realm): RealmResults<ChunkEntity> {
-
         return when (mode) {
             is Mode.Live      -> {
                 ChunkEntity.where(realm, roomId)
