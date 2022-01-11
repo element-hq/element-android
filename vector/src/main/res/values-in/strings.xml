@@ -3003,4 +3003,22 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="restart_the_application_to_apply_changes">Mulai ulang aplikasi ini untuk menerapkan perubahan.</string>
     <string name="labs_enable_latex_maths">Aktifkan matematika LaTeX</string>
     <string name="room_error_access_unauthorized">Anda tidak diperbolehkan untuk bergabung ke ruangan ini</string>
+    <string name="labs_auto_report_uisi_desc">Sistem Anda akan mengirimkan log secara otomatis ketika sebuah kesalahan dekripsi terjadi</string>
+    <string name="tooltip_attachment_poll">Buat poll</string>
+    <string name="tooltip_attachment_contact">Buka kontak</string>
+    <string name="tooltip_attachment_sticker">Kirim stiker</string>
+    <string name="tooltip_attachment_file">Unggah file</string>
+    <string name="tooltip_attachment_gallery">Kirim gambar dan video</string>
+    <string name="tooltip_attachment_photo">Buka kamera</string>
+    <string name="labs_auto_report_uisi">Laporkan Kesalahan Dekripsi Secara Otomatis.</string>
+    <string name="room_member_override_nick_color">Ubah warna nama tampilan</string>
+    <string name="login_splash_already_have_account">Saya sudah punya akun</string>
+    <string name="ftue_auth_carousel_4_body">Universal seperti email, Element adalah jenis kolaborasi yang benar-benar baru.</string>
+    <string name="ftue_auth_carousel_4_title">Bebaskan.</string>
+    <string name="ftue_auth_carousel_3_body">Elemen berfungsi dengan semua aplikasi berbasis Matrix dan bahkan dapat menjembatani ke perpesanan sumber tertutup.</string>
+    <string name="ftue_auth_carousel_3_title">Hubung dengan siapa pun.</string>
+    <string name="ftue_auth_carousel_2_body">Elemen memungkinkan Anda untuk memilih di mana pesan Anda disimpan, membuat Anda tetap mengendali data Anda.</string>
+    <string name="ftue_auth_carousel_2_title">Anda mengendalikannya.</string>
+    <string name="ftue_auth_carousel_1_body">Perpesanan terenkripsi secara ujung-ke-ujung untuk komunikasi aman dan independen, terhubung via Matrix.</string>
+    <string name="ftue_auth_carousel_1_title">Miliki percakapan Anda.</string>
 </resources>
