@@ -56,7 +56,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 20L
+        const val SESSION_STORE_SCHEMA_VERSION = 21L
     }
 
     /**
@@ -89,6 +89,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
         if (oldVersion <= 17) migrateTo18(realm)
         if (oldVersion <= 18) migrateTo19(realm)
         if (oldVersion <= 19) migrateTo20(realm)
+        if (oldVersion <= 20) migrateTo21(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -415,6 +416,10 @@ internal class RealmSessionStoreMigration @Inject constructor(
                 chunkEntities.deleteAllFromRealm()
             }
         }
+    }
+
+    private fun migrateTo21(realm: DynamicRealm) {
+        Timber.d("Step 20 -> 21")
 
         realm.schema.get("RoomSummaryEntity")
                 ?.addField(RoomSummaryEntityFields.E2E_ALGORITHM, String::class.java)
