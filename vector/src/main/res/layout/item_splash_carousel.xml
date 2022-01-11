@@ -24,13 +24,15 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/carousel_item_image_container"
-        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintHeight_percent="0.05"
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/carousel_item_image_container"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         app:layout_constraintBottom_toTopOf="@id/carousel_item_image_bottom_space"
         app:layout_constraintEnd_toEndOf="@id/splashCarouselGutterEnd"
@@ -42,7 +44,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:adjustViewBounds="true"
             android:contentDescription="@null" />
 
     </FrameLayout>
