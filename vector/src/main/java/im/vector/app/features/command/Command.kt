@@ -37,7 +37,7 @@ enum class Command(val command: String, val parameters: String, @StringRes val d
     JOIN_ROOM("/join", "<room-address> [reason]", R.string.command_description_join_room, false),
     PART("/part", "[<room-address>]", R.string.command_description_part_room, false),
     TOPIC("/topic", "<topic>", R.string.command_description_topic, false),
-    KICK_USER("/kick", "<user-id> [reason]", R.string.command_description_kick_user, false),
+    REMOVE_USER("/remove", "<user-id> [reason]", R.string.command_description_kick_user, false),
     CHANGE_DISPLAY_NAME("/nick", "<display-name>", R.string.command_description_nick, false),
     CHANGE_DISPLAY_NAME_FOR_ROOM("/myroomnick", "<display-name>", R.string.command_description_nick_for_room, false),
     ROOM_AVATAR("/roomavatar", "<mxc_url>", R.string.command_description_room_avatar, true /* Since user has to know the mxc url */),

@@ -217,8 +217,8 @@ class MessageComposerViewModel @AssistedInject constructor(
                         is ParsedCommand.UnignoreUser             -> {
                             handleUnignoreSlashCommand(slashCommandResult)
                         }
-                        is ParsedCommand.KickUser                 -> {
-                            handleKickSlashCommand(slashCommandResult)
+                        is ParsedCommand.RemoveUser               -> {
+                            handleRemoveSlashCommand(slashCommandResult)
                         }
                         is ParsedCommand.JoinRoom                 -> {
                             handleJoinToAnotherRoomSlashCommand(slashCommandResult)
@@ -576,9 +576,9 @@ class MessageComposerViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleKickSlashCommand(kick: ParsedCommand.KickUser) {
+    private fun handleRemoveSlashCommand(removeUser: ParsedCommand.RemoveUser) {
         launchSlashCommandFlowSuspendable {
-            room.kick(kick.userId, kick.reason)
+            room.remove(removeUser.userId, removeUser.reason)
         }
     }
 

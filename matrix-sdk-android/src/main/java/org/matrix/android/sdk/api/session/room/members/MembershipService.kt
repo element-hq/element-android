@@ -77,7 +77,7 @@ interface MembershipService {
     /**
      * Kick a user from the room
      */
-    suspend fun kick(userId: String, reason: String? = null)
+    suspend fun remove(userId: String, reason: String? = null)
 
     /**
      * Join the room, or accept an invitation.

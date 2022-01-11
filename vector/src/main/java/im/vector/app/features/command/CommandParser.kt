@@ -200,22 +200,22 @@ object CommandParser {
                         ParsedCommand.ErrorSyntax(Command.INVITE)
                     }
                 }
-                Command.KICK_USER.command                    -> {
+                Command.REMOVE_USER.command                  -> {
                     if (messageParts.size >= 2) {
                         val userId = messageParts[1]
 
                         if (MatrixPatterns.isUserId(userId)) {
-                            ParsedCommand.KickUser(
+                            ParsedCommand.RemoveUser(
                                     userId,
-                                    textMessage.substring(Command.KICK_USER.length + userId.length)
+                                    textMessage.substring(Command.REMOVE_USER.length + userId.length)
                                             .trim()
                                             .takeIf { it.isNotBlank() }
                             )
                         } else {
-                            ParsedCommand.ErrorSyntax(Command.KICK_USER)
+                            ParsedCommand.ErrorSyntax(Command.REMOVE_USER)
                         }
                     } else {
-                        ParsedCommand.ErrorSyntax(Command.KICK_USER)
+                        ParsedCommand.ErrorSyntax(Command.REMOVE_USER)
                     }
                 }
                 Command.BAN_USER.command                     -> {
