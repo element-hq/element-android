@@ -118,7 +118,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             attributes.threadDetails?.let { threadDetails ->
                 holder.threadSummaryConstraintLayout.isVisible = threadDetails.isRootThread
                 holder.threadSummaryCounterTextView.text = threadDetails.numberOfThreads.toString()
-                holder.threadSummaryInfoTextView.text = threadDetails.threadSummaryLatestTextMessage
+                holder.threadSummaryInfoTextView.text = threadDetails.threadSummaryLatestTextMessage ?: attributes.decryptionErrorMessage
 
                 val userId = threadDetails.threadSummarySenderInfo?.userId ?: return@let
                 val displayName = threadDetails.threadSummarySenderInfo?.displayName
@@ -185,6 +185,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             val threadCallback: TimelineEventController.ThreadCallback? = null,
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
             val emojiTypeFace: Typeface? = null,
+            val decryptionErrorMessage: String? = null,
             val threadDetails: ThreadDetails? = null
     ) : AbsBaseMessageItem.Attributes {
 

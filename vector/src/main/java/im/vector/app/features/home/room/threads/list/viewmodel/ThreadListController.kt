@@ -17,8 +17,10 @@
 package im.vector.app.features.home.room.threads.list.viewmodel
 
 import com.airbnb.epoxy.EpoxyController
+import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.threads.list.model.threadList
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -28,6 +30,7 @@ import javax.inject.Inject
 
 class ThreadListController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
+        private val stringProvider: StringProvider,
         private val dateFormatter: VectorDateFormatter
 ) : EpoxyController() {
 
@@ -56,6 +59,7 @@ class ThreadListController @Inject constructor(
                 }
                 ?.forEach { timelineEvent ->
                     val date = dateFormatter.format(timelineEvent.root.threadDetails?.lastMessageTimestamp, DateFormatKind.ROOM_LIST)
+                    val decryptionErrorMessage = stringProvider.getString(R.string.encrypted_message)
                     threadList {
                         id(timelineEvent.eventId)
                         avatarRenderer(host.avatarRenderer)
@@ -64,8 +68,8 @@ class ThreadListController @Inject constructor(
                         date(date)
                         rootMessageDeleted(timelineEvent.root.isRedacted())
                         threadNotificationState(timelineEvent.root.threadDetails?.threadNotificationState ?: ThreadNotificationState.NO_NEW_MESSAGE)
-                        rootMessage(timelineEvent.root.getDecryptedTextSummary())
-                        lastMessage(timelineEvent.root.threadDetails?.threadSummaryLatestTextMessage.orEmpty())
+                        rootMessage(timelineEvent.root.getDecryptedTextSummary() ?: decryptionErrorMessage)
+                        lastMessage(timelineEvent.root.threadDetails?.threadSummaryLatestTextMessage ?: decryptionErrorMessage)
                         lastMessageCounter(timelineEvent.root.threadDetails?.numberOfThreads.toString())
                         lastMessageMatrixItem(timelineEvent.root.threadDetails?.threadSummarySenderInfo?.toMatrixItem())
                         itemClickListener {

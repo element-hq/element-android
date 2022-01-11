@@ -16,6 +16,8 @@
 package im.vector.app.features.home.room.detail.timeline.helper
 
 import im.vector.app.EmojiCompatFontProvider
+import im.vector.app.R
+import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -28,6 +30,7 @@ class MessageItemAttributesFactory @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val messageColorProvider: MessageColorProvider,
         private val avatarSizeProvider: AvatarSizeProvider,
+        private val stringProvider: StringProvider,
         private val emojiCompatFontProvider: EmojiCompatFontProvider) {
 
     fun create(messageContent: Any?,
@@ -53,6 +56,7 @@ class MessageItemAttributesFactory @Inject constructor(
                 threadCallback = callback,
                 readReceiptsCallback = callback,
                 emojiTypeFace = emojiCompatFontProvider.typeface,
+                decryptionErrorMessage = stringProvider.getString(R.string.encrypted_message),
                 threadDetails = threadDetails
         )
     }
