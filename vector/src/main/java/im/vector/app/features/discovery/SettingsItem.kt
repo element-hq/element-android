@@ -43,7 +43,7 @@ abstract class SettingsItem : EpoxyModelWithHolder<SettingsItem.Holder>() {
     var descriptionResId: Int? = null
 
     @EpoxyAttribute
-    var description: CharSequence? = null
+    var description: String? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var itemClickListener: ClickListener? = null

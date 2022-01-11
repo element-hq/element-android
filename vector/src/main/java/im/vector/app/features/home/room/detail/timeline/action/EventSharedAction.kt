@@ -43,28 +43,28 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
             EventSharedAction(R.string.edit, R.drawable.ic_edit)
 
     data class Quote(val eventId: String) :
-            EventSharedAction(R.string.quote, R.drawable.ic_quote)
+            EventSharedAction(R.string.action_quote, R.drawable.ic_quote)
 
     data class Reply(val eventId: String) :
             EventSharedAction(R.string.reply, R.drawable.ic_reply)
 
     data class Share(val eventId: String, val messageContent: MessageContent) :
-            EventSharedAction(R.string.share, R.drawable.ic_share)
+            EventSharedAction(R.string.action_share, R.drawable.ic_share)
 
     data class Save(val eventId: String, val messageContent: MessageWithAttachmentContent) :
-            EventSharedAction(R.string.save, R.drawable.ic_material_save)
+            EventSharedAction(R.string.action_save, R.drawable.ic_material_save)
 
     data class Resend(val eventId: String) :
             EventSharedAction(R.string.global_retry, R.drawable.ic_refresh_cw)
 
     data class Remove(val eventId: String) :
-            EventSharedAction(R.string.remove, R.drawable.ic_trash, true)
+            EventSharedAction(R.string.action_remove, R.drawable.ic_trash, true)
 
     data class Redact(val eventId: String, val askForReason: Boolean, val dialogTitleRes: Int, val dialogDescriptionRes: Int) :
             EventSharedAction(R.string.message_action_item_redact, R.drawable.ic_delete, true)
 
     data class Cancel(val eventId: String, val force: Boolean) :
-            EventSharedAction(R.string.cancel, R.drawable.ic_close_round)
+            EventSharedAction(R.string.action_cancel, R.drawable.ic_close_round)
 
     data class ViewSource(val content: String) :
             EventSharedAction(R.string.view_source, R.drawable.ic_view_source)

@@ -71,14 +71,10 @@ interface Timeline {
     fun paginate(direction: Direction, count: Int)
 
     /**
-     * Returns the number of sending events
+     * This is the same than the regular paginate method but waits for the results instead
+     * of relying on the timeline listener.
      */
-    fun pendingEventCount(): Int
-
-    /**
-     * Returns the number of failed sending events.
-     */
-    fun failedToDeliverEventCount(): Int
+    suspend fun awaitPaginate(direction: Direction, count: Int): List<TimelineEvent>
 
     /**
      * Returns the index of a built event or null.
@@ -86,14 +82,14 @@ interface Timeline {
     fun getIndexOfEvent(eventId: String?): Int?
 
     /**
-     * Returns the built [TimelineEvent] at index or null
+     * Returns the current pagination state for the direction.
      */
-    fun getTimelineEventAtIndex(index: Int): TimelineEvent?
+    fun getPaginationState(direction: Direction): PaginationState
 
     /**
-     * Returns the built [TimelineEvent] with eventId or null
+     * Returns a snapshot of the timeline in his current state.
      */
-    fun getTimelineEventWithId(eventId: String?): TimelineEvent?
+    fun getSnapshot(): List<TimelineEvent>
 
     interface Listener {
         /**
@@ -101,18 +97,32 @@ interface Timeline {
          * The latest event is the first in the list
          * @param snapshot the most up to date snapshot
          */
-        fun onTimelineUpdated(snapshot: List<TimelineEvent>)
+        fun onTimelineUpdated(snapshot: List<TimelineEvent>) = Unit
 
         /**
          * Called whenever an error we can't recover from occurred
          */
-        fun onTimelineFailure(throwable: Throwable)
+        fun onTimelineFailure(throwable: Throwable) = Unit
 
         /**
          * Called when new events come through the sync
          */
-        fun onNewTimelineEvents(eventIds: List<String>)
+        fun onNewTimelineEvents(eventIds: List<String>) = Unit
+
+        /**
+         * Called when the pagination state has changed in one direction
+         */
+        fun onStateUpdated(direction: Direction, state: PaginationState) = Unit
     }
+
+    /**
+     * Pagination state
+     */
+    data class PaginationState(
+            val hasMoreToLoad: Boolean = true,
+            val loading: Boolean = false,
+            val inError: Boolean = false
+    )
 
     /**
      * This is used to paginate in one or another direction.

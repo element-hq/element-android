@@ -23,7 +23,7 @@ import im.vector.app.core.platform.VectorSharedAction
  * Parent class for a bottom sheet action
  */
 open class BottomSheetGenericRadioAction(
-        open val title: CharSequence?,
+        open val title: String?,
         open val description: String? = null,
         open val isSelected: Boolean
 ) : VectorSharedAction {

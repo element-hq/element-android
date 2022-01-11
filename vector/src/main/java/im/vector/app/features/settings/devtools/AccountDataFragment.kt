@@ -82,10 +82,10 @@ class AccountDataFragment @Inject constructor(
 
     override fun didLongTap(data: UserAccountDataEvent) {
         MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
-                .setTitle(R.string.delete)
+                .setTitle(R.string.action_delete)
                 .setMessage(getString(R.string.delete_account_data_warning, data.type))
-                .setNegativeButton(R.string.cancel, null)
-                .setPositiveButton(R.string.delete) { _, _ ->
+                .setNegativeButton(R.string.action_cancel, null)
+                .setPositiveButton(R.string.action_delete) { _, _ ->
                     viewModel.handle(AccountDataAction.DeleteAccountData(data.type))
                 }
                 .show()

@@ -83,8 +83,8 @@ abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineIte
      */
     data class Attributes(
             val shieldUIState: ShieldUIState,
-            val title: CharSequence,
-            val description: CharSequence,
+            val title: String,
+            val description: String,
             override val informationData: MessageInformationData,
             override val avatarRenderer: AvatarRenderer,
             override val messageColorProvider: MessageColorProvider,

@@ -124,9 +124,9 @@ fun startNotificationChannelSettingsIntent(fragment: Fragment, channelID: String
 }
 
 fun startAddGoogleAccountIntent(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>) {
+    val intent = Intent(Settings.ACTION_ADD_ACCOUNT)
+    intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
     try {
-        val intent = Intent(Settings.ACTION_ADD_ACCOUNT)
-        intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, arrayOf("com.google"))
         activityResultLauncher.launch(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
         context.toast(R.string.error_no_external_application_found)
@@ -135,9 +135,9 @@ fun startAddGoogleAccountIntent(context: Context, activityResultLauncher: Activi
 
 @RequiresApi(Build.VERSION_CODES.O)
 fun startInstallFromSourceIntent(context: Context, activityResultLauncher: ActivityResultLauncher<Intent>) {
+    val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
+            .setData(Uri.parse(String.format("package:%s", context.packageName)))
     try {
-        val intent = Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES)
-                .setData(Uri.parse(String.format("package:%s", context.packageName)))
         activityResultLauncher.launch(intent)
     } catch (activityNotFoundException: ActivityNotFoundException) {
         context.toast(R.string.error_no_external_application_found)
@@ -177,9 +177,9 @@ fun startImportTextFromFileIntent(context: Context, activityResultLauncher: Acti
     val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
         type = "text/plain"
     }
-    if (intent.resolveActivity(context.packageManager) != null) {
+    try {
         activityResultLauncher.launch(intent)
-    } else {
+    } catch (activityNotFoundException: ActivityNotFoundException) {
         context.toast(R.string.error_no_external_application_found)
     }
 }

@@ -38,8 +38,8 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.login2.AbstractLoginFragment2
 import im.vector.app.features.login2.LoginAction2
-import im.vector.app.features.login2.LoginActivity2
 import im.vector.app.features.login2.LoginViewState2
+import im.vector.app.features.onboarding.OnboardingActivity
 import org.matrix.android.sdk.api.util.MatrixItem
 import java.util.UUID
 import javax.inject.Inject
@@ -107,7 +107,7 @@ class AccountCreatedFragment @Inject constructor(
                     val newName = views.editText.text.toString()
                     viewModel.handle(AccountCreatedAction.SetDisplayName(newName))
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 
@@ -130,7 +130,7 @@ class AccountCreatedFragment @Inject constructor(
 
     private fun invalidateState(state: AccountCreatedViewState) {
         // Ugly hack...
-        (activity as? LoginActivity2)?.setIsLoading(state.isLoading)
+        (activity as? OnboardingActivity)?.setIsLoading(state.isLoading)
 
         views.loginAccountCreatedSubtitle.text = getString(R.string.login_account_created_subtitle, state.userId)
 

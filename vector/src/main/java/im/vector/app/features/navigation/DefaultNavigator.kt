@@ -38,6 +38,7 @@ import im.vector.app.core.error.fatalError
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.features.VectorFeatures
+import im.vector.app.features.VectorFeatures.OnboardingVariant
 import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
 import im.vector.app.features.call.conference.JitsiCallViewModel
 import im.vector.app.features.call.conference.VectorJitsiActivity
@@ -63,11 +64,11 @@ import im.vector.app.features.location.LocationSharingArgs
 import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
-import im.vector.app.features.login2.LoginActivity2
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.media.BigImageViewerActivity
 import im.vector.app.features.media.VectorAttachmentViewerActivity
+import im.vector.app.features.onboarding.OnboardingActivity
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.pin.PinArgs
 import im.vector.app.features.pin.PinMode
@@ -85,7 +86,6 @@ import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
 import im.vector.app.features.share.SharedData
 import im.vector.app.features.signout.soft.SoftLogoutActivity
-import im.vector.app.features.signout.soft.SoftLogoutActivity2
 import im.vector.app.features.spaces.InviteRoomSpaceChooserBottomSheet
 import im.vector.app.features.spaces.SpaceExploreActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
@@ -116,27 +116,26 @@ class DefaultNavigator @Inject constructor(
 ) : Navigator {
 
     override fun openLogin(context: Context, loginConfig: LoginConfig?, flags: Int) {
-        val intent = when (features.loginVersion()) {
-            VectorFeatures.LoginVersion.V1 -> LoginActivity.newIntent(context, loginConfig)
-            VectorFeatures.LoginVersion.V2 -> LoginActivity2.newIntent(context, loginConfig)
+        val intent = when (features.onboardingVariant()) {
+            OnboardingVariant.LEGACY    -> LoginActivity.newIntent(context, loginConfig)
+            OnboardingVariant.LOGIN_2,
+            OnboardingVariant.FTUE_AUTH -> OnboardingActivity.newIntent(context, loginConfig)
         }
         intent.addFlags(flags)
         context.startActivity(intent)
     }
 
     override fun loginSSORedirect(context: Context, data: Uri?) {
-        val intent = when (features.loginVersion()) {
-            VectorFeatures.LoginVersion.V1 -> LoginActivity.redirectIntent(context, data)
-            VectorFeatures.LoginVersion.V2 -> LoginActivity2.redirectIntent(context, data)
+        val intent = when (features.onboardingVariant()) {
+            OnboardingVariant.LEGACY    -> LoginActivity.redirectIntent(context, data)
+            OnboardingVariant.LOGIN_2,
+            OnboardingVariant.FTUE_AUTH -> OnboardingActivity.redirectIntent(context, data)
         }
         context.startActivity(intent)
     }
 
     override fun softLogout(context: Context) {
-        val intent = when (features.loginVersion()) {
-            VectorFeatures.LoginVersion.V1 -> SoftLogoutActivity.newIntent(context)
-            VectorFeatures.LoginVersion.V2 -> SoftLogoutActivity2.newIntent(context)
-        }
+        val intent = SoftLogoutActivity.newIntent(context)
         context.startActivity(intent)
     }
 

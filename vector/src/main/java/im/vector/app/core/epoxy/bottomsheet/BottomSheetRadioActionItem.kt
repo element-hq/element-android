@@ -37,7 +37,7 @@ import im.vector.app.core.extensions.setTextOrHide
 abstract class BottomSheetRadioActionItem : VectorEpoxyModel<BottomSheetRadioActionItem.Holder>() {
 
     @EpoxyAttribute
-    var title: CharSequence? = null
+    var title: String? = null
 
     @StringRes
     @EpoxyAttribute
@@ -47,7 +47,7 @@ abstract class BottomSheetRadioActionItem : VectorEpoxyModel<BottomSheetRadioAct
     var selected = false
 
     @EpoxyAttribute
-    var description: CharSequence? = null
+    var description: String? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     lateinit var listener: ClickListener

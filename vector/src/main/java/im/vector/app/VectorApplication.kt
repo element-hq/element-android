@@ -97,6 +97,7 @@ class VectorApplication :
     @Inject lateinit var pinLocker: PinLocker
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var invitesAcceptor: InvitesAcceptor
+    @Inject lateinit var autoRageShaker: AutoRageShaker
     @Inject lateinit var vectorFileLogger: VectorFileLogger
     @Inject lateinit var vectorAnalytics: VectorAnalytics
 
@@ -118,6 +119,7 @@ class VectorApplication :
         appContext = this
         vectorAnalytics.init()
         invitesAcceptor.initialize()
+        autoRageShaker.initialize()
         vectorUncaughtExceptionHandler.activate(this)
 
         // Remove Log handler statically added by Jitsi

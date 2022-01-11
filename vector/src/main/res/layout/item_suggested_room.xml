@@ -79,7 +79,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:maxWidth="@dimen/button_max_width"
-        android:text="@string/join"
+        android:text="@string/action_join"
         app:layout_constraintBottom_toTopOf="@id/inlineErrorText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

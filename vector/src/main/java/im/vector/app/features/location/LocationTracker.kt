@@ -22,9 +22,9 @@ import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import androidx.annotation.RequiresPermission
+import androidx.core.content.getSystemService
 import timber.log.Timber
 import javax.inject.Inject
-import androidx.core.content.getSystemService
 
 class LocationTracker @Inject constructor(
         private val context: Context) : LocationListener {

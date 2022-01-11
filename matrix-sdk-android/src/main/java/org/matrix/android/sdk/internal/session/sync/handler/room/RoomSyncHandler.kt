@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.sync.handler.room
 
+import dagger.Lazy
 import io.realm.Realm
 import io.realm.kotlin.createObject
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
@@ -52,6 +53,7 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.clearWith
+import org.matrix.android.sdk.internal.session.StreamEventsManager
 import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
 import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
 import org.matrix.android.sdk.internal.session.initsync.mapWithProgress
@@ -79,7 +81,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val threadsAwarenessHandler: ThreadsAwarenessHandler,
                                                    private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
                                                    @UserId private val userId: String,
-                                                   private val timelineInput: TimelineInput) {
+                                                   private val timelineInput: TimelineInput,
+                                                   private val liveEventService: Lazy<StreamEventsManager>) {
 
     sealed class HandlingStrategy {
         data class JOINED(val data: Map<String, RoomSync>) : HandlingStrategy()
@@ -345,15 +348,17 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                      syncLocalTimestampMillis: Long,
                                      aggregator: SyncResponsePostTreatmentAggregator): ChunkEntity {
         val lastChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomEntity.roomId)
+        if (isLimited && lastChunk != null) {
+            lastChunk.deleteOnCascade(deleteStateEvents = true, canDeleteRoot = true)
+        }
         val chunkEntity = if (!isLimited && lastChunk != null) {
             lastChunk
         } else {
-            realm.createObject<ChunkEntity>().apply { this.prevToken = prevToken }
+            realm.createObject<ChunkEntity>().apply {
+                this.prevToken = prevToken
+                this.isLastForward = true
+            }
         }
-        // Only one chunk has isLastForward set to true
-        lastChunk?.isLastForward = false
-        chunkEntity.isLastForward = true
-
         val eventIds = ArrayList<String>(eventList.size)
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
 
@@ -362,6 +367,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 continue
             }
             eventIds.add(event.eventId)
+            liveEventService.get().dispatchLiveEventReceived(event, roomId, insertType == EventInsertType.INITIAL_SYNC)
 
             val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
 

@@ -140,8 +140,8 @@ dependencies {
     implementation libs.arrow.core
     implementation libs.arrow.instances
 
-    // olm lib is now hosted by maven at https://gitlab.matrix.org/api/v4/projects/27/packages/maven
-    implementation 'org.matrix.android:olm:3.2.7'
+    // olm lib is now hosted in MavenCentral
+    implementation 'org.matrix.android:olm-sdk:3.2.10'
 
     // DI
     implementation libs.dagger.dagger
@@ -158,7 +158,7 @@ dependencies {
     implementation libs.apache.commonsImaging
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.39'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.40'
 
     testImplementation libs.tests.junit
     testImplementation 'org.robolectric:robolectric:4.7.3'

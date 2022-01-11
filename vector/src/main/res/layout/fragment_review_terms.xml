@@ -34,13 +34,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="@string/decline" />
+            android:text="@string/action_decline" />
 
         <Button
             android:id="@+id/reviewTermsAccept"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/accept" />
+            android:text="@string/action_accept" />
 
     </LinearLayout>
 

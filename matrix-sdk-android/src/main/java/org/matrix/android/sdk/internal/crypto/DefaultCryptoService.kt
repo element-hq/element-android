@@ -90,6 +90,7 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.session.StreamEventsManager
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.TaskThread
@@ -168,7 +169,8 @@ internal class DefaultCryptoService @Inject constructor(
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val taskExecutor: TaskExecutor,
         private val cryptoCoroutineScope: CoroutineScope,
-        private val eventDecryptor: EventDecryptor
+        private val eventDecryptor: EventDecryptor,
+        private val liveEventManager: Lazy<StreamEventsManager>
 ) : CryptoService {
 
     private val isStarting = AtomicBoolean(false)
@@ -429,7 +431,17 @@ internal class DefaultCryptoService @Inject constructor(
                     val currentCount = syncResponse.deviceOneTimeKeysCount.signedCurve25519 ?: 0
                     oneTimeKeysUploader.updateOneTimeKeyCount(currentCount)
                 }
-                if (isStarted()) {
+                // There is a limit of to_device events returned per sync.
+                // If we are in a case of such limited to_device sync we can't try to generate/upload
+                // new otk now, because there might be some pending olm pre-key to_device messages that would fail if we rotate
+                // the old otk too early. In this case we want to wait for the pending to_device before doing anything
+                // As per spec:
+                // If there is a large queue of send-to-device messages, the server should limit the number sent in each /sync response.
+                // 100 messages is recommended as a reasonable limit.
+                // The limit is not part of the spec, so it's probably safer to handle that when there are no more to_device ( so we are sure
+                // that there are no pending to_device
+                val toDevices = syncResponse.toDevice?.events.orEmpty()
+                if (isStarted() && toDevices.isEmpty()) {
                     // Make sure we process to-device messages before generating new one-time-keys #2782
                     deviceListManager.refreshOutdatedDeviceLists()
                     // The presence of device_unused_fallback_key_types indicates that the server supports fallback keys.
@@ -772,6 +784,7 @@ internal class DefaultCryptoService @Inject constructor(
                 }
             }
         }
+        liveEventManager.get().dispatchOnLiveToDevice(event)
     }
 
     /**

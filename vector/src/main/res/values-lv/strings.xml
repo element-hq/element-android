@@ -39,7 +39,7 @@
     <string name="notice_room_third_party_invite">%1$s nosūtīja %2$s uzaicinājumu pievienoties istabai</string>
     <string name="notice_room_third_party_registered_invite">%1$s pieņēma uzaicinājumu %2$s</string>
     <string name="notice_crypto_unable_to_decrypt">** Neizdodas atšifrēt: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">Sūtītāja ierīce mums nav nenosūtījusi atslēgas priekš šīs ziņas.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Sūtītāja ierīce mums nav nenosūtījusi atslēgas priekš šīs ziņas.</string>
     <string name="could_not_redact">Nevarēja rediģēt</string>
     <string name="unable_to_send_message">Neizdodas nosūtīt ziņu</string>
     <string name="message_failed_to_upload">Neizdevās augšuplādēt attēlu</string>
@@ -247,21 +247,21 @@
     <string name="title_activity_member_details">Dalībnieka informācija</string>
     <string name="title_activity_historical">Bijušie</string>
     <string name="ok">Labi</string>
-    <string name="cancel">Atcelt</string>
-    <string name="save">Saglabāt</string>
-    <string name="leave">Pamest</string>
-    <string name="send">Nosūtīt</string>
-    <string name="resend">Sūtīt atkārtoti</string>
-    <string name="redact">Rediģēt</string>
-    <string name="quote">Citēt</string>
-    <string name="share">Dalīties</string>
+    <string name="action_cancel">Atcelt</string>
+    <string name="action_save">Saglabāt</string>
+    <string name="action_leave">Pamest</string>
+    <string name="action_send">Nosūtīt</string>
+    <string name="action_resend">Sūtīt atkārtoti</string>
+    <string name="action_redact">Rediģēt</string>
+    <string name="action_quote">Citēt</string>
+    <string name="action_share">Dalīties</string>
     <string name="later">Vēlāk</string>
-    <string name="forward">Pārsūtīt</string>
+    <string name="action_forward">Pārsūtīt</string>
     <string name="permalink">Iekšējā saite</string>
     <string name="view_source">Skatīt pirmkodu</string>
     <string name="view_decrypted_source">Skatīt atšifrētu pirmkodu</string>
-    <string name="delete">Dzēst</string>
-    <string name="rename">Pārdēvēt</string>
+    <string name="action_delete">Dzēst</string>
+    <string name="action_rename">Pārdēvēt</string>
     <string name="report_content">Ziņot par saturu</string>
     <string name="active_call">Aktīvs zvans</string>
     <string name="ongoing_conference_call">Turpinās konferences zvans.
@@ -276,7 +276,7 @@
     <string name="room_no_conference_call_in_encrypted_rooms">Konferences zvani netiek atbalstīti šifrētās istabās</string>
     <string name="send_anyway">Nosūtīt jebkurā gadījumā</string>
     <string name="or">vai</string>
-    <string name="invite">Uzaicināt</string>
+    <string name="action_invite">Uzaicināt</string>
     <string name="action_sign_out">Izrakstīties</string>
     <string name="action_voice_call">Balss zvans</string>
     <string name="action_video_call">Video zvans</string>
@@ -287,7 +287,7 @@
     <string name="action_open">Atvērt</string>
     <string name="action_close">Aizvērt</string>
     <string name="copied_to_clipboard">Nokopēts starpliktuvē</string>
-    <string name="disable">Atslēgt</string>
+    <string name="action_disable">Atslēgt</string>
     <string name="dialog_title_confirmation">Apstiprinājums</string>
     <string name="dialog_title_warning">Brīdinājums</string>
     <string name="bottom_action_home">Uz sākumu</string>
@@ -483,10 +483,10 @@ Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespē
     <string name="yes">JĀ</string>
     <string name="no">NĒ</string>
     <string name="_continue">Turpināt</string>
-    <string name="remove">Dzēst</string>
-    <string name="join">Pievienoties</string>
-    <string name="preview">Piekšskatījums</string>
-    <string name="reject">Noraidīt</string>
+    <string name="action_remove">Dzēst</string>
+    <string name="action_join">Pievienoties</string>
+    <string name="action_preview">Piekšskatījums</string>
+    <string name="action_reject">Noraidīt</string>
     <string name="room_jump_to_first_unread">Pāriet uz pirmo neizlasīto ziņu</string>
     <string name="room_preview_invitation_format">%s jūs uzaicināja pievienoties šai istabai</string>
     <string name="room_preview_unlinked_email_warning">Uzaicinājums tika nosūtīts uz %s, kura nav piesaistīta šim kontam. 
@@ -578,17 +578,6 @@ Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespē
     <string name="tab_title_search_messages">ZIŅAS</string>
     <string name="tab_title_search_people">CILVĒKI</string>
     <string name="tab_title_search_files">FAILI</string>
-    <string name="room_recents_join">PIEVIENOTIES</string>
-    <string name="room_recents_directory">KATALOGS</string>
-    <string name="room_recents_favourites">IZLASE</string>
-    <string name="room_recents_conversations">ISTABAS</string>
-    <string name="room_recents_low_priority">ZEMA PRIORITĀTE</string>
-    <string name="room_recents_invites">UZAICINĀJUMI</string>
-    <string name="room_recents_start_chat">Sākt saraksti</string>
-    <string name="room_recents_create_room">Izveidot istabu</string>
-    <string name="room_recents_join_room">Ieiet istabā</string>
-    <string name="room_recents_join_room_title">Ieiet istabā</string>
-    <string name="room_recents_join_room_prompt">Ievadiet istabas ID vai aliasu</string>
     <string name="directory_search_results_title">Pārlūkot katalogu</string>
     <string name="directory_searching_title">Meklē katalogā…</string>
     <string name="room_settings_all_messages_noisy">Visas ziņas (ar skaņu)</string>
@@ -890,7 +879,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
         <item quantity="one">%d aktīvi vidžeti</item>
         <item quantity="other">%d aktīvu vidžetu</item>
     </plurals>
-    <!-- Widget Integration Manager -->
     <string name="widget_integration_unable_to_create">Neizdevās uzstādīt vidžetu.</string>
     <string name="widget_integration_failed_to_send_request">Neizdevās nosūtīt pieprasījumu.</string>
     <string name="widget_integration_positive_power_level">Pieejas līmenim jābūt lielākam par 0.</string>
@@ -901,30 +889,24 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="widget_integration_room_not_visible">Istaba %s ir neredzama.</string>
     <string name="room_add_matrix_apps">Pievienot Matrix lietotnes</string>
     <string name="settings_labs_native_camera">Lietot iebūvēto kameru</string>
-    <!-- share keys -->
     <string name="you_added_a_new_device">Tu pievienoji jaunu ierīci \'%s\', kura pieprasa šifrēšanas atslēgas.</string>
     <string name="your_unverified_device_requesting">Tava neverificētā ierīce \'%s\' pieprasa šifrēšanas atslēgas.</string>
     <string name="start_verification">Sākt tās verifikāciju</string>
     <string name="share_without_verifying">Dalīties bez verificēšanas</string>
     <string name="ignore_request">Ignorēt pieprasījumu</string>
-    <!-- conference call -->
     <string name="conference_call_warning_title">Uzmanību!</string>
     <string name="conference_call_warning_message">Konferences zvans ir izstrādes stadijā un var nebūt uzticams.</string>
-    <!-- slash commands -->
     <string name="command_error">Komandas kļūda</string>
     <string name="unrecognized_command">Nepazīstama komanda: %s</string>
-    <!-- notification statuses -->
     <string name="notification_off">Izslēgts</string>
     <string name="notification_noisy">Ar skaņu</string>
     <string name="encrypted_message">Šifrēta ziņa</string>
-    <!-- groups creation -->
     <string name="create">Izveidot</string>
     <string name="create_community">Izveidot kopienu</string>
     <string name="community_name">Kopienas nosaukums</string>
     <string name="community_name_hint">Piemērs</string>
     <string name="community_id">Kopienas Id</string>
     <string name="community_id_hint">piemērs</string>
-    <!-- group details -->
     <string name="group_details_home">Sākums</string>
     <string name="group_details_people">Cilvēki</string>
     <string name="group_details_rooms">Istabas</string>
@@ -960,7 +942,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="verify_other_sessions">Verificējiet visas savas sesijas, lai nodrošinātos, ka jūsu konts un ziņas ir drošībā</string>
     <string name="review_logins">Pārskatiet savas pierakstīšanās</string>
     <string name="unencrypted">Nešifrēts</string>
-    <string name="or_other_mx_capabale_client">vai kādu citu Matrix lietotni ar cross-signing atbalstu</string>
+    <string name="or_other_mx_capable_client">vai kādu citu Matrix lietotni ar cross-signing atbalstu</string>
     <string name="auth_invalid_login_deactivated_account">Šis konts ir deaktivizēts.</string>
     <string name="settings_messages_in_e2e_group_chat">Šifrētas ziņas grupas čatos</string>
     <string name="settings_messages_in_e2e_one_to_one">Šifrētas ziņas viens-pret-vienu čatos</string>
@@ -1221,25 +1203,25 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="action_sign_out_confirmation_simple">Vai tiešām vēlies izrakstīties\?</string>
     <string name="call_notification_reject">Noraidīt</string>
     <string name="call_notification_answer">Pieņemt</string>
-    <string name="decline">Noraidīt</string>
-    <string name="review">Pārlūkot</string>
-    <string name="ignore">Nerādīt nevienu šī dalībnieka ziņu</string>
-    <string name="abort">Pārtraukt</string>
+    <string name="action_decline">Noraidīt</string>
+    <string name="action_review">Pārlūkot</string>
+    <string name="action_ignore">Nerādīt nevienu šī dalībnieka ziņu</string>
+    <string name="action_abort">Pārtraukt</string>
     <string name="done">Gatavs</string>
-    <string name="skip">Izlaist</string>
-    <string name="accept">Pieņemt</string>
+    <string name="action_skip">Izlaist</string>
+    <string name="action_accept">Pieņemt</string>
     <string name="no_permissions_to_start_conf_call">Jums nav atļaujas sākt konferences zvanu šajā istabā</string>
-    <string name="reset">Atiestatīt</string>
-    <string name="dismiss">Aizvērt</string>
-    <string name="pause_video">Pauzēt</string>
-    <string name="play_video">Atskaņot</string>
-    <string name="disconnect">Atvienoties</string>
-    <string name="revoke">Atsaukt</string>
+    <string name="action_reset">Atiestatīt</string>
+    <string name="action_dismiss">Aizvērt</string>
+    <string name="action_pause">Pauzēt</string>
+    <string name="action_play">Atskaņot</string>
+    <string name="action_disconnect">Atvienoties</string>
+    <string name="action_revoke">Atsaukt</string>
     <string name="none">Nav</string>
-    <string name="clear">Notīrīt</string>
-    <string name="speak">Runāt</string>
-    <string name="download">Lejupielādēt</string>
-    <string name="stay">Palikt</string>
+    <string name="action_clear">Notīrīt</string>
+    <string name="action_speak">Runāt</string>
+    <string name="action_download">Lejupielādēt</string>
+    <string name="action_stay">Palikt</string>
     <string name="are_you_sure">Vai tiešām to vēlaties\?</string>
     <string name="title_activity_verify_device">Verificēt ierīci</string>
     <string name="system_theme">Sistēmas noklusējuma</string>
@@ -1275,7 +1257,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_list_sharing_header_other_rooms">Citas istabas</string>
     <string name="room_list_sharing_header_recent_rooms">Nesenās istabas</string>
     <string name="sent_verification_conclusion">Verifikācijas slēdziens</string>
-    <string name="sent_a_bot_buttons">Bota pogas</string>
     <string name="sent_a_poll">Aptauja</string>
     <string name="send_a_sticker">Uzlīme</string>
     <string name="verification_conclusion_compromised">Kāds no uzskaitītajiem var būt kompromitēts:
@@ -1790,8 +1771,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_show_redacted">Rādīt izdzēstās ziņas</string>
     <string name="message_view_reaction">Apskatīt Reakcijas</string>
     <string name="message_add_reaction">Pievienot Reakciju</string>
-    <string name="reactions_like">Patīk</string>
-    <string name="reactions_agree">Piekrist</string>
+    <string name="action_like">Patīk</string>
+    <string name="action_agree">Piekrist</string>
     <string name="room_list_people_empty_body">Jūsu sarunas tiks parādītas šeit. Nospiediet + ekrāna labējā, apakšējā stūrī, lai sāktu sarunas.</string>
     <string name="room_list_catchup_welcome_body">Apskatiet nelasītas ziņas šeit</string>
     <string name="room_list_catchup_welcome_title">Laipni lūgti mājās!</string>
@@ -2159,7 +2140,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Atslēgas jau ir atjauninātas!</string>
     <string name="event_redacted_by_admin_reason_with_reason">Pasākumu moderē telpas administrators, iemesls: %1$s</string>
     <string name="event_redacted_by_user_reason_with_reason">Lietotājs izdzēsa notikumu, iemesls: %1$s</string>
-    <string name="poll_item_selected_aria">Izvēlētā Opcija</string>
     <string name="delete_account_data_warning">Dzēst %1$s tipa konta datus\?
 \n
 \nLietojiet piesardzīgi, tas var izraisīt neparedzētu uzvedību.</string>
@@ -2351,8 +2331,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="invite_to_space_with_name_desc">Viņi varēs izpētīt %s</string>
     <string name="invite_to_space_with_name">Uzaicināt uz %s</string>
     <string name="invite_by_link">Kopīgot saiti</string>
-    <string name="invite_by_mxid_or_mail">Ielūgt pēc lietotājvārda vai pa e-pastu</string>
-    <string name="invite_by_mxid">Ielūgt pēc lietotājvārda</string>
+    <string name="invite_by_username_or_mail">Ielūgt pēc lietotājvārda vai pa e-pastu</string>
+    <string name="invite_by_username">Ielūgt pēc lietotājvārda</string>
     <string name="invite_by_email">Ielūgt pa e-pastu</string>
     <string name="invite_people_to_your_space_desc">Šobrīd esi tikai tu. %s būs vēl labāk kopā ar citiem.</string>
     <string name="invite_to_space">Uzaicināt uz %s</string>
@@ -2562,16 +2542,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
         <item quantity="zero">Sūtīt attēlu ar oriģinālo izmēru</item>
         <item quantity="one">Sūtīt attēlu ar oriģinālo izmēru</item>
         <item quantity="other">Sūtīt attēlus ar oriģinālo izmēru</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="zero">%d balsu - Galīgie rezultāti</item>
-        <item quantity="one">%d balss - Galīgie rezultāti</item>
-        <item quantity="other">%d balsis - Galīgie rezultāti</item>
-    </plurals>
-    <plurals name="poll_info">
-        <item quantity="zero">%d balsu</item>
-        <item quantity="one">%d balss</item>
-        <item quantity="other">%d balsis</item>
     </plurals>
     <string name="settings_server_room_version_unstable">nestabila</string>
     <string name="settings_server_room_version_stable">stabila</string>

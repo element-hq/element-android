@@ -22,6 +22,7 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.resources.StringProvider
@@ -73,11 +74,11 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
             KeysBackupState.Disabled                   -> {
                 genericItem {
                     id("summary")
-                    title(host.stringProvider.getString(R.string.keys_backup_settings_status_not_setup))
+                    title(host.stringProvider.getString(R.string.keys_backup_settings_status_not_setup).toEpoxyCharSequence())
                     style(ItemStyle.BIG_TEXT)
 
                     if (data.keysBackupVersionTrust()?.usable == false) {
-                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup))
+                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
                     }
                 }
 
@@ -88,12 +89,12 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
             KeysBackupState.Enabling                   -> {
                 genericItem {
                     id("summary")
-                    title(host.stringProvider.getString(R.string.keys_backup_settings_status_ko))
+                    title(host.stringProvider.getString(R.string.keys_backup_settings_status_ko).toEpoxyCharSequence())
                     style(ItemStyle.BIG_TEXT)
                     if (data.keysBackupVersionTrust()?.usable == false) {
-                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup))
+                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
                     } else {
-                        description(keyBackupState.toString())
+                        description(keyBackupState.toString().toEpoxyCharSequence())
                     }
                     endIconResourceId(R.drawable.unit_test_ko)
                 }
@@ -103,12 +104,12 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
             KeysBackupState.ReadyToBackUp              -> {
                 genericItem {
                     id("summary")
-                    title(host.stringProvider.getString(R.string.keys_backup_settings_status_ok))
+                    title(host.stringProvider.getString(R.string.keys_backup_settings_status_ok).toEpoxyCharSequence())
                     style(ItemStyle.BIG_TEXT)
                     if (data.keysBackupVersionTrust()?.usable == false) {
-                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup))
+                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
                     } else {
-                        description(host.stringProvider.getString(R.string.keys_backup_info_keys_all_backup_up))
+                        description(host.stringProvider.getString(R.string.keys_backup_info_keys_all_backup_up).toEpoxyCharSequence())
                     }
                     endIconResourceId(R.drawable.unit_test_ok)
                 }
@@ -119,7 +120,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
             KeysBackupState.BackingUp                  -> {
                 genericItem {
                     id("summary")
-                    title(host.stringProvider.getString(R.string.keys_backup_settings_status_ok))
+                    title(host.stringProvider.getString(R.string.keys_backup_settings_status_ok).toEpoxyCharSequence())
                     style(ItemStyle.BIG_TEXT)
                     hasIndeterminateProcess(true)
 
@@ -129,10 +130,11 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                     val remainingKeysToBackup = totalKeys - backedUpKeys
 
                     if (data.keysBackupVersionTrust()?.usable == false) {
-                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup))
+                        description(host.stringProvider.getString(R.string.keys_backup_settings_untrusted_backup).toEpoxyCharSequence())
                     } else {
                         description(host.stringProvider
-                                .getQuantityString(R.plurals.keys_backup_info_keys_backing_up, remainingKeysToBackup, remainingKeysToBackup))
+                                .getQuantityString(R.plurals.keys_backup_info_keys_backing_up, remainingKeysToBackup, remainingKeysToBackup)
+                                .toEpoxyCharSequence())
                     }
                 }
 
@@ -144,14 +146,14 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
             // Add infos
             genericItem {
                 id("version")
-                title(host.stringProvider.getString(R.string.keys_backup_info_title_version))
-                description(keyVersionResult?.version ?: "")
+                title(host.stringProvider.getString(R.string.keys_backup_info_title_version).toEpoxyCharSequence())
+                description(keyVersionResult?.version.orEmpty().toEpoxyCharSequence())
             }
 
             genericItem {
                 id("algorithm")
-                title(host.stringProvider.getString(R.string.keys_backup_info_title_algorithm))
-                description(keyVersionResult?.algorithm ?: "")
+                title(host.stringProvider.getString(R.string.keys_backup_info_title_algorithm).toEpoxyCharSequence())
+                description(keyVersionResult?.algorithm.orEmpty().toEpoxyCharSequence())
             }
 
             if (vectorPreferences.developerMode()) {
@@ -189,7 +191,7 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                 keysVersionTrust().signatures.forEach {
                     genericItem {
                         id(UUID.randomUUID().toString())
-                        title(host.stringProvider.getString(R.string.keys_backup_info_title_signature))
+                        title(host.stringProvider.getString(R.string.keys_backup_info_title_signature).toEpoxyCharSequence())
 
                         val isDeviceKnown = it.device != null
                         val isDeviceVerified = it.device?.isVerified ?: false
@@ -197,21 +199,27 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                         val deviceId: String = it.deviceId ?: ""
 
                         if (!isDeviceKnown) {
-                            description(host.stringProvider.getString(R.string.keys_backup_settings_signature_from_unknown_device, deviceId))
+                            description(host.stringProvider
+                                    .getString(R.string.keys_backup_settings_signature_from_unknown_device, deviceId)
+                                    .toEpoxyCharSequence())
                             endIconResourceId(R.drawable.e2e_warning)
                         } else {
                             if (isSignatureValid) {
                                 if (host.session.sessionParams.deviceId == it.deviceId) {
-                                    description(host.stringProvider.getString(R.string.keys_backup_settings_valid_signature_from_this_device))
+                                    description(host.stringProvider
+                                            .getString(R.string.keys_backup_settings_valid_signature_from_this_device)
+                                            .toEpoxyCharSequence())
                                     endIconResourceId(R.drawable.e2e_verified)
                                 } else {
                                     if (isDeviceVerified) {
                                         description(host.stringProvider
-                                                .getString(R.string.keys_backup_settings_valid_signature_from_verified_device, deviceId))
+                                                .getString(R.string.keys_backup_settings_valid_signature_from_verified_device, deviceId)
+                                                .toEpoxyCharSequence())
                                         endIconResourceId(R.drawable.e2e_verified)
                                     } else {
                                         description(host.stringProvider
-                                                .getString(R.string.keys_backup_settings_valid_signature_from_unverified_device, deviceId))
+                                                .getString(R.string.keys_backup_settings_valid_signature_from_unverified_device, deviceId)
+                                                .toEpoxyCharSequence())
                                         endIconResourceId(R.drawable.e2e_warning)
                                     }
                                 }
@@ -220,10 +228,12 @@ class KeysBackupSettingsRecyclerViewController @Inject constructor(
                                 endIconResourceId(R.drawable.e2e_warning)
                                 if (isDeviceVerified) {
                                     description(host.stringProvider
-                                            .getString(R.string.keys_backup_settings_invalid_signature_from_verified_device, deviceId))
+                                            .getString(R.string.keys_backup_settings_invalid_signature_from_verified_device, deviceId)
+                                            .toEpoxyCharSequence())
                                 } else {
                                     description(host.stringProvider
-                                            .getString(R.string.keys_backup_settings_invalid_signature_from_unverified_device, deviceId))
+                                            .getString(R.string.keys_backup_settings_invalid_signature_from_unverified_device, deviceId)
+                                            .toEpoxyCharSequence())
                                 }
                             }
                         }

@@ -38,6 +38,7 @@ import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.BehaviorDataSource
+import im.vector.app.features.analytics.DecryptionFailureTracker
 import im.vector.app.features.call.conference.ConferenceEvent
 import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.call.conference.JitsiService
@@ -113,6 +114,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val directRoomHelper: DirectRoomHelper,
         private val jitsiService: JitsiService,
         private val activeConferenceHolder: JitsiActiveConferenceHolder,
+        private val decryptionFailureTracker: DecryptionFailureTracker,
         timelineFactory: TimelineFactory
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
@@ -161,6 +163,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         observeMyRoomMember()
         observeActiveRoomWidgets()
         observePowerLevel()
+        setupPreviewUrlObservers()
         room.getRoomSummaryLive()
         viewModelScope.launch(Dispatchers.IO) {
             tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
@@ -262,6 +265,30 @@ class RoomDetailViewModel @AssistedInject constructor(
                 .execute {
                     copy(myRoomMember = it)
                 }
+    }
+
+    private fun setupPreviewUrlObservers() {
+        if (!vectorPreferences.showUrlPreviews()) {
+            return
+        }
+        combine(
+                timelineEvents,
+                room.flow().liveRoomSummary()
+                        .unwrap()
+                        .map { it.isEncrypted }
+                        .distinctUntilChanged()
+        ) { snapshot, isRoomEncrypted ->
+            if (isRoomEncrypted) {
+                return@combine
+            }
+            withContext(Dispatchers.Default) {
+                Timber.v("On new timeline events for urlpreview on ${Thread.currentThread()}")
+                snapshot.forEach {
+                    previewUrlRetriever.getPreviewUrl(it)
+                }
+            }
+        }
+                .launchIn(viewModelScope)
     }
 
     fun getOtherUserIds() = room.roomSummary()?.otherMemberIds
@@ -726,7 +753,6 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleNavigateToEvent(action: RoomDetailAction.NavigateToEvent) {
-        stopTrackingUnreadMessages()
         val targetEventId: String = action.eventId
         val indexOfEvent = timeline.getIndexOfEvent(targetEventId)
         if (indexOfEvent == null) {
@@ -802,12 +828,12 @@ class RoomDetailViewModel @AssistedInject constructor(
                 .chunk(1000)
                 .filter { it.isNotEmpty() }
                 .onEach { actions ->
-                    val bufferedMostRecentDisplayedEvent = actions.maxByOrNull { it.event.displayIndex }?.event ?: return@onEach
+                    val bufferedMostRecentDisplayedEvent = actions.minByOrNull { it.event.indexOfEvent() }?.event ?: return@onEach
                     val globalMostRecentDisplayedEvent = mostRecentDisplayedEvent
                     if (trackUnreadMessages.get()) {
                         if (globalMostRecentDisplayedEvent == null) {
                             mostRecentDisplayedEvent = bufferedMostRecentDisplayedEvent
-                        } else if (bufferedMostRecentDisplayedEvent.displayIndex > globalMostRecentDisplayedEvent.displayIndex) {
+                        } else if (bufferedMostRecentDisplayedEvent.indexOfEvent() < globalMostRecentDisplayedEvent.indexOfEvent()) {
                             mostRecentDisplayedEvent = bufferedMostRecentDisplayedEvent
                         }
                     }
@@ -820,6 +846,12 @@ class RoomDetailViewModel @AssistedInject constructor(
                 .flowOn(Dispatchers.Default)
                 .launchIn(viewModelScope)
     }
+
+    /**
+     * Returns the index of event in the timeline.
+     * Returns Int.MAX_VALUE if not found
+     */
+    private fun TimelineEvent.indexOfEvent(): Int = timeline.getIndexOfEvent(eventId) ?: Int.MAX_VALUE
 
     private fun handleMarkAllAsRead() {
         setState { copy(unreadState = UnreadState.HasNoUnread) }
@@ -1043,16 +1075,6 @@ class RoomDetailViewModel @AssistedInject constructor(
             // tryEmit doesn't work with SharedFlow without cache
             timelineEvents.emit(snapshot)
         }
-        // PreviewUrl
-        if (vectorPreferences.showUrlPreviews()) {
-            withState { state ->
-                snapshot
-                        .takeIf { state.asyncRoomSummary.invoke()?.isEncrypted == false }
-                        ?.forEach {
-                            previewUrlRetriever.getPreviewUrl(it)
-                        }
-            }
-        }
     }
 
     override fun onTimelineFailure(throwable: Throwable) {
@@ -1069,6 +1091,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     override fun onCleared() {
         timeline.dispose()
         timeline.removeAllListeners()
+        decryptionFailureTracker.onTimeLineDisposed(room.roomId)
         if (vectorPreferences.sendTypingNotifs()) {
             room.userStopsTyping()
         }

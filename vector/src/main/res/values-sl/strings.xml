@@ -3,8 +3,8 @@
     <string name="create_room_name_hint">Ime</string>
     <string name="send_bug_report">Prijava hrošča</string>
     <string name="send_bug_report_include_screenshot">Pošlji ekransko sliko</string>
-    <string name="resend">Ponovno pošlji</string>
-    <string name="send">Pošlji</string>
+    <string name="action_resend">Ponovno pošlji</string>
+    <string name="action_send">Pošlji</string>
     <string name="notification_sync_in_progress">Sinhroniziram…</string>
     <string name="notice_room_join_by_you">Pridružil si se v sobi</string>
     <string name="notice_room_invite_you">%1$s te je povabil</string>

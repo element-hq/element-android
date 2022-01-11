@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.summary
 
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -136,7 +137,7 @@ internal class RoomSummaryUpdater @Inject constructor(
 
         roomSummaryEntity.hasUnreadMessages = roomSummaryEntity.notificationCount > 0 ||
                 // avoid this call if we are sure there are unread events
-                !isEventRead(realm.configuration, userId, roomId, latestPreviewableEvent?.eventId)
+                latestPreviewableEvent?.let { !isEventRead(realm.configuration, userId, roomId, it.eventId) } ?: false
 
         roomSummaryEntity.setDisplayName(roomDisplayNameResolver.resolve(realm, roomId))
         roomSummaryEntity.avatarUrl = roomAvatarResolver.resolve(realm, roomId)
@@ -236,7 +237,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                                     .findFirst()
                                     ?.let { childSum ->
                                         lookupMap.entries.firstOrNull { it.key.roomId == lookedUp.roomId }?.let { entry ->
-                                            if (entry.value.indexOfFirst { it.roomId == childSum.roomId } == -1) {
+                                            if (entry.value.none { it.roomId == childSum.roomId }) {
                                                 // add looked up as a parent
                                                 entry.value.add(childSum)
                                             }
@@ -299,7 +300,7 @@ internal class RoomSummaryUpdater @Inject constructor(
                                                 .process(RoomSummaryEntityFields.MEMBERSHIP_STR, Membership.activeMemberships())
                                                 .findFirst()
                                                 ?.let { parentSum ->
-                                                    if (lookupMap[parentSum]?.indexOfFirst { it.roomId == lookedUp.roomId } == -1) {
+                                                    if (lookupMap[parentSum]?.none { it.roomId == lookedUp.roomId }.orFalse()) {
                                                         // add lookedup as a parent
                                                         lookupMap[parentSum]?.add(lookedUp)
                                                     }

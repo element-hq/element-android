@@ -35,14 +35,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:text="@string/cancel" />
+            android:text="@string/action_cancel" />
 
         <Button
             android:id="@+id/positiveButton"
             style="@style/Widget.Vector.Button.Positive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/save" />
+            android:text="@string/action_save" />
     </LinearLayout>
 
     <FrameLayout

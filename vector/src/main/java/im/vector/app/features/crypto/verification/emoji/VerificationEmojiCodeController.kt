@@ -21,6 +21,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
 import im.vector.app.R
 import im.vector.app.core.epoxy.bottomSheetDividerItem
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.ColorProvider
@@ -64,7 +65,7 @@ class VerificationEmojiCodeController @Inject constructor(
             is Success -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
-                    notice(host.stringProvider.getString(R.string.verification_emoji_notice))
+                    notice(host.stringProvider.getString(R.string.verification_emoji_notice).toEpoxyCharSequence())
                 }
 
                 bottomSheetVerificationEmojisItem {
@@ -101,7 +102,7 @@ class VerificationEmojiCodeController @Inject constructor(
             is Success -> {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
-                    notice(host.stringProvider.getString(R.string.verification_code_notice))
+                    notice(host.stringProvider.getString(R.string.verification_code_notice).toEpoxyCharSequence())
                 }
 
                 bottomSheetVerificationDecimalCodeItem {

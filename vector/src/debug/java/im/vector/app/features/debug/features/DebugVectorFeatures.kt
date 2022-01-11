@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -38,19 +39,36 @@ class DebugVectorFeatures(
 
     private val dataStore = context.dataStore
 
-    override fun loginVersion(): VectorFeatures.LoginVersion {
-        return readPreferences().getEnum<VectorFeatures.LoginVersion>() ?: vectorFeatures.loginVersion()
+    override fun onboardingVariant(): VectorFeatures.OnboardingVariant {
+        return readPreferences().getEnum<VectorFeatures.OnboardingVariant>() ?: vectorFeatures.onboardingVariant()
     }
+
+    override fun isAlreadyHaveAccountSplashEnabled(): Boolean = read(DebugFeatureKeys.alreadyHaveAnAccount)
+            ?: vectorFeatures.isAlreadyHaveAccountSplashEnabled()
+
+    override fun isSplashCarouselEnabled(): Boolean = read(DebugFeatureKeys.splashCarousel) ?: vectorFeatures.isSplashCarouselEnabled()
+
+    fun <T> override(value: T?, key: Preferences.Key<T>) = updatePreferences {
+        if (value == null) {
+            it.remove(key)
+        } else {
+            it[key] = value
+        }
+    }
+
+    fun <T> hasOverride(key: Preferences.Key<T>) = readPreferences().contains(key)
 
     fun <T : Enum<T>> hasEnumOverride(type: KClass<T>) = readPreferences().containsEnum(type)
 
-    fun <T : Enum<T>> overrideEnum(value: T?, type: KClass<T>) {
+    fun <T : Enum<T>> overrideEnum(value: T?, type: KClass<T>) = updatePreferences {
         if (value == null) {
-            updatePreferences { it.removeEnum(type) }
+            it.removeEnum(type)
         } else {
-            updatePreferences { it.putEnum(value, type) }
+            it.putEnum(value, type)
         }
     }
+
+    private fun read(key: Preferences.Key<Boolean>): Boolean? = readPreferences()[key]
 
     private fun readPreferences() = runBlocking { dataStore.data.first() }
 
@@ -76,3 +94,8 @@ private inline fun <reified T : Enum<T>> Preferences.getEnum(): T? {
 private inline fun <reified T : Enum<T>> enumPreferencesKey() = enumPreferencesKey(T::class)
 
 private fun <T : Enum<T>> enumPreferencesKey(type: KClass<T>) = stringPreferencesKey("enum-${type.simpleName}")
+
+object DebugFeatureKeys {
+    val alreadyHaveAnAccount = booleanPreferencesKey("already-have-an-account")
+    val splashCarousel = booleanPreferencesKey("splash-carousel")
+}

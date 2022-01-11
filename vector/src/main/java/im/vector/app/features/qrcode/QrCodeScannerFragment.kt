@@ -16,9 +16,12 @@
 
 package im.vector.app.features.qrcode
 
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.google.zxing.Result
+import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentQrCodeScannerBinding
 import me.dm7.barcodescanner.zxing.ZXingScannerView
@@ -30,6 +33,15 @@ class QrCodeScannerFragment @Inject constructor() :
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentQrCodeScannerBinding {
         return FragmentQrCodeScannerBinding.inflate(inflater, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        views.qrScannerClose.debouncedClicks {
+            requireActivity().onBackPressed()
+        }
+        views.qrScannerTitle.text = getString(R.string.verification_scan_their_code)
     }
 
     override fun onResume() {

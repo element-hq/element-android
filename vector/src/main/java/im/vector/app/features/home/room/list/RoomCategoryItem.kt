@@ -32,7 +32,7 @@ import im.vector.app.features.themes.ThemeUtils
 @EpoxyModelClass(layout = R.layout.item_room_category)
 abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
 
-    @EpoxyAttribute lateinit var title: CharSequence
+    @EpoxyAttribute lateinit var title: String
     @EpoxyAttribute var expanded: Boolean = false
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var showHighlighted: Boolean = false

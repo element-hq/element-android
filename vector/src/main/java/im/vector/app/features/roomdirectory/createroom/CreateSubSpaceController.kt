@@ -20,6 +20,7 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericPillItem
@@ -52,7 +53,7 @@ class CreateSubSpaceController @Inject constructor(
             id("beta")
             imageRes(R.drawable.ic_beta_pill)
             tintIcon(false)
-            text(host.stringProvider.getString(R.string.space_add_space_to_any_space_you_manage))
+            text(host.stringProvider.getString(R.string.space_add_space_to_any_space_you_manage).toEpoxyCharSequence())
         }
 
         formEditableSquareAvatarItem {
