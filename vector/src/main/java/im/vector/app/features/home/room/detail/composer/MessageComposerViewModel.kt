@@ -161,7 +161,7 @@ class MessageComposerViewModel @AssistedInject constructor(
         withState { state ->
             when (state.sendMode) {
                 is SendMode.Regular -> {
-                    when (val slashCommandResult = CommandParser.parseSplashCommand(action.text)) {
+                    when (val slashCommandResult = CommandParser.parseSlashCommand(action.text)) {
                         is ParsedCommand.ErrorNotACommand         -> {
                             // Send the text message to the room
                             room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
