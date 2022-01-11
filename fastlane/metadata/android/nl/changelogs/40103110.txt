@@ -1,0 +1,2 @@
+Belangrijkste wijzigingen in deze versie: Bugfixes!
+Volledige changelog: https://github.com/vector-im/element-android/releases/tag/v1.3.11

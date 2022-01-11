@@ -1979,7 +1979,7 @@
     <string name="initialize_cross_signing">Spustit křížové podepsání</string>
     <string name="reset_cross_signing">Resetovat klíče</string>
     <string name="a11y_qr_code_for_verification">QR kód</string>
-    <string name="qr_code_scanned_by_other_notice">Téměř hotovo! Ukazuje %s úspěšné dokončení\?</string>
+    <string name="qr_code_scanned_by_other_notice">Už to skoro je! Ukazuje %s úspěšné dokončení\?</string>
     <string name="qr_code_scanned_by_other_yes">Ano</string>
     <string name="qr_code_scanned_by_other_no">Ne</string>
     <string name="no_connectivity_to_the_server_indicator">Spojení k serveru bylo ztraceno</string>
@@ -2069,8 +2069,8 @@
     <string name="encryption_not_enabled">Šifrování není zapnuto</string>
     <string name="encryption_unknown_algorithm_tile_description">Šifrování použité v této místnosti není podporováno</string>
     <string name="room_created_summary_item">%s založil a nastavil tuto místnost.</string>
-    <string name="qr_code_scanned_self_verif_notice">Téměř hotovo! Ukazuje druhé zařízení úspěšné dokončení\?</string>
-    <string name="qr_code_scanned_verif_waiting_notice">Téměř hotovo! Čekám na potvrzení…</string>
+    <string name="qr_code_scanned_self_verif_notice">Už to skoro je! Ukazuje druhé zařízení úspěšné dokončení\?</string>
+    <string name="qr_code_scanned_verif_waiting_notice">Už to skoro je! Čekám na potvrzení…</string>
     <string name="qr_code_scanned_verif_waiting">Čekám na %s…</string>
     <string name="error_failed_to_import_keys">Import klíčů selhal</string>
     <string name="settings_notification_configuration">Konfigurace oznámení</string>
@@ -3116,4 +3116,7 @@
 \nMůžete si přečíst všechny naše podmínky %s.</string>
     <string name="analytics_opt_in_title">Pomozte vylepšit Element</string>
     <string name="action_enable">Povolit</string>
+    <string name="restart_the_application_to_apply_changes">Restartujte aplikaci, aby se změna projevila.</string>
+    <string name="labs_enable_latex_maths">Povolit matematické výrazy LaTeXu</string>
+    <string name="room_error_access_unauthorized">Do této místnosti vám není dovoleno vstoupit</string>
 </resources>

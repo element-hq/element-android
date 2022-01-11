@@ -3159,4 +3159,7 @@
 \nМожете прочитати всі наші умови %s.</string>
     <string name="analytics_opt_in_title">Допоможіть покращити Element</string>
     <string name="action_enable">Увімкнути</string>
+    <string name="restart_the_application_to_apply_changes">Перезапустіть застосунок, щоб зміни набули чинності.</string>
+    <string name="labs_enable_latex_maths">Увімкнути підтримку LaTeX</string>
+    <string name="room_error_access_unauthorized">Вам не дозволено приєднуватися до цієї кімнати</string>
 </resources>

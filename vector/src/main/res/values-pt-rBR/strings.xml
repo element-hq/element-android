@@ -3057,4 +3057,7 @@
     <string name="analytics_opt_in_list_item_2">Nós <b>não</b> compartilhamos informação com terceiros</string>
     <string name="analytics_opt_in_content_link">aqui</string>
     <string name="action_enable">Habilitar</string>
+    <string name="restart_the_application_to_apply_changes">Recomece o aplicativo para a mudançar tomar efeito.</string>
+    <string name="labs_enable_latex_maths">Habilitar matemática LaTeX</string>
+    <string name="room_error_access_unauthorized">Você não é permitida(o) a juntar-se a esta sala</string>
 </resources>
