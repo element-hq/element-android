@@ -127,7 +127,7 @@ class SoftLogoutFragment @Inject constructor(
             MaterialAlertDialogBuilder(requireActivity(), R.style.ThemeOverlay_Vector_MaterialAlertDialog_Destructive)
                     .setTitle(R.string.soft_logout_clear_data_dialog_title)
                     .setMessage(messageResId)
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .setPositiveButton(R.string.soft_logout_clear_data_submit) { _, _ ->
                         softLogoutViewModel.handle(SoftLogoutAction.ClearData)
                     }

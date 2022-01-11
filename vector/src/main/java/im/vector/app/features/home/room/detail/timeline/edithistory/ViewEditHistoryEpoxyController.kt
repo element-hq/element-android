@@ -23,6 +23,7 @@ import com.airbnb.mvrx.Success
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
@@ -61,7 +62,7 @@ class ViewEditHistoryEpoxyController @Inject constructor(
             is Fail       -> {
                 genericFooterItem {
                     id("failure")
-                    text(host.stringProvider.getString(R.string.unknown_error))
+                    text(host.stringProvider.getString(R.string.unknown_error).toEpoxyCharSequence())
                 }
             }
             is Success    -> {
@@ -75,7 +76,7 @@ class ViewEditHistoryEpoxyController @Inject constructor(
         if (sourceEvents.isEmpty()) {
             genericItem {
                 id("footer")
-                title(host.stringProvider.getString(R.string.no_message_edits_found))
+                title(host.stringProvider.getString(R.string.no_message_edits_found).toEpoxyCharSequence())
             }
         } else {
             var lastDate: Calendar? = null
@@ -133,8 +134,8 @@ class ViewEditHistoryEpoxyController @Inject constructor(
                 }
                 genericItem {
                     id(timelineEvent.eventId)
-                    title(host.dateFormatter.format(timelineEvent.originServerTs, DateFormatKind.EDIT_HISTORY_ROW))
-                    description(spannedDiff ?: body)
+                    title(host.dateFormatter.format(timelineEvent.originServerTs, DateFormatKind.EDIT_HISTORY_ROW).toEpoxyCharSequence())
+                    description((spannedDiff ?: body).toEpoxyCharSequence())
                 }
             }
         }

@@ -39,7 +39,7 @@ abstract class FormSwitchItem : VectorEpoxyModel<FormSwitchItem.Holder>() {
     var switchChecked: Boolean = false
 
     @EpoxyAttribute
-    var title: CharSequence? = null
+    var title: String? = null
 
     @EpoxyAttribute
     var summary: String? = null

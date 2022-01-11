@@ -46,7 +46,5 @@ internal fun TimelineEventEntity.deleteOnCascade(canDeleteRoot: Boolean) {
     if (canDeleteRoot) {
         root?.deleteFromRealm()
     }
-    annotations?.deleteOnCascade()
-    readReceipts?.deleteOnCascade()
     deleteFromRealm()
 }

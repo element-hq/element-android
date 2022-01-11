@@ -18,6 +18,7 @@ package im.vector.app.features.roommemberprofile.devices
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.ItemStyle
@@ -52,9 +53,9 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
                 style(ItemStyle.BIG_TEXT)
                 titleIconResourceId(if (isVerified) R.drawable.ic_shield_trusted else R.drawable.ic_shield_warning)
                 title(
-                        host.stringProvider.getString(
-                                if (isVerified) R.string.verification_profile_verified else R.string.verification_profile_warning
-                        )
+                        host.stringProvider
+                                .getString(if (isVerified) R.string.verification_profile_verified else R.string.verification_profile_warning)
+                                .toEpoxyCharSequence()
                 )
             }
             genericFooterItem {
@@ -66,12 +67,12 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
                         // TODO FORMAT
                         text(host.stringProvider.getString(R.string.verification_profile_device_verified_because,
                                 data.userItem?.displayName ?: "",
-                                data.userItem?.id ?: ""))
+                                data.userItem?.id ?: "").toEpoxyCharSequence())
                     } else {
                         // TODO what if mine
                         text(host.stringProvider.getString(R.string.verification_profile_device_new_signing,
                                 data.userItem?.displayName ?: "",
-                                data.userItem?.id ?: ""))
+                                data.userItem?.id ?: "").toEpoxyCharSequence())
                     }
                 }
 //                    text(stringProvider.getString(R.string.verification_profile_device_untrust_info))
@@ -88,7 +89,7 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
                                 textColor = host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary)
                                 textSize = host.dimensionConverter.spToPx(14)
                             }
-                        }
+                        }.toEpoxyCharSequence()
                 )
             }
 
@@ -97,7 +98,7 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
                     id("warn")
                     centered(false)
                     textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
-                    text(host.stringProvider.getString(R.string.verification_profile_device_untrust_info))
+                    text(host.stringProvider.getString(R.string.verification_profile_device_untrust_info).toEpoxyCharSequence())
                 }
 
                 bottomSheetVerificationActionItem {

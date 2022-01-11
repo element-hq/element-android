@@ -18,6 +18,7 @@ package im.vector.app.features.roomprofile.settings.joinrule
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.ItemStyle
@@ -49,7 +50,7 @@ class RoomJoinRuleAdvancedController @Inject constructor(
 
         genericFooterItem {
             id("header")
-            text(host.stringProvider.getString(R.string.room_settings_room_access_title))
+            text(host.stringProvider.getString(R.string.room_settings_room_access_title).toEpoxyCharSequence())
             centered(false)
             style(ItemStyle.TITLE)
             textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
@@ -57,7 +58,7 @@ class RoomJoinRuleAdvancedController @Inject constructor(
 
         genericFooterItem {
             id("desc")
-            text(host.stringProvider.getString(R.string.decide_who_can_find_and_join))
+            text(host.stringProvider.getString(R.string.decide_who_can_find_and_join).toEpoxyCharSequence())
             centered(false)
         }
 

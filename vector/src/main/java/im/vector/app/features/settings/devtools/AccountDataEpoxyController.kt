@@ -22,6 +22,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
@@ -53,7 +54,7 @@ class AccountDataEpoxyController @Inject constructor(
             is Fail    -> {
                 genericFooterItem {
                     id("fail")
-                    text(data.accountData.error.localizedMessage)
+                    text(data.accountData.error.localizedMessage?.toEpoxyCharSequence())
                 }
             }
             is Success -> {
@@ -61,13 +62,13 @@ class AccountDataEpoxyController @Inject constructor(
                 if (dataList.isEmpty()) {
                     genericFooterItem {
                         id("noResults")
-                        text(host.stringProvider.getString(R.string.no_result_placeholder))
+                        text(host.stringProvider.getString(R.string.no_result_placeholder).toEpoxyCharSequence())
                     }
                 } else {
                     dataList.forEach { accountData ->
                         genericWithValueItem {
                             id(accountData.type)
-                            title(accountData.type)
+                            title(accountData.type.toEpoxyCharSequence())
                             itemClickAction {
                                 host.interactionListener?.didTap(accountData)
                             }

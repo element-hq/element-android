@@ -215,7 +215,7 @@ class SpaceDirectoryFragment @Inject constructor(
                             .setPositiveButton(R.string._continue) { _, _ ->
                                 openUrlInExternalBrowser(requireContext(), url)
                             }
-                            .setNegativeButton(R.string.cancel, null)
+                            .setNegativeButton(R.string.action_cancel, null)
                             .show()
                 } else {
                     // Open in external browser, in a new Tab

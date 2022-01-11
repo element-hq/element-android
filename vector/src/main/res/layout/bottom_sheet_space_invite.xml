@@ -50,7 +50,7 @@
         android:layout_marginBottom="16dp"
         app:icon="@drawable/ic_add_people"
         app:iconTint="?vctr_content_secondary"
-        app:title="@string/invite_by_mxid_or_mail" />
+        app:title="@string/invite_by_username_or_mail" />
 
     <im.vector.app.features.spaces.create.WizardButtonView
         android:id="@+id/inviteByLinkButton"

@@ -28,10 +28,12 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
@@ -42,12 +44,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.accountdata.UserAccountDataTypes
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomEncryptionAlgorithm
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
@@ -57,10 +62,12 @@ import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 
-class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private val initialState: RoomMemberProfileViewState,
-                                                             private val stringProvider: StringProvider,
-                                                             private val session: Session) :
-        VectorViewModel<RoomMemberProfileViewState, RoomMemberProfileAction, RoomMemberProfileViewEvents>(initialState) {
+class RoomMemberProfileViewModel @AssistedInject constructor(
+        @Assisted private val initialState: RoomMemberProfileViewState,
+        private val stringProvider: StringProvider,
+        private val matrixItemColorProvider: MatrixItemColorProvider,
+        private val session: Session
+) : VectorViewModel<RoomMemberProfileViewState, RoomMemberProfileAction, RoomMemberProfileViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<RoomMemberProfileViewModel, RoomMemberProfileViewState> {
@@ -85,6 +92,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             )
         }
         observeIgnoredState()
+        observeAccountData()
         viewModelScope.launch(Dispatchers.Main) {
             // Do we have a room member for this id.
             val roomMember = withContext(Dispatchers.Default) {
@@ -121,6 +129,21 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                 }
     }
 
+    private fun observeAccountData() {
+        session.flow()
+                .liveUserAccountData(UserAccountDataTypes.TYPE_OVERRIDE_COLORS)
+                .unwrap()
+                .onEach {
+                    val newUserColor = it.content.toModel<Map<String, String>>()?.get(initialState.userId)
+                    setState {
+                        copy(
+                                userColorOverride = newUserColor
+                        )
+                    }
+                }
+                .launchIn(viewModelScope)
+    }
+
     private fun observeIgnoredState() {
         session.flow().liveIgnoredUsers()
                 .map { ignored ->
@@ -143,6 +166,31 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
             is RoomMemberProfileAction.BanOrUnbanUser         -> handleBanOrUnbanAction(action)
             is RoomMemberProfileAction.KickUser               -> handleKickAction(action)
             RoomMemberProfileAction.InviteUser                -> handleInviteAction()
+            is RoomMemberProfileAction.SetUserColorOverride   -> handleSetUserColorOverride(action)
+        }.exhaustive
+    }
+
+    private fun handleSetUserColorOverride(action: RoomMemberProfileAction.SetUserColorOverride) {
+        val newOverrideColorSpecs = session.accountDataService()
+                .getUserAccountDataEvent(UserAccountDataTypes.TYPE_OVERRIDE_COLORS)
+                ?.content
+                ?.toModel<Map<String, String>>()
+                .orEmpty()
+                .toMutableMap()
+        if (matrixItemColorProvider.setOverrideColor(initialState.userId, action.newColorSpec)) {
+            newOverrideColorSpecs[initialState.userId] = action.newColorSpec
+        } else {
+            newOverrideColorSpecs.remove(initialState.userId)
+        }
+        viewModelScope.launch {
+            try {
+                session.accountDataService().updateUserAccountData(
+                        type = UserAccountDataTypes.TYPE_OVERRIDE_COLORS,
+                        content = newOverrideColorSpecs
+                )
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
+            }
         }
     }
 
@@ -297,7 +345,15 @@ class RoomMemberProfileViewModel @AssistedInject constructor(@Assisted private v
                 }.launchIn(viewModelScope)
 
         roomSummaryLive.execute {
-            copy(isRoomEncrypted = it.invoke()?.isEncrypted == true)
+            val summary = it.invoke() ?: return@execute this
+            if (summary.isEncrypted) {
+                copy(
+                        isRoomEncrypted = true,
+                        isAlgorithmSupported = summary.roomEncryptionAlgorithm is RoomEncryptionAlgorithm.SupportedAlgorithm
+                )
+            } else {
+                copy(isRoomEncrypted = false)
+            }
         }
         roomSummaryLive.combine(powerLevelsContentLive) { roomSummary, powerLevelsContent ->
             val roomName = roomSummary.toMatrixItem().getBestName()

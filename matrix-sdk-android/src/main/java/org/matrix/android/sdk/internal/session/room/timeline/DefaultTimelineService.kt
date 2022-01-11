@@ -23,6 +23,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.realm.Sort
 import io.realm.kotlin.where
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.session.events.model.isImageMessage
 import org.matrix.android.sdk.api.session.events.model.isVideoMessage
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
@@ -54,7 +55,8 @@ internal class DefaultTimelineService @AssistedInject constructor(
         private val timelineEventMapper: TimelineEventMapper,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val threadsAwarenessHandler: ThreadsAwarenessHandler,
-        private val readReceiptHandler: ReadReceiptHandler
+        private val readReceiptHandler: ReadReceiptHandler,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) : TimelineService {
 
     @AssistedFactory
@@ -66,19 +68,18 @@ internal class DefaultTimelineService @AssistedInject constructor(
         return DefaultTimeline(
                 roomId = roomId,
                 initialEventId = eventId,
+                settings = settings,
                 realmConfiguration = monarchy.realmConfiguration,
-                taskExecutor = taskExecutor,
-                contextOfEventTask = contextOfEventTask,
+                coroutineDispatchers = coroutineDispatchers,
                 paginationTask = paginationTask,
                 timelineEventMapper = timelineEventMapper,
-                settings = settings,
                 timelineInput = timelineInput,
                 eventDecryptor = eventDecryptor,
                 fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
-                realmSessionProvider = realmSessionProvider,
                 loadRoomMembersTask = loadRoomMembersTask,
-                threadsAwarenessHandler = threadsAwarenessHandler,
-                readReceiptHandler = readReceiptHandler
+                readReceiptHandler = readReceiptHandler,
+                getEventTask = contextOfEventTask,
+                threadsAwarenessHandler = threadsAwarenessHandler
         )
     }
 

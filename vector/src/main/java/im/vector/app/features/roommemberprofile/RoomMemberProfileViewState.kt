@@ -33,6 +33,7 @@ data class RoomMemberProfileViewState(
         val isMine: Boolean = false,
         val isIgnored: Async<Boolean> = Uninitialized,
         val isRoomEncrypted: Boolean = false,
+        val isAlgorithmSupported: Boolean = true,
         val powerLevelsContent: PowerLevelsContent? = null,
         val userPowerLevelString: Async<String> = Uninitialized,
         val userMatrixItem: Async<MatrixItem> = Uninitialized,
@@ -41,6 +42,7 @@ data class RoomMemberProfileViewState(
         val allDevicesAreCrossSignedTrusted: Boolean = false,
         val asyncMembership: Async<Membership> = Uninitialized,
         val hasReadReceipt: Boolean = false,
+        val userColorOverride: String? = null,
         val actionPermissions: ActionPermissions = ActionPermissions()
 ) : MavericksState {
 

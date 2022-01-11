@@ -230,7 +230,7 @@ internal interface IMXCryptoStore {
      * @param roomId    the id of the room.
      * @param algorithm the algorithm.
      */
-    fun storeRoomAlgorithm(roomId: String, algorithm: String)
+    fun storeRoomAlgorithm(roomId: String, algorithm: String?)
 
     /**
      * Provides the algorithm used in a dedicated room.

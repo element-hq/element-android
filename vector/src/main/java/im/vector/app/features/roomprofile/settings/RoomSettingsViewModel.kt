@@ -73,11 +73,7 @@ class RoomSettingsViewModel @AssistedInject constructor(@Assisted initialState: 
                 .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED, room.getRoomVersion())
 
         val restrictedSupport = homeServerCapabilities.isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
-        val couldUpgradeToRestricted = when (restrictedSupport) {
-            HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED          -> true
-            HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED_UNSTABLE -> vectorPreferences.labsUseExperimentalRestricted()
-            else                                                            -> false
-        }
+        val couldUpgradeToRestricted = restrictedSupport == HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED
 
         setState {
             copy(

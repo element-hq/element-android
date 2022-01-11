@@ -18,6 +18,7 @@ package im.vector.app.features.settings.devices
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
 import im.vector.app.core.epoxy.bottomSheetDividerItem
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
@@ -34,7 +35,7 @@ import javax.inject.Inject
 class DeviceVerificationInfoBottomSheetController @Inject constructor(
         private val stringProvider: StringProvider,
         private val colorProvider: ColorProvider) :
-    TypedEpoxyController<DeviceVerificationInfoBottomSheetViewState>() {
+        TypedEpoxyController<DeviceVerificationInfoBottomSheetViewState>() {
 
     var callback: Callback? = null
 
@@ -88,8 +89,8 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                     id("trust${cryptoDeviceInfo.deviceId}")
                     style(ItemStyle.BIG_TEXT)
                     titleIconResourceId(shield)
-                    title(host.stringProvider.getString(R.string.encryption_information_verified))
-                    description(host.stringProvider.getString(R.string.settings_active_sessions_verified_device_desc))
+                    title(host.stringProvider.getString(R.string.encryption_information_verified).toEpoxyCharSequence())
+                    description(host.stringProvider.getString(R.string.settings_active_sessions_verified_device_desc).toEpoxyCharSequence())
                 }
             } else if (data.canVerifySession) {
                 // You need to complete security, only if there are other session(s) available, or if 4S contains secrets
@@ -97,12 +98,11 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                     id("trust${cryptoDeviceInfo.deviceId}")
                     style(ItemStyle.BIG_TEXT)
                     titleIconResourceId(shield)
-                    title(host.stringProvider.getString(R.string.crosssigning_verify_this_session))
-                    if (data.hasOtherSessions) {
-                        description(host.stringProvider.getString(R.string.confirm_your_identity))
-                    } else {
-                        description(host.stringProvider.getString(R.string.confirm_your_identity_quad_s))
-                    }
+                    title(host.stringProvider.getString(R.string.crosssigning_verify_this_session).toEpoxyCharSequence())
+                    description(host.stringProvider
+                            .getString(if (data.hasOtherSessions) R.string.confirm_your_identity else R.string.confirm_your_identity_quad_s)
+                            .toEpoxyCharSequence()
+                    )
                 }
             }
         } else {
@@ -117,16 +117,16 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                         id("trust${cryptoDeviceInfo.deviceId}")
                         style(ItemStyle.BIG_TEXT)
                         titleIconResourceId(shield)
-                        title(host.stringProvider.getString(R.string.encryption_information_verified))
-                        description(host.stringProvider.getString(R.string.settings_active_sessions_verified_device_desc))
+                        title(host.stringProvider.getString(R.string.encryption_information_verified).toEpoxyCharSequence())
+                        description(host.stringProvider.getString(R.string.settings_active_sessions_verified_device_desc).toEpoxyCharSequence())
                     }
                 } else {
                     genericItem {
                         id("trust${cryptoDeviceInfo.deviceId}")
                         titleIconResourceId(shield)
                         style(ItemStyle.BIG_TEXT)
-                        title(host.stringProvider.getString(R.string.encryption_information_not_verified))
-                        description(host.stringProvider.getString(R.string.settings_active_sessions_unverified_device_desc))
+                        title(host.stringProvider.getString(R.string.encryption_information_not_verified).toEpoxyCharSequence())
+                        description(host.stringProvider.getString(R.string.settings_active_sessions_unverified_device_desc).toEpoxyCharSequence())
                     }
                 }
             }
@@ -135,8 +135,8 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
         // DEVICE INFO SECTION
         genericItem {
             id("info${cryptoDeviceInfo.deviceId}")
-            title(cryptoDeviceInfo.displayName() ?: "")
-            description("(${cryptoDeviceInfo.deviceId})")
+            title(cryptoDeviceInfo.displayName().orEmpty().toEpoxyCharSequence())
+            description("(${cryptoDeviceInfo.deviceId})".toEpoxyCharSequence())
         }
 
         if (isMine && !currentSessionIsTrusted && data.canVerifySession) {
@@ -176,24 +176,24 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
                 id("trust${cryptoDeviceInfo.deviceId}")
                 style(ItemStyle.BIG_TEXT)
                 titleIconResourceId(shield)
-                title(host.stringProvider.getString(R.string.encryption_information_verified))
-                description(host.stringProvider.getString(R.string.settings_active_sessions_verified_device_desc))
+                title(host.stringProvider.getString(R.string.encryption_information_verified).toEpoxyCharSequence())
+                description(host.stringProvider.getString(R.string.settings_active_sessions_verified_device_desc).toEpoxyCharSequence())
             }
         } else {
             genericItem {
                 id("trust${cryptoDeviceInfo.deviceId}")
                 titleIconResourceId(shield)
                 style(ItemStyle.BIG_TEXT)
-                title(host.stringProvider.getString(R.string.encryption_information_not_verified))
-                description(host.stringProvider.getString(R.string.settings_active_sessions_unverified_device_desc))
+                title(host.stringProvider.getString(R.string.encryption_information_not_verified).toEpoxyCharSequence())
+                description(host.stringProvider.getString(R.string.settings_active_sessions_unverified_device_desc).toEpoxyCharSequence())
             }
         }
 
         // DEVICE INFO SECTION
         genericItem {
             id("info${cryptoDeviceInfo.deviceId}")
-            title(cryptoDeviceInfo.displayName() ?: "")
-            description("(${cryptoDeviceInfo.deviceId})")
+            title(cryptoDeviceInfo.displayName().orEmpty().toEpoxyCharSequence())
+            description("(${cryptoDeviceInfo.deviceId})".toEpoxyCharSequence())
         }
 
         // ACTIONS
@@ -272,7 +272,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
         }
         bottomSheetVerificationActionItem {
             id("rename")
-            title(host.stringProvider.getString(R.string.rename))
+            title(host.stringProvider.getString(R.string.action_rename))
             titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
             iconRes(R.drawable.ic_arrow_right)
             iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
@@ -287,13 +287,13 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
         val info = data.deviceInfo.invoke() ?: return
         genericItem {
             id("info${info.deviceId}")
-            title(info.displayName ?: "")
-            description("(${info.deviceId})")
+            title(info.displayName.orEmpty().toEpoxyCharSequence())
+            description("(${info.deviceId})".toEpoxyCharSequence())
         }
 
         genericFooterItem {
             id("infoCrypto${info.deviceId}")
-            text(host.stringProvider.getString(R.string.settings_failed_to_get_crypto_device_info))
+            text(host.stringProvider.getString(R.string.settings_failed_to_get_crypto_device_info).toEpoxyCharSequence())
         }
 
         info.deviceId?.let { addGenericDeviceManageActions(data, it) }

@@ -371,7 +371,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                     .setView(view)
                     .setCancelable(false)
                     .setPositiveButton(R.string.settings_change_password, null)
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .setOnDismissListener {
                         view.hideKeyboard()
                     }

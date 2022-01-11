@@ -177,8 +177,8 @@ class KeysBackupSetupActivity : SimpleFragmentActivity() {
             MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.keys_backup_setup_skip_title)
                     .setMessage(R.string.keys_backup_setup_skip_msg)
-                    .setNegativeButton(R.string.cancel, null)
-                    .setPositiveButton(R.string.leave) { _, _ ->
+                    .setNegativeButton(R.string.action_cancel, null)
+                    .setPositiveButton(R.string.action_leave) { _, _ ->
                         finish()
                     }
                     .show()

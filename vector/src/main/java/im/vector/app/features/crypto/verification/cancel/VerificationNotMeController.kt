@@ -19,6 +19,7 @@ package im.vector.app.features.crypto.verification.cancel
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
 import im.vector.app.core.epoxy.bottomSheetDividerItem
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewState
@@ -46,7 +47,7 @@ class VerificationNotMeController @Inject constructor(
         val host = this
         bottomSheetVerificationNoticeItem {
             id("notice")
-            notice(host.eventHtmlRenderer.render(host.stringProvider.getString(R.string.verify_not_me_self_verification)))
+            notice(host.eventHtmlRenderer.render(host.stringProvider.getString(R.string.verify_not_me_self_verification)).toEpoxyCharSequence())
         }
 
         bottomSheetDividerItem {
@@ -55,7 +56,7 @@ class VerificationNotMeController @Inject constructor(
 
         bottomSheetVerificationActionItem {
             id("skip")
-            title(host.stringProvider.getString(R.string.skip))
+            title(host.stringProvider.getString(R.string.action_skip))
             titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
             iconRes(R.drawable.ic_arrow_right)
             iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))

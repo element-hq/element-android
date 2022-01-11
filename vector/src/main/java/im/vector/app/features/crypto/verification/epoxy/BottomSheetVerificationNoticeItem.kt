@@ -22,6 +22,7 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
 
 /**
  * A action for bottom sheet.
@@ -30,11 +31,11 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 abstract class BottomSheetVerificationNoticeItem : VectorEpoxyModel<BottomSheetVerificationNoticeItem.Holder>() {
 
     @EpoxyAttribute
-    var notice: CharSequence = ""
+    lateinit var notice: EpoxyCharSequence
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        holder.notice.text = notice
+        holder.notice.text = notice.charSequence
     }
 
     class Holder : VectorEpoxyHolder() {

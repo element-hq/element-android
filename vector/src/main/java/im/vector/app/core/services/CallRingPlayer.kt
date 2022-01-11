@@ -28,6 +28,8 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import androidx.core.content.getSystemService
 import im.vector.app.R
+import im.vector.app.features.call.audio.CallAudioManager.Mode
+import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.notifications.NotificationUtils
 import org.matrix.android.sdk.api.extensions.orFalse
 import timber.log.Timber
@@ -94,7 +96,8 @@ class CallRingPlayerIncoming(
 }
 
 class CallRingPlayerOutgoing(
-        context: Context
+        context: Context,
+        private val callManager: WebRtcCallManager
 ) {
 
     private val applicationContext = context.applicationContext
@@ -102,7 +105,7 @@ class CallRingPlayerOutgoing(
     private var player: MediaPlayer? = null
 
     fun start() {
-        applicationContext.getSystemService<AudioManager>()?.mode = AudioManager.MODE_IN_COMMUNICATION
+        callManager.setAudioModeToCallType()
         player?.release()
         player = createPlayer()
         if (player != null) {
@@ -118,6 +121,11 @@ class CallRingPlayerOutgoing(
                 player = null
             }
         }
+    }
+
+    private fun WebRtcCallManager.setAudioModeToCallType() {
+        val callMode = if (currentCall.get()?.mxCall?.isVideoCall.orFalse()) Mode.VIDEO_CALL else Mode.AUDIO_CALL
+        audioManager.setMode(callMode)
     }
 
     fun stop() {

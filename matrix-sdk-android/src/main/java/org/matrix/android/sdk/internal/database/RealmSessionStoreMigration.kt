@@ -25,6 +25,8 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
+import org.matrix.android.sdk.internal.crypto.model.event.EncryptionEventContent
+import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
 import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.EditionOfEventFields
@@ -54,7 +56,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 19L
+        const val SESSION_STORE_SCHEMA_VERSION = 21L
     }
 
     /**
@@ -86,6 +88,8 @@ internal class RealmSessionStoreMigration @Inject constructor(
         if (oldVersion <= 16) migrateTo17(realm)
         if (oldVersion <= 17) migrateTo18(realm)
         if (oldVersion <= 18) migrateTo19(realm)
+        if (oldVersion <= 19) migrateTo20(realm)
+        if (oldVersion <= 20) migrateTo21(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -387,6 +391,57 @@ internal class RealmSessionStoreMigration @Inject constructor(
                     it.getString(RoomSummaryEntityFields.DISPLAY_NAME)?.let { displayName ->
                         val normalised = normalizer.normalize(displayName)
                         it.set(RoomSummaryEntityFields.NORMALIZED_DISPLAY_NAME, normalised)
+                    }
+                }
+    }
+
+    private fun migrateTo20(realm: DynamicRealm) {
+        Timber.d("Step 19 -> 20")
+
+        realm.schema.get("ChunkEntity")?.apply {
+            if (hasField("numberOfTimelineEvents")) {
+                removeField("numberOfTimelineEvents")
+            }
+            var cleanOldChunks = false
+            if (!hasField(ChunkEntityFields.NEXT_CHUNK.`$`)) {
+                cleanOldChunks = true
+                addRealmObjectField(ChunkEntityFields.NEXT_CHUNK.`$`, this)
+            }
+            if (!hasField(ChunkEntityFields.PREV_CHUNK.`$`)) {
+                cleanOldChunks = true
+                addRealmObjectField(ChunkEntityFields.PREV_CHUNK.`$`, this)
+            }
+            if (cleanOldChunks) {
+                val chunkEntities = realm.where("ChunkEntity").equalTo(ChunkEntityFields.IS_LAST_FORWARD, false).findAll()
+                chunkEntities.deleteAllFromRealm()
+            }
+        }
+    }
+
+    private fun migrateTo21(realm: DynamicRealm) {
+        Timber.d("Step 20 -> 21")
+
+        realm.schema.get("RoomSummaryEntity")
+                ?.addField(RoomSummaryEntityFields.E2E_ALGORITHM, String::class.java)
+                ?.transform { obj ->
+
+                    val encryptionContentAdapter = MoshiProvider.providesMoshi().adapter(EncryptionEventContent::class.java)
+
+                    val encryptionEvent = realm.where("CurrentStateEventEntity")
+                            .equalTo(CurrentStateEventEntityFields.ROOM_ID, obj.getString(RoomSummaryEntityFields.ROOM_ID))
+                            .equalTo(CurrentStateEventEntityFields.TYPE, EventType.STATE_ROOM_ENCRYPTION)
+                            .findFirst()
+
+                    val encryptionEventRoot = encryptionEvent?.getObject(CurrentStateEventEntityFields.ROOT.`$`)
+                    val algorithm = encryptionEventRoot
+                            ?.getString(EventEntityFields.CONTENT)?.let {
+                                encryptionContentAdapter.fromJson(it)?.algorithm
+                            }
+
+                    obj.setString(RoomSummaryEntityFields.E2E_ALGORITHM, algorithm)
+                    obj.setBoolean(RoomSummaryEntityFields.IS_ENCRYPTED, encryptionEvent != null)
+                    encryptionEventRoot?.getLong(EventEntityFields.ORIGIN_SERVER_TS)?.let {
+                        obj.setLong(RoomSummaryEntityFields.ENCRYPTION_EVENT_TS, it)
                     }
                 }
     }

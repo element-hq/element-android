@@ -20,6 +20,7 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import im.vector.app.R
 import im.vector.app.core.epoxy.TextListener
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.form.formEditTextItem
@@ -61,7 +62,7 @@ class SpaceDetailEpoxyController @Inject constructor(
                         host.stringProvider.getString(R.string.create_spaces_details_public_header)
                     } else {
                         host.stringProvider.getString(R.string.create_spaces_details_private_header)
-                    }
+                    }.toEpoxyCharSequence()
             )
         }
 

@@ -48,6 +48,7 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     object OpenInvitePeople : RoomDetailViewEvents()
     object OpenSetRoomAvatarDialog : RoomDetailViewEvents()
     object OpenRoomSettings : RoomDetailViewEvents()
+    object OpenRoomProfile : RoomDetailViewEvents()
     data class ShowRoomAvatarFullScreen(val matrixItem: MatrixItem?, val view: View?) : RoomDetailViewEvents()
 
     object ShowWaitingView : RoomDetailViewEvents()

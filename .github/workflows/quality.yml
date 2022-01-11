@@ -14,6 +14,7 @@ jobs:
       - name: Run code quality check suite
         run: ./tools/check/check_code_quality.sh
 
+# ktlint for all the modules
   ktlint:
     name: Kotlin Linter
     runs-on: ubuntu-latest
@@ -23,12 +24,66 @@ jobs:
         run: |
           ./gradlew ktlintCheck --continue
       - name: Upload reports
+        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: ktlinting-report
-          path: vector/build/reports/ktlint/*.*
+          path: |
+            */build/reports/ktlint/ktlint*/ktlint*.txt
+      - name: Handle Results
+        if: always()
+        id: ktlint-results
+        run: |
+          results="$(cat */*/build/reports/ktlint/ktlint*/ktlint*.txt */build/reports/ktlint/ktlint*/ktlint*.txt | sed -r "s/\x1B\[([0-9]{1,3}(;[0-9]{1,2})?)?[mGK]//g")"
+          if [ -z  "$results" ]; then
+            echo "::set-output name=add_comment::false"
+          else
+            body="👎\`Failed${results}\`"
+            body="${body//'%'/'%25'}"
+            body="${body//$'\n'/'%0A'}"
+            body="${body//$'\r'/'%0D'}"
+            body="$( echo $body | sed 's/\/home\/runner\/work\/element-android\/element-android\//\`<br\/>\`/g')"
+            body="$( echo $body | sed 's/\/src\/main\/java\// 🔸 /g')"
+            body="$( echo $body | sed 's/im\/vector\/app\///g')"
+            body="$( echo $body | sed 's/im\/vector\/lib\/attachmentviewer\///g')"
+            body="$( echo $body | sed 's/im\/vector\/lib\/multipicker\///g')"
+            body="$( echo $body | sed 's/im\/vector\/lib\///g')"
+            body="$( echo $body | sed 's/org\/matrix\/android\/sdk\///g')"
+            body="$( echo $body | sed 's/\/src\/androidTest\/java\// 🔸 /g')"
+            echo "::set-output name=add_comment::true"
+            echo "::set-output name=body::$body"
+          fi
+      - name: Find Comment
+        if: always()
+        uses: peter-evans/find-comment@v1
+        id: fc
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Ktlint Results
+      - name: Add comment if needed
+        if: always() && steps.ktlint-results.outputs.add_comment == 'true'
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ### Ktlint Results
 
-# Lint for main module and all the other modules
+            ${{ steps.ktlint-results.outputs.body }}
+          edit-mode: replace
+      - name: Delete comment if needed
+        if: always() && steps.fc.outputs.comment-id != '' && steps.ktlint-results.outputs.add_comment == 'false'
+        uses: actions/github-script@v3
+        with:
+          script: |
+            github.issues.deleteComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              comment_id: ${{ steps.fc.outputs.comment-id }}
+            })
+
+# Lint for main module
   android-lint:
     name: Android Linter
     runs-on: ubuntu-latest
@@ -45,6 +100,7 @@ jobs:
       - name: Lint analysis
         run: ./gradlew clean :vector:lint --stacktrace
       - name: Upload reports
+        if: always()
         uses: actions/upload-artifact@v2
         with:
           name: lint-report
@@ -73,8 +129,8 @@ jobs:
       - name: Lint ${{ matrix.target }} release
         run: ./gradlew clean lint${{ matrix.target }}Release --stacktrace
       - name: Upload ${{ matrix.target }} linting report
-        uses: actions/upload-artifact@v2
         if: always()
+        uses: actions/upload-artifact@v2
         with:
           name: release-lint-report-${{ matrix.target }}
           path: |

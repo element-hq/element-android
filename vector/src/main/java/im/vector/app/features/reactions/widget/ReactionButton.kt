@@ -24,7 +24,7 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.EmojiCompatWrapper
+import im.vector.app.EmojiSpanify
 import im.vector.app.R
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.TextUtils
@@ -39,9 +39,9 @@ import javax.inject.Inject
 class ReactionButton @JvmOverloads constructor(context: Context,
                                                attrs: AttributeSet? = null,
                                                defStyleAttr: Int = 0) :
-    LinearLayout(context, attrs, defStyleAttr), View.OnClickListener, View.OnLongClickListener {
+        LinearLayout(context, attrs, defStyleAttr), View.OnClickListener, View.OnLongClickListener {
 
-    @Inject lateinit var emojiCompatWrapper: EmojiCompatWrapper
+    @Inject lateinit var emojiSpanify: EmojiSpanify
 
     private val views: ReactionButtonBinding
 
@@ -57,7 +57,7 @@ class ReactionButton @JvmOverloads constructor(context: Context,
         set(value) {
             field = value
             // maybe cache this for performances?
-            val emojiSpanned = emojiCompatWrapper.safeEmojiSpanify(value)
+            val emojiSpanned = emojiSpanify.spanify(value)
             views.reactionText.text = emojiSpanned
         }
 

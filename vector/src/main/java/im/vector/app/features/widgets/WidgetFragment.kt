@@ -160,7 +160,7 @@ class WidgetFragment @Inject constructor() :
                 return@withState true
             }
             R.id.action_delete          -> {
-                viewModel.handle(WidgetAction.DeleteWidget)
+                deleteWidget()
                 return@withState true
             }
             R.id.action_refresh         -> if (state.formattedURL.complete) {
@@ -172,7 +172,7 @@ class WidgetFragment @Inject constructor() :
                 return@withState true
             }
             R.id.action_revoke          -> if (state.status == WidgetStatus.WIDGET_ALLOWED) {
-                viewModel.handle(WidgetAction.RevokeWidget)
+                revokeWidget()
                 return@withState true
             }
         }
@@ -306,17 +306,17 @@ class WidgetFragment @Inject constructor() :
         )
     }
 
-    fun deleteWidget() {
+    private fun deleteWidget() {
         MaterialAlertDialogBuilder(requireContext())
                 .setMessage(R.string.widget_delete_message_confirmation)
-                .setPositiveButton(R.string.remove) { _, _ ->
+                .setPositiveButton(R.string.action_remove) { _, _ ->
                     viewModel.handle(WidgetAction.DeleteWidget)
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 
-    fun revokeWidget() {
+    private fun revokeWidget() {
         viewModel.handle(WidgetAction.RevokeWidget)
     }
 }

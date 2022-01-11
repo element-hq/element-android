@@ -32,8 +32,10 @@ import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.auth.data.sessionId
 import org.matrix.android.sdk.api.crypto.MXCryptoConfig
+import org.matrix.android.sdk.api.session.EventStreamService
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.SessionLifecycleObserver
+import org.matrix.android.sdk.api.session.ToDeviceService
 import org.matrix.android.sdk.api.session.accountdata.SessionAccountDataService
 import org.matrix.android.sdk.api.session.events.EventService
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
@@ -47,7 +49,6 @@ import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorage
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultRedactEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.RedactEventTask
 import org.matrix.android.sdk.internal.crypto.verification.VerificationMessageProcessor
-import org.matrix.android.sdk.internal.database.DatabaseCleaner
 import org.matrix.android.sdk.internal.database.EventInsertLiveObserver
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.SessionRealmConfigurationFactory
@@ -341,10 +342,6 @@ internal abstract class SessionModule {
 
     @Binds
     @IntoSet
-    abstract fun bindDatabaseCleaner(cleaner: DatabaseCleaner): SessionLifecycleObserver
-
-    @Binds
-    @IntoSet
     abstract fun bindRealmSessionProvider(provider: RealmSessionProvider): SessionLifecycleObserver
 
     @Binds
@@ -378,6 +375,12 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindOpenIdTokenService(service: DefaultOpenIdService): OpenIdService
+
+    @Binds
+    abstract fun bindToDeviceService(service: DefaultToDeviceService): ToDeviceService
+
+    @Binds
+    abstract fun bindEventStreamService(service: DefaultEventStreamService): EventStreamService
 
     @Binds
     abstract fun bindTypingUsersTracker(tracker: DefaultTypingUsersTracker): TypingUsersTracker

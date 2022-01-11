@@ -30,6 +30,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
+import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.ui.views.PresenceStateImageView
@@ -44,16 +45,12 @@ import org.matrix.android.sdk.api.util.MatrixItem
 @EpoxyModelClass(layout = R.layout.item_room)
 abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
 
-    @EpoxyAttribute lateinit var typingMessage: CharSequence
+    @EpoxyAttribute lateinit var typingMessage: String
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
 
-    // Used only for diff calculation
-    @EpoxyAttribute lateinit var lastEvent: String
-
-    // We use DoNotHash here as Spans are not implementing equals/hashcode
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) lateinit var lastFormattedEvent: CharSequence
-    @EpoxyAttribute lateinit var lastEventTime: CharSequence
+    @EpoxyAttribute lateinit var lastFormattedEvent: EpoxyCharSequence
+    @EpoxyAttribute lateinit var lastEventTime: String
     @EpoxyAttribute var encryptionTrustLevel: RoomEncryptionTrustLevel? = null
     @EpoxyAttribute var userPresence: UserPresence? = null
     @EpoxyAttribute var showPresence: Boolean = false
@@ -76,7 +73,7 @@ abstract class RoomSummaryItem : VectorEpoxyModel<RoomSummaryItem.Holder>() {
         }
         holder.titleView.text = matrixItem.getBestName()
         holder.lastEventTimeView.text = lastEventTime
-        holder.lastEventView.text = lastFormattedEvent
+        holder.lastEventView.text = lastFormattedEvent.charSequence
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.unreadIndentIndicator.isVisible = hasUnreadMessage
         holder.draftView.isVisible = hasDraft

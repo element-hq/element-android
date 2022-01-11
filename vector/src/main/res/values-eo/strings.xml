@@ -14,7 +14,7 @@
     <string name="notice_room_withdraw">%1$s nuligis inviton por %2$s</string>
     <string name="notice_avatar_url_changed">%1$s ŝanĝis sian profilbildon</string>
     <string name="notice_crypto_unable_to_decrypt">** Ne eblas malĉifri: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">La aparato de la sendinto ne sendis al ni la ŝlosilojn por tiu mesaĝo.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">La aparato de la sendinto ne sendis al ni la ŝlosilojn por tiu mesaĝo.</string>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="notice_display_name_set">%1$s ŝanĝis sian prezentan nomon al %2$s</string>
     <string name="notice_display_name_changed_from">%1$s ŝanĝis sian prezentan nomon de %2$s al %3$s</string>
@@ -227,24 +227,24 @@
     <string name="dialog_title_third_party_licences">Permesiloj de eksteraj liverantoj</string>
     <string name="loading">Enlegante…</string>
     <string name="ok">Bone</string>
-    <string name="cancel">Nuligi</string>
-    <string name="save">Konservi</string>
-    <string name="leave">Eliri</string>
-    <string name="send">Sendi</string>
-    <string name="resend">Resendi</string>
-    <string name="redact">Forigi</string>
-    <string name="quote">Citi</string>
-    <string name="download">Elŝuti</string>
-    <string name="share">Kunhavigi</string>
-    <string name="speak">Paroli</string>
-    <string name="clear">Forviŝi</string>
+    <string name="action_cancel">Nuligi</string>
+    <string name="action_save">Konservi</string>
+    <string name="action_leave">Eliri</string>
+    <string name="action_send">Sendi</string>
+    <string name="action_resend">Resendi</string>
+    <string name="action_redact">Forigi</string>
+    <string name="action_quote">Citi</string>
+    <string name="action_download">Elŝuti</string>
+    <string name="action_share">Kunhavigi</string>
+    <string name="action_speak">Paroli</string>
+    <string name="action_clear">Forviŝi</string>
     <string name="later">Poste</string>
-    <string name="forward">Plusendi</string>
+    <string name="action_forward">Plusendi</string>
     <string name="permalink">Fiksligilo</string>
     <string name="view_source">Vidi fonton</string>
     <string name="view_decrypted_source">Vidi malĉifritan fonton</string>
-    <string name="delete">Forigi</string>
-    <string name="rename">Alinomi</string>
+    <string name="action_delete">Forigi</string>
+    <string name="action_rename">Alinomi</string>
     <string name="title_activity_member_details">Detaloj pri ano</string>
     <string name="title_activity_historical">Historia</string>
     <string name="report_content">Raporti enhavon</string>
@@ -261,7 +261,7 @@
     <string name="device_information">Informoj pri salutaĵo</string>
     <string name="send_anyway">Tamen sendi</string>
     <string name="or">aŭ</string>
-    <string name="invite">Inviti</string>
+    <string name="action_invite">Inviti</string>
     <string name="offline">Eksterrete</string>
     <string name="action_exit">Eliri</string>
     <string name="actions">Agoj</string>
@@ -285,7 +285,6 @@
     <string name="room_details_settings">Agordoj</string>
     <string name="tab_title_search_people">PERSONOJ</string>
     <string name="tab_title_search_files">DOSIEROJ</string>
-    <string name="room_recents_join">ALIĜI</string>
     <string name="group_details_people">Personoj</string>
     <string name="group_details_rooms">Ĉambroj</string>
     <string name="no_users_placeholder">Neniuj uzantoj</string>
@@ -305,26 +304,26 @@
     <string name="are_you_sure">Ĉu vi certas\?</string>
     <string name="backup">Savkopii</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Vi perdos aliron al viaj ĉifritaj mesaĝoj, se vi ne savkopios viajn ŝlosilojn antaŭ adiaŭo.</string>
-    <string name="stay">Resti</string>
+    <string name="action_stay">Resti</string>
     <string name="none">Neniu</string>
-    <string name="revoke">Senvalidigi</string>
-    <string name="disconnect">Malkonekti</string>
+    <string name="action_revoke">Senvalidigi</string>
+    <string name="action_disconnect">Malkonekti</string>
     <string name="missing_permissions_to_start_conf_call">Vi bezonas permeson inviti por komenci grupan vokon en ĉi tiu ĉambro</string>
     <string name="room_no_conference_call_in_encrypted_rooms">Grupaj vokoj ne estas subtenataj de ĉifrataj ĉambroj</string>
-    <string name="accept">Akcepti</string>
-    <string name="skip">Preterpasi</string>
+    <string name="action_accept">Akcepti</string>
+    <string name="action_skip">Preterpasi</string>
     <string name="done">Finite</string>
-    <string name="abort">Ĉesigi</string>
-    <string name="ignore">Malatenti</string>
-    <string name="review">Kontroli</string>
-    <string name="decline">Rifuzi</string>
+    <string name="action_abort">Ĉesigi</string>
+    <string name="action_ignore">Malatenti</string>
+    <string name="action_review">Kontroli</string>
+    <string name="action_decline">Rifuzi</string>
     <string name="action_sign_out">Adiaŭi</string>
     <string name="action_sign_out_confirmation_simple">Ĉu vi certe volas adiaŭi\?</string>
     <string name="action_mark_all_as_read">Marki ĉion legita</string>
     <string name="action_historical">Historia</string>
     <string name="action_mark_room_read">Marki legita</string>
     <string name="copied_to_clipboard">Kopiiĝis al tondujo</string>
-    <string name="disable">Malŝalti</string>
+    <string name="action_disable">Malŝalti</string>
     <string name="dialog_title_confirmation">Konfirmo</string>
     <string name="dialog_title_warning">Averto</string>
     <string name="dialog_title_error">Eraro</string>
@@ -482,13 +481,6 @@
     <string name="search_no_results">Neniuj rezultoj</string>
     <string name="tab_title_search_rooms">ĈAMBROJ</string>
     <string name="tab_title_search_messages">MESAĜOJ</string>
-    <string name="room_recents_favourites">ELSTARIGITAJ</string>
-    <string name="room_recents_conversations">ĈAMBROJ</string>
-    <string name="room_recents_invites">INVITOJ</string>
-    <string name="room_recents_start_chat">Komenci babilon</string>
-    <string name="room_recents_create_room">Krei ĉambron</string>
-    <string name="room_recents_join_room">Aliĝi al ĉambro</string>
-    <string name="room_recents_join_room_title">Aliĝi al ĉambro</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">%d ĉambro</item>
         <item quantity="other">%d ĉambroj</item>
@@ -638,10 +630,10 @@
     <string name="yes">JES</string>
     <string name="no">NE</string>
     <string name="_continue">Daŭrigi</string>
-    <string name="remove">Forigi</string>
-    <string name="join">Aliĝi</string>
-    <string name="preview">Antaŭrigardi</string>
-    <string name="reject">Rifuzi</string>
+    <string name="action_remove">Forigi</string>
+    <string name="action_join">Aliĝi</string>
+    <string name="action_preview">Antaŭrigardi</string>
+    <string name="action_reject">Rifuzi</string>
     <string name="list_members">Listigi ĉambranojn</string>
     <string name="room_sync_in_progress">Spegulante…</string>
     <string name="room_preview_invitation_format">Vi estis invitita al ĉi tiu ĉambro de %s</string>
@@ -725,9 +717,9 @@
     <string name="open_settings">Malfermi agordojn</string>
     <string name="settings_troubleshoot_test_account_settings_title">Agordoj de konto.</string>
     <string name="settings_troubleshoot_test_account_settings_success">Sciigoj estas ŝaltitaj por via konto.</string>
-    <string name="play_video">Ludi</string>
-    <string name="pause_video">Paŭzigi</string>
-    <string name="dismiss">Eksigi</string>
+    <string name="action_play">Ludi</string>
+    <string name="action_pause">Paŭzigi</string>
+    <string name="action_dismiss">Eksigi</string>
     <string name="no_permissions_to_start_conf_call">Vi ne havas permeson ekigi grupan vokon en ĉi tiu ĉambro</string>
     <string name="conference_call_in_progress">Grupa voko jam daŭras!</string>
     <string name="video_meeting">Komenci grupan vidvokon</string>
@@ -803,7 +795,6 @@
     <string name="verification_request_waiting">Atendante…</string>
     <string name="sent_verification_conclusion">Rezulto de kontrolo</string>
     <string name="sent_a_reaction">Reagis per: %s</string>
-    <string name="sent_a_bot_buttons">Butonoj de robotoj</string>
     <string name="sent_a_poll">Enketo</string>
     <string name="send_a_sticker">Glumarko</string>
     <string name="sent_a_file">Dosiero</string>
@@ -1139,8 +1130,8 @@
     <string name="reactions">Reagoj</string>
     <string name="message_view_reaction">Vidi reagojn</string>
     <string name="message_add_reaction">Aldoni reagon</string>
-    <string name="reactions_like">Ŝati</string>
-    <string name="reactions_agree">Konsenti</string>
+    <string name="action_like">Ŝati</string>
+    <string name="action_agree">Konsenti</string>
     <string name="title_activity_emoji_reaction_picker">Reagoj</string>
     <string name="room_list_rooms_empty_body">Viaj ĉambroj montriĝos ĉi tie. Tuŝetu al la «+» dekstre sube por trovi jam ekzistantajn, aŭ fari viajn proprajn.</string>
     <string name="room_list_rooms_empty_title">Ĉambroj</string>
@@ -1878,8 +1869,6 @@
         <item quantity="one">%1$s ĉambro trovita por %2$s</item>
         <item quantity="other">%1$s ĉambroj trovitaj por %2$s</item>
     </plurals>
-    <string name="room_recents_join_room_prompt">Entajpu identigilon de ĉambro aŭ kromnomon de ĉambro</string>
-    <string name="room_recents_low_priority">MALALTA PRIORITATO</string>
     <string name="search_is_not_supported_in_e2e_room">Serĉado en ĉifritaj ĉambroj ankoraŭ en estas subtenata.</string>
     <string name="search_banned_user_hint">Filtri forbaritajn uzantojn</string>
     <string name="ssl_only_accept">Akceptu la atestilon nur se administranto de la servilo publikigis fingrospuron akordan kun tiu ĉi-supre.</string>
@@ -1986,7 +1975,7 @@
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">Vi ne havas permeson komenci vokon</string>
     <string name="no_permissions_to_start_webrtc_call">Vi ne havas permeson komenci vokon en ĉi tiu ĉambro</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Vi ne havas permeson komenci grupan vokon</string>
-    <string name="reset">Restarigi</string>
+    <string name="action_reset">Restarigi</string>
     <string name="rooms_directory_header">Listo de ĉambroj</string>
     <string name="bootstrap_info_confirm_text">Replenigu per via %s por konfirmi ĝin.</string>
     <string name="initialize_cross_signing">Pretigi delegajn subskribojn</string>
@@ -2140,7 +2129,7 @@
     <string name="enter_secret_storage_passphrase_or_key">Por daŭrigi, necesas via %1$s aŭ via %2$s.</string>
     <string name="command_description_discard_session_not_handled">Subtenata nur en ĉifritaj ĉambroj</string>
     <string name="template_use_latest_app">Uzu la plej freŝan version de ${app_name} per aliaj viaj aparatoj:</string>
-    <string name="or_other_mx_capabale_client">aŭ alian klienton de Matrix kapablan je delegaj subskriboj</string>
+    <string name="or_other_mx_capable_client">aŭ alian klienton de Matrix kapablan je delegaj subskriboj</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
     <string name="template_app_desktop_web">${app_name} Web (por TTT)
@@ -2232,15 +2221,6 @@
     <string name="verification_use_passphrase">Se vi ne povas aliri jaman salutaĵon</string>
     <string name="verification_cannot_access_other_session">Uzi rehavan pasfrazon aŭ ŝlosilon</string>
     <string name="command_description_poll">Faras simplan enketon</string>
-    <string name="poll_item_selected_aria">Elektita elekteblo</string>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d voĉo – finaj rezultoj</item>
-        <item quantity="other">%d voĉoj – finaj rezultoj</item>
-    </plurals>
-    <plurals name="poll_info">
-        <item quantity="one">%d voĉo</item>
-        <item quantity="other">%d voĉoj</item>
-    </plurals>
     <string name="delete_account_data_warning">Ĉu forigi la datumojn de konto de la speco «%1$s»\?
 \n
 \nForu tion zorge, ĝi povus kaŭzi neatenditan konduton.</string>
@@ -2361,7 +2341,6 @@
     <string name="room_settings_directory_visibility">Inkluzivigi la ĉambron en katalogo de ĉambroj</string>
     <string name="directory_searching_title">Serĉante tra katalogo…</string>
     <string name="directory_search_results_title">Foliumi katalogon</string>
-    <string name="room_recents_directory">KATALOGO</string>
     <string name="people_search_user_directory">KATALOGO DE UZANTOJ (%s)</string>
     <string name="user_directory_header">Katalogo de uzantoj</string>
     <string name="warning_room_not_created_yet">La ĉambro ankoraŭ ne kreiĝis. Ĉu nuligi kreadon de la ĉambro\?</string>
@@ -2663,8 +2642,6 @@
     <string name="space_settings_manage_rooms">Administri ĉambrojn</string>
     <string name="looking_for_someone_not_in_space">Ĉu vi serĉas iun, kiu ne estas en %s\?</string>
     <string name="user_invites_you">%s invitas vin</string>
-    <string name="labs_use_restricted_join_rule_desc">Averto: bezonas subtenon de servilo kaj eksperimentan version de ĉambro</string>
-    <string name="labs_use_restricted_join_rule">Eksperimenta aro – limigita ĉambro.</string>
     <string name="you_are_invited">Vi estas invitita</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Aroj prezentas novan manieron grupigi ĉambrojn kaj personojn.</string>
     <string name="spaces_beta_welcome_to_spaces">Bonvenu al aroj!</string>
@@ -2694,7 +2671,7 @@
     <string name="invite_to_space_with_name_desc">Oni povos esplori en %s</string>
     <string name="invite_to_space_with_name">Inviti al %s</string>
     <string name="invite_by_link">Havigi ligilon</string>
-    <string name="invite_by_mxid">Inviti per uzantonomo</string>
+    <string name="invite_by_username">Inviti per uzantonomo</string>
     <string name="invite_by_email">Inviti per retpoŝto</string>
     <string name="invite_people_to_your_space_desc">Nun ĉeestas nur vi. %s eĉ pli bonos kun aliuloj.</string>
     <string name="invite_to_space">Inviti al %s</string>
@@ -2877,7 +2854,7 @@
     <string name="leave_all_rooms_and_spaces">Foriri de ĉiuj ĉambroj kaj aroj</string>
     <string name="space_leave_prompt_msg_with_name">Ĉu vi certe volas foriri de %s\?</string>
     <string name="discovery_section">Trovado (%s)</string>
-    <string name="invite_by_mxid_or_mail">Inviti laŭ uzantonomo aŭ retpoŝtadreso</string>
+    <string name="invite_by_username_or_mail">Inviti laŭ uzantonomo aŭ retpoŝtadreso</string>
     <string name="command_description_add_to_space">Aldoni al la aro</string>
     <string name="call_one_active">Aktiva voko (%1$s) ·</string>
     <plurals name="call_active_status">

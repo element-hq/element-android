@@ -57,6 +57,7 @@ abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineIte
             ShieldUIState.GREEN -> R.drawable.ic_shield_trusted
             ShieldUIState.BLACK -> R.drawable.ic_shield_black
             ShieldUIState.RED   -> R.drawable.ic_shield_warning
+            ShieldUIState.ERROR   -> R.drawable.ic_warning_badge
         }
 
         holder.titleView.setCompoundDrawablesWithIntrinsicBounds(
@@ -83,8 +84,8 @@ abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineIte
      */
     data class Attributes(
             val shieldUIState: ShieldUIState,
-            val title: CharSequence,
-            val description: CharSequence,
+            val title: String,
+            val description: String,
             override val informationData: MessageInformationData,
             override val avatarRenderer: AvatarRenderer,
             override val messageColorProvider: MessageColorProvider,
@@ -98,6 +99,7 @@ abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineIte
     enum class ShieldUIState {
         BLACK,
         RED,
-        GREEN
+        GREEN,
+        ERROR
     }
 }

@@ -16,7 +16,9 @@
 
 package im.vector.app.features.createdirect
 
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.airbnb.mvrx.activityViewModel
@@ -56,6 +58,17 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
     private fun startCamera() {
         // Start camera on resume
         views.scannerView.startCamera()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupToolbar(views.qrScannerToolbar)
+
+        views.qrScannerClose.debouncedClicks {
+            requireActivity().onBackPressed()
+        }
+        views.qrScannerTitle.text = getString(R.string.add_by_qr_code)
     }
 
     override fun onResume() {

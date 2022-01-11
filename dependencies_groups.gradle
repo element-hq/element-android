@@ -14,13 +14,6 @@ ext.groups = [
                         'com.github.Zhuinden',
                 ]
         ],
-        olm         : [
-                regex: [
-                ],
-                group: [
-                        'org.matrix.android',
-                ]
-        ],
         jitsi       : [
                 regex: [
                 ],
@@ -166,6 +159,7 @@ ext.groups = [
                         'org.junit.jupiter',
                         'org.junit.platform',
                         'org.jvnet.staxex',
+                        'org.matrix.android',
                         'org.mockito',
                         'org.mongodb',
                         'org.objenesis',
@@ -179,6 +173,7 @@ ext.groups = [
                         'org.sonatype.oss',
                         'org.testng',
                         'org.threeten',
+                        'ru.noties',
                         'xerces',
                         'xml-apis',
                 ]

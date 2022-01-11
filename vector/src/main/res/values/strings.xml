@@ -147,7 +147,7 @@
     <string name="notice_power_level_diff">%1$s from %2$s to %3$s</string>
 
     <string name="notice_crypto_unable_to_decrypt">** Unable to decrypt: %s **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">The sender\'s device has not sent us the keys for this message.</string>
 
     <!-- Messages -->
 
@@ -169,6 +169,7 @@
 
     <!-- room error messages -->
     <string name="room_error_join_failed_empty_room">It is not currently possible to re-join an empty room.</string>
+    <string name="room_error_access_unauthorized">You are not allowed to join this room</string>
 
     <!-- medium friendly name -->
     <string name="medium_email">Email address</string>
@@ -357,34 +358,13 @@
 
     <!-- button names -->
     <string name="ok">OK</string>
-    <string name="cancel">Cancel</string>
-    <string name="save">Save</string>
-    <string name="leave">Leave</string>
-    <string name="stay">Stay</string>
-    <string name="send">Send</string>
-    <string name="resend">Resend</string>
-    <string name="redact">Remove</string>
-    <string name="quote">Quote</string>
-    <string name="download">Download</string>
-    <string name="share">Share</string>
-    <string name="speak">Speak</string>
-    <string name="clear">Clear</string>
     <string name="later">Later</string>
-    <string name="forward">Forward</string>
     <string name="permalink">Permalink</string>
     <string name="view_source">View Source</string>
     <string name="view_decrypted_source">View Decrypted Source</string>
-    <string name="delete">Delete</string>
-    <string name="rename">Rename</string>
     <string name="none">None</string>
-    <string name="revoke">Revoke</string>
-    <string name="disconnect">Disconnect</string>
     <string name="report_content">Report Content</string>
     <string name="active_call">Active call</string>
-    <string name="play_video">Play</string>
-    <string name="pause_video">Pause</string>
-    <string name="dismiss">Dismiss</string>
-    <string name="reset">Reset</string>
     <string name="start_chatting">Start Chatting</string>
     <string name="learn_more">Learn More</string>
     <string name="spaces">Spaces</string>
@@ -421,23 +401,16 @@
     <string name="call_anyway">Call Anyway</string>
     <string name="send_anyway">Send Anyway</string>
     <string name="or">or</string>
-    <string name="invite">Invite</string>
     <string name="offline">Offline</string>
-    <string name="accept">Accept</string>
-    <string name="skip">Skip</string>
     <string name="done">Done</string>
-    <string name="abort">Abort</string>
-    <string name="ignore">Ignore</string>
-    <string name="review">Review</string>
-    <string name="decline">Decline</string>
 
     <string name="call_notification_answer">Accept</string>
     <string name="call_notification_reject">Decline</string>
     <string name="call_notification_hangup">Hang Up</string>
 
     <!-- actions -->
-    <string name="action_exit">Exit</string>
     <string name="actions">Actions</string>
+    <string name="action_exit">Exit</string>
     <string name="action_sign_out">Sign out</string>
     <string name="action_sign_out_confirmation_simple">Are you sure you want to sign out?</string>
     <string name="action_voice_call">Voice Call</string>
@@ -453,11 +426,47 @@
     <string name="action_add">Add</string>
     <string name="action_switch">Switch</string>
     <string name="action_unpublish">Unpublish</string>
-    <string name="copied_to_clipboard">Copied to clipboard</string>
-    <string name="disable">Disable</string>
     <string name="action_return">Return</string>
     <string name="action_enable">Enable</string>
     <string name="action_not_now">Not now</string>
+    <string name="action_agree">Agree</string>
+    <string name="action_like">Like</string>
+    <string name="action_change">"Change"</string>
+    <string name="action_remove">Remove</string>
+    <string name="action_join">Join</string>
+    <string name="action_preview">Preview</string>
+    <string name="action_reject">Reject</string>
+    <string name="action_disable">Disable</string>
+    <string name="action_accept">Accept</string>
+    <string name="action_skip">Skip</string>
+    <string name="action_abort">Abort</string>
+    <string name="action_ignore">Ignore</string>
+    <string name="action_review">Review</string>
+    <string name="action_decline">Decline</string>
+    <string name="action_invite">Invite</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_save">Save</string>
+    <string name="action_leave">Leave</string>
+    <string name="action_stay">Stay</string>
+    <string name="action_send">Send</string>
+    <string name="action_resend">Resend</string>
+    <string name="action_redact">Remove</string>
+    <string name="action_quote">Quote</string>
+    <string name="action_download">Download</string>
+    <string name="action_share">Share</string>
+    <string name="action_speak">Speak</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_forward">Forward</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_rename">Rename</string>
+    <string name="action_revoke">Revoke</string>
+    <string name="action_disconnect">Disconnect</string>
+    <string name="action_play">Play</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_dismiss">Dismiss</string>
+    <string name="action_reset">Reset</string>
+
+    <string name="copied_to_clipboard">Copied to clipboard</string>
 
     <!-- dialog titles -->
     <string name="dialog_title_confirmation">Confirmation</string>
@@ -802,12 +811,6 @@
     <string name="_continue">Continue</string>
     <string name="continue_anyway">Continue Anyway</string>
 
-    <!-- Actions -->
-    <string name="remove">Remove</string>
-    <string name="join">Join</string>
-    <string name="preview">Preview</string>
-    <string name="reject">Reject</string>
-
     <!-- Room -->
     <string name="list_members">List members</string>
     <string name="open_chat_header">Open header</string>
@@ -959,6 +962,8 @@
     <string name="room_delete_unsent_messages">Delete unsent messages</string>
     <string name="room_message_file_not_found">File not found</string>
     <string name="room_do_not_have_permission_to_post">You do not have permission to post to this room.</string>
+    <string name="room_unsupported_e2e_algorithm">Encryption has been misconfigured so you can\'t send messages. Please contact an admin to restore encryption to a valid state.</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">Encryption has been misconfigured so you can\'t send messages. Click to open settings.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d new message</item>
         <item quantity="other">%d new messages</item>
@@ -1042,19 +1047,6 @@
     <string name="tab_title_search_people">PEOPLE</string>
     <string name="tab_title_search_files">FILES</string>
     <string name="search_is_not_supported_in_e2e_room">Searching in encrypted rooms is not supported yet.</string>
-
-    <!-- Room recents -->
-    <string name="room_recents_join">JOIN</string>
-    <string name="room_recents_directory">DIRECTORY</string>
-    <string name="room_recents_favourites">FAVORITES</string>
-    <string name="room_recents_conversations">ROOMS</string>
-    <string name="room_recents_low_priority">LOW PRIORITY</string>
-    <string name="room_recents_invites">INVITES</string>
-    <string name="room_recents_start_chat">Start chat</string>
-    <string name="room_recents_create_room">Create room</string>
-    <string name="room_recents_join_room">Join room</string>
-    <string name="room_recents_join_room_title">Join a room</string>
-    <string name="room_recents_join_room_prompt">Type a room id or a room alias</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory</string>
@@ -2210,10 +2202,6 @@
     <string name="room_list_rooms_empty_body">Your rooms will be displayed here. Tap the + bottom right to find existing ones or start some of your own.</string>
 
     <string name="title_activity_emoji_reaction_picker">Reactions</string>
-    <!-- TODO weblate sync: rename to "action_agree"-->
-    <string name="reactions_agree">Agree</string>
-    <!-- TODO weblate sync: rename to "action_like"-->
-    <string name="reactions_like">Like</string>
     <string name="message_add_reaction">Add Reaction</string>
     <string name="message_view_reaction">View Reactions</string>
     <string name="reactions">Reactions</string>
@@ -2230,7 +2218,6 @@
     <string name="create_new_room">Create New Room</string>
     <string name="create_new_space">Create New Space</string>
     <string name="error_no_network">No network. Please check your Internet connection.</string>
-    <string name="action_change">"Change"</string>
     <string name="change_room_directory_network">"Change network"</string>
     <string name="please_wait">"Please wait…"</string>
     <string name="group_all_communities">"All Communities"</string>
@@ -2531,11 +2518,22 @@
     <string name="direct_room_join_rules_invite_by_you">You made this invite only.</string>
     <string name="timeline_unread_messages">Unread messages</string>
 
+    <!--  Onboarding -->
+    <string name="ftue_auth_carousel_1_title">Own your conversations.</string>
+    <string name="ftue_auth_carousel_1_body">End-to-end encrypted messaging for secure and independent communication, connected via Matrix.</string>
+    <string name="ftue_auth_carousel_2_title">You\'re in control.</string>
+    <string name="ftue_auth_carousel_2_body">Element lets you choose where you messages are stored, keeping you in control of your data.</string>
+    <string name="ftue_auth_carousel_3_title">Connect with anyone.</string>
+    <string name="ftue_auth_carousel_3_body">Element works with all Matrix-based apps and can even bridge into proprietary messengers.</string>
+    <string name="ftue_auth_carousel_4_title">Cut the slack from teams.</string>
+    <string name="ftue_auth_carousel_4_body">As universal as email, Element is a completely new type of collaboration.</string>
+
     <string name="login_splash_title">It\'s your conversation. Own it.</string>
     <string name="login_splash_text1">Chat with people directly or in groups</string>
     <string name="login_splash_text2">Keep conversations private with encryption</string>
     <string name="login_splash_text3">Extend &amp; customise your experience</string>
     <string name="login_splash_submit">Get started</string>
+    <string name="login_splash_already_have_account">I already have an account</string>
 
     <string name="login_server_title">Select a server</string>
     <string name="login_server_text">Just like email, accounts have one home, although you can talk to anyone</string>
@@ -2756,7 +2754,6 @@
     <string name="sent_a_file">File</string>
     <string name="send_a_sticker">Sticker</string>
     <string name="sent_a_poll">Poll</string>
-    <string name="sent_a_bot_buttons">Bot Buttons</string>
     <string name="sent_a_reaction">Reacted with: %s</string>
     <string name="sent_verification_conclusion">Verification Conclusion</string>
 
@@ -2795,8 +2792,11 @@
     <string name="room_profile_not_encrypted_subtitle">Messages in this room are not end-to-end encrypted.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Messages here are not end-to-end encrypted.</string>
     <string name="room_profile_encrypted_subtitle">Messages in this room are end-to-end encrypted.\n\nYour messages are secured with locks and only you and the recipient have the unique keys to unlock them.</string>
+    <string name="encryption_has_been_misconfigured">Encryption has been misconfigured.</string>
+    <string name="contact_admin_to_restore_encryption">Please contact an admin to restore encryption to a valid state.</string>
     <string name="direct_room_profile_encrypted_subtitle">Messages here are end-to-end encrypted.\n\nYour messages are secured with locks and only you and the recipient have the unique keys to unlock them.</string>
     <string name="room_profile_section_security">Security</string>
+    <string name="room_profile_section_restore_security">Restore Encryption</string>
     <string name="room_profile_section_security_learn_more">Learn more</string>
     <string name="room_profile_section_more">More</string>
     <string name="room_profile_section_admin">Admin Actions</string>
@@ -2811,6 +2811,8 @@
     <string name="room_profile_section_more_leave">Leave Room</string>
     <string name="direct_room_profile_section_more_leave">Leave</string>
     <string name="room_profile_leaving_room">"Leaving the room…"</string>
+
+    <string name="room_member_override_nick_color">Override nick color</string>
 
     <string name="room_member_power_level_admins">Admins</string>
     <string name="room_member_power_level_moderators">Moderators</string>
@@ -2936,15 +2938,6 @@
     <string name="settings_account_data">Account Data</string>
     <string name="delete_account_data_warning">Delete the account data of type %1$s?\n\nUse with caution, it may lead to unexpected behavior.</string>
 
-    <plurals name="poll_info">
-        <item quantity="zero">%d vote</item>
-        <item quantity="other">%d votes</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="zero">%d vote - Final results</item>
-        <item quantity="other">%d votes - Final results</item>
-    </plurals>
-    <string name="poll_item_selected_aria">Selected Option</string>
     <string name="command_description_poll">Creates a simple poll</string>
     <string name="verification_cannot_access_other_session">Use a Recovery Passphrase or Key</string>
     <string name="verification_use_passphrase">If you can’t access an existing session</string>
@@ -3064,6 +3057,7 @@
     <string name="encryption_enabled_tile_description">Messages in this room are end-to-end encrypted. Learn more &amp; verify users in their profile.</string>
     <string name="direct_room_encryption_enabled_tile_description">Messages in this room are end-to-end encrypted.</string>
     <string name="encryption_not_enabled">Encryption not enabled</string>
+    <string name="encryption_misconfigured">Encryption is misconfigured</string>
     <string name="encryption_unknown_algorithm_tile_description">The encryption used by this room is not supported</string>
 
     <string name="room_created_summary_item">%s created and configured the room.</string>
@@ -3140,7 +3134,7 @@
     <string name="template_app_desktop_web">${app_name} Web\n${app_name} Desktop</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_app_ios_android">${app_name} iOS\n${app_name} Android</string>
-    <string name="or_other_mx_capabale_client">or another cross-signing capable Matrix client</string>
+    <string name="or_other_mx_capable_client">or another cross-signing capable Matrix client</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_use_latest_app">Use the latest ${app_name} on your other devices:</string>
     <string name="command_description_discard_session">Forces the current outbound group session in an encrypted room to be discarded</string>
@@ -3432,6 +3426,7 @@
     <string name="a11y_trust_level_default">Default trust level</string>
     <string name="a11y_trust_level_warning">Warning trust level</string>
     <string name="a11y_trust_level_trusted">Trusted trust level</string>
+    <string name="a11y_trust_level_misconfigured">Misconfigured trust level</string>
     <string name="a11y_open_emoji_picker">Open Emoji picker</string>
     <string name="a11y_close_emoji_picker">Close Emoji picker</string>
     <string name="a11y_checked">Checked</string>
@@ -3517,8 +3512,8 @@
     <string name="invite_to_space">Invite to %s</string>
     <string name="invite_people_to_your_space_desc">It’s just you at the moment.  %s will be even better with others.</string>
     <string name="invite_by_email">Invite by email</string>
-    <string name="invite_by_mxid">Invite by username</string>
-    <string name="invite_by_mxid_or_mail">Invite by username or mail</string>
+    <string name="invite_by_username">Invite by username</string>
+    <string name="invite_by_username_or_mail">Invite by username or mail</string>
     <string name="invite_by_link">Share link</string>
     <string name="invite_to_space_with_name">Invite to %s</string>
     <string name="invite_to_space_with_name_desc">"They’ll be able to explore %s"</string>
@@ -3574,9 +3569,9 @@
     <string name="spaces_beta_welcome_to_spaces_desc">Spaces are a new way to group rooms and people.</string>
     <string name="you_are_invited">You are invited</string>
 
+    <string name="labs_auto_report_uisi">Auto Report Decryption Errors.</string>
+    <string name="labs_auto_report_uisi_desc">Your system will automatically send logs when an unable to decrypt error occurs</string>
 
-    <string name="labs_use_restricted_join_rule">Experimental Space - Restricted Room.</string>
-    <string name="labs_use_restricted_join_rule_desc">Warning requires server support and experimental room version</string>
     <string name="user_invites_you">%s invites you</string>
 
     <string name="looking_for_someone_not_in_space">Looking for someone not in %s?</string>
@@ -3661,6 +3656,9 @@
     <!-- %s will be replaced by the value of link_this_email_settings_link and styled as a link -->
     <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in Element.</string>
 
+   <string name="labs_enable_latex_maths">Enable LaTeX mathematics</string>
+   <string name="restart_the_application_to_apply_changes">Restart the application for the change to take effect.</string>
+
     <!-- Poll -->
     <string name="create_poll_title">Create Poll</string>
     <string name="create_poll_question_title">Poll question or topic</string>
@@ -3701,4 +3699,12 @@
     <string name="poll_end_room_list_preview">Poll ended</string>
     <string name="delete_poll_dialog_title">Remove poll</string>
     <string name="delete_poll_dialog_content">Are you sure you want to remove this poll? You won\'t be able to recover it once removed.</string>
+
+    <string name="tooltip_attachment_photo">Open camera</string>
+    <string name="tooltip_attachment_gallery">Send images and videos</string>
+    <string name="tooltip_attachment_file">Upload file</string>
+    <string name="tooltip_attachment_sticker">Send sticker</string>
+    <string name="tooltip_attachment_contact">Open contacts</string>
+    <string name="tooltip_attachment_poll">Create poll</string>
+
 </resources>

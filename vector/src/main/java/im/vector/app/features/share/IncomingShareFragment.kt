@@ -200,10 +200,10 @@ class IncomingShareFragment @Inject constructor(
         MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.send_attachment)
                 .setMessage(getString(R.string.share_confirm_room, roomSummary.displayName))
-                .setPositiveButton(R.string.send) { _, _ ->
+                .setPositiveButton(R.string.action_send) { _, _ ->
                     navigator.openRoomForSharingAndFinish(requireActivity(), roomSummary.roomId, sharedData)
                 }
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.action_cancel, null)
                 .show()
     }
 

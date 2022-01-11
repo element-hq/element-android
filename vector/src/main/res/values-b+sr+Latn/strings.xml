@@ -34,18 +34,18 @@
     <string name="loading">Učitavanje…</string>
 
     <string name="ok">U redu</string>
-    <string name="cancel">Otkaži</string>
-    <string name="save">Sačuvaj</string>
-    <string name="leave">Napusti</string>
-    <string name="stay">Ostani</string>
-    <string name="send">Pošalji</string>
-    <string name="resend">Pošalji ponovo</string>
-    <string name="redact">Ukloni</string>
-    <string name="share">Podeli</string>
+    <string name="action_cancel">Otkaži</string>
+    <string name="action_save">Sačuvaj</string>
+    <string name="action_leave">Napusti</string>
+    <string name="action_stay">Ostani</string>
+    <string name="action_send">Pošalji</string>
+    <string name="action_resend">Pošalji ponovo</string>
+    <string name="action_redact">Ukloni</string>
+    <string name="action_share">Podeli</string>
     <string name="later">Kasnije</string>
-    <string name="forward">Prosledi</string>
-    <string name="delete">Obriši</string>
-    <string name="rename">Preimenuj</string>
+    <string name="action_forward">Prosledi</string>
+    <string name="action_delete">Obriši</string>
+    <string name="action_rename">Preimenuj</string>
     <string name="ongoing_conference_call">Konferencijski poziv u toku.
 \nPriključi se kao %1$s ili %2$s</string>
     <string name="ongoing_conference_call_voice">Glas</string>
@@ -60,14 +60,14 @@
     <string name="call_anyway">Ipak zovi</string>
     <string name="send_anyway">Ipak pošalji</string>
     <string name="or">ili</string>
-    <string name="invite">Pošalji pozivnicu</string>
-    <string name="accept">Prihvati</string>
-    <string name="skip">Preskoči</string>
+    <string name="action_invite">Pošalji pozivnicu</string>
+    <string name="action_accept">Prihvati</string>
+    <string name="action_skip">Preskoči</string>
     <string name="done">Gotovo</string>
-    <string name="abort">Obustavi</string>
-    <string name="ignore">Ignoriši</string>
-    <string name="review">Pregledaj</string>
-    <string name="decline">Odbaci</string>
+    <string name="action_abort">Obustavi</string>
+    <string name="action_ignore">Ignoriši</string>
+    <string name="action_review">Pregledaj</string>
+    <string name="action_decline">Odbaci</string>
 
     <string name="action_exit">Izađi</string>
     <string name="actions">Akcije</string>
@@ -81,7 +81,7 @@
     <string name="action_mark_room_read">Označi kao pročitano</string>
     <string name="action_open">Otvori</string>
     <string name="action_close">Zatvori</string>
-    <string name="disable">Onemogući</string>
+    <string name="action_disable">Onemogući</string>
 
     <string name="dialog_title_confirmation">Potvrda</string>
     <string name="dialog_title_warning">Upozorenje</string>
@@ -128,7 +128,7 @@
     <string name="auth_repeat_password_placeholder">Ponovi lozinku</string>
     <string name="auth_repeat_new_password_placeholder">Potvrdite vašu novu lozinku</string>
     <string name="auth_invalid_login_param">Pogrešno korisničko ime i/ili lozinka</string>
-    <string name="clear">Obriši</string>
+    <string name="action_clear">Obriši</string>
     <string name="view_source">Vidi izvor</string>
     <string name="report_content">Prijavi sadržaj</string>
     <string name="send_bug_report_progress">Napredak (%s%%)</string>
