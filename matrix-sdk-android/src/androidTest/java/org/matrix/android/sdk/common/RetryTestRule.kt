@@ -27,10 +27,10 @@ import org.junit.runners.model.Statement
 class RetryTestRule(val retryCount: Int = 3) : TestRule {
 
     override fun apply(base: Statement, description: Description): Statement {
-        return statement(base, description)
+        return statement(base)
     }
 
-    private fun statement(base: Statement, description: Description): Statement {
+    private fun statement(base: Statement): Statement {
         return object : Statement() {
             @Throws(Throwable::class)
             override fun evaluate() {
