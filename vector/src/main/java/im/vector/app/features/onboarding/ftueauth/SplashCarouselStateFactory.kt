@@ -21,14 +21,17 @@ import androidx.annotation.AttrRes
 import im.vector.app.R
 import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
 import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
+import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.resources.isEnglishSpeaking
 import im.vector.app.features.themes.ThemeUtils
 import me.gujun.android.span.span
 import javax.inject.Inject
 
 class SplashCarouselStateFactory @Inject constructor(
         private val context: Context,
-        private val stringProvider: StringProvider
+        private val stringProvider: StringProvider,
+        private val localeProvider: LocaleProvider,
 ) {
 
     fun create() = SplashCarouselState(listOf(
@@ -51,12 +54,19 @@ class SplashCarouselStateFactory @Inject constructor(
                     R.drawable.bg_carousel_page_3
             ),
             SplashCarouselState.Item(
-                    R.string.ftue_auth_carousel_4_title.colorTerminatingFullStop(R.attr.colorAccent),
+                    collaborationTitle().colorTerminatingFullStop(R.attr.colorAccent),
                     R.string.ftue_auth_carousel_4_body,
                     R.drawable.ic_splash_collaboration,
                     R.drawable.bg_carousel_page_4
             )
     ))
+
+    private fun collaborationTitle(): Int {
+        return when {
+            localeProvider.isEnglishSpeaking() -> R.string.cut_the_slack_from_teams
+            else                               -> R.string.ftue_auth_carousel_4_title
+        }
+    }
 
     private fun Int.colorTerminatingFullStop(@AttrRes color: Int): EpoxyCharSequence {
         val string = stringProvider.getString(this)
