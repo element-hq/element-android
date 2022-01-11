@@ -52,6 +52,7 @@ class CreatePollFragment @Inject constructor(
         vectorBaseActivity.setSupportActionBar(views.createPollToolbar)
 
         views.createPollRecyclerView.configureWith(controller, disableItemAnimation = true)
+        // workaround for https://github.com/vector-im/element-android/issues/4735
         views.createPollRecyclerView.setItemViewCacheSize(MAX_OPTIONS_COUNT + 4)
         controller.callback = this
 
