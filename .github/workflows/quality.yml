@@ -74,7 +74,7 @@ jobs:
           edit-mode: replace
       - name: Delete comment if needed
         if: always() && steps.fc.outputs.comment-id != '' && steps.ktlint-results.outputs.add_comment == 'false'
-        uses: actions/github-script@v3
+        uses: actions/github-script@v5.1.0
         with:
           script: |
             github.issues.deleteComment({
