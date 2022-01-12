@@ -578,7 +578,7 @@ internal class DefaultCryptoService @Inject constructor(
         // (for now at least. Maybe we should alert the user somehow?)
         val existingAlgorithm = cryptoStore.getRoomAlgorithm(roomId)
 
-        if (existingAlgorithm == algorithm) {
+        if (existingAlgorithm == algorithm && roomEncryptorsStore.get(roomId) != null) {
             // ignore
             Timber.tag(loggerTag.value).e("setEncryptionInRoom() : Ignoring m.room.encryption for same alg ($algorithm) in  $roomId")
             return false
