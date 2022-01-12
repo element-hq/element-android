@@ -1917,9 +1917,9 @@ class TimelineFragment @Inject constructor(
                 roomDetailViewModel.handle(action)
             }
             is EncryptedEventContent             -> {
-                if(isRootThreadEvent){
+                if (isRootThreadEvent) {
                     onThreadSummaryClicked(informationData.eventId, isRootThreadEvent)
-                }else {
+                } else {
                     roomDetailViewModel.handle(RoomDetailAction.TapOnFailedToDecrypt(informationData.eventId))
                 }
             }
