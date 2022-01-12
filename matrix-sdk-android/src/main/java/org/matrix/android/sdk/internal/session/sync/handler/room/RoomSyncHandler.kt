@@ -129,7 +129,10 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 } else {
                     handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountJoinedRooms, 0.6f) {
                         handleJoinedRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis, aggregator)
+                    }.also {
+                        fixStuckLocalEcho(it)
                     }
+
                 }
             }
             is HandlingStrategy.INVITED ->
@@ -477,5 +480,48 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         }
 
         return result
+    }
+
+    /**
+     * There are multiple issues like #516 that report stuck local echo events
+     * at the bottom of each room timeline.
+     *
+     * That can happen when a message is SENT but not received back from the /sync.
+     * Until now we use unsignedData.transactionId to determine whether or not the local
+     * event should be deleted on every /sync. However, this is partially correct, lets have a look
+     * at the following scenario:
+     *
+     * [There is no Internet connection] --> [10 Messages are sent] --> [The 10 messages are in the queue] -->
+     * [Internet comes back for 1 second] --> [3 messages are sent] --> [Internet drops again] -->
+     * [No /sync response is triggered | home server can even replied with /sync but never arrived while we are offline]
+     *
+     * So the state until now is that we have 7 pending events to send and 3 sent but not received them back from /sync
+     * Subsequently, those 3 local messages will not be deleted while there is no transactionId from the /sync
+     *
+     * lets continue:
+     * [Now lets assume that in the same room another user sent 15 events] -->
+     * [We are finally back online!] -->
+     * [We will receive the 10 latest events for the room and of course sent the pending 7 messages] -->
+     * Now /sync response will NOT contain the 3 local messages so our events will stuck in the device.
+     *
+     * Someone can say, yes but it will come with the rooms/{roomId}/messages while paginating,
+     * so the problem will be solved. No that is not the case for two reasons:
+     *   1. rooms/{roomId}/messages response do not contain the unsignedData.transactionId so we cannot know which event
+     *   to delete
+     *   2. even if transactionId was there, currently we are not deleting it from the pagination
+     *
+     * ---------------------------------------------------------------------------------------------
+     * While we cannot know when a specific event arrived from the pagination (no transactionId included), after each room /sync
+     * we clear all SENT events, and we are sure that we will receive it from /sync or pagination
+     */
+    private fun fixStuckLocalEcho(rooms: List<RoomEntity>){
+        rooms.forEach { roomEntity ->
+            roomEntity.sendingTimelineEvents.filter {  timelineEvent ->
+                timelineEvent.root?.sendState ==  SendState.SENT
+            }.forEach {
+                roomEntity.sendingTimelineEvents.remove(it)
+                it.deleteOnCascade(true)
+            }
+        }
     }
 }
