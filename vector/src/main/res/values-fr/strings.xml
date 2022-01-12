@@ -2676,7 +2676,6 @@
     <string name="spaces_header">Espaces</string>
     <string name="spaces_invited_header">Invitations</string>
     <string name="suggested_header">Salons recommandés</string>
-    <string name="labs_use_restricted_join_rule">Espace expérimental – salon restreint.</string>
     <string name="you_are_invited">Vous êtes invité</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Les espaces sont une nouvelle manière de regrouper les salons et les gens.</string>
     <string name="spaces_beta_welcome_to_spaces">Bienvenue dans les espaces !</string>
@@ -2735,7 +2734,6 @@
     <string name="send_file_step_compressing_image">Compression de l’image…</string>
     <string name="use_as_default_and_do_not_ask_again">Utiliser par défaut et ne plus demander</string>
     <string name="option_always_ask">Toujours demander</string>
-    <string name="labs_use_restricted_join_rule_desc">Attention, nécessite la prise en charge par le serveur ainsi qu’une version de salon expérimentale</string>
     <string name="space_manage_rooms_and_spaces">Gérer les salons et les espaces</string>
     <string name="space_mark_as_not_suggested">Marquer comme non recommandé</string>
     <string name="space_mark_as_suggested">Marquer comme recommandé</string>

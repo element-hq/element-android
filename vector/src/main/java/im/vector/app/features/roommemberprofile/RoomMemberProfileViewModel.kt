@@ -52,6 +52,7 @@ import org.matrix.android.sdk.api.session.profile.ProfileService
 import org.matrix.android.sdk.api.session.room.Room
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.RoomEncryptionAlgorithm
 import org.matrix.android.sdk.api.session.room.model.RoomType
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.powerlevels.Role
@@ -344,7 +345,15 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
                 }.launchIn(viewModelScope)
 
         roomSummaryLive.execute {
-            copy(isRoomEncrypted = it.invoke()?.isEncrypted == true)
+            val summary = it.invoke() ?: return@execute this
+            if (summary.isEncrypted) {
+                copy(
+                        isRoomEncrypted = true,
+                        isAlgorithmSupported = summary.roomEncryptionAlgorithm is RoomEncryptionAlgorithm.SupportedAlgorithm
+                )
+            } else {
+                copy(isRoomEncrypted = false)
+            }
         }
         roomSummaryLive.combine(powerLevelsContentLive) { roomSummary, powerLevelsContent ->
             val roomName = roomSummary.toMatrixItem().getBestName()

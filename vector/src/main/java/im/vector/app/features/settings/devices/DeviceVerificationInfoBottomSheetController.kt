@@ -293,7 +293,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
 
         genericFooterItem {
             id("infoCrypto${info.deviceId}")
-            text(host.stringProvider.getString(R.string.settings_failed_to_get_crypto_device_info))
+            text(host.stringProvider.getString(R.string.settings_failed_to_get_crypto_device_info).toEpoxyCharSequence())
         }
 
         info.deviceId?.let { addGenericDeviceManageActions(data, it) }

@@ -224,6 +224,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 }
                 val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
                 val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)
+                Timber.v("## received state event ${event.type} and key ${event.stateKey}")
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
                     // Timber.v("## Space state event: $eventEntity")
                     eventId = event.eventId
@@ -399,6 +400,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     roomMemberEventHandler.handle(realm, roomEntity.roomId, event.stateKey, fixedContent, aggregator)
                 }
             }
+
             roomMemberContentsByUser.getOrPut(event.senderId) {
                 // If we don't have any new state on this user, get it from db
                 val rootStateEvent = CurrentStateEventEntity.getOrNull(realm, roomId, event.senderId, EventType.STATE_ROOM_MEMBER)?.root

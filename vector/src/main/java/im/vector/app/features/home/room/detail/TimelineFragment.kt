@@ -136,12 +136,14 @@ import im.vector.app.features.crypto.keysbackup.restore.KeysBackupRestoreActivit
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
+import im.vector.app.features.home.room.detail.composer.CanSendStatus
 import im.vector.app.features.home.room.detail.composer.MessageComposerAction
 import im.vector.app.features.home.room.detail.composer.MessageComposerView
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewEvents
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewModel
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewState
 import im.vector.app.features.home.room.detail.composer.SendMode
+import im.vector.app.features.home.room.detail.composer.boolean
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
@@ -391,7 +393,7 @@ class TimelineFragment @Inject constructor(
         }
 
         messageComposerViewModel.onEach(MessageComposerViewState::sendMode, MessageComposerViewState::canSendMessage) { mode, canSend ->
-            if (!canSend) {
+            if (!canSend.boolean()) {
                 return@onEach
             }
             when (mode) {
@@ -458,7 +460,8 @@ class TimelineFragment @Inject constructor(
                 is RoomDetailViewEvents.OpenRoom                         -> handleOpenRoom(it)
                 RoomDetailViewEvents.OpenInvitePeople                    -> navigator.openInviteUsersToRoom(requireContext(), timelineArgs.roomId)
                 RoomDetailViewEvents.OpenSetRoomAvatarDialog             -> galleryOrCameraDialogHelper.show()
-                RoomDetailViewEvents.OpenRoomSettings                    -> handleOpenRoomSettings()
+                RoomDetailViewEvents.OpenRoomSettings                    -> handleOpenRoomSettings(RoomProfileActivity.EXTRA_DIRECT_ACCESS_ROOM_SETTINGS)
+                RoomDetailViewEvents.OpenRoomProfile                     -> handleOpenRoomSettings()
                 is RoomDetailViewEvents.ShowRoomAvatarFullScreen         -> it.matrixItem?.let { item ->
                     navigator.openBigImageViewer(requireActivity(), it.view, item)
                 }
@@ -582,11 +585,11 @@ class TimelineFragment @Inject constructor(
         )
     }
 
-    private fun handleOpenRoomSettings() {
+    private fun handleOpenRoomSettings(directAccess: Int? = null) {
         navigator.openRoomProfile(
                 requireContext(),
-                timelineArgs.roomId,
-                RoomProfileActivity.EXTRA_DIRECT_ACCESS_ROOM_SETTINGS
+                roomDetailArgs.roomId,
+                directAccess
         )
     }
 
@@ -950,6 +953,10 @@ class TimelineFragment @Inject constructor(
         views.notificationAreaView.delegate = object : NotificationAreaView.Delegate {
             override fun onTombstoneEventClicked() {
                 roomDetailViewModel.handle(RoomDetailAction.JoinAndOpenReplacementRoom)
+            }
+
+            override fun onMisconfiguredEncryptionClicked() {
+                roomDetailViewModel.handle(RoomDetailAction.OnClickMisconfiguredEncryption)
             }
         }
     }
@@ -1348,7 +1355,7 @@ class TimelineFragment @Inject constructor(
                     val canSendMessage = withState(messageComposerViewModel) {
                         it.canSendMessage
                     }
-                    if (!canSendMessage) {
+                    if (!canSendMessage.boolean()) {
                         return false
                     }
                     return when (model) {
@@ -1530,10 +1537,18 @@ class TimelineFragment @Inject constructor(
                 views.voiceMessageRecorderView.render(messageComposerState.voiceRecordingUiState)
                 views.composerLayout.setRoomEncrypted(summary.isEncrypted)
                 // views.composerLayout.alwaysShowSendButton = false
-                if (messageComposerState.canSendMessage) {
-                    views.notificationAreaView.render(NotificationAreaView.State.Hidden)
-                } else {
-                    views.notificationAreaView.render(NotificationAreaView.State.NoPermissionToPost)
+                when (messageComposerState.canSendMessage) {
+                    CanSendStatus.Allowed                    -> {
+                        NotificationAreaView.State.Hidden
+                    }
+                    CanSendStatus.NoPermission               -> {
+                        NotificationAreaView.State.NoPermissionToPost
+                    }
+                    is CanSendStatus.UnSupportedE2eAlgorithm -> {
+                        NotificationAreaView.State.UnsupportedAlgorithm(mainState.isAllowedToSetupEncryption)
+                    }
+                }.let {
+                    views.notificationAreaView.render(it)
                 }
             } else {
                 views.hideComposerViews()

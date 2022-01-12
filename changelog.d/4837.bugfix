@@ -1,1 +1,0 @@
-Stop using CharSequence as EpoxyAttribute because it can lead to crash if the CharSequence mutates during rendering.

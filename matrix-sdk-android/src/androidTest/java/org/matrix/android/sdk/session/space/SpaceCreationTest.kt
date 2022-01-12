@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.session.space
 
+import androidx.test.filters.LargeTest
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -43,12 +44,12 @@ import org.matrix.android.sdk.common.SessionTestParams
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
+@LargeTest
 class SpaceCreationTest : InstrumentedTest {
-
-    private val commonTestHelper = CommonTestHelper(context())
 
     @Test
     fun createSimplePublicSpace() {
+        val commonTestHelper = CommonTestHelper(context())
         val session = commonTestHelper.createAccount("Hubble", SessionTestParams(true))
         val roomName = "My Space"
         val topic = "A public space for test"
@@ -58,6 +59,7 @@ class SpaceCreationTest : InstrumentedTest {
             // wait a bit to let the summary update it self :/
             it.countDown()
         }
+        Thread.sleep(4_000)
 
         val syncedSpace = session.spaceService().getSpace(spaceId)
         commonTestHelper.waitWithLatch {
@@ -99,6 +101,8 @@ class SpaceCreationTest : InstrumentedTest {
 
     @Test
     fun testJoinSimplePublicSpace() {
+        val commonTestHelper = CommonTestHelper(context())
+
         val aliceSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
         val bobSession = commonTestHelper.createAccount("bob", SessionTestParams(true))
 
@@ -130,6 +134,7 @@ class SpaceCreationTest : InstrumentedTest {
 
     @Test
     fun testSimplePublicSpaceWithChildren() {
+        val commonTestHelper = CommonTestHelper(context())
         val aliceSession = commonTestHelper.createAccount("alice", SessionTestParams(true))
         val bobSession = commonTestHelper.createAccount("bob", SessionTestParams(true))
 

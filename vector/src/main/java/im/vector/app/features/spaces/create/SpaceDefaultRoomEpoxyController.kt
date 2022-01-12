@@ -19,6 +19,7 @@ package im.vector.app.features.spaces.create
 import com.airbnb.epoxy.TypedEpoxyController
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.ItemStyle
@@ -45,7 +46,7 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
                         host.stringProvider.getString(R.string.create_spaces_room_public_header, data.name)
                     } else {
                         host.stringProvider.getString(R.string.create_spaces_room_private_header)
-                    }
+                    }.toEpoxyCharSequence()
             )
             textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
         }
@@ -59,7 +60,7 @@ class SpaceDefaultRoomEpoxyController @Inject constructor(
                             } else {
                                 R.string.create_spaces_room_private_header_desc
                             }
-                    )
+                    ).toEpoxyCharSequence()
             )
             textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary))
         }

@@ -2652,8 +2652,6 @@
     <string name="event_status_a11y_sending">Saadan</string>
     <string name="settings_category_room_directory">Jututubade kataloog</string>
     <string name="event_status_sent_message">Sõnum on saadetud</string>
-    <string name="labs_use_restricted_join_rule_desc">Hoiatus: eeldab serveripoolset tuge ning katselise jututoa versiooni kasutamist</string>
-    <string name="labs_use_restricted_join_rule">Katseline kogukonnakeskus - ligipääs on piiratud.</string>
     <string name="you_are_invited">Sa oled saanud kutse</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Kogukonnakeskused on uus võimalus siduda jututubasid ja inimesi.</string>
     <string name="spaces_beta_welcome_to_spaces">Tere tulemast kasutama kogukonnakeskuseid!</string>

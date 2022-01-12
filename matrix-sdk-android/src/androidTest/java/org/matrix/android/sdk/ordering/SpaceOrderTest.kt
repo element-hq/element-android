@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk
+package org.matrix.android.sdk.ordering
 
 import org.amshove.kluent.internal.assertEquals
 import org.junit.Assert

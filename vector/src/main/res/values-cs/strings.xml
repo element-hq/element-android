@@ -2702,7 +2702,6 @@
     <string name="settings_category_room_directory">Adresář místností</string>
     <string name="event_status_sent_message">Zpráva odeslána</string>
     <string name="a11y_unchecked">Neoznačeno</string>
-    <string name="labs_use_restricted_join_rule">Experimentální, prostor - omezená místnost.</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Prostory představují nový způsob seskupování místností a osob.</string>
     <string name="create_spaces_room_private_header_desc">Založme pro každé místnost. Později můžete přidat i další, včetně již existujících.</string>
     <string name="create_spaces_room_private_header">Na jakých tématech pracujete\?</string>
@@ -2710,7 +2709,6 @@
     <string name="create_spaces_details_private_header">Doplňte nějaké podrobnosti, aby jej lidé mohli identifikovat. Můžete je kdykoli změnit.</string>
     <string name="create_spaces_type_header">Prostory jsou nový způsob organizace místností a lidí</string>
     <string name="spaces_header">Prostory</string>
-    <string name="labs_use_restricted_join_rule_desc">Varování, nutná podpora serveru a experimentální verze místnosti</string>
     <string name="you_are_invited">Jste zváni</string>
     <string name="spaces_beta_welcome_to_spaces">Vítejte v prostorech!</string>
     <string name="space_add_existing_rooms">Přidat existující místnosti a prostor</string>
