@@ -29,6 +29,7 @@ def vanniktechEmoji = "0.8.0"
 def mockk = "1.12.1"
 def espresso = "3.4.0"
 def androidxTest = "1.4.0"
+def androidxOrchestrator = "1.4.1"
 
 
 ext.libs = [
@@ -63,7 +64,7 @@ ext.libs = [
                 'pagingRuntimeKtx'        : "androidx.paging:paging-runtime-ktx:2.1.2",
                 'coreTesting'             : "androidx.arch.core:core-testing:2.1.0",
                 'testCore'                : "androidx.test:core:$androidxTest",
-                'orchestrator'            : "androidx.test:orchestrator:$androidxTest",
+                'orchestrator'            : "androidx.test:orchestrator:$androidxOrchestrator",
                 'testRunner'              : "androidx.test:runner:$androidxTest",
                 'testRules'               : "androidx.test:rules:$androidxTest",
                 'espressoCore'            : "androidx.test.espresso:espresso-core:$espresso",
