@@ -73,7 +73,6 @@ import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.location.LocationData
-import im.vector.app.features.location.VectorMapView
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import me.gujun.android.span.span
@@ -192,11 +191,9 @@ class MessageItemFactory @Inject constructor(
         val locationData = LocationData.create(geoUri)
 
         val mapCallback: MessageLocationItem.Callback = object : MessageLocationItem.Callback {
-            override fun onMapReady(mapView: VectorMapView) {
-                mapView.onClick {
-                    locationData?.let {
-                        callback?.onTimelineItemAction(RoomDetailAction.ShowLocation(it, informationData.senderId))
-                    }
+            override fun onMapClicked() {
+                locationData?.let {
+                    callback?.onTimelineItemAction(RoomDetailAction.ShowLocation(it, informationData.senderId))
                 }
             }
         }

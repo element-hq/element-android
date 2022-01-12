@@ -16,21 +16,22 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
+import android.widget.FrameLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.MapTilerMapView
 import im.vector.app.features.location.VectorMapListener
-import im.vector.app.features.location.VectorMapView
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>() {
 
     interface Callback {
-        fun onMapReady(mapView: VectorMapView)
+        fun onMapClicked()
     }
 
     @EpoxyAttribute
@@ -52,6 +53,10 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
         val location = locationData ?: return
         val locationOwnerId = userId ?: return
 
+        holder.clickableMapArea.onClick {
+            callback?.onMapClicked()
+        }
+
         holder.mapView.apply {
             initialize(object : VectorMapListener {
                 override fun onMapReady() {
@@ -61,8 +66,6 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
                         addPinToMap(locationOwnerId, pinDrawable)
                         updatePinLocation(locationOwnerId, location.latitude, location.longitude)
                     }
-
-                    callback?.onMapReady(this@apply)
                 }
             })
         }
@@ -73,6 +76,7 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val mapViewContainer by bind<ConstraintLayout>(R.id.mapViewContainer)
         val mapView by bind<MapTilerMapView>(R.id.mapView)
+        val clickableMapArea by bind<FrameLayout>(R.id.clickableMapArea)
     }
 
     companion object {
