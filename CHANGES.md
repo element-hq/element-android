@@ -1,3 +1,11 @@
+Changes in Element v1.3.14 (2022-01-12)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fix sending events in encrypted rooms broken, and incremental sync broken in 1.3.13 ([#4924](https://github.com/vector-im/element-android/issues/4924))
+
+
 Changes in Element v1.3.13 (2022-01-11)
 =======================================
 
