@@ -215,6 +215,12 @@ android {
             storeFile file('./signature/debug.keystore')
             storePassword 'android'
         }
+        release {
+            keyAlias project.property("signing.element.keyId")
+            keyPassword project.property("signing.element.keyPassword")
+            storeFile file(project.property("signing.element.storePath"))
+            storePassword project.property("signing.element.storePassword")
+        }
     }
 
     buildTypes {
@@ -245,6 +251,7 @@ android {
                 optimizeCode true
                 proguardFiles 'proguard-rules.pro'
             }
+            signingConfig signingConfigs.release
         }
     }
 
