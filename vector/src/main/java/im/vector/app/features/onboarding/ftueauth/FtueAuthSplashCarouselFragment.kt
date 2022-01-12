@@ -94,9 +94,8 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
 
             override fun onPageSelected(position: Int) {
                 scheduledTransition?.cancel()
-                if (hasUserManuallyInteractedWithCarousel) {
-                    // stop the automatic transitions
-                } else {
+                // only schedule automatic transitions whilst the user has not interacted with the carousel
+                if (!hasUserManuallyInteractedWithCarousel) {
                     scheduledTransition = scheduleCarouselTransition()
                 }
             }
