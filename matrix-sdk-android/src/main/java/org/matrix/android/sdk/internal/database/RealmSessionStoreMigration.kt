@@ -91,6 +91,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
         if (oldVersion <= 18) migrateTo19(realm)
         if (oldVersion <= 19) migrateTo20(realm)
         if (oldVersion <= 20) migrateTo21(realm)
+        if (oldVersion <= 21) migrateTo22(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -447,7 +448,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
                 }
     }
 
-    private fun migrateTo21(realm: DynamicRealm) {
+    private fun migrateTo22(realm: DynamicRealm) {
         Timber.d("Step 21 -> 22")
         val eventEntity = realm.schema.get("TimelineEventEntity") ?: return
 
