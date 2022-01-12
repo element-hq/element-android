@@ -46,7 +46,8 @@ class DebugVectorFeatures(
     override fun isOnboardingAlreadyHaveAccountSplashEnabled(): Boolean = read(DebugFeatureKeys.onboardingAlreadyHaveAnAccount)
             ?: vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
 
-    override fun isOnboardingSplashCarouselEnabled(): Boolean = read(DebugFeatureKeys.onboardingSplashCarousel) ?: vectorFeatures.isOnboardingSplashCarouselEnabled()
+    override fun isOnboardingSplashCarouselEnabled(): Boolean = read(DebugFeatureKeys.onboardingSplashCarousel)
+            ?: vectorFeatures.isOnboardingSplashCarouselEnabled()
 
     override fun isOnboardingUseCaseEnabled(): Boolean = read(DebugFeatureKeys.onboardingUseCase) ?: vectorFeatures.isOnboardingUseCaseEnabled()
 
