@@ -45,23 +45,28 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
         val isNextMessageReceivedMoreThanOneHourAgo = nextDate?.isBefore(date.minusMinutes(60))
                 ?: false
 
-        val showInformation =
-                (addDaySeparator ||
-                        event.senderInfo.avatarUrl != nextDisplayableEvent?.senderInfo?.avatarUrl ||
-                        event.senderInfo.disambiguatedDisplayName != nextDisplayableEvent?.senderInfo?.disambiguatedDisplayName ||
-                        nextDisplayableEvent.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.ENCRYPTED) ||
-                        isNextMessageReceivedMoreThanOneHourAgo ||
-                        isTileTypeMessage(nextDisplayableEvent) ||
-                        nextDisplayableEvent.isEdition()) && !isSentByMe
+        val showInformation = addDaySeparator ||
+                event.senderInfo.avatarUrl != nextDisplayableEvent?.senderInfo?.avatarUrl ||
+                event.senderInfo.disambiguatedDisplayName != nextDisplayableEvent?.senderInfo?.disambiguatedDisplayName ||
+                nextDisplayableEvent.root.getClearType() !in listOf(EventType.MESSAGE, EventType.STICKER, EventType.ENCRYPTED) ||
+                isNextMessageReceivedMoreThanOneHourAgo ||
+                isTileTypeMessage(nextDisplayableEvent) ||
+                nextDisplayableEvent.isEdition()
 
         val messageLayout = when (layoutSettingsProvider.getLayoutSettings()) {
-            TimelineLayoutSettings.MODERN -> TimelineMessageLayout.Modern(showInformation, showInformation, showInformation || vectorPreferences.alwaysShowTimeStamps())
+            TimelineLayoutSettings.MODERN -> {
+                TimelineMessageLayout.Modern(
+                        showAvatar = showInformation,
+                        showDisplayName = showInformation,
+                        showTimestamp = showInformation || vectorPreferences.alwaysShowTimeStamps()
+                )
+            }
             TimelineLayoutSettings.BUBBLE -> {
                 val isFirstFromThisSender = nextDisplayableEvent?.root?.senderId != event.root.senderId || addDaySeparator
                 val isLastFromThisSender = prevDisplayableEvent?.root?.senderId != event.root.senderId || prevDisplayableEvent?.root?.localDateTime()?.toLocalDate() != date.toLocalDate()
                 TimelineMessageLayout.Bubble(
-                        showAvatar = showInformation,
-                        showDisplayName = showInformation,
+                        showAvatar = showInformation && !isSentByMe,
+                        showDisplayName = showInformation && !isSentByMe,
                         isIncoming = !isSentByMe,
                         isFirstFromThisSender = isFirstFromThisSender,
                         isLastFromThisSender = isLastFromThisSender
