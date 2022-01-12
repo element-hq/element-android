@@ -64,7 +64,7 @@ internal class DefaultTermsService @Inject constructor(
      */
     override suspend fun getHomeserverTerms(baseUrl: String): TermsResponse {
         return try {
-            val request = baseUrl + NetworkConstants.URI_API_PREFIX_PATH_R0 + "register"
+            val request = baseUrl.ensureTrailingSlash() + NetworkConstants.URI_API_PREFIX_PATH_R0 + "register"
             executeRequest(null) {
                 termsAPI.register(request)
             }
