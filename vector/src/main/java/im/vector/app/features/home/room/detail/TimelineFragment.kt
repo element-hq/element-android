@@ -588,7 +588,7 @@ class TimelineFragment @Inject constructor(
     private fun handleOpenRoomSettings(directAccess: Int? = null) {
         navigator.openRoomProfile(
                 requireContext(),
-                roomDetailArgs.roomId,
+                timelineArgs.roomId,
                 directAccess
         )
     }
