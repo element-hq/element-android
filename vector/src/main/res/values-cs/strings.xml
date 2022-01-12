@@ -3117,4 +3117,22 @@
     <string name="restart_the_application_to_apply_changes">Restartujte aplikaci, aby se změna projevila.</string>
     <string name="labs_enable_latex_maths">Povolit matematické výrazy LaTeXu</string>
     <string name="room_error_access_unauthorized">Do této místnosti vám není dovoleno vstoupit</string>
+    <string name="tooltip_attachment_poll">Vytvořit hlasování</string>
+    <string name="tooltip_attachment_contact">Otevřít kontakty</string>
+    <string name="tooltip_attachment_sticker">Odeslat nálepku</string>
+    <string name="tooltip_attachment_file">Odeslání souboru</string>
+    <string name="tooltip_attachment_gallery">Odesílání obrázků a videí</string>
+    <string name="tooltip_attachment_photo">Otevřít fotoaparát</string>
+    <string name="labs_auto_report_uisi_desc">Váš systém bude automaticky odesílat chybové protokoly, když dojde k chybě dešifrování</string>
+    <string name="labs_auto_report_uisi">Automaticky nahlašovat chyby dešifrování.</string>
+    <string name="room_member_override_nick_color">Přepsat barvu přezdívky</string>
+    <string name="login_splash_already_have_account">Již mám účet</string>
+    <string name="ftue_auth_carousel_4_body">Element je stejně univerzální jako e-mail a představuje zcela nový typ spolupráce.</string>
+    <string name="ftue_auth_carousel_4_title">Zlepšete týmovou komunikaci.</string>
+    <string name="ftue_auth_carousel_3_body">Element funguje se všemi aplikacemi založenými na protokolu Matrix a dokáže se propojit i s proprietárními messengery.</string>
+    <string name="ftue_auth_carousel_3_title">Spojte se s kýmkoli.</string>
+    <string name="ftue_auth_carousel_2_body">Element vám umožňuje zvolit si, kde jsou vaše zprávy uložené, takže máte svá data pod kontrolou.</string>
+    <string name="ftue_auth_carousel_2_title">Máte vše pod kontrolou.</string>
+    <string name="ftue_auth_carousel_1_body">Koncově šifrovaná, bezpečná a nezávislá komunikace, připojená přes Matrix.</string>
+    <string name="ftue_auth_carousel_1_title">Vlastněte své konverzace.</string>
 </resources>
