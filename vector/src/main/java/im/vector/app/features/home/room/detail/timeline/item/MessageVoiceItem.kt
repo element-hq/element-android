@@ -120,7 +120,7 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
         voiceMessagePlaybackTracker.unTrack(attributes.informationData.eventId)
     }
 
-    override fun getViewType() = STUB_ID
+    override fun getViewStubId() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val voiceLayout by bind<ViewGroup>(R.id.voiceLayout)

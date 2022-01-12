@@ -172,7 +172,9 @@ class MessageItemFactory @Inject constructor(
             is MessagePollContent                -> buildPollContent(messageContent, informationData, highlight, callback, attributes)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
-        return messageItem?.apply {
+        return messageItem?.takeIf {
+            it.layout == R.layout.item_timeline_event_base
+        }?.apply {
             layout(informationData.messageLayout.layoutRes)
         }
     }

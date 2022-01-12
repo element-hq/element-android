@@ -95,7 +95,7 @@ abstract class MessageFileItem : AbsMessageItem<MessageFileItem.Holder>() {
         contentDownloadStateTrackerBinder.unbind(mxcUrl)
     }
 
-    override fun getViewType() = STUB_ID
+    override fun getViewStubId() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val progressLayout by bind<ViewGroup>(R.id.messageFileUploadProgressLayout)

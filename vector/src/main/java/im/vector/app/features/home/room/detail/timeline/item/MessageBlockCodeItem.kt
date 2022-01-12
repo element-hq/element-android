@@ -44,7 +44,7 @@ abstract class MessageBlockCodeItem : AbsMessageItem<MessageBlockCodeItem.Holder
         holder.editedView.setTextOrHide(editedSpan?.charSequence)
     }
 
-    override fun getViewType() = STUB_ID
+    override fun getViewStubId() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val messageView by bind<TextView>(R.id.codeBlockTextView)
