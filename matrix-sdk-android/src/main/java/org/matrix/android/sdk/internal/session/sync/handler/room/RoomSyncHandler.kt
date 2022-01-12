@@ -132,7 +132,6 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     }.also {
                         fixStuckLocalEcho(it)
                     }
-
                 }
             }
             is HandlingStrategy.INVITED ->
@@ -514,7 +513,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
      * While we cannot know when a specific event arrived from the pagination (no transactionId included), after each room /sync
      * we clear all SENT events, and we are sure that we will receive it from /sync or pagination
      */
-    private fun fixStuckLocalEcho(rooms: List<RoomEntity>){
+    private fun fixStuckLocalEcho(rooms: List<RoomEntity>) {
         rooms.forEach { roomEntity ->
             roomEntity.sendingTimelineEvents.filter {  timelineEvent ->
                 timelineEvent.root?.sendState ==  SendState.SENT
