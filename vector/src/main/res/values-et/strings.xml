@@ -3057,4 +3057,23 @@
     <string name="restart_the_application_to_apply_changes">Muudatuste jõustamiseks käivita rakendus uuesti.</string>
     <string name="labs_enable_latex_maths">Kasuta LaTeX-vorminduses matemaatika märgistust</string>
     <string name="room_error_access_unauthorized">Sul pole luba selle jututoaga liitumiseks</string>
+    <string name="tooltip_attachment_poll">Koosta üks küsitlus</string>
+    <string name="tooltip_attachment_contact">Ava kontaktide vaade</string>
+    <string name="tooltip_attachment_sticker">Saada kleeps</string>
+    <string name="tooltip_attachment_file">Laadi fail üles</string>
+    <string name="tooltip_attachment_gallery">Saada pilte ja videosid</string>
+    <string name="tooltip_attachment_photo">Ava kaamera</string>
+    <string name="a11y_poll_winner_option">populaarsem valik</string>
+    <string name="labs_auto_report_uisi_desc">Kui sõnumite dekrüptimisel tekib viga, siis rakendus saadab selle kohta automaatse teate arendajatele</string>
+    <string name="labs_auto_report_uisi">Automaatselt teata dekrüptimise vigadest.</string>
+    <string name="room_member_override_nick_color">Asenda hüüdnime värvid</string>
+    <string name="login_splash_already_have_account">Mul on kasutajakonto juba olemas</string>
+    <string name="ftue_auth_carousel_4_body">Olles ühelt poolt sama universaalne kui e-post, on Element teisalt uus ja tõhus viis ühistöö korraldamiseks.</string>
+    <string name="ftue_auth_carousel_4_title">Lase tiimidel vabalt tegutseda.</string>
+    <string name="ftue_auth_carousel_3_body">Element võimaldub suhelda kõikide teiste kasutusel olevate Matrixi-põhiste rakendustega ning lisaks ka paljude suletud suhtlusrakendustega.</string>
+    <string name="ftue_auth_carousel_3_title">Suhtle kellega soovid.</string>
+    <string name="ftue_auth_carousel_2_title">Sul on kontroll oma andmete üle.</string>
+    <string name="ftue_auth_carousel_2_body">Element võimaldab sul valida, kus sinu sõnumeid salvestatakse ja seega on sul kontroll oma andmete üle.</string>
+    <string name="ftue_auth_carousel_1_body">Matrix\'i võrgul põhinev läbivat krüptimist kasutav turvaline ja sõltumatu suhtluslahendus.</string>
+    <string name="ftue_auth_carousel_1_title">Vestlused, mida sa tegelikult ka omad.</string>
 </resources>
