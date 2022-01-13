@@ -126,6 +126,7 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.OnGetStarted               -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
             is OnboardingAction.OnIAlreadyHaveAnAccount    -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
             is OnboardingAction.UpdateUseCase              -> handleUpdateUseCase()
+            OnboardingAction.ResetUseCase                  -> resetUseCase()
             is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
             is OnboardingAction.UpdateSignMode             -> handleUpdateSignMode(action)
             is OnboardingAction.InitWith                   -> handleInitWith(action)
@@ -460,6 +461,10 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleUpdateUseCase() {
         // TODO act on the use case selection
         _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
+    }
+
+    private fun resetUseCase() {
+        // TODO remove stored use case
     }
 
     private fun handleUpdateServerType(action: OnboardingAction.UpdateServerType) {

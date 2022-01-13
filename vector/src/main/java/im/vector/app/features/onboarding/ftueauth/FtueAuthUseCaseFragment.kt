@@ -60,7 +60,7 @@ class FtueAuthUseCaseFragment @Inject constructor() : AbstractFtueAuthFragment<F
     }
 
     override fun resetViewModel() {
-        // Nothing to do
+        viewModel.handle(OnboardingAction.ResetUseCase)
     }
 
     private fun TextView.setUseCase(@StringRes label: Int, useCase: FtueUseCase) {
