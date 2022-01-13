@@ -153,13 +153,3 @@ project(":diff-match-patch") {
 //        }
 //    }
 //}
-//
-//project(":matrix-sdk-android-rx") {
-//    sonarqube {
-//        properties {
-//            property "sonar.sources", project(":matrix-sdk-android-rx").android.sourceSets.main.java.srcDirs
-//            // exclude source code from analyses separated by a colon (:)
-//            // property "sonar.exclusions", "**/*.*"
-//        }
-//    }
-//}
