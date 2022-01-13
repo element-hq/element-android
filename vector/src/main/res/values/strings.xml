@@ -2526,7 +2526,6 @@
     <string name="ftue_auth_carousel_2_body">Element lets you choose where your messages are stored, keeping you in control of your data.</string>
     <string name="ftue_auth_carousel_3_title">Secure Messaging.</string>
     <string name="ftue_auth_carousel_3_body">No phone number required, so you don\'t have to share those details with the outside world. No ads, no datamining.</string>
-    <!-- Todo replace with literal english translation -->
     <string name="ftue_auth_carousel_4_title">Cut the slack from teams.</string>
     <string name="ftue_auth_carousel_4_body">As universal as email, Element is a completely new type of collaboration.</string>
 

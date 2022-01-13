@@ -37,25 +37,25 @@ class SplashCarouselStateFactory @Inject constructor(
     fun create() = SplashCarouselState(listOf(
             SplashCarouselState.Item(
                     R.string.ftue_auth_carousel_1_title.colorTerminatingFullStop(R.attr.colorAccent),
-                    R.string.ftue_auth_carousel_1_body,
+                    R.string.ftue_auth_carousel_body_secure,
                     R.drawable.ic_splash_conversations,
                     R.drawable.bg_carousel_page_1
             ),
             SplashCarouselState.Item(
                     R.string.ftue_auth_carousel_2_title.colorTerminatingFullStop(R.attr.colorAccent),
-                    R.string.ftue_auth_carousel_2_body,
+                    R.string.ftue_auth_carousel_body_control,
                     R.drawable.ic_splash_control,
                     R.drawable.bg_carousel_page_2
             ),
             SplashCarouselState.Item(
                     R.string.ftue_auth_carousel_3_title.colorTerminatingFullStop(R.attr.colorAccent),
-                    R.string.ftue_auth_carousel_3_body,
+                    R.string.ftue_auth_carousel_body_encrypted,
                     R.drawable.ic_splash_secure,
                     R.drawable.bg_carousel_page_3
             ),
             SplashCarouselState.Item(
                     collaborationTitle().colorTerminatingFullStop(R.attr.colorAccent),
-                    R.string.ftue_auth_carousel_4_body,
+                    R.string.ftue_auth_carousel_body_workplace,
                     R.drawable.ic_splash_collaboration,
                     R.drawable.bg_carousel_page_4
             )
@@ -64,7 +64,7 @@ class SplashCarouselStateFactory @Inject constructor(
     private fun collaborationTitle(): Int {
         return when {
             localeProvider.isEnglishSpeaking() -> R.string.cut_the_slack_from_teams
-            else                               -> R.string.ftue_auth_carousel_4_title
+            else                               -> R.string.ftue_auth_carousel_title_messaging
         }
     }
 
