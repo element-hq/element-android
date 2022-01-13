@@ -27,10 +27,11 @@ sealed interface TimelineMessageLayout : Parcelable {
     val showTimestamp: Boolean
 
     @Parcelize
-    data class Modern(override val showAvatar: Boolean,
-                      override val showDisplayName: Boolean,
-                      override val showTimestamp: Boolean,
-                      override val layoutRes: Int = R.layout.item_timeline_event_base) : TimelineMessageLayout
+    data class Default(override val showAvatar: Boolean,
+                       override val showDisplayName: Boolean,
+                       override val showTimestamp: Boolean,
+                       // Keep defaultLayout generated on epoxy items
+                       override val layoutRes: Int = 0) : TimelineMessageLayout
 
     @Parcelize
     data class Bubble(override val showAvatar: Boolean,

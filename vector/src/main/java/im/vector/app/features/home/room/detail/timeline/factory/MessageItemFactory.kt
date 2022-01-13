@@ -172,9 +172,7 @@ class MessageItemFactory @Inject constructor(
             is MessagePollContent                -> buildPollContent(messageContent, informationData, highlight, callback, attributes)
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
-        return messageItem?.takeIf {
-            it.layout == R.layout.item_timeline_event_base
-        }?.apply {
+        return messageItem?.apply {
             layout(informationData.messageLayout.layoutRes)
         }
     }
@@ -650,6 +648,7 @@ class MessageItemFactory @Inject constructor(
     private fun buildRedactedItem(attributes: AbsMessageItem.Attributes,
                                   highlight: Boolean): RedactedMessageItem? {
         return RedactedMessageItem_()
+                .layout(attributes.informationData.messageLayout.layoutRes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)

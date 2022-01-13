@@ -21,6 +21,7 @@ import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFact
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
@@ -30,6 +31,18 @@ import javax.inject.Inject
 class TimelineMessageLayoutFactory @Inject constructor(private val session: Session,
                                                        private val layoutSettingsProvider: TimelineLayoutSettingsProvider,
                                                        private val vectorPreferences: VectorPreferences) {
+
+    companion object {
+        private val EVENT_TYPES_WITH_BUBBLE_LAYOUT = setOf(
+                EventType.MESSAGE,
+                EventType.ENCRYPTED,
+                EventType.STICKER
+        )
+        private val MSG_TYPES_WITHOUT_BUBBLE_LAYOUT = setOf(
+                MessageType.MSGTYPE_POLL_START,
+                MessageType.MSGTYPE_VERIFICATION_REQUEST
+        )
+    }
 
     fun create(params: TimelineItemFactoryParams): TimelineMessageLayout {
 
@@ -55,25 +68,40 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
 
         val messageLayout = when (layoutSettingsProvider.getLayoutSettings()) {
             TimelineLayoutSettings.MODERN -> {
-                TimelineMessageLayout.Modern(
-                        showAvatar = showInformation,
-                        showDisplayName = showInformation,
-                        showTimestamp = showInformation || vectorPreferences.alwaysShowTimeStamps()
-                )
+                buildModernLayout(showInformation)
             }
             TimelineLayoutSettings.BUBBLE -> {
-                val isFirstFromThisSender = nextDisplayableEvent?.root?.senderId != event.root.senderId || addDaySeparator
-                val isLastFromThisSender = prevDisplayableEvent?.root?.senderId != event.root.senderId || prevDisplayableEvent?.root?.localDateTime()?.toLocalDate() != date.toLocalDate()
-                TimelineMessageLayout.Bubble(
-                        showAvatar = showInformation && !isSentByMe,
-                        showDisplayName = showInformation && !isSentByMe,
-                        isIncoming = !isSentByMe,
-                        isFirstFromThisSender = isFirstFromThisSender,
-                        isLastFromThisSender = isLastFromThisSender
-                )
+                val type = event.root.getClearType()
+                if (type in EVENT_TYPES_WITH_BUBBLE_LAYOUT) {
+                    val messageContent = if (type == EventType.MESSAGE) params.event.getLastMessageContent() else null
+                    if (messageContent?.msgType in MSG_TYPES_WITHOUT_BUBBLE_LAYOUT) {
+                        buildModernLayout(showInformation)
+                    }
+                    val isFirstFromThisSender = nextDisplayableEvent?.root?.senderId != event.root.senderId || addDaySeparator
+                    val isLastFromThisSender = prevDisplayableEvent?.root?.senderId != event.root.senderId
+                            || prevDisplayableEvent?.root?.localDateTime()?.toLocalDate() != date.toLocalDate()
+
+                    TimelineMessageLayout.Bubble(
+                            showAvatar = showInformation && !isSentByMe,
+                            showDisplayName = showInformation && !isSentByMe,
+                            isIncoming = !isSentByMe,
+                            isFirstFromThisSender = isFirstFromThisSender,
+                            isLastFromThisSender = isLastFromThisSender
+                    )
+                } else {
+                    buildModernLayout(showInformation)
+                }
             }
         }
         return messageLayout
+    }
+
+    private fun buildModernLayout(showInformation: Boolean): TimelineMessageLayout.Default {
+        return TimelineMessageLayout.Default(
+                showAvatar = showInformation,
+                showDisplayName = showInformation,
+                showTimestamp = showInformation || vectorPreferences.alwaysShowTimeStamps()
+        )
     }
 
     /**
