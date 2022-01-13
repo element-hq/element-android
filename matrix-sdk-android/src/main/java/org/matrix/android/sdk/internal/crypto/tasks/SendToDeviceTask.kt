@@ -53,7 +53,7 @@ internal class DefaultSendToDeviceTask @Inject constructor(
 
         return executeRequest(
                 globalErrorReceiver,
-                canRetry = true,
+                canRetryOnFailure = { true },
                 maxRetriesCount = 3
         ) {
             cryptoApi.sendToDevice(

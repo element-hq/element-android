@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.network
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.getRetryDelay
 import org.matrix.android.sdk.api.failure.shouldBeRetried
@@ -28,19 +29,28 @@ import timber.log.Timber
 import java.io.IOException
 
 /**
- * Execute a request from the requestBlock and handle some of the Exception it could generate
+ * Default retry policy according to the given error.
+ */
+internal val defaultRequestRetryPolicy = { throwable: Throwable ->
+    // By default, systematically retry on 429
+    (throwable is Failure.ServerError && throwable.httpCode == 429 && throwable.error.code == MatrixError.M_LIMIT_EXCEEDED) ||
+            throwable.shouldBeRetried()
+}
+
+/**
+ * Execute a request from the requestBlock and handle some of the Exception it could generate.
  * Ref: https://github.com/matrix-org/matrix-js-sdk/blob/develop/src/scheduler.js#L138-L175
  *
  * @param globalErrorReceiver will be use to notify error such as invalid token error. See [GlobalError]
- * @param canRetry if set to true, the request will be executed again in case of error, after a delay
  * @param maxDelayBeforeRetry the max delay to wait before a retry
  * @param maxRetriesCount the max number of retries
+ * @param canRetryOnFailure tell if the request can be executed again according to the given error, after a delay
  * @param requestBlock a suspend lambda to perform the network request
  */
 internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
-                                                  canRetry: Boolean = false,
                                                   maxDelayBeforeRetry: Long = 32_000L,
                                                   maxRetriesCount: Int = 4,
+                                                  noinline canRetryOnFailure: (throwable: Throwable) -> Boolean = defaultRequestRetryPolicy,
                                                   noinline requestBlock: suspend () -> DATA): DATA {
     var currentRetryCount = 0
     var currentDelay = 1_000L
@@ -74,23 +84,16 @@ internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErr
 
             currentRetryCount++
 
-            if (exception is Failure.ServerError &&
-                    exception.httpCode == 429 &&
-                    exception.error.code == MatrixError.M_LIMIT_EXCEEDED &&
-                    currentRetryCount < maxRetriesCount) {
-                // 429, we can retry
-                delay(exception.getRetryDelay(1_000))
-            } else if (canRetry && currentRetryCount < maxRetriesCount && exception.shouldBeRetried()) {
-                delay(currentDelay)
+            if (canRetryOnFailure(exception) && currentRetryCount < maxRetriesCount) {
+                delay(exception.getRetryDelay(currentDelay))
                 currentDelay = currentDelay.times(2L).coerceAtMost(maxDelayBeforeRetry)
-                // Try again (loop)
             } else {
                 throw when (exception) {
-                    is IOException              -> Failure.NetworkConnection(exception)
+                    is IOException           -> Failure.NetworkConnection(exception)
                     is Failure.ServerError,
                     is Failure.OtherServerError,
-                    is CancellationException    -> exception
-                    else                        -> Failure.Unknown(exception)
+                    is CancellationException -> exception
+                    else                     -> Failure.Unknown(exception)
                 }
             }
         }

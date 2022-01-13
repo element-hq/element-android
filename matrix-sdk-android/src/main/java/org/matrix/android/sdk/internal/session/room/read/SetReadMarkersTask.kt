@@ -98,7 +98,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
         if (markers.isNotEmpty()) {
             executeRequest(
                     globalErrorReceiver,
-                    canRetry = true
+                    canRetryOnFailure = { true }
             ) {
                 if (markers[READ_MARKER] == null) {
                     if (readReceiptEventId != null) {

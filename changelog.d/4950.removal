@@ -1,0 +1,1 @@
+`executeRequest` now takes a `canRetryOnFailure` lambda replacing the `canRetry` boolean. It allows to have a custom retry policy for a specific request error.
