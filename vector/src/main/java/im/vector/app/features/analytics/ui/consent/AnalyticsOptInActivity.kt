@@ -20,14 +20,18 @@ import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.platform.ScreenOrientationLocker
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
+import javax.inject.Inject
 
 /**
  * Simple container for AnalyticsOptInFragment
  */
 @AndroidEntryPoint
 class AnalyticsOptInActivity : VectorBaseActivity<ActivitySimpleBinding>() {
+
+    @Inject lateinit var orientationLocker: ScreenOrientationLocker
 
     private val viewModel: AnalyticsConsentViewModel by viewModel()
 
@@ -36,6 +40,7 @@ class AnalyticsOptInActivity : VectorBaseActivity<ActivitySimpleBinding>() {
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun initUiAndData() {
+        orientationLocker.lockPhonesToPortrait(this)
         if (isFirstCreation()) {
             addFragment(views.simpleFragmentContainer, AnalyticsOptInFragment::class.java)
         }
