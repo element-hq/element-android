@@ -34,6 +34,13 @@ class SpaceAddRoomSpaceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        views.createRooms.views.bottomSheetActionClickableZone.debouncedClicks {
+            setFragmentResult(REQUEST_KEY, Bundle().apply {
+                putString(BUNDLE_KEY_ACTION, ACTION_CREATE_ROOM)
+            })
+            dismiss()
+        }
+
         views.addSpaces.views.bottomSheetActionClickableZone.debouncedClicks {
             setFragmentResult(REQUEST_KEY, Bundle().apply {
                 putString(BUNDLE_KEY_ACTION, ACTION_ADD_SPACES)
@@ -55,6 +62,7 @@ class SpaceAddRoomSpaceChooserBottomSheet : VectorBaseBottomSheetDialogFragment<
         const val BUNDLE_KEY_ACTION = "SpaceAddRoomSpaceChooserBottomSheet.Action"
         const val ACTION_ADD_ROOMS = "Action.AddRoom"
         const val ACTION_ADD_SPACES = "Action.AddSpaces"
+        const val ACTION_CREATE_ROOM = "Action.CreateRoom"
 
         fun newInstance(): SpaceAddRoomSpaceChooserBottomSheet {
             return SpaceAddRoomSpaceChooserBottomSheet()

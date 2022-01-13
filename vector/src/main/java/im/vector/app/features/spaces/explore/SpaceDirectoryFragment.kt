@@ -26,6 +26,7 @@ import android.view.ViewGroup
 import androidx.core.text.toSpannable
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.epoxy.EpoxyVisibilityTracker
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.withState
@@ -83,13 +84,16 @@ class SpaceDirectoryFragment @Inject constructor(
             bundle.getString(SpaceAddRoomSpaceChooserBottomSheet.BUNDLE_KEY_ACTION)?.let { action ->
                 val spaceId = withState(viewModel) { it.spaceId }
                 when (action) {
-                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_ADD_ROOMS  -> {
+                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_ADD_ROOMS   -> {
                         addExistingRoomActivityResult.launch(SpaceManageActivity.newIntent(requireContext(), spaceId, ManageType.AddRooms))
                     }
-                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_ADD_SPACES -> {
+                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_ADD_SPACES  -> {
                         addExistingRoomActivityResult.launch(SpaceManageActivity.newIntent(requireContext(), spaceId, ManageType.AddRoomsOnlySpaces))
                     }
-                    else                                                  -> {
+                    SpaceAddRoomSpaceChooserBottomSheet.ACTION_CREATE_ROOM -> {
+                        viewModel.handle(SpaceDirectoryViewAction.CreateNewRoom)
+                    }
+                    else                                                   -> {
                         // nop
                     }
                 }
@@ -114,8 +118,32 @@ class SpaceDirectoryFragment @Inject constructor(
             invalidateOptionsMenu()
         }
 
+        views.addOrCreateChatRoomButton.debouncedClicks {
+            withState(viewModel) {
+                addExistingRooms(it.spaceId)
+            }
+        }
+
         views.spaceCard.matrixToCardMainButton.isVisible = false
         views.spaceCard.matrixToCardSecondaryButton.isVisible = false
+
+        // Hide FAB when list is scrolling
+        views.spaceDirectoryList.addOnScrollListener(
+                object : RecyclerView.OnScrollListener() {
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        views.addOrCreateChatRoomButton.removeCallbacks(showFabRunnable)
+
+                        when (newState) {
+                            RecyclerView.SCROLL_STATE_IDLE     -> {
+                                views.addOrCreateChatRoomButton.postDelayed(showFabRunnable, 250)
+                            }
+                            RecyclerView.SCROLL_STATE_DRAGGING,
+                            RecyclerView.SCROLL_STATE_SETTLING -> {
+                                views.addOrCreateChatRoomButton.hide()
+                            }
+                        }
+                    }
+                })
     }
 
     override fun onDestroyView() {
@@ -123,6 +151,12 @@ class SpaceDirectoryFragment @Inject constructor(
         epoxyVisibilityTracker.detach(views.spaceDirectoryList)
         views.spaceDirectoryList.cleanup()
         super.onDestroyView()
+    }
+
+    private val showFabRunnable = Runnable {
+        if (isAdded) {
+            views.addOrCreateChatRoomButton.show()
+        }
     }
 
     override fun invalidate() = withState(viewModel) { state ->
@@ -142,6 +176,7 @@ class SpaceDirectoryFragment @Inject constructor(
         }
 
         spaceCardRenderer.render(state.currentRootSummary, emptyList(), this, views.spaceCard)
+        views.addOrCreateChatRoomButton.isVisible = state.canAddRooms
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) = withState(viewModel) { state ->

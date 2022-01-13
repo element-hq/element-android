@@ -25,6 +25,7 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.AppStateHandler
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
@@ -53,7 +54,8 @@ import timber.log.Timber
 
 class CreateRoomViewModel @AssistedInject constructor(@Assisted private val initialState: CreateRoomViewState,
                                                       private val session: Session,
-                                                      private val rawService: RawService
+                                                      private val rawService: RawService,
+                                                      appStateHandler: AppStateHandler
 ) : VectorViewModel<CreateRoomViewState, CreateRoomAction, CreateRoomViewEvents>(initialState) {
 
     @AssistedFactory
@@ -67,10 +69,12 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
         initHomeServerName()
         initAdminE2eByDefault()
 
+        val parentSpaceId = initialState.parentSpaceId ?: appStateHandler.safeActiveSpaceId()
+
         val restrictedSupport = session.getHomeServerCapabilities().isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
         val createRestricted = restrictedSupport == HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED
 
-        val defaultJoinRules = if (initialState.parentSpaceId != null && createRestricted) {
+        val defaultJoinRules = if (parentSpaceId != null && createRestricted) {
             RoomJoinRules.RESTRICTED
         } else {
             RoomJoinRules.INVITE
@@ -78,9 +82,10 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
 
         setState {
             copy(
+                    parentSpaceId = parentSpaceId,
                     supportsRestricted = createRestricted,
                     roomJoinRules = defaultJoinRules,
-                    parentSpaceSummary = initialState.parentSpaceId?.let { session.getRoomSummary(it) }
+                    parentSpaceSummary = parentSpaceId?.let { session.getRoomSummary(it) }
             )
         }
     }
@@ -156,7 +161,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
             CreateRoomViewState(
                     isEncrypted = adminE2EByDefault,
                     hsAdminHasDisabledE2E = !adminE2EByDefault,
-                    parentSpaceId = initialState.parentSpaceId
+                    parentSpaceId = this.parentSpaceId
             )
         }
 
@@ -292,11 +297,11 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
             runCatching { session.createRoom(createRoomParams) }.fold(
                     { roomId ->
 
-                        if (initialState.parentSpaceId != null) {
+                        if (state.parentSpaceId != null) {
                             // add it as a child
                             try {
                                 session.spaceService()
-                                        .getSpace(initialState.parentSpaceId)
+                                        .getSpace(state.parentSpaceId)
                                         ?.addChildren(roomId, viaServers = null, order = null)
                             } catch (failure: Throwable) {
                                 Timber.w(failure, "Failed to add as a child")
