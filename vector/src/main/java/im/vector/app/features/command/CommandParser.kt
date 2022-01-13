@@ -370,10 +370,18 @@ object CommandParser {
                     }
                 }
                 Command.ADD_TO_SPACE.matches(slashCommand)                 -> {
-                    ParsedCommand.AddToSpace(spaceId = message)
+                    if (messageParts.size == 1) {
+                        ParsedCommand.AddToSpace(spaceId = message)
+                    } else {
+                        ParsedCommand.ErrorSyntax(Command.ADD_TO_SPACE)
+                    }
                 }
                 Command.JOIN_SPACE.matches(slashCommand)                   -> {
-                    ParsedCommand.JoinSpace(spaceIdOrAlias = message)
+                    if (messageParts.size == 1) {
+                        ParsedCommand.JoinSpace(spaceIdOrAlias = message)
+                    } else {
+                        ParsedCommand.ErrorSyntax(Command.JOIN_SPACE)
+                    }
                 }
                 Command.LEAVE_ROOM.matches(slashCommand)                   -> {
                     ParsedCommand.LeaveRoom(roomId = message)

@@ -25,6 +25,7 @@
     <string name="notice_direct_room_leave_by_you">You left the room</string>
     <string name="notice_room_reject">%1$s rejected the invitation</string>
     <string name="notice_room_reject_by_you">You rejected the invitation</string>
+    <!-- TODO: replace "kick" with "remove" in string resources keys -->
     <string name="notice_room_kick">%1$s removed %2$s</string>
     <string name="notice_room_kick_by_you">You removed %1$s</string>
     <string name="notice_room_unban">%1$s unbanned %2$s</string>
