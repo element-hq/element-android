@@ -65,7 +65,8 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
         val addDaySeparator = date.toLocalDate() != nextDate?.toLocalDate()
 
         val isFirstFromThisSender = nextDisplayableEvent?.root?.senderId != event.root.senderId || addDaySeparator
-        val isLastFromThisSender = prevDisplayableEvent?.root?.senderId != event.root.senderId || prevDisplayableEvent?.root?.localDateTime()?.toLocalDate() != date.toLocalDate()
+        val isLastFromThisSender = prevDisplayableEvent?.root?.senderId != event.root.senderId ||
+                prevDisplayableEvent?.root?.localDateTime()?.toLocalDate() != date.toLocalDate()
 
         val time = dateFormatter.format(event.root.originServerTs, DateFormatKind.MESSAGE_SIMPLE)
         val e2eDecoration = getE2EDecoration(roomSummary, event)

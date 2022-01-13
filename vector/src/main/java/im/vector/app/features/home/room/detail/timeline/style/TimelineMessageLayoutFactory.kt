@@ -45,7 +45,6 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
     }
 
     fun create(params: TimelineItemFactoryParams): TimelineMessageLayout {
-
         val event = params.event
         val nextDisplayableEvent = params.nextDisplayableEvent
         val prevDisplayableEvent = params.prevDisplayableEvent
@@ -78,8 +77,8 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                         buildModernLayout(showInformation)
                     }
                     val isFirstFromThisSender = nextDisplayableEvent?.root?.senderId != event.root.senderId || addDaySeparator
-                    val isLastFromThisSender = prevDisplayableEvent?.root?.senderId != event.root.senderId
-                            || prevDisplayableEvent?.root?.localDateTime()?.toLocalDate() != date.toLocalDate()
+                    val isLastFromThisSender = prevDisplayableEvent?.root?.senderId != event.root.senderId ||
+                            prevDisplayableEvent?.root?.localDateTime()?.toLocalDate() != date.toLocalDate()
 
                     TimelineMessageLayout.Bubble(
                             showAvatar = showInformation && !isSentByMe,

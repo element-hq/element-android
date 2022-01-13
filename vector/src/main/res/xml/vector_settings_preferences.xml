@@ -25,7 +25,7 @@
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"
             android:key="SETTINGS_INTERFACE_BUBBLE_KEY"
-            android:title="Message bubbles" />
+            android:title="@string/message_bubbles" />
 
         <im.vector.app.core.preference.VectorPreference
             android:dialogTitle="@string/font_size"

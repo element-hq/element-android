@@ -37,8 +37,8 @@ import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.themes.ThemeUtils
 
 class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
-                                                  defStyleAttr: Int = 0)
-    : RelativeLayout(context, attrs, defStyleAttr), MessageViewConfiguration {
+                                                  defStyleAttr: Int = 0) :
+    RelativeLayout(context, attrs, defStyleAttr), MessageViewConfiguration {
 
     override var isIncoming: Boolean = false
         set(value) {
