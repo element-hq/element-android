@@ -107,8 +107,8 @@ class UnreadMessagesSharedViewModel @AssistedInject constructor(@Assisted initia
                 }
 
         combine(
-                appStateHandler.selectedRoomGroupingObservable.distinctUntilChanged(),
-                appStateHandler.selectedRoomGroupingObservable.flatMapLatest {
+                appStateHandler.selectedRoomGroupingFlow.distinctUntilChanged(),
+                appStateHandler.selectedRoomGroupingFlow.flatMapLatest {
                     session.getPagedRoomSummariesLive(
                             roomSummaryQueryParams {
                                 this.memberships = Membership.activeMemberships()
