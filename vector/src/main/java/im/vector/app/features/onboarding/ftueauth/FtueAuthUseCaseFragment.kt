@@ -46,10 +46,9 @@ class FtueAuthUseCaseFragment @Inject constructor() : AbstractFtueAuthFragment<F
         views.useCaseOptionTwo.setUseCase(R.string.ftue_auth_use_case_option_two, FtueUseCase.TEAMS)
         views.useCaseOptionThree.setUseCase(R.string.ftue_auth_use_case_option_three, FtueUseCase.COMMUNITIES)
 
-        val partial = getString(R.string.ftue_auth_use_case_skip_partial)
         views.useCaseSkip.setTextWithColoredPart(
-                getString(R.string.ftue_auth_use_case_skip, partial),
-                partial,
+                fullTextRes = R.string.ftue_auth_use_case_skip,
+                coloredTextRes = R.string.ftue_auth_use_case_skip_partial,
                 underline = false,
                 colorAttribute = R.attr.colorAccent,
                 onClick = { viewModel.handle(OnboardingAction.UpdateUseCase(FtueUseCase.SKIP)) }
