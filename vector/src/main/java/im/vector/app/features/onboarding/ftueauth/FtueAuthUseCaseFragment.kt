@@ -26,8 +26,8 @@ import im.vector.app.R
 import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.databinding.FragmentFtueAuthUseCaseBinding
 import im.vector.app.features.login.ServerType
-import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.FtueUseCase
+import im.vector.app.features.onboarding.OnboardingAction
 import javax.inject.Inject
 
 class FtueAuthUseCaseFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueAuthUseCaseBinding>() {
