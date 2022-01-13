@@ -426,9 +426,9 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
             if (initialEventId != null) {
                 frozenTimelineEvents.where().equalTo(TimelineEventEntityFields.EVENT_ID, initialEventId).findFirst()?.displayIndex
             } else if (direction == Timeline.Direction.BACKWARDS) {
-                frozenTimelineEvents.first()?.displayIndex
+                frozenTimelineEvents.first(null)?.displayIndex
             } else {
-                frozenTimelineEvents.last()?.displayIndex
+                frozenTimelineEvents.last(null)?.displayIndex
             }
         } else if (direction == Timeline.Direction.FORWARDS) {
             builtEvents.first().displayIndex + 1

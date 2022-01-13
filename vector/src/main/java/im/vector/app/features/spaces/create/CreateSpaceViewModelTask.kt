@@ -125,11 +125,7 @@ class CreateSpaceViewModelTask @Inject constructor(
                                 val restrictedSupport = homeServerCapabilities
                                         .isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
 
-                                val createRestricted = when (restrictedSupport) {
-                                    HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED          -> true
-                                    HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED_UNSTABLE -> vectorPreferences.labsUseExperimentalRestricted()
-                                    else                                                            -> false
-                                }
+                                val createRestricted = restrictedSupport == HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED
                                 if (createRestricted) {
                                     session.createRoom(CreateRoomParams().apply {
                                         this.name = roomName

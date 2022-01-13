@@ -91,7 +91,7 @@
             style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/cancel"
+            android:text="@string/action_cancel"
             tools:ignore="MissingConstraints" />
 
         <Button
@@ -99,7 +99,7 @@
             style="@style/Widget.Vector.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/reset"
+            android:text="@string/action_reset"
             tools:ignore="MissingConstraints" />
 
         <androidx.constraintlayout.helper.widget.Flow

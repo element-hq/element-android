@@ -63,9 +63,9 @@ class EncryptionItemFactory @Inject constructor(
             )
             shield = StatusTileTimelineItem.ShieldUIState.BLACK
         } else {
-            title = stringProvider.getString(R.string.encryption_not_enabled)
+            title = stringProvider.getString(R.string.encryption_misconfigured)
             description = stringProvider.getString(R.string.encryption_unknown_algorithm_tile_description)
-            shield = StatusTileTimelineItem.ShieldUIState.RED
+            shield = StatusTileTimelineItem.ShieldUIState.ERROR
         }
         return StatusTileTimelineItem_()
                 .attributes(

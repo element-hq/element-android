@@ -56,7 +56,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                 val spannableStr = if (vectorPreferences.developerMode()) {
                     val errorDescription =
                             if (cryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID) {
-                                stringProvider.getString(R.string.notice_crypto_error_unkwown_inbound_session_id)
+                                stringProvider.getString(R.string.notice_crypto_error_unknown_inbound_session_id)
                             } else {
                                 // TODO i18n
                                 cryptoError?.name

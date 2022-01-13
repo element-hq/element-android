@@ -48,7 +48,11 @@
     <dimen name="composer_attachment_size">52dp</dimen>
     <dimen name="composer_attachment_margin">1dp</dimen>
 
+
     <dimen name="chat_bubble_margin_start">28dp</dimen>
     <dimen name="chat_bubble_margin_end">62dp</dimen>
 
+    <!--  Onboarding   -->
+    <item name="ftue_auth_gutter_start_percent" format="float" type="dimen">0.05</item>
+    <item name="ftue_auth_gutter_end_percent" format="float" type="dimen">0.95</item>
 </resources>

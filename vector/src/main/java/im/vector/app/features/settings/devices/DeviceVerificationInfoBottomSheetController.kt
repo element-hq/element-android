@@ -272,7 +272,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
         }
         bottomSheetVerificationActionItem {
             id("rename")
-            title(host.stringProvider.getString(R.string.rename))
+            title(host.stringProvider.getString(R.string.action_rename))
             titleColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
             iconRes(R.drawable.ic_arrow_right)
             iconColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
@@ -293,7 +293,7 @@ class DeviceVerificationInfoBottomSheetController @Inject constructor(
 
         genericFooterItem {
             id("infoCrypto${info.deviceId}")
-            text(host.stringProvider.getString(R.string.settings_failed_to_get_crypto_device_info))
+            text(host.stringProvider.getString(R.string.settings_failed_to_get_crypto_device_info).toEpoxyCharSequence())
         }
 
         info.deviceId?.let { addGenericDeviceManageActions(data, it) }

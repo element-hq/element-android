@@ -97,7 +97,7 @@ class DeviceListEpoxyController @Inject constructor(private val stringProvider: 
                     // Can this really happen?
                     genericFooterItem {
                         id("empty")
-                        text(host.stringProvider.getString(R.string.search_no_results))
+                        text(host.stringProvider.getString(R.string.search_no_results).toEpoxyCharSequence())
                     }
                 } else {
                     // Build list of device with status

@@ -62,7 +62,6 @@
     <string name="verification_use_passphrase">Si vous n’avez pas accès à une session existante</string>
     <string name="verification_cannot_access_other_session">Utiliser une phrase secrète ou une clé de récupération</string>
     <string name="command_description_poll">Crée un sondage simple</string>
-    <string name="poll_item_selected_aria">Option sélectionnée</string>
     <string name="delete_account_data_warning">Supprimer les données du compte de type %1$s \?
 \n
 \nÀ utiliser avec précaution, ceci peut entraîner des comportements inattendus.</string>
@@ -190,7 +189,6 @@
     <string name="verification_request_waiting">En attente…</string>
     <string name="sent_verification_conclusion">Conclusion de la vérification</string>
     <string name="sent_a_reaction">A réagi avec : %s</string>
-    <string name="sent_a_bot_buttons">Boutons de robot</string>
     <string name="sent_a_poll">Sondage</string>
     <string name="send_a_sticker">Autocollants</string>
     <string name="sent_a_file">Fichier</string>
@@ -427,8 +425,8 @@
     <string name="reactions">Réactions</string>
     <string name="message_view_reaction">Voir les réactions</string>
     <string name="message_add_reaction">Ajouter une réaction</string>
-    <string name="reactions_like">J’aime</string>
-    <string name="reactions_agree">D’accord</string>
+    <string name="action_like">J’aime</string>
+    <string name="action_agree">D’accord</string>
     <string name="title_activity_emoji_reaction_picker">Réactions</string>
     <string name="room_list_rooms_empty_body">Vos salons seront affichés ici. Appuyez sur le « + » en bas à droite pour trouver ceux existant ou en créer de nouveaux.</string>
     <string name="room_list_rooms_empty_title">Salons</string>
@@ -517,14 +515,6 @@
     <plurals name="send_images_with_original_size">
         <item quantity="one">Envoyer l’image en taille originale</item>
         <item quantity="other">Envoyer les images en taille originale</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d vote − Résultats finaux</item>
-        <item quantity="other">%d votes − Résultats finaux</item>
-    </plurals>
-    <plurals name="poll_info">
-        <item quantity="one">%d vote</item>
-        <item quantity="other">%d votes</item>
     </plurals>
     <plurals name="settings_active_sessions_count">
         <item quantity="one">%d session active</item>
@@ -818,7 +808,7 @@
     <string name="command_description_discard_session_not_handled">Seulement pris en charge dans les salons chiffrés</string>
     <string name="command_description_discard_session">Force la session de groupe sortante actuelle dans un salon chiffré à être abandonnée</string>
     <string name="template_use_latest_app">Utilisez la dernière version de ${app_name} sur vos autres appareils :</string>
-    <string name="or_other_mx_capabale_client">ou un autre client Matrix qui prend en charge la signature croisée</string>
+    <string name="or_other_mx_capable_client">ou un autre client Matrix qui prend en charge la signature croisée</string>
     <string name="template_app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
     <string name="template_app_desktop_web">${app_name} Web
@@ -1458,17 +1448,6 @@
     <string name="room_settings_all_messages_noisy">Notification sonore pour chaque message</string>
     <string name="directory_searching_title">Recherche dans le répertoire…</string>
     <string name="directory_search_results_title">Parcourir le répertoire</string>
-    <string name="room_recents_join_room_prompt">Saisissez un identifiant ou un alias de salon</string>
-    <string name="room_recents_join_room_title">Rejoindre un salon</string>
-    <string name="room_recents_join_room">Rejoindre le salon</string>
-    <string name="room_recents_create_room">Créer un salon</string>
-    <string name="room_recents_start_chat">Nouvelle discussion</string>
-    <string name="room_recents_invites">INVITATIONS</string>
-    <string name="room_recents_low_priority">PRIORITÉ BASSE</string>
-    <string name="room_recents_conversations">SALONS</string>
-    <string name="room_recents_favourites">FAVORIS</string>
-    <string name="room_recents_directory">RÉPERTOIRE</string>
-    <string name="room_recents_join">REJOINDRE</string>
     <string name="search_is_not_supported_in_e2e_room">La recherche dans les salons chiffrés n\'est pas encore prise en charge.</string>
     <string name="tab_title_search_files">FICHIERS</string>
     <string name="tab_title_search_people">PARTICIPANTS</string>
@@ -2004,7 +1983,7 @@
     <string name="dialog_title_warning">Attention</string>
     <string name="dialog_title_confirmation">Confirmation</string>
     <string name="action_return">Revenir</string>
-    <string name="disable">Désactiver</string>
+    <string name="action_disable">Désactiver</string>
     <string name="copied_to_clipboard">Copié dans le presse-papiers</string>
     <string name="action_unpublish">Dé-publier</string>
     <string name="action_switch">Changer</string>
@@ -2025,15 +2004,15 @@
     <string name="call_notification_hangup">Raccrocher</string>
     <string name="call_notification_reject">Refuser</string>
     <string name="call_notification_answer">Accepter</string>
-    <string name="decline">Refuser</string>
-    <string name="review">Examiner</string>
-    <string name="ignore">Ignorer</string>
-    <string name="abort">Annuler</string>
+    <string name="action_decline">Refuser</string>
+    <string name="action_review">Examiner</string>
+    <string name="action_ignore">Ignorer</string>
+    <string name="action_abort">Annuler</string>
     <string name="done">Terminé</string>
-    <string name="skip">Passer</string>
-    <string name="accept">Accepter</string>
+    <string name="action_skip">Passer</string>
+    <string name="action_accept">Accepter</string>
     <string name="offline">Hors ligne</string>
-    <string name="invite">Inviter</string>
+    <string name="action_invite">Inviter</string>
     <string name="or">ou</string>
     <string name="send_anyway">Envoyer quand même</string>
     <string name="call_anyway">Appeler quand même</string>
@@ -2058,34 +2037,34 @@
     <string name="ongoing_conference_call">Téléconférence en cours.
 \nLa rejoindre en %1$s ou en %2$s</string>
     <string name="start_chatting">Commencer une conversation</string>
-    <string name="reset">Réinitialiser</string>
-    <string name="dismiss">Ignorer</string>
-    <string name="pause_video">Pause</string>
-    <string name="play_video">Lancer</string>
+    <string name="action_reset">Réinitialiser</string>
+    <string name="action_dismiss">Ignorer</string>
+    <string name="action_pause">Pause</string>
+    <string name="action_play">Lancer</string>
     <string name="active_call">Appel en cours</string>
     <string name="report_content">Signaler le contenu</string>
-    <string name="disconnect">Déconnecter</string>
-    <string name="revoke">Révoquer</string>
+    <string name="action_disconnect">Déconnecter</string>
+    <string name="action_revoke">Révoquer</string>
     <string name="none">Aucun</string>
-    <string name="rename">Renommer</string>
-    <string name="delete">Supprimer</string>
+    <string name="action_rename">Renommer</string>
+    <string name="action_delete">Supprimer</string>
     <string name="view_decrypted_source">Afficher la source déchiffrée</string>
     <string name="view_source">Afficher la source</string>
     <string name="permalink">Permalien</string>
-    <string name="forward">Transférer</string>
+    <string name="action_forward">Transférer</string>
     <string name="later">Plus tard</string>
-    <string name="clear">Effacer</string>
-    <string name="speak">Parler</string>
-    <string name="share">Partager</string>
-    <string name="download">Télécharger</string>
-    <string name="quote">Citer</string>
-    <string name="redact">Effacer</string>
-    <string name="resend">Renvoyer</string>
-    <string name="send">Envoyer</string>
-    <string name="stay">Rester</string>
-    <string name="leave">Quitter</string>
-    <string name="save">Enregistrer</string>
-    <string name="cancel">Annuler</string>
+    <string name="action_clear">Effacer</string>
+    <string name="action_speak">Parler</string>
+    <string name="action_share">Partager</string>
+    <string name="action_download">Télécharger</string>
+    <string name="action_quote">Citer</string>
+    <string name="action_redact">Effacer</string>
+    <string name="action_resend">Renvoyer</string>
+    <string name="action_send">Envoyer</string>
+    <string name="action_stay">Rester</string>
+    <string name="action_leave">Quitter</string>
+    <string name="action_save">Enregistrer</string>
+    <string name="action_cancel">Annuler</string>
     <string name="ok">OK</string>
     <string name="loading">Chargement…</string>
     <string name="dialog_title_third_party_licences">Licences tierces</string>
@@ -2375,7 +2354,7 @@
     <string name="network_error">Erreur de réseau</string>
     <string name="unable_to_send_message">Envoi du message impossible</string>
     <string name="could_not_redact">Effacement impossible</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">L’appareil de l’expéditeur ne nous a pas envoyé les clés pour ce message.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">L’appareil de l’expéditeur ne nous a pas envoyé les clés pour ce message.</string>
     <string name="notice_crypto_unable_to_decrypt">** Déchiffrement impossible : %s **</string>
     <string name="notice_power_level_diff">%1$s de %2$s à %3$s</string>
     <string name="notice_power_level_changed">%1$s a modifié le rang de %2$s.</string>
@@ -2524,10 +2503,10 @@
     <string name="room_sync_in_progress">Synchronisation…</string>
     <string name="open_chat_header">Développer l’entête</string>
     <string name="list_members">Liste les membres</string>
-    <string name="reject">Rejeter</string>
-    <string name="preview">Aperçu</string>
-    <string name="join">Rejoindre</string>
-    <string name="remove">Supprimer</string>
+    <string name="action_reject">Rejeter</string>
+    <string name="action_preview">Aperçu</string>
+    <string name="action_join">Rejoindre</string>
+    <string name="action_remove">Supprimer</string>
     <string name="_continue">Continuer</string>
     <string name="no">NON</string>
     <string name="yes">OUI</string>
@@ -2737,8 +2716,6 @@
     <string name="space_settings_manage_rooms">Gérer les salons</string>
     <string name="looking_for_someone_not_in_space">Vous cherchez quelqu’un qui n’est pas dans %s\?</string>
     <string name="user_invites_you">%s vous invite</string>
-    <string name="labs_use_restricted_join_rule_desc">Attention, nécessite la prise en charge par le serveur ainsi qu’une version de salon expérimentale</string>
-    <string name="labs_use_restricted_join_rule">Espace expérimental – salon restreint.</string>
     <string name="you_are_invited">Vous êtes invité·e</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Les espaces sont une nouvelle manière de regrouper les salons et les gens.</string>
     <string name="spaces_beta_welcome_to_spaces">Bienvenue dans les espaces!</string>
@@ -2768,7 +2745,7 @@
     <string name="invite_to_space_with_name_desc">Permettra de parcourir les salons de %s</string>
     <string name="invite_to_space_with_name">Inviter dans %s</string>
     <string name="invite_by_link">Partager le lien</string>
-    <string name="invite_by_mxid">Inviter par nom d’utilisateur</string>
+    <string name="invite_by_username">Inviter par nom d’utilisateur</string>
     <string name="invite_by_email">Inviter par courriel</string>
     <string name="invite_people_to_your_space_desc">Vous êtes seul·e pour l’instant. %s sera plus agréable avec de la compagnie.</string>
     <string name="invite_to_space">Inviter à %s</string>

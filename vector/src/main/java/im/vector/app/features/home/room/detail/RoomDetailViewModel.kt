@@ -38,6 +38,7 @@ import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.BehaviorDataSource
+import im.vector.app.features.analytics.DecryptionFailureTracker
 import im.vector.app.features.call.conference.ConferenceEvent
 import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.call.conference.JitsiService
@@ -112,6 +113,7 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val directRoomHelper: DirectRoomHelper,
         private val jitsiService: JitsiService,
         private val activeConferenceHolder: JitsiActiveConferenceHolder,
+        private val decryptionFailureTracker: DecryptionFailureTracker,
         timelineFactory: TimelineFactory
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
@@ -209,11 +211,13 @@ class RoomDetailViewModel @AssistedInject constructor(
                     val canInvite = PowerLevelsHelper(it).isUserAbleToInvite(session.myUserId)
                     val isAllowedToManageWidgets = session.widgetService().hasPermissionsToHandleWidgets(room.roomId)
                     val isAllowedToStartWebRTCCall = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, false, EventType.CALL_INVITE)
+                    val isAllowedToSetupEncryption = PowerLevelsHelper(it).isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
                     setState {
                         copy(
                                 canInvite = canInvite,
                                 isAllowedToManageWidgets = isAllowedToManageWidgets,
-                                isAllowedToStartWebRTCCall = isAllowedToStartWebRTCCall
+                                isAllowedToStartWebRTCCall = isAllowedToStartWebRTCCall,
+                                isAllowedToSetupEncryption = isAllowedToSetupEncryption
                         )
                     }
                 }.launchIn(viewModelScope)
@@ -307,6 +311,7 @@ class RoomDetailViewModel @AssistedInject constructor(
             is RoomDetailAction.DownloadOrOpen                   -> handleOpenOrDownloadFile(action)
             is RoomDetailAction.NavigateToEvent                  -> handleNavigateToEvent(action)
             is RoomDetailAction.JoinAndOpenReplacementRoom       -> handleJoinAndOpenReplacementRoom()
+            is RoomDetailAction.OnClickMisconfiguredEncryption   -> handleClickMisconfiguredE2E()
             is RoomDetailAction.ResendMessage                    -> handleResendEvent(action)
             is RoomDetailAction.RemoveFailedEcho                 -> handleRemove(action)
             is RoomDetailAction.MarkAllAsRead                    -> handleMarkAllAsRead()
@@ -609,6 +614,12 @@ class RoomDetailViewModel @AssistedInject constructor(
                     _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId, closeCurrentRoom = true))
                 }
             }
+        }
+    }
+
+    private fun handleClickMisconfiguredE2E() = withState { state ->
+        if (state.isAllowedToSetupEncryption) {
+            _viewEvents.post(RoomDetailViewEvents.OpenRoomProfile)
         }
     }
 
@@ -1083,6 +1094,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     override fun onCleared() {
         timeline.dispose()
         timeline.removeAllListeners()
+        decryptionFailureTracker.onTimeLineDisposed(room.roomId)
         if (vectorPreferences.sendTypingNotifs()) {
             room.userStopsTyping()
         }

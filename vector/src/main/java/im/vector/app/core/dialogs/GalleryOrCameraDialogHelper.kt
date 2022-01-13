@@ -113,7 +113,7 @@ class GalleryOrCameraDialogHelper(
                 )) { _, which ->
                     onAvatarTypeSelected(if (which == 0) Type.Camera else Type.Gallery)
                 }
-                .setPositiveButton(R.string.cancel, null)
+                .setPositiveButton(R.string.action_cancel, null)
                 .show()
     }
 

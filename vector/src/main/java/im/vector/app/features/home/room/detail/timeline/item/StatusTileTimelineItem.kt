@@ -57,6 +57,7 @@ abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineIte
             ShieldUIState.GREEN -> R.drawable.ic_shield_trusted
             ShieldUIState.BLACK -> R.drawable.ic_shield_black
             ShieldUIState.RED   -> R.drawable.ic_shield_warning
+            ShieldUIState.ERROR   -> R.drawable.ic_warning_badge
         }
 
         holder.titleView.setCompoundDrawablesWithIntrinsicBounds(
@@ -98,6 +99,7 @@ abstract class StatusTileTimelineItem : AbsBaseMessageItem<StatusTileTimelineIte
     enum class ShieldUIState {
         BLACK,
         RED,
-        GREEN
+        GREEN,
+        ERROR
     }
 }

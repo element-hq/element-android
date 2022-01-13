@@ -32,7 +32,7 @@
     <string name="notice_profile_change_redacted">حدَّثَ %1$s ملفه الشخصي %2$s</string>
     <string name="notice_room_third_party_invite">أرسلَ %1$s دعوة إلى %2$s للإنضمام إلى الغُرفة</string>
     <string name="notice_crypto_unable_to_decrypt">** يتعذَّر فك التشفير: ⁨%s⁩ **</string>
-    <string name="notice_crypto_error_unkwown_inbound_session_id">لم يُرسل جِهاز المُرسل مفاتيحًا لهذه الرِّسالة.</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">لم يُرسل جِهاز المُرسل مفاتيحًا لهذه الرِّسالة.</string>
     <string name="unable_to_send_message">تعذَّر إرسال الرِّسالة</string>
     <string name="message_failed_to_upload">فَشلَ رفع الصُّورة</string>
     <string name="network_error">خطأ في الشَّبكة</string>
@@ -225,19 +225,19 @@
     <string name="title_activity_historical">الأرشيف</string>
     <string name="title_activity_bug_report">أبلِغ عن علة</string>
     <string name="ok">حسنا</string>
-    <string name="cancel">ألغِ</string>
-    <string name="save">احفظ</string>
-    <string name="leave">اترك</string>
-    <string name="send">أرسِل</string>
-    <string name="resend">أعِد الإرسال</string>
-    <string name="quote">اقتبس</string>
-    <string name="share">شارِك</string>
-    <string name="forward">مرّر</string>
+    <string name="action_cancel">ألغِ</string>
+    <string name="action_save">احفظ</string>
+    <string name="action_leave">اترك</string>
+    <string name="action_send">أرسِل</string>
+    <string name="action_resend">أعِد الإرسال</string>
+    <string name="action_quote">اقتبس</string>
+    <string name="action_share">شارِك</string>
+    <string name="action_forward">مرّر</string>
     <string name="permalink">رابط دائم</string>
     <string name="view_source">اعرض المصدر</string>
     <string name="view_decrypted_source">اعرض المصدر بلا تعمية</string>
-    <string name="delete">احذف</string>
-    <string name="rename">غيّر الاسم</string>
+    <string name="action_delete">احذف</string>
+    <string name="action_rename">غيّر الاسم</string>
     <string name="report_content">أبلِغ عن المحتوى</string>
     <string name="active_call">مكالمة نشطة</string>
     <string name="ongoing_conference_call">مكالمة اجتماع جارية.
@@ -258,7 +258,7 @@
     <string name="action_open">افتح</string>
     <string name="action_close">أغلِق</string>
     <string name="copied_to_clipboard">نُسخ إلى الحافظة</string>
-    <string name="disable">عطّل</string>
+    <string name="action_disable">عطّل</string>
     <string name="dialog_title_confirmation">أكّد</string>
     <string name="dialog_title_warning">تحذير</string>
     <string name="bottom_action_home">الرئيسيّة</string>
@@ -373,9 +373,9 @@
     <string name="yes">نعم</string>
     <string name="no">لا</string>
     <string name="_continue">تابع</string>
-    <string name="remove">أزِل</string>
-    <string name="join">انضم</string>
-    <string name="reject">ارفض</string>
+    <string name="action_remove">أزِل</string>
+    <string name="action_join">انضم</string>
+    <string name="action_reject">ارفض</string>
     <string name="room_jump_to_first_unread">انتقل إلى أول رسالة غير مقروءة.</string>
     <string name="room_preview_invitation_format">لقد دعاك ⁨%s⁩ للانضمام إلى هذه الغرفة</string>
     <string name="room_preview_room_interactions_disabled">هذه معاينة عن الغرفة. عُطّل التفاعل مع الغرفة.</string>
@@ -428,14 +428,6 @@
     <string name="tab_title_search_rooms">الغرف</string>
     <string name="tab_title_search_messages">الرسائل</string>
     <string name="tab_title_search_files">الملفات</string>
-    <string name="room_recents_directory">الدليل</string>
-    <string name="room_recents_favourites">المفضلة</string>
-    <string name="room_recents_conversations">الغرف</string>
-    <string name="room_recents_invites">الدعوات</string>
-    <string name="room_recents_create_room">أنشئ غرفة</string>
-    <string name="room_recents_join_room">انضم إلى غرفة</string>
-    <string name="room_recents_join_room_title">انضم إلى غرفة</string>
-    <string name="room_recents_join_room_prompt">اكتب معرّف غرفة أو اختصارها</string>
     <string name="directory_searching_title">يبحث في الدليل..</string>
     <string name="room_settings_leave_conversation">اترك المحادثة</string>
     <string name="room_settings_forget">انسَ</string>
@@ -526,7 +518,6 @@
     <string name="widget_integration_must_be_in_room">لست في هذه الغرفة.</string>
     <string name="widget_integration_no_permission_in_room">ليس لديك تصريح لفعل هذا في هذه الغرفة.</string>
     <string name="settings_labs_native_camera">استخدم الكمرة الأصيلة</string>
-    <!-- share keys -->
     <string name="conference_call_warning_title">تحذير!</string>
     <string name="room_unknown_devices_messages_notification">لم تُرسل الرسائل بسبب وجود أجهزة مجهولة. ماذا أفعل؟ %1$s. ‏%2$s.</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">ليس ’⁨%s⁩‘ تنسيقا صالحا لاختصار</string>
@@ -586,11 +577,9 @@
     <string name="widget_integration_room_not_visible">الغرفة ⁨%s⁩ غير ظاهرة.</string>
     <string name="you_added_a_new_device">لقد أضفت جهازا جديدا ’⁨%s⁩‘ يطلب مفاتيح التعمية.</string>
     <string name="ignore_request">تجاهل الطلب</string>
-    <!-- conference call -->
     <string name="command_error">خطأ في الأمر</string>
     <string name="unrecognized_command">لم يُفهم الأمر: ⁨%s⁩</string>
-    <!-- notification statuses -->
-    <string name="redact">أزل</string>
+    <string name="action_redact">أزل</string>
     <string name="missing_permissions_to_start_conf_call">تحتاج تصريح الدعوة لبدء اجتماع في هذه الغرفة</string>
     <string name="or">أو</string>
     <string name="action_quick_reply">ردّ سريع</string>
@@ -699,14 +688,14 @@
 
 رجاءً اسمح بالوصول في المنبثقة التالية لتستكشف مستخدميك في دفتر العناوين من Element.</string>
     <string name="media_slider_saved">حُفظت</string>
-    <string name="preview">عايِن</string>
+    <string name="action_preview">عايِن</string>
     <string name="room_sync_in_progress">يُزامن…</string>
     <string name="room_preview_unlinked_email_warning">أُرسلت الدعوة إلى ⁨%s⁩ غير المرتبط بهذا الحساب.
 لربما عليك الولوج بحساب آخر، أو إضافة هذا البريد إلى حسابك هذا.</string>
     <string name="room_preview_try_join_an_unknown_room">تحاول الوصول إلى ⁨%s⁩. أتريد الانضمام للمشاركة في النقاش؟</string>
     <string name="room_preview_try_join_an_unknown_room_default">إحدى الغرف</string>
     <string name="room_title_one_member">عضو واحد</string>
-    <string name="invite">ادعُ</string>
+    <string name="action_invite">ادعُ</string>
     <string name="join_room">انضم إلى الغرفة</string>
     <string name="auth_reset_password_next_step_button">لقد أكّدت عنوان بريدي الإلكتروني</string>
     <string name="read_receipts_list">قائمة علامات القراءة</string>
@@ -737,7 +726,6 @@
     <string name="search_hint">ابحث</string>
     <string name="search_members_hint">رشّح أعضاء الغرفة</string>
     <string name="tab_title_search_people">الناس</string>
-    <string name="room_recents_low_priority">أولوية منخفضة</string>
     <string name="room_settings_all_messages_noisy">كل الرسائل (مزعج)</string>
     <string name="room_settings_all_messages">كل الرسائل</string>
     <string name="room_settings_mention_only">الإشارات فقط</string>
@@ -774,13 +762,11 @@
         <item quantity="many">%d ودجة نشطة</item>
         <item quantity="other">%d ودجة نشطة</item>
     </plurals>
-    <!-- Widget Integration Manager -->
     <string name="room_add_matrix_apps">أضِف تطبيقات ماترِكس</string>
     <string name="your_unverified_device_requesting">يطلب جهازك غير المؤكّد ”‏⁨%s⁩“ مفاتيح التعمية.</string>
     <string name="start_verification">ابدأ التأكيد</string>
     <string name="share_without_verifying">شارِك دون تأكيد</string>
     <string name="encrypted_message">رسالة معمّاة</string>
-    <!-- groups creation -->
     <string name="create">أنشئ</string>
     <string name="community_name">اسم المجتمع</string>
     <string name="community_id">معرّف المجتمع</string>
@@ -853,7 +839,6 @@
     <string name="notification_off">معطّل</string>
     <string name="notification_noisy">مزعج</string>
     <string name="conference_call_warning_message">ما زالت مكالمات الاجتماعات قيد التطوير وقد لا يُعتمد عليها.</string>
-    <!-- slash commands -->
     <string name="unknown_devices_alert_message">تحتوي هذه الغرفة أجهزة مجهولة لم يُتأكّد منها.
 يعني هذا عدم وجود أي ضمانات بأن الأجهزة هي فعلا ملك لمن يستخدمها.
 ننصحك بأن تبدأ عملية التأكيد لكل جهاز وذلك قبل أن تتابع. يمكنك طبعا إرسال الرسالة دون تأكيد إن أردت ذلك.
@@ -875,8 +860,6 @@
     <string name="ssl_cert_not_trust">قد يعني هذا بأن أحدهم يعترض الاتصال بعدوانية، أو أن هاتفك لا يثق بالشهادة التي قدّمها الخادوم البعيد.</string>
     <string name="ssl_cert_new_account_expl">إن قال مدير الخادوم بأن هذا متوقع، فتأكد من أن البصمة أدناه تطابق البصمة التي وفّرها.</string>
     <string name="ssl_expected_existing_expl">تغيّرت الشهادة من شهادة كنت تثق بها إلى شهادة لا تثق بها. لربما جدّد الخادوم شهادته. راسل إدارة الخادوم واسألهم عن البصمة المتوقعة.</string>
-    <string name="room_recents_join">انضم</string>
-    <string name="room_recents_start_chat">ابدأ دردشة</string>
     <string name="directory_search_results_title">تصفح الدليل</string>
     <plurals name="directory_search_rooms_for">
         <item quantity="zero">لم يُعثر على غرف تطابق ‏⁨%2$s⁩</item>
@@ -918,13 +901,12 @@
     <string name="widget_integration_positive_power_level">يجب أن يكون مستوى السلطة عددا صحيحا موجبا.</string>
     <string name="community_name_hint">مثال</string>
     <string name="community_id_hint">مثال</string>
-    <!-- group details -->
     <string name="title_activity_room">الغرفة</string>
     <string name="groups_invite_header">دعوة</string>
     <string name="send_files_in">أرسل إلى</string>
     <string name="title_activity_choose_sticker">أرسِل ملصقا</string>
     <string name="dialog_title_third_party_licences">رُخص الأطراف الثالثة</string>
-    <string name="download">نزِّل</string>
+    <string name="action_download">نزِّل</string>
     <string name="option_send_voice">أرسِل صوتًا</string>
     <string name="option_send_sticker">أرسِل ملصقًا</string>
     <string name="no_sticker_application_dialog_content">ليس ثمة أية حزمة ملصقات مفعّلة حاليًا.
@@ -935,8 +917,8 @@
     <string name="e2e_re_request_encryption_key_sent">أُرسل طلب المفتاح.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">أُرسل الطلب</string>
     <string name="template_e2e_re_request_encryption_key_dialog_content">رجاءً أطلِق Element في جهاز آخر يقدر على فك تعمية الرسالة ليُرسل المفاتيح إلى هذا الجهاز.</string>
-    <string name="speak">انطِق</string>
-    <string name="clear">امسح</string>
+    <string name="action_speak">انطِق</string>
+    <string name="action_clear">امسح</string>
     <string name="room_participants_online">متّصل</string>
     <string name="room_participants_offline">غير متّصل</string>
     <string name="room_participants_idle">خامل</string>
@@ -1097,7 +1079,7 @@
 ظهور الرسائل في «ماترِكس» شبيه كثيرًا بالبريد الإلكتروني. نسياننا لرسائلك يعني أن الرسائل التي أرسلتها لن تُشارك مع أي مستخدم جديد أو غير مسجّل، إلا أن المستخدمين المسجّلين الذي يقدرون على الوصول إليها سيمتلكون نسخة عنها.</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">طُلب مفتاح البصمة Ed25519</string>
     <string name="title_activity_keys_backup_restore">الرسائل الآمنة</string>
-    <string name="skip">تخطي</string>
+    <string name="action_skip">تخطي</string>
     <string name="done">تم</string>
     <string name="dialog_title_error">خطأ</string>
     <string name="settings_call_category">المكالمات</string>
@@ -1114,14 +1096,14 @@
     <string name="no_permissions_to_start_conf_call_in_direct_room">ليس لديك تصريح لبدء إجتماع</string>
     <string name="no_permissions_to_start_conf_call">ليس لديك تصريح لبدء إجتماع في هذه الغرفة</string>
     <string name="start_chatting">إبدأ بالمحادثة</string>
-    <string name="reset">إعادة ضبط</string>
-    <string name="dismiss">إصرف</string>
-    <string name="pause_video">أوقف</string>
-    <string name="play_video">شغل</string>
-    <string name="disconnect">إفصل</string>
-    <string name="revoke">أبّطل</string>
+    <string name="action_reset">إعادة ضبط</string>
+    <string name="action_dismiss">إصرف</string>
+    <string name="action_pause">أوقف</string>
+    <string name="action_play">شغل</string>
+    <string name="action_disconnect">إفصل</string>
+    <string name="action_revoke">أبّطل</string>
     <string name="none">لاشيء</string>
-    <string name="stay">إبقى</string>
+    <string name="action_stay">إبقى</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">ستفقد الوصول إلى رسائلك المشفرة إلا إذا أخذت نسخة إحتياطية من مفاتيحك قبل تسجيلك للخروج.</string>
     <string name="backup">نسخة إحتياطية</string>
     <string name="are_you_sure">هل أنت متأكد؟</string>
@@ -1175,7 +1157,6 @@
     <string name="spaces_beta_welcome_to_spaces">مرحبًا بك في المساحات!</string>
     <string name="spaces_beta_welcome_to_spaces_desc">تعد المساحات طريقة جديدة لتجميع الغرف والأشخاص.</string>
     <string name="you_are_invited">أنت مدعو</string>
-    <string name="labs_use_restricted_join_rule">مساحة تجريبية - غُرفة مقيدة.</string>
     <string name="space_mark_as_suggested">علم كمقترحة</string>
     <string name="space_mark_as_not_suggested">علم كغير مقترحة</string>
     <string name="space_manage_rooms_and_spaces">إدارة الغُرف والمساحات</string>
@@ -1187,7 +1168,6 @@
     <string name="this_space_has_no_rooms_not_admin">قد تكون بعض الغُرف مخفية لأنها خاصة وأنك بحاجة إلى دعوة.
 \nليس لديك إذن لإضافة غُرف.</string>
     <string name="this_space_has_no_rooms_admin">قد تكون بعض الغُرف مخفية لأنها خاصة وأنك بحاجة إلى دعوة.</string>
-    <string name="labs_use_restricted_join_rule_desc">يتطلب التحذير دعم الخادم وإصدار الغرفة التجريبية</string>
     <string name="user_invites_you">%s يدعوك</string>
     <string name="looking_for_someone_not_in_space">تبحث عن شخص ما ليس في %s؟</string>
     <string name="space_settings_manage_rooms">إدارة الغُرف</string>
@@ -1313,11 +1293,11 @@
     <string name="action_sign_out_confirmation_simple">أمتأكد من الخروج؟</string>
     <string name="call_notification_reject">رَفض</string>
     <string name="call_notification_answer">قبُول</string>
-    <string name="decline">رَفض</string>
-    <string name="review">مراجعة</string>
-    <string name="ignore">تجاهل</string>
-    <string name="abort">إِجهَاض</string>
-    <string name="accept">قبُول</string>
+    <string name="action_decline">رَفض</string>
+    <string name="action_review">مراجعة</string>
+    <string name="action_ignore">تجاهل</string>
+    <string name="action_abort">إِجهَاض</string>
+    <string name="action_accept">قبُول</string>
     <string name="call_anyway">اتصل على أي حال</string>
     <string name="cannot_call_yourself">لا يمكن مكالمة نفسك</string>
     <string name="learn_more">تَعَلَّم المَزِيد</string>

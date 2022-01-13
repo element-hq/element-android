@@ -16,6 +16,7 @@
 
 package im.vector.app.features.debug.features
 
+import androidx.datastore.preferences.core.Preferences
 import com.airbnb.epoxy.TypedEpoxyController
 import javax.inject.Inject
 import kotlin.reflect.KClass
@@ -28,16 +29,23 @@ sealed interface Feature {
 
     data class EnumFeature<T : Enum<T>>(
             val label: String,
-            val selection: T?,
+            val override: T?,
             val default: T,
             val options: List<T>,
             val type: KClass<T>
+    ) : Feature
+
+    data class BooleanFeature(
+            val label: String,
+            val featureOverride: Boolean?,
+            val featureDefault: Boolean,
+            val key: Preferences.Key<Boolean>
     ) : Feature
 }
 
 class FeaturesController @Inject constructor() : TypedEpoxyController<FeaturesState>() {
 
-    var listener: EnumFeatureItem.Listener? = null
+    var listener: Listener? = null
 
     override fun buildModels(data: FeaturesState?) {
         if (data == null) return
@@ -49,7 +57,14 @@ class FeaturesController @Inject constructor() : TypedEpoxyController<FeaturesSt
                     feature(feature)
                     listener(this@FeaturesController.listener)
                 }
+                is Feature.BooleanFeature -> booleanFeatureItem {
+                    id(index)
+                    feature(feature)
+                    listener(this@FeaturesController.listener)
+                }
             }
         }
     }
+
+    interface Listener : EnumFeatureItem.Listener, BooleanFeatureItem.Listener
 }

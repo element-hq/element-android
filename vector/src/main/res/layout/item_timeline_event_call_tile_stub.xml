@@ -61,7 +61,7 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toEndOf="@id/itemCallRejectView"
             app:layout_constraintTop_toTopOf="@id/itemCallRejectView"
-            tools:text="@string/join" />
+            tools:text="@string/action_join" />
 
         <Button
             android:id="@+id/itemCallRejectView"
@@ -74,7 +74,7 @@
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/ignore" />
+            tools:text="@string/action_ignore" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

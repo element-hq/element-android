@@ -18,6 +18,7 @@ package im.vector.app.features.home.room.detail.widget
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericButtonItem
@@ -40,7 +41,7 @@ class RoomWidgetsController @Inject constructor(
         if (widgets.isEmpty()) {
             genericFooterItem {
                 id("empty")
-                text(host.stringProvider.getString(R.string.room_no_active_widgets))
+                text(host.stringProvider.getString(R.string.room_no_active_widgets).toEpoxyCharSequence())
             }
         } else {
             widgets.forEach { widget ->

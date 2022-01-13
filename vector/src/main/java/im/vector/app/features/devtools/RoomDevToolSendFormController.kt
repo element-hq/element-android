@@ -18,6 +18,7 @@ package im.vector.app.features.devtools
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.form.formEditTextItem
@@ -36,7 +37,7 @@ class RoomDevToolSendFormController @Inject constructor(
 
         genericFooterItem {
             id("topSpace")
-            text("")
+            text("".toEpoxyCharSequence())
         }
         formEditTextItem {
             id("event_type")

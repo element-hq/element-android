@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
+import android.text.Spanned
 import android.text.method.MovementMethod
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.text.PrecomputedTextCompat
@@ -33,6 +34,7 @@ import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlUiState
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlView
 import im.vector.app.features.media.ImageContentRenderer
+import io.noties.markwon.MarkwonPlugin
 import org.matrix.android.sdk.api.extensions.orFalse
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
@@ -62,6 +64,9 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var movementMethod: MovementMethod? = null
 
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var markwonPlugins: (List<MarkwonPlugin>)? = null
+
     private val previewUrlViewUpdater = PreviewUrlViewUpdater()
 
     override fun bind(holder: Holder) {
@@ -87,24 +92,24 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
                 it.bind(holder.messageView)
             }
         }
-        val textFuture = if (bindingOptions?.canUseTextFuture.orFalse()) {
-            PrecomputedTextCompat.getTextFuture(
-                    message?.charSequence ?: "",
-                    TextViewCompat.getTextMetricsParams(holder.messageView),
-                    null)
-        } else {
-            null
+        message?.charSequence.let { charSequence ->
+            markwonPlugins?.forEach { plugin -> plugin.beforeSetText(holder.messageView, charSequence as Spanned) }
         }
         super.bind(holder)
         holder.messageView.movementMethod = movementMethod
         renderSendState(holder.messageView, holder.messageView)
         holder.messageView.onClick(attributes.itemClickListener)
         holder.messageView.onLongClickIgnoringLinks(attributes.itemLongClickListener)
+        holder.messageView.setTextWithEmojiSupport(message?.charSequence, bindingOptions)
+        markwonPlugins?.forEach { plugin -> plugin.afterSetText(holder.messageView) }
+    }
 
-        if (bindingOptions?.canUseTextFuture.orFalse()) {
-            holder.messageView.setTextFuture(textFuture)
+    private fun AppCompatTextView.setTextWithEmojiSupport(message: CharSequence?, bindingOptions: BindingOptions?) {
+        if (bindingOptions?.canUseTextFuture.orFalse() && message != null) {
+            val textFuture = PrecomputedTextCompat.getTextFuture(message, TextViewCompat.getTextMetricsParams(this), null)
+            setTextFuture(textFuture)
         } else {
-            holder.messageView.text = message?.charSequence
+            text = message
         }
     }
 

@@ -138,7 +138,7 @@ class SpaceAddRoomFragment @Inject constructor(
                             .setPositiveButton(R.string.warning_unsaved_change_discard) { _, _ ->
                                 sharedViewModel.handle(SpaceManagedSharedAction.HandleBack)
                             }
-                            .setNegativeButton(R.string.cancel, null)
+                            .setNegativeButton(R.string.action_cancel, null)
                             .show()
                 }
                 is SpaceAddRoomsViewEvents.SaveFailed      -> {

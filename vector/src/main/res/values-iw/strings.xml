@@ -6,7 +6,7 @@
     <string name="dialog_title_error">שגיאה</string>
     <string name="dialog_title_warning">אזהרה</string>
     <string name="dialog_title_confirmation">אישור</string>
-    <string name="disable">השבת</string>
+    <string name="action_disable">השבת</string>
     <string name="copied_to_clipboard">העתק ללוח הגזירים</string>
     <string name="action_unpublish">הסר פרסום</string>
     <string name="action_add">הוסף</string>
@@ -26,15 +26,15 @@
     <string name="call_notification_hangup">נתק</string>
     <string name="call_notification_reject">להסיר</string>
     <string name="call_notification_answer">לקבל</string>
-    <string name="decline">יְרִידָה</string>
-    <string name="review">סקירה</string>
-    <string name="ignore">להתעלם</string>
-    <string name="abort">לְהַפִּיל</string>
+    <string name="action_decline">יְרִידָה</string>
+    <string name="action_review">סקירה</string>
+    <string name="action_ignore">להתעלם</string>
+    <string name="action_abort">לְהַפִּיל</string>
     <string name="done">בוצע</string>
-    <string name="skip">לדלג</string>
-    <string name="accept">לְקַבֵּל</string>
+    <string name="action_skip">לדלג</string>
+    <string name="action_accept">לְקַבֵּל</string>
     <string name="offline">לא מקוון</string>
-    <string name="invite">להזמין</string>
+    <string name="action_invite">להזמין</string>
     <string name="send_anyway">לשלוח בכל מקרה</string>
     <string name="call_anyway">תתקשר בכל מקרה</string>
     <string name="room_no_conference_call_in_encrypted_rooms">שיחות ועידה אינן נתמכות בחדרים מוצפנים</string>
@@ -59,33 +59,33 @@
     <string name="ongoing_conference_call_video">וידאו</string>
     <string name="ongoing_conference_call_voice">קול</string>
     <string name="start_chatting">התחל לצ\'וטט</string>
-    <string name="reset">אתחול</string>
-    <string name="pause_video">השהה</string>
-    <string name="play_video">לנגן</string>
+    <string name="action_reset">אתחול</string>
+    <string name="action_pause">השהה</string>
+    <string name="action_play">לנגן</string>
     <string name="active_call">שיחה פעילה</string>
     <string name="report_content">דווח על תוכן</string>
-    <string name="disconnect">התנתק</string>
-    <string name="revoke">לבטל</string>
+    <string name="action_disconnect">התנתק</string>
+    <string name="action_revoke">לבטל</string>
     <string name="none">אין</string>
-    <string name="rename">שנה שם</string>
-    <string name="delete">מחק</string>
+    <string name="action_rename">שנה שם</string>
+    <string name="action_delete">מחק</string>
     <string name="view_decrypted_source">צפה במקור המפוענח</string>
     <string name="view_source">צפה במקור הדף</string>
     <string name="permalink">קישור קבוע</string>
-    <string name="forward">העבר</string>
+    <string name="action_forward">העבר</string>
     <string name="later">מאוחר יותר</string>
-    <string name="clear">ניקוי</string>
-    <string name="speak">דבר</string>
-    <string name="share">שתף</string>
-    <string name="download">הורדה</string>
-    <string name="quote">צטט</string>
-    <string name="redact">הסר</string>
-    <string name="resend">שלח שוב</string>
-    <string name="send">שלח</string>
-    <string name="stay">הישאר</string>
-    <string name="leave">עזיבה</string>
-    <string name="save">שמירה</string>
-    <string name="cancel">ביטול</string>
+    <string name="action_clear">ניקוי</string>
+    <string name="action_speak">דבר</string>
+    <string name="action_share">שתף</string>
+    <string name="action_download">הורדה</string>
+    <string name="action_quote">צטט</string>
+    <string name="action_redact">הסר</string>
+    <string name="action_resend">שלח שוב</string>
+    <string name="action_send">שלח</string>
+    <string name="action_stay">הישאר</string>
+    <string name="action_leave">עזיבה</string>
+    <string name="action_save">שמירה</string>
+    <string name="action_cancel">ביטול</string>
     <string name="ok">אוקיי</string>
     <string name="loading">טוען…</string>
     <string name="dialog_title_third_party_licences">רישיונות צד ג \'</string>
@@ -102,7 +102,7 @@
     <string name="or">או</string>
     <string name="action_open">פתיחה</string>
     <string name="login_signin">כניסה</string>
-    <string name="dismiss">שחרר</string>
+    <string name="action_dismiss">שחרר</string>
     <string name="keys_backup_is_not_finished_please_wait">גיבוי המפתחות לא הסתיים, אנא המתן …</string>
     <string name="title_activity_verify_device">אמת מושב</string>
     <string name="title_activity_keys_backup_restore">השתמש במפתח גיבוי</string>
@@ -297,10 +297,10 @@
     <string name="room_sync_in_progress">מסנכרן…</string>
     <string name="open_chat_header">פתח כותרת</string>
     <string name="list_members">חברי רשימה</string>
-    <string name="reject">דחייה</string>
-    <string name="preview">תצוגה מקדימה</string>
-    <string name="join">הצטרף</string>
-    <string name="remove">הסר</string>
+    <string name="action_reject">דחייה</string>
+    <string name="action_preview">תצוגה מקדימה</string>
+    <string name="action_join">הצטרף</string>
+    <string name="action_remove">הסר</string>
     <string name="_continue">המשך</string>
     <string name="no">לא</string>
     <string name="yes">כן</string>
@@ -684,17 +684,6 @@
         <item quantity="other">%d חדרים</item>
     </plurals>
     <string name="directory_search_results_title">חפש בתיקיות</string>
-    <string name="room_recents_join_room_prompt">הקלד מזהה חדר או כינוי לחדר</string>
-    <string name="room_recents_join_room_title">הצטרף לחדר</string>
-    <string name="room_recents_join_room">הצטרף לחדר</string>
-    <string name="room_recents_create_room">צור חדר</string>
-    <string name="room_recents_start_chat">התחלת שיחת צ\'אט</string>
-    <string name="room_recents_invites">הזמנות</string>
-    <string name="room_recents_low_priority">עדיפות נמוכה</string>
-    <string name="room_recents_conversations">חדרים</string>
-    <string name="room_recents_favourites">מועדפים</string>
-    <string name="room_recents_directory">תיקייה ראשית</string>
-    <string name="room_recents_join">הצטרף</string>
     <string name="search_is_not_supported_in_e2e_room">עדיין אין תמיכה בחיפוש בחדרים מוצפנים.</string>
     <string name="tab_title_search_files">קבצים</string>
     <string name="tab_title_search_people">אנשים</string>
@@ -1283,7 +1272,6 @@
     <string name="keys_backup_setup_step3_button_title_no_passphrase">הכנתי עותק</string>
     <string name="sent_verification_conclusion">מסקנת אימות</string>
     <string name="sent_a_reaction">הגיב עם: %s</string>
-    <string name="sent_a_bot_buttons">כפתורי בוט</string>
     <string name="sent_a_poll">משאל</string>
     <string name="send_a_sticker">מדבקה</string>
     <string name="sent_a_file">קובץ</string>
@@ -1730,8 +1718,8 @@
     <string name="reactions">תגובות</string>
     <string name="message_view_reaction">צפה בתגובות</string>
     <string name="message_add_reaction">הוסף תגובה</string>
-    <string name="reactions_like">אהבתי</string>
-    <string name="reactions_agree">מסכים</string>
+    <string name="action_like">אהבתי</string>
+    <string name="action_agree">מסכים</string>
     <string name="title_activity_emoji_reaction_picker">תגובות</string>
     <string name="room_list_rooms_empty_body">החדרים שלך יוצגו כאן. הקש על + שמאל למטה כדי למצוא את הקיים או התחל כמה משלך.</string>
     <string name="room_list_rooms_empty_title">חדרים</string>
@@ -2021,7 +2009,6 @@
     <string name="verification_use_passphrase">אם אינך יכול לגשת להפעלה קיימת</string>
     <string name="verification_cannot_access_other_session">השתמש בביטוי סיסמה או מפתח שחזור</string>
     <string name="command_description_poll">יוצר סקר פשוט</string>
-    <string name="poll_item_selected_aria">אפשרות נבחרת</string>
     <string name="delete_account_data_warning">למחוק את נתוני החשבון מסוג %1$s\?
 \n
 \nהשתמש בזהירות, זה עלול להוביל להתנהגות בלתי צפויה.</string>
@@ -2042,12 +2029,6 @@
     <string name="bottom_sheet_setup_secure_backup_security_key_title">השתמש במפתח אבטחה</string>
     <string name="bottom_sheet_setup_secure_backup_submit">התקן</string>
     <string name="bottom_sheet_setup_secure_backup_subtitle">הגן מפני אובדן גישה להודעות ונתונים מוצפנים על ידי גיבוי של מפתחות הצפנה בשרת שלך.</string>
-    <plurals name="poll_info">
-        <item quantity="one">%d הצבעה</item>
-        <item quantity="two">%d הצבעות</item>
-        <item quantity="many">%d הצבעות</item>
-        <item quantity="other">%d הצבעות</item>
-    </plurals>
     <string name="settings_dev_tools">כלי מפתחים</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">מצב טיסה פועל</string>
     <string name="no_connectivity_to_the_server_indicator">הקישוריות לשרת אבדה</string>
@@ -2131,7 +2112,7 @@
     <string name="command_description_discard_session_not_handled">נתמך רק בחדרים מוצפנים</string>
     <string name="command_description_discard_session">מכריח את ההפעלה הקבוצתית החוצה הנוכחית בחדר מוצפן להיזרק</string>
     <string name="template_use_latest_app">השתמש באלמנט האחרון במכשירים האחרים שלך:</string>
-    <string name="or_other_mx_capabale_client">או לקוח מטריקס אחר עם יכולת חתימה צולבת</string>
+    <string name="or_other_mx_capable_client">או לקוח מטריקס אחר עם יכולת חתימה צולבת</string>
     <string name="template_app_ios_android">אלמנט iOS
 \nאלמנט אנדרואיד</string>
     <string name="template_app_desktop_web">רשת האינטרנט
@@ -2249,12 +2230,6 @@
         <item quantity="two">שלח תמוננות בגודל המקורי</item>
         <item quantity="many">שלח תמונות בגודל המקורי</item>
         <item quantity="other">שלח תמונות בגודל המקורי</item>
-    </plurals>
-    <plurals name="poll_info_final">
-        <item quantity="one">%d הצבעה - תוצאות סופיות</item>
-        <item quantity="two">%d הצבעות - תוצאות סופיות</item>
-        <item quantity="many">%d הצבעעות - תוצאות סופיות</item>
-        <item quantity="other">%d הצבעות - תוצאות סופיות</item>
     </plurals>
     <string name="create_pin_title">בחר PIN לאבטחה</string>
     <string name="too_many_pin_failures">שגיאות רבות מדי, יצאת מהחשבון</string>

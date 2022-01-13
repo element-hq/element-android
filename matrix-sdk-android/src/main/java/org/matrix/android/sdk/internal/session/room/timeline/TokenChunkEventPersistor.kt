@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.timeline
 
 import com.zhuinden.monarchy.Monarchy
+import dagger.Lazy
 import io.realm.Realm
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -35,6 +36,7 @@ import org.matrix.android.sdk.internal.database.query.create
 import org.matrix.android.sdk.internal.database.query.find
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.session.StreamEventsManager
 import org.matrix.android.sdk.internal.util.awaitTransaction
 import timber.log.Timber
 import javax.inject.Inject
@@ -42,7 +44,9 @@ import javax.inject.Inject
 /**
  * Insert Chunk in DB, and eventually link next and previous chunk in db.
  */
-internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase private val monarchy: Monarchy) {
+internal class TokenChunkEventPersistor @Inject constructor(
+        @SessionDatabase private val monarchy: Monarchy,
+        private val liveEventManager: Lazy<StreamEventsManager>) {
 
     enum class Result {
         SHOULD_FETCH_MORE,
@@ -170,6 +174,7 @@ internal class TokenChunkEventPersistor @Inject constructor(@SessionDatabase pri
                     }
                     roomMemberContentsByUser[event.stateKey] = contentToUse.toModel<RoomMemberContent>()
                 }
+                liveEventManager.get().dispatchPaginatedEventReceived(event, roomId)
                 currentChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberContentsByUser)
             }
         }

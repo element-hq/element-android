@@ -24,6 +24,7 @@ import im.vector.app.core.platform.VectorViewEvents
  */
 sealed class RoomProfileViewEvents : VectorViewEvents {
     data class Loading(val message: CharSequence? = null) : RoomProfileViewEvents()
+    object DismissLoading : RoomProfileViewEvents()
     data class Failure(val throwable: Throwable) : RoomProfileViewEvents()
 
     data class ShareRoomProfile(val permalink: String) : RoomProfileViewEvents()

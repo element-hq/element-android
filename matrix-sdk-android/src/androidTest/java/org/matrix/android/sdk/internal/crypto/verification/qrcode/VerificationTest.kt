@@ -40,8 +40,6 @@ import kotlin.coroutines.resume
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 class VerificationTest : InstrumentedTest {
-    private val testHelper = CommonTestHelper(context())
-    private val cryptoTestHelper = CryptoTestHelper(testHelper)
 
     data class ExpectedResult(
             val sasIsSupported: Boolean = false,
@@ -155,6 +153,8 @@ class VerificationTest : InstrumentedTest {
                        bobSupportedMethods: List<VerificationMethod>,
                        expectedResultForAlice: ExpectedResult,
                        expectedResultForBob: ExpectedResult) {
+         val testHelper = CommonTestHelper(context())
+         val cryptoTestHelper = CryptoTestHelper(testHelper)
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
         val aliceSession = cryptoTestData.firstSession

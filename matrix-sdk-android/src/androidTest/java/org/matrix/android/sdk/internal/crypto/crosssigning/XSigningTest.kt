@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.crypto.crosssigning
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.test.filters.LargeTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
@@ -24,6 +25,7 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
 import org.junit.FixMethodOrder
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -43,6 +45,7 @@ import kotlin.coroutines.resume
 
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@LargeTest
 class XSigningTest : InstrumentedTest {
 
     private val testHelper = CommonTestHelper(context())
@@ -124,11 +127,11 @@ class XSigningTest : InstrumentedTest {
 
         assertFalse("Bob keys from alice pov should not be trusted", bobKeysFromAlicePOV.isTrusted())
 
-        testHelper.signOutAndClose(aliceSession)
-        testHelper.signOutAndClose(bobSession)
+        cryptoTestData.cleanUp(testHelper)
     }
 
     @Test
+    @Ignore("This test will be ignored until it is fixed")
     fun test_CrossSigningTestAliceTrustBobNewDevice() {
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom()
 
