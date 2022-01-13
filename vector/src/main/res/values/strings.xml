@@ -2528,16 +2528,6 @@
     <string name="ftue_auth_carousel_4_title">Cut the slack from teams.</string>
     <string name="ftue_auth_carousel_4_body">As universal as email, Element is a completely new type of collaboration.</string>
 
-    <string name="ftue_auth_use_case_title">Who will you chat to the most?</string>
-    <string name="ftue_auth_use_case_subtitle">We\'ll help you get connected.</string>
-    <string name="ftue_auth_use_case_option_one">Friends and family</string>
-    <string name="ftue_auth_use_case_option_two">Teams</string>
-    <string name="ftue_auth_use_case_option_three">Communities</string>
-    <string name="ftue_auth_use_case_skip">Not sure yet? %s</string>
-    <string name="ftue_auth_use_case_skip_partial">You can skip this question</string>
-    <string name="ftue_auth_use_case_join_existing_server">Looking to join an existing server?</string>
-    <string name="ftue_auth_use_case_connect_to_server">Connect to server</string>
-
     <string name="login_splash_title">It\'s your conversation. Own it.</string>
     <string name="login_splash_text1">Chat with people directly or in groups</string>
     <string name="login_splash_text2">Keep conversations private with encryption</string>
