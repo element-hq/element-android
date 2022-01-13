@@ -13,9 +13,6 @@
     <color name="button_bot_background_color">#14368BD6</color>
     <color name="button_bot_enabled_text_color">@color/palette_azure</color>
 
-    <color name="bubble_background_outgoing">#0F0DBD8B</color>
-    <color name="bubble_background_incoming">@color/element_system_light</color>
-
     <!-- Notification (do not depends on theme) -->
     <color name="notification_accent_color">@color/palette_azure</color>
     <color name="key_share_req_accent_color">@color/palette_melon</color>

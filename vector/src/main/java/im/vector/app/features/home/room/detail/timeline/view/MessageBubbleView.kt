@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.detail.timeline.view
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
@@ -26,12 +27,14 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
+import androidx.core.graphics.ColorUtils
 import androidx.core.view.updateLayoutParams
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import im.vector.app.R
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.features.themes.ThemeUtils
 
 class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
                                                   defStyleAttr: Int = 0)
@@ -116,7 +119,6 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
             }
             applyTo(bubbleView)
         }
-
     }
 
     private fun createBackgroundDrawable(): Drawable {
@@ -133,14 +135,16 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
         val shapeAppearanceModelBuilder = ShapeAppearanceModel().toBuilder()
         val backgroundColor: Int
         if (isIncoming) {
-            backgroundColor = R.color.bubble_background_incoming
+            backgroundColor = ThemeUtils.getColor(context, R.attr.vctr_system)
             shapeAppearanceModelBuilder
                     .setTopRightCorner(CornerFamily.ROUNDED, cornerRadius)
                     .setBottomRightCorner(CornerFamily.ROUNDED, cornerRadius)
                     .setTopLeftCorner(topCornerFamily, topRadius)
                     .setBottomLeftCorner(bottomCornerFamily, bottomRadius)
         } else {
-            backgroundColor = R.color.bubble_background_outgoing
+            val resolvedColor = ContextCompat.getColor(context, R.color.palette_element_green)
+            val alpha = if (ThemeUtils.isLightTheme(context)) 0x0E else 0x26
+            backgroundColor = ColorUtils.setAlphaComponent(resolvedColor, alpha)
             shapeAppearanceModelBuilder
                     .setTopLeftCorner(CornerFamily.ROUNDED, cornerRadius)
                     .setBottomLeftCorner(CornerFamily.ROUNDED, cornerRadius)
@@ -149,7 +153,7 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
         }
         val shapeAppearanceModel = shapeAppearanceModelBuilder.build()
         return MaterialShapeDrawable(shapeAppearanceModel).apply {
-            fillColor = ContextCompat.getColorStateList(context, backgroundColor)
+            fillColor = ColorStateList.valueOf(backgroundColor)
         }
     }
 }
