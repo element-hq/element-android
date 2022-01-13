@@ -29,12 +29,12 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.PublishDataSource
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.login.ReAuthHelper
+import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged

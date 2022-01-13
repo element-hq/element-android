@@ -333,6 +333,7 @@ dependencies {
     implementation project(":multipicker")
     implementation project(":attachment-viewer")
     implementation project(":library:ui-styles")
+    implementation project(":library:core-utils")
     implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation libs.jetbrains.coroutinesCore

@@ -26,12 +26,12 @@ import im.vector.app.AppStateHandler
 import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
