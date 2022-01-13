@@ -27,7 +27,7 @@ import im.vector.app.core.extensions.setTextWithColoredPart
 import im.vector.app.databinding.FragmentFtueAuthUseCaseBinding
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.onboarding.OnboardingAction
-import im.vector.app.features.onboarding.OnboardingAction.UpdateUseCase.UseCase
+import im.vector.app.features.onboarding.FtueUseCase
 import javax.inject.Inject
 
 class FtueAuthUseCaseFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueAuthUseCaseBinding>() {
@@ -42,9 +42,9 @@ class FtueAuthUseCaseFragment @Inject constructor() : AbstractFtueAuthFragment<F
     }
 
     private fun setupViews() {
-        views.useCaseOptionOne.setUseCase(R.string.ftue_auth_use_case_option_one, UseCase.FRIENDS_FAMILY)
-        views.useCaseOptionTwo.setUseCase(R.string.ftue_auth_use_case_option_two, UseCase.TEAMS)
-        views.useCaseOptionThree.setUseCase(R.string.ftue_auth_use_case_option_three, UseCase.COMMUNITIES)
+        views.useCaseOptionOne.setUseCase(R.string.ftue_auth_use_case_option_one, FtueUseCase.FRIENDS_FAMILY)
+        views.useCaseOptionTwo.setUseCase(R.string.ftue_auth_use_case_option_two, FtueUseCase.TEAMS)
+        views.useCaseOptionThree.setUseCase(R.string.ftue_auth_use_case_option_three, FtueUseCase.COMMUNITIES)
 
         val partial = getString(R.string.ftue_auth_use_case_skip_partial)
         views.useCaseSkip.setTextWithColoredPart(
@@ -52,7 +52,7 @@ class FtueAuthUseCaseFragment @Inject constructor() : AbstractFtueAuthFragment<F
                 partial,
                 underline = false,
                 colorAttribute = R.attr.colorAccent,
-                onClick = { viewModel.handle(OnboardingAction.UpdateUseCase(UseCase.SKIP)) }
+                onClick = { viewModel.handle(OnboardingAction.UpdateUseCase(FtueUseCase.SKIP)) }
         )
 
         views.useCaseConnectToServer.setOnClickListener {
@@ -64,7 +64,7 @@ class FtueAuthUseCaseFragment @Inject constructor() : AbstractFtueAuthFragment<F
         // Nothing to do
     }
 
-    private fun TextView.setUseCase(@StringRes label: Int, useCase: UseCase) {
+    private fun TextView.setUseCase(@StringRes label: Int, useCase: FtueUseCase) {
         setText(label)
         debouncedClicks {
             viewModel.handle(OnboardingAction.UpdateUseCase(useCase))
