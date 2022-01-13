@@ -32,7 +32,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
-import im.vector.app.features.settings.VectorPreferences
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns.getDomain
@@ -56,7 +55,6 @@ import timber.log.Timber
 class CreateRoomViewModel @AssistedInject constructor(@Assisted private val initialState: CreateRoomViewState,
                                                       private val session: Session,
                                                       private val rawService: RawService,
-                                                      vectorPreferences: VectorPreferences,
                                                       appStateHandler: AppStateHandler
 ) : VectorViewModel<CreateRoomViewState, CreateRoomAction, CreateRoomViewEvents>(initialState) {
 
@@ -74,11 +72,7 @@ class CreateRoomViewModel @AssistedInject constructor(@Assisted private val init
         val parentSpaceId = initialState.parentSpaceId ?: appStateHandler.safeActiveSpaceId()
 
         val restrictedSupport = session.getHomeServerCapabilities().isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
-        val createRestricted = when (restrictedSupport) {
-            HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED          -> true
-            HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED_UNSTABLE -> vectorPreferences.labsUseExperimentalRestricted()
-            else                                                            -> false
-        }
+        val createRestricted = restrictedSupport == HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED
 
         val defaultJoinRules = if (parentSpaceId != null && createRestricted) {
             RoomJoinRules.RESTRICTED

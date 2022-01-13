@@ -22,6 +22,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.error.ErrorFormatter
@@ -86,7 +87,7 @@ class ThreePidsSettingsController @Inject constructor(
             is Fail    -> {
                 genericFooterItem {
                     id("fail")
-                    text(data.threePids.error.localizedMessage)
+                    text(data.threePids.error.localizedMessage?.toEpoxyCharSequence())
                 }
             }
             is Success -> {

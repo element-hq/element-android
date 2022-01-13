@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.session.room.timeline
 
+import androidx.test.filters.LargeTest
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.internal.assertEquals
 import org.amshove.kluent.shouldBeFalse
@@ -40,16 +41,20 @@ import java.util.concurrent.CountDownLatch
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
+@LargeTest
 class TimelineForwardPaginationTest : InstrumentedTest {
 
-    private val commonTestHelper = CommonTestHelper(context())
-    private val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
+//    @Rule
+//    @JvmField
+//    val mRetryTestRule = RetryTestRule()
 
     /**
      * This test ensure that if we click to permalink, we will be able to go back to the live
      */
     @Test
     fun forwardPaginationTest() {
+        val commonTestHelper = CommonTestHelper(context())
+        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
         val numberOfMessagesToSend = 90
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
 

@@ -109,11 +109,7 @@ class RoomJoinRuleChooseRestrictedViewModel @AssistedInject constructor(
             }
 
             val restrictedSupport = homeServerCapabilities.isFeatureSupported(HomeServerCapabilities.ROOM_CAP_RESTRICTED)
-            val couldUpgradeToRestricted = when (restrictedSupport) {
-                HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED          -> true
-                HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED_UNSTABLE -> vectorPreferences.labsUseExperimentalRestricted()
-                else                                                            -> false
-            }
+            val couldUpgradeToRestricted = restrictedSupport == HomeServerCapabilities.RoomCapabilitySupport.SUPPORTED
 
             val choices = if (restrictedSupportedByThisVersion || couldUpgradeToRestricted) {
                 listOf(

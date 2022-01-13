@@ -43,12 +43,12 @@ class SpaceAdd3pidEpoxyController @Inject constructor(
         genericFooterItem {
             id("info_help_header")
             style(ItemStyle.TITLE)
-            text(host.stringProvider.getString(R.string.create_spaces_invite_public_header))
+            text(host.stringProvider.getString(R.string.create_spaces_invite_public_header).toEpoxyCharSequence())
             textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
         }
         genericFooterItem {
             id("info_help_desc")
-            text(host.stringProvider.getString(R.string.create_spaces_invite_public_header_desc, data.name ?: ""))
+            text(host.stringProvider.getString(R.string.create_spaces_invite_public_header_desc, data.name ?: "").toEpoxyCharSequence())
             textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary))
         }
 

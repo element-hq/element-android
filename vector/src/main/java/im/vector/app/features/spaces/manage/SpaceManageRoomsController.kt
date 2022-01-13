@@ -21,6 +21,7 @@ import com.airbnb.epoxy.VisibilityState
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Incomplete
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.error.ErrorFormatter
@@ -74,7 +75,7 @@ class SpaceManageRoomsController @Inject constructor(
         if (filteredResult.isEmpty()) {
             genericFooterItem {
                 id("empty_result")
-                text(host.stringProvider.getString(R.string.no_result_placeholder))
+                text(host.stringProvider.getString(R.string.no_result_placeholder).toEpoxyCharSequence())
             }
         } else {
             filteredResult.forEach { childInfo ->

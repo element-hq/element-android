@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.session.room.timeline
 
+import androidx.test.filters.LargeTest
 import kotlinx.coroutines.runBlocking
 import org.amshove.kluent.internal.assertEquals
 import org.junit.FixMethodOrder
@@ -36,13 +37,13 @@ import org.matrix.android.sdk.common.TestConstants
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
+@LargeTest
 class TimelineSimpleBackPaginationTest : InstrumentedTest {
-
-    private val commonTestHelper = CommonTestHelper(context())
-    private val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
 
     @Test
     fun timeline_backPaginate_shouldReachEndOfTimeline() {
+        val commonTestHelper = CommonTestHelper(context())
+        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
         val numberOfMessagesToSent = 200
 
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)

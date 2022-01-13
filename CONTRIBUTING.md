@@ -139,7 +139,7 @@ If a string is not used anymore, it should be removed from the resource, but ple
 
 Instead, please comment the original string with:
 ```xml
-<!-- TO BE REMOVED -->
+<!-- TODO TO BE REMOVED -->
 ```
 The string will be removed during the next sync with Weblate.
 
