@@ -53,8 +53,6 @@ allprojects {
                 groups.jitsi.group.each { includeGroup it }
             }
         }
-        // TODO. MapTiler
-        mavenCentral()
         google {
             content {
                 groups.google.regex.each { includeGroupByRegex it }
