@@ -47,6 +47,7 @@ android {
 
 dependencies {
     implementation project(":library:ui-styles")
+    implementation project(":library:core-utils")
 
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
