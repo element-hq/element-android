@@ -69,7 +69,6 @@ class UiAllScreensSanityTest {
             preferences { crawl() }
             voiceAndVideo()
             ignoredUsers()
-            // TODO Test analytics
             securityAndPrivacy { crawl() }
             labs()
             advancedSettings { crawl() }
