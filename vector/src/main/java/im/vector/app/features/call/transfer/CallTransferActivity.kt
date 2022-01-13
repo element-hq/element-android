@@ -70,7 +70,8 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
                 CallTransferPagerAdapter.DIAL_PAD_INDEX  -> tab.text = getString(R.string.call_dial_pad_title)
             }
         }.attach()
-        configureToolbar(views.callTransferToolbar)
+        setupToolbar(views.callTransferToolbar)
+                .allowBack()
         views.callTransferToolbar.title = getString(R.string.call_transfer_title)
         setupConnectAction()
     }

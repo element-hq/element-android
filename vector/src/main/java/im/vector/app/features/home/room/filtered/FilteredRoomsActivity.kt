@@ -42,7 +42,8 @@ class FilteredRoomsActivity : VectorBaseActivity<ActivityFilteredRoomsBinding>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        configureToolbar(views.filteredRoomsToolbar)
+        setupToolbar(views.filteredRoomsToolbar)
+                .allowBack()
         if (isFirstCreation()) {
             val params = RoomListParams(RoomListDisplayMode.FILTERED)
             replaceFragment(views.filteredRoomsFragmentContainer, RoomListFragment::class.java, params, FRAGMENT_TAG)

@@ -91,6 +91,7 @@ class RoomMemberProfileFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.matrixProfileToolbar)
+                .allowBack()
         val headerView = views.matrixProfileHeaderView.let {
             it.layoutResource = R.layout.view_stub_room_member_profile_header
             it.inflate()

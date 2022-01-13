@@ -79,7 +79,8 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
     }
 
     override fun initUiAndData() {
-        configureToolbar(views.emojiPickerToolbar)
+        setupToolbar(views.emojiPickerToolbar)
+                .allowBack()
         emojiCompatFontProvider.let {
             EmojiDrawView.configureTextPaint(this, it.typeface)
             it.addListener(this)

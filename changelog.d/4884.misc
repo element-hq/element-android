@@ -1,0 +1,3 @@
+Toolbar management rework. Toolbar title's and subtitle's text appearance now controlled by theme without local overrides. Helper class introduced to
+help with toolbar configuration. Toolbar title, subtitle and navigation button widgets are removed where it is possible and replaced with built-in
+toolbar widgets.

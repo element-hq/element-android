@@ -68,6 +68,12 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
 
     private var progress: AlertDialog? = null
 
+    /**
+     * [ToolbarConfig] instance from host activity
+     * */
+    protected var toolbar: ToolbarConfig? = null
+            get() = (activity as? VectorBaseActivity<*>)?.toolbar
+            private set
     /* ==========================================================================================
      * View model
      * ========================================================================================== */
@@ -213,19 +219,15 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
      * Toolbar
      * ========================================================================================== */
 
-    /**
-     * Configure the Toolbar.
-     */
-    protected fun setupToolbar(toolbar: MaterialToolbar) {
-        val parentActivity = vectorBaseActivity
-        if (parentActivity is ToolbarConfigurable) {
-            parentActivity.configure(toolbar)
-        }
-    }
 
-    //we need to decide if we want to use vectorBaseActivity here
-    //the problem is that it casts getActivity() result to non nullable type, so in case if it will return null, NullPointerException will be thrown
-    protected fun configureToolbar(toolbar: MaterialToolbar) = (activity as? VectorBaseActivity<*>)?.configureToolbar(toolbar) ?: ToolbarConfig(null, toolbar)
+    /**
+     * Sets toolbar as actionBar for current activity
+     *
+     * @return Instance of [ToolbarConfig] with set of helper methods to configure toolbar
+     * */
+    protected fun setupToolbar(toolbar: MaterialToolbar): ToolbarConfig {
+        return vectorBaseActivity.setupToolbar(toolbar)
+    }
 
     /* ==========================================================================================
      * ViewEvents

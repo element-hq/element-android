@@ -41,10 +41,10 @@
             android:layout_width="@dimen/call_pip_width"
             android:layout_height="@dimen/call_pip_height"
             android:layout_marginEnd="16dp"
-            app:layout_goneMarginEnd="0dp"
             app:cardCornerRadius="@dimen/call_pip_radius"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_goneMarginEnd="0dp">
 
             <org.webrtc.SurfaceViewRenderer
                 android:id="@+id/pipRenderer"
@@ -104,11 +104,8 @@
         app:navigationIcon="@drawable/ic_back_24dp"
         app:navigationIconTint="@color/element_background_light"
         app:subtitle="3:10"
-        app:subtitleTextAppearance="@style/TextAppearance.Vector.Caption"
         app:subtitleTextColor="@color/element_background_light"
         app:title="Video call"
-        app:titleMarginTop="16dp"
-        app:titleTextAppearance="@style/TextAppearance.Vector.Body.Medium"
         app:titleTextColor="@color/element_background_light" />
 
     <ImageView

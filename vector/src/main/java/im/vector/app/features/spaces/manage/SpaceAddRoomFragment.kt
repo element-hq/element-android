@@ -63,12 +63,9 @@ class SpaceAddRoomFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vectorBaseActivity.setSupportActionBar(views.addRoomToSpaceToolbar)
+        setupToolbar(views.addRoomToSpaceToolbar)
+                .allowBack()
 
-        vectorBaseActivity.supportActionBar?.let {
-            it.setDisplayShowHomeEnabled(true)
-            it.setDisplayHomeAsUpEnabled(true)
-        }
 
 //        sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
@@ -90,7 +87,7 @@ class SpaceAddRoomFragment @Inject constructor(
         }
 
         viewModel.onEach(SpaceAddRoomsState::spaceName) {
-            views.appBarSpaceInfo.text = it
+            toolbar?.subtitle = it
         }
 
         viewModel.onEach(SpaceAddRoomsState::ignoreRooms) {
@@ -115,8 +112,7 @@ class SpaceAddRoomFragment @Inject constructor(
             spaceEpoxyController.disabled = !it
             roomEpoxyController.disabled = it
             views.createNewRoom.text = if (it) getString(R.string.create_space) else getString(R.string.create_new_room)
-            val title = if (it) getString(R.string.space_add_existing_spaces) else getString(R.string.space_add_existing_rooms_only)
-            views.appBarTitle.text = title
+            toolbar?.setTitle(if (it) R.string.space_add_existing_spaces else R.string.space_add_existing_rooms_only)
         }
 
         views.createNewRoom.debouncedClicks {

@@ -16,45 +16,70 @@
 
 package im.vector.app.core.utils
 
-import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import com.google.android.material.appbar.MaterialToolbar
+import im.vector.app.R
 
+/**
+ * Helper class to configure toolbar.
+ * Wraps [MaterialToolbar] providing set of methods to configure it
+ */
 class ToolbarConfig(val activity: AppCompatActivity?, val toolbar: MaterialToolbar) {
-    private var titleRes: Int? = null
-    private var title: String? = null
-    private var subtitleRes: Int? = null
-    private var subtitle: String? = null
     private var customBackResId: Int? = null
-    private var isBackAllowed: Boolean = true
-    private var useCloseButton: Boolean = false
 
-    fun withTitle(@StringRes titleRes: Int) = apply {this.titleRes = titleRes }
-    fun withTitle(title: String) = apply {this.title = title}
-    fun withSubtitle(@StringRes subtitleRes: Int) = apply {this.subtitleRes = subtitleRes }
-    fun withSubtitle(subtitle: String) = apply {this.subtitle = subtitle}
-
-    fun allowBack(isBackAllowed: Boolean) = apply { this.isBackAllowed = isBackAllowed }
-    fun setBackAsClose(useCloseButton: Boolean) = apply { this.useCloseButton = useCloseButton }
-    fun withCustomBackIcon(@DrawableRes customBackResId: Int) = apply { this.customBackResId = customBackResId }
-
-    fun configure(){
+    fun setup() {
         if (activity == null) {
             return
         }
         activity.setSupportActionBar(toolbar)
-        toolbar.title = titleRes?.let { activity.getString(it) }
-        toolbar.subtitle = subtitleRes?.let { activity.getString(it) }
+    }
 
-        activity.supportActionBar?.let {
-            it.setDisplayShowHomeEnabled(isBackAllowed)
-                    it.setDisplayHomeAsUpEnabled(isBackAllowed)
-        }
+    /**
+     * Delegating property for [toolbar.title]
+     * */
+    var title: CharSequence? by toolbar::title
 
-        customBackResId?.let {
-            toolbar.navigationIcon = AppCompatResources.getDrawable(activity, it)
+    /**
+     * Delegating property for [toolbar.subtitle]
+     * */
+    var subtitle: CharSequence? by toolbar::subtitle
+
+    /**
+     * Sets toolbar's title text
+     * */
+    fun setTitle(title: CharSequence?) = apply { toolbar.title = title }
+
+    /**
+     * Sets toolbar's title text using provided string resource
+     * */
+    fun setTitle(@StringRes titleRes: Int) = apply { toolbar.setTitle(titleRes)}
+
+    /**
+     * Sets toolbar's subtitle text
+     * */
+    fun setSubtitle(subtitle: String?) = apply { toolbar.subtitle = subtitle }
+
+    /**
+     * Sets toolbar's title text using provided string resource
+     * */
+    fun setSubtitle(@StringRes subtitleRes: Int) = apply { toolbar.subtitle = activity?.getString(subtitleRes) }
+
+    /**
+     * Enables/disables navigate back button
+     *
+     * @param isAllowed defines if back button is enabled. Default [true]
+     * @param useCross defines if cross icon should be used instead of arrow. Default [false]
+     * */
+    fun allowBack(isAllowed: Boolean = true, useCross: Boolean = false) = apply {
+        activity?.supportActionBar?.let {
+            it.setDisplayShowHomeEnabled(isAllowed)
+            it.setDisplayHomeAsUpEnabled(isAllowed)
+            if (isAllowed && useCross) {
+                val navResId = customBackResId ?: R.drawable.ic_x_18dp
+                toolbar.navigationIcon = AppCompatResources.getDrawable(activity, navResId)
+            }
         }
     }
 }

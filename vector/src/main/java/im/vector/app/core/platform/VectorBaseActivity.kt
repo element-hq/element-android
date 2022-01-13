@@ -116,6 +116,8 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
                 .launchIn(lifecycleScope)
     }
 
+    var toolbar: ToolbarConfig? = null
+
     /* ==========================================================================================
      * Views
      * ========================================================================================== */
@@ -498,18 +500,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
      */
     protected fun isFirstCreation() = savedInstanceState == null
 
-    /**
-     * Configure the Toolbar, with default back button.
-     */
-    protected fun configureToolbar(toolbar: MaterialToolbar, displayBack: Boolean) {
-        setSupportActionBar(toolbar)
-        supportActionBar?.let {
-            it.setDisplayShowHomeEnabled(displayBack)
-            it.setDisplayHomeAsUpEnabled(displayBack)
-            it.title = null
-        }
-    }
-
     // ==============================================================================================
     // Handle loading view (also called waiting view or spinner view)
     // ==============================================================================================
@@ -620,5 +610,13 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         }
     }
 
-    fun configureToolbar(toolbar: MaterialToolbar): ToolbarConfig = ToolbarConfig(this, toolbar)
+    /**
+     * Sets toolbar as actionBar
+     *
+     * @return Instance of [ToolbarConfig] with set of helper methods to configure toolbar
+     * */
+    fun setupToolbar(toolbar: MaterialToolbar) = ToolbarConfig(this, toolbar).also {
+        this.toolbar = it
+        it.setup()
+    }
 }

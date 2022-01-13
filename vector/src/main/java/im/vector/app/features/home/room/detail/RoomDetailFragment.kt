@@ -359,6 +359,7 @@ class RoomDetailFragment @Inject constructor(
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         lazyLoadedViews.bind(views)
         setupToolbar(views.roomToolbar)
+                .allowBack()
         setupRecyclerView()
         setupComposer()
         setupNotificationView()
@@ -1494,7 +1495,7 @@ class RoomDetailFragment @Inject constructor(
         views.roomToolbarSubtitleView.apply {
             setTextOrHide(subtitle)
             if (typingMessage.isNullOrBlank()) {
-                setTextColor(colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                setTextColor(colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary))
                 setTypeface(null, Typeface.NORMAL)
             } else {
                 setTextColor(colorProvider.getColorFromAttribute(R.attr.colorPrimary))

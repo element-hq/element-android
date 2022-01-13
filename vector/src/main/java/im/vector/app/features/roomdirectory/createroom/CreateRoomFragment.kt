@@ -82,25 +82,19 @@ class CreateRoomFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        vectorBaseActivity.setSupportActionBar(views.createRoomToolbar)
         sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         setupRoomJoinRuleSharedActionViewModel()
         setupWaitingView()
         setupRecyclerView()
-        views.createRoomClose.debouncedClicks {
-            sharedActionViewModel.post(RoomDirectorySharedAction.Back)
-        }
+        setupToolbar(views.createRoomToolbar)
+                .setTitle(if (args.isSpace) R.string.create_new_space else R.string.create_new_room)
+                .allowBack(useCross = true)
         viewModel.observeViewEvents {
             when (it) {
                 CreateRoomViewEvents.Quit       -> vectorBaseActivity.onBackPressed()
                 is CreateRoomViewEvents.Failure -> showFailure(it.throwable)
             }.exhaustive
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        views.createRoomTitle.text = getString(if (args.isSpace) R.string.create_new_space else R.string.create_new_room)
     }
 
     private fun setupRoomJoinRuleSharedActionViewModel() {

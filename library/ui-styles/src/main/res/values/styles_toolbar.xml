@@ -27,13 +27,15 @@
     <style name="Widget.Vector.TextView.ActionBarTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">?vctr_content_primary</item>
         <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">20sp</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <!-- sub text -->
     <style name="Widget.Vector.TextView.ActionBarSubTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-        <item name="android:textColor">?vctr_content_primary</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">?vctr_content_secondary</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
         <item name="android:textSize">12sp</item>
     </style>
 

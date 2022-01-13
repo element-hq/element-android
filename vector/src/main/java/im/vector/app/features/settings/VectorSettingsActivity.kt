@@ -63,7 +63,8 @@ class VectorSettingsActivity : VectorBaseActivity<ActivityVectorSettingsBinding>
     @Inject lateinit var session: Session
 
     override fun initUiAndData() {
-        configureToolbar(views.settingsToolbar)
+        setupToolbar(views.settingsToolbar)
+                .allowBack()
 
         if (isFirstCreation()) {
             // display the fragment

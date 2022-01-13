@@ -44,7 +44,8 @@ class VectorWebViewActivity : VectorBaseActivity<ActivityVectorWebViewBinding>()
     }
 
     override fun initUiAndData() {
-        configureToolbar(views.webviewToolbar)
+        setupToolbar(views.webviewToolbar)
+                .allowBack()
         waitingView = views.simpleWebviewLoader
 
         views.simpleWebview.settings.apply {

@@ -45,7 +45,8 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
     private var reportType: ReportType = ReportType.BUG_REPORT
 
     override fun initUiAndData() {
-        configureToolbar(views.bugReportToolbar)
+        setupToolbar(views.bugReportToolbar)
+                .allowBack()
         setupViews()
 
         if (bugReporter.screenshot != null) {

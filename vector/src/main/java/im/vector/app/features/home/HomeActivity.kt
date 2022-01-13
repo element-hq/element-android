@@ -32,7 +32,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.AppStateHandler
@@ -42,7 +41,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.databinding.ActivityHomeBinding
@@ -96,7 +94,6 @@ data class HomeActivityArgs(
 @AndroidEntryPoint
 class HomeActivity :
         VectorBaseActivity<ActivityHomeBinding>(),
-        ToolbarConfigurable,
         NavigationInterceptor,
         SpaceInviteBottomSheet.InteractionListener,
         MatrixToBottomSheet.InteractionListener {
@@ -476,10 +473,6 @@ class HomeActivity :
 
         // Force remote backup state update to update the banner if needed
         serverBackupStatusViewModel.refreshRemoteStateIfNeeded()
-    }
-
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar, false)
     }
 
     override fun getMenuRes() = R.menu.home
