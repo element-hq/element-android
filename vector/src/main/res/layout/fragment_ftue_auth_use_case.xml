@@ -127,8 +127,8 @@
         android:id="@+id/useCaseSkip"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:clickable="true"
+        android:gravity="center"
         app:layout_constraintBottom_toTopOf="@id/contentFooterSpacing"
         app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
         app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
@@ -152,7 +152,7 @@
         app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
         app:layout_constraintTop_toBottomOf="@id/contentFooterSpacing" />
 
-    <TextView
+    <Button
         android:id="@+id/useCaseConnectToServer"
         style="@style/Widget.Vector.Button.Text"
         android:layout_width="wrap_content"
