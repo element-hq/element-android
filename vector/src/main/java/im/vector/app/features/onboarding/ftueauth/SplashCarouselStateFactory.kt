@@ -18,12 +18,14 @@ package im.vector.app.features.onboarding.ftueauth
 
 import android.content.Context
 import androidx.annotation.AttrRes
+import androidx.annotation.DrawableRes
 import im.vector.app.R
 import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
 import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.isEnglishSpeaking
+import im.vector.app.features.themes.ThemeProvider
 import im.vector.app.features.themes.ThemeUtils
 import me.gujun.android.span.span
 import javax.inject.Inject
@@ -32,34 +34,39 @@ class SplashCarouselStateFactory @Inject constructor(
         private val context: Context,
         private val stringProvider: StringProvider,
         private val localeProvider: LocaleProvider,
+        private val themeProvider: ThemeProvider,
 ) {
 
-    fun create() = SplashCarouselState(listOf(
-            SplashCarouselState.Item(
-                    R.string.ftue_auth_carousel_1_title.colorTerminatingFullStop(R.attr.colorAccent),
-                    R.string.ftue_auth_carousel_body_secure,
-                    R.drawable.ic_splash_conversations,
-                    R.drawable.bg_carousel_page_1
-            ),
-            SplashCarouselState.Item(
-                    R.string.ftue_auth_carousel_2_title.colorTerminatingFullStop(R.attr.colorAccent),
-                    R.string.ftue_auth_carousel_body_control,
-                    R.drawable.ic_splash_control,
-                    R.drawable.bg_carousel_page_2
-            ),
-            SplashCarouselState.Item(
-                    R.string.ftue_auth_carousel_3_title.colorTerminatingFullStop(R.attr.colorAccent),
-                    R.string.ftue_auth_carousel_body_encrypted,
-                    R.drawable.ic_splash_secure,
-                    R.drawable.bg_carousel_page_3
-            ),
-            SplashCarouselState.Item(
-                    collaborationTitle().colorTerminatingFullStop(R.attr.colorAccent),
-                    R.string.ftue_auth_carousel_body_workplace,
-                    R.drawable.ic_splash_collaboration,
-                    R.drawable.bg_carousel_page_4
-            )
-    ))
+    fun create(): SplashCarouselState {
+        val lightTheme = themeProvider.isLightTheme()
+        fun background(@DrawableRes lightDrawable: Int) = if (lightTheme) lightDrawable else R.drawable.bg_carousel_page_dark
+        return SplashCarouselState(listOf(
+                SplashCarouselState.Item(
+                        R.string.ftue_auth_carousel_1_title.colorTerminatingFullStop(R.attr.colorAccent),
+                        R.string.ftue_auth_carousel_body_secure,
+                        R.drawable.ic_splash_conversations,
+                        background(R.drawable.bg_carousel_page_1)
+                ),
+                SplashCarouselState.Item(
+                        R.string.ftue_auth_carousel_2_title.colorTerminatingFullStop(R.attr.colorAccent),
+                        R.string.ftue_auth_carousel_body_control,
+                        R.drawable.ic_splash_control,
+                        background(R.drawable.bg_carousel_page_2)
+                ),
+                SplashCarouselState.Item(
+                        R.string.ftue_auth_carousel_3_title.colorTerminatingFullStop(R.attr.colorAccent),
+                        R.string.ftue_auth_carousel_body_encrypted,
+                        R.drawable.ic_splash_secure,
+                        background(R.drawable.bg_carousel_page_3)
+                ),
+                SplashCarouselState.Item(
+                        collaborationTitle().colorTerminatingFullStop(R.attr.colorAccent),
+                        R.string.ftue_auth_carousel_body_workplace,
+                        R.drawable.ic_splash_collaboration,
+                        background(R.drawable.bg_carousel_page_4)
+                )
+        ))
+    }
 
     private fun collaborationTitle(): Int {
         return when {
