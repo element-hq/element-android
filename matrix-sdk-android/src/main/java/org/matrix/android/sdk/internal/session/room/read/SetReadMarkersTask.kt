@@ -28,6 +28,7 @@ import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
+import org.matrix.android.sdk.internal.network.RequestRetryPolicy
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
@@ -98,7 +99,7 @@ internal class DefaultSetReadMarkersTask @Inject constructor(
         if (markers.isNotEmpty()) {
             executeRequest(
                     globalErrorReceiver,
-                    canRetryOnFailure = { true }
+                    getRequestRetryPolicy = { RequestRetryPolicy(true) }
             ) {
                 if (markers[READ_MARKER] == null) {
                     if (readReceiptEventId != null) {

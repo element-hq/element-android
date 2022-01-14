@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto.tasks
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.internal.crypto.api.CryptoApi
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
+import org.matrix.android.sdk.internal.network.RequestRetryPolicy
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
@@ -37,7 +38,7 @@ internal class DefaultUploadSignaturesTask @Inject constructor(
         try {
             val response = executeRequest(
                     globalErrorReceiver,
-                    canRetryOnFailure = { true },
+                    getRequestRetryPolicy = { RequestRetryPolicy(true) },
                     maxRetriesCount = 10
             ) {
                 cryptoApi.uploadSignatures(params.signatures)

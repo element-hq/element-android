@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.membership.joining
 
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
+import org.matrix.android.sdk.internal.network.RequestRetryPolicy
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.room.RoomAPI
 import org.matrix.android.sdk.internal.task.Task
@@ -39,7 +40,7 @@ internal class DefaultInviteTask @Inject constructor(
         val body = InviteBody(params.userId, params.reason)
         return executeRequest(
                 globalErrorReceiver,
-                canRetryOnFailure = { true },
+                getRequestRetryPolicy = { RequestRetryPolicy(true) },
                 maxRetriesCount = 3
         ) {
             roomAPI.invite(params.roomId, body)

@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.session.room.timeline
 
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
+import org.matrix.android.sdk.internal.network.RequestRetryPolicy
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.filter.FilterRepository
 import org.matrix.android.sdk.internal.session.room.RoomAPI
@@ -44,7 +45,7 @@ internal class DefaultPaginationTask @Inject constructor(
         val filter = filterRepository.getRoomFilter()
         val chunk = executeRequest(
                 globalErrorReceiver,
-                canRetryOnFailure = { true }
+                getRequestRetryPolicy = { RequestRetryPolicy(true) }
         ) {
             roomAPI.getRoomMessagesFrom(params.roomId, params.from, params.direction.value, params.limit, filter)
         }

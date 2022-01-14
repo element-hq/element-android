@@ -22,7 +22,7 @@ internal interface RequestExecutor {
     suspend fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
                                       maxDelayBeforeRetry: Long = 32_000L,
                                       maxRetriesCount: Int = 4,
-                                      canRetryOnFailure: (Throwable) -> Boolean = defaultRequestRetryPolicy,
+                                      getRetryPolicy: (Throwable) -> RequestRetryPolicy = defaultRequestRetryPolicy,
                                       requestBlock: suspend () -> DATA): DATA
 }
 
@@ -30,8 +30,8 @@ internal object DefaultRequestExecutor : RequestExecutor {
     override suspend fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
                                                maxDelayBeforeRetry: Long,
                                                maxRetriesCount: Int,
-                                               canRetryOnFailure: (Throwable) -> Boolean,
+                                               getRetryPolicy: (Throwable) -> RequestRetryPolicy,
                                                requestBlock: suspend () -> DATA): DATA {
-        return internalExecuteRequest(globalErrorReceiver, maxDelayBeforeRetry, maxRetriesCount, canRetryOnFailure, requestBlock)
+        return internalExecuteRequest(globalErrorReceiver, maxDelayBeforeRetry, maxRetriesCount, getRetryPolicy, requestBlock)
     }
 }

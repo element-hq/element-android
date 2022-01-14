@@ -18,13 +18,14 @@ package org.matrix.android.sdk.test.fakes
 
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.RequestExecutor
+import org.matrix.android.sdk.internal.network.RequestRetryPolicy
 
 internal class FakeRequestExecutor : RequestExecutor {
 
     override suspend fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
                                                maxDelayBeforeRetry: Long,
                                                maxRetriesCount: Int,
-                                               canRetryOnFailure: (Throwable) -> Boolean,
+                                               getRetryPolicy: (Throwable) -> RequestRetryPolicy,
                                                requestBlock: suspend () -> DATA): DATA {
         return requestBlock()
     }

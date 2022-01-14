@@ -29,12 +29,30 @@ import timber.log.Timber
 import java.io.IOException
 
 /**
+ * Hold the retry policy for a request.
+ *
+ * @property canRetry whether the request can be retried.
+ * @property delay a fixed delay (in ms) before retrying the request. Set null to let the sdk apply its own delay.
+ */
+internal data class RequestRetryPolicy(
+        val canRetry: Boolean = false,
+        val delay: Long? = null
+)
+
+/**
  * Default retry policy according to the given error.
  */
 internal val defaultRequestRetryPolicy = { throwable: Throwable ->
-    // By default, systematically retry on 429
-    (throwable is Failure.ServerError && throwable.httpCode == 429 && throwable.error.code == MatrixError.M_LIMIT_EXCEEDED) ||
-            throwable.shouldBeRetried()
+    when {
+        // By default, systematically retry on 429
+        (throwable is Failure.ServerError && throwable.httpCode == 429 && throwable.error.code == MatrixError.M_LIMIT_EXCEEDED) -> {
+            RequestRetryPolicy(true, throwable.getRetryDelay(1000L))
+        }
+        throwable.shouldBeRetried()                                                                                             -> {
+            RequestRetryPolicy(true)
+        }
+        else                                                                                                                    -> RequestRetryPolicy()
+    }
 }
 
 /**
@@ -44,13 +62,13 @@ internal val defaultRequestRetryPolicy = { throwable: Throwable ->
  * @param globalErrorReceiver will be use to notify error such as invalid token error. See [GlobalError]
  * @param maxDelayBeforeRetry the max delay to wait before a retry
  * @param maxRetriesCount the max number of retries
- * @param canRetryOnFailure tell if the request can be executed again according to the given error, after a delay
+ * @param getRequestRetryPolicy tell if the request can be executed again according to the given error, after a delay
  * @param requestBlock a suspend lambda to perform the network request
  */
 internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
                                                   maxDelayBeforeRetry: Long = 32_000L,
                                                   maxRetriesCount: Int = 4,
-                                                  noinline canRetryOnFailure: (throwable: Throwable) -> Boolean = defaultRequestRetryPolicy,
+                                                  noinline getRequestRetryPolicy: (throwable: Throwable) -> RequestRetryPolicy = defaultRequestRetryPolicy,
                                                   noinline requestBlock: suspend () -> DATA): DATA {
     var currentRetryCount = 0
     var currentDelay = 1_000L
@@ -84,8 +102,9 @@ internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErr
 
             currentRetryCount++
 
-            if (canRetryOnFailure(exception) && currentRetryCount < maxRetriesCount) {
-                delay(exception.getRetryDelay(currentDelay))
+            val retryPolicy = getRequestRetryPolicy(exception)
+            if (retryPolicy.canRetry && currentRetryCount < maxRetriesCount) {
+                delay(retryPolicy.delay ?: currentDelay)
                 currentDelay = currentDelay.times(2L).coerceAtMost(maxDelayBeforeRetry)
                 // Try again (loop)
             } else {
