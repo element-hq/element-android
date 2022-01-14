@@ -100,6 +100,7 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>(), ToolbarCon
                 roomId = timelineEvent.roomId,
                 displayName = timelineEvent.senderInfo.displayName,
                 avatarUrl = timelineEvent.senderInfo.avatarUrl,
+                roomEncryptionTrustLevel = null,
                 rootThreadEventId = timelineEvent.eventId)
         val commonOption: (FragmentTransaction) -> Unit = {
             it.setCustomAnimations(

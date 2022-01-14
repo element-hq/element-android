@@ -16,17 +16,21 @@
 
 package im.vector.app.features.home.room.threads.list.views
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.AttrRes
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import com.airbnb.mvrx.parentFragmentViewModel
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetThreadListBinding
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewModel
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewState
+import im.vector.app.features.themes.ThemeUtils
 
 class ThreadListBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetThreadListBinding>() {
 
@@ -53,8 +57,29 @@ class ThreadListBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetThr
     }
 
     private fun renderState(state: ThreadListViewState) {
-        val tickDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_tick)
-        views.threadListModalAllThreads.rightIcon = if (state.shouldFilterThreads) null else tickDrawable
-        views.threadListModalMyThreads.rightIcon = if (state.shouldFilterThreads) tickDrawable else null
+        val radioOffDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_radio_off)
+        val radioOnDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_radio_on)
+
+        if (state.shouldFilterThreads) {
+            setRightIconDrawableAllThreads(radioOffDrawable, R.attr.vctr_content_primary)
+            setRightIconDrawableMyThreads(radioOnDrawable, R.attr.colorPrimary)
+        } else {
+            setRightIconDrawableAllThreads(radioOnDrawable, R.attr.colorPrimary)
+            setRightIconDrawableMyThreads(radioOffDrawable, R.attr.vctr_content_primary)
+        }
+    }
+
+    private fun setRightIconDrawableAllThreads(drawable: Drawable?, @AttrRes tint: Int) {
+        views.threadListModalAllThreads.rightIcon = drawable
+        views.threadListModalAllThreads.rightIcon?.setTintFromAttribute(tint)
+    }
+
+    private fun setRightIconDrawableMyThreads(drawable: Drawable?, @AttrRes tint: Int) {
+        views.threadListModalMyThreads.rightIcon = drawable
+        views.threadListModalMyThreads.rightIcon?.setTintFromAttribute(tint)
+    }
+
+    private fun Drawable.setTintFromAttribute(@AttrRes tint: Int) {
+        DrawableCompat.setTint(this, ThemeUtils.getColor(requireContext(), tint))
     }
 }

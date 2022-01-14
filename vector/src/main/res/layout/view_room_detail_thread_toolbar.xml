@@ -35,6 +35,15 @@
         app:layout_constraintTop_toBottomOf="@id/roomToolbarThreadTitleTextView"
         tools:src="@sample/room_round_avatars" />
 
+    <im.vector.app.core.ui.views.ShieldImageView
+        android:id="@+id/roomToolbarThreadShieldImageView"
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        app:layout_constraintCircle="@id/roomToolbarThreadImageView"
+        app:layout_constraintCircleAngle="135"
+        app:layout_constraintCircleRadius="10dp"
+        tools:ignore="MissingConstraints" />
+
     <TextView
         android:id="@+id/roomToolbarThreadSubtitleTextView"
         style="@style/Widget.Vector.TextView.Caption"

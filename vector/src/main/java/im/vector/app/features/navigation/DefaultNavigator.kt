@@ -569,7 +569,8 @@ class DefaultNavigator @Inject constructor(
                 threadListArgs = ThreadListArgs(
                         roomId = threadTimelineArgs.roomId,
                         displayName = threadTimelineArgs.displayName,
-                        avatarUrl = threadTimelineArgs.avatarUrl
+                        avatarUrl = threadTimelineArgs.avatarUrl,
+                        roomEncryptionTrustLevel = threadTimelineArgs.roomEncryptionTrustLevel
                 )))
     }
 }

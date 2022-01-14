@@ -126,7 +126,12 @@ class SearchFragment @Inject constructor(
     private fun navigateToEvent(event: Event) {
         val roomId = event.roomId ?: return
         event.getRootThreadEventId()?.let {
-            val threadTimelineArgs = ThreadTimelineArgs(roomId, displayName = fragmentArgs.roomDisplayName, fragmentArgs.roomAvatarUrl, it)
+            val threadTimelineArgs = ThreadTimelineArgs(
+                    roomId = roomId,
+                    displayName = fragmentArgs.roomDisplayName,
+                    avatarUrl = fragmentArgs.roomAvatarUrl,
+                    roomEncryptionTrustLevel = null,
+                    rootThreadEventId = it)
             navigator.openThread(requireContext(), threadTimelineArgs, event.eventId)
         } ?: navigator.openRoom(requireContext(), roomId, event.eventId)
     }

@@ -1594,6 +1594,7 @@ class TimelineFragment @Inject constructor(
             timelineArgs.threadTimelineArgs?.let {
                 val matrixItem = MatrixItem.RoomItem(it.roomId, it.displayName, it.avatarUrl)
                 avatarRenderer.render(matrixItem, views.includeThreadToolbar.roomToolbarThreadImageView)
+                views.includeThreadToolbar.roomToolbarThreadShieldImageView.render(it.roomEncryptionTrustLevel)
                 views.includeThreadToolbar.roomToolbarThreadSubtitleTextView.text = it.displayName
             }
             views.includeThreadToolbar.roomToolbarThreadTitleTextView.text = resources.getText(R.string.thread_timeline_title)
@@ -2321,6 +2322,7 @@ class TimelineFragment @Inject constructor(
                     roomId = timelineArgs.roomId,
                     displayName = roomDetailViewModel.getRoomSummary()?.displayName,
                     avatarUrl = roomDetailViewModel.getRoomSummary()?.avatarUrl,
+                    roomEncryptionTrustLevel = roomDetailViewModel.getRoomSummary()?.roomEncryptionTrustLevel,
                     rootThreadEventId = rootThreadEventId)
             navigator.openThread(it, roomThreadDetailArgs)
         }
@@ -2336,6 +2338,7 @@ class TimelineFragment @Inject constructor(
             val roomThreadDetailArgs = ThreadTimelineArgs(
                     roomId = timelineArgs.roomId,
                     displayName = roomDetailViewModel.getRoomSummary()?.displayName,
+                    roomEncryptionTrustLevel = roomDetailViewModel.getRoomSummary()?.roomEncryptionTrustLevel,
                     avatarUrl = roomDetailViewModel.getRoomSummary()?.avatarUrl)
             navigator.openThreadList(it, roomThreadDetailArgs)
         }
