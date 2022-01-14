@@ -20,19 +20,19 @@
         style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="4dp"
         android:minEms="1"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/messageThreadSummaryImageView"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="192" />
+        tools:text="123" />
 
     <ImageView
         android:id="@+id/messageThreadSummaryAvatarImageView"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:layout_marginStart="13dp"
+        android:layout_marginStart="4dp"
         android:contentDescription="@string/avatar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/messageThreadSummaryCounterTextView"

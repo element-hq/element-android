@@ -60,7 +60,7 @@ abstract class ThreadListModel : VectorEpoxyModel<ThreadListModel.Holder>() {
         holder.dateTextView.text = date
         if (rootMessageDeleted) {
             holder.rootMessageTextView.text = holder.view.context.getString(R.string.event_redacted)
-            holder.rootMessageTextView.setLeftDrawable(R.drawable.ic_trash_16, R.attr.colorOnPrimary)
+            holder.rootMessageTextView.setLeftDrawable(R.drawable.ic_trash_16, R.attr.vctr_content_tertiary)
             holder.rootMessageTextView.compoundDrawablePadding = DimensionConverter(holder.view.context.resources).dpToPx(10)
         } else {
             holder.rootMessageTextView.text = rootMessage

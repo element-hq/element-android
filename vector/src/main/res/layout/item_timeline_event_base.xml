@@ -205,8 +205,8 @@
         android:contentDescription="@string/room_threads_filter"
         android:maxWidth="496dp"
         android:minWidth="144dp"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         android:visibility="gone"
         tools:visibility="visible">
 

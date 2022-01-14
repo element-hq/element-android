@@ -239,7 +239,10 @@ internal class DefaultTimeline(private val roomId: String,
             else                      -> buildStrategy(LoadTimelineStrategy.Mode.Permalink(eventId))
         }
 
-        initPaginationStates(eventId)
+        rootThreadEventId?.let {
+            initPaginationStates(null)
+        } ?: initPaginationStates(eventId)
+
         strategy.onStart()
         loadMore(
                 count = strategyDependencies.timelineSettings.initialSize,
