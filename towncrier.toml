@@ -16,7 +16,7 @@
         showcontent = true
 
     [[tool.towncrier.type]]
-        directory = "dev"
+        directory = "wip"
         name = "In development 🚧"
         showcontent = true
 
