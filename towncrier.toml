@@ -16,6 +16,11 @@
         showcontent = true
 
     [[tool.towncrier.type]]
+        directory = "dev"
+        name = "In development"
+        showcontent = true
+
+    [[tool.towncrier.type]]
         directory = "doc"
         name = "Improved Documentation 📚"
         showcontent = true

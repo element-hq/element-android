@@ -61,6 +61,7 @@ Supported filename extensions are:
 
 - ``.feature``: Signifying a new feature in Element Android or in the Matrix SDK.
 - ``.bugfix``: Signifying a bug fix.
+- ``.dev``: Signifying a change which is not ready to be user facing, typically a component of a larger feature.
 - ``.doc``: Signifying a documentation improvement.
 - ``.removal``: Signifying a deprecation or removal of public API. Can be used to notifying about API change in the Matrix SDK
 - ``.misc``: Any other changes.
