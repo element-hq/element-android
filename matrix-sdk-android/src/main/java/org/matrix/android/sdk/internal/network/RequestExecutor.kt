@@ -16,14 +16,13 @@
 
 package org.matrix.android.sdk.internal.network
 
-import org.matrix.android.sdk.internal.network.defaultRequestRetryPolicy as internalDefaultRequestRetryPolicy
 import org.matrix.android.sdk.internal.network.executeRequest as internalExecuteRequest
 
 internal interface RequestExecutor {
     suspend fun <DATA> executeRequest(globalErrorReceiver: GlobalErrorReceiver?,
                                       maxDelayBeforeRetry: Long = 32_000L,
                                       maxRetriesCount: Int = 4,
-                                      canRetryOnFailure: (Throwable) -> Boolean = internalDefaultRequestRetryPolicy,
+                                      canRetryOnFailure: (Throwable) -> Boolean = defaultRequestRetryPolicy,
                                       requestBlock: suspend () -> DATA): DATA
 }
 

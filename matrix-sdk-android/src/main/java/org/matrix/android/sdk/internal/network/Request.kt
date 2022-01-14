@@ -87,6 +87,7 @@ internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErr
             if (canRetryOnFailure(exception) && currentRetryCount < maxRetriesCount) {
                 delay(exception.getRetryDelay(currentDelay))
                 currentDelay = currentDelay.times(2L).coerceAtMost(maxDelayBeforeRetry)
+                // Try again (loop)
             } else {
                 throw when (exception) {
                     is IOException           -> Failure.NetworkConnection(exception)
