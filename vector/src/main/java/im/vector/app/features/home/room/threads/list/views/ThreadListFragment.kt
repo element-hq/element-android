@@ -36,6 +36,7 @@ import im.vector.app.features.home.room.threads.ThreadsActivity
 import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListController
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewModel
+import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -90,6 +91,7 @@ class ThreadListFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(threadListViewModel) { state ->
+        renderEmptyStateIfNeeded(state)
         threadListController.update(state)
     }
 
@@ -103,5 +105,10 @@ class ThreadListFragment @Inject constructor(
 
     override fun onThreadClicked(timelineEvent: TimelineEvent) {
         (activity as? ThreadsActivity)?.navigateToThreadTimeline(timelineEvent)
+    }
+
+    private fun renderEmptyStateIfNeeded(state: ThreadListViewState) {
+        val show = state.rootThreadEventList.invoke().isNullOrEmpty()
+        views.threadListEmptyConstraintLayout.isVisible = show
     }
 }
