@@ -17,7 +17,7 @@
 
     [[tool.towncrier.type]]
         directory = "dev"
-        name = "In development"
+        name = "In development 🚧"
         showcontent = true
 
     [[tool.towncrier.type]]
