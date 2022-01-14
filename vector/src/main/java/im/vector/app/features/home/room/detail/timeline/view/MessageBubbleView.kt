@@ -23,6 +23,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
 import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
@@ -38,7 +39,7 @@ import im.vector.app.features.themes.ThemeUtils
 
 class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
                                                   defStyleAttr: Int = 0) :
-    RelativeLayout(context, attrs, defStyleAttr), MessageViewConfiguration {
+        RelativeLayout(context, attrs, defStyleAttr), MessageViewConfiguration {
 
     override var isIncoming: Boolean = false
         set(value) {
@@ -57,7 +58,7 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
             render()
         }
 
-    override var showTimeAsOverlay: Boolean = true
+    override var showTimeAsOverlay: Boolean = false
         set(value) {
             field = value
             render()
@@ -69,7 +70,7 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
         inflate(context, R.layout.view_message_bubble, this)
         context.withStyledAttributes(attrs, R.styleable.MessageBubble) {
             isIncoming = getBoolean(R.styleable.MessageBubble_incoming_style, false)
-            showTimeAsOverlay = getBoolean(R.styleable.MessageBubble_show_time_overlay, true)
+            showTimeAsOverlay = getBoolean(R.styleable.MessageBubble_show_time_overlay, false)
             isFirstFromSender = getBoolean(R.styleable.MessageBubble_is_first, false)
             isLastFromSender = getBoolean(R.styleable.MessageBubble_is_last, false)
         }
@@ -95,6 +96,9 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
             findViewById<View>(R.id.messageEndGuideline).updateLayoutParams<LayoutParams> {
                 marginEnd = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_end)
             }
+            findViewById<View>(R.id.messageStartGuideline).updateLayoutParams<LayoutParams> {
+                marginStart = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_start)
+            }
         } else {
             val oppositeLayoutDirection = if (currentLayoutDirection == View.LAYOUT_DIRECTION_LTR) {
                 View.LAYOUT_DIRECTION_RTL
@@ -108,14 +112,23 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
             findViewById<View>(R.id.messageEndGuideline).updateLayoutParams<LayoutParams> {
                 marginEnd = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_start)
             }
+            findViewById<View>(R.id.messageStartGuideline).updateLayoutParams<LayoutParams> {
+                marginStart = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_end)
+            }
         }
         ConstraintSet().apply {
             clone(bubbleView)
             clear(R.id.viewStubContainer, ConstraintSet.END)
             if (showTimeAsOverlay) {
-                connect(R.id.viewStubContainer, ConstraintSet.END, R.id.messageTimeView, ConstraintSet.START, 0)
-            } else {
+                val timeColor = ContextCompat.getColor(context, R.color.palette_white)
+                findViewById<TextView>(R.id.messageTimeView).setTextColor(timeColor)
                 connect(R.id.viewStubContainer, ConstraintSet.END, R.id.parent, ConstraintSet.END, 0)
+                val margin = resources.getDimensionPixelSize(R.dimen.layout_horizontal_margin)
+                setMargin(R.id.messageTimeView, ConstraintSet.END, margin)
+            } else {
+                val timeColor = ThemeUtils.getColor(context, R.attr.vctr_content_tertiary)
+                findViewById<TextView>(R.id.messageTimeView).setTextColor(timeColor)
+                connect(R.id.viewStubContainer, ConstraintSet.END, R.id.messageTimeView, ConstraintSet.START, 0)
             }
             applyTo(bubbleView)
         }

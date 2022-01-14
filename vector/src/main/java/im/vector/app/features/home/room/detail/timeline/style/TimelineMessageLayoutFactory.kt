@@ -35,11 +35,11 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
     companion object {
         private val EVENT_TYPES_WITH_BUBBLE_LAYOUT = setOf(
                 EventType.MESSAGE,
+                EventType.POLL_START,
                 EventType.ENCRYPTED,
                 EventType.STICKER
         )
         private val MSG_TYPES_WITHOUT_BUBBLE_LAYOUT = setOf(
-                MessageType.MSGTYPE_POLL_START,
                 MessageType.MSGTYPE_VERIFICATION_REQUEST
         )
     }
@@ -72,21 +72,22 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
             TimelineLayoutSettings.BUBBLE -> {
                 val type = event.root.getClearType()
                 if (type in EVENT_TYPES_WITH_BUBBLE_LAYOUT) {
-                    val messageContent = if (type == EventType.MESSAGE) params.event.getLastMessageContent() else null
+                    val messageContent = event.getLastMessageContent()
                     if (messageContent?.msgType in MSG_TYPES_WITHOUT_BUBBLE_LAYOUT) {
                         buildModernLayout(showInformation)
-                    }
-                    val isFirstFromThisSender = nextDisplayableEvent?.root?.senderId != event.root.senderId || addDaySeparator
-                    val isLastFromThisSender = prevDisplayableEvent?.root?.senderId != event.root.senderId ||
-                            prevDisplayableEvent?.root?.localDateTime()?.toLocalDate() != date.toLocalDate()
+                    } else {
+                        val isFirstFromThisSender = nextDisplayableEvent?.root?.senderId != event.root.senderId || addDaySeparator
+                        val isLastFromThisSender = prevDisplayableEvent?.root?.senderId != event.root.senderId ||
+                                prevDisplayableEvent?.root?.localDateTime()?.toLocalDate() != date.toLocalDate()
 
-                    TimelineMessageLayout.Bubble(
-                            showAvatar = showInformation && !isSentByMe,
-                            showDisplayName = showInformation && !isSentByMe,
-                            isIncoming = !isSentByMe,
-                            isFirstFromThisSender = isFirstFromThisSender,
-                            isLastFromThisSender = isLastFromThisSender
-                    )
+                        TimelineMessageLayout.Bubble(
+                                showAvatar = showInformation && !isSentByMe,
+                                showDisplayName = showInformation && !isSentByMe,
+                                isIncoming = !isSentByMe,
+                                isFirstFromThisSender = isFirstFromThisSender,
+                                isLastFromThisSender = isLastFromThisSender,
+                        )
+                    }
                 } else {
                     buildModernLayout(showInformation)
                 }

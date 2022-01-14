@@ -29,6 +29,7 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.files.LocalFilesHelper
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
+import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.home.room.detail.timeline.view.MessageViewConfiguration
 import im.vector.app.features.media.ImageContentRenderer
 
@@ -71,7 +72,8 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         holder.mediaContentView.onClick(attributes.itemClickListener)
         holder.mediaContentView.setOnLongClickListener(attributes.itemLongClickListener)
         holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
-        (holder.view as? MessageViewConfiguration)?.showTimeAsOverlay = false
+        (holder.view as? MessageViewConfiguration)?.showTimeAsOverlay = true
+        holder.overlayView.isVisible = baseAttributes.informationData.messageLayout is TimelineMessageLayout.Bubble
     }
 
     override fun unbind(holder: Holder) {
@@ -90,6 +92,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         val imageView by bind<ImageView>(R.id.messageThumbnailView)
         val playContentView by bind<ImageView>(R.id.messageMediaPlayView)
         val mediaContentView by bind<ViewGroup>(R.id.messageContentMedia)
+        val overlayView by bind<View>(R.id.messageMediaOverlayView)
     }
 
     companion object {

@@ -105,7 +105,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_max="300dp" />
+                app:layout_constraintWidth_max="@dimen/chat_bubble_fixed_size" />
 
             <TextView
                 android:id="@+id/messageTimeView"

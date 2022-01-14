@@ -12,4 +12,14 @@
         <item name="android:layout_marginTop">4dp</item>
     </style>
 
+    <style name="TimelineContentMediaPillStyle">
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="minHeight">48dp</item>
+        <item name="android:background">@drawable/bg_media_pill</item>
+        <item name="android:backgroundTint">?vctr_content_quinary</item>
+    </style>
+
 </resources>
