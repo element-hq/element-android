@@ -4,7 +4,7 @@
     <string name="summary_user_sent_image">%1$s saatis pildi.</string>
     <string name="summary_user_sent_sticker">%1$s saatis kleepsu.</string>
     <string name="notice_room_invite_no_invitee">Kasutaja %s kutse</string>
-    <string name="notice_room_invite">%1$s kutsus kasutajat %2$s</string>
+    <string name="notice_room_invite">%1$s saatis kutse kasutajale %2$s</string>
     <string name="notice_room_invite_you">%1$s kutsus sind</string>
     <string name="notice_room_join">%1$s liitus jututoaga</string>
     <string name="notice_room_leave">%1$s lahkus jututoast</string>
@@ -81,7 +81,7 @@
     <string name="event_status_sending_message">Saadan sõnumit…</string>
     <string name="clear_timeline_send_queue">Tühjenda saatmisjärjekord</string>
     <string name="notice_room_invite_no_invitee_with_reason">Kasutaja %1$s kutse. Põhjus: %2$s</string>
-    <string name="notice_room_invite_with_reason">%1$s kutsus kasutajat %2$s. Põhjus: %3$s</string>
+    <string name="notice_room_invite_with_reason">%1$s saatis kutse kasutajale %2$s. Põhjus: %3$s</string>
     <string name="notice_room_invite_you_with_reason">%1$s kutsus sind. Põhjus: %2$s</string>
     <string name="notice_room_join_with_reason">%1$s liitus jututoaga. Põhjus: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s lahkus jututoast. Põhjus: %2$s</string>
@@ -201,7 +201,7 @@
     <string name="notice_direct_room_third_party_revoked_invite_by_you">Sina võtsid tagasi jututoaga liitumise kutse kasutajalt %1$s</string>
     <string name="notice_direct_room_third_party_revoked_invite">%1$s võttis tagasi jututoaga liitumise kutse kasutajalt %2$s</string>
     <string name="notice_direct_room_third_party_invite_by_you">Sina kutsusid kasutajat %1$s</string>
-    <string name="notice_direct_room_third_party_invite">%1$s kutsus kasutajat %2$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s saatis kutse kasutajale %2$s</string>
     <string name="notice_direct_room_update_by_you">Sa uuendasid seda jututuba.</string>
     <string name="notice_direct_room_update">%s uuendas seda jututuba.</string>
     <string name="notice_made_future_direct_room_visibility_by_you">Sina seadistasid, et tulevased jututoa sõnumid on nähtavad kasutajale %1$s</string>
@@ -2161,7 +2161,7 @@
     <string name="login_signin_matrix_id_notice">Kui sa võtad kasutusele konto koduserveris, siis sisesta alljärgnevalt oma Matrix\'i kasutajatunnus (näiteks @torekasutaja:domeen.ee) ja salasõna.</string>
     <string name="login_signin_matrix_id_hint">Matrix\'i kasutajatunnus</string>
     <string name="login_signin_matrix_id_password_notice">Kui sa ei tea oma salasṍna, siis mine tagasi ja loo uus salasõna.</string>
-    <string name="seen_by">Nähtud kasutaja poolt</string>
+    <string name="seen_by">Seda nägi(d)</string>
     <string name="signed_out_title">Sa oled loginud välja</string>
     <string name="signed_out_notice">See võib juhtuda eri põhjustel:
 \n
