@@ -1242,8 +1242,8 @@
     <string name="settings_show_read_receipts">Hiện thông báo tin đã đọc</string>
     <string name="settings_12_24_timestamps">Hiện dấu thời gian theo chuẩn 12-giờ</string>
     <string name="settings_always_show_timestamps">Hiện Dấu thời gian cho tất cả tin nhắn</string>
-    <string name="settings_send_markdown_summary">Định dạng tin nhắn theo chuẩn markdown trước khi gửi.</string>
-    <string name="settings_send_markdown">Định dạng markdown</string>
+    <string name="settings_send_markdown_summary">Định dạng tin nhắn theo chuẩn Markdown trước khi gửi.</string>
+    <string name="settings_send_markdown">Sử dụng định dạng Markdown</string>
     <string name="settings_send_typing_notifs_summary">Cho người dùng khác biết bạn đã gõ phím.</string>
     <string name="settings_send_typing_notifs">Gửi thông báo đang gõ tin nhắn</string>
     <string name="settings_inline_url_preview_summary">Xem trước trang web trong phòng chat nếu máy chủ bật hỗ trợ chức năng này.</string>
@@ -2075,7 +2075,7 @@
     <string name="room_message_placeholder">Tin nhắn…</string>
     <string name="auth_invalid_login_deactivated_account">Tài khoản này đã bị vô hiệu hóa.</string>
     <string name="auth_invalid_login_param_space_in_password">Tên người dùng và/hoặc mật khẩu không chính xác. Mật khẩu đã nhập bắt đầu hoặc kết thúc bằng không gian, vui lòng kiểm tra.</string>
-    <string name="command_description_plain">Gửi tin nhắn dưới dạng văn bản thuần túy, mà không giải thích nó dưới dạng đánh dấu</string>
+    <string name="command_description_plain">Gửi tin nhắn dưới dạng văn bản thuần túy, không sử dụng định dạng Markdown</string>
     <string name="settings_notification_advanced_summary">Đặt tầm quan trọng thông báo theo sự kiện</string>
     <string name="settings_troubleshoot_title">Khắc phục</string>
     <string name="settings_notification_configuration">Cấu hình thông báo</string>
@@ -2275,7 +2275,7 @@
     <string name="create_room_encryption_description">Sau khi được bật, mã hóa không thể bị vô hiệu hóa.</string>
     <string name="create_room_encryption_title">Bật mã hóa</string>
     <string name="command_description_lenny">Thêm ( ͡° ͜ʖ ͡°) vào một tin nhắn văn bản thuần túy</string>
-    <string name="command_description_shrug">"Thêm   ̄\\_(ツ)_/ ̄ vào một tin nhắn văn bản thuần túy"</string>
+    <string name="command_description_shrug">Thêm ¯\\_(ツ)_/¯ vào một tin nhắn văn bản thuần túy</string>
     <string name="settings_developer_mode_show_info_on_screen_summary">Hiển thị một số thông tin hữu ích để giúp gỡ lỗi ứng dụng</string>
     <string name="settings_developer_mode_show_info_on_screen_title">Hiện thông tin debug trên màn hình</string>
     <string name="template_settings_developer_mode_fail_fast_summary">${app_name} có thể gặp sự cố thường xuyên hơn khi một lỗi bất ngờ xảy ra</string>
@@ -2352,7 +2352,7 @@
     <string name="a11y_open_drawer">Mở ngăn khung điều hướng</string>
     <string name="error_network_timeout">Có vẻ như máy chủ mất quá nhiều thời gian để phản hồi, điều này có thể được gây ra bởi kết nối kém hoặc lỗi với máy chủ. Hãy thử lại trong một thời gian.</string>
     <string name="error_terms_not_accepted">Vui lòng thử lại một khi bạn đã chấp nhận các điều khoản và điều kiện của homeserver của bạn.</string>
-    <string name="labs_allow_extended_logging_summary">Nhật ký verbose sẽ giúp các nhà phát triển bằng cách cung cấp thêm nhật ký khi bạn gửi RageShake. Ngay cả khi được bật, ứng dụng không ghi lại nội dung tin nhắn hoặc bất kỳ dữ liệu riêng tư nào khác.</string>
+    <string name="labs_allow_extended_logging_summary">Nhật ký verbose sẽ giúp các nhà phát triển bằng cách cung cấp thêm nhật ký khi bạn lắc mạnh thiết bị. Ngay cả khi được bật, ứng dụng không ghi lại nội dung tin nhắn hoặc bất kỳ dữ liệu riêng tư nào khác.</string>
     <string name="labs_allow_extended_logging">Bật nhật ký verbose.</string>
     <string name="settings_agree_to_terms">Đồng ý với điều khoản dịch vụ của máy chủ xác thực (%s) để cho phép bản thân có thể khám phá bằng địa chỉ email hoặc số điện thoại.</string>
     <string name="settings_discovery_disconnect_with_bound_pid">Bạn hiện đang chia sẻ địa chỉ email hoặc số điện thoại trên máy chủ xác thực %1$s. Bạn sẽ cần kết nối lại với %2$s để ngừng chia sẻ chúng.</string>
@@ -2415,7 +2415,7 @@
     <string name="settings_push_rules">Quy tắc Push</string>
     <string name="settings_expert">Chuyên gia</string>
     <string name="settings_security_and_privacy">Bảo mật &amp; Quyền riêng tư</string>
-    <string name="settings_preferences">Sự ưa thích</string>
+    <string name="settings_preferences">Tuỳ biến</string>
     <string name="settings_general_title">Tổng quát</string>
     <string name="quick_reactions">Phản ứng nhanh</string>
     <string name="navigate_to_room_when_already_in_the_room">Bạn đang xem phòng này rồi!</string>
@@ -2776,7 +2776,7 @@
     <string name="no_users_placeholder">Không có người dùng</string>
     <string name="group_details_rooms">Phòng</string>
     <string name="group_details_people">Danh bạ</string>
-    <string name="group_details_home">Nhà</string>
+    <string name="group_details_home">Trang chủ</string>
     <string name="community_id_hint">Ví dụ</string>
     <string name="community_id">ID Community</string>
     <string name="community_name_hint">Ví dụ</string>
@@ -2787,11 +2787,11 @@
     <string name="notification_noisy">Ồn ào</string>
     <string name="notification_silent">Im lặng</string>
     <string name="notification_off">Tắt</string>
-    <string name="markdown_has_been_disabled">Đánh dấu đã bị vô hiệu hóa.</string>
-    <string name="markdown_has_been_enabled">Đánh dấu đã được kích hoạt.</string>
+    <string name="markdown_has_been_disabled">Tính năng định dạng tin nhắn chuẩn Markdown đã bị vô hiệu hoá.</string>
+    <string name="markdown_has_been_enabled">Tính năng định dạng tin nhắn chuẩn Markdown đã được kích hoạt.</string>
     <string name="command_description_whois">Hiển thị thông tin về người dùng</string>
     <string name="command_description_clear_scalar_token">Để sửa trình quản lý ứng dụng Matrix</string>
-    <string name="command_description_markdown">Đánh dấu Bật/Tắt</string>
+    <string name="command_description_markdown">Bật/tắt tính năng định dạng Markdown</string>
     <string name="command_description_avatar_for_room">Chỉ thay đổi avatar của bạn trong căn phòng hiện tại này</string>
     <string name="command_description_room_avatar">Thay đổi avatar của căn phòng hiện tại</string>
     <string name="command_description_nick_for_room">Chỉ thay đổi biệt danh hiển thị của bạn trong phòng hiện tại</string>
