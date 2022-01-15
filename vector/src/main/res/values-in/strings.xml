@@ -3018,7 +3018,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="ftue_auth_carousel_3_body">Elemen berfungsi dengan semua aplikasi berbasis Matrix dan bahkan dapat menjembatani ke perpesanan sumber tertutup.</string>
     <string name="ftue_auth_carousel_3_title">Hubung dengan siapa pun.</string>
     <string name="ftue_auth_carousel_2_body">Elemen memungkinkan Anda untuk memilih di mana pesan Anda disimpan, membuat Anda tetap mengendali data Anda.</string>
-    <string name="ftue_auth_carousel_2_title">Anda mengendalikannya.</string>
+    <string name="ftue_auth_carousel_2_title">Anda dalam kendali.</string>
     <string name="ftue_auth_carousel_1_body">Perpesanan terenkripsi secara ujung-ke-ujung untuk komunikasi aman dan independen, terhubung via Matrix.</string>
     <string name="ftue_auth_carousel_1_title">Miliki percakapan Anda.</string>
 </resources>
