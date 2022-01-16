@@ -2149,9 +2149,9 @@
     <string name="room_participants_action_cancel_invite_prompt_msg">Bist du dir sicher, dass du die Einladung für diesen Benutzer zurückziehen möchtest\?</string>
     <string name="room_participants_kick_title">Benutzer entfernen</string>
     <string name="room_participants_kick_reason">Grund für das Entfernen</string>
-    <string name="room_participants_kick_prompt_msg">Dies Entfernen den Benutzer aus diesem Raum.
+    <string name="room_participants_kick_prompt_msg">Dies entfernt den Benutzer aus diesem Raum.
 \n
-\nUm einen erneuten Beitritt zu verhindern, solltest du ihn stattdessen bannen.</string>
+\nUm einen erneuten Beitritt zu verhindern, solltest du diesen stattdessen bannen.</string>
     <string name="room_participants_ban_title">Benutzer bannen</string>
     <string name="room_participants_ban_reason">Grund für den Bann</string>
     <string name="room_participants_unban_title">Bann des Benutzers aufheben</string>
@@ -2944,7 +2944,7 @@
     <string name="a11y_presence_offline">Abwesend</string>
     <string name="a11y_presence_online">Online</string>
     <string name="call_tap_to_return">%1$s Klicke zum Zurückkehren</string>
-    <string name="call_tile_no_answer">Nicht erreicht</string>
+    <string name="call_tile_no_answer">Nicht abgenommen</string>
     <string name="command_description_lenny">Nachricht mit ( ͡° ͜ʖ ͡°) beginnen</string>
     <string name="command_description_whois">Zeigt Information über die Person an</string>
     <string name="command_description_avatar_for_room">Ändert dein Profilbild im aktuellen Raum</string>
@@ -3030,7 +3030,7 @@
     <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Dies macht es für Räume einfach, privat in einem Space zu bleiben, während die Leute im Space diese finden und ihnen beitreten können. Alle neuen Räume in einem Raum haben diese Option zur Verfügung.</string>
     <string name="help_people_in_spaces_find_and_join">Helfen Sie Personen in Spaces, private Räume selbst zu finden und ihnen beizutreten, damit Sie nicht alle manuell einladen müssen.</string>
     <string name="new_let_people_in_spaces_find_and_join">Neu: Personen in Spaces können private Räume finden und ihnen beitreten</string>
-    <string name="labs_auto_report_uisi_desc">Das System sendet automatisch Protokolle, wenn ein Fehler bei der Entschlüsselung auftritt.</string>
+    <string name="labs_auto_report_uisi_desc">Das System sendet automatisch Protokolle, wenn ein Fehler bei der Entschlüsselung auftritt</string>
     <string name="labs_auto_report_uisi">Automatische Meldung von Entschlüsselungsfehlern.</string>
     <string name="discovery_section">Auffindbarkeit (%s)</string>
     <string name="discovery_invite">Per E-Mail einladen, finde Kontakte und mehr…</string>
@@ -3049,4 +3049,24 @@
     <string name="legals_identity_server_title">Deine Identitätsserver Richtlinie</string>
     <string name="legals_home_server_title">Deine Heimserver Richtlinie</string>
     <string name="template_legals_application_title">${app_name} Richtlinie</string>
+    <string name="tooltip_attachment_poll">Erstelle eine Abstimmung</string>
+    <string name="tooltip_attachment_contact">Öffne die Kontakte</string>
+    <string name="tooltip_attachment_sticker">Sticker verschicken</string>
+    <string name="tooltip_attachment_file">Datei hochladen</string>
+    <string name="tooltip_attachment_gallery">Verschicke Fotos und Videos</string>
+    <string name="tooltip_attachment_photo">Kamera öffnen</string>
+    <string name="delete_poll_dialog_content">Sind Sie sicher, dass Sie diese Umfrage entfernen möchten\? Sie können diese Umfrage nicht wiederherstellen, sobald sie entfernt wurde.</string>
+    <string name="delete_poll_dialog_title">Abstimmung entfernen</string>
+    <string name="poll_end_room_list_preview">Abstimmung beendet</string>
+    <string name="poll_response_room_list_preview">Stimme abgegeben</string>
+    <string name="labs_enable_polls">Aktiviere Abstimmungen</string>
+    <string name="end_poll_confirmation_approve_button">Abstimmung beenden</string>
+    <string name="end_poll_confirmation_description">Dies verhindert, dass andere Personen abstimmen können, und zeigt die Endergebnisse der Umfrage an.</string>
+    <string name="end_poll_confirmation_title">Diese Abstimmung beenden\?</string>
+    <string name="a11y_poll_winner_option">Gewinneroption</string>
+    <string name="poll_end_action">Abstimmung beenden</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Endgültiges Ergebnis basierend auf %1$d Abstimmung</item>
+        <item quantity="other">Endgültiges Ergebnis basierend auf %1$d Abstimmungen</item>
+    </plurals>
 </resources>
