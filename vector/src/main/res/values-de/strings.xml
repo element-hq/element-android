@@ -3010,4 +3010,43 @@
     <string name="ftue_auth_carousel_2_title">Du hast die volle Kontrolle.</string>
     <string name="ftue_auth_carousel_1_body">Ende-zu-Ende-Verschlüsselter Messenger für sichere und unabhängige Kommunikation, verbunden mit Matrix.</string>
     <string name="room_error_access_unauthorized">Du hast nicht die Berechtigung um diesen Raum zu betreten</string>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">Keine Stimme abgegeben</item>
+        <item quantity="other">%1$d Stimme abgegeben. Stimme ab, um die Ergebnisse zu sehen</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">Basierend auf %1$d Stimme</item>
+        <item quantity="other">Basierend auf %1$d Stimmen</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d Stimme</item>
+        <item quantity="other">%1$d Stimmen</item>
+    </plurals>
+    <string name="restart_the_application_to_apply_changes">Starten Sie die Anwendung neu, damit die Änderung wirksam wird.</string>
+    <string name="labs_enable_latex_maths">LaTeX-Mathematik aktivieren</string>
+    <string name="link_this_email_with_your_account">%s in den Einstellungen, um Einladungen direkt in Element zu erhalten.</string>
+    <string name="this_invite_to_this_space_was_sent">Diese Einladung zu diesem Raum wurde an %s gesendet, der nicht mit Ihrem Konto verbunden ist</string>
+    <string name="to_help_space_members_find_and_join">Um Spacemitgliedern zu helfen, einen privaten Raum zu finden und ihm beizutreten, gehen Sie zu den Einstellungen des Raums, indem Sie auf den Avatar tippen.</string>
+    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Dies macht es für Räume einfach, privat in einem Space zu bleiben, während die Leute im Space diese finden und ihnen beitreten können. Alle neuen Räume in einem Raum haben diese Option zur Verfügung.</string>
+    <string name="help_people_in_spaces_find_and_join">Helfen Sie Personen in Spaces, private Räume selbst zu finden und ihnen beizutreten, damit Sie nicht alle manuell einladen müssen.</string>
+    <string name="new_let_people_in_spaces_find_and_join">Neu: Personen in Spaces können private Räume finden und ihnen beitreten</string>
+    <string name="labs_auto_report_uisi_desc">Das System sendet automatisch Protokolle, wenn ein Fehler bei der Entschlüsselung auftritt.</string>
+    <string name="labs_auto_report_uisi">Automatische Meldung von Entschlüsselungsfehlern.</string>
+    <string name="discovery_section">Auffindbarkeit (%s)</string>
+    <string name="discovery_invite">Per E-Mail einladen, finde Kontakte und mehr…</string>
+    <string name="finish_setting_up_discovery">Schließe die Konfiguration des Auffindbarkeitsdienstes ab.</string>
+    <string name="create_space_identity_server_info_none">Sie verwenden derzeit keinen Identitätsserver. Um Teammitglieder einzuladen und für sie auffindbar zu sein, müssen Sie einen solchen Server konfigurieren.</string>
+    <string name="login_splash_already_have_account">Ich habe bereits ein Benutzerkonto</string>
+    <string name="ftue_auth_carousel_3_title">Vernetz dich mit jedem.</string>
+    <string name="ftue_auth_carousel_1_title">Besitze deine Konversationen.</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Richtlinie</string>
+    <string name="identity_server_consent_dialog_content_3">Um bestehende Kontakte ermitteln zu können, müssen Sie Kontaktinformationen (E-Mails und Telefonnummern) an Ihren Identitätsserver senden. Wir verschlüsseln deine Daten vor dem Senden, um den Datenschutz zu gewährleisten.</string>
+    <string name="identity_server_consent_dialog_content_2">Um bestehende Kontakte zu ermitteln, müssen Sie Kontaktinformationen an deinen Identitätsserver senden.
+\n
+\nWir verschlüsseln deine Daten vor dem Senden, um den Datenschutz zu gewährleisten. Bist du damit einverstanden, diese Informationen zu senden\?</string>
+    <string name="settings_discovery_consent_notice_off_2">Deine Kontakte sind privat. Um in deinen Kontakten Benutzer erkennen zu können, benötigen wir deine Erlaubnis, Kontaktinformationen an deinen Identitätsserver zu senden.</string>
+    <string name="legals_no_policy_provided">Dieser Server stellt keine Richtlinie bereit.</string>
+    <string name="legals_identity_server_title">Deine Identitätsserver Richtlinie</string>
+    <string name="legals_home_server_title">Deine Heimserver Richtlinie</string>
+    <string name="template_legals_application_title">${app_name} Richtlinie</string>
 </resources>
