@@ -2161,7 +2161,7 @@
     <string name="settings_secure_backup_setup">Backup einrichten</string>
     <string name="settings_secure_backup_reset">Backup zurücksetzen</string>
     <string name="settings_secure_backup_enter_to_setup">Auf diesem Gerät einrichten</string>
-    <string name="settings_secure_backup_section_info">Verlust verschlüsselter Nachrichten &amp; Daten verhindern, indem die Schlüssel für die Entschlüsselung am Server gesichert werden.</string>
+    <string name="settings_secure_backup_section_info">Verlust verschlüsselter Nachrichten &amp; Daten verhindern, indem die Schlüssel für die Entschlüsselung auf dem Server gesichert werden.</string>
     <string name="reset_secure_backup_title">Generiere einen neuen Sicherheitsschlüssel oder setze eine neue Sicherheitspassphrase für dein existierendes Backup.</string>
     <string name="reset_secure_backup_warning">Dieses wird deinen aktuellen Schlüssel oder deine aktuelle Phrase ersetzen.</string>
     <string name="disabled_integration_dialog_title">Integrationen sind deaktiviert</string>
