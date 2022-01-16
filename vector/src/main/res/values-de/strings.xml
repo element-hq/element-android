@@ -306,7 +306,7 @@
     <string name="action_voice_call">Sprachanruf</string>
     <string name="action_video_call">Videoanruf</string>
     <string name="action_global_search">Globale Suche</string>
-    <string name="action_mark_all_as_read">Alle als gelesen markieren</string>
+    <string name="action_mark_all_as_read">Alles als gelesen markieren</string>
     <string name="action_historical">Archiv</string>
     <string name="action_quick_reply">Antworten</string>
     <string name="action_open">Öffnen</string>
@@ -496,7 +496,7 @@
     <string name="room_participants_create">Erstellen</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
-    <string name="room_participants_idle">Untätig</string>
+    <string name="room_participants_idle">Abwesend</string>
     <string name="room_participants_header_admin_tools">ADMIN-WERKZEUGE</string>
     <string name="room_participants_header_call">ANRUFE</string>
     <string name="room_participants_header_direct_chats">DIREKT-CHATS</string>
@@ -978,8 +978,8 @@
     <string name="template_e2e_re_request_encryption_key_dialog_content">Bitte öffne ${app_name} auf einem anderen Gerät, das die Nachricht entschlüsseln kann, damit es die Schlüssel an diese Sitzung senden kann.</string>
     <string name="lock_screen_hint">Hier tippen…</string>
     <string name="option_send_voice">Sprachnachricht senden</string>
-    <string name="go_on_with">Öffnen mit…</string>
-    <string name="error_no_external_application_found">Es wurde keine externe Anwendung gefunden, um diese Aktion auszuführen.</string>
+    <string name="go_on_with">Fortfahren mit…</string>
+    <string name="error_no_external_application_found">Es wurde keine externe App gefunden, um diese Aktion auszuführen.</string>
     <string name="settings_labs_enable_send_voice">Sende Sprachnachrichten</string>
     <string name="error_empty_field_your_password">Bitte gib dein Passwort ein.</string>
     <string name="send_bug_report_description_in_english">Schreibe bitte auf Englisch, wenn möglich.</string>
@@ -2122,7 +2122,7 @@
     <string name="call_failed_no_connection_description">Echtzeitverbindung konnte nicht hergestellt werden.
 \nBitte den Administrator deines Homeservers, einen TURN-Server zu konfigurieren, dass Anrufe zuverlässig funktionieren.</string>
     <string name="call_select_sound_device">Audiogerät auswählen</string>
-    <string name="sound_device_phone">Telefonie</string>
+    <string name="sound_device_phone">Telefon</string>
     <string name="sound_device_speaker">Lautsprecher</string>
     <string name="sound_device_headset">Kopfhörer</string>
     <string name="sound_device_wireless_headset">Drahtloser Kopfhörer</string>
@@ -2941,7 +2941,7 @@
     <string name="pick_tings_to_leave">Welche Räume willst du verlassen\?</string>
     <string name="finish_setup">Einrichtung beenden</string>
     <string name="a11y_presence_unavailable">Nicht verfügbar</string>
-    <string name="a11y_presence_offline">Offline</string>
+    <string name="a11y_presence_offline">Abwesend</string>
     <string name="a11y_presence_online">Online</string>
     <string name="call_tap_to_return">%1$s Klicke zum Zurückkehren</string>
     <string name="call_tile_no_answer">Nicht erreicht</string>
