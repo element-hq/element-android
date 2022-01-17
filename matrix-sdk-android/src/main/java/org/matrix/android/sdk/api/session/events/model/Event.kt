@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
@@ -205,7 +206,7 @@ data class Event(
             isAudioMessage()       -> "sent an audio file."
             isImageMessage()       -> "sent an image."
             isVideoMessage()       -> "sent a video."
-            isPoll()               -> "created a poll."
+            isPoll()               -> getPollQuestion() ?: "created a poll."
             else                   -> text
         }
     }
@@ -358,6 +359,12 @@ fun Event.getRelationContent(): RelationDefaultContent? {
 }
 
 /**
+ * Returns the poll question or null otherwise
+ */
+fun Event.getPollQuestion(): String? =
+        getPollContent()?.pollCreationInfo?.question?.question
+
+/**
  * Returns the relation content for a specific type or null otherwise
  */
 fun Event.getRelationContentForType(type: String): RelationDefaultContent? =
@@ -381,3 +388,7 @@ fun Event.getPresenceContent(): PresenceContent? {
 
 fun Event.isInvitation(): Boolean = type == EventType.STATE_ROOM_MEMBER &&
         content?.toModel<RoomMemberContent>()?.membership == Membership.INVITE
+
+fun Event.getPollContent(): MessagePollContent? {
+    return content.toModel<MessagePollContent>()
+}
