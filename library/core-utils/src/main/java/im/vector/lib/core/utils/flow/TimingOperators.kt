@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.flow
+package im.vector.lib.core.utils.flow
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -85,10 +85,12 @@ fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
     }
 }
 
+@ExperimentalCoroutinesApi
 fun tickerFlow(scope: CoroutineScope, delayMillis: Long, initialDelayMillis: Long = delayMillis): Flow<Unit> {
     return scope.fixedPeriodTicker(delayMillis, initialDelayMillis).consumeAsFlow()
 }
 
+@ExperimentalCoroutinesApi
 private fun CoroutineScope.fixedPeriodTicker(delayMillis: Long, initialDelayMillis: Long = delayMillis): ReceiveChannel<Unit> {
     require(delayMillis >= 0) { "Expected non-negative delay, but has $delayMillis ms" }
     require(initialDelayMillis >= 0) { "Expected non-negative initial delay, but has $initialDelayMillis ms" }

@@ -61,7 +61,7 @@ class AppStateHandler @Inject constructor(
     private val coroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val selectedSpaceDataSource = BehaviorDataSource<Option<RoomGroupingMethod>>(Option.empty())
 
-    val selectedRoomGroupingObservable = selectedSpaceDataSource.stream()
+    val selectedRoomGroupingFlow = selectedSpaceDataSource.stream()
 
     fun getCurrentRoomGroupingMethod(): RoomGroupingMethod? {
         // XXX we should somehow make it live :/ just a work around

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.utils
+package im.vector.lib.core.utils.timer
 
-import im.vector.app.core.flow.tickerFlow
+import im.vector.lib.core.utils.flow.tickerFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
@@ -27,6 +27,7 @@ import kotlinx.coroutines.flow.onEach
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class CountUpTimer(private val intervalInMs: Long = 1_000) {
 
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
