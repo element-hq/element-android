@@ -25,10 +25,10 @@ import androidx.core.text.toSpannable
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import im.vector.app.R
-import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentSsssAccessFromPassphraseBinding
+import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.widget.editorActionEvents

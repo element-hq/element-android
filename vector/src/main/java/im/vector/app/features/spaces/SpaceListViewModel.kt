@@ -88,7 +88,7 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
 
         observeSpaceSummaries()
 //        observeSelectionState()
-        appStateHandler.selectedRoomGroupingObservable
+        appStateHandler.selectedRoomGroupingFlow
                 .distinctUntilChanged()
                 .setOnEach {
                     copy(

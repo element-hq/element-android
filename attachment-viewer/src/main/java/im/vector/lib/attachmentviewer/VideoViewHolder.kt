@@ -20,12 +20,9 @@ import android.util.Log
 import android.view.View
 import androidx.core.view.isVisible
 import im.vector.lib.attachmentviewer.databinding.ItemVideoAttachmentBinding
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
+import im.vector.lib.core.utils.timer.CountUpTimer
 import java.io.File
 import java.lang.ref.WeakReference
-import java.util.concurrent.TimeUnit
 
 // TODO, it would be probably better to use a unique media player
 // for better customization and control
@@ -35,7 +32,7 @@ class VideoViewHolder constructor(itemView: View) :
 
     private var isSelected = false
     private var mVideoPath: String? = null
-    private var progressDisposable: Disposable? = null
+    private var countUpTimer: CountUpTimer? = null
     private var progress: Int = 0
     private var wasPaused = false
 
@@ -47,8 +44,7 @@ class VideoViewHolder constructor(itemView: View) :
 
     override fun onRecycled() {
         super.onRecycled()
-        progressDisposable?.dispose()
-        progressDisposable = null
+        stopTimer()
         mVideoPath = null
     }
 
@@ -72,8 +68,7 @@ class VideoViewHolder constructor(itemView: View) :
     override fun entersBackground() {
         if (views.videoView.isPlaying) {
             progress = views.videoView.currentPosition
-            progressDisposable?.dispose()
-            progressDisposable = null
+            stopTimer()
             views.videoView.stopPlayback()
             views.videoView.pause()
         }
@@ -91,8 +86,7 @@ class VideoViewHolder constructor(itemView: View) :
             } else {
                 progress = 0
             }
-            progressDisposable?.dispose()
-            progressDisposable = null
+            stopTimer()
         } else {
             if (mVideoPath != null) {
                 startPlaying()
@@ -107,17 +101,19 @@ class VideoViewHolder constructor(itemView: View) :
         views.videoView.isVisible = true
 
         views.videoView.setOnPreparedListener {
-            progressDisposable?.dispose()
-            progressDisposable = Observable.interval(100, TimeUnit.MILLISECONDS)
-                    .timeInterval()
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
+            stopTimer()
+            countUpTimer = CountUpTimer(100).also {
+                it.tickListener = object : CountUpTimer.TickListener {
+                    override fun onTick(milliseconds: Long) {
                         val duration = views.videoView.duration
                         val progress = views.videoView.currentPosition
                         val isPlaying = views.videoView.isPlaying
 //                        Log.v("FOO", "isPlaying $isPlaying $progress/$duration")
                         eventListener?.get()?.onEvent(AttachmentEvents.VideoEvent(isPlaying, progress, duration))
                     }
+                }
+                it.resume()
+            }
         }
         try {
             views.videoView.setVideoPath(mVideoPath)
@@ -132,6 +128,11 @@ class VideoViewHolder constructor(itemView: View) :
                 views.videoView.seekTo(progress)
             }
         }
+    }
+
+    private fun stopTimer() {
+        countUpTimer?.stop()
+        countUpTimer = null
     }
 
     override fun handleCommand(commands: AttachmentCommands) {

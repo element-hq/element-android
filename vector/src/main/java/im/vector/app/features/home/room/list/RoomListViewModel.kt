@@ -92,7 +92,7 @@ class RoomListViewModel @AssistedInject constructor(
     init {
         observeMembershipChanges()
 
-        appStateHandler.selectedRoomGroupingObservable
+        appStateHandler.selectedRoomGroupingFlow
                 .distinctUntilChanged()
                 .execute {
                     copy(
