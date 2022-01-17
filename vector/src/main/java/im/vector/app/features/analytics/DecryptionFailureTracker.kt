@@ -18,6 +18,7 @@ package im.vector.app.features.analytics
 
 import im.vector.app.core.time.Clock
 import im.vector.app.features.analytics.plan.Error
+import im.vector.lib.core.utils.compat.removeIfCompat
 import im.vector.lib.core.utils.flow.tickerFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -89,7 +90,7 @@ class DecryptionFailureTracker @Inject constructor(
     fun onTimeLineDisposed(roomId: String) {
         scope.launch(Dispatchers.Default) {
             synchronized(failures) {
-                failures.removeIf { it.roomId == roomId }
+                failures.removeIfCompat { it.roomId == roomId }
             }
         }
     }
@@ -105,7 +106,7 @@ class DecryptionFailureTracker @Inject constructor(
 
     private fun removeFailureForEventId(eventId: String) {
         synchronized(failures) {
-            failures.removeIf { it.failedEventId == eventId }
+            failures.removeIfCompat { it.failedEventId == eventId }
         }
     }
 
