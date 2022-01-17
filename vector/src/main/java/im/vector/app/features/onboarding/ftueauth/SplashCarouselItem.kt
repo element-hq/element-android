@@ -35,7 +35,7 @@ abstract class SplashCarouselItem : VectorEpoxyModel<SplashCarouselItem.Holder>(
 
         holder.view.setBackgroundResource(item.pageBackground)
         holder.image.setImageResource(item.image)
-        holder.title.setText(item.title)
+        holder.title.text = item.title.charSequence
         holder.body.setText(item.body)
     }
 

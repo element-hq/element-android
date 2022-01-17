@@ -50,7 +50,7 @@ class PromoteRestrictedViewModel @AssistedInject constructor(
 ) : VectorViewModel<ActiveSpaceViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     init {
-        appStateHandler.selectedRoomGroupingObservable.distinctUntilChanged().execute { state ->
+        appStateHandler.selectedRoomGroupingFlow.distinctUntilChanged().execute { state ->
             val groupingMethod = state.invoke()?.orNull()
             val isSpaceMode = groupingMethod is RoomGroupingMethod.BySpace
             val currentSpace = (groupingMethod as? RoomGroupingMethod.BySpace)?.spaceSummary

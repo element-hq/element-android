@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="ftue_auth_carousel_item_spacing" format="float" type="dimen">0.05</item>
+    <item name="ftue_auth_carousel_item_image_height" format="float" type="dimen">0.40</item>
+</resources>

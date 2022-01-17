@@ -27,3 +27,5 @@ class LocaleProvider @Inject constructor(private val resources: Resources) {
         return ConfigurationCompat.getLocales(resources.configuration)[0]
     }
 }
+
+fun LocaleProvider.isEnglishSpeaking() = current().language.startsWith("en")

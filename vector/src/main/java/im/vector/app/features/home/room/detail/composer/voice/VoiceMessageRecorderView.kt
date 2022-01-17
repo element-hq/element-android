@@ -26,10 +26,10 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.time.Clock
-import im.vector.app.core.utils.CountUpTimer
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewVoiceMessageRecorderBinding
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
+import im.vector.lib.core.utils.timer.CountUpTimer
 import javax.inject.Inject
 import kotlin.math.floor
 

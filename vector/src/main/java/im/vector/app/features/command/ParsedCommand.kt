@@ -51,7 +51,7 @@ sealed class ParsedCommand {
     class JoinRoom(val roomAlias: String, val reason: String?) : ParsedCommand()
     class PartRoom(val roomAlias: String?) : ParsedCommand()
     class ChangeTopic(val topic: String) : ParsedCommand()
-    class KickUser(val userId: String, val reason: String?) : ParsedCommand()
+    class RemoveUser(val userId: String, val reason: String?) : ParsedCommand()
     class ChangeDisplayName(val displayName: String) : ParsedCommand()
     class ChangeDisplayNameForRoom(val displayName: String) : ParsedCommand()
     class ChangeRoomAvatar(val url: String) : ParsedCommand()

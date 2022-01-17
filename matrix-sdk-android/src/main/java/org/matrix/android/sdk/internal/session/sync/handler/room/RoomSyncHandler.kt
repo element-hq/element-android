@@ -129,8 +129,6 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 } else {
                     handlingStrategy.data.mapWithProgress(reporter, InitSyncStep.ImportingAccountJoinedRooms, 0.6f) {
                         handleJoinedRoom(realm, it.key, it.value, insertType, syncLocalTimeStampMillis, aggregator)
-                    }.also {
-                        fixStuckLocalEcho(it)
                     }
                 }
             }
@@ -428,6 +426,10 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 }
             }
         }
+
+        // Handle deletion of [stuck] local echos if needed
+         deleteLocalEchosIfNeeded(insertType, roomEntity, eventList)
+
         // posting new events to timeline if any is registered
         timelineInput.onNewTimelineEvents(roomId = roomId, eventIds = eventIds)
         return chunkEntity
@@ -513,14 +515,16 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
      * While we cannot know when a specific event arrived from the pagination (no transactionId included), after each room /sync
      * we clear all SENT events, and we are sure that we will receive it from /sync or pagination
      */
-    private fun fixStuckLocalEcho(rooms: List<RoomEntity>) {
-        rooms.forEach { roomEntity ->
-            roomEntity.sendingTimelineEvents.filter {  timelineEvent ->
-                timelineEvent.root?.sendState ==  SendState.SENT
-            }.forEach {
-                roomEntity.sendingTimelineEvents.remove(it)
-                it.deleteOnCascade(true)
-            }
+    private fun deleteLocalEchosIfNeeded(insertType: EventInsertType, roomEntity: RoomEntity, eventList: List<Event>) {
+        // Skip deletion if we are on initial sync
+        if (insertType == EventInsertType.INITIAL_SYNC) return
+        // Skip deletion if there are no timeline events or there is no event received from the current user
+        if (eventList.firstOrNull { it.senderId == userId } == null) return
+        roomEntity.sendingTimelineEvents.filter { timelineEvent ->
+            timelineEvent.root?.sendState == SendState.SENT
+        }.forEach {
+            roomEntity.sendingTimelineEvents.remove(it)
+            it.deleteOnCascade(true)
         }
     }
 }
