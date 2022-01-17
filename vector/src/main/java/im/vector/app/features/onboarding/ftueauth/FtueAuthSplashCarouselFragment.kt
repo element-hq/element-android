@@ -49,7 +49,8 @@ private const val CAROUSEL_TRANSITION_TIME_MS = 500L
 class FtueAuthSplashCarouselFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val vectorFeatures: VectorFeatures,
-        private val carouselController: SplashCarouselController
+        private val carouselController: SplashCarouselController,
+        private val carouselStateFactory: SplashCarouselStateFactory
 ) : AbstractFtueAuthFragment<FragmentFtueSplashCarouselBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueSplashCarouselBinding {
@@ -65,7 +66,7 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
         val carouselAdapter = carouselController.adapter
         views.splashCarousel.adapter = carouselAdapter
         TabLayoutMediator(views.carouselIndicator, views.splashCarousel) { _, _ -> }.attach()
-        carouselController.setData(SplashCarouselState())
+        carouselController.setData(carouselStateFactory.create())
 
         views.loginSplashSubmit.debouncedClicks { getStarted() }
         views.loginSplashAlreadyHaveAccount.apply {

@@ -2521,12 +2521,16 @@
 
     <!--  Onboarding -->
     <string name="ftue_auth_carousel_1_title">Own your conversations.</string>
+    <!-- TODO TO BE REMOVED -->
     <string name="ftue_auth_carousel_1_body">End-to-end encrypted messaging for secure and independent communication, connected via Matrix.</string>
     <string name="ftue_auth_carousel_2_title">You\'re in control.</string>
-    <string name="ftue_auth_carousel_2_body">Element lets you choose where you messages are stored, keeping you in control of your data.</string>
-    <string name="ftue_auth_carousel_3_title">Connect with anyone.</string>
-    <string name="ftue_auth_carousel_3_body">Element works with all Matrix-based apps and can even bridge into proprietary messengers.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string name="ftue_auth_carousel_2_body">Element lets you choose where your messages are stored, keeping you in control of your data.</string>
+    <string name="ftue_auth_carousel_3_title">Secure Messaging.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string name="ftue_auth_carousel_3_body">No phone number required, so you don\'t have to share those details with the outside world. No ads, no datamining.</string>
     <string name="ftue_auth_carousel_4_title">Cut the slack from teams.</string>
+    <!-- TODO TO BE REMOVED -->
     <string name="ftue_auth_carousel_4_body">As universal as email, Element is a completely new type of collaboration.</string>
 
     <string name="login_splash_title">It\'s your conversation. Own it.</string>
@@ -3657,8 +3661,8 @@
     <!-- %s will be replaced by the value of link_this_email_settings_link and styled as a link -->
     <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in Element.</string>
 
-   <string name="labs_enable_latex_maths">Enable LaTeX mathematics</string>
-   <string name="restart_the_application_to_apply_changes">Restart the application for the change to take effect.</string>
+    <string name="labs_enable_latex_maths">Enable LaTeX mathematics</string>
+    <string name="restart_the_application_to_apply_changes">Restart the application for the change to take effect.</string>
 
     <!-- Poll -->
     <string name="create_poll_title">Create Poll</string>

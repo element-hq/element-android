@@ -51,4 +51,7 @@
     <!--  Onboarding   -->
     <item name="ftue_auth_gutter_start_percent" format="float" type="dimen">0.05</item>
     <item name="ftue_auth_gutter_end_percent" format="float" type="dimen">0.95</item>
+
+    <item name="ftue_auth_carousel_item_spacing" format="float" type="dimen">0.01</item>
+    <item name="ftue_auth_carousel_item_image_height" format="float" type="dimen">0.35</item>
 </resources>
