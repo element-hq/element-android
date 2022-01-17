@@ -22,6 +22,7 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.ConnectionSpec
 import okhttp3.OkHttpClient
+import okhttp3.Protocol
 import okhttp3.logging.HttpLoggingInterceptor
 import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.MatrixConfiguration
@@ -71,6 +72,7 @@ internal object NetworkModule {
         val spec = ConnectionSpec.Builder(matrixConfiguration.connectionSpec).build()
 
         return OkHttpClient.Builder()
+                .protocols(listOf(Protocol.HTTP_1_1))
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
