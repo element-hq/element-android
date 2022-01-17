@@ -517,9 +517,9 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
      */
     private fun deleteLocalEchosIfNeeded(insertType: EventInsertType, roomEntity: RoomEntity, eventList: List<Event>) {
         // Skip deletion if we are on initial sync
-        if(insertType == EventInsertType.INITIAL_SYNC) return
+        if (insertType == EventInsertType.INITIAL_SYNC) return
         // Skip deletion if there are no timeline events or there is no event received from the current user
-        if(eventList.firstOrNull { it.senderId == userId } == null) return
+        if (eventList.firstOrNull { it.senderId == userId } == null) return
         roomEntity.sendingTimelineEvents.filter { timelineEvent ->
             timelineEvent.root?.sendState == SendState.SENT
         }.forEach {
