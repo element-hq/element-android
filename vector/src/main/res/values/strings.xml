@@ -1049,6 +1049,7 @@
     <string name="thread_list_empty_subtitle">Threads help keep your conversations on-topic and easy to track.</string>
     <!-- Parameter %s will be replaced by the value of string reply_in_thread -->
     <string name="thread_list_empty_notice">Tip: Long tap a message and use “%s”.</string>
+    <string name="search_thread_from_a_thread">From a Thread</string>
 
     <!-- Room events -->
     <string name="room_event_action_report_prompt_reason">Reason for reporting this content</string>

@@ -122,6 +122,7 @@ class SearchResultController @Inject constructor(
                     .spannable(spannable.toEpoxyCharSequence())
                     .sender(eventAndSender.sender
                             ?: eventAndSender.event.senderId?.let { session.getRoomMember(it, data.roomId) }?.toMatrixItem())
+                    .threadDetails(event.threadDetails)
                     .listener { listener?.onItemClicked(eventAndSender.event) }
                     .let { result.add(it) }
         }
