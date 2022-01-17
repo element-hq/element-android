@@ -22,30 +22,41 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 // https://github.com/matrix-org/matrix-analytics-events/
 
 /**
- * Triggered when an error occurred in a call.
+ * Triggered when the user becomes unauthenticated without actually clicking sign out(E.g. Due to expiry of an access token without a way to refresh).
  */
-data class CallError(
+data class UnauthenticatedError(
         /**
-         * Whether its a video call or not.
+         * The error code as defined in matrix spec. The source of this error is from the homeserver.
          */
-        val isVideo: Boolean,
+        val errorCode: ErrorCode,
         /**
-         * Number of participants in the call.
+         * The reason for the error. The source of this error is from the homeserver, the reason can vary and is subject to change so there is no enum of possible values.
          */
-        val numParticipants: Int,
+        val errorReason: String,
         /**
-         * Whether this user placed it.
+         * Whether the auth mechanism is refresh-token-based.
          */
-        val placed: Boolean,
+        val refreshTokenAuth: Boolean,
+        /**
+         * Whether a soft logout or hard logout was triggered.
+         */
+        val softLogout: Boolean,
 ) : VectorAnalyticsEvent {
 
-    override fun getName() = "CallError"
+    enum class ErrorCode {
+        M_FORBIDDEN,
+        M_UNKNOWN,
+        M_UNKNOWN_TOKEN,
+    }
+
+    override fun getName() = "UnauthenticatedError"
 
     override fun getProperties(): Map<String, Any>? {
         return mutableMapOf<String, Any>().apply {
-            put("isVideo", isVideo)
-            put("numParticipants", numParticipants)
-            put("placed", placed)
+            put("errorCode", errorCode.name)
+            put("errorReason", errorReason)
+            put("refreshTokenAuth", refreshTokenAuth)
+            put("softLogout", softLogout)
         }.takeIf { it.isNotEmpty() }
     }
 }
