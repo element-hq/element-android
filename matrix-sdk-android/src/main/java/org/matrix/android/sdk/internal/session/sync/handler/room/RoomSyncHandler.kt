@@ -514,6 +514,9 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
      * we clear all SENT events, and we are sure that we will receive it from /sync or pagination
      */
     private fun fixStuckLocalEcho(rooms: List<RoomEntity>) {
+        // when there are not room events, there is no need to delete SENT messages
+        // this might be useful for events like typing etc
+        if(rooms.isNullOrEmpty()) return
         rooms.forEach { roomEntity ->
             roomEntity.sendingTimelineEvents.filter {  timelineEvent ->
                 timelineEvent.root?.sendState ==  SendState.SENT
