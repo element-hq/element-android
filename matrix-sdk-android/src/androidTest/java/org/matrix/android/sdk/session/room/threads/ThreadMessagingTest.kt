@@ -40,15 +40,10 @@ import java.util.concurrent.CountDownLatch
 @FixMethodOrder(MethodSorters.JVM)
 class ThreadMessagingTest : InstrumentedTest {
 
-    private val commonTestHelper = CommonTestHelper(context())
-    private val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
-
-//    @Rule
-//    @JvmField
-//    val mRetryTestRule = RetryTestRule()
-
     @Test
     fun reply_in_thread_should_create_a_thread() {
+        val commonTestHelper = CommonTestHelper(context())
+        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -105,6 +100,8 @@ class ThreadMessagingTest : InstrumentedTest {
 
     @Test
     fun reply_in_thread_should_create_a_thread_from_other_user() {
+        val commonTestHelper = CommonTestHelper(context())
+        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -176,6 +173,8 @@ class ThreadMessagingTest : InstrumentedTest {
 
     @Test
     fun reply_in_thread_to_timeline_message_multiple_times() {
+        val commonTestHelper = CommonTestHelper(context())
+        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -237,6 +236,8 @@ class ThreadMessagingTest : InstrumentedTest {
 
     @Test
     fun thread_summary_advanced_validation_after_multiple_messages_in_multiple_threads() {
+        val commonTestHelper = CommonTestHelper(context())
+        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
