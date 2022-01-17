@@ -72,6 +72,7 @@ internal object NetworkModule {
         val spec = ConnectionSpec.Builder(matrixConfiguration.connectionSpec).build()
 
         return OkHttpClient.Builder()
+                // workaround for #4669
                 .protocols(listOf(Protocol.HTTP_1_1))
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(60, TimeUnit.SECONDS)

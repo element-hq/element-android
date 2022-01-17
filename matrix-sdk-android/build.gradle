@@ -116,6 +116,11 @@ dependencies {
     implementation libs.squareup.retrofit
     implementation libs.squareup.retrofitMoshi
 
+    // When version of okhttp is updated (current is 4.9.3), consider removing the workaround
+    // to force usage of Protocol.HTTP_1_1. Check the status of:
+    // - https://github.com/square/okhttp/issues/3278
+    // - https://github.com/square/okhttp/issues/4455
+    // - https://github.com/square/okhttp/issues/3146
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.3"))
     implementation 'com.squareup.okhttp3:okhttp'
     implementation 'com.squareup.okhttp3:logging-interceptor'
