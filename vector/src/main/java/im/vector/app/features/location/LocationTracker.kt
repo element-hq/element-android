@@ -27,15 +27,18 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class LocationTracker @Inject constructor(
-        private val context: Context) : LocationListener {
+        private val context: Context
+) : LocationListener {
 
     interface Callback {
         fun onLocationUpdate(locationData: LocationData)
+        fun onLocationProviderIsNotAvailable()
     }
 
     private var locationManager: LocationManager? = null
     var callback: Callback? = null
 
+    @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     fun start() {
         val locationManager = context.getSystemService<LocationManager>()
 
@@ -47,6 +50,7 @@ class LocationTracker @Inject constructor(
                 isGpsEnabled     -> LocationManager.GPS_PROVIDER
                 isNetworkEnabled -> LocationManager.NETWORK_PROVIDER
                 else             -> {
+                    callback?.onLocationProviderIsNotAvailable()
                     Timber.v("## LocationTracker. There is no location provider available")
                     return
                 }
@@ -54,16 +58,17 @@ class LocationTracker @Inject constructor(
 
             // Send last known location without waiting location updates
             it.getLastKnownLocation(provider)?.let { lastKnownLocation ->
-                callback?.onLocationUpdate(LocationData(lastKnownLocation.latitude, lastKnownLocation.longitude, lastKnownLocation.accuracy.toDouble()))
+                callback?.onLocationUpdate(lastKnownLocation.toLocationData())
             }
 
             it.requestLocationUpdates(
                     provider,
-                    MIN_TIME_MILLIS_TO_UPDATE,
-                    MIN_DISTANCE_METERS_TO_UPDATE,
+                    MIN_TIME_MILLIS_TO_UPDATE_LOCATION,
+                    MIN_DISTANCE_METERS_TO_UPDATE_LOCATION,
                     this
             )
         } ?: run {
+            callback?.onLocationProviderIsNotAvailable()
             Timber.v("## LocationTracker. LocationManager is not available")
         }
     }
@@ -75,11 +80,10 @@ class LocationTracker @Inject constructor(
     }
 
     override fun onLocationChanged(location: Location) {
-        callback?.onLocationUpdate(LocationData(location.latitude, location.longitude, location.accuracy.toDouble()))
+        callback?.onLocationUpdate(location.toLocationData())
     }
 
-    companion object {
-        const val MIN_TIME_MILLIS_TO_UPDATE =  1 * 60 * 1000L // every 1 minute
-        const val MIN_DISTANCE_METERS_TO_UPDATE = 10f
+    private fun Location.toLocationData(): LocationData {
+        return LocationData(latitude, longitude, accuracy.toDouble())
     }
 }

@@ -20,9 +20,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.activityViewModel
+import com.airbnb.mvrx.fragmentViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentLocationSharingBinding
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
@@ -33,13 +34,13 @@ class LocationSharingFragment @Inject constructor(
         private val locationTracker: LocationTracker,
         private val session: Session,
         private val locationPinProvider: LocationPinProvider
-) : VectorBaseFragment<FragmentLocationSharingBinding>(), LocationTracker.Callback, VectorMapListener {
+) : VectorBaseFragment<FragmentLocationSharingBinding>(), LocationTracker.Callback {
 
     init {
         locationTracker.callback = this
     }
 
-    private val viewModel: LocationSharingViewModel by activityViewModel()
+    private val viewModel: LocationSharingViewModel by fragmentViewModel()
 
     private var lastZoomValue: Double = -1.0
 
@@ -50,7 +51,11 @@ class LocationSharingFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.mapView.initialize(this)
+        views.mapView.initialize {
+            if (isAdded) {
+                onMapReady()
+            }
+        }
 
         views.shareLocationContainer.debouncedClicks {
             viewModel.handle(LocationSharingAction.OnShareLocation)
@@ -60,7 +65,7 @@ class LocationSharingFragment @Inject constructor(
             when (it) {
                 LocationSharingViewEvents.LocationNotAvailableError    -> handleLocationNotAvailableError()
                 LocationSharingViewEvents.Close                        -> activity?.finish()
-            }
+            }.exhaustive
         }
     }
 
@@ -69,7 +74,7 @@ class LocationSharingFragment @Inject constructor(
         locationTracker.stop()
     }
 
-    override fun onMapReady() {
+    private fun onMapReady() {
         locationPinProvider.create(session.myUserId) {
             views.mapView.addPinToMap(
                     pinId = USER_PIN_NAME,
@@ -81,7 +86,7 @@ class LocationSharingFragment @Inject constructor(
     }
 
     override fun onLocationUpdate(locationData: LocationData) {
-        lastZoomValue = if (lastZoomValue == -1.0) INITIAL_ZOOM else views.mapView.getCurrentZoom() ?: INITIAL_ZOOM
+        lastZoomValue = if (lastZoomValue == -1.0) INITIAL_MAP_ZOOM else views.mapView.getCurrentZoom() ?: INITIAL_MAP_ZOOM
 
         views.mapView.zoomToLocation(locationData.latitude, locationData.longitude, lastZoomValue)
         views.mapView.deleteAllPins()
@@ -90,16 +95,21 @@ class LocationSharingFragment @Inject constructor(
         viewModel.handle(LocationSharingAction.OnLocationUpdate(locationData))
     }
 
+    override fun onLocationProviderIsNotAvailable() {
+        viewModel.handle(LocationSharingAction.OnLocationProviderIsNotAvailable)
+    }
+
     private fun handleLocationNotAvailableError() {
         MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.location_not_available_dialog_title)
                 .setMessage(R.string.location_not_available_dialog_content)
-                .setPositiveButton(R.string.ok, null)
+                .setPositiveButton(R.string.ok) { _, _ ->
+                    activity?.finish()
+                }
                 .show()
     }
 
     companion object {
-        const val INITIAL_ZOOM = 15.0
         const val USER_PIN_NAME = "USER_PIN_NAME"
     }
 }

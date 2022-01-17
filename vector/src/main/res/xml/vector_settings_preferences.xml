@@ -29,7 +29,7 @@
             android:title="@string/font_size" />
 
         <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="SETTINGS_PREF_ENABLE_LOCATION_SHARING"
             android:title="@string/settings_enable_location_sharing" />
 

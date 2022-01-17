@@ -23,10 +23,10 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import im.vector.app.R
+import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.AvatarRenderer
 import org.billcarsonfr.jsonviewer.Utils
-import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -34,7 +34,7 @@ import javax.inject.Singleton
 @Singleton
 class LocationPinProvider @Inject constructor(
         private val context: Context,
-        private val session: Session,
+        private val activeSessionHolder: ActiveSessionHolder,
         private val avatarRenderer: AvatarRenderer
 ) {
     private val cache = mutableMapOf<String, Drawable>()
@@ -49,7 +49,7 @@ class LocationPinProvider @Inject constructor(
             return
         }
 
-        session.getUser(userId)?.toMatrixItem()?.let {
+        activeSessionHolder.getActiveSession().getUser(userId)?.toMatrixItem()?.let {
             val size = Utils.dpToPx(44, context)
             avatarRenderer.render(glideRequests, it, object : CustomTarget<Drawable>(size, size) {
                 override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {

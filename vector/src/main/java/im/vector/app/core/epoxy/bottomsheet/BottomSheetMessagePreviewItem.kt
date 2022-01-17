@@ -36,7 +36,6 @@ import im.vector.app.features.home.room.detail.timeline.item.BindingOptions
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.MapTilerMapView
-import im.vector.app.features.location.VectorMapListener
 import im.vector.app.features.media.ImageContentRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
@@ -101,15 +100,15 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         holder.mapView.isVisible = locationData != null
         holder.body.isVisible = locationData == null
         locationData?.let { location ->
-            holder.mapView.initialize(object : VectorMapListener {
-                override fun onMapReady() {
+            holder.mapView.initialize {
+                if (holder.view.isAttachedToWindow) {
                     holder.mapView.zoomToLocation(location.latitude, location.longitude, 15.0)
                     locationPinProvider?.create(matrixItem.id) { pinDrawable ->
                         holder.mapView.addPinToMap(matrixItem.id, pinDrawable)
                         holder.mapView.updatePinLocation(matrixItem.id, location.latitude, location.longitude)
                     }
                 }
-            })
+            }
         }
     }
 

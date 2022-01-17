@@ -26,19 +26,6 @@ data class LocationData(
         val uncertainty: Double?
 ) : Parcelable {
 
-    fun toGeoUri(): String {
-        return buildString {
-            append("geo:")
-            append(latitude)
-            append(",")
-            append(longitude)
-            append("?q=")
-            append(latitude)
-            append(",")
-            append(longitude)
-        }
-    }
-
     companion object {
 
         /**

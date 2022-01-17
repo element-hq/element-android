@@ -2755,6 +2755,7 @@
     <string name="sent_a_poll">Poll</string>
     <string name="sent_a_reaction">Reacted with: %s</string>
     <string name="sent_verification_conclusion">Verification Conclusion</string>
+    <string name="sent_location">Shared their location</string>
 
     <string name="verification_request_waiting">Waiting…</string>
     <string name="verification_request_other_cancelled">%s cancelled</string>
@@ -3704,8 +3705,8 @@
     <string name="location_activity_title_preview">Location</string>
     <string name="a11y_location_share_icon">Share location</string>
     <string name="location_share">Share location</string>
-    <string name="location_not_available_dialog_title">Element could not access your location</string>
-    <string name="location_not_available_dialog_content">Element could not access your location. Please try again later.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} could not access your location</string>
+    <string name="template_location_not_available_dialog_content">${app_name} could not access your location. Please try again later.</string>
     <string name="location_share_external">Open with</string>
     <string name="settings_enable_location_sharing">Enable location sharing</string>
 

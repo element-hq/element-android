@@ -22,6 +22,7 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.session.Session
 
@@ -42,9 +43,10 @@ class LocationSharingViewModel @AssistedInject constructor(
 
     override fun handle(action: LocationSharingAction) {
         when (action) {
-            is LocationSharingAction.OnLocationUpdate -> handleLocationUpdate(action.locationData)
-            LocationSharingAction.OnShareLocation     -> handleShareLocation()
-        }
+            is LocationSharingAction.OnLocationUpdate              -> handleLocationUpdate(action.locationData)
+            LocationSharingAction.OnShareLocation                  -> handleShareLocation()
+            LocationSharingAction.OnLocationProviderIsNotAvailable -> handleLocationProviderIsNotAvailable()
+        }.exhaustive
     }
 
     private fun handleShareLocation() = withState { state ->
@@ -64,5 +66,9 @@ class LocationSharingViewModel @AssistedInject constructor(
         setState {
             copy(lastKnownLocation = locationData)
         }
+    }
+
+    private fun handleLocationProviderIsNotAvailable() {
+        _viewEvents.post(LocationSharingViewEvents.LocationNotAvailableError)
     }
 }

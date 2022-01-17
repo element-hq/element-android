@@ -31,7 +31,7 @@ import javax.inject.Inject
 
 class LocationPreviewFragment @Inject constructor(
         private val locationPinProvider: LocationPinProvider
-) : VectorBaseFragment<FragmentLocationPreviewBinding>(), VectorMapListener {
+) : VectorBaseFragment<FragmentLocationPreviewBinding>() {
 
     private val args: LocationSharingArgs by args()
 
@@ -42,7 +42,11 @@ class LocationPreviewFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.mapView.initialize(this)
+        views.mapView.initialize {
+            if (isAdded) {
+                onMapReady()
+            }
+        }
     }
 
     override fun getMenuRes() = R.menu.menu_location_preview
@@ -62,21 +66,17 @@ class LocationPreviewFragment @Inject constructor(
         openLocation(requireActivity(), location.latitude, location.longitude)
     }
 
-    override fun onMapReady() {
+    private fun onMapReady() {
         val location = args.initialLocationData ?: return
         val userId = args.locationOwnerId
 
         locationPinProvider.create(userId) { pinDrawable ->
             views.mapView.apply {
-                zoomToLocation(location.latitude, location.longitude, INITIAL_ZOOM)
+                zoomToLocation(location.latitude, location.longitude, INITIAL_MAP_ZOOM)
                 deleteAllPins()
                 addPinToMap(userId, pinDrawable)
                 updatePinLocation(userId, location.latitude, location.longitude)
             }
         }
-    }
-
-    companion object {
-        const val INITIAL_ZOOM = 15.0
     }
 }

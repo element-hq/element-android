@@ -39,13 +39,13 @@ class MapTilerMapView @JvmOverloads constructor(
     private var symbolManager: SymbolManager? = null
     private var style: Style? = null
 
-    override fun initialize(listener: VectorMapListener) {
+    override fun initialize(onMapReady: () -> Unit) {
         getMapAsync { map ->
             map.setStyle(styleUrl) { style ->
                 this.symbolManager = SymbolManager(this, map, style)
                 this.map = map
                 this.style = style
-                listener.onMapReady()
+                onMapReady()
             }
         }
     }

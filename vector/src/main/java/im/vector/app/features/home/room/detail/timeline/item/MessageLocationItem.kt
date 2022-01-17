@@ -25,7 +25,6 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.MapTilerMapView
-import im.vector.app.features.location.VectorMapListener
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>() {
@@ -58,16 +57,14 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
         }
 
         holder.mapView.apply {
-            initialize(object : VectorMapListener {
-                override fun onMapReady() {
-                    zoomToLocation(location.latitude, location.longitude, INITIAL_ZOOM)
+            initialize {
+                zoomToLocation(location.latitude, location.longitude, INITIAL_ZOOM)
 
-                    locationPinProvider?.create(locationOwnerId) { pinDrawable ->
-                        addPinToMap(locationOwnerId, pinDrawable)
-                        updatePinLocation(locationOwnerId, location.latitude, location.longitude)
-                    }
+                locationPinProvider?.create(locationOwnerId) { pinDrawable ->
+                    addPinToMap(locationOwnerId, pinDrawable)
+                    updatePinLocation(locationOwnerId, location.latitude, location.longitude)
                 }
-            })
+            }
         }
     }
 

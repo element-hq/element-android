@@ -108,7 +108,7 @@
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:layout_marginTop="6dp"
-        android:importantForAccessibility="no"
+        android:contentDescription="@string/attachment_type_location"
         android:scaleType="centerCrop"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@id/bottom_sheet_message_preview_timestamp"
