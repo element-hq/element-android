@@ -48,11 +48,9 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
     data class Reply(val eventId: String) :
             EventSharedAction(R.string.reply, R.drawable.ic_reply)
 
-    // TODO add translations
     data class ReplyInThread(val eventId: String) :
             EventSharedAction(R.string.reply_in_thread, R.drawable.ic_reply_in_thread)
 
-    // TODO add translations
     object ViewInRoom :
             EventSharedAction(R.string.view_in_room, R.drawable.ic_thread_view_in_room_menu_item)
 

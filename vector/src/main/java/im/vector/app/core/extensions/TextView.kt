@@ -126,7 +126,7 @@ fun TextView.setLeftDrawable(@DrawableRes iconRes: Int, @AttrRes tintColor: Int?
 }
 
 fun TextView.clearDrawables() {
-    this.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+    setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
 }
 
 /**

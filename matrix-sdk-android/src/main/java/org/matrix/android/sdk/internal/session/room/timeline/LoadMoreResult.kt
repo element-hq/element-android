@@ -20,5 +20,4 @@ internal enum class LoadMoreResult {
     REACHED_END,
     SUCCESS,
     FAILURE
-    // evenIDS
 }

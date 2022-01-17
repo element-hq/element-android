@@ -222,8 +222,8 @@ data class Event(
     private fun getDecryptedValue(key: String = "body"): String? {
         return if (isEncrypted()) {
             @Suppress("UNCHECKED_CAST")
-            val content = mxDecryptionResult?.payload?.get("content") as? JsonDict
-            content?.get(key) as? String
+            val decryptedContent = mxDecryptionResult?.payload?.get("content") as? JsonDict
+            decryptedContent?.get(key) as? String
         } else {
             content?.get(key) as? String
         }

@@ -75,6 +75,7 @@ class ThreadListFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
+        initTextConstants()
         views.threadListRecyclerView.configureWith(threadListController, TimelineItemAnimator(), hasFixedSize = false)
         threadListController.listener = this
     }
@@ -88,6 +89,12 @@ class ThreadListFragment @Inject constructor(
     private fun initToolbar() {
         setupToolbar(views.threadListToolbar)
         renderToolbar()
+    }
+
+    private fun initTextConstants() {
+        views.threadListEmptyNoticeTextView.text = String.format(
+                resources.getString(R.string.thread_list_empty_notice),
+                resources.getString(R.string.reply_in_thread))
     }
 
     override fun invalidate() = withState(threadListViewModel) { state ->

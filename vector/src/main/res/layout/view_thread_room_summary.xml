@@ -55,5 +55,5 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/messageThreadSummaryAvatarImageView"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Hello There, whats up! Its a large sentence whats up! Its a large centence" />
+        tools:text="@sample/messages.json/data/message" />
 </merge>

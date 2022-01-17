@@ -22,7 +22,7 @@ import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.room.threads.list.model.threadList
+import im.vector.app.features.home.room.threads.list.model.threadListItem
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -60,7 +60,7 @@ class ThreadListController @Inject constructor(
                 ?.forEach { timelineEvent ->
                     val date = dateFormatter.format(timelineEvent.root.threadDetails?.lastMessageTimestamp, DateFormatKind.ROOM_LIST)
                     val decryptionErrorMessage = stringProvider.getString(R.string.encrypted_message)
-                    threadList {
+                    threadListItem {
                         id(timelineEvent.eventId)
                         avatarRenderer(host.avatarRenderer)
                         matrixItem(timelineEvent.senderInfo.toMatrixItem())

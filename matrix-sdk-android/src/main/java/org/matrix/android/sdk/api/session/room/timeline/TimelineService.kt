@@ -57,13 +57,13 @@ interface TimelineService {
     fun getAttachmentMessages(): List<TimelineEvent>
 
     /**
-     * Get a live list of all the thread for the specified roomId
+     * Get a live list of all the TimelineEvents which have thread replies for the specified roomId
      * @return the [LiveData] of [TimelineEvent]
      */
     fun getAllThreadsLive(): LiveData<List<TimelineEvent>>
 
     /**
-     * Get a list of all the thread for the specified roomId
+     * Get a list of all the TimelineEvents which have thread replies for the specified roomId
      * @return the [LiveData] of [TimelineEvent]
      */
     fun getAllThreads(): List<TimelineEvent>

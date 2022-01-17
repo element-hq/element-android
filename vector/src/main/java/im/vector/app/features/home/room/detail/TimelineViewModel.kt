@@ -103,7 +103,7 @@ import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
-class RoomDetailViewModel @AssistedInject constructor(
+class TimelineViewModel @AssistedInject constructor(
         @Assisted private val initialState: RoomDetailViewState,
         private val vectorPreferences: VectorPreferences,
         private val vectorDataStore: VectorDataStore,
@@ -144,11 +144,11 @@ class RoomDetailViewModel @AssistedInject constructor(
     private var prepareToEncrypt: Async<Unit> = Uninitialized
 
     @AssistedFactory
-    interface Factory : MavericksAssistedViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
-        override fun create(initialState: RoomDetailViewState): RoomDetailViewModel
+    interface Factory : MavericksAssistedViewModelFactory<TimelineViewModel, RoomDetailViewState> {
+        override fun create(initialState: RoomDetailViewState): TimelineViewModel
     }
 
-    companion object : MavericksViewModelFactory<RoomDetailViewModel, RoomDetailViewState> by hiltMavericksViewModelFactory() {
+    companion object : MavericksViewModelFactory<TimelineViewModel, RoomDetailViewState> by hiltMavericksViewModelFactory() {
         const val PAGINATION_COUNT = 50
     }
 

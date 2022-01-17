@@ -441,13 +441,12 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     /**
-     * Determine whether or not the Reply In Thread bottom sheet setting will be visible
+     * Determine whether or not the Reply In Thread bottom sheet action will be visible
      * to the user
      */
     private fun canReplyInThread(event: TimelineEvent,
                                  messageContent: MessageContent?,
                                  actionPermissions: ActionPermissions): Boolean {
-        // Only event of type EventType.MESSAGE are supported for the moment
         if (!BuildConfig.THREADING_ENABLED) return false
         if (initialState.isFromThreadTimeline) return false
         if (event.root.getClearType() != EventType.MESSAGE &&
@@ -468,13 +467,11 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     /**
-     * Determine whether or no the selected event is a root thread event from within
-     * a thread timeline
+     * Determine whether or not the view in room action will be available for the current event
      */
     private fun canViewInRoom(event: TimelineEvent,
                               messageContent: MessageContent?,
                               actionPermissions: ActionPermissions): Boolean {
-        // Only event of type EventType.MESSAGE are supported for the moment
         if (!BuildConfig.THREADING_ENABLED) return false
         if (!initialState.isFromThreadTimeline) return false
         if (event.root.getClearType() != EventType.MESSAGE &&

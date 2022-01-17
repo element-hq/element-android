@@ -215,7 +215,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             if (state.rootThreadEventId != null) {
                                 room.replyInThread(
                                         rootThreadEventId = state.rootThreadEventId,
-                                        replyInThreadText = action.text.toString(),
+                                        replyInThreadText = slashCommandResult.message,
                                         autoMarkdown = false)
                             } else {
                                 room.sendTextMessage(slashCommandResult.message, autoMarkdown = false)
@@ -270,7 +270,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                         is ParsedCommand.SendEmote                         -> {
                             state.rootThreadEventId?.let {
                                 room.replyInThread(
-                                        rootThreadEventId = state.rootThreadEventId,
+                                        rootThreadEventId = it,
                                         replyInThreadText = slashCommandResult.message,
                                         msgType = MessageType.MSGTYPE_EMOTE,
                                         autoMarkdown = action.autoMarkdown)
@@ -282,7 +282,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             val message = slashCommandResult.message.toString()
                             state.rootThreadEventId?.let {
                                 room.replyInThread(
-                                        rootThreadEventId = state.rootThreadEventId,
+                                        rootThreadEventId = it,
                                         replyInThreadText = slashCommandResult.message,
                                         formattedText = rainbowGenerator.generate(message))
                             } ?: room.sendFormattedTextMessage(message, rainbowGenerator.generate(message))
@@ -293,7 +293,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             val message = slashCommandResult.message.toString()
                             state.rootThreadEventId?.let {
                                 room.replyInThread(
-                                        rootThreadEventId = state.rootThreadEventId,
+                                        rootThreadEventId = it,
                                         replyInThreadText = slashCommandResult.message,
                                         msgType = MessageType.MSGTYPE_EMOTE,
                                         formattedText = rainbowGenerator.generate(message))
@@ -307,7 +307,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             val formattedText = "<span data-mx-spoiler>${slashCommandResult.message}</span>"
                             state.rootThreadEventId?.let {
                                 room.replyInThread(
-                                        rootThreadEventId = state.rootThreadEventId,
+                                        rootThreadEventId = it,
                                         replyInThreadText = text,
                                         formattedText = formattedText)
                             } ?: room.sendFormattedTextMessage(
@@ -479,9 +479,9 @@ class MessageComposerViewModel @AssistedInject constructor(
                 }
                 is SendMode.Reply   -> {
                     val timelineEvent = state.sendMode.timelineEvent
-                    state.rootThreadEventId?.let { rootThreadEventId ->
+                    state.rootThreadEventId?.let {
                         room.replyInThread(
-                                rootThreadEventId = rootThreadEventId,
+                                rootThreadEventId = it,
                                 replyInThreadText = action.text.toString(),
                                 autoMarkdown = action.autoMarkdown,
                                 eventReplied = timelineEvent)

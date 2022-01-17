@@ -203,7 +203,7 @@ interface FragmentModule {
     @Binds
     @IntoMap
     @FragmentKey(TimelineFragment::class)
-    fun bindRoomDetailFragment(fragment: TimelineFragment): Fragment
+    fun bindTimelineFragment(fragment: TimelineFragment): Fragment
 
     @Binds
     @IntoMap
@@ -933,7 +933,7 @@ interface FragmentModule {
     @Binds
     @IntoMap
     @FragmentKey(ThreadListFragment::class)
-    fun bindRoomThreadDetailFragment(fragment: ThreadListFragment): Fragment
+    fun bindThreadListFragment(fragment: ThreadListFragment): Fragment
 
     @Binds
     @IntoMap

@@ -223,7 +223,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
                 body)
 
         val messageTextContent = MessageTextContent(
-                msgType = "m.text",
+                msgType = MessageType.MSGTYPE_TEXT,
                 format = MessageFormat.FORMAT_MATRIX_HTML,
                 body = body,
                 formattedBody = replyFormatted

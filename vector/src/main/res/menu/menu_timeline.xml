@@ -90,7 +90,7 @@
             <item
                 android:id="@+id/menu_thread_timeline_share"
                 android:icon="@drawable/ic_thread_share_menu_item"
-                android:title="@string/action_thread_share"
+                android:title="@string/action_share"
                 app:iconTint="?vctr_content_secondary"
                 app:showAsAction="ifRoom" />
         </menu>

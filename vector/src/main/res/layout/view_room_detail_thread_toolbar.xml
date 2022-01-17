@@ -56,7 +56,7 @@
         app:layout_constraintBottom_toBottomOf="@id/roomToolbarThreadImageView"
         app:layout_constraintStart_toEndOf="@id/roomToolbarThreadImageView"
         app:layout_constraintTop_toTopOf="@id/roomToolbarThreadImageView"
-        tools:text="RoomName"
+        tools:text="@sample/rooms.json/data/name"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

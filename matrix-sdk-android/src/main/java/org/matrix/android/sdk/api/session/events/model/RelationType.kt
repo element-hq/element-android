@@ -28,7 +28,7 @@ object RelationType {
     /** Lets you define an event which references an existing event.*/
     const val REFERENCE = "m.reference"
 
-    /** Lets you define an event which is a reply to an existing event.*/
+    /** Lets you define an event which is a thread reply to an existing event.*/
     const val THREAD = "m.thread"
     const val IO_THREAD = "io.element.thread"
 

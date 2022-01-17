@@ -34,7 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/threadListAppBarLayout"
-        tools:listitem="@layout/item_thread_list"
+        tools:listitem="@layout/item_thread"
         tools:visibility="gone" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -108,7 +108,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/threadListEmptySubtitleTextView"
-            android:text="@string/thread_list_empty_notice" />
+            tools:text="@string/thread_list_empty_notice" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
