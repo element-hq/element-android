@@ -36,6 +36,7 @@ import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.notifications.NotificationDrawerManager
+import im.vector.app.features.onboarding.store.OnboardingStore
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.UnlockedActivity
@@ -98,6 +99,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
     @Inject lateinit var pinLocker: PinLocker
     @Inject lateinit var popupAlertManager: PopupAlertManager
     @Inject lateinit var vectorAnalytics: VectorAnalytics
+    @Inject lateinit var onboardingStore: OnboardingStore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -193,6 +195,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             pinLocker.unlock()
             pinCodeStore.deleteEncodedPin()
             vectorAnalytics.onSignOut()
+            onboardingStore.clear()
         }
         withContext(Dispatchers.IO) {
             // On BG thread

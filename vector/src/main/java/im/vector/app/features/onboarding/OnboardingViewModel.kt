@@ -42,6 +42,7 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
+import im.vector.app.features.onboarding.store.OnboardingStore
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns.getDomain
@@ -73,7 +74,8 @@ class OnboardingViewModel @AssistedInject constructor(
         private val reAuthHelper: ReAuthHelper,
         private val stringProvider: StringProvider,
         private val homeServerHistoryService: HomeServerHistoryService,
-        private val vectorFeatures: VectorFeatures
+        private val vectorFeatures: VectorFeatures,
+        private val onboardingStore: OnboardingStore
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
     @AssistedFactory
@@ -125,7 +127,7 @@ class OnboardingViewModel @AssistedInject constructor(
         when (action) {
             is OnboardingAction.OnGetStarted               -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
             is OnboardingAction.OnIAlreadyHaveAnAccount    -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
-            is OnboardingAction.UpdateUseCase              -> handleUpdateUseCase()
+            is OnboardingAction.UpdateUseCase              -> handleUpdateUseCase(action)
             OnboardingAction.ResetUseCase                  -> resetUseCase()
             is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
             is OnboardingAction.UpdateSignMode             -> handleUpdateSignMode(action)
@@ -458,13 +460,17 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleUpdateUseCase() {
-        // TODO act on the use case selection
+    private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
+        viewModelScope.launch {
+            onboardingStore.setUseCase(action.useCase)
+        }
         _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
     }
 
     private fun resetUseCase() {
-        // TODO remove stored use case
+        viewModelScope.launch {
+            onboardingStore.resetUseCase()
+        }
     }
 
     private fun handleUpdateServerType(action: OnboardingAction.UpdateServerType) {
