@@ -127,7 +127,7 @@ class RoomDetailRobot {
 
     fun openSettings(block: RoomSettingsRobot.() -> Unit) {
         clickMenu(R.id.timeline_setting)
-        waitForView(withId(R.id.roomProfileAvatarView))
+        waitUntilViewVisible(withId(R.id.roomProfileAvatarView))
         sleep(1000)
         block(RoomSettingsRobot())
         pressBack()
