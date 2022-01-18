@@ -37,7 +37,6 @@ import im.vector.app.features.home.room.detail.timeline.action.MessageActionsBot
 import im.vector.app.features.home.room.detail.timeline.reactions.ViewReactionsBottomSheet
 import im.vector.app.features.reactions.data.EmojiDataSource
 import im.vector.app.interactWithSheet
-import im.vector.app.waitForView
 import im.vector.app.withRetry
 import java.lang.Thread.sleep
 
