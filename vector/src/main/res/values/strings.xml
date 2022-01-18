@@ -2526,12 +2526,19 @@
     <string name="ftue_auth_carousel_2_title">You\'re in control.</string>
     <!-- TODO TO BE REMOVED -->
     <string name="ftue_auth_carousel_2_body">Element lets you choose where your messages are stored, keeping you in control of your data.</string>
-    <string name="ftue_auth_carousel_3_title">Secure Messaging.</string>
+    <string name="ftue_auth_carousel_3_title">Secure messaging.</string>
     <!-- TODO TO BE REMOVED -->
     <string name="ftue_auth_carousel_3_body">No phone number required, so you don\'t have to share those details with the outside world. No ads, no datamining.</string>
     <string name="ftue_auth_carousel_4_title">Cut the slack from teams.</string>
     <!-- TODO TO BE REMOVED -->
     <string name="ftue_auth_carousel_4_body">As universal as email, Element is a completely new type of collaboration.</string>
+
+    <string name="ftue_auth_carousel_body_secure">Secure and independent communication that gives you the same level of privacy as a face-to-face conversation in your own home.</string>
+    <string name="ftue_auth_carousel_body_control">Choose where your conversations are kept, giving you control and independence. Connected via Matrix.</string>
+    <string name="ftue_auth_carousel_body_encrypted">End-to-end encrypted and no phone number required. No ads or datamining.</string>
+    <string name="ftue_auth_carousel_title_messaging">Messaging for your team.</string>
+    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
+    <string name="template_ftue_auth_carousel_body_workplace" translatable="false">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
 
     <string name="login_splash_title">It\'s your conversation. Own it.</string>
     <string name="login_splash_text1">Chat with people directly or in groups</string>
