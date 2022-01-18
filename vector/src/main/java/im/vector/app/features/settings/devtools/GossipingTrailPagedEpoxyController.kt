@@ -21,10 +21,10 @@ import com.airbnb.epoxy.paging.PagedListEpoxyController
 import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
-import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.ui.list.GenericItem_
 import im.vector.app.core.utils.createUIHandler
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType

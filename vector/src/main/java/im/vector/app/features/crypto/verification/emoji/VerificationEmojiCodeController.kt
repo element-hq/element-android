@@ -21,7 +21,6 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
 import im.vector.app.R
 import im.vector.app.core.epoxy.bottomSheetDividerItem
-import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.errorWithRetryItem
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.ColorProvider
@@ -32,6 +31,7 @@ import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationE
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationWaitingItem
 import im.vector.app.features.displayname.getBestName
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class VerificationEmojiCodeController @Inject constructor(
