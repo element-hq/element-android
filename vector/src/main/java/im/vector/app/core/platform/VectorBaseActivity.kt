@@ -616,7 +616,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
      * @return Instance of [ToolbarConfig] with set of helper methods to configure toolbar
      * */
     fun setupToolbar(toolbar: MaterialToolbar) = ToolbarConfig(this, toolbar).also {
-        this.toolbar = it
-        it.setup()
+        this.toolbar = it.setup()
     }
 }

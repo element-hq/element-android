@@ -26,13 +26,10 @@ import im.vector.app.R
  * Helper class to configure toolbar.
  * Wraps [MaterialToolbar] providing set of methods to configure it
  */
-class ToolbarConfig(val activity: AppCompatActivity?, val toolbar: MaterialToolbar) {
+class ToolbarConfig(val activity: AppCompatActivity, val toolbar: MaterialToolbar) {
     private var customBackResId: Int? = null
 
-    fun setup() {
-        if (activity == null) {
-            return
-        }
+    fun setup() = apply {
         activity.setSupportActionBar(toolbar)
     }
 
