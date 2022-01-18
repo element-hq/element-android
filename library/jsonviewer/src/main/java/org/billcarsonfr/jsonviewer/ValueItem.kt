@@ -28,12 +28,13 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyHolder
 import com.airbnb.epoxy.EpoxyModelClass
 import com.airbnb.epoxy.EpoxyModelWithHolder
+import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 
 @EpoxyModelClass(layout = R2.layout.item_jv_base_value)
 internal abstract class ValueItem : EpoxyModelWithHolder<ValueItem.Holder>() {
 
     @EpoxyAttribute
-    var text: SafeCharSequence? = null
+    var text: EpoxyCharSequence? = null
 
     @EpoxyAttribute
     var depth: Int = 0
