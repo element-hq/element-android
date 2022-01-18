@@ -1,1 +1,0 @@
-Fix crash on API <24 and make sure this error will not occur again.
