@@ -38,7 +38,6 @@ internal data class JSonViewerFragmentArgs(
     val styleProvider: JSonViewerStyleProvider?
 ) : Parcelable
 
-
 class JSonViewerFragment : Fragment(), MavericksView {
 
     private val viewModel: JSonViewerViewModel by fragmentViewModel()

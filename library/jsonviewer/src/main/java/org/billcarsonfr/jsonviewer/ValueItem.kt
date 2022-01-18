@@ -75,7 +75,6 @@ internal abstract class ValueItem : EpoxyModelWithHolder<ValueItem.Holder>() {
             v: View?,
             menuInfo: ContextMenu.ContextMenuInfo?
         ) {
-
             if (copyValue != null) {
                 val menuItem = menu?.add(
                     Menu.NONE, R.id.copy_value,

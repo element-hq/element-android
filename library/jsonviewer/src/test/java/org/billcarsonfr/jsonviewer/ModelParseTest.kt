@@ -69,14 +69,11 @@ class ModelParseTest {
             Assert.assertEquals(JSONType.STRING, it.type)
         }
 
-
         Assert.assertTrue(glossary.keys["GlossDiv"] is JSonViewerObject)
         val glossDiv = glossary.keys["GlossDiv"] as JSonViewerObject
 
-
         Assert.assertTrue(glossDiv.keys["GlossList"] is JSonViewerObject)
         val glossList = glossDiv.keys["GlossList"] as JSonViewerObject
-
 
         Assert.assertTrue(glossList.keys["GlossEntry"] is JSonViewerObject)
         val glossEntry = glossList.keys["GlossEntry"] as JSonViewerObject
@@ -84,13 +81,11 @@ class ModelParseTest {
         Assert.assertTrue(glossEntry.keys["GlossDef"] is JSonViewerObject)
         val glossDef = glossEntry.keys["GlossDef"] as JSonViewerObject
 
-
         Assert.assertTrue(glossDef.keys["GlossSeeAlso"] is JSonViewerArray)
         val glossSeeAlso = glossDef.keys["GlossSeeAlso"] as JSonViewerArray
 
         Assert.assertEquals(2, glossSeeAlso.items.size)
         Assert.assertEquals("0", glossSeeAlso.items.first().key)
         Assert.assertEquals("GML", (glossSeeAlso.items.first() as JSonViewerLeaf).stringRes)
-
     }
 }

@@ -16,7 +16,15 @@
 
 package org.billcarsonfr.jsonviewer
 
-import com.airbnb.mvrx.*
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.Loading
+import com.airbnb.mvrx.MavericksState
+import com.airbnb.mvrx.MavericksViewModel
+import com.airbnb.mvrx.MavericksViewModelFactory
+import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
+import com.airbnb.mvrx.ViewModelContext
 import kotlinx.coroutines.launch
 
 internal data class JSonViewerState(
@@ -61,7 +69,6 @@ internal class JSonViewerViewModel(initialState: JSonViewerState) :
             } catch (failure: Throwable) {
                 JSonViewerState(Fail(failure))
             }
-
         }
     }
 }

@@ -237,7 +237,6 @@ internal class JSonViewerEpoxyController(private val context: Context) :
             )
             itemClickListener(View.OnClickListener { host.itemClicked(composed) })
         }
-
     }
 
     private fun itemClicked(model: JSonViewerModel) {

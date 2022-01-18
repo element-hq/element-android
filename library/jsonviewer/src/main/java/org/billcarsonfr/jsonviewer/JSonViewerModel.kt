@@ -38,7 +38,6 @@ internal class JSonViewerObject(key: String?, index: Int?, jObject: JSONObject) 
     override fun addChild(model: JSonViewerModel) {
         keys[model.key!!] = model
     }
-
 }
 
 internal class JSonViewerArray(key: String?, index: Int?, jObject: JSONArray) :
@@ -52,7 +51,6 @@ internal class JSonViewerArray(key: String?, index: Int?, jObject: JSONArray) :
 
 internal class JSonViewerLeaf(key: String?, index: Int?, val stringRes: String, val type: JSONType) :
     JSonViewerModel(key, index, stringRes)
-
 
 internal enum class JSONType {
     STRING,
