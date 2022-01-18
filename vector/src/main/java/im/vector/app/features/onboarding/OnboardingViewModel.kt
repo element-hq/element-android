@@ -826,13 +826,17 @@ class OnboardingViewModel @AssistedInject constructor(
             }
 
             withState {
-                when (it.onboardingFlow) {
-                    OnboardingFlow.SignIn -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignIn))
-                    OnboardingFlow.SignUp -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignUp))
-                    OnboardingFlow.SignInSignUp,
-                    null                  -> {
-                        _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
+                if (it.serverType == ServerType.MatrixOrg) {
+                    when (it.onboardingFlow) {
+                        OnboardingFlow.SignIn -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignIn))
+                        OnboardingFlow.SignUp -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignUp))
+                        OnboardingFlow.SignInSignUp,
+                        null                  -> {
+                            _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
+                        }
                     }
+                } else {
+                    _viewEvents.post(OnboardingViewEvents.OnLoginFlowRetrieved)
                 }
             }
         }
