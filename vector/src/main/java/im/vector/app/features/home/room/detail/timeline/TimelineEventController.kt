@@ -443,7 +443,12 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         }
         val readReceipts = receiptsByEvents[event.eventId].orEmpty()
         return copy(
-                readReceiptsItem = readReceiptsItemFactory.create(event.eventId, readReceipts, callback),
+                readReceiptsItem = readReceiptsItemFactory.create(
+                        event.eventId,
+                        readReceipts,
+                        callback,
+                        partialState.isFromThreadTimeline()
+                ),
                 formattedDayModel = formattedDayModel,
                 mergedHeaderModel = mergedHeaderModel
         )

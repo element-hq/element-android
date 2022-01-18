@@ -153,5 +153,5 @@ interface RelationService {
      * from the backend
      * @param rootThreadEventId the root thread eventId
      */
-    suspend fun fetchThreadTimeline(rootThreadEventId: String): List<Event>
+    suspend fun fetchThreadTimeline(rootThreadEventId: String): Boolean
 }

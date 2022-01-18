@@ -203,7 +203,7 @@ internal class DefaultRelationService @AssistedInject constructor(
         return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
     }
 
-    override suspend fun fetchThreadTimeline(rootThreadEventId: String): List<Event> {
+    override suspend fun fetchThreadTimeline(rootThreadEventId: String): Boolean {
         return fetchThreadTimelineTask.execute(FetchThreadTimelineTask.Params(roomId, rootThreadEventId))
     }
 
