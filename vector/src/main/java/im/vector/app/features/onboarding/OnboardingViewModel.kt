@@ -852,7 +852,7 @@ class OnboardingViewModel @AssistedInject constructor(
             }
 
             withState {
-                if (it.serverType == ServerType.MatrixOrg) {
+                if (loginMode.supportsSignModeScreen()) {
                     when (it.onboardingFlow) {
                         OnboardingFlow.SignIn -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignIn))
                         OnboardingFlow.SignUp -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignUp))
@@ -878,5 +878,15 @@ class OnboardingViewModel @AssistedInject constructor(
 
     fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {
         return authenticationService.getFallbackUrl(forSignIn, deviceId)
+    }
+}
+
+private fun LoginMode.supportsSignModeScreen(): Boolean {
+    return when (this) {
+        LoginMode.Password,
+        is LoginMode.SsoAndPassword -> true
+        is LoginMode.Sso,
+        LoginMode.Unknown,
+        LoginMode.Unsupported       -> false
     }
 }
