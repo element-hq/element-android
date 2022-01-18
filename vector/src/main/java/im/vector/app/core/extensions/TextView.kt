@@ -82,7 +82,7 @@ fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
 fun TextView.setTextWithColoredPart(fullText: String,
                                     coloredPart: String,
                                     @AttrRes colorAttribute: Int = R.attr.colorPrimary,
-                                    underline: Boolean = false,
+                                    underline: Boolean = true,
                                     onClick: (() -> Unit)? = null) {
     val color = ThemeUtils.getColor(context, colorAttribute)
 
@@ -101,7 +101,6 @@ fun TextView.setTextWithColoredPart(fullText: String,
 
                         override fun updateDrawState(ds: TextPaint) {
                             ds.color = color
-                            ds.isUnderlineText = !underline
                         }
                     }
                     setSpan(clickableSpan, index, index + coloredPart.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)

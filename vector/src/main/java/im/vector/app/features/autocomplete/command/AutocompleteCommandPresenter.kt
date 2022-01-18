@@ -67,7 +67,7 @@ class AutocompleteCommandPresenter @AssistedInject constructor(
                     if (query.isNullOrEmpty()) {
                         true
                     } else {
-                        it.command.startsWith(query, 1, true)
+                        it.startsWith(query)
                     }
                 }
         controller.setData(data)

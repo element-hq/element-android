@@ -25,8 +25,9 @@
     <string name="notice_direct_room_leave_by_you">You left the room</string>
     <string name="notice_room_reject">%1$s rejected the invitation</string>
     <string name="notice_room_reject_by_you">You rejected the invitation</string>
-    <string name="notice_room_kick">%1$s kicked %2$s</string>
-    <string name="notice_room_kick_by_you">You kicked %1$s</string>
+    <!-- TODO: replace "kick" with "remove" in string resources keys -->
+    <string name="notice_room_kick">%1$s removed %2$s</string>
+    <string name="notice_room_kick_by_you">You removed %1$s</string>
     <string name="notice_room_unban">%1$s unbanned %2$s</string>
     <string name="notice_room_unban_by_you">You unbanned %1$s</string>
     <string name="notice_room_ban">%1$s banned %2$s</string>
@@ -229,8 +230,8 @@
     <string name="notice_direct_room_leave_with_reason_by_you">You left. Reason: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s rejected the invitation. Reason: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">You rejected the invitation. Reason: %1$s</string>
-    <string name="notice_room_kick_with_reason">%1$s kicked %2$s. Reason: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">You kicked %1$s. Reason: %2$s</string>
+    <string name="notice_room_kick_with_reason">%1$s removed %2$s. Reason: %3$s</string>
+    <string name="notice_room_kick_with_reason_by_you">You removed %1$s. Reason: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s unbanned %2$s. Reason: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">You unbanned %1$s. Reason: %2$s</string>
     <string name="notice_room_ban_with_reason">%1$s banned %2$s. Reason: %3$s</string>
@@ -889,7 +890,7 @@
     <string name="room_participants_action_remove">Remove from this room</string>
     <string name="room_participants_action_ban">Ban</string>
     <string name="room_participants_action_unban">Unban</string>
-    <string name="room_participants_action_kick">Kick</string>
+    <string name="room_participants_action_kick">Remove from chat</string>
     <string name="room_participants_action_set_default_power_level">Reset to normal user</string>
     <string name="room_participants_action_set_moderator">Make moderator</string>
     <string name="room_participants_action_set_admin">Make admin</string>
@@ -913,15 +914,15 @@
 
     <string name="room_participants_action_cancel_invite_title">Cancel invite</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Are you sure you want to cancel the invite for this user?</string>
-    <string name="room_participants_kick_title">Kick user</string>
-    <string name="room_participants_kick_reason">Reason to kick</string>
-    <string name="room_participants_kick_prompt_msg">kicking user will remove them from this room.\n\nTo prevent them from joining again, you should ban them instead.</string>
-    <string name="space_participants_kick_prompt_msg">kicking user will remove them from this space.\n\nTo prevent them from joining again, you should ban them instead.</string>
+    <string name="room_participants_kick_title">Remove user</string>
+    <string name="room_participants_kick_reason">Reason to remove</string>
+    <string name="room_participants_kick_prompt_msg">The user will be removed from this room.\n\nTo prevent them from joining again, you should ban them instead.</string>
+    <string name="space_participants_kick_prompt_msg">The user will be removed from this space.\n\nTo prevent them from joining again, you should ban them instead.</string>
     <string name="room_participants_ban_title">Ban user</string>
     <string name="room_participants_ban_reason">Reason to ban</string>
     <string name="room_participants_unban_title">Unban user</string>
-    <string name="room_participants_ban_prompt_msg">Banning user will kick them from this room and prevent them from joining again.</string>
-    <string name="space_participants_ban_prompt_msg">Banning user will kick them from this space and prevent them from joining again.</string>
+    <string name="room_participants_ban_prompt_msg">Banning user will remove them from this room and prevent them from joining again.</string>
+    <string name="space_participants_ban_prompt_msg">Banning user will remove them from this space and prevent them from joining again.</string>
     <string name="room_participants_unban_prompt_msg">Unbanning user will allow them to join the room again.</string>
     <string name="space_participants_unban_prompt_msg">Unbanning user will allow them to join the space again.</string>
 
@@ -1003,7 +1004,7 @@
     <string name="room_permissions_send_messages">Send messages</string>
     <string name="room_permissions_invite_users">Invite users</string>
     <string name="room_permissions_change_settings">Change settings</string>
-    <string name="room_permissions_kick_users">Kick users</string>
+    <string name="room_permissions_kick_users">Remove users</string>
     <string name="room_permissions_ban_users">Ban users</string>
     <string name="room_permissions_remove_messages_sent_by_others">Remove messages sent by others</string>
     <string name="room_permissions_notify_everyone">Notify everyone</string>
@@ -1345,9 +1346,9 @@
     <string name="settings_show_room_member_state_events">Show room member state events</string>
     <string name="settings_chat_effects_title">Show chat effects</string>
     <string name="settings_chat_effects_description">Use /confetti command or send a message containing ❄️ or 🎉</string>
-    <string name="settings_show_room_member_state_events_summary">Includes invite/join/left/kick/ban events and avatar/display name changes.</string>
+    <string name="settings_show_room_member_state_events_summary">Includes invite/join/left/remove/ban events and avatar/display name changes.</string>
     <string name="settings_show_join_leave_messages">Show join and leave events</string>
-    <string name="settings_show_join_leave_messages_summary">Invites, kicks, and bans are unaffected.</string>
+    <string name="settings_show_join_leave_messages_summary">Invites, removes, and bans are unaffected.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Show account events</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Includes avatar and display name changes.</string>
     <string name="settings_vibrate_on_mention">Vibrate when mentioning a user</string>
@@ -1876,7 +1877,7 @@
     <string name="command_description_join_room">Joins room with given address</string>
     <string name="command_description_part_room">Leave room</string>
     <string name="command_description_topic">Set the room topic</string>
-    <string name="command_description_kick_user">Kicks user with given id</string>
+    <string name="command_description_kick_user">Removes user with given id from this room</string>
     <string name="command_description_nick">Changes your display nickname</string>
     <string name="command_description_nick_for_room">Changes your display nickname in the current room only</string>
     <string name="command_description_room_avatar">Changes the avatar of the current room</string>
@@ -1926,7 +1927,7 @@
     </plurals>
     <string name="group_no_long_description">The community admin has not provided a long description for this community.</string>
 
-    <string name="has_been_kicked">You have been kicked from %1$s by %2$s</string>
+    <string name="has_been_kicked">You have been removed from %1$s by %2$s</string>
     <string name="has_been_banned">You have been banned from %1$s by %2$s</string>
     <string name="reason_colon">Reason: %1$s</string>
     <string name="rejoin">Rejoin</string>
@@ -2544,12 +2545,16 @@
 
     <!--  Onboarding -->
     <string name="ftue_auth_carousel_1_title">Own your conversations.</string>
+    <!-- TODO TO BE REMOVED -->
     <string name="ftue_auth_carousel_1_body">End-to-end encrypted messaging for secure and independent communication, connected via Matrix.</string>
     <string name="ftue_auth_carousel_2_title">You\'re in control.</string>
-    <string name="ftue_auth_carousel_2_body">Element lets you choose where you messages are stored, keeping you in control of your data.</string>
-    <string name="ftue_auth_carousel_3_title">Connect with anyone.</string>
-    <string name="ftue_auth_carousel_3_body">Element works with all Matrix-based apps and can even bridge into proprietary messengers.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string name="ftue_auth_carousel_2_body">Element lets you choose where your messages are stored, keeping you in control of your data.</string>
+    <string name="ftue_auth_carousel_3_title">Secure Messaging.</string>
+    <!-- TODO TO BE REMOVED -->
+    <string name="ftue_auth_carousel_3_body">No phone number required, so you don\'t have to share those details with the outside world. No ads, no datamining.</string>
     <string name="ftue_auth_carousel_4_title">Cut the slack from teams.</string>
+    <!-- TODO TO BE REMOVED -->
     <string name="ftue_auth_carousel_4_body">As universal as email, Element is a completely new type of collaboration.</string>
 
     <string name="login_splash_title">It\'s your conversation. Own it.</string>
@@ -3680,8 +3685,8 @@
     <!-- %s will be replaced by the value of link_this_email_settings_link and styled as a link -->
     <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in Element.</string>
 
-   <string name="labs_enable_latex_maths">Enable LaTeX mathematics</string>
-   <string name="restart_the_application_to_apply_changes">Restart the application for the change to take effect.</string>
+    <string name="labs_enable_latex_maths">Enable LaTeX mathematics</string>
+    <string name="restart_the_application_to_apply_changes">Restart the application for the change to take effect.</string>
 
     <!-- Poll -->
     <string name="create_poll_title">Create Poll</string>

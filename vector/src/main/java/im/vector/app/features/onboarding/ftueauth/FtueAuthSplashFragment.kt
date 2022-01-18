@@ -55,7 +55,7 @@ class FtueAuthSplashFragment @Inject constructor(
     private fun setupViews() {
         views.loginSplashSubmit.debouncedClicks { getStarted() }
         views.loginSplashAlreadyHaveAccount.apply {
-            isVisible = vectorFeatures.isAlreadyHaveAccountSplashEnabled()
+            isVisible = vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
             debouncedClicks { alreadyHaveAnAccount() }
         }
 
@@ -70,7 +70,7 @@ class FtueAuthSplashFragment @Inject constructor(
     }
 
     private fun getStarted() {
-        val getStartedFlow = if (vectorFeatures.isAlreadyHaveAccountSplashEnabled()) OnboardingFlow.SignUp else OnboardingFlow.SignInSignUp
+        val getStartedFlow = if (vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()) OnboardingFlow.SignUp else OnboardingFlow.SignInSignUp
         viewModel.handle(OnboardingAction.OnGetStarted(resetLoginConfig = false, onboardingFlow = getStartedFlow))
     }
 

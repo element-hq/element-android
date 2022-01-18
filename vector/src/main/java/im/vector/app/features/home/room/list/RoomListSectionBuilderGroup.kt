@@ -104,7 +104,7 @@ class RoomListSectionBuilderGroup(
             }
         }
 
-        appStateHandler.selectedRoomGroupingObservable
+        appStateHandler.selectedRoomGroupingFlow
                 .distinctUntilChanged()
                 .onEach { groupingMethod ->
                     val selectedGroupId = (groupingMethod.orNull() as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary?.groupId

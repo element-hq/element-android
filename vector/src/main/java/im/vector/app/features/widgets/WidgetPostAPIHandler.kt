@@ -319,7 +319,7 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
         launchWidgetAPIAction(widgetPostAPIMediator, eventData) {
             room.sendStateEvent(
                     eventType = EventType.PLUMBING,
-                    stateKey = null,
+                    stateKey = "",
                     body = params
             )
         }

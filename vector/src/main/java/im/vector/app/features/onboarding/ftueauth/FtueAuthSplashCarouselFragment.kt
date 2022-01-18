@@ -49,7 +49,8 @@ private const val CAROUSEL_TRANSITION_TIME_MS = 500L
 class FtueAuthSplashCarouselFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val vectorFeatures: VectorFeatures,
-        private val carouselController: SplashCarouselController
+        private val carouselController: SplashCarouselController,
+        private val carouselStateFactory: SplashCarouselStateFactory
 ) : AbstractFtueAuthFragment<FragmentFtueSplashCarouselBinding>() {
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueSplashCarouselBinding {
@@ -65,11 +66,11 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
         val carouselAdapter = carouselController.adapter
         views.splashCarousel.adapter = carouselAdapter
         TabLayoutMediator(views.carouselIndicator, views.splashCarousel) { _, _ -> }.attach()
-        carouselController.setData(SplashCarouselState())
+        carouselController.setData(carouselStateFactory.create())
 
         views.loginSplashSubmit.debouncedClicks { getStarted() }
         views.loginSplashAlreadyHaveAccount.apply {
-            isVisible = vectorFeatures.isAlreadyHaveAccountSplashEnabled()
+            isVisible = vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
             debouncedClicks { alreadyHaveAnAccount() }
         }
 
@@ -80,17 +81,26 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
                     "Branch: ${BuildConfig.GIT_BRANCH_NAME}"
             views.loginSplashVersion.debouncedClicks { navigator.openDebug(requireContext()) }
         }
+        views.splashCarousel.registerAutomaticUntilInteractionTransitions()
+    }
 
-        views.splashCarousel.apply {
-            var scheduledTransition: Job? = null
-            registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageSelected(position: Int) {
-                    scheduledTransition?.cancel()
+    private fun ViewPager2.registerAutomaticUntilInteractionTransitions() {
+        var scheduledTransition: Job? = null
+        registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            private var hasUserManuallyInteractedWithCarousel: Boolean = false
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                hasUserManuallyInteractedWithCarousel = !isFakeDragging
+            }
+
+            override fun onPageSelected(position: Int) {
+                scheduledTransition?.cancel()
+                // only schedule automatic transitions whilst the user has not interacted with the carousel
+                if (!hasUserManuallyInteractedWithCarousel) {
                     scheduledTransition = scheduleCarouselTransition()
                 }
-            })
-            scheduledTransition = scheduleCarouselTransition()
-        }
+            }
+        })
     }
 
     private fun ViewPager2.scheduleCarouselTransition(): Job {
@@ -102,7 +112,7 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
     }
 
     private fun getStarted() {
-        val getStartedFlow = if (vectorFeatures.isAlreadyHaveAccountSplashEnabled()) OnboardingFlow.SignUp else OnboardingFlow.SignInSignUp
+        val getStartedFlow = if (vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()) OnboardingFlow.SignUp else OnboardingFlow.SignInSignUp
         viewModel.handle(OnboardingAction.OnGetStarted(resetLoginConfig = false, onboardingFlow = getStartedFlow))
     }
 

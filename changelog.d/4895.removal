@@ -1,0 +1,1 @@
+`StateService.sendStateEvent()` now takes a non-nullable String for the parameter `stateKey`. If null was used, just now use an empty string.

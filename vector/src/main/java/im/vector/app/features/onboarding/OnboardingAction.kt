@@ -31,6 +31,8 @@ sealed class OnboardingAction : VectorViewModelAction {
 
     data class UpdateServerType(val serverType: ServerType) : OnboardingAction()
     data class UpdateHomeServer(val homeServerUrl: String) : OnboardingAction()
+    data class UpdateUseCase(val useCase: FtueUseCase) : OnboardingAction()
+    object ResetUseCase : OnboardingAction()
     data class UpdateSignMode(val signMode: SignMode) : OnboardingAction()
     data class LoginWithToken(val loginToken: String) : OnboardingAction()
     data class WebLoginSuccess(val credentials: Credentials) : OnboardingAction()

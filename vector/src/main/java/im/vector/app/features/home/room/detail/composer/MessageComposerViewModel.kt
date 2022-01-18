@@ -183,7 +183,9 @@ class MessageComposerViewModel @AssistedInject constructor(
         withState { state ->
             when (state.sendMode) {
                 is SendMode.Regular -> {
-                    when (val slashCommandResult = CommandParser.parseSplashCommand(action.text, state.isInThreadTimeline())) {
+                    when (val slashCommandResult = CommandParser.parseSplashCommand(
+                            textMessage = action.text,
+                            isInThreadTimeline =  state.isInThreadTimeline())) {
                         is ParsedCommand.ErrorNotACommand                  -> {
                             // Send the text message to the room
                             if (state.rootThreadEventId != null) {
@@ -257,8 +259,8 @@ class MessageComposerViewModel @AssistedInject constructor(
                         is ParsedCommand.UnignoreUser                      -> {
                             handleUnignoreSlashCommand(slashCommandResult)
                         }
-                        is ParsedCommand.KickUser                          -> {
-                            handleKickSlashCommand(slashCommandResult)
+                        is ParsedCommand.RemoveUser               -> {
+                            handleRemoveSlashCommand(slashCommandResult)
                         }
                         is ParsedCommand.JoinRoom                          -> {
                             handleJoinToAnotherRoomSlashCommand(slashCommandResult)
@@ -625,7 +627,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                 ?: return
 
         launchSlashCommandFlowSuspendable {
-            room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, newPowerLevelsContent)
+            room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, stateKey = "", newPowerLevelsContent)
         }
     }
 
@@ -649,9 +651,9 @@ class MessageComposerViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleKickSlashCommand(kick: ParsedCommand.KickUser) {
+    private fun handleRemoveSlashCommand(removeUser: ParsedCommand.RemoveUser) {
         launchSlashCommandFlowSuspendable {
-            room.kick(kick.userId, kick.reason)
+            room.remove(removeUser.userId, removeUser.reason)
         }
     }
 
@@ -692,7 +694,7 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     private fun handleChangeRoomAvatarSlashCommand(changeAvatar: ParsedCommand.ChangeRoomAvatar) {
         launchSlashCommandFlowSuspendable {
-            room.sendStateEvent(EventType.STATE_ROOM_AVATAR, null, RoomAvatarContent(changeAvatar.url).toContent())
+            room.sendStateEvent(EventType.STATE_ROOM_AVATAR, stateKey = "", RoomAvatarContent(changeAvatar.url).toContent())
         }
     }
 

@@ -32,12 +32,12 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.cleanup
 import im.vector.app.core.extensions.configureWith
-import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSpacePreviewBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.spaces.SpacePreviewSharedAction
 import im.vector.app.features.spaces.SpacePreviewSharedActionViewModel
+import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize

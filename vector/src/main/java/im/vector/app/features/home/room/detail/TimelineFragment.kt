@@ -2256,7 +2256,7 @@ class TimelineFragment @Inject constructor(
                 userId == session.myUserId) {
             // Empty composer, current user: start an emote
             views.composerLayout.views.composerEditText.setText(Command.EMOTE.command + " ")
-            views.composerLayout.views.composerEditText.setSelection(Command.EMOTE.length)
+            views.composerLayout.views.composerEditText.setSelection(Command.EMOTE.command.length + 1)
         } else {
             val roomMember = timelineViewModel.getMember(userId)
             // TODO move logic outside of fragment

@@ -75,9 +75,12 @@ interface MembershipService {
     suspend fun unban(userId: String, reason: String? = null)
 
     /**
-     * Kick a user from the room
+     * Remove a user from the room
      */
-    suspend fun kick(userId: String, reason: String? = null)
+    suspend fun remove(userId: String, reason: String? = null)
+
+    @Deprecated("Use remove instead", ReplaceWith("remove(userId, reason)"))
+    suspend fun kick(userId: String, reason: String? = null) = remove(userId, reason)
 
     /**
      * Join the room, or accept an invitation.
