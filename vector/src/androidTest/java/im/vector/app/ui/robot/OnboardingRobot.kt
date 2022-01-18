@@ -40,13 +40,13 @@ class OnboardingRobot {
 
     private fun crawlGetStarted() {
         clickOn(R.id.loginSplashSubmit)
-        AuthOptionsRobot().crawlGetStarted()
+        OnboardingServersRobot().crawlSignUp()
         pressBack()
     }
 
     private fun crawlAlreadyHaveAccount() {
         clickOn(R.id.loginSplashAlreadyHaveAccount)
-        AuthOptionsRobot().crawlAlreadyHaveAccount()
+        OnboardingServersRobot().crawlSignIn()
         pressBack()
     }
 
@@ -92,76 +92,3 @@ class OnboardingRobot {
         clickOn(R.id.loginSubmit)
     }
 }
-
-class AuthOptionsRobot {
-
-    fun crawlGetStarted() {
-        assertDisplayed(R.id.loginServerTitle, R.string.login_server_title)
-        crawlMatrixServer(isSignUp = true)
-        crawlEmsServer()
-        crawlOtherServer(isSignUp = true)
-        crawlSignInWithMatrixId()
-    }
-
-    fun crawlAlreadyHaveAccount() {
-        assertDisplayed(R.id.loginServerTitle, R.string.login_server_title)
-        crawlMatrixServer(isSignUp = false)
-        crawlEmsServer()
-        crawlOtherServer(isSignUp = false)
-        crawlSignInWithMatrixId()
-    }
-
-    private fun crawlOtherServer(isSignUp: Boolean) {
-        clickOn(R.id.loginServerChoiceOther)
-        waitUntilViewVisible(withId(R.id.loginServerUrlFormTitle))
-        writeTo(R.id.loginServerUrlFormHomeServerUrl, "https://chat.mozilla.org")
-        clickOn(R.id.loginServerUrlFormSubmit)
-        waitUntilViewVisible(withId(R.id.loginSignupSigninTitle))
-        assertDisplayed(R.id.loginSignupSigninText, "Connect to chat.mozilla.org")
-        assertDisplayed(R.id.loginSignupSigninSubmit, R.string.login_signin_sso)
-        pressBack()
-
-        writeTo(R.id.loginServerUrlFormHomeServerUrl, "https://matrix.org")
-        clickOn(R.id.loginServerUrlFormSubmit)
-        assetMatrixSignInOptions(isSignUp)
-        pressBack()
-        pressBack()
-    }
-
-    private fun crawlEmsServer() {
-        clickOn(R.id.loginServerChoiceEms)
-        waitUntilViewVisible(withId(R.id.loginServerUrlFormTitle))
-        assertDisplayed(R.id.loginServerUrlFormTitle, R.string.login_connect_to_modular)
-
-        writeTo(R.id.loginServerUrlFormHomeServerUrl, "https://one.ems.host")
-        clickOn(R.id.loginServerUrlFormSubmit)
-
-        waitUntilViewVisible(withId(R.id.loginSignupSigninTitle))
-        assertDisplayed(R.id.loginSignupSigninText, "one.ems.host")
-        assertDisplayed(R.id.loginSignupSigninSubmit, R.string.login_signin_sso)
-        pressBack()
-        pressBack()
-    }
-
-    private fun crawlMatrixServer(isSignUp: Boolean) {
-        clickOn(R.id.loginServerChoiceMatrixOrg)
-        assetMatrixSignInOptions(isSignUp)
-        pressBack()
-    }
-
-    private fun assetMatrixSignInOptions(isSignUp: Boolean) {
-        waitUntilViewVisible(withId(R.id.loginTitle))
-        when (isSignUp) {
-            true  -> assertDisplayed(R.id.loginTitle, "Sign up to matrix.org")
-            false -> assertDisplayed(R.id.loginTitle, "Connect to matrix.org")
-        }
-    }
-
-    private fun crawlSignInWithMatrixId() {
-        clickOn(R.id.loginServerIKnowMyIdSubmit)
-        waitUntilViewVisible(withId(R.id.loginTitle))
-        assertDisplayed(R.id.loginTitle, R.string.login_signin_matrix_id_title)
-        pressBack()
-    }
-}
-
