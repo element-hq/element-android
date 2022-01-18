@@ -40,6 +40,10 @@ import timber.log.Timber
 
 class ElementRobot {
 
+    fun onboarding(block: OnboardingRobot.() -> Unit) {
+        block(OnboardingRobot())
+    }
+
     fun signUp(userId: String) {
         val onboardingRobot = OnboardingRobot()
         onboardingRobot.createAccount(userId = userId)

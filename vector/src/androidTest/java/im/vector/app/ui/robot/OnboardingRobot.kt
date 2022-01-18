@@ -18,6 +18,7 @@ package im.vector.app.ui.robot
 
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.adevinta.android.barista.assertion.BaristaEnabledAssertions.assertDisabled
@@ -30,6 +31,24 @@ import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.waitForView
 
 class OnboardingRobot {
+
+    fun crawl() {
+        waitUntilViewVisible(withId(R.id.loginSplashSubmit))
+        crawlGetStarted()
+        crawlAlreadyHaveAccount()
+    }
+
+    private fun crawlGetStarted() {
+        clickOn(R.id.loginSplashSubmit)
+        AuthOptionsRobot().crawlGetStarted()
+        pressBack()
+    }
+
+    private fun crawlAlreadyHaveAccount() {
+        clickOn(R.id.loginSplashAlreadyHaveAccount)
+        AuthOptionsRobot().crawlAlreadyHaveAccount()
+        pressBack()
+    }
 
     fun createAccount(userId: String, password: String = "password", homeServerUrl: String = "http://10.0.2.2:8080") {
         initSession(true, userId, password, homeServerUrl)
@@ -73,3 +92,76 @@ class OnboardingRobot {
         clickOn(R.id.loginSubmit)
     }
 }
+
+class AuthOptionsRobot {
+
+    fun crawlGetStarted() {
+        assertDisplayed(R.id.loginServerTitle, R.string.login_server_title)
+        crawlMatrixServer(isSignUp = true)
+        crawlEmsServer()
+        crawlOtherServer(isSignUp = true)
+        crawlSignInWithMatrixId()
+    }
+
+    fun crawlAlreadyHaveAccount() {
+        assertDisplayed(R.id.loginServerTitle, R.string.login_server_title)
+        crawlMatrixServer(isSignUp = false)
+        crawlEmsServer()
+        crawlOtherServer(isSignUp = false)
+        crawlSignInWithMatrixId()
+    }
+
+    private fun crawlOtherServer(isSignUp: Boolean) {
+        clickOn(R.id.loginServerChoiceOther)
+        waitUntilViewVisible(withId(R.id.loginServerUrlFormTitle))
+        writeTo(R.id.loginServerUrlFormHomeServerUrl, "https://chat.mozilla.org")
+        clickOn(R.id.loginServerUrlFormSubmit)
+        waitUntilViewVisible(withId(R.id.loginSignupSigninTitle))
+        assertDisplayed(R.id.loginSignupSigninText, "Connect to chat.mozilla.org")
+        assertDisplayed(R.id.loginSignupSigninSubmit, R.string.login_signin_sso)
+        pressBack()
+
+        writeTo(R.id.loginServerUrlFormHomeServerUrl, "https://matrix.org")
+        clickOn(R.id.loginServerUrlFormSubmit)
+        assetMatrixSignInOptions(isSignUp)
+        pressBack()
+        pressBack()
+    }
+
+    private fun crawlEmsServer() {
+        clickOn(R.id.loginServerChoiceEms)
+        waitUntilViewVisible(withId(R.id.loginServerUrlFormTitle))
+        assertDisplayed(R.id.loginServerUrlFormTitle, R.string.login_connect_to_modular)
+
+        writeTo(R.id.loginServerUrlFormHomeServerUrl, "https://one.ems.host")
+        clickOn(R.id.loginServerUrlFormSubmit)
+
+        waitUntilViewVisible(withId(R.id.loginSignupSigninTitle))
+        assertDisplayed(R.id.loginSignupSigninText, "one.ems.host")
+        assertDisplayed(R.id.loginSignupSigninSubmit, R.string.login_signin_sso)
+        pressBack()
+        pressBack()
+    }
+
+    private fun crawlMatrixServer(isSignUp: Boolean) {
+        clickOn(R.id.loginServerChoiceMatrixOrg)
+        assetMatrixSignInOptions(isSignUp)
+        pressBack()
+    }
+
+    private fun assetMatrixSignInOptions(isSignUp: Boolean) {
+        waitUntilViewVisible(withId(R.id.loginTitle))
+        when (isSignUp) {
+            true  -> assertDisplayed(R.id.loginTitle, "Sign up to matrix.org")
+            false -> assertDisplayed(R.id.loginTitle, "Connect to matrix.org")
+        }
+    }
+
+    private fun crawlSignInWithMatrixId() {
+        clickOn(R.id.loginServerIKnowMyIdSubmit)
+        waitUntilViewVisible(withId(R.id.loginTitle))
+        assertDisplayed(R.id.loginTitle, R.string.login_signin_matrix_id_title)
+        pressBack()
+    }
+}
+
