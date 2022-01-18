@@ -183,7 +183,7 @@ class MessageComposerViewModel @AssistedInject constructor(
         withState { state ->
             when (state.sendMode) {
                 is SendMode.Regular -> {
-                    when (val slashCommandResult = CommandParser.parseSplashCommand(
+                    when (val slashCommandResult = CommandParser.parseSlashCommand(
                             textMessage = action.text,
                             isInThreadTimeline =  state.isInThreadTimeline())) {
                         is ParsedCommand.ErrorNotACommand                  -> {
