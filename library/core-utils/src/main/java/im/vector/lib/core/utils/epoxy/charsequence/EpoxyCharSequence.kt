@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.epoxy.charsequence
+package im.vector.lib.core.utils.epoxy.charsequence
 
 /**
- * Extensions to wrap CharSequence to EpoxyCharSequence
+ * Wrapper for a CharSequence, which support mutation of the CharSequence, which can happen during rendering
  */
-fun CharSequence.toEpoxyCharSequence() = EpoxyCharSequence(this)
+class EpoxyCharSequence(val charSequence: CharSequence) {
+    private val hash = charSequence.toString().hashCode()
+
+    override fun hashCode() = hash
+    override fun equals(other: Any?) = other is EpoxyCharSequence && other.hash == hash
+}

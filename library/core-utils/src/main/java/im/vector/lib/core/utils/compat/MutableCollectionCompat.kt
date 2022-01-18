@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package org.billcarsonfr.jsonviewer
+package im.vector.lib.core.utils.compat
 
-/**
- * Wrapper for a CharSequence, which support mutation of the CharSequence, which can happen during rendering
- * TODO Mutualize
- */
-internal class SafeCharSequence(val charSequence: CharSequence) {
-    private val hash = charSequence.toString().hashCode()
+import android.os.Build
 
-    override fun hashCode() = hash
-    override fun equals(other: Any?) = other is SafeCharSequence && other.hash == hash
+fun <E> MutableCollection<E>.removeIfCompat(predicate: (E) -> Boolean) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        removeIf(predicate)
+    } else {
+        removeAll(filter(predicate).toSet())
+    }
 }
-
-internal fun CharSequence.toSafeCharSequence() = SafeCharSequence(this)

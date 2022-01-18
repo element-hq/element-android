@@ -20,13 +20,13 @@ import android.content.Context
 import androidx.annotation.AttrRes
 import androidx.annotation.DrawableRes
 import im.vector.app.R
-import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
-import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.isEnglishSpeaking
 import im.vector.app.features.themes.ThemeProvider
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import javax.inject.Inject
 

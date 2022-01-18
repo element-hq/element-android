@@ -24,8 +24,8 @@ import com.airbnb.epoxy.EpoxyModelWithHolder
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
-import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
 import im.vector.app.core.epoxy.onClick
+import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 
 /**
  * Item displaying an emoji reaction (single line with emoji, author, time)

@@ -18,11 +18,11 @@ package im.vector.app.features.devtools
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
-import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formMultiLineEditTextItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class RoomDevToolSendFormController @Inject constructor(
