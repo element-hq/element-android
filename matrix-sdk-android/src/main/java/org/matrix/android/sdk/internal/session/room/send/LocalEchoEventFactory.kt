@@ -32,6 +32,8 @@ import org.matrix.android.sdk.api.session.room.model.message.AudioInfo
 import org.matrix.android.sdk.api.session.room.model.message.AudioWaveformInfo
 import org.matrix.android.sdk.api.session.room.model.message.FileInfo
 import org.matrix.android.sdk.api.session.room.model.message.ImageInfo
+import org.matrix.android.sdk.api.session.room.model.message.LocationAsset
+import org.matrix.android.sdk.api.session.room.model.message.LocationAssetType
 import org.matrix.android.sdk.api.session.room.model.message.LocationInfo
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -63,6 +65,7 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.content.ThumbnailExtractor
 import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -207,7 +210,12 @@ internal class LocalEchoEventFactory @Inject constructor(
                 locationInfo = LocationInfo(
                         geoUri = geoUri,
                         description = geoUri
-                )
+                ),
+                locationAsset = LocationAsset(
+                        type = LocationAssetType.SELF
+                ),
+                ts = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()),
+                text = geoUri
         )
         return createMessageEvent(roomId, content)
     }
