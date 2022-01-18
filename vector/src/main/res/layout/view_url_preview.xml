@@ -9,6 +9,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:minWidth="@dimen/chat_bubble_fixed_size"
         android:orientation="vertical">
 
         <ImageView
@@ -17,6 +18,7 @@
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
             android:importantForAccessibility="no"
+            android:layout_gravity="center"
             android:maxHeight="200dp"
             android:scaleType="fitXY"
             tools:src="@tools:sample/backgrounds/scenic" />

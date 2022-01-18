@@ -21,4 +21,6 @@ interface MessageViewConfiguration {
     var isFirstFromSender: Boolean
     var isLastFromSender: Boolean
     var showTimeAsOverlay: Boolean
+    var showNoBubble: Boolean
+    fun render()
 }
