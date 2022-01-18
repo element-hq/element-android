@@ -195,7 +195,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                 // Also invalidate the first previous displayable event if
                 // it's sent by the same user so we are sure we have up to date information.
                 val invalidatedSenderId: String? = currentSnapshot.getOrNull(position)?.senderInfo?.userId
-                // In some cases onChanged will be called before onRemoved and onInserted so position will be smaller than currentSnapshot.size.
+                // In some cases onChanged will be called before onRemoved and onInserted so position will be bigger than currentSnapshot.size.
                 val prevList = currentSnapshot.subList(0, min(position, currentSnapshot.size))
                 val prevDisplayableEventIndex = prevList.indexOfLast {
                     timelineEventVisibilityHelper.shouldShowEvent(it, partialState.highlightedEventId)
