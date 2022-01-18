@@ -171,7 +171,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
     /**
      * If the event is a thread event then transform/enhance it to a visual Reply Event,
      * If the event is not a thread event, null value will be returned
-     * If there is an error (ex. the root/origin thread event is not found), null willl be returend
+     * If there is an error (ex. the root/origin thread event is not found), null will be returned
      */
     private fun transformThreadToReplyIfNeeded(realm: Realm, roomId: String?, event: Event, decryptedResult: JsonDict?): JsonDict? {
         roomId ?: return null

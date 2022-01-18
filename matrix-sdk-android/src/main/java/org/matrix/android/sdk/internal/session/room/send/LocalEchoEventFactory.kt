@@ -457,6 +457,14 @@ internal class LocalEchoEventFactory @Inject constructor(
     /**
      * Generates the appropriate relatesTo object for a reply event.
      * It can either be a regular reply or a reply within a thread
+     * "m.relates_to": {
+     *      "rel_type": "m.thread",
+     *      "event_id": "$thread_root",
+     *      "m.in_reply_to": {
+     *          "event_id": "$event_target",
+     *          "render_in": ["m.thread"]
+     *        }
+     *   }
      */
     private fun generateReplyRelationContent(eventId: String, rootThreadEventId: String? = null): RelationDefaultContent =
             rootThreadEventId?.let {

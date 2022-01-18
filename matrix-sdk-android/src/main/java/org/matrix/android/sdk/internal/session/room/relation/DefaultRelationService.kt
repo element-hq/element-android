@@ -176,6 +176,7 @@ internal class DefaultRelationService @AssistedInject constructor(
             formattedText: String?,
             eventReplied: TimelineEvent?): Cancelable? {
         val event = if (eventReplied != null) {
+            // Reply within a thread
             eventFactory.createReplyTextEvent(
                     roomId = roomId,
                     eventReplied = eventReplied,
@@ -187,6 +188,7 @@ internal class DefaultRelationService @AssistedInject constructor(
                     }
                     ?: return null
         } else {
+            // Normal thread reply
             eventFactory.createThreadTextEvent(
                     rootThreadEventId = rootThreadEventId,
                     roomId = roomId,

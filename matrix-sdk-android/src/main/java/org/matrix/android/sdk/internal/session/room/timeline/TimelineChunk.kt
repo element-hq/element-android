@@ -289,22 +289,10 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         val displayIndex = getNextDisplayIndex(direction) ?: return LoadedFromStorage()
         val baseQuery = timelineEventEntities.where()
 
-//        val timelineEvents = if (timelineSettings.rootThreadEventId != null) {
-//            baseQuery
-//                    .beginGroup()
-//                    .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, timelineSettings.rootThreadEventId)
-//                    .or()
-//                    .equalTo(TimelineEventEntityFields.ROOT.EVENT_ID, timelineSettings.rootThreadEventId)
-//                    .endGroup()
-//                    .offsets(direction, count, displayIndex)
-//                    .findAll()
-//                    .orEmpty()
-//        } else {
         val timelineEvents = baseQuery
                 .offsets(direction, count, displayIndex)
                 .findAll()
                 .orEmpty()
-//        }
 
         if (timelineEvents.isEmpty()) return LoadedFromStorage()
         fetchRootThreadEventsIfNeeded(timelineEvents)
@@ -331,7 +319,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
     }
 
     /**
-     * Returns whether or not the the thread has reached end. It returned false if the current timeline
+     * Returns whether or not the the thread has reached end. It returns false if the current timeline
      * is not a thread timeline
      */
     private fun threadReachedEnd(timelineEvents: List<TimelineEventEntity>): Boolean =

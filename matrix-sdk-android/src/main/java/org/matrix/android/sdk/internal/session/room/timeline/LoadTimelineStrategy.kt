@@ -171,7 +171,6 @@ internal class LoadTimelineStrategy(
     }
 
     suspend fun loadMore(count: Int, direction: Timeline.Direction, fetchOnServerIfNeeded: Boolean = true): LoadMoreResult {
-        // /
         if (mode is Mode.Permalink && timelineChunk == null) {
             val params = GetContextOfEventTask.Params(roomId, mode.originEventId)
             try {
