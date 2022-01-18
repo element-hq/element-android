@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:parentTag="android.widget.RelativeLayout"
-    tools:viewBindingIgnore="true">
+    tools:parentTag="android.widget.RelativeLayout">
 
     <im.vector.app.core.platform.CheckableView
         android:id="@+id/messageSelectedBackground"
@@ -91,7 +90,6 @@
             android:layout_marginStart="0dp"
             android:layout_marginEnd="0dp"
             android:addStatesFromChildren="true"
-            android:paddingStart="4dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 

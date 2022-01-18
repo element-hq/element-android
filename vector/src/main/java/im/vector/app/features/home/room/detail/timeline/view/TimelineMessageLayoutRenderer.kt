@@ -16,11 +16,8 @@
 
 package im.vector.app.features.home.room.detail.timeline.view
 
-interface MessageViewConfiguration {
-    var isIncoming: Boolean
-    var isFirstFromSender: Boolean
-    var isLastFromSender: Boolean
-    var showTimeAsOverlay: Boolean
-    var showNoBubble: Boolean
-    fun render()
+import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
+
+interface TimelineMessageLayoutRenderer {
+    fun render(messageLayout: TimelineMessageLayout)
 }

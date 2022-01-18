@@ -18,13 +18,12 @@ package im.vector.app.features.home.room.detail.timeline.view
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
 import android.widget.RelativeLayout
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
@@ -35,70 +34,38 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import com.google.android.material.shape.ShapeAppearanceModel
 import im.vector.app.R
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.databinding.ViewMessageBubbleBinding
+import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.themes.ThemeUtils
+import timber.log.Timber
 
 class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null,
                                                   defStyleAttr: Int = 0) :
-        RelativeLayout(context, attrs, defStyleAttr), MessageViewConfiguration {
+        RelativeLayout(context, attrs, defStyleAttr), TimelineMessageLayoutRenderer {
 
-    override var isIncoming: Boolean = false
-        set(value) {
-            field = value
-            render()
-        }
+    private var isIncoming: Boolean = false
 
-    override var isFirstFromSender: Boolean = false
-        set(value) {
-            field = value
-            render()
-        }
-    override var isLastFromSender: Boolean = false
-        set(value) {
-            field = value
-            render()
-        }
+    private val cornerRadius = resources.getDimensionPixelSize(R.dimen.chat_bubble_corner_radius).toFloat()
+    private val horizontalStubPadding = DimensionConverter(resources).dpToPx(12)
+    private val verticalStubPadding = DimensionConverter(resources).dpToPx(4)
 
-    override var showTimeAsOverlay: Boolean = false
-        set(value) {
-            field = value
-            render()
-        }
-
-    private val cornerRadius = DimensionConverter(resources).dpToPx(12).toFloat()
+    private lateinit var views: ViewMessageBubbleBinding
 
     init {
         inflate(context, R.layout.view_message_bubble, this)
         context.withStyledAttributes(attrs, R.styleable.MessageBubble) {
             isIncoming = getBoolean(R.styleable.MessageBubble_incoming_style, false)
-            showTimeAsOverlay = getBoolean(R.styleable.MessageBubble_show_time_overlay, false)
-            isFirstFromSender = getBoolean(R.styleable.MessageBubble_is_first, false)
-            isLastFromSender = getBoolean(R.styleable.MessageBubble_is_last, false)
         }
     }
 
     override fun onFinishInflate() {
         super.onFinishInflate()
-        render()
-    }
-
-    private fun render() {
+        views = ViewMessageBubbleBinding.bind(this)
         val currentLayoutDirection = layoutDirection
-        val bubbleView: ConstraintLayout = findViewById(R.id.bubbleView)
-        bubbleView.apply {
-            background = createBackgroundDrawable()
-            outlineProvider = ViewOutlineProvider.BACKGROUND
-            clipToOutline = true
-        }
         if (isIncoming) {
-            findViewById<View>(R.id.informationBottom).layoutDirection = currentLayoutDirection
-            findViewById<View>(R.id.bubbleWrapper).layoutDirection = currentLayoutDirection
-            bubbleView.layoutDirection = currentLayoutDirection
-            findViewById<View>(R.id.messageEndGuideline).updateLayoutParams<LayoutParams> {
-                marginEnd = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_end)
-            }
-            findViewById<View>(R.id.messageStartGuideline).updateLayoutParams<LayoutParams> {
-                marginStart = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_start)
-            }
+            views.informationBottom.layoutDirection = currentLayoutDirection
+            views.bubbleWrapper.layoutDirection = currentLayoutDirection
+            views.bubbleView.layoutDirection = currentLayoutDirection
         } else {
             val oppositeLayoutDirection = if (currentLayoutDirection == View.LAYOUT_DIRECTION_LTR) {
                 View.LAYOUT_DIRECTION_RTL
@@ -106,41 +73,66 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
                 View.LAYOUT_DIRECTION_LTR
             }
 
-            findViewById<View>(R.id.informationBottom).layoutDirection = oppositeLayoutDirection
-            findViewById<View>(R.id.bubbleWrapper).layoutDirection = oppositeLayoutDirection
-            bubbleView.layoutDirection = currentLayoutDirection
-            findViewById<View>(R.id.messageEndGuideline).updateLayoutParams<LayoutParams> {
-                marginEnd = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_start)
-            }
-            findViewById<View>(R.id.messageStartGuideline).updateLayoutParams<LayoutParams> {
-                marginStart = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_end)
-            }
-        }
-        ConstraintSet().apply {
-            clone(bubbleView)
-            clear(R.id.viewStubContainer, ConstraintSet.END)
-            if (showTimeAsOverlay) {
-                val timeColor = ContextCompat.getColor(context, R.color.palette_white)
-                findViewById<TextView>(R.id.messageTimeView).setTextColor(timeColor)
-                connect(R.id.viewStubContainer, ConstraintSet.END, R.id.parent, ConstraintSet.END, 0)
-                val margin = resources.getDimensionPixelSize(R.dimen.layout_horizontal_margin)
-                setMargin(R.id.messageTimeView, ConstraintSet.END, margin)
-            } else {
-                val timeColor = ThemeUtils.getColor(context, R.attr.vctr_content_tertiary)
-                findViewById<TextView>(R.id.messageTimeView).setTextColor(timeColor)
-                connect(R.id.viewStubContainer, ConstraintSet.END, R.id.messageTimeView, ConstraintSet.START, 0)
-            }
-            applyTo(bubbleView)
+            views.informationBottom.layoutDirection = oppositeLayoutDirection
+            views.bubbleWrapper.layoutDirection = oppositeLayoutDirection
+            views.bubbleView.layoutDirection = currentLayoutDirection
         }
     }
 
-    private fun createBackgroundDrawable(): Drawable {
-        val (topCornerFamily, topRadius) = if (isFirstFromSender) {
+    override fun render(messageLayout: TimelineMessageLayout) {
+        if (messageLayout !is TimelineMessageLayout.Bubble) {
+            Timber.v("Can't render messageLayout $messageLayout")
+            return
+        }
+        views.bubbleView.apply {
+            background = createBackgroundDrawable(messageLayout)
+            outlineProvider = ViewOutlineProvider.BACKGROUND
+            clipToOutline = true
+        }
+        ConstraintSet().apply {
+            clone(views.bubbleView)
+            clear(R.id.viewStubContainer, ConstraintSet.END)
+            val showTimeAsOverlay = messageLayout.isPseudoBubble
+            if (showTimeAsOverlay) {
+                val timeColor = ContextCompat.getColor(context, R.color.palette_white)
+                views.messageTimeView.setTextColor(timeColor)
+                connect(R.id.viewStubContainer, ConstraintSet.END, R.id.parent, ConstraintSet.END, 0)
+            } else {
+                val timeColor = ThemeUtils.getColor(context, R.attr.vctr_content_tertiary)
+                views.messageTimeView.setTextColor(timeColor)
+                connect(R.id.viewStubContainer, ConstraintSet.END, R.id.messageTimeView, ConstraintSet.START, 0)
+            }
+            applyTo(views.bubbleView)
+        }
+        if (messageLayout.isPseudoBubble) {
+            views.viewStubContainer.root.setPadding(0, 0, 0, 0)
+        } else {
+            views.viewStubContainer.root.setPadding(horizontalStubPadding, verticalStubPadding, horizontalStubPadding, verticalStubPadding)
+        }
+        if (messageLayout.isIncoming) {
+            views.messageEndGuideline.updateLayoutParams<LayoutParams> {
+                marginEnd = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_end)
+            }
+            views.messageStartGuideline.updateLayoutParams<LayoutParams> {
+                marginStart = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_start)
+            }
+        } else {
+            views.messageEndGuideline.updateLayoutParams<LayoutParams> {
+                marginEnd = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_start)
+            }
+            views.messageStartGuideline.updateLayoutParams<LayoutParams> {
+                marginStart = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_end)
+            }
+        }
+    }
+
+    private fun createBackgroundDrawable(messageLayout: TimelineMessageLayout.Bubble): Drawable {
+        val (topCornerFamily, topRadius) = if (messageLayout.isFirstFromThisSender) {
             Pair(CornerFamily.ROUNDED, cornerRadius)
         } else {
             Pair(CornerFamily.CUT, 0f)
         }
-        val (bottomCornerFamily, bottomRadius) = if (isLastFromSender) {
+        val (bottomCornerFamily, bottomRadius) = if (messageLayout.isLastFromThisSender) {
             Pair(CornerFamily.ROUNDED, cornerRadius)
         } else {
             Pair(CornerFamily.CUT, 0f)
@@ -166,7 +158,11 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
         }
         val shapeAppearanceModel = shapeAppearanceModelBuilder.build()
         return MaterialShapeDrawable(shapeAppearanceModel).apply {
-            fillColor = ColorStateList.valueOf(backgroundColor)
+            fillColor = if (messageLayout.isPseudoBubble) {
+                ColorStateList.valueOf(Color.TRANSPARENT)
+            } else {
+                ColorStateList.valueOf(backgroundColor)
+            }
         }
     }
 }

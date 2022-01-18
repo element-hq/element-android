@@ -16,6 +16,7 @@
 
 package im.vector.app.features.media
 
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Parcelable
@@ -23,6 +24,7 @@ import android.view.View
 import android.widget.ImageView
 import androidx.core.view.updateLayoutParams
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.Transformation
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -109,7 +111,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
                 .into(imageView)
     }
 
-    fun render(data: Data, mode: Mode, imageView: ImageView) {
+    fun render(data: Data, mode: Mode, imageView: ImageView, cornerTransformation: Transformation<Bitmap> = RoundedCorners(dimensionConverter.dpToPx(8))) {
         val size = processSize(data, mode)
         imageView.updateLayoutParams {
             width = size.width
@@ -120,7 +122,7 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
 
         createGlideRequest(data, mode, imageView, size)
                 .dontAnimate()
-                .transform(RoundedCorners(dimensionConverter.dpToPx(8)))
+                .transform(cornerTransformation)
                 // .thumbnail(0.3f)
                 .into(imageView)
     }
