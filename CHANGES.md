@@ -1,3 +1,14 @@
+Changes in Element v1.3.15 (2022-01-18)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fix crash when viewing source which contains an emoji ([#4796](https://github.com/vector-im/element-android/issues/4796))
+ - Prevent crash in Timeline and add more logs. ([#4959](https://github.com/vector-im/element-android/issues/4959))
+ - Fix crash on API <24 and make sure this error will not occur again. ([#4962](https://github.com/vector-im/element-android/issues/4962))
+ - Fixes sign in/up crash when selecting ems and other server types which use SSO ([#4969](https://github.com/vector-im/element-android/issues/4969))
+
+
 Changes in Element v1.3.14 (2022-01-12)
 =======================================
 
