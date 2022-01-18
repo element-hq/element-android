@@ -34,7 +34,8 @@ data class RoomProfileViewState(
         val isUsingUnstableRoomVersion: Boolean = false,
         val recommendedRoomVersion: String? = null,
         val canUpgradeRoom: Boolean = false,
-        val isTombstoned: Boolean = false
+        val isTombstoned: Boolean = false,
+        val canUpdateRoomState: Boolean = false
 ) : MavericksState {
 
     constructor(args: RoomProfileArgs) : this(roomId = args.roomId)

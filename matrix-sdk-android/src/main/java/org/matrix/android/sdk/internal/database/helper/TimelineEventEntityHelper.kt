@@ -30,8 +30,8 @@ internal fun TimelineEventEntity.Companion.nextId(realm: Realm): Long {
 }
 
 internal fun TimelineEventEntity.isMoreRecentThan(eventToCheck: TimelineEventEntity): Boolean {
-    val currentChunk = this.chunk?.first() ?: return false
-    val chunkToCheck = eventToCheck.chunk?.firstOrNull() ?: return false
+    val currentChunk = this.chunk?.first(null) ?: return false
+    val chunkToCheck = eventToCheck.chunk?.first(null) ?: return false
     return if (currentChunk == chunkToCheck) {
         this.displayIndex >= eventToCheck.displayIndex
     } else {

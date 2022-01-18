@@ -21,11 +21,11 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import androidx.core.content.FileProvider
 import im.vector.app.BuildConfig
-import im.vector.app.core.utils.CountUpTimer
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import im.vector.app.features.voice.VoiceFailure
 import im.vector.app.features.voice.VoiceRecorder
 import im.vector.app.features.voice.VoiceRecorderProvider
+import im.vector.lib.core.utils.timer.CountUpTimer
 import im.vector.lib.multipicker.entity.MultiPickerAudioType
 import im.vector.lib.multipicker.utils.toMultiPickerAudioType
 import org.matrix.android.sdk.api.extensions.orFalse

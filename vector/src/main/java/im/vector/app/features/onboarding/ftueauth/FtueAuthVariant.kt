@@ -32,8 +32,10 @@ import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.platform.ScreenOrientationLocker
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
@@ -61,7 +63,9 @@ class FtueAuthVariant(
         private val views: ActivityLoginBinding,
         private val onboardingViewModel: OnboardingViewModel,
         private val activity: VectorBaseActivity<ActivityLoginBinding>,
-        private val supportFragmentManager: FragmentManager
+        private val supportFragmentManager: FragmentManager,
+        private val vectorFeatures: VectorFeatures,
+        private val orientationLocker: ScreenOrientationLocker,
 ) : OnboardingVariant {
 
     private val enterAnim = R.anim.enter_fade_in
@@ -90,6 +94,7 @@ class FtueAuthVariant(
         }
 
         with(activity) {
+            orientationLocker.lockPhonesToPortrait(this)
             onboardingViewModel.onEach {
                 updateWithState(it)
             }
@@ -108,7 +113,11 @@ class FtueAuthVariant(
     }
 
     private fun addFirstFragment() {
-        activity.addFragment(views.loginFragmentContainer, FtueAuthSplashFragment::class.java)
+        val splashFragment = when (vectorFeatures.isOnboardingSplashCarouselEnabled()) {
+            true -> FtueAuthSplashCarouselFragment::class.java
+            else -> FtueAuthSplashFragment::class.java
+        }
+        activity.addFragment(views.loginFragmentContainer, splashFragment)
     }
 
     private fun handleOnboardingViewEvents(viewEvents: OnboardingViewEvents) {
@@ -146,13 +155,16 @@ class FtueAuthVariant(
                 activity.addFragmentToBackstack(views.loginFragmentContainer,
                         FtueAuthServerSelectionFragment::class.java,
                         option = { ft ->
-                            activity.findViewById<View?>(R.id.loginSplashLogo)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
-                            // Disable transition of text
-                            // findViewById<View?>(R.id.loginSplashTitle)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
-                            // No transition here now actually
-                            // findViewById<View?>(R.id.loginSplashSubmit)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
-                            // TODO Disabled because it provokes a flickering
-                            // ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
+                            if (vectorFeatures.isOnboardingUseCaseEnabled()) {
+                                ft.setCustomAnimations(enterAnim, exitAnim, popEnterAnim, popExitAnim)
+                            } else {
+                                activity.findViewById<View?>(R.id.loginSplashLogo)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
+                                // TODO Disabled because it provokes a flickering
+                                // Disable transition of text
+                                // findViewById<View?>(R.id.loginSplashTitle)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
+                                // No transition here now actually
+                                // findViewById<View?>(R.id.loginSplashSubmit)?.let { ft.addSharedElement(it, ViewCompat.getTransitionName(it) ?: "") }
+                            }
                         })
             is OnboardingViewEvents.OnServerSelectionDone                      -> onServerSelectionDone(viewEvents)
             is OnboardingViewEvents.OnSignModeSelected                         -> onSignModeSelected(viewEvents)
@@ -203,6 +215,11 @@ class FtueAuthVariant(
             is OnboardingViewEvents.Loading                                    ->
                 // This is handled by the Fragments
                 Unit
+            OnboardingViewEvents.OpenUseCaseSelection                          -> {
+                activity.addFragmentToBackstack(views.loginFragmentContainer,
+                        FtueAuthUseCaseFragment::class.java,
+                        option = commonOption)
+            }
         }.exhaustive
     }
 

@@ -19,6 +19,7 @@ package im.vector.app.features.spaces
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
 import im.vector.app.RoomGroupingMethod
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
@@ -66,7 +67,7 @@ class SpaceSummaryController @Inject constructor(
         if (!nonNullViewState.legacyGroups.isNullOrEmpty()) {
             genericFooterItem {
                 id("legacy_space")
-                text(" ")
+                text(" ".toEpoxyCharSequence())
             }
 
             genericHeaderItem {

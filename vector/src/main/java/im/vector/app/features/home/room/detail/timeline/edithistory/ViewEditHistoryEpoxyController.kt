@@ -62,7 +62,7 @@ class ViewEditHistoryEpoxyController @Inject constructor(
             is Fail       -> {
                 genericFooterItem {
                     id("failure")
-                    text(host.stringProvider.getString(R.string.unknown_error))
+                    text(host.stringProvider.getString(R.string.unknown_error).toEpoxyCharSequence())
                 }
             }
             is Success    -> {

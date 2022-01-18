@@ -1,1 +1,0 @@
-New attachment picker UI

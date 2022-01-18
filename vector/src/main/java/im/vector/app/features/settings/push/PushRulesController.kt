@@ -18,6 +18,7 @@ package im.vector.app.features.settings.push
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
+import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import javax.inject.Inject
@@ -38,7 +39,7 @@ class PushRulesController @Inject constructor(
         } ?: run {
             genericFooterItem {
                 id("footer")
-                text(host.stringProvider.getString(R.string.settings_push_rules_no_rules))
+                text(host.stringProvider.getString(R.string.settings_push_rules_no_rules).toEpoxyCharSequence())
             }
         }
     }

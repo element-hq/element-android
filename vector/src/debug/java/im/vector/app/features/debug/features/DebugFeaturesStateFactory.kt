@@ -16,8 +16,11 @@
 
 package im.vector.app.features.debug.features
 
+import androidx.datastore.preferences.core.Preferences
 import im.vector.app.features.DefaultVectorFeatures
+import im.vector.app.features.VectorFeatures
 import javax.inject.Inject
+import kotlin.reflect.KFunction1
 
 class DebugFeaturesStateFactory @Inject constructor(
         private val debugFeatures: DebugVectorFeatures,
@@ -31,16 +34,31 @@ class DebugFeaturesStateFactory @Inject constructor(
                         featureOverride = debugFeatures.onboardingVariant(),
                         featureDefault = defaultFeatures.onboardingVariant()
                 ),
-
-                Feature.BooleanFeature(
+                createBooleanFeature(
                         label = "FTUE Splash - I already have an account",
-                        featureOverride = debugFeatures.isAlreadyHaveAccountSplashEnabled().takeIf {
-                            debugFeatures.hasOverride(DebugFeatureKeys.alreadyHaveAnAccount)
-                        },
-                        featureDefault = defaultFeatures.isAlreadyHaveAccountSplashEnabled(),
-                        key = DebugFeatureKeys.alreadyHaveAnAccount
+                        key = DebugFeatureKeys.onboardingAlreadyHaveAnAccount,
+                        factory = VectorFeatures::isOnboardingAlreadyHaveAccountSplashEnabled
+                ),
+                createBooleanFeature(
+                        label = "FTUE Splash - carousel",
+                        key = DebugFeatureKeys.onboardingSplashCarousel,
+                        factory = VectorFeatures::isOnboardingSplashCarouselEnabled
+                ),
+                createBooleanFeature(
+                        label = "FTUE Use Case",
+                        key = DebugFeatureKeys.onboardingUseCase,
+                        factory = VectorFeatures::isOnboardingUseCaseEnabled
                 )
         ))
+    }
+
+    private fun createBooleanFeature(key: Preferences.Key<Boolean>, label: String, factory: KFunction1<VectorFeatures, Boolean>): Feature {
+        return Feature.BooleanFeature(
+                label = label,
+                featureOverride = factory.invoke(debugFeatures).takeIf { debugFeatures.hasOverride(key) },
+                featureDefault = factory.invoke(defaultFeatures),
+                key = key
+        )
     }
 
     private inline fun <reified T : Enum<T>> createEnumFeature(label: String, featureOverride: T, featureDefault: T): Feature {

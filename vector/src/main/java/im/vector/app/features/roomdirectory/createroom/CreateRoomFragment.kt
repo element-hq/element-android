@@ -56,7 +56,8 @@ import javax.inject.Inject
 data class CreateRoomArgs(
         val initialName: String,
         val parentSpaceId: String? = null,
-        val isSpace: Boolean = false
+        val isSpace: Boolean = false,
+        val openAfterCreate: Boolean = true
 ) : Parcelable
 
 class CreateRoomFragment @Inject constructor(
@@ -220,16 +221,19 @@ class CreateRoomFragment @Inject constructor(
         views.waitingView.root.isVisible = async is Loading
         if (async is Success) {
             // Navigate to freshly created room
-            if (state.isSubSpace) {
-                navigator.switchToSpace(
-                        requireContext(),
-                        async(),
-                        Navigator.PostSwitchSpaceAction.None
-                )
-            } else {
-                navigator.openRoom(requireActivity(), async())
+            if (state.openAfterCreate) {
+                if (state.isSubSpace) {
+                    navigator.switchToSpace(
+                            requireContext(),
+                            async(),
+                            Navigator.PostSwitchSpaceAction.None
+                    )
+                } else {
+                    navigator.openRoom(requireActivity(), async())
+                }
             }
 
+            sharedActionViewModel.post(RoomDirectorySharedAction.CreateRoomSuccess(async()))
             sharedActionViewModel.post(RoomDirectorySharedAction.Close)
         } else {
             // Populate list with Epoxy

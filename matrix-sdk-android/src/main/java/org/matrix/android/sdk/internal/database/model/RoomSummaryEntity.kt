@@ -205,6 +205,11 @@ internal open class RoomSummaryEntity(
             if (value != field) field = value
         }
 
+    var e2eAlgorithm: String? = null
+        set(value) {
+            if (value != field) field = value
+        }
+
     var encryptionEventTs: Long? = 0
         set(value) {
             if (value != field) field = value

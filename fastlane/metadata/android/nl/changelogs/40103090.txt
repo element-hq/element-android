@@ -1,0 +1,2 @@
+Belangrijkste wijzigingen in deze versie: Ondersteuning toevoegen voor spraakberichtconcept. Veel bugfixes!
+Volledige changelog: https://github.com/vector-im/element-android/releases/tag/v1.3.9

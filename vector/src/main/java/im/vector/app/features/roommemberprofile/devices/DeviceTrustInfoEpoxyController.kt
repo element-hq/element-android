@@ -67,12 +67,12 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
                         // TODO FORMAT
                         text(host.stringProvider.getString(R.string.verification_profile_device_verified_because,
                                 data.userItem?.displayName ?: "",
-                                data.userItem?.id ?: ""))
+                                data.userItem?.id ?: "").toEpoxyCharSequence())
                     } else {
                         // TODO what if mine
                         text(host.stringProvider.getString(R.string.verification_profile_device_new_signing,
                                 data.userItem?.displayName ?: "",
-                                data.userItem?.id ?: ""))
+                                data.userItem?.id ?: "").toEpoxyCharSequence())
                     }
                 }
 //                    text(stringProvider.getString(R.string.verification_profile_device_untrust_info))
@@ -98,7 +98,7 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
                     id("warn")
                     centered(false)
                     textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
-                    text(host.stringProvider.getString(R.string.verification_profile_device_untrust_info))
+                    text(host.stringProvider.getString(R.string.verification_profile_device_untrust_info).toEpoxyCharSequence())
                 }
 
                 bottomSheetVerificationActionItem {

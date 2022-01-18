@@ -27,7 +27,6 @@ import im.vector.app.RoomGroupingMethod
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.singletonEntryPoint
-import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.call.dialpad.DialPadLookup
 import im.vector.app.features.call.lookup.CallProtocolsChecker
@@ -37,6 +36,7 @@ import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.invite.showInvites
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.ui.UiStateRepository
+import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterIsInstance
@@ -197,7 +197,7 @@ class HomeDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeRoomGroupingMethod() {
-        appStateHandler.selectedRoomGroupingObservable
+        appStateHandler.selectedRoomGroupingFlow
                 .setOnEach {
                     copy(
                             roomGroupingMethod = it.orNull() ?: RoomGroupingMethod.BySpace(null)
@@ -206,7 +206,7 @@ class HomeDetailViewModel @AssistedInject constructor(
     }
 
     private fun observeRoomSummaries() {
-        appStateHandler.selectedRoomGroupingObservable.distinctUntilChanged().flatMapLatest {
+        appStateHandler.selectedRoomGroupingFlow.distinctUntilChanged().flatMapLatest {
             // we use it as a trigger to all changes in room, but do not really load
             // the actual models
             session.getPagedRoomSummariesLive(

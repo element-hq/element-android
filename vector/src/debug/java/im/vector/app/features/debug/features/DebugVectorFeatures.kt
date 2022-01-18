@@ -43,8 +43,13 @@ class DebugVectorFeatures(
         return readPreferences().getEnum<VectorFeatures.OnboardingVariant>() ?: vectorFeatures.onboardingVariant()
     }
 
-    override fun isAlreadyHaveAccountSplashEnabled(): Boolean = readPreferences()[DebugFeatureKeys.alreadyHaveAnAccount]
-            ?: vectorFeatures.isAlreadyHaveAccountSplashEnabled()
+    override fun isOnboardingAlreadyHaveAccountSplashEnabled(): Boolean = read(DebugFeatureKeys.onboardingAlreadyHaveAnAccount)
+            ?: vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
+
+    override fun isOnboardingSplashCarouselEnabled(): Boolean = read(DebugFeatureKeys.onboardingSplashCarousel)
+            ?: vectorFeatures.isOnboardingSplashCarouselEnabled()
+
+    override fun isOnboardingUseCaseEnabled(): Boolean = read(DebugFeatureKeys.onboardingUseCase) ?: vectorFeatures.isOnboardingUseCaseEnabled()
 
     fun <T> override(value: T?, key: Preferences.Key<T>) = updatePreferences {
         if (value == null) {
@@ -65,6 +70,8 @@ class DebugVectorFeatures(
             it.putEnum(value, type)
         }
     }
+
+    private fun read(key: Preferences.Key<Boolean>): Boolean? = readPreferences()[key]
 
     private fun readPreferences() = runBlocking { dataStore.data.first() }
 
@@ -92,6 +99,7 @@ private inline fun <reified T : Enum<T>> enumPreferencesKey() = enumPreferencesK
 private fun <T : Enum<T>> enumPreferencesKey(type: KClass<T>) = stringPreferencesKey("enum-${type.simpleName}")
 
 object DebugFeatureKeys {
-
-    val alreadyHaveAnAccount = booleanPreferencesKey("already-have-an-account")
+    val onboardingAlreadyHaveAnAccount = booleanPreferencesKey("onboarding-already-have-an-account")
+    val onboardingSplashCarousel = booleanPreferencesKey("onboarding-splash-carousel")
+    val onboardingUseCase = booleanPreferencesKey("onbboarding-splash-carousel")
 }

@@ -38,13 +38,11 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncSummary
 import org.matrix.android.sdk.api.session.sync.model.RoomSyncUnreadNotifications
 import org.matrix.android.sdk.internal.crypto.EventDecryptor
-import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.crosssigning.DefaultCrossSigningService
+import org.matrix.android.sdk.internal.crypto.model.event.EncryptionEventContent
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
-import org.matrix.android.sdk.internal.database.model.EventEntity
-import org.matrix.android.sdk.internal.database.model.EventEntityFields
 import org.matrix.android.sdk.internal.database.model.GroupSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntityFields
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
@@ -57,7 +55,6 @@ import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.isEventRead
 import org.matrix.android.sdk.internal.database.query.where
-import org.matrix.android.sdk.internal.database.query.whereType
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.clearWith
 import org.matrix.android.sdk.internal.query.process
@@ -123,10 +120,8 @@ internal class RoomSummaryUpdater @Inject constructor(
         Timber.v("## Space: Updating summary room [$roomId] roomType: [$roomType]")
 
         // Don't use current state for this one as we are only interested in having MXCRYPTO_ALGORITHM_MEGOLM event in the room
-        val encryptionEvent = EventEntity.whereType(realm, roomId = roomId, type = EventType.STATE_ROOM_ENCRYPTION)
-                .contains(EventEntityFields.CONTENT, "\"algorithm\":\"$MXCRYPTO_ALGORITHM_MEGOLM\"")
-                .isNotNull(EventEntityFields.STATE_KEY)
-                .findFirst()
+        val encryptionEvent = CurrentStateEventEntity.getOrNull(realm, roomId, type = EventType.STATE_ROOM_ENCRYPTION, stateKey = "")?.root
+        Timber.v("## CRYPTO: currentEncryptionEvent is $encryptionEvent")
 
         val latestPreviewableEvent = RoomSummaryEventsHelper.getLatestPreviewableEvent(realm, roomId)
 
@@ -152,6 +147,11 @@ internal class RoomSummaryUpdater @Inject constructor(
                 .orEmpty()
         roomSummaryEntity.updateAliases(roomAliases)
         roomSummaryEntity.isEncrypted = encryptionEvent != null
+
+        roomSummaryEntity.e2eAlgorithm = ContentMapper.map(encryptionEvent?.content)
+                ?.toModel<EncryptionEventContent>()
+                ?.algorithm
+
         roomSummaryEntity.encryptionEventTs = encryptionEvent?.originServerTs
 
         if (roomSummaryEntity.membership == Membership.INVITE && inviterId != null) {

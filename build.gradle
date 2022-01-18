@@ -36,14 +36,6 @@ allprojects {
     apply plugin: "org.jlleitschuh.gradle.ktlint"
 
     repositories {
-        // For olm library.
-        maven {
-            url 'https://gitlab.matrix.org/api/v4/projects/27/packages/maven'
-            content {
-                groups.olm.regex.each { includeGroupByRegex it }
-                groups.olm.group.each { includeGroup it }
-            }
-        }
         maven {
             url 'https://jitpack.io'
             content {
@@ -156,16 +148,6 @@ project(":diff-match-patch") {
 //    sonarqube {
 //        properties {
 //            property "sonar.sources", project(":matrix-sdk-android").android.sourceSets.main.java.srcDirs
-//            // exclude source code from analyses separated by a colon (:)
-//            // property "sonar.exclusions", "**/*.*"
-//        }
-//    }
-//}
-//
-//project(":matrix-sdk-android-rx") {
-//    sonarqube {
-//        properties {
-//            property "sonar.sources", project(":matrix-sdk-android-rx").android.sourceSets.main.java.srcDirs
 //            // exclude source code from analyses separated by a colon (:)
 //            // property "sonar.exclusions", "**/*.*"
 //        }

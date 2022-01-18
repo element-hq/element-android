@@ -17,12 +17,20 @@
 package im.vector.app.features.settings
 
 import im.vector.app.R
+import im.vector.app.core.preference.VectorSwitchPreference
 import javax.inject.Inject
 
-class VectorSettingsLabsFragment @Inject constructor() : VectorSettingsBaseFragment() {
+class VectorSettingsLabsFragment @Inject constructor(
+        private val vectorPreferences: VectorPreferences
+) : VectorSettingsBaseFragment() {
 
     override var titleRes = R.string.room_settings_labs_pref_title
     override val preferenceXmlRes = R.xml.vector_settings_labs
 
-    override fun bindPref() {}
+    override fun bindPref() {
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_AUTO_REPORT_UISI)?.let { pref ->
+            // ensure correct default
+            pref.isChecked = vectorPreferences.labsAutoReportUISI()
+        }
+    }
 }

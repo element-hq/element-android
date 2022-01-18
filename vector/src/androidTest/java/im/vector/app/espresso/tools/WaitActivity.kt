@@ -26,7 +26,6 @@ import im.vector.app.activityIdlingResource
 import im.vector.app.waitForView
 import im.vector.app.withIdlingResource
 import org.hamcrest.Matcher
-import org.hamcrest.Matchers.not
 
 inline fun <reified T : Activity> waitUntilActivityVisible(noinline block: (() -> Unit) = {}) {
     withIdlingResource(activityIdlingResource(T::class.java), block)
