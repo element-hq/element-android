@@ -1,0 +1,64 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.jakewharton.butterknife'
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.jakewharton:butterknife-gradle-plugin:10.2.3'
+    }
+}
+
+android {
+    compileSdk versions.compileSdk
+
+    defaultConfig {
+        minSdk versions.minSdk
+        targetSdk versions.targetSdk
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility versions.sourceCompat
+        targetCompatibility versions.targetCompat
+    }
+
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+
+dependencies {
+    implementation libs.androidx.appCompat
+    implementation libs.androidx.core
+
+    implementation libs.airbnb.epoxy
+    kapt libs.airbnb.epoxyProcessor
+
+    implementation libs.airbnb.mavericks
+    // Span utils
+    implementation 'me.gujun.android:span:1.7'
+
+    implementation libs.google.material
+
+    implementation libs.jetbrains.coroutinesCore
+    implementation libs.jetbrains.coroutinesAndroid
+
+    testImplementation 'org.json:json:20190722'
+    testImplementation libs.tests.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espressoCore
+}
