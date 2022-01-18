@@ -85,7 +85,8 @@ class ModelParseTest {
         val glossSeeAlso = glossDef.keys["GlossSeeAlso"] as JSonViewerArray
 
         Assert.assertEquals(2, glossSeeAlso.items.size)
-        Assert.assertEquals("0", glossSeeAlso.items.first().key)
+        Assert.assertEquals(0, glossSeeAlso.items.first().index)
+        Assert.assertNull(glossSeeAlso.items.first().key)
         Assert.assertEquals("GML", (glossSeeAlso.items.first() as JSonViewerLeaf).stringRes)
     }
 }
