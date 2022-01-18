@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.utils.compat
+package im.vector.lib.core.utils.compat
 
 import android.os.Build
 
