@@ -11,8 +11,7 @@ updates:
     schedule:
       interval: "weekly"
     ignore:
-      - dependency-name: "github-script"
-        versions: ["3.x"]
+      - dependency-name: "*github-script*"
   # Updates for Gradle dependencies used in the app
   - package-ecosystem: gradle
     directory: "/"
