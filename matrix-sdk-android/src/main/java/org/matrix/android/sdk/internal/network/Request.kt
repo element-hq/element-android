@@ -19,8 +19,8 @@ package org.matrix.android.sdk.internal.network
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.getRetryDelay
+import org.matrix.android.sdk.api.failure.isLimitExceededError
 import org.matrix.android.sdk.api.failure.shouldBeRetried
 import org.matrix.android.sdk.internal.network.ssl.CertUtil
 import retrofit2.HttpException
@@ -74,23 +74,26 @@ internal suspend inline fun <DATA> executeRequest(globalErrorReceiver: GlobalErr
 
             currentRetryCount++
 
-            if (exception is Failure.ServerError &&
-                    exception.httpCode == 429 &&
-                    exception.error.code == MatrixError.M_LIMIT_EXCEEDED &&
-                    currentRetryCount < maxRetriesCount) {
+            if (exception.isLimitExceededError() && currentRetryCount < maxRetriesCount) {
                 // 429, we can retry
-                delay(exception.getRetryDelay(1_000))
+                val retryDelay = exception.getRetryDelay(1_000)
+                if (retryDelay <= maxDelayBeforeRetry) {
+                    delay(retryDelay)
+                } else {
+                    // delay is too high to be retried, propagate the exception
+                    throw exception
+                }
             } else if (canRetry && currentRetryCount < maxRetriesCount && exception.shouldBeRetried()) {
                 delay(currentDelay)
                 currentDelay = currentDelay.times(2L).coerceAtMost(maxDelayBeforeRetry)
                 // Try again (loop)
             } else {
                 throw when (exception) {
-                    is IOException              -> Failure.NetworkConnection(exception)
+                    is IOException           -> Failure.NetworkConnection(exception)
                     is Failure.ServerError,
                     is Failure.OtherServerError,
-                    is CancellationException    -> exception
-                    else                        -> Failure.Unknown(exception)
+                    is CancellationException -> exception
+                    else                     -> Failure.Unknown(exception)
                 }
             }
         }
