@@ -78,6 +78,9 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
     data class ViewDecryptedSource(val content: String) :
             EventSharedAction(R.string.view_decrypted_source, R.drawable.ic_view_source)
 
+    data class ViewEventE2EInformation(val eventId: String, val roomId: String) :
+            EventSharedAction(R.string.view_message_e2e_info, R.drawable.ic_crypto_info)
+
     data class CopyPermalink(val eventId: String) :
             EventSharedAction(R.string.permalink, R.drawable.ic_permalink)
 

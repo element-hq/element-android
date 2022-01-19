@@ -149,6 +149,7 @@ import im.vector.app.features.home.room.detail.composer.SendMode
 import im.vector.app.features.home.room.detail.composer.boolean
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
+import im.vector.app.features.home.room.detail.e2einfo.MessageE2EInfoActivity
 import im.vector.app.features.home.room.detail.readreceipts.DisplayReadReceiptsBottomSheet
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.action.EventSharedAction
@@ -2153,6 +2154,11 @@ class TimelineFragment @Inject constructor(
                         -1,
                         createJSonViewerStyleProvider(colorProvider)
                 ).show(childFragmentManager, "JSON_VIEWER")
+            }
+            is EventSharedAction.ViewEventE2EInformation    -> {
+                MessageE2EInfoActivity.getIntent(requireContext(), roomDetailArgs.roomId, action.eventId).let {
+                    startActivity(it)
+                }
             }
             is EventSharedAction.QuickReact                 -> {
                 // eventId,ClickedOn,Add

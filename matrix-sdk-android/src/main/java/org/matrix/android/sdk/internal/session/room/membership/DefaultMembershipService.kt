@@ -62,7 +62,7 @@ internal class DefaultMembershipService @AssistedInject constructor(
     }
 
     override suspend fun loadRoomMembersIfNeeded() {
-        val params = LoadRoomMembersTask.Params(roomId, Membership.LEAVE)
+        val params = LoadRoomMembersTask.Params(roomId = roomId, excludeMembership = Membership.LEAVE)
         loadRoomMembersTask.execute(params)
     }
 

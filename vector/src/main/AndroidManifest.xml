@@ -309,6 +309,7 @@
         <activity android:name=".features.home.room.detail.search.SearchActivity" />
         <activity android:name=".features.usercode.UserCodeActivity" />
         <activity android:name=".features.call.transfer.CallTransferActivity" />
+        <activity android:name=".features.home.room.detail.e2einfo.MessageE2EInfoActivity" />
 
         <!-- Single instance is very important for the custom scheme callback-->
         <activity

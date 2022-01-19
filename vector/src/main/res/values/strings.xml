@@ -362,6 +362,7 @@
     <string name="permalink">Permalink</string>
     <string name="view_source">View Source</string>
     <string name="view_decrypted_source">View Decrypted Source</string>
+    <string name="view_message_e2e_info">Cryptography Info</string>
     <string name="none">None</string>
     <string name="report_content">Report Content</string>
     <string name="active_call">Active call</string>
@@ -1644,7 +1645,30 @@
     <string name="encryption_information_claimed_ed25519_fingerprint_key">Claimed Ed25519 fingerprint key</string>
     <string name="encryption_information_algorithm">Algorithm</string>
     <string name="encryption_information_session_id">Session ID</string>
+    <string name="encryption_information_ratchet_index">Ratchet Index</string>
     <string name="encryption_information_decryption_error">Decryption error</string>
+    <string name="encryption_information_sent_by_you_from_device">Message sent by you from this device (%s)</string>
+    <string name="encryption_information_sent_by_you_from_other_device">Message sent by you from another device (%s)</string>
+    <string name="encryption_information_sent_by_other_from_device">Sent by %1$s from device %2$s</string>
+    <string name="encryption_information_sender_info">Sender Info</string>
+    <string name="encryption_information_key_share_info">Key Share Info</string>
+    <string name="encryption_information_key_share_desc">"This is the list of devices that this message was originally intended to be shared with.\nIt is possible that the key was not successfully transmitted though (network problem, missing one time key…)"</string>
+    <string name="encryption_information_shared_with_users_devices">This session (at this index) was shared with %1$d user(s) and %2$d device(s)</string>
+    <string name="encryption_information_key_requests">Key Requests</string>
+    <string name="encryption_information_key_requests_helper_text">When a recipient cannot decrypt a message he will send you a key request to ask you to send the key.\nYour device will automatically decide to forward or not the key when appropriate. Carefully review these requests before you decide to forward anyhow.</string>
+
+    <string name="encryption_info_request_state_none">Received</string>
+    <string name="encryption_info_request_state_pending">Pending Review</string>
+    <string name="encryption_info_request_state_rejected">Rejected</string>
+    <string name="encryption_info_request_state_accepting">Sharing</string>
+    <string name="encryption_info_request_state_accepted">Forwarded</string>
+    <string name="encryption_info_request_state_failed_to_accept">Failed to share</string>
+    <string name="encryption_info_request_state_unable_to_process">Failed to share</string>
+    <string name="encryption_info_request_state_cancelled_by_requester">Cancelled by sender</string>
+    <string name="encryption_info_request_state_re_requested">Sharing</string>
+
+    <!-- First param is a userId, second a deviceId, third a technical status of a request-->
+    <string name="encryption_info_request_state_description">Requested by %1$s|%2$s\nStatus: %3$s</string>
 
     <string name="encryption_information_sender_device_information">Sender session information</string>
     <string name="encryption_information_device_name">Public name</string>
@@ -3500,6 +3524,9 @@
     <string name="dev_tools_success_state_event">State event sent!</string>
     <string name="dev_tools_event_content_hint">Event content</string>
 
+    <string name="message_e2e_info_title">Message e2e details</string>
+    <string name="message_e2e_room_key_request_title">Key request review</string>
+
     <string name="command_description_create_space">Create a Space</string>
     <string name="command_description_add_to_space">Add to the given Space</string>
     <string name="command_description_join_space">Join the Space with the given id</string>
@@ -3778,4 +3805,6 @@
     <string name="tooltip_attachment_poll">Create poll</string>
     <string name="tooltip_attachment_location">Share location</string>
 
+
+    <string name="search_device_user_hint">Type a deviceId/userId</string>
 </resources>

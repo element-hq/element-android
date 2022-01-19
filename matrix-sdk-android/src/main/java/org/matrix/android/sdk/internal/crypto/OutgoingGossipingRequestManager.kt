@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.internal.crypto.model.rest.RoomKeyRequestBody
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
@@ -102,6 +103,12 @@ internal class OutgoingGossipingRequestManager @Inject constructor(
     fun resendRoomKeyRequest(requestBody: RoomKeyRequestBody) {
         cryptoCoroutineScope.launch(coroutineDispatchers.computation) {
             cancelRoomKeyRequest(requestBody, true)
+        }
+    }
+
+    suspend fun hasExistingRequestFor(requestBody: RoomKeyRequestBody): Boolean {
+        return withContext(coroutineDispatchers.computation) {
+            cryptoStore.getOutgoingRoomKeyRequest(requestBody) != null
         }
     }
 

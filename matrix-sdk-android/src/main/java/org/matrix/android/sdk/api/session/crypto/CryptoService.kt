@@ -147,6 +147,7 @@ interface CryptoService {
     fun getOutgoingRoomKeyRequestsPaged(): LiveData<PagedList<OutgoingRoomKeyRequest>>
 
     fun getIncomingRoomKeyRequests(): List<IncomingRoomKeyRequest>
+    suspend fun replyToForwardKeyRequest(request: IncomingRoomKeyRequest)
     fun getIncomingRoomKeyRequestsPaged(): LiveData<PagedList<IncomingRoomKeyRequest>>
 
     fun getGossipingEventsTrail(): LiveData<PagedList<Event>>
@@ -155,6 +156,7 @@ interface CryptoService {
     // For testing shared session
     fun getSharedWithInfo(roomId: String?, sessionId: String): MXUsersDevicesMap<Int>
     fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent?
+    suspend fun isMegolmSessionKnownLocally(roomId: String?, sessionId: String?, senderKey: String?): Int?
 
     fun logDbUsageInfo()
 

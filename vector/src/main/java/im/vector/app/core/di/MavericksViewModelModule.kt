@@ -45,6 +45,8 @@ import im.vector.app.features.home.UserColorAccountDataViewModel
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsViewModel
 import im.vector.app.features.home.room.detail.TimelineViewModel
 import im.vector.app.features.home.room.detail.composer.MessageComposerViewModel
+import im.vector.app.features.home.room.detail.e2einfo.CryptoInfoViewModel
+import im.vector.app.features.home.room.detail.e2einfo.RequestInfoViewModel
 import im.vector.app.features.home.room.detail.search.SearchViewModel
 import im.vector.app.features.home.room.detail.timeline.action.MessageActionsViewModel
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryViewModel
@@ -594,4 +596,14 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(LocationSharingViewModel::class)
     fun createLocationSharingViewModelFactory(factory: LocationSharingViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(CryptoInfoViewModel::class)
+    fun createCryptoInfoViewModel(factory: CryptoInfoViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(RequestInfoViewModel::class)
+    fun createRequestInfoViewModel(factory: RequestInfoViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 }

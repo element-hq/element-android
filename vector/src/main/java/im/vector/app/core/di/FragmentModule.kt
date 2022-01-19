@@ -59,6 +59,9 @@ import im.vector.app.features.home.HomeDrawerFragment
 import im.vector.app.features.home.LoadingFragment
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.app.features.home.room.detail.TimelineFragment
+import im.vector.app.features.home.room.detail.e2einfo.CryptoInfoFragment
+import im.vector.app.features.home.room.detail.e2einfo.ReviewRequestFragment
+import im.vector.app.features.home.room.detail.e2einfo.SearchCryptoInfoFragment
 import im.vector.app.features.home.room.detail.search.SearchFragment
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
@@ -957,4 +960,19 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(LocationPreviewFragment::class)
     fun bindLocationPreviewFragment(fragment: LocationPreviewFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(CryptoInfoFragment::class)
+    fun bindCryptoInfoFragment(fragment: CryptoInfoFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(ReviewRequestFragment::class)
+    fun bindReviewRequestFragment(fragment: ReviewRequestFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(SearchCryptoInfoFragment::class)
+    fun bindSearchCryptoInfoFragment(fragment: SearchCryptoInfoFragment): Fragment
 }

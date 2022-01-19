@@ -31,6 +31,14 @@ internal fun WithHeldSessionEntity.Companion.get(realm: Realm, roomId: String, s
             .findFirst()
 }
 
+internal fun WithHeldSessionEntity.Companion.getAll(realm: Realm, roomId: String, sessionId: String): List<WithHeldSessionEntity> {
+    return realm.where<WithHeldSessionEntity>()
+            .equalTo(WithHeldSessionEntityFields.ROOM_ID, roomId)
+            .equalTo(WithHeldSessionEntityFields.SESSION_ID, sessionId)
+            .equalTo(WithHeldSessionEntityFields.ALGORITHM, MXCRYPTO_ALGORITHM_MEGOLM)
+            .findAll()
+}
+
 internal fun WithHeldSessionEntity.Companion.getOrCreate(realm: Realm, roomId: String, sessionId: String): WithHeldSessionEntity? {
     return get(realm, roomId, sessionId)
             ?: realm.createObject<WithHeldSessionEntity>().apply {

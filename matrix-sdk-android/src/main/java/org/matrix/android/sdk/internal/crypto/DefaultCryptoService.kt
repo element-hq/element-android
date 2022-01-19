@@ -1156,18 +1156,23 @@ internal class DefaultCryptoService @Inject constructor(
      * @param event the event to decrypt again.
      */
     override fun reRequestRoomKeyForEvent(event: Event) {
-        val wireContent = event.content.toModel<EncryptedEventContent>() ?: return Unit.also {
-            Timber.tag(loggerTag.value).e("reRequestRoomKeyForEvent Failed to re-request key, null content")
+        cryptoCoroutineScope.launch {
+            val wireContent = event.content.toModel<EncryptedEventContent>() ?: return@launch Unit.also {
+                Timber.tag(loggerTag.value).e("reRequestRoomKeyForEvent Failed to re-request key, null content")
+            }
+
+            val requestBody = RoomKeyRequestBody(
+                    algorithm = wireContent.algorithm,
+                    roomId = event.roomId,
+                    senderKey = wireContent.senderKey,
+                    sessionId = wireContent.sessionId
+            )
+            if (outgoingGossipingRequestManager.hasExistingRequestFor(requestBody)) {
+                outgoingGossipingRequestManager.resendRoomKeyRequest(requestBody)
+            } else {
+                requestRoomKeyForEvent(event)
+            }
         }
-
-        val requestBody = RoomKeyRequestBody(
-                algorithm = wireContent.algorithm,
-                roomId = event.roomId,
-                senderKey = wireContent.senderKey,
-                sessionId = wireContent.sessionId
-        )
-
-        outgoingGossipingRequestManager.resendRoomKeyRequest(requestBody)
     }
 
     override fun requestRoomKeyForEvent(event: Event) {
@@ -1300,6 +1305,10 @@ internal class DefaultCryptoService @Inject constructor(
         return cryptoStore.getIncomingRoomKeyRequests()
     }
 
+    override suspend fun replyToForwardKeyRequest(request: IncomingRoomKeyRequest) {
+        incomingGossipingRequestManager.shareKeysFromRequest(request)
+    }
+
     override fun getGossipingEventsTrail(): LiveData<PagedList<Event>> {
         return cryptoStore.getGossipingEventsTrail()
     }
@@ -1314,6 +1323,12 @@ internal class DefaultCryptoService @Inject constructor(
 
     override fun getWithHeldMegolmSession(roomId: String, sessionId: String): RoomKeyWithHeldContent? {
         return cryptoStore.getWithHeldMegolmSession(roomId, sessionId)
+    }
+
+    override suspend fun isMegolmSessionKnownLocally(roomId: String?, sessionId: String?, senderKey: String?): Int? {
+        return withContext(coroutineDispatchers.crypto) {
+            tryOrNull { olmDevice.getInboundGroupSession(sessionId, senderKey, roomId) }?.firstKnownIndex?.toInt()
+        }
     }
 
     override fun logDbUsageInfo() {

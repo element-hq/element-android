@@ -407,7 +407,14 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             }
             addViewSourceItems(timelineEvent)
         }
+
         add(EventSharedAction.CopyPermalink(eventId))
+
+        // add e2e info action if message is encrypted
+        if (timelineEvent.isEncrypted()) {
+            add(EventSharedAction.ViewEventE2EInformation(timelineEvent.eventId, timelineEvent.roomId))
+        }
+
         if (session.myUserId != timelineEvent.root.senderId) {
             // not sent by me
             if (timelineEvent.root.getClearType() == EventType.MESSAGE) {
