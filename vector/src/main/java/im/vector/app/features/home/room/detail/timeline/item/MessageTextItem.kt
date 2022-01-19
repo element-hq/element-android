@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
+import android.graphics.Color
 import android.text.Spanned
 import android.text.method.MovementMethod
 import androidx.appcompat.widget.AppCompatTextView
@@ -29,11 +30,13 @@ import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.epoxy.onLongClickIgnoringLinks
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlUiState
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlView
 import im.vector.app.features.media.ImageContentRenderer
+import im.vector.app.features.themes.ThemeUtils
 import io.noties.markwon.MarkwonPlugin
 import org.matrix.android.sdk.api.extensions.orFalse
 
@@ -80,6 +83,12 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             safePreviewUrlRetriever.addListener(attributes.informationData.eventId, previewUrlViewUpdater)
         }
         holder.previewUrlView.delegate = previewUrlCallback
+        val urlPreviewBackgroundColor = if (attributes.informationData.messageLayout is TimelineMessageLayout.Bubble) {
+            Color.TRANSPARENT
+        } else {
+            ThemeUtils.getColor(holder.view.context, R.attr.vctr_system)
+        }
+        holder.previewUrlView.setCardBackgroundColor(urlPreviewBackgroundColor)
 
         if (useBigFont) {
             holder.messageView.textSize = 44F

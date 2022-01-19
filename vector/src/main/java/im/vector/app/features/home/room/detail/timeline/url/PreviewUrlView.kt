@@ -47,7 +47,6 @@ class PreviewUrlView @JvmOverloads constructor(
         setupView()
         radius = resources.getDimensionPixelSize(R.dimen.preview_url_view_corner_radius).toFloat()
         cardElevation = 0f
-        setCardBackgroundColor(ThemeUtils.getColor(context, R.attr.vctr_system))
     }
 
     private var state: PreviewUrlUiState = PreviewUrlUiState.Unknown
