@@ -96,11 +96,6 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
 
     companion object {
 
-        /**
-         * Determines whether or not thread messages are enabled
-         */
-        var areThreadMessagesEnabled: Boolean = false
-
         private lateinit var instance: Matrix
         private val isInit = AtomicBoolean(false)
 

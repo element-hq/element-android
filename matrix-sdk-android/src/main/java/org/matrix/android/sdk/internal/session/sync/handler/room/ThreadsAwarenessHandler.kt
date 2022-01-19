@@ -45,6 +45,7 @@ import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.timeline.GetEventTask
 import org.matrix.android.sdk.internal.util.awaitTransaction
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -280,6 +281,9 @@ internal class ThreadsAwarenessHandler @Inject constructor(
      */
     private fun getRootThreadEventId(event: Event): String? =
             event.content.toModel<MessageRelationContent>()?.relatesTo?.eventId
+//    private fun getRootThreadEventId(event: Event): String? =
+//            event.content.toModel<MessageRelationContent>()?.relatesTo?.inReplyTo?.eventId ?:
+//            event.content.toModel<MessageRelationContent>()?.relatesTo?.eventId
 
     @Suppress("UNCHECKED_CAST")
     private fun getValueFromPayload(payload: JsonDict?, key: String): String? {

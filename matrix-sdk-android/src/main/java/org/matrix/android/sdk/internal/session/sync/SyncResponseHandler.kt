@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.sync
 
 import androidx.work.ExistingPeriodicWorkPolicy
 import com.zhuinden.monarchy.Monarchy
-import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.pushrules.RuleScope
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
@@ -27,6 +26,7 @@ import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
@@ -65,6 +65,7 @@ internal class SyncResponseHandler @Inject constructor(
         private val aggregatorHandler: SyncResponsePostTreatmentAggregatorHandler,
         private val cryptoService: DefaultCryptoService,
         private val tokenStore: SyncTokenStore,
+        private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val processEventForPushTask: ProcessEventForPushTask,
         private val pushRuleService: PushRuleService,
         private val threadsAwarenessHandler: ThreadsAwarenessHandler,
@@ -103,9 +104,9 @@ internal class SyncResponseHandler @Inject constructor(
 
         // Prerequisite for thread events handling in RoomSyncHandler
 // Disabled due to the new fallback
-//        if (!BuildConfig.THREADING_ENABLED) {
-//            threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
-//        }
+        if (!lightweightSettingsStorage.areThreadMessagesEnabled()) {
+            threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
+        }
 
         // Start one big transaction
         monarchy.awaitTransaction { realm ->

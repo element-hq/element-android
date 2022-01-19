@@ -471,8 +471,8 @@ internal class LocalEchoEventFactory @Inject constructor(
                 RelationDefaultContent(
                         type = RelationType.IO_THREAD,
                         eventId = it,
-                        inReplyTo = ReplyToContent(eventId))
-            } ?: RelationDefaultContent(null, null, ReplyToContent(eventId))
+                        inReplyTo = ReplyToContent(eventId = eventId))
+            } ?: RelationDefaultContent(null, null, ReplyToContent( eventId = eventId))
 
     private fun buildFormattedReply(permalink: String, userLink: String, userId: String, bodyFormatted: String, newBodyFormatted: String): String {
         return REPLY_PATTERN.format(

@@ -19,8 +19,6 @@ package org.matrix.android.sdk.internal.session.room.timeline
 import com.zhuinden.monarchy.Monarchy
 import dagger.Lazy
 import io.realm.Realm
-import org.matrix.android.sdk.api.Matrix
-import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -29,6 +27,7 @@ import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addStateEvent
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
 import org.matrix.android.sdk.internal.database.helper.updateThreadSummaryIfNeeded
+import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
@@ -52,7 +51,7 @@ import javax.inject.Inject
 internal class TokenChunkEventPersistor @Inject constructor(
                                                             @SessionDatabase private val monarchy: Monarchy,
                                                             @UserId private val userId: String,
-                                                            private val matrixConfiguration: MatrixConfiguration,
+                                                            private val lightweightSettingsStorage: LightweightSettingsStorage,
                                                             private val liveEventManager: Lazy<StreamEventsManager>) {
 
     enum class Result {
@@ -185,7 +184,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
                 }
                 liveEventManager.get().dispatchPaginatedEventReceived(event, roomId)
                 currentChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberContentsByUser)
-                if(Matrix.areThreadMessagesEnabled) {
+                if(lightweightSettingsStorage.areThreadMessagesEnabled()) {
                     eventEntity.rootThreadEventId?.let {
                         // This is a thread event
                         optimizedThreadSummaryMap[it] = eventEntity
@@ -199,7 +198,8 @@ internal class TokenChunkEventPersistor @Inject constructor(
         if (currentChunk.isValid) {
             RoomEntity.where(realm, roomId).findFirst()?.addIfNecessary(currentChunk)
         }
-        if(Matrix.areThreadMessagesEnabled) {
+
+        if(lightweightSettingsStorage.areThreadMessagesEnabled()) {
             optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(roomId = roomId, realm = realm, currentUserId = userId)
         }
     }

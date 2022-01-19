@@ -37,6 +37,7 @@ import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.helper.findAllLocalThreadNotificationsForRoomId
 import org.matrix.android.sdk.internal.database.helper.findAllThreadsForRoomId
 import org.matrix.android.sdk.internal.database.helper.isUserParticipatingInThread
+import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
@@ -64,6 +65,7 @@ internal class DefaultTimelineService @AssistedInject constructor(
         private val timelineEventMapper: TimelineEventMapper,
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val threadsAwarenessHandler: ThreadsAwarenessHandler,
+        private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val readReceiptHandler: ReadReceiptHandler,
         private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) : TimelineService {
@@ -88,7 +90,8 @@ internal class DefaultTimelineService @AssistedInject constructor(
                 loadRoomMembersTask = loadRoomMembersTask,
                 readReceiptHandler = readReceiptHandler,
                 getEventTask = contextOfEventTask,
-                threadsAwarenessHandler = threadsAwarenessHandler
+                threadsAwarenessHandler = threadsAwarenessHandler,
+                lightweightSettingsStorage = lightweightSettingsStorage
         )
     }
 

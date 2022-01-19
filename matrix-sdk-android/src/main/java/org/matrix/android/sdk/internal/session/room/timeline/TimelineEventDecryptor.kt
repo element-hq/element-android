@@ -17,13 +17,13 @@ package org.matrix.android.sdk.internal.session.room.timeline
 
 import io.realm.Realm
 import io.realm.RealmConfiguration
-import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.internal.crypto.NewSessionListener
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
+import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
@@ -37,7 +37,8 @@ internal class TimelineEventDecryptor @Inject constructor(
         @SessionDatabase
         private val realmConfiguration: RealmConfiguration,
         private val cryptoService: CryptoService,
-        private val threadsAwarenessHandler: ThreadsAwarenessHandler
+        private val threadsAwarenessHandler: ThreadsAwarenessHandler,
+        private val lightweightSettingsStorage: LightweightSettingsStorage
 ) {
 
     private val newSessionListener = object : NewSessionListener {
@@ -117,15 +118,15 @@ internal class TimelineEventDecryptor @Inject constructor(
                 eventEntity?.apply {
                     val decryptedPayload =
 // Disabled due to the new fallback
-//                            if (!BuildConfig.THREADING_ENABLED) {
-//                                threadsAwarenessHandler.handleIfNeededDuringDecryption(
-//                                        it,
-//                                        roomId = event.roomId,
-//                                        event,
-//                                        result)
-//                            } else {
+                            if (!lightweightSettingsStorage.areThreadMessagesEnabled()) {
+                                threadsAwarenessHandler.handleIfNeededDuringDecryption(
+                                        it,
+                                        roomId = event.roomId,
+                                        event,
+                                        result)
+                            } else {
                                 null
-//                            }
+                            }
                     setDecryptionResult(result, decryptedPayload)
                 }
             }

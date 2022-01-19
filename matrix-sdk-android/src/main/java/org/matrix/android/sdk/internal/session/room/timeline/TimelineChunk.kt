@@ -23,13 +23,13 @@ import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
 import kotlinx.coroutines.CompletableDeferred
-import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.EventMapper
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
@@ -56,6 +56,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                              private val timelineEventMapper: TimelineEventMapper,
                              private val uiEchoManager: UIEchoManager? = null,
                              private val threadsAwarenessHandler: ThreadsAwarenessHandler,
+                             private val lightweightSettingsStorage: LightweightSettingsStorage,
                              private val initialEventId: String?,
                              private val onBuiltEvents: (Boolean) -> Unit) {
 
@@ -296,7 +297,9 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
 
         if (timelineEvents.isEmpty()) return LoadedFromStorage()
 // Disabled due to the new fallback
-//        fetchRootThreadEventsIfNeeded(timelineEvents)
+        if(!lightweightSettingsStorage.areThreadMessagesEnabled()) {
+            fetchRootThreadEventsIfNeeded(timelineEvents)
+        }
         if (direction == Timeline.Direction.FORWARDS) {
             builtEventsIndexes.entries.forEach { it.setValue(it.value + timelineEvents.size) }
         }
@@ -333,7 +336,6 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
      * in order to be able to display the event to the user appropriately
      */
     private suspend fun fetchRootThreadEventsIfNeeded(offsetResults: List<TimelineEventEntity>) {
-//        if (BuildConfig.THREADING_ENABLED) return
         val eventEntityList = offsetResults
                 .mapNotNull {
                     it.root
@@ -486,6 +488,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                 timelineEventMapper = timelineEventMapper,
                 uiEchoManager = uiEchoManager,
                 threadsAwarenessHandler = threadsAwarenessHandler,
+                lightweightSettingsStorage = lightweightSettingsStorage,
                 initialEventId = null,
                 onBuiltEvents = this.onBuiltEvents
         )

@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
+import org.matrix.android.sdk.api.session.room.model.relation.ReplyToContent
 import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromHtmlReply
 import org.matrix.android.sdk.api.util.ContentUtils.extractUsefulTextFromReply
 
@@ -48,7 +49,7 @@ fun TextContent.toThreadTextContent(rootThreadEventId: String, msgType: String =
             msgType = msgType,
             format = MessageFormat.FORMAT_MATRIX_HTML.takeIf { formattedText != null },
             body = text,
-            relatesTo = RelationDefaultContent(RelationType.IO_THREAD, rootThreadEventId),
+            relatesTo = RelationDefaultContent(type = RelationType.IO_THREAD, eventId = rootThreadEventId, inReplyTo = ReplyToContent(eventId = "CYIpEhDXkImqKD2TF9NSocxt4vU6hh98yXi5Ncusdaw")),
             formattedBody = formattedText
     )
 }

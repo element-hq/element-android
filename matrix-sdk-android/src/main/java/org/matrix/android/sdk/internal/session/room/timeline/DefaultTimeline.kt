@@ -35,6 +35,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
@@ -60,6 +61,7 @@ internal class DefaultTimeline(private val roomId: String,
                                timelineEventMapper: TimelineEventMapper,
                                timelineInput: TimelineInput,
                                threadsAwarenessHandler: ThreadsAwarenessHandler,
+                               lightweightSettingsStorage: LightweightSettingsStorage,
                                eventDecryptor: TimelineEventDecryptor) : Timeline {
 
     companion object {
@@ -92,6 +94,7 @@ internal class DefaultTimeline(private val roomId: String,
             timelineInput = timelineInput,
             timelineEventMapper = timelineEventMapper,
             threadsAwarenessHandler = threadsAwarenessHandler,
+            lightweightSettingsStorage = lightweightSettingsStorage,
             onEventsUpdated = this::sendSignalToPostSnapshot,
             onLimitedTimeline = this::onLimitedTimeline,
             onNewTimelineEvents = this::onNewTimelineEvents

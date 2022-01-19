@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
@@ -80,6 +81,7 @@ internal class LoadTimelineStrategy(
             val timelineInput: TimelineInput,
             val timelineEventMapper: TimelineEventMapper,
             val threadsAwarenessHandler: ThreadsAwarenessHandler,
+            val lightweightSettingsStorage: LightweightSettingsStorage,
             val onEventsUpdated: (Boolean) -> Unit,
             val onLimitedTimeline: () -> Unit,
             val onNewTimelineEvents: (List<String>) -> Unit
@@ -241,6 +243,7 @@ internal class LoadTimelineStrategy(
                     timelineEventMapper = dependencies.timelineEventMapper,
                     uiEchoManager = uiEchoManager,
                     threadsAwarenessHandler = dependencies.threadsAwarenessHandler,
+                    lightweightSettingsStorage = dependencies.lightweightSettingsStorage,
                     initialEventId = mode.originEventId(),
                     onBuiltEvents = dependencies.onEventsUpdated
             )

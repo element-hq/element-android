@@ -194,7 +194,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         navigator = singletonEntryPoint.navigator()
         activeSessionHolder = singletonEntryPoint.activeSessionHolder()
         vectorPreferences = singletonEntryPoint.vectorPreferences()
-        Matrix.areThreadMessagesEnabled = vectorPreferences.areThreadMessagesEnabled()
         configurationViewModel.activityRestarter.observe(this) {
             if (!it.hasBeenHandled) {
                 // Recreate the Activity because configuration has changed
