@@ -63,7 +63,7 @@ class OnboardingRobot {
                             password: String,
                             homeServerUrl: String) {
         waitUntilViewVisible(withId(R.id.loginSplashSubmit))
-        assertDisplayed(R.id.loginSplashSubmit, R.string.login_splash_submit)
+        assertDisplayed(R.id.loginSplashSubmit, R.string.login_splash_create_account)
         if (createAccount) {
             clickOn(R.id.loginSplashSubmit)
         } else {

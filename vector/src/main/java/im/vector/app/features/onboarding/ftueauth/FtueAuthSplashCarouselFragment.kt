@@ -68,9 +68,13 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
         TabLayoutMediator(views.carouselIndicator, views.splashCarousel) { _, _ -> }.attach()
         carouselController.setData(carouselStateFactory.create())
 
-        views.loginSplashSubmit.debouncedClicks { getStarted() }
+        val isAlreadyHaveAccountEnabled = vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
+        views.loginSplashSubmit.apply {
+            setText(if (isAlreadyHaveAccountEnabled) R.string.login_splash_create_account else R.string.login_splash_submit)
+            debouncedClicks { splashSubmit(isAlreadyHaveAccountEnabled) }
+        }
         views.loginSplashAlreadyHaveAccount.apply {
-            isVisible = vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()
+            isVisible = isAlreadyHaveAccountEnabled
             debouncedClicks { alreadyHaveAnAccount() }
         }
 
@@ -111,8 +115,8 @@ class FtueAuthSplashCarouselFragment @Inject constructor(
         }
     }
 
-    private fun getStarted() {
-        val getStartedFlow = if (vectorFeatures.isOnboardingAlreadyHaveAccountSplashEnabled()) OnboardingFlow.SignUp else OnboardingFlow.SignInSignUp
+    private fun splashSubmit(isAlreadyHaveAccountEnabled: Boolean) {
+        val getStartedFlow = if (isAlreadyHaveAccountEnabled) OnboardingFlow.SignUp else OnboardingFlow.SignInSignUp
         viewModel.handle(OnboardingAction.OnGetStarted(resetLoginConfig = false, onboardingFlow = getStartedFlow))
     }
 
