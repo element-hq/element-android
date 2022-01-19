@@ -35,11 +35,9 @@ class CommandParser @Inject constructor() {
      */
     fun parseSlashCommand(textMessage: CharSequence): ParsedCommand {
         // check if it has the Slash marker
-        if (!textMessage.startsWith("/")) {
-            return ParsedCommand.ErrorNotACommand
+        return if (!textMessage.startsWith("/")) {
+            ParsedCommand.ErrorNotACommand
         } else {
-            Timber.v("parseSlashCommand")
-
             // "/" only
             if (textMessage.length == 1) {
                 return ParsedCommand.ErrorEmptySlashCommand
@@ -53,7 +51,7 @@ class CommandParser @Inject constructor() {
             val messageParts = try {
                 textMessage.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
             } catch (e: Exception) {
-                Timber.e(e, "## manageSlashCommand() : split failed")
+                Timber.e(e, "## parseSlashCommand() : split failed")
                 null
             }
 
@@ -65,7 +63,7 @@ class CommandParser @Inject constructor() {
             val slashCommand = messageParts.first()
             val message = textMessage.substring(slashCommand.length).trim()
 
-            return when {
+            when {
                 Command.PLAIN.matches(slashCommand)                        -> {
                     if (message.isNotEmpty()) {
                         ParsedCommand.SendPlainText(message = message)
