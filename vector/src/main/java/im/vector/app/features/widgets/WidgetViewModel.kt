@@ -219,7 +219,7 @@ class WidgetViewModel @AssistedInject constructor(@Assisted val initialState: Wi
                         baseUrl = initialState.baseUrl,
                         params = initialState.urlParams,
                         forceFetchScalarToken = forceFetchToken,
-                        bypassWhitelist = initialState.widgetKind == WidgetKind.INTEGRATION_MANAGER
+                        bypassWhitelist = initialState.widgetKind == WidgetKind.INTEGRATION_MANAGER || initialState.widgetKind == WidgetKind.STICKER_PICKER
                 )
                 setState { copy(formattedURL = Success(formattedUrl)) }
                 Timber.v("Post load formatted url event: $formattedUrl")
