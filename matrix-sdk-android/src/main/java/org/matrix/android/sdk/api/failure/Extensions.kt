@@ -32,8 +32,8 @@ fun Throwable.is401() =
 fun Throwable.isTokenError() =
         this is Failure.ServerError &&
                 (error.code == MatrixError.M_UNKNOWN_TOKEN ||
-                error.code == MatrixError.M_MISSING_TOKEN ||
-                error.code == MatrixError.ORG_MATRIX_EXPIRED_ACCOUNT)
+                        error.code == MatrixError.M_MISSING_TOKEN ||
+                        error.code == MatrixError.ORG_MATRIX_EXPIRED_ACCOUNT)
 
 fun Throwable.isLimitExceededError() =
         this is Failure.ServerError &&
@@ -43,7 +43,7 @@ fun Throwable.isLimitExceededError() =
 fun Throwable.shouldBeRetried(): Boolean {
     return this is Failure.NetworkConnection ||
             this is IOException ||
-            (this is Failure.ServerError && error.code == MatrixError.M_LIMIT_EXCEEDED)
+            this.isLimitExceededError()
 }
 
 /**
