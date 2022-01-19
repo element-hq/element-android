@@ -66,7 +66,8 @@
         app:layout_constraintBottom_toTopOf="@id/loginSplashAlreadyHaveAccount"
         app:layout_constraintEnd_toEndOf="@id/splashCarouselGutterEnd"
         app:layout_constraintStart_toStartOf="@id/splashCarouselGutterStart"
-        app:layout_constraintTop_toBottomOf="@id/loginSplashButtonsSpace" />
+        app:layout_constraintTop_toBottomOf="@id/loginSplashButtonsSpace"
+        tools:text="@string/login_splash_create_account" />
 
     <Button
         android:id="@+id/loginSplashAlreadyHaveAccount"

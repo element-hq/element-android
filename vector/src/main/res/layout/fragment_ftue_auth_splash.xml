@@ -187,7 +187,8 @@
         app:layout_constraintBottom_toTopOf="@id/loginSplashSpace5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/loginSplashSpace4" />
+        app:layout_constraintTop_toBottomOf="@id/loginSplashSpace4"
+        tools:text="@string/login_splash_create_account" />
 
     <Button
         android:id="@+id/loginSplashAlreadyHaveAccount"
