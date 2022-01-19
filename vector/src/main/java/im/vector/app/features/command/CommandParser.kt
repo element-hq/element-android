@@ -65,7 +65,7 @@ object CommandParser {
             val slashCommand = messageParts.first()
             val message = textMessage.substring(slashCommand.length).trim()
 
-            if (BuildConfig.THREADING_ENABLED && isInThreadTimeline) {
+            if (isInThreadTimeline) {
                 val notSupportedCommandsInThreads = Command.values().filter {
                     !it.isThreadCommand
                 }.map {

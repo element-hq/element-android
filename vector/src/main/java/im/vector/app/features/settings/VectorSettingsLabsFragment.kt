@@ -16,8 +16,11 @@
 
 package im.vector.app.features.settings
 
+import androidx.preference.Preference
 import im.vector.app.R
 import im.vector.app.core.preference.VectorSwitchPreference
+import im.vector.app.features.MainActivity
+import im.vector.app.features.MainActivityArgs
 import javax.inject.Inject
 
 class VectorSettingsLabsFragment @Inject constructor(
@@ -32,5 +35,15 @@ class VectorSettingsLabsFragment @Inject constructor(
             // ensure correct default
             pref.isChecked = vectorPreferences.labsAutoReportUISI()
         }
+
+        // clear cache
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_LABS_ENABLE_THREAD_MESSAGES)?.let {
+            it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                displayLoadingView()
+                MainActivity.restartApp(requireActivity(), MainActivityArgs(clearCache = true))
+                false
+            }
+        }
+
     }
 }

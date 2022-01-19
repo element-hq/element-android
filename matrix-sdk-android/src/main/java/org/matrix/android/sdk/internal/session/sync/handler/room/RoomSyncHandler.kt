@@ -19,7 +19,8 @@ package org.matrix.android.sdk.internal.session.sync.handler.room
 import dagger.Lazy
 import io.realm.Realm
 import io.realm.kotlin.createObject
-import org.matrix.android.sdk.BuildConfig
+import org.matrix.android.sdk.api.Matrix
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -82,6 +83,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val roomMemberEventHandler: RoomMemberEventHandler,
                                                    private val roomTypingUsersHandler: RoomTypingUsersHandler,
                                                    private val threadsAwarenessHandler: ThreadsAwarenessHandler,
+                                                   private val matrixConfiguration: MatrixConfiguration,
                                                    private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
                                                    @UserId private val userId: String,
                                                    private val timelineInput: TimelineInput,
@@ -379,13 +381,13 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             if (event.isEncrypted() && !isInitialSync) {
                 decryptIfNeeded(event, roomId)
             }
-
-            if (!BuildConfig.THREADING_ENABLED) {
-                threadsAwarenessHandler.handleIfNeeded(
-                        realm = realm,
-                        roomId = roomId,
-                        event = event)
-            }
+// Disabled due to the new fallback
+//            if (!BuildConfig.THREADING_ENABLED) {
+//                threadsAwarenessHandler.handleIfNeeded(
+//                        realm = realm,
+//                        roomId = roomId,
+//                        event = event)
+//            }
 
             val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
             val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)
@@ -408,12 +410,14 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             }
 
             chunkEntity.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberContentsByUser)
-            eventEntity.rootThreadEventId?.let {
-                // This is a thread event
-                optimizedThreadSummaryMap[it] = eventEntity
-            } ?: run {
-                // This is a normal event or a root thread one
-                optimizedThreadSummaryMap[eventEntity.eventId] = eventEntity
+            if(Matrix.areThreadMessagesEnabled) {
+                eventEntity.rootThreadEventId?.let {
+                    // This is a thread event
+                    optimizedThreadSummaryMap[it] = eventEntity
+                } ?: run {
+                    // This is a normal event or a root thread one
+                    optimizedThreadSummaryMap[eventEntity.eventId] = eventEntity
+                }
             }
 
             // Give info to crypto module
@@ -442,10 +446,12 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         }
         // Handle deletion of [stuck] local echos if needed
         deleteLocalEchosIfNeeded(insertType, roomEntity, eventList)
-        optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(
-                roomId = roomId,
-                realm = realm,
-                currentUserId = userId)
+        if(Matrix.areThreadMessagesEnabled) {
+            optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(
+                    roomId = roomId,
+                    realm = realm,
+                    currentUserId = userId)
+        }
 
         // posting new events to timeline if any is registered
         timelineInput.onNewTimelineEvents(roomId = roomId, eventIds = eventIds)

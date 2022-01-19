@@ -447,7 +447,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private fun canReplyInThread(event: TimelineEvent,
                                  messageContent: MessageContent?,
                                  actionPermissions: ActionPermissions): Boolean {
-        if (!BuildConfig.THREADING_ENABLED) return false
+        if (!vectorPreferences.areThreadMessagesEnabled()) return false
         if (initialState.isFromThreadTimeline) return false
         if (event.root.getClearType() != EventType.MESSAGE &&
                 !event.isSticker() && !event.isPoll()) return false
@@ -472,7 +472,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     private fun canViewInRoom(event: TimelineEvent,
                               messageContent: MessageContent?,
                               actionPermissions: ActionPermissions): Boolean {
-        if (!BuildConfig.THREADING_ENABLED) return false
+        if (!vectorPreferences.areThreadMessagesEnabled()) return false
         if (!initialState.isFromThreadTimeline) return false
         if (event.root.getClearType() != EventType.MESSAGE &&
                 !event.isSticker() && !event.isPoll()) return false

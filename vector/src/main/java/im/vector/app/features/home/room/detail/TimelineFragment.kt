@@ -1958,7 +1958,7 @@ class TimelineFragment @Inject constructor(
     }
 
     override fun onThreadSummaryClicked(eventId: String, isRootThreadEvent: Boolean) {
-        if (BuildConfig.THREADING_ENABLED && isRootThreadEvent && !isThreadTimeLine()) {
+        if (vectorPreferences.areThreadMessagesEnabled() && isRootThreadEvent && !isThreadTimeLine()) {
             navigateToThreadTimeline(eventId)
         }
     }

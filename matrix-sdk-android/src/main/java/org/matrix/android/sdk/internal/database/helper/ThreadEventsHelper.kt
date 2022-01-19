@@ -40,7 +40,6 @@ internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded(
         roomId: String,
         realm: Realm, currentUserId: String,
         shouldUpdateNotifications: Boolean = true) {
-    if (!BuildConfig.THREADING_ENABLED) return
 
     for ((rootThreadEventId, eventEntity) in this) {
         eventEntity.findAllThreadsForRootEventId(eventEntity.realm, rootThreadEventId).let {

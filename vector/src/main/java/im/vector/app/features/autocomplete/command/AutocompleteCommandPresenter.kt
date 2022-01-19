@@ -57,7 +57,7 @@ class AutocompleteCommandPresenter @AssistedInject constructor(
                     !it.isDevCommand || vectorPreferences.developerMode()
                 }
                 .filter {
-                    if (BuildConfig.THREADING_ENABLED && isInThreadTimeline) {
+                    if (vectorPreferences.areThreadMessagesEnabled() && isInThreadTimeline) {
                         it.isThreadCommand
                     } else {
                         true

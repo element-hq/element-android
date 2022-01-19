@@ -19,6 +19,8 @@ package org.matrix.android.sdk.internal.session.room.timeline
 import com.zhuinden.monarchy.Monarchy
 import dagger.Lazy
 import io.realm.Realm
+import org.matrix.android.sdk.api.Matrix
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -50,6 +52,7 @@ import javax.inject.Inject
 internal class TokenChunkEventPersistor @Inject constructor(
                                                             @SessionDatabase private val monarchy: Monarchy,
                                                             @UserId private val userId: String,
+                                                            private val matrixConfiguration: MatrixConfiguration,
                                                             private val liveEventManager: Lazy<StreamEventsManager>) {
 
     enum class Result {
@@ -182,18 +185,22 @@ internal class TokenChunkEventPersistor @Inject constructor(
                 }
                 liveEventManager.get().dispatchPaginatedEventReceived(event, roomId)
                 currentChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberContentsByUser)
-                eventEntity.rootThreadEventId?.let {
-                    // This is a thread event
-                    optimizedThreadSummaryMap[it] = eventEntity
-                } ?: run {
-                    // This is a normal event or a root thread one
-                    optimizedThreadSummaryMap[eventEntity.eventId] = eventEntity
+                if(Matrix.areThreadMessagesEnabled) {
+                    eventEntity.rootThreadEventId?.let {
+                        // This is a thread event
+                        optimizedThreadSummaryMap[it] = eventEntity
+                    } ?: run {
+                        // This is a normal event or a root thread one
+                        optimizedThreadSummaryMap[eventEntity.eventId] = eventEntity
+                    }
                 }
             }
         }
         if (currentChunk.isValid) {
             RoomEntity.where(realm, roomId).findFirst()?.addIfNecessary(currentChunk)
         }
-        optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(roomId = roomId, realm = realm, currentUserId = userId)
+        if(Matrix.areThreadMessagesEnabled) {
+            optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(roomId = roomId, realm = realm, currentUserId = userId)
+        }
     }
 }

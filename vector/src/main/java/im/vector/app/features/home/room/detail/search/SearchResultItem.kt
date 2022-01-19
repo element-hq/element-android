@@ -43,6 +43,7 @@ abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>() {
     @EpoxyAttribute lateinit var spannable: EpoxyCharSequence
     @EpoxyAttribute var sender: MatrixItem? = null
     @EpoxyAttribute var threadDetails: ThreadDetails? = null
+    @EpoxyAttribute var areThreadMessagesEnabled: Boolean = false
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var listener: ClickListener? = null
 
@@ -55,7 +56,7 @@ abstract class SearchResultItem : VectorEpoxyModel<SearchResultItem.Holder>() {
         holder.timeView.text = formattedDate
         holder.contentView.text = spannable.charSequence
 
-        if (BuildConfig.THREADING_ENABLED) {
+        if (areThreadMessagesEnabled) {
             threadDetails?.let {
                 if (it.isRootThread) {
                     showThreadSummary(holder)

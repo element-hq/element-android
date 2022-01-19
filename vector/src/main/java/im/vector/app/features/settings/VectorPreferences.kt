@@ -197,6 +197,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
 
         private const val SETTINGS_LABS_ENABLE_POLLS = "SETTINGS_LABS_ENABLE_POLLS"
+        const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES"
 
         // Possible values for TAKE_PHOTO_VIDEO_MODE
         const val TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK = 0
@@ -994,5 +995,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun labsEnablePolls(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_POLLS, false)
+    }
+
+    fun areThreadMessagesEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES, false)
     }
 }

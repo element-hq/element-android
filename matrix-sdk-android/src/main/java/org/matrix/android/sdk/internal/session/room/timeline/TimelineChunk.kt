@@ -295,7 +295,8 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                 .orEmpty()
 
         if (timelineEvents.isEmpty()) return LoadedFromStorage()
-        fetchRootThreadEventsIfNeeded(timelineEvents)
+// Disabled due to the new fallback
+//        fetchRootThreadEventsIfNeeded(timelineEvents)
         if (direction == Timeline.Direction.FORWARDS) {
             builtEventsIndexes.entries.forEach { it.setValue(it.value + timelineEvents.size) }
         }
@@ -332,7 +333,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
      * in order to be able to display the event to the user appropriately
      */
     private suspend fun fetchRootThreadEventsIfNeeded(offsetResults: List<TimelineEventEntity>) {
-        if (BuildConfig.THREADING_ENABLED) return
+//        if (BuildConfig.THREADING_ENABLED) return
         val eventEntityList = offsetResults
                 .mapNotNull {
                     it.root

@@ -113,7 +113,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         holder.eventSendingIndicator.isVisible = attributes.informationData.sendStateDecoration == SendStateDecoration.SENDING_MEDIA
 
         // Threads
-        if (BuildConfig.THREADING_ENABLED) {
+        if (attributes.areThreadMessagesEnabled) {
             holder.threadSummaryConstraintLayout.onClick(_threadClickListener)
             attributes.threadDetails?.let { threadDetails ->
                 holder.threadSummaryConstraintLayout.isVisible = threadDetails.isRootThread
@@ -186,7 +186,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
             val emojiTypeFace: Typeface? = null,
             val decryptionErrorMessage: String? = null,
-            val threadDetails: ThreadDetails? = null
+            val threadDetails: ThreadDetails? = null,
+            val areThreadMessagesEnabled: Boolean = false
     ) : AbsBaseMessageItem.Attributes {
 
         // Have to override as it's used to diff epoxy items

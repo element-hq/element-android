@@ -3600,6 +3600,8 @@
 
     <string name="labs_auto_report_uisi">Auto Report Decryption Errors.</string>
     <string name="labs_auto_report_uisi_desc">Your system will automatically send logs when an unable to decrypt error occurs</string>
+    <string name="labs_enable_thread_messages">Enable Thread Messages</string>
+    <string name="labs_enable_thread_messages_desc">Note: app will be restarted</string>
 
     <string name="user_invites_you">%s invites you</string>
 

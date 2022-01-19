@@ -102,9 +102,10 @@ internal class SyncResponseHandler @Inject constructor(
         val aggregator = SyncResponsePostTreatmentAggregator()
 
         // Prerequisite for thread events handling in RoomSyncHandler
-        if (!BuildConfig.THREADING_ENABLED) {
-            threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
-        }
+// Disabled due to the new fallback
+//        if (!BuildConfig.THREADING_ENABLED) {
+//            threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
+//        }
 
         // Start one big transaction
         monarchy.awaitTransaction { realm ->

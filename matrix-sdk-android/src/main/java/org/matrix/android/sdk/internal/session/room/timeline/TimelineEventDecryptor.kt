@@ -116,15 +116,16 @@ internal class TimelineEventDecryptor @Inject constructor(
 
                 eventEntity?.apply {
                     val decryptedPayload =
-                            if (!BuildConfig.THREADING_ENABLED) {
-                                threadsAwarenessHandler.handleIfNeededDuringDecryption(
-                                        it,
-                                        roomId = event.roomId,
-                                        event,
-                                        result)
-                            } else {
+// Disabled due to the new fallback
+//                            if (!BuildConfig.THREADING_ENABLED) {
+//                                threadsAwarenessHandler.handleIfNeededDuringDecryption(
+//                                        it,
+//                                        roomId = event.roomId,
+//                                        event,
+//                                        result)
+//                            } else {
                                 null
-                            }
+//                            }
                     setDecryptionResult(result, decryptedPayload)
                 }
             }
