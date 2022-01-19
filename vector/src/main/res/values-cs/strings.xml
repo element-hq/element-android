@@ -1669,7 +1669,7 @@
     <string name="attachment_type_sticker">Nálepka</string>
     <string name="error_handling_incoming_share">Nemohl jsem zpracovat sdílená data</string>
     <string name="report_content_spam">Je to spam</string>
-    <string name="report_content_inappropriate">Je to nepatřičné</string>
+    <string name="report_content_inappropriate">Je to nevhodné</string>
     <string name="report_content_custom">Vlastní hlášení…</string>
     <string name="report_content_custom_title">Nahlásit tento obsah</string>
     <string name="report_content_custom_hint">Důvod k nahlášení tohoto obsahu</string>
@@ -1683,7 +1683,7 @@
     <string name="content_reported_as_spam_content">Tento obsah byl nahlášen jako spam.
 \n
 \nPokud si dále nepřejete vidět více obsahu tohoto uživatele, můžete jej ignorovat a tím skrýt jejich zprávy.</string>
-    <string name="content_reported_as_inappropriate_title">Nahlášeno jako nepatřičné</string>
+    <string name="content_reported_as_inappropriate_title">Nahlášeno jako nevhodné</string>
     <string name="content_reported_as_inappropriate_content">Obsah byl nahlášen jako nepatřičný.
 \n
 \nPokud si dále nepřejete vidět obsah tohoto uživatele, můžete jej ignorovat a tím skrýt jejich zprávy.</string>
