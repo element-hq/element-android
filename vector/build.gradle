@@ -116,8 +116,6 @@ android {
 
     defaultConfig {
         applicationId "im.vector.app"
-        // Set to API 21: see #405
-        minSdk versions.minSdk
         targetSdk versions.targetSdk
         multiDexEnabled true
 
@@ -254,7 +252,7 @@ android {
         }
     }
 
-    flavorDimensions "store"
+    flavorDimensions "store", "api"
 
     productFlavors {
         gplay {
@@ -282,6 +280,18 @@ android {
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
+        }
+
+        api21 {
+            dimension "api"
+            // Set to API 21: see #405
+            minSdk versions.minSdk
+            maxSdk 28
+        }
+
+        api29 {
+            dimension "api"
+            minSdk 29
         }
     }
 
@@ -419,7 +429,7 @@ dependencies {
     implementation 'com.nulab-inc:zxcvbn:1.5.2'
 
     // To convert voice message on old platforms
-    implementation 'com.arthenica:ffmpeg-kit-audio:4.5.LTS'
+    api21Implementation 'com.arthenica:ffmpeg-kit-audio:4.5.LTS'
 
     // Alerter
     implementation 'com.github.tapadoo:alerter:7.2.4'

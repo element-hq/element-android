@@ -43,6 +43,8 @@ import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.SharedPrefPinCodeStore
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
+import im.vector.app.features.voice.DefaultVoiceRecorder
+import im.vector.app.features.voice.VoiceRecorder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -81,6 +83,9 @@ abstract class VectorBindModule {
 
     @Binds
     abstract fun bindEmojiSpanify(emojiCompatWrapper: EmojiCompatWrapper): EmojiSpanify
+
+    @Binds
+    abstract fun bindVoiceRecorder(recorder: DefaultVoiceRecorder): VoiceRecorder
 }
 
 @InstallIn(SingletonComponent::class)

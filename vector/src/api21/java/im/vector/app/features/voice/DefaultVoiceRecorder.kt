@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,9 @@ import com.arthenica.ffmpegkit.ReturnCode
 import im.vector.app.BuildConfig
 import timber.log.Timber
 import java.io.File
+import javax.inject.Inject
 
-class VoiceRecorderL(context: Context) : AbstractVoiceRecorder(context, "mp4") {
+class DefaultVoiceRecorder @Inject constructor(context: Context) : AbstractVoiceRecorder(context, "mp4") {
     override fun setOutputFormat(mediaRecorder: MediaRecorder) {
         // Use AAC/MP4 format here
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)

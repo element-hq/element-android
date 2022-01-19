@@ -24,7 +24,6 @@ import im.vector.app.BuildConfig
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import im.vector.app.features.voice.VoiceFailure
 import im.vector.app.features.voice.VoiceRecorder
-import im.vector.app.features.voice.VoiceRecorderProvider
 import im.vector.lib.core.utils.timer.CountUpTimer
 import im.vector.lib.multipicker.entity.MultiPickerAudioType
 import im.vector.lib.multipicker.utils.toMultiPickerAudioType
@@ -43,10 +42,9 @@ import javax.inject.Inject
 class VoiceMessageHelper @Inject constructor(
         private val context: Context,
         private val playbackTracker: VoiceMessagePlaybackTracker,
-        voiceRecorderProvider: VoiceRecorderProvider
+        private val voiceRecorder: VoiceRecorder
 ) {
     private var mediaPlayer: MediaPlayer? = null
-    private var voiceRecorder: VoiceRecorder = voiceRecorderProvider.provideVoiceRecorder()
 
     private val amplitudeList = mutableListOf<Int>()
 

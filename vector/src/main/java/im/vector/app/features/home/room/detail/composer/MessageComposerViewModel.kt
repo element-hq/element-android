@@ -738,8 +738,7 @@ class MessageComposerViewModel @AssistedInject constructor(
             try {
                 // Download can fail
                 val audioFile = session.fileService().downloadFile(action.messageAudioContent)
-                // Conversion can fail, fallback to the original file in this case and let the player fail for us
-                val convertedFile = voicePlayerHelper.convertFile(audioFile) ?: audioFile
+                val convertedFile = voicePlayerHelper.convertFile(audioFile)
                 // Play can fail
                 voiceMessageHelper.startOrPausePlayback(action.eventId, convertedFile)
             } catch (failure: Throwable) {

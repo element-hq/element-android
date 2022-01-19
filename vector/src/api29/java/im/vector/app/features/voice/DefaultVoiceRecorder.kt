@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,22 @@
 package im.vector.app.features.voice
 
 import android.content.Context
+import android.media.MediaRecorder
 import android.os.Build
+import androidx.annotation.RequiresApi
+import java.io.File
 import javax.inject.Inject
 
-class VoiceRecorderProvider @Inject constructor(
-        private val context: Context
-) {
-    fun provideVoiceRecorder(): VoiceRecorder {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            VoiceRecorderQ(context)
-        } else {
-            VoiceRecorderL(context)
-        }
+@RequiresApi(Build.VERSION_CODES.Q)
+class DefaultVoiceRecorder @Inject constructor(context: Context) : AbstractVoiceRecorder(context, "ogg") {
+    override fun setOutputFormat(mediaRecorder: MediaRecorder) {
+        // We can directly use OGG here
+        mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.OGG)
+        mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.OPUS)
+    }
+
+    override fun convertFile(recordedFile: File?): File? {
+        // Nothing to do here
+        return recordedFile
     }
 }
