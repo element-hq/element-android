@@ -42,6 +42,7 @@ sealed interface TimelineMessageLayout : Parcelable {
             val isFirstFromThisSender: Boolean,
             val isLastFromThisSender: Boolean,
             val isPseudoBubble: Boolean,
+            val timestampAsOverlay: Boolean,
             override val layoutRes: Int = if (isIncoming) {
                 R.layout.item_timeline_event_bubble_incoming_base
             } else {

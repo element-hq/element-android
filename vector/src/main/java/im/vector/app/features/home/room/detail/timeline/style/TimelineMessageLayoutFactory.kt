@@ -40,6 +40,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                 EventType.ENCRYPTED,
                 EventType.STICKER
         )
+
         // Can't be rendered in bubbles, so get back to default layout
         private val MSG_TYPES_WITHOUT_BUBBLE_LAYOUT = setOf(
                 MessageType.MSGTYPE_VERIFICATION_REQUEST
@@ -47,7 +48,10 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
 
         // Use the bubble layout but without borders
         private val MSG_TYPES_WITH_PSEUDO_BUBBLE_LAYOUT = setOf(
-                MessageType.MSGTYPE_IMAGE, MessageType.MSGTYPE_VIDEO,
+                MessageType.MSGTYPE_IMAGE, MessageType.MSGTYPE_VIDEO, MessageType.MSGTYPE_STICKER_LOCAL
+        )
+        private val MSG_TYPES_WITH_TIMESTAMP_AS_OVERLAY = setOf(
+                MessageType.MSGTYPE_IMAGE, MessageType.MSGTYPE_VIDEO
         )
     }
 
@@ -93,7 +97,8 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                                 isIncoming = !isSentByMe,
                                 isFirstFromThisSender = isFirstFromThisSender,
                                 isLastFromThisSender = isLastFromThisSender,
-                                isPseudoBubble = messageContent?.msgType in MSG_TYPES_WITH_PSEUDO_BUBBLE_LAYOUT
+                                isPseudoBubble = messageContent?.msgType in MSG_TYPES_WITH_PSEUDO_BUBBLE_LAYOUT,
+                                timestampAsOverlay = messageContent?.msgType in MSG_TYPES_WITH_TIMESTAMP_AS_OVERLAY
                         )
                     }
                 } else {

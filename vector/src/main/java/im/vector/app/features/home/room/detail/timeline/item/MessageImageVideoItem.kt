@@ -89,7 +89,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         holder.mediaContentView.onClick(attributes.itemClickListener)
         holder.mediaContentView.setOnLongClickListener(attributes.itemLongClickListener)
         holder.playContentView.visibility = if (playable) View.VISIBLE else View.GONE
-        holder.overlayView.isVisible = messageLayout is TimelineMessageLayout.Bubble
+        holder.overlayView.isVisible = messageLayout is TimelineMessageLayout.Bubble && messageLayout.timestampAsOverlay
     }
 
     override fun unbind(holder: Holder) {

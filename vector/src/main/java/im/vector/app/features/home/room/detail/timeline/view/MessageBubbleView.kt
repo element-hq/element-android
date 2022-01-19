@@ -92,8 +92,7 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
         ConstraintSet().apply {
             clone(views.bubbleView)
             clear(R.id.viewStubContainer, ConstraintSet.END)
-            val showTimeAsOverlay = messageLayout.isPseudoBubble
-            if (showTimeAsOverlay) {
+            if (messageLayout.timestampAsOverlay) {
                 val timeColor = ContextCompat.getColor(context, R.color.palette_white)
                 views.messageTimeView.setTextColor(timeColor)
                 connect(R.id.viewStubContainer, ConstraintSet.END, R.id.parent, ConstraintSet.END, 0)
