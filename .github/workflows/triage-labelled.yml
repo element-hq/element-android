@@ -20,7 +20,7 @@ jobs:
         contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
         contains(github.event.issue.labels.*.name, 'A-Tags')
     steps:
-      - uses: actions/github-script@v5
+      - uses: actions/github-script@v5.1.0
         with:
           script: |
             github.rest.issues.addLabels({
