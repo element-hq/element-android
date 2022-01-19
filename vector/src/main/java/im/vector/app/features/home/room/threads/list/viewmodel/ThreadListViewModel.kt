@@ -62,9 +62,9 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
         room?.flow()
                 ?.liveThreadList()
                 ?.map {
-                    it.map { timelineEvent ->
-                        val isParticipating = room.isUserParticipatingInThread(timelineEvent.eventId)
-                        ThreadTimelineEvent(timelineEvent, isParticipating)
+                    it.map { threadRootEvent ->
+                        val isParticipating = room.isUserParticipatingInThread(threadRootEvent.eventId)
+                        ThreadTimelineEvent(threadRootEvent, isParticipating)
                     }
                 }
                 ?.flowOn(room.coroutineDispatchers.io)

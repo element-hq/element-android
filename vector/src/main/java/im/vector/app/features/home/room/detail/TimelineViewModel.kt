@@ -326,8 +326,8 @@ class TimelineViewModel @AssistedInject constructor(
                 .liveLocalUnreadThreadList()
                 .execute {
                     val threadList = it.invoke()
-                    val isUserMentioned = threadList?.firstOrNull { timelineEvent ->
-                        timelineEvent.root.threadDetails?.threadNotificationState == ThreadNotificationState.NEW_HIGHLIGHTED_MESSAGE
+                    val isUserMentioned = threadList?.firstOrNull { threadRootEvent ->
+                        threadRootEvent.root.threadDetails?.threadNotificationState == ThreadNotificationState.NEW_HIGHLIGHTED_MESSAGE
                     }?.let { true } ?: false
                     val numberOfLocalUnreadThreads = threadList?.size ?: 0
                     copy(threadNotificationBadgeState = ThreadNotificationBadgeState(

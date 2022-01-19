@@ -32,6 +32,8 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 
+typealias ThreadRootEvent = TimelineEvent
+
 class FlowRoom(private val room: Room) {
 
     fun liveRoomSummary(): Flow<Optional<RoomSummary>> {
@@ -99,14 +101,14 @@ class FlowRoom(private val room: Room) {
         return room.getLiveRoomNotificationState().asFlow()
     }
 
-    fun liveThreadList(): Flow<List<TimelineEvent>> {
+    fun liveThreadList(): Flow<List<ThreadRootEvent>> {
         return room.getAllThreadsLive().asFlow()
                 .startWith(room.coroutineDispatchers.io) {
                     room.getAllThreads()
                 }
     }
 
-    fun liveLocalUnreadThreadList(): Flow<List<TimelineEvent>> {
+    fun liveLocalUnreadThreadList(): Flow<List<ThreadRootEvent>> {
         return room.getNumberOfLocalThreadNotificationsLive().asFlow()
                 .startWith(room.coroutineDispatchers.io) {
                     room.getNumberOfLocalThreadNotifications()
