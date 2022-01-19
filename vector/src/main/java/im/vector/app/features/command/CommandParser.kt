@@ -23,8 +23,9 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
+import javax.inject.Inject
 
-object CommandParser {
+class CommandParser @Inject constructor() {
 
     /**
      * Convert the text message into a Slash command.

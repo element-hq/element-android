@@ -66,6 +66,7 @@ class MessageComposerViewModel @AssistedInject constructor(
         private val session: Session,
         private val stringProvider: StringProvider,
         private val vectorPreferences: VectorPreferences,
+        private val commandParser: CommandParser,
         private val rainbowGenerator: RainbowGenerator,
         private val voiceMessageHelper: VoiceMessageHelper,
         private val voicePlayerHelper: VoicePlayerHelper
@@ -183,7 +184,7 @@ class MessageComposerViewModel @AssistedInject constructor(
         withState { state ->
             when (state.sendMode) {
                 is SendMode.Regular -> {
-                    when (val slashCommandResult = CommandParser.parseSlashCommand(action.text)) {
+                    when (val slashCommandResult = commandParser.parseSlashCommand(action.text)) {
                         is ParsedCommand.ErrorNotACommand         -> {
                             // Send the text message to the room
                             room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
