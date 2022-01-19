@@ -675,7 +675,7 @@ class RoomDetailFragment @Inject constructor(
      */
     private fun EmojiPopup.Builder.setOnEmojiPopupDismissListenerLifecycleAware(action: () -> Unit): EmojiPopup.Builder {
         return setOnEmojiPopupDismissListener {
-            if (lifecycle.currentState == Lifecycle.State.STARTED) {
+            if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                 action()
             }
         }
