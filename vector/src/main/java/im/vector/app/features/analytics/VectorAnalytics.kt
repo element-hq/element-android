@@ -16,6 +16,7 @@
 
 package im.vector.app.features.analytics
 
+import im.vector.app.features.analytics.plan.Identity
 import kotlinx.coroutines.flow.Flow
 
 interface VectorAnalytics : AnalyticsTracker {
@@ -58,4 +59,9 @@ interface VectorAnalytics : AnalyticsTracker {
      * To be called when application is started
      */
     fun init()
+
+    /**
+     * Update user specific properties
+     */
+    fun updateUserProperties(identity: Identity)
 }
