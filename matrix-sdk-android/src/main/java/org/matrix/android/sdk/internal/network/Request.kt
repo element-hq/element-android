@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.network
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.failure.getRetryDelay
 import org.matrix.android.sdk.api.failure.isLimitExceededError
 import org.matrix.android.sdk.api.failure.shouldBeRetried
