@@ -83,12 +83,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             safePreviewUrlRetriever.addListener(attributes.informationData.eventId, previewUrlViewUpdater)
         }
         holder.previewUrlView.delegate = previewUrlCallback
-        val urlPreviewBackgroundColor = if (attributes.informationData.messageLayout is TimelineMessageLayout.Bubble) {
-            Color.TRANSPARENT
-        } else {
-            ThemeUtils.getColor(holder.view.context, R.attr.vctr_system)
-        }
-        holder.previewUrlView.setCardBackgroundColor(urlPreviewBackgroundColor)
+        holder.previewUrlView.render(attributes.informationData.messageLayout)
 
         if (useBigFont) {
             holder.messageView.textSize = 44F

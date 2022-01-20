@@ -44,6 +44,7 @@ import im.vector.app.core.utils.DimensionConverter
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.content.ContentUrlResolver
+import org.matrix.android.sdk.api.session.media.PreviewUrlData
 import org.matrix.android.sdk.internal.crypto.attachments.ElementToDecrypt
 import timber.log.Timber
 import java.io.File
@@ -60,6 +61,9 @@ interface AttachmentData : Parcelable {
     // If true will load non mxc url, be careful to set it only for attachments sent by you
     val allowNonMxcUrls: Boolean
 }
+
+private const val URL_PREVIEW_IMAGE_MIN_FULL_WIDTH_PX = 600
+private const val URL_PREVIEW_IMAGE_MIN_FULL_HEIGHT_PX = 315
 
 class ImageContentRenderer @Inject constructor(private val localFilesHelper: LocalFilesHelper,
                                                private val activeSessionHolder: ActiveSessionHolder,
@@ -89,12 +93,20 @@ class ImageContentRenderer @Inject constructor(private val localFilesHelper: Loc
     /**
      * For url preview
      */
-    fun render(mxcUrl: String, imageView: ImageView): Boolean {
+    fun render(previewUrlData: PreviewUrlData, imageView: ImageView): Boolean {
         val contentUrlResolver = activeSessionHolder.getActiveSession().contentUrlResolver()
-        val imageUrl = contentUrlResolver.resolveFullSize(mxcUrl) ?: return false
-
+        val imageUrl = contentUrlResolver.resolveFullSize(previewUrlData.mxcUrl) ?: return false
+        val maxHeight = dimensionConverter.resources.getDimensionPixelSize(R.dimen.preview_url_view_image_max_height)
+        val height = previewUrlData.imageHeight ?: URL_PREVIEW_IMAGE_MIN_FULL_HEIGHT_PX
+        val width = previewUrlData.imageWidth ?: URL_PREVIEW_IMAGE_MIN_FULL_WIDTH_PX
+        if (height < URL_PREVIEW_IMAGE_MIN_FULL_HEIGHT_PX || width < URL_PREVIEW_IMAGE_MIN_FULL_WIDTH_PX) {
+            imageView.scaleType = ImageView.ScaleType.CENTER_INSIDE
+        } else {
+            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+        }
         GlideApp.with(imageView)
                 .load(imageUrl)
+                .override(width, height.coerceAtMost(maxHeight))
                 .into(imageView)
         return true
     }
