@@ -192,7 +192,7 @@ internal class DefaultRelationService @AssistedInject constructor(
             eventFactory.createThreadTextEvent(
                     rootThreadEventId = rootThreadEventId,
                     roomId = roomId,
-                    text = replyInThreadText.toString(),
+                    text = replyInThreadText,
                     msgType = msgType,
                     autoMarkdown = autoMarkdown,
                     formattedText = formattedText)

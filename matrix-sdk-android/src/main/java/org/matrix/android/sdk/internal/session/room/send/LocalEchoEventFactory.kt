@@ -396,11 +396,11 @@ internal class LocalEchoEventFactory @Inject constructor(
     fun createThreadTextEvent(
             rootThreadEventId: String,
             roomId: String,
-            text: String,
+            text: CharSequence,
             msgType: String,
             autoMarkdown: Boolean,
             formattedText: String?): Event {
-        val content = formattedText?.let { TextContent(text, it) } ?: createTextContent(text, autoMarkdown)
+        val content = formattedText?.let { TextContent(text.toString(), it) } ?: createTextContent(text, autoMarkdown)
         return createEvent(
                 roomId,
                 EventType.MESSAGE,

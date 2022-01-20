@@ -191,7 +191,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             if (state.rootThreadEventId != null) {
                                 room.replyInThread(
                                         rootThreadEventId = state.rootThreadEventId,
-                                        replyInThreadText = action.text.toString(),
+                                        replyInThreadText = action.text,
                                         autoMarkdown = action.autoMarkdown)
                             } else {
                                 room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
