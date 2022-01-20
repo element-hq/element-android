@@ -44,6 +44,14 @@
             android:summary="@string/settings_developer_mode_fail_fast_summary"
             android:title="@string/settings_developer_mode_fail_fast_title" />
 
+
+        <im.vector.app.core.preference.VectorSwitchPreference
+            android:defaultValue="true"
+            android:dependency="SETTINGS_DEVELOPER_MODE_PREFERENCE_KEY"
+            android:key="SETTINGS_DEVELOPER_MODE_CRYPTO_INFO"
+            android:summary="@string/encryption_information_lab_flag_description"
+            android:title="@string/encryption_information_lab_flag_name" />
+
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory

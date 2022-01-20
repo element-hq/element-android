@@ -160,6 +160,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY = "SETTINGS_LABS_ENABLE_SWIPE_TO_REPLY"
         private const val SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY = "SETTINGS_DEVELOPER_MODE_FAIL_FAST_PREFERENCE_KEY"
         private const val SETTINGS_DEVELOPER_MODE_SHOW_INFO_ON_SCREEN_KEY = "SETTINGS_DEVELOPER_MODE_SHOW_INFO_ON_SCREEN_KEY"
+        private const val SETTINGS_DEVELOPER_MODE_CRYPTO_INFO = "SETTINGS_DEVELOPER_MODE_CRYPTO_INFO"
 
         // SETTINGS_LABS_HIDE_TECHNICAL_E2E_ERRORS
         private const val SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM = "SETTINGS_LABS_SHOW_COMPLETE_HISTORY_IN_ENCRYPTED_ROOM"
@@ -316,6 +317,10 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun developerShowDebugInfo(): Boolean {
         return developerMode() && defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_SHOW_INFO_ON_SCREEN_KEY, false)
+    }
+
+    fun developerShowCryptoInfo(): Boolean {
+        return developerMode() && defaultPrefs.getBoolean(SETTINGS_DEVELOPER_MODE_CRYPTO_INFO, true)
     }
 
     fun shouldShowHiddenEvents(): Boolean {
