@@ -36,6 +36,8 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.VectorFeatures
+import im.vector.app.features.analytics.VectorAnalytics
+import im.vector.app.features.analytics.plan.Identity
 import im.vector.app.features.login.HomeServerConnectionConfigFactory
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
@@ -75,7 +77,8 @@ class OnboardingViewModel @AssistedInject constructor(
         private val stringProvider: StringProvider,
         private val homeServerHistoryService: HomeServerHistoryService,
         private val vectorFeatures: VectorFeatures,
-        private val onboardingStore: OnboardingStore
+        private val onboardingStore: OnboardingStore,
+        private val vectorAnalytics: VectorAnalytics
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
     @AssistedFactory
@@ -463,6 +466,9 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
         viewModelScope.launch {
             onboardingStore.setUseCase(action.useCase)
+            vectorAnalytics.updateUserProperties(
+                    Identity(ftueUseCaseSelection = action.useCase.toTrackingValue())
+            )
         }
         _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
     }
@@ -470,6 +476,9 @@ class OnboardingViewModel @AssistedInject constructor(
     private fun resetUseCase() {
         viewModelScope.launch {
             onboardingStore.resetUseCase()
+            vectorAnalytics.updateUserProperties(
+                    Identity(ftueUseCaseSelection = null)
+            )
         }
     }
 

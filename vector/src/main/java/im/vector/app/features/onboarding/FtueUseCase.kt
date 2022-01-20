@@ -16,6 +16,8 @@
 
 package im.vector.app.features.onboarding
 
+import im.vector.app.features.analytics.plan.Identity
+
 enum class FtueUseCase(val persistableValue: String) {
     FRIENDS_FAMILY("friends_family"),
     TEAMS("teams"),
@@ -24,5 +26,14 @@ enum class FtueUseCase(val persistableValue: String) {
 
     companion object {
         fun from(persistedValue: String) = values().first { it.persistableValue == persistedValue }
+    }
+}
+
+fun FtueUseCase.toTrackingValue(): Identity.FtueUseCaseSelection {
+    return when (this) {
+        FtueUseCase.FRIENDS_FAMILY -> Identity.FtueUseCaseSelection.PersonalMessaging
+        FtueUseCase.TEAMS          -> Identity.FtueUseCaseSelection.WorkMessaging
+        FtueUseCase.COMMUNITIES    -> Identity.FtueUseCaseSelection.CommunityMessaging
+        FtueUseCase.SKIP           -> Identity.FtueUseCaseSelection.Skip
     }
 }
