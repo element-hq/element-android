@@ -87,14 +87,10 @@ class CryptoInfoViewModel @AssistedInject constructor(
                         val messageIndex = encryptedContent.ciphertext?.fromBase64()?.inputStream()?.reader()?.let {
                             tryOrNull {
                                 val megolmVersion = it.read()
-                                if (megolmVersion == 3) {
-                                    if (it.read() == 8
-                                    /** Int tag */
-                                    ) {
-                                        return@let it.read()
-                                    }
-                                }
-                                return@let null
+                                if (megolmVersion != 3) return@tryOrNull null
+                                /** Int tag */
+                                if (it.read() != 8) return@tryOrNull null
+                                it.read()
                             }
                         }
 
@@ -112,7 +108,12 @@ class CryptoInfoViewModel @AssistedInject constructor(
                         } else {
                             emptyList()
                         }
-                        val locallyKnownIndex = session.cryptoService().isMegolmSessionKnownLocally(initialState.roomId, encryptedContent.sessionId, encryptedContent.senderKey)
+                        val locallyKnownIndex = session.cryptoService()
+                                .isMegolmSessionKnownLocally(
+                                        initialState.roomId,
+                                        encryptedContent.sessionId,
+                                        encryptedContent.senderKey
+                                )
 
                         tickerFlow(viewModelScope, 5_000, 0)
                                 .execute {
@@ -157,7 +158,7 @@ class CryptoInfoViewModel @AssistedInject constructor(
                     try {
                         session.cryptoService().replyToForwardKeyRequest(action.request)
                     } catch (failure: Throwable) {
-                        Timber.w("## VALR: failed to share $failure")
+                        Timber.w("## failed to share $failure")
                     }
                 }
             }

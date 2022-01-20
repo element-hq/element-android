@@ -101,13 +101,23 @@ class CryptoInfoController @Inject constructor(
 
         val senderInfo = when {
             successInfo.sentByThisDevice -> {
-                host.stringProvider.getString(R.string.encryption_information_sent_by_you_from_device, successInfo.sentByUser.deviceId)
+                host.stringProvider.getString(
+                        R.string.encryption_information_sent_by_you_from_device,
+                        successInfo.sentByUser.deviceId
+                )
             }
             successInfo.sentByMe         -> {
-                host.stringProvider.getString(R.string.encryption_information_sent_by_you_from_other_device, successInfo.sentByUser.deviceId)
+                host.stringProvider.getString(
+                        R.string.encryption_information_sent_by_you_from_other_device,
+                        successInfo.sentByUser.deviceId
+                )
             }
             else                         -> {
-                host.stringProvider.getString(R.string.encryption_information_sent_by_other_from_device, successInfo.sentByUser.userId, successInfo.sentByUser.deviceId)
+                host.stringProvider.getString(
+                        R.string.encryption_information_sent_by_other_from_device,
+                        successInfo.sentByUser.userId,
+                        successInfo.sentByUser.deviceId
+                )
             }
         }
         // Sender info
@@ -184,7 +194,7 @@ class CryptoInfoController @Inject constructor(
                             title(userId.toEpoxyCharSequence())
                             description(
                                     span {
-                                        +deviceInfos.map { it.deviceId }.joinToString(", ")
+                                        +deviceInfos.joinToString(", ") { it.deviceId }
                                     }.toEpoxyCharSequence()
                             )
                         }
