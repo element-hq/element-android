@@ -33,7 +33,8 @@ import java.io.IOException
  *
  * @param globalErrorReceiver will be use to notify error such as invalid token error. See [GlobalError]
  * @param canRetry if set to true, the request will be executed again in case of error, after a delay
- * @param maxDelayBeforeRetry the max delay to wait before a retry
+ * @param maxDelayBeforeRetry the max delay to wait before a retry. Note that in the case of a 429, if the provided delay exceeds this value, the error will
+ * be propagated as it does not make sense to retry it with a shorter delay.
  * @param maxRetriesCount the max number of retries
  * @param requestBlock a suspend lambda to perform the network request
  */
