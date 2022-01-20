@@ -23,12 +23,14 @@ import com.airbnb.mvrx.Success
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -47,7 +49,8 @@ sealed class RequestInfoEvent : VectorViewEvents {
 class RequestInfoViewModel @AssistedInject constructor(
         @Assisted private val initialState: RequestState,
         private val session: Session,
-        private val errorFormatter: ErrorFormatter
+        private val errorFormatter: ErrorFormatter,
+        private val stringProvider: StringProvider
 ) : VectorViewModel<RequestState, RequestInfoAction, RequestInfoEvent>(initialState) {
 
     @AssistedFactory
@@ -71,7 +74,11 @@ class RequestInfoViewModel @AssistedInject constructor(
                                 setState {
                                     copy(sharingStatus = Success(Unit))
                                 }
-                                _viewEvents.post(RequestInfoEvent.DisplayConfirmAlert("Key was forwarded", false))
+                                _viewEvents.post(
+                                        RequestInfoEvent.DisplayConfirmAlert(
+                                                stringProvider.getString(R.string.encryption_information_key_was_forwarded), false
+                                        )
+                                )
                             } catch (failure: Throwable) {
                                 _viewEvents.post(RequestInfoEvent.DisplayConfirmAlert(errorFormatter.toHumanReadable(failure), true))
                                 setState {

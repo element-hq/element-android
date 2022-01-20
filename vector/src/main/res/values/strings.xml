@@ -1658,6 +1658,7 @@
     <string name="encryption_information_key_requests_helper_text">When a recipient cannot decrypt a message he will send you a key request to ask you to send the key.\nYour device will automatically decide to forward or not the key when appropriate. Carefully review these requests before you decide to forward anyhow.</string>
     <string name="encryption_information_lab_flag_name">Cryptography Info</string>
     <string name="encryption_information_lab_flag_description">Long press on a message to get message e2e details and review key share requests.</string>
+    <string name="encryption_information_key_was_forwarded">Key was forwarded</string>
 
     <string name="encryption_info_request_state_none">Received</string>
     <string name="encryption_info_request_state_pending">Pending Review</string>
