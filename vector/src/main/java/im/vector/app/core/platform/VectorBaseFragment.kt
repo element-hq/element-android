@@ -218,8 +218,7 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
     /* ==========================================================================================
      * Toolbar
      * ========================================================================================== */
-
-
+    ToolbarConfig
     /**
      * Sets toolbar as actionBar for current activity
      *

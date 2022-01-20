@@ -66,7 +66,6 @@ class SpaceAddRoomFragment @Inject constructor(
         setupToolbar(views.addRoomToSpaceToolbar)
                 .allowBack()
 
-
 //        sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
 

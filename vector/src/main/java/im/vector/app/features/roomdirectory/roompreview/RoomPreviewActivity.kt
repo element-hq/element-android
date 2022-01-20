@@ -50,7 +50,7 @@ data class RoomPreviewData(
 }
 
 @AndroidEntryPoint
-class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(){
+class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     companion object {
         private const val ARG = "ARG"

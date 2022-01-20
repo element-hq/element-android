@@ -30,8 +30,7 @@ import im.vector.app.features.room.RequireActiveMembershipViewEvents
 import im.vector.app.features.room.RequireActiveMembershipViewModel
 
 @AndroidEntryPoint
-class RoomMemberProfileActivity :
-        VectorBaseActivity<ActivitySimpleBinding>(){
+class RoomMemberProfileActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     companion object {
         fun newIntent(context: Context, args: RoomMemberProfileArgs): Intent {

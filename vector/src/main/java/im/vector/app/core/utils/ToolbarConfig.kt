@@ -51,7 +51,7 @@ class ToolbarConfig(val activity: AppCompatActivity, val toolbar: MaterialToolba
     /**
      * Sets toolbar's title text using provided string resource
      * */
-    fun setTitle(@StringRes titleRes: Int) = apply { toolbar.setTitle(titleRes)}
+    fun setTitle(@StringRes titleRes: Int) = apply { toolbar.setTitle(titleRes) }
 
     /**
      * Sets toolbar's subtitle text
@@ -61,7 +61,7 @@ class ToolbarConfig(val activity: AppCompatActivity, val toolbar: MaterialToolba
     /**
      * Sets toolbar's title text using provided string resource
      * */
-    fun setSubtitle(@StringRes subtitleRes: Int) = apply { toolbar.subtitle = activity?.getString(subtitleRes) }
+    fun setSubtitle(@StringRes subtitleRes: Int) = apply { toolbar.subtitle = activity.getString(subtitleRes) }
 
     /**
      * Enables/disables navigate back button
@@ -70,7 +70,7 @@ class ToolbarConfig(val activity: AppCompatActivity, val toolbar: MaterialToolba
      * @param useCross defines if cross icon should be used instead of arrow. Default [false]
      * */
     fun allowBack(isAllowed: Boolean = true, useCross: Boolean = false) = apply {
-        activity?.supportActionBar?.let {
+        activity.supportActionBar?.let {
             it.setDisplayShowHomeEnabled(isAllowed)
             it.setDisplayHomeAsUpEnabled(isAllowed)
             if (isAllowed && useCross) {
