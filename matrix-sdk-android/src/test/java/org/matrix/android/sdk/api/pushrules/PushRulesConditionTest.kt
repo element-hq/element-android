@@ -109,7 +109,7 @@ class PushRulesConditionTest : MatrixTest {
     fun test_eventmatch_words_only_condition() {
         val condition = EventMatchCondition("content.body", "ben", true)
 
-        assertFalse(condition.isSatisfied(createSimpleTextEvent("benoit")))
+        assertTrue(condition.isSatisfied(createSimpleTextEvent("benoit")))
         assertFalse(condition.isSatisfied(createSimpleTextEvent("Hello benoit")))
         assertFalse(condition.isSatisfied(createSimpleTextEvent("superben")))
 
