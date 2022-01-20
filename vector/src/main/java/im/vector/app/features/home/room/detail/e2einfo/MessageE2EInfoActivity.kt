@@ -26,7 +26,6 @@ import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
@@ -83,15 +82,6 @@ class MessageE2EInfoActivity : SimpleFragmentActivity() {
                 CryptoInfoEvents.NavigateToFilter           -> {
                     pushFragment(SearchCryptoInfoFragment::class.java, null)
                     updateTitle(getString(R.string.message_e2e_info_title))
-                }
-                is CryptoInfoEvents.PromptError             -> {
-                    MaterialAlertDialogBuilder(this)
-                            .setTitle(getString(R.string.dialog_title_error))
-                            .setMessage(event.message)
-                            .setCancelable(false)
-                            .setPositiveButton(R.string.ok) { _, _ ->
-                            }
-                            .show()
                 }
             }
         }

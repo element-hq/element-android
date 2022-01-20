@@ -27,6 +27,7 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
+import im.vector.lib.core.utils.flow.tickerFlow
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.Session
@@ -49,7 +50,6 @@ sealed class CryptoInfoAction : VectorViewModelAction {
 sealed class CryptoInfoEvents : VectorViewEvents {
     data class NavigateToRequestReview(val incomingRoomKeyRequest: IncomingRoomKeyRequest) : CryptoInfoEvents()
     object NavigateToFilter : CryptoInfoEvents()
-    data class PromptError(val message: String) : CryptoInfoEvents()
 }
 
 class CryptoInfoViewModel @AssistedInject constructor(
@@ -112,30 +112,31 @@ class CryptoInfoViewModel @AssistedInject constructor(
                         } else {
                             emptyList()
                         }
+                        val locallyKnownIndex = session.cryptoService().isMegolmSessionKnownLocally(initialState.roomId, encryptedContent.sessionId, encryptedContent.senderKey)
 
-                        // I could get history of people requesting this
-                        val incomingRequest = session.cryptoService().getIncomingRoomKeyRequests()
-                                .filter {
-                                    it.requestBody?.roomId == initialState.roomId && it.requestBody?.sessionId == encryptedContent.sessionId
+                        tickerFlow(viewModelScope, 5_000, 0)
+                                .execute {
+                                    val incomingRequest = session.cryptoService().getIncomingRoomKeyRequests()
+                                            .filter {
+                                                it.requestBody?.roomId == initialState.roomId && it.requestBody?.sessionId == encryptedContent.sessionId
+                                            }
+
+                                    val info = EncryptionInfo(
+                                            sentByMe = sentByMe,
+                                            sentByThisDevice = sentByMe && encryptedContent.deviceId == session.cryptoService().getMyDevice().deviceId,
+                                            algorithm = algorithm,
+                                            sharedWithUsers = sharedWithList,
+                                            encryptedEventContent = encryptedContent,
+                                            sentByUser = UserDeviceInfo(timelineEvent.root.senderId ?: "", encryptedContent.deviceId ?: ""),
+                                            incomingRoomKeyRequest = incomingRequest,
+                                            messageIndex = messageIndex ?: -1,
+                                            locallyKnownIndex = locallyKnownIndex
+                                    )
+                                    copy(
+                                            timelineEvent = Success(timelineEvent),
+                                            e2eInfo = Success(info)
+                                    )
                                 }
-
-                        val info = EncryptionInfo(
-                                sentByMe = sentByMe,
-                                sentByThisDevice = sentByMe && encryptedContent.deviceId == session.cryptoService().getMyDevice().deviceId,
-                                algorithm = algorithm,
-                                sharedWithUsers = sharedWithList,
-                                encryptedEventContent = encryptedContent,
-                                sentByUser = UserDeviceInfo(timelineEvent.root.senderId ?: "", encryptedContent.deviceId ?: ""),
-                                incomingRoomKeyRequest = incomingRequest,
-                                messageIndex = messageIndex ?: -1,
-                                locallyKnownIndex = session.cryptoService().isMegolmSessionKnownLocally(initialState.roomId, encryptedContent.sessionId, encryptedContent.senderKey)
-                        )
-                        setState {
-                            copy(
-                                    timelineEvent = Success(timelineEvent),
-                                    e2eInfo = Success(info)
-                            )
-                        }
                     }
                 }
             }

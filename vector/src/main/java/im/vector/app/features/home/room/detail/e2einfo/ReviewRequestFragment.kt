@@ -32,7 +32,6 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentGenericRecyclerBinding
-import kotlinx.coroutines.flow.onEach
 import kotlinx.parcelize.Parcelize
 import javax.inject.Inject
 
@@ -55,7 +54,7 @@ class ReviewRequestFragment @Inject constructor(
         views.genericRecyclerView.configureWith(controller, disableItemAnimation = true)
         controller.callback = this
 
-        requestViewModel.viewEvents.stream().onEach {
+        requestViewModel.observeViewEvents {
             when (it) {
                 is RequestInfoEvent.DisplayConfirmAlert -> {
                     MaterialAlertDialogBuilder(requireContext())
