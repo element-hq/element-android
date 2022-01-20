@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.createdirect
+package im.vector.app.features.qrcode
 
-import com.airbnb.mvrx.Async
-import im.vector.app.core.platform.VectorViewEvents
+import im.vector.app.core.platform.VectorViewModelAction
 
-sealed class CreateDirectRoomViewEvents : VectorViewEvents {
-    object InvalidCode: CreateDirectRoomViewEvents()
-    object DmSelf: CreateDirectRoomViewEvents()
+sealed class QrCodeScannerAction : VectorViewModelAction {
+    data class CodeDecoded(
+            val result: String,
+            val isQrCode: Boolean
+    ) : QrCodeScannerAction()
+
+    object ScanFailed : QrCodeScannerAction()
+
+    object SwitchMode : QrCodeScannerAction()
 }

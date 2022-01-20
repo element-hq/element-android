@@ -34,13 +34,16 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.permalinks.PermalinkData
+import org.matrix.android.sdk.api.session.permalinks.PermalinkParser
 import org.matrix.android.sdk.api.session.room.model.create.CreateRoomParams
+import org.matrix.android.sdk.api.session.user.model.User
 
 class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
                                                             initialState: CreateDirectRoomViewState,
                                                             private val rawService: RawService,
                                                             val session: Session) :
-    VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
+        VectorViewModel<CreateDirectRoomViewState, CreateDirectRoomAction, CreateDirectRoomViewEvents>(initialState) {
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<CreateDirectRoomViewModel, CreateDirectRoomViewState> {
@@ -51,15 +54,33 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
 
     override fun handle(action: CreateDirectRoomAction) {
         when (action) {
-            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action)
+            is CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers -> onSubmitInvitees(action.selections)
+            is CreateDirectRoomAction.QrScannedAction                  -> onCodeParsed(action)
         }.exhaustive
+    }
+
+    private fun onCodeParsed(action: CreateDirectRoomAction.QrScannedAction) {
+        val mxid = (PermalinkParser.parse(action.result) as? PermalinkData.UserLink)?.userId
+
+        if (mxid === null) {
+            _viewEvents.post(CreateDirectRoomViewEvents.InvalidCode)
+        } else {
+            // The following assumes MXIDs are case insensitive
+            if (mxid.equals(other = session.myUserId, ignoreCase = true)) {
+                _viewEvents.post(CreateDirectRoomViewEvents.DmSelf)
+            } else {
+                // Try to get user from known users and fall back to creating a User object from MXID
+                val qrInvitee = if (session.getUser(mxid) != null) session.getUser(mxid)!! else User(mxid, null, null)
+                onSubmitInvitees(setOf(PendingSelection.UserPendingSelection(qrInvitee)))
+            }
+        }
     }
 
     /**
      * If users already have a DM room then navigate to it instead of creating a new room.
      */
-    private fun onSubmitInvitees(action: CreateDirectRoomAction.CreateRoomAndInviteSelectedUsers) {
-        val existingRoomId = action.selections.singleOrNull()?.getMxId()?.let { userId ->
+    private fun onSubmitInvitees(selections: Set<PendingSelection>) {
+        val existingRoomId = selections.singleOrNull()?.getMxId()?.let { userId ->
             session.getExistingDirectRoomWithUser(userId)
         }
         if (existingRoomId != null) {
@@ -69,7 +90,7 @@ class CreateDirectRoomViewModel @AssistedInject constructor(@Assisted
             }
         } else {
             // Create the DM
-            createRoomAndInviteSelectedUsers(action.selections)
+            createRoomAndInviteSelectedUsers(selections)
         }
     }
 

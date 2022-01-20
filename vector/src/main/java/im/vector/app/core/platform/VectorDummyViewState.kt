@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.createdirect
+package im.vector.app.core.platform
 
-import com.airbnb.mvrx.Async
-import im.vector.app.core.platform.VectorViewEvents
+import com.airbnb.mvrx.MavericksState
 
-sealed class CreateDirectRoomViewEvents : VectorViewEvents {
-    object InvalidCode: CreateDirectRoomViewEvents()
-    object DmSelf: CreateDirectRoomViewEvents()
-}
+data class VectorDummyViewState(
+        val isDummy: Unit = Unit
+) : MavericksState
