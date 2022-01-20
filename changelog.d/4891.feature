@@ -1,0 +1,1 @@
+Add a new cryptography info screen accessible from message context menu.
