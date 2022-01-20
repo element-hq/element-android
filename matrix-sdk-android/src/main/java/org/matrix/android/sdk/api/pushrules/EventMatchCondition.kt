@@ -56,7 +56,12 @@ class EventMatchCondition(
             if (wordsOnly) {
                 value.caseInsensitiveFind(pattern)
             } else {
-                val modPattern = if (pattern.hasSpecialGlobChar()) pattern.simpleGlobToRegExp() else "*$pattern*".simpleGlobToRegExp()
+                val modPattern = if (pattern.hasSpecialGlobChar())
+                    // Regex.containsMatchIn() is way faster without leading and trailing
+                    // stars, that don't make any difference for the evaluation result
+                    pattern.removePrefix("*").removeSuffix("*").simpleGlobToRegExp()
+                else
+                    pattern.simpleGlobToRegExp()
                 val regex = Regex(modPattern, RegexOption.DOT_MATCHES_ALL)
                 regex.containsMatchIn(value)
             }
