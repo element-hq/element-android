@@ -124,6 +124,41 @@ internal class LocalEchoEventFactory @Inject constructor(
                 ))
     }
 
+    private fun createPollContent(question: String,
+                                  options: List<String>): MessagePollContent {
+        return MessagePollContent(
+                pollCreationInfo = PollCreationInfo(
+                        question = PollQuestion(
+                                question = question
+                        ),
+                        answers = options.mapIndexed { index, option ->
+                            PollAnswer(
+                                    id = "$index-$option",
+                                    answer = option
+                            )
+                        }
+                )
+        )
+    }
+
+    fun createPollReplaceEvent(roomId: String,
+                               targetEventId: String,
+                               question: String,
+                               options: List<String>): Event {
+        val newContent = MessagePollContent(
+                relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
+                newContent = createPollContent(question, options).toContent()
+        )
+        return Event(
+                roomId = roomId,
+                originServerTs = dummyOriginServerTs(),
+                senderId = userId,
+                eventId = targetEventId,
+                type = EventType.POLL_START,
+                content = newContent.toContent()
+        )
+    }
+
     fun createPollReplyEvent(roomId: String,
                              pollEventId: String,
                              answerId: String): Event {
@@ -151,19 +186,7 @@ internal class LocalEchoEventFactory @Inject constructor(
     fun createPollEvent(roomId: String,
                         question: String,
                         options: List<String>): Event {
-        val content = MessagePollContent(
-                pollCreationInfo = PollCreationInfo(
-                        question = PollQuestion(
-                                question = question
-                        ),
-                        answers = options.mapIndexed { index, option ->
-                            PollAnswer(
-                                    id = "$index-$option",
-                                    answer = option
-                            )
-                        }
-                )
-        )
+        val content = createPollContent(question, options)
         val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,

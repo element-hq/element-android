@@ -284,7 +284,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         }
         add(EventSharedAction.Remove(eventId))
         if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
-            add(EventSharedAction.Edit(eventId))
+            add(EventSharedAction.Edit(eventId, timelineEvent.root.getClearType()))
         }
         if (canCopy(msgType)) {
             // TODO copy images? html? see ClipBoard
@@ -329,7 +329,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             }
 
             if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
-                add(EventSharedAction.Edit(eventId))
+                add(EventSharedAction.Edit(eventId, timelineEvent.root.getClearType()))
             }
 
             if (canRedact(timelineEvent, actionPermissions)) {

@@ -28,6 +28,7 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.pin.PinMode
+import im.vector.app.features.poll.create.PollMode
 import im.vector.app.features.roomdirectory.RoomDirectoryData
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import im.vector.app.features.settings.VectorSettingsActivity
@@ -148,5 +149,5 @@ interface Navigator {
 
     fun openCallTransfer(context: Context, callId: String)
 
-    fun openCreatePoll(context: Context, roomId: String)
+    fun openCreatePoll(context: Context, roomId: String, editedEventId: String?, mode: PollMode)
 }

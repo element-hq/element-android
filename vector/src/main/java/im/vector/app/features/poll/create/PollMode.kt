@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,7 @@
 
 package im.vector.app.features.poll.create
 
-import com.airbnb.mvrx.MavericksState
-
-data class CreatePollViewState(
-        val roomId: String,
-        val editedEventId: String?,
-        val mode: PollMode,
-        val question: String = "",
-        val options: List<String> = List(CreatePollViewModel.MIN_OPTIONS_COUNT) { "" },
-        val canCreatePoll: Boolean = false,
-        val canAddMoreOptions: Boolean = true
-) : MavericksState {
-
-    constructor(args: CreatePollArgs) : this(
-            roomId = args.roomId,
-            editedEventId = args.editedEventId,
-            mode = args.mode
-    )
+enum class PollMode {
+    CREATE,
+    EDIT
 }

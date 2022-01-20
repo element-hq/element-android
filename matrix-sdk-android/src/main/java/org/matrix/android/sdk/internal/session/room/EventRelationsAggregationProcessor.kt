@@ -34,6 +34,7 @@ import org.matrix.android.sdk.api.session.room.model.VoteInfo
 import org.matrix.android.sdk.api.session.room.model.VoteSummary
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollContent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
@@ -79,6 +80,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
             // EventType.KEY_VERIFICATION_READY,
             EventType.KEY_VERIFICATION_KEY,
             EventType.ENCRYPTED,
+            EventType.POLL_START,
             EventType.POLL_RESPONSE,
             EventType.POLL_END
     )
@@ -206,6 +208,14 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                         EventType.REACTION -> {
                             handleReactionRedact(realm, eventToPrune)
                         }
+                    }
+                }
+                EventType.POLL_START           -> {
+                    val content: MessagePollContent? = event.content.toModel()
+                    if (content?.relatesTo?.type == RelationType.REPLACE) {
+                        Timber.v("###REPLACE in room $roomId for event ${event.eventId}")
+                        // A replace!
+                        handleReplace(realm, event, content, roomId, isLocalEcho)
                     }
                 }
                 EventType.POLL_RESPONSE        -> {

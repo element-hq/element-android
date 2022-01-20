@@ -65,6 +65,16 @@ interface RelationService {
                      reaction: String): Cancelable
 
     /**
+     * Edit a poll.
+     * @param targetEvent The poll event to edit
+     * @param question The edited question
+     * @param options The edited options
+     */
+    fun editPoll(targetEvent: TimelineEvent,
+                 question: String,
+                 options: List<String>): Cancelable
+
+    /**
      * Edit a text message body. Limited to "m.text" contentType
      * @param targetEvent The event to edit
      * @param newBodyText The edited body

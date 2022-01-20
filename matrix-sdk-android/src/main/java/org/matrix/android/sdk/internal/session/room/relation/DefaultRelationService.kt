@@ -112,6 +112,12 @@ internal class DefaultRelationService @AssistedInject constructor(
                 .executeBy(taskExecutor)
     }
 
+    override fun editPoll(targetEvent: TimelineEvent,
+                          question: String,
+                          options: List<String>): Cancelable {
+        return eventEditor.editPoll(targetEvent, question, options)
+    }
+
     override fun editTextMessage(targetEvent: TimelineEvent,
                                  msgType: String,
                                  newBodyText: CharSequence,
