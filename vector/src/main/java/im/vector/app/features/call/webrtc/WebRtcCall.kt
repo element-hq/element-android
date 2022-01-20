@@ -270,6 +270,10 @@ class WebRtcCall(
         }
     }
 
+    fun durationMillis(): Int {
+        return timer.elapsedTime().toInt()
+    }
+
     fun formattedDuration(): String {
         return formatDuration(
                 Duration.ofMillis(timer.elapsedTime())

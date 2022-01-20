@@ -28,6 +28,7 @@ import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
+import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -62,6 +63,7 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarC
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        analyticsScreenName = Screen.ScreenName.CreateRoom
         sharedActionViewModel = viewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         sharedActionViewModel
                 .stream()

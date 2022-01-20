@@ -22,35 +22,45 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 // https://github.com/matrix-org/matrix-analytics-events/
 
 /**
- * Triggered when a call has ended.
+ * Triggered when the user becomes unauthenticated without actually clicking
+ * sign out(E.g. Due to expiry of an access token without a way to refresh).
  */
-data class CallEnded(
+data class UnauthenticatedError(
         /**
-         * The duration of the call in milliseconds.
+         * The error code as defined in matrix spec. The source of this error is
+         * from the homeserver.
          */
-        val durationMs: Int,
+        val errorCode: ErrorCode,
         /**
-         * Whether its a video call or not.
+         * The reason for the error. The source of this error is from the
+         * homeserver, the reason can vary and is subject to change so there is
+         * no enum of possible values.
          */
-        val isVideo: Boolean,
+        val errorReason: String,
         /**
-         * Number of participants in the call.
+         * Whether the auth mechanism is refresh-token-based.
          */
-        val numParticipants: Int,
+        val refreshTokenAuth: Boolean,
         /**
-         * Whether this user placed it.
+         * Whether a soft logout or hard logout was triggered.
          */
-        val placed: Boolean,
+        val softLogout: Boolean,
 ) : VectorAnalyticsEvent {
 
-    override fun getName() = "CallEnded"
+    enum class ErrorCode {
+        M_FORBIDDEN,
+        M_UNKNOWN,
+        M_UNKNOWN_TOKEN,
+    }
+
+    override fun getName() = "UnauthenticatedError"
 
     override fun getProperties(): Map<String, Any>? {
         return mutableMapOf<String, Any>().apply {
-            put("durationMs", durationMs)
-            put("isVideo", isVideo)
-            put("numParticipants", numParticipants)
-            put("placed", placed)
+            put("errorCode", errorCode.name)
+            put("errorReason", errorReason)
+            put("refreshTokenAuth", refreshTokenAuth)
+            put("softLogout", softLogout)
         }.takeIf { it.isNotEmpty() }
     }
 }

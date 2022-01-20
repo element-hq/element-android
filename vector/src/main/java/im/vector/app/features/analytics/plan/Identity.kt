@@ -22,30 +22,42 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 // https://github.com/matrix-org/matrix-analytics-events/
 
 /**
- * Triggered when an error occurred in a call.
+ * The user properties to apply when identifying
  */
-data class CallError(
+data class Identity(
         /**
-         * Whether its a video call or not.
+         * The selected messaging use case during the onboarding flow.
          */
-        val isVideo: Boolean,
-        /**
-         * Number of participants in the call.
-         */
-        val numParticipants: Int,
-        /**
-         * Whether this user placed it.
-         */
-        val placed: Boolean,
+        val ftueUseCaseSelection: FtueUseCaseSelection? = null,
 ) : VectorAnalyticsEvent {
 
-    override fun getName() = "CallError"
+    enum class FtueUseCaseSelection {
+        /**
+         * The third option, Communities.
+         */
+        CommunityMessaging,
+
+        /**
+         * The first option, Friends and family.
+         */
+        PersonalMessaging,
+
+        /**
+         * The footer option to skip the question.
+         */
+        Skip,
+
+        /**
+         * The second option, Teams.
+         */
+        WorkMessaging,
+    }
+
+    override fun getName() = "Identity"
 
     override fun getProperties(): Map<String, Any>? {
         return mutableMapOf<String, Any>().apply {
-            put("isVideo", isVideo)
-            put("numParticipants", numParticipants)
-            put("placed", placed)
+            ftueUseCaseSelection?.let { put("ftueUseCaseSelection", it.name) }
         }.takeIf { it.isNotEmpty() }
     }
 }

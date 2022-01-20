@@ -14,28 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.analytics.plan
+package im.vector.app.features.analytics
 
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
+import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 
-// GENERATED FILE, DO NOT EDIT. FOR MORE INFORMATION VISIT
-// https://github.com/matrix-org/matrix-analytics-events/
+interface AnalyticsTracker {
+    /**
+     * Capture an Event
+     */
+    fun capture(event: VectorAnalyticsEvent)
 
-/**
- * Triggered when the user creates a room.
- */
-data class CreatedRoom(
-        /**
-         * Whether the room is a DM.
-         */
-        val isDM: Boolean,
-) : VectorAnalyticsEvent {
-
-    override fun getName() = "CreatedRoom"
-
-    override fun getProperties(): Map<String, Any>? {
-        return mutableMapOf<String, Any>().apply {
-            put("isDM", isDM)
-        }.takeIf { it.isNotEmpty() }
-    }
+    /**
+     * Track a displayed screen
+     */
+    fun screen(screen: VectorAnalyticsScreen)
 }
