@@ -30,7 +30,8 @@ data class PerformanceTimer(
          */
         val context: String? = null,
         /**
-         * Client defined, an optional value to indicate how many items were handled during the operation.
+         * Client defined, an optional value to indicate how many items were
+         * handled during the operation.
          */
         val itemCount: Int? = null,
         /**
@@ -55,7 +56,8 @@ data class PerformanceTimer(
         InitialSyncRequest,
 
         /**
-         * The time taken to display an event in the timeline that was opened from a notification.
+         * The time taken to display an event in the timeline that was opened
+         * from a notification.
          */
         NotificationsOpenEvent,
 
@@ -65,7 +67,8 @@ data class PerformanceTimer(
         StartupIncrementalSync,
 
         /**
-         * The duration of an initial /sync request during startup (if the store has been wiped).
+         * The duration of an initial /sync request during startup (if the store
+         * has been wiped).
          */
         StartupInitialSync,
 
@@ -80,7 +83,8 @@ data class PerformanceTimer(
         StartupStorePreload,
 
         /**
-         * The time to load all data from the store (including StartupStorePreload time).
+         * The time to load all data from the store (including
+         * StartupStorePreload time).
          */
         StartupStoreReady,
     }

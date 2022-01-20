@@ -54,12 +54,14 @@ data class Screen(
         Group,
 
         /**
-         * The Home tab on iOS | possibly the same on Android? | The Home space on Web?
+         * The Home tab on iOS | possibly the same on Android? | The Home space
+         * on Web?
          */
         Home,
 
         /**
-         * The screen that displays the login flow (when the user already has an account).
+         * The screen that displays the login flow (when the user already has an
+         * account).
          */
         Login,
 
@@ -89,7 +91,8 @@ data class Screen(
         MobilePeople,
 
         /**
-         * The Rooms tab on mobile that lists all the (non-direct) rooms you've joined.
+         * The Rooms tab on mobile that lists all the (non-direct) rooms you've
+         * joined.
          */
         MobileRooms,
 
@@ -129,7 +132,8 @@ data class Screen(
         MyGroups,
 
         /**
-         * The screen that displays the registration flow (when the user wants to create an account)
+         * The screen that displays the registration flow (when the user wants
+         * to create an account)
          */
         Register,
 
@@ -139,7 +143,8 @@ data class Screen(
         Room,
 
         /**
-         * The screen shown when tapping the name of a room from the Room screen.
+         * The screen shown when tapping the name of a room from the Room
+         * screen.
          */
         RoomDetails,
 
@@ -149,7 +154,8 @@ data class Screen(
         RoomDirectory,
 
         /**
-         * The screen that lists all the user's rooms and let them filter the rooms.
+         * The screen that lists all the user's rooms and let them filter the
+         * rooms.
          */
         RoomFilter,
 
@@ -164,7 +170,8 @@ data class Screen(
         RoomNotifications,
 
         /**
-         * The screen that allows you to search for messages/files in a specific room.
+         * The screen that allows you to search for messages/files in a specific
+         * room.
          */
         RoomSearch,
 
@@ -174,7 +181,8 @@ data class Screen(
         RoomSettings,
 
         /**
-         * The screen that allows you to see all of the files sent in a specific room.
+         * The screen that allows you to see all of the files sent in a specific
+         * room.
          */
         RoomUploads,
 
