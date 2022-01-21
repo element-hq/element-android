@@ -21,7 +21,6 @@ package org.matrix.android.sdk.internal.network
 import com.squareup.moshi.JsonEncodingException
 import kotlinx.coroutines.suspendCancellableCoroutine
 import okhttp3.ResponseBody
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.failure.MatrixError
@@ -30,7 +29,6 @@ import retrofit2.HttpException
 import retrofit2.Response
 import timber.log.Timber
 import java.io.IOException
-import java.net.HttpURLConnection
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 

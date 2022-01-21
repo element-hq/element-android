@@ -34,4 +34,3 @@ class CredentialsResponseAdapter {
         return responseCredentials.copy(expiryTs = System.currentTimeMillis() + responseCredentials.expiresInMs)
     }
 }
-

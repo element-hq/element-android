@@ -426,5 +426,4 @@ internal class DefaultAuthenticationService @Inject constructor(
                 .addSocketFactory(homeServerConnectionConfig)
                 .build()
     }
-    
 }

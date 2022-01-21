@@ -78,7 +78,7 @@ internal class HomeserverAccessTokenProvider @Inject constructor(
         Timber.d("## Token Refresh: Refreshing access token...")
 
         var result: RefreshResult? = null
-        try{
+        try {
             result = authenticationService
                     .getRefreshWizard(sessionId)
                     .refresh(credentials.refreshToken)
@@ -111,5 +111,4 @@ internal class HomeserverAccessTokenProvider @Inject constructor(
 
         return result.accessToken
     }
-
 }
