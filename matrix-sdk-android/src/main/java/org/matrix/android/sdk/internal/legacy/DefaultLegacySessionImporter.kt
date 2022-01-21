@@ -108,6 +108,8 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                         userId = legacyConfig.credentials.userId,
                         accessToken = legacyConfig.credentials.accessToken,
                         refreshToken = legacyConfig.credentials.refreshToken,
+                        expiresInMs = null,
+                        expiryTs = null,
                         homeServer = legacyConfig.credentials.homeServer,
                         deviceId = legacyConfig.credentials.deviceId,
                         discoveryInformation = legacyConfig.credentials.wellKnown?.let { wellKnown ->

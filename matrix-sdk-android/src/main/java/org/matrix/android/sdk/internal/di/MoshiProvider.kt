@@ -31,6 +31,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.internal.network.parsing.CipherSuiteMoshiAdapter
+import org.matrix.android.sdk.internal.network.parsing.CredentialsResponseAdapter
 import org.matrix.android.sdk.internal.network.parsing.ForceToBooleanJsonAdapter
 import org.matrix.android.sdk.internal.network.parsing.RuntimeJsonAdapterFactory
 import org.matrix.android.sdk.internal.network.parsing.TlsVersionMoshiAdapter
@@ -44,6 +45,7 @@ object MoshiProvider {
             .add(ForceToBooleanJsonAdapter())
             .add(CipherSuiteMoshiAdapter())
             .add(TlsVersionMoshiAdapter())
+            .add(CredentialsResponseAdapter())
             // Use addLast here so we can inject a SplitLazyRoomSyncJsonAdapter later to override the default parsing.
             .addLast(DefaultLazyRoomSyncEphemeralJsonAdapter())
             .add(RuntimeJsonAdapterFactory.of(MessageContent::class.java, "msgtype", MessageDefaultContent::class.java)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,8 @@ package org.matrix.android.sdk.internal.auth.data
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 
 @JsonClass(generateAdapter = true)
-internal data class TokenLoginParams(
-        @Json(name = "type") override val type: String = LoginFlowTypes.TOKEN,
-        @Json(name = "refresh_token") override val refreshToken: Boolean = true,
-        @Json(name = "token") val token: String
-) : LoginParams
+internal data class RefreshParams(
+        @Json(name = "refresh_token") val refreshToken: String
+)

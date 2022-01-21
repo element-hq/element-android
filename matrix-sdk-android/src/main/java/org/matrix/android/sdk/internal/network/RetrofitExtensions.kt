@@ -91,10 +91,11 @@ private fun toFailure(errorBody: ResponseBody?, httpCode: Int, globalErrorReceiv
                 matrixError.code == MatrixError.M_CONSENT_NOT_GIVEN && !matrixError.consentUri.isNullOrBlank() -> {
                     globalErrorReceiver?.handleGlobalError(GlobalError.ConsentNotGivenError(matrixError.consentUri))
                 }
-                httpCode == HttpURLConnection.HTTP_UNAUTHORIZED && /* 401 */
-                        matrixError.code == MatrixError.M_UNKNOWN_TOKEN                                        -> {
-                    globalErrorReceiver?.handleGlobalError(GlobalError.InvalidToken(matrixError.isSoftLogout.orFalse()))
-                }
+// If using refresh tokens we won't want this as 401 will just mean refresh your token.
+//                httpCode == HttpURLConnection.HTTP_UNAUTHORIZED && /* 401 */
+//                        matrixError.code == MatrixError.M_UNKNOWN_TOKEN                                        -> {
+//                    globalErrorReceiver?.handleGlobalError(GlobalError.InvalidToken(matrixError.isSoftLogout.orFalse()))
+//                }
                 matrixError.code == MatrixError.ORG_MATRIX_EXPIRED_ACCOUNT                                     -> {
                     globalErrorReceiver?.handleGlobalError(GlobalError.ExpiredAccount)
                 }

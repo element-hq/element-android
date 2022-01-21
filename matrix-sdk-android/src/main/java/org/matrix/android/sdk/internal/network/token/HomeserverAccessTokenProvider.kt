@@ -16,13 +16,96 @@
 
 package org.matrix.android.sdk.internal.network.token
 
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import org.matrix.android.sdk.api.auth.AuthenticationService
+import org.matrix.android.sdk.api.auth.data.RefreshResult
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError.Companion.M_FORBIDDEN
+import org.matrix.android.sdk.api.failure.MatrixError.Companion.M_UNKNOWN_TOKEN
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.di.SessionId
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
+import org.matrix.android.sdk.internal.network.toFailure
+import retrofit2.HttpException
+import timber.log.Timber
 import javax.inject.Inject
 
 internal class HomeserverAccessTokenProvider @Inject constructor(
         @SessionId private val sessionId: String,
-        private val sessionParamsStore: SessionParamsStore
+        private val sessionParamsStore: SessionParamsStore,
+        private val authenticationService: AuthenticationService,
+        private val globalErrorReceiver: GlobalErrorReceiver
 ) : AccessTokenProvider {
-    override fun getToken() = sessionParamsStore.get(sessionId)?.credentials?.accessToken
+
+    companion object {
+        private val mutex = Mutex()
+    }
+
+    object Constants {
+        /**
+        The time interval before the access token expires that we will start trying to refresh the token.
+        This avoids us having to block other users requests while the token refreshes.
+        Choosing a value larger than DEFAULT_DELAY_MILLIS + DEFAULT_LONG_POOL_TIMEOUT_SECONDS guarantees we will at least have attempted it before expiry.
+         */
+        const val PREEMPT_REFRESH_EXPIRATION_INTERVAL = 60000
+    }
+
+    override fun getToken(): String? {
+        var accessToken: String?
+        runBlocking {
+            mutex.withLock {
+                accessToken = checkExpiryAndRefreshIfStale()
+            }
+        }
+        return accessToken
+    }
+
+    private suspend fun checkExpiryAndRefreshIfStale(): String? {
+        val credentials = sessionParamsStore.get(sessionId)?.credentials ?: return null
+
+        if (credentials.refreshToken.isNullOrEmpty() ||
+                credentials.expiryTs == null ||
+                System.currentTimeMillis() < (credentials.expiryTs - Constants.PREEMPT_REFRESH_EXPIRATION_INTERVAL)) {
+            return credentials.accessToken
+        }
+
+        Timber.d("## Token Refresh: Refreshing access token...")
+
+        var result: RefreshResult? = null
+        try{
+            result = authenticationService
+                    .getRefreshWizard(sessionId)
+                    .refresh(credentials.refreshToken)
+        } catch (throwable: Throwable) {
+            val serverError = throwable
+                    .let { it as? HttpException }
+                    ?.let { it.toFailure(globalErrorReceiver) as? Failure.ServerError }
+            if (serverError != null) {
+                Timber.d("## Token Refresh: Failed to refresh access token. error: $serverError")
+                if (serverError.error.code == M_UNKNOWN_TOKEN || serverError.error.code == M_FORBIDDEN) {
+                    Timber.d("## Token Refresh: Requires logout.")
+                }
+            }
+        }
+
+        if (result == null) {
+            return null
+        }
+
+        val updatedCredentials = credentials.copy(
+                accessToken = result.accessToken,
+                expiresInMs = result.expiresInMs,
+                expiryTs = System.currentTimeMillis() + result.expiresInMs,
+                refreshToken = result.refreshToken
+        )
+
+        sessionParamsStore.updateCredentials(updatedCredentials)
+
+        Timber.d("## Token Refresh: Tokens refreshed and saved.")
+
+        return result.accessToken
+    }
+
 }

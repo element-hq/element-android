@@ -18,8 +18,8 @@ package org.matrix.android.sdk.api.auth.data
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.util.md5
 
+import org.matrix.android.sdk.internal.util.md5
 /**
  * This data class hold credentials user data.
  * You shouldn't have to instantiate it.
@@ -36,6 +36,14 @@ data class Credentials(
          * An access token for the account. This access token can then be used to authorize other requests.
          */
         @Json(name = "access_token") val accessToken: String,
+        /**
+         * The interval in milliseconds that the access token will expire in.
+         */
+        @Json(name = "expires_in_ms") val expiresInMs: Long?,
+        /**
+         * The interval in milliseconds that the access token will expire in.
+         */
+        @Json(name = "expiry_ts") val expiryTs: Long?,
         /**
          * Not documented
          */

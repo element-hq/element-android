@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.login.LoginWizard
+import org.matrix.android.sdk.api.auth.refresh.RefreshWizard
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.failure.Failure
@@ -38,6 +39,7 @@ import org.matrix.android.sdk.internal.auth.data.WebClientConfig
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 import org.matrix.android.sdk.internal.auth.login.DefaultLoginWizard
 import org.matrix.android.sdk.internal.auth.login.DirectLoginTask
+import org.matrix.android.sdk.internal.auth.refresh.DefaultRefreshWizard
 import org.matrix.android.sdk.internal.auth.registration.DefaultRegistrationWizard
 import org.matrix.android.sdk.internal.auth.version.Versions
 import org.matrix.android.sdk.internal.auth.version.isLoginAndRegistrationSupportedBySdk
@@ -67,6 +69,7 @@ internal class DefaultAuthenticationService @Inject constructor(
 
     private var currentLoginWizard: LoginWizard? = null
     private var currentRegistrationWizard: RegistrationWizard? = null
+    private var currentRefreshWizard: RefreshWizard? = null
 
     override fun hasAuthenticatedSessions(): Boolean {
         return sessionParamsStore.getLast() != null
@@ -399,6 +402,19 @@ internal class DefaultAuthenticationService @Inject constructor(
         ))
     }
 
+    override fun getRefreshWizard(sessionId: String): RefreshWizard {
+        val homeServerConnectionConfig = sessionParamsStore.get(sessionId)?.homeServerConnectionConfig
+                ?: throw IllegalStateException("Session not found")
+        return currentRefreshWizard
+                ?: let {
+                    DefaultRefreshWizard(
+                            buildAuthAPI(homeServerConnectionConfig)
+                    ).also {
+                        currentRefreshWizard = it
+                    }
+                }
+    }
+
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {
         val retrofit = retrofitFactory.create(buildClient(homeServerConnectionConfig), homeServerConnectionConfig.homeServerUriBase.toString())
         return retrofit.create(AuthAPI::class.java)
@@ -410,4 +426,5 @@ internal class DefaultAuthenticationService @Inject constructor(
                 .addSocketFactory(homeServerConnectionConfig)
                 .build()
     }
+    
 }

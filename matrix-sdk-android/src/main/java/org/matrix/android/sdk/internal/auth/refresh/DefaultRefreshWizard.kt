@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.auth.data
+package org.matrix.android.sdk.internal.auth.refresh
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
+import org.matrix.android.sdk.api.auth.data.RefreshResult
+import org.matrix.android.sdk.api.auth.refresh.RefreshWizard
+import org.matrix.android.sdk.internal.auth.AuthAPI
+import org.matrix.android.sdk.internal.auth.data.RefreshParams
 
-@JsonClass(generateAdapter = true)
-internal data class TokenLoginParams(
-        @Json(name = "type") override val type: String = LoginFlowTypes.TOKEN,
-        @Json(name = "refresh_token") override val refreshToken: Boolean = true,
-        @Json(name = "token") val token: String
-) : LoginParams
+internal class DefaultRefreshWizard(
+        private val authAPI: AuthAPI
+) : RefreshWizard {
+
+    override suspend fun refresh(refreshToken: String): RefreshResult {
+        return authAPI.refresh(RefreshParams(refreshToken))
+    }
+}
