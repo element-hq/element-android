@@ -17,9 +17,32 @@
 package im.vector.app.core.extensions
 
 import android.content.Context
+import android.graphics.drawable.Drawable
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import dagger.hilt.EntryPoints
 import im.vector.app.core.di.SingletonEntryPoint
+import kotlin.math.round
 
 fun Context.singletonEntryPoint(): SingletonEntryPoint {
     return EntryPoints.get(applicationContext, SingletonEntryPoint::class.java)
+}
+
+fun Context.getResTintedDrawable(@DrawableRes drawableRes: Int, @ColorRes tint: Int, alpha: Float? = null): Drawable? {
+    return getTintedDrawable(drawableRes, ContextCompat.getColor(this, tint), alpha)
+}
+
+fun Context.getTintedDrawable(@DrawableRes drawableRes: Int, @ColorInt tint: Int, alpha: Float? = null) = ContextCompat.getDrawable(this, drawableRes)
+        ?.mutate()
+        ?.also { drawable ->
+            drawable.setTint(tint)
+            alpha?.let {
+                drawable.alpha = it.toAndroidAlpha()
+            }
+        }
+
+private fun Float.toAndroidAlpha(): Int {
+    return round(this * 255).toInt()
 }

@@ -16,6 +16,7 @@
 
 package im.vector.app.core.extensions
 
+import android.graphics.drawable.Drawable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextPaint
@@ -121,7 +122,11 @@ fun TextView.setLeftDrawable(@DrawableRes iconRes: Int, @AttrRes tintColor: Int?
     } else {
         ContextCompat.getDrawable(context, iconRes)
     }
-    setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null)
+    setLeftDrawable(icon)
+}
+
+fun TextView.setLeftDrawable(drawable: Drawable?) {
+    setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
 }
 
 /**
