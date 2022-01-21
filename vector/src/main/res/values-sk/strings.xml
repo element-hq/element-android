@@ -2089,4 +2089,20 @@
     <string name="create_spaces_just_me">Iba ja</string>
     <string name="disclaimer_title">Riot je teraz Element!</string>
     <string name="login_wait_for_email_title">Skontrolujte prosím svoj e-mail</string>
+    <string name="poll_end_room_list_preview">Anketa skončila</string>
+    <string name="invite_by_username">Pozvať podľa používateľského mena</string>
+    <string name="ftue_auth_carousel_1_title">Vlastnite svoje konverzácie.</string>
+    <string name="login_splash_already_have_account">Už mám účet</string>
+    <string name="tooltip_attachment_file">Nahrať súbor</string>
+    <string name="video_call_with_participant">Videohovor s %s</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">%d zmeškaný video hovor</item>
+        <item quantity="few">%d zmeškané video hovory</item>
+        <item quantity="other">%d zmeškaných video hovorov</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">%d zmeškaný hlasový hovor</item>
+        <item quantity="few">%d zmeškané hlasové hovory</item>
+        <item quantity="other">%d zmeškaných hlasových hovorov</item>
+    </plurals>
 </resources>
