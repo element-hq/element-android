@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.onboarding
+package im.vector.app.features.analytics.extensions
 
-enum class FtueUseCase(val persistableValue: String) {
-    FRIENDS_FAMILY("friends_family"),
-    TEAMS("teams"),
-    COMMUNITIES("communities"),
-    SKIP("skip");
+import im.vector.app.features.analytics.plan.Identity
+import im.vector.app.features.onboarding.FtueUseCase
 
-    companion object {
-        fun from(persistedValue: String) = values().first { it.persistableValue == persistedValue }
+fun FtueUseCase.toTrackingValue(): Identity.FtueUseCaseSelection {
+    return when (this) {
+        FtueUseCase.FRIENDS_FAMILY -> Identity.FtueUseCaseSelection.PersonalMessaging
+        FtueUseCase.TEAMS          -> Identity.FtueUseCaseSelection.WorkMessaging
+        FtueUseCase.COMMUNITIES    -> Identity.FtueUseCaseSelection.CommunityMessaging
+        FtueUseCase.SKIP           -> Identity.FtueUseCaseSelection.Skip
     }
 }
