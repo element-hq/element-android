@@ -54,15 +54,19 @@ internal class HomeserverAccessTokenProvider @Inject constructor(
 
     override fun getToken(): String? {
         var accessToken: String?
+        // We synchronise in a blocking fashion here so that when refresh is required, a single request becomes the leader.
+        // On successful refresh the leader saves the credential and the new access token then becomes available to other requests when they are unblocked.
+        // We should never send multiple refresh requests as refresh tokens are single-use(they rotate with a new one returned in the response).
+        // Mishandled via race conditions and we could become unauthenticated.
         runBlocking {
             mutex.withLock {
-                accessToken = checkExpiryAndRefreshIfStale()
+                accessToken = verifyExpiryAndRefreshIfStale()
             }
         }
         return accessToken
     }
 
-    private suspend fun checkExpiryAndRefreshIfStale(): String? {
+    private suspend fun verifyExpiryAndRefreshIfStale(): String? {
         val credentials = sessionParamsStore.get(sessionId)?.credentials ?: return null
 
         if (credentials.refreshToken.isNullOrEmpty() ||
