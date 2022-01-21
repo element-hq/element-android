@@ -753,7 +753,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private suspend fun onSessionCreated(session: Session) {
         awaitState().useCase?.let { useCase ->
-            onboardingStore.setUseCase(useCase)
+            onboardingStore.setUseCase(userId = session.myUserId, useCase)
         }
         activeSessionHolder.setActiveSession(session)
 

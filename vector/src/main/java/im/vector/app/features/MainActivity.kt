@@ -151,7 +151,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     // Just do the local cleanup
                     Timber.w("Account deactivated, start app")
                     sessionHolder.clearActiveSession()
-                    doLocalCleanup(clearPreferences = true)
+                    doLocalCleanup(clearPreferences = true, userId = session.myUserId)
                     startNextActivityAndFinish()
                 }
             }
@@ -165,14 +165,14 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     }
                     Timber.w("SIGN_OUT: success, start app")
                     sessionHolder.clearActiveSession()
-                    doLocalCleanup(clearPreferences = true)
+                    doLocalCleanup(clearPreferences = true, userId = session.myUserId)
                     startNextActivityAndFinish()
                 }
             }
             args.clearCache           -> {
                 lifecycleScope.launch {
                     session.clearCache()
-                    doLocalCleanup(clearPreferences = false)
+                    doLocalCleanup(clearPreferences = false, userId = session.myUserId)
                     session.startSyncing(applicationContext)
                     startNextActivityAndFinish()
                 }
@@ -185,7 +185,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         Timber.w("Ignoring invalid token global error")
     }
 
-    private suspend fun doLocalCleanup(clearPreferences: Boolean) {
+    private suspend fun doLocalCleanup(clearPreferences: Boolean, userId: String) {
         // On UI Thread
         Glide.get(this@MainActivity).clearMemory()
 
@@ -195,7 +195,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             pinLocker.unlock()
             pinCodeStore.deleteEncodedPin()
             vectorAnalytics.onSignOut()
-            onboardingStore.clear()
+            onboardingStore.clear(userId)
         }
         withContext(Dispatchers.IO) {
             // On BG thread
