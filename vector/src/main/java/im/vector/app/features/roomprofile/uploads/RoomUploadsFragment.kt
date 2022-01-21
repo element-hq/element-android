@@ -74,6 +74,7 @@ class RoomUploadsFragment @Inject constructor(
         }.attach()
 
         setupToolbar(views.roomUploadsToolbar)
+                .allowBack()
 
         viewModel.observeViewEvents {
             when (it) {

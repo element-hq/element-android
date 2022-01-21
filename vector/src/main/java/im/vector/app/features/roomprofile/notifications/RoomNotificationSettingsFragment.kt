@@ -50,6 +50,7 @@ class RoomNotificationSettingsFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.roomSettingsToolbar)
+                .allowBack()
         roomNotificationSettingsController.callback = this
         views.roomSettingsRecyclerView.configureWith(roomNotificationSettingsController, hasFixedSize = true)
         setupWaitingView()

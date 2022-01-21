@@ -19,10 +19,8 @@ package im.vector.app.features.roomdirectory.roompreview
 import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
-import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.roomdirectory.RoomDirectoryData
@@ -53,7 +51,7 @@ data class RoomPreviewData(
 }
 
 @AndroidEntryPoint
-class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable {
+class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     companion object {
         private const val ARG = "ARG"
@@ -82,10 +80,6 @@ class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), Toolbar
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
-
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
-    }
 
     override fun initUiAndData() {
         if (isFirstCreation()) {

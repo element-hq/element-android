@@ -109,6 +109,7 @@ class RoomProfileFragment @Inject constructor(
         headerViews = ViewStubRoomProfileHeaderBinding.bind(headerView)
         setupWaitingView()
         setupToolbar(views.matrixProfileToolbar)
+                .allowBack()
         setupRecyclerView()
         appBarStateChangeListener = MatrixItemAppBarStateChangeListener(
                 headerView,

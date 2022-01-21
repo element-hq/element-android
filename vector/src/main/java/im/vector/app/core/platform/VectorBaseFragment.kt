@@ -42,6 +42,7 @@ import im.vector.app.core.dialogs.UnrecognizedCertificateDialog
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
+import im.vector.app.core.utils.ToolbarConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.analytics.screen.ScreenEvent
@@ -80,6 +81,12 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
 
     private var progress: AlertDialog? = null
 
+    /**
+     * [ToolbarConfig] instance from host activity
+     * */
+    protected var toolbar: ToolbarConfig? = null
+            get() = (activity as? VectorBaseActivity<*>)?.toolbar
+            private set
     /* ==========================================================================================
      * View model
      * ========================================================================================== */
@@ -228,13 +235,12 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
      * ========================================================================================== */
 
     /**
-     * Configure the Toolbar.
-     */
-    protected fun setupToolbar(toolbar: MaterialToolbar) {
-        val parentActivity = vectorBaseActivity
-        if (parentActivity is ToolbarConfigurable) {
-            parentActivity.configure(toolbar)
-        }
+     * Sets toolbar as actionBar for current activity
+     *
+     * @return Instance of [ToolbarConfig] with set of helper methods to configure toolbar
+     * */
+    protected fun setupToolbar(toolbar: MaterialToolbar): ToolbarConfig {
+        return vectorBaseActivity.setupToolbar(toolbar)
     }
 
     /* ==========================================================================================

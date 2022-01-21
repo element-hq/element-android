@@ -29,7 +29,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
@@ -37,7 +36,6 @@ import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.analytics.plan.Screen
@@ -54,7 +52,7 @@ import org.matrix.android.sdk.api.extensions.tryOrNull
  * The LoginActivity manages the fragment navigation and also display the loading View
  */
 @AndroidEntryPoint
-open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarConfigurable, UnlockedActivity {
+open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedActivity {
 
     private val loginViewModel: LoginViewModel by viewModel()
 
@@ -351,10 +349,6 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarCo
                     option = commonOption)
             else               -> Unit // Should not happen
         }
-    }
-
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
     }
 
     companion object {

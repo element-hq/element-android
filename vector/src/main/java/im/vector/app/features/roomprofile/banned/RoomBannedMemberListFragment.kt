@@ -59,6 +59,7 @@ class RoomBannedMemberListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         roomMemberListController.callback = this
         setupToolbar(views.roomSettingsToolbar)
+                .allowBack()
         setupSearchView()
         views.roomSettingsRecyclerView.configureWith(roomMemberListController, hasFixedSize = true)
 

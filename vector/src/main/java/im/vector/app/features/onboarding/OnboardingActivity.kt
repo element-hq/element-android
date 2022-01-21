@@ -19,10 +19,8 @@ package im.vector.app.features.onboarding
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.lazyViewModel
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.lifecycleAwareLazy
 import im.vector.app.databinding.ActivityLoginBinding
@@ -31,7 +29,7 @@ import im.vector.app.features.pin.UnlockedActivity
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class OnboardingActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarConfigurable, UnlockedActivity {
+class OnboardingActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedActivity {
 
     private val onboardingVariant by lifecycleAwareLazy {
         onboardingVariantFactory.create(this, views = views, onboardingViewModel = lazyViewModel(), loginViewModel2 = lazyViewModel())
@@ -42,10 +40,6 @@ class OnboardingActivity : VectorBaseActivity<ActivityLoginBinding>(), ToolbarCo
     override fun getBinding() = ActivityLoginBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
-
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
-    }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)

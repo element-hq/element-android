@@ -28,13 +28,11 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
-import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.endKeepScreenOn
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.keepScreenOn
 import im.vector.app.core.extensions.replaceFragment
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityRoomDetailBinding
 import im.vector.app.features.analytics.plan.Screen
@@ -53,7 +51,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class RoomDetailActivity :
         VectorBaseActivity<ActivityRoomDetailBinding>(),
-        ToolbarConfigurable,
         MatrixToBottomSheet.InteractionListener {
 
     override fun getBinding(): ActivityRoomDetailBinding {
@@ -157,10 +154,6 @@ class RoomDetailActivity :
         views.drawerLayout.removeDrawerListener(drawerListener)
         playbackTracker.unTrackActivity(playbackActivityListener)
         super.onDestroy()
-    }
-
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
     }
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {

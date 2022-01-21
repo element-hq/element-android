@@ -66,8 +66,11 @@ class SpaceManageRoomsFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setupToolbar(views.addRoomToSpaceToolbar)
-        views.appBarTitle.text = getString(R.string.space_manage_rooms_and_spaces)
+                .setTitle(R.string.space_manage_rooms_and_spaces)
+                .allowBack()
+
         views.createNewRoom.isVisible = false
         epoxyController.listener = this
         views.roomList.configureWith(epoxyController, hasFixedSize = true, dividerDrawable = R.drawable.divider_horizontal)
@@ -111,14 +114,15 @@ class SpaceManageRoomsFragment @Inject constructor(
         epoxyController.setData(state)
 
         state.spaceSummary.invoke()?.let {
-            views.appBarSpaceInfo.text = it.displayName
+            toolbar?.subtitle = it.displayName
         }
+
         if (state.selectedRooms.isNotEmpty()) {
             if (currentActionMode == null) {
                 views.addRoomToSpaceToolbar.isVisible = true
                 vectorBaseActivity.startSupportActionMode(this)
             } else {
-                currentActionMode?.title = "${state.selectedRooms.size} selected"
+                toolbar?.title = "${state.selectedRooms.size} selected"
             }
 //            views.addRoomToSpaceToolbar.isVisible = false
 //            views.addRoomToSpaceToolbar.startActionMode(this)

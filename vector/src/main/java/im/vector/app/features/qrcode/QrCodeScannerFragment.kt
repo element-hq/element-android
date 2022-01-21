@@ -38,10 +38,9 @@ class QrCodeScannerFragment @Inject constructor() :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.qrScannerClose.debouncedClicks {
-            requireActivity().onBackPressed()
-        }
-        views.qrScannerTitle.text = getString(R.string.verification_scan_their_code)
+        setupToolbar(views.qrScannerToolbar)
+                .setTitle(R.string.verification_scan_their_code)
+                .allowBack(useCross = true)
     }
 
     override fun onResume() {

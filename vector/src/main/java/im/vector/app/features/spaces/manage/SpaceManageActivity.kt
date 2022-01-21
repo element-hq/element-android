@@ -26,13 +26,11 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
 import com.airbnb.mvrx.withState
-import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.replaceFragment
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleLoadingBinding
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
@@ -53,8 +51,7 @@ data class SpaceManageArgs(
 ) : Parcelable
 
 @AndroidEntryPoint
-class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
-        ToolbarConfigurable {
+class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>() {
 
     private lateinit var sharedDirectoryActionViewModel: RoomDirectorySharedActionViewModel
 
@@ -187,9 +184,5 @@ class SpaceManageActivity : VectorBaseActivity<ActivitySimpleLoadingBinding>(),
                 putExtra(Mavericks.KEY_ARG, SpaceManageArgs(spaceId, manageType))
             }
         }
-    }
-
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
     }
 }
