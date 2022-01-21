@@ -113,7 +113,7 @@ internal class DefaultSyncTask @Inject constructor(
         val readTimeOut = (params.timeout + TIMEOUT_MARGIN).coerceAtLeast(TimeOutInterceptor.DEFAULT_LONG_TIMEOUT)
 
         var syncResponseToReturn: SyncResponse? = null
-        var start = SystemClock.elapsedRealtime()
+        val syncStatisticsData = SyncStatisticsData(isInitialSync, params.afterPause)
         if (isInitialSync) {
             Timber.tag(loggerTag.value).d("INIT_SYNC with filter: ${requestParams["filter"]}")
             val initSyncStrategy = initialSyncStrategy
@@ -122,8 +122,7 @@ internal class DefaultSyncTask @Inject constructor(
                     roomSyncEphemeralTemporaryStore.reset()
                     workingDir.mkdirs()
                     val file = downloadInitSyncResponse(requestParams)
-                    sendStatistics(StatisticEvent.InitialSyncRequest((SystemClock.elapsedRealtime() - start).toInt()))
-                    start = SystemClock.elapsedRealtime()
+                    syncStatisticsData.intermediateTime = SystemClock.elapsedRealtime()
                     syncResponseToReturn = reportSubtask(defaultSyncStatusService, InitSyncStep.ImportingAccount, 1, 0.7F) {
                         handleSyncFile(file, initSyncStrategy)
                     }
@@ -138,8 +137,7 @@ internal class DefaultSyncTask @Inject constructor(
                             )
                         }
                     }
-                    sendStatistics(StatisticEvent.InitialSyncRequest((SystemClock.elapsedRealtime() - start).toInt()))
-                    start = SystemClock.elapsedRealtime()
+                    syncStatisticsData.intermediateTime = SystemClock.elapsedRealtime()
                     logDuration("INIT_SYNC Database insertion", loggerTag) {
                         syncResponseHandler.handleResponse(syncResponse, token, defaultSyncStatusService)
                     }
@@ -147,7 +145,6 @@ internal class DefaultSyncTask @Inject constructor(
                 }
             }
             defaultSyncStatusService.endAll()
-            sendStatistics(StatisticEvent.InitialSyncTreatment((SystemClock.elapsedRealtime() - start).toInt()))
         } else {
             Timber.tag(loggerTag.value).d("Start incremental sync request")
             defaultSyncStatusService.setStatus(SyncStatusService.Status.IncrementalSyncIdle)
@@ -174,8 +171,9 @@ internal class DefaultSyncTask @Inject constructor(
             syncResponseToReturn = syncResponse
             Timber.tag(loggerTag.value).d("Incremental sync done")
             defaultSyncStatusService.setStatus(SyncStatusService.Status.IncrementalSyncDone)
-            sendStatistics(StatisticEvent.SyncTreatment((SystemClock.elapsedRealtime() - start).toInt(), params.afterPause))
         }
+        syncStatisticsData.nbOfRooms = syncResponseToReturn?.rooms?.join?.size ?: 0
+        sendStatistics(syncStatisticsData)
         Timber.tag(loggerTag.value).d("Sync task finished on Thread: ${Thread.currentThread().name}")
         // Should throw if null as it's a mandatory value.
         return syncResponseToReturn!!
@@ -254,7 +252,38 @@ internal class DefaultSyncTask @Inject constructor(
         }
     }
 
-    private fun sendStatistics(statisticEvent: StatisticEvent) {
+    /**
+     * Aggregator to send stat event.
+     */
+    class SyncStatisticsData(
+            val isInitSync: Boolean,
+            val isAfterPause: Boolean
+    ) {
+        val startTime = SystemClock.elapsedRealtime()
+        var intermediateTime: Long = 0
+        var nbOfRooms: Int = 0
+    }
+
+    private fun sendStatistics(data: SyncStatisticsData) {
+        if (data.isInitSync) {
+            sendStatisticEvent(StatisticEvent.InitialSyncRequest(
+                    durationMs = (data.intermediateTime - data.startTime).toInt(),
+                    nbOfRooms = data.nbOfRooms
+            ))
+            sendStatisticEvent(StatisticEvent.InitialSyncTreatment(
+                    durationMs = (SystemClock.elapsedRealtime() - data.intermediateTime).toInt(),
+                    nbOfRooms = data.nbOfRooms
+            ))
+        } else {
+            sendStatisticEvent(StatisticEvent.SyncTreatment(
+                    durationMs = (SystemClock.elapsedRealtime() - data.startTime).toInt(),
+                    afterPause = data.isAfterPause,
+                    nbOfRooms = data.nbOfRooms
+            ))
+        }
+    }
+
+    private fun sendStatisticEvent(statisticEvent: StatisticEvent) {
         session.dispatchTo(sessionListeners) { session, listener ->
             listener.onStatisticsEvent(session, statisticEvent)
         }

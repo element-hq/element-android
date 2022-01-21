@@ -22,12 +22,24 @@ import org.matrix.android.sdk.api.session.statistics.StatisticEvent
 fun StatisticEvent.toPerformanceTimer(): PerformanceTimer? {
     return when (this) {
         is StatisticEvent.InitialSyncRequest   ->
-            PerformanceTimer(name = PerformanceTimer.Name.InitialSyncRequest, timeMs = durationMs)
+            PerformanceTimer(
+                    name = PerformanceTimer.Name.InitialSyncRequest,
+                    timeMs = durationMs,
+                    itemCount = nbOfRooms
+            )
         is StatisticEvent.InitialSyncTreatment ->
-            PerformanceTimer(name = PerformanceTimer.Name.InitialSyncParsing, timeMs = durationMs)
+            PerformanceTimer(
+                    name = PerformanceTimer.Name.InitialSyncParsing,
+                    timeMs = durationMs,
+                    itemCount = nbOfRooms
+            )
         is StatisticEvent.SyncTreatment        ->
             if (afterPause) {
-                PerformanceTimer(name = PerformanceTimer.Name.StartupIncrementalSync, timeMs = durationMs)
+                PerformanceTimer(
+                        name = PerformanceTimer.Name.StartupIncrementalSync,
+                        timeMs = durationMs,
+                        itemCount = nbOfRooms
+                )
             } else {
                 // We do not report
                 null
