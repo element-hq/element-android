@@ -3705,7 +3705,7 @@
     <string name="delete_poll_dialog_title">Remove poll</string>
     <string name="delete_poll_dialog_content">Are you sure you want to remove this poll? You won\'t be able to recover it once removed.</string>
 
-    <string name="message_bubbles">Message bubbles</string>
+    <string name="message_bubbles">Show Message bubbles</string>
 
     <string name="tooltip_attachment_photo">Open camera</string>
     <string name="tooltip_attachment_gallery">Send images and videos</string>
