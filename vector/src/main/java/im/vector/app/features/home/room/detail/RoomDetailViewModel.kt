@@ -28,6 +28,7 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.AppStateHandler
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
@@ -37,7 +38,9 @@ import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.BehaviorDataSource
+import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.DecryptionFailureTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
 import im.vector.app.features.call.conference.ConferenceEvent
 import im.vector.app.features.call.conference.JitsiActiveConferenceHolder
 import im.vector.app.features.call.conference.JitsiService
@@ -54,6 +57,7 @@ import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorDataStore
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.space
 import im.vector.lib.core.utils.flow.chunk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -112,9 +116,11 @@ class RoomDetailViewModel @AssistedInject constructor(
         private val chatEffectManager: ChatEffectManager,
         private val directRoomHelper: DirectRoomHelper,
         private val jitsiService: JitsiService,
+        private val analyticsTracker: AnalyticsTracker,
         private val activeConferenceHolder: JitsiActiveConferenceHolder,
         private val decryptionFailureTracker: DecryptionFailureTracker,
-        timelineFactory: TimelineFactory
+        timelineFactory: TimelineFactory,
+        appStateHandler: AppStateHandler
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
         Timeline.Listener, ChatEffectManager.Delegate, CallProtocolsChecker.Listener {
 
@@ -178,6 +184,24 @@ class RoomDetailViewModel @AssistedInject constructor(
         // Ensure to share the outbound session keys with all members
         if (OutboundSessionKeySharingStrategy.WhenEnteringRoom == BuildConfig.outboundSessionKeySharingStrategy && room.isEncrypted()) {
             prepareForEncryption()
+        }
+
+        if (initialState.switchToParentSpace) {
+            // We are coming from a notification, try to switch to the most relevant space
+            // so that when hitting back the room will appear in the list
+            appStateHandler.getCurrentRoomGroupingMethod()?.space().let { currentSpace ->
+                val currentRoomSummary = room.roomSummary() ?: return@let
+                // nothing we are good
+                if (currentSpace == null || !currentRoomSummary.flattenParentIds.contains(currentSpace.roomId)) {
+                    // take first one or switch to home
+                    appStateHandler.setCurrentSpace(
+                            currentRoomSummary
+                                    .flattenParentIds.firstOrNull { it.isNotBlank() },
+                            // force persist, because if not on resume the AppStateHandler will resume
+                            // the current space from what was persisted on enter background
+                            persistNow = true)
+                }
+            }
         }
     }
 
@@ -709,7 +733,10 @@ class RoomDetailViewModel @AssistedInject constructor(
 
     private fun handleAcceptInvite() {
         viewModelScope.launch {
-            tryOrNull { room.join() }
+            tryOrNull {
+                room.join()
+                analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom())
+            }
         }
     }
 

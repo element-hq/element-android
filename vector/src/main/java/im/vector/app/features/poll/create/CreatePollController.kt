@@ -20,7 +20,6 @@ import android.view.Gravity
 import android.view.inputmethod.EditorInfo
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
-import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.ItemStyle
@@ -28,6 +27,7 @@ import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditTextWithDeleteItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class CreatePollController @Inject constructor(

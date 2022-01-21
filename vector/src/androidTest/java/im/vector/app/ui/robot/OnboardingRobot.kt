@@ -18,6 +18,7 @@ package im.vector.app.ui.robot
 
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.adevinta.android.barista.assertion.BaristaEnabledAssertions.assertDisabled
@@ -30,6 +31,24 @@ import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.waitForView
 
 class OnboardingRobot {
+
+    fun crawl() {
+        waitUntilViewVisible(withId(R.id.loginSplashSubmit))
+        crawlGetStarted()
+        crawlAlreadyHaveAccount()
+    }
+
+    private fun crawlGetStarted() {
+        clickOn(R.id.loginSplashSubmit)
+        OnboardingServersRobot().crawlSignUp()
+        pressBack()
+    }
+
+    private fun crawlAlreadyHaveAccount() {
+        clickOn(R.id.loginSplashAlreadyHaveAccount)
+        OnboardingServersRobot().crawlSignIn()
+        pressBack()
+    }
 
     fun createAccount(userId: String, password: String = "password", homeServerUrl: String = "http://10.0.2.2:8080") {
         initSession(true, userId, password, homeServerUrl)
@@ -44,7 +63,7 @@ class OnboardingRobot {
                             password: String,
                             homeServerUrl: String) {
         waitUntilViewVisible(withId(R.id.loginSplashSubmit))
-        assertDisplayed(R.id.loginSplashSubmit, R.string.login_splash_submit)
+        assertDisplayed(R.id.loginSplashSubmit, R.string.login_splash_create_account)
         if (createAccount) {
             clickOn(R.id.loginSplashSubmit)
         } else {

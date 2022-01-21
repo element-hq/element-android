@@ -31,6 +31,7 @@ abstract class SimpleFragmentActivity : VectorBaseActivity<ActivityBinding>() {
 
     override fun initUiAndData() {
         setupToolbar(views.toolbar)
+                .allowBack(true)
         waitingView = views.waitingView.waitingView
     }
 

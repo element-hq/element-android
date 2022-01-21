@@ -34,6 +34,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.core.utils.shareMedia
 import im.vector.app.databinding.FragmentRoomUploadsBinding
+import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.roomprofile.RoomProfileArgs
@@ -52,6 +53,11 @@ class RoomUploadsFragment @Inject constructor(
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentRoomUploadsBinding {
         return FragmentRoomUploadsBinding.inflate(inflater, container, false)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = Screen.ScreenName.RoomUploads
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

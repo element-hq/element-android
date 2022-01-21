@@ -38,6 +38,7 @@ import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
+import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.login.terms.LoginTermsFragment
 import im.vector.app.features.login.terms.LoginTermsFragmentArgument
@@ -80,6 +81,8 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
     override fun initUiAndData() {
+        analyticsScreenName = Screen.ScreenName.Login
+
         if (isFirstCreation()) {
             addFirstFragment()
         }
@@ -198,6 +201,10 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
 
     private fun updateWithState(loginViewState: LoginViewState) {
         if (loginViewState.isUserLogged()) {
+            if (loginViewState.signMode == SignMode.SignUp) {
+                // change the screen name
+                analyticsScreenName = Screen.ScreenName.Register
+            }
             val intent = HomeActivity.newIntent(
                     this,
                     accountCreation = loginViewState.signMode == SignMode.SignUp

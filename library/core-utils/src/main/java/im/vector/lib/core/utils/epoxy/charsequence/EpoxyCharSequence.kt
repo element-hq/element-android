@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.epoxy.charsequence
+package im.vector.lib.core.utils.epoxy.charsequence
 
 /**
  * Wrapper for a CharSequence, which support mutation of the CharSequence, which can happen during rendering

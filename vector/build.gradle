@@ -332,6 +332,7 @@ dependencies {
     implementation project(":diff-match-patch")
     implementation project(":multipicker")
     implementation project(":attachment-viewer")
+    implementation project(":library:jsonviewer")
     implementation project(":library:ui-styles")
     implementation project(":library:core-utils")
     implementation 'androidx.multidex:multidex:2.0.1'
@@ -465,7 +466,6 @@ dependencies {
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
     implementation "androidx.emoji2:emoji2:1.0.1"
-    implementation('com.github.BillCarsonFr:JsonViewer:0.7')
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only

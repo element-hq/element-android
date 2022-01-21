@@ -38,7 +38,8 @@ jobs:
     # Skip in forks
     if: >
       github.repository == 'vector-im/element-android' &&
-      (contains(github.event.issue.labels.*.name, 'A-E2EE') ||
+      (contains(github.event.issue.labels.*.name, 'Z-UISI') ||
+        (contains(github.event.issue.labels.*.name, 'A-E2EE') ||
         contains(github.event.issue.labels.*.name, 'A-E2EE-Cross-Signing') ||
         contains(github.event.issue.labels.*.name, 'A-E2EE-Dehydration') ||
         contains(github.event.issue.labels.*.name, 'A-E2EE-Key-Backup') ||
@@ -50,7 +51,7 @@ jobs:
         contains(github.event.issue.labels.*.name, 'S-Major') &&
         contains(github.event.issue.labels.*.name, 'O-Frequent') ||
         contains(github.event.issue.labels.*.name, 'A11y') &&
-        contains(github.event.issue.labels.*.name, 'O-Frequent'))
+        contains(github.event.issue.labels.*.name, 'O-Frequent')))
     steps:
       - uses: alex-page/github-project-automation-plus@bb266ff4dde9242060e2d5418e120a133586d488
         with:
