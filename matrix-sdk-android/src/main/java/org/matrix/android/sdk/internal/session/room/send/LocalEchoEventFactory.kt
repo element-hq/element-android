@@ -149,11 +149,12 @@ internal class LocalEchoEventFactory @Inject constructor(
                 relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
                 newContent = createPollContent(question, options).toContent()
         )
+        val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
                 originServerTs = dummyOriginServerTs(),
                 senderId = userId,
-                eventId = targetEventId,
+                eventId = localId,
                 type = EventType.POLL_START,
                 content = newContent.toContent()
         )
