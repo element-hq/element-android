@@ -50,7 +50,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="@string/direct_chats_header"
-                        android:textAppearance="@style/Widget.Vector.TextView.ActionBarTitle"
+                        android:textAppearance="@style/TextAppearance.Vector.Widget.ActionBarTitle"
                         android:textColor="?vctr_content_primary"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"

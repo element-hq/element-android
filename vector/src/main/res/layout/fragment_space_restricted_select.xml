@@ -36,7 +36,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/select_spaces"
-                        android:textAppearance="@style/Widget.Vector.TextView.ActionBarTitle" />
+                        android:textAppearance="@style/TextAppearance.Vector.Widget.ActionBarTitle" />
 
                     <TextView
                         android:layout_width="match_parent"
