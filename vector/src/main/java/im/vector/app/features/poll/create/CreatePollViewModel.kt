@@ -26,6 +26,7 @@ import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
+import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 
 class CreatePollViewModel @AssistedInject constructor(
         @Assisted private val initialState: CreatePollViewState,
@@ -68,7 +69,7 @@ class CreatePollViewModel @AssistedInject constructor(
 
     private fun initializeEditedPoll(eventId: String) {
         val event = room.getTimeLineEvent(eventId) ?: return
-        val content = event.root.getClearContent()?.toModel<MessagePollContent>(catchError = true) ?: return
+        val content = event.getLastMessageContent() as? MessagePollContent ?: return
 
         val question = content.pollCreationInfo?.question?.question ?: ""
         val options = content.pollCreationInfo?.answers?.mapNotNull { it.answer } ?: List(MIN_OPTIONS_COUNT) { "" }
