@@ -464,22 +464,14 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
-        viewModelScope.launch {
-            onboardingStore.setUseCase(action.useCase)
-            analyticsTracker.updateUserProperties(
-                    Identity(ftueUseCaseSelection = action.useCase.toTrackingValue())
-            )
-        }
+        setState { copy(useCase = action.useCase) }
+        analyticsTracker.updateUserProperties(Identity(ftueUseCaseSelection = action.useCase.toTrackingValue()))
         _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
     }
 
     private fun resetUseCase() {
-        viewModelScope.launch {
-            onboardingStore.resetUseCase()
-            analyticsTracker.updateUserProperties(
-                    Identity(ftueUseCaseSelection = null)
-            )
-        }
+        setState { copy(useCase = null) }
+        analyticsTracker.updateUserProperties(Identity(ftueUseCaseSelection = null))
     }
 
     private fun handleUpdateServerType(action: OnboardingAction.UpdateServerType) {
@@ -760,6 +752,9 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private suspend fun onSessionCreated(session: Session) {
+        awaitState().useCase?.let { useCase ->
+            onboardingStore.setUseCase(useCase)
+        }
         activeSessionHolder.setActiveSession(session)
 
         authenticationService.reset()
