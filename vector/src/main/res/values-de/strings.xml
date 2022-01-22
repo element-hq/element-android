@@ -231,8 +231,8 @@
         <item quantity="other">Du hast die alternativen Adressen %1$s für diesen Raum hinzufügt.</item>
     </plurals>
     <plurals name="notice_room_canonical_alias_alternative_added">
-        <item quantity="one">%1$s fügte die alternative Adresse %2$s für diesen Raum hinzu.</item>
-        <item quantity="other">%1$s fügte die alternativen Adressen %2$s für diesen Raum hinzu.</item>
+        <item quantity="one">%1$s hat die Adresse %2$s hinzugefügt.</item>
+        <item quantity="other">%1$s hat die Adressen %2$s hinzugefügt.</item>
     </plurals>
     <string name="room_displayname_empty_room_was">Leerer Raum (war %s)</string>
     <plurals name="room_displayname_four_and_more_members">
@@ -1318,7 +1318,7 @@
     <string name="settings_change_password_submit">Passwort aktualisieren</string>
     <string name="settings_fail_to_update_password_invalid_current_password">Das Passwort ist ungültig</string>
     <string name="passwords_do_not_match">Passwörter stimmen nicht überein</string>
-    <string name="autodiscover_invalid_response">Ungültige Antwort beim Entdecken des Homeservers</string>
+    <string name="autodiscover_invalid_response">Ungültige Antwort beim Verbinden mit dem Homeserver</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Serveroptionen vervollständigen</string>
     <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} hat eine benutzerdefinierte Serverkonfiguration für die Domäne deines Benutzernamens gefunden \"%1$s\":
 \n%2$s</string>
@@ -2944,7 +2944,7 @@
     <string name="a11y_presence_offline">Offline</string>
     <string name="a11y_presence_online">Online</string>
     <string name="call_tap_to_return">%1$s Klicke zum Zurückkehren</string>
-    <string name="call_tile_no_answer">Nicht abgenommen</string>
+    <string name="call_tile_no_answer">Nicht angenommen</string>
     <string name="command_description_lenny">Nachricht mit ( ͡° ͜ʖ ͡°) beginnen</string>
     <string name="command_description_whois">Zeigt Information über die Person an</string>
     <string name="command_description_avatar_for_room">Ändert dein Profilbild im aktuellen Raum</string>
