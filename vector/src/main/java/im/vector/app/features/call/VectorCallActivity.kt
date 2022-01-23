@@ -126,7 +126,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
         if (savedInstanceState != null) {
             (supportFragmentManager.findFragmentByTag(FRAGMENT_DIAL_PAD_TAG) as? CallDialPadBottomSheet)?.callback = dialPadCallback
         }
-        setSupportActionBar(views.callToolbar)
+        setupToolbar(views.callToolbar)
         configureCallViews()
 
         callViewModel.onEach {
@@ -257,18 +257,18 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
-                views.callToolbar.setSubtitle(R.string.call_ringing)
+                toolbar?.setSubtitle(R.string.call_ringing)
                 configureCallInfo(state)
             }
             is CallState.Answering -> {
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
-                views.callToolbar.setSubtitle(R.string.call_connecting)
+                toolbar?.setSubtitle(R.string.call_connecting)
                 configureCallInfo(state)
             }
             is CallState.Connected -> {
-                views.callToolbar.subtitle = state.formattedDuration
+                toolbar?.subtitle = state.formattedDuration
                 if (callState.iceConnectionState == MxPeerConnectionState.CONNECTED) {
                     if (state.isLocalOnHold || state.isRemoteOnHold) {
                         views.smallIsHeldIcon.isVisible = true
@@ -280,11 +280,11 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                             views.callActionText.setText(R.string.call_resume_action)
                             views.callActionText.isVisible = true
                             views.callActionText.setOnClickListener { callViewModel.handle(VectorCallViewActions.ToggleHoldResume) }
-                            views.callToolbar.setSubtitle(R.string.call_held_by_you)
+                            toolbar?.setSubtitle(R.string.call_held_by_you)
                         } else {
                             views.callActionText.isInvisible = true
                             state.callInfo?.opponentUserItem?.let {
-                                views.callToolbar.subtitle = getString(R.string.call_held_by_user, it.getBestName())
+                                toolbar?.subtitle = getString(R.string.call_held_by_user, it.getBestName())
                             }
                         }
                     } else if (state.transferee !is VectorCallViewState.TransfereeState.NoTransferee) {
@@ -316,14 +316,14 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                     views.pipRendererWrapper.isVisible = false
                     views.callInfoGroup.isVisible = true
                     configureCallInfo(state)
-                    views.callToolbar.setSubtitle(R.string.call_connecting)
+                    toolbar?.setSubtitle(R.string.call_connecting)
                 }
             }
             is CallState.Ended     -> {
                 views.fullscreenRenderer.isVisible = false
                 views.pipRendererWrapper.isVisible = false
                 views.callInfoGroup.isVisible = true
-                views.callToolbar.setSubtitle(R.string.call_ended)
+                toolbar?.setSubtitle(R.string.call_ended)
                 configureCallInfo(state)
             }
             else                   -> {
@@ -410,7 +410,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             avatarRenderer.renderBlur(it, views.bgCallView, sampling = 20, rounded = false, colorFilter = colorFilter, addPlaceholder = false)
             if (state.transferee is VectorCallViewState.TransfereeState.NoTransferee) {
                 views.participantNameText.setTextOrHide(null)
-                views.callToolbar.title = if (state.isVideoCall) {
+                toolbar?.title = if (state.isVideoCall) {
                     getString(R.string.video_call_with_participant, it.getBestName())
                 } else {
                     getString(R.string.audio_call_with_participant, it.getBestName())

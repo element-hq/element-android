@@ -42,6 +42,8 @@ android {
 }
 
 dependencies {
+    implementation project(":library:core-utils")
+
     implementation libs.androidx.appCompat
     implementation libs.androidx.core
 
@@ -57,7 +59,7 @@ dependencies {
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
 
-    testImplementation 'org.json:json:20190722'
+    testImplementation 'org.json:json:20211205'
     testImplementation libs.tests.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espressoCore

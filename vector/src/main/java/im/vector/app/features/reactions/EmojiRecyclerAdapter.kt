@@ -31,8 +31,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.AutoTransition
 import androidx.transition.TransitionManager
 import im.vector.app.R
-import im.vector.app.core.utils.compat.removeIfCompat
 import im.vector.app.features.reactions.data.EmojiData
+import im.vector.lib.core.utils.compat.removeIfCompat
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -23,8 +23,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.getRetryDelay
+import org.matrix.android.sdk.api.failure.isLimitExceededError
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -145,17 +145,17 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
             task.execute()
         } catch (exception: Throwable) {
             when {
-                exception is IOException || exception is Failure.NetworkConnection                         -> {
+                exception is IOException || exception is Failure.NetworkConnection -> {
                     canReachServer.set(false)
                     task.markAsFailedOrRetry(exception, 0)
                 }
-                (exception is Failure.ServerError && exception.error.code == MatrixError.M_LIMIT_EXCEEDED) -> {
+                (exception.isLimitExceededError())                                 -> {
                     task.markAsFailedOrRetry(exception, exception.getRetryDelay(3_000))
                 }
-                exception is CancellationException                                                         -> {
+                exception is CancellationException                                 -> {
                     Timber.v("## $task has been cancelled, try next task")
                 }
-                else                                                                                       -> {
+                else                                                               -> {
                     Timber.v("## un-retryable error for $task, try next task")
                     // this task is in error, check next one?
                     task.onTaskFailed()

@@ -55,6 +55,10 @@ class UiAllScreensSanityTest {
     fun allScreensTest() {
         IdlingPolicies.setMasterPolicyTimeout(120, TimeUnit.SECONDS)
 
+        elementRobot.onboarding {
+            crawl()
+        }
+
         // Create an account
         val userId = "UiTest_" + UUID.randomUUID().toString()
         elementRobot.signUp(userId)

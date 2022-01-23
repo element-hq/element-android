@@ -85,14 +85,13 @@
 
                 <TextView
                     android:id="@+id/roomToolbarTitleView"
-                    style="@style/Widget.Vector.TextView.HeadlineMedium"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:layout_marginEnd="8dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textColor="?vctr_content_primary"
+                    android:textAppearance="@style/TextAppearance.Vector.Widget.ActionBarTitle"
                     app:layout_constraintBottom_toTopOf="@id/roomToolbarSubtitleView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -104,14 +103,13 @@
 
                 <TextView
                     android:id="@+id/roomToolbarSubtitleView"
-                    style="@style/Widget.Vector.TextView.Body"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="7dp"
                     android:layout_marginEnd="8dp"
                     android:ellipsize="end"
                     android:maxLines="1"
-                    android:textColor="?vctr_content_primary"
+                    android:textAppearance="@style/TextAppearance.Vector.Widget.ActionBarSubTitle"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"

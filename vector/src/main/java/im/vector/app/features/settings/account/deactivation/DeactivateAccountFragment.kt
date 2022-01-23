@@ -31,6 +31,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentDeactivateAccountBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.auth.ReAuthActivity
 import im.vector.app.features.settings.VectorSettingsActivity
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
@@ -47,7 +48,7 @@ class DeactivateAccountFragment @Inject constructor() : VectorBaseFragment<Fragm
     private val reAuthActivityResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             when (activityResult.data?.extras?.getString(ReAuthActivity.RESULT_FLOW_TYPE)) {
-                LoginFlowTypes.SSO -> {
+                LoginFlowTypes.SSO      -> {
                     viewModel.handle(DeactivateAccountAction.SsoAuthDone)
                 }
                 LoginFlowTypes.PASSWORD -> {
@@ -61,6 +62,11 @@ class DeactivateAccountFragment @Inject constructor() : VectorBaseFragment<Fragm
         } else {
             viewModel.handle(DeactivateAccountAction.ReAuthCancelled)
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = Screen.ScreenName.DeactivateAccount
     }
 
     override fun onResume() {

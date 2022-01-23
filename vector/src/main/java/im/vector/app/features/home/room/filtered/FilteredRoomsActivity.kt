@@ -24,6 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityFilteredRoomsBinding
+import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.list.RoomListParams
@@ -42,7 +43,9 @@ class FilteredRoomsActivity : VectorBaseActivity<ActivityFilteredRoomsBinding>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        configureToolbar(views.filteredRoomsToolbar)
+        analyticsScreenName = Screen.ScreenName.RoomFilter
+        setupToolbar(views.filteredRoomsToolbar)
+                .allowBack()
         if (isFirstCreation()) {
             val params = RoomListParams(RoomListDisplayMode.FILTERED)
             replaceFragment(views.filteredRoomsFragmentContainer, RoomListFragment::class.java, params, FRAGMENT_TAG)

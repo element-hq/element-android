@@ -6,10 +6,12 @@
         <item name="elevation">0dp</item>
 
         <!-- main text -->
-        <item name="titleTextStyle">@style/Widget.Vector.TextView.ActionBarTitle</item>
+        <item name="titleTextAppearance">@style/TextAppearance.Vector.Widget.ActionBarTitle</item>
 
         <!-- sub text -->
-        <item name="subtitleTextStyle">@style/Widget.Vector.TextView.ActionBarSubTitle</item>
+        <item name="subtitleTextAppearance">@style/TextAppearance.Vector.Widget.ActionBarSubTitle</item>
+
+        <item name="navigationIconTint">?vctr_content_secondary</item>
     </style>
 
     <!-- Default toolbar style -->
@@ -22,16 +24,18 @@
 
     <!-- Toolbar text style -->
     <!-- main text -->
-    <style name="Widget.Vector.TextView.ActionBarTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <style name="TextAppearance.Vector.Widget.ActionBarTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">?vctr_content_primary</item>
-        <item name="android:fontFamily">"sans-serif-medium"</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <!-- sub text -->
-    <style name="Widget.Vector.TextView.ActionBarSubTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
-        <item name="android:textColor">?vctr_content_primary</item>
-        <item name="android:fontFamily">"sans-serif-medium"</item>
+    <style name="TextAppearance.Vector.Widget.ActionBarSubTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
+        <item name="android:textColor">?vctr_content_secondary</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="fontFamily">sans-serif</item>
         <item name="android:textSize">12sp</item>
     </style>
 

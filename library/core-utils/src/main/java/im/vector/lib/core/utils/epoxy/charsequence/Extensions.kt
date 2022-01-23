@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.epoxy.charsequence
+package im.vector.lib.core.utils.epoxy.charsequence
 
 /**
  * Extensions to wrap CharSequence to EpoxyCharSequence

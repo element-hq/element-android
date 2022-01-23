@@ -1,11 +1,11 @@
 /*
- * Copyright 2019 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-package im.vector.app.core.platform
+package im.vector.lib.core.utils.epoxy.charsequence
 
-import com.google.android.material.appbar.MaterialToolbar
+/**
+ * Wrapper for a CharSequence, which support mutation of the CharSequence, which can happen during rendering
+ */
+class EpoxyCharSequence(val charSequence: CharSequence) {
+    private val hash = charSequence.toString().hashCode()
 
-interface ToolbarConfigurable {
-
-    fun configure(toolbar: MaterialToolbar)
+    override fun hashCode() = hash
+    override fun equals(other: Any?) = other is EpoxyCharSequence && other.hash == hash
 }

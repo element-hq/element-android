@@ -20,14 +20,14 @@ import androidx.core.text.toSpannable
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
 import im.vector.app.core.epoxy.bottomSheetDividerItem
-import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
-import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewState
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
+import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class VerificationCancelController @Inject constructor(
