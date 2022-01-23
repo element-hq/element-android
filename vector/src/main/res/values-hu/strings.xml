@@ -3058,4 +3058,21 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="labs_enable_latex_maths">LaTeX matematikai szintaxis engedélyezése</string>
     <string name="room_error_access_unauthorized">Nem léphetsz be ebbe a szobába</string>
     <string name="ftue_auth_carousel_1_title">Az ön beszélgetései csak az öné.</string>
+    <string name="ftue_auth_carousel_1_body">Üzenetküldés végpontok közötti titkosítással a biztonságos és független kommunikációért, Matrix-szal kapcsolódva.</string>
+    <string name="labs_auto_report_uisi_desc">Titkosítás visszafejtési hiba esemény alkalmával a rendszer automatikusan elküldi a logokat</string>
+    <string name="labs_auto_report_uisi">Titkosítás visszafejtési hibák automatikus jelentése.</string>
+    <string name="ftue_auth_carousel_4_body">Olyan univerzális mint az e-mail, Element egy teljesen új típusú együttműködés.</string>
+    <string name="ftue_auth_carousel_3_body">Element minden Matrix kompatibilis alkalmazással együttműködik sőt zárt üzenetküldőkkel is összeköthető.</string>
+    <string name="ftue_auth_carousel_2_body">Element megengedi, hogy megválaszd az üzeneteid hol vannak tárolva, meghagyja nálad az irányítást.</string>
+    <string name="tooltip_attachment_poll">Szavazás létrehozása</string>
+    <string name="tooltip_attachment_contact">Névjegyek megnyitása</string>
+    <string name="tooltip_attachment_sticker">Matrica küldése</string>
+    <string name="tooltip_attachment_file">Fájl feltöltése</string>
+    <string name="tooltip_attachment_gallery">Képek és videók küldése</string>
+    <string name="tooltip_attachment_photo">Kamera megnyitása</string>
+    <string name="room_member_override_nick_color">Becenév színének megváltoztatása</string>
+    <string name="login_splash_already_have_account">Már van fiókom</string>
+    <string name="ftue_auth_carousel_4_title">Rázd fel a csoportjaidat.</string>
+    <string name="ftue_auth_carousel_3_title">Lépj kapcsolatba bárkivel.</string>
+    <string name="ftue_auth_carousel_2_title">Te irányítasz.</string>
 </resources>
