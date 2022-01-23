@@ -3064,4 +3064,26 @@
         <item quantity="many">Usunąłeś(aś) %1$s jako adresy tego pokoju.</item>
         <item quantity="other">Usunąłeś(aś) %1$s jako adresy tego pokoju.</item>
     </plurals>
+    <string name="room_member_override_nick_color">Nadpisz kolor nicku</string>
+    <string name="login_splash_already_have_account">Posiadam już konto</string>
+    <string name="ftue_auth_carousel_4_body">Tak uniwersalny jak e-mail, Element jest zupełnie nowym typem współpracy.</string>
+    <string name="ftue_auth_carousel_3_body">Element współpracuje ze wszystkimi aplikacjami opartymi na protokole Matrix, a nawet może łączyć się z zewnętrznymi komunikatorami.</string>
+    <string name="ftue_auth_carousel_3_title">Połącz się z każdym.</string>
+    <string name="ftue_auth_carousel_2_body">Element pozwala ci wybrać gdzie twoje wiadomości mają być zapisywane, w celu zachowania kontroli nad danymi.</string>
+    <string name="ftue_auth_carousel_2_title">Ty jesteś w kontroli.</string>
+    <string name="ftue_auth_carousel_1_body">Wiadomości szyfrowane typu end-to-end zapewniają bezpieczną i niezależną komunikacje, połączoną za pośrednictwem protokołu Matrix.</string>
+    <string name="ftue_auth_carousel_1_title">Przejmij swoje konwersacje.</string>
+    <string name="identity_server_consent_dialog_content_3">By odkryć istniejące kontakty, musisz najpierw przesłać swoje dane kontaktowe (adresy e-mail i numer telefonu) do serwera tożsamości. Przed wysłaniem Twoje dane zostaną zaszyfrowane w celu zachowania prywatności.</string>
+    <string name="preference_help_summary">Uzyskaj pomoc w korzystaniu z Element</string>
+    <string name="room_error_access_unauthorized">Nie masz uprawnień by dołączyć do tego pokoju</string>
+    <string name="dev_tools_form_hint_type">Typ</string>
+    <string name="a11y_presence_offline">Niedostępny</string>
+    <string name="a11y_presence_online">Dostępny</string>
+    <string name="a11y_view_read_receipts">Pokaż znaczniki odczytania</string>
+    <plurals name="call_one_active_and_other_paused">
+        <item quantity="one">Jedno aktywne połączenie (%1$s) - Jedno wstrzymane połączenie</item>
+        <item quantity="few">Jedno aktywne połączenie (%1$s) - Kilka wstrzymanych połączeń</item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
+    </plurals>
 </resources>
