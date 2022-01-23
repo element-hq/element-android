@@ -3086,4 +3086,7 @@
         <item quantity="many"></item>
         <item quantity="other"></item>
     </plurals>
+    <string name="discovery_section">Odkrywanie (%s)</string>
+    <string name="finish_setting_up_discovery">Dokończ konfigurację odkrywania.</string>
+    <string name="event_status_a11y_delete_all">Usuń wszystkie nieudane wiadomości</string>
 </resources>
