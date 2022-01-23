@@ -220,13 +220,22 @@ class MessageItemFactory @Inject constructor(
             )
         }
 
+        val question = pollContent.pollCreationInfo?.question?.question ?: ""
+
         return PollItem_()
                 .attributes(attributes)
                 .eventId(informationData.eventId)
-                .pollQuestion(pollContent.pollCreationInfo?.question?.question ?: "")
+                .pollQuestion(
+                        if (informationData.hasBeenEdited) {
+                            annotateWithEdited(question, callback, informationData)
+                        } else {
+                            question
+                        }.toEpoxyCharSequence()
+                )
                 .pollSent(isPollSent)
                 .totalVotesText(totalVotesText)
                 .optionViewStates(optionViewStates)
+                .edited(informationData.hasBeenEdited)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(callback)

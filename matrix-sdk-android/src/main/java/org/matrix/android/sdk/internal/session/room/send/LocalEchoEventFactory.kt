@@ -61,6 +61,7 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.content.ThumbnailExtractor
 import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
+import java.util.UUID
 import javax.inject.Inject
 
 /**
@@ -131,9 +132,9 @@ internal class LocalEchoEventFactory @Inject constructor(
                         question = PollQuestion(
                                 question = question
                         ),
-                        answers = options.mapIndexed { index, option ->
+                        answers = options.map { option ->
                             PollAnswer(
-                                    id = "$index-$option",
+                                    id = UUID.randomUUID().toString(),
                                     answer = option
                             )
                         }
