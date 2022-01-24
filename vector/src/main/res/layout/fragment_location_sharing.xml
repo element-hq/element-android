@@ -7,7 +7,8 @@
     <im.vector.app.features.location.MapTilerMapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:mapbox_renderTextureMode="true" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/shareLocationContainer"

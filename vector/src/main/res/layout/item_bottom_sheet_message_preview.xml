@@ -114,6 +114,7 @@
         app:layout_constraintEnd_toEndOf="@id/bottom_sheet_message_preview_timestamp"
         app:layout_constraintStart_toStartOf="@id/bottom_sheet_message_preview_sender"
         app:layout_constraintTop_toBottomOf="@id/bottom_sheet_message_preview_sender"
+        app:mapbox_renderTextureMode="true"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
