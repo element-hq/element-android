@@ -81,32 +81,43 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                 buildModernLayout(showInformation)
             }
             TimelineLayoutSettings.BUBBLE -> {
-                val type = event.root.getClearType()
-                if (type in EVENT_TYPES_WITH_BUBBLE_LAYOUT) {
-                    val messageContent = event.getLastMessageContent()
-                    if (messageContent?.msgType in MSG_TYPES_WITHOUT_BUBBLE_LAYOUT) {
-                        buildModernLayout(showInformation)
-                    } else {
-                        val isFirstFromThisSender = nextDisplayableEvent?.root?.senderId != event.root.senderId || addDaySeparator
-                        val isLastFromThisSender = prevDisplayableEvent?.root?.senderId != event.root.senderId ||
-                                prevDisplayableEvent?.root?.localDateTime()?.toLocalDate() != date.toLocalDate()
+                val shouldBuildBubbleLayout = event.shouldBuildBubbleLayout()
+                if (shouldBuildBubbleLayout) {
+                    val isFirstFromThisSender = nextDisplayableEvent == null || !nextDisplayableEvent.shouldBuildBubbleLayout() ||
+                            nextDisplayableEvent.root.senderId != event.root.senderId || addDaySeparator
 
-                        TimelineMessageLayout.Bubble(
-                                showAvatar = showInformation && !isSentByMe,
-                                showDisplayName = showInformation && !isSentByMe,
-                                isIncoming = !isSentByMe,
-                                isFirstFromThisSender = isFirstFromThisSender,
-                                isLastFromThisSender = isLastFromThisSender,
-                                isPseudoBubble = messageContent?.msgType in MSG_TYPES_WITH_PSEUDO_BUBBLE_LAYOUT,
-                                timestampAsOverlay = messageContent?.msgType in MSG_TYPES_WITH_TIMESTAMP_AS_OVERLAY
-                        )
-                    }
+                    val isLastFromThisSender = prevDisplayableEvent == null || !prevDisplayableEvent.shouldBuildBubbleLayout() ||
+                            prevDisplayableEvent.root.senderId != event.root.senderId ||
+                            prevDisplayableEvent.root.localDateTime().toLocalDate() != date.toLocalDate()
+
+                    val messageContent = event.getLastMessageContent()
+                    TimelineMessageLayout.Bubble(
+                            showAvatar = showInformation && !isSentByMe,
+                            showDisplayName = showInformation && !isSentByMe,
+                            isIncoming = !isSentByMe,
+                            isFirstFromThisSender = isFirstFromThisSender,
+                            isLastFromThisSender = isLastFromThisSender,
+                            isPseudoBubble = messageContent?.msgType in MSG_TYPES_WITH_PSEUDO_BUBBLE_LAYOUT,
+                            timestampAsOverlay = messageContent?.msgType in MSG_TYPES_WITH_TIMESTAMP_AS_OVERLAY
+                    )
                 } else {
                     buildModernLayout(showInformation)
                 }
             }
         }
         return messageLayout
+    }
+
+    private fun TimelineEvent.shouldBuildBubbleLayout(): Boolean {
+        val type = root.getClearType()
+        if (type in EVENT_TYPES_WITH_BUBBLE_LAYOUT) {
+            val messageContent = getLastMessageContent()
+            if (messageContent?.msgType in MSG_TYPES_WITHOUT_BUBBLE_LAYOUT) {
+                return false
+            }
+            return true
+        }
+        return false
     }
 
     private fun buildModernLayout(showInformation: Boolean): TimelineMessageLayout.Default {
