@@ -67,8 +67,8 @@ class AutoRageShaker @Inject constructor(
 
     fun initialize() {
         observeActiveSession()
-        // It's a singleton...
         enable(vectorPreferences.labsAutoReportUISI())
+        // It's a singleton...
         vectorPreferences.subscribeToChanges(this)
 
         // Simple rate limit, notice that order is not
@@ -142,7 +142,7 @@ class AutoRageShaker @Inject constructor(
                 withCrashLogs = true,
                 withKeyRequestHistory = true,
                 withScreenshot = false,
-                theBugDescription = "Auto-reporting decryption error (recipient)",
+                theBugDescription = "Auto-reporting decryption error",
                 serverVersion = "",
                 canContact = false,
                 customFields = mapOf("auto_uisi" to buildString {
