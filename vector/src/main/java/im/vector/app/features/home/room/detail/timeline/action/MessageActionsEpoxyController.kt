@@ -75,7 +75,7 @@ class MessageActionsEpoxyController @Inject constructor(
         val body = state.messageBody.linkify(host.listener)
         val bindingOptions = spanUtils.getBindingOptions(body)
         val locationData = state.timelineEvent()?.root?.getClearContent()?.toModel<MessageLocationContent>(catchError = true)?.let {
-            LocationData.create(it.locationInfo?.geoUri ?: it.geoUri)
+            LocationData.create(it.getUri())
         }
         bottomSheetMessagePreviewItem {
             id("preview")

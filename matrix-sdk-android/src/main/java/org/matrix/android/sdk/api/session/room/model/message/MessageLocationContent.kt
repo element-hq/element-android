@@ -60,4 +60,7 @@ data class MessageLocationContent(
         @Json(name = "org.matrix.msc3488.ts") val ts: Long? = null,
 
         @Json(name = "org.matrix.msc1767.text") val text: String? = null
-) : MessageContent
+) : MessageContent {
+
+    fun getUri() = locationInfo?.geoUri ?: geoUri
+}

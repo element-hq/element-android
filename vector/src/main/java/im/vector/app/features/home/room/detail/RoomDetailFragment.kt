@@ -106,6 +106,7 @@ import im.vector.app.core.utils.createUIHandler
 import im.vector.app.core.utils.isValidUrl
 import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
+import im.vector.app.core.utils.openLocation
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.safeStartActivity
@@ -166,6 +167,7 @@ import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
 import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.invite.VectorInviteView
+import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
@@ -207,6 +209,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
@@ -1912,16 +1915,22 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun onShareActionClicked(action: EventSharedAction.Share) {
-        if (action.messageContent is MessageTextContent) {
-            shareText(requireContext(), action.messageContent.body)
-        } else if (action.messageContent is MessageWithAttachmentContent) {
-            lifecycleScope.launch {
-                val result = runCatching { session.fileService().downloadFile(messageContent = action.messageContent) }
-                if (!isAdded) return@launch
-                result.fold(
-                        { shareMedia(requireContext(), it, getMimeTypeFromUri(requireContext(), it.toUri())) },
-                        { showErrorInSnackbar(it) }
-                )
+        when (action.messageContent) {
+            is MessageTextContent           -> shareText(requireContext(), action.messageContent.body)
+            is MessageLocationContent       -> {
+                LocationData.create(action.messageContent.getUri())?.let {
+                    openLocation(requireActivity(), it.latitude, it.longitude)
+                }
+            }
+            is MessageWithAttachmentContent -> {
+                lifecycleScope.launch {
+                    val result = runCatching { session.fileService().downloadFile(messageContent = action.messageContent) }
+                    if (!isAdded) return@launch
+                    result.fold(
+                            { shareMedia(requireContext(), it, getMimeTypeFromUri(requireContext(), it.toUri())) },
+                            { showErrorInSnackbar(it) }
+                    )
+                }
             }
         }
     }
