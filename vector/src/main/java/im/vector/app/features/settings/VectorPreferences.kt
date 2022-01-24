@@ -1000,6 +1000,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     fun isLocationSharingEnabled(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_PREF_ENABLE_LOCATION_SHARING, false)
+        return defaultPrefs.getBoolean(SETTINGS_PREF_ENABLE_LOCATION_SHARING, false) && BuildConfig.enableLocationSharing
     }
 }
