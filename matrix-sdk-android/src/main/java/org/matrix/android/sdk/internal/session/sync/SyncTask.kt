@@ -121,8 +121,7 @@ internal class DefaultSyncTask @Inject constructor(
                 if (initSyncStrategy is InitialSyncStrategy.Optimized) {
                     roomSyncEphemeralTemporaryStore.reset()
                     workingDir.mkdirs()
-                    val file = downloadInitSyncResponse(requestParams)
-                    syncStatisticsData.intermediateTime = SystemClock.elapsedRealtime()
+                    val file = downloadInitSyncResponse(requestParams, syncStatisticsData)
                     syncResponseToReturn = reportSubtask(defaultSyncStatusService, InitSyncStep.ImportingAccount, 1, 0.7F) {
                         handleSyncFile(file, initSyncStrategy)
                     }
@@ -137,7 +136,9 @@ internal class DefaultSyncTask @Inject constructor(
                             )
                         }
                     }
-                    syncStatisticsData.intermediateTime = SystemClock.elapsedRealtime()
+                    // We cannot distinguish request and download in this case.
+                    syncStatisticsData.requestInitSyncTime = SystemClock.elapsedRealtime()
+                    syncStatisticsData.downloadInitSyncTime = syncStatisticsData.requestInitSyncTime
                     logDuration("INIT_SYNC Database insertion", loggerTag) {
                         syncResponseHandler.handleResponse(syncResponse, token, defaultSyncStatusService)
                     }
@@ -172,6 +173,7 @@ internal class DefaultSyncTask @Inject constructor(
             Timber.tag(loggerTag.value).d("Incremental sync done")
             defaultSyncStatusService.setStatus(SyncStatusService.Status.IncrementalSyncDone)
         }
+        syncStatisticsData.treatmentSyncTime = SystemClock.elapsedRealtime()
         syncStatisticsData.nbOfRooms = syncResponseToReturn?.rooms?.join?.size ?: 0
         sendStatistics(syncStatisticsData)
         Timber.tag(loggerTag.value).d("Sync task finished on Thread: ${Thread.currentThread().name}")
@@ -179,7 +181,7 @@ internal class DefaultSyncTask @Inject constructor(
         return syncResponseToReturn!!
     }
 
-    private suspend fun downloadInitSyncResponse(requestParams: Map<String, String>): File {
+    private suspend fun downloadInitSyncResponse(requestParams: Map<String, String>, syncStatisticsData: SyncStatisticsData): File {
         val workingFile = File(workingDir, "initSync.json")
         val status = initialSyncStatusRepository.getStep()
         if (workingFile.exists() && status >= InitialSyncStatus.STEP_DOWNLOADED) {
@@ -194,7 +196,7 @@ internal class DefaultSyncTask @Inject constructor(
                     getSyncResponse(requestParams, MAX_NUMBER_OF_RETRY_AFTER_TIMEOUT)
                 }
             }
-
+            syncStatisticsData.requestInitSyncTime = SystemClock.elapsedRealtime()
             if (syncResponse.isSuccessful) {
                 logDuration("INIT_SYNC Download and save to file", loggerTag) {
                     reportSubtask(defaultSyncStatusService, InitSyncStep.Downloading, 1, 0.1f) {
@@ -205,6 +207,7 @@ internal class DefaultSyncTask @Inject constructor(
                         }
                     }
                 }
+                syncStatisticsData.downloadInitSyncTime = SystemClock.elapsedRealtime()
             } else {
                 throw syncResponse.toFailure(globalErrorReceiver)
                         .also { Timber.tag(loggerTag.value).w("INIT_SYNC request failure: $this") }
@@ -260,27 +263,29 @@ internal class DefaultSyncTask @Inject constructor(
             val isAfterPause: Boolean
     ) {
         val startTime = SystemClock.elapsedRealtime()
-        var intermediateTime: Long = 0
+        var requestInitSyncTime = startTime
+        var downloadInitSyncTime = startTime
+        var treatmentSyncTime = startTime
         var nbOfRooms: Int = 0
     }
 
     private fun sendStatistics(data: SyncStatisticsData) {
-        if (data.isInitSync) {
-            sendStatisticEvent(StatisticEvent.InitialSyncRequest(
-                    durationMs = (data.intermediateTime - data.startTime).toInt(),
-                    nbOfRooms = data.nbOfRooms
-            ))
-            sendStatisticEvent(StatisticEvent.InitialSyncTreatment(
-                    durationMs = (SystemClock.elapsedRealtime() - data.intermediateTime).toInt(),
-                    nbOfRooms = data.nbOfRooms
-            ))
-        } else {
-            sendStatisticEvent(StatisticEvent.SyncTreatment(
-                    durationMs = (SystemClock.elapsedRealtime() - data.startTime).toInt(),
-                    afterPause = data.isAfterPause,
-                    nbOfRooms = data.nbOfRooms
-            ))
-        }
+        sendStatisticEvent(
+                if (data.isInitSync) {
+                    (StatisticEvent.InitialSyncRequest(
+                            requestDurationMs = (data.requestInitSyncTime - data.startTime).toInt(),
+                            downloadDurationMs = (data.downloadInitSyncTime - data.requestInitSyncTime).toInt(),
+                            treatmentDurationMs = (data.treatmentSyncTime - data.downloadInitSyncTime).toInt(),
+                            nbOfJoinedRooms = data.nbOfRooms,
+                    ))
+                } else {
+                    StatisticEvent.SyncTreatment(
+                            durationMs = (data.treatmentSyncTime - data.startTime).toInt(),
+                            afterPause = data.isAfterPause,
+                            nbOfJoinedRooms = data.nbOfRooms
+                    )
+                }
+        )
     }
 
     private fun sendStatisticEvent(statisticEvent: StatisticEvent) {

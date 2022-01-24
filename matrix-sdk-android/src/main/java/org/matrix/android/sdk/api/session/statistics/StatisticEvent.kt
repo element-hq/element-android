@@ -21,17 +21,17 @@ package org.matrix.android.sdk.api.session.statistics
  */
 sealed interface StatisticEvent {
     /**
-     * Initial sync request and response downloading, not including parsing and storage of response
+     * Initial sync request, response downloading, and treatment (parsing and storage) of response
      */
-    data class InitialSyncRequest(val durationMs: Int, val nbOfRooms: Int) : StatisticEvent
-
-    /**
-     * Initial sync treatment: parsing and storage of response
-     */
-    data class InitialSyncTreatment(val durationMs: Int, val nbOfRooms: Int) : StatisticEvent
+    data class InitialSyncRequest(val requestDurationMs: Int,
+                                  val downloadDurationMs: Int,
+                                  val treatmentDurationMs: Int,
+                                  val nbOfJoinedRooms: Int) : StatisticEvent
 
     /**
      * Incremental sync event
      */
-    data class SyncTreatment(val durationMs: Int, val afterPause: Boolean, val nbOfRooms: Int) : StatisticEvent
+    data class SyncTreatment(val durationMs: Int,
+                             val afterPause: Boolean,
+                             val nbOfJoinedRooms: Int) : StatisticEvent
 }

@@ -21,7 +21,7 @@ import androidx.lifecycle.MutableLiveData
 import im.vector.app.core.extensions.postLiveEvent
 import im.vector.app.core.utils.LiveEvent
 import im.vector.app.features.analytics.AnalyticsTracker
-import im.vector.app.features.analytics.extensions.toPerformanceTimer
+import im.vector.app.features.analytics.extensions.toListOfPerformanceTimer
 import im.vector.app.features.call.vectorCallService
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
@@ -51,7 +51,9 @@ class SessionListener @Inject constructor(
     }
 
     override fun onStatisticsEvent(session: Session, statisticEvent: StatisticEvent) {
-        statisticEvent.toPerformanceTimer()?.let { analyticsTracker.capture(it) }
+        statisticEvent.toListOfPerformanceTimer().forEach {
+            analyticsTracker.capture(it)
+        }
     }
 
     override fun onSessionStopped(session: Session) {
