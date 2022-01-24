@@ -219,7 +219,6 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
             if (checkRoomId(widgetPostAPIMediator, eventData)) {
                 return
             }
-            Timber.d("Received request to get widget in room $roomId")
             session.widgetService().getRoomWidgets(roomId) + session.widgetService().getUserWidgets()
         }
         Timber.d("Received request to get widget in room $roomId")
