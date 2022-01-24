@@ -116,6 +116,8 @@ import im.vector.app.core.utils.startInstallFromSourceIntent
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogReportContentBinding
 import im.vector.app.databinding.FragmentRoomDetailBinding
+import im.vector.app.features.analytics.plan.Click
+import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.attachments.AttachmentTypeSelectorView
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.ContactAttachment
@@ -237,7 +239,8 @@ data class RoomDetailArgs(
         val roomId: String,
         val eventId: String? = null,
         val sharedData: SharedData? = null,
-        val openShareSpaceForId: String? = null
+        val openShareSpaceForId: String? = null,
+        val switchToParentSpace: Boolean = false
 ) : Parcelable
 
 class RoomDetailFragment @Inject constructor(
@@ -335,6 +338,7 @@ class RoomDetailFragment @Inject constructor(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        analyticsScreenName = Screen.ScreenName.Room
         setFragmentResultListener(MigrateRoomBottomSheet.REQUEST_KEY) { _, bundle ->
             bundle.getString(MigrateRoomBottomSheet.BUNDLE_KEY_REPLACEMENT_ROOM)?.let { replacementRoomId ->
                 roomDetailViewModel.handle(RoomDetailAction.RoomUpgradeSuccess(replacementRoomId))
@@ -361,6 +365,7 @@ class RoomDetailFragment @Inject constructor(
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         lazyLoadedViews.bind(views)
         setupToolbar(views.roomToolbar)
+                .allowBack()
         setupRecyclerView()
         setupComposer()
         setupNotificationView()
@@ -675,7 +680,7 @@ class RoomDetailFragment @Inject constructor(
      */
     private fun EmojiPopup.Builder.setOnEmojiPopupDismissListenerLifecycleAware(action: () -> Unit): EmojiPopup.Builder {
         return setOnEmojiPopupDismissListener {
-            if (lifecycle.currentState == Lifecycle.State.STARTED) {
+            if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                 action()
             }
         }
@@ -1395,6 +1400,7 @@ class RoomDetailFragment @Inject constructor(
             return
         }
         if (text.isNotBlank()) {
+            analyticsTracker.capture(Click(name = Click.Name.SendMessageButton))
             // We collapse ASAP, if not there will be a slight annoying delay
             views.composerLayout.collapse(true)
             lockSendButton = true
@@ -1509,7 +1515,7 @@ class RoomDetailFragment @Inject constructor(
         views.roomToolbarSubtitleView.apply {
             setTextOrHide(subtitle)
             if (typingMessage.isNullOrBlank()) {
-                setTextColor(colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                setTextColor(colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary))
                 setTypeface(null, Typeface.NORMAL)
             } else {
                 setTextColor(colorProvider.getColorFromAttribute(R.attr.colorPrimary))

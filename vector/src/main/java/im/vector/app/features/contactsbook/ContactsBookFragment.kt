@@ -67,7 +67,8 @@ class ContactsBookFragment @Inject constructor(
         setupFilterView()
         setupConsentView()
         setupOnlyBoundContactsView()
-        setupCloseView()
+        setupToolbar(views.phoneBookToolbar)
+                .allowBack(useCross = true)
         contactsBookViewModel.observeViewEvents {
             when (it) {
                 is ContactsBookViewEvents.Failure             -> showFailure(it.throwable)
@@ -117,12 +118,6 @@ class ContactsBookFragment @Inject constructor(
     private fun setupRecyclerView() {
         contactsBookController.callback = this
         views.phoneBookRecyclerView.configureWith(contactsBookController)
-    }
-
-    private fun setupCloseView() {
-        views.phoneBookClose.debouncedClicks {
-            sharedActionViewModel.post(UserListSharedAction.GoBack)
-        }
     }
 
     override fun invalidate() = withState(contactsBookViewModel) { state ->

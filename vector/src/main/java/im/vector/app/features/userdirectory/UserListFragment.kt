@@ -72,9 +72,9 @@ class UserListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         sharedActionViewModel = activityViewModelProvider.get(UserListSharedActionViewModel::class.java)
         if (args.showToolbar) {
-            views.userListTitle.text = args.title
-            vectorBaseActivity.setSupportActionBar(views.userListToolbar)
-            setupCloseView()
+            setupToolbar(views.userListToolbar)
+                    .setTitle(args.title)
+                    .allowBack(useCross = true)
             views.userListToolbar.isVisible = true
         } else {
             views.userListToolbar.isVisible = false
@@ -151,12 +151,6 @@ class UserListFragment @Inject constructor(
 
         views.userListSearch.setupAsSearch()
         views.userListSearch.requestFocus()
-    }
-
-    private fun setupCloseView() {
-        views.userListClose.debouncedClicks {
-            requireActivity().finish()
-        }
     }
 
     override fun invalidate() = withState(viewModel) {

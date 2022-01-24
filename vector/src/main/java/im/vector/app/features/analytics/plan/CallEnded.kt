@@ -25,22 +25,22 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
  * Triggered when a call has ended.
  */
 data class CallEnded(
-    /**
-     * The duration of the call in milliseconds.
-     */
-    val durationMs: Int,
-    /**
-     * Whether its a video call or not.
-     */
-    val isVideo: Boolean,
-    /**
-     * Number of participants in the call.
-     */
-    val numParticipants: Int,
-    /**
-     * Whether this user placed it.
-     */
-    val placed: Boolean,
+        /**
+         * The duration of the call in milliseconds.
+         */
+        val durationMs: Int,
+        /**
+         * Whether its a video call or not.
+         */
+        val isVideo: Boolean,
+        /**
+         * Number of participants in the call.
+         */
+        val numParticipants: Int,
+        /**
+         * Whether this user placed it.
+         */
+        val placed: Boolean,
 ) : VectorAnalyticsEvent {
 
     override fun getName() = "CallEnded"

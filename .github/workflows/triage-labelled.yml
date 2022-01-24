@@ -100,32 +100,33 @@ jobs:
           PROJECT_ID: "PN_kwDOAM0swc4AAg6N"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
-#  delight_issues_to_board:
-#    name: Spaces issues to new Delight project board
-#    runs-on: ubuntu-latest
-#    # Skip in forks
-#    if: >
-#      github.repository == 'vector-im/element-android' &&
-#      contains(github.event.issue.labels.*.name, 'A-Spaces') ||
-#      contains(github.event.issue.labels.*.name, 'A-Space-Settings') ||
-#      contains(github.event.issue.labels.*.name, 'A-Subspaces')
-#    steps:
-#      - uses: octokit/graphql-action@v2.x
-#        with:
-#          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-#          query: |
-#            mutation add_to_project($projectid:ID!,$contentid:ID!) {
-#              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
-#                projectNextItem {
-#                  id
-#                }
-#              }
-#            }
-#          projectid: ${{ env.PROJECT_ID }}
-#          contentid: ${{ github.event.issue.node_id }}
-#        env:
-#          PROJECT_ID: "PN_kwDOAM0swc1HvQ"
-#          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+  delight_issues_to_board:
+    name: Spaces issues to Delight project board
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: >
+      github.repository == 'vector-im/element-android' &&
+      (contains(github.event.issue.labels.*.name, 'A-Spaces') ||
+        contains(github.event.issue.labels.*.name, 'A-Space-Settings') ||
+        contains(github.event.issue.labels.*.name, 'A-Subspaces') ||
+        contains(github.event.issue.labels.*.name, 'Z-IA'))
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc1HvQ"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
 
   move_voice-message_issues:
     name: A-Voice Messages to voice message board
