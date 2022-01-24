@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.relation
 
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
+import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
@@ -59,17 +60,18 @@ internal class EventEditor @Inject constructor(private val eventSenderProcessor:
     }
 
     fun editPoll(targetEvent: TimelineEvent,
+                 pollType: PollType,
                  question: String,
                  options: List<String>): Cancelable {
         val roomId = targetEvent.roomId
         if (targetEvent.root.sendState.hasFailed()) {
-            val editedEvent = eventFactory.createPollEvent(roomId, question, options).copy(
+            val editedEvent = eventFactory.createPollEvent(roomId, pollType, question, options).copy(
                     eventId = targetEvent.eventId
             )
             return sendFailedEvent(targetEvent, editedEvent)
         } else if (targetEvent.root.sendState.isSent()) {
             val event = eventFactory
-                    .createPollReplaceEvent(roomId, targetEvent.eventId, question, options)
+                    .createPollReplaceEvent(roomId, pollType, targetEvent.eventId, question, options)
             return sendReplaceEvent(roomId, event)
         } else {
             Timber.w("Can't edit a sending event")

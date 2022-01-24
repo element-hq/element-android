@@ -32,6 +32,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentCreatePollBinding
 import im.vector.app.features.poll.create.CreatePollViewModel.Companion.MAX_OPTIONS_COUNT
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.session.room.model.message.PollType
 import javax.inject.Inject
 
 @Parcelize
@@ -60,18 +61,18 @@ class CreatePollFragment @Inject constructor(
 
         when (args.mode) {
             PollMode.CREATE -> {
-                views.createPollTitle.text = getString(R.string.create_poll_title)
+                views.createPollToolbar.title = getString(R.string.create_poll_title)
                 views.createPollButton.text = getString(R.string.create_poll_title)
             }
             PollMode.EDIT   -> {
-                views.createPollTitle.text = getString(R.string.edit_poll_title)
+                views.createPollToolbar.title = getString(R.string.edit_poll_title)
                 views.createPollButton.text = getString(R.string.edit_poll_title)
             }
         }.exhaustive
 
         views.createPollRecyclerView.configureWith(controller, disableItemAnimation = true)
         // workaround for https://github.com/vector-im/element-android/issues/4735
-        views.createPollRecyclerView.setItemViewCacheSize(MAX_OPTIONS_COUNT + 4)
+        views.createPollRecyclerView.setItemViewCacheSize(MAX_OPTIONS_COUNT + 6)
         controller.callback = this
 
         views.createPollButton.debouncedClicks {
@@ -115,6 +116,10 @@ class CreatePollFragment @Inject constructor(
                 smoothScrollToPosition(adapter?.itemCount?.minus(1) ?: 0)
             }, 100)
         }
+    }
+
+    override fun onPollTypeChanged(type: PollType) {
+        viewModel.handle(CreatePollAction.OnPollTypeChanged(type))
     }
 
     private fun handleSuccess() {

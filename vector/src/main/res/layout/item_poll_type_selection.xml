@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pollTypeRadioGroup"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/layout_horizontal_margin"
+    android:layout_marginEnd="@dimen/layout_horizontal_margin"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/layout_vertical_margin">
+
+    <RadioButton
+        android:id="@+id/openPollTypeRadioButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="0dp"
+        android:text="@string/open_poll_option_title" />
+
+    <TextView
+        style="@style/TextAppearance.Vector.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="@string/open_poll_option_description" />
+
+    <RadioButton
+        android:id="@+id/closedPollTypeRadioButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:minHeight="0dp"
+        android:text="@string/closed_poll_option_title" />
+
+    <TextView
+        style="@style/TextAppearance.Vector.Caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:text="@string/closed_poll_option_description" />
+
+</RadioGroup>

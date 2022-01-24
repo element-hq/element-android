@@ -48,6 +48,7 @@ import org.matrix.android.sdk.api.session.room.model.message.PollAnswer
 import org.matrix.android.sdk.api.session.room.model.message.PollCreationInfo
 import org.matrix.android.sdk.api.session.room.model.message.PollQuestion
 import org.matrix.android.sdk.api.session.room.model.message.PollResponse
+import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.model.message.ThumbnailInfo
 import org.matrix.android.sdk.api.session.room.model.message.VideoInfo
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
@@ -126,12 +127,14 @@ internal class LocalEchoEventFactory @Inject constructor(
     }
 
     private fun createPollContent(question: String,
-                                  options: List<String>): MessagePollContent {
+                                  options: List<String>,
+                                  pollType: PollType): MessagePollContent {
         return MessagePollContent(
                 pollCreationInfo = PollCreationInfo(
                         question = PollQuestion(
                                 question = question
                         ),
+                        kind = pollType,
                         answers = options.map { option ->
                             PollAnswer(
                                     id = UUID.randomUUID().toString(),
@@ -143,12 +146,13 @@ internal class LocalEchoEventFactory @Inject constructor(
     }
 
     fun createPollReplaceEvent(roomId: String,
+                               pollType: PollType,
                                targetEventId: String,
                                question: String,
                                options: List<String>): Event {
         val newContent = MessagePollContent(
                 relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
-                newContent = createPollContent(question, options).toContent()
+                newContent = createPollContent(question, options, pollType).toContent()
         )
         val localId = LocalEcho.createLocalEchoId()
         return Event(
@@ -186,9 +190,10 @@ internal class LocalEchoEventFactory @Inject constructor(
     }
 
     fun createPollEvent(roomId: String,
+                        pollType: PollType,
                         question: String,
                         options: List<String>): Event {
-        val content = createPollContent(question, options)
+        val content = createPollContent(question, options, pollType)
         val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,

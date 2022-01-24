@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session.room.model.relation
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
+import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.Optional
@@ -66,11 +67,13 @@ interface RelationService {
 
     /**
      * Edit a poll.
+     * @param pollType indicates open or closed polls
      * @param targetEvent The poll event to edit
      * @param question The edited question
      * @param options The edited options
      */
     fun editPoll(targetEvent: TimelineEvent,
+                 pollType: PollType,
                  question: String,
                  options: List<String>): Cancelable
 
