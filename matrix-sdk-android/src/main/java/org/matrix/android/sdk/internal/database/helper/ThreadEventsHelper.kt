@@ -20,7 +20,6 @@ import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.RealmResults
 import io.realm.Sort
-import org.matrix.android.sdk.BuildConfig
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
@@ -40,7 +39,6 @@ internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded(
         roomId: String,
         realm: Realm, currentUserId: String,
         shouldUpdateNotifications: Boolean = true) {
-
     for ((rootThreadEventId, eventEntity) in this) {
         eventEntity.findAllThreadsForRootEventId(eventEntity.realm, rootThreadEventId).let {
             if (it.isNullOrEmpty()) return@let
@@ -57,7 +55,7 @@ internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded(
         }
     }
 
-    if(shouldUpdateNotifications) {
+    if (shouldUpdateNotifications) {
         updateNotificationsNew(roomId, realm, currentUserId)
     }
 }

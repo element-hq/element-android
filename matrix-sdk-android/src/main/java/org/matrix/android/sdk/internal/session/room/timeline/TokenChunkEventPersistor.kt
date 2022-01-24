@@ -184,7 +184,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
                 }
                 liveEventManager.get().dispatchPaginatedEventReceived(event, roomId)
                 currentChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberContentsByUser)
-                if(lightweightSettingsStorage.areThreadMessagesEnabled()) {
+                if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
                     eventEntity.rootThreadEventId?.let {
                         // This is a thread event
                         optimizedThreadSummaryMap[it] = eventEntity
@@ -199,7 +199,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
             RoomEntity.where(realm, roomId).findFirst()?.addIfNecessary(currentChunk)
         }
 
-        if(lightweightSettingsStorage.areThreadMessagesEnabled()) {
+        if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
             optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(roomId = roomId, realm = realm, currentUserId = userId)
         }
     }

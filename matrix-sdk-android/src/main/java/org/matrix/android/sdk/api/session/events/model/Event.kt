@@ -201,18 +201,19 @@ data class Event(
     fun getDecryptedTextSummary(): String? {
         val text = getDecryptedValue() ?: return null
         return when {
-            isReply() || isQuote() -> ContentUtils.extractUsefulTextFromReply(text)
+            isReplyRenderedInThread() || isQuote() -> ContentUtils.extractUsefulTextFromReply(text)
             isFileMessage()        -> "sent a file."
             isAudioMessage()       -> "sent an audio file."
             isImageMessage()       -> "sent an image."
             isVideoMessage()       -> "sent a video."
+            isSticker()            -> "sent a sticker"
             isPoll()               -> getPollQuestion() ?: "created a poll."
             else                   -> text
         }
     }
 
     private fun Event.isQuote(): Boolean {
-        if (isReply()) return false
+        if (isReplyRenderedInThread()) return false
         return getDecryptedValue("formatted_body")?.contains("<blockquote>") ?: false
     }
 
@@ -372,6 +373,10 @@ fun Event.getRelationContentForType(type: String): RelationDefaultContent? =
 
 fun Event.isReply(): Boolean {
     return getRelationContent()?.inReplyTo?.eventId != null
+}
+
+fun Event.isReplyRenderedInThread(): Boolean {
+    return isReply() && getRelationContent()?.inReplyTo?.renderIn?.contains("m.thread") == true
 }
 
 fun Event.isThread(): Boolean = getRelationContentForType(RelationType.IO_THREAD)?.eventId != null

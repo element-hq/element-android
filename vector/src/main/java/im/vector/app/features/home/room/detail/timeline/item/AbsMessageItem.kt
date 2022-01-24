@@ -29,7 +29,6 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
-import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick

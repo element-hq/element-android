@@ -381,16 +381,13 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             if (event.isEncrypted() && !isInitialSync) {
                 decryptIfNeeded(event, roomId)
             }
-// Disabled due to the new fallback
-            if (!lightweightSettingsStorage.areThreadMessagesEnabled()) {
-                threadsAwarenessHandler.handleIfNeeded(
-                        realm = realm,
-                        roomId = roomId,
-                        event = event)
+            var contentToInject: String? = null
+            if (!isInitialSync) {
+                contentToInject = threadsAwarenessHandler.makeEventThreadAware(realm, roomId, event)
             }
 
             val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
-            val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)
+            val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs, contentToInject).copyToRealmOrIgnore(realm, insertType)
             if (event.stateKey != null) {
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
                     eventId = event.eventId
@@ -410,7 +407,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             }
 
             chunkEntity.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberContentsByUser)
-            if(lightweightSettingsStorage.areThreadMessagesEnabled()) {
+            if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
                 eventEntity.rootThreadEventId?.let {
                     // This is a thread event
                     optimizedThreadSummaryMap[it] = eventEntity
@@ -447,7 +444,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         // Handle deletion of [stuck] local echos if needed
         deleteLocalEchosIfNeeded(insertType, roomEntity, eventList)
 
-        if(lightweightSettingsStorage.areThreadMessagesEnabled()) {
+        if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
             optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(
                     roomId = roomId,
                     realm = realm,

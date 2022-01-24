@@ -28,6 +28,7 @@ import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.AudioInfo
 import org.matrix.android.sdk.api.session.room.model.message.AudioWaveformInfo
 import org.matrix.android.sdk.api.session.room.model.message.FileInfo
@@ -41,6 +42,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
@@ -293,7 +295,13 @@ internal class LocalEchoEventFactory @Inject constructor(
                         size = attachment.size
                 ),
                 url = attachment.queryUri.toString(),
-                relatesTo = rootThreadEventId?.let { RelationDefaultContent(RelationType.IO_THREAD, it) }
+                relatesTo = rootThreadEventId?.let {
+                    RelationDefaultContent(
+                            type = RelationType.IO_THREAD,
+                            eventId = it,
+                            inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
+                    )
+                }
         )
         return createMessageEvent(roomId, content)
     }
@@ -330,7 +338,13 @@ internal class LocalEchoEventFactory @Inject constructor(
                         thumbnailInfo = thumbnailInfo
                 ),
                 url = attachment.queryUri.toString(),
-                relatesTo = rootThreadEventId?.let { RelationDefaultContent(RelationType.IO_THREAD, it) }
+                relatesTo = rootThreadEventId?.let {
+                    RelationDefaultContent(
+                            type = RelationType.IO_THREAD,
+                            eventId = it,
+                            inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
+                    )
+                }
         )
         return createMessageEvent(roomId, content)
     }
@@ -354,7 +368,13 @@ internal class LocalEchoEventFactory @Inject constructor(
                         waveform = waveformSanitizer.sanitize(attachment.waveform)
                 ),
                 voiceMessageIndicator = if (!isVoiceMessage) null else emptyMap(),
-                relatesTo = rootThreadEventId?.let { RelationDefaultContent(RelationType.IO_THREAD, it) }
+                relatesTo = rootThreadEventId?.let {
+                    RelationDefaultContent(
+                            type = RelationType.IO_THREAD,
+                            eventId = it,
+                            inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
+                    )
+                }
         )
         return createMessageEvent(roomId, content)
     }
@@ -368,7 +388,13 @@ internal class LocalEchoEventFactory @Inject constructor(
                         size = attachment.size
                 ),
                 url = attachment.queryUri.toString(),
-                relatesTo = rootThreadEventId?.let { RelationDefaultContent(RelationType.IO_THREAD, it) }
+                relatesTo = rootThreadEventId?.let {
+                    RelationDefaultContent(
+                            type = RelationType.IO_THREAD,
+                            eventId = it,
+                            inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
+                    )
+                }
         )
         return createMessageEvent(roomId, content)
     }
@@ -378,6 +404,7 @@ internal class LocalEchoEventFactory @Inject constructor(
     }
 
     fun createEvent(roomId: String, type: String, content: Content?): Event {
+        val newContent = enhanceStickerIfNeeded(type, content) ?: content
         val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
@@ -385,9 +412,29 @@ internal class LocalEchoEventFactory @Inject constructor(
                 senderId = userId,
                 eventId = localId,
                 type = type,
-                content = content,
+                content = newContent,
                 unsignedData = UnsignedData(age = null, transactionId = localId)
         )
+    }
+
+    /**
+     * Enhance sticker to support threads fallback if needed
+     */
+    private fun enhanceStickerIfNeeded(type: String, content: Content?): Content? {
+        var newContent: Content? = null
+        if (type == EventType.STICKER) {
+            val isThread = (content.toModel<MessageStickerContent>())?.relatesTo?.type == RelationType.IO_THREAD
+            val rootThreadEventId = (content.toModel<MessageStickerContent>())?.relatesTo?.eventId
+            if (isThread && rootThreadEventId != null) {
+                val newRelationalDefaultContent = (content.toModel<MessageStickerContent>())?.relatesTo?.copy(
+                        inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(rootThreadEventId))
+                )
+                newContent = (content.toModel<MessageStickerContent>())?.copy(
+                        relatesTo = newRelationalDefaultContent
+                ).toContent()
+            }
+        }
+        return newContent
     }
 
     /**
@@ -404,7 +451,10 @@ internal class LocalEchoEventFactory @Inject constructor(
         return createEvent(
                 roomId,
                 EventType.MESSAGE,
-                content.toThreadTextContent(rootThreadEventId, msgType)
+                content.toThreadTextContent(
+                        rootThreadEventId = rootThreadEventId,
+                        latestThreadEventId = localEchoRepository.getLatestThreadEvent(rootThreadEventId),
+                        msgType = msgType)
                         .toContent())
     }
 
@@ -471,8 +521,8 @@ internal class LocalEchoEventFactory @Inject constructor(
                 RelationDefaultContent(
                         type = RelationType.IO_THREAD,
                         eventId = it,
-                        inReplyTo = ReplyToContent(eventId = eventId))
-            } ?: RelationDefaultContent(null, null, ReplyToContent( eventId = eventId))
+                        inReplyTo = ReplyToContent(eventId = eventId, renderIn = arrayListOf("m.thread")))
+            } ?: RelationDefaultContent(null, null, ReplyToContent(eventId = eventId))
 
     private fun buildFormattedReply(permalink: String, userLink: String, userId: String, bodyFormatted: String, newBodyFormatted: String): String {
         return REPLY_PATTERN.format(
@@ -584,7 +634,10 @@ internal class LocalEchoEventFactory @Inject constructor(
                     roomId,
                     markdownParser
                             .parse(quoteText, force = true, advanced = autoMarkdown)
-                            .toThreadTextContent(rootThreadEventId, MessageType.MSGTYPE_TEXT)
+                            .toThreadTextContent(
+                                    rootThreadEventId = rootThreadEventId,
+                                    latestThreadEventId = localEchoRepository.getLatestThreadEvent(rootThreadEventId),
+                                    msgType = MessageType.MSGTYPE_TEXT)
             )
         } else {
             createFormattedTextEvent(
@@ -625,6 +678,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         // </mx-reply>
         // No whitespace because currently breaks temporary formatted text to Span
         const val REPLY_PATTERN = """<mx-reply><blockquote><a href="%s">In reply to</a> <a href="%s">%s</a><br />%s</blockquote></mx-reply>%s"""
+        const val QUOTE_PATTERN = """<blockquote><p>%s</p></blockquote><p>%s</p>"""
 
         // This is used to replace inner mx-reply tags
         val MX_REPLY_REGEX = "<mx-reply>.*</mx-reply>".toRegex()

@@ -48,6 +48,5 @@ class VectorSettingsLabsFragment @Inject constructor(
                 false
             }
         }
-
     }
 }

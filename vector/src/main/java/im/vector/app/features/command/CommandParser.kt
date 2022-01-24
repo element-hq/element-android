@@ -16,7 +16,6 @@
 
 package im.vector.app.features.command
 
-import im.vector.app.BuildConfig
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.isMsisdn
 import im.vector.app.features.home.room.detail.ChatEffect

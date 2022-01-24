@@ -104,9 +104,9 @@ internal class SyncResponseHandler @Inject constructor(
 
         // Prerequisite for thread events handling in RoomSyncHandler
 // Disabled due to the new fallback
-        if (!lightweightSettingsStorage.areThreadMessagesEnabled()) {
-            threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
-        }
+//        if (!lightweightSettingsStorage.areThreadMessagesEnabled()) {
+//            threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
+//        }
 
         // Start one big transaction
         monarchy.awaitTransaction { realm ->

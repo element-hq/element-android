@@ -83,10 +83,8 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
 
         val threadList = response.chunks + listOfNotNull(response.originalEvent)
 
-
         return storeNewEventsIfNeeded(threadList, params.roomId)
     }
-
 
     /**
      * Store new events if they are not already received, and returns weather or not,
@@ -105,7 +103,6 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                     val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
 
                     for (event in threadList.reversed()) {
-
                         if (event.eventId == null || event.senderId == null || event.type == null) {
                             eventsSkipped++
                             continue
@@ -180,7 +177,6 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
     private fun handleReaction(realm: Realm,
                                event: Event,
                                roomId: String) {
-
         val unsignedData = event.unsignedData ?: return
         val relatedEventId = event.eventId ?: return
 
@@ -206,7 +202,6 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
                     sum.count += 1
                 }
             }
-
         }
     }
 }

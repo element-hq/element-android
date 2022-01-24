@@ -44,12 +44,25 @@ fun TextContent.toMessageTextContent(msgType: String = MessageType.MSGTYPE_TEXT)
     )
 }
 
-fun TextContent.toThreadTextContent(rootThreadEventId: String, msgType: String = MessageType.MSGTYPE_TEXT): MessageTextContent {
+/**
+ * Transform a TextContent to a thread message content. It will also add the inReplyTo
+ * latestThreadEventId in order for the clients without threads enabled to render it appropriately
+ * If latest event not found, we pass rootThreadEventId
+ */
+fun TextContent.toThreadTextContent(
+        rootThreadEventId: String,
+        latestThreadEventId: String,
+        msgType: String = MessageType.MSGTYPE_TEXT): MessageTextContent {
     return MessageTextContent(
             msgType = msgType,
             format = MessageFormat.FORMAT_MATRIX_HTML.takeIf { formattedText != null },
             body = text,
-            relatesTo = RelationDefaultContent(type = RelationType.IO_THREAD, eventId = rootThreadEventId, inReplyTo = ReplyToContent(eventId = "CYIpEhDXkImqKD2TF9NSocxt4vU6hh98yXi5Ncusdaw")),
+            relatesTo = RelationDefaultContent(
+                    type = RelationType.IO_THREAD,
+                    eventId = rootThreadEventId,
+                    inReplyTo = ReplyToContent(
+                            eventId = latestThreadEventId
+                    )),
             formattedBody = formattedText
     )
 }

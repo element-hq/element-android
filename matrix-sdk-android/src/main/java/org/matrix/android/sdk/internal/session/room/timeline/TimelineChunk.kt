@@ -36,6 +36,7 @@ import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
+import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import timber.log.Timber
 import java.util.Collections
@@ -297,9 +298,9 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
 
         if (timelineEvents.isEmpty()) return LoadedFromStorage()
 // Disabled due to the new fallback
-        if(!lightweightSettingsStorage.areThreadMessagesEnabled()) {
-            fetchRootThreadEventsIfNeeded(timelineEvents)
-        }
+//        if(!lightweightSettingsStorage.areThreadMessagesEnabled()) {
+//            fetchRootThreadEventsIfNeeded(timelineEvents)
+//        }
         if (direction == Timeline.Direction.FORWARDS) {
             builtEventsIndexes.entries.forEach { it.setValue(it.value + timelineEvents.size) }
         }
@@ -351,6 +352,10 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         uiEchoManager?.onSyncedEvent(transactionId)
         if (timelineEvent.isEncrypted() &&
                 timelineEvent.root.mxDecryptionResult == null) {
+            timelineEvent.root.eventId?.also { eventDecryptor.requestDecryption(TimelineEventDecryptor.DecryptionRequest(timelineEvent.root, timelineId)) }
+        }
+        if (!timelineEvent.isEncrypted() && !lightweightSettingsStorage.areThreadMessagesEnabled()) {
+            // Thread aware for not encrypted events
             timelineEvent.root.eventId?.also { eventDecryptor.requestDecryption(TimelineEventDecryptor.DecryptionRequest(timelineEvent.root, timelineId)) }
         }
         return timelineEvent

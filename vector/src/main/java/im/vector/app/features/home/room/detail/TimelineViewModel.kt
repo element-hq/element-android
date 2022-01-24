@@ -282,6 +282,7 @@ class TimelineViewModel @AssistedInject constructor(
                     copy(myRoomMember = it)
                 }
     }
+
     private fun setupPreviewUrlObservers() {
         if (!vectorPreferences.showUrlPreviews()) {
             return
@@ -488,6 +489,7 @@ class TimelineViewModel @AssistedInject constructor(
         val content = initialState.rootThreadEventId?.let {
             action.stickerContent.copy(relatesTo = RelationDefaultContent(RelationType.IO_THREAD, it))
         } ?: action.stickerContent
+
         room.sendEvent(EventType.STICKER, content.toContent())
     }
 
