@@ -139,16 +139,16 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
         val shapeAppearanceModelBuilder = ShapeAppearanceModel().toBuilder()
         val backgroundColor: Int
         if (isIncoming) {
-            backgroundColor = ThemeUtils.getColor(context, R.attr.vctr_system)
+            backgroundColor = ThemeUtils.getColor(context, R.attr.vctr_message_bubble_inbound)
             shapeAppearanceModelBuilder
                     .setTopRightCorner(CornerFamily.ROUNDED, cornerRadius)
                     .setBottomRightCorner(CornerFamily.ROUNDED, cornerRadius)
                     .setTopLeftCorner(topCornerFamily, topRadius)
                     .setBottomLeftCorner(bottomCornerFamily, bottomRadius)
         } else {
-            val resolvedColor = ContextCompat.getColor(context, R.color.palette_element_green)
-            val alpha = if (ThemeUtils.isLightTheme(context)) 0x0E else 0x26
-            backgroundColor = ColorUtils.setAlphaComponent(resolvedColor, alpha)
+            backgroundColor = ThemeUtils.getColor(context, R.attr.vctr_message_bubble_outbound)
+            //val alpha = if (ThemeUtils.isLightTheme(context)) 0x0E else 0x26
+            //backgroundColor = ColorUtils.setAlphaComponent(resolvedColor, alpha)
             shapeAppearanceModelBuilder
                     .setTopLeftCorner(CornerFamily.ROUNDED, cornerRadius)
                     .setBottomLeftCorner(CornerFamily.ROUNDED, cornerRadius)
