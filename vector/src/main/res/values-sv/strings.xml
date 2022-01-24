@@ -3055,4 +3055,24 @@
         <item quantity="one">%1$d röst avgiven. Rösta för att se resultatet</item>
         <item quantity="other">%1$d röster avgivna. Rösta för att se resultatet</item>
     </plurals>
+    <string name="tooltip_attachment_poll">Skapa omröstning</string>
+    <string name="tooltip_attachment_contact">Öppna kontakter</string>
+    <string name="tooltip_attachment_sticker">Skicka dekal</string>
+    <string name="tooltip_attachment_file">Ladda upp fil</string>
+    <string name="tooltip_attachment_gallery">Skicka bilder och video</string>
+    <string name="tooltip_attachment_photo">Öppna kameran</string>
+    <string name="restart_the_application_to_apply_changes">Starta om appen för att ändringen ska börja gälla.</string>
+    <string name="labs_enable_latex_maths">Aktivera LaTeX-matte</string>
+    <string name="labs_auto_report_uisi_desc">Ditt system kommer automatiskt att skicka loggar när det misslyckas att avkryptera</string>
+    <string name="labs_auto_report_uisi">Rapportera avkrypteringsfel automatiskt.</string>
+    <string name="room_member_override_nick_color">Åsidosätt visningsnamnsfärg</string>
+    <string name="login_splash_already_have_account">Jag har redan ett konto</string>
+    <string name="ftue_auth_carousel_4_body">Lika universell som e-post, Element är ett helt nytt sorts samarbete.</string>
+    <string name="ftue_auth_carousel_3_body">Element funkar med alla Matrix-baserade appar och kan till och med brygga till proprietära meddelandetjänster.</string>
+    <string name="ftue_auth_carousel_3_title">Kontakta vem som helst.</string>
+    <string name="ftue_auth_carousel_2_body">Element låter dig välja var dina meddelanden lagras, vilket håller dig i kontroll över din data.</string>
+    <string name="ftue_auth_carousel_2_title">Du har kontroll.</string>
+    <string name="ftue_auth_carousel_1_body">Totalsträckskrypterade meddelanden för säker och oberoende kommunikation, ansluten via Matrix.</string>
+    <string name="ftue_auth_carousel_1_title">Äg dina konversationer.</string>
+    <string name="room_error_access_unauthorized">Du får inte gå med i det här rummet</string>
 </resources>
