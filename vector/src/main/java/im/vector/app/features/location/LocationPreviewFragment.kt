@@ -54,6 +54,11 @@ class LocationPreviewFragment @Inject constructor(
         super.onPause()
     }
 
+    override fun onStop() {
+        views.mapView.onStop()
+        super.onStop()
+    }
+
     override fun getMenuRes() = R.menu.menu_location_preview
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

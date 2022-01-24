@@ -74,9 +74,14 @@ class LocationSharingFragment @Inject constructor(
         super.onPause()
     }
 
+    override fun onStop() {
+        views.mapView.onStop()
+        super.onStop()
+    }
+
     override fun onDestroy() {
-        super.onDestroy()
         locationTracker.stop()
+        super.onDestroy()
     }
 
     private fun onMapReady() {
