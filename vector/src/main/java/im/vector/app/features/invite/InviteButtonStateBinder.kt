@@ -40,9 +40,9 @@ object InviteButtonStateBinder {
 
         rejectView.isGone = requestInProgress
 
-        when {
-            changeMembershipState is ChangeMembershipState.FailedLeaving -> rejectView.render(ButtonStateView.State.Error)
-            else                                                         -> rejectView.render(ButtonStateView.State.Button)
+        when (changeMembershipState) {
+            is ChangeMembershipState.FailedLeaving -> rejectView.render(ButtonStateView.State.Error)
+            else                                   -> rejectView.render(ButtonStateView.State.Button)
         }
     }
 }
