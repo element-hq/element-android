@@ -69,12 +69,19 @@ class LocationSharingFragment @Inject constructor(
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onPause() {
+        views.mapView.onPause()
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
         locationTracker.stop()
     }
 
     private fun onMapReady() {
+        if (!isAdded) return
+
         locationPinProvider.create(session.myUserId) {
             views.mapView.addPinToMap(
                     pinId = USER_PIN_NAME,

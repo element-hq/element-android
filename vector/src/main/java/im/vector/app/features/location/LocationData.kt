@@ -43,7 +43,7 @@ data class LocationData(
             val latitude = geoParts?.firstOrNull()
             val geoTailParts = geoParts?.getOrNull(1)?.split(";")
             val longitude = geoTailParts?.firstOrNull()
-            val uncertainty = geoTailParts?.getOrNull(1)
+            val uncertainty = geoTailParts?.getOrNull(1)?.replace("u=", "")
 
             return if (latitude != null && longitude != null) {
                 LocationData(

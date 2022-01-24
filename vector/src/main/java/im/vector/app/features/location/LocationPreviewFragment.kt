@@ -49,6 +49,11 @@ class LocationPreviewFragment @Inject constructor(
         }
     }
 
+    override fun onPause() {
+        views.mapView.onPause()
+        super.onPause()
+    }
+
     override fun getMenuRes() = R.menu.menu_location_preview
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -67,6 +72,8 @@ class LocationPreviewFragment @Inject constructor(
     }
 
     private fun onMapReady() {
+        if (!isAdded) return
+
         val location = args.initialLocationData ?: return
         val userId = args.locationOwnerId
 
