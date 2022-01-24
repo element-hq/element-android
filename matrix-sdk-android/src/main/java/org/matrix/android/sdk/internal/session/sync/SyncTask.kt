@@ -207,11 +207,11 @@ internal class DefaultSyncTask @Inject constructor(
                         }
                     }
                 }
-                syncStatisticsData.downloadInitSyncTime = SystemClock.elapsedRealtime()
             } else {
                 throw syncResponse.toFailure(globalErrorReceiver)
                         .also { Timber.tag(loggerTag.value).w("INIT_SYNC request failure: $this") }
             }
+            syncStatisticsData.downloadInitSyncTime = SystemClock.elapsedRealtime()
             initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_DOWNLOADED)
         }
         return workingFile
