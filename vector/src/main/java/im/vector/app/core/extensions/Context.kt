@@ -21,6 +21,7 @@ import android.graphics.drawable.Drawable
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
+import androidx.annotation.FloatRange
 import androidx.core.content.ContextCompat
 import dagger.hilt.EntryPoints
 import im.vector.app.core.di.SingletonEntryPoint
@@ -30,15 +31,15 @@ fun Context.singletonEntryPoint(): SingletonEntryPoint {
     return EntryPoints.get(applicationContext, SingletonEntryPoint::class.java)
 }
 
-fun Context.getResTintedDrawable(@DrawableRes drawableRes: Int, @ColorRes tint: Int, alpha: Float? = null): Drawable? {
+fun Context.getResTintedDrawable(@DrawableRes drawableRes: Int, @ColorRes tint: Int, @FloatRange(from = 0.0, to = 1.0) alpha: Float = 1f): Drawable? {
     return getTintedDrawable(drawableRes, ContextCompat.getColor(this, tint), alpha)
 }
 
-fun Context.getTintedDrawable(@DrawableRes drawableRes: Int, @ColorInt tint: Int, alpha: Float? = null) = ContextCompat.getDrawable(this, drawableRes)
+fun Context.getTintedDrawable(@DrawableRes drawableRes: Int, @ColorInt tint: Int, @FloatRange(from = 0.0, to = 1.0) alpha: Float = 1f) = ContextCompat.getDrawable(this, drawableRes)
         ?.mutate()
         ?.also { drawable ->
             drawable.setTint(tint)
-            alpha?.let {
+            alpha.let {
                 drawable.alpha = it.toAndroidAlpha()
             }
         }
