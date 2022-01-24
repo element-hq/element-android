@@ -37,7 +37,6 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.widgets.WidgetPostAPIMediator
-import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.util.JsonDict
 import timber.log.Timber
 import java.util.ArrayList
@@ -212,20 +211,16 @@ class WidgetPostAPIHandler @AssistedInject constructor(@Assisted private val roo
      * @param eventData the modular data
      */
     private fun getWidgets(widgetPostAPIMediator: WidgetPostAPIMediator, eventData: JsonDict) {
-        //if (checkRoomId(widgetPostAPIMediator, eventData)) {
-        //    return
-        //}
-        val roomIdInEvent = eventData["room_id"] as String?
         // Check if param is present
-        var allWidgets = emptyList<Widget>()
-        if (null == roomIdInEvent) {
-            allWidgets += session.widgetService().getUserWidgets()
+        val roomIdInEvent = eventData["room_id"] as String?
+        val allWidgets = if (null == roomIdInEvent) {
+            session.widgetService().getUserWidgets()
         } else {
             if (checkRoomId(widgetPostAPIMediator, eventData)) {
                 return
             }
             Timber.d("Received request to get widget in room $roomId")
-            allWidgets = session.widgetService().getRoomWidgets(roomId) + session.widgetService().getUserWidgets()
+            session.widgetService().getRoomWidgets(roomId) + session.widgetService().getUserWidgets()
         }
         Timber.d("Received request to get widget in room $roomId")
         val responseData = ArrayList<JsonDict>()
