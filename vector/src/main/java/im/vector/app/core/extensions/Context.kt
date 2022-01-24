@@ -25,7 +25,6 @@ import androidx.annotation.FloatRange
 import androidx.core.content.ContextCompat
 import dagger.hilt.EntryPoints
 import im.vector.app.core.di.SingletonEntryPoint
-import kotlin.math.round
 import kotlin.math.roundToInt
 
 fun Context.singletonEntryPoint(): SingletonEntryPoint {
