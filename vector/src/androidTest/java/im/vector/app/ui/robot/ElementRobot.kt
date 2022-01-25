@@ -128,7 +128,7 @@ class ElementRobot {
         }
 
         waitUntilActivityVisible<OnboardingActivity> {
-            assertDisplayed(R.id.loginSplashLogo)
+            assertDisplayed(R.id.loginSplashSubmit)
         }
     }
 
