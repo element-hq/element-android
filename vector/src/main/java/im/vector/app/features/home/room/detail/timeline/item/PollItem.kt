@@ -24,12 +24,13 @@ import com.airbnb.epoxy.EpoxyModelClass
 import im.vector.app.R
 import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
 
     @EpoxyAttribute
-    var pollQuestion: String? = null
+    var pollQuestion: EpoxyCharSequence? = null
 
     @EpoxyAttribute
     var callback: TimelineEventController.Callback? = null
@@ -43,6 +44,9 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
     @EpoxyAttribute
     var totalVotesText: String? = null
 
+   @EpoxyAttribute
+   var edited: Boolean = false
+
     @EpoxyAttribute
     lateinit var optionViewStates: List<PollOptionViewState>
 
@@ -52,7 +56,7 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
 
         renderSendState(holder.view, holder.questionTextView)
 
-        holder.questionTextView.text = pollQuestion
+        holder.questionTextView.text = pollQuestion?.charSequence
         holder.totalVotesTextView.text = totalVotesText
 
         while (holder.optionsContainer.childCount < optionViewStates.size) {

@@ -89,6 +89,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
+import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.model.message.getFileName
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.model.message.getThumbnailUrl
@@ -186,11 +187,14 @@ class MessageItemFactory @Inject constructor(
         val didUserVoted = pollResponseSummary?.myVote?.isNotEmpty().orFalse()
         val winnerVoteCount = pollResponseSummary?.winnerVoteCount
         val isPollSent = informationData.sendState.isSent()
+        val isPollUndisclosed = pollContent.pollCreationInfo?.kind == PollType.UNDISCLOSED
+
         val totalVotesText = (pollResponseSummary?.totalVotes ?: 0).let {
             when {
-                isEnded      -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_after_ended, it, it)
-                didUserVoted -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, it, it)
-                else         -> if (it == 0) {
+                isEnded           -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_after_ended, it, it)
+                isPollUndisclosed -> ""
+                didUserVoted      -> stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_voted, it, it)
+                else              -> if (it == 0) {
                     stringProvider.getString(R.string.poll_no_votes_cast)
                 } else {
                     stringProvider.getQuantityString(R.plurals.poll_total_vote_count_before_ended_and_not_voted, it, it)
@@ -214,6 +218,9 @@ class MessageItemFactory @Inject constructor(
                         // Poll is ended. Disable option, show votes and mark the winner.
                         val isWinner = winnerVoteCount != 0 && voteCount == winnerVoteCount
                         PollOptionViewState.PollEnded(optionId, optionAnswer, voteCount, votePercentage, isWinner)
+                    } else if (isPollUndisclosed) {
+                        // Poll is closed. Enable option, hide votes and mark the user's selection.
+                        PollOptionViewState.PollUndisclosed(optionId, optionAnswer, isMyVote)
                     } else if (didUserVoted) {
                         // User voted to the poll, but poll is not ended. Enable option, show votes and mark the user's selection.
                         PollOptionViewState.PollVoted(optionId, optionAnswer, voteCount, votePercentage, isMyVote)
@@ -224,13 +231,22 @@ class MessageItemFactory @Inject constructor(
             )
         }
 
+        val question = pollContent.pollCreationInfo?.question?.question ?: ""
+
         return PollItem_()
                 .attributes(attributes)
                 .eventId(informationData.eventId)
-                .pollQuestion(pollContent.pollCreationInfo?.question?.question ?: "")
+                .pollQuestion(
+                        if (informationData.hasBeenEdited) {
+                            annotateWithEdited(question, callback, informationData)
+                        } else {
+                            question
+                        }.toEpoxyCharSequence()
+                )
                 .pollSent(isPollSent)
                 .totalVotesText(totalVotesText)
                 .optionViewStates(optionViewStates)
+                .edited(informationData.hasBeenEdited)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(callback)

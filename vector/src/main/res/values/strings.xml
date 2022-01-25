@@ -3707,11 +3707,19 @@
     <string name="end_poll_confirmation_title">End this poll?</string>
     <string name="end_poll_confirmation_description">This will stop people from being able to vote and will display the final results of the poll.</string>
     <string name="end_poll_confirmation_approve_button">End poll</string>
+    <!-- TODO. Remove -->
     <string name="labs_enable_polls">Enable Polls</string>
-    <string name="poll_response_room_list_preview">Vote casted</string>
+    <string name="poll_response_room_list_preview">Vote cast</string>
     <string name="poll_end_room_list_preview">Poll ended</string>
     <string name="delete_poll_dialog_title">Remove poll</string>
     <string name="delete_poll_dialog_content">Are you sure you want to remove this poll? You won\'t be able to recover it once removed.</string>
+    <string name="edit_poll_title">Edit poll</string>
+    <string name="edit_poll_button">EDIT POLL</string>
+    <string name="poll_type_title">Poll type</string>
+    <string name="open_poll_option_title">Open poll</string>
+    <string name="open_poll_option_description">Voters see results as soon as they have voted</string>
+    <string name="closed_poll_option_title">Closed poll</string>
+    <string name="closed_poll_option_description">Results are only revealed when you end the poll</string>
 
     <string name="tooltip_attachment_photo">Open camera</string>
     <string name="tooltip_attachment_gallery">Send images and videos</string>

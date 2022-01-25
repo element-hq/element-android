@@ -284,7 +284,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         }
         add(EventSharedAction.Remove(eventId))
         if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
-            add(EventSharedAction.Edit(eventId))
+            add(EventSharedAction.Edit(eventId, timelineEvent.root.getClearType()))
         }
         if (canCopy(msgType)) {
             // TODO copy images? html? see ClipBoard
@@ -329,7 +329,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             }
 
             if (canEdit(timelineEvent, session.myUserId, actionPermissions)) {
-                add(EventSharedAction.Edit(eventId))
+                add(EventSharedAction.Edit(eventId, timelineEvent.root.getClearType()))
             }
 
             if (canRedact(timelineEvent, actionPermissions)) {
@@ -466,14 +466,15 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
     }
 
     private fun canEdit(event: TimelineEvent, myUserId: String, actionPermissions: ActionPermissions): Boolean {
-        // Only event of type EventType.MESSAGE are supported for the moment
-        if (event.root.getClearType() != EventType.MESSAGE) return false
+        // Only event of type EventType.MESSAGE and EventType.POLL_START are supported for the moment
+        if (event.root.getClearType() !in listOf(EventType.MESSAGE, EventType.POLL_START)) return false
         if (!actionPermissions.canSendMessage) return false
         // TODO if user is admin or moderator
         val messageContent = event.root.getClearContent().toModel<MessageContent>()
         return event.root.senderId == myUserId && (
                 messageContent?.msgType == MessageType.MSGTYPE_TEXT ||
-                        messageContent?.msgType == MessageType.MSGTYPE_EMOTE
+                        messageContent?.msgType == MessageType.MSGTYPE_EMOTE ||
+                        canEditPoll(event)
                 )
     }
 
@@ -515,5 +516,11 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         return event.root.getClearType() == EventType.POLL_START &&
                 canRedact(event, actionPermissions) &&
                 event.annotations?.pollResponseSummary?.closedTime == null
+    }
+
+    private fun canEditPoll(event: TimelineEvent): Boolean {
+        return event.root.getClearType() == EventType.POLL_START &&
+                event.annotations?.pollResponseSummary?.closedTime == null &&
+                event.annotations?.pollResponseSummary?.aggregatedContent?.totalVotes ?: 0 == 0
     }
 }
