@@ -33,8 +33,8 @@
             android:id="@+id/useCaseHeaderIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@null"
             android:layout_marginTop="52dp"
+            android:contentDescription="@null"
             android:src="@drawable/ic_onboarding_use_case_icon"
             app:layout_constraintBottom_toTopOf="@id/useCaseHeaderTitle"
             app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
@@ -89,11 +89,11 @@
             android:padding="16dp"
             android:text="@string/ftue_auth_use_case_option_one"
             android:textColor="?vctr_content_primary"
-            app:drawableStartCompat="@drawable/ic_friends_and_family"
             app:layout_constraintBottom_toTopOf="@id/useCaseOptionTwo"
             app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
             app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/titleContentSpacing" />
+            app:layout_constraintTop_toBottomOf="@id/titleContentSpacing"
+            tools:drawableStartCompat="@drawable/bg_feature_icon" />
 
         <TextView
             android:id="@+id/useCaseOptionTwo"
@@ -107,11 +107,11 @@
             android:padding="16dp"
             android:text="@string/ftue_auth_use_case_option_two"
             android:textColor="?vctr_content_primary"
-            app:drawableStartCompat="@drawable/ic_teams"
             app:layout_constraintBottom_toTopOf="@id/useCaseOptionThree"
             app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
             app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/useCaseOptionOne" />
+            app:layout_constraintTop_toBottomOf="@id/useCaseOptionOne"
+            tools:drawableStartCompat="@drawable/bg_feature_icon" />
 
         <TextView
             android:id="@+id/useCaseOptionThree"
@@ -125,11 +125,11 @@
             android:padding="16dp"
             android:text="@string/ftue_auth_use_case_option_three"
             android:textColor="?vctr_content_primary"
-            app:drawableStartCompat="@drawable/ic_communities"
             app:layout_constraintBottom_toTopOf="@id/useCaseSkip"
             app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
             app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/useCaseOptionTwo" />
+            app:layout_constraintTop_toBottomOf="@id/useCaseOptionTwo"
+            tools:drawableStartCompat="@drawable/bg_feature_icon" />
 
         <TextView
             android:id="@+id/useCaseSkip"
