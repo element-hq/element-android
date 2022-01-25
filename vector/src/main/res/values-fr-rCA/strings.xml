@@ -1352,11 +1352,6 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Le redémarrage du service a échoué</string>
     <string name="settings_troubleshoot_test_service_restart_success">Le service a été tué et redémarré automatiquement.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Redémarrage automatique du service de notifications</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Démarrer le service</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Le service de notifications n’est pas lancé.
-\nEssayez de redémarrer l’application.</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Le service de notifications est lancé.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Service de notifications</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">La notification a été cliquée !</string>
     <string name="settings_troubleshoot_test_notification_notice">Veuillez cliquer sur la notification. Si vous ne voyez pas la notification, veuillez vérifier les paramètres système.</string>
     <string name="settings_troubleshoot_test_notification_title">Affichage de la notification</string>

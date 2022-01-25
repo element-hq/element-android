@@ -832,11 +832,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM token se podařilo úspěšné registrovat na domovském serveru.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Registrace FCM tokenu na domovském serveru se nezdařila:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Služba oznámení</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Služba oznámení je v chodu.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Služba oznámení není v chodu. 
-\nZkuste restartovat aplikaci.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Spustit službu</string>
     <string name="settings_troubleshoot_test_service_restart_title">Auto-restart služby oznámení</string>
     <string name="settings_troubleshoot_test_service_restart_success">Služba byla ukončena a spustila se automaticky.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Restart služby se nezdařil</string>
@@ -3125,12 +3120,8 @@
     <string name="labs_auto_report_uisi">Automaticky nahlašovat chyby dešifrování.</string>
     <string name="room_member_override_nick_color">Přepsat barvu přezdívky</string>
     <string name="login_splash_already_have_account">Již mám účet</string>
-    <string name="ftue_auth_carousel_4_body">Element je stejně univerzální jako e-mail a představuje zcela nový typ spolupráce.</string>
     <string name="ftue_auth_carousel_4_title">Zlepšete týmovou komunikaci.</string>
-    <string name="ftue_auth_carousel_3_body">Element funguje se všemi aplikacemi založenými na protokolu Matrix a dokáže se propojit i s proprietárními messengery.</string>
     <string name="ftue_auth_carousel_3_title">Spojte se s kýmkoli.</string>
-    <string name="ftue_auth_carousel_2_body">Element vám umožňuje zvolit si, kde jsou vaše zprávy uložené, takže máte svá data pod kontrolou.</string>
     <string name="ftue_auth_carousel_2_title">Máte vše pod kontrolou.</string>
-    <string name="ftue_auth_carousel_1_body">Koncově šifrovaná, bezpečná a nezávislá komunikace, připojená přes Matrix.</string>
     <string name="ftue_auth_carousel_1_title">Vlastněte své konverzace.</string>
 </resources>

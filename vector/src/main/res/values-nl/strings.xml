@@ -992,11 +992,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM-bewijs geregistreerd bij thuisserver.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM-bewijs niet geregistreerd bij thuisserver:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Meldingsdienst</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Meldingsdienst is actief.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Meldingsdienst is niet actief.
-\nProbeer de app te herstarten.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Dienst starten</string>
     <string name="settings_troubleshoot_test_service_restart_title">Meldingsdienst automatisch herstarten</string>
     <string name="settings_troubleshoot_test_service_restart_success">Dienst is afgesloten en automatisch herstart.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Dienst is niet herstart</string>
@@ -2901,7 +2896,6 @@
     <string name="create_spaces_join_info_help">Als u lid wilt worden van een bestaande kamer, heeft u een uitnodiging nodig.</string>
     <string name="event_status_delete_all_failed_dialog_message">Weet je zeker dat je alle niet verzonden berichten in deze kamer wilt verwijderen\?</string>
     <string name="labs_auto_report_uisi">Automatisch rapport versleutelingsfouten.</string>
-    <string name="ftue_auth_carousel_1_body">End-to-end-versleutelde berichtenuitwisseling voor veilige en onafhankelijke communicatie, verbonden via Matrix.</string>
     <string name="tooltip_attachment_poll">Poll maken</string>
     <string name="tooltip_attachment_contact">Contacten openen</string>
     <string name="tooltip_attachment_sticker">Stuur sticker</string>
@@ -3069,9 +3063,6 @@
     <string name="command_description_create_space">Maak een Space</string>
     <string name="room_member_override_nick_color">Bijnaam kleur overschrijven</string>
     <string name="login_splash_already_have_account">Ik heb al een account</string>
-    <string name="ftue_auth_carousel_4_body">Even universeel als e-mail, Element is een volledig nieuw type samenwerking.</string>
-    <string name="ftue_auth_carousel_3_body">Element werkt met alle op Matrix gebaseerde apps en kan zelfs verbinden met propriëtaire diensten.</string>
     <string name="ftue_auth_carousel_3_title">Maak contact met iedereen.</string>
-    <string name="ftue_auth_carousel_2_body">Met Element kunt u kiezen waar uw berichten worden opgeslagen, zodat u de controle over uw gegevens behoudt.</string>
     <string name="ftue_auth_carousel_2_title">U heeft de controle.</string>
 </resources>

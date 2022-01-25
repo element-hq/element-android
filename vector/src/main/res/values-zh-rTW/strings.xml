@@ -1105,11 +1105,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM token 成功註冊至家伺服器。</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM token 註冊至家伺服器失敗： 
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">通知服務</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">通知服務正在執行。</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">通知服務並未執行。
-\n嘗試重新啟動應用程式。</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">啟動服務</string>
     <string name="settings_troubleshoot_test_service_restart_title">通知服務自動重新啟動</string>
     <string name="settings_troubleshoot_test_service_restart_success">服務被自動砍除並重新啟動。</string>
     <string name="settings_troubleshoot_test_service_restart_failed">服務重新啟動失敗</string>
@@ -3007,12 +3002,8 @@
     <string name="labs_auto_report_uisi">自動回報解密錯誤。</string>
     <string name="room_member_override_nick_color">覆寫暱稱色彩</string>
     <string name="login_splash_already_have_account">我已有一個帳號</string>
-    <string name="ftue_auth_carousel_4_body">與電子郵件一樣普遍，Element 是一種全新的協作類型。</string>
     <string name="ftue_auth_carousel_4_title">減少團隊的懈怠。</string>
-    <string name="ftue_auth_carousel_3_body">Element 適用於所有以 Matrix 為基礎的應用程式，甚至可以橋接到專有的通訊軟體。</string>
     <string name="ftue_auth_carousel_3_title">與任何人聯絡。</string>
-    <string name="ftue_auth_carousel_2_body">Element 可讓您選擇您要儲存訊息的地方，讓您掌控您自己的資料。</string>
     <string name="ftue_auth_carousel_2_title">您已掌控了您的資料。</string>
-    <string name="ftue_auth_carousel_1_body">透過 Matrix 連結的端到端加密訊息傳遞，用於安全與獨立的通訊。</string>
     <string name="ftue_auth_carousel_1_title">擁有您的對話。</string>
 </resources>

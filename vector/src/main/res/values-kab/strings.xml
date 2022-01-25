@@ -1349,7 +1349,6 @@
     <string name="settings_troubleshoot_test_fcm_failed">Tiririt n ujuṭu FCM ur teddi ara:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">Asekles n ujuṭu</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Senker ameẓlu</string>
     <string name="settings_troubleshoot_test_service_boot_title">Bdu seg tazwara</string>
     <string name="settings_noisy_notifications_preferences">Swel ilɣa n zzhir</string>
     <string name="settings_call_notifications_preferences">Swel ilɣa n usiwel</string>
@@ -1614,10 +1613,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">Ajuṭu FCM yettwasekles akken iwata ɣef uqeddac agejdan.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Asekles n ujuṭu FCM ɣef uqeddac agejdan ur yeddi ara.
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Ameẓlu n yilɣa</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Ameẓlu n yilɣa la iteddu.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Ameẓlu n yilɣa ur iteddu ara.
-\nƐreḍ ad talseḍ asenker n usnas.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Ameẓlu n yilɣa yules asenker s wudem awurman</string>
     <string name="settings_troubleshoot_test_service_restart_success">Ameẓlu yettwanɣa syen yules asenker s wudem awurman.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Allus n usenker n umeẓlu ur yeddi ara</string>

@@ -301,11 +301,6 @@
     <string name="settings_troubleshoot_test_service_restart_failed">পরিষেবা পুনরায় আরম্ভ করতে ব্যর্থ হয়েছে</string>
     <string name="settings_troubleshoot_test_service_restart_success">সেবা টি হত্যা করা হয়েছে এবং স্বয়ংক্রিয়ভাবে পুনরায় আরম্ভ করা হয়েছে।</string>
     <string name="settings_troubleshoot_test_service_restart_title">বিজ্ঞপ্তি পরিষেবা অটো-পুনরায়-আরম্ভ</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">পরিসেবা আরম্ভ</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">বিজ্ঞপ্তিগুলির সেবা চলছে না।
-\nঅপ্প্লিকেশনটি পুনরায় আরম্ভ করার চেষ্টা করুন।</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">বিজ্ঞপ্তিগুলির সেবা চলছে।</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">বিজ্ঞপ্তিগুলির সেবা</string>
     <string name="settings_troubleshoot_test_token_registration_failed">হোম সার্ভারে FCM টোকেন নিবন্ধন করতে ব্যর্থ হয়েছে:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM টোকেন সফলভাবে হোম সার্ভারে নিবন্ধিত।</string>

@@ -1561,11 +1561,6 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Dịch vụ không thể khởi động</string>
     <string name="settings_troubleshoot_test_service_restart_success">Dịch vụ đã bị đóng và tự động khởi động lại.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Tụ động khởi động lại dịch vụ thông báo</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Bắt đầu</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Dịch vụ thông báo đang không hoạt động:
-\nHãy thử khởi động lại ứng dụng.</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Dịch vụ thông báo đang chạy.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Dịch vụ thông báo</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">Thông báo đã được bấm!</string>
     <string name="settings_troubleshoot_test_notification_notice">Hãy bấm vào thông báo. Nếu bạn không thấy bất kỳ thông báo nào, vui lòng kiểm tra cài đặt hệ thống.</string>
     <string name="settings_troubleshoot_test_notification_title">Hiển thị thông báo</string>

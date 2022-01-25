@@ -986,11 +986,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM-tunniste rekisteröity onnistuneesti kotipalvelimelle.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM-tunnisteen rekisteröinti kotipalvelimelle epäonnistui: 
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Ilmoituspalvelu</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Ilmoituspalvelu on käynnissä.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Ilmoituspalvelu ei ole käynnissä.
-\nKokeile Elementin uudelleenkäynnistystä.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Käynnistä palvelu</string>
     <string name="settings_troubleshoot_test_service_restart_title">Ilmoituspalvelun automaattinen uudelleenkäynnistys</string>
     <string name="settings_troubleshoot_test_service_restart_success">Palvelu suljettiin ja se käynnistyi uudelleen automaattisesti.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Palvelun uudelleenkäynnistäminen epäonnistui</string>

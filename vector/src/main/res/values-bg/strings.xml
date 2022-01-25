@@ -1078,11 +1078,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM токенът беше успешно регистриран със сървъра.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Неуспешна регистрация на FCM токена със сървъра:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Услуга за известия</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Услугата за известия работи.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Услугата за известия не работи.
-\nОпитайте да рестартирате приложението.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Стартирай услугата</string>
     <string name="settings_troubleshoot_test_service_restart_title">Автоматично рестартиране на услугата за известия</string>
     <string name="settings_troubleshoot_test_service_restart_success">Услугата беше спряна и рестартирана автоматично.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Услугата не успя да се рестартира</string>

@@ -1178,12 +1178,6 @@ Egiaztatu zure kontuaren ezarpenak.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Huts egin du FCM token-a hasiera zerbitzarian erregistratzean:
 %1$s</string>
 
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Jakinarazpen zerbitzua</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Jakinarazpen zerbitzua abian dago.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Jakinarazpen zerbitzua ez dago abian.
-Berrabiarazi aplikazioa.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Hasi zerbitzua</string>
-
     <string name="settings_troubleshoot_test_service_restart_title">Jakinarazpen zerbitzua automatikoki berrabiarazi</string>
     <string name="settings_troubleshoot_test_service_restart_success">Zerbitzua hil da eta automatikoki berrabiarazi da.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Zerbitzuak huts egin du berrabiaraztean</string>

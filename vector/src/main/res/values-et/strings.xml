@@ -1233,11 +1233,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM tunnusloa registreerimine koduserveris õnnestus.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM tunnusloa registreerimine koduserveris ei õnnestunud:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Teavituste teenus</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Teavituste teenus töötab.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Teavituste teenus ei tööta.
-\nProovi, kas Element\'i uuesti käivitamine aitab.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Käivita teenus</string>
     <string name="settings_troubleshoot_test_service_restart_title">Teavituste teenuse automaatne taaskäivitamine</string>
     <string name="settings_troubleshoot_test_service_restart_success">Teenus suleti ja käivitati automaatselt uuesti.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Teenuse uuesti käivitamine ei õnnestunud</string>
@@ -3066,12 +3061,8 @@
     <string name="labs_auto_report_uisi">Automaatselt teata dekrüptimise vigadest.</string>
     <string name="room_member_override_nick_color">Asenda hüüdnime värvid</string>
     <string name="login_splash_already_have_account">Mul on kasutajakonto juba olemas</string>
-    <string name="ftue_auth_carousel_4_body">Olles ühelt poolt sama universaalne kui e-post, on Element teisalt uus ja tõhus viis ühistöö korraldamiseks.</string>
     <string name="ftue_auth_carousel_4_title">Lase tiimidel vabalt tegutseda.</string>
-    <string name="ftue_auth_carousel_3_body">Element võimaldub suhelda kõikide teiste kasutusel olevate Matrixi-põhiste rakendustega ning lisaks ka paljude suletud suhtlusrakendustega.</string>
     <string name="ftue_auth_carousel_3_title">Suhtle kellega soovid.</string>
     <string name="ftue_auth_carousel_2_title">Sul on kontroll oma andmete üle.</string>
-    <string name="ftue_auth_carousel_2_body">Element võimaldab sul valida, kus sinu sõnumeid salvestatakse ja seega on sul kontroll oma andmete üle.</string>
-    <string name="ftue_auth_carousel_1_body">Matrix\'i võrgul põhinev läbivat krüptimist kasutav turvaline ja sõltumatu suhtluslahendus.</string>
     <string name="ftue_auth_carousel_1_title">Vestlused, mida sa tegelikult ka omad.</string>
 </resources>

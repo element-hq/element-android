@@ -1480,11 +1480,6 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Помилка перезапуску служби</string>
     <string name="settings_troubleshoot_test_service_restart_success">Службу зупинено й перезапущено автоматично.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Автоматичний перезапуск служби сповіщень</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Запуск служби</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Служба сповіщень не працює.
-\nСпробуйте перезапустити програму.</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Служба сповіщень працює.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Служба сповіщень</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">Сповіщення натиснено!</string>
     <string name="settings_troubleshoot_test_notification_notice">Клацніть на сповіщення. Якщо ви не бачите сповіщення, перевірте налаштування системи.</string>
     <string name="settings_troubleshoot_test_notification_title">Показ сповіщень</string>
@@ -3168,12 +3163,8 @@
     <string name="labs_auto_report_uisi">Автозвіт про помилки шифрування.</string>
     <string name="room_member_override_nick_color">Замінити колір псевдоніма</string>
     <string name="login_splash_already_have_account">Я вже маю обліковий запис</string>
-    <string name="ftue_auth_carousel_4_body">Універсальний, як електронна пошта, Element — це абсолютно новий тип співпраці.</string>
     <string name="ftue_auth_carousel_4_title">Удоскональте спілкування в команді.</string>
-    <string name="ftue_auth_carousel_3_body">Element працює з усіма застосунками на базі Matrix і може навіть з\'єднуватися з власницькими месенджерами.</string>
     <string name="ftue_auth_carousel_3_title">З\'єднуйтеся з будь-ким.</string>
-    <string name="ftue_auth_carousel_2_body">Element дає змогу обрати де зберігати повідомлення, надаючи вам контроль над вашими даними.</string>
     <string name="ftue_auth_carousel_2_title">Ви контролюєте все.</string>
-    <string name="ftue_auth_carousel_1_body">Наскрізно зашифроване спілкування для безпечного та незалежного зв’язку, під\'єднаного через Matrix.</string>
     <string name="ftue_auth_carousel_1_title">Володійте своїми розмовами.</string>
 </resources>

@@ -589,11 +589,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM 토큰이 성공적으로 홈서버에 등록되었습니다.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM 토큰을 홈서버에 등록 실패:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">알림 서비스</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">알림 서비스가 실행 중입니다.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">알림 서비스가 실행 중이 아닙니다.
-\n애플리케이션을 다시 실행해보세요.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">서비스 시작</string>
     <string name="settings_troubleshoot_test_service_restart_title">알림 서비스 자동 다시 시작</string>
     <string name="settings_troubleshoot_test_service_restart_success">서비스가 종료되고 자동으로 다시 시작되었습니다.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">서비스 다시 시작에 실패함</string>

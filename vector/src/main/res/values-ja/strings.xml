@@ -1500,11 +1500,6 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="settings_troubleshoot_test_service_restart_failed">サービスの再起動に失敗しました</string>
     <string name="settings_troubleshoot_test_service_restart_success">サービスが強制終了され、自動的に再起動されました。</string>
     <string name="settings_troubleshoot_test_service_restart_title">通知サービスの自動再起動</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">開始する</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">通知サービスが実行されていません。
-\nアプリケーションを再起動してみてください。</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">通知サービスが機能しています。</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">通知サービス</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">通知がクリックされました！</string>
     <string name="settings_troubleshoot_test_notification_notice">通知をクリックしてください。 通知が表示されない場合は、システム設定を確認してください。</string>
     <string name="settings_troubleshoot_test_notification_title">通知を表示</string>

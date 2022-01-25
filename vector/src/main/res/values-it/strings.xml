@@ -1131,11 +1131,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">Token FCM registrato con successo sull\'homeserver.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">È fallita la registrazione del token FCM sull\'homeserver:
 \n %1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Servizi di notifica</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Servizio di notifiche in esecuzione.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Servizio di notifiche non in esecuzione.
-\nProva a riavviare l\'applicazione.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Avvia il servizio</string>
     <string name="settings_troubleshoot_test_service_restart_title">Auto riavvio del servizio di notifiche</string>
     <string name="settings_troubleshoot_test_service_restart_success">Il servizio è stato chiuso e si è riavviato automaticamente.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">L\'avvio del servizio è fallito</string>
@@ -3056,12 +3051,8 @@
     <string name="labs_auto_report_uisi">Auto-segnala errori di decifrazione.</string>
     <string name="room_member_override_nick_color">Sovrascrivi colore nick</string>
     <string name="login_splash_already_have_account">Ho già un account</string>
-    <string name="ftue_auth_carousel_4_body">Universale come le email, Element è un tipo di collaborazione completamente nuovo.</string>
     <string name="ftue_auth_carousel_4_title">Riduci il carico ai team.</string>
-    <string name="ftue_auth_carousel_3_body">Element funziona con tutte le app basate su Matrix e può anche fare da ponte tra messaggistiche proprietarie.</string>
     <string name="ftue_auth_carousel_3_title">Connettiti con chiunque.</string>
-    <string name="ftue_auth_carousel_2_body">Element ti lascia scegliere dove i messaggi vengono salvati, dandoti il controllo dei tuoi dati.</string>
     <string name="ftue_auth_carousel_2_title">Tu hai il controllo.</string>
-    <string name="ftue_auth_carousel_1_body">Messaggistica cifrata end-to-end per comunicazioni sicure e indipendenti, connesse via Matrix.</string>
     <string name="ftue_auth_carousel_1_title">Prendi il controllo delle tue conversazioni.</string>
 </resources>

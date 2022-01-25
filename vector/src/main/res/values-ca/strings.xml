@@ -1091,11 +1091,6 @@
     <string name="settings_troubleshoot_test_device_settings_success">Les notificacions per aquesta sessió estan activades.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Habilita</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Repara els serveis de Google Play</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Servei de notificacions</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">El servei de notificacions s\'està executant.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">El servei de notificacions no s\'està executant.
-\nProva de reiniciar l\'aplicació.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Inicia el servei</string>
     <string name="settings_troubleshoot_test_service_boot_title">Inicia\'l a l\'arrencada</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Inhabilita les restriccions</string>
     <string name="settings_troubleshoot_test_battery_title">Optimització de bateria</string>

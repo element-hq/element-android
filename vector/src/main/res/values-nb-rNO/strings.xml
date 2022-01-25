@@ -1594,11 +1594,6 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Tjenesten kunne ikke startes på nytt</string>
     <string name="settings_troubleshoot_test_service_restart_success">Tjenesten ble stoppet og startet på nytt automatisk.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Automatisk omstart av varslingstjenesten</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Start tjeneste</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Varslingstjenesten kjører ikke.
-\nPrøv å starte programmet på nytt.</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Varslingstjenesten kjører.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Varslingstjeneste</string>
     <string name="settings_troubleshoot_test_play_services_title">Play Tjenester Sjekk</string>
     <string name="directory_searching_title">Søker i katalogen…</string>
     <string name="dev_tools_error_no_content">Ikke noe innhold</string>

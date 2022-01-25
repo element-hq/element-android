@@ -553,11 +553,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">Oznaka FCM-a je uspješno registrirana pri Vašem poslužitelju.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Neuspjela registracija oznake FCM-a pri Vašem poslužitelju:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Servis za obavijesti</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Servis za obavijesti je pokrenut.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Servis za obavijesti nije pokrenut.
-\nPokušajte ponovno pokrenuti aplikaciju.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Pokreni servis</string>
     <string name="settings_troubleshoot_test_service_restart_title">Automatsko ponovno pokretanje Servisa za obavijesti</string>
     <string name="settings_troubleshoot_test_service_restart_success">Servis je zaustavljen i automatski ponovno pokrenut.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Neuspjelo ponovno pokretanje servisa</string>

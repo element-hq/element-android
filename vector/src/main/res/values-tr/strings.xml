@@ -532,11 +532,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM belirteci başarı ile AnaMakineye kaydedildi.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM belirteci AnaMakineye kaydedilirken hata:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Bildirim Hizmetleri</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Bildirim Hizmetleri çalışıyor.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Bildirim Hizmetleri çalışmıyor.
-\nUygulamayı yeniden başlatmayı deneyin.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Hizmeti Başlat</string>
     <string name="settings_troubleshoot_test_service_restart_title">Bildirim Hizmetleri Otomatik-Yeniden-Başlatma</string>
     <string name="settings_troubleshoot_test_service_restart_success">Hizmet otomatik olarak sonlandırılıp yeniden başlatıldı.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Hizmet yeniden başlatılamadı</string>

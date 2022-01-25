@@ -933,8 +933,6 @@ Por favor, verifique configurações de aplicação</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Reparar os serviços Google Play</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Adicionar conta</string>
     <string name="settings_troubleshoot_test_token_registration_title">Registração de token</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Serviço de Notificações</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Iniciar Serviço</string>
     <string name="settings_troubleshoot_test_service_restart_title">Auto-Reniciar Serviço de Notificações</string>
     <string name="settings_troubleshoot_test_service_boot_title">Iniciar em boot</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Falha na reniciação de Serviço</string>

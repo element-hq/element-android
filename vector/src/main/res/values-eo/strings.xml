@@ -1762,9 +1762,6 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Servo malsukcesis reeki</string>
     <string name="settings_troubleshoot_test_service_restart_success">Servo estis haltigita kaj memage reekis.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Memreeko de sciiga servo</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Ekigi servon</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Sciiga servo ne estas rulata.
-\nProvu reekigi la aplikaĵon.</string>
     <string name="resource_limit_hard_contact">Bonvolu %s por daŭre uzadi ĉi tiun servon.</string>
     <string name="resource_limit_soft_contact">Bonvolu %s por plialtigi ĉi tiun limon.</string>
     <string name="resource_limit_hard_mau">Ĉi tiu hejmservilo atingis sian monatan limon de aktivaj uzantoj.</string>
@@ -1783,8 +1780,6 @@
     <string name="deactivate_account_submit">Malaktivigi konton</string>
     <string name="deactivate_account_prompt_password">Por daŭrigi, bonvolu enigi vian pasvorton:</string>
     <string name="deactivate_account_delete_checkbox">Bonvolu forgesi ĉiujn mesaĝojn, kiujn mi sendis, kun malaktivigo de mia konto (Averto: ĉi tio kaŭzos, ke estontaj uzantoj vidos nur partajn, netutajn interparolojn)</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Sciiga servo estas rulata.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Sciiga servo</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">La sciigo estas klakita!</string>
     <string name="settings_troubleshoot_test_notification_notice">Bonvolu klaki la sciigon. Se vi ne vidas la sciigon, bonvolu kontroli la sistemajn agordojn.</string>
     <string name="settings_troubleshoot_test_notification_title">Montrado de sciigoj</string>

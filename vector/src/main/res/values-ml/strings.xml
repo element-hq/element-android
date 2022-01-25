@@ -864,7 +864,6 @@
     <string name="settings_troubleshoot_test_battery_quickfix">ഒപ്റ്റിമൈസേഷൻ അവഗണിക്കുക</string>
     <string name="settings_troubleshoot_test_battery_title">ബാറ്ററി ഒപ്റ്റിമൈസേഷൻ</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">നിയന്ത്രണങ്ങൾ പ്രവർത്തനരഹിതമാക്കുക</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">സേവനം ആരംഭിക്കുക</string>
     <string name="settings_troubleshoot_test_notification_title">അറിയിപ്പ് പ്രദർശനം</string>
     <string name="settings_troubleshoot_test_token_registration_title">ടോക്കൺ രജിസ്ട്രേഷൻ</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">അക്കൗണ്ട് ചേർക്കുക</string>

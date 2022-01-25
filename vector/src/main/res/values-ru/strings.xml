@@ -1171,11 +1171,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">Токен FCM успешно зарегистрирован на домашнем сервере.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Не удалось зарегистрировать токен FCM на домашнем сервере:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Служба уведомлений</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Служба уведомлений запущена.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Служба уведомлений не запущена. 
-\nПопробуйте перезапустить приложение.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Запустить службу</string>
     <string name="settings_troubleshoot_test_service_restart_title">Автоматический перезапуск службы уведомлений</string>
     <string name="settings_troubleshoot_test_service_restart_success">Служба была убита и перезапущена автоматически.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Не удалось перезапустить службу</string>

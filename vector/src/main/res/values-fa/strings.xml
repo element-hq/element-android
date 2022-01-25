@@ -555,10 +555,6 @@
     <string name="template_settings_troubleshoot_test_device_settings_failed">آگاهی‌ها برای این نشست به کار نیفتاده‌اند.
 \nلطفاً تنظیمات المنت را بررسی کنید.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">برخی آگاهی‌ها در تنظیمات سفارشیتان از کار افتاده‌اند.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">خدمت آگاهی</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">خدمت آگاهی در حال اجراست.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">خدمت آگاهی در حال اجرا نیست.
-\nتلاش کنید برنامه را دوباره شروع کنید.</string>
     <string name="settings_troubleshoot_test_service_restart_title">شروع دوبارهٔ خودکار خدمت آگاهی</string>
     <string name="settings_enable_all_notif">به کار انداختن آگاهی‌ها برای این حساب</string>
     <string name="settings_enable_this_device">به کار انداختن آگاهی‌ها برای این نشست</string>
@@ -959,7 +955,6 @@
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">به یاد داشته باشید که برخی گونه‌های پیام‌ها روی صامت بودن تنظیم شده‌اند (آگاهی‌ای بدون هیچ صدایی تولید خواهند کرد).</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">بررسی تنظیمات</string>
     <string name="settings_troubleshoot_test_play_services_title">بررسی خدمات پلی</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">شروع خدمت</string>
     <string name="settings_troubleshoot_test_service_restart_success">خدمت کشته و به صورت خودکار دوباره شروع شد.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">شروع دوبارهٔ خدمت شکست خورد</string>
     <string name="settings_troubleshoot_test_service_boot_title">شروع هنگام راه‌اندازی</string>
@@ -3065,10 +3060,7 @@
     <string name="labs_auto_report_uisi_desc">سامانه‌تان هنگام‌ مواجهه با خطای ناتوانی در رمزگشایی، گزارش‌ها را به صورت خودکار خواهد فرستاد</string>
     <string name="labs_auto_report_uisi">گزارش خودکار خطاهای رمزگشایی.</string>
     <string name="login_splash_already_have_account">از پیش حساب دارم</string>
-    <string name="ftue_auth_carousel_3_body">المنت با تمامی کاره‌های مبتنی بر ماتریکس کار کرده و حتا می‌تواند به پیام‌رسان‌های مالکیتیتان پل بزند.</string>
     <string name="ftue_auth_carousel_3_title">ارتباط با هرکسی.</string>
-    <string name="ftue_auth_carousel_2_body">المنت می‌گذارد مکان ذخیرهٔ پیام‌هایتان را برگزینید تا داده‌هایتان را کنترل کنید.</string>
     <string name="ftue_auth_carousel_2_title">شما کنترل می‌کنید.</string>
-    <string name="ftue_auth_carousel_1_body">پیام‌رسانی رمزنگاشتهٔ سرتاسری برای ارتباط مستقل امن، وصل شده با ماتریکس.</string>
     <string name="ftue_auth_carousel_1_title">صاحب گفت‌وگوهایتان باشید.</string>
 </resources>

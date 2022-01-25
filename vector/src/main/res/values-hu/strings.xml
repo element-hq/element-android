@@ -1059,11 +1059,6 @@ Kérlek ellenőrizd a fiókbeállításokat.</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM token sikeresen regisztrálva a Matrix-kiszolgálón.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM token regisztrációja sikertelen a Matrix-kiszolgálón:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Értesítés Szolgáltatás</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Értesítés Szolgáltatás fut.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Értesítés Szolgáltatás nem fut.
-Próbáld újraindítani a szolgáltatást.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Szolgáltatás indítása</string>
     <string name="settings_troubleshoot_test_service_restart_title">Értesítések szolgáltatás Automatikus-Újraindítása</string>
     <string name="settings_troubleshoot_test_service_restart_success">A szolgáltatás meg lett szakítva és automatikusan újraindult.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">A szolgáltatást nem sikerült újraindítani</string>
@@ -3056,12 +3051,8 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="labs_enable_latex_maths">LaTeX matematikai szintaxis engedélyezése</string>
     <string name="room_error_access_unauthorized">Nem léphetsz be ebbe a szobába</string>
     <string name="ftue_auth_carousel_1_title">Az ön beszélgetései csak az öné.</string>
-    <string name="ftue_auth_carousel_1_body">Üzenetküldés végpontok közötti titkosítással a biztonságos és független kommunikációért, Matrix-szal kapcsolódva.</string>
     <string name="labs_auto_report_uisi_desc">Titkosítás visszafejtési hiba esemény alkalmával a rendszer automatikusan elküldi a logokat</string>
     <string name="labs_auto_report_uisi">Titkosítás visszafejtési hibák automatikus jelentése.</string>
-    <string name="ftue_auth_carousel_4_body">Olyan univerzális mint az e-mail, Element egy teljesen új típusú együttműködés.</string>
-    <string name="ftue_auth_carousel_3_body">Element minden Matrix kompatibilis alkalmazással együttműködik sőt zárt üzenetküldőkkel is összeköthető.</string>
-    <string name="ftue_auth_carousel_2_body">Element megengedi, hogy megválaszd az üzeneteid hol vannak tárolva, meghagyja nálad az irányítást.</string>
     <string name="tooltip_attachment_poll">Szavazás létrehozása</string>
     <string name="tooltip_attachment_contact">Névjegyek megnyitása</string>
     <string name="tooltip_attachment_sticker">Matrica küldése</string>

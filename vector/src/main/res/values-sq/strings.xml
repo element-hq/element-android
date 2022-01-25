@@ -1123,11 +1123,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">Token-i FCM u regjistrua me sukses te shërbyesi Home.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">S’u arrit të regjistrohej token FCM te shërbyesi Home:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Shërbim Njoftimesh</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Shërbimi i Njoftimeve po xhiron.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Shërbimi i Njoftimeve s’po xhiron.
-\nProvoni të rinisni aplikacionin.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Nise Shërbimin</string>
     <string name="settings_troubleshoot_test_service_restart_title">Vetërinisje Shërbimi Njoftimesh</string>
     <string name="settings_troubleshoot_test_service_restart_success">Shërbimi u asgjësua dhe u rinis automatikisht.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">S’u arrit të rinisej shërbimi</string>
@@ -3054,11 +3049,7 @@
     <string name="labs_auto_report_uisi">Raporto Vetvetiu Gabime Shfshehtëzimi.</string>
     <string name="room_member_override_nick_color">Anashkalo ngjyrë nofke</string>
     <string name="login_splash_already_have_account">Kam tashmë një llogari</string>
-    <string name="ftue_auth_carousel_4_body">Po aq universal sa email-i, Element-i është një lloj plotësisht i ri bashkëpunimi.</string>
-    <string name="ftue_auth_carousel_3_body">Element-i funksionon me krejt aplikacionet e bazuar në Matrix dhe mund të shërbejë madje si urë për shkëmbyes pronësorë mesazhesh.</string>
     <string name="ftue_auth_carousel_3_title">Lidhuni me këdo.</string>
-    <string name="ftue_auth_carousel_2_body">Element-i ju lejon të zgjidhni ku depozitohen mesazhet tuaja, duke ju mbajtur ju në kontroll të të dhënave tuaja.</string>
     <string name="ftue_auth_carousel_2_title">Kontrollin e keni ju.</string>
-    <string name="ftue_auth_carousel_1_body">Shkëmbim mesazhesh të fshehtëzuar skaj më skaj, për komunikim të siguruar dhe të pavarur, me lidhje përmes Matrix-it.</string>
     <string name="ftue_auth_carousel_1_title">Jini zot i bisedave tuaja.</string>
 </resources>

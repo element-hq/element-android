@@ -1102,11 +1102,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">Le jeton FCM a été correctement enregistré sur le serveur d’accueil.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Le jeton FCM n’a pas pu être enregistré sur le serveur d’accueil :
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Service de notifications</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Le service de notifications est lancé.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Le service de notifications n’est pas lancé.
-\nEssayez de redémarrer l’application.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Démarrer le service</string>
     <string name="settings_troubleshoot_test_service_restart_title">Redémarrage automatique du service de notifications</string>
     <string name="settings_troubleshoot_test_service_restart_success">Le service a été tué et redémarré automatiquement.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Le redémarrage du service a échoué</string>
@@ -3066,13 +3061,9 @@
     <string name="labs_auto_report_uisi">Signalement automatique des erreurs de déchiffrement.</string>
     <string name="room_member_override_nick_color">Outrepasser la couleur du pseudo</string>
     <string name="login_splash_already_have_account">J’ai déjà un compte</string>
-    <string name="ftue_auth_carousel_4_body">Aussi universel que le courriel, Element est une forme de collaboration complètement nouvelle.</string>
     <string name="ftue_auth_carousel_4_title">Être vicTeams, ce n’est pas Slack vous voulez.</string>
-    <string name="ftue_auth_carousel_3_body">Element fonctionne avec toutes les apps basées sur Matrix et peut même être relié à des messageries propriétaires.</string>
     <string name="ftue_auth_carousel_3_title">Se connecter avec qui vous voulez.</string>
-    <string name="ftue_auth_carousel_2_body">Element vous laisse choisir où sont stockés vos messages, vous laissant le contrôle sur vos données.</string>
     <string name="ftue_auth_carousel_2_title">Vous êtes aux commandes.</string>
-    <string name="ftue_auth_carousel_1_body">Messagerie chiffrée de bout en bout pour une communication sécurisée et indépendante, connectée via Matrix.</string>
     <string name="ftue_auth_carousel_1_title">Contrôlez vos conversations.</string>
     <string name="room_error_access_unauthorized">Vous n’êtes pas autorisé à rejoindre ce salon</string>
 </resources>

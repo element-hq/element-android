@@ -471,11 +471,6 @@
     <string name="settings_troubleshoot_test_service_restart_failed">השירות נכשל מלעלות מחדש</string>
     <string name="settings_troubleshoot_test_service_restart_success">השירות נסגר והופעל מחדש אוטומטית.</string>
     <string name="settings_troubleshoot_test_service_restart_title">הפעלה מחדש אוטומטית לשירות ההתראות</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">החל שירות</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">שירות ההתראות אינו פועל.
-\nנסה להפעיל מחדש את היישום.</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">שירות ההתראות פועל.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">שירות התראות</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">ההודעה נלחצה!</string>
     <string name="settings_troubleshoot_test_notification_notice">אנא לחץ על ההודעה. אם אינך רואה את ההודעה, אנא בדוק את הגדרות המערכת.</string>
     <string name="settings_troubleshoot_test_notification_title">תצוגת התראות</string>

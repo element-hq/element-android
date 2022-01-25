@@ -1829,9 +1829,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Pārbaudīt fona ierobežojumus</string>
     <string name="settings_troubleshoot_test_service_restart_success">Pakalpojums tika beigts un restartēts automātiski.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Notifikāciju Pakalpojuma Auto-Restartēšana</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Notifikāciju Pakalpojums nestrādā.
-\nMēģiniet restartēt aplikāciju.</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Notifikāciju Pakalpojums strādā.</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">Notifikācija tika nospiesta!</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Neizdevās reģistrēt FCM žetonu mājasserverī:
 \n%1$s</string>
@@ -1865,8 +1862,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_call_notifications_preferences">Konfigurēt Zvanu Notifikācijas</string>
     <string name="settings_troubleshoot_test_service_boot_success">Pakalpojums startēsies, kad ierīce būs restartēta.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Pakalpojumam neizdevās restartēties</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Sākt Pakalpojumu</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Notifikāciju Pakalpojums</string>
     <string name="settings_troubleshoot_test_notification_title">Notifikāciju Displejs</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Servisu APK ir pieejams un atjaunināts.</string>
     <string name="search_banned_user_hint">Filtrēt aizliegtos lietotājus</string>

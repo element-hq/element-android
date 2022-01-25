@@ -848,8 +848,6 @@
     <string name="settings_enable_all_notif">Notifikaasjes foar dizze account ynskeakelje</string>
     <string name="settings_notification_ringtone">Notifikaasjelûd</string>
     <string name="settings_notification_privacy_normal">Normaal</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Tsjinst starte</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Notifikaasjetsjinst</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Ynstellingen kontrolearje</string>
     <string name="settings_troubleshoot_test_device_settings_title">Sesjeynstellingen.</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Oan it útfieren… (%1$d fan %2$d)</string>
@@ -1080,9 +1078,6 @@
     <string name="settings_call_notifications_preferences">Opropnotifikaasjes konfigurearje</string>
     <string name="settings_notification_privacy_nosecure_message_content">• Notifikaasjes befetsje <b>meta- en berjochtgegevens</b></string>
     <string name="settings_troubleshoot_test_service_restart_title">Notifikaasjetsjinst automatysk opnij starte</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Notifikaasjetsjinst is net aktyf.
-\nProbearje de app opnij te starten.</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Notifikaasjetsjinst is aktyf.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Notifikaasjes binne foar dizze sesje ynskeakele.</string>
     <string name="settings_notification_troubleshoot">Problemen mei notifikaasjes oplosse</string>
     <string name="settings_notification_default">Standert notifikaasjes</string>

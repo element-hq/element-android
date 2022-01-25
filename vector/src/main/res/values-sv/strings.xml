@@ -795,10 +795,6 @@
 \nVänligen kolla ${app_name}inställningarna.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Observera att vissa meddelandetyper är satta till tyst (kommer att producera aviseringar utan ljud).</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Vissa aviseringar är inaktiverade i dina anpassade inställningar.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Aviseringstjänst</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Aviseringstjänsten körs.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Aviseringstjänsten körs inte.
-\nFörsök att starta om appen.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Automatisk omstart av aviseringstjänsten</string>
     <string name="template_settings_troubleshoot_test_service_boot_failed">Tjänsten kommer inte att starta när enheten startas om, så du kommer inte att få aviseringar förrens ${app_name} har öppnats en gång.</string>
     <string name="template_settings_troubleshoot_test_bg_restricted_failed">Bakgrundsbegränsningar är aktiverade för ${app_name}.
@@ -1330,7 +1326,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM-token registrerades framgångsrikt på hemservern.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Misslyckades att registrera FCM-token på hemservern:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Starta tjänst</string>
     <string name="settings_troubleshoot_test_service_restart_success">Tjänsten dödades och startades om automatiskt.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Tjänsten misslyckades att starta om</string>
     <string name="settings_troubleshoot_test_service_boot_title">Starta vid boot</string>
@@ -3065,12 +3060,8 @@
     <string name="labs_auto_report_uisi">Rapportera avkrypteringsfel automatiskt.</string>
     <string name="room_member_override_nick_color">Åsidosätt visningsnamnsfärg</string>
     <string name="login_splash_already_have_account">Jag har redan ett konto</string>
-    <string name="ftue_auth_carousel_4_body">Lika universell som e-post, Element är ett helt nytt sorts samarbete.</string>
-    <string name="ftue_auth_carousel_3_body">Element funkar med alla Matrix-baserade appar och kan till och med brygga till proprietära meddelandetjänster.</string>
     <string name="ftue_auth_carousel_3_title">Kontakta vem som helst.</string>
-    <string name="ftue_auth_carousel_2_body">Element låter dig välja var dina meddelanden lagras, vilket håller dig i kontroll över din data.</string>
     <string name="ftue_auth_carousel_2_title">Du har kontroll.</string>
-    <string name="ftue_auth_carousel_1_body">Totalsträckskrypterade meddelanden för säker och oberoende kommunikation, ansluten via Matrix.</string>
     <string name="ftue_auth_carousel_1_title">Äg dina konversationer.</string>
     <string name="room_error_access_unauthorized">Du får inte gå med i det här rummet</string>
 </resources>

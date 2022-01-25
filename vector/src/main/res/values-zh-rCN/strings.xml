@@ -1025,11 +1025,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM Token 已成功注册至主服务器。</string>
     <string name="settings_troubleshoot_test_token_registration_failed">未能将FCM Token 注册到主服务器：
 \n %1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">通知服务</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">通知服务正在运行。</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">通知服务未在运行。
-\n请尝试重启本应用程序。</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">启动服务</string>
     <string name="settings_labs_native_camera_summary">调用系统相机应用而非使用 ${app_name} 内置的相机界面。</string>
     <string name="settings_labs_enable_send_voice_summary">此选项需要第三方应用录制消息。</string>
     <string name="settings_troubleshoot_test_service_boot_title">开机时启动</string>

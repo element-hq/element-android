@@ -1187,11 +1187,6 @@
     <string name="settings_troubleshoot_test_notification_notice">Please click on the notification. If you do not see the notification, please check the system settings.</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">The notification has been clicked!</string>
 
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Notifications Service</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Notifications Service is running.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Notifications Service is not running.\nTry to restart the application.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Start Service</string>
-
     <string name="settings_troubleshoot_test_service_restart_title">Notifications Service Auto-Restart</string>
     <string name="settings_troubleshoot_test_service_restart_success">Service was killed and restarted automatically.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Service failed to restart</string>
@@ -2519,17 +2514,9 @@
 
     <!--  Onboarding -->
     <string name="ftue_auth_carousel_1_title">Own your conversations.</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="ftue_auth_carousel_1_body">End-to-end encrypted messaging for secure and independent communication, connected via Matrix.</string>
     <string name="ftue_auth_carousel_2_title">You\'re in control.</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="ftue_auth_carousel_2_body">Element lets you choose where your messages are stored, keeping you in control of your data.</string>
     <string name="ftue_auth_carousel_3_title">Secure messaging.</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="ftue_auth_carousel_3_body">No phone number required, so you don\'t have to share those details with the outside world. No ads, no datamining.</string>
     <string name="ftue_auth_carousel_4_title">Cut the slack from teams.</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="ftue_auth_carousel_4_body">As universal as email, Element is a completely new type of collaboration.</string>
 
     <string name="ftue_auth_carousel_body_secure">Secure and independent communication that gives you the same level of privacy as a face-to-face conversation in your own home.</string>
     <string name="ftue_auth_carousel_body_control">Choose where your conversations are kept, giving you control and independence. Connected via Matrix.</string>
