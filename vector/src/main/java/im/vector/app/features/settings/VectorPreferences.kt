@@ -201,6 +201,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         private const val SETTINGS_LABS_ENABLE_POLLS = "SETTINGS_LABS_ENABLE_POLLS"
 
+        private const val SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE = "SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
+
         // Possible values for TAKE_PHOTO_VIDEO_MODE
         const val TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK = 0
         const val TAKE_PHOTO_VIDEO_MODE_PHOTO = 1
@@ -1001,5 +1003,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
     fun isLocationSharingEnabled(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_PREF_ENABLE_LOCATION_SHARING, false) && BuildConfig.enableLocationSharing
+    }
+
+    fun labsRenderLocationsInTimeline(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE, true)
     }
 }

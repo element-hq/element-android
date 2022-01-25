@@ -75,6 +75,7 @@ import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
+import im.vector.app.features.settings.VectorPreferences
 import me.gujun.android.span.span
 import org.commonmark.node.Document
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
@@ -124,7 +125,8 @@ class MessageItemFactory @Inject constructor(
         private val spanUtils: SpanUtils,
         private val session: Session,
         private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
-        private val locationPinProvider: LocationPinProvider) {
+        private val locationPinProvider: LocationPinProvider,
+        private val vectorPreferences: VectorPreferences) {
 
     // TODO inject this properly?
     private var roomId: String = ""
@@ -177,7 +179,13 @@ class MessageItemFactory @Inject constructor(
             }
             is MessageVerificationRequestContent -> buildVerificationRequestMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessagePollContent                -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
-            is MessageLocationContent            -> buildLocationItem(messageContent, informationData, highlight, callback, attributes)
+            is MessageLocationContent            -> {
+                if (vectorPreferences.labsRenderLocationsInTimeline()) {
+                    buildLocationItem(messageContent, informationData, highlight, callback, attributes)
+                } else {
+                    buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
+                }
+            }
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
     }

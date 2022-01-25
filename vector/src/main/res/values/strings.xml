@@ -3709,6 +3709,7 @@
     <string name="template_location_not_available_dialog_content">${app_name} could not access your location. Please try again later.</string>
     <string name="location_share_external">Open with</string>
     <string name="settings_enable_location_sharing">Enable location sharing</string>
+    <string name="labs_render_locations_in_timeline">Render user locations in the timeline</string>
 
     <string name="tooltip_attachment_photo">Open camera</string>
     <string name="tooltip_attachment_gallery">Send images and videos</string>
