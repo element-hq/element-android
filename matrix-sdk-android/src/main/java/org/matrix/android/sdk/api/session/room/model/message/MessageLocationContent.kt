@@ -48,7 +48,8 @@ data class MessageLocationContent(
         @Json(name = "m.new_content") override val newContent: Content? = null,
 
         /**
-         * m.asset defines a generic asset that can be used for location tracking but also in other places like inventories, geofencing, checkins/checkouts etc.
+         * m.asset defines a generic asset that can be used for location tracking but also in other places like
+         * inventories, geofencing, checkins/checkouts etc.
          * It should contain a mandatory namespaced type key defining what particular asset is being referred to.
          * For the purposes of user location tracking m.self should be used in order to avoid duplicating the mxid.
          */
