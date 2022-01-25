@@ -53,7 +53,7 @@ sealed class PollOptionViewState(open val optionId: String,
     ) : PollOptionViewState(optionId, optionAnswer)
 
     /**
-     * Represent a poll that is closed, votes will be hidden until the poll is ended.
+     * Represent a poll that is undisclosed, votes will be hidden until the poll is ended.
      */
     data class PollUndisclosed(override val optionId: String,
                                override val optionAnswer: String,

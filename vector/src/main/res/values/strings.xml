@@ -3707,6 +3707,7 @@
     <string name="end_poll_confirmation_title">End this poll?</string>
     <string name="end_poll_confirmation_description">This will stop people from being able to vote and will display the final results of the poll.</string>
     <string name="end_poll_confirmation_approve_button">End poll</string>
+    <!-- TODO. Remove -->
     <string name="labs_enable_polls">Enable Polls</string>
     <string name="poll_response_room_list_preview">Vote cast</string>
     <string name="poll_end_room_list_preview">Poll ended</string>
