@@ -1082,7 +1082,7 @@
     <string name="room_participants_action_leave">Lahku sellest jututoast</string>
     <string name="room_participants_action_ban">Keela ligipääs</string>
     <string name="room_participants_action_unban">Taasta ligipääs</string>
-    <string name="room_participants_action_kick">Müksa välja</string>
+    <string name="room_participants_action_remove">Müksa välja</string>
     <string name="room_participants_action_set_default_power_level">Muuda tavakasutajaks</string>
     <string name="room_participants_action_set_moderator">Määra moderaatoriks</string>
     <string name="room_participants_action_set_admin">Määra peakasutajaks</string>
@@ -1149,8 +1149,8 @@
     <string name="room_participants_action_unignore">Lõpeta eiramine</string>
     <string name="room_participants_action_cancel_invite_title">Tühista kutse</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Kas oled kindel et sa soovid tühistada kutse sellele kasutajale\?</string>
-    <string name="room_participants_kick_title">Müksa kasutaja välja</string>
-    <string name="room_participants_kick_reason">Jututoast väljamüksamise põhjus</string>
+    <string name="room_participants_remove_title">Müksa kasutaja välja</string>
+    <string name="room_participants_remove_reason">Jututoast väljamüksamise põhjus</string>
     <string name="room_participants_kick_prompt_msg">jututoast välja müksamine eemaldab ta praeguseks jututoast.
 \n
 \nKui soovid, et ta ei saaks uuesti liituda, siis peaksid seadma suhtluskeelu.</string>
@@ -1548,7 +1548,7 @@
     <string name="command_description_join_room">Liitu sellise aadressiga jututoaga</string>
     <string name="command_description_part_room">Lahku jututoast</string>
     <string name="command_description_topic">Määra jututoa teema</string>
-    <string name="command_description_kick_user">Müksa selle tunnusega kasutaja jututoast välja</string>
+    <string name="command_description_remove_user">Müksa selle tunnusega kasutaja jututoast välja</string>
     <string name="command_description_nick">Muudab sinu kuvatavat nime</string>
     <string name="command_description_markdown">Lülita markdown-vormingu kasutamine sisse või välja</string>
     <string name="command_description_clear_scalar_token">Paranda Matrix\'i rakenduse haldust</string>
@@ -1581,7 +1581,7 @@
         <item quantity="other">%d jututuba</item>
     </plurals>
     <string name="group_no_long_description">Kogukonna haldur ei ole kogukonna pikka kirjeldust koostanud.</string>
-    <string name="has_been_kicked">%2$s müksas sind välja %1$s jututoast</string>
+    <string name="has_been_removed">%2$s müksas sind välja %1$s jututoast</string>
     <string name="receipt_avatar">Lugemisteatise tunnuspilt</string>
     <string name="notice_avatar">Teavituse tunnuspilt</string>
     <string name="avatar">Tunnuspilt</string>
@@ -2539,7 +2539,7 @@
     <string name="room_permissions_notify_everyone">Teavita kõiki</string>
     <string name="room_permissions_remove_messages_sent_by_others">Kustuta teiste saadetud sõnumid</string>
     <string name="room_permissions_ban_users">Määra kasutajatele suhtluskeeld</string>
-    <string name="room_permissions_kick_users">Müksa kasutajaid välja</string>
+    <string name="room_permissions_remove_users">Müksa kasutajaid välja</string>
     <string name="room_permissions_change_settings">Muuda seadistusi</string>
     <string name="room_permissions_invite_users">Kutsu kasutajaid</string>
     <string name="room_permissions_send_messages">Saada sõnumeid</string>
@@ -2963,7 +2963,7 @@
     <string name="space_settings_permissions_title">Õigused kogukonnakeskuses</string>
     <string name="space_participants_unban_prompt_msg">Suhtluskeelu eemaldamine võimaldab kogukonnaga uuesti liituda.</string>
     <string name="space_participants_ban_prompt_msg">Sellele kasutajale suhtluskeelu seadmine tõstab ta kogukonnast välja ning ei võimalda uuesti liitumist.</string>
-    <string name="space_participants_kick_prompt_msg">kogukonnast välja müksamine eemaldab ta praeguseks sellest kogukonnast.
+    <string name="space_participants_remove_prompt_msg">kogukonnast välja müksamine eemaldab ta praeguseks sellest kogukonnast.
 \n
 \nKui soovid, et ta ei saaks uuesti liituda, siis peaksid seadma suhtluskeelu.</string>
     <string name="a11y_stop_voice_message">Lõpeta salvestamine</string>

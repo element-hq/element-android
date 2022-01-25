@@ -427,7 +427,7 @@
     <string name="room_participants_action_leave">이 방 떠나기</string>
     <string name="room_participants_action_ban">출입 금지</string>
     <string name="room_participants_action_unban">출입 금지 풀기</string>
-    <string name="room_participants_action_kick">추방</string>
+    <string name="room_participants_action_remove">추방</string>
     <string name="room_participants_action_set_default_power_level">일반 사용자로 재 설정</string>
     <string name="room_participants_action_set_moderator">중재자로 하기</string>
     <string name="room_participants_action_set_admin">관리자로 하기</string>
@@ -965,7 +965,7 @@
     <string name="command_description_join_room">주어진 별칭으로 방에 참가하기</string>
     <string name="command_description_part_room">방 떠나기</string>
     <string name="command_description_topic">방 주제 설정하기</string>
-    <string name="command_description_kick_user">주어진 ID로 사용자 추방하기</string>
+    <string name="command_description_remove_user">주어진 ID로 사용자 추방하기</string>
     <string name="command_description_nick">표시 별명 바꾸기</string>
     <string name="command_description_markdown">마크다운 On/Off</string>
     <string name="command_description_clear_scalar_token">Matrix 앱 관리 문제를 해결하려면</string>
@@ -997,7 +997,7 @@
         <item quantity="other">%d개의 방</item>
     </plurals>
     <string name="group_no_long_description">커뮤니티 관리자가 이 커뮤니티에 대한 자세한 설명을 제공하지 않았습니다.</string>
-    <string name="has_been_kicked">%2$s님에 의해 %1$s 방에서 추방당했습니다</string>
+    <string name="has_been_removed">%2$s님에 의해 %1$s 방에서 추방당했습니다</string>
     <string name="has_been_banned">%2$s님에 의해 %1$s 방에서 출입 금지당했습니다</string>
     <string name="reason_colon">이유: %1$s</string>
     <string name="rejoin">다시 참가하기</string>

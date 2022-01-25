@@ -639,7 +639,7 @@
     <string name="room_participants_action_leave">Lämna det här rummet</string>
     <string name="room_participants_action_ban">Banna</string>
     <string name="room_participants_action_unban">Avbanna</string>
-    <string name="room_participants_action_kick">Kicka</string>
+    <string name="room_participants_action_remove">Kicka</string>
     <string name="room_participants_action_set_default_power_level">Återställ till vanlig användare</string>
     <string name="room_participants_action_set_moderator">Gör till moderator</string>
     <string name="room_participants_action_set_admin">Gör till administratör</string>
@@ -1238,8 +1238,8 @@
     <string name="room_participants_action_unignore_prompt_msg">Att avignorera den här användaren kommer att visa alla meddelanden från hen igen.</string>
     <string name="room_participants_action_cancel_invite_title">Avbryt inbjudan</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Är du säker på att du vill avbryta inbjudan för den här användaren\?</string>
-    <string name="room_participants_kick_title">Kicka användaren</string>
-    <string name="room_participants_kick_reason">Anledning för kick</string>
+    <string name="room_participants_remove_title">Kicka användaren</string>
+    <string name="room_participants_remove_reason">Anledning för kick</string>
     <string name="room_participants_kick_prompt_msg">att sparka ut användaren kommer att ta bort hen från det här rummet.
 \n
 \nFör att hindra hen från att gå med i rummet igen så bör du banna hen istället.</string>
@@ -1776,7 +1776,7 @@
     <string name="command_description_invite_user">Bjuder in användaren med det angivna ID:t till det nuvarande rummet</string>
     <string name="command_description_join_room">Går med i rummet med den angivna adressen</string>
     <string name="command_description_topic">Sätt ett rumsämne</string>
-    <string name="command_description_kick_user">Sparkar ut användaren med det angivna ID:t</string>
+    <string name="command_description_remove_user">Sparkar ut användaren med det angivna ID:t</string>
     <string name="command_description_nick">Ändrar ditt visningsnamn</string>
     <string name="command_description_clear_scalar_token">För att fixa Matrixapphantering</string>
     <string name="create">Skapa</string>
@@ -1794,7 +1794,7 @@
         <item quantity="other">%d medlemmar</item>
     </plurals>
     <string name="group_no_long_description">Gemenskapsadministratören har inte försett en lång beskrivning för den här gemenskapen.</string>
-    <string name="has_been_kicked">Du har blivit utsparkad från %1$s av %2$s</string>
+    <string name="has_been_removed">Du har blivit utsparkad från %1$s av %2$s</string>
     <string name="has_been_banned">Du har blivit bannad från %1$s av %2$s</string>
     <string name="reason_colon">Orsak: %1$s</string>
     <string name="rejoin">Gå med igen</string>
@@ -2539,7 +2539,7 @@
     <string name="room_permissions_notify_everyone">Underrätta alla</string>
     <string name="room_permissions_remove_messages_sent_by_others">Ta bort meddelanden skickade av andra</string>
     <string name="room_permissions_ban_users">Banna användare</string>
-    <string name="room_permissions_kick_users">Kicka användare</string>
+    <string name="room_permissions_remove_users">Kicka användare</string>
     <string name="room_permissions_change_settings">Ändra inställningar</string>
     <string name="room_permissions_invite_users">Bjuda in användare</string>
     <string name="room_permissions_send_messages">Skicka meddelanden</string>
@@ -2924,7 +2924,7 @@
     <string name="space_settings_permissions_title">Utrymmesbehörigheter</string>
     <string name="space_participants_unban_prompt_msg">Om användaren avbannas kommer denna att få gå med i utrymmet igen.</string>
     <string name="space_participants_ban_prompt_msg">Att banna användaren kommer att kicka denne från det här utrymmet och hindra hen från att gå med igen.</string>
-    <string name="space_participants_kick_prompt_msg">att kicka användaren kommer att ta bort den från det här utrymmet.
+    <string name="space_participants_remove_prompt_msg">att kicka användaren kommer att ta bort den från det här utrymmet.
 \n
 \nFör att hindra hen från att gå med igen så bör de banna hen istället.</string>
     <string name="create_space_in_progress">Skapar utrymme…</string>

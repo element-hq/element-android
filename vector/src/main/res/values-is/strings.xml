@@ -486,7 +486,7 @@
     <string name="start_verification">Hefja sannvottun</string>
     <string name="share_without_verifying">Deila án sannvottunar</string>
     <string name="ignore_request">Hunsa beiðni</string>
-    <string name="has_been_kicked">Þér hefur verið sparkað úr %1$s af %2$s</string>
+    <string name="has_been_removed">Þér hefur verið sparkað úr %1$s af %2$s</string>
     <string name="has_been_banned">Þú hefur verið settur í bann á %1$s af %2$s</string>
     <string name="room_settings_labs_pref_title">Tilraunir</string>
     <string name="report_content">Klaga efni</string>

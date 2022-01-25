@@ -804,7 +804,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="filter_group_members">Csoport tagjai szűrése</string>
     <string name="filter_group_rooms">Csoport szobái szűrése</string>
     <string name="group_no_long_description">A közösség adminisztrátora nem adott meg hosszú leírást ehhez a közösséghez.</string>
-    <string name="has_been_kicked">Ki lettél rúgva innen: %1$s, %2$s által</string>
+    <string name="has_been_removed">Ki lettél rúgva innen: %1$s, %2$s által</string>
     <string name="has_been_banned">Ki lettél tiltva innen: %1$s, %2$s által</string>
     <string name="reason_colon">Ok: %1$s</string>
     <string name="rejoin">Újracsatlakozás</string>
@@ -928,7 +928,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="command_description_join_room">Megadott címmel csatlakozik a szobához</string>
     <string name="command_description_part_room">Kilépés a szobából</string>
     <string name="command_description_topic">A szoba témájának beállítása</string>
-    <string name="command_description_kick_user">Megadott azonosítójú felhasználó kirúgása</string>
+    <string name="command_description_remove_user">Megadott azonosítójú felhasználó kirúgása</string>
     <string name="command_description_nick">Becenév megváltoztatása</string>
     <string name="command_description_markdown">Markdown ki-,bekapcsolása</string>
     <string name="command_description_clear_scalar_token">Matrix-kisalkalmazás-token törlése</string>
@@ -1000,7 +1000,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="call_anyway">Hívás mindenképpen</string>
-    <string name="room_participants_action_kick">Elküld</string>
+    <string name="room_participants_action_remove">Elküld</string>
     <string name="reason_hint">Ok</string>
     <string name="settings_inline_url_preview_summary">URL előnézet a csevegő ablakban, ha a Matrix szervered támogatja ezt a lehetőséget.</string>
     <string name="settings_send_typing_notifs">Gépelés visszajelzés küldése</string>
@@ -2096,8 +2096,8 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="active_call_with_duration">Aktív hívás (%s)</string>
     <string name="return_to_call">Visszatérés a híváshoz</string>
     <string name="room_participants_action_ignore_title">Felhasználó figyelmen kívül hagyása</string>
-    <string name="room_participants_kick_title">Felhasználó kirúgása</string>
-    <string name="room_participants_kick_reason">Kirúgás oka</string>
+    <string name="room_participants_remove_title">Felhasználó kirúgása</string>
+    <string name="room_participants_remove_reason">Kirúgás oka</string>
     <string name="room_participants_ban_title">Felhasználó kitiltása a szobából</string>
     <string name="room_participants_ban_reason">Kitiltás oka</string>
     <string name="room_participants_unban_title">Felhasználó visszaengedése</string>
@@ -2404,7 +2404,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="room_permissions_notify_everyone">Mindenki értesítése</string>
     <string name="room_permissions_remove_messages_sent_by_others">Mások által küldött üzenetek törlése</string>
     <string name="room_permissions_ban_users">Felhasználók kitiltása</string>
-    <string name="room_permissions_kick_users">Felhasználók kirúgása</string>
+    <string name="room_permissions_remove_users">Felhasználók kirúgása</string>
     <string name="room_permissions_change_settings">Beállítások megváltoztatása</string>
     <string name="room_permissions_invite_users">Felhasználók meghívása</string>
     <string name="room_permissions_send_messages">Üzenet küldése</string>
@@ -2962,7 +2962,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="space_settings_permissions_title">Tér jogosultságok</string>
     <string name="space_participants_unban_prompt_msg">A felhasználó tiltásának visszavonása lehetővé teszi, hogy újra belépjen a térbe.</string>
     <string name="space_participants_ban_prompt_msg">A felhasználó kitiltása eltávolítja őt a térből és megakadályozza, hogy visszajöjjön.</string>
-    <string name="space_participants_kick_prompt_msg">a felhasználó kirúgása eltávolítja a térből.
+    <string name="space_participants_remove_prompt_msg">a felhasználó kirúgása eltávolítja a térből.
 \n
 \nHa meg akarja akadályozni, hogy újra csatlakozzon, akkor inkább tiltsa ki.</string>
     <string name="a11y_stop_voice_message">Felvétel megállítása</string>

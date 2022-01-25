@@ -131,7 +131,7 @@
     <string name="room_participants_action_invite">Inviter</string>
     <string name="room_participants_action_ban">Utesteng</string>
     <string name="room_participants_action_unban">Opphev utestengelse</string>
-    <string name="room_participants_action_kick">Spark ut</string>
+    <string name="room_participants_action_remove">Spark ut</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
     <string name="room_menu_search">Søk</string>
     <string name="room_message_file_not_found">Filen ble ikke funnet</string>
@@ -1053,8 +1053,8 @@
     <string name="room_participants_kick_prompt_msg">sparke bruker vil fjerne dem fra dette rommet.
 \n
 \nFor å forhindre at de blir med igjen, bør du forby dem i stedet.</string>
-    <string name="room_participants_kick_reason">Grunn til å sparke</string>
-    <string name="room_participants_kick_title">Spark bruker</string>
+    <string name="room_participants_remove_reason">Grunn til å sparke</string>
+    <string name="room_participants_remove_title">Spark bruker</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Er du sikker på at du vil avbryte invitasjonen til denne brukeren\?</string>
     <string name="room_participants_action_cancel_invite_title">Avbryt invitasjonen</string>
     <string name="room_participants_action_unignore_prompt_msg">Oppheving av denne brukeren viser alle meldinger fra dem igjen.</string>
@@ -1531,7 +1531,7 @@
     <string name="room_permissions_notify_everyone">Gi beskjed til alle</string>
     <string name="room_permissions_remove_messages_sent_by_others">Fjern meldinger sendt av andre</string>
     <string name="room_permissions_ban_users">Utesteng brukere</string>
-    <string name="room_permissions_kick_users">Spark brukere</string>
+    <string name="room_permissions_remove_users">Spark brukere</string>
     <string name="room_permissions_change_settings">Endre innstillinger</string>
     <string name="room_permissions_invite_users">Inviter brukere</string>
     <string name="room_permissions_send_messages">Send meldinger</string>

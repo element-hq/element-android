@@ -809,7 +809,7 @@
     <string name="filter_group_members">Rajaa jäsenlistaa</string>
     <string name="filter_group_rooms">Rajaa huonelistaa</string>
     <string name="group_no_long_description">Yhteisön pääkäyttäjä ei ole antanut pitkää kuvausta yhteisölle.</string>
-    <string name="has_been_kicked">Sinut poistettiin %1$s käyttäjän %2$s toimesta</string>
+    <string name="has_been_removed">Sinut poistettiin %1$s käyttäjän %2$s toimesta</string>
     <string name="has_been_banned">Sinut estettiin %1$s käyttäjän %2$s toimesta</string>
     <string name="reason_colon">Syy: %1$s</string>
     <string name="rejoin">Liity uudelleen</string>
@@ -913,7 +913,7 @@
     </plurals>
     <string name="room_participants_now">Nyt %1$s</string>
     <string name="room_participants_ago">Oli %1$s %2$s sitten</string>
-    <string name="room_participants_action_kick">Poista huoneesta</string>
+    <string name="room_participants_action_remove">Poista huoneesta</string>
     <string name="reason_hint">Syy</string>
     <string name="room_participants_invite_join_names">"%1$s, "</string>
     <string name="room_participants_invite_join_names_and">%1$s ja %2$s</string>
@@ -1080,7 +1080,7 @@
     <string name="command_description_join_room">Liittyy annettuun huoneeseen</string>
     <string name="command_description_part_room">Poistu huoneesta</string>
     <string name="command_description_topic">Aseta huoneen aihe</string>
-    <string name="command_description_kick_user">Potkaisee käyttäjän pois</string>
+    <string name="command_description_remove_user">Potkaisee käyttäjän pois</string>
     <string name="command_description_nick">Vaihtaa näytettävän nimimerkkisi</string>
     <string name="command_description_markdown">Markdown päällä/pois</string>
     <string name="command_description_clear_scalar_token">Matrix-sovellusten hallinnan korjaamiseen</string>
@@ -2038,8 +2038,8 @@
 \n
 \nJos haluat estää häntä uudelleen liittymästä, anna hänelle porttikielto.</string>
     <string name="room_participants_ban_reason">Syy porttikielolle</string>
-    <string name="room_participants_kick_reason">Syy poistolle</string>
-    <string name="room_participants_kick_title">Poista käyttäjä</string>
+    <string name="room_participants_remove_reason">Syy poistolle</string>
+    <string name="room_participants_remove_title">Poista käyttäjä</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Valitse ketkä näkevät huoneen historian. Tähänastinen historian näkyvyys ei muutu.</string>
     <string name="room_permissions_change_room_avatar">Muuttaa huoneen profiilikuvaa</string>
     <string name="room_permissions_change_room_name">Muuttaa ryhmän nimeä</string>
@@ -2051,7 +2051,7 @@
     <string name="room_permissions_change_permissions">Muuttaa oikeuksia</string>
     <string name="room_permissions_modify_widgets">Hallita sovelmia</string>
     <string name="room_permissions_ban_users">Estää käyttäjiä</string>
-    <string name="room_permissions_kick_users">Poistaa käyttäjiä</string>
+    <string name="room_permissions_remove_users">Poistaa käyttäjiä</string>
     <string name="room_permissions_change_settings">Muuttaa asetuksia</string>
     <string name="room_permissions_invite_users">Kutsua käyttäjiä</string>
     <string name="room_settings_permissions_title">Oikeudet</string>

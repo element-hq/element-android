@@ -918,7 +918,7 @@
     <string name="filter_group_members">Cerca tra i membri del gruppo</string>
     <string name="filter_group_rooms">Cerca tra le stanze del gruppo</string>
     <string name="group_no_long_description">L\'amministratore non ha fornito una descrizione estesa di questa comunità.</string>
-    <string name="has_been_kicked">%2$s ti ha buttato fuori da %1$s</string>
+    <string name="has_been_removed">%2$s ti ha buttato fuori da %1$s</string>
     <string name="has_been_banned">%2$s ti ha bannato da %1$s</string>
     <string name="reason_colon">Motivo: %1$s</string>
     <string name="rejoin">Rientra</string>
@@ -1000,7 +1000,7 @@
     <string name="command_description_join_room">Entra nella stanza con l\'indirizzo scelto</string>
     <string name="command_description_part_room">Esci dalla stanza</string>
     <string name="command_description_topic">Imposta l\'argomento della stanza</string>
-    <string name="command_description_kick_user">Butta fuori l\'utente con l\'ID specificato</string>
+    <string name="command_description_remove_user">Butta fuori l\'utente con l\'ID specificato</string>
     <string name="command_description_nick">Cambia il tuo nome visualizzato</string>
     <string name="command_description_markdown">Markdown attivo / spento</string>
     <string name="command_description_clear_scalar_token">Per correggere la gestione dei widget</string>
@@ -1072,7 +1072,7 @@
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="call_anyway">Chiama comunque</string>
-    <string name="room_participants_action_kick">Butta fuori</string>
+    <string name="room_participants_action_remove">Butta fuori</string>
     <string name="reason_hint">Motivo</string>
     <string name="settings_inline_url_preview_summary">Se il tuo Home Server supporta questa funzione, all\'interno delle chat verrà visualizzata un\'anteprima dei link postati.</string>
     <string name="settings_send_typing_notifs">Invia notifiche di digitazione</string>
@@ -2176,8 +2176,8 @@
     <string name="room_participants_action_unignore_prompt_msg">Se non ignori più l\'utente vedrai di nuovo tutti i suoi messaggi.</string>
     <string name="room_participants_action_cancel_invite_title">Annulla invito</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Sei sicuro di voler annullare l\'invito per questo utente\?</string>
-    <string name="room_participants_kick_title">Butta fuori l\'utente</string>
-    <string name="room_participants_kick_reason">Motivo</string>
+    <string name="room_participants_remove_title">Butta fuori l\'utente</string>
+    <string name="room_participants_remove_reason">Motivo</string>
     <string name="room_participants_kick_prompt_msg">buttando fuori l\'utente verrà rimosso da questa stanza.
 \n
 \nPer evitare che possa rientrare, dovresti invece bandirlo.</string>
@@ -2529,7 +2529,7 @@
     <string name="room_permissions_notify_everyone">Notifica tutti</string>
     <string name="room_permissions_remove_messages_sent_by_others">Rimuovi i messaggi inviati dagli altri</string>
     <string name="room_permissions_ban_users">Bandisci utenti</string>
-    <string name="room_permissions_kick_users">Butta fuori utenti</string>
+    <string name="room_permissions_remove_users">Butta fuori utenti</string>
     <string name="room_permissions_change_settings">Modifica impostazioni</string>
     <string name="room_permissions_invite_users">Invita utenti</string>
     <string name="room_permissions_send_messages">Invia messaggi</string>
@@ -2953,7 +2953,7 @@
     <string name="space_settings_permissions_subtitle">Vedi e aggiorna i ruoli necessari per cambiare varie parti dello spazio.</string>
     <string name="space_participants_unban_prompt_msg">Riammettere l\'utente gli permetterà di rientrare nello spazio.</string>
     <string name="space_participants_ban_prompt_msg">Bandire l\'utente lo espellerà da questo spazio e gli impedirà di rientrare.</string>
-    <string name="space_participants_kick_prompt_msg">buttando fuori l\'utente verrà rimosso da questo spazio.
+    <string name="space_participants_remove_prompt_msg">buttando fuori l\'utente verrà rimosso da questo spazio.
 \n
 \nPer impedire che possa rientrare, dovresti invece bandirlo.</string>
     <string name="a11y_stop_voice_message">Ferma la registrazione</string>

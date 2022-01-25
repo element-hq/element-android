@@ -779,7 +779,7 @@
     <string name="filter_group_members">رشّح أعضاء المجموعة</string>
     <string name="filter_group_rooms">رشّح غرف المجموعة</string>
     <string name="group_no_long_description">لم يقدّم مدير المجتمع وصفا طويلا عن مجتمعه.</string>
-    <string name="has_been_kicked">لقد طُردت من ⁨%1$s⁩ على يد ⁨%2$s⁩</string>
+    <string name="has_been_removed">لقد طُردت من ⁨%1$s⁩ على يد ⁨%2$s⁩</string>
     <string name="has_been_banned">لقد مُنعت من ⁨%1$s⁩ على يد ⁨%2$s⁩</string>
     <string name="reason_colon">السبب: ⁨%1$s⁩</string>
     <string name="rejoin">أعِد الانضمام</string>
@@ -1055,7 +1055,7 @@
     <string name="command_description_join_room">ينضمّ للغرفة حسب الاختصار المعطى</string>
     <string name="command_description_part_room">اترك الغرفة</string>
     <string name="command_description_topic">اضبط موضوع الغرفة</string>
-    <string name="command_description_kick_user">يطرد المستخدم حسب المعرّف المعطى</string>
+    <string name="command_description_remove_user">يطرد المستخدم حسب المعرّف المعطى</string>
     <string name="command_description_nick">يُغيّر اسم العرض لحسابك</string>
     <string name="command_description_clear_scalar_token">لإصلاح إدارة تطبيقات «ماترِكس»</string>
     <string name="receipt_avatar">شعار الرصيد</string>
@@ -1082,7 +1082,7 @@
     <string name="done">تم</string>
     <string name="dialog_title_error">خطأ</string>
     <string name="settings_call_category">المكالمات</string>
-    <string name="room_participants_action_kick">طرد</string>
+    <string name="room_participants_action_remove">طرد</string>
     <string name="reason_hint">السبب</string>
     <string name="room_sliding_menu_version_x">الإصدار %s</string>
     <string name="settings_notification_advanced">الإعدادات المتقدمة للإشعارات</string>
@@ -1329,7 +1329,7 @@
     <string name="room_permissions_notify_everyone">نبّه الكل</string>
     <string name="room_permissions_remove_messages_sent_by_others">أزل رسائل الآخرين</string>
     <string name="room_permissions_ban_users">احظر مستخدمين</string>
-    <string name="room_permissions_kick_users">أطرد مستخدمين</string>
+    <string name="room_permissions_remove_users">أطرد مستخدمين</string>
     <string name="room_permissions_change_settings">غيّر الإعدادات</string>
     <string name="room_permissions_invite_users">أدعوا مستخدمين</string>
     <string name="room_permissions_send_messages">أرسل رسائل</string>

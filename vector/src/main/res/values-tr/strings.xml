@@ -366,7 +366,7 @@
     <string name="room_participants_action_leave">Odadan ayrıl</string>
     <string name="room_participants_action_ban">Engelle</string>
     <string name="room_participants_action_unban">Engeli kaldır</string>
-    <string name="room_participants_action_kick">At</string>
+    <string name="room_participants_action_remove">At</string>
     <string name="room_participants_action_set_default_power_level">Normal kullanıcıya döndür</string>
     <string name="room_participants_action_set_moderator">Moderatör yap</string>
     <string name="room_participants_action_set_admin">Yönetici yap</string>
@@ -872,7 +872,7 @@
     <string name="command_description_join_room">Verilen takma ad ile odalara katıl</string>
     <string name="command_description_part_room">Odadan ayrıl</string>
     <string name="command_description_topic">Odanın konusunu belirle</string>
-    <string name="command_description_kick_user">Verilen id ile kullanıcıları atar</string>
+    <string name="command_description_remove_user">Verilen id ile kullanıcıları atar</string>
     <string name="command_description_nick">Görünür ismini değiştirir</string>
     <string name="command_description_markdown">Markdown Aç/Kapat</string>
     <string name="command_description_clear_scalar_token">Matrix uygulamaları yönetmeyi düzeltmek için</string>
@@ -906,7 +906,7 @@
         <item quantity="other">%d oda</item>
     </plurals>
     <string name="group_no_long_description">Topluluk yöneticisi bu topluluk için uzun bir açıklama sağlamadı.</string>
-    <string name="has_been_kicked">%1$s dan/den %2$s tarafından atıldın</string>
+    <string name="has_been_removed">%1$s dan/den %2$s tarafından atıldın</string>
     <string name="has_been_banned">%1$s dan/den %2$s tarafından engellendin</string>
     <string name="reason_colon">Nedeni: %1$s</string>
     <string name="rejoin">Tekrar katıl</string>
@@ -1295,8 +1295,8 @@
     <string name="room_participants_action_unignore_prompt_msg">Bu kullanıcıyı yoksaymaktan vazgeçerseniz tekrar tüm mesajlarını görmeye başlayacaksınız.</string>
     <string name="room_participants_action_cancel_invite_title">Daveti geri çevir</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Bu kullanıcıdan gelen daveti geri çevirmek istediğinizden emin misiniz\?</string>
-    <string name="room_participants_kick_title">Kullanıcıyı kov</string>
-    <string name="room_participants_kick_reason">Kovma sebebi</string>
+    <string name="room_participants_remove_title">Kullanıcıyı kov</string>
+    <string name="room_participants_remove_reason">Kovma sebebi</string>
     <string name="room_participants_kick_prompt_msg">Kullanıcıyı kovarsanız kendisi bu odadan çıkacak.
 \n
 \nEğer tekrar katılmasını engellemek istiyorsanız kovmak yerine yasaklamalısınız.</string>
@@ -1346,7 +1346,7 @@
     <string name="room_permissions_notify_everyone">Herkesi bilgilendir</string>
     <string name="room_permissions_remove_messages_sent_by_others">Başkaları tarafından gönderilen mesajları kaldır</string>
     <string name="room_permissions_ban_users">Kullanıcıları banla</string>
-    <string name="room_permissions_kick_users">Kullanıcıları at</string>
+    <string name="room_permissions_remove_users">Kullanıcıları at</string>
     <string name="room_permissions_change_settings">Ayarları değiştir</string>
     <string name="room_permissions_invite_users">Kullanıcı davet et</string>
     <string name="room_permissions_send_messages">Mesaj gönder</string>

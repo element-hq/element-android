@@ -520,7 +520,7 @@
     <string name="avatar">Awatar</string>
     <string name="reason_colon">Powód: %1$s</string>
     <string name="has_been_banned">Zostałeś zbanowany z %1$s przez %2$s</string>
-    <string name="has_been_kicked">Zostałeś wyrzucony z %1$s przez %2$s</string>
+    <string name="has_been_removed">Zostałeś wyrzucony z %1$s przez %2$s</string>
     <string name="group_details_rooms">Pokoje</string>
     <string name="joined">Dołączeni</string>
     <string name="group_details_people">Ludzie</string>
@@ -897,7 +897,7 @@
     <string name="command_description_invite_user">Zaprasza użytkownika z podanym ID do aktualnego pokoju</string>
     <string name="command_description_join_room">Dołącza do pokoju o podanym adresie</string>
     <string name="command_description_topic">Ustawia temat pokoju</string>
-    <string name="command_description_kick_user">Wyrzuca użytkownika z podanym ID</string>
+    <string name="command_description_remove_user">Wyrzuca użytkownika z podanym ID</string>
     <string name="command_description_nick">Zmienia twój wyświetlany nick</string>
     <string name="command_description_clear_scalar_token">Do naprawiania zarządzania aplikacjami Matrix</string>
     <string name="room_tombstone_versioned_description">Ten pokój został zamieniony i nie jest już aktywny.</string>
@@ -933,7 +933,7 @@
     <string name="template_settings_call_ringtone_use_app_ringtone">Użyj domyślnego dzwonka ${app_name} dla przychodzących połączeń</string>
     <string name="call_anyway">Zadzwoń mimo to</string>
     <string name="settings_call_category">Połączenia</string>
-    <string name="room_participants_action_kick">Wyrzuć</string>
+    <string name="room_participants_action_remove">Wyrzuć</string>
     <string name="settings_send_markdown">Formatowanie Markdown</string>
     <string name="settings_show_join_leave_messages">Pokaż zdarzenia dołączenia i wyjścia</string>
     <string name="show_info_area_messages_and_errors">Dla komunikatów i błędów</string>
@@ -2197,8 +2197,8 @@
     <string name="search_banned_user_hint">Filtruj zbanowanych użytkowników</string>
     <string name="room_participants_unban_prompt_msg">Odbanowanie użytkownika pozwoli mu na ponowne dołączenie do pokoju.</string>
     <string name="room_participants_ban_title">Zbanuj użytkownika</string>
-    <string name="room_participants_kick_reason">Powód wykopania</string>
-    <string name="room_participants_kick_title">Wykop użytkownika</string>
+    <string name="room_participants_remove_reason">Powód wykopania</string>
+    <string name="room_participants_remove_title">Wykop użytkownika</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Czy na pewno anulować zaproszenie dla tego użytkownika\?</string>
     <string name="room_participants_action_cancel_invite_title">Anuluj zaproszenie</string>
     <string name="room_participants_action_unignore_prompt_msg">Zaprzestanie ignorowania użytkownika spowoduje ponowne wyświetlanie wszystkich jego wiadomości.</string>
@@ -2503,7 +2503,7 @@
     <string name="room_permissions_notify_everyone">Powiadamianie wszystkich</string>
     <string name="room_permissions_remove_messages_sent_by_others">Usuwanie wiadomości wysłanych przez inne osoby</string>
     <string name="room_permissions_ban_users">Blokowanie użytkowników</string>
-    <string name="room_permissions_kick_users">Wyrzucanie użytkowników</string>
+    <string name="room_permissions_remove_users">Wyrzucanie użytkowników</string>
     <string name="room_permissions_change_settings">Zmiana ustawień</string>
     <string name="room_permissions_invite_users">Zapraszanie użytkowników</string>
     <string name="room_permissions_send_messages">Wysyłanie wiadomości</string>
@@ -2829,7 +2829,7 @@
     <string name="spaces_which_can_access">Przestrzenie mogące uzyskać dostęp</string>
     <string name="allow_space_member_to_find_and_access">Zezwól użytkownikom przestrzeni na znalezienie i dostęp.</string>
     <string name="settings_room_upgrades">Ulepszenia pokoju</string>
-    <string name="space_participants_kick_prompt_msg">wyproszenie użytkownika zaskutkuje usunięciem go z tej przestrzeni.
+    <string name="space_participants_remove_prompt_msg">wyproszenie użytkownika zaskutkuje usunięciem go z tej przestrzeni.
 \n
 \nAby uniemożliwić mu ponowne dołączenie, należy go zbanować.</string>
     <string name="settings_room_directory_show_all_rooms_summary">Pokaż wszystkie pokoje w katalogu pokoi (również te zawierające treści dla dorosłych).</string>

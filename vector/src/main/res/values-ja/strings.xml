@@ -692,7 +692,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="filter_group_members">グループのメンバーをフィルタリングする</string>
     <string name="filter_group_rooms">グループの部屋を絞り込み</string>
     <string name="group_no_long_description">管理者はこのコミュニティの詳細を規定していません。</string>
-    <string name="has_been_kicked">あなたは%2$sによって%1$sから除外されました</string>
+    <string name="has_been_removed">あなたは%2$sによって%1$sから除外されました</string>
     <string name="has_been_banned">あなたは%2$sによって%1$sへの参加を禁止されました</string>
     <string name="reason_colon">理由: %1$s</string>
     <string name="rejoin">再参加</string>
@@ -812,7 +812,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="command_description_join_room">指定したエイリアスの部屋に参加</string>
     <string name="command_description_part_room">部屋を退室</string>
     <string name="command_description_topic">部屋のテーマを設定</string>
-    <string name="command_description_kick_user">指定したIDのユーザとの接続を切断</string>
+    <string name="command_description_remove_user">指定したIDのユーザとの接続を切断</string>
     <string name="command_description_nick">表示するニックネームを変更</string>
     <string name="command_description_markdown">Markdown書式の入/切</string>
     <string name="command_description_clear_scalar_token">Matrixアプリの管理を修正するには</string>
@@ -875,7 +875,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="template_settings_call_ringtone_use_app_ringtone">着信に${app_name}の既定の着信音を使う</string>
     <string name="settings_call_ringtone_title">着信音</string>
     <string name="settings_call_ringtone_dialog_title">着信音を選んでください:</string>
-    <string name="room_participants_action_kick">追い出す</string>
+    <string name="room_participants_action_remove">追い出す</string>
     <string name="reason_hint">理由</string>
     <string name="notification_sync_init">サービスを初期化</string>
     <string name="title_activity_keys_backup_setup">鍵のバックアップ</string>
@@ -1222,7 +1222,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="room_permissions_notify_everyone">全員に通知する</string>
     <string name="room_permissions_remove_messages_sent_by_others">他の人から送信されたメッセージを削除する</string>
     <string name="room_permissions_ban_users">禁止ユーザー</string>
-    <string name="room_permissions_kick_users">キックユーザー</string>
+    <string name="room_permissions_remove_users">キックユーザー</string>
     <string name="room_permissions_change_settings">設定を変更する</string>
     <string name="room_permissions_invite_users">招待されたユーザー</string>
     <string name="room_permissions_send_messages">メッセージを送る</string>
@@ -1239,8 +1239,8 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="room_participants_kick_prompt_msg">キックするユーザーは、この部屋から削除されます。
 \n
 \n再び参加するのを防ぐためには永久追放する必要があります。</string>
-    <string name="room_participants_kick_reason">キックする理由</string>
-    <string name="room_participants_kick_title">ユーザーをキックする</string>
+    <string name="room_participants_remove_reason">キックする理由</string>
+    <string name="room_participants_remove_title">ユーザーをキックする</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">このユーザーの招待をキャンセルしてよろしいですか？</string>
     <string name="room_participants_action_cancel_invite_title">招待をキャンセル</string>
     <string name="room_participants_action_unignore_prompt_msg">このユーザーを解除すると、そのユーザーからのすべてのメッセージが再び表示されます。</string>
@@ -2046,7 +2046,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="login_server_url_form_other_hint">アドレス</string>
     <string name="login_continue">継続する</string>
     <string name="uploads_files_title">ファイル</string>
-    <string name="space_participants_kick_prompt_msg">ユーザーをキックすると、このスペースから削除されます。
+    <string name="space_participants_remove_prompt_msg">ユーザーをキックすると、このスペースから削除されます。
 \n
 \n再参加を防ぐには、代わりにブロックしてください。</string>
     <string name="call_remove_jitsi_widget_progress">通話を終了しています…</string>

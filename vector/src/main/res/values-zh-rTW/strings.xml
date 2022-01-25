@@ -945,7 +945,7 @@
     <string name="filter_group_members">篩選社群成員</string>
     <string name="filter_group_rooms">篩選社群聊天室</string>
     <string name="group_no_long_description">社群管理員未提供此社群的具體描述。</string>
-    <string name="has_been_kicked">您已被 %2$s 從 %1$s 踢出</string>
+    <string name="has_been_removed">您已被 %2$s 從 %1$s 踢出</string>
     <string name="has_been_banned">您已被 %2$s 從 %1$s 封鎖</string>
     <string name="reason_colon">理由：%1$s</string>
     <string name="rejoin">重新加入</string>
@@ -980,7 +980,7 @@
     <string name="command_description_join_room">加入指定地址的聊天室</string>
     <string name="command_description_part_room">離開聊天室</string>
     <string name="command_description_topic">設定聊天室主題</string>
-    <string name="command_description_kick_user">踢除指定 id 的使用者</string>
+    <string name="command_description_remove_user">踢除指定 id 的使用者</string>
     <string name="command_description_nick">變更您的顯示暱稱</string>
     <string name="command_description_markdown">開啟／關閉 markdown</string>
     <string name="command_description_clear_scalar_token">為了修復 Matrix 應用程式管理</string>
@@ -1037,7 +1037,7 @@
     <string name="merged_events_expand">展開</string>
     <string name="merged_events_collapse">摺疊</string>
     <string name="call_anyway">無論如何都要通話</string>
-    <string name="room_participants_action_kick">踢出</string>
+    <string name="room_participants_action_remove">踢出</string>
     <string name="reason_hint">理由</string>
     <string name="settings_inline_url_preview_summary">當您的家伺服器支援此功能時在聊天中預覽連結。</string>
     <string name="settings_send_typing_notifs">傳送輸入通知</string>
@@ -2147,8 +2147,8 @@
     <string name="room_participants_action_unignore_prompt_msg">取消忽略此使用者將再次顯示從他們而來的所有訊息。</string>
     <string name="room_participants_action_cancel_invite_title">取消邀請</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">您確定您想要取消對此使用者的邀請嗎？</string>
-    <string name="room_participants_kick_title">踢除使用者</string>
-    <string name="room_participants_kick_reason">踢除的理由</string>
+    <string name="room_participants_remove_title">踢除使用者</string>
+    <string name="room_participants_remove_reason">踢除的理由</string>
     <string name="room_participants_kick_prompt_msg">踢除使用者將會將他們從此聊天室中移除。
 \n
 \n要避免他們再次加入，您應改為封鎖他們。</string>
@@ -2491,7 +2491,7 @@
     <string name="room_permissions_notify_everyone">通知每個人</string>
     <string name="room_permissions_remove_messages_sent_by_others">移除其他人傳送的訊息</string>
     <string name="room_permissions_ban_users">封鎖使用者</string>
-    <string name="room_permissions_kick_users">踢除使用者</string>
+    <string name="room_permissions_remove_users">踢除使用者</string>
     <string name="room_permissions_change_settings">變更設定</string>
     <string name="room_permissions_invite_users">邀請使用者</string>
     <string name="room_permissions_send_messages">傳送訊息</string>
@@ -2909,7 +2909,7 @@
     <string name="space_settings_permissions_title">空間權限</string>
     <string name="space_participants_unban_prompt_msg">取消封鎖使用者將讓他們可以再次加入空間。</string>
     <string name="space_participants_ban_prompt_msg">封鎖使用者會將他們踢出此空間並防止他們再次加入。</string>
-    <string name="space_participants_kick_prompt_msg">踢除使用者將會將他們從此空間中移除。
+    <string name="space_participants_remove_prompt_msg">踢除使用者將會將他們從此空間中移除。
 \n
 \n為了防止他們再加入，您應該封鎖他們。</string>
     <string name="a11y_stop_voice_message">停止錄製</string>

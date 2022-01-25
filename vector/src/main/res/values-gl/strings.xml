@@ -684,7 +684,7 @@
     <string name="filter_group_members">Filtrar os membros do grupo</string>
     <string name="filter_group_rooms">Filtrar as salas dos grupos</string>
     <string name="group_no_long_description">O administrador da comunidade non fixo unha descrición longa desta comunidade.</string>
-    <string name="has_been_kicked">Foi expulsado de %1$s por %2$s</string>
+    <string name="has_been_removed">Foi expulsado de %1$s por %2$s</string>
     <string name="has_been_banned">Foi bloqueado de %1$s por %2$s</string>
     <string name="reason_colon">Motivo: %1$s</string>
     <string name="rejoin">Volver a unirse</string>

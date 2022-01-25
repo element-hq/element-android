@@ -826,7 +826,7 @@
     <string name="filter_group_members">Filtrovať členov komunity</string>
     <string name="filter_group_rooms">Filtrovať miestnosti v komunite</string>
     <string name="group_no_long_description">Správca nenastavil dlhý popis tejto komunity.</string>
-    <string name="has_been_kicked">Používateľ %2$s vás vykázal z miestnosti %1$s</string>
+    <string name="has_been_removed">Používateľ %2$s vás vykázal z miestnosti %1$s</string>
     <string name="has_been_banned">Používateľ %2$s vám zakázal vstúpiť do miestnosti %1$s</string>
     <string name="reason_colon">Dôvod: %1$s</string>
     <string name="rejoin">Vstúpiť znovu</string>
@@ -987,7 +987,7 @@
     <string name="command_description_join_room">Vstúpi do miestnosti podľa zadaného aliasu</string>
     <string name="command_description_part_room">Opustí aktuálnu miestnosť</string>
     <string name="command_description_topic">Nastaví tému aktuálnej miestnosti</string>
-    <string name="command_description_kick_user">Vykáže zadaného používateľa z miestnosti</string>
+    <string name="command_description_remove_user">Vykáže zadaného používateľa z miestnosti</string>
     <string name="command_description_nick">Mení vaše zobrazované meno / prezývku</string>
     <string name="command_description_markdown">Zapína alebo vypína formátovanie textu pomocou markdown</string>
     <string name="command_description_clear_scalar_token">Užitočné na opravu spravovania aplikácií matrix</string>
@@ -1042,7 +1042,7 @@
     <string name="settings_call_ringtone_title">Zvonenie pre prichádzajúci hovor</string>
     <string name="settings_call_ringtone_dialog_title">Vyberte zvonenie pre prichádzajúce hovory:</string>
     <string name="video_call_in_progress">Prebiehajúci video hovor…</string>
-    <string name="room_participants_action_kick">Vykázať</string>
+    <string name="room_participants_action_remove">Vykázať</string>
     <string name="reason_hint">Dôvod</string>
     <string name="settings_notification_troubleshoot">Riešiť problémy s oznámeniami</string>
     <string name="settings_troubleshoot_diagnostic">Diagnostika problémov</string>
@@ -1272,8 +1272,8 @@
     <string name="room_participants_action_unignore_prompt_msg">Zrušením ignorovania si opäť zobrazíte všetky správy od tohoto používateľa.</string>
     <string name="room_participants_action_cancel_invite_title">Zrušiť pozvanie</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Ste si istí, že chcete zrušiť pozvanie tohoto používateľa\?</string>
-    <string name="room_participants_kick_title">Vykázať používateľa</string>
-    <string name="room_participants_kick_reason">Dôvod vykázania</string>
+    <string name="room_participants_remove_title">Vykázať používateľa</string>
+    <string name="room_participants_remove_reason">Dôvod vykázania</string>
     <string name="room_participants_kick_prompt_msg">Vykázaním odstránite používateľa z miestnosti.
 \n
 \nAk si želáte, aby sa nemohol vrátiť, mali by ste mu tiež zakázať vstupovať.</string>
@@ -1985,7 +1985,7 @@
     <string name="room_permissions_modify_widgets">Upraviť widgety</string>
     <string name="room_permissions_notify_everyone">Poslať oznámenie všetkým</string>
     <string name="room_permissions_ban_users">Zakázať používateľov</string>
-    <string name="room_permissions_kick_users">Vylúčiť používateľov</string>
+    <string name="room_permissions_remove_users">Vylúčiť používateľov</string>
     <string name="room_permissions_change_settings">Zmeniť nastavenia</string>
     <string name="room_permissions_invite_users">Pozvať používateľov</string>
     <string name="room_permissions_send_messages">Odoslať správy</string>

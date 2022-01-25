@@ -516,7 +516,7 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="command_description_join_room">Gabung ke ruangan dengan alamat berikut</string>
     <string name="command_description_part_room">Tinggalkan ruang</string>
     <string name="command_description_topic">Tentukan topik ruang</string>
-    <string name="command_description_kick_user">Keluarkan pengguna dengan id berikut</string>
+    <string name="command_description_remove_user">Keluarkan pengguna dengan id berikut</string>
     <string name="command_description_nick">Ubah nama panggilan layar Anda</string>
     <string name="command_description_markdown">Mati/Nyalakan markdown</string>
     <string name="command_description_clear_scalar_token">Untuk memperbaiki kepengurusan Apps Matrix</string>
@@ -545,7 +545,7 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
         <item quantity="other">%d ruangan</item>
     </plurals>
     <string name="group_no_long_description">Admin komunitas belum menyediakan deskripsi panjang untuk komunitas ini.</string>
-    <string name="has_been_kicked">Anda telah dikeluarkan dari %1$s oleh %2$s</string>
+    <string name="has_been_removed">Anda telah dikeluarkan dari %1$s oleh %2$s</string>
     <string name="has_been_banned">Anda telah dicekal dari %1$s oleh %2$s</string>
     <string name="reason_colon">Alasan: %1$s</string>
     <string name="rejoin">Gabung lagi</string>
@@ -789,7 +789,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_call_ringtone_title">Nada dering panggilan masuk</string>
     <string name="settings_call_ringtone_dialog_title">Pilih nada dering untuk panggilan:</string>
     <string name="video_call_in_progress">Panggilan Video Sedang Berlangsung…</string>
-    <string name="room_participants_action_kick">Keluarkan</string>
+    <string name="room_participants_action_remove">Keluarkan</string>
     <string name="reason_hint">Alasan</string>
     <string name="room_sliding_menu_version_x">Versi %s</string>
     <string name="settings_notification_troubleshoot">Periksa Keadaan Pemberitahuan</string>
@@ -998,7 +998,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_permissions_send_m_room_server_acl_events">Mengirim event m.room.server_acl</string>
     <string name="room_permissions_send_messages">Mengirim pesan</string>
     <string name="room_permissions_invite_users">Mengundang pengguna</string>
-    <string name="room_permissions_kick_users">Keluarkan pengguna</string>
+    <string name="room_permissions_remove_users">Keluarkan pengguna</string>
     <string name="room_permissions_ban_users">Mencekal pengguna</string>
     <string name="room_permissions_change_permissions">Mengubah izin</string>
     <string name="room_permissions_change_room_name">Mengubah nama ruangan</string>
@@ -1023,8 +1023,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_participants_kick_prompt_msg">Pengguna yang dikeluarkan akan menghilangkannya dari ruangan ini.
 \n
 \nUntuk mencegah mereka bergabung lagi, Anda seharusnya mencekalnya.</string>
-    <string name="room_participants_kick_reason">Alasan untuk mengeluarkan</string>
-    <string name="room_participants_kick_title">Keluarkan pengguna</string>
+    <string name="room_participants_remove_reason">Alasan untuk mengeluarkan</string>
+    <string name="room_participants_remove_title">Keluarkan pengguna</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Apakah Anda yakin ingin membatalkan undangan untuk pengguna ini\?</string>
     <string name="room_participants_action_cancel_invite_title">Batalkan undangan</string>
     <string name="room_participants_action_unignore_prompt_msg">Membatalkan abaian pengguna ini akan menampilkan semua pesan dari mereka.</string>
@@ -2913,7 +2913,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="space_settings_permissions_title">Izin space</string>
     <string name="space_participants_unban_prompt_msg">Menghapus cekalan akan mengizinkan pengguna untuk bergabung ke space lagi.</string>
     <string name="space_participants_ban_prompt_msg">Mencekal pengguna akan mengeluarkan pengguna dari space ini dan mencegah pengguna untuk bergabung lagi.</string>
-    <string name="space_participants_kick_prompt_msg">mengeluarkan pengguna akan mengeluarkannya dari space ini.
+    <string name="space_participants_remove_prompt_msg">mengeluarkan pengguna akan mengeluarkannya dari space ini.
 \n
 \nUntuk mencegah pengguna untuk bergabung lagi, Anda seharusnya cekal pengguna itu saja.</string>
     <string name="a11y_stop_voice_message">Berhenti Merekam</string>

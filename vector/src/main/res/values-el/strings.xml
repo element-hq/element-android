@@ -445,8 +445,8 @@
     <string name="room_participants_kick_prompt_msg">Αποβάλλοντας αυτό το χρήση θα τους αφαιρέσαι από το δωμάτιο.
 \n 
 \nΕάν θέλετε να τους αποτρέψετε να συμμετάσχουν ξανά, θα πρέπει να τους αποβάλλετε οριστικά.</string>
-    <string name="room_participants_kick_reason">Λόγος αποβολής</string>
-    <string name="room_participants_kick_title">Αποβολή χρήστη</string>
+    <string name="room_participants_remove_reason">Λόγος αποβολής</string>
+    <string name="room_participants_remove_title">Αποβολή χρήστη</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Είστε σίγουροι πως θέλετε να καταργήσετε την πρόσκληση προς αυτό τον χρήστη;</string>
     <string name="room_participants_action_cancel_invite_title">Ακύρωση πρόσκλησης</string>
     <string name="room_participants_action_unignore">Κατάργηση παράβλεψης</string>

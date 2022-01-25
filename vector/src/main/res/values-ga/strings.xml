@@ -15,7 +15,7 @@
     <string name="room_participants_action_ignore">Tabhair neamhaird ar teachtaireachtaí an úsáideora seo</string>
     <string name="room_participants_power_level_demote">Bain ceadanna</string>
     <string name="room_participants_action_mention">Luaigh</string>
-    <string name="room_participants_action_kick">Caith amach</string>
+    <string name="room_participants_action_remove">Caith amach</string>
     <string name="room_participants_action_unban">Bain an coisc</string>
     <string name="room_participants_action_ban">Coisc</string>
     <string name="room_participants_action_invite">Tabhair cuireadh</string>

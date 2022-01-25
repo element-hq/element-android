@@ -849,7 +849,7 @@
     <string name="filter_group_members">Filtrer les membres du groupe</string>
     <string name="filter_group_rooms">Filtrer les salons du groupe</string>
     <string name="group_no_long_description">L’administrateur de cette communauté n’a pas encore fourni de description.</string>
-    <string name="has_been_kicked">%2$s vous a expulsé de %1$s</string>
+    <string name="has_been_removed">%2$s vous a expulsé de %1$s</string>
     <string name="has_been_banned">%2$s vous a banni de %1$s</string>
     <string name="reason_colon">Motif : %1$s</string>
     <string name="rejoin">Rejoindre</string>
@@ -970,7 +970,7 @@
     <string name="command_description_join_room">Rejoint le salon avec l’adresse fournie</string>
     <string name="command_description_part_room">Quitte le salon</string>
     <string name="command_description_topic">Définit le sujet du salon</string>
-    <string name="command_description_kick_user">Expulse l’utilisateur avec l’identifiant fourni</string>
+    <string name="command_description_remove_user">Expulse l’utilisateur avec l’identifiant fourni</string>
     <string name="command_description_nick">Change le nom d’affichage</string>
     <string name="command_description_markdown">Markdown activé/désactivé</string>
     <string name="command_description_clear_scalar_token">Pour réparer la gestion des applications Matrix</string>
@@ -1042,7 +1042,7 @@
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="call_anyway">Appeler quand même</string>
-    <string name="room_participants_action_kick">Expulser</string>
+    <string name="room_participants_action_remove">Expulser</string>
     <string name="reason_hint">Motif</string>
     <string name="settings_inline_url_preview_summary">Afficher un aperçu des liens dans la discussion quand votre serveur d’accueil le permet.</string>
     <string name="settings_send_typing_notifs">Envoyer des notifications de saisie</string>
@@ -2351,8 +2351,8 @@
     <string name="room_participants_kick_prompt_msg">expulser un utilisateur le supprimera de ce salon.
 \n
 \nPour l’empêcher de revenir, vous devez plutôt le bannir.</string>
-    <string name="room_participants_kick_reason">Motif d’expulsion</string>
-    <string name="room_participants_kick_title">Expulser l’utilisateur</string>
+    <string name="room_participants_remove_reason">Motif d’expulsion</string>
+    <string name="room_participants_remove_title">Expulser l’utilisateur</string>
     <string name="room_participants_action_unignore_title">Ne plus ignorer l’utilisateur</string>
     <string name="call_format_turn_hd_on">Activer la HD</string>
     <string name="call_format_turn_hd_off">Désactiver la HD</string>
@@ -2586,7 +2586,7 @@
     <string name="room_permissions_notify_everyone">Notifier tout le monde</string>
     <string name="room_permissions_remove_messages_sent_by_others">Supprimer les messages des autres</string>
     <string name="room_permissions_ban_users">Bannir des utilisateurs</string>
-    <string name="room_permissions_kick_users">Expulser des utilisateurs</string>
+    <string name="room_permissions_remove_users">Expulser des utilisateurs</string>
     <string name="room_permissions_change_settings">Mettre à jour les paramètres</string>
     <string name="room_permissions_invite_users">Inviter des utilisateurs</string>
     <string name="room_permissions_send_messages">Envoyer des messages</string>
@@ -2977,7 +2977,7 @@
     <string name="space_settings_permissions_title">Permissions de l’espace</string>
     <string name="space_participants_unban_prompt_msg">Annuler l’exclusion des utilisateurs leur permettra de revenir dans cet espace.</string>
     <string name="space_participants_ban_prompt_msg">L’exclusion des utilisateurs va les expulser de cet espace et les empêcher de revenir.</string>
-    <string name="space_participants_kick_prompt_msg">L’expulsion des utilisateurs va les supprimer de cet espace
+    <string name="space_participants_remove_prompt_msg">L’expulsion des utilisateurs va les supprimer de cet espace
 \n
 \nPour les empêcher de revenir, vous devriez les exclure.</string>
     <string name="a11y_presence_unavailable">Indisponible</string>

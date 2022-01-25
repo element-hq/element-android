@@ -363,11 +363,11 @@ class RoomMemberProfileFragment @Inject constructor(
                 .show(
                         activity = requireActivity(),
                         askForReason = true,
-                        confirmationRes = if (isSpace) R.string.space_participants_kick_prompt_msg
+                        confirmationRes = if (isSpace) R.string.space_participants_remove_prompt_msg
                         else R.string.room_participants_kick_prompt_msg,
-                        positiveRes = R.string.room_participants_action_kick,
-                        reasonHintRes = R.string.room_participants_kick_reason,
-                        titleRes = R.string.room_participants_kick_title
+                        positiveRes = R.string.room_participants_action_remove,
+                        reasonHintRes = R.string.room_participants_remove_reason,
+                        titleRes = R.string.room_participants_remove_title
                 ) { reason ->
                     viewModel.handle(RoomMemberProfileAction.KickUser(reason))
                 }

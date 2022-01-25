@@ -210,7 +210,7 @@
     <string name="room_participants_invite_join_names_and">%1$s และ %2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
     <string name="reason_hint">เหตุผล</string>
-    <string name="room_participants_action_kick">เตะ</string>
+    <string name="room_participants_action_remove">เตะ</string>
     <string name="room_participants_action_unban">เลิกห้าม</string>
     <string name="room_participants_action_ban">ห้าม</string>
     <string name="room_participants_action_leave">ออกจากห้องนี้</string>

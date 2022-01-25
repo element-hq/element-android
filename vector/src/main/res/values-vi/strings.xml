@@ -805,7 +805,7 @@
     <string name="room_participants_action_set_admin">Làm quản trị viên</string>
     <string name="room_participants_action_set_moderator">Làm điều hành viên</string>
     <string name="room_participants_action_set_default_power_level">Đặt lại thành người dùng bình thường</string>
-    <string name="room_participants_action_kick">Đá</string>
+    <string name="room_participants_action_remove">Đá</string>
     <string name="room_participants_action_unban">Bỏ cấm</string>
     <string name="room_participants_action_ban">Cấm</string>
     <string name="room_participants_action_leave">Rời khỏi phòng này</string>
@@ -1468,7 +1468,7 @@
     <string name="room_permissions_notify_everyone">Thông báo mọi người</string>
     <string name="room_permissions_remove_messages_sent_by_others">Xóa tin nhắn gửi bởi người khác</string>
     <string name="room_permissions_ban_users">Cấm người dùng</string>
-    <string name="room_permissions_kick_users">Loại người dùng</string>
+    <string name="room_permissions_remove_users">Loại người dùng</string>
     <string name="room_permissions_change_settings">Thay đổi thiết lập</string>
     <string name="room_permissions_invite_users">Mời người dùng</string>
     <string name="room_permissions_send_messages">Gửi tin nhắn</string>
@@ -1523,8 +1523,8 @@
     <string name="room_participants_kick_prompt_msg">việc đá người dùng sẽ xóa họ khỏi phòng.
 \n
 \nĐể ngăn họ tham gia lại, bạn nên cấm họ thay vì đá.</string>
-    <string name="room_participants_kick_reason">Lý do đá</string>
-    <string name="room_participants_kick_title">Đá người dùng</string>
+    <string name="room_participants_remove_reason">Lý do đá</string>
+    <string name="room_participants_remove_title">Đá người dùng</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Bạn có chắc bạn muốn hủy lời mời đối với người dùng này không\?</string>
     <string name="room_participants_action_cancel_invite_title">Hủy lời mời</string>
     <string name="room_participants_action_unignore">Hủy làm ngơ</string>
@@ -1627,7 +1627,7 @@
     <string name="ssl_cert_new_account_expl">Nếu quản trị viên của máy chủ đã nói rằng điều này có thể xảy ra, hãy chắc chắn rằng dấu vân tay phía dưới trùng với dấu vân tay được họ cung cấp.</string>
     <string name="space_participants_unban_prompt_msg">Hủy cấm người dùng sẽ cho phép họ tham gia không gian này lần nữa.</string>
     <string name="space_participants_ban_prompt_msg">Cấm người dùng này sẽ đá họ khỏi không gian này và ngăn chặn họ tiếp tục tham gia.</string>
-    <string name="space_participants_kick_prompt_msg">hành động của bạn sẽ xóa họ khỏi không gian này.
+    <string name="space_participants_remove_prompt_msg">hành động của bạn sẽ xóa họ khỏi không gian này.
 \n
 \nTrong trường hợp không muốn họ quay lại, bạn nên cấm họ tham gia lần nữa.</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' không phải là định dạng phù hợp</string>
@@ -2765,7 +2765,7 @@
     <string name="rejoin">Tham gia lại</string>
     <string name="reason_colon">Lý do: %1$s</string>
     <string name="has_been_banned">Bạn đã bị cấm từ %1$s bởi %2$s</string>
-    <string name="has_been_kicked">Bạn đã bị đá từ %1$s bởi %2$s</string>
+    <string name="has_been_removed">Bạn đã bị đá từ %1$s bởi %2$s</string>
     <string name="group_no_long_description">Quản trị viên Community đã không cung cấp mô tả cho cộng đồng này.</string>
     <string name="filter_group_rooms">Lọc nhóm phòng</string>
     <string name="filter_group_members">Lọc thành viên nhóm</string>
@@ -2795,7 +2795,7 @@
     <string name="command_description_room_avatar">Thay đổi avatar của căn phòng hiện tại</string>
     <string name="command_description_nick_for_room">Chỉ thay đổi biệt danh hiển thị của bạn trong phòng hiện tại</string>
     <string name="command_description_nick">Thay đổi biệt danh hiển thị của bạn</string>
-    <string name="command_description_kick_user">Đá người dùng với id đã cho</string>
+    <string name="command_description_remove_user">Đá người dùng với id đã cho</string>
     <string name="command_description_topic">Đặt chủ đề phòng</string>
     <string name="command_description_part_room">Rời khỏi phòng</string>
     <string name="command_description_join_room">Tham gia phòng có địa chỉ đã cho</string>

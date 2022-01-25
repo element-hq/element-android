@@ -919,7 +919,7 @@
     <string name="command_description_join_room">Приєднує до кімнати із вказаною адресою</string>
     <string name="command_description_part_room">Вийти з кімнати</string>
     <string name="command_description_topic">Встановити тему кімнати</string>
-    <string name="command_description_kick_user">Вилучити користувача із вказаним ID</string>
+    <string name="command_description_remove_user">Вилучити користувача із вказаним ID</string>
     <string name="command_description_nick">Змінити Ваш псевдонім</string>
     <string name="command_description_markdown">Увімкнути/Вимкнути розмітку Markdown</string>
     <string name="command_description_clear_scalar_token">Для виправлення керування додатками Matrix</string>
@@ -951,7 +951,7 @@
         <item quantity="other"/>
     </plurals>
     <string name="group_no_long_description">Адміністратор спільноти не вказав для неї детальної інформації.</string>
-    <string name="has_been_kicked">%2$s вилучає вас із %1$s</string>
+    <string name="has_been_removed">%2$s вилучає вас із %1$s</string>
     <string name="has_been_banned">%2$s блокує вас у %1$s</string>
     <string name="reason_colon">Причина: %1$s</string>
     <string name="rejoin">Приєднатися знову</string>
@@ -999,7 +999,7 @@
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="call_anyway">Усе одно зателефонувати</string>
-    <string name="room_participants_action_kick">Вилучити</string>
+    <string name="room_participants_action_remove">Вилучити</string>
     <string name="reason_hint">Причина</string>
     <string name="settings_inline_url_preview_summary">Попередній перегляд посилань у бесіді, якщо ваш сервер підтримує цю можливість.</string>
     <string name="settings_send_typing_notifs">Надсилати сповіщення про набір повідомлення</string>
@@ -1533,8 +1533,8 @@
     <string name="room_participants_kick_prompt_msg">вилучення користувачів прибере їх з цієї кімнати.
 \n
 \nЩоб запобігти їхньому повторному приєднанню, замість цього слід заблокувати їх.</string>
-    <string name="room_participants_kick_reason">Причина вилучення</string>
-    <string name="room_participants_kick_title">Вилучити користувача</string>
+    <string name="room_participants_remove_reason">Причина вилучення</string>
+    <string name="room_participants_remove_title">Вилучити користувача</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Ви впевнені, що бажаєте скасувати запрошення для цього користувача\?</string>
     <string name="room_participants_action_cancel_invite_title">Скасувати запрошення</string>
     <string name="room_participants_action_unignore_prompt_msg">Якщо перестати нехтувати цього користувача, усі його повідомлення стануть знову видимими.</string>
@@ -1681,7 +1681,7 @@
     <string name="room_permissions_notify_everyone">Сповіщати всіх</string>
     <string name="room_permissions_remove_messages_sent_by_others">Вилучати повідомлення, надіслані іншими</string>
     <string name="room_permissions_ban_users">Блокувати користувачів</string>
-    <string name="room_permissions_kick_users">Вилучати користувачів</string>
+    <string name="room_permissions_remove_users">Вилучати користувачів</string>
     <string name="room_permissions_change_settings">Змінювати налаштування</string>
     <string name="room_permissions_invite_users">Запрошувати користувачів</string>
     <string name="room_permissions_send_messages">Надсилати повідомлення</string>
@@ -2668,7 +2668,7 @@
     <string name="space_settings_permissions_title">Дозволи простору</string>
     <string name="space_participants_unban_prompt_msg">Розблокування користувачів дозволить їм знову приєднатися до простору.</string>
     <string name="space_participants_ban_prompt_msg">Блокування користувачів вилучить їх із цього простору та не дозволить їм знову приєднатися.</string>
-    <string name="space_participants_kick_prompt_msg">вилучення користувачів прибере їх з цього простору.
+    <string name="space_participants_remove_prompt_msg">вилучення користувачів прибере їх з цього простору.
 \n
 \nЩоб запобігти їхньому повторному приєднанню, замість цього слід заблокувати їх.</string>
     <string name="verification_verify_user">Звірити %s</string>

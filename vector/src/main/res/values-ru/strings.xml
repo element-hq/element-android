@@ -892,7 +892,7 @@
     <string name="filter_group_members">Фильтр участников группы</string>
     <string name="filter_group_rooms">Фильтр комнат группы</string>
     <string name="group_no_long_description">Администратор сообщества не предоставил подробного описания этого сообщества.</string>
-    <string name="has_been_kicked">Вас выгнал %2$s из %1$s</string>
+    <string name="has_been_removed">Вас выгнал %2$s из %1$s</string>
     <string name="has_been_banned">Вас забанил %2$s в %1$s</string>
     <string name="reason_colon">Причина: %1$s</string>
     <string name="rejoin">Присоединиться снова</string>
@@ -1033,7 +1033,7 @@
     <string name="command_description_invite_user">Пригласить пользователя с данным ID в текущую комнату</string>
     <string name="command_description_part_room">Покинуть комнату</string>
     <string name="command_description_topic">Задать тему комнаты</string>
-    <string name="command_description_kick_user">Выкинуть пользователя с заданным ID</string>
+    <string name="command_description_remove_user">Выкинуть пользователя с заданным ID</string>
     <string name="command_description_nick">Изменить ваш псевдоним</string>
     <string name="command_description_markdown">Вкл/выкл markdown</string>
     <string name="room_tombstone_versioned_description">Эта комната была заменена и больше не активна.</string>
@@ -1119,7 +1119,7 @@
     <string name="settings_call_ringtone_title">Мелодия звонка</string>
     <string name="settings_call_ringtone_dialog_title">Выберите мелодию звонка:</string>
     <string name="video_call_in_progress">Идёт видеозвонок …</string>
-    <string name="room_participants_action_kick">Выгнать</string>
+    <string name="room_participants_action_remove">Выгнать</string>
     <string name="reason_hint">Причина</string>
     <string name="settings_notification_troubleshoot">Поиск проблем с уведомлениями</string>
     <string name="settings_send_typing_notifs">Оправлять уведомления о наборе текста</string>
@@ -1951,8 +1951,8 @@
     <string name="room_participants_action_unignore_prompt_msg">Если вы перестанете игнорировать этого пользователя, то все его сообщения вновь будут отображаться.</string>
     <string name="room_participants_action_cancel_invite_title">Отменить приглашение</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Вы уверены, что хотите отменить приглашение для этого пользователя\?</string>
-    <string name="room_participants_kick_title">Выгнать пользователя</string>
-    <string name="room_participants_kick_reason">Причина гонения</string>
+    <string name="room_participants_remove_title">Выгнать пользователя</string>
+    <string name="room_participants_remove_reason">Причина гонения</string>
     <string name="room_participants_kick_prompt_msg">Выгнанный пользователь будет удалён из этой комнаты.
 \n
 \nЧтобы предотвратить его повторное присоединение, вы должны забанить его.</string>
@@ -2610,7 +2610,7 @@
     <string name="room_permissions_notify_everyone">Уведомить всех</string>
     <string name="room_permissions_remove_messages_sent_by_others">Удалить сообщения, отправленные другими</string>
     <string name="room_permissions_ban_users">Блокировка пользователей</string>
-    <string name="room_permissions_kick_users">Выгнать пользователей</string>
+    <string name="room_permissions_remove_users">Выгнать пользователей</string>
     <string name="room_permissions_change_settings">Изменить настройки</string>
     <string name="room_permissions_invite_users">Пригласить пользователей</string>
     <string name="room_permissions_send_messages">Отправить сообщения</string>
@@ -3050,7 +3050,7 @@
     <string name="space_settings_permissions_title">Разрешения пространства</string>
     <string name="space_participants_unban_prompt_msg">Разблокирование пользователя позволит ему снова присоединиться к пространству.</string>
     <string name="space_participants_ban_prompt_msg">Блокировка пользователя исключит его из этого пространства и не позволит ему присоединиться снова.</string>
-    <string name="space_participants_kick_prompt_msg">Выгнанный пользователь будет удалён из этого пространства. 
+    <string name="space_participants_remove_prompt_msg">Выгнанный пользователь будет удалён из этого пространства.
 \n 
 \nЧтобы предотвратить его повторное присоединение, вы должны заблокировать его.</string>
     <string name="a11y_stop_voice_message">Остановить запись</string>

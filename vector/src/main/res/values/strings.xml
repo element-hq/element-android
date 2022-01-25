@@ -883,7 +883,7 @@
     <string name="room_participants_action_leave">Leave this room</string>
     <string name="room_participants_action_ban">Ban</string>
     <string name="room_participants_action_unban">Unban</string>
-    <string name="room_participants_action_kick">Remove from chat</string>
+    <string name="room_participants_action_remove">Remove from chat</string>
     <string name="room_participants_action_set_default_power_level">Reset to normal user</string>
     <string name="room_participants_action_set_moderator">Make moderator</string>
     <string name="room_participants_action_set_admin">Make admin</string>
@@ -907,10 +907,10 @@
 
     <string name="room_participants_action_cancel_invite_title">Cancel invite</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Are you sure you want to cancel the invite for this user?</string>
-    <string name="room_participants_kick_title">Remove user</string>
-    <string name="room_participants_kick_reason">Reason to remove</string>
+    <string name="room_participants_remove_title">Remove user</string>
+    <string name="room_participants_remove_reason">Reason to remove</string>
     <string name="room_participants_kick_prompt_msg">The user will be removed from this room.\n\nTo prevent them from joining again, you should ban them instead.</string>
-    <string name="space_participants_kick_prompt_msg">The user will be removed from this space.\n\nTo prevent them from joining again, you should ban them instead.</string>
+    <string name="space_participants_remove_prompt_msg">The user will be removed from this space.\n\nTo prevent them from joining again, you should ban them instead.</string>
     <string name="room_participants_ban_title">Ban user</string>
     <string name="room_participants_ban_reason">Reason to ban</string>
     <string name="room_participants_unban_title">Unban user</string>
@@ -997,7 +997,7 @@
     <string name="room_permissions_send_messages">Send messages</string>
     <string name="room_permissions_invite_users">Invite users</string>
     <string name="room_permissions_change_settings">Change settings</string>
-    <string name="room_permissions_kick_users">Remove users</string>
+    <string name="room_permissions_remove_users">Remove users</string>
     <string name="room_permissions_ban_users">Ban users</string>
     <string name="room_permissions_remove_messages_sent_by_others">Remove messages sent by others</string>
     <string name="room_permissions_notify_everyone">Notify everyone</string>
@@ -1854,7 +1854,7 @@
     <string name="command_description_join_room">Joins room with given address</string>
     <string name="command_description_part_room">Leave room</string>
     <string name="command_description_topic">Set the room topic</string>
-    <string name="command_description_kick_user">Removes user with given id from this room</string>
+    <string name="command_description_remove_user">Removes user with given id from this room</string>
     <string name="command_description_nick">Changes your display nickname</string>
     <string name="command_description_nick_for_room">Changes your display nickname in the current room only</string>
     <string name="command_description_room_avatar">Changes the avatar of the current room</string>
@@ -1904,7 +1904,7 @@
     </plurals>
     <string name="group_no_long_description">The community admin has not provided a long description for this community.</string>
 
-    <string name="has_been_kicked">You have been removed from %1$s by %2$s</string>
+    <string name="has_been_removed">You have been removed from %1$s by %2$s</string>
     <string name="has_been_banned">You have been banned from %1$s by %2$s</string>
     <string name="reason_colon">Reason: %1$s</string>
     <string name="rejoin">Rejoin</string>

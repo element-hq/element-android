@@ -850,7 +850,7 @@
     <string name="invited">已邀请</string>
     <string name="filter_group_members">过滤社群成员</string>
     <string name="filter_group_rooms">过滤社群聊天室</string>
-    <string name="has_been_kicked">你已被 %2$s 从 %1$s 中移除</string>
+    <string name="has_been_removed">你已被 %2$s 从 %1$s 中移除</string>
     <string name="has_been_banned">你已被 %2$s 从 %1$s 中封禁</string>
     <string name="reason_colon">理由：%1$s</string>
     <string name="avatar">头像</string>
@@ -930,7 +930,7 @@
     <string name="command_description_join_room">用给定地址加入聊天室</string>
     <string name="command_description_part_room">离开聊天室</string>
     <string name="command_description_topic">设置聊天室主题</string>
-    <string name="command_description_kick_user">按照 ID 踢出用户</string>
+    <string name="command_description_remove_user">按照 ID 踢出用户</string>
     <string name="command_description_nick">更改你显示的昵称</string>
     <string name="command_description_markdown">打开/关闭 markdown</string>
     <string name="command_description_clear_scalar_token">修复 Matrix Apps 管理</string>
@@ -987,7 +987,7 @@
     <string name="template_settings_call_ringtone_use_app_ringtone">为来电使用 ${app_name} 的默认铃声</string>
     <string name="settings_call_ringtone_title">来电铃声</string>
     <string name="settings_call_ringtone_dialog_title">请选择来电铃声：</string>
-    <string name="room_participants_action_kick">移除</string>
+    <string name="room_participants_action_remove">移除</string>
     <string name="reason_hint">理由</string>
     <string name="room_sliding_menu_version_x">版本 %s</string>
     <string name="settings_notification_troubleshoot">通知故障排除</string>
@@ -1404,8 +1404,8 @@
     <string name="room_participants_action_unignore_prompt_msg">取消忽略此用户将重新显示来自他们的全部消息。</string>
     <string name="room_participants_action_cancel_invite_title">取消邀请</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">你确定想要取消邀请此用户吗？</string>
-    <string name="room_participants_kick_title">踢掉用户</string>
-    <string name="room_participants_kick_reason">踢掉理由</string>
+    <string name="room_participants_remove_title">踢掉用户</string>
+    <string name="room_participants_remove_reason">踢掉理由</string>
     <string name="room_participants_kick_prompt_msg">踢掉用户将从此聊天室移除他们。
 \n
 \n为防止他们再次加入，你应当封禁他们。</string>
@@ -2426,7 +2426,7 @@
     <string name="room_permissions_notify_everyone">通知每个人</string>
     <string name="room_permissions_remove_messages_sent_by_others">移除其他人发送的消息</string>
     <string name="room_permissions_ban_users">封禁用户</string>
-    <string name="room_permissions_kick_users">踢掉用户</string>
+    <string name="room_permissions_remove_users">踢掉用户</string>
     <string name="room_permissions_change_settings">更改设置</string>
     <string name="room_permissions_invite_users">邀请用户</string>
     <string name="room_permissions_send_messages">发送消息</string>
@@ -2909,7 +2909,7 @@
     <string name="space_settings_permissions_title">空间权限</string>
     <string name="space_participants_unban_prompt_msg">解除禁令将允许被封禁的用户再次加入空间。</string>
     <string name="space_participants_ban_prompt_msg">封禁用户将把他们踢出这个空间，并阻止他们再次加入。</string>
-    <string name="space_participants_kick_prompt_msg">把用户踢出也会从这个空间删除他们。
+    <string name="space_participants_remove_prompt_msg">把用户踢出也会从这个空间删除他们。
 \n
 \n为了防止他们再次加入，你应该封禁他们。</string>
     <string name="a11y_stop_voice_message">停止录制</string>

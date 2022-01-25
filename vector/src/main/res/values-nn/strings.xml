@@ -750,7 +750,7 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="command_description_join_room">Vert med i rommet med det gjevne aliaset</string>
     <string name="command_description_part_room">Forlat rom</string>
     <string name="command_description_topic">Set romemnet</string>
-    <string name="command_description_kick_user">Sparkar brukarar med gjeven ID</string>
+    <string name="command_description_remove_user">Sparkar brukarar med gjeven ID</string>
     <string name="command_description_nick">Forandrar visingsnamnet ditt</string>
     <string name="command_description_markdown">På/Av markdown</string>
     <string name="command_description_clear_scalar_token">For å ordne opp i Matrix-App-administrasjon</string>
@@ -773,7 +773,7 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="filter_group_members">Filtrer gruppemedlemmar</string>
     <string name="filter_group_rooms">Filtrer grupperom</string>
     <string name="group_no_long_description">Fellesskapssadministratoren har ikkje satt ei lang skildring for dette fellesskapet.</string>
-    <string name="has_been_kicked">Du vart sparka frå %1$s av %2$s</string>
+    <string name="has_been_removed">Du vart sparka frå %1$s av %2$s</string>
     <string name="has_been_banned">Du var stengd ute frå %1$s av %2$s</string>
     <string name="reason_colon">Grunnlag: %1$s</string>
     <string name="rejoin">Vert med att</string>
@@ -857,7 +857,7 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="settings_call_ringtone_title">Ringetone for innkommande samtalar</string>
     <string name="settings_call_ringtone_dialog_title">Vel ringetone for samtalar:</string>
     <string name="video_call_in_progress">Ein videosamtale pågår…</string>
-    <string name="room_participants_action_kick">Spark</string>
+    <string name="room_participants_action_remove">Spark</string>
     <string name="reason_hint">Grunn</string>
     <string name="settings_notification_advanced">Avanserte varslingsinnstillingar</string>
     <string name="settings_notification_by_event">Prioritet på varsel ut ifrå hendingar</string>

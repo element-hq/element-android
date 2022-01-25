@@ -617,7 +617,7 @@
     <string name="room_permissions_notify_everyone">Обавестити све</string>
     <string name="room_permissions_remove_messages_sent_by_others">Уклонити поруке које су други послали</string>
     <string name="room_permissions_ban_users">Забранити кориснике</string>
-    <string name="room_permissions_kick_users">Протерати кориснике</string>
+    <string name="room_permissions_remove_users">Протерати кориснике</string>
     <string name="room_permissions_change_settings">Променити подешавања</string>
     <string name="room_permissions_invite_users">Позвати чланове</string>
     <string name="room_permissions_send_messages">Слати поруке</string>
@@ -643,7 +643,7 @@
     <string name="room_participants_action_set_admin">Постави као администратор</string>
     <string name="room_participants_action_set_moderator">Постави као модератор</string>
     <string name="room_participants_action_set_default_power_level">Рисетуј на нормалан корисник</string>
-    <string name="room_participants_action_kick">Изтерај</string>
+    <string name="room_participants_action_remove">Изтерај</string>
     <string name="room_participants_action_unban">Уклони забрану</string>
     <string name="room_participants_action_ban">Забрани</string>
     <string name="room_participants_action_leave">Напусти ову собу</string>
@@ -731,8 +731,8 @@
     <string name="room_participants_unban_title">Склони забрану корисника</string>
     <string name="room_participants_ban_reason">Разлог забране</string>
     <string name="room_participants_ban_title">Забрани корисника</string>
-    <string name="room_participants_kick_reason">Разлог одбацивања</string>
-    <string name="room_participants_kick_title">Одбацити корисник</string>
+    <string name="room_participants_remove_reason">Разлог одбацивања</string>
+    <string name="room_participants_remove_title">Одбацити корисник</string>
     <string name="no">НЕ</string>
     <string name="yes">ДА</string>
     <string name="media_slider_saved_message">Сачувати у преузимања\?</string>

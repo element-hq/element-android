@@ -874,7 +874,7 @@
     <string name="filter_group_members">Filter Gruppen-Mitglieder</string>
     <string name="filter_group_rooms">Filter Gruppen-Räume</string>
     <string name="group_no_long_description">Der Community-Administrator hat keine lange Beschreibung für diese Community zur Verfügung gestellt.</string>
-    <string name="has_been_kicked">Du wurdest von %2$s aus %1$s entfernt</string>
+    <string name="has_been_removed">Du wurdest von %2$s aus %1$s entfernt</string>
     <string name="has_been_banned">Du wurdest von %2$s aus %1$s verbannt</string>
     <string name="reason_colon">Grund: %1$s</string>
     <string name="rejoin">Erneut beitreten</string>
@@ -996,7 +996,7 @@
     <string name="command_description_join_room">Raum mit angegebener Adresse beitreten</string>
     <string name="command_description_part_room">Verlasse Raum</string>
     <string name="command_description_topic">Raumthema ändern</string>
-    <string name="command_description_kick_user">Entfernt die Person angegebener ID</string>
+    <string name="command_description_remove_user">Entfernt die Person angegebener ID</string>
     <string name="command_description_nick">Ändert deinen Anzeigenamen</string>
     <string name="command_description_markdown">(De-)Aktiviert Markdown</string>
     <string name="command_description_clear_scalar_token">Um das Matrix-App-Management zu reparieren</string>
@@ -1068,7 +1068,7 @@
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="call_anyway">Trotzdem anrufen</string>
-    <string name="room_participants_action_kick">Entfernen</string>
+    <string name="room_participants_action_remove">Entfernen</string>
     <string name="reason_hint">Grund</string>
     <string name="settings_inline_url_preview_summary">Linkvorschau im Chat aktivieren, falls dein Homeserver diese Funktion unterstützt.</string>
     <string name="settings_send_typing_notifs">Schreibbenachrichtigungen senden</string>
@@ -2146,8 +2146,8 @@
     <string name="room_participants_action_unignore_prompt_msg">Das Aufheben der Ignorierung wird alle Nachrichten des Benutzers wieder einblenden.</string>
     <string name="room_participants_action_cancel_invite_title">Einladung zurückziehen</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Bist du dir sicher, dass du die Einladung für diesen Benutzer zurückziehen möchtest\?</string>
-    <string name="room_participants_kick_title">Benutzer entfernen</string>
-    <string name="room_participants_kick_reason">Grund für das Entfernen</string>
+    <string name="room_participants_remove_title">Benutzer entfernen</string>
+    <string name="room_participants_remove_reason">Grund für das Entfernen</string>
     <string name="room_participants_kick_prompt_msg">Dies entfernt den Benutzer aus diesem Raum.
 \n
 \nUm einen erneuten Beitritt zu verhindern, solltest du diesen stattdessen bannen.</string>
@@ -2516,7 +2516,7 @@
     <string name="room_permissions_notify_everyone">Jeden benachrichtigen</string>
     <string name="room_permissions_remove_messages_sent_by_others">Von anderen gesendete Nachrichten entfernen</string>
     <string name="room_permissions_ban_users">Nutzer verbannen</string>
-    <string name="room_permissions_kick_users">Nutzer entfernen</string>
+    <string name="room_permissions_remove_users">Nutzer entfernen</string>
     <string name="room_permissions_change_settings">Einstellungen ändern</string>
     <string name="room_permissions_invite_users">Nutzer einladen</string>
     <string name="room_permissions_send_messages">Nachrichten senden</string>
@@ -2933,7 +2933,7 @@
     <string name="space_settings_permissions_title">Space-Berechtigungen</string>
     <string name="space_participants_unban_prompt_msg">Wenn du die Person entbannst, kann sie wieder beitreten.</string>
     <string name="space_participants_ban_prompt_msg">Wenn du eine Person bannst, kann sie nicht erneut beitreten.</string>
-    <string name="space_participants_kick_prompt_msg">Kicken entfernt die Person aus dem Space
+    <string name="space_participants_remove_prompt_msg">Kicken entfernt die Person aus dem Space
 \n
 \nUm sie für immer zu entfernen, solltest du sie bannen.</string>
     <string name="a11y_stop_voice_message">Aufnahme beenden</string>

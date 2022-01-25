@@ -492,7 +492,7 @@
     <string name="room_participants_action_leave">Braktiseni këtë dhomë</string>
     <string name="room_participants_action_ban">Dëboje</string>
     <string name="room_participants_action_unban">Hiqja dëbimin</string>
-    <string name="room_participants_action_kick">Përzëre</string>
+    <string name="room_participants_action_remove">Përzëre</string>
     <string name="room_participants_action_set_default_power_level">Rikthejeni në përdorues normal</string>
     <string name="room_participants_action_set_moderator">Kalojeni moderator</string>
     <string name="room_participants_action_set_admin">Kalojeni përgjegjës</string>
@@ -799,7 +799,7 @@
     <string name="command_description_join_room">Hyn te dhoma me adresën e dhënë</string>
     <string name="command_description_part_room">Dilni nga dhoma</string>
     <string name="command_description_topic">Caktoni temë dhome</string>
-    <string name="command_description_kick_user">Përzë përdoruesin me ID-në e dhënë</string>
+    <string name="command_description_remove_user">Përzë përdoruesin me ID-në e dhënë</string>
     <string name="command_description_nick">Ndryshon nofkën tuaj në ekran</string>
     <string name="markdown_has_been_enabled">Markdown është i aktivizuar.</string>
     <string name="markdown_has_been_disabled">Markdown është çaktivizuar.</string>
@@ -829,7 +829,7 @@
         <item quantity="one">%d dhomë</item>
         <item quantity="other">%d dhoma</item>
     </plurals>
-    <string name="has_been_kicked">Jeni përzënë prej %1$s nga %2$s</string>
+    <string name="has_been_removed">Jeni përzënë prej %1$s nga %2$s</string>
     <string name="has_been_banned">Jeni dëbuar prej %1$s nga %2$s</string>
     <string name="reason_colon">Arsye: %1$s</string>
     <string name="rejoin">Rifutuni</string>
@@ -2187,8 +2187,8 @@
     <string name="room_participants_action_unignore_prompt_msg">Heqja e shpërfilljes së këtij përdoruesi do të shfaqë sërish krejt mesazhet prej tij.</string>
     <string name="room_participants_action_cancel_invite_title">Anuloje ftesën</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Jeni i sigurt se doni të anulohet ftesa për këtë përdorues\?</string>
-    <string name="room_participants_kick_title">Përzëre përdoruesin</string>
-    <string name="room_participants_kick_reason">Arsye për përzënie</string>
+    <string name="room_participants_remove_title">Përzëre përdoruesin</string>
+    <string name="room_participants_remove_reason">Arsye për përzënie</string>
     <string name="room_participants_kick_prompt_msg">Përzënia e përdoruesit do ta heqë prej kësaj dhome.
 \n
 \nQë të pengohet pjesëmarrja sërish e tij, duhet ta dëboni.</string>
@@ -2556,7 +2556,7 @@
     <string name="room_permissions_notify_everyone">Të njoftojë gjithkënd</string>
     <string name="room_permissions_remove_messages_sent_by_others">Të heqë mesazhe dërguar nga të tjerët</string>
     <string name="room_permissions_ban_users">Të dëbojë përdorues</string>
-    <string name="room_permissions_kick_users">Të përzërë përdorues</string>
+    <string name="room_permissions_remove_users">Të përzërë përdorues</string>
     <string name="room_permissions_change_settings">Të ndryshojë rregullime</string>
     <string name="room_permissions_invite_users">Të ftojë përdorues</string>
     <string name="room_permissions_send_messages">Të dërgojë mesazhe</string>
@@ -2952,7 +2952,7 @@
     <string name="space_settings_permissions_title">Leje hapësire</string>
     <string name="space_participants_unban_prompt_msg">Heqja e dëbimit përdoruesit do t’i lejojë të marrë pjesë sërish në hapësirë.</string>
     <string name="space_participants_ban_prompt_msg">Dëbimi i përdoruesit do ta përzërë atë nga kjo hapësirë dhe do t’i pengojë atij rihyrjen.</string>
-    <string name="space_participants_kick_prompt_msg">Përzënia e përdoruesit do ta heqë prej kësaj hapësire.
+    <string name="space_participants_remove_prompt_msg">Përzënia e përdoruesit do ta heqë prej kësaj hapësire.
 \n
 \nQë të pengohet pjesëmarrja sërish e tij, duhet ta dëboni.</string>
     <string name="a11y_stop_voice_message">Ndale Regjistrimin</string>

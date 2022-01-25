@@ -767,7 +767,7 @@
     <string name="filter_group_members">Groepsleden filteren</string>
     <string name="filter_group_rooms">Groepsgesprekken filteren</string>
     <string name="group_no_long_description">De gemeenschapsbeheerder heeft geen lange beschrijving gegeven voor deze gemeenschap.</string>
-    <string name="has_been_kicked">%2$s heeft u uit %1$s gezet</string>
+    <string name="has_been_removed">%2$s heeft u uit %1$s gezet</string>
     <string name="has_been_banned">%2$s heeft u uit %1$s verbannen</string>
     <string name="reason_colon">Reden: %1$s</string>
     <string name="rejoin">Opnieuw toetreden</string>
@@ -845,7 +845,7 @@
     <string name="command_description_join_room">Voegt een kamer toe met het opgegeven adres</string>
     <string name="command_description_part_room">Gesprek verlaten</string>
     <string name="command_description_topic">Onderwerp van het gesprek instellen</string>
-    <string name="command_description_kick_user">Stuurt gebruiker met gegeven ID eruit</string>
+    <string name="command_description_remove_user">Stuurt gebruiker met gegeven ID eruit</string>
     <string name="command_description_nick">Wijzigt uw weergavenaam</string>
     <string name="command_description_markdown">Markdown aan/uit</string>
     <string name="room_tombstone_versioned_description">Dit gesprek is vervangen en is niet langer actief.</string>
@@ -905,7 +905,7 @@
     <string name="template_settings_call_ringtone_use_app_ringtone">Gebruik de standaardbeltoon van ${app_name} voor inkomende oproepen</string>
     <string name="settings_call_ringtone_title">Beltoon voor inkomende oproepen</string>
     <string name="settings_call_ringtone_dialog_title">Selecteer beltoon voor oproepen:</string>
-    <string name="room_participants_action_kick">Eruit sturen</string>
+    <string name="room_participants_action_remove">Eruit sturen</string>
     <string name="reason_hint">Reden</string>
     <string name="room_sliding_menu_version_x">Versie %s</string>
     <string name="settings_inline_url_preview_summary">Voorvertoning van koppelingen in het gesprek tonen (als uw thuisserver deze functie ondersteunt).</string>
@@ -1623,7 +1623,7 @@
     <string name="settings_secure_backup_section_title">Beveiligde Backup</string>
     <string name="room_participants_unban_title">Verbanning gebruiker ongedaan maken</string>
     <string name="room_participants_ban_title">Gebruiker verbannen</string>
-    <string name="room_participants_kick_title">Gebruiker verwijderen</string>
+    <string name="room_participants_remove_title">Gebruiker verwijderen</string>
     <string name="room_participants_action_cancel_invite_title">Uitnodiging annuleren</string>
     <string name="room_participants_action_unignore_title">Gebruiker niet meer negeren</string>
     <string name="sent_a_voice_message">Stem</string>
@@ -1850,13 +1850,13 @@
     <string name="room_participants_unban_prompt_msg">Door deze gebruiker niet meer de verbannen kan hij/zij opnieuw toetreden tot het gesprek.</string>
     <string name="space_participants_ban_prompt_msg">Door deze gebruiker te verbannen zal hij/zij verwijderd worden uit deze space en voorkomen dat hij/zij opnieuw toetreedt.</string>
     <string name="room_participants_ban_reason">Reden voor verbanning</string>
-    <string name="space_participants_kick_prompt_msg">door deze gebruiker de verwijderen zal hij/zij niet meer in deze space zitten.
+    <string name="space_participants_remove_prompt_msg">door deze gebruiker de verwijderen zal hij/zij niet meer in deze space zitten.
 \n
 \nOm te voorkomen dat hij/zij opnieuw toetreedt, kunt u hem/haar ook verbannen.</string>
     <string name="room_participants_kick_prompt_msg">door deze gebruiker te verwijderen zal hij/zij niet meer in dit gesprek zitten.
 \n
 \nOm te voorkomen dat hij/zij opnieuw toetreedt, kun je hem/haar ook verbannen.</string>
-    <string name="room_participants_kick_reason">Reden voor verwijdering</string>
+    <string name="room_participants_remove_reason">Reden voor verwijdering</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Weet u zeker dat u uitnodiging voor deze gebruiker wilt annuleren\?</string>
     <string name="room_participants_action_unignore_prompt_msg">Het niet meer negeren van deze gebruiker zal al zijn/haar berichten opnieuw doen weergeven.</string>
     <string name="room_participants_action_ignore_prompt_msg">Door deze gebruiker te negeren worden zijn/haar berichten verwijderd uit gesprekken die jullie delen.
@@ -2312,7 +2312,7 @@
     <string name="room_permissions_notify_everyone">Iedereen informeren</string>
     <string name="room_permissions_remove_messages_sent_by_others">Berichten verwijderen die door anderen zijn verzonden</string>
     <string name="room_permissions_ban_users">Gebruikers verbannen</string>
-    <string name="room_permissions_kick_users">Kick gebruikers</string>
+    <string name="room_permissions_remove_users">Kick gebruikers</string>
     <string name="room_permissions_change_settings">Instellingen veranderen</string>
     <string name="room_permissions_invite_users">Gebruikers uitnodigen</string>
     <string name="room_permissions_send_messages">Berichten sturen</string>

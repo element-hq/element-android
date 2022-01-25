@@ -595,7 +595,7 @@
     <string name="room_participants_action_leave">এই রুম ছাড়ো</string>
     <string name="room_participants_action_ban">নিষেধাজ্ঞা</string>
     <string name="room_participants_action_unban">নিষেধাজ্ঞা মুক্ত</string>
-    <string name="room_participants_action_kick">পদাঘাত</string>
+    <string name="room_participants_action_remove">পদাঘাত</string>
     <string name="room_participants_action_set_default_power_level">স্বাভাবিক ব্যবহারকারী তে রিসেট করুন</string>
     <string name="room_participants_action_set_moderator">মডারেটর কর</string>
     <string name="room_participants_action_set_admin">অ্যাডমিন কর</string>
@@ -835,7 +835,7 @@
     <string name="encrypted_message">এনক্রিপ্ট করা বার্তা</string>
 
     <string name="joined">যোগ করেছেন</string>
-    <string name="has_been_kicked">আপনি %1$s থেকে %2$s দ্বারা লাথি খেয়েছেন</string>
+    <string name="has_been_removed">আপনি %1$s থেকে %2$s দ্বারা লাথি খেয়েছেন</string>
     <string name="merged_events_expand">সম্প্রসারিত</string>
     <string name="merged_events_collapse">বন্ধ</string>
 
@@ -1335,7 +1335,7 @@
     <string name="command_description_join_room">প্রদত্ত ওরফে সহ রুমে যোগ দেয়</string>
     <string name="command_description_part_room">কক্ষ ছেড়ে দিন</string>
     <string name="command_description_topic">রুমের টপিক সেট করুন</string>
-    <string name="command_description_kick_user">প্রদত্ত আইডি সহ ব্যবহারকারীকে কিক্ করে</string>
+    <string name="command_description_remove_user">প্রদত্ত আইডি সহ ব্যবহারকারীকে কিক্ করে</string>
     <string name="command_description_nick">আপনার প্রদর্শনের ডাকনাম পরিবর্তন করে</string>
     <string name="command_description_markdown">অন/অফ মার্কডাউন</string>
     <string name="markdown_has_been_enabled">মার্কডাউন সক্ষম করা হয়েছে।</string>
@@ -1457,8 +1457,8 @@
     <string name="room_participants_action_unignore_prompt_msg">এই ব্যবহারকারী কে উপেক্ষা তালিকা থেকে সরালে তাদের থেকে সমস্ত বার্তা আবার দেখাবে।</string>
     <string name="room_participants_action_cancel_invite_title">আমন্ত্রণ বাতিল করুন</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">আপনি কি নিশ্চিত যে আপনি এই ব্যবহারকারীর জন্য আমন্ত্রণটি বাতিল করতে চান\?</string>
-    <string name="room_participants_kick_title">ব্যবহারকারী কে কীক করুন</string>
-    <string name="room_participants_kick_reason">কীক করার কারণ</string>
+    <string name="room_participants_remove_title">ব্যবহারকারী কে কীক করুন</string>
+    <string name="room_participants_remove_reason">কীক করার কারণ</string>
     <string name="room_participants_kick_prompt_msg">কীক করা ব্যবহারকারী কে তাদের এই ঘর থেকে সরিয়ে দেবে।
 \n
 \nতাদের আবার যোগদানের হাত থেকে বাঁচাতে আপনার পরিবর্তে ওদেরকে নিষিদ্ধ করা উচিত।</string>

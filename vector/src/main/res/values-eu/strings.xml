@@ -868,7 +868,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="group_no_long_description">Komunitatearen administratzaileak ez du deskripzio luzerik eman komunitate honentzat.</string>
 
-    <string name="has_been_kicked">%1$s gelatik kanporatu zaitu %2$s erabiltzaileak</string>
+    <string name="has_been_removed">%1$s gelatik kanporatu zaitu %2$s erabiltzaileak</string>
     <string name="has_been_banned">%1$s gelatik debekatu zaitu %2$s erabiltzaileak</string>
     <string name="reason_colon">Arrazoia: %1$s</string>
     <string name="rejoin">Berriro elkartu</string>
@@ -1015,7 +1015,7 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
     <string name="command_description_join_room">Gelara elkartzen da emandako ezizenarekin</string>
     <string name="command_description_part_room">Atera gelatik</string>
     <string name="command_description_topic">Ezarri gelaren mintzagaia</string>
-    <string name="command_description_kick_user">Id zehatz bat duen erabiltzailea kanporatzen du</string>
+    <string name="command_description_remove_user">Id zehatz bat duen erabiltzailea kanporatzen du</string>
     <string name="command_description_nick">Zure pantaila-izena aldatzen du</string>
     <string name="command_description_markdown">Markdown bai/ez</string>
     <string name="command_description_clear_scalar_token">Matrix aplikazioen kudeaketa konpontzeko</string>
@@ -1111,7 +1111,7 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
     <string name="settings_call_ringtone_title">Jasotako deien doinua</string>
     <string name="settings_call_ringtone_dialog_title">Hautatu deientzako doinua:</string>
 
-    <string name="room_participants_action_kick">Kanporatu</string>
+    <string name="room_participants_action_remove">Kanporatu</string>
     <string name="reason_hint">Arrazoia</string>
 
     <string name="settings_inline_url_preview_summary">Erakutsi txateko esteken aurrebista hasiera-zerbitzariak onartzen badu.</string>

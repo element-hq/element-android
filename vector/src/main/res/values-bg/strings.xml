@@ -874,7 +874,7 @@
     <string name="filter_group_members">Филтриране на членовете</string>
     <string name="filter_group_rooms">Филтриране на стаите</string>
     <string name="group_no_long_description">Администраторът на общността не е предоставил дълго описание за тази общност.</string>
-    <string name="has_been_kicked">Бяхте изгонен от %1$s от %2$s</string>
+    <string name="has_been_removed">Бяхте изгонен от %1$s от %2$s</string>
     <string name="has_been_banned">Бяхте блокиран от %1$s от %2$s</string>
     <string name="reason_colon">Причина: %1$s</string>
     <string name="receipt_avatar">Профилна снимка</string>
@@ -946,7 +946,7 @@
     <string name="command_description_join_room">Присъединява се към стая с даден псевдоним</string>
     <string name="command_description_part_room">Напуска стаята</string>
     <string name="command_description_topic">Слага тема на стаята</string>
-    <string name="command_description_kick_user">Изгонва потребител с даден идентификатор</string>
+    <string name="command_description_remove_user">Изгонва потребител с даден идентификатор</string>
     <string name="command_description_nick">Променя името Ви</string>
     <string name="command_description_markdown">Включва/изключва markdown</string>
     <string name="command_description_clear_scalar_token">Поправя управлението на Matrix приспособленията</string>
@@ -1024,7 +1024,7 @@
     <string name="template_settings_call_ringtone_use_app_ringtone">Използвай мелодията по подразбиране на ${app_name} за входящи повиквания</string>
     <string name="settings_call_ringtone_title">Мелодия за входящо повикване</string>
     <string name="settings_call_ringtone_dialog_title">Избор на мелодия за обаждания:</string>
-    <string name="room_participants_action_kick">Изгони</string>
+    <string name="room_participants_action_remove">Изгони</string>
     <string name="reason_hint">Причина</string>
     <string name="settings_inline_url_preview_summary">Прегледи на връзки директно в самия чат, когато функцията се поддържа от сървъра.</string>
     <string name="settings_send_typing_notifs">Изпращане на информация, че пиша</string>
@@ -1765,8 +1765,8 @@
     <string name="settings_show_redacted_summary">Показвай индикатор на мястото на премахнатите съобщения</string>
     <string name="action_play">Възпроизведи</string>
     <string name="action_pause">Пауза</string>
-    <string name="room_participants_kick_reason">Причина за изгонване</string>
-    <string name="room_participants_kick_title">Изгонване на потребител</string>
+    <string name="room_participants_remove_reason">Причина за изгонване</string>
+    <string name="room_participants_remove_title">Изгонване на потребител</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Сигурни ли сте, че искате да откажете изпратената към този потребител покана\?</string>
     <string name="room_participants_action_cancel_invite_title">Отказва на покана</string>
     <string name="room_participants_action_unignore_prompt_msg">Премахване на игнорирането на потребителя ще покаже отново всички техни съобщения.</string>

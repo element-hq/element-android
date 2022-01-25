@@ -719,7 +719,7 @@
     <string name="notification_noisy">Lûd</string>
     <string name="notification_silent">Stil</string>
     <string name="notification_off">Ut</string>
-    <string name="command_description_kick_user">Brûker mei it ID wat opjûn is der útskoppe</string>
+    <string name="command_description_remove_user">Brûker mei it ID wat opjûn is der útskoppe</string>
     <string name="command_description_part_room">Keamer ferlitte</string>
     <string name="share_without_verifying_short_label">Diele</string>
     <string name="share_without_verifying">Diele sûnder te ferifiearjen</string>
@@ -873,7 +873,7 @@
     <string name="room_permissions_notify_everyone">Elkenien op de hichte bringe</string>
     <string name="room_permissions_remove_messages_sent_by_others">Berjochten dy’t troch oaren ferstjoerd binne fuortsmite</string>
     <string name="room_permissions_ban_users">Brûkers ferbalje</string>
-    <string name="room_permissions_kick_users">Brûkers der út skoppe</string>
+    <string name="room_permissions_remove_users">Brûkers der út skoppe</string>
     <string name="room_permissions_invite_users">Brûkers útnûgje</string>
     <string name="room_permissions_send_messages">Berjochten ferstjoere</string>
     <string name="room_permissions_default_role">Standert rol</string>
@@ -906,7 +906,7 @@
     <string name="room_participants_action_set_admin">Behearder meitsje</string>
     <string name="room_participants_action_set_moderator">Moderator meitsje</string>
     <string name="room_participants_action_set_default_power_level">Weromsette nei gewoane brûker</string>
-    <string name="room_participants_action_kick">Der útskoppe</string>
+    <string name="room_participants_action_remove">Der útskoppe</string>
     <string name="room_participants_action_ban">Ferbalje</string>
     <string name="room_participants_action_cancel_invite">Utnûging annulearje</string>
     <string name="room_participants_action_invite">Utnûgje</string>
@@ -1330,14 +1330,14 @@
     <string name="room_participants_unban_title">Ferballing brûker ûngedien meitsje</string>
     <string name="room_participants_ban_reason">Reden foar ferballing</string>
     <string name="room_participants_ban_title">Brûker ferbalje</string>
-    <string name="space_participants_kick_prompt_msg">troch dizze brûker fuort te smiten sil dy net mear yn dizze romte sitte.
+    <string name="space_participants_remove_prompt_msg">troch dizze brûker fuort te smiten sil dy net mear yn dizze romte sitte.
 \n
 \nOm foar te kommen dat dyjinge opnij ta treed, kinne jo him/har ek ferballe.</string>
     <string name="room_participants_kick_prompt_msg">troch dizze brûker fuort te smiten sil dy net mear yn dit petear sitte.
 \n
 \nOm foar te kommen dat dyjinge opnij ta treed, kinne jo him/har ek ferballe.</string>
-    <string name="room_participants_kick_reason">Reden foar fuortsmiten</string>
-    <string name="room_participants_kick_title">Brûker fuortsmite</string>
+    <string name="room_participants_remove_reason">Reden foar fuortsmiten</string>
+    <string name="room_participants_remove_title">Brûker fuortsmite</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Binne jo wis dat jo de útnûging foar dizze brûker annulearje wolle\?</string>
     <string name="room_participants_action_unignore_prompt_msg">It net mear negearjen fan dizze brûker sil al syn/har berjochten opnij werjaan.</string>
     <string name="room_participants_action_ignore_prompt_msg">Troch dizze brûker te negearjen wurden syn/har berjochten fuortsmiten út petearen dy’t jimme diele.

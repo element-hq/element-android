@@ -304,7 +304,7 @@
     <string name="room_participants_action_invite">Nced</string>
     <string name="room_participants_action_ban">Agi</string>
     <string name="room_participants_action_unban">Asefsex n tigtin</string>
-    <string name="room_participants_action_kick">Suffeɣ</string>
+    <string name="room_participants_action_remove">Suffeɣ</string>
     <string name="room_participants_action_mention">Abder</string>
     <string name="room_participants_power_level_demote_warning_title">Ṣubb deg usellun-ik·im\?</string>
     <string name="room_participants_power_level_demote">Ṣubb deg usellun</string>
@@ -445,7 +445,7 @@
     <string name="command_description_deop_user">Aseqdac Deops s usulay i d-yettunefken</string>
     <string name="command_description_invite_user">Inced iseqdacen s tikci n usulay i texxamt tamirant</string>
     <string name="command_description_part_room">Ffeɣ seg texxamt</string>
-    <string name="command_description_kick_user">Suffeɣ aseqdac s usulay i d-yettunefken</string>
+    <string name="command_description_remove_user">Suffeɣ aseqdac s usulay i d-yettunefken</string>
     <string name="command_description_nick">Ibeddel isem-inek·inem yettwaskanen</string>
     <string name="notification_off">Insa</string>
     <string name="create">Snulfu-d</string>
@@ -986,8 +986,8 @@
     <string name="settings_call_show_confirmation_dialog_title">Sewḥel isawalen iɣef ur tebniḍ</string>
     <string name="settings_call_show_confirmation_dialog_summary">Suter i usentem send beddu n usiwel</string>
     <string name="settings_call_ringtone_use_default_stun">Sireg aqeddac n tallalt n yisawalen n usellek</string>
-    <string name="room_participants_kick_title">Suffeɣ aseqdac</string>
-    <string name="room_participants_kick_reason">Ssebba n usuffeɣ</string>
+    <string name="room_participants_remove_title">Suffeɣ aseqdac</string>
+    <string name="room_participants_remove_reason">Ssebba n usuffeɣ</string>
     <string name="room_participants_ban_title">Agi aseqdac</string>
     <string name="room_participants_ban_reason">Ssebba n tigtin</string>
     <string name="room_participants_unban_title">Asefsex n useqdac</string>
@@ -1754,7 +1754,7 @@
     <string name="markdown_has_been_enabled">Tacreḍt yeɣlin tettwarmed.</string>
     <string name="markdown_has_been_disabled">Tacreḍt yeɣlin tettusens.</string>
     <string name="group_no_long_description">Anedbal n temɣiwent ur d-imudd ara aglam ɣezzifen i temɣiwent-a.</string>
-    <string name="has_been_kicked">Tettusuffɣeḍ-d seg %1$s sɣur %2$s</string>
+    <string name="has_been_removed">Tettusuffɣeḍ-d seg %1$s sɣur %2$s</string>
     <string name="has_been_banned">Tettusuffɣeḍ-d seg %1$s sɣur %2$s</string>
     <string name="dialog_user_consent_content">I wakken ad tkemmleḍ aseqdec n uqeddac agejdan %1$s, ilaq ad talseḍ asenqed syen ad tqebleḍ tiwtilin-nneɣ s umata.</string>
     <string name="deactivate_account_delete_checkbox">Ttxil-k·m ttu akk iznan i yuzneɣ mi ara senseɣ amiḍan-iw (Ɣur-k·m: aya ad yerr iseqdacen ara d-yernun ad walin idiwenniyen ur nemmid ara)</string>
