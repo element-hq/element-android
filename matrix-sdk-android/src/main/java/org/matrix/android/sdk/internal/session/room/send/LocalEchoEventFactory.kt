@@ -66,8 +66,8 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.content.ThumbnailExtractor
 import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
-import java.util.concurrent.TimeUnit
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
