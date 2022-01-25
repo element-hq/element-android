@@ -513,7 +513,6 @@
     <string name="room_title_one_member">1 participant</string>
     <string name="room_participants_leave_prompt_title">Marxa de la sala</string>
     <string name="room_participants_leave_prompt_msg">Estàs segur que vols marxar de la sala\?</string>
-    <string name="room_participants_remove_prompt_msg">Estàs segur que vols eliminar %s d\'aquest xat\?</string>
     <string name="room_participants_create">Crea</string>
     <string name="room_participants_online">En línia</string>
     <string name="room_participants_offline">Fora de línia</string>

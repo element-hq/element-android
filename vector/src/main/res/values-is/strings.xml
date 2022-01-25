@@ -603,7 +603,6 @@
     <string name="rejoin">Taka þátt aftur</string>
     <string name="read_receipts_list">Listi yfir leskvittanir</string>
     <string name="room_preview_invitation_format">Þér hefur verið boðið af %s að taka þátt í þessari spjallrás</string>
-    <string name="room_participants_remove_prompt_msg">Ertu viss um að þú viljir fjarlægja %s úr þessu spjalli?</string>
     <string name="room_participants_invite_prompt_msg">Ertu viss um að þú viljir bjóða %s á þetta spjall?</string>
     <string name="room_participants_ban_prompt_msg">Bönun notanda mun henda þeim út úr þessu herbergi og halda þeim frá því að koma aftur.</string>
     <string name="people_search_invite_by_id"><u>Bjóða miðað við auðkenni</u></string>

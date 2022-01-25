@@ -298,7 +298,6 @@ Det kan være du vil logge ind med en anden konto eller tilføje denne email til
     <string name="room_title_one_member">1 medlem</string>
     <string name="room_participants_leave_prompt_title">Forlad rum</string>
     <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil forlade rummet?</string>
-    <string name="room_participants_remove_prompt_msg">Er du sikker på du vil fjerne %s fra denne chat?</string>
     <string name="room_participants_create">Skab</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>

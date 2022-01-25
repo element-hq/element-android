@@ -509,7 +509,6 @@
     <string name="room_title_one_member">1 пользователь</string>
     <string name="room_participants_leave_prompt_title">Покинуть комнату</string>
     <string name="room_participants_leave_prompt_msg">Вы уверены, что хотите выйти из комнаты\?</string>
-    <string name="room_participants_remove_prompt_msg">Вы уверены, что хотите исключить %s из чата?</string>
     <string name="room_participants_create">Создать</string>
     <string name="room_participants_online">В сети</string>
     <string name="room_participants_offline">Недоступен</string>

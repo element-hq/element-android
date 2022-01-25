@@ -246,7 +246,6 @@
     <string name="room_creation_add_member">添加成员</string>
     <string name="room_participants_leave_prompt_title">退出聊天室</string>
     <string name="room_participants_leave_prompt_msg">你确定要退出聊天室吗？</string>
-    <string name="room_participants_remove_prompt_msg">你确定要把 %s 从这个聊天中移除吗？</string>
     <string name="room_participants_online">在线</string>
     <string name="room_participants_offline">离线</string>
     <string name="room_menu_search">搜索</string>

@@ -655,7 +655,6 @@
     <string name="room_preview_try_join_an_unknown_room">Vous essayez d’accéder à %s. Souhaitez-vous rejoindre le salon pour participer à la discussion \?</string>
     <string name="room_preview_room_interactions_disabled">Ceci est un aperçu du salon. Vous ne pouvez pas interagir.</string>
     <string name="room_participants_leave_prompt_msg">Voulez-vous vraiment quitter le salon \?</string>
-    <string name="room_participants_remove_prompt_msg">Voulez-vous vraiment bannir %s de cette discussion \?</string>
     <string name="room_participants_idle">Inactif</string>
     <string name="room_participants_action_ignore">Ignorer</string>
     <string name="room_participants_action_unignore">Afficher tous les messages de cet utilisateur</string>

@@ -430,7 +430,6 @@
     <string name="room_title_one_member">yksi jäsen</string>
     <string name="room_participants_leave_prompt_title">Poistu huoneesta</string>
     <string name="room_participants_leave_prompt_msg">Haluatko varmasti poistua huoneesta?</string>
-    <string name="room_participants_remove_prompt_msg">Haluatko varmasti poistaa käyttäjän %s tästä keskustelusta\?</string>
     <string name="room_participants_create">Luo</string>
     <string name="room_participants_online">kirjautuneena sisään</string>
     <string name="room_participants_offline">saavuttamattomissa</string>

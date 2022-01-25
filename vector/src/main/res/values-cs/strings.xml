@@ -587,7 +587,6 @@
     </plurals>
     <string name="room_participants_leave_prompt_title">Opustit místnost</string>
     <string name="room_participants_leave_prompt_msg">Opravdu chcete opustit tuto místnost\?</string>
-    <string name="room_participants_remove_prompt_msg">Opravdu chcete vyhodit %s z této konverzace\?</string>
     <string name="room_participants_create">Vytvořit</string>
     <string name="room_participants_online">On-line</string>
     <string name="room_participants_offline">Off-line</string>

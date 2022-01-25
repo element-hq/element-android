@@ -821,7 +821,6 @@
     <string name="room_participants_offline">Ngoại tuyến</string>
     <string name="room_participants_online">Trực tuyến</string>
     <string name="room_participants_create">Tạo</string>
-    <string name="room_participants_remove_prompt_msg">Bạn có chắc muốn xóa %s khỏi cuộc trò chuyện này\?</string>
     <string name="room_participants_leave_private_warning">Phòng này không công khai. Bạn sẽ không thể tham gia lại nếu không có lời mời.</string>
     <string name="continue_anyway">Vẫn tiếp tục</string>
     <plurals name="missed_video_call">

@@ -498,7 +498,6 @@
     <string name="room_title_one_member">1 utente</string>
     <string name="room_participants_leave_prompt_title">Esci dalla stanza</string>
     <string name="room_participants_leave_prompt_msg">Sei sicuro di voler uscire dalla stanza?</string>
-    <string name="room_participants_remove_prompt_msg">Sei sicuro di voler rimuovere %s da questa chat?</string>
     <string name="room_participants_create">Crea</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>

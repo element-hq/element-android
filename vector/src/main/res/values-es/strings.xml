@@ -494,7 +494,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="room_title_one_member">1 miembro</string>
     <string name="room_participants_leave_prompt_title">Salir de la sala</string>
     <string name="room_participants_leave_prompt_msg">¿Seguro que quieres salir de la sala?</string>
-    <string name="room_participants_remove_prompt_msg">¿Seguro que quieres eliminar a %s de esta conversación?</string>
     <string name="room_participants_create">Crear</string>
     <string name="room_participants_online">En línea</string>
     <string name="room_participants_offline">Desconectado</string>

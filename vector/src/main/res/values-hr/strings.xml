@@ -365,7 +365,6 @@
     </plurals>
     <string name="room_participants_leave_prompt_title">Napusti sobu</string>
     <string name="room_participants_leave_prompt_msg">Jeste li sigurni da želite napustiti sobu\?</string>
-    <string name="room_participants_remove_prompt_msg">Jeste li sigurni da iz ovog ćaskanja želite ukloniti %s\?</string>
     <string name="room_participants_create">Izradi</string>
     <string name="room_participants_online">Na vezi</string>
     <string name="room_participants_offline">Odspojen</string>

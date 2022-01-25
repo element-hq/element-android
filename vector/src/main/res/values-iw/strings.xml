@@ -687,7 +687,6 @@
     <string name="tab_title_search_files">קבצים</string>
     <string name="tab_title_search_people">אנשים</string>
     <string name="tab_title_search_messages">הודעות</string>
-    <string name="room_participants_remove_prompt_msg">האם אתה בטוח שברצונך להסיר את%s מהצ\'אט הזה\?</string>
     <string name="room_participants_leave_prompt_msg">האם ברצונך לעזוב את החדר\?</string>
     <string name="room_participants_leave_prompt_title">עזוב חדר</string>
     <plurals name="format_time_d">

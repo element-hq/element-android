@@ -521,7 +521,6 @@
     <string name="room_title_one_member">1 個成員</string>
     <string name="room_participants_leave_prompt_title">離開聊天室</string>
     <string name="room_participants_leave_prompt_msg">您確定想要離開聊天室？</string>
-    <string name="room_participants_remove_prompt_msg">你確定想從此聊天室移除 %s？</string>
     <string name="room_participants_create">建立</string>
     <string name="room_participants_online">線上</string>
     <string name="room_participants_offline">離線</string>

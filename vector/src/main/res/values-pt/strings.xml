@@ -287,7 +287,6 @@ Pode querer iniciar sessão com uma conta diferente, ou adicionar este email à 
     <string name="room_title_one_member">1 membro</string>
     <string name="room_participants_leave_prompt_title">Sair da sala</string>
     <string name="room_participants_leave_prompt_msg">Tem a certeza que quer sair da sala?</string>
-    <string name="room_participants_remove_prompt_msg">Tem certeza que quer remover %s desta conversa?</string>
     <string name="room_participants_create">Criar</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>

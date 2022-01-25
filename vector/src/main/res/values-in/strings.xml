@@ -319,7 +319,6 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     </plurals>
     <string name="room_participants_leave_prompt_title">Tinggalkan ruang</string>
     <string name="room_participants_leave_prompt_msg">Apa benar Anda ingin meninggalkan ruangan ini\?</string>
-    <string name="room_participants_remove_prompt_msg">Apa benar Anda ingin mengeluarkan %s dari percakapan ini?</string>
     <string name="room_participants_create">Buat</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>

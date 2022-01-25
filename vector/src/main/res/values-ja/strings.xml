@@ -209,7 +209,6 @@
     <string name="room_creation_title">新しい会話</string>
     <string name="room_creation_add_member">参加者を追加</string>
     <string name="room_title_one_member">1名</string>
-    <string name="room_participants_remove_prompt_msg">本当に%sさんを退室させますか?</string>
     <string name="room_participants_header_devices">端末</string>
     <string name="room_participants_action_set_default_power_level">権限を一般参加者へ変更</string>
     <string name="room_participants_action_set_moderator">権限を司会者へ変更</string>

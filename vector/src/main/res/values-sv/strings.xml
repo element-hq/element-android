@@ -624,7 +624,6 @@
     </plurals>
     <string name="room_participants_leave_prompt_title">Lämna rum</string>
     <string name="room_participants_leave_prompt_msg">Är du säker på att du vill lämna rummet\?</string>
-    <string name="room_participants_remove_prompt_msg">Är du säker på att du vill ta bort %s från den här chatten\?</string>
     <string name="room_participants_create">Skapa</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>

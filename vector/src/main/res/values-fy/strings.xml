@@ -1347,7 +1347,6 @@
     <string name="room_participants_power_level_prompt">Jo kinne dizze wizigingen net ûngedien meitsje omdat jo de brûker ta itselde nivo as josels promovearje.
 \nBinne jo wis\?</string>
     <string name="room_participants_action_unban">Untballe</string>
-    <string name="room_participants_remove_prompt_msg">Binne jo wis dat jo %s út dit petear gean wolle\?</string>
     <string name="room_participants_leave_private_warning">Dit petear is net iepenbier. Jo kinne net opnij ta trede sûnder útnûging.</string>
     <plurals name="format_time_d">
         <item quantity="one">%dd</item>

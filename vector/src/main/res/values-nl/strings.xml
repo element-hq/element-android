@@ -340,7 +340,6 @@
     <string name="room_title_one_member">1 deelnemer</string>
     <string name="room_participants_leave_prompt_title">Gesprek verlaten</string>
     <string name="room_participants_leave_prompt_msg">Weet u zeker dat u het gesprek wilt verlaten\?</string>
-    <string name="room_participants_remove_prompt_msg">Weet u zeker dat u %s uit dit gesprek wilt verwijderen\?</string>
     <string name="room_participants_create">Aanmaken</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>

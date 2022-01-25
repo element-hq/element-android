@@ -499,7 +499,6 @@ Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespē
     <string name="room_title_one_member">1 biedrs</string>
     <string name="room_participants_leave_prompt_title">Pamest istabu</string>
     <string name="room_participants_leave_prompt_msg">Vai tiešām vēlies pamest istabu\?</string>
-    <string name="room_participants_remove_prompt_msg">Vai tiešām vēlies dzēst (izmest) %s no šī čata?</string>
     <string name="room_participants_create">Izveidot</string>
     <string name="room_participants_online">Tiešsaistē</string>
     <string name="room_participants_offline">Bezsaistē</string>

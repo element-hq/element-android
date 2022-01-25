@@ -798,7 +798,6 @@
     <string name="room_creation_title">Нов чат</string>
     <string name="room_creation_add_member">Добави член</string>
     <string name="room_participants_leave_prompt_title">Напускане на стая</string>
-    <string name="room_participants_remove_prompt_msg">Сигурни ли сте, че искате да премахнете %s от този чат?</string>
     <string name="room_participants_create">Създай</string>
     <string name="room_participants_header_call">ПОВИКВАНЕ</string>
     <string name="room_participants_action_invite">Покани</string>

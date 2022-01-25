@@ -659,7 +659,6 @@
     <string name="room_participants_offline">Ван везе</string>
     <string name="room_participants_online">На вези</string>
     <string name="room_participants_create">Креирај</string>
-    <string name="room_participants_remove_prompt_msg">Сигурно уклонити %s из овог ћаскања\?</string>
     <string name="room_participants_leave_private_warning">Ова соба није јавна. Нећете моћи поново да се придружите без позива.</string>
     <string name="room_participants_leave_prompt_msg">Стварно напустити ову собу\?</string>
     <string name="room_participants_leave_prompt_title">Напусти собу</string>

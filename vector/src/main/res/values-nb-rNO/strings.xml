@@ -1075,7 +1075,6 @@
     <string name="room_participants_header_devices">SESSJONER</string>
     <string name="room_participants_header_call">RING</string>
     <string name="room_participants_header_admin_tools">ADMIN VERKTØY</string>
-    <string name="room_participants_remove_prompt_msg">Er du sikker på at du vil fjerne %s fra denne chatten\?</string>
     <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil forlate rommet\?</string>
     <string name="room_creation_add_member">Legg til medlem</string>
     <string name="room_creation_title">Ny chat</string>

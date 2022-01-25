@@ -289,7 +289,6 @@
     <string name="room_title_one_member">1 członek</string>
     <string name="room_participants_leave_prompt_title">Opuść pokój</string>
     <string name="room_participants_leave_prompt_msg">Czy na pewno chcesz opuścić pokój?</string>
-    <string name="room_participants_remove_prompt_msg">Czy na pewno chcesz usunąć %s z rozmowy?</string>
     <string name="room_participants_create">Utwórz</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>

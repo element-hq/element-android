@@ -667,7 +667,6 @@
     </plurals>
     <string name="room_participants_leave_prompt_title">Foriri de ĉambro</string>
     <string name="room_participants_leave_prompt_msg">Ĉu vi certe volas foriri de la ĉambro\?</string>
-    <string name="room_participants_remove_prompt_msg">Ĉu vi certe volas forigi ĉambranon %s de ĉi tiu babilo\?</string>
     <string name="room_participants_create">Krei</string>
     <string name="room_participants_online">Enrete</string>
     <string name="room_participants_offline">Eksetrrete</string>

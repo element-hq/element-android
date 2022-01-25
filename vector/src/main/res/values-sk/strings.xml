@@ -449,7 +449,6 @@
     <string name="room_title_one_member">1 člen</string>
     <string name="room_participants_leave_prompt_title">Opustiť miestnosť</string>
     <string name="room_participants_leave_prompt_msg">Ste si istí, že chcete opustiť miestnosť?</string>
-    <string name="room_participants_remove_prompt_msg">Ste si istí, že chcete používateľa %s vykopnúť z tejto miestnosti?</string>
     <string name="room_participants_create">Vytvoriť</string>
     <string name="room_participants_online">Prítomný</string>
     <string name="room_participants_offline">Nedostupný</string>

@@ -1570,7 +1570,6 @@
     <string name="template_permissions_rationale_msg_contacts">Matrix yezmer ad isenqed adlis-ik·im n tansiwin i wakken ad yaf iseqdacen-nniḍen n Matrix s ttawil n yimaylen d wuṭṭunen n tiliɣri nsen. Ma yella tqebleḍ ad tebduḍ adlis-ik·im n tansiwin i waya, ma ulac aɣilif sireg anekcum deg yisfuyla udhimen i d-iteddun.</string>
     <string name="invite_no_identity_server_error">Rnu aqeddac n timagit deg yiɣewwaren-ik·im i wakken ad tesnetmeḍ tigawt-a.</string>
     <string name="room_participants_leave_prompt_msg">S tidet tebɣiḍ ad teǧǧeḍ taxxamt\?</string>
-    <string name="room_participants_remove_prompt_msg">Tebɣiḍ s tidet ad tekkseḍ %s seg udiwenni-a\?</string>
     <string name="room_participants_power_level_prompt">Ur tettizmireḍ ara ad tesfesxeḍ asnifel-a acku tessebɣaseḍ aseqdac ad yesɛu aswir n tezmert am kečč·kemm.
 \nTebɣiḍ s tidet\?</string>
     <string name="room_participants_action_ignore_prompt_msg">Azgal n useqdac-a ad yekkes iznan-ines seg texxamin i tebḍiḍ.

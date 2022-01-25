@@ -440,7 +440,6 @@
     </plurals>
     <string name="room_participants_leave_prompt_title">ترک اتاق</string>
     <string name="room_participants_leave_prompt_msg">آیا از ترک این اتاق اطمینان دارید؟</string>
-    <string name="room_participants_remove_prompt_msg">آیا می‌خواهید %s را از این گفتگو حذف کنید؟</string>
     <string name="room_participants_create">ساخت</string>
     <string name="room_participants_online">آنلاین</string>
     <string name="room_participants_offline">آفلاین</string>

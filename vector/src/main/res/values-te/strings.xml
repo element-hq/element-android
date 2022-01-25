@@ -268,7 +268,6 @@
 
     <string name="room_participants_leave_prompt_title">గదిని వదలండి</string>
     <string name="room_participants_leave_prompt_msg">మీరు ఖచ్చితంగా గదిని వదిలేయాలనుకుంటున్నారా?</string>
-    <string name="room_participants_remove_prompt_msg">మీరు ఈ చాట్ నుండి ఖచ్చితంగా %s ను తీసివేయాలనుకుంటున్నారా?</string>
     <string name="room_participants_create">సృష్టించు</string>
 
     <string name="room_participants_online">ఆన్‌లైన్</string>

@@ -412,7 +412,6 @@
     </plurals>
     <string name="room_participants_leave_prompt_title">방 떠나기</string>
     <string name="room_participants_leave_prompt_msg">방을 떠나겠습니까\?</string>
-    <string name="room_participants_remove_prompt_msg">이 대화에서 %s을(를) 삭제하겠습니까\?</string>
     <string name="room_participants_create">만들기</string>
     <string name="room_participants_online">온라인</string>
     <string name="room_participants_offline">오프라인</string>

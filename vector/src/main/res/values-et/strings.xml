@@ -1067,7 +1067,6 @@
     </plurals>
     <string name="room_participants_leave_prompt_title">Lahku jututoast</string>
     <string name="room_participants_leave_prompt_msg">Kas oled kindel, et soovid lahkuda jututoast\?</string>
-    <string name="room_participants_remove_prompt_msg">Kas sa oled kindel, et soovid eemaldada %s sellest vestlusest\?</string>
     <string name="room_participants_create">Loo</string>
     <string name="room_participants_online">Võrgus</string>
     <string name="room_participants_offline">Võrgust väljas</string>

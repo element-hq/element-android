@@ -398,7 +398,6 @@
     <string name="room_title_one_member">1 учасник</string>
     <string name="room_participants_leave_prompt_title">Вийти з кімнати</string>
     <string name="room_participants_leave_prompt_msg">Ви впевнені, що хочете вийти з кімнати\?</string>
-    <string name="room_participants_remove_prompt_msg">Ви впевнені, що бажаєте вилучити %s з цієї кімнати\?</string>
     <string name="room_participants_create">Створити</string>
     <string name="room_participants_online">У мережі</string>
     <string name="room_participants_offline">Не в мережі</string>

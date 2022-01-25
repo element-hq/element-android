@@ -294,7 +294,6 @@
     <string name="room_title_one_member">1 miembro</string>
     <string name="room_participants_leave_prompt_title">Salir de la sala</string>
     <string name="room_participants_leave_prompt_msg">¿Estás seguro que quieres salir de la sala?</string>
-    <string name="room_participants_remove_prompt_msg">¿Estás seguro que quieres quitar a %s de este chat?</string>
     <string name="room_participants_create">Crear</string>
     <string name="room_participants_online">Conectado</string>
     <string name="room_participants_offline">Desconectado</string>

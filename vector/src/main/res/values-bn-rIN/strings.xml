@@ -577,7 +577,6 @@
 
     <string name="room_participants_leave_prompt_title">রুম ছেড়ে দিন</string>
     <string name="room_participants_leave_prompt_msg">আপনি কি রুম ছেড়ে যেতে চান\?</string>
-    <string name="room_participants_remove_prompt_msg">আপনি কি এই চ্যাট থেকে %s মুছে ফেলতে চান\?</string>
     <string name="room_participants_create">সৃষ্টি</string>
 
     <string name="room_participants_online">অনলাইন</string>

@@ -396,7 +396,6 @@ Baimendu sarbidea hurrengo laster-leihoan zure telefonotik fitxategiak bidali ah
 
     <string name="room_participants_leave_prompt_title">Atera gelatik</string>
     <string name="room_participants_leave_prompt_msg">Ziur gelatik atera nahi duzula?</string>
-    <string name="room_participants_remove_prompt_msg">Ziur %s txat honetatik kendu nahi duzula?</string>
     <string name="room_participants_create">Sortu</string>
 
     <string name="room_participants_online">Konektatuta</string>

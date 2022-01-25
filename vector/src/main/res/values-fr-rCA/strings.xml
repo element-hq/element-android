@@ -2487,7 +2487,6 @@
     <string name="room_participants_offline">Hors ligne</string>
     <string name="room_participants_online">En ligne</string>
     <string name="room_participants_create">Créer</string>
-    <string name="room_participants_remove_prompt_msg">Voulez-vous vraiment bannir %s de cette discussion \?</string>
     <string name="room_participants_leave_private_warning">Ce salon n’est pas public. Vous ne pourrez pas le rejoindre sans invitation.</string>
     <string name="room_participants_leave_prompt_title">Quitter le salon</string>
     <string name="room_title_one_member">1 membre</string>

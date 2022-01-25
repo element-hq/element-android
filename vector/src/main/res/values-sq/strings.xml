@@ -477,7 +477,6 @@
     </plurals>
     <string name="room_participants_leave_prompt_title">Dilni nga dhoma</string>
     <string name="room_participants_leave_prompt_msg">Jeni i sigurt se doni të dilni nga dhoma?</string>
-    <string name="room_participants_remove_prompt_msg">Jeni i sigurt se doni të hiqet %s nga kjo fjalosje?</string>
     <string name="room_participants_create">Krijoje</string>
     <string name="room_participants_online">Në linjë</string>
     <string name="room_participants_offline">Jo në linjë</string>
