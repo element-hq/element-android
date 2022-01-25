@@ -28,6 +28,7 @@ import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.popBackstack
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
+import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.roomdirectory.createroom.CreateRoomArgs
@@ -50,6 +51,7 @@ class RoomDirectoryActivity : VectorBaseActivity<ActivitySimpleBinding>(), Matri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        analyticsScreenName = Screen.ScreenName.RoomDirectory
         sharedActionViewModel = viewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
 
         if (isFirstCreation()) {

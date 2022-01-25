@@ -33,17 +33,17 @@
                     android:padding="8dp">
 
                     <TextView
-                        style="@style/Widget.Vector.TextView.ActionBarTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/select_spaces" />
+                        android:text="@string/select_spaces"
+                        android:textAppearance="@style/TextAppearance.Vector.Widget.ActionBarTitle" />
 
                     <TextView
-                        style="@style/Widget.Vector.TextView.Body"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:paddingTop="8dp"
                         android:text="@string/decide_which_spaces_can_access"
+                        android:textAppearance="@style/Widget.Vector.TextView.Subtitle"
                         android:textColor="?vctr_content_secondary" />
                 </LinearLayout>
 
@@ -92,8 +92,8 @@
         android:paddingEnd="16dp">
 
         <Button
-            style="@style/Widget.Vector.Button.Positive"
             android:id="@+id/okButton"
+            style="@style/Widget.Vector.Button.Positive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/ok" />

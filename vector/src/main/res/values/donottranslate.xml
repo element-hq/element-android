@@ -14,4 +14,17 @@
     <!-- Temporary string -->
     <string name="template_not_implemented" translatable="false">Not implemented yet in ${app_name}</string>
 
+    <!-- onboarding english only word play -->
+    <string name="cut_the_slack_from_teams" translatable="false">Cut the slack from teams.</string>
+
+    <!--  WIP strings, will move to strings.xml when signed off  -->
+    <string name="ftue_auth_use_case_title" translatable="false">Who will you chat to the most?</string>
+    <string name="ftue_auth_use_case_subtitle" translatable="false">We\'ll help you get connected.</string>
+    <string name="ftue_auth_use_case_option_one" translatable="false">Friends and family</string>
+    <string name="ftue_auth_use_case_option_two" translatable="false">Teams</string>
+    <string name="ftue_auth_use_case_option_three" translatable="false">Communities</string>
+    <string name="ftue_auth_use_case_skip" translatable="false">Not sure yet? %s</string>
+    <string name="ftue_auth_use_case_skip_partial" translatable="false">You can skip this question</string>
+    <string name="ftue_auth_use_case_join_existing_server" translatable="false">Looking to join an existing server?</string>
+    <string name="ftue_auth_use_case_connect_to_server" translatable="false">Connect to server</string>
 </resources>

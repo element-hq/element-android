@@ -22,7 +22,6 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import im.vector.app.R
-import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.noResultItem
 import im.vector.app.core.error.ErrorFormatter
@@ -38,6 +37,7 @@ import im.vector.app.features.discovery.settingsEditTextItem
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.discovery.settingsInformationItem
 import im.vector.app.features.discovery.settingsSectionTitleItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.identity.ThreePid

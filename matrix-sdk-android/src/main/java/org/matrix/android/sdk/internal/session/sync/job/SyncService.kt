@@ -152,7 +152,7 @@ abstract class SyncService : Service() {
 
     private suspend fun doSync() {
         Timber.v("## Sync: Execute sync request with timeout $syncTimeoutSeconds seconds")
-        val params = SyncTask.Params(syncTimeoutSeconds * 1000L, SyncPresence.Offline)
+        val params = SyncTask.Params(syncTimeoutSeconds * 1000L, SyncPresence.Offline, afterPause = false)
         try {
             // never do that in foreground, let the syncThread work
             syncTask.execute(params)

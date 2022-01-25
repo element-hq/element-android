@@ -25,9 +25,12 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.pin.PinMode
+import im.vector.app.features.poll.create.PollMode
 import im.vector.app.features.roomdirectory.RoomDirectoryData
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import im.vector.app.features.settings.VectorSettingsActivity
@@ -76,7 +79,7 @@ interface Navigator {
 
     fun openMatrixToBottomSheet(context: Context, link: String)
 
-    fun openCreateRoom(context: Context, initialName: String = "")
+    fun openCreateRoom(context: Context, initialName: String = "", openAfterCreate: Boolean = true)
 
     fun openCreateDirectRoom(context: Context)
 
@@ -148,5 +151,11 @@ interface Navigator {
 
     fun openCallTransfer(context: Context, callId: String)
 
-    fun openCreatePoll(context: Context, roomId: String)
+    fun openCreatePoll(context: Context, roomId: String, editedEventId: String?, mode: PollMode)
+
+    fun openLocationSharing(context: Context,
+                            roomId: String,
+                            mode: LocationSharingMode,
+                            initialLocationData: LocationData?,
+                            locationOwnerId: String)
 }

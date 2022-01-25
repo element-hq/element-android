@@ -19,7 +19,6 @@ package im.vector.app.features.roomprofile
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
-import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.expandableTextItem
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
@@ -32,6 +31,7 @@ import im.vector.app.features.home.ShortcutCreator
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.image
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel

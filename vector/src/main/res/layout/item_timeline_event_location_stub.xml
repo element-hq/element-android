@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/mapViewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <im.vector.app.features.location.MapTilerMapView
+            android:id="@+id/mapView"
+            android:layout_width="0dp"
+            android:layout_height="200dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:mapbox_renderTextureMode="true" />
+
+        <FrameLayout
+            android:id="@+id/clickableMapArea"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/mapView"
+            app:layout_constraintEnd_toEndOf="@id/mapView"
+            app:layout_constraintStart_toStartOf="@id/mapView"
+            app:layout_constraintTop_toTopOf="@id/mapView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

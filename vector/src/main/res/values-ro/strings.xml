@@ -50,8 +50,8 @@
     <string name="notice_avatar_url_changed">%1$s și-a schimbat avatarul</string>
     <string name="notice_room_withdraw_by_you">Ați înlăturat invitația lui %1$s</string>
     <string name="notice_room_withdraw">%1$s a înlăturat invitația lui %2$s</string>
-    <string name="notice_room_kick_by_you">Ați scos pe %1$s</string>
-    <string name="notice_room_kick">%1$s a scos pe %2$s</string>
+    <string name="notice_room_remove_by_you">Ați scos pe %1$s</string>
+    <string name="notice_room_remove">%1$s a scos pe %2$s</string>
     <string name="notice_call_candidates">%s a trimis informații pentru a începe apelul.</string>
     <string name="notice_placed_voice_call_by_you">Ați început un apel video.</string>
     <string name="notice_placed_voice_call">%s a început un apel video.</string>
@@ -474,7 +474,7 @@
     </plurals>
     <string name="notice_room_withdraw_with_reason_by_you">Ți-ai retras invitația către %1$s. Motivul: %2$s</string>
     <string name="notice_room_withdraw_with_reason">%1$s și-a retras invitația către %2$s. Motivul: %3$s</string>
-    <string name="notice_room_kick_with_reason">%1$s la evacuat pe %2$s. Motivul: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s la evacuat pe %2$s. Motivul: %3$s</string>
     <string name="notice_room_invite_with_reason_by_you">Tu ai invitat %1$s. Motivul: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">Ai acceptat invitaţia pentru %1$s. Motivul: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s a acceptat invitaţia pentru %2$s. Motivul: %3$s</string>
@@ -486,7 +486,7 @@
     <string name="notice_room_ban_with_reason">%1$s a blocat utilizatorul %2$s. Motivul: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Ai deblocat utilizatorul %1$s. Motivul: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s a blocat pe %2$s. Motivul: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Ai dat afară utilizatorul %1$s. Motivul: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Ai dat afară utilizatorul %1$s. Motivul: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">Ai respins invitaţia. Motivul: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s a respins invitaţia. Motivul: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Ai ieşit. Motivul: %1$s</string>

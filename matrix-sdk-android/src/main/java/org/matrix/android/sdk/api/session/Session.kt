@@ -54,6 +54,7 @@ import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.signout.SignOutService
 import org.matrix.android.sdk.api.session.space.SpaceService
+import org.matrix.android.sdk.api.session.statistics.StatisticsListener
 import org.matrix.android.sdk.api.session.sync.FilterService
 import org.matrix.android.sdk.api.session.sync.SyncState
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
@@ -287,7 +288,7 @@ interface Session :
     /**
      * A global session listener to get notified for some events.
      */
-    interface Listener : SessionLifecycleObserver {
+    interface Listener : StatisticsListener, SessionLifecycleObserver {
         /**
          * Called when the session received new invites to room so the client can react to it once.
          */

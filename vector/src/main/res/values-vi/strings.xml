@@ -429,8 +429,8 @@
     <string name="notice_room_topic_changed_by_you">Bạn đã thay đổi chủ đề thành: %1$s</string>
     <string name="event_status_delete_all_failed_dialog_title">Xoá các tin nhắn chưa được gửi</string>
     <string name="event_status_delete_all_failed_dialog_message">Bạn có chắc bạn muốn xoá tất cả tin nhắn chưa được gửi trong phòng này không\?</string>
-    <string name="notice_room_kick_by_you">Bạn đã kick %1$s</string>
-    <string name="notice_room_kick">%1$s đã kick %2$s</string>
+    <string name="notice_room_remove_by_you">Bạn đã kick %1$s</string>
+    <string name="notice_room_remove">%1$s đã kick %2$s</string>
     <string name="notice_room_reject_by_you">Bạn đã từ chối lời mời</string>
     <string name="notice_room_reject">%1$s đã từ chối lời mời</string>
     <string name="notice_direct_room_leave_by_you">Bạn đã rời phòng</string>
@@ -732,8 +732,8 @@
     <string name="notice_room_ban_with_reason">%1$s đã cấm %2$s. Lý do: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Bạn đã bỏ cấm %1$s. Lý do: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s đã bỏ cấm %2$s. Lý do: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Bạn đã đá %1$s. Lý do: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s đã đá %2$s. Lý do: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Bạn đã đá %1$s. Lý do: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s đã đá %2$s. Lý do: %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">Bạn đã từ chối lời mời. Lý do: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s đã từ chối lời mời. Lý do: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Bạn đã rời đi. Lý do: %1$s</string>
@@ -805,10 +805,9 @@
     <string name="room_participants_action_set_admin">Làm quản trị viên</string>
     <string name="room_participants_action_set_moderator">Làm điều hành viên</string>
     <string name="room_participants_action_set_default_power_level">Đặt lại thành người dùng bình thường</string>
-    <string name="room_participants_action_kick">Đá</string>
+    <string name="room_participants_action_remove">Đá</string>
     <string name="room_participants_action_unban">Bỏ cấm</string>
     <string name="room_participants_action_ban">Cấm</string>
-    <string name="room_participants_action_remove">Xóa khỏi phòng này</string>
     <string name="room_participants_action_leave">Rời khỏi phòng này</string>
     <string name="room_participants_action_cancel_invite">Hủy mời</string>
     <string name="room_participants_action_invite">Mời</string>
@@ -822,7 +821,6 @@
     <string name="room_participants_offline">Ngoại tuyến</string>
     <string name="room_participants_online">Trực tuyến</string>
     <string name="room_participants_create">Tạo</string>
-    <string name="room_participants_remove_prompt_msg">Bạn có chắc muốn xóa %s khỏi cuộc trò chuyện này\?</string>
     <string name="room_participants_leave_private_warning">Phòng này không công khai. Bạn sẽ không thể tham gia lại nếu không có lời mời.</string>
     <string name="continue_anyway">Vẫn tiếp tục</string>
     <plurals name="missed_video_call">
@@ -1242,8 +1240,8 @@
     <string name="settings_show_read_receipts">Hiện thông báo tin đã đọc</string>
     <string name="settings_12_24_timestamps">Hiện dấu thời gian theo chuẩn 12-giờ</string>
     <string name="settings_always_show_timestamps">Hiện Dấu thời gian cho tất cả tin nhắn</string>
-    <string name="settings_send_markdown_summary">Định dạng tin nhắn theo chuẩn markdown trước khi gửi.</string>
-    <string name="settings_send_markdown">Định dạng markdown</string>
+    <string name="settings_send_markdown_summary">Định dạng tin nhắn theo chuẩn Markdown trước khi gửi.</string>
+    <string name="settings_send_markdown">Sử dụng định dạng Markdown</string>
     <string name="settings_send_typing_notifs_summary">Cho người dùng khác biết bạn đã gõ phím.</string>
     <string name="settings_send_typing_notifs">Gửi thông báo đang gõ tin nhắn</string>
     <string name="settings_inline_url_preview_summary">Xem trước trang web trong phòng chat nếu máy chủ bật hỗ trợ chức năng này.</string>
@@ -1469,7 +1467,7 @@
     <string name="room_permissions_notify_everyone">Thông báo mọi người</string>
     <string name="room_permissions_remove_messages_sent_by_others">Xóa tin nhắn gửi bởi người khác</string>
     <string name="room_permissions_ban_users">Cấm người dùng</string>
-    <string name="room_permissions_kick_users">Loại người dùng</string>
+    <string name="room_permissions_remove_users">Loại người dùng</string>
     <string name="room_permissions_change_settings">Thay đổi thiết lập</string>
     <string name="room_permissions_invite_users">Mời người dùng</string>
     <string name="room_permissions_send_messages">Gửi tin nhắn</string>
@@ -1521,11 +1519,11 @@
     <string name="room_participants_unban_title">Hủy cấm người dùng</string>
     <string name="room_participants_ban_reason">Lý do cấm</string>
     <string name="room_participants_ban_title">Cấm người dùng</string>
-    <string name="room_participants_kick_prompt_msg">việc đá người dùng sẽ xóa họ khỏi phòng.
+    <string name="room_participants_remove_prompt_msg">việc đá người dùng sẽ xóa họ khỏi phòng.
 \n
 \nĐể ngăn họ tham gia lại, bạn nên cấm họ thay vì đá.</string>
-    <string name="room_participants_kick_reason">Lý do đá</string>
-    <string name="room_participants_kick_title">Đá người dùng</string>
+    <string name="room_participants_remove_reason">Lý do đá</string>
+    <string name="room_participants_remove_title">Đá người dùng</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Bạn có chắc bạn muốn hủy lời mời đối với người dùng này không\?</string>
     <string name="room_participants_action_cancel_invite_title">Hủy lời mời</string>
     <string name="room_participants_action_unignore">Hủy làm ngơ</string>
@@ -1563,11 +1561,6 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Dịch vụ không thể khởi động</string>
     <string name="settings_troubleshoot_test_service_restart_success">Dịch vụ đã bị đóng và tự động khởi động lại.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Tụ động khởi động lại dịch vụ thông báo</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Bắt đầu</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Dịch vụ thông báo đang không hoạt động:
-\nHãy thử khởi động lại ứng dụng.</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Dịch vụ thông báo đang chạy.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Dịch vụ thông báo</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">Thông báo đã được bấm!</string>
     <string name="settings_troubleshoot_test_notification_notice">Hãy bấm vào thông báo. Nếu bạn không thấy bất kỳ thông báo nào, vui lòng kiểm tra cài đặt hệ thống.</string>
     <string name="settings_troubleshoot_test_notification_title">Hiển thị thông báo</string>
@@ -1628,7 +1621,7 @@
     <string name="ssl_cert_new_account_expl">Nếu quản trị viên của máy chủ đã nói rằng điều này có thể xảy ra, hãy chắc chắn rằng dấu vân tay phía dưới trùng với dấu vân tay được họ cung cấp.</string>
     <string name="space_participants_unban_prompt_msg">Hủy cấm người dùng sẽ cho phép họ tham gia không gian này lần nữa.</string>
     <string name="space_participants_ban_prompt_msg">Cấm người dùng này sẽ đá họ khỏi không gian này và ngăn chặn họ tiếp tục tham gia.</string>
-    <string name="space_participants_kick_prompt_msg">hành động của bạn sẽ xóa họ khỏi không gian này.
+    <string name="space_participants_remove_prompt_msg">hành động của bạn sẽ xóa họ khỏi không gian này.
 \n
 \nTrong trường hợp không muốn họ quay lại, bạn nên cấm họ tham gia lần nữa.</string>
     <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' không phải là định dạng phù hợp</string>
@@ -1699,7 +1692,6 @@
     <string name="delete_poll_dialog_title">Xóa cuộc thăm dò ý kiến</string>
     <string name="poll_end_room_list_preview">Cuộc thăm dò kết thúc</string>
     <string name="poll_response_room_list_preview">Bỏ phiếu</string>
-    <string name="labs_enable_polls">Bật Cuộc thăm dò ý kiến</string>
     <string name="end_poll_confirmation_approve_button">Kết thúc cuộc thăm dò ý kiến</string>
     <string name="end_poll_confirmation_description">Điều này sẽ ngăn mọi người có thể bỏ phiếu và sẽ hiển thị kết quả cuối cùng của cuộc thăm dò.</string>
     <string name="end_poll_confirmation_title">Kết thúc cuộc thăm dò này\?</string>
@@ -2075,7 +2067,7 @@
     <string name="room_message_placeholder">Tin nhắn…</string>
     <string name="auth_invalid_login_deactivated_account">Tài khoản này đã bị vô hiệu hóa.</string>
     <string name="auth_invalid_login_param_space_in_password">Tên người dùng và/hoặc mật khẩu không chính xác. Mật khẩu đã nhập bắt đầu hoặc kết thúc bằng không gian, vui lòng kiểm tra.</string>
-    <string name="command_description_plain">Gửi tin nhắn dưới dạng văn bản thuần túy, mà không giải thích nó dưới dạng đánh dấu</string>
+    <string name="command_description_plain">Gửi tin nhắn dưới dạng văn bản thuần túy, không sử dụng định dạng Markdown</string>
     <string name="settings_notification_advanced_summary">Đặt tầm quan trọng thông báo theo sự kiện</string>
     <string name="settings_troubleshoot_title">Khắc phục</string>
     <string name="settings_notification_configuration">Cấu hình thông báo</string>
@@ -2275,7 +2267,7 @@
     <string name="create_room_encryption_description">Sau khi được bật, mã hóa không thể bị vô hiệu hóa.</string>
     <string name="create_room_encryption_title">Bật mã hóa</string>
     <string name="command_description_lenny">Thêm ( ͡° ͜ʖ ͡°) vào một tin nhắn văn bản thuần túy</string>
-    <string name="command_description_shrug">"Thêm   ̄\\_(ツ)_/ ̄ vào một tin nhắn văn bản thuần túy"</string>
+    <string name="command_description_shrug">Thêm ¯\\_(ツ)_/¯ vào một tin nhắn văn bản thuần túy</string>
     <string name="settings_developer_mode_show_info_on_screen_summary">Hiển thị một số thông tin hữu ích để giúp gỡ lỗi ứng dụng</string>
     <string name="settings_developer_mode_show_info_on_screen_title">Hiện thông tin debug trên màn hình</string>
     <string name="template_settings_developer_mode_fail_fast_summary">${app_name} có thể gặp sự cố thường xuyên hơn khi một lỗi bất ngờ xảy ra</string>
@@ -2352,7 +2344,7 @@
     <string name="a11y_open_drawer">Mở ngăn khung điều hướng</string>
     <string name="error_network_timeout">Có vẻ như máy chủ mất quá nhiều thời gian để phản hồi, điều này có thể được gây ra bởi kết nối kém hoặc lỗi với máy chủ. Hãy thử lại trong một thời gian.</string>
     <string name="error_terms_not_accepted">Vui lòng thử lại một khi bạn đã chấp nhận các điều khoản và điều kiện của homeserver của bạn.</string>
-    <string name="labs_allow_extended_logging_summary">Nhật ký verbose sẽ giúp các nhà phát triển bằng cách cung cấp thêm nhật ký khi bạn gửi RageShake. Ngay cả khi được bật, ứng dụng không ghi lại nội dung tin nhắn hoặc bất kỳ dữ liệu riêng tư nào khác.</string>
+    <string name="labs_allow_extended_logging_summary">Nhật ký verbose sẽ giúp các nhà phát triển bằng cách cung cấp thêm nhật ký khi bạn lắc mạnh thiết bị. Ngay cả khi được bật, ứng dụng không ghi lại nội dung tin nhắn hoặc bất kỳ dữ liệu riêng tư nào khác.</string>
     <string name="labs_allow_extended_logging">Bật nhật ký verbose.</string>
     <string name="settings_agree_to_terms">Đồng ý với điều khoản dịch vụ của máy chủ xác thực (%s) để cho phép bản thân có thể khám phá bằng địa chỉ email hoặc số điện thoại.</string>
     <string name="settings_discovery_disconnect_with_bound_pid">Bạn hiện đang chia sẻ địa chỉ email hoặc số điện thoại trên máy chủ xác thực %1$s. Bạn sẽ cần kết nối lại với %2$s để ngừng chia sẻ chúng.</string>
@@ -2415,7 +2407,7 @@
     <string name="settings_push_rules">Quy tắc Push</string>
     <string name="settings_expert">Chuyên gia</string>
     <string name="settings_security_and_privacy">Bảo mật &amp; Quyền riêng tư</string>
-    <string name="settings_preferences">Sự ưa thích</string>
+    <string name="settings_preferences">Tuỳ biến</string>
     <string name="settings_general_title">Tổng quát</string>
     <string name="quick_reactions">Phản ứng nhanh</string>
     <string name="navigate_to_room_when_already_in_the_room">Bạn đang xem phòng này rồi!</string>
@@ -2766,7 +2758,7 @@
     <string name="rejoin">Tham gia lại</string>
     <string name="reason_colon">Lý do: %1$s</string>
     <string name="has_been_banned">Bạn đã bị cấm từ %1$s bởi %2$s</string>
-    <string name="has_been_kicked">Bạn đã bị đá từ %1$s bởi %2$s</string>
+    <string name="has_been_removed">Bạn đã bị đá từ %1$s bởi %2$s</string>
     <string name="group_no_long_description">Quản trị viên Community đã không cung cấp mô tả cho cộng đồng này.</string>
     <string name="filter_group_rooms">Lọc nhóm phòng</string>
     <string name="filter_group_members">Lọc thành viên nhóm</string>
@@ -2776,7 +2768,7 @@
     <string name="no_users_placeholder">Không có người dùng</string>
     <string name="group_details_rooms">Phòng</string>
     <string name="group_details_people">Danh bạ</string>
-    <string name="group_details_home">Nhà</string>
+    <string name="group_details_home">Trang chủ</string>
     <string name="community_id_hint">Ví dụ</string>
     <string name="community_id">ID Community</string>
     <string name="community_name_hint">Ví dụ</string>
@@ -2787,16 +2779,16 @@
     <string name="notification_noisy">Ồn ào</string>
     <string name="notification_silent">Im lặng</string>
     <string name="notification_off">Tắt</string>
-    <string name="markdown_has_been_disabled">Đánh dấu đã bị vô hiệu hóa.</string>
-    <string name="markdown_has_been_enabled">Đánh dấu đã được kích hoạt.</string>
+    <string name="markdown_has_been_disabled">Tính năng định dạng tin nhắn chuẩn Markdown đã bị vô hiệu hoá.</string>
+    <string name="markdown_has_been_enabled">Tính năng định dạng tin nhắn chuẩn Markdown đã được kích hoạt.</string>
     <string name="command_description_whois">Hiển thị thông tin về người dùng</string>
     <string name="command_description_clear_scalar_token">Để sửa trình quản lý ứng dụng Matrix</string>
-    <string name="command_description_markdown">Đánh dấu Bật/Tắt</string>
+    <string name="command_description_markdown">Bật/tắt tính năng định dạng Markdown</string>
     <string name="command_description_avatar_for_room">Chỉ thay đổi avatar của bạn trong căn phòng hiện tại này</string>
     <string name="command_description_room_avatar">Thay đổi avatar của căn phòng hiện tại</string>
     <string name="command_description_nick_for_room">Chỉ thay đổi biệt danh hiển thị của bạn trong phòng hiện tại</string>
     <string name="command_description_nick">Thay đổi biệt danh hiển thị của bạn</string>
-    <string name="command_description_kick_user">Đá người dùng với id đã cho</string>
+    <string name="command_description_remove_user">Đá người dùng với id đã cho</string>
     <string name="command_description_topic">Đặt chủ đề phòng</string>
     <string name="command_description_part_room">Rời khỏi phòng</string>
     <string name="command_description_join_room">Tham gia phòng có địa chỉ đã cho</string>

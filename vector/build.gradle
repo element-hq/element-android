@@ -18,7 +18,7 @@ ext.versionMinor = 3
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 15
+ext.versionPatch = 16
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -153,6 +153,9 @@ android {
         //  This *must* only be set in trusted environments.
         buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
 
+        buildConfigField "Boolean", "enableLocationSharing", "true"
+        buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
         // Keep abiFilter for the universalApk
@@ -205,15 +208,20 @@ android {
         animationsDisabled = true
 
         // Comment to run on Android 12
-        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+//        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
-
     signingConfigs {
         debug {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
             storeFile file('./signature/debug.keystore')
             storePassword 'android'
+        }
+        release {
+            keyAlias project.property("signing.element.keyId")
+            keyPassword project.property("signing.element.keyPassword")
+            storeFile file(project.property("signing.element.storePath"))
+            storePassword project.property("signing.element.storePassword")
         }
     }
 
@@ -245,6 +253,7 @@ android {
                 optimizeCode true
                 proguardFiles 'proguard-rules.pro'
             }
+            signingConfig signingConfigs.release
         }
     }
 
@@ -328,6 +337,7 @@ dependencies {
     implementation project(":attachment-viewer")
     implementation project(":library:jsonviewer")
     implementation project(":library:ui-styles")
+    implementation project(":library:core-utils")
     implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation libs.jetbrains.coroutinesCore
@@ -363,7 +373,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.40'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.41'
 
     // FlowBinding
     implementation libs.github.flowBinding
@@ -490,6 +500,10 @@ dependencies {
         exclude group: 'org.json', module: 'json' //provided by Android natively
     }
     implementation 'commons-codec:commons-codec:1.15'
+
+    // MapTiler
+    implementation 'org.maplibre.gl:android-sdk:9.5.2'
+    implementation 'org.maplibre.gl:android-plugin-annotation-v9:1.0.0'
 
 
     // TESTS

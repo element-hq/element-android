@@ -27,42 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:minHeight="0dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap|enterAlways">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|start"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/appBarTitle"
-                    style="@style/Widget.Vector.TextView.HeadlineMedium"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:ellipsize="end"
-                    android:gravity="start|center"
-                    android:maxLines="1"
-                    android:textColor="?vctr_content_primary"
-                    android:textStyle="bold"
-                    tools:text="@tools:sample/lorem/random" />
-
-                <TextView
-                    android:id="@+id/appBarSpaceInfo"
-                    style="@style/Widget.Vector.TextView.Subtitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:ellipsize="end"
-                    android:gravity="start|center"
-                    android:maxLines="1"
-                    android:textColor="?vctr_content_secondary"
-                    tools:text="@tools:sample/lorem/random" />
-
-            </LinearLayout>
-
-        </com.google.android.material.appbar.MaterialToolbar>
+            app:title="@string/bottom_action_people"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap|enterAlways"/>
 
         <androidx.appcompat.widget.SearchView
             android:id="@+id/memberNameFilter"

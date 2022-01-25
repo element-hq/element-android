@@ -19,11 +19,11 @@ package im.vector.app.features.roommemberprofile
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
-import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.profiles.buildProfileAction
 import im.vector.app.core.epoxy.profiles.buildProfileSection
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
@@ -282,7 +282,7 @@ class RoomMemberProfileController @Inject constructor(
                             editable = false,
                             divider = canBan,
                             destructive = true,
-                            title = stringProvider.getString(R.string.room_participants_action_kick),
+                            title = stringProvider.getString(R.string.room_participants_action_remove),
                             action = { callback?.onKickClicked(state.isSpace) }
                     )
                 }

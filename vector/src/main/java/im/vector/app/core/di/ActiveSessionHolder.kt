@@ -31,7 +31,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ActiveSessionHolder @Inject constructor(private val sessionObservableStore: ActiveSessionDataSource,
+class ActiveSessionHolder @Inject constructor(private val activeSessionDataSource: ActiveSessionDataSource,
                                               private val keyRequestHandler: KeyRequestHandler,
                                               private val incomingVerificationRequestHandler: IncomingVerificationRequestHandler,
                                               private val callManager: WebRtcCallManager,
@@ -46,7 +46,7 @@ class ActiveSessionHolder @Inject constructor(private val sessionObservableStore
     fun setActiveSession(session: Session) {
         Timber.w("setActiveSession of ${session.myUserId}")
         activeSession.set(session)
-        sessionObservableStore.post(Option.just(session))
+        activeSessionDataSource.post(Option.just(session))
 
         keyRequestHandler.start(session)
         incomingVerificationRequestHandler.start(session)
@@ -66,7 +66,7 @@ class ActiveSessionHolder @Inject constructor(private val sessionObservableStore
         }
 
         activeSession.set(null)
-        sessionObservableStore.post(Option.empty())
+        activeSessionDataSource.post(Option.empty())
 
         keyRequestHandler.stop()
         incomingVerificationRequestHandler.stop()

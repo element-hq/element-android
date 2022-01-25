@@ -64,9 +64,9 @@ class SpacePeopleFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(membersViewModel) { memberListState ->
-        views.appBarTitle.text = getString(R.string.bottom_action_people)
         val memberCount = (memberListState.roomSummary.invoke()?.otherMemberIds?.size ?: 0) + 1
-        views.appBarSpaceInfo.text = resources.getQuantityString(R.plurals.room_title_members, memberCount, memberCount)
+
+        toolbar?.subtitle = resources.getQuantityString(R.plurals.room_title_members, memberCount, memberCount)
 //        views.listBuildingProgress.isVisible = true
         epoxyController.setData(memberListState)
     }
@@ -78,16 +78,11 @@ class SpacePeopleFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupToolbar(views.addRoomToSpaceToolbar)
+                .allowBack()
         setupRecyclerView()
         setupSearchView()
-
-        views.addRoomToSpaceToolbar.navigationIcon = drawableProvider.getDrawable(
-                R.drawable.ic_close_24dp,
-                colorProvider.getColorFromAttribute(R.attr.vctr_content_primary)
-        )
-        views.addRoomToSpaceToolbar.setNavigationOnClickListener {
-            sharedActionViewModel.post(SpacePeopleSharedAction.Dismiss)
-        }
 
         viewModel.observeViewEvents {
             handleViewEvents(it)

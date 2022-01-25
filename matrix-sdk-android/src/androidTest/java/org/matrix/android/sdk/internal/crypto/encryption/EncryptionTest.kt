@@ -62,7 +62,7 @@ class EncryptionTest : InstrumentedTest {
                 // Send an encryption Event as a State Event
                 room.sendStateEvent(
                         eventType = EventType.STATE_ROOM_ENCRYPTION,
-                        stateKey = null,
+                        stateKey = "",
                         body = EncryptionEventContent(algorithm = MXCRYPTO_ALGORITHM_MEGOLM).toContent()
                 )
             }

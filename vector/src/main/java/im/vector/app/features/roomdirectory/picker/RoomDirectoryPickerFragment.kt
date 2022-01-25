@@ -20,7 +20,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -30,6 +29,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomDirectoryPickerBinding
+import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.roomdirectory.RoomDirectoryAction
 import im.vector.app.features.roomdirectory.RoomDirectoryData
 import im.vector.app.features.roomdirectory.RoomDirectoryServer
@@ -52,15 +52,17 @@ class RoomDirectoryPickerFragment @Inject constructor(private val roomDirectoryP
         return FragmentRoomDirectoryPickerBinding.inflate(inflater, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = Screen.ScreenName.MobileSwitchDirectory
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vectorBaseActivity.setSupportActionBar(views.toolbar)
-
-        vectorBaseActivity.supportActionBar?.let {
-            it.setDisplayShowHomeEnabled(true)
-            it.setDisplayHomeAsUpEnabled(true)
-        }
+        setupToolbar(views.toolbar)
+                .setTitle(R.string.select_room_directory)
+                .allowBack()
 
         sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
@@ -107,11 +109,6 @@ class RoomDirectoryPickerFragment @Inject constructor(private val roomDirectoryP
 
     override fun onRemoveServer(roomDirectoryServer: RoomDirectoryServer) {
         pickerViewModel.handle(RoomDirectoryPickerAction.RemoveServer(roomDirectoryServer))
-    }
-
-    override fun onResume() {
-        super.onResume()
-        (activity as? AppCompatActivity)?.supportActionBar?.setTitle(R.string.select_room_directory)
     }
 
     override fun retry() {

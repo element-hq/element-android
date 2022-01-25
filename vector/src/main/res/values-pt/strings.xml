@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s entrou</string>
     <string name="notice_room_leave">%1$s saiu</string>
     <string name="notice_room_reject">%1$s recusou o convite</string>
-    <string name="notice_room_kick">%1$s expulsou %2$s</string>
+    <string name="notice_room_remove">%1$s expulsou %2$s</string>
     <string name="notice_room_unban">%1$s des-baniu %2$s</string>
     <string name="notice_room_ban">%1$s baniu %2$s</string>
     <string name="notice_room_withdraw">%1$s cancelou o convite de %2$s</string>
@@ -287,7 +287,6 @@ Pode querer iniciar sessão com uma conta diferente, ou adicionar este email à 
     <string name="room_title_one_member">1 membro</string>
     <string name="room_participants_leave_prompt_title">Sair da sala</string>
     <string name="room_participants_leave_prompt_msg">Tem a certeza que quer sair da sala?</string>
-    <string name="room_participants_remove_prompt_msg">Tem certeza que quer remover %s desta conversa?</string>
     <string name="room_participants_create">Criar</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
@@ -298,7 +297,6 @@ Pode querer iniciar sessão com uma conta diferente, ou adicionar este email à 
     <string name="room_participants_header_devices">DISPOSITIVOS</string>
     <string name="room_participants_action_invite">Convidar</string>
     <string name="room_participants_action_leave">Sair desta sala</string>
-    <string name="room_participants_action_remove">Remover desta sala</string>
     <string name="room_participants_action_ban">Banir</string>
     <string name="room_participants_action_unban">Remover banimento</string>
     <string name="room_participants_action_set_default_power_level">Retornar a utilizador normal</string>
@@ -786,7 +784,7 @@ Adicionar alguns agora?</string>
     <string name="command_description_join_room">Entra na sala com o pseudónimo fornecido</string>
     <string name="command_description_part_room">Faz sair da sala</string>
     <string name="command_description_topic">Define o tópico da sala</string>
-    <string name="command_description_kick_user">Expulsa o utilizador com o ID fornecido</string>
+    <string name="command_description_remove_user">Expulsa o utilizador com o ID fornecido</string>
     <string name="command_description_nick">Altera o seu nome público</string>
     <string name="command_description_markdown">Activa/Desactiva o Markdown</string>
     <string name="command_description_clear_scalar_token">Repara a gestão de aplicações Matrix</string>
@@ -817,7 +815,7 @@ Adicionar alguns agora?</string>
         <item quantity="other">%d salas</item>
     </plurals>
     <string name="group_no_long_description">O administrador desta comunidade não definiu uma descrição longa da mesma.</string>
-    <string name="has_been_kicked">Você foi expulso da sala %1$s por %2$s</string>
+    <string name="has_been_removed">Você foi expulso da sala %1$s por %2$s</string>
     <string name="has_been_banned">Você foi banido da sala %1$s por %2$s</string>
     <string name="reason_colon">Motivo: %1$s</string>
     <string name="rejoin">Entrar novamente</string>
@@ -906,7 +904,7 @@ A visibilidade das mensagens no Matrix é parecida com a dos emails. O nosso esq
     <string name="settings_call_ringtone_title">Toque para chamadas recebidas</string>
     <string name="settings_call_ringtone_dialog_title">Selecione toque para chamadas:</string>
     <string name="video_call_in_progress">Chamada de Vídeo em Progresso…</string>
-    <string name="room_participants_action_kick">Expulsar</string>
+    <string name="room_participants_action_remove">Expulsar</string>
     <string name="reason_hint">Razão</string>
     <string name="settings_notification_advanced">Configurações avançadas para notificações</string>
     <string name="settings_notification_by_event">Importância de notificações por evento</string>
@@ -935,8 +933,6 @@ Por favor, verifique configurações de aplicação</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Reparar os serviços Google Play</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Adicionar conta</string>
     <string name="settings_troubleshoot_test_token_registration_title">Registração de token</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Serviço de Notificações</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Iniciar Serviço</string>
     <string name="settings_troubleshoot_test_service_restart_title">Auto-Reniciar Serviço de Notificações</string>
     <string name="settings_troubleshoot_test_service_boot_title">Iniciar em boot</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Falha na reniciação de Serviço</string>

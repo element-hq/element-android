@@ -193,14 +193,8 @@
     <string name="call_in_progress">Poziv u toku…</string>
     <string name="video_call_in_progress">Video poziv u toku..</string>
 
-    <string name="room_participants_action_remove">Izbaci iz ove sobe</string>
-    <string name="room_participants_action_kick">Izbaci</string>
+    <string name="room_participants_action_remove">Izbaci</string>
     <string name="room_participants_action_mention">Pomeni</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Servis Obaveštenja</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Servis obaveštenja radi.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Servis obaveštenja ne radi.
-\nPokušajte da ponovo pokrenete aplikaciju.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Pokreni servis</string>
 
     <string name="settings_troubleshoot_test_service_restart_title">Servis obaveštenja, automatsko ponovno pokretanje</string>
     <string name="settings_troubleshoot_test_service_restart_success">Servis je eliminisan i pokrenut ponovo automatski.</string>

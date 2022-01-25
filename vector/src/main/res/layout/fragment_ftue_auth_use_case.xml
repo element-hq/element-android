@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/LoginFormScrollView"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground"
+    android:fillViewport="true"
+    android:paddingTop="0dp"
+    android:paddingBottom="0dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/layout_vertical_margin"
+        android:paddingBottom="@dimen/layout_vertical_margin">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/useCaseGutterStart"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_start_percent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/useCaseGutterEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_end_percent" />
+
+        <ImageView
+            android:id="@+id/useCaseHeaderIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="52dp"
+            android:contentDescription="@null"
+            android:src="@drawable/ic_onboarding_use_case_icon"
+            app:layout_constraintBottom_toTopOf="@id/useCaseHeaderTitle"
+            app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/useCaseHeaderTitle"
+            style="@style/Widget.Vector.TextView.Title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="@string/ftue_auth_use_case_title"
+            android:textColor="?vctr_content_primary"
+            app:layout_constraintBottom_toTopOf="@id/useCaseHeaderSubtitle"
+            app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/useCaseHeaderIcon" />
+
+        <TextView
+            android:id="@+id/useCaseHeaderSubtitle"
+            style="@style/Widget.Vector.TextView.Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="@string/ftue_auth_use_case_subtitle"
+            android:textColor="?vctr_content_secondary"
+            app:layout_constraintBottom_toTopOf="@id/titleContentSpacing"
+            app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/useCaseHeaderTitle" />
+
+        <Space
+            android:id="@+id/titleContentSpacing"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/useCaseOptionOne"
+            app:layout_constraintHeight_percent="0.05"
+            app:layout_constraintTop_toBottomOf="@id/useCaseHeaderSubtitle" />
+
+        <TextView
+            android:id="@+id/useCaseOptionOne"
+            style="@style/Widget.Vector.TextView.Subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_login_server_selector"
+            android:drawablePadding="16dp"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:text="@string/ftue_auth_use_case_option_one"
+            android:textColor="?vctr_content_primary"
+            app:layout_constraintBottom_toTopOf="@id/useCaseOptionTwo"
+            app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/titleContentSpacing"
+            tools:drawableStartCompat="@drawable/bg_feature_icon" />
+
+        <TextView
+            android:id="@+id/useCaseOptionTwo"
+            style="@style/Widget.Vector.TextView.Subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_login_server_selector"
+            android:drawablePadding="16dp"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:text="@string/ftue_auth_use_case_option_two"
+            android:textColor="?vctr_content_primary"
+            app:layout_constraintBottom_toTopOf="@id/useCaseOptionThree"
+            app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/useCaseOptionOne"
+            tools:drawableStartCompat="@drawable/bg_feature_icon" />
+
+        <TextView
+            android:id="@+id/useCaseOptionThree"
+            style="@style/Widget.Vector.TextView.Subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/bg_login_server_selector"
+            android:drawablePadding="16dp"
+            android:gravity="center_vertical"
+            android:padding="16dp"
+            android:text="@string/ftue_auth_use_case_option_three"
+            android:textColor="?vctr_content_primary"
+            app:layout_constraintBottom_toTopOf="@id/useCaseSkip"
+            app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/useCaseOptionTwo"
+            tools:drawableStartCompat="@drawable/bg_feature_icon" />
+
+        <TextView
+            android:id="@+id/useCaseSkip"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:gravity="center"
+            app:layout_constraintBottom_toTopOf="@id/contentFooterSpacing"
+            app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/useCaseOptionThree"
+            tools:text="Not sure yet? You can skip this question" />
+
+        <Space
+            android:id="@+id/contentFooterSpacing"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/useCaseFooter"
+            app:layout_constraintHeight_min="16dp"
+            app:layout_constraintTop_toBottomOf="@id/useCaseSkip" />
+
+        <TextView
+            android:id="@+id/useCaseFooter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/ftue_auth_use_case_join_existing_server"
+            app:layout_constraintBottom_toTopOf="@id/useCaseConnectToServer"
+            app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/contentFooterSpacing" />
+
+        <Button
+            android:id="@+id/useCaseConnectToServer"
+            style="@style/Widget.Vector.Button.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/ftue_auth_use_case_connect_to_server"
+            android:textAllCaps="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
+            app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
+            app:layout_constraintTop_toBottomOf="@id/useCaseFooter" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>
+
+

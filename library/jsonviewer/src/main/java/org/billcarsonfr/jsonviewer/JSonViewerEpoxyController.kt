@@ -21,6 +21,7 @@ import android.view.View
 import com.airbnb.epoxy.TypedEpoxyController
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Success
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.Span
 import me.gujun.android.span.span
 
@@ -40,7 +41,7 @@ internal class JSonViewerEpoxyController(private val context: Context) :
             is Fail -> {
                 valueItem {
                     id("fail")
-                    text(async.error.localizedMessage?.toSafeCharSequence())
+                    text(async.error.localizedMessage?.toEpoxyCharSequence())
                 }
             }
             is Success -> {
@@ -94,7 +95,7 @@ internal class JSonViewerEpoxyController(private val context: Context) :
                                     +"{+${model.keys.size}}"
                                     textColor = host.styleProvider.baseColor
                                 }
-                            }.toSafeCharSequence()
+                            }.toEpoxyCharSequence()
                         )
                         itemClickListener(View.OnClickListener { host.itemClicked(model) })
                     }
@@ -133,7 +134,7 @@ internal class JSonViewerEpoxyController(private val context: Context) :
                                     +"[+${model.items.size}]"
                                     textColor = host.styleProvider.baseColor
                                 }
-                            }.toSafeCharSequence()
+                            }.toEpoxyCharSequence()
                         )
                         itemClickListener(View.OnClickListener { host.itemClicked(model) })
                     }
@@ -163,7 +164,7 @@ internal class JSonViewerEpoxyController(private val context: Context) :
                                 }
                             }
                             append(host.valueToSpan(model))
-                        }.toSafeCharSequence()
+                        }.toEpoxyCharSequence()
                     )
                     copyValue(model.stringRes)
                 }
@@ -233,7 +234,7 @@ internal class JSonViewerEpoxyController(private val context: Context) :
                     span("{".takeIf { isObject } ?: "[") {
                         textColor = host.styleProvider.baseColor
                     }
-                }.toSafeCharSequence()
+                }.toEpoxyCharSequence()
             )
             itemClickListener(View.OnClickListener { host.itemClicked(composed) })
         }
@@ -253,7 +254,7 @@ internal class JSonViewerEpoxyController(private val context: Context) :
                 span {
                     text = "}".takeIf { isObject } ?: "]"
                     textColor = host.styleProvider.baseColor
-                }.toSafeCharSequence()
+                }.toEpoxyCharSequence()
             )
         }
     }

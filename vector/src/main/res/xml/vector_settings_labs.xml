@@ -53,14 +53,13 @@
 
     <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="false"
-        android:key="SETTINGS_LABS_ENABLE_POLLS"
-        android:title="@string/labs_enable_polls" />
+        android:key="SETTINGS_LABS_AUTO_REPORT_UISI"
+        android:summary="@string/labs_auto_report_uisi_desc"
+        android:title="@string/labs_auto_report_uisi" />
 
-
-        <im.vector.app.core.preference.VectorSwitchPreference
-            android:defaultValue="false"
-            android:key="SETTINGS_LABS_AUTO_REPORT_UISI"
-            android:title="@string/labs_auto_report_uisi"
-            android:summary="@string/labs_auto_report_uisi_desc"/>
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="true"
+        android:key="SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
+        android:title="@string/labs_render_locations_in_timeline" />
 
 </androidx.preference.PreferenceScreen>

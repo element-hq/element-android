@@ -35,6 +35,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureTrailingSlash
+import im.vector.app.features.VectorFeatures
 import im.vector.app.features.login.HomeServerConnectionConfigFactory
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
@@ -71,7 +72,8 @@ class OnboardingViewModel @AssistedInject constructor(
         private val homeServerConnectionConfigFactory: HomeServerConnectionConfigFactory,
         private val reAuthHelper: ReAuthHelper,
         private val stringProvider: StringProvider,
-        private val homeServerHistoryService: HomeServerHistoryService
+        private val homeServerHistoryService: HomeServerHistoryService,
+        private val vectorFeatures: VectorFeatures
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
     @AssistedFactory
@@ -123,6 +125,8 @@ class OnboardingViewModel @AssistedInject constructor(
         when (action) {
             is OnboardingAction.OnGetStarted               -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
             is OnboardingAction.OnIAlreadyHaveAnAccount    -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
+            is OnboardingAction.UpdateUseCase              -> handleUpdateUseCase()
+            OnboardingAction.ResetUseCase                  -> resetUseCase()
             is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
             is OnboardingAction.UpdateSignMode             -> handleUpdateSignMode(action)
             is OnboardingAction.InitWith                   -> handleInitWith(action)
@@ -154,13 +158,26 @@ class OnboardingViewModel @AssistedInject constructor(
             if (homeServerConnectionConfig == null) {
                 // Url is invalid, in this case, just use the regular flow
                 Timber.w("Url from config url was invalid: $configUrl")
-                _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
+                continueToPageAfterSplash(onboardingFlow)
             } else {
                 getLoginFlow(homeServerConnectionConfig, ServerType.Other)
             }
         } else {
-            _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
+            continueToPageAfterSplash(onboardingFlow)
         }
+    }
+
+    private fun continueToPageAfterSplash(onboardingFlow: OnboardingFlow) {
+        val nextOnboardingStep = when (onboardingFlow) {
+            OnboardingFlow.SignUp       -> if (vectorFeatures.isOnboardingUseCaseEnabled()) {
+                OnboardingViewEvents.OpenUseCaseSelection
+            } else {
+                OnboardingViewEvents.OpenServerSelection
+            }
+            OnboardingFlow.SignIn,
+            OnboardingFlow.SignInSignUp -> OnboardingViewEvents.OpenServerSelection
+        }
+        _viewEvents.post(nextOnboardingStep)
     }
 
     private fun handleUserAcceptCertificate(action: OnboardingAction.UserAcceptCertificate) {
@@ -439,6 +456,15 @@ class OnboardingViewModel @AssistedInject constructor(
             SignMode.SignInWithMatrixId -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
             SignMode.Unknown            -> Unit
         }
+    }
+
+    private fun handleUpdateUseCase() {
+        // TODO act on the use case selection
+        _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
+    }
+
+    private fun resetUseCase() {
+        // TODO remove stored use case
     }
 
     private fun handleUpdateServerType(action: OnboardingAction.UpdateServerType) {
@@ -826,7 +852,7 @@ class OnboardingViewModel @AssistedInject constructor(
             }
 
             withState {
-                if (it.serverType == ServerType.MatrixOrg) {
+                if (loginMode.supportsSignModeScreen()) {
                     when (it.onboardingFlow) {
                         OnboardingFlow.SignIn -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignIn))
                         OnboardingFlow.SignUp -> handleUpdateSignMode(OnboardingAction.UpdateSignMode(SignMode.SignUp))
@@ -852,5 +878,15 @@ class OnboardingViewModel @AssistedInject constructor(
 
     fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {
         return authenticationService.getFallbackUrl(forSignIn, deviceId)
+    }
+}
+
+private fun LoginMode.supportsSignModeScreen(): Boolean {
+    return when (this) {
+        LoginMode.Password,
+        is LoginMode.SsoAndPassword -> true
+        is LoginMode.Sso,
+        LoginMode.Unknown,
+        LoginMode.Unsupported       -> false
     }
 }

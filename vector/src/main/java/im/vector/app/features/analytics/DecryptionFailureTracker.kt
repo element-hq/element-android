@@ -16,10 +16,10 @@
 
 package im.vector.app.features.analytics
 
-import im.vector.app.core.flow.tickerFlow
 import im.vector.app.core.time.Clock
-import im.vector.app.core.utils.compat.removeIfCompat
 import im.vector.app.features.analytics.plan.Error
+import im.vector.lib.core.utils.compat.removeIfCompat
+import im.vector.lib.core.utils.flow.tickerFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -49,7 +49,7 @@ private const val CHECK_INTERVAL = 2_000L
  */
 @Singleton
 class DecryptionFailureTracker @Inject constructor(
-        private val vectorAnalytics: VectorAnalytics,
+        private val analyticsTracker: AnalyticsTracker,
         private val clock: Clock
 ) {
 
@@ -136,7 +136,7 @@ class DecryptionFailureTracker @Inject constructor(
                     // for now we ignore events already reported even if displayed again?
                     .filter { alreadyReported.contains(it).not() }
                     .forEach { failedEventId ->
-                        vectorAnalytics.capture(Error(failedEventId, Error.Domain.E2EE, aggregation.key))
+                        analyticsTracker.capture(Error(failedEventId, Error.Domain.E2EE, aggregation.key))
                         alreadyReported.add(failedEventId)
                     }
         }

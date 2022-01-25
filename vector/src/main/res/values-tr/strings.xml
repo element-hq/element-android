@@ -351,7 +351,6 @@
     </plurals>
     <string name="room_participants_leave_prompt_title">Odadan ayrıl</string>
     <string name="room_participants_leave_prompt_msg">Odadan ayrılmak istediğine emin misin\?</string>
-    <string name="room_participants_remove_prompt_msg">Odadan %s adlı kişiyi atmak istediğine emin misin\?</string>
     <string name="room_participants_create">Oluştur</string>
     <string name="room_participants_online">Çevrimiçi</string>
     <string name="room_participants_offline">Çevrimdışı</string>
@@ -364,10 +363,9 @@
     <string name="room_participants_header_devices">OTURUMLAR</string>
     <string name="room_participants_action_invite">Davet</string>
     <string name="room_participants_action_leave">Odadan ayrıl</string>
-    <string name="room_participants_action_remove">Odadan at</string>
     <string name="room_participants_action_ban">Engelle</string>
     <string name="room_participants_action_unban">Engeli kaldır</string>
-    <string name="room_participants_action_kick">At</string>
+    <string name="room_participants_action_remove">At</string>
     <string name="room_participants_action_set_default_power_level">Normal kullanıcıya döndür</string>
     <string name="room_participants_action_set_moderator">Moderatör yap</string>
     <string name="room_participants_action_set_admin">Yönetici yap</string>
@@ -534,11 +532,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM belirteci başarı ile AnaMakineye kaydedildi.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM belirteci AnaMakineye kaydedilirken hata:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Bildirim Hizmetleri</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Bildirim Hizmetleri çalışıyor.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Bildirim Hizmetleri çalışmıyor.
-\nUygulamayı yeniden başlatmayı deneyin.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Hizmeti Başlat</string>
     <string name="settings_troubleshoot_test_service_restart_title">Bildirim Hizmetleri Otomatik-Yeniden-Başlatma</string>
     <string name="settings_troubleshoot_test_service_restart_success">Hizmet otomatik olarak sonlandırılıp yeniden başlatıldı.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Hizmet yeniden başlatılamadı</string>
@@ -873,7 +866,7 @@
     <string name="command_description_join_room">Verilen takma ad ile odalara katıl</string>
     <string name="command_description_part_room">Odadan ayrıl</string>
     <string name="command_description_topic">Odanın konusunu belirle</string>
-    <string name="command_description_kick_user">Verilen id ile kullanıcıları atar</string>
+    <string name="command_description_remove_user">Verilen id ile kullanıcıları atar</string>
     <string name="command_description_nick">Görünür ismini değiştirir</string>
     <string name="command_description_markdown">Markdown Aç/Kapat</string>
     <string name="command_description_clear_scalar_token">Matrix uygulamaları yönetmeyi düzeltmek için</string>
@@ -907,7 +900,7 @@
         <item quantity="other">%d oda</item>
     </plurals>
     <string name="group_no_long_description">Topluluk yöneticisi bu topluluk için uzun bir açıklama sağlamadı.</string>
-    <string name="has_been_kicked">%1$s dan/den %2$s tarafından atıldın</string>
+    <string name="has_been_removed">%1$s dan/den %2$s tarafından atıldın</string>
     <string name="has_been_banned">%1$s dan/den %2$s tarafından engellendin</string>
     <string name="reason_colon">Nedeni: %1$s</string>
     <string name="rejoin">Tekrar katıl</string>
@@ -1296,9 +1289,9 @@
     <string name="room_participants_action_unignore_prompt_msg">Bu kullanıcıyı yoksaymaktan vazgeçerseniz tekrar tüm mesajlarını görmeye başlayacaksınız.</string>
     <string name="room_participants_action_cancel_invite_title">Daveti geri çevir</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Bu kullanıcıdan gelen daveti geri çevirmek istediğinizden emin misiniz\?</string>
-    <string name="room_participants_kick_title">Kullanıcıyı kov</string>
-    <string name="room_participants_kick_reason">Kovma sebebi</string>
-    <string name="room_participants_kick_prompt_msg">Kullanıcıyı kovarsanız kendisi bu odadan çıkacak.
+    <string name="room_participants_remove_title">Kullanıcıyı kov</string>
+    <string name="room_participants_remove_reason">Kovma sebebi</string>
+    <string name="room_participants_remove_prompt_msg">Kullanıcıyı kovarsanız kendisi bu odadan çıkacak.
 \n
 \nEğer tekrar katılmasını engellemek istiyorsanız kovmak yerine yasaklamalısınız.</string>
     <string name="room_participants_ban_title">Kullanıcıyı yasakla</string>
@@ -1347,7 +1340,7 @@
     <string name="room_permissions_notify_everyone">Herkesi bilgilendir</string>
     <string name="room_permissions_remove_messages_sent_by_others">Başkaları tarafından gönderilen mesajları kaldır</string>
     <string name="room_permissions_ban_users">Kullanıcıları banla</string>
-    <string name="room_permissions_kick_users">Kullanıcıları at</string>
+    <string name="room_permissions_remove_users">Kullanıcıları at</string>
     <string name="room_permissions_change_settings">Ayarları değiştir</string>
     <string name="room_permissions_invite_users">Kullanıcı davet et</string>
     <string name="room_permissions_send_messages">Mesaj gönder</string>
@@ -1761,8 +1754,8 @@
     <string name="notice_room_topic_changed">%1$s konuyu şuna değiştirdi: %2$s</string>
     <string name="notice_room_unban_by_you">%1$s adlı kişinin banını kaldırdı</string>
     <string name="notice_room_unban">%1$s, %2$s adlı kişinin banını kaldırdı</string>
-    <string name="notice_room_kick_by_you">%1$s adlı kullanıcıyı attı</string>
-    <string name="notice_room_kick">%1$s, %2$s adlı kullanıcıyı attı</string>
+    <string name="notice_room_remove_by_you">%1$s adlı kullanıcıyı attı</string>
+    <string name="notice_room_remove">%1$s, %2$s adlı kullanıcıyı attı</string>
     <string name="room_list_quick_actions_room_settings">Oda ayarları</string>
     <string name="a11y_show_password">Şifreyi göster</string>
     <string name="read_at">Şu zamanda okundu:</string>
@@ -1808,13 +1801,22 @@
     <string name="notice_widget_removed">%1$s %2$s widgetını kaldırdı</string>
     <string name="notice_end_to_end">%1$s uçtan uca şifrelemeyi etkinleştirdi (%2$s)</string>
     <string name="notice_room_visibility_unknown">bilinmeyen (%s).</string>
-    <string name="notice_direct_room_update">%s güncellendi.</string>
+    <string name="notice_direct_room_update">%s burada yükseltildi.</string>
     <string name="notice_room_visibility_world_readable">birisi.</string>
     <string name="notice_made_future_direct_room_visibility_by_you">Gelecek mesajları %1$s için görünür yaptınız.</string>
     <string name="notice_made_future_direct_room_visibility">%1$s, gelecek mesajları %2$s için görünür hale getirdi.</string>
     <string name="notice_made_future_room_visibility_by_you">Oda geçmişini %1$s için görünür yaptınız.</string>
     <string name="notice_made_future_room_visibility">%1$s oda geçmişini %2$s \'ye görünür yaptı.</string>
     <string name="notice_call_candidates_by_you">Çağrı kurulumu için verileri gönderdiniz.</string>
-    <string name="notice_call_candidates">%s kurulumu çağrı verileri gönderildi.</string>
-    <string name="notice_display_name_removed_by_you">%1$s başlıklı görünen ad silindi.</string>
+    <string name="notice_call_candidates">%s çağrıyı ayarlamak için veri gönderdi.</string>
+    <string name="notice_display_name_removed_by_you">Görünen adınızı kaldırdınız (%1$s)</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• IP değişmezleriyle eşleşen sunucular engellendi.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• IP değişmezleriyle eşleşen sunuculara izin verildi.</string>
+    <string name="notice_room_server_acl_set_allowed">• %s ile eşleşen sunuculara izin verildi.</string>
+    <string name="notice_room_server_acl_set_banned">• %s ile eşleşen sunucular yasaklandı.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Bu oda için sunucu EKL\'lerini ayarladınız.</string>
+    <string name="notice_room_server_acl_set_title">%s bu oda için sunucu EKL\'lerini ayarladı.</string>
+    <string name="notice_direct_room_update_by_you">Burada yükselttiniz.</string>
+    <string name="notice_room_visibility_joined">tüm oda üyeleri, katıldıkları andan itibaren.</string>
+    <string name="notice_room_visibility_invited">tüm oda üyeleri, davet edildikleri andan itibaren.</string>
 </resources>

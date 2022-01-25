@@ -1352,11 +1352,6 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Le redémarrage du service a échoué</string>
     <string name="settings_troubleshoot_test_service_restart_success">Le service a été tué et redémarré automatiquement.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Redémarrage automatique du service de notifications</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Démarrer le service</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Le service de notifications n’est pas lancé.
-\nEssayez de redémarrer l’application.</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Le service de notifications est lancé.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Service de notifications</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">La notification a été cliquée !</string>
     <string name="settings_troubleshoot_test_notification_notice">Veuillez cliquer sur la notification. Si vous ne voyez pas la notification, veuillez vérifier les paramètres système.</string>
     <string name="settings_troubleshoot_test_notification_title">Affichage de la notification</string>
@@ -1478,7 +1473,7 @@
     <string name="room_permissions_notify_everyone">Notifier tout le monde</string>
     <string name="room_permissions_remove_messages_sent_by_others">Supprimer les messages des autres</string>
     <string name="room_permissions_ban_users">Bannir des utilisateurs</string>
-    <string name="room_permissions_kick_users">Expulser des utilisateurs</string>
+    <string name="room_permissions_remove_users">Expulser des utilisateurs</string>
     <string name="room_permissions_change_settings">Mettre à jour les paramètres</string>
     <string name="room_permissions_invite_users">Inviter des utilisateurs</string>
     <string name="room_permissions_send_messages">Envoyer des messages</string>
@@ -1756,7 +1751,7 @@
     <string name="rejoin">Rejoindre</string>
     <string name="reason_colon">Motif : %1$s</string>
     <string name="has_been_banned">%2$s vous a banni de %1$s</string>
-    <string name="has_been_kicked">%2$s vous a expulsé de %1$s</string>
+    <string name="has_been_removed">%2$s vous a expulsé de %1$s</string>
     <string name="group_no_long_description">L’administrateur de cette communauté n’a pas encore fourni de description.</string>
     <string name="filter_group_rooms">Filtrer les salons du groupe</string>
     <string name="filter_group_members">Filtrer les membres du groupe</string>
@@ -1782,7 +1777,7 @@
     <string name="command_description_clear_scalar_token">Pour réparer la gestion des applications Matrix</string>
     <string name="command_description_markdown">Markdown activé/désactivé</string>
     <string name="command_description_nick">Change le nom d’affichage</string>
-    <string name="command_description_kick_user">Expulse l’utilisateur avec l’identifiant fourni</string>
+    <string name="command_description_remove_user">Expulse l’utilisateur avec l’identifiant fourni</string>
     <string name="command_description_topic">Définit le sujet du salon</string>
     <string name="command_description_part_room">Quitte le salon</string>
     <string name="command_description_join_room">Rejoint le salon avec l’alias fourni</string>
@@ -1879,11 +1874,11 @@
     <string name="room_participants_unban_title">Révoquer le bannissement de l’utilisateur</string>
     <string name="room_participants_ban_reason">Motif du bannissement</string>
     <string name="room_participants_ban_title">Bannir l’utilisateur</string>
-    <string name="room_participants_kick_prompt_msg">expulser un utilisateur le supprimera de ce salon.
+    <string name="room_participants_remove_prompt_msg">expulser un utilisateur le supprimera de ce salon.
 \n
 \nPour l’empêcher de revenir, vous devez plutôt le bannir.</string>
-    <string name="room_participants_kick_reason">Motif d’expulsion</string>
-    <string name="room_participants_kick_title">Expulser l’utilisateur</string>
+    <string name="room_participants_remove_reason">Motif d’expulsion</string>
+    <string name="room_participants_remove_title">Expulser l’utilisateur</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Êtes-vous sûr de vouloir annuler l’invitation pour cet utilisateur \?</string>
     <string name="room_participants_action_cancel_invite_title">Annuler l’invitation</string>
     <string name="room_participants_action_unignore">Afficher tous les messages de cet utilisateur</string>
@@ -2301,8 +2296,8 @@
     <string name="notice_room_ban_with_reason">%1$s a banni %2$s. Raison : %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Vous avez révoqué le bannissement de %1$s. Raison : %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s a révoqué le bannissement de %2$s. Raison : %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Vous avez expulsé %1$s. Raison : %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s a expulsé %2$s. Raison : %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Vous avez expulsé %1$s. Raison : %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s a expulsé %2$s. Raison : %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">Vous avez refusé l’invitation. Raison : %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s a refusé l’invitation. Raison : %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Vous êtes parti. Raison : %1$s</string>
@@ -2471,10 +2466,9 @@
     <string name="room_participants_action_set_admin">Nommer administrateur</string>
     <string name="room_participants_action_set_moderator">Nommer modérateur</string>
     <string name="room_participants_action_set_default_power_level">Réinitialiser en tant qu’utilisateur standard</string>
-    <string name="room_participants_action_kick">Expulser</string>
+    <string name="room_participants_action_remove">Expulser</string>
     <string name="room_participants_action_unban">Révoquer le bannissement</string>
     <string name="room_participants_action_ban">Bannir</string>
-    <string name="room_participants_action_remove">Exclure de ce salon</string>
     <string name="room_participants_action_leave">Quitter ce salon</string>
     <string name="room_participants_action_cancel_invite">Annuler l’invitation</string>
     <string name="room_participants_action_invite">Inviter</string>
@@ -2488,7 +2482,6 @@
     <string name="room_participants_offline">Hors ligne</string>
     <string name="room_participants_online">En ligne</string>
     <string name="room_participants_create">Créer</string>
-    <string name="room_participants_remove_prompt_msg">Voulez-vous vraiment bannir %s de cette discussion \?</string>
     <string name="room_participants_leave_private_warning">Ce salon n’est pas public. Vous ne pourrez pas le rejoindre sans invitation.</string>
     <string name="room_participants_leave_prompt_title">Quitter le salon</string>
     <string name="room_title_one_member">1 membre</string>
@@ -2625,8 +2618,8 @@
     <string name="auth_skip">Ignorer</string>
     <string name="auth_submit">Valider</string>
     <string name="auth_register">Créer un compte</string>
-    <string name="notice_room_kick_by_you">Vous avez expulsé %1$s</string>
-    <string name="notice_room_kick">%1$s a expulsé %2$s</string>
+    <string name="notice_room_remove_by_you">Vous avez expulsé %1$s</string>
+    <string name="notice_room_remove">%1$s a expulsé %2$s</string>
     <string name="notice_room_reject_by_you">Vous avez rejeté l’invitation</string>
     <string name="notice_room_reject">%1$s a rejeté l’invitation</string>
     <string name="notice_direct_room_leave_by_you">Vous avez quitté le salon</string>

@@ -211,7 +211,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
             viewModelScope.launch {
                 _viewEvents.post(RoomMemberProfileViewEvents.Loading())
                 try {
-                    room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, null, newPowerLevelsContent)
+                    room.sendStateEvent(EventType.STATE_ROOM_POWER_LEVELS, stateKey = "", newPowerLevelsContent)
                     _viewEvents.post(RoomMemberProfileViewEvents.OnSetPowerLevelSuccess)
                 } catch (failure: Throwable) {
                     _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
@@ -255,7 +255,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         viewModelScope.launch {
             try {
                 _viewEvents.post(RoomMemberProfileViewEvents.Loading())
-                room.kick(initialState.userId, action.reason)
+                room.remove(initialState.userId, action.reason)
                 _viewEvents.post(RoomMemberProfileViewEvents.OnKickActionSuccess)
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))

@@ -4,7 +4,7 @@
     <string name="notice_room_invite">%1$s ఆహ్వానించారు %2$s</string>
     <string name="notice_room_leave">%1$s వదిలి వెళారు</string>
     <string name="notice_room_reject">%1$s ఆహ్వానాన్ని తిరస్కరించారు</string>
-    <string name="notice_room_kick">%1$s తన్నాడు %2$s</string>
+    <string name="notice_room_remove">%1$s తన్నాడు %2$s</string>
     <string name="notice_room_unban">%1$s నిషేధాన్ని %2$s</string>
     <string name="notice_room_ban">%1$s నిషేధించారు %2$s</string>
     <string name="notice_room_withdraw">%1$s ఉపసంహరించుకుంది %2$s\'s ఆహ్వానం</string>
@@ -268,7 +268,6 @@
 
     <string name="room_participants_leave_prompt_title">గదిని వదలండి</string>
     <string name="room_participants_leave_prompt_msg">మీరు ఖచ్చితంగా గదిని వదిలేయాలనుకుంటున్నారా?</string>
-    <string name="room_participants_remove_prompt_msg">మీరు ఈ చాట్ నుండి ఖచ్చితంగా %s ను తీసివేయాలనుకుంటున్నారా?</string>
     <string name="room_participants_create">సృష్టించు</string>
 
     <string name="room_participants_online">ఆన్‌లైన్</string>
@@ -281,7 +280,6 @@
 
     <string name="room_participants_action_invite">ఆహ్వానము</string>
     <string name="room_participants_action_leave">గదిని వదలండి</string>
-    <string name="room_participants_action_remove">ఈ గది నుండి తీసివేయండి</string>
     <string name="room_participants_action_ban">నిషేధించు</string>
     <string name="ongoing_conference_call">జరుగుతున్న కాన్ఫరెన్స్ కాల్.\n%1$s లేదా %2$s చేరండి.</string>
     <string name="ongoing_conference_call_voice">వాయిస్</string>

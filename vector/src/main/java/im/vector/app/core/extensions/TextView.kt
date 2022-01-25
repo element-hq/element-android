@@ -16,6 +16,7 @@
 
 package im.vector.app.core.extensions
 
+import android.graphics.drawable.Drawable
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.TextPaint
@@ -82,7 +83,7 @@ fun TextView.setTextWithColoredPart(@StringRes fullTextRes: Int,
 fun TextView.setTextWithColoredPart(fullText: String,
                                     coloredPart: String,
                                     @AttrRes colorAttribute: Int = R.attr.colorPrimary,
-                                    underline: Boolean = false,
+                                    underline: Boolean = true,
                                     onClick: (() -> Unit)? = null) {
     val color = ThemeUtils.getColor(context, colorAttribute)
 
@@ -101,7 +102,6 @@ fun TextView.setTextWithColoredPart(fullText: String,
 
                         override fun updateDrawState(ds: TextPaint) {
                             ds.color = color
-                            ds.isUnderlineText = !underline
                         }
                     }
                     setSpan(clickableSpan, index, index + coloredPart.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
@@ -122,7 +122,11 @@ fun TextView.setLeftDrawable(@DrawableRes iconRes: Int, @AttrRes tintColor: Int?
     } else {
         ContextCompat.getDrawable(context, iconRes)
     }
-    setCompoundDrawablesWithIntrinsicBounds(icon, null, null, null)
+    setLeftDrawable(icon)
+}
+
+fun TextView.setLeftDrawable(drawable: Drawable?) {
+    setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
 }
 
 /**

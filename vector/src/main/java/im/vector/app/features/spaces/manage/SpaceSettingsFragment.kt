@@ -85,6 +85,7 @@ class SpaceSettingsFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.roomSettingsToolbar)
+                .allowBack()
         // roomProfileSharedActionViewModel = activityViewModelProvider.get(RoomProfileSharedActionViewModel::class.java)
 //        setupRoomHistoryVisibilitySharedActionViewModel()
         setupRoomJoinRuleSharedActionViewModel()

@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -27,15 +28,15 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
-import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.endKeepScreenOn
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.keepScreenOn
 import im.vector.app.core.extensions.replaceFragment
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityRoomDetailBinding
+import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.screen.ScreenEvent
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import im.vector.app.features.matrixto.MatrixToBottomSheet
@@ -50,7 +51,6 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class RoomDetailActivity :
         VectorBaseActivity<ActivityRoomDetailBinding>(),
-        ToolbarConfigurable,
         MatrixToBottomSheet.InteractionListener {
 
     override fun getBinding(): ActivityRoomDetailBinding {
@@ -156,11 +156,17 @@ class RoomDetailActivity :
         super.onDestroy()
     }
 
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
-    }
-
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
+        private var drawerScreenEvent: ScreenEvent? = null
+        override fun onDrawerOpened(drawerView: View) {
+            drawerScreenEvent = ScreenEvent(Screen.ScreenName.MobileBreadcrumbs)
+        }
+
+        override fun onDrawerClosed(drawerView: View) {
+            drawerScreenEvent?.send(analyticsTracker)
+            drawerScreenEvent = null
+        }
+
         override fun onDrawerStateChanged(newState: Int) {
             hideKeyboard()
 

@@ -37,9 +37,6 @@ class SearchMessagesTest : InstrumentedTest {
         private const val MESSAGE = "Lorem ipsum dolor sit amet"
     }
 
-    private val commonTestHelper = CommonTestHelper(context())
-    private val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
-
     @Test
     fun sendTextMessageAndSearchPartOfItUsingSession() {
         doTest { cryptoTestData ->
@@ -76,6 +73,8 @@ class SearchMessagesTest : InstrumentedTest {
     }
 
     private fun doTest(block: suspend (CryptoTestData) -> SearchResult) {
+        val commonTestHelper = CommonTestHelper(context())
+        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceInARoom(false)
         val aliceSession = cryptoTestData.firstSession
         val aliceRoomId = cryptoTestData.roomId

@@ -242,7 +242,6 @@ Možda se želite prijaviti s nekim drugim računom ili dodati ovu poruku email 
     <string name="room_title_one_member">1 član</string>
     <string name="room_participants_leave_prompt_title">Napusti sobu</string>
     <string name="room_participants_leave_prompt_msg">Da li ste sigurni da želite napustiti sobu?</string>
-    <string name="room_participants_remove_prompt_msg">Da li ste sigurni da želite ukloniti %s iz ovog razgovora\?</string>
     <string name="room_participants_create">Kreiraj</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
@@ -253,7 +252,6 @@ Možda se želite prijaviti s nekim drugim računom ili dodati ovu poruku email 
     <string name="room_participants_header_devices">UREĐAJI</string>
     <string name="room_participants_action_invite">Pozovi</string>
     <string name="room_participants_action_leave">Napusti ovu sobu</string>
-    <string name="room_participants_action_remove">Ukloni iz ove sobe</string>
     <string name="room_participants_action_ban">Ban</string>
     <string name="room_participants_action_unban">Deban</string>
     <string name="room_participants_action_set_default_power_level">Resetuj na normlanog korisnika</string>

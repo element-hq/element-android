@@ -16,8 +16,8 @@
     <string name="notice_room_leave_by_you">Teǧǧiḍ taxxamt</string>
     <string name="notice_room_reject">%1$s yugi/tugi tinubga</string>
     <string name="notice_room_reject_by_you">Tufiḍ tinubga</string>
-    <string name="notice_room_kick">%1$s yessufeɣ %2$s</string>
-    <string name="notice_room_kick_by_you">Tessufɣeḍ %1$s</string>
+    <string name="notice_room_remove">%1$s yessufeɣ %2$s</string>
+    <string name="notice_room_remove_by_you">Tessufɣeḍ %1$s</string>
     <string name="notice_avatar_url_changed_by_you">Tbeddleḍ avatar-inek·inem</string>
     <string name="power_level_admin">Anedbal</string>
     <string name="power_level_moderator">Aseɣyad</string>
@@ -144,8 +144,8 @@
     <string name="notice_room_leave_with_reason_by_you">Teǧǧiḍ taxxamt. Tamentilt: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s yugi tinubga. Tamentilt: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">Tugiḍ tinubga. Tamentilt: %1$s</string>
-    <string name="notice_room_kick_with_reason">%1$s yessufeɣ %2$s. Tamentilt: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Tessufɣeḍ %1$s. Tamentilt: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s yessufeɣ %2$s. Tamentilt: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Tessufɣeḍ %1$s. Tamentilt: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s yekkes agdal i %2$s. Tamentilt: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Tekkseḍ agdal i %1$s. Tamentilt: %2$s</string>
     <string name="notice_room_ban_with_reason">%1$s igdel %2$s. Tamentilt: %3$s</string>
@@ -304,7 +304,7 @@
     <string name="room_participants_action_invite">Nced</string>
     <string name="room_participants_action_ban">Agi</string>
     <string name="room_participants_action_unban">Asefsex n tigtin</string>
-    <string name="room_participants_action_kick">Suffeɣ</string>
+    <string name="room_participants_action_remove">Suffeɣ</string>
     <string name="room_participants_action_mention">Abder</string>
     <string name="room_participants_power_level_demote_warning_title">Ṣubb deg usellun-ik·im\?</string>
     <string name="room_participants_power_level_demote">Ṣubb deg usellun</string>
@@ -445,7 +445,7 @@
     <string name="command_description_deop_user">Aseqdac Deops s usulay i d-yettunefken</string>
     <string name="command_description_invite_user">Inced iseqdacen s tikci n usulay i texxamt tamirant</string>
     <string name="command_description_part_room">Ffeɣ seg texxamt</string>
-    <string name="command_description_kick_user">Suffeɣ aseqdac s usulay i d-yettunefken</string>
+    <string name="command_description_remove_user">Suffeɣ aseqdac s usulay i d-yettunefken</string>
     <string name="command_description_nick">Ibeddel isem-inek·inem yettwaskanen</string>
     <string name="notification_off">Insa</string>
     <string name="create">Snulfu-d</string>
@@ -820,7 +820,6 @@
     <string name="room_participants_header_devices">TIƔIMIYIN</string>
     <string name="room_participants_action_cancel_invite">Sefsex tinubga</string>
     <string name="room_participants_action_leave">Ffeɣ si texxamt-a</string>
-    <string name="room_participants_action_remove">Kkes si texxamt-a</string>
     <string name="room_participants_action_set_default_power_level">Wennez aseqdac amagnu</string>
     <string name="room_participants_action_set_moderator">Eg amaẓrag</string>
     <string name="room_participants_action_set_admin">Eg anebdal</string>
@@ -987,8 +986,8 @@
     <string name="settings_call_show_confirmation_dialog_title">Sewḥel isawalen iɣef ur tebniḍ</string>
     <string name="settings_call_show_confirmation_dialog_summary">Suter i usentem send beddu n usiwel</string>
     <string name="settings_call_ringtone_use_default_stun">Sireg aqeddac n tallalt n yisawalen n usellek</string>
-    <string name="room_participants_kick_title">Suffeɣ aseqdac</string>
-    <string name="room_participants_kick_reason">Ssebba n usuffeɣ</string>
+    <string name="room_participants_remove_title">Suffeɣ aseqdac</string>
+    <string name="room_participants_remove_reason">Ssebba n usuffeɣ</string>
     <string name="room_participants_ban_title">Agi aseqdac</string>
     <string name="room_participants_ban_reason">Ssebba n tigtin</string>
     <string name="room_participants_unban_title">Asefsex n useqdac</string>
@@ -1350,7 +1349,6 @@
     <string name="settings_troubleshoot_test_fcm_failed">Tiririt n ujuṭu FCM ur teddi ara:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">Asekles n ujuṭu</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Senker ameẓlu</string>
     <string name="settings_troubleshoot_test_service_boot_title">Bdu seg tazwara</string>
     <string name="settings_noisy_notifications_preferences">Swel ilɣa n zzhir</string>
     <string name="settings_call_notifications_preferences">Swel ilɣa n usiwel</string>
@@ -1571,7 +1569,6 @@
     <string name="template_permissions_rationale_msg_contacts">Matrix yezmer ad isenqed adlis-ik·im n tansiwin i wakken ad yaf iseqdacen-nniḍen n Matrix s ttawil n yimaylen d wuṭṭunen n tiliɣri nsen. Ma yella tqebleḍ ad tebduḍ adlis-ik·im n tansiwin i waya, ma ulac aɣilif sireg anekcum deg yisfuyla udhimen i d-iteddun.</string>
     <string name="invite_no_identity_server_error">Rnu aqeddac n timagit deg yiɣewwaren-ik·im i wakken ad tesnetmeḍ tigawt-a.</string>
     <string name="room_participants_leave_prompt_msg">S tidet tebɣiḍ ad teǧǧeḍ taxxamt\?</string>
-    <string name="room_participants_remove_prompt_msg">Tebɣiḍ s tidet ad tekkseḍ %s seg udiwenni-a\?</string>
     <string name="room_participants_power_level_prompt">Ur tettizmireḍ ara ad tesfesxeḍ asnifel-a acku tessebɣaseḍ aseqdac ad yesɛu aswir n tezmert am kečč·kemm.
 \nTebɣiḍ s tidet\?</string>
     <string name="room_participants_action_ignore_prompt_msg">Azgal n useqdac-a ad yekkes iznan-ines seg texxamin i tebḍiḍ.
@@ -1579,7 +1576,7 @@
 \nTzemreḍ ad tbeddleḍ tigawt-a melmi i tebɣiḍ deg yiɣewwaren imuta.</string>
     <string name="room_participants_action_unignore_prompt_msg">Tukksa n uzgal i useqdac-a ad d-yesken akk iznan-ines i tikkel-nniḍen.</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">S tidet tebɣiḍ ad tesfesxeḍ tinubga i useqdac-a\?</string>
-    <string name="room_participants_kick_prompt_msg">asuffeɣ n useqdac ad t-yekkes seg texxamt-a.
+    <string name="room_participants_remove_prompt_msg">asuffeɣ n useqdac ad t-yekkes seg texxamt-a.
 \n
 \nAkken ur tettɛemmideḍ ara attekki-nsen tikkelt-nniḍen, ilaq ad t-tagiḍ xiṛ.</string>
     <string name="room_participants_ban_prompt_msg">Tegtin n useqdac ad t-isuffeɣ seg texxamt-a rnu ur as-yettɛemmid ara ad yettekki tikkelt-nniḍen.</string>
@@ -1616,10 +1613,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">Ajuṭu FCM yettwasekles akken iwata ɣef uqeddac agejdan.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Asekles n ujuṭu FCM ɣef uqeddac agejdan ur yeddi ara.
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Ameẓlu n yilɣa</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Ameẓlu n yilɣa la iteddu.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Ameẓlu n yilɣa ur iteddu ara.
-\nƐreḍ ad talseḍ asenker n usnas.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Ameẓlu n yilɣa yules asenker s wudem awurman</string>
     <string name="settings_troubleshoot_test_service_restart_success">Ameẓlu yettwanɣa syen yules asenker s wudem awurman.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Allus n usenker n umeẓlu ur yeddi ara</string>
@@ -1755,7 +1748,7 @@
     <string name="markdown_has_been_enabled">Tacreḍt yeɣlin tettwarmed.</string>
     <string name="markdown_has_been_disabled">Tacreḍt yeɣlin tettusens.</string>
     <string name="group_no_long_description">Anedbal n temɣiwent ur d-imudd ara aglam ɣezzifen i temɣiwent-a.</string>
-    <string name="has_been_kicked">Tettusuffɣeḍ-d seg %1$s sɣur %2$s</string>
+    <string name="has_been_removed">Tettusuffɣeḍ-d seg %1$s sɣur %2$s</string>
     <string name="has_been_banned">Tettusuffɣeḍ-d seg %1$s sɣur %2$s</string>
     <string name="dialog_user_consent_content">I wakken ad tkemmleḍ aseqdec n uqeddac agejdan %1$s, ilaq ad talseḍ asenqed syen ad tqebleḍ tiwtilin-nneɣ s umata.</string>
     <string name="deactivate_account_delete_checkbox">Ttxil-k·m ttu akk iznan i yuzneɣ mi ara senseɣ amiḍan-iw (Ɣur-k·m: aya ad yerr iseqdacen ara d-yernun ad walin idiwenniyen ur nemmid ara)</string>
