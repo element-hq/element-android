@@ -3,15 +3,14 @@ Changes in Element 1.3.16 (2022-01-25)
 
 Features ✨
 ----------
+ - Static location sharing and rendering ([#2210](https://github.com/vector-im/element-android/issues/2210))
  - Enables the FTUE splash carousel ([#4584](https://github.com/vector-im/element-android/issues/4584))
- - Enabling native support for window resizing ([#4811](https://github.com/vector-im/element-android/issues/4811))
  - Allow editing polls ([#5036](https://github.com/vector-im/element-android/issues/5036))
- - Support undisclosed polls ([#5037](https://github.com/vector-im/element-android/issues/5037))
 
 Bugfixes 🐛
 ----------
+ - Fixing missing notifications in FDroid variants using `optimised for battery` background sync mode ([#5003](https://github.com/vector-im/element-android/issues/5003))
  - Fix for stuck local event messages at the bottom of the screen ([#516](https://github.com/vector-im/element-android/issues/516))
- - Static location sharing and rendering ([#2210](https://github.com/vector-im/element-android/issues/2210))
  - Notification does not take me to the room when another space was last viewed ([#3839](https://github.com/vector-im/element-android/issues/3839))
  - Explore Rooms overflow menu - content update include "Create room" ([#3932](https://github.com/vector-im/element-android/issues/3932))
  - Fix sync timeout after returning from background ([#4669](https://github.com/vector-im/element-android/issues/4669))
@@ -19,7 +18,6 @@ Bugfixes 🐛
  - Prevent Alerts to be displayed in the automatically displayed analytics opt-in screen ([#4948](https://github.com/vector-im/element-android/issues/4948))
  - EmojiPopupDismissListener not being triggered after dismissing the EmojiPopup ([#4991](https://github.com/vector-im/element-android/issues/4991))
  - Fix an error in string resource ([#4997](https://github.com/vector-im/element-android/issues/4997))
- - Fixing missing notifications in FDroid variants using `optimised for battery` background sync mode ([#5003](https://github.com/vector-im/element-android/issues/5003))
  - Big messages taking inappropriately long to evaluate .m.rule.roomnotif push rules ([#5008](https://github.com/vector-im/element-android/issues/5008))
  - Improve auto rageshake lab feature ([#5021](https://github.com/vector-im/element-android/issues/5021))
 
@@ -30,9 +28,11 @@ In development 🚧
  - Locking phones to portrait during the FTUE onboarding ([#4918](https://github.com/vector-im/element-android/issues/4918))
  - Adds a messaging use case screen to the FTUE onboarding ([#4927](https://github.com/vector-im/element-android/issues/4927))
  - Updating the FTUE use case icons ([#5025](https://github.com/vector-im/element-android/issues/5025))
+ - Support undisclosed polls ([#5037](https://github.com/vector-im/element-android/issues/5037))
 
 Other changes
 -------------
+ - Enabling native support for window resizing ([#4811](https://github.com/vector-im/element-android/issues/4811))
  - Analytics: send more Events ([#4734](https://github.com/vector-im/element-android/issues/4734))
  - Fix integration tests and add a comment with results (still not perfect due to github actions resource limitations) ([#4842](https://github.com/vector-im/element-android/issues/4842))
  - "/kick" command is replaced with "/remove". Also replaced all occurrences in string resources ([#4865](https://github.com/vector-im/element-android/issues/4865))
