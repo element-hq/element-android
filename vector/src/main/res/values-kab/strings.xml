@@ -16,8 +16,8 @@
     <string name="notice_room_leave_by_you">Teǧǧiḍ taxxamt</string>
     <string name="notice_room_reject">%1$s yugi/tugi tinubga</string>
     <string name="notice_room_reject_by_you">Tufiḍ tinubga</string>
-    <string name="notice_room_kick">%1$s yessufeɣ %2$s</string>
-    <string name="notice_room_kick_by_you">Tessufɣeḍ %1$s</string>
+    <string name="notice_room_remove">%1$s yessufeɣ %2$s</string>
+    <string name="notice_room_remove_by_you">Tessufɣeḍ %1$s</string>
     <string name="notice_avatar_url_changed_by_you">Tbeddleḍ avatar-inek·inem</string>
     <string name="power_level_admin">Anedbal</string>
     <string name="power_level_moderator">Aseɣyad</string>
@@ -144,8 +144,8 @@
     <string name="notice_room_leave_with_reason_by_you">Teǧǧiḍ taxxamt. Tamentilt: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s yugi tinubga. Tamentilt: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">Tugiḍ tinubga. Tamentilt: %1$s</string>
-    <string name="notice_room_kick_with_reason">%1$s yessufeɣ %2$s. Tamentilt: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Tessufɣeḍ %1$s. Tamentilt: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s yessufeɣ %2$s. Tamentilt: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Tessufɣeḍ %1$s. Tamentilt: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s yekkes agdal i %2$s. Tamentilt: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Tekkseḍ agdal i %1$s. Tamentilt: %2$s</string>
     <string name="notice_room_ban_with_reason">%1$s igdel %2$s. Tamentilt: %3$s</string>

@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s a rejoint le salon</string>
     <string name="notice_room_leave">%1$s est parti du salon</string>
     <string name="notice_room_reject">%1$s a rejeté l’invitation</string>
-    <string name="notice_room_kick">%1$s a expulsé %2$s</string>
+    <string name="notice_room_remove">%1$s a expulsé %2$s</string>
     <string name="notice_room_unban">%1$s a révoqué le bannissement de %2$s</string>
     <string name="notice_room_ban">%1$s a banni %2$s</string>
     <string name="notice_room_withdraw">%1$s a annulé l’invitation de %2$s</string>
@@ -88,7 +88,7 @@
     <string name="notice_room_join_with_reason">%1$s a rejoint le salon. Raison : %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s est parti du salon. Raison : %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s a refusé l’invitation. Raison : %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s a expulsé %2$s. Raison : %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s a expulsé %2$s. Raison : %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s a révoqué le bannissement de %2$s. Raison : %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s a banni %2$s. Raison : %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s a envoyé une invitation à %2$s à rejoindre le salon. Raison : %3$s</string>
@@ -114,7 +114,7 @@
     <string name="notice_direct_room_update_by_you">Vous avez mis cet endroit à niveau.</string>
     <string name="notice_direct_room_update">%s a mis cet endroit à niveau.</string>
     <string name="notice_room_update_by_you">Vous avez mis à niveau ce salon.</string>
-    <string name="notice_room_kick_by_you">Vous avez expulsé %1$s</string>
+    <string name="notice_room_remove_by_you">Vous avez expulsé %1$s</string>
     <string name="notice_room_reject_by_you">Vous avez rejeté l’invitation</string>
     <string name="notice_direct_room_leave_by_you">Vous avez quitté le salon</string>
     <string name="notice_direct_room_leave">%1$s a quitté le salon</string>
@@ -211,7 +211,7 @@
     <string name="notice_room_unban_with_reason_by_you">Vous avez révoqué le bannissement de %1$s. Raison : %2$s</string>
     <string name="notice_room_ban_by_you">Vous avez banni %1$s</string>
     <string name="notice_room_unban_by_you">Vous avez révoqué le bannissement de %1$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Vous avez expulsé %1$s. Raison : %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Vous avez expulsé %1$s. Raison : %2$s</string>
     <string name="room_displayname_empty_room_was">Salon vide (était %s)</string>
     <plurals name="room_displayname_four_and_more_members">
         <item quantity="one">%1$s, %2$s, %3$s et %4$d autre</item>

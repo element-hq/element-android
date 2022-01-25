@@ -423,8 +423,8 @@
     <string name="notice_room_ban_by_you">Jo hawwe %1$s ferballe</string>
     <string name="notice_direct_room_join_by_you">Jo binne oansluten</string>
     <string name="notice_room_ban">%1$s hat %2$s ferballe</string>
-    <string name="notice_room_kick_by_you">Jo hawwe %1$s der útskopt</string>
-    <string name="notice_room_kick">%1$s hat %2$s der útskopt</string>
+    <string name="notice_room_remove_by_you">Jo hawwe %1$s der útskopt</string>
+    <string name="notice_room_remove">%1$s hat %2$s der útskopt</string>
     <string name="notice_room_reject_by_you">Jo hawwe de útnûging wegere</string>
     <string name="notice_room_reject">%1$s hat de útnûging wegere</string>
     <string name="notice_direct_room_leave_by_you">Jo hawwe de keamer ferlitten</string>
@@ -484,8 +484,8 @@
     <string name="notice_room_topic_removed">%1$s hat it petearûnderwerp fuortsmiten</string>
     <string name="notice_room_name_removed_by_you">Jo hawwe de keamernamme fuortsmiten</string>
     <string name="notice_room_name_removed">%1$s hat de petearnamme fuortsmiten</string>
-    <string name="notice_room_kick_with_reason">%1$s hat %2$s der útskopt. Reden: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Jo hawwe %1$s der útskopt. Reden: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s hat %2$s der útskopt. Reden: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Jo hawwe %1$s der útskopt. Reden: %2$s</string>
     <string name="notice_direct_room_update_by_you">Jo hawwe hjir bywurke.</string>
     <string name="notice_direct_room_update">%s is hjir fernijd.</string>
     <string name="notice_placed_voice_call_by_you">Jo hawwe in audiopetear iepene.</string>

@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s вошёл(ла) в комнату</string>
     <string name="notice_room_leave">%1$s покинул(а) комнату</string>
     <string name="notice_room_reject">%1$s отклонил(а) приглашение</string>
-    <string name="notice_room_kick">%1$s выгнан %2$s</string>
+    <string name="notice_room_remove">%1$s выгнан %2$s</string>
     <string name="notice_room_unban">%1$s разблокировал(а) %2$s</string>
     <string name="notice_room_ban">%1$s заблокировал(а) %2$s</string>
     <string name="notice_room_withdraw">%1$s отозвал(а) приглашение %2$s</string>
@@ -89,7 +89,7 @@
     <string name="notice_room_join_with_reason">%1$s вошёл(ла) в комнату. Причина: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s покинул(а) комнату. Причина: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s отклонил приглашение. Причина: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s выгнали %2$s. Причина: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s выгнали %2$s. Причина: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s разблокировано %2$s. Причина: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s забанен %2$s. Причина: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s отправил приглашение %2$s в комнату. Причина: %3$s</string>
@@ -122,7 +122,7 @@
     <string name="notice_room_join_by_you">Вы вошли в комнату</string>
     <string name="notice_room_leave_by_you">Вы покинули комнату</string>
     <string name="notice_room_reject_by_you">Вы отклонили приглашение</string>
-    <string name="notice_room_kick_by_you">Вы выгнали %1$s</string>
+    <string name="notice_room_remove_by_you">Вы выгнали %1$s</string>
     <string name="notice_room_unban_by_you">Вы разбанили %1$s</string>
     <string name="notice_room_ban_by_you">Вы забанили %1$s</string>
     <string name="notice_room_withdraw_by_you">Вы отозвали приглашение %1$s</string>
@@ -165,7 +165,7 @@
     <string name="notice_room_join_with_reason_by_you">Вы вошли в комнату. Причина: %1$s</string>
     <string name="notice_room_leave_with_reason_by_you">Вы покинули комнату. Причина: %1$s</string>
     <string name="notice_room_reject_with_reason_by_you">Вы отклонили приглашение. Причина: %1$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Вы выгнали %1$s. Причина: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Вы выгнали %1$s. Причина: %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">Вы разбанили %1$s. Причина: %2$s</string>
     <string name="notice_room_ban_with_reason_by_you">Вы забанили %1$s. Причина: %2$s</string>
     <string name="notice_room_third_party_invite_with_reason_by_you">Вы отправили %1$s приглашение в эту комнату. Причина: %2$s</string>

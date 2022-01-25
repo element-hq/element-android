@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s hat den Raum betreten</string>
     <string name="notice_room_leave">%1$s hat den Raum verlassen</string>
     <string name="notice_room_reject">%1$s hat die Einladung abgelehnt</string>
-    <string name="notice_room_kick">%1$s hat %2$s entfernt</string>
+    <string name="notice_room_remove">%1$s hat %2$s entfernt</string>
     <string name="notice_room_unban">%1$s hat den Bann von %2$s aufgehoben</string>
     <string name="notice_room_ban">%1$s hat %2$s gebannt</string>
     <string name="notice_room_withdraw">%1$s hat die Einladung für %2$s zurückgezogen</string>
@@ -88,7 +88,7 @@
     <string name="notice_room_join_with_reason">%1$s ist dem Raum beigetreten. Grund: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s hat den Raum verlassen. Grund: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s hat die Einladung abgelehnt. Grund: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s hat %2$s entfernt. Grund: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s hat %2$s entfernt. Grund: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s hat Sperre von %2$s aufgehoben. Grund: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s hat %2$s verbannt. Grund: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s hat eine Einladung an %2$s gesandt um diesem Raum beizutreten. Grund: %3$s</string>
@@ -119,7 +119,7 @@
     <string name="notice_room_join_by_you">Du bist dem Raum beigetreten</string>
     <string name="notice_room_leave_by_you">Du hast den Raum verlassen</string>
     <string name="notice_room_reject_by_you">Du hast die Einladung abgelehnt</string>
-    <string name="notice_room_kick_by_you">Du hast %1$s aus dem Raum entfernt</string>
+    <string name="notice_room_remove_by_you">Du hast %1$s aus dem Raum entfernt</string>
     <string name="notice_room_unban_by_you">Du hast den Bann von %1$s aufgehoben</string>
     <string name="notice_room_ban_by_you">Du hast %1$s gebannt</string>
     <string name="notice_room_withdraw_by_you">Du hast die Einladung von %1$s zurückgenommen</string>
@@ -166,7 +166,7 @@
     <string name="notice_room_join_with_reason_by_you">Du bist dem Raum beigetreten. Grund: %1$s</string>
     <string name="notice_room_leave_with_reason_by_you">Du hast den Raum verlassen. Grund: %1$s</string>
     <string name="notice_room_reject_with_reason_by_you">Du hast die Einladung abgelehnt. Grund: %1$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Du hast %1$s aus dem Raum entfernt. Grund %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Du hast %1$s aus dem Raum entfernt. Grund %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">Du hast den Bann von %1$s aufgehoben. Grund: %2$s</string>
     <string name="notice_room_ban_with_reason_by_you">Du hast %1$s gebannt. Grund: %2$s</string>
     <string name="notice_room_third_party_invite_with_reason_by_you">Du hast %1$s in den Raum eingeladen. Grund: %2$s</string>

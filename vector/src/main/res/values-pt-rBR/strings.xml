@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s juntou-se à sala</string>
     <string name="notice_room_leave">%1$s saiu da sala</string>
     <string name="notice_room_reject">%1$s rejeitou o convite</string>
-    <string name="notice_room_kick">%1$s expulsou %2$s</string>
+    <string name="notice_room_remove">%1$s expulsou %2$s</string>
     <string name="notice_room_unban">%1$s desbaniu %2$s</string>
     <string name="notice_room_ban">%1$s baniu %2$s</string>
     <string name="notice_room_withdraw">%1$s retirou o convite de %2$s</string>
@@ -66,7 +66,7 @@
     <string name="notice_room_join_by_you">Você juntou-se à sala</string>
     <string name="notice_room_leave_by_you">Você saiu da sala</string>
     <string name="notice_room_reject_by_you">Você rejeitou o convite</string>
-    <string name="notice_room_kick_by_you">Você expulsou %1$s</string>
+    <string name="notice_room_remove_by_you">Você expulsou %1$s</string>
     <string name="notice_room_unban_by_you">Você desbaniu %1$s</string>
     <string name="notice_room_ban_by_you">Você baniu %1$s</string>
     <string name="notice_room_withdraw_by_you">Você retirou o convite de %1$s</string>
@@ -146,8 +146,8 @@
     <string name="notice_room_leave_with_reason_by_you">Você saiu da sala. Razão: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s rejeitou o convite. Razão: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">Você rejeitou o convite. Razão: %1$s</string>
-    <string name="notice_room_kick_with_reason">%1$s expulsou %2$s. Razão: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Você expulsou %1$s. Razão: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s expulsou %2$s. Razão: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Você expulsou %1$s. Razão: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s desbaniu %2$s. Razão: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Você desbaniu %1$s. Razão: %2$s</string>
     <string name="notice_room_ban_with_reason">%1$s baniu %2$s. Razão: %3$s</string>

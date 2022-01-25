@@ -36,8 +36,8 @@
     <string name="notice_room_ban">%1$s забрани корисника %2$s</string>
     <string name="notice_room_unban_by_you">Укинули сте забрану кориснику %1$s</string>
     <string name="notice_room_unban">%1$s укину забрану кориснику %2$s</string>
-    <string name="notice_room_kick_by_you">Избацили сте корисника %1$s</string>
-    <string name="notice_room_kick">%1$s избаци %2$s</string>
+    <string name="notice_room_remove_by_you">Избацили сте корисника %1$s</string>
+    <string name="notice_room_remove">%1$s избаци %2$s</string>
     <string name="notice_room_reject_by_you">Одбили сте позивницу</string>
     <string name="notice_room_reject">%1$s одби позивницу</string>
     <string name="notice_direct_room_leave_by_you">Напустили сте собу</string>
@@ -130,8 +130,8 @@
     <string name="notice_room_ban_with_reason">%1$s забрани корисника %2$s. Разлог: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Одблокирали сте корисника %1$s. Разлог: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s одблокира корисника %2$s. Разлог: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Избацили сте корисника %1$s. Разлог: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s избаци корисника %2$s. Разлог: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Избацили сте корисника %1$s. Разлог: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s избаци корисника %2$s. Разлог: %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">Одбили сте позивницу. Разлог: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s одби позивницу. Разлог: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Изашли сте. Разлог: %1$s</string>

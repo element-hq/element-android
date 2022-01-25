@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s vstúpil/a do miestnosti</string>
     <string name="notice_room_leave">%1$s opustil/a miestnosť</string>
     <string name="notice_room_reject">%1$s odmietol/a pozvanie</string>
-    <string name="notice_room_kick">%1$s vykázal/a %2$s</string>
+    <string name="notice_room_remove">%1$s vykázal/a %2$s</string>
     <string name="notice_room_unban">%1$s povolil/a vstupovať %2$s</string>
     <string name="notice_room_ban">%1$s zakázal/a vstupovať %2$s</string>
     <string name="notice_room_withdraw">%1$s vzal/a späť pozvanie %2$s</string>
@@ -89,7 +89,7 @@
     <string name="notice_room_join_with_reason">%1$s vstúpil/a do miestnosti. Dôvod: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s opustil/a miestnosť. Dôvod: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s odmietol/a pozvanie. Dôvod: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s vykázal/a %2$s. Dôvod: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s vykázal/a %2$s. Dôvod: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s povolil/a vstupovať %2$s. Dôvod: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s zakázal/a vstupovať %2$s. Dôvod: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s pozval/a %2$s vstúpiť do miestnosti. Dôvod: %3$s</string>
@@ -119,7 +119,7 @@
     <string name="notice_room_join_by_you">Vstúpili ste do miestnosti</string>
     <string name="notice_room_leave_by_you">Opustili ste miestnosť</string>
     <string name="notice_room_reject_by_you">Odmietli ste pozvanie</string>
-    <string name="notice_room_kick_by_you">Vykázali ste %1$s</string>
+    <string name="notice_room_remove_by_you">Vykázali ste %1$s</string>
     <string name="notice_room_unban_by_you">Povolili ste vstupovať %1$s</string>
     <string name="notice_room_ban_by_you">Zakázali ste vstupovať %1$s</string>
     <string name="notice_room_withdraw_by_you">Vzali ste späť pozvanie %1$s</string>
@@ -168,7 +168,7 @@
     <string name="notice_room_join_with_reason_by_you">Vstúpili ste do miestnosti. Dôvod: %1$s</string>
     <string name="notice_room_leave_with_reason_by_you">Opustili ste miestnosť. Dôvod: %1$s</string>
     <string name="notice_room_reject_with_reason_by_you">Odmietli ste pozvanie. Dôvod: %1$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Vykázali ste %1$s. Dôvod: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Vykázali ste %1$s. Dôvod: %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">Povolili ste vstupovať %1$s. Dôvod: %2$s</string>
     <string name="notice_room_ban_with_reason_by_you">Zakázali ste vstupovať %1$s. Dôvod: %2$s</string>
     <string name="notice_room_third_party_invite_with_reason_by_you">Pozvali ste %1$s vstúpiť do miestnosti. Dôvod: %2$s</string>

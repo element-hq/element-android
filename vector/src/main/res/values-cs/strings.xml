@@ -9,7 +9,7 @@
     <string name="notice_room_join">%1$s vstoupil(a) do místnosti</string>
     <string name="notice_room_leave">Uživatel %1$s odešel z místnosti</string>
     <string name="notice_room_reject">%1$s odmítli pozvání</string>
-    <string name="notice_room_kick">%1$s vykopli %2$s</string>
+    <string name="notice_room_remove">%1$s vykopli %2$s</string>
     <string name="notice_room_unban">%1$s zrušil vykázání %2$s</string>
     <string name="notice_room_ban">%1$s vykázali %2$s</string>
     <string name="notice_room_withdraw">%1$s zrušili pozvání pro %2$s</string>
@@ -95,7 +95,7 @@
     <string name="notice_room_join_by_you">Vstoupili jste do místnosti</string>
     <string name="notice_room_leave_by_you">Opustili jste místnost</string>
     <string name="notice_room_reject_by_you">Odmítli jste pozvání</string>
-    <string name="notice_room_kick_by_you">Vykopli jste %1$s</string>
+    <string name="notice_room_remove_by_you">Vykopli jste %1$s</string>
     <string name="notice_room_unban_by_you">Zrušili jste vykázání pro %1$s</string>
     <string name="notice_room_ban_by_you">Vykázali jste %1$s</string>
     <string name="notice_room_withdraw_by_you">Stáhli jste pozvánku od %1$s zpět</string>
@@ -147,8 +147,8 @@
     <string name="notice_room_leave_with_reason_by_you">Opustili jste místnost. Důvod: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s pozvání odmítli. Důvod: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">Odmítli jste pozvání. Důvod: %1$s</string>
-    <string name="notice_room_kick_with_reason">%1$s vykopnuli %2$s. Důvod: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Vykopnuli jste %1$s. Důvod: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s vykopnuli %2$s. Důvod: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Vykopnuli jste %1$s. Důvod: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s zrušili %2$s vykázání. Důvod: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Zrušili jste %1$s vykázání. Důvod: %2$s</string>
     <string name="notice_room_ban_with_reason">%1$s vykázali %2$s. Důvod: %3$s</string>

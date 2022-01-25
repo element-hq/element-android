@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s dołączył(a)</string>
     <string name="notice_room_leave">%1$s opuścił(a)</string>
     <string name="notice_room_reject">%1$s odrzucił(a) zaproszenie</string>
-    <string name="notice_room_kick">%1$s wyrzucił(a) %2$s</string>
+    <string name="notice_room_remove">%1$s wyrzucił(a) %2$s</string>
     <string name="notice_room_unban">%1$s odblokował(a) %2$s</string>
     <string name="notice_room_ban">%1$s zablokował(a) %2$s</string>
     <string name="notice_avatar_url_changed">%1$s zmienił(a) awatar</string>
@@ -2398,7 +2398,7 @@
     <string name="notice_room_withdraw_by_you">Wycofałeś zaproszenie %1$s</string>
     <string name="notice_room_ban_by_you">Zbanowałeś %1$s</string>
     <string name="notice_room_unban_by_you">Odbanowałeś %1$s</string>
-    <string name="notice_room_kick_by_you">Wyrzuciłeś %1$s</string>
+    <string name="notice_room_remove_by_you">Wyrzuciłeś %1$s</string>
     <string name="notice_room_reject_by_you">Odrzuciłeś zaproszenie</string>
     <string name="notice_direct_room_leave_by_you">Opuściłeś pokój</string>
     <string name="notice_direct_room_leave">%1$s opuścił(a) pokój</string>
@@ -2765,7 +2765,7 @@
     <string name="notice_room_ban_with_reason">%1$s zbanował(a) %2$s. Powód: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Odbanowałeś(aś) %1$s. Powód: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s zdjął(ęła) bana %2$s. Powód: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Wyrzuciłeś(aś) %1$s. Powód: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Wyrzuciłeś(aś) %1$s. Powód: %2$s</string>
     <string name="notice_requested_voip_conference_by_you">Zażądałeś konferencji VoIP</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉 Wszystkie serwery zostały zbanowane od uczestnictwa. Ten pokój nie może być już używany.</string>
     <string name="notice_room_server_acl_updated_no_change">Bez zmian.</string>
@@ -2783,7 +2783,7 @@
     <string name="notice_room_third_party_invite_with_reason_by_you">Wysłałeś zaproszenie do pokoju do %1$s. Powód: %2$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s wysłał zaproszenie do pokoju do %2$s . Powód: %3$s</string>
     <string name="notice_room_ban_with_reason_by_you">Zbanowałeś %1$s. Powód: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s wyrzucił %2$s. Powód: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s wyrzucił %2$s. Powód: %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">Odrzuciłeś/aś zaproszenie. Powód: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s odrzucił/a zaproszenie. Powód: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Wyszedłeś. Powód: %1$s</string>

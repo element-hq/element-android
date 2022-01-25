@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s envenis</string>
     <string name="notice_room_leave">%1$s foriris de la ĉambro</string>
     <string name="notice_room_reject">%1$s rifuzis la inviton</string>
-    <string name="notice_room_kick">%1$s forpelis uzanton %2$s</string>
+    <string name="notice_room_remove">%1$s forpelis uzanton %2$s</string>
     <string name="notice_room_unban">%1$s malforbaris uzanton %2$s</string>
     <string name="notice_room_ban">%1$s forbaris uzanton %2$s</string>
     <string name="notice_room_withdraw">%1$s nuligis inviton por %2$s</string>
@@ -87,7 +87,7 @@
     <string name="notice_room_join_with_reason">%1$s envenis. Kialo: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s foriris de la ĉambro. Kialo: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s rifuzis la inviton. Kialo: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s forpelis uzanton %2$s. Kialo: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s forpelis uzanton %2$s. Kialo: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s malforbaris uzanton %2$s. Kialo: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s forbaris uzanton %2$s. Kialo: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s sendis al %2$s inviton al la ĉambro. Kialo: %3$s</string>
@@ -136,7 +136,7 @@
     <string name="notice_room_third_party_invite_with_reason_by_you">Vi sendis al %1$s inviton al la ĉambro. Kialo: %2$s</string>
     <string name="notice_room_ban_with_reason_by_you">Vi forbaris uzanton %1$s. Kialo: %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">Vi malforbaris uzanton %1$s. Kialo: %2$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Vi forpelis uzanton %1$s. Kialo: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Vi forpelis uzanton %1$s. Kialo: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">Vi rifuzis la inviton. Kialo: %1$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Vi foriris. Kialo: %1$s</string>
     <string name="notice_direct_room_leave_with_reason">%1$s foriris. Kialo: %2$s</string>
@@ -195,7 +195,7 @@
     <string name="notice_room_withdraw_by_you">Vi nuligis inviton por %1$s</string>
     <string name="notice_room_ban_by_you">Vi forbaris uzanton %1$s</string>
     <string name="notice_room_unban_by_you">Vi malforbaris uzanton %1$s</string>
-    <string name="notice_room_kick_by_you">Vi forpelis uzanton %1$s</string>
+    <string name="notice_room_remove_by_you">Vi forpelis uzanton %1$s</string>
     <string name="notice_room_reject_by_you">Vi rifuzis la inviton</string>
     <string name="notice_direct_room_leave_by_you">Vi foriris de la ĉambro</string>
     <string name="notice_direct_room_leave">%1$s foriris de la ĉambro</string>

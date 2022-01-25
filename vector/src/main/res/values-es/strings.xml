@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s se ha unido</string>
     <string name="notice_room_leave">%1$s salió</string>
     <string name="notice_room_reject">%1$s rechazó la invitación</string>
-    <string name="notice_room_kick">%1$s expulsó a %2$s</string>
+    <string name="notice_room_remove">%1$s expulsó a %2$s</string>
     <string name="notice_room_unban">%1$s le quitó el veto a %2$s</string>
     <string name="notice_room_ban">%1$s vetó a %2$s</string>
     <string name="notice_room_withdraw">%1$s retiró la invitación de %2$s</string>
@@ -77,7 +77,7 @@
     <string name="notice_room_join_with_reason">%1$s se ha unido. Razón: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s se ha ido. Razón: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s ha rechadazo la invitación. Razón: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s expulsó a %2$s. Razón: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s expulsó a %2$s. Razón: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s ha baneado a %2$s. Razón: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s ha aceptado la invitación para %2$s. Razón: %3$s</string>
     <string name="notice_room_canonical_alias_unset">%1$s ha eliminado la dirección principal para esta sala.</string>
@@ -117,7 +117,7 @@
     <string name="notice_room_join_by_you">Te uniste a la Sala</string>
     <string name="notice_room_leave_by_you">Dejaste la Sala</string>
     <string name="notice_room_reject_by_you">Rechazaste la invitación</string>
-    <string name="notice_room_kick_by_you">Tu pateaste a %1$s</string>
+    <string name="notice_room_remove_by_you">Tu pateaste a %1$s</string>
     <string name="notice_room_unban_by_you">Tu desbanaste a %1$s</string>
     <string name="notice_room_ban_by_you">Usted prohibió a %1$s</string>
     <string name="notice_room_withdraw_by_you">Retiró la invitación de %1$s\'s</string>
@@ -166,7 +166,7 @@
     <string name="notice_room_join_with_reason_by_you">Te uniste a la sala. Razón: %1$s</string>
     <string name="notice_room_leave_with_reason_by_you">Dejaste la sala. Razón: %1$s</string>
     <string name="notice_room_reject_with_reason_by_you">Rechazaste la invitación. Razón: %1$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Pateaste a %1$s. Motivo: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Pateaste a %1$s. Motivo: %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">Has desactivado a %1$s. Motivo: %2$s</string>
     <string name="notice_room_ban_with_reason_by_you">Prohibiste a %1$s. Motivo: %2$s</string>
     <string name="notice_room_third_party_invite_with_reason_by_you">Enviaste una invitación a %1$s para unirse a la sala. Motivo: %2$s</string>

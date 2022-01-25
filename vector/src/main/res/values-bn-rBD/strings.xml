@@ -1019,8 +1019,8 @@
     <string name="notice_room_ban_with_reason">%1$s %2$s কে নিষিদ্ধ করেছে। কারণ: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">আপনি %1$s কে নিষিদ্ধ মুক্ত করেছেন। কারণ: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s %2$s কে নিষিদ্ধ তালিকা থেকে মুক্ত করেছে। কারণ: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">আপনি %1$s কে কীক করেছেন। কারণ: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s %2$s কে কিক করেছে। কারণ: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">আপনি %1$s কে কীক করেছেন। কারণ: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s %2$s কে কিক করেছে। কারণ: %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">আপনি আমন্ত্রণটি বাতিল করেছেন। কারণ: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s আমন্ত্রণ বাতিল করেছেন। কারণ: %2$s</string>
     <string name="notice_room_leave_with_reason_by_you">আপনি কক্ষ ছেড়ে দিয়েছেন। কারণ: %1$s</string>
@@ -1349,8 +1349,8 @@
     <string name="notice_room_ban">%1$s %2$s কে নিষিদ্ধ করেছে</string>
     <string name="notice_room_unban_by_you">আপনি %1$s কে নিষিদ্ধ মুক্ত করেছেন</string>
     <string name="notice_room_unban">%1$s %2$s কে নিষিদ্ধ তালিকা থেকে মুক্ত করেছে</string>
-    <string name="notice_room_kick_by_you">আপনি %1$s কে কীক করেছেন</string>
-    <string name="notice_room_kick">%1$s %2$s কে কিক করেছে</string>
+    <string name="notice_room_remove_by_you">আপনি %1$s কে কীক করেছেন</string>
+    <string name="notice_room_remove">%1$s %2$s কে কিক করেছে</string>
     <string name="notice_room_reject_by_you">আপনি আমন্ত্রণটি বাতিল করেছেন</string>
     <string name="notice_room_reject">%1$s আমন্ত্রণ টি বাতিল করেছে</string>
     <string name="notice_room_leave_by_you">আপনি কক্ষ ছেড়ে দিয়েছেন</string>

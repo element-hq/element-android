@@ -7,7 +7,7 @@
     <string name="notice_room_join">انضمّ ⁨%1$s⁩ إلى الغرفة</string>
     <string name="notice_room_leave">غادرَ ⁨%1$s⁩ الغرفة</string>
     <string name="notice_room_reject">رفضَ ⁨%1$s⁩ الدعوة</string>
-    <string name="notice_room_kick">طردَ ⁨%1$s⁩ ⁨%2$s⁩</string>
+    <string name="notice_room_remove">طردَ ⁨%1$s⁩ ⁨%2$s⁩</string>
     <string name="notice_room_unban">رفعَ ⁨%1$s⁩ الحظر عن ⁨%2$s⁩</string>
     <string name="notice_room_ban">حظرَ ⁨%1$s⁩ ⁨%2$s⁩</string>
     <string name="notice_avatar_url_changed">غيّر ⁨%1$s⁩ صورته الشخصية</string>
@@ -69,7 +69,7 @@
     <string name="notice_room_join_by_you">انضممتَ إلى الغرفة</string>
     <string name="notice_room_leave_by_you">غادرتَ الغرفة</string>
     <string name="notice_room_reject_by_you">رفضتَ الدعوة</string>
-    <string name="notice_room_kick_by_you">طردتَ ⁨%1$s⁩</string>
+    <string name="notice_room_remove_by_you">طردتَ ⁨%1$s⁩</string>
     <string name="notice_room_unban_by_you">رفعتَ الحظر عن ⁨%1$s⁩</string>
     <string name="notice_room_ban_by_you">حظرتَ ⁨%1$s⁩</string>
     <string name="notice_room_withdraw_by_you">سحبتَ الدعوة الموجّهة إلى ⁨%1$s⁩</string>
@@ -157,8 +157,8 @@
     <string name="notice_room_ban_with_reason">حظر %1$s %2$s. السبب: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">رفعتَ الحظر عن %1$s. السبب: %2$s</string>
     <string name="notice_room_unban_with_reason">رفع %1$s الحظر عن %2$s. السبب: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">طردتَ %1$s. السبب: %2$s</string>
-    <string name="notice_room_kick_with_reason">طرد %1$s %2$s. السبب: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">طردتَ %1$s. السبب: %2$s</string>
+    <string name="notice_room_remove_with_reason">طرد %1$s %2$s. السبب: %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">رفضتَ الدعوة. السبب: %1$s</string>
     <string name="notice_room_reject_with_reason">رفض %1$s الدعوة. السبب: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">غادرتَ. السبب: %1$s</string>

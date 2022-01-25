@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s 已加入聊天室</string>
     <string name="notice_room_leave">%1$s 已離開聊天室</string>
     <string name="notice_room_reject">%1$s 拒絕邀請</string>
-    <string name="notice_room_kick">%1$s 踢出 %2$s</string>
+    <string name="notice_room_remove">%1$s 踢出 %2$s</string>
     <string name="notice_room_unban">%1$s 解除禁止 %2$s</string>
     <string name="notice_room_ban">%1$s 禁止 %2$s</string>
     <string name="notice_room_withdraw">%1$s 收回了對 %2$s 的邀請</string>
@@ -87,7 +87,7 @@
     <string name="notice_room_join_with_reason">%1$s 已加入聊天室。理由：%2$s</string>
     <string name="notice_room_leave_with_reason">%1$s 已離開聊天室。理由：%2$s</string>
     <string name="notice_room_reject_with_reason">%1$s 已回絕邀請。理由：%2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s 踢走了 %2$s。理由：%3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s 踢走了 %2$s。理由：%3$s</string>
     <string name="notice_room_unban_with_reason">%1$s 取消封鎖了 %2$s。理由：%3$s</string>
     <string name="notice_room_ban_with_reason">%1$s 封鎖了 %2$s。理由：%3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s 已傳送邀請給 %2$s 來加入聊天室。理由：%3$s</string>
@@ -116,7 +116,7 @@
     <string name="notice_room_join_by_you">您加入了聊天室</string>
     <string name="notice_room_leave_by_you">您離開的聊天室</string>
     <string name="notice_room_reject_by_you">您回絕了邀請</string>
-    <string name="notice_room_kick_by_you">您踢除了 %1$s</string>
+    <string name="notice_room_remove_by_you">您踢除了 %1$s</string>
     <string name="notice_room_unban_by_you">您取消封鎖了 %1$s</string>
     <string name="notice_room_ban_by_you">您封鎖了 %1$s</string>
     <string name="notice_room_withdraw_by_you">您撤銷了 %1$s 的邀請</string>
@@ -165,7 +165,7 @@
     <string name="notice_room_join_with_reason_by_you">您加入了聊天室。理由：%1$s</string>
     <string name="notice_room_leave_with_reason_by_you">您離開了聊天室。理由：%1$s</string>
     <string name="notice_room_reject_with_reason_by_you">您回絕了邀請。理由：%1$s</string>
-    <string name="notice_room_kick_with_reason_by_you">您踢除了 %1$s。理由：%2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">您踢除了 %1$s。理由：%2$s</string>
     <string name="notice_room_unban_with_reason_by_you">您取消封鎖了 %1$s。理由：%2$s</string>
     <string name="notice_room_ban_with_reason_by_you">您封鎖了 %1$s。理由：%2$s</string>
     <string name="notice_room_third_party_invite_with_reason_by_you">您傳甕了邀請給 %1$s 以加入聊天室。理由：%2$s</string>

@@ -9,7 +9,7 @@
     <string name="notice_room_join">%1$sが参加しました</string>
     <string name="notice_room_leave">%1$sが退出しました</string>
     <string name="notice_room_reject">%1$sが招待を断りました</string>
-    <string name="notice_room_kick">%1$sが%2$sを追放しました</string>
+    <string name="notice_room_remove">%1$sが%2$sを追放しました</string>
     <string name="notice_room_unban">%1$sが%2$sをブロック解除しました</string>
     <string name="notice_room_ban">%1$sが%2$sをブロックしました</string>
     <string name="notice_room_withdraw">%1$sが%2$sの招待を撤回しました</string>
@@ -66,7 +66,7 @@
     <string name="notice_room_withdraw_by_you">%1$sの招待を取り下げました</string>
     <string name="notice_room_ban_by_you">%1$sをBANしました</string>
     <string name="notice_room_unban_by_you">%1$sのBANを解除しました</string>
-    <string name="notice_room_kick_by_you">%1$sを退出させました</string>
+    <string name="notice_room_remove_by_you">%1$sを退出させました</string>
     <string name="notice_room_reject_by_you">招待を拒否しました</string>
     <string name="notice_direct_room_leave_by_you">ルームから退出しました</string>
     <string name="notice_direct_room_leave">%1$sがルームから退出しました</string>
@@ -1366,8 +1366,8 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="notice_room_ban_with_reason">%1$sが%2$sを永久追放しました。理由: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">あなたが%1$sの禁止を解除しました。理由: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$sが%2$sの禁止を解除しました。理由: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">あなたは%1$sをキックしました。理由: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$sが%2$sをキックしました。理由: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">あなたは%1$sをキックしました。理由: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$sが%2$sをキックしました。理由: %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">あなたは招待を拒否しました。理由: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s は招待を拒否しました。理由: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">退出しました。理由: %1$s</string>

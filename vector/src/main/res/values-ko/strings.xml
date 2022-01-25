@@ -9,7 +9,7 @@
     <string name="notice_room_join">%1$s님이 참가했습니다</string>
     <string name="notice_room_leave">%1$s님이 떠났습니다</string>
     <string name="notice_room_reject">%1$s님이 초대를 거부했습니다</string>
-    <string name="notice_room_kick">%1$s님이 %2$s님을 추방했습니다</string>
+    <string name="notice_room_remove">%1$s님이 %2$s님을 추방했습니다</string>
     <string name="notice_room_unban">%1$s님이 %2$s님의 출입 금지를 풀었습니다</string>
     <string name="notice_room_ban">%1$s님이 %2$s님을 출입 금지했습니다</string>
     <string name="notice_room_withdraw">%1$s님이 %2$s님의 초대를 취소했습니다</string>

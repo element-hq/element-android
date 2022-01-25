@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s belépett a szobába</string>
     <string name="notice_room_leave">%1$s kilépett a szobából</string>
     <string name="notice_room_reject">%1$s elutasította a meghívást</string>
-    <string name="notice_room_kick">%1$s kidobta: %2$s</string>
+    <string name="notice_room_remove">%1$s kidobta: %2$s</string>
     <string name="notice_room_unban">%1$s feloldotta %2$s tiltását</string>
     <string name="notice_room_ban">%1$s kitiltotta: %2$s</string>
     <string name="notice_room_withdraw">%1$s visszavonta %2$s meghívását</string>
@@ -88,7 +88,7 @@
     <string name="notice_room_join_with_reason">%1$s belépett a szobába. Mert: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s kilépett a szobából. Ok: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s visszautasította a meghívót. Ok: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s kirúgta őt: %2$s. Ok: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s kirúgta őt: %2$s. Ok: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s visszaengedte őt: %2$s. Ok: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s kitiltotta őt: %2$s. Ok: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s meghívót küldött neki: %2$s, hogy lépjen be a szobába. Ok: %3$s</string>
@@ -124,7 +124,7 @@
     <string name="notice_room_withdraw_by_you">Visszavontad %1$s meghívóját</string>
     <string name="notice_room_ban_by_you">Kitiltottad %1$s felhasználót</string>
     <string name="notice_room_unban_by_you">Visszaengedted %1$s felhasználót</string>
-    <string name="notice_room_kick_by_you">Kirúgtad %1$s felhasználót</string>
+    <string name="notice_room_remove_by_you">Kirúgtad %1$s felhasználót</string>
     <string name="notice_room_reject_by_you">Visszautasítottad a meghívót</string>
     <string name="notice_direct_room_leave_by_you">Elhagytad a szobát</string>
     <string name="notice_direct_room_leave">%1$s elhagyta a szobát</string>
@@ -2353,7 +2353,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="notice_room_third_party_invite_with_reason_by_you">Meghívót küldtél neki, hogy belépjen a szobába: %1$s. Ok: %2$s</string>
     <string name="notice_room_ban_with_reason_by_you">Kitiltottad: %1$s. Ok: %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">Visszaengedted: %1$s. Ok: %2$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Kirúgtad: %1$s. Ok: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Kirúgtad: %1$s. Ok: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">A meghívót elutasítottad. Ok: %1$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Kiléptél. Ok: %1$s</string>
     <string name="notice_direct_room_leave_with_reason">%1$s kilépett. Ok: %2$s</string>

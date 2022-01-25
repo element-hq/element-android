@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s è entrato nella stanza</string>
     <string name="notice_room_leave">%1$s è uscito dalla stanza</string>
     <string name="notice_room_reject">%1$s ha rifiutato l\'invito</string>
-    <string name="notice_room_kick">%1$s ha buttato fuori %2$s</string>
+    <string name="notice_room_remove">%1$s ha buttato fuori %2$s</string>
     <string name="notice_room_unban">%1$s ha rimosso il ban nei confronti di %2$s</string>
     <string name="notice_room_ban">%1$s ha bannato %2$s</string>
     <string name="notice_room_withdraw">%1$s ha revocato l\'invito a %2$s</string>
@@ -88,7 +88,7 @@
     <string name="notice_room_join_with_reason">%1$s è entrato nella stanza. Motivo: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s è uscito dalla stanza. Motivo: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s ha rifiutato l\'invito. Motivo: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s ha cacciato fuori %2$s. Motivo: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s ha cacciato fuori %2$s. Motivo: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s ha riammesso %2$s. Motivo: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s ha bannato %2$s. Motivo: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s ha mandato un invito a %2$s per entrare nella stanza. Motivo: %3$s</string>
@@ -119,7 +119,7 @@
     <string name="notice_room_join_by_you">Sei entrato nella stanza</string>
     <string name="notice_room_leave_by_you">Sei uscito dalla stanza</string>
     <string name="notice_room_reject_by_you">Hai rifiutato l\'invito</string>
-    <string name="notice_room_kick_by_you">Hai buttato fuori %1$s</string>
+    <string name="notice_room_remove_by_you">Hai buttato fuori %1$s</string>
     <string name="notice_room_unban_by_you">Hai rimosso il ban nei confronti di %1$s</string>
     <string name="notice_room_ban_by_you">Hai bannato %1$s</string>
     <string name="notice_room_withdraw_by_you">Hai revocato l\'invito a %1$s</string>
@@ -168,7 +168,7 @@
     <string name="notice_room_join_with_reason_by_you">Sei entrato nella stanza. Motivo: %1$s</string>
     <string name="notice_room_leave_with_reason_by_you">Sei uscito dalla stanza. Motivo: %1$s</string>
     <string name="notice_room_reject_with_reason_by_you">Hai rifiutato l\'invito. Motivo: %1$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Hai cacciato %1$s. Motivo: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Hai cacciato %1$s. Motivo: %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">Hai riammesso %1$s. Motivo: %2$s</string>
     <string name="notice_room_ban_with_reason_by_you">Hai bannato %1$s. Motivo: %2$s</string>
     <string name="notice_room_third_party_invite_with_reason_by_you">Hai mandato un invito a %1$s per entrare nella stanza. Motivo: %2$s</string>

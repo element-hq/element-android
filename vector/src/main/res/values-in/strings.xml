@@ -946,8 +946,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="notice_room_ban">%1$s mencekal %2$s</string>
     <string name="notice_room_unban_by_you">Anda menghilangkan pencekalan %1$s</string>
     <string name="notice_room_unban">%1$s menghilangkan pencekalan %2$s</string>
-    <string name="notice_room_kick_by_you">Anda mengeluarkan %1$s</string>
-    <string name="notice_room_kick">%1$s mengeluarkan %2$s</string>
+    <string name="notice_room_remove_by_you">Anda mengeluarkan %1$s</string>
+    <string name="notice_room_remove">%1$s mengeluarkan %2$s</string>
     <string name="notice_room_reject_by_you">Anda menolak undangannya</string>
     <string name="notice_room_reject">%1$s menolak undangannya</string>
     <string name="notice_direct_room_leave_by_you">Anda meninggalkan ruangan ini</string>
@@ -1206,8 +1206,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="notice_room_ban_with_reason">%1$s mencekal %2$s. Alasan: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s membatalkan pencekalan %2$s. Alasan: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Anda membatalkan pencekalan %1$s. Alasan: %2$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Anda mengeluarkan %1$s. Alasan: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s mengeluarkan %2$s. Alasan: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Anda mengeluarkan %1$s. Alasan: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s mengeluarkan %2$s. Alasan: %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">Anda menolak undangan. Alasan: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s menolak undangan. Alasan: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Anda meninggalkan ruangan. Alasan: %1$s</string>

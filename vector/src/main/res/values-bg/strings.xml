@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s се присъедини в стаята</string>
     <string name="notice_room_leave">%1$s напусна стаята</string>
     <string name="notice_room_reject">%1$s отхвърли поканата</string>
-    <string name="notice_room_kick">%1$s изгони %2$s</string>
+    <string name="notice_room_remove">%1$s изгони %2$s</string>
     <string name="notice_room_unban">%1$s отблокира %2$s</string>
     <string name="notice_room_ban">%1$s блокира %2$s</string>
     <string name="notice_room_withdraw">%1$s оттегли поканата си за %2$s</string>
@@ -87,7 +87,7 @@
     <string name="notice_room_join_with_reason">%1$s се присъедини в стаята. Причина: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s напусна стаята. Причина: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s отхвърли поканата. Причина: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s изгони %2$s. Причина: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s изгони %2$s. Причина: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s блокира %2$s. Причина: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s блокира %2$s. Причина: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s изпрати покана до %2$s да се присъедини в стаята. Причина: %3$s</string>
@@ -118,7 +118,7 @@
     <string name="notice_room_join_by_you">Присъединихте се в стаята</string>
     <string name="notice_room_leave_by_you">Напуснахте стаята</string>
     <string name="notice_room_reject_by_you">Отхвърлихте поканата</string>
-    <string name="notice_room_kick_by_you">Изгонихте %1$s</string>
+    <string name="notice_room_remove_by_you">Изгонихте %1$s</string>
     <string name="notice_room_unban_by_you">Отблокирахте %1$s</string>
     <string name="notice_room_ban_by_you">Блокирахте %1$s</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Включихте шифроване от-край-до-край (непознат алгоритъм: %1$s).</string>
@@ -146,7 +146,7 @@
     <string name="notice_room_third_party_invite_with_reason_by_you">Изпратихте покана към %1$s за присъединяване в стаята. Причина: %2$s</string>
     <string name="notice_room_ban_with_reason_by_you">Блокирахте %1$s. Причина: %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">Отблокирахте %1$s. Причина: %2$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Изгонихте %1$s. Причина: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Изгонихте %1$s. Причина: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">Отхвърлихте поканата. Причина: %1$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Напуснахте. Причина: %1$s</string>
     <string name="notice_direct_room_leave_with_reason">%1$s напусна. Причина: %2$s</string>

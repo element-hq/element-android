@@ -411,8 +411,8 @@
     <string name="summary_you_sent_image">നിങ്ങൾ ഒരു ചിത്രം അയച്ചു.</string>
     <string name="summary_user_sent_image">%1$s ഒരു ചിത്രം അയച്ചു.</string>
     <string name="summary_message">%1$s: %2$s</string>
-    <string name="notice_room_kick_by_you">നിങ്ങൾ %1$s-നെ(യെ) പുറത്താക്കി</string>
-    <string name="notice_room_kick">%1$s %2$s-നെ(യെ) പുറത്താക്കി</string>
+    <string name="notice_room_remove_by_you">നിങ്ങൾ %1$s-നെ(യെ) പുറത്താക്കി</string>
+    <string name="notice_room_remove">%1$s %2$s-നെ(യെ) പുറത്താക്കി</string>
     <string name="notice_direct_room_join_by_you">നിങ്ങൾ ചേർന്നു</string>
     <string name="notice_direct_room_join">%1$s ചേർന്നു</string>
     <string name="notice_room_join_by_you">നിങ്ങൾ മുറിയിൽ ചേർന്നു</string>
@@ -540,8 +540,8 @@
     <string name="notice_room_ban_with_reason">%1$s %2$s ന്റെ വിലക്ക് നീക്കി. കാരണം: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">നിങ്ങൾ %1$sന്റെ വിലക്ക് നീക്കി. കാരണം: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s %2$sന്റെ വിലക്ക് നീക്കി. കാരണം: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">നിങ്ങൾ %1$sനെ പുറത്താക്കി. കാരണം:%2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s %2$sനെ പുറത്താക്കി. കാരണം: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">നിങ്ങൾ %1$sനെ പുറത്താക്കി. കാരണം:%2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s %2$sനെ പുറത്താക്കി. കാരണം: %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">നിങ്ങൾ ക്ഷണം നിരസിച്ചു. കാരണം: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s ക്ഷണം നിരസിച്ചു. കാരണം: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">നിങ്ങൾ ഉപേക്ഷിച്ചു. കാരണം: %1$s</string>

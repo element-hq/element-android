@@ -429,8 +429,8 @@
     <string name="notice_room_topic_changed_by_you">Bạn đã thay đổi chủ đề thành: %1$s</string>
     <string name="event_status_delete_all_failed_dialog_title">Xoá các tin nhắn chưa được gửi</string>
     <string name="event_status_delete_all_failed_dialog_message">Bạn có chắc bạn muốn xoá tất cả tin nhắn chưa được gửi trong phòng này không\?</string>
-    <string name="notice_room_kick_by_you">Bạn đã kick %1$s</string>
-    <string name="notice_room_kick">%1$s đã kick %2$s</string>
+    <string name="notice_room_remove_by_you">Bạn đã kick %1$s</string>
+    <string name="notice_room_remove">%1$s đã kick %2$s</string>
     <string name="notice_room_reject_by_you">Bạn đã từ chối lời mời</string>
     <string name="notice_room_reject">%1$s đã từ chối lời mời</string>
     <string name="notice_direct_room_leave_by_you">Bạn đã rời phòng</string>
@@ -732,8 +732,8 @@
     <string name="notice_room_ban_with_reason">%1$s đã cấm %2$s. Lý do: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Bạn đã bỏ cấm %1$s. Lý do: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s đã bỏ cấm %2$s. Lý do: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Bạn đã đá %1$s. Lý do: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s đã đá %2$s. Lý do: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Bạn đã đá %1$s. Lý do: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s đã đá %2$s. Lý do: %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">Bạn đã từ chối lời mời. Lý do: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s đã từ chối lời mời. Lý do: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Bạn đã rời đi. Lý do: %1$s</string>

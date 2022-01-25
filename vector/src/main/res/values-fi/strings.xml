@@ -7,7 +7,7 @@
     <string name="notice_room_join">%1$s liittyi huoneeseen</string>
     <string name="notice_room_leave">%1$s poistui huoneesta</string>
     <string name="notice_room_reject">%1$s hylkäsi kutsun</string>
-    <string name="notice_room_kick">%1$s poisti käyttäjän %2$s</string>
+    <string name="notice_room_remove">%1$s poisti käyttäjän %2$s</string>
     <string name="notice_room_unban">%1$s poisti porttikiellon käyttäjältä %2$s</string>
     <string name="notice_room_ban">%1$s antoi porttikiellon käyttäjälle %2$s</string>
     <string name="notice_room_withdraw">%1$s veti takaisin kutsun käyttäjälle %2$s</string>
@@ -87,7 +87,7 @@
     <string name="notice_room_join_with_reason">%1$s liittyi huoneeseen. Syy: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s poistui huoneesta. Syy: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s hylkäsi kutsun. Syy: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s poisti käyttäjän %2$s huoneesta. Syy: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s poisti käyttäjän %2$s huoneesta. Syy: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s poisti porttikiellon käyttäjältä %2$s. Syy: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s antoi porttikiellon käyttäjälle %2$s. Syy: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s lähetti kutsun liittyä huoneeseen käyttäjälle %2$s. Syy: %3$s</string>
@@ -114,7 +114,7 @@
     <string name="notice_room_third_party_invite_with_reason_by_you">Lähetit kutsun liittyä huoneeseen käyttäjälle %1$s. Syy: %2$s</string>
     <string name="notice_room_ban_with_reason_by_you">Estit käyttäjän %1$s. Syy: %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">Peruutit eston %1$s. Syy: %2$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Poistit käyttäjän %1$s. Syy: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Poistit käyttäjän %1$s. Syy: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">Hylkäsit kutsun. Syy: %1$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Lähdit. Syy: %1$s</string>
     <string name="notice_direct_room_leave_with_reason">%1$s lähti. Syy: %2$s</string>
@@ -191,7 +191,7 @@
     <string name="notice_room_withdraw_by_you">Peruutit %1$sn kutsun</string>
     <string name="notice_room_ban_by_you">Estit %1$s</string>
     <string name="notice_room_unban_by_you">Poistit eston %1$s</string>
-    <string name="notice_room_kick_by_you">Poistit %1$s</string>
+    <string name="notice_room_remove_by_you">Poistit %1$s</string>
     <string name="notice_room_reject_by_you">Hylkäsit kutsun</string>
     <string name="notice_direct_room_leave_by_you">Poistuit huoneesta</string>
     <string name="notice_direct_room_leave">%1$s poistui huoneesta</string>

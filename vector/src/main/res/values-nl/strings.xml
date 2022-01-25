@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s neemt nu deel aan het gesprek</string>
     <string name="notice_room_leave">%1$s heeft het gesprek verlaten</string>
     <string name="notice_room_reject">%1$s heeft de uitnodiging geweigerd</string>
-    <string name="notice_room_kick">%1$s heeft %2$s uit het gesprek verwijderd</string>
+    <string name="notice_room_remove">%1$s heeft %2$s uit het gesprek verwijderd</string>
     <string name="notice_room_unban">%1$s heeft %2$s ontbannen</string>
     <string name="notice_room_ban">%1$s heeft %2$s verbannen</string>
     <string name="notice_room_withdraw">%1$s heeft de uitnodiging van %2$s ingetrokken</string>
@@ -88,7 +88,7 @@
     <string name="notice_room_join_with_reason">%1$s neemt nu deel. Reden: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s is weggegaan. Reden: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s heeft de uitnodiging geweigerd. Reden: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s heeft %2$s verwijderd. Reden: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s heeft %2$s verwijderd. Reden: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s heeft %2$s ontbannen. Reden: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s heeft %2$s verbannen. Reden: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s heeft %2$s een uitnodiging voor het gesprek gestuurd. Reden: %3$s</string>
@@ -1401,7 +1401,7 @@
     <string name="summary_you_sent_image">U heeft een afbeelding gestuurd.</string>
     <string name="notice_room_ban_with_reason_by_you">U heeft %1$s verbannen. Reden: %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">U heeft de verbanning van %1$s opgeheven. Reden: %2$s</string>
-    <string name="notice_room_kick_with_reason_by_you">U heeft %1$s eruit getrapt. Reden: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">U heeft %1$s eruit getrapt. Reden: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">U heeft de uitnodiging geweigerd. Reden: %1$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">U bent vertrokken. Reden: %1$s</string>
     <string name="notice_direct_room_leave_with_reason">%1$s is vertrokken. Reden: %2$s</string>
@@ -1456,7 +1456,7 @@
     <string name="notice_room_withdraw_by_you">U heeft de uitnodiging van %1$s ingetrokken</string>
     <string name="notice_room_ban_by_you">U heeft %1$s verbannen</string>
     <string name="notice_room_unban_by_you">U heeft de verbanning van %1$s opgeheven</string>
-    <string name="notice_room_kick_by_you">U heeft %1$s eruit getrapt</string>
+    <string name="notice_room_remove_by_you">U heeft %1$s eruit getrapt</string>
     <string name="notice_direct_room_join_by_you">U sloot zich aan</string>
     <string name="notice_direct_room_join">%1$s sluit aan</string>
     <string name="notice_room_join_by_you">U heeft de kamer betreden</string>

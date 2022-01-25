@@ -8,7 +8,7 @@
     <string name="notice_room_invite_you">Ο/Η %1$s σας προσκάλεσε</string>
     <string name="notice_room_leave">Ο/Η %1$s αποχώρησε</string>
     <string name="notice_room_reject">Ο/Η %1$s απέρριψε την πρόσκληση</string>
-    <string name="notice_room_kick">Ο/Η %1$s έδιωξε τον/την %2$s</string>
+    <string name="notice_room_remove">Ο/Η %1$s έδιωξε τον/την %2$s</string>
     <string name="notice_room_invite">Ο/Η %1$s προσκάλεσε τον/την %2$s</string>
     <string name="notice_room_invite_no_invitee">Η πρόσκληση του/της %s</string>
     <string name="medium_phone_number">Αριθμός τηλεφώνου</string>

@@ -25,9 +25,8 @@
     <string name="notice_direct_room_leave_by_you">You left the room</string>
     <string name="notice_room_reject">%1$s rejected the invitation</string>
     <string name="notice_room_reject_by_you">You rejected the invitation</string>
-    <!-- TODO: replace "kick" with "remove" in string resources keys -->
-    <string name="notice_room_kick">%1$s removed %2$s</string>
-    <string name="notice_room_kick_by_you">You removed %1$s</string>
+    <string name="notice_room_remove">%1$s removed %2$s</string>
+    <string name="notice_room_remove_by_you">You removed %1$s</string>
     <string name="notice_room_unban">%1$s unbanned %2$s</string>
     <string name="notice_room_unban_by_you">You unbanned %1$s</string>
     <string name="notice_room_ban">%1$s banned %2$s</string>
@@ -230,8 +229,8 @@
     <string name="notice_direct_room_leave_with_reason_by_you">You left. Reason: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s rejected the invitation. Reason: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">You rejected the invitation. Reason: %1$s</string>
-    <string name="notice_room_kick_with_reason">%1$s removed %2$s. Reason: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">You removed %1$s. Reason: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s removed %2$s. Reason: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">You removed %1$s. Reason: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s unbanned %2$s. Reason: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">You unbanned %1$s. Reason: %2$s</string>
     <string name="notice_room_ban_with_reason">%1$s banned %2$s. Reason: %3$s</string>

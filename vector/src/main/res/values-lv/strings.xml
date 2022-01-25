@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s pievienojās</string>
     <string name="notice_room_leave">%1$s pameta istabu</string>
     <string name="notice_room_reject">%1$s noraidīja uzaicinājumu</string>
-    <string name="notice_room_kick">%1$s padzina %2$s</string>
+    <string name="notice_room_remove">%1$s padzina %2$s</string>
     <string name="notice_room_unban">%1$s atcēla pieejas liegumu %2$s</string>
     <string name="notice_room_ban">%1$s liedza pieeju %2$s</string>
     <string name="notice_room_withdraw">%1$s atsauca %2$s uzaicinājumu</string>
@@ -63,7 +63,7 @@
     <string name="notice_room_withdraw_by_you">Jūs atsaucāt %1$s uzaicinājumu</string>
     <string name="notice_room_ban_by_you">Jūs liedzāt pieeju %1$s</string>
     <string name="notice_room_unban_by_you">Jūs atcēlāt pieejas liegumu %1$s</string>
-    <string name="notice_room_kick_by_you">Jūs padzināt %1$s</string>
+    <string name="notice_room_remove_by_you">Jūs padzināt %1$s</string>
     <string name="notice_room_reject_by_you">Jūs noraidījāt uzaicinājumu</string>
     <string name="notice_direct_room_leave_by_you">Jūs pametāt istabu</string>
     <string name="notice_direct_room_leave">%1$s pameta istabu</string>
@@ -156,8 +156,8 @@
     <string name="notice_room_ban_with_reason">%1$s liedza pieeju %2$s. Iemesls: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Jūs atcēlāt pieejas liegumu %1$s. Iemesls: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s atcēla %2$s pieejas liegumu. Iemesls: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Jūs padzināt %1$s. Iemesls: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s padzina %2$s. Iemesls: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Jūs padzināt %1$s. Iemesls: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s padzina %2$s. Iemesls: %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">Jūs noraidījāt uzaicinājumu. Iemesls: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s noraidīja uzaicinājumu. Iemesls: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Jūs izgājāt. Iemesls: %1$s</string>
