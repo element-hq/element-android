@@ -18,7 +18,6 @@ package im.vector.app.features.roommemberprofile.devices
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
-import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.ItemStyle
@@ -28,6 +27,7 @@ import im.vector.app.core.ui.list.genericWithValueItem
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
 import javax.inject.Inject
@@ -67,12 +67,12 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
                         // TODO FORMAT
                         text(host.stringProvider.getString(R.string.verification_profile_device_verified_because,
                                 data.userItem?.displayName ?: "",
-                                data.userItem?.id ?: ""))
+                                data.userItem?.id ?: "").toEpoxyCharSequence())
                     } else {
                         // TODO what if mine
                         text(host.stringProvider.getString(R.string.verification_profile_device_new_signing,
                                 data.userItem?.displayName ?: "",
-                                data.userItem?.id ?: ""))
+                                data.userItem?.id ?: "").toEpoxyCharSequence())
                     }
                 }
 //                    text(stringProvider.getString(R.string.verification_profile_device_untrust_info))
@@ -98,7 +98,7 @@ class DeviceTrustInfoEpoxyController @Inject constructor(private val stringProvi
                     id("warn")
                     centered(false)
                     textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
-                    text(host.stringProvider.getString(R.string.verification_profile_device_untrust_info))
+                    text(host.stringProvider.getString(R.string.verification_profile_device_untrust_info).toEpoxyCharSequence())
                 }
 
                 bottomSheetVerificationActionItem {

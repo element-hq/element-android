@@ -4,7 +4,6 @@ ext.groups = [
                 ],
                 group: [
                         'com.github.Armen101',
-                        'com.github.BillCarsonFr',
                         'com.github.chrisbanes',
                         'com.github.hyuwah',
                         'com.github.jetradarmobile',
@@ -155,6 +154,7 @@ ext.groups = [
                         'org.jetbrains.intellij.deps',
                         'org.jetbrains.kotlin',
                         'org.jetbrains.kotlinx',
+                        'org.json',
                         'org.jsoup',
                         'org.junit',
                         'org.junit.jupiter',

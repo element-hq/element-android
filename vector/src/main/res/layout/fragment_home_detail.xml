@@ -86,19 +86,19 @@
 
                     <TextView
                         android:id="@+id/groupToolbarTitleView"
-                        style="@style/Widget.Vector.TextView.HeadlineMedium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:gravity="start"
                         android:maxLines="1"
+                        android:textAppearance="@style/TextAppearance.Vector.Widget.ActionBarTitle"
                         android:textColor="?vctr_content_primary"
                         android:textStyle="bold"
                         tools:text="@tools:sample/lorem/random" />
 
                     <TextView
                         android:id="@+id/groupToolbarSpaceTitleView"
-                        style="@style/Widget.Vector.TextView.Subtitle"
+                        style="@style/TextAppearance.Vector.Widget.ActionBarSubTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"

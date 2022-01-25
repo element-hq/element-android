@@ -58,6 +58,7 @@ class RoomMemberListFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
         roomMemberListController.callback = this
         setupToolbar(views.roomSettingGeneric.roomSettingsToolbar)
+                .allowBack()
         setupSearchView()
         setupInviteUsersButton()
         views.roomSettingGeneric.roomSettingsRecyclerView.configureWith(roomMemberListController, hasFixedSize = true)

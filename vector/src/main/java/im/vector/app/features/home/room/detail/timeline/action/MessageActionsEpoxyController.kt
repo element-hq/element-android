@@ -27,7 +27,6 @@ import im.vector.app.core.epoxy.bottomsheet.bottomSheetActionItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetMessagePreviewItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetQuickReactionsItem
 import im.vector.app.core.epoxy.bottomsheet.bottomSheetSendStateItem
-import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DimensionConverter
@@ -42,6 +41,7 @@ import im.vector.app.features.home.room.detail.timeline.tools.linkify
 import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.media.ImageContentRenderer
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.events.model.toModel

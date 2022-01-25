@@ -37,6 +37,7 @@ import im.vector.app.features.discovery.settingsEditTextItem
 import im.vector.app.features.discovery.settingsInfoItem
 import im.vector.app.features.discovery.settingsInformationItem
 import im.vector.app.features.discovery.settingsSectionTitleItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.session.identity.ThreePid
@@ -86,7 +87,7 @@ class ThreePidsSettingsController @Inject constructor(
             is Fail    -> {
                 genericFooterItem {
                     id("fail")
-                    text(data.threePids.error.localizedMessage)
+                    text(data.threePids.error.localizedMessage?.toEpoxyCharSequence())
                 }
             }
             is Success -> {

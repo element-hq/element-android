@@ -28,6 +28,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.spaces.manage.roomSelectionItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
@@ -76,7 +77,7 @@ class ChooseRestrictedController @Inject constructor(
         // when no filters
         genericFooterItem {
             id("h1")
-            text(host.stringProvider.getString(R.string.space_you_know_that_contains_this_room))
+            text(host.stringProvider.getString(R.string.space_you_know_that_contains_this_room).toEpoxyCharSequence())
             centered(false)
         }
 
@@ -93,7 +94,7 @@ class ChooseRestrictedController @Inject constructor(
         if (data.unknownRestricted.isNotEmpty()) {
             genericFooterItem {
                 id("others")
-                text(host.stringProvider.getString(R.string.other_spaces_or_rooms_you_might_not_know))
+                text(host.stringProvider.getString(R.string.other_spaces_or_rooms_you_might_not_know).toEpoxyCharSequence())
                 centered(false)
             }
 

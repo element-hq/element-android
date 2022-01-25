@@ -65,6 +65,7 @@ class LoginWebFragment2 @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         setupToolbar(views.loginWebToolbar)
+                .allowBack()
     }
 
     override fun updateWithState(state: LoginViewState2) {
@@ -79,7 +80,7 @@ class LoginWebFragment2 @Inject constructor(
     }
 
     private fun setupTitle(state: LoginViewState2) {
-        views.loginWebToolbar.title = when (state.signMode) {
+        toolbar?.title = when (state.signMode) {
             SignMode2.SignIn -> getString(R.string.login_signin)
             else            -> getString(R.string.login_signup)
         }
@@ -150,7 +151,7 @@ class LoginWebFragment2 @Inject constructor(
             override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
                 super.onPageStarted(view, url, favicon)
 
-                views.loginWebToolbar.subtitle = url
+                toolbar?.subtitle = url
             }
 
             override fun onPageFinished(view: WebView, url: String) {

@@ -29,7 +29,10 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.ShortcutCreator
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
+import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
@@ -44,6 +47,7 @@ import org.matrix.android.sdk.flow.FlowRoom
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.mapOptional
 import org.matrix.android.sdk.flow.unwrap
+import timber.log.Timber
 
 class RoomProfileViewModel @AssistedInject constructor(
         @Assisted private val initialState: RoomProfileViewState,
@@ -67,6 +71,19 @@ class RoomProfileViewModel @AssistedInject constructor(
         observeRoomCreateContent(flowRoom)
         observeBannedRoomMembers(flowRoom)
         observePermissions()
+        observePowerLevels()
+    }
+
+    private fun observePowerLevels() {
+        val powerLevelsContentLive = PowerLevelsFlowFactory(room).createFlow()
+        powerLevelsContentLive
+                .onEach {
+                    val powerLevelsHelper = PowerLevelsHelper(it)
+                    val canUpdateRoomState = powerLevelsHelper.isUserAllowedToSend(session.myUserId, true, EventType.STATE_ROOM_ENCRYPTION)
+                    setState {
+                        copy(canUpdateRoomState = canUpdateRoomState)
+                    }
+                }.launchIn(viewModelScope)
     }
 
     private fun observeRoomCreateContent(flowRoom: FlowRoom) {
@@ -119,6 +136,7 @@ class RoomProfileViewModel @AssistedInject constructor(
             is RoomProfileAction.ChangeRoomNotificationState -> handleChangeNotificationMode(action)
             is RoomProfileAction.ShareRoomProfile            -> handleShareRoomProfile()
             RoomProfileAction.CreateShortcut                 -> handleCreateShortcut()
+            RoomProfileAction.RestoreEncryptionState         -> restoreEncryptionState()
         }.exhaustive
     }
 
@@ -181,5 +199,19 @@ class RoomProfileViewModel @AssistedInject constructor(
                 ?.let { permalink ->
                     _viewEvents.post(RoomProfileViewEvents.ShareRoomProfile(permalink))
                 }
+    }
+
+    private fun restoreEncryptionState() {
+        _viewEvents.post(RoomProfileViewEvents.Loading())
+        session.coroutineScope.launch {
+            try {
+                room.enableEncryption(force = true)
+            } catch (failure: Throwable) {
+                Timber.e(failure, "Failed to restore encryption state in room ${room.roomId}")
+                _viewEvents.post(RoomProfileViewEvents.Failure(failure))
+            } finally {
+                _viewEvents.post(RoomProfileViewEvents.DismissLoading)
+            }
+        }
     }
 }

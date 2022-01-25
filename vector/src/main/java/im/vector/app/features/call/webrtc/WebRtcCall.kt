@@ -19,9 +19,7 @@ package im.vector.app.features.call.webrtc
 import android.content.Context
 import android.hardware.camera2.CameraManager
 import androidx.core.content.getSystemService
-import im.vector.app.core.flow.chunk
 import im.vector.app.core.services.CallService
-import im.vector.app.core.utils.CountUpTimer
 import im.vector.app.core.utils.PublishDataSource
 import im.vector.app.core.utils.TextUtils.formatDuration
 import im.vector.app.features.call.CameraEventsHandlerAdapter
@@ -37,6 +35,8 @@ import im.vector.app.features.call.utils.awaitSetLocalDescription
 import im.vector.app.features.call.utils.awaitSetRemoteDescription
 import im.vector.app.features.call.utils.mapToCallCandidate
 import im.vector.app.features.session.coroutineScope
+import im.vector.lib.core.utils.flow.chunk
+import im.vector.lib.core.utils.timer.CountUpTimer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -268,6 +268,10 @@ class WebRtcCall(
                 makingOffer = false
             }
         }
+    }
+
+    fun durationMillis(): Int {
+        return timer.elapsedTime().toInt()
     }
 
     fun formattedDuration(): String {

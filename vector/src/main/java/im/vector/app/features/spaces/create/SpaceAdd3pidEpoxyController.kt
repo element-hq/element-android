@@ -20,7 +20,6 @@ import android.text.InputType
 import com.airbnb.epoxy.TypedEpoxyController
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.R
-import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.ItemStyle
@@ -28,6 +27,7 @@ import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericPillItem
 import im.vector.app.features.form.formEditTextItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class SpaceAdd3pidEpoxyController @Inject constructor(
@@ -43,12 +43,12 @@ class SpaceAdd3pidEpoxyController @Inject constructor(
         genericFooterItem {
             id("info_help_header")
             style(ItemStyle.TITLE)
-            text(host.stringProvider.getString(R.string.create_spaces_invite_public_header))
+            text(host.stringProvider.getString(R.string.create_spaces_invite_public_header).toEpoxyCharSequence())
             textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
         }
         genericFooterItem {
             id("info_help_desc")
-            text(host.stringProvider.getString(R.string.create_spaces_invite_public_header_desc, data.name ?: ""))
+            text(host.stringProvider.getString(R.string.create_spaces_invite_public_header_desc, data.name ?: "").toEpoxyCharSequence())
             textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary))
         }
 

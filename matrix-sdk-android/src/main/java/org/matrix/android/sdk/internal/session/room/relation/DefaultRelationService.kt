@@ -24,6 +24,7 @@ import dagger.assisted.AssistedInject
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
+import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.model.relation.RelationService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
@@ -110,6 +111,13 @@ internal class DefaultRelationService @AssistedInject constructor(
                     this.callback = callback
                 }
                 .executeBy(taskExecutor)
+    }
+
+    override fun editPoll(targetEvent: TimelineEvent,
+                          pollType: PollType,
+                          question: String,
+                          options: List<String>): Cancelable {
+        return eventEditor.editPoll(targetEvent, pollType, question, options)
     }
 
     override fun editTextMessage(targetEvent: TimelineEvent,

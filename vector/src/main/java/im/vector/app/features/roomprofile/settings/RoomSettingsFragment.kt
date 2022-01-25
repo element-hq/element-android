@@ -85,6 +85,7 @@ class RoomSettingsFragment @Inject constructor(
         setupRoomJoinRuleSharedActionViewModel()
         controller.callback = this
         setupToolbar(views.roomSettingsToolbar)
+                .allowBack()
         views.roomSettingsRecyclerView.configureWith(controller, hasFixedSize = true)
         views.waitingView.waitingStatusText.setText(R.string.please_wait)
         views.waitingView.waitingStatusText.isVisible = true

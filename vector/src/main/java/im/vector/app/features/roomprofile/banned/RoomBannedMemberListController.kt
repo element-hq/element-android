@@ -26,6 +26,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.members.RoomMemberSummaryFilter
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -53,7 +54,7 @@ class RoomBannedMemberListController @Inject constructor(
 
             genericFooterItem {
                 id("footer")
-                text(quantityString)
+                text(quantityString.toEpoxyCharSequence())
             }
         } else {
             buildProfileSection(quantityString)

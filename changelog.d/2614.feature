@@ -1,1 +1,0 @@
-Allow changing nick colors from the member detail screen

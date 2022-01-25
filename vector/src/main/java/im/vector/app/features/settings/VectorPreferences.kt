@@ -199,8 +199,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
 
-        private const val SETTINGS_LABS_ENABLE_POLLS = "SETTINGS_LABS_ENABLE_POLLS"
-
         private const val SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE = "SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
 
         // Possible values for TAKE_PHOTO_VIDEO_MODE
@@ -995,10 +993,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         return defaultPrefs.edit {
             putInt(TAKE_PHOTO_VIDEO_MODE, mode)
         }
-    }
-
-    fun labsEnablePolls(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_POLLS, false)
     }
 
     fun isLocationSharingEnabled(): Boolean {

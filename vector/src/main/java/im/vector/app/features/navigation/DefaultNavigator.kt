@@ -74,6 +74,7 @@ import im.vector.app.features.pin.PinArgs
 import im.vector.app.features.pin.PinMode
 import im.vector.app.features.poll.create.CreatePollActivity
 import im.vector.app.features.poll.create.CreatePollArgs
+import im.vector.app.features.poll.create.PollMode
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import im.vector.app.features.roomdirectory.RoomDirectoryData
 import im.vector.app.features.roomdirectory.createroom.CreateRoomActivity
@@ -313,8 +314,8 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openCreateRoom(context: Context, initialName: String) {
-        val intent = CreateRoomActivity.getIntent(context, initialName)
+    override fun openCreateRoom(context: Context, initialName: String, openAfterCreate: Boolean) {
+        val intent = CreateRoomActivity.getIntent(context = context, initialName = initialName, openAfterCreate = openAfterCreate)
         context.startActivity(intent)
     }
 
@@ -528,10 +529,10 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
-    override fun openCreatePoll(context: Context, roomId: String) {
+    override fun openCreatePoll(context: Context, roomId: String, editedEventId: String?, mode: PollMode) {
         val intent = CreatePollActivity.getIntent(
                 context,
-                CreatePollArgs(roomId = roomId)
+                CreatePollArgs(roomId = roomId, editedEventId = editedEventId, mode = mode)
         )
         context.startActivity(intent)
     }

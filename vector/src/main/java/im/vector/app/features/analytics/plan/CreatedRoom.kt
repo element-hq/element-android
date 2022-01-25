@@ -25,10 +25,10 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
  * Triggered when the user creates a room.
  */
 data class CreatedRoom(
-    /**
-     * Whether the room is a DM.
-     */
-    val isDM: Boolean,
+        /**
+         * Whether the room is a DM.
+         */
+        val isDM: Boolean,
 ) : VectorAnalyticsEvent {
 
     override fun getName() = "CreatedRoom"

@@ -31,6 +31,7 @@ import im.vector.app.core.extensions.hidePassword
 import im.vector.app.core.extensions.isEmail
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginResetPasswordBinding
+import im.vector.app.features.analytics.plan.Screen
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -45,6 +46,11 @@ class LoginResetPasswordFragment @Inject constructor() : AbstractLoginFragment<F
 
     // Show warning only once
     private var showWarning = true
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        analyticsScreenName = Screen.ScreenName.ForgotPassword
+        super.onCreate(savedInstanceState)
+    }
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginResetPasswordBinding {
         return FragmentLoginResetPasswordBinding.inflate(inflater, container, false)

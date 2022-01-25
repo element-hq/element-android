@@ -25,18 +25,18 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
  * Triggered when an error occurred in a call.
  */
 data class CallError(
-    /**
-     * Whether its a video call or not.
-     */
-    val isVideo: Boolean,
-    /**
-     * Number of participants in the call.
-     */
-    val numParticipants: Int,
-    /**
-     * Whether this user placed it.
-     */
-    val placed: Boolean,
+        /**
+         * Whether its a video call or not.
+         */
+        val isVideo: Boolean,
+        /**
+         * Number of participants in the call.
+         */
+        val numParticipants: Int,
+        /**
+         * Whether this user placed it.
+         */
+        val placed: Boolean,
 ) : VectorAnalyticsEvent {
 
     override fun getName() = "CallError"

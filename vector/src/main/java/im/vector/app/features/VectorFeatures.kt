@@ -21,10 +21,9 @@ import im.vector.app.BuildConfig
 interface VectorFeatures {
 
     fun onboardingVariant(): OnboardingVariant
-
-    fun isAlreadyHaveAccountSplashEnabled(): Boolean
-
-    fun isSplashCarouselEnabled(): Boolean
+    fun isOnboardingAlreadyHaveAccountSplashEnabled(): Boolean
+    fun isOnboardingSplashCarouselEnabled(): Boolean
+    fun isOnboardingUseCaseEnabled(): Boolean
 
     enum class OnboardingVariant {
         LEGACY,
@@ -35,6 +34,7 @@ interface VectorFeatures {
 
 class DefaultVectorFeatures : VectorFeatures {
     override fun onboardingVariant(): VectorFeatures.OnboardingVariant = BuildConfig.ONBOARDING_VARIANT
-    override fun isAlreadyHaveAccountSplashEnabled() = true
-    override fun isSplashCarouselEnabled() = false
+    override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
+    override fun isOnboardingSplashCarouselEnabled() = true
+    override fun isOnboardingUseCaseEnabled() = false
 }

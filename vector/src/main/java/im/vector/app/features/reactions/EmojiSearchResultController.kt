@@ -22,6 +22,7 @@ import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.R
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class EmojiSearchResultController @Inject constructor(
@@ -52,13 +53,13 @@ class EmojiSearchResultController @Inject constructor(
                 // display 'Type something to find'
                 genericFooterItem {
                     id("type.query.item")
-                    text(host.stringProvider.getString(R.string.reaction_search_type_hint))
+                    text(host.stringProvider.getString(R.string.reaction_search_type_hint).toEpoxyCharSequence())
                 }
             } else {
                 // Display no search Results
                 genericFooterItem {
                     id("no.results.item")
-                    text(host.stringProvider.getString(R.string.no_result_placeholder))
+                    text(host.stringProvider.getString(R.string.no_result_placeholder).toEpoxyCharSequence())
                 }
             }
         } else {

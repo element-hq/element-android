@@ -151,6 +151,7 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
                             sessionId = sessionId,
                             timeout = serverTimeoutInSeconds,
                             delay = delayInSeconds,
+                            periodic = true,
                             forceImmediate = forceImmediate
                     )
             )

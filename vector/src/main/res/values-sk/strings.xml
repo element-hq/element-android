@@ -2080,4 +2080,13 @@
         <item quantity="few">%1$d osoby</item>
         <item quantity="other">%1$d osôb</item>
     </plurals>
+    <string name="rageshake_detected">Zistené otrasy!</string>
+    <string name="login_a11y_choose_matrix_org">Vybrať matrix.org</string>
+    <string name="content_reported_title">Obsah nahlásený</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Zásady</string>
+    <string name="call_resume_action">Pokračovať</string>
+    <string name="settings_rageshake">Zúrivé trasenie</string>
+    <string name="create_spaces_just_me">Iba ja</string>
+    <string name="disclaimer_title">Riot je teraz Element!</string>
+    <string name="login_wait_for_email_title">Skontrolujte prosím svoj e-mail</string>
 </resources>

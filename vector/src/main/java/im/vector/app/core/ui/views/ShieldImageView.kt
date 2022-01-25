@@ -61,6 +61,10 @@ class ShieldImageView @JvmOverloads constructor(
                         else R.drawable.ic_shield_trusted
                 )
             }
+            RoomEncryptionTrustLevel.E2EWithUnsupportedAlgorithm -> {
+                contentDescription = context.getString(R.string.a11y_trust_level_trusted)
+                setImageResource(R.drawable.ic_warning_badge)
+            }
         }
     }
 }
@@ -71,5 +75,6 @@ fun RoomEncryptionTrustLevel.toDrawableRes(): Int {
         RoomEncryptionTrustLevel.Default -> R.drawable.ic_shield_black
         RoomEncryptionTrustLevel.Warning -> R.drawable.ic_shield_warning
         RoomEncryptionTrustLevel.Trusted -> R.drawable.ic_shield_trusted
+        RoomEncryptionTrustLevel.E2EWithUnsupportedAlgorithm -> R.drawable.ic_warning_badge
     }
 }

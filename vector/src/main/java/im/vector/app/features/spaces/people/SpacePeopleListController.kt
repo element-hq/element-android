@@ -18,7 +18,6 @@ package im.vector.app.features.spaces.people
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
-import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.epoxy.dividerItem
 import im.vector.app.core.epoxy.loadingItem
 import im.vector.app.core.epoxy.profiles.profileMatrixItemWithPowerLevel
@@ -31,6 +30,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomprofile.members.RoomMemberListCategories
 import im.vector.app.features.roomprofile.members.RoomMemberListViewState
 import im.vector.app.features.roomprofile.members.RoomMemberSummaryFilter
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.util.toMatrixItem

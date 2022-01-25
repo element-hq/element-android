@@ -26,10 +26,10 @@ import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import im.vector.app.R
 import im.vector.app.core.extensions.registerStartForActivityResult
-import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.utils.startImportTextFromFileIntent
 import im.vector.app.databinding.FragmentSsssAccessFromKeyBinding
+import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.tryOrNull

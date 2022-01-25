@@ -2716,8 +2716,6 @@
     <string name="space_settings_manage_rooms">Gérer les salons</string>
     <string name="looking_for_someone_not_in_space">Vous cherchez quelqu’un qui n’est pas dans %s\?</string>
     <string name="user_invites_you">%s vous invite</string>
-    <string name="labs_use_restricted_join_rule_desc">Attention, nécessite la prise en charge par le serveur ainsi qu’une version de salon expérimentale</string>
-    <string name="labs_use_restricted_join_rule">Espace expérimental – salon restreint.</string>
     <string name="you_are_invited">Vous êtes invité·e</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Les espaces sont une nouvelle manière de regrouper les salons et les gens.</string>
     <string name="spaces_beta_welcome_to_spaces">Bienvenue dans les espaces!</string>

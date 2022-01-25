@@ -51,6 +51,7 @@ import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openFileSelection
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogImportE2eKeysBinding
+import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewActions
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewModel
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewState
@@ -90,6 +91,11 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
     override val preferenceXmlRes = R.xml.vector_settings_security_privacy
 
     private val analyticsConsentViewModel: AnalyticsConsentViewModel by fragmentViewModel()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = Screen.ScreenName.SettingsSecurity
+    }
 
     // cryptography
     private val mCryptographyCategory by lazy {

@@ -53,12 +53,6 @@
 
     <im.vector.app.core.preference.VectorSwitchPreference
         android:defaultValue="false"
-        android:key="SETTINGS_LABS_ENABLE_POLLS"
-        android:title="@string/labs_enable_polls" />
-
-
-    <im.vector.app.core.preference.VectorSwitchPreference
-        android:defaultValue="false"
         android:key="SETTINGS_LABS_AUTO_REPORT_UISI"
         android:summary="@string/labs_auto_report_uisi_desc"
         android:title="@string/labs_auto_report_uisi" />

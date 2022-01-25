@@ -1,3 +1,67 @@
+Changes in Element v1.3.15 (2022-01-18)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fix crash when viewing source which contains an emoji ([#4796](https://github.com/vector-im/element-android/issues/4796))
+ - Prevent crash in Timeline and add more logs. ([#4959](https://github.com/vector-im/element-android/issues/4959))
+ - Fix crash on API <24 and make sure this error will not occur again. ([#4962](https://github.com/vector-im/element-android/issues/4962))
+ - Fixes sign in/up crash when selecting ems and other server types which use SSO ([#4969](https://github.com/vector-im/element-android/issues/4969))
+
+
+Changes in Element v1.3.14 (2022-01-12)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fix sending events in encrypted rooms broken, and incremental sync broken in 1.3.13 ([#4924](https://github.com/vector-im/element-android/issues/4924))
+
+
+Changes in Element v1.3.13 (2022-01-11)
+=======================================
+
+Features ✨
+----------
+ - Updates onboarding splash screen to have a dedicated sign in button and removes the dual purpose sign in/up stage ([#4382](https://github.com/vector-im/element-android/issues/4382))
+ - Display Analytics opt-in screen at first start-up of the app ([#4892](https://github.com/vector-im/element-android/issues/4892))
+ - New attachment picker UI ([#3444](https://github.com/vector-im/element-android/issues/3444))
+ - Add labs support for rendering LaTeX maths (MSC2191) ([#2133](https://github.com/vector-im/element-android/issues/2133))
+ - Allow changing nick colors from the member detail screen ([#2614](https://github.com/vector-im/element-android/issues/2614))
+ - Analytics: Track Errors ([#4719](https://github.com/vector-im/element-android/issues/4719))
+ - Change internal timeline management. ([#4405](https://github.com/vector-im/element-android/issues/4405))
+ - Translate the error observed when the user is not allowed to join a room ([#4847](https://github.com/vector-im/element-android/issues/4847))
+
+Bugfixes 🐛
+----------
+ - Stop using CharSequence as EpoxyAttribute because it can lead to crash if the CharSequence mutates during rendering. ([#4837](https://github.com/vector-im/element-android/issues/4837))
+ - Better handling of misconfigured room encryption ([#4711](https://github.com/vector-im/element-android/issues/4711))
+ - Fix message replies/quotes to respect newlines. ([#4540](https://github.com/vector-im/element-android/issues/4540))
+ - Polls: unable to create a poll with more than 10 answers ([#4735](https://github.com/vector-im/element-android/issues/4735))
+ - Fix for broken unread message indicator on the room list when there are no messages in the room. ([#4749](https://github.com/vector-im/element-android/issues/4749))
+ - Fixes newer emojis rendering strangely when inserting from the system keyboard ([#4756](https://github.com/vector-im/element-android/issues/4756))
+ - Fixing unable to change change avatar in some scenarios ([#4767](https://github.com/vector-im/element-android/issues/4767))
+ - Tentative fix for the speaker being used instead of earpiece for the outgoing call ringtone on lineage os ([#4781](https://github.com/vector-im/element-android/issues/4781))
+ - Fixing crashes when quickly scrolling or restoring the room timeline ([#4789](https://github.com/vector-im/element-android/issues/4789))
+ - Fixing encrypted non message events showing up as notification messages (eg when a participant joins, mutes or leaves a voice call) ([#4804](https://github.com/vector-im/element-android/issues/4804))
+
+SDK API changes ⚠️
+------------------
+ - Introduce method onStateUpdated on Timeline.Callback ([#4405](https://github.com/vector-im/element-android/issues/4405))
+ - Support tagged events in Room Account Data (MSC2437) ([#4753](https://github.com/vector-im/element-android/issues/4753))
+
+Other changes
+-------------
+ - Workaround to fetch all the pending toDevice events from a Synapse homeserver ([#4612](https://github.com/vector-im/element-android/issues/4612))
+ - Toolbar is added to a views with QR code scan ([#4644](https://github.com/vector-im/element-android/issues/4644))
+ - Open share UI provides by the system when sharing media or text. ([#4745](https://github.com/vector-im/element-android/issues/4745))
+ - Cleaning rendering of state events in timeline ([#4747](https://github.com/vector-im/element-android/issues/4747))
+ - Enabling new FTUE Auth onboarding base, includes the "I already have an account" button in the splash ([#4872](https://github.com/vector-im/element-android/issues/4872))
+ - Olm lib is now hosted in MavenCentral - upgrade to 3.2.10 ([#4882](https://github.com/vector-im/element-android/issues/4882))
+ - Remove deprecated experimental restricted space lab option ([#4889](https://github.com/vector-im/element-android/issues/4889))
+ - Add ktlint results on github as a comment only on fail ([#4888](https://github.com/vector-im/element-android/issues/4888))
+ - Fix github actions ktlint reports and publish results on PR as comment ([#4864](https://github.com/vector-im/element-android/issues/4864))
+
+
 Changes in Element v1.3.12 (2021-12-20)
 =======================================
 

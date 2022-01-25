@@ -1157,7 +1157,6 @@
     <string name="spaces_beta_welcome_to_spaces">مرحبًا بك في المساحات!</string>
     <string name="spaces_beta_welcome_to_spaces_desc">تعد المساحات طريقة جديدة لتجميع الغرف والأشخاص.</string>
     <string name="you_are_invited">أنت مدعو</string>
-    <string name="labs_use_restricted_join_rule">مساحة تجريبية - غُرفة مقيدة.</string>
     <string name="space_mark_as_suggested">علم كمقترحة</string>
     <string name="space_mark_as_not_suggested">علم كغير مقترحة</string>
     <string name="space_manage_rooms_and_spaces">إدارة الغُرف والمساحات</string>
@@ -1169,7 +1168,6 @@
     <string name="this_space_has_no_rooms_not_admin">قد تكون بعض الغُرف مخفية لأنها خاصة وأنك بحاجة إلى دعوة.
 \nليس لديك إذن لإضافة غُرف.</string>
     <string name="this_space_has_no_rooms_admin">قد تكون بعض الغُرف مخفية لأنها خاصة وأنك بحاجة إلى دعوة.</string>
-    <string name="labs_use_restricted_join_rule_desc">يتطلب التحذير دعم الخادم وإصدار الغرفة التجريبية</string>
     <string name="user_invites_you">%s يدعوك</string>
     <string name="looking_for_someone_not_in_space">تبحث عن شخص ما ليس في %s؟</string>
     <string name="space_settings_manage_rooms">إدارة الغُرف</string>

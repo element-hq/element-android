@@ -16,6 +16,7 @@
 
 package im.vector.app.features.onboarding
 
+import im.vector.app.core.platform.ScreenOrientationLocker
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.login2.LoginViewModel2
@@ -24,6 +25,7 @@ import javax.inject.Inject
 
 class OnboardingVariantFactory @Inject constructor(
         private val vectorFeatures: VectorFeatures,
+        private val orientationLocker: ScreenOrientationLocker,
 ) {
 
     fun create(activity: OnboardingActivity,
@@ -37,7 +39,8 @@ class OnboardingVariantFactory @Inject constructor(
                 onboardingViewModel = onboardingViewModel.value,
                 activity = activity,
                 supportFragmentManager = activity.supportFragmentManager,
-                vectorFeatures = vectorFeatures
+                vectorFeatures = vectorFeatures,
+                orientationLocker = orientationLocker
         )
         VectorFeatures.OnboardingVariant.LOGIN_2   -> Login2Variant(
                 views = views,

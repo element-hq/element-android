@@ -29,6 +29,7 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.list.UnreadCounterBadgeView
 import im.vector.app.group
 import im.vector.app.space
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -66,7 +67,7 @@ class SpaceSummaryController @Inject constructor(
         if (!nonNullViewState.legacyGroups.isNullOrEmpty()) {
             genericFooterItem {
                 id("legacy_space")
-                text(" ")
+                text(" ".toEpoxyCharSequence())
             }
 
             genericHeaderItem {

@@ -32,10 +32,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.EmojiCompatFontProvider
 import im.vector.app.R
 import im.vector.app.core.extensions.observeEvent
-import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityEmojiReactionPickerBinding
 import im.vector.app.features.reactions.data.EmojiDataSource
+import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -79,7 +79,8 @@ class EmojiReactionPickerActivity : VectorBaseActivity<ActivityEmojiReactionPick
     }
 
     override fun initUiAndData() {
-        configureToolbar(views.emojiPickerToolbar)
+        setupToolbar(views.emojiPickerToolbar)
+                .allowBack()
         emojiCompatFontProvider.let {
             EmojiDrawView.configureTextPaint(this, it.typeface)
             it.addListener(this)
