@@ -25,8 +25,8 @@ import com.bumptech.glide.request.transition.Transition
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.GlideApp
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.AvatarRenderer
-import org.billcarsonfr.jsonviewer.Utils
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -35,6 +35,7 @@ import javax.inject.Singleton
 class LocationPinProvider @Inject constructor(
         private val context: Context,
         private val activeSessionHolder: ActiveSessionHolder,
+        private val dimensionConverter: DimensionConverter,
         private val avatarRenderer: AvatarRenderer
 ) {
     private val cache = mutableMapOf<String, Drawable>()
@@ -50,14 +51,14 @@ class LocationPinProvider @Inject constructor(
         }
 
         activeSessionHolder.getActiveSession().getUser(userId)?.toMatrixItem()?.let {
-            val size = Utils.dpToPx(44, context)
+            val size = dimensionConverter.dpToPx(44)
             avatarRenderer.render(glideRequests, it, object : CustomTarget<Drawable>(size, size) {
                 override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
                     val bgUserPin = ContextCompat.getDrawable(context, R.drawable.bg_map_user_pin)!!
                     val layerDrawable = LayerDrawable(arrayOf(bgUserPin, resource))
-                    val horizontalInset = Utils.dpToPx(4, context)
-                    val topInset = Utils.dpToPx(4, context)
-                    val bottomInset = Utils.dpToPx(8, context)
+                    val horizontalInset = dimensionConverter.dpToPx(4)
+                    val topInset = dimensionConverter.dpToPx(4)
+                    val bottomInset = dimensionConverter.dpToPx(8)
                     layerDrawable.setLayerInset(1, horizontalInset, topInset, horizontalInset, bottomInset)
 
                     cache[userId] = layerDrawable

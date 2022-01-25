@@ -19,10 +19,8 @@ package im.vector.app.features.location
 import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
-import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLocationSharingBinding
 import kotlinx.parcelize.Parcelize
@@ -36,14 +34,9 @@ data class LocationSharingArgs(
 ) : Parcelable
 
 @AndroidEntryPoint
-class LocationSharingActivity : VectorBaseActivity<ActivityLocationSharingBinding>(),
-        ToolbarConfigurable {
+class LocationSharingActivity : VectorBaseActivity<ActivityLocationSharingBinding>() {
 
     override fun getBinding() = ActivityLocationSharingBinding.inflate(layoutInflater)
-
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
-    }
 
     override fun initUiAndData() {
         val locationSharingArgs: LocationSharingArgs? = intent?.extras?.getParcelable(EXTRA_LOCATION_SHARING_ARGS)
@@ -51,8 +44,9 @@ class LocationSharingActivity : VectorBaseActivity<ActivityLocationSharingBindin
             finish()
             return
         }
-        configure(views.toolbar)
-        supportActionBar?.title = getString(locationSharingArgs.mode.titleRes)
+        setupToolbar(views.toolbar)
+                .setTitle(locationSharingArgs.mode.titleRes)
+                .allowBack()
 
         if (isFirstCreation()) {
             when (locationSharingArgs.mode) {
