@@ -120,7 +120,7 @@ class VectorApplication :
         vectorAnalytics.init()
         invitesAcceptor.initialize()
         autoRageShaker.initialize()
-        vectorUncaughtExceptionHandler.activate(this)
+        vectorUncaughtExceptionHandler.activate()
 
         // Remove Log handler statically added by Jitsi
         Timber.forest()
