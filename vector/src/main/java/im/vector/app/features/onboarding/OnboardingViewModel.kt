@@ -32,6 +32,7 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.onboardingStore
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureTrailingSlash
@@ -45,7 +46,6 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
-import im.vector.app.features.onboarding.store.OnboardingStore
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns.getDomain
@@ -78,7 +78,6 @@ class OnboardingViewModel @AssistedInject constructor(
         private val stringProvider: StringProvider,
         private val homeServerHistoryService: HomeServerHistoryService,
         private val vectorFeatures: VectorFeatures,
-        private val onboardingStore: OnboardingStore,
         private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
@@ -754,7 +753,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private suspend fun onSessionCreated(session: Session) {
         awaitState().useCase?.let { useCase ->
-            onboardingStore.setUseCase(userId = session.myUserId, useCase)
+            session.onboardingStore(applicationContext).setUseCase(useCase)
         }
         activeSessionHolder.setActiveSession(session)
 

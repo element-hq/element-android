@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
 import im.vector.app.core.services.VectorSyncService
+import im.vector.app.features.onboarding.store.OnboardingStore
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.sync.FilterService
@@ -76,3 +77,5 @@ fun Session.cannotLogoutSafely(): Boolean {
             // That are not backed up
             !sharedSecretStorageService.isRecoverySetup())
 }
+
+fun Session.onboardingStore(context: Context) = OnboardingStore(context, myUserId)

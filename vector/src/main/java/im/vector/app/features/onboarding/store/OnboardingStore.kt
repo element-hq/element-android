@@ -25,7 +25,6 @@ import androidx.datastore.preferences.preferencesDataStore
 import im.vector.app.core.extensions.removeKeysWithPrefix
 import im.vector.app.features.onboarding.FtueUseCase
 import kotlinx.coroutines.flow.first
-import javax.inject.Inject
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "vector_onboarding")
 
@@ -33,27 +32,29 @@ private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(na
  * Local storage for:
  * - messaging use case (Enum/String)
  */
-class OnboardingStore @Inject constructor(
-        private val context: Context
+class OnboardingStore constructor(
+        private val context: Context,
+        private val myUserId: String
 ) {
-    suspend fun readUseCase(userId: String) = context.dataStore.data.first().let { preferences ->
-        preferences[userId.toUseCaseKey()]?.let { FtueUseCase.from(it) }
+
+    suspend fun readUseCase() = context.dataStore.data.first().let { preferences ->
+        preferences[myUserId.toUseCaseKey()]?.let { FtueUseCase.from(it) }
     }
 
-    suspend fun setUseCase(userId: String, useCase: FtueUseCase) {
+    suspend fun setUseCase(useCase: FtueUseCase) {
         context.dataStore.edit { settings ->
-            settings[userId.toUseCaseKey()] = useCase.persistableValue
+            settings[myUserId.toUseCaseKey()] = useCase.persistableValue
         }
     }
 
-    suspend fun resetUseCase(userId: String) {
+    suspend fun resetUseCase() {
         context.dataStore.edit { settings ->
-            settings.remove(userId.toUseCaseKey())
+            settings.remove(myUserId.toUseCaseKey())
         }
     }
 
-    suspend fun clear(userId: String) {
-        context.dataStore.removeKeysWithPrefix(userId)
+    suspend fun clear() {
+        context.dataStore.removeKeysWithPrefix(myUserId)
     }
 
     private fun String.toUseCaseKey() = stringPreferencesKey("$this-use_case")
