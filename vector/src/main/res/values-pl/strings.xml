@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s dołączył(a)</string>
     <string name="notice_room_leave">%1$s opuścił(a)</string>
     <string name="notice_room_reject">%1$s odrzucił(a) zaproszenie</string>
-    <string name="notice_room_kick">%1$s wyrzucił(a) %2$s</string>
+    <string name="notice_room_remove">%1$s wyrzucił(a) %2$s</string>
     <string name="notice_room_unban">%1$s odblokował(a) %2$s</string>
     <string name="notice_room_ban">%1$s zablokował(a) %2$s</string>
     <string name="notice_avatar_url_changed">%1$s zmienił(a) awatar</string>
@@ -289,7 +289,6 @@
     <string name="room_title_one_member">1 członek</string>
     <string name="room_participants_leave_prompt_title">Opuść pokój</string>
     <string name="room_participants_leave_prompt_msg">Czy na pewno chcesz opuścić pokój?</string>
-    <string name="room_participants_remove_prompt_msg">Czy na pewno chcesz usunąć %s z rozmowy?</string>
     <string name="room_participants_create">Utwórz</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
@@ -300,7 +299,6 @@
     <string name="room_participants_header_devices">SESJE</string>
     <string name="room_participants_action_invite">Zaproś</string>
     <string name="room_participants_action_leave">Opuść pokój</string>
-    <string name="room_participants_action_remove">Usuń z pokoju</string>
     <string name="room_participants_action_ban">Blokuj</string>
     <string name="room_participants_action_unban">Odbanuj</string>
     <string name="room_participants_action_set_default_power_level">Przywróć do poziomu normalnego użytkownika</string>
@@ -521,7 +519,7 @@
     <string name="avatar">Awatar</string>
     <string name="reason_colon">Powód: %1$s</string>
     <string name="has_been_banned">Zostałeś zbanowany z %1$s przez %2$s</string>
-    <string name="has_been_kicked">Zostałeś wyrzucony z %1$s przez %2$s</string>
+    <string name="has_been_removed">Zostałeś wyrzucony z %1$s przez %2$s</string>
     <string name="group_details_rooms">Pokoje</string>
     <string name="joined">Dołączeni</string>
     <string name="group_details_people">Ludzie</string>
@@ -898,7 +896,7 @@
     <string name="command_description_invite_user">Zaprasza użytkownika z podanym ID do aktualnego pokoju</string>
     <string name="command_description_join_room">Dołącza do pokoju o podanym adresie</string>
     <string name="command_description_topic">Ustawia temat pokoju</string>
-    <string name="command_description_kick_user">Wyrzuca użytkownika z podanym ID</string>
+    <string name="command_description_remove_user">Wyrzuca użytkownika z podanym ID</string>
     <string name="command_description_nick">Zmienia twój wyświetlany nick</string>
     <string name="command_description_clear_scalar_token">Do naprawiania zarządzania aplikacjami Matrix</string>
     <string name="room_tombstone_versioned_description">Ten pokój został zamieniony i nie jest już aktywny.</string>
@@ -934,7 +932,7 @@
     <string name="template_settings_call_ringtone_use_app_ringtone">Użyj domyślnego dzwonka ${app_name} dla przychodzących połączeń</string>
     <string name="call_anyway">Zadzwoń mimo to</string>
     <string name="settings_call_category">Połączenia</string>
-    <string name="room_participants_action_kick">Wyrzuć</string>
+    <string name="room_participants_action_remove">Wyrzuć</string>
     <string name="settings_send_markdown">Formatowanie Markdown</string>
     <string name="settings_show_join_leave_messages">Pokaż zdarzenia dołączenia i wyjścia</string>
     <string name="show_info_area_messages_and_errors">Dla komunikatów i błędów</string>
@@ -977,11 +975,6 @@
     <string name="settings_troubleshoot_test_battery_quickfix">Ignoruj Optymalizację</string>
     <string name="settings_troubleshoot_test_battery_title">Optymalizacja Baterii</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Jeden lub więcej testów nie powiodło się, prosimy o przesłanie raportu o błędzie, aby pomóc nam w zbadaniu problemu.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Uruchom Usługę</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Usługa Powiadomień</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Usługa Powiadomień jest uruchomiona.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Usługa powiadomień nie jest uruchomiona.
-\nSpróbuj uruchomić ponownie aplikację.</string>
     <string name="video_call_in_progress">Połączenie wideo trwa…</string>
     <string name="title_activity_keys_backup_setup">Kopia Zapasowa Klucza</string>
     <string name="keys_backup_is_not_finished_please_wait">Kopia zapasowa kluczy nie jest zakończona, proszę czekać…</string>
@@ -2028,7 +2021,7 @@
     <string name="settings_troubleshoot_test_push_loop_title">Przetestuj powiadomienia push</string>
     <string name="room_participants_unban_title">Odbanuj użytkownika</string>
     <string name="room_participants_ban_reason">Powód zbanowania</string>
-    <string name="room_participants_kick_prompt_msg">Wykopanie użytkownika spowoduje usunięcie go z tego pokoju.
+    <string name="room_participants_remove_prompt_msg">Wykopanie użytkownika spowoduje usunięcie go z tego pokoju.
 \n
 \nŻeby zapobiec jego ponownemu dołączeniu należy go zamiast tego zablokować.</string>
     <string name="active_call_with_duration">Aktywne połączenie (%s)</string>
@@ -2198,8 +2191,8 @@
     <string name="search_banned_user_hint">Filtruj zbanowanych użytkowników</string>
     <string name="room_participants_unban_prompt_msg">Odbanowanie użytkownika pozwoli mu na ponowne dołączenie do pokoju.</string>
     <string name="room_participants_ban_title">Zbanuj użytkownika</string>
-    <string name="room_participants_kick_reason">Powód wykopania</string>
-    <string name="room_participants_kick_title">Wykop użytkownika</string>
+    <string name="room_participants_remove_reason">Powód wykopania</string>
+    <string name="room_participants_remove_title">Wykop użytkownika</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Czy na pewno anulować zaproszenie dla tego użytkownika\?</string>
     <string name="room_participants_action_cancel_invite_title">Anuluj zaproszenie</string>
     <string name="room_participants_action_unignore_prompt_msg">Zaprzestanie ignorowania użytkownika spowoduje ponowne wyświetlanie wszystkich jego wiadomości.</string>
@@ -2398,7 +2391,7 @@
     <string name="notice_room_withdraw_by_you">Wycofałeś zaproszenie %1$s</string>
     <string name="notice_room_ban_by_you">Zbanowałeś %1$s</string>
     <string name="notice_room_unban_by_you">Odbanowałeś %1$s</string>
-    <string name="notice_room_kick_by_you">Wyrzuciłeś %1$s</string>
+    <string name="notice_room_remove_by_you">Wyrzuciłeś %1$s</string>
     <string name="notice_room_reject_by_you">Odrzuciłeś zaproszenie</string>
     <string name="notice_direct_room_leave_by_you">Opuściłeś pokój</string>
     <string name="notice_direct_room_leave">%1$s opuścił(a) pokój</string>
@@ -2504,7 +2497,7 @@
     <string name="room_permissions_notify_everyone">Powiadamianie wszystkich</string>
     <string name="room_permissions_remove_messages_sent_by_others">Usuwanie wiadomości wysłanych przez inne osoby</string>
     <string name="room_permissions_ban_users">Blokowanie użytkowników</string>
-    <string name="room_permissions_kick_users">Wyrzucanie użytkowników</string>
+    <string name="room_permissions_remove_users">Wyrzucanie użytkowników</string>
     <string name="room_permissions_change_settings">Zmiana ustawień</string>
     <string name="room_permissions_invite_users">Zapraszanie użytkowników</string>
     <string name="room_permissions_send_messages">Wysyłanie wiadomości</string>
@@ -2765,7 +2758,7 @@
     <string name="notice_room_ban_with_reason">%1$s zbanował(a) %2$s. Powód: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Odbanowałeś(aś) %1$s. Powód: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s zdjął(ęła) bana %2$s. Powód: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Wyrzuciłeś(aś) %1$s. Powód: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Wyrzuciłeś(aś) %1$s. Powód: %2$s</string>
     <string name="notice_requested_voip_conference_by_you">Zażądałeś konferencji VoIP</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉 Wszystkie serwery zostały zbanowane od uczestnictwa. Ten pokój nie może być już używany.</string>
     <string name="notice_room_server_acl_updated_no_change">Bez zmian.</string>
@@ -2783,7 +2776,7 @@
     <string name="notice_room_third_party_invite_with_reason_by_you">Wysłałeś zaproszenie do pokoju do %1$s. Powód: %2$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s wysłał zaproszenie do pokoju do %2$s . Powód: %3$s</string>
     <string name="notice_room_ban_with_reason_by_you">Zbanowałeś %1$s. Powód: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s wyrzucił %2$s. Powód: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s wyrzucił %2$s. Powód: %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">Odrzuciłeś/aś zaproszenie. Powód: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s odrzucił/a zaproszenie. Powód: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Wyszedłeś. Powód: %1$s</string>
@@ -2830,7 +2823,7 @@
     <string name="spaces_which_can_access">Przestrzenie mogące uzyskać dostęp</string>
     <string name="allow_space_member_to_find_and_access">Zezwól użytkownikom przestrzeni na znalezienie i dostęp.</string>
     <string name="settings_room_upgrades">Ulepszenia pokoju</string>
-    <string name="space_participants_kick_prompt_msg">wyproszenie użytkownika zaskutkuje usunięciem go z tej przestrzeni.
+    <string name="space_participants_remove_prompt_msg">wyproszenie użytkownika zaskutkuje usunięciem go z tej przestrzeni.
 \n
 \nAby uniemożliwić mu ponowne dołączenie, należy go zbanować.</string>
     <string name="settings_room_directory_show_all_rooms_summary">Pokaż wszystkie pokoje w katalogu pokoi (również te zawierające treści dla dorosłych).</string>
@@ -3066,12 +3059,8 @@
     </plurals>
     <string name="room_member_override_nick_color">Nadpisz kolor nicku</string>
     <string name="login_splash_already_have_account">Posiadam już konto</string>
-    <string name="ftue_auth_carousel_4_body">Tak uniwersalny jak e-mail, Element jest zupełnie nowym typem współpracy.</string>
-    <string name="ftue_auth_carousel_3_body">Element współpracuje ze wszystkimi aplikacjami opartymi na protokole Matrix, a nawet może łączyć się z zewnętrznymi komunikatorami.</string>
     <string name="ftue_auth_carousel_3_title">Połącz się z każdym.</string>
-    <string name="ftue_auth_carousel_2_body">Element pozwala ci wybrać gdzie twoje wiadomości mają być zapisywane, w celu zachowania kontroli nad danymi.</string>
     <string name="ftue_auth_carousel_2_title">Ty jesteś w kontroli.</string>
-    <string name="ftue_auth_carousel_1_body">Wiadomości szyfrowane typu end-to-end zapewniają bezpieczną i niezależną komunikacje, połączoną za pośrednictwem protokołu Matrix.</string>
     <string name="ftue_auth_carousel_1_title">Przejmij swoje konwersacje.</string>
     <string name="identity_server_consent_dialog_content_3">By odkryć istniejące kontakty, musisz najpierw przesłać swoje dane kontaktowe (adresy e-mail i numer telefonu) do serwera tożsamości. Przed wysłaniem Twoje dane zostaną zaszyfrowane w celu zachowania prywatności.</string>
     <string name="preference_help_summary">Uzyskaj pomoc w korzystaniu z Element</string>

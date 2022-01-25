@@ -770,12 +770,12 @@ class NoticeEventFormatter @Inject constructor(
                         Membership.JOIN   ->
                             if (event.isSentByCurrentUser()) {
                                 eventContent.safeReason?.let { reason ->
-                                    sp.getString(R.string.notice_room_kick_with_reason_by_you, targetDisplayName, reason)
-                                } ?: sp.getString(R.string.notice_room_kick_by_you, targetDisplayName)
+                                    sp.getString(R.string.notice_room_remove_with_reason_by_you, targetDisplayName, reason)
+                                } ?: sp.getString(R.string.notice_room_remove_by_you, targetDisplayName)
                             } else {
                                 eventContent.safeReason?.let { reason ->
-                                    sp.getString(R.string.notice_room_kick_with_reason, senderDisplayName, targetDisplayName, reason)
-                                } ?: sp.getString(R.string.notice_room_kick, senderDisplayName, targetDisplayName)
+                                    sp.getString(R.string.notice_room_remove_with_reason, senderDisplayName, targetDisplayName, reason)
+                                } ?: sp.getString(R.string.notice_room_remove, senderDisplayName, targetDisplayName)
                             }
                         Membership.BAN    ->
                             if (event.isSentByCurrentUser()) {
@@ -803,12 +803,12 @@ class NoticeEventFormatter @Inject constructor(
             Membership.KNOCK  ->
                 if (event.isSentByCurrentUser()) {
                     eventContent.safeReason?.let { reason ->
-                        sp.getString(R.string.notice_room_kick_with_reason_by_you, targetDisplayName, reason)
-                    } ?: sp.getString(R.string.notice_room_kick_by_you, targetDisplayName)
+                        sp.getString(R.string.notice_room_remove_with_reason_by_you, targetDisplayName, reason)
+                    } ?: sp.getString(R.string.notice_room_remove_by_you, targetDisplayName)
                 } else {
                     eventContent.safeReason?.let { reason ->
-                        sp.getString(R.string.notice_room_kick_with_reason, senderDisplayName, targetDisplayName, reason)
-                    } ?: sp.getString(R.string.notice_room_kick, senderDisplayName, targetDisplayName)
+                        sp.getString(R.string.notice_room_remove_with_reason, senderDisplayName, targetDisplayName, reason)
+                    } ?: sp.getString(R.string.notice_room_remove, senderDisplayName, targetDisplayName)
                 }
             else              -> null
         }

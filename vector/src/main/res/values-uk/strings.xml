@@ -13,7 +13,7 @@
     <string name="notice_room_join">%1$s приєднується</string>
     <string name="notice_room_leave">%1$s виходить з кімнати</string>
     <string name="notice_room_reject">%1$s відхиляє запрошення</string>
-    <string name="notice_room_kick">%1$s вилучає %2$s</string>
+    <string name="notice_room_remove">%1$s вилучає %2$s</string>
     <string name="notice_room_unban">%1$s розблоковує %2$s</string>
     <string name="notice_room_ban">%1$s блокує %2$s</string>
     <string name="notice_room_withdraw">%1$s відкликає запрошення для %2$s</string>
@@ -112,7 +112,7 @@
     <string name="notice_placed_video_call_by_you">Ви починаєте відеовиклик.</string>
     <string name="notice_room_avatar_changed">%1$s змінює аватар кімнати</string>
     <string name="notice_display_name_removed_by_you">Ви прибрали показуване ім\'я (%1$s)</string>
-    <string name="notice_room_kick_by_you">Ви вилучили %1$s</string>
+    <string name="notice_room_remove_by_you">Ви вилучили %1$s</string>
     <string name="notice_direct_room_third_party_invite">%1$s запрошує %2$s</string>
     <string name="notice_room_reject_by_you">Ви відхилили запрошення</string>
     <string name="notice_direct_room_join_by_you">Ви приєдналися</string>
@@ -398,7 +398,6 @@
     <string name="room_title_one_member">1 учасник</string>
     <string name="room_participants_leave_prompt_title">Вийти з кімнати</string>
     <string name="room_participants_leave_prompt_msg">Ви впевнені, що хочете вийти з кімнати\?</string>
-    <string name="room_participants_remove_prompt_msg">Ви впевнені, що бажаєте вилучити %s з цієї кімнати\?</string>
     <string name="room_participants_create">Створити</string>
     <string name="room_participants_online">У мережі</string>
     <string name="room_participants_offline">Не в мережі</string>
@@ -409,7 +408,6 @@
     <string name="room_participants_header_devices">СЕАНСИ</string>
     <string name="room_participants_action_invite">Запросити</string>
     <string name="room_participants_action_leave">Вийти з цієї кімнати</string>
-    <string name="room_participants_action_remove">Вилучити з цієї кімнати</string>
     <string name="room_participants_action_ban">Заблокувати</string>
     <string name="room_participants_action_unban">Розблокувати</string>
     <string name="room_participants_action_set_default_power_level">Зробити звичайним користувачем</string>
@@ -920,7 +918,7 @@
     <string name="command_description_join_room">Приєднує до кімнати із вказаною адресою</string>
     <string name="command_description_part_room">Вийти з кімнати</string>
     <string name="command_description_topic">Встановити тему кімнати</string>
-    <string name="command_description_kick_user">Вилучити користувача із вказаним ID</string>
+    <string name="command_description_remove_user">Вилучити користувача із вказаним ID</string>
     <string name="command_description_nick">Змінити Ваш псевдонім</string>
     <string name="command_description_markdown">Увімкнути/Вимкнути розмітку Markdown</string>
     <string name="command_description_clear_scalar_token">Для виправлення керування додатками Matrix</string>
@@ -952,7 +950,7 @@
         <item quantity="other"/>
     </plurals>
     <string name="group_no_long_description">Адміністратор спільноти не вказав для неї детальної інформації.</string>
-    <string name="has_been_kicked">%2$s вилучає вас із %1$s</string>
+    <string name="has_been_removed">%2$s вилучає вас із %1$s</string>
     <string name="has_been_banned">%2$s блокує вас у %1$s</string>
     <string name="reason_colon">Причина: %1$s</string>
     <string name="rejoin">Приєднатися знову</string>
@@ -1000,7 +998,7 @@
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="call_anyway">Усе одно зателефонувати</string>
-    <string name="room_participants_action_kick">Вилучити</string>
+    <string name="room_participants_action_remove">Вилучити</string>
     <string name="reason_hint">Причина</string>
     <string name="settings_inline_url_preview_summary">Попередній перегляд посилань у бесіді, якщо ваш сервер підтримує цю можливість.</string>
     <string name="settings_send_typing_notifs">Надсилати сповіщення про набір повідомлення</string>
@@ -1482,11 +1480,6 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Помилка перезапуску служби</string>
     <string name="settings_troubleshoot_test_service_restart_success">Службу зупинено й перезапущено автоматично.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Автоматичний перезапуск служби сповіщень</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Запуск служби</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Служба сповіщень не працює.
-\nСпробуйте перезапустити програму.</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Служба сповіщень працює.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Служба сповіщень</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">Сповіщення натиснено!</string>
     <string name="settings_troubleshoot_test_notification_notice">Клацніть на сповіщення. Якщо ви не бачите сповіщення, перевірте налаштування системи.</string>
     <string name="settings_troubleshoot_test_notification_title">Показ сповіщень</string>
@@ -1531,11 +1524,11 @@
     <string name="room_participants_unban_title">Розблокувати користувача</string>
     <string name="room_participants_ban_reason">Причина блокування</string>
     <string name="room_participants_ban_title">Заблокувати користувача</string>
-    <string name="room_participants_kick_prompt_msg">вилучення користувачів прибере їх з цієї кімнати.
+    <string name="room_participants_remove_prompt_msg">вилучення користувачів прибере їх з цієї кімнати.
 \n
 \nЩоб запобігти їхньому повторному приєднанню, замість цього слід заблокувати їх.</string>
-    <string name="room_participants_kick_reason">Причина вилучення</string>
-    <string name="room_participants_kick_title">Вилучити користувача</string>
+    <string name="room_participants_remove_reason">Причина вилучення</string>
+    <string name="room_participants_remove_title">Вилучити користувача</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Ви впевнені, що бажаєте скасувати запрошення для цього користувача\?</string>
     <string name="room_participants_action_cancel_invite_title">Скасувати запрошення</string>
     <string name="room_participants_action_unignore_prompt_msg">Якщо перестати нехтувати цього користувача, усі його повідомлення стануть знову видимими.</string>
@@ -1682,7 +1675,7 @@
     <string name="room_permissions_notify_everyone">Сповіщати всіх</string>
     <string name="room_permissions_remove_messages_sent_by_others">Вилучати повідомлення, надіслані іншими</string>
     <string name="room_permissions_ban_users">Блокувати користувачів</string>
-    <string name="room_permissions_kick_users">Вилучати користувачів</string>
+    <string name="room_permissions_remove_users">Вилучати користувачів</string>
     <string name="room_permissions_change_settings">Змінювати налаштування</string>
     <string name="room_permissions_invite_users">Запрошувати користувачів</string>
     <string name="room_permissions_send_messages">Надсилати повідомлення</string>
@@ -1797,8 +1790,8 @@
     <string name="notice_room_ban_with_reason">%1$s заблоковано %2$s. Причина: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Ви розблокували %1$s. Причина: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s розблоковує %2$s. Причина: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Ви вилучили %1$s. Причина: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s вилучає %2$s. Причина: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Ви вилучили %1$s. Причина: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s вилучає %2$s. Причина: %3$s</string>
     <string name="call_tile_in_call">Ви берете участь в цьому виклику зараз</string>
     <string name="this_is_the_beginning_of_dm">Це початок історії вашого особистого спілкування з %s.</string>
     <string name="room_profile_encrypted_subtitle">Повідомлення тут захищені наскрізним шифруванням.
@@ -2669,7 +2662,7 @@
     <string name="space_settings_permissions_title">Дозволи простору</string>
     <string name="space_participants_unban_prompt_msg">Розблокування користувачів дозволить їм знову приєднатися до простору.</string>
     <string name="space_participants_ban_prompt_msg">Блокування користувачів вилучить їх із цього простору та не дозволить їм знову приєднатися.</string>
-    <string name="space_participants_kick_prompt_msg">вилучення користувачів прибере їх з цього простору.
+    <string name="space_participants_remove_prompt_msg">вилучення користувачів прибере їх з цього простору.
 \n
 \nЩоб запобігти їхньому повторному приєднанню, замість цього слід заблокувати їх.</string>
     <string name="verification_verify_user">Звірити %s</string>
@@ -3113,7 +3106,6 @@
     <string name="delete_poll_dialog_title">Видалити опитування</string>
     <string name="poll_end_room_list_preview">Голосування завершене</string>
     <string name="poll_response_room_list_preview">Голос надіслано</string>
-    <string name="labs_enable_polls">Увімкнути опитування</string>
     <string name="end_poll_confirmation_approve_button">Завершити опитування</string>
     <string name="end_poll_confirmation_description">Люди більше не зможуть голосувати, і будуть показані остаточні результати опитування.</string>
     <string name="end_poll_confirmation_title">Завершити це опитування\?</string>
@@ -3170,12 +3162,8 @@
     <string name="labs_auto_report_uisi">Автозвіт про помилки шифрування.</string>
     <string name="room_member_override_nick_color">Замінити колір псевдоніма</string>
     <string name="login_splash_already_have_account">Я вже маю обліковий запис</string>
-    <string name="ftue_auth_carousel_4_body">Універсальний, як електронна пошта, Element — це абсолютно новий тип співпраці.</string>
     <string name="ftue_auth_carousel_4_title">Удоскональте спілкування в команді.</string>
-    <string name="ftue_auth_carousel_3_body">Element працює з усіма застосунками на базі Matrix і може навіть з\'єднуватися з власницькими месенджерами.</string>
     <string name="ftue_auth_carousel_3_title">З\'єднуйтеся з будь-ким.</string>
-    <string name="ftue_auth_carousel_2_body">Element дає змогу обрати де зберігати повідомлення, надаючи вам контроль над вашими даними.</string>
     <string name="ftue_auth_carousel_2_title">Ви контролюєте все.</string>
-    <string name="ftue_auth_carousel_1_body">Наскрізно зашифроване спілкування для безпечного та незалежного зв’язку, під\'єднаного через Matrix.</string>
     <string name="ftue_auth_carousel_1_title">Володійте своїми розмовами.</string>
 </resources>

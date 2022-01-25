@@ -319,7 +319,6 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     </plurals>
     <string name="room_participants_leave_prompt_title">Tinggalkan ruang</string>
     <string name="room_participants_leave_prompt_msg">Apa benar Anda ingin meninggalkan ruangan ini\?</string>
-    <string name="room_participants_remove_prompt_msg">Apa benar Anda ingin mengeluarkan %s dari percakapan ini?</string>
     <string name="room_participants_create">Buat</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
@@ -332,7 +331,6 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="room_participants_header_devices">PERANGKAT</string>
     <string name="room_participants_action_invite">Undang</string>
     <string name="room_participants_action_leave">Tinggalkan ruangan ini</string>
-    <string name="room_participants_action_remove">Keluarkan dari ruangan ini</string>
     <string name="room_participants_action_ban">Larang</string>
     <string name="room_participants_action_unban">Hapus Cekalan</string>
     <string name="room_participants_action_set_default_power_level">Setel ulang ke user biasa</string>
@@ -517,7 +515,7 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="command_description_join_room">Gabung ke ruangan dengan alamat berikut</string>
     <string name="command_description_part_room">Tinggalkan ruang</string>
     <string name="command_description_topic">Tentukan topik ruang</string>
-    <string name="command_description_kick_user">Keluarkan pengguna dengan id berikut</string>
+    <string name="command_description_remove_user">Keluarkan pengguna dengan id berikut</string>
     <string name="command_description_nick">Ubah nama panggilan layar Anda</string>
     <string name="command_description_markdown">Mati/Nyalakan markdown</string>
     <string name="command_description_clear_scalar_token">Untuk memperbaiki kepengurusan Apps Matrix</string>
@@ -546,7 +544,7 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
         <item quantity="other">%d ruangan</item>
     </plurals>
     <string name="group_no_long_description">Admin komunitas belum menyediakan deskripsi panjang untuk komunitas ini.</string>
-    <string name="has_been_kicked">Anda telah dikeluarkan dari %1$s oleh %2$s</string>
+    <string name="has_been_removed">Anda telah dikeluarkan dari %1$s oleh %2$s</string>
     <string name="has_been_banned">Anda telah dicekal dari %1$s oleh %2$s</string>
     <string name="reason_colon">Alasan: %1$s</string>
     <string name="rejoin">Gabung lagi</string>
@@ -790,7 +788,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_call_ringtone_title">Nada dering panggilan masuk</string>
     <string name="settings_call_ringtone_dialog_title">Pilih nada dering untuk panggilan:</string>
     <string name="video_call_in_progress">Panggilan Video Sedang Berlangsung…</string>
-    <string name="room_participants_action_kick">Keluarkan</string>
+    <string name="room_participants_action_remove">Keluarkan</string>
     <string name="reason_hint">Alasan</string>
     <string name="room_sliding_menu_version_x">Versi %s</string>
     <string name="settings_notification_troubleshoot">Periksa Keadaan Pemberitahuan</string>
@@ -829,11 +827,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_troubleshoot_test_token_registration_success">Berhasil mendaftarkan token FCM di homeserver.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Gagal mendaftarkan token FCM ke homeserver:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Layanan Pemberitahuan</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Layanan Pemberitahuan sedang berjalan.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Layanan notifikasi tidak berjalan.
-\nCoba buka ulang aplikasi ini.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Mulai Layanan</string>
     <string name="settings_troubleshoot_test_service_restart_title">Nyalakan Layanan Pemberitahuan dengan Otomatis</string>
     <string name="settings_troubleshoot_test_service_restart_success">Layanan terhenti dan dinyalakan kembali secara otomatis.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Layanan tidak dapat dinyalakan kembali</string>
@@ -946,8 +939,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="notice_room_ban">%1$s mencekal %2$s</string>
     <string name="notice_room_unban_by_you">Anda menghilangkan pencekalan %1$s</string>
     <string name="notice_room_unban">%1$s menghilangkan pencekalan %2$s</string>
-    <string name="notice_room_kick_by_you">Anda mengeluarkan %1$s</string>
-    <string name="notice_room_kick">%1$s mengeluarkan %2$s</string>
+    <string name="notice_room_remove_by_you">Anda mengeluarkan %1$s</string>
+    <string name="notice_room_remove">%1$s mengeluarkan %2$s</string>
     <string name="notice_room_reject_by_you">Anda menolak undangannya</string>
     <string name="notice_room_reject">%1$s menolak undangannya</string>
     <string name="notice_direct_room_leave_by_you">Anda meninggalkan ruangan ini</string>
@@ -999,7 +992,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_permissions_send_m_room_server_acl_events">Mengirim event m.room.server_acl</string>
     <string name="room_permissions_send_messages">Mengirim pesan</string>
     <string name="room_permissions_invite_users">Mengundang pengguna</string>
-    <string name="room_permissions_kick_users">Keluarkan pengguna</string>
+    <string name="room_permissions_remove_users">Keluarkan pengguna</string>
     <string name="room_permissions_ban_users">Mencekal pengguna</string>
     <string name="room_permissions_change_permissions">Mengubah izin</string>
     <string name="room_permissions_change_room_name">Mengubah nama ruangan</string>
@@ -1021,11 +1014,11 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_participants_unban_title">Batalkan pencekalan pengguna</string>
     <string name="room_participants_ban_reason">Alasan untuk mencekal</string>
     <string name="room_participants_ban_title">Cekal pengguna</string>
-    <string name="room_participants_kick_prompt_msg">Pengguna yang dikeluarkan akan menghilangkannya dari ruangan ini.
+    <string name="room_participants_remove_prompt_msg">Pengguna yang dikeluarkan akan menghilangkannya dari ruangan ini.
 \n
 \nUntuk mencegah mereka bergabung lagi, Anda seharusnya mencekalnya.</string>
-    <string name="room_participants_kick_reason">Alasan untuk mengeluarkan</string>
-    <string name="room_participants_kick_title">Keluarkan pengguna</string>
+    <string name="room_participants_remove_reason">Alasan untuk mengeluarkan</string>
+    <string name="room_participants_remove_title">Keluarkan pengguna</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Apakah Anda yakin ingin membatalkan undangan untuk pengguna ini\?</string>
     <string name="room_participants_action_cancel_invite_title">Batalkan undangan</string>
     <string name="room_participants_action_unignore_prompt_msg">Membatalkan abaian pengguna ini akan menampilkan semua pesan dari mereka.</string>
@@ -1206,8 +1199,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="notice_room_ban_with_reason">%1$s mencekal %2$s. Alasan: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s membatalkan pencekalan %2$s. Alasan: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Anda membatalkan pencekalan %1$s. Alasan: %2$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Anda mengeluarkan %1$s. Alasan: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s mengeluarkan %2$s. Alasan: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Anda mengeluarkan %1$s. Alasan: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s mengeluarkan %2$s. Alasan: %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">Anda menolak undangan. Alasan: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s menolak undangan. Alasan: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Anda meninggalkan ruangan. Alasan: %1$s</string>
@@ -2914,7 +2907,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="space_settings_permissions_title">Izin space</string>
     <string name="space_participants_unban_prompt_msg">Menghapus cekalan akan mengizinkan pengguna untuk bergabung ke space lagi.</string>
     <string name="space_participants_ban_prompt_msg">Mencekal pengguna akan mengeluarkan pengguna dari space ini dan mencegah pengguna untuk bergabung lagi.</string>
-    <string name="space_participants_kick_prompt_msg">mengeluarkan pengguna akan mengeluarkannya dari space ini.
+    <string name="space_participants_remove_prompt_msg">mengeluarkan pengguna akan mengeluarkannya dari space ini.
 \n
 \nUntuk mencegah pengguna untuk bergabung lagi, Anda seharusnya cekal pengguna itu saja.</string>
     <string name="a11y_stop_voice_message">Berhenti Merekam</string>
@@ -2962,7 +2955,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="delete_poll_dialog_title">Hapus poll</string>
     <string name="poll_end_room_list_preview">Poll berakhir</string>
     <string name="poll_response_room_list_preview">Suara diberikan</string>
-    <string name="labs_enable_polls">Aktifkan Poll</string>
     <string name="end_poll_confirmation_approve_button">Akhiri poll</string>
     <string name="end_poll_confirmation_description">Ini akan menghentikan orang-orang untuk dapat memberikan suara dan akan menampilkan hasil akhir poll.</string>
     <string name="end_poll_confirmation_title">Akhiri poll ini\?</string>
@@ -3013,12 +3005,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="labs_auto_report_uisi">Laporkan Kesalahan Dekripsi Secara Otomatis.</string>
     <string name="room_member_override_nick_color">Ubah warna nama tampilan</string>
     <string name="login_splash_already_have_account">Saya sudah punya akun</string>
-    <string name="ftue_auth_carousel_4_body">Universal seperti email, Element adalah jenis kolaborasi yang benar-benar baru.</string>
     <string name="ftue_auth_carousel_4_title">Bebaskan.</string>
-    <string name="ftue_auth_carousel_3_body">Elemen berfungsi dengan semua aplikasi berbasis Matrix dan bahkan dapat menjembatani ke perpesanan sumber tertutup.</string>
     <string name="ftue_auth_carousel_3_title">Hubung dengan siapa pun.</string>
-    <string name="ftue_auth_carousel_2_body">Elemen memungkinkan Anda untuk memilih di mana pesan Anda disimpan, membuat Anda tetap mengendali data Anda.</string>
     <string name="ftue_auth_carousel_2_title">Anda dalam kendali.</string>
-    <string name="ftue_auth_carousel_1_body">Perpesanan terenkripsi secara ujung-ke-ujung untuk komunikasi aman dan independen, terhubung via Matrix.</string>
     <string name="ftue_auth_carousel_1_title">Miliki percakapan Anda.</string>
 </resources>

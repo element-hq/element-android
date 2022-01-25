@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s vstúpil/a do miestnosti</string>
     <string name="notice_room_leave">%1$s opustil/a miestnosť</string>
     <string name="notice_room_reject">%1$s odmietol/a pozvanie</string>
-    <string name="notice_room_kick">%1$s vykázal/a %2$s</string>
+    <string name="notice_room_remove">%1$s vykázal/a %2$s</string>
     <string name="notice_room_unban">%1$s povolil/a vstupovať %2$s</string>
     <string name="notice_room_ban">%1$s zakázal/a vstupovať %2$s</string>
     <string name="notice_room_withdraw">%1$s vzal/a späť pozvanie %2$s</string>
@@ -89,7 +89,7 @@
     <string name="notice_room_join_with_reason">%1$s vstúpil/a do miestnosti. Dôvod: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s opustil/a miestnosť. Dôvod: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s odmietol/a pozvanie. Dôvod: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s vykázal/a %2$s. Dôvod: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s vykázal/a %2$s. Dôvod: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s povolil/a vstupovať %2$s. Dôvod: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s zakázal/a vstupovať %2$s. Dôvod: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s pozval/a %2$s vstúpiť do miestnosti. Dôvod: %3$s</string>
@@ -119,7 +119,7 @@
     <string name="notice_room_join_by_you">Vstúpili ste do miestnosti</string>
     <string name="notice_room_leave_by_you">Opustili ste miestnosť</string>
     <string name="notice_room_reject_by_you">Odmietli ste pozvanie</string>
-    <string name="notice_room_kick_by_you">Vykázali ste %1$s</string>
+    <string name="notice_room_remove_by_you">Vykázali ste %1$s</string>
     <string name="notice_room_unban_by_you">Povolili ste vstupovať %1$s</string>
     <string name="notice_room_ban_by_you">Zakázali ste vstupovať %1$s</string>
     <string name="notice_room_withdraw_by_you">Vzali ste späť pozvanie %1$s</string>
@@ -168,7 +168,7 @@
     <string name="notice_room_join_with_reason_by_you">Vstúpili ste do miestnosti. Dôvod: %1$s</string>
     <string name="notice_room_leave_with_reason_by_you">Opustili ste miestnosť. Dôvod: %1$s</string>
     <string name="notice_room_reject_with_reason_by_you">Odmietli ste pozvanie. Dôvod: %1$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Vykázali ste %1$s. Dôvod: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Vykázali ste %1$s. Dôvod: %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">Povolili ste vstupovať %1$s. Dôvod: %2$s</string>
     <string name="notice_room_ban_with_reason_by_you">Zakázali ste vstupovať %1$s. Dôvod: %2$s</string>
     <string name="notice_room_third_party_invite_with_reason_by_you">Pozvali ste %1$s vstúpiť do miestnosti. Dôvod: %2$s</string>
@@ -449,7 +449,6 @@
     <string name="room_title_one_member">1 člen</string>
     <string name="room_participants_leave_prompt_title">Opustiť miestnosť</string>
     <string name="room_participants_leave_prompt_msg">Ste si istí, že chcete opustiť miestnosť?</string>
-    <string name="room_participants_remove_prompt_msg">Ste si istí, že chcete používateľa %s vykopnúť z tejto miestnosti?</string>
     <string name="room_participants_create">Vytvoriť</string>
     <string name="room_participants_online">Prítomný</string>
     <string name="room_participants_offline">Nedostupný</string>
@@ -460,7 +459,6 @@
     <string name="room_participants_header_devices">RELÁCIE</string>
     <string name="room_participants_action_invite">Pozvať</string>
     <string name="room_participants_action_leave">Opustiť túto miestnosť</string>
-    <string name="room_participants_action_remove">Odstrániť z tejto miestnosti</string>
     <string name="room_participants_action_ban">Zakázať vstúpiť</string>
     <string name="room_participants_action_unban">Povoliť vstúpiť</string>
     <string name="room_participants_action_set_default_power_level">Obnoviť moc normálneho používateľa</string>
@@ -827,7 +825,7 @@
     <string name="filter_group_members">Filtrovať členov komunity</string>
     <string name="filter_group_rooms">Filtrovať miestnosti v komunite</string>
     <string name="group_no_long_description">Správca nenastavil dlhý popis tejto komunity.</string>
-    <string name="has_been_kicked">Používateľ %2$s vás vykázal z miestnosti %1$s</string>
+    <string name="has_been_removed">Používateľ %2$s vás vykázal z miestnosti %1$s</string>
     <string name="has_been_banned">Používateľ %2$s vám zakázal vstúpiť do miestnosti %1$s</string>
     <string name="reason_colon">Dôvod: %1$s</string>
     <string name="rejoin">Vstúpiť znovu</string>
@@ -988,7 +986,7 @@
     <string name="command_description_join_room">Vstúpi do miestnosti podľa zadaného aliasu</string>
     <string name="command_description_part_room">Opustí aktuálnu miestnosť</string>
     <string name="command_description_topic">Nastaví tému aktuálnej miestnosti</string>
-    <string name="command_description_kick_user">Vykáže zadaného používateľa z miestnosti</string>
+    <string name="command_description_remove_user">Vykáže zadaného používateľa z miestnosti</string>
     <string name="command_description_nick">Mení vaše zobrazované meno / prezývku</string>
     <string name="command_description_markdown">Zapína alebo vypína formátovanie textu pomocou markdown</string>
     <string name="command_description_clear_scalar_token">Užitočné na opravu spravovania aplikácií matrix</string>
@@ -1043,7 +1041,7 @@
     <string name="settings_call_ringtone_title">Zvonenie pre prichádzajúci hovor</string>
     <string name="settings_call_ringtone_dialog_title">Vyberte zvonenie pre prichádzajúce hovory:</string>
     <string name="video_call_in_progress">Prebiehajúci video hovor…</string>
-    <string name="room_participants_action_kick">Vykázať</string>
+    <string name="room_participants_action_remove">Vykázať</string>
     <string name="reason_hint">Dôvod</string>
     <string name="settings_notification_troubleshoot">Riešiť problémy s oznámeniami</string>
     <string name="settings_troubleshoot_diagnostic">Diagnostika problémov</string>
@@ -1081,11 +1079,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">Token FCM úspešne zaregistrovaný na domovskom serveri.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM token sa nepodarilo zaregistrovať na domovskom serveri:
 \n %1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Služba oznámení</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Služba oznámení je spustená.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Služba oznámení nie je spustená. 
-\nProsím skúste reštartovať aplikáciu.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Spustiť službu</string>
     <string name="settings_troubleshoot_test_service_restart_title">Automatický reštart služby notifikácií</string>
     <string name="settings_troubleshoot_test_service_restart_success">Služba bola automaticky skončená a spustená znovu.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Službu sa nepodarilo reštartovať</string>
@@ -1273,9 +1266,9 @@
     <string name="room_participants_action_unignore_prompt_msg">Zrušením ignorovania si opäť zobrazíte všetky správy od tohoto používateľa.</string>
     <string name="room_participants_action_cancel_invite_title">Zrušiť pozvanie</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Ste si istí, že chcete zrušiť pozvanie tohoto používateľa\?</string>
-    <string name="room_participants_kick_title">Vykázať používateľa</string>
-    <string name="room_participants_kick_reason">Dôvod vykázania</string>
-    <string name="room_participants_kick_prompt_msg">Vykázaním odstránite používateľa z miestnosti.
+    <string name="room_participants_remove_title">Vykázať používateľa</string>
+    <string name="room_participants_remove_reason">Dôvod vykázania</string>
+    <string name="room_participants_remove_prompt_msg">Vykázaním odstránite používateľa z miestnosti.
 \n
 \nAk si želáte, aby sa nemohol vrátiť, mali by ste mu tiež zakázať vstupovať.</string>
     <string name="room_participants_ban_title">Zakázať používateľovi vstupovať</string>
@@ -1896,7 +1889,6 @@
     <string name="report_content_custom_title">Nahlásiť tento obsah</string>
     <string name="uploads_files_subtitle">%1$s dňa %2$s</string>
     <string name="delete_poll_dialog_title">Odstrániť anketu</string>
-    <string name="labs_enable_polls">Povoliť ankety</string>
     <string name="end_poll_confirmation_approve_button">Ukončiť anketu</string>
     <string name="poll_end_action">Ukončiť anketu</string>
     <plurals name="poll_option_vote_count">
@@ -1986,7 +1978,7 @@
     <string name="room_permissions_modify_widgets">Upraviť widgety</string>
     <string name="room_permissions_notify_everyone">Poslať oznámenie všetkým</string>
     <string name="room_permissions_ban_users">Zakázať používateľov</string>
-    <string name="room_permissions_kick_users">Vylúčiť používateľov</string>
+    <string name="room_permissions_remove_users">Vylúčiť používateľov</string>
     <string name="room_permissions_change_settings">Zmeniť nastavenia</string>
     <string name="room_permissions_invite_users">Pozvať používateľov</string>
     <string name="room_permissions_send_messages">Odoslať správy</string>

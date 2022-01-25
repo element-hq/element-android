@@ -9,7 +9,7 @@
     <string name="notice_room_join">%1$s به اتاق پیوست</string>
     <string name="notice_room_leave">%1$s اتاق را ترک کرد</string>
     <string name="notice_room_reject">%1$s دعوت را رد کرد</string>
-    <string name="notice_room_kick">%1$s، %2$s را اخراج کرد</string>
+    <string name="notice_room_remove">%1$s، %2$s را اخراج کرد</string>
     <string name="notice_room_unban">%1$s، انسداد %2$s را رفع کرد</string>
     <string name="notice_room_ban">%1$s، %2$s را مسدود کرد</string>
     <string name="notice_room_withdraw">%1$s دعوت %2$s را نپذیرفت</string>
@@ -86,7 +86,7 @@
     <string name="notice_room_join_with_reason">%1$s به اتاق پیوست. دلیل: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s اتاق را ترک کرد. دلیل: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s دعوت را رد کرد. دلیل: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s، %2$s را اخراج کرد. دلیل: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s، %2$s را اخراج کرد. دلیل: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s انسداد %2$s را رفع کرد. دلیل: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s، %2$s را مسدود کرد. دلیل: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s دعوتی برای پیوستن %2$s به اتاق فرستاد. دلیل: %3$s</string>
@@ -119,7 +119,7 @@
     <string name="notice_room_join_by_you">به اتاق پیوستید</string>
     <string name="notice_room_leave_by_you">اتاق را ترک کردید</string>
     <string name="notice_room_reject_by_you">دعوت را رد کردید</string>
-    <string name="notice_room_kick_by_you">%1$s را اخراج کردید</string>
+    <string name="notice_room_remove_by_you">%1$s را اخراج کردید</string>
     <string name="notice_room_unban_by_you">تحریم %1$s را برداشتید</string>
     <string name="notice_room_ban_by_you">%1$s را تحریم کردید</string>
     <string name="notice_room_withdraw_by_you">دعوت %1$s را پس‌گرفتید</string>
@@ -168,7 +168,7 @@
     <string name="notice_room_join_with_reason_by_you">به اتاق پیوستید. دلیل: %1$s</string>
     <string name="notice_room_leave_with_reason_by_you">اتاق را ترک کردید. دلیل: %1$s</string>
     <string name="notice_room_reject_with_reason_by_you">دعوت را رد کردید. دلیل: %1$s</string>
-    <string name="notice_room_kick_with_reason_by_you">%1$s را اخراج کردید. دلیل: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">%1$s را اخراج کردید. دلیل: %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">تحریم %1$s را برداشتید. دلیل: %2$s</string>
     <string name="notice_room_ban_with_reason_by_you">%1$s را تحریم کردید. دلیل: %2$s</string>
     <string name="notice_room_third_party_invite_with_reason_by_you">دعوتی به %1$s برای پیوستن به اتاق فرستادید. دلیل: %2$s</string>
@@ -440,7 +440,6 @@
     </plurals>
     <string name="room_participants_leave_prompt_title">ترک اتاق</string>
     <string name="room_participants_leave_prompt_msg">آیا از ترک این اتاق اطمینان دارید؟</string>
-    <string name="room_participants_remove_prompt_msg">آیا می‌خواهید %s را از این گفتگو حذف کنید؟</string>
     <string name="room_participants_create">ساخت</string>
     <string name="room_participants_online">آنلاین</string>
     <string name="room_participants_offline">آفلاین</string>
@@ -453,7 +452,6 @@
     <string name="room_participants_header_devices">نشست‌ها</string>
     <string name="room_participants_action_invite">دعوت</string>
     <string name="room_participants_action_leave">ترک این اتاق</string>
-    <string name="room_participants_action_remove">حذف از این اتاق</string>
     <string name="action_stay">ماندن</string>
     <string name="action_redact">برداشتن</string>
     <string name="action_download">بارگیری</string>
@@ -557,10 +555,6 @@
     <string name="template_settings_troubleshoot_test_device_settings_failed">آگاهی‌ها برای این نشست به کار نیفتاده‌اند.
 \nلطفاً تنظیمات المنت را بررسی کنید.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">برخی آگاهی‌ها در تنظیمات سفارشیتان از کار افتاده‌اند.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">خدمت آگاهی</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">خدمت آگاهی در حال اجراست.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">خدمت آگاهی در حال اجرا نیست.
-\nتلاش کنید برنامه را دوباره شروع کنید.</string>
     <string name="settings_troubleshoot_test_service_restart_title">شروع دوبارهٔ خودکار خدمت آگاهی</string>
     <string name="settings_enable_all_notif">به کار انداختن آگاهی‌ها برای این حساب</string>
     <string name="settings_enable_this_device">به کار انداختن آگاهی‌ها برای این نشست</string>
@@ -813,7 +807,7 @@
     </plurals>
     <string name="room_participants_action_ban">تحریم</string>
     <string name="room_participants_action_unban">رفع انسداد</string>
-    <string name="room_participants_action_kick">اخراج</string>
+    <string name="room_participants_action_remove">اخراج</string>
     <string name="room_participants_action_set_default_power_level">بازنشانی به کاربر عادی</string>
     <string name="room_participants_action_set_moderator">ناظر کردن</string>
     <string name="room_participants_action_set_admin">مدیر کردن</string>
@@ -894,9 +888,9 @@
     <string name="room_participants_action_unignore_title">لغو نادیده‌گیری کاربر</string>
     <string name="room_participants_action_cancel_invite_title">لغو دعوت</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">مطمئنید که می‌خواهید دعوت این کاربر را لغو کنید؟</string>
-    <string name="room_participants_kick_title">اخراج کاربر</string>
-    <string name="room_participants_kick_reason">دلیل اخراج</string>
-    <string name="room_participants_kick_prompt_msg">اخراج کاربر، از این اتاق برش می‌دارد.
+    <string name="room_participants_remove_title">اخراج کاربر</string>
+    <string name="room_participants_remove_reason">دلیل اخراج</string>
+    <string name="room_participants_remove_prompt_msg">اخراج کاربر، از این اتاق برش می‌دارد.
 \n
 \nبرای پیش‌گیری از پیوستن دوباره، باید تحریمش کنید.</string>
     <string name="room_participants_ban_title">تحریم کاربر</string>
@@ -961,7 +955,6 @@
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">به یاد داشته باشید که برخی گونه‌های پیام‌ها روی صامت بودن تنظیم شده‌اند (آگاهی‌ای بدون هیچ صدایی تولید خواهند کرد).</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">بررسی تنظیمات</string>
     <string name="settings_troubleshoot_test_play_services_title">بررسی خدمات پلی</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">شروع خدمت</string>
     <string name="settings_troubleshoot_test_service_restart_success">خدمت کشته و به صورت خودکار دوباره شروع شد.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">شروع دوبارهٔ خدمت شکست خورد</string>
     <string name="settings_troubleshoot_test_service_boot_title">شروع هنگام راه‌اندازی</string>
@@ -1544,7 +1537,7 @@
     <string name="rejoin">پیوستن دوباره</string>
     <string name="reason_colon">دلیل: %1$s</string>
     <string name="has_been_banned">به دست %2$s از %1$s تحریم شدید</string>
-    <string name="has_been_kicked">به دست %2$s از %1$s اخراج شدید</string>
+    <string name="has_been_removed">به دست %2$s از %1$s اخراج شدید</string>
     <string name="room_created_summary_item">%s اتاق را ساخته و پیکربندی کرد.</string>
     <string name="encryption_unknown_algorithm_tile_description">رمزنگاری این اتاق پشتیبانی نمی‌شود</string>
     <string name="error_empty_field_enter_user_name">لطفاً نام کاربری‌ای وارد کنید.</string>
@@ -2237,7 +2230,7 @@
     <string name="command_description_clear_scalar_token">جهت رفع مشکلات مدیریت برنامه‌های ماتریکس</string>
     <string name="command_description_markdown">فعال و غیرفعال کردن markdown</string>
     <string name="command_description_nick">نام مستعار شما را تغییر می‌دهد</string>
-    <string name="command_description_kick_user">اخراج کاربر با شناسه داده شده</string>
+    <string name="command_description_remove_user">اخراج کاربر با شناسه داده شده</string>
     <string name="command_description_topic">تنظیم موضوع اتاق</string>
     <string name="command_description_part_room">ترک اتاق</string>
     <string name="command_description_join_room">به اتاق با نشانی داده شده می‌پیوندد</string>
@@ -2481,7 +2474,7 @@
     <string name="room_permissions_send_messages">فرستادن پیام‌ها</string>
     <string name="room_permissions_invite_users">دعوت کاربران</string>
     <string name="room_permissions_change_settings">تغییر تنظیمات</string>
-    <string name="room_permissions_kick_users">اخراج کاربران</string>
+    <string name="room_permissions_remove_users">اخراج کاربران</string>
     <string name="room_permissions_ban_users">تحریم کاربران</string>
     <string name="room_permissions_remove_messages_sent_by_others">برداشتن پیام‌های دیگران</string>
     <string name="room_permissions_notify_everyone">آگاه کردن همه</string>
@@ -2964,7 +2957,7 @@
     <string name="space_settings_permissions_title">اجازه‌های فضا</string>
     <string name="space_participants_unban_prompt_msg">لغو تحریم کاربر، اجازهٔ پیوستن دوباره‌اش به فضا را می‌دهد.</string>
     <string name="space_participants_ban_prompt_msg">تحریم کاربر، او را از این فضا اخراج کرده و از پیوستن دوباره‌اش جلوگیری می‌کند.</string>
-    <string name="space_participants_kick_prompt_msg">اخراج کاربر، از این فضا برش می‌دارد.
+    <string name="space_participants_remove_prompt_msg">اخراج کاربر، از این فضا برش می‌دارد.
 \n
 \nبرای پیش‌گیری از پیوستن دوباره، باید تحریمش کنید.</string>
     <string name="a11y_stop_voice_message">پایان ضبط</string>
@@ -3016,7 +3009,6 @@
     <string name="delete_poll_dialog_title">برداشتن نظرسنجی</string>
     <string name="poll_end_room_list_preview">نظرسنجی پایان یافت</string>
     <string name="poll_response_room_list_preview">رأی داده شد</string>
-    <string name="labs_enable_polls">به کار انداختن نظرسنجی‌ها</string>
     <string name="end_poll_confirmation_approve_button">پایان نظرسنجی</string>
     <string name="end_poll_confirmation_description">این کار اجازهٔ رأی دادن افراد را پایان داده و نتیجهٔ نهایی نظرسنجی را نمایش خواهد داد.</string>
     <string name="end_poll_confirmation_title">پایان این نظرسنجی؟</string>
@@ -3067,10 +3059,7 @@
     <string name="labs_auto_report_uisi_desc">سامانه‌تان هنگام‌ مواجهه با خطای ناتوانی در رمزگشایی، گزارش‌ها را به صورت خودکار خواهد فرستاد</string>
     <string name="labs_auto_report_uisi">گزارش خودکار خطاهای رمزگشایی.</string>
     <string name="login_splash_already_have_account">از پیش حساب دارم</string>
-    <string name="ftue_auth_carousel_3_body">المنت با تمامی کاره‌های مبتنی بر ماتریکس کار کرده و حتا می‌تواند به پیام‌رسان‌های مالکیتیتان پل بزند.</string>
     <string name="ftue_auth_carousel_3_title">ارتباط با هرکسی.</string>
-    <string name="ftue_auth_carousel_2_body">المنت می‌گذارد مکان ذخیرهٔ پیام‌هایتان را برگزینید تا داده‌هایتان را کنترل کنید.</string>
     <string name="ftue_auth_carousel_2_title">شما کنترل می‌کنید.</string>
-    <string name="ftue_auth_carousel_1_body">پیام‌رسانی رمزنگاشتهٔ سرتاسری برای ارتباط مستقل امن، وصل شده با ماتریکس.</string>
     <string name="ftue_auth_carousel_1_title">صاحب گفت‌وگوهایتان باشید.</string>
 </resources>

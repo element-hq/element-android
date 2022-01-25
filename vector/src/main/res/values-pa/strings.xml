@@ -85,8 +85,8 @@
     <string name="notice_room_ban">%1$s ਨੇ %2$s ਤੇ ਪਬੰਦੀ ਲਗਾਈ</string>
     <string name="notice_room_unban_by_you">ਤੁਸੀਂ %1$s ਤੇ ਲੱਗੀ ਪਬੰਦੀ ਹਟਾਈ</string>
     <string name="notice_room_unban">%1$s ਨੇ %2$s ਤੇ ਲੱਗੀ ਪਬੰਦੀ ਹਟਾਈ</string>
-    <string name="notice_room_kick_by_you">ਤੁਸੀਂ %1$s ਦੇ ਲੱਤ ਮਾਰ ਦਿੱਤੀ ਹੈ</string>
-    <string name="notice_room_kick">%1$s ਨੇ %2$s ਦੇ ਲੱਤ ਮਾਰ ਦਿੱਤੀ ਹੈ</string>
+    <string name="notice_room_remove_by_you">ਤੁਸੀਂ %1$s ਦੇ ਲੱਤ ਮਾਰ ਦਿੱਤੀ ਹੈ</string>
+    <string name="notice_room_remove">%1$s ਨੇ %2$s ਦੇ ਲੱਤ ਮਾਰ ਦਿੱਤੀ ਹੈ</string>
     <string name="notice_room_reject_by_you">ਤੁਸੀਂ ਸੱਦਾ ਨਕਾਰ ਦਿੱਤਾ ਹੈ</string>
     <string name="notice_room_reject">%1$s ਨੇ ਸੱਦਾ ਨਕਾਰ ਦਿੱਤਾ ਹੈ</string>
     <string name="notice_direct_room_leave_by_you">ਤੁਸੀਂ ਥਾਂ ਛੱਡ ਦਿੱਤੀ ਹੈ</string>

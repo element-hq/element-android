@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s neemt nu deel aan het gesprek</string>
     <string name="notice_room_leave">%1$s heeft het gesprek verlaten</string>
     <string name="notice_room_reject">%1$s heeft de uitnodiging geweigerd</string>
-    <string name="notice_room_kick">%1$s heeft %2$s uit het gesprek verwijderd</string>
+    <string name="notice_room_remove">%1$s heeft %2$s uit het gesprek verwijderd</string>
     <string name="notice_room_unban">%1$s heeft %2$s ontbannen</string>
     <string name="notice_room_ban">%1$s heeft %2$s verbannen</string>
     <string name="notice_room_withdraw">%1$s heeft de uitnodiging van %2$s ingetrokken</string>
@@ -88,7 +88,7 @@
     <string name="notice_room_join_with_reason">%1$s neemt nu deel. Reden: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s is weggegaan. Reden: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s heeft de uitnodiging geweigerd. Reden: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s heeft %2$s verwijderd. Reden: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s heeft %2$s verwijderd. Reden: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s heeft %2$s ontbannen. Reden: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s heeft %2$s verbannen. Reden: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s heeft %2$s een uitnodiging voor het gesprek gestuurd. Reden: %3$s</string>
@@ -340,7 +340,6 @@
     <string name="room_title_one_member">1 deelnemer</string>
     <string name="room_participants_leave_prompt_title">Gesprek verlaten</string>
     <string name="room_participants_leave_prompt_msg">Weet u zeker dat u het gesprek wilt verlaten\?</string>
-    <string name="room_participants_remove_prompt_msg">Weet u zeker dat u %s uit dit gesprek wilt verwijderen\?</string>
     <string name="room_participants_create">Aanmaken</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
@@ -351,7 +350,6 @@
     <string name="room_participants_header_devices">SESSIES</string>
     <string name="room_participants_action_invite">Uitnodigen</string>
     <string name="room_participants_action_leave">Dit gesprek verlaten</string>
-    <string name="room_participants_action_remove">Verwijderen uit dit gesprek</string>
     <string name="room_participants_action_ban">Verbannen</string>
     <string name="room_participants_action_unban">Ontbannen</string>
     <string name="room_participants_action_set_default_power_level">Herinstellen als normale gebruiker</string>
@@ -768,7 +766,7 @@
     <string name="filter_group_members">Groepsleden filteren</string>
     <string name="filter_group_rooms">Groepsgesprekken filteren</string>
     <string name="group_no_long_description">De gemeenschapsbeheerder heeft geen lange beschrijving gegeven voor deze gemeenschap.</string>
-    <string name="has_been_kicked">%2$s heeft u uit %1$s gezet</string>
+    <string name="has_been_removed">%2$s heeft u uit %1$s gezet</string>
     <string name="has_been_banned">%2$s heeft u uit %1$s verbannen</string>
     <string name="reason_colon">Reden: %1$s</string>
     <string name="rejoin">Opnieuw toetreden</string>
@@ -846,7 +844,7 @@
     <string name="command_description_join_room">Voegt een kamer toe met het opgegeven adres</string>
     <string name="command_description_part_room">Gesprek verlaten</string>
     <string name="command_description_topic">Onderwerp van het gesprek instellen</string>
-    <string name="command_description_kick_user">Stuurt gebruiker met gegeven ID eruit</string>
+    <string name="command_description_remove_user">Stuurt gebruiker met gegeven ID eruit</string>
     <string name="command_description_nick">Wijzigt uw weergavenaam</string>
     <string name="command_description_markdown">Markdown aan/uit</string>
     <string name="room_tombstone_versioned_description">Dit gesprek is vervangen en is niet langer actief.</string>
@@ -906,7 +904,7 @@
     <string name="template_settings_call_ringtone_use_app_ringtone">Gebruik de standaardbeltoon van ${app_name} voor inkomende oproepen</string>
     <string name="settings_call_ringtone_title">Beltoon voor inkomende oproepen</string>
     <string name="settings_call_ringtone_dialog_title">Selecteer beltoon voor oproepen:</string>
-    <string name="room_participants_action_kick">Eruit sturen</string>
+    <string name="room_participants_action_remove">Eruit sturen</string>
     <string name="reason_hint">Reden</string>
     <string name="room_sliding_menu_version_x">Versie %s</string>
     <string name="settings_inline_url_preview_summary">Voorvertoning van koppelingen in het gesprek tonen (als uw thuisserver deze functie ondersteunt).</string>
@@ -994,11 +992,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM-bewijs geregistreerd bij thuisserver.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM-bewijs niet geregistreerd bij thuisserver:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Meldingsdienst</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Meldingsdienst is actief.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Meldingsdienst is niet actief.
-\nProbeer de app te herstarten.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Dienst starten</string>
     <string name="settings_troubleshoot_test_service_restart_title">Meldingsdienst automatisch herstarten</string>
     <string name="settings_troubleshoot_test_service_restart_success">Dienst is afgesloten en automatisch herstart.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Dienst is niet herstart</string>
@@ -1401,7 +1394,7 @@
     <string name="summary_you_sent_image">U heeft een afbeelding gestuurd.</string>
     <string name="notice_room_ban_with_reason_by_you">U heeft %1$s verbannen. Reden: %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">U heeft de verbanning van %1$s opgeheven. Reden: %2$s</string>
-    <string name="notice_room_kick_with_reason_by_you">U heeft %1$s eruit getrapt. Reden: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">U heeft %1$s eruit getrapt. Reden: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">U heeft de uitnodiging geweigerd. Reden: %1$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">U bent vertrokken. Reden: %1$s</string>
     <string name="notice_direct_room_leave_with_reason">%1$s is vertrokken. Reden: %2$s</string>
@@ -1456,7 +1449,7 @@
     <string name="notice_room_withdraw_by_you">U heeft de uitnodiging van %1$s ingetrokken</string>
     <string name="notice_room_ban_by_you">U heeft %1$s verbannen</string>
     <string name="notice_room_unban_by_you">U heeft de verbanning van %1$s opgeheven</string>
-    <string name="notice_room_kick_by_you">U heeft %1$s eruit getrapt</string>
+    <string name="notice_room_remove_by_you">U heeft %1$s eruit getrapt</string>
     <string name="notice_direct_room_join_by_you">U sloot zich aan</string>
     <string name="notice_direct_room_join">%1$s sluit aan</string>
     <string name="notice_room_join_by_you">U heeft de kamer betreden</string>
@@ -1624,7 +1617,7 @@
     <string name="settings_secure_backup_section_title">Beveiligde Backup</string>
     <string name="room_participants_unban_title">Verbanning gebruiker ongedaan maken</string>
     <string name="room_participants_ban_title">Gebruiker verbannen</string>
-    <string name="room_participants_kick_title">Gebruiker verwijderen</string>
+    <string name="room_participants_remove_title">Gebruiker verwijderen</string>
     <string name="room_participants_action_cancel_invite_title">Uitnodiging annuleren</string>
     <string name="room_participants_action_unignore_title">Gebruiker niet meer negeren</string>
     <string name="sent_a_voice_message">Stem</string>
@@ -1851,13 +1844,13 @@
     <string name="room_participants_unban_prompt_msg">Door deze gebruiker niet meer de verbannen kan hij/zij opnieuw toetreden tot het gesprek.</string>
     <string name="space_participants_ban_prompt_msg">Door deze gebruiker te verbannen zal hij/zij verwijderd worden uit deze space en voorkomen dat hij/zij opnieuw toetreedt.</string>
     <string name="room_participants_ban_reason">Reden voor verbanning</string>
-    <string name="space_participants_kick_prompt_msg">door deze gebruiker de verwijderen zal hij/zij niet meer in deze space zitten.
+    <string name="space_participants_remove_prompt_msg">door deze gebruiker de verwijderen zal hij/zij niet meer in deze space zitten.
 \n
 \nOm te voorkomen dat hij/zij opnieuw toetreedt, kunt u hem/haar ook verbannen.</string>
-    <string name="room_participants_kick_prompt_msg">door deze gebruiker te verwijderen zal hij/zij niet meer in dit gesprek zitten.
+    <string name="room_participants_remove_prompt_msg">door deze gebruiker te verwijderen zal hij/zij niet meer in dit gesprek zitten.
 \n
 \nOm te voorkomen dat hij/zij opnieuw toetreedt, kun je hem/haar ook verbannen.</string>
-    <string name="room_participants_kick_reason">Reden voor verwijdering</string>
+    <string name="room_participants_remove_reason">Reden voor verwijdering</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Weet u zeker dat u uitnodiging voor deze gebruiker wilt annuleren\?</string>
     <string name="room_participants_action_unignore_prompt_msg">Het niet meer negeren van deze gebruiker zal al zijn/haar berichten opnieuw doen weergeven.</string>
     <string name="room_participants_action_ignore_prompt_msg">Door deze gebruiker te negeren worden zijn/haar berichten verwijderd uit gesprekken die jullie delen.
@@ -2313,7 +2306,7 @@
     <string name="room_permissions_notify_everyone">Iedereen informeren</string>
     <string name="room_permissions_remove_messages_sent_by_others">Berichten verwijderen die door anderen zijn verzonden</string>
     <string name="room_permissions_ban_users">Gebruikers verbannen</string>
-    <string name="room_permissions_kick_users">Kick gebruikers</string>
+    <string name="room_permissions_remove_users">Kick gebruikers</string>
     <string name="room_permissions_change_settings">Instellingen veranderen</string>
     <string name="room_permissions_invite_users">Gebruikers uitnodigen</string>
     <string name="room_permissions_send_messages">Berichten sturen</string>
@@ -2903,7 +2896,6 @@
     <string name="create_spaces_join_info_help">Als u lid wilt worden van een bestaande kamer, heeft u een uitnodiging nodig.</string>
     <string name="event_status_delete_all_failed_dialog_message">Weet je zeker dat je alle niet verzonden berichten in deze kamer wilt verwijderen\?</string>
     <string name="labs_auto_report_uisi">Automatisch rapport versleutelingsfouten.</string>
-    <string name="ftue_auth_carousel_1_body">End-to-end-versleutelde berichtenuitwisseling voor veilige en onafhankelijke communicatie, verbonden via Matrix.</string>
     <string name="tooltip_attachment_poll">Poll maken</string>
     <string name="tooltip_attachment_contact">Contacten openen</string>
     <string name="tooltip_attachment_sticker">Stuur sticker</string>
@@ -2914,7 +2906,6 @@
     <string name="delete_poll_dialog_title">Poll verwijderen</string>
     <string name="poll_end_room_list_preview">Poll beëindigd</string>
     <string name="poll_response_room_list_preview">Stem uitgebracht</string>
-    <string name="labs_enable_polls">Polls inschakelen</string>
     <string name="end_poll_confirmation_approve_button">Einde poll</string>
     <string name="end_poll_confirmation_description">Hierdoor kunnen mensen niet meer stemmen en worden de definitieve resultaten van de poll weergegeven.</string>
     <string name="end_poll_confirmation_title">Deze poll beëindigen\?</string>
@@ -3071,9 +3062,6 @@
     <string name="command_description_create_space">Maak een Space</string>
     <string name="room_member_override_nick_color">Bijnaam kleur overschrijven</string>
     <string name="login_splash_already_have_account">Ik heb al een account</string>
-    <string name="ftue_auth_carousel_4_body">Even universeel als e-mail, Element is een volledig nieuw type samenwerking.</string>
-    <string name="ftue_auth_carousel_3_body">Element werkt met alle op Matrix gebaseerde apps en kan zelfs verbinden met propriëtaire diensten.</string>
     <string name="ftue_auth_carousel_3_title">Maak contact met iedereen.</string>
-    <string name="ftue_auth_carousel_2_body">Met Element kunt u kiezen waar uw berichten worden opgeslagen, zodat u de controle over uw gegevens behoudt.</string>
     <string name="ftue_auth_carousel_2_title">U heeft de controle.</string>
 </resources>

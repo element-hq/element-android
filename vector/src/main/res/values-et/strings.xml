@@ -9,7 +9,7 @@
     <string name="notice_room_join">%1$s liitus jututoaga</string>
     <string name="notice_room_leave">%1$s lahkus jututoast</string>
     <string name="notice_room_reject">%1$s lükkas tagasi kutse</string>
-    <string name="notice_room_kick">%1$s müksas kasutajat %2$s</string>
+    <string name="notice_room_remove">%1$s müksas kasutajat %2$s</string>
     <string name="notice_room_withdraw">%1$s võttis tagasi kutse kasutajale %2$s</string>
     <string name="notice_avatar_url_changed">%1$s muutis oma avatari</string>
     <string name="notice_display_name_set">%1$s määras oma kuvatavaks nimeks %2$s</string>
@@ -86,7 +86,7 @@
     <string name="notice_room_join_with_reason">%1$s liitus jututoaga. Põhjus: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s lahkus jututoast. Põhjus: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s lükkas kutse tagasi. Põhjus: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s müksas välja kasutaja %2$s. Põhjus: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s müksas välja kasutaja %2$s. Põhjus: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s saatis kasutajale %2$s kutse jututoaga liitumiseks. Põhjus: %3$s</string>
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$s tühistas kasutajale %2$s saadetud kutse jututoaga liitumiseks. Põhjus: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s võttis vastu kutse %2$s jututoaga liitumiseks. Põhjus: %3$s</string>
@@ -115,7 +115,7 @@
     <string name="notice_room_join_by_you">Sina liitusid jututoaga</string>
     <string name="notice_room_leave_by_you">Sina lahkusid jututoast</string>
     <string name="notice_room_reject_by_you">Sina lükkasid kutse tagasi</string>
-    <string name="notice_room_kick_by_you">Sina müksasid %1$s välja</string>
+    <string name="notice_room_remove_by_you">Sina müksasid %1$s välja</string>
     <string name="notice_room_unban">%1$s taastas %2$s ligipääsu</string>
     <string name="notice_room_unban_by_you">Sina taastasid %1$s ligipääsu</string>
     <string name="notice_room_ban">%1$s keelas %2$s ligipääsu</string>
@@ -166,7 +166,7 @@
     <string name="notice_room_join_with_reason_by_you">Sina liitusid jututoaga. Põhjus: %1$s</string>
     <string name="notice_room_leave_with_reason_by_you">Sina lahkusid jututoast. Põhjus: %1$s</string>
     <string name="notice_room_reject_with_reason_by_you">Sina lükkasid kutse tagasi. Põhjus: %1$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Sina müksasid kasutaja %1$s välja. Põhjus: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Sina müksasid kasutaja %1$s välja. Põhjus: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s taastas ligipääsu kasutajale %2$s. Põhjus: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Sina taastasid kasutaja %1$s ligipääsu. Põhjus: %2$s</string>
     <string name="notice_room_ban_with_reason">%1$s keelas kasutaja %2$s ligipääsu. Põhjus: %3$s</string>
@@ -1067,7 +1067,6 @@
     </plurals>
     <string name="room_participants_leave_prompt_title">Lahku jututoast</string>
     <string name="room_participants_leave_prompt_msg">Kas oled kindel, et soovid lahkuda jututoast\?</string>
-    <string name="room_participants_remove_prompt_msg">Kas sa oled kindel, et soovid eemaldada %s sellest vestlusest\?</string>
     <string name="room_participants_create">Loo</string>
     <string name="room_participants_online">Võrgus</string>
     <string name="room_participants_offline">Võrgust väljas</string>
@@ -1080,10 +1079,9 @@
     <string name="room_participants_action_invite">Kutsu</string>
     <string name="room_participants_action_cancel_invite">Tühista kutse</string>
     <string name="room_participants_action_leave">Lahku sellest jututoast</string>
-    <string name="room_participants_action_remove">Eemalda sellest jututoast</string>
     <string name="room_participants_action_ban">Keela ligipääs</string>
     <string name="room_participants_action_unban">Taasta ligipääs</string>
-    <string name="room_participants_action_kick">Müksa välja</string>
+    <string name="room_participants_action_remove">Müksa välja</string>
     <string name="room_participants_action_set_default_power_level">Muuda tavakasutajaks</string>
     <string name="room_participants_action_set_moderator">Määra moderaatoriks</string>
     <string name="room_participants_action_set_admin">Määra peakasutajaks</string>
@@ -1150,9 +1148,9 @@
     <string name="room_participants_action_unignore">Lõpeta eiramine</string>
     <string name="room_participants_action_cancel_invite_title">Tühista kutse</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Kas oled kindel et sa soovid tühistada kutse sellele kasutajale\?</string>
-    <string name="room_participants_kick_title">Müksa kasutaja välja</string>
-    <string name="room_participants_kick_reason">Jututoast väljamüksamise põhjus</string>
-    <string name="room_participants_kick_prompt_msg">jututoast välja müksamine eemaldab ta praeguseks jututoast.
+    <string name="room_participants_remove_title">Müksa kasutaja välja</string>
+    <string name="room_participants_remove_reason">Jututoast väljamüksamise põhjus</string>
+    <string name="room_participants_remove_prompt_msg">jututoast välja müksamine eemaldab ta praeguseks jututoast.
 \n
 \nKui soovid, et ta ei saaks uuesti liituda, siis peaksid seadma suhtluskeelu.</string>
     <string name="room_participants_ban_title">Määra kasutajale suhtluskeeld</string>
@@ -1235,11 +1233,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM tunnusloa registreerimine koduserveris õnnestus.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM tunnusloa registreerimine koduserveris ei õnnestunud:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Teavituste teenus</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Teavituste teenus töötab.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Teavituste teenus ei tööta.
-\nProovi, kas Element\'i uuesti käivitamine aitab.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Käivita teenus</string>
     <string name="settings_troubleshoot_test_service_restart_title">Teavituste teenuse automaatne taaskäivitamine</string>
     <string name="settings_troubleshoot_test_service_restart_success">Teenus suleti ja käivitati automaatselt uuesti.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Teenuse uuesti käivitamine ei õnnestunud</string>
@@ -1549,7 +1542,7 @@
     <string name="command_description_join_room">Liitu sellise aadressiga jututoaga</string>
     <string name="command_description_part_room">Lahku jututoast</string>
     <string name="command_description_topic">Määra jututoa teema</string>
-    <string name="command_description_kick_user">Müksa selle tunnusega kasutaja jututoast välja</string>
+    <string name="command_description_remove_user">Müksa selle tunnusega kasutaja jututoast välja</string>
     <string name="command_description_nick">Muudab sinu kuvatavat nime</string>
     <string name="command_description_markdown">Lülita markdown-vormingu kasutamine sisse või välja</string>
     <string name="command_description_clear_scalar_token">Paranda Matrix\'i rakenduse haldust</string>
@@ -1582,7 +1575,7 @@
         <item quantity="other">%d jututuba</item>
     </plurals>
     <string name="group_no_long_description">Kogukonna haldur ei ole kogukonna pikka kirjeldust koostanud.</string>
-    <string name="has_been_kicked">%2$s müksas sind välja %1$s jututoast</string>
+    <string name="has_been_removed">%2$s müksas sind välja %1$s jututoast</string>
     <string name="receipt_avatar">Lugemisteatise tunnuspilt</string>
     <string name="notice_avatar">Teavituse tunnuspilt</string>
     <string name="avatar">Tunnuspilt</string>
@@ -2540,7 +2533,7 @@
     <string name="room_permissions_notify_everyone">Teavita kõiki</string>
     <string name="room_permissions_remove_messages_sent_by_others">Kustuta teiste saadetud sõnumid</string>
     <string name="room_permissions_ban_users">Määra kasutajatele suhtluskeeld</string>
-    <string name="room_permissions_kick_users">Müksa kasutajaid välja</string>
+    <string name="room_permissions_remove_users">Müksa kasutajaid välja</string>
     <string name="room_permissions_change_settings">Muuda seadistusi</string>
     <string name="room_permissions_invite_users">Kutsu kasutajaid</string>
     <string name="room_permissions_send_messages">Saada sõnumeid</string>
@@ -2964,7 +2957,7 @@
     <string name="space_settings_permissions_title">Õigused kogukonnakeskuses</string>
     <string name="space_participants_unban_prompt_msg">Suhtluskeelu eemaldamine võimaldab kogukonnaga uuesti liituda.</string>
     <string name="space_participants_ban_prompt_msg">Sellele kasutajale suhtluskeelu seadmine tõstab ta kogukonnast välja ning ei võimalda uuesti liitumist.</string>
-    <string name="space_participants_kick_prompt_msg">kogukonnast välja müksamine eemaldab ta praeguseks sellest kogukonnast.
+    <string name="space_participants_remove_prompt_msg">kogukonnast välja müksamine eemaldab ta praeguseks sellest kogukonnast.
 \n
 \nKui soovid, et ta ei saaks uuesti liituda, siis peaksid seadma suhtluskeelu.</string>
     <string name="a11y_stop_voice_message">Lõpeta salvestamine</string>
@@ -3013,7 +3006,6 @@
     <string name="delete_poll_dialog_content">Kas sa oled kindel, et soovid küsitlust kustutada\? Seda tegevust sa ei saa hiljem tagasi pöörata.</string>
     <string name="delete_poll_dialog_title">Kustuta küsitlus</string>
     <string name="poll_end_room_list_preview">Küsitlus on lõppenud</string>
-    <string name="labs_enable_polls">Võta küsitlused kasutusele</string>
     <string name="end_poll_confirmation_approve_button">Lõpeta küsitlus</string>
     <string name="end_poll_confirmation_description">Sellega ei saa enam keegi oma arvamust avaldada ning kuvame lõplikud tulemused.</string>
     <string name="end_poll_confirmation_title">Kas lõpetame selle küsitluse\?</string>
@@ -3068,12 +3060,8 @@
     <string name="labs_auto_report_uisi">Automaatselt teata dekrüptimise vigadest.</string>
     <string name="room_member_override_nick_color">Asenda hüüdnime värvid</string>
     <string name="login_splash_already_have_account">Mul on kasutajakonto juba olemas</string>
-    <string name="ftue_auth_carousel_4_body">Olles ühelt poolt sama universaalne kui e-post, on Element teisalt uus ja tõhus viis ühistöö korraldamiseks.</string>
     <string name="ftue_auth_carousel_4_title">Lase tiimidel vabalt tegutseda.</string>
-    <string name="ftue_auth_carousel_3_body">Element võimaldub suhelda kõikide teiste kasutusel olevate Matrixi-põhiste rakendustega ning lisaks ka paljude suletud suhtlusrakendustega.</string>
     <string name="ftue_auth_carousel_3_title">Suhtle kellega soovid.</string>
     <string name="ftue_auth_carousel_2_title">Sul on kontroll oma andmete üle.</string>
-    <string name="ftue_auth_carousel_2_body">Element võimaldab sul valida, kus sinu sõnumeid salvestatakse ja seega on sul kontroll oma andmete üle.</string>
-    <string name="ftue_auth_carousel_1_body">Matrix\'i võrgul põhinev läbivat krüptimist kasutav turvaline ja sõltumatu suhtluslahendus.</string>
     <string name="ftue_auth_carousel_1_title">Vestlused, mida sa tegelikult ka omad.</string>
 </resources>

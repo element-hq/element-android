@@ -10,7 +10,7 @@
     <string name="notice_room_join">%1$s neemt nu deel an ’t gesprek</string>
     <string name="notice_room_leave">%1$s èt ’t gesprek verloatn</string>
     <string name="notice_room_reject">%1$s èt d’uitnodigienge geweigerd</string>
-    <string name="notice_room_kick">%1$s èt %2$s uut ’t gesprek verwyderd</string>
+    <string name="notice_room_remove">%1$s èt %2$s uut ’t gesprek verwyderd</string>
     <string name="notice_room_unban">%1$s èt %2$s ountbann</string>
     <string name="notice_room_ban">%1$s èt %2$s verbann</string>
     <string name="notice_room_withdraw">%1$s èt d’uutnodigienge van %2$s ingetrokkn</string>

@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s pievienojās</string>
     <string name="notice_room_leave">%1$s pameta istabu</string>
     <string name="notice_room_reject">%1$s noraidīja uzaicinājumu</string>
-    <string name="notice_room_kick">%1$s padzina %2$s</string>
+    <string name="notice_room_remove">%1$s padzina %2$s</string>
     <string name="notice_room_unban">%1$s atcēla pieejas liegumu %2$s</string>
     <string name="notice_room_ban">%1$s liedza pieeju %2$s</string>
     <string name="notice_room_withdraw">%1$s atsauca %2$s uzaicinājumu</string>
@@ -63,7 +63,7 @@
     <string name="notice_room_withdraw_by_you">Jūs atsaucāt %1$s uzaicinājumu</string>
     <string name="notice_room_ban_by_you">Jūs liedzāt pieeju %1$s</string>
     <string name="notice_room_unban_by_you">Jūs atcēlāt pieejas liegumu %1$s</string>
-    <string name="notice_room_kick_by_you">Jūs padzināt %1$s</string>
+    <string name="notice_room_remove_by_you">Jūs padzināt %1$s</string>
     <string name="notice_room_reject_by_you">Jūs noraidījāt uzaicinājumu</string>
     <string name="notice_direct_room_leave_by_you">Jūs pametāt istabu</string>
     <string name="notice_direct_room_leave">%1$s pameta istabu</string>
@@ -156,8 +156,8 @@
     <string name="notice_room_ban_with_reason">%1$s liedza pieeju %2$s. Iemesls: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Jūs atcēlāt pieejas liegumu %1$s. Iemesls: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s atcēla %2$s pieejas liegumu. Iemesls: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Jūs padzināt %1$s. Iemesls: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s padzina %2$s. Iemesls: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Jūs padzināt %1$s. Iemesls: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s padzina %2$s. Iemesls: %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">Jūs noraidījāt uzaicinājumu. Iemesls: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s noraidīja uzaicinājumu. Iemesls: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Jūs izgājāt. Iemesls: %1$s</string>
@@ -499,7 +499,6 @@ Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespē
     <string name="room_title_one_member">1 biedrs</string>
     <string name="room_participants_leave_prompt_title">Pamest istabu</string>
     <string name="room_participants_leave_prompt_msg">Vai tiešām vēlies pamest istabu\?</string>
-    <string name="room_participants_remove_prompt_msg">Vai tiešām vēlies dzēst (izmest) %s no šī čata?</string>
     <string name="room_participants_create">Izveidot</string>
     <string name="room_participants_online">Tiešsaistē</string>
     <string name="room_participants_offline">Bezsaistē</string>
@@ -510,7 +509,6 @@ Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespē
     <string name="room_participants_header_devices">SESIJAS</string>
     <string name="room_participants_action_invite">Uzaicināt</string>
     <string name="room_participants_action_leave">Atstāt šo istabu</string>
-    <string name="room_participants_action_remove">Izmest no šīs istabas</string>
     <string name="room_participants_action_ban">Nobanot</string>
     <string name="room_participants_action_unban">Atbanot</string>
     <string name="room_participants_action_set_default_power_level">Padarīt par ierindas dalībnieku</string>
@@ -917,7 +915,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="filter_group_members">Grupas biedru filtrs</string>
     <string name="filter_group_rooms">Grupas istabu filtrs</string>
     <string name="group_no_long_description">Kopienas administrators nav izveidojis šīs kopienas garo aprakstu.</string>
-    <string name="has_been_kicked">%2$s padzina jūs no %1$s</string>
+    <string name="has_been_removed">%2$s padzina jūs no %1$s</string>
     <string name="has_been_banned">%2$s liedza jums pieeju %1$s</string>
     <string name="reason_colon">Iemesls: %1$s</string>
     <string name="rejoin">Pievienoties par jaunu</string>
@@ -1103,7 +1101,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="deactivate_account_prompt_password">Lai turpinātu, lūdzu, ievadiet savu paroli:</string>
     <string name="deactivate_account_title">Deaktivizēt kontu</string>
     <string name="command_description_nick">Nomaina jūsu parādāmo vārdu</string>
-    <string name="command_description_kick_user">Padzen lietotāju ar norādīto id</string>
+    <string name="command_description_remove_user">Padzen lietotāju ar norādīto id</string>
     <string name="command_description_part_room">Atstāj istabu</string>
     <string name="command_description_invite_user">Uzaicina lietotāju ar norādīto id uz pašreizējo istabu</string>
     <string name="command_description_deop_user">Atceļ operatora statusu lietotājam ar norādīto Id</string>
@@ -1157,7 +1155,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_permissions_notify_everyone">Apziņot visus</string>
     <string name="room_permissions_remove_messages_sent_by_others">Dzēst citu sūtītas ziņas</string>
     <string name="room_permissions_ban_users">Liegt pieeju lietotājiem</string>
-    <string name="room_permissions_kick_users">Padzīt lietotājus</string>
+    <string name="room_permissions_remove_users">Padzīt lietotājus</string>
     <string name="room_permissions_change_settings">Mainīt iestatījumus</string>
     <string name="room_permissions_invite_users">Uzaicināt lietotājus</string>
     <string name="room_permissions_send_messages">Sūtīt ziņas</string>
@@ -1175,7 +1173,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_participants_action_unignore_title">Atcelt lietotāja ignorēšanu</string>
     <string name="room_participants_action_ignore_title">Ignorēt lietotāju</string>
     <string name="room_participants_power_level_demote_warning_prompt">Jūs nevarēsiet atcelt šīs izmaiņas pēc sava statusa pazemināšanas. Gadījumā, ja esat pēdējais priviliģētais lietotājs istabā, būs neiespējami atgūt šīs privilēģijas.</string>
-    <string name="room_participants_action_kick">Padzīt</string>
+    <string name="room_participants_action_remove">Padzīt</string>
     <string name="room_participants_action_cancel_invite">Atcelt uzaicinājumu</string>
     <string name="room_participants_ago">%1$s %2$s iepriekš</string>
     <string name="room_participants_now">%1$s pašlaik</string>
@@ -1429,11 +1427,11 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_participants_unban_title">Atcelt pieejas liegumu lietotājam</string>
     <string name="room_participants_ban_reason">Pieejas lieguma iemesls</string>
     <string name="room_participants_ban_title">Liegt pieeju lietotājam</string>
-    <string name="room_participants_kick_prompt_msg">lietotāja padzīšanas gadījumā tas tiks dzēsts no šis istabas.
+    <string name="room_participants_remove_prompt_msg">lietotāja padzīšanas gadījumā tas tiks dzēsts no šis istabas.
 \n
 \nLai novērstu atkārtotu pievienošanos, tā vietā jums vajadzētu liegt pieeju.</string>
-    <string name="room_participants_kick_reason">Padzīšanas iemesls</string>
-    <string name="room_participants_kick_title">Padzīt lietotāju</string>
+    <string name="room_participants_remove_reason">Padzīšanas iemesls</string>
+    <string name="room_participants_remove_title">Padzīt lietotāju</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Vai tiešām vēlaties atcelt uzaicinājumu šim lietotājam\?</string>
     <string name="room_participants_action_unignore_prompt_msg">Atceļot ši lietotāja ignorēšanu, visas lietotāja ziņas atkal būs redzamas.</string>
     <string name="room_participants_action_ignore_prompt_msg">Ignorējot šo lietotāju noņems viņa ziņas istabās, kuras ir jums kopīgas.
@@ -1831,9 +1829,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Pārbaudīt fona ierobežojumus</string>
     <string name="settings_troubleshoot_test_service_restart_success">Pakalpojums tika beigts un restartēts automātiski.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Notifikāciju Pakalpojuma Auto-Restartēšana</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Notifikāciju Pakalpojums nestrādā.
-\nMēģiniet restartēt aplikāciju.</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Notifikāciju Pakalpojums strādā.</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">Notifikācija tika nospiesta!</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Neizdevās reģistrēt FCM žetonu mājasserverī:
 \n%1$s</string>
@@ -1867,8 +1862,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_call_notifications_preferences">Konfigurēt Zvanu Notifikācijas</string>
     <string name="settings_troubleshoot_test_service_boot_success">Pakalpojums startēsies, kad ierīce būs restartēta.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Pakalpojumam neizdevās restartēties</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Sākt Pakalpojumu</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Notifikāciju Pakalpojums</string>
     <string name="settings_troubleshoot_test_notification_title">Notifikāciju Displejs</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Servisu APK ir pieejams un atjaunināts.</string>
     <string name="search_banned_user_hint">Filtrēt aizliegtos lietotājus</string>
@@ -2725,7 +2718,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="space_settings_permissions_title">Telpas atļaujas</string>
     <string name="space_participants_unban_prompt_msg">Atceļot pievienošanās aizliegumu lietotājam, ļaus viņam atkal pievienoties Telpai.</string>
     <string name="space_participants_ban_prompt_msg">Aizliedzot lietotājam pievienoties, viņš tiks izmests no šīs Telpas un vairs nevarēs tai pievienoties.</string>
-    <string name="space_participants_kick_prompt_msg">izmetot lietotāju, noņems viņu no šīs Telpas.
+    <string name="space_participants_remove_prompt_msg">izmetot lietotāju, noņems viņu no šīs Telpas.
 \n
 \nLai novērstu viņu atkārtotu pievienošanos, jums tā vietā vajadzētu viņiem aizliegt pievienoties.</string>
     <plurals name="format_time_d">
