@@ -2996,7 +2996,6 @@
     <string name="delete_poll_dialog_title">Rimuovi sondaggio</string>
     <string name="poll_end_room_list_preview">Sondaggio terminato</string>
     <string name="poll_response_room_list_preview">Voto inviato</string>
-    <string name="labs_enable_polls">Attiva sondaggi</string>
     <string name="end_poll_confirmation_approve_button">Termina sondaggio</string>
     <string name="end_poll_confirmation_description">Ciò impedirà alle persone di poter votare e mostrerà i risultati finali del sondaggio.</string>
     <string name="end_poll_confirmation_title">Terminare questo sondaggio\?</string>

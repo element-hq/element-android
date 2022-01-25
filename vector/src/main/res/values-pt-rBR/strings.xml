@@ -3006,7 +3006,6 @@
     <string name="delete_poll_dialog_title">Remover sondagem</string>
     <string name="poll_end_room_list_preview">Sondagem terminada</string>
     <string name="poll_response_room_list_preview">Voto lançado</string>
-    <string name="labs_enable_polls">Habilitar Sondagens</string>
     <string name="end_poll_confirmation_approve_button">Terminar sondagem</string>
     <string name="end_poll_confirmation_description">Isto vai parar pessoas de serem capazes de votar e vai exibir os resultados finais da sondagem.</string>
     <string name="end_poll_confirmation_title">Terminar esta sondagem\?</string>

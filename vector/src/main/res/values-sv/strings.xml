@@ -3015,7 +3015,6 @@
     <string name="delete_poll_dialog_title">Ta bort omröstning</string>
     <string name="poll_end_room_list_preview">Omröstning avslutad</string>
     <string name="poll_response_room_list_preview">Röst avgiven</string>
-    <string name="labs_enable_polls">Aktivera omröstningar</string>
     <string name="end_poll_confirmation_approve_button">Avsluta omröstningen</string>
     <string name="end_poll_confirmation_description">Det här kommer att stoppa personer från att rösta och visa det slutgiltiga resultatet av omröstningen.</string>
     <string name="end_poll_confirmation_title">Avsluta den här omröstningen\?</string>

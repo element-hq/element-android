@@ -3007,7 +3007,6 @@
     <string name="delete_poll_dialog_title">Supprimer le sondage</string>
     <string name="poll_end_room_list_preview">Sondage terminé</string>
     <string name="poll_response_room_list_preview">Vote exprimé</string>
-    <string name="labs_enable_polls">Activer les sondages</string>
     <string name="end_poll_confirmation_approve_button">Terminer le sondage</string>
     <string name="end_poll_confirmation_description">Cela empêchera les gens de voter et affichera le résultat final du sondage.</string>
     <string name="end_poll_confirmation_title">Terminer ce sondage \?</string>

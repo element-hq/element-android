@@ -3006,7 +3006,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="delete_poll_dialog_title">Szavazás törlése</string>
     <string name="poll_end_room_list_preview">Szavazás lezárva</string>
     <string name="poll_response_room_list_preview">Szavazat leadva</string>
-    <string name="labs_enable_polls">Szavazások bekapcsolása</string>
     <string name="end_poll_confirmation_approve_button">Szavazás lezárása</string>
     <string name="end_poll_confirmation_description">Ez megszünteti az új szavazatok leadásának lehetőségét, és kijelzi a végleges eredményt.</string>
     <string name="end_poll_confirmation_title">Lezárod a szavazást\?</string>

@@ -3006,7 +3006,6 @@
     <string name="delete_poll_dialog_content">Kas sa oled kindel, et soovid küsitlust kustutada\? Seda tegevust sa ei saa hiljem tagasi pöörata.</string>
     <string name="delete_poll_dialog_title">Kustuta küsitlus</string>
     <string name="poll_end_room_list_preview">Küsitlus on lõppenud</string>
-    <string name="labs_enable_polls">Võta küsitlused kasutusele</string>
     <string name="end_poll_confirmation_approve_button">Lõpeta küsitlus</string>
     <string name="end_poll_confirmation_description">Sellega ei saa enam keegi oma arvamust avaldada ning kuvame lõplikud tulemused.</string>
     <string name="end_poll_confirmation_title">Kas lõpetame selle küsitluse\?</string>

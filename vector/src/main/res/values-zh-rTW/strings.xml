@@ -2951,7 +2951,6 @@
     <string name="delete_poll_dialog_title">移除投票</string>
     <string name="poll_end_room_list_preview">投票已結束</string>
     <string name="poll_response_room_list_preview">投票</string>
-    <string name="labs_enable_polls">啟用投票</string>
     <string name="end_poll_confirmation_approve_button">結束投票</string>
     <string name="end_poll_confirmation_description">這將阻止人們投票並顯示投票的最終結果。</string>
     <string name="end_poll_confirmation_title">結束此投票？</string>

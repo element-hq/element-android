@@ -1889,7 +1889,6 @@
     <string name="report_content_custom_title">Nahlásiť tento obsah</string>
     <string name="uploads_files_subtitle">%1$s dňa %2$s</string>
     <string name="delete_poll_dialog_title">Odstrániť anketu</string>
-    <string name="labs_enable_polls">Povoliť ankety</string>
     <string name="end_poll_confirmation_approve_button">Ukončiť anketu</string>
     <string name="poll_end_action">Ukončiť anketu</string>
     <plurals name="poll_option_vote_count">

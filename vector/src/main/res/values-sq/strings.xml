@@ -2993,7 +2993,6 @@
     <string name="delete_poll_dialog_title">Hiqe pyetësorin</string>
     <string name="poll_end_room_list_preview">Pyetësori përfundoi</string>
     <string name="poll_response_room_list_preview">U votua</string>
-    <string name="labs_enable_polls">Aktivizo Pyetësorë</string>
     <string name="end_poll_confirmation_approve_button">Përfundoje pyetësorin</string>
     <string name="end_poll_confirmation_description">Kjo do t’ua bëjë njerëzve të pamundur të votojnë dhe do të shfaqë rezultatet përfundimtare të pyetësorit.</string>
     <string name="end_poll_confirmation_title">Të përfundohet pyetësori\?</string>

@@ -2906,7 +2906,6 @@
     <string name="delete_poll_dialog_title">Poll verwijderen</string>
     <string name="poll_end_room_list_preview">Poll beëindigd</string>
     <string name="poll_response_room_list_preview">Stem uitgebracht</string>
-    <string name="labs_enable_polls">Polls inschakelen</string>
     <string name="end_poll_confirmation_approve_button">Einde poll</string>
     <string name="end_poll_confirmation_description">Hierdoor kunnen mensen niet meer stemmen en worden de definitieve resultaten van de poll weergegeven.</string>
     <string name="end_poll_confirmation_title">Deze poll beëindigen\?</string>

@@ -3061,7 +3061,6 @@
     <string name="delete_poll_dialog_title">Odstranit hlasování</string>
     <string name="poll_end_room_list_preview">Hlasování skončilo</string>
     <string name="poll_response_room_list_preview">Hlas odeslán</string>
-    <string name="labs_enable_polls">Povolit hlasování</string>
     <string name="end_poll_confirmation_approve_button">Ukončit hlasování</string>
     <string name="end_poll_confirmation_description">Toto zastaví možnost hlasování a zobrazí se konečné výsledky.</string>
     <string name="end_poll_confirmation_title">Ukončit toto hlasování\?</string>

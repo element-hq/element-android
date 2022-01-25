@@ -2955,7 +2955,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="delete_poll_dialog_title">Hapus poll</string>
     <string name="poll_end_room_list_preview">Poll berakhir</string>
     <string name="poll_response_room_list_preview">Suara diberikan</string>
-    <string name="labs_enable_polls">Aktifkan Poll</string>
     <string name="end_poll_confirmation_approve_button">Akhiri poll</string>
     <string name="end_poll_confirmation_description">Ini akan menghentikan orang-orang untuk dapat memberikan suara dan akan menampilkan hasil akhir poll.</string>
     <string name="end_poll_confirmation_title">Akhiri poll ini\?</string>

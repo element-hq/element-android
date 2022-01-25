@@ -3009,7 +3009,6 @@
     <string name="delete_poll_dialog_title">برداشتن نظرسنجی</string>
     <string name="poll_end_room_list_preview">نظرسنجی پایان یافت</string>
     <string name="poll_response_room_list_preview">رأی داده شد</string>
-    <string name="labs_enable_polls">به کار انداختن نظرسنجی‌ها</string>
     <string name="end_poll_confirmation_approve_button">پایان نظرسنجی</string>
     <string name="end_poll_confirmation_description">این کار اجازهٔ رأی دادن افراد را پایان داده و نتیجهٔ نهایی نظرسنجی را نمایش خواهد داد.</string>
     <string name="end_poll_confirmation_title">پایان این نظرسنجی؟</string>

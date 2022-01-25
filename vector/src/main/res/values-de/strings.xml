@@ -3048,7 +3048,6 @@
     <string name="delete_poll_dialog_title">Abstimmung entfernen</string>
     <string name="poll_end_room_list_preview">Abstimmung beendet</string>
     <string name="poll_response_room_list_preview">Stimme abgegeben</string>
-    <string name="labs_enable_polls">Aktiviere Abstimmungen</string>
     <string name="end_poll_confirmation_approve_button">Abstimmung beenden</string>
     <string name="end_poll_confirmation_description">Dies verhindert, dass andere Personen abstimmen können, und zeigt die Endergebnisse der Umfrage an.</string>
     <string name="end_poll_confirmation_title">Diese Abstimmung beenden\?</string>

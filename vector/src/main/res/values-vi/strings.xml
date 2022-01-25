@@ -1692,7 +1692,6 @@
     <string name="delete_poll_dialog_title">Xóa cuộc thăm dò ý kiến</string>
     <string name="poll_end_room_list_preview">Cuộc thăm dò kết thúc</string>
     <string name="poll_response_room_list_preview">Bỏ phiếu</string>
-    <string name="labs_enable_polls">Bật Cuộc thăm dò ý kiến</string>
     <string name="end_poll_confirmation_approve_button">Kết thúc cuộc thăm dò ý kiến</string>
     <string name="end_poll_confirmation_description">Điều này sẽ ngăn mọi người có thể bỏ phiếu và sẽ hiển thị kết quả cuối cùng của cuộc thăm dò.</string>
     <string name="end_poll_confirmation_title">Kết thúc cuộc thăm dò này\?</string>

@@ -3106,7 +3106,6 @@
     <string name="delete_poll_dialog_title">Видалити опитування</string>
     <string name="poll_end_room_list_preview">Голосування завершене</string>
     <string name="poll_response_room_list_preview">Голос надіслано</string>
-    <string name="labs_enable_polls">Увімкнути опитування</string>
     <string name="end_poll_confirmation_approve_button">Завершити опитування</string>
     <string name="end_poll_confirmation_description">Люди більше не зможуть голосувати, і будуть показані остаточні результати опитування.</string>
     <string name="end_poll_confirmation_title">Завершити це опитування\?</string>
