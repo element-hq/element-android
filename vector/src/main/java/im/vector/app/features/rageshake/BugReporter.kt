@@ -265,7 +265,7 @@ class BugReporter @Inject constructor(
                     // build the multi part request
                     val builder = BugReporterMultipartBody.Builder()
                             .addFormDataPart("text", text)
-                            .addFormDataPart("app", rageShakeAppNameForReport(reportType))
+                            .addFormDataPart("app", rageShakeAppNameForReport(context, reportType))
                             .addFormDataPart("user_agent", Matrix.getInstance(context).getUserAgent())
                             .addFormDataPart("user_id", userId)
                             .addFormDataPart("can_contact", canContact.toString())
@@ -487,7 +487,7 @@ class BugReporter @Inject constructor(
         activity.startActivity(BugReportActivity.intent(activity, reportType))
     }
 
-    private fun rageShakeAppNameForReport(reportType: ReportType): String {
+    private fun rageShakeAppNameForReport(context: Context, reportType: ReportType): String {
         // As per https://github.com/matrix-org/rageshake
         // app: Identifier for the application (eg 'riot-web').
         // Should correspond to a mapping configured in the configuration file for github issue reporting to work.
@@ -495,10 +495,10 @@ class BugReporter @Inject constructor(
         return when (reportType) {
             ReportType.AUTO_UISI_SENDER,
             ReportType.AUTO_UISI -> {
-                "element-auto-uisi"
+                context.getString(R.string.bug_report_auto_uisi_app_name)
             }
             else                 -> {
-                "riot-android"
+               context.getString(R.string.bug_report_app_name)
             }
         }
     }
