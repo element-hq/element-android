@@ -3058,4 +3058,19 @@
     <string name="restart_the_application_to_apply_changes">برای اثربخشی تغییر، برنامه را دوباره اجرا کنید.</string>
     <string name="labs_enable_latex_maths">به کار انداختن ریاضیات لاتک</string>
     <string name="room_error_access_unauthorized">مجاز به پیوستن به این گروه نیستید</string>
+    <string name="tooltip_attachment_poll">ایجاد نظرسنجی</string>
+    <string name="tooltip_attachment_contact">گشودن آشنایان</string>
+    <string name="tooltip_attachment_sticker">فرستادن عکس‌برگردان</string>
+    <string name="tooltip_attachment_file">بارگذاری پرونده</string>
+    <string name="tooltip_attachment_gallery">فرستادن تصویرها و ویدیوها</string>
+    <string name="tooltip_attachment_photo">گشودن دوربین</string>
+    <string name="labs_auto_report_uisi_desc">سامانه‌تان هنگام‌ مواجهه با خطای ناتوانی در رمزگشایی، گزارش‌ها را به صورت خودکار خواهد فرستاد</string>
+    <string name="labs_auto_report_uisi">گزارش خودکار خطاهای رمزگشایی.</string>
+    <string name="login_splash_already_have_account">از پیش حساب دارم</string>
+    <string name="ftue_auth_carousel_3_body">المنت با تمامی کاره‌های مبتنی بر ماتریکس کار کرده و حتا می‌تواند به پیام‌رسان‌های مالکیتیتان پل بزند.</string>
+    <string name="ftue_auth_carousel_3_title">ارتباط با هرکسی.</string>
+    <string name="ftue_auth_carousel_2_body">المنت می‌گذارد مکان ذخیرهٔ پیام‌هایتان را برگزینید تا داده‌هایتان را کنترل کنید.</string>
+    <string name="ftue_auth_carousel_2_title">شما کنترل می‌کنید.</string>
+    <string name="ftue_auth_carousel_1_body">پیام‌رسانی رمزنگاشتهٔ سرتاسری برای ارتباط مستقل امن، وصل شده با ماتریکس.</string>
+    <string name="ftue_auth_carousel_1_title">صاحب گفت‌وگوهایتان باشید.</string>
 </resources>

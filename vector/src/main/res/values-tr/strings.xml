@@ -1808,13 +1808,22 @@
     <string name="notice_widget_removed">%1$s %2$s widgetını kaldırdı</string>
     <string name="notice_end_to_end">%1$s uçtan uca şifrelemeyi etkinleştirdi (%2$s)</string>
     <string name="notice_room_visibility_unknown">bilinmeyen (%s).</string>
-    <string name="notice_direct_room_update">%s güncellendi.</string>
+    <string name="notice_direct_room_update">%s burada yükseltildi.</string>
     <string name="notice_room_visibility_world_readable">birisi.</string>
     <string name="notice_made_future_direct_room_visibility_by_you">Gelecek mesajları %1$s için görünür yaptınız.</string>
     <string name="notice_made_future_direct_room_visibility">%1$s, gelecek mesajları %2$s için görünür hale getirdi.</string>
     <string name="notice_made_future_room_visibility_by_you">Oda geçmişini %1$s için görünür yaptınız.</string>
     <string name="notice_made_future_room_visibility">%1$s oda geçmişini %2$s \'ye görünür yaptı.</string>
     <string name="notice_call_candidates_by_you">Çağrı kurulumu için verileri gönderdiniz.</string>
-    <string name="notice_call_candidates">%s kurulumu çağrı verileri gönderildi.</string>
-    <string name="notice_display_name_removed_by_you">%1$s başlıklı görünen ad silindi.</string>
+    <string name="notice_call_candidates">%s çağrıyı ayarlamak için veri gönderdi.</string>
+    <string name="notice_display_name_removed_by_you">Görünen adınızı kaldırdınız (%1$s)</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• IP değişmezleriyle eşleşen sunucular engellendi.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• IP değişmezleriyle eşleşen sunuculara izin verildi.</string>
+    <string name="notice_room_server_acl_set_allowed">• %s ile eşleşen sunuculara izin verildi.</string>
+    <string name="notice_room_server_acl_set_banned">• %s ile eşleşen sunucular yasaklandı.</string>
+    <string name="notice_room_server_acl_set_title_by_you">Bu oda için sunucu EKL\'lerini ayarladınız.</string>
+    <string name="notice_room_server_acl_set_title">%s bu oda için sunucu EKL\'lerini ayarladı.</string>
+    <string name="notice_direct_room_update_by_you">Burada yükselttiniz.</string>
+    <string name="notice_room_visibility_joined">tüm oda üyeleri, katıldıkları andan itibaren.</string>
+    <string name="notice_room_visibility_invited">tüm oda üyeleri, davet edildikleri andan itibaren.</string>
 </resources>

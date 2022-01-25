@@ -2999,4 +2999,22 @@
     <string name="restart_the_application_to_apply_changes">重新啟動應用程式以讓變更生效。</string>
     <string name="labs_enable_latex_maths">啟用 LaTeX 數學</string>
     <string name="room_error_access_unauthorized">您無法加入此聊天室</string>
+    <string name="tooltip_attachment_poll">建立投票</string>
+    <string name="tooltip_attachment_contact">開啟通訊錄</string>
+    <string name="tooltip_attachment_sticker">傳送貼圖</string>
+    <string name="tooltip_attachment_file">上傳檔案</string>
+    <string name="tooltip_attachment_gallery">傳送圖片與影片</string>
+    <string name="tooltip_attachment_photo">開啟攝影機</string>
+    <string name="labs_auto_report_uisi_desc">發生無法解密錯誤時，您的系統將會自動傳送紀錄檔</string>
+    <string name="labs_auto_report_uisi">自動回報解密錯誤。</string>
+    <string name="room_member_override_nick_color">覆寫暱稱色彩</string>
+    <string name="login_splash_already_have_account">我已有一個帳號</string>
+    <string name="ftue_auth_carousel_4_body">與電子郵件一樣普遍，Element 是一種全新的協作類型。</string>
+    <string name="ftue_auth_carousel_4_title">減少團隊的懈怠。</string>
+    <string name="ftue_auth_carousel_3_body">Element 適用於所有以 Matrix 為基礎的應用程式，甚至可以橋接到專有的通訊軟體。</string>
+    <string name="ftue_auth_carousel_3_title">與任何人聯絡。</string>
+    <string name="ftue_auth_carousel_2_body">Element 可讓您選擇您要儲存訊息的地方，讓您掌控您自己的資料。</string>
+    <string name="ftue_auth_carousel_2_title">您已掌控了您的資料。</string>
+    <string name="ftue_auth_carousel_1_body">透過 Matrix 連結的端到端加密訊息傳遞，用於安全與獨立的通訊。</string>
+    <string name="ftue_auth_carousel_1_title">擁有您的對話。</string>
 </resources>
