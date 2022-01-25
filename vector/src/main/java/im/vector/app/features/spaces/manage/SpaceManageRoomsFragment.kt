@@ -122,7 +122,7 @@ class SpaceManageRoomsFragment @Inject constructor(
                 views.addRoomToSpaceToolbar.isVisible = true
                 vectorBaseActivity.startSupportActionMode(this)
             } else {
-                toolbar?.title = "${state.selectedRooms.size} selected"
+                toolbar?.title = resources.getQuantityString(R.plurals.room_details_selected, state.selectedRooms.size, state.selectedRooms.size)
             }
 //            views.addRoomToSpaceToolbar.isVisible = false
 //            views.addRoomToSpaceToolbar.startActionMode(this)
@@ -171,10 +171,10 @@ class SpaceManageRoomsFragment @Inject constructor(
 
     override fun onActionItemClicked(mode: ActionMode?, item: MenuItem?): Boolean {
         when (item?.itemId) {
-            R.id.action_delete -> {
+            R.id.action_delete                -> {
                 handleDeleteSelection()
             }
-            R.id.action_mark_as_suggested -> {
+            R.id.action_mark_as_suggested     -> {
                 viewModel.handle(SpaceManageRoomViewAction.MarkAllAsSuggested(true))
             }
             R.id.action_mark_as_not_suggested -> {
