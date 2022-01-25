@@ -16,10 +16,13 @@
 
 package org.matrix.android.sdk.internal.session.sync
 
+import android.os.SystemClock
 import okhttp3.ResponseBody
 import org.matrix.android.sdk.api.logger.LoggerTag
+import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
+import org.matrix.android.sdk.api.session.statistics.StatisticEvent
 import org.matrix.android.sdk.api.session.sync.model.LazyRoomSyncEphemeral
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
@@ -28,6 +31,8 @@ import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.TimeOutInterceptor
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.network.toFailure
+import org.matrix.android.sdk.internal.session.SessionListeners
+import org.matrix.android.sdk.internal.session.dispatchTo
 import org.matrix.android.sdk.internal.session.filter.FilterRepository
 import org.matrix.android.sdk.internal.session.homeserver.GetHomeServerCapabilitiesTask
 import org.matrix.android.sdk.internal.session.initsync.DefaultSyncStatusService
@@ -49,7 +54,8 @@ internal interface SyncTask : Task<SyncTask.Params, SyncResponse> {
 
     data class Params(
             val timeout: Long,
-            val presence: SyncPresence?
+            val presence: SyncPresence?,
+            val afterPause: Boolean
     )
 }
 
@@ -62,6 +68,8 @@ internal class DefaultSyncTask @Inject constructor(
         private val syncTokenStore: SyncTokenStore,
         private val getHomeServerCapabilitiesTask: GetHomeServerCapabilitiesTask,
         private val userStore: UserStore,
+        private val session: Session,
+        private val sessionListeners: SessionListeners,
         private val syncTaskSequencer: SyncTaskSequencer,
         private val globalErrorReceiver: GlobalErrorReceiver,
         @SessionFilesDirectory
@@ -105,6 +113,7 @@ internal class DefaultSyncTask @Inject constructor(
         val readTimeOut = (params.timeout + TIMEOUT_MARGIN).coerceAtLeast(TimeOutInterceptor.DEFAULT_LONG_TIMEOUT)
 
         var syncResponseToReturn: SyncResponse? = null
+        val syncStatisticsData = SyncStatisticsData(isInitialSync, params.afterPause)
         if (isInitialSync) {
             Timber.tag(loggerTag.value).d("INIT_SYNC with filter: ${requestParams["filter"]}")
             val initSyncStrategy = initialSyncStrategy
@@ -112,7 +121,7 @@ internal class DefaultSyncTask @Inject constructor(
                 if (initSyncStrategy is InitialSyncStrategy.Optimized) {
                     roomSyncEphemeralTemporaryStore.reset()
                     workingDir.mkdirs()
-                    val file = downloadInitSyncResponse(requestParams)
+                    val file = downloadInitSyncResponse(requestParams, syncStatisticsData)
                     syncResponseToReturn = reportSubtask(defaultSyncStatusService, InitSyncStep.ImportingAccount, 1, 0.7F) {
                         handleSyncFile(file, initSyncStrategy)
                     }
@@ -127,6 +136,9 @@ internal class DefaultSyncTask @Inject constructor(
                             )
                         }
                     }
+                    // We cannot distinguish request and download in this case.
+                    syncStatisticsData.requestInitSyncTime = SystemClock.elapsedRealtime()
+                    syncStatisticsData.downloadInitSyncTime = syncStatisticsData.requestInitSyncTime
                     logDuration("INIT_SYNC Database insertion", loggerTag) {
                         syncResponseHandler.handleResponse(syncResponse, token, defaultSyncStatusService)
                     }
@@ -161,12 +173,15 @@ internal class DefaultSyncTask @Inject constructor(
             Timber.tag(loggerTag.value).d("Incremental sync done")
             defaultSyncStatusService.setStatus(SyncStatusService.Status.IncrementalSyncDone)
         }
+        syncStatisticsData.treatmentSyncTime = SystemClock.elapsedRealtime()
+        syncStatisticsData.nbOfRooms = syncResponseToReturn?.rooms?.join?.size ?: 0
+        sendStatistics(syncStatisticsData)
         Timber.tag(loggerTag.value).d("Sync task finished on Thread: ${Thread.currentThread().name}")
         // Should throw if null as it's a mandatory value.
         return syncResponseToReturn!!
     }
 
-    private suspend fun downloadInitSyncResponse(requestParams: Map<String, String>): File {
+    private suspend fun downloadInitSyncResponse(requestParams: Map<String, String>, syncStatisticsData: SyncStatisticsData): File {
         val workingFile = File(workingDir, "initSync.json")
         val status = initialSyncStatusRepository.getStep()
         if (workingFile.exists() && status >= InitialSyncStatus.STEP_DOWNLOADED) {
@@ -181,7 +196,7 @@ internal class DefaultSyncTask @Inject constructor(
                     getSyncResponse(requestParams, MAX_NUMBER_OF_RETRY_AFTER_TIMEOUT)
                 }
             }
-
+            syncStatisticsData.requestInitSyncTime = SystemClock.elapsedRealtime()
             if (syncResponse.isSuccessful) {
                 logDuration("INIT_SYNC Download and save to file", loggerTag) {
                     reportSubtask(defaultSyncStatusService, InitSyncStep.Downloading, 1, 0.1f) {
@@ -196,6 +211,7 @@ internal class DefaultSyncTask @Inject constructor(
                 throw syncResponse.toFailure(globalErrorReceiver)
                         .also { Timber.tag(loggerTag.value).w("INIT_SYNC request failure: $this") }
             }
+            syncStatisticsData.downloadInitSyncTime = SystemClock.elapsedRealtime()
             initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_DOWNLOADED)
         }
         return workingFile
@@ -236,6 +252,45 @@ internal class DefaultSyncTask @Inject constructor(
             }
             initialSyncStatusRepository.setStep(InitialSyncStatus.STEP_SUCCESS)
             syncResponse
+        }
+    }
+
+    /**
+     * Aggregator to send stat event.
+     */
+    class SyncStatisticsData(
+            val isInitSync: Boolean,
+            val isAfterPause: Boolean
+    ) {
+        val startTime = SystemClock.elapsedRealtime()
+        var requestInitSyncTime = startTime
+        var downloadInitSyncTime = startTime
+        var treatmentSyncTime = startTime
+        var nbOfRooms: Int = 0
+    }
+
+    private fun sendStatistics(data: SyncStatisticsData) {
+        sendStatisticEvent(
+                if (data.isInitSync) {
+                    (StatisticEvent.InitialSyncRequest(
+                            requestDurationMs = (data.requestInitSyncTime - data.startTime).toInt(),
+                            downloadDurationMs = (data.downloadInitSyncTime - data.requestInitSyncTime).toInt(),
+                            treatmentDurationMs = (data.treatmentSyncTime - data.downloadInitSyncTime).toInt(),
+                            nbOfJoinedRooms = data.nbOfRooms,
+                    ))
+                } else {
+                    StatisticEvent.SyncTreatment(
+                            durationMs = (data.treatmentSyncTime - data.startTime).toInt(),
+                            afterPause = data.isAfterPause,
+                            nbOfJoinedRooms = data.nbOfRooms
+                    )
+                }
+        )
+    }
+
+    private fun sendStatisticEvent(statisticEvent: StatisticEvent) {
+        session.dispatchTo(sessionListeners) { session, listener ->
+            listener.onStatisticsEvent(session, statisticEvent)
         }
     }
 
