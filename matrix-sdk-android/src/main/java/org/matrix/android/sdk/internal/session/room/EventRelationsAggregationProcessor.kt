@@ -64,7 +64,7 @@ import javax.inject.Inject
 internal class EventRelationsAggregationProcessor @Inject constructor(
         @UserId private val userId: String,
         private val stateEventDataSource: StateEventDataSource
-) : EventInsertLiveProcessor {
+        ) : EventInsertLiveProcessor {
 
     private val allowedTypes = listOf(
             EventType.MESSAGE,

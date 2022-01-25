@@ -51,6 +51,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomAvatarContent
 import org.matrix.android.sdk.api.session.room.model.RoomEncryptionAlgorithm
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
+import org.matrix.android.sdk.api.session.room.model.relation.shouldRenderInThread
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.send.UserDraft
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
@@ -185,7 +186,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                 is SendMode.Regular -> {
                     when (val slashCommandResult = CommandParser.parseSlashCommand(
                             textMessage = action.text,
-                            isInThreadTimeline =  state.isInThreadTimeline())) {
+                            isInThreadTimeline = state.isInThreadTimeline())) {
                         is ParsedCommand.ErrorNotACommand                  -> {
                             // Send the text message to the room
                             if (state.rootThreadEventId != null) {
@@ -259,7 +260,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                         is ParsedCommand.UnignoreUser                      -> {
                             handleUnignoreSlashCommand(slashCommandResult)
                         }
-                        is ParsedCommand.RemoveUser               -> {
+                        is ParsedCommand.RemoveUser                        -> {
                             handleRemoveSlashCommand(slashCommandResult)
                         }
                         is ParsedCommand.JoinRoom                          -> {
@@ -449,7 +450,20 @@ class MessageComposerViewModel @AssistedInject constructor(
                 }
                 is SendMode.Edit    -> {
                     // is original event a reply?
-                    val inReplyTo = state.sendMode.timelineEvent.getRelationContent()?.inReplyTo?.eventId
+                    val relationContent = state.sendMode.timelineEvent.getRelationContent()
+                    val inReplyTo = if (state.rootThreadEventId != null) {
+                        if (relationContent?.inReplyTo?.shouldRenderInThread() == true) {
+                            // Reply within a thread event
+                            relationContent.inReplyTo?.eventId
+                        } else {
+                            // Normal thread event
+                            null
+                        }
+                    } else {
+                        // Normal event
+                        relationContent?.inReplyTo?.eventId
+                    }
+
                     if (inReplyTo != null) {
                         // TODO check if same content?
                         room.getTimeLineEvent(inReplyTo)?.let {

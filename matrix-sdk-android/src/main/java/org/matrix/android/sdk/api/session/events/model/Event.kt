@@ -29,6 +29,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
+import org.matrix.android.sdk.api.session.room.model.relation.shouldRenderInThread
 import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.threads.ThreadDetails
 import org.matrix.android.sdk.api.util.ContentUtils
@@ -376,7 +377,7 @@ fun Event.isReply(): Boolean {
 }
 
 fun Event.isReplyRenderedInThread(): Boolean {
-    return isReply() && getRelationContent()?.inReplyTo?.renderIn?.contains("m.thread") == true
+    return isReply() && getRelationContent()?.inReplyTo?.shouldRenderInThread() == true
 }
 
 fun Event.isThread(): Boolean = getRelationContentForType(RelationType.IO_THREAD)?.eventId != null

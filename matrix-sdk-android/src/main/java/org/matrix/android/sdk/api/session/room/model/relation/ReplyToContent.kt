@@ -24,3 +24,5 @@ data class ReplyToContent(
         @Json(name = "event_id") val eventId: String? = null,
         @Json(name = "render_in") val renderIn: List<String>? = null
 )
+
+fun ReplyToContent.shouldRenderInThread(): Boolean = renderIn?.contains("m.thread") == true
