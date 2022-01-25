@@ -66,8 +66,8 @@ interface RelationService {
      * @param targetEventId the id of the event being reacted
      * @param reaction the reaction (preferably emoji)
      */
-    fun undoReaction(targetEventId: String,
-                     reaction: String): Cancelable
+    suspend fun undoReaction(targetEventId: String,
+                             reaction: String): Cancelable
 
     /**
      * Edit a poll.

@@ -21,7 +21,6 @@ import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.model.message.PollType
@@ -43,8 +42,6 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
-import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.task.configureWith
 import org.matrix.android.sdk.internal.util.fetchCopyMap
 import timber.log.Timber
 
@@ -60,9 +57,8 @@ internal class DefaultRelationService @AssistedInject constructor(
         private val fetchThreadTimelineTask: FetchThreadTimelineTask,
         private val timelineEventMapper: TimelineEventMapper,
         @UserId private val userId: String,
-        @SessionDatabase private val monarchy: Monarchy,
-        private val taskExecutor: TaskExecutor) :
-        RelationService {
+        @SessionDatabase private val monarchy: Monarchy
+) : RelationService {
 
     @AssistedFactory
     interface Factory {
@@ -84,39 +80,31 @@ internal class DefaultRelationService @AssistedInject constructor(
                         .none { it.addedByMe && it.key == reaction }) {
             val event = eventFactory.createReactionEvent(roomId, targetEventId, reaction)
                     .also { saveLocalEcho(it) }
-            return eventSenderProcessor.postEvent(event, false /* reaction are not encrypted*/)
+            eventSenderProcessor.postEvent(event, false /* reaction are not encrypted*/)
         } else {
             Timber.w("Reaction already added")
             NoOpCancellable
         }
     }
 
-    override fun undoReaction(targetEventId: String, reaction: String): Cancelable {
+    override suspend fun undoReaction(targetEventId: String, reaction: String): Cancelable {
         val params = FindReactionEventForUndoTask.Params(
                 roomId,
                 targetEventId,
                 reaction
         )
-        // TODO We should avoid using MatrixCallback internally
-        val callback = object : MatrixCallback<FindReactionEventForUndoTask.Result> {
-            override fun onSuccess(data: FindReactionEventForUndoTask.Result) {
-                if (data.redactEventId == null) {
-                    Timber.w("Cannot find reaction to undo (not yet synced?)")
-                    // TODO?
-                }
-                data.redactEventId?.let { toRedact ->
-                    val redactEvent = eventFactory.createRedactEvent(roomId, toRedact, null)
-                            .also { saveLocalEcho(it) }
-                    eventSenderProcessor.postRedaction(redactEvent, null)
-                }
-            }
+
+        val data = findReactionEventForUndoTask.executeRetry(params, Int.MAX_VALUE)
+
+        return if (data.redactEventId == null) {
+            Timber.w("Cannot find reaction to undo (not yet synced?)")
+            // TODO?
+            NoOpCancellable
+        } else {
+            val redactEvent = eventFactory.createRedactEvent(roomId, data.redactEventId, null)
+                    .also { saveLocalEcho(it) }
+            eventSenderProcessor.postRedaction(redactEvent, null)
         }
-        return findReactionEventForUndoTask
-                .configureWith(params) {
-                    this.retryCount = Int.MAX_VALUE
-                    this.callback = callback
-                }
-                .executeBy(taskExecutor)
     }
 
     override fun editPoll(targetEvent: TimelineEvent,

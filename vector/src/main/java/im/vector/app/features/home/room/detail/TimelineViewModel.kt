@@ -740,14 +740,22 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     private fun handleUndoReact(action: RoomDetailAction.UndoReaction) {
-        room.undoReaction(action.targetEventId, action.reaction)
+        viewModelScope.launch {
+            tryOrNull {
+                room.undoReaction(action.targetEventId, action.reaction)
+            }
+        }
     }
 
     private fun handleUpdateQuickReaction(action: RoomDetailAction.UpdateQuickReactAction) {
         if (action.add) {
             room.sendReaction(action.targetEventId, action.selectedReaction)
         } else {
-            room.undoReaction(action.targetEventId, action.selectedReaction)
+            viewModelScope.launch {
+                tryOrNull {
+                    room.undoReaction(action.targetEventId, action.selectedReaction)
+                }
+            }
         }
     }
 
