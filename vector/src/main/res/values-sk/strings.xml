@@ -1273,7 +1273,7 @@
     <string name="room_participants_action_cancel_invite_prompt_msg">Ste si istí, že chcete zrušiť pozvanie tohoto používateľa\?</string>
     <string name="room_participants_remove_title">Vykázať používateľa</string>
     <string name="room_participants_remove_reason">Dôvod vykázania</string>
-    <string name="room_participants_kick_prompt_msg">Vykázaním odstránite používateľa z miestnosti.
+    <string name="room_participants_remove_prompt_msg">Vykázaním odstránite používateľa z miestnosti.
 \n
 \nAk si želáte, aby sa nemohol vrátiť, mali by ste mu tiež zakázať vstupovať.</string>
     <string name="room_participants_ban_title">Zakázať používateľovi vstupovať</string>

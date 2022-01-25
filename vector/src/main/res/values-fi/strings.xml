@@ -2033,7 +2033,7 @@
     <string name="settings_chat_effects_title">Näytä keskustelujen tehosteet</string>
     <string name="settings_show_redacted">Näytä poistetut viestit</string>
     <string name="room_participants_unban_prompt_msg">Jos poistat käyttäjän porttikiellon, hän voi liittyä huoneeseen uudelleen.</string>
-    <string name="room_participants_kick_prompt_msg">Tämä poistaa käyttäjän huoneesta, mutta hän voi liittyä uudelleen.
+    <string name="room_participants_remove_prompt_msg">Tämä poistaa käyttäjän huoneesta, mutta hän voi liittyä uudelleen.
 \n
 \nJos haluat estää häntä uudelleen liittymästä, anna hänelle porttikielto.</string>
     <string name="room_participants_ban_reason">Syy porttikielolle</string>

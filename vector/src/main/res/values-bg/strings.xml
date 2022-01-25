@@ -2021,7 +2021,7 @@
     <string name="room_participants_unban_title">Премахване на блокиране</string>
     <string name="room_participants_ban_reason">Причина за блокирането</string>
     <string name="room_participants_ban_title">Блокиране на потребител</string>
-    <string name="room_participants_kick_prompt_msg">Изгонването на потребителя ще ги премахне от тази стая.
+    <string name="room_participants_remove_prompt_msg">Изгонването на потребителя ще ги премахне от тази стая.
 \n
 \nАко искате да не могат да влязат пак, блокирайте ги вместо това.</string>
     <string name="event_redacted_by_admin_reason_with_reason">Събитието бе модерирано от администратор на стаята, причина: %1$s</string>

@@ -1239,7 +1239,7 @@
     <string name="room_participants_action_cancel_invite_prompt_msg">Är du säker på att du vill avbryta inbjudan för den här användaren\?</string>
     <string name="room_participants_remove_title">Kicka användaren</string>
     <string name="room_participants_remove_reason">Anledning för kick</string>
-    <string name="room_participants_kick_prompt_msg">att sparka ut användaren kommer att ta bort hen från det här rummet.
+    <string name="room_participants_remove_prompt_msg">att sparka ut användaren kommer att ta bort hen från det här rummet.
 \n
 \nFör att hindra hen från att gå med i rummet igen så bör du banna hen istället.</string>
     <string name="room_participants_ban_title">Banna användaren</string>

@@ -894,7 +894,7 @@
     <string name="room_participants_action_cancel_invite_prompt_msg">مطمئنید که می‌خواهید دعوت این کاربر را لغو کنید؟</string>
     <string name="room_participants_remove_title">اخراج کاربر</string>
     <string name="room_participants_remove_reason">دلیل اخراج</string>
-    <string name="room_participants_kick_prompt_msg">اخراج کاربر، از این اتاق برش می‌دارد.
+    <string name="room_participants_remove_prompt_msg">اخراج کاربر، از این اتاق برش می‌دارد.
 \n
 \nبرای پیش‌گیری از پیوستن دوباره، باید تحریمش کنید.</string>
     <string name="room_participants_ban_title">تحریم کاربر</string>

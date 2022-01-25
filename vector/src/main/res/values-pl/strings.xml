@@ -2026,7 +2026,7 @@
     <string name="settings_troubleshoot_test_push_loop_title">Przetestuj powiadomienia push</string>
     <string name="room_participants_unban_title">Odbanuj użytkownika</string>
     <string name="room_participants_ban_reason">Powód zbanowania</string>
-    <string name="room_participants_kick_prompt_msg">Wykopanie użytkownika spowoduje usunięcie go z tego pokoju.
+    <string name="room_participants_remove_prompt_msg">Wykopanie użytkownika spowoduje usunięcie go z tego pokoju.
 \n
 \nŻeby zapobiec jego ponownemu dołączeniu należy go zamiast tego zablokować.</string>
     <string name="active_call_with_duration">Aktywne połączenie (%s)</string>

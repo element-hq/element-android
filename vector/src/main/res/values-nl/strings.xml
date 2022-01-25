@@ -1852,7 +1852,7 @@
     <string name="space_participants_remove_prompt_msg">door deze gebruiker de verwijderen zal hij/zij niet meer in deze space zitten.
 \n
 \nOm te voorkomen dat hij/zij opnieuw toetreedt, kunt u hem/haar ook verbannen.</string>
-    <string name="room_participants_kick_prompt_msg">door deze gebruiker te verwijderen zal hij/zij niet meer in dit gesprek zitten.
+    <string name="room_participants_remove_prompt_msg">door deze gebruiker te verwijderen zal hij/zij niet meer in dit gesprek zitten.
 \n
 \nOm te voorkomen dat hij/zij opnieuw toetreedt, kun je hem/haar ook verbannen.</string>
     <string name="room_participants_remove_reason">Reden voor verwijdering</string>

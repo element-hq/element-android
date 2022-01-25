@@ -2148,7 +2148,7 @@
     <string name="room_participants_action_cancel_invite_prompt_msg">您確定您想要取消對此使用者的邀請嗎？</string>
     <string name="room_participants_remove_title">踢除使用者</string>
     <string name="room_participants_remove_reason">踢除的理由</string>
-    <string name="room_participants_kick_prompt_msg">踢除使用者將會將他們從此聊天室中移除。
+    <string name="room_participants_remove_prompt_msg">踢除使用者將會將他們從此聊天室中移除。
 \n
 \n要避免他們再次加入，您應改為封鎖他們。</string>
     <string name="room_participants_ban_title">封鎖使用者</string>

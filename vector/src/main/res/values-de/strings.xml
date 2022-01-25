@@ -2147,7 +2147,7 @@
     <string name="room_participants_action_cancel_invite_prompt_msg">Bist du dir sicher, dass du die Einladung für diesen Benutzer zurückziehen möchtest\?</string>
     <string name="room_participants_remove_title">Benutzer entfernen</string>
     <string name="room_participants_remove_reason">Grund für das Entfernen</string>
-    <string name="room_participants_kick_prompt_msg">Dies entfernt den Benutzer aus diesem Raum.
+    <string name="room_participants_remove_prompt_msg">Dies entfernt den Benutzer aus diesem Raum.
 \n
 \nUm einen erneuten Beitritt zu verhindern, solltest du diesen stattdessen bannen.</string>
     <string name="room_participants_ban_title">Benutzer bannen</string>

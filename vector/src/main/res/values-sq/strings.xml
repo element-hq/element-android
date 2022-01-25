@@ -2188,7 +2188,7 @@
     <string name="room_participants_action_cancel_invite_prompt_msg">Jeni i sigurt se doni të anulohet ftesa për këtë përdorues\?</string>
     <string name="room_participants_remove_title">Përzëre përdoruesin</string>
     <string name="room_participants_remove_reason">Arsye për përzënie</string>
-    <string name="room_participants_kick_prompt_msg">Përzënia e përdoruesit do ta heqë prej kësaj dhome.
+    <string name="room_participants_remove_prompt_msg">Përzënia e përdoruesit do ta heqë prej kësaj dhome.
 \n
 \nQë të pengohet pjesëmarrja sërish e tij, duhet ta dëboni.</string>
     <string name="room_participants_ban_title">Dëboje përdoruesin</string>

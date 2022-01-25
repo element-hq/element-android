@@ -1050,7 +1050,7 @@
     <string name="reason_hint">Grunn</string>
     <string name="room_participants_ban_prompt_msg">Å forby bruker vil sparke dem fra dette rommet og forhindre at de blir med igjen.</string>
     <string name="room_participants_ban_reason">Grunn til å forby</string>
-    <string name="room_participants_kick_prompt_msg">sparke bruker vil fjerne dem fra dette rommet.
+    <string name="room_participants_remove_prompt_msg">sparke bruker vil fjerne dem fra dette rommet.
 \n
 \nFor å forhindre at de blir med igjen, bør du forby dem i stedet.</string>
     <string name="room_participants_remove_reason">Grunn til å sparke</string>

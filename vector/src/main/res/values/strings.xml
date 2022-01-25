@@ -908,7 +908,7 @@
     <string name="room_participants_action_cancel_invite_prompt_msg">Are you sure you want to cancel the invite for this user?</string>
     <string name="room_participants_remove_title">Remove user</string>
     <string name="room_participants_remove_reason">Reason to remove</string>
-    <string name="room_participants_kick_prompt_msg">The user will be removed from this room.\n\nTo prevent them from joining again, you should ban them instead.</string>
+    <string name="room_participants_remove_prompt_msg">The user will be removed from this room.\n\nTo prevent them from joining again, you should ban them instead.</string>
     <string name="space_participants_remove_prompt_msg">The user will be removed from this space.\n\nTo prevent them from joining again, you should ban them instead.</string>
     <string name="room_participants_ban_title">Ban user</string>
     <string name="room_participants_ban_reason">Reason to ban</string>

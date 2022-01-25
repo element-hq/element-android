@@ -1529,7 +1529,7 @@
     <string name="room_participants_unban_title">Розблокувати користувача</string>
     <string name="room_participants_ban_reason">Причина блокування</string>
     <string name="room_participants_ban_title">Заблокувати користувача</string>
-    <string name="room_participants_kick_prompt_msg">вилучення користувачів прибере їх з цієї кімнати.
+    <string name="room_participants_remove_prompt_msg">вилучення користувачів прибере їх з цієї кімнати.
 \n
 \nЩоб запобігти їхньому повторному приєднанню, замість цього слід заблокувати їх.</string>
     <string name="room_participants_remove_reason">Причина вилучення</string>

@@ -1427,7 +1427,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_participants_unban_title">Atcelt pieejas liegumu lietotājam</string>
     <string name="room_participants_ban_reason">Pieejas lieguma iemesls</string>
     <string name="room_participants_ban_title">Liegt pieeju lietotājam</string>
-    <string name="room_participants_kick_prompt_msg">lietotāja padzīšanas gadījumā tas tiks dzēsts no šis istabas.
+    <string name="room_participants_remove_prompt_msg">lietotāja padzīšanas gadījumā tas tiks dzēsts no šis istabas.
 \n
 \nLai novērstu atkārtotu pievienošanos, tā vietā jums vajadzētu liegt pieeju.</string>
     <string name="room_participants_remove_reason">Padzīšanas iemesls</string>

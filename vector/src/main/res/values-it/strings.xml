@@ -2177,7 +2177,7 @@
     <string name="room_participants_action_cancel_invite_prompt_msg">Sei sicuro di voler annullare l\'invito per questo utente\?</string>
     <string name="room_participants_remove_title">Butta fuori l\'utente</string>
     <string name="room_participants_remove_reason">Motivo</string>
-    <string name="room_participants_kick_prompt_msg">buttando fuori l\'utente verrà rimosso da questa stanza.
+    <string name="room_participants_remove_prompt_msg">buttando fuori l\'utente verrà rimosso da questa stanza.
 \n
 \nPer evitare che possa rientrare, dovresti invece bandirlo.</string>
     <string name="room_participants_ban_title">Bandisci l\'utente</string>

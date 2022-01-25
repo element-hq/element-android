@@ -1150,7 +1150,7 @@
     <string name="room_participants_action_cancel_invite_prompt_msg">Kas oled kindel et sa soovid tühistada kutse sellele kasutajale\?</string>
     <string name="room_participants_remove_title">Müksa kasutaja välja</string>
     <string name="room_participants_remove_reason">Jututoast väljamüksamise põhjus</string>
-    <string name="room_participants_kick_prompt_msg">jututoast välja müksamine eemaldab ta praeguseks jututoast.
+    <string name="room_participants_remove_prompt_msg">jututoast välja müksamine eemaldab ta praeguseks jututoast.
 \n
 \nKui soovid, et ta ei saaks uuesti liituda, siis peaksid seadma suhtluskeelu.</string>
     <string name="room_participants_ban_title">Määra kasutajale suhtluskeeld</string>

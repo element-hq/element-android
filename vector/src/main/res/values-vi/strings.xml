@@ -1519,7 +1519,7 @@
     <string name="room_participants_unban_title">Hủy cấm người dùng</string>
     <string name="room_participants_ban_reason">Lý do cấm</string>
     <string name="room_participants_ban_title">Cấm người dùng</string>
-    <string name="room_participants_kick_prompt_msg">việc đá người dùng sẽ xóa họ khỏi phòng.
+    <string name="room_participants_remove_prompt_msg">việc đá người dùng sẽ xóa họ khỏi phòng.
 \n
 \nĐể ngăn họ tham gia lại, bạn nên cấm họ thay vì đá.</string>
     <string name="room_participants_remove_reason">Lý do đá</string>

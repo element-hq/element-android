@@ -1892,7 +1892,7 @@
     <string name="room_participants_unban_title">Malforbari uzanton</string>
     <string name="room_participants_ban_reason">Kialo de forbaro</string>
     <string name="room_participants_ban_title">Forbari uzanton</string>
-    <string name="room_participants_kick_prompt_msg">Forpelo de uzanto ĝin forigos de la ĉambro.
+    <string name="room_participants_remove_prompt_msg">Forpelo de uzanto ĝin forigos de la ĉambro.
 \n
 \nPor malhelpi ĝin ree aliĝi, vi ĝin anstataŭe forbaru.</string>
     <string name="room_participants_remove_reason">Kialo de forpelo</string>

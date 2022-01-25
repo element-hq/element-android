@@ -1800,7 +1800,7 @@
     <string name="room_permissions_notice">Selecciona els rols necessaris per canviar les diferents parts de la sala</string>
     <string name="room_permissions_title">Permisos</string>
     <string name="room_settings_permissions_title">Permisos de la sala</string>
-    <string name="room_participants_kick_prompt_msg">l\'expulsió d\'un usuari l\'eliminarà de la sala.
+    <string name="room_participants_remove_prompt_msg">l\'expulsió d\'un usuari l\'eliminarà de la sala.
 \n
 \nPer evitar que torni a unir-s\'hi, l\'hauries de vetar.</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Segur que vols cancel·lar la invitació d\'aquest usuari\?</string>

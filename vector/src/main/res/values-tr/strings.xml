@@ -1296,7 +1296,7 @@
     <string name="room_participants_action_cancel_invite_prompt_msg">Bu kullanıcıdan gelen daveti geri çevirmek istediğinizden emin misiniz\?</string>
     <string name="room_participants_remove_title">Kullanıcıyı kov</string>
     <string name="room_participants_remove_reason">Kovma sebebi</string>
-    <string name="room_participants_kick_prompt_msg">Kullanıcıyı kovarsanız kendisi bu odadan çıkacak.
+    <string name="room_participants_remove_prompt_msg">Kullanıcıyı kovarsanız kendisi bu odadan çıkacak.
 \n
 \nEğer tekrar katılmasını engellemek istiyorsanız kovmak yerine yasaklamalısınız.</string>
     <string name="room_participants_ban_title">Kullanıcıyı yasakla</string>

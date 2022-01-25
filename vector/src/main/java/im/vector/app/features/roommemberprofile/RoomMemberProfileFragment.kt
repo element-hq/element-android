@@ -364,7 +364,7 @@ class RoomMemberProfileFragment @Inject constructor(
                         activity = requireActivity(),
                         askForReason = true,
                         confirmationRes = if (isSpace) R.string.space_participants_remove_prompt_msg
-                        else R.string.room_participants_kick_prompt_msg,
+                        else R.string.room_participants_remove_prompt_msg,
                         positiveRes = R.string.room_participants_action_remove,
                         reasonHintRes = R.string.room_participants_remove_reason,
                         titleRes = R.string.room_participants_remove_title

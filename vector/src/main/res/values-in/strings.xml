@@ -1019,7 +1019,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_participants_unban_title">Batalkan pencekalan pengguna</string>
     <string name="room_participants_ban_reason">Alasan untuk mencekal</string>
     <string name="room_participants_ban_title">Cekal pengguna</string>
-    <string name="room_participants_kick_prompt_msg">Pengguna yang dikeluarkan akan menghilangkannya dari ruangan ini.
+    <string name="room_participants_remove_prompt_msg">Pengguna yang dikeluarkan akan menghilangkannya dari ruangan ini.
 \n
 \nUntuk mencegah mereka bergabung lagi, Anda seharusnya mencekalnya.</string>
     <string name="room_participants_remove_reason">Alasan untuk mengeluarkan</string>

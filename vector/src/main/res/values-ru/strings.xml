@@ -1952,7 +1952,7 @@
     <string name="room_participants_action_cancel_invite_prompt_msg">Вы уверены, что хотите отменить приглашение для этого пользователя\?</string>
     <string name="room_participants_remove_title">Выгнать пользователя</string>
     <string name="room_participants_remove_reason">Причина гонения</string>
-    <string name="room_participants_kick_prompt_msg">Выгнанный пользователь будет удалён из этой комнаты.
+    <string name="room_participants_remove_prompt_msg">Выгнанный пользователь будет удалён из этой комнаты.
 \n
 \nЧтобы предотвратить его повторное присоединение, вы должны забанить его.</string>
     <string name="room_participants_ban_title">Заблокировать пользователя</string>

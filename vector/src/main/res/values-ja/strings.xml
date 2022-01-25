@@ -1235,7 +1235,7 @@ ${app_name}からあなた個人の電話帳への検索要求を許可する場
     <string name="room_participants_ban_title">禁止されたユーザー</string>
     <string name="room_participants_ban_reason">禁止の理由</string>
     <string name="room_participants_unban_title">ユーザーの禁止を解除する</string>
-    <string name="room_participants_kick_prompt_msg">キックするユーザーは、この部屋から削除されます。
+    <string name="room_participants_remove_prompt_msg">キックするユーザーは、この部屋から削除されます。
 \n
 \n再び参加するのを防ぐためには永久追放する必要があります。</string>
     <string name="room_participants_remove_reason">キックする理由</string>

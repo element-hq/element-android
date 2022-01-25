@@ -2238,7 +2238,7 @@
     <string name="room_participants_action_cancel_invite_prompt_msg">Jste si jisti, že chcete zrušit pozvánku tomuto uživateli\?</string>
     <string name="room_participants_remove_title">Vykopnout uživatele</string>
     <string name="room_participants_remove_reason">Důvod k vykopnutí</string>
-    <string name="room_participants_kick_prompt_msg">Vykopnutí uživatele je odstraní z této místnosti.
+    <string name="room_participants_remove_prompt_msg">Vykopnutí uživatele je odstraní z této místnosti.
 \n
 \nAbyste mu zamezili opětovně vstoupit, měli byste jej zakázat.</string>
     <string name="room_participants_ban_title">Vykázat uživatele</string>

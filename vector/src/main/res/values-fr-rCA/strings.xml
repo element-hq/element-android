@@ -1879,7 +1879,7 @@
     <string name="room_participants_unban_title">Révoquer le bannissement de l’utilisateur</string>
     <string name="room_participants_ban_reason">Motif du bannissement</string>
     <string name="room_participants_ban_title">Bannir l’utilisateur</string>
-    <string name="room_participants_kick_prompt_msg">expulser un utilisateur le supprimera de ce salon.
+    <string name="room_participants_remove_prompt_msg">expulser un utilisateur le supprimera de ce salon.
 \n
 \nPour l’empêcher de revenir, vous devez plutôt le bannir.</string>
     <string name="room_participants_remove_reason">Motif d’expulsion</string>

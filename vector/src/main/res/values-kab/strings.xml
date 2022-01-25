@@ -1577,7 +1577,7 @@
 \nTzemreḍ ad tbeddleḍ tigawt-a melmi i tebɣiḍ deg yiɣewwaren imuta.</string>
     <string name="room_participants_action_unignore_prompt_msg">Tukksa n uzgal i useqdac-a ad d-yesken akk iznan-ines i tikkel-nniḍen.</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">S tidet tebɣiḍ ad tesfesxeḍ tinubga i useqdac-a\?</string>
-    <string name="room_participants_kick_prompt_msg">asuffeɣ n useqdac ad t-yekkes seg texxamt-a.
+    <string name="room_participants_remove_prompt_msg">asuffeɣ n useqdac ad t-yekkes seg texxamt-a.
 \n
 \nAkken ur tettɛemmideḍ ara attekki-nsen tikkelt-nniḍen, ilaq ad t-tagiḍ xiṛ.</string>
     <string name="room_participants_ban_prompt_msg">Tegtin n useqdac ad t-isuffeɣ seg texxamt-a rnu ur as-yettɛemmid ara ad yettekki tikkelt-nniḍen.</string>

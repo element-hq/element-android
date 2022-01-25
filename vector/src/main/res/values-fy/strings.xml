@@ -1333,7 +1333,7 @@
     <string name="space_participants_remove_prompt_msg">troch dizze brûker fuort te smiten sil dy net mear yn dizze romte sitte.
 \n
 \nOm foar te kommen dat dyjinge opnij ta treed, kinne jo him/har ek ferballe.</string>
-    <string name="room_participants_kick_prompt_msg">troch dizze brûker fuort te smiten sil dy net mear yn dit petear sitte.
+    <string name="room_participants_remove_prompt_msg">troch dizze brûker fuort te smiten sil dy net mear yn dit petear sitte.
 \n
 \nOm foar te kommen dat dyjinge opnij ta treed, kinne jo him/har ek ferballe.</string>
     <string name="room_participants_remove_reason">Reden foar fuortsmiten</string>

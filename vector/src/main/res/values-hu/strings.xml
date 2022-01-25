@@ -2136,7 +2136,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="room_participants_action_unignore_prompt_msg">A felhasználó figyelembe vétele után újra meg fog jelenni az összes üzenete.</string>
     <string name="room_participants_action_cancel_invite_title">Meghívás visszavonása</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Biztos, hogy visszavonja a felhasználó meghívását\?</string>
-    <string name="room_participants_kick_prompt_msg">a felhasználó kirúgása eltávolítja a szobából.
+    <string name="room_participants_remove_prompt_msg">a felhasználó kirúgása eltávolítja a szobából.
 \n
 \nHa meg akarja akadályozni, hogy újra csatlakozzon, akkor inkább tiltsa ki.</string>
     <string name="room_participants_unban_prompt_msg">A felhasználó tiltásának visszavonása lehetővé teszi, hogy újra csatlakozzon a szobához.</string>

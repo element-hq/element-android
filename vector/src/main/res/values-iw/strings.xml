@@ -574,7 +574,7 @@
     <string name="room_participants_unban_title">הסר נידוי ממשתמש</string>
     <string name="room_participants_ban_reason">סיבות לנידוי</string>
     <string name="room_participants_ban_title">נדה משתמש</string>
-    <string name="room_participants_kick_prompt_msg">משתמש מעיף יסיר אותם מחדר זה.
+    <string name="room_participants_remove_prompt_msg">משתמש מעיף יסיר אותם מחדר זה.
 \n
 \nכדי למנוע מהם להצטרף שוב, עליך לאסור אותם במקום זאת.</string>
     <string name="room_participants_remove_reason">סיבות להעפה</string>

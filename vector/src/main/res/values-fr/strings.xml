@@ -2347,7 +2347,7 @@
     <string name="search_is_not_supported_in_e2e_room">La recherche dans les salons chiffrés n\'est pas encore prise en charge.</string>
     <string name="search_banned_user_hint">Filtrer les utilisateurs exclus</string>
     <string name="room_participants_action_unignore_prompt_msg">Ne plus ignorer cet utilisateur aura pour effet de ré-afficher ses messages.</string>
-    <string name="room_participants_kick_prompt_msg">expulser un utilisateur le supprimera de ce salon.
+    <string name="room_participants_remove_prompt_msg">expulser un utilisateur le supprimera de ce salon.
 \n
 \nPour l’empêcher de revenir, vous devez plutôt le bannir.</string>
     <string name="room_participants_remove_reason">Motif d’expulsion</string>
