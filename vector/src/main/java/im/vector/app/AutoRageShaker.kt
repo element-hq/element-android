@@ -67,6 +67,7 @@ class AutoRageShaker @Inject constructor(
 
     fun initialize() {
         observeActiveSession()
+        enable(vectorPreferences.labsAutoReportUISI())
         // It's a singleton...
         vectorPreferences.subscribeToChanges(this)
 
@@ -141,17 +142,19 @@ class AutoRageShaker @Inject constructor(
                 withCrashLogs = true,
                 withKeyRequestHistory = true,
                 withScreenshot = false,
-                theBugDescription = "UISI detected",
+                theBugDescription = "Auto-reporting decryption error",
                 serverVersion = "",
                 canContact = false,
-                customFields = mapOf("auto-uisi" to buildString {
-                    append("\neventId: ${target.eventId}")
-                    append("\nroomId: ${target.roomId}")
-                    append("\nsenderKey: ${target.senderKey}")
-                    append("\nsource: ${target.source}")
-                    append("\ndeviceId: ${target.senderDeviceId}")
-                    append("\nuserId: ${target.senderUserId}")
-                    append("\nsessionId: ${target.sessionId}")
+                customFields = mapOf("auto_uisi" to buildString {
+                    append("{")
+                    append("\"event_id\": \"${target.eventId}\",")
+                    append("\"room_id\": \"${target.roomId}\",")
+                    append("\"sender_key\": \"${target.senderKey}\",")
+                    append("\"device_id\": \"${target.senderDeviceId}\",")
+                    append("\"source\": \"${target.source}\",")
+                    append("\"user_id\": \"${target.senderUserId}\",")
+                    append("\"session_id\": \"${target.sessionId}\"")
+                    append("}")
                 }),
                 listener = object : BugReporter.IMXBugReportListener {
                     override fun onUploadCancelled() {
@@ -221,17 +224,19 @@ class AutoRageShaker @Inject constructor(
                 withCrashLogs = true,
                 withKeyRequestHistory = true,
                 withScreenshot = false,
-                theBugDescription = "UISI detected $matchingIssue",
+                theBugDescription = "Auto-reporting decryption error \nRecipient rageshake: $matchingIssue",
                 serverVersion = "",
                 canContact = false,
                 customFields = mapOf(
-                        "auto-uisi" to buildString {
-                            append("\neventId: $eventId")
-                            append("\nroomId: $roomId")
-                            append("\nsenderKey: $senderKey")
-                            append("\ndeviceId: $deviceId")
-                            append("\nuserId: $userId")
-                            append("\nsessionId: $sessionId")
+                        "auto_uisi" to buildString {
+                            append("{")
+                            append("\"event_id\": \"$eventId\",")
+                            append("\"room_id\": \"$roomId\",")
+                            append("\"sender_key\": \"$senderKey\",")
+                            append("\"device_id\": \"$deviceId\",")
+                            append("\"user_id\": \"$userId\",")
+                            append("\"session_id\": \"$sessionId\"")
+                            append("}")
                         },
                         "recipient_rageshake" to matchingIssue
                 ),
