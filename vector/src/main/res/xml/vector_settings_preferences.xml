@@ -75,6 +75,7 @@
         <im.vector.app.core.preference.VectorSwitchPreference
             android:defaultValue="false"
             android:key="SETTINGS_PREF_ENABLE_LOCATION_SHARING"
+            android:summary="@string/settings_enable_location_sharing_summary"
             android:title="@string/settings_enable_location_sharing" />
 
     </im.vector.app.core.preference.VectorPreferenceCategory>
