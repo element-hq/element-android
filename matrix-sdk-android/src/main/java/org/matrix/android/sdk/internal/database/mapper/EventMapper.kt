@@ -103,6 +103,7 @@ internal object EventMapper {
             it.mCryptoErrorReason = eventEntity.decryptionErrorReason
             it.threadDetails = ThreadDetails(
                     isRootThread = eventEntity.isRootThread,
+                    isThread = if (it.threadDetails?.isThread == true) true else eventEntity.isThread(),
                     numberOfThreads = eventEntity.numberOfThreads,
                     threadSummarySenderInfo = eventEntity.threadSummaryLatestMessage?.let { timelineEventEntity ->
                         SenderInfo(

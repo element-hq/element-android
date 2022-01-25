@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.database.helper
 
 import io.realm.Realm
 import io.realm.RealmQuery
-import io.realm.RealmResults
 import io.realm.Sort
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.internal.database.mapper.asDomain
@@ -27,9 +26,13 @@ import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
+import org.matrix.android.sdk.internal.database.query.find
 import org.matrix.android.sdk.internal.database.query.findIncludingEvent
+import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
+
+private typealias ThreadSummary = Pair<Int, TimelineEventEntity>?
 
 /**
  * Finds the root thread event and update it with the latest message summary along with the number
@@ -39,19 +42,21 @@ internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded(
         roomId: String,
         realm: Realm, currentUserId: String,
         shouldUpdateNotifications: Boolean = true) {
-    for ((rootThreadEventId, eventEntity) in this) {
-        eventEntity.findAllThreadsForRootEventId(eventEntity.realm, rootThreadEventId).let {
-            if (it.isNullOrEmpty()) return@let
 
-            val latestMessage = it.firstOrNull()
+    for ((rootThreadEventId, eventEntity) in this) {
+        eventEntity.threadSummaryInThread(eventEntity.realm, rootThreadEventId)?.let { threadSummary ->
+
+            val numberOfMessages = threadSummary.first
+            val latestEventInThread = threadSummary.second
 
             // If this is a thread message, find its root event if exists
             val rootThreadEvent = if (eventEntity.isThread()) eventEntity.findRootThreadEvent() else eventEntity
 
             rootThreadEvent?.markEventAsRoot(
-                    threadsCounted = it.size,
-                    latestMessageTimelineEventEntity = latestMessage
+                    threadsCounted = numberOfMessages,
+                    latestMessageTimelineEventEntity = latestEventInThread
             )
+
         }
     }
 
@@ -82,16 +87,49 @@ internal fun EventEntity.markEventAsRoot(
     threadSummaryLatestMessage = latestMessageTimelineEventEntity
 }
 
+///**
+// * Find all TimelineEventEntity that are threads bind to the Event with rootThreadEventId
+// * @param rootThreadEventId The root eventId that will try to find bind threads
+// */
+//internal fun EventEntity.findAllThreadsForRootEventId(realm: Realm, rootThreadEventId: String): RealmResults<TimelineEventEntity> =
+//        TimelineEventEntity
+//                .whereRoomId(realm, roomId = roomId)
+//                .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, rootThreadEventId)
+//                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
+//                .findAll()
+
 /**
- * Find all TimelineEventEntity that are threads bind to the Event with rootThreadEventId
- * @param rootThreadEventId The root eventId that will try to find bind threads
+ * Count the number of threads for the provided root thread eventId, and finds the latest event message
+ * @param rootThreadEventId The root eventId that will find the number of threads
+ * @return A ThreadSummary containing the counted threads and the latest event message
  */
-internal fun EventEntity.findAllThreadsForRootEventId(realm: Realm, rootThreadEventId: String): RealmResults<TimelineEventEntity> =
-        TimelineEventEntity
-                .whereRoomId(realm, roomId = roomId)
-                .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, rootThreadEventId)
-                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
-                .findAll()
+internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: String): ThreadSummary {
+
+    // Number of messages
+    val messages = TimelineEventEntity
+            .whereRoomId(realm, roomId = roomId)
+            .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, rootThreadEventId)
+            .count()
+            .toInt()
+
+    if (messages <= 0) return null
+
+    // Find latest thread event, we know it exists
+    var chunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId) ?: return null
+    var result: TimelineEventEntity? = null
+
+    // Iterate the chunk until we find our latest event
+    while (result == null) {
+        result = chunk.timelineEvents.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)?.firstOrNull {
+            it.root?.rootThreadEventId == rootThreadEventId
+        }
+        chunk  = ChunkEntity.find(realm, roomId, nextToken = chunk.prevToken) ?: break
+    }
+
+    result ?: return null
+
+    return ThreadSummary(messages, result)
+}
 
 /**
  * Find all TimelineEventEntity that are root threads for the specified room

@@ -28,5 +28,6 @@ data class ThreadDetails(
         val threadSummarySenderInfo: SenderInfo? = null,
         val threadSummaryLatestTextMessage: String? = null,
         val lastMessageTimestamp: Long? = null,
-        var threadNotificationState: ThreadNotificationState = ThreadNotificationState.NO_NEW_MESSAGE
+        var threadNotificationState: ThreadNotificationState = ThreadNotificationState.NO_NEW_MESSAGE,
+        val isThread: Boolean = false
 )

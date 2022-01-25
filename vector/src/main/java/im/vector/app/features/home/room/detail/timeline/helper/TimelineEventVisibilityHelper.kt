@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import timber.log.Timber
 import javax.inject.Inject
 
 class TimelineEventVisibilityHelper @Inject constructor(private val userPreferencesProvider: UserPreferencesProvider) {
@@ -137,9 +138,19 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
     }
 
     private fun TimelineEvent.shouldBeHidden(rootThreadEventId: String?, isFromThreadTimeline: Boolean): Boolean {
-        if (root.isRedacted() && !userPreferencesProvider.shouldShowRedactedMessages()) {
+
+        if (root.isRedacted() && !userPreferencesProvider.shouldShowRedactedMessages() && root.threadDetails?.isRootThread == false ) {
             return true
         }
+
+        // We should not display deleted thread messages within the normal timeline
+        if (root.isRedacted() &&
+                userPreferencesProvider.areThreadMessagesEnabled() &&
+                root.threadDetails?.isThread == true){
+            return true
+        }
+
+
         if (root.getRelationContent()?.type == RelationType.REPLACE) {
             return true
         }
@@ -155,6 +166,7 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
             return true
         }
 
+        // Allow only the the threads within the rootThreadEventId along with the root event
         if (userPreferencesProvider.areThreadMessagesEnabled() && isFromThreadTimeline) {
             return if (root.getRootThreadEventId() == rootThreadEventId) {
                 false
