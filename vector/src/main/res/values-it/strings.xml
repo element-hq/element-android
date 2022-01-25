@@ -3048,4 +3048,22 @@
     <string name="restart_the_application_to_apply_changes">Riavvia l\'applicazione per applicare le modifiche.</string>
     <string name="labs_enable_latex_maths">Attiva la matematica LaTeX</string>
     <string name="room_error_access_unauthorized">Non ti è permesso entrare in questa stanza</string>
+    <string name="tooltip_attachment_poll">Crea sondaggio</string>
+    <string name="tooltip_attachment_contact">Apri i contatti</string>
+    <string name="tooltip_attachment_sticker">Invia sticker</string>
+    <string name="tooltip_attachment_file">Invia file</string>
+    <string name="tooltip_attachment_gallery">Invia immagini e video</string>
+    <string name="tooltip_attachment_photo">Apri fotocamera</string>
+    <string name="labs_auto_report_uisi_desc">Il tuo sistema invierà automaticamente i log quando si verifica un errore di decifrazione</string>
+    <string name="labs_auto_report_uisi">Auto-segnala errori di decifrazione.</string>
+    <string name="room_member_override_nick_color">Sovrascrivi colore nick</string>
+    <string name="login_splash_already_have_account">Ho già un account</string>
+    <string name="ftue_auth_carousel_4_body">Universale come le email, Element è un tipo di collaborazione completamente nuovo.</string>
+    <string name="ftue_auth_carousel_4_title">Riduci il carico ai team.</string>
+    <string name="ftue_auth_carousel_3_body">Element funziona con tutte le app basate su Matrix e può anche fare da ponte tra messaggistiche proprietarie.</string>
+    <string name="ftue_auth_carousel_3_title">Connettiti con chiunque.</string>
+    <string name="ftue_auth_carousel_2_body">Element ti lascia scegliere dove i messaggi vengono salvati, dandoti il controllo dei tuoi dati.</string>
+    <string name="ftue_auth_carousel_2_title">Tu hai il controllo.</string>
+    <string name="ftue_auth_carousel_1_body">Messaggistica cifrata end-to-end per comunicazioni sicure e indipendenti, connesse via Matrix.</string>
+    <string name="ftue_auth_carousel_1_title">Prendi il controllo delle tue conversazioni.</string>
 </resources>

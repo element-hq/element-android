@@ -3046,4 +3046,21 @@
     <string name="restart_the_application_to_apply_changes">Që ndryshimi të hyjë në fuqi, rinisni aplikacionin.</string>
     <string name="labs_enable_latex_maths">Aktivizo elementë LaTeX për matematikë</string>
     <string name="room_error_access_unauthorized">S’keni leje të hyni në këtë dhomë</string>
+    <string name="tooltip_attachment_poll">Krijoni anketim</string>
+    <string name="tooltip_attachment_contact">Hap kontakte</string>
+    <string name="tooltip_attachment_sticker">Dërgoni ngjitës</string>
+    <string name="tooltip_attachment_file">Ngarkoni kartelë</string>
+    <string name="tooltip_attachment_gallery">Dërgoni figura dhe video</string>
+    <string name="tooltip_attachment_photo">Hapni kamerën</string>
+    <string name="labs_auto_report_uisi_desc">Sistemi juaj do të dërgojë automatikisht regjistra, kur ndodh një gabim “s’arrihet të shfshehtëzohet”</string>
+    <string name="labs_auto_report_uisi">Raporto Vetvetiu Gabime Shfshehtëzimi.</string>
+    <string name="room_member_override_nick_color">Anashkalo ngjyrë nofke</string>
+    <string name="login_splash_already_have_account">Kam tashmë një llogari</string>
+    <string name="ftue_auth_carousel_4_body">Po aq universal sa email-i, Element-i është një lloj plotësisht i ri bashkëpunimi.</string>
+    <string name="ftue_auth_carousel_3_body">Element-i funksionon me krejt aplikacionet e bazuar në Matrix dhe mund të shërbejë madje si urë për shkëmbyes pronësorë mesazhesh.</string>
+    <string name="ftue_auth_carousel_3_title">Lidhuni me këdo.</string>
+    <string name="ftue_auth_carousel_2_body">Element-i ju lejon të zgjidhni ku depozitohen mesazhet tuaja, duke ju mbajtur ju në kontroll të të dhënave tuaja.</string>
+    <string name="ftue_auth_carousel_2_title">Kontrollin e keni ju.</string>
+    <string name="ftue_auth_carousel_1_body">Shkëmbim mesazhesh të fshehtëzuar skaj më skaj, për komunikim të siguruar dhe të pavarur, me lidhje përmes Matrix-it.</string>
+    <string name="ftue_auth_carousel_1_title">Jini zot i bisedave tuaja.</string>
 </resources>

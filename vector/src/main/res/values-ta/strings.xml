@@ -1,2 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="notice_room_join">%1$s அறையில் சேர்ந்தார்</string>
+</resources>

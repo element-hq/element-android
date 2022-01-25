@@ -2089,4 +2089,99 @@
     <string name="create_spaces_just_me">Iba ja</string>
     <string name="disclaimer_title">Riot je teraz Element!</string>
     <string name="login_wait_for_email_title">Skontrolujte prosím svoj e-mail</string>
+    <string name="poll_end_room_list_preview">Anketa skončila</string>
+    <string name="invite_by_username">Pozvať podľa používateľského mena</string>
+    <string name="ftue_auth_carousel_1_title">Vlastnite svoje konverzácie.</string>
+    <string name="login_splash_already_have_account">Už mám účet</string>
+    <string name="tooltip_attachment_file">Nahrať súbor</string>
+    <string name="video_call_with_participant">Videohovor s %s</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">%d zmeškaný video hovor</item>
+        <item quantity="few">%d zmeškané video hovory</item>
+        <item quantity="other">%d zmeškaných video hovorov</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">%d zmeškaný hlasový hovor</item>
+        <item quantity="few">%d zmeškané hlasové hovory</item>
+        <item quantity="other">%d zmeškaných hlasových hovorov</item>
+    </plurals>
+    <string name="login_error_homeserver_from_url_not_found">Nie je možné pristupovať k domovskému serveru na adrese %s. Skontrolujte prosím odkaz alebo vyberte server ručne.</string>
+    <string name="auth_msisdn_already_defined">Toto telefónne číslo je už priradené.</string>
+    <string name="use_as_default_and_do_not_ask_again">Použiť ako predvolené a viac sa nepýtať</string>
+    <string name="hs_client_url">API URL domovského servera</string>
+    <string name="send_bug_report_include_key_share_history">Odoslať históriu žiadostí o šifrovacie kľúče</string>
+    <string name="settings_room_directory_show_all_rooms_summary">V adresári zobrazí všetky miestnosti, aj tie s explicitným obsahom.</string>
+    <string name="settings_room_directory_show_all_rooms">Zobrazovať miestnosti s explicitným obsahom</string>
+    <string name="action_return">Vrátiť</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Nemáte oprávnenie na začatie hovoru</string>
+    <string name="no_permissions_to_start_webrtc_call">Nemáte oprávnenie na začatie hovoru v tejto miestnosti</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">Nemáte oprávnenie na začatie konferenčného hovoru</string>
+    <string name="missing_permissions_title">Chýbajúce oprávnenia</string>
+    <string name="denied_permission_voice_message">Abyste mohli posielať hlasové správy, udeľte prosím oprávnenie používať mikrofón.</string>
+    <string name="denied_permission_camera">Na vykonanie tejto akcie, prosím udeľte oprávnenie na používanie fotoaparátu cez systémové nastavenia.</string>
+    <string name="denied_permission_generic">Chýbajú niektoré oprávnenia potrebné na vykonanie tejto akcie, prosím udeľte ich cez systémové nastavenia.</string>
+    <string name="notification_listening_for_notifications">Čakanie na upozornenia</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Zakázali ste hosťom vstupovať do tejto miestnosti.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s zakázal(a) hosťom vstupovať do tejto miestnosti.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Povolili ste hosťom vstupovať do tejto miestnosti.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s povolil(a) hosťom vstupovať do tejto miestnosti.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Upravili ste adresy pre túto miestnosť.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s upravil(a) adresy pre túto miestnosť.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Upravili ste hlavnú aj alternatívne adresy pre túto miestnosť.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s upravil(a) hlavnú aj alternatívne adresy pre túto miestnosť.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Upravili ste alternatívne adresy pre túto miestnosť.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s upravil(a) alternatívne adresy pre túto miestnosť.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Odstránili ste alternatívnu adresu %1$s pre túto miestnosť.</item>
+        <item quantity="few">Odstránili ste alternatívne adresy %1$s pre túto miestnosť.</item>
+        <item quantity="other">Odstránili ste alternatívne adresy %1$s pre túto miestnosť.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s odstránil(a) alternatívnu adresu %2$s pre túto miestnosť.</item>
+        <item quantity="few">%1$s odstránil(a) alternatívne adresy %2$s pre túto miestnosť.</item>
+        <item quantity="other">%1$s odstránil(a) alternatívne adresy %2$s pre túto miestnosť.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Pridali ste alternatívnu adresu %1$s pre túto miestnosť.</item>
+        <item quantity="few">Pridali ste alternatívne adresy %1$s pre túto miestnosť.</item>
+        <item quantity="other">Pridali ste alternatívne adresy %1$s pre túto miestnosť.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s pridal(a) alternatívnu adresu %2$s pre túto miestnosť.</item>
+        <item quantity="few">%1$s pridal(a) alternatívne adresy %2$s pre túto miestnosť.</item>
+        <item quantity="other">%1$s pridal(a) alternatívne adresy %2$s pre túto miestnosť.</item>
+    </plurals>
+    <string name="notice_direct_room_leave_with_reason_by_you">Opustili ste. Dôvod: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s opustil(a). Dôvod: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Vstúpili ste. Dôvod: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s vstúpil(a). Dôvod: %2$s</string>
+    <string name="initial_sync_start_downloading">Úvodná synchronizácia:
+\nPreberanie údajov…</string>
+    <string name="initial_sync_start_server_computing">Úvodná synchronizácia:
+\nčakanie na odpoveď zo servera…</string>
+    <string name="room_displayname_empty_room_was">Prázdna miestnosť (pred tým %s)</string>
+    <string name="room_error_access_unauthorized">Nemáte povolené vstúpiť do tejto miestnosti</string>
+    <string name="notice_widget_jitsi_modified_by_you">Upravili ste video konferenciu</string>
+    <string name="notice_widget_jitsi_modified">%1$s upravil(a) video konferenciu</string>
+    <string name="notice_widget_jitsi_removed_by_you">Ukončili ste video konferenciu</string>
+    <string name="notice_widget_jitsi_removed">%1$s ukončil(a) video konferenciu</string>
+    <string name="notice_widget_jitsi_added_by_you">Začali ste video konferenciu</string>
+    <string name="notice_widget_jitsi_added">%1$s začal(a) video konferenciu</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">Odmietli ste pozvanie pre %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s odmietol pozvanie pre %2$s</string>
+    <string name="notice_direct_room_third_party_invite_by_you">Pozvali ste %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s pozval(a) %2$s</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Všetky servery sú zakázané! Túto miestnosť viac nie je možné použiť.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Servery s číslicami ako IP adresa sú teraz zakázané.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Servery s číslicami ako IP adresa sú teraz povolené.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Servery, ktorých názov sa zhoduje s %s boli odstránené zo zoznamu povolených.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Servery, ktorých názov sa zhoduje s %s sú teraz povolené.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Servery, ktorých názov sa zhoduje s %s boli odstránené zo zoznamu zakázaných.</string>
+    <string name="notice_room_server_acl_updated_banned">• Servery, ktorých názov sa zhoduje s %s sú teraz zakázané.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Zmenili ste ACL servera pre túto miestnosť.</string>
+    <string name="notice_room_server_acl_updated_title">%s zmenil(a) ACL servera pre túto miestnosť.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Servery s číslicami ako IP adresa sú zakázané.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Servery s číslicami ako IP adresy sú povolené.</string>
+    <string name="notice_room_server_acl_set_allowed">• Servery, ktorých názov sa zhoduje s %s sú povolené.</string>
+    <string name="notice_room_server_acl_set_banned">• Servery, ktorých názov sa zhoduje s %s sú zakázané.</string>
 </resources>

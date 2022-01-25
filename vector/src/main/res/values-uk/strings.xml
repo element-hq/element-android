@@ -1002,9 +1002,9 @@
     <string name="call_anyway">Усе одно зателефонувати</string>
     <string name="room_participants_action_kick">Вилучити</string>
     <string name="reason_hint">Причина</string>
-    <string name="settings_inline_url_preview_summary">Попередній перегляд посилань у чаті, у разі якщо Ваш сервер підтримує таку можливість.</string>
+    <string name="settings_inline_url_preview_summary">Попередній перегляд посилань у бесіді, якщо ваш сервер підтримує цю можливість.</string>
     <string name="settings_send_typing_notifs">Надсилати сповіщення про набір повідомлення</string>
-    <string name="settings_send_typing_notifs_summary">Дозволити іншим користувачам бачити коли Ви набираєте повідомлення.</string>
+    <string name="settings_send_typing_notifs_summary">Дозволити іншим користувачам бачити, що ви набираєте повідомлення.</string>
     <string name="settings_send_markdown">Форматування Markdown</string>
     <string name="settings_send_markdown_summary">Форматувати повідомлення з використанням синтаксису Markdown перед надсиланням. Це дає можливість розгорнутого форматування, як-от використання зірочок для показу курсивного тексту.</string>
     <string name="settings_show_read_receipts">Показувати підтвердження прочитання</string>
@@ -1158,7 +1158,7 @@
     <string name="send_suggestion_report_placeholder">Опишіть вашу пропозицію тут</string>
     <string name="send_suggestion_content">Залиште вашу пропозицію внизу.</string>
     <string name="settings_show_redacted">Показувати видалені повідомлення</string>
-    <string name="settings_send_message_with_enter_summary">Натискання Enter на програмній клавіатурі надсилатиме повідомлення замість додавання перенесення рядка</string>
+    <string name="settings_send_message_with_enter_summary">Натискання Enter на програмній клавіатурі надсилатиме повідомлення замість перенесення рядка</string>
     <string name="settings_send_message_with_enter">Надсилати повідомлення натисканням Enter</string>
     <string name="room_profile_section_more_settings">Налаштування кімнати</string>
     <string name="room_profile_section_security_learn_more">Докладніше</string>
@@ -3160,4 +3160,22 @@
     <string name="restart_the_application_to_apply_changes">Перезапустіть застосунок, щоб зміни набули чинності.</string>
     <string name="labs_enable_latex_maths">Увімкнути підтримку LaTeX</string>
     <string name="room_error_access_unauthorized">Вам не дозволено приєднуватися до цієї кімнати</string>
+    <string name="tooltip_attachment_poll">Створити опитування</string>
+    <string name="tooltip_attachment_contact">Відкрити контакти</string>
+    <string name="tooltip_attachment_sticker">Надіслати наліпку</string>
+    <string name="tooltip_attachment_file">Вивантажити файл</string>
+    <string name="tooltip_attachment_gallery">Надіслати зображення й відео</string>
+    <string name="tooltip_attachment_photo">Відкрити камеру</string>
+    <string name="labs_auto_report_uisi_desc">Ваша система автоматично надсилатиме журнали, коли виникне помилка неможливості розшифрування</string>
+    <string name="labs_auto_report_uisi">Автозвіт про помилки шифрування.</string>
+    <string name="room_member_override_nick_color">Замінити колір псевдоніма</string>
+    <string name="login_splash_already_have_account">Я вже маю обліковий запис</string>
+    <string name="ftue_auth_carousel_4_body">Універсальний, як електронна пошта, Element — це абсолютно новий тип співпраці.</string>
+    <string name="ftue_auth_carousel_4_title">Удоскональте спілкування в команді.</string>
+    <string name="ftue_auth_carousel_3_body">Element працює з усіма застосунками на базі Matrix і може навіть з\'єднуватися з власницькими месенджерами.</string>
+    <string name="ftue_auth_carousel_3_title">З\'єднуйтеся з будь-ким.</string>
+    <string name="ftue_auth_carousel_2_body">Element дає змогу обрати де зберігати повідомлення, надаючи вам контроль над вашими даними.</string>
+    <string name="ftue_auth_carousel_2_title">Ви контролюєте все.</string>
+    <string name="ftue_auth_carousel_1_body">Наскрізно зашифроване спілкування для безпечного та незалежного зв’язку, під\'єднаного через Matrix.</string>
+    <string name="ftue_auth_carousel_1_title">Володійте своїми розмовами.</string>
 </resources>

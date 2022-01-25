@@ -221,18 +221,18 @@
     <string name="room_displayname_3_members">%1$s, %2$s e %3$s</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉 Todos os servidores estão banidos de participar! Esta sala não pode mais ser usada.</string>
     <string name="notice_room_server_acl_updated_no_change">Nenhuma mudança.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Servidores correspondendo a literais de IP estão agora banidos.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Servidores correspondendo a literais de IP estão agora permitidos.</string>
-    <string name="notice_room_server_acl_updated_was_allowed">• Servidores correspondendo a %s foram removidos da lista de permitidos.</string>
-    <string name="notice_room_server_acl_updated_allowed">• Servidores correspondendo a %s estão agora permitidos.</string>
-    <string name="notice_room_server_acl_updated_was_banned">• Servidores correspondendo a %s foram removidos da lista de banimento.</string>
-    <string name="notice_room_server_acl_updated_banned">• Servidores correspondendo a %s estão agora banidos.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Servidores correspondendo com literais de IP estão agora banidos.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Servidores correspondendo com literais de IP estão agora permitidos.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Servidores correspondendo com %s foram removidos da lista de permitidos.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Servidores correspondendo com %s estão agora permitidos.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Servidores correspondendo com %s foram removidos da lista de banimento.</string>
+    <string name="notice_room_server_acl_updated_banned">• Servidores correspondendo com %s estão agora banidos.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Você mudou as LCAs do servidor para esta sala.</string>
     <string name="notice_room_server_acl_updated_title">%s mudou as LCAs do servidor para esta sala.</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Servidores correspondendo a literais de IP estão banidos.</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• Servidores correspondendo a literais de IP estão permitidos.</string>
-    <string name="notice_room_server_acl_set_allowed">• Servidores correspondendo a %s estão permitidos.</string>
-    <string name="notice_room_server_acl_set_banned">• Servidores correspondendo a %s estão banidos.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Servidores correspondendo com literais de IP estão banidos.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Servidores correspondendo com literais de IP estão permitidos.</string>
+    <string name="notice_room_server_acl_set_allowed">• Servidores correspondendo com %s estão permitidos.</string>
+    <string name="notice_room_server_acl_set_banned">• Servidores correspondendo com %s estão banidos.</string>
     <string name="notice_room_server_acl_set_title_by_you">Você definiu as LCAs do servidor para esta sala.</string>
     <string name="notice_room_server_acl_set_title">%s definiu as LCAs do servidor para esta sala.</string>
     <string name="notice_room_canonical_alias_alternative_changed_by_you">Você mudou os endereços alternativos para esta sala.</string>
@@ -549,7 +549,7 @@
     <string name="ssl_fingerprint_hash">Impressão digital (%s):</string>
     <string name="ssl_could_not_verify">Não foi possível verificar identidade de servidor remoto.</string>
     <string name="ssl_cert_not_trust">Isto poderia significar que alguém está maliciosamente interceptando seu tráfico, ou que seu celular não confia no certificado provido pelo servidor remoto.</string>
-    <string name="ssl_cert_new_account_expl">Se o/a administrador(a) de servidor tem dito que isto é esperado, assegure que a impressão digital abaixo corresponde à impressão digital provida por ele(a).</string>
+    <string name="ssl_cert_new_account_expl">Se o/a administrador(a) de servidor tem dito que isto é esperado, assegure que a impressão digital abaixo corresponde com a impressão digital provida por ele(a).</string>
     <string name="ssl_unexpected_existing_expl">O certificado tem mudado de um que era confiado por seu telefone. Isto é ALTAMENTE INCOMUM. É recomendado que você NÃO ACEITE este novo certificado.</string>
     <string name="ssl_expected_existing_expl">O certificado tem mudado de um previamente confiado para um que não é confiado. O servidor pode ter renovado seu certificado. Contacte o/a administrador(a) de servidor para a impressão digital esperada.</string>
     <string name="ssl_only_accept">Somente aceite o certificado se o/a administrador(a) de servidor tem publicado uma impressão digital que corresponde com a acima.</string>
@@ -759,7 +759,7 @@
     <string name="encryption_information_unblock">Retirar da lista negra</string>
     <string name="encryption_information_verify_device">Verificar sessão</string>
     <string name="encryption_information_verify_device_warning">Confirme ao comparar o seguinte com as Configurações de Usuária(o) em sua outra sessão:</string>
-    <string name="encryption_information_verify_device_warning2">Se não corresponderem, a segurança de sua comunicação pode estar comprometida.</string>
+    <string name="encryption_information_verify_device_warning2">Se não correspondem, a segurança de sua comunicação pode estar comprometida.</string>
     <string name="encryption_information_verify_key_match">Eu verifico que as chaves correspondem</string>
     <string name="unknown_devices_alert_title">Sala contém sessões desconhecidas</string>
     <string name="unknown_devices_alert_message">Esta sala contém sessões desconhecidas que não têm sido verificadas.
@@ -1543,8 +1543,8 @@
     <string name="sas_error_m_mismatched_sas">O SAS não correspondeu</string>
     <string name="sas_error_m_unexpected_message">A sessão recebeu uma mensagem inesperada</string>
     <string name="sas_error_m_invalid_message">Uma mensagem inválida foi recebida</string>
-    <string name="sas_error_m_key_mismatch">Disparidade de chave</string>
-    <string name="sas_error_m_user_error">Disparidade de usuária(o)</string>
+    <string name="sas_error_m_key_mismatch">Correspondência errada de chave</string>
+    <string name="sas_error_m_user_error">Correspondência errada de usuária(o)</string>
     <string name="sas_error_unknown">Erro Desconhecido</string>
     <string name="identity_server_not_defined">Você não está usando nenhum servidor de identidade</string>
     <string name="identity_server_not_defined_for_password_reset">Nenhum servidor de identidade está configurado, ele é requerido para resettar sua senha.</string>
@@ -3047,7 +3047,7 @@
     <string name="analytics_opt_in_content">Ajude-nos a identificar problemas e melhorar Element ao compartilhar dados de uso anônimos. Para entender como pessoas usam seus múltiplos dispositivos, nós vamos gerar um identificador aleatório, compartilhado por seus dispositivos.
 \n
 \nVocê pode ler todos os nossos termos %s.</string>
-    <string name="analytics_opt_in_title">Ajudar a melhorar Element</string>
+    <string name="analytics_opt_in_title">Ajude a melhorar Element</string>
     <string name="preference_system_settings">Configurações de sistema</string>
     <string name="preference_help_title">Ajuda e suporte</string>
     <string name="preference_help">Ajuda</string>
@@ -3058,4 +3058,22 @@
     <string name="restart_the_application_to_apply_changes">Recomece o aplicativo para a mudançar tomar efeito.</string>
     <string name="labs_enable_latex_maths">Habilitar matemática LaTeX</string>
     <string name="room_error_access_unauthorized">Você não é permitida(o) a juntar-se a esta sala</string>
+    <string name="tooltip_attachment_poll">Criar sondagem</string>
+    <string name="tooltip_attachment_contact">Abrir contatos</string>
+    <string name="tooltip_attachment_sticker">Enviar sticker</string>
+    <string name="tooltip_attachment_file">Fazer upload de arquivo</string>
+    <string name="tooltip_attachment_gallery">Enviar imagens e vídeos</string>
+    <string name="tooltip_attachment_photo">Abrir câmera</string>
+    <string name="labs_auto_report_uisi_desc">Seu sistema vai automaticamente enviar logs quando um erro incapaz de decriptar ocorre</string>
+    <string name="labs_auto_report_uisi">Auro Reportar Erros de Decriptação.</string>
+    <string name="room_member_override_nick_color">Sobrepor cor de nick</string>
+    <string name="login_splash_already_have_account">Eu já tenho uma conta</string>
+    <string name="ftue_auth_carousel_4_body">Tão universal quanto email, Element é um tipo de colaboração completamente novo.</string>
+    <string name="ftue_auth_carousel_4_title">Dê liberdade a times.</string>
+    <string name="ftue_auth_carousel_3_body">Element funciona com todos os apps baseados em Matrix e pode até construir pontes para mensageiros proprietários.</string>
+    <string name="ftue_auth_carousel_3_title">Conecte-se com qualquer pessoa.</string>
+    <string name="ftue_auth_carousel_2_body">Element lhe permite escolher onde suas mensagens são armazenadas, mantendo você em controle de seus dados.</string>
+    <string name="ftue_auth_carousel_2_title">Você está em controle.</string>
+    <string name="ftue_auth_carousel_1_body">Mensageria encriptada ponta-a-ponta para comunicação segura e independente, conectada via Matrix.</string>
+    <string name="ftue_auth_carousel_1_title">Tenha posse de suas conversas.</string>
 </resources>
