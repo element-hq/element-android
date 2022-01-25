@@ -503,7 +503,6 @@
     <string name="room_participants_header_devices">SITZUNGEN</string>
     <string name="room_participants_action_invite">Einladen</string>
     <string name="room_participants_action_leave">Diesen Raum verlassen</string>
-    <string name="room_participants_action_remove">Aus diesem Raum entfernen</string>
     <string name="room_participants_action_ban">Verbannen</string>
     <string name="room_participants_action_unban">Verbannung aufheben</string>
     <string name="room_participants_action_set_default_power_level">Zum normalen Benutzer herabstufen</string>

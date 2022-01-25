@@ -603,7 +603,6 @@
     <string name="room_participants_action_kick">העף</string>
     <string name="room_participants_action_unban">הסרת התעלמות</string>
     <string name="room_participants_action_ban">התעלם</string>
-    <string name="room_participants_action_remove">הסר מחדר זה</string>
     <string name="room_participants_action_leave">עזוב חדר זה</string>
     <string name="room_participants_action_cancel_invite">בטל הזמנה</string>
     <string name="room_participants_action_invite">הזמן</string>

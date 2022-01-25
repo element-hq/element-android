@@ -453,7 +453,6 @@
     <string name="room_participants_header_devices">نشست‌ها</string>
     <string name="room_participants_action_invite">دعوت</string>
     <string name="room_participants_action_leave">ترک این اتاق</string>
-    <string name="room_participants_action_remove">حذف از این اتاق</string>
     <string name="action_stay">ماندن</string>
     <string name="action_redact">برداشتن</string>
     <string name="action_download">بارگیری</string>

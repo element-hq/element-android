@@ -1224,7 +1224,6 @@
     <string name="room_settings_addresses_disable_main_address_prompt_msg">আপনার এই রুমের জন্য নির্দিষ্ট কোন প্রধান ঠিকানা থাকবে না।</string>
     <string name="room_participants_action_unban">নিষেধাজ্ঞা মুক্ত</string>
     <string name="room_participants_action_ban">নিষেধাজ্ঞা</string>
-    <string name="room_participants_action_remove">এই রুমে থেকে সরান</string>
     <string name="room_participants_action_leave">এই রুম ছাড়ো</string>
     <string name="room_participants_action_cancel_invite">আমন্ত্রণ বাতিল করুন</string>
     <string name="room_participants_action_invite">আমন্ত্রণ</string>

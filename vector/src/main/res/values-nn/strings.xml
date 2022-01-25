@@ -362,7 +362,6 @@
     <string name="room_participants_header_devices">SESJONAR</string>
     <string name="room_participants_action_invite">Inviter</string>
     <string name="room_participants_action_leave">Forlat dette rommet</string>
-    <string name="room_participants_action_remove">Fjern frå dette romet</string>
     <string name="room_participants_action_ban">Steng ute</string>
     <string name="room_participants_action_unban">Slepp inn att</string>
     <string name="room_participants_action_set_default_power_level">Gjer til vanleg brukar</string>

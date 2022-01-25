@@ -253,7 +253,6 @@ Možda se želite prijaviti s nekim drugim računom ili dodati ovu poruku email 
     <string name="room_participants_header_devices">UREĐAJI</string>
     <string name="room_participants_action_invite">Pozovi</string>
     <string name="room_participants_action_leave">Napusti ovu sobu</string>
-    <string name="room_participants_action_remove">Ukloni iz ove sobe</string>
     <string name="room_participants_action_ban">Ban</string>
     <string name="room_participants_action_unban">Deban</string>
     <string name="room_participants_action_set_default_power_level">Resetuj na normlanog korisnika</string>

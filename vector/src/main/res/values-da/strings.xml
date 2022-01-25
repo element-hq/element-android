@@ -309,7 +309,6 @@ Det kan være du vil logge ind med en anden konto eller tilføje denne email til
     <string name="room_participants_header_devices">ENHEDER</string>
     <string name="room_participants_action_invite">Invitér</string>
     <string name="room_participants_action_leave">Forlad dette rum</string>
-    <string name="room_participants_action_remove">Fjern fra dette rum</string>
     <string name="room_participants_action_ban">Bandlys</string>
     <string name="room_participants_action_unban">Ophæv bandlysning</string>
     <string name="room_participants_action_set_default_power_level">Gør til normal bruger</string>

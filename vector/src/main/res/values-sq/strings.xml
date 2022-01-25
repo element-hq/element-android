@@ -490,7 +490,6 @@
     <string name="room_participants_header_devices">SESIONE</string>
     <string name="room_participants_action_invite">Ftoje</string>
     <string name="room_participants_action_leave">Braktiseni këtë dhomë</string>
-    <string name="room_participants_action_remove">Hiqeni prej kësaj dhome</string>
     <string name="room_participants_action_ban">Dëboje</string>
     <string name="room_participants_action_unban">Hiqja dëbimin</string>
     <string name="room_participants_action_kick">Përzëre</string>

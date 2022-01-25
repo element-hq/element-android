@@ -532,7 +532,6 @@
     <string name="room_participants_header_devices">工作階段</string>
     <string name="room_participants_action_invite">邀請</string>
     <string name="room_participants_action_leave">離開聊天室</string>
-    <string name="room_participants_action_remove">從此房間移除</string>
     <string name="room_participants_action_ban">封鎖</string>
     <string name="room_participants_action_unban">封禁</string>
     <string name="room_participants_action_set_default_power_level">恢復到一般使用者</string>

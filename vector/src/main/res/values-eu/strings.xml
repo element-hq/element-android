@@ -410,7 +410,6 @@ Baimendu sarbidea hurrengo laster-leihoan zure telefonotik fitxategiak bidali ah
 
     <string name="room_participants_action_invite">Gonbidatu</string>
     <string name="room_participants_action_leave">Atera gela honetatik</string>
-    <string name="room_participants_action_remove">Kendu gela honetatik</string>
     <string name="room_participants_action_ban">Debekatu</string>
     <string name="room_participants_action_unban">Debekua kendu</string>
     <string name="room_participants_action_set_default_power_level">Berrezarri erabiltzaile arrunt gisa</string>

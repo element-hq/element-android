@@ -600,7 +600,6 @@
     <string name="room_participants_header_devices">RELACE</string>
     <string name="room_participants_action_invite">Pozvat</string>
     <string name="room_participants_action_leave">Opustit tuto místnost</string>
-    <string name="room_participants_action_remove">Odstranit z této místnosti</string>
     <string name="room_participants_action_ban">Vykázat</string>
     <string name="room_participants_action_unban">Zrušit vykázání</string>
     <string name="room_participants_action_kick">Vykopnout</string>

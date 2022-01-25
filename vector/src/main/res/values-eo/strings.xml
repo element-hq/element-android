@@ -676,7 +676,6 @@
     <string name="room_participants_ago">%1$s antaŭ %2$s</string>
     <string name="room_participants_action_invite">Inviti</string>
     <string name="room_participants_action_leave">Foriri de ĉi tiu ĉambro</string>
-    <string name="room_participants_action_remove">Forigi de ĉi tiu ĉambro</string>
     <string name="room_participants_action_ban">Forbari</string>
     <string name="room_participants_action_unban">Malforbari</string>
     <string name="room_participants_action_kick">Forpeli</string>

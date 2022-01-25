@@ -646,7 +646,6 @@
     <string name="room_participants_action_kick">Изтерај</string>
     <string name="room_participants_action_unban">Уклони забрану</string>
     <string name="room_participants_action_ban">Забрани</string>
-    <string name="room_participants_action_remove">Уклони из ове собе</string>
     <string name="room_participants_action_leave">Напусти ову собу</string>
     <string name="room_participants_action_cancel_invite">Поништи позив</string>
     <string name="room_participants_action_invite">Позови</string>

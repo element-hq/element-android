@@ -223,7 +223,6 @@
     <string name="room_participants_invite_search_another_user">Brûkers-ID, namme of e-mailadres</string>
     <string name="room_participants_action_leave">Dizze keamer ferlitte</string>
     <string name="room_participants_create">Oanmeitsje</string>
-    <string name="room_participants_action_remove">Ut dizze keamer fuortsmite</string>
     <string name="room_settings_enable_encryption_no_permission">Jo hawwe gjin tastimming om fersifering yn dizze keamer yn te skeakeljen.</string>
     <string name="sound_device_phone">Telefoan</string>
     <string name="call_failed_dont_ask_again">My net wer freegje</string>

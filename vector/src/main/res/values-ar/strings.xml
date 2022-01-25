@@ -388,7 +388,6 @@
     <string name="room_participants_header_admin_tools">أدوات الإدارة</string>
     <string name="room_participants_header_devices">الأجهزة</string>
     <string name="room_participants_action_leave">اترك هذه الغرفة</string>
-    <string name="room_participants_action_remove">أزِل من هذه الغرفة</string>
     <string name="room_participants_action_ban">امنع</string>
     <string name="room_participants_action_unban">ارفع المنع</string>
     <string name="room_participants_action_set_default_power_level">صفّره إلى مستخدم عادي</string>

@@ -403,7 +403,6 @@
     <string name="room_participants_header_devices">设备列表</string>
     <string name="room_participants_action_invite">邀请</string>
     <string name="room_participants_action_leave">退出这个聊天室</string>
-    <string name="room_participants_action_remove">从这个聊天室移除</string>
     <string name="room_participants_action_ban">封禁</string>
     <string name="room_participants_action_unban">解除封禁</string>
     <string name="room_participants_action_set_default_power_level">重置为标准用户</string>

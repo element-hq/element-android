@@ -520,7 +520,6 @@
     <string name="room_participants_header_devices">СЕССИИ</string>
     <string name="room_participants_action_invite">Пригласить</string>
     <string name="room_participants_action_leave">Покинуть этот чат</string>
-    <string name="room_participants_action_remove">Исключить из этого чата</string>
     <string name="room_participants_action_ban">Забанить</string>
     <string name="room_participants_action_unban">Разбанить</string>
     <string name="room_participants_action_set_default_power_level">Сделать рядовым пользователем</string>

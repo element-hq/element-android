@@ -808,7 +808,6 @@
     <string name="room_participants_action_kick">Đá</string>
     <string name="room_participants_action_unban">Bỏ cấm</string>
     <string name="room_participants_action_ban">Cấm</string>
-    <string name="room_participants_action_remove">Xóa khỏi phòng này</string>
     <string name="room_participants_action_leave">Rời khỏi phòng này</string>
     <string name="room_participants_action_cancel_invite">Hủy mời</string>
     <string name="room_participants_action_invite">Mời</string>

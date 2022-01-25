@@ -429,7 +429,6 @@
     <string name="room_participants_header_admin_tools">管理者権限操作</string>
     <string name="room_participants_header_call">通話</string>
     <string name="room_participants_header_direct_chats">ダイレクトメッセージ</string>
-    <string name="room_participants_action_remove">部屋から退室させる</string>
     <string name="room_participants_action_ban">再入室禁止</string>
     <string name="room_participants_action_unban">再入室禁止解除</string>
     <string name="room_participants_action_ignore">この参加者の発言を全て非表示にする</string>

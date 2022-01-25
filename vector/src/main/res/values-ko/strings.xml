@@ -425,7 +425,6 @@
     <string name="room_participants_header_devices">기기</string>
     <string name="room_participants_action_invite">초대</string>
     <string name="room_participants_action_leave">이 방 떠나기</string>
-    <string name="room_participants_action_remove">이 방에서 삭제하기</string>
     <string name="room_participants_action_ban">출입 금지</string>
     <string name="room_participants_action_unban">출입 금지 풀기</string>
     <string name="room_participants_action_kick">추방</string>

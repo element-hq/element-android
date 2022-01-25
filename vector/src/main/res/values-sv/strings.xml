@@ -637,7 +637,6 @@
     <string name="room_participants_header_devices">SESSIONER</string>
     <string name="room_participants_action_invite">Bjud in</string>
     <string name="room_participants_action_leave">Lämna det här rummet</string>
-    <string name="room_participants_action_remove">Ta bort från det här rummet</string>
     <string name="room_participants_action_ban">Banna</string>
     <string name="room_participants_action_unban">Avbanna</string>
     <string name="room_participants_action_kick">Kicka</string>

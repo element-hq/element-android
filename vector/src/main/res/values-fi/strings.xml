@@ -441,7 +441,6 @@
     <string name="room_participants_header_devices">ISTUNNOT</string>
     <string name="room_participants_action_invite">Kutsu</string>
     <string name="room_participants_action_leave">Poistu huoneesta</string>
-    <string name="room_participants_action_remove">Poista huoneesta</string>
     <string name="room_participants_action_ban">Anna porttikielto</string>
     <string name="room_participants_action_unban">Poista porttikielto</string>
     <string name="room_participants_action_set_default_power_level">Palauta tavalliseksi käyttäjäksi</string>

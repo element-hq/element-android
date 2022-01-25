@@ -766,7 +766,6 @@
     <string name="room_participants_header_call">Chamar</string>
     <string name="room_participants_header_devices">DISPOSITIVOS</string>
     <string name="room_participants_action_leave">Deixar a sala</string>
-    <string name="room_participants_action_remove">Borrar desta sala</string>
     <string name="room_unsent_messages_notification">Mensaxes non enviadas. %1$s ou %2$s agora?</string>
     <string name="ssl_do_not_trust">Non confiar</string>
     <string name="ssl_fingerprint_hash">Pegada (%s):</string>

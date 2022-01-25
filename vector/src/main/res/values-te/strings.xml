@@ -281,7 +281,6 @@
 
     <string name="room_participants_action_invite">ఆహ్వానము</string>
     <string name="room_participants_action_leave">గదిని వదలండి</string>
-    <string name="room_participants_action_remove">ఈ గది నుండి తీసివేయండి</string>
     <string name="room_participants_action_ban">నిషేధించు</string>
     <string name="ongoing_conference_call">జరుగుతున్న కాన్ఫరెన్స్ కాల్.\n%1$s లేదా %2$s చేరండి.</string>
     <string name="ongoing_conference_call_voice">వాయిస్</string>

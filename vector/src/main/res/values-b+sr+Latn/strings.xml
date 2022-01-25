@@ -193,7 +193,6 @@
     <string name="call_in_progress">Poziv u toku…</string>
     <string name="video_call_in_progress">Video poziv u toku..</string>
 
-    <string name="room_participants_action_remove">Izbaci iz ove sobe</string>
     <string name="room_participants_action_kick">Izbaci</string>
     <string name="room_participants_action_mention">Pomeni</string>
     <string name="settings_troubleshoot_test_foreground_service_started_title">Servis Obaveštenja</string>

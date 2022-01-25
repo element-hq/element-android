@@ -305,7 +305,6 @@
     <string name="room_participants_header_devices">DISPOSITIVOS</string>
     <string name="room_participants_action_invite">Invitar</string>
     <string name="room_participants_action_leave">Salir de esta sala</string>
-    <string name="room_participants_action_remove">Remover de esta sala</string>
     <string name="room_participants_action_ban">Prohibir</string>
     <string name="room_participants_action_unban">Desprohibir</string>
     <string name="room_participants_action_set_default_power_level">Reestablecer como usuario normal</string>

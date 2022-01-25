@@ -364,7 +364,6 @@
     <string name="room_participants_header_devices">OTURUMLAR</string>
     <string name="room_participants_action_invite">Davet</string>
     <string name="room_participants_action_leave">Odadan ayrıl</string>
-    <string name="room_participants_action_remove">Odadan at</string>
     <string name="room_participants_action_ban">Engelle</string>
     <string name="room_participants_action_unban">Engeli kaldır</string>
     <string name="room_participants_action_kick">At</string>

@@ -378,7 +378,6 @@
     <string name="room_participants_header_devices">SESIJE</string>
     <string name="room_participants_action_invite">Pozovi</string>
     <string name="room_participants_action_leave">Napusti ovu sobu</string>
-    <string name="room_participants_action_remove">Izbaci iz ove sobe</string>
     <string name="room_participants_action_ban">Zabrani pristup</string>
     <string name="room_participants_action_unban">Ukloni zabranu pristupa</string>
     <string name="room_participants_action_kick">Izbaci</string>

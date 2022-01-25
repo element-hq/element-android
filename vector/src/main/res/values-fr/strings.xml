@@ -404,7 +404,6 @@
     <string name="room_participants_header_devices">SESSIONS</string>
     <string name="room_participants_action_invite">Inviter</string>
     <string name="room_participants_action_leave">Quitter ce salon</string>
-    <string name="room_participants_action_remove">Exclure de ce salon</string>
     <string name="room_participants_action_ban">Bannir</string>
     <string name="room_participants_action_unban">Révoquer le bannissement</string>
     <string name="room_participants_action_set_default_power_level">Réinitialiser en tant qu’utilisateur standard</string>

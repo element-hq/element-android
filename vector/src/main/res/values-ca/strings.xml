@@ -524,7 +524,6 @@
     <string name="room_participants_header_devices">SESSIONS</string>
     <string name="room_participants_action_invite">Convida</string>
     <string name="room_participants_action_leave">Marxa d\'aquesta sala</string>
-    <string name="room_participants_action_remove">Elimina d\'aquesta sala</string>
     <string name="room_participants_action_ban">Veta</string>
     <string name="room_participants_action_unban">Treu el vet</string>
     <string name="room_participants_action_set_default_power_level">Retorna\'l a usuari normal</string>

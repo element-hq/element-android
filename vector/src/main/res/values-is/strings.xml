@@ -229,7 +229,6 @@
     <string name="room_participants_header_devices">TÆKI</string>
     <string name="room_participants_action_invite">Bjóða</string>
     <string name="room_participants_action_leave">Fara af spjallrás</string>
-    <string name="room_participants_action_remove">Fjarlægja úr þessari spjallrás</string>
     <string name="room_participants_action_set_admin">Gera að stjórnanda</string>
     <string name="room_menu_search">Leita</string>
     <string name="room_one_user_is_typing">%s er að skrifa…</string>

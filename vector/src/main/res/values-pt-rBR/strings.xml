@@ -507,7 +507,6 @@
     <string name="room_participants_header_devices">SESSÕES</string>
     <string name="room_participants_action_invite">Convidar</string>
     <string name="room_participants_action_leave">Sair desta sala</string>
-    <string name="room_participants_action_remove">Remover desta sala</string>
     <string name="room_participants_action_ban">Banir</string>
     <string name="room_participants_action_unban">Desbanir</string>
     <string name="room_participants_action_set_default_power_level">Resettar a usuária(o) normal</string>

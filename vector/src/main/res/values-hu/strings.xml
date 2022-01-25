@@ -434,7 +434,6 @@
     <string name="room_participants_header_devices">MUNKAMENETEK</string>
     <string name="room_participants_action_invite">Meghívás</string>
     <string name="room_participants_action_leave">Szoba elhagyása</string>
-    <string name="room_participants_action_remove">Eltávolítás ebből a szobából</string>
     <string name="room_participants_action_ban">Tiltás</string>
     <string name="room_participants_action_unban">Tiltás feloldása</string>
     <string name="room_participants_action_set_default_power_level">Visszaállítás normál felhasználóra</string>

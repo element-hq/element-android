@@ -505,7 +505,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="room_participants_header_devices">SESIONES</string>
     <string name="room_participants_action_invite">Invitar</string>
     <string name="room_participants_action_leave">Salir de esta sala</string>
-    <string name="room_participants_action_remove">Eliminar de esta sala</string>
     <string name="room_participants_action_ban">Vetar</string>
     <string name="room_participants_action_unban">Quitar Veto</string>
     <string name="room_participants_action_set_default_power_level">Restablecer a usuario normal</string>

@@ -2474,7 +2474,6 @@
     <string name="room_participants_action_kick">Expulser</string>
     <string name="room_participants_action_unban">Révoquer le bannissement</string>
     <string name="room_participants_action_ban">Bannir</string>
-    <string name="room_participants_action_remove">Exclure de ce salon</string>
     <string name="room_participants_action_leave">Quitter ce salon</string>
     <string name="room_participants_action_cancel_invite">Annuler l’invitation</string>
     <string name="room_participants_action_invite">Inviter</string>

@@ -300,7 +300,6 @@
     <string name="room_participants_header_devices">SESJE</string>
     <string name="room_participants_action_invite">Zaproś</string>
     <string name="room_participants_action_leave">Opuść pokój</string>
-    <string name="room_participants_action_remove">Usuń z pokoju</string>
     <string name="room_participants_action_ban">Blokuj</string>
     <string name="room_participants_action_unban">Odbanuj</string>
     <string name="room_participants_action_set_default_power_level">Przywróć do poziomu normalnego użytkownika</string>

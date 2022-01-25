@@ -510,7 +510,6 @@ Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespē
     <string name="room_participants_header_devices">SESIJAS</string>
     <string name="room_participants_action_invite">Uzaicināt</string>
     <string name="room_participants_action_leave">Atstāt šo istabu</string>
-    <string name="room_participants_action_remove">Izmest no šīs istabas</string>
     <string name="room_participants_action_ban">Nobanot</string>
     <string name="room_participants_action_unban">Atbanot</string>
     <string name="room_participants_action_set_default_power_level">Padarīt par ierindas dalībnieku</string>

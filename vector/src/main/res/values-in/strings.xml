@@ -332,7 +332,6 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="room_participants_header_devices">PERANGKAT</string>
     <string name="room_participants_action_invite">Undang</string>
     <string name="room_participants_action_leave">Tinggalkan ruangan ini</string>
-    <string name="room_participants_action_remove">Keluarkan dari ruangan ini</string>
     <string name="room_participants_action_ban">Larang</string>
     <string name="room_participants_action_unban">Hapus Cekalan</string>
     <string name="room_participants_action_set_default_power_level">Setel ulang ke user biasa</string>

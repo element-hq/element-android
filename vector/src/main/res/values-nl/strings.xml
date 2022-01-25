@@ -351,7 +351,6 @@
     <string name="room_participants_header_devices">SESSIES</string>
     <string name="room_participants_action_invite">Uitnodigen</string>
     <string name="room_participants_action_leave">Dit gesprek verlaten</string>
-    <string name="room_participants_action_remove">Verwijderen uit dit gesprek</string>
     <string name="room_participants_action_ban">Verbannen</string>
     <string name="room_participants_action_unban">Ontbannen</string>
     <string name="room_participants_action_set_default_power_level">Herinstellen als normale gebruiker</string>

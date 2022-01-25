@@ -803,7 +803,6 @@
     <string name="room_participants_header_call">ПОВИКВАНЕ</string>
     <string name="room_participants_action_invite">Покани</string>
     <string name="room_participants_action_leave">Напусни тази стая</string>
-    <string name="room_participants_action_remove">Премахни от тази стая</string>
     <string name="people_search_invite_by_id"><u>Покани по ID</u></string>
     <string name="people_search_invite_by_id_dialog_title">Покани потребител по ID</string>
     <string name="people_search_invite_by_id_dialog_description">Моля, въведете един или повече имейл адреси или Matrix ID</string>

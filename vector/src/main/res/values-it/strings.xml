@@ -509,7 +509,6 @@
     <string name="room_participants_header_devices">SESSIONI</string>
     <string name="room_participants_action_invite">Invita</string>
     <string name="room_participants_action_leave">Esci da questa stanza</string>
-    <string name="room_participants_action_remove">Butta fuori da questa stanza</string>
     <string name="room_participants_action_ban">Bannalo</string>
     <string name="room_participants_action_unban">Togli il ban</string>
     <string name="room_participants_action_set_default_power_level">Ripristina ad utente normale</string>

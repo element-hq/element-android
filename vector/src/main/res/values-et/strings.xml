@@ -1080,7 +1080,6 @@
     <string name="room_participants_action_invite">Kutsu</string>
     <string name="room_participants_action_cancel_invite">Tühista kutse</string>
     <string name="room_participants_action_leave">Lahku sellest jututoast</string>
-    <string name="room_participants_action_remove">Eemalda sellest jututoast</string>
     <string name="room_participants_action_ban">Keela ligipääs</string>
     <string name="room_participants_action_unban">Taasta ligipääs</string>
     <string name="room_participants_action_kick">Müksa välja</string>

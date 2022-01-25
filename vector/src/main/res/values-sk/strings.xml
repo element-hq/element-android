@@ -460,7 +460,6 @@
     <string name="room_participants_header_devices">RELÁCIE</string>
     <string name="room_participants_action_invite">Pozvať</string>
     <string name="room_participants_action_leave">Opustiť túto miestnosť</string>
-    <string name="room_participants_action_remove">Odstrániť z tejto miestnosti</string>
     <string name="room_participants_action_ban">Zakázať vstúpiť</string>
     <string name="room_participants_action_unban">Povoliť vstúpiť</string>
     <string name="room_participants_action_set_default_power_level">Obnoviť moc normálneho používateľa</string>

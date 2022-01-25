@@ -820,7 +820,6 @@
     <string name="room_participants_header_devices">TIƔIMIYIN</string>
     <string name="room_participants_action_cancel_invite">Sefsex tinubga</string>
     <string name="room_participants_action_leave">Ffeɣ si texxamt-a</string>
-    <string name="room_participants_action_remove">Kkes si texxamt-a</string>
     <string name="room_participants_action_set_default_power_level">Wennez aseqdac amagnu</string>
     <string name="room_participants_action_set_moderator">Eg amaẓrag</string>
     <string name="room_participants_action_set_admin">Eg anebdal</string>

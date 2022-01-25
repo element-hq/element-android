@@ -298,7 +298,6 @@ Pode querer iniciar sessão com uma conta diferente, ou adicionar este email à 
     <string name="room_participants_header_devices">DISPOSITIVOS</string>
     <string name="room_participants_action_invite">Convidar</string>
     <string name="room_participants_action_leave">Sair desta sala</string>
-    <string name="room_participants_action_remove">Remover desta sala</string>
     <string name="room_participants_action_ban">Banir</string>
     <string name="room_participants_action_unban">Remover banimento</string>
     <string name="room_participants_action_set_default_power_level">Retornar a utilizador normal</string>

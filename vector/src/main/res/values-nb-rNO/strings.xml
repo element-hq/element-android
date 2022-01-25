@@ -673,7 +673,6 @@
     <string name="room_participants_ago">%1$s for %2$s siden</string>
     <string name="room_participants_header_direct_chats">Direktemeldinger</string>
     <string name="room_participants_action_leave">Forlat dette rommet</string>
-    <string name="room_participants_action_remove">Fjern fra dette rommet</string>
     <string name="room_participants_action_set_moderator">Utnevn til moderator</string>
     <string name="room_participants_action_set_admin">Utnevn til admin</string>
     <string name="room_participants_action_ignore_title">Ignorer bruker</string>

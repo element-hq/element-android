@@ -409,7 +409,6 @@
     <string name="room_participants_header_devices">СЕАНСИ</string>
     <string name="room_participants_action_invite">Запросити</string>
     <string name="room_participants_action_leave">Вийти з цієї кімнати</string>
-    <string name="room_participants_action_remove">Вилучити з цієї кімнати</string>
     <string name="room_participants_action_ban">Заблокувати</string>
     <string name="room_participants_action_unban">Розблокувати</string>
     <string name="room_participants_action_set_default_power_level">Зробити звичайним користувачем</string>
