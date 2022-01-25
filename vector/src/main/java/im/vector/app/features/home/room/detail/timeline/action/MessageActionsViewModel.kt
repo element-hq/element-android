@@ -424,8 +424,9 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             MessageType.MSGTYPE_VIDEO,
             MessageType.MSGTYPE_AUDIO,
             MessageType.MSGTYPE_FILE,
-            MessageType.MSGTYPE_POLL_START -> true
-            else                           -> false
+            MessageType.MSGTYPE_POLL_START,
+            MessageType.MSGTYPE_LOCATION -> true
+            else                         -> false
         }
     }
 

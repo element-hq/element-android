@@ -2454,6 +2454,7 @@
     <string name="attachment_type_gallery">"Gallery"</string>
     <string name="attachment_type_sticker">"Sticker"</string>
     <string name="attachment_type_poll">Poll</string>
+    <string name="attachment_type_location">Location</string>
     <string name="rotate_and_crop_screen_title">Rotate and crop</string>
     <string name="error_handling_incoming_share">Couldn\'t handle share data</string>
 
@@ -2769,6 +2770,7 @@
     <string name="sent_a_poll">Poll</string>
     <string name="sent_a_reaction">Reacted with: %s</string>
     <string name="sent_verification_conclusion">Verification Conclusion</string>
+    <string name="sent_location">Shared their location</string>
 
     <string name="verification_request_waiting">Waiting…</string>
     <string name="verification_request_other_cancelled">%s cancelled</string>
@@ -3721,11 +3723,24 @@
     <string name="closed_poll_option_title">Closed poll</string>
     <string name="closed_poll_option_description">Results are only revealed when you end the poll</string>
 
+    <!-- Location -->
+    <string name="location_activity_title_static_sharing">Share location</string>
+    <string name="location_activity_title_preview">Location</string>
+    <string name="a11y_location_share_icon">Share location</string>
+    <string name="location_share">Share location</string>
+    <string name="template_location_not_available_dialog_title">${app_name} could not access your location</string>
+    <string name="template_location_not_available_dialog_content">${app_name} could not access your location. Please try again later.</string>
+    <string name="location_share_external">Open with</string>
+    <string name="settings_enable_location_sharing">Enable location sharing</string>
+    <string name="settings_enable_location_sharing_summary">Once enabled you will be able to send your location to any room</string>
+    <string name="labs_render_locations_in_timeline">Render user locations in the timeline</string>
+
     <string name="tooltip_attachment_photo">Open camera</string>
     <string name="tooltip_attachment_gallery">Send images and videos</string>
     <string name="tooltip_attachment_file">Upload file</string>
     <string name="tooltip_attachment_sticker">Send sticker</string>
     <string name="tooltip_attachment_contact">Open contacts</string>
     <string name="tooltip_attachment_poll">Create poll</string>
+    <string name="tooltip_attachment_location">Share location</string>
 
 </resources>

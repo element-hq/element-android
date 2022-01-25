@@ -57,4 +57,9 @@
         android:summary="@string/labs_auto_report_uisi_desc"
         android:title="@string/labs_auto_report_uisi" />
 
+    <im.vector.app.core.preference.VectorSwitchPreference
+        android:defaultValue="true"
+        android:key="SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
+        android:title="@string/labs_render_locations_in_timeline" />
+
 </androidx.preference.PreferenceScreen>

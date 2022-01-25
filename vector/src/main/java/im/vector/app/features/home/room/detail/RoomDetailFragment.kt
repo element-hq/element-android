@@ -106,6 +106,7 @@ import im.vector.app.core.utils.createUIHandler
 import im.vector.app.core.utils.isValidUrl
 import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
+import im.vector.app.core.utils.openLocation
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.safeStartActivity
@@ -170,6 +171,8 @@ import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
 import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.invite.VectorInviteView
+import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -212,6 +215,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
@@ -477,6 +481,7 @@ class RoomDetailFragment @Inject constructor(
                 RoomDetailViewEvents.StopChatEffects                     -> handleStopChatEffects()
                 is RoomDetailViewEvents.DisplayAndAcceptCall             -> acceptIncomingCall(it)
                 RoomDetailViewEvents.RoomReplacementStarted              -> handleRoomReplacement()
+                is RoomDetailViewEvents.ShowLocation                     -> handleShowLocationPreview(it)
             }.exhaustive
         }
 
@@ -606,6 +611,17 @@ class RoomDetailFragment @Inject constructor(
         if (openRoom.closeCurrentRoom) {
             requireActivity().finish()
         }
+    }
+
+    private fun handleShowLocationPreview(viewEvent: RoomDetailViewEvents.ShowLocation) {
+        navigator
+                .openLocationSharing(
+                        context = requireContext(),
+                        roomId = roomDetailArgs.roomId,
+                        mode = LocationSharingMode.PREVIEW,
+                        initialLocationData = viewEvent.locationData,
+                        locationOwnerId = viewEvent.userId
+                )
     }
 
     private fun requestNativeWidgetPermission(it: RoomDetailViewEvents.RequestNativeWidgetPermission) {
@@ -1373,6 +1389,7 @@ class RoomDetailFragment @Inject constructor(
             override fun onAddAttachment() {
                 if (!::attachmentTypeSelector.isInitialized) {
                     attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@RoomDetailFragment)
+                    attachmentTypeSelector.setAttachmentVisibility(AttachmentTypeSelectorView.Type.LOCATION, vectorPreferences.isLocationSharingEnabled())
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton)
             }
@@ -1920,16 +1937,22 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun onShareActionClicked(action: EventSharedAction.Share) {
-        if (action.messageContent is MessageTextContent) {
-            shareText(requireContext(), action.messageContent.body)
-        } else if (action.messageContent is MessageWithAttachmentContent) {
-            lifecycleScope.launch {
-                val result = runCatching { session.fileService().downloadFile(messageContent = action.messageContent) }
-                if (!isAdded) return@launch
-                result.fold(
-                        { shareMedia(requireContext(), it, getMimeTypeFromUri(requireContext(), it.toUri())) },
-                        { showErrorInSnackbar(it) }
-                )
+        when (action.messageContent) {
+            is MessageTextContent           -> shareText(requireContext(), action.messageContent.body)
+            is MessageLocationContent       -> {
+                LocationData.create(action.messageContent.getUri())?.let {
+                    openLocation(requireActivity(), it.latitude, it.longitude)
+                }
+            }
+            is MessageWithAttachmentContent -> {
+                lifecycleScope.launch {
+                    val result = runCatching { session.fileService().downloadFile(messageContent = action.messageContent) }
+                    if (!isAdded) return@launch
+                    result.fold(
+                            { shareMedia(requireContext(), it, getMimeTypeFromUri(requireContext(), it.toUri())) },
+                            { showErrorInSnackbar(it) }
+                    )
+                }
             }
         }
     }
@@ -2225,17 +2248,27 @@ class RoomDetailFragment @Inject constructor(
 
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
-            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera(
+            AttachmentTypeSelectorView.Type.CAMERA   -> attachmentsHelper.openCamera(
                     activity = requireActivity(),
                     vectorPreferences = vectorPreferences,
                     cameraActivityResultLauncher = attachmentCameraActivityResultLauncher,
                     cameraVideoActivityResultLauncher = attachmentCameraVideoActivityResultLauncher
             )
-            AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.STICKER -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)
-            AttachmentTypeSelectorView.Type.POLL    -> navigator.openCreatePoll(requireContext(), roomDetailArgs.roomId, null, PollMode.CREATE)
+            AttachmentTypeSelectorView.Type.FILE     -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.GALLERY  -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.CONTACT  -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.STICKER  -> roomDetailViewModel.handle(RoomDetailAction.SelectStickerAttachment)
+            AttachmentTypeSelectorView.Type.POLL     -> navigator.openCreatePoll(requireContext(), roomDetailArgs.roomId, null, PollMode.CREATE)
+            AttachmentTypeSelectorView.Type.LOCATION -> {
+                navigator
+                        .openLocationSharing(
+                                context = requireContext(),
+                                roomId = roomDetailArgs.roomId,
+                                mode = LocationSharingMode.STATIC_SHARING,
+                                initialLocationData = null,
+                                locationOwnerId = session.myUserId
+                        )
+            }
         }.exhaustive
     }
 

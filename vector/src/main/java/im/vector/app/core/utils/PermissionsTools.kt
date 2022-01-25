@@ -40,6 +40,7 @@ val PERMISSIONS_FOR_MEMBERS_SEARCH = listOf(Manifest.permission.READ_CONTACTS)
 val PERMISSIONS_FOR_ROOM_AVATAR = listOf(Manifest.permission.CAMERA)
 val PERMISSIONS_FOR_WRITING_FILES = listOf(Manifest.permission.WRITE_EXTERNAL_STORAGE)
 val PERMISSIONS_FOR_PICKING_CONTACT = listOf(Manifest.permission.READ_CONTACTS)
+val PERMISSIONS_FOR_LOCATION_SHARING = listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
 
 val PERMISSIONS_EMPTY = emptyList<String>()
 

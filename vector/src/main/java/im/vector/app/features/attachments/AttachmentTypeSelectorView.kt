@@ -37,6 +37,7 @@ import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.utils.PERMISSIONS_EMPTY
+import im.vector.app.core.utils.PERMISSIONS_FOR_LOCATION_SHARING
 import im.vector.app.core.utils.PERMISSIONS_FOR_PICKING_CONTACT
 import im.vector.app.core.utils.PERMISSIONS_FOR_TAKING_PHOTO
 import im.vector.app.databinding.ViewAttachmentTypeSelectorBinding
@@ -71,6 +72,7 @@ class AttachmentTypeSelectorView(context: Context,
         views.attachmentStickersButton.configure(Type.STICKER)
         views.attachmentContactButton.configure(Type.CONTACT)
         views.attachmentPollButton.configure(Type.POLL)
+        views.attachmentLocationButton.configure(Type.LOCATION)
         width = LinearLayout.LayoutParams.MATCH_PARENT
         height = LinearLayout.LayoutParams.WRAP_CONTENT
         animationStyle = 0
@@ -123,12 +125,13 @@ class AttachmentTypeSelectorView(context: Context,
 
     fun setAttachmentVisibility(type: Type, isVisible: Boolean) {
         when (type) {
-            Type.CAMERA  -> views.attachmentCameraButton
-            Type.GALLERY -> views.attachmentGalleryButton
-            Type.FILE    -> views.attachmentFileButton
-            Type.STICKER -> views.attachmentStickersButton
-            Type.CONTACT -> views.attachmentContactButton
-            Type.POLL    -> views.attachmentPollButton
+            Type.CAMERA   -> views.attachmentCameraButton
+            Type.GALLERY  -> views.attachmentGalleryButton
+            Type.FILE     -> views.attachmentFileButton
+            Type.STICKER  -> views.attachmentStickersButton
+            Type.CONTACT  -> views.attachmentContactButton
+            Type.POLL     -> views.attachmentPollButton
+            Type.LOCATION -> views.attachmentLocationButton
         }.let {
             it.isVisible = isVisible
         }
@@ -211,6 +214,7 @@ class AttachmentTypeSelectorView(context: Context,
         FILE(PERMISSIONS_EMPTY, R.string.tooltip_attachment_file),
         STICKER(PERMISSIONS_EMPTY, R.string.tooltip_attachment_sticker),
         CONTACT(PERMISSIONS_FOR_PICKING_CONTACT, R.string.tooltip_attachment_contact),
-        POLL(PERMISSIONS_EMPTY, R.string.tooltip_attachment_poll)
+        POLL(PERMISSIONS_EMPTY, R.string.tooltip_attachment_poll),
+        LOCATION(PERMISSIONS_FOR_LOCATION_SHARING, R.string.tooltip_attachment_location)
     }
 }

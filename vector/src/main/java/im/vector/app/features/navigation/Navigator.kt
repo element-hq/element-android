@@ -25,6 +25,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.pin.PinMode
@@ -150,4 +152,10 @@ interface Navigator {
     fun openCallTransfer(context: Context, callId: String)
 
     fun openCreatePoll(context: Context, roomId: String, editedEventId: String?, mode: PollMode)
+
+    fun openLocationSharing(context: Context,
+                            roomId: String,
+                            mode: LocationSharingMode,
+                            initialLocationData: LocationData?,
+                            locationOwnerId: String)
 }
