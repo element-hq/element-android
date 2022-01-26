@@ -39,6 +39,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponse
 import org.matrix.android.sdk.api.session.room.model.message.MessageRelationContent
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
@@ -344,15 +345,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         val targetEventId = relatedEventId ?: content.relatesTo?.eventId ?: return
         val eventTimestamp = event.originServerTs ?: return
 
-        val session = sessionManager.getSessionComponent(sessionId)?.session()
-
-        val targetPollEvent = session?.getRoom(roomId)?.getTimeLineEvent(targetEventId) ?: return Unit.also {
-            Timber.v("## POLL target poll event $targetEventId not found in room $roomId")
-        }
-
-        val targetPollContent = targetPollEvent.getLastMessageContent() as? MessagePollContent ?: return Unit.also {
-            Timber.v("## POLL target poll event $targetEventId content is malformed")
-        }
+        val targetPollContent = getPollContent(roomId, targetEventId) ?: return
 
         // ok, this is a poll response
         var existing = EventAnnotationsSummaryEntity.where(realm, roomId, targetEventId).findFirst()
@@ -470,10 +463,13 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
             return
         }
 
+        val pollOwnerId = getPollEvent(roomId, pollEventId)?.root?.senderId
+        val isPollOwner = pollOwnerId == sessionManager.getSessionComponent(sessionId)?.session()?.myUserId
+
         val powerLevelsHelper = stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
                 ?.content?.toModel<PowerLevelsContent>()
                 ?.let { PowerLevelsHelper(it) }
-        if (!powerLevelsHelper?.isUserAbleToRedact(event.senderId ?: "").orFalse()) {
+        if (!isPollOwner && !powerLevelsHelper?.isUserAbleToRedact(event.senderId ?: "").orFalse()) {
             Timber.v("## Received poll.end event $pollEventId but user ${event.senderId} doesn't have enough power level in room $roomId")
             return
         }
@@ -489,6 +485,21 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
         }
 
         existingPollSummary.closedTime = event.originServerTs
+    }
+
+    private fun getPollEvent(roomId: String, eventId: String): TimelineEvent? {
+        val session = sessionManager.getSessionComponent(sessionId)?.session()
+        return session?.getRoom(roomId)?.getTimeLineEvent(eventId) ?: return null.also {
+            Timber.v("## POLL target poll event $eventId not found in room $roomId")
+        }
+    }
+
+    private fun getPollContent(roomId: String, eventId: String): MessagePollContent? {
+        val pollEvent = getPollEvent(roomId, eventId) ?: return null
+
+        return pollEvent.getLastMessageContent() as? MessagePollContent ?: return null.also {
+            Timber.v("## POLL target poll event $eventId content is malformed")
+        }
     }
 
     private fun handleInitialAggregatedRelations(realm: Realm,
