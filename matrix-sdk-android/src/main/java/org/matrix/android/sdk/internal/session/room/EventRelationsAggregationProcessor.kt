@@ -446,6 +446,17 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                               isLocalEcho: Boolean) {
         val pollEventId = content.relatesTo?.eventId ?: return
 
+        val pollOwnerId = getPollEvent(roomId, pollEventId)?.root?.senderId
+        val isPollOwner = pollOwnerId == event.senderId
+
+        val powerLevelsHelper = stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
+                ?.content?.toModel<PowerLevelsContent>()
+                ?.let { PowerLevelsHelper(it) }
+        if (!isPollOwner && !powerLevelsHelper?.isUserAbleToRedact(event.senderId ?: "").orFalse()) {
+            Timber.v("## Received poll.end event $pollEventId but user ${event.senderId} doesn't have enough power level in room $roomId")
+            return
+        }
+
         var existing = EventAnnotationsSummaryEntity.where(realm, roomId, pollEventId).findFirst()
         if (existing == null) {
             Timber.v("## POLL creating new relation summary for $pollEventId")
@@ -460,17 +471,6 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
 
         if (existingPollSummary.closedTime != null) {
             Timber.v("## Received poll.end event for already ended poll $pollEventId")
-            return
-        }
-
-        val pollOwnerId = getPollEvent(roomId, pollEventId)?.root?.senderId
-        val isPollOwner = pollOwnerId == sessionManager.getSessionComponent(sessionId)?.session()?.myUserId
-
-        val powerLevelsHelper = stateEventDataSource.getStateEvent(roomId, EventType.STATE_ROOM_POWER_LEVELS, QueryStringValue.NoCondition)
-                ?.content?.toModel<PowerLevelsContent>()
-                ?.let { PowerLevelsHelper(it) }
-        if (!isPollOwner && !powerLevelsHelper?.isUserAbleToRedact(event.senderId ?: "").orFalse()) {
-            Timber.v("## Received poll.end event $pollEventId but user ${event.senderId} doesn't have enough power level in room $roomId")
             return
         }
 
