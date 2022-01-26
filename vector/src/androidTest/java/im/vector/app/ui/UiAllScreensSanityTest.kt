@@ -20,6 +20,7 @@ import androidx.test.espresso.IdlingPolicies
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import com.adevinta.android.barista.interaction.BaristaDrawerInteractions.openDrawer
 import im.vector.app.R
 import im.vector.app.espresso.tools.ScreenshotFailureRule
 import im.vector.app.features.MainActivity
@@ -93,6 +94,23 @@ class UiAllScreensSanityTest {
                     openSettings { crawl() }
                 }
             }
+        }
+
+        elementRobot.space {
+            openDrawer()
+            createSpace()
+            openDrawer()
+            openSpaceMenu()
+            invitePeople()
+            openSpaceMenu()
+            spaceMembers()
+            spaceSettings()
+            exploreRooms()
+            addRoom()
+            openSpaceMenu()
+            addSpace()
+            openSpaceMenu()
+            leaveSpace()
         }
 
         elementRobot.withDeveloperMode {

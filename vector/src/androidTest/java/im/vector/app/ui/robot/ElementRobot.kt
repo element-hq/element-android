@@ -147,6 +147,10 @@ class ElementRobot {
             waitUntilViewVisible(withId(R.id.bottomSheetFragmentContainer))
         }.onFailure { Timber.w("Verification popup missing", it) }
     }
+
+    fun space(block: SpaceRobot.() -> Unit) {
+        block(SpaceRobot())
+    }
 }
 
 private fun Boolean.toWarningType() = if (this) "shown" else "skipped"
