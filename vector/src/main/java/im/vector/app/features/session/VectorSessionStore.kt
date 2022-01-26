@@ -24,6 +24,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import im.vector.app.features.onboarding.FtueUseCase
 import kotlinx.coroutines.flow.first
+import org.matrix.android.sdk.internal.util.md5
 
 /**
  * Local storage for:
@@ -34,7 +35,7 @@ class VectorSessionStore constructor(
         myUserId: String
 ) {
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "vector_session_store_$myUserId")
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "vector_session_store_${myUserId.md5()}")
     private val useCaseKey = stringPreferencesKey("use_case")
 
     suspend fun readUseCase() = context.dataStore.data.first().let { preferences ->
