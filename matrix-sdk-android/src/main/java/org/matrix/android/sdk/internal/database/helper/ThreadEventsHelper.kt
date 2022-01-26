@@ -41,10 +41,11 @@ private typealias ThreadSummary = Pair<Int, TimelineEventEntity>?
 internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded(
         roomId: String,
         realm: Realm, currentUserId: String,
+        chunkEntity: ChunkEntity? = null,
         shouldUpdateNotifications: Boolean = true) {
 
     for ((rootThreadEventId, eventEntity) in this) {
-        eventEntity.threadSummaryInThread(eventEntity.realm, rootThreadEventId)?.let { threadSummary ->
+        eventEntity.threadSummaryInThread(eventEntity.realm, rootThreadEventId, chunkEntity)?.let { threadSummary ->
 
             val numberOfMessages = threadSummary.first
             val latestEventInThread = threadSummary.second
@@ -103,7 +104,7 @@ internal fun EventEntity.markEventAsRoot(
  * @param rootThreadEventId The root eventId that will find the number of threads
  * @return A ThreadSummary containing the counted threads and the latest event message
  */
-internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: String): ThreadSummary {
+internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: String, chunkEntity: ChunkEntity?): ThreadSummary {
 
     // Number of messages
     val messages = TimelineEventEntity
@@ -115,7 +116,7 @@ internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: 
     if (messages <= 0) return null
 
     // Find latest thread event, we know it exists
-    var chunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId) ?: return null
+    var chunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomId) ?: chunkEntity ?: return null
     var result: TimelineEventEntity? = null
 
     // Iterate the chunk until we find our latest event
@@ -125,7 +126,6 @@ internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: 
         }
         chunk  = ChunkEntity.find(realm, roomId, nextToken = chunk.prevToken) ?: break
     }
-
     result ?: return null
 
     return ThreadSummary(messages, result)

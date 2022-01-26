@@ -200,16 +200,17 @@ data class Event(
      * It will return a decrypted text message or an empty string otherwise.
      */
     fun getDecryptedTextSummary(): String? {
+        if (isRedacted()) return "Message Deleted"
         val text = getDecryptedValue() ?: return null
         return when {
             isReplyRenderedInThread() || isQuote() -> ContentUtils.extractUsefulTextFromReply(text)
-            isFileMessage()        -> "sent a file."
-            isAudioMessage()       -> "sent an audio file."
-            isImageMessage()       -> "sent an image."
-            isVideoMessage()       -> "sent a video."
-            isSticker()            -> "sent a sticker"
-            isPoll()               -> getPollQuestion() ?: "created a poll."
-            else                   -> text
+            isFileMessage()                        -> "sent a file."
+            isAudioMessage()                       -> "sent an audio file."
+            isImageMessage()                       -> "sent an image."
+            isVideoMessage()                       -> "sent a video."
+            isSticker()                            -> "sent a sticker"
+            isPoll()                               -> getPollQuestion() ?: "created a poll."
+            else                                   -> text
         }
     }
 

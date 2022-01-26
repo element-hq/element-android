@@ -200,7 +200,10 @@ internal class TokenChunkEventPersistor @Inject constructor(
         }
 
         if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
-            optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(roomId = roomId, realm = realm, currentUserId = userId)
+            optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(
+                    roomId = roomId,
+                    realm = realm,
+                    currentUserId = userId)
         }
     }
 }

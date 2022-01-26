@@ -416,7 +416,6 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     optimizedThreadSummaryMap[eventEntity.eventId] = eventEntity
                 }
             }
-
             // Give info to crypto module
             cryptoService.onLiveEvent(roomEntity.roomId, event)
 
@@ -443,11 +442,11 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         }
         // Handle deletion of [stuck] local echos if needed
         deleteLocalEchosIfNeeded(insertType, roomEntity, eventList)
-
         if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
             optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(
                     roomId = roomId,
                     realm = realm,
+                    chunkEntity = chunkEntity,
                     currentUserId = userId)
         }
 

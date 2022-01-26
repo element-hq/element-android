@@ -146,10 +146,17 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         // We should not display deleted thread messages within the normal timeline
         if (root.isRedacted() &&
                 userPreferencesProvider.areThreadMessagesEnabled() &&
-                root.threadDetails?.isThread == true){
+                !isFromThreadTimeline &&
+                (root.isThread() || root.threadDetails?.isThread == true)){
             return true
         }
-
+        if (root.isRedacted() &&
+                !userPreferencesProvider.shouldShowRedactedMessages() &&
+                userPreferencesProvider.areThreadMessagesEnabled() &&
+                isFromThreadTimeline &&
+                root.isThread()){
+            return true
+        }
 
         if (root.getRelationContent()?.type == RelationType.REPLACE) {
             return true
