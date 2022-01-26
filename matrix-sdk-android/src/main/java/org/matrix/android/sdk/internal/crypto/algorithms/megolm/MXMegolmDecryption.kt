@@ -318,7 +318,7 @@ internal class MXMegolmDecryption(private val userId: String,
 
             outgoingGossipingRequestManager.cancelRoomKeyRequest(content)
 
-            onNewSession(senderKey, roomKeyContent.sessionId)
+            onNewSession(roomKeyContent.roomId, senderKey, roomKeyContent.sessionId)
         }
     }
 
@@ -328,9 +328,9 @@ internal class MXMegolmDecryption(private val userId: String,
      * @param senderKey the session sender key
      * @param sessionId the session id
      */
-    override fun onNewSession(senderKey: String, sessionId: String) {
+    fun onNewSession(roomId: String?, senderKey: String, sessionId: String) {
         Timber.tag(loggerTag.value).v("ON NEW SESSION $sessionId - $senderKey")
-        newSessionListener?.onNewSession(null, senderKey, sessionId)
+        newSessionListener?.onNewSession(roomId, senderKey, sessionId)
     }
 
     override fun hasKeysForKeyRequest(request: IncomingRoomKeyRequest): Boolean {
