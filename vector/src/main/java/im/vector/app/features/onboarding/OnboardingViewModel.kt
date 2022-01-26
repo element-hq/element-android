@@ -32,7 +32,7 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.extensions.onboardingStore
+import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureTrailingSlash
@@ -753,7 +753,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private suspend fun onSessionCreated(session: Session) {
         awaitState().useCase?.let { useCase ->
-            session.onboardingStore(applicationContext).setUseCase(useCase)
+            session.vectorStore(applicationContext).setUseCase(useCase)
         }
         activeSessionHolder.setActiveSession(session)
 

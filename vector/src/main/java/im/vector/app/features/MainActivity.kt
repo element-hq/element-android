@@ -28,8 +28,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.core.extensions.onboardingStore
 import im.vector.app.core.extensions.startSyncing
+import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.deleteAllFiles
 import im.vector.app.databinding.ActivityMainBinding
@@ -37,11 +37,11 @@ import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.home.HomeActivity
 import im.vector.app.features.home.ShortcutsHandler
 import im.vector.app.features.notifications.NotificationDrawerManager
-import im.vector.app.features.onboarding.store.OnboardingStore
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.UnlockedActivity
 import im.vector.app.features.popup.PopupAlertManager
+import im.vector.app.features.session.VectorSessionStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.themes.ActivityOtherThemes
@@ -146,7 +146,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             return
         }
 
-        val onboardingStore = session.onboardingStore(this)
+        val onboardingStore = session.vectorStore(this)
         when {
             args.isAccountDeactivated -> {
                 lifecycleScope.launch {
@@ -187,7 +187,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         Timber.w("Ignoring invalid token global error")
     }
 
-    private suspend fun doLocalCleanup(clearPreferences: Boolean, onboardingStore: OnboardingStore) {
+    private suspend fun doLocalCleanup(clearPreferences: Boolean, vectorSessionStore: VectorSessionStore) {
         // On UI Thread
         Glide.get(this@MainActivity).clearMemory()
 
@@ -197,7 +197,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             pinLocker.unlock()
             pinCodeStore.deleteEncodedPin()
             vectorAnalytics.onSignOut()
-            onboardingStore.clear()
+            vectorSessionStore.clear()
         }
         withContext(Dispatchers.IO) {
             // On BG thread
