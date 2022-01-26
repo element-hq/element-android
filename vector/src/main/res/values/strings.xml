@@ -2516,11 +2516,13 @@
     <string name="ftue_auth_carousel_1_title">Own your conversations.</string>
     <string name="ftue_auth_carousel_2_title">You\'re in control.</string>
     <string name="ftue_auth_carousel_3_title">Secure messaging.</string>
+    <!-- TODO Remove -->
     <string name="ftue_auth_carousel_4_title">Cut the slack from teams.</string>
 
     <string name="ftue_auth_carousel_body_secure">Secure and independent communication that gives you the same level of privacy as a face-to-face conversation in your own home.</string>
     <string name="ftue_auth_carousel_body_control">Choose where your conversations are kept, giving you control and independence. Connected via Matrix.</string>
     <string name="ftue_auth_carousel_body_encrypted">End-to-end encrypted and no phone number required. No ads or datamining.</string>
+    <!-- TODO Rename to ftue_auth_carousel_4_title and move the string with the 3 other titles -->
     <string name="ftue_auth_carousel_title_messaging">Messaging for your team.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_ftue_auth_carousel_body_workplace" translatable="false">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
