@@ -65,10 +65,15 @@ class PillImageSpan(private val glideRequests: GlideRequests,
                          fm: Paint.FontMetricsInt?): Int {
         val rect = pillDrawable.bounds
         if (fm != null) {
-            fm.ascent = -rect.bottom
-            fm.descent = 0
-            fm.top = fm.ascent
-            fm.bottom = 0
+            val fmPaint = paint.fontMetricsInt
+            val fontHeight = fmPaint.bottom - fmPaint.top
+            val drHeight = rect.bottom - rect.top
+            val top = drHeight / 2 - fontHeight / 4
+            val bottom = drHeight / 2 + fontHeight / 4
+            fm.ascent = -bottom
+            fm.top = -bottom
+            fm.bottom = top
+            fm.descent = top
         }
         return rect.right
     }
@@ -82,7 +87,9 @@ class PillImageSpan(private val glideRequests: GlideRequests,
                       bottom: Int,
                       paint: Paint) {
         canvas.save()
-        val transY = bottom - pillDrawable.bounds.bottom
+        val fm = paint.fontMetricsInt
+        val transY: Int = y + (fm.descent + fm.ascent - pillDrawable.bounds.bottom) / 2
+        canvas.save()
         canvas.translate(x, transY.toFloat())
         pillDrawable.draw(canvas)
         canvas.restore()
