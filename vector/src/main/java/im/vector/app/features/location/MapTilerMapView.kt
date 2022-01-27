@@ -28,34 +28,47 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property
 import im.vector.app.BuildConfig
+import timber.log.Timber
 
 class MapTilerMapView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : MapView(context, attrs, defStyleAttr), VectorMapView {
+) : MapView(context, attrs, defStyleAttr) {
 
-    private var map: MapboxMap? = null
-    private var symbolManager: SymbolManager? = null
-    private var style: Style? = null
+    private var pendingState: LocationSharingViewState? = null
 
-    override fun initialize(onMapReady: () -> Unit) {
+    data class MapRefs(
+            val map: MapboxMap,
+            val symbolManager: SymbolManager,
+            val style: Style
+    )
+
+    private var mapRefs: MapRefs? = null
+    private var initZoomDone = false
+
+    // TODO Kept only for the bottom sheet usage
+    fun initialize(onMapReady: () -> Unit) {
         getMapAsync { map ->
             map.setStyle(styleUrl) { style ->
-                this.symbolManager = SymbolManager(this, map, style)
-                this.map = map
-                this.style = style
+                mapRefs = MapRefs(
+                        map,
+                        SymbolManager(this, map, style),
+                        style
+                )
                 onMapReady()
             }
         }
     }
 
-    override fun addPinToMap(pinId: String, image: Drawable) {
-        style?.addImage(pinId, image)
+    // TODO Kept only for the bottom sheet usage
+    fun addPinToMap(pinId: String, image: Drawable) {
+        mapRefs?.style?.addImage(pinId, image)
     }
 
-    override fun updatePinLocation(pinId: String, latitude: Double, longitude: Double) {
-        symbolManager?.create(
+    // TODO Kept only for the bottom sheet usage
+    fun updatePinLocation(pinId: String, latitude: Double, longitude: Double) {
+        mapRefs?.symbolManager?.create(
                 SymbolOptions()
                         .withLatLng(LatLng(latitude, longitude))
                         .withIconImage(pinId)
@@ -63,26 +76,57 @@ class MapTilerMapView @JvmOverloads constructor(
         )
     }
 
-    override fun deleteAllPins() {
-        symbolManager?.deleteAll()
+    /**
+     * For location fragments
+     */
+    fun initialize() {
+        Timber.d("## Location: initialize")
+
+        getMapAsync { map ->
+            map.setStyle(styleUrl) { style ->
+                mapRefs = MapRefs(
+                        map,
+                        SymbolManager(this, map, style),
+                        style
+                )
+                pendingState?.let { render(it) }
+                pendingState = null
+            }
+        }
     }
 
-    override fun zoomToLocation(latitude: Double, longitude: Double, zoom: Double) {
-        map?.cameraPosition = CameraPosition.Builder()
+    fun render(data: LocationSharingViewState) {
+        val safeMapRefs = mapRefs ?: return Unit.also {
+            pendingState = data
+        }
+
+        data.pinDrawable?.let { pinDrawable ->
+            if (safeMapRefs.style.getImage(LocationSharingFragment.USER_PIN_NAME) == null) {
+                safeMapRefs.style.addImage(LocationSharingFragment.USER_PIN_NAME, pinDrawable)
+            }
+        }
+
+        data.lastKnownLocation?.let { locationData ->
+            if (!initZoomDone) {
+                zoomToLocation(locationData.latitude, locationData.longitude, INITIAL_MAP_ZOOM)
+                initZoomDone = true
+            }
+
+            safeMapRefs.symbolManager.create(
+                    SymbolOptions()
+                            .withLatLng(LatLng(locationData.latitude, locationData.longitude))
+                            .withIconImage(LocationSharingFragment.USER_PIN_NAME)
+                            .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
+            )
+        }
+    }
+
+    fun zoomToLocation(latitude: Double, longitude: Double, zoom: Double) {
+        Timber.d("## Location: zoomToLocation")
+        mapRefs?.map?.cameraPosition = CameraPosition.Builder()
                 .target(LatLng(latitude, longitude))
                 .zoom(zoom)
                 .build()
-    }
-
-    override fun getCurrentZoom(): Double? {
-        return map?.cameraPosition?.zoom
-    }
-
-    override fun onClick(callback: () -> Unit) {
-        map?.addOnMapClickListener {
-            callback()
-            true
-        }
     }
 
     companion object {

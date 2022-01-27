@@ -27,63 +27,73 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class LocationTracker @Inject constructor(
-        private val context: Context
+        context: Context
 ) : LocationListenerCompat {
+
+    private val locationManager = context.getSystemService<LocationManager>()
 
     interface Callback {
         fun onLocationUpdate(locationData: LocationData)
         fun onLocationProviderIsNotAvailable()
     }
 
-    private var locationManager: LocationManager? = null
-    var callback: Callback? = null
+    private var callback: Callback? = null
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
-    fun start() {
-        val locationManager = context.getSystemService<LocationManager>()
+    fun start(callback: Callback?) {
+        Timber.d("## LocationTracker. start()")
+        this.callback = callback
 
-        locationManager?.let {
-            val isGpsEnabled = it.isProviderEnabled(LocationManager.GPS_PROVIDER)
-            val isNetworkEnabled = it.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-
-            val provider = when {
-                isGpsEnabled     -> LocationManager.GPS_PROVIDER
-                isNetworkEnabled -> LocationManager.NETWORK_PROVIDER
-                else             -> {
-                    callback?.onLocationProviderIsNotAvailable()
-                    Timber.v("## LocationTracker. There is no location provider available")
-                    return
-                }
-            }
-
-            // Send last known location without waiting location updates
-            it.getLastKnownLocation(provider)?.let { lastKnownLocation ->
-                callback?.onLocationUpdate(lastKnownLocation.toLocationData())
-            }
-
-            it.requestLocationUpdates(
-                    provider,
-                    MIN_TIME_MILLIS_TO_UPDATE_LOCATION,
-                    MIN_DISTANCE_METERS_TO_UPDATE_LOCATION,
-                    this
-            )
-        } ?: run {
+        if (locationManager == null) {
             callback?.onLocationProviderIsNotAvailable()
             Timber.v("## LocationTracker. LocationManager is not available")
+            return
         }
+
+        val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        val isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+
+        Timber.d("## LocationTracker. isGpsEnabled: $isGpsEnabled - isNetworkEnabled: $isNetworkEnabled")
+
+        val provider = when {
+            isGpsEnabled     -> LocationManager.GPS_PROVIDER
+            isNetworkEnabled -> LocationManager.NETWORK_PROVIDER
+            else             -> {
+                callback?.onLocationProviderIsNotAvailable()
+                Timber.v("## LocationTracker. There is no location provider available")
+                return
+            }
+        }
+
+        // Send last known location without waiting location updates
+        locationManager.getLastKnownLocation(provider)?.let { lastKnownLocation ->
+            Timber.d("## LocationTracker. lastKnownLocation")
+            callback?.onLocationUpdate(lastKnownLocation.toLocationData())
+        }
+
+        Timber.d("## LocationTracker. track location using $provider")
+        locationManager.requestLocationUpdates(
+                provider,
+                MIN_TIME_TO_UPDATE_LOCATION_MILLIS,
+                MIN_DISTANCE_TO_UPDATE_LOCATION_METERS,
+                this
+        )
     }
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     fun stop() {
+        Timber.d("## LocationTracker. stop()")
         locationManager?.removeUpdates(this)
         callback = null
     }
 
     override fun onLocationChanged(location: Location) {
+        Timber.d("## LocationTracker. onLocationChanged")
         callback?.onLocationUpdate(location.toLocationData())
     }
 
     override fun onProviderDisabled(provider: String) {
+        Timber.d("## LocationTracker. onProviderDisabled: $provider")
         callback?.onLocationProviderIsNotAvailable()
     }
 

@@ -19,7 +19,5 @@ package im.vector.app.features.location
 import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class LocationSharingAction : VectorViewModelAction {
-    data class OnLocationUpdate(val locationData: LocationData) : LocationSharingAction()
     object OnShareLocation : LocationSharingAction()
-    object OnLocationProviderIsNotAvailable : LocationSharingAction()
 }
