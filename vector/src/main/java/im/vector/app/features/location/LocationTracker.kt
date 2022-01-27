@@ -19,16 +19,16 @@ package im.vector.app.features.location
 import android.Manifest
 import android.content.Context
 import android.location.Location
-import android.location.LocationListener
 import android.location.LocationManager
 import androidx.annotation.RequiresPermission
 import androidx.core.content.getSystemService
+import androidx.core.location.LocationListenerCompat
 import timber.log.Timber
 import javax.inject.Inject
 
 class LocationTracker @Inject constructor(
         private val context: Context
-) : LocationListener {
+) : LocationListenerCompat {
 
     interface Callback {
         fun onLocationUpdate(locationData: LocationData)
