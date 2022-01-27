@@ -3078,7 +3078,7 @@
     <string name="a11y_location_share_icon">Partager la localisation</string>
     <string name="location_activity_title_preview">Localisation</string>
     <string name="location_activity_title_static_sharing">Partager la localisation</string>
-    <string name="closed_poll_option_description">Les résultats ne sont dévoilés que quand vous terminez le sondage</string>
+    <string name="closed_poll_option_description">Les résultats ne sont dévoilés que lorsque vous terminez le sondage</string>
     <string name="closed_poll_option_title">Sondage fermé</string>
     <string name="open_poll_option_description">Les votants voient les résultats dès qu\'ils ont votés</string>
     <string name="open_poll_option_title">Ouvrir le sondage</string>
