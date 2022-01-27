@@ -118,6 +118,7 @@ class LocationSharingFragment @Inject constructor(
                 .setPositiveButton(R.string.ok) { _, _ ->
                     activity?.finish()
                 }
+                .setCancelable(false)
                 .show()
     }
 
