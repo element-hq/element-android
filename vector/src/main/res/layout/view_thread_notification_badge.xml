@@ -26,12 +26,11 @@
         <FrameLayout
             android:id="@+id/threadNotificationBadgeFrameLayout"
             android:layout_width="wrap_content"
-            android:layout_height="15dp"
-            android:minWidth="15dp"
+            android:layout_height="9dp"
+            android:minWidth="9dp"
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
             android:layout_gravity="top|end"
-            android:layout_marginTop="1dp"
             android:backgroundTint="@color/palette_gray_200"
             android:background="@drawable/notification_badge"
             android:visibility="visible"
@@ -47,6 +46,7 @@
                 android:layout_gravity="center"
                 android:textColor="@color/palette_white"
                 android:maxLength="3"
+                android:visibility="gone"
                 android:textStyle="bold"
                 android:textSize="10sp"
                 tools:text="99" />

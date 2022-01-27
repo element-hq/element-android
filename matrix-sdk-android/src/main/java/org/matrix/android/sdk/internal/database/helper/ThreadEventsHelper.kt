@@ -210,8 +210,7 @@ internal fun findMyReadReceipt(realm: Realm, roomId: String, userId: String): St
  * Returns whether or not the user is mentioned in the event
  */
 internal fun isUserMentioned(currentUserId: String, timelineEventEntity: TimelineEventEntity?): Boolean {
-    val decryptedContent = timelineEventEntity?.root?.asDomain()?.getDecryptedTextSummary().orEmpty()
-    return decryptedContent.contains(currentUserId.replace("@", "").substringBefore(":"))
+    return timelineEventEntity?.root?.asDomain()?.isUserMentioned(currentUserId) == true
 }
 
 /**

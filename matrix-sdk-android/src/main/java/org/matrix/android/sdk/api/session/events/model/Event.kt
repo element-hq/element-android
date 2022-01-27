@@ -220,6 +220,13 @@ data class Event(
     }
 
     /**
+     * Determines whether or not current event has mentioned the user
+     */
+    fun isUserMentioned(userId: String): Boolean {
+        return getDecryptedValue("formatted_body")?.contains(userId) ?: false
+    }
+
+    /**
      * Decrypt the message, or return the pure payload value if there is no encryption
      */
     private fun getDecryptedValue(key: String = "body"): String? {
