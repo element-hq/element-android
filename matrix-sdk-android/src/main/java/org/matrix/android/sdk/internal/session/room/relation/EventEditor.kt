@@ -71,7 +71,9 @@ internal class EventEditor @Inject constructor(private val eventSenderProcessor:
                     roomId = roomId,
                     eventReplied = originalTimelineEvent,
                     replyText = newBodyText,
-                    autoMarkdown = false)?.copy(
+                    autoMarkdown = false,
+                    showInThread = false
+            )?.copy(
                     eventId = replyToEdit.eventId
             ) ?: return NoOpCancellable
             updateFailedEchoWithEvent(roomId, replyToEdit.eventId, editedEvent)

@@ -132,6 +132,9 @@ internal fun TimelineEventEntity.Companion.findAllThreadsForRoomId(realm: Realm,
                 .equalTo(TimelineEventEntityFields.ROOT.IS_ROOT_THREAD, true)
                 .sort("${TimelineEventEntityFields.ROOT.THREAD_SUMMARY_LATEST_MESSAGE}.${TimelineEventEntityFields.ROOT.ORIGIN_SERVER_TS}", Sort.DESCENDING)
 
+/**
+ * Map each timelineEvent with the equivalent decrypted text edition/replacement for root threads
+ */
 internal fun List<TimelineEvent>.mapEventsWithEdition(realm: Realm, roomId: String): List<TimelineEvent> =
         this.map {
             EventAnnotationsSummaryEntity

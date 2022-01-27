@@ -137,12 +137,20 @@ internal class DefaultRelationService @AssistedInject constructor(
         return fetchEditHistoryTask.execute(FetchEditHistoryTask.Params(roomId, eventId))
     }
 
-    override fun replyToMessage(eventReplied: TimelineEvent, replyText: CharSequence, autoMarkdown: Boolean): Cancelable? {
+    override fun replyToMessage(
+            eventReplied: TimelineEvent,
+            replyText: CharSequence,
+            autoMarkdown: Boolean,
+            showInThread: Boolean,
+            rootThreadEventId: String?
+    ): Cancelable? {
         val event = eventFactory.createReplyTextEvent(
                 roomId = roomId,
                 eventReplied = eventReplied,
                 replyText = replyText,
-                autoMarkdown = autoMarkdown)
+                autoMarkdown = autoMarkdown,
+                rootThreadEventId = rootThreadEventId,
+                showInThread = showInThread)
                 ?.also { saveLocalEcho(it) }
                 ?: return null
 
@@ -182,7 +190,9 @@ internal class DefaultRelationService @AssistedInject constructor(
                     eventReplied = eventReplied,
                     replyText = replyInThreadText,
                     autoMarkdown = autoMarkdown,
-                    rootThreadEventId = rootThreadEventId)
+                    rootThreadEventId = rootThreadEventId,
+                    showInThread = false
+            )
                     ?.also {
                         saveLocalEcho(it)
                     }

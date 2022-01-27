@@ -469,7 +469,8 @@ internal class LocalEchoEventFactory @Inject constructor(
                              eventReplied: TimelineEvent,
                              replyText: CharSequence,
                              autoMarkdown: Boolean,
-                             rootThreadEventId: String? = null): Event? {
+                             rootThreadEventId: String? = null,
+                             showInThread: Boolean): Event? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
         val permalink = permalinkFactory.createPermalink(eventReplied.root, false) ?: return null
@@ -500,7 +501,10 @@ internal class LocalEchoEventFactory @Inject constructor(
                 format = MessageFormat.FORMAT_MATRIX_HTML,
                 body = replyFallback,
                 formattedBody = replyFormatted,
-                relatesTo = generateReplyRelationContent(eventId = eventId, rootThreadEventId = rootThreadEventId))
+                relatesTo = generateReplyRelationContent(
+                        eventId = eventId,
+                        rootThreadEventId = rootThreadEventId,
+                        showAsReply = showInThread ))
         return createMessageEvent(roomId, content)
     }
 
@@ -516,12 +520,12 @@ internal class LocalEchoEventFactory @Inject constructor(
      *        }
      *   }
      */
-    private fun generateReplyRelationContent(eventId: String, rootThreadEventId: String? = null): RelationDefaultContent =
+    private fun generateReplyRelationContent(eventId: String, rootThreadEventId: String? = null, showAsReply: Boolean): RelationDefaultContent =
             rootThreadEventId?.let {
                 RelationDefaultContent(
                         type = RelationType.IO_THREAD,
                         eventId = it,
-                        inReplyTo = ReplyToContent(eventId = eventId, renderIn = arrayListOf("m.thread")))
+                        inReplyTo = ReplyToContent(eventId = eventId, renderIn = if (showAsReply) arrayListOf("m.thread") else null))
             } ?: RelationDefaultContent(null, null, ReplyToContent(eventId = eventId))
 
     private fun buildFormattedReply(permalink: String, userLink: String, userId: String, bodyFormatted: String, newBodyFormatted: String): String {

@@ -109,10 +109,15 @@ interface RelationService {
      * @param eventReplied the event referenced by the reply
      * @param replyText the reply text
      * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
+     * @param showInThread If true, relation will be added to the reply in order to be visible from within threads
+     * @param rootThreadEventId If show in thread is true then we need the rootThreadEventId to generate the relation
      */
     fun replyToMessage(eventReplied: TimelineEvent,
                        replyText: CharSequence,
-                       autoMarkdown: Boolean = false): Cancelable?
+                       autoMarkdown: Boolean = false,
+                       showInThread: Boolean = false,
+                       rootThreadEventId: String? = null
+    ): Cancelable?
 
     /**
      * Get the current EventAnnotationsSummary

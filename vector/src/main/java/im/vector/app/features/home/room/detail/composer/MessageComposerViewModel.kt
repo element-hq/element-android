@@ -26,6 +26,7 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.attachments.toContentAttachmentData
 import im.vector.app.features.command.CommandParser
 import im.vector.app.features.command.ParsedCommand
@@ -44,6 +45,8 @@ import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
+import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toContent
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
@@ -495,13 +498,21 @@ class MessageComposerViewModel @AssistedInject constructor(
                 }
                 is SendMode.Reply   -> {
                     val timelineEvent = state.sendMode.timelineEvent
+                    val showInThread = state.sendMode.timelineEvent.root.isThread() && state.rootThreadEventId == null
+                    val rootThreadEventId = if(showInThread) timelineEvent.root.getRootThreadEventId() else null
                     state.rootThreadEventId?.let {
                         room.replyInThread(
                                 rootThreadEventId = it,
                                 replyInThreadText = action.text.toString(),
                                 autoMarkdown = action.autoMarkdown,
                                 eventReplied = timelineEvent)
-                    } ?: room.replyToMessage(timelineEvent, action.text.toString(), action.autoMarkdown)
+                    } ?: room.replyToMessage(
+                            eventReplied = timelineEvent,
+                            replyText = action.text.toString(),
+                            autoMarkdown = action.autoMarkdown,
+                            showInThread = showInThread,
+                            rootThreadEventId = rootThreadEventId
+                    )
 
                     _viewEvents.post(MessageComposerViewEvents.MessageSent)
                     popDraft()
