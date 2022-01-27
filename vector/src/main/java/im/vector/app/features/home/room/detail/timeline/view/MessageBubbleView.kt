@@ -103,7 +103,7 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
             }
             applyTo(views.bubbleView)
         }
-        if (messageLayout.isPseudoBubble) {
+        if (messageLayout.isPseudoBubble && messageLayout.timestampAsOverlay) {
             views.viewStubContainer.root.setPadding(0, 0, 0, 0)
         } else {
             views.viewStubContainer.root.setPadding(horizontalStubPadding, verticalStubPadding, horizontalStubPadding, verticalStubPadding)

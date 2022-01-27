@@ -48,7 +48,10 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
 
         // Use the bubble layout but without borders
         private val MSG_TYPES_WITH_PSEUDO_BUBBLE_LAYOUT = setOf(
-                MessageType.MSGTYPE_IMAGE, MessageType.MSGTYPE_VIDEO, MessageType.MSGTYPE_STICKER_LOCAL
+                MessageType.MSGTYPE_IMAGE,
+                MessageType.MSGTYPE_VIDEO,
+                MessageType.MSGTYPE_STICKER_LOCAL,
+                MessageType.MSGTYPE_EMOTE
         )
         private val MSG_TYPES_WITH_TIMESTAMP_AS_OVERLAY = setOf(
                 MessageType.MSGTYPE_IMAGE, MessageType.MSGTYPE_VIDEO
