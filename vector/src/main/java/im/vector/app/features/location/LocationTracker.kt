@@ -83,6 +83,10 @@ class LocationTracker @Inject constructor(
         callback?.onLocationUpdate(location.toLocationData())
     }
 
+    override fun onProviderDisabled(provider: String) {
+        callback?.onLocationProviderIsNotAvailable()
+    }
+
     private fun Location.toLocationData(): LocationData {
         return LocationData(latitude, longitude, accuracy.toDouble())
     }
