@@ -52,7 +52,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 internal class UpdateTrustWorker(context: Context, params: WorkerParameters, sessionManager: SessionManager) :
-    SessionSafeCoroutineWorker<UpdateTrustWorker.Params>(context, params, sessionManager, Params::class.java) {
+        SessionSafeCoroutineWorker<UpdateTrustWorker.Params>(context, params, sessionManager, Params::class.java) {
 
     @JsonClass(generateAdapter = true)
     internal data class Params(
