@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.args
 import com.mapbox.mapboxsdk.maps.MapView
 import im.vector.app.R
@@ -52,11 +53,8 @@ class LocationPreviewFragment @Inject constructor(
 
         mapView = WeakReference(views.mapView)
         views.mapView.onCreate(savedInstanceState)
-        views.mapView.initialize {
-            if (isAdded) {
-                onMapReady()
-            }
-        }
+        views.mapView.initialize()
+        loadPinDrawable()
     }
 
     override fun onResume() {
@@ -112,17 +110,20 @@ class LocationPreviewFragment @Inject constructor(
         openLocation(requireActivity(), location.latitude, location.longitude)
     }
 
-    private fun onMapReady() {
-        if (!isAdded) return
-
+    private fun loadPinDrawable() {
         val location = args.initialLocationData ?: return
         val userId = args.locationOwnerId
 
         locationPinProvider.create(userId) { pinDrawable ->
-            views.mapView.apply {
-                zoomToLocation(location.latitude, location.longitude, INITIAL_MAP_ZOOM)
-                addPinToMap(userId, pinDrawable)
-                updatePinLocation(userId, location.latitude, location.longitude)
+            lifecycleScope.launchWhenResumed {
+                views.mapView.render(
+                        MapState(
+                                zoomOnlyOnce = true,
+                                pinLocationData = location,
+                                pinId = args.locationOwnerId,
+                                pinDrawable = pinDrawable
+                        )
+                )
             }
         }
     }

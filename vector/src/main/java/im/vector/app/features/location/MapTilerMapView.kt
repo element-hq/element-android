@@ -17,7 +17,6 @@
 package im.vector.app.features.location
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
@@ -29,6 +28,7 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property
 import im.vector.app.BuildConfig
 import timber.log.Timber
+import java.util.concurrent.atomic.AtomicBoolean
 
 class MapTilerMapView @JvmOverloads constructor(
         context: Context,
@@ -36,7 +36,7 @@ class MapTilerMapView @JvmOverloads constructor(
         defStyleAttr: Int = 0
 ) : MapView(context, attrs, defStyleAttr) {
 
-    private var pendingState: LocationSharingViewState? = null
+    private var pendingState: MapState? = null
 
     data class MapRefs(
             val map: MapboxMap,
@@ -44,43 +44,18 @@ class MapTilerMapView @JvmOverloads constructor(
             val style: Style
     )
 
+    private var isInitializing = AtomicBoolean(false)
     private var mapRefs: MapRefs? = null
     private var initZoomDone = false
-
-    // TODO Kept only for the bottom sheet usage
-    fun initialize(onMapReady: () -> Unit) {
-        getMapAsync { map ->
-            map.setStyle(styleUrl) { style ->
-                mapRefs = MapRefs(
-                        map,
-                        SymbolManager(this, map, style),
-                        style
-                )
-                onMapReady()
-            }
-        }
-    }
-
-    // TODO Kept only for the bottom sheet usage
-    fun addPinToMap(pinId: String, image: Drawable) {
-        mapRefs?.style?.addImage(pinId, image)
-    }
-
-    // TODO Kept only for the bottom sheet usage
-    fun updatePinLocation(pinId: String, latitude: Double, longitude: Double) {
-        mapRefs?.symbolManager?.create(
-                SymbolOptions()
-                        .withLatLng(LatLng(latitude, longitude))
-                        .withIconImage(pinId)
-                        .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
-        )
-    }
 
     /**
      * For location fragments
      */
     fun initialize() {
-        Timber.d("## Location: initialize")
+        Timber.d("## Location: initialize $isInitializing")
+        if (isInitializing.getAndSet(true)) {
+            return
+        }
 
         getMapAsync { map ->
             map.setStyle(styleUrl) { style ->
@@ -95,20 +70,21 @@ class MapTilerMapView @JvmOverloads constructor(
         }
     }
 
-    fun render(data: LocationSharingViewState) {
+    fun render(state: MapState) {
         val safeMapRefs = mapRefs ?: return Unit.also {
-            pendingState = data
+            pendingState = state
         }
 
-        data.pinDrawable?.let { pinDrawable ->
-            if (safeMapRefs.style.getImage(LocationSharingFragment.USER_PIN_NAME) == null) {
+        state.pinDrawable?.let { pinDrawable ->
+            if (safeMapRefs.style.isFullyLoaded &&
+                    safeMapRefs.style.getImage(LocationSharingFragment.USER_PIN_NAME) == null) {
                 safeMapRefs.style.addImage(LocationSharingFragment.USER_PIN_NAME, pinDrawable)
             }
         }
 
-        data.lastKnownLocation?.let { locationData ->
-            if (!initZoomDone) {
-                zoomToLocation(locationData.latitude, locationData.longitude, INITIAL_MAP_ZOOM)
+        state.pinLocationData?.let { locationData ->
+            if (!initZoomDone || !state.zoomOnlyOnce) {
+                zoomToLocation(locationData.latitude, locationData.longitude)
                 initZoomDone = true
             }
 
@@ -121,11 +97,11 @@ class MapTilerMapView @JvmOverloads constructor(
         }
     }
 
-    fun zoomToLocation(latitude: Double, longitude: Double, zoom: Double) {
+    private fun zoomToLocation(latitude: Double, longitude: Double) {
         Timber.d("## Location: zoomToLocation")
         mapRefs?.map?.cameraPosition = CameraPosition.Builder()
                 .target(LatLng(latitude, longitude))
-                .zoom(zoom)
+                .zoom(INITIAL_MAP_ZOOM)
                 .build()
     }
 

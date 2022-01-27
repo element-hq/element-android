@@ -39,8 +39,6 @@ class LocationSharingFragment @Inject constructor(
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
 
-    private var lastZoomValue: Double = -1.0
-
     // Keep a ref to handle properly the onDestroy callback
     private var mapView: WeakReference<MapView>? = null
 
@@ -115,7 +113,7 @@ class LocationSharingFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        views.mapView.render(state)
+        views.mapView.render(state.toMapState())
     }
 
     companion object {

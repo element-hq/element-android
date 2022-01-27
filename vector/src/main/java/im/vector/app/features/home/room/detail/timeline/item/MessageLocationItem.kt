@@ -24,6 +24,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.MapState
 import im.vector.app.features.location.MapTilerMapView
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
@@ -56,14 +57,25 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
             callback?.onMapClicked()
         }
 
-        holder.mapView.apply {
-            initialize {
-                zoomToLocation(location.latitude, location.longitude, INITIAL_ZOOM)
-
-                locationPinProvider?.create(locationOwnerId) { pinDrawable ->
-                    addPinToMap(locationOwnerId, pinDrawable)
-                    updatePinLocation(locationOwnerId, location.latitude, location.longitude)
-                }
+        holder.mapView.initialize()
+        holder.mapView.render(
+                MapState(
+                        zoomOnlyOnce = false,
+                        pinLocationData = location,
+                        pinId = locationOwnerId,
+                        pinDrawable = null
+                )
+        )
+        locationPinProvider?.create(locationOwnerId) { pinDrawable ->
+            if (holder.view.isAttachedToWindow) {
+                holder.mapView.render(
+                        MapState(
+                                zoomOnlyOnce = false,
+                                pinLocationData = location,
+                                pinId = locationOwnerId,
+                                pinDrawable = pinDrawable
+                        )
+                )
             }
         }
     }
@@ -78,6 +90,5 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
 
     companion object {
         private const val STUB_ID = R.id.messageContentLocationStub
-        private const val INITIAL_ZOOM = 15.0
     }
 }

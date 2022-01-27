@@ -38,3 +38,10 @@ data class LocationSharingViewState(
             mode = locationSharingArgs.mode
     )
 }
+
+fun LocationSharingViewState.toMapState() = MapState(
+        zoomOnlyOnce = true,
+        pinLocationData = lastKnownLocation,
+        pinId = LocationSharingFragment.USER_PIN_NAME,
+        pinDrawable = pinDrawable
+)

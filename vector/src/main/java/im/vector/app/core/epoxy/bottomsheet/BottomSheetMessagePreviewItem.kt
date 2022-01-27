@@ -34,6 +34,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvid
 import im.vector.app.features.home.room.detail.timeline.item.BindingOptions
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
 import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.MapState
 import im.vector.app.features.location.MapTilerMapView
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
@@ -99,15 +100,25 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
 
         holder.mapView.isVisible = locationData != null
         holder.body.isVisible = locationData == null
-        locationData?.let { location ->
-            holder.mapView.initialize {
-                if (holder.view.isAttachedToWindow) {
-                    holder.mapView.zoomToLocation(location.latitude, location.longitude, 15.0)
-                    locationPinProvider?.create(matrixItem.id) { pinDrawable ->
-                        holder.mapView.addPinToMap(matrixItem.id, pinDrawable)
-                        holder.mapView.updatePinLocation(matrixItem.id, location.latitude, location.longitude)
-                    }
-                }
+        holder.mapView.initialize()
+        holder.mapView.render(
+                MapState(
+                        zoomOnlyOnce = false,
+                        pinLocationData = locationData,
+                        pinId = matrixItem.id,
+                        pinDrawable = null
+                )
+        )
+        locationPinProvider?.create(matrixItem.id) { pinDrawable ->
+            if (holder.view.isAttachedToWindow) {
+                holder.mapView.render(
+                        MapState(
+                                zoomOnlyOnce = false,
+                                pinLocationData = locationData,
+                                pinId = matrixItem.id,
+                                pinDrawable = pinDrawable
+                        )
+                )
             }
         }
     }
