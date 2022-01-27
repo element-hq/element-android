@@ -334,7 +334,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
             }
         }
 
-        if(!isLocalEcho) {
+        if (!isLocalEcho) {
             val replaceEvent = TimelineEventEntity.where(realm, roomId, eventId).findFirst()
             handleThreadSummaryEdition(editedEvent, replaceEvent, existingSummary?.editions)
         }

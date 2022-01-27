@@ -45,7 +45,6 @@ internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded(
         realm: Realm, currentUserId: String,
         chunkEntity: ChunkEntity? = null,
         shouldUpdateNotifications: Boolean = true) {
-
     for ((rootThreadEventId, eventEntity) in this) {
         eventEntity.threadSummaryInThread(eventEntity.realm, rootThreadEventId, chunkEntity)?.let { threadSummary ->
 
@@ -59,7 +58,6 @@ internal fun Map<String, EventEntity>.updateThreadSummaryIfNeeded(
                     threadsCounted = numberOfMessages,
                     latestMessageTimelineEventEntity = latestEventInThread
             )
-
         }
     }
 
@@ -96,7 +94,6 @@ internal fun EventEntity.markEventAsRoot(
  * @return A ThreadSummary containing the counted threads and the latest event message
  */
 internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: String, chunkEntity: ChunkEntity?): ThreadSummary {
-
     // Number of messages
     val messages = TimelineEventEntity
             .whereRoomId(realm, roomId = roomId)

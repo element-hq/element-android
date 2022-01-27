@@ -26,7 +26,6 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
 import im.vector.app.features.attachments.toContentAttachmentData
@@ -503,7 +502,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                 is SendMode.Reply   -> {
                     val timelineEvent = state.sendMode.timelineEvent
                     val showInThread = state.sendMode.timelineEvent.root.isThread() && state.rootThreadEventId == null
-                    val rootThreadEventId = if(showInThread) timelineEvent.root.getRootThreadEventId() else null
+                    val rootThreadEventId = if (showInThread) timelineEvent.root.getRootThreadEventId() else null
                     state.rootThreadEventId?.let {
                         room.replyInThread(
                                 rootThreadEventId = it,

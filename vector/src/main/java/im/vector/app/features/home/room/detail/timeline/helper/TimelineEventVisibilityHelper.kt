@@ -27,7 +27,6 @@ import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
-import timber.log.Timber
 import javax.inject.Inject
 
 class TimelineEventVisibilityHelper @Inject constructor(private val userPreferencesProvider: UserPreferencesProvider) {
@@ -138,8 +137,7 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
     }
 
     private fun TimelineEvent.shouldBeHidden(rootThreadEventId: String?, isFromThreadTimeline: Boolean): Boolean {
-
-        if (root.isRedacted() && !userPreferencesProvider.shouldShowRedactedMessages() && root.threadDetails?.isRootThread == false ) {
+        if (root.isRedacted() && !userPreferencesProvider.shouldShowRedactedMessages() && root.threadDetails?.isRootThread == false) {
             return true
         }
 
@@ -147,14 +145,14 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         if (root.isRedacted() &&
                 userPreferencesProvider.areThreadMessagesEnabled() &&
                 !isFromThreadTimeline &&
-                (root.isThread() || root.threadDetails?.isThread == true)){
+                (root.isThread() || root.threadDetails?.isThread == true)) {
             return true
         }
         if (root.isRedacted() &&
                 !userPreferencesProvider.shouldShowRedactedMessages() &&
                 userPreferencesProvider.areThreadMessagesEnabled() &&
                 isFromThreadTimeline &&
-                root.isThread()){
+                root.isThread()) {
             return true
         }
 

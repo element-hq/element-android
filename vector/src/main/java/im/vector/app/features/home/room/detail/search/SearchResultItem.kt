@@ -30,8 +30,8 @@ import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
-import org.matrix.android.sdk.api.session.threads.ThreadDetails
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
+import org.matrix.android.sdk.api.session.threads.ThreadDetails
 import org.matrix.android.sdk.api.util.MatrixItem
 
 @EpoxyModelClass(layout = R.layout.item_search_result)

@@ -560,7 +560,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 relatesTo = generateReplyRelationContent(
                         eventId = eventId,
                         rootThreadEventId = rootThreadEventId,
-                        showAsReply = showInThread ))
+                        showAsReply = showInThread))
         return createMessageEvent(roomId, content)
     }
 

@@ -92,7 +92,6 @@ interface TimelineService {
      */
     fun mapEventsWithEdition(threads: List<TimelineEvent>): List<TimelineEvent>
 
-
     /**
      * Marks the current thread as read. This is a local implementation
      * @param rootThreadEventId the eventId of the current thread
