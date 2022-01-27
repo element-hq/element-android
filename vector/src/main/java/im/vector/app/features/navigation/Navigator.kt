@@ -155,7 +155,6 @@ interface Navigator {
             callId: String
     )
 
-
     fun openCreatePoll(context: Context, roomId: String, editedEventId: String?, mode: PollMode)
 
     fun openLocationSharing(context: Context,
