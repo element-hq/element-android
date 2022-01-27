@@ -4,25 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:addStatesFromChildren="true"
-    android:paddingStart="8dp"
-    android:paddingLeft="8dp"
-    android:paddingTop="4dp"
-    android:paddingEnd="8dp"
-    android:paddingRight="8dp"
-    android:paddingBottom="4dp">
+    style="@style/TimelineContentStubContainerParams">
 
     <ViewStub
         android:id="@+id/messageContentTextStub"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout="@layout/item_timeline_event_text_message_stub"
-        tools:visibility="visible" />
-
-    <ViewStub
-        android:id="@+id/messageContentCodeBlockStub"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout="@layout/item_timeline_event_code_block_stub"
         tools:visibility="visible" />
 
     <ViewStub

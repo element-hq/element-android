@@ -6,6 +6,13 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="TimelineContentStubContainerParams">
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+    </style>
+
     <style name="TimelineContentMediaPillStyle">
         <item name="android:paddingStart">8dp</item>
         <item name="android:paddingEnd">8dp</item>
