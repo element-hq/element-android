@@ -64,4 +64,8 @@ class SettingsRobot {
     fun helpAndAbout(block: SettingsHelpRobot.() -> Unit) {
         clickOnAndGoBack(R.string.preference_root_help_about) { block(SettingsHelpRobot()) }
     }
+
+    fun legals(block: SettingsLegalsRobot.() -> Unit) {
+        clickOnAndGoBack(R.string.preference_root_legals) { block(SettingsLegalsRobot()) }
+    }
 }

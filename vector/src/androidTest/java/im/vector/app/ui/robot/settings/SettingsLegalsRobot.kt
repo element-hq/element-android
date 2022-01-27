@@ -16,25 +16,14 @@
 
 package im.vector.app.ui.robot.settings
 
-import androidx.test.espresso.Espresso
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
 import im.vector.app.R
-import im.vector.app.espresso.tools.clickOnPreference
 
-class SettingsSecurityRobot {
+class SettingsLegalsRobot {
 
     fun crawl() {
-        clickOnPreference(R.string.settings_active_sessions_show_all)
-        Espresso.pressBack()
-
-        clickOnPreference(R.string.encryption_message_recovery)
-        // TODO go deeper here
-        Espresso.pressBack()
-        /* Cannot exit
-        clickOnPreference(R.string.encryption_export_e2e_room_keys)
-        pressBack()
-         */
-
-        clickOnPreference(R.string.settings_opt_in_of_analytics)
-        Espresso.pressBack()
+        clickOn(R.string.settings_third_party_notices)
+        clickDialogPositiveButton()
     }
 }
