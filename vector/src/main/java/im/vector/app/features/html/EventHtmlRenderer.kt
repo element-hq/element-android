@@ -121,6 +121,8 @@ class MatrixHtmlPluginConfigure @Inject constructor(private val colorProvider: C
                 .addHandler(FontTagHandler())
                 .addHandler(ParagraphHandler(DimensionConverter(resources)))
                 .addHandler(MxReplyTagHandler())
+                .addHandler(CodePreTagHandler())
+                .addHandler(CodeTagHandler())
                 .addHandler(SpanHandler(colorProvider))
     }
 }
