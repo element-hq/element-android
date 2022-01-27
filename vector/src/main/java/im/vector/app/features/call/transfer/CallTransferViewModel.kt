@@ -50,14 +50,14 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
     private val callListener = object : WebRtcCall.Listener {
         override fun onStateUpdate(call: MxCall) {
             if (call.state is CallState.Ended) {
-                _viewEvents.post(CallTransferViewEvents.Dismiss)
+                _viewEvents.post(CallTransferViewEvents.Complete)
             }
         }
     }
 
     init {
         if (call == null) {
-            _viewEvents.post(CallTransferViewEvents.Dismiss)
+            _viewEvents.post(CallTransferViewEvents.Complete)
         } else {
             call.addListener(callListener)
         }
@@ -89,7 +89,7 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
                 } else {
                     call?.transferToUser(action.selectedUserId, null)
                 }
-                _viewEvents.post(CallTransferViewEvents.Dismiss)
+                _viewEvents.post(CallTransferViewEvents.Complete)
             } catch (failure: Throwable) {
                 _viewEvents.post(CallTransferViewEvents.FailToTransfer)
             }
@@ -111,7 +111,7 @@ class CallTransferViewModel @AssistedInject constructor(@Assisted initialState: 
                 } else {
                     call?.transferToUser(result.userId, result.roomId)
                 }
-                _viewEvents.post(CallTransferViewEvents.Dismiss)
+                _viewEvents.post(CallTransferViewEvents.Complete)
             } catch (failure: Throwable) {
                 _viewEvents.post(CallTransferViewEvents.FailToTransfer)
             }
