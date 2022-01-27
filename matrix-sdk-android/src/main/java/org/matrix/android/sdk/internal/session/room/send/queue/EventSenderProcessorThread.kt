@@ -23,7 +23,7 @@ import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.auth.data.sessionId
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.failure.isLimitExceededError
 import org.matrix.android.sdk.api.failure.isTokenError
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.CryptoService
@@ -171,7 +171,7 @@ internal class EventSenderProcessorThread @Inject constructor(
                             break@retryLoop
                         } catch (exception: Throwable) {
                             when {
-                                exception is IOException || exception is Failure.NetworkConnection                         -> {
+                                exception is IOException || exception is Failure.NetworkConnection -> {
                                     canReachServer = false
                                     if (task.retryCount.getAndIncrement() >= 3) task.onTaskFailed()
                                     while (!canReachServer) {
@@ -180,7 +180,7 @@ internal class EventSenderProcessorThread @Inject constructor(
                                         waitForNetwork()
                                     }
                                 }
-                                (exception is Failure.ServerError && exception.error.code == MatrixError.M_LIMIT_EXCEEDED) -> {
+                                (exception.isLimitExceededError())                                 -> {
                                     if (task.retryCount.getAndIncrement() >= 3) task.onTaskFailed()
                                     Timber.v("## SendThread retryLoop retryable error for $task reason: ${exception.localizedMessage}")
                                     // wait a bit
@@ -188,17 +188,17 @@ internal class EventSenderProcessorThread @Inject constructor(
                                     sleep(3_000)
                                     continue@retryLoop
                                 }
-                                exception.isTokenError()                                                                   -> {
+                                exception.isTokenError()                                           -> {
                                     Timber.v("## SendThread retryLoop retryable TOKEN error, interrupt")
                                     // we can exit the loop
                                     task.onTaskFailed()
                                     throw InterruptedException()
                                 }
-                                exception is CancellationException                                                         -> {
+                                exception is CancellationException                                 -> {
                                     Timber.v("## SendThread task has been cancelled")
                                     break@retryLoop
                                 }
-                                else                                                                                       -> {
+                                else                                                               -> {
                                     Timber.v("## SendThread retryLoop Un-Retryable error, try next task")
                                     // this task is in error, check next one?
                                     task.onTaskFailed()

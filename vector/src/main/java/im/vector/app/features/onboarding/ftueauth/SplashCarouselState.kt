@@ -18,7 +18,7 @@ package im.vector.app.features.onboarding.ftueauth
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import im.vector.app.core.epoxy.charsequence.EpoxyCharSequence
+import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 
 data class SplashCarouselState(
         val items: List<Item>

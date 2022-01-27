@@ -71,7 +71,6 @@
 
                     <TextView
                         android:id="@+id/matrixProfileToolbarTitleView"
-                        style="@style/Widget.Vector.TextView.HeadlineMedium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -79,6 +78,7 @@
                         android:alpha="0"
                         android:ellipsize="end"
                         android:maxLines="1"
+                        android:textAppearance="@style/TextAppearance.Vector.Widget.ActionBarTitle"
                         android:textColor="?vctr_content_primary"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

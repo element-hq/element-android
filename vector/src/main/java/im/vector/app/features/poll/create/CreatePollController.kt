@@ -20,7 +20,6 @@ import android.view.Gravity
 import android.view.inputmethod.EditorInfo
 import com.airbnb.epoxy.EpoxyController
 import im.vector.app.R
-import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.ItemStyle
@@ -28,6 +27,8 @@ import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formEditTextWithDeleteItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
+import org.matrix.android.sdk.api.session.room.model.message.PollType
 import javax.inject.Inject
 
 class CreatePollController @Inject constructor(
@@ -46,6 +47,28 @@ class CreatePollController @Inject constructor(
     override fun buildModels() {
         val currentState = state ?: return
         val host = this
+
+        genericItem {
+            id("poll_type_title")
+            style(ItemStyle.BIG_TEXT)
+            title(host.stringProvider.getString(R.string.poll_type_title).toEpoxyCharSequence())
+        }
+
+        /*
+        pollTypeSelectionItem {
+            id("poll_type_selection")
+            pollType(currentState.pollType)
+            pollTypeChangedListener { _, id ->
+                host.callback?.onPollTypeChanged(
+                        if (id == R.id.openPollTypeRadioButton) {
+                            PollType.DISCLOSED
+                        } else {
+                            PollType.UNDISCLOSED
+                        }
+                )
+            }
+        }
+         */
 
         genericItem {
             id("question_title")
@@ -110,5 +133,6 @@ class CreatePollController @Inject constructor(
         fun onOptionChanged(index: Int, option: String)
         fun onDeleteOption(index: Int)
         fun onAddOption()
+        fun onPollTypeChanged(type: PollType)
     }
 }

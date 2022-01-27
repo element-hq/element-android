@@ -23,6 +23,8 @@ import androidx.core.app.RemoteInput
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
 import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -41,6 +43,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
 
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
+    @Inject lateinit var analyticsTracker: AnalyticsTracker
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent == null || context == null) return
@@ -79,7 +82,10 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             val room = session.getRoom(roomId)
             if (room != null) {
                 session.coroutineScope.launch {
-                    tryOrNull { room.join() }
+                    tryOrNull {
+                        room.join()
+                        analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom())
+                    }
                 }
             }
         }

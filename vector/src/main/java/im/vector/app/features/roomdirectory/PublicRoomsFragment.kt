@@ -69,12 +69,8 @@ class PublicRoomsFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vectorBaseActivity.setSupportActionBar(views.publicRoomsToolbar)
-
-        vectorBaseActivity.supportActionBar?.let {
-            it.setDisplayShowHomeEnabled(true)
-            it.setDisplayHomeAsUpEnabled(true)
-        }
+        setupToolbar(views.publicRoomsToolbar)
+                .allowBack()
 
         sharedActionViewModel = activityViewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         setupRecyclerView()
@@ -160,7 +156,7 @@ class PublicRoomsFragment @Inject constructor(
 
     override fun onPublicRoomJoin(publicRoom: PublicRoom) {
         Timber.v("PublicRoomJoinClicked: $publicRoom")
-        viewModel.handle(RoomDirectoryAction.JoinRoom(publicRoom.roomId))
+        viewModel.handle(RoomDirectoryAction.JoinRoom(publicRoom))
     }
 
     override fun loadMore() {

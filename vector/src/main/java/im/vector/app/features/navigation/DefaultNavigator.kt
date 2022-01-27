@@ -61,6 +61,10 @@ import im.vector.app.features.home.room.threads.ThreadsActivity
 import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.invite.InviteUsersToRoomActivity
+import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.LocationSharingActivity
+import im.vector.app.features.location.LocationSharingArgs
+import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.matrixto.MatrixToBottomSheet
@@ -73,6 +77,7 @@ import im.vector.app.features.pin.PinArgs
 import im.vector.app.features.pin.PinMode
 import im.vector.app.features.poll.create.CreatePollActivity
 import im.vector.app.features.poll.create.CreatePollArgs
+import im.vector.app.features.poll.create.PollMode
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import im.vector.app.features.roomdirectory.RoomDirectoryData
 import im.vector.app.features.roomdirectory.createroom.CreateRoomActivity
@@ -535,10 +540,22 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
-    override fun openCreatePoll(context: Context, roomId: String) {
+    override fun openCreatePoll(context: Context, roomId: String, editedEventId: String?, mode: PollMode) {
         val intent = CreatePollActivity.getIntent(
                 context,
-                CreatePollArgs(roomId = roomId)
+                CreatePollArgs(roomId = roomId, editedEventId = editedEventId, mode = mode)
+        )
+        context.startActivity(intent)
+    }
+
+    override fun openLocationSharing(context: Context,
+                                     roomId: String,
+                                     mode: LocationSharingMode,
+                                     initialLocationData: LocationData?,
+                                     locationOwnerId: String) {
+        val intent = LocationSharingActivity.getIntent(
+                context,
+                LocationSharingArgs(roomId = roomId, mode = mode, initialLocationData = initialLocationData, locationOwnerId = locationOwnerId)
         )
         context.startActivity(intent)
     }

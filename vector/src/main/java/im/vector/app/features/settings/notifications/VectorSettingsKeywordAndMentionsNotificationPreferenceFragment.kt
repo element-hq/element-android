@@ -25,6 +25,7 @@ import im.vector.app.core.preference.KeywordPreference
 import im.vector.app.core.preference.VectorCheckboxPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
+import im.vector.app.features.analytics.plan.Screen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -34,13 +35,18 @@ import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.pushrules.toJson
 
 class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
-    VectorSettingsPushRuleNotificationPreferenceFragment() {
+        VectorSettingsPushRuleNotificationPreferenceFragment() {
 
     override var titleRes: Int = R.string.settings_notification_mentions_and_keywords
 
     override val preferenceXmlRes = R.xml.vector_settings_notification_mentions_and_keywords
 
     private var keywordsHasFocus = false
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = Screen.ScreenName.SettingsMentionsAndKeywords
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -71,7 +77,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
             val keywords = editKeywordPreference.keywords
             val newChecked = newValue as Boolean
             displayLoadingView()
-            updateKeywordPushRules(keywords, newChecked) {  result ->
+            updateKeywordPushRules(keywords, newChecked) { result ->
                 hideLoadingView()
                 if (!isAdded) {
                     return@updateKeywordPushRules
@@ -88,7 +94,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
             false
         }
 
-        editKeywordPreference.listener  = object : KeywordPreference.Listener {
+        editKeywordPreference.listener = object : KeywordPreference.Listener {
             override fun onFocusDidChange(hasFocus: Boolean) {
                 keywordsHasFocus = true
             }
@@ -174,8 +180,8 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
     }
 
     override val prefKeyToPushRuleId = mapOf(
-                "SETTINGS_PUSH_RULE_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY" to RuleIds.RULE_ID_CONTAIN_DISPLAY_NAME,
-                "SETTINGS_PUSH_RULE_CONTAINING_MY_USER_NAME_PREFERENCE_KEY" to RuleIds.RULE_ID_CONTAIN_USER_NAME,
-                "SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_AT_ROOM_PREFERENCE_KEY" to RuleIds.RULE_ID_ROOM_NOTIF
-        )
+            "SETTINGS_PUSH_RULE_CONTAINING_MY_DISPLAY_NAME_PREFERENCE_KEY" to RuleIds.RULE_ID_CONTAIN_DISPLAY_NAME,
+            "SETTINGS_PUSH_RULE_CONTAINING_MY_USER_NAME_PREFERENCE_KEY" to RuleIds.RULE_ID_CONTAIN_USER_NAME,
+            "SETTINGS_PUSH_RULE_MESSAGES_CONTAINING_AT_ROOM_PREFERENCE_KEY" to RuleIds.RULE_ID_ROOM_NOTIF
+    )
 }

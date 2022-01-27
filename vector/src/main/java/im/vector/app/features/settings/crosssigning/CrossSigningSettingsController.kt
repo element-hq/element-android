@@ -17,7 +17,6 @@ package im.vector.app.features.settings.crosssigning
 
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
-import im.vector.app.core.epoxy.charsequence.toEpoxyCharSequence
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericButtonItem
@@ -25,6 +24,7 @@ import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.ui.list.genericPositiveButtonItem
 import im.vector.app.core.ui.list.genericWithValueItem
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import javax.inject.Inject
 

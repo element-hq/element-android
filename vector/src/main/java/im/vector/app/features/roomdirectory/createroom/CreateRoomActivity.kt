@@ -22,12 +22,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
-import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
+import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -37,17 +36,13 @@ import kotlinx.coroutines.flow.onEach
  * Simple container for [CreateRoomFragment]
  */
 @AndroidEntryPoint
-class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable {
+class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     private lateinit var sharedActionViewModel: RoomDirectorySharedActionViewModel
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
-
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
-    }
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
@@ -62,6 +57,7 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarC
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        analyticsScreenName = Screen.ScreenName.CreateRoom
         sharedActionViewModel = viewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         sharedActionViewModel
                 .stream()

@@ -52,9 +52,9 @@ class ShowUserCodeFragment @Inject constructor(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        views.showUserCodeClose.debouncedClicks {
-            sharedViewModel.handle(UserCodeActions.DismissAction)
-        }
+        setupToolbar(views.showUserCodeToolBar)
+                .allowBack(useCross = true)
+
         views.showUserCodeScanButton.debouncedClicks {
             if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, requireActivity(), openCameraActivityResultLauncher)) {
                 doOpenQRCodeScanner()

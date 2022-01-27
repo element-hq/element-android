@@ -69,6 +69,7 @@ data class RoomDetailViewState(
         val isAllowedToSetupEncryption: Boolean = true,
         val hasFailedSending: Boolean = false,
         val jitsiState: JitsiState = JitsiState(),
+        val switchToParentSpace: Boolean = false,
         val rootThreadEventId: String? = null,
         val threadNotificationBadgeState: ThreadNotificationBadgeState = ThreadNotificationBadgeState()
 ) : MavericksState {
@@ -78,6 +79,7 @@ data class RoomDetailViewState(
             eventId = args.eventId,
             // Also highlight the target event, if any
             highlightedEventId = args.eventId,
+            switchToParentSpace = args.switchToParentSpace,
             rootThreadEventId = args.threadTimelineArgs?.rootThreadEventId
     )
 

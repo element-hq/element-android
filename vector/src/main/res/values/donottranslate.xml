@@ -18,13 +18,6 @@
     <string name="cut_the_slack_from_teams" translatable="false">Cut the slack from teams.</string>
 
     <!--  WIP strings, will move to strings.xml when signed off  -->
-    <string name="ftue_auth_carousel_body_secure" translatable="false">Secure and independent communication that gives you the same level of privacy as a face-to-face conversation in your own home.</string>
-    <string name="ftue_auth_carousel_body_control" translatable="false">Choose where your conversations are kept, giving you control and independence. Connected via Matrix.</string>
-    <string name="ftue_auth_carousel_body_encrypted" translatable="false">End-to-end encrypted and no phone number required. No ads or datamining.</string>
-    <string name="ftue_auth_carousel_title_messaging" translatable="false">Messaging for your team.</string>
-    <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_ftue_auth_carousel_body_workplace" translatable="false">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
-
     <string name="ftue_auth_use_case_title" translatable="false">Who will you chat to the most?</string>
     <string name="ftue_auth_use_case_subtitle" translatable="false">We\'ll help you get connected.</string>
     <string name="ftue_auth_use_case_option_one" translatable="false">Friends and family</string>

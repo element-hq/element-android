@@ -1,0 +1,2 @@
+Änderungen: Die Websitevorschau hat ein neues Design erhalten. Außerdem gibt es in den experimentellen Einstellungen Abstimmungen.
+Alle Änderungen: https://github.com/vector-im/element-android/releases/tag/v1.3.10

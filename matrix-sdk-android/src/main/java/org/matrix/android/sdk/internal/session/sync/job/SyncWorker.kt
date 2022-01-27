@@ -113,7 +113,7 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
      * Will return true if the sync response contains some toDevice events.
      */
     private suspend fun doSync(timeout: Long): Boolean {
-        val taskParams = SyncTask.Params(timeout * 1000, SyncPresence.Offline)
+        val taskParams = SyncTask.Params(timeout * 1000, SyncPresence.Offline, afterPause = false)
         val syncResponse = syncTask.execute(taskParams)
         return syncResponse.toDevice?.events?.isNotEmpty().orFalse()
     }
@@ -151,6 +151,7 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
                             sessionId = sessionId,
                             timeout = serverTimeoutInSeconds,
                             delay = delayInSeconds,
+                            periodic = true,
                             forceImmediate = forceImmediate
                     )
             )

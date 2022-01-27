@@ -23,8 +23,9 @@ import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.session.identity.ThreePid
 import timber.log.Timber
+import javax.inject.Inject
 
-object CommandParser {
+class CommandParser @Inject constructor() {
 
     /**
      * Convert the text message into a Slash command.
@@ -34,11 +35,9 @@ object CommandParser {
      */
     fun parseSlashCommand(textMessage: CharSequence, isInThreadTimeline: Boolean): ParsedCommand {
         // check if it has the Slash marker
-        if (!textMessage.startsWith("/")) {
-            return ParsedCommand.ErrorNotACommand
+        return if (!textMessage.startsWith("/")) {
+            ParsedCommand.ErrorNotACommand
         } else {
-            Timber.v("parseSlashCommand")
-
             // "/" only
             if (textMessage.length == 1) {
                 return ParsedCommand.ErrorEmptySlashCommand
@@ -52,7 +51,7 @@ object CommandParser {
             val messageParts = try {
                 textMessage.split("\\s+".toRegex()).dropLastWhile { it.isEmpty() }
             } catch (e: Exception) {
-                Timber.e(e, "## manageSlashCommand() : split failed")
+                Timber.e(e, "## parseSlashCommand() : split failed")
                 null
             }
 
@@ -75,7 +74,7 @@ object CommandParser {
                 }
             }
 
-            return when {
+            when {
                 Command.PLAIN.matches(slashCommand)                        -> {
                     if (message.isNotEmpty()) {
                         ParsedCommand.SendPlainText(message = message)

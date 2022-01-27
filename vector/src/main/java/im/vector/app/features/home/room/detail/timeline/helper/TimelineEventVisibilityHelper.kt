@@ -165,8 +165,6 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
             val diff = computeMembershipDiff()
             if ((diff.isJoin || diff.isPart) && !userPreferencesProvider.shouldShowJoinLeaves()) return true
             if ((diff.isAvatarChange || diff.isDisplaynameChange) && !userPreferencesProvider.shouldShowAvatarDisplayNameChanges()) return true
-        } else if (root.getClearType() == EventType.POLL_START && !userPreferencesProvider.shouldShowPolls()) {
-            return true
         }
 
         if (userPreferencesProvider.areThreadMessagesEnabled() && !isFromThreadTimeline && root.isThread()) {

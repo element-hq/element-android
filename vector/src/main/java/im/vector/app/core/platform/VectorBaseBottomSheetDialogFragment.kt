@@ -37,7 +37,9 @@ import im.vector.app.core.di.ActivityEntryPoint
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.utils.DimensionConverter
-import im.vector.app.features.analytics.VectorAnalytics
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.screen.ScreenEvent
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.view.clicks
@@ -47,6 +49,14 @@ import timber.log.Timber
  * Add Mavericks capabilities, handle DI and bindings.
  */
 abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomSheetDialogFragment(), MavericksView {
+    /* ==========================================================================================
+     * Analytics
+     * ========================================================================================== */
+
+    protected var analyticsScreenName: Screen.ScreenName? = null
+    private var screenEvent: ScreenEvent? = null
+
+    protected lateinit var analyticsTracker: AnalyticsTracker
 
     /* ==========================================================================================
      * View
@@ -83,8 +93,6 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
     }
 
     open val showExpanded = false
-
-    protected lateinit var analytics: VectorAnalytics
 
     interface ResultListener {
         fun onBottomSheetResult(resultCode: Int, data: Any?)
@@ -124,13 +132,19 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
         val activityEntryPoint = EntryPointAccessors.fromActivity(vectorBaseActivity, ActivityEntryPoint::class.java)
         viewModelFactory = activityEntryPoint.viewModelFactory()
         val singletonEntryPoint = context.singletonEntryPoint()
-        analytics = singletonEntryPoint.analytics()
+        analyticsTracker = singletonEntryPoint.analyticsTracker()
         super.onAttach(context)
     }
 
     override fun onResume() {
         super.onResume()
         Timber.i("onResume BottomSheet ${javaClass.simpleName}")
+        screenEvent = analyticsScreenName?.let { ScreenEvent(it) }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        screenEvent?.send(analyticsTracker)
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

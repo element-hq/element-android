@@ -9,7 +9,7 @@
     <string name="notice_room_join">%1$s님이 참가했습니다</string>
     <string name="notice_room_leave">%1$s님이 떠났습니다</string>
     <string name="notice_room_reject">%1$s님이 초대를 거부했습니다</string>
-    <string name="notice_room_kick">%1$s님이 %2$s님을 추방했습니다</string>
+    <string name="notice_room_remove">%1$s님이 %2$s님을 추방했습니다</string>
     <string name="notice_room_unban">%1$s님이 %2$s님의 출입 금지를 풀었습니다</string>
     <string name="notice_room_ban">%1$s님이 %2$s님을 출입 금지했습니다</string>
     <string name="notice_room_withdraw">%1$s님이 %2$s님의 초대를 취소했습니다</string>
@@ -412,7 +412,6 @@
     </plurals>
     <string name="room_participants_leave_prompt_title">방 떠나기</string>
     <string name="room_participants_leave_prompt_msg">방을 떠나겠습니까\?</string>
-    <string name="room_participants_remove_prompt_msg">이 대화에서 %s을(를) 삭제하겠습니까\?</string>
     <string name="room_participants_create">만들기</string>
     <string name="room_participants_online">온라인</string>
     <string name="room_participants_offline">오프라인</string>
@@ -425,10 +424,9 @@
     <string name="room_participants_header_devices">기기</string>
     <string name="room_participants_action_invite">초대</string>
     <string name="room_participants_action_leave">이 방 떠나기</string>
-    <string name="room_participants_action_remove">이 방에서 삭제하기</string>
     <string name="room_participants_action_ban">출입 금지</string>
     <string name="room_participants_action_unban">출입 금지 풀기</string>
-    <string name="room_participants_action_kick">추방</string>
+    <string name="room_participants_action_remove">추방</string>
     <string name="room_participants_action_set_default_power_level">일반 사용자로 재 설정</string>
     <string name="room_participants_action_set_moderator">중재자로 하기</string>
     <string name="room_participants_action_set_admin">관리자로 하기</string>
@@ -591,11 +589,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM 토큰이 성공적으로 홈서버에 등록되었습니다.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM 토큰을 홈서버에 등록 실패:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">알림 서비스</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">알림 서비스가 실행 중입니다.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">알림 서비스가 실행 중이 아닙니다.
-\n애플리케이션을 다시 실행해보세요.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">서비스 시작</string>
     <string name="settings_troubleshoot_test_service_restart_title">알림 서비스 자동 다시 시작</string>
     <string name="settings_troubleshoot_test_service_restart_success">서비스가 종료되고 자동으로 다시 시작되었습니다.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">서비스 다시 시작에 실패함</string>
@@ -966,7 +959,7 @@
     <string name="command_description_join_room">주어진 별칭으로 방에 참가하기</string>
     <string name="command_description_part_room">방 떠나기</string>
     <string name="command_description_topic">방 주제 설정하기</string>
-    <string name="command_description_kick_user">주어진 ID로 사용자 추방하기</string>
+    <string name="command_description_remove_user">주어진 ID로 사용자 추방하기</string>
     <string name="command_description_nick">표시 별명 바꾸기</string>
     <string name="command_description_markdown">마크다운 On/Off</string>
     <string name="command_description_clear_scalar_token">Matrix 앱 관리 문제를 해결하려면</string>
@@ -998,7 +991,7 @@
         <item quantity="other">%d개의 방</item>
     </plurals>
     <string name="group_no_long_description">커뮤니티 관리자가 이 커뮤니티에 대한 자세한 설명을 제공하지 않았습니다.</string>
-    <string name="has_been_kicked">%2$s님에 의해 %1$s 방에서 추방당했습니다</string>
+    <string name="has_been_removed">%2$s님에 의해 %1$s 방에서 추방당했습니다</string>
     <string name="has_been_banned">%2$s님에 의해 %1$s 방에서 출입 금지당했습니다</string>
     <string name="reason_colon">이유: %1$s</string>
     <string name="rejoin">다시 참가하기</string>

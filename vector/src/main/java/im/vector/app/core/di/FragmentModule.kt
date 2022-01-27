@@ -62,6 +62,8 @@ import im.vector.app.features.home.room.detail.TimelineFragment
 import im.vector.app.features.home.room.detail.search.SearchFragment
 import im.vector.app.features.home.room.list.RoomListFragment
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
+import im.vector.app.features.location.LocationPreviewFragment
+import im.vector.app.features.location.LocationSharingFragment
 import im.vector.app.features.login.LoginCaptchaFragment
 import im.vector.app.features.login.LoginFragment
 import im.vector.app.features.login.LoginGenericTextInputFormFragment
@@ -945,4 +947,14 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(CreatePollFragment::class)
     fun bindCreatePollFragment(fragment: CreatePollFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LocationSharingFragment::class)
+    fun bindLocationSharingFragment(fragment: LocationSharingFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LocationPreviewFragment::class)
+    fun bindLocationPreviewFragment(fragment: LocationPreviewFragment): Fragment
 }

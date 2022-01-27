@@ -10,7 +10,7 @@
     <string name="notice_room_invite">%1$s ha convidat a %2$s</string>
     <string name="notice_room_invite_you">%1$s t\'ha convidat</string>
     <string name="notice_room_reject">%1$s ha rebutjat la invitació</string>
-    <string name="notice_room_kick">%1$s ha expulsat %2$s</string>
+    <string name="notice_room_remove">%1$s ha expulsat %2$s</string>
     <string name="notice_display_name_changed_from">%1$s ha canviat el seu àlies de %2$s a %3$s</string>
     <string name="notice_display_name_removed">%1$s ha eliminat el àlies (era %2$s)</string>
     <string name="notice_room_topic_changed">%1$s ha canviat el tema a: %2$s</string>
@@ -115,9 +115,9 @@
     <string name="notice_direct_room_leave_by_you">Has marxat de la sala</string>
     <string name="notice_direct_room_leave">%1$s ha marxat de la sala</string>
     <string name="notice_room_leave_by_you">Has marxat de la sala</string>
-    <string name="notice_room_kick_by_you">Has expulsat %1$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Has expulsat %1$s. Motiu: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s ha expulsat %2$s. Motiu: %3$s</string>
+    <string name="notice_room_remove_by_you">Has expulsat %1$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Has expulsat %1$s. Motiu: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s ha expulsat %2$s. Motiu: %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">Has rebutjat la invitació. Motiu: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s ha rebutjat la invitació. Motiu: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Has marxat. Motiu: %1$s</string>
@@ -513,7 +513,6 @@
     <string name="room_title_one_member">1 participant</string>
     <string name="room_participants_leave_prompt_title">Marxa de la sala</string>
     <string name="room_participants_leave_prompt_msg">Estàs segur que vols marxar de la sala\?</string>
-    <string name="room_participants_remove_prompt_msg">Estàs segur que vols eliminar %s d\'aquest xat\?</string>
     <string name="room_participants_create">Crea</string>
     <string name="room_participants_online">En línia</string>
     <string name="room_participants_offline">Fora de línia</string>
@@ -524,7 +523,6 @@
     <string name="room_participants_header_devices">SESSIONS</string>
     <string name="room_participants_action_invite">Convida</string>
     <string name="room_participants_action_leave">Marxa d\'aquesta sala</string>
-    <string name="room_participants_action_remove">Elimina d\'aquesta sala</string>
     <string name="room_participants_action_ban">Veta</string>
     <string name="room_participants_action_unban">Treu el vet</string>
     <string name="room_participants_action_set_default_power_level">Retorna\'l a usuari normal</string>
@@ -868,7 +866,7 @@
     <string name="filter_group_members">Filtre de participants de grups</string>
     <string name="filter_group_rooms">Filtra els grups de sales</string>
     <string name="group_no_long_description">L\'administrador de la comunitat no ha proporcionat una descripció llarga d\'aquesta comunitat.</string>
-    <string name="has_been_kicked">%2$s t\'ha expulsat de %1$s</string>
+    <string name="has_been_removed">%2$s t\'ha expulsat de %1$s</string>
     <string name="has_been_banned">%2$s l\'ha expulsat de la sala %1$s</string>
     <string name="reason_colon">Raó: %1$s</string>
     <string name="rejoin">Tornar-hi a entrar</string>
@@ -1014,7 +1012,7 @@
     <string name="command_description_join_room">Entra a la sala amb l\'àlies donat</string>
     <string name="command_description_part_room">Marxa de la sala</string>
     <string name="command_description_topic">Defineix el tema de la sala</string>
-    <string name="command_description_kick_user">Expulsa l\'usuari amb l\'ID proporcionat</string>
+    <string name="command_description_remove_user">Expulsa l\'usuari amb l\'ID proporcionat</string>
     <string name="command_description_nick">Canvia l\'àlies</string>
     <string name="command_description_markdown">Activa/Desactiva el markdown</string>
     <string name="command_description_clear_scalar_token">Arreglar la gestió de les Apps de Matrix</string>
@@ -1063,7 +1061,7 @@
     <string name="template_settings_call_ringtone_use_app_ringtone">Utilitza el to de trucada d\'${app_name} predeterminat per trucades entrants</string>
     <string name="settings_call_ringtone_title">To de trucada entrant</string>
     <string name="settings_call_ringtone_dialog_title">Tria el to per les trucades:</string>
-    <string name="room_participants_action_kick">Expulsa</string>
+    <string name="room_participants_action_remove">Expulsa</string>
     <string name="reason_hint">Motiu</string>
     <string name="settings_inline_url_preview_summary">Mostra la vista prèvia dels enllaços dins del xat en cas que el vostre servidor base suporti aquesta funcionalitat.</string>
     <string name="settings_send_typing_notifs">Envia notificacions d\'escriptura</string>
@@ -1093,11 +1091,6 @@
     <string name="settings_troubleshoot_test_device_settings_success">Les notificacions per aquesta sessió estan activades.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Habilita</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Repara els serveis de Google Play</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Servei de notificacions</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">El servei de notificacions s\'està executant.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">El servei de notificacions no s\'està executant.
-\nProva de reiniciar l\'aplicació.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Inicia el servei</string>
     <string name="settings_troubleshoot_test_service_boot_title">Inicia\'l a l\'arrencada</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Inhabilita les restriccions</string>
     <string name="settings_troubleshoot_test_battery_title">Optimització de bateria</string>
@@ -1457,8 +1450,8 @@
     <string name="settings_preferences">Preferències</string>
     <string name="settings_security_and_privacy">Seguretat i privadesa</string>
     <string name="settings_expert">Expert</string>
-    <string name="room_participants_kick_reason">Motiu de l\'expulsió</string>
-    <string name="room_participants_kick_title">Expulsa usuari</string>
+    <string name="room_participants_remove_reason">Motiu de l\'expulsió</string>
+    <string name="room_participants_remove_title">Expulsa usuari</string>
     <string name="login_signin_sso">Continua amb SSO</string>
     <string name="template_identity_server_error_bulk_sha256_not_supported">Per a la teva pròpia privadesa, ${app_name} només admet l\'enviament del \"hash\" de correus electrònics i números de telèfon.</string>
     <string name="command_description_discard_session_not_handled">Només admès en sales xifrades</string>
@@ -1793,7 +1786,7 @@
     <string name="room_permissions_notify_everyone">Notificar a tothom</string>
     <string name="room_permissions_remove_messages_sent_by_others">Eliminar missatges enviats per altres</string>
     <string name="room_permissions_ban_users">Vetar usuaris</string>
-    <string name="room_permissions_kick_users">Expulsar usuaris</string>
+    <string name="room_permissions_remove_users">Expulsar usuaris</string>
     <string name="room_permissions_change_settings">Canviar la configuració</string>
     <string name="room_permissions_invite_users">Convidar usuaris</string>
     <string name="room_permissions_send_messages">Enviar missatges</string>
@@ -1802,7 +1795,7 @@
     <string name="room_permissions_notice">Selecciona els rols necessaris per canviar les diferents parts de la sala</string>
     <string name="room_permissions_title">Permisos</string>
     <string name="room_settings_permissions_title">Permisos de la sala</string>
-    <string name="room_participants_kick_prompt_msg">l\'expulsió d\'un usuari l\'eliminarà de la sala.
+    <string name="room_participants_remove_prompt_msg">l\'expulsió d\'un usuari l\'eliminarà de la sala.
 \n
 \nPer evitar que torni a unir-s\'hi, l\'hauries de vetar.</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Segur que vols cancel·lar la invitació d\'aquest usuari\?</string>

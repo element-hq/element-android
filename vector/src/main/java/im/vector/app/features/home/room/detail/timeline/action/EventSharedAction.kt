@@ -39,7 +39,7 @@ sealed class EventSharedAction(@StringRes val titleRes: Int,
     data class Copy(val content: String) :
             EventSharedAction(R.string.action_copy, R.drawable.ic_copy)
 
-    data class Edit(val eventId: String) :
+    data class Edit(val eventId: String, val eventType: String) :
             EventSharedAction(R.string.edit, R.drawable.ic_edit)
 
     data class Quote(val eventId: String) :

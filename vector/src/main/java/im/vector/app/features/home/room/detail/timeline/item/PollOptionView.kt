@@ -23,6 +23,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import im.vector.app.R
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.setAttributeTintedImageResource
 import im.vector.app.databinding.ItemPollOptionBinding
 
@@ -43,11 +44,12 @@ class PollOptionView @JvmOverloads constructor(
         views.optionNameTextView.text = state.optionAnswer
 
         when (state) {
-            is PollOptionViewState.PollSending -> renderPollSending()
-            is PollOptionViewState.PollEnded   -> renderPollEnded(state)
-            is PollOptionViewState.PollReady   -> renderPollReady()
-            is PollOptionViewState.PollVoted   -> renderPollVoted(state)
-        }
+            is PollOptionViewState.PollSending     -> renderPollSending()
+            is PollOptionViewState.PollEnded       -> renderPollEnded(state)
+            is PollOptionViewState.PollReady       -> renderPollReady()
+            is PollOptionViewState.PollVoted       -> renderPollVoted(state)
+            is PollOptionViewState.PollUndisclosed -> renderPollUndisclosed(state)
+        }.exhaustive
     }
 
     private fun renderPollSending() {
@@ -75,6 +77,12 @@ class PollOptionView @JvmOverloads constructor(
         views.optionCheckImageView.isVisible = true
         views.optionWinnerImageView.isVisible = false
         showVotes(state.voteCount, state.votePercentage)
+        renderVoteSelection(state.isSelected)
+    }
+
+    private fun renderPollUndisclosed(state: PollOptionViewState.PollUndisclosed) {
+        views.optionCheckImageView.isVisible = true
+        views.optionWinnerImageView.isVisible = false
         renderVoteSelection(state.isSelected)
     }
 

@@ -23,12 +23,10 @@ import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
-import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.home.room.detail.RoomDetailPendingActionStore
@@ -47,8 +45,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class RoomProfileActivity :
-        VectorBaseActivity<ActivitySimpleBinding>(),
-        ToolbarConfigurable {
+        VectorBaseActivity<ActivitySimpleBinding>() {
 
     companion object {
 
@@ -156,9 +153,5 @@ class RoomProfileActivity :
 
     private fun openRoomNotificationSettings() {
         addFragmentToBackstack(views.simpleFragmentContainer, RoomNotificationSettingsFragment::class.java, roomProfileArgs)
-    }
-
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
     }
 }

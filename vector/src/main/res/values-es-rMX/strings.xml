@@ -9,7 +9,7 @@
     <string name="notice_room_join">%1$s se unió</string>
     <string name="notice_room_leave">%1$s salió</string>
     <string name="notice_room_reject">%1$s rechazó la invitación</string>
-    <string name="notice_room_kick">%1$s quitó a %2$s</string>
+    <string name="notice_room_remove">%1$s quitó a %2$s</string>
     <string name="notice_room_unban">%1$s desprohibió a %2$s</string>
     <string name="notice_room_ban">%1$s prohibió %2$s</string>
     <string name="notice_room_withdraw">%1$s retiró la invitación de %2$s</string>
@@ -294,7 +294,6 @@
     <string name="room_title_one_member">1 miembro</string>
     <string name="room_participants_leave_prompt_title">Salir de la sala</string>
     <string name="room_participants_leave_prompt_msg">¿Estás seguro que quieres salir de la sala?</string>
-    <string name="room_participants_remove_prompt_msg">¿Estás seguro que quieres quitar a %s de este chat?</string>
     <string name="room_participants_create">Crear</string>
     <string name="room_participants_online">Conectado</string>
     <string name="room_participants_offline">Desconectado</string>
@@ -305,7 +304,6 @@
     <string name="room_participants_header_devices">DISPOSITIVOS</string>
     <string name="room_participants_action_invite">Invitar</string>
     <string name="room_participants_action_leave">Salir de esta sala</string>
-    <string name="room_participants_action_remove">Remover de esta sala</string>
     <string name="room_participants_action_ban">Prohibir</string>
     <string name="room_participants_action_unban">Desprohibir</string>
     <string name="room_participants_action_set_default_power_level">Reestablecer como usuario normal</string>

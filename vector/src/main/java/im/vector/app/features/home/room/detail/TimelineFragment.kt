@@ -107,6 +107,7 @@ import im.vector.app.core.utils.createUIHandler
 import im.vector.app.core.utils.isValidUrl
 import im.vector.app.core.utils.onPermissionDeniedDialog
 import im.vector.app.core.utils.onPermissionDeniedSnackbar
+import im.vector.app.core.utils.openLocation
 import im.vector.app.core.utils.openUrlInExternalBrowser
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.safeStartActivity
@@ -117,6 +118,8 @@ import im.vector.app.core.utils.startInstallFromSourceIntent
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogReportContentBinding
 import im.vector.app.databinding.FragmentTimelineBinding
+import im.vector.app.features.analytics.plan.Click
+import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.attachments.AttachmentTypeSelectorView
 import im.vector.app.features.attachments.AttachmentsHelper
 import im.vector.app.features.attachments.ContactAttachment
@@ -171,12 +174,15 @@ import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
 import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.invite.VectorInviteView
+import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.permalink.NavigationInterceptor
 import im.vector.app.features.permalink.PermalinkHandler
+import im.vector.app.features.poll.create.PollMode
 import im.vector.app.features.reactions.EmojiReactionPickerActivity
 import im.vector.app.features.roomprofile.RoomProfileActivity
 import im.vector.app.features.session.coroutineScope
@@ -203,6 +209,7 @@ import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
+import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -210,6 +217,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageInfoContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
@@ -332,6 +340,7 @@ class TimelineFragment @Inject constructor(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        analyticsScreenName = Screen.ScreenName.Room
         setFragmentResultListener(MigrateRoomBottomSheet.REQUEST_KEY) { _, bundle ->
             bundle.getString(MigrateRoomBottomSheet.BUNDLE_KEY_REPLACEMENT_ROOM)?.let { replacementRoomId ->
                 timelineViewModel.handle(RoomDetailAction.RoomUpgradeSuccess(replacementRoomId))
@@ -359,6 +368,7 @@ class TimelineFragment @Inject constructor(
         keyboardStateUtils = KeyboardStateUtils(requireActivity())
         lazyLoadedViews.bind(views)
         setupToolbar(views.roomToolbar)
+                .allowBack()
         setupRecyclerView()
         setupComposer()
         setupNotificationView()
@@ -468,6 +478,7 @@ class TimelineFragment @Inject constructor(
                 RoomDetailViewEvents.StopChatEffects                     -> handleStopChatEffects()
                 is RoomDetailViewEvents.DisplayAndAcceptCall             -> acceptIncomingCall(it)
                 RoomDetailViewEvents.RoomReplacementStarted              -> handleRoomReplacement()
+                is RoomDetailViewEvents.ShowLocation                     -> handleShowLocationPreview(it)
             }.exhaustive
         }
 
@@ -599,6 +610,17 @@ class TimelineFragment @Inject constructor(
         }
     }
 
+    private fun handleShowLocationPreview(viewEvent: RoomDetailViewEvents.ShowLocation) {
+        navigator
+                .openLocationSharing(
+                        context = requireContext(),
+                        roomId = roomDetailArgs.roomId,
+                        mode = LocationSharingMode.PREVIEW,
+                        initialLocationData = viewEvent.locationData,
+                        locationOwnerId = viewEvent.userId
+                )
+    }
+
     private fun requestNativeWidgetPermission(it: RoomDetailViewEvents.RequestNativeWidgetPermission) {
         val tag = RoomWidgetPermissionBottomSheet::class.java.name
         val dFrag = childFragmentManager.findFragmentByTag(tag) as? RoomWidgetPermissionBottomSheet
@@ -673,7 +695,7 @@ class TimelineFragment @Inject constructor(
      */
     private fun EmojiPopup.Builder.setOnEmojiPopupDismissListenerLifecycleAware(action: () -> Unit): EmojiPopup.Builder {
         return setOnEmojiPopupDismissListener {
-            if (lifecycle.currentState == Lifecycle.State.STARTED) {
+            if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                 action()
             }
         }
@@ -1447,8 +1469,8 @@ class TimelineFragment @Inject constructor(
                 if (!::attachmentTypeSelector.isInitialized) {
                     attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@TimelineFragment)
                     attachmentTypeSelector.setAttachmentVisibility(
-                            AttachmentTypeSelectorView.Type.POLL,
-                            vectorPreferences.labsEnablePolls() && !isThreadTimeLine())
+                            AttachmentTypeSelectorView.Type.LOCATION,
+                            vectorPreferences.isLocationSharingEnabled() && !isThreadTimeLine())
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton)
             }
@@ -1477,6 +1499,7 @@ class TimelineFragment @Inject constructor(
             return
         }
         if (text.isNotBlank()) {
+            analyticsTracker.capture(Click(name = Click.Name.SendMessageButton))
             // We collapse ASAP, if not there will be a slight annoying delay
             views.composerLayout.collapse(true)
             lockSendButton = true
@@ -1606,7 +1629,7 @@ class TimelineFragment @Inject constructor(
         views.includeRoomToolbar.roomToolbarSubtitleView.apply {
             setTextOrHide(subtitle)
             if (typingMessage.isNullOrBlank()) {
-                setTextColor(colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
+                setTextColor(colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary))
                 setTypeface(null, Typeface.NORMAL)
             } else {
                 setTextColor(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
@@ -2041,16 +2064,22 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun onShareActionClicked(action: EventSharedAction.Share) {
-        if (action.messageContent is MessageTextContent) {
-            shareText(requireContext(), action.messageContent.body)
-        } else if (action.messageContent is MessageWithAttachmentContent) {
-            lifecycleScope.launch {
-                val result = runCatching { session.fileService().downloadFile(messageContent = action.messageContent) }
-                if (!isAdded) return@launch
-                result.fold(
-                        { shareMedia(requireContext(), it, getMimeTypeFromUri(requireContext(), it.toUri())) },
-                        { showErrorInSnackbar(it) }
-                )
+        when (action.messageContent) {
+            is MessageTextContent           -> shareText(requireContext(), action.messageContent.body)
+            is MessageLocationContent       -> {
+                LocationData.create(action.messageContent.getUri())?.let {
+                    openLocation(requireActivity(), it.latitude, it.longitude)
+                }
+            }
+            is MessageWithAttachmentContent -> {
+                lifecycleScope.launch {
+                    val result = runCatching { session.fileService().downloadFile(messageContent = action.messageContent) }
+                    if (!isAdded) return@launch
+                    result.fold(
+                            { shareMedia(requireContext(), it, getMimeTypeFromUri(requireContext(), it.toUri())) },
+                            { showErrorInSnackbar(it) }
+                    )
+                }
             }
         }
     }
@@ -2142,7 +2171,9 @@ class TimelineFragment @Inject constructor(
                 timelineViewModel.handle(RoomDetailAction.UpdateQuickReactAction(action.eventId, action.clickedOn, action.add))
             }
             is EventSharedAction.Edit                       -> {
-                if (withState(messageComposerViewModel) { it.isVoiceMessageIdle }) {
+                if (action.eventType == EventType.POLL_START) {
+                    navigator.openCreatePoll(requireContext(), roomDetailArgs.roomId, action.eventId, PollMode.EDIT)
+                } else if (withState(messageComposerViewModel) { it.isVoiceMessageIdle }) {
                     messageComposerViewModel.handle(MessageComposerAction.EnterEditMode(action.eventId, views.composerLayout.text.toString()))
                 } else {
                     requireActivity().toast(R.string.error_voice_message_cannot_reply_or_edit)
@@ -2391,17 +2422,27 @@ class TimelineFragment @Inject constructor(
 
     private fun launchAttachmentProcess(type: AttachmentTypeSelectorView.Type) {
         when (type) {
-            AttachmentTypeSelectorView.Type.CAMERA  -> attachmentsHelper.openCamera(
+            AttachmentTypeSelectorView.Type.CAMERA   -> attachmentsHelper.openCamera(
                     activity = requireActivity(),
                     vectorPreferences = vectorPreferences,
                     cameraActivityResultLauncher = attachmentCameraActivityResultLauncher,
                     cameraVideoActivityResultLauncher = attachmentCameraVideoActivityResultLauncher
             )
-            AttachmentTypeSelectorView.Type.FILE    -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.GALLERY -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.CONTACT -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
-            AttachmentTypeSelectorView.Type.STICKER -> timelineViewModel.handle(RoomDetailAction.SelectStickerAttachment)
-            AttachmentTypeSelectorView.Type.POLL    -> navigator.openCreatePoll(requireContext(), timelineArgs.roomId)
+            AttachmentTypeSelectorView.Type.FILE     -> attachmentsHelper.selectFile(attachmentFileActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.GALLERY  -> attachmentsHelper.selectGallery(attachmentMediaActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.CONTACT  -> attachmentsHelper.selectContact(attachmentContactActivityResultLauncher)
+            AttachmentTypeSelectorView.Type.STICKER  -> timelineViewModel.handle(RoomDetailAction.SelectStickerAttachment)
+            AttachmentTypeSelectorView.Type.POLL     -> navigator.openCreatePoll(requireContext(), timelineArgs.roomId, null, PollMode.CREATE)
+            AttachmentTypeSelectorView.Type.LOCATION -> {
+                navigator
+                        .openLocationSharing(
+                                context = requireContext(),
+                                roomId = roomDetailArgs.roomId,
+                                mode = LocationSharingMode.STATIC_SHARING,
+                                initialLocationData = null,
+                                locationOwnerId = session.myUserId
+                        )
+            }
         }.exhaustive
     }
 

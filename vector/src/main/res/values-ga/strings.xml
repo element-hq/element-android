@@ -15,7 +15,7 @@
     <string name="room_participants_action_ignore">Tabhair neamhaird ar teachtaireachtaí an úsáideora seo</string>
     <string name="room_participants_power_level_demote">Bain ceadanna</string>
     <string name="room_participants_action_mention">Luaigh</string>
-    <string name="room_participants_action_kick">Caith amach</string>
+    <string name="room_participants_action_remove">Caith amach</string>
     <string name="room_participants_action_unban">Bain an coisc</string>
     <string name="room_participants_action_ban">Coisc</string>
     <string name="room_participants_action_invite">Tabhair cuireadh</string>
@@ -200,8 +200,8 @@
     <string name="notice_room_unban_by_you">Chuir tú deireadh leis an cosc ar %1$s</string>
     <string name="notice_room_ban_by_you">Chuir tú cosc ar %1$s</string>
     <string name="notice_room_ban">Chuir %1$s cosc ar %2$s</string>
-    <string name="notice_room_kick_by_you">Dhíbir tú %1$s</string>
-    <string name="notice_room_kick">Dhíbir %1$s %2$s</string>
+    <string name="notice_room_remove_by_you">Dhíbir tú %1$s</string>
+    <string name="notice_room_remove">Dhíbir %1$s %2$s</string>
     <string name="notice_room_reject_by_you">Dhiúltaigh tú don chuireadh</string>
     <string name="notice_room_reject">Dhiúltaigh %1$s don chuireadh</string>
     <string name="notice_direct_room_leave_by_you">D’fhág tú an seomra</string>
