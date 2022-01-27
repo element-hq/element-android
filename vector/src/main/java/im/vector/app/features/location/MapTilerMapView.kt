@@ -76,9 +76,10 @@ class MapTilerMapView @JvmOverloads constructor(
         }
 
         state.pinDrawable?.let { pinDrawable ->
-            if (safeMapRefs.style.isFullyLoaded &&
-                    safeMapRefs.style.getImage(LocationSharingFragment.USER_PIN_NAME) == null) {
-                safeMapRefs.style.addImage(LocationSharingFragment.USER_PIN_NAME, pinDrawable)
+            if (!safeMapRefs.style.isFullyLoaded ||
+                    safeMapRefs.style.getImage(state.pinId) == null) {
+                safeMapRefs.symbolManager.deleteAll()
+                safeMapRefs.style.addImage(state.pinId, pinDrawable)
             }
         }
 
@@ -91,7 +92,7 @@ class MapTilerMapView @JvmOverloads constructor(
             safeMapRefs.symbolManager.create(
                     SymbolOptions()
                             .withLatLng(LatLng(locationData.latitude, locationData.longitude))
-                            .withIconImage(LocationSharingFragment.USER_PIN_NAME)
+                            .withIconImage(state.pinId)
                             .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
             )
         }
