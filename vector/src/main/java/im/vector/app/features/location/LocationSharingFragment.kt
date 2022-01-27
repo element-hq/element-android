@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -114,6 +115,7 @@ class LocationSharingFragment @Inject constructor(
 
     override fun invalidate() = withState(viewModel) { state ->
         views.mapView.render(state.toMapState())
+        views.shareLocationGpsLoading.isGone = state.lastKnownLocation != null
     }
 
     companion object {
