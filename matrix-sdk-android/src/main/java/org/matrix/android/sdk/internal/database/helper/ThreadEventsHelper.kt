@@ -19,9 +19,11 @@ package org.matrix.android.sdk.internal.database.helper
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.Sort
+import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
+import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.ReadReceiptEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
@@ -88,17 +90,6 @@ internal fun EventEntity.markEventAsRoot(
     threadSummaryLatestMessage = latestMessageTimelineEventEntity
 }
 
-///**
-// * Find all TimelineEventEntity that are threads bind to the Event with rootThreadEventId
-// * @param rootThreadEventId The root eventId that will try to find bind threads
-// */
-//internal fun EventEntity.findAllThreadsForRootEventId(realm: Realm, rootThreadEventId: String): RealmResults<TimelineEventEntity> =
-//        TimelineEventEntity
-//                .whereRoomId(realm, roomId = roomId)
-//                .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, rootThreadEventId)
-//                .sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)
-//                .findAll()
-
 /**
  * Count the number of threads for the provided root thread eventId, and finds the latest event message
  * @param rootThreadEventId The root eventId that will find the number of threads
@@ -124,7 +115,7 @@ internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: 
         result = chunk.timelineEvents.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)?.firstOrNull {
             it.root?.rootThreadEventId == rootThreadEventId
         }
-        chunk  = ChunkEntity.find(realm, roomId, nextToken = chunk.prevToken) ?: break
+        chunk = ChunkEntity.find(realm, roomId, nextToken = chunk.prevToken) ?: break
     }
     result ?: return null
 
@@ -139,7 +130,25 @@ internal fun TimelineEventEntity.Companion.findAllThreadsForRoomId(realm: Realm,
         TimelineEventEntity
                 .whereRoomId(realm, roomId = roomId)
                 .equalTo(TimelineEventEntityFields.ROOT.IS_ROOT_THREAD, true)
-                .sort("${TimelineEventEntityFields.ROOT.THREAD_SUMMARY_LATEST_MESSAGE}.${TimelineEventEntityFields.DISPLAY_INDEX}", Sort.DESCENDING)
+                .sort("${TimelineEventEntityFields.ROOT.THREAD_SUMMARY_LATEST_MESSAGE}.${TimelineEventEntityFields.ROOT.ORIGIN_SERVER_TS}", Sort.DESCENDING)
+
+internal fun List<TimelineEvent>.mapEventsWithEdition(realm: Realm, roomId: String): List<TimelineEvent> =
+        this.map {
+            EventAnnotationsSummaryEntity
+                    .where(realm, roomId, eventId = it.eventId)
+                    .findFirst()
+                    ?.editSummary
+                    ?.editions
+                    ?.lastOrNull()
+                    ?.eventId
+                    ?.let { editedEventId ->
+                        TimelineEventEntity.where(realm, roomId, eventId = editedEventId).findFirst()?.let { editedEvent ->
+                            it.root.threadDetails = it.root.threadDetails?.copy(lastRootThreadEdition = editedEvent.root?.asDomain()?.getDecryptedTextSummary()
+                                    ?: "(edited)")
+                            it
+                        } ?: it
+                    } ?: it
+        }
 
 /**
  * Find the number of all the local notifications for the specified room

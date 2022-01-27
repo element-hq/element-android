@@ -60,6 +60,7 @@ class ThreadListController @Inject constructor(
                 ?.forEach { timelineEvent ->
                     val date = dateFormatter.format(timelineEvent.root.threadDetails?.lastMessageTimestamp, DateFormatKind.ROOM_LIST)
                     val decryptionErrorMessage = stringProvider.getString(R.string.encrypted_message)
+                    val lastRootThreadEdition = timelineEvent.root.threadDetails?.lastRootThreadEdition
                     threadListItem {
                         id(timelineEvent.eventId)
                         avatarRenderer(host.avatarRenderer)
@@ -68,7 +69,7 @@ class ThreadListController @Inject constructor(
                         date(date)
                         rootMessageDeleted(timelineEvent.root.isRedacted())
                         threadNotificationState(timelineEvent.root.threadDetails?.threadNotificationState ?: ThreadNotificationState.NO_NEW_MESSAGE)
-                        rootMessage(timelineEvent.root.getDecryptedTextSummary() ?: decryptionErrorMessage)
+                        rootMessage(lastRootThreadEdition ?: timelineEvent.root.getDecryptedTextSummary() ?: decryptionErrorMessage)
                         lastMessage(timelineEvent.root.threadDetails?.threadSummaryLatestTextMessage ?: decryptionErrorMessage)
                         lastMessageCounter(timelineEvent.root.threadDetails?.numberOfThreads.toString())
                         lastMessageMatrixItem(timelineEvent.root.threadDetails?.threadSummarySenderInfo?.toMatrixItem())

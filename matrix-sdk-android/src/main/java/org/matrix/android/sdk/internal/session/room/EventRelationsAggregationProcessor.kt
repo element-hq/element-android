@@ -40,6 +40,7 @@ import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 import org.matrix.android.sdk.internal.crypto.verification.toState
+import org.matrix.android.sdk.internal.database.helper.findRootThreadEvent
 import org.matrix.android.sdk.internal.database.mapper.ContentMapper
 import org.matrix.android.sdk.internal.database.mapper.EventMapper
 import org.matrix.android.sdk.internal.database.model.EditAggregatedSummaryEntity
@@ -64,7 +65,7 @@ import javax.inject.Inject
 internal class EventRelationsAggregationProcessor @Inject constructor(
         @UserId private val userId: String,
         private val stateEventDataSource: StateEventDataSource
-        ) : EventInsertLiveProcessor {
+) : EventInsertLiveProcessor {
 
     private val allowedTypes = listOf(
             EventType.MESSAGE,
@@ -300,6 +301,29 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                                 isLocalEcho = isLocalEcho
                         )
                 )
+            }
+        }
+
+        if(!isLocalEcho) {
+            val replaceEvent = TimelineEventEntity.where(realm, roomId, eventId).findFirst()
+            handleThreadSummaryEdition(editedEvent, replaceEvent, existingSummary?.editions)
+        }
+    }
+
+    /**
+     * Check if the edition is on the latest thread event, and update it accordingly
+     */
+    private fun handleThreadSummaryEdition(editedEvent: EventEntity?,
+                                           replaceEvent: TimelineEventEntity?,
+                                           editions: List<EditionOfEvent>?) {
+        replaceEvent ?: return
+        editedEvent ?: return
+        editedEvent.findRootThreadEvent()?.apply {
+            val threadSummaryEventId = threadSummaryLatestMessage?.eventId
+            if (editedEvent.eventId == threadSummaryEventId || editions?.any { it.eventId == threadSummaryEventId } == true) {
+                // The edition is for the latest event or for any event replaced, this is to handle multiple
+                // edits of the same latest event
+                threadSummaryLatestMessage = replaceEvent
             }
         }
     }

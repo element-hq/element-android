@@ -37,6 +37,7 @@ import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.helper.findAllLocalThreadNotificationsForRoomId
 import org.matrix.android.sdk.internal.database.helper.findAllThreadsForRoomId
 import org.matrix.android.sdk.internal.database.helper.isUserParticipatingInThread
+import org.matrix.android.sdk.internal.database.helper.mapEventsWithEdition
 import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.EventEntity
@@ -154,6 +155,12 @@ internal class DefaultTimelineService @AssistedInject constructor(
                     roomId = roomId,
                     rootThreadEventId = rootThreadEventId,
                     senderId = userId)
+        }
+    }
+
+    override fun mapEventsWithEdition(threads: List<TimelineEvent>): List<TimelineEvent> {
+        return Realm.getInstance(monarchy.realmConfiguration).use {
+            threads.mapEventsWithEdition(it, roomId)
         }
     }
 

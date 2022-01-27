@@ -87,6 +87,13 @@ interface TimelineService {
     fun isUserParticipatingInThread(rootThreadEventId: String): Boolean
 
     /**
+     * Enhance the thread list with the edited events if needed
+     * @return the [LiveData] of [TimelineEvent]
+     */
+    fun mapEventsWithEdition(threads: List<TimelineEvent>): List<TimelineEvent>
+
+
+    /**
      * Marks the current thread as read. This is a local implementation
      * @param rootThreadEventId the eventId of the current thread
      */

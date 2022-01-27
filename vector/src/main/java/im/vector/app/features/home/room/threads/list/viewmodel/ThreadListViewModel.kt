@@ -61,6 +61,7 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
     private fun observeThreadsList() {
         room?.flow()
                 ?.liveThreadList()
+                ?.map { room.mapEventsWithEdition(it) }
                 ?.map {
                     it.map { threadRootEvent ->
                         val isParticipating = room.isUserParticipatingInThread(threadRootEvent.eventId)
