@@ -9,7 +9,7 @@
     <string name="notice_room_join">%1$s gelara elkartu da</string>
     <string name="notice_room_leave">%1$s gelatik atera da</string>
     <string name="notice_room_reject">%1$s erabiltzaileak gonbidapena baztertu du</string>
-    <string name="notice_room_kick">%1$s erabiltzaileak %2$s kanporatu du</string>
+    <string name="notice_room_remove">%1$s erabiltzaileak %2$s kanporatu du</string>
     <string name="notice_room_unban">%1$s erabiltzaileak debekua kendu dio %2$s erabiltzaileari</string>
     <string name="notice_room_ban">%1$s erabiltzaileak %2$s debekatu du</string>
     <string name="notice_room_withdraw">%1$s erabiltzaileak %2$s erabiltzailearen gonbidapena atzera bota du</string>
@@ -105,7 +105,7 @@
     <string name="notice_room_join_with_reason">%1$s gelara elkartu da. Arrazoia: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s gelatik atera da. Arrazoia: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s erabiltzaileak gonbidapena baztertu du. Arrazoia: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s erabiltzaileak %2$s kanporatu du. Arrazoia: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s erabiltzaileak %2$s kanporatu du. Arrazoia: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s erabiltzaileak debekua kendu dio %2$s erabiltzaileari. Arrazoia: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s erabiltzaileak %2$s debekatu du. Arrazoia: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">"%1$s erabiltzaileak gelara elkartzeko gonbidapen bat bidali dio %2$s erabiltzaileari. Arrazoia: %3$s"</string>
@@ -396,7 +396,6 @@ Baimendu sarbidea hurrengo laster-leihoan zure telefonotik fitxategiak bidali ah
 
     <string name="room_participants_leave_prompt_title">Atera gelatik</string>
     <string name="room_participants_leave_prompt_msg">Ziur gelatik atera nahi duzula?</string>
-    <string name="room_participants_remove_prompt_msg">Ziur %s txat honetatik kendu nahi duzula?</string>
     <string name="room_participants_create">Sortu</string>
 
     <string name="room_participants_online">Konektatuta</string>
@@ -410,7 +409,6 @@ Baimendu sarbidea hurrengo laster-leihoan zure telefonotik fitxategiak bidali ah
 
     <string name="room_participants_action_invite">Gonbidatu</string>
     <string name="room_participants_action_leave">Atera gela honetatik</string>
-    <string name="room_participants_action_remove">Kendu gela honetatik</string>
     <string name="room_participants_action_ban">Debekatu</string>
     <string name="room_participants_action_unban">Debekua kendu</string>
     <string name="room_participants_action_set_default_power_level">Berrezarri erabiltzaile arrunt gisa</string>
@@ -869,7 +867,7 @@ Abisua: Fitxategi hau ezabatu daiteke aplikazioa desinstalatzen bada.</string>
 
     <string name="group_no_long_description">Komunitatearen administratzaileak ez du deskripzio luzerik eman komunitate honentzat.</string>
 
-    <string name="has_been_kicked">%1$s gelatik kanporatu zaitu %2$s erabiltzaileak</string>
+    <string name="has_been_removed">%1$s gelatik kanporatu zaitu %2$s erabiltzaileak</string>
     <string name="has_been_banned">%1$s gelatik debekatu zaitu %2$s erabiltzaileak</string>
     <string name="reason_colon">Arrazoia: %1$s</string>
     <string name="rejoin">Berriro elkartu</string>
@@ -1016,7 +1014,7 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
     <string name="command_description_join_room">Gelara elkartzen da emandako ezizenarekin</string>
     <string name="command_description_part_room">Atera gelatik</string>
     <string name="command_description_topic">Ezarri gelaren mintzagaia</string>
-    <string name="command_description_kick_user">Id zehatz bat duen erabiltzailea kanporatzen du</string>
+    <string name="command_description_remove_user">Id zehatz bat duen erabiltzailea kanporatzen du</string>
     <string name="command_description_nick">Zure pantaila-izena aldatzen du</string>
     <string name="command_description_markdown">Markdown bai/ez</string>
     <string name="command_description_clear_scalar_token">Matrix aplikazioen kudeaketa konpontzeko</string>
@@ -1112,7 +1110,7 @@ Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ah
     <string name="settings_call_ringtone_title">Jasotako deien doinua</string>
     <string name="settings_call_ringtone_dialog_title">Hautatu deientzako doinua:</string>
 
-    <string name="room_participants_action_kick">Kanporatu</string>
+    <string name="room_participants_action_remove">Kanporatu</string>
     <string name="reason_hint">Arrazoia</string>
 
     <string name="settings_inline_url_preview_summary">Erakutsi txateko esteken aurrebista hasiera-zerbitzariak onartzen badu.</string>
@@ -1179,12 +1177,6 @@ Egiaztatu zure kontuaren ezarpenak.</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM token-a ongi erregistratu da hasiera-zerbitzarian.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Huts egin du FCM token-a hasiera zerbitzarian erregistratzean:
 %1$s</string>
-
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Jakinarazpen zerbitzua</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Jakinarazpen zerbitzua abian dago.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Jakinarazpen zerbitzua ez dago abian.
-Berrabiarazi aplikazioa.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Hasi zerbitzua</string>
 
     <string name="settings_troubleshoot_test_service_restart_title">Jakinarazpen zerbitzua automatikoki berrabiarazi</string>
     <string name="settings_troubleshoot_test_service_restart_success">Zerbitzua hil da eta automatikoki berrabiarazi da.</string>

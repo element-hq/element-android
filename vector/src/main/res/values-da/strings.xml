@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s kom ind i rummet</string>
     <string name="notice_room_leave">%1$s forlod rummet</string>
     <string name="notice_room_reject">%1$s afviste invitationen</string>
-    <string name="notice_room_kick">%1$s kickede %2$s</string>
+    <string name="notice_room_remove">%1$s kickede %2$s</string>
     <string name="notice_room_unban">%1$s unbannede %2$s</string>
     <string name="notice_room_ban">%1$s bannede %2$s</string>
     <string name="notice_room_withdraw">%1$s trak %2$ss invitation tilbage</string>
@@ -298,7 +298,6 @@ Det kan være du vil logge ind med en anden konto eller tilføje denne email til
     <string name="room_title_one_member">1 medlem</string>
     <string name="room_participants_leave_prompt_title">Forlad rum</string>
     <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil forlade rummet?</string>
-    <string name="room_participants_remove_prompt_msg">Er du sikker på du vil fjerne %s fra denne chat?</string>
     <string name="room_participants_create">Skab</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
@@ -309,7 +308,6 @@ Det kan være du vil logge ind med en anden konto eller tilføje denne email til
     <string name="room_participants_header_devices">ENHEDER</string>
     <string name="room_participants_action_invite">Invitér</string>
     <string name="room_participants_action_leave">Forlad dette rum</string>
-    <string name="room_participants_action_remove">Fjern fra dette rum</string>
     <string name="room_participants_action_ban">Bandlys</string>
     <string name="room_participants_action_unban">Ophæv bandlysning</string>
     <string name="room_participants_action_set_default_power_level">Gør til normal bruger</string>
@@ -516,7 +514,7 @@ Er du sikker?</string>
     <string name="notice_room_withdraw_by_you">Du trak %1$ss invitation tilbage</string>
     <string name="notice_room_ban_by_you">Du bannede %1$s</string>
     <string name="notice_room_unban_by_you">Du unbannede %1$s</string>
-    <string name="notice_room_kick_by_you">Du smed %1$s ud</string>
+    <string name="notice_room_remove_by_you">Du smed %1$s ud</string>
     <string name="notice_room_reject_by_you">Du afslog invitationen</string>
     <string name="notice_direct_room_leave_by_you">Du gik ud af rummet</string>
     <string name="notice_direct_room_leave">%1$s gik ud af rummet</string>

@@ -40,6 +40,10 @@ import timber.log.Timber
 
 class ElementRobot {
 
+    fun onboarding(block: OnboardingRobot.() -> Unit) {
+        block(OnboardingRobot())
+    }
+
     fun signUp(userId: String) {
         val onboardingRobot = OnboardingRobot()
         onboardingRobot.createAccount(userId = userId)
@@ -124,7 +128,7 @@ class ElementRobot {
         }
 
         waitUntilActivityVisible<OnboardingActivity> {
-            assertDisplayed(R.id.loginSplashLogo)
+            assertDisplayed(R.id.loginSplashSubmit)
         }
     }
 

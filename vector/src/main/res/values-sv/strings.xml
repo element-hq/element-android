@@ -18,8 +18,8 @@
     <string name="notice_room_leave_by_you">Du lämnade rummet</string>
     <string name="notice_room_reject">%1$s avböjde inbjudan</string>
     <string name="notice_room_reject_by_you">Du avböjde inbjudan</string>
-    <string name="notice_room_kick">%1$s kickade %2$s</string>
-    <string name="notice_room_kick_by_you">Du kickade %1$s</string>
+    <string name="notice_room_remove">%1$s kickade %2$s</string>
+    <string name="notice_room_remove_by_you">Du kickade %1$s</string>
     <string name="notice_room_unban">%1$s avbannade %2$s</string>
     <string name="notice_room_unban_by_you">Du avbannade %1$s</string>
     <string name="notice_room_ban">%1$s avbannade %2$s</string>
@@ -146,8 +146,8 @@
     <string name="notice_room_leave_with_reason_by_you">Du lämnade rummet. Anledning: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s avböjde inbjudan. Anledning: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">Du avböjde inbjudan. Anledning: %1$s</string>
-    <string name="notice_room_kick_with_reason">%1$s kickade %2$s. Anledning: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Du kickade %1$s. Anledning: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s kickade %2$s. Anledning: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Du kickade %1$s. Anledning: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s avbannade %2$s. Anledning: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Du avbannade %1$s. Anledning: %2$s</string>
     <string name="notice_room_ban_with_reason">%1$s bannade %2$s. Anledning: %3$s</string>
@@ -624,7 +624,6 @@
     </plurals>
     <string name="room_participants_leave_prompt_title">Lämna rum</string>
     <string name="room_participants_leave_prompt_msg">Är du säker på att du vill lämna rummet\?</string>
-    <string name="room_participants_remove_prompt_msg">Är du säker på att du vill ta bort %s från den här chatten\?</string>
     <string name="room_participants_create">Skapa</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
@@ -637,10 +636,9 @@
     <string name="room_participants_header_devices">SESSIONER</string>
     <string name="room_participants_action_invite">Bjud in</string>
     <string name="room_participants_action_leave">Lämna det här rummet</string>
-    <string name="room_participants_action_remove">Ta bort från det här rummet</string>
     <string name="room_participants_action_ban">Banna</string>
     <string name="room_participants_action_unban">Avbanna</string>
-    <string name="room_participants_action_kick">Kicka</string>
+    <string name="room_participants_action_remove">Kicka</string>
     <string name="room_participants_action_set_default_power_level">Återställ till vanlig användare</string>
     <string name="room_participants_action_set_moderator">Gör till moderator</string>
     <string name="room_participants_action_set_admin">Gör till administratör</string>
@@ -797,10 +795,6 @@
 \nVänligen kolla ${app_name}inställningarna.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Observera att vissa meddelandetyper är satta till tyst (kommer att producera aviseringar utan ljud).</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Vissa aviseringar är inaktiverade i dina anpassade inställningar.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Aviseringstjänst</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Aviseringstjänsten körs.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Aviseringstjänsten körs inte.
-\nFörsök att starta om appen.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Automatisk omstart av aviseringstjänsten</string>
     <string name="template_settings_troubleshoot_test_service_boot_failed">Tjänsten kommer inte att starta när enheten startas om, så du kommer inte att få aviseringar förrens ${app_name} har öppnats en gång.</string>
     <string name="template_settings_troubleshoot_test_bg_restricted_failed">Bakgrundsbegränsningar är aktiverade för ${app_name}.
@@ -1239,9 +1233,9 @@
     <string name="room_participants_action_unignore_prompt_msg">Att avignorera den här användaren kommer att visa alla meddelanden från hen igen.</string>
     <string name="room_participants_action_cancel_invite_title">Avbryt inbjudan</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Är du säker på att du vill avbryta inbjudan för den här användaren\?</string>
-    <string name="room_participants_kick_title">Kicka användaren</string>
-    <string name="room_participants_kick_reason">Anledning för kick</string>
-    <string name="room_participants_kick_prompt_msg">att sparka ut användaren kommer att ta bort hen från det här rummet.
+    <string name="room_participants_remove_title">Kicka användaren</string>
+    <string name="room_participants_remove_reason">Anledning för kick</string>
+    <string name="room_participants_remove_prompt_msg">att sparka ut användaren kommer att ta bort hen från det här rummet.
 \n
 \nFör att hindra hen från att gå med i rummet igen så bör du banna hen istället.</string>
     <string name="room_participants_ban_title">Banna användaren</string>
@@ -1332,7 +1326,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM-token registrerades framgångsrikt på hemservern.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Misslyckades att registrera FCM-token på hemservern:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Starta tjänst</string>
     <string name="settings_troubleshoot_test_service_restart_success">Tjänsten dödades och startades om automatiskt.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Tjänsten misslyckades att starta om</string>
     <string name="settings_troubleshoot_test_service_boot_title">Starta vid boot</string>
@@ -1777,7 +1770,7 @@
     <string name="command_description_invite_user">Bjuder in användaren med det angivna ID:t till det nuvarande rummet</string>
     <string name="command_description_join_room">Går med i rummet med den angivna adressen</string>
     <string name="command_description_topic">Sätt ett rumsämne</string>
-    <string name="command_description_kick_user">Sparkar ut användaren med det angivna ID:t</string>
+    <string name="command_description_remove_user">Sparkar ut användaren med det angivna ID:t</string>
     <string name="command_description_nick">Ändrar ditt visningsnamn</string>
     <string name="command_description_clear_scalar_token">För att fixa Matrixapphantering</string>
     <string name="create">Skapa</string>
@@ -1795,7 +1788,7 @@
         <item quantity="other">%d medlemmar</item>
     </plurals>
     <string name="group_no_long_description">Gemenskapsadministratören har inte försett en lång beskrivning för den här gemenskapen.</string>
-    <string name="has_been_kicked">Du har blivit utsparkad från %1$s av %2$s</string>
+    <string name="has_been_removed">Du har blivit utsparkad från %1$s av %2$s</string>
     <string name="has_been_banned">Du har blivit bannad från %1$s av %2$s</string>
     <string name="reason_colon">Orsak: %1$s</string>
     <string name="rejoin">Gå med igen</string>
@@ -2540,7 +2533,7 @@
     <string name="room_permissions_notify_everyone">Underrätta alla</string>
     <string name="room_permissions_remove_messages_sent_by_others">Ta bort meddelanden skickade av andra</string>
     <string name="room_permissions_ban_users">Banna användare</string>
-    <string name="room_permissions_kick_users">Kicka användare</string>
+    <string name="room_permissions_remove_users">Kicka användare</string>
     <string name="room_permissions_change_settings">Ändra inställningar</string>
     <string name="room_permissions_invite_users">Bjuda in användare</string>
     <string name="room_permissions_send_messages">Skicka meddelanden</string>
@@ -2925,7 +2918,7 @@
     <string name="space_settings_permissions_title">Utrymmesbehörigheter</string>
     <string name="space_participants_unban_prompt_msg">Om användaren avbannas kommer denna att få gå med i utrymmet igen.</string>
     <string name="space_participants_ban_prompt_msg">Att banna användaren kommer att kicka denne från det här utrymmet och hindra hen från att gå med igen.</string>
-    <string name="space_participants_kick_prompt_msg">att kicka användaren kommer att ta bort den från det här utrymmet.
+    <string name="space_participants_remove_prompt_msg">att kicka användaren kommer att ta bort den från det här utrymmet.
 \n
 \nFör att hindra hen från att gå med igen så bör de banna hen istället.</string>
     <string name="create_space_in_progress">Skapar utrymme…</string>
@@ -3022,7 +3015,6 @@
     <string name="delete_poll_dialog_title">Ta bort omröstning</string>
     <string name="poll_end_room_list_preview">Omröstning avslutad</string>
     <string name="poll_response_room_list_preview">Röst avgiven</string>
-    <string name="labs_enable_polls">Aktivera omröstningar</string>
     <string name="end_poll_confirmation_approve_button">Avsluta omröstningen</string>
     <string name="end_poll_confirmation_description">Det här kommer att stoppa personer från att rösta och visa det slutgiltiga resultatet av omröstningen.</string>
     <string name="end_poll_confirmation_title">Avsluta den här omröstningen\?</string>
@@ -3055,4 +3047,20 @@
         <item quantity="one">%1$d röst avgiven. Rösta för att se resultatet</item>
         <item quantity="other">%1$d röster avgivna. Rösta för att se resultatet</item>
     </plurals>
+    <string name="tooltip_attachment_poll">Skapa omröstning</string>
+    <string name="tooltip_attachment_contact">Öppna kontakter</string>
+    <string name="tooltip_attachment_sticker">Skicka dekal</string>
+    <string name="tooltip_attachment_file">Ladda upp fil</string>
+    <string name="tooltip_attachment_gallery">Skicka bilder och video</string>
+    <string name="tooltip_attachment_photo">Öppna kameran</string>
+    <string name="restart_the_application_to_apply_changes">Starta om appen för att ändringen ska börja gälla.</string>
+    <string name="labs_enable_latex_maths">Aktivera LaTeX-matte</string>
+    <string name="labs_auto_report_uisi_desc">Ditt system kommer automatiskt att skicka loggar när det misslyckas att avkryptera</string>
+    <string name="labs_auto_report_uisi">Rapportera avkrypteringsfel automatiskt.</string>
+    <string name="room_member_override_nick_color">Åsidosätt visningsnamnsfärg</string>
+    <string name="login_splash_already_have_account">Jag har redan ett konto</string>
+    <string name="ftue_auth_carousel_3_title">Kontakta vem som helst.</string>
+    <string name="ftue_auth_carousel_2_title">Du har kontroll.</string>
+    <string name="ftue_auth_carousel_1_title">Äg dina konversationer.</string>
+    <string name="room_error_access_unauthorized">Du får inte gå med i det här rummet</string>
 </resources>

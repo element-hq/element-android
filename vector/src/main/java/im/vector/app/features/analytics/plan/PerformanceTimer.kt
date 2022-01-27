@@ -25,22 +25,23 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
  * Triggered after timing an operation in the app.
  */
 data class PerformanceTimer(
-    /**
-     * Client defined, can be used for debugging.
-     */
-    val context: String? = null,
-    /**
-     * Client defined, an optional value to indicate how many items were handled during the operation.
-     */
-    val itemCount: Int? = null,
-    /**
-     * The timer that is being reported.
-     */
-    val name: Name,
-    /**
-     * The time reported by the timer in milliseconds.
-     */
-    val timeMs: Int,
+        /**
+         * Client defined, can be used for debugging.
+         */
+        val context: String? = null,
+        /**
+         * Client defined, an optional value to indicate how many items were
+         * handled during the operation.
+         */
+        val itemCount: Int? = null,
+        /**
+         * The timer that is being reported.
+         */
+        val name: Name,
+        /**
+         * The time reported by the timer in milliseconds.
+         */
+        val timeMs: Int,
 ) : VectorAnalyticsEvent {
 
     enum class Name {
@@ -55,7 +56,8 @@ data class PerformanceTimer(
         InitialSyncRequest,
 
         /**
-         * The time taken to display an event in the timeline that was opened from a notification.
+         * The time taken to display an event in the timeline that was opened
+         * from a notification.
          */
         NotificationsOpenEvent,
 
@@ -65,7 +67,8 @@ data class PerformanceTimer(
         StartupIncrementalSync,
 
         /**
-         * The duration of an initial /sync request during startup (if the store has been wiped).
+         * The duration of an initial /sync request during startup (if the store
+         * has been wiped).
          */
         StartupInitialSync,
 
@@ -80,7 +83,8 @@ data class PerformanceTimer(
         StartupStorePreload,
 
         /**
-         * The time to load all data from the store (including StartupStorePreload time).
+         * The time to load all data from the store (including
+         * StartupStorePreload time).
          */
         StartupStoreReady,
     }

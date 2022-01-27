@@ -16,14 +16,21 @@
 
 package im.vector.app.features.settings
 
+import android.os.Bundle
 import im.vector.app.R
 import im.vector.app.core.preference.VectorPreference
+import im.vector.app.features.analytics.plan.Screen
 import javax.inject.Inject
 
 class VectorSettingsRootFragment @Inject constructor() : VectorSettingsBaseFragment() {
 
     override var titleRes: Int = R.string.title_activity_settings
     override val preferenceXmlRes = R.xml.vector_settings_root
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = Screen.ScreenName.Settings
+    }
 
     override fun bindPref() {
         tintIcons()

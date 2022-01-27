@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="key_color">#FF006700</color>
+    <color name="string_color">#FF040091</color>
+    <color name="bool_color">#FF980000</color>
+    <color name="number_color">#FF1700FF</color>
+    <color name="base_color">#FF000000</color>
+    <color name="secondary_color">#FFAAAAAA</color>
+
+</resources>

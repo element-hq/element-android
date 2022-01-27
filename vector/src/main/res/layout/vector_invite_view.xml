@@ -59,38 +59,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/inviteIdentifierView" />
 
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/actionsFlow"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:constraint_referenced_ids="inviteRejectView,inviteAcceptView"
+        app:flow_horizontalGap="4dp"
+        app:flow_horizontalStyle="packed"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/inviteLabelView" />
+
     <im.vector.app.core.platform.ButtonStateView
         android:id="@+id/inviteAcceptView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
         android:minWidth="120dp"
         app:bsv_button_text="@string/action_accept"
         app:bsv_loaded_image_src="@drawable/ic_tick"
-        app:bsv_use_flat_button="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/inviteRejectView"
-        app:layout_constraintTop_toTopOf="@id/inviteRejectView" />
+        app:bsv_use_flat_button="false" />
 
     <im.vector.app.core.platform.ButtonStateView
         android:id="@+id/inviteRejectView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="4dp"
         android:minWidth="120dp"
         app:bsv_button_text="@string/action_reject"
         app:bsv_loaded_image_src="@drawable/ic_tick"
-        app:bsv_use_flat_button="true"
-        app:layout_constraintEnd_toStartOf="@id/inviteAcceptView"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/inviteLabelView" />
+        app:bsv_use_flat_button="true" />
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="16dp"
-        app:layout_constraintTop_toBottomOf="@id/inviteAcceptView" />
+        app:layout_constraintTop_toBottomOf="@id/actionsFlow" />
 
 </merge>

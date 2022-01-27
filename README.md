@@ -7,7 +7,7 @@
 
 # Element Android
 
-Element Android is an Android Matrix Client provided by [Element](https://element.io/).
+Element Android is an Android Matrix Client provided by [Element](https://element.io/). The app can be run on every Android devices with Android OS Lollipop and more (API 21).
 
 It is a total rewrite of [Riot-Android](https://github.com/vector-im/riot-android) with a new user experience.
 

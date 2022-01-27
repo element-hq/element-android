@@ -38,12 +38,9 @@ class BigImageViewerActivity : VectorBaseActivity<ActivityBigImageViewerBinding>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setSupportActionBar(views.bigImageViewerToolbar)
-        supportActionBar?.apply {
-            title = intent.getStringExtra(EXTRA_TITLE)
-            setHomeButtonEnabled(true)
-            setDisplayHomeAsUpEnabled(true)
-        }
+        setupToolbar(views.bigImageViewerToolbar)
+                .setTitle(intent.getStringExtra(EXTRA_TITLE))
+                .allowBack()
 
         val uri = sessionHolder.getSafeActiveSession()
                 ?.contentUrlResolver()

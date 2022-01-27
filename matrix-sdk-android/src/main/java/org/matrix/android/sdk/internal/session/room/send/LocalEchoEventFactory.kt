@@ -32,6 +32,9 @@ import org.matrix.android.sdk.api.session.room.model.message.AudioInfo
 import org.matrix.android.sdk.api.session.room.model.message.AudioWaveformInfo
 import org.matrix.android.sdk.api.session.room.model.message.FileInfo
 import org.matrix.android.sdk.api.session.room.model.message.ImageInfo
+import org.matrix.android.sdk.api.session.room.model.message.LocationAsset
+import org.matrix.android.sdk.api.session.room.model.message.LocationAssetType
+import org.matrix.android.sdk.api.session.room.model.message.LocationInfo
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
@@ -39,6 +42,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollConte
 import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
@@ -48,6 +52,7 @@ import org.matrix.android.sdk.api.session.room.model.message.PollAnswer
 import org.matrix.android.sdk.api.session.room.model.message.PollCreationInfo
 import org.matrix.android.sdk.api.session.room.model.message.PollQuestion
 import org.matrix.android.sdk.api.session.room.model.message.PollResponse
+import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.model.message.ThumbnailInfo
 import org.matrix.android.sdk.api.session.room.model.message.VideoInfo
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
@@ -61,6 +66,8 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.content.ThumbnailExtractor
 import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
+import java.util.UUID
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -124,6 +131,45 @@ internal class LocalEchoEventFactory @Inject constructor(
                 ))
     }
 
+    private fun createPollContent(question: String,
+                                  options: List<String>,
+                                  pollType: PollType): MessagePollContent {
+        return MessagePollContent(
+                pollCreationInfo = PollCreationInfo(
+                        question = PollQuestion(
+                                question = question
+                        ),
+                        kind = pollType,
+                        answers = options.map { option ->
+                            PollAnswer(
+                                    id = UUID.randomUUID().toString(),
+                                    answer = option
+                            )
+                        }
+                )
+        )
+    }
+
+    fun createPollReplaceEvent(roomId: String,
+                               pollType: PollType,
+                               targetEventId: String,
+                               question: String,
+                               options: List<String>): Event {
+        val newContent = MessagePollContent(
+                relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
+                newContent = createPollContent(question, options, pollType).toContent()
+        )
+        val localId = LocalEcho.createLocalEchoId()
+        return Event(
+                roomId = roomId,
+                originServerTs = dummyOriginServerTs(),
+                senderId = userId,
+                eventId = localId,
+                type = EventType.POLL_START,
+                content = newContent.toContent()
+        )
+    }
+
     fun createPollReplyEvent(roomId: String,
                              pollEventId: String,
                              answerId: String): Event {
@@ -149,21 +195,10 @@ internal class LocalEchoEventFactory @Inject constructor(
     }
 
     fun createPollEvent(roomId: String,
+                        pollType: PollType,
                         question: String,
                         options: List<String>): Event {
-        val content = MessagePollContent(
-                pollCreationInfo = PollCreationInfo(
-                        question = PollQuestion(
-                                question = question
-                        ),
-                        answers = options.mapIndexed { index, option ->
-                            PollAnswer(
-                                    id = "$index-$option",
-                                    answer = option
-                            )
-                        }
-                )
-        )
+        val content = createPollContent(question, options, pollType)
         val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
@@ -192,6 +227,27 @@ internal class LocalEchoEventFactory @Inject constructor(
                 type = EventType.POLL_END,
                 content = content.toContent(),
                 unsignedData = UnsignedData(age = null, transactionId = localId))
+    }
+
+    fun createLocationEvent(roomId: String,
+                            latitude: Double,
+                            longitude: Double,
+                            uncertainty: Double?): Event {
+        val geoUri = buildGeoUri(latitude, longitude, uncertainty)
+        val content = MessageLocationContent(
+                geoUri = geoUri,
+                body = geoUri,
+                locationInfo = LocationInfo(
+                        geoUri = geoUri,
+                        description = geoUri
+                ),
+                locationAsset = LocationAsset(
+                        type = LocationAssetType.SELF
+                ),
+                ts = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()),
+                text = geoUri
+        )
+        return createMessageEvent(roomId, content)
     }
 
     fun createReplaceTextOfReply(roomId: String,
@@ -477,6 +533,23 @@ internal class LocalEchoEventFactory @Inject constructor(
             MessageType.MSGTYPE_VIDEO      -> return TextContent("sent a video.")
             MessageType.MSGTYPE_POLL_START -> return TextContent((content as? MessagePollContent)?.pollCreationInfo?.question?.question ?: "")
             else                           -> return TextContent(content?.body ?: "")
+        }
+    }
+
+    /**
+     * Returns RFC5870 formatted geo uri 'geo:latitude,longitude;uncertainty' like 'geo:40.05,29.24;30'
+     * Uncertainty of the location is in meters and not required.
+     */
+    private fun buildGeoUri(latitude: Double, longitude: Double, uncertainty: Double?): String {
+        return buildString {
+            append("geo:")
+            append(latitude)
+            append(",")
+            append(longitude)
+            uncertainty?.let {
+                append(";")
+                append(it)
+            }
         }
     }
 

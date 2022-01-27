@@ -22,6 +22,7 @@ import android.widget.CheckedTextView
 import androidx.core.view.children
 import androidx.preference.Preference
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.dialogs.PhotoOrVideoDialog
 import im.vector.app.core.extensions.restart
@@ -149,6 +150,8 @@ class VectorSettingsPreferencesFragment @Inject constructor(
             })
             true
         }
+
+        findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_PREF_ENABLE_LOCATION_SHARING)?.isVisible = BuildConfig.enableLocationSharing
     }
 
     private fun updateTakePhotoOrVideoPreferenceSummary() {

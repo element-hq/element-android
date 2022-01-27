@@ -73,6 +73,16 @@
                 app:tint="?colorPrimary" />
 
             <ImageButton
+                android:id="@+id/attachmentLocationButton"
+                android:layout_width="@dimen/layout_touch_size"
+                android:layout_height="@dimen/layout_touch_size"
+                android:layout_marginStart="2dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/attachment_type_location"
+                android:src="@drawable/ic_attachment_location"
+                app:tint="?colorPrimary" />
+
+            <ImageButton
                 android:id="@+id/attachmentCameraButton"
                 android:layout_width="@dimen/layout_touch_size"
                 android:layout_height="@dimen/layout_touch_size"

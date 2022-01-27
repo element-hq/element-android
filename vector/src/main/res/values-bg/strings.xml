@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s се присъедини в стаята</string>
     <string name="notice_room_leave">%1$s напусна стаята</string>
     <string name="notice_room_reject">%1$s отхвърли поканата</string>
-    <string name="notice_room_kick">%1$s изгони %2$s</string>
+    <string name="notice_room_remove">%1$s изгони %2$s</string>
     <string name="notice_room_unban">%1$s отблокира %2$s</string>
     <string name="notice_room_ban">%1$s блокира %2$s</string>
     <string name="notice_room_withdraw">%1$s оттегли поканата си за %2$s</string>
@@ -87,7 +87,7 @@
     <string name="notice_room_join_with_reason">%1$s се присъедини в стаята. Причина: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s напусна стаята. Причина: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s отхвърли поканата. Причина: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s изгони %2$s. Причина: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s изгони %2$s. Причина: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s блокира %2$s. Причина: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s блокира %2$s. Причина: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s изпрати покана до %2$s да се присъедини в стаята. Причина: %3$s</string>
@@ -118,7 +118,7 @@
     <string name="notice_room_join_by_you">Присъединихте се в стаята</string>
     <string name="notice_room_leave_by_you">Напуснахте стаята</string>
     <string name="notice_room_reject_by_you">Отхвърлихте поканата</string>
-    <string name="notice_room_kick_by_you">Изгонихте %1$s</string>
+    <string name="notice_room_remove_by_you">Изгонихте %1$s</string>
     <string name="notice_room_unban_by_you">Отблокирахте %1$s</string>
     <string name="notice_room_ban_by_you">Блокирахте %1$s</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">Включихте шифроване от-край-до-край (непознат алгоритъм: %1$s).</string>
@@ -146,7 +146,7 @@
     <string name="notice_room_third_party_invite_with_reason_by_you">Изпратихте покана към %1$s за присъединяване в стаята. Причина: %2$s</string>
     <string name="notice_room_ban_with_reason_by_you">Блокирахте %1$s. Причина: %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">Отблокирахте %1$s. Причина: %2$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Изгонихте %1$s. Причина: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Изгонихте %1$s. Причина: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">Отхвърлихте поканата. Причина: %1$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Напуснахте. Причина: %1$s</string>
     <string name="notice_direct_room_leave_with_reason">%1$s напусна. Причина: %2$s</string>
@@ -798,12 +798,10 @@
     <string name="room_creation_title">Нов чат</string>
     <string name="room_creation_add_member">Добави член</string>
     <string name="room_participants_leave_prompt_title">Напускане на стая</string>
-    <string name="room_participants_remove_prompt_msg">Сигурни ли сте, че искате да премахнете %s от този чат?</string>
     <string name="room_participants_create">Създай</string>
     <string name="room_participants_header_call">ПОВИКВАНЕ</string>
     <string name="room_participants_action_invite">Покани</string>
     <string name="room_participants_action_leave">Напусни тази стая</string>
-    <string name="room_participants_action_remove">Премахни от тази стая</string>
     <string name="people_search_invite_by_id"><u>Покани по ID</u></string>
     <string name="people_search_invite_by_id_dialog_title">Покани потребител по ID</string>
     <string name="people_search_invite_by_id_dialog_description">Моля, въведете един или повече имейл адреси или Matrix ID</string>
@@ -875,7 +873,7 @@
     <string name="filter_group_members">Филтриране на членовете</string>
     <string name="filter_group_rooms">Филтриране на стаите</string>
     <string name="group_no_long_description">Администраторът на общността не е предоставил дълго описание за тази общност.</string>
-    <string name="has_been_kicked">Бяхте изгонен от %1$s от %2$s</string>
+    <string name="has_been_removed">Бяхте изгонен от %1$s от %2$s</string>
     <string name="has_been_banned">Бяхте блокиран от %1$s от %2$s</string>
     <string name="reason_colon">Причина: %1$s</string>
     <string name="receipt_avatar">Профилна снимка</string>
@@ -947,7 +945,7 @@
     <string name="command_description_join_room">Присъединява се към стая с даден псевдоним</string>
     <string name="command_description_part_room">Напуска стаята</string>
     <string name="command_description_topic">Слага тема на стаята</string>
-    <string name="command_description_kick_user">Изгонва потребител с даден идентификатор</string>
+    <string name="command_description_remove_user">Изгонва потребител с даден идентификатор</string>
     <string name="command_description_nick">Променя името Ви</string>
     <string name="command_description_markdown">Включва/изключва markdown</string>
     <string name="command_description_clear_scalar_token">Поправя управлението на Matrix приспособленията</string>
@@ -1025,7 +1023,7 @@
     <string name="template_settings_call_ringtone_use_app_ringtone">Използвай мелодията по подразбиране на ${app_name} за входящи повиквания</string>
     <string name="settings_call_ringtone_title">Мелодия за входящо повикване</string>
     <string name="settings_call_ringtone_dialog_title">Избор на мелодия за обаждания:</string>
-    <string name="room_participants_action_kick">Изгони</string>
+    <string name="room_participants_action_remove">Изгони</string>
     <string name="reason_hint">Причина</string>
     <string name="settings_inline_url_preview_summary">Прегледи на връзки директно в самия чат, когато функцията се поддържа от сървъра.</string>
     <string name="settings_send_typing_notifs">Изпращане на информация, че пиша</string>
@@ -1080,11 +1078,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM токенът беше успешно регистриран със сървъра.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Неуспешна регистрация на FCM токена със сървъра:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Услуга за известия</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Услугата за известия работи.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Услугата за известия не работи.
-\nОпитайте да рестартирате приложението.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Стартирай услугата</string>
     <string name="settings_troubleshoot_test_service_restart_title">Автоматично рестартиране на услугата за известия</string>
     <string name="settings_troubleshoot_test_service_restart_success">Услугата беше спряна и рестартирана автоматично.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Услугата не успя да се рестартира</string>
@@ -1766,8 +1759,8 @@
     <string name="settings_show_redacted_summary">Показвай индикатор на мястото на премахнатите съобщения</string>
     <string name="action_play">Възпроизведи</string>
     <string name="action_pause">Пауза</string>
-    <string name="room_participants_kick_reason">Причина за изгонване</string>
-    <string name="room_participants_kick_title">Изгонване на потребител</string>
+    <string name="room_participants_remove_reason">Причина за изгонване</string>
+    <string name="room_participants_remove_title">Изгонване на потребител</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Сигурни ли сте, че искате да откажете изпратената към този потребител покана\?</string>
     <string name="room_participants_action_cancel_invite_title">Отказва на покана</string>
     <string name="room_participants_action_unignore_prompt_msg">Премахване на игнорирането на потребителя ще покаже отново всички техни съобщения.</string>
@@ -2023,7 +2016,7 @@
     <string name="room_participants_unban_title">Премахване на блокиране</string>
     <string name="room_participants_ban_reason">Причина за блокирането</string>
     <string name="room_participants_ban_title">Блокиране на потребител</string>
-    <string name="room_participants_kick_prompt_msg">Изгонването на потребителя ще ги премахне от тази стая.
+    <string name="room_participants_remove_prompt_msg">Изгонването на потребителя ще ги премахне от тази стая.
 \n
 \nАко искате да не могат да влязат пак, блокирайте ги вместо това.</string>
     <string name="event_redacted_by_admin_reason_with_reason">Събитието бе модерирано от администратор на стаята, причина: %1$s</string>

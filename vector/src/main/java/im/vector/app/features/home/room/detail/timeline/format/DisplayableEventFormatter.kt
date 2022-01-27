@@ -89,6 +89,9 @@ class DisplayableEventFormatter @Inject constructor(
                         MessageType.MSGTYPE_FILE                 -> {
                             simpleFormat(senderName, stringProvider.getString(R.string.sent_a_file), appendAuthor)
                         }
+                        MessageType.MSGTYPE_LOCATION             -> {
+                            simpleFormat(senderName, stringProvider.getString(R.string.sent_location), appendAuthor)
+                        }
                         else                                     -> {
                             simpleFormat(senderName, messageContent.body, appendAuthor)
                         }

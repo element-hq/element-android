@@ -64,11 +64,8 @@ class CreateDirectRoomByQrCodeFragment @Inject constructor() : VectorBaseFragmen
         super.onViewCreated(view, savedInstanceState)
 
         setupToolbar(views.qrScannerToolbar)
-
-        views.qrScannerClose.debouncedClicks {
-            requireActivity().onBackPressed()
-        }
-        views.qrScannerTitle.text = getString(R.string.add_by_qr_code)
+                .setTitle(R.string.add_by_qr_code)
+                .allowBack(useCross = true)
     }
 
     override fun onResume() {

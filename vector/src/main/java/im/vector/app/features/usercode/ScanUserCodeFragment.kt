@@ -55,16 +55,16 @@ class ScanUserCodeFragment @Inject constructor() :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setupToolbar(views.qrScannerToolbar)
+                .allowBack(useCross = true)
+
         views.userCodeMyCodeButton.debouncedClicks {
             sharedViewModel.handle(UserCodeActions.SwitchMode(UserCodeState.Mode.SHOW))
         }
 
         views.userCodeOpenGalleryButton.debouncedClicks {
             MultiPicker.get(MultiPicker.IMAGE).single().startWith(pickImageActivityResultLauncher)
-        }
-
-        views.userCodeClose.debouncedClicks {
-            requireActivity().onBackPressed()
         }
     }
 

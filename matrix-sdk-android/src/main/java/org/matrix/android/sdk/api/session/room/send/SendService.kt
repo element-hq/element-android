@@ -20,6 +20,7 @@ import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
+import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
 
@@ -91,11 +92,12 @@ interface SendService {
 
     /**
      * Send a poll to the room.
+     * @param pollType indicates open or closed polls
      * @param question the question
      * @param options list of options
      * @return a [Cancelable]
      */
-    fun sendPoll(question: String, options: List<String>): Cancelable
+    fun sendPoll(pollType: PollType, question: String, options: List<String>): Cancelable
 
     /**
      * Method to send a poll response.
@@ -130,6 +132,14 @@ interface SendService {
      * @param localEcho the unsent local echo
      */
     fun resendMediaMessage(localEcho: TimelineEvent): Cancelable
+
+    /**
+     * Send a location event to the room
+     * @param latitude required latitude of the location
+     * @param longitude required longitude of the location
+     * @param uncertainty Accuracy of the location in meters
+     */
+    fun sendLocation(latitude: Double, longitude: Double, uncertainty: Double?): Cancelable
 
     /**
      * Remove this failed message from the timeline

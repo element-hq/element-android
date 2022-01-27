@@ -108,4 +108,6 @@
     <string name="title_activity_choose_sticker">Stiker joʻnatish</string>
     <string name="title_activity_home">Xabarlar</string>
     <string name="title_activity_room">Xona</string>
+    <string name="summary_user_sent_image">%1$s rasm yubordi.</string>
+    <string name="summary_message">%1$s: %2$s</string>
 </resources>

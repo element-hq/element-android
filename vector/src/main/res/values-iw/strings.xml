@@ -471,11 +471,6 @@
     <string name="settings_troubleshoot_test_service_restart_failed">השירות נכשל מלעלות מחדש</string>
     <string name="settings_troubleshoot_test_service_restart_success">השירות נסגר והופעל מחדש אוטומטית.</string>
     <string name="settings_troubleshoot_test_service_restart_title">הפעלה מחדש אוטומטית לשירות ההתראות</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">החל שירות</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">שירות ההתראות אינו פועל.
-\nנסה להפעיל מחדש את היישום.</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">שירות ההתראות פועל.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">שירות התראות</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">ההודעה נלחצה!</string>
     <string name="settings_troubleshoot_test_notification_notice">אנא לחץ על ההודעה. אם אינך רואה את ההודעה, אנא בדוק את הגדרות המערכת.</string>
     <string name="settings_troubleshoot_test_notification_title">תצוגת התראות</string>
@@ -574,11 +569,11 @@
     <string name="room_participants_unban_title">הסר נידוי ממשתמש</string>
     <string name="room_participants_ban_reason">סיבות לנידוי</string>
     <string name="room_participants_ban_title">נדה משתמש</string>
-    <string name="room_participants_kick_prompt_msg">משתמש מעיף יסיר אותם מחדר זה.
+    <string name="room_participants_remove_prompt_msg">משתמש מעיף יסיר אותם מחדר זה.
 \n
 \nכדי למנוע מהם להצטרף שוב, עליך לאסור אותם במקום זאת.</string>
-    <string name="room_participants_kick_reason">סיבות להעפה</string>
-    <string name="room_participants_kick_title">העף משתמש</string>
+    <string name="room_participants_remove_reason">סיבות להעפה</string>
+    <string name="room_participants_remove_title">העף משתמש</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">האם אתה בטוח שברצונך לבטל את ההזמנה עבור משתמש זה\?</string>
     <string name="room_participants_action_cancel_invite_title">בטל הזמנה</string>
     <string name="room_participants_action_unignore">הסרת התעלמות</string>
@@ -600,10 +595,9 @@
     <string name="room_participants_action_set_admin">הפוך למנהל</string>
     <string name="room_participants_action_set_moderator">הפוך למנחה</string>
     <string name="room_participants_action_set_default_power_level">אפס למשתמש רגיל</string>
-    <string name="room_participants_action_kick">העף</string>
+    <string name="room_participants_action_remove">העף</string>
     <string name="room_participants_action_unban">הסרת התעלמות</string>
     <string name="room_participants_action_ban">התעלם</string>
-    <string name="room_participants_action_remove">הסר מחדר זה</string>
     <string name="room_participants_action_leave">עזוב חדר זה</string>
     <string name="room_participants_action_cancel_invite">בטל הזמנה</string>
     <string name="room_participants_action_invite">הזמן</string>
@@ -688,7 +682,6 @@
     <string name="tab_title_search_files">קבצים</string>
     <string name="tab_title_search_people">אנשים</string>
     <string name="tab_title_search_messages">הודעות</string>
-    <string name="room_participants_remove_prompt_msg">האם אתה בטוח שברצונך להסיר את%s מהצ\'אט הזה\?</string>
     <string name="room_participants_leave_prompt_msg">האם ברצונך לעזוב את החדר\?</string>
     <string name="room_participants_leave_prompt_title">עזוב חדר</string>
     <plurals name="format_time_d">
@@ -1115,7 +1108,7 @@
     <string name="rejoin">לָשׁוּב וֵלְהִצְטַרֵף</string>
     <string name="reason_colon">סיבה: %1$s</string>
     <string name="has_been_banned">חסום על ידי %2$s מ- %1$s</string>
-    <string name="has_been_kicked">אתה נבעט מ- %1$s על ידי %2$s</string>
+    <string name="has_been_removed">אתה נבעט מ- %1$s על ידי %2$s</string>
     <string name="group_no_long_description">מנהל הקהילה לא סיפק תיאור ארוך לקהילה זו.</string>
     <plurals name="group_rooms">
         <item quantity="one">חדר %d</item>
@@ -1153,7 +1146,7 @@
     <string name="command_description_clear_scalar_token">כדי לתקן את ניהול אפליקציות מטריקס</string>
     <string name="command_description_markdown">הפעלה / כיבוי של סימון MARKDOWN</string>
     <string name="command_description_nick">משנה את כינוי התצוגה שלך</string>
-    <string name="command_description_kick_user">בועט משתמש עם מזהה נתון</string>
+    <string name="command_description_remove_user">בועט משתמש עם מזהה נתון</string>
     <string name="command_description_topic">הגדר את נושא החדר</string>
     <string name="command_description_part_room">עזוב חדר</string>
     <string name="command_description_join_room">מצטרף לחדר עם כינוי נתון</string>
@@ -1838,7 +1831,7 @@
     <string name="room_permissions_notify_everyone">הודע לכולם</string>
     <string name="room_permissions_remove_messages_sent_by_others">הסר הודעות שנשלחו על ידי אחרים</string>
     <string name="room_permissions_ban_users">נדה משתמשים</string>
-    <string name="room_permissions_kick_users">בעט החוצה משתמשים</string>
+    <string name="room_permissions_remove_users">בעט החוצה משתמשים</string>
     <string name="room_permissions_change_settings">שנה הגדרות</string>
     <string name="room_permissions_invite_users">הזמן משתמשם</string>
     <string name="room_permissions_send_messages">שלח הודעות</string>
@@ -2389,8 +2382,8 @@
     <string name="notice_room_ban">%1$s חסם את%2$s</string>
     <string name="notice_room_unban_by_you">חסמת את %1$s</string>
     <string name="notice_room_unban">%1$s הסיר מחסימה את %2$s</string>
-    <string name="notice_room_kick_by_you">הרחקת את %1$s</string>
-    <string name="notice_room_kick">%1$s הרחיק את%2$s</string>
+    <string name="notice_room_remove_by_you">הרחקת את %1$s</string>
+    <string name="notice_room_remove">%1$s הרחיק את%2$s</string>
     <string name="notice_room_reject_by_you">דחית את ההזמנה</string>
     <string name="notice_room_reject">%1$s דחה את ההזמנה</string>
     <string name="notice_direct_room_leave_by_you">עזבת את החדר</string>

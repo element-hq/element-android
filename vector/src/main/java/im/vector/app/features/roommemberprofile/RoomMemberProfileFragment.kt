@@ -47,6 +47,7 @@ import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.DialogShareQrCodeBinding
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomMemberProfileHeaderBinding
+import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
@@ -88,9 +89,15 @@ class RoomMemberProfileFragment @Inject constructor(
 
     override fun getMenuRes() = R.menu.vector_room_member_profile
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = Screen.ScreenName.User
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupToolbar(views.matrixProfileToolbar)
+                .allowBack()
         val headerView = views.matrixProfileHeaderView.let {
             it.layoutResource = R.layout.view_stub_room_member_profile_header
             it.inflate()
@@ -356,11 +363,11 @@ class RoomMemberProfileFragment @Inject constructor(
                 .show(
                         activity = requireActivity(),
                         askForReason = true,
-                        confirmationRes = if (isSpace) R.string.space_participants_kick_prompt_msg
-                        else R.string.room_participants_kick_prompt_msg,
-                        positiveRes = R.string.room_participants_action_kick,
-                        reasonHintRes = R.string.room_participants_kick_reason,
-                        titleRes = R.string.room_participants_kick_title
+                        confirmationRes = if (isSpace) R.string.space_participants_remove_prompt_msg
+                        else R.string.room_participants_remove_prompt_msg,
+                        positiveRes = R.string.room_participants_action_remove,
+                        reasonHintRes = R.string.room_participants_remove_reason,
+                        titleRes = R.string.room_participants_remove_title
                 ) { reason ->
                     viewModel.handle(RoomMemberProfileAction.KickUser(reason))
                 }

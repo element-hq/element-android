@@ -104,12 +104,9 @@ class SpaceDirectoryFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vectorBaseActivity.setSupportActionBar(views.toolbar)
+        setupToolbar(views.toolbar)
+                .allowBack()
 
-        vectorBaseActivity.supportActionBar?.let {
-            it.setDisplayShowHomeEnabled(true)
-            it.setDisplayHomeAsUpEnabled(true)
-        }
         epoxyController.listener = this
         views.spaceDirectoryList.configureWith(epoxyController)
         epoxyVisibilityTracker.attach(views.spaceDirectoryList)
@@ -166,13 +163,11 @@ class SpaceDirectoryFragment @Inject constructor(
 
         if (currentParentId == null) {
             // it's the root
-            val title = getString(R.string.space_explore_activity_title)
-            views.toolbar.title = title
+            toolbar?.setTitle(R.string.space_explore_activity_title)
         } else {
-            val title = state.currentRootSummary?.name
+            toolbar?.title = state.currentRootSummary?.name
                     ?: state.currentRootSummary?.canonicalAlias
                     ?: getString(R.string.space_explore_activity_title)
-            views.toolbar.title = title
         }
 
         spaceCardRenderer.render(state.currentRootSummary, emptyList(), this, views.spaceCard)

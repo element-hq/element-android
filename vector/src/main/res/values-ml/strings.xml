@@ -279,7 +279,7 @@
     <string name="room_details_people">ആളുകൾ</string>
     <string name="room_permissions_title">അനുമതികൾ</string>
     <string name="reason_hint">കാരണം</string>
-    <string name="room_participants_action_kick">പുറത്താക്കൂ</string>
+    <string name="room_participants_action_remove">പുറത്താക്കൂ</string>
     <string name="room_participants_action_ban">നിരോധിക്കൂ</string>
     <string name="action_reset">പുനഃസജ്ജമാക്കൂ</string>
     <string name="none">ഒന്നുമില്ല</string>
@@ -387,7 +387,7 @@
     <string name="room_permissions_change_room_name">മുറിയുടെ പേര് മാറ്റുക</string>
     <string name="room_permissions_notify_everyone">എല്ലാവരേയും അറിയിക്കുക</string>
     <string name="room_permissions_ban_users">ഉപയോക്താക്കളെ നിരോധിക്കുക</string>
-    <string name="room_permissions_kick_users">ഉപയോക്താക്കളെ പുറത്താക്കുക</string>
+    <string name="room_permissions_remove_users">ഉപയോക്താക്കളെ പുറത്താക്കുക</string>
     <string name="room_permissions_change_settings">ക്രമീകരണങ്ങൾ മാറ്റുക</string>
     <string name="room_permissions_invite_users">ഉപയോക്താക്കളെ ക്ഷണിക്കുക</string>
     <string name="room_permissions_send_messages">സന്ദേശങ്ങൾ അയയ്ക്കൂ</string>
@@ -397,8 +397,8 @@
     <string name="room_message_placeholder_reply_to_not_encrypted">ഒരു മറുപടി അയയ്‌ക്കുക(എൻ‌ക്രിപ്റ്റ് ചെയ്യാത്ത)…</string>
     <string name="room_participants_ban_reason">നിരോനിരോധിക്കാനുള്ള കാരണം</string>
     <string name="room_participants_ban_title">ഉപയോക്താവിനെ നിരോധിക്കുക</string>
-    <string name="room_participants_kick_reason">പുറത്താക്കാനുള്ള കാരണം</string>
-    <string name="room_participants_kick_title">ഉപയോക്താവിനെ പുറത്താക്കുക</string>
+    <string name="room_participants_remove_reason">പുറത്താക്കാനുള്ള കാരണം</string>
+    <string name="room_participants_remove_title">ഉപയോക്താവിനെ പുറത്താക്കുക</string>
     <string name="room_participants_action_ignore">അവഗണിക്കൂ</string>
     <string name="room_participants_action_ignore_title">ഉപയോക്താവിനെ അവഗണിക്കുക</string>
     <string name="room_participants_power_level_demote">തരംതാഴ്ത്തുക</string>
@@ -411,8 +411,8 @@
     <string name="summary_you_sent_image">നിങ്ങൾ ഒരു ചിത്രം അയച്ചു.</string>
     <string name="summary_user_sent_image">%1$s ഒരു ചിത്രം അയച്ചു.</string>
     <string name="summary_message">%1$s: %2$s</string>
-    <string name="notice_room_kick_by_you">നിങ്ങൾ %1$s-നെ(യെ) പുറത്താക്കി</string>
-    <string name="notice_room_kick">%1$s %2$s-നെ(യെ) പുറത്താക്കി</string>
+    <string name="notice_room_remove_by_you">നിങ്ങൾ %1$s-നെ(യെ) പുറത്താക്കി</string>
+    <string name="notice_room_remove">%1$s %2$s-നെ(യെ) പുറത്താക്കി</string>
     <string name="notice_direct_room_join_by_you">നിങ്ങൾ ചേർന്നു</string>
     <string name="notice_direct_room_join">%1$s ചേർന്നു</string>
     <string name="notice_room_join_by_you">നിങ്ങൾ മുറിയിൽ ചേർന്നു</string>
@@ -540,8 +540,8 @@
     <string name="notice_room_ban_with_reason">%1$s %2$s ന്റെ വിലക്ക് നീക്കി. കാരണം: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">നിങ്ങൾ %1$sന്റെ വിലക്ക് നീക്കി. കാരണം: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s %2$sന്റെ വിലക്ക് നീക്കി. കാരണം: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">നിങ്ങൾ %1$sനെ പുറത്താക്കി. കാരണം:%2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s %2$sനെ പുറത്താക്കി. കാരണം: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">നിങ്ങൾ %1$sനെ പുറത്താക്കി. കാരണം:%2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s %2$sനെ പുറത്താക്കി. കാരണം: %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">നിങ്ങൾ ക്ഷണം നിരസിച്ചു. കാരണം: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s ക്ഷണം നിരസിച്ചു. കാരണം: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">നിങ്ങൾ ഉപേക്ഷിച്ചു. കാരണം: %1$s</string>
@@ -864,7 +864,6 @@
     <string name="settings_troubleshoot_test_battery_quickfix">ഒപ്റ്റിമൈസേഷൻ അവഗണിക്കുക</string>
     <string name="settings_troubleshoot_test_battery_title">ബാറ്ററി ഒപ്റ്റിമൈസേഷൻ</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">നിയന്ത്രണങ്ങൾ പ്രവർത്തനരഹിതമാക്കുക</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">സേവനം ആരംഭിക്കുക</string>
     <string name="settings_troubleshoot_test_notification_title">അറിയിപ്പ് പ്രദർശനം</string>
     <string name="settings_troubleshoot_test_token_registration_title">ടോക്കൺ രജിസ്ട്രേഷൻ</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">അക്കൗണ്ട് ചേർക്കുക</string>

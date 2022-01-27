@@ -22,7 +22,7 @@ import com.squareup.moshi.JsonClass
 @JsonClass(generateAdapter = true)
 data class PollCreationInfo(
     @Json(name = "question") val question: PollQuestion? = null,
-    @Json(name = "kind") val kind: String? = "org.matrix.msc3381.poll.disclosed",
+    @Json(name = "kind") val kind: PollType? = PollType.DISCLOSED,
     @Json(name = "max_selections") val maxSelections: Int = 1,
     @Json(name = "answers") val answers: List<PollAnswer>? = null
 )

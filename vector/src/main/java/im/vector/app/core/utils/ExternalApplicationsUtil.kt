@@ -183,6 +183,26 @@ fun openMedia(activity: Activity, savedMediaPath: String, mimeType: String) {
     activity.safeStartActivity(intent)
 }
 
+/**
+ * Open external location
+ * @param activity the activity
+ * @param latitude latitude of the location
+ * @param longitude longitude of the location
+ */
+fun openLocation(activity: Activity, latitude: Double, longitude: Double) {
+    val locationUri = buildString {
+        append("geo:")
+        append(latitude)
+        append(",")
+        append(longitude)
+        append("?q=") // This is required to drop a pin to the location
+        append(latitude)
+        append(",")
+        append(longitude)
+    }
+    openUri(activity, locationUri)
+}
+
 fun shareMedia(context: Context, file: File, mediaMimeType: String?) {
     val mediaUri = try {
         FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", file)
