@@ -446,7 +446,8 @@ dependencies {
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
 
     // Chat effects
-    implementation 'nl.dionsegijn:konfetti:1.3.2'
+    implementation 'nl.dionsegijn:konfetti-xml:2.0.1'
+
     implementation 'com.github.jetradarmobile:android-snowfall:1.2.1'
     // DI
     implementation libs.dagger.hilt

@@ -20,9 +20,9 @@ import android.content.Context
 import androidx.annotation.ColorInt
 import androidx.core.content.ContextCompat
 import im.vector.app.R
-import nl.dionsegijn.konfetti.KonfettiView
-import nl.dionsegijn.konfetti.models.Shape
-import nl.dionsegijn.konfetti.models.Size
+import nl.dionsegijn.konfetti.core.Party
+import nl.dionsegijn.konfetti.core.emitter.Emitter
+import nl.dionsegijn.konfetti.xml.KonfettiView
 
 fun KonfettiView.play() {
     val confettiColors = listOf(
@@ -35,6 +35,7 @@ fun KonfettiView.play() {
             R.color.palette_prune,
             R.color.palette_kiwi
     )
+    /*
     build()
             .addColors(confettiColors.toColorInt(context))
             .setDirection(0.0, 359.0)
@@ -45,6 +46,23 @@ fun KonfettiView.play() {
             .addSizes(Size(12))
             .setPosition(-50f, width + 50f, -50f, -50f)
             .streamFor(150, 3000L)
+     */
+
+    val party = Party(
+            colors = confettiColors.toColorInt(context),
+            /*
+            // Keep other default setting for now.
+            timeToLive = 2000L,
+            fadeOutEnabled = true,
+            speed = 2f,
+            maxSpeed = 5f,
+            damping = 0.9f,
+            spread = 360,
+            position = Position.Relative(0.5, 0.3),
+             */
+            emitter = Emitter(duration = 100).max(100)
+    )
+    start(party)
 }
 
 @ColorInt
