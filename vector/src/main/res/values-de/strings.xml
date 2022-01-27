@@ -3082,4 +3082,13 @@
     <string name="ftue_auth_carousel_body_control">Wähle wo deine Gespräche liegen, für Kontrolle und Unabhängigkeit. Verbunden mit Matrix.</string>
     <string name="ftue_auth_carousel_body_secure">Sichere und unabhängige Kommunikation, die für die gleiche Vertraulichkeit sorgt, wie ein Gespräch von Angesicht zu Angesicht in deinem eigenen Zuhause.</string>
     <string name="attachment_type_location">Standort</string>
+    <string name="a11y_trust_level_misconfigured">Fehlerhaft konfiguriertes Vertrauenslevel</string>
+    <string name="encryption_misconfigured">Die Verschlüsselung ist fehlerhaft konfiguriert</string>
+    <string name="contact_admin_to_restore_encryption">Bitte kontaktiere einen Admin, um die Verschlüsselung zurückzusetzen.</string>
+    <string name="encryption_has_been_misconfigured">Die Verschlüsselung wurde fehlerhaft konfiguriert.</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">Die Verschlüsselung wurde fehlerhaft konfiguriert und du kannst keine Nachrichten senden. Klicke, um die Einstellungen zu öffnen.</string>
+    <string name="room_unsupported_e2e_algorithm">Die Verschlüsselung wurde fehlerhaft konfiguriert und du kannst keine Nachrichten senden. Bitte kontaktiere einen Admin, um die Verschlüsselung wiederherzustellen.</string>
+    <string name="labs_render_locations_in_timeline">Geteilte Standorte anzeigen</string>
+    <string name="settings_enable_location_sharing_summary">Sobald aktiviert, kannst du deinen Standort in jeden Raum senden</string>
+    <string name="sent_location">Hat den Standort geteilt</string>
 </resources>
