@@ -47,6 +47,11 @@ Other changes
  - Exclude dependabot upgrade for @github-script@v3 ([#4988](https://github.com/vector-im/element-android/issues/4988))
  - Small iteration on command parser and unit test it. ([#4998](https://github.com/vector-im/element-android/issues/4998))
 
+SDK API changes ⚠️
+------------------
+ - `StateService.sendStateEvent()` now takes a non-nullable String for the parameter `stateKey`. If null was used, just now use an empty string. ([#4895](https://github.com/vector-im/element-android/issues/4895))
+ - 429 are not automatically retried anymore in case of too long retry delay ([#4995](https://github.com/vector-im/element-android/issues/4995))
+
 
 Changes in Element v1.3.15 (2022-01-18)
 =======================================
