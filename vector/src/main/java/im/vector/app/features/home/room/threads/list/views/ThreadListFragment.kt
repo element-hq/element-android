@@ -87,7 +87,7 @@ class ThreadListFragment @Inject constructor(
     }
 
     private fun initToolbar() {
-        setupToolbar(views.threadListToolbar)
+        setupToolbar(views.threadListToolbar).allowBack()
         renderToolbar()
     }
 

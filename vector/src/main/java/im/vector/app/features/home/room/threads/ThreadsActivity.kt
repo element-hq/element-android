@@ -25,7 +25,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.replaceFragment
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityThreadsBinding
 import im.vector.app.features.home.AvatarRenderer
@@ -38,7 +37,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>(), ToolbarConfigurable {
+class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>() {
 
     @Inject
     lateinit var avatarRenderer: AvatarRenderer
@@ -118,10 +117,6 @@ class ThreadsActivity : VectorBaseActivity<ActivityThreadsBinding>(), ToolbarCon
                 ),
                 option = commonOption
         )
-    }
-
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
     }
 
     /**

@@ -614,7 +614,7 @@ class TimelineFragment @Inject constructor(
         navigator
                 .openLocationSharing(
                         context = requireContext(),
-                        roomId = roomDetailArgs.roomId,
+                        roomId = timelineArgs.roomId,
                         mode = LocationSharingMode.PREVIEW,
                         initialLocationData = viewEvent.locationData,
                         locationOwnerId = viewEvent.userId
@@ -1470,7 +1470,9 @@ class TimelineFragment @Inject constructor(
                     attachmentTypeSelector = AttachmentTypeSelectorView(vectorBaseActivity, vectorBaseActivity.layoutInflater, this@TimelineFragment)
                     attachmentTypeSelector.setAttachmentVisibility(
                             AttachmentTypeSelectorView.Type.LOCATION,
-                            vectorPreferences.isLocationSharingEnabled() && !isThreadTimeLine())
+                            vectorPreferences.isLocationSharingEnabled())
+                    attachmentTypeSelector.setAttachmentVisibility(
+                            AttachmentTypeSelectorView.Type.POLL, !isThreadTimeLine())
                 }
                 attachmentTypeSelector.show(views.composerLayout.views.attachmentButton)
             }
@@ -2172,7 +2174,7 @@ class TimelineFragment @Inject constructor(
             }
             is EventSharedAction.Edit                       -> {
                 if (action.eventType == EventType.POLL_START) {
-                    navigator.openCreatePoll(requireContext(), roomDetailArgs.roomId, action.eventId, PollMode.EDIT)
+                    navigator.openCreatePoll(requireContext(), timelineArgs.roomId, action.eventId, PollMode.EDIT)
                 } else if (withState(messageComposerViewModel) { it.isVoiceMessageIdle }) {
                     messageComposerViewModel.handle(MessageComposerAction.EnterEditMode(action.eventId, views.composerLayout.text.toString()))
                 } else {
@@ -2437,7 +2439,7 @@ class TimelineFragment @Inject constructor(
                 navigator
                         .openLocationSharing(
                                 context = requireContext(),
-                                roomId = roomDetailArgs.roomId,
+                                roomId = timelineArgs.roomId,
                                 mode = LocationSharingMode.STATIC_SHARING,
                                 initialLocationData = null,
                                 locationOwnerId = session.myUserId
