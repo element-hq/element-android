@@ -59,10 +59,8 @@ import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
-import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.RoomDetailActivity
 import im.vector.app.features.home.room.detail.RoomDetailArgs
-import im.vector.app.features.widgets.WidgetActivity
 import io.github.hyuwah.draggableviewlib.DraggableView
 import io.github.hyuwah.draggableviewlib.setupDraggable
 import kotlinx.parcelize.Parcelize
@@ -71,9 +69,7 @@ import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.call.CallState
 import org.matrix.android.sdk.api.session.call.MxPeerConnectionState
 import org.matrix.android.sdk.api.session.call.TurnServerResponse
-import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.call.EndCallReason
-import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.webrtc.EglBase
 import org.webrtc.RendererCommon
 import timber.log.Timber
@@ -532,7 +528,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
     }
 
     private val callTransferActivityResultLauncher = registerStartForActivityResult { activityResult ->
-        if(activityResult.resultCode == Activity.RESULT_CANCELED) {
+        if (activityResult.resultCode == Activity.RESULT_CANCELED) {
             callViewModel.handle(VectorCallViewActions.CallTransferSelectionCancelled)
         }
     }
