@@ -46,6 +46,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
+import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
@@ -448,6 +449,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                                  actionPermissions: ActionPermissions): Boolean {
         if (!vectorPreferences.areThreadMessagesEnabled()) return false
         if (initialState.isFromThreadTimeline) return false
+        if (event.root.isThread()) return false
         if (event.root.getClearType() != EventType.MESSAGE &&
                 !event.isSticker() && !event.isPoll()) return false
         if (!actionPermissions.canSendMessage) return false
