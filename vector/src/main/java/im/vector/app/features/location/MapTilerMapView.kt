@@ -78,7 +78,6 @@ class MapTilerMapView @JvmOverloads constructor(
         state.pinDrawable?.let { pinDrawable ->
             if (!safeMapRefs.style.isFullyLoaded ||
                     safeMapRefs.style.getImage(state.pinId) == null) {
-                safeMapRefs.symbolManager.deleteAll()
                 safeMapRefs.style.addImage(state.pinId, pinDrawable)
             }
         }
@@ -89,6 +88,7 @@ class MapTilerMapView @JvmOverloads constructor(
                 initZoomDone = true
             }
 
+            safeMapRefs.symbolManager.deleteAll()
             safeMapRefs.symbolManager.create(
                     SymbolOptions()
                             .withLatLng(LatLng(locationData.latitude, locationData.longitude))

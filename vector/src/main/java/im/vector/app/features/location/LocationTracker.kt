@@ -50,11 +50,6 @@ class LocationTracker @Inject constructor(
             return
         }
 
-        val isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
-        val isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
-
-        Timber.d("## LocationTracker. isGpsEnabled: $isGpsEnabled - isNetworkEnabled: $isNetworkEnabled")
-
         locationManager.allProviders
                 .takeIf { it.isNotEmpty() }
                 ?.forEach { provider ->
