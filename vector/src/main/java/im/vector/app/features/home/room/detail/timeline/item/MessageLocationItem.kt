@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
-import android.widget.FrameLayout
 import android.widget.ImageView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -56,12 +55,12 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        renderSendState(holder.mapViewContainer, null)
+        renderSendState(holder.view, null)
 
         val location = locationData ?: return
         val locationOwnerId = userId ?: return
 
-        holder.mapViewContainer.onClick {
+        holder.view.onClick {
             callback?.onMapClicked()
         }
 
@@ -80,7 +79,6 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
     override fun getViewType() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
-        val mapViewContainer by bind<FrameLayout>(R.id.mapViewContainer)
         val staticMapImageView by bind<ImageView>(R.id.staticMapImageView)
         val staticMapPinImageView by bind<ImageView>(R.id.staticMapPinImageView)
     }
