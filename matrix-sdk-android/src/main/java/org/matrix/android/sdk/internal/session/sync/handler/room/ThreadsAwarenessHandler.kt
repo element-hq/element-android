@@ -308,7 +308,7 @@ internal class ThreadsAwarenessHandler @Inject constructor(
                                         eventEntity: EventEntity?,
                                         eventPayload: MutableMap<String, Any>): String? {
         val replyFormatted = LocalEchoEventFactory.QUOTE_PATTERN.format(
-                "Replied within a thread",
+                "In reply to a thread",
                 eventBody)
 
         val messageTextContent = MessageTextContent(

@@ -33,7 +33,6 @@ import org.matrix.android.sdk.internal.database.query.findIncludingEvent
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
-import timber.log.Timber
 
 private typealias ThreadSummary = Pair<Int, TimelineEventEntity>?
 
