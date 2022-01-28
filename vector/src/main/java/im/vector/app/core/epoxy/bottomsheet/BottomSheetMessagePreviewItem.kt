@@ -17,25 +17,28 @@
 package im.vector.app.core.epoxy.bottomsheet
 
 import android.text.method.MovementMethod
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import com.bumptech.glide.request.RequestOptions
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.home.room.detail.timeline.item.BindingOptions
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
+import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
 import im.vector.app.features.location.LocationData
-import im.vector.app.features.location.MapState
-import im.vector.app.features.location.MapTilerMapView
+import im.vector.app.features.location.getStaticMapUrl
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -82,6 +85,12 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var userClicked: ClickListener? = null
 
+    @EpoxyAttribute
+    var mapWidth: Int = 1200
+
+    @EpoxyAttribute
+    var mapHeight: Int = 800
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         avatarRenderer.render(matrixItem, holder.avatar)
@@ -98,27 +107,21 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         body.charSequence.findPillsAndProcess(coroutineScope) { it.bind(holder.body) }
         holder.timestamp.setTextOrHide(time)
 
-        holder.mapView.isVisible = locationData != null
-        holder.body.isVisible = locationData == null
-        holder.mapView.initialize()
-        holder.mapView.render(
-                MapState(
-                        zoomOnlyOnce = false,
-                        pinLocationData = locationData,
-                        pinId = matrixItem.id,
-                        pinDrawable = null
-                )
-        )
-        locationPinProvider?.create(matrixItem.id) { pinDrawable ->
-            if (holder.view.isAttachedToWindow) {
-                holder.mapView.render(
-                        MapState(
-                                zoomOnlyOnce = false,
-                                pinLocationData = locationData,
-                                pinId = matrixItem.id,
-                                pinDrawable = pinDrawable
-                        )
-                )
+        if (locationData == null) {
+            holder.body.isVisible = true
+            holder.mapViewContainer.isVisible = false
+        } else {
+            holder.body.isVisible = false
+            holder.mapViewContainer.isVisible = true
+            GlideApp.with(holder.staticMapImageView)
+                    .load(getStaticMapUrl(locationData!!.latitude, locationData!!.longitude, INITIAL_MAP_ZOOM_IN_TIMELINE, mapWidth, mapHeight))
+                    .apply(RequestOptions.centerCropTransform())
+                    .into(holder.staticMapImageView)
+
+            locationPinProvider?.create(matrixItem.id) { pinDrawable ->
+                GlideApp.with(holder.staticMapPinImageView)
+                        .load(pinDrawable)
+                        .into(holder.staticMapPinImageView)
             }
         }
     }
@@ -135,6 +138,8 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         val bodyDetails by bind<TextView>(R.id.bottom_sheet_message_preview_body_details)
         val timestamp by bind<TextView>(R.id.bottom_sheet_message_preview_timestamp)
         val imagePreview by bind<ImageView>(R.id.bottom_sheet_message_preview_image)
-        val mapView by bind<MapTilerMapView>(R.id.bottom_sheet_message_preview_location)
+        val mapViewContainer by bind<FrameLayout>(R.id.mapViewContainer)
+        val staticMapImageView by bind<ImageView>(R.id.staticMapImageView)
+        val staticMapPinImageView by bind<ImageView>(R.id.staticMapPinImageView)
     }
 }

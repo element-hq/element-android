@@ -44,5 +44,6 @@ fun getStaticMapUrl(latitude: Double,
         append(height)
         append(".png?key=")
         append(BuildConfig.mapTilerKey)
+        append("&attribution=bottomleft")
     }
 }
