@@ -21,6 +21,7 @@ import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFact
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVerificationRequestContent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
@@ -100,8 +101,8 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                             isIncoming = !isSentByMe,
                             isFirstFromThisSender = isFirstFromThisSender,
                             isLastFromThisSender = isLastFromThisSender,
-                            isPseudoBubble = messageContent?.msgType in MSG_TYPES_WITH_PSEUDO_BUBBLE_LAYOUT,
-                            timestampAsOverlay = messageContent?.msgType in MSG_TYPES_WITH_TIMESTAMP_AS_OVERLAY
+                            isPseudoBubble = messageContent.isPseudoBubble(),
+                            timestampAsOverlay = messageContent.timestampAsOverlay()
                     )
                 } else {
                     buildModernLayout(showInformation)
@@ -111,14 +112,23 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
         return messageLayout
     }
 
+    private fun MessageContent?.isPseudoBubble(): Boolean{
+        if(this == null) return false
+        if(msgType == MessageType.MSGTYPE_LOCATION) return vectorPreferences.labsRenderLocationsInTimeline()
+        return this.msgType in MSG_TYPES_WITH_PSEUDO_BUBBLE_LAYOUT
+    }
+
+    private fun MessageContent?.timestampAsOverlay(): Boolean{
+        if(this == null) return false
+        if(msgType == MessageType.MSGTYPE_LOCATION) return vectorPreferences.labsRenderLocationsInTimeline()
+        return this.msgType in MSG_TYPES_WITH_TIMESTAMP_AS_OVERLAY
+    }
+
     private fun TimelineEvent.shouldBuildBubbleLayout(): Boolean {
         val type = root.getClearType()
         if (type in EVENT_TYPES_WITH_BUBBLE_LAYOUT) {
             val messageContent = getLastMessageContent()
-            if (messageContent?.msgType in MSG_TYPES_WITHOUT_BUBBLE_LAYOUT) {
-                return false
-            }
-            return true
+            return messageContent?.msgType !in MSG_TYPES_WITHOUT_BUBBLE_LAYOUT
         }
         return false
     }

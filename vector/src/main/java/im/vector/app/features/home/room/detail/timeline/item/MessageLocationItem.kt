@@ -20,9 +20,14 @@ import android.widget.FrameLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import com.bumptech.glide.load.resource.bitmap.GranularRoundedCorners
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.card.MaterialCardView
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
+import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
+import im.vector.app.features.home.room.detail.timeline.style.shapeAppearanceModel
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.MapTilerMapView
 
@@ -48,9 +53,12 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
     override fun bind(holder: Holder) {
         super.bind(holder)
         renderSendState(holder.mapViewContainer, null)
-
         val location = locationData ?: return
         val locationOwnerId = userId ?: return
+        val messageLayout = attributes.informationData.messageLayout
+        if (messageLayout is TimelineMessageLayout.Bubble) {
+            holder.mapCardView.shapeAppearanceModel = messageLayout.shapeAppearanceModel(12f)
+        }
 
         holder.clickableMapArea.onClick {
             callback?.onMapClicked()
@@ -71,6 +79,7 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
     override fun getViewStubId() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
+        val mapCardView by bind<MaterialCardView>(R.id.mapCardView)
         val mapViewContainer by bind<ConstraintLayout>(R.id.mapViewContainer)
         val mapView by bind<MapTilerMapView>(R.id.mapView)
         val clickableMapArea by bind<FrameLayout>(R.id.clickableMapArea)
