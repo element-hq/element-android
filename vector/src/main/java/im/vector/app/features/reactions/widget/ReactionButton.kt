@@ -70,6 +70,7 @@ class ReactionButton @JvmOverloads constructor(context: Context,
         orientation = HORIZONTAL
         minimumHeight = DimensionConverter(context.resources).dpToPx(30)
         gravity = Gravity.CENTER
+        layoutDirection = View.LAYOUT_DIRECTION_LOCALE
         views = ReactionButtonBinding.bind(this)
         views.reactionCount.text = TextUtils.formatCountToShortDecimal(reactionCount)
         context.withStyledAttributes(attrs, R.styleable.ReactionButton, defStyleAttr) {

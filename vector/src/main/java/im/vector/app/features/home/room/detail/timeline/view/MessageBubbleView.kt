@@ -19,9 +19,9 @@ package im.vector.app.features.home.room.detail.timeline.view
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.RippleDrawable
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -34,6 +34,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.google.android.material.shape.MaterialShapeDrawable
 import im.vector.app.R
+import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewMessageBubbleBinding
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
@@ -65,21 +66,21 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
     override fun onFinishInflate() {
         super.onFinishInflate()
         views = ViewMessageBubbleBinding.bind(this)
-        val currentLayoutDirection = layoutDirection
-        if (isIncoming) {
-            views.informationBottom.layoutDirection = currentLayoutDirection
-            views.bubbleWrapper.layoutDirection = currentLayoutDirection
-            views.bubbleView.layoutDirection = currentLayoutDirection
+        val currentLocale = LocaleProvider(resources).current()
+        val currentLayoutDirection = TextUtils.getLayoutDirectionFromLocale(currentLocale)
+        val layoutDirectionToSet = if (isIncoming) {
+            currentLayoutDirection
         } else {
-            val oppositeLayoutDirection = if (currentLayoutDirection == View.LAYOUT_DIRECTION_LTR) {
+            if (currentLayoutDirection == View.LAYOUT_DIRECTION_LTR) {
                 View.LAYOUT_DIRECTION_RTL
             } else {
                 View.LAYOUT_DIRECTION_LTR
             }
-            views.informationBottom.layoutDirection = oppositeLayoutDirection
-            views.bubbleWrapper.layoutDirection = oppositeLayoutDirection
-            views.bubbleView.layoutDirection = currentLayoutDirection
         }
+        views.informationBottom.layoutDirection = layoutDirectionToSet
+        views.bubbleWrapper.layoutDirection = layoutDirectionToSet
+        views.bubbleView.layoutDirection = currentLayoutDirection
+
         bubbleDrawable = MaterialShapeDrawable()
         rippleMaskDrawable = MaterialShapeDrawable()
         DrawableCompat.setTint(rippleMaskDrawable, Color.WHITE)
