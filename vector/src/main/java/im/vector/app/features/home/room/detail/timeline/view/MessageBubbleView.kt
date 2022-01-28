@@ -21,6 +21,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.RippleDrawable
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -28,6 +29,7 @@ import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import com.google.android.material.shape.MaterialShapeDrawable
@@ -50,6 +52,8 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
     private val verticalStubPadding = DimensionConverter(resources).dpToPx(4)
 
     private lateinit var views: ViewMessageBubbleBinding
+    private lateinit var bubbleDrawable: MaterialShapeDrawable
+    private lateinit var rippleMaskDrawable: MaterialShapeDrawable
 
     init {
         inflate(context, R.layout.view_message_bubble, this)
@@ -72,10 +76,20 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
             } else {
                 View.LAYOUT_DIRECTION_LTR
             }
-
             views.informationBottom.layoutDirection = oppositeLayoutDirection
             views.bubbleWrapper.layoutDirection = oppositeLayoutDirection
             views.bubbleView.layoutDirection = currentLayoutDirection
+        }
+        bubbleDrawable = MaterialShapeDrawable()
+        rippleMaskDrawable = MaterialShapeDrawable()
+        DrawableCompat.setTint(rippleMaskDrawable, Color.WHITE)
+        views.bubbleView.apply {
+            outlineProvider = ViewOutlineProvider.BACKGROUND
+            clipToOutline = true
+            background = RippleDrawable(
+                    ContextCompat.getColorStateList(context, R.color.mtrl_btn_ripple_color) ?: ColorStateList.valueOf(Color.TRANSPARENT),
+                    bubbleDrawable,
+                    rippleMaskDrawable)
         }
     }
 
@@ -84,11 +98,7 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
             Timber.v("Can't render messageLayout $messageLayout")
             return
         }
-        views.bubbleView.apply {
-            background = createBackgroundDrawable(messageLayout)
-            outlineProvider = ViewOutlineProvider.BACKGROUND
-            clipToOutline = true
-        }
+        updateDrawables(messageLayout)
         ConstraintSet().apply {
             clone(views.bubbleView)
             clear(R.id.viewStubContainer, ConstraintSet.END)
@@ -141,10 +151,11 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
         }
     }
 
-    private fun createBackgroundDrawable(messageLayout: TimelineMessageLayout.Bubble): Drawable {
+    private fun updateDrawables(messageLayout: TimelineMessageLayout.Bubble) {
         val shapeAppearanceModel = messageLayout.shapeAppearanceModel(cornerRadius)
-        return MaterialShapeDrawable(shapeAppearanceModel).apply {
-            fillColor = if (messageLayout.isPseudoBubble) {
+        bubbleDrawable.apply {
+            this.shapeAppearanceModel = shapeAppearanceModel
+            this.fillColor = if (messageLayout.isPseudoBubble) {
                 ColorStateList.valueOf(Color.TRANSPARENT)
             } else {
                 val backgroundColorAttr = if (isIncoming) R.attr.vctr_message_bubble_inbound else R.attr.vctr_message_bubble_outbound
@@ -152,5 +163,6 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
                 ColorStateList.valueOf(backgroundColor)
             }
         }
+        rippleMaskDrawable.shapeAppearanceModel = shapeAppearanceModel
     }
 }
