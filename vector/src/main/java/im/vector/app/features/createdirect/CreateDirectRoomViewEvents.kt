@@ -16,10 +16,9 @@
 
 package im.vector.app.features.createdirect
 
-import com.airbnb.mvrx.Async
 import im.vector.app.core.platform.VectorViewEvents
 
 sealed class CreateDirectRoomViewEvents : VectorViewEvents {
-    object InvalidCode: CreateDirectRoomViewEvents()
-    object DmSelf: CreateDirectRoomViewEvents()
+    object InvalidCode : CreateDirectRoomViewEvents()
+    object DmSelf : CreateDirectRoomViewEvents()
 }

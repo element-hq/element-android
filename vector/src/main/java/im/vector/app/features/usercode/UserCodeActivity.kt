@@ -127,7 +127,7 @@ class UserCodeActivity : VectorBaseActivity<ActivitySimpleBinding>(),
                     Toast.makeText(this, R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
                     finish()
                 }
-            }
+            }.exhaustive
         }
     }
 

@@ -46,9 +46,9 @@ import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.contactsbook.ContactsBookFragment
 import im.vector.app.features.qrcode.QrCodeScannerEvents
+import im.vector.app.features.qrcode.QrCodeScannerFragment
 import im.vector.app.features.qrcode.QrCodeScannerViewModel
 import im.vector.app.features.qrcode.QrScannerArgs
-import im.vector.app.features.qrcode.QrCodeScannerFragment
 import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.userdirectory.UserListFragmentArgs
 import im.vector.app.features.userdirectory.UserListSharedAction
@@ -107,11 +107,11 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     Toast.makeText(this, R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
                     finish()
                 }
-                CreateDirectRoomViewEvents.DmSelf -> {
+                CreateDirectRoomViewEvents.DmSelf      -> {
                     Toast.makeText(this, R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
                     finish()
                 }
-            }
+            }.exhaustive
         }
 
         qrViewModel.observeViewEvents {
@@ -123,7 +123,8 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
                     Toast.makeText(this, R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
                     finish()
                 }
-            }
+                else                               -> Unit
+            }.exhaustive
         }
     }
 

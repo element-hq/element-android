@@ -40,11 +40,12 @@ class QrCodeScannerViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<QrCodeScannerViewModel, VectorDummyViewState> by hiltMavericksViewModelFactory()
 
     override fun handle(action: QrCodeScannerAction) {
-        when (action) {
-            is QrCodeScannerAction.CodeDecoded -> _viewEvents.post(QrCodeScannerEvents.CodeParsed(action.result, action.isQrCode))
-            is QrCodeScannerAction.SwitchMode  -> _viewEvents.post(QrCodeScannerEvents.SwitchMode)
-            is QrCodeScannerAction.ScanFailed  -> _viewEvents.post(QrCodeScannerEvents.ParseFailed)
-        }.exhaustive
+        _viewEvents.post(
+                when (action) {
+                    is QrCodeScannerAction.CodeDecoded -> QrCodeScannerEvents.CodeParsed(action.result, action.isQrCode)
+                    is QrCodeScannerAction.SwitchMode  -> QrCodeScannerEvents.SwitchMode
+                    is QrCodeScannerAction.ScanFailed  -> QrCodeScannerEvents.ParseFailed
+                }.exhaustive
+        )
     }
 }
-
