@@ -101,7 +101,7 @@ class CallItemFactory @Inject constructor(
                 createCallTileTimelineItem(
                         roomSummary = roomSummary,
                         callId = callEventGrouper.callId,
-                        callStatus = if (callEventGrouper.callWasMissed()) CallTileTimelineItem.CallStatus.MISSED else CallTileTimelineItem.CallStatus.ENDED,
+                        callStatus = if (!callEventGrouper.callWasAnswered()) CallTileTimelineItem.CallStatus.MISSED else CallTileTimelineItem.CallStatus.ENDED,
                         callKind = callKind,
                         callback = params.callback,
                         highlight = params.isHighlighted,
