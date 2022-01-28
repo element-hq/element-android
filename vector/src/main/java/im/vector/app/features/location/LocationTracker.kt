@@ -55,29 +55,28 @@ class LocationTracker @Inject constructor(
 
         Timber.d("## LocationTracker. isGpsEnabled: $isGpsEnabled - isNetworkEnabled: $isNetworkEnabled")
 
-        val provider = when {
-            isGpsEnabled     -> LocationManager.GPS_PROVIDER
-            isNetworkEnabled -> LocationManager.NETWORK_PROVIDER
-            else             -> {
-                callback?.onLocationProviderIsNotAvailable()
-                Timber.v("## LocationTracker. There is no location provider available")
-                return
-            }
-        }
+        locationManager.allProviders
+                .takeIf { it.isNotEmpty() }
+                ?.forEach { provider ->
+                    Timber.d("## LocationTracker. track location using $provider")
 
-        // Send last known location without waiting location updates
-        locationManager.getLastKnownLocation(provider)?.let { lastKnownLocation ->
-            Timber.d("## LocationTracker. lastKnownLocation")
-            callback?.onLocationUpdate(lastKnownLocation.toLocationData())
-        }
+                    // Send last known location without waiting location updates
+                    locationManager.getLastKnownLocation(provider)?.let { lastKnownLocation ->
+                        Timber.d("## LocationTracker. lastKnownLocation")
+                        callback?.onLocationUpdate(lastKnownLocation.toLocationData())
+                    }
 
-        Timber.d("## LocationTracker. track location using $provider")
-        locationManager.requestLocationUpdates(
-                provider,
-                MIN_TIME_TO_UPDATE_LOCATION_MILLIS,
-                MIN_DISTANCE_TO_UPDATE_LOCATION_METERS,
-                this
-        )
+                    locationManager.requestLocationUpdates(
+                            provider,
+                            MIN_TIME_TO_UPDATE_LOCATION_MILLIS,
+                            MIN_DISTANCE_TO_UPDATE_LOCATION_METERS,
+                            this
+                    )
+                }
+                ?: run {
+                    callback?.onLocationProviderIsNotAvailable()
+                    Timber.v("## LocationTracker. There is no location provider available")
+                }
     }
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
