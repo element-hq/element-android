@@ -203,7 +203,9 @@ internal class TokenChunkEventPersistor @Inject constructor(
             optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(
                     roomId = roomId,
                     realm = realm,
-                    currentUserId = userId)
+                    currentUserId = userId,
+                    chunkEntity = currentChunk
+            )
         }
     }
 }

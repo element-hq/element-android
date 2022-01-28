@@ -33,6 +33,7 @@ import org.matrix.android.sdk.internal.database.query.findIncludingEvent
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.database.query.whereRoomId
+import timber.log.Timber
 
 private typealias ThreadSummary = Pair<Int, TimelineEventEntity>?
 
@@ -109,15 +110,44 @@ internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: 
 
     // Iterate the chunk until we find our latest event
     while (result == null) {
-        result = chunk.timelineEvents.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)?.firstOrNull {
-            it.root?.rootThreadEventId == rootThreadEventId
-        }
+        result = findLatestSortedChunkEvent(chunk, rootThreadEventId)
         chunk = ChunkEntity.find(realm, roomId, nextToken = chunk.prevToken) ?: break
     }
+
+    if (result == null && chunkEntity != null) {
+        // Find latest event from our current chunk
+        result = findLatestSortedChunkEvent(chunkEntity, rootThreadEventId)
+    } else if (result != null && chunkEntity != null) {
+        val currentChunkLatestEvent = findLatestSortedChunkEvent(chunkEntity, rootThreadEventId)
+        result = findMostRecentEvent(result, currentChunkLatestEvent)
+    }
+
     result ?: return null
 
     return ThreadSummary(messages, result)
 }
+
+/**
+ * Lets compare them in case user is moving forward in the timeline and we cannot know the
+ * exact chunk sequence while currentChunk is not yet committed in the DB
+ */
+private fun findMostRecentEvent(result: TimelineEventEntity, currentChunkLatestEvent: TimelineEventEntity?): TimelineEventEntity {
+    currentChunkLatestEvent ?: return result
+    val currentChunkEventTimestamp = currentChunkLatestEvent.root?.originServerTs ?: return result
+    val resultTimestamp = result.root?.originServerTs ?: return result
+    if (currentChunkEventTimestamp > resultTimestamp) {
+        return currentChunkLatestEvent
+    }
+    return result
+}
+
+/**
+ * Find the latest event of the current chunk
+ */
+private fun findLatestSortedChunkEvent(chunk: ChunkEntity, rootThreadEventId: String): TimelineEventEntity? =
+        chunk.timelineEvents.sort(TimelineEventEntityFields.DISPLAY_INDEX, Sort.DESCENDING)?.firstOrNull {
+            it.root?.rootThreadEventId == rootThreadEventId
+        }
 
 /**
  * Find all TimelineEventEntity that are root threads for the specified room
