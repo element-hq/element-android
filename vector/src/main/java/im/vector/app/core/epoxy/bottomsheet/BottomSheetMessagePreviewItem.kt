@@ -36,9 +36,6 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.home.room.detail.timeline.item.BindingOptions
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
-import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
-import im.vector.app.features.location.LocationData
-import im.vector.app.features.location.getStaticMapUrl
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -74,7 +71,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
     var time: String? = null
 
     @EpoxyAttribute
-    var locationData: LocationData? = null
+    var locationUrl: String? = null
 
     @EpoxyAttribute
     var locationPinProvider: LocationPinProvider? = null
@@ -84,12 +81,6 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var userClicked: ClickListener? = null
-
-    @EpoxyAttribute
-    var mapWidth: Int = 1200
-
-    @EpoxyAttribute
-    var mapHeight: Int = 800
 
     override fun bind(holder: Holder) {
         super.bind(holder)
@@ -107,14 +98,14 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         body.charSequence.findPillsAndProcess(coroutineScope) { it.bind(holder.body) }
         holder.timestamp.setTextOrHide(time)
 
-        if (locationData == null) {
+        if (locationUrl == null) {
             holder.body.isVisible = true
             holder.mapViewContainer.isVisible = false
         } else {
             holder.body.isVisible = false
             holder.mapViewContainer.isVisible = true
             GlideApp.with(holder.staticMapImageView)
-                    .load(getStaticMapUrl(locationData!!.latitude, locationData!!.longitude, INITIAL_MAP_ZOOM_IN_TIMELINE, mapWidth, mapHeight))
+                    .load(locationUrl)
                     .apply(RequestOptions.centerCropTransform())
                     .into(holder.staticMapImageView)
 

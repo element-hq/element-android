@@ -72,7 +72,9 @@ import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.html.VectorHtmlCompressor
+import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
 import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.UrlMapProvider
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
@@ -129,7 +131,9 @@ class MessageItemFactory @Inject constructor(
         private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
         private val locationPinProvider: LocationPinProvider,
         private val vectorPreferences: VectorPreferences,
-        private val resources: Resources) {
+        private val urlMapProvider: UrlMapProvider,
+        private val resources: Resources
+) {
 
     // TODO inject this properly?
     private var roomId: String = ""
@@ -212,13 +216,15 @@ class MessageItemFactory @Inject constructor(
         val width = resources.displayMetrics.widthPixels - dimensionConverter.dpToPx(60)
         val height = dimensionConverter.dpToPx(200)
 
+        val locationUrl = locationData?.let {
+            urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, width, height)
+        }
+
         return MessageLocationItem_()
                 .attributes(attributes)
-                .locationData(locationData)
+                .locationUrl(locationUrl)
                 .userId(informationData.senderId)
                 .locationPinProvider(locationPinProvider)
-                .mapWidth(width)
-                .mapHeight(height)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(mapCallback)

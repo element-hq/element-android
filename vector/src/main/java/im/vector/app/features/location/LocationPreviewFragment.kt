@@ -36,6 +36,7 @@ import javax.inject.Inject
  * TODO Move locationPinProvider to a ViewModel
  */
 class LocationPreviewFragment @Inject constructor(
+        private val urlMapProvider: UrlMapProvider,
         private val locationPinProvider: LocationPinProvider
 ) : VectorBaseFragment<FragmentLocationPreviewBinding>() {
 
@@ -53,7 +54,7 @@ class LocationPreviewFragment @Inject constructor(
 
         mapView = WeakReference(views.mapView)
         views.mapView.onCreate(savedInstanceState)
-        views.mapView.initialize()
+        views.mapView.initialize(urlMapProvider.mapUrl)
         loadPinDrawable()
     }
 

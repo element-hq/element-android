@@ -24,9 +24,6 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
-import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
-import im.vector.app.features.location.LocationData
-import im.vector.app.features.location.getStaticMapUrl
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>() {
@@ -39,7 +36,7 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
     var callback: Callback? = null
 
     @EpoxyAttribute
-    var locationData: LocationData? = null
+    var locationUrl: String? = null
 
     @EpoxyAttribute
     var userId: String? = null
@@ -47,17 +44,11 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
     @EpoxyAttribute
     var locationPinProvider: LocationPinProvider? = null
 
-    @EpoxyAttribute
-    var mapWidth: Int = 1200
-
-    @EpoxyAttribute
-    var mapHeight: Int = 800
-
     override fun bind(holder: Holder) {
         super.bind(holder)
         renderSendState(holder.view, null)
 
-        val location = locationData ?: return
+        val location = locationUrl ?: return
         val locationOwnerId = userId ?: return
 
         holder.view.onClick {
@@ -65,7 +56,7 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
         }
 
         GlideApp.with(holder.staticMapImageView)
-                .load(getStaticMapUrl(location.latitude, location.longitude, INITIAL_MAP_ZOOM_IN_TIMELINE, mapWidth, mapHeight))
+                .load(location)
                 .apply(RequestOptions.centerCropTransform())
                 .into(holder.staticMapImageView)
 

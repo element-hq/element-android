@@ -27,7 +27,6 @@ import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property
 import timber.log.Timber
-import java.util.concurrent.atomic.AtomicBoolean
 
 class MapTilerMapView @JvmOverloads constructor(
         context: Context,
@@ -43,21 +42,16 @@ class MapTilerMapView @JvmOverloads constructor(
             val style: Style
     )
 
-    private var isInitializing = AtomicBoolean(false)
     private var mapRefs: MapRefs? = null
     private var initZoomDone = false
 
     /**
      * For location fragments
      */
-    fun initialize() {
-        Timber.d("## Location: initialize $isInitializing")
-        if (isInitializing.getAndSet(true)) {
-            return
-        }
-
+    fun initialize(url: String) {
+        Timber.d("## Location: initialize")
         getMapAsync { map ->
-            map.setStyle(MAP_STYLE_URL) { style ->
+            map.setStyle(url) { style ->
                 mapRefs = MapRefs(
                         map,
                         SymbolManager(this, map, style),
