@@ -105,6 +105,18 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_max="@dimen/chat_bubble_fixed_size" />
 
+            <View
+                android:id="@+id/messageOverlayView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@drawable/overlay_bubble_media"
+                android:visibility="gone"
+                tools:visibility="visible"
+                app:layout_constraintStart_toStartOf="@id/viewStubContainer"
+                app:layout_constraintEnd_toEndOf="@id/viewStubContainer"
+                app:layout_constraintTop_toTopOf="@id/viewStubContainer"
+                app:layout_constraintBottom_toBottomOf="@id/viewStubContainer"/>
+
             <TextView
                 android:id="@+id/messageTimeView"
                 android:layout_width="wrap_content"

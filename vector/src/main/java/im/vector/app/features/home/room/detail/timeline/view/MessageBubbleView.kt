@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -27,15 +28,14 @@ import android.widget.RelativeLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.core.content.withStyledAttributes
-import androidx.core.graphics.ColorUtils
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
-import com.google.android.material.shape.CornerFamily
 import com.google.android.material.shape.MaterialShapeDrawable
-import com.google.android.material.shape.ShapeAppearanceModel
 import im.vector.app.R
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewMessageBubbleBinding
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
+import im.vector.app.features.home.room.detail.timeline.style.shapeAppearanceModel
 import im.vector.app.features.themes.ThemeUtils
 import timber.log.Timber
 
@@ -103,6 +103,12 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
             }
             applyTo(views.bubbleView)
         }
+        if (messageLayout.timestampAsOverlay) {
+            views.messageOverlayView.isVisible = true
+            (views.messageOverlayView.background as? GradientDrawable)?.cornerRadii = messageLayout.cornerRadii(cornerRadius)
+        } else {
+            views.messageOverlayView.isVisible = false
+        }
         if (messageLayout.isPseudoBubble && messageLayout.timestampAsOverlay) {
             views.viewStubContainer.root.setPadding(0, 0, 0, 0)
         } else {
@@ -125,41 +131,24 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
         }
     }
 
+    private fun TimelineMessageLayout.Bubble.cornerRadii(cornerRadius: Float): FloatArray {
+        val topRadius = if (isFirstFromThisSender) cornerRadius else 0f
+        val bottomRadius = if (isLastFromThisSender) cornerRadius else 0f
+        return if (isIncoming) {
+            floatArrayOf(topRadius, topRadius, cornerRadius, cornerRadius, cornerRadius, cornerRadius, bottomRadius, bottomRadius)
+        } else {
+            floatArrayOf(cornerRadius, cornerRadius, topRadius, topRadius, bottomRadius, bottomRadius, cornerRadius, cornerRadius)
+        }
+    }
+
     private fun createBackgroundDrawable(messageLayout: TimelineMessageLayout.Bubble): Drawable {
-        val (topCornerFamily, topRadius) = if (messageLayout.isFirstFromThisSender) {
-            Pair(CornerFamily.ROUNDED, cornerRadius)
-        } else {
-            Pair(CornerFamily.CUT, 0f)
-        }
-        val (bottomCornerFamily, bottomRadius) = if (messageLayout.isLastFromThisSender) {
-            Pair(CornerFamily.ROUNDED, cornerRadius)
-        } else {
-            Pair(CornerFamily.CUT, 0f)
-        }
-        val shapeAppearanceModelBuilder = ShapeAppearanceModel().toBuilder()
-        val backgroundColor: Int
-        if (isIncoming) {
-            backgroundColor = ThemeUtils.getColor(context, R.attr.vctr_message_bubble_inbound)
-            shapeAppearanceModelBuilder
-                    .setTopRightCorner(CornerFamily.ROUNDED, cornerRadius)
-                    .setBottomRightCorner(CornerFamily.ROUNDED, cornerRadius)
-                    .setTopLeftCorner(topCornerFamily, topRadius)
-                    .setBottomLeftCorner(bottomCornerFamily, bottomRadius)
-        } else {
-            backgroundColor = ThemeUtils.getColor(context, R.attr.vctr_message_bubble_outbound)
-            //val alpha = if (ThemeUtils.isLightTheme(context)) 0x0E else 0x26
-            //backgroundColor = ColorUtils.setAlphaComponent(resolvedColor, alpha)
-            shapeAppearanceModelBuilder
-                    .setTopLeftCorner(CornerFamily.ROUNDED, cornerRadius)
-                    .setBottomLeftCorner(CornerFamily.ROUNDED, cornerRadius)
-                    .setTopRightCorner(topCornerFamily, topRadius)
-                    .setBottomRightCorner(bottomCornerFamily, bottomRadius)
-        }
-        val shapeAppearanceModel = shapeAppearanceModelBuilder.build()
+        val shapeAppearanceModel = messageLayout.shapeAppearanceModel(cornerRadius)
         return MaterialShapeDrawable(shapeAppearanceModel).apply {
             fillColor = if (messageLayout.isPseudoBubble) {
                 ColorStateList.valueOf(Color.TRANSPARENT)
             } else {
+                val backgroundColorAttr = if (isIncoming) R.attr.vctr_message_bubble_inbound else R.attr.vctr_message_bubble_outbound
+                val backgroundColor = ThemeUtils.getColor(context, backgroundColorAttr)
                 ColorStateList.valueOf(backgroundColor)
             }
         }
