@@ -35,8 +35,7 @@ import javax.inject.Inject
 /**
  * We should consider using SupportMapFragment for a out of the box lifecycle handling
  */
-class LocationSharingFragment @Inject constructor(
-) : VectorBaseFragment<FragmentLocationSharingBinding>() {
+class LocationSharingFragment @Inject constructor() : VectorBaseFragment<FragmentLocationSharingBinding>() {
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
 

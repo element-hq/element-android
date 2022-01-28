@@ -26,7 +26,6 @@ import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property
-import im.vector.app.BuildConfig
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -58,7 +57,7 @@ class MapTilerMapView @JvmOverloads constructor(
         }
 
         getMapAsync { map ->
-            map.setStyle(styleUrl) { style ->
+            map.setStyle(MAP_STYLE_URL) { style ->
                 mapRefs = MapRefs(
                         map,
                         SymbolManager(this, map, style),
@@ -102,11 +101,7 @@ class MapTilerMapView @JvmOverloads constructor(
         Timber.d("## Location: zoomToLocation")
         mapRefs?.map?.cameraPosition = CameraPosition.Builder()
                 .target(LatLng(latitude, longitude))
-                .zoom(INITIAL_MAP_ZOOM)
+                .zoom(INITIAL_MAP_ZOOM_IN_PREVIEW)
                 .build()
-    }
-
-    companion object {
-        private const val styleUrl = "https://api.maptiler.com/maps/streets/style.json?key=${BuildConfig.mapTilerKey}"
     }
 }

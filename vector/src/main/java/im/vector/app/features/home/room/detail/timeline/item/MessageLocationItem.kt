@@ -17,15 +17,17 @@
 package im.vector.app.features.home.room.detail.timeline.item
 
 import android.widget.FrameLayout
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.ImageView
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import com.bumptech.glide.request.RequestOptions
 import im.vector.app.R
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
+import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
 import im.vector.app.features.location.LocationData
-import im.vector.app.features.location.MapState
-import im.vector.app.features.location.MapTilerMapView
+import im.vector.app.features.location.getStaticMapUrl
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>() {
@@ -46,6 +48,12 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
     @EpoxyAttribute
     var locationPinProvider: LocationPinProvider? = null
 
+    @EpoxyAttribute
+    var mapWidth: Int = 1200
+
+    @EpoxyAttribute
+    var mapHeight: Int = 800
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         renderSendState(holder.mapViewContainer, null)
@@ -53,39 +61,28 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
         val location = locationData ?: return
         val locationOwnerId = userId ?: return
 
-        holder.clickableMapArea.onClick {
+        holder.mapViewContainer.onClick {
             callback?.onMapClicked()
         }
 
-        holder.mapView.initialize()
-        holder.mapView.render(
-                MapState(
-                        zoomOnlyOnce = false,
-                        pinLocationData = location,
-                        pinId = locationOwnerId,
-                        pinDrawable = null
-                )
-        )
+        GlideApp.with(holder.staticMapImageView)
+                .load(getStaticMapUrl(location.latitude, location.longitude, INITIAL_MAP_ZOOM_IN_TIMELINE, mapWidth, mapHeight))
+                .apply(RequestOptions.centerCropTransform())
+                .into(holder.staticMapImageView)
+
         locationPinProvider?.create(locationOwnerId) { pinDrawable ->
-            if (holder.view.isAttachedToWindow) {
-                holder.mapView.render(
-                        MapState(
-                                zoomOnlyOnce = false,
-                                pinLocationData = location,
-                                pinId = locationOwnerId,
-                                pinDrawable = pinDrawable
-                        )
-                )
-            }
+            GlideApp.with(holder.staticMapPinImageView)
+                    .load(pinDrawable)
+                    .into(holder.staticMapPinImageView)
         }
     }
 
     override fun getViewType() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
-        val mapViewContainer by bind<ConstraintLayout>(R.id.mapViewContainer)
-        val mapView by bind<MapTilerMapView>(R.id.mapView)
-        val clickableMapArea by bind<FrameLayout>(R.id.clickableMapArea)
+        val mapViewContainer by bind<FrameLayout>(R.id.mapViewContainer)
+        val staticMapImageView by bind<ImageView>(R.id.staticMapImageView)
+        val staticMapPinImageView by bind<ImageView>(R.id.staticMapPinImageView)
     }
 
     companion object {

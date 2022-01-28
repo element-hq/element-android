@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
+import android.content.res.Resources
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -127,7 +128,8 @@ class MessageItemFactory @Inject constructor(
         private val session: Session,
         private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
         private val locationPinProvider: LocationPinProvider,
-        private val vectorPreferences: VectorPreferences) {
+        private val vectorPreferences: VectorPreferences,
+        private val resources: Resources) {
 
     // TODO inject this properly?
     private var roomId: String = ""
@@ -207,11 +209,16 @@ class MessageItemFactory @Inject constructor(
             }
         }
 
+        val width = resources.displayMetrics.widthPixels - dimensionConverter.dpToPx(60)
+        val height = dimensionConverter.dpToPx(200)
+
         return MessageLocationItem_()
                 .attributes(attributes)
                 .locationData(locationData)
                 .userId(informationData.senderId)
                 .locationPinProvider(locationPinProvider)
+                .mapWidth(width)
+                .mapHeight(height)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .callback(mapCallback)

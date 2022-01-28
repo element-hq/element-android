@@ -6,30 +6,25 @@
     android:layout_height="wrap_content"
     app:cardCornerRadius="8dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:id="@+id/mapViewContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <im.vector.app.features.location.MapTilerMapView
-            android:id="@+id/mapView"
-            android:layout_width="0dp"
+        <ImageView
+            android:id="@+id/staticMapImageView"
+            android:layout_width="match_parent"
             android:layout_height="200dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:mapbox_renderTextureMode="true" />
+            android:contentDescription="@string/a11y_static_map_image" />
 
-        <FrameLayout
-            android:id="@+id/clickableMapArea"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/mapView"
-            app:layout_constraintEnd_toEndOf="@id/mapView"
-            app:layout_constraintStart_toStartOf="@id/mapView"
-            app:layout_constraintTop_toTopOf="@id/mapView" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/staticMapPinImageView"
+            android:layout_width="51dp"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="28dp"
+            android:importantForAccessibility="no"
+            android:src="@drawable/bg_map_user_pin" />
+    </FrameLayout>
 
 </com.google.android.material.card.MaterialCardView>
