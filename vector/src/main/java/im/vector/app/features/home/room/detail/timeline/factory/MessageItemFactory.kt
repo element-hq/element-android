@@ -200,7 +200,7 @@ class MessageItemFactory @Inject constructor(
                                   informationData: MessageInformationData,
                                   highlight: Boolean,
                                   attributes: AbsMessageItem.Attributes): MessageLocationItem? {
-        val geoUri = locationContent.getUri()
+        val geoUri = locationContent.getBestGeoUri()
         val locationData = LocationData.create(geoUri)
 
         val width = resources.displayMetrics.widthPixels - dimensionConverter.dpToPx(60)

@@ -63,5 +63,5 @@ data class MessageLocationContent(
         @Json(name = "org.matrix.msc1767.text") val text: String? = null
 ) : MessageContent {
 
-    fun getUri() = locationInfo?.geoUri ?: geoUri
+    fun getBestGeoUri() = locationInfo?.geoUri ?: geoUri
 }

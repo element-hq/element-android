@@ -614,7 +614,7 @@ class RoomDetailFragment @Inject constructor(
 
     private fun handleShowLocationPreview(locationContent: MessageLocationContent, senderId: String) {
                 // TODO Create a helper
-        val geoUri = locationContent.getUri()
+        val geoUri = locationContent.getBestGeoUri()
         val locationData = LocationData.create(geoUri)
         navigator
                 .openLocationSharing(
@@ -1948,7 +1948,7 @@ class RoomDetailFragment @Inject constructor(
         when (action.messageContent) {
             is MessageTextContent           -> shareText(requireContext(), action.messageContent.body)
             is MessageLocationContent       -> {
-                LocationData.create(action.messageContent.getUri())?.let {
+                LocationData.create(action.messageContent.getBestGeoUri())?.let {
                     openLocation(requireActivity(), it.latitude, it.longitude)
                 }
             }

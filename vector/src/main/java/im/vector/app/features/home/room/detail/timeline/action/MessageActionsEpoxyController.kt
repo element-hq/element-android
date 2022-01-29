@@ -79,7 +79,7 @@ class MessageActionsEpoxyController @Inject constructor(
         val bindingOptions = spanUtils.getBindingOptions(body)
         val locationUrl = state.timelineEvent()?.root?.getClearContent()
                 ?.toModel<MessageLocationContent>(catchError = true)
-                ?.let { LocationData.create(it.getUri()) }
+                ?.let { LocationData.create(it.getBestGeoUri()) }
                 ?.let { urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, 1200, 800) }
 
         bottomSheetMessagePreviewItem {
