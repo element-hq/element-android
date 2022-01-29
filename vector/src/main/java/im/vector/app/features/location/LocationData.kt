@@ -57,4 +57,3 @@ fun parseGeo(geo: String): LocationData? {
             uncertainty = uncertainty
     )
 }
-
