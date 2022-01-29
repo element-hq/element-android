@@ -23,6 +23,7 @@ import android.location.LocationManager
 import androidx.annotation.RequiresPermission
 import androidx.core.content.getSystemService
 import androidx.core.location.LocationListenerCompat
+import im.vector.app.BuildConfig
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,9 +40,12 @@ class LocationTracker @Inject constructor(
 
     private var callback: Callback? = null
 
+    private var hasGpsProviderLocation = false
+
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     fun start(callback: Callback?) {
         Timber.d("## LocationTracker. start()")
+        hasGpsProviderLocation = false
         this.callback = callback
 
         if (locationManager == null) {
@@ -82,7 +86,16 @@ class LocationTracker @Inject constructor(
     }
 
     override fun onLocationChanged(location: Location) {
-        Timber.d("## LocationTracker. onLocationChanged")
+        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+            Timber.d("## LocationTracker. onLocationChanged: $location")
+        } else {
+            Timber.d("## LocationTracker. onLocationChanged")
+        }
+        if (location.provider != LocationManager.GPS_PROVIDER && hasGpsProviderLocation) {
+            // Ignore this update
+            Timber.d("## LocationTracker. ignoring location from ${location.provider}, we have gps location")
+            return
+        }
         callback?.onLocationUpdate(location.toLocationData())
     }
 
