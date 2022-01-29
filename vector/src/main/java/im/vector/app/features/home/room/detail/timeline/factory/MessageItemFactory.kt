@@ -72,8 +72,8 @@ import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.html.VectorHtmlCompressor
 import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
-import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.UrlMapProvider
+import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
@@ -200,13 +200,10 @@ class MessageItemFactory @Inject constructor(
                                   informationData: MessageInformationData,
                                   highlight: Boolean,
                                   attributes: AbsMessageItem.Attributes): MessageLocationItem? {
-        val geoUri = locationContent.getBestGeoUri()
-        val locationData = LocationData.create(geoUri)
-
         val width = resources.displayMetrics.widthPixels - dimensionConverter.dpToPx(60)
         val height = dimensionConverter.dpToPx(200)
 
-        val locationUrl = locationData?.let {
+        val locationUrl = locationContent.toLocationData()?.let {
             urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, width, height)
         }
 

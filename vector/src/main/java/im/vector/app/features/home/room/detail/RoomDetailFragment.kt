@@ -171,8 +171,8 @@ import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
 import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.invite.VectorInviteView
-import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationSharingMode
+import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -613,15 +613,12 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun handleShowLocationPreview(locationContent: MessageLocationContent, senderId: String) {
-                // TODO Create a helper
-        val geoUri = locationContent.getBestGeoUri()
-        val locationData = LocationData.create(geoUri)
         navigator
                 .openLocationSharing(
                         context = requireContext(),
                         roomId = roomDetailArgs.roomId,
                         mode = LocationSharingMode.PREVIEW,
-                        initialLocationData = locationData,
+                        initialLocationData = locationContent.toLocationData(),
                         locationOwnerId = senderId
                 )
     }
@@ -1948,7 +1945,7 @@ class RoomDetailFragment @Inject constructor(
         when (action.messageContent) {
             is MessageTextContent           -> shareText(requireContext(), action.messageContent.body)
             is MessageLocationContent       -> {
-                LocationData.create(action.messageContent.getBestGeoUri())?.let {
+                action.messageContent.toLocationData()?.let {
                     openLocation(requireActivity(), it.latitude, it.longitude)
                 }
             }

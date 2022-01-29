@@ -40,8 +40,8 @@ import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovement
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
 import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
-import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.UrlMapProvider
+import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
@@ -79,7 +79,7 @@ class MessageActionsEpoxyController @Inject constructor(
         val bindingOptions = spanUtils.getBindingOptions(body)
         val locationUrl = state.timelineEvent()?.root?.getClearContent()
                 ?.toModel<MessageLocationContent>(catchError = true)
-                ?.let { LocationData.create(it.getBestGeoUri()) }
+                ?.toLocationData()
                 ?.let { urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, 1200, 800) }
 
         bottomSheetMessagePreviewItem {
