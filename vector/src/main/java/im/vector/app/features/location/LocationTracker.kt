@@ -56,13 +56,19 @@ class LocationTracker @Inject constructor(
 
         locationManager.allProviders
                 .takeIf { it.isNotEmpty() }
+                // Take GPS first
+                ?.sortedByDescending { if (it == LocationManager.GPS_PROVIDER) 1 else 0 }
                 ?.forEach { provider ->
                     Timber.d("## LocationTracker. track location using $provider")
 
                     // Send last known location without waiting location updates
                     locationManager.getLastKnownLocation(provider)?.let { lastKnownLocation ->
-                        Timber.d("## LocationTracker. lastKnownLocation")
-                        callback?.onLocationUpdate(lastKnownLocation.toLocationData())
+                        if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
+                            Timber.d("## LocationTracker. lastKnownLocation: $lastKnownLocation")
+                        } else {
+                            Timber.d("## LocationTracker. lastKnownLocation")
+                        }
+                        onLocationChanged(lastKnownLocation)
                     }
 
                     locationManager.requestLocationUpdates(
@@ -91,10 +97,21 @@ class LocationTracker @Inject constructor(
         } else {
             Timber.d("## LocationTracker. onLocationChanged")
         }
-        if (location.provider != LocationManager.GPS_PROVIDER && hasGpsProviderLocation) {
-            // Ignore this update
-            Timber.d("## LocationTracker. ignoring location from ${location.provider}, we have gps location")
-            return
+        notifyLocation(location)
+    }
+
+    private fun notifyLocation(location: Location) {
+        when (location.provider) {
+            LocationManager.GPS_PROVIDER -> {
+                hasGpsProviderLocation = true
+            }
+            else                         -> {
+                if (hasGpsProviderLocation) {
+                    // Ignore this update
+                    Timber.d("## LocationTracker. ignoring location from ${location.provider}, we have gps location")
+                    return
+                }
+            }
         }
         callback?.onLocationUpdate(location.toLocationData())
     }
