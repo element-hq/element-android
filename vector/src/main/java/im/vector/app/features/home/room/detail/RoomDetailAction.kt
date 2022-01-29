@@ -112,7 +112,4 @@ sealed class RoomDetailAction : VectorViewModelAction {
 
     // Poll
     data class EndPoll(val eventId: String) : RoomDetailAction()
-
-    // Location
-    data class ShowLocation(val locationData: LocationData, val userId: String) : RoomDetailAction()
 }

@@ -481,7 +481,6 @@ class RoomDetailFragment @Inject constructor(
                 RoomDetailViewEvents.StopChatEffects                     -> handleStopChatEffects()
                 is RoomDetailViewEvents.DisplayAndAcceptCall             -> acceptIncomingCall(it)
                 RoomDetailViewEvents.RoomReplacementStarted              -> handleRoomReplacement()
-                is RoomDetailViewEvents.ShowLocation                     -> handleShowLocationPreview(it)
             }.exhaustive
         }
 
@@ -613,14 +612,17 @@ class RoomDetailFragment @Inject constructor(
         }
     }
 
-    private fun handleShowLocationPreview(viewEvent: RoomDetailViewEvents.ShowLocation) {
+    private fun handleShowLocationPreview(locationContent: MessageLocationContent, senderId: String) {
+                // TODO Create a helper
+        val geoUri = locationContent.getUri()
+        val locationData = LocationData.create(geoUri)
         navigator
                 .openLocationSharing(
                         context = requireContext(),
                         roomId = roomDetailArgs.roomId,
                         mode = LocationSharingMode.PREVIEW,
-                        initialLocationData = viewEvent.locationData,
-                        locationOwnerId = viewEvent.userId
+                        initialLocationData = locationData,
+                        locationOwnerId = senderId
                 )
     }
 
@@ -1827,6 +1829,12 @@ class RoomDetailFragment @Inject constructor(
             }
             is EncryptedEventContent             -> {
                 roomDetailViewModel.handle(RoomDetailAction.TapOnFailedToDecrypt(informationData.eventId))
+            }
+            is MessageLocationContent            -> {
+                handleShowLocationPreview(messageContent, informationData.senderId)
+            }
+            else                                 -> {
+                Timber.d("No click action defined for this message content")
             }
         }
     }

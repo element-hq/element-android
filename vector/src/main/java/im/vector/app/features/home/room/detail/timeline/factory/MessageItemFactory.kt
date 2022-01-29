@@ -34,7 +34,6 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.containsOnlyEmojis
-import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
@@ -188,7 +187,7 @@ class MessageItemFactory @Inject constructor(
             is MessagePollContent                -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
             is MessageLocationContent            -> {
                 if (vectorPreferences.labsRenderLocationsInTimeline()) {
-                    buildLocationItem(messageContent, informationData, highlight, callback, attributes)
+                    buildLocationItem(messageContent, informationData, highlight, attributes)
                 } else {
                     buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
                 }
@@ -200,18 +199,9 @@ class MessageItemFactory @Inject constructor(
     private fun buildLocationItem(locationContent: MessageLocationContent,
                                   informationData: MessageInformationData,
                                   highlight: Boolean,
-                                  callback: TimelineEventController.Callback?,
                                   attributes: AbsMessageItem.Attributes): MessageLocationItem? {
         val geoUri = locationContent.getUri()
         val locationData = LocationData.create(geoUri)
-
-        val mapCallback: MessageLocationItem.Callback = object : MessageLocationItem.Callback {
-            override fun onMapClicked() {
-                locationData?.let {
-                    callback?.onTimelineItemAction(RoomDetailAction.ShowLocation(it, informationData.senderId))
-                }
-            }
-        }
 
         val width = resources.displayMetrics.widthPixels - dimensionConverter.dpToPx(60)
         val height = dimensionConverter.dpToPx(200)
@@ -227,7 +217,6 @@ class MessageItemFactory @Inject constructor(
                 .locationPinProvider(locationPinProvider)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
-                .callback(mapCallback)
     }
 
     private fun buildPollItem(pollContent: MessagePollContent,

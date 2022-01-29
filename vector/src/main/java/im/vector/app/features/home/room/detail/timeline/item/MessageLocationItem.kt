@@ -21,19 +21,11 @@ import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.bumptech.glide.request.RequestOptions
 import im.vector.app.R
-import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>() {
-
-    interface Callback {
-        fun onMapClicked()
-    }
-
-    @EpoxyAttribute
-    var callback: Callback? = null
 
     @EpoxyAttribute
     var locationUrl: String? = null
@@ -50,10 +42,6 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
 
         val location = locationUrl ?: return
         val locationOwnerId = userId ?: return
-
-        holder.view.onClick {
-            callback?.onMapClicked()
-        }
 
         GlideApp.with(holder.staticMapImageView)
                 .load(location)

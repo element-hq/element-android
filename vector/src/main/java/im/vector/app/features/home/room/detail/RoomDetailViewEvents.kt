@@ -83,6 +83,4 @@ sealed class RoomDetailViewEvents : VectorViewEvents {
     data class StartChatEffect(val type: ChatEffect) : RoomDetailViewEvents()
     object StopChatEffects : RoomDetailViewEvents()
     object RoomReplacementStarted : RoomDetailViewEvents()
-
-    data class ShowLocation(val locationData: LocationData, val userId: String) : RoomDetailViewEvents()
 }
