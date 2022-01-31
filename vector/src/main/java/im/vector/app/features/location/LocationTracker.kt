@@ -40,12 +40,12 @@ class LocationTracker @Inject constructor(
 
     private var callback: Callback? = null
 
-    private var hasGpsProviderLocation = false
+    private var hasGpsProviderLiveLocation = false
 
     @RequiresPermission(anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION])
     fun start(callback: Callback?) {
         Timber.d("## LocationTracker. start()")
-        hasGpsProviderLocation = false
+        hasGpsProviderLiveLocation = false
         this.callback = callback
 
         if (locationManager == null) {
@@ -66,9 +66,9 @@ class LocationTracker @Inject constructor(
                         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
                             Timber.d("## LocationTracker. lastKnownLocation: $lastKnownLocation")
                         } else {
-                            Timber.d("## LocationTracker. lastKnownLocation")
+                            Timber.d("## LocationTracker. lastKnownLocation: ${lastKnownLocation.provider}")
                         }
-                        onLocationChanged(lastKnownLocation)
+                        notifyLocation(lastKnownLocation, isLive = false)
                     }
 
                     locationManager.requestLocationUpdates(
@@ -95,20 +95,20 @@ class LocationTracker @Inject constructor(
         if (BuildConfig.LOW_PRIVACY_LOG_ENABLE) {
             Timber.d("## LocationTracker. onLocationChanged: $location")
         } else {
-            Timber.d("## LocationTracker. onLocationChanged")
+            Timber.d("## LocationTracker. onLocationChanged: ${location.provider}")
         }
-        notifyLocation(location)
+        notifyLocation(location, isLive = true)
     }
 
-    private fun notifyLocation(location: Location) {
+    private fun notifyLocation(location: Location, isLive: Boolean) {
         when (location.provider) {
             LocationManager.GPS_PROVIDER -> {
-                hasGpsProviderLocation = true
+                hasGpsProviderLiveLocation = isLive
             }
             else                         -> {
-                if (hasGpsProviderLocation) {
+                if (hasGpsProviderLiveLocation) {
                     // Ignore this update
-                    Timber.d("## LocationTracker. ignoring location from ${location.provider}, we have gps location")
+                    Timber.d("## LocationTracker. ignoring location from ${location.provider}, we have gps live location")
                     return
                 }
             }
