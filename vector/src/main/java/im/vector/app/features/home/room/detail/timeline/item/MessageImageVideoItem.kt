@@ -33,7 +33,7 @@ import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStateTrackerBinder
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
-import im.vector.app.features.home.room.detail.timeline.view.TimelineMessageLayoutRenderer
+import im.vector.app.features.home.room.detail.timeline.style.granularRoundedCorners
 import im.vector.app.features.media.ImageContentRenderer
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
@@ -62,14 +62,7 @@ abstract class MessageImageVideoItem : AbsMessageItem<MessageImageVideoItem.Hold
         val messageLayout = baseAttributes.informationData.messageLayout
         val dimensionConverter = DimensionConverter(holder.view.resources)
         val imageCornerTransformation = if (messageLayout is TimelineMessageLayout.Bubble) {
-            val cornerRadius = holder.view.resources.getDimensionPixelSize(R.dimen.chat_bubble_corner_radius).toFloat()
-            val topRadius = if (messageLayout.isFirstFromThisSender) cornerRadius else 0f
-            val bottomRadius = if (messageLayout.isLastFromThisSender) cornerRadius else 0f
-            if (messageLayout.isIncoming) {
-                GranularRoundedCorners(topRadius, cornerRadius, cornerRadius, bottomRadius)
-            } else {
-                GranularRoundedCorners(cornerRadius, topRadius, bottomRadius, cornerRadius)
-            }
+            messageLayout.cornersRadius.granularRoundedCorners()
         } else {
             RoundedCorners(dimensionConverter.dpToPx(8))
         }

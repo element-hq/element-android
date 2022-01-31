@@ -39,14 +39,22 @@ sealed interface TimelineMessageLayout : Parcelable {
             override val showDisplayName: Boolean,
             override val showTimestamp: Boolean = true,
             val isIncoming: Boolean,
-            val isFirstFromThisSender: Boolean,
-            val isLastFromThisSender: Boolean,
             val isPseudoBubble: Boolean,
+            val cornersRadius: CornersRadius,
             val timestampAsOverlay: Boolean,
             override val layoutRes: Int = if (isIncoming) {
                 R.layout.item_timeline_event_bubble_incoming_base
             } else {
                 R.layout.item_timeline_event_bubble_outgoing_base
             }
-    ) : TimelineMessageLayout
+    ) : TimelineMessageLayout {
+
+        @Parcelize
+        data class CornersRadius(
+                val topStartRadius: Float,
+                val topEndRadius: Float,
+                val bottomStartRadius: Float,
+                val bottomEndRadius: Float
+        ) : Parcelable
+    }
 }

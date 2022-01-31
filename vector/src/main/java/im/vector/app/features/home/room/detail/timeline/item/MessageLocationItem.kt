@@ -55,10 +55,6 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
         renderSendState(holder.mapViewContainer, null)
         val location = locationData ?: return
         val locationOwnerId = userId ?: return
-        val messageLayout = attributes.informationData.messageLayout
-        if (messageLayout is TimelineMessageLayout.Bubble) {
-            holder.mapCardView.shapeAppearanceModel = messageLayout.shapeAppearanceModel(12f)
-        }
 
         holder.clickableMapArea.onClick {
             callback?.onMapClicked()

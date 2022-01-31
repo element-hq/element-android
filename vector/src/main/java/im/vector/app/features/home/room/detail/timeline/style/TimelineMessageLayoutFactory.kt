@@ -16,7 +16,12 @@
 
 package im.vector.app.features.home.room.detail.timeline.style
 
+import android.content.res.Resources
+import android.text.TextUtils
+import android.view.View
+import im.vector.app.R
 import im.vector.app.core.extensions.localDateTime
+import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactoryParams
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.Session
@@ -31,6 +36,8 @@ import javax.inject.Inject
 
 class TimelineMessageLayoutFactory @Inject constructor(private val session: Session,
                                                        private val layoutSettingsProvider: TimelineLayoutSettingsProvider,
+                                                       private val localeProvider: LocaleProvider,
+                                                       private val resources: Resources,
                                                        private val vectorPreferences: VectorPreferences) {
 
     companion object {
@@ -57,6 +64,15 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
         private val MSG_TYPES_WITH_TIMESTAMP_AS_OVERLAY = setOf(
                 MessageType.MSGTYPE_IMAGE, MessageType.MSGTYPE_VIDEO
         )
+    }
+
+    private val cornerRadius: Float by lazy {
+        resources.getDimensionPixelSize(R.dimen.chat_bubble_corner_radius).toFloat()
+    }
+
+    private val isRTL: Boolean by lazy {
+        val currentLocale = localeProvider.current()
+        TextUtils.getLayoutDirectionFromLocale(currentLocale) == View.LAYOUT_DIRECTION_RTL
     }
 
     fun create(params: TimelineItemFactoryParams): TimelineMessageLayout {
@@ -94,13 +110,18 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                             prevDisplayableEvent.root.senderId != event.root.senderId ||
                             prevDisplayableEvent.root.localDateTime().toLocalDate() != date.toLocalDate()
 
+                    val cornersRadius = buildCornersRadius(
+                            isIncoming = !isSentByMe,
+                            isFirstFromThisSender = isFirstFromThisSender,
+                            isLastFromThisSender = isLastFromThisSender
+                    )
+
                     val messageContent = event.getLastMessageContent()
                     TimelineMessageLayout.Bubble(
                             showAvatar = showInformation && !isSentByMe,
                             showDisplayName = showInformation && !isSentByMe,
                             isIncoming = !isSentByMe,
-                            isFirstFromThisSender = isFirstFromThisSender,
-                            isLastFromThisSender = isLastFromThisSender,
+                            cornersRadius = cornersRadius,
                             isPseudoBubble = messageContent.isPseudoBubble(),
                             timestampAsOverlay = messageContent.timestampAsOverlay()
                     )
@@ -112,15 +133,15 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
         return messageLayout
     }
 
-    private fun MessageContent?.isPseudoBubble(): Boolean{
-        if(this == null) return false
-        if(msgType == MessageType.MSGTYPE_LOCATION) return vectorPreferences.labsRenderLocationsInTimeline()
+    private fun MessageContent?.isPseudoBubble(): Boolean {
+        if (this == null) return false
+        if (msgType == MessageType.MSGTYPE_LOCATION) return vectorPreferences.labsRenderLocationsInTimeline()
         return this.msgType in MSG_TYPES_WITH_PSEUDO_BUBBLE_LAYOUT
     }
 
-    private fun MessageContent?.timestampAsOverlay(): Boolean{
-        if(this == null) return false
-        if(msgType == MessageType.MSGTYPE_LOCATION) return vectorPreferences.labsRenderLocationsInTimeline()
+    private fun MessageContent?.timestampAsOverlay(): Boolean {
+        if (this == null) return false
+        if (msgType == MessageType.MSGTYPE_LOCATION) return vectorPreferences.labsRenderLocationsInTimeline()
         return this.msgType in MSG_TYPES_WITH_TIMESTAMP_AS_OVERLAY
     }
 
@@ -139,6 +160,24 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                 showDisplayName = showInformation,
                 showTimestamp = showInformation || vectorPreferences.alwaysShowTimeStamps()
         )
+    }
+
+    private fun buildCornersRadius(isIncoming: Boolean, isFirstFromThisSender: Boolean, isLastFromThisSender: Boolean): TimelineMessageLayout.Bubble.CornersRadius {
+        return if ((isIncoming && !isRTL) || (!isIncoming && isRTL)) {
+            TimelineMessageLayout.Bubble.CornersRadius(
+                    topStartRadius = if (isFirstFromThisSender) cornerRadius else 0f,
+                    topEndRadius = cornerRadius,
+                    bottomStartRadius = if (isLastFromThisSender) cornerRadius else 0f,
+                    bottomEndRadius = cornerRadius
+            )
+        } else {
+            TimelineMessageLayout.Bubble.CornersRadius(
+                    topStartRadius = cornerRadius,
+                    topEndRadius = if (isFirstFromThisSender) cornerRadius else 0f,
+                    bottomStartRadius = cornerRadius,
+                    bottomEndRadius = if (isLastFromThisSender) cornerRadius else 0f
+            )
+        }
     }
 
     /**

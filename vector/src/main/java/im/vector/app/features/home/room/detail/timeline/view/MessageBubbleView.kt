@@ -48,7 +48,6 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
 
     private var isIncoming: Boolean = false
 
-    private val cornerRadius = resources.getDimensionPixelSize(R.dimen.chat_bubble_corner_radius).toFloat()
     private val horizontalStubPadding = DimensionConverter(resources).dpToPx(12)
     private val verticalStubPadding = DimensionConverter(resources).dpToPx(4)
 
@@ -116,7 +115,7 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
         }
         if (messageLayout.timestampAsOverlay) {
             views.messageOverlayView.isVisible = true
-            (views.messageOverlayView.background as? GradientDrawable)?.cornerRadii = messageLayout.cornerRadii(cornerRadius)
+            (views.messageOverlayView.background as? GradientDrawable)?.cornerRadii = messageLayout.cornersRadius.toFloatArray()
         } else {
             views.messageOverlayView.isVisible = false
         }
@@ -125,7 +124,7 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
         } else {
             views.viewStubContainer.root.setPadding(horizontalStubPadding, verticalStubPadding, horizontalStubPadding, verticalStubPadding)
         }
-        if (messageLayout.isIncoming) {
+        if (isIncoming) {
             views.messageEndGuideline.updateLayoutParams<LayoutParams> {
                 marginEnd = resources.getDimensionPixelSize(R.dimen.chat_bubble_margin_end)
             }
@@ -142,18 +141,12 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
         }
     }
 
-    private fun TimelineMessageLayout.Bubble.cornerRadii(cornerRadius: Float): FloatArray {
-        val topRadius = if (isFirstFromThisSender) cornerRadius else 0f
-        val bottomRadius = if (isLastFromThisSender) cornerRadius else 0f
-        return if (isIncoming) {
-            floatArrayOf(topRadius, topRadius, cornerRadius, cornerRadius, cornerRadius, cornerRadius, bottomRadius, bottomRadius)
-        } else {
-            floatArrayOf(cornerRadius, cornerRadius, topRadius, topRadius, bottomRadius, bottomRadius, cornerRadius, cornerRadius)
-        }
+    private fun TimelineMessageLayout.Bubble.CornersRadius.toFloatArray(): FloatArray {
+        return floatArrayOf(topStartRadius, topStartRadius, topEndRadius, topEndRadius, bottomEndRadius, bottomEndRadius, bottomStartRadius, bottomStartRadius)
     }
 
     private fun updateDrawables(messageLayout: TimelineMessageLayout.Bubble) {
-        val shapeAppearanceModel = messageLayout.shapeAppearanceModel(cornerRadius)
+        val shapeAppearanceModel = messageLayout.cornersRadius.shapeAppearanceModel()
         bubbleDrawable.apply {
             this.shapeAppearanceModel = shapeAppearanceModel
             this.fillColor = if (messageLayout.isPseudoBubble) {
