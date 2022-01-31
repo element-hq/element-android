@@ -55,46 +55,4 @@ interface TimelineService {
      * Returns a snapshot list of TimelineEvent with EventType.MESSAGE and MessageType.MSGTYPE_IMAGE or MessageType.MSGTYPE_VIDEO.
      */
     fun getAttachmentMessages(): List<TimelineEvent>
-
-    /**
-     * Get a live list of all the TimelineEvents which have thread replies for the specified roomId
-     * @return the [LiveData] of [TimelineEvent]
-     */
-    fun getAllThreadsLive(): LiveData<List<TimelineEvent>>
-
-    /**
-     * Get a list of all the TimelineEvents which have thread replies for the specified roomId
-     * @return the [LiveData] of [TimelineEvent]
-     */
-    fun getAllThreads(): List<TimelineEvent>
-
-    /**
-     * Get a live list of all the local unread threads for the specified roomId
-     * @return the [LiveData] of [TimelineEvent]
-     */
-    fun getNumberOfLocalThreadNotificationsLive(): LiveData<List<TimelineEvent>>
-
-    /**
-     * Get a list of all the local unread threads for the specified roomId
-     * @return the [LiveData] of [TimelineEvent]
-     */
-    fun getNumberOfLocalThreadNotifications(): List<TimelineEvent>
-
-    /**
-     * Returns whether or not the current user is participating in the thread
-     * @param rootThreadEventId the eventId of the current thread
-     */
-    fun isUserParticipatingInThread(rootThreadEventId: String): Boolean
-
-    /**
-     * Enhance the thread list with the edited events if needed
-     * @return the [LiveData] of [TimelineEvent]
-     */
-    fun mapEventsWithEdition(threads: List<TimelineEvent>): List<TimelineEvent>
-
-    /**
-     * Marks the current thread as read. This is a local implementation
-     * @param rootThreadEventId the eventId of the current thread
-     */
-    suspend fun markThreadAsRead(rootThreadEventId: String)
 }

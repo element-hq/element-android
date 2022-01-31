@@ -31,16 +31,10 @@ import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
-import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
-import org.matrix.android.sdk.internal.database.helper.findAllLocalThreadNotificationsForRoomId
-import org.matrix.android.sdk.internal.database.helper.findAllThreadsForRoomId
-import org.matrix.android.sdk.internal.database.helper.isUserParticipatingInThread
-import org.matrix.android.sdk.internal.database.helper.mapEventsWithEdition
 import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
-import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.where
@@ -50,7 +44,6 @@ import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTa
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.util.awaitTransaction
 
 internal class DefaultTimelineService @AssistedInject constructor(
         @Assisted private val roomId: String,
@@ -117,58 +110,6 @@ internal class DefaultTimelineService @AssistedInject constructor(
                     .findAll()
                     ?.mapNotNull { timelineEventMapper.map(it).takeIf { it.root.isImageMessage() || it.root.isVideoMessage() } }
                     .orEmpty()
-        }
-    }
-
-    override fun getNumberOfLocalThreadNotificationsLive(): LiveData<List<TimelineEvent>> {
-        return monarchy.findAllMappedWithChanges(
-                { TimelineEventEntity.findAllLocalThreadNotificationsForRoomId(it, roomId = roomId) },
-                { timelineEventMapper.map(it) }
-        )
-    }
-
-    override fun getNumberOfLocalThreadNotifications(): List<TimelineEvent> {
-        return monarchy.fetchAllMappedSync(
-                { TimelineEventEntity.findAllLocalThreadNotificationsForRoomId(it, roomId = roomId) },
-                { timelineEventMapper.map(it) }
-        )
-    }
-
-    override fun getAllThreadsLive(): LiveData<List<TimelineEvent>> {
-        return monarchy.findAllMappedWithChanges(
-                { TimelineEventEntity.findAllThreadsForRoomId(it, roomId = roomId) },
-                { timelineEventMapper.map(it) }
-        )
-    }
-
-    override fun getAllThreads(): List<TimelineEvent> {
-        return monarchy.fetchAllMappedSync(
-                { TimelineEventEntity.findAllThreadsForRoomId(it, roomId = roomId) },
-                { timelineEventMapper.map(it) }
-        )
-    }
-
-    override fun isUserParticipatingInThread(rootThreadEventId: String): Boolean {
-        return Realm.getInstance(monarchy.realmConfiguration).use {
-            TimelineEventEntity.isUserParticipatingInThread(
-                    realm = it,
-                    roomId = roomId,
-                    rootThreadEventId = rootThreadEventId,
-                    senderId = userId)
-        }
-    }
-
-    override fun mapEventsWithEdition(threads: List<TimelineEvent>): List<TimelineEvent> {
-        return Realm.getInstance(monarchy.realmConfiguration).use {
-            threads.mapEventsWithEdition(it, roomId)
-        }
-    }
-
-    override suspend fun markThreadAsRead(rootThreadEventId: String) {
-        monarchy.awaitTransaction {
-            EventEntity.where(
-                    realm = it,
-                    eventId = rootThreadEventId).findFirst()?.threadNotificationState = ThreadNotificationState.NO_NEW_MESSAGE
         }
     }
 }
