@@ -34,6 +34,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
+        android:textAlignment="viewStart"
         android:layout_toStartOf="@id/messageTimeView"
         android:layout_toEndOf="@id/messageStartGuideline"
         android:ellipsize="end"

@@ -29,6 +29,7 @@
     <TextView
         android:id="@+id/messageMemberNameView"
         style="@style/Widget.Vector.TextView.Subtitle"
+        android:textAlignment="viewStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
