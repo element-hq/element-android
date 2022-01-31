@@ -48,4 +48,13 @@
         android:textColor="?colorPrimary"
         android:textStyle="bold" />
 
+    <ProgressBar
+        android:id="@+id/shareLocationGpsLoading"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        app:layout_constraintBottom_toBottomOf="@id/shareLocationContainer"
+        app:layout_constraintEnd_toEndOf="@id/shareLocationContainer"
+        app:layout_constraintTop_toTopOf="@id/shareLocationContainer" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

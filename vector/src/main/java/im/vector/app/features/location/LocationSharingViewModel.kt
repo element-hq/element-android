@@ -24,12 +24,15 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import org.matrix.android.sdk.api.session.Session
 
 class LocationSharingViewModel @AssistedInject constructor(
         @Assisted private val initialState: LocationSharingViewState,
-        session: Session
-) : VectorViewModel<LocationSharingViewState, LocationSharingAction, LocationSharingViewEvents>(initialState) {
+        private val locationTracker: LocationTracker,
+        private val locationPinProvider: LocationPinProvider,
+        private val session: Session
+) : VectorViewModel<LocationSharingViewState, LocationSharingAction, LocationSharingViewEvents>(initialState), LocationTracker.Callback {
 
     private val room = session.getRoom(initialState.roomId)!!
 
@@ -38,14 +41,31 @@ class LocationSharingViewModel @AssistedInject constructor(
         override fun create(initialState: LocationSharingViewState): LocationSharingViewModel
     }
 
-    companion object : MavericksViewModelFactory<LocationSharingViewModel, LocationSharingViewState> by hiltMavericksViewModelFactory() {
+    companion object : MavericksViewModelFactory<LocationSharingViewModel, LocationSharingViewState> by hiltMavericksViewModelFactory()
+
+    init {
+        locationTracker.start(this)
+        createPin()
+    }
+
+    private fun createPin() {
+        locationPinProvider.create(session.myUserId) {
+            setState {
+                copy(
+                        pinDrawable = it
+                )
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        locationTracker.stop()
     }
 
     override fun handle(action: LocationSharingAction) {
         when (action) {
-            is LocationSharingAction.OnLocationUpdate              -> handleLocationUpdate(action.locationData)
-            LocationSharingAction.OnShareLocation                  -> handleShareLocation()
-            LocationSharingAction.OnLocationProviderIsNotAvailable -> handleLocationProviderIsNotAvailable()
+            LocationSharingAction.OnShareLocation -> handleShareLocation()
         }.exhaustive
     }
 
@@ -62,13 +82,13 @@ class LocationSharingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleLocationUpdate(locationData: LocationData) {
+    override fun onLocationUpdate(locationData: LocationData) {
         setState {
             copy(lastKnownLocation = locationData)
         }
     }
 
-    private fun handleLocationProviderIsNotAvailable() {
+    override fun onLocationProviderIsNotAvailable() {
         _viewEvents.post(LocationSharingViewEvents.LocationNotAvailableError)
     }
 }
