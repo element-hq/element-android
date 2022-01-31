@@ -1,0 +1,2 @@
+Fő változás ebben a verzióban: Első változások a bemutató képernyőn, beleértve az analitikai adatküldés engedélyezésének lehetőségét. Matematikai formulák támogatása a Laborok között.
+Teljes változásnapló: https://github.com/vector-im/element-android/releases/tag/v1.3.14
