@@ -542,7 +542,7 @@
     <string name="room_participants_action_mention">提及</string>
     <string name="room_participants_action_devices_list">顯示工作階段清單</string>
     <string name="room_participants_invite_prompt_msg">您確定想要邀請 %s 到聊天室？</string>
-    <string name="room_participants_ban_prompt_msg">封鎖使用者將會把他們從此聊天室中踢除，並避免他們再次加入。</string>
+    <string name="room_participants_ban_prompt_msg">封鎖使用者將會把他們從此聊天室中移除，並避免他們再次加入。</string>
     <string name="people_search_invite_by_id"><u>透過 ID 邀請</u></string>
     <string name="people_search_local_contacts">裝置上的聯絡人（%d）</string>
     <string name="people_search_user_directory">使用者目錄 (%s)</string>
@@ -1046,7 +1046,7 @@
     <string name="settings_show_read_receipts">顯示讀取回條</string>
     <string name="settings_show_read_receipts_summary">點選讀取回條以顯示詳細資料。</string>
     <string name="settings_show_join_leave_messages">顯示加入與離開的活動</string>
-    <string name="settings_show_join_leave_messages_summary">邀請、踢出與封鎖不受影響。</string>
+    <string name="settings_show_join_leave_messages_summary">邀請、移除與封鎖不受影響。</string>
     <string name="settings_show_avatar_display_name_changes_messages">顯示帳號活動</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">包含大頭貼與顯示名稱變動。</string>
     <string name="settings_password">密碼</string>
@@ -2298,7 +2298,7 @@
         <item quantity="other">%d 秒</item>
     </plurals>
     <string name="settings_show_room_member_state_events">顯示聊天室成員狀態活動</string>
-    <string name="settings_show_room_member_state_events_summary">包含邀請／加入／離開／踢除／封鎖事件與大頭貼／顯示名稱變更等。</string>
+    <string name="settings_show_room_member_state_events_summary">包含邀請／加入／離開／移除／封鎖事件與大頭貼／顯示名稱變更等。</string>
     <string name="sent_a_poll">投票</string>
     <string name="sent_a_reaction">反應：%s</string>
     <string name="sent_verification_conclusion">驗證結論</string>
@@ -2902,7 +2902,7 @@
     <string name="space_settings_permissions_subtitle">檢視並更新變更空間各部份所需的角色。</string>
     <string name="space_settings_permissions_title">空間權限</string>
     <string name="space_participants_unban_prompt_msg">取消封鎖使用者將讓他們可以再次加入空間。</string>
-    <string name="space_participants_ban_prompt_msg">封鎖使用者會將他們踢出此空間並防止他們再次加入。</string>
+    <string name="space_participants_ban_prompt_msg">封鎖使用者會將他們自此空間移除並防止他們再次加入。</string>
     <string name="space_participants_remove_prompt_msg">踢除使用者將會將他們從此空間中移除。
 \n
 \n為了防止他們再加入，您應該封鎖他們。</string>
@@ -3002,7 +3002,40 @@
     <string name="room_member_override_nick_color">覆寫暱稱色彩</string>
     <string name="login_splash_already_have_account">我已有一個帳號</string>
     <string name="ftue_auth_carousel_4_title">減少團隊的懈怠。</string>
-    <string name="ftue_auth_carousel_3_title">與任何人聯絡。</string>
+    <string name="ftue_auth_carousel_3_title">安全傳送訊息。</string>
     <string name="ftue_auth_carousel_2_title">您已掌控了您的資料。</string>
     <string name="ftue_auth_carousel_1_title">擁有您的對話。</string>
+    <string name="tooltip_attachment_location">分享位置</string>
+    <string name="labs_render_locations_in_timeline">在時間軸中繪製使用者位置</string>
+    <string name="settings_enable_location_sharing_summary">啟用後，您就能將您的位置傳送至任何聊天室</string>
+    <string name="settings_enable_location_sharing">啟用位置分享</string>
+    <string name="location_share_external">開啟以</string>
+    <string name="template_location_not_available_dialog_content">${app_name} 無法存取您的位置。請稍後再試。</string>
+    <string name="template_location_not_available_dialog_title">${app_name} 無法存取您的位置</string>
+    <string name="location_share">分享位置</string>
+    <string name="a11y_location_share_icon">分享位置</string>
+    <string name="location_activity_title_preview">位置</string>
+    <string name="location_activity_title_static_sharing">分享位置</string>
+    <string name="closed_poll_option_description">結果僅在您結束投票後顯示</string>
+    <string name="closed_poll_option_title">已關閉投票</string>
+    <string name="open_poll_option_description">投票者在投票後可以立刻看到投票結果</string>
+    <string name="open_poll_option_title">開啟投票</string>
+    <string name="poll_type_title">投票類型</string>
+    <string name="edit_poll_button">編輯投票</string>
+    <string name="edit_poll_title">編輯投票</string>
+    <string name="poll_no_votes_cast">沒有投票</string>
+    <string name="a11y_trust_level_misconfigured">信任層級設定錯誤</string>
+    <string name="encryption_misconfigured">加密設定錯誤</string>
+    <string name="room_profile_section_restore_security">還原加密</string>
+    <string name="contact_admin_to_restore_encryption">請聯絡管理員以將加密還原至有效狀態。</string>
+    <string name="encryption_has_been_misconfigured">加密設定錯誤。</string>
+    <string name="sent_location">分享了他們的位置</string>
+    <string name="login_splash_create_account">建立帳號</string>
+    <string name="ftue_auth_carousel_title_messaging">為您的團隊傳送訊息。</string>
+    <string name="ftue_auth_carousel_body_encrypted">端到端加密，不需要電話號碼。沒有廣告或資料挖礦。</string>
+    <string name="ftue_auth_carousel_body_control">選擇保留對話的位置，讓您擁有控制權與獨立性。透過 Matrix 連結。</string>
+    <string name="ftue_auth_carousel_body_secure">安全且獨立的通訊，為您提供與在家中進行面對面對話相同的隱私等級。</string>
+    <string name="attachment_type_location">位置</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">加密設定錯誤，因此您無法傳送訊息。點擊以開啟設定。</string>
+    <string name="room_unsupported_e2e_algorithm">加密設定錯誤，因此您無法傳送訊息。請聯絡管理員將加密還原至有效的狀態。</string>
 </resources>

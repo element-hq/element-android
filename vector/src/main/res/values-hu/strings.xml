@@ -777,7 +777,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="start_voice_call_prompt_msg">Biztos, hogy hanghívást akarsz indítani\?</string>
     <string name="start_video_call_prompt_msg">Biztos, hogy videóhívást akarsz indítani\?</string>
     <string name="groups_list">Csoportok listája</string>
-    <string name="room_participants_ban_prompt_msg">A felhasználó kitiltása kirúgja őt a szobából, és megakadályozza, hogy újra csatlakozhasson.</string>
+    <string name="room_participants_ban_prompt_msg">A felhasználó kitiltása eltávolítja őt a szobából, és megakadályozza, hogy újra csatlakozhasson.</string>
     <string name="room_settings_all_messages_noisy">Összes üzenet (hangos)</string>
     <string name="room_settings_all_messages">Összes üzenet</string>
     <string name="room_settings_mention_only">Csak megemlítések</string>
@@ -1009,7 +1009,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="settings_show_read_receipts">Olvasás visszajelzés megjelenítése</string>
     <string name="settings_show_read_receipts_summary">További információér kattints az olvasás visszaigazolásokra.</string>
     <string name="settings_show_join_leave_messages">Be-, és kilépési események megjelenítése</string>
-    <string name="settings_show_join_leave_messages_summary">Meghívások, kirúgások és kitiltások nem változtak.</string>
+    <string name="settings_show_join_leave_messages_summary">Meghívások, eltávolítások és kitiltások nem változtak.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Fiók események megjelenítése</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Avatar és név változásokat tartalmaz.</string>
     <string name="settings_password">Jelszó</string>
@@ -2751,7 +2751,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="room_settings_room_read_history_dialog_subtitle">A üzenetek olvashatóságának változtatása csak az új üzenetekre lesz érvényes. A régi üzenetek láthatósága nem fog változni.</string>
     <string name="settings_show_emoji_keyboard_summary">Az üzenet szerkesztőhöz emodzsi billentyűzet gomb hozzáadása</string>
     <string name="settings_show_emoji_keyboard">Emodzsi billentyűzet megjelenítése</string>
-    <string name="settings_show_room_member_state_events_summary">Magába foglalja a meghívás/belépés/kilépés/kirúgás/kitiltás eseményt és profilkép/megjelenítési név változtatást.</string>
+    <string name="settings_show_room_member_state_events_summary">Magába foglalja a meghívás/belépés/kilépés/eltávolítás/kitiltás eseményt és profilkép/megjelenítési név változtatást.</string>
     <string name="settings_chat_effects_description">Használd a /confetti parancsot vagy küldj üzenetet ami ❄️-t vagy 🎉-t tartalmaz</string>
     <string name="settings_chat_effects_title">Beszélgetés effektek megjelenítése</string>
     <string name="settings_show_room_member_state_events">Szoba tagok státusz eseményeinek megjelenítése</string>
@@ -3015,7 +3015,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
         <item quantity="other">Eredmény %1$d szavazat alapján</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
-        <item quantity="one">Nem szavazott senki</item>
+        <item quantity="one">%1$d leadott szavazat. Szavazz az eredmények megtekintéséhez</item>
         <item quantity="other">%1$d leadott szavazat. Szavazz az eredmények megtekintéséhez</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_voted">
@@ -3061,6 +3061,39 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="room_member_override_nick_color">Becenév színének megváltoztatása</string>
     <string name="login_splash_already_have_account">Már van fiókom</string>
     <string name="ftue_auth_carousel_4_title">Rázd fel a csoportjaidat.</string>
-    <string name="ftue_auth_carousel_3_title">Lépj kapcsolatba bárkivel.</string>
+    <string name="ftue_auth_carousel_3_title">Biztonságos üzenetküldés.</string>
     <string name="ftue_auth_carousel_2_title">Te irányítasz.</string>
+    <string name="tooltip_attachment_location">Tartózkodási hely megosztása</string>
+    <string name="labs_render_locations_in_timeline">A felhasználó földrajzi helyzetének megjelenítése az idővonalon</string>
+    <string name="settings_enable_location_sharing_summary">A beállítás után bármelyik szobában megoszthatod a földrajzi helyzetedet</string>
+    <string name="settings_enable_location_sharing">Földrajzi hely megosztás engedélyezése</string>
+    <string name="location_share_external">Megnyitás ezzel</string>
+    <string name="template_location_not_available_dialog_content">${app_name} nem fér hozzá a helyadatodhoz. Próbáld újra később.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} nem fér hozzá a földrajzi helyzetedhez</string>
+    <string name="location_share">Tartózkodási hely megosztása</string>
+    <string name="a11y_location_share_icon">Tartózkodási hely megosztása</string>
+    <string name="location_activity_title_preview">Földrajzi helyzet</string>
+    <string name="location_activity_title_static_sharing">Tartózkodási hely megosztása</string>
+    <string name="closed_poll_option_description">Az eredmény csak a szavazás végeztével válik láthatóvá</string>
+    <string name="closed_poll_option_title">Lezárt szavazás</string>
+    <string name="open_poll_option_description">A szavazók a szavazásuk után látják a szavazatokat</string>
+    <string name="open_poll_option_title">Szavazás megnyitása</string>
+    <string name="poll_type_title">Szavazás típusa</string>
+    <string name="edit_poll_button">SZAVAZÁS SZERKESZTÉSE</string>
+    <string name="edit_poll_title">Szavazás szerkesztése</string>
+    <string name="poll_no_votes_cast">Nem adtak le szavazatot</string>
+    <string name="a11y_trust_level_misconfigured">Megbízhatósági szint beállítási hiba</string>
+    <string name="encryption_misconfigured">A titkosítási beállítás hibás</string>
+    <string name="room_profile_section_restore_security">Titkosítás helyreállítása</string>
+    <string name="contact_admin_to_restore_encryption">Kérjük vedd fel a kapcsolatot az adminisztrátorral a titkosítás helyreállítása érdekében.</string>
+    <string name="encryption_has_been_misconfigured">A titkosítás beállítása hibás.</string>
+    <string name="sent_location">A földrajzi helyzetüket megosztották</string>
+    <string name="login_splash_create_account">Fiók létrehozása</string>
+    <string name="ftue_auth_carousel_title_messaging">Üzenetküldés a csoportodnak.</string>
+    <string name="ftue_auth_carousel_body_encrypted">Telefonszám nélkül végpontok között titkosított. Reklámok és adatbányászat nélkül.</string>
+    <string name="ftue_auth_carousel_body_control">Válaszd meg hol legyenek a beszélgetéseid tárolva, visszaadja az irányítást és függetlenné tesz. Csatlakozva a Matrixhoz.</string>
+    <string name="ftue_auth_carousel_body_secure">Biztonságos és független kommunikáció ami olyan biztonságos mintha valakivel négyszemközt beszélgetnél a házadban.</string>
+    <string name="attachment_type_location">Földrajzi helyzet</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">A titkosítás beállítása hibás így nem lehet üzenetet küldeni. Kattints a beállításokért.</string>
+    <string name="room_unsupported_e2e_algorithm">A titkosítás beállítása hibás így nem lehet üzenetet küldeni. Kérjük vedd fel a kapcsolatot az adminisztrátorral a titkosítás helyreállításához.</string>
 </resources>

@@ -3017,7 +3017,7 @@
         <item quantity="other">Résultat final sur la base de %1$d votes</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
-        <item quantity="one">Aucun vote exprimé</item>
+        <item quantity="one">%1$d vote exprimé. Votez pour voir les résultats</item>
         <item quantity="other">%1$d votes exprimés. Votez pour voir les résultats</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_voted">
@@ -3040,8 +3040,8 @@
     <string name="legals_home_server_title">La politique de votre serveur d’accueil</string>
     <string name="template_legals_application_title">Politique de ${app_name}</string>
     <string name="analytics_opt_in_list_item_3">Vous pouvez désactiver ceci à tout moment dans les paramètres</string>
-    <string name="analytics_opt_in_list_item_2">Nous <b>ne</b> partageons <b>pas</b> d’information avec des tierces parties</string>
-    <string name="analytics_opt_in_list_item_1">Nous <b>n’</b>enregistrons ou ne profilons <b>aucune</b> donnée du compte</string>
+    <string name="analytics_opt_in_list_item_2">Nous ne partageons <b>aucune</b> information avec des tiers</string>
+    <string name="analytics_opt_in_list_item_1">Nous n’enregistrons ou ne profilons <b>aucune</b> donnée du compte</string>
     <string name="analytics_opt_in_content_link">ici</string>
     <string name="analytics_opt_in_content">Aidez nous à identifier les problèmes et améliorer Element en envoyant des rapports d’usage anonymes. Pour comprendre de quelle manière les gens utilisent Element sur plusieurs appareils, nous créeront un identifiant aléatoire commun à tous vos appareils.
 \n
@@ -3061,8 +3061,41 @@
     <string name="room_member_override_nick_color">Outrepasser la couleur du pseudo</string>
     <string name="login_splash_already_have_account">J’ai déjà un compte</string>
     <string name="ftue_auth_carousel_4_title">Être vicTeams, ce n’est pas Slack vous voulez.</string>
-    <string name="ftue_auth_carousel_3_title">Se connecter avec qui vous voulez.</string>
+    <string name="ftue_auth_carousel_3_title">Messagerie sécurisée.</string>
     <string name="ftue_auth_carousel_2_title">Vous êtes aux commandes.</string>
     <string name="ftue_auth_carousel_1_title">Contrôlez vos conversations.</string>
     <string name="room_error_access_unauthorized">Vous n’êtes pas autorisé à rejoindre ce salon</string>
+    <string name="ftue_auth_carousel_body_control">Choisissez où vos conversations sont stockées, vous avez le contrôle et êtes indépendant. Connecté via Matrix.</string>
+    <string name="room_unsupported_e2e_algorithm">Le chiffrement a été mal configuré ce qui vous empêche d’envoyer des messages. Veuillez contacter un administrateur pour remettre le chiffrement en état de marche.</string>
+    <string name="tooltip_attachment_location">Partager la localisation</string>
+    <string name="labs_render_locations_in_timeline">Afficher les localisations de l\'utilisateur dans le temps</string>
+    <string name="settings_enable_location_sharing_summary">Une fois activé il vous sera possible d\'envoyer votre localisation dans n\'importe quel salon</string>
+    <string name="settings_enable_location_sharing">Activer le partage de localisation</string>
+    <string name="location_share_external">Ouvrir avec</string>
+    <string name="template_location_not_available_dialog_content">${app_name} n\'a pas pu accéder à votre localisation. Veuillez réessayer plus tard.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} n\'a pas pu accéder à votre localisation</string>
+    <string name="location_share">Partager la localisation</string>
+    <string name="a11y_location_share_icon">Partager la localisation</string>
+    <string name="location_activity_title_preview">Localisation</string>
+    <string name="location_activity_title_static_sharing">Partager la localisation</string>
+    <string name="closed_poll_option_description">Les résultats ne sont dévoilés que lorsque vous terminez le sondage</string>
+    <string name="closed_poll_option_title">Sondage fermé</string>
+    <string name="open_poll_option_description">Les votants voient les résultats dès qu\'ils ont votés</string>
+    <string name="open_poll_option_title">Ouvrir le sondage</string>
+    <string name="poll_type_title">Type de sondage</string>
+    <string name="edit_poll_button">ÉDITER LE SONDAGE</string>
+    <string name="edit_poll_title">Éditer le sondage</string>
+    <string name="poll_no_votes_cast">Aucun vote exprimé</string>
+    <string name="a11y_trust_level_misconfigured">Niveau de confiance mal configuré</string>
+    <string name="encryption_misconfigured">Le chiffrement est mal configuré</string>
+    <string name="room_profile_section_restore_security">Restaurer le Chiffrement</string>
+    <string name="contact_admin_to_restore_encryption">Veuillez contacter un administrateur pour reconfigurer le chiffrement.</string>
+    <string name="encryption_has_been_misconfigured">Le chiffrement a été mal configuré.</string>
+    <string name="sent_location">On partagé leur localisation</string>
+    <string name="login_splash_create_account">Créer un compte</string>
+    <string name="ftue_auth_carousel_title_messaging">Messagerie pour votre équipe.</string>
+    <string name="ftue_auth_carousel_body_encrypted">Chiffré de bout en bout et aucun numéro de téléphone n\'est nécessaire. Pas de pubs ni de collecte de données.</string>
+    <string name="ftue_auth_carousel_body_secure">Communication indépendante et sécurisée qui vous donne le même niveau d\'intimité qu\'une discussion face-à-face dans votre maison.</string>
+    <string name="attachment_type_location">Localisation</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">Le chiffrement a été mal configuré ce qui vous empêche d\'envoyer des messages. Cliquez pour ouvrir les paramètres.</string>
 </resources>

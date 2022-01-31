@@ -819,7 +819,7 @@
     <string name="option_take_video">Tirar vídeo</string>
     <string name="groups_list">Lista de Grupos</string>
     <string name="call">Chamar</string>
-    <string name="room_participants_ban_prompt_msg">Banir usuária(o) vai expulsá-la(o) desta sala e preveni-la(o) de se juntar de novo.</string>
+    <string name="room_participants_ban_prompt_msg">Banir usuária(o) vai removê-la(o) desta sala e preveni-la(o) de se juntar de novo.</string>
     <string name="room_settings_all_messages_noisy">Todas as mensagens (barulhento)</string>
     <string name="room_settings_all_messages">Todas as mensagens</string>
     <string name="room_settings_mention_only">Menções somente</string>
@@ -1118,7 +1118,7 @@
     <string name="settings_show_read_receipts">Mostrar recibos de leitura</string>
     <string name="settings_show_read_receipts_summary">Clique nos recibos de leitura para uma lista detalhada.</string>
     <string name="settings_show_join_leave_messages">Mostrar eventos de juntar-se e sair</string>
-    <string name="settings_show_join_leave_messages_summary">Convites, expulsões e bans são desafetados.</string>
+    <string name="settings_show_join_leave_messages_summary">Convites, remoções e bans são desafetados.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Mostrar eventos de conta</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Inclui mudanças de avatar e nome de exibição.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Conexão no Background</string>
@@ -2334,7 +2334,7 @@
         <item quantity="one">%d segundo</item>
         <item quantity="other">%d segundos</item>
     </plurals>
-    <string name="settings_show_room_member_state_events_summary">Inclui eventos de convite/juntar-se/saiu/expulsão/ban e mudanças de avatar/nome de exibição.</string>
+    <string name="settings_show_room_member_state_events_summary">Inclui eventos de convidar/juntar-se/saiu/remover/ban e mudanças de avatar/nome de exibição.</string>
     <string name="settings_emails_and_phone_numbers_title">Emails e números de telefone</string>
     <string name="settings_emails_and_phone_numbers_summary">Gerenciar emails e números de telefone linkados a sua conta Matrix</string>
     <string name="settings_text_message_sent_hint">Código</string>
@@ -2956,7 +2956,7 @@
     <string name="space_settings_permissions_subtitle">Veja e atualize os papéis requeridos para mudar várias partes do espaço.</string>
     <string name="space_settings_permissions_title">Permissões de espaço</string>
     <string name="space_participants_unban_prompt_msg">Desbanir usuária(o) vai permiti-la(o) se juntar ao espaço de novo.</string>
-    <string name="space_participants_ban_prompt_msg">Banir usuária(o) vai expulsá-la(o) deste espaço e preveni-la de se juntar de novo.</string>
+    <string name="space_participants_ban_prompt_msg">Banir usuária(o) vai removê-la(o) deste espaço e preveni-la de se juntar de novo.</string>
     <string name="space_participants_remove_prompt_msg">expulsar usuária(o) vai removê-la(o) deste espaço.
 \n
 \nPara preveni-la(o) de se juntar de novo, você devia bani-la(o) em vez disso.</string>
@@ -3061,7 +3061,40 @@
     <string name="room_member_override_nick_color">Sobrepor cor de nick</string>
     <string name="login_splash_already_have_account">Eu já tenho uma conta</string>
     <string name="ftue_auth_carousel_4_title">Dê liberdade a times.</string>
-    <string name="ftue_auth_carousel_3_title">Conecte-se com qualquer pessoa.</string>
+    <string name="ftue_auth_carousel_3_title">Mensageria segura.</string>
     <string name="ftue_auth_carousel_2_title">Você está em controle.</string>
     <string name="ftue_auth_carousel_1_title">Tenha posse de suas conversas.</string>
+    <string name="tooltip_attachment_location">Compartilhar localização</string>
+    <string name="labs_render_locations_in_timeline">Render localizações de usuária(o) na timeline</string>
+    <string name="settings_enable_location_sharing_summary">Uma vez habilitada você vai ser capaz de enviar sua localização a qualquer sala</string>
+    <string name="settings_enable_location_sharing">Habilitar compartilhamento de localização</string>
+    <string name="location_share_external">Abrir com</string>
+    <string name="template_location_not_available_dialog_content">${app_name} não pôde acessar sua localização. Por favor tente de novo mais tarde.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} não pôde acessar sua localização</string>
+    <string name="location_share">Compartilhar localização</string>
+    <string name="a11y_location_share_icon">Compartilhar localização</string>
+    <string name="location_activity_title_preview">Localização</string>
+    <string name="location_activity_title_static_sharing">Compartilhar localização</string>
+    <string name="closed_poll_option_description">Resultados são somente revelados quando você termina a sondagem</string>
+    <string name="closed_poll_option_title">Sondagem fechada</string>
+    <string name="open_poll_option_description">Votantes veem resultados assim que elas(es) têm votado</string>
+    <string name="open_poll_option_title">Sondagem aberta</string>
+    <string name="poll_type_title">Tipo de sondagem</string>
+    <string name="edit_poll_button">EDITAR SONDAGEM</string>
+    <string name="edit_poll_title">Editar sondagem</string>
+    <string name="poll_no_votes_cast">Nenhum voto lançado</string>
+    <string name="a11y_trust_level_misconfigured">Nível de confiança malconfigurado</string>
+    <string name="encryption_misconfigured">Encriptação está malconfigurada</string>
+    <string name="room_profile_section_restore_security">Restaurar Encriptação</string>
+    <string name="contact_admin_to_restore_encryption">Por favor contacte um(a) admin para restaurar encriptação a um estado válido.</string>
+    <string name="sent_location">Compartilhou a localização dela(e)</string>
+    <string name="attachment_type_location">Localização</string>
+    <string name="encryption_has_been_misconfigured">Encriptação tem sido malconfigurada.</string>
+    <string name="login_splash_create_account">Criar conta</string>
+    <string name="ftue_auth_carousel_title_messaging">Mensageria para seu time.</string>
+    <string name="ftue_auth_carousel_body_encrypted">Encriptado ponta-a-ponta e nenhum número de telefone requerido. Sem publicidade ou datamining.</string>
+    <string name="ftue_auth_carousel_body_control">Escolha onde suas conversas são mantidas, dando-lhe controle e independência. Conectado via Matrix.</string>
+    <string name="ftue_auth_carousel_body_secure">Comunicação segura e independente que lhe dá o mesmo nível de privacidade que conversa face-a-face em sua própria casa.</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">Encriptação tem sido malconfigurada então você não pode enviar mensagens. Clique para abrir configurações.</string>
+    <string name="room_unsupported_e2e_algorithm">Encriptação tem sido malconfigurada então você não pode enviar mensagens. Por favor contacte um(a) admin para restaurar encriptação a um estado válido.</string>
 </resources>
