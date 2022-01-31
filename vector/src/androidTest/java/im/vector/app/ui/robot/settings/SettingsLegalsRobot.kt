@@ -14,19 +14,16 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.location
+package im.vector.app.ui.robot.settings
 
-import android.graphics.drawable.Drawable
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaDialogInteractions.clickDialogPositiveButton
+import im.vector.app.R
 
-interface VectorMapView {
-    fun initialize(onMapReady: () -> Unit)
+class SettingsLegalsRobot {
 
-    fun addPinToMap(pinId: String, image: Drawable)
-    fun updatePinLocation(pinId: String, latitude: Double, longitude: Double)
-    fun deleteAllPins()
-
-    fun zoomToLocation(latitude: Double, longitude: Double, zoom: Double)
-    fun getCurrentZoom(): Double?
-
-    fun onClick(callback: () -> Unit)
+    fun crawl() {
+        clickOn(R.string.settings_third_party_notices)
+        clickDialogPositiveButton()
+    }
 }

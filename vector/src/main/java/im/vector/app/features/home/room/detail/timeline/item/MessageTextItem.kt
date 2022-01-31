@@ -109,6 +109,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             val textFuture = PrecomputedTextCompat.getTextFuture(message, TextViewCompat.getTextMetricsParams(this), null)
             setTextFuture(textFuture)
         } else {
+            setTextFuture(null)
             text = message
         }
     }

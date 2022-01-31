@@ -1,50 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <im.vector.app.features.location.MapTilerMapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:mapbox_renderTextureMode="true" />
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/shareLocationContainer"
+        app:layout_constraintTop_toTopOf="parent"
+        app:mapbox_renderTextureMode="true"
+        tools:background="#4F00" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.constraintlayout.helper.widget.Flow
         android:id="@+id/shareLocationContainer"
         android:layout_width="0dp"
         android:layout_height="72dp"
         android:background="?android:colorBackground"
+        android:paddingStart="@dimen/layout_horizontal_margin"
+        android:paddingEnd="@dimen/layout_horizontal_margin"
+        app:constraint_referenced_ids="shareLocationImageView,shareLocationText"
+        app:flow_horizontalBias="0"
+        app:flow_horizontalGap="8dp"
+        app:flow_horizontalStyle="packed"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
-            android:id="@+id/shareLocationImageView"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginStart="12dp"
-            android:background="@drawable/circle"
-            android:backgroundTint="?colorPrimary"
-            android:contentDescription="@string/a11y_location_share_icon"
-            android:padding="10dp"
-            android:src="@drawable/ic_attachment_location_white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/shareLocationImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="?colorPrimary"
+        android:contentDescription="@string/a11y_location_share_icon"
+        android:padding="10dp"
+        android:src="@drawable/ic_attachment_location_white" />
 
-        <TextView
-            style="@style/TextAppearance.Vector.Subtitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@string/location_share"
-            android:textColor="?colorPrimary"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/shareLocationImageView"
-            app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/shareLocationText"
+        style="@style/TextAppearance.Vector.Subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/location_share"
+        android:textColor="?colorPrimary"
+        android:textStyle="bold" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <ProgressBar
+        android:id="@+id/shareLocationGpsLoading"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="@dimen/layout_horizontal_margin"
+        app:layout_constraintBottom_toBottomOf="@id/shareLocationContainer"
+        app:layout_constraintEnd_toEndOf="@id/shareLocationContainer"
+        app:layout_constraintTop_toTopOf="@id/shareLocationContainer" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

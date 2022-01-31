@@ -69,12 +69,11 @@ class UiAllScreensSanityTest {
             preferences { crawl() }
             voiceAndVideo()
             ignoredUsers()
-            // TODO Test analytics
             securityAndPrivacy { crawl() }
             labs()
             advancedSettings { crawl() }
-            // TODO Rework this part (Legals, etc.)
-            // helpAndAbout { crawl() }
+            helpAndAbout { crawl() }
+            legals { crawl() }
         }
 
         elementRobot.newDirectMessage {

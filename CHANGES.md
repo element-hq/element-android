@@ -1,3 +1,15 @@
+Changes in Element v1.3.17 (2022-01-31)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Display static map images in the timeline and improve Location sharing feature ([#5084](https://github.com/vector-im/element-android/issues/5084))
+ - Show the legal mention of mapbox when sharing location ([#5062](https://github.com/vector-im/element-android/issues/5062))
+ - Poll cannot end in some unencrypted rooms ([#5067](https://github.com/vector-im/element-android/issues/5067))
+ - Selecting Transfer in a call should immediately put the other person on hold until the call connects or the Transfer is cancelled. ([#5081](https://github.com/vector-im/element-android/issues/5081))
+ - Fixing crashes when quickly scrolling or restoring the room timeline ([#5091](https://github.com/vector-im/element-android/issues/5091))
+
+
 Changes in Element 1.3.16 (2022-01-25)
 ======================================
 
@@ -46,6 +58,11 @@ Other changes
  - Including onboarding server options in the all screen sanity test suite ([#4975](https://github.com/vector-im/element-android/issues/4975))
  - Exclude dependabot upgrade for @github-script@v3 ([#4988](https://github.com/vector-im/element-android/issues/4988))
  - Small iteration on command parser and unit test it. ([#4998](https://github.com/vector-im/element-android/issues/4998))
+
+SDK API changes ⚠️
+------------------
+ - `StateService.sendStateEvent()` now takes a non-nullable String for the parameter `stateKey`. If null was used, just now use an empty string. ([#4895](https://github.com/vector-im/element-android/issues/4895))
+ - 429 are not automatically retried anymore in case of too long retry delay ([#4995](https://github.com/vector-im/element-android/issues/4995))
 
 
 Changes in Element v1.3.15 (2022-01-18)

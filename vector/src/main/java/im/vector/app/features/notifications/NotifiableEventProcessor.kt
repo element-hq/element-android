@@ -20,6 +20,7 @@ import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.notifications.ProcessedEvent.Type.KEEP
 import im.vector.app.features.notifications.ProcessedEvent.Type.REMOVE
 import org.matrix.android.sdk.api.session.events.model.EventType
+import timber.log.Timber
 import javax.inject.Inject
 
 private typealias ProcessedEvents = List<ProcessedEvent<NotifiableEvent>>
@@ -33,9 +34,13 @@ class NotifiableEventProcessor @Inject constructor(
         val processedEvents = queuedEvents.map {
             val type = when (it) {
                 is InviteNotifiableEvent  -> if (autoAcceptInvites.hideInvites) REMOVE else KEEP
-                is NotifiableMessageEvent -> if (shouldIgnoreMessageEventInRoom(currentRoomId, it.roomId) || outdatedDetector.isMessageOutdated(it)) {
-                    REMOVE
-                } else KEEP
+                is NotifiableMessageEvent -> when {
+                    shouldIgnoreMessageEventInRoom(currentRoomId, it.roomId) -> REMOVE
+                            .also { Timber.d("notification message removed due to currently viewing the same room") }
+                    outdatedDetector.isMessageOutdated(it)                   -> REMOVE
+                            .also { Timber.d("notification message removed due to being read") }
+                    else                                                     -> KEEP
+                }
                 is SimpleNotifiableEvent  -> when (it.type) {
                     EventType.REDACTION -> REMOVE
                     else                -> KEEP

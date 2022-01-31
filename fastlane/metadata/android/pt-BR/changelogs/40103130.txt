@@ -1,0 +1,2 @@
+Principais mudanças nesta versão: Primeira mudança em telas de onboarding, incluindo opt-in de Analítica. Suporte para Eventos com Matemática adicionado nos labs.
+Changelog completo: https://github.com/vector-im/element-android/releases/tag/v1.3.13

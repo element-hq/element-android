@@ -611,7 +611,7 @@
     <string name="room_participants_action_mention">Zmínit</string>
     <string name="room_participants_action_devices_list">Zobrazit seznam relací</string>
     <string name="room_preview_room_interactions_disabled">Toto je náhled místnosti. Interakce s místností byla vypnuta.</string>
-    <string name="room_participants_ban_prompt_msg">Vykázání uživatele jej vykopne z této místnosti a zamezí, aby opět vstoupili.</string>
+    <string name="room_participants_ban_prompt_msg">Vykázání uživatele jej odebere z této místnosti a zamezí, aby opět vstoupil.</string>
     <string name="reason_hint">Důvod</string>
     <string name="room_participants_invite_prompt_msg">Opravdu chcete pozvat uživatele %s do této konverzace\?</string>
     <string name="room_participants_invite_join_names">"%1$s, "</string>
@@ -930,7 +930,7 @@
     <string name="settings_show_read_receipts">Ukázat potvrzení o přečtení</string>
     <string name="settings_show_read_receipts_summary">Klepněte na potvrzení o přečtení pro podrobnosti.</string>
     <string name="settings_show_join_leave_messages">Ukázat události příchodů a odchodů</string>
-    <string name="settings_show_join_leave_messages_summary">Nemá vliv na pozvánky, nakopnutí a zákazy.</string>
+    <string name="settings_show_join_leave_messages_summary">Pozvánky, odebrání a vykázání nejsou dotčeny.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Ukázat události účtu</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Zahrnout avatar a změny veřejného jména.</string>
     <string name="settings_vibrate_on_mention">Vibrovat při zmínce uživatele</string>
@@ -2386,7 +2386,7 @@
         <item quantity="other">%d vteřin</item>
     </plurals>
     <string name="settings_show_room_member_state_events">Zobrazit stavové události účastníků v místnosti</string>
-    <string name="settings_show_room_member_state_events_summary">Zahrnuje události pozvat/vstoupit/opustit/vykopnout/vykázat a změny avatara/veřejného jména.</string>
+    <string name="settings_show_room_member_state_events_summary">Zahrnuje události pozvat/vstoupit/opustit/odebrat/vykázat a změny avatara/veřejného jména.</string>
     <string name="sent_a_poll">Hlasování</string>
     <string name="sent_a_reaction">Reagoval(a): %s</string>
     <string name="sent_verification_conclusion">Výsledek ověření</string>
@@ -3010,7 +3010,7 @@
     <string name="space_settings_permissions_subtitle">Zobrazit a aktualizovat role potřebné ke změně různých částí prostoru.</string>
     <string name="space_settings_permissions_title">Oprávnění prostoru</string>
     <string name="space_participants_unban_prompt_msg">Zrušením vykázání uživateli umožní znovu se připojit do prostoru.</string>
-    <string name="space_participants_ban_prompt_msg">Vykázáním uživatele z tohoto prostoru vykopnete a zabráníte mu v dalším připojení.</string>
+    <string name="space_participants_ban_prompt_msg">Vykázání uživatele z tohoto prostoru ho odebere a zamezí, aby opět vstoupil.</string>
     <string name="space_participants_remove_prompt_msg">vykopnutí uživatele je z tohoto prostoru odstraní.
 \n
 \nAbyste jim zabránili v dalším vstupu, měli byste je raději vykázat.</string>
@@ -3072,8 +3072,8 @@
         <item quantity="other">Konečný výsledek na základě %1$d hlasů</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
-        <item quantity="one">Nikdo nehlasoval</item>
-        <item quantity="few">%1$d hlasů. Hlasujte pro zobrazení výsledků</item>
+        <item quantity="one">%1$d hlas. Hlasujte pro zobrazení výsledků</item>
+        <item quantity="few">%1$d hlasy. Hlasujte pro zobrazení výsledků</item>
         <item quantity="other">%1$d hlasů. Hlasujte pro zobrazení výsledků</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_voted">
@@ -3120,7 +3120,40 @@
     <string name="room_member_override_nick_color">Přepsat barvu přezdívky</string>
     <string name="login_splash_already_have_account">Již mám účet</string>
     <string name="ftue_auth_carousel_4_title">Zlepšete týmovou komunikaci.</string>
-    <string name="ftue_auth_carousel_3_title">Spojte se s kýmkoli.</string>
+    <string name="ftue_auth_carousel_3_title">Bezpečené zasílání zpráv.</string>
     <string name="ftue_auth_carousel_2_title">Máte vše pod kontrolou.</string>
     <string name="ftue_auth_carousel_1_title">Vlastněte své konverzace.</string>
+    <string name="tooltip_attachment_location">Sdílet polohu</string>
+    <string name="labs_render_locations_in_timeline">Zobrazit polohy uživatele na časové ose</string>
+    <string name="settings_enable_location_sharing_summary">Po zapnutí budete moci odeslat svou polohu do libovolné místnosti</string>
+    <string name="settings_enable_location_sharing">Povolit sdílení polohy</string>
+    <string name="location_share_external">Otevřít v</string>
+    <string name="template_location_not_available_dialog_content">${app_name} nemohl získat přístup k vaší poloze. Zkuste to prosím později.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} nemohl získat přístup k vaší poloze</string>
+    <string name="location_share">Sdílet polohu</string>
+    <string name="a11y_location_share_icon">Sdílet polohu</string>
+    <string name="location_activity_title_preview">Poloha</string>
+    <string name="location_activity_title_static_sharing">Sdílet polohu</string>
+    <string name="closed_poll_option_description">Výsledky se zobrazí až po ukončení hlasování</string>
+    <string name="closed_poll_option_title">Uzavřené hlasování</string>
+    <string name="open_poll_option_description">Hlasující vidí výsledky ihned po hlasování</string>
+    <string name="open_poll_option_title">Otevřené hlasování</string>
+    <string name="poll_type_title">Typ hlasování</string>
+    <string name="edit_poll_button">UPRAVIT HLASOVÁNÍ</string>
+    <string name="edit_poll_title">Upravit hlasování</string>
+    <string name="poll_no_votes_cast">Nikdo nehlasoval</string>
+    <string name="a11y_trust_level_misconfigured">Chybně nakonfigurovaná úroveň důvěryhodnosti</string>
+    <string name="encryption_misconfigured">Šifrování je špatně nakonfigurováno</string>
+    <string name="room_profile_section_restore_security">Obnovit šifrování</string>
+    <string name="room_unsupported_e2e_algorithm">Šifrování bylo špatně nakonfigurováno, takže nelze odesílat zprávy. Kontaktujte správce, aby obnovil šifrování do funkčního stavu.</string>
+    <string name="contact_admin_to_restore_encryption">Kontaktujte správce, aby obnovil šifrování do funkčního stavu.</string>
+    <string name="encryption_has_been_misconfigured">Šifrování bylo špatně nakonfigurováno.</string>
+    <string name="sent_location">Sdíleli svou polohu</string>
+    <string name="login_splash_create_account">Vytvořit účet</string>
+    <string name="ftue_auth_carousel_title_messaging">Zasílání zpráv pro váš tým.</string>
+    <string name="ftue_auth_carousel_body_encrypted">Koncové šifrování bez potřeby telefonního čísla. Žádné reklamy ani vytěžování dat.</string>
+    <string name="ftue_auth_carousel_body_control">Můžete si vybrat, kde budou vaše konverzace uloženy, a získat tak kontrolu a nezávislost. Připojeno přes Matrix.</string>
+    <string name="ftue_auth_carousel_body_secure">Bezpečná a nezávislá komunikace, která vám poskytne stejnou úroveň soukromí jako osobní rozhovor u vás doma.</string>
+    <string name="attachment_type_location">Poloha</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">Šifrování bylo špatně nakonfigurováno, takže nelze odesílat zprávy. Kliknutím otevřete nastavení.</string>
 </resources>
