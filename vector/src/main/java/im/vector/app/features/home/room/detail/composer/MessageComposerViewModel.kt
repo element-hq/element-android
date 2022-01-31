@@ -277,36 +277,42 @@ class MessageComposerViewModel @AssistedInject constructor(
                             handlePartSlashCommand(slashCommandResult)
                         }
                         is ParsedCommand.SendEmote                         -> {
-                            state.rootThreadEventId?.let {
+                            if (state.rootThreadEventId != null) {
                                 room.replyInThread(
-                                        rootThreadEventId = it,
+                                        rootThreadEventId = state.rootThreadEventId,
                                         replyInThreadText = slashCommandResult.message,
                                         msgType = MessageType.MSGTYPE_EMOTE,
                                         autoMarkdown = action.autoMarkdown)
-                            } ?: room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE, autoMarkdown = action.autoMarkdown)
+                            }else{
+                                room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE, autoMarkdown = action.autoMarkdown)
+                            }
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
                             popDraft()
                         }
                         is ParsedCommand.SendRainbow                       -> {
                             val message = slashCommandResult.message.toString()
-                            state.rootThreadEventId?.let {
+                            if (state.rootThreadEventId != null) {
                                 room.replyInThread(
-                                        rootThreadEventId = it,
+                                        rootThreadEventId = state.rootThreadEventId,
                                         replyInThreadText = slashCommandResult.message,
                                         formattedText = rainbowGenerator.generate(message))
-                            } ?: room.sendFormattedTextMessage(message, rainbowGenerator.generate(message))
+                            } else {
+                                room.sendFormattedTextMessage(message, rainbowGenerator.generate(message))
+                            }
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
                             popDraft()
                         }
                         is ParsedCommand.SendRainbowEmote                  -> {
                             val message = slashCommandResult.message.toString()
-                            state.rootThreadEventId?.let {
+                            if (state.rootThreadEventId != null) {
                                 room.replyInThread(
-                                        rootThreadEventId = it,
+                                        rootThreadEventId = state.rootThreadEventId,
                                         replyInThreadText = slashCommandResult.message,
                                         msgType = MessageType.MSGTYPE_EMOTE,
                                         formattedText = rainbowGenerator.generate(message))
-                            } ?: room.sendFormattedTextMessage(message, rainbowGenerator.generate(message), MessageType.MSGTYPE_EMOTE)
+                            } else {
+                                room.sendFormattedTextMessage(message, rainbowGenerator.generate(message), MessageType.MSGTYPE_EMOTE)
+                            }
 
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
                             popDraft()
@@ -314,15 +320,16 @@ class MessageComposerViewModel @AssistedInject constructor(
                         is ParsedCommand.SendSpoiler                       -> {
                             val text = "[${stringProvider.getString(R.string.spoiler)}](${slashCommandResult.message})"
                             val formattedText = "<span data-mx-spoiler>${slashCommandResult.message}</span>"
-                            state.rootThreadEventId?.let {
+                            if (state.rootThreadEventId != null) {
                                 room.replyInThread(
-                                        rootThreadEventId = it,
+                                        rootThreadEventId = state.rootThreadEventId,
                                         replyInThreadText = text,
                                         formattedText = formattedText)
-                            } ?: room.sendFormattedTextMessage(
-                                    text,
-                                    formattedText
-                            )
+                            } else {
+                                room.sendFormattedTextMessage(
+                                        text,
+                                        formattedText)
+                            }
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
                             popDraft()
                         }

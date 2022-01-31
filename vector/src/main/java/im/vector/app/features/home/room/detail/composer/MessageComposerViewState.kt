@@ -67,7 +67,7 @@ data class MessageComposerViewState(
 ) : MavericksState {
 
     val isVoiceRecording = when (voiceRecordingUiState) {
-        VoiceMessageRecorderView.RecordingUiState.Idle      -> false
+        VoiceMessageRecorderView.RecordingUiState.Idle         -> false
         is VoiceMessageRecorderView.RecordingUiState.Locked,
         VoiceMessageRecorderView.RecordingUiState.Draft,
         is VoiceMessageRecorderView.RecordingUiState.Recording -> true
