@@ -115,7 +115,10 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
     private fun MutableList<EpoxyModel<*>>.addForwardPrefetchIfNeeded(timeline: Timeline?, callback: TimelineEventController.Callback?) {
         val shouldAddForwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.FORWARDS) ?: false
         if (shouldAddForwardPrefetch) {
-            val indexOfPrefetchForward = DEFAULT_PREFETCH_THRESHOLD.coerceAtMost(size - 1)
+            val indexOfPrefetchForward = DEFAULT_PREFETCH_THRESHOLD
+                    .coerceAtMost(size - 1)
+                    .coerceAtLeast(0)
+
             val loadingItem = LoadingItem_()
                     .id("prefetch_forward_loading${System.currentTimeMillis()}")
                     .showLoader(false)
