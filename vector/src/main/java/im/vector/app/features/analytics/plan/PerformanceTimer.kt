@@ -46,12 +46,14 @@ data class PerformanceTimer(
 
     enum class Name {
         /**
-         * The time spent parsing the response from an initial /sync request.
+         * The time spent parsing the response from an initial /sync request. In
+         * this case, `itemCount` should contain the number of joined rooms.
          */
         InitialSyncParsing,
 
         /**
-         * The time spent waiting for a response to an initial /sync request.
+         * The time spent waiting for a response to an initial /sync request. In
+         * this case, `itemCount` should contain the number of joined rooms.
          */
         InitialSyncRequest,
 
@@ -62,13 +64,16 @@ data class PerformanceTimer(
         NotificationsOpenEvent,
 
         /**
-         * The duration of a regular /sync request when resuming the app.
+         * The duration of a regular /sync request when resuming the app. In
+         * this case, `itemCount` should contain the number of joined rooms in
+         * the response.
          */
         StartupIncrementalSync,
 
         /**
          * The duration of an initial /sync request during startup (if the store
-         * has been wiped).
+         * has been wiped). In this case, `itemCount` should contain the number
+         * of joined rooms.
          */
         StartupInitialSync,
 
