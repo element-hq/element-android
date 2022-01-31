@@ -37,7 +37,7 @@
     <string name="view_decrypted_source">Deşifre Edilmiş Kaynağı İncele</string>
     <string name="action_delete">Sil</string>
     <string name="action_rename">Yeniden Adlandır</string>
-    <string name="report_content">İçeriği bildir</string>
+    <string name="report_content">Rapor İçeriği</string>
     <string name="active_call">Şu anki görüşme</string>
     <string name="ongoing_conference_call">Devam eden konferans görüşmesi. 
 \n%1$s veya %2$s olarak katıl</string>
@@ -118,7 +118,7 @@
     <string name="create_account">Hesap oluştur</string>
     <string name="login">Giriş yap</string>
     <string name="logout">Çıkış yap</string>
-    <string name="hs_url">Ev Sunucusu URL\'si</string>
+    <string name="hs_url">Ana Sunucu URL\'si</string>
     <string name="search">Ara</string>
     <string name="start_new_chat">Yeni Sohbete Başla</string>
     <string name="start_voice_call">Sesli Görüşme Başlat</string>
@@ -188,7 +188,7 @@
     <string name="dialog_title_error">Hata</string>
     <string name="system_alerts_header">Sistem Uyarıları</string>
     <string name="send_files_in">Gönder</string>
-    <string name="identity_url">Kimlik Sunucusu URL\'si</string>
+    <string name="identity_url">Kimlik sunucusu URL\'si</string>
     <string name="auth_email_placeholder">E-posta adresi</string>
     <string name="auth_opt_email_placeholder">E-posta adresi (isteğe bağlı)</string>
     <string name="auth_phone_number_placeholder">Telefon numarası</string>
@@ -213,10 +213,10 @@
     <string name="auth_threepid_warning_message">Eposta ve telefon numarası ile aynı anda kayıt yaptırmak şimdilik API yüzüden desteklenmiyor. Sadece telefon numarası hesaba eklenecektir.
 \n
 \nEpostanı daha sonra profil ayarlarından ekleyebilirsin.</string>
-    <string name="auth_recaptcha_message">Ana Makine senin robot olmadığından emin olmak istiyor</string>
+    <string name="auth_recaptcha_message">Bu ana sunucu bir robot olmadığından emin olmak istiyor</string>
     <string name="auth_username_in_use">Kullandığın kullanıcı adı</string>
-    <string name="auth_home_server">Ana Makine:</string>
-    <string name="auth_identity_server">Tanımlayıcı Sunucu:</string>
+    <string name="auth_home_server">Ana sunucu:</string>
+    <string name="auth_identity_server">Kimlik sunucusu:</string>
     <string name="auth_reset_password_next_step_button">Eposta adresimi doğruladım</string>
     <string name="auth_reset_password_message">Şifrenizi sıfırlamak için, hesabınıza bağlı eposta adresini girin:</string>
     <string name="auth_reset_password_missing_email">Hesaba bağlı eposta adresi mutlaka girilmeli.</string>
@@ -248,8 +248,8 @@
     <string name="read_receipts_list">Makbuz Listesini Oku</string>
     <string name="groups_list">Grup Listesi</string>
     <plurals name="membership_changes">
-        <item quantity="one">1 üyelik değişimi</item>
-        <item quantity="other">%d üyelik değişimi</item>
+        <item quantity="one">%d üyelik değişikliği</item>
+        <item quantity="other">%d üyelik değişiklikleri</item>
     </plurals>
     <string name="compression_options">Farklı gönder</string>
     <string name="compression_opt_list_original">Orijinal</string>
@@ -325,28 +325,28 @@
     <string name="room_creation_title">Yeni Sohbet</string>
     <string name="room_creation_add_member">Üye ekle</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">1 aktif üye</item>
-        <item quantity="other">%d aktif üye</item>
+        <item quantity="one">%d aktif üye</item>
+        <item quantity="other">%d aktif üyeler</item>
     </plurals>
     <plurals name="room_title_members">
-        <item quantity="one">1 üye</item>
-        <item quantity="other">%d üye</item>
+        <item quantity="one">%d üye</item>
+        <item quantity="other">%d üyeler</item>
     </plurals>
     <string name="room_title_one_member">1 üye</string>
     <plurals name="format_time_s">
-        <item quantity="one">1sn</item>
-        <item quantity="other">%dsn</item>
+        <item quantity="one">%ds 1</item>
+        <item quantity="other">%ds</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">1dk</item>
+        <item quantity="one">%d1dk</item>
         <item quantity="other">%ddk</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">1sa</item>
+        <item quantity="one">%d1sa</item>
         <item quantity="other">%dsa</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">1g</item>
+        <item quantity="one">%d1g</item>
         <item quantity="other">%dg</item>
     </plurals>
     <string name="room_participants_leave_prompt_title">Odadan ayrıl</string>
@@ -376,7 +376,7 @@
     <string name="room_participants_action_devices_list">Oturum Listesini Göster</string>
     <string name="room_participants_power_level_prompt">Bu işlemin geri dönüşü yok kullanıcıyı sen ile aynı erişim seviyesine getiriyorsun.
 \nEmin misin\?</string>
-    <string name="room_participants_ban_prompt_msg">Kullanıcıyı bu engellersen bu odadan kovulacak ve bir daha giremeyecek.</string>
+    <string name="room_participants_ban_prompt_msg">Kullanıcıyı yasaklamak onları bu odadan çıkaracak ve tekrar katılmalarını engelleyecektir.</string>
     <string name="reason_hint">Neden</string>
     <string name="room_participants_invite_prompt_msg">%s adlı kullanıcılar(ı) bu sohbete davet etmek istediğinden emin misin\?</string>
     <string name="room_participants_invite_join_names">"%1$s, "</string>
@@ -405,10 +405,10 @@
     <string name="room_resend_unsent_messages">Gönderilmeyen mesajları tekrar gönder</string>
     <string name="room_delete_unsent_messages">Gönderilmeyen mesajları sil</string>
     <string name="room_message_file_not_found">Dosya bulunamadı</string>
-    <string name="room_do_not_have_permission_to_post">Bu odada mesajlaşmaya yetkin yok</string>
+    <string name="room_do_not_have_permission_to_post">Bu odaya mesaj gönderme izniniz yok.</string>
     <plurals name="room_new_messages_notification">
-        <item quantity="one">1 yeni mesaj</item>
-        <item quantity="other">%d yeni mesaj</item>
+        <item quantity="one">%d 1 yeni mesaj</item>
+        <item quantity="other">%d yeni mesajlar</item>
     </plurals>
     <string name="ssl_trust">Güven</string>
     <string name="ssl_do_not_trust">Güvenme</string>
@@ -426,7 +426,7 @@
     <string name="room_details_files">Dosyalar</string>
     <string name="room_details_settings">Ayarlar</string>
     <plurals name="room_details_selected">
-        <item quantity="one">1 tane seçili</item>
+        <item quantity="one">%d1 tane seçili</item>
         <item quantity="other">%d tane seçili</item>
     </plurals>
     <string name="malformed_id">Hatalı ID. Eposta adresi ya da Matrix ID\'si olmalıdır \'@localpart:domain\'</string>
@@ -447,8 +447,8 @@
     <string name="tab_title_search_files">DOSYALAR</string>
     <string name="directory_search_results_title">Dizinlere gözat</string>
     <plurals name="directory_search_rooms">
-        <item quantity="one">1 oda</item>
-        <item quantity="other">%d oda</item>
+        <item quantity="one">%d1 oda</item>
+        <item quantity="other">%d odalar</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%2$s adında %1$s oda bulundu</item>
@@ -1068,7 +1068,7 @@
     <string name="auth_add_email_and_phone_message_2">Hesap kurtarma epostası kaydedin. Daha sonra isteğe bağlı eposta veya telefon nuraması kullanarak sizi tanıyan kişilerin sizi bulabilmesini sağlayın.</string>
     <string name="login_error_ssl_handshake">Cihazın saldırılara açık, eski bir TLS güvenlik protokolü kullanıyor; güvenliğin için bağlantın engellendi</string>
     <string name="settings_call_ringtone_use_default_stun">İkincil çağrı yardımcı sunucusuna izin ver</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Anasunucunuz çağrı yardımcı sunucusu vermez ise %s çağrı yardımcı sunucusu olarak kullanılacaktır (Çağrıda IP adresiniz paylaşılacaktır)</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">Ana sunucunuz bir tane sunmadığında %sas assist kullanacaktır (arama sırasında IP adresiniz paylaşılacaktır)</string>
     <string name="invite_no_identity_server_error">Bu eylemi gerçekleştirebilmek için ayarlarınızdan bir kimlik sunucusu ekleyin.</string>
     <string name="settings_add_3pid_confirm_password_title">Şifreni doğrula</string>
     <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name}, cihazın sınırlı kaynaklarını (pil) koruyacak şekilde arka planda senkronize olur.
@@ -1819,4 +1819,211 @@
     <string name="notice_direct_room_update_by_you">Burada yükselttiniz.</string>
     <string name="notice_room_visibility_joined">tüm oda üyeleri, katıldıkları andan itibaren.</string>
     <string name="notice_room_visibility_invited">tüm oda üyeleri, davet edildikleri andan itibaren.</string>
+    <string name="room_settings_none">Hiçbiri</string>
+    <string name="room_settings_mention_and_keyword_only">Yalnızca Söz ve Anahtar Kelimeler</string>
+    <string name="room_permissions_upgrade_the_space">Alanı yükseltin</string>
+    <string name="room_permissions_send_m_room_server_acl_events">m.room.server_acl olaylarını gönder</string>
+    <string name="room_permissions_change_space_name">Alan adını değiştir</string>
+    <string name="room_permissions_enable_space_encryption">Alan şifrelemeyi etkinleştir</string>
+    <string name="room_permissions_change_main_address_for_the_space">Alanın ana adresini değiştirme</string>
+    <string name="room_permissions_change_space_avatar">Alan avatarını değiştir</string>
+    <string name="space_permissions_notice_read_only">Bu alanın çeşitli bölümlerini değiştirmek için gereken rolleri güncelleme izniniz yok</string>
+    <string name="space_permissions_notice">Bu alanın çeşitli bölümlerini değiştirmek için gereken rolleri seçin</string>
+    <string name="space_settings_permissions_subtitle">Alanın çeşitli bölümlerini değiştirmek için gereken rolleri görüntüleyin ve güncelleyin.</string>
+    <string name="space_settings_permissions_title">Alan izinleri</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">Şifreleme yanlış yapılandırıldı, böylece mesaj gönderemezsiniz. Ayarlar\'ı açmak için tıklatın.</string>
+    <string name="room_unsupported_e2e_algorithm">Şifreleme yanlış yapılandırıldı, böylece mesaj gönderemezsiniz. Şifrelemeyi geçerli bir duruma geri yüklemek için lütfen bir yöneticiyle iletişime geçin.</string>
+    <string name="space_participants_unban_prompt_msg">Yasağı kaldırmak, kullanıcının alana tekrar katılmasına izin verir.</string>
+    <string name="space_participants_ban_prompt_msg">Kullanıcıyı yasaklamak onları bu alandan kaldıracak ve tekrar katılmalarını engelleyecektir.</string>
+    <string name="space_participants_remove_prompt_msg">Kullanıcı bu alandan kaldırılacaktır.
+\n
+\nTekrar katılmalarını önlemek için, onları yasaklamalısınız.</string>
+    <string name="continue_anyway">Yine de Devam Et</string>
+    <string name="call_remove_jitsi_widget_progress">Arama sonlandırılıyor…</string>
+    <string name="call_ended_invite_timeout_title">Cevap yok</string>
+    <string name="call_ended_user_busy_description">Aradığınız kullanıcı meşgul.</string>
+    <string name="call_ended_user_busy_title">Kullanıcı meşgul</string>
+    <string name="audio_call_with_participant">%s ile sesli arama</string>
+    <string name="video_call_with_participant">%s ile görüntülü arama</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">Cevapsız görüntülü arama</item>
+        <item quantity="other">%d cevapsız görüntülü aramalar</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">Cevapsız sesli arama</item>
+        <item quantity="other">%d cevapsız sesli aramalar</item>
+    </plurals>
+    <string name="call_ringing">Çağrı çalıyor…</string>
+    <string name="error_unauthorized">Yetkisiz, eksik geçerli kimlik doğrulama kimlik bilgileri</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Ana sunucuyu seçin</string>
+    <string name="login_error_homeserver_from_url_not_found">%s url\'sinde bir ana sunucuya ulaşılamıyor. Lütfen bağlantınızı kontrol edin veya bir ana sunucuyu manuel olarak seçin.</string>
+    <string name="use_as_default_and_do_not_ask_again">Varsayılan olarak kullan ve tekrar sorma</string>
+    <string name="option_always_ask">Her zaman sor</string>
+    <string name="hs_client_url">Ana sunucu API URL\'si</string>
+    <string name="spaces_header">Alanlar</string>
+    <string name="spaces_invited_header">Davetliler</string>
+    <string name="settings_room_directory_show_all_rooms_summary">Açık içeriğe sahip odalar da dahil olmak üzere oda dizinindeki tüm odaları göster.</string>
+    <string name="settings_room_directory_show_all_rooms">Açık içerikli odaları göster</string>
+    <string name="settings_category_room_directory">Oda rehberi</string>
+    <string name="suggested_header">Önerilen Odalar</string>
+    <string name="dialog_edit_hint">Yeni değer</string>
+    <string name="action_not_now">Şimdi değil</string>
+    <string name="action_enable">Etkinleştirmek</string>
+    <string name="action_return">Geri dönüş</string>
+    <string name="action_switch">Değiştirmek</string>
+    <string name="missing_permissions_title">Eksik izinler</string>
+    <string name="denied_permission_voice_message">Sesli mesaj göndermek için lütfen Mikrofona izin verin.</string>
+    <string name="denied_permission_camera">Bu işlemi gerçekleştirmek için lütfen Kameraya sistem ayarlarından izin verin.</string>
+    <string name="denied_permission_generic">Bazı izinler eksik, bu eylemi gerçekleştirmek için lütfen sistem ayarlarından izinleri verin.</string>
+    <string name="spaces">Alanlar</string>
+    <string name="learn_more">daha fazla bilgi edin</string>
+    <string name="notification_listening_for_notifications">Bildirimleri dinleme</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">Uçtan uca şifrelemeyi etkinleştirdiniz (tanınmayan algoritma %1$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s uçtan uca şifrelemeyi etkinleştirdi (tanınmayan algoritma %2$s).</string>
+    <string name="notice_end_to_end_ok_by_you">Uçtan uca şifrelemeyi açtın.</string>
+    <string name="notice_end_to_end_ok">%1$s uçtan uca şifrelemeyi etkinleştirdi.</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">Konukların odaya katılmasını engellediniz.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s konukların odaya katılmasını engelledi.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">Konukların odaya katılmasını engellediniz.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s konukların odaya katılmasını engelledi.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">Konukların buraya katılmasına izin verdiniz.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s konukların buraya katılmasına izin verdi.</string>
+    <string name="notice_room_guest_access_can_join_by_you">Konukların odaya katılmasına izin verdiniz.</string>
+    <string name="notice_room_guest_access_can_join">%1$s konukların odaya katılmasına izin verdi.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">Bu odanın adreslerini değiştirdin.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s bu odanın adreslerini değiştirdi.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Bu odanın ana ve alternatif adreslerini değiştirdiniz.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s bu odanın ana ve alternatif adreslerini değiştirdi.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">Bu odanın alternatif adreslerini değiştirdiniz.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s bu odanın alternatif adreslerini değiştirdi.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">Bu oda için %1$s alternatif adresini kaldırdınız.</item>
+        <item quantity="other">Bu oda için %1$s alternatif adreslerini kaldırdınız.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s bu oda için %2$s alternatif adresini kaldırdı.</item>
+        <item quantity="other">%1$s bu oda için %2$s alternatif adreslerini kaldırdı.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">Bu oda için %1$s alternatif adresini eklediniz.</item>
+        <item quantity="other">Bu oda için %1$s alternatif adreslerini eklediniz.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s, bu oda için %2$s alternatif adresini ekledi.</item>
+        <item quantity="other">%1$s, bu oda için %2$s alternatif adreslerini ekledi.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_unset_by_you">Bu odanın ana adresini kaldırdınız.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s bu odanın ana adresini kaldırdı.</string>
+    <string name="notice_room_canonical_alias_set_by_you">Bu odanın ana adresini %1$s olarak ayarladınız.</string>
+    <string name="notice_room_canonical_alias_set">%1$s, bu odanın ana adresini %2$s olarak belirledi.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">Bu oda için adres olarak %1$s eklediniz ve %2$s\'i kaldırdınız.</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s, bu oda için adres olarak %2$s ekledi ve %3$s\'i kaldırdı.</string>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">%1$s adresini bu odanın adresi olarak kaldırdınız.</item>
+        <item quantity="other">%1$s adresini bu oda için adres olarak kaldırdınız.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s, %2$s adresini bu odanın adresi olarak kaldırdı.</item>
+        <item quantity="other">%1$s, %2$s adresini bu odanın adresi olarak kaldırdı.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">Bu oda için adres olarak %1$s eklediniz.</item>
+        <item quantity="other">Bu oda için adres olarak %1$s eklediniz.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s, bu oda için bir adres olarak %2$s ekledi.</item>
+        <item quantity="other">%1$s, bu oda için adres olarak %2$s ekledi.</item>
+    </plurals>
+    <string name="notice_room_withdraw_with_reason_by_you">%1$s adlı kişinin davetini geri çektiniz. Neden: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s, %2$s adlı kişinin davetini geri çekti. Neden: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">%1$s davetini kabul ettiniz. Neden: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s, %2$s davetini kabul etti. Neden: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">%1$s için odaya katılma davetini iptal ettiniz. Neden: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s, %2$s için odaya katılma davetini iptal etti. Neden: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">Odaya katılması için %1$s\'a bir davetiye gönderdiniz. Neden: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s, odaya katılması için %2$s\'a bir davetiye gönderdi. Neden: %3$s</string>
+    <string name="notice_room_ban_with_reason_by_you">%1$s\'i yasakladınız. Neden: %2$s</string>
+    <string name="notice_room_ban_with_reason">%1$s, %2$s\'yi yasakladı. Neden: %3$s</string>
+    <string name="notice_room_unban_with_reason_by_you">%1$s yasağını kaldırdınız. Neden: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s planlanmamış %2$s. Nedeni: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">%1$s kaldırdınız. Nedeni: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s %2$s kaldırıldı. Nedeni: %3$s</string>
+    <string name="notice_room_reject_with_reason_by_you">Daveti reddettiniz. Sebep: %1$s</string>
+    <string name="notice_room_reject_with_reason">%1$s daveti reddetti. Neden: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">Gittin. Sebep: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s kaldı. Neden: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">Odadan ayrıldın. Sebep: %1$s</string>
+    <string name="notice_room_leave_with_reason">%1$s odadan ayrıldı. Neden: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">Katıldın. Sebep: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s katıldı. Neden: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">Odaya katıldın. Sebep: %1$s</string>
+    <string name="notice_room_join_with_reason">%1$s odaya katıldı. Neden: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s sizi davet etti. Neden: %2$s</string>
+    <string name="notice_room_invite_with_reason_by_you">%1$s davet ettiniz. Neden: %2$s</string>
+    <string name="notice_room_invite_with_reason">%1$s, %2$s\'i davet etti. Neden: %3$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">Senin davetiyen. Sebep: %1$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason">%1$s\'in davetiyesi. Neden: %2$s</string>
+    <string name="clear_timeline_send_queue">Gönderme kuyruğunu temizle</string>
+    <string name="event_status_sent_message">Mesajı gönderildi</string>
+    <string name="initial_sync_start_importing_account_data">İlk senkronizasyon:
+\nHesap verilerini içe aktarma</string>
+    <string name="initial_sync_start_importing_account_groups">İlk senkronizasyon:
+\nToplulukları içe aktarma</string>
+    <string name="initial_sync_start_importing_account_left_rooms">İlk senkronizasyon:
+\nSol odalar içe aktarılıyor</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">İlk senkronizasyon:
+\nDavetli odaları içe aktarma</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">İlk senkronizasyon:
+\nKonuşmalarınız yükleniyor
+\nÇok sayıda odaya katıldıysanız, bu biraz zaman alabilir</string>
+    <string name="initial_sync_start_importing_account_rooms">İlk senkronizasyon:
+\nOdaları içe aktarma</string>
+    <string name="initial_sync_start_importing_account_crypto">İlk senkronizasyon:
+\nKripto içe aktarma</string>
+    <string name="initial_sync_start_importing_account">İlk senkronizasyon:
+\nHesap içe aktarılıyor…</string>
+    <string name="initial_sync_start_downloading">İlk senkronizasyon:
+\nVeriler indiriliyor…</string>
+    <string name="initial_sync_start_server_computing">İlk senkronizasyon:
+\nSunucu yanıtı bekleniyor…</string>
+    <string name="room_displayname_empty_room_was">Boş oda (%s idi)</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s ve 1 kişi daha</item>
+        <item quantity="other">%1$s ve %2$d kişi daha</item>
+    </plurals>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s ve %4$d diğer</item>
+        <item quantity="other">%1$s, %2$s, %3$s ve %4$d kişi daha</item>
+    </plurals>
+    <string name="room_displayname_4_members">%1$s, %2$s, %3$s ve %4$s</string>
+    <string name="room_displayname_two_members">%1$s ve %2$s</string>
+    <string name="room_displayname_invite_from">%s\'den davet</string>
+    <string name="room_error_access_unauthorized">Bu odaya katılmanıza izin verilmiyor</string>
+    <string name="room_error_join_failed_empty_room">Şu anda boş bir odaya yeniden katılmak mümkün değildir.</string>
+    <string name="could_not_redact">redaksiyon yapılamadı</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">Gönderenin cihazı bize bu mesajın anahtarlarını göndermedi.</string>
+    <string name="notice_crypto_unable_to_decrypt">** Şifre çözülemiyor: %s **</string>
+    <string name="notice_power_level_diff">%1$s, %2$s ile %3$s arasında</string>
+    <string name="notice_power_level_changed">%1$s, %2$s\'nin güç seviyesini değiştirdi.</string>
+    <string name="notice_power_level_changed_by_you">%1$s\'nin güç seviyesini değiştirdiniz.</string>
+    <string name="power_level_custom">Özel (%1$d)</string>
+    <string name="power_level_moderator">Moderatör</string>
+    <string name="power_level_admin">Admin</string>
+    <string name="notice_widget_jitsi_added">%1$s tarafından video konferans başlatıldı</string>
+    <string name="notice_widget_modified_by_you">%1$s widget\'ını değiştirdiniz</string>
+    <string name="notice_widget_added">%1$s, %2$s widget\'ı ekledi</string>
+    <string name="notice_profile_change_redacted">%1$s, %2$s profilini güncelledi</string>
+    <string name="notice_voip_finished">VoIP konferansı bitti</string>
+    <string name="notice_voip_started">VoIP konferansı başladı</string>
+    <string name="notice_requested_voip_conference_by_you">Bir VoIP konferansı talep ettiniz</string>
+    <string name="notice_requested_voip_conference">%1$s bir VoIP konferansı istedi</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 Tüm sunucuların katılımı yasaklanmıştır! Bu oda artık kullanılamaz.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• IP değişmezleriyle eşleşen sunucular artık yasaklanmıştır.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• IP değişmez değerleriyle eşleşen sunuculara artık izin verilmektedir.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• %s ile eşleşen sunucular izin verilenler listesinden kaldırıldı.</string>
+    <string name="notice_room_server_acl_updated_allowed">• %s ile eşleşen sunuculara artık izin veriliyor.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• %s ile eşleşen sunucular yasak listesinden kaldırıldı.</string>
+    <string name="notice_room_server_acl_updated_banned">• %s ile eşleşen sunucular artık yasaklandı.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">Bu oda için sunucu ACL\'lerini değiştirdiniz.</string>
+    <string name="notice_room_server_acl_updated_title">%s, bu oda için sunucu ACL\'lerini değiştirdi.</string>
 </resources>
