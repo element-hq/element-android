@@ -55,7 +55,7 @@
     <string name="offline">Çevrimdışı</string>
     <string name="action_exit">Çık</string>
     <string name="actions">Aksiyonlar</string>
-    <string name="action_sign_out">Hesaptan çık</string>
+    <string name="action_sign_out">Oturumu kapat</string>
     <string name="action_voice_call">Sesli Arama</string>
     <string name="action_video_call">Görüntülü Arama</string>
     <string name="action_global_search">Global arama</string>
@@ -86,7 +86,7 @@
     <string name="matrix_only_filter">Sadece Matrix kullanıcıları</string>
     <string name="no_conversation_placeholder">Konuşma yok</string>
     <string name="template_no_contact_access_placeholder">${app_name}\'in yerel rehbere erişmesine izin vermediniz</string>
-    <string name="no_result_placeholder">Sonuç yok</string>
+    <string name="no_result_placeholder">Sonuç bulunamadı</string>
     <string name="rooms_header">Odalar</string>
     <string name="rooms_directory_header">Odalar dizini</string>
     <string name="no_room_placeholder">Oda yok</string>
@@ -104,14 +104,14 @@
     <string name="send_bug_report">Hata Bildir</string>
     <string name="send_bug_report_description">Lütfen hatayı tanımlayın. Ne yaptınız? Ne olmasını beklediniz? Ne oldu?</string>
     <string name="send_bug_report_description_in_english">Mümkünse, lütfen yapacağınız açıklamayı İngilizce yazın.</string>
-    <string name="send_bug_report_placeholder">Sorununu buraya yaz</string>
+    <string name="send_bug_report_placeholder">Sorunu açıklayın</string>
     <string name="send_bug_report_logs_description">Sorunları teşhis etmek için bu istemciden gelen sistem günlüğü (log) hata raporu ile gönderilecek. Bu hata raporu -sistem günlüğü ve ekran görüntülere dahil- halka açık bir şekilde görünür olmayacaktır. Eğer sadece alttaki yazıları göndermek istiyorsanız, lütfen şunun işaretini kaldırın:</string>
     <string name="send_bug_report_alert_message">Telefonunu yılgınlıkla sallıyor gibi görünüyorsun. Hata raporu göndermek ister misin\?</string>
     <string name="send_bug_report_app_crashed">Uygulama en son çökmüştü, hata raporu göndermek ister misiniz\?</string>
-    <string name="send_bug_report_rage_shake">Hata bildirmek için öfkeyle salla</string>
+    <string name="send_bug_report_rage_shake">Hata bildirmek için telefonu sallayın</string>
     <string name="send_bug_report_sent">Hata raporu başarılı bir şekilde gönderildi</string>
     <string name="send_bug_report_failed">Hata raporu gönderilemedi (%s)</string>
-    <string name="send_bug_report_progress">Süreç (%%%s)</string>
+    <string name="send_bug_report_progress">İlerleme (%%%s)</string>
     <string name="read_receipt">Oku</string>
     <string name="join_room">Odaya Katıl</string>
     <string name="username">Kullanıcı adı</string>
@@ -136,7 +136,7 @@
 \n
 \nBirkaç tane eklemek ister misin\?</string>
     <string name="go_on_with">İle devam et…</string>
-    <string name="error_no_external_application_found">Üzgünüm, bu eylemi gerçekleştirebilecek hiçbir harici uygulama bulunamadı.</string>
+    <string name="error_no_external_application_found">Üzgünüm, bu eylemi gerçekleştirebilecek harici bir uygulama bulunamadı.</string>
     <string name="auth_login">Giriş yap</string>
     <string name="auth_register">Kayıt ol</string>
     <string name="auth_submit">Tamam</string>
@@ -195,44 +195,44 @@
     <string name="auth_opt_phone_number_placeholder">Telefon numarası (isteğe bağlı)</string>
     <string name="auth_repeat_password_placeholder">Şifreyi tekrar girin</string>
     <string name="auth_repeat_new_password_placeholder">Yeni şifrenizi doğrulayın</string>
-    <string name="auth_invalid_login_param">Hatalı kullanıcı adı ve/veya şifre</string>
+    <string name="auth_invalid_login_param">Hatalı kullanıcı adı veya şifre</string>
     <string name="auth_invalid_user_name">Kullanıcı adları yalnızca harfler, sayılar, noktalar, kısa çizgiler ve alt çizgiler içerebilir</string>
     <string name="auth_invalid_password">Şifre çok kısa (min 6)</string>
     <string name="auth_missing_password">Eksik şifre</string>
     <string name="auth_invalid_email">Bu, geçerli bir e-posta adresi gibi gözükmüyor</string>
     <string name="auth_invalid_phone">Bu, geçerli bir telefon numarası gibi gözükmüyor</string>
     <string name="auth_email_already_defined">Bu e-posta adresi zaten tanımlanmış.</string>
-    <string name="auth_missing_email">Eposta adresi eksik</string>
+    <string name="auth_missing_email">E-posta adresi eksik</string>
     <string name="auth_missing_phone">Telefon numarası eksik</string>
-    <string name="auth_missing_email_or_phone">Eposta ya da telefon numarası eksik</string>
+    <string name="auth_missing_email_or_phone">E-posta ya da telefon numarası eksik</string>
     <string name="auth_invalid_token">Geçersiz belirteç</string>
     <string name="auth_password_dont_match">Şifreler uyuşmuyor</string>
     <string name="auth_forgot_password">Şifreni mi unuttun\?</string>
     <string name="auth_use_server_options">Özel sunucu ayarları kullan (gelişmiş)</string>
-    <string name="auth_email_validation_message">Lütfen kayıda devam etmek için epostanı kontrol et</string>
-    <string name="auth_threepid_warning_message">Eposta ve telefon numarası ile aynı anda kayıt yaptırmak şimdilik API yüzüden desteklenmiyor. Sadece telefon numarası hesaba eklenecektir.
+    <string name="auth_email_validation_message">Lütfen kayıda devam etmek için e-postanı kontrol et</string>
+    <string name="auth_threepid_warning_message">E-posta ve telefon numarası ile aynı anda kayıt yaptırmak şimdilik API yüzüden desteklenmiyor. Sadece telefon numarası hesaba eklenecektir.
 \n
-\nEpostanı daha sonra profil ayarlarından ekleyebilirsin.</string>
+\nE-postanı daha sonra profil ayarlarından ekleyebilirsin.</string>
     <string name="auth_recaptcha_message">Bu ana sunucu bir robot olmadığından emin olmak istiyor</string>
     <string name="auth_username_in_use">Kullandığın kullanıcı adı</string>
     <string name="auth_home_server">Ana sunucu:</string>
     <string name="auth_identity_server">Kimlik sunucusu:</string>
-    <string name="auth_reset_password_next_step_button">Eposta adresimi doğruladım</string>
-    <string name="auth_reset_password_message">Şifrenizi sıfırlamak için, hesabınıza bağlı eposta adresini girin:</string>
-    <string name="auth_reset_password_missing_email">Hesaba bağlı eposta adresi mutlaka girilmeli.</string>
+    <string name="auth_reset_password_next_step_button">E-posta adresimi doğruladım</string>
+    <string name="auth_reset_password_message">Şifrenizi sıfırlamak için, hesabınıza bağlı e-posta adresini girin:</string>
+    <string name="auth_reset_password_missing_email">Hesaba bağlı e-posta adresi mutlaka girilmeli.</string>
     <string name="auth_reset_password_missing_password">Yeni şifre mutlaka girilmeli.</string>
-    <string name="auth_reset_password_email_validation_message">Eposta %s adresine gönderildi. Epostadaki yönergeleri takip ettikten sonra, aşağıdaki tuşa tıklayın.</string>
-    <string name="auth_reset_password_error_unauthorized">Eposta doğrulaması başarısız: epostanızdaki bağlantıya tıkladığınızdan emin olun</string>
+    <string name="auth_reset_password_email_validation_message">E-posta %s adresine gönderildi. E-postadaki yönergeleri takip ettikten sonra, aşağıdaki tuşa tıklayın.</string>
+    <string name="auth_reset_password_error_unauthorized">E-posta doğrulaması başarısız: e-postanızdaki bağlantıya tıkladığınızdan emin olun</string>
     <string name="auth_reset_password_success_message">Şifreniz sıfırlandı. 
 \n 
 \nTüm oturumlardan çıkış yaptınız ve mesaj bildirimleri almayacaksınız. Tekrar bildirimleri alabilmek için her cihazda tekrar giriş yapmalısınız.</string>
-    <string name="auth_accept_policies">Lütfen anamakinenin ilkelerini gözden geçirin ve kabul edin:</string>
+    <string name="auth_accept_policies">Lütfen ana sunucunun ilkelerini gözden geçirin ve kabul edin:</string>
     <string name="login_error_must_start_http">URL http[s]:// ile başlamalıdır</string>
     <string name="login_error_network_error">Giriş yapılamadı: Ağ hatası</string>
     <string name="login_error_unable_login">Giriş yapılamadı</string>
     <string name="login_error_registration_network_error">Kayıt olunamadı: Ağ hatası</string>
     <string name="login_error_unable_register">Kayıt olunamadı</string>
-    <string name="login_error_unable_register_mail_ownership">Kayıt olunamadı: eposta sahiplik hatası</string>
+    <string name="login_error_unable_register_mail_ownership">Kayıt olunamadı: e-posta sahiplik hatası</string>
     <string name="login_error_invalid_home_server">Lütfen geçerli bir URL girin</string>
     <string name="login_error_forbidden">Geçersiz kullanıcıadı/şifre</string>
     <string name="login_error_unknown_token">Erişim belirteci belirtildi ancak tanımlanamadı</string>
@@ -240,7 +240,7 @@
     <string name="login_error_not_json">Geçerli JSON içermiyor</string>
     <string name="login_error_limit_exceeded">Çok fazla istek gönderildi</string>
     <string name="login_error_user_in_use">Kullanıcı adı zaten kullanımda</string>
-    <string name="login_error_login_email_not_yet">Eposta bağlantısına hala tıklanmadı</string>
+    <string name="login_error_login_email_not_yet">E-posta bağlantısına hala tıklanmadı</string>
     <string name="e2e_re_request_encryption_key">Diğer oturumlardan <u>şifreleme anahtarlarını tekrar iste</u>.</string>
     <string name="e2e_re_request_encryption_key_sent">Anahtar isteği gönderildi.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">İstek gönderildi</string>
@@ -249,7 +249,7 @@
     <string name="groups_list">Grup Listesi</string>
     <plurals name="membership_changes">
         <item quantity="one">%d üyelik değişikliği</item>
-        <item quantity="other">%d üyelik değişiklikleri</item>
+        <item quantity="other">%d adet üyelik değişikliği</item>
     </plurals>
     <string name="compression_options">Farklı gönder</string>
     <string name="compression_opt_list_original">Orijinal</string>
@@ -282,25 +282,25 @@
     <string name="call_error_ice_failed">Medya Bağlantı Hatası</string>
     <string name="call_error_camera_init_failed">Kamera algılanamadı</string>
     <string name="call_error_answered_elsewhere">arama başka yerde cevaplandı</string>
-    <string name="media_picker_both_capture_title">Resim ya da video çek</string>
+    <string name="media_picker_both_capture_title">Fotoğraf ya da video çek</string>
     <string name="media_picker_cannot_record_video">Video kaydedilemiyor</string>
     <string name="permissions_rationale_popup_title">Bilgilendirme</string>
     <string name="template_permissions_rationale_msg_storage">${app_name}\'in ekleri göndermek ya da kaydetmek için galeriye erişmeye ihtiyacı var.
 \n
 \nLütfen çıkacak ekranda telefonunuzdan dosya gönderebilmesine izin verin.</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name}\'in resim ya da video çekmek için kameraya erişmeye ihtiyacı var.</string>
+    <string name="template_permissions_rationale_msg_camera">${app_name}\'in fotoğraf ya da video çekmek için kameraya erişmeye ihtiyacı var.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
-\nLütfen çıkacak ekranda kameraya erişebilmesine izin verin."</string>
+\nLütfen çıkacak ekranda kamera erişimine izin verin."</string>
     <string name="template_permissions_rationale_msg_record_audio">${app_name}\'in sesli arama yapması için mikrofonunuza erişmeye ihtiyacı var.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
-\nLütfen çıkacak ekranda mikrofona erişebilmesine izin verin."</string>
+\nLütfen çıkacak ekranda mikrofon erişimine izin verin."</string>
     <string name="template_permissions_rationale_msg_camera_and_audio">${app_name}\'in görüntülü arama yapması için kameranıza ve mikrofonunuza erişmeye ihtiyacı var.
 \n
-\nLütfen çıkacak ekranda kamera ve mikrofona erişebilmesine izin verin.</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} eposta ve telefon numaralarına göre diğer Matrix kullanıcılarını bulmak için rehberinizi kontrol edebilir. Eğer bu nedenle rehberinizi paylaşmak istiyorsanız, lütfen açılan ekranda erişime izin verin.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name}\'in eposta ve telefon numaralarına göre diğer Matrix kullanıcılarını bulmak için rehberinizi kontrol edebilir.
+\nLütfen çıkacak ekranda kamera ve mikrofon erişimine izin verin.</string>
+    <string name="template_permissions_rationale_msg_contacts">${app_name} e-posta ve telefon numaralarına göre diğer Matrix kullanıcılarını bulmak için rehberinizi kontrol edebilir. Eğer bu nedenle rehberinizi paylaşmak istiyorsanız, lütfen açılan ekranda erişime izin verin.</string>
+    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name}\'in e-posta ve telefon numaralarına göre diğer Matrix kullanıcılarını bulmak için rehberinizi kontrol edebilir.
 \n 
 \nRehberinizi bu sebeple paylaşmayı kabul ediyor musunuz\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Üzgünüz. İsteğiniz, yetersiz izinlerden dolayı gerçekleştirilemedi</string>
@@ -311,14 +311,14 @@
     <string name="_continue">Devam et</string>
     <string name="action_remove">Sil</string>
     <string name="action_join">Katıl</string>
-    <string name="action_preview">Önizleme</string>
+    <string name="action_preview">Ön izleme</string>
     <string name="action_reject">Reddet</string>
     <string name="list_members">Üyeleri Listele</string>
     <string name="open_chat_header">Başlık Aç</string>
-    <string name="room_sync_in_progress">Eşzamanlanıyor…</string>
+    <string name="room_sync_in_progress">Senkronize ediliyor…</string>
     <string name="room_preview_invitation_format">Bu odaya %s tarafından davet edildiniz</string>
-    <string name="room_preview_unlinked_email_warning">Davet %s e/a gönderildi ancak eposta hala ilişkilendirilmemiş.
-\nFarklı bir hesaba giriş yapın, ya da epostayı hesabınıza ekleyin.</string>
+    <string name="room_preview_unlinked_email_warning">Davet %s e/a gönderildi ancak e-posta hala ilişkilendirilmemiş.
+\nFarklı bir hesaba giriş yapın, ya da e-postayı hesabınıza ekleyin.</string>
     <string name="room_preview_try_join_an_unknown_room">%s e/a erişmeye çalışıyorsun. Katılıp sohbete dahil olmak ister misin\?</string>
     <string name="room_preview_try_join_an_unknown_room_default">oda</string>
     <string name="room_preview_room_interactions_disabled">Bu odanın önizlemesi. Oda etkileşimleri devre dışı bırakıldı.</string>
@@ -330,7 +330,7 @@
     </plurals>
     <plurals name="room_title_members">
         <item quantity="one">%d üye</item>
-        <item quantity="other">%d üyeler</item>
+        <item quantity="other">%d adet üye</item>
     </plurals>
     <string name="room_title_one_member">1 üye</string>
     <plurals name="format_time_s">
@@ -361,7 +361,7 @@
     <string name="room_participants_header_call">ARAMA</string>
     <string name="room_participants_header_direct_chats">DİREKT SOHBETLER</string>
     <string name="room_participants_header_devices">OTURUMLAR</string>
-    <string name="room_participants_action_invite">Davet</string>
+    <string name="room_participants_action_invite">Davet et</string>
     <string name="room_participants_action_leave">Odadan ayrıl</string>
     <string name="room_participants_action_ban">Engelle</string>
     <string name="room_participants_action_unban">Engeli kaldır</string>
@@ -371,13 +371,13 @@
     <string name="room_participants_action_set_admin">Yönetici yap</string>
     <string name="room_participants_action_ignore">Bu kullanıcının tüm mesajlarını gizle</string>
     <string name="room_participants_action_unignore">Bu kullanıcının tüm mesajlarını göster</string>
-    <string name="room_participants_invite_search_another_user">Kullanıcı ID, Ad ya da eposta</string>
+    <string name="room_participants_invite_search_another_user">Kullanıcı ID, Ad ya da e-posta</string>
     <string name="room_participants_action_mention">Bahset</string>
     <string name="room_participants_action_devices_list">Oturum Listesini Göster</string>
-    <string name="room_participants_power_level_prompt">Bu işlemin geri dönüşü yok kullanıcıyı sen ile aynı erişim seviyesine getiriyorsun.
+    <string name="room_participants_power_level_prompt">Bu işlemin geri dönüşü yok kullanıcıyı kendin ile aynı erişim seviyesine getiriyorsun.
 \nEmin misin\?</string>
-    <string name="room_participants_ban_prompt_msg">Kullanıcıyı yasaklamak onları bu odadan çıkaracak ve tekrar katılmalarını engelleyecektir.</string>
-    <string name="reason_hint">Neden</string>
+    <string name="room_participants_ban_prompt_msg">Kullanıcıyı engellemek onları bu odadan çıkaracak ve tekrar katılmalarını engelleyecektir.</string>
+    <string name="reason_hint">Sebep</string>
     <string name="room_participants_invite_prompt_msg">%s adlı kullanıcılar(ı) bu sohbete davet etmek istediğinden emin misin\?</string>
     <string name="room_participants_invite_join_names">"%1$s, "</string>
     <string name="room_participants_invite_join_names_and">%1$s ve %2$s</string>
@@ -387,8 +387,8 @@
     <string name="people_search_user_directory">KULLANICI DİZİNİ (%s)</string>
     <string name="people_search_filter_text">Sadece Matrix kullanıcıları</string>
     <string name="people_search_invite_by_id_dialog_title">Kullanıcıyı ID ile Davet et</string>
-    <string name="people_search_invite_by_id_dialog_description">Lütfen bir veya daha fazla eposta adresi ya da Matrix ID girin</string>
-    <string name="people_search_invite_by_id_dialog_hint">Eposta ya da Matrix ID</string>
+    <string name="people_search_invite_by_id_dialog_description">Lütfen bir veya daha fazla e-posta adresi ya da Matrix ID girin</string>
+    <string name="people_search_invite_by_id_dialog_hint">E-posta ya da Matrix ID</string>
     <string name="room_menu_search">Bul</string>
     <string name="room_one_user_is_typing">%s yazıyor…</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s yazıyor…</string>
@@ -408,17 +408,17 @@
     <string name="room_do_not_have_permission_to_post">Bu odaya mesaj gönderme izniniz yok.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d yeni mesaj</item>
-        <item quantity="other">%d yeni mesajlar</item>
+        <item quantity="other">%d yeni mesaj</item>
     </plurals>
     <string name="ssl_trust">Güven</string>
     <string name="ssl_do_not_trust">Güvenme</string>
     <string name="ssl_logout_account">Çıkış yap</string>
     <string name="ssl_remain_offline">Göz ardı et</string>
-    <string name="ssl_fingerprint_hash">Parmakizi (%s):</string>
+    <string name="ssl_fingerprint_hash">Parmak izi (%s):</string>
     <string name="ssl_could_not_verify">Uzak sunucunun kimliğini doğrulayamadı.</string>
     <string name="ssl_cert_not_trust">Bu ağ trafiğinizin izlendiğinden, ya da telefonunuzun uzak sunucudaki sertifikaya güvenmediğinden dolayı olabilir.</string>
     <string name="ssl_cert_new_account_expl">Eğer sunucu yöneticisi bunun beklendiğini söylediyse aşağıdaki parmak izi ile sağlanılan parmak izinin uyuştuğunu dogrulayın.</string>
-    <string name="ssl_unexpected_existing_expl">Sertifika telefonunuzun güvendi sertifika ile değiştirildi. Bu çok OLAĞANDIŞI. Bu yeni sertifikayı KABUL ETMEMENİZ tavsiye edilir.</string>
+    <string name="ssl_unexpected_existing_expl">Sertifika telefonunuzun güvendi sertifika ile değiştirildi. Bu çok OLAĞAN DIŞI. Bu yeni sertifikayı KABUL ETMEMENİZ tavsiye edilir.</string>
     <string name="ssl_expected_existing_expl">Bu sertifika önceki güvenilen sertifikadan güvenilmez sertifikaya değiştirildi. Sunucu bu sertifikayı yenileyecek. Farklı bir parmak izi için sunucu yöneticisiyle iletişime geçin.</string>
     <string name="ssl_only_accept">Sadece sunucu yöneticisinin yukarıdaki yayınladığı parmak izleri ile uyuşan sertifikaları onaylayın.</string>
     <string name="room_details_title">Oda Detayları</string>
@@ -426,10 +426,10 @@
     <string name="room_details_files">Dosyalar</string>
     <string name="room_details_settings">Ayarlar</string>
     <plurals name="room_details_selected">
-        <item quantity="one">%d tane seçili</item>
-        <item quantity="other">%d tane seçili</item>
+        <item quantity="one">%d adet seçili</item>
+        <item quantity="other">%d adet seçili</item>
     </plurals>
-    <string name="malformed_id">Hatalı ID. Eposta adresi ya da Matrix ID\'si olmalıdır \'@localpart:domain\'</string>
+    <string name="malformed_id">Hatalı ID. E-posta adresi ya da Matrix ID\'si olmalıdır \'@localpart:domain\'</string>
     <string name="room_details_people_invited_group_name">DAVET EDİLDİ</string>
     <string name="room_details_people_present_group_name">KATILDI</string>
     <string name="room_event_action_report_prompt_reason">İçeriği bildirme nedeni</string>
@@ -440,7 +440,7 @@
     <string name="room_event_action_cancel_download">İndirmeyi iptal et</string>
     <string name="search_hint">Bul</string>
     <string name="search_members_hint">Oda üyelerini filtrele</string>
-    <string name="search_no_results">Sonuç yok</string>
+    <string name="search_no_results">Sonuç bulunamadı</string>
     <string name="tab_title_search_rooms">ODALAR</string>
     <string name="tab_title_search_messages">MESAJLAR</string>
     <string name="tab_title_search_people">KİŞİLER</string>
@@ -448,7 +448,7 @@
     <string name="directory_search_results_title">Dizinlere gözat</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">%d oda</item>
-        <item quantity="other">%d odalar</item>
+        <item quantity="other">%d adet oda</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
         <item quantity="one">%2$s adında %1$s oda bulundu</item>
@@ -475,8 +475,8 @@
     <string name="room_sliding_menu_privacy_policy">Gizlilik Politikası</string>
     <string name="settings_profile_picture">Profil Resmi</string>
     <string name="settings_display_name">Görünür Ad</string>
-    <string name="settings_email_address">Eposta</string>
-    <string name="settings_add_email_address">Eposta ekle</string>
+    <string name="settings_email_address">E-posta</string>
+    <string name="settings_add_email_address">E-posta ekle</string>
     <string name="settings_phone_number">Telefon</string>
     <string name="settings_add_phone_number">Telefon numarası ekle</string>
     <string name="settings_app_info_link_title">Uygulama bilgisi</string>
@@ -501,12 +501,12 @@
     <string name="settings_troubleshoot_test_account_settings_failed">Bildirimler hesabın için etkin durumda değil.
 \nLütfen hesap ayarlarınızı gözden geçirin.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Etkinleştir</string>
-    <string name="settings_troubleshoot_test_device_settings_title">Oturum Ayarları.</string>
+    <string name="settings_troubleshoot_test_device_settings_title">Oturum Ayarları</string>
     <string name="settings_troubleshoot_test_device_settings_success">Bildirimler bu oturum için etkinleştirilmiş.</string>
     <string name="template_settings_troubleshoot_test_device_settings_failed">Bildirimler bu oturum için etkin değil.
 \nLütfen ${app_name} ayarlarını gözden geçirin.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Etkinleştir</string>
-    <string name="settings_troubleshoot_test_bing_settings_title">Özel Ayarlar.</string>
+    <string name="settings_troubleshoot_test_bing_settings_title">Özel Ayarlar</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Bazı mesajların türü sessize ayarlanmıştır (sessiz bir bildirim gönderecektir).</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Bazı bildirimler özel ayarlarınızda devre dışı durumda.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Özel kuralları yüklerken hata oluştu, lütfen tekrar deneyin.</string>
@@ -529,8 +529,8 @@
 \nBu hata ${app_name}\'in kontrolü dışında. Telefonda hiç Google hesabı yok. Lütfen hesap yöneticisini açın ve bir tane Google hesabı ekleyin.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Hesap ekle</string>
     <string name="settings_troubleshoot_test_token_registration_title">Belirteç Kayıtı</string>
-    <string name="settings_troubleshoot_test_token_registration_success">FCM belirteci başarı ile AnaMakineye kaydedildi.</string>
-    <string name="settings_troubleshoot_test_token_registration_failed">FCM belirteci AnaMakineye kaydedilirken hata:
+    <string name="settings_troubleshoot_test_token_registration_success">FCM belirteci başarı ile Ana Sunucuya kaydedildi.</string>
+    <string name="settings_troubleshoot_test_token_registration_failed">FCM belirteci Ana Sunucuya kaydedilirken hata:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_service_restart_title">Bildirim Hizmetleri Otomatik-Yeniden-Başlatma</string>
     <string name="settings_troubleshoot_test_service_restart_success">Hizmet otomatik olarak sonlandırılıp yeniden başlatıldı.</string>
@@ -539,11 +539,11 @@
     <string name="settings_troubleshoot_test_service_boot_success">Hizmet cihaz yeniden başlatıldığında çalıştırılacak.</string>
     <string name="template_settings_troubleshoot_test_service_boot_failed">Hizmet cihaz yeniden başlatılınca çalıştırılmayacak, ${app_name}\'i açana kadar bildirimleri almakyacaksın.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Açılışta başlatı etkinleştir</string>
-    <string name="settings_troubleshoot_test_bg_restricted_title">Arkaplan kısıtlamalarını gözden geçir</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">Arkaplan kısıtlamaları ${app_name} için devre dışı. Bu test mobil veri kullanacak (WIFI değil).
+    <string name="settings_troubleshoot_test_bg_restricted_title">Arka plan kısıtlamalarını gözden geçir</string>
+    <string name="template_settings_troubleshoot_test_bg_restricted_success">Arka plan kısıtlamaları ${app_name} için devre dışı. Bu test mobil veri kullanacak (WIFI değil).
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Arkaplan kısıtlamaları ${app_name} için etkinleştirilmiş.
-\nUygulamanın arkaplanda iken yapmaya çalıştığı şeyler agresif bir biçimde kısıtlanacak ve bu bildirimleri de etkileyebilir.
+    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Arka plan kısıtlamaları ${app_name} için etkinleştirilmiş.
+\nUygulamanın arka planda iken yapmaya çalıştığı şeyler agresif bir biçimde kısıtlanacak ve bu bildirimleri de etkileyebilir.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Kısıtlamaları devre dışı bırak</string>
     <string name="settings_troubleshoot_test_battery_title">Pil Optimizasyonu</string>
@@ -552,10 +552,10 @@
     <string name="settings_troubleshoot_test_battery_quickfix">Optimizasyonu Göz ardı et</string>
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="settings_notification_privacy_reduced">Azaltılmış gizlilik</string>
-    <string name="settings_notification_privacy_need_permission">Uygulamanın arkaplanda çalışması için izne ihtiyacı var</string>
+    <string name="settings_notification_privacy_need_permission">Uygulamanın arka planda çalışması için izne ihtiyacı var</string>
     <string name="settings_notification_privacy_fcm">• Bildirimler Firebase Bulut Mesajlaşma ile gönderildi</string>
     <string name="settings_notification_privacy_metadata">• Bildirimler sadece meta verileri içeriyor</string>
-    <string name="settings_notification_privacy_secure_message_content">• Bildirimin mesaj içeriği <b>direkt Matrix anamakinesinden güvenli bir şekilde bulundu</b></string>
+    <string name="settings_notification_privacy_secure_message_content">• Bildirimin mesaj içeriği <b>direkt Matrix ana sunucudan güvenli bir şekilde bulundu</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Bildirimler <b>meta ve mesaj verileri</b> içeriyor</string>
     <string name="settings_notification_privacy_message_content_not_shown">• Bildirimler <b>mesaj içeriğini göstermeyecek</b></string>
     <string name="settings_notification_ringtone">Bildirim sesi</string>
@@ -573,10 +573,10 @@
     <string name="settings_invited_to_room">Odaya davet edildiğimde</string>
     <string name="settings_call_invitations">Arama davetleri</string>
     <string name="settings_messages_sent_by_bot">Mesajlar bot tarafından gönderildi</string>
-    <string name="settings_background_sync">Arkaplanda Eşzamanlama</string>
+    <string name="settings_background_sync">Arka planda Senkronizasyon</string>
     <string name="settings_start_on_boot">Açılışta başlat</string>
-    <string name="settings_enable_background_sync">Arkaplanda eşzamanlamayı etkinleştir</string>
-    <string name="settings_set_sync_timeout">Eşzamanlama talep süresi doldu</string>
+    <string name="settings_enable_background_sync">Arka planda senkronizasyonu etkinleştir</string>
+    <string name="settings_set_sync_timeout">Senkronizasyon talep süresi doldu</string>
     <string name="settings_set_sync_delay">Her senkronizasyon arası gecikme</string>
     <string name="settings_version">Sürüm</string>
     <string name="settings_olm_version">olm sürümü</string>
@@ -584,7 +584,7 @@
     <string name="settings_third_party_notices">Üçüncü parti uyarıları</string>
     <string name="settings_copyright">Telif hakkı</string>
     <string name="settings_privacy_policy">Gizlilik politikası</string>
-    <string name="settings_keep_media">Medyayı tut</string>
+    <string name="settings_keep_media">Medyayı sakla</string>
     <string name="settings_clear_cache">Ön belleği temizle</string>
     <string name="settings_clear_media_cache">Medya ön belleğini temizle</string>
     <string name="settings_user_settings">Kullanıcı ayarları</string>
@@ -603,38 +603,38 @@
     <string name="settings_pin_unread_messages">Okunmamış mesajlı odaları öne çıkar</string>
     <string name="settings_devices_list">Oturumlar</string>
     <string name="settings_inline_url_preview">Satır içi URL önizlemesi</string>
-    <string name="settings_inline_url_preview_summary">Bağlantıları anamakine destekliyorsa sohbette önizle.</string>
+    <string name="settings_inline_url_preview_summary">Bağlantıları ana sunucu destekliyorsa sohbette önizle.</string>
     <string name="settings_send_typing_notifs">Yazıyor bildirimleri gönder</string>
     <string name="settings_send_typing_notifs_summary">Diğer kullanıcıların senin ne yazdığını bilmelerine izin ver.</string>
     <string name="settings_send_markdown">Markdown biçimlendirmesi</string>
     <string name="settings_send_markdown_summary">Mesajları gönderilmeden önce markdown ile biçimlendir. Bu gelişmiş biçimlendirmeye izin verir örneğin asteriks ile italik yazı yazmak gibi.</string>
     <string name="settings_always_show_timestamps">Tüm mesajların zaman damgasını göster</string>
     <string name="settings_12_24_timestamps">Zaman damgasını 12-saat biçiminde göster</string>
-    <string name="settings_show_read_receipts">Makbuz okumayı göster</string>
-    <string name="settings_show_read_receipts_summary">Detaylı liste için makbuz okumaya tıkla.</string>
+    <string name="settings_show_read_receipts">Okundu ibaresini göster</string>
+    <string name="settings_show_read_receipts_summary">Detaylı liste için okundu ibaresine tıkla.</string>
     <string name="settings_show_join_leave_messages">Katılma ve ayrılma durumlarını göster</string>
     <string name="settings_show_join_leave_messages_summary">Davetler, atılanlar ve engellenenler etkilenmemiştir.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Hesap olaylarını göster</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Avatar ve görünür adı değişimlerde içer.</string>
     <string name="settings_vibrate_on_mention">Bir kullanıcıdan söz ederken titreşim ver</string>
-    <string name="settings_preview_media_before_sending">Medyayı göndermeden önce önizle</string>
+    <string name="settings_preview_media_before_sending">Medyayı göndermeden önce önizleme göster</string>
     <string name="settings_deactivate_account_section">Hesabı devre dışı bırak</string>
     <string name="settings_deactivate_my_account">Hesabımı devre dışı bırak</string>
     <string name="startup_notification_privacy_title">Bildirim Gizliliği</string>
-    <string name="template_startup_notification_privacy_message">${app_name} bildirimlerinizi güvenli ve gizli bir şekilde yönetmek için arkaplanda çalışır. Bu pil kullanımını etkileyebilir.</string>
+    <string name="template_startup_notification_privacy_message">${app_name} bildirimlerinizi güvenli ve gizli bir şekilde yönetmek için arka planda çalışır. Bu pil kullanımını etkileyebilir.</string>
     <string name="startup_notification_privacy_button_grant">İzin ver</string>
     <string name="startup_notification_privacy_button_other">Farklı bir seçenek seç</string>
-    <string name="startup_notification_fdroid_battery_optim_title">Arkaplan Bağlantısı</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} güvenilir bildirimlere sahip olmak için düşük arkaplan bağlatısı yapmaya ihtiyaç duyar.
-\nÇıkacak ekranda ${app_name}\'in arkaplanda sürekli çalışması için izin istenecek, lütfen kabul edin.</string>
+    <string name="startup_notification_fdroid_battery_optim_title">Arka plan Bağlantısı</string>
+    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} güvenilir bildirimlere sahip olmak için düşük arka plan bağlatısı yapmaya ihtiyaç duyar.
+\nÇıkacak ekranda ${app_name}\'in arka planda sürekli çalışması için izin istenecek, lütfen kabul edin.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">İzin ver</string>
-    <string name="settings_analytics">Analiz</string>
-    <string name="settings_opt_in_of_analytics">Analiz verilerini gönder</string>
+    <string name="settings_analytics">Analitik</string>
+    <string name="settings_opt_in_of_analytics">Analitik verilerini gönder</string>
     <string name="template_settings_opt_in_of_analytics_summary">${app_name} uygulamayı geliştirmemiz için anonim analitik veriler toplar.</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">Lütfen ${app_name}\'i geliştirebilmemiz için analizleri etkinleştirin.</string>
-    <string name="settings_opt_in_of_analytics_ok">Evet, Yardım etmek istiyorum!</string>
+    <string name="template_settings_opt_in_of_analytics_prompt">Lütfen ${app_name}\'i geliştirebilmemiz için analitikleri etkinleştirin.</string>
+    <string name="settings_opt_in_of_analytics_ok">Evet, yardım etmek istiyorum!</string>
     <string name="settings_data_save_mode">Veri kaydetme modu</string>
-    <string name="settings_data_save_mode_summary">Veri kaydetme modu belirli filtreler uygular bu sayede ilerki güncellemeler ve yazıyor bildirimleri filtrelenir.</string>
+    <string name="settings_data_save_mode_summary">Veri kaydetme modu belirli filtreler uygular bu sayede ilerideki güncellemeler ve yazıyor bildirimleri filtrelenir.</string>
     <string name="devices_details_dialog_title">Oturum bilgileri</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Görünür Ad</string>
@@ -647,18 +647,18 @@
     <string name="devices_delete_pswd">Şifre:</string>
     <string name="devices_delete_submit_button_label">Gönder</string>
     <string name="settings_logged_in">Olarak giriş yaptın</string>
-    <string name="settings_home_server">Ana Makine</string>
+    <string name="settings_home_server">Ana Sunucu</string>
     <string name="settings_identity_server">Kimlik Sunucusu</string>
     <string name="settings_user_interface">Kullanıcı arayüzü</string>
     <string name="settings_interface_language">Dil</string>
     <string name="settings_select_language">Dili seç</string>
     <string name="account_email_validation_title">Doğrulama Bekleniyor</string>
-    <string name="account_email_validation_message">Lütfen epostanı kontrol et ve içerdiği bağlantıya tıkla. Bu tamamlandığında, tamama tıkla.</string>
-    <string name="account_email_validation_error">Eposta adresi doğrulanamadı. Lütfen epostanı kontrol et ve içerdiği bağlantıya tıkla. Bu tamamlandığında, tamama tıkla.</string>
-    <string name="account_email_already_used_error">Bu eposta adresi zaten kullanımda.</string>
-    <string name="account_email_not_found_error">Bu eposta adresi bulunamadı.</string>
+    <string name="account_email_validation_message">Lütfen e-postanı kontrol et ve içerdiği bağlantıya tıkla. Bu tamamlandığında tamama tıkla.</string>
+    <string name="account_email_validation_error">E-posta adresi doğrulanamadı. Lütfen e-postanı kontrol et ve içerdiği bağlantıya tıkla. Bu tamamlandığında tamama tıkla.</string>
+    <string name="account_email_already_used_error">Bu e-posta adresi zaten kullanımda.</string>
+    <string name="account_email_not_found_error">Bu e-posta adresi bulunamadı.</string>
     <string name="account_phone_number_already_used_error">Bu telefon numarası zaten kullanımda.</string>
-    <string name="account_email_error">Epostanı doğrularken bir hata meydana geldi.</string>
+    <string name="account_email_error">E-postanı doğrularken bir hata meydana geldi.</string>
     <string name="settings_password">Şifre</string>
     <string name="settings_change_password">Şifreni değiştir</string>
     <string name="settings_old_password">Mevcut şifre</string>
@@ -796,8 +796,8 @@
 \nBilinmeyen Oturumlar:</string>
     <string name="select_room_directory">Bir oda dizini seç</string>
     <string name="directory_server_fail_to_retrieve_server">Sunucu müsait değil ya da aşırı yüklenmiş</string>
-    <string name="directory_server_type_homeserver">Herkese açık odaları listelemek için bir anamakine girin</string>
-    <string name="directory_server_placeholder">Anamakine URL</string>
+    <string name="directory_server_type_homeserver">Herkese açık odaları listelemek için bir ana sunucu girin</string>
+    <string name="directory_server_placeholder">Ana sunucu URL</string>
     <string name="directory_server_all_rooms_on_server">%s sunucusundaki tüm odalar</string>
     <string name="directory_server_native_rooms">%s deki/daki tüm yerel odalar</string>
     <string name="lock_screen_hint">Buraya yazın…</string>
@@ -834,8 +834,8 @@
     <string name="widget_integration_unable_to_create">Widget oluşturulamıyor.</string>
     <string name="widget_integration_failed_to_send_request">İstek gönderilemedi.</string>
     <string name="widget_integration_positive_power_level">Erişim seviyesi pozitif tamsayı olmalıdır.</string>
-    <string name="widget_integration_must_be_in_room">Bu oda da değilsin.</string>
-    <string name="widget_integration_no_permission_in_room">Bu oda da bunu yapacak iznin yok.</string>
+    <string name="widget_integration_must_be_in_room">Bu odada değilsin.</string>
+    <string name="widget_integration_no_permission_in_room">Bu odada bunu yapacak iznin yok.</string>
     <string name="widget_integration_missing_room_id">room_id istekte eksik.</string>
     <string name="widget_integration_missing_user_id">user_id istekte eksik.</string>
     <string name="widget_integration_room_not_visible">%s adlı oda görünür değil.</string>
@@ -908,14 +908,14 @@
     <string name="receipt_avatar">Avatar açıklaması</string>
     <string name="notice_avatar">Avatar uyarısı</string>
     <string name="avatar">Avatar</string>
-    <string name="dialog_user_consent_content">%1$s anamakinesini kullanmaya devam etmek için şart ve koşulları gözden geçirip kabul etmelisiniz.</string>
+    <string name="dialog_user_consent_content">%1$s ana sunucusunu kullanmaya devam etmek için şart ve koşulları gözden geçirip kabul etmelisiniz.</string>
     <string name="dialog_user_consent_submit">Şimdi yorumla</string>
     <string name="deactivate_account_title">Hesabı devre dışı bırak</string>
     <string name="deactivate_account_content">Bu hesabınızın kalıcı bir şekilde kullanılamaz yapar. Giriş yapamazsınız ve kimse tekrar aynı kullanıcı ID\'sini kullanarak kayıt yaptıramaz. Bu hesabınızın tüm odalardan ayrılmasına ve kimlik sunucusundan hesap detaylarınızın silinmesine yok açar. <b>Bu eylem geri çevrilemez</b>.
 \n
 \nHesabınızı devre dışı bırakmak <b>varsayılan olarak gönderdiğiniz mesajlarınızın silinmesini sağlamaz</b>. Eğer mesajlarınızın silinmesini istiyorsanız lütfen alttaki kutuyu işaretleyin.
 \n
-\nMatrixdeki mesaj görünürlüğü eposta ile benzerdir. Silinen mesajlarınız yeni ya da kayıtsız kullanıcılarla paylaşılmaz ama kayıtlı ve zaten mesajlarınıza erişebilen kullanıcılar halen mesajlarınızın bir kopyasına sahip olurlar.</string>
+\nMatrixdeki mesaj görünürlüğü e-posta ile benzerdir. Silinen mesajlarınız yeni ya da kayıtsız kullanıcılarla paylaşılmaz ama kayıtlı ve zaten mesajlarınıza erişebilen kullanıcılar halen mesajlarınızın bir kopyasına sahip olurlar.</string>
     <string name="deactivate_account_delete_checkbox">Lütfen hesabım devre dışı olunca gönderdiğim tüm mesajları sil (Uyarı: bu gelecekteki kullanıcıların bitmemiş yarım tartışma görmelerine sebep olur)</string>
     <string name="deactivate_account_prompt_password">Devam etmek için lütfen şifrenizi girin:</string>
     <string name="deactivate_account_submit">Hesabı devre dışı bırak</string>
@@ -928,15 +928,15 @@
     <string name="resource_limit_exceeded_title">Kaynak Sınırı Aşıldı</string>
     <string name="resource_limit_contact_action">Yöneticiyle iletişime geç</string>
     <string name="resource_limit_contact_admin">Hizmet yöneticin iletişime geç</string>
-    <string name="resource_limit_soft_default">Bu anamakine kaynak sınırılarından birini aştı <b>bazı kullanıcılar giriş yapamayabilir</b>.</string>
-    <string name="resource_limit_hard_default">Bu anamakine kaynak sınırılarından birini aştı.</string>
-    <string name="resource_limit_soft_mau"> Bu anamakine Aylık Etkin Kullanıcı sınırına ulaştı <b>bazı kullanıcılar giriş yapamayabilir</b>.</string>
-    <string name="resource_limit_hard_mau">Bu anamakine Aylık Etkin Kullanıcı sınırına ulaştı.</string>
+    <string name="resource_limit_soft_default">Bu ana sunucu kaynak sınırılarından birini aştı <b>bazı kullanıcılar giriş yapamayabilir</b>.</string>
+    <string name="resource_limit_hard_default">Bu ana sunucu kaynak sınırılarından birini aştı.</string>
+    <string name="resource_limit_soft_mau"> Bu ana sunucu Aylık Etkin Kullanıcı sınırına ulaştı <b>bazı kullanıcılar giriş yapamayabilir</b>.</string>
+    <string name="resource_limit_hard_mau">Bu ana sunucu Aylık Etkin Kullanıcı sınırına ulaştı.</string>
     <string name="resource_limit_soft_contact">Lütfen limitin arttırılması için %s yapın.</string>
     <string name="resource_limit_hard_contact">Lütfen bu hizmeti kullanmak için %s yapın.</string>
     <string name="settings_lazy_loading_title">Yavaş yüklenen oda üyeleri</string>
     <string name="settings_lazy_loading_description">Sadece ilk görüntüdeki oda üyelerini yükleyerek performansı arttırın.</string>
-    <string name="error_lazy_loading_not_supported_by_home_server">Anamakineniz yavaş oda üyeleri yüklemeyi desteklemiyor daha. Daha sonra tekrar deneyin.</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Ana sunucunuz yavaş oda üyeleri yüklemeyi desteklemiyor daha. Daha sonra tekrar deneyin.</string>
     <string name="unknown_error">Üzgünüz bir hata oluştu</string>
     <string name="merged_events_expand">genişlet</string>
     <string name="merged_events_collapse">daralt</string>
@@ -965,7 +965,7 @@
     <string name="keys_backup_setup_step1_advanced">(Gelişmiş)</string>
     <string name="keys_backup_setup_step1_manual_export">Elle anahtarları dışa aktar</string>
     <string name="keys_backup_setup_step2_text_title">Yedeklemeni parola ile güvence altına al.</string>
-    <string name="keys_backup_setup_step2_text_description">Anahtarlarının şifrelenmiş bir kopyasını anamakinede depolayacağız. Yedeklemeni parola ile koru ve güvenli tut.
+    <string name="keys_backup_setup_step2_text_description">Anahtarlarının şifrelenmiş bir kopyasını ana sunucuda depolayacağız. Yedeklemeni parola ile koru ve güvenli tut.
 \n
 \nÜst düzey güvenlik için parolanız hesap şifresinden farklı olmalıdır.</string>
     <string name="keys_backup_setup_step2_button_title">Parolayı ayarla</string>
@@ -991,7 +991,7 @@
     <string name="recovery_key">Kurtarma Anahtarı</string>
     <string name="unexpected_error">Beklenmeyen hata</string>
     <string name="keys_backup_setup_backup_started_title">Yedekleme Başlatıldı</string>
-    <string name="keys_backup_setup_backup_started_message">Şifreleme anahtarın arkaplanda anamakineye yedeklenecek. İlk yedekleme birkaç dakika sürecek.</string>
+    <string name="keys_backup_setup_backup_started_message">Şifreleme anahtarın arka planda ana sunucuya yedeklenecek. İlk yedekleme birkaç dakika sürecek.</string>
     <string name="keys_backup_setup_skip_title">Emin misin\?</string>
     <string name="keys_backup_setup_skip_msg">Eğer cihazı kaybedersen ya da çıkış yaparsan mesajlara erişimini kaybedeceksin.</string>
     <string name="keys_backup_restore_is_getting_backup_version">Yedekleme sürümü alınıyor…</string>
@@ -1018,7 +1018,7 @@
     </plurals>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="one">%d yeni anahtar bu oturuma eklendi.</item>
-        <item quantity="other">%d tane yeni anahtar bu oturuma eklendi.</item>
+        <item quantity="other">%d adet yeni anahtar bu oturuma eklendi.</item>
     </plurals>
     <string name="keys_backup_get_version_error">Son sürüm onarma anahtarı alınırken hata oluştu (%s).</string>
     <string name="keys_backup_no_keysbackup_sdk_error">Kripto oturumu etkin değil</string>
@@ -1054,9 +1054,9 @@
     <string name="call_failed_no_ice_use_alt">%s kullanmayı deneyin</string>
     <string name="call_failed_dont_ask_again">Tekrar sorma</string>
     <string name="auth_login_sso">Tek oturum açma ile giriş yap</string>
-    <string name="auth_add_email_message_2">Hesap kurtarma epostası kaydedin ve daha sonra isteğe bağlı olarak sizi tanıyan kişilerin sizi bulabilmesini sağlayın.</string>
+    <string name="auth_add_email_message_2">Hesap kurtarma e-postası kaydedin ve daha sonra isteğe bağlı olarak sizi tanıyan kişilerin sizi bulabilmesini sağlayın.</string>
     <string name="login_error_unknown_host">Bu adrese erişilemiyor, lütfen kontrol et</string>
-    <string name="settings_notification_privacy_no_background_sync">Bu uygulamanın arkaplanda anasunucuya bağlanması <b>gerekmez</b>, bu durum batarya kullanımını azaltır</string>
+    <string name="settings_notification_privacy_no_background_sync">Bu uygulamanın arka planda anasunucuya bağlanması <b>gerekmez</b>, bu durum batarya kullanımını azaltır</string>
     <string name="settings_send_message_with_enter">Enter ile mesaj gönder</string>
     <string name="settings_send_message_with_enter_summary">Klavyedeki Enter tuşuna bastığında alt satıra geçmek yerine mesajı gönder</string>
     <string name="people_no_identity_server">Hiçbir kimlik sunucusu yapılandırılmamış.</string>
@@ -1064,8 +1064,8 @@
 \n
 \nAlternatif olarak %2$s herkese açık sunucuyu kullanmayı da deneyebilirsiniz, ancak bu o kadar da güvenilir olmayacak ve IP adresiniz sunucu ile paylaşılacaktır. Bunu ayrıca Ayarlardan da düzenleyebilirsiniz.</string>
     <string name="auth_add_phone_message_2">Telefon numarası kaydedin ve daha sonra isteğe bağlı olarak sizi tanıyan kişilerin sizi bulabilmesini sağlayın.</string>
-    <string name="auth_add_email_phone_message_2">Hesap kurtarma epostası kaydedin. Daha sonra isteğe bağlı eposta veya telefon nuraması kullanarak sizi tanıyan kişilerin sizi bulabilmesini sağlayın.</string>
-    <string name="auth_add_email_and_phone_message_2">Hesap kurtarma epostası kaydedin. Daha sonra isteğe bağlı eposta veya telefon nuraması kullanarak sizi tanıyan kişilerin sizi bulabilmesini sağlayın.</string>
+    <string name="auth_add_email_phone_message_2">Hesap kurtarma e-postası kaydedin. Daha sonra isteğe bağlı e-posta veya telefon nuraması kullanarak sizi tanıyan kişilerin sizi bulabilmesini sağlayın.</string>
+    <string name="auth_add_email_and_phone_message_2">Hesap kurtarma e-postası kaydedin. Daha sonra isteğe bağlı e-posta veya telefon nuraması kullanarak sizi tanıyan kişilerin sizi bulabilmesini sağlayın.</string>
     <string name="login_error_ssl_handshake">Cihazın saldırılara açık, eski bir TLS güvenlik protokolü kullanıyor; güvenliğin için bağlantın engellendi</string>
     <string name="settings_call_ringtone_use_default_stun">İkincil çağrı yardımcı sunucusuna izin ver</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Ana sunucunuz bir tane sunmadığında %sas assist kullanacaktır (arama sırasında IP adresiniz paylaşılacaktır)</string>
@@ -1101,11 +1101,11 @@
     <string name="encryption_information_unknown_ip">bilinmeyen ip</string>
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: 1 mesaj</item>
-        <item quantity="other">%1$s: %2$d tane mesaj</item>
+        <item quantity="other">%1$s: %2$d adet mesaj</item>
     </plurals>
     <plurals name="notification_compat_summary_title">
         <item quantity="one">%d bildirim</item>
-        <item quantity="other">%d tane bildirim</item>
+        <item quantity="other">%d adet bildirim</item>
     </plurals>
     <string name="notification_unknown_new_event">Yeni Etkinlik</string>
     <string name="notification_unknown_room_name">Oda</string>
@@ -1216,7 +1216,7 @@
     <string name="room_list_rooms_empty_title">Odalar</string>
     <string name="room_list_rooms_empty_body">Odalar burada görünecek. Mevcut odaları görmek ya da kendi odanızı kurmak için aşağıdan + butonuna tıklayın.</string>
     <string name="title_activity_emoji_reaction_picker">Tepkiler</string>
-    <string name="action_agree">Bencede</string>
+    <string name="action_agree">Bence de</string>
     <string name="action_like">Beğendim</string>
     <string name="message_add_reaction">Bir Tepki Ekle</string>
     <string name="message_view_reaction">Tekpileri Görüntüle</string>
@@ -1231,8 +1231,8 @@
     <string name="change_room_directory_network">Ağı değiştir</string>
     <string name="please_wait">Lütfen bekleyin…</string>
     <string name="group_all_communities">Tüm Topluluklar</string>
-    <string name="room_preview_no_preview">Bu oda önizlenemez</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">${app_name} henüz herkese-açık odaları önizlemeyi desteklemiyor</string>
+    <string name="room_preview_no_preview">Bu oda ön izlenemez</string>
+    <string name="template_room_preview_world_readable_room_not_supported_yet">${app_name} henüz herkese açık odaları ön izlemeyi desteklemiyor</string>
     <string name="fab_menu_create_room">Odalar</string>
     <string name="fab_menu_create_chat">Doğrudan Mesajlar</string>
     <string name="create_room_title">Yeni Oda</string>
@@ -1248,7 +1248,7 @@
     <string name="login_error_homeserver_not_found">Bu URL ile ev-sunucusuna erişilemiyor, lütfen kontrol edin</string>
     <string name="template_settings_add_3pid_flow_not_supported">Bunu ${app_name} mobil ile yapamazsınız</string>
     <string name="settings_add_3pid_authentication_needed">Kimlik doğrulama gereklidir</string>
-    <string name="settings_background_fdroid_sync_mode">Arkaplan Senkronizasyon Modu (Deneysel)</string>
+    <string name="settings_background_fdroid_sync_mode">Arka plan Senkronizasyon Modu (Deneysel)</string>
     <string name="settings_background_fdroid_sync_mode_battery">Batarya için optimize edildi</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Uygulama arka plandayken gelen mesajlar için uyarılmayacaksınız.</string>
     <string name="settings_background_sync_update_error">Ayarlar güncellenemedi.</string>
@@ -1273,14 +1273,14 @@
     <string name="call_format_turn_hd_on">Yüksek çözünürlüğü aç</string>
     <string name="login_error_ssl_peer_unverified">SSL Hatası: karşınıdaki kişinin kimliği doğrulanmadı.</string>
     <string name="login_error_ssl_other">SSL Hatası.</string>
-    <string name="settings_call_show_confirmation_dialog_title">Kazara aramayı önle</string>
+    <string name="settings_call_show_confirmation_dialog_title">Yanlışlıkla aramayı önle</string>
     <string name="settings_call_show_confirmation_dialog_summary">Arama başlatmadan önce onay iste</string>
     <string name="active_call_with_duration">Mevcut Arama (%s)</string>
     <string name="return_to_call">Aramaya dön</string>
     <string name="room_participants_action_cancel_invite">Daveti Geri Çevir</string>
-    <string name="room_participants_power_level_demote_warning_title">Kendini alçaltmak istediğinden emin misin\?</string>
-    <string name="room_participants_power_level_demote_warning_prompt">Kendi yetkinizi alçalttığınız için bunu geri alma şansınız olmayacak, eğer bu odadaki son yetkili kişiyseniz yetkileri geri alma imkânınız olmayacak.</string>
-    <string name="room_participants_power_level_demote">Alçalt</string>
+    <string name="room_participants_power_level_demote_warning_title">Kendi yetkinizi düşürmek istediğinizden emin misin\?</string>
+    <string name="room_participants_power_level_demote_warning_prompt">Kendi yetkinizi düşürdüğünüzde bunu geri alma şansınız olmayacak, eğer bu odadaki son yetkili kişiyseniz yetkileri geri alma imkânınız olmayacak.</string>
+    <string name="room_participants_power_level_demote">Yetkiyi Düşür</string>
     <string name="room_participants_action_ignore_title">Kullanıcıyı yoksay</string>
     <string name="room_participants_action_ignore_prompt_msg">Bu kullanıcıyı yoksayarsanız ortak odalarınızda mesajlarını görmeyeceksiniz.
 \n
@@ -1310,7 +1310,7 @@
     <string name="disabled_integration_dialog_content">Bunun için ayarlardan \'Entegrasyonlara İzin Ver\'i açın.</string>
     <plurals name="room_settings_banned_users_count">
         <item quantity="one">1 yasaklanmış kullanıcı</item>
-        <item quantity="other">%d yasaklanmış kullanıcı</item>
+        <item quantity="other">%d adet yasaklanmış kullanıcı</item>
     </plurals>
     <string name="encryption_exported_successfully">Anahtarlar başarıyla dışarı aktarıldı</string>
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
@@ -1320,7 +1320,7 @@
     <string name="recovery_key_export_saved">Kurtarma anahtarın kaydedildi.</string>
     <string name="secure_backup_banner_setup_line1">Güvenli Yedekleme</string>
     <string name="settings_troubleshoot_test_push_notification_content">Bildirimi görüntülüyorsunuz! Buraya tıkla!</string>
-    <string name="error_threepid_auth_failed">Sana gönderdiğimiz e-postadaki bağlantıya tıkladığına emin oldu.</string>
+    <string name="error_threepid_auth_failed">Size gönderdiğimiz e-postadaki bağlantıya tıkladığınıza emin olun.</string>
     <string name="settings_phone_numbers">Telefon numaraları</string>
     <string name="settings_emails_empty">Hesabınıza e-posta adresi eklenmemiş</string>
     <string name="settings_emails">E-posta hesapları</string>
@@ -1540,7 +1540,7 @@
     <string name="login_social_signin_with">%s ile giriş yap</string>
     <string name="login_social_continue">Ya da</string>
     <string name="login_server_other_text">Özel ve gelişmiş ayarlar</string>
-    <string name="login_server_modular_learn_more">Daha fazlasını öğren</string>
+    <string name="login_server_modular_learn_more">Daha fazlasını öğrenin</string>
     <string name="login_server_modular_text">Kuruluşlar için premium sunucu(hosting)</string>
     <string name="login_server_matrix_org_text">En büyük genel sunucuda milyonlara ücretsiz katılın</string>
     <string name="login_server_text">Tıpkı e-posta gibi, hesapların da bir sunucusu vardır, ancak tüm sunuculardaki kişilerle konuşabilirsiniz</string>
@@ -1661,7 +1661,7 @@
     <string name="login_reset_password_mail_confirmation_title">Gelen kutunuzu kontrol edin</string>
     <string name="login_reset_password_error_not_found">Bu e-posta herhangi bir hesapla ilişkili değil</string>
     <string name="login_reset_password_password_hint">Yeni parola</string>
-    <string name="login_reset_password_notice">Yeni parolanızı ayarlamayı onaylamak için e-postanıza onaylama linki gelecek.</string>
+    <string name="login_reset_password_notice">Yeni parolanızı ayarlamayı onaylamak için e-postanıza onaylama linki gönderdik.</string>
     <string name="login_reset_password_on">%1$s sunucusunda parolayı yenile</string>
     <string name="login_registration_not_supported">Uygulama bu sunucuda yeni hesap oluşturamıyor.
 \n
@@ -1773,7 +1773,7 @@
     <string name="medium_email">E-posta adresi</string>
     <string name="matrix_error">Matrix hatası</string>
     <string name="network_error">Ağ hatası</string>
-    <string name="message_failed_to_upload">Görüntü yüklenemedi</string>
+    <string name="message_failed_to_upload">Fotoğraf yüklenemedi</string>
     <string name="unable_to_send_message">Mesaj gönderilemedi</string>
     <string name="power_level_default">Varsayılan</string>
     <string name="notice_widget_jitsi_modified_by_you">Video konferansı düzenlediniz</string>
@@ -1847,13 +1847,13 @@
     <string name="video_call_with_participant">%s ile görüntülü arama</string>
     <plurals name="missed_video_call">
         <item quantity="one">Cevapsız görüntülü arama</item>
-        <item quantity="other">%d cevapsız görüntülü aramalar</item>
+        <item quantity="other">%d adet cevapsız görüntülü arama</item>
     </plurals>
     <plurals name="missed_audio_call">
         <item quantity="one">Cevapsız sesli arama</item>
-        <item quantity="other">%d cevapsız sesli aramalar</item>
+        <item quantity="other">%d adet cevapsız sesli arama</item>
     </plurals>
-    <string name="call_ringing">Çağrı çalıyor…</string>
+    <string name="call_ringing">Çalıyor…</string>
     <string name="error_unauthorized">Yetkisiz, eksik geçerli kimlik doğrulama kimlik bilgileri</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Ana sunucuyu seçin</string>
     <string name="login_error_homeserver_from_url_not_found">%s url\'sinde bir ana sunucuya ulaşılamıyor. Lütfen bağlantınızı kontrol edin veya bir ana sunucuyu manuel olarak seçin.</string>
@@ -2000,7 +2000,7 @@
     <string name="room_displayname_invite_from">%s\'den davet</string>
     <string name="room_error_access_unauthorized">Bu odaya katılmanıza izin verilmiyor</string>
     <string name="room_error_join_failed_empty_room">Şu anda boş bir odaya yeniden katılmak mümkün değildir.</string>
-    <string name="could_not_redact">redaksiyon yapılamadı</string>
+    <string name="could_not_redact">Silinemedi</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">Gönderenin cihazı bize bu mesajın anahtarlarını göndermedi.</string>
     <string name="notice_crypto_unable_to_decrypt">** Şifre çözülemiyor: %s **</string>
     <string name="notice_power_level_diff">%1$s, %2$s ile %3$s arasında</string>
