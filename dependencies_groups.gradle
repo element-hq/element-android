@@ -175,6 +175,7 @@ ext.groups = [
                         'org.sonatype.oss',
                         'org.testng',
                         'org.threeten',
+                        'org.webjars',
                         'ru.noties',
                         'xerces',
                         'xml-apis',
