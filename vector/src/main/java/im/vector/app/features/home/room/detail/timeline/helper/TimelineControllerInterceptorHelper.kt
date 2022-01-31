@@ -100,7 +100,8 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
         val shouldAddBackwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.BACKWARDS) ?: false
         if (shouldAddBackwardPrefetch) {
             val indexOfPrefetchBackward = (previousModelsSize - 1)
-                    .coerceIn(minimumValue = 0, maximumValue = size - DEFAULT_PREFETCH_THRESHOLD)
+                    .coerceAtMost(size - DEFAULT_PREFETCH_THRESHOLD)
+                    .coerceAtLeast(0)
 
             val loadingItem = LoadingItem_()
                     .id("prefetch_backward_loading${System.currentTimeMillis()}")
@@ -115,7 +116,8 @@ class TimelineControllerInterceptorHelper(private val positionOfReadMarker: KMut
         val shouldAddForwardPrefetch = timeline?.hasMoreToLoad(Timeline.Direction.FORWARDS) ?: false
         if (shouldAddForwardPrefetch) {
             val indexOfPrefetchForward = DEFAULT_PREFETCH_THRESHOLD
-                    .coerceIn(minimumValue = 0, maximumValue = size - 1)
+                    .coerceAtMost(size - 1)
+                    .coerceAtLeast(0)
 
             val loadingItem = LoadingItem_()
                     .id("prefetch_forward_loading${System.currentTimeMillis()}")
