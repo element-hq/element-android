@@ -338,15 +338,15 @@
         <item quantity="other">%ds</item>
     </plurals>
     <plurals name="format_time_m">
-        <item quantity="one">%d1dk</item>
+        <item quantity="one">%ddk</item>
         <item quantity="other">%ddk</item>
     </plurals>
     <plurals name="format_time_h">
-        <item quantity="one">%d1sa</item>
+        <item quantity="one">%dsa</item>
         <item quantity="other">%dsa</item>
     </plurals>
     <plurals name="format_time_d">
-        <item quantity="one">%d1g</item>
+        <item quantity="one">%dg</item>
         <item quantity="other">%dg</item>
     </plurals>
     <string name="room_participants_leave_prompt_title">Odadan ayrıl</string>
@@ -407,7 +407,7 @@
     <string name="room_message_file_not_found">Dosya bulunamadı</string>
     <string name="room_do_not_have_permission_to_post">Bu odaya mesaj gönderme izniniz yok.</string>
     <plurals name="room_new_messages_notification">
-        <item quantity="one">%d 1 yeni mesaj</item>
+        <item quantity="one">%d yeni mesaj</item>
         <item quantity="other">%d yeni mesajlar</item>
     </plurals>
     <string name="ssl_trust">Güven</string>
@@ -426,7 +426,7 @@
     <string name="room_details_files">Dosyalar</string>
     <string name="room_details_settings">Ayarlar</string>
     <plurals name="room_details_selected">
-        <item quantity="one">%d1 tane seçili</item>
+        <item quantity="one">%d tane seçili</item>
         <item quantity="other">%d tane seçili</item>
     </plurals>
     <string name="malformed_id">Hatalı ID. Eposta adresi ya da Matrix ID\'si olmalıdır \'@localpart:domain\'</string>
@@ -447,7 +447,7 @@
     <string name="tab_title_search_files">DOSYALAR</string>
     <string name="directory_search_results_title">Dizinlere gözat</string>
     <plurals name="directory_search_rooms">
-        <item quantity="one">%d1 oda</item>
+        <item quantity="one">%d oda</item>
         <item quantity="other">%d odalar</item>
     </plurals>
     <plurals name="directory_search_rooms_for">
