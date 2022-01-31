@@ -1930,14 +1930,11 @@ class TimelineFragment @Inject constructor(
                     timelineViewModel.handle(RoomDetailAction.TapOnFailedToDecrypt(informationData.eventId))
                 }
             }
-            else                                 -> {
-                onThreadSummaryClicked(informationData.eventId, isRootThreadEvent)
-            }
             is MessageLocationContent            -> {
                 handleShowLocationPreview(messageContent, informationData.senderId)
             }
             else                                 -> {
-                Timber.d("No click action defined for this message content")
+                onThreadSummaryClicked(informationData.eventId, isRootThreadEvent)
             }
         }
     }
