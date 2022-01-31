@@ -63,10 +63,9 @@ class CommandParser @Inject constructor() {
             val slashCommand = messageParts.first()
             val message = textMessage.substring(slashCommand.length).trim()
 
-            if (isInThreadTimeline) {
-                if (notSupportedThreadsCommands.contains(slashCommand)) {
-                    return ParsedCommand.ErrorCommandNotSupportedInThreads(slashCommand)
-                }
+
+            getNotSupportedByThreads(isInThreadTimeline, slashCommand)?.let {
+                return ParsedCommand.ErrorCommandNotSupportedInThreads(it)
             }
 
             when {
@@ -406,12 +405,27 @@ class CommandParser @Inject constructor() {
         }
     }
 
-    val notSupportedThreadsCommands: List<String> by lazy {
+    private val notSupportedThreadsCommands: List<Command> by lazy {
         Command.values().filter {
             !it.isThreadCommand
-        }.map {
-            it.command
         }
+    }
+
+    /**
+     * Checks whether or not the current command is not supported by threads
+     * @param slashCommand the slash command that will be checked
+     * @param isInThreadTimeline if its true we are in a thread timeline
+     * @return The command that is not supported
+     */
+    private fun getNotSupportedByThreads(isInThreadTimeline: Boolean, slashCommand: String): Command? {
+        if (isInThreadTimeline) {
+            notSupportedThreadsCommands.firstOrNull {
+                it.command == slashCommand
+            }?.let {
+                return it
+            }
+        }
+        return null
     }
 
     private fun trimParts(message: CharSequence, messageParts: List<String>): String? {

@@ -217,7 +217,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandUnknown(slashCommandResult.slashCommand))
                         }
                         is ParsedCommand.ErrorCommandNotSupportedInThreads -> {
-                            _viewEvents.post(MessageComposerViewEvents.SlashCommandNotSupportedInThreads(slashCommandResult.slashCommand))
+                            _viewEvents.post(MessageComposerViewEvents.SlashCommandNotSupportedInThreads(slashCommandResult.command))
                         }
                         is ParsedCommand.SendPlainText                     -> {
                             // Send the text message to the room, without markdown
