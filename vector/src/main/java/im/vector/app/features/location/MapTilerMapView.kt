@@ -17,7 +17,6 @@
 package im.vector.app.features.location
 
 import android.content.Context
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
@@ -27,65 +26,76 @@ import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property
-import im.vector.app.BuildConfig
+import timber.log.Timber
 
 class MapTilerMapView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : MapView(context, attrs, defStyleAttr), VectorMapView {
+) : MapView(context, attrs, defStyleAttr) {
 
-    private var map: MapboxMap? = null
-    private var symbolManager: SymbolManager? = null
-    private var style: Style? = null
+    private var pendingState: MapState? = null
 
-    override fun initialize(onMapReady: () -> Unit) {
+    data class MapRefs(
+            val map: MapboxMap,
+            val symbolManager: SymbolManager,
+            val style: Style
+    )
+
+    private var mapRefs: MapRefs? = null
+    private var initZoomDone = false
+
+    /**
+     * For location fragments
+     */
+    fun initialize(url: String) {
+        Timber.d("## Location: initialize")
         getMapAsync { map ->
-            map.setStyle(styleUrl) { style ->
-                this.symbolManager = SymbolManager(this, map, style)
-                this.map = map
-                this.style = style
-                onMapReady()
+            map.setStyle(url) { style ->
+                mapRefs = MapRefs(
+                        map,
+                        SymbolManager(this, map, style),
+                        style
+                )
+                pendingState?.let { render(it) }
+                pendingState = null
             }
         }
     }
 
-    override fun addPinToMap(pinId: String, image: Drawable) {
-        style?.addImage(pinId, image)
-    }
+    fun render(state: MapState) {
+        val safeMapRefs = mapRefs ?: return Unit.also {
+            pendingState = state
+        }
 
-    override fun updatePinLocation(pinId: String, latitude: Double, longitude: Double) {
-        symbolManager?.create(
-                SymbolOptions()
-                        .withLatLng(LatLng(latitude, longitude))
-                        .withIconImage(pinId)
-                        .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
-        )
-    }
+        state.pinDrawable?.let { pinDrawable ->
+            if (!safeMapRefs.style.isFullyLoaded ||
+                    safeMapRefs.style.getImage(state.pinId) == null) {
+                safeMapRefs.style.addImage(state.pinId, pinDrawable)
+            }
+        }
 
-    override fun deleteAllPins() {
-        symbolManager?.deleteAll()
-    }
+        state.pinLocationData?.let { locationData ->
+            if (!initZoomDone || !state.zoomOnlyOnce) {
+                zoomToLocation(locationData.latitude, locationData.longitude)
+                initZoomDone = true
+            }
 
-    override fun zoomToLocation(latitude: Double, longitude: Double, zoom: Double) {
-        map?.cameraPosition = CameraPosition.Builder()
-                .target(LatLng(latitude, longitude))
-                .zoom(zoom)
-                .build()
-    }
-
-    override fun getCurrentZoom(): Double? {
-        return map?.cameraPosition?.zoom
-    }
-
-    override fun onClick(callback: () -> Unit) {
-        map?.addOnMapClickListener {
-            callback()
-            true
+            safeMapRefs.symbolManager.deleteAll()
+            safeMapRefs.symbolManager.create(
+                    SymbolOptions()
+                            .withLatLng(LatLng(locationData.latitude, locationData.longitude))
+                            .withIconImage(state.pinId)
+                            .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
+            )
         }
     }
 
-    companion object {
-        private const val styleUrl = "https://api.maptiler.com/maps/streets/style.json?key=${BuildConfig.mapTilerKey}"
+    private fun zoomToLocation(latitude: Double, longitude: Double) {
+        Timber.d("## Location: zoomToLocation")
+        mapRefs?.map?.cameraPosition = CameraPosition.Builder()
+                .target(LatLng(latitude, longitude))
+                .zoom(INITIAL_MAP_ZOOM_IN_PREVIEW)
+                .build()
     }
 }

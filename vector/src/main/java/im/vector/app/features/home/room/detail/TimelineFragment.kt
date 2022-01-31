@@ -174,8 +174,8 @@ import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillImageSpan
 import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.invite.VectorInviteView
-import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationSharingMode
+import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -478,7 +478,6 @@ class TimelineFragment @Inject constructor(
                 RoomDetailViewEvents.StopChatEffects                     -> handleStopChatEffects()
                 is RoomDetailViewEvents.DisplayAndAcceptCall             -> acceptIncomingCall(it)
                 RoomDetailViewEvents.RoomReplacementStarted              -> handleRoomReplacement()
-                is RoomDetailViewEvents.ShowLocation                     -> handleShowLocationPreview(it)
             }.exhaustive
         }
 
@@ -610,14 +609,14 @@ class TimelineFragment @Inject constructor(
         }
     }
 
-    private fun handleShowLocationPreview(viewEvent: RoomDetailViewEvents.ShowLocation) {
+    private fun handleShowLocationPreview(locationContent: MessageLocationContent, senderId: String) {
         navigator
                 .openLocationSharing(
                         context = requireContext(),
                         roomId = timelineArgs.roomId,
                         mode = LocationSharingMode.PREVIEW,
-                        initialLocationData = viewEvent.locationData,
-                        locationOwnerId = viewEvent.userId
+                        initialLocationData = locationContent.toLocationData(),
+                        locationOwnerId = senderId
                 )
     }
 
@@ -1934,6 +1933,12 @@ class TimelineFragment @Inject constructor(
             else                                 -> {
                 onThreadSummaryClicked(informationData.eventId, isRootThreadEvent)
             }
+            is MessageLocationContent            -> {
+                handleShowLocationPreview(messageContent, informationData.senderId)
+            }
+            else                                 -> {
+                Timber.d("No click action defined for this message content")
+            }
         }
     }
 
@@ -2052,7 +2057,7 @@ class TimelineFragment @Inject constructor(
         when (action.messageContent) {
             is MessageTextContent           -> shareText(requireContext(), action.messageContent.body)
             is MessageLocationContent       -> {
-                LocationData.create(action.messageContent.getUri())?.let {
+                action.messageContent.toLocationData()?.let {
                     openLocation(requireActivity(), it.latitude, it.longitude)
                 }
             }

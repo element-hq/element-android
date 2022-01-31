@@ -19,7 +19,7 @@ package im.vector.app.features.call.transfer
 import im.vector.app.core.platform.VectorViewEvents
 
 sealed class CallTransferViewEvents : VectorViewEvents {
-    object Dismiss : CallTransferViewEvents()
+    object Complete : CallTransferViewEvents()
     object Loading : CallTransferViewEvents()
     object FailToTransfer : CallTransferViewEvents()
 }

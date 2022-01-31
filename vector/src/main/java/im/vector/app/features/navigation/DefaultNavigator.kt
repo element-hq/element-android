@@ -535,9 +535,13 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(RoomDevToolActivity.intent(context, roomId))
     }
 
-    override fun openCallTransfer(context: Context, callId: String) {
+    override fun openCallTransfer(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>,
+            callId: String
+    ) {
         val intent = CallTransferActivity.newIntent(context, callId)
-        context.startActivity(intent)
+        activityResultLauncher.launch(intent)
     }
 
     override fun openCreatePoll(context: Context, roomId: String, editedEventId: String?, mode: PollMode) {

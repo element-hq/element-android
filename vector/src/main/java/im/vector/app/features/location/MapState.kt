@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,9 @@ package im.vector.app.features.location
 
 import android.graphics.drawable.Drawable
 
-interface VectorMapView {
-    fun initialize(onMapReady: () -> Unit)
-
-    fun addPinToMap(pinId: String, image: Drawable)
-    fun updatePinLocation(pinId: String, latitude: Double, longitude: Double)
-    fun deleteAllPins()
-
-    fun zoomToLocation(latitude: Double, longitude: Double, zoom: Double)
-    fun getCurrentZoom(): Double?
-
-    fun onClick(callback: () -> Unit)
-}
+data class MapState(
+        val zoomOnlyOnce: Boolean,
+        val pinLocationData: LocationData? = null,
+        val pinId: String,
+        val pinDrawable: Drawable? = null
+)

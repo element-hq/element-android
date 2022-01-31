@@ -150,7 +150,11 @@ interface Navigator {
 
     fun openDevTools(context: Context, roomId: String)
 
-    fun openCallTransfer(context: Context, callId: String)
+    fun openCallTransfer(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>,
+            callId: String
+    )
 
     fun openCreatePoll(context: Context, roomId: String, editedEventId: String?, mode: PollMode)
 
