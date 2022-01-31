@@ -64,12 +64,7 @@ class CommandParser @Inject constructor() {
             val message = textMessage.substring(slashCommand.length).trim()
 
             if (isInThreadTimeline) {
-                val notSupportedCommandsInThreads = Command.values().filter {
-                    !it.isThreadCommand
-                }.map {
-                    it.command
-                }
-                if (notSupportedCommandsInThreads.contains(slashCommand)) {
+                if (notSupportedThreadsCommands.contains(slashCommand)) {
                     return ParsedCommand.ErrorCommandNotSupportedInThreads(slashCommand)
                 }
             }
@@ -408,6 +403,14 @@ class CommandParser @Inject constructor() {
                     ParsedCommand.ErrorUnknownSlashCommand(slashCommand)
                 }
             }
+        }
+    }
+
+    val notSupportedThreadsCommands: List<String> by lazy {
+        Command.values().filter {
+            !it.isThreadCommand
+        }.map {
+            it.command
         }
     }
 
