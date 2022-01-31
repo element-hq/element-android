@@ -1796,7 +1796,6 @@ class TimelineFragment @Inject constructor(
     }
 
     // TimelineEventController.Callback ************************************************************
-
     override fun onUrlClicked(url: String, title: String): Boolean {
         viewLifecycleOwner.lifecycleScope.launch {
             val isManaged = permalinkHandler
@@ -1906,27 +1905,11 @@ class TimelineFragment @Inject constructor(
         }
     }
 
-//    override fun onFileMessageClicked(eventId: String, messageFileContent: MessageFileContent) {
-//        val isEncrypted = messageFileContent.encryptedFileInfo != null
-//        val action = RoomDetailAction.DownloadOrOpen(eventId, messageFileContent, isEncrypted)
-//        // We need WRITE_EXTERNAL permission
-// //        if (!isEncrypted || checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, PERMISSION_REQUEST_CODE_DOWNLOAD_FILE)) {
-//            showSnackWithMessage(getString(R.string.downloading_file, messageFileContent.getFileName()))
-//            roomDetailViewModel.handle(action)
-// //        } else {
-// //            roomDetailViewModel.pendingAction = action
-// //        }
-//    }
-
     private fun cleanUpAfterPermissionNotGranted() {
         // Reset all pending data
         timelineViewModel.pendingAction = null
         attachmentsHelper.pendingType = null
     }
-
-//    override fun onAudioMessageClicked(messageAudioContent: MessageAudioContent) {
-//        vectorBaseActivity.notImplemented("open audio file")
-//    }
 
     override fun onLoadMore(direction: Timeline.Direction) {
         timelineViewModel.handle(RoomDetailAction.LoadMoreTimelineEvents(direction))
@@ -2377,7 +2360,6 @@ class TimelineFragment @Inject constructor(
     }
 
 // VectorInviteView.Callback
-
     override fun onAcceptInvite() {
         notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(timelineArgs.roomId) }
         timelineViewModel.handle(RoomDetailAction.AcceptInvite)
@@ -2398,7 +2380,6 @@ class TimelineFragment @Inject constructor(
     }
 
 // AttachmentTypeSelectorView.Callback
-
     private val typeSelectedActivityResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             val pendingType = attachmentsHelper.pendingType
@@ -2449,7 +2430,6 @@ class TimelineFragment @Inject constructor(
     }
 
 // AttachmentsHelper.Callback
-
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
         val grouped = attachments.toGroupedContentAttachmentData()
         if (grouped.notPreviewables.isNotEmpty()) {
