@@ -63,7 +63,6 @@ class CommandParser @Inject constructor() {
             val slashCommand = messageParts.first()
             val message = textMessage.substring(slashCommand.length).trim()
 
-
             getNotSupportedByThreads(isInThreadTimeline, slashCommand)?.let {
                 return ParsedCommand.ErrorCommandNotSupportedInThreads(it)
             }

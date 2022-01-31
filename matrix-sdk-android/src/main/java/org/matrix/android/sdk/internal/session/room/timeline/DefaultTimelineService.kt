@@ -21,7 +21,6 @@ import com.zhuinden.monarchy.Monarchy
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import io.realm.Realm
 import io.realm.Sort
 import io.realm.kotlin.where
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers

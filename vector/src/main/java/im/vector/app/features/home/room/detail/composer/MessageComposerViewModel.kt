@@ -283,7 +283,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                                         replyInThreadText = slashCommandResult.message,
                                         msgType = MessageType.MSGTYPE_EMOTE,
                                         autoMarkdown = action.autoMarkdown)
-                            }else{
+                            } else {
                                 room.sendTextMessage(slashCommandResult.message, msgType = MessageType.MSGTYPE_EMOTE, autoMarkdown = action.autoMarkdown)
                             }
                             _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
