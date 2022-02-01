@@ -16,6 +16,7 @@
 
 package im.vector.app.features.call
 
+import android.app.Activity
 import android.app.KeyguardManager
 import android.app.PictureInPictureParams
 import android.content.Context
@@ -43,6 +44,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
+import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.PERMISSIONS_FOR_AUDIO_IP_CALL
@@ -518,10 +520,16 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
             }
             is VectorCallViewEvents.ShowCallTransferScreen -> {
                 val callId = withState(callViewModel) { it.callId }
-                navigator.openCallTransfer(this, callId)
+                navigator.openCallTransfer(this, callTransferActivityResultLauncher, callId)
             }
             null                                           -> {
             }
+        }
+    }
+
+    private val callTransferActivityResultLauncher = registerStartForActivityResult { activityResult ->
+        if (activityResult.resultCode == Activity.RESULT_CANCELED) {
+            callViewModel.handle(VectorCallViewActions.CallTransferSelectionCancelled)
         }
     }
 

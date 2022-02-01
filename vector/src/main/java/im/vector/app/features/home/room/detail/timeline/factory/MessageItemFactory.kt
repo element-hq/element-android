@@ -16,6 +16,7 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
+import android.content.res.Resources
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -33,7 +34,6 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.containsOnlyEmojis
-import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
@@ -68,7 +68,9 @@ import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.html.VectorHtmlCompressor
-import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
+import im.vector.app.features.location.UrlMapProvider
+import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
@@ -123,7 +125,10 @@ class MessageItemFactory @Inject constructor(
         private val session: Session,
         private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
         private val locationPinProvider: LocationPinProvider,
-        private val vectorPreferences: VectorPreferences) {
+        private val vectorPreferences: VectorPreferences,
+        private val urlMapProvider: UrlMapProvider,
+        private val resources: Resources
+) {
 
     // TODO inject this properly?
     private var roomId: String = ""
@@ -178,7 +183,7 @@ class MessageItemFactory @Inject constructor(
             is MessagePollContent                -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
             is MessageLocationContent            -> {
                 if (vectorPreferences.labsRenderLocationsInTimeline()) {
-                    buildLocationItem(messageContent, informationData, highlight, callback, attributes)
+                    buildLocationItem(messageContent, informationData, highlight, attributes)
                 } else {
                     buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
                 }
@@ -193,27 +198,21 @@ class MessageItemFactory @Inject constructor(
     private fun buildLocationItem(locationContent: MessageLocationContent,
                                   informationData: MessageInformationData,
                                   highlight: Boolean,
-                                  callback: TimelineEventController.Callback?,
                                   attributes: AbsMessageItem.Attributes): MessageLocationItem? {
-        val geoUri = locationContent.getUri()
-        val locationData = LocationData.create(geoUri)
+        val width = resources.displayMetrics.widthPixels - dimensionConverter.dpToPx(60)
+        val height = dimensionConverter.dpToPx(200)
 
-        val mapCallback: MessageLocationItem.Callback = object : MessageLocationItem.Callback {
-            override fun onMapClicked() {
-                locationData?.let {
-                    callback?.onTimelineItemAction(RoomDetailAction.ShowLocation(it, informationData.senderId))
-                }
-            }
+        val locationUrl = locationContent.toLocationData()?.let {
+            urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, width, height)
         }
 
         return MessageLocationItem_()
                 .attributes(attributes)
-                .locationData(locationData)
+                .locationUrl(locationUrl)
                 .userId(informationData.senderId)
                 .locationPinProvider(locationPinProvider)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
-                .callback(mapCallback)
     }
 
     private fun buildPollItem(pollContent: MessagePollContent,

@@ -41,9 +41,6 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     @EpoxyAttribute
     open var leftGuideline: Int = 0
 
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-    lateinit var dimensionConverter: DimensionConverter
-
     final override fun getViewType(): Int {
         // This makes sure we have a unique integer for the combination of layout and ViewStubId.
         return pairingFunction(layout, getViewStubId()).also {

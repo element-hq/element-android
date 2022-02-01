@@ -16,6 +16,7 @@
 
 package im.vector.app.features.call.transfer
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -55,7 +56,7 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
 
         callTransferViewModel.observeViewEvents {
             when (it) {
-                is CallTransferViewEvents.Dismiss        -> finish()
+                is CallTransferViewEvents.Complete        -> handleComplete()
                 CallTransferViewEvents.Loading           -> showWaitingView()
                 is CallTransferViewEvents.FailToTransfer -> showSnackbar(getString(R.string.call_transfer_failure))
             }
@@ -91,6 +92,11 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
                 }
             }
         }
+    }
+
+    private fun handleComplete() {
+        setResult(Activity.RESULT_OK)
+        finish()
     }
 
     companion object {
