@@ -171,8 +171,8 @@ class MessageItemFactory @Inject constructor(
             return noticeItemFactory.create(params)
         }
 
-        // This is a thread event and we will [debug] display it when we are in the main timeline
         if (lightweightSettingsStorage.areThreadMessagesEnabled() && !params.isFromThreadTimeline() && event.root.isThread()) {
+            // This is a thread event and we will [debug] display it when we are in the main timeline
             return noticeItemFactory.create(params)
         }
 
