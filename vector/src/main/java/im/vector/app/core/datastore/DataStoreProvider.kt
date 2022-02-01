@@ -40,7 +40,7 @@ private class MappedPreferenceDataStoreSingletonDelegate : ReadOnlyProperty<Cont
         { key ->
             dataStoreCache.getOrPut(key) {
                 PreferenceDataStoreFactory.create {
-                    context.preferencesDataStoreFile(key)
+                    context.applicationContext.preferencesDataStoreFile(key)
                 }
             }
         }
