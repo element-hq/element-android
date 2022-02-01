@@ -156,7 +156,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
     }
 
     interface ThreadCallback {
-        fun onThreadSummaryClicked(eventId: String, isRootThreadEvent: Boolean) : Boolean
+        fun onThreadSummaryClicked(eventId: String, isRootThreadEvent: Boolean): Boolean
     }
 
     interface ReadReceiptsCallback {
