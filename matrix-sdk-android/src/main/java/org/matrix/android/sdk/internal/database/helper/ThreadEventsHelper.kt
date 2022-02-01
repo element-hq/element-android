@@ -159,7 +159,7 @@ internal fun TimelineEventEntity.Companion.findAllThreadsForRoomId(realm: Realm,
                 .sort("${TimelineEventEntityFields.ROOT.THREAD_SUMMARY_LATEST_MESSAGE}.${TimelineEventEntityFields.ROOT.ORIGIN_SERVER_TS}", Sort.DESCENDING)
 
 /**
- * Map each timelineEvent with the equivalent decrypted text edition/replacement for root threads
+ * Map each root thread TimelineEvent with the equivalent decrypted text edition/replacement
  */
 internal fun List<TimelineEvent>.mapEventsWithEdition(realm: Realm, roomId: String): List<TimelineEvent> =
         this.map {
@@ -180,8 +180,8 @@ internal fun List<TimelineEvent>.mapEventsWithEdition(realm: Realm, roomId: Stri
         }
 
 /**
- * Find the number of all the local notifications for the specified room
- * @param roomId The room that the number of notifications will be returned
+ * Returns a list of all the marked unread threads that exists for the specified room
+ * @param roomId The roomId that the user is currently in
  */
 internal fun TimelineEventEntity.Companion.findAllLocalThreadNotificationsForRoomId(realm: Realm, roomId: String): RealmQuery<TimelineEventEntity> =
         TimelineEventEntity

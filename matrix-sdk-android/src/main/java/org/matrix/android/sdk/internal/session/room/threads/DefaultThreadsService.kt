@@ -49,14 +49,14 @@ internal class DefaultThreadsService @AssistedInject constructor(
         fun create(roomId: String): DefaultThreadsService
     }
 
-    override fun getNumberOfLocalThreadNotificationsLive(): LiveData<List<TimelineEvent>> {
+    override fun getMarkedThreadNotificationsLive(): LiveData<List<TimelineEvent>> {
         return monarchy.findAllMappedWithChanges(
                 { TimelineEventEntity.findAllLocalThreadNotificationsForRoomId(it, roomId = roomId) },
                 { timelineEventMapper.map(it) }
         )
     }
 
-    override fun getNumberOfLocalThreadNotifications(): List<TimelineEvent> {
+    override fun getMarkedThreadNotifications(): List<TimelineEvent> {
         return monarchy.fetchAllMappedSync(
                 { TimelineEventEntity.findAllLocalThreadNotificationsForRoomId(it, roomId = roomId) },
                 { timelineEventMapper.map(it) }

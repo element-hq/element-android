@@ -417,14 +417,13 @@ class CommandParser @Inject constructor() {
      * @return The command that is not supported
      */
     private fun getNotSupportedByThreads(isInThreadTimeline: Boolean, slashCommand: String): Command? {
-        if (isInThreadTimeline) {
+        return if (isInThreadTimeline) {
             notSupportedThreadsCommands.firstOrNull {
                 it.command == slashCommand
-            }?.let {
-                return it
             }
+        } else {
+            null
         }
-        return null
     }
 
     private fun trimParts(message: CharSequence, messageParts: List<String>): String? {

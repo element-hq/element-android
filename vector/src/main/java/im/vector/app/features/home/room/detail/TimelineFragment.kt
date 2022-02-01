@@ -1924,17 +1924,16 @@ class TimelineFragment @Inject constructor(
                 timelineViewModel.handle(action)
             }
             is EncryptedEventContent             -> {
-                if (isRootThreadEvent) {
-                    onThreadSummaryClicked(informationData.eventId, isRootThreadEvent)
-                } else {
                     timelineViewModel.handle(RoomDetailAction.TapOnFailedToDecrypt(informationData.eventId))
-                }
             }
             is MessageLocationContent            -> {
                 handleShowLocationPreview(messageContent, informationData.senderId)
             }
             else                                 -> {
-                onThreadSummaryClicked(informationData.eventId, isRootThreadEvent)
+                val handled = onThreadSummaryClicked(informationData.eventId, isRootThreadEvent)
+                if (!handled) {
+                    Timber.d("No click action defined for this message content")
+                }
             }
         }
     }
@@ -1966,9 +1965,12 @@ class TimelineFragment @Inject constructor(
         }
     }
 
-    override fun onThreadSummaryClicked(eventId: String, isRootThreadEvent: Boolean) {
-        if (vectorPreferences.areThreadMessagesEnabled() && isRootThreadEvent && !isThreadTimeLine()) {
+    override fun onThreadSummaryClicked(eventId: String, isRootThreadEvent: Boolean): Boolean {
+        return if (vectorPreferences.areThreadMessagesEnabled() && isRootThreadEvent && !isThreadTimeLine()) {
             navigateToThreadTimeline(eventId)
+            true
+        } else {
+            false
         }
     }
 
@@ -2361,7 +2363,7 @@ class TimelineFragment @Inject constructor(
         }
     }
 
-// VectorInviteView.Callback
+    // VectorInviteView.Callback
     override fun onAcceptInvite() {
         notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(timelineArgs.roomId) }
         timelineViewModel.handle(RoomDetailAction.AcceptInvite)
@@ -2381,7 +2383,7 @@ class TimelineFragment @Inject constructor(
         }
     }
 
-// AttachmentTypeSelectorView.Callback
+    // AttachmentTypeSelectorView.Callback
     private val typeSelectedActivityResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
             val pendingType = attachmentsHelper.pendingType
@@ -2431,7 +2433,7 @@ class TimelineFragment @Inject constructor(
         }.exhaustive
     }
 
-// AttachmentsHelper.Callback
+    // AttachmentsHelper.Callback
     override fun onContentAttachmentsReady(attachments: List<ContentAttachmentData>) {
         val grouped = attachments.toGroupedContentAttachmentData()
         if (grouped.notPreviewables.isNotEmpty()) {

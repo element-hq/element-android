@@ -20,33 +20,30 @@ import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 
 /**
- * This interface defines methods to interact with threads related features. It's implemented at the room level within the main timeline.
+ * This interface defines methods to interact with threads related features.
+ * It's implemented at the room level within the main timeline.
  */
 interface ThreadsService {
 
     /**
-     * Get a live list of all the TimelineEvents which have thread replies for the specified roomId
-     * @return the [LiveData] of [TimelineEvent]
+     * Returns a [LiveData] list of all the thread root TimelineEvents that exists at the room level
      */
     fun getAllThreadsLive(): LiveData<List<TimelineEvent>>
 
     /**
-     * Get a list of all the TimelineEvents which have thread replies for the specified roomId
-     * @return the [LiveData] of [TimelineEvent]
+     * Returns a list of all the thread root TimelineEvents that exists at the room level
      */
     fun getAllThreads(): List<TimelineEvent>
 
     /**
-     * Get a live list of all the local unread threads for the specified roomId
-     * @return the [LiveData] of [TimelineEvent]
+     * Returns a [LiveData] list of all the marked unread threads that exists at the room level
      */
-    fun getNumberOfLocalThreadNotificationsLive(): LiveData<List<TimelineEvent>>
+    fun getMarkedThreadNotificationsLive(): LiveData<List<TimelineEvent>>
 
     /**
-     * Get a list of all the local unread threads for the specified roomId
-     * @return the [LiveData] of [TimelineEvent]
+     * Returns a list of all the marked unread threads that exists at the room level
      */
-    fun getNumberOfLocalThreadNotifications(): List<TimelineEvent>
+    fun getMarkedThreadNotifications(): List<TimelineEvent>
 
     /**
      * Returns whether or not the current user is participating in the thread
@@ -55,14 +52,16 @@ interface ThreadsService {
     fun isUserParticipatingInThread(rootThreadEventId: String): Boolean
 
     /**
-     * Enhance the thread list with the edited events if needed
-     * @return the [LiveData] of [TimelineEvent]
+     * Enhance the provided root thread TimelineEvent [List] by adding the latest
+     * message edition for that thread
+     * @return the enhanced [List] with edited updates
      */
     fun mapEventsWithEdition(threads: List<TimelineEvent>): List<TimelineEvent>
 
     /**
-     * Marks the current thread as read. This is a local implementation
-     * @param rootThreadEventId the eventId of the current thread
+     * Marks the current thread as read in local DB.
+     * note: read receipts within threads are not yet supported with the API
+     * @param rootThreadEventId the root eventId of the current thread
      */
     suspend fun markThreadAsRead(rootThreadEventId: String)
 }
