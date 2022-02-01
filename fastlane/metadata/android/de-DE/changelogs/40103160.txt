@@ -1,0 +1,2 @@
+Hauptänderungen: Du kannst ab sofort deinen Standort an deine Räume senden und Abstimmungen bearbeiten.
+Alle Änderungen: https://github.com/vector-im/element-android/releases/tag/v1.3.16
