@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomJoinRulesContent
 import org.matrix.android.sdk.api.session.room.model.VersioningState
 import org.matrix.android.sdk.api.session.room.model.create.RoomCreateContent
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
+import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptionEventContent
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntityFields
@@ -56,7 +57,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 21L
+        const val SESSION_STORE_SCHEMA_VERSION = 22L
     }
 
     /**
@@ -90,6 +91,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
         if (oldVersion <= 18) migrateTo19(realm)
         if (oldVersion <= 19) migrateTo20(realm)
         if (oldVersion <= 20) migrateTo21(realm)
+        if (oldVersion <= 21) migrateTo22(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -444,5 +446,20 @@ internal class RealmSessionStoreMigration @Inject constructor(
                         obj.setLong(RoomSummaryEntityFields.ENCRYPTION_EVENT_TS, it)
                     }
                 }
+    }
+
+    private fun migrateTo22(realm: DynamicRealm) {
+        Timber.d("Step 21 -> 22")
+        val eventEntity = realm.schema.get("TimelineEventEntity") ?: return
+
+        realm.schema.get("EventEntity")
+                ?.addField(EventEntityFields.IS_ROOT_THREAD, Boolean::class.java, FieldAttribute.INDEXED)
+                ?.addField(EventEntityFields.ROOT_THREAD_EVENT_ID, String::class.java, FieldAttribute.INDEXED)
+                ?.addField(EventEntityFields.NUMBER_OF_THREADS, Int::class.java)
+                ?.addField(EventEntityFields.THREAD_NOTIFICATION_STATE_STR, String::class.java)
+                ?.transform {
+                    it.setString(EventEntityFields.THREAD_NOTIFICATION_STATE_STR, ThreadNotificationState.NO_NEW_MESSAGE.name)
+                }
+                ?.addRealmObjectField(EventEntityFields.THREAD_SUMMARY_LATEST_MESSAGE.`$`, eventEntity)
     }
 }

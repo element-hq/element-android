@@ -32,12 +32,15 @@ import org.matrix.android.sdk.api.util.NoOpCancellable
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
+import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
+import org.matrix.android.sdk.internal.di.UserId
+import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
 import org.matrix.android.sdk.internal.task.TaskExecutor
@@ -51,12 +54,15 @@ internal class DefaultRelationService @AssistedInject constructor(
         private val eventSenderProcessor: EventSenderProcessor,
         private val eventFactory: LocalEchoEventFactory,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
+        private val cryptoService: DefaultCryptoService,
         private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
         private val fetchEditHistoryTask: FetchEditHistoryTask,
+        private val fetchThreadTimelineTask: FetchThreadTimelineTask,
         private val timelineEventMapper: TimelineEventMapper,
+        @UserId private val userId: String,
         @SessionDatabase private val monarchy: Monarchy,
         private val taskExecutor: TaskExecutor) :
-    RelationService {
+        RelationService {
 
     @AssistedFactory
     interface Factory {
@@ -139,8 +145,20 @@ internal class DefaultRelationService @AssistedInject constructor(
         return fetchEditHistoryTask.execute(FetchEditHistoryTask.Params(roomId, eventId))
     }
 
-    override fun replyToMessage(eventReplied: TimelineEvent, replyText: CharSequence, autoMarkdown: Boolean): Cancelable? {
-        val event = eventFactory.createReplyTextEvent(roomId, eventReplied, replyText, autoMarkdown)
+    override fun replyToMessage(
+            eventReplied: TimelineEvent,
+            replyText: CharSequence,
+            autoMarkdown: Boolean,
+            showInThread: Boolean,
+            rootThreadEventId: String?
+    ): Cancelable? {
+        val event = eventFactory.createReplyTextEvent(
+                roomId = roomId,
+                eventReplied = eventReplied,
+                replyText = replyText,
+                autoMarkdown = autoMarkdown,
+                rootThreadEventId = rootThreadEventId,
+                showInThread = showInThread)
                 ?.also { saveLocalEcho(it) }
                 ?: return null
 
@@ -164,6 +182,47 @@ internal class DefaultRelationService @AssistedInject constructor(
         return Transformations.map(liveData) { results ->
             results.firstOrNull().toOptional()
         }
+    }
+
+    override fun replyInThread(
+            rootThreadEventId: String,
+            replyInThreadText: CharSequence,
+            msgType: String,
+            autoMarkdown: Boolean,
+            formattedText: String?,
+            eventReplied: TimelineEvent?): Cancelable? {
+        val event = if (eventReplied != null) {
+            // Reply within a thread
+            eventFactory.createReplyTextEvent(
+                    roomId = roomId,
+                    eventReplied = eventReplied,
+                    replyText = replyInThreadText,
+                    autoMarkdown = autoMarkdown,
+                    rootThreadEventId = rootThreadEventId,
+                    showInThread = false
+            )
+                    ?.also {
+                        saveLocalEcho(it)
+                    }
+                    ?: return null
+        } else {
+            // Normal thread reply
+            eventFactory.createThreadTextEvent(
+                    rootThreadEventId = rootThreadEventId,
+                    roomId = roomId,
+                    text = replyInThreadText,
+                    msgType = msgType,
+                    autoMarkdown = autoMarkdown,
+                    formattedText = formattedText)
+                    .also {
+                        saveLocalEcho(it)
+                    }
+        }
+        return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
+    }
+
+    override suspend fun fetchThreadTimeline(rootThreadEventId: String): Boolean {
+        return fetchThreadTimelineTask.execute(FetchThreadTimelineTask.Params(roomId, rootThreadEventId))
     }
 
     /**

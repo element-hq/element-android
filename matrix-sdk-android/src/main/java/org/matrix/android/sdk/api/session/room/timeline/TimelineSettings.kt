@@ -27,5 +27,14 @@ data class TimelineSettings(
         /**
          * If true, will build read receipts for each event.
          */
-        val buildReadReceipts: Boolean = true
-)
+        val buildReadReceipts: Boolean = true,
+        /**
+         * The root thread eventId if this is a thread timeline, or null if this is NOT a thread timeline
+         */
+        val rootThreadEventId: String? = null) {
+
+    /**
+     * Returns true if this is a thread timeline or false otherwise
+     */
+    fun isThreadTimeline() = rootThreadEventId != null
+}

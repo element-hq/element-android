@@ -78,6 +78,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.LocalEcho
+import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -90,11 +91,14 @@ import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
+import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
 import org.matrix.android.sdk.api.session.room.model.tombstone.RoomTombstoneContent
 import org.matrix.android.sdk.api.session.room.powerlevels.PowerLevelsHelper
 import org.matrix.android.sdk.api.session.room.read.ReadService
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
+import org.matrix.android.sdk.api.session.threads.ThreadNotificationBadgeState
+import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.flow.flow
@@ -103,7 +107,7 @@ import org.matrix.android.sdk.internal.crypto.model.event.WithHeldCode
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
-class RoomDetailViewModel @AssistedInject constructor(
+class TimelineViewModel @AssistedInject constructor(
         @Assisted private val initialState: RoomDetailViewState,
         private val vectorPreferences: VectorPreferences,
         private val vectorDataStore: VectorDataStore,
@@ -129,7 +133,7 @@ class RoomDetailViewModel @AssistedInject constructor(
     private val invisibleEventsSource = BehaviorDataSource<RoomDetailAction.TimelineEventTurnsInvisible>()
     private val visibleEventsSource = BehaviorDataSource<RoomDetailAction.TimelineEventTurnsVisible>()
     private var timelineEvents = MutableSharedFlow<List<TimelineEvent>>(0)
-    val timeline = timelineFactory.createTimeline(viewModelScope, room, eventId)
+    val timeline = timelineFactory.createTimeline(viewModelScope, room, eventId, initialState.rootThreadEventId)
 
     // Same lifecycle than the ViewModel (survive to screen rotation)
     val previewUrlRetriever = PreviewUrlRetriever(session, viewModelScope)
@@ -146,16 +150,16 @@ class RoomDetailViewModel @AssistedInject constructor(
     private var prepareToEncrypt: Async<Unit> = Uninitialized
 
     @AssistedFactory
-    interface Factory : MavericksAssistedViewModelFactory<RoomDetailViewModel, RoomDetailViewState> {
-        override fun create(initialState: RoomDetailViewState): RoomDetailViewModel
+    interface Factory : MavericksAssistedViewModelFactory<TimelineViewModel, RoomDetailViewState> {
+        override fun create(initialState: RoomDetailViewState): TimelineViewModel
     }
 
-    companion object : MavericksViewModelFactory<RoomDetailViewModel, RoomDetailViewState> by hiltMavericksViewModelFactory() {
+    companion object : MavericksViewModelFactory<TimelineViewModel, RoomDetailViewState> by hiltMavericksViewModelFactory() {
         const val PAGINATION_COUNT = 50
     }
 
     init {
-        timeline.start()
+        timeline.start(initialState.rootThreadEventId)
         timeline.addListener(this)
         observeRoomSummary()
         observeMembershipChanges()
@@ -203,6 +207,17 @@ class RoomDetailViewModel @AssistedInject constructor(
                 }
             }
         }
+
+        // Threads
+        initThreads()
+    }
+
+    /**
+     * Threads specific initialization
+     */
+    private fun initThreads() {
+        markThreadTimelineAsReadLocal()
+        observeLocalThreadNotifications()
     }
 
     private fun observeDataStore() {
@@ -316,7 +331,39 @@ class RoomDetailViewModel @AssistedInject constructor(
                 .launchIn(viewModelScope)
     }
 
+    /**
+     * Mark the thread as read, while the user navigated within the thread
+     * This is a local implementation has nothing to do with APIs
+     */
+    private fun markThreadTimelineAsReadLocal() {
+        initialState.rootThreadEventId?.let {
+            session.coroutineScope.launch {
+                room.markThreadAsRead(it)
+            }
+        }
+    }
+
+    /**
+     * Observe local unread threads
+     */
+    private fun observeLocalThreadNotifications() {
+        room.flow()
+                .liveLocalUnreadThreadList()
+                .execute {
+                    val threadList = it.invoke()
+                    val isUserMentioned = threadList?.firstOrNull { threadRootEvent ->
+                        threadRootEvent.root.threadDetails?.threadNotificationState == ThreadNotificationState.NEW_HIGHLIGHTED_MESSAGE
+                    }?.let { true } ?: false
+                    val numberOfLocalUnreadThreads = threadList?.size ?: 0
+                    copy(threadNotificationBadgeState = ThreadNotificationBadgeState(
+                            numberOfLocalUnreadThreads = numberOfLocalUnreadThreads,
+                            isUserMentioned = isUserMentioned))
+                }
+    }
+
     fun getOtherUserIds() = room.roomSummary()?.otherMemberIds
+
+    fun getRoomSummary() = room.roomSummary()
 
     override fun handle(action: RoomDetailAction) {
         when (action) {
@@ -463,7 +510,11 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleSendSticker(action: RoomDetailAction.SendSticker) {
-        room.sendEvent(EventType.STICKER, action.stickerContent.toContent())
+        val content = initialState.rootThreadEventId?.let {
+            action.stickerContent.copy(relatesTo = RelationDefaultContent(RelationType.IO_THREAD, it))
+        } ?: action.stickerContent
+
+        room.sendEvent(EventType.STICKER, content.toContent())
     }
 
     private fun handleStartCall(action: RoomDetailAction.StartCall) {
@@ -650,20 +701,30 @@ class RoomDetailViewModel @AssistedInject constructor(
     private fun isIntegrationEnabled() = session.integrationManagerService().isIntegrationEnabled()
 
     fun isMenuItemVisible(@IdRes itemId: Int): Boolean = com.airbnb.mvrx.withState(this) { state ->
+
         if (state.asyncRoomSummary()?.membership != Membership.JOIN) {
             return@withState false
         }
-        when (itemId) {
-            R.id.timeline_setting -> true
-            R.id.invite           -> state.canInvite
-            R.id.open_matrix_apps -> true
-            R.id.voice_call       -> state.isWebRTCCallOptionAvailable()
-            R.id.video_call       -> state.isWebRTCCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
-            // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
-            R.id.join_conference  -> !state.isWebRTCCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
-            R.id.search           -> true
-            R.id.dev_tools        -> vectorPreferences.developerMode()
-            else                  -> false
+
+        if (initialState.isThreadTimeline()) {
+            when (itemId) {
+                R.id.menu_thread_timeline_more -> true
+                else                           -> false
+            }
+        } else {
+            when (itemId) {
+                R.id.timeline_setting          -> true
+                R.id.invite                    -> state.canInvite
+                R.id.open_matrix_apps          -> true
+                R.id.voice_call                -> state.isWebRTCCallOptionAvailable()
+                R.id.video_call                -> state.isWebRTCCallOptionAvailable() || state.jitsiState.confId == null || state.jitsiState.hasJoined
+                // Show Join conference button only if there is an active conf id not joined. Otherwise fallback to default video disabled. ^
+                R.id.join_conference           -> !state.isWebRTCCallOptionAvailable() && state.jitsiState.confId != null && !state.jitsiState.hasJoined
+                R.id.search                    -> true
+                R.id.menu_timeline_thread_list -> vectorPreferences.areThreadMessagesEnabled()
+                R.id.dev_tools                 -> vectorPreferences.developerMode()
+                else                           -> false
+            }
         }
     }
 
@@ -691,7 +752,12 @@ class RoomDetailViewModel @AssistedInject constructor(
     }
 
     private fun handleSendMedia(action: RoomDetailAction.SendMedia) {
-        room.sendMedias(action.attachments, action.compressBeforeSending, emptySet())
+        room.sendMedias(
+                action.attachments,
+                action.compressBeforeSending,
+                emptySet(),
+                initialState.rootThreadEventId
+        )
     }
 
     private fun handleEventVisible(action: RoomDetailAction.TimelineEventTurnsVisible) {
@@ -1128,6 +1194,9 @@ class RoomDetailViewModel @AssistedInject constructor(
         chatEffectManager.delegate = null
         chatEffectManager.dispose()
         callManager.removeProtocolsCheckerListener(this)
+        // we should also mark it as read here, for the scenario that the user
+        // is already in the thread timeline
+        markThreadTimelineAsReadLocal()
         super.onCleared()
     }
 }
