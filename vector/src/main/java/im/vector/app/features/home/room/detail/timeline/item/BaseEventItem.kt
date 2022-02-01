@@ -26,8 +26,6 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.platform.CheckableView
-import im.vector.app.core.utils.DimensionConverter
-import timber.log.Timber
 
 /**
  * Children must override getViewType()
@@ -43,15 +41,14 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
 
     final override fun getViewType(): Int {
         // This makes sure we have a unique integer for the combination of layout and ViewStubId.
-        return pairingFunction(layout, getViewStubId()).also {
-            Timber.v("GetViewType: for ${javaClass.canonicalName} $it with layout:$layout and stubId:${getViewStubId()}")
-        }
+        val pairingResult = pairingFunction(layout.toLong(), getViewStubId().toLong())
+        return (pairingResult - Int.MAX_VALUE).toInt()
     }
 
     abstract fun getViewStubId(): Int
 
     // Szudzik function
-    private fun pairingFunction(a: Int, b: Int): Int {
+    private fun pairingFunction(a: Long, b: Long): Long {
         return if (a >= b) a * a + a + b else a + b * b
     }
 
