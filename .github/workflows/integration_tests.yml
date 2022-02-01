@@ -180,6 +180,7 @@ jobs:
           body="$(cat ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml | grep "<testsuite" | sed "s@.*tests=\(.*\)time=.*@\1@")"
           echo "::set-output name=permalink::passed=$body"
       - name: Find Comment
+        if: github.event_name == 'pull_request'
         uses: peter-evans/find-comment@v1
         id: fc
         with:
@@ -187,6 +188,7 @@ jobs:
           comment-author: 'github-actions[bot]'
           body-includes: Integration Tests Results
       - name: Publish results to PR
+        if: github.event_name == 'pull_request'
         uses: peter-evans/create-or-update-comment@v1
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
