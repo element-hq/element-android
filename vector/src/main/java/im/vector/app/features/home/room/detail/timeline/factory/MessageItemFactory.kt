@@ -25,6 +25,8 @@ import android.text.style.AbsoluteSizeSpan
 import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
+import android.view.WindowManager
+import android.view.WindowMetrics
 import dagger.Lazy
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
@@ -199,7 +201,7 @@ class MessageItemFactory @Inject constructor(
                                   informationData: MessageInformationData,
                                   highlight: Boolean,
                                   attributes: AbsMessageItem.Attributes): MessageLocationItem? {
-        val width = resources.displayMetrics.widthPixels - dimensionConverter.dpToPx(60)
+        val width = timelineMediaSizeProvider.getMaxSize().first
         val height = dimensionConverter.dpToPx(200)
 
         val locationUrl = locationContent.toLocationData()?.let {
@@ -209,6 +211,8 @@ class MessageItemFactory @Inject constructor(
         return MessageLocationItem_()
                 .attributes(attributes)
                 .locationUrl(locationUrl)
+                .mapWidth(width)
+                .mapHeight(height)
                 .userId(informationData.senderId)
                 .locationPinProvider(locationPinProvider)
                 .highlighted(highlight)
