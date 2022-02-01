@@ -220,20 +220,12 @@ class FtueAuthVariant(
                         FtueAuthUseCaseFragment::class.java,
                         option = commonOption)
             }
+            OnboardingViewEvents.OnAccountCreated                              -> onAccountCreated()
+            OnboardingViewEvents.OnAccountSignedIn                             -> onAccountSignedIn()
         }.exhaustive
     }
 
     private fun updateWithState(viewState: OnboardingViewState) {
-        if (viewState.isUserLogged()) {
-            val intent = HomeActivity.newIntent(
-                    activity,
-                    accountCreation = viewState.signMode == SignMode.SignUp
-            )
-            activity.startActivity(intent)
-            activity.finish()
-            return
-        }
-
         // Loading
         views.loginLoading.isVisible = viewState.isLoading()
     }
@@ -367,5 +359,19 @@ class FtueAuthVariant(
                     option = commonOption)
             else               -> Unit // Should not happen
         }
+    }
+
+    private fun onAccountSignedIn() {
+        navigateToHome(createdAccount = false)
+    }
+
+    private fun onAccountCreated() {
+        navigateToHome(createdAccount = true)
+    }
+
+    private fun navigateToHome(createdAccount: Boolean) {
+        val intent = HomeActivity.newIntent(activity, accountCreation = createdAccount)
+        activity.startActivity(intent)
+        activity.finish()
     }
 }
