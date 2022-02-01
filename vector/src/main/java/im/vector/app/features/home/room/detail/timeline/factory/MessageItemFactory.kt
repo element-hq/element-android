@@ -84,6 +84,7 @@ import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -106,6 +107,7 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
+import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import javax.inject.Inject
 
 class MessageItemFactory @Inject constructor(
@@ -125,6 +127,7 @@ class MessageItemFactory @Inject constructor(
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
+        private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val spanUtils: SpanUtils,
         private val session: Session,
         private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
@@ -168,6 +171,11 @@ class MessageItemFactory @Inject constructor(
             return noticeItemFactory.create(params)
         }
 
+        // This is a thread event and we will [debug] display it when we are in the main timeline
+        if (lightweightSettingsStorage.areThreadMessagesEnabled() && !params.isFromThreadTimeline() && event.root.isThread()) {
+            return noticeItemFactory.create(params)
+        }
+
         // always hide summary when we are on thread timeline
         val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback, threadDetails)
 
@@ -198,10 +206,6 @@ class MessageItemFactory @Inject constructor(
             }
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
-    }
-
-    private fun isFromThreadTimeline(params: TimelineItemFactoryParams) {
-        params.rootThreadEventId
     }
 
     private fun buildLocationItem(locationContent: MessageLocationContent,

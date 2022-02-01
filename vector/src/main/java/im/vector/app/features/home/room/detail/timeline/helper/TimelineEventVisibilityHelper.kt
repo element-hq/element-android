@@ -117,7 +117,7 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
             rootThreadEventId: String?
     ): Boolean {
         // If show hidden events is true we should always display something
-        if (userPreferencesProvider.shouldShowHiddenEvents()) {
+        if (userPreferencesProvider.shouldShowHiddenEvents() && !isFromThreadTimeline) {
             return true
         }
         // We always show highlighted event
