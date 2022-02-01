@@ -54,7 +54,7 @@ jobs:
             echo "::set-output name=body::$body"
           fi
       - name: Find Comment
-        if: always()
+        if: always() && github.event_name == 'pull_request'
         uses: peter-evans/find-comment@v1
         id: fc
         with:
@@ -62,7 +62,7 @@ jobs:
           comment-author: 'github-actions[bot]'
           body-includes: Ktlint Results
       - name: Add comment if needed
-        if: always() && steps.ktlint-results.outputs.add_comment == 'true'
+        if: always() && github.event_name == 'pull_request' && steps.ktlint-results.outputs.add_comment == 'true'
         uses: peter-evans/create-or-update-comment@v1
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
@@ -73,7 +73,7 @@ jobs:
             ${{ steps.ktlint-results.outputs.body }}
           edit-mode: replace
       - name: Delete comment if needed
-        if: always() && steps.fc.outputs.comment-id != '' && steps.ktlint-results.outputs.add_comment == 'false'
+        if: always() && github.event_name == 'pull_request' && steps.fc.outputs.comment-id != '' && steps.ktlint-results.outputs.add_comment == 'false'
         uses: actions/github-script@v3
         with:
           script: |
