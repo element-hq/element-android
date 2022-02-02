@@ -67,7 +67,7 @@
             android:importantForAccessibility="no"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/matrixToAccessText"
-            app:layout_constraintStart_toStartOf="@+id/matrixToCardNameText"
+            app:layout_constraintStart_toStartOf="@id/matrixToCardNameText"
             app:layout_constraintTop_toTopOf="@id/matrixToAccessText"
             app:tint="?vctr_content_secondary"
             tools:ignore="MissingPrefix"
@@ -92,7 +92,7 @@
             tools:visibility="visible" />
 
         <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/header_barrier"
+            android:id="@+id/matrixToHeaderBarrier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="bottom"
@@ -114,7 +114,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/header_barrier">
+            app:layout_constraintTop_toBottomOf="@id/matrixToHeaderBarrier">
 
             <ImageView
                 android:id="@+id/spaceChildMemberCountIcon"
