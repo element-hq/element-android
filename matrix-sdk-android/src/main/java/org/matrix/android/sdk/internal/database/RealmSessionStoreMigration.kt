@@ -455,5 +455,4 @@ internal class RealmSessionStoreMigration @Inject constructor(
             realm.deleteAll()
         }
     }
-
 }
