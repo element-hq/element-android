@@ -55,5 +55,5 @@
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/messageThreadSummaryAvatarImageView"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Pouet" />
+        tools:text="@sample/messages.json/data/message" />
 </merge>

@@ -862,9 +862,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     }
 
     /**
-     * Tells if the emoji keyboard button should be visible or not.
+     * Tells if the timeline messages should be shown in a bubble or not.
      *
-     * @return true to show emoji keyboard button.
+     * @return true to show timeline message in bubble.
      */
     fun useMessageBubblesLayout(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_INTERFACE_BUBBLE_KEY, false)

@@ -99,7 +99,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 
         holder.view.onClick(baseAttributes.itemClickListener)
         holder.view.setOnLongClickListener(baseAttributes.itemLongClickListener)
-        (holder.view as? TimelineMessageLayoutRenderer)?.render(baseAttributes.informationData.messageLayout)
+        (holder.view as? TimelineMessageLayoutRenderer)?.renderMessageLayout(baseAttributes.informationData.messageLayout)
     }
 
     override fun unbind(holder: H) {

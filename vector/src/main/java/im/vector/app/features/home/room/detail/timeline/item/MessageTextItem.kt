@@ -80,7 +80,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             safePreviewUrlRetriever.addListener(attributes.informationData.eventId, previewUrlViewUpdater)
         }
         holder.previewUrlView.delegate = previewUrlCallback
-        holder.previewUrlView.render(attributes.informationData.messageLayout)
+        holder.previewUrlView.renderMessageLayout(attributes.informationData.messageLayout)
 
         if (useBigFont) {
             holder.messageView.textSize = 44F

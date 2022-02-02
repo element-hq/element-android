@@ -41,7 +41,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                                                        private val vectorPreferences: VectorPreferences) {
 
     companion object {
-        // Can't be rendered in bubbles, so get back to default layout
+        // Can be rendered in bubbles, other types will fallback to default
         private val EVENT_TYPES_WITH_BUBBLE_LAYOUT = setOf(
                 EventType.MESSAGE,
                 EventType.POLL_START,
@@ -162,7 +162,9 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
         )
     }
 
-    private fun buildCornersRadius(isIncoming: Boolean, isFirstFromThisSender: Boolean, isLastFromThisSender: Boolean): TimelineMessageLayout.Bubble.CornersRadius {
+    private fun buildCornersRadius(isIncoming: Boolean,
+                                   isFirstFromThisSender: Boolean,
+                                   isLastFromThisSender: Boolean): TimelineMessageLayout.Bubble.CornersRadius {
         return if ((isIncoming && !isRTL) || (!isIncoming && isRTL)) {
             TimelineMessageLayout.Bubble.CornersRadius(
                     topStartRadius = if (isFirstFromThisSender) cornerRadius else 0f,

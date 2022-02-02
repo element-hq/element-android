@@ -94,7 +94,7 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
         }
     }
 
-    override fun render(messageLayout: TimelineMessageLayout) {
+    override fun renderMessageLayout(messageLayout: TimelineMessageLayout) {
         if (messageLayout !is TimelineMessageLayout.Bubble) {
             Timber.v("Can't render messageLayout $messageLayout")
             return

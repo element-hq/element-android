@@ -200,7 +200,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/informationBottom"
         android:layout_toStartOf="@id/messageEndGuideline"
-        android:layout_toEndOf="@+id/messageStartGuideline"
+        android:layout_toEndOf="@id/messageStartGuideline"
         android:contentDescription="@string/room_threads_filter">
 
         <androidx.constraintlayout.widget.ConstraintLayout

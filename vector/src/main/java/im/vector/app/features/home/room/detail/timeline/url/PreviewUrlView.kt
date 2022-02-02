@@ -25,7 +25,6 @@ import androidx.core.view.isVisible
 import com.google.android.material.card.MaterialCardView
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
-import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewUrlPreviewBinding
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -33,7 +32,6 @@ import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLay
 import im.vector.app.features.home.room.detail.timeline.view.TimelineMessageLayoutRenderer
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.themes.ThemeUtils
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.media.PreviewUrlData
 
 /**
@@ -81,7 +79,7 @@ class PreviewUrlView @JvmOverloads constructor(
         }
     }
 
-    override fun render(messageLayout: TimelineMessageLayout) {
+    override fun renderMessageLayout(messageLayout: TimelineMessageLayout) {
         when (messageLayout) {
             is TimelineMessageLayout.Default -> {
                 val backgroundColor = ThemeUtils.getColor(context, R.attr.vctr_system)
