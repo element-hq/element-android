@@ -28,9 +28,9 @@ object RelationType {
     /** Lets you define an event which references an existing event.*/
     const val REFERENCE = "m.reference"
 
-    /** Lets you define an thread event that belongs to another existing event.*/
-//    const val THREAD = "m.thread"         // m.thread is not yet released in the backend
-    const val THREAD = "io.element.thread"  // io.element.thread will be replaced by m.thread when it is released
+    /** Lets you define an event which is a thread reply to an existing event.*/
+    const val THREAD = "m.thread"
+    const val IO_THREAD = "io.element.thread"
 
     /** Lets you define an event which adds a response to an existing event.*/
     const val RESPONSE = "org.matrix.response"

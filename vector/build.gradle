@@ -153,6 +153,9 @@ android {
         //  This *must* only be set in trusted environments.
         buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
 
+        // Indicates whether or not threading support is enabled
+        buildConfigField "Boolean", "THREADING_ENABLED", "${isThreadingEnabled}"
+
         buildConfigField "Boolean", "enableLocationSharing", "true"
         buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
 
@@ -288,9 +291,8 @@ android {
         }
     }
 
-    lintOptions {
-        lintConfig file("lint.xml")
-
+    lint {
+        lintConfig file('lint.xml')
         checkDependencies true
         abortOnError true
     }

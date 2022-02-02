@@ -550,7 +550,7 @@ class HomeActivity :
         return true
     }
 
-    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
+    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
         if (roomId == null) return false
         MatrixToBottomSheet.withLink(deepLink.toString())
                 .show(supportFragmentManager, "HA#MatrixToBottomSheet")

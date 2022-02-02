@@ -7,7 +7,7 @@ ext.versions = [
         'targetCompat'      : JavaVersion.VERSION_11,
 ]
 
-def gradle = "7.0.4"
+def gradle = "7.1.0"
 // Ref: https://kotlinlang.org/releases.html
 def kotlin = "1.5.31"
 def kotlinCoroutines = "1.5.2"
@@ -37,7 +37,6 @@ ext.libs = [
                 'gradlePlugin'            : "com.android.tools.build:gradle:$gradle",
                 'kotlinPlugin'            : "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin",
                 'hiltPlugin'              : "com.google.dagger:hilt-android-gradle-plugin:$dagger"
-
         ],
         jetbrains   : [
                 'coroutinesCore'          : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutines",

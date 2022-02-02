@@ -145,7 +145,7 @@ class ElementRobot {
             assertDisplayed(R.string.are_you_sure)
             clickOn(R.string.action_skip)
             waitUntilViewVisible(withId(R.id.bottomSheetFragmentContainer))
-        }.onFailure { Timber.w("Verification popup missing", it) }
+        }.onFailure { Timber.w(it, "Verification popup missing") }
     }
 }
 

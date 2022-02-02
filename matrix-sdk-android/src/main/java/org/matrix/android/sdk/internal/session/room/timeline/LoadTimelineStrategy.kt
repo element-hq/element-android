@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
+import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
@@ -51,6 +52,7 @@ internal class LoadTimelineStrategy(
     sealed interface Mode {
         object Live : Mode
         data class Permalink(val originEventId: String) : Mode
+        data class Thread(val rootThreadEventId: String) : Mode
 
         fun originEventId(): String? {
             return if (this is Permalink) {
@@ -59,6 +61,14 @@ internal class LoadTimelineStrategy(
                 null
             }
         }
+
+//        fun getRootThreadEventId(): String? {
+//            return if (this is Thread) {
+//                rootThreadEventId
+//            } else {
+//                null
+//            }
+//        }
     }
 
     data class Dependencies(
@@ -71,6 +81,7 @@ internal class LoadTimelineStrategy(
             val timelineInput: TimelineInput,
             val timelineEventMapper: TimelineEventMapper,
             val threadsAwarenessHandler: ThreadsAwarenessHandler,
+            val lightweightSettingsStorage: LightweightSettingsStorage,
             val onEventsUpdated: (Boolean) -> Unit,
             val onLimitedTimeline: () -> Unit,
             val onNewTimelineEvents: (List<String>) -> Unit
@@ -198,12 +209,20 @@ internal class LoadTimelineStrategy(
     }
 
     private fun getChunkEntity(realm: Realm): RealmResults<ChunkEntity> {
-        return if (mode is Mode.Permalink) {
-            ChunkEntity.findAllIncludingEvents(realm, listOf(mode.originEventId))
-        } else {
-            ChunkEntity.where(realm, roomId)
-                    .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
-                    .findAll()
+        return when (mode) {
+            is Mode.Live      -> {
+                ChunkEntity.where(realm, roomId)
+                        .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
+                        .findAll()
+            }
+            is Mode.Permalink -> {
+                ChunkEntity.findAllIncludingEvents(realm, listOf(mode.originEventId))
+            }
+            is Mode.Thread    -> {
+                ChunkEntity.where(realm, roomId)
+                        .equalTo(ChunkEntityFields.IS_LAST_FORWARD, true)
+                        .findAll()
+            }
         }
     }
 
@@ -224,6 +243,7 @@ internal class LoadTimelineStrategy(
                     timelineEventMapper = dependencies.timelineEventMapper,
                     uiEchoManager = uiEchoManager,
                     threadsAwarenessHandler = dependencies.threadsAwarenessHandler,
+                    lightweightSettingsStorage = dependencies.lightweightSettingsStorage,
                     initialEventId = mode.originEventId(),
                     onBuiltEvents = dependencies.onEventsUpdated
             )
