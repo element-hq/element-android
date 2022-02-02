@@ -42,6 +42,6 @@ data class LocationSharingViewState(
 fun LocationSharingViewState.toMapState() = MapState(
         zoomOnlyOnce = true,
         pinLocationData = lastKnownLocation,
-        pinId = LocationSharingFragment.USER_PIN_NAME,
+        pinId = USER_PIN_NAME,
         pinDrawable = pinDrawable
 )

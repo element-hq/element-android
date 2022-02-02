@@ -207,10 +207,12 @@ class MessageItemFactory @Inject constructor(
             urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, width, height)
         }
 
+        val userId = if (locationContent.isGenericLocation()) null else informationData.senderId
+
         return MessageLocationItem_()
                 .attributes(attributes)
                 .locationUrl(locationUrl)
-                .userId(informationData.senderId)
+                .userId(userId)
                 .locationPinProvider(locationPinProvider)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)

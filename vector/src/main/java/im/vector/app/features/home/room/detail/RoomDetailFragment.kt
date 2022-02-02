@@ -613,13 +613,14 @@ class RoomDetailFragment @Inject constructor(
     }
 
     private fun handleShowLocationPreview(locationContent: MessageLocationContent, senderId: String) {
+        val isGenericLocation = locationContent.isGenericLocation()
         navigator
                 .openLocationSharing(
                         context = requireContext(),
                         roomId = roomDetailArgs.roomId,
                         mode = LocationSharingMode.PREVIEW,
                         initialLocationData = locationContent.toLocationData(),
-                        locationOwnerId = senderId
+                        locationOwnerId = if (isGenericLocation) null else senderId
                 )
     }
 

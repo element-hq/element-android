@@ -64,4 +64,12 @@ data class MessageLocationContent(
 ) : MessageContent {
 
     fun getBestGeoUri() = locationInfo?.geoUri ?: geoUri
+
+    /**
+     * @return true if location asset is different than LocationAssetType.SELF
+     */
+    fun isGenericLocation(): Boolean {
+        // Should behave like m.self if locationAsset is null
+        return locationAsset != null && locationAsset.type != LocationAssetType.SELF
+    }
 }

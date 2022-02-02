@@ -77,10 +77,12 @@ class MessageActionsEpoxyController @Inject constructor(
         val formattedDate = dateFormatter.format(date, DateFormatKind.MESSAGE_DETAIL)
         val body = state.messageBody.linkify(host.listener)
         val bindingOptions = spanUtils.getBindingOptions(body)
-        val locationUrl = state.timelineEvent()?.root?.getClearContent()
+
+        val locationContent = state.timelineEvent()?.root?.getClearContent()
                 ?.toModel<MessageLocationContent>(catchError = true)
-                ?.toLocationData()
+        val locationUrl = locationContent?.toLocationData()
                 ?.let { urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, 1200, 800) }
+        val locationOwnerId = if (locationContent?.isGenericLocation().orFalse()) null else state.informationData.matrixItem.id
 
         bottomSheetMessagePreviewItem {
             id("preview")
@@ -96,6 +98,7 @@ class MessageActionsEpoxyController @Inject constructor(
             time(formattedDate)
             locationUrl(locationUrl)
             locationPinProvider(host.locationPinProvider)
+            locationOwnerId(locationOwnerId)
         }
 
         // Send state

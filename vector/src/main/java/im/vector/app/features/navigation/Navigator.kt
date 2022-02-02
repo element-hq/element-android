@@ -161,5 +161,5 @@ interface Navigator {
                             roomId: String,
                             mode: LocationSharingMode,
                             initialLocationData: LocationData?,
-                            locationOwnerId: String)
+                            locationOwnerId: String?)
 }
