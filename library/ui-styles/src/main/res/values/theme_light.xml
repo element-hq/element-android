@@ -105,9 +105,6 @@
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
         <item name="android:overScrollMode">never</item>
 
-        <!-- fonts -->
-        <item name="android:typeface">sans</item>
-
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 
         <item name="pf_lock_screen">@style/PinCodeScreenStyle</item>
