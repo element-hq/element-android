@@ -34,27 +34,29 @@ internal fun isEventRead(realmConfiguration: RealmConfiguration,
     if (LocalEcho.isLocalEchoId(eventId)) {
         return true
     }
-    // If we don't know if the event has been read, we assume it's not
-    var isEventRead = false
 
-    Realm.getInstance(realmConfiguration).use { realm ->
-        val latestEvent = TimelineEventEntity.latestEvent(realm, roomId, true)
-        // If latest event is from you we are sure the event is read
-        if (latestEvent?.root?.sender == userId) {
-            return true
-        }
+    return Realm.getInstance(realmConfiguration).use { realm ->
         val eventToCheck = TimelineEventEntity.where(realm, roomId, eventId).findFirst()
-        isEventRead = when {
-            eventToCheck == null                -> false
-            eventToCheck.root?.sender == userId -> true
-            else                                -> {
-                val readReceipt = ReadReceiptEntity.where(realm, roomId, userId).findFirst() ?: return@use
-                val readReceiptEvent = TimelineEventEntity.where(realm, roomId, readReceipt.eventId).findFirst() ?: return@use
-                readReceiptEvent.isMoreRecentThan(eventToCheck)
-            }
+        when {
+            // The event doesn't exist locally, let's assume it hasn't been read
+            eventToCheck == null                                          -> false
+            eventToCheck.root?.sender == userId                           -> true
+            // If new event exists and the latest event is from ourselves we can infer the event is read
+            latestEventIsFromSelf(realm, roomId, userId)                  -> true
+            eventToCheck.isBeforeLatestReadReceipt(realm, roomId, userId) -> true
+            else                                                          -> false
         }
     }
-    return isEventRead
+}
+
+private fun latestEventIsFromSelf(realm: Realm, roomId: String, userId: String) = TimelineEventEntity.latestEvent(realm, roomId, true)
+        ?.root?.sender == userId
+
+private fun TimelineEventEntity.isBeforeLatestReadReceipt(realm: Realm, roomId: String, userId: String): Boolean {
+    return ReadReceiptEntity.where(realm, roomId, userId).findFirst()?.let { readReceipt ->
+        val readReceiptEvent = TimelineEventEntity.where(realm, roomId, readReceipt.eventId).findFirst()
+        readReceiptEvent?.isMoreRecentThan(this)
+    } ?: false
 }
 
 /**
