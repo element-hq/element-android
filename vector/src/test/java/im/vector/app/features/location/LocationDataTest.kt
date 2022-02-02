@@ -17,7 +17,9 @@
 package im.vector.app.features.location
 
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeNull
+import org.amshove.kluent.shouldBeTrue
 import org.junit.Test
 import org.matrix.android.sdk.api.session.room.model.message.LocationAsset
 import org.matrix.android.sdk.api.session.room.model.message.LocationAssetType
@@ -62,14 +64,14 @@ class LocationDataTest {
     }
 
     @Test
-    fun genericLocationTest() {
+    fun selfLocationTest() {
         val contentWithNullAsset = MessageLocationContent(body = "", geoUri = "", locationAsset = null)
-        contentWithNullAsset.isGenericLocation() shouldBeEqualTo(false)
+        contentWithNullAsset.isSelfLocation().shouldBeTrue()
 
         val contentWithNullAssetType = MessageLocationContent(body = "", geoUri = "", locationAsset = LocationAsset(type = null))
-        contentWithNullAssetType.isGenericLocation() shouldBeEqualTo(true)
+        contentWithNullAssetType.isSelfLocation().shouldBeTrue()
 
         val contentWithSelfAssetType = MessageLocationContent(body = "", geoUri = "", locationAsset = LocationAsset(type = LocationAssetType.SELF))
-        contentWithSelfAssetType.isGenericLocation() shouldBeEqualTo(false)
+        contentWithSelfAssetType.isSelfLocation().shouldBeTrue()
     }
 }

@@ -121,7 +121,7 @@ class LocationPreviewFragment @Inject constructor(
                         MapState(
                                 zoomOnlyOnce = true,
                                 pinLocationData = location,
-                                pinId = args.locationOwnerId ?: USER_PIN_NAME,
+                                pinId = args.locationOwnerId ?: DEFAULT_PIN_ID,
                                 pinDrawable = pinDrawable
                         )
                 )

@@ -82,7 +82,7 @@ class MessageActionsEpoxyController @Inject constructor(
                 ?.toModel<MessageLocationContent>(catchError = true)
         val locationUrl = locationContent?.toLocationData()
                 ?.let { urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, 1200, 800) }
-        val locationOwnerId = if (locationContent?.isGenericLocation().orFalse()) null else state.informationData.matrixItem.id
+        val locationOwnerId = if (locationContent?.isSelfLocation().orFalse()) state.informationData.matrixItem.id else null
 
         bottomSheetMessagePreviewItem {
             id("preview")
