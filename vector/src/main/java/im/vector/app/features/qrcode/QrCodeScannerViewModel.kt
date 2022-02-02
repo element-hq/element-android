@@ -22,7 +22,6 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
-import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorDummyViewState
 import im.vector.app.core.platform.VectorViewModel
 import org.matrix.android.sdk.api.session.Session
@@ -45,7 +44,7 @@ class QrCodeScannerViewModel @AssistedInject constructor(
                     is QrCodeScannerAction.CodeDecoded -> QrCodeScannerEvents.CodeParsed(action.result, action.isQrCode)
                     is QrCodeScannerAction.SwitchMode  -> QrCodeScannerEvents.SwitchMode
                     is QrCodeScannerAction.ScanFailed  -> QrCodeScannerEvents.ParseFailed
-                }.exhaustive
+                }
         )
     }
 }
