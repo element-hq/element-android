@@ -28,6 +28,13 @@ import kotlin.reflect.KProperty
 /**
  * Provides a singleton datastore cache
  * allows for lazily fetching a datastore instance by key to avoid creating multiple stores for the same file
+ * Based on https://androidx.tech/artifacts/datastore/datastore-preferences/1.0.0-source/androidx/datastore/preferences/PreferenceDataStoreDelegate.kt.html
+ *
+ * Makes use of a ReadOnlyProperty in order to provide a simplified api on top of a Context
+ * ReadOnlyProperty allows us to lazily access the backing property instead of requiring it upfront as a dependency
+ * <pre>
+ * val Context.dataStoreProvider by dataStoreProvider()
+ * </pre>
  */
 fun dataStoreProvider(): ReadOnlyProperty<Context, (String) -> DataStore<Preferences>> {
     return MappedPreferenceDataStoreSingletonDelegate()
