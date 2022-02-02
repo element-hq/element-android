@@ -20,11 +20,17 @@ import io.realm.DynamicRealm
 import io.realm.RealmMigration
 import org.matrix.android.sdk.internal.raw.migration.MigrateGlobalTo001
 import timber.log.Timber
+import javax.inject.Inject
 
-internal object GlobalRealmMigration : RealmMigration {
+internal class GlobalRealmMigration @Inject constructor() : RealmMigration {
+    /**
+     * Forces all GlobalRealmMigration instances to be equal
+     * Avoids Realm throwing when multiple instances of the migration are set
+     */
+    override fun equals(other: Any?) = other is GlobalRealmMigration
+    override fun hashCode() = 2000
 
-    // Current schema version
-    const val SCHEMA_VERSION = 1L
+    val schemaVersion = 1L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.d("Migrating Global Realm from $oldVersion to $newVersion")

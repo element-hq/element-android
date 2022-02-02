@@ -71,7 +71,7 @@ internal class SessionRealmConfigurationFactory @Inject constructor(
                 }
                 .allowWritesOnUiThread(true)
                 .modules(SessionRealmModule())
-                .schemaVersion(RealmSessionStoreMigration.SESSION_STORE_SCHEMA_VERSION)
+                .schemaVersion(realmSessionStoreMigration.schemaVersion)
                 .migration(realmSessionStoreMigration)
                 .build()
 

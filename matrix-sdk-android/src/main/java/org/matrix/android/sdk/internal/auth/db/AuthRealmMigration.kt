@@ -23,11 +23,17 @@ import org.matrix.android.sdk.internal.auth.db.migration.MigrateAuthTo002
 import org.matrix.android.sdk.internal.auth.db.migration.MigrateAuthTo003
 import org.matrix.android.sdk.internal.auth.db.migration.MigrateAuthTo004
 import timber.log.Timber
+import javax.inject.Inject
 
-internal object AuthRealmMigration : RealmMigration {
+internal class AuthRealmMigration @Inject constructor() : RealmMigration {
+    /**
+     * Forces all AuthRealmMigration instances to be equal
+     * Avoids Realm throwing when multiple instances of the migration are set
+     */
+    override fun equals(other: Any?) = other is AuthRealmMigration
+    override fun hashCode() = 4000
 
-    // Current schema version
-    const val SCHEMA_VERSION = 4L
+    val schemaVersion = 4L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.d("Migrating Auth Realm from $oldVersion to $newVersion")

@@ -49,11 +49,6 @@ import javax.inject.Inject
 internal class RealmSessionStoreMigration @Inject constructor(
         private val normalizer: Normalizer
 ) : RealmMigration {
-
-    companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 24L
-    }
-
     /**
      * Forces all RealmSessionStoreMigration instances to be equal
      * Avoids Realm throwing when multiple instances of the migration are set
@@ -61,8 +56,10 @@ internal class RealmSessionStoreMigration @Inject constructor(
     override fun equals(other: Any?) = other is RealmSessionStoreMigration
     override fun hashCode() = 1000
 
+    val schemaVersion = 24L
+
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
-        Timber.v("Migrating Realm Session from $oldVersion to $newVersion")
+        Timber.d("Migrating Realm Session from $oldVersion to $newVersion")
 
         if (oldVersion < 1) MigrateSessionTo001(realm).perform()
         if (oldVersion < 2) MigrateSessionTo002(realm).perform()
