@@ -41,7 +41,8 @@ class SpaceCardRenderer @Inject constructor(
     fun render(spaceSummary: RoomSummary?,
                peopleYouKnow: List<User>,
                matrixLinkCallback: TimelineEventController.UrlClickCallback?,
-               inCard: FragmentMatrixToRoomSpaceCardBinding) {
+               inCard: FragmentMatrixToRoomSpaceCardBinding,
+               showDescription: Boolean) {
         if (spaceSummary == null) {
             inCard.matrixToCardContentVisibility.isVisible = false
             inCard.matrixToCardButtonLoading.isVisible = true
@@ -69,6 +70,8 @@ class SpaceCardRenderer @Inject constructor(
                 // hide the pill
                 inCard.matrixToMemberPills.isVisible = false
             }
+
+            inCard.matrixToCardDescText.isVisible = showDescription
 
             renderPeopleYouKnow(inCard, peopleYouKnow.map { it.toMatrixItem() })
         }
