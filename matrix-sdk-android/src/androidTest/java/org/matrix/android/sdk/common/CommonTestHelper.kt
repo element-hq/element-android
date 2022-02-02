@@ -157,14 +157,20 @@ class CommonTestHelper(context: Context) {
     /**
      * Will send nb of messages provided by count parameter but waits every 10 messages to avoid gap in sync
      */
-    private fun sendTextMessagesBatched(timeline: Timeline, room: Room, message: String, count: Int, timeout: Long): List<TimelineEvent> {
+    private fun sendTextMessagesBatched(timeline: Timeline, room: Room, message: String, count: Int, timeout: Long, rootThreadEventId: String? = null): List<TimelineEvent> {
         val sentEvents = ArrayList<TimelineEvent>(count)
         (1 until count + 1)
                 .map { "$message #$it" }
                 .chunked(10)
                 .forEach { batchedMessages ->
                     batchedMessages.forEach { formattedMessage ->
-                        room.sendTextMessage(formattedMessage)
+                        if (rootThreadEventId != null) {
+                            room.replyInThread(
+                                    rootThreadEventId = rootThreadEventId,
+                                    replyInThreadText = formattedMessage)
+                        } else {
+                            room.sendTextMessage(formattedMessage)
+                        }
                     }
                     waitWithLatch(timeout) { latch ->
                         val timelineListener = object : Timeline.Listener {
@@ -193,6 +199,27 @@ class CommonTestHelper(context: Context) {
                         timeline.addListener(timelineListener)
                     }
                 }
+        return sentEvents
+    }
+
+    /**
+     * Reply in a thread
+     * @param room         the room where to send the messages
+     * @param message      the message to send
+     * @param numberOfMessages the number of time the message will be sent
+     */
+    fun replyInThreadMessage(
+            room: Room,
+            message: String,
+            numberOfMessages: Int,
+            rootThreadEventId: String,
+            timeout: Long = TestConstants.timeOutMillis): List<TimelineEvent> {
+        val timeline = room.createTimeline(null, TimelineSettings(10))
+        timeline.start()
+        val sentEvents = sendTextMessagesBatched(timeline, room, message, numberOfMessages, timeout, rootThreadEventId)
+        timeline.dispose()
+        // Check that all events has been created
+        assertEquals("Message number do not match $sentEvents", numberOfMessages.toLong(), sentEvents.size.toLong())
         return sentEvents
     }
 

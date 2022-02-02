@@ -20,16 +20,15 @@
         android:layout_height="44dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="4dp"
-        android:padding="2dp"
         android:background="@drawable/bg_avatar_border"
         android:contentDescription="@string/avatar"
         android:elevation="2dp"
+        android:padding="2dp"
         tools:src="@sample/user_round_avatars" />
 
     <TextView
         android:id="@+id/messageMemberNameView"
         style="@style/Widget.Vector.TextView.Subtitle"
-        android:textAlignment="viewStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -39,6 +38,7 @@
         android:layout_toEndOf="@id/messageStartGuideline"
         android:ellipsize="end"
         android:maxLines="1"
+        android:textAlignment="viewStart"
         android:textColor="?vctr_content_primary"
         android:textStyle="bold"
         tools:text="@sample/users.json/data/displayName" />
@@ -112,11 +112,11 @@
                 android:layout_height="0dp"
                 android:background="@drawable/overlay_bubble_media"
                 android:visibility="gone"
-                tools:visibility="visible"
-                app:layout_constraintStart_toStartOf="@id/viewStubContainer"
+                app:layout_constraintBottom_toBottomOf="@id/viewStubContainer"
                 app:layout_constraintEnd_toEndOf="@id/viewStubContainer"
+                app:layout_constraintStart_toStartOf="@id/viewStubContainer"
                 app:layout_constraintTop_toTopOf="@id/viewStubContainer"
-                app:layout_constraintBottom_toBottomOf="@id/viewStubContainer"/>
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/messageTimeView"
@@ -193,5 +193,36 @@
 
         </com.google.android.flexbox.FlexboxLayout>
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/messageThreadSummaryContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/informationBottom"
+        android:layout_toStartOf="@id/messageEndGuideline"
+        android:layout_toEndOf="@+id/messageStartGuideline"
+        android:contentDescription="@string/room_threads_filter">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/messageThreadSummaryConstraintLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/rounded_rect_shape_8"
+            android:contentDescription="@string/room_threads_filter"
+            android:layoutDirection="locale"
+            android:maxWidth="496dp"
+            android:minWidth="144dp"
+            android:paddingStart="13dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="13dp"
+            android:paddingBottom="8dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <include layout="@layout/view_thread_room_summary" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
 
 </merge>

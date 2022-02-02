@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.sync.model.RoomsSyncResponse
 import org.matrix.android.sdk.api.session.sync.model.SyncResponse
 import org.matrix.android.sdk.internal.SessionManager
 import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
+import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.di.SessionDatabase
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
@@ -64,6 +65,7 @@ internal class SyncResponseHandler @Inject constructor(
         private val aggregatorHandler: SyncResponsePostTreatmentAggregatorHandler,
         private val cryptoService: DefaultCryptoService,
         private val tokenStore: SyncTokenStore,
+        private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val processEventForPushTask: ProcessEventForPushTask,
         private val pushRuleService: PushRuleService,
         private val threadsAwarenessHandler: ThreadsAwarenessHandler,
@@ -101,7 +103,10 @@ internal class SyncResponseHandler @Inject constructor(
         val aggregator = SyncResponsePostTreatmentAggregator()
 
         // Prerequisite for thread events handling in RoomSyncHandler
-        threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
+// Disabled due to the new fallback
+//        if (!lightweightSettingsStorage.areThreadMessagesEnabled()) {
+//            threadsAwarenessHandler.fetchRootThreadEventsIfNeeded(syncResponse)
+//        }
 
         // Start one big transaction
         monarchy.awaitTransaction { realm ->

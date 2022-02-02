@@ -25,9 +25,14 @@ import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.relation.RelationDefaultContent
+import org.matrix.android.sdk.api.session.room.model.relation.shouldRenderInThread
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.api.session.threads.ThreadDetails
+import org.matrix.android.sdk.api.util.ContentUtils
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
@@ -98,6 +103,9 @@ data class Event(
     @Transient
     var sendStateDetails: String? = null
 
+    @Transient
+    var threadDetails: ThreadDetails? = null
+
     fun sendStateError(): MatrixError? {
         return sendStateDetails?.let {
             val matrixErrorAdapter = MoshiProvider.providesMoshi().adapter(MatrixError::class.java)
@@ -123,6 +131,7 @@ data class Event(
             it.mCryptoErrorReason = mCryptoErrorReason
             it.sendState = sendState
             it.ageLocalTs = ageLocalTs
+            it.threadDetails = threadDetails
         }
     }
 
@@ -186,6 +195,51 @@ data class Event(
     }
 
     /**
+     * Returns a user friendly content depending on the message type.
+     * It can be used especially for message summaries.
+     * It will return a decrypted text message or an empty string otherwise.
+     */
+    fun getDecryptedTextSummary(): String? {
+        if (isRedacted()) return "Message Deleted"
+        val text = getDecryptedValue() ?: return null
+        return when {
+            isReplyRenderedInThread() || isQuote() -> ContentUtils.extractUsefulTextFromReply(text)
+            isFileMessage()                        -> "sent a file."
+            isAudioMessage()                       -> "sent an audio file."
+            isImageMessage()                       -> "sent an image."
+            isVideoMessage()                       -> "sent a video."
+            isSticker()                            -> "sent a sticker"
+            isPoll()                               -> getPollQuestion() ?: "created a poll."
+            else                                   -> text
+        }
+    }
+
+    private fun Event.isQuote(): Boolean {
+        if (isReplyRenderedInThread()) return false
+        return getDecryptedValue("formatted_body")?.contains("<blockquote>") ?: false
+    }
+
+    /**
+     * Determines whether or not current event has mentioned the user
+     */
+    fun isUserMentioned(userId: String): Boolean {
+        return getDecryptedValue("formatted_body")?.contains(userId) ?: false
+    }
+
+    /**
+     * Decrypt the message, or return the pure payload value if there is no encryption
+     */
+    private fun getDecryptedValue(key: String = "body"): String? {
+        return if (isEncrypted()) {
+            @Suppress("UNCHECKED_CAST")
+            val decryptedContent = mxDecryptionResult?.payload?.get("content") as? JsonDict
+            decryptedContent?.get(key) as? String
+        } else {
+            content?.get(key) as? String
+        }
+    }
+
+    /**
      * Tells if the event is redacted
      */
     fun isRedacted() = unsignedData?.redactedEvent != null
@@ -217,7 +271,7 @@ data class Event(
         if (mCryptoError != other.mCryptoError) return false
         if (mCryptoErrorReason != other.mCryptoErrorReason) return false
         if (sendState != other.sendState) return false
-
+        if (threadDetails != other.threadDetails) return false
         return true
     }
 
@@ -236,6 +290,8 @@ data class Event(
         result = 31 * result + (mCryptoError?.hashCode() ?: 0)
         result = 31 * result + (mCryptoErrorReason?.hashCode() ?: 0)
         result = 31 * result + sendState.hashCode()
+        result = 31 * result + threadDetails.hashCode()
+
         return result
     }
 }
@@ -243,70 +299,101 @@ data class Event(
 fun Event.isTextMessage(): Boolean {
     return getClearType() == EventType.MESSAGE &&
             when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
-        MessageType.MSGTYPE_TEXT,
-        MessageType.MSGTYPE_EMOTE,
-        MessageType.MSGTYPE_NOTICE -> true
-        else                       -> false
-    }
+                MessageType.MSGTYPE_TEXT,
+                MessageType.MSGTYPE_EMOTE,
+                MessageType.MSGTYPE_NOTICE -> true
+                else                       -> false
+            }
 }
 
 fun Event.isImageMessage(): Boolean {
     return getClearType() == EventType.MESSAGE &&
             when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
-        MessageType.MSGTYPE_IMAGE -> true
-        else                      -> false
-    }
+                MessageType.MSGTYPE_IMAGE -> true
+                else                      -> false
+            }
 }
 
 fun Event.isVideoMessage(): Boolean {
     return getClearType() == EventType.MESSAGE &&
             when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
-        MessageType.MSGTYPE_VIDEO -> true
-        else                      -> false
-    }
+                MessageType.MSGTYPE_VIDEO -> true
+                else                      -> false
+            }
 }
 
 fun Event.isAudioMessage(): Boolean {
     return getClearType() == EventType.MESSAGE &&
             when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
-        MessageType.MSGTYPE_AUDIO -> true
-        else                      -> false
-    }
+                MessageType.MSGTYPE_AUDIO -> true
+                else                      -> false
+            }
 }
 
 fun Event.isFileMessage(): Boolean {
     return getClearType() == EventType.MESSAGE &&
             when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
-        MessageType.MSGTYPE_FILE -> true
-        else                     -> false
-    }
+                MessageType.MSGTYPE_FILE -> true
+                else                     -> false
+            }
 }
 
 fun Event.isAttachmentMessage(): Boolean {
     return getClearType() == EventType.MESSAGE &&
             when (getClearContent()?.get(MessageContent.MSG_TYPE_JSON_KEY)) {
-        MessageType.MSGTYPE_IMAGE,
-        MessageType.MSGTYPE_AUDIO,
-        MessageType.MSGTYPE_VIDEO,
-        MessageType.MSGTYPE_FILE -> true
-        else                     -> false
-    }
+                MessageType.MSGTYPE_IMAGE,
+                MessageType.MSGTYPE_AUDIO,
+                MessageType.MSGTYPE_VIDEO,
+                MessageType.MSGTYPE_FILE -> true
+                else                     -> false
+            }
 }
+
+fun Event.isPoll(): Boolean = getClearType() == EventType.POLL_START || getClearType() == EventType.POLL_END
+
+fun Event.isSticker(): Boolean = getClearType() == EventType.STICKER
 
 fun Event.getRelationContent(): RelationDefaultContent? {
     return if (isEncrypted()) {
         content.toModel<EncryptedEventContent>()?.relatesTo
     } else {
-        content.toModel<MessageContent>()?.relatesTo
+        content.toModel<MessageContent>()?.relatesTo ?: run {
+            // Special case to handle stickers, while there is only a local msgtype for stickers
+            if (getClearType() == EventType.STICKER) {
+                getClearContent().toModel<MessageStickerContent>()?.relatesTo
+            } else {
+                null
+            }
+        }
     }
 }
+
+/**
+ * Returns the poll question or null otherwise
+ */
+fun Event.getPollQuestion(): String? =
+        getPollContent()?.pollCreationInfo?.question?.question
+
+/**
+ * Returns the relation content for a specific type or null otherwise
+ */
+fun Event.getRelationContentForType(type: String): RelationDefaultContent? =
+        getRelationContent()?.takeIf { it.type == type }
 
 fun Event.isReply(): Boolean {
     return getRelationContent()?.inReplyTo?.eventId != null
 }
 
+fun Event.isReplyRenderedInThread(): Boolean {
+    return isReply() && getRelationContent()?.inReplyTo?.shouldRenderInThread() == true
+}
+
+fun Event.isThread(): Boolean = getRelationContentForType(RelationType.IO_THREAD)?.eventId != null
+
+fun Event.getRootThreadEventId(): String? = getRelationContentForType(RelationType.IO_THREAD)?.eventId
+
 fun Event.isEdition(): Boolean {
-    return getRelationContent()?.takeIf { it.type == RelationType.REPLACE }?.eventId != null
+    return getRelationContentForType(RelationType.REPLACE)?.eventId != null
 }
 
 fun Event.getPresenceContent(): PresenceContent? {
@@ -315,3 +402,7 @@ fun Event.getPresenceContent(): PresenceContent? {
 
 fun Event.isInvitation(): Boolean = type == EventType.STATE_ROOM_MEMBER &&
         content?.toModel<RoomMemberContent>()?.membership == Membership.INVITE
+
+fun Event.getPollContent(): MessagePollContent? {
+    return content.toModel<MessagePollContent>()
+}

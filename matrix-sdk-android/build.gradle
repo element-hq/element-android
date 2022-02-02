@@ -38,6 +38,8 @@ android {
         resValue "string", "git_sdk_revision_unix_date", "\"${gitRevisionUnixDate()}\""
         resValue "string", "git_sdk_revision_date", "\"${gitRevisionDate()}\""
 
+        // Indicates whether or not threading support is enabled
+        buildConfigField "Boolean", "THREADING_ENABLED", "${isThreadingEnabled}"
         defaultConfig {
             consumerProguardFiles 'proguard-rules.pro'
         }
@@ -62,8 +64,8 @@ android {
         }
     }
 
-    adbOptions {
-        installOptions "-g"
+    installation {
+        installOptions '-g'
 //        timeOutInMs 350 * 1000
     }
 
@@ -138,6 +140,9 @@ dependencies {
     implementation 'com.github.Zhuinden:realm-monarchy:0.7.1'
 
     kapt 'dk.ilios:realmfieldnameshelper:2.0.0'
+
+    // Shared Preferences
+    implementation libs.androidx.preferenceKtx
 
     // Work
     implementation libs.androidx.work

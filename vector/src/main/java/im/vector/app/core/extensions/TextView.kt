@@ -129,6 +129,10 @@ fun TextView.setLeftDrawable(drawable: Drawable?) {
     setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null)
 }
 
+fun TextView.clearDrawables() {
+    setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
+}
+
 /**
  * Set long click listener to copy the current text of the TextView to the clipboard and show a Snackbar
  */

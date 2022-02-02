@@ -35,5 +35,10 @@ data class TimelineItemFactoryParams(
     val highlightedEventId: String?
         get() = partialState.highlightedEventId
 
+    val rootThreadEventId: String?
+        get() = partialState.rootThreadEventId
+
     val isHighlighted = highlightedEventId == event.eventId
+
+    fun isFromThreadTimeline(): Boolean = rootThreadEventId != null
 }

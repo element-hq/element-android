@@ -25,6 +25,7 @@ import org.matrix.android.sdk.api.extensions.appendNl
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.GuestAccess
 import org.matrix.android.sdk.api.session.room.model.Membership
@@ -104,6 +105,7 @@ class NoticeEventFormatter @Inject constructor(
             EventType.STATE_SPACE_CHILD,
             EventType.STATE_SPACE_PARENT,
             EventType.REDACTION,
+            EventType.STICKER,
             EventType.POLL_RESPONSE,
             EventType.POLL_END                      -> formatDebug(timelineEvent.root)
             else                                    -> {
@@ -194,7 +196,8 @@ class NoticeEventFormatter @Inject constructor(
     }
 
     private fun formatDebug(event: Event): CharSequence {
-        return "Debug: event type \"${event.getClearType()}\""
+            val threadPrefix = if (event.isThread()) "thread" else ""
+            return "Debug: $threadPrefix event type \"${event.getClearType()}\""
     }
 
     private fun formatRoomCreateEvent(event: Event, isDm: Boolean): CharSequence? {

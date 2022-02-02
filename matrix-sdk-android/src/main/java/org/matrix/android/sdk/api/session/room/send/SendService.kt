@@ -64,7 +64,7 @@ interface SendService {
      * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
      * @return a [Cancelable]
      */
-    fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean): Cancelable
+    fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean, rootThreadEventId: String? = null): Cancelable
 
     /**
      * Method to send a media asynchronously.
@@ -72,11 +72,13 @@ interface SendService {
      * @param compressBeforeSending set to true to compress images before sending them
      * @param roomIds set of roomIds to where the media will be sent. The current roomId will be add to this set if not present.
      *                It can be useful to send media to multiple room. It's safe to include the current roomId in this set
+     * @param rootThreadEventId when this param is not null, the Media will be sent in this specific thread
      * @return a [Cancelable]
      */
     fun sendMedia(attachment: ContentAttachmentData,
                   compressBeforeSending: Boolean,
-                  roomIds: Set<String>): Cancelable
+                  roomIds: Set<String>,
+                  rootThreadEventId: String? = null): Cancelable
 
     /**
      * Method to send a list of media asynchronously.
@@ -84,11 +86,13 @@ interface SendService {
      * @param compressBeforeSending set to true to compress images before sending them
      * @param roomIds set of roomIds to where the media will be sent. The current roomId will be add to this set if not present.
      *                It can be useful to send media to multiple room. It's safe to include the current roomId in this set
+     * @param rootThreadEventId when this param is not null, all the Media will be sent in this specific thread
      * @return a [Cancelable]
      */
     fun sendMedias(attachments: List<ContentAttachmentData>,
                    compressBeforeSending: Boolean,
-                   roomIds: Set<String>): Cancelable
+                   roomIds: Set<String>,
+                   rootThreadEventId: String? = null): Cancelable
 
     /**
      * Send a poll to the room.

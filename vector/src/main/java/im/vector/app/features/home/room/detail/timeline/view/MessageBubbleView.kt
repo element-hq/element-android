@@ -77,6 +77,7 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
             }
         }
         views.informationBottom.layoutDirection = layoutDirectionToSet
+        views.messageThreadSummaryContainer.layoutDirection = layoutDirectionToSet
         views.bubbleWrapper.layoutDirection = layoutDirectionToSet
         views.bubbleView.layoutDirection = currentLayoutDirection
 

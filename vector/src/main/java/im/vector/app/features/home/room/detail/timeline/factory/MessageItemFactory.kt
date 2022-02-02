@@ -82,6 +82,7 @@ import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -104,6 +105,7 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
+import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import javax.inject.Inject
 
 class MessageItemFactory @Inject constructor(
@@ -123,6 +125,7 @@ class MessageItemFactory @Inject constructor(
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
+        private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val spanUtils: SpanUtils,
         private val session: Session,
         private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
@@ -146,9 +149,11 @@ class MessageItemFactory @Inject constructor(
         event.root.eventId ?: return null
         roomId = event.roomId
         val informationData = messageInformationDataFactory.create(params)
+        val threadDetails = if (params.isFromThreadTimeline()) null else event.root.threadDetails
+
         if (event.root.isRedacted()) {
             // message is redacted
-            val attributes = messageItemAttributesFactory.create(null, informationData, callback)
+            val attributes = messageItemAttributesFactory.create(null, informationData, callback, threadDetails)
             return buildRedactedItem(attributes, highlight)
         }
 
@@ -163,7 +168,14 @@ class MessageItemFactory @Inject constructor(
             // This is an edit event, we should display it when debugging as a notice event
             return noticeItemFactory.create(params)
         }
-        val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback)
+
+        if (lightweightSettingsStorage.areThreadMessagesEnabled() && !params.isFromThreadTimeline() && event.root.isThread()) {
+            // This is a thread event and we will [debug] display it when we are in the main timeline
+            return noticeItemFactory.create(params)
+        }
+
+        // always hide summary when we are on thread timeline
+        val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback, threadDetails)
 
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()

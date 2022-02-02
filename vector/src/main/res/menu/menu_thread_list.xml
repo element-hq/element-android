@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/menu_thread_list_filter"
+        android:icon="@drawable/ic_filter"
+        android:title="@string/room_threads_filter"
+        app:iconTint="?vctr_content_secondary"
+        app:showAsAction="ifRoom" />
+
+</menu>

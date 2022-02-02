@@ -38,6 +38,7 @@ import im.vector.app.databinding.ActivityRoomDetailBinding
 import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.analytics.screen.ScreenEvent
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
+import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.navigation.Navigator
@@ -97,17 +98,17 @@ class RoomDetailActivity :
         super.onCreate(savedInstanceState)
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
         waitingView = views.waitingView.waitingView
-        val roomDetailArgs: RoomDetailArgs? = if (intent?.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
-            RoomDetailArgs(roomId = intent?.extras?.getString(EXTRA_ROOM_ID)!!)
+        val timelineArgs: TimelineArgs? = if (intent?.action == ACTION_ROOM_DETAILS_FROM_SHORTCUT) {
+            TimelineArgs(roomId = intent?.extras?.getString(EXTRA_ROOM_ID)!!)
         } else {
             intent?.extras?.getParcelable(EXTRA_ROOM_DETAIL_ARGS)
         }
-        if (roomDetailArgs == null) return
-        intent.putExtra(Mavericks.KEY_ARG, roomDetailArgs)
-        currentRoomId = roomDetailArgs.roomId
+        if (timelineArgs == null) return
+        intent.putExtra(Mavericks.KEY_ARG, timelineArgs)
+        currentRoomId = timelineArgs.roomId
 
         if (isFirstCreation()) {
-            replaceFragment(views.roomDetailContainer, RoomDetailFragment::class.java, roomDetailArgs)
+            replaceFragment(views.roomDetailContainer, TimelineFragment::class.java, timelineArgs)
             replaceFragment(views.roomDetailDrawerContainer, BreadcrumbsFragment::class.java)
         }
 
@@ -145,7 +146,7 @@ class RoomDetailActivity :
         if (currentRoomId != switchToRoom.roomId) {
             currentRoomId = switchToRoom.roomId
             requireActiveMembershipViewModel.handle(RequireActiveMembershipAction.ChangeRoom(switchToRoom.roomId))
-            replaceFragment(views.roomDetailContainer, RoomDetailFragment::class.java, RoomDetailArgs(switchToRoom.roomId))
+            replaceFragment(views.roomDetailContainer, TimelineFragment::class.java, TimelineArgs(switchToRoom.roomId))
         }
     }
 
@@ -196,9 +197,9 @@ class RoomDetailActivity :
         const val EXTRA_ROOM_ID = "EXTRA_ROOM_ID"
         const val ACTION_ROOM_DETAILS_FROM_SHORTCUT = "ROOM_DETAILS_FROM_SHORTCUT"
 
-        fun newIntent(context: Context, roomDetailArgs: RoomDetailArgs): Intent {
+        fun newIntent(context: Context, timelineArgs: TimelineArgs): Intent {
             return Intent(context, RoomDetailActivity::class.java).apply {
-                putExtra(EXTRA_ROOM_DETAIL_ARGS, roomDetailArgs)
+                putExtra(EXTRA_ROOM_DETAIL_ARGS, timelineArgs)
             }
         }
 

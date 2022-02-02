@@ -37,11 +37,19 @@
         app:showAsAction="always"
         tools:visible="true" />
 
+    <item
+        android:id="@+id/menu_timeline_thread_list"
+        android:title="@string/action_view_threads"
+        android:visible="false"
+        app:iconTint="?colorPrimary"
+        app:actionLayout="@layout/view_thread_notification_badge"
+        app:showAsAction="always"
+        tools:visible="true" />
+
     <item android:id="@+id/join_conference"
         android:title="@string/action_join"
         app:actionLayout="@layout/layout_join_conference_action"
-        app:showAsAction="always"
-        />
+        app:showAsAction="always" />
 
     <item
         android:id="@+id/open_matrix_apps"
@@ -56,5 +64,37 @@
         android:visible="false"
         app:showAsAction="never"
         tools:visible="true" />
+
+    <item
+        android:id="@+id/menu_thread_timeline_more"
+        android:icon="@drawable/ic_more_vertical"
+        android:title="@string/action_thread_view_in_room"
+        app:iconTint="?vctr_content_secondary"
+        app:showAsAction="always">
+
+        <menu>
+            <item
+                android:id="@+id/menu_thread_timeline_view_in_room"
+                android:icon="@drawable/ic_thread_view_in_room_menu_item"
+                android:title="@string/action_thread_view_in_room"
+                app:iconTint="?vctr_content_secondary"
+                app:showAsAction="ifRoom" />
+
+            <item
+                android:id="@+id/menu_thread_timeline_copy_link"
+                android:icon="@drawable/ic_thread_link_menu_item"
+                android:title="@string/action_thread_copy_link_to_thread"
+                app:iconTint="?vctr_content_secondary"
+                app:showAsAction="ifRoom" />
+
+            <item
+                android:id="@+id/menu_thread_timeline_share"
+                android:icon="@drawable/ic_thread_share_menu_item"
+                android:title="@string/action_share"
+                app:iconTint="?vctr_content_secondary"
+                app:showAsAction="ifRoom" />
+        </menu>
+    </item>
+
 
 </menu>

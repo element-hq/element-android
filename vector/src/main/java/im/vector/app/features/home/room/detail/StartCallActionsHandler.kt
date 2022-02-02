@@ -32,7 +32,7 @@ class StartCallActionsHandler(
         private val fragment: Fragment,
         private val callManager: WebRtcCallManager,
         private val vectorPreferences: VectorPreferences,
-        private val roomDetailViewModel: RoomDetailViewModel,
+        private val timelineViewModel: TimelineViewModel,
         private val startCallActivityResultLauncher: ActivityResultLauncher<Array<String>>,
         private val showDialogWithMessage: (String) -> Unit,
         private val onTapToReturnToCall: () -> Unit) {
@@ -45,7 +45,7 @@ class StartCallActionsHandler(
         handleCallRequest(false)
     }
 
-    private fun handleCallRequest(isVideoCall: Boolean) = withState(roomDetailViewModel) { state ->
+    private fun handleCallRequest(isVideoCall: Boolean) = withState(timelineViewModel) { state ->
         val roomSummary = state.asyncRoomSummary.invoke() ?: return@withState
         when (roomSummary.joinedMembersCount) {
             1    -> {
@@ -95,7 +95,7 @@ class StartCallActionsHandler(
                                 .setMessage(R.string.audio_video_meeting_description)
                                 .setPositiveButton(fragment.getString(R.string.create)) { _, _ ->
                                     // create the widget, then navigate to it..
-                                    roomDetailViewModel.handle(RoomDetailAction.AddJitsiWidget(isVideoCall))
+                                    timelineViewModel.handle(RoomDetailAction.AddJitsiWidget(isVideoCall))
                                 }
                                 .setNegativeButton(fragment.getString(R.string.action_cancel), null)
                                 .show()
@@ -121,22 +121,22 @@ class StartCallActionsHandler(
 
     private fun safeStartCall2(isVideoCall: Boolean) {
         val startCallAction = RoomDetailAction.StartCall(isVideoCall)
-        roomDetailViewModel.pendingAction = startCallAction
+        timelineViewModel.pendingAction = startCallAction
         if (isVideoCall) {
             if (checkPermissions(PERMISSIONS_FOR_VIDEO_IP_CALL,
                             fragment.requireActivity(),
                             startCallActivityResultLauncher,
                             R.string.permissions_rationale_msg_camera_and_audio)) {
-                roomDetailViewModel.pendingAction = null
-                roomDetailViewModel.handle(startCallAction)
+                timelineViewModel.pendingAction = null
+                timelineViewModel.handle(startCallAction)
             }
         } else {
             if (checkPermissions(PERMISSIONS_FOR_AUDIO_IP_CALL,
                             fragment.requireActivity(),
                             startCallActivityResultLauncher,
                             R.string.permissions_rationale_msg_record_audio)) {
-                roomDetailViewModel.pendingAction = null
-                roomDetailViewModel.handle(startCallAction)
+                timelineViewModel.pendingAction = null
+                timelineViewModel.handle(startCallAction)
             }
         }
     }
