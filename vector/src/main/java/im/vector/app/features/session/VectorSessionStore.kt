@@ -17,44 +17,42 @@
 package im.vector.app.features.session
 
 import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
+import im.vector.app.core.extensions.dataStoreProvider
 import im.vector.app.features.onboarding.FtueUseCase
 import kotlinx.coroutines.flow.first
 import org.matrix.android.sdk.internal.util.md5
 
 /**
- * Local storage for:
+ * User session scoped storage for:
  * - messaging use case (Enum/String)
  */
 class VectorSessionStore constructor(
-        private val context: Context,
+        context: Context,
         myUserId: String
 ) {
 
-    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "vector_session_store_${myUserId.md5()}")
     private val useCaseKey = stringPreferencesKey("use_case")
+    private val dataStore by lazy { context.dataStoreProvider("vector_session_store_${myUserId.md5()}") }
 
-    suspend fun readUseCase() = context.dataStore.data.first().let { preferences ->
+    suspend fun readUseCase() = dataStore.data.first().let { preferences ->
         preferences[useCaseKey]?.let { FtueUseCase.from(it) }
     }
 
     suspend fun setUseCase(useCase: FtueUseCase) {
-        context.dataStore.edit { settings ->
+        dataStore.edit { settings ->
             settings[useCaseKey] = useCase.persistableValue
         }
     }
 
     suspend fun resetUseCase() {
-        context.dataStore.edit { settings ->
+        dataStore.edit { settings ->
             settings.remove(useCaseKey)
         }
     }
 
     suspend fun clear() {
-        context.dataStore.edit { settings -> settings.clear() }
+        dataStore.edit { settings -> settings.clear() }
     }
 }
