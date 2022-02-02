@@ -31,14 +31,12 @@ import org.matrix.android.sdk.api.util.NoOpCancellable
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
 import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
-import org.matrix.android.sdk.internal.crypto.DefaultCryptoService
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.model.EventAnnotationsSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.di.SessionDatabase
-import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.send.queue.EventSenderProcessor
@@ -51,12 +49,10 @@ internal class DefaultRelationService @AssistedInject constructor(
         private val eventSenderProcessor: EventSenderProcessor,
         private val eventFactory: LocalEchoEventFactory,
         private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
-        private val cryptoService: DefaultCryptoService,
         private val findReactionEventForUndoTask: FindReactionEventForUndoTask,
         private val fetchEditHistoryTask: FetchEditHistoryTask,
         private val fetchThreadTimelineTask: FetchThreadTimelineTask,
         private val timelineEventMapper: TimelineEventMapper,
-        @UserId private val userId: String,
         @SessionDatabase private val monarchy: Monarchy
 ) : RelationService {
 
