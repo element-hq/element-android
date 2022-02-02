@@ -36,7 +36,6 @@ import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
-import org.matrix.android.sdk.internal.database.query.where
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import timber.log.Timber
 import java.util.Collections
@@ -198,11 +197,12 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
     /**
      * Simple log that displays the number and timeline of loaded events
      */
-    private fun logLoadedFromStorage(loadedFromStorage: LoadedFromStorage, direction: Timeline.Direction) =
+    private fun logLoadedFromStorage(loadedFromStorage: LoadedFromStorage, direction: Timeline.Direction) {
         Timber.v("[" +
                 "${if (timelineSettings.isThreadTimeline()) "ThreadTimeLine" else "Timeline"}] Has loaded " +
                 "${loadedFromStorage.numberOfEvents} items from storage in $direction " +
                 if (timelineSettings.isThreadTimeline() && loadedFromStorage.threadReachedEnd) "[Reached End]" else "")
+    }
 
     fun getBuiltEventIndex(eventId: String, searchInNext: Boolean, searchInPrev: Boolean): Int? {
         val builtEventIndex = builtEventsIndexes[eventId]
