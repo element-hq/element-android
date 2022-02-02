@@ -634,6 +634,10 @@ internal class DefaultCryptoService @Inject constructor(
         return cryptoSessionInfoProvider.isRoomEncrypted(roomId)
     }
 
+    override fun shouldEncryptInRoom(roomId: String?): Boolean {
+        return roomId?.let { cryptoStore.roomWasOnceEncrypted(it) } ?: false
+    }
+
     /**
      * @return the stored device keys for a user.
      */

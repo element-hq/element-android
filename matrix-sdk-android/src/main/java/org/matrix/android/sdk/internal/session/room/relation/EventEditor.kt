@@ -23,7 +23,6 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.NoOpCancellable
-import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoEventFactory
 import org.matrix.android.sdk.internal.session.room.send.LocalEchoRepository
@@ -33,7 +32,6 @@ import javax.inject.Inject
 
 internal class EventEditor @Inject constructor(private val eventSenderProcessor: EventSenderProcessor,
                                                private val eventFactory: LocalEchoEventFactory,
-                                               private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
                                                private val localEchoRepository: LocalEchoRepository) {
 
     fun editTextMessage(targetEvent: TimelineEvent,
@@ -51,7 +49,7 @@ internal class EventEditor @Inject constructor(private val eventSenderProcessor:
         } else if (targetEvent.root.sendState.isSent()) {
             val event = eventFactory
                     .createReplaceTextEvent(roomId, targetEvent.eventId, newBodyText, newBodyAutoMarkdown, msgType, compatibilityBodyText)
-            return sendReplaceEvent(roomId, event)
+            return sendReplaceEvent(event)
         } else {
             // Should we throw?
             Timber.w("Can't edit a sending event")
@@ -72,7 +70,7 @@ internal class EventEditor @Inject constructor(private val eventSenderProcessor:
         } else if (targetEvent.root.sendState.isSent()) {
             val event = eventFactory
                     .createPollReplaceEvent(roomId, pollType, targetEvent.eventId, question, options)
-            return sendReplaceEvent(roomId, event)
+            return sendReplaceEvent(event)
         } else {
             Timber.w("Can't edit a sending event")
             return NoOpCancellable
@@ -82,12 +80,12 @@ internal class EventEditor @Inject constructor(private val eventSenderProcessor:
     private fun sendFailedEvent(targetEvent: TimelineEvent, editedEvent: Event): Cancelable {
         val roomId = targetEvent.roomId
         updateFailedEchoWithEvent(roomId, targetEvent.eventId, editedEvent)
-        return eventSenderProcessor.postEvent(editedEvent, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
+        return eventSenderProcessor.postEvent(editedEvent)
     }
 
-    private fun sendReplaceEvent(roomId: String, editedEvent: Event): Cancelable {
+    private fun sendReplaceEvent(editedEvent: Event): Cancelable {
         localEchoRepository.createLocalEcho(editedEvent)
-        return eventSenderProcessor.postEvent(editedEvent, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
+        return eventSenderProcessor.postEvent(editedEvent)
     }
 
     fun editReply(replyToEdit: TimelineEvent,
@@ -107,7 +105,7 @@ internal class EventEditor @Inject constructor(private val eventSenderProcessor:
                     eventId = replyToEdit.eventId
             ) ?: return NoOpCancellable
             updateFailedEchoWithEvent(roomId, replyToEdit.eventId, editedEvent)
-            return eventSenderProcessor.postEvent(editedEvent, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
+            return eventSenderProcessor.postEvent(editedEvent)
         } else if (replyToEdit.root.sendState.isSent()) {
             val event = eventFactory.createReplaceTextOfReply(
                     roomId,
@@ -119,7 +117,7 @@ internal class EventEditor @Inject constructor(private val eventSenderProcessor:
                     compatibilityBodyText
             )
                     .also { localEchoRepository.createLocalEcho(it) }
-            return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(roomId))
+            return eventSenderProcessor.postEvent(event)
         } else {
             // Should we throw?
             Timber.w("Can't edit a sending event")

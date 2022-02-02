@@ -240,6 +240,8 @@ internal interface IMXCryptoStore {
      */
     fun getRoomAlgorithm(roomId: String): String?
 
+    fun roomWasOnceEncrypted(roomId: String): Boolean
+
     fun shouldEncryptForInvitedMembers(roomId: String): Boolean
 
     fun setShouldEncryptForInvitedMembers(roomId: String, shouldEncryptForInvitedMembers: Boolean)

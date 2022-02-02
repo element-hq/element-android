@@ -113,6 +113,14 @@ interface CryptoService {
 
     fun isRoomEncrypted(roomId: String): Boolean
 
+    /**
+     * This is a bit different than isRoomEncrypted
+     * A room is encrypted when there is a m.room.encryption state event in the room (malformed/invalid or not)
+     * But the crypto layer has additional guaranty to ensure that encryption would never been reverted
+     * It's defensive coding out of precaution (if ever state is reset)
+     */
+    fun shouldEncryptInRoom(roomId: String?): Boolean
+
     fun encryptEventContent(eventContent: Content,
                             eventType: String,
                             roomId: String,

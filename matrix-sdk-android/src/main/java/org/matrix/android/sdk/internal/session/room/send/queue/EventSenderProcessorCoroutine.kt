@@ -92,7 +92,7 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
     }
 
     override fun postEvent(event: Event): Cancelable {
-        return postEvent(event, event.roomId?.let { cryptoService.isRoomEncrypted(it) } ?: false)
+        return postEvent(event, cryptoService.shouldEncryptInRoom(event.roomId))
     }
 
     override fun postEvent(event: Event, encrypt: Boolean): Cancelable {
