@@ -395,7 +395,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
                 paginationTask.execute(taskParams).toLoadMoreResult()
             }
         } catch (failure: Throwable) {
-            Timber.e("Failed to fetch from server: $failure", failure)
+            Timber.e(failure, "Failed to fetch from server")
             LoadMoreResult.FAILURE
         }
         return if (loadMoreResult == LoadMoreResult.SUCCESS) {
