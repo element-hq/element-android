@@ -88,6 +88,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.platform.lifecycleAwareLazy
 import im.vector.app.core.platform.showOptimizedSnackbar
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.core.time.Clock
 import im.vector.app.core.ui.views.CurrentCallsView
 import im.vector.app.core.ui.views.CurrentCallsViewPresenter
@@ -253,6 +254,7 @@ class TimelineFragment @Inject constructor(
         private val vectorPreferences: VectorPreferences,
         private val colorProvider: ColorProvider,
         private val dimensionConverter: DimensionConverter,
+        private val userPreferencesProvider: UserPreferencesProvider,
         private val notificationUtils: NotificationUtils,
         private val matrixItemColorProvider: MatrixItemColorProvider,
         private val imageContentRenderer: ImageContentRenderer,
@@ -1804,7 +1806,7 @@ class TimelineFragment @Inject constructor(
                             if (roomId != timelineArgs.roomId) return false
                             // Navigation to same room
                             if (!isThreadTimeLine()) {
-                                if (rootThreadEventId != null) {
+                                if (rootThreadEventId != null && userPreferencesProvider.areThreadMessagesEnabled()) {
                                     // Thread link, so PermalinkHandler will handle the navigation
                                     return false
                                 }

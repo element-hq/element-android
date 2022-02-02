@@ -22,6 +22,7 @@ import androidx.core.net.toUri
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.isIgnored
+import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.core.utils.toast
 import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.navigation.Navigator
@@ -40,6 +41,7 @@ import org.matrix.android.sdk.api.session.room.model.RoomType
 import javax.inject.Inject
 
 class PermalinkHandler @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
+                                           private val userPreferencesProvider: UserPreferencesProvider,
                                            private val navigator: Navigator) {
 
     suspend fun launch(
@@ -200,15 +202,17 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
                                                             roomSummary: RoomSummary
     ) {
         if (this?.navToRoom(roomId, eventId, rawLink, rootThreadEventId) != true) {
-            rootThreadEventId?.let {
+            if (rootThreadEventId != null && userPreferencesProvider.areThreadMessagesEnabled()) {
                 val threadTimelineArgs = ThreadTimelineArgs(
                         roomId = roomId,
                         displayName = roomSummary.displayName,
                         avatarUrl = roomSummary.avatarUrl,
                         roomEncryptionTrustLevel = roomSummary.roomEncryptionTrustLevel,
-                        rootThreadEventId =  it)
+                        rootThreadEventId = rootThreadEventId)
                 navigator.openThread(context, threadTimelineArgs, eventId)
-            } ?: navigator.openRoom(context, roomId, eventId, buildTask)
+            } else {
+                navigator.openRoom(context, roomId, eventId, buildTask)
+            }
         }
     }
 
