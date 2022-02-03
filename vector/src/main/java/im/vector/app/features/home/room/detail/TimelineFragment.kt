@@ -1141,16 +1141,12 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun handleSearchAction() {
-        if (session.getRoom(timelineArgs.roomId)?.isEncrypted() == false) {
-            navigator.openSearch(
-                    context = requireContext(),
-                    roomId = timelineArgs.roomId,
-                    roomDisplayName = timelineViewModel.getRoomSummary()?.displayName,
-                    roomAvatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl
-            )
-        } else {
-            showDialogWithMessage(getString(R.string.search_is_not_supported_in_e2e_room))
-        }
+        navigator.openSearch(
+                context = requireContext(),
+                roomId = timelineArgs.roomId,
+                roomDisplayName = timelineViewModel.getRoomSummary()?.displayName,
+                roomAvatarUrl = timelineViewModel.getRoomSummary()?.avatarUrl
+        )
     }
 
     private fun displayDisabledIntegrationDialog() {
@@ -1926,7 +1922,7 @@ class TimelineFragment @Inject constructor(
                 timelineViewModel.handle(action)
             }
             is EncryptedEventContent             -> {
-                    timelineViewModel.handle(RoomDetailAction.TapOnFailedToDecrypt(informationData.eventId))
+                timelineViewModel.handle(RoomDetailAction.TapOnFailedToDecrypt(informationData.eventId))
             }
             is MessageLocationContent            -> {
                 handleShowLocationPreview(messageContent, informationData.senderId)
