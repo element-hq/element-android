@@ -350,7 +350,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                      aggregator: SyncResponsePostTreatmentAggregator): ChunkEntity {
         val lastChunk = ChunkEntity.findLastForwardChunkOfRoom(realm, roomEntity.roomId)
         if (isLimited && lastChunk != null) {
-            lastChunk.deleteOnCascade(deleteStateEvents = true, canDeleteRoot = true)
+            lastChunk.deleteOnCascade(deleteStateEvents = false, canDeleteRoot = true)
         }
         val chunkEntity = if (!isLimited && lastChunk != null) {
             lastChunk

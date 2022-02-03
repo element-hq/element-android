@@ -56,7 +56,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 21L
+        const val SESSION_STORE_SCHEMA_VERSION = 22L
     }
 
     /**
@@ -90,6 +90,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
         if (oldVersion <= 18) migrateTo19(realm)
         if (oldVersion <= 19) migrateTo20(realm)
         if (oldVersion <= 20) migrateTo21(realm)
+        if (oldVersion <= 21) migrateTo22(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -444,5 +445,21 @@ internal class RealmSessionStoreMigration @Inject constructor(
                         obj.setLong(RoomSummaryEntityFields.ENCRYPTION_EVENT_TS, it)
                     }
                 }
+    }
+
+    private fun migrateTo22(realm: DynamicRealm) {
+        Timber.d("Step 21 -> 22")
+        val listJoinedRoomIds = realm.where("RoomEntity")
+                .equalTo(RoomEntityFields.MEMBERSHIP_STR, Membership.JOIN.name).findAll()
+                .map { it.getString(RoomEntityFields.ROOM_ID) }
+
+        val hasMissingStateEvent = realm.where("CurrentStateEventEntity")
+                .`in`(CurrentStateEventEntityFields.ROOM_ID, listJoinedRoomIds.toTypedArray())
+                .isNull(CurrentStateEventEntityFields.ROOT.`$`).findFirst() != null
+
+        if (hasMissingStateEvent) {
+            Timber.v("Has some missing state event, clear session cache")
+            realm.deleteAll()
+        }
     }
 }
