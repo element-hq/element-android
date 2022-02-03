@@ -2,6 +2,7 @@
 
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardCornerRadius="8dp">
@@ -20,5 +21,17 @@
         android:layout_marginBottom="28dp"
         android:importantForAccessibility="no"
         android:src="@drawable/bg_map_user_pin" />
+
+    <TextView
+        android:id="@+id/staticMapErrorTextView"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="54dp"
+        android:text="@string/location_timeline_failed_to_load_map"
+        android:textColor="?vctr_content_tertiary"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
 </com.google.android.material.card.MaterialCardView>

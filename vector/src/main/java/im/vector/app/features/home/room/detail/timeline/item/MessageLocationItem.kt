@@ -16,10 +16,17 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
+import android.graphics.drawable.Drawable
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import im.vector.app.R
 import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
@@ -46,13 +53,24 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
         GlideApp.with(holder.staticMapImageView)
                 .load(location)
                 .apply(RequestOptions.centerCropTransform())
-                .into(holder.staticMapImageView)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                        holder.staticMapPinImageView.setImageResource(R.drawable.ic_location_pin_failed)
+                        holder.staticMapErrorTextView.isVisible = true
+                        return false
+                    }
 
-        locationPinProvider?.create(locationOwnerId) { pinDrawable ->
-            GlideApp.with(holder.staticMapPinImageView)
-                    .load(pinDrawable)
-                    .into(holder.staticMapPinImageView)
-        }
+                    override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                        locationPinProvider?.create(locationOwnerId) { pinDrawable ->
+                            GlideApp.with(holder.staticMapPinImageView)
+                                    .load(pinDrawable)
+                                    .into(holder.staticMapPinImageView)
+                        }
+                        holder.staticMapErrorTextView.isVisible = false
+                        return false
+                    }
+                })
+                .into(holder.staticMapImageView)
     }
 
     override fun getViewType() = STUB_ID
@@ -60,6 +78,7 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val staticMapImageView by bind<ImageView>(R.id.staticMapImageView)
         val staticMapPinImageView by bind<ImageView>(R.id.staticMapPinImageView)
+        val staticMapErrorTextView by bind<TextView>(R.id.staticMapErrorTextView)
     }
 
     companion object {
