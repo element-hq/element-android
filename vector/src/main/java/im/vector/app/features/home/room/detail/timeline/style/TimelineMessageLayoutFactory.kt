@@ -17,8 +17,6 @@
 package im.vector.app.features.home.room.detail.timeline.style
 
 import android.content.res.Resources
-import android.text.TextUtils
-import android.view.View
 import im.vector.app.R
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.resources.LocaleProvider

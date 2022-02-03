@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home.room.detail.timeline.factory
 
-import android.content.res.Resources
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.Spanned
