@@ -21,7 +21,6 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.RippleDrawable
-import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewOutlineProvider
@@ -35,6 +34,7 @@ import androidx.core.view.updateLayoutParams
 import com.google.android.material.shape.MaterialShapeDrawable
 import im.vector.app.R
 import im.vector.app.core.resources.LocaleProvider
+import im.vector.app.core.resources.getLayoutDirectionFromCurrentLocale
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewMessageBubbleBinding
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
@@ -65,8 +65,7 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
     override fun onFinishInflate() {
         super.onFinishInflate()
         views = ViewMessageBubbleBinding.bind(this)
-        val currentLocale = LocaleProvider(resources).current()
-        val currentLayoutDirection = TextUtils.getLayoutDirectionFromLocale(currentLocale)
+        val currentLayoutDirection = LocaleProvider(resources).getLayoutDirectionFromCurrentLocale()
         val layoutDirectionToSet = if (isIncoming) {
             currentLayoutDirection
         } else {

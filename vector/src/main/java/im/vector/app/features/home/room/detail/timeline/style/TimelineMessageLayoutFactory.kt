@@ -22,6 +22,7 @@ import android.view.View
 import im.vector.app.R
 import im.vector.app.core.extensions.localDateTime
 import im.vector.app.core.resources.LocaleProvider
+import im.vector.app.core.resources.isRTL
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineItemFactoryParams
 import im.vector.app.features.settings.VectorPreferences
 import org.matrix.android.sdk.api.session.Session
@@ -71,8 +72,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
     }
 
     private val isRTL: Boolean by lazy {
-        val currentLocale = localeProvider.current()
-        TextUtils.getLayoutDirectionFromLocale(currentLocale) == View.LAYOUT_DIRECTION_RTL
+       localeProvider.isRTL()
     }
 
     fun create(params: TimelineItemFactoryParams): TimelineMessageLayout {

@@ -19,10 +19,12 @@ package im.vector.app.features.location
 import android.content.res.Resources
 import im.vector.app.BuildConfig
 import im.vector.app.R
+import im.vector.app.core.resources.LocaleProvider
+import im.vector.app.core.resources.isRTL
 import javax.inject.Inject
 
 class UrlMapProvider @Inject constructor(
-        private val resources: Resources
+        private val localeProvider: LocaleProvider
 ) {
     private val keyParam = "?key=${BuildConfig.mapTilerKey}"
 
@@ -49,7 +51,7 @@ class UrlMapProvider @Inject constructor(
             append(height)
             append(".png")
             append(keyParam)
-            if (!resources.getBoolean(R.bool.is_rtl)) {
+            if (!localeProvider.isRTL()) {
                 // On LTR languages we want the legal mentions to be displayed on the bottom left of the image
                 append("&attribution=bottomleft")
             }
