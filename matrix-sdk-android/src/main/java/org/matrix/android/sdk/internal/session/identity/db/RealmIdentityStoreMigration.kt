@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.identity.db
 
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
+import org.matrix.android.sdk.internal.session.identity.db.migration.MigrateIdentityTo001
 import timber.log.Timber
 
 internal object RealmIdentityStoreMigration : RealmMigration {
@@ -27,14 +28,6 @@ internal object RealmIdentityStoreMigration : RealmMigration {
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
         Timber.v("Migrating Realm Identity from $oldVersion to $newVersion")
 
-        if (oldVersion <= 0) migrateTo1(realm)
-    }
-
-    private fun migrateTo1(realm: DynamicRealm) {
-        Timber.d("Step 0 -> 1")
-        Timber.d("Add field userConsent (Boolean) and set the value to false")
-
-        realm.schema.get("IdentityDataEntity")
-                ?.addField(IdentityDataEntityFields.USER_CONSENT, Boolean::class.java)
+        if (oldVersion < 1) MigrateIdentityTo001(realm).perform()
     }
 }
