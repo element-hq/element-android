@@ -118,8 +118,4 @@ class LocationSharingFragment @Inject constructor(
         views.mapView.render(state.toMapState())
         views.shareLocationGpsLoading.isGone = state.lastKnownLocation != null
     }
-
-    companion object {
-        const val USER_PIN_NAME = "USER_PIN_NAME"
-    }
 }

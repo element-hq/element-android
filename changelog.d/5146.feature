@@ -1,0 +1,1 @@
+Support generic location pin

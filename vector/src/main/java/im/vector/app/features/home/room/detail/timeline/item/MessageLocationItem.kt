@@ -41,14 +41,13 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
         renderSendState(holder.view, null)
 
         val location = locationUrl ?: return
-        val locationOwnerId = userId ?: return
 
         GlideApp.with(holder.staticMapImageView)
                 .load(location)
                 .apply(RequestOptions.centerCropTransform())
                 .into(holder.staticMapImageView)
 
-        locationPinProvider?.create(locationOwnerId) { pinDrawable ->
+        locationPinProvider?.create(userId) { pinDrawable ->
             GlideApp.with(holder.staticMapPinImageView)
                     .load(pinDrawable)
                     .into(holder.staticMapPinImageView)

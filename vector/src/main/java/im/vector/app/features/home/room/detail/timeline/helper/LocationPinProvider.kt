@@ -45,7 +45,17 @@ class LocationPinProvider @Inject constructor(
         GlideApp.with(context)
     }
 
-    fun create(userId: String, callback: (Drawable) -> Unit) {
+    /**
+     * Creates a pin drawable. If userId is null then a generic pin drawable will be created.
+     * @param userId userId that will be used to retrieve user avatar
+     * @param callback Pin drawable will be sent through the callback
+     */
+    fun create(userId: String?, callback: (Drawable) -> Unit) {
+        if (userId == null) {
+            callback(ContextCompat.getDrawable(context, R.drawable.ic_location_pin)!!)
+            return
+        }
+
         if (cache.contains(userId)) {
             callback(cache[userId]!!)
             return

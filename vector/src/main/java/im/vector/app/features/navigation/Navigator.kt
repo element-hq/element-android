@@ -162,7 +162,8 @@ interface Navigator {
                             roomId: String,
                             mode: LocationSharingMode,
                             initialLocationData: LocationData?,
-                            locationOwnerId: String)
+                            locationOwnerId: String?)
+
     fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String? = null)
 
     fun openThreadList(context: Context, threadTimelineArgs: ThreadTimelineArgs)
