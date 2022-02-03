@@ -11,8 +11,8 @@
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingStart="16dp"
     android:paddingVertical="8dp"
+    android:paddingStart="16dp"
     android:paddingEnd="@dimen/layout_horizontal_margin">
 
     <TextView
@@ -24,15 +24,25 @@
         android:ellipsize="end"
         android:gravity="center_vertical"
         android:maxLines="1"
-        android:textColor="?vctr_content_primary"
         android:textAllCaps="true"
+        android:textColor="?vctr_content_primary"
         android:textStyle="normal"
-        app:drawableTint="?vctr_content_secondary"
-        android:drawablePadding="8dp"
-        tools:drawableEnd="@drawable/ic_expand_more"
         tools:text="@string/room_participants_header_direct_chats" />
 
-    <!-- TODO add item counter text with the expand drawable + bind data into viewState and adapter -->
+    <TextView
+        android:id="@+id/roomCategoryCounterView"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:drawablePadding="2dp"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:textColor="?vctr_content_secondary"
+        android:textStyle="normal"
+        app:drawableTint="?vctr_content_secondary"
+        tools:drawableEnd="@drawable/ic_expand_more"
+        tools:text="14" />
 
     <im.vector.app.features.home.room.list.UnreadCounterBadgeView
         android:id="@+id/roomCategoryUnreadCounterBadgeView"
