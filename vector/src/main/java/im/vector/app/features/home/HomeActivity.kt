@@ -66,7 +66,6 @@ import im.vector.app.features.rageshake.ReportType
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
-import im.vector.app.features.spaces.RestrictedPromoBottomSheet
 import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
@@ -111,7 +110,6 @@ class HomeActivity :
     private val userColorAccountDataViewModel: UserColorAccountDataViewModel by viewModel()
 
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
-    private val promoteRestrictedViewModel: PromoteRestrictedViewModel by viewModel()
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
@@ -266,21 +264,6 @@ class HomeActivity :
         homeActivityViewModel.onEach { renderState(it) }
 
         shortcutsHandler.observeRoomsAndBuildShortcuts(lifecycleScope)
-
-        if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
-            promoteRestrictedViewModel.onEach {
-                if (it.activeSpaceSummary != null && !it.activeSpaceSummary.isPublic &&
-                        it.activeSpaceSummary.otherMemberIds.isNotEmpty()) {
-                    // It's a private space with some members show this once
-                    if (it.canUserManageSpace && !popupAlertManager.hasAlertsToShow()) {
-                        if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
-                            vectorPreferences.setDidPromoteNewRestrictedFeature()
-                            RestrictedPromoBottomSheet().show(supportFragmentManager, "RestrictedPromoBottomSheet")
-                        }
-                    }
-                }
-            }
-        }
 
         if (isFirstCreation()) {
             handleIntent(intent)
@@ -473,14 +456,14 @@ class HomeActivity :
     override fun onResume() {
         super.onResume()
 
-        if (vectorUncaughtExceptionHandler.didAppCrash(this)) {
-            vectorUncaughtExceptionHandler.clearAppCrashStatus(this)
+        if (vectorUncaughtExceptionHandler.didAppCrash()) {
+            vectorUncaughtExceptionHandler.clearAppCrashStatus()
 
             MaterialAlertDialogBuilder(this)
                     .setMessage(R.string.send_bug_report_app_crashed)
                     .setCancelable(false)
                     .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
-                    .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile(this) }
+                    .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile() }
                     .show()
         } else {
             showDisclaimerDialog(this)

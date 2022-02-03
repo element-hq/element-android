@@ -179,7 +179,7 @@ class DefaultVectorAnalytics @Inject constructor(
         posthog?.identify(REUSE_EXISTING_ID, identity.getProperties().toPostHogProperties(), IGNORED_OPTIONS)
     }
 
-    private fun Map<String, Any>?.toPostHogProperties(): Properties? {
+    private fun Map<String, Any?>?.toPostHogProperties(): Properties? {
         if (this == null) return null
 
         return Properties().apply {

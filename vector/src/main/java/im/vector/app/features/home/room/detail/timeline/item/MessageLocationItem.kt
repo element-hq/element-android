@@ -50,7 +50,6 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
         super.bind(holder)
         renderSendState(holder.view, null)
         val location = locationUrl ?: return
-        val locationOwnerId = userId ?: return
         val messageLayout = attributes.informationData.messageLayout
         val dimensionConverter = DimensionConverter(holder.view.resources)
         val imageCornerTransformation = if (messageLayout is TimelineMessageLayout.Bubble) {
@@ -67,7 +66,7 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
                 .transform(imageCornerTransformation)
                 .into(holder.staticMapImageView)
 
-        locationPinProvider?.create(locationOwnerId) { pinDrawable ->
+        locationPinProvider?.create(userId) { pinDrawable ->
             GlideApp.with(holder.staticMapPinImageView)
                     .load(pinDrawable)
                     .into(holder.staticMapPinImageView)

@@ -19,55 +19,53 @@ package im.vector.app.features.qrcode
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
-import com.google.zxing.BarcodeFormat
-import com.google.zxing.Result
-import com.google.zxing.ResultMetadataType
+import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
+import im.vector.app.R
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 
 @AndroidEntryPoint
-class QrCodeScannerActivity : VectorBaseActivity<ActivitySimpleBinding>() {
+class QrCodeScannerActivity() : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun getBinding() = ActivitySimpleBinding.inflate(layoutInflater)
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
+    private val qrViewModel: QrCodeScannerViewModel by viewModel()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        qrViewModel.observeViewEvents {
+            when (it) {
+                is QrCodeScannerEvents.CodeParsed  -> {
+                    setResultAndFinish(it.result, it.isQrCode)
+                }
+                is QrCodeScannerEvents.ParseFailed -> {
+                    Toast.makeText(this, R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                else                               -> Unit
+            }.exhaustive
+        }
+
         if (isFirstCreation()) {
-            replaceFragment(views.simpleFragmentContainer, QrCodeScannerFragment::class.java)
+            val args = QrScannerArgs(showExtraButtons = false, R.string.verification_scan_their_code)
+            replaceFragment(views.simpleFragmentContainer, QrCodeScannerFragment::class.java, args)
         }
     }
 
-    fun setResultAndFinish(result: Result?) {
-        if (result != null) {
-            val rawBytes = getRawBytes(result)
-            val rawBytesStr = rawBytes?.toString(Charsets.ISO_8859_1)
-
-            setResult(RESULT_OK, Intent().apply {
-                putExtra(EXTRA_OUT_TEXT, rawBytesStr ?: result.text)
-                putExtra(EXTRA_OUT_IS_QR_CODE, result.barcodeFormat == BarcodeFormat.QR_CODE)
-            })
-        }
+    private fun setResultAndFinish(result: String, isQrCode: Boolean) {
+        setResult(RESULT_OK, Intent().apply {
+            putExtra(EXTRA_OUT_TEXT, result)
+            putExtra(EXTRA_OUT_IS_QR_CODE, isQrCode)
+        })
         finish()
-    }
-
-    // Copied from https://github.com/markusfisch/BinaryEye/blob/
-    // 9d57889b810dcaa1a91d7278fc45c262afba1284/app/src/main/kotlin/de/markusfisch/android/binaryeye/activity/CameraActivity.kt#L434
-    private fun getRawBytes(result: Result): ByteArray? {
-        val metadata = result.resultMetadata ?: return null
-        val segments = metadata[ResultMetadataType.BYTE_SEGMENTS] ?: return null
-        var bytes = ByteArray(0)
-        @Suppress("UNCHECKED_CAST")
-        for (seg in segments as Iterable<ByteArray>) {
-            bytes += seg
-        }
-        // byte segments can never be shorter than the text.
-        // Zxing cuts off content prefixes like "WIFI:"
-        return if (bytes.size >= result.text.length) bytes else null
     }
 
     companion object {
