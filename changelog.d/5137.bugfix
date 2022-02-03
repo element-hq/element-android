@@ -1,1 +1,0 @@
-Avoid deleting root event of CurrentState on gappy sync. In order to restore lost Events an initial sync may be triggered.
