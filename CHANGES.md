@@ -1,3 +1,11 @@
+Changes in Element v1.3.18 (2022-02-03)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Avoid deleting root event of CurrentState on gappy sync. In order to restore lost Events an initial sync may be triggered. ([#5137](https://github.com/vector-im/element-android/issues/5137))
+
+
 Changes in Element v1.3.17 (2022-01-31)
 =======================================
 
