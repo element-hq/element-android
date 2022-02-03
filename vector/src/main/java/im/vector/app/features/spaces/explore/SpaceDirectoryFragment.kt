@@ -170,7 +170,7 @@ class SpaceDirectoryFragment @Inject constructor(
                     ?: getString(R.string.space_explore_activity_title)
         }
 
-        spaceCardRenderer.render(state.currentRootSummary, emptyList(), this, views.spaceCard)
+        spaceCardRenderer.render(state.currentRootSummary, emptyList(), this, views.spaceCard, showDescription = false)
         views.addOrCreateChatRoomButton.isVisible = state.canAddRooms
     }
 

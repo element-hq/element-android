@@ -151,7 +151,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
         views.bugReportProgressView.isVisible = true
         views.bugReportProgressView.progress = 0
 
-        bugReporter.sendBugReport(this,
+        bugReporter.sendBugReport(
                 reportType,
                 views.bugReportButtonIncludeLogs.isChecked,
                 views.bugReportButtonIncludeCrashLogs.isChecked,
@@ -249,7 +249,7 @@ class BugReportActivity : VectorBaseActivity<ActivityBugReportBinding>() {
 
     override fun onBackPressed() {
         // Ensure there is no crash status remaining, which will be sent later on by mistake
-        bugReporter.deleteCrashFile(this)
+        bugReporter.deleteCrashFile()
 
         super.onBackPressed()
     }

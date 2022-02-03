@@ -85,6 +85,8 @@ data class RoomDetailViewState(
 
     fun isWebRTCCallOptionAvailable() = (asyncRoomSummary.invoke()?.joinedMembersCount ?: 0) <= 2
 
+    fun isSearchAvailable() = asyncRoomSummary()?.isEncrypted == false
+
     // This checks directly on the active room widgets.
     // It can differs for a short period of time on the JitsiState as its computed async.
     fun hasActiveJitsiWidget() = activeRoomWidgets()?.any { it.type == WidgetType.Jitsi && it.isActive }.orFalse()

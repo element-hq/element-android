@@ -18,7 +18,11 @@ package im.vector.app.features.location
 
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
+import org.amshove.kluent.shouldBeTrue
 import org.junit.Test
+import org.matrix.android.sdk.api.session.room.model.message.LocationAsset
+import org.matrix.android.sdk.api.session.room.model.message.LocationAssetType
+import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 
 class LocationDataTest {
     @Test
@@ -56,5 +60,17 @@ class LocationDataTest {
         parseGeo(" geo:12.34,56.78;13.56").shouldBeNull()
         parseGeo("ge o:12.34,56.78;13.56").shouldBeNull()
         parseGeo("geo :12.34,56.78;13.56").shouldBeNull()
+    }
+
+    @Test
+    fun selfLocationTest() {
+        val contentWithNullAsset = MessageLocationContent(body = "", geoUri = "", locationAsset = null)
+        contentWithNullAsset.isSelfLocation().shouldBeTrue()
+
+        val contentWithNullAssetType = MessageLocationContent(body = "", geoUri = "", locationAsset = LocationAsset(type = null))
+        contentWithNullAssetType.isSelfLocation().shouldBeTrue()
+
+        val contentWithSelfAssetType = MessageLocationContent(body = "", geoUri = "", locationAsset = LocationAsset(type = LocationAssetType.SELF))
+        contentWithSelfAssetType.isSelfLocation().shouldBeTrue()
     }
 }

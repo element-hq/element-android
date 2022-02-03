@@ -1064,6 +1064,7 @@
     <string name="tab_title_search_messages">MESSAGES</string>
     <string name="tab_title_search_people">PEOPLE</string>
     <string name="tab_title_search_files">FILES</string>
+    <!-- TODO TO BE REMOVED -->
     <string name="search_is_not_supported_in_e2e_room">Searching in encrypted rooms is not supported yet.</string>
 
     <!-- Directory -->
@@ -2555,6 +2556,17 @@
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_ftue_auth_carousel_body_workplace" translatable="false">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
 
+    <string name="ftue_auth_use_case_title">Who will you chat to the most?</string>
+    <string name="ftue_auth_use_case_subtitle">We\'ll help you get connected.</string>
+    <string name="ftue_auth_use_case_option_one">Friends and family</string>
+    <string name="ftue_auth_use_case_option_two">Teams</string>
+    <string name="ftue_auth_use_case_option_three">Communities</string>
+    <!-- Note to translators: the %s is replaced by the content of ftue_auth_use_case_skip_partial -->
+    <string name="ftue_auth_use_case_skip">Not sure yet? You can %s</string>
+    <string name="ftue_auth_use_case_skip_partial">skip this question</string>
+    <string name="ftue_auth_use_case_join_existing_server">Looking to join an existing server?</string>
+    <string name="ftue_auth_use_case_connect_to_server">Connect to server</string>
+
     <string name="login_splash_title">It\'s your conversation. Own it.</string>
     <string name="login_splash_text1">Chat with people directly or in groups</string>
     <string name="login_splash_text2">Keep conversations private with encryption</string>
@@ -3672,10 +3684,15 @@
 
     <string name="upgrade_room_for_restricted_note">Please note upgrading will make a new version of the room. All current messages will stay in this archived room.</string>
 
+    <!-- TODO TO BE REMOVED -->
     <string name="new_let_people_in_spaces_find_and_join">New: Let people in spaces find and join private rooms</string>
+    <!-- TODO TO BE REMOVED -->
     <string name="help_people_in_spaces_find_and_join">Help people in spaces to find and join private rooms themselves, no need to manually invite everyone.</string>
+    <!-- TODO TO BE REMOVED -->
     <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">This makes it easy for rooms to stay private to a space, while letting people in the space find and join them. All new rooms in a space will have this option available.</string>
+    <!-- TODO TO BE REMOVED -->
     <string name="help_space_members">Help space members find private rooms</string>
+    <!-- TODO TO BE REMOVED -->
     <string name="to_help_space_members_find_and_join">To help space members find and join a private room, go to that room’s settings by tapping on the avatar.</string>
 
     <!-- %s will be replaced by an email at runtime -->
