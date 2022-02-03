@@ -449,7 +449,14 @@ internal class RealmSessionStoreMigration @Inject constructor(
 
     private fun migrateTo22(realm: DynamicRealm) {
         Timber.d("Step 21 -> 22")
-        val hasMissingStateEvent = realm.where("CurrentStateEventEntity").isNull(CurrentStateEventEntityFields.ROOT.`$`).findFirst() != null
+        val listJoinedRoomIds = realm.where("RoomEntity")
+                .equalTo(RoomEntityFields.MEMBERSHIP_STR, Membership.JOIN.name).findAll()
+                .map { it.getString(RoomEntityFields.ROOM_ID) }
+
+        val hasMissingStateEvent = realm.where("CurrentStateEventEntity")
+                .`in`(CurrentStateEventEntityFields.ROOM_ID, listJoinedRoomIds.toTypedArray())
+                .isNull(CurrentStateEventEntityFields.ROOT.`$`).findFirst() != null
+
         if (hasMissingStateEvent) {
             Timber.v("Has some missing state event, clear session cache")
             realm.deleteAll()
