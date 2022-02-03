@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s belépett a szobába</string>
     <string name="notice_room_leave">%1$s kilépett a szobából</string>
     <string name="notice_room_reject">%1$s elutasította a meghívást</string>
-    <string name="notice_room_kick">%1$s kidobta: %2$s</string>
+    <string name="notice_room_remove">%1$s kidobta: %2$s</string>
     <string name="notice_room_unban">%1$s feloldotta %2$s tiltását</string>
     <string name="notice_room_ban">%1$s kitiltotta: %2$s</string>
     <string name="notice_room_withdraw">%1$s visszavonta %2$s meghívását</string>
@@ -88,7 +88,7 @@
     <string name="notice_room_join_with_reason">%1$s belépett a szobába. Mert: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s kilépett a szobából. Ok: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s visszautasította a meghívót. Ok: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s kirúgta őt: %2$s. Ok: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s kirúgta őt: %2$s. Ok: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s visszaengedte őt: %2$s. Ok: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s kitiltotta őt: %2$s. Ok: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s meghívót küldött neki: %2$s, hogy lépjen be a szobába. Ok: %3$s</string>
@@ -124,7 +124,7 @@
     <string name="notice_room_withdraw_by_you">Visszavontad %1$s meghívóját</string>
     <string name="notice_room_ban_by_you">Kitiltottad %1$s felhasználót</string>
     <string name="notice_room_unban_by_you">Visszaengedted %1$s felhasználót</string>
-    <string name="notice_room_kick_by_you">Kirúgtad %1$s felhasználót</string>
+    <string name="notice_room_remove_by_you">Kirúgtad %1$s felhasználót</string>
     <string name="notice_room_reject_by_you">Visszautasítottad a meghívót</string>
     <string name="notice_direct_room_leave_by_you">Elhagytad a szobát</string>
     <string name="notice_direct_room_leave">%1$s elhagyta a szobát</string>
@@ -423,7 +423,6 @@
     <string name="room_title_one_member">1 tag</string>
     <string name="room_participants_leave_prompt_title">Szoba elhagyása</string>
     <string name="room_participants_leave_prompt_msg">Biztos el akarod hagyni a szobát?</string>
-    <string name="room_participants_remove_prompt_msg">Biztos el akarod távolítani %s -t a csevegésből?</string>
     <string name="room_participants_create">Létrehozás</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
@@ -434,7 +433,6 @@
     <string name="room_participants_header_devices">MUNKAMENETEK</string>
     <string name="room_participants_action_invite">Meghívás</string>
     <string name="room_participants_action_leave">Szoba elhagyása</string>
-    <string name="room_participants_action_remove">Eltávolítás ebből a szobából</string>
     <string name="room_participants_action_ban">Tiltás</string>
     <string name="room_participants_action_unban">Tiltás feloldása</string>
     <string name="room_participants_action_set_default_power_level">Visszaállítás normál felhasználóra</string>
@@ -779,7 +777,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="start_voice_call_prompt_msg">Biztos, hogy hanghívást akarsz indítani\?</string>
     <string name="start_video_call_prompt_msg">Biztos, hogy videóhívást akarsz indítani\?</string>
     <string name="groups_list">Csoportok listája</string>
-    <string name="room_participants_ban_prompt_msg">A felhasználó kitiltása kirúgja őt a szobából, és megakadályozza, hogy újra csatlakozhasson.</string>
+    <string name="room_participants_ban_prompt_msg">A felhasználó kitiltása eltávolítja őt a szobából, és megakadályozza, hogy újra csatlakozhasson.</string>
     <string name="room_settings_all_messages_noisy">Összes üzenet (hangos)</string>
     <string name="room_settings_all_messages">Összes üzenet</string>
     <string name="room_settings_mention_only">Csak megemlítések</string>
@@ -805,7 +803,7 @@ Figyelmeztetés: ez a fájl törlésre kerülhet, ha az alkalmazást törli.</st
     <string name="filter_group_members">Csoport tagjai szűrése</string>
     <string name="filter_group_rooms">Csoport szobái szűrése</string>
     <string name="group_no_long_description">A közösség adminisztrátora nem adott meg hosszú leírást ehhez a közösséghez.</string>
-    <string name="has_been_kicked">Ki lettél rúgva innen: %1$s, %2$s által</string>
+    <string name="has_been_removed">Ki lettél rúgva innen: %1$s, %2$s által</string>
     <string name="has_been_banned">Ki lettél tiltva innen: %1$s, %2$s által</string>
     <string name="reason_colon">Ok: %1$s</string>
     <string name="rejoin">Újracsatlakozás</string>
@@ -929,7 +927,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="command_description_join_room">Megadott címmel csatlakozik a szobához</string>
     <string name="command_description_part_room">Kilépés a szobából</string>
     <string name="command_description_topic">A szoba témájának beállítása</string>
-    <string name="command_description_kick_user">Megadott azonosítójú felhasználó kirúgása</string>
+    <string name="command_description_remove_user">Megadott azonosítójú felhasználó kirúgása</string>
     <string name="command_description_nick">Becenév megváltoztatása</string>
     <string name="command_description_markdown">Markdown ki-,bekapcsolása</string>
     <string name="command_description_clear_scalar_token">Matrix-kisalkalmazás-token törlése</string>
@@ -1001,7 +999,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="call_anyway">Hívás mindenképpen</string>
-    <string name="room_participants_action_kick">Elküld</string>
+    <string name="room_participants_action_remove">Elküld</string>
     <string name="reason_hint">Ok</string>
     <string name="settings_inline_url_preview_summary">URL előnézet a csevegő ablakban, ha a Matrix szervered támogatja ezt a lehetőséget.</string>
     <string name="settings_send_typing_notifs">Gépelés visszajelzés küldése</string>
@@ -1011,7 +1009,7 @@ Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlés
     <string name="settings_show_read_receipts">Olvasás visszajelzés megjelenítése</string>
     <string name="settings_show_read_receipts_summary">További információér kattints az olvasás visszaigazolásokra.</string>
     <string name="settings_show_join_leave_messages">Be-, és kilépési események megjelenítése</string>
-    <string name="settings_show_join_leave_messages_summary">Meghívások, kirúgások és kitiltások nem változtak.</string>
+    <string name="settings_show_join_leave_messages_summary">Meghívások, eltávolítások és kitiltások nem változtak.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Fiók események megjelenítése</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Avatar és név változásokat tartalmaz.</string>
     <string name="settings_password">Jelszó</string>
@@ -1061,11 +1059,6 @@ Kérlek ellenőrizd a fiókbeállításokat.</string>
     <string name="settings_troubleshoot_test_token_registration_success">FCM token sikeresen regisztrálva a Matrix-kiszolgálón.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM token regisztrációja sikertelen a Matrix-kiszolgálón:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Értesítés Szolgáltatás</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Értesítés Szolgáltatás fut.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Értesítés Szolgáltatás nem fut.
-Próbáld újraindítani a szolgáltatást.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Szolgáltatás indítása</string>
     <string name="settings_troubleshoot_test_service_restart_title">Értesítések szolgáltatás Automatikus-Újraindítása</string>
     <string name="settings_troubleshoot_test_service_restart_success">A szolgáltatás meg lett szakítva és automatikusan újraindult.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">A szolgáltatást nem sikerült újraindítani</string>
@@ -2097,8 +2090,8 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="active_call_with_duration">Aktív hívás (%s)</string>
     <string name="return_to_call">Visszatérés a híváshoz</string>
     <string name="room_participants_action_ignore_title">Felhasználó figyelmen kívül hagyása</string>
-    <string name="room_participants_kick_title">Felhasználó kirúgása</string>
-    <string name="room_participants_kick_reason">Kirúgás oka</string>
+    <string name="room_participants_remove_title">Felhasználó kirúgása</string>
+    <string name="room_participants_remove_reason">Kirúgás oka</string>
     <string name="room_participants_ban_title">Felhasználó kitiltása a szobából</string>
     <string name="room_participants_ban_reason">Kitiltás oka</string>
     <string name="room_participants_unban_title">Felhasználó visszaengedése</string>
@@ -2138,7 +2131,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="room_participants_action_unignore_prompt_msg">A felhasználó figyelembe vétele után újra meg fog jelenni az összes üzenete.</string>
     <string name="room_participants_action_cancel_invite_title">Meghívás visszavonása</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Biztos, hogy visszavonja a felhasználó meghívását\?</string>
-    <string name="room_participants_kick_prompt_msg">a felhasználó kirúgása eltávolítja a szobából.
+    <string name="room_participants_remove_prompt_msg">a felhasználó kirúgása eltávolítja a szobából.
 \n
 \nHa meg akarja akadályozni, hogy újra csatlakozzon, akkor inkább tiltsa ki.</string>
     <string name="room_participants_unban_prompt_msg">A felhasználó tiltásának visszavonása lehetővé teszi, hogy újra csatlakozzon a szobához.</string>
@@ -2353,7 +2346,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="notice_room_third_party_invite_with_reason_by_you">Meghívót küldtél neki, hogy belépjen a szobába: %1$s. Ok: %2$s</string>
     <string name="notice_room_ban_with_reason_by_you">Kitiltottad: %1$s. Ok: %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">Visszaengedted: %1$s. Ok: %2$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Kirúgtad: %1$s. Ok: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Kirúgtad: %1$s. Ok: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">A meghívót elutasítottad. Ok: %1$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Kiléptél. Ok: %1$s</string>
     <string name="notice_direct_room_leave_with_reason">%1$s kilépett. Ok: %2$s</string>
@@ -2405,7 +2398,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="room_permissions_notify_everyone">Mindenki értesítése</string>
     <string name="room_permissions_remove_messages_sent_by_others">Mások által küldött üzenetek törlése</string>
     <string name="room_permissions_ban_users">Felhasználók kitiltása</string>
-    <string name="room_permissions_kick_users">Felhasználók kirúgása</string>
+    <string name="room_permissions_remove_users">Felhasználók kirúgása</string>
     <string name="room_permissions_change_settings">Beállítások megváltoztatása</string>
     <string name="room_permissions_invite_users">Felhasználók meghívása</string>
     <string name="room_permissions_send_messages">Üzenet küldése</string>
@@ -2758,7 +2751,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="room_settings_room_read_history_dialog_subtitle">A üzenetek olvashatóságának változtatása csak az új üzenetekre lesz érvényes. A régi üzenetek láthatósága nem fog változni.</string>
     <string name="settings_show_emoji_keyboard_summary">Az üzenet szerkesztőhöz emodzsi billentyűzet gomb hozzáadása</string>
     <string name="settings_show_emoji_keyboard">Emodzsi billentyűzet megjelenítése</string>
-    <string name="settings_show_room_member_state_events_summary">Magába foglalja a meghívás/belépés/kilépés/kirúgás/kitiltás eseményt és profilkép/megjelenítési név változtatást.</string>
+    <string name="settings_show_room_member_state_events_summary">Magába foglalja a meghívás/belépés/kilépés/eltávolítás/kitiltás eseményt és profilkép/megjelenítési név változtatást.</string>
     <string name="settings_chat_effects_description">Használd a /confetti parancsot vagy küldj üzenetet ami ❄️-t vagy 🎉-t tartalmaz</string>
     <string name="settings_chat_effects_title">Beszélgetés effektek megjelenítése</string>
     <string name="settings_show_room_member_state_events">Szoba tagok státusz eseményeinek megjelenítése</string>
@@ -2963,7 +2956,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="space_settings_permissions_title">Tér jogosultságok</string>
     <string name="space_participants_unban_prompt_msg">A felhasználó tiltásának visszavonása lehetővé teszi, hogy újra belépjen a térbe.</string>
     <string name="space_participants_ban_prompt_msg">A felhasználó kitiltása eltávolítja őt a térből és megakadályozza, hogy visszajöjjön.</string>
-    <string name="space_participants_kick_prompt_msg">a felhasználó kirúgása eltávolítja a térből.
+    <string name="space_participants_remove_prompt_msg">a felhasználó kirúgása eltávolítja a térből.
 \n
 \nHa meg akarja akadályozni, hogy újra csatlakozzon, akkor inkább tiltsa ki.</string>
     <string name="a11y_stop_voice_message">Felvétel megállítása</string>
@@ -3013,7 +3006,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="delete_poll_dialog_title">Szavazás törlése</string>
     <string name="poll_end_room_list_preview">Szavazás lezárva</string>
     <string name="poll_response_room_list_preview">Szavazat leadva</string>
-    <string name="labs_enable_polls">Szavazások bekapcsolása</string>
     <string name="end_poll_confirmation_approve_button">Szavazás lezárása</string>
     <string name="end_poll_confirmation_description">Ez megszünteti az új szavazatok leadásának lehetőségét, és kijelzi a végleges eredményt.</string>
     <string name="end_poll_confirmation_title">Lezárod a szavazást\?</string>
@@ -3023,7 +3015,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
         <item quantity="other">Eredmény %1$d szavazat alapján</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
-        <item quantity="one">Nem szavazott senki</item>
+        <item quantity="one">%1$d leadott szavazat. Szavazz az eredmények megtekintéséhez</item>
         <item quantity="other">%1$d leadott szavazat. Szavazz az eredmények megtekintéséhez</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_voted">
@@ -3057,4 +3049,51 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="restart_the_application_to_apply_changes">A változások életbelépéséhez indítsd újra az alkalmazást.</string>
     <string name="labs_enable_latex_maths">LaTeX matematikai szintaxis engedélyezése</string>
     <string name="room_error_access_unauthorized">Nem léphetsz be ebbe a szobába</string>
+    <string name="ftue_auth_carousel_1_title">Az ön beszélgetései csak az öné.</string>
+    <string name="labs_auto_report_uisi_desc">Titkosítás visszafejtési hiba esemény alkalmával a rendszer automatikusan elküldi a logokat</string>
+    <string name="labs_auto_report_uisi">Titkosítás visszafejtési hibák automatikus jelentése.</string>
+    <string name="tooltip_attachment_poll">Szavazás létrehozása</string>
+    <string name="tooltip_attachment_contact">Névjegyek megnyitása</string>
+    <string name="tooltip_attachment_sticker">Matrica küldése</string>
+    <string name="tooltip_attachment_file">Fájl feltöltése</string>
+    <string name="tooltip_attachment_gallery">Képek és videók küldése</string>
+    <string name="tooltip_attachment_photo">Kamera megnyitása</string>
+    <string name="room_member_override_nick_color">Becenév színének megváltoztatása</string>
+    <string name="login_splash_already_have_account">Már van fiókom</string>
+    <string name="ftue_auth_carousel_4_title">Rázd fel a csoportjaidat.</string>
+    <string name="ftue_auth_carousel_3_title">Biztonságos üzenetküldés.</string>
+    <string name="ftue_auth_carousel_2_title">Te irányítasz.</string>
+    <string name="tooltip_attachment_location">Tartózkodási hely megosztása</string>
+    <string name="labs_render_locations_in_timeline">A felhasználó földrajzi helyzetének megjelenítése az idővonalon</string>
+    <string name="settings_enable_location_sharing_summary">A beállítás után bármelyik szobában megoszthatod a földrajzi helyzetedet</string>
+    <string name="settings_enable_location_sharing">Földrajzi hely megosztás engedélyezése</string>
+    <string name="location_share_external">Megnyitás ezzel</string>
+    <string name="template_location_not_available_dialog_content">${app_name} nem fér hozzá a helyadatodhoz. Próbáld újra később.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} nem fér hozzá a földrajzi helyzetedhez</string>
+    <string name="location_share">Tartózkodási hely megosztása</string>
+    <string name="a11y_location_share_icon">Tartózkodási hely megosztása</string>
+    <string name="location_activity_title_preview">Földrajzi helyzet</string>
+    <string name="location_activity_title_static_sharing">Tartózkodási hely megosztása</string>
+    <string name="closed_poll_option_description">Az eredmény csak a szavazás végeztével válik láthatóvá</string>
+    <string name="closed_poll_option_title">Lezárt szavazás</string>
+    <string name="open_poll_option_description">A szavazók a szavazásuk után látják a szavazatokat</string>
+    <string name="open_poll_option_title">Szavazás megnyitása</string>
+    <string name="poll_type_title">Szavazás típusa</string>
+    <string name="edit_poll_button">SZAVAZÁS SZERKESZTÉSE</string>
+    <string name="edit_poll_title">Szavazás szerkesztése</string>
+    <string name="poll_no_votes_cast">Nem adtak le szavazatot</string>
+    <string name="a11y_trust_level_misconfigured">Megbízhatósági szint beállítási hiba</string>
+    <string name="encryption_misconfigured">A titkosítási beállítás hibás</string>
+    <string name="room_profile_section_restore_security">Titkosítás helyreállítása</string>
+    <string name="contact_admin_to_restore_encryption">Kérjük vedd fel a kapcsolatot az adminisztrátorral a titkosítás helyreállítása érdekében.</string>
+    <string name="encryption_has_been_misconfigured">A titkosítás beállítása hibás.</string>
+    <string name="sent_location">A földrajzi helyzetüket megosztották</string>
+    <string name="login_splash_create_account">Fiók létrehozása</string>
+    <string name="ftue_auth_carousel_title_messaging">Üzenetküldés a csoportodnak.</string>
+    <string name="ftue_auth_carousel_body_encrypted">Telefonszám nélkül végpontok között titkosított. Reklámok és adatbányászat nélkül.</string>
+    <string name="ftue_auth_carousel_body_control">Válaszd meg hol legyenek a beszélgetéseid tárolva, visszaadja az irányítást és függetlenné tesz. Csatlakozva a Matrixhoz.</string>
+    <string name="ftue_auth_carousel_body_secure">Biztonságos és független kommunikáció ami olyan biztonságos mintha valakivel négyszemközt beszélgetnél a házadban.</string>
+    <string name="attachment_type_location">Földrajzi helyzet</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">A titkosítás beállítása hibás így nem lehet üzenetet küldeni. Kattints a beállításokért.</string>
+    <string name="room_unsupported_e2e_algorithm">A titkosítás beállítása hibás így nem lehet üzenetet küldeni. Kérjük vedd fel a kapcsolatot az adminisztrátorral a titkosítás helyreállításához.</string>
 </resources>

@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s juntou-se à sala</string>
     <string name="notice_room_leave">%1$s saiu da sala</string>
     <string name="notice_room_reject">%1$s rejeitou o convite</string>
-    <string name="notice_room_kick">%1$s expulsou %2$s</string>
+    <string name="notice_room_remove">%1$s expulsou %2$s</string>
     <string name="notice_room_unban">%1$s desbaniu %2$s</string>
     <string name="notice_room_ban">%1$s baniu %2$s</string>
     <string name="notice_room_withdraw">%1$s retirou o convite de %2$s</string>
@@ -66,7 +66,7 @@
     <string name="notice_room_join_by_you">Você juntou-se à sala</string>
     <string name="notice_room_leave_by_you">Você saiu da sala</string>
     <string name="notice_room_reject_by_you">Você rejeitou o convite</string>
-    <string name="notice_room_kick_by_you">Você expulsou %1$s</string>
+    <string name="notice_room_remove_by_you">Você expulsou %1$s</string>
     <string name="notice_room_unban_by_you">Você desbaniu %1$s</string>
     <string name="notice_room_ban_by_you">Você baniu %1$s</string>
     <string name="notice_room_withdraw_by_you">Você retirou o convite de %1$s</string>
@@ -146,8 +146,8 @@
     <string name="notice_room_leave_with_reason_by_you">Você saiu da sala. Razão: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s rejeitou o convite. Razão: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">Você rejeitou o convite. Razão: %1$s</string>
-    <string name="notice_room_kick_with_reason">%1$s expulsou %2$s. Razão: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Você expulsou %1$s. Razão: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s expulsou %2$s. Razão: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Você expulsou %1$s. Razão: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s desbaniu %2$s. Razão: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Você desbaniu %1$s. Razão: %2$s</string>
     <string name="notice_room_ban_with_reason">%1$s baniu %2$s. Razão: %3$s</string>
@@ -221,18 +221,18 @@
     <string name="room_displayname_3_members">%1$s, %2$s e %3$s</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉 Todos os servidores estão banidos de participar! Esta sala não pode mais ser usada.</string>
     <string name="notice_room_server_acl_updated_no_change">Nenhuma mudança.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Servidores correspondendo a literais de IP estão agora banidos.</string>
-    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Servidores correspondendo a literais de IP estão agora permitidos.</string>
-    <string name="notice_room_server_acl_updated_was_allowed">• Servidores correspondendo a %s foram removidos da lista de permitidos.</string>
-    <string name="notice_room_server_acl_updated_allowed">• Servidores correspondendo a %s estão agora permitidos.</string>
-    <string name="notice_room_server_acl_updated_was_banned">• Servidores correspondendo a %s foram removidos da lista de banimento.</string>
-    <string name="notice_room_server_acl_updated_banned">• Servidores correspondendo a %s estão agora banidos.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Servidores correspondendo com literais de IP estão agora banidos.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• Servidores correspondendo com literais de IP estão agora permitidos.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• Servidores correspondendo com %s foram removidos da lista de permitidos.</string>
+    <string name="notice_room_server_acl_updated_allowed">• Servidores correspondendo com %s estão agora permitidos.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• Servidores correspondendo com %s foram removidos da lista de banimento.</string>
+    <string name="notice_room_server_acl_updated_banned">• Servidores correspondendo com %s estão agora banidos.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Você mudou as LCAs do servidor para esta sala.</string>
     <string name="notice_room_server_acl_updated_title">%s mudou as LCAs do servidor para esta sala.</string>
-    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Servidores correspondendo a literais de IP estão banidos.</string>
-    <string name="notice_room_server_acl_set_ip_literals_allowed">• Servidores correspondendo a literais de IP estão permitidos.</string>
-    <string name="notice_room_server_acl_set_allowed">• Servidores correspondendo a %s estão permitidos.</string>
-    <string name="notice_room_server_acl_set_banned">• Servidores correspondendo a %s estão banidos.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Servidores correspondendo com literais de IP estão banidos.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• Servidores correspondendo com literais de IP estão permitidos.</string>
+    <string name="notice_room_server_acl_set_allowed">• Servidores correspondendo com %s estão permitidos.</string>
+    <string name="notice_room_server_acl_set_banned">• Servidores correspondendo com %s estão banidos.</string>
     <string name="notice_room_server_acl_set_title_by_you">Você definiu as LCAs do servidor para esta sala.</string>
     <string name="notice_room_server_acl_set_title">%s definiu as LCAs do servidor para esta sala.</string>
     <string name="notice_room_canonical_alias_alternative_changed_by_you">Você mudou os endereços alternativos para esta sala.</string>
@@ -496,7 +496,6 @@
     <string name="room_title_one_member">1 membro</string>
     <string name="room_participants_leave_prompt_title">Sair de sala</string>
     <string name="room_participants_leave_prompt_msg">Você tem certeza que você quer sair da sala\?</string>
-    <string name="room_participants_remove_prompt_msg">Você tem certeza que você quer remover %s deste chat\?</string>
     <string name="room_participants_create">Criar</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
@@ -507,7 +506,6 @@
     <string name="room_participants_header_devices">SESSÕES</string>
     <string name="room_participants_action_invite">Convidar</string>
     <string name="room_participants_action_leave">Sair desta sala</string>
-    <string name="room_participants_action_remove">Remover desta sala</string>
     <string name="room_participants_action_ban">Banir</string>
     <string name="room_participants_action_unban">Desbanir</string>
     <string name="room_participants_action_set_default_power_level">Resettar a usuária(o) normal</string>
@@ -549,7 +547,7 @@
     <string name="ssl_fingerprint_hash">Impressão digital (%s):</string>
     <string name="ssl_could_not_verify">Não foi possível verificar identidade de servidor remoto.</string>
     <string name="ssl_cert_not_trust">Isto poderia significar que alguém está maliciosamente interceptando seu tráfico, ou que seu celular não confia no certificado provido pelo servidor remoto.</string>
-    <string name="ssl_cert_new_account_expl">Se o/a administrador(a) de servidor tem dito que isto é esperado, assegure que a impressão digital abaixo corresponde à impressão digital provida por ele(a).</string>
+    <string name="ssl_cert_new_account_expl">Se o/a administrador(a) de servidor tem dito que isto é esperado, assegure que a impressão digital abaixo corresponde com a impressão digital provida por ele(a).</string>
     <string name="ssl_unexpected_existing_expl">O certificado tem mudado de um que era confiado por seu telefone. Isto é ALTAMENTE INCOMUM. É recomendado que você NÃO ACEITE este novo certificado.</string>
     <string name="ssl_expected_existing_expl">O certificado tem mudado de um previamente confiado para um que não é confiado. O servidor pode ter renovado seu certificado. Contacte o/a administrador(a) de servidor para a impressão digital esperada.</string>
     <string name="ssl_only_accept">Somente aceite o certificado se o/a administrador(a) de servidor tem publicado uma impressão digital que corresponde com a acima.</string>
@@ -759,7 +757,7 @@
     <string name="encryption_information_unblock">Retirar da lista negra</string>
     <string name="encryption_information_verify_device">Verificar sessão</string>
     <string name="encryption_information_verify_device_warning">Confirme ao comparar o seguinte com as Configurações de Usuária(o) em sua outra sessão:</string>
-    <string name="encryption_information_verify_device_warning2">Se não corresponderem, a segurança de sua comunicação pode estar comprometida.</string>
+    <string name="encryption_information_verify_device_warning2">Se não correspondem, a segurança de sua comunicação pode estar comprometida.</string>
     <string name="encryption_information_verify_key_match">Eu verifico que as chaves correspondem</string>
     <string name="unknown_devices_alert_title">Sala contém sessões desconhecidas</string>
     <string name="unknown_devices_alert_message">Esta sala contém sessões desconhecidas que não têm sido verificadas.
@@ -821,7 +819,7 @@
     <string name="option_take_video">Tirar vídeo</string>
     <string name="groups_list">Lista de Grupos</string>
     <string name="call">Chamar</string>
-    <string name="room_participants_ban_prompt_msg">Banir usuária(o) vai expulsá-la(o) desta sala e preveni-la(o) de se juntar de novo.</string>
+    <string name="room_participants_ban_prompt_msg">Banir usuária(o) vai removê-la(o) desta sala e preveni-la(o) de se juntar de novo.</string>
     <string name="room_settings_all_messages_noisy">Todas as mensagens (barulhento)</string>
     <string name="room_settings_all_messages">Todas as mensagens</string>
     <string name="room_settings_mention_only">Menções somente</string>
@@ -882,7 +880,7 @@
     <string name="filter_group_members">Filtrar membros do grupo</string>
     <string name="filter_group_rooms">Filtrar salas do grupo</string>
     <string name="group_no_long_description">O/a admin de comunidade não tem provido uma descrição longa para esta comunidade.</string>
-    <string name="has_been_kicked">Você foi expulsa(o) de %1$s por %2$s</string>
+    <string name="has_been_removed">Você foi expulsa(o) de %1$s por %2$s</string>
     <string name="has_been_banned">Você foi banida(o) de %1$s por %2$s</string>
     <string name="reason_colon">Razão: %1$s</string>
     <string name="rejoin">Rejuntar-se</string>
@@ -1017,7 +1015,7 @@
     <string name="command_description_join_room">Junta-se a sala com endereço dado</string>
     <string name="command_description_part_room">Sair de sala</string>
     <string name="command_description_topic">Definir o tópico da sala</string>
-    <string name="command_description_kick_user">Expulsa a(o) usuária(o) com id dada</string>
+    <string name="command_description_remove_user">Expulsa a(o) usuária(o) com id dada</string>
     <string name="command_description_nick">Muda seu apelido de exibição</string>
     <string name="command_description_markdown">Ativar/Desativar markdown</string>
     <string name="command_description_clear_scalar_token">Para consertar gerenciamento de Apps Matrix</string>
@@ -1083,7 +1081,7 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Habilitar</string>
     <string name="settings_troubleshoot_test_device_settings_title">Configurações de Sessão.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Notificações estão habilitadas para esta sessão.</string>
-    <string name="room_participants_action_kick">Expulsar</string>
+    <string name="room_participants_action_remove">Expulsar</string>
     <string name="template_settings_troubleshoot_test_device_settings_failed">Notificações não estão habilitadas para esta sessão.
 \nPor favor cheque as configurações de ${app_name}.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Habilitar</string>
@@ -1102,11 +1100,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">Token FCM registrado com sucesso a servidorcasa.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Falha para registrar token FCM a servidorcasa:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Serviço de Notificações</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Serviço de Notificações está rodando.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Serviço de Notificações não está rodando.
-\nTente recomeçar o aplicativo.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Começar Serviço</string>
     <string name="settings_troubleshoot_test_service_restart_success">Serviço foi matado e reiniciado automaticamente.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Serviço falhou para recomeçar</string>
     <string name="settings_troubleshoot_test_service_boot_title">Começar em boot</string>
@@ -1125,7 +1118,7 @@
     <string name="settings_show_read_receipts">Mostrar recibos de leitura</string>
     <string name="settings_show_read_receipts_summary">Clique nos recibos de leitura para uma lista detalhada.</string>
     <string name="settings_show_join_leave_messages">Mostrar eventos de juntar-se e sair</string>
-    <string name="settings_show_join_leave_messages_summary">Convites, expulsões e bans são desafetados.</string>
+    <string name="settings_show_join_leave_messages_summary">Convites, remoções e bans são desafetados.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Mostrar eventos de conta</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Inclui mudanças de avatar e nome de exibição.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Conexão no Background</string>
@@ -1268,9 +1261,9 @@
     <string name="room_participants_action_unignore_prompt_msg">Designorar esta(e) usuária(o) vai mostrar todas as mensagens dela(e) de novo.</string>
     <string name="room_participants_action_cancel_invite_title">Cancelar convite</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Você tem certeza que você quer cancelar o convite para esta(e) usuária(o)\?</string>
-    <string name="room_participants_kick_title">Expulsar usuária(o)</string>
-    <string name="room_participants_kick_reason">Razão de expulsão</string>
-    <string name="room_participants_kick_prompt_msg">expulsar usuária(o) vai removê-la(o) desta sala.
+    <string name="room_participants_remove_title">Expulsar usuária(o)</string>
+    <string name="room_participants_remove_reason">Razão de expulsão</string>
+    <string name="room_participants_remove_prompt_msg">expulsar usuária(o) vai removê-la(o) desta sala.
 \n
 \nPara preveni-la(o) de se juntar de novo, você devia bani-la(o) em vez disso.</string>
     <string name="room_participants_ban_title">Banir usuária(o)</string>
@@ -1543,8 +1536,8 @@
     <string name="sas_error_m_mismatched_sas">O SAS não correspondeu</string>
     <string name="sas_error_m_unexpected_message">A sessão recebeu uma mensagem inesperada</string>
     <string name="sas_error_m_invalid_message">Uma mensagem inválida foi recebida</string>
-    <string name="sas_error_m_key_mismatch">Disparidade de chave</string>
-    <string name="sas_error_m_user_error">Disparidade de usuária(o)</string>
+    <string name="sas_error_m_key_mismatch">Correspondência errada de chave</string>
+    <string name="sas_error_m_user_error">Correspondência errada de usuária(o)</string>
     <string name="sas_error_unknown">Erro Desconhecido</string>
     <string name="identity_server_not_defined">Você não está usando nenhum servidor de identidade</string>
     <string name="identity_server_not_defined_for_password_reset">Nenhum servidor de identidade está configurado, ele é requerido para resettar sua senha.</string>
@@ -2341,7 +2334,7 @@
         <item quantity="one">%d segundo</item>
         <item quantity="other">%d segundos</item>
     </plurals>
-    <string name="settings_show_room_member_state_events_summary">Inclui eventos de convite/juntar-se/saiu/expulsão/ban e mudanças de avatar/nome de exibição.</string>
+    <string name="settings_show_room_member_state_events_summary">Inclui eventos de convidar/juntar-se/saiu/remover/ban e mudanças de avatar/nome de exibição.</string>
     <string name="settings_emails_and_phone_numbers_title">Emails e números de telefone</string>
     <string name="settings_emails_and_phone_numbers_summary">Gerenciar emails e números de telefone linkados a sua conta Matrix</string>
     <string name="settings_text_message_sent_hint">Código</string>
@@ -2540,7 +2533,7 @@
     <string name="room_permissions_modify_widgets">Modificar widgets</string>
     <string name="room_permissions_remove_messages_sent_by_others">Remover mensagens enviadas por outras(os)</string>
     <string name="room_permissions_ban_users">Banir usuárias(os)</string>
-    <string name="room_permissions_kick_users">Expulsar usuárias(os)</string>
+    <string name="room_permissions_remove_users">Expulsar usuárias(os)</string>
     <string name="room_permissions_change_settings">Mudar configurações</string>
     <string name="room_permissions_invite_users">Convidar usuárias(os)</string>
     <string name="room_permissions_send_messages">Enviar mensagens</string>
@@ -2963,8 +2956,8 @@
     <string name="space_settings_permissions_subtitle">Veja e atualize os papéis requeridos para mudar várias partes do espaço.</string>
     <string name="space_settings_permissions_title">Permissões de espaço</string>
     <string name="space_participants_unban_prompt_msg">Desbanir usuária(o) vai permiti-la(o) se juntar ao espaço de novo.</string>
-    <string name="space_participants_ban_prompt_msg">Banir usuária(o) vai expulsá-la(o) deste espaço e preveni-la de se juntar de novo.</string>
-    <string name="space_participants_kick_prompt_msg">expulsar usuária(o) vai removê-la(o) deste espaço.
+    <string name="space_participants_ban_prompt_msg">Banir usuária(o) vai removê-la(o) deste espaço e preveni-la de se juntar de novo.</string>
+    <string name="space_participants_remove_prompt_msg">expulsar usuária(o) vai removê-la(o) deste espaço.
 \n
 \nPara preveni-la(o) de se juntar de novo, você devia bani-la(o) em vez disso.</string>
     <string name="a11y_stop_voice_message">Parar de Gravar</string>
@@ -3013,7 +3006,6 @@
     <string name="delete_poll_dialog_title">Remover sondagem</string>
     <string name="poll_end_room_list_preview">Sondagem terminada</string>
     <string name="poll_response_room_list_preview">Voto lançado</string>
-    <string name="labs_enable_polls">Habilitar Sondagens</string>
     <string name="end_poll_confirmation_approve_button">Terminar sondagem</string>
     <string name="end_poll_confirmation_description">Isto vai parar pessoas de serem capazes de votar e vai exibir os resultados finais da sondagem.</string>
     <string name="end_poll_confirmation_title">Terminar esta sondagem\?</string>
@@ -3047,7 +3039,7 @@
     <string name="analytics_opt_in_content">Ajude-nos a identificar problemas e melhorar Element ao compartilhar dados de uso anônimos. Para entender como pessoas usam seus múltiplos dispositivos, nós vamos gerar um identificador aleatório, compartilhado por seus dispositivos.
 \n
 \nVocê pode ler todos os nossos termos %s.</string>
-    <string name="analytics_opt_in_title">Ajudar a melhorar Element</string>
+    <string name="analytics_opt_in_title">Ajude a melhorar Element</string>
     <string name="preference_system_settings">Configurações de sistema</string>
     <string name="preference_help_title">Ajuda e suporte</string>
     <string name="preference_help">Ajuda</string>
@@ -3058,4 +3050,51 @@
     <string name="restart_the_application_to_apply_changes">Recomece o aplicativo para a mudançar tomar efeito.</string>
     <string name="labs_enable_latex_maths">Habilitar matemática LaTeX</string>
     <string name="room_error_access_unauthorized">Você não é permitida(o) a juntar-se a esta sala</string>
+    <string name="tooltip_attachment_poll">Criar sondagem</string>
+    <string name="tooltip_attachment_contact">Abrir contatos</string>
+    <string name="tooltip_attachment_sticker">Enviar sticker</string>
+    <string name="tooltip_attachment_file">Fazer upload de arquivo</string>
+    <string name="tooltip_attachment_gallery">Enviar imagens e vídeos</string>
+    <string name="tooltip_attachment_photo">Abrir câmera</string>
+    <string name="labs_auto_report_uisi_desc">Seu sistema vai automaticamente enviar logs quando um erro incapaz de decriptar ocorre</string>
+    <string name="labs_auto_report_uisi">Auro Reportar Erros de Decriptação.</string>
+    <string name="room_member_override_nick_color">Sobrepor cor de nick</string>
+    <string name="login_splash_already_have_account">Eu já tenho uma conta</string>
+    <string name="ftue_auth_carousel_4_title">Dê liberdade a times.</string>
+    <string name="ftue_auth_carousel_3_title">Mensageria segura.</string>
+    <string name="ftue_auth_carousel_2_title">Você está em controle.</string>
+    <string name="ftue_auth_carousel_1_title">Tenha posse de suas conversas.</string>
+    <string name="tooltip_attachment_location">Compartilhar localização</string>
+    <string name="labs_render_locations_in_timeline">Render localizações de usuária(o) na timeline</string>
+    <string name="settings_enable_location_sharing_summary">Uma vez habilitada você vai ser capaz de enviar sua localização a qualquer sala</string>
+    <string name="settings_enable_location_sharing">Habilitar compartilhamento de localização</string>
+    <string name="location_share_external">Abrir com</string>
+    <string name="template_location_not_available_dialog_content">${app_name} não pôde acessar sua localização. Por favor tente de novo mais tarde.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} não pôde acessar sua localização</string>
+    <string name="location_share">Compartilhar localização</string>
+    <string name="a11y_location_share_icon">Compartilhar localização</string>
+    <string name="location_activity_title_preview">Localização</string>
+    <string name="location_activity_title_static_sharing">Compartilhar localização</string>
+    <string name="closed_poll_option_description">Resultados são somente revelados quando você termina a sondagem</string>
+    <string name="closed_poll_option_title">Sondagem fechada</string>
+    <string name="open_poll_option_description">Votantes veem resultados assim que elas(es) têm votado</string>
+    <string name="open_poll_option_title">Sondagem aberta</string>
+    <string name="poll_type_title">Tipo de sondagem</string>
+    <string name="edit_poll_button">EDITAR SONDAGEM</string>
+    <string name="edit_poll_title">Editar sondagem</string>
+    <string name="poll_no_votes_cast">Nenhum voto lançado</string>
+    <string name="a11y_trust_level_misconfigured">Nível de confiança malconfigurado</string>
+    <string name="encryption_misconfigured">Encriptação está malconfigurada</string>
+    <string name="room_profile_section_restore_security">Restaurar Encriptação</string>
+    <string name="contact_admin_to_restore_encryption">Por favor contacte um(a) admin para restaurar encriptação a um estado válido.</string>
+    <string name="sent_location">Compartilhou a localização dela(e)</string>
+    <string name="attachment_type_location">Localização</string>
+    <string name="encryption_has_been_misconfigured">Encriptação tem sido malconfigurada.</string>
+    <string name="login_splash_create_account">Criar conta</string>
+    <string name="ftue_auth_carousel_title_messaging">Mensageria para seu time.</string>
+    <string name="ftue_auth_carousel_body_encrypted">Encriptado ponta-a-ponta e nenhum número de telefone requerido. Sem publicidade ou datamining.</string>
+    <string name="ftue_auth_carousel_body_control">Escolha onde suas conversas são mantidas, dando-lhe controle e independência. Conectado via Matrix.</string>
+    <string name="ftue_auth_carousel_body_secure">Comunicação segura e independente que lhe dá o mesmo nível de privacidade que conversa face-a-face em sua própria casa.</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">Encriptação tem sido malconfigurada então você não pode enviar mensagens. Clique para abrir configurações.</string>
+    <string name="room_unsupported_e2e_algorithm">Encriptação tem sido malconfigurada então você não pode enviar mensagens. Por favor contacte um(a) admin para restaurar encriptação a um estado válido.</string>
 </resources>

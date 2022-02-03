@@ -24,6 +24,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.core.view.GravityCompat
 import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
@@ -32,7 +33,6 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.AppStateHandler
@@ -42,13 +42,14 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
+import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.screen.ScreenEvent
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.navigation.Navigator
@@ -65,7 +66,6 @@ import im.vector.app.features.rageshake.ReportType
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
-import im.vector.app.features.spaces.RestrictedPromoBottomSheet
 import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
@@ -96,7 +96,6 @@ data class HomeActivityArgs(
 @AndroidEntryPoint
 class HomeActivity :
         VectorBaseActivity<ActivityHomeBinding>(),
-        ToolbarConfigurable,
         NavigationInterceptor,
         SpaceInviteBottomSheet.InteractionListener,
         MatrixToBottomSheet.InteractionListener {
@@ -104,13 +103,13 @@ class HomeActivity :
     private lateinit var sharedActionViewModel: HomeSharedActionViewModel
 
     private val homeActivityViewModel: HomeActivityViewModel by viewModel()
+
     @Suppress("UNUSED")
     private val analyticsAccountDataViewModel: AnalyticsAccountDataViewModel by viewModel()
     @Suppress("UNUSED")
     private val userColorAccountDataViewModel: UserColorAccountDataViewModel by viewModel()
 
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
-    private val promoteRestrictedViewModel: PromoteRestrictedViewModel by viewModel()
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
@@ -164,6 +163,16 @@ class HomeActivity :
     }
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
+        private var drawerScreenEvent: ScreenEvent? = null
+        override fun onDrawerOpened(drawerView: View) {
+            drawerScreenEvent = ScreenEvent(Screen.ScreenName.MobileSidebar)
+        }
+
+        override fun onDrawerClosed(drawerView: View) {
+            drawerScreenEvent?.send(analyticsTracker)
+            drawerScreenEvent = null
+        }
+
         override fun onDrawerStateChanged(newState: Int) {
             hideKeyboard()
         }
@@ -175,6 +184,7 @@ class HomeActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        analyticsScreenName = Screen.ScreenName.Home
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
         FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager, vectorPreferences.areNotificationEnabledForDevice())
         sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
@@ -254,21 +264,6 @@ class HomeActivity :
         homeActivityViewModel.onEach { renderState(it) }
 
         shortcutsHandler.observeRoomsAndBuildShortcuts(lifecycleScope)
-
-        if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
-            promoteRestrictedViewModel.onEach {
-                if (it.activeSpaceSummary != null && !it.activeSpaceSummary.isPublic &&
-                        it.activeSpaceSummary.otherMemberIds.isNotEmpty()) {
-                    // It's a private space with some members show this once
-                    if (it.canUserManageSpace && !popupAlertManager.hasAlertsToShow()) {
-                        if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
-                            vectorPreferences.setDidPromoteNewRestrictedFeature()
-                            RestrictedPromoBottomSheet().show(supportFragmentManager, "RestrictedPromoBottomSheet")
-                        }
-                    }
-                }
-            }
-        }
 
         if (isFirstCreation()) {
             handleIntent(intent)
@@ -461,14 +456,14 @@ class HomeActivity :
     override fun onResume() {
         super.onResume()
 
-        if (vectorUncaughtExceptionHandler.didAppCrash(this)) {
-            vectorUncaughtExceptionHandler.clearAppCrashStatus(this)
+        if (vectorUncaughtExceptionHandler.didAppCrash()) {
+            vectorUncaughtExceptionHandler.clearAppCrashStatus()
 
             MaterialAlertDialogBuilder(this)
                     .setMessage(R.string.send_bug_report_app_crashed)
                     .setCancelable(false)
                     .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
-                    .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile(this) }
+                    .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile() }
                     .show()
         } else {
             showDisclaimerDialog(this)
@@ -476,10 +471,6 @@ class HomeActivity :
 
         // Force remote backup state update to update the banner if needed
         serverBackupStatusViewModel.refreshRemoteStateIfNeeded()
-    }
-
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar, false)
     }
 
     override fun getMenuRes() = R.menu.home
@@ -542,7 +533,7 @@ class HomeActivity :
         return true
     }
 
-    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
+    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
         if (roomId == null) return false
         MatrixToBottomSheet.withLink(deepLink.toString())
                 .show(supportFragmentManager, "HA#MatrixToBottomSheet")

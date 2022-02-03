@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s 已加入聊天室</string>
     <string name="notice_room_leave">%1$s 已離開聊天室</string>
     <string name="notice_room_reject">%1$s 拒絕邀請</string>
-    <string name="notice_room_kick">%1$s 踢出 %2$s</string>
+    <string name="notice_room_remove">%1$s 踢出 %2$s</string>
     <string name="notice_room_unban">%1$s 解除禁止 %2$s</string>
     <string name="notice_room_ban">%1$s 禁止 %2$s</string>
     <string name="notice_room_withdraw">%1$s 收回了對 %2$s 的邀請</string>
@@ -87,7 +87,7 @@
     <string name="notice_room_join_with_reason">%1$s 已加入聊天室。理由：%2$s</string>
     <string name="notice_room_leave_with_reason">%1$s 已離開聊天室。理由：%2$s</string>
     <string name="notice_room_reject_with_reason">%1$s 已回絕邀請。理由：%2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s 踢走了 %2$s。理由：%3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s 踢走了 %2$s。理由：%3$s</string>
     <string name="notice_room_unban_with_reason">%1$s 取消封鎖了 %2$s。理由：%3$s</string>
     <string name="notice_room_ban_with_reason">%1$s 封鎖了 %2$s。理由：%3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s 已傳送邀請給 %2$s 來加入聊天室。理由：%3$s</string>
@@ -116,7 +116,7 @@
     <string name="notice_room_join_by_you">您加入了聊天室</string>
     <string name="notice_room_leave_by_you">您離開的聊天室</string>
     <string name="notice_room_reject_by_you">您回絕了邀請</string>
-    <string name="notice_room_kick_by_you">您踢除了 %1$s</string>
+    <string name="notice_room_remove_by_you">您踢除了 %1$s</string>
     <string name="notice_room_unban_by_you">您取消封鎖了 %1$s</string>
     <string name="notice_room_ban_by_you">您封鎖了 %1$s</string>
     <string name="notice_room_withdraw_by_you">您撤銷了 %1$s 的邀請</string>
@@ -165,7 +165,7 @@
     <string name="notice_room_join_with_reason_by_you">您加入了聊天室。理由：%1$s</string>
     <string name="notice_room_leave_with_reason_by_you">您離開了聊天室。理由：%1$s</string>
     <string name="notice_room_reject_with_reason_by_you">您回絕了邀請。理由：%1$s</string>
-    <string name="notice_room_kick_with_reason_by_you">您踢除了 %1$s。理由：%2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">您踢除了 %1$s。理由：%2$s</string>
     <string name="notice_room_unban_with_reason_by_you">您取消封鎖了 %1$s。理由：%2$s</string>
     <string name="notice_room_ban_with_reason_by_you">您封鎖了 %1$s。理由：%2$s</string>
     <string name="notice_room_third_party_invite_with_reason_by_you">您傳甕了邀請給 %1$s 以加入聊天室。理由：%2$s</string>
@@ -521,7 +521,6 @@
     <string name="room_title_one_member">1 個成員</string>
     <string name="room_participants_leave_prompt_title">離開聊天室</string>
     <string name="room_participants_leave_prompt_msg">您確定想要離開聊天室？</string>
-    <string name="room_participants_remove_prompt_msg">你確定想從此聊天室移除 %s？</string>
     <string name="room_participants_create">建立</string>
     <string name="room_participants_online">線上</string>
     <string name="room_participants_offline">離線</string>
@@ -532,7 +531,6 @@
     <string name="room_participants_header_devices">工作階段</string>
     <string name="room_participants_action_invite">邀請</string>
     <string name="room_participants_action_leave">離開聊天室</string>
-    <string name="room_participants_action_remove">從此房間移除</string>
     <string name="room_participants_action_ban">封鎖</string>
     <string name="room_participants_action_unban">封禁</string>
     <string name="room_participants_action_set_default_power_level">恢復到一般使用者</string>
@@ -544,7 +542,7 @@
     <string name="room_participants_action_mention">提及</string>
     <string name="room_participants_action_devices_list">顯示工作階段清單</string>
     <string name="room_participants_invite_prompt_msg">您確定想要邀請 %s 到聊天室？</string>
-    <string name="room_participants_ban_prompt_msg">封鎖使用者將會把他們從此聊天室中踢除，並避免他們再次加入。</string>
+    <string name="room_participants_ban_prompt_msg">封鎖使用者將會把他們從此聊天室中移除，並避免他們再次加入。</string>
     <string name="people_search_invite_by_id"><u>透過 ID 邀請</u></string>
     <string name="people_search_local_contacts">裝置上的聯絡人（%d）</string>
     <string name="people_search_user_directory">使用者目錄 (%s)</string>
@@ -946,7 +944,7 @@
     <string name="filter_group_members">篩選社群成員</string>
     <string name="filter_group_rooms">篩選社群聊天室</string>
     <string name="group_no_long_description">社群管理員未提供此社群的具體描述。</string>
-    <string name="has_been_kicked">您已被 %2$s 從 %1$s 踢出</string>
+    <string name="has_been_removed">您已被 %2$s 從 %1$s 踢出</string>
     <string name="has_been_banned">您已被 %2$s 從 %1$s 封鎖</string>
     <string name="reason_colon">理由：%1$s</string>
     <string name="rejoin">重新加入</string>
@@ -981,7 +979,7 @@
     <string name="command_description_join_room">加入指定地址的聊天室</string>
     <string name="command_description_part_room">離開聊天室</string>
     <string name="command_description_topic">設定聊天室主題</string>
-    <string name="command_description_kick_user">踢除指定 id 的使用者</string>
+    <string name="command_description_remove_user">踢除指定 id 的使用者</string>
     <string name="command_description_nick">變更您的顯示暱稱</string>
     <string name="command_description_markdown">開啟／關閉 markdown</string>
     <string name="command_description_clear_scalar_token">為了修復 Matrix 應用程式管理</string>
@@ -1038,7 +1036,7 @@
     <string name="merged_events_expand">展開</string>
     <string name="merged_events_collapse">摺疊</string>
     <string name="call_anyway">無論如何都要通話</string>
-    <string name="room_participants_action_kick">踢出</string>
+    <string name="room_participants_action_remove">踢出</string>
     <string name="reason_hint">理由</string>
     <string name="settings_inline_url_preview_summary">當您的家伺服器支援此功能時在聊天中預覽連結。</string>
     <string name="settings_send_typing_notifs">傳送輸入通知</string>
@@ -1048,7 +1046,7 @@
     <string name="settings_show_read_receipts">顯示讀取回條</string>
     <string name="settings_show_read_receipts_summary">點選讀取回條以顯示詳細資料。</string>
     <string name="settings_show_join_leave_messages">顯示加入與離開的活動</string>
-    <string name="settings_show_join_leave_messages_summary">邀請、踢出與封鎖不受影響。</string>
+    <string name="settings_show_join_leave_messages_summary">邀請、移除與封鎖不受影響。</string>
     <string name="settings_show_avatar_display_name_changes_messages">顯示帳號活動</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">包含大頭貼與顯示名稱變動。</string>
     <string name="settings_password">密碼</string>
@@ -1107,11 +1105,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM token 成功註冊至家伺服器。</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM token 註冊至家伺服器失敗： 
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">通知服務</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">通知服務正在執行。</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">通知服務並未執行。
-\n嘗試重新啟動應用程式。</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">啟動服務</string>
     <string name="settings_troubleshoot_test_service_restart_title">通知服務自動重新啟動</string>
     <string name="settings_troubleshoot_test_service_restart_success">服務被自動砍除並重新啟動。</string>
     <string name="settings_troubleshoot_test_service_restart_failed">服務重新啟動失敗</string>
@@ -2148,9 +2141,9 @@
     <string name="room_participants_action_unignore_prompt_msg">取消忽略此使用者將再次顯示從他們而來的所有訊息。</string>
     <string name="room_participants_action_cancel_invite_title">取消邀請</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">您確定您想要取消對此使用者的邀請嗎？</string>
-    <string name="room_participants_kick_title">踢除使用者</string>
-    <string name="room_participants_kick_reason">踢除的理由</string>
-    <string name="room_participants_kick_prompt_msg">踢除使用者將會將他們從此聊天室中移除。
+    <string name="room_participants_remove_title">踢除使用者</string>
+    <string name="room_participants_remove_reason">踢除的理由</string>
+    <string name="room_participants_remove_prompt_msg">踢除使用者將會將他們從此聊天室中移除。
 \n
 \n要避免他們再次加入，您應改為封鎖他們。</string>
     <string name="room_participants_ban_title">封鎖使用者</string>
@@ -2305,7 +2298,7 @@
         <item quantity="other">%d 秒</item>
     </plurals>
     <string name="settings_show_room_member_state_events">顯示聊天室成員狀態活動</string>
-    <string name="settings_show_room_member_state_events_summary">包含邀請／加入／離開／踢除／封鎖事件與大頭貼／顯示名稱變更等。</string>
+    <string name="settings_show_room_member_state_events_summary">包含邀請／加入／離開／移除／封鎖事件與大頭貼／顯示名稱變更等。</string>
     <string name="sent_a_poll">投票</string>
     <string name="sent_a_reaction">反應：%s</string>
     <string name="sent_verification_conclusion">驗證結論</string>
@@ -2492,7 +2485,7 @@
     <string name="room_permissions_notify_everyone">通知每個人</string>
     <string name="room_permissions_remove_messages_sent_by_others">移除其他人傳送的訊息</string>
     <string name="room_permissions_ban_users">封鎖使用者</string>
-    <string name="room_permissions_kick_users">踢除使用者</string>
+    <string name="room_permissions_remove_users">踢除使用者</string>
     <string name="room_permissions_change_settings">變更設定</string>
     <string name="room_permissions_invite_users">邀請使用者</string>
     <string name="room_permissions_send_messages">傳送訊息</string>
@@ -2909,8 +2902,8 @@
     <string name="space_settings_permissions_subtitle">檢視並更新變更空間各部份所需的角色。</string>
     <string name="space_settings_permissions_title">空間權限</string>
     <string name="space_participants_unban_prompt_msg">取消封鎖使用者將讓他們可以再次加入空間。</string>
-    <string name="space_participants_ban_prompt_msg">封鎖使用者會將他們踢出此空間並防止他們再次加入。</string>
-    <string name="space_participants_kick_prompt_msg">踢除使用者將會將他們從此空間中移除。
+    <string name="space_participants_ban_prompt_msg">封鎖使用者會將他們自此空間移除並防止他們再次加入。</string>
+    <string name="space_participants_remove_prompt_msg">踢除使用者將會將他們從此空間中移除。
 \n
 \n為了防止他們再加入，您應該封鎖他們。</string>
     <string name="a11y_stop_voice_message">停止錄製</string>
@@ -2958,7 +2951,6 @@
     <string name="delete_poll_dialog_title">移除投票</string>
     <string name="poll_end_room_list_preview">投票已結束</string>
     <string name="poll_response_room_list_preview">投票</string>
-    <string name="labs_enable_polls">啟用投票</string>
     <string name="end_poll_confirmation_approve_button">結束投票</string>
     <string name="end_poll_confirmation_description">這將阻止人們投票並顯示投票的最終結果。</string>
     <string name="end_poll_confirmation_title">結束此投票？</string>
@@ -2999,4 +2991,51 @@
     <string name="restart_the_application_to_apply_changes">重新啟動應用程式以讓變更生效。</string>
     <string name="labs_enable_latex_maths">啟用 LaTeX 數學</string>
     <string name="room_error_access_unauthorized">您無法加入此聊天室</string>
+    <string name="tooltip_attachment_poll">建立投票</string>
+    <string name="tooltip_attachment_contact">開啟通訊錄</string>
+    <string name="tooltip_attachment_sticker">傳送貼圖</string>
+    <string name="tooltip_attachment_file">上傳檔案</string>
+    <string name="tooltip_attachment_gallery">傳送圖片與影片</string>
+    <string name="tooltip_attachment_photo">開啟攝影機</string>
+    <string name="labs_auto_report_uisi_desc">發生無法解密錯誤時，您的系統將會自動傳送紀錄檔</string>
+    <string name="labs_auto_report_uisi">自動回報解密錯誤。</string>
+    <string name="room_member_override_nick_color">覆寫暱稱色彩</string>
+    <string name="login_splash_already_have_account">我已有一個帳號</string>
+    <string name="ftue_auth_carousel_4_title">減少團隊的懈怠。</string>
+    <string name="ftue_auth_carousel_3_title">安全傳送訊息。</string>
+    <string name="ftue_auth_carousel_2_title">您已掌控了您的資料。</string>
+    <string name="ftue_auth_carousel_1_title">擁有您的對話。</string>
+    <string name="tooltip_attachment_location">分享位置</string>
+    <string name="labs_render_locations_in_timeline">在時間軸中繪製使用者位置</string>
+    <string name="settings_enable_location_sharing_summary">啟用後，您就能將您的位置傳送至任何聊天室</string>
+    <string name="settings_enable_location_sharing">啟用位置分享</string>
+    <string name="location_share_external">開啟以</string>
+    <string name="template_location_not_available_dialog_content">${app_name} 無法存取您的位置。請稍後再試。</string>
+    <string name="template_location_not_available_dialog_title">${app_name} 無法存取您的位置</string>
+    <string name="location_share">分享位置</string>
+    <string name="a11y_location_share_icon">分享位置</string>
+    <string name="location_activity_title_preview">位置</string>
+    <string name="location_activity_title_static_sharing">分享位置</string>
+    <string name="closed_poll_option_description">結果僅在您結束投票後顯示</string>
+    <string name="closed_poll_option_title">已關閉投票</string>
+    <string name="open_poll_option_description">投票者在投票後可以立刻看到投票結果</string>
+    <string name="open_poll_option_title">開啟投票</string>
+    <string name="poll_type_title">投票類型</string>
+    <string name="edit_poll_button">編輯投票</string>
+    <string name="edit_poll_title">編輯投票</string>
+    <string name="poll_no_votes_cast">沒有投票</string>
+    <string name="a11y_trust_level_misconfigured">信任層級設定錯誤</string>
+    <string name="encryption_misconfigured">加密設定錯誤</string>
+    <string name="room_profile_section_restore_security">還原加密</string>
+    <string name="contact_admin_to_restore_encryption">請聯絡管理員以將加密還原至有效狀態。</string>
+    <string name="encryption_has_been_misconfigured">加密設定錯誤。</string>
+    <string name="sent_location">分享了他們的位置</string>
+    <string name="login_splash_create_account">建立帳號</string>
+    <string name="ftue_auth_carousel_title_messaging">為您的團隊傳送訊息。</string>
+    <string name="ftue_auth_carousel_body_encrypted">端到端加密，不需要電話號碼。沒有廣告或資料挖礦。</string>
+    <string name="ftue_auth_carousel_body_control">選擇保留對話的位置，讓您擁有控制權與獨立性。透過 Matrix 連結。</string>
+    <string name="ftue_auth_carousel_body_secure">安全且獨立的通訊，為您提供與在家中進行面對面對話相同的隱私等級。</string>
+    <string name="attachment_type_location">位置</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">加密設定錯誤，因此您無法傳送訊息。點擊以開啟設定。</string>
+    <string name="room_unsupported_e2e_algorithm">加密設定錯誤，因此您無法傳送訊息。請聯絡管理員將加密還原至有效的狀態。</string>
 </resources>

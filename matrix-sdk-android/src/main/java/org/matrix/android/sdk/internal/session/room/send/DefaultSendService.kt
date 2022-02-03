@@ -37,6 +37,7 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageWithAttachmentContent
+import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.model.message.getFileUrl
 import org.matrix.android.sdk.api.session.room.send.SendService
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -97,14 +98,20 @@ internal class DefaultSendService @AssistedInject constructor(
                 .let { sendEvent(it) }
     }
 
-    override fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean): Cancelable {
-        return localEchoEventFactory.createQuotedTextEvent(roomId, quotedEvent, text, autoMarkdown)
+    override fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean, rootThreadEventId: String?): Cancelable {
+        return localEchoEventFactory.createQuotedTextEvent(
+                roomId = roomId,
+                quotedEvent = quotedEvent,
+                text = text,
+                autoMarkdown = autoMarkdown,
+                rootThreadEventId = rootThreadEventId
+        )
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }
 
-    override fun sendPoll(question: String, options: List<String>): Cancelable {
-        return localEchoEventFactory.createPollEvent(roomId, question, options)
+    override fun sendPoll(pollType: PollType, question: String, options: List<String>): Cancelable {
+        return localEchoEventFactory.createPollEvent(roomId, pollType, question, options)
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }
@@ -117,6 +124,12 @@ internal class DefaultSendService @AssistedInject constructor(
 
     override fun endPoll(pollEventId: String): Cancelable {
         return localEchoEventFactory.createEndPollEvent(roomId, pollEventId)
+                .also { createLocalEcho(it) }
+                .let { sendEvent(it) }
+    }
+
+    override fun sendLocation(latitude: Double, longitude: Double, uncertainty: Double?): Cancelable {
+        return localEchoEventFactory.createLocationEvent(roomId, latitude, longitude, uncertainty)
                 .also { createLocalEcho(it) }
                 .let { sendEvent(it) }
     }
@@ -247,22 +260,37 @@ internal class DefaultSendService @AssistedInject constructor(
 
     override fun sendMedias(attachments: List<ContentAttachmentData>,
                             compressBeforeSending: Boolean,
-                            roomIds: Set<String>): Cancelable {
+                            roomIds: Set<String>,
+                            rootThreadEventId: String?
+    ): Cancelable {
         return attachments.mapTo(CancelableBag()) {
-            sendMedia(it, compressBeforeSending, roomIds)
+            sendMedia(
+                    attachment = it,
+                    compressBeforeSending = compressBeforeSending,
+                    roomIds = roomIds,
+                    rootThreadEventId = rootThreadEventId)
         }
     }
 
     override fun sendMedia(attachment: ContentAttachmentData,
                            compressBeforeSending: Boolean,
-                           roomIds: Set<String>): Cancelable {
+                           roomIds: Set<String>,
+                           rootThreadEventId: String?
+    ): Cancelable {
+        // Ensure that the event will not be send in a thread if we are a different flow.
+        // Like sending files to multiple rooms
+        val rootThreadId = if (roomIds.isNotEmpty()) null else rootThreadEventId
+
         // Create an event with the media file path
         // Ensure current roomId is included in the set
         val allRoomIds = (roomIds + roomId).toList()
 
         // Create local echo for each room
         val allLocalEchoes = allRoomIds.map {
-            localEchoEventFactory.createMediaEvent(it, attachment).also { event ->
+            localEchoEventFactory.createMediaEvent(
+                    roomId = it,
+                    attachment = attachment,
+                    rootThreadEventId = rootThreadId).also { event ->
                 createLocalEcho(event)
             }
         }

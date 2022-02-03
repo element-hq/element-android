@@ -19,49 +19,8 @@
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/createRoomToolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?actionBarSize">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/createDirectRoomClose"
-                        android:layout_width="@dimen/layout_touch_size"
-                        android:layout_height="@dimen/layout_touch_size"
-                        android:clickable="true"
-                        android:contentDescription="@string/action_close"
-                        android:focusable="true"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:scaleType="center"
-                        android:src="@drawable/ic_x_18dp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="?vctr_content_secondary"
-                        tools:ignore="MissingPrefix" />
-
-                    <TextView
-                        android:id="@+id/createDirectRoomTitle"
-                        style="@style/Widget.Vector.TextView.HeadlineMedium"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="@string/direct_chats_header"
-                        android:textColor="?vctr_content_primary"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toEndOf="@id/createDirectRoomClose"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </com.google.android.material.appbar.MaterialToolbar>
+                android:layout_height="?actionBarSize"
+                app:title="@string/direct_chats_header" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/createDirectRoomSearchByIdContainer"

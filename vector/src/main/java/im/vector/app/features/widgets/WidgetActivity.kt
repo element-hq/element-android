@@ -22,11 +22,9 @@ import android.content.Intent
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
-import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityWidgetBinding
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
@@ -36,8 +34,7 @@ import org.matrix.android.sdk.api.session.events.model.Content
 import java.io.Serializable
 
 @AndroidEntryPoint
-class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
-        ToolbarConfigurable {
+class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
 
     companion object {
         private const val WIDGET_FRAGMENT_TAG = "WIDGET_FRAGMENT_TAG"
@@ -77,7 +74,8 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
             finish()
             return
         }
-        configure(views.toolbar)
+        setupToolbar(views.toolbar)
+                .allowBack()
         views.toolbar.isVisible = widgetArgs.kind.nameRes != 0
         viewModel.observeViewEvents {
             when (it) {
@@ -128,9 +126,5 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
             setResult(Activity.RESULT_OK, intent)
         }
         finish()
-    }
-
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
     }
 }

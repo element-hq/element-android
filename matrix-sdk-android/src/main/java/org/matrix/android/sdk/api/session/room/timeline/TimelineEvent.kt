@@ -22,7 +22,9 @@ import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
 import org.matrix.android.sdk.api.session.events.model.isEdition
+import org.matrix.android.sdk.api.session.events.model.isPoll
 import org.matrix.android.sdk.api.session.events.model.isReply
+import org.matrix.android.sdk.api.session.events.model.isSticker
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
@@ -133,7 +135,7 @@ fun TimelineEvent.getEditedEventId(): String? {
 fun TimelineEvent.getLastMessageContent(): MessageContent? {
     return when (root.getClearType()) {
         EventType.STICKER    -> root.getClearContent().toModel<MessageStickerContent>()
-        EventType.POLL_START -> root.getClearContent().toModel<MessagePollContent>()
+        EventType.POLL_START -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel<MessagePollContent>()
         else                 -> (annotations?.editSummary?.latestContent ?: root.getClearContent()).toModel()
     }
 }
@@ -147,6 +149,13 @@ fun TimelineEvent.isReply(): Boolean {
 
 fun TimelineEvent.isEdition(): Boolean {
     return root.isEdition()
+}
+
+fun TimelineEvent.isPoll(): Boolean =
+        root.isPoll()
+
+fun TimelineEvent.isSticker(): Boolean {
+    return root.isSticker()
 }
 
 /**

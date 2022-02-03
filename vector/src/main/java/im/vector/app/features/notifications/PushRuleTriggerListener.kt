@@ -55,12 +55,12 @@ class PushRuleTriggerListener @Inject constructor(
 
     private suspend fun createNotifiableEvents(pushEvents: PushEvents, session: Session): List<NotifiableEvent> {
         return pushEvents.matchedEvents.mapNotNull { (event, pushRule) ->
-            Timber.v("Push rule match for event ${event.eventId}")
+            Timber.d("Push rule match for event ${event.eventId}")
             val action = pushRule.getActions().toNotificationAction()
             if (action.shouldNotify) {
                 resolver.resolveEvent(event, session, isNoisy = !action.soundName.isNullOrBlank())
             } else {
-                Timber.v("Matched push rule is set to not notify")
+                Timber.d("Matched push rule is set to not notify")
                 null
             }
         }

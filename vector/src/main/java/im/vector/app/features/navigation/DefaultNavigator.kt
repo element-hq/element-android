@@ -53,11 +53,18 @@ import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.debug.DebugMenuActivity
 import im.vector.app.features.devtools.RoomDevToolActivity
 import im.vector.app.features.home.room.detail.RoomDetailActivity
-import im.vector.app.features.home.room.detail.RoomDetailArgs
+import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import im.vector.app.features.home.room.detail.search.SearchActivity
 import im.vector.app.features.home.room.detail.search.SearchArgs
 import im.vector.app.features.home.room.filtered.FilteredRoomsActivity
+import im.vector.app.features.home.room.threads.ThreadsActivity
+import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
+import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.invite.InviteUsersToRoomActivity
+import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.LocationSharingActivity
+import im.vector.app.features.location.LocationSharingArgs
+import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.login.LoginActivity
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.matrixto.MatrixToBottomSheet
@@ -70,6 +77,7 @@ import im.vector.app.features.pin.PinArgs
 import im.vector.app.features.pin.PinMode
 import im.vector.app.features.poll.create.CreatePollActivity
 import im.vector.app.features.poll.create.CreatePollArgs
+import im.vector.app.features.poll.create.PollMode
 import im.vector.app.features.roomdirectory.RoomDirectoryActivity
 import im.vector.app.features.roomdirectory.RoomDirectoryData
 import im.vector.app.features.roomdirectory.createroom.CreateRoomActivity
@@ -135,12 +143,17 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(intent)
     }
 
-    override fun openRoom(context: Context, roomId: String, eventId: String?, buildTask: Boolean) {
+    override fun openRoom(
+            context: Context,
+            roomId: String,
+            eventId: String?,
+            buildTask: Boolean
+    ) {
         if (sessionHolder.getSafeActiveSession()?.getRoom(roomId) == null) {
             fatalError("Trying to open an unknown room $roomId", vectorPreferences.failFast())
             return
         }
-        val args = RoomDetailArgs(roomId, eventId)
+        val args = TimelineArgs(roomId, eventId)
         val intent = RoomDetailActivity.newIntent(context, args)
         startActivity(context, intent, buildTask)
     }
@@ -163,7 +176,7 @@ class DefaultNavigator @Inject constructor(
                 startActivity(context, SpaceManageActivity.newIntent(context, spaceId, ManageType.AddRooms), false)
             }
             is Navigator.PostSwitchSpaceAction.OpenDefaultRoom   -> {
-                val args = RoomDetailArgs(
+                val args = TimelineArgs(
                         postSwitchSpaceAction.roomId,
                         eventId = null,
                         openShareSpaceForId = spaceId.takeIf { postSwitchSpaceAction.showShareSheet }
@@ -261,7 +274,7 @@ class DefaultNavigator @Inject constructor(
     }
 
     override fun openRoomForSharingAndFinish(activity: Activity, roomId: String, sharedData: SharedData) {
-        val args = RoomDetailArgs(roomId, null, sharedData)
+        val args = TimelineArgs(roomId, null, sharedData)
         val intent = RoomDetailActivity.newIntent(activity, args)
         activity.startActivity(intent)
         activity.finish()
@@ -309,8 +322,8 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openCreateRoom(context: Context, initialName: String) {
-        val intent = CreateRoomActivity.getIntent(context, initialName)
+    override fun openCreateRoom(context: Context, initialName: String, openAfterCreate: Boolean) {
+        val intent = CreateRoomActivity.getIntent(context = context, initialName = initialName, openAfterCreate = openAfterCreate)
         context.startActivity(intent)
     }
 
@@ -510,8 +523,11 @@ class DefaultNavigator @Inject constructor(
         }
     }
 
-    override fun openSearch(context: Context, roomId: String) {
-        val intent = SearchActivity.newIntent(context, SearchArgs(roomId))
+    override fun openSearch(context: Context,
+                            roomId: String,
+                            roomDisplayName: String?,
+                            roomAvatarUrl: String?) {
+        val intent = SearchActivity.newIntent(context, SearchArgs(roomId, roomDisplayName, roomAvatarUrl))
         context.startActivity(intent)
     }
 
@@ -519,15 +535,31 @@ class DefaultNavigator @Inject constructor(
         context.startActivity(RoomDevToolActivity.intent(context, roomId))
     }
 
-    override fun openCallTransfer(context: Context, callId: String) {
+    override fun openCallTransfer(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>,
+            callId: String
+    ) {
         val intent = CallTransferActivity.newIntent(context, callId)
+        activityResultLauncher.launch(intent)
+    }
+
+    override fun openCreatePoll(context: Context, roomId: String, editedEventId: String?, mode: PollMode) {
+        val intent = CreatePollActivity.getIntent(
+                context,
+                CreatePollArgs(roomId = roomId, editedEventId = editedEventId, mode = mode)
+        )
         context.startActivity(intent)
     }
 
-    override fun openCreatePoll(context: Context, roomId: String) {
-        val intent = CreatePollActivity.getIntent(
+    override fun openLocationSharing(context: Context,
+                                     roomId: String,
+                                     mode: LocationSharingMode,
+                                     initialLocationData: LocationData?,
+                                     locationOwnerId: String) {
+        val intent = LocationSharingActivity.getIntent(
                 context,
-                CreatePollArgs(roomId = roomId)
+                LocationSharingArgs(roomId = roomId, mode = mode, initialLocationData = initialLocationData, locationOwnerId = locationOwnerId)
         )
         context.startActivity(intent)
     }
@@ -540,5 +572,26 @@ class DefaultNavigator @Inject constructor(
         } else {
             context.startActivity(intent)
         }
+    }
+
+    override fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String?) {
+        context.startActivity(ThreadsActivity.newIntent(
+                context = context,
+                threadTimelineArgs = threadTimelineArgs,
+                threadListArgs = null,
+                eventIdToNavigate = eventIdToNavigate
+        ))
+    }
+
+    override fun openThreadList(context: Context, threadTimelineArgs: ThreadTimelineArgs) {
+        context.startActivity(ThreadsActivity.newIntent(
+                context = context,
+                threadTimelineArgs = null,
+                threadListArgs = ThreadListArgs(
+                        roomId = threadTimelineArgs.roomId,
+                        displayName = threadTimelineArgs.displayName,
+                        avatarUrl = threadTimelineArgs.avatarUrl,
+                        roomEncryptionTrustLevel = threadTimelineArgs.roomEncryptionTrustLevel
+                )))
     }
 }

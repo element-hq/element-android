@@ -55,6 +55,10 @@ class UiAllScreensSanityTest {
     fun allScreensTest() {
         IdlingPolicies.setMasterPolicyTimeout(120, TimeUnit.SECONDS)
 
+        elementRobot.onboarding {
+            crawl()
+        }
+
         // Create an account
         val userId = "UiTest_" + UUID.randomUUID().toString()
         elementRobot.signUp(userId)
@@ -65,12 +69,11 @@ class UiAllScreensSanityTest {
             preferences { crawl() }
             voiceAndVideo()
             ignoredUsers()
-            // TODO Test analytics
             securityAndPrivacy { crawl() }
             labs()
             advancedSettings { crawl() }
-            // TODO Rework this part (Legals, etc.)
-            // helpAndAbout { crawl() }
+            helpAndAbout { crawl() }
+            legals { crawl() }
         }
 
         elementRobot.newDirectMessage {

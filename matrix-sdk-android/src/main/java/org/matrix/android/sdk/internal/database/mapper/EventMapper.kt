@@ -21,7 +21,11 @@ import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
+import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.api.session.room.sender.SenderInfo
+import org.matrix.android.sdk.api.session.threads.ThreadDetails
+import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.di.MoshiProvider
@@ -51,6 +55,10 @@ internal object EventMapper {
         }
         eventEntity.decryptionErrorReason = event.mCryptoErrorReason
         eventEntity.decryptionErrorCode = event.mCryptoError?.name
+        eventEntity.isRootThread = event.threadDetails?.isRootThread ?: false
+        eventEntity.rootThreadEventId = event.getRootThreadEventId()
+        eventEntity.numberOfThreads = event.threadDetails?.numberOfThreads ?: 0
+        eventEntity.threadNotificationState = event.threadDetails?.threadNotificationState ?: ThreadNotificationState.NO_NEW_MESSAGE
         return eventEntity
     }
 
@@ -93,6 +101,23 @@ internal object EventMapper {
                 MXCryptoError.ErrorType.valueOf(errorCode)
             }
             it.mCryptoErrorReason = eventEntity.decryptionErrorReason
+            it.threadDetails = ThreadDetails(
+                    isRootThread = eventEntity.isRootThread,
+                    isThread = if (it.threadDetails?.isThread == true) true else eventEntity.isThread(),
+                    numberOfThreads = eventEntity.numberOfThreads,
+                    threadSummarySenderInfo = eventEntity.threadSummaryLatestMessage?.let { timelineEventEntity ->
+                        SenderInfo(
+                                userId = timelineEventEntity.root?.sender ?: "",
+                                displayName = timelineEventEntity.senderName,
+                                isUniqueDisplayName = timelineEventEntity.isUniqueDisplayName,
+                                avatarUrl = timelineEventEntity.senderAvatar
+                        )
+                    },
+                    threadNotificationState = eventEntity.threadNotificationState,
+                    threadSummaryLatestTextMessage = eventEntity.threadSummaryLatestMessage?.root?.asDomain()?.getDecryptedTextSummary(),
+                    lastMessageTimestamp = eventEntity.threadSummaryLatestMessage?.root?.originServerTs
+
+            )
         }
     }
 }
@@ -101,9 +126,15 @@ internal fun EventEntity.asDomain(castJsonNumbers: Boolean = false): Event {
     return EventMapper.map(this, castJsonNumbers)
 }
 
-internal fun Event.toEntity(roomId: String, sendState: SendState, ageLocalTs: Long?): EventEntity {
+internal fun Event.toEntity(roomId: String, sendState: SendState, ageLocalTs: Long?, contentToInject: String? = null): EventEntity {
     return EventMapper.map(this, roomId).apply {
         this.sendState = sendState
         this.ageLocalTs = ageLocalTs
+        contentToInject?.let {
+            this.content = it
+            if (this.type == EventType.STICKER) {
+                this.type = EventType.MESSAGE
+            }
+        }
     }
 }

@@ -58,9 +58,12 @@ import im.vector.app.features.home.HomeDetailFragment
 import im.vector.app.features.home.HomeDrawerFragment
 import im.vector.app.features.home.LoadingFragment
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
-import im.vector.app.features.home.room.detail.RoomDetailFragment
+import im.vector.app.features.home.room.detail.TimelineFragment
 import im.vector.app.features.home.room.detail.search.SearchFragment
 import im.vector.app.features.home.room.list.RoomListFragment
+import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
+import im.vector.app.features.location.LocationPreviewFragment
+import im.vector.app.features.location.LocationSharingFragment
 import im.vector.app.features.login.LoginCaptchaFragment
 import im.vector.app.features.login.LoginFragment
 import im.vector.app.features.login.LoginGenericTextInputFormFragment
@@ -104,6 +107,7 @@ import im.vector.app.features.onboarding.ftueauth.FtueAuthServerSelectionFragmen
 import im.vector.app.features.onboarding.ftueauth.FtueAuthSignUpSignInSelectionFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthSplashCarouselFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthSplashFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthUseCaseFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthWaitForEmailFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthWebFragment
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragment
@@ -201,8 +205,8 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
-    @FragmentKey(RoomDetailFragment::class)
-    fun bindRoomDetailFragment(fragment: RoomDetailFragment): Fragment
+    @FragmentKey(TimelineFragment::class)
+    fun bindTimelineFragment(fragment: TimelineFragment): Fragment
 
     @Binds
     @IntoMap
@@ -448,6 +452,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(FtueAuthSplashCarouselFragment::class)
     fun bindFtueAuthSplashCarouselFragment(fragment: FtueAuthSplashCarouselFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthUseCaseFragment::class)
+    fun bindFtueAuthUseCaseFragment(fragment: FtueAuthUseCaseFragment): Fragment
 
     @Binds
     @IntoMap
@@ -931,6 +940,21 @@ interface FragmentModule {
 
     @Binds
     @IntoMap
+    @FragmentKey(ThreadListFragment::class)
+    fun bindThreadListFragment(fragment: ThreadListFragment): Fragment
+
+    @Binds
+    @IntoMap
     @FragmentKey(CreatePollFragment::class)
     fun bindCreatePollFragment(fragment: CreatePollFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LocationSharingFragment::class)
+    fun bindLocationSharingFragment(fragment: LocationSharingFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(LocationPreviewFragment::class)
+    fun bindLocationPreviewFragment(fragment: LocationPreviewFragment): Fragment
 }

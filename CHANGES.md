@@ -1,3 +1,81 @@
+Changes in Element v1.3.17 (2022-01-31)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Display static map images in the timeline and improve Location sharing feature ([#5084](https://github.com/vector-im/element-android/issues/5084))
+ - Show the legal mention of mapbox when sharing location ([#5062](https://github.com/vector-im/element-android/issues/5062))
+ - Poll cannot end in some unencrypted rooms ([#5067](https://github.com/vector-im/element-android/issues/5067))
+ - Selecting Transfer in a call should immediately put the other person on hold until the call connects or the Transfer is cancelled. ([#5081](https://github.com/vector-im/element-android/issues/5081))
+ - Fixing crashes when quickly scrolling or restoring the room timeline ([#5091](https://github.com/vector-im/element-android/issues/5091))
+
+
+Changes in Element 1.3.16 (2022-01-25)
+======================================
+
+Features ✨
+----------
+ - Static location sharing and rendering ([#2210](https://github.com/vector-im/element-android/issues/2210))
+ - Enables the FTUE splash carousel ([#4584](https://github.com/vector-im/element-android/issues/4584))
+ - Allow editing polls ([#5036](https://github.com/vector-im/element-android/issues/5036))
+
+Bugfixes 🐛
+----------
+ - Fixing missing notifications in FDroid variants using `optimised for battery` background sync mode ([#5003](https://github.com/vector-im/element-android/issues/5003))
+ - Fix for stuck local event messages at the bottom of the screen ([#516](https://github.com/vector-im/element-android/issues/516))
+ - Notification does not take me to the room when another space was last viewed ([#3839](https://github.com/vector-im/element-android/issues/3839))
+ - Explore Rooms overflow menu - content update include "Create room" ([#3932](https://github.com/vector-im/element-android/issues/3932))
+ - Fix sync timeout after returning from background ([#4669](https://github.com/vector-im/element-android/issues/4669))
+ - Fix a wrong network error issue in the Legals screen ([#4935](https://github.com/vector-im/element-android/issues/4935))
+ - Prevent Alerts to be displayed in the automatically displayed analytics opt-in screen ([#4948](https://github.com/vector-im/element-android/issues/4948))
+ - EmojiPopupDismissListener not being triggered after dismissing the EmojiPopup ([#4991](https://github.com/vector-im/element-android/issues/4991))
+ - Fix an error in string resource ([#4997](https://github.com/vector-im/element-android/issues/4997))
+ - Big messages taking inappropriately long to evaluate .m.rule.roomnotif push rules ([#5008](https://github.com/vector-im/element-android/issues/5008))
+ - Improve auto rageshake lab feature ([#5021](https://github.com/vector-im/element-android/issues/5021))
+
+In development 🚧
+----------------
+ - Updates the onboarding carousel images, copy and improves the handling of different device sizes ([#4880](https://github.com/vector-im/element-android/issues/4880))
+ - Disabling onboarding automatic carousel transitions on user interaction ([#4914](https://github.com/vector-im/element-android/issues/4914))
+ - Locking phones to portrait during the FTUE onboarding ([#4918](https://github.com/vector-im/element-android/issues/4918))
+ - Adds a messaging use case screen to the FTUE onboarding ([#4927](https://github.com/vector-im/element-android/issues/4927))
+ - Updating the FTUE use case icons ([#5025](https://github.com/vector-im/element-android/issues/5025))
+ - Support undisclosed polls ([#5037](https://github.com/vector-im/element-android/issues/5037))
+
+Other changes
+-------------
+ - Enabling native support for window resizing ([#4811](https://github.com/vector-im/element-android/issues/4811))
+ - Analytics: send more Events ([#4734](https://github.com/vector-im/element-android/issues/4734))
+ - Fix integration tests and add a comment with results (still not perfect due to github actions resource limitations) ([#4842](https://github.com/vector-im/element-android/issues/4842))
+ - "/kick" command is replaced with "/remove". Also replaced all occurrences in string resources ([#4865](https://github.com/vector-im/element-android/issues/4865))
+ - Toolbar management rework. Toolbar title's and subtitle's text appearance now controlled by theme without local overrides. Helper class introduced to
+  help with toolbar configuration. Toolbar title, subtitle and navigation button widgets are removed where it is possible and replaced with built-in
+  toolbar widgets. ([#4884](https://github.com/vector-im/element-android/issues/4884))
+ - Add signing config for the release buildType. No secret added ([#4926](https://github.com/vector-im/element-android/issues/4926))
+ - Remove unused module matrix-sdk-android-rx and do some cleanup ([#4942](https://github.com/vector-im/element-android/issues/4942))
+ - Sync issue automation with element-web ([#4949](https://github.com/vector-im/element-android/issues/4949))
+ - Improves local echo blinking when non room events received ([#4960](https://github.com/vector-im/element-android/issues/4960))
+ - Including onboarding server options in the all screen sanity test suite ([#4975](https://github.com/vector-im/element-android/issues/4975))
+ - Exclude dependabot upgrade for @github-script@v3 ([#4988](https://github.com/vector-im/element-android/issues/4988))
+ - Small iteration on command parser and unit test it. ([#4998](https://github.com/vector-im/element-android/issues/4998))
+
+SDK API changes ⚠️
+------------------
+ - `StateService.sendStateEvent()` now takes a non-nullable String for the parameter `stateKey`. If null was used, just now use an empty string. ([#4895](https://github.com/vector-im/element-android/issues/4895))
+ - 429 are not automatically retried anymore in case of too long retry delay ([#4995](https://github.com/vector-im/element-android/issues/4995))
+
+
+Changes in Element v1.3.15 (2022-01-18)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Fix crash when viewing source which contains an emoji ([#4796](https://github.com/vector-im/element-android/issues/4796))
+ - Prevent crash in Timeline and add more logs. ([#4959](https://github.com/vector-im/element-android/issues/4959))
+ - Fix crash on API <24 and make sure this error will not occur again. ([#4962](https://github.com/vector-im/element-android/issues/4962))
+ - Fixes sign in/up crash when selecting ems and other server types which use SSO ([#4969](https://github.com/vector-im/element-android/issues/4969))
+
+
 Changes in Element v1.3.14 (2022-01-12)
 =======================================
 

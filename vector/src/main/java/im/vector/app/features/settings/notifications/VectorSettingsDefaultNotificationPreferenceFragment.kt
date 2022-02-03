@@ -16,8 +16,10 @@
 
 package im.vector.app.features.settings.notifications
 
+import android.os.Bundle
 import im.vector.app.R
 import im.vector.app.core.preference.VectorPreferenceCategory
+import im.vector.app.features.analytics.plan.Screen
 import org.matrix.android.sdk.api.pushrules.RuleIds
 
 class VectorSettingsDefaultNotificationPreferenceFragment :
@@ -33,6 +35,11 @@ class VectorSettingsDefaultNotificationPreferenceFragment :
                 "SETTINGS_PUSH_RULE_MESSAGES_IN_E2E_ONE_ONE_CHAT_PREFERENCE_KEY" to RuleIds.RULE_ID_ONE_TO_ONE_ENCRYPTED_ROOM,
                 "SETTINGS_PUSH_RULE_MESSAGES_IN_E2E_GROUP_CHAT_PREFERENCE_KEY" to RuleIds.RULE_ID_ENCRYPTED
         )
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        analyticsScreenName = Screen.ScreenName.SettingsDefaultNotifications
+    }
 
     override fun bindPref() {
         super.bindPref()

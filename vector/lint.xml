@@ -6,6 +6,7 @@
     <issue id="MissingTranslation" severity="ignore" />
     <issue id="TypographyEllipsis" severity="error" />
     <issue id="ImpliedQuantity" severity="warning" />
+    <issue id="MissingQuantity" severity="warning" />
     <issue id="UnusedQuantity" severity="error" />
     <issue id="IconXmlAndPng" severity="error" />
     <issue id="IconDipSize" severity="error" />
@@ -40,6 +41,7 @@
     <issue id="RtlSymmetry" severity="error" />
 
     <!-- Code -->
+    <issue id="NewApi" severity="error" />
     <issue id="SetTextI18n" severity="error" />
     <issue id="ViewConstructor" severity="error" />
     <issue id="UseValueOf" severity="error" />
@@ -81,10 +83,6 @@
     <issue id="all">
         <ignore path="**/generated/resolved/**/resolved.xml" />
     </issue>
-
-    <!-- Bug in lint agp 4.1 incorrectly thinks kotlin forEach is using java 8 API's. -->
-    <!-- FIXME this workaround should be removed in a near future -->
-    <issue id="NewApi" severity="warning" />
 
     <!-- DI -->
     <issue id="JvmStaticProvidesInObjectDetector" severity="error" />

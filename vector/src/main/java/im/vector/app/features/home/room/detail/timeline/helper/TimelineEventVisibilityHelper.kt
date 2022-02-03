@@ -21,6 +21,8 @@ import im.vector.app.core.resources.UserPreferencesProvider
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.getRelationContent
+import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
+import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
@@ -37,7 +39,13 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
      *
      * @return a list of timeline events which have sequentially the same type following the next direction.
      */
-    fun nextSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int, eventIdToHighlight: String?): List<TimelineEvent> {
+    private fun nextSameTypeEvents(
+            timelineEvents: List<TimelineEvent>,
+            index: Int,
+            minSize: Int,
+            eventIdToHighlight: String?,
+            rootThreadEventId: String?,
+            isFromThreadTimeline: Boolean): List<TimelineEvent> {
         if (index >= timelineEvents.size - 1) {
             return emptyList()
         }
@@ -59,11 +67,18 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         } else {
             nextSameDayEvents.subList(0, indexOfFirstDifferentEventType)
         }
-        val filteredSameTypeEvents = sameTypeEvents.filter { shouldShowEvent(it, eventIdToHighlight) }
+        val filteredSameTypeEvents = sameTypeEvents.filter {
+            shouldShowEvent(
+                    timelineEvent = it,
+                    highlightedEventId = eventIdToHighlight,
+                    isFromThreadTimeline = isFromThreadTimeline,
+                    rootThreadEventId = rootThreadEventId
+            )
+        }
         if (filteredSameTypeEvents.size < minSize) {
             return emptyList()
         }
-        return  filteredSameTypeEvents
+        return filteredSameTypeEvents
     }
 
     /**
@@ -74,23 +89,35 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
      *
      * @return a list of timeline events which have sequentially the same type following the prev direction.
      */
-    fun prevSameTypeEvents(timelineEvents: List<TimelineEvent>, index: Int, minSize: Int, eventIdToHighlight: String?): List<TimelineEvent> {
+    fun prevSameTypeEvents(
+            timelineEvents: List<TimelineEvent>,
+            index: Int,
+            minSize: Int,
+            eventIdToHighlight: String?,
+            rootThreadEventId: String?,
+            isFromThreadTimeline: Boolean): List<TimelineEvent> {
         val prevSub = timelineEvents.subList(0, index + 1)
         return prevSub
                 .reversed()
                 .let {
-                    nextSameTypeEvents(it, 0, minSize, eventIdToHighlight)
+                    nextSameTypeEvents(it, 0, minSize, eventIdToHighlight, rootThreadEventId, isFromThreadTimeline)
                 }
     }
 
     /**
      * @param timelineEvent the event to check for visibility
      * @param highlightedEventId can be checked to force visibility to true
+     * @param rootThreadEventId if this param is null it means we are in the original timeline
      * @return true if the event should be shown in the timeline.
      */
-    fun shouldShowEvent(timelineEvent: TimelineEvent, highlightedEventId: String?): Boolean {
+    fun shouldShowEvent(
+            timelineEvent: TimelineEvent,
+            highlightedEventId: String?,
+            isFromThreadTimeline: Boolean,
+            rootThreadEventId: String?
+    ): Boolean {
         // If show hidden events is true we should always display something
-        if (userPreferencesProvider.shouldShowHiddenEvents()) {
+        if (userPreferencesProvider.shouldShowHiddenEvents() && !isFromThreadTimeline) {
             return true
         }
         // We always show highlighted event
@@ -100,18 +127,35 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
         if (!timelineEvent.isDisplayable()) {
             return false
         }
+
         // Check for special case where we should hide the event, like redacted, relation, memberships... according to user preferences.
-        return !timelineEvent.shouldBeHidden()
+        return !timelineEvent.shouldBeHidden(rootThreadEventId, isFromThreadTimeline)
     }
 
     private fun TimelineEvent.isDisplayable(): Boolean {
         return TimelineDisplayableEvents.DISPLAYABLE_TYPES.contains(root.getClearType())
     }
 
-    private fun TimelineEvent.shouldBeHidden(): Boolean {
-        if (root.isRedacted() && !userPreferencesProvider.shouldShowRedactedMessages()) {
+    private fun TimelineEvent.shouldBeHidden(rootThreadEventId: String?, isFromThreadTimeline: Boolean): Boolean {
+        if (root.isRedacted() && !userPreferencesProvider.shouldShowRedactedMessages() && root.threadDetails?.isRootThread == false) {
             return true
         }
+
+        // We should not display deleted thread messages within the normal timeline
+        if (root.isRedacted() &&
+                userPreferencesProvider.areThreadMessagesEnabled() &&
+                !isFromThreadTimeline &&
+                (root.isThread() || root.threadDetails?.isThread == true)) {
+            return true
+        }
+        if (root.isRedacted() &&
+                !userPreferencesProvider.shouldShowRedactedMessages() &&
+                userPreferencesProvider.areThreadMessagesEnabled() &&
+                isFromThreadTimeline &&
+                root.isThread()) {
+            return true
+        }
+
         if (root.getRelationContent()?.type == RelationType.REPLACE) {
             return true
         }
@@ -119,9 +163,19 @@ class TimelineEventVisibilityHelper @Inject constructor(private val userPreferen
             val diff = computeMembershipDiff()
             if ((diff.isJoin || diff.isPart) && !userPreferencesProvider.shouldShowJoinLeaves()) return true
             if ((diff.isAvatarChange || diff.isDisplaynameChange) && !userPreferencesProvider.shouldShowAvatarDisplayNameChanges()) return true
-        } else if (root.getClearType() == EventType.POLL_START && !userPreferencesProvider.shouldShowPolls()) {
+        }
+
+        if (userPreferencesProvider.areThreadMessagesEnabled() && !isFromThreadTimeline && root.isThread()) {
             return true
         }
+
+        // Allow only the the threads within the rootThreadEventId along with the root event
+        if (userPreferencesProvider.areThreadMessagesEnabled() && isFromThreadTimeline) {
+            return if (root.getRootThreadEventId() == rootThreadEventId) {
+                false
+            } else root.eventId != rootThreadEventId
+        }
+
         return false
     }
 

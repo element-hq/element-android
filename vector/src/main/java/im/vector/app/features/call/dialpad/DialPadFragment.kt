@@ -17,6 +17,7 @@
 package im.vector.app.features.call.dialpad
 
 import android.content.ClipboardManager
+import android.content.Context
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.telephony.PhoneNumberFormattingTextWatcher
@@ -37,6 +38,10 @@ import androidx.fragment.app.Fragment
 import com.android.dialer.dialpadview.DialpadView
 import com.android.dialer.dialpadview.DigitsEditText
 import im.vector.app.R
+import im.vector.app.core.extensions.singletonEntryPoint
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.screen.ScreenEvent
 import im.vector.app.features.themes.ThemeUtils
 
 class DialPadFragment : Fragment(), TextWatcher {
@@ -52,6 +57,25 @@ class DialPadFragment : Fragment(), TextWatcher {
     private var cursorVisible = true
     private var enableDelete = true
     private var enableFabOk = true
+
+    private lateinit var analyticsTracker: AnalyticsTracker
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val singletonEntryPoint = context.singletonEntryPoint()
+        analyticsTracker = singletonEntryPoint.analyticsTracker()
+    }
+
+    private var screenEvent: ScreenEvent? = null
+    override fun onResume() {
+        super.onResume()
+        screenEvent = ScreenEvent(Screen.ScreenName.MobileDialpad)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        screenEvent?.send(analyticsTracker)
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,

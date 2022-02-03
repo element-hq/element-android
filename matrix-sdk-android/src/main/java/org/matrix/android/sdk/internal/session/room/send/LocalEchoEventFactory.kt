@@ -28,10 +28,14 @@ import org.matrix.android.sdk.api.session.events.model.LocalEcho
 import org.matrix.android.sdk.api.session.events.model.RelationType
 import org.matrix.android.sdk.api.session.events.model.UnsignedData
 import org.matrix.android.sdk.api.session.events.model.toContent
+import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.AudioInfo
 import org.matrix.android.sdk.api.session.room.model.message.AudioWaveformInfo
 import org.matrix.android.sdk.api.session.room.model.message.FileInfo
 import org.matrix.android.sdk.api.session.room.model.message.ImageInfo
+import org.matrix.android.sdk.api.session.room.model.message.LocationAsset
+import org.matrix.android.sdk.api.session.room.model.message.LocationAssetType
+import org.matrix.android.sdk.api.session.room.model.message.LocationInfo
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContentWithFormattedBody
@@ -39,8 +43,10 @@ import org.matrix.android.sdk.api.session.room.model.message.MessageEndPollConte
 import org.matrix.android.sdk.api.session.room.model.message.MessageFileContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
 import org.matrix.android.sdk.api.session.room.model.message.MessageImageContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollResponseContent
+import org.matrix.android.sdk.api.session.room.model.message.MessageStickerContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageTextContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.MessageVideoContent
@@ -48,6 +54,7 @@ import org.matrix.android.sdk.api.session.room.model.message.PollAnswer
 import org.matrix.android.sdk.api.session.room.model.message.PollCreationInfo
 import org.matrix.android.sdk.api.session.room.model.message.PollQuestion
 import org.matrix.android.sdk.api.session.room.model.message.PollResponse
+import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.model.message.ThumbnailInfo
 import org.matrix.android.sdk.api.session.room.model.message.VideoInfo
 import org.matrix.android.sdk.api.session.room.model.relation.ReactionContent
@@ -61,6 +68,8 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.session.content.ThumbnailExtractor
 import org.matrix.android.sdk.internal.session.permalinks.PermalinkFactory
 import org.matrix.android.sdk.internal.session.room.send.pills.TextPillsUtils
+import java.util.UUID
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -124,6 +133,45 @@ internal class LocalEchoEventFactory @Inject constructor(
                 ))
     }
 
+    private fun createPollContent(question: String,
+                                  options: List<String>,
+                                  pollType: PollType): MessagePollContent {
+        return MessagePollContent(
+                pollCreationInfo = PollCreationInfo(
+                        question = PollQuestion(
+                                question = question
+                        ),
+                        kind = pollType,
+                        answers = options.map { option ->
+                            PollAnswer(
+                                    id = UUID.randomUUID().toString(),
+                                    answer = option
+                            )
+                        }
+                )
+        )
+    }
+
+    fun createPollReplaceEvent(roomId: String,
+                               pollType: PollType,
+                               targetEventId: String,
+                               question: String,
+                               options: List<String>): Event {
+        val newContent = MessagePollContent(
+                relatesTo = RelationDefaultContent(RelationType.REPLACE, targetEventId),
+                newContent = createPollContent(question, options, pollType).toContent()
+        )
+        val localId = LocalEcho.createLocalEchoId()
+        return Event(
+                roomId = roomId,
+                originServerTs = dummyOriginServerTs(),
+                senderId = userId,
+                eventId = localId,
+                type = EventType.POLL_START,
+                content = newContent.toContent()
+        )
+    }
+
     fun createPollReplyEvent(roomId: String,
                              pollEventId: String,
                              answerId: String): Event {
@@ -149,21 +197,10 @@ internal class LocalEchoEventFactory @Inject constructor(
     }
 
     fun createPollEvent(roomId: String,
+                        pollType: PollType,
                         question: String,
                         options: List<String>): Event {
-        val content = MessagePollContent(
-                pollCreationInfo = PollCreationInfo(
-                        question = PollQuestion(
-                                question = question
-                        ),
-                        answers = options.mapIndexed { index, option ->
-                            PollAnswer(
-                                    id = "$index-$option",
-                                    answer = option
-                            )
-                        }
-                )
-        )
+        val content = createPollContent(question, options, pollType)
         val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
@@ -192,6 +229,27 @@ internal class LocalEchoEventFactory @Inject constructor(
                 type = EventType.POLL_END,
                 content = content.toContent(),
                 unsignedData = UnsignedData(age = null, transactionId = localId))
+    }
+
+    fun createLocationEvent(roomId: String,
+                            latitude: Double,
+                            longitude: Double,
+                            uncertainty: Double?): Event {
+        val geoUri = buildGeoUri(latitude, longitude, uncertainty)
+        val content = MessageLocationContent(
+                geoUri = geoUri,
+                body = geoUri,
+                locationInfo = LocationInfo(
+                        geoUri = geoUri,
+                        description = geoUri
+                ),
+                locationAsset = LocationAsset(
+                        type = LocationAssetType.SELF
+                ),
+                ts = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()),
+                text = geoUri
+        )
+        return createMessageEvent(roomId, content)
     }
 
     fun createReplaceTextOfReply(roomId: String,
@@ -236,13 +294,16 @@ internal class LocalEchoEventFactory @Inject constructor(
                 ))
     }
 
-    fun createMediaEvent(roomId: String, attachment: ContentAttachmentData): Event {
+    fun createMediaEvent(roomId: String,
+                         attachment: ContentAttachmentData,
+                         rootThreadEventId: String?
+    ): Event {
         return when (attachment.type) {
-            ContentAttachmentData.Type.IMAGE         -> createImageEvent(roomId, attachment)
-            ContentAttachmentData.Type.VIDEO         -> createVideoEvent(roomId, attachment)
-            ContentAttachmentData.Type.AUDIO         -> createAudioEvent(roomId, attachment, isVoiceMessage = false)
-            ContentAttachmentData.Type.VOICE_MESSAGE -> createAudioEvent(roomId, attachment, isVoiceMessage = true)
-            ContentAttachmentData.Type.FILE          -> createFileEvent(roomId, attachment)
+            ContentAttachmentData.Type.IMAGE         -> createImageEvent(roomId, attachment, rootThreadEventId)
+            ContentAttachmentData.Type.VIDEO         -> createVideoEvent(roomId, attachment, rootThreadEventId)
+            ContentAttachmentData.Type.AUDIO         -> createAudioEvent(roomId, attachment, isVoiceMessage = false, rootThreadEventId = rootThreadEventId)
+            ContentAttachmentData.Type.VOICE_MESSAGE -> createAudioEvent(roomId, attachment, isVoiceMessage = true, rootThreadEventId = rootThreadEventId)
+            ContentAttachmentData.Type.FILE          -> createFileEvent(roomId, attachment, rootThreadEventId)
         }
     }
 
@@ -265,7 +326,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 unsignedData = UnsignedData(age = null, transactionId = localId))
     }
 
-    private fun createImageEvent(roomId: String, attachment: ContentAttachmentData): Event {
+    private fun createImageEvent(roomId: String, attachment: ContentAttachmentData, rootThreadEventId: String?): Event {
         var width = attachment.width
         var height = attachment.height
 
@@ -289,12 +350,19 @@ internal class LocalEchoEventFactory @Inject constructor(
                         height = height?.toInt() ?: 0,
                         size = attachment.size
                 ),
-                url = attachment.queryUri.toString()
+                url = attachment.queryUri.toString(),
+                relatesTo = rootThreadEventId?.let {
+                    RelationDefaultContent(
+                            type = RelationType.IO_THREAD,
+                            eventId = it,
+                            inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
+                    )
+                }
         )
         return createMessageEvent(roomId, content)
     }
 
-    private fun createVideoEvent(roomId: String, attachment: ContentAttachmentData): Event {
+    private fun createVideoEvent(roomId: String, attachment: ContentAttachmentData, rootThreadEventId: String?): Event {
         val mediaDataRetriever = MediaMetadataRetriever()
         mediaDataRetriever.setDataSource(context, attachment.queryUri)
 
@@ -325,12 +393,23 @@ internal class LocalEchoEventFactory @Inject constructor(
                         thumbnailUrl = attachment.queryUri.toString(),
                         thumbnailInfo = thumbnailInfo
                 ),
-                url = attachment.queryUri.toString()
+                url = attachment.queryUri.toString(),
+                relatesTo = rootThreadEventId?.let {
+                    RelationDefaultContent(
+                            type = RelationType.IO_THREAD,
+                            eventId = it,
+                            inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
+                    )
+                }
         )
         return createMessageEvent(roomId, content)
     }
 
-    private fun createAudioEvent(roomId: String, attachment: ContentAttachmentData, isVoiceMessage: Boolean): Event {
+    private fun createAudioEvent(roomId: String,
+                                 attachment: ContentAttachmentData,
+                                 isVoiceMessage: Boolean,
+                                 rootThreadEventId: String?
+    ): Event {
         val content = MessageAudioContent(
                 msgType = MessageType.MSGTYPE_AUDIO,
                 body = attachment.name ?: "audio",
@@ -344,12 +423,19 @@ internal class LocalEchoEventFactory @Inject constructor(
                         duration = attachment.duration?.toInt(),
                         waveform = waveformSanitizer.sanitize(attachment.waveform)
                 ),
-                voiceMessageIndicator = if (!isVoiceMessage) null else emptyMap()
+                voiceMessageIndicator = if (!isVoiceMessage) null else emptyMap(),
+                relatesTo = rootThreadEventId?.let {
+                    RelationDefaultContent(
+                            type = RelationType.IO_THREAD,
+                            eventId = it,
+                            inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
+                    )
+                }
         )
         return createMessageEvent(roomId, content)
     }
 
-    private fun createFileEvent(roomId: String, attachment: ContentAttachmentData): Event {
+    private fun createFileEvent(roomId: String, attachment: ContentAttachmentData, rootThreadEventId: String?): Event {
         val content = MessageFileContent(
                 msgType = MessageType.MSGTYPE_FILE,
                 body = attachment.name ?: "file",
@@ -357,7 +443,14 @@ internal class LocalEchoEventFactory @Inject constructor(
                         mimeType = attachment.getSafeMimeType()?.takeIf { it.isNotBlank() },
                         size = attachment.size
                 ),
-                url = attachment.queryUri.toString()
+                url = attachment.queryUri.toString(),
+                relatesTo = rootThreadEventId?.let {
+                    RelationDefaultContent(
+                            type = RelationType.IO_THREAD,
+                            eventId = it,
+                            inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(it))
+                    )
+                }
         )
         return createMessageEvent(roomId, content)
     }
@@ -367,6 +460,7 @@ internal class LocalEchoEventFactory @Inject constructor(
     }
 
     fun createEvent(roomId: String, type: String, content: Content?): Event {
+        val newContent = enhanceStickerIfNeeded(type, content) ?: content
         val localId = LocalEcho.createLocalEchoId()
         return Event(
                 roomId = roomId,
@@ -374,19 +468,65 @@ internal class LocalEchoEventFactory @Inject constructor(
                 senderId = userId,
                 eventId = localId,
                 type = type,
-                content = content,
+                content = newContent,
                 unsignedData = UnsignedData(age = null, transactionId = localId)
         )
+    }
+
+    /**
+     * Enhance sticker to support threads fallback if needed
+     */
+    private fun enhanceStickerIfNeeded(type: String, content: Content?): Content? {
+        var newContent: Content? = null
+        if (type == EventType.STICKER) {
+            val isThread = (content.toModel<MessageStickerContent>())?.relatesTo?.type == RelationType.IO_THREAD
+            val rootThreadEventId = (content.toModel<MessageStickerContent>())?.relatesTo?.eventId
+            if (isThread && rootThreadEventId != null) {
+                val newRelationalDefaultContent = (content.toModel<MessageStickerContent>())?.relatesTo?.copy(
+                        inReplyTo = ReplyToContent(eventId = localEchoRepository.getLatestThreadEvent(rootThreadEventId))
+                )
+                newContent = (content.toModel<MessageStickerContent>())?.copy(
+                        relatesTo = newRelationalDefaultContent
+                ).toContent()
+            }
+        }
+        return newContent
+    }
+
+    /**
+     * Creates a thread event related to the already existing root event
+     */
+    fun createThreadTextEvent(
+            rootThreadEventId: String,
+            roomId: String,
+            text: CharSequence,
+            msgType: String,
+            autoMarkdown: Boolean,
+            formattedText: String?): Event {
+        val content = formattedText?.let { TextContent(text.toString(), it) } ?: createTextContent(text, autoMarkdown)
+        return createEvent(
+                roomId,
+                EventType.MESSAGE,
+                content.toThreadTextContent(
+                        rootThreadEventId = rootThreadEventId,
+                        latestThreadEventId = localEchoRepository.getLatestThreadEvent(rootThreadEventId),
+                        msgType = msgType)
+                        .toContent())
     }
 
     private fun dummyOriginServerTs(): Long {
         return System.currentTimeMillis()
     }
 
+    /**
+     * Creates a reply to a regular timeline Event or a thread Event if needed
+     */
     fun createReplyTextEvent(roomId: String,
                              eventReplied: TimelineEvent,
                              replyText: CharSequence,
-                             autoMarkdown: Boolean): Event? {
+                             autoMarkdown: Boolean,
+                             rootThreadEventId: String? = null,
+                             showInThread: Boolean): Event? {
         // Fallbacks and event representation
         // TODO Add error/warning logs when any of this is null
         val permalink = permalinkFactory.createPermalink(eventReplied.root, false) ?: return null
@@ -417,10 +557,32 @@ internal class LocalEchoEventFactory @Inject constructor(
                 format = MessageFormat.FORMAT_MATRIX_HTML,
                 body = replyFallback,
                 formattedBody = replyFormatted,
-                relatesTo = RelationDefaultContent(null, null, ReplyToContent(eventId))
-        )
+                relatesTo = generateReplyRelationContent(
+                        eventId = eventId,
+                        rootThreadEventId = rootThreadEventId,
+                        showAsReply = showInThread))
         return createMessageEvent(roomId, content)
     }
+
+    /**
+     * Generates the appropriate relatesTo object for a reply event.
+     * It can either be a regular reply or a reply within a thread
+     * "m.relates_to": {
+     *      "rel_type": "m.thread",
+     *      "event_id": "$thread_root",
+     *      "m.in_reply_to": {
+     *          "event_id": "$event_target",
+     *          "render_in": ["m.thread"]
+     *        }
+     *   }
+     */
+    private fun generateReplyRelationContent(eventId: String, rootThreadEventId: String? = null, showAsReply: Boolean): RelationDefaultContent =
+            rootThreadEventId?.let {
+                RelationDefaultContent(
+                        type = RelationType.IO_THREAD,
+                        eventId = it,
+                        inReplyTo = ReplyToContent(eventId = eventId, renderIn = if (showAsReply) arrayListOf("m.thread") else null))
+            } ?: RelationDefaultContent(null, null, ReplyToContent(eventId = eventId))
 
     private fun buildFormattedReply(permalink: String, userLink: String, userId: String, bodyFormatted: String, newBodyFormatted: String): String {
         return REPLY_PATTERN.format(
@@ -432,6 +594,7 @@ internal class LocalEchoEventFactory @Inject constructor(
                 newBodyFormatted
         )
     }
+
     private fun buildReplyFallback(body: TextContent, originalSenderId: String?, newBodyText: String): String {
         return buildString {
             append("> <")
@@ -480,6 +643,23 @@ internal class LocalEchoEventFactory @Inject constructor(
         }
     }
 
+    /**
+     * Returns RFC5870 formatted geo uri 'geo:latitude,longitude;uncertainty' like 'geo:40.05,29.24;30'
+     * Uncertainty of the location is in meters and not required.
+     */
+    private fun buildGeoUri(latitude: Double, longitude: Double, uncertainty: Double?): String {
+        return buildString {
+            append("geo:")
+            append(latitude)
+            append(",")
+            append(longitude)
+            uncertainty?.let {
+                append(";")
+                append(it)
+            }
+        }
+    }
+
     /*
      * {
         "content": {
@@ -520,11 +700,28 @@ internal class LocalEchoEventFactory @Inject constructor(
             quotedEvent: TimelineEvent,
             text: String,
             autoMarkdown: Boolean,
+            rootThreadEventId: String?
     ): Event {
         val messageContent = quotedEvent.getLastMessageContent()
         val textMsg = messageContent?.body
         val quoteText = legacyRiotQuoteText(textMsg, text)
-        return createFormattedTextEvent(roomId, markdownParser.parse(quoteText, force = true, advanced = autoMarkdown), MessageType.MSGTYPE_TEXT)
+
+        return if (rootThreadEventId != null) {
+            createMessageEvent(
+                    roomId,
+                    markdownParser
+                            .parse(quoteText, force = true, advanced = autoMarkdown)
+                            .toThreadTextContent(
+                                    rootThreadEventId = rootThreadEventId,
+                                    latestThreadEventId = localEchoRepository.getLatestThreadEvent(rootThreadEventId),
+                                    msgType = MessageType.MSGTYPE_TEXT)
+            )
+        } else {
+            createFormattedTextEvent(
+                    roomId,
+                    markdownParser.parse(quoteText, force = true, advanced = autoMarkdown),
+                    MessageType.MSGTYPE_TEXT)
+        }
     }
 
     private fun legacyRiotQuoteText(quotedText: String?, myText: String): String {
@@ -558,6 +755,7 @@ internal class LocalEchoEventFactory @Inject constructor(
         // </mx-reply>
         // No whitespace because currently breaks temporary formatted text to Span
         const val REPLY_PATTERN = """<mx-reply><blockquote><a href="%s">In reply to</a> <a href="%s">%s</a><br />%s</blockquote></mx-reply>%s"""
+        const val QUOTE_PATTERN = """<blockquote><p>%s</p></blockquote><p>%s</p>"""
 
         // This is used to replace inner mx-reply tags
         val MX_REPLY_REGEX = "<mx-reply>.*</mx-reply>".toRegex()

@@ -7,7 +7,7 @@
     <string name="notice_room_join">%1$s hyri në dhomë</string>
     <string name="notice_room_leave">%1$s doli nga dhoma</string>
     <string name="notice_room_reject">%1$s hodhi tej ftesën</string>
-    <string name="notice_room_kick">%1$s përzuri %2$s</string>
+    <string name="notice_room_remove">%1$s përzuri %2$s</string>
     <string name="notice_room_ban">%1$s dëboi %2$s</string>
     <string name="notice_avatar_url_changed">%1$s ndryshoi avatarin e vet</string>
     <string name="notice_room_topic_changed">%1$s ndryshoi temën në: %2$s</string>
@@ -88,7 +88,7 @@
     <string name="notice_room_join_with_reason">%1$s erdhi në dhomë. Arsye: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s doli nga dhoma. Arsye: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s hodhi poshtë ftesën. Arsye: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s përzuri %2$s. Arsye: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s përzuri %2$s. Arsye: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s hoqi dëbimin për %2$s. Arsye: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s dëboi %2$s. Arsye: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s dërgoi një ftesë për %2$s për të ardhur në dhomë. Arsye: %3$s</string>
@@ -119,7 +119,7 @@
     <string name="notice_room_join_by_you">Hytë në dhomë</string>
     <string name="notice_room_leave_by_you">Dolët nga dhoma</string>
     <string name="notice_room_reject_by_you">Hodhët poshtë ftesën</string>
-    <string name="notice_room_kick_by_you">Përzutë %1$s</string>
+    <string name="notice_room_remove_by_you">Përzutë %1$s</string>
     <string name="notice_room_unban_by_you">Hoqët dëbimin për %1$s</string>
     <string name="notice_room_ban_by_you">Dëbuat %1$s</string>
     <string name="notice_room_withdraw_by_you">Tërhoqët mbrapsht ftesën për %1$s</string>
@@ -168,7 +168,7 @@
     <string name="notice_room_join_with_reason_by_you">Erdhët në dhomë, Arsye: %1$s</string>
     <string name="notice_room_leave_with_reason_by_you">Ikët nga dhoma. Arsye: %1$s</string>
     <string name="notice_room_reject_with_reason_by_you">Hodhët poshtë ftesën. Arsye: %1$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Përzutë %1$s. Arsye: %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Përzutë %1$s. Arsye: %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">Hoqët dëbimin për %1$s. Arsye: %2$s</string>
     <string name="notice_room_ban_with_reason_by_you">Dëbuat %1$s. Arsye: %2$s</string>
     <string name="notice_room_third_party_invite_with_reason_by_you">Dërguat një ftesë për %1$s të vijë në dhomë. Arsye: %2$s</string>
@@ -477,7 +477,6 @@
     </plurals>
     <string name="room_participants_leave_prompt_title">Dilni nga dhoma</string>
     <string name="room_participants_leave_prompt_msg">Jeni i sigurt se doni të dilni nga dhoma?</string>
-    <string name="room_participants_remove_prompt_msg">Jeni i sigurt se doni të hiqet %s nga kjo fjalosje?</string>
     <string name="room_participants_create">Krijoje</string>
     <string name="room_participants_online">Në linjë</string>
     <string name="room_participants_offline">Jo në linjë</string>
@@ -490,10 +489,9 @@
     <string name="room_participants_header_devices">SESIONE</string>
     <string name="room_participants_action_invite">Ftoje</string>
     <string name="room_participants_action_leave">Braktiseni këtë dhomë</string>
-    <string name="room_participants_action_remove">Hiqeni prej kësaj dhome</string>
     <string name="room_participants_action_ban">Dëboje</string>
     <string name="room_participants_action_unban">Hiqja dëbimin</string>
-    <string name="room_participants_action_kick">Përzëre</string>
+    <string name="room_participants_action_remove">Përzëre</string>
     <string name="room_participants_action_set_default_power_level">Rikthejeni në përdorues normal</string>
     <string name="room_participants_action_set_moderator">Kalojeni moderator</string>
     <string name="room_participants_action_set_admin">Kalojeni përgjegjës</string>
@@ -502,7 +500,7 @@
     <string name="room_participants_invite_search_another_user">ID Përdoruesi, Emër ose email-i</string>
     <string name="room_participants_action_mention">Përmendje</string>
     <string name="room_participants_action_devices_list">Shfaq Listë Sesionesh</string>
-    <string name="room_participants_ban_prompt_msg">Dëbimi i përdoruesit do ta përzërë atë nga kjo dhomë dhe do t’i pengojë atij rihyrjen.</string>
+    <string name="room_participants_ban_prompt_msg">Dëbimi i përdoruesit do ta heqë atë nga kjo dhomë dhe do t’i pengojë atij rihyrjen.</string>
     <string name="reason_hint">Arsye</string>
     <string name="room_participants_invite_prompt_msg">Jeni i sigurt se doni të ftohet %s te kjo fjalosje?</string>
     <string name="room_participants_invite_join_names">"%1$s, "</string>
@@ -800,7 +798,7 @@
     <string name="command_description_join_room">Hyn te dhoma me adresën e dhënë</string>
     <string name="command_description_part_room">Dilni nga dhoma</string>
     <string name="command_description_topic">Caktoni temë dhome</string>
-    <string name="command_description_kick_user">Përzë përdoruesin me ID-në e dhënë</string>
+    <string name="command_description_remove_user">Përzë përdoruesin me ID-në e dhënë</string>
     <string name="command_description_nick">Ndryshon nofkën tuaj në ekran</string>
     <string name="markdown_has_been_enabled">Markdown është i aktivizuar.</string>
     <string name="markdown_has_been_disabled">Markdown është çaktivizuar.</string>
@@ -830,7 +828,7 @@
         <item quantity="one">%d dhomë</item>
         <item quantity="other">%d dhoma</item>
     </plurals>
-    <string name="has_been_kicked">Jeni përzënë prej %1$s nga %2$s</string>
+    <string name="has_been_removed">Jeni përzënë prej %1$s nga %2$s</string>
     <string name="has_been_banned">Jeni dëbuar prej %1$s nga %2$s</string>
     <string name="reason_colon">Arsye: %1$s</string>
     <string name="rejoin">Rifutuni</string>
@@ -1050,7 +1048,7 @@
     <string name="settings_inline_url_preview_summary">Parashihini lidhjet brenda fjalosjes, kur shërbyesi juaj home e mbulon këtë veçori.</string>
     <string name="settings_send_typing_notifs_summary">Lejojuni përdoruesve të tjerë të dinë se po shtypni.</string>
     <string name="settings_send_markdown_summary">Formatojini mesazhet duke përdorur sintaksën Markdown përpara se të dërgohen. Kjo lejon formatim të thelluar, f.v., përdorimi i yllthit për ta shfaqur tekstin me të pjerrëta.</string>
-    <string name="settings_show_join_leave_messages_summary">Nuk prek ftesat, përzëniet dhe dëbimet.</string>
+    <string name="settings_show_join_leave_messages_summary">Nuk prek ftesat, heqjet dhe dëbimet.</string>
     <string name="template_startup_notification_privacy_message">${app_name}-i mund të xhirojë në prapaskenë që të administrojë njoftimet tuaja në rrugë të sigurt dhe privatisht. Kjo mund të ndikojë në harxhimin e baterisë.</string>
     <string name="template_settings_opt_in_of_analytics_summary">${app_name}-i grumbullon të dhëna analitike anonime që të na lejojë ta përmirësojmë aplikacionin.</string>
     <string name="template_settings_opt_in_of_analytics_prompt">Ju lutemi, aktivizoni analizat që të na ndihmoni të përmirësojmë ${app_name}-in.</string>
@@ -1125,11 +1123,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">Token-i FCM u regjistrua me sukses te shërbyesi Home.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">S’u arrit të regjistrohej token FCM te shërbyesi Home:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Shërbim Njoftimesh</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Shërbimi i Njoftimeve po xhiron.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Shërbimi i Njoftimeve s’po xhiron.
-\nProvoni të rinisni aplikacionin.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Nise Shërbimin</string>
     <string name="settings_troubleshoot_test_service_restart_title">Vetërinisje Shërbimi Njoftimesh</string>
     <string name="settings_troubleshoot_test_service_restart_success">Shërbimi u asgjësua dhe u rinis automatikisht.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">S’u arrit të rinisej shërbimi</string>
@@ -2188,9 +2181,9 @@
     <string name="room_participants_action_unignore_prompt_msg">Heqja e shpërfilljes së këtij përdoruesi do të shfaqë sërish krejt mesazhet prej tij.</string>
     <string name="room_participants_action_cancel_invite_title">Anuloje ftesën</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Jeni i sigurt se doni të anulohet ftesa për këtë përdorues\?</string>
-    <string name="room_participants_kick_title">Përzëre përdoruesin</string>
-    <string name="room_participants_kick_reason">Arsye për përzënie</string>
-    <string name="room_participants_kick_prompt_msg">Përzënia e përdoruesit do ta heqë prej kësaj dhome.
+    <string name="room_participants_remove_title">Përzëre përdoruesin</string>
+    <string name="room_participants_remove_reason">Arsye për përzënie</string>
+    <string name="room_participants_remove_prompt_msg">Përzënia e përdoruesit do ta heqë prej kësaj dhome.
 \n
 \nQë të pengohet pjesëmarrja sërish e tij, duhet ta dëboni.</string>
     <string name="room_participants_ban_title">Dëboje përdoruesin</string>
@@ -2208,7 +2201,7 @@
         <item quantity="other">%d sekonda</item>
     </plurals>
     <string name="settings_show_room_member_state_events">Shfaq akte gjendjeje përdoruesish të dhomës</string>
-    <string name="settings_show_room_member_state_events_summary">Përfshin akte ftimi/pjesëmarrjeje/ikjeje/përzënieje/dëbimi dhe ndryshime emri avatari/shfaqjeje.</string>
+    <string name="settings_show_room_member_state_events_summary">Përfshin akte ftimi/pjesëmarrjeje/ikjeje/heqjeje/dëbimi dhe ndryshime emri avatari/shfaqjeje.</string>
     <string name="settings_secure_backup_section_title">Kopjeruajtje e Sigurt</string>
     <string name="settings_secure_backup_manage">Administroni</string>
     <string name="settings_secure_backup_setup">Ujdisni Kopjeruajtje të Sigurt</string>
@@ -2557,7 +2550,7 @@
     <string name="room_permissions_notify_everyone">Të njoftojë gjithkënd</string>
     <string name="room_permissions_remove_messages_sent_by_others">Të heqë mesazhe dërguar nga të tjerët</string>
     <string name="room_permissions_ban_users">Të dëbojë përdorues</string>
-    <string name="room_permissions_kick_users">Të përzërë përdorues</string>
+    <string name="room_permissions_remove_users">Të përzërë përdorues</string>
     <string name="room_permissions_change_settings">Të ndryshojë rregullime</string>
     <string name="room_permissions_invite_users">Të ftojë përdorues</string>
     <string name="room_permissions_send_messages">Të dërgojë mesazhe</string>
@@ -2874,8 +2867,8 @@
     <string name="call_tap_to_return">%1$s Prekeni që të kthehet</string>
     <string name="call_one_active">Thirrje aktive (%1$s) ·</string>
     <plurals name="call_active_status">
-        <item quantity="one">Thirrje aktive</item>
-        <item quantity="other">%1$d thirrje aktive</item>
+        <item quantity="one">Thirrje aktive ·</item>
+        <item quantity="other">%1$d thirrje aktive ·</item>
     </plurals>
     <string name="call_tile_connection_failed">Lidhja dështoi</string>
     <string name="call_tile_no_answer">S’ka përgjigje</string>
@@ -2920,7 +2913,7 @@
     <string name="you_will_leave_all_in">Do të braktisni krejt dhomat dhe hapësirat te %s.</string>
     <string name="leave_all_rooms_and_spaces">Braktis krejt dhomat dhe hapësirat</string>
     <string name="space_leave_prompt_msg_with_name">Jeni i sigurt se doni të dilni nga \'%s\?</string>
-    <string name="discovery_section">Zbulim (%S)</string>
+    <string name="discovery_section">Zbulim (%s)</string>
     <string name="finish_setup">Përfundoje ujdisjen</string>
     <string name="discovery_invite">Ftoni me email, gjeni kontakte, etj…</string>
     <string name="finish_setting_up_discovery">Përfundo ujdisjen e zbulimit.</string>
@@ -2952,8 +2945,8 @@
     <string name="space_settings_permissions_subtitle">Të shohë dhe përditësojë role të domosdoshëm për të ndryshuar anë të ndryshme të hapësirës.</string>
     <string name="space_settings_permissions_title">Leje hapësire</string>
     <string name="space_participants_unban_prompt_msg">Heqja e dëbimit përdoruesit do t’i lejojë të marrë pjesë sërish në hapësirë.</string>
-    <string name="space_participants_ban_prompt_msg">Dëbimi i përdoruesit do ta përzërë atë nga kjo hapësirë dhe do t’i pengojë atij rihyrjen.</string>
-    <string name="space_participants_kick_prompt_msg">Përzënia e përdoruesit do ta heqë prej kësaj hapësire.
+    <string name="space_participants_ban_prompt_msg">Dëbimi i përdoruesit do ta heqë atë nga kjo hapësirë dhe do t’i pengojë atij rihyrjen.</string>
+    <string name="space_participants_remove_prompt_msg">Përzënia e përdoruesit do ta heqë prej kësaj hapësire.
 \n
 \nQë të pengohet pjesëmarrja sërish e tij, duhet ta dëboni.</string>
     <string name="a11y_stop_voice_message">Ndale Regjistrimin</string>
@@ -3000,7 +2993,6 @@
     <string name="delete_poll_dialog_title">Hiqe pyetësorin</string>
     <string name="poll_end_room_list_preview">Pyetësori përfundoi</string>
     <string name="poll_response_room_list_preview">U votua</string>
-    <string name="labs_enable_polls">Aktivizo Pyetësorë</string>
     <string name="end_poll_confirmation_approve_button">Përfundoje pyetësorin</string>
     <string name="end_poll_confirmation_description">Kjo do t’ua bëjë njerëzve të pamundur të votojnë dhe do të shfaqë rezultatet përfundimtare të pyetësorit.</string>
     <string name="end_poll_confirmation_title">Të përfundohet pyetësori\?</string>
@@ -3040,10 +3032,56 @@
     <string name="analytics_opt_in_title">Ndihmoni të përmirësohet Element-in</string>
     <string name="action_enable">Aktivizoje</string>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
-        <item quantity="one">S’ka vota të hedhura</item>
-        <item quantity="other">%1$d votë e hedhur. Votoni, që të shihni përfundimet</item>
+        <item quantity="one">%1$d votë e hedhur. Votoni, që të shihni përfundimet</item>
+        <item quantity="other">%1$d vota të hedhur. Votoni, që të shihni përfundimet</item>
     </plurals>
     <string name="restart_the_application_to_apply_changes">Që ndryshimi të hyjë në fuqi, rinisni aplikacionin.</string>
     <string name="labs_enable_latex_maths">Aktivizo elementë LaTeX për matematikë</string>
     <string name="room_error_access_unauthorized">S’keni leje të hyni në këtë dhomë</string>
+    <string name="tooltip_attachment_poll">Krijoni anketim</string>
+    <string name="tooltip_attachment_contact">Hap kontakte</string>
+    <string name="tooltip_attachment_sticker">Dërgoni ngjitës</string>
+    <string name="tooltip_attachment_file">Ngarkoni kartelë</string>
+    <string name="tooltip_attachment_gallery">Dërgoni figura dhe video</string>
+    <string name="tooltip_attachment_photo">Hapni kamerën</string>
+    <string name="labs_auto_report_uisi_desc">Sistemi juaj do të dërgojë automatikisht regjistra, kur ndodh një gabim “s’arrihet të shfshehtëzohet”</string>
+    <string name="labs_auto_report_uisi">Raporto Vetvetiu Gabime Shfshehtëzimi.</string>
+    <string name="room_member_override_nick_color">Anashkalo ngjyrë nofke</string>
+    <string name="login_splash_already_have_account">Kam tashmë një llogari</string>
+    <string name="ftue_auth_carousel_3_title">Shkëmbim i siguruar mesazhesh.</string>
+    <string name="ftue_auth_carousel_2_title">Kontrollin e keni ju.</string>
+    <string name="ftue_auth_carousel_1_title">Jini zot i bisedave tuaja.</string>
+    <string name="tooltip_attachment_location">Jepe vendndodhjen</string>
+    <string name="settings_enable_location_sharing">Aktivizoni dhënie vendndodhjeje</string>
+    <string name="location_share">Jepe vendndodhjen</string>
+    <string name="a11y_location_share_icon">Jepe vendndodhjen</string>
+    <string name="location_activity_title_preview">Vendndodhje</string>
+    <string name="location_activity_title_static_sharing">Jepe vendndodhjen</string>
+    <string name="closed_poll_option_description">Përfundimet shfaqen vetëm kur përfundoni anketimin</string>
+    <string name="closed_poll_option_title">Anketim i mbyllur</string>
+    <string name="open_poll_option_description">Votuesit do të shohin përfundime sapo të kenë votuar</string>
+    <string name="open_poll_option_title">Anketim i hapur</string>
+    <string name="poll_type_title">Lloj anketimi</string>
+    <string name="login_splash_create_account">Krijoni llogari</string>
+    <string name="ftue_auth_carousel_title_messaging">Shkëmbim mesazhesh për ekipin tuaj.</string>
+    <string name="ftue_auth_carousel_body_encrypted">I fshehtëzuar skaj më skaj dhe pa u dashur numër telefoni. Pa reklama, apo shfrytëzim të dhënash.</string>
+    <string name="ftue_auth_carousel_body_control">Zgjidhni ku mbahen bisedat tuaja, duke ju dhënë kontroll dhe pavarësi. Të lidhur përmes Matrix-i.</string>
+    <string name="ftue_auth_carousel_body_secure">Komunikim i sigurt dhe i pavarur, që ju jep të njëjtën shkallë privatësie si biseda kokë më kokë, në shtëpinë tuaj.</string>
+    <string name="labs_render_locations_in_timeline">Trego vendndodhje përdoruesi në rrjedhën kohore</string>
+    <string name="settings_enable_location_sharing_summary">Pasi të aktivizohet, do të jeni në gjendje të dërgoni vendndodhjen tuaj në çfarëdo dhome</string>
+    <string name="location_share_external">Hape me</string>
+    <string name="template_location_not_available_dialog_content">${app_name} s’njohu dot vendndodhjen tuaj. Ju lutemi, riprovoni më vonë.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} s’mësoi dot vendndodhjen tuaj</string>
+    <string name="edit_poll_button">PËRPUNONI ANKETIMIN</string>
+    <string name="edit_poll_title">Përpunoni anketimin</string>
+    <string name="poll_no_votes_cast">S’janë hedhur vota</string>
+    <string name="a11y_trust_level_misconfigured">Shkallë besueshmërie e formësuar gabim</string>
+    <string name="encryption_misconfigured">Fshehtëzimi është formësuar gabim</string>
+    <string name="room_profile_section_restore_security">Riktheni Fshehtëzimin</string>
+    <string name="contact_admin_to_restore_encryption">Ju lutemi, lidhuni me një nga përgjegjësit, që ta ktheni fshehtëzimin në një gjendje të vlefshme.</string>
+    <string name="encryption_has_been_misconfigured">Fshehtëzimi është formësuar gabim.</string>
+    <string name="sent_location">Tregoi vendndodhjen e vet</string>
+    <string name="attachment_type_location">Vendndodhje</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">Fshehtëzimi është formësuar keq, që të mos dërgoni mesazhe. Klikoni që të hapni rregullimet.</string>
+    <string name="room_unsupported_e2e_algorithm">Fshehtëzimi është formësuar keq, që të mos dërgoni mesazhe. Ju lutemi, lidhuni me një nga përgjegjësit që ta ktheni fshehtëzimin në një gjendje të vlefshme.</string>
 </resources>

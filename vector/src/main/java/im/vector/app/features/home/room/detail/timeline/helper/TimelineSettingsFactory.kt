@@ -22,9 +22,11 @@ import javax.inject.Inject
 
 class TimelineSettingsFactory @Inject constructor(private val userPreferencesProvider: UserPreferencesProvider) {
 
-    fun create(): TimelineSettings {
+    fun create(rootThreadEventId: String?): TimelineSettings {
         return TimelineSettings(
                 initialSize = 30,
-                buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts())
+                buildReadReceipts = userPreferencesProvider.shouldShowReadReceipts(),
+                rootThreadEventId = rootThreadEventId
+        )
     }
 }

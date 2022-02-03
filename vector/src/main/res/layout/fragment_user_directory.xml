@@ -43,7 +43,6 @@
 
                     <TextView
                         android:id="@+id/userDirectoryTitle"
-                        style="@style/Widget.Vector.TextView.HeadlineMedium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -51,6 +50,7 @@
                         android:ellipsize="end"
                         android:maxLines="1"
                         android:text="@string/direct_chats_header"
+                        android:textAppearance="@style/TextAppearance.Vector.Widget.ActionBarTitle"
                         android:textColor="?vctr_content_primary"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"

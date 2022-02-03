@@ -11,7 +11,7 @@
     <string name="notice_room_join">%1$s entrou</string>
     <string name="notice_room_leave">%1$s saíu</string>
     <string name="notice_room_reject">%1$s rexeitou o convite</string>
-    <string name="notice_room_kick">%1$s expulsou a %2$s</string>
+    <string name="notice_room_remove">%1$s expulsou a %2$s</string>
     <string name="notice_room_unban">%1$s desbloqueou a %2$s</string>
     <string name="notice_room_ban">%1$s bloqueou a %2$s</string>
     <string name="notice_room_withdraw">%1$s cancelou o convite de %2$s</string>
@@ -63,7 +63,7 @@
     <string name="notice_room_withdraw_by_you">Retirácheslle o convite a %1$s</string>
     <string name="notice_room_ban_by_you">Vetaches a %1$s</string>
     <string name="notice_room_unban_by_you">Readmitiches a %1$s</string>
-    <string name="notice_room_kick_by_you">Expulsaches a %1$s</string>
+    <string name="notice_room_remove_by_you">Expulsaches a %1$s</string>
     <string name="notice_room_reject_by_you">Rexeitaches o convite</string>
     <string name="notice_direct_room_leave_by_you">Deixaches a sala</string>
     <string name="notice_direct_room_leave">%1$s deixou a sala</string>
@@ -109,8 +109,8 @@
     <string name="notice_room_ban_with_reason">%1$s vetou a %2$s. Razón: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Retirácheslle o veto a %1$s. Razón: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s retirou o veto a %2$s. Razón: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Expulsaches a %1$s. Razón: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s expulsou a %2$s. Razón: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Expulsaches a %1$s. Razón: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s expulsou a %2$s. Razón: %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">Rexeitaches o convite. Razón: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s rexeitou o convite. Razón: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Saíches. Razón: %1$s</string>
@@ -684,7 +684,7 @@
     <string name="filter_group_members">Filtrar os membros do grupo</string>
     <string name="filter_group_rooms">Filtrar as salas dos grupos</string>
     <string name="group_no_long_description">O administrador da comunidade non fixo unha descrición longa desta comunidade.</string>
-    <string name="has_been_kicked">Foi expulsado de %1$s por %2$s</string>
+    <string name="has_been_removed">Foi expulsado de %1$s por %2$s</string>
     <string name="has_been_banned">Foi bloqueado de %1$s por %2$s</string>
     <string name="reason_colon">Motivo: %1$s</string>
     <string name="rejoin">Volver a unirse</string>
@@ -766,7 +766,6 @@
     <string name="room_participants_header_call">Chamar</string>
     <string name="room_participants_header_devices">DISPOSITIVOS</string>
     <string name="room_participants_action_leave">Deixar a sala</string>
-    <string name="room_participants_action_remove">Borrar desta sala</string>
     <string name="room_unsent_messages_notification">Mensaxes non enviadas. %1$s ou %2$s agora?</string>
     <string name="ssl_do_not_trust">Non confiar</string>
     <string name="ssl_fingerprint_hash">Pegada (%s):</string>

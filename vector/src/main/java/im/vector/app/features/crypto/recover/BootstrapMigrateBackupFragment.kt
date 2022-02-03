@@ -33,12 +33,12 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
-import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.utils.colorizeMatchingText
 import im.vector.app.core.utils.startImportTextFromFileIntent
 import im.vector.app.databinding.FragmentBootstrapMigrateBackupBinding
+import im.vector.lib.core.utils.flow.throttleFirst
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.tryOrNull

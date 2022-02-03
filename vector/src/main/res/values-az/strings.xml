@@ -10,7 +10,7 @@
     <string name="notice_room_join">%1$s qoşuldu</string>
     <string name="notice_room_leave">%1$s qalıb</string>
     <string name="notice_room_reject">%1$s dəvəti rədd etdi</string>
-    <string name="notice_room_kick">%1$s %2$s-i xaric etdi</string>
+    <string name="notice_room_remove">%1$s %2$s-i xaric etdi</string>
     <string name="notice_room_unban">%1$s %2$s-i blokdan açdı</string>
     <string name="notice_room_ban">%1$s %2$s-i blokladı</string>
     <string name="notice_room_withdraw">%1$s %2$s-in dəvətini geri götürdü</string>
@@ -105,7 +105,7 @@
     <string name="notice_room_join_with_reason">%1$s qoşuldu. Səbəb: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s qalıb. Səbəb: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s dəvəti rədd etdi. Səbəb: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s %2$s-i xaric etdi. Səbəb: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s %2$s-i xaric etdi. Səbəb: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s blokdan açdı %2$s. Səbəb: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s blokladı %2$s. Səbəb: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s otağa qoşulmaq üçün %2$s dəvətnamə göndərdi. Səbəb: %3$s</string>

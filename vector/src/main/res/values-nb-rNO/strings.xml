@@ -131,7 +131,7 @@
     <string name="room_participants_action_invite">Inviter</string>
     <string name="room_participants_action_ban">Utesteng</string>
     <string name="room_participants_action_unban">Opphev utestengelse</string>
-    <string name="room_participants_action_kick">Spark ut</string>
+    <string name="room_participants_action_remove">Spark ut</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
     <string name="room_menu_search">Søk</string>
     <string name="room_message_file_not_found">Filen ble ikke funnet</string>
@@ -673,7 +673,6 @@
     <string name="room_participants_ago">%1$s for %2$s siden</string>
     <string name="room_participants_header_direct_chats">Direktemeldinger</string>
     <string name="room_participants_action_leave">Forlat dette rommet</string>
-    <string name="room_participants_action_remove">Fjern fra dette rommet</string>
     <string name="room_participants_action_set_moderator">Utnevn til moderator</string>
     <string name="room_participants_action_set_admin">Utnevn til admin</string>
     <string name="room_participants_action_ignore_title">Ignorer bruker</string>
@@ -1051,11 +1050,11 @@
     <string name="reason_hint">Grunn</string>
     <string name="room_participants_ban_prompt_msg">Å forby bruker vil sparke dem fra dette rommet og forhindre at de blir med igjen.</string>
     <string name="room_participants_ban_reason">Grunn til å forby</string>
-    <string name="room_participants_kick_prompt_msg">sparke bruker vil fjerne dem fra dette rommet.
+    <string name="room_participants_remove_prompt_msg">sparke bruker vil fjerne dem fra dette rommet.
 \n
 \nFor å forhindre at de blir med igjen, bør du forby dem i stedet.</string>
-    <string name="room_participants_kick_reason">Grunn til å sparke</string>
-    <string name="room_participants_kick_title">Spark bruker</string>
+    <string name="room_participants_remove_reason">Grunn til å sparke</string>
+    <string name="room_participants_remove_title">Spark bruker</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Er du sikker på at du vil avbryte invitasjonen til denne brukeren\?</string>
     <string name="room_participants_action_cancel_invite_title">Avbryt invitasjonen</string>
     <string name="room_participants_action_unignore_prompt_msg">Oppheving av denne brukeren viser alle meldinger fra dem igjen.</string>
@@ -1076,7 +1075,6 @@
     <string name="room_participants_header_devices">SESSJONER</string>
     <string name="room_participants_header_call">RING</string>
     <string name="room_participants_header_admin_tools">ADMIN VERKTØY</string>
-    <string name="room_participants_remove_prompt_msg">Er du sikker på at du vil fjerne %s fra denne chatten\?</string>
     <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil forlate rommet\?</string>
     <string name="room_creation_add_member">Legg til medlem</string>
     <string name="room_creation_title">Ny chat</string>
@@ -1532,7 +1530,7 @@
     <string name="room_permissions_notify_everyone">Gi beskjed til alle</string>
     <string name="room_permissions_remove_messages_sent_by_others">Fjern meldinger sendt av andre</string>
     <string name="room_permissions_ban_users">Utesteng brukere</string>
-    <string name="room_permissions_kick_users">Spark brukere</string>
+    <string name="room_permissions_remove_users">Spark brukere</string>
     <string name="room_permissions_change_settings">Endre innstillinger</string>
     <string name="room_permissions_invite_users">Inviter brukere</string>
     <string name="room_permissions_send_messages">Send meldinger</string>
@@ -1596,11 +1594,6 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Tjenesten kunne ikke startes på nytt</string>
     <string name="settings_troubleshoot_test_service_restart_success">Tjenesten ble stoppet og startet på nytt automatisk.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Automatisk omstart av varslingstjenesten</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Start tjeneste</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Varslingstjenesten kjører ikke.
-\nPrøv å starte programmet på nytt.</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Varslingstjenesten kjører.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Varslingstjeneste</string>
     <string name="settings_troubleshoot_test_play_services_title">Play Tjenester Sjekk</string>
     <string name="directory_searching_title">Søker i katalogen…</string>
     <string name="dev_tools_error_no_content">Ikke noe innhold</string>
@@ -1665,7 +1658,7 @@
     <string name="notice_avatar_url_changed_by_you">Du byttet avatar</string>
     <string name="notice_avatar_url_changed">%1$s endret avatar</string>
     <string name="notice_room_ban_by_you">Du utestengte %1$s</string>
-    <string name="notice_room_kick_by_you">Du sparket %1$s</string>
+    <string name="notice_room_remove_by_you">Du sparket %1$s</string>
     <string name="notice_room_reject_by_you">Du avviste invitasjonen</string>
     <string name="notice_room_reject">%1$s avviste invitasjonen</string>
     <string name="notice_direct_room_leave_by_you">Du forlot rommet</string>
@@ -1708,7 +1701,7 @@
     <string name="voice_message_reply_content">Talemelding (%1$s)</string>
     <string name="upgrade_room_for_restricted_no_param">Alle i et forelderrom vil kunne finne og bli med i dette rommet - du trenger ikke å invitere alle manuelt. Du kan når som helst endre dette i rominnstillingene.</string>
     <string name="upgrade_room_for_restricted_note">Vær oppmerksom på at oppgradering vil gjøre en ny versjon av rommet. Alle nåværende meldinger vil forbli i dette arkiverte rommet.</string>
-    <string name="notice_room_kick">%1$s sparket %2$s</string>
+    <string name="notice_room_remove">%1$s sparket %2$s</string>
     <string name="notice_room_invite_no_invitee_by_you">Din invitasjon</string>
     <string name="suggested_rooms_pills_on_empty_header">Velkommen til %1$s, %2$s.</string>
     <string name="space_add_rooms">Legg til rom</string>

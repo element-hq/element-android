@@ -8,7 +8,7 @@
     <string name="notice_room_join">%1$s hat den Raum betreten</string>
     <string name="notice_room_leave">%1$s hat den Raum verlassen</string>
     <string name="notice_room_reject">%1$s hat die Einladung abgelehnt</string>
-    <string name="notice_room_kick">%1$s hat %2$s entfernt</string>
+    <string name="notice_room_remove">%1$s hat %2$s entfernt</string>
     <string name="notice_room_unban">%1$s hat den Bann von %2$s aufgehoben</string>
     <string name="notice_room_ban">%1$s hat %2$s gebannt</string>
     <string name="notice_room_withdraw">%1$s hat die Einladung für %2$s zurückgezogen</string>
@@ -88,7 +88,7 @@
     <string name="notice_room_join_with_reason">%1$s ist dem Raum beigetreten. Grund: %2$s</string>
     <string name="notice_room_leave_with_reason">%1$s hat den Raum verlassen. Grund: %2$s</string>
     <string name="notice_room_reject_with_reason">%1$s hat die Einladung abgelehnt. Grund: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s hat %2$s entfernt. Grund: %3$s</string>
+    <string name="notice_room_remove_with_reason">%1$s hat %2$s entfernt. Grund: %3$s</string>
     <string name="notice_room_unban_with_reason">%1$s hat Sperre von %2$s aufgehoben. Grund: %3$s</string>
     <string name="notice_room_ban_with_reason">%1$s hat %2$s verbannt. Grund: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s hat eine Einladung an %2$s gesandt um diesem Raum beizutreten. Grund: %3$s</string>
@@ -119,7 +119,7 @@
     <string name="notice_room_join_by_you">Du bist dem Raum beigetreten</string>
     <string name="notice_room_leave_by_you">Du hast den Raum verlassen</string>
     <string name="notice_room_reject_by_you">Du hast die Einladung abgelehnt</string>
-    <string name="notice_room_kick_by_you">Du hast %1$s aus dem Raum entfernt</string>
+    <string name="notice_room_remove_by_you">Du hast %1$s aus dem Raum entfernt</string>
     <string name="notice_room_unban_by_you">Du hast den Bann von %1$s aufgehoben</string>
     <string name="notice_room_ban_by_you">Du hast %1$s gebannt</string>
     <string name="notice_room_withdraw_by_you">Du hast die Einladung von %1$s zurückgenommen</string>
@@ -153,7 +153,7 @@
     <string name="notice_widget_removed_by_you">Du hast das %1$s Widget entfernt</string>
     <string name="notice_widget_modified">%1$s hat das %2$s Widget modifiziert</string>
     <string name="notice_widget_modified_by_you">Du hast das %1$s Widget modifiziert</string>
-    <string name="power_level_admin">Administrator</string>
+    <string name="power_level_admin">Admin</string>
     <string name="power_level_moderator">Moderator</string>
     <string name="power_level_default">Standard</string>
     <string name="power_level_custom">Benutzerdefiniert (%1$d)</string>
@@ -166,7 +166,7 @@
     <string name="notice_room_join_with_reason_by_you">Du bist dem Raum beigetreten. Grund: %1$s</string>
     <string name="notice_room_leave_with_reason_by_you">Du hast den Raum verlassen. Grund: %1$s</string>
     <string name="notice_room_reject_with_reason_by_you">Du hast die Einladung abgelehnt. Grund: %1$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Du hast %1$s aus dem Raum entfernt. Grund %2$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Du hast %1$s aus dem Raum entfernt. Grund %2$s</string>
     <string name="notice_room_unban_with_reason_by_you">Du hast den Bann von %1$s aufgehoben. Grund: %2$s</string>
     <string name="notice_room_ban_with_reason_by_you">Du hast %1$s gebannt. Grund: %2$s</string>
     <string name="notice_room_third_party_invite_with_reason_by_you">Du hast %1$s in den Raum eingeladen. Grund: %2$s</string>
@@ -231,8 +231,8 @@
         <item quantity="other">Du hast die alternativen Adressen %1$s für diesen Raum hinzufügt.</item>
     </plurals>
     <plurals name="notice_room_canonical_alias_alternative_added">
-        <item quantity="one">%1$s fügte die alternative Adresse %2$s für diesen Raum hinzu.</item>
-        <item quantity="other">%1$s fügte die alternativen Adressen %2$s für diesen Raum hinzu.</item>
+        <item quantity="one">%1$s hat die Adresse %2$s hinzugefügt.</item>
+        <item quantity="other">%1$s hat die Adressen %2$s hinzugefügt.</item>
     </plurals>
     <string name="room_displayname_empty_room_was">Leerer Raum (war %s)</string>
     <plurals name="room_displayname_four_and_more_members">
@@ -306,7 +306,7 @@
     <string name="action_voice_call">Sprachanruf</string>
     <string name="action_video_call">Videoanruf</string>
     <string name="action_global_search">Globale Suche</string>
-    <string name="action_mark_all_as_read">Alle als gelesen markieren</string>
+    <string name="action_mark_all_as_read">Alles als gelesen markieren</string>
     <string name="action_historical">Archiv</string>
     <string name="action_quick_reply">Antworten</string>
     <string name="action_open">Öffnen</string>
@@ -480,7 +480,7 @@
     <string name="action_join">Betreten</string>
     <string name="action_preview">Vorschau</string>
     <string name="action_reject">Ablehnen</string>
-    <string name="room_jump_to_first_unread">Zur ersten ungelesenen Nachricht</string>
+    <string name="room_jump_to_first_unread">Zu ungelesenen Nachrichten springen</string>
     <string name="room_preview_invitation_format">Du wurdest von %s in diesen Raum eingeladen</string>
     <string name="room_preview_unlinked_email_warning">Diese Einladung wurde an %s gesendet, welche nicht mit diesem Konto verknüpft ist.
 \nDu kannst dich mit einem anderen Konto anmelden oder diese E-Mail-Adresse zu diesem Konto hinzufügen.</string>
@@ -492,18 +492,16 @@
     <string name="room_title_one_member">1 Mitglied</string>
     <string name="room_participants_leave_prompt_title">Raum verlassen</string>
     <string name="room_participants_leave_prompt_msg">Raum wirklich verlassen\?</string>
-    <string name="room_participants_remove_prompt_msg">%s wirklich aus diesem Chat entfernen möchtest\?</string>
     <string name="room_participants_create">Erstellen</string>
     <string name="room_participants_online">Online</string>
     <string name="room_participants_offline">Offline</string>
-    <string name="room_participants_idle">Untätig</string>
+    <string name="room_participants_idle">Abwesend</string>
     <string name="room_participants_header_admin_tools">ADMIN-WERKZEUGE</string>
     <string name="room_participants_header_call">ANRUFE</string>
     <string name="room_participants_header_direct_chats">DIREKT-CHATS</string>
     <string name="room_participants_header_devices">SITZUNGEN</string>
     <string name="room_participants_action_invite">Einladen</string>
     <string name="room_participants_action_leave">Diesen Raum verlassen</string>
-    <string name="room_participants_action_remove">Aus diesem Raum entfernen</string>
     <string name="room_participants_action_ban">Verbannen</string>
     <string name="room_participants_action_unban">Verbannung aufheben</string>
     <string name="room_participants_action_set_default_power_level">Zum normalen Benutzer herabstufen</string>
@@ -764,7 +762,7 @@
 \nUnbekannte Sitzungen:</string>
     <string name="select_room_directory">Raumverzeichnis auswählen</string>
     <string name="directory_server_fail_to_retrieve_server">Der Server kann nicht verfügbar oder überlastet sein</string>
-    <string name="directory_server_type_homeserver">Gib einen Home-Server ein, um seine öffentlichen Räume aufzulisten</string>
+    <string name="directory_server_type_homeserver">Gib einen Homeserver ein, um seine öffentlichen Räume aufzulisten</string>
     <string name="directory_server_placeholder">Server-Name</string>
     <string name="directory_server_all_rooms_on_server">Alle Räume auf dem %s-Server</string>
     <string name="directory_server_native_rooms">Alle nativen %s-Räume</string>
@@ -875,7 +873,7 @@
     <string name="filter_group_members">Filter Gruppen-Mitglieder</string>
     <string name="filter_group_rooms">Filter Gruppen-Räume</string>
     <string name="group_no_long_description">Der Community-Administrator hat keine lange Beschreibung für diese Community zur Verfügung gestellt.</string>
-    <string name="has_been_kicked">Du wurdest von %2$s aus %1$s entfernt</string>
+    <string name="has_been_removed">Du wurdest von %2$s aus %1$s entfernt</string>
     <string name="has_been_banned">Du wurdest von %2$s aus %1$s verbannt</string>
     <string name="reason_colon">Grund: %1$s</string>
     <string name="rejoin">Erneut beitreten</string>
@@ -937,7 +935,7 @@
     <string name="settings_notification_privacy_need_permission">Dies App braucht die Berechtigung im Hintergrund zu laufen</string>
     <string name="settings_notification_privacy_fcm">• Benachrichtigungen werden über Firebase-Cloud-Messaging versendet</string>
     <string name="settings_notification_privacy_metadata">• Benachrichtigungen enthalten nur Metadaten</string>
-    <string name="settings_notification_privacy_secure_message_content">• Der Nachrichteninhalt der Benachrichtigung wird <b>sicher vom Matrix-Home-Server abgerufen</b></string>
+    <string name="settings_notification_privacy_secure_message_content">• Der Nachrichteninhalt der Benachrichtigung wird <b>sicher vom Homeserver abgerufen</b></string>
     <string name="settings_notification_privacy_nosecure_message_content">• Benachrichtigungen enthalten <b>Metadaten und Nachrichteninhalte</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• Benachrichtigungen werden <b>den Nachrichteninhalt nicht anzeigen</b></string>
     <string name="startup_notification_privacy_title">Benachrichtungs-Datenschutz</string>
@@ -978,8 +976,8 @@
     <string name="template_e2e_re_request_encryption_key_dialog_content">Bitte öffne ${app_name} auf einem anderen Gerät, das die Nachricht entschlüsseln kann, damit es die Schlüssel an diese Sitzung senden kann.</string>
     <string name="lock_screen_hint">Hier tippen…</string>
     <string name="option_send_voice">Sprachnachricht senden</string>
-    <string name="go_on_with">Öffnen mit…</string>
-    <string name="error_no_external_application_found">Es wurde keine externe Anwendung gefunden, um diese Aktion auszuführen.</string>
+    <string name="go_on_with">Fortfahren mit…</string>
+    <string name="error_no_external_application_found">Für diese Aktion wurde keine passende App gefunden.</string>
     <string name="settings_labs_enable_send_voice">Sende Sprachnachrichten</string>
     <string name="error_empty_field_your_password">Bitte gib dein Passwort ein.</string>
     <string name="send_bug_report_description_in_english">Schreibe bitte auf Englisch, wenn möglich.</string>
@@ -997,7 +995,7 @@
     <string name="command_description_join_room">Raum mit angegebener Adresse beitreten</string>
     <string name="command_description_part_room">Verlasse Raum</string>
     <string name="command_description_topic">Raumthema ändern</string>
-    <string name="command_description_kick_user">Entfernt die Person angegebener ID</string>
+    <string name="command_description_remove_user">Entfernt die Person angegebener ID</string>
     <string name="command_description_nick">Ändert deinen Anzeigenamen</string>
     <string name="command_description_markdown">(De-)Aktiviert Markdown</string>
     <string name="command_description_clear_scalar_token">Um das Matrix-App-Management zu reparieren</string>
@@ -1041,18 +1039,18 @@
     </plurals>
     <string name="system_alerts_header">Systembenachrichtigungen</string>
     <string name="resource_limit_exceeded_title">Ressourcen-Limit</string>
-    <string name="resource_limit_contact_action">Kontaktiere Administrator</string>
+    <string name="resource_limit_contact_action">Administrator kontaktieren</string>
     <string name="resource_limit_contact_admin">kontaktiere deinen Service-Administrator</string>
-    <string name="resource_limit_soft_default">Dieser Home-Server hat eine seiner Ressourcen-Grenzen erreicht, sodass <b>einige Nutzer sich nicht anmelden können</b>.</string>
-    <string name="resource_limit_hard_default">Dieser Home-Server hat einen seiner Ressourcen-Limits überschritten.</string>
-    <string name="resource_limit_soft_mau"> Dieser Home-Server hat seine Obergrenze an monatlich aktiven Nutzer erreicht, sodass <b>einige Nutzer sich nicht anmelden können</b>.</string>
-    <string name="resource_limit_hard_mau">Dieser Home-Server hat seine Obergrenze an monatlich aktiven Nutzer erreicht.</string>
+    <string name="resource_limit_soft_default">Dieser Homeserver hat eine seiner Ressourcen-Grenzen erreicht, sodass <b>einige Nutzer sich nicht anmelden können</b>.</string>
+    <string name="resource_limit_hard_default">Dieser Homeserver hat einen seiner Ressourcen-Limits überschritten.</string>
+    <string name="resource_limit_soft_mau"> Dieser Homeserver hat seine Obergrenze an monatlich aktiven Nutzer erreicht, sodass sich <b>einige Nutzer nicht anmelden können</b>.</string>
+    <string name="resource_limit_hard_mau">Dieser Homeserver hat seine Obergrenze an monatlich aktiven Nutzer erreicht.</string>
     <string name="resource_limit_soft_contact">Bitte %s um dieses Limit anheben zu lassen.</string>
     <string name="resource_limit_hard_contact">Bitte %s um diesen Dienst weiter zu nutzen.</string>
     <string name="dialog_title_error">Fehler</string>
     <string name="settings_lazy_loading_title">Raummitglieder bei Bedarf nachladen</string>
     <string name="settings_lazy_loading_description">Verbessere Performance, indem Raummitglieder erst beim ersten Ansehen geladen werden.</string>
-    <string name="error_lazy_loading_not_supported_by_home_server">Dein Home-Server unterstützt noch nicht das Nachladen von Raummitgliedern. Versuche es später.</string>
+    <string name="error_lazy_loading_not_supported_by_home_server">Dein Homeserver unterstützt noch nicht das Nachladen von Raummitgliedern. Versuche es später.</string>
     <string name="unknown_error">Entschuldige, ein Fehler trat auf</string>
     <string name="room_sliding_menu_version_x">Version %s</string>
     <string name="encryption_export_notice">Bitte eine Passphrase erstellen um exportierte Schlüssel zu verschlüsseln. Du musst dieselbe Passphrase eingeben um die Schlüssel importieren zu können.</string>
@@ -1069,9 +1067,9 @@
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="call_anyway">Trotzdem anrufen</string>
-    <string name="room_participants_action_kick">Entfernen</string>
+    <string name="room_participants_action_remove">Entfernen</string>
     <string name="reason_hint">Grund</string>
-    <string name="settings_inline_url_preview_summary">Linkvorschau im Chat aktivieren, falls dein Home-Server diese Funktion unterstützt.</string>
+    <string name="settings_inline_url_preview_summary">Linkvorschau im Chat aktivieren, falls dein Homeserver diese Funktion unterstützt.</string>
     <string name="settings_send_typing_notifs">Schreibbenachrichtigungen senden</string>
     <string name="settings_send_typing_notifs_summary">Lasse andere Benutzer wissen, dass du tippst.</string>
     <string name="settings_send_markdown">Markdown-Formatierung</string>
@@ -1093,7 +1091,7 @@
     <string name="settings_call_ringtone_title">Klingelton für eingehende Anrufe</string>
     <string name="settings_call_ringtone_dialog_title">Wähle Klingelton für Anrufe:</string>
     <string name="action_accept">Akzeptieren</string>
-    <string name="auth_accept_policies">Bitte lese und akzeptiere die Richtlinien dieses Home-Servers:</string>
+    <string name="auth_accept_policies">Bitte lese und akzeptiere die Richtlinien dieses Homeservers:</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Tests ausführen</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Läuft… (%1$d von %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Einer oder mehrere Tests sind fehlgeschlagen. Versuche vorgeschlagene Lösung(en).</string>
@@ -1124,11 +1122,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM-Token erfolgreich beim Homeserver registriert.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCM-Token konnte nicht beim Homeserver registriert werden:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Benachrichtigungsdienst</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Benachrichtigungsdienst läuft.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Benachrichtigungsdienst läuft nicht.
-\nVersuche die Anwendung neu zu starten.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Starte Dienst</string>
     <string name="settings_troubleshoot_test_service_restart_title">Automatischer Neustart des Benachrichtigungsdienstes</string>
     <string name="settings_troubleshoot_test_service_restart_success">Dienst wurde automatisch gestoppt und erneut gestartet.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Dienst konnte nicht neu gestartet werden</string>
@@ -1219,7 +1212,7 @@
 \n
 \nWarnung: Diese Datei wird gelöscht, wenn die Anwendung deinstalliert wird.</string>
     <string name="keys_backup_setup_step3_generating_key_status">Wiederherstellungsschlüssel aus Passphrase generieren. Dies kann mehrere Sekunden brauchen.</string>
-    <string name="keys_backup_setup_backup_started_message">Deine Schlüssel werden nun im Hintergrund auf deinem Home-Server gesichert. Die initiale Sicherung kann mehrere Minuten dauern.</string>
+    <string name="keys_backup_setup_backup_started_message">Deine Schlüssel werden nun im Hintergrund auf deinem Homeserver gesichert. Die initiale Sicherung kann mehrere Minuten dauern.</string>
     <string name="keys_backup_setup_skip_msg">Du verlierst möglicherweise den Zugang zu deinen Nachrichten, wenn du dich abmeldest oder das Gerät verlierst.</string>
     <string name="keys_backup_restore_is_getting_backup_version">Rufe Backup-Version ab…</string>
     <string name="keys_backup_restore_with_passphrase">Nutze deine Wiederherstellungspassphrase, um deinen verschlüsselten Chatverlauf lesen zu können</string>
@@ -1273,7 +1266,7 @@
     <string name="keys_backup_setup_step1_advanced">(Erweitert)</string>
     <string name="keys_backup_setup_step1_manual_export">Schlüssel manuell exportieren</string>
     <string name="keys_backup_setup_step2_text_title">Schütze deine Sicherung mit einer Passphrase.</string>
-    <string name="keys_backup_setup_step2_text_description">Eine verschlüsselte Kopie deiner Schlüssel wird auf deinem Home-Server gespeichert. Schütze deine Sicherung mit einer Passphrase.
+    <string name="keys_backup_setup_step2_text_description">Eine verschlüsselte Kopie deiner Schlüssel wird auf deinem Homeserver gespeichert. Schütze deine Sicherung mit einer Passphrase.
 \n
 \nFür maximale Sicherheit sollte diese *nicht* dein Konto-Passwort sein.</string>
     <string name="keys_backup_setup_creating_backup">Erstelle Sicherung</string>
@@ -1318,7 +1311,7 @@
     <string name="settings_change_password_submit">Passwort aktualisieren</string>
     <string name="settings_fail_to_update_password_invalid_current_password">Das Passwort ist ungültig</string>
     <string name="passwords_do_not_match">Passwörter stimmen nicht überein</string>
-    <string name="autodiscover_invalid_response">Ungültige Antwort beim Entdecken des Home-Servers</string>
+    <string name="autodiscover_invalid_response">Ungültige Antwort beim Verbinden mit dem Homeserver</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Serveroptionen vervollständigen</string>
     <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} hat eine benutzerdefinierte Serverkonfiguration für die Domäne deines Benutzernamens gefunden \"%1$s\":
 \n%2$s</string>
@@ -1522,7 +1515,7 @@
     <string name="widget_integration_review_terms">Um fortzufahren, musst du die Nutzungsbedingungen akzeptieren.</string>
     <string name="identity_server_not_defined">Du verwendest keinen Identitätsserver</string>
     <string name="identity_server_not_defined_for_password_reset">Es ist kein Identitätsserver konfiguriert. Du musst dein Kennwort zurücksetzen.</string>
-    <string name="error_user_already_logged_in">Du versuchst anscheinend, eine Verbindung zu einem anderen Home-Server herzustellen. Möchtest du dich abmelden\?</string>
+    <string name="error_user_already_logged_in">Du versuchst anscheinend, eine Verbindung zu einem anderen Homeserver herzustellen. Möchtest du dich abmelden\?</string>
     <string name="push_gateway_item_push_key">Push-Key:</string>
     <string name="push_gateway_item_app_display_name">App-Anzeigename:</string>
     <string name="push_gateway_item_url">Url:</string>
@@ -1539,12 +1532,12 @@
     <string name="settings_discovery_no_mails">Erkennungsoptionen werden angezeigt, sobald du eine E-Mail hinzugefügt hast.</string>
     <string name="settings_discovery_mail_pending">ausstehend</string>
     <string name="settings_discovery_enter_identity_server">Gib einen neuen Identitätsserver ein</string>
-    <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Home-Server herstellen</string>
+    <string name="settings_discovery_bad_identity_server">Konnte keine Verbindung zum Homeserver herstellen</string>
     <string name="call_failed_no_ice_description">Bitte bitte den Administrator deines Heimservers (%1$s) einen \"TURN-Server\" einzurichten, damit Anrufe zuverlässig funktionieren.
 \n
 \nAlternativ kann ein öffentlicher Server auf %2$s genutzt werden. Dies wird jedoch weniger zuverlässig sein und deine IP-Adresse gegenüber diesem Server preisgeben. Du kannst den Server auch in den Einstellungen anpassen.</string>
     <string name="login_error_no_homeserver_found">Dies ist keine Adresse eines Matrixservers</string>
-    <string name="login_error_homeserver_not_found">Kann Home-Server nicht unter dieser URL erreichen. Bitte überprüfen</string>
+    <string name="login_error_homeserver_not_found">Kann Homeserver nicht unter dieser URL erreichen. Bitte überprüfen</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Wir nutzen %s als Ersatz, wenn dein Heimserver keinen anbietet (Deine IP-Adresse wird während des Anrufs geteilt)</string>
     <string name="invite_no_identity_server_error">Füge einen Identitätsserver in deinen Einstellungen hinzu, um diese Aktion auszuführen.</string>
     <string name="settings_add_3pid_confirm_password_title">Passwort bestätigen</string>
@@ -1594,7 +1587,7 @@
     <string name="settings_text_message_sent">Eine Textnachricht wurde an %s gesendet. Bitte gib den Verifizierungscode ein, den sie enthält.</string>
     <string name="labs_allow_extended_logging">Aktiviere ausführliche Logs.</string>
     <string name="labs_allow_extended_logging_summary">Ausführliche Logs werden der Entwicklung der App dadurch helfen, dass mehr Informationen übertragen werden, wenn du einen Fehlerbericht sendest. Auch wenn dies aktiviert ist, werden keine Nachrichteninhalte oder andere privaten Daten aufgezeichnet.</string>
-    <string name="error_terms_not_accepted">Bitte erneut versuchen, nachdem du die Nutzungsbedingungen deines Home-Servers akzeptiert hast.</string>
+    <string name="error_terms_not_accepted">Bitte erneut versuchen, nachdem du die Nutzungsbedingungen deines Homeservers akzeptiert hast.</string>
     <string name="room_widget_permission_webview_shared_info_title">Bei Benutzung könnten Cookies gesetzt werden und es könnten Daten mit %s geteilt werden:</string>
     <string name="room_widget_permission_shared_info_title">Bei Benutzung könnten Daten mit %s geteilt werden:</string>
     <string name="settings_discovery_no_msisdn">Optionen zum Finden werden erscheinen, sobald du eine Telefonnummer hinzugefügt hast.</string>
@@ -1737,8 +1730,8 @@
     <string name="login_splash_title">Es ist deine Konversation. Mache sie dir zu eigen.</string>
     <string name="login_server_url_form_modular_text">Premium-Hosting für Organisationen</string>
     <string name="login_server_url_form_modular_notice">Gib die Adresse des Modular Element oder Servers ein, den du verwenden möchtest</string>
-    <string name="login_mode_not_supported">Die Anwendung kann sich nicht bei diesem Home-Server anmelden. Der Home-Server unterstützt die folgenden Anmeldetypen: %1$s.
-\n 
+    <string name="login_mode_not_supported">Die Anwendung kann sich nicht bei diesem Homeserver anmelden. Der Homeserver unterstützt die folgenden Anmeldemöglichkeiten: %1$s.
+\n
 \nMöchtest du dich mit einem Webclient anmelden\?</string>
     <string name="login_reset_password_notice">Dir wird eine Bestätigungsmail gesendet, um dein neues Passwort zu bestätigen.</string>
     <string name="login_reset_password_submit">Weiter</string>
@@ -1758,8 +1751,8 @@
     <string name="login_signup_submit">Weiter</string>
     <string name="login_signup_cancel_confirmation_title">Warnung</string>
     <string name="login_a11y_captcha_container">Bitte löse das Captcha</string>
-    <string name="login_error_outdated_homeserver_title">Veralteter Home-Server</string>
-    <string name="login_error_outdated_homeserver_content">Auf diesem Home-Server läuft eine zu alte Version, um eine Verbindung herzustellen. Bitte deinen Home-Server-Administrator um ein Upgrade.</string>
+    <string name="login_error_outdated_homeserver_title">Veralteter Homeserver</string>
+    <string name="login_error_outdated_homeserver_content">Dieser Homeserver ist veraltet und wir können dich mit ihm leider nicht verbinden. Kontaktiere die Betreiber und bitte sie, den Server upzudaten.</string>
     <plurals name="login_error_limit_exceeded_retry_after">
         <item quantity="one">Es wurden zu viele Anfragen gesendet. Versuche es erneut in %1$d Sekunde…</item>
         <item quantity="other">Es wurden zu viele Anfragen gesendet. Versuche es erneut in %1$d Sekunden…</item>
@@ -1776,7 +1769,7 @@
     <string name="signed_out_submit">Melde dich erneut an</string>
     <string name="soft_logout_title">Du bist abgemeldet</string>
     <string name="soft_logout_signin_title">Anmelden</string>
-    <string name="soft_logout_signin_notice">Dein Home-Server-Administrator (%1$s) hat dich von deinem Konto %2$s (%3$s) abgemeldet.</string>
+    <string name="soft_logout_signin_notice">Dein Homeserver-Administrator (%1$s) hat dich von deinem Konto %2$s (%3$s) abgemeldet.</string>
     <string name="soft_logout_signin_e2e_warning_notice">Melde dich an, um ausschließlich auf diesem Gerät gespeicherte Schlüssel wiederherzustellen. Du benötigst sie, um deine verschlüsselten Nachrichten auf jedem Gerät zu lesen.</string>
     <string name="soft_logout_signin_submit">Anmelden</string>
     <string name="soft_logout_signin_password_hint">Passwort</string>
@@ -1820,11 +1813,11 @@
     <string name="verify_user_sas_emoji_security_tip">Für ultimative Sicherheit verwende ein anderes vertrauenswürdiges Kommunikationsmittel oder mache es persönlich.</string>
     <string name="verification_green_shield">Suche nach dem grünen Schild, um sicherzustellen, dass ein Benutzer vertrauenswürdig ist. Vertraue alle Benutzer in einem Raum, um sicherzustellen, dass der Raum sicher ist.</string>
     <string name="verification_conclusion_not_secure">Nicht sicher</string>
-    <string name="verification_conclusion_compromised">Eine der folgenden Möglichkeiten kann beeinträchtigt sein: 
-\n 
-\n - Dein Home-Server 
-\n - Der Home-Server mit dem dein Gegenüber verbunden ist 
-\n - Deine oder die Internetverbindung des Gegenüber 
+    <string name="verification_conclusion_compromised">Eine der folgenden Möglichkeiten kann beeinträchtigt sein:
+\n
+\n - Dein Homeserver
+\n - Der Homeserver mit dem dein Gegenüber verbunden ist
+\n - Deine oder die Internetverbindung des Gegenüber
 \n - Dein Gerät oder das Gerät des Gegenüber</string>
     <string name="sent_a_video">Video.</string>
     <string name="sent_an_image">Bild.</string>
@@ -1982,7 +1975,7 @@
     <string name="verify_not_me_self_verification">Eines der folgenden könnte kom­pro­mit­tie­rt sein:
 \n
 \n- Dein Passwort
-\n- Dein Home-Server
+\n- Dein Homeserver
 \n- Dieses Gerät, oder das andere Gerät
 \n- Die Internetverbindung, die von den Geräten genutzt wird
 \n
@@ -2120,9 +2113,9 @@
     <string name="action_dismiss">Ablehnen</string>
     <string name="dialog_title_success">Erfolg</string>
     <string name="call_failed_no_connection_description">Echtzeitverbindung konnte nicht hergestellt werden.
-\nBitte den Administrator deines Home-Servers, einen TURN-Server zu konfigurieren, dass Anrufe zuverlässig funktionieren.</string>
+\nBitte den Administrator deines Homeservers, einen TURN-Server zu konfigurieren, dass Anrufe zuverlässig funktionieren.</string>
     <string name="call_select_sound_device">Audiogerät auswählen</string>
-    <string name="sound_device_phone">Telefonie</string>
+    <string name="sound_device_phone">Telefon</string>
     <string name="sound_device_speaker">Lautsprecher</string>
     <string name="sound_device_headset">Kopfhörer</string>
     <string name="sound_device_wireless_headset">Drahtloser Kopfhörer</string>
@@ -2147,11 +2140,11 @@
     <string name="room_participants_action_unignore_prompt_msg">Das Aufheben der Ignorierung wird alle Nachrichten des Benutzers wieder einblenden.</string>
     <string name="room_participants_action_cancel_invite_title">Einladung zurückziehen</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Bist du dir sicher, dass du die Einladung für diesen Benutzer zurückziehen möchtest\?</string>
-    <string name="room_participants_kick_title">Benutzer entfernen</string>
-    <string name="room_participants_kick_reason">Grund für das Entfernen</string>
-    <string name="room_participants_kick_prompt_msg">Du entfernst diese Person aus dem Raum.
+    <string name="room_participants_remove_title">Benutzer entfernen</string>
+    <string name="room_participants_remove_reason">Grund für das Entfernen</string>
+    <string name="room_participants_remove_prompt_msg">Dies entfernt den Benutzer aus diesem Raum.
 \n
-\nBanne sie stattdessen, um erneutes Beitreten zu verhindern.</string>
+\nUm einen erneuten Beitritt zu verhindern, solltest du diesen stattdessen bannen.</string>
     <string name="room_participants_ban_title">Benutzer bannen</string>
     <string name="room_participants_ban_reason">Grund für den Bann</string>
     <string name="room_participants_unban_title">Bann des Benutzers aufheben</string>
@@ -2161,7 +2154,7 @@
     <string name="settings_secure_backup_setup">Backup einrichten</string>
     <string name="settings_secure_backup_reset">Backup zurücksetzen</string>
     <string name="settings_secure_backup_enter_to_setup">Auf diesem Gerät einrichten</string>
-    <string name="settings_secure_backup_section_info">Verlust verschlüsselter Nachrichten &amp; Daten verhindern, indem die Schlüssel für die Entschlüsselung am Server gesichert werden.</string>
+    <string name="settings_secure_backup_section_info">Verlust verschlüsselter Nachrichten &amp; Daten verhindern, indem die Schlüssel für die Entschlüsselung auf dem Server gesichert werden.</string>
     <string name="reset_secure_backup_title">Generiere einen neuen Sicherheitsschlüssel oder setze eine neue Sicherheitspassphrase für dein existierendes Backup.</string>
     <string name="reset_secure_backup_warning">Dieses wird deinen aktuellen Schlüssel oder deine aktuelle Phrase ersetzen.</string>
     <string name="disabled_integration_dialog_title">Integrationen sind deaktiviert</string>
@@ -2197,11 +2190,11 @@
     <string name="login_connect_using_matrix_id_notice">Wenn du deine Matrixkennung und dein Passwort weißt, kannst du alternativ diese Methode nutzen:</string>
     <string name="login_connect_using_matrix_id_submit">Einloggen mit Matrix-ID</string>
     <string name="login_signin_matrix_id_title">Einloggen mit Matrix-ID</string>
-    <string name="login_signin_matrix_id_notice">Wenn du einen Account auf einem Home-Server eingerichtet hast, benutze deine Matrix-ID (z.B. @benutzer:domain.com) und Passwort.</string>
+    <string name="login_signin_matrix_id_notice">Wenn du einen Account auf einem Homeserver eingerichtet hast, benutze deine Matrix-ID (z.B. @benutzer:domain.com) und Passwort.</string>
     <string name="login_signin_matrix_id_hint">Matrix-ID</string>
     <string name="login_signin_matrix_id_password_notice">Wenn du dein Passwort nicht weißt, gehe zurück um es zurücksetzen zu lassen.</string>
     <string name="login_signin_matrix_id_error_invalid_matrix_id">Dies ist keine gültige Benutzerkennung. Erwartetes Format: \'@benutzer:homeserver.org\'</string>
-    <string name="autodiscover_well_known_error">Es konnte kein gültiger Home-Server gefunden werden. Bitte prüfe deine Kennung</string>
+    <string name="autodiscover_well_known_error">Es konnte kein gültiger Homeserver gefunden werden. Bitte prüfe deine Kennung</string>
     <string name="send_a_sticker">Sticker</string>
     <string name="room_profile_section_admin">Administrative Aktionen</string>
     <string name="room_member_power_level_default_in">Standard in %1$s</string>
@@ -2221,13 +2214,13 @@
     <string name="open_terms_of">Öffne AGBs von %s</string>
     <string name="disconnect_identity_server_dialog_content">Trenne Verbindung zu Identitätsserver %s\?</string>
     <string name="template_identity_server_error_outdated_identity_server">Dieser Identitätsserver ist veraltet. ${app_name} unterstützt nur API V2.</string>
-    <string name="identity_server_error_outdated_home_server">Diese Operation ist nicht möglich. Der Home-Server ist veraltet.</string>
+    <string name="identity_server_error_outdated_home_server">Diese Operation ist nicht möglich. Der Homeserver ist veraltet.</string>
     <string name="identity_server_error_no_identity_server_configured">Bitte konfiguriere zuerst einen Identitätsserver.</string>
     <string name="identity_server_error_terms_not_signed">Bitte akzeptiere zuerst die AGB des Identitätsservers in den Einstellungen.</string>
     <string name="template_identity_server_error_bulk_sha256_not_supported">Deiner Privatsphäre wegen unterstützt ${app_name} nur das Senden gehashter E-Mail-Adressen und Telefonnummern.</string>
     <string name="identity_server_error_binding_error">Die Assoziierung ist fehlgeschlagen.</string>
     <string name="identity_server_error_no_current_binding_error">Für diese Kennung gibt es aktuell keine Zuordnung.</string>
-    <string name="identity_server_set_default_notice">Dein Home-Server (%1$s) schlägt %2$s als Identitätsserver vor</string>
+    <string name="identity_server_set_default_notice">Dein Homeserver (%1$s) schlägt %2$s als Identitätsserver vor</string>
     <string name="identity_server_set_default_submit">Benutze %1$s</string>
     <string name="identity_server_set_alternative_notice">Alternativ kannst du die URL eines beliebigen anderen Identitätsservers angeben</string>
     <string name="identity_server_set_alternative_notice_no_default">Gib die URL von einem Identitätsserver ein</string>
@@ -2388,7 +2381,7 @@
 \n
 \nDeine Nachrichten sind mit digitalen Schlüsseln gesichert. Nur du und der Empfänger haben die einzigen Schlüssel, um jene zu entsperren.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Nachrichten hier sind nicht Ende-zu-Ende-verschlüsselt.</string>
-    <string name="login_error_outdated_homeserver_warning_content">Dieser Home-Server läuft mit einer alten Version. Bitte deinen Home-Server-Administrator um eine Aktualisierung. Du kannst fortfahren, aber einige Funktionen funktionieren möglicherweise nicht richtig.</string>
+    <string name="login_error_outdated_homeserver_warning_content">Dieser Homeserver läuft mit einer alten Version. Bitte deinen Homeserver-Administrator um eine Aktualisierung. Du kannst fortfahren, aber einige Funktionen funktionieren möglicherweise nicht richtig.</string>
     <string name="direct_room_join_rules_invite_by_you">Du hast dies auf Einladungen beschränkt.</string>
     <string name="direct_room_join_rules_invite">%1$s hat dies auf Einladungen beschränkt.</string>
     <string name="settings_labs_show_complete_history_in_encrypted_room">Vollständigen Verlauf in verschlüsselten Räumen anzeigen</string>
@@ -2517,7 +2510,7 @@
     <string name="room_permissions_notify_everyone">Jeden benachrichtigen</string>
     <string name="room_permissions_remove_messages_sent_by_others">Von anderen gesendete Nachrichten entfernen</string>
     <string name="room_permissions_ban_users">Nutzer verbannen</string>
-    <string name="room_permissions_kick_users">Nutzer entfernen</string>
+    <string name="room_permissions_remove_users">Nutzer entfernen</string>
     <string name="room_permissions_change_settings">Einstellungen ändern</string>
     <string name="room_permissions_invite_users">Nutzer einladen</string>
     <string name="room_permissions_send_messages">Nachrichten senden</string>
@@ -2621,7 +2614,7 @@
         <item quantity="other">%d Einträge</item>
     </plurals>
     <string name="settings_server_upload_size_unknown">Die Obergrenze ist nicht bekannt.</string>
-    <string name="settings_server_upload_size_content">Dein Home-Server akzeptiert Anhänge (wie Dateien, Medien, etc.) mit einer Größe bis zu %s.</string>
+    <string name="settings_server_upload_size_content">Dein Homeserver akzeptiert Anhänge (wie Dateien, Medien, etc.) mit einer Größe bis zu %s.</string>
     <string name="settings_server_upload_size_title">Datei-Upload-Obergrenze des Servers</string>
     <string name="settings_server_version">Serverversion</string>
     <string name="settings_server_name">Servername</string>
@@ -2668,7 +2661,7 @@
     <string name="suggested_rooms_pills_on_empty_header">Willkommen zu %1$s, %2$s.</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Mit Spaces kannst du Personen und Räume gruppieren.</string>
     <string name="spaces_beta_welcome_to_spaces">Sag hallo zu Spaces!</string>
-    <string name="space_add_existing_rooms">Füge bereits existierende Räume und Spaces hinzu</string>
+    <string name="space_add_existing_rooms">Räume oder Spaces hinzufügen</string>
     <string name="skip_for_now">Vorübergehend überspringen</string>
     <string name="create_spaces_room_public_header">Über welche Themen möchtest du dich in %s unterhalten\?</string>
     <string name="create_spaces_details_private_header">Füge ein paar Details hinzu, um die Wiedererkennbarkeit zu steigern. Du kannst die Angaben auch später wieder ändern.</string>
@@ -2685,7 +2678,7 @@
     <string name="suggested_rooms_pills_on_empty_text">Bislang bist du keinem Raum beigetreten. Unterhalb findest du ein paar Raum-Empfehlungen, welche du mit der grünen Taste unten rechts erweitern kannst.</string>
     <string name="join_anyway">Trotzdem beitreten</string>
     <string name="join_space">Space beitreten</string>
-    <string name="create_space">Space erzeugen</string>
+    <string name="create_space">Space erstellen</string>
     <string name="invite_just_to_this_room">Nur zu diesem Raum</string>
     <string name="invite_to_space_with_name">In Space \"%s\" einladen</string>
     <string name="invite_by_link">Link teilen</string>
@@ -2712,7 +2705,7 @@
     <string name="create_spaces_choose_type_label">Welche Art von Space möchtest du erstellen\?</string>
     <string name="add_space">Space erstellen</string>
     <string name="command_description_create_space">Space erstellen</string>
-    <string name="room_settings_room_access_restricted_description">Jeder, der sich in einem Space mit diesem Raum befindet, kann diesen Raum finden und ihm beitreten. Nur die Administratoren des Raums können diesen zu einem Space hinzufügen.</string>
+    <string name="room_settings_room_access_restricted_description">Jeder, der sich in einem Space mit diesem Raum befindet, kann diesen Raum finden und ihm beitreten. Nur die Admins des Raums können diesen zu einem Space hinzufügen.</string>
     <string name="room_settings_room_access_restricted_title">Nur Space-Mitglieder</string>
     <plurals name="space_people_you_know">
         <item quantity="one">%d Person, die du kennst, ist bereits beigetreten</item>
@@ -2934,17 +2927,17 @@
     <string name="space_settings_permissions_title">Space-Berechtigungen</string>
     <string name="space_participants_unban_prompt_msg">Wenn du die Person entbannst, kann sie wieder beitreten.</string>
     <string name="space_participants_ban_prompt_msg">Wenn du eine Person bannst, kann sie nicht erneut beitreten.</string>
-    <string name="space_participants_kick_prompt_msg">Kicken entfernt die Person aus dem Space
+    <string name="space_participants_remove_prompt_msg">Kicken entfernt die Person aus dem Space
 \n
 \nUm sie für immer zu entfernen, solltest du sie bannen.</string>
     <string name="a11y_stop_voice_message">Aufnahme beenden</string>
     <string name="pick_tings_to_leave">Welche Räume willst du verlassen\?</string>
     <string name="finish_setup">Einrichtung beenden</string>
-    <string name="a11y_presence_unavailable">Nicht verfügbar</string>
+    <string name="a11y_presence_unavailable">Nicht stören</string>
     <string name="a11y_presence_offline">Offline</string>
     <string name="a11y_presence_online">Online</string>
     <string name="call_tap_to_return">%1$s Klicke zum Zurückkehren</string>
-    <string name="call_tile_no_answer">Nicht erreicht</string>
+    <string name="call_tile_no_answer">Nicht angenommen</string>
     <string name="command_description_lenny">Nachricht mit ( ͡° ͜ʖ ͡°) beginnen</string>
     <string name="command_description_whois">Zeigt Information über die Person an</string>
     <string name="command_description_avatar_for_room">Ändert dein Profilbild im aktuellen Raum</string>
@@ -2987,7 +2980,7 @@
     <string name="analytics_opt_in_list_item_1">Wir erfassen und analysieren <b>keine</b> Accountdaten</string>
     <string name="analytics_opt_in_content">Hilf uns dabei Probleme zu identifizieren und Element zu verbessern, indem du anonyme Nutzungsdaten teilst. Um zu verstehen, wie Personen mehrere Geräte benutzen, werden wir eine zufällige Kennung generieren, die zwischen deinen Geräten geteilt wird.
 \n
-\nDu kannst alle unsere Bedingungen lesen %s.</string>
+\n%s kannst du alle unsere Bedingungen lesen.</string>
     <string name="create_spaces_invite_public_header_desc">Stelle sicher, dass die richtigen Personen Zugriff auf %s haben. Du kannst jederzeit weitere Personen einladen.</string>
     <string name="create_spaces_invite_public_header">Wer ist Mitglied deines Teams\?</string>
     <string name="settings_discovery_no_policy_provided">Der Identitätsserver gibt keine Bedingungen an</string>
@@ -3003,4 +2996,99 @@
     <string name="analytics_opt_in_content_link">hier</string>
     <string name="analytics_opt_in_title">Hilf mit, Element zu verbessern</string>
     <string name="action_enable">Aktivieren</string>
+    <string name="room_member_override_nick_color">Farbe des Nicknamens ändern</string>
+    <string name="ftue_auth_carousel_2_title">Du hast die volle Kontrolle.</string>
+    <string name="room_error_access_unauthorized">Du hast nicht die Berechtigung um diesen Raum zu betreten</string>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">Keine Stimme abgegeben</item>
+        <item quantity="other">%1$d Stimme abgegeben. Stimme ab, um die Ergebnisse zu sehen</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">Basierend auf %1$d Stimme</item>
+        <item quantity="other">Basierend auf %1$d Stimmen</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d Stimme</item>
+        <item quantity="other">%1$d Stimmen</item>
+    </plurals>
+    <string name="restart_the_application_to_apply_changes">Starte die Anwendung neu, damit die Änderung wirksam wird.</string>
+    <string name="labs_enable_latex_maths">LaTeX-Mathematik aktivieren</string>
+    <string name="link_this_email_with_your_account">%s in den Einstellungen, um Einladungen direkt in Element zu erhalten.</string>
+    <string name="this_invite_to_this_space_was_sent">Diese Einladung zu diesem Raum wurde an %s gesendet, der nicht mit deinem Konto verbunden ist</string>
+    <string name="to_help_space_members_find_and_join">Um Spacemitgliedern zu helfen, einen privaten Raum zu finden und ihm beizutreten, gehe zu den Einstellungen des Raums, indem du auf den Avatar tippst.</string>
+    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Dies macht es für Räume einfach, privat in einem Space zu bleiben, während die Leute im Space diese finden und ihnen beitreten können. Alle neuen Räume in einem Raum haben diese Option zur Verfügung.</string>
+    <string name="help_people_in_spaces_find_and_join">Hilf Personen in Spaces, private Räume selbst zu finden und ihnen beizutreten, damit du nicht alle einzeln einladen musst.</string>
+    <string name="new_let_people_in_spaces_find_and_join">Neu: Personen in Spaces können private Räume finden und ihnen beitreten</string>
+    <string name="labs_auto_report_uisi_desc">Das System sendet automatisch Protokolle, wenn ein Fehler bei der Entschlüsselung auftritt</string>
+    <string name="labs_auto_report_uisi">Entschlüsselungsfehler automatisch melden.</string>
+    <string name="discovery_section">Auffindbarkeit (%s)</string>
+    <string name="discovery_invite">Per E-Mail einladen, finde deine Kontakte und mehr…</string>
+    <string name="finish_setting_up_discovery">Schließe die Konfiguration des Auffindbarkeitsdienstes ab.</string>
+    <string name="create_space_identity_server_info_none">Du verwendest derzeit keinen Identitätsserver. Um Teammitglieder einzuladen und für sie auffindbar zu sein, müssen du einen solchen Server konfigurieren.</string>
+    <string name="login_splash_already_have_account">Ich habe schon ein Konto</string>
+    <string name="ftue_auth_carousel_3_title">Vernetz dich mit jedem.</string>
+    <string name="ftue_auth_carousel_1_title">Besitze deine Konversationen.</string>
+    <string name="identity_server_consent_dialog_neutral_policy">Richtlinie</string>
+    <string name="identity_server_consent_dialog_content_3">Um bestehende Kontakte ermitteln zu können, müsst du Kontaktinformationen (E-Mails und Telefonnummern) an Ihren Identitätsserver senden. Wir verschlüsseln deine Daten vor dem Senden, um den Datenschutz zu gewährleisten.</string>
+    <string name="identity_server_consent_dialog_content_2">Um bestehende Kontakte zu ermitteln, müssen Sie Kontaktinformationen an deinen Identitätsserver senden.
+\n
+\nWir verschlüsseln deine Daten vor dem Senden, um den Datenschutz zu gewährleisten. Bist du damit einverstanden, diese Informationen zu senden\?</string>
+    <string name="settings_discovery_consent_notice_off_2">Deine Kontakte sind privat. Um in deinen Kontakten Benutzer erkennen zu können, benötigen wir deine Erlaubnis, Kontaktinformationen an deinen Identitätsserver zu senden.</string>
+    <string name="legals_no_policy_provided">Dieser Server stellt keine Richtlinie bereit.</string>
+    <string name="legals_identity_server_title">Deine Identitätsserver-Richtlinie</string>
+    <string name="legals_home_server_title">Deine Heimserver Richtlinie</string>
+    <string name="template_legals_application_title">${app_name} Richtlinie</string>
+    <string name="tooltip_attachment_poll">Abstimmung erstellen</string>
+    <string name="tooltip_attachment_contact">Kontakte öffnen</string>
+    <string name="tooltip_attachment_sticker">Sticker verschicken</string>
+    <string name="tooltip_attachment_file">Datei hochladen</string>
+    <string name="tooltip_attachment_gallery">Verschicke Fotos und Videos</string>
+    <string name="tooltip_attachment_photo">Kamera öffnen</string>
+    <string name="delete_poll_dialog_content">Willst du diese Umfrage wirklich entfernen\? Du wirst sie nicht wiederherstellen können.</string>
+    <string name="delete_poll_dialog_title">Abstimmung entfernen</string>
+    <string name="poll_end_room_list_preview">Abstimmung beendet</string>
+    <string name="poll_response_room_list_preview">Stimme abgegeben</string>
+    <string name="end_poll_confirmation_approve_button">Abstimmung beenden</string>
+    <string name="end_poll_confirmation_description">Dies verhindert, dass andere Personen abstimmen können, und zeigt die Endergebnisse der Umfrage an.</string>
+    <string name="end_poll_confirmation_title">Diese Abstimmung beenden\?</string>
+    <string name="a11y_poll_winner_option">Gewinneroption</string>
+    <string name="poll_end_action">Abstimmung beenden</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Endgültiges Ergebnis basiert auf %1$d Stimme</item>
+        <item quantity="other">Endgültiges Ergebnis basiert auf %1$d Stimmen</item>
+    </plurals>
+    <string name="ftue_auth_carousel_4_title">Element verbindet Datenschutz mit tollen Features.</string>
+    <string name="room_profile_section_restore_security">Verschlüsselung wiederherstellen</string>
+    <string name="tooltip_attachment_location">Standort freigeben</string>
+    <string name="location_share">Standort freigeben</string>
+    <string name="a11y_location_share_icon">Standort freigeben</string>
+    <string name="location_activity_title_static_sharing">Standort freigeben</string>
+    <string name="settings_enable_location_sharing">Standortfreigabe aktivieren</string>
+    <string name="location_share_external">Öffnen mit</string>
+    <string name="template_location_not_available_dialog_content">${app_name} konnte nicht auf deinen Standort zugreifen. Bitte versuche es später noch einmal.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} konnte nicht auf deinen Standort zugreifen</string>
+    <string name="location_activity_title_preview">Standort</string>
+    <string name="closed_poll_option_description">Ergebnisse werden erst angezeigt, wenn du die Umfrage beendest</string>
+    <string name="closed_poll_option_title">Geschlossene Umfrage</string>
+    <string name="open_poll_option_description">Ergebnisse werden direkt nach Stimmabgabe angezeigt</string>
+    <string name="open_poll_option_title">Offene Umfrage</string>
+    <string name="poll_type_title">Umfragetyp</string>
+    <string name="edit_poll_button">UMFRAGE BEARBEITEN</string>
+    <string name="edit_poll_title">Umfrage bearbeiten</string>
+    <string name="poll_no_votes_cast">Keine Stimmen abgegeben</string>
+    <string name="login_splash_create_account">Konto erstellen</string>
+    <string name="ftue_auth_carousel_title_messaging">Nachrichtenaustausch für dein Team.</string>
+    <string name="ftue_auth_carousel_body_encrypted">Ende-zu-Ende-verschlüsselt und ohne Telefonnummer nutzbar. Keine Werbung oder Datenerfassung.</string>
+    <string name="ftue_auth_carousel_body_control">Wähle wo deine Gespräche liegen, für Kontrolle und Unabhängigkeit. Verbunden mit Matrix.</string>
+    <string name="ftue_auth_carousel_body_secure">Sichere und unabhängige Kommunikation, die für die gleiche Vertraulichkeit sorgt, wie ein Gespräch von Angesicht zu Angesicht in deinem eigenen Zuhause.</string>
+    <string name="attachment_type_location">Standort</string>
+    <string name="a11y_trust_level_misconfigured">Fehlerhaft konfiguriertes Vertrauenslevel</string>
+    <string name="encryption_misconfigured">Die Verschlüsselung ist fehlerhaft konfiguriert</string>
+    <string name="contact_admin_to_restore_encryption">Bitte kontaktiere einen Admin, um die Verschlüsselung zurückzusetzen.</string>
+    <string name="encryption_has_been_misconfigured">Die Verschlüsselung wurde fehlerhaft konfiguriert.</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">Die Verschlüsselung wurde fehlerhaft konfiguriert und du kannst keine Nachrichten senden. Klicke, um die Einstellungen zu öffnen.</string>
+    <string name="room_unsupported_e2e_algorithm">Die Verschlüsselung wurde fehlerhaft konfiguriert und du kannst keine Nachrichten senden. Bitte kontaktiere einen Admin, um die Verschlüsselung wiederherzustellen.</string>
+    <string name="labs_render_locations_in_timeline">Geteilte Standorte anzeigen</string>
+    <string name="settings_enable_location_sharing_summary">Sobald aktiviert, kannst du deinen Standort in jeden Raum senden</string>
+    <string name="sent_location">Hat den Standort geteilt</string>
 </resources>

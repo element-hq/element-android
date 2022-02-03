@@ -319,9 +319,13 @@ class VectorCallViewModel @AssistedInject constructor(
                 call?.sendDtmfDigit(action.digit)
             }
             VectorCallViewActions.InitiateCallTransfer -> {
+                call?.updateRemoteOnHold(true)
                 _viewEvents.post(
                         VectorCallViewEvents.ShowCallTransferScreen
                 )
+            }
+            VectorCallViewActions.CallTransferSelectionCancelled -> {
+                call?.updateRemoteOnHold(false)
             }
             VectorCallViewActions.TransferCall         -> {
                 handleCallTransfer()

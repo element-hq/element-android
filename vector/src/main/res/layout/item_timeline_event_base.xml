@@ -130,6 +130,11 @@
             style="@style/TimelineContentStubBaseParams"
             android:layout="@layout/item_timeline_event_poll" />
 
+        <ViewStub
+            android:id="@+id/messageContentLocationStub"
+            style="@style/TimelineContentStubBaseParams"
+            android:layout="@layout/item_timeline_event_location_stub" />
+
     </FrameLayout>
 
     <im.vector.app.core.ui.views.SendStateImageView
@@ -190,5 +195,28 @@
 
         </com.google.android.flexbox.FlexboxLayout>
     </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/messageThreadSummaryConstraintLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/informationBottom"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="4dp"
+        android:paddingStart="13dp"
+        android:paddingEnd="13dp"
+        android:layout_toEndOf="@id/messageStartGuideline"
+        android:background="@drawable/rounded_rect_shape_8"
+        android:contentDescription="@string/room_threads_filter"
+        android:maxWidth="496dp"
+        android:minWidth="144dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <include layout="@layout/view_thread_room_summary" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </RelativeLayout>

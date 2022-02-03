@@ -69,6 +69,7 @@ class FtueAuthWebFragment @Inject constructor(
         super.onViewCreated(view, savedInstanceState)
 
         setupToolbar(views.loginWebToolbar)
+                .allowBack()
     }
 
     override fun updateWithState(state: OnboardingViewState) {
@@ -83,7 +84,7 @@ class FtueAuthWebFragment @Inject constructor(
     }
 
     private fun setupTitle(state: OnboardingViewState) {
-        views.loginWebToolbar.title = when (state.signMode) {
+        toolbar?.title = when (state.signMode) {
             SignMode.SignIn -> getString(R.string.login_signin)
             else            -> getString(R.string.login_signup)
         }

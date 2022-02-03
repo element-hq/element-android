@@ -9,7 +9,7 @@
     <string name="notice_room_join">%1$s kom inn</string>
     <string name="notice_room_leave">%1$s forlot rommet</string>
     <string name="notice_room_reject">%1$s sa nei til innbjodingi</string>
-    <string name="notice_room_kick">%1$s sparka %2$s</string>
+    <string name="notice_room_remove">%1$s sparka %2$s</string>
     <string name="notice_room_unban">%1$s slapp %2$s inn att</string>
     <string name="notice_room_ban">%1$s stengde %2$s ute</string>
     <string name="notice_room_withdraw">%1$s tok attende %2$s si innbjoding</string>
@@ -349,7 +349,6 @@
     <string name="room_title_one_member">1 medlem</string>
     <string name="room_participants_leave_prompt_title">Forlat rom</string>
     <string name="room_participants_leave_prompt_msg">Er du sikker på at du vil forlata rommet\?</string>
-    <string name="room_participants_remove_prompt_msg">Er du sikker på at du vil ta vekk %s frå denne samtalen\?</string>
     <string name="room_participants_create">Lag</string>
     <string name="room_participants_online">Tilkopla</string>
     <string name="room_participants_offline">Fråkopla</string>
@@ -362,7 +361,6 @@
     <string name="room_participants_header_devices">SESJONAR</string>
     <string name="room_participants_action_invite">Inviter</string>
     <string name="room_participants_action_leave">Forlat dette rommet</string>
-    <string name="room_participants_action_remove">Fjern frå dette romet</string>
     <string name="room_participants_action_ban">Steng ute</string>
     <string name="room_participants_action_unban">Slepp inn att</string>
     <string name="room_participants_action_set_default_power_level">Gjer til vanleg brukar</string>
@@ -751,7 +749,7 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="command_description_join_room">Vert med i rommet med det gjevne aliaset</string>
     <string name="command_description_part_room">Forlat rom</string>
     <string name="command_description_topic">Set romemnet</string>
-    <string name="command_description_kick_user">Sparkar brukarar med gjeven ID</string>
+    <string name="command_description_remove_user">Sparkar brukarar med gjeven ID</string>
     <string name="command_description_nick">Forandrar visingsnamnet ditt</string>
     <string name="command_description_markdown">På/Av markdown</string>
     <string name="command_description_clear_scalar_token">For å ordne opp i Matrix-App-administrasjon</string>
@@ -774,7 +772,7 @@ For å gå fram, ver venleg og skriv passordet ditt inn.</string>
     <string name="filter_group_members">Filtrer gruppemedlemmar</string>
     <string name="filter_group_rooms">Filtrer grupperom</string>
     <string name="group_no_long_description">Fellesskapssadministratoren har ikkje satt ei lang skildring for dette fellesskapet.</string>
-    <string name="has_been_kicked">Du vart sparka frå %1$s av %2$s</string>
+    <string name="has_been_removed">Du vart sparka frå %1$s av %2$s</string>
     <string name="has_been_banned">Du var stengd ute frå %1$s av %2$s</string>
     <string name="reason_colon">Grunnlag: %1$s</string>
     <string name="rejoin">Vert med att</string>
@@ -858,7 +856,7 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="settings_call_ringtone_title">Ringetone for innkommande samtalar</string>
     <string name="settings_call_ringtone_dialog_title">Vel ringetone for samtalar:</string>
     <string name="video_call_in_progress">Ein videosamtale pågår…</string>
-    <string name="room_participants_action_kick">Spark</string>
+    <string name="room_participants_action_remove">Spark</string>
     <string name="reason_hint">Grunn</string>
     <string name="settings_notification_advanced">Avanserte varslingsinnstillingar</string>
     <string name="settings_notification_by_event">Prioritet på varsel ut ifrå hendingar</string>

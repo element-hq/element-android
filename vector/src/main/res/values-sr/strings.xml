@@ -36,8 +36,8 @@
     <string name="notice_room_ban">%1$s забрани корисника %2$s</string>
     <string name="notice_room_unban_by_you">Укинули сте забрану кориснику %1$s</string>
     <string name="notice_room_unban">%1$s укину забрану кориснику %2$s</string>
-    <string name="notice_room_kick_by_you">Избацили сте корисника %1$s</string>
-    <string name="notice_room_kick">%1$s избаци %2$s</string>
+    <string name="notice_room_remove_by_you">Избацили сте корисника %1$s</string>
+    <string name="notice_room_remove">%1$s избаци %2$s</string>
     <string name="notice_room_reject_by_you">Одбили сте позивницу</string>
     <string name="notice_room_reject">%1$s одби позивницу</string>
     <string name="notice_direct_room_leave_by_you">Напустили сте собу</string>
@@ -130,8 +130,8 @@
     <string name="notice_room_ban_with_reason">%1$s забрани корисника %2$s. Разлог: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Одблокирали сте корисника %1$s. Разлог: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s одблокира корисника %2$s. Разлог: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Избацили сте корисника %1$s. Разлог: %2$s</string>
-    <string name="notice_room_kick_with_reason">%1$s избаци корисника %2$s. Разлог: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Избацили сте корисника %1$s. Разлог: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s избаци корисника %2$s. Разлог: %3$s</string>
     <string name="notice_room_reject_with_reason_by_you">Одбили сте позивницу. Разлог: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s одби позивницу. Разлог: %2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">Изашли сте. Разлог: %1$s</string>
@@ -617,7 +617,7 @@
     <string name="room_permissions_notify_everyone">Обавестити све</string>
     <string name="room_permissions_remove_messages_sent_by_others">Уклонити поруке које су други послали</string>
     <string name="room_permissions_ban_users">Забранити кориснике</string>
-    <string name="room_permissions_kick_users">Протерати кориснике</string>
+    <string name="room_permissions_remove_users">Протерати кориснике</string>
     <string name="room_permissions_change_settings">Променити подешавања</string>
     <string name="room_permissions_invite_users">Позвати чланове</string>
     <string name="room_permissions_send_messages">Слати поруке</string>
@@ -643,10 +643,9 @@
     <string name="room_participants_action_set_admin">Постави као администратор</string>
     <string name="room_participants_action_set_moderator">Постави као модератор</string>
     <string name="room_participants_action_set_default_power_level">Рисетуј на нормалан корисник</string>
-    <string name="room_participants_action_kick">Изтерај</string>
+    <string name="room_participants_action_remove">Изтерај</string>
     <string name="room_participants_action_unban">Уклони забрану</string>
     <string name="room_participants_action_ban">Забрани</string>
-    <string name="room_participants_action_remove">Уклони из ове собе</string>
     <string name="room_participants_action_leave">Напусти ову собу</string>
     <string name="room_participants_action_cancel_invite">Поништи позив</string>
     <string name="room_participants_action_invite">Позови</string>
@@ -660,7 +659,6 @@
     <string name="room_participants_offline">Ван везе</string>
     <string name="room_participants_online">На вези</string>
     <string name="room_participants_create">Креирај</string>
-    <string name="room_participants_remove_prompt_msg">Сигурно уклонити %s из овог ћаскања\?</string>
     <string name="room_participants_leave_private_warning">Ова соба није јавна. Нећете моћи поново да се придружите без позива.</string>
     <string name="room_participants_leave_prompt_msg">Стварно напустити ову собу\?</string>
     <string name="room_participants_leave_prompt_title">Напусти собу</string>
@@ -732,8 +730,8 @@
     <string name="room_participants_unban_title">Склони забрану корисника</string>
     <string name="room_participants_ban_reason">Разлог забране</string>
     <string name="room_participants_ban_title">Забрани корисника</string>
-    <string name="room_participants_kick_reason">Разлог одбацивања</string>
-    <string name="room_participants_kick_title">Одбацити корисник</string>
+    <string name="room_participants_remove_reason">Разлог одбацивања</string>
+    <string name="room_participants_remove_title">Одбацити корисник</string>
     <string name="no">НЕ</string>
     <string name="yes">ДА</string>
     <string name="media_slider_saved_message">Сачувати у преузимања\?</string>

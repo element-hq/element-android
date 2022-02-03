@@ -20,6 +20,7 @@ import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.message.MessageType
+import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
 
@@ -63,7 +64,7 @@ interface SendService {
      * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
      * @return a [Cancelable]
      */
-    fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean): Cancelable
+    fun sendQuotedTextMessage(quotedEvent: TimelineEvent, text: String, autoMarkdown: Boolean, rootThreadEventId: String? = null): Cancelable
 
     /**
      * Method to send a media asynchronously.
@@ -71,11 +72,13 @@ interface SendService {
      * @param compressBeforeSending set to true to compress images before sending them
      * @param roomIds set of roomIds to where the media will be sent. The current roomId will be add to this set if not present.
      *                It can be useful to send media to multiple room. It's safe to include the current roomId in this set
+     * @param rootThreadEventId when this param is not null, the Media will be sent in this specific thread
      * @return a [Cancelable]
      */
     fun sendMedia(attachment: ContentAttachmentData,
                   compressBeforeSending: Boolean,
-                  roomIds: Set<String>): Cancelable
+                  roomIds: Set<String>,
+                  rootThreadEventId: String? = null): Cancelable
 
     /**
      * Method to send a list of media asynchronously.
@@ -83,19 +86,22 @@ interface SendService {
      * @param compressBeforeSending set to true to compress images before sending them
      * @param roomIds set of roomIds to where the media will be sent. The current roomId will be add to this set if not present.
      *                It can be useful to send media to multiple room. It's safe to include the current roomId in this set
+     * @param rootThreadEventId when this param is not null, all the Media will be sent in this specific thread
      * @return a [Cancelable]
      */
     fun sendMedias(attachments: List<ContentAttachmentData>,
                    compressBeforeSending: Boolean,
-                   roomIds: Set<String>): Cancelable
+                   roomIds: Set<String>,
+                   rootThreadEventId: String? = null): Cancelable
 
     /**
      * Send a poll to the room.
+     * @param pollType indicates open or closed polls
      * @param question the question
      * @param options list of options
      * @return a [Cancelable]
      */
-    fun sendPoll(question: String, options: List<String>): Cancelable
+    fun sendPoll(pollType: PollType, question: String, options: List<String>): Cancelable
 
     /**
      * Method to send a poll response.
@@ -130,6 +136,14 @@ interface SendService {
      * @param localEcho the unsent local echo
      */
     fun resendMediaMessage(localEcho: TimelineEvent): Cancelable
+
+    /**
+     * Send a location event to the room
+     * @param latitude required latitude of the location
+     * @param longitude required longitude of the location
+     * @param uncertainty Accuracy of the location in meters
+     */
+    fun sendLocation(latitude: Double, longitude: Double, uncertainty: Double?): Cancelable
 
     /**
      * Remove this failed message from the timeline

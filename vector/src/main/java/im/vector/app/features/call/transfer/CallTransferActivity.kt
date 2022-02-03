@@ -16,6 +16,7 @@
 
 package im.vector.app.features.call.transfer
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -55,7 +56,7 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
 
         callTransferViewModel.observeViewEvents {
             when (it) {
-                is CallTransferViewEvents.Dismiss        -> finish()
+                is CallTransferViewEvents.Complete        -> handleComplete()
                 CallTransferViewEvents.Loading           -> showWaitingView()
                 is CallTransferViewEvents.FailToTransfer -> showSnackbar(getString(R.string.call_transfer_failure))
             }
@@ -70,7 +71,8 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
                 CallTransferPagerAdapter.DIAL_PAD_INDEX  -> tab.text = getString(R.string.call_dial_pad_title)
             }
         }.attach()
-        configureToolbar(views.callTransferToolbar)
+        setupToolbar(views.callTransferToolbar)
+                .allowBack()
         views.callTransferToolbar.title = getString(R.string.call_transfer_title)
         setupConnectAction()
     }
@@ -90,6 +92,11 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
                 }
             }
         }
+    }
+
+    private fun handleComplete() {
+        setResult(Activity.RESULT_OK)
+        finish()
     }
 
     companion object {

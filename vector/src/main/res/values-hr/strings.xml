@@ -365,7 +365,6 @@
     </plurals>
     <string name="room_participants_leave_prompt_title">Napusti sobu</string>
     <string name="room_participants_leave_prompt_msg">Jeste li sigurni da želite napustiti sobu\?</string>
-    <string name="room_participants_remove_prompt_msg">Jeste li sigurni da iz ovog ćaskanja želite ukloniti %s\?</string>
     <string name="room_participants_create">Izradi</string>
     <string name="room_participants_online">Na vezi</string>
     <string name="room_participants_offline">Odspojen</string>
@@ -378,10 +377,9 @@
     <string name="room_participants_header_devices">SESIJE</string>
     <string name="room_participants_action_invite">Pozovi</string>
     <string name="room_participants_action_leave">Napusti ovu sobu</string>
-    <string name="room_participants_action_remove">Izbaci iz ove sobe</string>
     <string name="room_participants_action_ban">Zabrani pristup</string>
     <string name="room_participants_action_unban">Ukloni zabranu pristupa</string>
-    <string name="room_participants_action_kick">Izbaci</string>
+    <string name="room_participants_action_remove">Izbaci</string>
     <string name="room_participants_action_set_default_power_level">Poništi na običnog korisnika</string>
     <string name="room_participants_action_set_moderator">Učini moderatorom</string>
     <string name="room_participants_action_set_admin">Učini administratorom</string>
@@ -555,11 +553,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">Oznaka FCM-a je uspješno registrirana pri Vašem poslužitelju.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Neuspjela registracija oznake FCM-a pri Vašem poslužitelju:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Servis za obavijesti</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Servis za obavijesti je pokrenut.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Servis za obavijesti nije pokrenut.
-\nPokušajte ponovno pokrenuti aplikaciju.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Pokreni servis</string>
     <string name="settings_troubleshoot_test_service_restart_title">Automatsko ponovno pokretanje Servisa za obavijesti</string>
     <string name="settings_troubleshoot_test_service_restart_success">Servis je zaustavljen i automatski ponovno pokrenut.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Neuspjelo ponovno pokretanje servisa</string>
@@ -810,7 +803,7 @@
     <string name="command_description_join_room">Pridružuje Vas u sobu s danim alternativnim nazivom</string>
     <string name="command_description_part_room">Napusti sobu</string>
     <string name="command_description_topic">Postavi temu sobe</string>
-    <string name="command_description_kick_user">Izbacuje korisnika s danim identitetom</string>
+    <string name="command_description_remove_user">Izbacuje korisnika s danim identitetom</string>
     <string name="command_description_nick">Mijenja Vaš nadimak za prikaz</string>
     <string name="command_description_markdown">Uključi/isključi Markdown</string>
     <string name="markdown_has_been_enabled">Markdown je omogućen.</string>
@@ -844,7 +837,7 @@
         <item quantity="other">%d soba</item>
     </plurals>
     <string name="group_no_long_description">Administrator zajednice nije dao dugačak opis ove zajednice.</string>
-    <string name="has_been_kicked">Izbačeni ste iz %1$s od strane %2$s</string>
+    <string name="has_been_removed">Izbačeni ste iz %1$s od strane %2$s</string>
     <string name="has_been_banned">Korisnik %2$s Vam je zabranio pristup sobi %1$s</string>
     <string name="reason_colon">Razlog: %1$s</string>
     <string name="rejoin">Ponovno se pridruži</string>

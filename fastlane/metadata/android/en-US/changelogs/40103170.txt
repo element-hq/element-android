@@ -1,0 +1,2 @@
+Main changes in this version: send your location to any room. Edit poll.
+Full changelog: https://github.com/vector-im/element-android/releases/tag/v1.3.17

@@ -27,7 +27,6 @@ import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.SessionComponent
 import org.matrix.android.sdk.internal.session.sync.SyncPresence
 import org.matrix.android.sdk.internal.session.sync.SyncTask
-import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.worker.SessionSafeCoroutineWorker
 import org.matrix.android.sdk.internal.worker.SessionWorkerParams
 import org.matrix.android.sdk.internal.worker.WorkerParamsFactory
@@ -58,7 +57,6 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
     ) : SessionWorkerParams
 
     @Inject lateinit var syncTask: SyncTask
-    @Inject lateinit var taskExecutor: TaskExecutor
     @Inject lateinit var workManagerProvider: WorkManagerProvider
 
     override fun injectWith(injector: SessionComponent) {
@@ -113,7 +111,7 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
      * Will return true if the sync response contains some toDevice events.
      */
     private suspend fun doSync(timeout: Long): Boolean {
-        val taskParams = SyncTask.Params(timeout * 1000, SyncPresence.Offline)
+        val taskParams = SyncTask.Params(timeout * 1000, SyncPresence.Offline, afterPause = false)
         val syncResponse = syncTask.execute(taskParams)
         return syncResponse.toDevice?.events?.isNotEmpty().orFalse()
     }
@@ -151,6 +149,7 @@ internal class SyncWorker(context: Context, workerParameters: WorkerParameters, 
                             sessionId = sessionId,
                             timeout = serverTimeoutInSeconds,
                             delay = delayInSeconds,
+                            periodic = true,
                             forceImmediate = forceImmediate
                     )
             )

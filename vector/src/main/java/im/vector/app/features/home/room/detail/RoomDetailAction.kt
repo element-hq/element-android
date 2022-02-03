@@ -89,6 +89,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class EnsureNativeWidgetAllowed(val widget: Widget,
                                          val userJustAccepted: Boolean,
                                          val grantedEvents: RoomDetailViewEvents) : RoomDetailAction()
+
     data class UpdateJoinJitsiCallStatus(val conferenceEvent: ConferenceEvent) : RoomDetailAction()
 
     data class OpenOrCreateDm(val userId: String) : RoomDetailAction()

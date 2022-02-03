@@ -7,6 +7,8 @@
     <string name="matrix_org_server_url" translatable="false">https://matrix.org</string>
     <string name="piwik_server_url" translatable="false">https://piwik.riot.im</string>
     <string name="bug_report_url" translatable="false">https://riot.im/bugreports/submit</string>
+    <string name="bug_report_app_name" translatable="false">riot-android</string>
+    <string name="bug_report_auto_uisi_app_name" translatable="false">element-auto-uisi</string>
 
     <!--
         Pusher config for the application

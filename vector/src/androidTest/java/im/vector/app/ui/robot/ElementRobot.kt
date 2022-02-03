@@ -40,6 +40,10 @@ import timber.log.Timber
 
 class ElementRobot {
 
+    fun onboarding(block: OnboardingRobot.() -> Unit) {
+        block(OnboardingRobot())
+    }
+
     fun signUp(userId: String) {
         val onboardingRobot = OnboardingRobot()
         onboardingRobot.createAccount(userId = userId)
@@ -124,7 +128,7 @@ class ElementRobot {
         }
 
         waitUntilActivityVisible<OnboardingActivity> {
-            assertDisplayed(R.id.loginSplashLogo)
+            assertDisplayed(R.id.loginSplashSubmit)
         }
     }
 
@@ -141,7 +145,7 @@ class ElementRobot {
             assertDisplayed(R.string.are_you_sure)
             clickOn(R.string.action_skip)
             waitUntilViewVisible(withId(R.id.bottomSheetFragmentContainer))
-        }.onFailure { Timber.w("Verification popup missing", it) }
+        }.onFailure { Timber.w(it, "Verification popup missing") }
     }
 }
 

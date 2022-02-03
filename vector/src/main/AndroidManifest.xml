@@ -42,6 +42,10 @@
         android:name="android.permission.WRITE_CALENDAR"
         tools:node="remove" />
 
+    <!-- Location Sharing -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <!-- Jitsi SDK is now API23+ -->
     <uses-sdk tools:overrideLibrary="org.jitsi.meet.sdk,com.oney.WebRTCModule,com.learnium.RNDeviceInfo,com.reactnativecommunity.asyncstorage,com.ocetnik.timer,com.calendarevents,com.reactnativecommunity.netinfo,com.kevinresol.react_native_default_preference,com.rnimmersive,com.corbt.keepawake,com.BV.LinearGradient,com.horcrux.svg,com.oblador.performance,com.reactnativecommunity.slider,com.brentvatne.react" />
 
@@ -76,6 +80,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
+        android:resizeableActivity="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Vector.Light"
@@ -170,6 +175,8 @@
         <activity android:name=".features.roomdirectory.RoomDirectoryActivity" />
         <activity android:name=".features.roomdirectory.roompreview.RoomPreviewActivity" />
         <activity android:name=".features.home.room.filtered.FilteredRoomsActivity" />
+        <activity android:name=".features.home.room.threads.ThreadsActivity" />
+
         <activity
             android:name=".features.home.room.detail.RoomDetailActivity"
             android:parentActivityName=".features.home.HomeActivity">
@@ -332,6 +339,7 @@
         <activity android:name=".features.spaces.people.SpacePeopleActivity" />
         <activity android:name=".features.spaces.leave.SpaceLeaveAdvancedActivity" />
         <activity android:name=".features.poll.create.CreatePollActivity" />
+        <activity android:name=".features.location.LocationSharingActivity" />
 
         <!-- Services -->
 
@@ -400,7 +408,8 @@
                 android:value="androidx.startup"
                 tools:node="remove" />
             <!-- We init the lib ourself in EmojiCompatWrapper -->
-            <meta-data android:name="androidx.emoji2.text.EmojiCompatInitializer"
+            <meta-data
+                android:name="androidx.emoji2.text.EmojiCompatInitializer"
                 tools:node="remove" />
         </provider>
 

@@ -185,7 +185,9 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         private const val SETTINGS_DISPLAY_ALL_EVENTS_KEY = "SETTINGS_DISPLAY_ALL_EVENTS_KEY"
 
         private const val DID_ASK_TO_ENABLE_SESSION_PUSH = "DID_ASK_TO_ENABLE_SESSION_PUSH"
-        private const val DID_PROMOTE_NEW_RESTRICTED_JOIN_RULE = "DID_PROMOTE_NEW_RESTRICTED_JOIN_RULE"
+
+        // Location Sharing
+        const val SETTINGS_PREF_ENABLE_LOCATION_SHARING = "SETTINGS_PREF_ENABLE_LOCATION_SHARING"
 
         private const val MEDIA_SAVING_3_DAYS = 0
         private const val MEDIA_SAVING_1_WEEK = 1
@@ -196,7 +198,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
 
         private const val TAKE_PHOTO_VIDEO_MODE = "TAKE_PHOTO_VIDEO_MODE"
 
-        private const val SETTINGS_LABS_ENABLE_POLLS = "SETTINGS_LABS_ENABLE_POLLS"
+        private const val SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE = "SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE"
+        const val SETTINGS_LABS_ENABLE_THREAD_MESSAGES = "SETTINGS_LABS_ENABLE_THREAD_MESSAGES"
 
         // Possible values for TAKE_PHOTO_VIDEO_MODE
         const val TAKE_PHOTO_VIDEO_MODE_ALWAYS_ASK = 0
@@ -349,16 +352,6 @@ class VectorPreferences @Inject constructor(private val context: Context) {
     fun setDidAskUserToEnableSessionPush() {
         defaultPrefs.edit {
             putBoolean(DID_ASK_TO_ENABLE_SESSION_PUSH, true)
-        }
-    }
-
-    fun didPromoteNewRestrictedFeature(): Boolean {
-        return defaultPrefs.getBoolean(DID_PROMOTE_NEW_RESTRICTED_JOIN_RULE, false)
-    }
-
-    fun setDidPromoteNewRestrictedFeature() {
-        defaultPrefs.edit {
-            putBoolean(DID_PROMOTE_NEW_RESTRICTED_JOIN_RULE, true)
         }
     }
 
@@ -992,7 +985,15 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         }
     }
 
-    fun labsEnablePolls(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_POLLS, false)
+    fun isLocationSharingEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_PREF_ENABLE_LOCATION_SHARING, false) && BuildConfig.enableLocationSharing
+    }
+
+    fun labsRenderLocationsInTimeline(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_RENDER_LOCATIONS_IN_TIMELINE, true)
+    }
+
+    fun areThreadMessagesEnabled(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_LABS_ENABLE_THREAD_MESSAGES, false)
     }
 }

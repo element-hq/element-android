@@ -49,7 +49,7 @@ class UserPreferencesProvider @Inject constructor(private val vectorPreferences:
         return vectorPreferences.showAvatarDisplayNameChangeMessages()
     }
 
-    fun shouldShowPolls(): Boolean {
-        return vectorPreferences.labsEnablePolls()
+    fun areThreadMessagesEnabled(): Boolean {
+        return vectorPreferences.areThreadMessagesEnabled()
     }
 }

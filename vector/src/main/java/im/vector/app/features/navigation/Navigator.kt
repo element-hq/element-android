@@ -25,9 +25,13 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
+import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.media.AttachmentData
 import im.vector.app.features.pin.PinMode
+import im.vector.app.features.poll.create.PollMode
 import im.vector.app.features.roomdirectory.RoomDirectoryData
 import im.vector.app.features.roomdirectory.roompreview.RoomPreviewData
 import im.vector.app.features.settings.VectorSettingsActivity
@@ -76,7 +80,7 @@ interface Navigator {
 
     fun openMatrixToBottomSheet(context: Context, link: String)
 
-    fun openCreateRoom(context: Context, initialName: String = "")
+    fun openCreateRoom(context: Context, initialName: String = "", openAfterCreate: Boolean = true)
 
     fun openCreateDirectRoom(context: Context)
 
@@ -142,11 +146,24 @@ interface Navigator {
                         inMemory: List<AttachmentData> = emptyList(),
                         options: ((MutableList<Pair<View, String>>) -> Unit)?)
 
-    fun openSearch(context: Context, roomId: String)
+    fun openSearch(context: Context, roomId: String, roomDisplayName: String?, roomAvatarUrl: String?)
 
     fun openDevTools(context: Context, roomId: String)
 
-    fun openCallTransfer(context: Context, callId: String)
+    fun openCallTransfer(
+            context: Context,
+            activityResultLauncher: ActivityResultLauncher<Intent>,
+            callId: String
+    )
 
-    fun openCreatePoll(context: Context, roomId: String)
+    fun openCreatePoll(context: Context, roomId: String, editedEventId: String?, mode: PollMode)
+
+    fun openLocationSharing(context: Context,
+                            roomId: String,
+                            mode: LocationSharingMode,
+                            initialLocationData: LocationData?,
+                            locationOwnerId: String)
+    fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String? = null)
+
+    fun openThreadList(context: Context, threadTimelineArgs: ThreadTimelineArgs)
 }

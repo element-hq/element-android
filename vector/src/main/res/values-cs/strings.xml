@@ -9,7 +9,7 @@
     <string name="notice_room_join">%1$s vstoupil(a) do místnosti</string>
     <string name="notice_room_leave">Uživatel %1$s odešel z místnosti</string>
     <string name="notice_room_reject">%1$s odmítli pozvání</string>
-    <string name="notice_room_kick">%1$s vykopli %2$s</string>
+    <string name="notice_room_remove">%1$s vykopli %2$s</string>
     <string name="notice_room_unban">%1$s zrušil vykázání %2$s</string>
     <string name="notice_room_ban">%1$s vykázali %2$s</string>
     <string name="notice_room_withdraw">%1$s zrušili pozvání pro %2$s</string>
@@ -95,7 +95,7 @@
     <string name="notice_room_join_by_you">Vstoupili jste do místnosti</string>
     <string name="notice_room_leave_by_you">Opustili jste místnost</string>
     <string name="notice_room_reject_by_you">Odmítli jste pozvání</string>
-    <string name="notice_room_kick_by_you">Vykopli jste %1$s</string>
+    <string name="notice_room_remove_by_you">Vykopli jste %1$s</string>
     <string name="notice_room_unban_by_you">Zrušili jste vykázání pro %1$s</string>
     <string name="notice_room_ban_by_you">Vykázali jste %1$s</string>
     <string name="notice_room_withdraw_by_you">Stáhli jste pozvánku od %1$s zpět</string>
@@ -147,8 +147,8 @@
     <string name="notice_room_leave_with_reason_by_you">Opustili jste místnost. Důvod: %1$s</string>
     <string name="notice_room_reject_with_reason">%1$s pozvání odmítli. Důvod: %2$s</string>
     <string name="notice_room_reject_with_reason_by_you">Odmítli jste pozvání. Důvod: %1$s</string>
-    <string name="notice_room_kick_with_reason">%1$s vykopnuli %2$s. Důvod: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Vykopnuli jste %1$s. Důvod: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s vykopnuli %2$s. Důvod: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Vykopnuli jste %1$s. Důvod: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s zrušili %2$s vykázání. Důvod: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Zrušili jste %1$s vykázání. Důvod: %2$s</string>
     <string name="notice_room_ban_with_reason">%1$s vykázali %2$s. Důvod: %3$s</string>
@@ -587,7 +587,6 @@
     </plurals>
     <string name="room_participants_leave_prompt_title">Opustit místnost</string>
     <string name="room_participants_leave_prompt_msg">Opravdu chcete opustit tuto místnost\?</string>
-    <string name="room_participants_remove_prompt_msg">Opravdu chcete vyhodit %s z této konverzace\?</string>
     <string name="room_participants_create">Vytvořit</string>
     <string name="room_participants_online">On-line</string>
     <string name="room_participants_offline">Off-line</string>
@@ -600,10 +599,9 @@
     <string name="room_participants_header_devices">RELACE</string>
     <string name="room_participants_action_invite">Pozvat</string>
     <string name="room_participants_action_leave">Opustit tuto místnost</string>
-    <string name="room_participants_action_remove">Odstranit z této místnosti</string>
     <string name="room_participants_action_ban">Vykázat</string>
     <string name="room_participants_action_unban">Zrušit vykázání</string>
-    <string name="room_participants_action_kick">Vykopnout</string>
+    <string name="room_participants_action_remove">Vykopnout</string>
     <string name="room_participants_action_set_default_power_level">Obnovit na normálního uživatele</string>
     <string name="room_participants_action_set_moderator">Udělat moderátorem</string>
     <string name="room_participants_action_set_admin">Udělat správcem</string>
@@ -613,7 +611,7 @@
     <string name="room_participants_action_mention">Zmínit</string>
     <string name="room_participants_action_devices_list">Zobrazit seznam relací</string>
     <string name="room_preview_room_interactions_disabled">Toto je náhled místnosti. Interakce s místností byla vypnuta.</string>
-    <string name="room_participants_ban_prompt_msg">Vykázání uživatele jej vykopne z této místnosti a zamezí, aby opět vstoupili.</string>
+    <string name="room_participants_ban_prompt_msg">Vykázání uživatele jej odebere z této místnosti a zamezí, aby opět vstoupil.</string>
     <string name="reason_hint">Důvod</string>
     <string name="room_participants_invite_prompt_msg">Opravdu chcete pozvat uživatele %s do této konverzace\?</string>
     <string name="room_participants_invite_join_names">"%1$s, "</string>
@@ -834,11 +832,6 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM token se podařilo úspěšné registrovat na domovském serveru.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Registrace FCM tokenu na domovském serveru se nezdařila:
 \n%1$s</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Služba oznámení</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Služba oznámení je v chodu.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Služba oznámení není v chodu. 
-\nZkuste restartovat aplikaci.</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Spustit službu</string>
     <string name="settings_troubleshoot_test_service_restart_title">Auto-restart služby oznámení</string>
     <string name="settings_troubleshoot_test_service_restart_success">Služba byla ukončena a spustila se automaticky.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Restart služby se nezdařil</string>
@@ -937,7 +930,7 @@
     <string name="settings_show_read_receipts">Ukázat potvrzení o přečtení</string>
     <string name="settings_show_read_receipts_summary">Klepněte na potvrzení o přečtení pro podrobnosti.</string>
     <string name="settings_show_join_leave_messages">Ukázat události příchodů a odchodů</string>
-    <string name="settings_show_join_leave_messages_summary">Nemá vliv na pozvánky, nakopnutí a zákazy.</string>
+    <string name="settings_show_join_leave_messages_summary">Pozvánky, odebrání a vykázání nejsou dotčeny.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Ukázat události účtu</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Zahrnout avatar a změny veřejného jména.</string>
     <string name="settings_vibrate_on_mention">Vibrovat při zmínce uživatele</string>
@@ -1290,7 +1283,7 @@
     <string name="command_description_join_room">Vstoupí do místnosti s danou adresou</string>
     <string name="command_description_part_room">Opustit místnost</string>
     <string name="command_description_topic">Určit téma místnosti</string>
-    <string name="command_description_kick_user">Nakopne uživatele s daným id</string>
+    <string name="command_description_remove_user">Nakopne uživatele s daným id</string>
     <string name="command_description_nick">Změní Vaši veřejnou přezdívku</string>
     <string name="command_description_markdown">Markdown zap/vyp</string>
     <string name="command_description_deop_user">Odebere práva uživateli s daným id</string>
@@ -1326,7 +1319,7 @@
         <item quantity="other">%d místností</item>
     </plurals>
     <string name="group_no_long_description">Správce komunity neposkytl podrobný popis této lomunity.</string>
-    <string name="has_been_kicked">%2$s Vás vykopnul z %1$s</string>
+    <string name="has_been_removed">%2$s Vás vykopnul z %1$s</string>
     <string name="has_been_banned">%2$s Vám zakázal %1$s</string>
     <string name="reason_colon">Důvod: %1$s</string>
     <string name="rejoin">Opět se přidejte</string>
@@ -1669,7 +1662,7 @@
     <string name="attachment_type_sticker">Nálepka</string>
     <string name="error_handling_incoming_share">Nemohl jsem zpracovat sdílená data</string>
     <string name="report_content_spam">Je to spam</string>
-    <string name="report_content_inappropriate">Je to nepatřičné</string>
+    <string name="report_content_inappropriate">Je to nevhodné</string>
     <string name="report_content_custom">Vlastní hlášení…</string>
     <string name="report_content_custom_title">Nahlásit tento obsah</string>
     <string name="report_content_custom_hint">Důvod k nahlášení tohoto obsahu</string>
@@ -1683,7 +1676,7 @@
     <string name="content_reported_as_spam_content">Tento obsah byl nahlášen jako spam.
 \n
 \nPokud si dále nepřejete vidět více obsahu tohoto uživatele, můžete jej ignorovat a tím skrýt jejich zprávy.</string>
-    <string name="content_reported_as_inappropriate_title">Nahlášeno jako nepatřičné</string>
+    <string name="content_reported_as_inappropriate_title">Nahlášeno jako nevhodné</string>
     <string name="content_reported_as_inappropriate_content">Obsah byl nahlášen jako nepatřičný.
 \n
 \nPokud si dále nepřejete vidět obsah tohoto uživatele, můžete jej ignorovat a tím skrýt jejich zprávy.</string>
@@ -2238,9 +2231,9 @@
     <string name="room_participants_action_unignore_prompt_msg">Odignorování tohoto uživatele opět ukáže všechny jejich zprávy.</string>
     <string name="room_participants_action_cancel_invite_title">Zrušit pozvánku</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Jste si jisti, že chcete zrušit pozvánku tomuto uživateli\?</string>
-    <string name="room_participants_kick_title">Vykopnout uživatele</string>
-    <string name="room_participants_kick_reason">Důvod k vykopnutí</string>
-    <string name="room_participants_kick_prompt_msg">Vykopnutí uživatele je odstraní z této místnosti.
+    <string name="room_participants_remove_title">Vykopnout uživatele</string>
+    <string name="room_participants_remove_reason">Důvod k vykopnutí</string>
+    <string name="room_participants_remove_prompt_msg">Vykopnutí uživatele je odstraní z této místnosti.
 \n
 \nAbyste mu zamezili opětovně vstoupit, měli byste jej zakázat.</string>
     <string name="room_participants_ban_title">Vykázat uživatele</string>
@@ -2393,7 +2386,7 @@
         <item quantity="other">%d vteřin</item>
     </plurals>
     <string name="settings_show_room_member_state_events">Zobrazit stavové události účastníků v místnosti</string>
-    <string name="settings_show_room_member_state_events_summary">Zahrnuje události pozvat/vstoupit/opustit/vykopnout/vykázat a změny avatara/veřejného jména.</string>
+    <string name="settings_show_room_member_state_events_summary">Zahrnuje události pozvat/vstoupit/opustit/odebrat/vykázat a změny avatara/veřejného jména.</string>
     <string name="sent_a_poll">Hlasování</string>
     <string name="sent_a_reaction">Reagoval(a): %s</string>
     <string name="sent_verification_conclusion">Výsledek ověření</string>
@@ -2584,7 +2577,7 @@
     <string name="room_permissions_notify_everyone">Upozornit všechny</string>
     <string name="room_permissions_remove_messages_sent_by_others">Odstranit zprávy odeslané ostatními</string>
     <string name="room_permissions_ban_users">Vykázat uživatele</string>
-    <string name="room_permissions_kick_users">Vykopnout uživatele</string>
+    <string name="room_permissions_remove_users">Vykopnout uživatele</string>
     <string name="room_permissions_change_settings">Upravit nastavení</string>
     <string name="room_permissions_invite_users">Pozvat uživatele</string>
     <string name="room_permissions_send_messages">Poslat zprávu</string>
@@ -3017,8 +3010,8 @@
     <string name="space_settings_permissions_subtitle">Zobrazit a aktualizovat role potřebné ke změně různých částí prostoru.</string>
     <string name="space_settings_permissions_title">Oprávnění prostoru</string>
     <string name="space_participants_unban_prompt_msg">Zrušením vykázání uživateli umožní znovu se připojit do prostoru.</string>
-    <string name="space_participants_ban_prompt_msg">Vykázáním uživatele z tohoto prostoru vykopnete a zabráníte mu v dalším připojení.</string>
-    <string name="space_participants_kick_prompt_msg">vykopnutí uživatele je z tohoto prostoru odstraní.
+    <string name="space_participants_ban_prompt_msg">Vykázání uživatele z tohoto prostoru ho odebere a zamezí, aby opět vstoupil.</string>
+    <string name="space_participants_remove_prompt_msg">vykopnutí uživatele je z tohoto prostoru odstraní.
 \n
 \nAbyste jim zabránili v dalším vstupu, měli byste je raději vykázat.</string>
     <string name="command_description_lenny">Předsune ( ͡° ͜ʖ ͡°) do textové zprávy</string>
@@ -3068,7 +3061,6 @@
     <string name="delete_poll_dialog_title">Odstranit hlasování</string>
     <string name="poll_end_room_list_preview">Hlasování skončilo</string>
     <string name="poll_response_room_list_preview">Hlas odeslán</string>
-    <string name="labs_enable_polls">Povolit hlasování</string>
     <string name="end_poll_confirmation_approve_button">Ukončit hlasování</string>
     <string name="end_poll_confirmation_description">Toto zastaví možnost hlasování a zobrazí se konečné výsledky.</string>
     <string name="end_poll_confirmation_title">Ukončit toto hlasování\?</string>
@@ -3080,8 +3072,8 @@
         <item quantity="other">Konečný výsledek na základě %1$d hlasů</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
-        <item quantity="one">Nikdo nehlasoval</item>
-        <item quantity="few">%1$d hlasů. Hlasujte pro zobrazení výsledků</item>
+        <item quantity="one">%1$d hlas. Hlasujte pro zobrazení výsledků</item>
+        <item quantity="few">%1$d hlasy. Hlasujte pro zobrazení výsledků</item>
         <item quantity="other">%1$d hlasů. Hlasujte pro zobrazení výsledků</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_voted">
@@ -3117,4 +3109,51 @@
     <string name="restart_the_application_to_apply_changes">Restartujte aplikaci, aby se změna projevila.</string>
     <string name="labs_enable_latex_maths">Povolit matematické výrazy LaTeXu</string>
     <string name="room_error_access_unauthorized">Do této místnosti vám není dovoleno vstoupit</string>
+    <string name="tooltip_attachment_poll">Vytvořit hlasování</string>
+    <string name="tooltip_attachment_contact">Otevřít kontakty</string>
+    <string name="tooltip_attachment_sticker">Odeslat nálepku</string>
+    <string name="tooltip_attachment_file">Odeslání souboru</string>
+    <string name="tooltip_attachment_gallery">Odesílání obrázků a videí</string>
+    <string name="tooltip_attachment_photo">Otevřít fotoaparát</string>
+    <string name="labs_auto_report_uisi_desc">Váš systém bude automaticky odesílat chybové protokoly, když dojde k chybě dešifrování</string>
+    <string name="labs_auto_report_uisi">Automaticky nahlašovat chyby dešifrování.</string>
+    <string name="room_member_override_nick_color">Přepsat barvu přezdívky</string>
+    <string name="login_splash_already_have_account">Již mám účet</string>
+    <string name="ftue_auth_carousel_4_title">Zlepšete týmovou komunikaci.</string>
+    <string name="ftue_auth_carousel_3_title">Bezpečené zasílání zpráv.</string>
+    <string name="ftue_auth_carousel_2_title">Máte vše pod kontrolou.</string>
+    <string name="ftue_auth_carousel_1_title">Vlastněte své konverzace.</string>
+    <string name="tooltip_attachment_location">Sdílet polohu</string>
+    <string name="labs_render_locations_in_timeline">Zobrazit polohy uživatele na časové ose</string>
+    <string name="settings_enable_location_sharing_summary">Po zapnutí budete moci odeslat svou polohu do libovolné místnosti</string>
+    <string name="settings_enable_location_sharing">Povolit sdílení polohy</string>
+    <string name="location_share_external">Otevřít v</string>
+    <string name="template_location_not_available_dialog_content">${app_name} nemohl získat přístup k vaší poloze. Zkuste to prosím později.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} nemohl získat přístup k vaší poloze</string>
+    <string name="location_share">Sdílet polohu</string>
+    <string name="a11y_location_share_icon">Sdílet polohu</string>
+    <string name="location_activity_title_preview">Poloha</string>
+    <string name="location_activity_title_static_sharing">Sdílet polohu</string>
+    <string name="closed_poll_option_description">Výsledky se zobrazí až po ukončení hlasování</string>
+    <string name="closed_poll_option_title">Uzavřené hlasování</string>
+    <string name="open_poll_option_description">Hlasující vidí výsledky ihned po hlasování</string>
+    <string name="open_poll_option_title">Otevřené hlasování</string>
+    <string name="poll_type_title">Typ hlasování</string>
+    <string name="edit_poll_button">UPRAVIT HLASOVÁNÍ</string>
+    <string name="edit_poll_title">Upravit hlasování</string>
+    <string name="poll_no_votes_cast">Nikdo nehlasoval</string>
+    <string name="a11y_trust_level_misconfigured">Chybně nakonfigurovaná úroveň důvěryhodnosti</string>
+    <string name="encryption_misconfigured">Šifrování je špatně nakonfigurováno</string>
+    <string name="room_profile_section_restore_security">Obnovit šifrování</string>
+    <string name="room_unsupported_e2e_algorithm">Šifrování bylo špatně nakonfigurováno, takže nelze odesílat zprávy. Kontaktujte správce, aby obnovil šifrování do funkčního stavu.</string>
+    <string name="contact_admin_to_restore_encryption">Kontaktujte správce, aby obnovil šifrování do funkčního stavu.</string>
+    <string name="encryption_has_been_misconfigured">Šifrování bylo špatně nakonfigurováno.</string>
+    <string name="sent_location">Sdíleli svou polohu</string>
+    <string name="login_splash_create_account">Vytvořit účet</string>
+    <string name="ftue_auth_carousel_title_messaging">Zasílání zpráv pro váš tým.</string>
+    <string name="ftue_auth_carousel_body_encrypted">Koncové šifrování bez potřeby telefonního čísla. Žádné reklamy ani vytěžování dat.</string>
+    <string name="ftue_auth_carousel_body_control">Můžete si vybrat, kde budou vaše konverzace uloženy, a získat tak kontrolu a nezávislost. Připojeno přes Matrix.</string>
+    <string name="ftue_auth_carousel_body_secure">Bezpečná a nezávislá komunikace, která vám poskytne stejnou úroveň soukromí jako osobní rozhovor u vás doma.</string>
+    <string name="attachment_type_location">Poloha</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">Šifrování bylo špatně nakonfigurováno, takže nelze odesílat zprávy. Kliknutím otevřete nastavení.</string>
 </resources>

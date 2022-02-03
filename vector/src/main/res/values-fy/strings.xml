@@ -223,7 +223,6 @@
     <string name="room_participants_invite_search_another_user">Brûkers-ID, namme of e-mailadres</string>
     <string name="room_participants_action_leave">Dizze keamer ferlitte</string>
     <string name="room_participants_create">Oanmeitsje</string>
-    <string name="room_participants_action_remove">Ut dizze keamer fuortsmite</string>
     <string name="room_settings_enable_encryption_no_permission">Jo hawwe gjin tastimming om fersifering yn dizze keamer yn te skeakeljen.</string>
     <string name="sound_device_phone">Telefoan</string>
     <string name="call_failed_dont_ask_again">My net wer freegje</string>
@@ -423,8 +422,8 @@
     <string name="notice_room_ban_by_you">Jo hawwe %1$s ferballe</string>
     <string name="notice_direct_room_join_by_you">Jo binne oansluten</string>
     <string name="notice_room_ban">%1$s hat %2$s ferballe</string>
-    <string name="notice_room_kick_by_you">Jo hawwe %1$s der útskopt</string>
-    <string name="notice_room_kick">%1$s hat %2$s der útskopt</string>
+    <string name="notice_room_remove_by_you">Jo hawwe %1$s der útskopt</string>
+    <string name="notice_room_remove">%1$s hat %2$s der útskopt</string>
     <string name="notice_room_reject_by_you">Jo hawwe de útnûging wegere</string>
     <string name="notice_room_reject">%1$s hat de útnûging wegere</string>
     <string name="notice_direct_room_leave_by_you">Jo hawwe de keamer ferlitten</string>
@@ -484,8 +483,8 @@
     <string name="notice_room_topic_removed">%1$s hat it petearûnderwerp fuortsmiten</string>
     <string name="notice_room_name_removed_by_you">Jo hawwe de keamernamme fuortsmiten</string>
     <string name="notice_room_name_removed">%1$s hat de petearnamme fuortsmiten</string>
-    <string name="notice_room_kick_with_reason">%1$s hat %2$s der útskopt. Reden: %3$s</string>
-    <string name="notice_room_kick_with_reason_by_you">Jo hawwe %1$s der útskopt. Reden: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s hat %2$s der útskopt. Reden: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">Jo hawwe %1$s der útskopt. Reden: %2$s</string>
     <string name="notice_direct_room_update_by_you">Jo hawwe hjir bywurke.</string>
     <string name="notice_direct_room_update">%s is hjir fernijd.</string>
     <string name="notice_placed_voice_call_by_you">Jo hawwe in audiopetear iepene.</string>
@@ -720,7 +719,7 @@
     <string name="notification_noisy">Lûd</string>
     <string name="notification_silent">Stil</string>
     <string name="notification_off">Ut</string>
-    <string name="command_description_kick_user">Brûker mei it ID wat opjûn is der útskoppe</string>
+    <string name="command_description_remove_user">Brûker mei it ID wat opjûn is der útskoppe</string>
     <string name="command_description_part_room">Keamer ferlitte</string>
     <string name="share_without_verifying_short_label">Diele</string>
     <string name="share_without_verifying">Diele sûnder te ferifiearjen</string>
@@ -849,8 +848,6 @@
     <string name="settings_enable_all_notif">Notifikaasjes foar dizze account ynskeakelje</string>
     <string name="settings_notification_ringtone">Notifikaasjelûd</string>
     <string name="settings_notification_privacy_normal">Normaal</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_quickfix">Tsjinst starte</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_title">Notifikaasjetsjinst</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Ynstellingen kontrolearje</string>
     <string name="settings_troubleshoot_test_device_settings_title">Sesjeynstellingen.</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Oan it útfieren… (%1$d fan %2$d)</string>
@@ -874,7 +871,7 @@
     <string name="room_permissions_notify_everyone">Elkenien op de hichte bringe</string>
     <string name="room_permissions_remove_messages_sent_by_others">Berjochten dy’t troch oaren ferstjoerd binne fuortsmite</string>
     <string name="room_permissions_ban_users">Brûkers ferbalje</string>
-    <string name="room_permissions_kick_users">Brûkers der út skoppe</string>
+    <string name="room_permissions_remove_users">Brûkers der út skoppe</string>
     <string name="room_permissions_invite_users">Brûkers útnûgje</string>
     <string name="room_permissions_send_messages">Berjochten ferstjoere</string>
     <string name="room_permissions_default_role">Standert rol</string>
@@ -907,7 +904,7 @@
     <string name="room_participants_action_set_admin">Behearder meitsje</string>
     <string name="room_participants_action_set_moderator">Moderator meitsje</string>
     <string name="room_participants_action_set_default_power_level">Weromsette nei gewoane brûker</string>
-    <string name="room_participants_action_kick">Der útskoppe</string>
+    <string name="room_participants_action_remove">Der útskoppe</string>
     <string name="room_participants_action_ban">Ferbalje</string>
     <string name="room_participants_action_cancel_invite">Utnûging annulearje</string>
     <string name="room_participants_action_invite">Utnûgje</string>
@@ -1081,9 +1078,6 @@
     <string name="settings_call_notifications_preferences">Opropnotifikaasjes konfigurearje</string>
     <string name="settings_notification_privacy_nosecure_message_content">• Notifikaasjes befetsje <b>meta- en berjochtgegevens</b></string>
     <string name="settings_troubleshoot_test_service_restart_title">Notifikaasjetsjinst automatysk opnij starte</string>
-    <string name="settings_troubleshoot_test_foreground_service_started_failed">Notifikaasjetsjinst is net aktyf.
-\nProbearje de app opnij te starten.</string>
-    <string name="settings_troubleshoot_test_foreground_service_startedt_success">Notifikaasjetsjinst is aktyf.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Notifikaasjes binne foar dizze sesje ynskeakele.</string>
     <string name="settings_notification_troubleshoot">Problemen mei notifikaasjes oplosse</string>
     <string name="settings_notification_default">Standert notifikaasjes</string>
@@ -1331,14 +1325,14 @@
     <string name="room_participants_unban_title">Ferballing brûker ûngedien meitsje</string>
     <string name="room_participants_ban_reason">Reden foar ferballing</string>
     <string name="room_participants_ban_title">Brûker ferbalje</string>
-    <string name="space_participants_kick_prompt_msg">troch dizze brûker fuort te smiten sil dy net mear yn dizze romte sitte.
+    <string name="space_participants_remove_prompt_msg">troch dizze brûker fuort te smiten sil dy net mear yn dizze romte sitte.
 \n
 \nOm foar te kommen dat dyjinge opnij ta treed, kinne jo him/har ek ferballe.</string>
-    <string name="room_participants_kick_prompt_msg">troch dizze brûker fuort te smiten sil dy net mear yn dit petear sitte.
+    <string name="room_participants_remove_prompt_msg">troch dizze brûker fuort te smiten sil dy net mear yn dit petear sitte.
 \n
 \nOm foar te kommen dat dyjinge opnij ta treed, kinne jo him/har ek ferballe.</string>
-    <string name="room_participants_kick_reason">Reden foar fuortsmiten</string>
-    <string name="room_participants_kick_title">Brûker fuortsmite</string>
+    <string name="room_participants_remove_reason">Reden foar fuortsmiten</string>
+    <string name="room_participants_remove_title">Brûker fuortsmite</string>
     <string name="room_participants_action_cancel_invite_prompt_msg">Binne jo wis dat jo de útnûging foar dizze brûker annulearje wolle\?</string>
     <string name="room_participants_action_unignore_prompt_msg">It net mear negearjen fan dizze brûker sil al syn/har berjochten opnij werjaan.</string>
     <string name="room_participants_action_ignore_prompt_msg">Troch dizze brûker te negearjen wurden syn/har berjochten fuortsmiten út petearen dy’t jimme diele.
@@ -1348,7 +1342,6 @@
     <string name="room_participants_power_level_prompt">Jo kinne dizze wizigingen net ûngedien meitsje omdat jo de brûker ta itselde nivo as josels promovearje.
 \nBinne jo wis\?</string>
     <string name="room_participants_action_unban">Untballe</string>
-    <string name="room_participants_remove_prompt_msg">Binne jo wis dat jo %s út dit petear gean wolle\?</string>
     <string name="room_participants_leave_private_warning">Dit petear is net iepenbier. Jo kinne net opnij ta trede sûnder útnûging.</string>
     <plurals name="format_time_d">
         <item quantity="one">%dd</item>

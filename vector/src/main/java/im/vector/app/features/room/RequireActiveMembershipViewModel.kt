@@ -98,13 +98,13 @@ class RequireActiveMembershipViewModel @AssistedInject constructor(
         val viewEvent = when (roomSummary.membership) {
             Membership.LEAVE -> {
                 val message = senderDisplayName?.let {
-                    stringProvider.getString(R.string.has_been_kicked, roomSummary.displayName, it)
+                    stringProvider.getString(R.string.has_been_removed, roomSummary.displayName, it)
                 }
                 RequireActiveMembershipViewEvents.RoomLeft(message)
             }
             Membership.KNOCK -> {
                 val message = senderDisplayName?.let {
-                    stringProvider.getString(R.string.has_been_kicked, roomSummary.displayName, it)
+                    stringProvider.getString(R.string.has_been_removed, roomSummary.displayName, it)
                 }
                 RequireActiveMembershipViewEvents.RoomLeft(message)
             }
