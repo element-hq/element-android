@@ -27,5 +27,7 @@ internal fun PreviewUrlCacheEntity.toDomain() = PreviewUrlData(
         siteName = siteName,
         title = title,
         description = description,
-        mxcUrl = mxcUrl
+        mxcUrl = mxcUrl,
+        imageWidth = imageWidth,
+        imageHeight = imageHeight
 )

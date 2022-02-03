@@ -64,7 +64,7 @@ abstract class NoticeItem : BaseEventItem<NoticeItem.Holder>() {
         return listOf(attributes.informationData.eventId)
     }
 
-    override fun getViewType() = STUB_ID
+    override fun getViewStubId() = STUB_ID
 
     class Holder : BaseHolder(STUB_ID) {
         val avatarImageView by bind<ImageView>(R.id.itemNoticeAvatarView)

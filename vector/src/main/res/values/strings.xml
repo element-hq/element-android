@@ -3768,6 +3768,8 @@
     <string name="settings_enable_location_sharing_summary">Once enabled you will be able to send your location to any room</string>
     <string name="labs_render_locations_in_timeline">Render user locations in the timeline</string>
 
+    <string name="message_bubbles">Show Message bubbles</string>
+
     <string name="tooltip_attachment_photo">Open camera</string>
     <string name="tooltip_attachment_gallery">Send images and videos</string>
     <string name="tooltip_attachment_file">Upload file</string>

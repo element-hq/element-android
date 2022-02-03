@@ -17,9 +17,11 @@
 package im.vector.app.features.html
 
 import android.content.Context
+import android.content.res.Resources
 import android.text.Spannable
 import androidx.core.text.toSpannable
 import im.vector.app.core.resources.ColorProvider
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.settings.VectorPreferences
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
@@ -53,11 +55,11 @@ class EventHtmlRenderer @Inject constructor(
                 .usePlugin(object : AbstractMarkwonPlugin() { // Markwon expects maths to be in a specific format: https://noties.io/Markwon/docs/v4/ext-latex
                     override fun processMarkdown(markdown: String): String {
                         return markdown
-                                .replace(Regex("""<span\s+data-mx-maths="([^"]*)">.*?</span>""")) {
-                                    matchResult -> "$$" + matchResult.groupValues[1] + "$$"
+                                .replace(Regex("""<span\s+data-mx-maths="([^"]*)">.*?</span>""")) { matchResult ->
+                                    "$$" + matchResult.groupValues[1] + "$$"
                                 }
-                                .replace(Regex("""<div\s+data-mx-maths="([^"]*)">.*?</div>""")) {
-                                    matchResult -> "\n$$\n" + matchResult.groupValues[1] + "\n$$\n"
+                                .replace(Regex("""<div\s+data-mx-maths="([^"]*)">.*?</div>""")) { matchResult ->
+                                    "\n$$\n" + matchResult.groupValues[1] + "\n$$\n"
                                 }
                     }
                 })
@@ -112,12 +114,15 @@ class EventHtmlRenderer @Inject constructor(
     }
 }
 
-class MatrixHtmlPluginConfigure @Inject constructor(private val colorProvider: ColorProvider) : HtmlPlugin.HtmlConfigure {
+class MatrixHtmlPluginConfigure @Inject constructor(private val colorProvider: ColorProvider, private val resources: Resources) : HtmlPlugin.HtmlConfigure {
 
     override fun configureHtml(plugin: HtmlPlugin) {
         plugin
                 .addHandler(FontTagHandler())
+                .addHandler(ParagraphHandler(DimensionConverter(resources)))
                 .addHandler(MxReplyTagHandler())
+                .addHandler(CodePreTagHandler())
+                .addHandler(CodeTagHandler())
                 .addHandler(SpanHandler(colorProvider))
     }
 }

@@ -17,12 +17,16 @@
 package im.vector.app.features.home.room.detail.timeline.item
 
 import android.widget.ImageView
+import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import im.vector.app.R
 import im.vector.app.core.glide.GlideApp
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
+import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
+import im.vector.app.features.home.room.detail.timeline.style.granularRoundedCorners
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>() {
@@ -34,17 +38,32 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
     var userId: String? = null
 
     @EpoxyAttribute
+    var mapWidth: Int = 0
+
+    @EpoxyAttribute
+    var mapHeight: Int = 0
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var locationPinProvider: LocationPinProvider? = null
 
     override fun bind(holder: Holder) {
         super.bind(holder)
         renderSendState(holder.view, null)
-
         val location = locationUrl ?: return
-
+        val messageLayout = attributes.informationData.messageLayout
+        val dimensionConverter = DimensionConverter(holder.view.resources)
+        val imageCornerTransformation = if (messageLayout is TimelineMessageLayout.Bubble) {
+            messageLayout.cornersRadius.granularRoundedCorners()
+        } else {
+            RoundedCorners(dimensionConverter.dpToPx(8))
+        }
+        holder.staticMapImageView.updateLayoutParams {
+            width = mapWidth
+            height = mapHeight
+        }
         GlideApp.with(holder.staticMapImageView)
                 .load(location)
-                .apply(RequestOptions.centerCropTransform())
+                .transform(imageCornerTransformation)
                 .into(holder.staticMapImageView)
 
         locationPinProvider?.create(userId) { pinDrawable ->
@@ -54,7 +73,7 @@ abstract class MessageLocationItem : AbsMessageItem<MessageLocationItem.Holder>(
         }
     }
 
-    override fun getViewType() = STUB_ID
+    override fun getViewStubId() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val staticMapImageView by bind<ImageView>(R.id.staticMapImageView)
