@@ -17,7 +17,6 @@
 package im.vector.app.features.location
 
 import org.amshove.kluent.shouldBeEqualTo
-import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeNull
 import org.amshove.kluent.shouldBeTrue
 import org.junit.Test
