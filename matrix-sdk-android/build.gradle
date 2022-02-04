@@ -64,8 +64,8 @@ android {
         }
     }
 
-    installation {
-        installOptions '-g'
+    adbOptions {
+        installOptions "-g"
 //        timeOutInMs 350 * 1000
     }
 
