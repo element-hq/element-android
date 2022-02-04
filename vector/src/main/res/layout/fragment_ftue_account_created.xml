@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?colorSecondary">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/ftueAuthGutterStart"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_start_percent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/ftueAuthGutterEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_end_percent" />
+
+    <Space
+        android:id="@+id/accountCreatedSpace1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/accountCreatedLogo"
+        app:layout_constraintHeight_percent="0.10"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
+
+    <ImageView
+        android:id="@+id/accountCreatedLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_user_round"
+        app:layout_constraintBottom_toTopOf="@id/accountCreatedSpace2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/accountCreatedSpace1"
+        app:tint="@color/element_background_light" />
+
+    <Space
+        android:id="@+id/accountCreatedSpace2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/accountCreatedTitle"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintTop_toBottomOf="@id/accountCreatedLogo" />
+
+    <TextView
+        android:id="@+id/accountCreatedTitle"
+        style="@style/Widget.Vector.TextView.Title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/ftue_account_created_congratulations_title"
+        android:textColor="@color/element_background_light"
+        android:transitionName="loginTitleTransition"
+        app:layout_constraintBottom_toTopOf="@id/accountCreatedSubtitle"
+        app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/accountCreatedSpace2" />
+
+    <TextView
+        android:id="@+id/accountCreatedSubtitle"
+        style="@style/Widget.Vector.TextView.Subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:textColor="@color/element_background_light"
+        app:layout_constraintBottom_toTopOf="@id/accountCreatedSpace4"
+        app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/accountCreatedTitle"
+        tools:text="Your account @hello:matrix.org has been created" />
+
+    <Space
+        android:id="@+id/accountCreatedSpace4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/accountCreatedPersonalize"
+        app:layout_constraintTop_toBottomOf="@id/accountCreatedSubtitle" />
+
+    <Button
+        android:id="@+id/accountCreatedPersonalize"
+        style="@style/Widget.Vector.Button.Login"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/element_background_light"
+        android:text="@string/ftue_account_created_personalize"
+        android:textAllCaps="true"
+        android:textColor="?colorSecondary"
+        android:transitionName="loginSubmitTransition"
+        app:layout_constraintBottom_toTopOf="@id/accountCreatedSpace5"
+        app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/accountCreatedSpace4"
+        tools:text="@string/ftue_account_created_personalize" />
+
+    <Button
+        android:id="@+id/accountCreatedTakeMeHome"
+        style="@style/Widget.Vector.Button.Text.Login"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/ftue_account_created_take_me_home"
+        android:textAllCaps="true"
+        android:textColor="@color/element_background_light"
+        android:transitionName="loginSubmitTransition"
+        app:layout_constraintBottom_toTopOf="@id/accountCreatedSpace5"
+        app:layout_constraintEnd_toEndOf="@id/ftueAuthGutterEnd"
+        app:layout_constraintStart_toStartOf="@id/ftueAuthGutterStart"
+        app:layout_constraintTop_toBottomOf="@id/accountCreatedPersonalize" />
+
+    <Space
+        android:id="@+id/accountCreatedSpace5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.05"
+        app:layout_constraintTop_toBottomOf="@id/accountCreatedPersonalize" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -222,6 +222,9 @@ class FtueAuthVariant(
             }
             OnboardingViewEvents.OnAccountCreated                              -> onAccountCreated()
             OnboardingViewEvents.OnAccountSignedIn                             -> onAccountSignedIn()
+            OnboardingViewEvents.OnPersonalizeProfile                          -> TODO()
+            OnboardingViewEvents.OnTakeMeHome                                  -> navigateToHome(createdAccount = true)
+
         }.exhaustive
     }
 
@@ -366,7 +369,15 @@ class FtueAuthVariant(
     }
 
     private fun onAccountCreated() {
-        navigateToHome(createdAccount = true)
+        if (vectorFeatures.isOnboardingPersonalizeEnabled()) {
+            activity.addFragmentToBackstack(
+                    views.loginFragmentContainer,
+                    FtueAuthAccountCreatedFragment::class.java,
+                    option = commonOption
+            )
+        } else {
+            navigateToHome(createdAccount = true)
+        }
     }
 
     private fun navigateToHome(createdAccount: Boolean) {
