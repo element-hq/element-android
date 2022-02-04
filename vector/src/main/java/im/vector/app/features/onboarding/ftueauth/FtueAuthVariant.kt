@@ -229,8 +229,12 @@ class FtueAuthVariant(
     }
 
     private fun updateWithState(viewState: OnboardingViewState) {
-        // Loading
-        views.loginLoading.isVisible = viewState.isLoading()
+        views.loginLoading.isVisible = if (vectorFeatures.isOnboardingPersonalizeEnabled()) {
+            viewState.isLoading()
+        } else {
+            // Keep loading when during success because of the delay when switching to the next Activity
+            viewState.isLoading() || viewState.isAuthTaskCompleted()
+        }
     }
 
     private fun onWebLoginError(onWebLoginError: OnboardingViewEvents.OnWebLoginError) {

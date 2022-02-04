@@ -73,7 +73,7 @@ data class OnboardingViewState(
                 asyncRegistration is Loading
     }
 
-    fun isUserLogged(): Boolean {
+    fun isAuthTaskCompleted(): Boolean {
         return asyncLoginAction is Success
     }
 }
