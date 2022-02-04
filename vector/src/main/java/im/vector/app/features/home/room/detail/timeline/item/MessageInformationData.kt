@@ -17,6 +17,7 @@
 package im.vector.app.features.home.room.detail.timeline.item
 
 import android.os.Parcelable
+import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.crypto.VerificationState
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -31,8 +32,7 @@ data class MessageInformationData(
         val ageLocalTS: Long?,
         val avatarUrl: String?,
         val memberName: CharSequence? = null,
-        val showInformation: Boolean = true,
-        val forceShowTimestamp: Boolean = false,
+        val messageLayout: TimelineMessageLayout,
         /*List of reactions (emoji,count,isSelected)*/
         val orderedReactionList: List<ReactionInfoData>? = null,
         val pollResponseAggregatedSummary: PollResponseData? = null,
@@ -41,7 +41,9 @@ data class MessageInformationData(
         val referencesInfoData: ReferencesInfoData? = null,
         val sentByMe: Boolean,
         val e2eDecoration: E2EDecoration = E2EDecoration.NONE,
-        val sendStateDecoration: SendStateDecoration = SendStateDecoration.NONE
+        val sendStateDecoration: SendStateDecoration = SendStateDecoration.NONE,
+        val isFirstFromThisSender: Boolean = false,
+        val isLastFromThisSender: Boolean = false
 ) : Parcelable {
 
     val matrixItem: MatrixItem

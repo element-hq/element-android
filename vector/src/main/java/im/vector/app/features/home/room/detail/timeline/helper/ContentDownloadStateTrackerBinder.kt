@@ -22,16 +22,12 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import dagger.hilt.android.scopes.ActivityScoped
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.error.ErrorFormatter
-import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
 import org.matrix.android.sdk.api.session.file.ContentDownloadStateTracker
 import javax.inject.Inject
 
 @ActivityScoped
-class ContentDownloadStateTrackerBinder @Inject constructor(private val activeSessionHolder: ActiveSessionHolder,
-                                                            private val messageColorProvider: MessageColorProvider,
-                                                            private val errorFormatter: ErrorFormatter) {
+class ContentDownloadStateTrackerBinder @Inject constructor(private val activeSessionHolder: ActiveSessionHolder) {
 
     private val updateListeners = mutableMapOf<String, ContentDownloadUpdater>()
 
@@ -39,7 +35,7 @@ class ContentDownloadStateTrackerBinder @Inject constructor(private val activeSe
              holder: MessageFileItem.Holder) {
         activeSessionHolder.getSafeActiveSession()?.also { session ->
             val downloadStateTracker = session.contentDownloadProgressTracker()
-            val updateListener = ContentDownloadUpdater(holder, messageColorProvider, errorFormatter)
+            val updateListener = ContentDownloadUpdater(holder)
             updateListeners[mxcUrl] = updateListener
             downloadStateTracker.track(mxcUrl, updateListener)
         }
@@ -62,9 +58,7 @@ class ContentDownloadStateTrackerBinder @Inject constructor(private val activeSe
     }
 }
 
-private class ContentDownloadUpdater(private val holder: MessageFileItem.Holder,
-                                     private val messageColorProvider: MessageColorProvider,
-                                     private val errorFormatter: ErrorFormatter) : ContentDownloadStateTracker.UpdateListener {
+private class ContentDownloadUpdater(private val holder: MessageFileItem.Holder) : ContentDownloadStateTracker.UpdateListener {
 
     override fun onDownloadStateUpdate(state: ContentDownloadStateTracker.State) {
         when (state) {
@@ -124,7 +118,7 @@ private class ContentDownloadUpdater(private val holder: MessageFileItem.Holder,
     private fun handleSuccess() {
         stop()
         holder.fileDownloadProgress.isIndeterminate = false
-        holder.fileDownloadProgress.progress = 100
+        holder.fileDownloadProgress.progress = 0
         holder.fileImageView.setImageResource(R.drawable.ic_paperclip)
     }
 }

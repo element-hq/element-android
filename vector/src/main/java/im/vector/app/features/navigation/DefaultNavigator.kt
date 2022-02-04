@@ -556,7 +556,7 @@ class DefaultNavigator @Inject constructor(
                                      roomId: String,
                                      mode: LocationSharingMode,
                                      initialLocationData: LocationData?,
-                                     locationOwnerId: String) {
+                                     locationOwnerId: String?) {
         val intent = LocationSharingActivity.getIntent(
                 context,
                 LocationSharingArgs(roomId = roomId, mode = mode, initialLocationData = initialLocationData, locationOwnerId = locationOwnerId)

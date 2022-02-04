@@ -29,7 +29,7 @@ import im.vector.app.features.home.AvatarRenderer
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
 abstract class MergedMembershipEventsItem : BasedMergedItem<MergedMembershipEventsItem.Holder>() {
 
-    override fun getViewType() = STUB_ID
+    override fun getViewStubId() = STUB_ID
 
     @EpoxyAttribute
     override lateinit var attributes: Attributes

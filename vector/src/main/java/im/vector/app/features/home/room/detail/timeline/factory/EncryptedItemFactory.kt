@@ -113,6 +113,7 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                         callback = params.callback,
                         threadDetails = threadDetails)
                 return MessageTextItem_()
+                        .layout(informationData.messageLayout.layoutRes)
                         .leftGuideline(avatarSizeProvider.leftGuideline)
                         .highlighted(params.isHighlighted)
                         .attributes(attributes)

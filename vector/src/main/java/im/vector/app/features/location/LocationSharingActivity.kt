@@ -30,7 +30,7 @@ data class LocationSharingArgs(
         val roomId: String,
         val mode: LocationSharingMode,
         val initialLocationData: LocationData?,
-        val locationOwnerId: String
+        val locationOwnerId: String?
 ) : Parcelable
 
 @AndroidEntryPoint
