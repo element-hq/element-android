@@ -40,4 +40,9 @@
         <item>riot.im</item>
     </string-array>
 
+    <!-- Default preference values -->
+
+    <!-- If set to true, bubbles will be enabled by default in the preference -->
+    <bool name="settings_interface_bubble_default">false</bool>
+
 </resources>
