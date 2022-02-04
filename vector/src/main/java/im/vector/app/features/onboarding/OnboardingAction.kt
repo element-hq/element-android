@@ -80,6 +80,6 @@ sealed class OnboardingAction : VectorViewModelAction {
 
     data class UserAcceptCertificate(val fingerprint: Fingerprint) : OnboardingAction()
 
-    object TakeMeHome: OnboardingAction()
-    object PersonalizeProfile: OnboardingAction()
+    object TakeMeHome : OnboardingAction()
+    object PersonalizeProfile : OnboardingAction()
 }
