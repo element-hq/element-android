@@ -18,10 +18,14 @@ package im.vector.app.features.home.room.list
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
+import im.vector.app.core.epoxy.onClick
 import im.vector.app.databinding.ItemRoomCategoryBinding
+import im.vector.app.features.themes.ThemeUtils
 
 class SectionHeaderAdapter constructor(
         private val onClickAction: ClickListener
