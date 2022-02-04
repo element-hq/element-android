@@ -291,8 +291,9 @@ android {
         }
     }
 
-    lint {
-        lintConfig file('lint.xml')
+    lintOptions {
+        lintConfig file("lint.xml")
+
         checkDependencies true
         abortOnError true
     }
