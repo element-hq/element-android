@@ -2156,7 +2156,7 @@ class TimelineFragment @Inject constructor(
                 ).show(childFragmentManager, "JSON_VIEWER")
             }
             is EventSharedAction.ViewEventE2EInformation    -> {
-                MessageE2EInfoActivity.getIntent(requireContext(), roomDetailArgs.roomId, action.eventId).let {
+                MessageE2EInfoActivity.getIntent(requireContext(), timelineArgs.roomId, action.eventId).let {
                     startActivity(it)
                 }
             }

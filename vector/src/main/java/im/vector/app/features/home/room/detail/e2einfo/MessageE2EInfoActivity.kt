@@ -43,7 +43,9 @@ class MessageE2EInfoActivity : SimpleFragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        configureToolbar(views.toolbar, true)
+        setupToolbar(views.toolbar)
+                .setTitle(title)
+                .allowBack(useCross = true)
 
         if (isFirstCreation()) {
             val fragmentArgs: EncryptedMessageInfoArg = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return
@@ -88,11 +90,7 @@ class MessageE2EInfoActivity : SimpleFragmentActivity() {
     }
 
     private fun updateTitle(title: String) {
-        supportActionBar?.let {
-            it.title = title
-        } ?: run {
-            setTitle(title)
-        }
+        toolbar?.setTitle(title)
     }
 
     override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
