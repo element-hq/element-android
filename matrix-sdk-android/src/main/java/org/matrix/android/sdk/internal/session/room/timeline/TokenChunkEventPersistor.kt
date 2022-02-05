@@ -67,14 +67,25 @@ internal class TokenChunkEventPersistor @Inject constructor(
                 .awaitTransaction { realm ->
                     Timber.v("Start persisting ${receivedChunk.events.size} events in $roomId towards $direction")
 
+                    /**
+                     * As per spec
+                     * if no further events are available (either because we have reached the start of the timeline,
+                     * or because the user does not have permission to see any more events), the end property is omitted from the response.
+                     * Synapse is not omitting it and EA was relying on it
+                     */
+                    val chunkEnd = if (receivedChunk.events.isEmpty()) {
+                        receivedChunk.start
+                    } else {
+                        receivedChunk.end
+                    }
                     val nextToken: String?
                     val prevToken: String?
                     if (direction == PaginationDirection.FORWARDS) {
-                        nextToken = receivedChunk.end
+                        nextToken = chunkEnd
                         prevToken = receivedChunk.start
                     } else {
                         nextToken = receivedChunk.start
-                        prevToken = receivedChunk.end
+                        prevToken = chunkEnd
                     }
 
                     val existingChunk = ChunkEntity.find(realm, roomId, prevToken = prevToken, nextToken = nextToken)
