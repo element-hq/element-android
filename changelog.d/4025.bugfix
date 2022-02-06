@@ -1,0 +1,5 @@
+- Can't get out of a verification dialog #4025
+
+- Enabling user to cancel the verification bottom sheet dialog by clicking outside or on back button. 
+- change the cancel verification bottom sheet dialog to a a fragment dialog in order to ensure that user 
+is aware of cancellation result and to respect material guidelines. 
