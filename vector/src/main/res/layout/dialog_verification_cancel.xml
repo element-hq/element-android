@@ -52,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="18dp"
         android:layout_marginStart="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/otherUserAvatarImageView"
+        app:layout_constraintTop_toBottomOf="@id/otherUserAvatarImageView"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,10 +69,10 @@
         android:layout_marginEnd="8dp"
         android:background="@android:color/transparent"
         app:layout_constraintEnd_toStartOf="@+id/btn_continue_action"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_content"
+        app:layout_constraintTop_toBottomOf="@id/dialog_content"
         android:text="@string/action_skip"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/btn_continue_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
         app:layout_constraintTop_toTopOf="@id/btn_skip_action"
         android:background="@android:color/transparent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_content"
+        app:layout_constraintTop_toBottomOf="@id/dialog_content"
         android:text="@string/_continue"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
