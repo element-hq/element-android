@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="?colorSurface"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/otherUserAvatarImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:adjustViewBounds="true"
+        android:importantForAccessibility="no"
+        android:scaleType="centerCrop"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@sample/user_round_avatars" />
+
+    <im.vector.app.core.ui.views.ShieldImageView
+        android:id="@+id/otherUserShield"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintCircle="@id/otherUserAvatarImageView"
+        app:layout_constraintCircleAngle="139"
+        app:layout_constraintCircleRadius="20dp"
+        tools:ignore="MissingConstraints" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        style="@style/Widget.Vector.TextView.HeadlineMedium"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="16dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="@string/are_you_sure"
+        android:textColor="?vctr_content_primary"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@id/otherUserAvatarImageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/otherUserAvatarImageView"
+        app:layout_constraintTop_toTopOf="@id/otherUserAvatarImageView"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/dialog_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/otherUserAvatarImageView"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="?vctr_content_secondary"
+        style="@style/TextAppearance.Vector.Body"
+        tools:text="@string/verify_cancel_self_verification_from_untrusted"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_skip_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?colorError"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_continue_action"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_content"
+        android:text="@string/action_skip"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_continue_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?colorPrimary"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintTop_toTopOf="@id/btn_skip_action"
+        android:background="@android:color/transparent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_content"
+        android:text="@string/_continue"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

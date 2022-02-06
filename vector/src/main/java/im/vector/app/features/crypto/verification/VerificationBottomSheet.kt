@@ -17,6 +17,7 @@ package im.vector.app.features.crypto.verification
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.KeyEvent
@@ -37,7 +38,7 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.VectorBaseBottomSheetDialogFragment
 import im.vector.app.databinding.BottomSheetVerificationBinding
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
-import im.vector.app.features.crypto.verification.cancel.VerificationCancelFragment
+import im.vector.app.features.crypto.verification.cancel.VerificationCancelDialogFragment
 import im.vector.app.features.crypto.verification.cancel.VerificationNotMeFragment
 import im.vector.app.features.crypto.verification.choose.VerificationChooseMethodFragment
 import im.vector.app.features.crypto.verification.conclusion.VerificationConclusionFragment
@@ -71,7 +72,8 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
             val verificationLocalId: String? = null,
             val roomId: String? = null,
             // Special mode where UX should show loading wheel until other session sends a request/tx
-            val selfVerificationMode: Boolean = false
+            val selfVerificationMode: Boolean = false,
+            val userTrustLevel: RoomEncryptionTrustLevel? = null
     ) : Parcelable
 
     override val showExpanded = true
@@ -83,10 +85,6 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): BottomSheetVerificationBinding {
         return BottomSheetVerificationBinding.inflate(inflater, container, false)
-    }
-
-    init {
-        isCancelable = false
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -133,6 +131,14 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                 }
             }
         }
+    }
+
+    override fun onCancel(dialog: DialogInterface) {
+        viewModel.queryCancel()
+        withState(viewModel) { state->
+            showCancelVerificationDialog(state)
+        }
+        super.onCancel(dialog)
     }
 
     private val secretStartForActivityResult = registerStartForActivityResult { activityResult ->
@@ -196,7 +202,8 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
 
         if (state.userWantsToCancel) {
             views.otherUserNameText.text = getString(R.string.are_you_sure)
-            showFragment(VerificationCancelFragment::class)
+            dismiss()
+            showCancelVerificationDialog(state)
             return@withState
         }
 
@@ -354,6 +361,17 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
                         fragmentClass.simpleName
                 )
             }
+        }
+    }
+
+    private fun showCancelVerificationDialog(state: VerificationBottomSheetViewState) {
+        (activity as? VectorBaseActivity<*>)?.let { activity ->
+            VerificationCancelDialogFragment.newInstance(
+                    VerificationArgs(
+                            state.otherUserMxItem?.id ?: "",
+                            state.pendingRequest.invoke()?.transactionId ?: state.transactionId,
+                             userTrustLevel = RoomEncryptionTrustLevel.Trusted)
+            ).show(activity.supportFragmentManager, VerificationCancelDialogFragment::class.java.name)
         }
     }
 

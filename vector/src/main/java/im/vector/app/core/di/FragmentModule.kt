@@ -17,6 +17,7 @@
 
 package im.vector.app.core.di
 
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
 import dagger.Binds
@@ -40,6 +41,7 @@ import im.vector.app.features.crypto.recover.BootstrapSaveRecoveryKeyFragment
 import im.vector.app.features.crypto.recover.BootstrapSetupRecoveryKeyFragment
 import im.vector.app.features.crypto.recover.BootstrapWaitingFragment
 import im.vector.app.features.crypto.verification.QuadSLoadingFragment
+import im.vector.app.features.crypto.verification.cancel.VerificationCancelDialogFragment
 import im.vector.app.features.crypto.verification.cancel.VerificationCancelFragment
 import im.vector.app.features.crypto.verification.cancel.VerificationNotMeFragment
 import im.vector.app.features.crypto.verification.choose.VerificationChooseMethodFragment
@@ -632,6 +634,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(VerificationChooseMethodFragment::class)
     fun bindVerificationChooseMethodFragment(fragment: VerificationChooseMethodFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(VerificationCancelDialogFragment::class)
+    fun bindVerificationCancelDialogFragment(fragment : VerificationCancelDialogFragment) : DialogFragment
 
     @Binds
     @IntoMap

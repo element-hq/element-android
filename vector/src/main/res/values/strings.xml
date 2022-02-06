@@ -352,7 +352,7 @@
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">I don’t want my encrypted messages</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Backing up keys…</string>
     <string name="keys_backup_activate">Use Key Backup</string>
-    <string name="are_you_sure">Are you sure?</string>
+    <string name="are_you_sure">Are you sure ?</string>
     <string name="backup">Back up</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">You’ll lose access to your encrypted messages unless you back up your keys before signing out.</string>
     <string name="dialog_title_third_party_licences">Third party licences</string>

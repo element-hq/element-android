@@ -34,6 +34,7 @@ import im.vector.app.core.resources.StringProvider
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixCallback
+import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.crypto.crosssigning.KEYBACKUP_SECRET_SSSS_NAME
 import org.matrix.android.sdk.api.session.crypto.crosssigning.MASTER_KEY_SSSS_NAME
@@ -79,7 +80,8 @@ data class VerificationBottomSheetViewState(
         val userThinkItsNotHim: Boolean = false,
         val quadSContainsSecrets: Boolean = true,
         val quadSHasBeenReset: Boolean = false,
-        val hasAnyOtherSession: Boolean = false
+        val hasAnyOtherSession: Boolean = false,
+        val userTrustLevel : RoomEncryptionTrustLevel? = null
 ) : MavericksState {
 
     constructor(args: VerificationBottomSheet.VerificationArgs) : this(
@@ -140,6 +142,15 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     it.deviceId != session.sessionParams.deviceId
                 }
 
+        val userTrustLevel = if(initialState.isMe) {
+            if(sasTx?.state == VerificationTxState.Verified ||
+                    qrTx?.state == VerificationTxState.Verified ||
+                    initialState.verifiedFromPrivateKeys) RoomEncryptionTrustLevel.Trusted else RoomEncryptionTrustLevel.Warning
+        } else {
+            if(sasTx?.state == VerificationTxState.Verified || qrTx?.state == VerificationTxState.Verified)
+                RoomEncryptionTrustLevel.Trusted else RoomEncryptionTrustLevel.Warning
+        }
+
         setState {
             copy(
                     otherUserMxItem = userItem?.toMatrixItem(),
@@ -150,7 +161,8 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     isMe = initialState.otherUserId == session.myUserId,
                     currentDeviceCanCrossSign = session.cryptoService().crossSigningService().canCrossSign(),
                     quadSContainsSecrets = session.sharedSecretStorageService.isRecoverySetup(),
-                    hasAnyOtherSession = hasAnyOtherSession
+                    hasAnyOtherSession = hasAnyOtherSession,
+                    userTrustLevel = userTrustLevel
             )
         }
 

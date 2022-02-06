@@ -32,6 +32,7 @@ import im.vector.app.features.crypto.keysbackup.settings.KeysBackupSettingsViewM
 import im.vector.app.features.crypto.quads.SharedSecureStorageViewModel
 import im.vector.app.features.crypto.recover.BootstrapSharedViewModel
 import im.vector.app.features.crypto.verification.VerificationBottomSheetViewModel
+import im.vector.app.features.crypto.verification.cancel.VerificationCancelViewModel
 import im.vector.app.features.crypto.verification.choose.VerificationChooseMethodViewModel
 import im.vector.app.features.crypto.verification.emoji.VerificationEmojiCodeViewModel
 import im.vector.app.features.devtools.RoomDevToolViewModel
@@ -504,6 +505,11 @@ interface MavericksViewModelModule {
     @IntoMap
     @MavericksViewModelKey(VerificationChooseMethodViewModel::class)
     fun verificationChooseMethodViewModelFactory(factory: VerificationChooseMethodViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
+
+    @Binds
+    @IntoMap
+    @MavericksViewModelKey(VerificationCancelViewModel::class)
+    fun verificationCancelViewModelFactory(factory : VerificationCancelViewModel.Factory) : MavericksAssistedViewModelFactory<*,*>
 
     @Binds
     @IntoMap
