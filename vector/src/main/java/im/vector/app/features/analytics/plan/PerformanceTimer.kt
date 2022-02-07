@@ -83,13 +83,15 @@ data class PerformanceTimer(
         StartupLaunchScreen,
 
         /**
-         * The time to preload data in the MXStore on iOS.
+         * The time to preload data in the MXStore on iOS. In this case,
+         * `itemCount` should contain the number of rooms in the store.
          */
         StartupStorePreload,
 
         /**
          * The time to load all data from the store (including
-         * StartupStorePreload time).
+         * StartupStorePreload time). In this case, `itemCount` should contain
+         * the number of rooms loaded into the session
          */
         StartupStoreReady,
     }

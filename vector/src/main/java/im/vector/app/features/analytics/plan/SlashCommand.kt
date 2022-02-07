@@ -22,29 +22,25 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 // https://github.com/matrix-org/matrix-analytics-events/
 
 /**
- * Triggered when the user clicks/taps on a UI element.
+ * Triggered when the user runs a slash command in their composer.
  */
-data class Click(
+data class SlashCommand(
         /**
-         * The index of the element, if its in a list of elements.
+         * The name of this command.
          */
-        val index: Int? = null,
-        /**
-         * The unique name of this element.
-         */
-        val name: Name,
+        val command: Command,
 ) : VectorAnalyticsEvent {
 
-    enum class Name {
-        SendMessageButton,
+    enum class Command {
+        invite,
+        part,
     }
 
-    override fun getName() = "Click"
+    override fun getName() = "SlashCommand"
 
     override fun getProperties(): Map<String, Any>? {
         return mutableMapOf<String, Any>().apply {
-            index?.let { put("index", it) }
-            put("name", name.name)
+            put("command", command.name)
         }.takeIf { it.isNotEmpty() }
     }
 }

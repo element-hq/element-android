@@ -122,6 +122,16 @@ data class Screen(
         MobileSidebar,
 
         /**
+         * Screen that displays the list of memebrs of a space
+         */
+        MobileSpaceMembers,
+
+        /**
+         * The bottom sheet that list all space options
+         */
+        MobileSpaceMenu,
+
+        /**
          * The screen shown to select which room directory you'd like to use.
          */
         MobileSwitchDirectory,
@@ -205,6 +215,11 @@ data class Screen(
          * The global security settings screen.
          */
         SettingsSecurity,
+
+        /**
+         * Screen that displays the list of rooms and spaces of a space
+         */
+        SpaceExploreRooms,
 
         /**
          * The screen shown to create a new direct room.
