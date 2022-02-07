@@ -23,6 +23,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,8 +52,10 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.extensions.orTrue
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
@@ -287,11 +291,14 @@ class RoomListFragment @Inject constructor(
                                             ))
                                             checkEmptyState()
                                         }
-                                        // TODO use flow if possible ?
-                                        section.itemCount.observe(viewLifecycleOwner) { count ->
-                                            sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
-                                                    itemCount = count
-                                            ))
+                                        lifecycleScope.launch {
+                                            section.itemCount
+                                                    .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                                                    .collect { count ->
+                                                        sectionAdapter.updateSection(
+                                                                sectionAdapter.roomsSectionData.copy(itemCount = count)
+                                                        )
+                                                    }
                                         }
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
@@ -332,11 +339,14 @@ class RoomListFragment @Inject constructor(
                                                     isLoading = false))
                                             checkEmptyState()
                                         }
-                                        // TODO use flow instead ?
-                                        section.itemCount.observe(viewLifecycleOwner) { count ->
-                                            sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
-                                                    itemCount = count
-                                            ))
+                                        lifecycleScope.launch {
+                                            section.itemCount
+                                                    .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                                                    .collect { count ->
+                                                        sectionAdapter.updateSection(
+                                                                sectionAdapter.roomsSectionData.copy(itemCount = count)
+                                                        )
+                                                    }
                                         }
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(

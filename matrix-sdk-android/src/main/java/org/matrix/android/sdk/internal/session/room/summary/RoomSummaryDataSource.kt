@@ -29,8 +29,10 @@ import io.realm.kotlin.toFlow
 import io.realm.kotlin.where
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.isNormalized
@@ -63,7 +65,8 @@ internal class RoomSummaryDataSource @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
         private val realmSessionProvider: RealmSessionProvider,
         private val roomSummaryMapper: RoomSummaryMapper,
-        private val queryStringValueProcessor: QueryStringValueProcessor
+        private val queryStringValueProcessor: QueryStringValueProcessor,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers
 ) {
 
     fun getRoomSummary(roomIdOrAlias: String): RoomSummary? {
@@ -237,28 +240,16 @@ internal class RoomSummaryDataSource @Inject constructor(
         }
     }
 
-//    @OptIn(ExperimentalCoroutinesApi::class)
-//    fun getCountFlow(queryParams: RoomSummaryQueryParams): Flow<Int> = callbackFlow {
-//        val realmResult = realmSessionProvider.withRealm { realm ->
-//            roomSummariesQuery(realm, queryParams).findAllAsync()
-//        }
-//        val changeListener = RealmChangeListener<RealmResults<RoomSummaryEntity>> {
-//            trySendBlocking(it.size)
-//                    .onFailure { throwable -> Timber.e(throwable) }
-//        }
-//        realmResult.addChangeListener(changeListener)
-//        awaitClose { realmResult.removeChangeListener(changeListener) }
-//    }
-
     fun getCountFlow(queryParams: RoomSummaryQueryParams): Flow<Int> =
-            // TODO handle properly threads and dispatchers otherwise use livedata of monarchy
             realmSessionProvider
                     .withRealm { realm -> roomSummariesQuery(realm, queryParams).findAllAsync() }
                     .toFlow()
+                    // need to create the flow on a context dispatcher with a thread with attached Looper
+                    .flowOn(coroutineDispatchers.main)
                     .map { it.size }
-                    .flowOn(Dispatchers.IO)
+                    .flowOn(coroutineDispatchers.io)
+                    .distinctUntilChanged()
 
-    // TODO should we improve how we update notification count with flow ??
     fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount {
         var notificationCount: RoomAggregateNotificationCount? = null
         monarchy.doWithRealm { realm ->

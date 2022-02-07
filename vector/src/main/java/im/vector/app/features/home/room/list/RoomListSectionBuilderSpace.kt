@@ -38,6 +38,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
@@ -87,11 +88,18 @@ class RoomListSectionBuilderSpace(
                             it.memberships = Membership.activeMemberships()
                         },
                         { qpm ->
+                            // TODO find a way to show the filtered rooms count ?
                             val name = stringProvider.getString(R.string.bottom_action_rooms)
                             session.getFilteredPagedRoomSummariesLive(qpm)
                                     .let { updatableFilterLivePageResult ->
                                         onUpdatable(updatableFilterLivePageResult)
-                                        sections.add(RoomsSection(name, updatableFilterLivePageResult.livePagedList))
+                                        sections.add(
+                                                RoomsSection(
+                                                        sectionName = name,
+                                                        livePages = updatableFilterLivePageResult.livePagedList,
+                                                        itemCount = session.getRoomCountFlow(qpm)
+                                                )
+                                        )
                                     }
                         }
                 )
@@ -261,7 +269,8 @@ class RoomListSectionBuilderSpace(
                 RoomsSection(
                         sectionName = stringProvider.getString(R.string.suggested_header),
                         liveSuggested = liveSuggestedRooms,
-                        notifyOfLocalEcho = false
+                        notifyOfLocalEcho = false,
+                        itemCount = suggestedRoomsFlow.map { suggestions -> suggestions.size }
                 )
         )
     }
@@ -374,7 +383,6 @@ class RoomListSectionBuilderSpace(
                                 // use it also as a source to update count
                                 livePagedList.asFlow()
                                         .onEach {
-                                            // TODO should we improve this ?
                                             Timber.v("Thread space list: ${Thread.currentThread()}")
                                             sections.find { it.sectionName == name }
                                                     ?.notificationCount
@@ -395,16 +403,11 @@ class RoomListSectionBuilderSpace(
                                         RoomsSection(
                                                 sectionName = name,
                                                 livePages = livePagedList,
-                                                notifyOfLocalEcho = notifyOfLocalEcho
+                                                notifyOfLocalEcho = notifyOfLocalEcho,
+                                                itemCount = session.getRoomCountFlow(roomQueryParams)
                                         )
                                 )
                             }
-
-                    // TODO extract into a dedicated private method
-                    session.getRoomCountFlow(roomQueryParams)
-                            .onEach { count -> sections.find { section -> section.sectionName == name }?.itemCount?.postValue(count) }
-                            .flowOn(Dispatchers.Default)
-                            .launchIn(viewModelScope)
                 }
 
         )

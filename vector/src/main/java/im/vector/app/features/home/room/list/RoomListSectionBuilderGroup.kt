@@ -68,11 +68,18 @@ class RoomListSectionBuilderGroup(
                             it.memberships = Membership.activeMemberships()
                         },
                         { qpm ->
+                            // TODO find a way to show the filtered rooms count ?
                             val name = stringProvider.getString(R.string.bottom_action_rooms)
                             session.getFilteredPagedRoomSummariesLive(qpm)
                                     .let { updatableFilterLivePageResult ->
                                         onUpdatable(updatableFilterLivePageResult)
-                                        sections.add(RoomsSection(name, updatableFilterLivePageResult.livePagedList))
+                                        sections.add(
+                                                RoomsSection(
+                                                        sectionName = name,
+                                                        livePages = updatableFilterLivePageResult.livePagedList,
+                                                        itemCount = session.getRoomCountFlow(qpm)
+                                                )
+                                        )
                                     }
                         }
                 )
@@ -242,7 +249,6 @@ class RoomListSectionBuilderGroup(
                            @StringRes nameRes: Int,
                            notifyOfLocalEcho: Boolean = false,
                            query: (RoomSummaryQueryParams.Builder) -> Unit) {
-        // TODO check when this class is used: difference with RoomListSectionBuilderSpace ?
         withQueryParams(
                 { query.invoke(it) },
                 { roomQueryParams ->
@@ -252,7 +258,6 @@ class RoomListSectionBuilderGroup(
                                 activeSpaceUpdaters.add(it)
                             }.livePagedList
                             .let { livePagedList ->
-                                // TODO should we improve this ?
                                 // use it also as a source to update count
                                 livePagedList.asFlow()
                                         .onEach {
@@ -267,7 +272,8 @@ class RoomListSectionBuilderGroup(
                                         RoomsSection(
                                                 sectionName = name,
                                                 livePages = livePagedList,
-                                                notifyOfLocalEcho = notifyOfLocalEcho
+                                                notifyOfLocalEcho = notifyOfLocalEcho,
+                                                itemCount = session.getRoomCountFlow(roomQueryParams)
                                         )
                                 )
                             }
