@@ -100,6 +100,7 @@ data class PowerLevelsContent(
         }
     }
 
+    // TODO use this to check if user can notify everyone => compare user role to room permission setting
     companion object {
         /**
          * Key to use for content.notifications and get the level required to trigger an @room notification. Defaults to 50 if unspecified.

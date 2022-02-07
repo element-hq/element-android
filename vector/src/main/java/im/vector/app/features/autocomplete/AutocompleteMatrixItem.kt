@@ -30,6 +30,7 @@ import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.MatrixItem
 
+// TODO create a new item for sections
 @EpoxyModelClass(layout = R.layout.item_autocomplete_matrix_item)
 abstract class AutocompleteMatrixItem : VectorEpoxyModel<AutocompleteMatrixItem.Holder>() {
 

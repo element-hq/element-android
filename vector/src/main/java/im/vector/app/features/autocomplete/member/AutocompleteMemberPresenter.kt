@@ -72,6 +72,9 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                 .asSequence()
                 .sortedBy { it.displayName }
                 .disambiguate()
+        // TODO check if user can notify everyone => compare user role to room permission setting
+        // TODO if user can notify everyone, add entry "@room"
+        // TODO add header sections to separate members and notification
         controller.setData(members.toList())
     }
 }
