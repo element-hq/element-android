@@ -75,8 +75,11 @@ abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>() 
         val textStyle = if (bold) Typeface.BOLD else Typeface.NORMAL
         holder.button.setTypeface(null, textStyle)
 
-        holder.button.rippleColor = if (highlight) ColorStateList.valueOf(ThemeUtils.getColor(holder.view.context, R.attr.colorSecondary)) else
+        holder.button.rippleColor = if (highlight) {
+            ColorStateList.valueOf(ThemeUtils.getColor(holder.view.context, R.attr.colorSecondary))
+        } else {
             ContextCompat.getColorStateList(holder.view.context, android.R.color.transparent)
+        }
 
         holder.button.onClick(buttonClickAction)
     }
