@@ -135,7 +135,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
 
     override fun onCancel(dialog: DialogInterface) {
         viewModel.queryCancel()
-        withState(viewModel) { state->
+        withState(viewModel) { state ->
             showCancelVerificationDialog(state)
         }
         super.onCancel(dialog)

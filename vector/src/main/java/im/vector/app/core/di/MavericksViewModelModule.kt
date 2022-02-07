@@ -509,7 +509,7 @@ interface MavericksViewModelModule {
     @Binds
     @IntoMap
     @MavericksViewModelKey(VerificationCancelViewModel::class)
-    fun verificationCancelViewModelFactory(factory : VerificationCancelViewModel.Factory) : MavericksAssistedViewModelFactory<*,*>
+    fun verificationCancelViewModelFactory(factory: VerificationCancelViewModel.Factory): MavericksAssistedViewModelFactory<*, *>
 
     @Binds
     @IntoMap

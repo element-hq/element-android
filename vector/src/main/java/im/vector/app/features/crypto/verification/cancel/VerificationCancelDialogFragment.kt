@@ -32,7 +32,7 @@ import javax.inject.Inject
 class VerificationCancelDialogFragment : VectorBaseDialogFragment<DialogVerificationCancelBinding>() {
 
     companion object {
-        fun newInstance(args : VerificationBottomSheet.VerificationArgs) : VerificationCancelDialogFragment {
+        fun newInstance(args: VerificationBottomSheet.VerificationArgs): VerificationCancelDialogFragment {
             return VerificationCancelDialogFragment().apply {
                 setArguments(args)
             }

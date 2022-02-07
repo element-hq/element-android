@@ -39,18 +39,18 @@ import org.matrix.android.sdk.api.util.toMatrixItem
 
 data class VerificationCancelViewState(
         val userMxItem: MatrixItem? = null,
-        val otherUserId : String,
+        val otherUserId: String,
         val transactionId: String? = null,
-        val roomId : String? = null,
-        val userTrustLevel : RoomEncryptionTrustLevel? = null,
+        val roomId: String? = null,
+        val userTrustLevel: RoomEncryptionTrustLevel? = null,
         val isMe: Boolean = false,
         val currentDeviceCanCrossSign: Boolean = false,
 ) : MavericksState
 
 class VerificationCancelViewModel @AssistedInject constructor(
-        @Assisted initialState : VerificationCancelViewState,
+        @Assisted initialState: VerificationCancelViewState,
         private val session: Session
-) : VectorViewModel<VerificationCancelViewState, EmptyAction, EmptyViewEvents>(initialState), VerificationService.Listener  {
+) : VectorViewModel<VerificationCancelViewState, EmptyAction, EmptyViewEvents>(initialState), VerificationService.Listener {
 
     init {
         session.cryptoService().verificationService().addListener(this)
@@ -77,7 +77,7 @@ class VerificationCancelViewModel @AssistedInject constructor(
                     userMxItem = matrixItem,
                     otherUserId = args.otherUserId,
                     roomId = args.roomId,
-                    transactionId= args.verificationId,
+                    transactionId = args.verificationId,
                     userTrustLevel = args.userTrustLevel,
                     isMe = args.otherUserId == session.myUserId,
                     currentDeviceCanCrossSign = session.cryptoService().crossSigningService().canCrossSign()

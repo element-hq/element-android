@@ -148,9 +148,9 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     initialState.verifiedFromPrivateKeys) RoomEncryptionTrustLevel.Trusted
             else RoomEncryptionTrustLevel.Warning
         } else {
-            if (sasTx?.state == VerificationTxState.Verified || qrTx?.state == VerificationTxState.Verified)
+            if (sasTx?.state == VerificationTxState.Verified || qrTx?.state == VerificationTxState.Verified) {
                 RoomEncryptionTrustLevel.Trusted
-            else RoomEncryptionTrustLevel.Warning
+            } else RoomEncryptionTrustLevel.Warning
         }
 
         setState {

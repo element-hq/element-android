@@ -638,7 +638,7 @@ interface FragmentModule {
     @Binds
     @IntoMap
     @FragmentKey(VerificationCancelDialogFragment::class)
-    fun bindVerificationCancelDialogFragment(fragment : VerificationCancelDialogFragment) : DialogFragment
+    fun bindVerificationCancelDialogFragment(fragment: VerificationCancelDialogFragment): DialogFragment
 
     @Binds
     @IntoMap
