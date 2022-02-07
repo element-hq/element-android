@@ -1193,7 +1193,7 @@
     <string name="crypto_error_withheld_generic">Du kan inte komma åt det här meddelandet för att avsändaren avsiktligt inte skickade nycklarna</string>
     <string name="search_in_my_contacts">Sök i mina kontakter</string>
     <string name="empty_contact_book">Din kontaktbok är tom</string>
-    <string name="no_permissions_to_start_conf_call">Du har inte behörighet att starta ett gruppsamtal i det här rummet</string>
+    <string name="no_permissions_to_start_conf_call">Du är inte behörig att starta ett gruppsamtal i det här rummet</string>
     <string name="conference_call_in_progress">Ett gruppsamtal pågår redan!</string>
     <string name="video_meeting">Starta videomöte</string>
     <string name="audio_meeting">Starta ljudmöte</string>
@@ -1263,7 +1263,7 @@
     <string name="room_prompt_cancel">Avbryt alla</string>
     <string name="room_resend_unsent_messages">Skicka oskickade meddelanden igen</string>
     <string name="room_delete_unsent_messages">Radera oskickade meddelanden</string>
-    <string name="room_do_not_have_permission_to_post">Du har inte behörighet att skriva i det här rummet.</string>
+    <string name="room_do_not_have_permission_to_post">Du är inte behörig att skriva i det här rummet.</string>
     <string name="ssl_trust">Betro</string>
     <string name="ssl_do_not_trust">Betro inte</string>
     <string name="ssl_logout_account">Logga ut</string>
@@ -1740,7 +1740,7 @@
     <string name="widget_integration_failed_to_send_request">Misslyckades att skicka begäran.</string>
     <string name="widget_integration_positive_power_level">Behörighetsnivå måste vara ett positivt heltal.</string>
     <string name="widget_integration_must_be_in_room">Du är inte i det här rummet.</string>
-    <string name="widget_integration_no_permission_in_room">Du har inte behörighet att göra det i det här rummet.</string>
+    <string name="widget_integration_no_permission_in_room">Du är inte behörig att göra det i det här rummet.</string>
     <string name="widget_integration_missing_room_id">Saknar room_id i begäran.</string>
     <string name="widget_integration_missing_user_id">Saknar user_id i begäran.</string>
     <string name="widget_integration_room_not_visible">Rummet %s är inte synligt.</string>
@@ -2347,7 +2347,7 @@
     <string name="sent_a_reaction">Reagerade med: %s</string>
     <string name="sent_verification_conclusion">Verifieringsavslutning</string>
     <string name="universal_link_malformed">Länken var felformaterad</string>
-    <string name="no_permissions_to_start_webrtc_call">Du har inte behörighet att starta ett samtal i det här rummet</string>
+    <string name="no_permissions_to_start_webrtc_call">Du är inte behörig att starta ett samtal i det här rummet</string>
     <string name="delete_account_data_warning">Radera kontodata av typen %1$s\?
 \n
 \nAnvänd varsamt, det kan leda till oväntat beteende.</string>
@@ -2401,8 +2401,8 @@
     <string name="settings_troubleshoot_test_push_loop_title">Testa push</string>
     <string name="search_is_not_supported_in_e2e_room">Sökning i krypterade rum stöds inte än.</string>
     <string name="search_banned_user_hint">Filtrera bannade användare</string>
-    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Du har inte behörighet att starta ett samtal</string>
-    <string name="no_permissions_to_start_conf_call_in_direct_room">Du har inte behörighet att starta ett gruppsamtal</string>
+    <string name="no_permissions_to_start_webrtc_call_in_direct_room">Du är inte behörig att starta ett samtal</string>
+    <string name="no_permissions_to_start_conf_call_in_direct_room">Du är inte behörig att starta ett gruppsamtal</string>
     <string name="action_reset">Återställ</string>
     <string name="create_room_topic_hint">Ämne</string>
     <string name="warning_unsaved_change_discard">Förkasta ändringar</string>
@@ -2449,7 +2449,7 @@
     <string name="this_is_the_beginning_of_dm">Det här är början av din direktmeddelandehistorik med %s.</string>
     <string name="this_is_the_beginning_of_room_no_name">Det här är början av konversationen.</string>
     <string name="this_is_the_beginning_of_room">Det här är början av %s.</string>
-    <string name="room_settings_enable_encryption_no_permission">Du har inte behörighet att aktivera kryptering i det här rummet.</string>
+    <string name="room_settings_enable_encryption_no_permission">Du är inte behörig att aktivera kryptering i det här rummet.</string>
     <string name="create_room_in_progress">Skapar rum…</string>
     <string name="create_room_alias_invalid">Vissa tecken tillåts inte</string>
     <string name="create_room_alias_empty">Vänligen ange en rumsadress</string>
@@ -2538,7 +2538,7 @@
     <string name="room_permissions_invite_users">Bjuda in användare</string>
     <string name="room_permissions_send_messages">Skicka meddelanden</string>
     <string name="room_permissions_default_role">Förvald roll</string>
-    <string name="room_permissions_notice_read_only">Du har inte behörighet att uppdatera rollerna som krävs för att ändra olika delar av rummet</string>
+    <string name="room_permissions_notice_read_only">Du är inte behörig att uppdatera rollerna som krävs för att ändra olika delar av rummet</string>
     <string name="room_permissions_notice">Välj de roller som krävs för att ändra olika delar av rummet</string>
     <string name="room_permissions_title">Behörigheter</string>
     <string name="room_settings_permissions_subtitle">Se och uppdatera rollerna som krävs för att ändra olika delar av rummet.</string>
@@ -2742,7 +2742,7 @@
     <string name="option_always_ask">Fråga alltid</string>
     <string name="this_space_has_no_rooms_admin">Vissa rum kan vara dolda för att de är privata och du behöver en inbjudan.</string>
     <string name="this_space_has_no_rooms_not_admin">Vissa rum kan vara dolda för att de är privata och du behöver en inbjudan.
-\nDu har inte behörighet att lägga till rum.</string>
+\nDu är inte behörig att lägga till rum.</string>
     <string name="this_space_has_no_rooms">Det här utrymmet har inga rum</string>
     <string name="spaces_no_server_support_description">Vänligen kontakta din hemserveradmin för vidare information</string>
     <string name="spaces_no_server_support_title">Det verkar som att din hemserver inte stöder utrymmen än</string>
@@ -2951,7 +2951,7 @@
     <string name="room_permissions_enable_space_encryption">Aktivera utrymmeskryptering</string>
     <string name="room_permissions_change_main_address_for_the_space">Byt huvudadress för det här utrymmet</string>
     <string name="room_permissions_change_space_avatar">Byt utrymmets avatar</string>
-    <string name="space_permissions_notice_read_only">Du har inte behörighet att uppdatera rollerna som krävs för att ändra diverse delar av det här utrmmet</string>
+    <string name="space_permissions_notice_read_only">Du är inte behörig att uppdatera rollerna som krävs för att ändra diverse delar av det här utrymmet</string>
     <string name="space_permissions_notice">Välj de roller som krävs för att ändra diverse delar av det här utrymmet</string>
     <string name="space_settings_permissions_subtitle">Se och uppdatera rollerna som krävs för att ändra diverse delar av utrymmet.</string>
     <string name="create_spaces_invite_public_header">Vilka är dina lagkamrater\?</string>
