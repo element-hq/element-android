@@ -60,7 +60,7 @@
         style="@style/TextAppearance.Vector.Body"
         tools:text="@string/verify_cancel_self_verification_from_untrusted"/>
 
-    <androidx.appcompat.widget.AppCompatButton
+    <Button
         android:id="@+id/btn_skip_action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
