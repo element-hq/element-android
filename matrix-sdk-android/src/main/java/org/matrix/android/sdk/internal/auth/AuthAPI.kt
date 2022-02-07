@@ -133,7 +133,7 @@ internal interface AuthAPI {
      */
     @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
     @POST(NetworkConstants.URI_API_PREFIX_PATH_V1 + "refresh")
-    suspend fun refresh(@Body refreshParams: RefreshParams): RefreshResult
+    suspend fun refreshToken(@Body refreshParams: RefreshParams): RefreshResult
 
     /**
      * Ask the homeserver to reset the password associated with the provided email.

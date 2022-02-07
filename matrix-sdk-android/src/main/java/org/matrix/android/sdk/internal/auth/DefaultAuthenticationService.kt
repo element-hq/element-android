@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.auth
 import android.net.Uri
 import dagger.Lazy
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.MatrixPatterns.getDomain
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -27,7 +28,6 @@ import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.login.LoginWizard
-import org.matrix.android.sdk.api.auth.refresh.RefreshWizard
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.failure.Failure
@@ -39,11 +39,11 @@ import org.matrix.android.sdk.internal.auth.data.WebClientConfig
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 import org.matrix.android.sdk.internal.auth.login.DefaultLoginWizard
 import org.matrix.android.sdk.internal.auth.login.DirectLoginTask
-import org.matrix.android.sdk.internal.auth.refresh.DefaultRefreshWizard
 import org.matrix.android.sdk.internal.auth.registration.DefaultRegistrationWizard
 import org.matrix.android.sdk.internal.auth.version.Versions
 import org.matrix.android.sdk.internal.auth.version.isLoginAndRegistrationSupportedBySdk
 import org.matrix.android.sdk.internal.auth.version.isSupportedBySdk
+import org.matrix.android.sdk.internal.di.MatrixScope
 import org.matrix.android.sdk.internal.di.Unauthenticated
 import org.matrix.android.sdk.internal.network.RetrofitFactory
 import org.matrix.android.sdk.internal.network.executeRequest
@@ -62,14 +62,14 @@ internal class DefaultAuthenticationService @Inject constructor(
         private val sessionCreator: SessionCreator,
         private val pendingSessionStore: PendingSessionStore,
         private val getWellknownTask: GetWellknownTask,
-        private val directLoginTask: DirectLoginTask
+        private val directLoginTask: DirectLoginTask,
+        private val matrixConfiguration: MatrixConfiguration
 ) : AuthenticationService {
 
     private var pendingSessionData: PendingSessionData? = pendingSessionStore.getPendingSessionData()
 
     private var currentLoginWizard: LoginWizard? = null
     private var currentRegistrationWizard: RegistrationWizard? = null
-    private var currentRefreshWizard: RefreshWizard? = null
 
     override fun hasAuthenticatedSessions(): Boolean {
         return sessionParamsStore.getLast() != null
@@ -336,7 +336,8 @@ internal class DefaultAuthenticationService @Inject constructor(
                         DefaultLoginWizard(
                                 buildAuthAPI(it),
                                 sessionCreator,
-                                pendingSessionStore
+                                pendingSessionStore,
+                                matrixConfiguration
                         ).also {
                             currentLoginWizard = it
                         }
@@ -398,21 +399,9 @@ internal class DefaultAuthenticationService @Inject constructor(
                 userId = matrixId,
                 password = password,
                 deviceName = initialDeviceName,
-                deviceId = deviceId
+                deviceId = deviceId,
+                refreshToken = matrixConfiguration.enableRefreshTokenAuth
         ))
-    }
-
-    override fun getRefreshWizard(sessionId: String): RefreshWizard {
-        val homeServerConnectionConfig = sessionParamsStore.get(sessionId)?.homeServerConnectionConfig
-                ?: throw IllegalStateException("Session not found")
-        return currentRefreshWizard
-                ?: let {
-                    DefaultRefreshWizard(
-                            buildAuthAPI(homeServerConnectionConfig)
-                    ).also {
-                        currentRefreshWizard = it
-                    }
-                }
     }
 
     private fun buildAuthAPI(homeServerConnectionConfig: HomeServerConnectionConfig): AuthAPI {

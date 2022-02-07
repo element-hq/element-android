@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.auth.login
 
 import dagger.Lazy
 import okhttp3.OkHttpClient
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.session.Session
@@ -38,7 +39,8 @@ internal interface DirectLoginTask : Task<DirectLoginTask.Params, Session> {
             val userId: String,
             val password: String,
             val deviceName: String,
-            val deviceId: String?
+            val deviceId: String?,
+            val refreshToken: Boolean
     )
 }
 
@@ -60,7 +62,8 @@ internal class DefaultDirectLoginTask @Inject constructor(
                 user = params.userId,
                 password = params.password,
                 deviceDisplayName = params.deviceName,
-                deviceId = params.deviceId
+                deviceId = params.deviceId,
+                refreshToken = params.refreshToken
         )
 
         val credentials = try {

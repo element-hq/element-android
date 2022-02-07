@@ -24,6 +24,10 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 import java.io.IOException
 import javax.net.ssl.HttpsURLConnection
 
+fun Failure.ServerError.isTokenUnknownError() =
+        httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED &&
+                error.code ==  MatrixError.M_UNKNOWN_TOKEN
+
 fun Throwable.is401() =
         this is Failure.ServerError &&
                 httpCode == HttpsURLConnection.HTTP_UNAUTHORIZED && /* 401 */

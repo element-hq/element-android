@@ -20,7 +20,6 @@ import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.LoginFlowResult
 import org.matrix.android.sdk.api.auth.login.LoginWizard
-import org.matrix.android.sdk.api.auth.refresh.RefreshWizard
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 import org.matrix.android.sdk.api.auth.wellknown.WellknownResult
 import org.matrix.android.sdk.api.session.Session
@@ -63,13 +62,6 @@ interface AuthenticationService {
      * See [RegistrationWizard] for more details.
      */
     fun getRegistrationWizard(): RegistrationWizard
-
-    /**
-     * Return a RefreshWizard, refresh our authentication with the homeserver.
-     *
-     * See [RefreshWizard] for more details.
-     */
-    fun getRefreshWizard(sessionId: String): RefreshWizard
 
     /**
      * True when login and password has been sent with success to the homeserver

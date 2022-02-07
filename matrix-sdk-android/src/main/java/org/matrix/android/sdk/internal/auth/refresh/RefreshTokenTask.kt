@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,25 @@
 package org.matrix.android.sdk.internal.auth.refresh
 
 import org.matrix.android.sdk.api.auth.data.RefreshResult
-import org.matrix.android.sdk.api.auth.refresh.RefreshWizard
 import org.matrix.android.sdk.internal.auth.AuthAPI
 import org.matrix.android.sdk.internal.auth.data.RefreshParams
+import org.matrix.android.sdk.internal.network.executeRequest
+import org.matrix.android.sdk.internal.task.Task
+import javax.inject.Inject
 
-internal class DefaultRefreshWizard(
+internal interface RefreshTokenTask : Task<RefreshTokenTask.Params, RefreshResult> {
+    data class Params(
+            val refreshToken: String
+    )
+}
+
+internal class DefaultRefreshTokenTask @Inject constructor(
         private val authAPI: AuthAPI
-) : RefreshWizard {
-
-    override suspend fun refresh(refreshToken: String): RefreshResult {
-        return authAPI.refresh(RefreshParams(refreshToken))
+    ) : RefreshTokenTask {
+    override suspend fun execute(params: RefreshTokenTask.Params): RefreshResult {
+        return executeRequest(null) {
+            authAPI.refreshToken(RefreshParams(params.refreshToken))
+        }
     }
 }
+

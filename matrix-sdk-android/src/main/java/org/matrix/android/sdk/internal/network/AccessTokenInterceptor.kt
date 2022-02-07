@@ -16,22 +16,45 @@
 
 package org.matrix.android.sdk.internal.network
 
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
+import okhttp3.Request
 import okhttp3.Response
+import org.matrix.android.sdk.api.failure.Failure
+import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.failure.isTokenUnknownError
+import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
+import java.net.HttpURLConnection
 
-internal class AccessTokenInterceptor(private val accessTokenProvider: AccessTokenProvider) : Interceptor {
+internal class AccessTokenInterceptor(
+        private val accessTokenProvider: AccessTokenProvider,
+        private val globalErrorReceiver: GlobalErrorReceiver
+        ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        var request = chain.request()
+        // Attempt to get the latest access token before the request token might be expiring soon.
+        val response = attemptRequestWithLatestToken(chain)
 
-        // Add the access token to all requests if it is set
-        accessTokenProvider.getToken()?.let { token ->
-            val newRequestBuilder = request.newBuilder()
-            newRequestBuilder.header(HttpHeaders.Authorization, "Bearer $token")
-            request = newRequestBuilder.build()
+        val serverError = response.toFailure(globalErrorReceiver) as? Failure.ServerError
+
+        if (serverError == null || !serverError.isTokenUnknownError()) {
+            return response
         }
+        // Server is the source of truth on token validity, if it is no longer valid we should refresh and retry the original request.
+        return attemptRequestWithLatestToken(chain, serverError)
+    }
 
+    private fun attemptRequestWithLatestToken(chain: Interceptor.Chain, serverError: Failure.ServerError? = null): Response {
+        var request = chain.request()
+        runBlocking {
+            accessTokenProvider.getToken(serverError)?.let { token ->
+                val newRequestBuilder = request.newBuilder()
+                newRequestBuilder.header(HttpHeaders.Authorization, "Bearer $token")
+                request = newRequestBuilder.build()
+            }
+        }
         return chain.proceed(request)
     }
+
 }

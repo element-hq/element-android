@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.auth.login
 
 import android.util.Patterns
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.login.LoginProfileInfo
 import org.matrix.android.sdk.api.auth.login.LoginWizard
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
@@ -38,7 +39,8 @@ import org.matrix.android.sdk.internal.session.contentscanner.DisabledContentSca
 internal class DefaultLoginWizard(
         private val authAPI: AuthAPI,
         private val sessionCreator: SessionCreator,
-        private val pendingSessionStore: PendingSessionStore
+        private val pendingSessionStore: PendingSessionStore,
+        private val matrixConfiguration: MatrixConfiguration
 ) : LoginWizard {
 
     private var pendingSessionData: PendingSessionData = pendingSessionStore.getPendingSessionData() ?: error("Pending session data should exist here")
@@ -62,14 +64,16 @@ internal class DefaultLoginWizard(
                     address = login,
                     password = password,
                     deviceDisplayName = initialDeviceName,
-                    deviceId = deviceId
+                    deviceId = deviceId,
+                    refreshToken = matrixConfiguration.enableRefreshTokenAuth
             )
         } else {
             PasswordLoginParams.userIdentifier(
                     user = login,
                     password = password,
                     deviceDisplayName = initialDeviceName,
-                    deviceId = deviceId
+                    deviceId = deviceId,
+                    refreshToken = matrixConfiguration.enableRefreshTokenAuth
             )
         }
         val credentials = executeRequest(null) {
@@ -84,7 +88,8 @@ internal class DefaultLoginWizard(
      */
     override suspend fun loginWithToken(loginToken: String): Session {
         val loginParams = TokenLoginParams(
-                token = loginToken
+                token = loginToken,
+                refreshToken = matrixConfiguration.enableRefreshTokenAuth
         )
         val credentials = executeRequest(null) {
             authAPI.login(loginParams)
@@ -94,8 +99,12 @@ internal class DefaultLoginWizard(
     }
 
     override suspend fun loginCustom(data: JsonDict): Session {
+        val loginParams = data.toMutableMap()
+        if (matrixConfiguration.enableRefreshTokenAuth) {
+            loginParams["refresh_token"] = true
+        }
         val credentials = executeRequest(null) {
-            authAPI.login(data)
+            authAPI.login(loginParams)
         }
 
         return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig)

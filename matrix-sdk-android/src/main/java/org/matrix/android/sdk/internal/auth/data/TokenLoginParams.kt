@@ -23,6 +23,6 @@ import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 @JsonClass(generateAdapter = true)
 internal data class TokenLoginParams(
         @Json(name = "type") override val type: String = LoginFlowTypes.TOKEN,
-        @Json(name = "refresh_token") override val refreshToken: Boolean = true,
+        @Json(name = "refresh_token") override val refreshToken: Boolean,
         @Json(name = "token") val token: String
 ) : LoginParams

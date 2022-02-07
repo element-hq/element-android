@@ -45,6 +45,9 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
+import org.matrix.android.sdk.internal.auth.AuthAPI
+import org.matrix.android.sdk.internal.auth.refresh.DefaultRefreshTokenTask
+import org.matrix.android.sdk.internal.auth.refresh.RefreshTokenTask
 import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorageService
 import org.matrix.android.sdk.internal.crypto.tasks.DefaultRedactEventTask
 import org.matrix.android.sdk.internal.crypto.tasks.RedactEventTask
@@ -222,10 +225,11 @@ internal abstract class SessionModule {
         fun providesOkHttpClient(@UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
                                  @Authenticated accessTokenProvider: AccessTokenProvider,
                                  @SessionId sessionId: String,
-                                 @MockHttpInterceptor testInterceptor: TestInterceptor?): OkHttpClient {
+                                 @MockHttpInterceptor testInterceptor: TestInterceptor?,
+                                 globalErrorReceiver: GlobalErrorReceiver): OkHttpClient {
             return okHttpClient
                     .newBuilder()
-                    .addAccessTokenInterceptor(accessTokenProvider)
+                    .addAccessTokenInterceptor(accessTokenProvider, globalErrorReceiver)
                     .apply {
                         if (testInterceptor != null) {
                             testInterceptor.sessionId = sessionId
@@ -284,6 +288,19 @@ internal abstract class SessionModule {
         @SessionScope
         fun providesMxCryptoConfig(matrixConfiguration: MatrixConfiguration): MXCryptoConfig {
             return matrixConfiguration.cryptoConfig
+        }
+
+        @JvmStatic
+        @Provides
+        @SessionScope
+        fun providesAuthApi(
+                @Unauthenticated okHttpClient: Lazy<OkHttpClient>,
+                retrofitFactory: RetrofitFactory,
+                homeServerConnectionConfig: HomeServerConnectionConfig
+        ): AuthAPI {
+            val homeServerUrl = homeServerConnectionConfig.homeServerUriBase.toString()
+            return retrofitFactory.create(okHttpClient, homeServerUrl)
+                    .create(AuthAPI::class.java)
         }
     }
 
@@ -390,4 +407,7 @@ internal abstract class SessionModule {
 
     @Binds
     abstract fun bindEventSenderProcessor(processor: EventSenderProcessorCoroutine): EventSenderProcessor
+
+    @Binds
+    abstract fun bindRefreshTokenTask(task: DefaultRefreshTokenTask): RefreshTokenTask
 }

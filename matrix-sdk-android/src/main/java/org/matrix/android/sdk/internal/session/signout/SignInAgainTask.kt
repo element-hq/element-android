@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.session.signout
 
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.auth.data.PasswordLoginParams
@@ -34,7 +35,8 @@ internal class DefaultSignInAgainTask @Inject constructor(
         private val signOutAPI: SignOutAPI,
         private val sessionParams: SessionParams,
         private val sessionParamsStore: SessionParamsStore,
-        private val globalErrorReceiver: GlobalErrorReceiver
+        private val globalErrorReceiver: GlobalErrorReceiver,
+        private val matrixConfiguration: MatrixConfiguration
 ) : SignInAgainTask {
 
     override suspend fun execute(params: SignInAgainTask.Params) {
@@ -49,7 +51,8 @@ internal class DefaultSignInAgainTask @Inject constructor(
                             // but https://github.com/matrix-org/synapse/issues/6525
                             deviceDisplayName = null,
                             // Reuse the same deviceId
-                            deviceId = sessionParams.deviceId
+                            deviceId = sessionParams.deviceId,
+                            refreshToken = matrixConfiguration.enableRefreshTokenAuth
                     )
             )
         }

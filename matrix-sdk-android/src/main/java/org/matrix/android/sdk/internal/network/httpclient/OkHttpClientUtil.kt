@@ -19,17 +19,18 @@ package org.matrix.android.sdk.internal.network.httpclient
 import okhttp3.OkHttpClient
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.internal.network.AccessTokenInterceptor
+import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.interceptors.CurlLoggingInterceptor
 import org.matrix.android.sdk.internal.network.ssl.CertUtil
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 import timber.log.Timber
 
-internal fun OkHttpClient.Builder.addAccessTokenInterceptor(accessTokenProvider: AccessTokenProvider): OkHttpClient.Builder {
+internal fun OkHttpClient.Builder.addAccessTokenInterceptor(accessTokenProvider: AccessTokenProvider, globalErrorReceiver: GlobalErrorReceiver): OkHttpClient.Builder {
     // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
     val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
     interceptors().removeAll(existingCurlInterceptors)
 
-    addInterceptor(AccessTokenInterceptor(accessTokenProvider))
+    addInterceptor(AccessTokenInterceptor(accessTokenProvider, globalErrorReceiver))
 
     // Re add eventually the curl logging interceptors
     existingCurlInterceptors.forEach {

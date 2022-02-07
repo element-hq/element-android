@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.network.token
 
+import org.matrix.android.sdk.api.failure.Failure
+
 internal interface AccessTokenProvider {
-    fun getToken(): String?
+    suspend fun getToken(serverError: Failure.ServerError? = null): String?
 }

@@ -51,7 +51,8 @@ internal data class PasswordLoginParams(
         fun userIdentifier(user: String,
                            password: String,
                            deviceDisplayName: String?,
-                           deviceId: String?): PasswordLoginParams {
+                           deviceId: String?,
+                           refreshToken: Boolean): PasswordLoginParams {
             return PasswordLoginParams(
                     identifier = mapOf(
                             IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_USER,
@@ -59,7 +60,7 @@ internal data class PasswordLoginParams(
                     ),
                     password = password,
                     type = LoginFlowTypes.PASSWORD,
-                    refreshToken = true,
+                    refreshToken = refreshToken,
                     deviceDisplayName = deviceDisplayName,
                     deviceId = deviceId
             )
@@ -69,7 +70,8 @@ internal data class PasswordLoginParams(
                                  address: String,
                                  password: String,
                                  deviceDisplayName: String?,
-                                 deviceId: String?): PasswordLoginParams {
+                                 deviceId: String?,
+                                 refreshToken: Boolean): PasswordLoginParams {
             return PasswordLoginParams(
                     identifier = mapOf(
                             IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_THIRD_PARTY,
@@ -78,7 +80,7 @@ internal data class PasswordLoginParams(
                     ),
                     password = password,
                     type = LoginFlowTypes.PASSWORD,
-                    refreshToken = true,
+                    refreshToken = refreshToken,
                     deviceDisplayName = deviceDisplayName,
                     deviceId = deviceId
             )
@@ -88,7 +90,8 @@ internal data class PasswordLoginParams(
                             phone: String,
                             password: String,
                             deviceDisplayName: String?,
-                            deviceId: String?): PasswordLoginParams {
+                            deviceId: String?,
+                            refreshToken: Boolean): PasswordLoginParams {
             return PasswordLoginParams(
                     identifier = mapOf(
                             IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_PHONE,
@@ -97,7 +100,7 @@ internal data class PasswordLoginParams(
                     ),
                     password = password,
                     type = LoginFlowTypes.PASSWORD,
-                    refreshToken = true,
+                    refreshToken = refreshToken,
                     deviceDisplayName = deviceDisplayName,
                     deviceId = deviceId
             )
