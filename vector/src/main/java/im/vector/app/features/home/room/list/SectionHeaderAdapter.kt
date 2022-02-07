@@ -88,7 +88,7 @@ class SectionHeaderAdapter constructor(
                     DrawableCompat.setTint(it, tintColor)
                 }
                 roomCategoryCounterView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
-                roomCategoryCounterView.text = roomsSectionData.itemCount.toString()
+                roomCategoryCounterView.text = roomsSectionData.itemCount.takeIf { it > 0 }?.toString().orEmpty()
                 roomCategoryUnreadCounterBadgeView.render(UnreadCounterBadgeView.State(roomsSectionData.notificationCount, roomsSectionData.isHighlighted))
             }
         }
