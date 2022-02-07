@@ -374,6 +374,7 @@ class RoomListSectionBuilderSpace(
                                 // use it also as a source to update count
                                 livePagedList.asFlow()
                                         .onEach {
+                                            // TODO should we improve this ?
                                             Timber.v("Thread space list: ${Thread.currentThread()}")
                                             sections.find { it.sectionName == name }
                                                     ?.notificationCount
@@ -398,6 +399,12 @@ class RoomListSectionBuilderSpace(
                                         )
                                 )
                             }
+
+                    // TODO extract into a dedicated private method
+                    session.getRoomCountFlow(roomQueryParams)
+                            .onEach { count -> sections.find { section -> section.sectionName == name }?.itemCount?.postValue(count) }
+                            .flowOn(Dispatchers.Default)
+                            .launchIn(viewModelScope)
                 }
 
         )

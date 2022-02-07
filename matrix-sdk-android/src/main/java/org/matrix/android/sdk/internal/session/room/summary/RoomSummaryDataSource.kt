@@ -25,7 +25,12 @@ import androidx.paging.PagedList
 import com.zhuinden.monarchy.Monarchy
 import io.realm.Realm
 import io.realm.RealmQuery
+import io.realm.kotlin.toFlow
 import io.realm.kotlin.where
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.query.ActiveSpaceFilter
 import org.matrix.android.sdk.api.query.RoomCategoryFilter
 import org.matrix.android.sdk.api.query.isNormalized
@@ -42,6 +47,7 @@ import org.matrix.android.sdk.api.session.room.summary.RoomAggregateNotification
 import org.matrix.android.sdk.api.session.space.SpaceSummaryQueryParams
 import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.api.util.toOptional
+import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.mapper.RoomSummaryMapper
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
@@ -55,6 +61,7 @@ import javax.inject.Inject
 
 internal class RoomSummaryDataSource @Inject constructor(
         @SessionDatabase private val monarchy: Monarchy,
+        private val realmSessionProvider: RealmSessionProvider,
         private val roomSummaryMapper: RoomSummaryMapper,
         private val queryStringValueProcessor: QueryStringValueProcessor
 ) {
@@ -230,6 +237,28 @@ internal class RoomSummaryDataSource @Inject constructor(
         }
     }
 
+//    @OptIn(ExperimentalCoroutinesApi::class)
+//    fun getCountFlow(queryParams: RoomSummaryQueryParams): Flow<Int> = callbackFlow {
+//        val realmResult = realmSessionProvider.withRealm { realm ->
+//            roomSummariesQuery(realm, queryParams).findAllAsync()
+//        }
+//        val changeListener = RealmChangeListener<RealmResults<RoomSummaryEntity>> {
+//            trySendBlocking(it.size)
+//                    .onFailure { throwable -> Timber.e(throwable) }
+//        }
+//        realmResult.addChangeListener(changeListener)
+//        awaitClose { realmResult.removeChangeListener(changeListener) }
+//    }
+
+    fun getCountFlow(queryParams: RoomSummaryQueryParams): Flow<Int> =
+            // TODO handle properly threads and dispatchers otherwise use livedata of monarchy
+            realmSessionProvider
+                    .withRealm { realm -> roomSummariesQuery(realm, queryParams).findAllAsync() }
+                    .toFlow()
+                    .map { it.size }
+                    .flowOn(Dispatchers.IO)
+
+    // TODO should we improve how we update notification count with flow ??
     fun getNotificationCountForRooms(queryParams: RoomSummaryQueryParams): RoomAggregateNotificationCount {
         var notificationCount: RoomAggregateNotificationCount? = null
         monarchy.doWithRealm { realm ->

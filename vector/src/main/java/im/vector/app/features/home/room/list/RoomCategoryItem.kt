@@ -29,6 +29,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.themes.ThemeUtils
 
+// TODO check where it is used in the project
 @EpoxyModelClass(layout = R.layout.item_room_category)
 abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
 

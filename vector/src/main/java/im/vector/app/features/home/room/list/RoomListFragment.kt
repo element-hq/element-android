@@ -287,6 +287,12 @@ class RoomListFragment @Inject constructor(
                                             ))
                                             checkEmptyState()
                                         }
+                                        // TODO use flow if possible ?
+                                        section.itemCount.observe(viewLifecycleOwner) { count ->
+                                            sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
+                                                    itemCount = count
+                                            ))
+                                        }
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                                     notificationCount = counts.totalCount,
@@ -325,6 +331,12 @@ class RoomListFragment @Inject constructor(
                                                     isHidden = list.isEmpty(),
                                                     isLoading = false))
                                             checkEmptyState()
+                                        }
+                                        // TODO use flow instead ?
+                                        section.itemCount.observe(viewLifecycleOwner) { count ->
+                                            sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
+                                                    itemCount = count
+                                            ))
                                         }
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(

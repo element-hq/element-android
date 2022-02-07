@@ -242,6 +242,7 @@ class RoomListSectionBuilderGroup(
                            @StringRes nameRes: Int,
                            notifyOfLocalEcho: Boolean = false,
                            query: (RoomSummaryQueryParams.Builder) -> Unit) {
+        // TODO check when this class is used: difference with RoomListSectionBuilderSpace ?
         withQueryParams(
                 { query.invoke(it) },
                 { roomQueryParams ->
@@ -251,6 +252,7 @@ class RoomListSectionBuilderGroup(
                                 activeSpaceUpdaters.add(it)
                             }.livePagedList
                             .let { livePagedList ->
+                                // TODO should we improve this ?
                                 // use it also as a source to update count
                                 livePagedList.asFlow()
                                         .onEach {
