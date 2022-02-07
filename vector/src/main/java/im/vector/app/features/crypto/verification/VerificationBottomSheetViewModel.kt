@@ -81,7 +81,7 @@ data class VerificationBottomSheetViewState(
         val quadSContainsSecrets: Boolean = true,
         val quadSHasBeenReset: Boolean = false,
         val hasAnyOtherSession: Boolean = false,
-        val userTrustLevel : RoomEncryptionTrustLevel? = null
+        val userTrustLevel: RoomEncryptionTrustLevel? = null
 ) : MavericksState {
 
     constructor(args: VerificationBottomSheet.VerificationArgs) : this(
@@ -142,13 +142,15 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     it.deviceId != session.sessionParams.deviceId
                 }
 
-        val userTrustLevel = if(initialState.isMe) {
-            if(sasTx?.state == VerificationTxState.Verified ||
+        val userTrustLevel = if (initialState.isMe) {
+            if (sasTx?.state == VerificationTxState.Verified ||
                     qrTx?.state == VerificationTxState.Verified ||
-                    initialState.verifiedFromPrivateKeys) RoomEncryptionTrustLevel.Trusted else RoomEncryptionTrustLevel.Warning
+                    initialState.verifiedFromPrivateKeys) RoomEncryptionTrustLevel.Trusted
+            else RoomEncryptionTrustLevel.Warning
         } else {
-            if(sasTx?.state == VerificationTxState.Verified || qrTx?.state == VerificationTxState.Verified)
-                RoomEncryptionTrustLevel.Trusted else RoomEncryptionTrustLevel.Warning
+            if (sasTx?.state == VerificationTxState.Verified || qrTx?.state == VerificationTxState.Verified)
+                RoomEncryptionTrustLevel.Trusted
+            else RoomEncryptionTrustLevel.Warning
         }
 
         setState {
