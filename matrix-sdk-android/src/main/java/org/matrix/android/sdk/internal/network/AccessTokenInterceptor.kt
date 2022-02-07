@@ -36,7 +36,8 @@ internal class AccessTokenInterceptor(
         // Attempt to get the latest access token before the request token might be expiring soon.
         val response = attemptRequestWithLatestToken(chain)
 
-        val serverError = response.toFailure(globalErrorReceiver) as? Failure.ServerError
+
+        val serverError = response.peekFailure(globalErrorReceiver) as? Failure.ServerError
 
         if (serverError == null || !serverError.isTokenUnknownError()) {
             return response

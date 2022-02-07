@@ -83,16 +83,13 @@ internal class HomeserverAccessTokenProvider @Inject constructor(
         try {
             result = refreshTokenTask.execute(RefreshTokenTask.Params(credentials.refreshToken))
         } catch (throwable: Throwable) {
-            throwable
-                    .let { it as? HttpException }
-                    ?.let { it.toFailure(globalErrorReceiver) as? Failure.ServerError }
-                    ?.also {
-                        Timber.d("## HomeserverAccessTokenProvider: Failed to refresh access token. error: $it")
-                        if (it.error.code == M_UNKNOWN_TOKEN || it.error.code == M_FORBIDDEN) {
-                            Timber.d("## HomeserverAccessTokenProvider: refreshToken-based auth failed, requires logout.")
-                            globalErrorReceiver.handleGlobalError(GlobalError.InvalidToken(it.error.isSoftLogout.orFalse()))
-                        }
-                    }
+            if (throwable is Failure.ServerError) {
+                Timber.d("## HomeserverAccessTokenProvider: Failed to refresh access token. error: $throwable")
+                if (throwable.error.code == M_UNKNOWN_TOKEN || throwable.error.code == M_FORBIDDEN) {
+                    Timber.d("## HomeserverAccessTokenProvider: refreshToken-based auth failed, requires logout.")
+                    globalErrorReceiver.handleGlobalError(GlobalError.InvalidToken(throwable.error.isSoftLogout.orFalse()))
+                }
+            }
         }
 
         if (result == null) {

@@ -71,6 +71,18 @@ internal fun okhttp3.Response.toFailure(globalErrorReceiver: GlobalErrorReceiver
     return toFailure(body, code, globalErrorReceiver)
 }
 
+/**
+ * Convert a okhttp3 Response to a Failure, and eventually parse errorBody to convert it to a MatrixError.
+ * This is used to check error responses in interceptors as it does not consume the body but uses `Response.peekBody` instead.
+ */
+internal fun okhttp3.Response.peekFailure(globalErrorReceiver: GlobalErrorReceiver?): Failure? {
+    if (isSuccessful) {
+        return null
+    }
+    return toFailure(this.peekBody(1024), code, globalErrorReceiver)
+}
+
+
 private fun toFailure(errorBody: ResponseBody?, httpCode: Int, globalErrorReceiver: GlobalErrorReceiver?): Failure {
     if (errorBody == null) {
         return Failure.Unknown(RuntimeException("errorBody should not be null"))
