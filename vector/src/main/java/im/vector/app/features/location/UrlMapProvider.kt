@@ -32,14 +32,16 @@ class UrlMapProvider @Inject constructor(
 ) {
     private val keyParam = "?key=${BuildConfig.mapTilerKey}"
 
+    private val fallbackMapUrl = buildString {
+        append(MAP_BASE_URL)
+        append(keyParam)
+    }
+
     suspend fun getMapUrl(): String {
-        return tryOrNull { rawService.getElementWellknown(session.sessionParams) }
+        val upstreamMapUrl = tryOrNull { rawService.getElementWellknown(session.sessionParams) }
                 ?.mapTileServerConfig
                 ?.mapStyleUrl
-                ?: buildString {
-                    append(MAP_BASE_URL)
-                    append(keyParam)
-                }
+        return upstreamMapUrl ?: fallbackMapUrl
     }
 
     fun buildStaticMapUrl(locationData: LocationData,
