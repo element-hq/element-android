@@ -83,6 +83,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
         // interface
         const val SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY = "SETTINGS_INTERFACE_LANGUAGE_PREFERENCE_KEY"
         const val SETTINGS_INTERFACE_TEXT_SIZE_KEY = "SETTINGS_INTERFACE_TEXT_SIZE_KEY"
+        const val SETTINGS_INTERFACE_BUBBLE_KEY = "SETTINGS_INTERFACE_BUBBLE_KEY"
         const val SETTINGS_SHOW_URL_PREVIEW_KEY = "SETTINGS_SHOW_URL_PREVIEW_KEY"
         private const val SETTINGS_SEND_TYPING_NOTIF_KEY = "SETTINGS_SEND_TYPING_NOTIF_KEY"
         private const val SETTINGS_ENABLE_MARKDOWN_KEY = "SETTINGS_ENABLE_MARKDOWN_KEY"
@@ -847,6 +848,15 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      */
     fun showEmojiKeyboard(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_SHOW_EMOJI_KEYBOARD, true)
+    }
+
+    /**
+     * Tells if the timeline messages should be shown in a bubble or not.
+     *
+     * @return true to show timeline message in bubble.
+     */
+    fun useMessageBubblesLayout(): Boolean {
+        return defaultPrefs.getBoolean(SETTINGS_INTERFACE_BUBBLE_KEY, false)
     }
 
     /**

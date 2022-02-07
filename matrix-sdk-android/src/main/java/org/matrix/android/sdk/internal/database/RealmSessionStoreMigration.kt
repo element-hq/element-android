@@ -57,7 +57,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 22L
+        const val SESSION_STORE_SCHEMA_VERSION = 24L
     }
 
     /**
@@ -92,6 +92,8 @@ internal class RealmSessionStoreMigration @Inject constructor(
         if (oldVersion <= 19) migrateTo20(realm)
         if (oldVersion <= 20) migrateTo21(realm)
         if (oldVersion <= 21) migrateTo22(realm)
+        if (oldVersion <= 22) migrateTo23(realm)
+        if (oldVersion <= 23) migrateTo24(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -450,6 +452,22 @@ internal class RealmSessionStoreMigration @Inject constructor(
 
     private fun migrateTo22(realm: DynamicRealm) {
         Timber.d("Step 21 -> 22")
+        val listJoinedRoomIds = realm.where("RoomEntity")
+                .equalTo(RoomEntityFields.MEMBERSHIP_STR, Membership.JOIN.name).findAll()
+                .map { it.getString(RoomEntityFields.ROOM_ID) }
+
+        val hasMissingStateEvent = realm.where("CurrentStateEventEntity")
+                .`in`(CurrentStateEventEntityFields.ROOM_ID, listJoinedRoomIds.toTypedArray())
+                .isNull(CurrentStateEventEntityFields.ROOT.`$`).findFirst() != null
+
+        if (hasMissingStateEvent) {
+            Timber.v("Has some missing state event, clear session cache")
+            realm.deleteAll()
+        }
+    }
+
+    private fun migrateTo23(realm: DynamicRealm) {
+        Timber.d("Step 22 -> 23")
         val eventEntity = realm.schema.get("TimelineEventEntity") ?: return
 
         realm.schema.get("EventEntity")
@@ -461,5 +479,14 @@ internal class RealmSessionStoreMigration @Inject constructor(
                     it.setString(EventEntityFields.THREAD_NOTIFICATION_STATE_STR, ThreadNotificationState.NO_NEW_MESSAGE.name)
                 }
                 ?.addRealmObjectField(EventEntityFields.THREAD_SUMMARY_LATEST_MESSAGE.`$`, eventEntity)
+    }
+
+    private fun migrateTo24(realm: DynamicRealm) {
+        Timber.d("Step 23 -> 24")
+        realm.schema.get("PreviewUrlCacheEntity")
+                ?.addField(PreviewUrlCacheEntityFields.IMAGE_WIDTH, Int::class.java)
+                ?.setNullable(PreviewUrlCacheEntityFields.IMAGE_WIDTH, true)
+                ?.addField(PreviewUrlCacheEntityFields.IMAGE_HEIGHT, Int::class.java)
+                ?.setNullable(PreviewUrlCacheEntityFields.IMAGE_HEIGHT, true)
     }
 }

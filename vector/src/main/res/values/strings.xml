@@ -2556,6 +2556,17 @@
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
     <string name="template_ftue_auth_carousel_body_workplace" translatable="false">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
 
+    <string name="ftue_auth_use_case_title">Who will you chat to the most?</string>
+    <string name="ftue_auth_use_case_subtitle">We\'ll help you get connected.</string>
+    <string name="ftue_auth_use_case_option_one">Friends and family</string>
+    <string name="ftue_auth_use_case_option_two">Teams</string>
+    <string name="ftue_auth_use_case_option_three">Communities</string>
+    <!-- Note to translators: the %s is replaced by the content of ftue_auth_use_case_skip_partial -->
+    <string name="ftue_auth_use_case_skip">Not sure yet? You can %s</string>
+    <string name="ftue_auth_use_case_skip_partial">skip this question</string>
+    <string name="ftue_auth_use_case_join_existing_server">Looking to join an existing server?</string>
+    <string name="ftue_auth_use_case_connect_to_server">Connect to server</string>
+
     <string name="login_splash_title">It\'s your conversation. Own it.</string>
     <string name="login_splash_text1">Chat with people directly or in groups</string>
     <string name="login_splash_text2">Keep conversations private with encryption</string>
@@ -3756,6 +3767,9 @@
     <string name="settings_enable_location_sharing">Enable location sharing</string>
     <string name="settings_enable_location_sharing_summary">Once enabled you will be able to send your location to any room</string>
     <string name="labs_render_locations_in_timeline">Render user locations in the timeline</string>
+    <string name="location_timeline_failed_to_load_map">Failed to load map</string>
+
+    <string name="message_bubbles">Show Message bubbles</string>
 
     <string name="tooltip_attachment_photo">Open camera</string>
     <string name="tooltip_attachment_gallery">Send images and videos</string>

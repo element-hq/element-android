@@ -382,20 +382,28 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         (0 until modelCache.size).forEach { position ->
             val event = currentSnapshot[position]
             val nextEvent = currentSnapshot.nextOrNull(position)
-            val prevEvent = currentSnapshot.prevOrNull(position)
-            val nextDisplayableEvent = currentSnapshot.subList(position + 1, currentSnapshot.size).firstOrNull {
-                timelineEventVisibilityHelper.shouldShowEvent(
-                        timelineEvent = it,
-                        highlightedEventId = partialState.highlightedEventId,
-                        isFromThreadTimeline = partialState.isFromThreadTimeline(),
-                        rootThreadEventId = partialState.rootThreadEventId)
-            }
             // Should be build if not cached or if model should be refreshed
             if (modelCache[position] == null || modelCache[position]?.isCacheable(partialState) == false) {
+                val prevEvent = currentSnapshot.prevOrNull(position)
+                val prevDisplayableEvent = currentSnapshot.subList(0, position).lastOrNull {
+                    timelineEventVisibilityHelper.shouldShowEvent(
+                            timelineEvent = it,
+                            highlightedEventId = partialState.highlightedEventId,
+                            isFromThreadTimeline = partialState.isFromThreadTimeline(),
+                            rootThreadEventId = partialState.rootThreadEventId)
+                }
+                val nextDisplayableEvent = currentSnapshot.subList(position + 1, currentSnapshot.size).firstOrNull {
+                    timelineEventVisibilityHelper.shouldShowEvent(
+                            timelineEvent = it,
+                            highlightedEventId = partialState.highlightedEventId,
+                            isFromThreadTimeline = partialState.isFromThreadTimeline(),
+                            rootThreadEventId = partialState.rootThreadEventId)
+                }
                 val timelineEventsGroup = timelineEventsGroups.getOrNull(event)
                 val params = TimelineItemFactoryParams(
                         event = event,
                         prevEvent = prevEvent,
+                        prevDisplayableEvent = prevDisplayableEvent,
                         nextEvent = nextEvent,
                         nextDisplayableEvent = nextDisplayableEvent,
                         partialState = partialState,

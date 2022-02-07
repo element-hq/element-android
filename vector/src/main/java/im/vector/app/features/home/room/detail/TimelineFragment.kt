@@ -612,13 +612,14 @@ class TimelineFragment @Inject constructor(
     }
 
     private fun handleShowLocationPreview(locationContent: MessageLocationContent, senderId: String) {
+        val isSelfLocation = locationContent.isSelfLocation()
         navigator
                 .openLocationSharing(
                         context = requireContext(),
                         roomId = timelineArgs.roomId,
                         mode = LocationSharingMode.PREVIEW,
                         initialLocationData = locationContent.toLocationData(),
-                        locationOwnerId = senderId
+                        locationOwnerId = if (isSelfLocation) senderId else null
                 )
     }
 

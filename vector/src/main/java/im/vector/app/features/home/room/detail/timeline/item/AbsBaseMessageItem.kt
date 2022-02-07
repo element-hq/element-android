@@ -29,6 +29,7 @@ import im.vector.app.core.ui.views.ShieldImageView
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.home.room.detail.timeline.view.TimelineMessageLayoutRenderer
 import im.vector.app.features.reactions.widget.ReactionButton
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.send.SendState
@@ -98,6 +99,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
 
         holder.view.onClick(baseAttributes.itemClickListener)
         holder.view.setOnLongClickListener(baseAttributes.itemLongClickListener)
+        (holder.view as? TimelineMessageLayoutRenderer)?.renderMessageLayout(baseAttributes.informationData.messageLayout)
     }
 
     override fun unbind(holder: H) {

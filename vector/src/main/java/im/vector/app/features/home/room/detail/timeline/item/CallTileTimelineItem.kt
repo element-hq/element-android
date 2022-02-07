@@ -50,7 +50,7 @@ abstract class CallTileTimelineItem : AbsBaseMessageItem<CallTileTimelineItem.Ho
     @EpoxyAttribute
     lateinit var attributes: Attributes
 
-    override fun getViewType() = STUB_ID
+    override fun getViewStubId() = STUB_ID
 
     override fun bind(holder: Holder) {
         super.bind(holder)
