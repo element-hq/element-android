@@ -19,17 +19,27 @@ package im.vector.app.features.location
 import im.vector.app.BuildConfig
 import im.vector.app.core.resources.LocaleProvider
 import im.vector.app.core.resources.isRTL
+import im.vector.app.features.raw.wellknown.getElementWellknown
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
 class UrlMapProvider @Inject constructor(
-        private val localeProvider: LocaleProvider
+        private val localeProvider: LocaleProvider,
+        private val session: Session,
+        private val rawService: RawService
 ) {
     private val keyParam = "?key=${BuildConfig.mapTilerKey}"
 
-    // This is static so no need for a fun
-    val mapUrl = buildString {
-        append(MAP_BASE_URL)
-        append(keyParam)
+    suspend fun getMapUrl(): String {
+        return tryOrNull { rawService.getElementWellknown(session.sessionParams) }
+                ?.mapTileServerConfig
+                ?.mapStyleUrl
+                ?: buildString {
+                    append(MAP_BASE_URL)
+                    append(keyParam)
+                }
     }
 
     fun buildStaticMapUrl(locationData: LocationData,
