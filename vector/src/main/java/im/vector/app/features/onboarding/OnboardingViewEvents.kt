@@ -48,8 +48,8 @@ sealed class OnboardingViewEvents : VectorViewEvents {
     data class OnSendMsisdnSuccess(val msisdn: String) : OnboardingViewEvents()
 
     data class OnWebLoginError(val errorCode: Int, val description: String, val failingUrl: String) : OnboardingViewEvents()
-    object OnAccountCreated: OnboardingViewEvents()
-    object OnAccountSignedIn: OnboardingViewEvents()
-    object OnTakeMeHome: OnboardingViewEvents()
-    object OnPersonalizeProfile: OnboardingViewEvents()
+    object OnAccountCreated : OnboardingViewEvents()
+    object OnAccountSignedIn : OnboardingViewEvents()
+    object OnTakeMeHome : OnboardingViewEvents()
+    object OnPersonalizeProfile : OnboardingViewEvents()
 }

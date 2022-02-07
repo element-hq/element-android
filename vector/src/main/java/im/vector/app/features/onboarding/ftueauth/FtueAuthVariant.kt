@@ -225,7 +225,6 @@ class FtueAuthVariant(
             OnboardingViewEvents.OnAccountSignedIn                             -> onAccountSignedIn()
             OnboardingViewEvents.OnPersonalizeProfile                          -> TODO()
             OnboardingViewEvents.OnTakeMeHome                                  -> navigateToHome(createdAccount = true)
-
         }.exhaustive
     }
 
