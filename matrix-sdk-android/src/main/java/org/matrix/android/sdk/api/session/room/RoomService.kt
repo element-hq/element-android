@@ -77,6 +77,13 @@ interface RoomService {
     )
 
     /**
+     * Leave the room, or reject an invitation.
+     * @param roomId the roomId of the room to leave
+     * @param reason optional reason for leaving the room
+     */
+    suspend fun leaveRoom(roomId: String, reason: String? = null)
+
+    /**
      * Get a room from a roomId
      * @param roomId the roomId to look for.
      * @return a room with roomId or null

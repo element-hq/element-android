@@ -186,7 +186,7 @@ class RoomProfileViewModel @AssistedInject constructor(
         _viewEvents.post(RoomProfileViewEvents.Loading(stringProvider.getString(R.string.room_profile_leaving_room)))
         viewModelScope.launch {
             try {
-                room.leave(null)
+                session.leaveRoom(room.roomId)
                 // Do nothing, we will be closing the room automatically when it will get back from sync
             } catch (failure: Throwable) {
                 _viewEvents.post(RoomProfileViewEvents.Failure(failure))

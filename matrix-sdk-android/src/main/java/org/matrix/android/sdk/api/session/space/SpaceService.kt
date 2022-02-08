@@ -87,6 +87,13 @@ interface SpaceService {
 
     suspend fun rejectInvite(spaceId: String, reason: String?)
 
+    /**
+     * Leave the space, or reject an invitation.
+     * @param roomId the roomId of the space to leave
+     * @param reason optional reason for leaving the space
+     */
+    suspend fun leaveSpace(roomId: String, reason: String? = null)
+
 //    fun getSpaceParentsOfRoom(roomId: String) : List<SpaceSummary>
 
     /**

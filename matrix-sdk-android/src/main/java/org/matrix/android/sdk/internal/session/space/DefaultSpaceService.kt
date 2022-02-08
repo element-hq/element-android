@@ -184,6 +184,10 @@ internal class DefaultSpaceService @Inject constructor(
         return joinSpaceTask.execute(JoinSpaceTask.Params(spaceIdOrAlias, reason, viaServers))
     }
 
+    override suspend fun leaveSpace(roomId: String, reason: String?) {
+        leaveRoomTask.execute(LeaveRoomTask.Params(roomId, reason))
+    }
+
     override suspend fun rejectInvite(spaceId: String, reason: String?) {
         leaveRoomTask.execute(LeaveRoomTask.Params(spaceId, reason))
     }
