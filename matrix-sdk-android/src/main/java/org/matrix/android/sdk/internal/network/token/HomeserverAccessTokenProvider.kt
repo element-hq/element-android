@@ -41,11 +41,11 @@ internal class HomeserverAccessTokenProvider @Inject constructor(
 
     companion object {
         private val mutex = Mutex()
-        
+
         /**
-        The time interval before the access token expires that we will start trying to refresh the token.
-        This avoids us having to block other users requests while the token refreshes.
-        Choosing a value larger than DEFAULT_DELAY_MILLIS + DEFAULT_LONG_POOL_TIMEOUT_SECONDS guarantees we will at least have attempted it before expiry.
+         * The time interval before the access token expires that we will start trying to refresh the token.]
+         * This avoids us having to block other users requests while the token refreshes.
+         * Choosing a value larger than DEFAULT_DELAY_MILLIS + DEFAULT_LONG_POOL_TIMEOUT_SECONDS guarantees we will at least have attempted it before expiry.
          */
         private const val PREEMPT_REFRESH_EXPIRATION_INTERVAL = 60000
     }
