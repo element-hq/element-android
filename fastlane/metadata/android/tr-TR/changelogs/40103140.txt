@@ -1,0 +1,2 @@
+Bu sürümdeki ana değişiklikler: Analytics'in etkinleştirilmesi de dahil olmak üzere, ilk önce yerleşik ekranlardaki değişiklikler. Laboratuvarlara Matematik eklenmiş Etkinlikler için destek.
+Tam değişiklik listesi: https://github.com/vector-im/element-android/releases/tag/v1.3.14
