@@ -1,0 +1,6 @@
+# [[Issue #5114]](https://github.com/vector-im/element-android/issues/5114) Update design and behaviour on widget bottom sheet
+
+## Changes : 
+ - update room widget permission bottom sheet behaviour on click outside or on back button clicked (Triggering onCancel event) 
+to be the same as the "Decline" button performance.
+ - change actions UI from button to colored labels, as was red for the decline, green for the continue action. 
