@@ -17,6 +17,8 @@ mod responses;
 mod users;
 mod verification;
 
+use std::convert::TryFrom;
+
 pub use backup_recovery_key::{
     BackupRecoveryKey, DecodeError, MegolmV1BackupKey, PassphraseInfo, PkDecryptionError,
 };
@@ -151,6 +153,11 @@ impl From<matrix_sdk_crypto::CrossSigningStatus> for CrossSigningStatus {
             has_user_signing: s.has_user_signing,
         }
     }
+}
+
+fn parse_user_id(user_id: &str) -> Result<Box<ruma::UserId>, CryptoStoreError> {
+    Box::<ruma::UserId>::try_from(user_id)
+        .map_err(|e| CryptoStoreError::InvalidUserId(user_id.to_owned(), e))
 }
 
 include!(concat!(env!("OUT_DIR"), "/olm.uniffi.rs"));

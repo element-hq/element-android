@@ -46,6 +46,8 @@ pub enum CryptoStoreError {
     OlmError(#[from] OlmError),
     #[error(transparent)]
     Serialization(#[from] serde_json::Error),
+    #[error("The given string is not a valid user ID: source {0}, error {1}")]
+    InvalidUserId(String, RumaIdentifierError),
     #[error(transparent)]
     Identifier(#[from] RumaIdentifierError),
 }

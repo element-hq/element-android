@@ -48,7 +48,7 @@ use crate::{
     CrossSigningStatus, DecodeError, DecryptedEvent, Device, DeviceLists, KeyImportError,
     KeysImportResult, MegolmV1BackupKey, ProgressListener, QrCode, Request, RequestType,
     RequestVerificationResult, RoomKeyCounts, ScanResult, SignatureUploadRequest, StartSasResult,
-    UserIdentity, Verification, VerificationRequest,
+    UserIdentity, Verification, VerificationRequest, parse_user_id,
 };
 
 /// A high level state machine that handles E2EE for Matrix.
@@ -78,7 +78,7 @@ impl OlmMachine {
     ///
     /// * `path` - The path where the state of the machine should be persisted.
     pub fn new(user_id: &str, device_id: &str, path: &str) -> Result<Self, CryptoStoreError> {
-        let user_id = Box::<UserId>::try_from(user_id)?;
+        let user_id = parse_user_id(user_id)?;
         let device_id = device_id.into();
         let runtime = Runtime::new().expect("Couldn't create a tokio runtime");
 
@@ -107,7 +107,7 @@ impl OlmMachine {
 
     /// Get a cross signing user identity for the given user ID.
     pub fn get_identity(&self, user_id: &str) -> Result<Option<UserIdentity>, CryptoStoreError> {
-        let user_id = Box::<UserId>::try_from(user_id)?;
+        let user_id = parse_user_id(user_id)?;
 
         Ok(
             if let Some(identity) = self.runtime.block_on(self.inner.get_identity(&user_id))? {
@@ -120,7 +120,7 @@ impl OlmMachine {
 
     /// Check if a user identity is considered to be verified by us.
     pub fn is_identity_verified(&self, user_id: &str) -> Result<bool, CryptoStoreError> {
-        let user_id = Box::<UserId>::try_from(user_id)?;
+        let user_id = parse_user_id(user_id)?;
 
         Ok(
             if let Some(identity) = self.runtime.block_on(self.inner.get_identity(&user_id))? {
@@ -173,7 +173,7 @@ impl OlmMachine {
         user_id: &str,
         device_id: &str,
     ) -> Result<Option<Device>, CryptoStoreError> {
-        let user_id = Box::<UserId>::try_from(user_id)?;
+        let user_id = parse_user_id(user_id)?;
 
         Ok(self
             .runtime
@@ -220,7 +220,7 @@ impl OlmMachine {
         user_id: &str,
         device_id: &str,
     ) -> Result<(), CryptoStoreError> {
-        let user_id = Box::<UserId>::try_from(user_id)?;
+        let user_id = parse_user_id(user_id)?;
 
         let device = self
             .runtime
@@ -240,7 +240,7 @@ impl OlmMachine {
     ///
     /// * `user_id` - The id of the device owner.
     pub fn get_user_devices(&self, user_id: &str) -> Result<Vec<Device>, CryptoStoreError> {
-        let user_id = Box::<UserId>::try_from(user_id)?;
+        let user_id = parse_user_id(user_id)?;
 
         Ok(self
             .runtime
@@ -400,7 +400,7 @@ impl OlmMachine {
     /// A user can be marked for tracking using the
     /// [`OlmMachine::update_tracked_users()`] method.
     pub fn is_user_tracked(&self, user_id: &str) -> Result<bool, CryptoStoreError> {
-        let user_id = Box::<UserId>::try_from(user_id)?;
+        let user_id = parse_user_id(user_id)?;
         Ok(self.inner.tracked_users().contains(&user_id))
     }
 
@@ -802,7 +802,7 @@ impl OlmMachine {
         user_id: &str,
         methods: Vec<String>,
     ) -> Result<Option<String>, CryptoStoreError> {
-        let user_id = Box::<UserId>::try_from(user_id)?;
+        let user_id = parse_user_id(user_id)?;
 
         let identity = self.runtime.block_on(self.inner.get_identity(&user_id))?;
 
@@ -845,7 +845,7 @@ impl OlmMachine {
         event_id: &str,
         methods: Vec<String>,
     ) -> Result<Option<VerificationRequest>, CryptoStoreError> {
-        let user_id = Box::<UserId>::try_from(user_id)?;
+        let user_id = parse_user_id(user_id)?;
         let event_id = Box::<EventId>::try_from(event_id)?;
         let room_id = Box::<RoomId>::try_from(room_id)?;
 
@@ -883,7 +883,7 @@ impl OlmMachine {
         device_id: &str,
         methods: Vec<String>,
     ) -> Result<Option<RequestVerificationResult>, CryptoStoreError> {
-        let user_id = Box::<UserId>::try_from(user_id)?;
+        let user_id = parse_user_id(user_id)?;
 
         let methods = methods.into_iter().map(VerificationMethod::from).collect();
 
@@ -1010,7 +1010,7 @@ impl OlmMachine {
         user_id: &str,
         flow_id: &str,
     ) -> Result<Option<ConfirmVerificationResult>, CryptoStoreError> {
-        let user_id = Box::<UserId>::try_from(user_id)?;
+        let user_id = parse_user_id(user_id)?;
 
         Ok(
             if let Some(verification) = self.inner.get_verification(&user_id, flow_id) {
@@ -1053,7 +1053,7 @@ impl OlmMachine {
         user_id: &str,
         flow_id: &str,
     ) -> Result<Option<QrCode>, CryptoStoreError> {
-        let user_id = Box::<UserId>::try_from(user_id)?;
+        let user_id = parse_user_id(user_id)?;
 
         if let Some(verification) = self.inner.get_verification_request(&user_id, flow_id) {
             Ok(self
@@ -1146,7 +1146,7 @@ impl OlmMachine {
         user_id: &str,
         flow_id: &str,
     ) -> Result<Option<StartSasResult>, CryptoStoreError> {
-        let user_id = Box::<UserId>::try_from(user_id)?;
+        let user_id = parse_user_id(user_id)?;
 
         Ok(
             if let Some(verification) = self.inner.get_verification_request(&user_id, flow_id) {
@@ -1181,7 +1181,7 @@ impl OlmMachine {
         user_id: &str,
         device_id: &str,
     ) -> Result<Option<StartSasResult>, CryptoStoreError> {
-        let user_id = Box::<UserId>::try_from(user_id)?;
+        let user_id = parse_user_id(user_id)?;
 
         Ok(
             if let Some(device) = self
