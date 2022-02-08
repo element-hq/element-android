@@ -17,8 +17,17 @@
 package org.matrix.android.sdk.internal.session.filter
 
 import org.matrix.android.sdk.api.session.events.model.EventType
+import org.matrix.android.sdk.api.session.events.model.RelationType
 
 internal object FilterFactory {
+
+    fun createThreadsFilter(numberOfEvents: Int): RoomEventFilter {
+        return RoomEventFilter(
+                limit = numberOfEvents,
+                types = listOf(EventType.MESSAGE),
+                relationTypes = listOf(RelationType.IO_THREAD)
+        )
+    }
 
     fun createUploadsFilter(numberOfEvents: Int): RoomEventFilter {
         return RoomEventFilter(

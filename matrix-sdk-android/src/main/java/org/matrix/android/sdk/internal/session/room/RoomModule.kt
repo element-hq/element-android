@@ -87,6 +87,8 @@ import org.matrix.android.sdk.internal.session.room.tags.AddTagToRoomTask
 import org.matrix.android.sdk.internal.session.room.tags.DefaultAddTagToRoomTask
 import org.matrix.android.sdk.internal.session.room.tags.DefaultDeleteTagFromRoomTask
 import org.matrix.android.sdk.internal.session.room.tags.DeleteTagFromRoomTask
+import org.matrix.android.sdk.internal.session.room.threads.DefaultFetchRootThreadsTask
+import org.matrix.android.sdk.internal.session.room.threads.FetchRootThreadsTask
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultFetchTokenAndPaginateTask
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultGetContextOfEventTask
 import org.matrix.android.sdk.internal.session.room.timeline.DefaultGetEventTask
@@ -264,6 +266,9 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindGetUploadsTask(task: DefaultGetUploadsTask): GetUploadsTask
+
+    @Binds
+    abstract fun bindFetchRootThreadsTask(task: DefaultFetchRootThreadsTask): FetchRootThreadsTask
 
     @Binds
     abstract fun bindAddTagToRoomTask(task: DefaultAddTagToRoomTask): AddTagToRoomTask

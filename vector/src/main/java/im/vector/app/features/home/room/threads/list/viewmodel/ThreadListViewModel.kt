@@ -28,9 +28,11 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.threads.ThreadTimelineEvent
 import org.matrix.android.sdk.flow.flow
+import timber.log.Timber
 
 class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState: ThreadListViewState,
                                                       private val session: Session) :
@@ -54,6 +56,7 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
 
     init {
         observeThreadsList()
+        loadMore()
     }
 
     override fun handle(action: EmptyAction) {}
@@ -77,6 +80,12 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
     fun applyFiltering(shouldFilterThreads: Boolean) {
         setState {
             copy(shouldFilterThreads = shouldFilterThreads)
+        }
+    }
+
+    private fun loadMore() {
+        viewModelScope.launch {
+            room?.fetchAllThreads(2, null)
         }
     }
 }

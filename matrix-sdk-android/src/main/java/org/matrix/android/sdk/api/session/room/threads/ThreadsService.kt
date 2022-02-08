@@ -64,4 +64,12 @@ interface ThreadsService {
      * @param rootThreadEventId the root eventId of the current thread
      */
     suspend fun markThreadAsRead(rootThreadEventId: String)
+
+
+    /**
+     * Fetches a list of thread root TimelineEvents that exists at the room level
+     * @param numberOfEvents indicates the number of the events to fetch
+     * @param since indicates the token that our filtering will start
+     */
+    suspend fun fetchAllThreads(numberOfEvents: Int, since: String?): FetchRootThreadsResult
 }

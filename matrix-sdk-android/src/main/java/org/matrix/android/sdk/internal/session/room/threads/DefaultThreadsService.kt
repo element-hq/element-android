@@ -22,6 +22,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.realm.Realm
+import org.matrix.android.sdk.api.session.room.threads.FetchRootThreadsResult
 import org.matrix.android.sdk.api.session.room.threads.ThreadsService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
@@ -42,6 +43,7 @@ internal class DefaultThreadsService @AssistedInject constructor(
         @UserId private val userId: String,
         @SessionDatabase private val monarchy: Monarchy,
         private val timelineEventMapper: TimelineEventMapper,
+        private val fetchRootThreadsTask: FetchRootThreadsTask
 ) : ThreadsService {
 
     @AssistedFactory
@@ -99,5 +101,13 @@ internal class DefaultThreadsService @AssistedInject constructor(
                     realm = it,
                     eventId = rootThreadEventId).findFirst()?.threadNotificationState = ThreadNotificationState.NO_NEW_MESSAGE
         }
+    }
+
+    override suspend fun fetchAllThreads(numberOfEvents: Int, since: String?): FetchRootThreadsResult {
+        return fetchRootThreadsTask.execute(
+                FetchRootThreadsTask.Params(
+                        roomId = roomId,
+                        since = since,
+                        numberOfEvents = numberOfEvents))
     }
 }
