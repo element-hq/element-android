@@ -28,6 +28,8 @@ sealed interface ParsedCommand {
 
     object ErrorEmptySlashCommand : ParsedCommand
 
+    class ErrorCommandNotSupportedInThreads(val command: Command) : ParsedCommand
+
     // Unknown/Unsupported slash command
     data class ErrorUnknownSlashCommand(val slashCommand: String) : ParsedCommand
 

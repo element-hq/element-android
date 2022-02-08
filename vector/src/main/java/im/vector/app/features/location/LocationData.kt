@@ -17,41 +17,43 @@
 package im.vector.app.features.location
 
 import android.os.Parcelable
+import androidx.annotation.VisibleForTesting
 import kotlinx.parcelize.Parcelize
+import org.matrix.android.sdk.api.session.room.model.message.MessageLocationContent
 
 @Parcelize
 data class LocationData(
         val latitude: Double,
         val longitude: Double,
         val uncertainty: Double?
-) : Parcelable {
+) : Parcelable
 
-    companion object {
+/**
+ * Creates location data from a LocationContent
+ * "geo:40.05,29.24;30" -> LocationData(40.05, 29.24, 30)
+ * @return location data or null if geo uri is not valid
+ */
+fun MessageLocationContent.toLocationData(): LocationData? {
+    return parseGeo(getBestGeoUri())
+}
 
-        /**
-         * Creates location data from geo uri
-         * @param geoUri geo:latitude,longitude;uncertainty
-         * @return location data or null if geo uri is not valid
-         */
-        fun create(geoUri: String): LocationData? {
-            val geoParts = geoUri
-                    .split(":")
-                    .takeIf { it.firstOrNull() == "geo" }
-                    ?.getOrNull(1)
-                    ?.split(",")
+@VisibleForTesting
+fun parseGeo(geo: String): LocationData? {
+    val geoParts = geo
+            .split(":")
+            .takeIf { it.firstOrNull() == "geo" }
+            ?.getOrNull(1)
+            ?.split(";") ?: return null
 
-            val latitude = geoParts?.firstOrNull()
-            val geoTailParts = geoParts?.getOrNull(1)?.split(";")
-            val longitude = geoTailParts?.firstOrNull()
-            val uncertainty = geoTailParts?.getOrNull(1)?.replace("u=", "")
+    val gpsParts = geoParts.getOrNull(0)?.split(",") ?: return null
+    val lat = gpsParts.getOrNull(0)?.toDoubleOrNull() ?: return null
+    val lng = gpsParts.getOrNull(1)?.toDoubleOrNull() ?: return null
 
-            return if (latitude != null && longitude != null) {
-                LocationData(
-                        latitude = latitude.toDouble(),
-                        longitude = longitude.toDouble(),
-                        uncertainty = uncertainty?.toDouble()
-                )
-            } else null
-        }
-    }
+    val uncertainty = geoParts.getOrNull(1)?.replace("u=", "")?.toDoubleOrNull()
+
+    return LocationData(
+            latitude = lat,
+            longitude = lng,
+            uncertainty = uncertainty
+    )
 }

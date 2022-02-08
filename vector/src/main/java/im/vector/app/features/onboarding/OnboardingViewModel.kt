@@ -32,10 +32,14 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.configureAndStart
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.VectorFeatures
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toTrackingValue
+import im.vector.app.features.analytics.plan.Identity
 import im.vector.app.features.login.HomeServerConnectionConfigFactory
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
@@ -73,7 +77,8 @@ class OnboardingViewModel @AssistedInject constructor(
         private val reAuthHelper: ReAuthHelper,
         private val stringProvider: StringProvider,
         private val homeServerHistoryService: HomeServerHistoryService,
-        private val vectorFeatures: VectorFeatures
+        private val vectorFeatures: VectorFeatures,
+        private val analyticsTracker: AnalyticsTracker
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
     @AssistedFactory
@@ -125,7 +130,7 @@ class OnboardingViewModel @AssistedInject constructor(
         when (action) {
             is OnboardingAction.OnGetStarted               -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
             is OnboardingAction.OnIAlreadyHaveAnAccount    -> handleSplashAction(action.resetLoginConfig, action.onboardingFlow)
-            is OnboardingAction.UpdateUseCase              -> handleUpdateUseCase()
+            is OnboardingAction.UpdateUseCase              -> handleUpdateUseCase(action)
             OnboardingAction.ResetUseCase                  -> resetUseCase()
             is OnboardingAction.UpdateServerType           -> handleUpdateServerType(action)
             is OnboardingAction.UpdateSignMode             -> handleUpdateSignMode(action)
@@ -458,13 +463,13 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private fun handleUpdateUseCase() {
-        // TODO act on the use case selection
+    private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
+        setState { copy(useCase = action.useCase) }
         _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
     }
 
     private fun resetUseCase() {
-        // TODO remove stored use case
+        setState { copy(useCase = null) }
     }
 
     private fun handleUpdateServerType(action: OnboardingAction.UpdateServerType) {
@@ -745,6 +750,10 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private suspend fun onSessionCreated(session: Session) {
+        awaitState().useCase?.let { useCase ->
+            session.vectorStore(applicationContext).setUseCase(useCase)
+            analyticsTracker.updateUserProperties(Identity(ftueUseCaseSelection = useCase.toTrackingValue()))
+        }
         activeSessionHolder.setActiveSession(session)
 
         authenticationService.reset()

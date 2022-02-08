@@ -20,29 +20,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isGone
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
+import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.mapbox.mapboxsdk.maps.MapView
 import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentLocationSharingBinding
-import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
-import org.matrix.android.sdk.api.session.Session
+import java.lang.ref.WeakReference
 import javax.inject.Inject
 
+/**
+ * We should consider using SupportMapFragment for a out of the box lifecycle handling
+ */
 class LocationSharingFragment @Inject constructor(
-        private val locationTracker: LocationTracker,
-        private val session: Session,
-        private val locationPinProvider: LocationPinProvider
-) : VectorBaseFragment<FragmentLocationSharingBinding>(), LocationTracker.Callback {
-
-    init {
-        locationTracker.callback = this
-    }
+        private val urlMapProvider: UrlMapProvider
+) : VectorBaseFragment<FragmentLocationSharingBinding>() {
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
 
-    private var lastZoomValue: Double = -1.0
+    // Keep a ref to handle properly the onDestroy callback
+    private var mapView: WeakReference<MapView>? = null
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLocationSharingBinding {
         return FragmentLocationSharingBinding.inflate(inflater, container, false)
@@ -51,10 +52,11 @@ class LocationSharingFragment @Inject constructor(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        views.mapView.initialize {
-            if (isAdded) {
-                onMapReady()
-            }
+        mapView = WeakReference(views.mapView)
+        views.mapView.onCreate(savedInstanceState)
+
+        lifecycleScope.launchWhenCreated {
+            views.mapView.initialize(urlMapProvider.getMapUrl())
         }
 
         views.shareLocationContainer.debouncedClicks {
@@ -63,10 +65,15 @@ class LocationSharingFragment @Inject constructor(
 
         viewModel.observeViewEvents {
             when (it) {
-                LocationSharingViewEvents.LocationNotAvailableError    -> handleLocationNotAvailableError()
-                LocationSharingViewEvents.Close                        -> activity?.finish()
+                LocationSharingViewEvents.LocationNotAvailableError -> handleLocationNotAvailableError()
+                LocationSharingViewEvents.Close                     -> activity?.finish()
             }.exhaustive
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        views.mapView.onResume()
     }
 
     override fun onPause() {
@@ -74,41 +81,30 @@ class LocationSharingFragment @Inject constructor(
         super.onPause()
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        views.mapView.onSaveInstanceState(outState)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        views.mapView.onStart()
+    }
+
     override fun onStop() {
         views.mapView.onStop()
         super.onStop()
     }
 
+    override fun onLowMemory() {
+        super.onLowMemory()
+        views.mapView.onLowMemory()
+    }
+
     override fun onDestroy() {
-        locationTracker.stop()
+        mapView?.get()?.onDestroy()
+        mapView?.clear()
         super.onDestroy()
-    }
-
-    private fun onMapReady() {
-        if (!isAdded) return
-
-        locationPinProvider.create(session.myUserId) {
-            views.mapView.addPinToMap(
-                    pinId = USER_PIN_NAME,
-                    image = it,
-            )
-            // All set, start location tracker
-            locationTracker.start()
-        }
-    }
-
-    override fun onLocationUpdate(locationData: LocationData) {
-        lastZoomValue = if (lastZoomValue == -1.0) INITIAL_MAP_ZOOM else views.mapView.getCurrentZoom() ?: INITIAL_MAP_ZOOM
-
-        views.mapView.zoomToLocation(locationData.latitude, locationData.longitude, lastZoomValue)
-        views.mapView.deleteAllPins()
-        views.mapView.updatePinLocation(USER_PIN_NAME, locationData.latitude, locationData.longitude)
-
-        viewModel.handle(LocationSharingAction.OnLocationUpdate(locationData))
-    }
-
-    override fun onLocationProviderIsNotAvailable() {
-        viewModel.handle(LocationSharingAction.OnLocationProviderIsNotAvailable)
     }
 
     private fun handleLocationNotAvailableError() {
@@ -118,10 +114,12 @@ class LocationSharingFragment @Inject constructor(
                 .setPositiveButton(R.string.ok) { _, _ ->
                     activity?.finish()
                 }
+                .setCancelable(false)
                 .show()
     }
 
-    companion object {
-        const val USER_PIN_NAME = "USER_PIN_NAME"
+    override fun invalidate() = withState(viewModel) { state ->
+        views.mapView.render(state.toMapState())
+        views.shareLocationGpsLoading.isGone = state.lastKnownLocation != null
     }
 }

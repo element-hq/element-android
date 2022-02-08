@@ -1323,7 +1323,7 @@
     <string name="settings_default_media_source">Standard-Medienquelle</string>
     <string name="media_source_choose">Wählen</string>
     <string name="settings_play_shutter_sound">Auslöseton abspielen</string>
-    <string name="action_mark_room_read">Als gelesen markieren</string>
+    <string name="action_mark_room_read">Gelesen</string>
     <string name="settings_notification_privacy_no_background_sync">Die App muss sich <b>nicht</b> im Hintergrund mit dem Homeserver verbinden, dies sollte die Akkunutzung reduzieren</string>
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: %2$d Nachricht</item>

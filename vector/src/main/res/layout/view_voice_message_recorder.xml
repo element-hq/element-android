@@ -160,7 +160,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@drawable/bg_voice_playback"
+            android:background="@drawable/bg_media_pill"
             android:backgroundTint="?vctr_content_quinary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

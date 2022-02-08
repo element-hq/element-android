@@ -17,17 +17,21 @@
 package im.vector.app.features.home.room.detail.timeline.url
 
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.view.isVisible
 import com.google.android.material.card.MaterialCardView
 import im.vector.app.R
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewUrlPreviewBinding
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
+import im.vector.app.features.home.room.detail.timeline.view.TimelineMessageLayoutRenderer
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.themes.ThemeUtils
-import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.media.PreviewUrlData
 
 /**
@@ -37,7 +41,7 @@ class PreviewUrlView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null,
         defStyleAttr: Int = 0
-) : MaterialCardView(context, attrs, defStyleAttr), View.OnClickListener {
+) : MaterialCardView(context, attrs, defStyleAttr), View.OnClickListener, TimelineMessageLayoutRenderer {
 
     private lateinit var views: ViewUrlPreviewBinding
 
@@ -47,7 +51,6 @@ class PreviewUrlView @JvmOverloads constructor(
         setupView()
         radius = resources.getDimensionPixelSize(R.dimen.preview_url_view_corner_radius).toFloat()
         cardElevation = 0f
-        setCardBackgroundColor(ThemeUtils.getColor(context, R.attr.vctr_system))
     }
 
     private var state: PreviewUrlUiState = PreviewUrlUiState.Unknown
@@ -73,6 +76,22 @@ class PreviewUrlView @JvmOverloads constructor(
             PreviewUrlUiState.Loading  -> renderLoading()
             is PreviewUrlUiState.Error -> renderHidden()
             is PreviewUrlUiState.Data  -> renderData(newState.previewUrlData, imageContentRenderer)
+        }
+    }
+
+    override fun renderMessageLayout(messageLayout: TimelineMessageLayout) {
+        when (messageLayout) {
+            is TimelineMessageLayout.Default -> {
+                val backgroundColor = ThemeUtils.getColor(context, R.attr.vctr_system)
+                setCardBackgroundColor(backgroundColor)
+                val guidelineBegin = DimensionConverter(resources).dpToPx(8)
+                views.urlPreviewStartGuideline.setGuidelineBegin(guidelineBegin)
+            }
+            is TimelineMessageLayout.Bubble  -> {
+                setCardBackgroundColor(Color.TRANSPARENT)
+                rippleColor = ColorStateList.valueOf(Color.TRANSPARENT)
+                views.urlPreviewStartGuideline.setGuidelineBegin(0)
+            }
         }
     }
 
@@ -127,7 +146,7 @@ class PreviewUrlView @JvmOverloads constructor(
         isVisible = true
 
         views.urlPreviewTitle.setTextOrHide(previewUrlData.title)
-        views.urlPreviewImage.isVisible = previewUrlData.mxcUrl?.let { imageContentRenderer.render(it, views.urlPreviewImage) }.orFalse()
+        views.urlPreviewImage.isVisible = imageContentRenderer.render(previewUrlData, views.urlPreviewImage)
         views.urlPreviewDescription.setTextOrHide(previewUrlData.description)
         views.urlPreviewDescription.maxLines = when {
             previewUrlData.mxcUrl != null -> 2

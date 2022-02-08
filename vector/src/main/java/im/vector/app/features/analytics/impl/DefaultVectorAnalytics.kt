@@ -17,6 +17,7 @@
 package im.vector.app.features.analytics.impl
 
 import android.content.Context
+import com.posthog.android.Options
 import com.posthog.android.PostHog
 import com.posthog.android.Properties
 import im.vector.app.BuildConfig
@@ -25,6 +26,7 @@ import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.log.analyticsTag
+import im.vector.app.features.analytics.plan.Identity
 import im.vector.app.features.analytics.store.AnalyticsStore
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -33,6 +35,9 @@ import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+
+private val REUSE_EXISTING_ID: String? = null
+private val IGNORED_OPTIONS: Options? = null
 
 @Singleton
 class DefaultVectorAnalytics @Inject constructor(
@@ -170,11 +175,25 @@ class DefaultVectorAnalytics @Inject constructor(
                 ?.screen(screen.getName(), screen.getProperties()?.toPostHogProperties())
     }
 
-    private fun Map<String, Any>?.toPostHogProperties(): Properties? {
+    override fun updateUserProperties(identity: Identity) {
+        posthog?.identify(REUSE_EXISTING_ID, identity.getProperties()?.toPostHogUserProperties(), IGNORED_OPTIONS)
+    }
+
+    private fun Map<String, Any?>?.toPostHogProperties(): Properties? {
         if (this == null) return null
 
         return Properties().apply {
             putAll(this@toPostHogProperties)
+        }
+    }
+
+    /**
+     * We avoid sending nulls as part of the UserProperties as this will reset the values across all devices
+     * The Identify event has nullable properties to allow for clients to opt in
+     */
+    private fun Map<String, Any?>.toPostHogUserProperties(): Properties {
+        return Properties().apply {
+            putAll(this@toPostHogUserProperties.filter { it.value != null })
         }
     }
 }

@@ -31,6 +31,8 @@
         <item name="vctr_waiting_background_color">@color/vctr_waiting_background_color_light</item>
         <item name="vctr_chat_effect_snow_background">@color/vctr_chat_effect_snow_background_light</item>
         <item name="vctr_toolbar_background">@color/element_background_light</item>
+        <item name="vctr_message_bubble_inbound">@color/vctr_message_bubble_inbound_light</item>
+        <item name="vctr_message_bubble_outbound">@color/vctr_message_bubble_outbound_light</item>
 
         <!-- room message colors -->
         <item name="vctr_notice_secondary">#61708B</item>
@@ -104,9 +106,6 @@
         <!-- ANDROID SUPPORT ATTRIBUTES -->
         <!-- disable the overscroll because setOverscrollHeader/Footer don't always work -->
         <item name="android:overScrollMode">never</item>
-
-        <!-- fonts -->
-        <item name="android:typeface">sans</item>
 
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
 

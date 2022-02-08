@@ -33,7 +33,6 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.core.utils.containsOnlyEmojis
-import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
@@ -44,8 +43,6 @@ import im.vector.app.features.home.room.detail.timeline.helper.MessageItemAttrib
 import im.vector.app.features.home.room.detail.timeline.helper.TimelineMediaSizeProvider
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
-import im.vector.app.features.home.room.detail.timeline.item.MessageBlockCodeItem
-import im.vector.app.features.home.room.detail.timeline.item.MessageBlockCodeItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageFileItem_
 import im.vector.app.features.home.room.detail.timeline.item.MessageImageVideoItem
@@ -66,22 +63,23 @@ import im.vector.app.features.home.room.detail.timeline.item.VerificationRequest
 import im.vector.app.features.home.room.detail.timeline.item.VerificationRequestItem_
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
-import im.vector.app.features.html.CodeVisitor
 import im.vector.app.features.html.EventHtmlRenderer
 import im.vector.app.features.html.PillsPostProcessor
 import im.vector.app.features.html.SpanUtils
 import im.vector.app.features.html.VectorHtmlCompressor
-import im.vector.app.features.location.LocationData
+import im.vector.app.features.location.INITIAL_MAP_ZOOM_IN_TIMELINE
+import im.vector.app.features.location.UrlMapProvider
+import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
-import org.commonmark.node.Document
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.RelationType
+import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
@@ -104,6 +102,7 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.util.MimeTypes
 import org.matrix.android.sdk.internal.crypto.attachments.toElementToDecrypt
 import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
+import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import javax.inject.Inject
 
 class MessageItemFactory @Inject constructor(
@@ -123,11 +122,14 @@ class MessageItemFactory @Inject constructor(
         private val noticeItemFactory: NoticeItemFactory,
         private val avatarSizeProvider: AvatarSizeProvider,
         private val pillsPostProcessorFactory: PillsPostProcessor.Factory,
+        private val lightweightSettingsStorage: LightweightSettingsStorage,
         private val spanUtils: SpanUtils,
         private val session: Session,
         private val voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker,
         private val locationPinProvider: LocationPinProvider,
-        private val vectorPreferences: VectorPreferences) {
+        private val vectorPreferences: VectorPreferences,
+        private val urlMapProvider: UrlMapProvider,
+) {
 
     // TODO inject this properly?
     private var roomId: String = ""
@@ -143,9 +145,11 @@ class MessageItemFactory @Inject constructor(
         event.root.eventId ?: return null
         roomId = event.roomId
         val informationData = messageInformationDataFactory.create(params)
+        val threadDetails = if (params.isFromThreadTimeline()) null else event.root.threadDetails
+
         if (event.root.isRedacted()) {
             // message is redacted
-            val attributes = messageItemAttributesFactory.create(null, informationData, callback)
+            val attributes = messageItemAttributesFactory.create(null, informationData, callback, threadDetails)
             return buildRedactedItem(attributes, highlight)
         }
 
@@ -160,11 +164,18 @@ class MessageItemFactory @Inject constructor(
             // This is an edit event, we should display it when debugging as a notice event
             return noticeItemFactory.create(params)
         }
-        val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback)
+
+        if (lightweightSettingsStorage.areThreadMessagesEnabled() && !params.isFromThreadTimeline() && event.root.isThread()) {
+            // This is a thread event and we will [debug] display it when we are in the main timeline
+            return noticeItemFactory.create(params)
+        }
+
+        // always hide summary when we are on thread timeline
+        val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback, threadDetails)
 
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
-        return when (messageContent) {
+        val messageItem = when (messageContent) {
             is MessageEmoteContent               -> buildEmoteMessageItem(messageContent, informationData, highlight, callback, attributes)
             is MessageTextContent                -> buildItemForTextContent(messageContent, informationData, highlight, callback, attributes)
             is MessageImageInfoContent           -> buildImageMessageItem(messageContent, informationData, highlight, callback, attributes)
@@ -182,39 +193,40 @@ class MessageItemFactory @Inject constructor(
             is MessagePollContent                -> buildPollItem(messageContent, informationData, highlight, callback, attributes)
             is MessageLocationContent            -> {
                 if (vectorPreferences.labsRenderLocationsInTimeline()) {
-                    buildLocationItem(messageContent, informationData, highlight, callback, attributes)
+                    buildLocationItem(messageContent, informationData, highlight, attributes)
                 } else {
                     buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
                 }
             }
             else                                 -> buildNotHandledMessageItem(messageContent, informationData, highlight, callback, attributes)
         }
+        return messageItem?.apply {
+            layout(informationData.messageLayout.layoutRes)
+        }
     }
 
     private fun buildLocationItem(locationContent: MessageLocationContent,
                                   informationData: MessageInformationData,
                                   highlight: Boolean,
-                                  callback: TimelineEventController.Callback?,
                                   attributes: AbsMessageItem.Attributes): MessageLocationItem? {
-        val geoUri = locationContent.getUri()
-        val locationData = LocationData.create(geoUri)
+        val width = timelineMediaSizeProvider.getMaxSize().first
+        val height = dimensionConverter.dpToPx(200)
 
-        val mapCallback: MessageLocationItem.Callback = object : MessageLocationItem.Callback {
-            override fun onMapClicked() {
-                locationData?.let {
-                    callback?.onTimelineItemAction(RoomDetailAction.ShowLocation(it, informationData.senderId))
-                }
-            }
+        val locationUrl = locationContent.toLocationData()?.let {
+            urlMapProvider.buildStaticMapUrl(it, INITIAL_MAP_ZOOM_IN_TIMELINE, width, height)
         }
+
+        val userId = if (locationContent.isSelfLocation()) informationData.senderId else null
 
         return MessageLocationItem_()
                 .attributes(attributes)
-                .locationData(locationData)
-                .userId(informationData.senderId)
+                .locationUrl(locationUrl)
+                .mapWidth(width)
+                .mapHeight(height)
+                .userId(userId)
                 .locationPinProvider(locationPinProvider)
                 .highlighted(highlight)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
-                .callback(mapCallback)
     }
 
     private fun buildPollItem(pollContent: MessagePollContent,
@@ -513,46 +525,22 @@ class MessageItemFactory @Inject constructor(
                                         highlight: Boolean,
                                         callback: TimelineEventController.Callback?,
                                         attributes: AbsMessageItem.Attributes): VectorEpoxyModel<*>? {
-        val isFormatted = messageContent.matrixFormattedBody.isNullOrBlank().not()
-        return if (isFormatted) {
-            // First detect if the message contains some code block(s) or inline code
-            val localFormattedBody = htmlRenderer.get().parse(messageContent.body) as Document
-            val codeVisitor = CodeVisitor()
-            codeVisitor.visit(localFormattedBody)
-            when (codeVisitor.codeKind) {
-                CodeVisitor.Kind.BLOCK  -> {
-                    val codeFormattedBlock = htmlRenderer.get().render(localFormattedBody)
-                    if (codeFormattedBlock == null) {
-                        buildFormattedTextItem(messageContent, informationData, highlight, callback, attributes)
-                    } else {
-                        buildCodeBlockItem(codeFormattedBlock, informationData, highlight, callback, attributes)
-                    }
-                }
-                CodeVisitor.Kind.INLINE -> {
-                    val codeFormatted = htmlRenderer.get().render(localFormattedBody)
-                    if (codeFormatted == null) {
-                        buildFormattedTextItem(messageContent, informationData, highlight, callback, attributes)
-                    } else {
-                        buildMessageTextItem(codeFormatted, false, informationData, highlight, callback, attributes)
-                    }
-                }
-                CodeVisitor.Kind.NONE   -> {
-                    buildFormattedTextItem(messageContent, informationData, highlight, callback, attributes)
-                }
-            }
+        val matrixFormattedBody = messageContent.matrixFormattedBody
+        return if (matrixFormattedBody != null) {
+            buildFormattedTextItem(matrixFormattedBody, informationData, highlight, callback, attributes)
         } else {
             buildMessageTextItem(messageContent.body, false, informationData, highlight, callback, attributes)
         }
     }
 
-    private fun buildFormattedTextItem(messageContent: MessageTextContent,
+    private fun buildFormattedTextItem(matrixFormattedBody: String,
                                        informationData: MessageInformationData,
                                        highlight: Boolean,
                                        callback: TimelineEventController.Callback?,
                                        attributes: AbsMessageItem.Attributes): MessageTextItem? {
-        val compressed = htmlCompressor.compress(messageContent.formattedBody!!)
-        val formattedBody = htmlRenderer.get().render(compressed, pillsPostProcessor)
-        return buildMessageTextItem(formattedBody, true, informationData, highlight, callback, attributes)
+        val compressed = htmlCompressor.compress(matrixFormattedBody)
+        val renderedFormattedBody = htmlRenderer.get().render(compressed, pillsPostProcessor) as Spanned
+        return buildMessageTextItem(renderedFormattedBody, true, informationData, highlight, callback, attributes)
     }
 
     private fun buildMessageTextItem(body: CharSequence,
@@ -583,24 +571,6 @@ class MessageItemFactory @Inject constructor(
                 .attributes(attributes)
                 .highlighted(highlight)
                 .movementMethod(createLinkMovementMethod(callback))
-    }
-
-    private fun buildCodeBlockItem(formattedBody: CharSequence,
-                                   informationData: MessageInformationData,
-                                   highlight: Boolean,
-                                   callback: TimelineEventController.Callback?,
-                                   attributes: AbsMessageItem.Attributes): MessageBlockCodeItem? {
-        return MessageBlockCodeItem_()
-                .apply {
-                    if (informationData.hasBeenEdited) {
-                        val spannable = annotateWithEdited("", callback, informationData)
-                        editedSpan(spannable.toEpoxyCharSequence())
-                    }
-                }
-                .leftGuideline(avatarSizeProvider.leftGuideline)
-                .attributes(attributes)
-                .highlighted(highlight)
-                .message(formattedBody.toEpoxyCharSequence())
     }
 
     private fun annotateWithEdited(linkifiedBody: CharSequence,
@@ -708,6 +678,7 @@ class MessageItemFactory @Inject constructor(
     private fun buildRedactedItem(attributes: AbsMessageItem.Attributes,
                                   highlight: Boolean): RedactedMessageItem? {
         return RedactedMessageItem_()
+                .layout(attributes.informationData.messageLayout.layoutRes)
                 .leftGuideline(avatarSizeProvider.leftGuideline)
                 .attributes(attributes)
                 .highlighted(highlight)

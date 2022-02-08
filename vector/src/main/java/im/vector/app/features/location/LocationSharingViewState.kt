@@ -16,6 +16,7 @@
 
 package im.vector.app.features.location
 
+import android.graphics.drawable.Drawable
 import androidx.annotation.StringRes
 import com.airbnb.mvrx.MavericksState
 import im.vector.app.R
@@ -28,7 +29,8 @@ enum class LocationSharingMode(@StringRes val titleRes: Int) {
 data class LocationSharingViewState(
         val roomId: String,
         val mode: LocationSharingMode,
-        val lastKnownLocation: LocationData? = null
+        val lastKnownLocation: LocationData? = null,
+        val pinDrawable: Drawable? = null
 ) : MavericksState {
 
     constructor(locationSharingArgs: LocationSharingArgs) : this(
@@ -36,3 +38,10 @@ data class LocationSharingViewState(
             mode = locationSharingArgs.mode
     )
 }
+
+fun LocationSharingViewState.toMapState() = MapState(
+        zoomOnlyOnce = true,
+        pinLocationData = lastKnownLocation,
+        pinId = DEFAULT_PIN_ID,
+        pinDrawable = pinDrawable
+)

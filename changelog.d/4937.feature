@@ -1,0 +1,1 @@
+Support message bubbles in timeline.

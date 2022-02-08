@@ -15,6 +15,8 @@
     <dimen name="item_decoration_left_margin">72dp</dimen>
     <dimen name="item_event_message_state_size">16dp</dimen>
 
+    <dimen name="item_event_message_media_button_size">32dp</dimen>
+
     <dimen name="chat_avatar_size">40dp</dimen>
     <dimen name="member_list_avatar_size">60dp</dimen>
 
@@ -42,11 +44,22 @@
 
     <!--  Preview Url  -->
     <dimen name="preview_url_view_corner_radius">8dp</dimen>
+    <dimen name="preview_url_view_image_max_height">160dp</dimen>
+
+    <dimen name="menu_item_icon_size">24dp</dimen>
+    <dimen name="menu_item_size">48dp</dimen>
+    <dimen name="menu_item_ripple_size">48dp</dimen>
 
     <!-- Composer -->
     <dimen name="composer_min_height">56dp</dimen>
     <dimen name="composer_attachment_size">52dp</dimen>
     <dimen name="composer_attachment_margin">1dp</dimen>
+
+
+    <dimen name="chat_bubble_margin_start">28dp</dimen>
+    <dimen name="chat_bubble_margin_end">62dp</dimen>
+    <dimen name="chat_bubble_fixed_size">300dp</dimen>
+    <dimen name="chat_bubble_corner_radius">12dp</dimen>
 
     <!--  Onboarding   -->
     <item name="ftue_auth_gutter_start_percent" format="float" type="dimen">0.05</item>

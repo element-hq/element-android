@@ -18,6 +18,7 @@ package org.matrix.android.sdk.api.session.room.model.relation
 import androidx.lifecycle.LiveData
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.model.EventAnnotationsSummary
+import org.matrix.android.sdk.api.session.room.model.message.MessageType
 import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.Cancelable
@@ -45,6 +46,9 @@ import org.matrix.android.sdk.api.util.Optional
  *  m.reference - lets you define an event which references an existing event.
  *              When aggregated, currently doesn't do anything special, but in future could bundle chains of references (i.e. threads).
  *              These are primarily intended for handling replies (and in future threads).
+ *
+ *  m.thread - lets you define an event which is a thread reply to an existing event.
+ *             When aggregated, returns the most thread event
  */
 interface RelationService {
 
@@ -62,8 +66,8 @@ interface RelationService {
      * @param targetEventId the id of the event being reacted
      * @param reaction the reaction (preferably emoji)
      */
-    fun undoReaction(targetEventId: String,
-                     reaction: String): Cancelable
+    suspend fun undoReaction(targetEventId: String,
+                             reaction: String): Cancelable
 
     /**
      * Edit a poll.
@@ -118,10 +122,15 @@ interface RelationService {
      * @param eventReplied the event referenced by the reply
      * @param replyText the reply text
      * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
+     * @param showInThread If true, relation will be added to the reply in order to be visible from within threads
+     * @param rootThreadEventId If show in thread is true then we need the rootThreadEventId to generate the relation
      */
     fun replyToMessage(eventReplied: TimelineEvent,
                        replyText: CharSequence,
-                       autoMarkdown: Boolean = false): Cancelable?
+                       autoMarkdown: Boolean = false,
+                       showInThread: Boolean = false,
+                       rootThreadEventId: String? = null
+    ): Cancelable?
 
     /**
      * Get the current EventAnnotationsSummary
@@ -136,4 +145,31 @@ interface RelationService {
      * @return the LiveData of EventAnnotationsSummary
      */
     fun getEventAnnotationsSummaryLive(eventId: String): LiveData<Optional<EventAnnotationsSummary>>
+
+    /**
+     * Creates a thread reply for an existing timeline event
+     * The replyInThreadText can be a Spannable and contains special spans (MatrixItemSpan) that will be translated
+     * by the sdk into pills.
+     * @param rootThreadEventId the root thread eventId
+     * @param replyInThreadText the reply text
+     * @param msgType the message type: MessageType.MSGTYPE_TEXT (default) or MessageType.MSGTYPE_EMOTE
+     * @param formattedText The formatted body using MessageType#FORMAT_MATRIX_HTML
+     * @param autoMarkdown If true, the SDK will generate a formatted HTML message from the body text if markdown syntax is present
+     * @param eventReplied the event referenced by the reply within a thread
+     */
+    fun replyInThread(rootThreadEventId: String,
+                      replyInThreadText: CharSequence,
+                      msgType: String = MessageType.MSGTYPE_TEXT,
+                      autoMarkdown: Boolean = false,
+                      formattedText: String? = null,
+                      eventReplied: TimelineEvent? = null): Cancelable?
+
+    /**
+     * Get all the thread replies for the specified rootThreadEventId
+     * The return list will contain the original root thread event and all the thread replies to that event
+     * Note: We will use a large limit value in order to avoid using pagination until it would be 100% ready
+     * from the backend
+     * @param rootThreadEventId the root thread eventId
+     */
+    suspend fun fetchThreadTimeline(rootThreadEventId: String): Boolean
 }
