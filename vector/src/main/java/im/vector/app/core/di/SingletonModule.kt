@@ -26,6 +26,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import im.vector.app.BuildConfig
 import im.vector.app.EmojiCompatWrapper
 import im.vector.app.EmojiSpanify
 import im.vector.app.core.dispatchers.CoroutineDispatchers
@@ -42,12 +43,14 @@ import im.vector.app.features.navigation.DefaultNavigator
 import im.vector.app.features.navigation.Navigator
 import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.SharedPrefPinCodeStore
+import im.vector.app.features.room.VectorRoomDisplayNameFallbackProvider
 import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.matrix.android.sdk.api.Matrix
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
@@ -107,7 +110,16 @@ object VectorStaticModule {
     }
 
     @Provides
-    fun providesMatrix(context: Context): Matrix {
+    fun providesMatrixConfiguration(context: Context): MatrixConfiguration {
+        return MatrixConfiguration(
+                applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
+                roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(context)
+        )
+    }
+
+    @Provides
+    fun providesMatrix(context: Context, configuration: MatrixConfiguration): Matrix {
+        Matrix.initialize(context, configuration)
         return Matrix.getInstance(context)
     }
 
