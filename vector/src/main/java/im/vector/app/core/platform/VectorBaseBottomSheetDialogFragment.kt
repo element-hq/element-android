@@ -47,7 +47,7 @@ import timber.log.Timber
 /**
  * Add Mavericks capabilities, handle DI and bindings.
  */
-abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomSheetDialogFragment(), MavericksView {
+abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomSheetDialogFragment(), MavericksView, VectorBaseBottomSheetListener {
     /* ==========================================================================================
      * Analytics
      * ========================================================================================== */
@@ -124,6 +124,12 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
     @CallSuper
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun doCancel(dialog: DialogInterface) {}
+    override fun onCancel(dialog: DialogInterface) {
+        doCancel(dialog)
+        super.onCancel(dialog)
     }
 
     override fun onAttach(context: Context) {
