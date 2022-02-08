@@ -291,15 +291,7 @@ class RoomListFragment @Inject constructor(
                                             ))
                                             checkEmptyState()
                                         }
-                                        lifecycleScope.launch {
-                                            section.itemCount
-                                                    .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-                                                    .collect { count ->
-                                                        sectionAdapter.updateSection(
-                                                                sectionAdapter.roomsSectionData.copy(itemCount = count)
-                                                        )
-                                                    }
-                                        }
+                                        listenItemCount(section, sectionAdapter)
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                                     notificationCount = counts.totalCount,
@@ -323,6 +315,7 @@ class RoomListFragment @Inject constructor(
                                             ))
                                             checkEmptyState()
                                         }
+                                        listenItemCount(section, sectionAdapter)
                                         section.isExpanded.observe(viewLifecycleOwner) { _ ->
                                             refreshCollapseStates()
                                         }
@@ -339,15 +332,7 @@ class RoomListFragment @Inject constructor(
                                                     isLoading = false))
                                             checkEmptyState()
                                         }
-                                        lifecycleScope.launch {
-                                            section.itemCount
-                                                    .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
-                                                    .collect { count ->
-                                                        sectionAdapter.updateSection(
-                                                                sectionAdapter.roomsSectionData.copy(itemCount = count)
-                                                        )
-                                                    }
-                                        }
+                                        listenItemCount(section, sectionAdapter)
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                                     notificationCount = counts.totalCount,
@@ -392,6 +377,18 @@ class RoomListFragment @Inject constructor(
                 RoomListDisplayMode.ROOMS         -> views.createGroupRoomButton.show()
                 else                              -> Unit
             }
+        }
+    }
+
+    private fun listenItemCount(section: RoomsSection, sectionAdapter: SectionHeaderAdapter) {
+        lifecycleScope.launch {
+            section.itemCount
+                    .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                    .collect { count ->
+                        sectionAdapter.updateSection(
+                                sectionAdapter.roomsSectionData.copy(itemCount = count)
+                        )
+                    }
         }
     }
 

@@ -88,7 +88,7 @@ class RoomListSectionBuilderSpace(
                             it.memberships = Membership.activeMemberships()
                         },
                         { qpm ->
-                            // TODO find a way to show the filtered rooms count ?
+                            // TODO find a clean way to listen query params changes to show the filtered rooms count
                             val name = stringProvider.getString(R.string.bottom_action_rooms)
                             session.getFilteredPagedRoomSummariesLive(qpm)
                                     .let { updatableFilterLivePageResult ->
@@ -404,7 +404,8 @@ class RoomListSectionBuilderSpace(
                                                 sectionName = name,
                                                 livePages = livePagedList,
                                                 notifyOfLocalEcho = notifyOfLocalEcho,
-                                                itemCount = session.getRoomCountFlow(roomQueryParams)
+                                                // TODO not working when switching spaces, how does the query is updated in this case?
+                                                itemCount = session.getRoomCountFlow(roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId()))
                                         )
                                 )
                             }

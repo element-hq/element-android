@@ -29,7 +29,6 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.features.themes.ThemeUtils
 
-// TODO check where it is used in the project
 @EpoxyModelClass(layout = R.layout.item_room_category)
 abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
 
@@ -41,6 +40,7 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
 
     override fun bind(holder: Holder) {
         super.bind(holder)
+        // TODO do we need to update the binding? do not understand how it is used in the app
         val tintColor = ThemeUtils.getColor(holder.rootView.context, R.attr.vctr_content_secondary)
         val expandedArrowDrawableRes = if (expanded) R.drawable.ic_expand_more else R.drawable.ic_expand_less
         val expandedArrowDrawable = ContextCompat.getDrawable(holder.rootView.context, expandedArrowDrawableRes)?.also {

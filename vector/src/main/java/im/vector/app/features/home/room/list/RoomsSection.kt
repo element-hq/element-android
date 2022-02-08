@@ -27,7 +27,7 @@ data class RoomsSection(
         val sectionName: String,
         // can be a paged list or a regular list
         val livePages: LiveData<PagedList<RoomSummary>>? = null,
-        // TODO liveList is not used : can we delete ?
+        // TODO liveList is not used : can we delete this livedata?
         val liveList: LiveData<List<RoomSummary>>? = null,
         val liveSuggested: LiveData<SuggestedRoomInfo>? = null,
         val isExpanded: MutableLiveData<Boolean> = MutableLiveData(true),
