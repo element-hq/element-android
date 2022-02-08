@@ -68,6 +68,7 @@ import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.UnauthenticatedError
 import im.vector.app.features.analytics.screen.ScreenEvent
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.consent.ConsentNotGivenHelper
@@ -299,6 +300,10 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
             return
         }
 
+        val errorCode: UnauthenticatedError.ErrorCode = UnauthenticatedError.ErrorCode.values().firstOrNull { it.name == globalError.errorCode }
+                ?: UnauthenticatedError.ErrorCode.M_UNKNOWN
+        val unauthenticatedError = UnauthenticatedError(errorCode, globalError.errorReason, globalError.refreshTokenAuth, globalError.softLogout)
+        analyticsTracker.capture(unauthenticatedError)
         mainActivityStarted = true
 
         MainActivity.restartApp(this,

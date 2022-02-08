@@ -25,7 +25,10 @@ import org.matrix.android.sdk.internal.network.ssl.CertUtil
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 import timber.log.Timber
 
-internal fun OkHttpClient.Builder.addAccessTokenInterceptor(accessTokenProvider: AccessTokenProvider, globalErrorReceiver: GlobalErrorReceiver): OkHttpClient.Builder {
+internal fun OkHttpClient.Builder.addAccessTokenInterceptor(
+        accessTokenProvider: AccessTokenProvider,
+        globalErrorReceiver: GlobalErrorReceiver
+): OkHttpClient.Builder {
     // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
     val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()
     interceptors().removeAll(existingCurlInterceptors)

@@ -224,7 +224,7 @@ class VectorApplication :
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
                 roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(this),
-                enableRefreshTokenAuth = true
+                enableRefreshTokenAuth = BuildConfig.enableRefreshTokens
         )
     }
 

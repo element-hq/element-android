@@ -67,9 +67,9 @@ internal class HomeserverAccessTokenProvider @Inject constructor(
         val credentials = sessionParamsStore.get(sessionId)?.credentials ?: return null
         val receivedTokenUnknown = serverError?.isTokenUnknownError().orFalse()
 
-        if (credentials.refreshToken.isNullOrEmpty() && receivedTokenUnknown) {
+        if (credentials.refreshToken.isNullOrEmpty() && serverError != null &&  receivedTokenUnknown) {
             Timber.d("## HomeserverAccessTokenProvider: accessToken-based auth failed, requires logout.")
-            globalErrorReceiver.handleGlobalError(GlobalError.InvalidToken(serverError?.error?.isSoftLogout.orFalse()))
+            globalErrorReceiver.handleGlobalError(invalidToken(serverError, false))
         }
 
         if (credentials.refreshToken.isNullOrEmpty() || (!receivedTokenUnknown && expiryIsValid(credentials.expiryTs))) {
@@ -87,7 +87,7 @@ internal class HomeserverAccessTokenProvider @Inject constructor(
                 Timber.d("## HomeserverAccessTokenProvider: Failed to refresh access token. error: $throwable")
                 if (throwable.error.code == M_UNKNOWN_TOKEN || throwable.error.code == M_FORBIDDEN) {
                     Timber.d("## HomeserverAccessTokenProvider: refreshToken-based auth failed, requires logout.")
-                    globalErrorReceiver.handleGlobalError(GlobalError.InvalidToken(throwable.error.isSoftLogout.orFalse()))
+                    globalErrorReceiver.handleGlobalError(invalidToken(throwable, true))
                 }
             }
         }
@@ -100,7 +100,7 @@ internal class HomeserverAccessTokenProvider @Inject constructor(
                 accessToken = result.accessToken,
                 expiresInMs = result.expiresInMs,
                 expiryTs = System.currentTimeMillis() + result.expiresInMs,
-                refreshToken = result.refreshToken
+                refreshToken = result.refreshToken + "fake"
         )
 
         sessionParamsStore.updateCredentials(updatedCredentials)
@@ -111,4 +111,11 @@ internal class HomeserverAccessTokenProvider @Inject constructor(
     }
 
     private fun expiryIsValid(expiryTs: Long?) = expiryTs == null || System.currentTimeMillis() < (expiryTs - PREEMPT_REFRESH_EXPIRATION_INTERVAL)
+
+    private fun invalidToken(serverError: Failure.ServerError, refreshTokenAuth: Boolean) = GlobalError.InvalidToken(
+            softLogout = serverError.error.isSoftLogout.orFalse(),
+            refreshTokenAuth = refreshTokenAuth,
+            errorCode = serverError.error.code,
+            errorReason = serverError.error.message
+    )
 }

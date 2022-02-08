@@ -20,7 +20,7 @@ import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 
 // This class will be sent to the bus
 sealed class GlobalError {
-    data class InvalidToken(val softLogout: Boolean) : GlobalError()
+    data class InvalidToken(val softLogout: Boolean, val refreshTokenAuth: Boolean, val errorCode: String, val errorReason: String) : GlobalError()
     data class ConsentNotGivenError(val consentUri: String) : GlobalError()
     data class CertificateError(val fingerprint: Fingerprint) : GlobalError()
     object ExpiredAccount : GlobalError()

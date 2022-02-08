@@ -21,10 +21,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import io.realm.RealmConfiguration
-import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.HomeServerHistoryService
-import org.matrix.android.sdk.api.crypto.MXCryptoConfig
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.internal.auth.db.AuthRealmMigration
 import org.matrix.android.sdk.internal.auth.db.AuthRealmModule
@@ -32,12 +30,9 @@ import org.matrix.android.sdk.internal.auth.db.RealmPendingSessionStore
 import org.matrix.android.sdk.internal.auth.db.RealmSessionParamsStore
 import org.matrix.android.sdk.internal.auth.login.DefaultDirectLoginTask
 import org.matrix.android.sdk.internal.auth.login.DirectLoginTask
-import org.matrix.android.sdk.internal.auth.refresh.DefaultRefreshTokenTask
-import org.matrix.android.sdk.internal.auth.refresh.RefreshTokenTask
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
 import org.matrix.android.sdk.internal.di.AuthDatabase
 import org.matrix.android.sdk.internal.legacy.DefaultLegacySessionImporter
-import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.wellknown.WellknownModule
 import java.io.File
 
