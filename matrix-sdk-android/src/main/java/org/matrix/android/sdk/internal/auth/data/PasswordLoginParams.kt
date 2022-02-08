@@ -30,7 +30,7 @@ internal data class PasswordLoginParams(
         @Json(name = "identifier") val identifier: Map<String, String>,
         @Json(name = "password") val password: String,
         @Json(name = "type") override val type: String,
-        @Json(name = "refresh_token") override val refreshToken: Boolean,
+        @Json(name = "refresh_token") override val enableRefreshTokenAuth: Boolean,
         @Json(name = "initial_device_display_name") val deviceDisplayName: String?,
         @Json(name = "device_id") val deviceId: String?) : LoginParams {
 
@@ -52,7 +52,7 @@ internal data class PasswordLoginParams(
                            password: String,
                            deviceDisplayName: String?,
                            deviceId: String?,
-                           refreshToken: Boolean): PasswordLoginParams {
+                           enableRefreshTokenAuth: Boolean): PasswordLoginParams {
             return PasswordLoginParams(
                     identifier = mapOf(
                             IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_USER,
@@ -60,7 +60,7 @@ internal data class PasswordLoginParams(
                     ),
                     password = password,
                     type = LoginFlowTypes.PASSWORD,
-                    refreshToken = refreshToken,
+                    enableRefreshTokenAuth = enableRefreshTokenAuth,
                     deviceDisplayName = deviceDisplayName,
                     deviceId = deviceId
             )
@@ -71,7 +71,7 @@ internal data class PasswordLoginParams(
                                  password: String,
                                  deviceDisplayName: String?,
                                  deviceId: String?,
-                                 refreshToken: Boolean): PasswordLoginParams {
+                                 enableRefreshTokenAuth: Boolean): PasswordLoginParams {
             return PasswordLoginParams(
                     identifier = mapOf(
                             IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_THIRD_PARTY,
@@ -80,7 +80,7 @@ internal data class PasswordLoginParams(
                     ),
                     password = password,
                     type = LoginFlowTypes.PASSWORD,
-                    refreshToken = refreshToken,
+                    enableRefreshTokenAuth = enableRefreshTokenAuth,
                     deviceDisplayName = deviceDisplayName,
                     deviceId = deviceId
             )
@@ -91,7 +91,7 @@ internal data class PasswordLoginParams(
                             password: String,
                             deviceDisplayName: String?,
                             deviceId: String?,
-                            refreshToken: Boolean): PasswordLoginParams {
+                            enableRefreshTokenAuth: Boolean): PasswordLoginParams {
             return PasswordLoginParams(
                     identifier = mapOf(
                             IDENTIFIER_KEY_TYPE to IDENTIFIER_KEY_TYPE_PHONE,
@@ -100,7 +100,7 @@ internal data class PasswordLoginParams(
                     ),
                     password = password,
                     type = LoginFlowTypes.PASSWORD,
-                    refreshToken = refreshToken,
+                    enableRefreshTokenAuth = enableRefreshTokenAuth,
                     deviceDisplayName = deviceDisplayName,
                     deviceId = deviceId
             )

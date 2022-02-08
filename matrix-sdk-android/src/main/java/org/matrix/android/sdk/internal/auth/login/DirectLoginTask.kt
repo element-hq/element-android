@@ -63,7 +63,7 @@ internal class DefaultDirectLoginTask @Inject constructor(
                 password = params.password,
                 deviceDisplayName = params.deviceName,
                 deviceId = params.deviceId,
-                refreshToken = params.refreshToken
+                enableRefreshTokenAuth = params.refreshToken
         )
 
         val credentials = try {

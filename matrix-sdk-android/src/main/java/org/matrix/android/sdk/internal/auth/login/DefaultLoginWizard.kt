@@ -65,7 +65,7 @@ internal class DefaultLoginWizard(
                     password = password,
                     deviceDisplayName = initialDeviceName,
                     deviceId = deviceId,
-                    refreshToken = matrixConfiguration.enableRefreshTokenAuth
+                    enableRefreshTokenAuth = matrixConfiguration.enableRefreshTokenAuth
             )
         } else {
             PasswordLoginParams.userIdentifier(
@@ -73,7 +73,7 @@ internal class DefaultLoginWizard(
                     password = password,
                     deviceDisplayName = initialDeviceName,
                     deviceId = deviceId,
-                    refreshToken = matrixConfiguration.enableRefreshTokenAuth
+                    enableRefreshTokenAuth = matrixConfiguration.enableRefreshTokenAuth
             )
         }
         val credentials = executeRequest(null) {
@@ -89,7 +89,7 @@ internal class DefaultLoginWizard(
     override suspend fun loginWithToken(loginToken: String): Session {
         val loginParams = TokenLoginParams(
                 token = loginToken,
-                refreshToken = matrixConfiguration.enableRefreshTokenAuth
+                enableRefreshTokenAuth = matrixConfiguration.enableRefreshTokenAuth
         )
         val credentials = executeRequest(null) {
             authAPI.login(loginParams)

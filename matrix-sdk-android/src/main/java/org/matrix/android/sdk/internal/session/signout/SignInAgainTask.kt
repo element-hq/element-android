@@ -52,7 +52,7 @@ internal class DefaultSignInAgainTask @Inject constructor(
                             deviceDisplayName = null,
                             // Reuse the same deviceId
                             deviceId = sessionParams.deviceId,
-                            refreshToken = matrixConfiguration.enableRefreshTokenAuth
+                            enableRefreshTokenAuth = matrixConfiguration.enableRefreshTokenAuth
                     )
             )
         }
