@@ -15,7 +15,6 @@
  */
 package im.vector.app.core.ui.list
 
-import android.content.res.ColorStateList
 import android.graphics.Typeface
 import android.view.Gravity
 import androidx.annotation.ColorInt
@@ -76,9 +75,9 @@ abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>() 
         holder.button.setTypeface(null, textStyle)
 
         holder.button.rippleColor = if (highlight) {
-            ColorStateList.valueOf(ThemeUtils.getColor(holder.view.context, R.attr.colorSecondary))
+            ContextCompat.getColorStateList(holder.view.context, R.color.mtrl_btn_text_btn_ripple_color)
         } else {
-            ContextCompat.getColorStateList(holder.view.context, android.R.color.transparent)
+            null
         }
 
         holder.button.onClick(buttonClickAction)
