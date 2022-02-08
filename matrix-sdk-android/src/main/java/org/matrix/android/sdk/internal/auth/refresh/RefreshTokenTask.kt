@@ -38,4 +38,3 @@ internal class DefaultRefreshTokenTask @Inject constructor(
         }
     }
 }
-

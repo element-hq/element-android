@@ -82,7 +82,6 @@ internal fun okhttp3.Response.peekFailure(globalErrorReceiver: GlobalErrorReceiv
     return toFailure(this.peekBody(1024), code, globalErrorReceiver)
 }
 
-
 private fun toFailure(errorBody: ResponseBody?, httpCode: Int, globalErrorReceiver: GlobalErrorReceiver?): Failure {
     if (errorBody == null) {
         return Failure.Unknown(RuntimeException("errorBody should not be null"))

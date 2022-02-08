@@ -18,14 +18,10 @@ package org.matrix.android.sdk.internal.network
 
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
-import okhttp3.Request
 import okhttp3.Response
 import org.matrix.android.sdk.api.failure.Failure
-import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.isTokenUnknownError
-import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
-import java.net.HttpURLConnection
 
 internal class AccessTokenInterceptor(
         private val accessTokenProvider: AccessTokenProvider,
@@ -35,7 +31,6 @@ internal class AccessTokenInterceptor(
     override fun intercept(chain: Interceptor.Chain): Response {
         // Attempt to get the latest access token before the request token might be expiring soon.
         val response = attemptRequestWithLatestToken(chain)
-
 
         val serverError = response.peekFailure(globalErrorReceiver) as? Failure.ServerError
 
@@ -57,5 +52,4 @@ internal class AccessTokenInterceptor(
         }
         return chain.proceed(request)
     }
-
 }

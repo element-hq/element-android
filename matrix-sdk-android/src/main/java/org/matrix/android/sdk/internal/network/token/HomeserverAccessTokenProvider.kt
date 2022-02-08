@@ -29,8 +29,6 @@ import org.matrix.android.sdk.internal.auth.SessionParamsStore
 import org.matrix.android.sdk.internal.auth.refresh.RefreshTokenTask
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
-import org.matrix.android.sdk.internal.network.toFailure
-import retrofit2.HttpException
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -43,6 +41,7 @@ internal class HomeserverAccessTokenProvider @Inject constructor(
 
     companion object {
         private val mutex = Mutex()
+        
         /**
         The time interval before the access token expires that we will start trying to refresh the token.
         This avoids us having to block other users requests while the token refreshes.
