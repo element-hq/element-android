@@ -98,22 +98,21 @@
 
         <Button
             android:id="@+id/widgetPermissionDecline"
+            style="@style/Widget.Vector.Button.Destructive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="@dimen/layout_vertical_margin"
             android:text="@string/action_decline"
-            android:background="@android:color/transparent"
-            android:textColor="?colorError"
             android:textAllCaps="true" />
 
         <Button
             android:id="@+id/widgetPermissionContinue"
+            style="@style/Widget.Vector.Button.Positive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/layout_vertical_margin"
+            android:minWidth="160dp"
             android:text="@string/_continue"
-            android:background="@android:color/transparent"
-            android:textColor="?colorPrimary"
             android:textAllCaps="true" />
 
     </LinearLayout>

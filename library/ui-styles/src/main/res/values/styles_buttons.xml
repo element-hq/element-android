@@ -15,7 +15,7 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="Widget.Vector.Button.Destructive">
+    <style name="Widget.Vector.Button.Destructive" parent="BottomSheetButtonTextColor">
         <item name="android:minWidth">94dp</item>
         <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayDestructive</item>
     </style>
@@ -24,7 +24,7 @@
         <item name="colorPrimary">?colorError</item>
     </style>
 
-    <style name="Widget.Vector.Button.Positive">
+    <style name="Widget.Vector.Button.Positive" parent="BottomSheetButtonTextColor">
         <item name="android:minWidth">94dp</item>
         <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayPositive</item>
     </style>
