@@ -1,0 +1,5 @@
+# [[Issue #4640]](https://github.com/vector-im/element-android/issues/4640) The notification badge jumps around
+
+## Changes :
+- change unread counter badge view in item_room to be in consistent place on the screen, to left of date/time.
+- change unread badge color state for dark and light theme to align with iOS. 
