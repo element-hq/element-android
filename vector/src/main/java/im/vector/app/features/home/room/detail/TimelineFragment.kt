@@ -119,7 +119,7 @@ import im.vector.app.core.utils.startInstallFromSourceIntent
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogReportContentBinding
 import im.vector.app.databinding.FragmentTimelineBinding
-import im.vector.app.features.analytics.plan.Click
+import im.vector.app.features.analytics.plan.Composer
 import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.attachments.AttachmentTypeSelectorView
 import im.vector.app.features.attachments.AttachmentsHelper
@@ -1499,7 +1499,9 @@ class TimelineFragment @Inject constructor(
             return
         }
         if (text.isNotBlank()) {
-            analyticsTracker.capture(Click(name = Click.Name.SendMessageButton))
+            withState(messageComposerViewModel) { state ->
+                analyticsTracker.capture(Composer(isThreadTimeLine(), isEditing = state.sendMode is SendMode.Edit, isReply = state.sendMode is SendMode.Reply))
+            }
             // We collapse ASAP, if not there will be a slight annoying delay
             views.composerLayout.collapse(true)
             lockSendButton = true

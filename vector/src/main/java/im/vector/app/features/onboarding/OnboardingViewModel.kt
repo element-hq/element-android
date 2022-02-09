@@ -39,7 +39,7 @@ import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.VectorFeatures
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toTrackingValue
-import im.vector.app.features.analytics.plan.Identity
+import im.vector.app.features.analytics.plan.UserProperties
 import im.vector.app.features.login.HomeServerConnectionConfigFactory
 import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.LoginMode
@@ -465,13 +465,13 @@ class OnboardingViewModel @AssistedInject constructor(
 
     private fun handleUpdateUseCase(action: OnboardingAction.UpdateUseCase) {
         setState { copy(useCase = action.useCase) }
-        analyticsTracker.updateUserProperties(Identity(ftueUseCaseSelection = action.useCase.toTrackingValue()))
+        analyticsTracker.updateUserProperties(UserProperties(ftueUseCaseSelection = action.useCase.toTrackingValue()))
         _viewEvents.post(OnboardingViewEvents.OpenServerSelection)
     }
 
     private fun resetUseCase() {
         setState { copy(useCase = null) }
-        analyticsTracker.updateUserProperties(Identity(ftueUseCaseSelection = null))
+        analyticsTracker.updateUserProperties(UserProperties(ftueUseCaseSelection = null))
     }
 
     private fun handleUpdateServerType(action: OnboardingAction.UpdateServerType) {

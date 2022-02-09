@@ -26,7 +26,7 @@ import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.log.analyticsTag
-import im.vector.app.features.analytics.plan.Identity
+import im.vector.app.features.analytics.plan.UserProperties
 import im.vector.app.features.analytics.store.AnalyticsStore
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
@@ -175,8 +175,8 @@ class DefaultVectorAnalytics @Inject constructor(
                 ?.screen(screen.getName(), screen.getProperties()?.toPostHogProperties())
     }
 
-    override fun updateUserProperties(identity: Identity) {
-        posthog?.identify(REUSE_EXISTING_ID, identity.getProperties().toPostHogProperties(), IGNORED_OPTIONS)
+    override fun updateUserProperties(userProperties: UserProperties) {
+        posthog?.identify(REUSE_EXISTING_ID, userProperties.getProperties().toPostHogProperties(), IGNORED_OPTIONS)
     }
 
     private fun Map<String, Any?>?.toPostHogProperties(): Properties? {
