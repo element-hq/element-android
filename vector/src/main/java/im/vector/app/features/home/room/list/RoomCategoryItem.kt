@@ -40,21 +40,24 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        // TODO do we need to update the binding? do not understand how it is used in the app
         val tintColor = ThemeUtils.getColor(holder.rootView.context, R.attr.vctr_content_secondary)
         val expandedArrowDrawableRes = if (expanded) R.drawable.ic_expand_more else R.drawable.ic_expand_less
         val expandedArrowDrawable = ContextCompat.getDrawable(holder.rootView.context, expandedArrowDrawableRes)?.also {
             DrawableCompat.setTint(it, tintColor)
         }
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
-        holder.titleView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
         holder.titleView.text = title
+        with(holder.counterView) {
+            text = ""
+            setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
+        }
         holder.rootView.onClick(listener)
     }
 
     class Holder : VectorEpoxyHolder() {
         val unreadCounterBadgeView by bind<UnreadCounterBadgeView>(R.id.roomCategoryUnreadCounterBadgeView)
         val titleView by bind<TextView>(R.id.roomCategoryTitleView)
+        val counterView by bind<TextView>(R.id.roomCategoryCounterView)
         val rootView by bind<ViewGroup>(R.id.roomCategoryRootView)
     }
 }
