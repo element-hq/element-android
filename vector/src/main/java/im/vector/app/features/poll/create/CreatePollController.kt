@@ -121,6 +121,7 @@ class CreatePollController @Inject constructor(
                 textColor(host.colorProvider.getColor(R.color.palette_element_green))
                 gravity(Gravity.START)
                 bold(true)
+                highlight(false)
                 buttonClickAction {
                     host.callback?.onAddOption()
                 }

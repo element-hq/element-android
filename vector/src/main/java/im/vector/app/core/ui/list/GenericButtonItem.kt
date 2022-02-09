@@ -19,6 +19,7 @@ import android.graphics.Typeface
 import android.view.Gravity
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
 import com.google.android.material.button.MaterialButton
@@ -55,6 +56,9 @@ abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>() 
     @EpoxyAttribute
     var bold: Boolean = false
 
+    @EpoxyAttribute
+    var highlight: Boolean = true
+
     override fun bind(holder: Holder) {
         super.bind(holder)
         holder.button.text = text
@@ -69,6 +73,12 @@ abstract class GenericButtonItem : VectorEpoxyModel<GenericButtonItem.Holder>() 
         holder.button.gravity = gravity or Gravity.CENTER_VERTICAL
         val textStyle = if (bold) Typeface.BOLD else Typeface.NORMAL
         holder.button.setTypeface(null, textStyle)
+
+        holder.button.rippleColor = if (highlight) {
+            ContextCompat.getColorStateList(holder.view.context, R.color.mtrl_btn_text_btn_ripple_color)
+        } else {
+            null
+        }
 
         holder.button.onClick(buttonClickAction)
     }
