@@ -1,0 +1,2 @@
+Hlavní změny v této verzi: odeslání svojí polohy do libovolné místnosti. Úpravy anket.
+Úplný seznam změn: https://github.com/vector-im/element-android/releases/tag/v1.3.17
