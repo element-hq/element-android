@@ -17,7 +17,6 @@
 package im.vector.app.features.spaces.manage
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
@@ -143,17 +142,13 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
 
     override fun handle(action: SpaceAddRoomActions) {
         when (action) {
-            is SpaceAddRoomActions.UpdateFilter -> {
-                updatableLivePageResult.updateQuery {
-                    it.copy(
-                            displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
-                    )
-                }
-                updatableLiveSpacePageResult.updateQuery {
-                    it.copy(
-                            displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
-                    )
-                }
+            is SpaceAddRoomActions.UpdateFilter    -> {
+                updatableLivePageResult.queryParams = updatableLivePageResult.queryParams.copy(
+                        displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
+                )
+                updatableLivePageResult.queryParams = updatableLivePageResult.queryParams.copy(
+                        displayName = QueryStringValue.Contains(action.filter, QueryStringValue.Case.INSENSITIVE)
+                )
                 setState {
                     copy(
                             currentFilter = action.filter
@@ -164,7 +159,7 @@ class SpaceAddRoomsViewModel @AssistedInject constructor(
                 selectionList[action.roomSummary.roomId] = (selectionList[action.roomSummary.roomId] ?: false).not()
                 selectionListLiveData.postValue(selectionList.toMap())
             }
-            SpaceAddRoomActions.Save -> {
+            SpaceAddRoomActions.Save               -> {
                 doAddSelectedRooms()
             }
         }

@@ -28,6 +28,7 @@ import im.vector.app.features.invite.showInvites
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -68,16 +69,19 @@ class RoomListSectionBuilderGroup(
                             it.memberships = Membership.activeMemberships()
                         },
                         { qpm ->
-                            // TODO find a clean way to listen query params changes to show the filtered rooms count
                             val name = stringProvider.getString(R.string.bottom_action_rooms)
                             session.getFilteredPagedRoomSummariesLive(qpm)
                                     .let { updatableFilterLivePageResult ->
                                         onUpdatable(updatableFilterLivePageResult)
+
+                                        val itemCountFlow = updatableFilterLivePageResult.livePagedList.asFlow()
+                                                .flatMapLatest { session.getRoomCountFlow(updatableFilterLivePageResult.queryParams) }
+
                                         sections.add(
                                                 RoomsSection(
                                                         sectionName = name,
                                                         livePages = updatableFilterLivePageResult.livePagedList,
-                                                        itemCount = session.getRoomCountFlow(qpm)
+                                                        itemCount = itemCountFlow
                                                 )
                                         )
                                     }
@@ -116,9 +120,7 @@ class RoomListSectionBuilderGroup(
                 .onEach { groupingMethod ->
                     val selectedGroupId = (groupingMethod.orNull() as? RoomGroupingMethod.ByLegacyGroup)?.groupSummary?.groupId
                     activeGroupAwareQueries.onEach { updater ->
-                        updater.updateQuery { query ->
-                            query.copy(activeGroupId = selectedGroupId)
-                        }
+                        updater.queryParams = updater.queryParams.copy(activeGroupId = selectedGroupId)
                     }
                 }.launchIn(coroutineScope)
 

@@ -88,16 +88,19 @@ class RoomListSectionBuilderSpace(
                             it.memberships = Membership.activeMemberships()
                         },
                         { qpm ->
-                            // TODO find a clean way to listen query params changes to show the filtered rooms count
                             val name = stringProvider.getString(R.string.bottom_action_rooms)
                             session.getFilteredPagedRoomSummariesLive(qpm)
                                     .let { updatableFilterLivePageResult ->
                                         onUpdatable(updatableFilterLivePageResult)
+
+                                        val itemCountFlow = updatableFilterLivePageResult.livePagedList.asFlow()
+                                                .flatMapLatest { session.getRoomCountFlow(updatableFilterLivePageResult.queryParams) }
+
                                         sections.add(
                                                 RoomsSection(
                                                         sectionName = name,
                                                         livePages = updatableFilterLivePageResult.livePagedList,
-                                                        itemCount = session.getRoomCountFlow(qpm)
+                                                        itemCount = itemCountFlow
                                                 )
                                         )
                                     }
@@ -347,11 +350,9 @@ class RoomListSectionBuilderSpace(
                             RoomListViewModel.SpaceFilterStrategy.ORPHANS_IF_SPACE_NULL -> {
                                 activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
                                     override fun updateForSpaceId(roomId: String?) {
-                                        it.updateQuery {
-                                            it.copy(
-                                                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
-                                            )
-                                        }
+                                        it.queryParams = roomQueryParams.copy(
+                                                activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
+                                        )
                                     }
                                 })
                             }
@@ -359,17 +360,13 @@ class RoomListSectionBuilderSpace(
                                 activeSpaceUpdaters.add(object : RoomListViewModel.ActiveSpaceQueryUpdater {
                                     override fun updateForSpaceId(roomId: String?) {
                                         if (roomId != null) {
-                                            it.updateQuery {
-                                                it.copy(
-                                                        activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
-                                                )
-                                            }
+                                            it.queryParams = roomQueryParams.copy(
+                                                    activeSpaceFilter = ActiveSpaceFilter.ActiveSpace(roomId)
+                                            )
                                         } else {
-                                            it.updateQuery {
-                                                it.copy(
-                                                        activeSpaceFilter = ActiveSpaceFilter.None
-                                                )
-                                            }
+                                            it.queryParams = roomQueryParams.copy(
+                                                    activeSpaceFilter = ActiveSpaceFilter.None
+                                            )
                                         }
                                     }
                                 })

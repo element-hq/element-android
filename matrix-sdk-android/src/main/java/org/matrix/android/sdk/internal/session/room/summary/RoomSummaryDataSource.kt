@@ -228,14 +228,16 @@ internal class RoomSummaryDataSource @Inject constructor(
         return object : UpdatableLivePageResult {
             override val livePagedList: LiveData<PagedList<RoomSummary>> = mapped
 
-            override fun updateQuery(builder: (RoomSummaryQueryParams) -> RoomSummaryQueryParams) {
-                realmDataSourceFactory.updateQuery {
-                    roomSummariesQuery(it, builder.invoke(queryParams)).process(sortOrder)
-                }
-            }
-
             override val liveBoundaries: LiveData<ResultBoundaries>
                 get() = boundaries
+
+            override var queryParams: RoomSummaryQueryParams = queryParams
+                set(value) {
+                    field = value
+                    realmDataSourceFactory.updateQuery {
+                        roomSummariesQuery(it, value).process(sortOrder)
+                    }
+                }
         }
     }
 
