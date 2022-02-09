@@ -223,7 +223,7 @@ class FtueAuthVariant(
             }
             OnboardingViewEvents.OnAccountCreated                              -> onAccountCreated()
             OnboardingViewEvents.OnAccountSignedIn                             -> onAccountSignedIn()
-            OnboardingViewEvents.OnPersonalizeProfile                          -> TODO()
+            OnboardingViewEvents.OnPersonalizeProfile                          -> onPersonalizeProfile()
             OnboardingViewEvents.OnTakeMeHome                                  -> navigateToHome(createdAccount = true)
         }.exhaustive
     }
@@ -388,5 +388,16 @@ class FtueAuthVariant(
         val intent = HomeActivity.newIntent(activity, accountCreation = createdAccount)
         activity.startActivity(intent)
         activity.finish()
+    }
+
+    private fun onPersonalizeProfile() {
+        activity.addFragmentToBackstack(views.loginFragmentContainer,
+                FtueAuthChooseDisplayNameFragment::class.java,
+                option = commonOption
+        )
+    }
+
+    override fun onToolbarBack() {
+        activity.supportFragmentManager.popBackStack()
     }
 }
