@@ -222,10 +222,9 @@ class RoomListViewModel @AssistedInject constructor(
             )
         }
 
-        val room = session.getRoom(roomId) ?: return@withState
         viewModelScope.launch {
             try {
-                session.joinRoom(room.roomId)
+                session.joinRoom(roomId)
                 analyticsTracker.capture(action.roomSummary.toAnalyticsJoinedRoom())
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
