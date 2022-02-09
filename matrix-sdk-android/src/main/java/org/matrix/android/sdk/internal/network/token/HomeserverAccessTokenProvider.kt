@@ -101,7 +101,7 @@ internal class HomeserverAccessTokenProvider @Inject constructor(
                 accessToken = result.accessToken,
                 expiresInMs = result.expiresInMs,
                 expiryTs = System.currentTimeMillis() + result.expiresInMs,
-                refreshToken = result.refreshToken + "fake"
+                refreshToken = result.refreshToken
         )
 
         sessionParamsStore.updateCredentials(updatedCredentials)
