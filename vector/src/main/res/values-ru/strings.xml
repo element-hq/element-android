@@ -3189,8 +3189,8 @@
     <string name="shortcut_disabled_reason_room_left">Комната покинута!</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Шифрование было неправильно настроено, поэтому вы не можете отправлять сообщения. Нажмите, чтобы открыть настройки.</string>
     <string name="room_unsupported_e2e_algorithm">Шифрование было неправильно настроено, поэтому вы не можете отправлять сообщения. Пожалуйста, обратитесь к администратору, чтобы восстановить работу шифрования.</string>
-    <string name="login_error_homeserver_from_url_not_found_enter_manual">Выбрать домашний сервер</string>
-    <string name="login_error_homeserver_from_url_not_found">Не удается связаться с домашним сервером по адресу %s. Пожалуйста, проверьте ссылку или выберите домашний сервер вручную.</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Выберите домашний сервер</string>
+    <string name="login_error_homeserver_from_url_not_found">Не могу связаться с домашним сервером на URL %s. Пожалуйста, проверьте вашу ссылку или выберите домашний сервер вручную.</string>
     <string name="action_not_now">Не сейчас</string>
     <string name="action_enable">Включить</string>
     <string name="notification_listening_for_notifications">Слежка за уведомлениями</string>
