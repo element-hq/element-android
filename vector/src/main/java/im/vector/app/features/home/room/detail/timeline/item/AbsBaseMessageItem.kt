@@ -16,11 +16,15 @@
 
 package im.vector.app.features.home.room.detail.timeline.item
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.IdRes
+import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.view.isVisible
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
@@ -65,27 +69,10 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
         return listOf(baseAttributes.informationData.eventId)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun bind(holder: H) {
         super.bind(holder)
-        val reactions = baseAttributes.informationData.orderedReactionList
-        if (!shouldShowReactionAtBottom() || reactions.isNullOrEmpty()) {
-            holder.reactionsContainer.isVisible = false
-        } else {
-            holder.reactionsContainer.isVisible = true
-            holder.reactionsContainer.removeAllViews()
-            reactions.take(8).forEach { reaction ->
-                val reactionButton = ReactionButton(holder.view.context)
-                reactionButton.reactedListener = reactionClickListener
-                reactionButton.setTag(R.id.reactionsContainer, reaction.key)
-                reactionButton.reactionString = reaction.key
-                reactionButton.reactionCount = reaction.count
-                reactionButton.setChecked(reaction.addedByMe)
-                reactionButton.isEnabled = reaction.synced
-                holder.reactionsContainer.addView(reactionButton)
-            }
-            holder.reactionsContainer.setOnLongClickListener(baseAttributes.itemLongClickListener)
-        }
-
+        renderReactions(holder, baseAttributes.informationData.reactionsSummary)
         when (baseAttributes.informationData.e2eDecoration) {
             E2EDecoration.NONE                 -> {
                 holder.e2EDecorationView.render(null)
@@ -100,6 +87,59 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
         holder.view.onClick(baseAttributes.itemClickListener)
         holder.view.setOnLongClickListener(baseAttributes.itemLongClickListener)
         (holder.view as? TimelineMessageLayoutRenderer)?.renderMessageLayout(baseAttributes.informationData.messageLayout)
+    }
+
+    private fun renderReactions(holder: H, reactionsSummary: ReactionsSummaryData) {
+        val reactions = reactionsSummary.reactions
+        if (!shouldShowReactionAtBottom() || reactions.isNullOrEmpty()) {
+            holder.reactionsContainer.isVisible = false
+        } else {
+            holder.reactionsContainer.isVisible = true
+            holder.reactionsContainer.removeAllViews()
+            val reactionsToShow = if (reactionsSummary.showAll) {
+                reactions
+            } else {
+                reactions.take(8)
+            }
+            reactionsToShow.forEach { reaction ->
+                val reactionButton = ReactionButton(holder.view.context)
+                reactionButton.reactedListener = reactionClickListener
+                reactionButton.setTag(R.id.reactionsContainer, reaction.key)
+                reactionButton.reactionString = reaction.key
+                reactionButton.reactionCount = reaction.count
+                reactionButton.setChecked(reaction.addedByMe)
+                reactionButton.isEnabled = reaction.synced
+                holder.reactionsContainer.addView(reactionButton)
+            }
+            if (reactions.count() > 8) {
+                val showReactionsTextView = createReactionTextView(holder.view.context)
+                if (reactionsSummary.showAll) {
+                    showReactionsTextView.setText(R.string.message_reaction_show_less)
+                    showReactionsTextView.onClick { reactionsSummary.onShowLessClicked() }
+                } else {
+                    val moreCount = reactions.count() - 8
+                    showReactionsTextView.text = holder.view.resources.getString(R.string.message_reaction_show_more, moreCount)
+                    showReactionsTextView.onClick { reactionsSummary.onShowMoreClicked() }
+                }
+                holder.reactionsContainer.addView(showReactionsTextView)
+            }
+            val addMoreReactionsTextView = createReactionTextView(holder.view.context)
+            addMoreReactionsTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add_reaction_small, 0, 0, 0)
+            addMoreReactionsTextView.onClick { reactionsSummary.onAddMoreClicked() }
+            holder.reactionsContainer.addView(addMoreReactionsTextView)
+            holder.reactionsContainer.setOnLongClickListener(baseAttributes.itemLongClickListener)
+        }
+    }
+
+    private fun createReactionTextView(context: Context): TextView {
+        return TextView(context).apply {
+            textSize = 10f
+            gravity = Gravity.CENTER
+            minimumHeight = resources.getDimensionPixelSize(R.dimen.chat_reaction_min_height)
+            background = getDrawable(context, R.drawable.reaction_rounded_rect_shape_off)
+            val padding = resources.getDimensionPixelSize(R.dimen.layout_horizontal_margin)
+            setPadding(padding, 0, padding, 0)
+        }
     }
 
     override fun unbind(holder: H) {

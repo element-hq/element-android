@@ -68,7 +68,7 @@ class ReactionButton @JvmOverloads constructor(context: Context,
     init {
         inflate(context, R.layout.reaction_button, this)
         orientation = HORIZONTAL
-        minimumHeight = DimensionConverter(context.resources).dpToPx(30)
+        minimumHeight = resources.getDimensionPixelSize(R.dimen.chat_reaction_min_height)
         gravity = Gravity.CENTER
         layoutDirection = View.LAYOUT_DIRECTION_LOCALE
         views = ReactionButtonBinding.bind(this)
