@@ -1,1 +1,0 @@
-Retrieve map style url from .well-known
