@@ -69,9 +69,10 @@
 \nИмпорт криптографии</string>
     <string name="initial_sync_start_importing_account_rooms">Начальная синхронизация:
 \nИмпорт комнат</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">Синхронизация начата:
-\nИмпорт присоединенных комнат</string>
-    <string name="initial_sync_start_importing_account_invited_rooms">Синхронизация начата:
+    <string name="initial_sync_start_importing_account_joined_rooms">Начальная синхронизация:
+\nЗагрузка ваших бесед
+\nЕсли вы присоединились к большому количеству комнат, это может занять некоторое время</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">Начальная синхронизация:
 \nИмпорт приглашенных комнат</string>
     <string name="initial_sync_start_importing_account_left_rooms">Начальная синхронизация:
 \nИмпорт покинутых комнат</string>
@@ -863,7 +864,7 @@
     <string name="start_voice_call_prompt_msg">Вы уверены, что хотите начать голосовой вызов?</string>
     <string name="start_video_call_prompt_msg">Вы уверены, что хотите начать видеовызов?</string>
     <string name="groups_list">Список групп</string>
-    <string name="room_participants_ban_prompt_msg">Блокирующий пользователь выгонит их из этой комнаты и не позволит им снова присоединиться.</string>
+    <string name="room_participants_ban_prompt_msg">Блокировка пользователя удалит его из этой комнаты и не позволит ему присоединиться к ней снова.</string>
     <string name="room_settings_all_messages_noisy">Все сообщения (громко)</string>
     <string name="room_settings_all_messages">Все сообщения</string>
     <string name="room_settings_mention_only">Только упоминания</string>
@@ -1118,7 +1119,7 @@
     <string name="settings_call_ringtone_title">Мелодия звонка</string>
     <string name="settings_call_ringtone_dialog_title">Выберите мелодию звонка:</string>
     <string name="video_call_in_progress">Идёт видеозвонок …</string>
-    <string name="room_participants_action_remove">Выгнать</string>
+    <string name="room_participants_action_remove">Удалить из чата</string>
     <string name="reason_hint">Причина</string>
     <string name="settings_notification_troubleshoot">Поиск проблем с уведомлениями</string>
     <string name="settings_send_typing_notifs">Оправлять уведомления о наборе текста</string>
@@ -1206,7 +1207,7 @@
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="no_valid_google_play_services_apk">Не найден APK сервисов Google Play. Уведомления могут работать неправильно.</string>
-    <string name="settings_show_join_leave_messages_summary">Не влияет на приглашения, исключения и запреты.</string>
+    <string name="settings_show_join_leave_messages_summary">Не влияет на приглашения, удаления и запреты.</string>
     <string name="title_activity_keys_backup_setup">Резервное копирование ключей</string>
     <string name="title_activity_keys_backup_restore">Используйте резервную копию ключа</string>
     <string name="keys_backup_is_not_finished_please_wait">Резервное копирование ключей не завершено, пожалуйста, подождите…</string>
@@ -2151,7 +2152,7 @@
     <string name="verification_profile_device_untrust_info">Пока этот пользователь не доверяет этой сессии, сообщения, отправленные в обе стороны, помечаются предупреждениями. Кроме того, вы можете подтвердить сессию вручную.</string>
     <string name="initialize_cross_signing">Инициализировать кросс-подпись</string>
     <string name="reset_cross_signing">Сбросить ключи</string>
-    <string name="qr_code_scanned_by_other_notice">Почти готово! Отображает ли %s такой же щит\?</string>
+    <string name="qr_code_scanned_by_other_notice">Почти готово! Показывает ли %s галочку\?</string>
     <string name="qr_code_scanned_by_other_yes">Да</string>
     <string name="qr_code_scanned_by_other_no">Нет</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Активирован режим \"В самолёте\"</string>
@@ -2216,7 +2217,7 @@
     <string name="auth_flow_not_supported">Вы не можете сделать это с телефона</string>
     <string name="encryption_unknown_algorithm_tile_description">Шифрование этой комнаты не поддерживается</string>
     <string name="room_created_summary_item_by_you">Вы создали и настроили комнату.</string>
-    <string name="qr_code_scanned_self_verif_notice">Почти готово! Отображается ли такой же щит в другой вашей сессии\?</string>
+    <string name="qr_code_scanned_self_verif_notice">Почти готово! Показывает ли другое устройство галочку\?</string>
     <string name="qr_code_scanned_verif_waiting_notice">Почти готово! Ожидание подтверждения…</string>
     <string name="qr_code_scanned_verif_waiting">Ожидание для %s…</string>
     <string name="error_failed_to_import_keys">Не удалось импортировать ключи</string>
@@ -2409,8 +2410,8 @@
         <item quantity="many">%d секунд</item>
     </plurals>
     <string name="settings_show_room_member_state_events">Показать события статуса участников комнаты</string>
-    <string name="settings_show_room_member_state_events_summary">Включает в себя события приглашения/ присоединения/выхода/исключения/бана и изменение аватара/отображаемого имени.</string>
-    <string name="sent_a_poll">Голосование</string>
+    <string name="settings_show_room_member_state_events_summary">Включает в себя события приглашения/ присоединения/выхода/удаления/блокировки и изменение аватара/отображаемого имени.</string>
+    <string name="sent_a_poll">Опрос</string>
     <string name="sent_a_reaction">Отреагировал: %s</string>
     <string name="sent_verification_conclusion">Результат проверки</string>
     <string name="universal_link_malformed">Ссылка была искажена</string>
@@ -3043,7 +3044,7 @@
     <string name="space_settings_permissions_subtitle">Просмотр и обновление ролей, необходимых для изменения различных частей пространства.</string>
     <string name="space_settings_permissions_title">Разрешения пространства</string>
     <string name="space_participants_unban_prompt_msg">Разблокирование пользователя позволит ему снова присоединиться к пространству.</string>
-    <string name="space_participants_ban_prompt_msg">Блокировка пользователя исключит его из этого пространства и не позволит ему присоединиться снова.</string>
+    <string name="space_participants_ban_prompt_msg">Блокировка пользователя удалит его из этого пространства и не позволит ему присоединиться снова.</string>
     <string name="space_participants_remove_prompt_msg">Выгнанный пользователь будет удалён из этого пространства.
 \n 
 \nЧтобы предотвратить его повторное присоединение, вы должны заблокировать его.</string>
@@ -3063,4 +3064,135 @@
     <string name="a11y_presence_unavailable">Недоступен</string>
     <string name="a11y_presence_offline">Не в сети</string>
     <string name="a11y_presence_online">В сети</string>
+    <string name="tooltip_attachment_location">Поделиться местоположением</string>
+    <string name="tooltip_attachment_poll">Создать опрос</string>
+    <string name="tooltip_attachment_contact">Открыть контакты</string>
+    <string name="tooltip_attachment_sticker">Отправить стикер</string>
+    <string name="tooltip_attachment_file">Загрузить файл</string>
+    <string name="tooltip_attachment_gallery">Отправить изображения и видео</string>
+    <string name="tooltip_attachment_photo">Открыть камеру</string>
+    <string name="labs_render_locations_in_timeline">Отображать местоположения пользователя на временной шкале</string>
+    <string name="settings_enable_location_sharing_summary">После включения вы сможете отправить свое местоположение в любую комнату</string>
+    <string name="settings_enable_location_sharing">Включить отправку местоположения</string>
+    <string name="location_share_external">Открыть с помощью</string>
+    <string name="template_location_not_available_dialog_content">${app_name} не смог получить доступ к вашему местоположению. Пожалуйста, повторите попытку позже.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} не смог получить доступ к вашему местоположению</string>
+    <string name="location_share">Поделиться местоположением</string>
+    <string name="a11y_location_share_icon">Поделиться местоположением</string>
+    <string name="location_activity_title_preview">Местоположение</string>
+    <string name="location_activity_title_static_sharing">Поделиться местоположением</string>
+    <string name="closed_poll_option_description">Результаты отображаются только после завершения опроса</string>
+    <string name="closed_poll_option_title">Закрытый опрос</string>
+    <string name="open_poll_option_title">Открытый опрос</string>
+    <string name="open_poll_option_description">Проголосовавшие увидят результаты сразу после голосования</string>
+    <string name="poll_type_title">Тип опроса</string>
+    <string name="edit_poll_button">РЕДАКТИРОВАТЬ ОПРОС</string>
+    <string name="edit_poll_title">Редактировать опрос</string>
+    <string name="delete_poll_dialog_content">Вы уверены, что хотите удалить этот опрос\? Вы не сможете восстановить его после удаления.</string>
+    <string name="delete_poll_dialog_title">Удалить опрос</string>
+    <string name="poll_end_room_list_preview">Опрос завершен</string>
+    <string name="poll_response_room_list_preview">Проголосовано</string>
+    <string name="end_poll_confirmation_approve_button">Завершить опрос</string>
+    <string name="end_poll_confirmation_description">Это лишит людей возможности голосовать и отобразит окончательные результаты опроса.</string>
+    <string name="end_poll_confirmation_title">Завершить этот опрос\?</string>
+    <string name="a11y_poll_winner_option">вариант-победитель</string>
+    <string name="poll_end_action">Завершить опрос</string>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="one">Окончательный результат на основании %1$d голоса</item>
+        <item quantity="few">Окончательный результат на основании %1$d голосов</item>
+        <item quantity="many">Окончательный результат на основании %1$d голосов</item>
+        <item quantity="other">Окончательный результат на основании %1$d голосов</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="one">%1$d голос. Проголосуйте, чтобы увидеть результаты</item>
+        <item quantity="few">%1$d голоса. Проголосуйте, чтобы увидеть результаты</item>
+        <item quantity="many">%1$d голосов. Проголосуйте, чтобы увидеть результаты</item>
+        <item quantity="other">%1$d голосов. Проголосуйте, чтобы увидеть результаты</item>
+    </plurals>
+    <string name="poll_no_votes_cast">Голосов нет</string>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="one">На основании %1$d голоса</item>
+        <item quantity="few">На основании %1$d голосов</item>
+        <item quantity="many">На основании %1$d голосов</item>
+        <item quantity="other">На основании %1$d голосов</item>
+    </plurals>
+    <plurals name="poll_option_vote_count">
+        <item quantity="one">%1$d голос</item>
+        <item quantity="few">%1$d голоса</item>
+        <item quantity="many">%1$d голосов</item>
+        <item quantity="other">%1$d голосов</item>
+    </plurals>
+    <plurals name="create_poll_not_enough_options_error">
+        <item quantity="one">Требуется минимум %1$s вариант</item>
+        <item quantity="few">Требуется минимум %1$s варианта</item>
+        <item quantity="many">Требуется минимум %1$s вариантов</item>
+        <item quantity="other">Требуется минимум %1$s вариантов</item>
+    </plurals>
+    <string name="create_poll_empty_question_error">Вопрос не может быть пустым</string>
+    <string name="create_poll_button">СОЗДАТЬ ОПРОС</string>
+    <string name="create_poll_add_option">ДОБАВИТЬ ВАРИАНТ</string>
+    <string name="create_poll_options_hint">Вариант %1$d</string>
+    <string name="create_poll_options_title">Создать варианты</string>
+    <string name="create_poll_question_hint">Вопрос или тема</string>
+    <string name="create_poll_question_title">Вопрос или тема опроса</string>
+    <string name="attachment_type_poll">Опрос</string>
+    <string name="create_poll_title">Создать опрос</string>
+    <string name="restart_the_application_to_apply_changes">Перезапустите приложение, чтобы изменения вступили в силу.</string>
+    <string name="labs_enable_latex_maths">Включить математику LaTeX</string>
+    <string name="labs_auto_report_uisi_desc">Ваша система будет автоматически отправлять журналы при возникновении ошибки невозможности расшифровки</string>
+    <string name="labs_auto_report_uisi">Автоматически сообщать об ошибках расшифровки.</string>
+    <string name="a11y_trust_level_misconfigured">Неправильно настроенный уровень доверия</string>
+    <string name="encryption_misconfigured">Шифрование неправильно настроено</string>
+    <string name="room_member_override_nick_color">Изменить цвет ника</string>
+    <string name="room_profile_section_restore_security">Восстановить шифрование</string>
+    <string name="contact_admin_to_restore_encryption">Пожалуйста, свяжитесь с администратором для восстановления шифрования в рабочее состояние.</string>
+    <string name="encryption_has_been_misconfigured">Шифрование неправильно настроено.</string>
+    <string name="sent_location">Поделились своим местоположением</string>
+    <string name="login_splash_already_have_account">У меня уже есть учетная запись</string>
+    <string name="login_splash_create_account">Создать учетную запись</string>
+    <string name="ftue_auth_carousel_title_messaging">Общение вашей команды.</string>
+    <string name="ftue_auth_carousel_body_encrypted">Со сквозным шифрованием и без требования номера телефона. Без рекламы или анализа данных.</string>
+    <string name="ftue_auth_carousel_body_control">Выберите, где общаться, что даст вам контроль и независимость. Подключено через Matrix.</string>
+    <string name="ftue_auth_carousel_body_secure">Безопасное и независимое общение, обеспечивающее вам такой же уровень конфиденциальности, как при личном общении в вашем собственном доме.</string>
+    <string name="ftue_auth_carousel_4_title">Усовершенствуйте общение в команде.</string>
+    <string name="ftue_auth_carousel_3_title">Защищенное общение.</string>
+    <string name="ftue_auth_carousel_2_title">Вы контролируете всё.</string>
+    <string name="ftue_auth_carousel_1_title">Владейте своими разговорами.</string>
+    <string name="attachment_type_location">Местоположение</string>
+    <string name="identity_server_consent_dialog_content_question">Вы согласны отправить эту информацию\?</string>
+    <string name="identity_server_consent_dialog_content_3">Чтобы обнаружить существующие контакты, необходимо отправить контактную информацию (электронную почту и номера телефонов) на сервер идентификации. Мы хэшируем ваши данные перед отправкой для обеспечения конфиденциальности.</string>
+    <string name="identity_server_consent_dialog_content_2">Чтобы обнаружить существующие контакты, необходимо отправить контактную информацию на сервер идентификации.
+\n
+\nМы хэшируем ваши данные перед отправкой для обеспечения конфиденциальности. Согласны ли вы отправить эту информацию\?</string>
+    <string name="identity_server_consent_dialog_title_2">Отправить электронные адреса и номера телефонов %s</string>
+    <string name="settings_discovery_consent_notice_off_2">Ваши контакты приватны. Чтобы обнаружить пользователей из ваших контактов, нам необходимо ваше разрешение на отправку контактной информации на ваш сервер идентификации.</string>
+    <string name="preference_system_settings">Системные настройки</string>
+    <string name="preference_versions">Версии</string>
+    <string name="preference_help_summary">Получите помощь в использовании Element</string>
+    <string name="preference_help_title">Помощь и поддержка</string>
+    <string name="preference_help">Помощь</string>
+    <string name="preference_root_legals">Правовые положения</string>
+    <string name="legals_no_policy_provided">Этот сервер не предоставляет никакой политики.</string>
+    <string name="legals_third_party_notices">Сторонние библиотеки</string>
+    <string name="legals_identity_server_title">Политика вашего сервера идентификации</string>
+    <string name="legals_home_server_title">Политика вашего домашнего сервера</string>
+    <string name="template_legals_application_title">Политика ${app_name}</string>
+    <string name="analytics_opt_in_list_item_3">Вы можете отключить это в любое время в настройках</string>
+    <string name="analytics_opt_in_list_item_2">Мы <b>не</b> передаем информацию третьим лицам</string>
+    <string name="analytics_opt_in_list_item_1">Мы <b>не</b> записываем и <b>не</b> профилируем любые данные учетной записи</string>
+    <string name="analytics_opt_in_content_link">тут</string>
+    <string name="analytics_opt_in_content">Помогите нам выявить проблемы и улучшить Element, поделившись анонимными данными об использовании. Чтобы понять, как люди используют несколько устройств, мы сгенерируем случайный идентификатор, общий для всех ваших устройств.
+\n
+\nВы можете ознакомиться со всеми нашими условиями %s.</string>
+    <string name="analytics_opt_in_title">Помогите улучшить Element</string>
+    <string name="shortcut_disabled_reason_sign_out">Сессия была завершена!</string>
+    <string name="shortcut_disabled_reason_room_left">Комната покинута!</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">Шифрование было неправильно настроено, поэтому вы не можете отправлять сообщения. Нажмите, чтобы открыть настройки.</string>
+    <string name="room_unsupported_e2e_algorithm">Шифрование было неправильно настроено, поэтому вы не можете отправлять сообщения. Пожалуйста, обратитесь к администратору, чтобы восстановить работу шифрования.</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Выбрать домашний сервер</string>
+    <string name="login_error_homeserver_from_url_not_found">Не удается связаться с домашним сервером по адресу %s. Пожалуйста, проверьте ссылку или выберите домашний сервер вручную.</string>
+    <string name="action_not_now">Не сейчас</string>
+    <string name="action_enable">Включить</string>
+    <string name="notification_listening_for_notifications">Слежка за уведомлениями</string>
+    <string name="room_error_access_unauthorized">Вам не разрешено подключаться к этой комнате</string>
 </resources>

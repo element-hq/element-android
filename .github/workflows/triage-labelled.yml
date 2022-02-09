@@ -202,3 +202,53 @@ jobs:
         env:
           PROJECT_ID: "PN_kwDOAM0swc3m-g"
           GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+ 
+  move_ftue_issues:
+    name: Z-FTUE to Mobile FTUE board
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: >
+      github.repository == 'vector-im/element-android' &&
+      contains(github.event.issue.labels.*.name, 'Z-FTUE')
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc4AAqVx"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
+
+  move_WTF_issues:
+    name: Z-WTF to WTF board
+    runs-on: ubuntu-latest
+    # Skip in forks
+    if: >
+      github.repository == 'vector-im/element-android' &&
+      contains(github.event.issue.labels.*.name, 'Z-WTF')
+    steps:
+      - uses: octokit/graphql-action@v2.x
+        with:
+          headers: '{"GraphQL-Features": "projects_next_graphql"}'
+          query: |
+            mutation add_to_project($projectid:ID!,$contentid:ID!) {
+              addProjectNextItem(input:{projectId:$projectid contentId:$contentid}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }
+          projectid: ${{ env.PROJECT_ID }}
+          contentid: ${{ github.event.issue.node_id }}
+        env:
+          PROJECT_ID: "PN_kwDOAM0swc4AArk0"
+          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
