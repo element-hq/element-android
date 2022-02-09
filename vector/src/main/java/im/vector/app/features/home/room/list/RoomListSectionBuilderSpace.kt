@@ -397,7 +397,10 @@ class RoomListSectionBuilderSpace(
                                         .launchIn(viewModelScope)
 
                                 val itemCountFlow = livePagedList.asFlow()
-                                        .flatMapLatest { session.getRoomCountFlow(roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())) }
+                                        .flatMapLatest {
+                                            val queryParams = roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())
+                                            session.getRoomCountFlow(queryParams)
+                                        }
 
                                 sections.add(
                                         RoomsSection(
