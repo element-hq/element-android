@@ -399,13 +399,15 @@ class RoomListSectionBuilderSpace(
                                         .flowOn(Dispatchers.Default)
                                         .launchIn(viewModelScope)
 
+                                val itemCountFlow = livePagedList.asFlow()
+                                        .flatMapLatest { session.getRoomCountFlow(roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId())) }
+
                                 sections.add(
                                         RoomsSection(
                                                 sectionName = name,
                                                 livePages = livePagedList,
                                                 notifyOfLocalEcho = notifyOfLocalEcho,
-                                                // TODO not working when switching spaces, how does the query is updated in this case?
-                                                itemCount = session.getRoomCountFlow(roomQueryParams.process(spaceFilterStrategy, appStateHandler.safeActiveSpaceId()))
+                                                itemCount = itemCountFlow
                                         )
                                 )
                             }
