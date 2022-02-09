@@ -129,7 +129,7 @@ internal interface AuthAPI {
 
     /**
      * Refresh the access token given a refresh token.
-     * @param refreshParams the refresh token used to
+     * @param refreshParams the refresh parameters
      */
     @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
     @POST(NetworkConstants.URI_API_PREFIX_PATH_V1 + "refresh")

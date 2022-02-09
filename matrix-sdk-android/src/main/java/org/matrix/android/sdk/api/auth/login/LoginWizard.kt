@@ -54,8 +54,7 @@ interface LoginWizard {
 
     /**
      * Login to the homeserver by sending a custom JsonDict.
-     * The data should contain:
-     * - at least one entry "type" with a String value.
+     * The data should contain at least one entry "type" with a String value.
      */
     suspend fun loginCustom(data: JsonDict): Session
 

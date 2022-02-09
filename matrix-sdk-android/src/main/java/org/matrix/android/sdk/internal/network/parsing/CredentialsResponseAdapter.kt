@@ -27,10 +27,10 @@ class CredentialsResponseAdapter {
     @FromJson
     fun credentialsFromResponse(responseCredentials: Credentials): Credentials {
         if (responseCredentials.expiresInMs == null || responseCredentials.expiryTs != null) {
-            // expiryTs already estimated or doesn't apply return existing credential
+            // expiryTs already estimated or doesn't apply, return existing credential.
             return responseCredentials
         }
-        // We have received a credential response from the server estimate the expiry datetime.
+        // We have received a credential response from the server, estimate the expiry datetime.
         return responseCredentials.copy(expiryTs = System.currentTimeMillis() + responseCredentials.expiresInMs)
     }
 }

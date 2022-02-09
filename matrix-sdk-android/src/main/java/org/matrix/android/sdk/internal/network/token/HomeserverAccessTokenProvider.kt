@@ -50,6 +50,8 @@ internal class HomeserverAccessTokenProvider @Inject constructor(
         private const val PREEMPT_REFRESH_EXPIRATION_INTERVAL = 60000
     }
 
+    override val supportsRefreshTokens = true
+
     override suspend fun getToken(serverError: Failure.ServerError?): String? {
         var accessToken: String?
         // We synchronise here so that when refresh is required, a single request becomes the leader.

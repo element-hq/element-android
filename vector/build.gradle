@@ -159,7 +159,7 @@ android {
         buildConfigField "Boolean", "enableLocationSharing", "true"
         buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
 
-        buildConfigField "Boolean", "enableRefreshTokens", "false"
+        buildConfigField "Boolean", "enableRefreshTokenAuth", "false"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 

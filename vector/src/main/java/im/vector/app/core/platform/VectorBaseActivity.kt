@@ -304,6 +304,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
                 ?: UnauthenticatedError.ErrorCode.M_UNKNOWN
         val unauthenticatedError = UnauthenticatedError(errorCode, globalError.errorReason, globalError.refreshTokenAuth, globalError.softLogout)
         analyticsTracker.capture(unauthenticatedError)
+
         mainActivityStarted = true
 
         MainActivity.restartApp(this,

@@ -42,7 +42,7 @@ data class Credentials(
         @Json(name = "expires_in_ms") val expiresInMs: Long?,
         /**
          * The timestamp that indicates when the access token will expire.
-         * It is estimated using `expiresInMs` when the SDK retrieved it from the homeserver.
+         * It is estimated using `expiresInMs` when the SDK retrieves it from the homeserver.
          */
         @Json(name = "expiry_ts") val expiryTs: Long?,
         /**

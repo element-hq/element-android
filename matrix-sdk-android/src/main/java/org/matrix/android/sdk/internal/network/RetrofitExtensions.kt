@@ -79,7 +79,8 @@ internal fun okhttp3.Response.peekFailure(globalErrorReceiver: GlobalErrorReceiv
     if (isSuccessful) {
         return null
     }
-    return toFailure(this.peekBody(1024), code, globalErrorReceiver)
+    val megabyteInBytes: Long = 1024 * 1024
+    return toFailure(this.peekBody(megabyteInBytes), code, globalErrorReceiver)
 }
 
 private fun toFailure(errorBody: ResponseBody?, httpCode: Int, globalErrorReceiver: GlobalErrorReceiver?): Failure {
