@@ -52,6 +52,18 @@ data class Interaction(
         SpacePanelSwitchSpace,
 
         /**
+         * User interacted with pin to sidebar checkboxes in the quick settings
+         * menu of Element Web/Desktop.
+         */
+        WebQuickSettingsPinToSidebarCheckbox,
+
+        /**
+         * User interacted with the theme dropdown in the quick settings menu of
+         * Element Web/Desktop.
+         */
+        WebQuickSettingsThemeDropdown,
+
+        /**
          * User accessed the room invite flow using the button at the top of the
          * room member list in the right panel of Element Web/Desktop.
          */
@@ -152,6 +164,24 @@ data class Interaction(
          * settings dialog in Element Web/Desktop.
          */
         WebRoomSettingsLeaveButton,
+
+        /**
+         * User interacted with the theme radio selector in the Appearance tab
+         * of Settings in Element Web/Desktop.
+         */
+        WebSettingsAppearanceTabThemeSelector,
+
+        /**
+         * User interacted with the pre-built space checkboxes in the Sidebar
+         * tab of Settings in Element Web/Desktop.
+         */
+        WebSettingsSidebarTabSpacesCheckbox,
+
+        /**
+         * User clicked the theme toggle button in the user menu of Element
+         * Web/Desktop.
+         */
+        WebUserMenuThemeToggleButton,
     }
 
     enum class InteractionType {
