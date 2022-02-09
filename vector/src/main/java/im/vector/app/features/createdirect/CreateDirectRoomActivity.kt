@@ -22,6 +22,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Fail
@@ -44,6 +45,10 @@ import im.vector.app.core.utils.onPermissionDeniedSnackbar
 import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.features.analytics.plan.Screen
 import im.vector.app.features.contactsbook.ContactsBookFragment
+import im.vector.app.features.qrcode.QrCodeScannerEvents
+import im.vector.app.features.qrcode.QrCodeScannerFragment
+import im.vector.app.features.qrcode.QrCodeScannerViewModel
+import im.vector.app.features.qrcode.QrScannerArgs
 import im.vector.app.features.userdirectory.UserListFragment
 import im.vector.app.features.userdirectory.UserListFragmentArgs
 import im.vector.app.features.userdirectory.UserListSharedAction
@@ -59,6 +64,8 @@ import javax.inject.Inject
 class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private val viewModel: CreateDirectRoomViewModel by viewModel()
+    private val qrViewModel: QrCodeScannerViewModel by viewModel()
+
     private lateinit var sharedActionViewModel: UserListSharedActionViewModel
     @Inject lateinit var errorFormatter: ErrorFormatter
 
@@ -93,11 +100,38 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
         viewModel.onEach(CreateDirectRoomViewState::createAndInviteState) {
             renderCreateAndInviteState(it)
         }
+
+        viewModel.observeViewEvents {
+            when (it) {
+                CreateDirectRoomViewEvents.InvalidCode -> {
+                    Toast.makeText(this, R.string.invalid_qr_code_uri, Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                CreateDirectRoomViewEvents.DmSelf      -> {
+                    Toast.makeText(this, R.string.cannot_dm_self, Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            }.exhaustive
+        }
+
+        qrViewModel.observeViewEvents {
+            when (it) {
+                is QrCodeScannerEvents.CodeParsed  -> {
+                    viewModel.handle(CreateDirectRoomAction.QrScannedAction(it.result))
+                }
+                is QrCodeScannerEvents.ParseFailed -> {
+                    Toast.makeText(this, R.string.qr_code_not_scanned, Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+                else                               -> Unit
+            }.exhaustive
+        }
     }
 
     private fun openAddByQrCode() {
         if (checkPermissions(PERMISSIONS_FOR_TAKING_PHOTO, this, permissionCameraLauncher)) {
-            addFragment(views.container, CreateDirectRoomByQrCodeFragment::class.java)
+            val args = QrScannerArgs(showExtraButtons = false, R.string.add_by_qr_code)
+            addFragment(views.container, QrCodeScannerFragment::class.java, args)
         }
     }
 
@@ -118,7 +152,7 @@ class CreateDirectRoomActivity : SimpleFragmentActivity() {
 
     private val permissionCameraLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
         if (allGranted) {
-            addFragment(views.container, CreateDirectRoomByQrCodeFragment::class.java)
+            addFragment(views.container, QrCodeScannerFragment::class.java)
         } else if (deniedPermanently) {
             onPermissionDeniedSnackbar(R.string.permissions_denied_qr_code)
         }

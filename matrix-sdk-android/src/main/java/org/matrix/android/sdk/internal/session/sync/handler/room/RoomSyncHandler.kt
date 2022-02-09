@@ -36,10 +36,13 @@ import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
+import org.matrix.android.sdk.internal.database.helper.updateThreadSummaryIfNeeded
+import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.asDomain
 import org.matrix.android.sdk.internal.database.mapper.toEntity
 import org.matrix.android.sdk.internal.database.model.ChunkEntity
 import org.matrix.android.sdk.internal.database.model.CurrentStateEventEntity
+import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
@@ -81,6 +84,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val threadsAwarenessHandler: ThreadsAwarenessHandler,
                                                    private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
                                                    @UserId private val userId: String,
+                                                   private val lightweightSettingsStorage: LightweightSettingsStorage,
                                                    private val timelineInput: TimelineInput,
                                                    private val liveEventService: Lazy<StreamEventsManager>) {
 
@@ -363,10 +367,12 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         val eventIds = ArrayList<String>(eventList.size)
         val roomMemberContentsByUser = HashMap<String, RoomMemberContent?>()
 
+        val optimizedThreadSummaryMap = hashMapOf<String, EventEntity>()
         for (event in eventList) {
             if (event.eventId == null || event.senderId == null || event.type == null) {
                 continue
             }
+
             eventIds.add(event.eventId)
             liveEventService.get().dispatchLiveEventReceived(event, roomId, insertType == EventInsertType.INITIAL_SYNC)
 
@@ -375,14 +381,13 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             if (event.isEncrypted() && !isInitialSync) {
                 decryptIfNeeded(event, roomId)
             }
-
-            threadsAwarenessHandler.handleIfNeeded(
-                    realm = realm,
-                    roomId = roomId,
-                    event = event)
+            var contentToInject: String? = null
+            if (!isInitialSync) {
+                contentToInject = threadsAwarenessHandler.makeEventThreadAware(realm, roomId, event)
+            }
 
             val ageLocalTs = event.unsignedData?.age?.let { syncLocalTimestampMillis - it }
-            val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, insertType)
+            val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs, contentToInject).copyToRealmOrIgnore(realm, insertType)
             if (event.stateKey != null) {
                 CurrentStateEventEntity.getOrCreate(realm, roomId, event.stateKey, event.type).apply {
                     eventId = event.eventId
@@ -402,6 +407,15 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             }
 
             chunkEntity.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberContentsByUser)
+            if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
+                eventEntity.rootThreadEventId?.let {
+                    // This is a thread event
+                    optimizedThreadSummaryMap[it] = eventEntity
+                } ?: run {
+                    // This is a normal event or a root thread one
+                    optimizedThreadSummaryMap[eventEntity.eventId] = eventEntity
+                }
+            }
             // Give info to crypto module
             cryptoService.onLiveEvent(roomEntity.roomId, event)
 
@@ -426,9 +440,15 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 }
             }
         }
-
         // Handle deletion of [stuck] local echos if needed
-         deleteLocalEchosIfNeeded(insertType, roomEntity, eventList)
+        deleteLocalEchosIfNeeded(insertType, roomEntity, eventList)
+        if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
+            optimizedThreadSummaryMap.updateThreadSummaryIfNeeded(
+                    roomId = roomId,
+                    realm = realm,
+                    chunkEntity = chunkEntity,
+                    currentUserId = userId)
+        }
 
         // posting new events to timeline if any is registered
         timelineInput.onNewTimelineEvents(roomId = roomId, eventIds = eventIds)

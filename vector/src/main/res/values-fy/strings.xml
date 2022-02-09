@@ -1101,7 +1101,7 @@
     <string name="command_description_nick">Wiziget jo werjeftenamme</string>
     <string name="room_widget_permission_display_name">Jo werjeftenamme</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Befettet wizigingen yn avatar en werjeftenamme.</string>
-    <string name="settings_show_room_member_state_events_summary">Befettet útnûging/meidwaan/ferlitten/skopt/ferballe-barrens en wizigingen avatar/werjeftenamme.</string>
+    <string name="settings_show_room_member_state_events_summary">Befettet útnûging/meidwaan/ferlitten/fuortsmiten/ferballe-barrens en wizigingen avatar/werjeftenamme.</string>
     <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} sil periodyk op de eftergrûn syngronisearje (konfigurearber).
 \nDit hat in negative ynfloed op jo batterij- en datagebrûk. Der sil in melding toand wurde ta ynformaasje.</string>
     <string name="settings_messages_containing_display_name">Myn werjeftenamme</string>
@@ -1271,7 +1271,7 @@
     <string name="permissions_action_not_performed_missing_permissions">Sorry. De aksje is net tapast fanwegen ûntbrekkende rjochten</string>
     <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} kin jo adresboek benaderje om oare Matrix-brûkers te finen oan de hân fan harren e-mailadressen en telefoannûmers.
 \n
-\nWolle jo jo adresboek hjir foar diele.</string>
+\nWolle jo jo adresboek hjir foar diele\?</string>
     <string name="template_permissions_rationale_msg_contacts">${app_name} kin jo adresboek benaderje om oare Matrix-brûkers te finen oan de hân fan harren e-mailadressen en telefoannûmers. As jo it goed fine om jo adresboek hjirfoar te dielen, jou dan tagong op de folgjende pop-up.</string>
     <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} hat tagong nedich ta jo kamera en mikrofoan om fideo-oproppen te meitsjen.
 \n
@@ -1320,7 +1320,7 @@
     <string name="call_connecting">Oprop is oan it ferbinen…</string>
     <string name="template_e2e_re_request_encryption_key_dialog_content">Start ${app_name} op in oar apparaat dat it berjocht ûntsiferje kin, sadat it de kaaien nei dizze sesje stjoere kin.</string>
     <string name="login_error_homeserver_from_url_not_found">Thússerver-URL %s net te berikken. Kontrolearje jo keppeling of kies hânmjittich in oare thússerver.</string>
-    <string name="space_participants_ban_prompt_msg">Troch dizze brûker te ferballen sil dy fuortsmiten wurde út dizze romte en foarkommen dat dy opnij ta treed.</string>
+    <string name="space_participants_ban_prompt_msg">Troch dizze brûker te ferballen, sil dy fuortsmiten wurde út dizze romte en foarkommen wurde dat dy opnij binnen komt.</string>
     <string name="room_participants_ban_prompt_msg">As in brûker ferballe wurdt, wurdt dizze út dizze keamer fuortsmiten en wurdt der foarkommen dat dy opnij lid wurdt.</string>
     <string name="room_participants_unban_title">Ferballing brûker ûngedien meitsje</string>
     <string name="room_participants_ban_reason">Reden foar ferballing</string>

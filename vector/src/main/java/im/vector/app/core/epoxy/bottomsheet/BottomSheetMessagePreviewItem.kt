@@ -77,6 +77,9 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
     var locationPinProvider: LocationPinProvider? = null
 
     @EpoxyAttribute
+    var locationOwnerId: String? = null
+
+    @EpoxyAttribute
     var movementMethod: MovementMethod? = null
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
@@ -109,7 +112,7 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
                     .apply(RequestOptions.centerCropTransform())
                     .into(holder.staticMapImageView)
 
-            locationPinProvider?.create(matrixItem.id) { pinDrawable ->
+            locationPinProvider?.create(locationOwnerId) { pinDrawable ->
                 GlideApp.with(holder.staticMapPinImageView)
                         .load(pinDrawable)
                         .into(holder.staticMapPinImageView)

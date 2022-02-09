@@ -17,14 +17,22 @@
 package im.vector.app.features.home.room.detail.timeline.helper
 
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.features.home.room.detail.timeline.style.TimelineLayoutSettings
+import im.vector.app.features.home.room.detail.timeline.style.TimelineLayoutSettingsProvider
 import javax.inject.Inject
 
-class AvatarSizeProvider @Inject constructor(private val dimensionConverter: DimensionConverter) {
+class AvatarSizeProvider @Inject constructor(private val dimensionConverter: DimensionConverter,
+                                             private val layoutSettingsProvider: TimelineLayoutSettingsProvider) {
 
-    private val avatarStyle = AvatarStyle.SMALL
+    private val avatarStyle by lazy {
+        when (layoutSettingsProvider.getLayoutSettings()) {
+            TimelineLayoutSettings.MODERN -> AvatarStyle.SMALL
+            TimelineLayoutSettings.BUBBLE -> AvatarStyle.BUBBLE
+        }
+    }
 
     val leftGuideline: Int by lazy {
-        dimensionConverter.dpToPx(avatarStyle.avatarSizeDP + 8)
+        dimensionConverter.dpToPx(avatarStyle.avatarSizeDP + avatarStyle.marginDP)
     }
 
     val avatarSize: Int by lazy {
@@ -33,11 +41,12 @@ class AvatarSizeProvider @Inject constructor(private val dimensionConverter: Dim
 
     companion object {
 
-        enum class AvatarStyle(val avatarSizeDP: Int) {
-            BIG(50),
-            MEDIUM(40),
-            SMALL(30),
-            NONE(0)
+        enum class AvatarStyle(val avatarSizeDP: Int, val marginDP: Int) {
+            BIG(50, 8),
+            MEDIUM(40, 8),
+            SMALL(30, 8),
+            BUBBLE(28, 4),
+            NONE(0, 8)
         }
     }
 }

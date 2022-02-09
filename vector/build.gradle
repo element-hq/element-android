@@ -14,11 +14,11 @@ kapt {
 
 // Note: 2 digits max for each value
 ext.versionMajor = 1
-ext.versionMinor = 3
+ext.versionMinor = 4
 // Note: even values are reserved for regular release, odd values for hotfix release.
 // When creating a hotfix, you should decrease the value, since the current value
 // is the value for the next regular release.
-ext.versionPatch = 18
+ext.versionPatch = 0
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -152,6 +152,9 @@ android {
         //  If set, MSC3086 asserted identity messages sent on VoIP calls will cause the call to appear in the room corresponding to the asserted identity.
         //  This *must* only be set in trusted environments.
         buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
+
+        // Indicates whether or not threading support is enabled
+        buildConfigField "Boolean", "THREADING_ENABLED", "${isThreadingEnabled}"
 
         buildConfigField "Boolean", "enableLocationSharing", "true"
         buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
@@ -443,7 +446,7 @@ dependencies {
 
     implementation libs.github.glide
     kapt libs.github.glideCompiler
-    implementation 'com.github.yalantis:ucrop:2.2.7'
+    implementation 'com.github.yalantis:ucrop:2.2.8'
 
     // Badge for compatibility
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'

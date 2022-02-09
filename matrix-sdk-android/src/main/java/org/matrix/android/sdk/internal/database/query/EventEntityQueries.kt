@@ -49,6 +49,11 @@ internal fun EventEntity.Companion.where(realm: Realm, eventId: String): RealmQu
             .equalTo(EventEntityFields.EVENT_ID, eventId)
 }
 
+internal fun EventEntity.Companion.whereRoomId(realm: Realm, roomId: String): RealmQuery<EventEntity> {
+    return realm.where<EventEntity>()
+            .equalTo(EventEntityFields.ROOM_ID, roomId)
+}
+
 internal fun EventEntity.Companion.where(realm: Realm, eventIds: List<String>): RealmQuery<EventEntity> {
     return realm.where<EventEntity>()
             .`in`(EventEntityFields.EVENT_ID, eventIds.toTypedArray())
@@ -84,4 +89,9 @@ internal fun RealmList<EventEntity>.find(eventId: String): EventEntity? {
 
 internal fun RealmList<EventEntity>.fastContains(eventId: String): Boolean {
     return this.find(eventId) != null
+}
+
+internal fun EventEntity.Companion.whereRootThreadEventId(realm: Realm, rootThreadEventId: String): RealmQuery<EventEntity> {
+    return realm.where<EventEntity>()
+            .equalTo(EventEntityFields.ROOT_THREAD_EVENT_ID, rootThreadEventId)
 }

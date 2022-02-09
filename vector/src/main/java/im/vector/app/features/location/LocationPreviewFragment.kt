@@ -54,8 +54,11 @@ class LocationPreviewFragment @Inject constructor(
 
         mapView = WeakReference(views.mapView)
         views.mapView.onCreate(savedInstanceState)
-        views.mapView.initialize(urlMapProvider.mapUrl)
-        loadPinDrawable()
+
+        lifecycleScope.launchWhenCreated {
+            views.mapView.initialize(urlMapProvider.getMapUrl())
+            loadPinDrawable()
+        }
     }
 
     override fun onResume() {
@@ -121,7 +124,7 @@ class LocationPreviewFragment @Inject constructor(
                         MapState(
                                 zoomOnlyOnce = true,
                                 pinLocationData = location,
-                                pinId = args.locationOwnerId,
+                                pinId = args.locationOwnerId ?: DEFAULT_PIN_ID,
                                 pinDrawable = pinDrawable
                         )
                 )

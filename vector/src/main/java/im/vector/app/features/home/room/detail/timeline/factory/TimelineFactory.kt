@@ -35,8 +35,14 @@ private val secondaryTimelineAllowedTypes = listOf(
 
 class TimelineFactory @Inject constructor(private val session: Session, private val timelineSettingsFactory: TimelineSettingsFactory) {
 
-    fun createTimeline(coroutineScope: CoroutineScope, mainRoom: Room, eventId: String?): Timeline {
-        val settings = timelineSettingsFactory.create()
+    fun createTimeline(
+            coroutineScope: CoroutineScope,
+            mainRoom: Room,
+            eventId: String?,
+            rootThreadEventId: String?
+    ): Timeline {
+        val settings = timelineSettingsFactory.create(rootThreadEventId)
+
         if (!session.vectorCallService.protocolChecker.supportVirtualRooms) {
             return mainRoom.createTimeline(eventId, settings)
         }
