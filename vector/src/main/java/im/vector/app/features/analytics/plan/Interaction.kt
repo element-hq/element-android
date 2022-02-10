@@ -52,6 +52,18 @@ data class Interaction(
         SpacePanelSwitchSpace,
 
         /**
+         * User clicked the create room button in the + context menu of the room
+         * list header in Element Web/Desktop.
+         */
+        WebAddExistingToSpaceDialogCreateRoomButton,
+
+        /**
+         * User clicked the create room button in the home page of Element
+         * Web/Desktop.
+         */
+        WebHomeCreateRoomButton,
+
+        /**
          * User interacted with pin to sidebar checkboxes in the quick settings
          * menu of Element Web/Desktop.
          */
@@ -94,6 +106,12 @@ data class Interaction(
         WebRightPanelRoomUserInfoInviteButton,
 
         /**
+         * User clicked the create room button in the room directory of Element
+         * Web/Desktop.
+         */
+        WebRoomDirectoryCreateRoomButton,
+
+        /**
          * User adjusted their favourites using the context menu on the header
          * of a room in Element Web/Desktop.
          */
@@ -130,6 +148,12 @@ data class Interaction(
         WebRoomHeaderContextMenuSettingsItem,
 
         /**
+         * User clicked the create room button in the + context menu of the room
+         * list header in Element Web/Desktop.
+         */
+        WebRoomListHeaderPlusMenuCreateRoomItem,
+
+        /**
          * User adjusted their favourites using the context menu on a room tile
          * in the room list in Element Web/Desktop.
          */
@@ -160,10 +184,22 @@ data class Interaction(
         WebRoomListRoomTileNotificationsMenu,
 
         /**
+         * User clicked the create room button in the + context menu of the
+         * rooms sublist in Element Web/Desktop.
+         */
+        WebRoomListRoomsSublistPlusMenuCreateRoomItem,
+
+        /**
          * User interacted with leave action in the general tab of the room
          * settings dialog in Element Web/Desktop.
          */
         WebRoomSettingsLeaveButton,
+
+        /**
+         * User interacted with the prompt to create a new room when adjusting
+         * security settings in an existing room in Element Web/Desktop.
+         */
+        WebRoomSettingsSecurityTabCreateNewRoomButton,
 
         /**
          * User interacted with the theme radio selector in the Appearance tab
@@ -176,6 +212,18 @@ data class Interaction(
          * tab of Settings in Element Web/Desktop.
          */
         WebSettingsSidebarTabSpacesCheckbox,
+
+        /**
+         * User clicked the create room button in the + context menu of the room
+         * list header in Element Web/Desktop.
+         */
+        WebSpaceContextMenuNewRoomItem,
+
+        /**
+         * User clicked the create room button in the + context menu of the room
+         * list header in Element Web/Desktop.
+         */
+        WebSpaceHomeCreateRoomButton,
 
         /**
          * User clicked the theme toggle button in the user menu of Element

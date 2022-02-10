@@ -49,6 +49,10 @@ data class UserProperties(
          */
         val ftueUseCaseSelection: FtueUseCaseSelection? = null,
         /**
+         * Number of joined rooms the user has favourited
+         */
+        val numFavouriteRooms: Int? = null,
+        /**
          * Number of spaces (and sub-spaces) the user is joined to
          */
         val numSpaces: Int? = null,
@@ -84,6 +88,7 @@ data class UserProperties(
             WebMetaSpaceOrphansEnabled?.let { put("WebMetaSpaceOrphansEnabled", it) }
             WebMetaSpacePeopleEnabled?.let { put("WebMetaSpacePeopleEnabled", it) }
             ftueUseCaseSelection?.let { put("ftueUseCaseSelection", it.name) }
+            numFavouriteRooms?.let { put("numFavouriteRooms", it) }
             numSpaces?.let { put("numSpaces", it) }
         }.takeIf { it.isNotEmpty() }
     }

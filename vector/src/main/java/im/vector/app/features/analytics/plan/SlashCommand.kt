@@ -32,8 +32,8 @@ data class SlashCommand(
 ) : VectorAnalyticsEvent {
 
     enum class Command {
-        invite,
-        part,
+        Invite,
+        Part,
     }
 
     override fun getName() = "SlashCommand"
