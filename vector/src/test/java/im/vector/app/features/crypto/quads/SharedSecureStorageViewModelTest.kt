@@ -102,10 +102,16 @@ class SharedSecureStorageViewModelTest {
             viewModel.handle(SharedSecureStorageAction.UseKey)
 
             test
-                    .assertState(aViewState(
-                            hasPassphrase = true,
-                            step = SharedSecureStorageViewState.Step.EnterKey
-                    ))
+                    .assertStates(
+                            aViewState(
+                                    hasPassphrase = true,
+                                    step = SharedSecureStorageViewState.Step.EnterPassphrase
+                            ),
+                            aViewState(
+                                    hasPassphrase = true,
+                                    step = SharedSecureStorageViewState.Step.EnterKey
+                            )
+                    )
                     .finish()
         }
     }
@@ -121,10 +127,20 @@ class SharedSecureStorageViewModelTest {
             viewModel.handle(SharedSecureStorageAction.Back)
 
             test
-                    .assertState(aViewState(
-                    hasPassphrase = true,
-                    step = SharedSecureStorageViewState.Step.EnterPassphrase
-            ))
+                    .assertStates(
+                            aViewState(
+                                    hasPassphrase = true,
+                                    step = SharedSecureStorageViewState.Step.EnterPassphrase
+                            ),
+                            aViewState(
+                                    hasPassphrase = true,
+                                    step = SharedSecureStorageViewState.Step.EnterKey
+                            ),
+                            aViewState(
+                                    hasPassphrase = true,
+                                    step = SharedSecureStorageViewState.Step.EnterPassphrase
+                            )
+                    )
                     .finish()
         }
     }

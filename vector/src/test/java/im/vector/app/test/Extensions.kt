@@ -21,18 +21,19 @@ import im.vector.app.core.platform.VectorViewEvents
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.platform.VectorViewModelAction
 import kotlinx.coroutines.CoroutineScope
-import org.amshove.kluent.shouldBeEqualTo
 
 fun String.trimIndentOneLine() = trimIndent().replace("\n", "")
 
 fun <S : MavericksState, VA : VectorViewModelAction, VE : VectorViewEvents> VectorViewModel<S, VA, VE>.test(coroutineScope: CoroutineScope): ViewModelTest<S, VE> {
-    val state = { com.airbnb.mvrx.withState(this) { it } }
+//    val state = { com.airbnb.mvrx.withState(this) { it } }
+
+    val state = stateFlow.test(coroutineScope)
     val viewEvents = viewEvents.stream().test(coroutineScope)
     return ViewModelTest(state, viewEvents)
 }
 
 class ViewModelTest<S, VE>(
-        val state: () -> S,
+        val states: FlowTestObserver<S>,
         val viewEvents: FlowTestObserver<VE>
 ) {
 
@@ -41,12 +42,18 @@ class ViewModelTest<S, VE>(
         return this
     }
 
+    fun assertStates(vararg expected: S): ViewModelTest<S, VE> {
+        states.assertValues(*expected)
+        return this
+    }
+
     fun assertState(expected: S): ViewModelTest<S, VE> {
-        state() shouldBeEqualTo expected
+        states.assertValues(expected)
         return this
     }
 
     fun finish() {
+        states.finish()
         viewEvents.finish()
     }
 }
