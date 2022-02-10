@@ -165,6 +165,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 ?.let {
                     callViewModel.handle(VectorCallViewActions.SwitchCall(it))
                 }
+        this.intent = intent
     }
 
     override fun getMenuRes() = R.menu.vector_call
