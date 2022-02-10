@@ -17,9 +17,11 @@
 package im.vector.app.features.onboarding.ftueauth
 
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.databinding.FragmentFtueDisplayNameBinding
 import im.vector.app.features.onboarding.OnboardingAction
 import javax.inject.Inject
@@ -36,6 +38,19 @@ class FtueAuthChooseDisplayNameFragment @Inject constructor() : AbstractFtueAuth
     }
 
     private fun setupViews() {
+        views.displayNameInput.editText?.addTextChangedListener(object : SimpleTextWatcher() {
+            override fun afterTextChanged(s: Editable) {
+                val newContent = s.toString()
+                views.displayNameSubmit.isEnabled = newContent.isNotEmpty()
+            }
+        })
+
+        views.displayNameSubmit.setOnClickListener {
+            val newDisplayName = views.displayNameInput.editText?.text.toString()
+            viewModel.handle(OnboardingAction.UpdateDisplayName(newDisplayName))
+        }
+
+        views.displayNameSkip.setOnClickListener { viewModel.handle(OnboardingAction.UpdateDisplayNameSkipped) }
     }
 
     override fun resetViewModel() {

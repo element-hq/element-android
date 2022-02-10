@@ -225,6 +225,8 @@ class FtueAuthVariant(
             OnboardingViewEvents.OnAccountSignedIn                             -> onAccountSignedIn()
             OnboardingViewEvents.OnPersonalizeProfile                          -> onPersonalizeProfile()
             OnboardingViewEvents.OnTakeMeHome                                  -> navigateToHome(createdAccount = true)
+            OnboardingViewEvents.OnDisplayNameUpdated                          -> onDisplayNameUpdated()
+            OnboardingViewEvents.OnDisplayNameSkipped                          -> onDisplayNameUpdated()
         }.exhaustive
     }
 
@@ -397,7 +399,12 @@ class FtueAuthVariant(
         )
     }
 
-    override fun onToolbarBack() {
-        activity.supportFragmentManager.popBackStack()
+    private fun onDisplayNameUpdated() {
+        // TODO go to real fragment
+        activity.addFragmentToBackstack(views.loginFragmentContainer,
+                FtueAuthChooseDisplayNameFragment::class.java,
+                option = commonOption
+        )
     }
+
 }
