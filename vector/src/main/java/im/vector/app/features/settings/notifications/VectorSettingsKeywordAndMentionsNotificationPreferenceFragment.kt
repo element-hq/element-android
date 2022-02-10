@@ -45,7 +45,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        analyticsScreenName = Screen.ScreenName.SettingsMentionsAndKeywords
+        analyticsScreenName = Screen.ScreenName.MobileSettingsMentionsAndKeywords
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

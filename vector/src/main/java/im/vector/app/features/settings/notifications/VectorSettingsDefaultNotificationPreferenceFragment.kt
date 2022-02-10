@@ -38,7 +38,7 @@ class VectorSettingsDefaultNotificationPreferenceFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        analyticsScreenName = Screen.ScreenName.SettingsDefaultNotifications
+        analyticsScreenName = Screen.ScreenName.MobileSettingsDefaultNotifications
     }
 
     override fun bindPref() {

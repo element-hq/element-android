@@ -18,7 +18,7 @@ package im.vector.app.features.analytics
 
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
-import im.vector.app.features.analytics.plan.Identity
+import im.vector.app.features.analytics.plan.UserProperties
 
 interface AnalyticsTracker {
     /**
@@ -34,5 +34,5 @@ interface AnalyticsTracker {
     /**
      * Update user specific properties
      */
-    fun updateUserProperties(identity: Identity)
+    fun updateUserProperties(userProperties: UserProperties)
 }

@@ -22,29 +22,32 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 // https://github.com/matrix-org/matrix-analytics-events/
 
 /**
- * Triggered when the user clicks/taps on a UI element.
+ * Triggered when the user sends a message via the composer.
  */
-data class Click(
+data class Composer(
         /**
-         * The index of the element, if its in a list of elements.
+         * Whether the user was using the composer inside of a thread.
          */
-        val index: Int? = null,
+        val inThread: Boolean,
         /**
-         * The unique name of this element.
+         * Whether the user's composer interaction was editing a previously sent
+         * event.
          */
-        val name: Name,
+        val isEditing: Boolean,
+        /**
+         * Whether the user's composer interaction was a reply to a previously
+         * sent event.
+         */
+        val isReply: Boolean,
 ) : VectorAnalyticsEvent {
 
-    enum class Name {
-        SendMessageButton,
-    }
-
-    override fun getName() = "Click"
+    override fun getName() = "Composer"
 
     override fun getProperties(): Map<String, Any>? {
         return mutableMapOf<String, Any>().apply {
-            index?.let { put("index", it) }
-            put("name", name.name)
+            put("inThread", inThread)
+            put("isEditing", isEditing)
+            put("isReply", isReply)
         }.takeIf { it.isNotEmpty() }
     }
 }

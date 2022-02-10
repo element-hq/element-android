@@ -22,42 +22,25 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 // https://github.com/matrix-org/matrix-analytics-events/
 
 /**
- * The user properties to apply when identifying
+ * Triggered when the user runs a slash command in their composer.
  */
-data class Identity(
+data class SlashCommand(
         /**
-         * The selected messaging use case during the onboarding flow.
+         * The name of this command.
          */
-        val ftueUseCaseSelection: FtueUseCaseSelection? = null,
+        val command: Command,
 ) : VectorAnalyticsEvent {
 
-    enum class FtueUseCaseSelection {
-        /**
-         * The third option, Communities.
-         */
-        CommunityMessaging,
-
-        /**
-         * The first option, Friends and family.
-         */
-        PersonalMessaging,
-
-        /**
-         * The footer option to skip the question.
-         */
-        Skip,
-
-        /**
-         * The second option, Teams.
-         */
-        WorkMessaging,
+    enum class Command {
+        Invite,
+        Part,
     }
 
-    override fun getName() = "Identity"
+    override fun getName() = "SlashCommand"
 
-    override fun getProperties(): Map<String, Any?>? {
-        return mutableMapOf<String, Any?>().apply {
-            put("ftueUseCaseSelection", ftueUseCaseSelection?.name)
+    override fun getProperties(): Map<String, Any>? {
+        return mutableMapOf<String, Any>().apply {
+            put("command", command.name)
         }.takeIf { it.isNotEmpty() }
     }
 }
