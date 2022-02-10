@@ -26,6 +26,13 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_end_percent" />
 
+        <Space
+            android:id="@+id/headerSpacing"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            app:layout_constraintBottom_toTopOf="@id/displayNameHeaderIcon"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <ImageView
             android:id="@+id/displayNameHeaderIcon"
             android:layout_width="wrap_content"
