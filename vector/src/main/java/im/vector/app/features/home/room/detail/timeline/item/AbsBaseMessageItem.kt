@@ -17,7 +17,6 @@
 package im.vector.app.features.home.room.detail.timeline.item
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +29,7 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.ui.views.ShieldImageView
+import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
@@ -37,6 +37,9 @@ import im.vector.app.features.home.room.detail.timeline.view.TimelineMessageLayo
 import im.vector.app.features.reactions.widget.ReactionButton
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.send.SendState
+
+
+private const val MAX_REACTIONS_TO_SHOW = 8
 
 /**
  * Base timeline item with reactions and read receipts.
@@ -99,7 +102,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
             val reactionsToShow = if (reactionsSummary.showAll) {
                 reactions
             } else {
-                reactions.take(8)
+                reactions.take(MAX_REACTIONS_TO_SHOW)
             }
             reactionsToShow.forEach { reaction ->
                 val reactionButton = ReactionButton(holder.view.context)
@@ -111,19 +114,19 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
                 reactionButton.isEnabled = reaction.synced
                 holder.reactionsContainer.addView(reactionButton)
             }
-            if (reactions.count() > 8) {
-                val showReactionsTextView = createReactionTextView(holder.view.context)
+            if (reactions.count() > MAX_REACTIONS_TO_SHOW) {
+                val showReactionsTextView = createReactionTextView(holder, 6)
                 if (reactionsSummary.showAll) {
                     showReactionsTextView.setText(R.string.message_reaction_show_less)
                     showReactionsTextView.onClick { reactionsSummary.onShowLessClicked() }
                 } else {
-                    val moreCount = reactions.count() - 8
+                    val moreCount = reactions.count() - MAX_REACTIONS_TO_SHOW
                     showReactionsTextView.text = holder.view.resources.getString(R.string.message_reaction_show_more, moreCount)
                     showReactionsTextView.onClick { reactionsSummary.onShowMoreClicked() }
                 }
                 holder.reactionsContainer.addView(showReactionsTextView)
             }
-            val addMoreReactionsTextView = createReactionTextView(holder.view.context)
+            val addMoreReactionsTextView = createReactionTextView(holder, 14)
             addMoreReactionsTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add_reaction_small, 0, 0, 0)
             addMoreReactionsTextView.onClick { reactionsSummary.onAddMoreClicked() }
             holder.reactionsContainer.addView(addMoreReactionsTextView)
@@ -131,13 +134,14 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
         }
     }
 
-    private fun createReactionTextView(context: Context): TextView {
-        return TextView(context).apply {
+    private fun createReactionTextView(holder: H, horizontalPaddingDp: Int): TextView {
+        return TextView(holder.view.context).apply {
             textSize = 10f
             gravity = Gravity.CENTER
             minimumHeight = resources.getDimensionPixelSize(R.dimen.chat_reaction_min_height)
+            minimumWidth = resources.getDimensionPixelSize(R.dimen.chat_reaction_min_width)
             background = getDrawable(context, R.drawable.reaction_rounded_rect_shape_off)
-            val padding = resources.getDimensionPixelSize(R.dimen.layout_horizontal_margin)
+            val padding = holder.dimensionConverter.dpToPx(horizontalPaddingDp)
             setPadding(padding, 0, padding, 0)
         }
     }
@@ -155,6 +159,9 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
     }
 
     abstract class Holder(@IdRes stubId: Int) : BaseEventItem.BaseHolder(stubId) {
+        val dimensionConverter by lazy {
+            DimensionConverter(view.resources)
+        }
         val reactionsContainer by bind<ViewGroup>(R.id.reactionsContainer)
         val e2EDecorationView by bind<ShieldImageView>(R.id.messageE2EDecoration)
     }

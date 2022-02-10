@@ -50,7 +50,7 @@ import javax.inject.Inject
 class MessageInformationDataFactory @Inject constructor(private val session: Session,
                                                         private val dateFormatter: VectorDateFormatter,
                                                         private val messageLayoutFactory: TimelineMessageLayoutFactory,
-                                                        private val reactionListFactory: ReactionsSummaryFactory) {
+                                                        private val reactionsSummaryFactory: ReactionsSummaryFactory) {
 
     fun create(params: TimelineItemFactoryParams): MessageInformationData {
         val event = params.event
@@ -93,7 +93,7 @@ class MessageInformationDataFactory @Inject constructor(private val session: Ses
                 avatarUrl = event.senderInfo.avatarUrl,
                 memberName = event.senderInfo.disambiguatedDisplayName,
                 messageLayout = messageLayout,
-                reactionsSummary = reactionListFactory.create(event, params.callback),
+                reactionsSummary = reactionsSummaryFactory.create(event, params.callback),
                 pollResponseAggregatedSummary = event.annotations?.pollResponseSummary?.let {
                     PollResponseData(
                             myVote = it.aggregatedContent?.myVote,
