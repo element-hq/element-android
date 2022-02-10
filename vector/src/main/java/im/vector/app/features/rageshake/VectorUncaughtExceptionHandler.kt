@@ -63,7 +63,7 @@ class VectorUncaughtExceptionHandler @Inject constructor(
      */
     override fun uncaughtException(thread: Thread, throwable: Throwable) {
         Timber.v("Uncaught exception: $throwable")
-        preferences.edit {
+        preferences.edit(commit = true) {
             putBoolean(PREFS_CRASH_KEY, true)
         }
         val b = StringBuilder()
