@@ -56,7 +56,6 @@ import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.call.transfer.CallTransferResult
-import im.vector.app.features.call.transfer.CallTransferViewEvents
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -534,7 +533,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     private val callTransferActivityResultLauncher = registerStartForActivityResult { activityResult ->
 
-        when(activityResult.resultCode) {
+        when (activityResult.resultCode) {
             Activity.RESULT_CANCELED -> {
                 callViewModel.handle(VectorCallViewActions.CallTransferSelectionCancelled)
             }
