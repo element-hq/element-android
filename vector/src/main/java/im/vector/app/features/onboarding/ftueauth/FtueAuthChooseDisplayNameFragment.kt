@@ -21,6 +21,7 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.databinding.FragmentFtueDisplayNameBinding
 import im.vector.app.features.onboarding.OnboardingAction
@@ -38,6 +39,7 @@ class FtueAuthChooseDisplayNameFragment @Inject constructor() : AbstractFtueAuth
     }
 
     private fun setupViews() {
+        views.displayNameSubmit.isEnabled = views.displayNameInput.hasContentEmpty()
         views.displayNameInput.editText?.addTextChangedListener(object : SimpleTextWatcher() {
             override fun afterTextChanged(s: Editable) {
                 val newContent = s.toString()
@@ -62,3 +64,5 @@ class FtueAuthChooseDisplayNameFragment @Inject constructor() : AbstractFtueAuth
         return false
     }
 }
+
+private fun TextInputLayout.hasContentEmpty() = !editText?.text.isNullOrEmpty()
