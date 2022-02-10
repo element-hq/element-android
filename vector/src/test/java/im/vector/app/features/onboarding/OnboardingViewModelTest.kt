@@ -112,7 +112,7 @@ class OnboardingViewModelTest {
                 FakeHomeServerHistoryService(),
                 FakeVectorFeatures(),
                 FakeAnalyticsTracker(),
-                DefaultVectorOverrides(),
+                DefaultVectorOverrides()
         )
     }
 }
