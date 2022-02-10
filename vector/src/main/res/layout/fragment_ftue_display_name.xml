@@ -45,7 +45,7 @@
             app:layout_constraintHeight_percent="0.15"
             app:layout_constraintStart_toStartOf="@id/displayNameGutterStart"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="?colorAccent" />
+            app:tint="?colorSecondary" />
 
         <TextView
             android:id="@+id/displayNameHeaderTitle"
