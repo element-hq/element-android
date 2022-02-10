@@ -44,6 +44,7 @@ import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.MatrixItem
+import org.matrix.android.sdk.api.util.toEveryoneInRoomMatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import org.matrix.android.sdk.api.util.toRoomAliasMatrixItem
 
@@ -135,7 +136,8 @@ class AutoCompleter @AssistedInject constructor(
                         when (item) {
                             is AutocompleteMemberItem.RoomMember ->
                                 insertMatrixItem(editText, editable, "@", item.roomMemberSummary.toMatrixItem())
-                            is AutocompleteMemberItem.Everyone   -> Unit // TODO
+                            is AutocompleteMemberItem.Everyone   ->
+                                insertMatrixItem(editText, editable, "@", item.roomSummary.toEveryoneInRoomMatrixItem())
                         }
                         return true
                     }
@@ -253,6 +255,7 @@ class AutoCompleter @AssistedInject constructor(
     }
 
     companion object {
+        // TODO add consts for string trigger for autocomplete
         private const val ELEVATION = 6f
     }
 }

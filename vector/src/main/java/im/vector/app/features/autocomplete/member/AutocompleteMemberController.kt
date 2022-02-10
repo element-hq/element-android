@@ -16,18 +16,34 @@
 
 package im.vector.app.features.autocomplete.member
 
+import android.content.Context
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.app.R
 import im.vector.app.features.autocomplete.AutocompleteClickListener
 import im.vector.app.features.autocomplete.autocompleteMatrixItem
 import im.vector.app.features.home.AvatarRenderer
+import org.matrix.android.sdk.api.util.toEveryoneInRoomMatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class AutocompleteMemberController @Inject constructor() : TypedEpoxyController<List<AutocompleteMemberItem>>() {
+class AutocompleteMemberController @Inject constructor(private val context: Context)
+    : TypedEpoxyController<List<AutocompleteMemberItem>>() {
+
+    ///////////////////////////////////////////////////////////////////////////
+    // FIELDS
+    ///////////////////////////////////////////////////////////////////////////
 
     var listener: AutocompleteClickListener<AutocompleteMemberItem>? = null
 
+    ///////////////////////////////////////////////////////////////////////////
+    // DEPENDENCIES
+    ///////////////////////////////////////////////////////////////////////////
+
     @Inject lateinit var avatarRenderer: AvatarRenderer
+
+    ///////////////////////////////////////////////////////////////////////////
+    // SPECIALIZATION
+    ///////////////////////////////////////////////////////////////////////////
 
     override fun buildModels(data: List<AutocompleteMemberItem>?) {
         if (data.isNullOrEmpty()) {
@@ -46,17 +62,30 @@ class AutocompleteMemberController @Inject constructor() : TypedEpoxyController<
     ///////////////////////////////////////////////////////////////////////////
 
     private fun buildRoomMemberItem(roomMember: AutocompleteMemberItem.RoomMember) {
+        val host = this
         autocompleteMatrixItem {
             roomMember.roomMemberSummary.let { user ->
                 id(user.userId)
                 matrixItem(user.toMatrixItem())
-                avatarRenderer(this@AutocompleteMemberController.avatarRenderer)
-                clickListener { this@AutocompleteMemberController.listener?.onItemClick(roomMember) }
+                avatarRenderer(host.avatarRenderer)
+                clickListener { host.listener?.onItemClick(roomMember) }
             }
         }
     }
 
     private fun buildEveryoneItem(everyone: AutocompleteMemberItem.Everyone) {
-        // TODO
+        val host = this
+
+        autocompleteMatrixItem {
+            everyone.roomSummary.let { room ->
+                id(room.roomId)
+                matrixItem(room.toEveryoneInRoomMatrixItem())
+                subName(host.context.getString(R.string.room_message_notify_everyone))
+                // TODO fix usage of first letter of room name when avatarUrl is empty
+                // TODO test avatar with a room which has a picture
+                avatarRenderer(host.avatarRenderer)
+                clickListener { host.listener?.onItemClick(everyone) }
+            }
+        }
     }
 }

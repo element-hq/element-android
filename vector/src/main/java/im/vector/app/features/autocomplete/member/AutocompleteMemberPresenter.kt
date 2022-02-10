@@ -28,6 +28,7 @@ import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.api.util.MatrixItem
 
 class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                                                               @Assisted val roomId: String,
@@ -68,14 +69,28 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
             memberships = listOf(Membership.JOIN)
             excludeSelf = true
         }
+
         val members = room.getRoomMembers(queryParams)
                 .asSequence()
                 .sortedBy { it.displayName }
                 .disambiguate()
+                .map { AutocompleteMemberItem.RoomMember(it) }
+                .toList()
+
         // TODO check if user can notify everyone => compare user role to room permission setting: PowerLevelsContent
-        // TODO if user can notify everyone, add entry AutocompleteMemberItem.Everyone
-        // TODO add header sections to separate members and notification
-        controller.setData(members.map { AutocompleteMemberItem.RoomMember(it) }.toList())
+        val everyone = room.roomSummary()
+                ?.takeIf { query.isNullOrBlank() || MatrixItem.NOTIFY_EVERYONE.startsWith("@$query") }
+                ?.let {
+            AutocompleteMemberItem.Everyone(it)
+        }
+
+        val items = mutableListOf<AutocompleteMemberItem>().apply {
+            // TODO add header sections
+            addAll(members)
+            everyone?.let { add(it) }
+        }
+
+        controller.setData(items)
     }
 }
 

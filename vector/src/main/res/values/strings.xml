@@ -3782,4 +3782,7 @@
     <string name="message_reaction_show_less">Show less</string>
     <string name="message_reaction_show_more">"%1$d more"</string>
 
+    <string name="room_message_notify_everyone">Notify the whole room</string>
+    <string name="room_message_autocomplete_users">Users</string>
+    <string name="room_message_autocomplete_notification">Room notification</string>
 </resources>
