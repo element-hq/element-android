@@ -57,8 +57,6 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
         callTransferViewModel.observeViewEvents {
             when (it) {
                 is CallTransferViewEvents.Complete        -> handleComplete()
-                CallTransferViewEvents.Loading           -> showWaitingView()
-                is CallTransferViewEvents.FailToTransfer -> showSnackbar(getString(R.string.call_transfer_failure))
             }
         }
 
@@ -82,25 +80,32 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
             when (views.callTransferTabLayout.selectedTabPosition) {
                 CallTransferPagerAdapter.USER_LIST_INDEX -> {
                     val selectedUser = sectionsPagerAdapter.userListFragment?.getCurrentState()?.getSelectedMatrixId()?.firstOrNull() ?: return@debouncedClicks
-                    val action = CallTransferAction.ConnectWithUserId(views.callTransferConsultCheckBox.isChecked, selectedUser)
-                    callTransferViewModel.handle(action)
+                    val result = CallTransferResult.ConnectWithUserId(views.callTransferConsultCheckBox.isChecked, selectedUser)
+                    handleComplete(result)
                 }
                 CallTransferPagerAdapter.DIAL_PAD_INDEX  -> {
                     val phoneNumber = sectionsPagerAdapter.dialPadFragment?.getRawInput() ?: return@debouncedClicks
-                    val action = CallTransferAction.ConnectWithPhoneNumber(views.callTransferConsultCheckBox.isChecked, phoneNumber)
-                    callTransferViewModel.handle(action)
+                    val result = CallTransferResult.ConnectWithPhoneNumber(views.callTransferConsultCheckBox.isChecked, phoneNumber)
+                    handleComplete(result)
                 }
             }
         }
     }
 
-    private fun handleComplete() {
-        setResult(Activity.RESULT_OK)
+    private fun handleComplete(callTransferResult: CallTransferResult? = null) {
+        if (callTransferResult != null) {
+            val intent = Intent().apply {
+                putExtra(EXTRA_TRANSFER_RESULT, callTransferResult)
+            }
+            setResult(RESULT_OK, intent)
+        } else {
+            setResult(RESULT_OK)
+        }
         finish()
     }
 
     companion object {
-
+            const val EXTRA_TRANSFER_RESULT = "EXTRA_TRANSFER_RESULT"
         fun newIntent(context: Context, callId: String): Intent {
             return Intent(context, CallTransferActivity::class.java).also {
                 it.putExtra(Mavericks.KEY_ARG, CallTransferArgs(callId))
