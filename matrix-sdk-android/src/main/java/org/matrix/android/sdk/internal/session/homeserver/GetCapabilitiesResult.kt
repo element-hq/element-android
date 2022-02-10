@@ -37,9 +37,10 @@ internal data class GetCapabilitiesResult(
 internal data class Capabilities(
         /**
          * Capability to indicate if the user can change their password.
+         * True if the user can change their password, false otherwise.
          */
         @Json(name = "m.change_password")
-        val changePassword: ChangePassword? = null,
+        val changePassword: BooleanCapability? = null,
 
         /**
          * This capability describes the default and available room versions a server supports, and at what level of stability.
@@ -50,9 +51,9 @@ internal data class Capabilities(
 )
 
 @JsonClass(generateAdapter = true)
-internal data class ChangePassword(
+internal data class BooleanCapability(
         /**
-         * Required. True if the user can change their password, false otherwise.
+         * Required.
          */
         @Json(name = "enabled")
         val enabled: Boolean?
