@@ -222,10 +222,9 @@ class RoomListViewModel @AssistedInject constructor(
             )
         }
 
-        val room = session.getRoom(roomId) ?: return@withState
         viewModelScope.launch {
             try {
-                room.join()
+                session.joinRoom(roomId)
                 analyticsTracker.capture(action.roomSummary.toAnalyticsJoinedRoom())
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
                 // Instead, we wait for the room to be joined
@@ -245,10 +244,9 @@ class RoomListViewModel @AssistedInject constructor(
             return@withState
         }
 
-        val room = session.getRoom(roomId) ?: return@withState
         viewModelScope.launch {
             try {
-                room.leave(null)
+                session.leaveRoom(roomId)
                 // We do not update the rejectingRoomsIds here, because, the room is not rejected yet regarding the sync data.
                 // Instead, we wait for the room to be rejected
                 // Known bug: if the user is invited again (after rejecting the first invitation), the loading will be displayed instead of the buttons.
@@ -333,9 +331,8 @@ class RoomListViewModel @AssistedInject constructor(
 
     private fun handleLeaveRoom(action: RoomListAction.LeaveRoom) {
         _viewEvents.post(RoomListViewEvents.Loading(null))
-        val room = session.getRoom(action.roomId) ?: return
         viewModelScope.launch {
-            val value = runCatching { room.leave(null) }
+            val value = runCatching { session.leaveRoom(action.roomId) }
                     .fold({ RoomListViewEvents.Done }, { RoomListViewEvents.Failure(it) })
             _viewEvents.post(value)
         }

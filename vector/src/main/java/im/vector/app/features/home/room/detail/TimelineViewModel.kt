@@ -801,14 +801,14 @@ class TimelineViewModel @AssistedInject constructor(
 
     private fun handleRejectInvite() {
         viewModelScope.launch {
-            tryOrNull { room.leave(null) }
+            tryOrNull { session.leaveRoom(room.roomId) }
         }
     }
 
     private fun handleAcceptInvite() {
         viewModelScope.launch {
             tryOrNull {
-                room.join()
+                session.joinRoom(room.roomId)
                 analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom())
             }
         }

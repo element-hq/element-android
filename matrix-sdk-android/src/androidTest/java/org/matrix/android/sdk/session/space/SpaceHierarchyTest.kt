@@ -344,7 +344,6 @@ class SpaceHierarchyTest : InstrumentedTest {
         // Test part one of the rooms
 
         val bRoomId = spaceBInfo.roomIds.first()
-        val bRoom = session.getRoom(bRoomId)
 
         commonTestHelper.waitWithLatch { latch ->
             val flatAChildren = session.getFlattenRoomSummaryChildrenOfLive(spaceAInfo.spaceId)
@@ -360,7 +359,7 @@ class SpaceHierarchyTest : InstrumentedTest {
             }
 
             // part from b room
-            bRoom!!.leave(null)
+            session.leaveRoom(bRoomId)
             // The room should have disapear from flat children
             flatAChildren.observeForever(childObserver)
         }
