@@ -33,6 +33,7 @@ import im.vector.app.features.themes.ThemeUtils
 abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
 
     @EpoxyAttribute lateinit var title: String
+    @EpoxyAttribute var itemCount: Int = 0
     @EpoxyAttribute var expanded: Boolean = false
     @EpoxyAttribute var unreadNotificationCount: Int = 0
     @EpoxyAttribute var showHighlighted: Boolean = false
@@ -48,7 +49,7 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.titleView.text = title
         with(holder.counterView) {
-            text = ""
+            text = itemCount.takeIf { it > 0 }?.toString().orEmpty()
             setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
         }
         holder.rootView.onClick(listener)

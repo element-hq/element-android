@@ -76,6 +76,7 @@ class RoomListSectionBuilderGroup(
 
                                         val itemCountFlow = updatableFilterLivePageResult.livePagedList.asFlow()
                                                 .flatMapLatest { session.getRoomCountFlow(updatableFilterLivePageResult.queryParams) }
+                                                .distinctUntilChanged()
 
                                         sections.add(
                                                 RoomsSection(
