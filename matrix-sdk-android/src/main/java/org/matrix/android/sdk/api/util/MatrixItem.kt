@@ -45,7 +45,8 @@ sealed class MatrixItem(
 
     data class EveryoneInRoomItem(override val id: String,
                                   override val displayName: String? = null,
-                                  override val avatarUrl: String? = null) :
+                                  override val avatarUrl: String? = null,
+                                  val roomDisplayName: String? = null) :
             MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
@@ -131,7 +132,11 @@ sealed class MatrixItem(
     }
 
     fun firstLetterOfDisplayName(): String {
-        // TODO retrieve first letter of room name when EveryoneInRoomItem
+        val displayName = when (this) {
+            // use the room display name for the notify everyone item
+            is EveryoneInRoomItem -> roomDisplayName
+            else                  -> displayName
+        }
         return (displayName?.takeIf { it.isNotBlank() } ?: id)
                 .let { dn ->
                     var startIndex = 0
@@ -185,7 +190,7 @@ fun RoomSummary.toMatrixItem() = if (roomType == RoomType.SPACE) {
 
 fun RoomSummary.toRoomAliasMatrixItem() = MatrixItem.RoomAliasItem(canonicalAlias ?: roomId, displayName, avatarUrl)
 
-fun RoomSummary.toEveryoneInRoomMatrixItem() = MatrixItem.EveryoneInRoomItem(roomId, MatrixItem.NOTIFY_EVERYONE, avatarUrl)
+fun RoomSummary.toEveryoneInRoomMatrixItem() = MatrixItem.EveryoneInRoomItem(roomId, MatrixItem.NOTIFY_EVERYONE, avatarUrl, displayName)
 
 // If no name is available, use room alias as Riot-Web does
 fun PublicRoom.toMatrixItem() = MatrixItem.RoomItem(roomId, name ?: getPrimaryAlias() ?: "", avatarUrl)

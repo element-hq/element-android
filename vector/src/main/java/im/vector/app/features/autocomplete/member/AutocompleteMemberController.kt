@@ -81,8 +81,6 @@ class AutocompleteMemberController @Inject constructor(private val context: Cont
                 id(room.roomId)
                 matrixItem(room.toEveryoneInRoomMatrixItem())
                 subName(host.context.getString(R.string.room_message_notify_everyone))
-                // TODO fix usage of first letter of room name when avatarUrl is empty
-                // TODO test avatar with a room which has a picture
                 avatarRenderer(host.avatarRenderer)
                 clickListener { host.listener?.onItemClick(everyone) }
             }
