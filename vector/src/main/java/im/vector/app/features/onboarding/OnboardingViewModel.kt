@@ -891,11 +891,11 @@ class OnboardingViewModel @AssistedInject constructor(
             try {
                 activeSession.setDisplayName(activeSession.myUserId, displayName)
                 setState { copy(asyncDisplayName = Success(Unit)) }
+                _viewEvents.post(OnboardingViewEvents.OnDisplayNameUpdated)
             } catch (error: Throwable) {
                 setState { copy(asyncDisplayName = Fail(error)) }
                 _viewEvents.post(OnboardingViewEvents.Failure(error))
             }
-            _viewEvents.post(OnboardingViewEvents.OnDisplayNameUpdated)
         }
     }
 }
