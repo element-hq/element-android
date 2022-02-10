@@ -59,6 +59,7 @@ class PillsPostProcessor @AssistedInject constructor(@Assisted private val roomI
     }
 
     private fun LinkSpan.createPillSpan(roomId: String?): PillImageSpan? {
+        // TODO handle @room text to create associated chip
         val permalinkData = PermalinkParser.parse(url)
         val matrixItem = when (permalinkData) {
             is PermalinkData.UserLink -> {

@@ -20,28 +20,43 @@ import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.features.autocomplete.AutocompleteClickListener
 import im.vector.app.features.autocomplete.autocompleteMatrixItem
 import im.vector.app.features.home.AvatarRenderer
-import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class AutocompleteMemberController @Inject constructor() : TypedEpoxyController<List<RoomMemberSummary>>() {
+class AutocompleteMemberController @Inject constructor() : TypedEpoxyController<List<AutocompleteMemberItem>>() {
 
-    var listener: AutocompleteClickListener<RoomMemberSummary>? = null
+    var listener: AutocompleteClickListener<AutocompleteMemberItem>? = null
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
 
-    override fun buildModels(data: List<RoomMemberSummary>?) {
+    override fun buildModels(data: List<AutocompleteMemberItem>?) {
         if (data.isNullOrEmpty()) {
             return
         }
-        val host = this
-        data.forEach { user ->
-            autocompleteMatrixItem {
-                id(user.userId)
-                matrixItem(user.toMatrixItem())
-                avatarRenderer(host.avatarRenderer)
-                clickListener { host.listener?.onItemClick(user) }
+        data.forEach { item ->
+            when (item) {
+                is AutocompleteMemberItem.RoomMember -> buildRoomMemberItem(item)
+                is AutocompleteMemberItem.Everyone   -> buildEveryoneItem(item)
             }
         }
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // HELPER METHODS
+    ///////////////////////////////////////////////////////////////////////////
+
+    private fun buildRoomMemberItem(roomMember: AutocompleteMemberItem.RoomMember) {
+        autocompleteMatrixItem {
+            roomMember.roomMemberSummary.let { user ->
+                id(user.userId)
+                matrixItem(user.toMatrixItem())
+                avatarRenderer(this@AutocompleteMemberController.avatarRenderer)
+                clickListener { this@AutocompleteMemberController.listener?.onItemClick(roomMember) }
+            }
+        }
+    }
+
+    private fun buildEveryoneItem(everyone: AutocompleteMemberItem.Everyone) {
+        // TODO
     }
 }

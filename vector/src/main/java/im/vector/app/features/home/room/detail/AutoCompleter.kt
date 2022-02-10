@@ -33,6 +33,7 @@ import im.vector.app.features.autocomplete.command.AutocompleteCommandPresenter
 import im.vector.app.features.autocomplete.command.CommandAutocompletePolicy
 import im.vector.app.features.autocomplete.emoji.AutocompleteEmojiPresenter
 import im.vector.app.features.autocomplete.group.AutocompleteGroupPresenter
+import im.vector.app.features.autocomplete.member.AutocompleteMemberItem
 import im.vector.app.features.autocomplete.member.AutocompleteMemberPresenter
 import im.vector.app.features.autocomplete.room.AutocompleteRoomPresenter
 import im.vector.app.features.command.Command
@@ -41,7 +42,6 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.html.PillImageSpan
 import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.group.model.GroupSummary
-import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -125,14 +125,18 @@ class AutoCompleter @AssistedInject constructor(
 
     private fun setupMembers(backgroundDrawable: ColorDrawable, editText: EditText) {
         autocompleteMemberPresenter = autocompleteMemberPresenterFactory.create(roomId)
-        Autocomplete.on<RoomMemberSummary>(editText)
+        Autocomplete.on<AutocompleteMemberItem>(editText)
                 .with(CharPolicy('@', true))
                 .with(autocompleteMemberPresenter)
                 .with(ELEVATION)
                 .with(backgroundDrawable)
-                .with(object : AutocompleteCallback<RoomMemberSummary> {
-                    override fun onPopupItemClicked(editable: Editable, item: RoomMemberSummary): Boolean {
-                        insertMatrixItem(editText, editable, "@", item.toMatrixItem())
+                .with(object : AutocompleteCallback<AutocompleteMemberItem> {
+                    override fun onPopupItemClicked(editable: Editable, item: AutocompleteMemberItem): Boolean {
+                        when (item) {
+                            is AutocompleteMemberItem.RoomMember ->
+                                insertMatrixItem(editText, editable, "@", item.roomMemberSummary.toMatrixItem())
+                            is AutocompleteMemberItem.Everyone   -> Unit // TODO
+                        }
                         return true
                     }
 

@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.session.room.sender.SenderInfo
 import org.matrix.android.sdk.api.session.user.model.User
 import java.util.Locale
 
+// TODO how to represent the notify everyone @room item? EveryoneItem ??
 sealed class MatrixItem(
         open val id: String,
         open val displayName: String?,

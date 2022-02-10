@@ -33,7 +33,7 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                                                               @Assisted val roomId: String,
                                                               session: Session,
                                                               private val controller: AutocompleteMemberController
-) : RecyclerViewPresenter<RoomMemberSummary>(context), AutocompleteClickListener<RoomMemberSummary> {
+) : RecyclerViewPresenter<AutocompleteMemberItem>(context), AutocompleteClickListener<AutocompleteMemberItem> {
 
     private val room by lazy { session.getRoom(roomId)!! }
 
@@ -54,7 +54,7 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
         return controller.adapter
     }
 
-    override fun onItemClick(t: RoomMemberSummary) {
+    override fun onItemClick(t: AutocompleteMemberItem) {
         dispatchClick(t)
     }
 
@@ -72,10 +72,10 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                 .asSequence()
                 .sortedBy { it.displayName }
                 .disambiguate()
-        // TODO check if user can notify everyone => compare user role to room permission setting
-        // TODO if user can notify everyone, add entry "@room"
+        // TODO check if user can notify everyone => compare user role to room permission setting: PowerLevelsContent
+        // TODO if user can notify everyone, add entry AutocompleteMemberItem.Everyone
         // TODO add header sections to separate members and notification
-        controller.setData(members.toList())
+        controller.setData(members.map { AutocompleteMemberItem.RoomMember(it) }.toList())
     }
 }
 
