@@ -38,7 +38,6 @@ import im.vector.app.features.reactions.widget.ReactionButton
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.send.SendState
 
-
 private const val MAX_REACTIONS_TO_SHOW = 8
 
 /**

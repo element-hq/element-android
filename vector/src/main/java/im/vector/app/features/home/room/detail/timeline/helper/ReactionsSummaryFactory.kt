@@ -17,7 +17,6 @@
 package im.vector.app.features.home.room.detail.timeline.helper
 
 import dagger.hilt.android.scopes.ActivityScoped
-import im.vector.app.features.home.room.detail.RoomDetailAction
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.item.ReactionInfoData
 import im.vector.app.features.home.room.detail.timeline.item.ReactionsSummaryData
