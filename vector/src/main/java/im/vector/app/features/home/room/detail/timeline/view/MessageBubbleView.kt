@@ -31,6 +31,7 @@ import androidx.core.content.withStyledAttributes
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import com.google.android.flexbox.FlexDirection
 import com.google.android.material.shape.MaterialShapeDrawable
 import im.vector.app.R
 import im.vector.app.core.resources.LocaleProvider
@@ -79,6 +80,7 @@ class MessageBubbleView @JvmOverloads constructor(context: Context, attrs: Attri
         views.messageThreadSummaryContainer.layoutDirection = layoutDirectionToSet
         views.bubbleWrapper.layoutDirection = layoutDirectionToSet
         views.bubbleView.layoutDirection = currentLayoutDirection
+        views.reactionsContainer.flexDirection = if (isIncoming) FlexDirection.ROW else FlexDirection.ROW_REVERSE
 
         bubbleDrawable = MaterialShapeDrawable()
         rippleMaskDrawable = MaterialShapeDrawable()

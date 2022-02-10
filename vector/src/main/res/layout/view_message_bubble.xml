@@ -177,7 +177,7 @@
 
         <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/reactionsContainer"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
             app:dividerDrawable="@drawable/reaction_divider"
