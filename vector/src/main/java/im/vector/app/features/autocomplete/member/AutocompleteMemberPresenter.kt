@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.R
 import im.vector.app.features.autocomplete.AutocompleteClickListener
 import im.vector.app.features.autocomplete.RecyclerViewPresenter
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -36,11 +37,23 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                                                               private val controller: AutocompleteMemberController
 ) : RecyclerViewPresenter<AutocompleteMemberItem>(context), AutocompleteClickListener<AutocompleteMemberItem> {
 
+    ///////////////////////////////////////////////////////////////////////////
+    // FIELDS
+    ///////////////////////////////////////////////////////////////////////////
+
     private val room by lazy { session.getRoom(roomId)!! }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // INIT
+    ///////////////////////////////////////////////////////////////////////////
 
     init {
         controller.listener = this
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // PUBLIC API
+    ///////////////////////////////////////////////////////////////////////////
 
     fun clear() {
         controller.listener = null
@@ -50,6 +63,10 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
     interface Factory {
         fun create(roomId: String): AutocompleteMemberPresenter
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // SPECIALIZATION
+    ///////////////////////////////////////////////////////////////////////////
 
     override fun instantiateAdapter(): RecyclerView.Adapter<*> {
         return controller.adapter
@@ -70,6 +87,10 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
             excludeSelf = true
         }
 
+        val membersHeader = AutocompleteMemberItem.Header(
+                ID_HEADER_MEMBERS,
+                context.getString(R.string.room_message_autocomplete_users)
+        )
         val members = room.getRoomMembers(queryParams)
                 .asSequence()
                 .sortedBy { it.displayName }
@@ -81,16 +102,34 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
         val everyone = room.roomSummary()
                 ?.takeIf { query.isNullOrBlank() || MatrixItem.NOTIFY_EVERYONE.startsWith("@$query") }
                 ?.let {
-            AutocompleteMemberItem.Everyone(it)
-        }
+                    AutocompleteMemberItem.Everyone(it)
+                }
 
         val items = mutableListOf<AutocompleteMemberItem>().apply {
-            // TODO add header sections
-            addAll(members)
-            everyone?.let { add(it) }
+            if(members.isNotEmpty()) {
+                add(membersHeader)
+                addAll(members)
+            }
+            everyone?.let {
+                val everyoneHeader = AutocompleteMemberItem.Header(
+                        ID_HEADER_EVERYONE,
+                        context.getString(R.string.room_message_autocomplete_notification)
+                )
+                add(everyoneHeader)
+                add(it)
+            }
         }
 
         controller.setData(items)
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // CONST
+    ///////////////////////////////////////////////////////////////////////////
+
+    companion object {
+        private const val ID_HEADER_MEMBERS = "ID_HEADER_MEMBERS"
+        private const val ID_HEADER_EVERYONE = "ID_HEADER_EVERYONE"
     }
 }
 

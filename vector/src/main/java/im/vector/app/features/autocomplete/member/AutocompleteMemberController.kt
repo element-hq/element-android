@@ -20,6 +20,7 @@ import android.content.Context
 import com.airbnb.epoxy.TypedEpoxyController
 import im.vector.app.R
 import im.vector.app.features.autocomplete.AutocompleteClickListener
+import im.vector.app.features.autocomplete.autocompleteHeaderItem
 import im.vector.app.features.autocomplete.autocompleteMatrixItem
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.toEveryoneInRoomMatrixItem
@@ -51,6 +52,7 @@ class AutocompleteMemberController @Inject constructor(private val context: Cont
         }
         data.forEach { item ->
             when (item) {
+                is AutocompleteMemberItem.Header     -> buildHeaderItem(item)
                 is AutocompleteMemberItem.RoomMember -> buildRoomMemberItem(item)
                 is AutocompleteMemberItem.Everyone   -> buildEveryoneItem(item)
             }
@@ -60,6 +62,13 @@ class AutocompleteMemberController @Inject constructor(private val context: Cont
     ///////////////////////////////////////////////////////////////////////////
     // HELPER METHODS
     ///////////////////////////////////////////////////////////////////////////
+
+    private fun buildHeaderItem(header: AutocompleteMemberItem.Header) {
+        autocompleteHeaderItem {
+            id(header.id)
+            title(header.title)
+        }
+    }
 
     private fun buildRoomMemberItem(roomMember: AutocompleteMemberItem.RoomMember) {
         val host = this
