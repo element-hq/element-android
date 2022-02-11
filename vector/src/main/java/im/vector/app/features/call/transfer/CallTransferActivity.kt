@@ -104,7 +104,7 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
     }
 
     companion object {
-            const val EXTRA_TRANSFER_RESULT = "EXTRA_TRANSFER_RESULT"
+        const val EXTRA_TRANSFER_RESULT = "EXTRA_TRANSFER_RESULT"
         fun newIntent(context: Context, callId: String): Intent {
             return Intent(context, CallTransferActivity::class.java).also {
                 it.putExtra(Mavericks.KEY_ARG, CallTransferArgs(callId))
