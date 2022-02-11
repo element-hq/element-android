@@ -956,6 +956,9 @@
     <string name="room_one_user_is_typing">%s is typing…</string>
     <string name="room_two_users_are_typing">%1$s &#038; %2$s are typing…</string>
     <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; others are typing…</string>
+    <!--TODO #3296 add next two strings values -->
+    <string name="room_notification_two_users_are_typing">%1$s and %2$s</string>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s and others</string>
     <string name="room_message_placeholder_encrypted">Send an encrypted message…</string>
     <string name="room_message_placeholder_not_encrypted">Send a message (unencrypted)…</string>
     <string name="room_message_placeholder_reply_to_encrypted">Send an encrypted reply…</string>
