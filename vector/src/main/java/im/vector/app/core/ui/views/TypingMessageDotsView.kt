@@ -16,6 +16,7 @@
 
 package im.vector.app.core.ui.views
 
+import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.util.AttributeSet
@@ -75,14 +76,11 @@ class TypingMessageDotsView(context: Context, attrs: AttributeSet) :
     }
 
     private fun animateCircle(index: Int, circle: View) {
-        val animator = ValueAnimator.ofFloat(DEFAULT_MAX_ALPHA, DEFAULT_MIN_ALPHA)
-        animator.duration = DEFAULT_CIRCLE_DURATION
-        animator.startDelay = DEFAULT_START_ANIM_CIRCLE_DURATION * index
-        animator.repeatCount = ValueAnimator.INFINITE
-        animator.addUpdateListener {
-            circle.alpha = it.animatedValue as Float
-        }
-        animator.start()
+        ObjectAnimator.ofFloat(circle, "alpha", DEFAULT_MAX_ALPHA, DEFAULT_MIN_ALPHA).apply {
+            duration = DEFAULT_CIRCLE_DURATION
+            startDelay = DEFAULT_START_ANIM_CIRCLE_DURATION * index
+            repeatCount = ValueAnimator.INFINITE
+        }.start()
     }
 
     override fun onDetachedFromWindow() {
