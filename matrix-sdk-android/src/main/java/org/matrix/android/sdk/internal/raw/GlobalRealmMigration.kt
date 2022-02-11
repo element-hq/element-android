@@ -18,24 +18,23 @@ package org.matrix.android.sdk.internal.raw
 
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
-import org.matrix.android.sdk.internal.database.model.KnownServerUrlEntityFields
+import org.matrix.android.sdk.internal.raw.migration.MigrateGlobalTo001
 import timber.log.Timber
+import javax.inject.Inject
 
-internal object GlobalRealmMigration : RealmMigration {
+internal class GlobalRealmMigration @Inject constructor() : RealmMigration {
+    /**
+     * Forces all GlobalRealmMigration instances to be equal
+     * Avoids Realm throwing when multiple instances of the migration are set
+     */
+    override fun equals(other: Any?) = other is GlobalRealmMigration
+    override fun hashCode() = 2000
 
-    // Current schema version
-    const val SCHEMA_VERSION = 1L
+    val schemaVersion = 1L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
-        Timber.d("Migrating Auth Realm from $oldVersion to $newVersion")
+        Timber.d("Migrating Global Realm from $oldVersion to $newVersion")
 
-        if (oldVersion <= 0) migrateTo1(realm)
-    }
-
-    private fun migrateTo1(realm: DynamicRealm) {
-        realm.schema.create("KnownServerUrlEntity")
-                .addField(KnownServerUrlEntityFields.URL, String::class.java)
-                .addPrimaryKey(KnownServerUrlEntityFields.URL)
-                .setRequired(KnownServerUrlEntityFields.URL, true)
+        if (oldVersion < 1) MigrateGlobalTo001(realm).perform()
     }
 }
