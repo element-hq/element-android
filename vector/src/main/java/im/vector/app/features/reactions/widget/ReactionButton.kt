@@ -18,7 +18,6 @@ package im.vector.app.features.reactions.widget
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
@@ -37,8 +36,9 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class ReactionButton @JvmOverloads constructor(context: Context,
                                                attrs: AttributeSet? = null,
-                                               defStyleAttr: Int = 0) :
-        LinearLayout(context, attrs, defStyleAttr), View.OnClickListener, View.OnLongClickListener {
+                                               defStyleAttr: Int = 0,
+                                               defStyleRes: Int = R.style.TimelineReactionView) :
+        LinearLayout(context, attrs, defStyleAttr, defStyleRes), View.OnClickListener, View.OnLongClickListener {
 
     @Inject lateinit var emojiSpanify: EmojiSpanify
 
@@ -67,9 +67,6 @@ class ReactionButton @JvmOverloads constructor(context: Context,
     init {
         inflate(context, R.layout.reaction_button, this)
         orientation = HORIZONTAL
-        minimumHeight = resources.getDimensionPixelSize(R.dimen.chat_reaction_min_height)
-        minimumWidth = resources.getDimensionPixelSize(R.dimen.chat_reaction_min_width)
-        gravity = Gravity.CENTER
         layoutDirection = View.LAYOUT_DIRECTION_LOCALE
         views = ReactionButtonBinding.bind(this)
         views.reactionCount.text = TextUtils.formatCountToShortDecimal(reactionCount)

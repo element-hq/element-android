@@ -17,17 +17,20 @@
 package im.vector.app.features.home.room.detail.timeline.item
 
 import android.annotation.SuppressLint
-import android.view.Gravity
+import android.graphics.Typeface
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.IdRes
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.view.isVisible
+import androidx.core.widget.TextViewCompat
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.onClick
+import im.vector.app.core.extensions.getDrawableAsSpannable
 import im.vector.app.core.ui.views.ShieldImageView
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.AvatarRenderer
@@ -35,6 +38,7 @@ import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.view.TimelineMessageLayoutRenderer
 import im.vector.app.features.reactions.widget.ReactionButton
+import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import org.matrix.android.sdk.api.session.room.send.SendState
 
@@ -114,7 +118,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
                 holder.reactionsContainer.addView(reactionButton)
             }
             if (reactions.count() > MAX_REACTIONS_TO_SHOW) {
-                val showReactionsTextView = createReactionTextView(holder, 6)
+                val showReactionsTextView = createReactionTextView(holder)
                 if (reactionsSummary.showAll) {
                     showReactionsTextView.setText(R.string.message_reaction_show_less)
                     showReactionsTextView.onClick { reactionsSummary.onShowLessClicked() }
@@ -125,23 +129,21 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
                 }
                 holder.reactionsContainer.addView(showReactionsTextView)
             }
-            val addMoreReactionsTextView = createReactionTextView(holder, 14)
-            addMoreReactionsTextView.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_add_reaction_small, 0, 0, 0)
+            val addMoreReactionsTextView = createReactionTextView(holder)
+
+            addMoreReactionsTextView.text = holder.view.context.getDrawableAsSpannable(R.drawable.ic_add_reaction_small)
             addMoreReactionsTextView.onClick { reactionsSummary.onAddMoreClicked() }
             holder.reactionsContainer.addView(addMoreReactionsTextView)
             holder.reactionsContainer.setOnLongClickListener(baseAttributes.itemLongClickListener)
         }
     }
 
-    private fun createReactionTextView(holder: H, horizontalPaddingDp: Int): TextView {
-        return TextView(holder.view.context).apply {
-            textSize = 10f
-            gravity = Gravity.CENTER
-            minimumHeight = resources.getDimensionPixelSize(R.dimen.chat_reaction_min_height)
-            minimumWidth = resources.getDimensionPixelSize(R.dimen.chat_reaction_min_width)
+    private fun createReactionTextView(holder: H): TextView {
+        return TextView(ContextThemeWrapper(holder.view.context, R.style.TimelineReactionView)).apply {
             background = getDrawable(context, R.drawable.reaction_rounded_rect_shape_off)
-            val padding = holder.dimensionConverter.dpToPx(horizontalPaddingDp)
-            setPadding(padding, 0, padding, 0)
+            TextViewCompat.setTextAppearance(this, R.style.TextAppearance_Vector_Micro)
+            setTypeface(typeface, Typeface.BOLD)
+            setTextColor(ThemeUtils.getColor(context, R.attr.vctr_content_secondary))
         }
     }
 
