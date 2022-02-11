@@ -98,7 +98,7 @@
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:visibility="invisible"
-        android:layout_height="wrap_content"/>
+        android:layout_height="20dp"/>
 
     <im.vector.app.core.ui.views.NotificationAreaView
         android:id="@+id/notificationAreaView"

@@ -34,7 +34,7 @@ class TypingMessageAvatar @JvmOverloads constructor(
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     companion object {
-        const val AVATAR_SIZE_DP = 24
+        const val AVATAR_SIZE_DP = 20
         const val OVERLAP_FACT0R = -3 // =~ 30% to left
     }
 
