@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/roomToolbarAvatarImageView"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:importantForAccessibility="no"
@@ -21,17 +21,16 @@
 
     <im.vector.app.core.ui.views.ShieldImageView
         android:id="@+id/roomToolbarDecorationImageView"
-        android:layout_width="17dp"
-        android:layout_height="17dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="2dp"
-        app:layout_constraintBottom_toBottomOf="@id/roomToolbarTitleView"
-        app:layout_constraintStart_toEndOf="@id/roomToolbarAvatarImageView"
-        app:layout_constraintTop_toTopOf="@id/roomToolbarTitleView" />
+        android:layout_width="11dp"
+        android:layout_height="13dp"
+        tools:ignore="MissingConstraints"
+        app:layout_constraintCircle="@id/roomToolbarAvatarImageView"
+        app:layout_constraintCircleAngle="120"
+        app:layout_constraintCircleRadius="18dp"/>
 
     <im.vector.app.core.ui.views.PresenceStateImageView
         android:id="@+id/roomToolbarPresenceImageView"
-        android:layout_width="12dp"
+        android:layout_width="11dp"
         android:layout_height="12dp"
         android:background="@drawable/background_circle"
         android:padding="2dp"
@@ -41,8 +40,10 @@
         app:layout_constraintCircleRadius="20dp"
         tools:ignore="MissingConstraints"
         tools:layout_constraintCircleRadius="8dp"
+        tools:layout_editor_absoluteX="17dp"
+        tools:layout_editor_absoluteY="365dp"
         tools:src="@drawable/ic_presence_offline"
-        tools:visibility="visible" />
+        tools:visibility="invisible" />
 
     <ImageView
         android:id="@+id/roomToolbarPublicImageView"
@@ -57,13 +58,13 @@
         app:layout_constraintCircleAngle="135"
         app:layout_constraintCircleRadius="20dp"
         tools:ignore="MissingConstraints"
-        tools:visibility="visible" />
+        tools:visibility="invisible" />
 
     <TextView
         android:id="@+id/roomToolbarTitleView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="12dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:maxLines="1"
@@ -82,8 +83,8 @@
         android:id="@+id/roomToolbarSubtitleView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:textAlignment="viewStart"
