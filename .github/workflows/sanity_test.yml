@@ -8,7 +8,7 @@ on:
 # Enrich gradle.properties for CI/CD
 env:
   CI_GRADLE_ARG_PROPERTIES: >
-    -Porg.gradle.jvmargs=-Xmx2g
+    -Porg.gradle.jvmargs=-Xmx4g
     -Porg.gradle.parallel=false
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        api-level: [ 29 ]
+        api-level: [ 28 ]
     steps:
       - uses: actions/checkout@v2
         with:
@@ -57,9 +57,11 @@ jobs:
       - name: Run sanity tests on API ${{ matrix.api-level }}
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           api-level: ${{ matrix.api-level }}
-          profile: 24 # Pixel 5
+          arch: x86
+          profile: Nexus 5X
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822  # workaround to emulator bug: https://github.com/ReactiveCircus/android-emulator-runner/issues/160
           script: |
             adb root
@@ -67,10 +69,9 @@ jobs:
             touch emulator.log
             chmod 777 emulator.log
             adb logcat >> emulator.log &
-            ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedGplayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest || adb pull storage/emulated/0/Pictures/failure_screenshots && exit 1
-      - name: Upload Failing Test Report Log
+            ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedGplayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest || adb pull storage/emulated/0/Pictures/failure_screenshots
+      - name: Upload Test Report Log
         uses: actions/upload-artifact@v2
-        if: failure()
         with:
           name: sanity-error-results
           path: |
