@@ -549,6 +549,7 @@ class MessageItemFactory @Inject constructor(
                                      highlight: Boolean,
                                      callback: TimelineEventController.Callback?,
                                      attributes: AbsMessageItem.Attributes): MessageTextItem? {
+        // TODO process body to add pills for @room texts: create a dedicated renderer with PillsPostProcessor ?
         val bindingOptions = spanUtils.getBindingOptions(body)
         val linkifiedBody = body.linkify(callback)
 

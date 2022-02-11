@@ -43,8 +43,9 @@ sealed class MatrixItem(
         override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
     }
 
+    // TODO is it correct to represent it by a Matrix Item ? => to confirm
     data class EveryoneInRoomItem(override val id: String,
-                                  override val displayName: String? = null,
+                                  override val displayName: String = NOTIFY_EVERYONE,
                                   override val avatarUrl: String? = null,
                                   val roomDisplayName: String? = null) :
             MatrixItem(id, displayName, avatarUrl) {
@@ -190,7 +191,7 @@ fun RoomSummary.toMatrixItem() = if (roomType == RoomType.SPACE) {
 
 fun RoomSummary.toRoomAliasMatrixItem() = MatrixItem.RoomAliasItem(canonicalAlias ?: roomId, displayName, avatarUrl)
 
-fun RoomSummary.toEveryoneInRoomMatrixItem() = MatrixItem.EveryoneInRoomItem(roomId, MatrixItem.NOTIFY_EVERYONE, avatarUrl, displayName)
+fun RoomSummary.toEveryoneInRoomMatrixItem() = MatrixItem.EveryoneInRoomItem(id = roomId, avatarUrl = avatarUrl, roomDisplayName = displayName)
 
 // If no name is available, use room alias as Riot-Web does
 fun PublicRoom.toMatrixItem() = MatrixItem.RoomItem(roomId, name ?: getPrimaryAlias() ?: "", avatarUrl)

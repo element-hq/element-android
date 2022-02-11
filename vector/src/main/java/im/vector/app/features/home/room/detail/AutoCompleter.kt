@@ -238,7 +238,7 @@ class AutoCompleter @AssistedInject constructor(
 
         // Adding trailing space " " or ": " if the user started mention someone
         val displayNameSuffix =
-                if (firstChar == TRIGGER_AUTO_COMPLETE_MEMBERS && startIndex == 0) {
+                if (matrixItem is MatrixItem.UserItem) {
                     ": "
                 } else {
                     " "
