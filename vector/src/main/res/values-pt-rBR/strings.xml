@@ -324,7 +324,7 @@
     <string name="home_filter_placeholder_people">Filtrar pessoas</string>
     <string name="home_filter_placeholder_rooms">Filtrar nomes de salas</string>
     <string name="invitations_header">Convites</string>
-    <string name="low_priority_header">Baixa prioridade</string>
+    <string name="low_priority_header">Prioridade baixa</string>
     <string name="direct_chats_header">Conversas</string>
     <string name="local_address_book_header">Agenda de endereços local</string>
     <string name="matrix_only_filter">Contatos de Matrix somente</string>
@@ -673,7 +673,7 @@
     <string name="room_settings_room_tag">Etiqueta da Sala</string>
     <string name="room_settings_tag_pref_dialog_title">Etiquetada como:</string>
     <string name="room_settings_tag_pref_entry_favourite">Favoritar</string>
-    <string name="room_settings_tag_pref_entry_low_priority">Baixa prioridade</string>
+    <string name="room_settings_tag_pref_entry_low_priority">Prioridade baixa</string>
     <string name="room_settings_tag_pref_entry_none">Nenhuma</string>
     <string name="room_settings_category_access_visibility_title">Acesso e visibilidade</string>
     <string name="room_settings_directory_visibility">Listar esta sala em diretório de salas</string>
@@ -2404,8 +2404,8 @@
         <item quantity="one">%d convite</item>
         <item quantity="other">%d convites</item>
     </plurals>
-    <string name="room_list_quick_actions_low_priority_remove">Remover de baixa prioridade</string>
-    <string name="room_list_quick_actions_low_priority_add">Adicionar a baixa prioridade</string>
+    <string name="room_list_quick_actions_low_priority_remove">Remover de prioridade baixa</string>
+    <string name="room_list_quick_actions_low_priority_add">Adicionar a prioridade baixa</string>
     <string name="attachment_type_dialog_title">Adicionar imagem de</string>
     <string name="warning_unsaved_change_discard">Descartar mudanças</string>
     <string name="warning_unsaved_change">Existem mudanças não-salvas. Descartar as mudanças\?</string>
@@ -2896,7 +2896,7 @@
     <string name="room_settings_room_notifications_account_settings">Configurações de conta</string>
     <string name="room_settings_room_notifications_manage_notifications">Você pode gerenciar notificações em %1$s.</string>
     <string name="room_settings_room_notifications_encryption_notice">Por favor note que notificações de menções &amp; palavrachave não estão disponíveis em salas encriptadas no celular.</string>
-    <string name="room_settings_room_notifications_notify_me">Notifique-me por</string>
+    <string name="room_settings_room_notifications_notify_me">Notifique-me para</string>
     <string name="settings_mentions_and_keywords_encryption_notice">Você não vai ter notificações para menções &amp; palavrachaves em salas encriptadas no celular.</string>
     <string name="settings_messages_containing_keywords">Palavrachaves</string>
     <string name="settings_mentions_at_room">\@room</string>
