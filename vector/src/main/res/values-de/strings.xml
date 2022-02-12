@@ -154,7 +154,7 @@
     <string name="notice_widget_modified">%1$s hat das %2$s Widget modifiziert</string>
     <string name="notice_widget_modified_by_you">Du hast das %1$s Widget modifiziert</string>
     <string name="power_level_admin">Admin</string>
-    <string name="power_level_moderator">Moderator</string>
+    <string name="power_level_moderator">Moderation</string>
     <string name="power_level_default">Standard</string>
     <string name="power_level_custom">Benutzerdefiniert (%1$d)</string>
     <string name="power_level_custom_no_value">Benutzerdefiniert</string>
@@ -505,8 +505,8 @@
     <string name="room_participants_action_ban">Verbannen</string>
     <string name="room_participants_action_unban">Verbannung aufheben</string>
     <string name="room_participants_action_set_default_power_level">Zum normalen Benutzer herabstufen</string>
-    <string name="room_participants_action_set_moderator">Zum Moderator machen</string>
-    <string name="room_participants_action_set_admin">Zum Admin machen</string>
+    <string name="room_participants_action_set_moderator">Moderationsrechte vergeben</string>
+    <string name="room_participants_action_set_admin">Administrationsrechte vergeben</string>
     <string name="room_participants_action_ignore">Blockieren</string>
     <string name="room_participants_action_unignore">Alle Nachrichten dieses Nutzers anzeigen</string>
     <string name="room_participants_invite_search_another_user">Nutzer-ID, Name oder E-Mail-Adresse</string>
@@ -845,7 +845,7 @@
     <string name="start_voice_call_prompt_msg">Sicher, dass du einen Sprachanruf starten möchtest\?</string>
     <string name="start_video_call_prompt_msg">Sicher, dass du einen Videoanruf starten möchtest\?</string>
     <string name="groups_list">Gruppenliste</string>
-    <string name="room_participants_ban_prompt_msg">Ein Bann schließt die Person aus dem Raum aus und verhindert einen erneuten Beitritt.</string>
+    <string name="room_participants_ban_prompt_msg">Die Verbannung einer Person entfernt sie aus diesem Raum und hindert sie am erneuten Beitritt.</string>
     <string name="room_settings_all_messages_noisy">Alle Nachrichten (laut)</string>
     <string name="room_settings_all_messages">Alle Nachrichten</string>
     <string name="room_settings_mention_only">Nur Erwähnungen</string>
@@ -1076,7 +1076,7 @@
     <string name="settings_send_markdown_summary">Formatiere Nachrichten mittels Markdown-Syntax, bevor sie gesendet werden. Dies erlaubt erweiterte Formatierungen wie Sternchen (*), um kursiven Text anzuzeigen.</string>
     <string name="settings_show_read_receipts">Lesebestätigungen zeigen</string>
     <string name="settings_show_read_receipts_summary">Klicke auf die Lesebestätigungen für eine detailliertere Liste.</string>
-    <string name="settings_show_join_leave_messages_summary">Einladungen, Kicks und Banns werden weiterhin angezeigt.</string>
+    <string name="settings_show_join_leave_messages_summary">Einladungen, Entfernungen und Verbannungen bleiben sichtbar.</string>
     <string name="settings_password">Passwort</string>
     <string name="settings_labs_native_camera_summary">Starte die System-Kamera anstelle der angepassten Kamera.</string>
     <string name="settings_labs_enable_send_voice_summary">Diese Option erfordert eine externe Anwendung um Sprachnachrichten aufzuzeichnen.</string>
@@ -1864,7 +1864,7 @@
     <string name="room_profile_section_more_leave">Raum verlassen</string>
     <string name="room_profile_leaving_room">Verlasse den Raum…</string>
     <string name="room_member_power_level_admins">Administratoren</string>
-    <string name="room_member_power_level_moderators">Moderatoren</string>
+    <string name="room_member_power_level_moderators">Moderationen</string>
     <string name="room_member_power_level_custom">Benutzerdefiniert</string>
     <string name="room_member_power_level_invites">Eingeladen</string>
     <string name="room_member_power_level_users">Nutzer</string>
@@ -2273,7 +2273,7 @@
     <string name="three_pid_revoke_invite_dialog_title">Einladung zurücknehmen</string>
     <string name="three_pid_revoke_invite_dialog_content">Einladung zu %1$s zurücknehmen\?</string>
     <string name="member_banned_by">Gebannt von %1$s</string>
-    <string name="failed_to_unban">Aufheben des Banns fehlgeschlagen</string>
+    <string name="failed_to_unban">Aufhebung der Verbannung fehlgeschlagen</string>
     <string name="alert_push_are_disabled_title">Push-Benachrichtigungen sind deaktiviert</string>
     <string name="alert_push_are_disabled_description">Gehe zu deinen Einstellungen um Push-Benachrichtigungen zu aktivieren</string>
     <string name="create_pin_title">Nutze eine PIN für mehr Sicherheit</string>
@@ -2337,7 +2337,7 @@
         <item quantity="other">%d Sekunden</item>
     </plurals>
     <string name="settings_show_room_member_state_events">Status-Ereignisse der Raummitglieder zeigen</string>
-    <string name="settings_show_room_member_state_events_summary">Bezieht Einladungs-/Beitritts-/Verlassen-/Entfernen-/Verbannen-Ereignisse und Avatar-/Anzeigenamen-Wechsel mit ein.</string>
+    <string name="settings_show_room_member_state_events_summary">Bezieht Einladungs-/Beitritts-/Verlassen-/Entfernungs-/Verbannungs-Ereignisse und Wechsel des Avatar/Anzeigenamen mit ein.</string>
     <string name="sent_a_poll">Umfrage</string>
     <string name="sent_a_reaction">Reagierte mit: %s</string>
     <string name="universal_link_malformed">Der Link war fehlerhaft</string>
@@ -2926,7 +2926,7 @@
     <string name="space_permissions_notice_read_only">Du hast nicht die Berechtigung, Rollenrechte zu bearbeiten</string>
     <string name="space_settings_permissions_title">Space-Berechtigungen</string>
     <string name="space_participants_unban_prompt_msg">Wenn du die Person entbannst, kann sie wieder beitreten.</string>
-    <string name="space_participants_ban_prompt_msg">Wenn du eine Person bannst, kann sie nicht erneut beitreten.</string>
+    <string name="space_participants_ban_prompt_msg">Die Verbannung einer Person entfernt sie aus diesem Space und hindert sie am erneuten Beitritt.</string>
     <string name="space_participants_remove_prompt_msg">Kicken entfernt die Person aus dem Space
 \n
 \nUm sie für immer zu entfernen, solltest du sie bannen.</string>
