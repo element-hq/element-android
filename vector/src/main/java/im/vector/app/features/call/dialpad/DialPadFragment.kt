@@ -40,7 +40,7 @@ import com.android.dialer.dialpadview.DigitsEditText
 import im.vector.app.R
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.features.analytics.AnalyticsTracker
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.screen.ScreenEvent
 import im.vector.app.features.themes.ThemeUtils
 
@@ -69,7 +69,7 @@ class DialPadFragment : Fragment(), TextWatcher {
     private var screenEvent: ScreenEvent? = null
     override fun onResume() {
         super.onResume()
-        screenEvent = ScreenEvent(Screen.ScreenName.MobileDialpad)
+        screenEvent = ScreenEvent(MobileScreen.ScreenName.Dialpad)
     }
 
     override fun onPause() {

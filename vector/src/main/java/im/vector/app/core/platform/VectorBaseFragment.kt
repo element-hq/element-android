@@ -44,7 +44,7 @@ import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.utils.ToolbarConfig
 import im.vector.app.features.analytics.AnalyticsTracker
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.screen.ScreenEvent
 import im.vector.app.features.navigation.Navigator
 import im.vector.lib.ui.styles.dialogs.MaterialProgressDialog
@@ -58,7 +58,7 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
      * Analytics
      * ========================================================================================== */
 
-    protected var analyticsScreenName: Screen.ScreenName? = null
+    protected var analyticsScreenName: MobileScreen.ScreenName? = null
     private var screenEvent: ScreenEvent? = null
 
     protected lateinit var analyticsTracker: AnalyticsTracker

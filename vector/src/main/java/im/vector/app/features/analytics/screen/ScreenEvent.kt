@@ -18,13 +18,13 @@ package im.vector.app.features.analytics.screen
 
 import android.os.SystemClock
 import im.vector.app.features.analytics.AnalyticsTracker
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import timber.log.Timber
 
 /**
  * Track a screen display. Unique usage.
  */
-class ScreenEvent(val screenName: Screen.ScreenName) {
+class ScreenEvent(val screenName: MobileScreen.ScreenName) {
     private val startTime = SystemClock.elapsedRealtime()
 
     // Protection to avoid multiple sending
@@ -34,14 +34,14 @@ class ScreenEvent(val screenName: Screen.ScreenName) {
      * @param screenNameOverride can be used to override the screen name passed in constructor parameter
      */
     fun send(analyticsTracker: AnalyticsTracker,
-             screenNameOverride: Screen.ScreenName? = null) {
+             screenNameOverride: MobileScreen.ScreenName? = null) {
         if (isSent) {
             Timber.w("Event $screenName Already sent!")
             return
         }
         isSent = true
         analyticsTracker.screen(
-                Screen(
+                MobileScreen(
                         screenName = screenNameOverride ?: screenName,
                         durationMs = (SystemClock.elapsedRealtime() - startTime).toInt()
                 )
