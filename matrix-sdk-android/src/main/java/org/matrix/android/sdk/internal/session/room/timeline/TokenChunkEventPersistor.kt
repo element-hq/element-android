@@ -34,6 +34,7 @@ import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.create
 import org.matrix.android.sdk.internal.database.query.find
@@ -49,10 +50,10 @@ import javax.inject.Inject
  * Insert Chunk in DB, and eventually link next and previous chunk in db.
  */
 internal class TokenChunkEventPersistor @Inject constructor(
-                                                            @SessionDatabase private val monarchy: Monarchy,
-                                                            @UserId private val userId: String,
-                                                            private val lightweightSettingsStorage: LightweightSettingsStorage,
-                                                            private val liveEventManager: Lazy<StreamEventsManager>) {
+        @SessionDatabase private val monarchy: Monarchy,
+        @UserId private val userId: String,
+        private val lightweightSettingsStorage: LightweightSettingsStorage,
+        private val liveEventManager: Lazy<StreamEventsManager>) {
 
     enum class Result {
         SHOULD_FETCH_MORE,
@@ -145,9 +146,12 @@ internal class TokenChunkEventPersistor @Inject constructor(
                 if (event.eventId == null || event.senderId == null) {
                     return@forEach
                 }
-                // We check for the timeline event with this id
+                // We check for the timeline event with this id, but not in the thread chunk
                 val eventId = event.eventId
-                val existingTimelineEvent = TimelineEventEntity.where(realm, roomId, eventId).findFirst()
+                val existingTimelineEvent = TimelineEventEntity
+                        .where(realm, roomId, eventId)
+                        .equalTo(TimelineEventEntityFields.OWNED_BY_THREAD_CHUNK, false)
+                        .findFirst()
                 // If it exists, we want to stop here, just link the prevChunk
                 val existingChunk = existingTimelineEvent?.chunk?.firstOrNull()
                 if (existingChunk != null) {
@@ -173,7 +177,7 @@ internal class TokenChunkEventPersistor @Inject constructor(
                     return@processTimelineEvents
                 }
                 val ageLocalTs = event.unsignedData?.age?.let { now - it }
-                val eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
+                var eventEntity = event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
                 if (event.type == EventType.STATE_ROOM_MEMBER && event.stateKey != null) {
                     val contentToUse = if (direction == PaginationDirection.BACKWARDS) {
                         event.prevContent
@@ -183,7 +187,11 @@ internal class TokenChunkEventPersistor @Inject constructor(
                     roomMemberContentsByUser[event.stateKey] = contentToUse.toModel<RoomMemberContent>()
                 }
                 liveEventManager.get().dispatchPaginatedEventReceived(event, roomId)
-                currentChunk.addTimelineEvent(roomId, eventEntity, direction, roomMemberContentsByUser)
+                currentChunk.addTimelineEvent(
+                        roomId = roomId,
+                        eventEntity = eventEntity,
+                        direction = direction,
+                        roomMemberContentsByUser = roomMemberContentsByUser)
                 if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
                     eventEntity.rootThreadEventId?.let {
                         // This is a thread event

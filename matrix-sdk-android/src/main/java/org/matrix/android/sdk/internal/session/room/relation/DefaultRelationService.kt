@@ -206,7 +206,13 @@ internal class DefaultRelationService @AssistedInject constructor(
     }
 
     override suspend fun fetchThreadTimeline(rootThreadEventId: String): Boolean {
-        return fetchThreadTimelineTask.execute(FetchThreadTimelineTask.Params(roomId, rootThreadEventId))
+        fetchThreadTimelineTask.execute(FetchThreadTimelineTask.Params(
+                roomId,
+                rootThreadEventId,
+                null,
+                10
+        ))
+        return true
     }
 
     /**

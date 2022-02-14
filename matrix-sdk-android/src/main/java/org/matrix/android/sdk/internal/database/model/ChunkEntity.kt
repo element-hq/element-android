@@ -23,6 +23,7 @@ import io.realm.annotations.Index
 import io.realm.annotations.LinkingObjects
 import org.matrix.android.sdk.internal.extensions.assertIsManaged
 import org.matrix.android.sdk.internal.extensions.clearWith
+import timber.log.Timber
 
 internal open class ChunkEntity(@Index var prevToken: String? = null,
         // Because of gaps we can have several chunks with nextToken == null
@@ -33,7 +34,10 @@ internal open class ChunkEntity(@Index var prevToken: String? = null,
                                 var timelineEvents: RealmList<TimelineEventEntity> = RealmList(),
         // Only one chunk will have isLastForward == true
                                 @Index var isLastForward: Boolean = false,
-                                @Index var isLastBackward: Boolean = false
+                                @Index var isLastBackward: Boolean = false,
+        // Threads
+                                @Index var rootThreadEventId: String? = null,
+                                @Index var isLastForwardThread: Boolean = false,
 ) : RealmObject() {
 
     fun identifier() = "${prevToken}_$nextToken"
@@ -58,3 +62,19 @@ internal fun ChunkEntity.deleteOnCascade(deleteStateEvents: Boolean, canDeleteRo
     }
     deleteFromRealm()
 }
+
+/**
+ * Delete the chunk along with the thread events that were temporarily created
+ */
+internal fun ChunkEntity.deleteAndClearThreadEvents() {
+    assertIsManaged()
+    timelineEvents
+            .filter { it.ownedByThreadChunk }
+            .forEach {
+                it.deleteOnCascade(false)
+            }
+    deleteFromRealm()
+}
+
+
+

@@ -38,6 +38,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineSettings
 import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.TimelineEventMapper
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
+import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.sync.handler.room.ReadReceiptHandler
 import org.matrix.android.sdk.internal.session.sync.handler.room.ThreadsAwarenessHandler
 import org.matrix.android.sdk.internal.task.SemaphoreCoroutineSequencer
@@ -58,6 +59,7 @@ internal class DefaultTimeline(private val roomId: String,
                                paginationTask: PaginationTask,
                                getEventTask: GetContextOfEventTask,
                                fetchTokenAndPaginateTask: FetchTokenAndPaginateTask,
+                               fetchThreadTimelineTask: FetchThreadTimelineTask,
                                timelineEventMapper: TimelineEventMapper,
                                timelineInput: TimelineInput,
                                threadsAwarenessHandler: ThreadsAwarenessHandler,
@@ -89,7 +91,9 @@ internal class DefaultTimeline(private val roomId: String,
             realm = backgroundRealm,
             eventDecryptor = eventDecryptor,
             paginationTask = paginationTask,
+            realmConfiguration = realmConfiguration,
             fetchTokenAndPaginateTask = fetchTokenAndPaginateTask,
+            fetchThreadTimelineTask = fetchThreadTimelineTask,
             getContextOfEventTask = getEventTask,
             timelineInput = timelineInput,
             timelineEventMapper = timelineEventMapper,

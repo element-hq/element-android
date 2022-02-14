@@ -57,7 +57,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
 ) : RealmMigration {
 
     companion object {
-        const val SESSION_STORE_SCHEMA_VERSION = 24L
+        const val SESSION_STORE_SCHEMA_VERSION = 26L
     }
 
     /**
@@ -94,6 +94,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
         if (oldVersion <= 21) migrateTo22(realm)
         if (oldVersion <= 22) migrateTo23(realm)
         if (oldVersion <= 23) migrateTo24(realm)
+        if (oldVersion <= 24) migrateTo25(realm)
     }
 
     private fun migrateTo1(realm: DynamicRealm) {
@@ -488,5 +489,16 @@ internal class RealmSessionStoreMigration @Inject constructor(
                 ?.setNullable(PreviewUrlCacheEntityFields.IMAGE_WIDTH, true)
                 ?.addField(PreviewUrlCacheEntityFields.IMAGE_HEIGHT, Int::class.java)
                 ?.setNullable(PreviewUrlCacheEntityFields.IMAGE_HEIGHT, true)
+    }
+
+    private fun migrateTo25(realm: DynamicRealm){
+        Timber.d("Step 24 -> 25")
+        realm.schema.get("ChunkEntity")
+                ?.addField(ChunkEntityFields.ROOT_THREAD_EVENT_ID, String::class.java, FieldAttribute.INDEXED)
+                ?.addField(ChunkEntityFields.IS_LAST_FORWARD_THREAD, Boolean::class.java, FieldAttribute.INDEXED)
+
+        realm.schema.get("TimelineEventEntity")
+                ?.addField(TimelineEventEntityFields.OWNED_BY_THREAD_CHUNK, Boolean::class.java)
+
     }
 }

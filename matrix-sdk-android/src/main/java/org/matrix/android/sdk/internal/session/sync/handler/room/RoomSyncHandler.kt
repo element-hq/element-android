@@ -46,10 +46,12 @@ import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.EventInsertType
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
+import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.deleteOnCascade
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.find
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
+import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfThread
 import org.matrix.android.sdk.internal.database.query.getOrCreate
 import org.matrix.android.sdk.internal.database.query.getOrNull
 import org.matrix.android.sdk.internal.database.query.where
@@ -343,6 +345,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         return roomEntity
     }
 
+    val customList = arrayListOf<String>()
     private fun handleTimelineEvents(realm: Realm,
                                      roomId: String,
                                      roomEntity: RoomEntity,
@@ -406,11 +409,18 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                 rootStateEvent?.asDomain()?.getFixedRoomMemberContent()
             }
 
-            chunkEntity.addTimelineEvent(roomId, eventEntity, PaginationDirection.FORWARDS, roomMemberContentsByUser)
+            val timelineEventAdded = chunkEntity.addTimelineEvent(
+                    roomId = roomId,
+                    eventEntity = eventEntity,
+                    direction = PaginationDirection.FORWARDS,
+                    roomMemberContentsByUser = roomMemberContentsByUser)
             if (lightweightSettingsStorage.areThreadMessagesEnabled()) {
                 eventEntity.rootThreadEventId?.let {
                     // This is a thread event
                     optimizedThreadSummaryMap[it] = eventEntity
+                    // Add the same thread timeline event to Thread Chunk
+                    addToThreadChunkIfNeeded(realm, roomId, it, timelineEventAdded, roomEntity)
+
                 } ?: run {
                     // This is a normal event or a root thread one
                     optimizedThreadSummaryMap[eventEntity.eventId] = eventEntity
@@ -453,6 +463,29 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         // posting new events to timeline if any is registered
         timelineInput.onNewTimelineEvents(roomId = roomId, eventIds = eventIds)
         return chunkEntity
+    }
+
+    /**
+     * Adds new event to the appropriate thread chunk. If the event is already in
+     * the thread timeline and /relations api, we should not added it
+     */
+    private fun addToThreadChunkIfNeeded(realm: Realm,
+                                         roomId: String,
+                                         threadId: String,
+                                         timelineEventEntity: TimelineEventEntity?,
+                                         roomEntity: RoomEntity) {
+
+        val eventId = timelineEventEntity?.eventId ?: return
+
+        ChunkEntity.findLastForwardChunkOfThread(realm, roomId, threadId)?.let { threadChunk ->
+            val existingEvent = threadChunk.timelineEvents.find(eventId)
+            if (existingEvent?.ownedByThreadChunk == true) {
+                Timber.i("###THREADS RoomSyncHandler event:${timelineEventEntity.eventId} already exists, do not add")
+                return@addToThreadChunkIfNeeded
+            }
+            threadChunk.timelineEvents.add(0, timelineEventEntity)
+            roomEntity.addIfNecessary(threadChunk)
+        }
     }
 
     private fun decryptIfNeeded(event: Event, roomId: String) {

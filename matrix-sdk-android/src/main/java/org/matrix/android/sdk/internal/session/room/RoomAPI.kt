@@ -227,6 +227,8 @@ internal interface RoomAPI {
                              @Path("eventId") eventId: String,
                              @Path("relationType") relationType: String,
                              @Path("eventType") eventType: String,
+                             @Query("from") from: String? = null,
+                             @Query("to") to: String? = null,
                              @Query("limit") limit: Int? = null
     ): RelationsResponse
 

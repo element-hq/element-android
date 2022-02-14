@@ -201,7 +201,11 @@ data class Event(
      */
     fun getDecryptedTextSummary(): String? {
         if (isRedacted()) return "Message Deleted"
-        val text = getDecryptedValue() ?: return null
+        val text = getDecryptedValue() ?: run {
+            if (isPoll()) {return getPollQuestion() ?: "created a poll."}
+            return null
+        }
+
         return when {
             isReplyRenderedInThread() || isQuote() -> ContentUtils.extractUsefulTextFromReply(text)
             isFileMessage()                        -> "sent a file."

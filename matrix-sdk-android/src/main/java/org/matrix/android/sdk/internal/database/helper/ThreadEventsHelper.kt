@@ -98,6 +98,7 @@ internal fun EventEntity.threadSummaryInThread(realm: Realm, rootThreadEventId: 
     val messages = TimelineEventEntity
             .whereRoomId(realm, roomId = roomId)
             .equalTo(TimelineEventEntityFields.ROOT.ROOT_THREAD_EVENT_ID, rootThreadEventId)
+            .distinct(TimelineEventEntityFields.ROOT.EVENT_ID)
             .count()
             .toInt()
 
@@ -156,6 +157,7 @@ internal fun TimelineEventEntity.Companion.findAllThreadsForRoomId(realm: Realm,
         TimelineEventEntity
                 .whereRoomId(realm, roomId = roomId)
                 .equalTo(TimelineEventEntityFields.ROOT.IS_ROOT_THREAD, true)
+                .equalTo(TimelineEventEntityFields.OWNED_BY_THREAD_CHUNK, false)
                 .sort("${TimelineEventEntityFields.ROOT.THREAD_SUMMARY_LATEST_MESSAGE}.${TimelineEventEntityFields.ROOT.ORIGIN_SERVER_TS}", Sort.DESCENDING)
 
 /**
