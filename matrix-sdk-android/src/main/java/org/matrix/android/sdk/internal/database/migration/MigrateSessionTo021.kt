@@ -25,7 +25,7 @@ import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo021(realm: DynamicRealm) : RealmMigrator(realm, 21) {
+class MigrateSessionTo021(realm: DynamicRealm) : RealmMigrator(realm) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("RoomSummaryEntity")

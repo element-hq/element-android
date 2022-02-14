@@ -21,7 +21,7 @@ import org.matrix.android.sdk.internal.auth.db.SessionParamsEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
-class MigrateAuthTo002(realm: DynamicRealm) : RealmMigrator(realm, 2) {
+class MigrateAuthTo002(realm: DynamicRealm) : RealmMigrator(realm) {
 
     override fun doMigrate(realm: DynamicRealm) {
         Timber.d("Add boolean isTokenValid in SessionParamsEntity, with value true")

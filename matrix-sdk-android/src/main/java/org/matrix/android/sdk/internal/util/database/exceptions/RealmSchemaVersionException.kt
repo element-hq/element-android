@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 The Matrix.org Foundation C.I.C.
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,6 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.database.migration
+package org.matrix.android.sdk.internal.util.database.exceptions
 
-import io.realm.DynamicRealm
-import org.matrix.android.sdk.internal.database.model.EventInsertEntityFields
-import org.matrix.android.sdk.internal.util.database.RealmMigrator
-
-class MigrateSessionTo017(realm: DynamicRealm) : RealmMigrator(realm) {
-
-    override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.get("EventInsertEntity")
-                ?.addField(EventInsertEntityFields.CAN_BE_PROCESSED, Boolean::class.java)
-    }
-}
+class RealmSchemaVersionException(message: String) : Exception(message)

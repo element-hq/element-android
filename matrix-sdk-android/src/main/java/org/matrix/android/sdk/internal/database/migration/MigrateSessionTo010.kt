@@ -27,7 +27,7 @@ import org.matrix.android.sdk.internal.database.model.SpaceParentSummaryEntityFi
 import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo010(realm: DynamicRealm) : RealmMigrator(realm, 10) {
+class MigrateSessionTo010(realm: DynamicRealm) : RealmMigrator(realm) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.create("SpaceChildSummaryEntity")

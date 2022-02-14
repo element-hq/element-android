@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.database.migration
 import io.realm.DynamicRealm
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo002(realm: DynamicRealm) : RealmMigrator(realm, 2) {
+class MigrateSessionTo002(realm: DynamicRealm) : RealmMigrator(realm) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("HomeServerCapabilitiesEntity")

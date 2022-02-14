@@ -18,10 +18,13 @@ package org.matrix.android.sdk.internal.util.database
 
 import io.realm.DynamicRealm
 import io.realm.RealmObjectSchema
+import org.matrix.android.sdk.internal.util.database.exceptions.RealmSchemaVersionException
 import timber.log.Timber
 
-abstract class RealmMigrator(private val realm: DynamicRealm,
-                             private val targetSchemaVersion: Int) {
+abstract class RealmMigrator(private val realm: DynamicRealm) {
+
+    private val targetSchemaVersion = calculateSchemaVersion(this::class.java.simpleName)
+
     fun perform() {
         Timber.d("Migrate ${realm.configuration.realmFileName} to $targetSchemaVersion")
         doMigrate(realm)
@@ -48,5 +51,30 @@ abstract class RealmMigrator(private val realm: DynamicRealm,
             setRequired(fieldName, isRequired)
         }
         return this
+    }
+
+    fun getSchemaVersion() = targetSchemaVersion
+
+    private fun calculateSchemaVersion(className: String): Int {
+        return when {
+            className.contains("Crypto") && className.contains("Legacy") -> {
+                className
+                        .substringAfterLast("CryptoTo")
+                        .substringBeforeLast("Legacy")
+                        .toInt()
+            }
+            className.contains("Crypto") && className.contains("RiotX")  -> {
+                className
+                        .substringAfterLast("CryptoTo")
+                        .substringBeforeLast("RiotX")
+                        .toInt()
+            }
+            className.contains("To")                                     -> {
+                className.substringAfterLast("To").toInt()
+            }
+            else                                                         -> {
+                throw RealmSchemaVersionException("Error calculating realm migration schema version for class $className")
+            }
+        }
     }
 }

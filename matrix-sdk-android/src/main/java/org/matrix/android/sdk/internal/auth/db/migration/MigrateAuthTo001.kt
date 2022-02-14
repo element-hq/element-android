@@ -21,7 +21,7 @@ import org.matrix.android.sdk.internal.auth.db.PendingSessionEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 import timber.log.Timber
 
-class MigrateAuthTo001(realm: DynamicRealm) : RealmMigrator(realm, 1) {
+class MigrateAuthTo001(realm: DynamicRealm) : RealmMigrator(realm) {
 
     override fun doMigrate(realm: DynamicRealm) {
         Timber.d("Create PendingSessionEntity")

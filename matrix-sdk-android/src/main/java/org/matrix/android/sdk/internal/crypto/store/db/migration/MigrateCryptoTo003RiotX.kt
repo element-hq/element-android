@@ -26,7 +26,7 @@ import org.matrix.androidsdk.crypto.data.MXDeviceInfo
 import org.matrix.androidsdk.crypto.data.MXOlmInboundGroupSession2
 import timber.log.Timber
 
-class MigrateCryptoTo003RiotX(realm: DynamicRealm) : RealmMigrator(realm, 3) {
+class MigrateCryptoTo003RiotX(realm: DynamicRealm) : RealmMigrator(realm) {
 
     override fun doMigrate(realm: DynamicRealm) {
         Timber.d("Migrate to RiotX model")

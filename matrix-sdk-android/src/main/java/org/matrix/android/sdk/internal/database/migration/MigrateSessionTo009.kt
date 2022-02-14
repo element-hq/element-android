@@ -25,7 +25,7 @@ import org.matrix.android.sdk.internal.database.model.RoomTagEntityFields
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo009(realm: DynamicRealm) : RealmMigrator(realm, 9) {
+class MigrateSessionTo009(realm: DynamicRealm) : RealmMigrator(realm) {
 
     override fun doMigrate(realm: DynamicRealm) {
         realm.schema.get("RoomSummaryEntity")
