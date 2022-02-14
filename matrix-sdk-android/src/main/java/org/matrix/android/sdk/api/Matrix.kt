@@ -129,7 +129,8 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
                     instance = Matrix(appContext, matrixConfiguration)
                 } else {
                     throw IllegalStateException("Matrix is not initialized properly." +
-                            " You should call Matrix.initialize or let your application implements MatrixConfiguration.Provider.")
+                            " If you want to manage your own Matrix instance use Matrix.createInstance" +
+                            " otherwise you should call Matrix.initialize or let your application implement MatrixConfiguration.Provider.")
                 }
             }
             return instance
