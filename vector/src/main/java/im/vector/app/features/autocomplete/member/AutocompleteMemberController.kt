@@ -84,7 +84,6 @@ class AutocompleteMemberController @Inject constructor(private val context: Cont
 
     private fun buildEveryoneItem(everyone: AutocompleteMemberItem.Everyone) {
         val host = this
-
         autocompleteMatrixItem {
             everyone.roomSummary.let { room ->
                 id(room.roomId)
