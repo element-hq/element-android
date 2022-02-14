@@ -57,7 +57,6 @@ class PillsPostProcessor @AssistedInject constructor(@Assisted private val roomI
 
     private fun addPillSpans(renderedText: Spannable, roomId: String?) {
         addLinkSpans(renderedText, roomId)
-        roomId?.let { id -> addRawTextSpans(renderedText, id) }
     }
 
     private fun addPillSpan(
@@ -77,31 +76,6 @@ class PillsPostProcessor @AssistedInject constructor(@Assisted private val roomI
             val startSpan = renderedText.getSpanStart(linkSpan)
             val endSpan = renderedText.getSpanEnd(linkSpan)
             addPillSpan(renderedText, pillSpan, startSpan, endSpan)
-        }
-    }
-
-    // TODO move this into another PostProcessor when there is no html
-    private fun addRawTextSpans(renderedText: Spannable, roomId: String) {
-        if (renderedText.contains(MatrixItem.NOTIFY_EVERYONE)) {
-            addNotifyEveryoneSpans(renderedText, roomId)
-        }
-    }
-
-    private fun addNotifyEveryoneSpans(renderedText: Spannable, roomId: String) {
-        val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.getRoomSummary(roomId)
-        val matrixItem = MatrixItem.EveryoneInRoomItem(
-                id = roomId,
-                avatarUrl = room?.avatarUrl,
-                roomDisplayName = room?.displayName
-        )
-        val pillSpan = createPillImageSpan(matrixItem)
-
-        // search for notify everyone text
-        var foundIndex = renderedText.indexOf(MatrixItem.NOTIFY_EVERYONE, 0)
-        while (foundIndex >= 0) {
-            val endSpan = foundIndex + MatrixItem.NOTIFY_EVERYONE.length
-            addPillSpan(renderedText, pillSpan, foundIndex, endSpan)
-            foundIndex = renderedText.indexOf(MatrixItem.NOTIFY_EVERYONE, endSpan)
         }
     }
 
