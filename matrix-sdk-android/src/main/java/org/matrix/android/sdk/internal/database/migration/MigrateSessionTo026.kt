@@ -25,7 +25,6 @@ import org.matrix.android.sdk.internal.util.database.RealmMigrator
 class MigrateSessionTo026(realm: DynamicRealm) : RealmMigrator(realm, 26) {
 
     override fun doMigrate(realm: DynamicRealm) {
-
         realm.schema.get("ChunkEntity")
                 ?.addField(ChunkEntityFields.ROOT_THREAD_EVENT_ID, String::class.java, FieldAttribute.INDEXED)
                 ?.addField(ChunkEntityFields.IS_LAST_FORWARD_THREAD, Boolean::class.java, FieldAttribute.INDEXED)
