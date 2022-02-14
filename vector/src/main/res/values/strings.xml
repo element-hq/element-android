@@ -3779,4 +3779,7 @@
     <string name="tooltip_attachment_poll">Create poll</string>
     <string name="tooltip_attachment_location">Share location</string>
 
+    <string name="message_reaction_show_less">Show less</string>
+    <string name="message_reaction_show_more">"%1$d more"</string>
+
 </resources>

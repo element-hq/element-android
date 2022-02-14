@@ -33,8 +33,7 @@ data class MessageInformationData(
         val avatarUrl: String?,
         val memberName: CharSequence? = null,
         val messageLayout: TimelineMessageLayout,
-        /*List of reactions (emoji,count,isSelected)*/
-        val orderedReactionList: List<ReactionInfoData>? = null,
+        val reactionsSummary: ReactionsSummaryData,
         val pollResponseAggregatedSummary: PollResponseData? = null,
         val hasBeenEdited: Boolean = false,
         val hasPendingEdits: Boolean = false,
@@ -53,6 +52,16 @@ data class MessageInformationData(
 @Parcelize
 data class ReferencesInfoData(
         val verificationStatus: VerificationState
+) : Parcelable
+
+@Parcelize
+data class ReactionsSummaryData(
+        /*List of reactions (emoji,count,isSelected)*/
+        val reactions: List<ReactionInfoData>? = null,
+        val showAll: Boolean = false,
+        val onShowMoreClicked: () -> Unit,
+        val onShowLessClicked: () -> Unit,
+        val onAddMoreClicked: () -> Unit
 ) : Parcelable
 
 @Parcelize

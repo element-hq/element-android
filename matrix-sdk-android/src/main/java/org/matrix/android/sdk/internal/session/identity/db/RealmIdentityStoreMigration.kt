@@ -18,23 +18,23 @@ package org.matrix.android.sdk.internal.session.identity.db
 
 import io.realm.DynamicRealm
 import io.realm.RealmMigration
+import org.matrix.android.sdk.internal.session.identity.db.migration.MigrateIdentityTo001
 import timber.log.Timber
+import javax.inject.Inject
 
-internal object RealmIdentityStoreMigration : RealmMigration {
+internal class RealmIdentityStoreMigration @Inject constructor() : RealmMigration {
+    /**
+     * Forces all RealmIdentityStoreMigration instances to be equal
+     * Avoids Realm throwing when multiple instances of the migration are set
+     */
+    override fun equals(other: Any?) = other is RealmIdentityStoreMigration
+    override fun hashCode() = 3000
 
-    const val IDENTITY_STORE_SCHEMA_VERSION = 1L
+    val schemaVersion = 1L
 
     override fun migrate(realm: DynamicRealm, oldVersion: Long, newVersion: Long) {
-        Timber.v("Migrating Realm Identity from $oldVersion to $newVersion")
+        Timber.d("Migrating Realm Identity from $oldVersion to $newVersion")
 
-        if (oldVersion <= 0) migrateTo1(realm)
-    }
-
-    private fun migrateTo1(realm: DynamicRealm) {
-        Timber.d("Step 0 -> 1")
-        Timber.d("Add field userConsent (Boolean) and set the value to false")
-
-        realm.schema.get("IdentityDataEntity")
-                ?.addField(IdentityDataEntityFields.USER_CONSENT, Boolean::class.java)
+        if (oldVersion < 1) MigrateIdentityTo001(realm).perform()
     }
 }

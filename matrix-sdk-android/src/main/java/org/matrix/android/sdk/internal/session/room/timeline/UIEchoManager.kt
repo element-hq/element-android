@@ -66,11 +66,11 @@ internal class UIEchoManager(private val listener: Listener) {
         return existingState != sendState
     }
 
-    fun onLocalEchoCreated(timelineEvent: TimelineEvent): Boolean  {
+    fun onLocalEchoCreated(timelineEvent: TimelineEvent): Boolean {
         when (timelineEvent.root.getClearType()) {
             EventType.REDACTION -> {
             }
-            EventType.REACTION -> {
+            EventType.REACTION  -> {
                 val content: ReactionContent? = timelineEvent.root.content?.toModel<ReactionContent>()
                 if (RelationType.ANNOTATION == content?.relatesTo?.type) {
                     val reaction = content.relatesTo.key
@@ -104,8 +104,8 @@ internal class UIEchoManager(private val listener: Listener) {
         val updateReactions = existingAnnotationSummary.reactionsSummary.toMutableList()
 
         contents.forEach { uiEchoReaction ->
-            val existing = updateReactions.firstOrNull { it.key == uiEchoReaction.reaction }
-            if (existing == null) {
+            val indexOfExistingReaction = updateReactions.indexOfFirst { it.key == uiEchoReaction.reaction }
+            if (indexOfExistingReaction == -1) {
                 // just add the new key
                 ReactionAggregatedSummary(
                         key = uiEchoReaction.reaction,
@@ -117,6 +117,7 @@ internal class UIEchoManager(private val listener: Listener) {
                 ).let { updateReactions.add(it) }
             } else {
                 // update Existing Key
+                val existing = updateReactions[indexOfExistingReaction]
                 if (!existing.localEchoEvents.contains(uiEchoReaction.localEchoId)) {
                     updateReactions.remove(existing)
                     // only update if echo is not yet there
@@ -128,7 +129,7 @@ internal class UIEchoManager(private val listener: Listener) {
                             sourceEvents = existing.sourceEvents,
                             localEchoEvents = existing.localEchoEvents + uiEchoReaction.localEchoId
 
-                    ).let { updateReactions.add(it) }
+                    ).let { updateReactions.add(indexOfExistingReaction, it) }
                 }
             }
         }

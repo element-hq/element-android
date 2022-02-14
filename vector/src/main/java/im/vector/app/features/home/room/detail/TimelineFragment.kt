@@ -1915,6 +1915,10 @@ class TimelineFragment @Inject constructor(
         timelineViewModel.handle(RoomDetailAction.LoadMoreTimelineEvents(direction))
     }
 
+    override fun onAddMoreReaction(event: TimelineEvent) {
+        openEmojiReactionPicker(event.eventId)
+    }
+
     override fun onEventCellClicked(informationData: MessageInformationData, messageContent: Any?, view: View, isRootThreadEvent: Boolean) {
         when (messageContent) {
             is MessageVerificationRequestContent -> {
@@ -2119,7 +2123,7 @@ class TimelineFragment @Inject constructor(
                 openRoomMemberProfile(action.userId)
             }
             is EventSharedAction.AddReaction                -> {
-                emojiActivityResultLauncher.launch(EmojiReactionPickerActivity.intent(requireContext(), action.eventId))
+                openEmojiReactionPicker(action.eventId)
             }
             is EventSharedAction.ViewReactions              -> {
                 ViewReactionsBottomSheet.newInstance(timelineArgs.roomId, action.messageInformationData)
@@ -2239,6 +2243,10 @@ class TimelineFragment @Inject constructor(
                 askConfirmationToEndPoll(action.eventId)
             }
         }
+    }
+
+    private fun openEmojiReactionPicker(eventId: String) {
+        emojiActivityResultLauncher.launch(EmojiReactionPickerActivity.intent(requireContext(), eventId))
     }
 
     private fun askConfirmationToEndPoll(eventId: String) {
