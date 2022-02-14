@@ -43,6 +43,7 @@ import org.matrix.android.sdk.internal.database.migration.MigrateSessionTo022
 import org.matrix.android.sdk.internal.database.migration.MigrateSessionTo023
 import org.matrix.android.sdk.internal.database.migration.MigrateSessionTo024
 import org.matrix.android.sdk.internal.database.migration.MigrateSessionTo025
+import org.matrix.android.sdk.internal.database.migration.MigrateSessionTo026
 import org.matrix.android.sdk.internal.util.Normalizer
 import timber.log.Timber
 import javax.inject.Inject
@@ -87,5 +88,6 @@ internal class RealmSessionStoreMigration @Inject constructor(
         if (oldVersion < 23) MigrateSessionTo023(realm).perform()
         if (oldVersion < 24) MigrateSessionTo024(realm).perform()
         if (oldVersion < 25) MigrateSessionTo025(realm).perform()
+        if (oldVersion < 26) MigrateSessionTo026(realm).perform()
     }
 }
