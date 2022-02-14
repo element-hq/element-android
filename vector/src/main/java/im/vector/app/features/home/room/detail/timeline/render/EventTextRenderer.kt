@@ -35,9 +35,9 @@ class EventTextRenderer @AssistedInject constructor(@Assisted private val roomId
                                                     private val avatarRenderer: AvatarRenderer,
                                                     private val sessionHolder: ActiveSessionHolder) {
 
-    ///////////////////////////////////////////////////////////////////////////
-    // PUBLIC API
-    ///////////////////////////////////////////////////////////////////////////
+    /* ==========================================================================================
+     * Public api
+     * ========================================================================================== */
 
     @AssistedFactory
     interface Factory {
@@ -57,9 +57,9 @@ class EventTextRenderer @AssistedInject constructor(@Assisted private val roomId
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // HELPER METHODS
-    ///////////////////////////////////////////////////////////////////////////
+    /* ==========================================================================================
+     * Helper methods
+     * ========================================================================================== */
 
     private fun addNotifyEveryoneSpans(text: Spannable, roomId: String) {
         val room: RoomSummary? = sessionHolder.getSafeActiveSession()?.getRoomSummary(roomId)

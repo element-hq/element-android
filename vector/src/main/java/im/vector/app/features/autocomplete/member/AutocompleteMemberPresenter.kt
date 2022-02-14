@@ -37,23 +37,23 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                                                               private val controller: AutocompleteMemberController
 ) : RecyclerViewPresenter<AutocompleteMemberItem>(context), AutocompleteClickListener<AutocompleteMemberItem> {
 
-    ///////////////////////////////////////////////////////////////////////////
-    // FIELDS
-    ///////////////////////////////////////////////////////////////////////////
+    /* ==========================================================================================
+     * Fields
+     * ========================================================================================== */
 
     private val room by lazy { session.getRoom(roomId)!! }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // INIT
-    ///////////////////////////////////////////////////////////////////////////
+    /* ==========================================================================================
+     * Init
+     * ========================================================================================== */
 
     init {
         controller.listener = this
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // PUBLIC API
-    ///////////////////////////////////////////////////////////////////////////
+    /* ==========================================================================================
+     * Public api
+     * ========================================================================================== */
 
     fun clear() {
         controller.listener = null
@@ -64,9 +64,9 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
         fun create(roomId: String): AutocompleteMemberPresenter
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // SPECIALIZATION
-    ///////////////////////////////////////////////////////////////////////////
+    /* ==========================================================================================
+     * Specialization
+     * ========================================================================================== */
 
     override fun instantiateAdapter(): RecyclerView.Adapter<*> {
         return controller.adapter
@@ -106,7 +106,7 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                 }
 
         val items = mutableListOf<AutocompleteMemberItem>().apply {
-            if(members.isNotEmpty()) {
+            if (members.isNotEmpty()) {
                 add(membersHeader)
                 addAll(members)
             }
@@ -123,9 +123,9 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
         controller.setData(items)
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // CONST
-    ///////////////////////////////////////////////////////////////////////////
+    /* ==========================================================================================
+     * Const
+     * ========================================================================================== */
 
     companion object {
         private const val ID_HEADER_MEMBERS = "ID_HEADER_MEMBERS"

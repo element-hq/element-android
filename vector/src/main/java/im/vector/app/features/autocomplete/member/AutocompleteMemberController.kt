@@ -27,24 +27,24 @@ import org.matrix.android.sdk.api.util.toEveryoneInRoomMatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class AutocompleteMemberController @Inject constructor(private val context: Context)
-    : TypedEpoxyController<List<AutocompleteMemberItem>>() {
+class AutocompleteMemberController @Inject constructor(private val context: Context) :
+        TypedEpoxyController<List<AutocompleteMemberItem>>() {
 
-    ///////////////////////////////////////////////////////////////////////////
-    // FIELDS
-    ///////////////////////////////////////////////////////////////////////////
+    /* ==========================================================================================
+     * Fields
+     * ========================================================================================== */
 
     var listener: AutocompleteClickListener<AutocompleteMemberItem>? = null
 
-    ///////////////////////////////////////////////////////////////////////////
-    // DEPENDENCIES
-    ///////////////////////////////////////////////////////////////////////////
+    /* ==========================================================================================
+     * Dependencies
+     * ========================================================================================== */
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
 
-    ///////////////////////////////////////////////////////////////////////////
-    // SPECIALIZATION
-    ///////////////////////////////////////////////////////////////////////////
+    /* ==========================================================================================
+     * Specialization
+     * ========================================================================================== */
 
     override fun buildModels(data: List<AutocompleteMemberItem>?) {
         if (data.isNullOrEmpty()) {
@@ -59,9 +59,9 @@ class AutocompleteMemberController @Inject constructor(private val context: Cont
         }
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // HELPER METHODS
-    ///////////////////////////////////////////////////////////////////////////
+    /* ==========================================================================================
+     * Helper methods
+     * ========================================================================================== */
 
     private fun buildHeaderItem(header: AutocompleteMemberItem.Header) {
         autocompleteHeaderItem {

@@ -38,22 +38,26 @@ class PillsPostProcessor @AssistedInject constructor(@Assisted private val roomI
                                                      private val sessionHolder: ActiveSessionHolder) :
         EventHtmlRenderer.PostProcessor {
 
+    /* ==========================================================================================
+     * Public api
+     * ========================================================================================== */
+
     @AssistedFactory
     interface Factory {
         fun create(roomId: String?): PillsPostProcessor
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // SPECIALIZATION
-    ///////////////////////////////////////////////////////////////////////////
+    /* ==========================================================================================
+     * Specialization
+     * ========================================================================================== */
 
     override fun afterRender(renderedText: Spannable) {
         addPillSpans(renderedText, roomId)
     }
 
-    ///////////////////////////////////////////////////////////////////////////
-    // HELPER METHODS
-    ///////////////////////////////////////////////////////////////////////////
+    /* ==========================================================================================
+     * Helper methods
+     * ========================================================================================== */
 
     private fun addPillSpans(renderedText: Spannable, roomId: String?) {
         addLinkSpans(renderedText, roomId)
