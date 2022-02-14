@@ -26,6 +26,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
+import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityCallTransferBinding
 import kotlinx.parcelize.Parcelize
@@ -55,8 +56,8 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
 
         callTransferViewModel.observeViewEvents {
             when (it) {
-                is CallTransferViewEvents.Complete        -> handleComplete()
-            }
+                is CallTransferViewEvents.Complete -> handleComplete()
+            }.exhaustive
         }
 
         sectionsPagerAdapter = CallTransferPagerAdapter(this)
@@ -104,11 +105,16 @@ class CallTransferActivity : VectorBaseActivity<ActivityCallTransferBinding>() {
     }
 
     companion object {
-        const val EXTRA_TRANSFER_RESULT = "EXTRA_TRANSFER_RESULT"
+        private const val EXTRA_TRANSFER_RESULT = "EXTRA_TRANSFER_RESULT"
+
         fun newIntent(context: Context, callId: String): Intent {
             return Intent(context, CallTransferActivity::class.java).also {
                 it.putExtra(Mavericks.KEY_ARG, CallTransferArgs(callId))
             }
+        }
+
+        fun getCallTransferResult(intent: Intent?): CallTransferResult? {
+            return intent?.extras?.getParcelable(EXTRA_TRANSFER_RESULT)
         }
     }
 }

@@ -55,7 +55,6 @@ import im.vector.app.databinding.ActivityCallBinding
 import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
 import im.vector.app.features.call.dialpad.DialPadFragment
 import im.vector.app.features.call.transfer.CallTransferActivity
-import im.vector.app.features.call.transfer.CallTransferResult
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
@@ -525,22 +524,20 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 val callId = withState(callViewModel) { it.callId }
                 navigator.openCallTransfer(this, callTransferActivityResultLauncher, callId)
             }
-            is VectorCallViewEvents.FailToTransfer -> showSnackbar(getString(R.string.call_transfer_failure))
+            is VectorCallViewEvents.FailToTransfer         -> showSnackbar(getString(R.string.call_transfer_failure))
             null                                           -> {
             }
         }
     }
 
     private val callTransferActivityResultLauncher = registerStartForActivityResult { activityResult ->
-
         when (activityResult.resultCode) {
             Activity.RESULT_CANCELED -> {
                 callViewModel.handle(VectorCallViewActions.CallTransferSelectionCancelled)
             }
-            Activity.RESULT_OK -> {
-                activityResult.data?.extras?.getParcelable<CallTransferResult>(CallTransferActivity.EXTRA_TRANSFER_RESULT)?.also {
-                    callViewModel.handle(VectorCallViewActions.CallTransferSelectionResult(it))
-                }
+            Activity.RESULT_OK       -> {
+                CallTransferActivity.getCallTransferResult(activityResult.data)
+                        ?.let { callViewModel.handle(VectorCallViewActions.CallTransferSelectionResult(it)) }
             }
         }
     }
