@@ -100,8 +100,8 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
         private val isInit = AtomicBoolean(false)
 
         /**
-         * Creates a new instance of Matrix, it's recommend to manage this instance as a singleton.
-         * To make use of the built in singleton use Matrix.initialise() and/or Matrix.getInstance(context) instead
+         * Creates a new instance of Matrix, it's recommended to manage this instance as a singleton.
+         * To make use of the built in singleton use Matrix.initialize() and/or Matrix.getInstance(context) instead
          **/
         fun createInstance(context: Context, matrixConfiguration: MatrixConfiguration): Matrix {
             return Matrix(context.applicationContext, matrixConfiguration)
