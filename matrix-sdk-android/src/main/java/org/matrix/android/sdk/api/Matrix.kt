@@ -122,6 +122,7 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
          * Either provides an already initialized singleton Matrix instance or queries the application context for a MatrixConfiguration.Provider
          * to lazily create and store the instance.
          */
+        @Suppress("deprecation") // suppressing warning as this method is unused but is still provided for SDK clients
         @Deprecated("Use Matrix.createInstance and manage the instance manually")
         fun getInstance(context: Context): Matrix {
             if (isInit.compareAndSet(false, true)) {
