@@ -17,19 +17,17 @@
 package org.matrix.android.sdk.internal.database.migration
 
 import io.realm.DynamicRealm
-import io.realm.FieldAttribute
-import org.matrix.android.sdk.internal.database.model.ChunkEntityFields
-import org.matrix.android.sdk.internal.database.model.TimelineEventEntityFields
+import org.matrix.android.sdk.internal.database.model.HomeServerCapabilitiesEntityFields
+import org.matrix.android.sdk.internal.extensions.forceRefreshOfHomeServerCapabilities
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-class MigrateSessionTo025(realm: DynamicRealm) : RealmMigrator(realm, 24) {
+class MigrateSessionTo025(realm: DynamicRealm) : RealmMigrator(realm, 25) {
 
     override fun doMigrate(realm: DynamicRealm) {
-        realm.schema.get("ChunkEntity")
-                ?.addField(ChunkEntityFields.ROOT_THREAD_EVENT_ID, String::class.java, FieldAttribute.INDEXED)
-                ?.addField(ChunkEntityFields.IS_LAST_FORWARD_THREAD, Boolean::class.java, FieldAttribute.INDEXED)
-
-        realm.schema.get("TimelineEventEntity")
-                ?.addField(TimelineEventEntityFields.OWNED_BY_THREAD_CHUNK, Boolean::class.java)
+        realm.schema.get("HomeServerCapabilitiesEntity")
+                ?.addField(HomeServerCapabilitiesEntityFields.CAN_CHANGE_DISPLAY_NAME, Boolean::class.java)
+                ?.addField(HomeServerCapabilitiesEntityFields.CAN_CHANGE_AVATAR, Boolean::class.java)
+                ?.addField(HomeServerCapabilitiesEntityFields.CAN_CHANGE3PID, Boolean::class.java)
+                ?.forceRefreshOfHomeServerCapabilities()
     }
 }
