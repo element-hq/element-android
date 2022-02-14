@@ -491,7 +491,7 @@ internal class RealmSessionStoreMigration @Inject constructor(
                 ?.setNullable(PreviewUrlCacheEntityFields.IMAGE_HEIGHT, true)
     }
 
-    private fun migrateTo25(realm: DynamicRealm){
+    private fun migrateTo25(realm: DynamicRealm) {
         Timber.d("Step 24 -> 25")
         realm.schema.get("ChunkEntity")
                 ?.addField(ChunkEntityFields.ROOT_THREAD_EVENT_ID, String::class.java, FieldAttribute.INDEXED)
@@ -499,6 +499,5 @@ internal class RealmSessionStoreMigration @Inject constructor(
 
         realm.schema.get("TimelineEventEntity")
                 ?.addField(TimelineEventEntityFields.OWNED_BY_THREAD_CHUNK, Boolean::class.java)
-
     }
 }

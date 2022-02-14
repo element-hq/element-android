@@ -179,7 +179,7 @@ internal class LoadTimelineStrategy(
         getContextLatch?.cancel()
         chunkEntity = null
         timelineChunk = null
-        if(mode is Mode.Thread) {
+        if (mode is Mode.Thread) {
             clearThreadChunkEntity(dependencies.realm.get(), mode.rootThreadEventId)
         }
     }
@@ -272,7 +272,6 @@ internal class LoadTimelineStrategy(
             ChunkEntity.findLastForwardChunkOfThread(it, roomId, rootThreadEventId)?.deleteAndClearThreadEvents()?.let {
                 Timber.i("###THREADS LoadTimelineStrategy [onStop] thread chunk cleared..")
             }
-
         }
     }
 

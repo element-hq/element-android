@@ -420,7 +420,6 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     optimizedThreadSummaryMap[it] = eventEntity
                     // Add the same thread timeline event to Thread Chunk
                     addToThreadChunkIfNeeded(realm, roomId, it, timelineEventAdded, roomEntity)
-
                 } ?: run {
                     // This is a normal event or a root thread one
                     optimizedThreadSummaryMap[eventEntity.eventId] = eventEntity
@@ -474,7 +473,6 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                          threadId: String,
                                          timelineEventEntity: TimelineEventEntity?,
                                          roomEntity: RoomEntity) {
-
         val eventId = timelineEventEntity?.eventId ?: return
 
         ChunkEntity.findLastForwardChunkOfThread(realm, roomId, threadId)?.let { threadChunk ->

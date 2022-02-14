@@ -23,7 +23,6 @@ import io.realm.annotations.Index
 import io.realm.annotations.LinkingObjects
 import org.matrix.android.sdk.internal.extensions.assertIsManaged
 import org.matrix.android.sdk.internal.extensions.clearWith
-import timber.log.Timber
 
 internal open class ChunkEntity(@Index var prevToken: String? = null,
         // Because of gaps we can have several chunks with nextToken == null
@@ -75,6 +74,3 @@ internal fun ChunkEntity.deleteAndClearThreadEvents() {
             }
     deleteFromRealm()
 }
-
-
-

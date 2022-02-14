@@ -171,7 +171,6 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
      * always fetch results, while we want our data to be up to dated.
      */
     suspend fun loadMoreThread(count: Int, direction: Timeline.Direction): LoadMoreResult {
-
         return if (direction == Timeline.Direction.BACKWARDS) {
             try {
                 fetchThreadTimelineTask.execute(FetchThreadTimelineTask.Params(

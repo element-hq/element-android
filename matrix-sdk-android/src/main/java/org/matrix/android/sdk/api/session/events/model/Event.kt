@@ -202,7 +202,7 @@ data class Event(
     fun getDecryptedTextSummary(): String? {
         if (isRedacted()) return "Message Deleted"
         val text = getDecryptedValue() ?: run {
-            if (isPoll()) {return getPollQuestion() ?: "created a poll."}
+            if (isPoll()) { return getPollQuestion() ?: "created a poll." }
             return null
         }
 

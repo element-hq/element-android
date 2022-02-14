@@ -118,7 +118,6 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
 
     private suspend fun handleRelationsResponse(response: RelationsResponse,
                                                 params: FetchThreadTimelineTask.Params): Result {
-
         val threadList = response.chunks
         val threadRootEvent = response.originalEvent
         val hasReachEnd = response.nextBatch == null
