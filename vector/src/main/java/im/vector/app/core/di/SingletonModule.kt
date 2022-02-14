@@ -120,8 +120,7 @@ object VectorStaticModule {
     @Provides
     @Singleton
     fun providesMatrix(context: Context, configuration: MatrixConfiguration): Matrix {
-        Matrix.initialize(context, configuration)
-        return Matrix.getInstance(context)
+        return Matrix.createInstance(context, configuration)
     }
 
     @Provides
