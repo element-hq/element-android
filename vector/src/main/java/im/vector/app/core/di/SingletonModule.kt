@@ -110,10 +110,10 @@ object VectorStaticModule {
     }
 
     @Provides
-    fun providesMatrixConfiguration(context: Context): MatrixConfiguration {
+    fun providesMatrixConfiguration(vectorRoomDisplayNameFallbackProvider: VectorRoomDisplayNameFallbackProvider): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
-                roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(context)
+                roomDisplayNameFallbackProvider = vectorRoomDisplayNameFallbackProvider
         )
     }
 
