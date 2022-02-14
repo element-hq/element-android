@@ -1,1 +1,1 @@
-Avoids using Matrix.getInstance() within the SyncService and instead relies on the SDK client to provide the matrix instance
+Deprecates Matrix.initialize and Matrix.getInstance in favour of the client providing its own singleton instance via Matrix.createInstance

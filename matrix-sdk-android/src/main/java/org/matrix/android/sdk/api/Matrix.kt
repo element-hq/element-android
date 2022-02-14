@@ -111,6 +111,7 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
          * Initializes a singleton instance of Matrix for the given MatrixConfiguration
          * This instance will be returned by Matrix.getInstance(context)
          */
+        @Deprecated("Use Matrix.createInstance and manage the instance manually")
         fun initialize(context: Context, matrixConfiguration: MatrixConfiguration) {
             if (isInit.compareAndSet(false, true)) {
                 instance = Matrix(context.applicationContext, matrixConfiguration)
@@ -121,6 +122,7 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
          * Either provides an already initialized singleton Matrix instance or queries the application context for a MatrixConfiguration.Provider
          * to lazily create and store the instance.
          */
+        @Deprecated("Use Matrix.createInstance and manage the instance manually")
         fun getInstance(context: Context): Matrix {
             if (isInit.compareAndSet(false, true)) {
                 val appContext = context.applicationContext
