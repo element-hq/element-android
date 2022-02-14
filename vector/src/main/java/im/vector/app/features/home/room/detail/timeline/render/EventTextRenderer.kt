@@ -29,7 +29,6 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.html.PillImageSpan
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.util.MatrixItem
-import timber.log.Timber
 
 class EventTextRenderer @AssistedInject constructor(@Assisted private val roomId: String?,
                                                     private val context: Context,
@@ -74,9 +73,7 @@ class EventTextRenderer @AssistedInject constructor(@Assisted private val roomId
         var foundIndex = text.indexOf(MatrixItem.NOTIFY_EVERYONE, 0)
         while (foundIndex >= 0) {
             val endSpan = foundIndex + MatrixItem.NOTIFY_EVERYONE.length
-            //text.setSpan(ForegroundColorSpan(Color.RED), foundIndex, endSpan, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             addPillSpan(text, createPillImageSpan(matrixItem), foundIndex, endSpan)
-            Timber.e("set span for text $text from index $foundIndex to $endSpan")
             foundIndex = text.indexOf(MatrixItem.NOTIFY_EVERYONE, endSpan)
         }
     }

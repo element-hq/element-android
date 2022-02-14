@@ -19,6 +19,7 @@
 package im.vector.app.features.html
 
 import android.content.Context
+import android.content.res.ColorStateList
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
@@ -32,6 +33,7 @@ import im.vector.app.R
 import im.vector.app.core.glide.GlideRequests
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.themes.ThemeUtils
 import org.matrix.android.sdk.api.session.room.send.MatrixItemSpan
 import org.matrix.android.sdk.api.util.MatrixItem
 import java.lang.ref.WeakReference
@@ -117,6 +119,9 @@ class PillImageSpan(private val glideRequests: GlideRequests,
             setChipMinHeightResource(R.dimen.pill_min_height)
             setChipIconSizeResource(R.dimen.pill_avatar_size)
             chipIcon = icon
+            if (matrixItem is MatrixItem.EveryoneInRoomItem) {
+                chipBackgroundColor = ColorStateList.valueOf(ThemeUtils.getColor(context, R.attr.colorError))
+            }
             setBounds(0, 0, intrinsicWidth, intrinsicHeight)
         }
     }
