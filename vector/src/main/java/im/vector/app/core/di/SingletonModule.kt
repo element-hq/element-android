@@ -46,6 +46,7 @@ import im.vector.app.features.ui.SharedPreferencesUiStateRepository
 import im.vector.app.features.ui.UiStateRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.SupervisorJob
 import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.AuthenticationService
@@ -146,5 +147,12 @@ object VectorStaticModule {
     @Provides
     fun providesCoroutineDispatchers(): CoroutineDispatchers {
         return CoroutineDispatchers(io = Dispatchers.IO, computation = Dispatchers.Default)
+    }
+
+    @Suppress("EXPERIMENTAL_API_USAGE")
+    @Provides
+    @NamedGlobalScope
+    fun providesGlobalScope(): CoroutineScope {
+        return GlobalScope
     }
 }

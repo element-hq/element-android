@@ -22,13 +22,14 @@ import com.posthog.android.PostHog
 import com.posthog.android.Properties
 import im.vector.app.BuildConfig
 import im.vector.app.config.analyticsConfig
+import im.vector.app.core.di.NamedGlobalScope
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.log.analyticsTag
 import im.vector.app.features.analytics.plan.UserProperties
 import im.vector.app.features.analytics.store.AnalyticsStore
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -42,7 +43,8 @@ private val IGNORED_OPTIONS: Options? = null
 @Singleton
 class DefaultVectorAnalytics @Inject constructor(
         private val context: Context,
-        private val analyticsStore: AnalyticsStore
+        private val analyticsStore: AnalyticsStore,
+        @NamedGlobalScope private val globalScope: CoroutineScope
 ) : VectorAnalytics {
     private var posthog: PostHog? = null
 
@@ -88,7 +90,6 @@ class DefaultVectorAnalytics @Inject constructor(
         createAnalyticsClient()
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
     private fun observeAnalyticsId() {
         getAnalyticsId()
                 .onEach { id ->
@@ -96,7 +97,7 @@ class DefaultVectorAnalytics @Inject constructor(
                     analyticsId = id
                     identifyPostHog()
                 }
-                .launchIn(GlobalScope)
+                .launchIn(globalScope)
     }
 
     private fun identifyPostHog() {
@@ -110,7 +111,6 @@ class DefaultVectorAnalytics @Inject constructor(
         }
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
     private fun observeUserConsent() {
         getUserConsent()
                 .onEach { consent ->
@@ -118,7 +118,7 @@ class DefaultVectorAnalytics @Inject constructor(
                     userConsent = consent
                     optOutPostHog()
                 }
-                .launchIn(GlobalScope)
+                .launchIn(globalScope)
     }
 
     private fun optOutPostHog() {
