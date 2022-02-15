@@ -113,6 +113,7 @@ class DefaultVectorAnalytics @Inject constructor(
     private fun observeUserConsent() {
         getUserConsent()
                 .onEach { consent ->
+                    println("!!!, got consent: $consent")
                     Timber.tag(analyticsTag.value).d("User consent updated to $consent")
                     userConsent = consent
                     optOutPostHog()
@@ -147,6 +148,9 @@ class DefaultVectorAnalytics @Inject constructor(
 
     override fun screen(screen: VectorAnalyticsScreen) {
         Timber.tag(analyticsTag.value).d("screen($screen)")
+
+        println("userconsnet: $userConsent")
+
         posthog
                 ?.takeIf { userConsent == true }
                 ?.screen(screen.getName(), screen.getProperties()?.toPostHogProperties())
