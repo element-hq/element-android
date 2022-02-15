@@ -16,13 +16,11 @@
 
 package im.vector.app.features.analytics.impl
 
-import android.content.Context
 import com.posthog.android.Options
 import com.posthog.android.PostHog
 import com.posthog.android.Properties
-import im.vector.app.BuildConfig
-import im.vector.app.config.analyticsConfig
 import im.vector.app.core.di.NamedGlobalScope
+import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
@@ -42,8 +40,9 @@ private val IGNORED_OPTIONS: Options? = null
 
 @Singleton
 class DefaultVectorAnalytics @Inject constructor(
-        private val context: Context,
+        private val postHogFactory: PostHogFactory,
         private val analyticsStore: AnalyticsStore,
+        private val analyticsConfig: AnalyticsConfig,
         @NamedGlobalScope private val globalScope: CoroutineScope
 ) : VectorAnalytics {
     private var posthog: PostHog? = null
@@ -85,9 +84,9 @@ class DefaultVectorAnalytics @Inject constructor(
     }
 
     override fun init() {
+        createAnalyticsClient()
         observeUserConsent()
         observeAnalyticsId()
-        createAnalyticsClient()
     }
 
     private fun observeAnalyticsId() {
@@ -133,32 +132,10 @@ class DefaultVectorAnalytics @Inject constructor(
             return
         }
 
-        posthog = PostHog.Builder(context, analyticsConfig.postHogApiKey, analyticsConfig.postHogHost)
-                // Record certain application events automatically! (off/false by default)
-                // .captureApplicationLifecycleEvents()
-                // Record screen views automatically! (off/false by default)
-                // .recordScreenViews()
-                // Capture deep links as part of the screen call. (off by default)
-                // .captureDeepLinks()
-                // Maximum number of events to keep in queue before flushing (default 20)
-                // .flushQueueSize(20)
-                // Max delay before flushing the queue (30 seconds)
-                // .flushInterval(30, TimeUnit.SECONDS)
-                // Enable or disable collection of ANDROID_ID (true)
-                .collectDeviceId(false)
-                .logLevel(getLogLevel())
-                .build()
+        posthog = postHogFactory.createPosthog()
 
         optOutPostHog()
         identifyPostHog()
-    }
-
-    private fun getLogLevel(): PostHog.LogLevel {
-        return if (BuildConfig.DEBUG) {
-            PostHog.LogLevel.DEBUG
-        } else {
-            PostHog.LogLevel.INFO
-        }
     }
 
     override fun capture(event: VectorAnalyticsEvent) {

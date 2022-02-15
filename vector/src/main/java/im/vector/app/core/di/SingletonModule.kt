@@ -28,11 +28,13 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import im.vector.app.EmojiCompatWrapper
 import im.vector.app.EmojiSpanify
+import im.vector.app.config.analyticsConfig
 import im.vector.app.core.dispatchers.CoroutineDispatchers
 import im.vector.app.core.error.DefaultErrorFormatter
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.time.Clock
 import im.vector.app.core.time.DefaultClock
+import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.impl.DefaultVectorAnalytics
@@ -154,5 +156,10 @@ object VectorStaticModule {
     @NamedGlobalScope
     fun providesGlobalScope(): CoroutineScope {
         return GlobalScope
+    }
+
+    @Provides
+    fun providesAnalyticsConfig(): AnalyticsConfig {
+        return analyticsConfig
     }
 }
