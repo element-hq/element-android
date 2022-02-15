@@ -24,6 +24,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.databinding.FragmentFtueAccountCreatedBinding
 import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.onboarding.OnboardingViewEvents
 import javax.inject.Inject
 
 class FtueAuthAccountCreatedFragment @Inject constructor(
@@ -41,8 +42,8 @@ class FtueAuthAccountCreatedFragment @Inject constructor(
 
     private fun setupViews() {
         views.accountCreatedSubtitle.text = getString(R.string.ftue_account_created_subtitle, activeSessionHolder.getActiveSession().myUserId)
-        views.accountCreatedPersonalize.setOnClickListener { viewModel.handle(OnboardingAction.PersonalizeProfile) }
-        views.accountCreatedTakeMeHome.setOnClickListener { viewModel.handle(OnboardingAction.TakeMeHome) }
+        views.accountCreatedPersonalize.setOnClickListener { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnPersonalizeProfile)) }
+        views.accountCreatedTakeMeHome.setOnClickListener { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome)) }
     }
 
     override fun resetViewModel() {
@@ -50,7 +51,7 @@ class FtueAuthAccountCreatedFragment @Inject constructor(
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
-        viewModel.handle(OnboardingAction.TakeMeHome)
+        viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome))
         return false
     }
 }

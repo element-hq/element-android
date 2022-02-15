@@ -147,8 +147,6 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
             OnboardingAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
             is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
-            OnboardingAction.PersonalizeProfile            -> _viewEvents.post(OnboardingViewEvents.OnPersonalizeProfile)
-            OnboardingAction.TakeMeHome                    -> _viewEvents.post(OnboardingViewEvents.OnTakeMeHome)
         }.exhaustive
     }
 
