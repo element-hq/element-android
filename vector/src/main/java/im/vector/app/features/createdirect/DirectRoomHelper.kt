@@ -16,8 +16,11 @@
 
 package im.vector.app.features.createdirect
 
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.CreatedRoom
 import im.vector.app.features.raw.wellknown.getElementWellknown
 import im.vector.app.features.raw.wellknown.isE2EByDefault
+import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.raw.RawService
 import org.matrix.android.sdk.api.session.Session
@@ -26,7 +29,8 @@ import javax.inject.Inject
 
 class DirectRoomHelper @Inject constructor(
         private val rawService: RawService,
-        private val session: Session
+        private val session: Session,
+        private val analyticsTracker: AnalyticsTracker
 ) {
 
     suspend fun ensureDMExists(userId: String): String {
@@ -45,6 +49,7 @@ class DirectRoomHelper @Inject constructor(
                 enableEncryptionIfInvitedUsersSupportIt = adminE2EByDefault
             }
             roomId = session.createRoom(roomParams)
+            analyticsTracker.capture(CreatedRoom(isDM = roomParams.isDirect.orFalse()))
         }
         return roomId
     }
