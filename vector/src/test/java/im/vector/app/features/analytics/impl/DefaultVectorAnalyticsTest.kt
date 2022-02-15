@@ -20,9 +20,13 @@ import com.posthog.android.Properties
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.test.fakes.FakeAnalyticsStore
+import im.vector.app.test.fakes.FakeLateInitUserPropertiesFactory
 import im.vector.app.test.fakes.FakePostHog
 import im.vector.app.test.fakes.FakePostHogFactory
 import im.vector.app.test.fixtures.AnalyticsConfigFixture.anAnalyticsConfig
+import im.vector.app.test.fixtures.aUserProperties
+import im.vector.app.test.fixtures.aVectorAnalyticsEvent
+import im.vector.app.test.fixtures.aVectorAnalyticsScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -31,26 +35,23 @@ import org.junit.Before
 import org.junit.Test
 
 private const val AN_ANALYTICS_ID = "analytics-id"
-private val A_SCREEN_EVENT = object : VectorAnalyticsScreen {
-    override fun getName() = "a-screen-event-name"
-    override fun getProperties() = mapOf("property-name" to "property-value")
-}
-private val AN_EVENT = object : VectorAnalyticsEvent {
-    override fun getName() = "an-event-name"
-    override fun getProperties() = mapOf("property-name" to "property-value")
-}
+private val A_SCREEN_EVENT = aVectorAnalyticsScreen()
+private val AN_EVENT = aVectorAnalyticsEvent()
+private val A_LATE_INIT_USER_PROPERTIES = aUserProperties()
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class DefaultVectorAnalyticsTest {
 
     private val fakePostHog = FakePostHog()
     private val fakeAnalyticsStore = FakeAnalyticsStore()
+    private val fakeLateInitUserPropertiesFactory = FakeLateInitUserPropertiesFactory()
 
     private val defaultVectorAnalytics = DefaultVectorAnalytics(
             postHogFactory = FakePostHogFactory(fakePostHog.instance).instance,
             analyticsStore = fakeAnalyticsStore.instance,
             globalScope = CoroutineScope(Dispatchers.Unconfined),
-            analyticsConfig = anAnalyticsConfig(isEnabled = true)
+            analyticsConfig = anAnalyticsConfig(isEnabled = true),
+            lateInitUserPropertiesFactory = fakeLateInitUserPropertiesFactory.instance
     )
 
     @Before
@@ -87,14 +88,16 @@ class DefaultVectorAnalyticsTest {
     }
 
     @Test
-    fun `when valid analytics id updates then identify`() = runBlockingTest {
+    fun `given lateinit user properties when valid analytics id updates then identify with lateinit properties`() = runBlockingTest {
+        fakeLateInitUserPropertiesFactory.givenCreatesProperties(A_LATE_INIT_USER_PROPERTIES)
+
         fakeAnalyticsStore.givenAnalyticsId(AN_ANALYTICS_ID)
 
-        fakePostHog.verifyIdentifies(AN_ANALYTICS_ID)
+        fakePostHog.verifyIdentifies(AN_ANALYTICS_ID, A_LATE_INIT_USER_PROPERTIES)
     }
 
     @Test
-    fun `when signing out analytics id updates then resets`() = runBlockingTest {
+    fun `when signing out then resets posthog`() = runBlockingTest {
         fakeAnalyticsStore.allowSettingAnalyticsIdToCallBackingFlow()
 
         defaultVectorAnalytics.onSignOut()
@@ -108,9 +111,7 @@ class DefaultVectorAnalyticsTest {
 
         defaultVectorAnalytics.screen(A_SCREEN_EVENT)
 
-        fakePostHog.verifyScreenTracked(A_SCREEN_EVENT.getName(), Properties().also {
-            it.putAll(A_SCREEN_EVENT.getProperties())
-        })
+        fakePostHog.verifyScreenTracked(A_SCREEN_EVENT.getName(), A_SCREEN_EVENT.toPostHogProperties())
     }
 
     @Test
@@ -128,9 +129,7 @@ class DefaultVectorAnalyticsTest {
 
         defaultVectorAnalytics.capture(AN_EVENT)
 
-        fakePostHog.verifyEventTracked(AN_EVENT.getName(), Properties().also {
-            it.putAll(AN_EVENT.getProperties())
-        })
+        fakePostHog.verifyEventTracked(AN_EVENT.getName(), AN_EVENT.toPostHogProperties())
     }
 
     @Test
@@ -140,5 +139,17 @@ class DefaultVectorAnalyticsTest {
         defaultVectorAnalytics.capture(AN_EVENT)
 
         fakePostHog.verifyNoEventTracking()
+    }
+}
+
+private fun VectorAnalyticsScreen.toPostHogProperties(): Properties? {
+    return getProperties()?.let { properties ->
+        Properties().also { it.putAll(properties) }
+    }
+}
+
+private fun VectorAnalyticsEvent.toPostHogProperties(): Properties? {
+    return getProperties()?.let { properties ->
+        Properties().also { it.putAll(properties) }
     }
 }

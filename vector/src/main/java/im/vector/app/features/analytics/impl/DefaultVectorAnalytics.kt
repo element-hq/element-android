@@ -43,6 +43,7 @@ class DefaultVectorAnalytics @Inject constructor(
         postHogFactory: PostHogFactory,
         analyticsConfig: AnalyticsConfig,
         private val analyticsStore: AnalyticsStore,
+        private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,
         @NamedGlobalScope private val globalScope: CoroutineScope
 ) : VectorAnalytics {
 
@@ -105,14 +106,14 @@ class DefaultVectorAnalytics @Inject constructor(
                 .launchIn(globalScope)
     }
 
-    private fun identifyPostHog() {
+    private suspend fun identifyPostHog() {
         val id = analyticsId ?: return
         if (id.isEmpty()) {
             Timber.tag(analyticsTag.value).d("reset")
             posthog?.reset()
         } else {
             Timber.tag(analyticsTag.value).d("identify")
-            posthog?.identify(id)
+            posthog?.identify(id, lateInitUserPropertiesFactory.createUserProperties()?.getProperties()?.toPostHogUserProperties(), IGNORED_OPTIONS)
         }
     }
 

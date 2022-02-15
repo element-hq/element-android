@@ -19,6 +19,7 @@ package im.vector.app.test.fakes
 import android.os.Looper
 import com.posthog.android.PostHog
 import com.posthog.android.Properties
+import im.vector.app.features.analytics.plan.UserProperties
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
@@ -41,15 +42,20 @@ class FakePostHog {
         verify { instance.optOut(optedOut) }
     }
 
-    fun verifyIdentifies(analyticsId: String) {
-        verify { instance.identify(analyticsId) }
+    fun verifyIdentifies(analyticsId: String, userProperties: UserProperties?) {
+        verify {
+            val postHogProperties = userProperties?.getProperties()
+                    ?.let { rawProperties -> Properties().also { it.putAll(rawProperties) } }
+                    ?.takeIf { it.isNotEmpty() }
+            instance.identify(analyticsId, postHogProperties, null)
+        }
     }
 
     fun verifyReset() {
         verify { instance.reset() }
     }
 
-    fun verifyScreenTracked(name: String, properties: Properties) {
+    fun verifyScreenTracked(name: String, properties: Properties?) {
         verify { instance.screen(name, properties) }
     }
 
@@ -61,7 +67,7 @@ class FakePostHog {
         }
     }
 
-    fun verifyEventTracked(name: String, properties: Properties) {
+    fun verifyEventTracked(name: String, properties: Properties?) {
         verify { instance.capture(name, properties) }
     }
 
