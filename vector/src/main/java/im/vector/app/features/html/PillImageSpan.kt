@@ -121,6 +121,8 @@ class PillImageSpan(private val glideRequests: GlideRequests,
             chipIcon = icon
             if (matrixItem is MatrixItem.EveryoneInRoomItem) {
                 chipBackgroundColor = ColorStateList.valueOf(ThemeUtils.getColor(context, R.attr.colorError))
+                // setTextColor API does not exist right now for ChipDrawable, use textAppearance
+                setTextAppearanceResource(R.style.TextAppearance_Vector_Body_OnError)
             }
             setBounds(0, 0, intrinsicWidth, intrinsicHeight)
         }
