@@ -24,17 +24,20 @@ import dagger.assisted.AssistedInject
 import im.vector.app.R
 import im.vector.app.features.autocomplete.AutocompleteClickListener
 import im.vector.app.features.autocomplete.RecyclerViewPresenter
+import org.matrix.android.sdk.api.pushrules.SenderNotificationPermissionCondition
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.room.members.RoomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.util.MatrixItem
 
 class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                                                               @Assisted val roomId: String,
-                                                              session: Session,
+                                                              private val session: Session,
                                                               private val controller: AutocompleteMemberController
 ) : RecyclerViewPresenter<AutocompleteMemberItem>(context), AutocompleteClickListener<AutocompleteMemberItem> {
 
@@ -140,12 +143,13 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                         AutocompleteMemberItem.Everyone(it)
                     }
 
-    private fun canNotifyEveryone() = true
-    // TODO use session object to check ?
-    /*conditionResolver.resolveSenderNotificationPermissionCondition(
-            Event(roomId = roomId),
+    private fun canNotifyEveryone() = session.resolveSenderNotificationPermissionCondition(
+            Event(
+                    senderId = session.myUserId,
+                    roomId = roomId
+            ),
             SenderNotificationPermissionCondition(PowerLevelsContent.NOTIFICATIONS_ROOM_KEY)
-    )*/
+    )
 
     /* ==========================================================================================
      * Const
