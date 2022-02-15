@@ -76,7 +76,7 @@
     <string name="notice_event_redacted_by">Meddelande borttaget av %1$s</string>
     <string name="notice_event_redacted_with_reason">Meddelande borttaget [anledning: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">Meddelande borttaget av %1$s [anledning: %2$s]</string>
-    <string name="notice_profile_change_redacted">%1$s uppdaterade sim profil %2$s</string>
+    <string name="notice_profile_change_redacted">%1$s uppdaterade sin profil %2$s</string>
     <string name="notice_profile_change_redacted_by_you">Du uppdaterade din profil %1$s</string>
     <string name="notice_room_third_party_invite">%1$s bjöd in %2$s att gå med i rummet</string>
     <string name="notice_room_third_party_invite_by_you">Du bjöd in %1$s att gå med i rummet</string>
@@ -582,7 +582,7 @@
     <string name="_continue">Fortsätt</string>
     <string name="action_remove">Ta bort</string>
     <string name="action_join">Gå med</string>
-    <string name="action_preview">Förhandsvisning</string>
+    <string name="action_preview">Förhandsgranskning</string>
     <string name="action_reject">Avslå</string>
     <string name="list_members">Lista medlemmar</string>
     <string name="open_chat_header">Öppna rubrik</string>
@@ -593,7 +593,7 @@
 \nDu kanske vill logga in på ett annat konto eller lägga till den här e-postadressen till det här kontot.</string>
     <string name="room_preview_try_join_an_unknown_room">Du försöker komma åt %s. Skulle du vilja gå med för att delta i diskussionen\?</string>
     <string name="room_preview_try_join_an_unknown_room_default">ett rum</string>
-    <string name="room_preview_room_interactions_disabled">Det här är en förhandsvisning av det här rummet. Rumsinteraktioner har blivit inaktiverade.</string>
+    <string name="room_preview_room_interactions_disabled">Det här är en förhandsgranskning av det här rummet. Rumsinteraktioner har blivit inaktiverade.</string>
     <string name="invite_no_identity_server_error">Lägg till en identitetsserver i dina inställningar för att utföra den här handlingen.</string>
     <string name="room_creation_title">Ny chatt</string>
     <string name="room_creation_add_member">Lägg till medlem</string>
@@ -740,7 +740,7 @@
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Lagra din återställningsnyckel på något säkert ställe, t.ex. en lösenordshanterare (eller ett kassaskåp)</string>
     <string name="new_recovery_method_popup_description">En ny säker säkerhetskopia för meddelandenycklar har hittats.
 \n
-\nOm det inte var du som satte upp den nya återställningsmetoden så kan det vara en angripare som försöker komma åt ditt konto. Ändra ditt kontolösenord och sätt en ny återställningsmetod omedelbart i inställningarna.</string>
+\nOm det inte var du som satte upp den nya återställningsmetoden så kan det vara en angripare som försöker komma åt ditt konto. Byt ditt kontolösenord och sätt en ny återställningsmetod omedelbart i inställningarna.</string>
     <string name="identity_server_not_defined_for_password_reset">Ingen identitetsserver är konfigurerad, vilket krävs för att återställa ditt lösenord.</string>
     <string name="change_room_directory_network">Byt nätverk</string>
     <string name="group_all_communities">Alla gemenskaper</string>
@@ -1469,7 +1469,7 @@
     <string name="login_signin_matrix_id_notice">Om du har skapat ett konto på en hemserver så kan du använda ditt Matrix-ID (t.ex. @användare:domän.com) och lösenord nedan.</string>
     <string name="signed_out_notice">Detta kan bero på flera orsaker:
 \n
-\n• Du har ändrat ditt lösenord från en annan session.
+\n• Du har bytt ditt lösenord från en annan session.
 \n
 \n• Du har tagit bort den här sessionen från en annan session.
 \n
@@ -1533,7 +1533,7 @@
 \n- Den här enheten, eller den andra enheten
 \n- Internetuppkopplingen en av enheterna använder
 \n
-\nVi rekommenderar att du ändrar ditt lösenord och återställningsnyckel i inställningarna omedelbart.</string>
+\nVi rekommenderar att du byter ditt lösenord och återställningsnyckel i inställningarna omedelbart.</string>
     <string name="bootstrap_crosssigning_progress_key_backup">Sätter upp nyckelsäkerhetskopiering</string>
     <string name="bootstrap_crosssigning_save_usb">Spara den på ett USB-minne eller en säkerhetskopieringsenhet</string>
     <string name="qr_code_scanned_self_verif_notice">Nästan färdigt! Visar den andra enheten en bock\?</string>
@@ -1771,7 +1771,7 @@
     <string name="command_description_join_room">Går med i rummet med den angivna adressen</string>
     <string name="command_description_topic">Sätt ett rumsämne</string>
     <string name="command_description_remove_user">Sparkar ut användaren med det angivna ID:t</string>
-    <string name="command_description_nick">Ändrar ditt visningsnamn</string>
+    <string name="command_description_nick">Byter ditt visningsnamn</string>
     <string name="command_description_clear_scalar_token">För att fixa Matrixapphantering</string>
     <string name="create">Skapa</string>
     <string name="create_community">Skapa gemenskap</string>
@@ -2034,9 +2034,9 @@
     <string name="login_reset_password_success_notice">Ditt lösenord har återställts.</string>
     <string name="login_reset_password_success_submit">Tillbaka till inloggning</string>
     <string name="login_reset_password_cancel_confirmation_title">Varning</string>
-    <string name="login_reset_password_cancel_confirmation_content">Ditt lösenord har inte ändrats än.
+    <string name="login_reset_password_cancel_confirmation_content">Ditt lösenord har inte bytts än.
 \n
-\nVill du avbryta återställningsprocessen\?</string>
+\nStoppa lösenordsbytesprocessen\?</string>
     <string name="login_set_email_submit">Nästa</string>
     <string name="login_set_msisdn_title">Sätt telefonnummer</string>
     <string name="login_set_msisdn_notice2">Vänligen använd internationellt format.</string>
@@ -2179,7 +2179,7 @@
         <item quantity="other">Skicka bilder i originalstorlek</item>
     </plurals>
     <string name="delete_event_dialog_title">Bekräfta borttagning</string>
-    <string name="delete_event_dialog_content">Är du säker på att du vill ta bort (radera) den här händelsen\? Observera att om du raderar ett rumsnamn eller ämnesändring så kan det upphäva ändringen.</string>
+    <string name="delete_event_dialog_content">Är du säker på att du vill ta bort (radera) den här händelsen\? Observera att om du raderar ett rumsnamns- eller ämnesbyte så kan det upphäva ändringen.</string>
     <string name="delete_event_dialog_reason_checkbox">Inkludera en anledning</string>
     <string name="delete_event_dialog_reason_hint">Anledning för borttagning</string>
     <string name="event_redacted_by_user_reason_with_reason">Händelsen raderades av användaren, anledning: %1$s</string>
@@ -2429,7 +2429,7 @@
     <string name="invalid_qr_code_uri">Ogiltig QR-kod (ogiltig URI)!</string>
     <string name="cannot_dm_self">Kan inte DMa dig själv!</string>
     <string name="share_by_text">Dela med text</string>
-    <string name="settings_security_pin_code_change_pin_summary">Ändra din nuvarande PIN-kod</string>
+    <string name="settings_security_pin_code_change_pin_summary">Byt din nuvarande PIN-kod</string>
     <string name="settings_security_pin_code_change_pin_title">Ändra PIN-kod</string>
     <string name="phone_book_perform_lookup">Sök efter kontakter på Matrix</string>
     <string name="room_settings_set_avatar">Sätt avatar</string>
@@ -2520,7 +2520,7 @@
     <string name="settings_show_emoji_keyboard">Visa emojitangentbord</string>
     <string name="settings_chat_effects_description">Använda /confetti för att skicka meddelanden som innehåller ❄️ eller 🎉</string>
     <string name="settings_chat_effects_title">Visa chatteffekter</string>
-    <string name="room_permissions_change_topic">Ändra ämnet</string>
+    <string name="room_permissions_change_topic">Byta ämnet</string>
     <string name="room_permissions_upgrade_the_room">Uppgradera rummet</string>
     <string name="room_permissions_send_m_room_server_acl_events">Skicka m.room.server_acl-händelser</string>
     <string name="room_permissions_change_permissions">Ändra behörigheter</string>
@@ -2645,7 +2645,7 @@
     <string name="event_status_a11y_sending">Skickar</string>
     <string name="settings_category_room_directory">Rumskatalog</string>
     <string name="event_status_sent_message">Meddelande skickat</string>
-    <string name="create_spaces_details_public_header">Lägg till några detaljer för att hjälpa det satt sticka ut. Du kan ändra dessa när som helst.</string>
+    <string name="create_spaces_details_public_header">Lägg till några detaljer för att hjälpa det att sticka ut. Du kan ändra dessa när som helst.</string>
     <string name="activity_create_space_title">Skapa ett utrymme</string>
     <string name="space_type_private_desc">Endast inbjudan, bäst för dig själv eller grupper</string>
     <string name="space_type_private">Privat</string>
@@ -2782,7 +2782,7 @@
     <string name="denied_permission_camera">För att utföra detta, vänligen ge kameraåtkomst från systeminställningarna.</string>
     <string name="denied_permission_generic">Vissa behörigheter saknas för att utföra detta, vänligen ge behörighet från systeminställningarna.</string>
     <string name="upgrade_room_for_restricted_note">Observera att uppgradering kommer att göra en ny version av rummet. Alla nuvarande meddelanden kommer att vara kvar i det här arkiverade rummet.</string>
-    <string name="upgrade_room_for_restricted_no_param">em som helst i föräldrautrymmet kommer kunna hitta och gå med i det här rummen - du behöver inte bjuda in alla. Du kommer kunna ändra detta i rumsinställningarna när som helst.</string>
+    <string name="upgrade_room_for_restricted_no_param">Vem som helst i föräldrautrymmet kommer kunna hitta och gå med i det här rummen - du behöver inte bjuda in alla. Du kommer kunna ändra detta i rumsinställningarna när som helst.</string>
     <string name="upgrade_room_for_restricted">Vem som helst i %s kommer kunna hitta och gå med i det här rummen - du behöver inte bjuda in alla. Du kommer kunna ändra detta i rumsinställningarna när som helst.</string>
     <string name="voice_message_reply_content">Röstmeddelande (%1$s)</string>
     <string name="error_voice_message_cannot_reply_or_edit">Kan inte svara eller redigera när röstmeddelande är aktivt</string>
@@ -2947,10 +2947,10 @@
     <string name="settings_notification_emails_no_emails">För att få e-post med aviseringar, vänligen associera en e-postadress med ditt Matrixkonto</string>
     <string name="settings_notification_emails_category">E-postavisering</string>
     <string name="room_permissions_upgrade_the_space">Uppgradera utrymmet</string>
-    <string name="room_permissions_change_space_name">Byt utrymmets namn</string>
+    <string name="room_permissions_change_space_name">Byta utrymmets namn</string>
     <string name="room_permissions_enable_space_encryption">Aktivera utrymmeskryptering</string>
-    <string name="room_permissions_change_main_address_for_the_space">Byt huvudadress för det här utrymmet</string>
-    <string name="room_permissions_change_space_avatar">Byt utrymmets avatar</string>
+    <string name="room_permissions_change_main_address_for_the_space">Byta huvudadress för det här utrymmet</string>
+    <string name="room_permissions_change_space_avatar">Byta utrymmets avatar</string>
     <string name="space_permissions_notice_read_only">Du är inte behörig att uppdatera rollerna som krävs för att ändra diverse delar av det här utrymmet</string>
     <string name="space_permissions_notice">Välj de roller som krävs för att ändra diverse delar av det här utrymmet</string>
     <string name="space_settings_permissions_subtitle">Se och uppdatera rollerna som krävs för att ändra diverse delar av utrymmet.</string>
