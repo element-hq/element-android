@@ -40,16 +40,28 @@ private val IGNORED_OPTIONS: Options? = null
 
 @Singleton
 class DefaultVectorAnalytics @Inject constructor(
-        private val postHogFactory: PostHogFactory,
+        postHogFactory: PostHogFactory,
+        analyticsConfig: AnalyticsConfig,
         private val analyticsStore: AnalyticsStore,
-        private val analyticsConfig: AnalyticsConfig,
         @NamedGlobalScope private val globalScope: CoroutineScope
 ) : VectorAnalytics {
-    private var posthog: PostHog? = null
+
+    private val posthog: PostHog? = when {
+        analyticsConfig.isEnabled -> postHogFactory.createPosthog()
+        else                      -> {
+            Timber.tag(analyticsTag.value).w("Analytics is disabled")
+            null
+        }
+    }
 
     // Cache for the store values
     private var userConsent: Boolean? = null
     private var analyticsId: String? = null
+
+    override fun init() {
+        observeUserConsent()
+        observeAnalyticsId()
+    }
 
     override fun getUserConsent(): Flow<Boolean> {
         return analyticsStore.userConsentFlow
@@ -83,12 +95,6 @@ class DefaultVectorAnalytics @Inject constructor(
         setAnalyticsId("")
     }
 
-    override fun init() {
-        createAnalyticsClient()
-        observeUserConsent()
-        observeAnalyticsId()
-    }
-
     private fun observeAnalyticsId() {
         getAnalyticsId()
                 .onEach { id ->
@@ -113,7 +119,6 @@ class DefaultVectorAnalytics @Inject constructor(
     private fun observeUserConsent() {
         getUserConsent()
                 .onEach { consent ->
-                    println("!!!, got consent: $consent")
                     Timber.tag(analyticsTag.value).d("User consent updated to $consent")
                     userConsent = consent
                     optOutPostHog()
@@ -125,20 +130,6 @@ class DefaultVectorAnalytics @Inject constructor(
         userConsent?.let { posthog?.optOut(!it) }
     }
 
-    private fun createAnalyticsClient() {
-        Timber.tag(analyticsTag.value).d("createAnalyticsClient()")
-
-        if (analyticsConfig.isEnabled.not()) {
-            Timber.tag(analyticsTag.value).w("Analytics is disabled")
-            return
-        }
-
-        posthog = postHogFactory.createPosthog()
-
-        optOutPostHog()
-        identifyPostHog()
-    }
-
     override fun capture(event: VectorAnalyticsEvent) {
         Timber.tag(analyticsTag.value).d("capture($event)")
         posthog
@@ -148,9 +139,6 @@ class DefaultVectorAnalytics @Inject constructor(
 
     override fun screen(screen: VectorAnalyticsScreen) {
         Timber.tag(analyticsTag.value).d("screen($screen)")
-
-        println("userconsnet: $userConsent")
-
         posthog
                 ?.takeIf { userConsent == true }
                 ?.screen(screen.getName(), screen.getProperties()?.toPostHogProperties())
