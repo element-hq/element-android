@@ -2408,4 +2408,7 @@
     <string name="summary_user_sent_sticker">%1$s שלח מדבקה.</string>
     <string name="summary_user_sent_image">%1$s שלח תמונה‮.</string>
     <string name="summary_message">%1$s: %2$s</string>
+    <string name="notice_room_visibility_invited">כל חברי החדר, מהנקודה בה הם הוזמנו.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">את/ה הפכת הודעות עתידיות לגלויות בפני %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s הפך הודעות עתידיות לגלויות בפני %2$s</string>
 </resources>
