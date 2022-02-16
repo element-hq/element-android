@@ -184,7 +184,7 @@ class RoomListFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom, isInviteAlreadyAccepted: Boolean?) {
+    private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom, isInviteAlreadyAccepted: Boolean) {
         navigator.openRoom(context = requireActivity(), roomId = event.roomSummary.roomId, isInviteAlreadyAccepted = isInviteAlreadyAccepted)
     }
 
