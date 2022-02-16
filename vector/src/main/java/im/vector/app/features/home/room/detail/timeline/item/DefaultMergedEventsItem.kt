@@ -20,6 +20,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.PluralsRes
 import androidx.core.view.children
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
@@ -27,7 +28,7 @@ import im.vector.app.R
 import im.vector.app.features.home.AvatarRenderer
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
-abstract class MergedMembershipEventsItem : BasedMergedItem<MergedMembershipEventsItem.Holder>() {
+abstract class DefaultMergedEventsItem : BasedMergedItem<DefaultMergedEventsItem.Holder>() {
 
     override fun getViewStubId() = STUB_ID
 
@@ -37,7 +38,7 @@ abstract class MergedMembershipEventsItem : BasedMergedItem<MergedMembershipEven
     override fun bind(holder: Holder) {
         super.bind(holder)
         if (attributes.isCollapsed) {
-            val summary = holder.expandView.resources.getQuantityString(R.plurals.membership_changes, attributes.mergeData.size, attributes.mergeData.size)
+            val summary = holder.expandView.resources.getQuantityString(attributes.summaryTitleResId, attributes.mergeData.size, attributes.mergeData.size)
             holder.summaryView.text = summary
             holder.summaryView.visibility = View.VISIBLE
             holder.avatarListView.visibility = View.VISIBLE
@@ -66,6 +67,7 @@ abstract class MergedMembershipEventsItem : BasedMergedItem<MergedMembershipEven
     }
 
     data class Attributes(
+            @PluralsRes val summaryTitleResId: Int,
             override val isCollapsed: Boolean,
             override val mergeData: List<Data>,
             override val avatarRenderer: AvatarRenderer,
