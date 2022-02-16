@@ -1,0 +1,1 @@
+When accepting an invite, expecting to see the room
