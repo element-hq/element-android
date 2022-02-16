@@ -185,7 +185,7 @@ class RoomListFragment @Inject constructor(
     }
 
     private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom, isInviteAlreadyAccepted: Boolean?) {
-        navigator.openRoom(requireActivity(), event.roomSummary.roomId, isInviteAlreadyAccepted = isInviteAlreadyAccepted)
+        navigator.openRoom(context = requireActivity(), roomId = event.roomSummary.roomId, isInviteAlreadyAccepted = isInviteAlreadyAccepted)
     }
 
     private fun setupCreateRoomButton() {

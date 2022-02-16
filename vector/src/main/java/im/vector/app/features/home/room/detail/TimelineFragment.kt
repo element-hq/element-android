@@ -1578,21 +1578,12 @@ class TimelineFragment @Inject constructor(
                 views.hideComposerViews()
                 views.notificationAreaView.render(NotificationAreaView.State.Tombstone(mainState.tombstoneEvent))
             }
-        } else if (summary?.membership == Membership.INVITE && inviter != null && !timelineArgs.isInviteAlreadyAccepted ) {
+        } else if (summary?.membership == Membership.INVITE && inviter != null) {
             views.hideComposerViews()
             lazyLoadedViews.inviteView(true)?.apply {
                 callback = this@TimelineFragment
                 isVisible = true
-                render(inviter, VectorInviteView.Mode.LARGE, mainState.changeMembershipState, false)
-                setOnClickListener(null)
-            }
-            Unit
-        } else if (summary?.membership == Membership.INVITE && inviter != null && timelineArgs.isInviteAlreadyAccepted) {
-            views.hideComposerViews()
-            lazyLoadedViews.inviteView(true)?.apply {
-                callback = this@TimelineFragment
-                isVisible = true
-                render(inviter, VectorInviteView.Mode.LARGE, mainState.changeMembershipState, true)
+                render(inviter, VectorInviteView.Mode.LARGE, mainState.changeMembershipState, timelineArgs.isInviteAlreadyAccepted)
                 setOnClickListener(null)
             }
             Unit
