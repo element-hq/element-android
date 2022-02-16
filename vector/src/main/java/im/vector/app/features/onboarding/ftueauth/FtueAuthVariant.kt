@@ -421,7 +421,9 @@ class FtueAuthVariant(
     }
 
     private fun onDisplayNameUpdated() {
-        // TODO go to the real profile picture fragment
-        navigateToHome(createdAccount = true)
+        activity.addFragmentToBackstack(views.loginFragmentContainer,
+                FtueAuthChooseProfilePictureFragment::class.java,
+                option = commonOption
+        )
     }
 }

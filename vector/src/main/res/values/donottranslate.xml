@@ -28,6 +28,10 @@
     <string name="ftue_display_name_entry_title" translatable="false">Display Name</string>
     <string name="ftue_display_name_entry_footer" translatable="false">You can change this later</string>
 
+    <string name="ftue_profile_picture_title" translatable="false">Add a profile picture</string>
+    <string name="ftue_profile_picture_subtitle" translatable="false">You can change this anytime.</string>
+
+
     <string name="ftue_personalize_submit" translatable="false">Save and continue</string>
     <string name="ftue_personalize_skip_this_step" translatable="false">Skip this step</string>
 </resources>
