@@ -121,7 +121,7 @@ class RoomListFragment @Inject constructor(
             when (it) {
                 is RoomListViewEvents.Loading                   -> showLoading(it.message)
                 is RoomListViewEvents.Failure                   -> showFailure(it.throwable)
-                is RoomListViewEvents.SelectRoom                -> handleSelectRoom(it)
+                is RoomListViewEvents.SelectRoom                -> handleSelectRoom(it, it.isInviteAlreadyAccepted)
                 is RoomListViewEvents.Done                      -> Unit
                 is RoomListViewEvents.NavigateToMxToBottomSheet -> handleShowMxToLink(it.link)
             }.exhaustive
@@ -184,8 +184,8 @@ class RoomListFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom) {
-        navigator.openRoom(requireActivity(), event.roomSummary.roomId)
+    private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom, isInviteAlreadyAccepted: Boolean?) {
+        navigator.openRoom(requireActivity(), event.roomSummary.roomId, isInviteAlreadyAccepted = isInviteAlreadyAccepted)
     }
 
     private fun setupCreateRoomButton() {

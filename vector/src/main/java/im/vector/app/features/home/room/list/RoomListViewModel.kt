@@ -33,7 +33,6 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.analytics.AnalyticsTracker
-import im.vector.app.features.analytics.extensions.toAnalyticsJoinedRoom
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.invite.AutoAcceptInvites
 import im.vector.app.features.settings.VectorPreferences
@@ -45,7 +44,6 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
-import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -174,7 +172,7 @@ class RoomListViewModel @AssistedInject constructor(
     // PRIVATE METHODS *****************************************************************************
 
     private fun handleSelectRoom(action: RoomListAction.SelectRoom) = withState {
-        _viewEvents.post(RoomListViewEvents.SelectRoom(action.roomSummary))
+        _viewEvents.post(RoomListViewEvents.SelectRoom(action.roomSummary, false))
     }
 
     private fun handleToggleSection(roomSection: RoomsSection) {
@@ -208,31 +206,7 @@ class RoomListViewModel @AssistedInject constructor(
             Timber.w("Try to join an already joining room. Should not happen")
             return@withState
         }
-
-        // quick echo
-        setState {
-            copy(
-                    roomMembershipChanges = roomMembershipChanges.mapValues {
-                        if (it.key == roomId) {
-                            ChangeMembershipState.Joining
-                        } else {
-                            it.value
-                        }
-                    }
-            )
-        }
-
-        viewModelScope.launch {
-            try {
-                session.joinRoom(roomId)
-                analyticsTracker.capture(action.roomSummary.toAnalyticsJoinedRoom())
-                // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.
-                // Instead, we wait for the room to be joined
-            } catch (failure: Throwable) {
-                // Notify the user
-                _viewEvents.post(RoomListViewEvents.Failure(failure))
-            }
-        }
+        _viewEvents.post(RoomListViewEvents.SelectRoom(action.roomSummary, true))
     }
 
     private fun handleRejectInvitation(action: RoomListAction.RejectInvitation) = withState { state ->
