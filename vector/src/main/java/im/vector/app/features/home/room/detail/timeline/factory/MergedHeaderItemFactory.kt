@@ -123,10 +123,10 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                 collapsedEventIds.removeAll(mergedEventIds)
             }
             val mergeId = mergedEventIds.joinToString(separator = "_") { it.toString() }
-            val summaryTitleResId = when(event.root.getClearType()) {
-                EventType.STATE_ROOM_MEMBER -> R.plurals.membership_changes
+            val summaryTitleResId = when (event.root.getClearType()) {
+                EventType.STATE_ROOM_MEMBER     -> R.plurals.membership_changes
                 EventType.STATE_ROOM_SERVER_ACL -> R.plurals.notice_room_server_acl_changes
-                else -> null
+                else                            -> null
             }
             summaryTitleResId?.let { summaryTitle ->
                 val attributes = DefaultMergedEventsItem.Attributes(
