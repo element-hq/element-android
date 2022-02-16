@@ -17,24 +17,25 @@
 package im.vector.app.core.epoxy.bottomsheet
 
 import android.text.method.MovementMethod
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
+import com.bumptech.glide.request.RequestOptions
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.epoxy.onClick
 import im.vector.app.core.extensions.setTextOrHide
+import im.vector.app.core.glide.GlideApp
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
 import im.vector.app.features.home.room.detail.timeline.item.BindingOptions
 import im.vector.app.features.home.room.detail.timeline.tools.findPillsAndProcess
-import im.vector.app.features.location.LocationData
-import im.vector.app.features.location.MapTilerMapView
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -70,10 +71,13 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
     var time: String? = null
 
     @EpoxyAttribute
-    var locationData: LocationData? = null
+    var locationUrl: String? = null
 
     @EpoxyAttribute
     var locationPinProvider: LocationPinProvider? = null
+
+    @EpoxyAttribute
+    var locationOwnerId: String? = null
 
     @EpoxyAttribute
     var movementMethod: MovementMethod? = null
@@ -97,17 +101,21 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         body.charSequence.findPillsAndProcess(coroutineScope) { it.bind(holder.body) }
         holder.timestamp.setTextOrHide(time)
 
-        holder.mapView.isVisible = locationData != null
-        holder.body.isVisible = locationData == null
-        locationData?.let { location ->
-            holder.mapView.initialize {
-                if (holder.view.isAttachedToWindow) {
-                    holder.mapView.zoomToLocation(location.latitude, location.longitude, 15.0)
-                    locationPinProvider?.create(matrixItem.id) { pinDrawable ->
-                        holder.mapView.addPinToMap(matrixItem.id, pinDrawable)
-                        holder.mapView.updatePinLocation(matrixItem.id, location.latitude, location.longitude)
-                    }
-                }
+        if (locationUrl == null) {
+            holder.body.isVisible = true
+            holder.mapViewContainer.isVisible = false
+        } else {
+            holder.body.isVisible = false
+            holder.mapViewContainer.isVisible = true
+            GlideApp.with(holder.staticMapImageView)
+                    .load(locationUrl)
+                    .apply(RequestOptions.centerCropTransform())
+                    .into(holder.staticMapImageView)
+
+            locationPinProvider?.create(locationOwnerId) { pinDrawable ->
+                GlideApp.with(holder.staticMapPinImageView)
+                        .load(pinDrawable)
+                        .into(holder.staticMapPinImageView)
             }
         }
     }
@@ -124,6 +132,8 @@ abstract class BottomSheetMessagePreviewItem : VectorEpoxyModel<BottomSheetMessa
         val bodyDetails by bind<TextView>(R.id.bottom_sheet_message_preview_body_details)
         val timestamp by bind<TextView>(R.id.bottom_sheet_message_preview_timestamp)
         val imagePreview by bind<ImageView>(R.id.bottom_sheet_message_preview_image)
-        val mapView by bind<MapTilerMapView>(R.id.bottom_sheet_message_preview_location)
+        val mapViewContainer by bind<FrameLayout>(R.id.mapViewContainer)
+        val staticMapImageView by bind<ImageView>(R.id.staticMapImageView)
+        val staticMapPinImageView by bind<ImageView>(R.id.staticMapPinImageView)
     }
 }

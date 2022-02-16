@@ -28,6 +28,7 @@ import im.vector.app.core.glide.GlideApp
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.home.AvatarRenderer
 import org.matrix.android.sdk.api.util.toMatrixItem
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -44,7 +45,17 @@ class LocationPinProvider @Inject constructor(
         GlideApp.with(context)
     }
 
-    fun create(userId: String, callback: (Drawable) -> Unit) {
+    /**
+     * Creates a pin drawable. If userId is null then a generic pin drawable will be created.
+     * @param userId userId that will be used to retrieve user avatar
+     * @param callback Pin drawable will be sent through the callback
+     */
+    fun create(userId: String?, callback: (Drawable) -> Unit) {
+        if (userId == null) {
+            callback(ContextCompat.getDrawable(context, R.drawable.ic_location_pin)!!)
+            return
+        }
+
         if (cache.contains(userId)) {
             callback(cache[userId]!!)
             return
@@ -54,22 +65,36 @@ class LocationPinProvider @Inject constructor(
             val size = dimensionConverter.dpToPx(44)
             avatarRenderer.render(glideRequests, it, object : CustomTarget<Drawable>(size, size) {
                 override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
-                    val bgUserPin = ContextCompat.getDrawable(context, R.drawable.bg_map_user_pin)!!
-                    val layerDrawable = LayerDrawable(arrayOf(bgUserPin, resource))
-                    val horizontalInset = dimensionConverter.dpToPx(4)
-                    val topInset = dimensionConverter.dpToPx(4)
-                    val bottomInset = dimensionConverter.dpToPx(8)
-                    layerDrawable.setLayerInset(1, horizontalInset, topInset, horizontalInset, bottomInset)
-
-                    cache[userId] = layerDrawable
-
-                    callback(layerDrawable)
+                    Timber.d("## Location: onResourceReady")
+                    val pinDrawable = createPinDrawable(resource)
+                    cache[userId] = pinDrawable
+                    callback(pinDrawable)
                 }
 
                 override fun onLoadCleared(placeholder: Drawable?) {
                     // Is it possible? Put placeholder instead?
+                    // FIXME The doc says it has to be implemented and should free resources
+                    Timber.d("## Location: onLoadCleared")
+                }
+
+                override fun onLoadFailed(errorDrawable: Drawable?) {
+                    Timber.w("## Location: onLoadFailed")
+                    errorDrawable ?: return
+                    val pinDrawable = createPinDrawable(errorDrawable)
+                    cache[userId] = pinDrawable
+                    callback(pinDrawable)
                 }
             })
         }
+    }
+
+    private fun createPinDrawable(drawable: Drawable): Drawable {
+        val bgUserPin = ContextCompat.getDrawable(context, R.drawable.bg_map_user_pin)!!
+        val layerDrawable = LayerDrawable(arrayOf(bgUserPin, drawable))
+        val horizontalInset = dimensionConverter.dpToPx(4)
+        val topInset = dimensionConverter.dpToPx(4)
+        val bottomInset = dimensionConverter.dpToPx(8)
+        layerDrawable.setLayerInset(1, horizontalInset, topInset, horizontalInset, bottomInset)
+        return layerDrawable
     }
 }

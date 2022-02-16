@@ -46,6 +46,7 @@ import org.matrix.android.sdk.api.session.crypto.keysbackup.KeysBackupState
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.isAttachmentMessage
 import org.matrix.android.sdk.api.session.events.model.isTextMessage
+import org.matrix.android.sdk.api.session.events.model.isThread
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.message.MessageContent
 import org.matrix.android.sdk.api.session.room.model.message.MessageFormat
@@ -59,6 +60,8 @@ import org.matrix.android.sdk.api.session.room.send.SendState
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.hasBeenEdited
+import org.matrix.android.sdk.api.session.room.timeline.isPoll
+import org.matrix.android.sdk.api.session.room.timeline.isSticker
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 
@@ -324,6 +327,14 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.Reply(eventId))
             }
 
+            if (canReplyInThread(timelineEvent, messageContent, actionPermissions)) {
+                add(EventSharedAction.ReplyInThread(eventId))
+            }
+
+            if (canViewInRoom(timelineEvent, messageContent, actionPermissions)) {
+                add(EventSharedAction.ViewInRoom)
+            }
+
             if (canEndPoll(timelineEvent, actionPermissions)) {
                 add(EventSharedAction.EndPoll(timelineEvent.eventId))
             }
@@ -427,6 +438,59 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
             MessageType.MSGTYPE_POLL_START,
             MessageType.MSGTYPE_LOCATION -> true
             else                         -> false
+        }
+    }
+
+    /**
+     * Determine whether or not the Reply In Thread bottom sheet action will be visible
+     * to the user
+     */
+    private fun canReplyInThread(event: TimelineEvent,
+                                 messageContent: MessageContent?,
+                                 actionPermissions: ActionPermissions): Boolean {
+        if (!vectorPreferences.areThreadMessagesEnabled()) return false
+        if (initialState.isFromThreadTimeline) return false
+        if (event.root.isThread()) return false
+        if (event.root.getClearType() != EventType.MESSAGE &&
+                !event.isSticker() && !event.isPoll()) return false
+        if (!actionPermissions.canSendMessage) return false
+        return when (messageContent?.msgType) {
+            MessageType.MSGTYPE_TEXT,
+            MessageType.MSGTYPE_NOTICE,
+            MessageType.MSGTYPE_EMOTE,
+            MessageType.MSGTYPE_IMAGE,
+            MessageType.MSGTYPE_VIDEO,
+            MessageType.MSGTYPE_AUDIO,
+            MessageType.MSGTYPE_FILE,
+            MessageType.MSGTYPE_POLL_START,
+            MessageType.MSGTYPE_STICKER_LOCAL -> true
+            else                              -> false
+        }
+    }
+
+    /**
+     * Determine whether or not the view in room action will be available for the current event
+     */
+    private fun canViewInRoom(event: TimelineEvent,
+                              messageContent: MessageContent?,
+                              actionPermissions: ActionPermissions): Boolean {
+        if (!vectorPreferences.areThreadMessagesEnabled()) return false
+        if (!initialState.isFromThreadTimeline) return false
+        if (event.root.getClearType() != EventType.MESSAGE &&
+                !event.isSticker() && !event.isPoll()) return false
+        if (!actionPermissions.canSendMessage) return false
+
+        return when (messageContent?.msgType) {
+            MessageType.MSGTYPE_TEXT,
+            MessageType.MSGTYPE_NOTICE,
+            MessageType.MSGTYPE_EMOTE,
+            MessageType.MSGTYPE_IMAGE,
+            MessageType.MSGTYPE_VIDEO,
+            MessageType.MSGTYPE_AUDIO,
+            MessageType.MSGTYPE_FILE,
+            MessageType.MSGTYPE_POLL_START,
+            MessageType.MSGTYPE_STICKER_LOCAL -> event.root.threadDetails?.isRootThread ?: false
+            else                              -> false
         }
     }
 

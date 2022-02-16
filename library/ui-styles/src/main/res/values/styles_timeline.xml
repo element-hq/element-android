@@ -4,12 +4,34 @@
     <style name="TimelineContentStubBaseParams">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">8dp</item>
-        <item name="android:layout_marginLeft">8dp</item>
-        <item name="android:layout_marginEnd">8dp</item>
-        <item name="android:layout_marginRight">8dp</item>
-        <item name="android:layout_marginBottom">4dp</item>
-        <item name="android:layout_marginTop">4dp</item>
     </style>
+
+    <style name="TimelineContentStubContainerParams">
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+    </style>
+
+    <style name="TimelineContentMediaPillStyle">
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="minHeight">48dp</item>
+        <item name="android:background">@drawable/bg_media_pill</item>
+        <item name="android:backgroundTint">?vctr_content_quinary</item>
+    </style>
+
+    <style name="TimelineReactionView">
+        <item name="android:paddingStart">6dp</item>
+        <item name="android:paddingEnd">6dp</item>
+        <item name="android:paddingTop">1dp</item>
+        <item name="android:paddingBottom">1dp</item>
+        <item name="android:minHeight">28dp</item>
+        <item name="android:minWidth">40dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
 
 </resources>

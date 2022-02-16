@@ -815,7 +815,7 @@
     <string name="room_participants_action_unignore">لغو نادیده‌گیری</string>
     <string name="room_participants_action_mention">اشاره</string>
     <string name="room_participants_action_devices_list">نمایش فهرست نشست</string>
-    <string name="room_participants_ban_prompt_msg">انسداد کاربر، او را از این اتاق اخراج کرده و از پیوستن دوباره‌اش جلوگیری می‌کند.</string>
+    <string name="room_participants_ban_prompt_msg">انسداد کاربر، او را از این اتاق برداشته و از پیوستن دوباره‌اش جلوگیری می‌کند.</string>
     <string name="reason_hint">دلیل</string>
     <string name="room_details_settings">تنظیمات</string>
     <string name="tab_title_search_messages">پیام‌ها</string>
@@ -1002,7 +1002,7 @@
 \nمدیرهای یکپارچگی، داده‌های پیکربندی را دریافت کرده و می‌توانند از طرف شما ابزارک‌ها را تغییر داده، دعوت‌های اتاق فرستاده و سطوح قدرت را تنظیم کنند.</string>
     <string name="settings_always_show_timestamps">نمایش برچسب زمانی برای تمامی پیام‌ها</string>
     <string name="settings_12_24_timestamps">نمایش برچسب‌های زمانی در قالب ۱۲ساعته</string>
-    <string name="settings_show_room_member_state_events_summary">شامل رویدادهای دعوت/پیوستن/ترک/اخراج/تحریم و تغییرهای چهرک/نام نمایشی.</string>
+    <string name="settings_show_room_member_state_events_summary">شامل رویدادهای دعوت/پیوستن/ترک/برداشتن/تحریم و تغییرهای چهرک/نام نمایشی.</string>
     <string name="settings_secure_backup_section_title">پشتیبان امن</string>
     <string name="settings_secure_backup_manage">مدیریت</string>
     <string name="settings_secure_backup_setup">برپایی پشتیبان امن</string>
@@ -1674,7 +1674,7 @@
     <string name="settings_vibrate_on_mention">لرزیدن گوشی در هنگام ذکر یک کاربر</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">شامل تغییرات نام نمایشی و چهرک.</string>
     <string name="settings_show_avatar_display_name_changes_messages">نمایش پیام‌های مربوط به حساب کاربری</string>
-    <string name="settings_show_join_leave_messages_summary">دعوت‌ها و حذف توسط مدیر به هر صورت نمایش داده می‌شوند.</string>
+    <string name="settings_show_join_leave_messages_summary">دعوت‌ها، برداشتن‌ها و انسدادها تأثیر نمی‌پذیرند.</string>
     <string name="settings_show_join_leave_messages">نمایش پیام‌های پیوستن و ترک اتاق</string>
     <string name="settings_inline_url_preview_summary">پیش‌نمایشی از آدرس‌های URL در پیام‌ها نمایش داده شود.</string>
     <string name="settings_set_workmanager_delay_summary">%s
@@ -2956,7 +2956,7 @@
     <string name="space_settings_permissions_subtitle">دیدن و به‌روز رسانی نقش‌های لازم برای تغییر بخش‌های مختلف فضا.</string>
     <string name="space_settings_permissions_title">اجازه‌های فضا</string>
     <string name="space_participants_unban_prompt_msg">لغو تحریم کاربر، اجازهٔ پیوستن دوباره‌اش به فضا را می‌دهد.</string>
-    <string name="space_participants_ban_prompt_msg">تحریم کاربر، او را از این فضا اخراج کرده و از پیوستن دوباره‌اش جلوگیری می‌کند.</string>
+    <string name="space_participants_ban_prompt_msg">تحریم کاربر، او را از این فضا برداشته و از پیوستن دوباره‌اش جلوگیری می‌کند.</string>
     <string name="space_participants_remove_prompt_msg">اخراج کاربر، از این فضا برش می‌دارد.
 \n
 \nبرای پیش‌گیری از پیوستن دوباره، باید تحریمش کنید.</string>
@@ -3019,7 +3019,7 @@
         <item quantity="other">نتیجهٔ نهایی بر مبنای %1$d رأی</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
-        <item quantity="one">رأیی داده نشده</item>
+        <item quantity="one">۱ رأی داده شده. برای دیدن نتیجه، رأی دهید</item>
         <item quantity="other">%1$d رأی داده شده. برای دیدن نتیجه، رأی دهید</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_voted">
@@ -3059,7 +3059,42 @@
     <string name="labs_auto_report_uisi_desc">سامانه‌تان هنگام‌ مواجهه با خطای ناتوانی در رمزگشایی، گزارش‌ها را به صورت خودکار خواهد فرستاد</string>
     <string name="labs_auto_report_uisi">گزارش خودکار خطاهای رمزگشایی.</string>
     <string name="login_splash_already_have_account">از پیش حساب دارم</string>
-    <string name="ftue_auth_carousel_3_title">ارتباط با هرکسی.</string>
+    <string name="ftue_auth_carousel_3_title">پیام‌رسانی امن.</string>
     <string name="ftue_auth_carousel_2_title">شما کنترل می‌کنید.</string>
     <string name="ftue_auth_carousel_1_title">صاحب گفت‌وگوهایتان باشید.</string>
+    <string name="tooltip_attachment_location">هم‌رسانی مکان</string>
+    <string name="settings_enable_location_sharing">به کار انداختن هم‌رسانی مکان</string>
+    <string name="location_share_external">گشودن با</string>
+    <string name="location_share">هم‌رسانی مکان</string>
+    <string name="a11y_location_share_icon">هم‌رسانی مکان</string>
+    <string name="location_activity_title_preview">مکان</string>
+    <string name="location_activity_title_static_sharing">هم‌رسانی مکان</string>
+    <string name="closed_poll_option_title">نظرسنجی بسته</string>
+    <string name="open_poll_option_title">گشودن نظرسنجی</string>
+    <string name="poll_type_title">گونهٔ نظرسنجی</string>
+    <string name="edit_poll_button">ویرایش نظرسنجی</string>
+    <string name="edit_poll_title">ویرایش نظرسنجی</string>
+    <string name="poll_no_votes_cast">رأیی داده نشده</string>
+    <string name="room_profile_section_restore_security">بازیابی رمزنگاری</string>
+    <string name="sent_location">مکانش را هم‌رسانی کرد</string>
+    <string name="login_splash_create_account">ایجاد حساب</string>
+    <string name="ftue_auth_carousel_title_messaging">پیام‌رسانی برای گروهتان.</string>
+    <string name="attachment_type_location">مکان</string>
+    <string name="ftue_auth_carousel_4_title">قطع اسلک از تیم‌ها.</string>
+    <string name="labs_render_locations_in_timeline">پرداخت مکان‌های کاربری در خط زمانی</string>
+    <string name="settings_enable_location_sharing_summary">پس از به کار افتادن، قادر خواهید بد مکانتان را به هر اتاقی بفرستید</string>
+    <string name="template_location_not_available_dialog_content">${app_name} نتوانست به مکانتان دست یابد. لطفاً بعداً دوباره تلاش کنید.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} نتوانست به مکانتان دست یابد</string>
+    <string name="closed_poll_option_description">نتایج تنها هنگامی که نظرسنجی را پایان دهید آشکار می‌شوند</string>
+    <string name="open_poll_option_description">رأی دهندگان به محض دادن رأی، نتایج را می‌بینند</string>
+    <string name="a11y_trust_level_misconfigured">سطح اطمنیان بد پیکربندی شده</string>
+    <string name="encryption_misconfigured">رمزنگاری بد پیکربندی شده</string>
+    <string name="room_member_override_nick_color">پایمالی رنگ نام مستعار</string>
+    <string name="contact_admin_to_restore_encryption">لطفاً برای بازگردانی رمزنگاری به یه وضعیتی معتبر، با مدیری تماس بگیرید.</string>
+    <string name="encryption_has_been_misconfigured">رمزنگاری بد پیکربندی شده.</string>
+    <string name="ftue_auth_carousel_body_encrypted">رمزنگاشتهٔ سرتاسری و بدون نیاز به شماره تلفن. بدون تبلیغات یا داده‌کاوی.</string>
+    <string name="ftue_auth_carousel_body_control">مکان نگه‌داری گفت‌وگوهایتان را برگزینید که به شما کنترل و استقلال می‌هد. وصل شده با ماتریکس.</string>
+    <string name="ftue_auth_carousel_body_secure">ارتباطات امن و مستقل که به شما همان سطح محرمانگی گفت‌وگوی رودررو در خانهٔ خودتان را می‌دهد.</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">از آن‌جا که رمزنگاری بد پیکربندی شده، نمی‌توانید پیام بفرستید. برای گشودن تنظیمات، بزنید.</string>
+    <string name="room_unsupported_e2e_algorithm">از آن‌جا که رمزنگاری بد پیکربندی شده، نمی‌توانید پیام بفرستید. لطفاً برای بازگردانی رمزنگاری به یه وضعیت معتبر، با مدیری تماس بگیرید.</string>
 </resources>

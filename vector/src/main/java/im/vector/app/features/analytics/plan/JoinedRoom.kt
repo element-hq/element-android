@@ -30,14 +30,45 @@ data class JoinedRoom(
          */
         val isDM: Boolean,
         /**
+         * Whether the room is a Space.
+         */
+        val isSpace: Boolean,
+        /**
          * The size of the room.
          */
         val roomSize: RoomSize,
+        /**
+         * The trigger for a room being joined if known.
+         */
+        val trigger: Trigger? = null,
 ) : VectorAnalyticsEvent {
+
+    enum class Trigger {
+        /**
+         * Room joined via a push/desktop notification.
+         */
+        Notification,
+
+        /**
+         * Room joined via the public rooms directory.
+         */
+        RoomDirectory,
+
+        /**
+         * Room joined via the space hierarchy view.
+         */
+        SpaceHierarchy,
+
+        /**
+         * Room joined via a timeline pill or link in another room.
+         */
+        Timeline,
+    }
 
     enum class RoomSize {
         ElevenToOneHundred,
         MoreThanAThousand,
+        One,
         OneHundredAndOneToAThousand,
         ThreeToTen,
         Two,
@@ -48,7 +79,9 @@ data class JoinedRoom(
     override fun getProperties(): Map<String, Any>? {
         return mutableMapOf<String, Any>().apply {
             put("isDM", isDM)
+            put("isSpace", isSpace)
             put("roomSize", roomSize.name)
+            trigger?.let { put("trigger", it.name) }
         }.takeIf { it.isNotEmpty() }
     }
 }

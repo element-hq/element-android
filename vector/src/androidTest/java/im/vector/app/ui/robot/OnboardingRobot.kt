@@ -40,7 +40,10 @@ class OnboardingRobot {
 
     private fun crawlGetStarted() {
         clickOn(R.id.loginSplashSubmit)
+        assertDisplayed(R.id.useCaseHeaderTitle, R.string.ftue_auth_use_case_title)
+        clickOn(R.id.useCaseOptionOne)
         OnboardingServersRobot().crawlSignUp()
+        pressBack()
         pressBack()
     }
 
@@ -66,6 +69,7 @@ class OnboardingRobot {
         assertDisplayed(R.id.loginSplashSubmit, R.string.login_splash_create_account)
         if (createAccount) {
             clickOn(R.id.loginSplashSubmit)
+            clickOn(R.id.useCaseOptionOne)
         } else {
             clickOn(R.id.loginSplashAlreadyHaveAccount)
         }

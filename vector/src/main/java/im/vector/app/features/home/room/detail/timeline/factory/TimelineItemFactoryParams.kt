@@ -23,6 +23,7 @@ import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 data class TimelineItemFactoryParams(
         val event: TimelineEvent,
         val prevEvent: TimelineEvent? = null,
+        val prevDisplayableEvent: TimelineEvent? = null,
         val nextEvent: TimelineEvent? = null,
         val nextDisplayableEvent: TimelineEvent? = null,
         val partialState: TimelineEventController.PartialState = TimelineEventController.PartialState(),
@@ -34,5 +35,10 @@ data class TimelineItemFactoryParams(
     val highlightedEventId: String?
         get() = partialState.highlightedEventId
 
+    val rootThreadEventId: String?
+        get() = partialState.rootThreadEventId
+
     val isHighlighted = highlightedEventId == event.eventId
+
+    fun isFromThreadTimeline(): Boolean = rootThreadEventId != null
 }

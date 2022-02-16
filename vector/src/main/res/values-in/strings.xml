@@ -104,13 +104,13 @@
     <string name="auth_password_dont_match">Kata sandi tidak cocok</string>
     <string name="auth_recaptcha_message">Homeserver ini ingin memastikan bahwa Anda bukan robot</string>
     <string name="auth_home_server">Homeserver:</string>
-    <string name="auth_reset_password_next_step_button">Saya sudah verifikasi alamat email saya</string>
+    <string name="auth_reset_password_next_step_button">Saya telah verifikasi alamat email saya</string>
     <string name="auth_reset_password_missing_password">Kata sandi baru perlu dimasukkan.</string>
     <string name="login_error_must_start_http">URL diawali dengan http[s]://</string>
     <string name="login_error_unable_login">Tidak dapat masuk</string>
     <string name="login_error_unable_register">Tidak dapat registrasi</string>
     <string name="login_error_invalid_home_server">Masukkan URL yang benar</string>
-    <string name="login_error_user_in_use">Nama pengguna sudah terpakai</string>
+    <string name="login_error_user_in_use">Nama pengguna telah terpakai</string>
     <string name="compression_opt_list_original">Asli</string>
     <string name="compression_opt_list_large">Besar</string>
     <string name="compression_opt_list_medium">Sedang</string>
@@ -1921,16 +1921,16 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="keys_backup_setup_step3_please_make_copy">Mohon membuat salinan</string>
     <string name="keys_backup_setup_override_stop">Berhenti</string>
     <string name="keys_backup_setup_override_replace">Ganti</string>
-    <string name="keys_backup_setup_override_backup_prompt_description">Sepertinya Anda sudah menyiapkan cadangan kunci dari sesi lain. Apakah Anda ingin menggantinya dengan yang Anda buat\?</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">Sepertinya Anda telah menyiapkan cadangan kunci dari sesi lain. Apakah Anda ingin menggantinya dengan yang Anda buat\?</string>
     <string name="keys_backup_setup_override_backup_prompt_tile">Cadangan sudah ada di homeserver Anda</string>
-    <string name="recovery_key_export_saved">Kunci pemulihan sudah disimpan.</string>
+    <string name="recovery_key_export_saved">Kunci pemulihan telah disimpan.</string>
     <string name="recovery_key_export_saved_as_warning">Kunci pemulihan telah disimpan ke \'%s\'.
 \n
 \nPeringatan: file ini dapat dihapus jika aplikasi dihapus.</string>
     <string name="keys_backup_setup_step3_save_button_title">Simpan sebagai File</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Bagikan</string>
     <string name="keys_backup_setup_step3_copy_button_title">Simpan Kunci Pemulihan</string>
-    <string name="keys_backup_setup_step3_button_title_no_passphrase">Saya sudah membuat salinan</string>
+    <string name="keys_backup_setup_step3_button_title_no_passphrase">Saya telah membuat salinan</string>
     <string name="keys_backup_setup_step3_button_title">Selesai</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">Simpan kunci pemulihan Anda di suatu tempat yang sangat aman, seperti manajer kata sandi (atau brankas)</string>
     <string name="keys_backup_setup_step3_text_line2">Kunci pemulihan Anda adalah jaring pengaman — Anda dapat menggunakannya untuk memulihkan akses ke pesan terenkripsi Anda jika Anda lupa frasa sandi Anda.
@@ -1966,7 +1966,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_preferences">Preferensi</string>
     <string name="settings_general_title">Umum</string>
     <string name="quick_reactions">Reaksi Cepat</string>
-    <string name="navigate_to_room_when_already_in_the_room">Anda sudah menampilkan ruangan ini!</string>
+    <string name="navigate_to_room_when_already_in_the_room">Anda telah menampilkan ruangan ini!</string>
     <string name="settings_other_third_party_notices">Pemberitahuan pihak ketiga lainnya</string>
     <string name="settings_sdk_version">Versi SDK Matrix</string>
     <string name="import_e2e_keys_from_file">Impor kunci E2E dari file \"%1$s\".</string>
@@ -2021,7 +2021,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_list_catchup_welcome_body">Lihat pesan yang belum dibaca di sini</string>
     <string name="room_list_catchup_welcome_title">Selamat datang kembali!</string>
     <string name="room_list_catchup_empty_body">Anda tidak mempunyai pesan yang belum dibaca</string>
-    <string name="room_list_catchup_empty_title">Anda sudah melihat semua!</string>
+    <string name="room_list_catchup_empty_title">Anda telah melihat semuanya!</string>
     <string name="invited_by">Diundang oleh %s</string>
     <string name="verification_conclusion_compromised">Salah satu dari yang berikut ini dapat dikompromikan:
 \n
@@ -2288,7 +2288,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="login_reset_password_success_notice_2">Anda telah keluar dari semua sesi dan tidak akan menerima notifikasi. Untuk mengaktifkan notifikasi, masuk lagi di setiap perangkat.</string>
     <string name="login_reset_password_success_notice">Kata sandi Anda telah direset.</string>
     <string name="login_reset_password_success_title">Berhasil!</string>
-    <string name="login_reset_password_mail_confirmation_submit">Saya sudah memverifikasi alamat email saya</string>
+    <string name="login_reset_password_mail_confirmation_submit">Saya telah memverifikasi alamat email saya</string>
     <string name="login_reset_password_mail_confirmation_notice_2">Ketuk tautan untuk mengkonfirmasi kata sandi baru Anda. Setelah Anda mengikuti petunjuk yang ada di tautan, klik bawahnya.</string>
     <string name="login_reset_password_mail_confirmation_notice">Email verifikasi terkirim ke %1$s.</string>
     <string name="login_reset_password_mail_confirmation_title">Cek kotak masuk Anda</string>
@@ -3006,7 +3006,40 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_member_override_nick_color">Ubah warna nama tampilan</string>
     <string name="login_splash_already_have_account">Saya sudah punya akun</string>
     <string name="ftue_auth_carousel_4_title">Bebaskan.</string>
-    <string name="ftue_auth_carousel_3_title">Hubung dengan siapa pun.</string>
+    <string name="ftue_auth_carousel_3_title">Perpesanan yang aman.</string>
     <string name="ftue_auth_carousel_2_title">Anda dalam kendali.</string>
     <string name="ftue_auth_carousel_1_title">Miliki percakapan Anda.</string>
+    <string name="tooltip_attachment_location">Bagikan lokasi</string>
+    <string name="labs_render_locations_in_timeline">Tampilkan lokasi pengguna di linimasa</string>
+    <string name="settings_enable_location_sharing_summary">Setelah diaktifkan Anda akan dapat mengirim lokasi Anda ke ruangan apa saja</string>
+    <string name="settings_enable_location_sharing">Aktifkan pembagian lokasi</string>
+    <string name="location_share_external">Buka dengan</string>
+    <string name="template_location_not_available_dialog_content">${app_name} tidak dapat mengakses lokasi Anda. Silakan coba lagi nanti.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} tidak dapat mengakses lokasi Anda</string>
+    <string name="location_share">Bagikan lokasi</string>
+    <string name="a11y_location_share_icon">Bagikan lokasi</string>
+    <string name="location_activity_title_preview">Lokasi</string>
+    <string name="location_activity_title_static_sharing">Bagikan lokasi</string>
+    <string name="closed_poll_option_description">Hasil akan ditampilkan ketika Anda mengakhiri poll-nya</string>
+    <string name="closed_poll_option_title">Poll tertutup</string>
+    <string name="open_poll_option_description">Pemberi suara akan melihat hasilnya ketika telah memberikan suara</string>
+    <string name="open_poll_option_title">Buka poll</string>
+    <string name="poll_type_title">Tipe poll</string>
+    <string name="edit_poll_button">EDIT POLL</string>
+    <string name="edit_poll_title">Edit poll</string>
+    <string name="poll_no_votes_cast">Tidak ada suara</string>
+    <string name="a11y_trust_level_misconfigured">Tingkat kepercayaan dikonfigurasi dengan salah</string>
+    <string name="encryption_misconfigured">Enkripsi dikonfigurasi dengan salah</string>
+    <string name="room_profile_section_restore_security">Pulihkan Enkripsi</string>
+    <string name="contact_admin_to_restore_encryption">Mohon hubungi sebuah admin untuk memulihkan enkripsi ke status yang valid.</string>
+    <string name="encryption_has_been_misconfigured">Enkripsi telah dikonfigurasi dengan salah.</string>
+    <string name="sent_location">Membagikan lokasinya</string>
+    <string name="login_splash_create_account">Buat akun</string>
+    <string name="ftue_auth_carousel_title_messaging">Perpesanan untuk tim Anda.</string>
+    <string name="ftue_auth_carousel_body_encrypted">Terenkripsi secara ujung-ke-ujung dan tidak memerlukan nomor telepon. Tidak ada iklan atau penambangan data.</string>
+    <string name="ftue_auth_carousel_body_control">Anda pilih di mana percakapan Anda disimpan, memberikan Anda kendali dan kebebasan. Terhubung via Matrix.</string>
+    <string name="ftue_auth_carousel_body_secure">Komunikasi aman dan independen yang memberikan tingkat privasi yang sama seperti percakapan wajah-ke-wajah di dalam rumah Anda sendiri.</string>
+    <string name="attachment_type_location">Lokasi</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">Enkripsi telah dikonfigurasi dengan salah sehingga Anda tidak dapat mengirim pesan. Klik untuk membuka pengaturan.</string>
+    <string name="room_unsupported_e2e_algorithm">Enkripsi telah dikonfigurasi dengan salah sehingga Anda tidak dapat mengirim pesan. Mohon hubungi sebuah admin untuk memulihkan enkripsi ke status yang valid.</string>
 </resources>

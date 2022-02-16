@@ -846,7 +846,7 @@
         <item quantity="one">%d utente</item>
         <item quantity="other">%d utenti</item>
     </plurals>
-    <string name="room_participants_ban_prompt_msg">Bandire l\'utente lo espellerà dalla stanza e gli impedirà di rientrare.</string>
+    <string name="room_participants_ban_prompt_msg">Bandire l\'utente lo rimuoverà da questa stanza e gli impedirà di rientrare.</string>
     <plurals name="room_new_messages_notification">
         <item quantity="one">%d nuovo messaggio</item>
         <item quantity="other">%d nuovi messaggi</item>
@@ -1081,7 +1081,7 @@
     <string name="settings_show_read_receipts">Mostra le conferme di lettura</string>
     <string name="settings_show_read_receipts_summary">Clicca sulle conferme di lettura per vederne l\'elenco dettagliato.</string>
     <string name="settings_show_join_leave_messages">Mostra entrata ed uscita degli utenti</string>
-    <string name="settings_show_join_leave_messages_summary">Inviti, butta fuori e ban non vengono considerati.</string>
+    <string name="settings_show_join_leave_messages_summary">Inviti, rimozioni e ban non vengono considerati.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Mostra i cambiamenti degli account</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Includi cambiamenti dell\'avatar e del nome visualizzato.</string>
     <string name="settings_password">Password</string>
@@ -2333,7 +2333,7 @@
         <item quantity="other">%d secondi</item>
     </plurals>
     <string name="settings_show_room_member_state_events">Mostra eventi di stato dei membri della stanza</string>
-    <string name="settings_show_room_member_state_events_summary">Includi eventi di invito/entrata/uscita/kick/ban e modifiche di avatar/nome.</string>
+    <string name="settings_show_room_member_state_events_summary">Includi eventi di invito/entrata/uscita/rimozione/ban e modifiche di avatar/nome.</string>
     <string name="sent_a_poll">Sondaggio</string>
     <string name="sent_a_reaction">Reagito con: %s</string>
     <string name="sent_verification_conclusion">Verifica conclusa</string>
@@ -2946,7 +2946,7 @@
     <string name="space_permissions_notice">Seleziona i ruoli necessari per cambiare varie parti dello spazio</string>
     <string name="space_settings_permissions_subtitle">Vedi e aggiorna i ruoli necessari per cambiare varie parti dello spazio.</string>
     <string name="space_participants_unban_prompt_msg">Riammettere l\'utente gli permetterà di rientrare nello spazio.</string>
-    <string name="space_participants_ban_prompt_msg">Bandire l\'utente lo espellerà da questo spazio e gli impedirà di rientrare.</string>
+    <string name="space_participants_ban_prompt_msg">Bandire l\'utente lo rimuoverà da questo spazio e gli impedirà di rientrare.</string>
     <string name="space_participants_remove_prompt_msg">buttando fuori l\'utente verrà rimosso da questo spazio.
 \n
 \nPer impedire che possa rientrare, dovresti invece bandirlo.</string>
@@ -3006,7 +3006,7 @@
         <item quantity="other">Risultato finale basato su %1$d voti</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
-        <item quantity="one">Nessun voto</item>
+        <item quantity="one">%1$d voto. Vota per vedere i risultati</item>
         <item quantity="other">%1$d voti. Vota per vedere i risultati</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_voted">
@@ -3051,7 +3051,40 @@
     <string name="room_member_override_nick_color">Sovrascrivi colore nick</string>
     <string name="login_splash_already_have_account">Ho già un account</string>
     <string name="ftue_auth_carousel_4_title">Riduci il carico ai team.</string>
-    <string name="ftue_auth_carousel_3_title">Connettiti con chiunque.</string>
+    <string name="ftue_auth_carousel_3_title">Messaggistica sicura.</string>
     <string name="ftue_auth_carousel_2_title">Tu hai il controllo.</string>
     <string name="ftue_auth_carousel_1_title">Prendi il controllo delle tue conversazioni.</string>
+    <string name="tooltip_attachment_location">Condividi posizione</string>
+    <string name="labs_render_locations_in_timeline">Mostra le posizioni dell\'utente nella linea temporale</string>
+    <string name="settings_enable_location_sharing_summary">Una volta attivata, potrai inviare la tua posizione in qualsiasi stanza</string>
+    <string name="settings_enable_location_sharing">Attiva condivisione posizione</string>
+    <string name="location_share_external">Apri con</string>
+    <string name="template_location_not_available_dialog_content">${app_name} non ha potuto rilevare la tua posizione. Riprova più tardi.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} non ha potuto rilevare la tua posizione</string>
+    <string name="location_share">Condividi posizione</string>
+    <string name="a11y_location_share_icon">Condividi posizione</string>
+    <string name="location_activity_title_preview">Posizione</string>
+    <string name="location_activity_title_static_sharing">Condividi posizione</string>
+    <string name="closed_poll_option_description">I risultati verranno rivelati solo quando termini il sondaggio</string>
+    <string name="closed_poll_option_title">Sondaggio chiuso</string>
+    <string name="open_poll_option_description">I votanti vedono i risultati appena avranno votato</string>
+    <string name="open_poll_option_title">Apri sondaggio</string>
+    <string name="poll_type_title">Tipo sondaggio</string>
+    <string name="edit_poll_button">MODIFICA SONDAGGIO</string>
+    <string name="edit_poll_title">Modifica sondaggio</string>
+    <string name="poll_no_votes_cast">Nessun voto</string>
+    <string name="a11y_trust_level_misconfigured">Livello di fiducia configurato male</string>
+    <string name="encryption_misconfigured">La crittografia è configurata male</string>
+    <string name="room_profile_section_restore_security">Reimposta crittografia</string>
+    <string name="contact_admin_to_restore_encryption">Contatta un amministratore per reimpostare la crittografia ad uno stato valido.</string>
+    <string name="encryption_has_been_misconfigured">La crittografia è stata configurata male.</string>
+    <string name="sent_location">Ha condiviso la sua posizione</string>
+    <string name="login_splash_create_account">Crea account</string>
+    <string name="ftue_auth_carousel_title_messaging">Messaggistica per la tua squadra.</string>
+    <string name="ftue_auth_carousel_body_encrypted">Crittografia end-to-end e nessun numero di telefono richiesto. Niente pubblicità o raccolta di dati.</string>
+    <string name="ftue_auth_carousel_body_control">Scegli dove vengono tenute le tue conversazioni, dandoti controllo e indipendenza. Connesso via Matrix.</string>
+    <string name="ftue_auth_carousel_body_secure">Comunicazioni sicure e indipendenti che ti danno lo stesso livello di riservatezza di una conversazione faccia a faccia in casa tua.</string>
+    <string name="attachment_type_location">Posizione</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">La crittografia è stata configurata male, perciò non puoi inviare messaggi. Clicca per aprire le impostazioni.</string>
+    <string name="room_unsupported_e2e_algorithm">La crittografia è stata configurata male, perciò non puoi inviare messaggi. Contatta l\'amministratore per reimpostare la crittografia ad uno stato valido.</string>
 </resources>

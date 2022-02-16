@@ -29,6 +29,7 @@ import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.startSyncing
+import im.vector.app.core.extensions.vectorStore
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.deleteAllFiles
 import im.vector.app.databinding.ActivityMainBinding
@@ -40,6 +41,7 @@ import im.vector.app.features.pin.PinCodeStore
 import im.vector.app.features.pin.PinLocker
 import im.vector.app.features.pin.UnlockedActivity
 import im.vector.app.features.popup.PopupAlertManager
+import im.vector.app.features.session.VectorSessionStore
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.themes.ActivityOtherThemes
@@ -143,13 +145,15 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             startNextActivityAndFinish()
             return
         }
+
+        val onboardingStore = session.vectorStore(this)
         when {
             args.isAccountDeactivated -> {
                 lifecycleScope.launch {
                     // Just do the local cleanup
                     Timber.w("Account deactivated, start app")
                     sessionHolder.clearActiveSession()
-                    doLocalCleanup(clearPreferences = true)
+                    doLocalCleanup(clearPreferences = true, onboardingStore)
                     startNextActivityAndFinish()
                 }
             }
@@ -163,14 +167,14 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                     }
                     Timber.w("SIGN_OUT: success, start app")
                     sessionHolder.clearActiveSession()
-                    doLocalCleanup(clearPreferences = true)
+                    doLocalCleanup(clearPreferences = true, onboardingStore)
                     startNextActivityAndFinish()
                 }
             }
             args.clearCache           -> {
                 lifecycleScope.launch {
                     session.clearCache()
-                    doLocalCleanup(clearPreferences = false)
+                    doLocalCleanup(clearPreferences = false, onboardingStore)
                     session.startSyncing(applicationContext)
                     startNextActivityAndFinish()
                 }
@@ -183,7 +187,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
         Timber.w("Ignoring invalid token global error")
     }
 
-    private suspend fun doLocalCleanup(clearPreferences: Boolean) {
+    private suspend fun doLocalCleanup(clearPreferences: Boolean, vectorSessionStore: VectorSessionStore) {
         // On UI Thread
         Glide.get(this@MainActivity).clearMemory()
 
@@ -193,6 +197,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
             pinLocker.unlock()
             pinCodeStore.deleteEncodedPin()
             vectorAnalytics.onSignOut()
+            vectorSessionStore.clear()
         }
         withContext(Dispatchers.IO) {
             // On BG thread

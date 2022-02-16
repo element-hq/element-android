@@ -1,3 +1,55 @@
+Changes in Element v1.4.0 (2022-02-09)
+======================================
+
+Features ✨
+----------
+ - Initial implementation of thread messages ([#4746](https://github.com/vector-im/element-android/issues/4746))
+ - Support message bubbles in timeline. ([#4937](https://github.com/vector-im/element-android/issues/4937))
+ - Support generic location pin ([#5146](https://github.com/vector-im/element-android/issues/5146))
+ - Retrieve map style url from .well-known ([#5175](https://github.com/vector-im/element-android/issues/5175))
+
+Bugfixes 🐛
+----------
+ - Fixes non sans-serif font weights being ignored ([#3907](https://github.com/vector-im/element-android/issues/3907))
+ - Fixing missing/intermittent notifications on the google play variant when wifi is enabled ([#5038](https://github.com/vector-im/element-android/issues/5038))
+ - Fixes call statuses in the timeline for missed/rejected calls and connected calls. ([#5088](https://github.com/vector-im/element-android/issues/5088))
+ - Fix fallback permalink when threads are disabled ([#5128](https://github.com/vector-im/element-android/issues/5128))
+ - Analytics: aligns use case identifying with iOS implementation ([#5142](https://github.com/vector-im/element-android/issues/5142))
+ - Fix location rendering in timeline if map cannot be loaded ([#5143](https://github.com/vector-im/element-android/issues/5143))
+
+Other changes
+-------------
+ - "Invite users to space" dialog now closed when user choose invite method ([#4295](https://github.com/vector-im/element-android/issues/4295))
+ - Changed layout for space card and room card used at "explore room" screen and space/room invite dialogs ([#4304](https://github.com/vector-im/element-android/issues/4304))
+ - Removed spaces restricted search hint dialogs ([#4315](https://github.com/vector-im/element-android/issues/4315))
+ - Remove Search from room options if not available ([#4641](https://github.com/vector-im/element-android/issues/4641))
+ - Qr code scanning fragments merged into one ([#4873](https://github.com/vector-im/element-android/issues/4873))
+ - Fix CI/CD errors after merges for quality and integration tests ([#5118](https://github.com/vector-im/element-android/issues/5118))
+ - Added automation for the Z-FTUE label to add issues to the FTUE Project Board ([#5120](https://github.com/vector-im/element-android/issues/5120))
+ - Added automation for WTF labels to move to WTF project board ([#5148](https://github.com/vector-im/element-android/issues/5148))
+ - Update WTF automation to fix it ([#5173](https://github.com/vector-im/element-android/issues/5173))
+
+
+Changes in Element v1.3.18 (2022-02-03)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Avoid deleting root event of CurrentState on gappy sync. In order to restore lost Events an initial sync may be triggered. ([#5137](https://github.com/vector-im/element-android/issues/5137))
+
+
+Changes in Element v1.3.17 (2022-01-31)
+=======================================
+
+Bugfixes 🐛
+----------
+ - Display static map images in the timeline and improve Location sharing feature ([#5084](https://github.com/vector-im/element-android/issues/5084))
+ - Show the legal mention of mapbox when sharing location ([#5062](https://github.com/vector-im/element-android/issues/5062))
+ - Poll cannot end in some unencrypted rooms ([#5067](https://github.com/vector-im/element-android/issues/5067))
+ - Selecting Transfer in a call should immediately put the other person on hold until the call connects or the Transfer is cancelled. ([#5081](https://github.com/vector-im/element-android/issues/5081))
+ - Fixing crashes when quickly scrolling or restoring the room timeline ([#5091](https://github.com/vector-im/element-android/issues/5091))
+
+
 Changes in Element 1.3.16 (2022-01-25)
 ======================================
 

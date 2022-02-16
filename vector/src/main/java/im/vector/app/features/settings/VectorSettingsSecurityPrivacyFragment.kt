@@ -94,7 +94,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        analyticsScreenName = Screen.ScreenName.SettingsSecurity
+        analyticsScreenName = Screen.ScreenName.MobileSettingsSecurity
     }
 
     // cryptography

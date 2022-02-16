@@ -59,8 +59,6 @@ class SpaceMenuRobot {
         Espresso.pressBack()
         // close invite view
         Espresso.pressBack()
-
-        Espresso.pressBack()
     }
 
     fun spaceMembers() {

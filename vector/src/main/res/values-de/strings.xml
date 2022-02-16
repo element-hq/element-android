@@ -1323,7 +1323,7 @@
     <string name="settings_default_media_source">Standard-Medienquelle</string>
     <string name="media_source_choose">Wählen</string>
     <string name="settings_play_shutter_sound">Auslöseton abspielen</string>
-    <string name="action_mark_room_read">Als gelesen markieren</string>
+    <string name="action_mark_room_read">Gelesen</string>
     <string name="settings_notification_privacy_no_background_sync">Die App muss sich <b>nicht</b> im Hintergrund mit dem Homeserver verbinden, dies sollte die Akkunutzung reduzieren</string>
     <plurals name="notification_compat_summary_line_for_room">
         <item quantity="one">%1$s: %2$d Nachricht</item>
@@ -3058,4 +3058,37 @@
         <item quantity="other">Endgültiges Ergebnis basiert auf %1$d Stimmen</item>
     </plurals>
     <string name="ftue_auth_carousel_4_title">Element verbindet Datenschutz mit tollen Features.</string>
+    <string name="room_profile_section_restore_security">Verschlüsselung wiederherstellen</string>
+    <string name="tooltip_attachment_location">Standort freigeben</string>
+    <string name="location_share">Standort freigeben</string>
+    <string name="a11y_location_share_icon">Standort freigeben</string>
+    <string name="location_activity_title_static_sharing">Standort freigeben</string>
+    <string name="settings_enable_location_sharing">Standortfreigabe aktivieren</string>
+    <string name="location_share_external">Öffnen mit</string>
+    <string name="template_location_not_available_dialog_content">${app_name} konnte nicht auf deinen Standort zugreifen. Bitte versuche es später noch einmal.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} konnte nicht auf deinen Standort zugreifen</string>
+    <string name="location_activity_title_preview">Standort</string>
+    <string name="closed_poll_option_description">Ergebnisse werden erst angezeigt, wenn du die Umfrage beendest</string>
+    <string name="closed_poll_option_title">Geschlossene Umfrage</string>
+    <string name="open_poll_option_description">Ergebnisse werden direkt nach Stimmabgabe angezeigt</string>
+    <string name="open_poll_option_title">Offene Umfrage</string>
+    <string name="poll_type_title">Umfragetyp</string>
+    <string name="edit_poll_button">UMFRAGE BEARBEITEN</string>
+    <string name="edit_poll_title">Umfrage bearbeiten</string>
+    <string name="poll_no_votes_cast">Keine Stimmen abgegeben</string>
+    <string name="login_splash_create_account">Konto erstellen</string>
+    <string name="ftue_auth_carousel_title_messaging">Nachrichtenaustausch für dein Team.</string>
+    <string name="ftue_auth_carousel_body_encrypted">Ende-zu-Ende-verschlüsselt und ohne Telefonnummer nutzbar. Keine Werbung oder Datenerfassung.</string>
+    <string name="ftue_auth_carousel_body_control">Wähle wo deine Gespräche liegen, für Kontrolle und Unabhängigkeit. Verbunden mit Matrix.</string>
+    <string name="ftue_auth_carousel_body_secure">Sichere und unabhängige Kommunikation, die für die gleiche Vertraulichkeit sorgt, wie ein Gespräch von Angesicht zu Angesicht in deinem eigenen Zuhause.</string>
+    <string name="attachment_type_location">Standort</string>
+    <string name="a11y_trust_level_misconfigured">Fehlerhaft konfiguriertes Vertrauenslevel</string>
+    <string name="encryption_misconfigured">Die Verschlüsselung ist fehlerhaft konfiguriert</string>
+    <string name="contact_admin_to_restore_encryption">Bitte kontaktiere einen Admin, um die Verschlüsselung zurückzusetzen.</string>
+    <string name="encryption_has_been_misconfigured">Die Verschlüsselung wurde fehlerhaft konfiguriert.</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">Die Verschlüsselung wurde fehlerhaft konfiguriert und du kannst keine Nachrichten senden. Klicke, um die Einstellungen zu öffnen.</string>
+    <string name="room_unsupported_e2e_algorithm">Die Verschlüsselung wurde fehlerhaft konfiguriert und du kannst keine Nachrichten senden. Bitte kontaktiere einen Admin, um die Verschlüsselung wiederherzustellen.</string>
+    <string name="labs_render_locations_in_timeline">Geteilte Standorte anzeigen</string>
+    <string name="settings_enable_location_sharing_summary">Sobald aktiviert, kannst du deinen Standort in jeden Raum senden</string>
+    <string name="sent_location">Hat den Standort geteilt</string>
 </resources>

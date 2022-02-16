@@ -16,7 +16,6 @@
 
 package im.vector.app.features.home
 
-import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -25,6 +24,7 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
+import im.vector.app.core.platform.VectorDummyViewState
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import kotlinx.coroutines.flow.launchIn
@@ -37,22 +37,18 @@ import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
 
-data class DummyState(
-        val dummy: Boolean = false
-) : MavericksState
-
 class UserColorAccountDataViewModel @AssistedInject constructor(
-        @Assisted initialState: DummyState,
+        @Assisted initialState: VectorDummyViewState,
         private val session: Session,
         private val matrixItemColorProvider: MatrixItemColorProvider
-) : VectorViewModel<DummyState, EmptyAction, EmptyViewEvents>(initialState) {
+) : VectorViewModel<VectorDummyViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
-    interface Factory : MavericksAssistedViewModelFactory<UserColorAccountDataViewModel, DummyState> {
-        override fun create(initialState: DummyState): UserColorAccountDataViewModel
+    interface Factory : MavericksAssistedViewModelFactory<UserColorAccountDataViewModel, VectorDummyViewState> {
+        override fun create(initialState: VectorDummyViewState): UserColorAccountDataViewModel
     }
 
-    companion object : MavericksViewModelFactory<UserColorAccountDataViewModel, DummyState> by hiltMavericksViewModelFactory()
+    companion object : MavericksViewModelFactory<UserColorAccountDataViewModel, VectorDummyViewState> by hiltMavericksViewModelFactory()
 
     init {
         observeAccountData()

@@ -17,12 +17,16 @@
 package im.vector.app.ui.robot
 
 import androidx.test.espresso.Espresso.pressBack
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.interaction.BaristaListInteractions.clickListItem
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import im.vector.app.R
+import im.vector.app.espresso.tools.waitUntilActivityVisible
+import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.home.room.detail.timeline.edithistory.ViewEditHistoryBottomSheet
+import im.vector.app.features.reactions.EmojiReactionPickerActivity
 import im.vector.app.interactWithSheet
 import java.lang.Thread.sleep
 
@@ -54,7 +58,10 @@ class MessageMenuRobot(
     fun addReactionFromEmojiPicker() {
         clickOn(R.string.message_add_reaction)
         // Wait for emoji to load, it's async now
-        sleep(2000)
+        waitUntilActivityVisible<EmojiReactionPickerActivity> {
+            waitUntilViewVisible(withId(R.id.emojiRecyclerView))
+            waitUntilViewVisible(withText("😀"))
+        }
         clickListItem(R.id.emojiRecyclerView, 4)
         autoClosed = true
     }

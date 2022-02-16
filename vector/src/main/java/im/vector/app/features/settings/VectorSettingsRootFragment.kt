@@ -29,7 +29,7 @@ class VectorSettingsRootFragment @Inject constructor() : VectorSettingsBaseFragm
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        analyticsScreenName = Screen.ScreenName.Settings
+        analyticsScreenName = Screen.ScreenName.MobileSettings
     }
 
     override fun bindPref() {

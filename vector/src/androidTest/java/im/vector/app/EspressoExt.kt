@@ -195,7 +195,9 @@ fun activityIdlingResource(activityClass: Class<*>): IdlingResource {
                         println("*** [$name]  onActivityLifecycleChanged callback: $callback")
                         callback?.onTransitionToIdle()
                     }
-                    else          -> {}
+                    else -> {
+                        // do nothing, we're blocking until the activity resumes
+                    }
                 }
             }
         }

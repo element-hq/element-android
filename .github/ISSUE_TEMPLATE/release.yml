@@ -1,6 +1,6 @@
 name: Release checklist
 description: Checklist for each release. This template is only for the core team.
-title: "[Release] Element Android v"
+title: "[Release] Element Android v"
 labels: [🚀 Release]
 assignees:
   - bmarty
@@ -10,7 +10,7 @@ body:
     id: checklist
     attributes:
       label: Release checklist
-      description: For the template example, we are releasing the version 1.1.10. Replace 1.1.10 with the version in the issue body.
+      description: For the template example, we are releasing the version 1.2.3. Replace 1.2.3 with the version in the issue body.
       placeholder: |
         If you are reading this, you have deleted the content of the release template: undo the deletion or start again.
       value: |
@@ -22,35 +22,41 @@ body:
 
         ### Do the release
 
-        - [ ] Create release with gitflow, branch name `release/1.1.10`
+        - [ ] Create release with gitflow, branch name `release/1.2.3`
         - [ ] Check the crashes from the PlayStore
-        - [ ] Check the rageshake with the current dev version: https://github.com/matrix-org/element-android-rageshakes/labels/1.1.10-dev
+        - [ ] Check the rageshake with the current dev version: https://github.com/matrix-org/element-android-rageshakes/labels/1.2.3-dev
         - [ ] Run the integration test, and especially `UiAllScreensSanityTest.allScreensTest()`
-        - [ ] Create an account on matrix.org
-        - [ ] Run towncrier: `towncrier --version v1.1.10 --draft` (remove `--draft` do write the file CHANGES.md)
+        - [ ] Create an account on matrix.org and do some smoke tests that the sanity test does not cover like: 1-1 call, 1-1 video call, Jitsi call for instance
+        - [ ] Run towncrier: `towncrier --version v1.2.3 --draft` (remove `--draft` do write the file CHANGES.md)
+        - [ ] Check that the folder `changelog.d` is empty. It can happen that some remaining files stay here
+        - [ ] Check the file CHANGES.md consistency. It's possible to reorder items (most important changes first) or change their section if relevant. Also an opportunity to fix some typo, or rewrite things
         - [ ] Add file for fastlane under ./fastlane/metadata/android/en-US/changelogs
-        - [ ] Push the branch and start a draft PR (will not be merged), to check that the CI is happy with all the changes.
-        - [ ] Finish release with gitflow, delete the draft PR
-        - [ ] Push `main` and the new tag `v1.1.10` to origin
+        - [ ] (optional) Push the branch and start a draft PR (will not be merged), to check that the CI is happy with all the changes.
+        - [ ] Finish release with gitflow, delete the draft PR (if created)
+        - [ ] Push `main` and the new tag `v1.2.3` to origin
         - [ ] Checkout `develop`
-        - [ ] Increase version in `./vector/build.gradle`
+        - [ ] Increase version (versionPatch + 2) in `./vector/build.gradle`
         - [ ] Change the value of SDK_VERSION in the file `./matrix-sdk-android/build.gradle`
         - [ ] Commit and push `develop`
         - [ ] Wait for [Buildkite](https://buildkite.com/matrix-dot-org/element-android/builds?branch=main) to build the `main` branch.
         - [ ] Run the script `~/scripts/releaseElement.sh`. It will download the APKs from Buildkite check them and sign them.
         - [ ] Install the APK on your phone to check that the upgrade went well (no init sync, etc.)
+        - [ ] Create the release on gitHub [from the tag](https://github.com/vector-im/element-android/tags), copy paste the block from the file CHANGES.md
+        - [ ] Add the 4 signed APKs to the GitHub release
+        - [ ] Ping the Android Internal room
+
+        ### Once tested and validated internally
+
         - [ ] Create a new beta release on the GooglePlay console and upload the 4 signed Apks.
         - [ ] Check that the version codes are correct
         - [ ] Copy the fastlane change to the GooglePlay console in the section en-GB.
         - [ ] Push to beta release to 100% of the users
-        - [ ] Create the release on gitHub [from the tag](https://github.com/vector-im/element-android/tags), copy paste the block from the file CHANGES.md
-        - [ ] Add the 4 signed APKs to the GitHub release
-        - [ ] Ping the Android Internal room
-        - [ ] Add an entry in the internal diary
+        - [ ] Notify the F-Droid team so that they can schedule the publication on F-Droid
 
         ### Once Live on PlayStore
 
         - [ ] Ping the Android public room and update its topic
+        - [ ] Add an entry in the internal diary
 
         ### After at least 2 days
 
@@ -61,6 +67,8 @@ body:
         - [ ] Ping the Android public room and update its topic with the new available version
 
         ### Android SDK2
+
+        The SDK2 and the sample app are released only when Element has been pushed to production.
 
         - [ ] Checkout the `main` branch on Element Android project
 

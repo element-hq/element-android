@@ -2475,9 +2475,11 @@
             "b": "1F636-200D-1F32B-FE0F",
             "j": [
                 "absentminded",
-                "face in clouds",
                 "face in the fog",
-                "head in clouds"
+                "head in clouds",
+                "shower",
+                "steam",
+                "dream"
             ]
         },
         "smirking-face": {
@@ -2536,12 +2538,14 @@
             "b": "1F62E-200D-1F4A8",
             "j": [
                 "exhale",
-                "face exhaling",
                 "gasp",
                 "groan",
                 "relief",
                 "whisper",
-                "whistle"
+                "whistle",
+                "relieve",
+                "tired",
+                "sigh"
             ]
         },
         "lying-face": {
@@ -2745,11 +2749,15 @@
             "b": "1F635-200D-1F4AB",
             "j": [
                 "dizzy",
-                "face with spiral eyes",
                 "hypnotized",
                 "spiral",
                 "trouble",
-                "whoa"
+                "whoa",
+                "sick",
+                "ill",
+                "confused",
+                "nauseous",
+                "nausea"
             ]
         },
         "exploding-head": {
@@ -3704,10 +3712,11 @@
             "j": [
                 "burn",
                 "heart",
-                "heart on fire",
                 "love",
                 "lust",
-                "sacred heart"
+                "sacred heart",
+                "passionate",
+                "enthusiastic"
             ]
         },
         "mending-heart": {
@@ -3717,10 +3726,12 @@
                 "healthier",
                 "improving",
                 "mending",
-                "mending heart",
                 "recovering",
                 "recuperating",
-                "well"
+                "well",
+                "broken heart",
+                "bandage",
+                "wounded"
             ]
         },
         "red-heart": {
@@ -4748,7 +4759,8 @@
             "j": [
                 "beard",
                 "man",
-                "man: beard"
+                "man: beard",
+                "facial hair"
             ]
         },
         "woman-beard": {
@@ -4757,7 +4769,8 @@
             "j": [
                 "beard",
                 "woman",
-                "woman: beard"
+                "woman: beard",
+                "facial hair"
             ]
         },
         "man-red-hair": {

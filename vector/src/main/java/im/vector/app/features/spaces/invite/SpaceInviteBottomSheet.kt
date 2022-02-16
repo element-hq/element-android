@@ -118,7 +118,7 @@ class SpaceInviteBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetIn
             views.inviterMxid.isVisible = false
         }
 
-        spaceCardRenderer.render(summary, state.peopleYouKnow.invoke().orEmpty(), null, views.spaceCard)
+        spaceCardRenderer.render(summary, state.peopleYouKnow.invoke().orEmpty(), null, views.spaceCard, showDescription = true)
 
         views.spaceCard.matrixToCardMainButton.button.text = getString(R.string.action_accept)
         views.spaceCard.matrixToCardSecondaryButton.button.text = getString(R.string.action_decline)

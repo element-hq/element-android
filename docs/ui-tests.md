@@ -104,3 +104,76 @@ fun initAccount() {
   existingSession = createAccountAndSync(matrix, userName, password, true)
 }
 ```
+
+### Contributing to the UiAllScreensSanityTest
+
+The `UiAllScreensSanityTest` makes use of the Robot pattern in order to model pages, components and interactions.
+Each Robot aims to return the UI back to its original state after the interaction, allowing for a reusable and consistent DSL.
+
+```kotlin
+// launches and closes settings after executing the block
+elementRobot.settings {
+    // whilst in the settings, launches and closes the advanced settings sub screen
+    advancedSettings {
+        // crawls all the pages within the advanced settings
+        crawl()
+    }
+}
+
+// enables developer mode by navigating to the settings, enabling the toggle and then returning to the starting point to execute the block
+// on block completion the Robot disables developer mode by navigating back to the settings and finally returning to the original starting point
+elementRobot.withDeveloperMode {
+    // the same starting point as the example above
+    settings {
+        advancedSettings { crawlDeveloperOptions() }
+    }
+}
+```
+
+The Robots used in the example above...
+
+```kotlin
+class ElementRobot {
+    fun settings(block: SettingsRobot.() -> Unit) {
+        // double check we're where we think we are
+        waitUntilViewVisible(withId(R.id.bottomNavigationView))
+
+        // navigate to the settings
+        openDrawer()
+        clickOn(R.id.homeDrawerHeaderSettingsView)
+
+        // execute the robot with the context of the settings screen
+        block(SettingsRobot())
+
+        // close the settings and ensure we're back at the starting point
+        pressBack()
+        waitUntilViewVisible(withId(R.id.bottomNavigationView))
+    }
+
+    fun withDeveloperMode(block: ElementRobot.() -> Unit) {
+        settings { toggleDeveloperMode() }
+        block()
+        settings { toggleDeveloperMode() }
+    }
+}
+
+class SettingsRobot {
+    fun toggleDeveloperMode() {
+        advancedSettings {
+            toggleDeveloperMode()
+        }
+    }
+
+    fun advancedSettings(block: SettingsAdvancedRobot.() -> Unit) {
+        clickOn(R.string.settings_advanced_settings)
+        block(SettingsAdvancedRobot())
+        pressBack()
+    }
+}
+
+class SettingsAdvancedRobot {
+    fun toggleDeveloperMode() {
+        clickOn(R.string.settings_developer_mode_summary)
+    }
+}
+```

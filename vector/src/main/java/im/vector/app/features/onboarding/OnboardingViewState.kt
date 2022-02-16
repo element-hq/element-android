@@ -40,6 +40,8 @@ data class OnboardingViewState(
         @PersistState
         val serverType: ServerType = ServerType.Unknown,
         @PersistState
+        val useCase: FtueUseCase? = null,
+        @PersistState
         val signMode: SignMode = SignMode.Unknown,
         @PersistState
         val resetPasswordEmail: String? = null,

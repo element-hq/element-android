@@ -16,7 +16,6 @@
 
 package im.vector.app
 
-import android.content.Context
 import android.content.SharedPreferences
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.features.rageshake.BugReporter
@@ -46,7 +45,6 @@ class AutoRageShaker @Inject constructor(
         private val sessionDataSource: ActiveSessionDataSource,
         private val activeSessionHolder: ActiveSessionHolder,
         private val bugReporter: BugReporter,
-        private val context: Context,
         private val vectorPreferences: VectorPreferences
 ) : Session.Listener, SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -136,7 +134,6 @@ class AutoRageShaker @Inject constructor(
 
     private fun sendRageShake(target: E2EMessageDetected) {
         bugReporter.sendBugReport(
-                context = context,
                 reportType = ReportType.AUTO_UISI,
                 withDevicesLogs = true,
                 withCrashLogs = true,
@@ -218,7 +215,6 @@ class AutoRageShaker @Inject constructor(
         val matchingIssue = event.content?.get("recipient_rageshake")?.toString() ?: ""
 
         bugReporter.sendBugReport(
-                context = context,
                 reportType = ReportType.AUTO_UISI_SENDER,
                 withDevicesLogs = true,
                 withCrashLogs = true,

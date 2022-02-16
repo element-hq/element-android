@@ -20,9 +20,12 @@ import androidx.test.espresso.IdlingPolicies
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
+import im.vector.app.R
 import im.vector.app.espresso.tools.ScreenshotFailureRule
 import im.vector.app.features.MainActivity
+import im.vector.app.getString
 import im.vector.app.ui.robot.ElementRobot
+import im.vector.app.ui.robot.withDeveloperMode
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
@@ -52,45 +55,44 @@ class UiAllScreensSanityTest {
     fun allScreensTest() {
         IdlingPolicies.setMasterPolicyTimeout(120, TimeUnit.SECONDS)
 
-//        elementRobot.onboarding {
-//            crawl()
-//        }
+        elementRobot.onboarding {
+            crawl()
+        }
 
         // Create an account
-//        val userId = "UiTest_" + UUID.randomUUID().toString()
-//        elementRobot.signUp(userId)
+        val userId = "UiTest_" + UUID.randomUUID().toString()
+        elementRobot.signUp(userId)
 
-//        elementRobot.settings {
-//            general { crawl() }
-//            notifications { crawl() }
-//            preferences { crawl() }
-//            voiceAndVideo()
-//            ignoredUsers()
-//            // TODO Test analytics
-//            securityAndPrivacy { crawl() }
-//            labs()
-//            advancedSettings { crawl() }
-//            // TODO Rework this part (Legals, etc.)
-//            // helpAndAbout { crawl() }
-//        }
+        elementRobot.settings {
+            general { crawl() }
+            notifications { crawl() }
+            preferences { crawl() }
+            voiceAndVideo()
+            ignoredUsers()
+            securityAndPrivacy { crawl() }
+            labs()
+            advancedSettings { crawl() }
+            helpAndAbout { crawl() }
+            legals { crawl() }
+        }
 
-//        elementRobot.newDirectMessage {
-//            verifyQrCodeButton()
-//            verifyInviteFriendsButton()
-//        }
+        elementRobot.newDirectMessage {
+            verifyQrCodeButton()
+            verifyInviteFriendsButton()
+        }
 
-//        elementRobot.newRoom {
-//            createNewRoom {
-//                crawl()
-//                createRoom {
-//                    val message = "Hello world!"
-//                    postMessage(message)
-//                    crawl()
-//                    crawlMessage(message)
-//                    openSettings { crawl() }
-//                }
-//            }
-//        }
+        elementRobot.newRoom {
+            createNewRoom {
+                crawl()
+                createRoom {
+                    val message = "Hello world!"
+                    postMessage(message)
+                    crawl()
+                    crawlMessage(message)
+                    openSettings { crawl() }
+                }
+            }
+        }
 
         elementRobot.space {
             createSpace {
@@ -116,31 +118,31 @@ class UiAllScreensSanityTest {
             }
         }
 
-//        elementRobot.withDeveloperMode {
-//            settings {
-//                advancedSettings { crawlDeveloperOptions() }
-//            }
-//            roomList {
-//                openRoom(getString(R.string.room_displayname_empty_room)) {
-//                    val message = "Test view source"
-//                    postMessage(message)
-//                    openMessageMenu(message) {
-//                        viewSource()
-//                    }
-//                }
-//            }
-//        }
+        elementRobot.withDeveloperMode {
+            settings {
+                advancedSettings { crawlDeveloperOptions() }
+            }
+            roomList {
+                openRoom(getString(R.string.room_displayname_empty_room)) {
+                    val message = "Test view source"
+                    postMessage(message)
+                    openMessageMenu(message) {
+                        viewSource()
+                    }
+                }
+            }
+        }
 
-//        elementRobot.roomList {
-//            verifyCreatedRoom()
-//        }
+        elementRobot.roomList {
+            verifyCreatedRoom()
+        }
 
-//        elementRobot.signout(expectSignOutWarning = true)
+        elementRobot.signout(expectSignOutWarning = true)
 
         // Login again on the same account
-//        elementRobot.login(userId)
-//        elementRobot.dismissVerificationIfPresent()
-//         TODO Deactivate account instead of logout?
-//        elementRobot.signout(expectSignOutWarning = false)
+        elementRobot.login(userId)
+        elementRobot.dismissVerificationIfPresent()
+        // TODO Deactivate account instead of logout?
+        elementRobot.signout(expectSignOutWarning = false)
     }
 }

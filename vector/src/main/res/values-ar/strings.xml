@@ -145,12 +145,12 @@
     <string name="notice_direct_room_join">انضمّ ⁨%1$s⁩</string>
     <string name="notice_direct_room_created_by_you">أنشأتَ النقاش</string>
     <string name="notice_direct_room_created">أنشأ ⁨%1$s⁩ النقاش</string>
-    <string name="notice_room_withdraw_with_reason_by_you">أنتَ قد سحبتَ دعوة %1$s. السبب: %2$s</string>
-    <string name="notice_room_withdraw_with_reason">إنَّ %1$s قد سحبَ دعوة %2$s. السبب: %3$s</string>
+    <string name="notice_room_withdraw_with_reason_by_you">سحبتَ دعوة %1$s. السبب: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">سحبَ %1$s دعوة %2$s. السبب: %3$s</string>
     <string name="notice_room_third_party_revoked_invite_with_reason_by_you">سحبتَ دعوة %1$s للإنضمام إلى الغُرفة. السبب: %2$s</string>
     <string name="notice_room_third_party_revoked_invite_with_reason">سحب %1$s دعوة %2$s للإنضمام إلى الغُرفة. السبب: %3$s</string>
-    <string name="notice_room_third_party_registered_invite_with_reason_by_you">أنتَ قد قبلتَ دعوة %1$s. السبب: %2$s</string>
-    <string name="notice_room_third_party_registered_invite_with_reason">إنَّ %1$s قد قبلَ دعوة %2$s. السبب: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">قبلتَ دعوة %1$s. السبب: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">قبلَ %1$s دعوة %2$s. السبب: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason_by_you">أرسلتَ دعوة إلى %1$s للإنضمام إلى الغُرفة. السبب: %2$s</string>
     <string name="notice_room_third_party_invite_with_reason">أرسل %1$s دعوة إلى %2$s للإنضمام إلى الغُرغة. السبب: %3$s</string>
     <string name="notice_room_ban_with_reason_by_you">حظرتَ %1$s. السبب: %2$s</string>
@@ -1338,4 +1338,5 @@
     <string name="keys_backup_unlock_button">فك قفل التأريخ</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">يستورد المفاتيح…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">ينزّل المفاتيح…</string>
+    <string name="room_error_access_unauthorized">لا يسمح لك بالانضمام لهذه الغرفة</string>
 </resources>

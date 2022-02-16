@@ -19,11 +19,14 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.graphics.Typeface
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.annotation.IdRes
-import androidx.core.view.isInvisible
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import com.airbnb.epoxy.EpoxyAttribute
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
@@ -32,6 +35,8 @@ import im.vector.app.core.ui.views.SendStateImageView
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
+import org.matrix.android.sdk.api.session.threads.ThreadDetails
+import org.matrix.android.sdk.api.util.MatrixItem
 
 /**
  * Base timeline item that adds an optional information bar with the sender avatar, name, time, send state
@@ -61,43 +66,77 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         }
     }
 
+    private val _threadClickListener = object : ClickListener {
+        override fun invoke(p1: View) {
+            attributes.threadCallback?.onThreadSummaryClicked(attributes.informationData.eventId, attributes.threadDetails?.isRootThread ?: false)
+        }
+    }
+
     override fun bind(holder: H) {
         super.bind(holder)
-        if (attributes.informationData.showInformation) {
+        if (attributes.informationData.messageLayout.showAvatar) {
             holder.avatarImageView.layoutParams = holder.avatarImageView.layoutParams?.apply {
                 height = attributes.avatarSize
                 width = attributes.avatarSize
             }
-            holder.avatarImageView.visibility = View.VISIBLE
-            holder.avatarImageView.onClick(_avatarClickListener)
-            holder.memberNameView.visibility = View.VISIBLE
-            holder.memberNameView.onClick(_memberNameClickListener)
-            holder.timeView.visibility = View.VISIBLE
-            holder.timeView.text = attributes.informationData.time
-            holder.memberNameView.text = attributes.informationData.memberName
-            holder.memberNameView.setTextColor(attributes.getMemberNameColor())
             attributes.avatarRenderer.render(attributes.informationData.matrixItem, holder.avatarImageView)
             holder.avatarImageView.setOnLongClickListener(attributes.itemLongClickListener)
-            holder.memberNameView.setOnLongClickListener(attributes.itemLongClickListener)
+            holder.avatarImageView.isVisible = true
+            holder.avatarImageView.onClick(_avatarClickListener)
         } else {
             holder.avatarImageView.setOnClickListener(null)
-            holder.memberNameView.setOnClickListener(null)
-            holder.avatarImageView.visibility = View.GONE
-            if (attributes.informationData.forceShowTimestamp) {
-                holder.memberNameView.isInvisible = true
-                holder.timeView.isVisible = true
-                holder.timeView.text = attributes.informationData.time
-            } else {
-                holder.memberNameView.isVisible = false
-                holder.timeView.isVisible = false
-            }
             holder.avatarImageView.setOnLongClickListener(null)
-            holder.memberNameView.setOnLongClickListener(null)
+            holder.avatarImageView.isVisible = false
         }
-
+        if (attributes.informationData.messageLayout.showDisplayName) {
+            holder.memberNameView.isVisible = true
+            holder.memberNameView.text = attributes.informationData.memberName
+            holder.memberNameView.setTextColor(attributes.getMemberNameColor())
+            holder.memberNameView.onClick(_memberNameClickListener)
+            holder.memberNameView.setOnLongClickListener(attributes.itemLongClickListener)
+        } else {
+            holder.memberNameView.setOnClickListener(null)
+            holder.memberNameView.setOnLongClickListener(null)
+            holder.memberNameView.isVisible = false
+        }
+        if (attributes.informationData.messageLayout.showTimestamp) {
+            holder.timeView.isVisible = true
+            holder.timeView.text = attributes.informationData.time
+        } else {
+            holder.timeView.isVisible = false
+        }
         // Render send state indicator
         holder.sendStateImageView.render(attributes.informationData.sendStateDecoration)
         holder.eventSendingIndicator.isVisible = attributes.informationData.sendStateDecoration == SendStateDecoration.SENDING_MEDIA
+
+        // Threads
+        if (attributes.areThreadMessagesEnabled) {
+            holder.threadSummaryConstraintLayout.onClick(_threadClickListener)
+            attributes.threadDetails?.let { threadDetails ->
+                holder.threadSummaryConstraintLayout.isVisible = threadDetails.isRootThread
+                holder.threadSummaryCounterTextView.text = threadDetails.numberOfThreads.toString()
+                holder.threadSummaryInfoTextView.text = threadDetails.threadSummaryLatestTextMessage ?: attributes.decryptionErrorMessage
+
+                val userId = threadDetails.threadSummarySenderInfo?.userId ?: return@let
+                val displayName = threadDetails.threadSummarySenderInfo?.displayName
+                val avatarUrl = threadDetails.threadSummarySenderInfo?.avatarUrl
+                attributes.avatarRenderer.render(MatrixItem.UserItem(userId, displayName, avatarUrl), holder.threadSummaryAvatarImageView)
+                updateHighlightedMessageHeight(holder, true)
+            } ?: run {
+                holder.threadSummaryConstraintLayout.isVisible = false
+                updateHighlightedMessageHeight(holder, false)
+            }
+        }
+    }
+
+    private fun updateHighlightedMessageHeight(holder: Holder, isExpanded: Boolean) {
+        holder.checkableBackground.updateLayoutParams<RelativeLayout.LayoutParams> {
+            if (isExpanded) {
+                addRule(RelativeLayout.ALIGN_BOTTOM, holder.threadSummaryConstraintLayout.id)
+            } else {
+                addRule(RelativeLayout.ALIGN_BOTTOM, holder.informationBottom.id)
+            }
+        }
     }
 
     override fun unbind(holder: H) {
@@ -106,17 +145,25 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         holder.avatarImageView.setOnLongClickListener(null)
         holder.memberNameView.setOnClickListener(null)
         holder.memberNameView.setOnLongClickListener(null)
+        attributes.avatarRenderer.clear(holder.threadSummaryAvatarImageView)
+        holder.threadSummaryConstraintLayout.setOnClickListener(null)
         super.unbind(holder)
     }
 
     private fun Attributes.getMemberNameColor() = messageColorProvider.getMemberNameTextColor(informationData.matrixItem)
 
     abstract class Holder(@IdRes stubId: Int) : AbsBaseMessageItem.Holder(stubId) {
+
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
         val sendStateImageView by bind<SendStateImageView>(R.id.messageSendStateImageView)
         val eventSendingIndicator by bind<ProgressBar>(R.id.eventSendingIndicator)
+        val informationBottom by bind<LinearLayout>(R.id.informationBottom)
+        val threadSummaryConstraintLayout by bind<ConstraintLayout>(R.id.messageThreadSummaryConstraintLayout)
+        val threadSummaryCounterTextView by bind<TextView>(R.id.messageThreadSummaryCounterTextView)
+        val threadSummaryAvatarImageView by bind<ImageView>(R.id.messageThreadSummaryAvatarImageView)
+        val threadSummaryInfoTextView by bind<TextView>(R.id.messageThreadSummaryInfoTextView)
     }
 
     /**
@@ -132,8 +179,12 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             val memberClickListener: ClickListener? = null,
             override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
             val avatarCallback: TimelineEventController.AvatarCallback? = null,
+            val threadCallback: TimelineEventController.ThreadCallback? = null,
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
-            val emojiTypeFace: Typeface? = null
+            val emojiTypeFace: Typeface? = null,
+            val decryptionErrorMessage: String? = null,
+            val threadDetails: ThreadDetails? = null,
+            val areThreadMessagesEnabled: Boolean = false
     ) : AbsBaseMessageItem.Attributes {
 
         // Have to override as it's used to diff epoxy items
@@ -145,6 +196,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
 
             if (avatarSize != other.avatarSize) return false
             if (informationData != other.informationData) return false
+            if (threadDetails != other.threadDetails) return false
 
             return true
         }
@@ -152,6 +204,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         override fun hashCode(): Int {
             var result = avatarSize
             result = 31 * result + informationData.hashCode()
+            result = 31 * result + threadDetails.hashCode()
+
             return result
         }
     }

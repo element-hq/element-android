@@ -79,7 +79,7 @@
 
         <TextView
             android:id="@+id/useCaseOptionOne"
-            style="@style/Widget.Vector.TextView.Subtitle"
+            style="@style/Widget.Vector.TextView.Subtitle.Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -97,7 +97,7 @@
 
         <TextView
             android:id="@+id/useCaseOptionTwo"
-            style="@style/Widget.Vector.TextView.Subtitle"
+            style="@style/Widget.Vector.TextView.Subtitle.Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -115,7 +115,7 @@
 
         <TextView
             android:id="@+id/useCaseOptionThree"
-            style="@style/Widget.Vector.TextView.Subtitle"
+            style="@style/Widget.Vector.TextView.Subtitle.Medium"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -133,10 +133,12 @@
 
         <TextView
             android:id="@+id/useCaseSkip"
+            style="@style/Widget.Vector.TextView.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:gravity="center"
+            android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toTopOf="@id/contentFooterSpacing"
             app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
             app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
@@ -153,10 +155,12 @@
 
         <TextView
             android:id="@+id/useCaseFooter"
+            style="@style/Widget.Vector.TextView.Subtitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/ftue_auth_use_case_join_existing_server"
+            android:textColor="?vctr_content_secondary"
             app:layout_constraintBottom_toTopOf="@id/useCaseConnectToServer"
             app:layout_constraintEnd_toEndOf="@id/useCaseGutterEnd"
             app:layout_constraintStart_toStartOf="@id/useCaseGutterStart"
