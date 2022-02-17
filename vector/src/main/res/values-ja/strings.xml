@@ -2267,4 +2267,5 @@
     <string name="room_upgrade_to_recommended_version">推奨のルームバージョンへとアップグレード</string>
     <string name="a11y_start_voice_message">音声メッセージを録音</string>
     <string name="legals_home_server_title">あなたのホームサーバーのポリシー</string>
+    <string name="a11y_jump_to_bottom">いちばん下へジャンプ</string>
 </resources>
