@@ -50,6 +50,9 @@ interface PushRuleService {
 
 //    fun fulfilledBingRule(event: Event, rules: List<PushRule>): PushRule?
 
+    fun resolveSenderNotificationPermissionCondition(event: Event,
+                                                     condition: SenderNotificationPermissionCondition): Boolean
+
     interface PushRuleListener {
         fun onEvents(pushEvents: PushEvents)
     }

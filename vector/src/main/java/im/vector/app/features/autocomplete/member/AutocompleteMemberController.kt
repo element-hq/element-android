@@ -16,31 +16,81 @@
 
 package im.vector.app.features.autocomplete.member
 
+import android.content.Context
 import com.airbnb.epoxy.TypedEpoxyController
+import im.vector.app.R
 import im.vector.app.features.autocomplete.AutocompleteClickListener
+import im.vector.app.features.autocomplete.autocompleteHeaderItem
 import im.vector.app.features.autocomplete.autocompleteMatrixItem
 import im.vector.app.features.home.AvatarRenderer
-import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.api.util.toEveryoneInRoomMatrixItem
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
 
-class AutocompleteMemberController @Inject constructor() : TypedEpoxyController<List<RoomMemberSummary>>() {
+class AutocompleteMemberController @Inject constructor(private val context: Context) :
+        TypedEpoxyController<List<AutocompleteMemberItem>>() {
 
-    var listener: AutocompleteClickListener<RoomMemberSummary>? = null
+    /* ==========================================================================================
+     * Fields
+     * ========================================================================================== */
+
+    var listener: AutocompleteClickListener<AutocompleteMemberItem>? = null
+
+    /* ==========================================================================================
+     * Dependencies
+     * ========================================================================================== */
 
     @Inject lateinit var avatarRenderer: AvatarRenderer
 
-    override fun buildModels(data: List<RoomMemberSummary>?) {
+    /* ==========================================================================================
+     * Specialization
+     * ========================================================================================== */
+
+    override fun buildModels(data: List<AutocompleteMemberItem>?) {
         if (data.isNullOrEmpty()) {
             return
         }
+        data.forEach { item ->
+            when (item) {
+                is AutocompleteMemberItem.Header     -> buildHeaderItem(item)
+                is AutocompleteMemberItem.RoomMember -> buildRoomMemberItem(item)
+                is AutocompleteMemberItem.Everyone   -> buildEveryoneItem(item)
+            }
+        }
+    }
+
+    /* ==========================================================================================
+     * Helper methods
+     * ========================================================================================== */
+
+    private fun buildHeaderItem(header: AutocompleteMemberItem.Header) {
+        autocompleteHeaderItem {
+            id(header.id)
+            title(header.title)
+        }
+    }
+
+    private fun buildRoomMemberItem(roomMember: AutocompleteMemberItem.RoomMember) {
         val host = this
-        data.forEach { user ->
-            autocompleteMatrixItem {
+        autocompleteMatrixItem {
+            roomMember.roomMemberSummary.let { user ->
                 id(user.userId)
                 matrixItem(user.toMatrixItem())
                 avatarRenderer(host.avatarRenderer)
-                clickListener { host.listener?.onItemClick(user) }
+                clickListener { host.listener?.onItemClick(roomMember) }
+            }
+        }
+    }
+
+    private fun buildEveryoneItem(everyone: AutocompleteMemberItem.Everyone) {
+        val host = this
+        autocompleteMatrixItem {
+            everyone.roomSummary.let { room ->
+                id(room.roomId)
+                matrixItem(room.toEveryoneInRoomMatrixItem())
+                subName(host.context.getString(R.string.room_message_notify_everyone))
+                avatarRenderer(host.avatarRenderer)
+                clickListener { host.listener?.onItemClick(everyone) }
             }
         }
     }

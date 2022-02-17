@@ -59,6 +59,10 @@
         <item name="android:fontFamily">sans-serif-medium</item>
     </style>
 
+    <style name="TextAppearance.Vector.Body.OnError">
+        <item name="android:textColor">?colorOnError</item>
+    </style>
+
     <style name="TextAppearance.Vector.Caption" parent="TextAppearance.MaterialComponents.Caption">
         <item name="fontFamily">sans-serif</item>
         <item name="android:fontFamily">sans-serif</item>
