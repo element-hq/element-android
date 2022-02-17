@@ -218,7 +218,7 @@ interface RoomService {
                                           sortOrder: RoomSortOrder = RoomSortOrder.ACTIVITY): UpdatableLivePageResult
 
     /**
-     * Retrieve a flow on the the number of rooms.
+     * Retrieve a flow on the number of rooms.
      */
     fun getRoomCountFlow(queryParams: RoomSummaryQueryParams): Flow<Int>
 
