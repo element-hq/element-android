@@ -1313,7 +1313,7 @@
     <string name="notice_room_server_acl_set_title_by_you">このルームのサーバーアクセス制御リストを設定しました。</string>
     <string name="notice_direct_room_update_by_you">ここをアップグレードしました。</string>
     <string name="notice_room_update_by_you">あなたはこのルームをアップグレードしました。</string>
-    <string name="notice_ended_call_by_you">通話を終えました。</string>
+    <string name="notice_ended_call_by_you">通話を終了しました。</string>
     <string name="notice_answered_call_by_you">通話に応答しました。</string>
     <string name="notice_call_candidates_by_you">通話を設定するためのデータを送信しました。</string>
     <string name="notice_room_canonical_alias_no_change_by_you">このルームのアドレスを変更しました。</string>
@@ -2211,4 +2211,8 @@
     <string name="action_view_threads">スレッドを表示</string>
     <string name="identity_server_consent_dialog_neutral_policy">ポリシー</string>
     <string name="room_error_access_unauthorized">このルームへの参加は許可されていません</string>
+    <string name="topic_prefix">"トピック: "</string>
+    <string name="settings_troubleshoot_title">トラブルシューティング</string>
+    <string name="error_attachment">添付ファイルを取得中にエラーが発生しました。</string>
+    <string name="a11y_close_keys_backup_banner">キーバックアップのバナーを閉じる</string>
 </resources>
