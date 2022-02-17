@@ -51,7 +51,7 @@ import im.vector.app.core.utils.copyToClipboard
 import im.vector.app.core.utils.openFileSelection
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogImportE2eKeysBinding
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewActions
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewModel
 import im.vector.app.features.analytics.ui.consent.AnalyticsConsentViewState
@@ -94,7 +94,7 @@ class VectorSettingsSecurityPrivacyFragment @Inject constructor(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        analyticsScreenName = Screen.ScreenName.MobileSettingsSecurity
+        analyticsScreenName = MobileScreen.ScreenName.SettingsSecurity
     }
 
     // cryptography

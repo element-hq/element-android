@@ -67,7 +67,7 @@ import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.AnalyticsTracker
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.screen.ScreenEvent
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.consent.ConsentNotGivenHelper
@@ -97,7 +97,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
      * Analytics
      * ========================================================================================== */
 
-    protected var analyticsScreenName: Screen.ScreenName? = null
+    protected var analyticsScreenName: MobileScreen.ScreenName? = null
     private var screenEvent: ScreenEvent? = null
 
     protected lateinit var analyticsTracker: AnalyticsTracker

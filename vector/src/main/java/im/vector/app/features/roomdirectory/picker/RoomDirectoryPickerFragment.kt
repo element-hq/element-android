@@ -29,7 +29,7 @@ import im.vector.app.core.extensions.configureWith
 import im.vector.app.core.platform.OnBackPressed
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentRoomDirectoryPickerBinding
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.roomdirectory.RoomDirectoryAction
 import im.vector.app.features.roomdirectory.RoomDirectoryData
 import im.vector.app.features.roomdirectory.RoomDirectoryServer
@@ -54,7 +54,7 @@ class RoomDirectoryPickerFragment @Inject constructor(private val roomDirectoryP
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        analyticsScreenName = Screen.ScreenName.MobileSwitchDirectory
+        analyticsScreenName = MobileScreen.ScreenName.SwitchDirectory
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

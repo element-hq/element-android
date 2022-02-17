@@ -35,7 +35,7 @@ import im.vector.app.core.extensions.keepScreenOn
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityRoomDetailBinding
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.screen.ScreenEvent
 import im.vector.app.features.home.room.breadcrumbs.BreadcrumbsFragment
 import im.vector.app.features.home.room.detail.arguments.TimelineArgs
@@ -160,7 +160,7 @@ class RoomDetailActivity :
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         private var drawerScreenEvent: ScreenEvent? = null
         override fun onDrawerOpened(drawerView: View) {
-            drawerScreenEvent = ScreenEvent(Screen.ScreenName.MobileBreadcrumbs)
+            drawerScreenEvent = ScreenEvent(MobileScreen.ScreenName.Breadcrumbs)
         }
 
         override fun onDrawerClosed(drawerView: View) {

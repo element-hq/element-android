@@ -30,7 +30,7 @@ import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.features.analytics.AnalyticsTracker
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.screen.ScreenEvent
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -43,7 +43,7 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), Maverick
      * Analytics
      * ========================================================================================== */
 
-    protected var analyticsScreenName: Screen.ScreenName? = null
+    protected var analyticsScreenName: MobileScreen.ScreenName? = null
     private var screenEvent: ScreenEvent? = null
 
     protected lateinit var analyticsTracker: AnalyticsTracker

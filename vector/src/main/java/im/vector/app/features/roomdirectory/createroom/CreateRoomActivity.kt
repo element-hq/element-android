@@ -26,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.roomdirectory.RoomDirectorySharedAction
 import im.vector.app.features.roomdirectory.RoomDirectorySharedActionViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -57,7 +57,7 @@ class CreateRoomActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        analyticsScreenName = Screen.ScreenName.CreateRoom
+        analyticsScreenName = MobileScreen.ScreenName.CreateRoom
         sharedActionViewModel = viewModelProvider.get(RoomDirectorySharedActionViewModel::class.java)
         sharedActionViewModel
                 .stream()
