@@ -316,6 +316,7 @@ class DefaultNavigator @Inject constructor(
         if (context is AppCompatActivity) {
             if (context !is MatrixToBottomSheet.InteractionListener) {
                 fatalError("Caller context should implement MatrixToBottomSheet.InteractionListener", vectorPreferences.failFast())
+                return
             }
             // TODO check if there is already one??
             MatrixToBottomSheet.withLink(link, origin)
