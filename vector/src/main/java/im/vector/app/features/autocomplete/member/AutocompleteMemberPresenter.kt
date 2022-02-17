@@ -88,18 +88,12 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
 
         val items = mutableListOf<AutocompleteMemberItem>().apply {
             if (members.isNotEmpty()) {
-                if (everyone != null) {
-                    // add header only when there is everyone tag as well
-                    add(membersHeader)
-                }
+                add(membersHeader)
                 addAll(members)
             }
             everyone?.let {
-                if (members.isNotEmpty()) {
-                    // add header only when there are members as well
-                    val everyoneHeader = createEveryoneHeader()
-                    add(everyoneHeader)
-                }
+                val everyoneHeader = createEveryoneHeader()
+                add(everyoneHeader)
                 add(it)
             }
         }
