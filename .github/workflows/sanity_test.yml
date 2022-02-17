@@ -1,9 +1,9 @@
 name: Sanity Test
 
 on:
-  schedule:
-    # At 20:00 every day UTC
-    - cron: '0 20 * * *'
+  push:
+  - branches: [ michaelk/gha_experiment ]
+
 
 # Enrich gradle.properties for CI/CD
 env:
