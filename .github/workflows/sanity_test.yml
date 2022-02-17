@@ -65,11 +65,12 @@ jobs:
           emulator-build: 7425822  # workaround to emulator bug: https://github.com/ReactiveCircus/android-emulator-runner/issues/160
           script: |
             adb root
+            adb shell mkdir -p storage/emulated/0/Pictures/failure_screenshot
             adb logcat -c
             touch emulator.log
             chmod 777 emulator.log
             adb logcat >> emulator.log &
-            ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedGplayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest || adb pull storage/emulated/0/Pictures/failure_screenshots
+            ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedGplayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest || (adb pull storage/emulated/0/Pictures/failure_screenshot && exit 1)
       - name: Upload Test Report Log
         uses: actions/upload-artifact@v2
         with:
