@@ -80,17 +80,15 @@ class SectionHeaderAdapter constructor(
         }
 
         fun bind(roomsSectionData: RoomsSectionData) {
-            with(binding) {
-                roomCategoryTitleView.text = roomsSectionData.name
-                val tintColor = ThemeUtils.getColor(root.context, R.attr.vctr_content_secondary)
-                val expandedArrowDrawableRes = if (roomsSectionData.isExpanded) R.drawable.ic_expand_more else R.drawable.ic_expand_less
-                val expandedArrowDrawable = ContextCompat.getDrawable(root.context, expandedArrowDrawableRes)?.also {
-                    DrawableCompat.setTint(it, tintColor)
-                }
-                roomCategoryCounterView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
-                roomCategoryCounterView.text = roomsSectionData.itemCount.takeIf { it > 0 }?.toString().orEmpty()
-                roomCategoryUnreadCounterBadgeView.render(UnreadCounterBadgeView.State(roomsSectionData.notificationCount, roomsSectionData.isHighlighted))
+            binding.roomCategoryTitleView.text = roomsSectionData.name
+            val tintColor = ThemeUtils.getColor(binding.root.context, R.attr.vctr_content_secondary)
+            val expandedArrowDrawableRes = if (roomsSectionData.isExpanded) R.drawable.ic_expand_more else R.drawable.ic_expand_less
+            val expandedArrowDrawable = ContextCompat.getDrawable(binding.root.context, expandedArrowDrawableRes)?.also {
+                DrawableCompat.setTint(it, tintColor)
             }
+            binding.roomCategoryCounterView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
+            binding.roomCategoryCounterView.text = roomsSectionData.itemCount.takeIf { it > 0 }?.toString().orEmpty()
+            binding.roomCategoryUnreadCounterBadgeView.render(UnreadCounterBadgeView.State(roomsSectionData.notificationCount, roomsSectionData.isHighlighted))
         }
 
         companion object {

@@ -48,10 +48,8 @@ abstract class RoomCategoryItem : VectorEpoxyModel<RoomCategoryItem.Holder>() {
         }
         holder.unreadCounterBadgeView.render(UnreadCounterBadgeView.State(unreadNotificationCount, showHighlighted))
         holder.titleView.text = title
-        with(holder.counterView) {
-            text = itemCount.takeIf { it > 0 }?.toString().orEmpty()
-            setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
-        }
+        holder.counterView.text = itemCount.takeIf { it > 0 }?.toString().orEmpty()
+        holder.counterView.setCompoundDrawablesWithIntrinsicBounds(null, null, expandedArrowDrawable, null)
         holder.rootView.onClick(listener)
     }
 
