@@ -56,6 +56,7 @@ class LoginWebFragment2 @Inject constructor(
         return FragmentLoginWebBinding.inflate(inflater, container, false)
     }
 
+    // TODO confirm the need of this viewModel
     val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
 
     private var isWebViewLoaded = false

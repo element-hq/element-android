@@ -56,6 +56,7 @@ class FtueAuthWebFragment @Inject constructor(
         private val assetReader: AssetReader
 ) : AbstractFtueAuthFragment<FragmentLoginWebBinding>() {
 
+    // TODO confirm the need of this viewModel
     val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLoginWebBinding {
