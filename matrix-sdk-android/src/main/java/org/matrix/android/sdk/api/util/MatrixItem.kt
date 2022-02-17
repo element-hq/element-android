@@ -43,7 +43,6 @@ sealed class MatrixItem(
         override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
     }
 
-    // TODO is it correct to represent it by a Matrix Item ? => to confirm
     data class EveryoneInRoomItem(override val id: String,
                                   override val displayName: String = NOTIFY_EVERYONE,
                                   override val avatarUrl: String? = null,
