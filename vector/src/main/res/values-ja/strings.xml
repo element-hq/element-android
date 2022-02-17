@@ -2268,4 +2268,7 @@
     <string name="a11y_start_voice_message">音声メッセージを録音</string>
     <string name="legals_home_server_title">あなたのホームサーバーのポリシー</string>
     <string name="a11y_jump_to_bottom">いちばん下へジャンプ</string>
+    <string name="enter_backup_passphrase">%sを入力する</string>
+    <string name="one_user_read">%sが読みました</string>
+    <string name="two_users_read">%1$sと%2$sが読みました</string>
 </resources>
