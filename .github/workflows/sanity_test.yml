@@ -2,7 +2,7 @@ name: Sanity Test
 
 on:
   push:
-  - branches: [ michaelk/gha_experiment ]
+    branches: [ michaelk/gha_experiment ]
 
 
 # Enrich gradle.properties for CI/CD
