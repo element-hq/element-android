@@ -65,7 +65,6 @@ jobs:
           emulator-build: 7425822  # workaround to emulator bug: https://github.com/ReactiveCircus/android-emulator-runner/issues/160
           script: |
             adb root
-            adb shell mkdir -p storage/emulated/0/Pictures/failure_screenshots
             adb logcat -c
             touch emulator.log
             chmod 777 emulator.log
