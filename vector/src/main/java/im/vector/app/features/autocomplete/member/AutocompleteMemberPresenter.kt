@@ -85,10 +85,14 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
         val membersHeader = createMembersHeader()
         val members = createMemberItems(queryParams)
         val everyone = createEveryoneItem(query)
+        // add headers only when user can notify everyone
+        val canAddHeaders = canNotifyEveryone()
 
         val items = mutableListOf<AutocompleteMemberItem>().apply {
             if (members.isNotEmpty()) {
-                add(membersHeader)
+                if (canAddHeaders) {
+                    add(membersHeader)
+                }
                 addAll(members)
             }
             everyone?.let {
