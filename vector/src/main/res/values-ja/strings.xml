@@ -646,7 +646,7 @@
     <string name="encrypted_message">暗号化されたメッセージ</string>
     <string name="action_exit">退出</string>
     <string name="title_activity_group_details">コミュニティーの詳細</string>
-    <string name="loading">読み込み中…</string>
+    <string name="loading">読み込んでいます…</string>
     <string name="bottom_action_groups">コミュニティー</string>
     <string name="home_filter_placeholder_groups">コミュニティー名で絞り込む</string>
     <string name="groups_invite_header">招待</string>
@@ -847,7 +847,7 @@
     <string name="resource_limit_hard_mau">このホームサーバーは月間アクティブユーザー上限に達しています。</string>
     <string name="resource_limit_soft_contact">この上限を上げるには %s してください。</string>
     <string name="resource_limit_hard_contact">このサービスを使い続けるには %s してください。</string>
-    <string name="settings_lazy_loading_description">最初にルームのメンバーのみを読み込むことによりパフォーマンスを向上。</string>
+    <string name="settings_lazy_loading_description">最初にルームのメンバーのみを読み込むことでパフォーマンスを向上。</string>
     <string name="error_lazy_loading_not_supported_by_home_server">あなたのホームサーバーはルームのメンバーの簡易読み込みをサポートしていません。後で試してください。</string>
     <string name="settings_lazy_loading_title">ルームのメンバーの簡易読み込み</string>
     <string name="unknown_error">申し訳ありません、エラーが発生しました</string>
@@ -1053,7 +1053,7 @@
     <string name="send_file_step_sending_thumbnail">サムネイル送信中 (%1$s / %2$s)</string>
     <string name="send_file_step_encrypting_file">ファイル暗号化中…</string>
     <string name="send_file_step_sending_file">ファイル送信中 (%1$s / %2$s)</string>
-    <string name="downloading_file">ファイルをダウンロード中 %1$s…</string>
+    <string name="downloading_file">ファイル %1$s をダウンロードしています…</string>
     <string name="attachment_type_file">ファイル</string>
     <string name="attachment_type_contact">連絡先</string>
     <string name="attachment_type_camera">カメラ</string>
@@ -1173,7 +1173,7 @@
     <string name="add_by_qr_code">QR コードによる追加</string>
     <string name="user_code_share">コードを共有</string>
     <string name="template_invite_friends_text">${app_name} で会話しましょう: %s</string>
-    <string name="invite_friends">フレンドを招待</string>
+    <string name="invite_friends">友達を招待</string>
     <string name="direct_room_user_list_known_title">既知のユーザー</string>
     <string name="invalid_qr_code_uri">無効なQRコード (無効な URI)！</string>
     <string name="passwords_do_not_match">パスワードが一致しません</string>
@@ -1624,7 +1624,7 @@
     <string name="keys_backup_recovery_code_empty_error_message">リカバリーキーを入力してください</string>
     <string name="keys_backup_unlock_button">履歴をアンロック</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">鍵をインポート中…</string>
-    <string name="keys_backup_restoring_downloading_backup_waiting_message">鍵をダウンロード中…</string>
+    <string name="keys_backup_restoring_downloading_backup_waiting_message">鍵をダウンロードしています…</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">リカバリーキーを計算しています…</string>
     <string name="keys_backup_restoring_waiting_message">バックアップを復元:</string>
     <string name="network_error_please_check_and_retry">ネットワークエラー: 接続を確認して再試行してください。</string>
@@ -2268,7 +2268,7 @@
     <string name="a11y_start_voice_message">音声メッセージを録音</string>
     <string name="legals_home_server_title">あなたのホームサーバーのポリシー</string>
     <string name="a11y_jump_to_bottom">一番下に移動</string>
-    <string name="enter_backup_passphrase">%sを入力する</string>
+    <string name="enter_backup_passphrase">%sを入力</string>
     <string name="one_user_read">%sが読みました</string>
     <string name="two_users_read">%1$sと%2$sが読みました</string>
     <string name="use_file">ファイルを使用</string>
@@ -2325,4 +2325,14 @@
     <plurals name="fallback_users_read">
         <item quantity="other">%d人のユーザーが読みました</item>
     </plurals>
+    <string name="room_settings_space_access_title">スペースへのアクセス</string>
+    <string name="legals_no_policy_provided">このサーバーはポリシーを提供していません。</string>
+    <string name="bootstrap_loading_text">数秒かかるかもしれません。少々お待ちください。</string>
+    <string name="choose_locale_loading_locales">利用可能な言語を読み込んでいます…</string>
+    <string name="invite_users_to_room_title">ユーザーを招待</string>
+    <string name="inviting_users_to_room">ユーザーを招待しています…</string>
+    <string name="error_empty_field_choose_password">パスワードを選択してください。</string>
+    <string name="add_members_to_room">メンバーを追加</string>
+    <string name="crosssigning_verify_session">ログインを検証</string>
+    <string name="room_message_placeholder">メッセージ…</string>
 </resources>
