@@ -97,7 +97,7 @@ class MessageBubbleContentLayout @JvmOverloads constructor(context: Context, att
                         parentTop + contentContainerView.marginTop + contentContainerView.measuredHeight
                 )
                 timeView.layout(
-                        parentLeft + timeView.marginEnd ,
+                        parentLeft + timeView.marginEnd,
                         parentBottom - timeView.measuredHeight - timeView.marginBottom,
                         parentLeft + timeView.measuredWidth + timeView.marginEnd,
                         parentBottom - timeView.marginBottom
