@@ -94,6 +94,30 @@ class UiAllScreensSanityTest {
             }
         }
 
+        elementRobot.space {
+            createSpace {
+                crawl()
+            }
+            val spaceName = UUID.randomUUID().toString()
+            createSpace {
+                createPublicSpace(spaceName)
+            }
+
+            spaceMenu(spaceName) {
+                spaceMembers()
+                spaceSettings {
+                    crawl()
+                }
+                exploreRooms()
+
+                invitePeople().also { openMenu(spaceName) }
+                addRoom().also { openMenu(spaceName) }
+                addSpace().also { openMenu(spaceName) }
+
+                leaveSpace()
+            }
+        }
+
         elementRobot.withDeveloperMode {
             settings {
                 advancedSettings { crawlDeveloperOptions() }
