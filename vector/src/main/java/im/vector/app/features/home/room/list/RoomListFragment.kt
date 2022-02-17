@@ -52,7 +52,6 @@ import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedA
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsSharedActionViewModel
 import im.vector.app.features.home.room.list.widget.NotifsFabMenuView
 import im.vector.app.features.notifications.NotificationDrawerManager
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -291,7 +290,7 @@ class RoomListFragment @Inject constructor(
                                             ))
                                             checkEmptyState()
                                         }
-                                        listenItemCount(section, sectionAdapter)
+                                        observeItemCount(section, sectionAdapter)
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                                     notificationCount = counts.totalCount,
@@ -315,7 +314,7 @@ class RoomListFragment @Inject constructor(
                                             ))
                                             checkEmptyState()
                                         }
-                                        listenItemCount(section, sectionAdapter)
+                                        observeItemCount(section, sectionAdapter)
                                         section.isExpanded.observe(viewLifecycleOwner) { _ ->
                                             refreshCollapseStates()
                                         }
@@ -332,7 +331,7 @@ class RoomListFragment @Inject constructor(
                                                     isLoading = false))
                                             checkEmptyState()
                                         }
-                                        listenItemCount(section, sectionAdapter)
+                                        observeItemCount(section, sectionAdapter)
                                         section.notificationCount.observe(viewLifecycleOwner) { counts ->
                                             sectionAdapter.updateSection(sectionAdapter.roomsSectionData.copy(
                                                     notificationCount = counts.totalCount,
@@ -380,7 +379,7 @@ class RoomListFragment @Inject constructor(
         }
     }
 
-    private fun listenItemCount(section: RoomsSection, sectionAdapter: SectionHeaderAdapter) {
+    private fun observeItemCount(section: RoomsSection, sectionAdapter: SectionHeaderAdapter) {
         lifecycleScope.launch {
             section.itemCount
                     .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
