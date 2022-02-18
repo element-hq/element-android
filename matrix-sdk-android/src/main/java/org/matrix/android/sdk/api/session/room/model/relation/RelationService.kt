@@ -163,13 +163,4 @@ interface RelationService {
                       autoMarkdown: Boolean = false,
                       formattedText: String? = null,
                       eventReplied: TimelineEvent? = null): Cancelable?
-
-    /**
-     * Get all the thread replies for the specified rootThreadEventId
-     * The return list will contain the original root thread event and all the thread replies to that event
-     * Note: We will use a large limit value in order to avoid using pagination until it would be 100% ready
-     * from the backend
-     * @param rootThreadEventId the root thread eventId
-     */
-    suspend fun fetchThreadTimeline(rootThreadEventId: String): Boolean
 }

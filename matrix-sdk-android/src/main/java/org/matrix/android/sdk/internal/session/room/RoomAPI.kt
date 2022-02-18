@@ -86,7 +86,7 @@ internal interface RoomAPI {
     suspend fun getRoomMessagesFrom(@Path("roomId") roomId: String,
                                     @Query("from") from: String,
                                     @Query("dir") dir: String,
-                                    @Query("limit") limit: Int,
+                                    @Query("limit") limit: Int?,
                                     @Query("filter") filter: String?
     ): PaginationResponse
 

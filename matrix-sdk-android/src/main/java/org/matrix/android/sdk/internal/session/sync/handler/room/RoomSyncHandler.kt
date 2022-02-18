@@ -23,10 +23,12 @@ import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilitiesService
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.api.session.room.model.RoomMemberContent
 import org.matrix.android.sdk.api.session.room.send.SendState
+import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummaryUpdateType
 import org.matrix.android.sdk.api.session.sync.model.InvitedRoomSync
 import org.matrix.android.sdk.api.session.sync.model.LazyRoomSyncEphemeral
 import org.matrix.android.sdk.api.session.sync.model.RoomSync
@@ -36,6 +38,7 @@ import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.algorithms.olm.OlmDecryptionResult
 import org.matrix.android.sdk.internal.database.helper.addIfNecessary
 import org.matrix.android.sdk.internal.database.helper.addTimelineEvent
+import org.matrix.android.sdk.internal.database.helper.createOrUpdate
 import org.matrix.android.sdk.internal.database.helper.updateThreadSummaryIfNeeded
 import org.matrix.android.sdk.internal.database.lightweight.LightweightSettingsStorage
 import org.matrix.android.sdk.internal.database.mapper.asDomain
@@ -48,6 +51,7 @@ import org.matrix.android.sdk.internal.database.model.RoomEntity
 import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.database.model.TimelineEventEntity
 import org.matrix.android.sdk.internal.database.model.deleteOnCascade
+import org.matrix.android.sdk.internal.database.model.threads.ThreadSummaryEntity
 import org.matrix.android.sdk.internal.database.query.copyToRealmOrIgnore
 import org.matrix.android.sdk.internal.database.query.find
 import org.matrix.android.sdk.internal.database.query.findLastForwardChunkOfRoom
@@ -60,6 +64,7 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.clearWith
 import org.matrix.android.sdk.internal.session.StreamEventsManager
 import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
+import org.matrix.android.sdk.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
 import org.matrix.android.sdk.internal.session.initsync.mapWithProgress
 import org.matrix.android.sdk.internal.session.initsync.reportSubtask
@@ -86,6 +91,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                                                    private val threadsAwarenessHandler: ThreadsAwarenessHandler,
                                                    private val roomChangeMembershipStateDataSource: RoomChangeMembershipStateDataSource,
                                                    @UserId private val userId: String,
+                                                   private val homeServerCapabilitiesService: HomeServerCapabilitiesService,
                                                    private val lightweightSettingsStorage: LightweightSettingsStorage,
                                                    private val timelineInput: TimelineInput,
                                                    private val liveEventService: Lazy<StreamEventsManager>) {
@@ -345,7 +351,6 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         return roomEntity
     }
 
-    val customList = arrayListOf<String>()
     private fun handleTimelineEvents(realm: Realm,
                                      roomId: String,
                                      roomEntity: RoomEntity,
@@ -420,6 +425,17 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     optimizedThreadSummaryMap[it] = eventEntity
                     // Add the same thread timeline event to Thread Chunk
                     addToThreadChunkIfNeeded(realm, roomId, it, timelineEventAdded, roomEntity)
+                    // Add thread list if needed
+                    if(homeServerCapabilitiesService.getHomeServerCapabilities().canUseThreading) {
+                        ThreadSummaryEntity.createOrUpdate(
+                                threadSummaryType = ThreadSummaryUpdateType.ADD,
+                                realm = realm,
+                                roomId = roomId,
+                                threadEventEntity = eventEntity,
+                                roomMemberContentsByUser = roomMemberContentsByUser,
+                                userId = userId,
+                                roomEntity = roomEntity)
+                    }
                 } ?: run {
                     // This is a normal event or a root thread one
                     optimizedThreadSummaryMap[eventEntity.eventId] = eventEntity

@@ -118,7 +118,7 @@ internal fun ChunkEntity.addTimelineEvent(roomId: String,
     return timelineEventEntity
 }
 
-private fun computeIsUnique(
+fun computeIsUnique(
         realm: Realm,
         roomId: String,
         isLastForward: Boolean,

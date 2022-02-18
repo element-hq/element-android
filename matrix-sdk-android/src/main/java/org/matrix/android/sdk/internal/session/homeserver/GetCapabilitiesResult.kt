@@ -65,7 +65,13 @@ internal data class Capabilities(
          * Clients should make use of this capability to determine if users need to be encouraged to upgrade their rooms.
          */
         @Json(name = "m.room_versions")
-        val roomVersions: RoomVersions? = null
+        val roomVersions: RoomVersions? = null,
+        /**
+         * Capability to indicate if the server supports MSC3440 Threading
+         * True if the user can use m.thread relation, false otherwise
+         */
+        @Json(name = "m.thread")
+        val threads: BooleanCapability? = null
 )
 
 @JsonClass(generateAdapter = true)

@@ -50,13 +50,18 @@ internal open class ChunkEntity(@Index var prevToken: String? = null,
     companion object
 }
 
-internal fun ChunkEntity.deleteOnCascade(deleteStateEvents: Boolean, canDeleteRoot: Boolean) {
+internal fun ChunkEntity.deleteOnCascade(
+        deleteStateEvents: Boolean,
+        canDeleteRoot: Boolean) {
     assertIsManaged()
     if (deleteStateEvents) {
         stateEvents.deleteAllFromRealm()
     }
     timelineEvents.clearWith {
         val deleteRoot = canDeleteRoot && (it.root?.stateKey == null || deleteStateEvents)
+        if (deleteRoot) {
+            room?.firstOrNull()?.removeThreadSummaryIfNeeded(it.eventId)
+        }
         it.deleteOnCascade(deleteRoot)
     }
     deleteFromRealm()

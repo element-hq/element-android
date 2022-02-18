@@ -33,6 +33,7 @@ import org.matrix.android.sdk.api.session.room.send.SendService
 import org.matrix.android.sdk.api.session.room.state.StateService
 import org.matrix.android.sdk.api.session.room.tags.TagsService
 import org.matrix.android.sdk.api.session.room.threads.ThreadsService
+import org.matrix.android.sdk.api.session.room.threads.local.ThreadsLocalService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineService
 import org.matrix.android.sdk.api.session.room.typing.TypingService
 import org.matrix.android.sdk.api.session.room.uploads.UploadsService
@@ -47,6 +48,7 @@ import org.matrix.android.sdk.api.util.Optional
 interface Room :
         TimelineService,
         ThreadsService,
+        ThreadsLocalService,
         SendService,
         DraftService,
         ReadService,

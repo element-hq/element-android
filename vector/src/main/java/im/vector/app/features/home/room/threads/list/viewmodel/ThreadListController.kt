@@ -23,15 +23,19 @@ import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.threads.list.model.threadListItem
+import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.session.threads.ThreadNotificationState
 import org.matrix.android.sdk.api.util.toMatrixItem
+import org.matrix.android.sdk.api.util.toMatrixItemOrNull
 import javax.inject.Inject
 
 class ThreadListController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val stringProvider: StringProvider,
-        private val dateFormatter: VectorDateFormatter
+        private val dateFormatter: VectorDateFormatter,
+        private val session: Session
 ) : EpoxyController() {
 
     var listener: Listener? = null
@@ -43,10 +47,59 @@ class ThreadListController @Inject constructor(
         requestModelBuild()
     }
 
-    override fun buildModels() {
+    override fun buildModels() =
+            when (session.getHomeServerCapabilities().canUseThreading) {
+                true  -> buildThreadSummaries()
+                false -> buildThreadList()
+            }
+
+    /**
+     * Building thread summaries when homeserver
+     * supports threading
+     */
+    private fun buildThreadSummaries() {
         val safeViewState = viewState ?: return
         val host = this
+        safeViewState.threadSummaryList.invoke()
+                ?.filter {
+                    if (safeViewState.shouldFilterThreads) {
+                        it.isUserParticipating
+                    } else {
+                        true
+                    }
+                }
+                ?.forEach { threadSummary ->
+                    val date = dateFormatter.format(threadSummary.latestEvent?.originServerTs, DateFormatKind.ROOM_LIST)
+                    val decryptionErrorMessage = stringProvider.getString(R.string.encrypted_message)
+                    val rootThreadEdition = threadSummary.threadEditions.rootThreadEdition
+                    val latestThreadEdition = threadSummary.threadEditions.latestThreadEdition
+                    threadListItem {
+                        id(threadSummary.rootEvent?.eventId)
+                        avatarRenderer(host.avatarRenderer)
+                        matrixItem(threadSummary.rootThreadSenderInfo.toMatrixItem())
+                        title(threadSummary.rootThreadSenderInfo.displayName.orEmpty())
+                        date(date)
+                        rootMessageDeleted(threadSummary.rootEvent?.isRedacted() ?: false)
+                        // TODO refactor notifications that with the new thread summary
+                        threadNotificationState(threadSummary.rootEvent?.threadDetails?.threadNotificationState ?: ThreadNotificationState.NO_NEW_MESSAGE)
+                        rootMessage(rootThreadEdition ?: threadSummary.rootEvent?.getDecryptedTextSummary() ?: decryptionErrorMessage)
+                        lastMessage(latestThreadEdition ?: threadSummary.latestEvent?.getDecryptedTextSummary() ?: decryptionErrorMessage)
+                        lastMessageCounter(threadSummary.numberOfThreads.toString())
+                        lastMessageMatrixItem(threadSummary.latestThreadSenderInfo.toMatrixItemOrNull())
+                        itemClickListener {
+                            host.listener?.onThreadSummaryClicked(threadSummary)
+                        }
+                    }
+                }
+    }
 
+    /**
+     * Building local thread list when homeserver do not
+     * support threading
+     */
+    private fun buildThreadList() {
+        val safeViewState = viewState ?: return
+        val host = this
         safeViewState.rootThreadEventList.invoke()
                 ?.filter {
                     if (safeViewState.shouldFilterThreads) {
@@ -74,13 +127,14 @@ class ThreadListController @Inject constructor(
                         lastMessageCounter(timelineEvent.root.threadDetails?.numberOfThreads.toString())
                         lastMessageMatrixItem(timelineEvent.root.threadDetails?.threadSummarySenderInfo?.toMatrixItem())
                         itemClickListener {
-                            host.listener?.onThreadClicked(timelineEvent)
+                            host.listener?.onThreadListClicked(timelineEvent)
                         }
                     }
                 }
     }
 
     interface Listener {
-        fun onThreadClicked(timelineEvent: TimelineEvent)
+        fun onThreadSummaryClicked(threadSummary: ThreadSummary)
+        fun onThreadListClicked(timelineEvent: TimelineEvent)
     }
 }

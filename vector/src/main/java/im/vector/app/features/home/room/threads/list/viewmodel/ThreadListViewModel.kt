@@ -28,6 +28,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.threads.ThreadTimelineEvent
 import org.matrix.android.sdk.flow.flow
@@ -53,11 +54,41 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
     }
 
     init {
-        observeThreadsList()
+        observeThreads()
+        fetchThreadList()
     }
 
     override fun handle(action: EmptyAction) {}
 
+    /**
+     * Observing thread list with respect to homeserver
+     * capabilities
+     */
+    private fun observeThreads() {
+        when (session.getHomeServerCapabilities().canUseThreading) {
+            true  -> observeThreadSummaries()
+            false -> observeThreadsList()
+        }
+    }
+
+    /**
+     * Observing thread summaries when homeserver support
+     * threading
+     */
+    private fun observeThreadSummaries() {
+        room?.flow()
+                ?.liveThreadSummaries()
+                ?.map { room.enhanceWithEditions(it) }
+                ?.flowOn(room.coroutineDispatchers.io)
+                ?.execute { asyncThreads ->
+                    copy(threadSummaryList = asyncThreads)
+                }
+    }
+
+    /**
+     * Observing thread list when homeserver do not support
+     * threading
+     */
     private fun observeThreadsList() {
         room?.flow()
                 ?.liveThreadList()
@@ -73,6 +104,14 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
                     copy(rootThreadEventList = asyncThreads)
                 }
     }
+
+    private fun fetchThreadList() {
+        viewModelScope.launch {
+            room?.fetchThreadSummaries()
+        }
+    }
+
+    fun canHomeserverUseThreading() =  session.getHomeServerCapabilities().canUseThreading
 
     fun applyFiltering(shouldFilterThreads: Boolean) {
         setState {

@@ -58,7 +58,6 @@ import javax.inject.Inject
 /***
  * This class is responsible to Fetch paginated chunks of the thread timeline using the /relations API
  *
- *
  * How it works
  *
  * The problem?

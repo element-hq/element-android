@@ -34,9 +34,11 @@ import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.animation.TimelineItemAnimator
 import im.vector.app.features.home.room.threads.ThreadsActivity
 import im.vector.app.features.home.room.threads.arguments.ThreadListArgs
+import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListController
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewModel
 import im.vector.app.features.home.room.threads.list.viewmodel.ThreadListViewState
+import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
 import org.matrix.android.sdk.api.session.room.timeline.TimelineEvent
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -111,12 +113,30 @@ class ThreadListFragment @Inject constructor(
         views.includeThreadListToolbar.roomToolbarThreadSubtitleTextView.text = threadListArgs.displayName
     }
 
-    override fun onThreadClicked(timelineEvent: TimelineEvent) {
-        (activity as? ThreadsActivity)?.navigateToThreadTimeline(timelineEvent)
+    override fun onThreadSummaryClicked(threadSummary: ThreadSummary) {
+        val roomThreadDetailArgs = ThreadTimelineArgs(
+                roomId = threadSummary.roomId,
+                displayName = threadSummary.rootThreadSenderInfo.displayName,
+                avatarUrl = threadSummary.rootThreadSenderInfo.avatarUrl,
+                roomEncryptionTrustLevel = null,
+                rootThreadEventId = threadSummary.rootEventId)
+        (activity as? ThreadsActivity)?.navigateToThreadTimeline(roomThreadDetailArgs)
+    }
+
+    override fun onThreadListClicked(timelineEvent: TimelineEvent) {
+        val threadTimelineArgs = ThreadTimelineArgs(
+                roomId = timelineEvent.roomId,
+                displayName = timelineEvent.senderInfo.displayName,
+                avatarUrl = timelineEvent.senderInfo.avatarUrl,
+                roomEncryptionTrustLevel = null,
+                rootThreadEventId = timelineEvent.eventId)
+        (activity as? ThreadsActivity)?.navigateToThreadTimeline(threadTimelineArgs)
     }
 
     private fun renderEmptyStateIfNeeded(state: ThreadListViewState) {
-        val show = state.rootThreadEventList.invoke().isNullOrEmpty()
-        views.threadListEmptyConstraintLayout.isVisible = show
+        when (threadListViewModel.canHomeserverUseThreading()) {
+            true  -> views.threadListEmptyConstraintLayout.isVisible = state.threadSummaryList.invoke().isNullOrEmpty()
+            false -> views.threadListEmptyConstraintLayout.isVisible = state.rootThreadEventList.invoke().isNullOrEmpty()
+        }
     }
 }

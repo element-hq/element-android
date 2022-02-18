@@ -50,7 +50,11 @@ data class HomeServerCapabilities(
          * This capability describes the default and available room versions a server supports, and at what level of stability.
          * Clients should make use of this capability to determine if users need to be encouraged to upgrade their rooms.
          */
-        val roomVersions: RoomVersionCapabilities? = null
+        val roomVersions: RoomVersionCapabilities? = null,
+        /**
+         * True if the home server support threading
+         */
+        var canUseThreading: Boolean = false
 ) {
 
     enum class RoomCapabilitySupport {
