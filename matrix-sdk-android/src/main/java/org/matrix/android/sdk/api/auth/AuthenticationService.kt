@@ -53,15 +53,19 @@ interface AuthenticationService {
      * Return a LoginWizard, to login to the homeserver. The login flow has to be retrieved first.
      *
      * See [LoginWizard] for more details
+     * @param enableRefreshTokenAuth whether to enable refresh token based auth (in beta, hence default is false for now)
+     * instead of long lived access tokens.
      */
-    fun getLoginWizard(): LoginWizard
+    fun getLoginWizard(enableRefreshTokenAuth: Boolean = false): LoginWizard
 
     /**
      * Return a RegistrationWizard, to create an matrix account on the homeserver. The login flow has to be retrieved first.
      *
      * See [RegistrationWizard] for more details.
+     * @param enableRefreshTokenAuth whether to enable refresh token based auth (in beta, hence default is false for now)
+     * instead of long lived access tokens.
      */
-    fun getRegistrationWizard(): RegistrationWizard
+    fun getRegistrationWizard(enableRefreshTokenAuth: Boolean = false): RegistrationWizard
 
     /**
      * True when login and password has been sent with success to the homeserver
@@ -109,11 +113,16 @@ interface AuthenticationService {
      * @param matrixId the matrixId of the user
      * @param password the password of the account
      * @param initialDeviceName the initial device name
+     * @param enableRefreshTokenAuth whether to enable refresh token based auth (in beta, hence default is false for now)
+     * instead of long lived access tokens.
      * @param deviceId the device id, optional. If not provided or null, the server will generate one.
      */
-    suspend fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,
-                                     matrixId: String,
-                                     password: String,
-                                     initialDeviceName: String,
-                                     deviceId: String? = null): Session
+    suspend fun directAuthentication(
+            homeServerConnectionConfig: HomeServerConnectionConfig,
+            matrixId: String,
+            password: String,
+            initialDeviceName: String,
+            enableRefreshTokenAuth: Boolean = false,
+            deviceId: String? = null,
+    ): Session
 }

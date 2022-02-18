@@ -27,7 +27,7 @@ import timber.log.Timber
 
 internal fun OkHttpClient.Builder.addAccessTokenInterceptor(
         accessTokenProvider: AccessTokenProvider,
-        globalErrorReceiver: GlobalErrorReceiver
+        globalErrorReceiver: GlobalErrorReceiver? = null
 ): OkHttpClient.Builder {
     // Remove the previous CurlLoggingInterceptor, to add it after the accessTokenInterceptor
     val existingCurlInterceptors = interceptors().filterIsInstance<CurlLoggingInterceptor>()

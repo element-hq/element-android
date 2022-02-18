@@ -26,6 +26,7 @@ import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
@@ -112,10 +113,10 @@ class OnboardingViewModel @AssistedInject constructor(
         get() = authenticationService.isRegistrationStarted
 
     private val registrationWizard: RegistrationWizard?
-        get() = authenticationService.getRegistrationWizard()
+        get() = authenticationService.getRegistrationWizard(BuildConfig.enableRefreshTokenAuth)
 
     private val loginWizard: LoginWizard?
-        get() = authenticationService.getLoginWizard()
+        get() = authenticationService.getLoginWizard(BuildConfig.enableRefreshTokenAuth)
 
     private var loginConfig: LoginConfig? = null
 
@@ -658,7 +659,9 @@ class OnboardingViewModel @AssistedInject constructor(
                     alteredHomeServerConnectionConfig,
                     action.username,
                     action.password,
-                    action.initialDeviceName)
+                    action.initialDeviceName,
+                    BuildConfig.enableRefreshTokenAuth
+            )
         } catch (failure: Throwable) {
             onDirectLoginError(failure)
             return

@@ -27,7 +27,8 @@ import javax.inject.Inject
 
 internal interface SignInAgainTask : Task<SignInAgainTask.Params, Unit> {
     data class Params(
-            val password: String
+            val password: String,
+            val enableRefreshTokenAuth: Boolean
     )
 }
 
@@ -52,7 +53,7 @@ internal class DefaultSignInAgainTask @Inject constructor(
                             deviceDisplayName = null,
                             // Reuse the same deviceId
                             deviceId = sessionParams.deviceId,
-                            enableRefreshTokenAuth = matrixConfiguration.enableRefreshTokenAuth
+                            enableRefreshTokenAuth = params.enableRefreshTokenAuth
                     )
             )
         }

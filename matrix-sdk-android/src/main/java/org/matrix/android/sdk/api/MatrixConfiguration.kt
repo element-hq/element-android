@@ -60,11 +60,7 @@ data class MatrixConfiguration(
         /**
          * RoomDisplayNameFallbackProvider to provide default room display name.
          */
-        val roomDisplayNameFallbackProvider: RoomDisplayNameFallbackProvider,
-        /**
-         * Boolean to enable refresh token based auth instead of long lived access tokens.
-         */
-        val enableRefreshTokenAuth: Boolean = false
+        val roomDisplayNameFallbackProvider: RoomDisplayNameFallbackProvider
 ) {
 
     /**

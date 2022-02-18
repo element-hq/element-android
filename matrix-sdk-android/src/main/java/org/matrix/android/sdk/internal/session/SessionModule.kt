@@ -45,7 +45,7 @@ import org.matrix.android.sdk.api.session.permalinks.PermalinkService
 import org.matrix.android.sdk.api.session.securestorage.SecureStorageService
 import org.matrix.android.sdk.api.session.securestorage.SharedSecretStorageService
 import org.matrix.android.sdk.api.session.typing.TypingUsersTracker
-import org.matrix.android.sdk.internal.auth.AuthAPI
+import org.matrix.android.sdk.internal.auth.RefreshTokenAPI
 import org.matrix.android.sdk.internal.auth.refresh.DefaultRefreshTokenTask
 import org.matrix.android.sdk.internal.auth.refresh.RefreshTokenTask
 import org.matrix.android.sdk.internal.crypto.secrets.DefaultSharedSecretStorageService
@@ -290,17 +290,17 @@ internal abstract class SessionModule {
             return matrixConfiguration.cryptoConfig
         }
 
-        @JvmStatic
         @Provides
+        @JvmStatic
         @SessionScope
-        fun providesAuthApi(
+        fun providesRefreshTokenAPI(
                 @Unauthenticated okHttpClient: Lazy<OkHttpClient>,
                 retrofitFactory: RetrofitFactory,
                 homeServerConnectionConfig: HomeServerConnectionConfig
-        ): AuthAPI {
+        ): RefreshTokenAPI {
             val homeServerUrl = homeServerConnectionConfig.homeServerUriBase.toString()
             return retrofitFactory.create(okHttpClient, homeServerUrl)
-                    .create(AuthAPI::class.java)
+                    .create(RefreshTokenAPI::class.java)
         }
     }
 

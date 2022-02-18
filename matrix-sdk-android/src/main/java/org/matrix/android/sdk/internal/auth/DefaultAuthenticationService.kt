@@ -62,7 +62,6 @@ internal class DefaultAuthenticationService @Inject constructor(
         private val pendingSessionStore: PendingSessionStore,
         private val getWellknownTask: GetWellknownTask,
         private val directLoginTask: DirectLoginTask,
-        private val matrixConfiguration: MatrixConfiguration
 ) : AuthenticationService {
 
     private var pendingSessionData: PendingSessionData? = pendingSessionStore.getPendingSessionData()
@@ -310,14 +309,15 @@ internal class DefaultAuthenticationService @Inject constructor(
         )
     }
 
-    override fun getRegistrationWizard(): RegistrationWizard {
+    override fun getRegistrationWizard(enableRefreshTokenAuth: Boolean): RegistrationWizard {
         return currentRegistrationWizard
                 ?: let {
                     pendingSessionData?.homeServerConnectionConfig?.let {
                         DefaultRegistrationWizard(
                                 buildAuthAPI(it),
                                 sessionCreator,
-                                pendingSessionStore
+                                pendingSessionStore,
+                                enableRefreshTokenAuth
                         ).also {
                             currentRegistrationWizard = it
                         }
@@ -328,7 +328,7 @@ internal class DefaultAuthenticationService @Inject constructor(
     override val isRegistrationStarted: Boolean
         get() = currentRegistrationWizard?.isRegistrationStarted == true
 
-    override fun getLoginWizard(): LoginWizard {
+    override fun getLoginWizard(enableRefreshTokenAuth: Boolean): LoginWizard {
         return currentLoginWizard
                 ?: let {
                     pendingSessionData?.homeServerConnectionConfig?.let {
@@ -336,7 +336,7 @@ internal class DefaultAuthenticationService @Inject constructor(
                                 buildAuthAPI(it),
                                 sessionCreator,
                                 pendingSessionStore,
-                                matrixConfiguration
+                                enableRefreshTokenAuth
                         ).also {
                             currentLoginWizard = it
                         }
@@ -388,18 +388,21 @@ internal class DefaultAuthenticationService @Inject constructor(
         )
     }
 
-    override suspend fun directAuthentication(homeServerConnectionConfig: HomeServerConnectionConfig,
-                                              matrixId: String,
-                                              password: String,
-                                              initialDeviceName: String,
-                                              deviceId: String?): Session {
+    override suspend fun directAuthentication(
+            homeServerConnectionConfig: HomeServerConnectionConfig,
+            matrixId: String,
+            password: String,
+            initialDeviceName: String,
+            enableRefreshTokenAuth: Boolean,
+            deviceId: String?,
+    ): Session {
         return directLoginTask.execute(DirectLoginTask.Params(
                 homeServerConnectionConfig = homeServerConnectionConfig,
                 userId = matrixId,
                 password = password,
                 deviceName = initialDeviceName,
                 deviceId = deviceId,
-                refreshToken = matrixConfiguration.enableRefreshTokenAuth
+                refreshToken = enableRefreshTokenAuth
         ))
     }
 

@@ -28,7 +28,6 @@ import org.matrix.android.sdk.internal.di.IdentityDatabase
 import org.matrix.android.sdk.internal.di.SessionFilesDirectory
 import org.matrix.android.sdk.internal.di.UnauthenticatedWithCertificate
 import org.matrix.android.sdk.internal.di.UserMd5
-import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.httpclient.addAccessTokenInterceptor
 import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 import org.matrix.android.sdk.internal.session.SessionModule
@@ -49,11 +48,10 @@ internal abstract class IdentityModule {
         @SessionScope
         @AuthenticatedIdentity
         fun providesOkHttpClient(@UnauthenticatedWithCertificate okHttpClient: OkHttpClient,
-                                 @AuthenticatedIdentity accessTokenProvider: AccessTokenProvider,
-                                 globalErrorReceiver: GlobalErrorReceiver): OkHttpClient {
+                                 @AuthenticatedIdentity accessTokenProvider: AccessTokenProvider): OkHttpClient {
             return okHttpClient
                     .newBuilder()
-                    .addAccessTokenInterceptor(accessTokenProvider, globalErrorReceiver)
+                    .addAccessTokenInterceptor(accessTokenProvider)
                     .build()
         }
 

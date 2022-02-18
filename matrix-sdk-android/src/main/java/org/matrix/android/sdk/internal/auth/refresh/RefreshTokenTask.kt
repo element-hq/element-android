@@ -16,8 +16,9 @@
 
 package org.matrix.android.sdk.internal.auth.refresh
 
-import org.matrix.android.sdk.api.auth.data.RefreshResult
+import org.matrix.android.sdk.internal.auth.data.RefreshResult
 import org.matrix.android.sdk.internal.auth.AuthAPI
+import org.matrix.android.sdk.internal.auth.RefreshTokenAPI
 import org.matrix.android.sdk.internal.auth.data.RefreshParams
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
@@ -30,11 +31,11 @@ internal interface RefreshTokenTask : Task<RefreshTokenTask.Params, RefreshResul
 }
 
 internal class DefaultRefreshTokenTask @Inject constructor(
-        private val authAPI: AuthAPI
+        private val refreshTokenAPI: RefreshTokenAPI
     ) : RefreshTokenTask {
     override suspend fun execute(params: RefreshTokenTask.Params): RefreshResult {
         return executeRequest(null) {
-            authAPI.refreshToken(RefreshParams(params.refreshToken))
+            refreshTokenAPI.refreshToken(RefreshParams(params.refreshToken))
         }
     }
 }

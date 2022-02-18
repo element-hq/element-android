@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.auth
 
 import org.matrix.android.sdk.api.auth.data.Credentials
-import org.matrix.android.sdk.api.auth.data.RefreshResult
+import org.matrix.android.sdk.internal.auth.data.RefreshResult
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.internal.auth.data.Availability
 import org.matrix.android.sdk.internal.auth.data.LoginFlowResponse
@@ -126,14 +126,6 @@ internal interface AuthAPI {
     @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
     @POST(NetworkConstants.URI_API_PREFIX_PATH_R0 + "login")
     suspend fun login(@Body loginParams: JsonDict): Credentials
-
-    /**
-     * Refresh the access token given a refresh token.
-     * @param refreshParams the refresh parameters
-     */
-    @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
-    @POST(NetworkConstants.URI_API_PREFIX_PATH_V1 + "refresh")
-    suspend fun refreshToken(@Body refreshParams: RefreshParams): RefreshResult
 
     /**
      * Ask the homeserver to reset the password associated with the provided email.

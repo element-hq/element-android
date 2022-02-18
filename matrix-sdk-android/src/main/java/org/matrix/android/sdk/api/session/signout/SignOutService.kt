@@ -27,7 +27,7 @@ interface SignOutService {
      * Ask the homeserver for a new access token.
      * The same deviceId will be used
      */
-    suspend fun signInAgain(password: String)
+    suspend fun signInAgain(password: String, enableRefreshTokenAuth: Boolean)
 
     /**
      * Update the session with credentials received after SSO

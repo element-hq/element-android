@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.auth.registration
 
 import kotlinx.coroutines.delay
+import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.auth.data.LoginFlowTypes
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.auth.registration.RegistrationAvailability
@@ -36,7 +37,8 @@ import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 internal class DefaultRegistrationWizard(
         authAPI: AuthAPI,
         private val sessionCreator: SessionCreator,
-        private val pendingSessionStore: PendingSessionStore
+        private val pendingSessionStore: PendingSessionStore,
+        private val enableRefreshTokenAuth: Boolean
 ) : RegistrationWizard {
 
     private var pendingSessionData: PendingSessionData = pendingSessionStore.getPendingSessionData() ?: error("Pending session data should exist here")
@@ -72,7 +74,8 @@ internal class DefaultRegistrationWizard(
         val params = RegistrationParams(
                 username = userName,
                 password = password,
-                initialDeviceDisplayName = initialDeviceDisplayName
+                initialDeviceDisplayName = initialDeviceDisplayName,
+                enableRefreshTokenAuth = enableRefreshTokenAuth
         )
         return performRegistrationRequest(params)
                 .also {
@@ -85,7 +88,10 @@ internal class DefaultRegistrationWizard(
         val safeSession = pendingSessionData.currentSession
                 ?: throw IllegalStateException("developer error, call createAccount() method first")
 
-        val params = RegistrationParams(auth = AuthParams.createForCaptcha(safeSession, response))
+        val params = RegistrationParams(
+                auth = AuthParams.createForCaptcha(safeSession, response),
+                enableRefreshTokenAuth = enableRefreshTokenAuth
+        )
         return performRegistrationRequest(params)
     }
 
@@ -93,7 +99,10 @@ internal class DefaultRegistrationWizard(
         val safeSession = pendingSessionData.currentSession
                 ?: throw IllegalStateException("developer error, call createAccount() method first")
 
-        val params = RegistrationParams(auth = AuthParams(type = LoginFlowTypes.TERMS, session = safeSession))
+        val params = RegistrationParams(
+                auth = AuthParams(type = LoginFlowTypes.TERMS, session = safeSession),
+                enableRefreshTokenAuth = enableRefreshTokenAuth
+        )
         return performRegistrationRequest(params)
     }
 
@@ -137,7 +146,8 @@ internal class DefaultRegistrationWizard(
                                     sid = response.sid
                             )
                     )
-                }
+                },
+                enableRefreshTokenAuth = enableRefreshTokenAuth
         )
         // Store data
         pendingSessionData = pendingSessionData.copy(currentThreePidData = ThreePidData.from(threePid, response, params))

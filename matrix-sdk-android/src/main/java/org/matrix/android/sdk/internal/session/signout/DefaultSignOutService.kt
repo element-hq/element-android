@@ -26,8 +26,8 @@ internal class DefaultSignOutService @Inject constructor(private val signOutTask
                                                          private val sessionParamsStore: SessionParamsStore
 ) : SignOutService {
 
-    override suspend fun signInAgain(password: String) {
-        signInAgainTask.execute(SignInAgainTask.Params(password))
+    override suspend fun signInAgain(password: String, enableRefreshTokenAuth: Boolean) {
+        signInAgainTask.execute(SignInAgainTask.Params(password, enableRefreshTokenAuth))
     }
 
     override suspend fun updateCredentials(credentials: Credentials) {

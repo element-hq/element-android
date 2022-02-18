@@ -223,8 +223,7 @@ class VectorApplication :
     override fun providesMatrixConfiguration(): MatrixConfiguration {
         return MatrixConfiguration(
                 applicationFlavor = BuildConfig.FLAVOR_DESCRIPTION,
-                roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(this),
-                enableRefreshTokenAuth = BuildConfig.enableRefreshTokenAuth
+                roomDisplayNameFallbackProvider = VectorRoomDisplayNameFallbackProvider(this)
         )
     }
 

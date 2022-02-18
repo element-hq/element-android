@@ -24,6 +24,6 @@ import javax.inject.Inject
 internal class IdentityAccessTokenProvider @Inject constructor(
         private val identityStore: IdentityStore
 ) : AccessTokenProvider {
-    override var supportsRefreshTokens = false
+    override val supportsRefreshTokens = false
     override suspend fun getToken(serverError: Failure.ServerError?): String? = identityStore.getIdentityData()?.token
 }

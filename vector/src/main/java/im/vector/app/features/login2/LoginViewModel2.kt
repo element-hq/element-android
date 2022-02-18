@@ -24,6 +24,7 @@ import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
@@ -101,10 +102,10 @@ class LoginViewModel2 @AssistedInject constructor(
         get() = authenticationService.isRegistrationStarted
 
     private val registrationWizard: RegistrationWizard?
-        get() = authenticationService.getRegistrationWizard()
+        get() = authenticationService.getRegistrationWizard(BuildConfig.enableRefreshTokenAuth)
 
     private val loginWizard: LoginWizard?
-        get() = authenticationService.getLoginWizard()
+        get() = authenticationService.getLoginWizard(BuildConfig.enableRefreshTokenAuth)
 
     private var loginConfig: LoginConfig? = null
 

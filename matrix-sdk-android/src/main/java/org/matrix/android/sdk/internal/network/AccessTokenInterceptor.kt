@@ -25,7 +25,7 @@ import org.matrix.android.sdk.internal.network.token.AccessTokenProvider
 
 internal class AccessTokenInterceptor(
         private val accessTokenProvider: AccessTokenProvider,
-        private val globalErrorReceiver: GlobalErrorReceiver,
+        private val globalErrorReceiver: GlobalErrorReceiver?,
         ) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {

@@ -26,6 +26,7 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
@@ -177,7 +178,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
         }
         viewModelScope.launch {
             try {
-                session.signInAgain(action.password)
+                session.signInAgain(action.password, BuildConfig.enableRefreshTokenAuth)
                 onSessionRestored()
             } catch (failure: Throwable) {
                 setState {

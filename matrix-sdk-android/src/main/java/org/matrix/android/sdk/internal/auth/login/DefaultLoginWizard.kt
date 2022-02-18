@@ -40,7 +40,7 @@ internal class DefaultLoginWizard(
         private val authAPI: AuthAPI,
         private val sessionCreator: SessionCreator,
         private val pendingSessionStore: PendingSessionStore,
-        private val matrixConfiguration: MatrixConfiguration
+        private val enableRefreshTokenAuth: Boolean
 ) : LoginWizard {
 
     private var pendingSessionData: PendingSessionData = pendingSessionStore.getPendingSessionData() ?: error("Pending session data should exist here")
@@ -65,7 +65,7 @@ internal class DefaultLoginWizard(
                     password = password,
                     deviceDisplayName = initialDeviceName,
                     deviceId = deviceId,
-                    enableRefreshTokenAuth = matrixConfiguration.enableRefreshTokenAuth
+                    enableRefreshTokenAuth = enableRefreshTokenAuth
             )
         } else {
             PasswordLoginParams.userIdentifier(
@@ -73,7 +73,7 @@ internal class DefaultLoginWizard(
                     password = password,
                     deviceDisplayName = initialDeviceName,
                     deviceId = deviceId,
-                    enableRefreshTokenAuth = matrixConfiguration.enableRefreshTokenAuth
+                    enableRefreshTokenAuth = enableRefreshTokenAuth
             )
         }
         val credentials = executeRequest(null) {
@@ -89,7 +89,7 @@ internal class DefaultLoginWizard(
     override suspend fun loginWithToken(loginToken: String): Session {
         val loginParams = TokenLoginParams(
                 token = loginToken,
-                enableRefreshTokenAuth = matrixConfiguration.enableRefreshTokenAuth
+                enableRefreshTokenAuth = enableRefreshTokenAuth
         )
         val credentials = executeRequest(null) {
             authAPI.login(loginParams)
@@ -100,9 +100,7 @@ internal class DefaultLoginWizard(
 
     override suspend fun loginCustom(data: JsonDict): Session {
         val loginParams = data.toMutableMap()
-        if (matrixConfiguration.enableRefreshTokenAuth) {
-            loginParams["refresh_token"] = true
-        }
+        loginParams["refresh_token"] = enableRefreshTokenAuth
         val credentials = executeRequest(null) {
             authAPI.login(loginParams)
         }
