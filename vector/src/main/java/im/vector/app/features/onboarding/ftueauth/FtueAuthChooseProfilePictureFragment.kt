@@ -22,7 +22,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
+import com.airbnb.mvrx.withState
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.singletonEntryPoint
@@ -31,7 +31,6 @@ import im.vector.app.databinding.FragmentFtueProfilePictureBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.onboarding.OnboardingAction
 import im.vector.app.features.onboarding.OnboardingViewState
-import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
@@ -53,48 +52,35 @@ class FtueAuthChooseProfilePictureFragment @Inject constructor(
     }
 
     private fun setupViews() {
-        views.profilePictureSubmit.isEnabled = false
-
-        lifecycleScope.launch {
-            val session = activeSessionHolder.getActiveSession()
-            val matrixItem = MatrixItem.UserItem(
-                    id = session.myUserId,
-                    displayName = session.getDisplayName(session.myUserId).getOrElse { "" }
-            )
-            avatarRenderer.render(matrixItem, localUri = null, imageView = views.profilePictureView)
-        }
-
         views.profilePictureView.setOnClickListener {
             galleryOrCameraDialogHelper.show()
         }
 
-
+        views.profilePictureSubmit.setOnClickListener {
+            withState(viewModel) {
+                viewModel.handle(OnboardingAction.SaveSelectedProfilePicture)
+            }
+        }
 
         views.profilePictureSkip.setOnClickListener { viewModel.handle(OnboardingAction.UpdateProfilePictureSkipped) }
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-        views.profilePictureSubmit.isEnabled = false
-        views.profilePictureSubmit.setOnClickListener {
-            // TODO
-        }
+        views.profilePictureSubmit.isEnabled = state.personalizationState.selectedPictureUri != null
+
+        val session = activeSessionHolder.getActiveSession()
+        val matrixItem = MatrixItem.UserItem(
+                id = session.myUserId,
+                displayName = state.personalizationState.displayName ?: ""
+        )
+        avatarRenderer.render(matrixItem, localUri = state.personalizationState.selectedPictureUri, imageView = views.profilePictureView)
     }
 
     override fun onImageReady(uri: Uri?) {
-        views.profilePictureSubmit.isEnabled = uri != null
-
-        if (uri != null) {
-            lifecycleScope.launch {
-                val session = activeSessionHolder.getActiveSession()
-                val matrixItem = MatrixItem.UserItem(
-                        id = session.myUserId,
-                        displayName = session.getDisplayName(session.myUserId).getOrElse { "" }
-                )
-                avatarRenderer.render(matrixItem, localUri = uri, imageView = views.profilePictureView)
-            }
-            //TODO update state
-        } else {
+        if (uri == null) {
             Toast.makeText(requireContext(), "Cannot retrieve cropped value", Toast.LENGTH_SHORT).show()
+        } else {
+            viewModel.handle(OnboardingAction.ProfilePictureSelected(uri))
         }
     }
 

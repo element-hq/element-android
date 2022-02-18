@@ -235,6 +235,7 @@ class FtueAuthVariant(
             OnboardingViewEvents.OnTakeMeHome                                  -> navigateToHome(createdAccount = true)
             OnboardingViewEvents.OnDisplayNameUpdated                          -> onDisplayNameUpdated()
             OnboardingViewEvents.OnDisplayNameSkipped                          -> onDisplayNameUpdated()
+            OnboardingViewEvents.OnPersonalizationComplete                     -> navigateToHome(createdAccount = true)
         }.exhaustive
     }
 

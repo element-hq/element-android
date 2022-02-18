@@ -18,6 +18,7 @@ package im.vector.app.test.fakes
 
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.features.session.VectorSessionStore
+import android.net.Uri
 import im.vector.app.test.testCoroutineDispatchers
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -34,10 +35,13 @@ class FakeSession(
         mockkStatic("im.vector.app.core.extensions.SessionKt")
     }
 
+    override val myUserId: String = "a-user-id"
+
     override fun cryptoService() = fakeCryptoService
     override val sharedSecretStorageService = fakeSharedSecretStorageService
     override val coroutineDispatchers = testCoroutineDispatchers
     override suspend fun setDisplayName(userId: String, newDisplayName: String) = fakeProfileService.setDisplayName(userId, newDisplayName)
+    override suspend fun updateAvatar(userId: String, newAvatarUri: Uri, fileName: String) = fakeProfileService.updateAvatar(userId, newAvatarUri, fileName)
 
     fun givenVectorStore(vectorSessionStore: VectorSessionStore) {
         coEvery {

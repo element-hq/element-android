@@ -16,6 +16,8 @@
 
 package im.vector.app.features.onboarding
 
+import android.net.Uri
+import android.os.Parcelable
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
@@ -25,6 +27,7 @@ import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
+import kotlinx.parcelize.Parcelize
 
 data class OnboardingViewState(
         val asyncLoginAction: Async<Unit> = Uninitialized,
@@ -33,6 +36,7 @@ data class OnboardingViewState(
         val asyncResetMailConfirmed: Async<Unit> = Uninitialized,
         val asyncRegistration: Async<Unit> = Uninitialized,
         val asyncDisplayName: Async<Unit> = Uninitialized,
+        val asyncProfilePicture: Async<Unit> = Uninitialized,
 
         @PersistState
         val onboardingFlow: OnboardingFlow? = null,
@@ -65,6 +69,9 @@ data class OnboardingViewState(
         val loginModeSupportedTypes: List<String> = emptyList(),
         val knownCustomHomeServersUrls: List<String> = emptyList(),
         val isForceLoginFallbackEnabled: Boolean = false,
+
+        @PersistState
+        val personalizationState: PersonalizationState = PersonalizationState()
 ) : MavericksState {
 
     fun isLoading(): Boolean {
@@ -86,3 +93,9 @@ enum class OnboardingFlow {
     SignUp,
     SignInSignUp
 }
+
+@Parcelize
+data class PersonalizationState(
+        val displayName: String? = null,
+        val selectedPictureUri: Uri? = null
+) : Parcelable
