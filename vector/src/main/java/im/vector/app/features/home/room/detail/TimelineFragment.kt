@@ -1583,7 +1583,7 @@ class TimelineFragment @Inject constructor(
             lazyLoadedViews.inviteView(true)?.apply {
                 callback = this@TimelineFragment
                 isVisible = true
-                render(inviter, VectorInviteView.Mode.LARGE, mainState.changeMembershipState, timelineArgs.isInviteAlreadyAccepted)
+                render(inviter, VectorInviteView.Mode.LARGE, mainState.changeMembershipState)
                 setOnClickListener(null)
             }
             Unit
@@ -2374,12 +2374,10 @@ class TimelineFragment @Inject constructor(
 
     // VectorInviteView.Callback
     override fun onAcceptInvite() {
-        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(timelineArgs.roomId) }
         timelineViewModel.handle(RoomDetailAction.AcceptInvite)
     }
 
     override fun onRejectInvite() {
-        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(timelineArgs.roomId) }
         timelineViewModel.handle(RoomDetailAction.RejectInvite)
     }
 

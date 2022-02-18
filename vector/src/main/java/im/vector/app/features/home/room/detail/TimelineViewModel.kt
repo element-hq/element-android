@@ -53,6 +53,7 @@ import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandle
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
+import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorDataStore
@@ -123,6 +124,7 @@ class TimelineViewModel @AssistedInject constructor(
         private val analyticsTracker: AnalyticsTracker,
         private val activeConferenceHolder: JitsiActiveConferenceHolder,
         private val decryptionFailureTracker: DecryptionFailureTracker,
+        private val notificationDrawerManager: NotificationDrawerManager,
         timelineFactory: TimelineFactory,
         appStateHandler: AppStateHandler
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
@@ -173,6 +175,7 @@ class TimelineViewModel @AssistedInject constructor(
         observeActiveRoomWidgets()
         observePowerLevel()
         setupPreviewUrlObservers()
+        handleIsInviteAlreadyAccepted()
         room.getRoomSummaryLive()
         viewModelScope.launch(Dispatchers.IO) {
             tryOrNull { room.markAsRead(ReadService.MarkAsReadParams.READ_RECEIPT) }
@@ -800,12 +803,14 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     private fun handleRejectInvite() {
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(initialState.roomId) }
         viewModelScope.launch {
             tryOrNull { session.leaveRoom(room.roomId) }
         }
     }
 
     private fun handleAcceptInvite() {
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(initialState.roomId) }
         viewModelScope.launch {
             tryOrNull {
                 session.joinRoom(room.roomId)
@@ -1165,6 +1170,9 @@ class TimelineViewModel @AssistedInject constructor(
                 summary.inviterId?.let { inviterId ->
                     session.getRoomMember(inviterId, summary.roomId)
                 }?.also {
+                    if (initialState.isInviteAlreadyAccepted) {
+                        handle(RoomDetailAction.AcceptInvite)
+                    }
                     setState { copy(asyncInviter = Success(it)) }
                 }
             }

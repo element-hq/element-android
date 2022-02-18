@@ -56,10 +56,7 @@ class VectorInviteView @JvmOverloads constructor(context: Context, attrs: Attrib
         views.inviteRejectView.commonClicked = { callback?.onRejectInvite() }
     }
 
-    fun render(sender: RoomMemberSummary, mode: Mode = Mode.LARGE, changeMembershipState: ChangeMembershipState, alreadyAccepted: Boolean) {
-        if (alreadyAccepted) {
-            callback?.onAcceptInvite()
-        }
+    fun render(sender: RoomMemberSummary, mode: Mode = Mode.LARGE, changeMembershipState: ChangeMembershipState) {
         if (mode == Mode.LARGE) {
             updateLayoutParams { height = LayoutParams.MATCH_CONSTRAINT }
             avatarRenderer.render(sender.toMatrixItem(), views.inviteAvatarView)

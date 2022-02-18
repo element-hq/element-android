@@ -44,6 +44,7 @@ import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.UpdatableLivePageResult
+import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.tag.RoomTag
 import org.matrix.android.sdk.api.session.room.state.isPublic
 import org.matrix.android.sdk.api.util.toMatrixItem
@@ -207,6 +208,19 @@ class RoomListViewModel @AssistedInject constructor(
             return@withState
         }
         _viewEvents.post(RoomListViewEvents.SelectRoom(action.roomSummary, true))
+
+        // quick echo
+        setState {
+            copy(
+                    roomMembershipChanges = roomMembershipChanges.mapValues {
+                        if (it.key == roomId) {
+                            ChangeMembershipState.Joining
+                        } else {
+                            it.value
+                        }
+                    }
+            )
+        }
     }
 
     private fun handleRejectInvitation(action: RoomListAction.RejectInvitation) = withState { state ->
