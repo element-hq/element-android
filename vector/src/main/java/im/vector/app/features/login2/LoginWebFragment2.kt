@@ -56,8 +56,9 @@ class LoginWebFragment2 @Inject constructor(
         return FragmentLoginWebBinding.inflate(inflater, container, false)
     }
 
-    // TODO confirm the need of this viewModel
-    val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
+    // TODO I noticed in the Git history this variable was a local variable inside notifyViewModel method
+    // TODO was there any reason ? To be able to create this ViewModel we must be sure we will have a valid session
+    private val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
 
     private var isWebViewLoaded = false
     private var isForSessionRecovery = false
@@ -72,6 +73,7 @@ class LoginWebFragment2 @Inject constructor(
     override fun updateWithState(state: LoginViewState2) {
         setupTitle(state)
 
+        // TODO check how it is possible to arrive in this case
         isForSessionRecovery = state.deviceId?.isNotBlank() == true
 
         if (!isWebViewLoaded) {
