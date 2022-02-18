@@ -448,7 +448,7 @@ class TimelineFragment @Inject constructor(
 
         timelineViewModel.observeViewEvents {
             when (it) {
-                is RoomDetailViewEvents.Failure                          -> showErrorInSnackbar(it.throwable)
+                is RoomDetailViewEvents.Failure                          -> displayErrorMessage(it)
                 is RoomDetailViewEvents.OnNewTimelineEvents              -> scrollOnNewMessageCallback.addNewTimelineEventIds(it.eventIds)
                 is RoomDetailViewEvents.ActionSuccess                    -> displayRoomDetailActionSuccess(it)
                 is RoomDetailViewEvents.ActionFailure                    -> displayRoomDetailActionFailure(it)
@@ -621,6 +621,10 @@ class TimelineFragment @Inject constructor(
                         initialLocationData = locationContent.toLocationData(),
                         locationOwnerId = if (isSelfLocation) senderId else null
                 )
+    }
+
+    private fun displayErrorMessage(error: RoomDetailViewEvents.Failure) {
+        if (error.showInDialog) displayErrorDialog(error.throwable) else showErrorInSnackbar(error.throwable)
     }
 
     private fun requestNativeWidgetPermission(it: RoomDetailViewEvents.RequestNativeWidgetPermission) {

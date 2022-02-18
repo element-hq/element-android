@@ -809,16 +809,22 @@ class TimelineViewModel @AssistedInject constructor(
     private fun handleRejectInvite() {
         notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(initialState.roomId) }
         viewModelScope.launch {
-            tryOrNull { session.leaveRoom(room.roomId) }
+            try {
+               session.leaveRoom(room.roomId)
+            } catch (throwable: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.Failure(throwable, showInDialog = true))
+            }
         }
     }
 
     private fun handleAcceptInvite() {
         notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(initialState.roomId) }
         viewModelScope.launch {
-            tryOrNull {
+            try {
                 session.joinRoom(room.roomId)
                 analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom())
+            } catch (throwable: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.Failure(throwable, showInDialog = true))
             }
         }
     }

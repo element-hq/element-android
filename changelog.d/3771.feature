@@ -1,1 +1,1 @@
-When accepting an invite, expecting to see the room
+Open the room when user accepts an invite from the room list
