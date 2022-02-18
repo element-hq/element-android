@@ -192,6 +192,11 @@ class TimelineViewModel @AssistedInject constructor(
             prepareForEncryption()
         }
 
+        // If the user had already accepted the invitation in the room list
+        if (initialState.isInviteAlreadyAccepted) {
+            handleAcceptInvite()
+        }
+
         if (initialState.switchToParentSpace) {
             // We are coming from a notification, try to switch to the most relevant space
             // so that when hitting back the room will appear in the list
@@ -1169,9 +1174,6 @@ class TimelineViewModel @AssistedInject constructor(
                 summary.inviterId?.let { inviterId ->
                     session.getRoomMember(inviterId, summary.roomId)
                 }?.also {
-                    if (initialState.isInviteAlreadyAccepted) {
-                        handle(RoomDetailAction.AcceptInvite)
-                    }
                     setState { copy(asyncInviter = Success(it)) }
                 }
             }
