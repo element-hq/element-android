@@ -43,7 +43,7 @@
     <string name="rooms_directory_header">Direktori ruang</string>
     <string name="send_bug_report_include_logs">Kirim log</string>
     <string name="send_bug_report_placeholder">Deskripsikan kendala Anda di sini</string>
-    <string name="send_bug_report_sent">Laporan bug telah berhasil dikirimkan</string>
+    <string name="send_bug_report_sent">Laporan kutu telah berhasil dikirimkan</string>
     <string name="read_receipt">Baca</string>
     <string name="create_account">Daftar</string>
     <string name="login">Masuk</string>
@@ -75,7 +75,7 @@
     <string name="cannot_start_call">Tidak dapat memulai panggilan, coba lagi nanti</string>
     <string name="missing_permissions_title_to_start_conf_call">Tidak dapat memulai panggilan</string>
     <string name="action_sign_out">Keluar</string>
-    <string name="offline">Offline</string>
+    <string name="offline">Luring</string>
     <string name="action_global_search">Pencarian global</string>
     <string name="action_mark_all_as_read">Tandai semua sudah dibaca</string>
     <string name="bottom_action_people">Orang</string>
@@ -86,7 +86,7 @@
     <string name="low_priority_header">Prioritas rendah</string>
     <string name="matrix_only_filter">Hanya kontak Matrix</string>
     <string name="rooms_header">Ruangan</string>
-    <string name="send_bug_report">Laporan bug</string>
+    <string name="send_bug_report">Laporan kutu</string>
     <string name="send_bug_report_app_crashed">Aplikasi gagal saat terakhir digunakan. Apakah Anda ingin membuka halaman laporan kegagalan\?</string>
     <string name="join_room">Gabung di Ruangan</string>
     <string name="identity_url">URL server identitas</string>
@@ -136,7 +136,7 @@
     <string name="later">Nanti</string>
     <string name="send_anyway">Kirim Saja</string>
     <string name="template_no_contact_access_placeholder">${app_name} belum diizinkan untuk mengakses kontak lokal</string>
-    <string name="send_bug_report_include_crash_logs">Kirim log gangguan</string>
+    <string name="send_bug_report_include_crash_logs">Kirim catat gangguan</string>
     <string name="huge">Raksasa</string>
     <string name="small">Kecil</string>
     <string name="normal">Normal</string>
@@ -169,10 +169,10 @@
         <item quantity="other">%d pengguna</item>
     </plurals>
     <string name="send_bug_report_include_screenshot">Kirim tampilan layar</string>
-    <string name="send_bug_report_description">Mohon uraikan bug tersebut. Apa yang Anda lakukan? Apa yang Anda harapkan terjadi? Apa yang sebenarnya terjadi?</string>
-    <string name="send_bug_report_logs_description">Log dari klien akan dikirim bersama laporan gangguan ini untuk mendalami kendala yang Anda temukan. Laporan gangguan ini, termasuk log dan rekalayar, tidak akan dilihat oleh khalayak umum. Jika Anda hanya ingin mengirimkan tulisan di atas, silahkan hapus centang:</string>
-    <string name="send_bug_report_alert_message">Sepertinya Anda mengguncang telepon akibat frustrasi. Apakah Anda ingin membuka halaman laporan bug?</string>
-    <string name="send_bug_report_failed">Pengiriman laporan bug gagal (%s)</string>
+    <string name="send_bug_report_description">Mohon uraikan kutu tersebut. Apa yang Anda lakukan\? Apa yang Anda harapkan terjadi\? Apa yang sebenarnya terjadi\?</string>
+    <string name="send_bug_report_logs_description">Catat dari klien akan dikirim bersama laporan gangguan ini untuk mendalami kendala yang Anda temukan. Laporan gangguan ini, termasuk catat dan tangkapan layar, tidak akan terlihat secara umum. Jika Anda hanya ingin mengirimkan tulisan di atas, silakan hapus centang:</string>
+    <string name="send_bug_report_alert_message">Sepertinya Anda mengguncang ponsel akibat frustrasi. Apakah Anda ingin membuka halaman laporan kutu\?</string>
+    <string name="send_bug_report_failed">Pengiriman laporan kutu gagal (%s)</string>
     <string name="send_bug_report_progress">Kemajuan (%s%%)</string>
     <string name="send_files_in">Kirim ke</string>
     <string name="username">Nama Pengguna</string>
@@ -320,8 +320,8 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="room_participants_leave_prompt_title">Tinggalkan ruang</string>
     <string name="room_participants_leave_prompt_msg">Apa benar Anda ingin meninggalkan ruangan ini\?</string>
     <string name="room_participants_create">Buat</string>
-    <string name="room_participants_online">Online</string>
-    <string name="room_participants_offline">Offline</string>
+    <string name="room_participants_online">Daring</string>
+    <string name="room_participants_offline">Luring</string>
     <string name="room_participants_idle">Berdiam Diri</string>
     <string name="room_participants_now">%1$s sekarang</string>
     <string name="room_participants_ago">%1$s %2$s yang lalu</string>
@@ -795,9 +795,9 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_troubleshoot_diagnostic">Hasil diagnosa pemeriksaan keadaan</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Lansungkan Ujicoba</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Berlangsung… (%1$d of %2$d)</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">Diagnosa dasar berlangsung lancar. Apabila Anda masih belum dapat menerima pemberitahuan, mohon kirim laporan bug untuk kami selidiki.</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">Diagnosa dasar berlangsung lancar. Apabila Anda masih belum dapat menerima pemberitahuan, mohon kirim laporan kutu untuk kami selidiki.</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">Satu atau beberapa ujicoba gagal, coba sugesti yang kami tawarkan.</string>
-    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Satu atau beberapa ujicoba gagal, mohon kirim laporan bug untuk kami selidiki.</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Satu atau beberapa ujicoba gagal, mohon kirim laporan kutu untuk kami selidiki.</string>
     <string name="settings_troubleshoot_test_system_settings_title">Pengaturan Sistem.</string>
     <string name="settings_troubleshoot_test_system_settings_success">Pemberitahuan diperbolehkan dalam pengaturan sistem.</string>
     <string name="settings_troubleshoot_test_system_settings_failed">Notifikasi dinonaktifkan dalam pengaturan sistem.
@@ -1710,8 +1710,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="send_attachment">Kirim lampiran</string>
     <string name="error_network_timeout">Sepertinya server terlalu lama merespons, hal ini dapat disebabkan oleh konektivitas yang buruk atau kesalahan pada server. Silakan coba lagi dalam beberapa saat.</string>
     <string name="error_terms_not_accepted">Silakan coba lagi setelah Anda menerima syarat dan ketentuan homeserver Anda.</string>
-    <string name="labs_allow_extended_logging_summary">Log verbose akan membantu pengembang dengan menyediakan lebih banyak log saat Anda mengirim RageShake. Bahkan ketika diaktifkan, aplikasi tidak mencatat isi pesan atau data pribadi lainnya.</string>
-    <string name="labs_allow_extended_logging">Aktifkan log verbose.</string>
+    <string name="labs_allow_extended_logging_summary">Log verbose akan membantu pengembang dengan menyediakan lebih banyak catat saat Anda mengirim RageShake. Bahkan ketika diaktifkan, aplikasi tidak mencatat isi pesan atau data pribadi lainnya.</string>
+    <string name="labs_allow_extended_logging">Aktifkan catat verbose.</string>
     <string name="settings_text_message_sent_wrong_code">Kode verifikasi salah.</string>
     <string name="settings_text_message_sent_hint">Kode</string>
     <string name="settings_text_message_sent">Sebuah pesan teks telah dikirim ke %s. Silakan masukkan kode verifikasi yang ada di dalamnya.</string>
@@ -2330,7 +2330,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="upgrade_room_update_parent_space">Otomatis memperbarui induk space</string>
     <string name="upgrade_room_auto_invite">Otomatis undang pengguna</string>
     <string name="upgrade_public_room_from_to">Anda akan meningkatkan ruangan ini dari %1$s ke %2$s.</string>
-    <string name="upgrade_room_warning">Meningkatkan ruangan adalah aksi lanjutan dan hanya disarankan ketika ruangan tidak stabil karena bug yang ada, fitur yang kurang atau rentanan keamanan.
+    <string name="upgrade_room_warning">Meningkatkan ruangan adalah aksi lanjutan dan hanya disarankan ketika ruangan tidak stabil karena kutu yang ada, fitur yang kurang atau rentanan keamanan.
 \nIni biasanya hanya mempengaruhi bagaimana ruangan itu diproses di servernya.</string>
     <string name="upgrade_private_room">Tingkatkan ruangan privat</string>
     <string name="upgrade_public_room">Tingkatkan ruangan publik</string>
@@ -2924,8 +2924,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="command_description_avatar_for_room">Mengubah avatar Anda di ruangan saat ini saja</string>
     <string name="command_description_whois">Menampilkan</string>
     <string name="a11y_presence_unavailable">Tidak Tersedia</string>
-    <string name="a11y_presence_offline">Offline</string>
-    <string name="a11y_presence_online">Online</string>
+    <string name="a11y_presence_offline">Luring</string>
+    <string name="a11y_presence_online">Daring</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Pilih homeserver</string>
     <string name="login_error_homeserver_from_url_not_found">Tidak dapat menjangkau homeserver di URL %s. Silakan periksa tautan Anda atau pilih sebuah homeserver secara manual.</string>
     <string name="notification_listening_for_notifications">Mendengarkan notifikasi</string>
@@ -2995,7 +2995,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="restart_the_application_to_apply_changes">Mulai ulang aplikasi ini untuk menerapkan perubahan.</string>
     <string name="labs_enable_latex_maths">Aktifkan matematika LaTeX</string>
     <string name="room_error_access_unauthorized">Anda tidak diperbolehkan untuk bergabung ke ruangan ini</string>
-    <string name="labs_auto_report_uisi_desc">Sistem Anda akan mengirimkan log secara otomatis ketika sebuah kesalahan dekripsi terjadi</string>
+    <string name="labs_auto_report_uisi_desc">Sistem Anda akan mengirimkan catat secara otomatis ketika sebuah kesalahan dekripsi terjadi</string>
     <string name="tooltip_attachment_poll">Buat poll</string>
     <string name="tooltip_attachment_contact">Buka kontak</string>
     <string name="tooltip_attachment_sticker">Kirim stiker</string>
