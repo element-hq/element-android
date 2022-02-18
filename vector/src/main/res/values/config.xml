@@ -5,7 +5,8 @@
 
     <!-- server urls -->
     <string name="matrix_org_server_url" translatable="false">https://matrix.org</string>
-    <string name="piwik_server_url" translatable="false">https://piwik.riot.im</string>
+
+    <!-- Rageshake configuration -->
     <string name="bug_report_url" translatable="false">https://riot.im/bugreports/submit</string>
     <string name="bug_report_app_name" translatable="false">riot-android</string>
     <string name="bug_report_auto_uisi_app_name" translatable="false">element-auto-uisi</string>
@@ -21,7 +22,7 @@
     <string name="pusher_app_id" translatable="false">im.vector.app.android</string>
 
     <!-- preferred jitsi domain -->
-    <string name="preferred_jitsi_domain" translatable="false">jitsi.riot.im</string>
+    <string name="preferred_jitsi_domain" translatable="false">meet.element.io</string>
 
     <string-array name="room_directory_servers" translatable="false">
         <item>matrix.org</item>
