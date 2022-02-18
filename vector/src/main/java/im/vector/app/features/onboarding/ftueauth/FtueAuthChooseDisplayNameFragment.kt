@@ -25,6 +25,7 @@ import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.databinding.FragmentFtueDisplayNameBinding
 import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.onboarding.OnboardingViewEvents
 import javax.inject.Inject
 
 class FtueAuthChooseDisplayNameFragment @Inject constructor() : AbstractFtueAuthFragment<FragmentFtueDisplayNameBinding>() {
@@ -60,7 +61,7 @@ class FtueAuthChooseDisplayNameFragment @Inject constructor() : AbstractFtueAuth
     }
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
-        viewModel.handle(OnboardingAction.TakeMeHome)
+        viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome))
         return false
     }
 }
