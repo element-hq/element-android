@@ -80,7 +80,8 @@ data class OnboardingViewState(
                 asyncResetPassword is Loading ||
                 asyncResetMailConfirmed is Loading ||
                 asyncRegistration is Loading ||
-                asyncDisplayName is Loading
+                asyncDisplayName is Loading ||
+                asyncProfilePicture is Loading
     }
 
     fun isAuthTaskCompleted(): Boolean {
