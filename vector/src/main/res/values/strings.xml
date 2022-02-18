@@ -81,6 +81,10 @@
 
     <string name="notice_room_server_acl_updated_title">%s changed the server ACLs for this room.</string>
     <string name="notice_room_server_acl_updated_title_by_you">You changed the server ACLs for this room.</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d server ACLs change</item>
+        <item quantity="other">%d server ACLs changes</item>
+    </plurals>
     <string name="notice_room_server_acl_updated_banned">• Servers matching %s are now banned.</string>
     <string name="notice_room_server_acl_updated_was_banned">• Servers matching %s were removed from the ban list.</string>
     <string name="notice_room_server_acl_updated_allowed">• Servers matching %s are now allowed.</string>

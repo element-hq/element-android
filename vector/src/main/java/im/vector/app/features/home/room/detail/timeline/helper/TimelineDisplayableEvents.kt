@@ -56,7 +56,8 @@ object TimelineDisplayableEvents {
 }
 
 fun TimelineEvent.canBeMerged(): Boolean {
-    return root.getClearType() == EventType.STATE_ROOM_MEMBER
+    return root.getClearType() == EventType.STATE_ROOM_MEMBER ||
+            root.getClearType() == EventType.STATE_ROOM_SERVER_ACL
 }
 
 fun TimelineEvent.isRoomConfiguration(roomCreatorUserId: String?): Boolean {
