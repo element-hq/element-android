@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.airbnb.mvrx.withState
+import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.extensions.singletonEntryPoint
@@ -70,7 +71,9 @@ class FtueAuthChooseProfilePictureFragment @Inject constructor(
     }
 
     override fun updateWithState(state: OnboardingViewState) {
-        views.profilePictureSubmit.isEnabled = state.personalizationState.selectedPictureUri != null
+        val hasSetPicture = state.personalizationState.selectedPictureUri != null
+        views.profilePictureSubmit.isEnabled = hasSetPicture
+        views.changeProfilePictureButton.setImageResource(if (hasSetPicture) R.drawable.ic_edit else R.drawable.ic_camera_plain)
 
         val session = activeSessionHolder.getActiveSession()
         val matrixItem = MatrixItem.UserItem(
