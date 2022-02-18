@@ -40,7 +40,7 @@ private val deviceLanguage = Locale.getDefault().language
 
 class ScreenshotFailureRule : TestWatcher() {
     override fun failed(e: Throwable?, description: Description) {
-        val screenShotName = "$deviceLanguage-${description.methodName}-${SimpleDateFormat("EEE-MMMM-dd-HH:mm:ss").format(Date())}"
+        val screenShotName = "$deviceLanguage-${description.methodName}-${SimpleDateFormat("EEE-MMMM-dd-HHmmss").format(Date())}"
         val bitmap = getInstrumentation().uiAutomation.takeScreenshot()
         storeFailureScreenshot(bitmap, screenShotName)
     }
