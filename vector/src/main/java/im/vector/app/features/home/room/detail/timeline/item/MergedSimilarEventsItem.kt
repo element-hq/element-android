@@ -28,7 +28,7 @@ import im.vector.app.R
 import im.vector.app.features.home.AvatarRenderer
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base_noinfo)
-abstract class DefaultMergedEventsItem : BasedMergedItem<DefaultMergedEventsItem.Holder>() {
+abstract class MergedSimilarEventsItem : BasedMergedItem<MergedSimilarEventsItem.Holder>() {
 
     override fun getViewStubId() = STUB_ID
 

@@ -27,10 +27,10 @@ import im.vector.app.features.home.room.detail.timeline.helper.TimelineEventVisi
 import im.vector.app.features.home.room.detail.timeline.helper.canBeMerged
 import im.vector.app.features.home.room.detail.timeline.helper.isRoomConfiguration
 import im.vector.app.features.home.room.detail.timeline.item.BasedMergedItem
-import im.vector.app.features.home.room.detail.timeline.item.DefaultMergedEventsItem
-import im.vector.app.features.home.room.detail.timeline.item.DefaultMergedEventsItem_
 import im.vector.app.features.home.room.detail.timeline.item.MergedRoomCreationItem
 import im.vector.app.features.home.room.detail.timeline.item.MergedRoomCreationItem_
+import im.vector.app.features.home.room.detail.timeline.item.MergedSimilarEventsItem
+import im.vector.app.features.home.room.detail.timeline.item.MergedSimilarEventsItem_
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.query.QueryStringValue
@@ -83,7 +83,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                                                    event: TimelineEvent,
                                                    eventIdToHighlight: String?,
                                                    requestModelBuild: () -> Unit,
-                                                   callback: TimelineEventController.Callback?): DefaultMergedEventsItem_? {
+                                                   callback: TimelineEventController.Callback?): MergedSimilarEventsItem_? {
         val mergedEvents = timelineEventVisibilityHelper.prevSameTypeEvents(
                 items,
                 currentPosition,
@@ -129,7 +129,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                 else                            -> null
             }
             summaryTitleResId?.let { summaryTitle ->
-                val attributes = DefaultMergedEventsItem.Attributes(
+                val attributes = MergedSimilarEventsItem.Attributes(
                         summaryTitleResId = summaryTitle,
                         isCollapsed = isCollapsed,
                         mergeData = mergedData,
@@ -139,7 +139,7 @@ class MergedHeaderItemFactory @Inject constructor(private val activeSessionHolde
                             requestModelBuild()
                         }
                 )
-                DefaultMergedEventsItem_()
+                MergedSimilarEventsItem_()
                         .id(mergeId)
                         .leftGuideline(avatarSizeProvider.leftGuideline)
                         .highlighted(isCollapsed && highlighted)
