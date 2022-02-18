@@ -44,7 +44,6 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), Maverick
      * ========================================================================================== */
 
     protected var analyticsScreenName: MobileScreen.ScreenName? = null
-    private var screenEvent: ScreenEvent? = null
 
     protected lateinit var analyticsTracker: AnalyticsTracker
 
@@ -91,15 +90,12 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), Maverick
     override fun onResume() {
         super.onResume()
         Timber.i("onResume Fragment ${javaClass.simpleName}")
-        screenEvent = analyticsScreenName?.let { ScreenEvent(it) }
+        analyticsScreenName?.let {
+            ScreenEvent(it).send(analyticsTracker)
+        }
         vectorActivity.supportActionBar?.setTitle(titleRes)
         // find the view from parent activity
         mLoadingView = vectorActivity.findViewById(R.id.vector_settings_spinner_views)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        screenEvent?.send(analyticsTracker)
     }
 
     abstract fun bindPref()

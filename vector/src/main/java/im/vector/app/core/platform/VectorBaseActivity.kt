@@ -98,7 +98,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
      * ========================================================================================== */
 
     protected var analyticsScreenName: MobileScreen.ScreenName? = null
-    private var screenEvent: ScreenEvent? = null
 
     protected lateinit var analyticsTracker: AnalyticsTracker
 
@@ -337,7 +336,9 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     override fun onResume() {
         super.onResume()
         Timber.i("onResume Activity ${javaClass.simpleName}")
-        screenEvent = analyticsScreenName?.let { ScreenEvent(it) }
+        analyticsScreenName?.let {
+            ScreenEvent(it).send(analyticsTracker)
+        }
         configurationViewModel.onActivityResumed()
 
         if (this !is BugReportActivity && vectorPreferences.useRageshake()) {
@@ -376,7 +377,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     override fun onPause() {
         super.onPause()
-        screenEvent?.send(analyticsTracker, analyticsScreenName)
         Timber.i("onPause Activity ${javaClass.simpleName}")
 
         rageShake.stop()

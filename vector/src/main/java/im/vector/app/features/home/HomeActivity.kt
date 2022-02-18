@@ -163,14 +163,8 @@ class HomeActivity :
     }
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
-        private var drawerScreenEvent: ScreenEvent? = null
         override fun onDrawerOpened(drawerView: View) {
-            drawerScreenEvent = ScreenEvent(MobileScreen.ScreenName.Sidebar)
-        }
-
-        override fun onDrawerClosed(drawerView: View) {
-            drawerScreenEvent?.send(analyticsTracker)
-            drawerScreenEvent = null
+            ScreenEvent(MobileScreen.ScreenName.Sidebar).send(analyticsTracker)
         }
 
         override fun onDrawerStateChanged(newState: Int) {

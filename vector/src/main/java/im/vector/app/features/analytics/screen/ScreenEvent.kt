@@ -16,7 +16,6 @@
 
 package im.vector.app.features.analytics.screen
 
-import android.os.SystemClock
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.MobileScreen
 import timber.log.Timber
@@ -25,8 +24,6 @@ import timber.log.Timber
  * Track a screen display. Unique usage.
  */
 class ScreenEvent(val screenName: MobileScreen.ScreenName) {
-    private val startTime = SystemClock.elapsedRealtime()
-
     // Protection to avoid multiple sending
     private var isSent = false
 
@@ -42,8 +39,7 @@ class ScreenEvent(val screenName: MobileScreen.ScreenName) {
         isSent = true
         analyticsTracker.screen(
                 MobileScreen(
-                        screenName = screenNameOverride ?: screenName,
-                        durationMs = (SystemClock.elapsedRealtime() - startTime).toInt()
+                        screenName = screenNameOverride ?: screenName
                 )
         )
     }

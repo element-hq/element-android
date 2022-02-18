@@ -69,12 +69,7 @@ class DialPadFragment : Fragment(), TextWatcher {
     private var screenEvent: ScreenEvent? = null
     override fun onResume() {
         super.onResume()
-        screenEvent = ScreenEvent(MobileScreen.ScreenName.Dialpad)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        screenEvent?.send(analyticsTracker)
+        ScreenEvent(MobileScreen.ScreenName.Dialpad).send(analyticsTracker)
     }
 
     override fun onCreateView(

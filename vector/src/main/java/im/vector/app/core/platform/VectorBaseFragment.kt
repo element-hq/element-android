@@ -59,7 +59,6 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
      * ========================================================================================== */
 
     protected var analyticsScreenName: MobileScreen.ScreenName? = null
-    private var screenEvent: ScreenEvent? = null
 
     protected lateinit var analyticsTracker: AnalyticsTracker
 
@@ -145,14 +144,15 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
     override fun onResume() {
         super.onResume()
         Timber.i("onResume Fragment ${javaClass.simpleName}")
-        screenEvent = analyticsScreenName?.let { ScreenEvent(it) }
+        analyticsScreenName?.let {
+            ScreenEvent(it).send(analyticsTracker)
+        }
     }
 
     @CallSuper
     override fun onPause() {
         super.onPause()
         Timber.i("onPause Fragment ${javaClass.simpleName}")
-        screenEvent?.send(analyticsTracker)
     }
 
     @CallSuper
