@@ -26,14 +26,17 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="@dimen/ftue_auth_gutter_end_percent" />
 
-        <Space
-            android:id="@+id/headerSpacing"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/profilePictureToolbar"
+            style="@style/Widget.Vector.Toolbar.Settings"
             android:layout_width="match_parent"
-            android:layout_height="52dp"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toTopOf="@id/profilePictureView"
+            app:layout_constraintTop_toBottomOf="@id/profilePictureToolbar"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0"
-            app:layout_constraintVertical_chainStyle="packed" />
+            app:layout_constraintVertical_chainStyle="packed"
+            app:navigationIcon="@drawable/ic_back_24dp" />
 
         <ImageView
             android:id="@+id/profilePictureView"
@@ -46,7 +49,7 @@
             app:layout_constraintEnd_toEndOf="@id/profilePictureGutterEnd"
             app:layout_constraintHeight_percent="0.25"
             app:layout_constraintStart_toStartOf="@id/profilePictureGutterStart"
-            app:layout_constraintTop_toBottomOf="@id/headerSpacing" />
+            app:layout_constraintTop_toBottomOf="@id/profilePictureToolbar" />
 
         <ImageView
             android:id="@+id/changeProfilePictureButton"

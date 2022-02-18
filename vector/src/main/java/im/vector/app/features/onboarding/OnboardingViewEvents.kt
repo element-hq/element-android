@@ -55,4 +55,5 @@ sealed class OnboardingViewEvents : VectorViewEvents {
     object OnDisplayNameUpdated : OnboardingViewEvents()
     object OnDisplayNameSkipped : OnboardingViewEvents()
     object OnPersonalizationComplete : OnboardingViewEvents()
+    object OnBack : OnboardingViewEvents()
 }

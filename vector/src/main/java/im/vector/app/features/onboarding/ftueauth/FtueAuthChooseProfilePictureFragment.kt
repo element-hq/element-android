@@ -30,6 +30,7 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.databinding.FragmentFtueProfilePictureBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.onboarding.OnboardingAction
+import im.vector.app.features.onboarding.OnboardingViewEvents
 import im.vector.app.features.onboarding.OnboardingViewState
 import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
@@ -52,6 +53,9 @@ class FtueAuthChooseProfilePictureFragment @Inject constructor(
     }
 
     private fun setupViews() {
+        views.profilePictureToolbar.setNavigationOnClickListener {
+            viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnBack))
+        }
         views.changeProfilePictureButton.setOnClickListener {
             galleryOrCameraDialogHelper.show()
         }
