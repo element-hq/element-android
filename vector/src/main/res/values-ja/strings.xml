@@ -40,7 +40,7 @@
     <string name="notice_requested_voip_conference">%1$s がVoIP会議をリクエストしました</string>
     <string name="notice_voip_started">VoIP会議が開始されました</string>
     <string name="notice_voip_finished">VoIP会議が終了しました</string>
-    <string name="notice_avatar_changed_too">(アバターも変更された)</string>
+    <string name="notice_avatar_changed_too">（アバターも変更されました）</string>
     <string name="notice_room_name_removed">%1$s がルーム名を削除しました</string>
     <string name="notice_room_topic_removed">%1$s がルームトピックを削除しました</string>
     <string name="notice_profile_change_redacted">%1$s がプロフィール %2$s を更新しました</string>
@@ -118,13 +118,13 @@
     <plurals name="public_room_nb_users">
         <item quantity="other">%d名</item>
     </plurals>
-    <string name="send_bug_report">バグを報告</string>
-    <string name="send_bug_report_description">不具合の内容と状況の説明をお願い致します。あなたは何をしましたか？何が起こると思いますか？実際何が起こったのですか？</string>
-    <string name="send_bug_report_placeholder">ここに不具合内容を説明</string>
-    <string name="send_bug_report_include_screenshot">画面のスクリーンショット画像を送信</string>
-    <string name="send_bug_report_include_crash_logs">不具合発生時の動作記録を送信</string>
+    <string name="send_bug_report">不具合を報告</string>
+    <string name="send_bug_report_description">不具合の内容と状況の説明をお願いします。何をしましたか？何が起こるべきでしたか？実際に起こった事象は何でしょうか？</string>
+    <string name="send_bug_report_placeholder">ここに不具合の内容を記述</string>
+    <string name="send_bug_report_include_screenshot">スクリーンショットの画像を送信</string>
+    <string name="send_bug_report_include_crash_logs">クラッシュ時の動作記録を送信</string>
     <string name="send_bug_report_include_logs">動作記録を送信</string>
-    <string name="send_bug_report_logs_description">開発者が問題を診断するために、このクライアントの動作記録がバグの報告と一緒に送信されます。このバグの報告は、ログとスクリーンショットを含め、公開されません。上記文章のみを送信したい場合は以下のチェックを解除してください：</string>
+    <string name="send_bug_report_logs_description">開発者が問題を診断するために、このクライアントの動作記録が不具合報告と一緒に送信されます。不具合報告は、動作記録とスクリーンショットを含めて、公開されることはありません。上記の説明文だけを送信したい場合は、以下のチェックを解除してください。</string>
     <string name="send_bug_report_alert_message">あなたは不満で端末を振っているようです。不具合報告の画面を開きますか？</string>
     <string name="send_bug_report_app_crashed">前回アプリケーションは正常に停止しませんでした。クラッシュ報告の画面を開きますか？</string>
     <string name="send_bug_report_sent">不具合を報告しました</string>
@@ -183,14 +183,14 @@
     <string name="room_participants_action_invite">招待</string>
     <string name="room_participants_action_leave">このルームを退出</string>
     <string name="room_menu_search">検索</string>
-    <string name="room_one_user_is_typing">%sさんが文字入力中…</string>
-    <string name="room_two_users_are_typing">%1$sさんと %2$sさんが文字入力中…</string>
-    <string name="room_many_users_are_typing">%1$sさん、%2$sさん他が文字入力中…</string>
+    <string name="room_one_user_is_typing">%sさんが文字入力しています…</string>
+    <string name="room_two_users_are_typing">%1$sさんと %2$sさんが文字入力しています…</string>
+    <string name="room_many_users_are_typing">%1$sさん、%2$sさん他が文字入力しています…</string>
     <string name="room_message_placeholder_encrypted">暗号文を送信…</string>
     <string name="light_theme">明るいテーマ</string>
     <string name="dark_theme">暗いテーマ</string>
     <string name="black_theme">黒いテーマ</string>
-    <string name="notification_sync_in_progress">同期中…</string>
+    <string name="notification_sync_in_progress">同期しています…</string>
     <string name="title_activity_home">メッセージ</string>
     <string name="title_activity_member_details">メンバー詳細</string>
     <string name="action_quote">引用</string>
@@ -317,7 +317,7 @@
     <string name="room_settings_banned_users_title">再入室禁止された参加者</string>
     <string name="room_settings_category_advanced_title">拡張設定</string>
     <string name="room_settings_room_internal_id">このルームのサーバー内識別ID</string>
-    <string name="room_settings_labs_pref_title">実験的</string>
+    <string name="room_settings_labs_pref_title">ラボ</string>
     <string name="room_settings_labs_warning_message">これらは予期せぬ不具合が生じるかもしれない実験的機能です。慎重に使用してください。</string>
     <string name="room_settings_labs_end_to_end">エンドツーエンド暗号化</string>
     <string name="room_settings_labs_end_to_end_is_active">エンドツーエンド暗号化を使用中</string>
@@ -397,7 +397,7 @@
     <string name="auth_reset_password_next_step_button">メールアドレスを確認しました</string>
     <string name="auth_reset_password_message">パスワードを初期化するには, アカウントに登録されている電子メールアドレスを入力してください:</string>
     <string name="auth_reset_password_missing_email">あなたのアカウントに登録された電子メールアドレスの入力が必要です.</string>
-    <string name="auth_reset_password_missing_password">新しいパスワードの入力が必要です.</string>
+    <string name="auth_reset_password_missing_password">新しいパスワードの入力が必要です。</string>
     <string name="auth_reset_password_email_validation_message">%s へ電子メールが送信されました. リンクをたどったら以下をクリックしてください.</string>
     <string name="auth_reset_password_error_unauthorized">電子メールアドレスの確認に失敗しました: 電子メールのリンクをクリックしたことを確認してください</string>
     <string name="auth_reset_password_success_message">パスワードがリセットされました。
@@ -412,11 +412,11 @@
     <string name="compression_options">以下の容量で画像を送信</string>
     <string name="room_info_room_topic">ルームの説明</string>
     <string name="call_connected">通話が接続されました</string>
-    <string name="call_connecting">通話を接続中…</string>
+    <string name="call_connecting">通話を接続しています…</string>
     <string name="incoming_call">通話着信中</string>
     <string name="incoming_video_call">ビデオ通話の着信中</string>
     <string name="incoming_voice_call">音声通話の着信中</string>
-    <string name="call_in_progress">通話中…</string>
+    <string name="call_in_progress">通話しています…</string>
     <string name="call_error_ice_failed">映像の接続に失敗</string>
     <string name="call_error_camera_init_failed">カメラを開始できません</string>
     <string name="call_error_answered_elsewhere">他の端末で通話に応答しました</string>
@@ -452,7 +452,7 @@
     <string name="room_settings_leave_conversation">会話から退出</string>
     <string name="room_sliding_menu_messages">会話</string>
     <string name="room_sliding_menu_settings">設定</string>
-    <string name="room_sliding_menu_version">Version</string>
+    <string name="room_sliding_menu_version">バージョン</string>
     <string name="room_sliding_menu_term_and_conditions">利用規約</string>
     <string name="room_sliding_menu_copyright">著作権</string>
     <string name="room_sliding_menu_privacy_policy">個人情報保護方針</string>
@@ -465,7 +465,7 @@
     <string name="settings_identity_server">IDサーバー</string>
     <string name="account_email_not_found_error">メールアドレスが見つかりません。</string>
     <string name="account_phone_number_already_used_error">この電話番号は既に使用されています。</string>
-    <string name="settings_change_password">パスワード変更</string>
+    <string name="settings_change_password">パスワードを変更</string>
     <string name="settings_old_password">現在のパスワード</string>
     <string name="settings_new_password">新しいパスワード</string>
     <string name="settings_confirm_password">新しいパスワードの確認</string>
@@ -490,7 +490,7 @@
     <string name="widget_integration_no_permission_in_room">あなたはこのルームで権限がありません。</string>
     <string name="widget_integration_room_not_visible">ルーム %s は、見ることができません。</string>
     <string name="username">ユーザー名</string>
-    <string name="hs_url">ホームサーバー URL</string>
+    <string name="hs_url">ホームサーバーのURL</string>
     <string name="identity_url">IDサーバーのURL</string>
     <string name="auth_login">ログイン</string>
     <string name="room_add_matrix_apps">Matrixアプリを追加</string>
@@ -512,7 +512,7 @@
     <string name="template_permissions_rationale_msg_camera_and_audio">${app_name}はビデオ通話を行うためにカメラとマイクにアクセスする許可を必要としています。
 \n
 \n次のポップアップでアクセスを許可して通話ができるようにしてください。</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name}アプリでは、あなたの端末の電話帳のメールアドレスや電話番号をもとに、他のユーザーを検索することができます。${app_name}による電話帳の検索を許可する場合は、次のポップアップでアクセスを許可してください。</string>
+    <string name="template_permissions_rationale_msg_contacts">${app_name}では、あなたの端末の電話帳のメールアドレスや電話番号をもとに、他のユーザーを検索することができます。${app_name}による電話帳の検索を許可する場合は、次のポップアップでアクセスを許可してください。</string>
     <string name="template_permissions_msg_contacts_warning_other_androids">${app_name}はあなたの電話帳のメールアドレスや電話番号をもとに他のユーザーを見つけることができます。
 \n
 \nこのアプリがあなたの電話帳へアクセスすることを許可しますか？</string>
@@ -557,7 +557,7 @@
     <string name="call">通話</string>
     <string name="notification_noisy_notifications">通知あり(音量大)</string>
     <string name="notification_silent_notifications">通知あり(音量小)</string>
-    <string name="title_activity_bug_report">不具合報告</string>
+    <string name="title_activity_bug_report">不具合の報告</string>
     <string name="read_receipts_list">開封確認メッセージのリスト</string>
     <string name="media_slider_saved_message">ダウンロードファイルに保存しますか？</string>
     <string name="room_preview_unlinked_email_warning">この招待はこのアカウントに関連付けられていない %s に送信されました。
@@ -590,9 +590,9 @@
     <string name="room_event_action_cancel_download">ダウンロードをキャンセルする</string>
     <string name="search_hint">検索</string>
     <string name="tab_title_search_messages">メッセージ</string>
-    <string name="directory_searching_title">ディレクトリを検索中…</string>
+    <string name="directory_searching_title">ディレクトリを検索しています…</string>
     <string name="room_sliding_menu_third_party_notices">サードパーティーの使用に関する掲示</string>
-    <string name="settings_app_info_link_summary">このアプリのシステムの情報を見る。</string>
+    <string name="settings_app_info_link_summary">このアプリの情報をシステム設定で表示する。</string>
     <string name="settings_app_info_link_title">アプリの情報</string>
     <string name="settings_containing_my_display_name">自分の表示名を含むメッセージ</string>
     <string name="settings_containing_my_user_name">自分のユーザー名を含むメッセージ</string>
@@ -693,13 +693,13 @@
     <string name="has_been_banned">あなたは%2$sによって%1$sへの参加を禁止されました</string>
     <string name="reason_colon">理由: %1$s</string>
     <string name="rejoin">再参加</string>
-    <string name="send_bug_report_rage_shake">バグを報告するには端末を降ってください</string>
+    <string name="send_bug_report_rage_shake">端末を振って不具合を報告</string>
     <plurals name="membership_changes">
         <item quantity="other">%dメンバーシップの変更</item>
     </plurals>
     <string name="list_members">参加者を表示</string>
     <string name="open_chat_header">見出しを開く</string>
-    <string name="room_sync_in_progress">同期中…</string>
+    <string name="room_sync_in_progress">同期しています…</string>
     <plurals name="room_header_active_members_count">
         <item quantity="other">%d名の参加者</item>
     </plurals>
@@ -717,7 +717,7 @@
     </plurals>
     <string name="forget_room">ルームの履歴を消す</string>
     <string name="avatar">アバター</string>
-    <string name="room_settings_mention_only">名前があがったときのみ</string>
+    <string name="room_settings_mention_only">メンションのみ</string>
     <string name="settings_notification_privacy">通知のプライバシー</string>
     <string name="settings_notification_privacy_normal">標準</string>
     <string name="settings_notification_privacy_need_permission">このアプリはバックグラウンド動作の権限が必要です</string>
@@ -731,7 +731,7 @@
     <string name="missing_permissions_error">許可がないため、この操作を実行できません。</string>
     <string name="actions">実行</string>
     <string name="system_alerts_header">システムアラート</string>
-    <string name="send_bug_report_description_in_english">可能であれば、英語で説明を書いてください。</string>
+    <string name="send_bug_report_description_in_english">可能であれば、英語で説明文を記述してください。</string>
     <string name="option_send_voice">音声を送信</string>
     <string name="option_send_sticker">スタンプを送信</string>
     <string name="no_sticker_application_dialog_content">使用可能なスタンプパックがありません。 
@@ -851,7 +851,7 @@
     <string name="error_lazy_loading_not_supported_by_home_server">あなたのホームサーバーはルームのメンバーの簡易読み込みをサポートしていません。後で試してください。</string>
     <string name="settings_lazy_loading_title">ルームのメンバーの簡易読み込み</string>
     <string name="unknown_error">申し訳ありません、エラーが発生しました</string>
-    <string name="room_sliding_menu_version_x">Version %s</string>
+    <string name="room_sliding_menu_version_x">バージョン %s</string>
     <string name="encryption_export_notice">エクスポートされた鍵を暗号化するパスフレーズを作成してください。 キーをインポートするには、同じパスフレーズを入力する必要があります。</string>
     <string name="passphrase_create_passphrase">パスフレーズの作成</string>
     <string name="passphrase_passphrase_does_not_match">パスフレーズは一致する必要があります</string>
@@ -922,10 +922,10 @@
     <string name="start_verification_short_label">検証</string>
     <string name="keys_backup_settings_restore_backup_button">バックアップから復元</string>
     <string name="keys_backup_settings_delete_backup_button">バックアップを削除</string>
-    <string name="keys_backup_banner_in_progress">鍵をバックアップ中…</string>
+    <string name="keys_backup_banner_in_progress">鍵をバックアップしています…</string>
     <string name="keys_backup_info_keys_all_backup_up">全ての鍵をバックアップしました</string>
     <plurals name="keys_backup_info_keys_backing_up">
-        <item quantity="other">%d 件の鍵をバックアップ中…</item>
+        <item quantity="other">%d 件の鍵をバックアップしています…</item>
     </plurals>
     <string name="keys_backup_info_title_version">バージョン</string>
     <string name="keys_backup_info_title_algorithm">アルゴリズム</string>
@@ -990,7 +990,7 @@
     </plurals>
     <string name="room_profile_section_more_uploads">アップロード</string>
     <string name="room_profile_section_more_leave">ルームを退出</string>
-    <string name="room_profile_leaving_room">ルームから退室中…</string>
+    <string name="room_profile_leaving_room">ルームから退室しています…</string>
     <string name="room_member_power_level_admins">管理者</string>
     <string name="room_member_power_level_moderators">モデレーター</string>
     <string name="room_member_power_level_custom">カスタム</string>
@@ -1048,11 +1048,11 @@
     <string name="done">完了</string>
     <string name="action_ignore">無視</string>
     <string name="action_review">レビュー</string>
-    <string name="send_file_step_idle">待機中…</string>
-    <string name="send_file_step_encrypting_thumbnail">サムネイル暗号化中…</string>
-    <string name="send_file_step_sending_thumbnail">サムネイル送信中 (%1$s / %2$s)</string>
-    <string name="send_file_step_encrypting_file">ファイル暗号化中…</string>
-    <string name="send_file_step_sending_file">ファイル送信中 (%1$s / %2$s)</string>
+    <string name="send_file_step_idle">待機しています…</string>
+    <string name="send_file_step_encrypting_thumbnail">サムネイルを暗号化しています…</string>
+    <string name="send_file_step_sending_thumbnail">サムネイルを送信しています (%1$s / %2$s)</string>
+    <string name="send_file_step_encrypting_file">ファイルを暗号化しています…</string>
+    <string name="send_file_step_sending_file">ファイルを送信しています (%1$s / %2$s)</string>
     <string name="downloading_file">ファイル %1$s をダウンロードしています…</string>
     <string name="attachment_type_file">ファイル</string>
     <string name="attachment_type_contact">連絡先</string>
@@ -1110,7 +1110,7 @@
     <string name="settings_secure_backup_setup">セキュアバックアップを設定</string>
     <string name="settings_secure_backup_manage">管理</string>
     <string name="settings_secure_backup_section_title">セキュアバックアップ</string>
-    <string name="creating_direct_room">ルームを作成中…</string>
+    <string name="creating_direct_room">ルームを作成しています…</string>
     <string name="send_you_invite">招待されています</string>
     <string name="invited_by">%s からの招待</string>
     <string name="sas_verified_successful">このセッションは正常に検証されました。</string>
@@ -1166,7 +1166,7 @@
     <string name="room_settings_enable_encryption_no_permission">あなたにはこのルームの暗号化を有効にする権限がありません。</string>
     <string name="timeline_unread_messages">未読メッセージ</string>
     <string name="labs_swipe_to_reply_in_timeline">タイムラインでのスワイプによる返信を有効にする</string>
-    <string name="settings_labs_show_hidden_events_in_timeline">タイムラインで非表示のイベントを表示する</string>
+    <string name="settings_labs_show_hidden_events_in_timeline">タイムラインで非表示のイベントを表示</string>
     <string name="user_code_scan">QR コードをスキャン</string>
     <string name="a13n_qr_code_description">QR コード画像</string>
     <string name="qr_code">QR コード</string>
@@ -1193,17 +1193,17 @@
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">カスタムルールの読み込みに失敗しました。再試行してください。</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">一部の通知はカスタム設定で無効になっています。</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">一部のメッセージがサイレントに設定されていることに注意してください（音を出さずに通知します）。</string>
-    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">1つ以上のテストが失敗しました。調査に役立つバグレポートを送信してください。</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">1つ以上のテストが失敗しました。調査用の不具合報告を送信してください。</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">1つ以上のテストが失敗しました。提案された修正を試してください。</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">基本的な診断はOKです。 それでも通知が届かない場合は、調査に役立つバグレポートを送信してください。</string>
-    <string name="settings_troubleshoot_diagnostic_running_status">実行中… (%1$dの %2$d)</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">基本的な診断はOKです。 それでも通知が届かない場合は、調査用の不具合報告を送信してください。</string>
+    <string name="settings_troubleshoot_diagnostic_running_status">実行しています… (%1$dの %2$d)</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">テストを実行する</string>
     <string name="settings_troubleshoot_diagnostic">診断トラブルシューティング</string>
     <string name="settings_notification_by_event">イベントごとの通知の優先順位</string>
     <string name="error_threepid_auth_failed">メールであなたに送ったリンクをクリックして確認してください。</string>
     <string name="settings_remove_three_pid_confirmation_content">%sを削除しますか？</string>
     <string name="settings_add_3pid_authentication_needed">認証が必要です</string>
-    <string name="settings_add_3pid_confirm_password_title">あなたのパスワードを確認する</string>
+    <string name="settings_add_3pid_confirm_password_title">パスワードを確認</string>
     <string name="search_is_not_supported_in_e2e_room">暗号化されたルームでの検索はまだサポートされていません。</string>
     <string name="search_banned_user_hint">ブロックされたユーザーを絞り込む</string>
     <string name="room_permissions_change_topic">トピックを変更する</string>
@@ -1519,8 +1519,8 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">FCMトークンの取得に失敗しました:
 \n%1$s</string>
-    <string name="notice_room_server_acl_allow_is_empty">🎉全てのサーバーの参加を禁止されています！このルームは使用できなくなりました。</string>
-    <string name="notice_room_server_acl_updated_no_change">変化がありません。</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉全てのサーバーの参加がブロックされています！このルームは使用できなくなりました。</string>
+    <string name="notice_room_server_acl_updated_no_change">変更はありません。</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• サーバーにマッチするIPリテラルが禁止されています。</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• サーバーにマッチするIPリテラルが許可されるようになりました。</string>
     <string name="notice_room_server_acl_updated_was_allowed">• %sに一致するサーバーが許可リストから削除されました。</string>
@@ -1601,7 +1601,7 @@
     <string name="keys_backup_settings_delete_confirm_title">バックアップを削除</string>
     <string name="keys_backup_settings_checking_backup_state">バックアップの状態を確認中</string>
     <string name="keys_backup_settings_delete_backup_error">バックアップの削除に失敗しました（%s）</string>
-    <string name="keys_backup_settings_deleting_backup">バックアップを削除中…</string>
+    <string name="keys_backup_settings_deleting_backup">バックアップを削除しています…</string>
     <string name="keys_backup_settings_untrusted_backup">このセッションで暗号鍵のバックアップを使用するには、パスフレーズまたはリカバリーキーでバックアップを復元してください。</string>
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">バックアップは%sという未検証セッションによる不正なしょめいがあります</string>
     <string name="keys_backup_settings_invalid_signature_from_verified_device">バックアップは%sという検証されたセッションによる不正な署名があります</string>
@@ -1623,7 +1623,7 @@
     <string name="keys_backup_recovery_code_error_decrypt">このリカバリーキーではバックアップを復号できませんでした。正しいリカバリーキーを入力したことを確認してください。</string>
     <string name="keys_backup_recovery_code_empty_error_message">リカバリーキーを入力してください</string>
     <string name="keys_backup_unlock_button">履歴をアンロック</string>
-    <string name="keys_backup_restoring_importing_keys_waiting_message">鍵をインポート中…</string>
+    <string name="keys_backup_restoring_importing_keys_waiting_message">鍵をインポートしています…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">鍵をダウンロードしています…</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">リカバリーキーを計算しています…</string>
     <string name="keys_backup_restoring_waiting_message">バックアップを復元:</string>
@@ -1631,7 +1631,7 @@
     <string name="keys_backup_passphrase_error_decrypt">このパスフレーズではバックアップを復号できませんでした。正しい復元パスフレーズを入力したことを確認してください。</string>
     <string name="keys_backup_restore_with_key_helper">リカバリーキーを喪失しましたか？　設定で新しいリカバリーキーを設定できます。</string>
     <string name="keys_backup_restore_setup_recovery_key">メッセージの復元</string>
-    <string name="keys_backup_restore_is_getting_backup_version">バックアップのバージョンを取得中…</string>
+    <string name="keys_backup_restore_is_getting_backup_version">バックアップのバージョンを取得しています…</string>
     <string name="keys_backup_restore_with_passphrase">暗号化されたメッセージ履歴のロックを解除するには、復元パスフレーズを使用してください</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">復元パスフレーズをご存知でなければ、%sができます。</string>
     <string name="keys_backup_restore_with_recovery_key">リカバリーキーを使用して暗号化されたメッセージ履歴をアンロックします</string>
@@ -1641,7 +1641,7 @@
     <string name="keys_backup_setup_skip_title">続行しますか？</string>
     <string name="keys_backup_setup_backup_started_message">暗号鍵が現在バックグラウンドでホームサーバーへバックアップされています。初期バックアップは数分かかることがあります。</string>
     <string name="keys_backup_setup_backup_started_title">バックアップが開始されました</string>
-    <string name="unexpected_error">予期せぬエラー</string>
+    <string name="unexpected_error">予期しないエラー</string>
     <string name="recovery_key">リカバリーキー</string>
     <string name="keys_backup_setup_step3_generating_key_status">パスフレーズを使用してリカバリーキーを生成中です。数秒かかることがあります。</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">リカバリーキーを共有…</string>
@@ -1817,19 +1817,19 @@
     <string name="login_splash_title">あなたの会話。 それを所有する。</string>
     <string name="auth_add_email_message_2">アカウントの復旧用のメールアドレスを設定して、後からオプションで知人に見つけてもらえるようにできます。</string>
     <string name="this_is_the_beginning_of_dm">ここが%sとのダイレクトメッセージのスタート地点です。</string>
-    <string name="no_message_edits_found">編集が見つかりません</string>
-    <string name="message_edits">メッセージを編集する</string>
-    <string name="downloaded_file">ファイル %1$s はダウンロードされました!</string>
+    <string name="no_message_edits_found">変更履歴はありません</string>
+    <string name="message_edits">メッセージの変更履歴</string>
+    <string name="downloaded_file">ファイル %1$s をダウンロードしました!</string>
     <string name="send_file_step_compressing_video">ビデオの圧縮%d%%</string>
     <string name="send_file_step_compressing_image">画像を圧縮しています…</string>
-    <string name="settings_labs_show_complete_history_in_encrypted_room">暗号化されたルームで完全な履歴を表示する</string>
+    <string name="settings_labs_show_complete_history_in_encrypted_room">暗号化されたルームで完全な履歴を表示</string>
     <string name="give_feedback">フィードバックを与える</string>
     <string name="feedback_failed">フィードバックを送信できませんでした (%s)</string>
     <string name="feedback_sent">ありがとうございます、あなたのフィードバックは正常に送信されました</string>
-    <string name="you_may_contact_me">ご質問がある場合は、私にご連絡ください</string>
+    <string name="you_may_contact_me">追加で確認が必要な事項がある場合は、連絡可</string>
     <string name="feedback">フィードバック</string>
-    <string name="send_feedback_space_info">現在、spaceのベータ版を使用しています。お客様のフィードバックは次のバージョンに反映されます。ご意見を参考にさせていただくため、お客様のプラットフォームとユーザー名を記載させていただきます。</string>
-    <string name="send_feedback_space_title">スペースについてフィードバック</string>
+    <string name="send_feedback_space_info">現在「スペース」のベータ版を使用しています。あなたのフィードバックは今後のバージョンに反映されます。ご意見を最大限に参考にさせていただくため、あなたのプラットフォームとユーザー名を記録させていただきます。</string>
+    <string name="send_feedback_space_title">スペースについてのフィードバック</string>
     <string name="send_suggestion_failed">提案の送信に失敗しました(%s)</string>
     <string name="send_suggestion_sent">ありがとうございます、提案は正常に送信されました</string>
     <string name="settings_troubleshoot_test_token_registration_quick_fix">トークンの登録</string>
@@ -1838,7 +1838,7 @@
     <string name="push_gateway_item_push_key">push_key:</string>
     <string name="settings_push_gateway_no_pushers">登録されたプッシュゲートウェイはありません</string>
     <string name="settings_push_rules_no_rules">プッシュルールが定義されていません</string>
-    <string name="settings_push_rules">プッシュルール</string>
+    <string name="settings_push_rules">プッシュ通知に関するルール</string>
     <string name="settings_expert">エキスパート</string>
     <string name="quick_reactions">クイックリアクション</string>
     <string name="navigate_to_room_when_already_in_the_room">あなたは既にこのルームを見ています!</string>
@@ -1969,7 +1969,7 @@
         <item quantity="other">%d 通話できません</item>
     </plurals>
     <string name="use_as_default_and_do_not_ask_again">デフォルトで使いもう尋ねない</string>
-    <string name="send_bug_report_include_key_share_history">キー共有リクエストの送信履歴</string>
+    <string name="send_bug_report_include_key_share_history">キー共有リクエストの履歴を送信</string>
     <string name="no_more_results">結果がありません</string>
     <string name="cannot_call_yourself_with_invite">自分で電話をかけることはできません。参加者が招待を受け入れるのを待ちます</string>
     <string name="audio_video_meeting_description">ミーティングはJitsiのセキュリティーとパーミッションポリシーを使用します。会議中は、現在ルームにいる全ての人に招待状が表示されます。</string>
@@ -1978,24 +1978,24 @@
     <string name="denied_permission_camera">この動作を行うには、システム設定からカメラの権限を許可してください。</string>
     <string name="denied_permission_generic">このアクションを実行するには、いくつかの権限が不足しています。システム設定から権限を付与してください。</string>
     <string name="settings_discovery_bad_identity_server">IDサーバーに接続できませんでした</string>
-    <string name="settings_discovery_enter_identity_server">IDサーバーのURLを入力する</string>
-    <string name="identity_server_consent_dialog_content">あなた既存の連絡先を発見するために、あなたの連絡先データ（電話番号や電子メール）を設定されたIDサーバー（%1$s）に送信することに同意しますか？
+    <string name="settings_discovery_enter_identity_server">IDサーバーのURLを入力</string>
+    <string name="identity_server_consent_dialog_content">連絡先を発見するために、あなたの連絡先のデータ（電話番号や電子メール）を、設定されたIDサーバー（%1$s）に送信することに同意しますか？
 \n
-\nプライバシー保護のため、送信データは送信前に必ずハッシュ化されます。</string>
-    <string name="identity_server_consent_dialog_title">メールや電話番号の送信</string>
+\nプライバシーの保護のため、データは送信前にハッシュ化されます。</string>
+    <string name="identity_server_consent_dialog_title">メールと電話番号を送信</string>
     <string name="settings_discovery_consent_action_give_consent">同意する</string>
     <string name="settings_discovery_consent_action_revoke">同意を撤回する</string>
     <string name="settings_discovery_consent_notice_off">あなたの連絡先から他のユーザーを発見するために、電子メールや電話番号をこのIDサーバーに送信することに同意していません。</string>
     <string name="settings_discovery_consent_notice_on">あなたの連絡先から他のユーザーを発見するために、このIDサーバーにメールや電話番号を送信することに同意しています。</string>
-    <string name="settings_discovery_consent_title">メールや電話番号の送信</string>
+    <string name="settings_discovery_consent_title">メールと電話番号を送信</string>
     <string name="settings_discovery_mail_pending">未確認</string>
-    <string name="settings_discovery_confirm_mail_not_clicked">%sに確認メールを送りました。まず、メールを確認してリンクをクリックしてください。</string>
+    <string name="settings_discovery_confirm_mail_not_clicked">%sに確認メールを送りました。まず、メールを確認してリンクをクリックしてください</string>
     <string name="settings_discovery_confirm_mail">%sに確認のためのメールを送りました。メールにて確認リンクをクリックしてください</string>
-    <string name="settings_discovery_msisdn_title">発見できる電話番号</string>
+    <string name="settings_discovery_msisdn_title">検出可能な電話番号</string>
     <string name="settings_discovery_disconnect_identity_server_info">IDサーバーとの接続を解除すると、他のユーザーから自分を発見できなくなり、メールや電話で他のユーザーを招待することができなくなります。</string>
     <string name="settings_discovery_no_msisdn">電話番号を追加すると、ディスカバリーオプションが表示されます。</string>
     <string name="settings_discovery_no_mails">メールを追加すると、ディスカバリーオプションが表示されます。</string>
-    <string name="settings_discovery_identity_server_info_none">現在、IDサーバーを使用していません。既存の連絡先を発見したり、その連絡先から発見できるようにするには、以下のように設定します。</string>
+    <string name="settings_discovery_identity_server_info_none">現在、IDサーバーを使用していません。あなたの知っている連絡先を発見したり、その連絡先から発見されるようにするには、以下のように設定します。</string>
     <string name="settings_discovery_identity_server_info">%1$sを使って知り合いを見つけたり、見つけられるようにしています。</string>
     <string name="change_identity_server">IDサーバーを変更</string>
     <string name="add_identity_server">IDサーバーの設定</string>
@@ -2003,21 +2003,21 @@
     <string name="identity_server">IDサーバー</string>
     <string name="terms_description_for_integration_manager">ボット、ブリッジ、ウィジェット、ステッカーパックを使う</string>
     <string name="terms_description_for_identity_server">他の人が見つけられるように</string>
-    <string name="review_terms">規約を確認する</string>
+    <string name="review_terms">規約を確認</string>
     <string name="terms_of_service">利用規約</string>
     <string name="message_view_edit_history">編集履歴を表示</string>
     <string name="joining_room">ルームに参加しています…</string>
     <string name="direct_room_user_list_suggestions_title">提案</string>
     <string name="direct_room_user_list_contacts_title">連絡先</string>
     <string name="direct_room_user_list_recent_title">最近の</string>
-    <string name="direct_room_start_search">検索結果を得るために入力を始める</string>
+    <string name="direct_room_start_search">入力すると検索結果が表示されます</string>
     <string name="direct_room_no_known_users">結果が見つかりません、matrix IDを使ってサーバー上で検索してください。</string>
     <string name="link_copied_to_clipboard">クリップボードにコピーされたリンク</string>
-    <string name="labs_show_unread_notifications_as_tab">メイン画面に未読通知専用のタブを追加しました。</string>
-    <string name="search_hint_room_name">ルーム名を検索する</string>
+    <string name="labs_show_unread_notifications_as_tab">メイン画面に未読通知専用のタブを追加する。</string>
+    <string name="search_hint_room_name">ルーム名を検索</string>
     <string name="room_directory_search_hint">名前もしくはID (#例えば:matrix.org)</string>
     <string name="room_filtering_footer_open_room_directory">ルームディレクトリを見る</string>
-    <string name="room_filtering_footer_create_new_room">新しいルームをつくる</string>
+    <string name="room_filtering_footer_create_new_room">新しいルームを作成</string>
     <string name="room_filtering_footer_title">お探しのものが見つかりませんか？</string>
     <string name="send_suggestion_report_placeholder">あなたの提案をここに書いてください</string>
     <string name="send_suggestion_content">ご意見・ご感想をお聞かせください。</string>
@@ -2110,7 +2110,7 @@
     <string name="you">あなた</string>
     <string name="sent_a_video">動画。</string>
     <string name="verify_by_emoji_title">絵文字で検証</string>
-    <string name="verification_request_waiting">待機中…</string>
+    <string name="verification_request_waiting">待機しています…</string>
     <string name="send_a_sticker">ステッカー</string>
     <string name="sent_a_file">ファイル</string>
     <string name="sent_an_audio_file">音声</string>
@@ -2336,4 +2336,24 @@
     <string name="crosssigning_verify_session">ログインを検証</string>
     <string name="room_message_placeholder">メッセージ…</string>
     <string name="error_file_too_big_simple">このファイルは大きすぎてアップロードできません。</string>
+    <string name="identity_server_consent_dialog_content_question">この情報の送信に同意しますか？</string>
+    <string name="identity_server_consent_dialog_content_3">連絡先を発見するには、連絡先のデータ（電話番号や電子メール）をあなたのIDサーバーに送信する必要があります。プライバシーの保護のため、データは送信前にハッシュ化されます。</string>
+    <string name="identity_server_consent_dialog_content_2">連絡先を発見するには、連絡先のデータをあなたのIDサーバーに送信する必要があります。
+\n
+\nプライバシーの保護のため、データは送信前にハッシュ化されます。この情報を送信することに同意しますか？</string>
+    <string name="identity_server_consent_dialog_title_2">メールアドレスと電話番号を %s に送信</string>
+    <string name="settings_discovery_no_policy_provided">このIDサーバーはポリシーを提供していません</string>
+    <string name="settings_discovery_hide_identity_server_policy_title">IDサーバーのポリシーを隠す</string>
+    <string name="settings_discovery_show_identity_server_policy_title">IDサーバーのポリシーを表示</string>
+    <string name="change_password_summary">アカウントの新しいパスワードを設定…</string>
+    <string name="rageshake_detected">シェイクを検出しました！</string>
+    <string name="settings_rageshake_detection_threshold_summary">電話を振って、しきい値を試してください</string>
+    <string name="settings_rageshake_detection_threshold">検出のしきい値</string>
+    <string name="template_settings_developer_mode_fail_fast_summary">予期しないエラーが生じた際に、${app_name}はより頻繁にクラッシュするかもしれません</string>
+    <string name="settings_developer_mode_fail_fast_title">素早くクラッシュ</string>
+    <string name="settings_developer_mode_summary">開発者モードは隠された機能を有効にするため、アプリケーションが不安定になる恐れがあります。開発者向けです！</string>
+    <string name="labs_auto_report_uisi_desc">復号エラーが生じた際に、自動的にログを送信</string>
+    <string name="labs_auto_report_uisi">復号エラーを自動的に報告する。</string>
+    <string name="restart_the_application_to_apply_changes">変更を有効にするにはアプリケーションの再起動が必要です。</string>
+    <string name="labs_enable_latex_maths">LaTeXによる数学表記を有効にする</string>
 </resources>
