@@ -183,9 +183,9 @@
     <string name="room_participants_action_invite">招待</string>
     <string name="room_participants_action_leave">このルームを退出</string>
     <string name="room_menu_search">検索</string>
-    <string name="room_one_user_is_typing">%sさんが文字入力しています…</string>
-    <string name="room_two_users_are_typing">%1$sさんと %2$sさんが文字入力しています…</string>
-    <string name="room_many_users_are_typing">%1$sさん、%2$sさん他が文字入力しています…</string>
+    <string name="room_one_user_is_typing">%sさんが文字を入力しています…</string>
+    <string name="room_two_users_are_typing">%1$sさんと %2$sさんが文字を入力しています…</string>
+    <string name="room_many_users_are_typing">%1$sさん、%2$sさん他が文字を入力しています…</string>
     <string name="room_message_placeholder_encrypted">暗号文を送信…</string>
     <string name="light_theme">明るいテーマ</string>
     <string name="dark_theme">暗いテーマ</string>
@@ -214,7 +214,7 @@
     <string name="room_participants_action_set_moderator">権限を司会者へ変更</string>
     <string name="room_participants_action_set_admin">権限を管理者へ変更</string>
     <string name="room_message_placeholder_not_encrypted">ここに送信文を入力 (暗号なし)…</string>
-    <string name="room_offline_notification">サーバーとの接続が失われました.</string>
+    <string name="room_offline_notification">サーバーとの接続が失われました。</string>
     <string name="room_prompt_resend">全て再送信</string>
     <string name="room_resend_unsent_messages">未送信の文を再送信</string>
     <string name="room_delete_unsent_messages">未送信の文を削除</string>
@@ -252,7 +252,7 @@
     <string name="settings_keep_media">画像等を一時保存する期間</string>
     <string name="settings_user_settings">利用者設定</string>
     <string name="settings_notifications">通知</string>
-    <string name="settings_ignored_users">無視する相手</string>
+    <string name="settings_ignored_users">無視しているユーザー</string>
     <string name="settings_other">その他</string>
     <string name="settings_advanced">拡張設定</string>
     <string name="settings_cryptography">暗号化</string>
@@ -264,7 +264,7 @@
     <string name="settings_always_show_timestamps">全てのメッセージにタイムスタンプを表示</string>
     <string name="settings_12_24_timestamps">タイムスタンプを12時間形式で表示</string>
     <string name="devices_details_dialog_title">セッションの詳細</string>
-    <string name="devices_details_id_title">ID(端末固有番号)</string>
+    <string name="devices_details_id_title">ID（端末固有番号）</string>
     <string name="devices_details_name_title">公開端末名</string>
     <string name="devices_details_device_name">公開端末名の更新</string>
     <string name="devices_details_last_seen_title">最終接続日</string>
@@ -302,7 +302,7 @@
     <string name="room_settings_tag_pref_entry_low_priority">低優先度</string>
     <string name="room_settings_tag_pref_entry_none">なし</string>
     <string name="room_settings_category_access_visibility_title">参加と可視範囲</string>
-    <string name="room_settings_directory_visibility">ルームの一覧へ公開</string>
+    <string name="room_settings_directory_visibility">ルームディレクトリへ公開</string>
     <string name="room_settings_room_access_rules_pref_title">ルームへの参加</string>
     <string name="room_settings_room_read_history_rules_pref_title">ルームの履歴の可視範囲</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">ルームの履歴を読める人は\?</string>
@@ -364,8 +364,8 @@
     <string name="template_no_contact_access_placeholder">端末の電話帳を${app_name}アプリが読み取ることは許可されていません</string>
     <string name="no_result_placeholder">結果なし</string>
     <string name="rooms_header">ルーム</string>
-    <string name="rooms_directory_header">ルーム一覧</string>
-    <string name="user_directory_header">利用者一覧</string>
+    <string name="rooms_directory_header">ルームディレクトリ</string>
+    <string name="user_directory_header">ユーザーディレクトリ</string>
     <string name="send_files_in">送信</string>
     <string name="logout">サインアウト</string>
     <string name="create_account">アカウントを作成</string>
@@ -402,7 +402,7 @@
     <string name="auth_reset_password_error_unauthorized">電子メールアドレスの確認に失敗しました: 電子メールのリンクをクリックしたことを確認してください</string>
     <string name="auth_reset_password_success_message">パスワードがリセットされました。
 \n
-\n全てのセッションからログアウトしたため、プッシュ通知を受け取れなくなりました。通知を再び有効にするには、各デバイスで再ログインをお願いします。</string>
+\n全てのセッションからログアウトしたため、プッシュ通知を受け取れなくなりました。通知を再び有効にするには、各端末で再ログインをお願いします。</string>
     <string name="login_error_unable_register_mail_ownership">登録ができません : 電子メールがあなた個人のものであるか確認できません</string>
     <string name="login_error_unknown_token">指定されたアクセストークンが認識されませんでした</string>
     <string name="login_error_bad_json">不正な形式のJSON</string>
@@ -448,7 +448,7 @@
     <string name="tab_title_search_people">参加者</string>
     <string name="tab_title_search_files">ファイル</string>
     <string name="tab_title_search_rooms">ルーム</string>
-    <string name="directory_search_results_title">ルーム一覧を見る</string>
+    <string name="directory_search_results_title">ディレクトリを見る</string>
     <string name="room_settings_leave_conversation">会話から退出</string>
     <string name="room_sliding_menu_messages">会話</string>
     <string name="room_sliding_menu_settings">設定</string>
@@ -479,7 +479,7 @@
     <string name="room_settings_addresses_e2e_disabled">このルームは暗号化されていません。</string>
     <string name="room_settings_addresses_e2e_encryption_warning">暗号化を有効にします
 \n（警告: 有効後にこれを無効にすることはできません！)</string>
-    <string name="directory_title">ルーム一覧</string>
+    <string name="directory_title">ディレクトリ</string>
     <string name="settings_theme">外観</string>
     <string name="encryption_information_title">エンドツーエンド暗号化についての情報</string>
     <string name="encryption_information_device_name">公開端末名</string>
@@ -537,13 +537,13 @@
 \n続行する前に、各セッションの検証プロセスを進めることをおすすめしますが、検証せずにメッセージを再送信することもできます。
 \n
 \n不明なセッション:</string>
-    <string name="unknown_devices_alert_title">ルームに不明なデバイスが含まれています</string>
+    <string name="unknown_devices_alert_title">ルームに不明な端末が含まれています</string>
     <string name="encryption_information_verify_key_match">キーが一致していることを確認</string>
-    <string name="encryption_information_verify_device_warning2">一致する場合は、下の確認ボタンを押します。そうでない場合は、他の誰かがこのデバイスを盗聴しているので、代わりにブロックボタンを押すことをおすすめします。今後この検証プロセスはより洗練されたものになるでしょう。</string>
-    <string name="encryption_information_verify_device">デバイスの検証</string>
-    <string name="encryption_information_unknown_device">不明なデバイス</string>
+    <string name="encryption_information_verify_device_warning2">一致する場合は、下の確認ボタンを押します。そうでない場合は、他の誰かがこの端末を盗聴しているので、代わりにブロックボタンを押すことをおすすめします。今後この検証プロセスはより洗練されたものになるでしょう。</string>
+    <string name="encryption_information_verify_device">端末の検証</string>
+    <string name="encryption_information_unknown_device">不明な端末</string>
     <string name="encryption_never_send_to_unverified_devices_summary">このセッションでは、未検証のセッションに対して暗号化されたメッセージを送信しない</string>
-    <string name="encryption_never_send_to_unverified_devices_title">認証済みデバイスに対してのみ暗号化</string>
+    <string name="encryption_never_send_to_unverified_devices_title">認証済み端末に対してのみ暗号化</string>
     <string name="encryption_import_import">インポート</string>
     <string name="encryption_import_room_keys_summary">ローカルファイルからキーをインポート</string>
     <string name="encryption_import_room_keys">ルームキーをインポート</string>
@@ -617,7 +617,7 @@
     <string name="encryption_information_decryption_error">復号エラー</string>
     <string name="encryption_information_sender_device_information">発信者装置の情報</string>
     <string name="encryption_information_name">公開端末名</string>
-    <string name="encryption_information_device_key">デバイスキー</string>
+    <string name="encryption_information_device_key">端末キー</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 フィンガープリント</string>
     <string name="encryption_information_not_verified">未認証</string>
     <string name="encryption_information_blocked">ブラックリスト</string>
@@ -626,14 +626,14 @@
     <string name="encryption_information_unverify">認証を取り消す</string>
     <string name="encryption_information_block">ブラックリスト</string>
     <string name="encryption_information_unblock">ブラックリストから除外</string>
-    <string name="encryption_information_verify_device_warning">このデバイスが信頼できることを確認するために、その所有者に何らかの他の方法（直接会って、または、電話で）連絡し、以下のキーが、そのデバイスの「設定」で確認できるキーと一致するかお尋ねください:</string>
+    <string name="encryption_information_verify_device_warning">この端末が信頼できることを確認するために、その所有者に何らかの他の方法（直接会って、または、電話で）連絡し、以下のキーが、その端末の「設定」で確認できるキーと一致するかお尋ねください:</string>
     <string name="select_room_directory">ルームのディレクトリを選択</string>
     <string name="directory_server_type_homeserver">公開のルームを表示するホームサーバーを入力してください</string>
     <string name="directory_server_placeholder">サーバー名</string>
     <string name="directory_server_all_rooms_on_server">%sサーバー上の全てのルーム</string>
     <string name="directory_server_native_rooms">全てのローカルの %s ルーム</string>
     <string name="room_unsent_messages_notification">メッセージが未送信です。今 %1$s または %2$s しますか？</string>
-    <string name="room_unknown_devices_messages_notification">不明なデバイスが存在しているため、メッセージを送ることができませんでした。今 %1$s または %2$s しますか？</string>
+    <string name="room_unknown_devices_messages_notification">不明な端末が存在しているため、メッセージを送ることができませんでした。今 %1$s または %2$s しますか？</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">要求されたフィンガープリントキー Ed25519</string>
     <string name="settings_labs_create_conference_with_jitsi">jitsiを用いて会議通話を始める</string>
     <string name="settings_labs_native_camera">端末のカメラを使う</string>
@@ -739,10 +739,10 @@
 \n追加しますか？</string>
     <string name="go_on_with">続行する…</string>
     <string name="error_no_external_application_found">申し訳ありません、この操作を完了するための外部アプリが見つかりません。</string>
-    <string name="e2e_re_request_encryption_key">他のデバイスから <u>暗号鍵を再度要求</u> します。</string>
+    <string name="e2e_re_request_encryption_key">他の端末から <u>暗号鍵を再度要求</u> します。</string>
     <string name="e2e_re_request_encryption_key_sent">鍵のリクエストが送信されました。</string>
     <string name="e2e_re_request_encryption_key_dialog_title">リクエスト送信済</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">鍵をこのデバイスに送信できるように、メッセージを復号化できる他のデバイスで${app_name}を起動してください。</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">鍵をこの端末に送信できるように、メッセージを復号化できる他の端末で${app_name}を起動してください。</string>
     <plurals name="format_time_s">
         <item quantity="other">%d秒</item>
     </plurals>
@@ -877,7 +877,7 @@
     <string name="notification_sync_init">サービスを初期化</string>
     <string name="title_activity_keys_backup_setup">鍵のバックアップ</string>
     <string name="title_activity_keys_backup_restore">鍵のバックアップを使用</string>
-    <string name="title_activity_verify_device">デバイスを認証</string>
+    <string name="title_activity_verify_device">端末を認証</string>
     <string name="keys_backup_is_not_finished_please_wait">鍵のバックアップが終了していません。しばらくお待ちください…</string>
     <string name="ongoing_conference_call">会議通話中。
 \n%1$s または %2$s として参加</string>
@@ -890,7 +890,7 @@
     <string name="settings_background_fdroid_sync_mode_disabled">バックグラウンド同期を行わない</string>
     <string name="settings_set_workmanager_delay">優先同期間隔</string>
     <string name="settings_set_workmanager_delay_summary">%s
-\n同期は、デバイスのリソース (バッテリ残量) または状態 (スリープ) に応じて延期される場合があります。</string>
+\n同期は、端末のリソース (バッテリ残量) または状態 (スリープ) に応じて延期される場合があります。</string>
     <string name="settings_send_typing_notifs">文字入力中通知を送信</string>
     <string name="settings_send_typing_notifs_summary">文字入力中であることを他の参加者に伝えます。</string>
     <string name="settings_show_read_receipts">開封確認メッセージを表示</string>
@@ -911,7 +911,7 @@
     <string name="soft_logout_signin_password_hint">パスワード</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">今ここでサインアウトすると、あなたの暗号化されたメッセージは失われてしまいます</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">鍵のバックアップは現在処理中です。処理中にサインアウトすると暗号化されたメッセージにアクセスできなくなります。</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">暗号化されたメッセージにアクセスできなくなることを防ぐため、鍵の安全なバックアップはあなたのデバイス全てで有効化してください。</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">暗号化されたメッセージにアクセスできなくなることを防ぐため、鍵の安全なバックアップはあなたの端末全てで有効化してください。</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">暗号化されたメッセージは不要です</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">鍵をバックアップしています…</string>
     <string name="keys_backup_activate">鍵のバックアップを使用</string>
@@ -954,8 +954,8 @@
     <string name="create_room_name_hint">名前</string>
     <string name="create_room_public_title">公開</string>
     <string name="create_room_public_description">誰でもこのルームに参加できるようになります</string>
-    <string name="create_room_directory_title">ルーム一覧</string>
-    <string name="create_room_directory_description">ルームの一覧へ公開</string>
+    <string name="create_room_directory_title">ルームディレクトリ</string>
+    <string name="create_room_directory_description">ルームディレクトリへ公開</string>
     <string name="settings_general_title">一般</string>
     <string name="settings_security_and_privacy">セキュリティーとプライバシー</string>
     <string name="preference_root_help_about">ヘルプと概要</string>
@@ -1105,7 +1105,7 @@
     <string name="choose_locale_other_locales_title">他の利用可能な言語</string>
     <string name="settings_category_composer">メッセージエディタ</string>
     <string name="settings_preferences">環境設定</string>
-    <string name="settings_secure_backup_enter_to_setup">このデバイスを設定</string>
+    <string name="settings_secure_backup_enter_to_setup">この端末を設定</string>
     <string name="settings_secure_backup_reset">セキュアバックアップをリセット</string>
     <string name="settings_secure_backup_setup">セキュアバックアップを設定</string>
     <string name="settings_secure_backup_manage">管理</string>
@@ -1115,7 +1115,7 @@
     <string name="invited_by">%s からの招待</string>
     <string name="sas_verified_successful">このセッションは正常に検証されました。</string>
     <string name="qr_code_scanned_by_other_notice">概ね完了しました。%s の画面にも同じシールドアイコンが表示されていますか？</string>
-    <string name="verification_scan_notice">相手ユーザーのデバイスのコードをスキャンし、相互に安全性を検証します</string>
+    <string name="verification_scan_notice">相手ユーザーの端末のコードをスキャンし、相互に安全性を検証</string>
     <string name="verification_scan_their_code">相手のコードをスキャン</string>
     <string name="verification_scan_emoji_title">スキャンできません</string>
     <string name="action_decline">断る</string>
@@ -1140,7 +1140,7 @@
     <string name="sound_device_headset">ヘッドセット</string>
     <string name="sound_device_speaker">スピーカー</string>
     <string name="sound_device_phone">電話</string>
-    <string name="call_select_sound_device">サウンドデバイスを選択</string>
+    <string name="call_select_sound_device">サウンド端末を選択</string>
     <string name="call_failed_no_connection_description">リアルタイム接続を確立できませんでした。
 \nホームサーバーの管理者に、通話が正常に動作するためにTURNを設定するようご連絡ください。</string>
     <string name="call_failed_dont_ask_again">再び表示しない</string>
@@ -1268,7 +1268,7 @@
     <string name="call_failed_no_ice_description">通話が確実に機能させるためには、ホームサーバー(%1$s)の管理者にTURNサーバーの設定を依頼してください。
 \n
 \n代わりに、%2$sのパブリックサーバーを使用することもできますが、信頼性は低く、あなたのIPアドレスがそのサーバーと共有されてしまいます。これは設定から管理することができます。</string>
-    <string name="settings_room_directory_show_all_rooms_summary">ルームのディレクトリ内の全てのルームを表示（露骨なコンテンツのあるルームを含む）する。</string>
+    <string name="settings_room_directory_show_all_rooms_summary">ルームディレクトリの全てのルームを表示（露骨なコンテンツのあるルームを含む）する。</string>
     <string name="settings_room_directory_show_all_rooms">露骨なコンテンツのあるルームを表示</string>
     <string name="settings_category_room_directory">ルームディレクトリ</string>
     <string name="dialog_edit_hint">新着情報</string>
@@ -1473,28 +1473,28 @@
     <string name="settings_background_fdroid_sync_mode_disabled_description">アプリがバックグラウンドにある場合、着信メッセージは通知されません。</string>
     <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name}は正確な時間に定期的にバックグラウンドで同期します（構成可能）。
 \nこれはラジオとバッテリーの使用量に影響し$ {app_name}がイベントをリッスンしていることを示す永続的な通知が表示されます。</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name}は、デバイスの限られたリソース（バッテリー）を維持する方法でバックグラウンド同期をします。
-\nデバイスの状態によっては、OSによって同期が延期される場合があります。</string>
+    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name}は、端末の限られたリソース（バッテリー）を維持する方法でバックグラウンド同期をします。
+\n端末の状態によっては、OSによって同期が延期される場合があります。</string>
     <string name="settings_system_preferences_summary">LEDの色、振動、音を選択してください…</string>
     <string name="settings_silent_notifications_preferences">サイレント通知を設定</string>
     <string name="settings_call_notifications_preferences">通話の通知を設定</string>
     <string name="settings_noisy_notifications_preferences">うるさい通知を設定</string>
     <string name="settings_notification_privacy_no_background_sync">アプリはバックグラウンドでホームサーバーに接続する<b>必要がない</b>ためバッテリー使用量を減らすことができます</string>
     <string name="settings_troubleshoot_test_battery_quickfix">最適化を無視</string>
-    <string name="settings_troubleshoot_test_battery_failed">画面をオフにした状態でデバイスのプラグを抜いて一定時間静止したままにすると、デバイスは機内モードになります。 これにより、アプリがネットワークにアクセスできなくなり、ジョブ、同期、および標準のアラームが防止されます。</string>
+    <string name="settings_troubleshoot_test_battery_failed">画面をオフにした状態で端末のプラグを抜いて一定時間静止したままにすると、端末は機内モードになります。 これにより、アプリがネットワークにアクセスできなくなり、ジョブ、同期、および標準のアラームが防止されます。</string>
     <string name="template_settings_troubleshoot_test_bg_restricted_failed">${app_name}に対してバックグラウンド制限が有効になっています。
 \nアプリがバックグラウンドで実行しようとすると積極的に制限され、通知に影響を与える可能性があります。
 \n%1$s</string>
     <string name="template_settings_troubleshoot_test_bg_restricted_success">${app_name}のバックグラウンド制限は無効になっています。 このテストは、モバイル（WIFIでない）を使用して実行する必要があります。
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">デバイスを再起動してもサービスは開始されません。${app_name}が一度開かれるまで通知は届きません。</string>
+    <string name="template_settings_troubleshoot_test_service_boot_failed">端末を再起動してもサービスは開始されません。${app_name}が一度開かれるまで通知は届きません。</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">%1$s
-\nこのエラーは${app_name}の管理外です。 これはいくつかの理由で発生する可能性があります。 後で再試行すればうまくいくかもしれません。システム設定でGoogle Play Serviceのデータ使用量が制限されていないか、デバイスの時刻が正しいかどうか、もしくはカスタムROMで起こることがあります。</string>
+\nこのエラーは${app_name}の管理外です。 これはいくつかの理由で発生する可能性があります。 後で再試行すればうまくいくかもしれません。システム設定でGoogle Play Serviceのデータ使用量が制限されていないか、端末の時刻が正しいかどうか、もしくはカスタムROMで起こることがあります。</string>
     <string name="template_settings_add_3pid_flow_not_supported">${app_name}モバイルからこれを行うことはできません</string>
     <string name="template_settings_troubleshoot_test_battery_success">${app_name}はバッテリー最適化の影響を受けません。</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">制限を無効にする</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">起動時の開始を有効にする</string>
-    <string name="settings_troubleshoot_test_service_boot_success">デバイスを再起動するとサービスが開始されます。</string>
+    <string name="settings_troubleshoot_test_service_boot_success">端末を再起動するとサービスが開始されます。</string>
     <string name="settings_troubleshoot_test_service_restart_failed">サービスの再起動に失敗しました</string>
     <string name="settings_troubleshoot_test_service_restart_success">サービスが強制終了され、自動的に再起動されました。</string>
     <string name="settings_troubleshoot_test_service_restart_title">通知サービスの自動再起動</string>
@@ -1514,7 +1514,7 @@
     <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nこのエラーは、${app_name}の管理外です。スマホにはGoogleアカウントがありません。アカウントマネージャーを開いて、Googleアカウントを追加してください。</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">%1$s
-\nこのエラーは${app_name}の管理外であり、Googleによると、このエラーは、デバイスにFCMに登録されているアプリが多すぎることを示しています。 このエラーは、アプリの数が極端に多い場合にのみ発生するため、平均的なユーザーには影響しません。</string>
+\nこのエラーは${app_name}の管理外であり、Googleによると、このエラーは、端末にFCMに登録されているアプリが多すぎることを示しています。 このエラーは、アプリの数が極端に多い場合にのみ発生するため、平均的なユーザーには影響しません。</string>
     <string name="template_settings_troubleshoot_test_play_services_failed">${app_name}はGoogle Playサービスを使用してプッシュメッセージを配信していますが、正しく設定されていないようです:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">FCMトークンの取得に失敗しました:
@@ -1716,7 +1716,7 @@
     <plurals name="notification_invitations">
         <item quantity="other">%d件の招待</item>
     </plurals>
-    <string name="directory_add_a_new_server_error_already_added">既にリストに載っているサーバーです</string>
+    <string name="directory_add_a_new_server_error_already_added">既に一覧に載っているサーバーです</string>
     <string name="directory_add_a_new_server_error">サーバーまたはそのルーム一覧が見つかりません</string>
     <string name="directory_add_a_new_server_prompt">検索される新しいサーバーの名前を入力します。</string>
     <string name="directory_add_a_new_server">新しいサーバーを追加</string>
@@ -1735,8 +1735,8 @@
     <string name="room_settings_room_access_private_title">非公開</string>
     <string name="room_settings_room_access_entry_unknown">不明のアクセス設定（%s）</string>
     <string name="room_settings_room_access_entry_knock">誰でもノックができ、メンバーがその参加を承認または拒否できます</string>
-    <string name="room_alias_publish_to_directory_error">現在のルーム一覧の見え方を取得できません（%1$s）。</string>
-    <string name="room_alias_publish_to_directory">このルームを%1$sのルーム一覧に公開しますか？</string>
+    <string name="room_alias_publish_to_directory_error">現在のルームディレクトリの見え方を取得できません（%1$s）。</string>
+    <string name="room_alias_publish_to_directory">このルームを%1$sのルームディレクトリに公開しますか？</string>
     <string name="room_alias_action_unpublish">アドレスを非公開にする</string>
     <string name="room_alias_action_publish">アドレスを公開</string>
     <string name="room_alias_local_address_subtitle">アドレスを設定すれば、他のユーザーがあなたのホームサーバー (%1$s) を通じてこのルームを見つけられるようになります。</string>
@@ -1744,7 +1744,7 @@
     <string name="room_alias_address_hint">新しい公開アドレス（例: #alias:server)</string>
     <string name="room_alias_address_empty_can_add">他の公開アドレスはまだありません。以下から追加できます。</string>
     <string name="room_alias_address_empty">他の公開アドレスはまだありません。</string>
-    <string name="room_alias_publish">このルームを%1$sのルーム一覧に公開しますか？</string>
+    <string name="room_alias_publish">このルームを%1$sのルームディレクトリに公開しますか？</string>
     <string name="room_alias_unpublish_confirmation">\"%1$s\"を非公開にしますか？</string>
     <string name="room_alias_published_alias_add_manually_submit">公開</string>
     <string name="room_alias_published_alias_add_manually">手動で新しいアドレスを公開</string>
@@ -1752,7 +1752,7 @@
     <string name="room_alias_published_alias_subtitle">公開されたアドレスを通して、どのサーバーのどのユーザーでもこのルームに参加できます。アドレスを公開するには、まずローカルアドレスとして設定する必要があります。</string>
     <string name="room_alias_published_alias_title">公開アドレス</string>
     <string name="room_alias_title">ルームのアドレス</string>
-    <string name="room_settings_alias_subtitle">ルームのアドレス及びルーム一覧における可視性を管理できます。</string>
+    <string name="room_settings_alias_subtitle">ルームのアドレス及びルームディレクトリにおける可視性を管理できます。</string>
     <string name="space_settings_alias_subtitle">スペースのアドレスを管理できます。</string>
     <string name="space_settings_alias_title">スペースのアドレス</string>
     <string name="room_settings_alias_title">ルームのアドレス</string>
@@ -1958,7 +1958,7 @@
     <string name="settings_messages_containing_display_name">自分の表示名</string>
     <string name="settings_messages_in_e2e_group_chat">グループチャットでのメッセージの暗号化</string>
     <string name="settings_messages_in_e2e_one_to_one">個別チャットでのメッセージの暗号化</string>
-    <string name="settings_notification_notify_me_for">通知してください</string>
+    <string name="settings_notification_notify_me_for">以下がメッセージに含まれる場合に通知</string>
     <string name="settings_notification_other">その他</string>
     <string name="settings_notification_mentions_and_keywords">メンションとキーワード</string>
     <string name="settings_notification_default">通知のデフォルト</string>
@@ -2224,7 +2224,7 @@
     <string name="create_spaces_just_me">自分のみ</string>
     <string name="thread_list_empty_title">スレッドでディスカッションを整理して管理</string>
     <string name="verification_request_waiting_for">%sを待機しています…</string>
-    <string name="verification_scan_with_this_device">このデバイスでスキャン</string>
+    <string name="verification_scan_with_this_device">この端末でスキャン</string>
     <string name="verification_sent">検証を送信済</string>
     <string name="verification_verify_device_manually">手動で検証</string>
     <string name="verification_verify_device">このセッションを検証</string>
@@ -2356,4 +2356,5 @@
     <string name="labs_auto_report_uisi">復号エラーを自動的に報告する。</string>
     <string name="restart_the_application_to_apply_changes">変更を有効にするにはアプリケーションの再起動が必要です。</string>
     <string name="labs_enable_latex_maths">LaTeXによる数学表記を有効にする</string>
+    <string name="room_settings_room_notifications_notify_me">以下が含まれる場合に通知</string>
 </resources>
