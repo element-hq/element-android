@@ -53,6 +53,7 @@ import im.vector.app.features.home.room.detail.sticker.StickerPickerActionHandle
 import im.vector.app.features.home.room.detail.timeline.factory.TimelineFactory
 import im.vector.app.features.home.room.detail.timeline.url.PreviewUrlRetriever
 import im.vector.app.features.home.room.typing.TypingHelper
+import im.vector.app.features.notifications.NotificationDrawerManager
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
 import im.vector.app.features.session.coroutineScope
 import im.vector.app.features.settings.VectorDataStore
@@ -123,6 +124,7 @@ class TimelineViewModel @AssistedInject constructor(
         private val analyticsTracker: AnalyticsTracker,
         private val activeConferenceHolder: JitsiActiveConferenceHolder,
         private val decryptionFailureTracker: DecryptionFailureTracker,
+        private val notificationDrawerManager: NotificationDrawerManager,
         timelineFactory: TimelineFactory,
         appStateHandler: AppStateHandler
 ) : VectorViewModel<RoomDetailViewState, RoomDetailAction, RoomDetailViewEvents>(initialState),
@@ -188,6 +190,11 @@ class TimelineViewModel @AssistedInject constructor(
         // Ensure to share the outbound session keys with all members
         if (OutboundSessionKeySharingStrategy.WhenEnteringRoom == BuildConfig.outboundSessionKeySharingStrategy && room.isEncrypted()) {
             prepareForEncryption()
+        }
+
+        // If the user had already accepted the invitation in the room list
+        if (initialState.isInviteAlreadyAccepted) {
+            handleAcceptInvite()
         }
 
         if (initialState.switchToParentSpace) {
@@ -800,16 +807,24 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     private fun handleRejectInvite() {
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(initialState.roomId) }
         viewModelScope.launch {
-            tryOrNull { session.leaveRoom(room.roomId) }
+            try {
+               session.leaveRoom(room.roomId)
+            } catch (throwable: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.Failure(throwable, showInDialog = true))
+            }
         }
     }
 
     private fun handleAcceptInvite() {
+        notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(initialState.roomId) }
         viewModelScope.launch {
-            tryOrNull {
+            try {
                 session.joinRoom(room.roomId)
                 analyticsTracker.capture(room.roomSummary().toAnalyticsJoinedRoom())
+            } catch (throwable: Throwable) {
+                _viewEvents.post(RoomDetailViewEvents.Failure(throwable, showInDialog = true))
             }
         }
     }
