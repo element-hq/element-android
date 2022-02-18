@@ -72,7 +72,6 @@ class LoginWebFragment @Inject constructor(
     override fun updateWithState(state: LoginViewState) {
         setupTitle(state)
 
-        // TODO check how it is possible to arrive in this case
         isForSessionRecovery = state.deviceId?.isNotBlank() == true
 
         if (!isWebViewLoaded) {
