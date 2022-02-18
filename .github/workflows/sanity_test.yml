@@ -52,6 +52,8 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '11'
+      - name: Build Test suite on API ${{ matrix.api-level }}
+        run: ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false packageGplayDebugAndroidTest
       - name: Run sanity tests on API ${{ matrix.api-level }}
         uses: reactivecircus/android-emulator-runner@v2
         with:
