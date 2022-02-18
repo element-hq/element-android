@@ -52,7 +52,7 @@ class FtueAuthChooseProfilePictureFragment @Inject constructor(
     }
 
     private fun setupViews() {
-        views.profilePictureView.setOnClickListener {
+        views.changeProfilePictureButton.setOnClickListener {
             galleryOrCameraDialogHelper.show()
         }
 

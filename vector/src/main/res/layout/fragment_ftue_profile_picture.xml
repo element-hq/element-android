@@ -48,6 +48,25 @@
             app:layout_constraintStart_toStartOf="@id/profilePictureGutterStart"
             app:layout_constraintTop_toBottomOf="@id/headerSpacing" />
 
+        <ImageView
+            android:id="@+id/changeProfilePictureButton"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/bg_rounded_button"
+            android:backgroundTint="?vctr_system"
+            android:contentDescription="@string/ftue_profile_picture_title"
+            android:padding="10dp"
+            android:src="@drawable/ic_camera_plain"
+            app:layout_constraintBottom_toBottomOf="@id/profilePictureView"
+            app:layout_constraintEnd_toEndOf="@id/profilePictureView"
+            app:layout_constraintHeight_percent="0.08"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toStartOf="@id/profilePictureView"
+            app:layout_constraintTop_toTopOf="@id/profilePictureView"
+            app:layout_constraintVertical_bias="1"
+            app:tint="?vctr_content_secondary" />
+
         <Space
             android:id="@+id/avatarTitleSpacing"
             android:layout_width="match_parent"
