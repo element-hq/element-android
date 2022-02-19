@@ -2458,7 +2458,7 @@
     <string name="settings_server_room_versions">ルームのバージョン 👓</string>
     <string name="settings_server_room_version_unstable">不安定</string>
     <string name="settings_server_room_version_stable">安定</string>
-    <string name="spoiler">スポイラー</string>
+    <string name="spoiler">ネタバレ</string>
     <string name="settings_security_pin_code_use_biometrics_title">生体認証を有効にする</string>
     <string name="member_banned_by">%1$sによりブロック</string>
     <string name="three_pid_revoke_invite_dialog_title">招待を取り消す</string>
@@ -2486,4 +2486,11 @@
     <string name="a11y_unchecked">未確認</string>
     <string name="settings_server_upload_size_unknown">制限は不明です。</string>
     <string name="settings_server_upload_size_title">サーバーのファイルアップロードの制限</string>
+    <string name="ftue_auth_carousel_1_title">自分の会話は自分のものにしましょう。</string>
+    <string name="room_join_rules_invite">%1$sが部屋を招待されたユーザーにのみアクセスできるように設定しました。</string>
+    <string name="room_join_rules_public">%1$sが部屋をリンクを持っているユーザーにアクセスできるように設定しました。</string>
+    <string name="command_description_spoiler">選択したメッセージをネタバレとして送信</string>
+    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} がE2E暗号鍵をディスクに保存する許可を要求しています。
+\n
+\n暗号鍵を手動でエクスポートできるように、次のポップアップでアクセスを許可してください。</string>
 </resources>
