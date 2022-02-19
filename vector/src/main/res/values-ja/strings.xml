@@ -386,7 +386,7 @@
     <string name="auth_missing_phone">電話番号が入力されていません</string>
     <string name="auth_missing_email_or_phone">電子メールアドレスまたは電話番号が入力されていません</string>
     <string name="auth_use_server_options">接続先サーバーを指定する(追加設定)</string>
-    <string name="auth_invalid_token">トークンが正しくありません</string>
+    <string name="auth_invalid_token">不正なトークン</string>
     <string name="auth_threepid_warning_message">メールと電話番号の同時登録はまだシステムが対応できませんが、電話番号だけの登録は可能です。
 \n
 \n設定からプロフィールにメールアドレスを追加できます。</string>
@@ -761,7 +761,7 @@
     <string name="room_participants_invite_join_names_and">%1$sと%2$s</string>
     <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
     <string name="room_message_placeholder_reply_to_encrypted">暗号化された返信を送信…</string>
-    <string name="room_message_placeholder_reply_to_not_encrypted">返信を送信 (未暗号化)…</string>
+    <string name="room_message_placeholder_reply_to_not_encrypted">返信を送る（未暗号化）…</string>
     <plurals name="room_details_selected">
         <item quantity="other">%d個選択済</item>
     </plurals>
