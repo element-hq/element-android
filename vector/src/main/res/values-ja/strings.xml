@@ -2404,4 +2404,5 @@
     <string name="open_discovery_settings">ディスカバリー設定を開く</string>
     <string name="read_at">既読時間</string>
     <string name="setup_cross_signing">クロスサイニングを有効にする</string>
+    <string name="add_a_topic_link_text">トピックを追加する</string>
 </resources>
