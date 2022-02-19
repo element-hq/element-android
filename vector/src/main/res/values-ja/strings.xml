@@ -2494,4 +2494,5 @@
 \n
 \n暗号鍵を手動でエクスポートできるように、次のポップアップでアクセスを許可してください。</string>
     <string name="room_join_rules_public">%1$sがルームをリンクを持っているユーザーにアクセスできるように設定しました。</string>
+    <string name="identity_server_error_terms_not_signed">まず、設定でIDサーバーの条件に同意してください。</string>
 </resources>
