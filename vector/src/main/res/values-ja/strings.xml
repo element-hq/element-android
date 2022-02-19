@@ -2405,4 +2405,7 @@
     <string name="read_at">既読時間</string>
     <string name="setup_cross_signing">クロス証明を有効にする</string>
     <string name="add_a_topic_link_text">トピックを追加する</string>
+    <string name="room_created_summary_item">%sが部屋を作成し構成しました。</string>
+    <string name="direct_room_created_summary_item_by_you">参加しました。</string>
+    <string name="direct_room_created_summary_item">%sが参加しました。</string>
 </resources>
