@@ -2441,4 +2441,14 @@
 \n既存のスペースを別のスペースに追加できます。</string>
     <string name="spaces_no_server_support_title">あなたのホームサーバーはまだスペースをサポートしていないようです</string>
     <string name="attachment_type_dialog_title">画像を追加</string>
+    <string name="content_reported_as_inappropriate_content">このコンテンツは不適切な投稿として報告されています。
+\n
+\nこのユーザーのコンテンツをこれ以上見たくなければ、ユーザーを無視してそのメッセージを非表示にできます。</string>
+    <string name="content_reported_as_spam_content">このコンテンツはスパムとして報告されています。
+\n
+\nこのユーザのコンテンツをこれ以上見たくなければ、ユーザーを無視してそのメッセージを非表示にできます。</string>
+    <string name="content_reported_content">このコンテンツが報告されています。
+\n
+\nこのユーザーのコンテンツをこれ以上見たくなければ、ユーザーを無視してそのメッセージを非表示にできます。</string>
+    <string name="uploads_files_subtitle">%1$s%2$s</string>
 </resources>
