@@ -207,10 +207,10 @@
     <string name="action_join">参加</string>
     <string name="room_preview_invitation_format">あなたは%sさんに、このルームへ招待されています</string>
     <string name="room_creation_title">新しい会話</string>
-    <string name="room_creation_add_member">参加者を追加</string>
+    <string name="room_creation_add_member">メンバーを追加</string>
     <string name="room_title_one_member">1名</string>
     <string name="room_participants_header_devices">端末</string>
-    <string name="room_participants_action_set_default_power_level">権限を一般参加者へ変更</string>
+    <string name="room_participants_action_set_default_power_level">権限を一般メンバーへ変更</string>
     <string name="room_participants_action_set_moderator">権限を司会者へ変更</string>
     <string name="room_participants_action_set_admin">権限を管理者へ変更</string>
     <string name="room_message_placeholder_not_encrypted">ここに送信文を入力 (暗号なし)…</string>
@@ -221,7 +221,7 @@
     <string name="room_message_file_not_found">ファイルが見つかりません</string>
     <string name="room_do_not_have_permission_to_post">あなたはこのルームで発言する権限がありません。</string>
     <string name="room_details_title">ルームの詳細</string>
-    <string name="room_details_people">参加者</string>
+    <string name="room_details_people">メンバー</string>
     <string name="room_details_files">ファイル</string>
     <string name="room_details_settings">設定</string>
     <string name="room_settings_favourite">お気に入り</string>
@@ -306,15 +306,15 @@
     <string name="room_settings_room_access_rules_pref_title">ルームへの参加</string>
     <string name="room_settings_room_read_history_rules_pref_title">ルームの履歴の可視範囲</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">ルームの履歴を読める人は\?</string>
-    <string name="room_settings_room_access_rules_pref_dialog_title">ルームへ参加できる人は\?</string>
+    <string name="room_settings_room_access_rules_pref_dialog_title">誰がルームにアクセスできますか？</string>
     <string name="room_settings_read_history_entry_anyone">誰でも</string>
-    <string name="room_settings_read_history_entry_members_only_option_time_shared">参加者のみ (この設定を選択した時点から)</string>
-    <string name="room_settings_read_history_entry_members_only_invited">参加者のみ (招待を送った時点から)</string>
-    <string name="room_settings_read_history_entry_members_only_joined">参加者のみ (参加した時点から)</string>
-    <string name="room_settings_room_access_entry_only_invited">このルームに招待された人だけ</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">ルームのリンクを知る人なら誰でも（ゲストユーザーを除く）</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">ルームのリンクを知る人なら誰でも（ゲストユーザーも含む）</string>
-    <string name="room_settings_banned_users_title">再入室禁止された参加者</string>
+    <string name="room_settings_read_history_entry_members_only_option_time_shared">メンバーのみ（この設定を選択した時点から）</string>
+    <string name="room_settings_read_history_entry_members_only_invited">メンバーのみ（招待を送った時点から）</string>
+    <string name="room_settings_read_history_entry_members_only_joined">メンバーのみ（参加した時点から）</string>
+    <string name="room_settings_room_access_entry_only_invited">招待された人のみ</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">ルームのリンクを知っている人なら誰でも（ゲストユーザーを除く）</string>
+    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">ルームのリンクを知っている人なら誰でも（ゲストユーザーを含む）</string>
+    <string name="room_settings_banned_users_title">再入室禁止されたメンバー</string>
     <string name="room_settings_category_advanced_title">拡張設定</string>
     <string name="room_settings_room_internal_id">このルームのサーバー内識別ID</string>
     <string name="room_settings_labs_pref_title">ラボ</string>
@@ -322,13 +322,13 @@
     <string name="room_settings_labs_end_to_end">エンドツーエンド暗号化</string>
     <string name="room_settings_labs_end_to_end_is_active">エンドツーエンド暗号化を使用中</string>
     <string name="room_settings_labs_end_to_end_warnings">暗号を有効にするためにはログアウトする必要があります.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">認証された端末のみで暗号化</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">検証済のセッションに対してのみ暗号化</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">このセッションでは、このルームの未検証のセッションに対して暗号化されたメッセージを送信しない。</string>
     <string name="room_settings_addresses_add_new_address">新しいアドレス (記入例 #foo:matrix.org)</string>
     <string name="room_settings_addresses_no_local_addresses">このルームにはローカルアドレスがありません</string>
     <string name="room_settings_addresses_pref_title">住所表記</string>
-    <string name="room_settings_addresses_invalid_format_dialog_title">住所表記が正しくありません</string>
-    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' は正しくない形式の住所表記です</string>
+    <string name="room_settings_addresses_invalid_format_dialog_title">エイリアスのフォーマットが正しくありません</string>
+    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\'はエイリアスの正しいフォーマットではありません</string>
     <string name="room_settings_addresses_disable_main_address_prompt_msg">このルームのメインアドレスが設定されていません。</string>
     <string name="room_settings_addresses_disable_main_address_prompt_title">メインアドレスの警告</string>
     <string name="room_settings_set_main_address">メインアドレスとして設定</string>
@@ -430,8 +430,8 @@
     <string name="room_participants_header_direct_chats">ダイレクトメッセージ</string>
     <string name="room_participants_action_ban">再入室禁止</string>
     <string name="room_participants_action_unban">再入室禁止解除</string>
-    <string name="room_participants_action_ignore">この参加者の発言を全て非表示</string>
-    <string name="room_participants_action_unignore">この参加者の発言を全て表示</string>
+    <string name="room_participants_action_ignore">このメンバーの発言を全て非表示</string>
+    <string name="room_participants_action_unignore">このメンバーの発言を全て表示</string>
     <string name="room_participants_action_mention">指名して呼掛け</string>
     <string name="room_participants_invite_search_another_user">ユーザーID, 表示名, 電子メールアドレス</string>
     <string name="room_participants_action_devices_list">接続端末一覧を表示</string>
@@ -442,10 +442,10 @@
     <string name="ssl_logout_account">ログアウト</string>
     <string name="ssl_remain_offline">無視</string>
     <string name="room_details_people_invited_group_name">招待中</string>
-    <string name="room_details_people_present_group_name">参加者</string>
-    <string name="search_members_hint">参加者を検索</string>
+    <string name="room_details_people_present_group_name">メンバー</string>
+    <string name="search_members_hint">メンバーを検索</string>
     <string name="search_no_results">結果なし</string>
-    <string name="tab_title_search_people">参加者</string>
+    <string name="tab_title_search_people">メンバー</string>
     <string name="tab_title_search_files">ファイル</string>
     <string name="tab_title_search_rooms">ルーム</string>
     <string name="directory_search_results_title">ディレクトリを見る</string>
@@ -477,7 +477,7 @@
     <string name="room_settings_room_access_warning">このルームへのリンクを作成するには、アドレスが必要です。</string>
     <string name="room_settings_addresses_e2e_enabled">このルームは暗号化されています。</string>
     <string name="room_settings_addresses_e2e_disabled">このルームは暗号化されていません。</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">暗号化を有効にします
+    <string name="room_settings_addresses_e2e_encryption_warning">暗号化を有効にする
 \n（警告: 有効後にこれを無効にすることはできません！)</string>
     <string name="directory_title">ディレクトリ</string>
     <string name="settings_theme">外観</string>
@@ -543,7 +543,7 @@
     <string name="encryption_information_verify_device">端末の検証</string>
     <string name="encryption_information_unknown_device">不明な端末</string>
     <string name="encryption_never_send_to_unverified_devices_summary">このセッションでは、未検証のセッションに対して暗号化されたメッセージを送信しない</string>
-    <string name="encryption_never_send_to_unverified_devices_title">認証済み端末に対してのみ暗号化</string>
+    <string name="encryption_never_send_to_unverified_devices_title">認証済端末に対してのみ暗号化</string>
     <string name="encryption_import_import">インポート</string>
     <string name="encryption_import_room_keys_summary">ローカルファイルからキーをインポート</string>
     <string name="encryption_import_room_keys">ルームキーをインポート</string>
@@ -680,7 +680,7 @@
     <string name="community_id">コミュニティーID</string>
     <string name="community_id_hint">例</string>
     <string name="group_details_home">ホーム</string>
-    <string name="group_details_people">参加者</string>
+    <string name="group_details_people">メンバー</string>
     <string name="group_details_rooms">ルーム</string>
     <string name="no_users_placeholder">ユーザーがいません</string>
     <string name="rooms">ルーム</string>
@@ -697,11 +697,11 @@
     <plurals name="membership_changes">
         <item quantity="other">%dメンバーシップの変更</item>
     </plurals>
-    <string name="list_members">参加者を表示</string>
+    <string name="list_members">メンバーを表示</string>
     <string name="open_chat_header">見出しを開く</string>
     <string name="room_sync_in_progress">同期しています…</string>
     <plurals name="room_header_active_members_count">
-        <item quantity="other">%d名の参加者</item>
+        <item quantity="other">%d名のメンバー</item>
     </plurals>
     <plurals name="room_title_members">
         <item quantity="other">%d名</item>
@@ -814,7 +814,7 @@
     <string name="command_description_markdown">Markdown書式の入/切</string>
     <string name="command_description_clear_scalar_token">Matrixアプリの管理を修正するには</string>
     <plurals name="group_members">
-        <item quantity="other">%d名の参加者</item>
+        <item quantity="other">%d名のメンバー</item>
     </plurals>
     <plurals name="group_rooms">
         <item quantity="other">%dルーム</item>
@@ -892,7 +892,7 @@
     <string name="settings_set_workmanager_delay_summary">%s
 \n同期は、端末のリソース (バッテリ残量) または状態 (スリープ) に応じて延期される場合があります。</string>
     <string name="settings_send_typing_notifs">入力中通知を送信</string>
-    <string name="settings_send_typing_notifs_summary">文字入力中であることを他の参加者に伝えます。</string>
+    <string name="settings_send_typing_notifs_summary">文字入力中であることを他のメンバーに伝えます。</string>
     <string name="settings_show_read_receipts">開封確認メッセージを表示</string>
     <string name="settings_show_read_receipts_summary">開封確認メッセージをクリックすると詳細なリストを確認できます。</string>
     <string name="settings_send_message_with_enter">エンター入力でメッセージを送信</string>
@@ -939,8 +939,8 @@
     <string name="action_stay">とどまる</string>
     <string name="edit">編集</string>
     <string name="reply">返信</string>
-    <string name="event_redacted">削除済みのメッセージ</string>
-    <string name="settings_show_redacted">削除済みのメッセージを表示</string>
+    <string name="event_redacted">メッセージが削除されました</string>
+    <string name="settings_show_redacted">削除済のメッセージを表示</string>
     <string name="settings_show_redacted_summary">削除されたメッセージの代わりに削除されたという通知を表示します。</string>
     <string name="event_redacted_by_user_reason">ユーザーによって削除されたイベント</string>
     <string name="create_new_room">新しいルームを作成</string>
@@ -960,7 +960,7 @@
     <string name="settings_security_and_privacy">セキュリティーとプライバシー</string>
     <string name="preference_root_help_about">ヘルプと概要</string>
     <string name="bottom_action_people_x">ダイレクトメッセージ</string>
-    <string name="edited_suffix">(編集済み)</string>
+    <string name="edited_suffix">（編集済）</string>
     <string name="room_filtering_filter_hint">会話を検索…</string>
     <string name="add_by_matrix_id">Matrix ID から追加</string>
     <string name="direct_room_filter_hint">ユーザー名または ID で検索…</string>
@@ -986,7 +986,7 @@
     <string name="room_profile_section_more_settings">ルームの設定</string>
     <string name="room_profile_section_more_notifications">通知</string>
     <plurals name="room_profile_section_more_member_list">
-        <item quantity="other">%1$d 人の参加者</item>
+        <item quantity="other">%1$d 人のメンバー</item>
     </plurals>
     <string name="room_profile_section_more_uploads">アップロード</string>
     <string name="room_profile_section_more_leave">ルームを退出</string>
@@ -1725,9 +1725,9 @@
     <string name="device_name_warning">セッションの公開名は会話中の相手に閲覧できます</string>
     <string name="room_settings_room_version_title">ルームのバージョン</string>
     <plurals name="room_settings_banned_users_count">
-        <item quantity="other">banされたユーザー%d人</item>
+        <item quantity="other">ブロックされたユーザー%d人</item>
     </plurals>
-    <string name="room_settings_room_access_restricted_description">このルームのあるスペースの参加者は誰でも発見し参加できます。ルームをスペースに追加できるのは、ルームの管理者だけです。</string>
+    <string name="room_settings_room_access_restricted_description">このルームのあるスペースのメンバーは誰でも発見し参加できます。ルームをスペースに追加できるのは、ルームの管理者だけです。</string>
     <string name="room_settings_room_access_restricted_title">スペースのメンバーのみ</string>
     <string name="room_settings_room_access_public_description">誰でもルームを発見し参加できます</string>
     <string name="room_settings_room_access_public_title">公開</string>
@@ -1896,7 +1896,7 @@
     <string name="sas_error_m_unknown_transaction">セッションはそのトランザクションについて知りません</string>
     <string name="sas_error_m_timeout">検証プロセスがタイムアウトしました</string>
     <string name="sas_error_m_user">ユーザーが検証をキャンセルしました</string>
-    <string name="space_you_know_that_contains_this_room">このルームを含むスペースを知る</string>
+    <string name="space_you_know_that_contains_this_room">このルームを含む参加済のスペース</string>
     <string name="decide_which_spaces_can_access">このルームにアクセスできるスペースを決定します。スペースが選択されるとそのメンバーはルーム名を見つけて参加できます。</string>
     <string name="sas_cancelled_by_me">検証がキャンセルされました。
 \n理由：%s</string>
@@ -1914,8 +1914,8 @@
     <string name="sas_incoming_verification_request_dialog">検証リクエストを受信しました。</string>
     <string name="sas_decimal_description">相手の画面に次の番号が表示されていることを確認して、このセッションを確認します</string>
     <string name="sas_emoji_description">相手の画面に次の絵文字が表示されることを確認して、このセッションを確認します</string>
-    <string name="sas_incoming_request_description_2">このセッションを検証すると、信頼済みとしてマークされ、自分も相手に信頼済みとしてマークされます。</string>
-    <string name="sas_incoming_request_description">このセッションを検証して、信頼済みとしてマークします。やり取りの前に検証することで、より安全にメッセージすることができます。</string>
+    <string name="sas_incoming_request_description_2">このセッションを検証すると、信頼済としてマークされ、自分も相手に信頼済としてマークされます。</string>
+    <string name="sas_incoming_request_description">このセッションを検証して、信頼済としてマークします。相手のセッションを信頼すると、さらに安心してエンドツーエンド暗号化を使用することができます。</string>
     <string name="sas_incoming_request_title">入力された検証要求</string>
     <string name="sas_verify_start_button_title">検証を開始します</string>
     <string name="sas_security_advise">最大限のセキュリティーを確保するために、これを行うか、別の信頼できる通信手段を用いることをお勧めします。</string>
@@ -1936,12 +1936,12 @@
     <string name="notification_ticker_text_group">%1$s：%2$s %3$s</string>
     <string name="notification_ticker_text_dm">%1$s：%2$s</string>
     <string name="other_spaces_or_rooms_you_might_not_know">あなたが知らないかもしれない他のスペースやルーム</string>
-    <string name="decide_who_can_find_and_join">このルームを見つけて参加できるか決める。</string>
+    <string name="decide_who_can_find_and_join">誰がこのルームを検索し、参加できるか決める。</string>
     <string name="tap_to_edit_spaces">タップしスペースを編集</string>
     <string name="select_spaces">スペースを選択</string>
     <string name="spaces_which_can_access">アクセス可能なスペース</string>
     <string name="allow_space_member_to_find_and_access">スペースのメンバーに発見とアクセスを許可します。</string>
-    <string name="room_create_member_of_space_name_can_join">スペース%sのメンバーが検索、プレビュー、参加できます。</string>
+    <string name="room_create_member_of_space_name_can_join">スペース %s のメンバーが検索、プレビュー、参加できます。</string>
     <string name="room_settings_room_access_private_invite_only_title">非公開（招待のみ）</string>
     <string name="settings_default_media_source">デフォルトのメディアソース</string>
     <string name="settings_default_compression">デフォルトの圧縮</string>
@@ -1971,7 +1971,7 @@
     <string name="use_as_default_and_do_not_ask_again">デフォルトで使いもう尋ねない</string>
     <string name="send_bug_report_include_key_share_history">キー共有リクエストの履歴を送信</string>
     <string name="no_more_results">結果がありません</string>
-    <string name="cannot_call_yourself_with_invite">自分で電話をかけることはできません。参加者が招待を受け入れるのを待ちます</string>
+    <string name="cannot_call_yourself_with_invite">自分で電話をかけることはできません。メンバーが招待を受け入れるのを待ちます</string>
     <string name="audio_video_meeting_description">ミーティングはJitsiのセキュリティーとパーミッションポリシーを使用します。会議中は、現在ルームにいる全ての人に招待状が表示されます。</string>
     <string name="missing_permissions_title">権限がありません</string>
     <string name="denied_permission_voice_message">音声メッセージを送信するには、マイクの権限を許可してください。</string>
@@ -2358,4 +2358,7 @@
     <string name="labs_enable_latex_maths">LaTeXによる数学表記を有効にする</string>
     <string name="room_settings_room_notifications_notify_me">以下が含まれる場合に通知</string>
     <string name="upgrade_room_for_restricted_note">アップグレードすると、このルームの新しいバージョンが作成されます。今ある全てのメッセージは、アーカイブしたルームに残ります。</string>
+    <string name="room_settings_access_rules_pref_dialog_title">誰がアクセスできますか？</string>
+    <string name="room_settings_room_notifications_manage_notifications">通知は%1$sで管理できます。</string>
+    <string name="room_settings_room_notifications_encryption_notice">暗号化されたルームでのメンションとキーワードによる通知は、携帯端末では利用できません。</string>
 </resources>
