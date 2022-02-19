@@ -2416,4 +2416,5 @@
     <string name="room_created_summary_item_by_you">ルームを作成し設定しました。</string>
     <string name="a11y_create_direct_message_by_qr_code">QRコードを読み取り新しいダイレクトメッセージを作成する</string>
     <string name="error_failed_to_import_keys">キーのインポートに失敗しました</string>
+    <string name="a11y_create_direct_message_by_mxid">Matrix IDで新しいダイレクトメッセージを作成する</string>
 </resources>
