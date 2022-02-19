@@ -2412,8 +2412,8 @@
     <string name="encryption_misconfigured">暗号化が正しく設定されていません</string>
     <string name="settings_text_message_sent">%sにテキストメッセージを送信しました。メッセージに含まれた確認コードを入力してください。</string>
     <string name="settings_discovery_no_terms">選択したIDサーバーは利用規約がありません。サービス提供者を信頼しなければ続行しないほうがいいです</string>
-    <string name="settings_discovery_disconnect_with_bound_pid">現在IDさーバー%1$sにメールアドレスや電話番号を共有しています。共有を停止させるためには%2$sに再接続する必要があります。</string>
-    <string name="room_created_summary_item_by_you">部屋を作成し構成しました。</string>
+    <string name="settings_discovery_disconnect_with_bound_pid">現在IDサーバー %1$s でメールアドレスや電話番号を共有しています。共有を停止するには %2$s に再接続する必要があります。</string>
+    <string name="room_created_summary_item_by_you">ルームを作成し設定しました。</string>
     <string name="a11y_create_direct_message_by_qr_code">QRコードを読み取り新しいダイレクトメッセージを作成する</string>
     <string name="error_failed_to_import_keys">キーのインポートに失敗しました</string>
 </resources>
