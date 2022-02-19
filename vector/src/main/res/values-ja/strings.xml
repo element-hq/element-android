@@ -2403,6 +2403,6 @@
     <string name="settings_discovery_consent_notice_off_2">あなたの連絡先はプライベートです。端末の連絡先からユーザーを発見できるように、連絡先の情報をIDサーバーへ送信する許可が必要です。</string>
     <string name="open_discovery_settings">ディスカバリー設定を開く</string>
     <string name="read_at">既読時間</string>
-    <string name="setup_cross_signing">クロスサイニングを有効にする</string>
+    <string name="setup_cross_signing">クロス証明を有効にする</string>
     <string name="add_a_topic_link_text">トピックを追加する</string>
 </resources>
