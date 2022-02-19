@@ -2399,4 +2399,8 @@
     <string name="space_type_private_desc">招待者のみ参加可能。個人やチームに最適</string>
     <string name="activity_create_space_title">スペースを作成</string>
     <string name="invite_people_to_your_space">スペースに招待</string>
+    <string name="settings_discovery_no_terms_title">IDサーバーは利用規約がありません</string>
+    <string name="settings_discovery_consent_notice_off_2">あなたの連絡先はプライベートです。端末の連絡先からユーザーを発見できるように、連絡先の情報をIDサーバーへ送信する許可が必要です。</string>
+    <string name="open_discovery_settings">ディスカバリー設定を開く</string>
+    <string name="read_at">既読時間</string>
 </resources>
