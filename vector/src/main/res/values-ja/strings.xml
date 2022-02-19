@@ -1031,7 +1031,7 @@
     <string name="delete_event_dialog_content">このイベントを削除してよろしいですか？ルーム名やトピックの変更を削除すると、変更が元に戻る点にご注意ください。</string>
     <string name="encryption_enabled">暗号化は有効です</string>
     <string name="encryption_enabled_tile_description">このルーム内でのメッセージはエンドツーエンド暗号化されます。詳細の確認や検証はユーザーのプロフィールをご確認ください。</string>
-    <string name="encryption_not_enabled">暗号化が有効化されていません</string>
+    <string name="encryption_not_enabled">暗号化が有効になっていません</string>
     <string name="settings_notification_configuration">通知設定</string>
     <string name="action_disconnect">切断</string>
     <string name="action_sign_out_confirmation_simple">ログアウトしますか？</string>
@@ -2404,8 +2404,10 @@
     <string name="open_discovery_settings">ディスカバリー設定を開く</string>
     <string name="read_at">既読時間</string>
     <string name="setup_cross_signing">クロス証明を有効にする</string>
-    <string name="add_a_topic_link_text">トピックを追加する</string>
+    <string name="add_a_topic_link_text">トピックを追加</string>
     <string name="room_created_summary_item">%sが部屋を作成し構成しました。</string>
     <string name="direct_room_created_summary_item_by_you">参加しました。</string>
     <string name="direct_room_created_summary_item">%sが参加しました。</string>
+    <string name="encryption_unknown_algorithm_tile_description">このルームで使用されている暗号化はサポートされていません</string>
+    <string name="encryption_misconfigured">暗号化が正しく設定されていません</string>
 </resources>
