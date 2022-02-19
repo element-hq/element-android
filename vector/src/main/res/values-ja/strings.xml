@@ -2505,4 +2505,11 @@
     <string name="command_snow">メッセージを降雪と共に送る</string>
     <string name="default_message_emote_confetti">紙吹雪🎉を送る</string>
     <string name="default_message_emote_snow">降雪❄️を送る</string>
+    <string name="ftue_auth_carousel_title_messaging">あなたのチームのメッセージングに。</string>
+    <string name="ftue_auth_carousel_body_encrypted">エンドツーエンド暗号化され、電話番号不要。広告やデータマイニング無し。</string>
+    <string name="ftue_auth_carousel_body_control">会話の保存先を自分で決められ、自分で管理できる独立したコミュニケーション。Matrixを基に。</string>
+    <string name="ftue_auth_carousel_body_secure">お宅での対面会話と同じぐらいのプライバシーを提供する、セキュアで独立したコミュニケーション。</string>
+    <string name="ftue_auth_carousel_4_title">チームワークを効率よくしましょう。</string>
+    <string name="ftue_auth_carousel_3_title">セキュアメッセージング</string>
+    <string name="ftue_auth_carousel_2_title">管理権を握るのはあなたです。</string>
 </resources>
