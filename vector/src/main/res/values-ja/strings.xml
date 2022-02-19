@@ -2316,7 +2316,7 @@
     <string name="analytics_opt_in_list_item_2">私たちは情報を第三者と共有することは<b>ありません</b></string>
     <string name="analytics_opt_in_list_item_1">私たちはアカウントのデータを記録したり分析したりすることは<b>ありません</b></string>
     <string name="analytics_opt_in_title">Elementの改善を手伝う</string>
-    <string name="room_join_rules_public_by_you">リンクを知っている人を対象に、このルームを公開しました。</string>
+    <string name="room_join_rules_public_by_you">リンクを知っている人がアクセスできるようにこのルームを設定しました。</string>
     <string name="no_ignored_users">どのユーザーも無視していません</string>
     <string name="reaction_search_type_hint">キーワードを入力するとリアクションを検索できます。</string>
     <string name="notice_member_no_changes_by_you">変更を加えませんでした</string>
@@ -2366,8 +2366,8 @@
     <string name="room_settings_space_access_public_description">誰でもこのスペースを発見し参加できます</string>
     <string name="preference_root_legals">法的情報</string>
     <string name="command_description_whois">ユーザーに関する情報を表示します</string>
-    <string name="command_description_avatar_for_room">この部屋においてのみアバターを変更します</string>
-    <string name="command_description_nick_for_room">この部屋においてのみ表示名を変更します</string>
+    <string name="command_description_avatar_for_room">このルームにおいてのみアバターを変更します</string>
+    <string name="command_description_nick_for_room">このルームにおいてのみ表示名を変更します</string>
     <string name="command_description_unignore_user">ユーザーの無視を解除し、これからのメッセージを表示します</string>
     <string name="bootstrap_enter_recovery">続行するには%sを入力してください</string>
     <string name="backup_recovery_passphrase">リカバリーパスフレーズ</string>
@@ -2487,12 +2487,22 @@
     <string name="settings_server_upload_size_unknown">制限は不明です。</string>
     <string name="settings_server_upload_size_title">サーバーのファイルアップロードの制限</string>
     <string name="ftue_auth_carousel_1_title">自分の会話は自分のものにしましょう。</string>
-    <string name="room_join_rules_invite">%1$sが部屋を招待されたユーザーにのみアクセスできるように設定しました。</string>
+    <string name="room_join_rules_invite">%1$sは、このルームを招待者のみ参加可能に設定しました。</string>
     <string name="room_join_rules_public">%1$sが部屋をリンクを持っているユーザーにアクセスできるように設定しました。</string>
     <string name="command_description_spoiler">選択したメッセージをネタバレとして送信</string>
     <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} がE2E暗号鍵をディスクに保存する許可を要求しています。
 \n
 \n暗号鍵を手動でエクスポートできるように、次のポップアップでアクセスを許可してください。</string>
-    <string name="room_join_rules_public">%1$sがルームをリンクを持っているユーザーにアクセスできるように設定しました。</string>
+    <string name="room_join_rules_public">%1$sはリンクを知っている人がアクセスできるようにこのルームを設定しました。</string>
     <string name="identity_server_error_terms_not_signed">まず、設定でIDサーバーの条件に同意してください。</string>
+    <string name="identity_server_error_no_identity_server_configured">初めにIDサーバーを設定してください。</string>
+    <plurals name="poll_total_vote_count_before_ended_and_not_voted">
+        <item quantity="other">%1$d個の投票があります。結果を見るには投票してください</item>
+    </plurals>
+    <string name="mark_as_verified">信頼済としてマーク</string>
+    <string name="encrypted_unverified">未検証の端末で暗号化</string>
+    <string name="command_confetti">メッセージを紙吹雪と共に送る</string>
+    <string name="command_snow">メッセージを降雪と共に送る</string>
+    <string name="default_message_emote_confetti">紙吹雪🎉を送る</string>
+    <string name="default_message_emote_snow">降雪❄️を送る</string>
 </resources>
