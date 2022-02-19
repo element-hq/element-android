@@ -2358,7 +2358,7 @@
     <string name="labs_enable_latex_maths">LaTeXによる数学表記を有効にする</string>
     <string name="room_settings_room_notifications_notify_me">以下が含まれる場合に通知</string>
     <string name="upgrade_room_for_restricted_note">アップグレードすると、このルームの新しいバージョンが作成されます。今ある全てのメッセージは、アーカイブしたルームに残ります。</string>
-    <string name="room_settings_access_rules_pref_dialog_title">誰にアクセスさせますか？</string>
+    <string name="room_settings_access_rules_pref_dialog_title">誰がアクセスできますか？</string>
     <string name="room_settings_room_notifications_manage_notifications">通知は%1$sで管理できます。</string>
     <string name="room_settings_room_notifications_encryption_notice">暗号化されたルームでのメンションとキーワードによる通知は、携帯端末では利用できません。</string>
     <string name="command_description_ignore_user">ユーザーを無視し、そのメッセージを非表示にします</string>
@@ -2372,4 +2372,12 @@
     <string name="bootstrap_enter_recovery">続行するには%sを入力してください</string>
     <string name="backup_recovery_passphrase">リカバリーパスフレーズ</string>
     <string name="bootstrap_invalid_recovery_key">有効なリカバリーキーではありません</string>
+    <string name="recovery_key_empty_error_message">リカバリーキーを入力してください</string>
+    <string name="poll_type_title">投票の種類</string>
+    <string name="open_poll_option_title">実施中の投票</string>
+    <string name="poll_response_room_list_preview">投票する</string>
+    <string name="open_poll_option_description">投票した人には、投票の際に即座に結果が表示されます</string>
+    <string name="closed_poll_option_title">終了した投票</string>
+    <string name="closed_poll_option_description">結果は投票を終了した後でのみ明らかにされます</string>
+    <string name="location_share_external">以下で開く</string>
 </resources>
