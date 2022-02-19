@@ -2493,4 +2493,5 @@
     <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} がE2E暗号鍵をディスクに保存する許可を要求しています。
 \n
 \n暗号鍵を手動でエクスポートできるように、次のポップアップでアクセスを許可してください。</string>
+    <string name="room_join_rules_public">%1$sがルームをリンクを持っているユーザーにアクセスできるように設定しました。</string>
 </resources>
