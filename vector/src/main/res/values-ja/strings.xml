@@ -2429,4 +2429,15 @@
     <string name="delete_poll_dialog_content">この投票を削除してよろしいですか？一度削除すると復元することはできません。</string>
     <string name="error_handling_incoming_share">共有データをの取扱に失敗しました</string>
     <string name="rotate_and_crop_screen_title">回転とクロップ</string>
+    <string name="space_explore_activity_title">ルームを探す</string>
+    <string name="space_add_existing_rooms">既存のルームとスペースを追加</string>
+    <string name="labs_enable_thread_messages">スレッドのメッセージを有効にする</string>
+    <string name="space_mark_as_suggested">おすすめに追加</string>
+    <string name="space_mark_as_not_suggested">おすすめから除外</string>
+    <string name="space_manage_rooms_and_spaces">ルームとスペースを管理</string>
+    <string name="preference_show_all_rooms_in_home">ホームに全てのルームを表示</string>
+    <string name="space_suggested">おすすめ</string>
+    <string name="spaces_feeling_experimental_subspace">実験したい気分ですか？
+\n既存のスペースを別のスペースに追加できます。</string>
+    <string name="spaces_no_server_support_title">あなたのホームサーバーはまだスペースをサポートしていないようです</string>
 </resources>
