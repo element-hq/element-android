@@ -2410,4 +2410,6 @@
     <string name="direct_room_created_summary_item">%sが参加しました。</string>
     <string name="encryption_unknown_algorithm_tile_description">このルームで使用されている暗号化はサポートされていません</string>
     <string name="encryption_misconfigured">暗号化が正しく設定されていません</string>
+    <string name="settings_text_message_sent">%sにテキストメッセージを送信しました。メッセージに含まれた確認コードを入力してください。</string>
+    <string name="settings_discovery_no_terms">選択したIDサーバーは利用規約がありません。サービス提供者を信頼しなければ続行しないほうがいいです</string>
 </resources>
