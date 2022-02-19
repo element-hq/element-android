@@ -2427,7 +2427,7 @@
     <string name="a11y_delete_recorded_voice_message">録音を削除</string>
     <string name="error_voice_message_cannot_reply_or_edit">音声メッセージがアクティブの間は返信や編集はできません</string>
     <string name="delete_poll_dialog_content">この投票を削除してよろしいですか？一度削除すると復元することはできません。</string>
-    <string name="error_handling_incoming_share">共有データをの取扱に失敗しました</string>
+    <string name="error_handling_incoming_share">共有データの取り扱いに失敗しました</string>
     <string name="rotate_and_crop_screen_title">回転とクロップ</string>
     <string name="space_explore_activity_title">ルームを探す</string>
     <string name="space_add_existing_rooms">既存のルームとスペースを追加</string>
@@ -2451,4 +2451,12 @@
 \n
 \nこのユーザーのコンテンツをこれ以上見たくなければ、ユーザーを無視してそのメッセージを非表示にできます。</string>
     <string name="uploads_files_subtitle">%1$s%2$s</string>
+    <string name="create_poll_question_hint">質問あるいはトピック</string>
+    <string name="create_poll_question_title">投票の質問あるいはトピック</string>
+    <string name="help_space_members">スペースのメンバーが非公開のルームを発見できるよう手伝う</string>
+    <string name="it_may_take_some_time">少々お待ちください。少し時間がかかるかもしれません。</string>
+    <string name="settings_server_room_versions">ルームのバージョン 👓</string>
+    <string name="settings_server_room_version_unstable">不安定</string>
+    <string name="settings_server_room_version_stable">安定</string>
+    <string name="spoiler">スポイラー</string>
 </resources>
