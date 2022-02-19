@@ -2380,4 +2380,5 @@
     <string name="closed_poll_option_title">終了した投票</string>
     <string name="closed_poll_option_description">結果は投票を終了した後でのみ明らかにされます</string>
     <string name="location_share_external">以下で開く</string>
+    <string name="upgrade_security">暗号化のアップグレードが利用できます</string>
 </resources>
