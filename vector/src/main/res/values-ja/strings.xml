@@ -362,7 +362,7 @@
     <string name="bottom_action_home">ホーム</string>
     <string name="no_conversation_placeholder">会話なし</string>
     <string name="template_no_contact_access_placeholder">端末の電話帳を${app_name}アプリが読み取ることは許可されていません</string>
-    <string name="no_result_placeholder">結果なし</string>
+    <string name="no_result_placeholder">結果がありません</string>
     <string name="rooms_header">ルーム</string>
     <string name="rooms_directory_header">ルームディレクトリ</string>
     <string name="user_directory_header">ユーザーディレクトリ</string>
@@ -2414,11 +2414,17 @@
     <string name="settings_discovery_no_terms">選択したIDサーバーは利用規約がありません。サービス提供者を信頼しなければ続行しないほうがいいです</string>
     <string name="settings_discovery_disconnect_with_bound_pid">現在IDサーバー %1$s でメールアドレスや電話番号を共有しています。共有を停止するには %2$s に再接続する必要があります。</string>
     <string name="room_created_summary_item_by_you">ルームを作成し設定しました。</string>
-    <string name="a11y_create_direct_message_by_qr_code">QRコードを読み取り新しいダイレクトメッセージを作成する</string>
+    <string name="a11y_create_direct_message_by_qr_code">QRコードを読み取り、新しいダイレクトメッセージを作成</string>
     <string name="error_failed_to_import_keys">キーのインポートに失敗しました</string>
     <string name="a11y_create_direct_message_by_mxid">Matrix IDで新しいダイレクトメッセージを作成する</string>
     <string name="a11y_create_direct_message">新しいダイレクトメッセージを作成</string>
     <string name="a11y_create_menu_close">部屋作成メニューを閉じる…</string>
     <string name="a11y_create_menu_open">部屋作成メニューを開く</string>
     <string name="error_network_timeout">サーバーの応答に時間がかかりすぎています。おそらく接続が遅すぎるからか、サーバー側でエラーが発生しているからです。後で再試行してください。</string>
+    <string name="upgrade_public_room_from_to">このルームを%1$sから%2$sにアップグレードします。</string>
+    <string name="voice_message_slide_to_cancel">スライドしてキャンセル</string>
+    <string name="a11y_recording_voice_message">音声メッセージを録音しています</string>
+    <string name="a11y_delete_recorded_voice_message">録音を削除</string>
+    <string name="error_voice_message_cannot_reply_or_edit">音声メッセージがアクティブの間は返信や編集はできません</string>
+    <string name="delete_poll_dialog_content">この投票を削除してよろしいですか？一度削除すると復元することはできません。</string>
 </resources>
