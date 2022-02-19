@@ -122,10 +122,10 @@
     <string name="send_bug_report_description">不具合の内容と状況の説明をお願いします。何をしましたか？何が起こるべきでしたか？実際に起こった事象は何でしょうか？</string>
     <string name="send_bug_report_placeholder">ここに不具合の内容を記述</string>
     <string name="send_bug_report_include_screenshot">スクリーンショットの画像を送信</string>
-    <string name="send_bug_report_include_crash_logs">クラッシュ時の動作記録を送信</string>
-    <string name="send_bug_report_include_logs">動作記録を送信</string>
-    <string name="send_bug_report_logs_description">開発者が問題を診断するために、このクライアントの動作記録が不具合報告と一緒に送信されます。不具合報告は、動作記録とスクリーンショットを含めて、公開されることはありません。上記の説明文だけを送信したい場合は、以下のチェックを解除してください。</string>
-    <string name="send_bug_report_alert_message">あなたは不満で端末を振っているようです。不具合報告の画面を開きますか？</string>
+    <string name="send_bug_report_include_crash_logs">クラッシュ時のログを送信</string>
+    <string name="send_bug_report_include_logs">ログを送信</string>
+    <string name="send_bug_report_logs_description">開発者が問題を診断するために、このクライアントのログがバグレポートと一緒に送信されます。バグレポートは、ログとスクリーンショットを含めて、公開されることはありません。上記の説明文だけを送信したい場合は、以下のチェックを解除してください。</string>
+    <string name="send_bug_report_alert_message">あなたは不満で端末を振っているようです。バグレポートの画面を開きますか？</string>
     <string name="send_bug_report_app_crashed">前回アプリケーションは正常に停止しませんでした。クラッシュ報告の画面を開きますか？</string>
     <string name="send_bug_report_sent">不具合を報告しました</string>
     <string name="send_bug_report_failed">不具合の報告の送信に失敗しました (%s)</string>
@@ -1193,9 +1193,9 @@
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">カスタムルールの読み込みに失敗しました。再試行してください。</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">一部の通知はカスタム設定で無効になっています。</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">一部のメッセージがサイレントに設定されていることに注意してください（音を出さずに通知します）。</string>
-    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">1つ以上のテストが失敗しました。調査用の不具合報告を送信してください。</string>
+    <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">1つ以上のテストが失敗しました。調査用のバグレポートを送信してください。</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_with_quickfix">1つ以上のテストが失敗しました。提案された修正を試してください。</string>
-    <string name="settings_troubleshoot_diagnostic_success_status">基本的な診断はOKです。 それでも通知が届かない場合は、調査用の不具合報告を送信してください。</string>
+    <string name="settings_troubleshoot_diagnostic_success_status">基本的な診断はOKです。 それでも通知が届かない場合は、調査用のバグレポートを送信してください。</string>
     <string name="settings_troubleshoot_diagnostic_running_status">実行しています…（%1$dの%2$d）</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">テストを実行</string>
     <string name="settings_troubleshoot_diagnostic">診断トラブルシューティング</string>
@@ -1536,7 +1536,7 @@
     <string name="keys_backup_setup_step3_share_recovery_file">共有</string>
     <string name="keys_backup_setup_step3_button_title">完了</string>
     <string name="keys_backup_setup_step3_success_title">成功！</string>
-    <string name="keys_backup_setup_creating_backup">バックアップを作成中</string>
+    <string name="keys_backup_setup_creating_backup">バックアップを作成しています</string>
     <string name="keys_backup_setup_step2_button_title">パスフレーズを設定</string>
     <string name="keys_backup_setup_step1_manual_export">手動でキーをエクスポート</string>
     <string name="keys_backup_setup">キーバックアップを使って開始</string>
@@ -1659,7 +1659,7 @@
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">リカバリーキーはパスワードマネージャー（もしくは金庫）のような、非常に安全な場所で保管してください</string>
     <string name="keys_backup_setup_step3_text_line2">リカバリーキーはセーフティーネットとなります。パスフレーズを忘れた場合でも、リカバリーキーを使えば、暗号化されたメッセージにアクセスすることができます。
 \nリカバリーキーは、パスワードマネージャー（もしくは金庫）のような、非常に安全な場所で保管してください。</string>
-    <string name="keys_backup_setup_step3_text_line1">暗号鍵がバックアップ中です。</string>
+    <string name="keys_backup_setup_step3_text_line1">暗号鍵をバックアップしています。</string>
     <string name="keys_backup_setup_step2_skip_button_title">（高度）リカバリーキーを使用して設定</string>
     <string name="keys_backup_setup_step1_recovery_key_alternative">または、リカバリーキーでバックアップを保護し、安全な場所に保存してください。</string>
     <string name="keys_backup_setup_step2_text_description">暗号鍵のコピーを暗号化してホームサーバーに保存します。バックアップを保護するためにパスフレーズを設定してください。
@@ -2411,7 +2411,7 @@
     <string name="encryption_unknown_algorithm_tile_description">このルームで使用されている暗号化はサポートされていません</string>
     <string name="encryption_misconfigured">暗号化が正しく設定されていません</string>
     <string name="settings_text_message_sent">%sにテキストメッセージを送信しました。メッセージに含まれた確認コードを入力してください。</string>
-    <string name="settings_discovery_no_terms">選択したIDサーバーは利用規約がありません。サービス提供者を信頼しなければ続行しないほうがいいです</string>
+    <string name="settings_discovery_no_terms">選択したIDサーバーには利用規約がありません。サービス提供者を信頼している場合にのみ続行してください</string>
     <string name="settings_discovery_disconnect_with_bound_pid">現在IDサーバー %1$s でメールアドレスや電話番号を共有しています。共有を停止するには %2$s に再接続する必要があります。</string>
     <string name="room_created_summary_item_by_you">ルームを作成し設定しました。</string>
     <string name="a11y_create_direct_message_by_qr_code">QRコードを読み取り、新しいダイレクトメッセージを作成</string>
@@ -2514,4 +2514,7 @@
     <string name="ftue_auth_carousel_2_title">管理権を握るのはあなたです。</string>
     <string name="preference_help_summary">Elementの使用に関するヘルプ</string>
     <string name="labs_allow_extended_logging_summary">詳細なログはRageShakeのときにもっと詳しいログを提供し開発者を助けてくれます。有効にした場合でも、メッセージの内容などのプライベートな情報は記録されません。</string>
+    <string name="upgrade_room_warning">ルームのアップグレードは高度な作業であり、不具合や不足する機能、セキュリティー上の脆弱性がある場合に推奨されます。
+\nアップグレードは普通、ルームがサーバー上で処理される仕方にだけ影響します。</string>
+    <string name="room_settings_enable_encryption_dialog_content">一度有効にしたルームの暗号化は無効にすることはできません。暗号化されたルームで送信されたメッセージは、サーバーからは見ることができず、そのルームのメンバーだけが見ることができます。暗号化を有効にすると、多くのボットやブリッジが正常に動作しなくなる場合があります。</string>
 </resources>
