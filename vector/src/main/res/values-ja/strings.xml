@@ -2369,4 +2369,7 @@
     <string name="command_description_avatar_for_room">この部屋においてのみアバターを変更します</string>
     <string name="command_description_nick_for_room">この部屋においてのみ表示名を変更します</string>
     <string name="command_description_unignore_user">ユーザーの無視を解除し、これからのメッセージを表示します</string>
+    <string name="bootstrap_enter_recovery">続行するには%sを入力してください</string>
+    <string name="backup_recovery_passphrase">リカバリーパスフレーズ</string>
+    <string name="bootstrap_invalid_recovery_key">有効なリカバリーキーではありません</string>
 </resources>
