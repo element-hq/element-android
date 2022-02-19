@@ -2358,7 +2358,10 @@
     <string name="labs_enable_latex_maths">LaTeXによる数学表記を有効にする</string>
     <string name="room_settings_room_notifications_notify_me">以下が含まれる場合に通知</string>
     <string name="upgrade_room_for_restricted_note">アップグレードすると、このルームの新しいバージョンが作成されます。今ある全てのメッセージは、アーカイブしたルームに残ります。</string>
-    <string name="room_settings_access_rules_pref_dialog_title">誰がアクセスできますか？</string>
+    <string name="room_settings_access_rules_pref_dialog_title">誰にアクセスさせますか？</string>
     <string name="room_settings_room_notifications_manage_notifications">通知は%1$sで管理できます。</string>
     <string name="room_settings_room_notifications_encryption_notice">暗号化されたルームでのメンションとキーワードによる通知は、携帯端末では利用できません。</string>
+    <string name="command_description_ignore_user">ユーザーを無視し、そのメッセージを非表示にします</string>
+    <string name="command_not_supported_in_threads">%sとのコマンドは認識されていますが、スレッドではサポートされていません。</string>
+    <string name="room_settings_space_access_public_description">誰でもこのスペースを発見し参加できます</string>
 </resources>
