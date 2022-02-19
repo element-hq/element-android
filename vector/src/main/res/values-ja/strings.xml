@@ -2416,7 +2416,7 @@
     <string name="room_created_summary_item_by_you">ルームを作成し設定しました。</string>
     <string name="a11y_create_direct_message_by_qr_code">QRコードを読み取り、新しいダイレクトメッセージを作成</string>
     <string name="error_failed_to_import_keys">キーのインポートに失敗しました</string>
-    <string name="a11y_create_direct_message_by_mxid">Matrix IDで新しいダイレクトメッセージを作成する</string>
+    <string name="a11y_create_direct_message_by_mxid">Matrix IDで新しいダイレクトメッセージを作成</string>
     <string name="a11y_create_direct_message">新しいダイレクトメッセージを作成</string>
     <string name="a11y_create_menu_close">部屋作成メニューを閉じる…</string>
     <string name="a11y_create_menu_open">部屋作成メニューを開く</string>
@@ -2427,4 +2427,6 @@
     <string name="a11y_delete_recorded_voice_message">録音を削除</string>
     <string name="error_voice_message_cannot_reply_or_edit">音声メッセージがアクティブの間は返信や編集はできません</string>
     <string name="delete_poll_dialog_content">この投票を削除してよろしいですか？一度削除すると復元することはできません。</string>
+    <string name="error_handling_incoming_share">共有データをの取扱に失敗しました</string>
+    <string name="rotate_and_crop_screen_title">回転とクロップ</string>
 </resources>
