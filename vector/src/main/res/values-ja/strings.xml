@@ -2440,4 +2440,5 @@
     <string name="spaces_feeling_experimental_subspace">実験したい気分ですか？
 \n既存のスペースを別のスペースに追加できます。</string>
     <string name="spaces_no_server_support_title">あなたのホームサーバーはまだスペースをサポートしていないようです</string>
+    <string name="attachment_type_dialog_title">画像を追加</string>
 </resources>
