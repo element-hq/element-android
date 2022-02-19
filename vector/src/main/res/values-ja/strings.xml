@@ -142,9 +142,9 @@
     <string name="auth_phone_number_placeholder">電話番号</string>
     <string name="auth_opt_phone_number_placeholder">電話番号 (任意で)</string>
     <string name="auth_invalid_login_param">ユーザー名かパスワードが正しくありません</string>
-    <string name="auth_invalid_user_name">ユーザー名は半角英数字、ドット、ハイフン、アンダスコアのみで記して下さい</string>
+    <string name="auth_invalid_user_name">ユーザー名は半角英数字、ドット、ハイフン、アンダースコアのみで記して下さい</string>
     <string name="auth_invalid_password">パスワードが短すぎます(最小6文字)</string>
-    <string name="auth_invalid_email">正しくない電子メールアドレスのようです</string>
+    <string name="auth_invalid_email">正しくないメールアドレスのようです</string>
     <string name="auth_invalid_phone">正しくない電話番号のようです</string>
     <string name="auth_email_already_defined">既に登録されている電子メールアドレスです。</string>
     <string name="auth_password_dont_match">パスワードが一致しません</string>
@@ -385,7 +385,7 @@
     <string name="auth_missing_email">メールアドレスがありません</string>
     <string name="auth_missing_phone">電話番号が入力されていません</string>
     <string name="auth_missing_email_or_phone">電子メールアドレスまたは電話番号が入力されていません</string>
-    <string name="auth_use_server_options">接続先サーバーを指定する(追加設定)</string>
+    <string name="auth_use_server_options">接続先サーバーを指定（高度）</string>
     <string name="auth_invalid_token">不正なトークン</string>
     <string name="auth_threepid_warning_message">メールと電話番号の同時登録はまだシステムが対応できませんが、電話番号だけの登録は可能です。
 \n
@@ -581,7 +581,7 @@
     <string name="ssl_unexpected_existing_expl">証明書はあなたの電話に信頼されていたものから変更されています。これはきわめて異常な事態です。この新しい証明書は承認しないことを強く推奨します。</string>
     <string name="ssl_expected_existing_expl">証明書は以前信頼されていたものから信頼されていないものへと変更されています。サーバーがその証明書を更新した可能性があります。予測されるフィンガープリントを取得するために、サーバーの管理者に連絡してください。</string>
     <string name="ssl_only_accept">サーバーの管理者が上のフィンガープリントと一致するものを発行した場合に限り、証明書を承認してください。</string>
-    <string name="malformed_id">不正な形式のIDです。メールアドレスまたは\'@localpart:domain\'のようなMatrix IDを入力してください</string>
+    <string name="malformed_id">不正な形式のIDです。メールアドレスまたは\'@localpart:domain\'という形式のMatrix IDを入力してください</string>
     <string name="room_event_action_report_prompt_reason">このコンテンツを報告する理由</string>
     <string name="room_event_action_report_prompt_ignore_user">このユーザーによる全てのメッセージを非表示にしますか？
 \n
@@ -978,7 +978,7 @@
     <string name="devices_current_device">現在のセッション</string>
     <string name="devices_other_devices">その他のセッション</string>
     <string name="create_room_encryption_title">暗号化を有効にする</string>
-    <string name="create_room_encryption_description">有効にすると、あとで無効にすることはできません。</string>
+    <string name="create_room_encryption_description">いったん有効にすると、暗号化を無効にすることはできません。</string>
     <string name="room_profile_section_security">セキュリティー</string>
     <string name="room_profile_section_security_learn_more">詳細</string>
     <string name="room_profile_section_more">その他の設定</string>
@@ -1063,7 +1063,7 @@
     <string name="report_content_spam">スパムメッセージです</string>
     <string name="report_content_inappropriate">不適切なメッセージです</string>
     <string name="report_content_custom">その他の報告…</string>
-    <string name="report_content_custom_title">コンテンツの報告</string>
+    <string name="report_content_custom_title">コンテンツを報告</string>
     <string name="report_content_custom_hint">このコンテンツを報告する理由</string>
     <string name="report_content_custom_submit">報告</string>
     <string name="block_user">ユーザーを無視</string>
@@ -1581,7 +1581,7 @@
     <string name="invite_to_space_with_name">%sに招待</string>
     <string name="invite_by_email">Eメールで招待</string>
     <string name="create_space_topic_hint">詳細</string>
-    <string name="invite_people_menu">人を招待</string>
+    <string name="invite_people_menu">連絡先を招待</string>
     <string name="join_anyway">とにかく参加</string>
     <string name="space_add_child_title">ルームを追加</string>
     <string name="user_invites_you">%sはあなたを招待しています</string>
@@ -1861,7 +1861,7 @@
     <string name="room_preview_no_preview">このルームはプレビューできません</string>
     <string name="please_wait">お待ち下さい…</string>
     <string name="error_no_network">ネットワークがありません。インターネット接続を確認してください。</string>
-    <string name="malformed_message">不正な形式のイベント、表示できません</string>
+    <string name="malformed_message">不正な形式のイベントです。表示できません</string>
     <string name="last_edited_info_message">%2$sに%1$sによって最後に編集されました</string>
     <string name="event_redacted_by_admin_reason">ルーム管理者によってモデレートされたイベント</string>
     <string name="reactions">リアクション</string>
@@ -2398,7 +2398,7 @@
     <string name="end_poll_confirmation_description">投票を締め切り、投票の最終結果を表示します。</string>
     <string name="space_type_private_desc">招待者のみ参加可能。個人やチームに最適</string>
     <string name="activity_create_space_title">スペースを作成</string>
-    <string name="invite_people_to_your_space">スペースに招待</string>
+    <string name="invite_people_to_your_space">連絡先をスペースに招待</string>
     <string name="settings_discovery_no_terms_title">IDサーバーは利用規約がありません</string>
     <string name="settings_discovery_consent_notice_off_2">あなたの連絡先はプライベートです。端末の連絡先からユーザーを発見できるように、連絡先の情報をIDサーバーへ送信する許可が必要です。</string>
     <string name="open_discovery_settings">ディスカバリー設定を開く</string>
@@ -2506,16 +2506,77 @@
     <string name="default_message_emote_confetti">紙吹雪🎉を送る</string>
     <string name="default_message_emote_snow">降雪❄️を送る</string>
     <string name="ftue_auth_carousel_title_messaging">あなたのチームのメッセージングに。</string>
-    <string name="ftue_auth_carousel_body_encrypted">エンドツーエンド暗号化され、電話番号不要。広告やデータマイニング無し。</string>
+    <string name="ftue_auth_carousel_body_encrypted">エンドツーエンドで暗号化され、電話番号不要。広告やデータマイニング無し。</string>
     <string name="ftue_auth_carousel_body_control">会話の保存先を自分で決められ、自分で管理できる独立したコミュニケーション。Matrixを基に。</string>
     <string name="ftue_auth_carousel_body_secure">お宅での対面会話と同じぐらいのプライバシーを提供する、セキュアで独立したコミュニケーション。</string>
     <string name="ftue_auth_carousel_4_title">チームワークを効率よくしましょう。</string>
     <string name="ftue_auth_carousel_3_title">セキュアメッセージング</string>
     <string name="ftue_auth_carousel_2_title">管理権を握るのはあなたです。</string>
     <string name="preference_help_summary">Elementの使用に関するヘルプ</string>
-    <string name="labs_allow_extended_logging_summary">詳細なログはRageShakeのときにもっと詳しいログを提供し開発者を助けてくれます。有効にした場合でも、メッセージの内容などのプライベートな情報は記録されません。</string>
+    <string name="labs_allow_extended_logging_summary">詳細なログは、イライラシェイクでログを送信する際に、より多くのログを提供することで、開発者にとっての助けになります。有効にした場合でも、メッセージの内容やその他のプライベートな情報は記録されません。</string>
     <string name="upgrade_room_warning">ルームのアップグレードは高度な作業であり、不具合や不足する機能、セキュリティー上の脆弱性がある場合に推奨されます。
 \nアップグレードは普通、ルームがサーバー上で処理される仕方にだけ影響します。</string>
     <string name="room_settings_enable_encryption_dialog_content">一度有効にしたルームの暗号化は無効にすることはできません。暗号化されたルームで送信されたメッセージは、サーバーからは見ることができず、そのルームのメンバーだけが見ることができます。暗号化を有効にすると、多くのボットやブリッジが正常に動作しなくなる場合があります。</string>
     <string name="room_created_summary_no_topic_creation_text">%sでこの部屋について人々に知らせます。</string>
+    <string name="user_code_info_text">このコードを連絡先と共有し、スキャンして追加してもらい、会話を始めましょう。</string>
+    <string name="create_spaces_make_sure_access">正当な参加者が%sにアクセスできることを確認してください。これは後から変更できます。</string>
+    <string name="new_let_people_in_spaces_find_and_join">新規：スペースの参加者が非公開のルームを検索し、参加できるようになりました</string>
+    <string name="add_people">参加者を追加</string>
+    <string name="create_spaces_type_header">スペースは、ルームや連絡先をグループ化する新しい方法です</string>
+    <plurals name="space_people_you_know">
+        <item quantity="other">%d人の連絡先がすでに参加しています</item>
+    </plurals>
+    <string name="invite_to_space">%sに招待</string>
+    <string name="invite_by_username_or_mail">ユーザー名かメールアドレスで招待</string>
+    <string name="dont_leave_any">どのルームやスペースからも退出しない</string>
+    <string name="pick_tings_to_leave">退出するルームとスペースを選択</string>
+    <string name="you_will_leave_all_in">%sにある全てのルームとスペースから退出しようとしています。</string>
+    <string name="suggested_rooms_pills_on_empty_header">%1$sにようこそ、%2$sさん。</string>
+    <string name="space_leave_prompt_msg_with_name">%sを退出してよろしいですか？</string>
+    <string name="spaces_beta_welcome_to_spaces_desc">スペースは、ルームや連絡先をグループ化する新しい方法です。</string>
+    <string name="you_are_invited">招待されています</string>
+    <string name="space_add_space_to_any_space_you_manage">新しいスペースを、あなたが管理するスペースに追加。</string>
+    <string name="labs_enable_thread_messages_desc">注意：アプリケーションは再起動します</string>
+    <string name="spaces_no_server_support_description">ホームサーバーの管理者にお問い合わせください</string>
+    <string name="all_rooms_youre_in_will_be_shown_in_home">あなたが参加している全てのルームがホームに表示されます。</string>
+    <string name="upgrade_room_update_parent_space">親のスペースを自動的に更新</string>
+    <string name="voice_message_n_seconds_warning_toast">残り%1$d秒</string>
+    <string name="upgrade_room_for_restricted">%sに属する人は、誰でもこのルームを検索し、参加することができます。手動で全員を招待する必要はありません。これはルームの設定からいつでも変更できます。</string>
+    <string name="upgrade_room_for_restricted_no_param">親のスペースに属する人は、誰でもこのルームを検索し、参加することができます。手動で全員を招待する必要はありません。これはルームの設定からいつでも変更できます。</string>
+    <plurals name="poll_total_vote_count_before_ended_and_voted">
+        <item quantity="other">%1$d個の投票に基づく</item>
+    </plurals>
+    <plurals name="poll_total_vote_count_after_ended">
+        <item quantity="other">%1$d個の投票に基づく最終結果</item>
+    </plurals>
+    <string name="room_list_sharing_header_recent_rooms">最近のルーム</string>
+    <string name="verification_conclusion_ok_self_notice">新しいセッションが認証されました。セッションは暗号化されたメッセージにアクセスでき、他のユーザーには信頼済として表示されます。</string>
+    <string name="room_settings_enable_encryption_warning">いったん有効にすると、暗号化を無効にすることはできません。</string>
+    <string name="create_room_disable_federation_description">このルームを、あなたのホームサーバーで、組織内のチームとのコラボレーションにのみ使用するなら、このオプションを有効にするといいかもしれません。これは後から変更できません。</string>
+    <string name="create_room_disable_federation_title">%sに属していない人がこのルームに今後参加するのを防ぐ</string>
+    <string name="command_description_lenny">プレーンテキストメッセージの前に ( ͡° ͜ʖ ͡°) を付ける</string>
+    <string name="login_error_threepid_denied">このメールアドレスのドメインの登録は許可されていません</string>
+    <string name="create_space_in_progress">スペースを作成しています…</string>
+    <string name="create_room_in_progress">ルームを作成しています…</string>
+    <string name="hide_advanced">高度な設定を表示しない</string>
+    <string name="show_advanced">高度な設定を表示</string>
+    <string name="command_description_shrug">プレーンテキストメッセージの前に ¯\\_(ツ)_/¯ を付ける</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">アプリケーションのデバッグを手伝うのに役立つ情報を表示</string>
+    <string name="settings_developer_mode_show_info_on_screen_title">デバッグ用の情報を画面に表示</string>
+    <string name="notification_initial_sync">初期同期を行っています…</string>
+    <string name="bug_report_error_too_short">説明文が短すぎます</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">サインインして暗号化の鍵を復元しない限り、暗号化されたメッセージにアクセスすることはできなくなります。</string>
+    <string name="signed_out_submit">再サインイン</string>
+    <string name="autodiscover_well_known_error">正しいホームサーバーを発見できません。識別子を確認してください</string>
+    <string name="login_signin_matrix_id_notice">ホームサーバーでアカウントを設定したら、以下でMatrix ID（例：@user:domain.com）とパスワードを使用してください。</string>
+    <string name="login_validation_code_is_not_correct">入力したコードは正しくありません。確認してください。</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">これは正しいユーザー識別子ではありません。期待されるフォーマットは「@user:homeserver.org」となります。</string>
+    <string name="login_signin_matrix_id_password_notice">パスワードが分からなければ、戻ってパスワードをリセットしてください。</string>
+    <string name="login_wait_for_email_title">電子メールを確認してください</string>
+    <string name="login_connect_to_a_custom_server">カスタムサーバーに接続</string>
+    <string name="login_splash_already_have_account">既にアカウントを持っています</string>
+    <string name="ftue_auth_use_case_join_existing_server">既存のサーバーに参加しますか？</string>
+    <string name="ftue_auth_use_case_skip_partial">この質問をスキップ</string>
+    <string name="ftue_auth_use_case_option_one">友達と家族</string>
+    <string name="direct_room_join_rules_invite">%1$sは、これを招待者のみ参加可能に設定しました。</string>
 </resources>
