@@ -2414,4 +2414,6 @@
     <string name="settings_discovery_no_terms">選択したIDサーバーは利用規約がありません。サービス提供者を信頼しなければ続行しないほうがいいです</string>
     <string name="settings_discovery_disconnect_with_bound_pid">現在IDさーバー%1$sにメールアドレスや電話番号を共有しています。共有を停止させるためには%2$sに再接続する必要があります。</string>
     <string name="room_created_summary_item_by_you">部屋を作成し構成しました。</string>
+    <string name="a11y_create_direct_message_by_qr_code">QRコードを読み取り新しいダイレクトメッセージを作成する</string>
+    <string name="error_failed_to_import_keys">キーのインポートに失敗しました</string>
 </resources>
