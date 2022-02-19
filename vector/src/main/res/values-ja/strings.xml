@@ -2417,4 +2417,8 @@
     <string name="a11y_create_direct_message_by_qr_code">QRコードを読み取り新しいダイレクトメッセージを作成する</string>
     <string name="error_failed_to_import_keys">キーのインポートに失敗しました</string>
     <string name="a11y_create_direct_message_by_mxid">Matrix IDで新しいダイレクトメッセージを作成する</string>
+    <string name="a11y_create_direct_message">新しいダイレクトメッセージを作成</string>
+    <string name="a11y_create_menu_close">部屋作成メニューを閉じる…</string>
+    <string name="a11y_create_menu_open">部屋作成メニューを開く</string>
+    <string name="error_network_timeout">サーバーの応答に時間がかかりすぎています。おそらく接続が遅すぎるからか、サーバー側でエラーが発生しているからです。後で再試行してください。</string>
 </resources>
