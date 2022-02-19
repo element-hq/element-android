@@ -2364,7 +2364,7 @@
     <string name="command_description_ignore_user">ユーザーを無視し、そのメッセージを非表示にします</string>
     <string name="command_not_supported_in_threads">%sとのコマンドは認識されていますが、スレッドではサポートされていません。</string>
     <string name="room_settings_space_access_public_description">誰でもこのスペースを発見し参加できます</string>
-    <string name="preference_root_legals">法律関連</string>
+    <string name="preference_root_legals">法的情報</string>
     <string name="command_description_whois">ユーザーに関する情報を表示します</string>
     <string name="command_description_avatar_for_room">この部屋においてのみアバターを変更します</string>
     <string name="command_description_nick_for_room">この部屋においてのみ表示名を変更します</string>
@@ -2381,4 +2381,22 @@
     <string name="closed_poll_option_description">結果は投票を終了した後でのみ明らかにされます</string>
     <string name="location_share_external">以下で開く</string>
     <string name="upgrade_security">暗号化のアップグレードが利用できます</string>
+    <string name="bootstrap_progress_generating_ssss_recovery">SSSSキーをリカバリーキーから生成しています</string>
+    <string name="template_app_ios_android">${app_name} iOS
+\n${app_name} Android</string>
+    <string name="template_app_desktop_web">${app_name}ウェブ版
+\n${app_name}デスクトップ版</string>
+    <string name="enter_secret_storage_input_key">リカバリーキーを選択、直接入力、あるいはクリップボードからペースト</string>
+    <string name="use_recovery_key">リカバリーキーを使用</string>
+    <string name="command_description_discard_session_not_handled">暗号化されたルームでのみサポート</string>
+    <string name="error_saving_media_file">メディアファイルを保存できませんでした</string>
+    <string name="error_adding_media_file_to_gallery">メディアファイルをギャラリーに追加できませんでした</string>
+    <string name="this_invite_to_this_space_was_sent">このスペースへの招待が、アカウントに関連付けられていないメールアドレス %s に送られました</string>
+    <plurals name="poll_option_vote_count">
+        <item quantity="other">%1$d個の投票</item>
+    </plurals>
+    <string name="end_poll_confirmation_description">投票を締め切り、投票の最終結果を表示します。</string>
+    <string name="space_type_private_desc">招待者のみ参加可能。個人やチームに最適</string>
+    <string name="activity_create_space_title">スペースを作成</string>
+    <string name="invite_people_to_your_space">スペースに招待</string>
 </resources>
