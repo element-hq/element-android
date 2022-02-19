@@ -2512,4 +2512,6 @@
     <string name="ftue_auth_carousel_4_title">チームワークを効率よくしましょう。</string>
     <string name="ftue_auth_carousel_3_title">セキュアメッセージング</string>
     <string name="ftue_auth_carousel_2_title">管理権を握るのはあなたです。</string>
+    <string name="preference_help_summary">Elementの使用に関するヘルプ</string>
+    <string name="labs_allow_extended_logging_summary">詳細なログはRageShakeのときにもっと詳しいログを提供し開発者を助けてくれます。有効にした場合でも、メッセージの内容などのプライベートな情報は記録されません。</string>
 </resources>
