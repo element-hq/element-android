@@ -314,7 +314,7 @@
     <string name="room_settings_room_access_entry_only_invited">招待された人のみ</string>
     <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">ルームのリンクを知っている人なら誰でも（ゲストユーザーを除く）</string>
     <string name="room_settings_room_access_entry_anyone_with_link_including_guest">ルームのリンクを知っている人なら誰でも（ゲストユーザーを含む）</string>
-    <string name="room_settings_banned_users_title">再入室禁止されたメンバー</string>
+    <string name="room_settings_banned_users_title">ブロックされたユーザー</string>
     <string name="room_settings_category_advanced_title">拡張設定</string>
     <string name="room_settings_room_internal_id">このルームのサーバー内識別ID</string>
     <string name="room_settings_labs_pref_title">ラボ</string>
@@ -347,7 +347,7 @@
     <string name="notification_listening_for_events">発言更新を確認</string>
     <string name="view_decrypted_source">暗号解除されたソースコードを表示</string>
     <string name="action_rename">名前変更</string>
-    <string name="offline">切断中</string>
+    <string name="offline">オフライン</string>
     <string name="start_new_chat">会話を開始</string>
     <string name="start_voice_call">音声通話を開始</string>
     <string name="start_video_call">ビデオ通話を開始</string>
@@ -2418,8 +2418,8 @@
     <string name="error_failed_to_import_keys">キーのインポートに失敗しました</string>
     <string name="a11y_create_direct_message_by_mxid">Matrix IDで新しいダイレクトメッセージを作成</string>
     <string name="a11y_create_direct_message">新しいダイレクトメッセージを作成</string>
-    <string name="a11y_create_menu_close">部屋作成メニューを閉じる…</string>
-    <string name="a11y_create_menu_open">部屋作成メニューを開く</string>
+    <string name="a11y_create_menu_close">ルーム作成メニューを閉じる…</string>
+    <string name="a11y_create_menu_open">ルーム作成メニューを開く</string>
     <string name="error_network_timeout">サーバーの応答に時間がかかりすぎています。おそらく接続が遅すぎるからか、サーバー側でエラーが発生しているからです。後で再試行してください。</string>
     <string name="upgrade_public_room_from_to">このルームを%1$sから%2$sにアップグレードします。</string>
     <string name="voice_message_slide_to_cancel">スライドしてキャンセル</string>
@@ -2446,7 +2446,7 @@
 \nこのユーザーのコンテンツをこれ以上見たくなければ、ユーザーを無視してそのメッセージを非表示にできます。</string>
     <string name="content_reported_as_spam_content">このコンテンツはスパムとして報告されています。
 \n
-\nこのユーザのコンテンツをこれ以上見たくなければ、ユーザーを無視してそのメッセージを非表示にできます。</string>
+\nこのユーザーのコンテンツをこれ以上見たくなければ、ユーザーを無視してそのメッセージを非表示にできます。</string>
     <string name="content_reported_content">このコンテンツが報告されています。
 \n
 \nこのユーザーのコンテンツをこれ以上見たくなければ、ユーザーを無視してそのメッセージを非表示にできます。</string>
@@ -2459,4 +2459,31 @@
     <string name="settings_server_room_version_unstable">不安定</string>
     <string name="settings_server_room_version_stable">安定</string>
     <string name="spoiler">スポイラー</string>
+    <string name="settings_security_pin_code_use_biometrics_title">生体認証を有効にする</string>
+    <string name="member_banned_by">%1$sによりブロック</string>
+    <string name="three_pid_revoke_invite_dialog_title">招待を取り消す</string>
+    <string name="settings_server_version">サーバーのバージョン</string>
+    <string name="settings_server_name">サーバー名</string>
+    <string name="login_msisdn_error_other">電話番号が正しくありません。確認してください</string>
+    <string name="login_a11y_choose_other">カスタムホームサーバーを選択</string>
+    <string name="login_a11y_choose_modular">Element Matrix Servicesを選択</string>
+    <string name="login_msisdn_confirm_send_again">再送信</string>
+    <string name="login_msisdn_confirm_hint">コードを入力</string>
+    <string name="login_set_msisdn_mandatory_hint">電話番号</string>
+    <string name="a11y_presence_unavailable">退席中</string>
+    <string name="a11y_presence_offline">オフライン</string>
+    <string name="a11y_presence_online">オンライン</string>
+    <string name="create_spaces_default_public_room_name">一般</string>
+    <string name="call_transfer_title">転送</string>
+    <string name="trusted">信頼済</string>
+    <string name="verification_profile_verified">検証済</string>
+    <string name="event_status_delete_all_failed_dialog_title">未送信のメッセージを削除</string>
+    <string name="dev_tools_send_custom_event">カスタムイベントを送信</string>
+    <string name="dev_tools_explore_room_state">ルームの状態を調べる</string>
+    <string name="a11y_view_read_receipts">開封確認メッセージを表示</string>
+    <string name="a11y_rule_notify_off">通知しない</string>
+    <string name="a11y_import_key_from_file">ファイルから鍵をインポート</string>
+    <string name="a11y_unchecked">未確認</string>
+    <string name="settings_server_upload_size_unknown">制限は不明です。</string>
+    <string name="settings_server_upload_size_title">サーバーのファイルアップロードの制限</string>
 </resources>
