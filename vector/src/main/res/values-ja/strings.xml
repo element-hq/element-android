@@ -28,7 +28,7 @@
     <string name="room_displayname_two_members">%1$sと%2$s</string>
     <string name="room_displayname_empty_room">空のルーム</string>
     <plurals name="room_displayname_three_and_more_members">
-        <item quantity="other">%1$sと他%2$d名</item>
+        <item quantity="other">%1$sと他%2$d人</item>
     </plurals>
     <string name="notice_made_future_room_visibility">%1$sは、今後のルーム履歴を%2$sに見えるように設定しました。</string>
     <string name="notice_room_visibility_invited">ルームのメンバー全員（招待された時点から）</string>
@@ -1333,7 +1333,7 @@
         <item quantity="other">%1$sはこのルームのアドレスの%2$sを削除しました。</item>
     </plurals>
     <plurals name="notice_room_aliases_added_by_you">
-        <item quantity="other">このルームのアドレスとして%1$sが追加されました。</item>
+        <item quantity="other">このルームのアドレスとして%1$sを追加しました。</item>
     </plurals>
     <string name="notice_room_third_party_invite_with_reason">%1$sが%2$sにルームへの招待を送りました。理由：%3$s</string>
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$sが%2$sのルームへの招待を取り消しました。理由：%3$s</string>
@@ -1358,50 +1358,50 @@
     <string name="notice_call_candidates">%sが通話を設定するためにデータを送信しました。</string>
     <string name="notice_placed_voice_call_by_you">通話を開始しました。</string>
     <string name="notice_placed_video_call_by_you">ビデオ通話を開始しました。</string>
-    <string name="notice_room_ban_with_reason_by_you">あなたが%1$sをブロックしました。理由：%2$s</string>
+    <string name="notice_room_ban_with_reason_by_you">%1$sをブロックしました。理由：%2$s</string>
     <string name="notice_room_ban_with_reason">%1$sが%2$sをブロックしました。理由：%3$s</string>
-    <string name="notice_room_unban_with_reason_by_you">あなたが%1$sのブロックを解除しました。理由：%2$s</string>
+    <string name="notice_room_unban_with_reason_by_you">%1$sのブロックを解除しました。理由：%2$s</string>
     <string name="notice_room_unban_with_reason">%1$sが%2$sのブロックを解除しました。理由：%3$s</string>
-    <string name="notice_room_remove_with_reason_by_you">%1$sを除去しました。理由：%2$s</string>
-    <string name="notice_room_remove_with_reason">%1$sが%2$sを除去しました。理由：%3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">%1$sを追放しました。理由：%2$s</string>
+    <string name="notice_room_remove_with_reason">%1$sが%2$sを追放しました。理由：%3$s</string>
     <string name="notice_room_reject_with_reason_by_you">招待を拒否しました。理由：%1$s</string>
     <string name="notice_room_reject_with_reason">%1$sは招待を拒否しました。理由：%2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">退出しました。理由：%1$s</string>
     <string name="notice_direct_room_leave_with_reason">%1$sが退出しました。理由：%2$s</string>
-    <string name="notice_room_leave_with_reason_by_you">あなたがこのルームを退出しました。理由：%1$s</string>
+    <string name="notice_room_leave_with_reason_by_you">このルームを退出しました。理由：%1$s</string>
     <string name="initial_sync_start_importing_account_left_rooms">初期同期:
 \n退出したルームをインポートしています</string>
     <string name="initial_sync_start_importing_account_invited_rooms">初期同期：
 \n招待されたルームをインポートしています</string>
-    <string name="initial_sync_start_importing_account_joined_rooms">初期同期:
+    <string name="initial_sync_start_importing_account_joined_rooms">初期同期：
 \n会話を読み込んでいます
 \n多くのルームに参加している場合、読み込みに時間がかかるかもしれません</string>
     <string name="notice_room_leave_with_reason">%1$sがこのルームを退出しました。理由：%2$s</string>
-    <string name="notice_direct_room_join_with_reason_by_you">あなたがこのルームに参加しました。理由：%1$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">このルームに参加しました。理由：%1$s</string>
     <string name="notice_direct_room_join_with_reason">%1$sがこのルームに参加しました。理由：%2$s</string>
-    <string name="notice_room_join_with_reason_by_you">あなたがこのルームに参加しました。理由：%1$s</string>
+    <string name="notice_room_join_with_reason_by_you">このルームに参加しました。理由：%1$s</string>
     <string name="notice_room_join_with_reason">%1$sがこのルームに参加しました。理由：%2$s</string>
     <string name="notice_room_invite_you_with_reason">%1$sがあなたを招待しました。 理由：%2$s</string>
-    <string name="notice_room_invite_with_reason_by_you">あなたが%1$sを招待しました。 理由：%2$s</string>
+    <string name="notice_room_invite_with_reason_by_you">%1$sを招待しました。 理由：%2$s</string>
     <string name="notice_room_invite_with_reason">%1$sが%2$sを招待しました。 理由：%3$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">あなたの招待です。理由：%1$s</string>
     <string name="notice_room_invite_no_invitee_with_reason">%1$sの招待です。理由：%2$s</string>
     <string name="clear_timeline_send_queue">送信キューのクリア</string>
     <string name="event_status_sending_message">メッセージを送っています…</string>
     <string name="event_status_sent_message">メッセージを送りました</string>
-    <string name="initial_sync_start_importing_account_data">初期同期:
+    <string name="initial_sync_start_importing_account_data">初期同期：
 \nアカウントデータをインポートしています</string>
-    <string name="initial_sync_start_importing_account_groups">初期同期:
+    <string name="initial_sync_start_importing_account_groups">初期同期：
 \nコミュニティーをインポートしています</string>
-    <string name="initial_sync_start_importing_account_rooms">初期同期:
+    <string name="initial_sync_start_importing_account_rooms">初期同期：
 \nルームをインポートしています</string>
-    <string name="initial_sync_start_importing_account_crypto">初期同期:
+    <string name="initial_sync_start_importing_account_crypto">初期同期：
 \n暗号をインポートしています</string>
-    <string name="initial_sync_start_importing_account">初期同期:
+    <string name="initial_sync_start_importing_account">初期同期：
 \nアカウントをインポートしています…</string>
-    <string name="initial_sync_start_downloading">初期同期:
+    <string name="initial_sync_start_downloading">初期同期：
 \nデータをダウンロードしています…</string>
-    <string name="initial_sync_start_server_computing">初期同期:
+    <string name="initial_sync_start_server_computing">初期同期：
 \nサーバーからの応答を待っています…</string>
     <string name="room_displayname_empty_room_was">空のルーム（%sでした）</string>
     <plurals name="room_displayname_four_and_more_members">
@@ -2800,8 +2800,8 @@
     <string name="verification_request_other_accepted">%sが承諾しました</string>
     <string name="verification_verified_user">%sが検証済み</string>
     <string name="verification_verify_user">%sを検証する</string>
-    <string name="verification_no_scan_emoji_title">絵文字を比較して検証する</string>
-    <string name="verification_scan_self_emoji_subtitle">絵文字を比較して検証する</string>
-    <string name="verification_scan_emoji_subtitle">対面じゃなければ、代わりに絵文字を比較してください</string>
+    <string name="verification_no_scan_emoji_title">絵文字を比較して検証</string>
+    <string name="verification_scan_self_emoji_subtitle">絵文字を比較して検証</string>
+    <string name="verification_scan_emoji_subtitle">対面でない場合は、代わりに絵文字を比較してください</string>
     <string name="settings_server_upload_size_content">あなたのホームサーバーは、最大%sのサイズの添付ファイルを受け付けています。</string>
 </resources>
