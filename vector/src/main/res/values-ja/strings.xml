@@ -2628,4 +2628,20 @@
     <string name="login_set_msisdn_notice2">国際電話番号の形式を使用してください。</string>
     <string name="login_msisdn_error_not_international">国際電話番号は「+」から始まる必要があります</string>
     <string name="login_msisdn_confirm_notice">コードを%1$sに送信しました。以下に入力して認証してください。</string>
+    <string name="login_reset_password_error_not_found">このメールアドレスはどのアカウントにも属していません</string>
+    <string name="login_reset_password_warning_content">パスワードの変更はすべてのセッションでエンドツーエンド暗号鍵をリセットし、暗号化されたメッセージ履歴が読めなくなります。パスワードを再設定する前に、暗号鍵のバックアップを設定するか他のセッションからエクスポートしてください。</string>
+    <string name="login_reset_password_notice">パスワードの再設定を確認するために認証メールを送信しました。</string>
+    <string name="login_login_with_email_error">このメールアドレスはどのアカウントにも属していません。</string>
+    <string name="login_registration_not_supported">このアプリではこのホームサーバーにアカウントを作成できません。
+\n
+\nウェブクライエントを使用してアカウント登録しますか？</string>
+    <string name="login_registration_disabled">申し訳ありません。このサーバーはアカウントの新規登録を認めていません。</string>
+    <string name="login_mode_not_supported">このアプリではこのホームサーバーにサインインできません。このホームサーバーは次のサインイン方法に対応しています：　%1$s
+\n
+\nウェブクライエントを使用してサインインしますか？</string>
+    <string name="login_sso_error_message">%1$sを読み込み中にエラーが発生しました（%2$d）</string>
+    <string name="login_server_url_form_common_notice">利用したいサーバーのアドレスを入力してください</string>
+    <string name="login_server_url_form_modular_notice">利用したいModular Elementまたはサーバーのアドレスを入力してください</string>
+    <string name="ftue_auth_use_case_skip">迷っていますか？%sしてもいいです</string>
+    <string name="ftue_auth_use_case_subtitle">みんなと繋がる手助けをいたします。</string>
 </resources>
