@@ -2796,4 +2796,6 @@
     <string name="bootstrap_progress_checking_backup_with_info">バックアップキーを確認しています（%s）</string>
     <string name="bootstrap_progress_checking_backup">バックアップキーを確認しています</string>
     <string name="a11y_open_drawer">ナビゲーションのメニューを開く</string>
+    <string name="verification_request_you_accepted">あなたが承諾しました</string>
+    <string name="verification_request_other_accepted">%sが承諾しました</string>
 </resources>
