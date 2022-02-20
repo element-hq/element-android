@@ -47,7 +47,7 @@
     <string name="notice_room_third_party_invite">%1$sは%2$sにルームに参加するよう招待状を送りました</string>
     <string name="notice_room_third_party_registered_invite">%1$sは%2$sの招待を受け入れました</string>
     <string name="notice_crypto_unable_to_decrypt">** 解読できません：%s **</string>
-    <string name="notice_crypto_error_unknown_inbound_session_id">送信者の端末からこのメッセージのキーが送信されていません。</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">送信者の端末からこのメッセージの鍵が送信されていません。</string>
     <string name="could_not_redact">修正できませんでした</string>
     <string name="unable_to_send_message">メッセージを送信できません</string>
     <string name="message_failed_to_upload">画像のアップロードに失敗しました</string>
@@ -94,7 +94,7 @@
     <string name="action_redact">削除</string>
     <string name="action_share">共有</string>
     <string name="action_delete">削除</string>
-    <string name="device_information">端末情報</string>
+    <string name="device_information">セッションの情報</string>
     <string name="room_no_conference_call_in_encrypted_rooms">暗号化されたルームでのグループ通話はサポートされていません</string>
     <string name="action_invite">招待</string>
     <string name="action_mark_all_as_read">全ての発言を既読にする</string>
@@ -209,7 +209,7 @@
     <string name="room_creation_title">新しい会話</string>
     <string name="room_creation_add_member">メンバーを追加</string>
     <string name="room_title_one_member">1名</string>
-    <string name="room_participants_header_devices">端末</string>
+    <string name="room_participants_header_devices">セッション</string>
     <string name="room_participants_action_set_default_power_level">権限を一般メンバーへ変更</string>
     <string name="room_participants_action_set_moderator">権限を司会者へ変更</string>
     <string name="room_participants_action_set_admin">権限を管理者へ変更</string>
@@ -236,7 +236,7 @@
     <string name="settings_add_phone_number">電話番号を追加</string>
     <string name="settings_notification_ringtone">通知音</string>
     <string name="settings_enable_all_notif">このアカウントで通知を許可</string>
-    <string name="settings_enable_this_device">この端末で通知を許可</string>
+    <string name="settings_enable_this_device">このセッションで通知を許可</string>
     <string name="settings_messages_in_one_to_one">1対1のチャットでのメッセージ</string>
     <string name="settings_messages_in_group_chat">グループチャットでのメッセージ</string>
     <string name="settings_invited_to_room">ルームへ招待されたとき</string>
@@ -322,7 +322,7 @@
     <string name="room_settings_labs_end_to_end">エンドツーエンド暗号化</string>
     <string name="room_settings_labs_end_to_end_is_active">エンドツーエンド暗号化を使用中</string>
     <string name="room_settings_labs_end_to_end_warnings">暗号を有効にするためにはログアウトする必要があります.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">検証済のセッションに対してのみ暗号化</string>
+    <string name="room_settings_never_send_to_unverified_devices_title">認証済のセッションに対してのみ暗号化</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">このセッションでは、このルームの未検証のセッションに対して暗号化されたメッセージを送信しない。</string>
     <string name="room_settings_addresses_add_new_address">新しいアドレス (記入例 #foo:matrix.org)</string>
     <string name="room_settings_addresses_no_local_addresses">このルームにはローカルアドレスがありません</string>
@@ -434,7 +434,7 @@
     <string name="room_participants_action_unignore">このメンバーの発言を全て表示</string>
     <string name="room_participants_action_mention">指名して呼掛け</string>
     <string name="room_participants_invite_search_another_user">ユーザーID, 表示名, 電子メールアドレス</string>
-    <string name="room_participants_action_devices_list">接続端末一覧を表示</string>
+    <string name="room_participants_action_devices_list">セッション一覧を表示</string>
     <string name="room_participants_invite_prompt_msg">%sさんをこのルームに招待してよろしいですか？</string>
     <string name="people_search_invite_by_id"><u>ユーザーIDで招待</u></string>
     <string name="people_search_invite_by_id_dialog_hint">メールアドレスまたはMatrix ID</string>
@@ -483,7 +483,7 @@
     <string name="settings_theme">外観</string>
     <string name="encryption_information_title">エンドツーエンド暗号化についての情報</string>
     <string name="encryption_information_device_name">公開端末名</string>
-    <string name="encryption_export_e2e_room_keys">ルームのエンドツーエンド暗号化の鍵をエクスポート</string>
+    <string name="encryption_export_e2e_room_keys">ルームのエンドツーエンド暗号鍵をエクスポート</string>
     <string name="encryption_information_verified">認証</string>
     <string name="historical_placeholder">履歴を検索</string>
     <string name="widget_integration_must_be_in_room">あなたはこのルームに参加していません。</string>
@@ -537,21 +537,21 @@
 \n続行する前に、各セッションの検証プロセスを進めることをおすすめしますが、検証せずにメッセージを再送信することもできます。
 \n
 \n不明なセッション:</string>
-    <string name="unknown_devices_alert_title">ルームに不明な端末が含まれています</string>
-    <string name="encryption_information_verify_key_match">キーが一致していることを確認</string>
-    <string name="encryption_information_verify_device_warning2">一致する場合は、下の確認ボタンを押します。そうでない場合は、他の誰かがこの端末を盗聴しているので、代わりにブロックボタンを押すことをおすすめします。今後この検証プロセスはより洗練されたものになるでしょう。</string>
-    <string name="encryption_information_verify_device">端末の検証</string>
-    <string name="encryption_information_unknown_device">不明な端末</string>
-    <string name="encryption_never_send_to_unverified_devices_summary">このセッションでは、未検証のセッションに対して暗号化されたメッセージを送信しない</string>
-    <string name="encryption_never_send_to_unverified_devices_title">認証済端末に対してのみ暗号化</string>
+    <string name="unknown_devices_alert_title">ルームに不明なセッションが含まれています</string>
+    <string name="encryption_information_verify_key_match">鍵が一致していることを確認</string>
+    <string name="encryption_information_verify_device_warning2">一致していない場合は、あなたのコミュニケーションの安全性が損なわれている可能性があります。</string>
+    <string name="encryption_information_verify_device">セッションを認証</string>
+    <string name="encryption_information_unknown_device">不明なセッション</string>
+    <string name="encryption_never_send_to_unverified_devices_summary">このセッションでは、未検証のセッションに対して暗号化されたメッセージを送信しない。</string>
+    <string name="encryption_never_send_to_unverified_devices_title">認証済のセッションに対してのみ暗号化</string>
     <string name="encryption_import_import">インポート</string>
-    <string name="encryption_import_room_keys_summary">ローカルファイルからキーをインポート</string>
-    <string name="encryption_import_room_keys">ルームキーをインポート</string>
+    <string name="encryption_import_room_keys_summary">ローカルファイルから鍵をインポート</string>
+    <string name="encryption_import_room_keys">ルームの暗号鍵をインポート</string>
     <string name="encryption_import_e2e_room_keys">ルームのエンドツーエンド暗号鍵をインポート</string>
     <string name="passphrase_confirm_passphrase">パスフレーズを確認</string>
     <string name="passphrase_enter_passphrase">パスフレーズを入力</string>
     <string name="encryption_export_export">エクスポート</string>
-    <string name="encryption_export_room_keys_summary">暗号鍵をローカルファイルにエクスポート</string>
+    <string name="encryption_export_room_keys_summary">鍵をローカルファイルにエクスポート</string>
     <string name="encryption_export_room_keys">ルームの暗号鍵をエクスポート</string>
     <string name="encryption_information_verification">検証</string>
     <string name="call">通話</string>
@@ -615,9 +615,9 @@
     <string name="encryption_information_algorithm">アルゴリズム</string>
     <string name="encryption_information_session_id">セッションID</string>
     <string name="encryption_information_decryption_error">復号エラー</string>
-    <string name="encryption_information_sender_device_information">発信者装置の情報</string>
+    <string name="encryption_information_sender_device_information">発信者のセッションの情報</string>
     <string name="encryption_information_name">公開端末名</string>
-    <string name="encryption_information_device_key">端末キー</string>
+    <string name="encryption_information_device_key">セッションキー</string>
     <string name="encryption_information_ed25519_fingerprint">Ed25519 フィンガープリント</string>
     <string name="encryption_information_not_verified">未認証</string>
     <string name="encryption_information_blocked">ブラックリスト</string>
@@ -626,14 +626,14 @@
     <string name="encryption_information_unverify">認証を取り消す</string>
     <string name="encryption_information_block">ブラックリスト</string>
     <string name="encryption_information_unblock">ブラックリストから除外</string>
-    <string name="encryption_information_verify_device_warning">この端末が信頼できることを確認するために、その所有者に何らかの他の方法（直接会って、または、電話で）連絡し、以下のキーが、その端末の「設定」で確認できるキーと一致するかお尋ねください:</string>
+    <string name="encryption_information_verify_device_warning">他のセッションのユーザー設定で、以下を比較して確認してください：</string>
     <string name="select_room_directory">ルームのディレクトリを選択</string>
     <string name="directory_server_type_homeserver">公開のルームを表示するホームサーバーを入力してください</string>
     <string name="directory_server_placeholder">サーバー名</string>
     <string name="directory_server_all_rooms_on_server">%sサーバー上の全てのルーム</string>
     <string name="directory_server_native_rooms">全てのローカルの%sルーム</string>
     <string name="room_unsent_messages_notification">メッセージが未送信です。今%1$sまたは%2$sしますか？</string>
-    <string name="room_unknown_devices_messages_notification">不明な端末が存在しているため、メッセージを送ることができませんでした。今%1$sまたは%2$sしますか？</string>
+    <string name="room_unknown_devices_messages_notification">不明なセッションが存在しているため、メッセージを送ることができませんでした。今%1$sまたは%2$sしますか？</string>
     <string name="encryption_information_claimed_ed25519_fingerprint_key">要求されたフィンガープリントキー Ed25519</string>
     <string name="settings_labs_create_conference_with_jitsi">jitsiを用いて会議通話を始める</string>
     <string name="settings_labs_native_camera">端末のカメラを使用</string>
@@ -671,8 +671,8 @@
     <string name="encryption_export_saved_as">ルームのエンドツーエンド暗号鍵は \'%s\' に保存されました。
 \n 
 \n警告: このファイルは、アプリケーションをアンインストールすると削除されることがあります。</string>
-    <string name="you_added_a_new_device">暗号鍵を要求している新しい端末 \'%s\' を追加しました。</string>
-    <string name="your_unverified_device_requesting">未認証の端末 \'%s\' が暗号鍵を要求しています。</string>
+    <string name="you_added_a_new_device">暗号鍵を要求している新しいセッション \'%s\' を追加しました。</string>
+    <string name="your_unverified_device_requesting">未認証のセッション \'%s\' が暗号鍵を要求しています。</string>
     <string name="create">作成</string>
     <string name="create_community">コミュニティーを作成</string>
     <string name="community_name">コミュニティーの名前</string>
@@ -739,10 +739,10 @@
 \n追加しますか？</string>
     <string name="go_on_with">続行する…</string>
     <string name="error_no_external_application_found">申し訳ありません、この操作を完了するための外部アプリが見つかりません。</string>
-    <string name="e2e_re_request_encryption_key">他の端末から <u>暗号鍵を再度要求</u> します。</string>
+    <string name="e2e_re_request_encryption_key">他のセッションから暗号鍵を再度要求します。</string>
     <string name="e2e_re_request_encryption_key_sent">鍵のリクエストが送信されました。</string>
     <string name="e2e_re_request_encryption_key_dialog_title">リクエスト送信済</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">鍵をこの端末に送信できるように、メッセージを復号化できる他の端末で${app_name}を起動してください。</string>
+    <string name="template_e2e_re_request_encryption_key_dialog_content">鍵をこのセッションに送信できるように、メッセージを復号化できる他の端末で${app_name}を起動してください。</string>
     <plurals name="format_time_s">
         <item quantity="other">%d秒</item>
     </plurals>
@@ -852,7 +852,7 @@
     <string name="settings_lazy_loading_title">ルームのメンバーの簡易読み込み</string>
     <string name="unknown_error">申し訳ありません、エラーが発生しました</string>
     <string name="room_sliding_menu_version_x">バージョン %s</string>
-    <string name="encryption_export_notice">エクスポートされた鍵を暗号化するパスフレーズを作成してください。 キーをインポートするには、同じパスフレーズを入力する必要があります。</string>
+    <string name="encryption_export_notice">エクスポートされた鍵を暗号化するパスフレーズを作成してください。 鍵をインポートするには、同じパスフレーズを入力する必要があります。</string>
     <string name="passphrase_create_passphrase">パスフレーズの作成</string>
     <string name="passphrase_passphrase_does_not_match">パスフレーズは一致する必要があります</string>
     <string name="settings_info_area_show">情報領域を表示</string>
@@ -877,7 +877,7 @@
     <string name="notification_sync_init">サービスを初期化</string>
     <string name="title_activity_keys_backup_setup">鍵のバックアップ</string>
     <string name="title_activity_keys_backup_restore">鍵のバックアップを使用</string>
-    <string name="title_activity_verify_device">端末を認証</string>
+    <string name="title_activity_verify_device">セッションを認証</string>
     <string name="keys_backup_is_not_finished_please_wait">鍵のバックアップが終了していません。しばらくお待ちください…</string>
     <string name="ongoing_conference_call">会議通話中。
 \n%1$sまたは%2$sとして参加</string>
@@ -896,7 +896,7 @@
     <string name="settings_show_read_receipts">開封確認メッセージを表示</string>
     <string name="settings_show_read_receipts_summary">開封確認メッセージをクリックすると詳細なリストを確認できます。</string>
     <string name="settings_send_message_with_enter">エンター入力でメッセージを送信</string>
-    <string name="settings_send_message_with_enter_summary">ソフトウェアキーボードのEnterボタンを押した際に改行せずにメッセージを送信します</string>
+    <string name="settings_send_message_with_enter_summary">ソフトウェアキーボードのEnterボタンを押した際、改行せずメッセージを送信</string>
     <string name="settings_password">パスワード</string>
     <string name="settings_change_password_submit">パスワードを更新</string>
     <string name="settings_fail_to_update_password_invalid_current_password">パスワードが無効です</string>
@@ -911,7 +911,7 @@
     <string name="soft_logout_signin_password_hint">パスワード</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">今ここでサインアウトすると、あなたの暗号化されたメッセージは失われてしまいます</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">鍵のバックアップは現在処理中です。処理中にサインアウトすると暗号化されたメッセージにアクセスできなくなります。</string>
-    <string name="sign_out_bottom_sheet_warning_backup_not_active">暗号化されたメッセージにアクセスできなくなることを防ぐため、鍵の安全なバックアップはあなたの端末全てで有効化してください。</string>
+    <string name="sign_out_bottom_sheet_warning_backup_not_active">暗号化されたメッセージにアクセスできなくなることを防ぐため、鍵の安全なバックアップはあなたのセッション全てで有効化してください。</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">暗号化されたメッセージは不要です</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">鍵をバックアップしています…</string>
     <string name="keys_backup_activate">鍵のバックアップを使用</string>
@@ -1087,7 +1087,7 @@
     <string name="template_settings_troubleshoot_test_device_settings_failed">このセッションで通知が無効化されています。
 \n${app_name} の設定をご確認ください。</string>
     <string name="settings_troubleshoot_test_device_settings_success">このセッションで通知は有効化されています。</string>
-    <string name="settings_troubleshoot_test_device_settings_title">セッション設定</string>
+    <string name="settings_troubleshoot_test_device_settings_title">セッションの設定。</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">有効化</string>
     <string name="settings_troubleshoot_test_account_settings_failed">あなたのアカウントで通知が無効化されています。
 \nアカウント設定をご確認ください。</string>
@@ -1454,7 +1454,7 @@
     <string name="settings_discovery_category">ディスカバリー（発見）</string>
     <string name="reset_secure_backup_warning">これにより、現在のキーまたはフレーズが置き換えられます。</string>
     <string name="reset_secure_backup_title">新しいセキュリティーキーを生成するか、既存のバックアップに新しいセキュリティーフレーズを設定します。</string>
-    <string name="settings_secure_backup_section_info">サーバー上の暗号化キーをバックアップすることにより、暗号化されたメッセージとデータへのアクセスが失われるのを防ぎます。</string>
+    <string name="settings_secure_backup_section_info">サーバー上の暗号鍵をバックアップすることにより、暗号化されたメッセージとデータへのアクセスが失われるのを防ぎます。</string>
     <string name="settings_show_emoji_keyboard_summary">メッセージ作成画面に絵文字キーボードを開くボタンを追加</string>
     <string name="settings_show_emoji_keyboard">絵文字キーボードを表示</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">アバターと表示名の変更が含まれます。</string>
@@ -1566,8 +1566,8 @@
     <plurals name="encryption_import_room_keys_success">
         <item quantity="other">キー%1$dと%2$dのインポートに成功。</item>
     </plurals>
-    <string name="encryption_settings_manage_message_recovery_summary">キーバックアップを管理</string>
-    <string name="encryption_exported_successfully">キーのエクスポートに成功しました</string>
+    <string name="encryption_settings_manage_message_recovery_summary">鍵のバックアップを管理</string>
+    <string name="encryption_exported_successfully">鍵のエクスポートに成功しました</string>
     <string name="media_source_choose">選択</string>
     <string name="compression_opt_list_choose">選択</string>
     <string name="account_additional_info">詳細情報：%s</string>
@@ -1602,16 +1602,16 @@
     <string name="keys_backup_settings_checking_backup_state">バックアップの状態を確認中</string>
     <string name="keys_backup_settings_delete_backup_error">バックアップの削除に失敗しました（%s）</string>
     <string name="keys_backup_settings_deleting_backup">バックアップを削除しています…</string>
-    <string name="keys_backup_settings_untrusted_backup">このセッションで暗号鍵のバックアップを使用するには、パスフレーズまたはリカバリーキーでバックアップを復元してください。</string>
-    <string name="keys_backup_settings_invalid_signature_from_unverified_device">バックアップは%sという未検証セッションによる不正なしょめいがあります</string>
-    <string name="keys_backup_settings_invalid_signature_from_verified_device">バックアップは%sという検証されたセッションによる不正な署名があります</string>
-    <string name="keys_backup_settings_valid_signature_from_unverified_device">バックアップは%sという未検証セッションによる有効な署名があります</string>
-    <string name="keys_backup_settings_valid_signature_from_verified_device">バックアップは%sという検証されたセッションによる署名があります。</string>
+    <string name="keys_backup_settings_untrusted_backup">このセッションで鍵のバックアップを使用するには、パスフレーズまたはリカバリーキーでバックアップを復元してください。</string>
+    <string name="keys_backup_settings_invalid_signature_from_unverified_device">バックアップには未検証のセッション %s による不正な署名があります</string>
+    <string name="keys_backup_settings_invalid_signature_from_verified_device">バックアップには検証されたセッション %s による不正な署名があります</string>
+    <string name="keys_backup_settings_valid_signature_from_unverified_device">バックアップには未検証のセッション %s による有効な署名があります</string>
+    <string name="keys_backup_settings_valid_signature_from_verified_device">バックアップには認証済のセッション %s による署名があります。</string>
     <string name="keys_backup_settings_valid_signature_from_this_device">バックアップはこのセッションによる有効な署名があります。</string>
-    <string name="keys_backup_settings_signature_from_unknown_device">バックアップは%sというIDの不明のセッションによる署名があります。</string>
-    <string name="keys_backup_settings_status_not_setup">このセッションでは暗号鍵がバックアップされていません。</string>
-    <string name="keys_backup_settings_status_ko">このセッションでは暗号鍵のバックアップが無効になっています。</string>
-    <string name="keys_backup_settings_status_ok">このセッションでは暗号鍵のバックアップが正しく設定されています。</string>
+    <string name="keys_backup_settings_signature_from_unknown_device">バックアップには%sというIDの不明のセッションによる署名があります。</string>
+    <string name="keys_backup_settings_status_not_setup">このセッションでは鍵がバックアップされていません。</string>
+    <string name="keys_backup_settings_status_ko">このセッションでは鍵のバックアップが無効になっています。</string>
+    <string name="keys_backup_settings_status_ok">このセッションでは鍵のバックアップが正しく設定されています。</string>
     <string name="keys_backup_get_version_error">最新の復号キーのバージョンを取得するのに失敗しました（%s）。</string>
     <plurals name="keys_backup_restore_success_description_part2">
         <item quantity="other">%d個の新しい鍵がこのセッションに追加されました。</item>
@@ -1648,7 +1648,7 @@
     <string name="keys_backup_setup_step3_please_make_copy">コピーをしてください</string>
     <string name="keys_backup_setup_override_stop">中止</string>
     <string name="keys_backup_setup_override_replace">上書き</string>
-    <string name="keys_backup_setup_override_backup_prompt_description">違うセッションにより設定されたキーのバックアップが存在してます。上書きしますか？</string>
+    <string name="keys_backup_setup_override_backup_prompt_description">別のセッションで鍵のバックアップを既に設定しているようです。上書きしますか？</string>
     <string name="keys_backup_setup_override_backup_prompt_tile">ホームサーバーにバックアップが存在しています</string>
     <string name="recovery_key_export_saved">リカバリーキーが保存されました。</string>
     <string name="recovery_key_export_saved_as_warning">リカバリーキーが%sに保存されました。
@@ -1681,7 +1681,7 @@
 \nセッション名：%1$s
 \n最後のオンライン時刻：%2$s
 \n新たにログインして新しいセッションを開始しなかった場合、この要求を無視してください。</string>
-    <string name="your_unverified_device_requesting_with_info">未検証のセッションが暗号鍵を要請しています。
+    <string name="your_unverified_device_requesting_with_info">未認証のセッションが暗号鍵を要請しています。
 \nセッション名：%1$s
 \n最後のオンライン時刻：%2$s
 \n新たにログインして新しいセッションを開始しなかった場合、この要求を無視してください。</string>
@@ -1844,7 +1844,7 @@
     <string name="navigate_to_room_when_already_in_the_room">あなたは既にこのルームを見ています!</string>
     <string name="settings_other_third_party_notices">その他のサードパーティーの使用に関する掲示</string>
     <string name="settings_sdk_version">Matrix SDK バージョン</string>
-    <string name="import_e2e_keys_from_file">ファイル\"%1$s\"からe2eキーをインポートします。</string>
+    <string name="import_e2e_keys_from_file">ファイル\"%1$s\"からエンドツーエンド暗号鍵をインポートします。</string>
     <string name="keys_backup_unable_to_get_keys_backup_data">キーのバックアップデータの取得中にエラーが発生しました</string>
     <string name="keys_backup_unable_to_get_trust_info">信頼情報の取得中にエラーが発生しました</string>
     <string name="create_room_federation_error">ルームが作成されましたが、一部の招待が送信されていません。理由：
@@ -1878,7 +1878,7 @@
     <string name="room_list_catchup_welcome_title">ホームへようこそ!</string>
     <string name="room_list_catchup_empty_body">未読メッセージはありません</string>
     <string name="room_list_catchup_empty_title">未読はありません！</string>
-    <string name="sas_incoming_request_notif_content">%sがセッションを検証を要求しています</string>
+    <string name="sas_incoming_request_notif_content">%sがセッションの検証を要求しています</string>
     <string name="sas_verification_request_notification_channel">インタラクティブセッション検証</string>
     <string name="room_list_empty">ルームに参加してアプリの使用を開始します。</string>
     <string name="global_retry">リトライ</string>
@@ -1912,7 +1912,7 @@
     <string name="sas_waiting_for_partner">相手が確認するのを待っています…</string>
     <string name="sas_view_request_action">リクエストを見る</string>
     <string name="sas_incoming_verification_request_dialog">検証リクエストを受信しました。</string>
-    <string name="sas_decimal_description">相手の画面に次の番号が表示されていることを確認して、このセッションを確認します</string>
+    <string name="sas_decimal_description">相手の画面に次の番号が表示されていることを確認して、このセッションを検証</string>
     <string name="sas_emoji_description">相手の画面に次の絵文字が表示されることを確認して、このセッションを確認します</string>
     <string name="sas_incoming_request_description_2">このセッションを検証すると、信頼済としてマークされ、自分も相手に信頼済としてマークされます。</string>
     <string name="sas_incoming_request_description">このセッションを検証して、信頼済としてマークします。相手のセッションを信頼すると、さらに安心してエンドツーエンド暗号化を使用することができます。</string>
@@ -1969,7 +1969,7 @@
         <item quantity="other">%d 通話できません</item>
     </plurals>
     <string name="use_as_default_and_do_not_ask_again">デフォルトで使いもう尋ねない</string>
-    <string name="send_bug_report_include_key_share_history">キー共有リクエストの履歴を送信</string>
+    <string name="send_bug_report_include_key_share_history">鍵の共有リクエストの履歴を送信</string>
     <string name="no_more_results">結果がありません</string>
     <string name="cannot_call_yourself_with_invite">自分で電話をかけることはできません。メンバーが招待を受け入れるのを待ちます</string>
     <string name="audio_video_meeting_description">ミーティングはJitsiのセキュリティーとパーミッションポリシーを使用します。会議中は、現在ルームにいる全ての人に招待状が表示されます。</string>
@@ -2490,7 +2490,7 @@
     <string name="room_join_rules_invite">%1$sは、このルームを招待者のみ参加可能に設定しました。</string>
     <string name="room_join_rules_public">%1$sが部屋をリンクを持っているユーザーにアクセスできるように設定しました。</string>
     <string name="command_description_spoiler">選択したメッセージをネタバレとして送信</string>
-    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} がE2E暗号鍵をディスクに保存する許可を要求しています。
+    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} がエンドツーエンド暗号鍵をディスクに保存する許可を要求しています。
 \n
 \n暗号鍵を手動でエクスポートできるように、次のポップアップでアクセスを許可してください。</string>
     <string name="room_join_rules_public">%1$sはリンクを知っている人がアクセスできるようにこのルームを設定しました。</string>
@@ -2565,7 +2565,7 @@
     <string name="settings_developer_mode_show_info_on_screen_title">デバッグ用の情報を画面に表示</string>
     <string name="notification_initial_sync">初期同期中…</string>
     <string name="bug_report_error_too_short">説明文が短すぎます</string>
-    <string name="soft_logout_clear_data_dialog_e2e_warning_content">サインインして暗号鍵を取り戻さななければ、暗号化されたメッセージがアクセスできなくなります。</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">サインインして暗号鍵を取り戻さなければ、暗号化されたメッセージにアクセスできなくなります。</string>
     <string name="signed_out_submit">再サインイン</string>
     <string name="autodiscover_well_known_error">有効なホームサーバーを発見できません。識別子を確認してください</string>
     <string name="login_signin_matrix_id_notice">どこかのホームサーバーで既にアカウントを登録している場合、以下でMatrix ID（例：@user:domain.com）とパスワードを使用してください。</string>
@@ -2715,13 +2715,13 @@
 \n%sで利用規約を閲覧できます。</string>
     <string name="autocomplete_limited_results">最初の検索結果のみ表示中、文字をもっと入力してください…</string>
     <string name="permalink_malformed">matrix.toリンクのフォーマットが正しくありませんでした</string>
-    <string name="soft_logout_clear_data_notice">注意！この端末には未だ暗号鍵を含む個人情報が保存されています。
+    <string name="soft_logout_clear_data_notice">注意！この端末には暗号鍵を含む個人情報が保存されています。
 \n
 \nこの端末での使用を終了したり、他のアカウントにサインインしたい場合、このデータをクリアしてください。</string>
     <string name="soft_logout_clear_data_dialog_content">この端末に現在保存されているすべてのデータをクリアしますか？
 \nアカウントデータとメッセージにアクセスするにはもう一度サインインしてください。</string>
-    <string name="template_soft_logout_sso_not_same_user_error">現在のセッションはユーザー%1$sのものなのに、あなたが提供している資格情報はユーザー%2$sのものです。この操作は${app_name}にサポートされていません。
-\nまずはデータをクリアしてから別のアカウントにサインインしてください。</string>
+    <string name="template_soft_logout_sso_not_same_user_error">現在のセッションはユーザー %1$s のものですが、あなたが提供している資格情報はユーザー %2$s のものです。この操作は${app_name}ではサポートされていません。
+\nまずデータをクリアし、その後、別のアカウントにサインインしてください。</string>
     <string name="soft_logout_signin_e2e_warning_notice">暗号化されたメッセージが読めるように、サインインしてこの端末にのみ保存されている暗号鍵を取り戻してください。</string>
     <string name="soft_logout_signin_notice">あなたのホームサーバー（%1$s）の管理者があなたを%2$sのアカウントからサインアウトしています。（%3$s）</string>
     <string name="signed_out_notice">いくつかの原因が考えられます：
@@ -2746,4 +2746,18 @@
 \n登録を中止しますか？</string>
     <string name="login_signup_to">%1$sにアカウント登録</string>
     <string name="login_reset_password_success_notice_2">あなたはすべてのセッションからログアウトしており、これ以上プッシュ通知を受け取れません。通知をもう一度有効にするには、各端末でサインインしてください。</string>
+    <string name="set_a_security_phrase_title">セキュリティーフレーズを設定</string>
+    <string name="bottom_sheet_setup_secure_backup_security_phrase_title">セキュリティーフレーズを使用</string>
+    <string name="save_your_security_key_notice">セキュリティーキーは、パスワードマネージャーもしくは金庫のような安全な場所で保管してください。</string>
+    <string name="bottom_sheet_save_your_recovery_key_content">セキュリティーキーは、パスワードマネージャーもしくは金庫のような安全な場所で保管してください。</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_subtitle">セキュリティーキーを生成し、パスワードマネージャーもしくは金庫のような安全な場所で保管してください。</string>
+    <string name="bottom_sheet_setup_secure_backup_title">セキュアバックアップ</string>
+    <string name="settings_setup_secure_backup">セキュアバックアップを設定</string>
+    <string name="a11y_open_chat">会話を開く</string>
+    <string name="template_identity_server_error_outdated_identity_server">このIDサーバーは最新のバージョンではありません。${app_name}はAPIのバージョン2のみをサポートしています。</string>
+    <string name="invite_users_to_room_failure">ユーザーを招待できませんでした。招待したいユーザーを確認して、もう一度試してください。</string>
+    <string name="open_terms_of">%sの利用規約を開く</string>
+    <string name="identity_server_user_consent_not_provided">ユーザーによる同意は与えられていません。</string>
+    <string name="identity_server_set_alternative_notice">代わりに、他のIDサーバーのURLを入力できます</string>
+    <string name="bottom_sheet_setup_secure_backup_subtitle">サーバー上の暗号化キーをバックアップすることにより、暗号化されたメッセージとデータへのアクセスが失われるのを防ぎます。</string>
 </resources>
