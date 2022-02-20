@@ -2798,4 +2798,9 @@
     <string name="a11y_open_drawer">ナビゲーションのメニューを開く</string>
     <string name="verification_request_you_accepted">あなたが承諾しました</string>
     <string name="verification_request_other_accepted">%sが承諾しました</string>
+    <string name="verification_verified_user">%sが検証済み</string>
+    <string name="verification_verify_user">%sを検証する</string>
+    <string name="verification_no_scan_emoji_title">絵文字を比較して検証する</string>
+    <string name="verification_scan_self_emoji_subtitle">絵文字を比較して検証する</string>
+    <string name="verification_scan_emoji_subtitle">対面じゃなければ、代わりに絵文字を比較してください</string>
 </resources>
