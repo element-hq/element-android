@@ -2464,7 +2464,7 @@
     <string name="three_pid_revoke_invite_dialog_title">招待を取り消す</string>
     <string name="settings_server_version">サーバーのバージョン</string>
     <string name="settings_server_name">サーバー名</string>
-    <string name="login_msisdn_error_other">電話番号が正しくありません。確認してください</string>
+    <string name="login_msisdn_error_other">電話番号が正しくないようです。確認してください</string>
     <string name="login_a11y_choose_other">カスタムホームサーバーを選択</string>
     <string name="login_a11y_choose_modular">Element Matrix Servicesを選択</string>
     <string name="login_msisdn_confirm_send_again">再送信</string>
@@ -2552,27 +2552,27 @@
     <string name="room_list_sharing_header_recent_rooms">最近のルーム</string>
     <string name="verification_conclusion_ok_self_notice">新しいセッションが認証されました。セッションは暗号化されたメッセージにアクセスでき、他のユーザーには信頼済として表示されます。</string>
     <string name="room_settings_enable_encryption_warning">いったん有効にすると、暗号化を無効にすることはできません。</string>
-    <string name="create_room_disable_federation_description">このルームを、あなたのホームサーバーで、組織内のチームとのコラボレーションにのみ使用するなら、このオプションを有効にするといいかもしれません。これは後から変更できません。</string>
-    <string name="create_room_disable_federation_title">%sに属していない人がこのルームに今後参加するのを防ぐ</string>
+    <string name="create_room_disable_federation_description">この部屋を同じホームサーバー上で組織内のチームとのコラボレーションにのみ使用するなら、このオプションを有効にするといいかもしれません。これは後から変更できません。</string>
+    <string name="create_room_disable_federation_title">%sに属していないユーザーによるこの部屋への参加を今後永久的に拒否する</string>
     <string name="command_description_lenny">プレーンテキストメッセージの前に ( ͡° ͜ʖ ͡°) を付ける</string>
     <string name="login_error_threepid_denied">このメールアドレスのドメインの登録は許可されていません</string>
     <string name="create_space_in_progress">スペースを作成しています…</string>
     <string name="create_room_in_progress">ルームを作成しています…</string>
-    <string name="hide_advanced">高度な設定を表示しない</string>
+    <string name="hide_advanced">高度な設定を非表示にする</string>
     <string name="show_advanced">高度な設定を表示</string>
     <string name="command_description_shrug">プレーンテキストメッセージの前に ¯\\_(ツ)_/¯ を付ける</string>
-    <string name="settings_developer_mode_show_info_on_screen_summary">アプリケーションのデバッグを手伝うのに役立つ情報を表示</string>
+    <string name="settings_developer_mode_show_info_on_screen_summary">アプリケーションのデバッグに役立つ情報を表示</string>
     <string name="settings_developer_mode_show_info_on_screen_title">デバッグ用の情報を画面に表示</string>
-    <string name="notification_initial_sync">初期同期を行っています…</string>
+    <string name="notification_initial_sync">初期同期中…</string>
     <string name="bug_report_error_too_short">説明文が短すぎます</string>
-    <string name="soft_logout_clear_data_dialog_e2e_warning_content">サインインして暗号化の鍵を復元しない限り、暗号化されたメッセージにアクセスすることはできなくなります。</string>
+    <string name="soft_logout_clear_data_dialog_e2e_warning_content">サインインして暗号鍵を取り戻さななければ、暗号化されたメッセージがアクセスできなくなります。</string>
     <string name="signed_out_submit">再サインイン</string>
-    <string name="autodiscover_well_known_error">正しいホームサーバーを発見できません。識別子を確認してください</string>
-    <string name="login_signin_matrix_id_notice">ホームサーバーでアカウントを設定したら、以下でMatrix ID（例：@user:domain.com）とパスワードを使用してください。</string>
-    <string name="login_validation_code_is_not_correct">入力したコードは正しくありません。確認してください。</string>
-    <string name="login_signin_matrix_id_error_invalid_matrix_id">これは正しいユーザー識別子ではありません。期待されるフォーマットは「@user:homeserver.org」となります。</string>
-    <string name="login_signin_matrix_id_password_notice">パスワードが分からなければ、戻ってパスワードをリセットしてください。</string>
-    <string name="login_wait_for_email_title">電子メールを確認してください</string>
+    <string name="autodiscover_well_known_error">有効なホームサーバーを発見できません。識別子を確認してください</string>
+    <string name="login_signin_matrix_id_notice">どこかのホームサーバーで既にアカウントを登録している場合、以下でMatrix ID（例：@user:domain.com）とパスワードを使用してください。</string>
+    <string name="login_validation_code_is_not_correct">入力したコードが正しくありません。確認してください。</string>
+    <string name="login_signin_matrix_id_error_invalid_matrix_id">これは正しいユーザー識別子ではありません。正しいフォーマットは「@user:homeserver.org」です。</string>
+    <string name="login_signin_matrix_id_password_notice">パスワードをお忘れの場合、戻ってパスワードをリセットしてください。</string>
+    <string name="login_wait_for_email_title">メールボックスを確認してください</string>
     <string name="login_connect_to_a_custom_server">カスタムサーバーに接続</string>
     <string name="login_splash_already_have_account">既にアカウントを持っています</string>
     <string name="ftue_auth_use_case_join_existing_server">既存のサーバーに参加しますか？</string>
@@ -2589,7 +2589,7 @@
     <string name="login_set_msisdn_optional_hint">電話番号（任意）</string>
     <string name="login_msisdn_confirm_title">電話番号を確認</string>
     <string name="login_set_msisdn_title">電話番号を設定</string>
-    <string name="login_reset_password_success_notice">パスワードがリセットされました。</string>
+    <string name="login_reset_password_success_notice">パスワードをリセットしました。</string>
     <string name="login_reset_password_on">%1$sでパスワードをリセット</string>
     <string name="login_server_url_form_modular_hint">Element Matrix Servicesのアドレス</string>
     <string name="login_signin_to">%1$sにサインイン</string>
@@ -2599,15 +2599,15 @@
 \nルームを追加する権限はありません。</string>
     <string name="this_space_has_no_rooms_admin">非公開で招待が必要なルームは表示されていません。</string>
     <string name="a11y_poll_winner_option">勝者</string>
-    <string name="login_set_msisdn_notice">電話番号を設定します。オプションで知人に見つけてもらえるようにできます。</string>
+    <string name="login_set_msisdn_notice">知人に見つけてもらえるように電話番号を設定できます。任意です。</string>
     <string name="message_key">メッセージキー</string>
     <string name="recovery_passphrase">復旧用のパスフレーズ</string>
     <string name="room_member_override_nick_color">ニックネームの色を変更</string>
     <string name="verify_by_emoji_description">上記のコードをスキャンできなければ、絵文字の並び方を比較して検証してください。</string>
-    <string name="login_reset_password_cancel_confirmation_content">パスワードは変更されていません。
+    <string name="login_reset_password_cancel_confirmation_content">パスワードはまだ変更されていません。
 \n
 \n変更作業を中止しますか？</string>
-    <string name="login_reset_password_mail_confirmation_notice">確認メールが%1$sに送信されました。</string>
+    <string name="login_reset_password_mail_confirmation_notice">%1$sに認証メールを送信しました。</string>
     <string name="login_reset_password_mail_confirmation_title">メールボックスを確認してください</string>
     <string name="login_reset_password_success_submit">サインインに戻る</string>
     <string name="send_images_and_video_with_original_size">元の大きさのままメディアファイルを送信</string>
@@ -2622,9 +2622,9 @@
     <string name="complete_security">セキュリティーを確認</string>
     <string name="verification_request">検証リクエスト</string>
     <string name="verification_request_other_cancelled">%sがキャンセルしました</string>
-    <string name="seen_by">閲覧済：</string>
+    <string name="seen_by">既読</string>
     <string name="verification_profile_verify">検証</string>
-    <string name="does_not_look_like_valid_email">正しくないメールアドレスのようです</string>
+    <string name="does_not_look_like_valid_email">メールアドレスが正しくないようです</string>
     <string name="login_set_msisdn_notice2">国際電話番号の形式を使用してください。</string>
     <string name="login_msisdn_error_not_international">国際電話番号は「+」から始まる必要があります</string>
     <string name="login_msisdn_confirm_notice">コードを%1$sに送信しました。以下に入力して認証してください。</string>
@@ -2695,4 +2695,55 @@
     <string name="a11y_stop_camera">カメラを停止</string>
     <string name="bottom_sheet_save_your_recovery_key_title">セキュリティーキーを保存</string>
     <string name="your_recovery_key">リカバリーキー</string>
+    <string name="sent_location">位置を共有しました</string>
+    <string name="sent_a_reaction">%sとリアクションしました</string>
+    <string name="sent_verification_conclusion">検証終了</string>
+    <string name="verification_conclusion_compromised">次のいずれかのセキュリティが破られている可能性があります。
+\n
+\n - あなたのホームサーバー
+\n - 検証している相手のホームサーバー
+\n - あなたか相手のインターネット接続
+\n - あなたか相手の端末</string>
+    <string name="verification_conclusion_not_secure">セキュアではない</string>
+    <string name="verification_green_shield">この緑の盾のシンボルが信頼できるユーザーの印です。部屋のセキュリティを確認するには、全ての参加者に信頼できることを確認してください。</string>
+    <string name="verify_user_sas_emoji_security_tip">セキュリティを最大限に高めるには、対面で行うか他の信頼できる通信媒体を利用してください。</string>
+    <string name="verify_user_sas_emoji_help_text">次の絵文字が相手の画面にも同じ順番で現れるのを確認し、このユーザーを検証してください。</string>
+    <string name="verification_conclusion_warning">信頼できないサインイン</string>
+    <string name="create_room_alias_invalid">使用できない文字が含まれています</string>
+    <string name="analytics_opt_in_content">Elementの改善と課題抽出のために、匿名の使用分析データを収集させてくださいませんか？複数の端末での使用を解析するために、あなたの全端末共通のランダムな識別子を生成します。
+\n
+\n%sで利用規約を閲覧できます。</string>
+    <string name="autocomplete_limited_results">最初の検索結果のみ表示中、文字をもっと入力してください…</string>
+    <string name="permalink_malformed">matrix.toリンクのフォーマットが正しくありませんでした</string>
+    <string name="soft_logout_clear_data_notice">注意！この端末には未だ暗号鍵を含む個人情報が保存されています。
+\n
+\nこの端末での使用を終了したり、他のアカウントにサインインしたい場合、このデータをクリアしてください。</string>
+    <string name="soft_logout_clear_data_dialog_content">この端末に現在保存されているすべてのデータをクリアしますか？
+\nアカウントデータとメッセージにアクセスするにはもう一度サインインしてください。</string>
+    <string name="template_soft_logout_sso_not_same_user_error">現在のセッションはユーザー%1$sのものなのに、あなたが提供している資格情報はユーザー%2$sのものです。この操作は${app_name}にサポートされていません。
+\nまずはデータをクリアしてから別のアカウントにサインインしてください。</string>
+    <string name="soft_logout_signin_e2e_warning_notice">暗号化されたメッセージが読めるように、サインインしてこの端末にのみ保存されている暗号鍵を取り戻してください。</string>
+    <string name="soft_logout_signin_notice">あなたのホームサーバー（%1$s）の管理者があなたを%2$sのアカウントからサインアウトしています。（%3$s）</string>
+    <string name="signed_out_notice">いくつかの原因が考えられます：
+\n
+\n• 他のセッションでパスワードを変更している。
+\n
+\n• 他のセッションでこのセッションを削除している。
+\n
+\n• サーバーの管理者がセキュリティ上の理由であなたのアクセスを取り消している。</string>
+    <string name="login_connect_using_matrix_id_notice">代理手段として、既にアカウントをお持ちでMatrix IDとパスワードをご存知なら、この方法が使用できます。</string>
+    <plurals name="login_error_limit_exceeded_retry_after">
+        <item quantity="other">リクエストが多すぎます。%1$d秒後に再試行できます…</item>
+    </plurals>
+    <string name="login_error_outdated_homeserver_warning_content">このホームサーバーが古いバージョンで運営しています。管理者にアップグレードを要請してください。続行できますが、いくつかの機能が正しく作動しない可能性があります。</string>
+    <string name="login_error_outdated_homeserver_content">このホームサーバーが古すぎるバージョンで運営しており、接続できません。管理者にアップグレードを要請してください。</string>
+    <string name="login_error_outdated_homeserver_title">ホームサーバーのバージョンが古すぎます</string>
+    <string name="login_wait_for_email_notice">ただいま%1$sにメールを送信しました。
+\nアカウント登録を続けるにはメールに含まれたリンクをクリックしてください。</string>
+    <string name="login_a11y_captcha_container">CAPTCHA認証を行ってください</string>
+    <string name="login_signup_cancel_confirmation_content">アカウントがまだ登録されていません。
+\n
+\n登録を中止しますか？</string>
+    <string name="login_signup_to">%1$sにアカウント登録</string>
+    <string name="login_reset_password_success_notice_2">あなたはすべてのセッションからログアウトしており、これ以上プッシュ通知を受け取れません。通知をもう一度有効にするには、各端末でサインインしてください。</string>
 </resources>
