@@ -116,7 +116,7 @@
     <string name="direct_chats_header">会話</string>
     <string name="no_public_room_placeholder">公開されたルームがありません</string>
     <plurals name="public_room_nb_users">
-        <item quantity="other">%d名</item>
+        <item quantity="other">%d名のユーザー</item>
     </plurals>
     <string name="send_bug_report">不具合を報告</string>
     <string name="send_bug_report_description">不具合の内容と状況の説明をお願いします。何をしましたか？何が起こるべきでしたか？実際に起こった事象は何でしょうか？</string>
@@ -126,7 +126,7 @@
     <string name="send_bug_report_include_logs">ログを送信</string>
     <string name="send_bug_report_logs_description">開発者が問題を診断するために、このクライアントのログがバグレポートと一緒に送信されます。バグレポートは、ログとスクリーンショットを含めて、公開されることはありません。上記の説明文だけを送信したい場合は、以下のチェックを解除してください。</string>
     <string name="send_bug_report_alert_message">あなたは不満で端末を振っているようです。バグレポートの画面を開きますか？</string>
-    <string name="send_bug_report_app_crashed">前回アプリケーションは正常に停止しませんでした。クラッシュ報告の画面を開きますか？</string>
+    <string name="send_bug_report_app_crashed">前回、アプリケーションは正常に停止しませんでした。クラッシュ報告の画面を開きますか？</string>
     <string name="send_bug_report_sent">不具合を報告しました</string>
     <string name="send_bug_report_failed">不具合の報告の送信に失敗しました (%s)</string>
     <string name="join_room">ルームに参加</string>
@@ -358,7 +358,7 @@
     <string name="missing_permissions_warning">権限が無いため、一部の機能を利用できない可能性があります…</string>
     <string name="missing_permissions_to_start_conf_call">このルームで会議を開始するためには招待の権限が必要です</string>
     <string name="send_anyway">とにかく送る</string>
-    <string name="action_sign_out">ログアウト</string>
+    <string name="action_sign_out">サインアウト</string>
     <string name="bottom_action_home">ホーム</string>
     <string name="no_conversation_placeholder">会話なし</string>
     <string name="template_no_contact_access_placeholder">端末の電話帳を${app_name}アプリが読み取ることは許可されていません</string>
@@ -1034,7 +1034,7 @@
     <string name="encryption_not_enabled">暗号化が有効になっていません</string>
     <string name="settings_notification_configuration">通知設定</string>
     <string name="action_disconnect">切断</string>
-    <string name="action_sign_out_confirmation_simple">ログアウトしますか？</string>
+    <string name="action_sign_out_confirmation_simple">サインアウトしてよろしいですか？</string>
     <string name="action_mark_room_read">既読にする</string>
     <string name="action_copy">コピー</string>
     <string name="dialog_title_success">成功</string>
@@ -1072,7 +1072,7 @@
     <plurals name="send_images_with_original_size">
         <item quantity="other">元の大きさのまま画像を送信</item>
     </plurals>
-    <string name="cannot_call_yourself">自分自身には通話できません</string>
+    <string name="cannot_call_yourself">自分に電話をかけることはできません</string>
     <string name="settings_send_markdown">マークダウン書式</string>
     <string name="settings_send_markdown_summary">メッセージ送信前にマークダウン書式を適用します。これにより、アスタリスクを使用して斜体のテキストを表示するなどの高度な書式設定が利用できます。</string>
     <string name="preference_voice_and_video">音声とビデオ</string>
@@ -1118,7 +1118,7 @@
     <string name="verification_scan_notice">相手ユーザーの端末のコードをスキャンし、相互に安全性を検証</string>
     <string name="verification_scan_their_code">相手のコードをスキャン</string>
     <string name="verification_scan_emoji_title">スキャンできません</string>
-    <string name="action_decline">断る</string>
+    <string name="action_decline">拒否</string>
     <string name="sas_incoming_request_notif_title">認証の要求</string>
     <string name="settings_call_show_confirmation_dialog_summary">通話の開始前に確認</string>
     <string name="settings_call_show_confirmation_dialog_title">意図しない通話を防止</string>
@@ -1140,7 +1140,7 @@
     <string name="sound_device_headset">ヘッドセット</string>
     <string name="sound_device_speaker">スピーカー</string>
     <string name="sound_device_phone">電話</string>
-    <string name="call_select_sound_device">サウンド端末を選択</string>
+    <string name="call_select_sound_device">サウンドデバイスを選択</string>
     <string name="call_failed_no_connection_description">リアルタイム接続を確立できませんでした。
 \nホームサーバーの管理者に、通話が正常に動作するためにTURNを設定するようご連絡ください。</string>
     <string name="call_failed_dont_ask_again">再び表示しない</string>
@@ -1265,7 +1265,7 @@
     <string name="settings_call_ringtone_use_default_stun">フォールバックコールアシストサーバーを許可</string>
     <string name="error_unauthorized">有効な認証情報がないため、権限がありません</string>
     <string name="template_call_failed_no_connection">${app_name} 呼び出し失敗</string>
-    <string name="call_failed_no_ice_description">通話が確実に機能させるためには、ホームサーバー(%1$s)の管理者にTURNサーバーの設定を依頼してください。
+    <string name="call_failed_no_ice_description">確実に通話できるようにするためには、ホームサーバー（%1$s）の管理者にTURNサーバーの設定を依頼してください。
 \n
 \n代わりに、%2$sのパブリックサーバーを使用することもできますが、信頼性は低く、あなたのIPアドレスがそのサーバーと共有されてしまいます。これは設定から管理することができます。</string>
     <string name="settings_room_directory_show_all_rooms_summary">ルームディレクトリの全てのルームを表示（露骨なコンテンツのあるルームを含む）する。</string>
@@ -1275,7 +1275,7 @@
     <string name="action_return">戻る</string>
     <string name="action_unpublish">非公開</string>
     <string name="action_switch">切り替える</string>
-    <string name="action_add">加える</string>
+    <string name="action_add">追加</string>
     <string name="notice_end_to_end_unknown_algorithm">%1$sがエンドツーエンド暗号化（認識されていないアルゴリズム %2$s）をオンにしました。</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">エンドツーエンド暗号化（認識されていないアルゴリズム %1$s）をオンにしました。</string>
     <string name="start_chatting">会話を始める</string>
