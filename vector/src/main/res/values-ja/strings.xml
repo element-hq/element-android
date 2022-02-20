@@ -578,7 +578,7 @@
     <string name="ssl_could_not_verify">リモートサーバーのIDを確認できませんでした。</string>
     <string name="ssl_cert_not_trust">誰かが不当にあなたの通信を傍受しているか、リモートサーバーの証明書をあなたの電話が信用していない可能性があります。</string>
     <string name="ssl_cert_new_account_expl">サーバーの管理者が、これは想定されていることであると言っているのであれば、以下のフィンガープリントが管理者によるフィンガープリントと一致していることを確認してください。</string>
-    <string name="ssl_unexpected_existing_expl">証明書はあなたの電話に信頼されていたものから変更されています。これはきわめて異常な事態です。この新しい証明書は承認しないことを強く推奨します。</string>
+    <string name="ssl_unexpected_existing_expl">証明書はあなたの電話に信頼されていたものから変更されています。これはきわめて異常な事態です。この新しい証明書を承認しないことを強く推奨します。</string>
     <string name="ssl_expected_existing_expl">証明書は以前信頼されていたものから信頼されていないものへと変更されています。サーバーがその証明書を更新した可能性があります。予測されるフィンガープリントを取得するために、サーバーの管理者に連絡してください。</string>
     <string name="ssl_only_accept">サーバーの管理者が上のフィンガープリントと一致するものを発行した場合に限り、証明書を承認してください。</string>
     <string name="malformed_id">不正な形式のIDです。メールアドレスまたは\'@localpart:domain\'という形式のMatrix IDを入力してください</string>
@@ -866,8 +866,8 @@
     <string name="merged_events_collapse">畳む</string>
     <string name="show_info_area_messages_and_errors">メッセージとエラーの場合</string>
     <string name="call_anyway">とにかく通話</string>
-    <string name="action_accept">了承</string>
-    <string name="auth_accept_policies">このホームサーバーの方針を閲覧し承認してください:</string>
+    <string name="action_accept">承諾</string>
+    <string name="auth_accept_policies">このホームサーバーの方針を確認し承諾してください：</string>
     <string name="settings_call_category">通話設定画面</string>
     <string name="template_settings_call_ringtone_use_app_ringtone">着信に${app_name}の既定の着信音を使用</string>
     <string name="settings_call_ringtone_title">着信音</string>
@@ -1448,7 +1448,7 @@
     <string name="notice_room_name_removed_by_you">ルーム名を削除しました</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">許可を与える</string>
     <string name="template_startup_notification_fdroid_battery_optim_message">${app_name}は、信頼できる通知を受け取るために、影響の少ないバックグラウンド接続を維持する必要があります。
-\n次の画面で、${app_name}を常にバックグラウンドで実行することを許可するように求められます。同意してください。</string>
+\n次の画面で、${app_name}を常にバックグラウンドで実行することを許可するように求められます。承認してください。</string>
     <string name="startup_notification_fdroid_battery_optim_title">バックグラウンド接続</string>
     <string name="settings_discovery_manage">ディスカバリー設定を管理します。</string>
     <string name="settings_discovery_category">ディスカバリー（発見）</string>
@@ -1546,7 +1546,7 @@
     <string name="error_empty_field_enter_user_name">ユーザー名を入力してください。</string>
     <string name="ignore_request_short_label">無視</string>
     <string name="share_without_verifying_short_label">共有</string>
-    <string name="widget_integration_review_terms">続けるには利用規約に同意する必要があります。</string>
+    <string name="widget_integration_review_terms">続けるには利用規約を承認する必要があります。</string>
     <string name="room_widget_resource_decline_permission">全てブロック</string>
     <string name="room_widget_resource_grant_permission">許可</string>
     <string name="room_widget_permission_room_id">ルームID</string>
@@ -1734,7 +1734,7 @@
     <string name="room_settings_room_access_private_description">招待された人だけが発見し参加できます</string>
     <string name="room_settings_room_access_private_title">非公開</string>
     <string name="room_settings_room_access_entry_unknown">不明のアクセス設定（%s）</string>
-    <string name="room_settings_room_access_entry_knock">誰でもノックができ、メンバーがその参加を承認または拒否できます</string>
+    <string name="room_settings_room_access_entry_knock">誰でもルームにノックができ、メンバーがその参加を承認または拒否できます</string>
     <string name="room_alias_publish_to_directory_error">現在のルームディレクトリの見え方を取得できません（%1$s）。</string>
     <string name="room_alias_publish_to_directory">このルームを%1$sのルームディレクトリに公開しますか？</string>
     <string name="room_alias_action_unpublish">アドレスを非公開にする</string>
@@ -1779,8 +1779,8 @@
     <string name="login_set_email_title">メールアドレスを設定</string>
     <string name="login_reset_password_mail_confirmation_submit">メールアドレスを確認しました</string>
     <string name="settings_discovery_emails_title">検出可能なメールアドレス</string>
-    <string name="login_terms_title">続行するには条件に同意してください</string>
-    <string name="error_terms_not_accepted">ホームサーバーの利用規約に同意したら、再試行してください。</string>
+    <string name="login_terms_title">続行するには利用規約を承認してください</string>
+    <string name="error_terms_not_accepted">ホームサーバーの利用規約を承認したら、再試行してください。</string>
     <string name="login_signup_submit">次に</string>
     <string name="login_msisdn_confirm_submit">次に</string>
     <string name="login_set_msisdn_submit">次に</string>
@@ -1971,7 +1971,7 @@
     <string name="use_as_default_and_do_not_ask_again">デフォルトで使いもう尋ねない</string>
     <string name="send_bug_report_include_key_share_history">鍵の共有リクエストの履歴を送信</string>
     <string name="no_more_results">結果がありません</string>
-    <string name="cannot_call_yourself_with_invite">自分との通話は開始できません、他の参加者が招待を受けるまでお待ちください</string>
+    <string name="cannot_call_yourself_with_invite">自分に電話をかけることはできません。参加者が招待を受け入れるまでお待ちください</string>
     <string name="audio_video_meeting_description">ミーティングはJitsiのセキュリティーとパーミッションポリシーを使用します。会議中は、現在ルームにいる全ての人に招待状が表示されます。</string>
     <string name="missing_permissions_title">権限がありません</string>
     <string name="denied_permission_voice_message">音声メッセージを送信するには、マイクの権限を許可してください。</string>
@@ -1979,7 +1979,7 @@
     <string name="denied_permission_generic">このアクションを実行するには、いくつかの権限が不足しています。システム設定から権限を付与してください。</string>
     <string name="settings_discovery_bad_identity_server">IDサーバーに接続できませんでした</string>
     <string name="settings_discovery_enter_identity_server">IDサーバーのURLを入力</string>
-    <string name="identity_server_consent_dialog_content">連絡先を発見するために、あなたの連絡先のデータ（電話番号や電子メール）を、設定されたIDサーバー（%1$s）に送信することに同意しますか？
+    <string name="identity_server_consent_dialog_content">連絡先を発見するために、あなたの連絡先のデータ（電話番号や電子メール）を、設定されたIDサーバー（%1$s）に送信することを承認しますか？
 \n
 \nプライバシーの保護のため、データは送信前にハッシュ化されます。</string>
     <string name="identity_server_consent_dialog_title">メールと電話番号を送信</string>
@@ -2635,7 +2635,7 @@
     <string name="login_registration_not_supported">このアプリではこのホームサーバーにアカウントを作成できません。
 \n
 \nウェブクライエントを使用してアカウント登録しますか？</string>
-    <string name="login_registration_disabled">申し訳ありません。このサーバーはアカウントの新規登録を認めていません。</string>
+    <string name="login_registration_disabled">申し訳ありませんが、このサーバーはアカウントの新規登録を受け入れていません。</string>
     <string name="login_mode_not_supported">このアプリではこのホームサーバーにサインインできません。このホームサーバーは次のサインイン方法に対応しています：　%1$s
 \n
 \nウェブクライエントを使用してサインインしますか？</string>
