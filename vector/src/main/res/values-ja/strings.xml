@@ -734,9 +734,9 @@
     <string name="send_bug_report_description_in_english">可能であれば、英語で説明文を記述してください。</string>
     <string name="option_send_voice">音声を送信</string>
     <string name="option_send_sticker">スタンプを送信</string>
-    <string name="no_sticker_application_dialog_content">使用可能なスタンプパックがありません。 
+    <string name="no_sticker_application_dialog_content">現在、有効なスタンプパックがありません。 
 \n
-\n追加しますか？</string>
+\nいくつか追加しますか？</string>
     <string name="go_on_with">続行する…</string>
     <string name="error_no_external_application_found">申し訳ありません、この操作を完了するための外部アプリが見つかりません。</string>
     <string name="e2e_re_request_encryption_key">あなたの他のセッションに暗号鍵を再要求する。</string>
