@@ -30,7 +30,7 @@
     <plurals name="room_displayname_three_and_more_members">
         <item quantity="other">%1$sと他%2$d人</item>
     </plurals>
-    <string name="notice_made_future_room_visibility">%1$sは、今後のルーム履歴を%2$sに見えるように設定しました。</string>
+    <string name="notice_made_future_room_visibility">%1$sが今後のルーム履歴を%2$sに見えるように設定しました。</string>
     <string name="notice_room_visibility_invited">ルームのメンバー全員（招待された時点から）</string>
     <string name="notice_room_visibility_joined">ルームのメンバー全員（参加した時点から）</string>
     <string name="notice_room_visibility_shared">ルームのメンバー全員</string>
@@ -44,9 +44,9 @@
     <string name="notice_room_name_removed">%1$sがルーム名を削除しました</string>
     <string name="notice_room_topic_removed">%1$sがルームのトピックを削除しました</string>
     <string name="notice_profile_change_redacted">%1$sがプロフィール %2$s を更新しました</string>
-    <string name="notice_room_third_party_invite">%1$sは%2$sにルームへの招待を送りました</string>
-    <string name="notice_room_third_party_registered_invite">%1$sは%2$sの招待を受け入れました</string>
-    <string name="notice_crypto_unable_to_decrypt">** 解読できません：%s **</string>
+    <string name="notice_room_third_party_invite">%1$sが%2$sにルームへの招待を送りました</string>
+    <string name="notice_room_third_party_registered_invite">%1$sが%2$sの招待を受け入れました</string>
+    <string name="notice_crypto_unable_to_decrypt">** 復号化できません：%s **</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">送信者の端末からこのメッセージの鍵が送信されていません。</string>
     <string name="could_not_redact">修正できませんでした</string>
     <string name="unable_to_send_message">メッセージを送信できません</string>
@@ -192,7 +192,7 @@
     <string name="black_theme">黒いテーマ</string>
     <string name="notification_sync_in_progress">同期しています…</string>
     <string name="title_activity_home">メッセージ</string>
-    <string name="title_activity_member_details">メンバー詳細</string>
+    <string name="title_activity_member_details">メンバーの詳細</string>
     <string name="action_quote">引用</string>
     <string name="later">後で</string>
     <string name="action_forward">転送</string>
@@ -344,8 +344,8 @@
     <string name="larger">より大きい</string>
     <string name="largest">とても大きい</string>
     <string name="huge">巨大</string>
-    <string name="notification_listening_for_events">発言更新を確認</string>
-    <string name="view_decrypted_source">暗号解除されたソースコードを表示</string>
+    <string name="notification_listening_for_events">発言更新を確認しています</string>
+    <string name="view_decrypted_source">復号化されたソースコードを表示</string>
     <string name="action_rename">名前変更</string>
     <string name="offline">オフライン</string>
     <string name="start_new_chat">会話を開始</string>
@@ -354,7 +354,7 @@
     <string name="option_take_photo_video">写真または動画を撮影</string>
     <string name="auth_send_reset_email">初期化メール送信</string>
     <string name="template_permissions_rationale_msg_camera">写真撮影やビデオ通話には, ${app_name}アプリに端末のカメラの使用を許可する必要があります.</string>
-    <string name="cannot_start_call">通話を開始できませんでした。後ほどお試しください</string>
+    <string name="cannot_start_call">通話を開始できませんでした。後ほど試してください</string>
     <string name="missing_permissions_warning">権限が無いため、一部の機能を利用できない可能性があります…</string>
     <string name="missing_permissions_to_start_conf_call">このルームで会議を開始するためには招待の権限が必要です</string>
     <string name="send_anyway">とにかく送る</string>
@@ -874,7 +874,7 @@
     <string name="settings_call_ringtone_dialog_title">着信音を選んでください:</string>
     <string name="room_participants_action_remove">追い出す</string>
     <string name="reason_hint">理由</string>
-    <string name="notification_sync_init">サービスを初期化</string>
+    <string name="notification_sync_init">サービスを初期化しています</string>
     <string name="title_activity_keys_backup_setup">鍵のバックアップ</string>
     <string name="title_activity_keys_backup_restore">鍵のバックアップを使用</string>
     <string name="title_activity_verify_device">セッションを認証</string>
@@ -910,7 +910,7 @@
     <string name="login_signup_password_hint">パスワード</string>
     <string name="soft_logout_signin_password_hint">パスワード</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">今ここでサインアウトすると、あなたの暗号化されたメッセージは失われてしまいます</string>
-    <string name="sign_out_bottom_sheet_warning_backing_up">鍵のバックアップは現在処理中です。処理中にサインアウトすると暗号化されたメッセージにアクセスできなくなります。</string>
+    <string name="sign_out_bottom_sheet_warning_backing_up">鍵のバックアップは現在処理中です。処理中にサインアウトすると、暗号化されたメッセージにアクセスできなくなります。</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">暗号化されたメッセージにアクセスできなくなることを防ぐため、鍵の安全なバックアップはあなたのセッション全てで有効化してください。</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">暗号化されたメッセージは不要です</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">鍵をバックアップしています…</string>
@@ -1276,7 +1276,7 @@
     <string name="action_unpublish">非公開</string>
     <string name="action_switch">切り替える</string>
     <string name="action_add">加える</string>
-    <string name="notice_end_to_end_unknown_algorithm">%1$sはエンドツーエンド暗号化（認識されていないアルゴリズム %2$s）をオンにしました。</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$sがエンドツーエンド暗号化（認識されていないアルゴリズム %2$s）をオンにしました。</string>
     <string name="notice_end_to_end_unknown_algorithm_by_you">エンドツーエンド暗号化（認識されていないアルゴリズム %1$s）をオンにしました。</string>
     <string name="start_chatting">会話を始める</string>
     <string name="notice_end_to_end_ok">%1$sがエンドツーエンド暗号化をオンにしました。</string>
@@ -1287,24 +1287,24 @@
     <string name="notice_room_guest_access_forbidden">%1$sはゲストがルームに参加するのを拒否しました。</string>
     <string name="notice_direct_room_guest_access_can_join_by_you">ここにゲストが参加することを許可しました。</string>
     <string name="notice_direct_room_guest_access_can_join">%1$sはここにゲストが参加することを許可しました。</string>
-    <string name="notice_room_guest_access_can_join_by_you">ゲストにルームへの参加を許可しました。</string>
-    <string name="notice_room_guest_access_can_join">%1$sがゲストにルームへの参加を許可しました。</string>
+    <string name="notice_room_guest_access_can_join_by_you">ゲストがルームに参加するのを許可しました。</string>
+    <string name="notice_room_guest_access_can_join">%1$sはゲストがルームに参加するのを許可しました。</string>
     <string name="system_theme">システムデフォルト</string>
     <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">このルームのメインおよび代替のアドレスを変更しました。</string>
     <string name="notice_room_canonical_alias_alternative_changed_by_you">このルームの代替アドレスを変更しました。</string>
     <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
-        <item quantity="other">このルームの代替アドレス%1$sを削除しました。</item>
+        <item quantity="other">このルームの代替アドレス %1$s を削除しました。</item>
     </plurals>
     <plurals name="notice_room_canonical_alias_alternative_added_by_you">
-        <item quantity="other">このルームの代替アドレス%1$sを追加しました。</item>
+        <item quantity="other">このルームの代替アドレス %1$s を追加しました。</item>
     </plurals>
     <string name="notice_room_canonical_alias_unset_by_you">このルームのメインアドレスを削除しました。</string>
     <string name="notice_room_canonical_alias_set_by_you">このルームのメインアドレスを%1$sに設定しました。</string>
-    <string name="notice_room_aliases_added_and_removed_by_you">このルームのアドレスとして、%1$sを追加し%2$sを削除しました。</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">このルームのアドレスに%1$sを追加し%2$sを削除しました。</string>
     <plurals name="notice_room_aliases_removed_by_you">
         <item quantity="other">このルームのアドレスの%1$sを削除しました。</item>
     </plurals>
-    <string name="notice_room_withdraw_with_reason_by_you">%1$sの招待を取り消しました。理由：%2$s</string>
+    <string name="notice_room_withdraw_with_reason_by_you">%1$sの招待を取り下げました。理由：%2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">%1$sの招待を受け入れました。理由：%2$s</string>
     <string name="notice_room_third_party_revoked_invite_with_reason_by_you">%1$sのルームへの招待を取り消しました。理由：%2$s</string>
     <string name="notice_room_third_party_invite_with_reason_by_you">%1$sにルームへの招待状を送りました。理由：%2$s</string>
@@ -1317,30 +1317,30 @@
     <string name="notice_answered_call_by_you">電話に出ました。</string>
     <string name="notice_call_candidates_by_you">通話を設定するためにデータを送信しました。</string>
     <string name="notice_room_canonical_alias_no_change_by_you">このルームのアドレスを変更しました。</string>
-    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$sはこのルームのメインおよび代替アドレスを変更しました。</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$sがこのルームのメインおよび代替アドレスを変更しました。</string>
     <string name="notice_room_canonical_alias_no_change">%1$sがこのルームのアドレスを変更しました。</string>
-    <string name="notice_room_canonical_alias_alternative_changed">%1$sはこのルームの代替アドレスを変更しました。</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$sがこのルームの代替アドレスを変更しました。</string>
     <plurals name="notice_room_canonical_alias_alternative_removed">
-        <item quantity="other">%1$sがこのルームの代替アドレス%2$sを削除しました。</item>
+        <item quantity="other">%1$sがこのルームの代替アドレス %2$s を削除しました。</item>
     </plurals>
     <plurals name="notice_room_canonical_alias_alternative_added">
-        <item quantity="other">%1$sはこのルームの代替アドレス%2$sを追加しました。</item>
+        <item quantity="other">%1$sがこのルームの代替アドレス %2$s を追加しました。</item>
     </plurals>
     <string name="notice_room_canonical_alias_unset">%1$sがこのルームのメインアドレスを削除しました。</string>
     <string name="notice_room_canonical_alias_set">%1$sがこのルームのメインアドレスを%2$sに設定しました。</string>
-    <string name="notice_room_aliases_added_and_removed">%1$sはこのルームのアドレスとして%2$sを追加し%3$sを削除しました。</string>
+    <string name="notice_room_aliases_added_and_removed">%1$sがこのルームのアドレスに%2$sを追加し%3$sを削除しました。</string>
     <plurals name="notice_room_aliases_removed">
-        <item quantity="other">%1$sはこのルームのアドレスの%2$sを削除しました。</item>
+        <item quantity="other">%1$sがこのルームのアドレスの%2$sを削除しました。</item>
     </plurals>
     <plurals name="notice_room_aliases_added_by_you">
-        <item quantity="other">このルームのアドレスとして%1$sを追加しました。</item>
+        <item quantity="other">このルームのアドレスに%1$sを追加しました。</item>
     </plurals>
     <string name="notice_room_third_party_invite_with_reason">%1$sが%2$sにルームへの招待を送りました。理由：%3$s</string>
     <string name="notice_room_third_party_revoked_invite_with_reason">%1$sが%2$sのルームへの招待を取り消しました。理由：%3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$sが %2$sの招待を受け入れました。理由：%3$s</string>
-    <string name="notice_room_withdraw_with_reason">%1$sは%2$sの招待を取り下げました。理由：%3$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$sが%2$sの招待を取り下げました。理由：%3$s</string>
     <plurals name="notice_room_aliases_added">
-        <item quantity="other">%1$sはこのルームのアドレスとして%2$sを追加しました。</item>
+        <item quantity="other">%1$sがこのルームのアドレスに%2$sを追加しました。</item>
     </plurals>
     <string name="notice_profile_change_redacted_by_you">プロフィール %1$s を更新しました</string>
     <string name="notice_room_server_acl_updated_title">%sがこのルームのサーバーのアクセス制御リストを変更しました。</string>
@@ -1354,7 +1354,7 @@
     <string name="notice_end_to_end_by_you">エンドツーエンド暗号化を有効にしました（%1$s）</string>
     <string name="notice_made_future_direct_room_visibility_by_you">今後のメッセージを%1$sに見えるように設定しました。</string>
     <string name="notice_made_future_room_visibility_by_you">今後のルーム履歴を%1$sに見えるように設定しました。</string>
-    <string name="notice_made_future_direct_room_visibility">%1$sは、今後のメッセージを%2$sに見えるように設定しました。</string>
+    <string name="notice_made_future_direct_room_visibility">%1$sが今後のメッセージを%2$sに見えるように設定しました。</string>
     <string name="notice_call_candidates">%sが通話を設定するためにデータを送信しました。</string>
     <string name="notice_placed_voice_call_by_you">通話を開始しました。</string>
     <string name="notice_placed_video_call_by_you">ビデオ通話を開始しました。</string>
@@ -1365,11 +1365,11 @@
     <string name="notice_room_remove_with_reason_by_you">%1$sを追放しました。理由：%2$s</string>
     <string name="notice_room_remove_with_reason">%1$sが%2$sを追放しました。理由：%3$s</string>
     <string name="notice_room_reject_with_reason_by_you">招待を拒否しました。理由：%1$s</string>
-    <string name="notice_room_reject_with_reason">%1$sは招待を拒否しました。理由：%2$s</string>
+    <string name="notice_room_reject_with_reason">%1$sが招待を拒否しました。理由：%2$s</string>
     <string name="notice_direct_room_leave_with_reason_by_you">退出しました。理由：%1$s</string>
     <string name="notice_direct_room_leave_with_reason">%1$sが退出しました。理由：%2$s</string>
     <string name="notice_room_leave_with_reason_by_you">このルームを退出しました。理由：%1$s</string>
-    <string name="initial_sync_start_importing_account_left_rooms">初期同期:
+    <string name="initial_sync_start_importing_account_left_rooms">初期同期：
 \n退出したルームをインポートしています</string>
     <string name="initial_sync_start_importing_account_invited_rooms">初期同期：
 \n招待されたルームをインポートしています</string>
@@ -1405,10 +1405,10 @@
 \nサーバーからの応答を待っています…</string>
     <string name="room_displayname_empty_room_was">空のルーム（%sでした）</string>
     <plurals name="room_displayname_four_and_more_members">
-        <item quantity="other">%1$sと%2$sと%3$sと%4$dなど</item>
+        <item quantity="other">%1$s、%2$s、%3$sと他%4$d人</item>
     </plurals>
-    <string name="room_displayname_4_members">%1$sと%2$sと%3$sと%4$s</string>
-    <string name="room_displayname_3_members">%1$sと%2$sと%3$s</string>
+    <string name="room_displayname_4_members">%1$s、%2$s、%3$sと%4$s</string>
+    <string name="room_displayname_3_members">%1$s、%2$sと%3$s</string>
     <string name="notice_power_level_diff">%1$sの権限レベルを%2$sから%3$sへ変更しました。</string>
     <string name="notice_power_level_changed">%1$sが</string>
     <string name="notice_power_level_changed_by_you">あなたは</string>
@@ -1424,7 +1424,7 @@
     <string name="notice_widget_jitsi_removed">%1$sがビデオ会議を開始しました</string>
     <string name="notice_widget_jitsi_added">%1$sがビデオ会議を開始しました</string>
     <string name="notice_widget_modified_by_you">%1$sウィジェットを変更しました</string>
-    <string name="notice_widget_modified">%1$sは%2$sウィジェットを変更しました</string>
+    <string name="notice_widget_modified">%1$sが%2$sウィジェットを変更しました</string>
     <string name="notice_widget_removed_by_you">%1$sウィジェットを削除しました</string>
     <string name="notice_widget_removed">%1$sが%2$sウィジェットを削除しました</string>
     <string name="notice_widget_added_by_you">%1$sウィジェットを追加しました</string>
@@ -2487,7 +2487,7 @@
     <string name="settings_server_upload_size_unknown">制限は不明です。</string>
     <string name="settings_server_upload_size_title">サーバーのファイルアップロードの制限</string>
     <string name="ftue_auth_carousel_1_title">自分の会話は、自分のものに。</string>
-    <string name="room_join_rules_invite">%1$sは、このルームを招待者のみ参加可能に設定しました。</string>
+    <string name="room_join_rules_invite">%1$sが、このルームを、招待者のみ参加可能に設定しました。</string>
     <string name="room_join_rules_public">%1$sが部屋をリンクを持っているユーザーにアクセスできるように設定しました。</string>
     <string name="command_description_spoiler">選択したメッセージをネタバレとして送信</string>
     <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} がエンドツーエンド暗号鍵をディスクに保存する許可を要求しています。
@@ -2552,8 +2552,8 @@
     <string name="room_list_sharing_header_recent_rooms">最近のルーム</string>
     <string name="verification_conclusion_ok_self_notice">新しいセッションが認証されました。セッションは暗号化されたメッセージにアクセスでき、他のユーザーには信頼済として表示されます。</string>
     <string name="room_settings_enable_encryption_warning">いったん有効にすると、暗号化を無効にすることはできません。</string>
-    <string name="create_room_disable_federation_description">この部屋を同じホームサーバー上で組織内のチームとのコラボレーションにのみ使用するなら、このオプションを有効にするといいかもしれません。これは後から変更できません。</string>
-    <string name="create_room_disable_federation_title">%sに属していないユーザーによるこの部屋への参加を今後永久的に拒否する</string>
+    <string name="create_room_disable_federation_description">このルームを同じホームサーバー上で組織内のチームとのコラボレーションにのみ使用するなら、このオプションを有効にするといいかもしれません。これは後から変更できません。</string>
+    <string name="create_room_disable_federation_title">%sに属していないユーザーによるこのルームへの参加を、今後永久的に拒否</string>
     <string name="command_description_lenny">プレーンテキストメッセージの前に ( ͡° ͜ʖ ͡°) を付ける</string>
     <string name="login_error_threepid_denied">このメールアドレスのドメインの登録は許可されていません</string>
     <string name="create_space_in_progress">スペースを作成しています…</string>
@@ -2578,13 +2578,13 @@
     <string name="ftue_auth_use_case_join_existing_server">既存のサーバーに参加しますか？</string>
     <string name="ftue_auth_use_case_skip_partial">この質問をスキップ</string>
     <string name="ftue_auth_use_case_option_one">友達と家族</string>
-    <string name="direct_room_join_rules_invite">%1$sは、これを招待者のみ参加可能に設定しました。</string>
+    <string name="direct_room_join_rules_invite">%1$sがこれを招待者のみ参加可能に設定しました。</string>
     <string name="event_status_failed_messages_warning">メッセージを送信できませんでした</string>
     <string name="a11y_open_widget">ウィジェットを開く</string>
     <string name="call_transfer_transfer_to_title">%1$sに転送</string>
     <string name="call_tile_ended">通話は終了しました</string>
     <string name="cannot_dm_self">自分自身にダイレクトメッセージを送信することはできません！</string>
-    <string name="call_tile_other_started_call">%1$sは通話を開始しました</string>
+    <string name="call_tile_other_started_call">%1$sが通話を開始しました</string>
     <string name="call_tile_you_started_call">通話を開始しました</string>
     <string name="login_set_msisdn_optional_hint">電話番号（任意）</string>
     <string name="login_msisdn_confirm_title">電話番号を確認</string>
