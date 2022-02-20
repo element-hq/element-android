@@ -105,11 +105,11 @@
     <string name="copied_to_clipboard">クリップボードへコピー</string>
     <string name="dialog_title_warning">警告</string>
     <string name="bottom_action_favourites">お気に入り</string>
-    <string name="bottom_action_people">会話</string>
+    <string name="bottom_action_people">知人</string>
     <string name="bottom_action_rooms">ルーム</string>
     <string name="home_filter_placeholder_home">ルーム名で絞り込む</string>
     <string name="home_filter_placeholder_favorites">お気に入りで絞り込む</string>
-    <string name="home_filter_placeholder_people">ユーザーで絞り込む</string>
+    <string name="home_filter_placeholder_people">連絡先で絞り込む</string>
     <string name="home_filter_placeholder_rooms">ルーム名で絞り込む</string>
     <string name="invitations_header">招待中</string>
     <string name="low_priority_header">低優先度</string>
@@ -130,7 +130,7 @@
     <string name="send_bug_report_sent">不具合を報告しました</string>
     <string name="send_bug_report_failed">不具合の報告の送信に失敗しました (%s)</string>
     <string name="join_room">ルームに参加</string>
-    <string name="missing_permissions_title_to_start_conf_call">通話が開始できません</string>
+    <string name="missing_permissions_title_to_start_conf_call">通話を開始できません</string>
     <string name="action_voice_call">音声通話</string>
     <string name="action_video_call">ビデオ通話</string>
     <string name="action_global_search">全体検索</string>
@@ -221,7 +221,7 @@
     <string name="room_message_file_not_found">ファイルが見つかりません</string>
     <string name="room_do_not_have_permission_to_post">あなたはこのルームで発言する権限がありません。</string>
     <string name="room_details_title">ルームの詳細</string>
-    <string name="room_details_people">メンバー</string>
+    <string name="room_details_people">参加者</string>
     <string name="room_details_files">ファイル</string>
     <string name="room_details_settings">設定</string>
     <string name="room_settings_favourite">お気に入り</string>
@@ -381,8 +381,8 @@
     <string name="auth_opt_email_placeholder">電子メールアドレス (任意で)</string>
     <string name="auth_repeat_password_placeholder">パスワード再確認</string>
     <string name="auth_repeat_new_password_placeholder">新しいパスワードを再確認</string>
-    <string name="auth_missing_password">パスワードが違います</string>
-    <string name="auth_missing_email">メールアドレスがありません</string>
+    <string name="auth_missing_password">パスワードが入力されていません</string>
+    <string name="auth_missing_email">メールアドレスが入力されていません</string>
     <string name="auth_missing_phone">電話番号が入力されていません</string>
     <string name="auth_missing_email_or_phone">電子メールアドレスまたは電話番号が入力されていません</string>
     <string name="auth_use_server_options">接続先サーバーを指定（高度）</string>
@@ -394,21 +394,21 @@
     <string name="auth_username_in_use">ユーザー名は既に使用されています</string>
     <string name="auth_home_server">ホームサーバー：</string>
     <string name="auth_identity_server">IDサーバー:</string>
-    <string name="auth_reset_password_next_step_button">メールアドレスを確認しました</string>
+    <string name="auth_reset_password_next_step_button">メールアドレスを認証しました</string>
     <string name="auth_reset_password_message">パスワードを初期化するには, アカウントに登録されている電子メールアドレスを入力してください:</string>
-    <string name="auth_reset_password_missing_email">あなたのアカウントに登録された電子メールアドレスの入力が必要です.</string>
+    <string name="auth_reset_password_missing_email">あなたのアカウントに登録されたメールアドレスの入力が必要です。</string>
     <string name="auth_reset_password_missing_password">新しいパスワードの入力が必要です。</string>
     <string name="auth_reset_password_email_validation_message">%sへ電子メールが送信されました. リンクをたどったら以下をクリックしてください.</string>
     <string name="auth_reset_password_error_unauthorized">電子メールアドレスの確認に失敗しました: 電子メールのリンクをクリックしたことを確認してください</string>
     <string name="auth_reset_password_success_message">パスワードがリセットされました。
 \n
 \n全てのセッションからログアウトしたため、プッシュ通知を受け取れなくなりました。通知を再び有効にするには、各端末で再ログインをお願いします。</string>
-    <string name="login_error_unable_register_mail_ownership">登録ができません : 電子メールがあなた個人のものであるか確認できません</string>
+    <string name="login_error_unable_register_mail_ownership">登録できません：メールアドレスの所有権が確認できません</string>
     <string name="login_error_unknown_token">指定されたアクセストークンが認識されませんでした</string>
     <string name="login_error_bad_json">不正な形式のJSON</string>
     <string name="login_error_not_json">有効なJSONを含んでいませんでした</string>
     <string name="login_error_limit_exceeded">ログイン要求が多すぎてサーバーが対応できません</string>
-    <string name="login_error_login_email_not_yet">まだクリックされていないeメールのリンク</string>
+    <string name="login_error_login_email_not_yet">まだクリックされていない電子メールのリンク</string>
     <string name="compression_options">以下の容量で画像を送信</string>
     <string name="room_info_room_topic">ルームの説明</string>
     <string name="call_connected">通話が接続されました</string>
@@ -437,15 +437,15 @@
     <string name="room_participants_action_devices_list">接続端末一覧を表示</string>
     <string name="room_participants_invite_prompt_msg">%sさんをこのルームに招待してよろしいですか？</string>
     <string name="people_search_invite_by_id"><u>ユーザーIDで招待</u></string>
-    <string name="people_search_invite_by_id_dialog_hint">電子メールまたはMatrixユーザーID</string>
+    <string name="people_search_invite_by_id_dialog_hint">メールアドレスまたはMatrix ID</string>
     <string name="room_prompt_cancel">全て中止</string>
     <string name="ssl_logout_account">ログアウト</string>
     <string name="ssl_remain_offline">無視</string>
     <string name="room_details_people_invited_group_name">招待中</string>
-    <string name="room_details_people_present_group_name">メンバー</string>
+    <string name="room_details_people_present_group_name">参加者</string>
     <string name="search_members_hint">メンバーを検索</string>
     <string name="search_no_results">結果なし</string>
-    <string name="tab_title_search_people">メンバー</string>
+    <string name="tab_title_search_people">参加者</string>
     <string name="tab_title_search_files">ファイル</string>
     <string name="tab_title_search_rooms">ルーム</string>
     <string name="directory_search_results_title">ディレクトリを見る</string>
@@ -483,7 +483,7 @@
     <string name="settings_theme">外観</string>
     <string name="encryption_information_title">エンドツーエンド暗号化についての情報</string>
     <string name="encryption_information_device_name">公開端末名</string>
-    <string name="encryption_export_e2e_room_keys">ルームのEnd-to-end暗号鍵を出力</string>
+    <string name="encryption_export_e2e_room_keys">ルームのエンドツーエンド暗号化の鍵をエクスポート</string>
     <string name="encryption_information_verified">認証</string>
     <string name="historical_placeholder">履歴を検索</string>
     <string name="widget_integration_must_be_in_room">あなたはこのルームに参加していません。</string>
@@ -569,9 +569,9 @@
 \nよろしいですか？</string>
     <string name="people_search_local_contacts">端末の連絡先 (%d)</string>
     <string name="people_search_user_directory">ユーザーディレクトリ (%s)</string>
-    <string name="people_search_filter_text">Matrixユーザーのみ</string>
+    <string name="people_search_filter_text">Matrixのユーザーのみ</string>
     <string name="people_search_invite_by_id_dialog_title">ユーザーIDで招待</string>
-    <string name="people_search_invite_by_id_dialog_description">1つまたは複数のメールアドレスか、Matrix IDを入力してください</string>
+    <string name="people_search_invite_by_id_dialog_description">メールアドレスかMatrix IDを入力してください</string>
     <string name="ssl_trust">信用する</string>
     <string name="ssl_do_not_trust">信用しない</string>
     <string name="ssl_fingerprint_hash">フィンガープリント (%s):</string>
@@ -680,7 +680,7 @@
     <string name="community_id">コミュニティーID</string>
     <string name="community_id_hint">例</string>
     <string name="group_details_home">ホーム</string>
-    <string name="group_details_people">メンバー</string>
+    <string name="group_details_people">参加者</string>
     <string name="group_details_rooms">ルーム</string>
     <string name="no_users_placeholder">ユーザーがいません</string>
     <string name="rooms">ルーム</string>
@@ -902,7 +902,7 @@
     <string name="settings_fail_to_update_password_invalid_current_password">パスワードが無効です</string>
     <string name="settings_media">メディア</string>
     <string name="settings_play_shutter_sound">シャッター音を再生</string>
-    <string name="encryption_information_device_name_with_warning">公開端末名 (会話を行うユーザーに表示されます)</string>
+    <string name="encryption_information_device_name_with_warning">公開セッション名（あなたとやり取りする人々に対して表示されます）</string>
     <string name="notification_silent">サイレント</string>
     <string name="a11y_show_password">パスワードを表示</string>
     <string name="a11y_hide_password">パスワードを隠す</string>
@@ -986,7 +986,7 @@
     <string name="room_profile_section_more_settings">ルームの設定</string>
     <string name="room_profile_section_more_notifications">通知</string>
     <plurals name="room_profile_section_more_member_list">
-        <item quantity="other">%1$d 人のメンバー</item>
+        <item quantity="other">%1$d人の参加者</item>
     </plurals>
     <string name="room_profile_section_more_uploads">アップロード</string>
     <string name="room_profile_section_more_leave">ルームを退出</string>
@@ -1126,10 +1126,10 @@
     <string name="login_error_ssl_other">SSLエラー。</string>
     <string name="login_error_ssl_peer_unverified">SSLエラー:相手のアイデンティティが認証されていません。</string>
     <string name="login_error_homeserver_not_found">このURLからホームサーバーに接続できませんでした、ご確認ください</string>
-    <string name="login_error_no_homeserver_found">有効なMatrixサーバーアドレスではありません</string>
+    <string name="login_error_no_homeserver_found">有効なMatrixサーバーのアドレスではありません</string>
     <string name="login_error_unknown_host">このURLは検索結果に表示できません、ご確認ください</string>
     <string name="auth_msisdn_already_defined">この電話番号は既に使用されています。</string>
-    <string name="auth_add_email_and_phone_message_2">復旧用のメールアドレスを設定します。後からオプションでメールアドレスや電話番号を使用して知人に見つけてもらえるようにできます。</string>
+    <string name="auth_add_email_and_phone_message_2">アカウント復旧用のメールアドレスを設定します。後からオプションでメールアドレスや電話番号を使用して知人に見つけてもらえるようにできます。</string>
     <string name="auth_login_sso">シングルサインオンを使用してサインイン</string>
     <string name="call_format_turn_hd_on">HDを使用する</string>
     <string name="call_format_turn_hd_off">HDを使用しない</string>
@@ -1175,7 +1175,7 @@
     <string name="template_invite_friends_text">${app_name} で会話しましょう：%s</string>
     <string name="invite_friends">友達を招待</string>
     <string name="direct_room_user_list_known_title">既知のユーザー</string>
-    <string name="invalid_qr_code_uri">無効なQRコード (無効な URI)！</string>
+    <string name="invalid_qr_code_uri">無効なQRコード（無効なURI）！</string>
     <string name="passwords_do_not_match">パスワードが一致しません</string>
     <string name="account_email_error">メールアドレスの確認中にエラーが発生しました。</string>
     <string name="disabled_integration_dialog_content">これを行うには設定からインテグレーションを許可を有効にしてください。</string>
@@ -1263,7 +1263,7 @@
     <string name="settings_call_ringtone_use_default_stun_sum">あなたのホームサーバーがアシスト機能を提供しない場合、代わりに%sを使用します（IPアドレスは通話中に共有されます）</string>
     <string name="video_call_in_progress">ビデオ通話が行われています…</string>
     <string name="settings_call_ringtone_use_default_stun">フォールバックコールアシストサーバーを許可</string>
-    <string name="error_unauthorized">有効な認証情報ではありません</string>
+    <string name="error_unauthorized">有効な認証情報がないため、権限がありません</string>
     <string name="template_call_failed_no_connection">${app_name} 呼び出し失敗</string>
     <string name="call_failed_no_ice_description">通話が確実に機能させるためには、ホームサーバー(%1$s)の管理者にTURNサーバーの設定を依頼してください。
 \n
@@ -1512,7 +1512,7 @@
     <string name="settings_troubleshoot_test_token_registration_title">トークンの登録</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">アカウントを追加</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
-\nこのエラーは、${app_name}の管理外です。スマホにはGoogleアカウントがありません。アカウントマネージャーを開いて、Googleアカウントを追加してください。</string>
+\nこのエラーは、${app_name}の管理外です。このスマートフォンにはGoogleアカウントが登録されていません。アカウントマネージャーを開いて、Googleアカウントを追加してください。</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">%1$s
 \nこのエラーは${app_name}の管理外であり、Googleによると、このエラーは、端末にFCMに登録されているアプリが多すぎることを示しています。 このエラーは、アプリの数が極端に多い場合にのみ発生するため、平均的なユーザーには影響しません。</string>
     <string name="template_settings_troubleshoot_test_play_services_failed">${app_name}はGoogle Playサービスを使用してプッシュメッセージを配信していますが、正しく設定されていないようです:
@@ -1722,7 +1722,7 @@
     <string name="directory_add_a_new_server">新しいサーバーを追加</string>
     <string name="directory_your_server">あなたのサーバー</string>
     <string name="encryption_message_recovery">暗号化されたメッセージの復元</string>
-    <string name="device_name_warning">セッションの公開名は会話中の相手に閲覧できます</string>
+    <string name="device_name_warning">セッションの公開名は、あなたとやり取りする人々に対して表示されます</string>
     <string name="room_settings_room_version_title">ルームのバージョン</string>
     <plurals name="room_settings_banned_users_count">
         <item quantity="other">ブロックされたユーザー%d人</item>
@@ -1765,8 +1765,8 @@
     <string name="suggested_header">おすすめのルーム</string>
     <string name="spaces_header">スペース</string>
     <string name="hs_client_url">ホームサーバーAPIのURL</string>
-    <string name="auth_add_email_phone_message_2">復旧用のメールアドレスを設定します。後からオプションでメールアドレスや電話番号を使用して知人に見つけてもらえるようにできます。</string>
-    <string name="auth_add_phone_message_2">電話番号を設定して、後からオプションで知人に見つけてもらえるようにできます。</string>
+    <string name="auth_add_email_phone_message_2">アカウント復旧用のメールアドレスを設定します。後からオプションでメールアドレスや電話番号を使用して知人に見つけてもらえるようにできます。</string>
+    <string name="auth_add_phone_message_2">電話番号を設定します。後からオプションで知人に見つけてもらえるようにできます。</string>
     <string name="call_failed_no_ice_use_alt">%sを使用してみてください</string>
     <string name="room_widget_revoke_access">アクセスを取り消す</string>
     <string name="active_widget_view_action">表示</string>
@@ -1775,7 +1775,7 @@
     <string name="room_filtering_footer_create_new_direct_message">新しいダイレクトメッセージを送信</string>
     <string name="login_set_email_optional_hint">メールアドレス（任意）</string>
     <string name="login_set_email_mandatory_hint">メールアドレス</string>
-    <string name="login_set_email_notice">アカウントを回復するためのメールを設定します。 後で、オプションで、あなたが知人にあなたのメールに見つけてもらえるようにできます。</string>
+    <string name="login_set_email_notice">アカウント復旧用のメールアドレスを設定します。後からオプションで知人に見つけてもらえるようにできます。</string>
     <string name="login_set_email_title">メールアドレスを設定</string>
     <string name="login_reset_password_mail_confirmation_submit">メールアドレスを確認しました</string>
     <string name="settings_discovery_emails_title">検出可能なメールアドレス</string>
@@ -1807,15 +1807,15 @@
     <string name="login_server_other_text">カスタムと高度な設定</string>
     <string name="login_server_url_form_modular_text">組織向けのプレミアムホスティング</string>
     <string name="login_server_modular_text">組織向けのプレミアムホスティング</string>
-    <string name="login_server_matrix_org_text">最大のパブリックサーバーで数百万人に無料で参加</string>
+    <string name="login_server_matrix_org_text">最大のパブリックサーバーで、数百万人に無料で参加</string>
     <string name="login_server_text">メールと同じように、アカウントには1つのホームがありますが、誰とでも話すことができます</string>
     <string name="login_server_title">サーバーを選択</string>
     <string name="login_splash_submit">始めましょう</string>
     <string name="login_splash_text3">エクスペリエンスを拡張およびカスタマイズ</string>
     <string name="login_splash_text2">暗号化して会話をプライベートに保つ</string>
-    <string name="login_splash_text1">直接またはグループで人々とチャットする</string>
+    <string name="login_splash_text1">直接またはグループで連絡先とチャット</string>
     <string name="login_splash_title">あなたの会話。 それを所有する。</string>
-    <string name="auth_add_email_message_2">アカウントの復旧用のメールアドレスを設定して、後からオプションで知人に見つけてもらえるようにできます。</string>
+    <string name="auth_add_email_message_2">アカウント復旧用のメールアドレスを設定します。後からオプションで知人に見つけてもらえるようにできます。</string>
     <string name="this_is_the_beginning_of_dm">ここが%sとのダイレクトメッセージのスタート地点です。</string>
     <string name="no_message_edits_found">変更履歴はありません</string>
     <string name="message_edits">メッセージの変更履歴</string>
@@ -2486,7 +2486,7 @@
     <string name="a11y_unchecked">未確認</string>
     <string name="settings_server_upload_size_unknown">制限は不明です。</string>
     <string name="settings_server_upload_size_title">サーバーのファイルアップロードの制限</string>
-    <string name="ftue_auth_carousel_1_title">自分の会話は自分のものにしましょう。</string>
+    <string name="ftue_auth_carousel_1_title">自分の会話は、自分のものに。</string>
     <string name="room_join_rules_invite">%1$sは、このルームを招待者のみ参加可能に設定しました。</string>
     <string name="room_join_rules_public">%1$sが部屋をリンクを持っているユーザーにアクセスできるように設定しました。</string>
     <string name="command_description_spoiler">選択したメッセージをネタバレとして送信</string>
@@ -2511,20 +2511,20 @@
     <string name="ftue_auth_carousel_body_secure">お宅での対面会話と同じぐらいのプライバシーを提供する、セキュアで独立したコミュニケーション。</string>
     <string name="ftue_auth_carousel_4_title">チームワークを効率よくしましょう。</string>
     <string name="ftue_auth_carousel_3_title">セキュアメッセージング</string>
-    <string name="ftue_auth_carousel_2_title">管理権を握るのはあなたです。</string>
+    <string name="ftue_auth_carousel_2_title">管理権を握るのは、あなたです。</string>
     <string name="preference_help_summary">Elementの使用に関するヘルプ</string>
     <string name="labs_allow_extended_logging_summary">詳細なログは、イライラシェイクでログを送信する際に、より多くのログを提供することで、開発者にとっての助けになります。有効にした場合でも、メッセージの内容やその他のプライベートな情報は記録されません。</string>
-    <string name="upgrade_room_warning">ルームのアップグレードは高度な作業であり、不具合や不足する機能、セキュリティー上の脆弱性がある場合に推奨されます。
+    <string name="upgrade_room_warning">ルームのアップグレードは高度な作業であり、不具合や欠けている機能、セキュリティー上の脆弱性がある場合に推奨されます。
 \nアップグレードは普通、ルームがサーバー上で処理される仕方にだけ影響します。</string>
     <string name="room_settings_enable_encryption_dialog_content">一度有効にしたルームの暗号化は無効にすることはできません。暗号化されたルームで送信されたメッセージは、サーバーからは見ることができず、そのルームのメンバーだけが見ることができます。暗号化を有効にすると、多くのボットやブリッジが正常に動作しなくなる場合があります。</string>
-    <string name="room_created_summary_no_topic_creation_text">%sでこの部屋について人々に知らせます。</string>
-    <string name="user_code_info_text">このコードを連絡先と共有し、スキャンして追加してもらい、会話を始めましょう。</string>
+    <string name="room_created_summary_no_topic_creation_text">%sして、このルームを皆に紹介しましょう。</string>
+    <string name="user_code_info_text">このコードを皆と共有し、スキャンして追加してもらい、会話を始めましょう。</string>
     <string name="create_spaces_make_sure_access">正当な参加者が%sにアクセスできることを確認してください。これは後から変更できます。</string>
     <string name="new_let_people_in_spaces_find_and_join">新規：スペースの参加者が非公開のルームを検索し、参加できるようになりました</string>
     <string name="add_people">参加者を追加</string>
     <string name="create_spaces_type_header">スペースは、ルームや連絡先をグループ化する新しい方法です</string>
     <plurals name="space_people_you_know">
-        <item quantity="other">%d人の連絡先がすでに参加しています</item>
+        <item quantity="other">%d人の知り合いがすでに参加しています</item>
     </plurals>
     <string name="invite_to_space">%sに招待</string>
     <string name="invite_by_username_or_mail">ユーザー名かメールアドレスで招待</string>
@@ -2579,4 +2579,25 @@
     <string name="ftue_auth_use_case_skip_partial">この質問をスキップ</string>
     <string name="ftue_auth_use_case_option_one">友達と家族</string>
     <string name="direct_room_join_rules_invite">%1$sは、これを招待者のみ参加可能に設定しました。</string>
+    <string name="event_status_failed_messages_warning">メッセージを送信できませんでした</string>
+    <string name="a11y_open_widget">ウィジェットを開く</string>
+    <string name="call_transfer_transfer_to_title">%1$sに転送</string>
+    <string name="call_tile_ended">通話は終了しました</string>
+    <string name="cannot_dm_self">自分自身にダイレクトメッセージを送信することはできません！</string>
+    <string name="call_tile_other_started_call">%1$sは通話を開始しました</string>
+    <string name="call_tile_you_started_call">あなたは通話を開始しました</string>
+    <string name="login_set_msisdn_optional_hint">電話番号（任意）</string>
+    <string name="login_msisdn_confirm_title">電話番号を確認</string>
+    <string name="login_set_msisdn_title">電話番号を設定</string>
+    <string name="login_reset_password_success_notice">パスワードがリセットされました。</string>
+    <string name="login_reset_password_on">%1$sでパスワードをリセット</string>
+    <string name="login_server_url_form_modular_hint">Element Matrix Servicesのアドレス</string>
+    <string name="login_signin_to">%1$sにサインイン</string>
+    <string name="ftue_auth_use_case_title">誰と最もよく会話しますか？</string>
+    <string name="leave_specific_ones">特定のルームとスペースから退出…</string>
+    <string name="this_space_has_no_rooms_not_admin">非公開で招待が必要なルームは表示されていません。
+\nルームを追加する権限はありません。</string>
+    <string name="this_space_has_no_rooms_admin">非公開で招待が必要なルームは表示されていません。</string>
+    <string name="a11y_poll_winner_option">勝者</string>
+    <string name="login_set_msisdn_notice">電話番号を設定します。オプションで知人に見つけてもらえるようにできます。</string>
 </resources>
