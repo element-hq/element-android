@@ -1585,7 +1585,7 @@
     <string name="join_anyway">とにかく参加</string>
     <string name="space_add_child_title">ルームを追加</string>
     <string name="user_invites_you">%sはあなたを招待しています</string>
-    <string name="no_permissions_to_start_conf_call">このルームでグループ通話をする権利がありません</string>
+    <string name="no_permissions_to_start_conf_call">このルームでグループ通話を開始する権限がありません</string>
     <string name="audio_meeting">オーディオミーティングを開始</string>
     <string name="secure_backup_setup">安全バックアップを設定</string>
     <string name="keys_backup_banner_update_line2">鍵のバックアップで管理</string>
