@@ -8,15 +8,15 @@
     <string name="notice_room_invite_you">%1$sがあなたを招待しました</string>
     <string name="notice_room_join">%1$sが参加しました</string>
     <string name="notice_room_leave">%1$sが退出しました</string>
-    <string name="notice_room_reject">%1$sが招待を断りました</string>
+    <string name="notice_room_reject">%1$sが招待を拒否しました</string>
     <string name="notice_room_remove">%1$sが%2$sを追放しました</string>
-    <string name="notice_room_unban">%1$sが%2$sをブロック解除しました</string>
+    <string name="notice_room_unban">%1$sが%2$sのブロックを解除しました</string>
     <string name="notice_room_ban">%1$sが%2$sをブロックしました</string>
-    <string name="notice_room_withdraw">%1$sが%2$sの招待を撤回しました</string>
+    <string name="notice_room_withdraw">%1$sが%2$sの招待を取り下げました</string>
     <string name="notice_avatar_url_changed">%1$sがアバターを変更しました</string>
     <string name="notice_display_name_set">%1$sが表示名を%2$sに設定しました</string>
     <string name="notice_display_name_changed_from">%1$sが表示名を%2$sから%3$sに変更しました</string>
-    <string name="notice_display_name_removed">%1$sが表示名 (%2$s) を削除しました</string>
+    <string name="notice_display_name_removed">%1$sが表示名（%2$s）を削除しました</string>
     <string name="notice_room_topic_changed">%1$sがテーマを%2$sに変更しました</string>
     <string name="notice_room_name_changed">%1$sがルーム名を%2$sに変更しました</string>
     <string name="notice_placed_video_call">%sがビデオ通話を開始しました。</string>
@@ -38,13 +38,13 @@
     <string name="notice_room_visibility_unknown">不明 (%s)。</string>
     <string name="notice_end_to_end">%1$sがエンドツーエンド暗号化を有効にしました (%2$s)</string>
     <string name="notice_requested_voip_conference">%1$sがVoIP会議をリクエストしました</string>
-    <string name="notice_voip_started">VoIP会議が開始されました</string>
+    <string name="notice_voip_started">VoIP会議が開始しました</string>
     <string name="notice_voip_finished">VoIP会議が終了しました</string>
     <string name="notice_avatar_changed_too">（アバターも変更されました）</string>
     <string name="notice_room_name_removed">%1$sがルーム名を削除しました</string>
-    <string name="notice_room_topic_removed">%1$sがルームトピックを削除しました</string>
-    <string name="notice_profile_change_redacted">%1$sがプロフィール %2$sを更新しました</string>
-    <string name="notice_room_third_party_invite">%1$sは%2$sにルームに参加するよう招待状を送りました</string>
+    <string name="notice_room_topic_removed">%1$sがルームのトピックを削除しました</string>
+    <string name="notice_profile_change_redacted">%1$sがプロフィール %2$s を更新しました</string>
+    <string name="notice_room_third_party_invite">%1$sは%2$sにルームへの招待を送りました</string>
     <string name="notice_room_third_party_registered_invite">%1$sは%2$sの招待を受け入れました</string>
     <string name="notice_crypto_unable_to_decrypt">** 解読できません：%s **</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">送信者の端末からこのメッセージの鍵が送信されていません。</string>
@@ -59,14 +59,14 @@
     <string name="notice_room_avatar_changed_by_you">ルームのアバターを変更しました</string>
     <string name="notice_room_avatar_changed">%1$sがルームのアバターを変更しました</string>
     <string name="notice_room_topic_changed_by_you">トピックを%1$sに変更しました</string>
-    <string name="notice_display_name_removed_by_you">表示名を削除しました(%1$sでした)</string>
+    <string name="notice_display_name_removed_by_you">表示名を削除しました（%1$sでした）</string>
     <string name="notice_display_name_changed_from_by_you">表示名を%1$sから%2$sに変更しました</string>
     <string name="notice_display_name_set_by_you">表示名を%1$sに設定しました</string>
     <string name="notice_avatar_url_changed_by_you">アバターを変更しました</string>
     <string name="notice_room_withdraw_by_you">%1$sの招待を取り下げました</string>
-    <string name="notice_room_ban_by_you">%1$sをBANしました</string>
-    <string name="notice_room_unban_by_you">%1$sのBANを解除しました</string>
-    <string name="notice_room_remove_by_you">%1$sを退出させました</string>
+    <string name="notice_room_ban_by_you">%1$sをブロックしました</string>
+    <string name="notice_room_unban_by_you">%1$sのブロックを解除しました</string>
+    <string name="notice_room_remove_by_you">%1$sを追放しました</string>
     <string name="notice_room_reject_by_you">招待を拒否しました</string>
     <string name="notice_direct_room_leave_by_you">ルームから退出しました</string>
     <string name="notice_direct_room_leave">%1$sがルームから退出しました</string>
@@ -739,9 +739,9 @@
 \n追加しますか？</string>
     <string name="go_on_with">続行する…</string>
     <string name="error_no_external_application_found">申し訳ありません、この操作を完了するための外部アプリが見つかりません。</string>
-    <string name="e2e_re_request_encryption_key">他のセッションから暗号鍵を再度要求します。</string>
+    <string name="e2e_re_request_encryption_key">あなたの他のセッションに暗号鍵を再要求する。</string>
     <string name="e2e_re_request_encryption_key_sent">鍵のリクエストが送信されました。</string>
-    <string name="e2e_re_request_encryption_key_dialog_title">リクエスト送信済</string>
+    <string name="e2e_re_request_encryption_key_dialog_title">要求が送信されました</string>
     <string name="template_e2e_re_request_encryption_key_dialog_content">鍵をこのセッションに送信できるように、メッセージを復号化できる他の端末で${app_name}を起動してください。</string>
     <plurals name="format_time_s">
         <item quantity="other">%d秒</item>
@@ -923,7 +923,7 @@
     <string name="keys_backup_settings_restore_backup_button">バックアップから復元</string>
     <string name="keys_backup_settings_delete_backup_button">バックアップを削除</string>
     <string name="keys_backup_banner_in_progress">鍵をバックアップしています。これには数分かかる可能性があります…</string>
-    <string name="keys_backup_info_keys_all_backup_up">全ての鍵をバックアップしました</string>
+    <string name="keys_backup_info_keys_all_backup_up">全ての鍵がバックアップされています</string>
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="other">%d個の鍵をバックアップしています…</item>
     </plurals>
@@ -1119,7 +1119,7 @@
     <string name="verification_scan_their_code">相手のコードをスキャン</string>
     <string name="verification_scan_emoji_title">スキャンできません</string>
     <string name="action_decline">断る</string>
-    <string name="sas_incoming_request_notif_title">検証リクエスト</string>
+    <string name="sas_incoming_request_notif_title">認証の要求</string>
     <string name="settings_call_show_confirmation_dialog_summary">通話の開始前に確認</string>
     <string name="settings_call_show_confirmation_dialog_title">意図しない通話を防止</string>
     <string name="login_error_ssl_handshake">お使いの端末は脆弱性のある古いTLSセキュリティープロトコルを使用しています、このセキュリティーでは接続できません</string>
@@ -1281,11 +1281,11 @@
     <string name="start_chatting">会話を始める</string>
     <string name="notice_end_to_end_ok">%1$sがエンドツーエンド暗号化をオンにしました。</string>
     <string name="notice_end_to_end_ok_by_you">エンドツーエンド暗号化をオンにしました。</string>
-    <string name="notice_direct_room_guest_access_forbidden_by_you">ゲストがルームに入るのを拒否しています。</string>
-    <string name="notice_direct_room_guest_access_forbidden">%1$sはゲストがルームに参加するのを拒否しています。</string>
-    <string name="notice_room_guest_access_forbidden_by_you">ゲストがルームに入るのを拒否しています。</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">ゲストがルームに参加するのを拒否しました。</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$sはゲストがルームに参加するのを拒否しました。</string>
+    <string name="notice_room_guest_access_forbidden_by_you">ゲストがルームに参加するのを拒否しました。</string>
     <string name="notice_room_guest_access_forbidden">%1$sはゲストがルームに参加するのを拒否しました。</string>
-    <string name="notice_direct_room_guest_access_can_join_by_you">ここへのゲストの入室を許可しました。</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">ここにゲストが参加することを許可しました。</string>
     <string name="notice_direct_room_guest_access_can_join">%1$sはここにゲストが参加することを許可しました。</string>
     <string name="notice_room_guest_access_can_join_by_you">ゲストにルームへの参加を許可しました。</string>
     <string name="notice_room_guest_access_can_join">%1$sがゲストにルームへの参加を許可しました。</string>
@@ -1308,14 +1308,14 @@
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">%1$sの招待を受諾しました%2$。理由：%2$s</string>
     <string name="notice_room_third_party_revoked_invite_with_reason_by_you">%1$sのルームへの招待を取り消しました。理由：%2$s</string>
     <string name="notice_room_third_party_invite_with_reason_by_you">%1$sにルームへの招待状を送りました。理由：%2$s</string>
-    <string name="notice_requested_voip_conference_by_you">VoIPカンファレンスをリクエストしました</string>
+    <string name="notice_requested_voip_conference_by_you">VoIP会議を要求しました</string>
     <string name="notice_room_server_acl_updated_title_by_you">このルームのサーバーのアクセス制御リストを変更しました。</string>
     <string name="notice_room_server_acl_set_title_by_you">このルームのサーバーアクセス制御リストを設定しました。</string>
     <string name="notice_direct_room_update_by_you">ここをアップグレードしました。</string>
-    <string name="notice_room_update_by_you">あなたはこのルームをアップグレードしました。</string>
+    <string name="notice_room_update_by_you">このルームをアップグレードしました。</string>
     <string name="notice_ended_call_by_you">通話を終了しました。</string>
-    <string name="notice_answered_call_by_you">通話に応答しました。</string>
-    <string name="notice_call_candidates_by_you">通話を設定するためのデータを送信しました。</string>
+    <string name="notice_answered_call_by_you">電話に出ました。</string>
+    <string name="notice_call_candidates_by_you">通話を設定するためにデータを送信しました。</string>
     <string name="notice_room_canonical_alias_no_change_by_you">このルームのアドレスを変更しました。</string>
     <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$sはこのルームのメインおよび代替アドレスを変更しました。</string>
     <string name="notice_room_canonical_alias_no_change">%1$sがこのルームのアドレスを変更しました。</string>
@@ -1342,7 +1342,7 @@
     <plurals name="notice_room_aliases_added">
         <item quantity="other">%1$sはこのルームのアドレスとして%2$sを追加しました。</item>
     </plurals>
-    <string name="notice_profile_change_redacted_by_you">あなたのプロフィールが更新されました %1$s</string>
+    <string name="notice_profile_change_redacted_by_you">プロフィール %1$s を更新しました</string>
     <string name="notice_room_server_acl_updated_title">%sがこのルームのサーバーのアクセス制御リストを変更しました。</string>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">IPリテラルに一致するサーバーは禁止されています。</string>
     <string name="notice_room_server_acl_set_ip_literals_allowed">・IPリテラルに一致するサーバーを許可します。</string>
@@ -1352,10 +1352,10 @@
     <string name="notice_direct_room_update">%sがここをアップグレードしました。</string>
     <string name="notice_room_update">%sがこのルームをアップグレードしました。</string>
     <string name="notice_end_to_end_by_you">エンドツーエンド暗号化をオンにしました (%1$s)</string>
-    <string name="notice_made_future_direct_room_visibility_by_you">あなたは今後のメッセージを%1$sに見えるように設定しました</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">あなたは、今後のメッセージを%1$sに見えるように設定しました</string>
     <string name="notice_made_future_room_visibility_by_you">今後のルーム履歴を%1$sに見えるように設定しました</string>
-    <string name="notice_made_future_direct_room_visibility">%1$sは今後のメッセージを%2$sに見えるように設定しました</string>
-    <string name="notice_call_candidates">%sが通話を設定するためのデータを送信しました。</string>
+    <string name="notice_made_future_direct_room_visibility">%1$sは、今後のメッセージを%2$sに見えるように設定しました</string>
+    <string name="notice_call_candidates">%sが通話を設定するためにデータを送信しました。</string>
     <string name="notice_placed_voice_call_by_you">通話をしました。</string>
     <string name="notice_placed_video_call_by_you">ビデオ通話をしました。</string>
     <string name="notice_room_ban_with_reason_by_you">あなたが%1$sをブロックしました。理由：%2$s</string>
@@ -1417,7 +1417,7 @@
     <string name="power_level_default">デフォルト</string>
     <string name="power_level_moderator">モデレーター</string>
     <string name="power_level_admin">管理者</string>
-    <string name="notice_widget_jitsi_modified_by_you">あなたががビデオ会議を変更しました</string>
+    <string name="notice_widget_jitsi_modified_by_you">ビデオ会議を変更しました</string>
     <string name="notice_widget_jitsi_modified">%1$sがビデオ会議を変更しました</string>
     <string name="notice_widget_jitsi_added_by_you">ビデオ会議を開始しました</string>
     <string name="notice_widget_jitsi_removed_by_you">ビデオ会議を終了しました</string>
@@ -1438,10 +1438,10 @@
     <string name="notice_room_third_party_revoked_invite">%1$sが%2$sのルームへの招待を取り消しました</string>
     <string name="notice_direct_room_third_party_invite">%1$sが%2$sを招待しました</string>
     <string name="notice_room_third_party_invite_by_you">あなたは%1$sにルームへの招待を送りました</string>
-    <string name="notice_event_redacted_by_with_reason">メッセージが%1$sによって削除されました［理由：%2$s］</string>
+    <string name="notice_event_redacted_by_with_reason">メッセージが%1$sにより削除されました［理由：%2$s］</string>
     <string name="notice_event_redacted_with_reason">メッセージが削除されました［理由：%1$s］</string>
-    <string name="notice_event_redacted_by">%1$sがメッセージを削除しました</string>
-    <string name="notice_event_redacted">メッセージを削除</string>
+    <string name="notice_event_redacted_by">メッセージが%1$sにより削除されました</string>
+    <string name="notice_event_redacted">メッセージが削除されました</string>
     <string name="notice_room_avatar_removed_by_you">ルームのアバターを削除しました</string>
     <string name="notice_room_avatar_removed">%1$sがルームのアバターを削除しました</string>
     <string name="notice_room_topic_removed_by_you">ルームのトピックを削除しました</string>
@@ -1487,14 +1487,14 @@
 \n%1$s</string>
     <string name="template_settings_troubleshoot_test_bg_restricted_success">${app_name}のバックグラウンド制限は無効になっています。 このテストは、モバイル（WIFIでない）を使用して実行する必要があります。
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">端末を再起動してもサービスは開始されません。${app_name}が一度開かれるまで通知は届きません。</string>
+    <string name="template_settings_troubleshoot_test_service_boot_failed">端末を再起動してもサービスは開始しません。${app_name}を一度開くまで通知は届きません。</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">%1$s
 \nこのエラーは${app_name}の管理外です。 これはいくつかの理由で発生する可能性があります。 後で再試行すればうまくいくかもしれません。システム設定でGoogle Play Serviceのデータ使用量が制限されていないか、端末の時刻が正しいかどうか、もしくはカスタムROMで起こることがあります。</string>
     <string name="template_settings_add_3pid_flow_not_supported">${app_name}モバイルからこれを行うことはできません</string>
     <string name="template_settings_troubleshoot_test_battery_success">${app_name}はバッテリー最適化の影響を受けません。</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">制限を無効にする</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">起動時の開始を有効にする</string>
-    <string name="settings_troubleshoot_test_service_boot_success">端末を再起動するとサービスが開始されます。</string>
+    <string name="settings_troubleshoot_test_service_boot_success">端末を再起動するとサービスが開始します。</string>
     <string name="settings_troubleshoot_test_service_restart_failed">サービスの再起動に失敗しました</string>
     <string name="settings_troubleshoot_test_service_restart_success">サービスが強制終了され、自動的に再起動されました。</string>
     <string name="settings_troubleshoot_test_service_restart_title">通知サービスの自動再起動</string>
@@ -1666,9 +1666,9 @@
 \n
 \n最高度のセキュリティーのために、アカウントのパスワードと異なるものに設定することが大切です。</string>
     <string name="keys_backup_setup_step2_text_title">パスフレーズを使用してバックアップを保護します。</string>
-    <string name="keys_backup_setup_step1_description">暗号化が有効なルームで送信されたメッセージは、エンドツーエンド暗号化によって保護されます。メッセージを読むための鍵を持っているのは送受信者のみです。
+    <string name="keys_backup_setup_step1_description">暗号化されたメッセージは、エンドツーエンドの暗号化によって保護されています。これらの暗号化されたメッセージを読むための鍵を持っているのは、あなたと受信者だけです。
 \n
-\n鍵を失わないために、鍵を安全にバックアップしてください。</string>
+\n鍵を失くさないよう、鍵を安全にバックアップしてください。</string>
     <string name="keys_backup_setup_step1_advanced">（高度）</string>
     <string name="keys_backup_setup_step1_title">暗号化されたメッセージを決して失わないために</string>
     <string name="keys_backup_no_session_error">利用可能なMatrixセッションがありません</string>
@@ -2147,7 +2147,7 @@
     <string name="a11y_static_map_image">地図</string>
     <string name="end_poll_confirmation_approve_button">投票を終了</string>
     <string name="poll_end_action">投票を終了</string>
-    <string name="create_poll_options_hint">選択肢 %1$d</string>
+    <string name="create_poll_options_hint">選択肢%1$d</string>
     <string name="create_poll_options_title">選択肢を作成</string>
     <string name="location_activity_title_preview">ロケーション</string>
     <string name="a11y_location_share_icon">ロケーションを共有</string>
@@ -2225,9 +2225,9 @@
     <string name="thread_list_empty_title">スレッドでディスカッションを整理して管理</string>
     <string name="verification_request_waiting_for">%sを待機しています…</string>
     <string name="verification_scan_with_this_device">この端末でスキャン</string>
-    <string name="verification_sent">検証を送信済</string>
-    <string name="verification_verify_device_manually">手動で検証</string>
-    <string name="verification_verify_device">このセッションを検証</string>
+    <string name="verification_sent">認証を送信済</string>
+    <string name="verification_verify_device_manually">手動で認証</string>
+    <string name="verification_verify_device">このセッションを認証</string>
     <string name="sent_a_voice_message">音声</string>
     <string name="create_room_alias_empty">ルームのアドレスを入力してください</string>
     <string name="create_room_alias_already_in_use">このアドレスは既に使用されています</string>
@@ -2415,7 +2415,7 @@
     <string name="settings_discovery_disconnect_with_bound_pid">現在IDサーバー %1$s でメールアドレスや電話番号を共有しています。共有を停止するには %2$s に再接続する必要があります。</string>
     <string name="room_created_summary_item_by_you">ルームを作成し設定しました。</string>
     <string name="a11y_create_direct_message_by_qr_code">QRコードを読み取り、新しいダイレクトメッセージを作成</string>
-    <string name="error_failed_to_import_keys">キーのインポートに失敗しました</string>
+    <string name="error_failed_to_import_keys">鍵のインポートに失敗しました</string>
     <string name="a11y_create_direct_message_by_mxid">Matrix IDで新しいダイレクトメッセージを作成</string>
     <string name="a11y_create_direct_message">新しいダイレクトメッセージを作成</string>
     <string name="a11y_create_menu_close">ルーム作成メニューを閉じる…</string>
@@ -2620,7 +2620,7 @@
     <string name="initialize_cross_signing">クロス署名を開始</string>
     <string name="not_trusted">信頼されていません</string>
     <string name="complete_security">セキュリティーを確認</string>
-    <string name="verification_request">検証リクエスト</string>
+    <string name="verification_request">認証の要求</string>
     <string name="verification_request_other_cancelled">%sがキャンセルしました</string>
     <string name="seen_by">既読</string>
     <string name="verification_profile_verify">検証</string>
@@ -2722,7 +2722,7 @@
 \nアカウントデータとメッセージにアクセスするにはもう一度サインインしてください。</string>
     <string name="template_soft_logout_sso_not_same_user_error">現在のセッションはユーザー %1$s のものですが、あなたが提供している資格情報はユーザー %2$s のものです。この操作は${app_name}ではサポートされていません。
 \nまずデータをクリアし、その後、別のアカウントにサインインしてください。</string>
-    <string name="soft_logout_signin_e2e_warning_notice">暗号化されたメッセージが読めるように、サインインしてこの端末にのみ保存されている暗号鍵を取り戻してください。</string>
+    <string name="soft_logout_signin_e2e_warning_notice">暗号化されたメッセージがどの端末でも読めるように、サインインしてこの端末にのみ保存されている暗号鍵を取り戻してください。</string>
     <string name="soft_logout_signin_notice">あなたのホームサーバー（%1$s）の管理者があなたを%2$sのアカウントからサインアウトしています。（%3$s）</string>
     <string name="signed_out_notice">いくつかの原因が考えられます：
 \n
@@ -2760,9 +2760,9 @@
     <string name="identity_server_user_consent_not_provided">ユーザーによる同意は与えられていません。</string>
     <string name="identity_server_set_alternative_notice">代わりに、他のIDサーバーのURLを入力できます</string>
     <string name="bottom_sheet_setup_secure_backup_subtitle">サーバー上の暗号化キーをバックアップすることにより、暗号化されたメッセージとデータへのアクセスが失われるのを防ぎます。</string>
-    <string name="bootstrap_cancel_text">今キャンセルしてログインにアクセスできなくなると、暗号化されたメッセージとデータが失われる可能性があります。
+    <string name="bootstrap_cancel_text">いまキャンセルすると、ログインできなくなった際に、暗号化されたメッセージとデータを失ってしまう可能性があります。
 \n
-\nまた、設定からバックアップの設定や鍵の管理ができます。</string>
+\nまた、設定から、安全なバックアップの設定や鍵の管理を行うことができます。</string>
     <string name="bootstrap_crosssigning_save_usb">USBメモリーもしくはバックアップドライブに保存</string>
     <string name="bootstrap_crosssigning_progress_key_backup">鍵のバックアップの設定</string>
     <string name="bootstrap_crosssigning_progress_save_ssk">自己署名キーを同期しています</string>
@@ -2775,4 +2775,24 @@
     <string name="settings_key_requests">鍵の要求</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">鍵は既に最新です！</string>
     <string name="reset_cross_signing">鍵をリセット</string>
+    <string name="create_poll_empty_question_error">質問は空にできません</string>
+    <string name="direct_room_profile_encrypted_subtitle">ここで送受信されるメッセージはエンドツーエンド暗号化されています。
+\n
+\nメッセージは安全に保護されており、メッセージのロックを解除するための固有の鍵は、あなたと受信者だけが持っています。</string>
+    <string name="room_profile_encrypted_subtitle">このルームのメッセージはエンドツーエンド暗号化されています。
+\n
+\nメッセージは安全に保護されており、メッセージのロックを解除するための固有の鍵は、あなたと受信者だけが持っています。</string>
+    <string name="dev_tools_form_hint_state_key">ステートキー</string>
+    <string name="save_recovery_key_chooser_hint">リカバリーキーを以下に保存</string>
+    <string name="crypto_error_withheld_generic">送信者が意図的に鍵を送信しなかったため、このメッセージにアクセスすることができません</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">暗号鍵が適切に送信されませんでした。エンドツーエンド暗号化の性質上、相手のメッセージが届くまで待機する必要があるかもしれません。</string>
+    <string name="bootstrap_migration_backup_recovery_key">鍵のバックアップのリカバリーキー</string>
+    <string name="bootstrap_migration_with_passphrase_helper_with_link">鍵のバックアップのパスフレーズが分からなければ、%sできます。</string>
+    <string name="bootstrap_migration_use_recovery_key">鍵のバックアップのリカバリーキーを使用</string>
+    <string name="bootstrap_migration_enter_backup_password">続行するには鍵のバックアップのパスフレーズを入力してください。</string>
+    <string name="bootstrap_progress_generating_ssss_with_info">SSSS鍵をパスフレーズから生成しています（%s）</string>
+    <string name="bootstrap_progress_generating_ssss">SSSS鍵をパスフレーズから生成しています</string>
+    <string name="bootstrap_progress_compute_curve_key">Curveキーを取得しています</string>
+    <string name="bootstrap_progress_checking_backup_with_info">バックアップキーを確認しています（%s）</string>
+    <string name="bootstrap_progress_checking_backup">バックアップキーを確認しています</string>
 </resources>
