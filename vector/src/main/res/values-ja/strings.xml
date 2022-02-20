@@ -216,8 +216,8 @@
     <string name="room_message_placeholder_not_encrypted">ここに送信文を入力 (暗号なし)…</string>
     <string name="room_offline_notification">サーバーとの接続が失われました。</string>
     <string name="room_prompt_resend">全て再送信</string>
-    <string name="room_resend_unsent_messages">未送信の文を再送信</string>
-    <string name="room_delete_unsent_messages">未送信の文を削除</string>
+    <string name="room_resend_unsent_messages">未送信のメッセージを再送信</string>
+    <string name="room_delete_unsent_messages">未送信のメッセージを削除</string>
     <string name="room_message_file_not_found">ファイルが見つかりません</string>
     <string name="room_do_not_have_permission_to_post">あなたはこのルームで発言する権限がありません。</string>
     <string name="room_details_title">ルームの詳細</string>
@@ -803,7 +803,7 @@
     <string name="command_description_emote">動作を表示</string>
     <string name="command_description_ban_user">指定したIDのユーザーをブロック</string>
     <string name="command_description_unban_user">指定したIDのユーザーのブロックを解除</string>
-    <string name="command_description_op_user">ユーザーの権限レベルを決める</string>
+    <string name="command_description_op_user">ユーザーの権限レベルを規定</string>
     <string name="command_description_deop_user">指定したIDのユーザーの管理者権限を取り消す</string>
     <string name="command_description_invite_user">指定したユーザーを現在のルームに招待</string>
     <string name="command_description_join_room">指定されたアドレスのルームに参加</string>
@@ -1105,7 +1105,7 @@
     <string name="choose_locale_other_locales_title">他の利用可能な言語</string>
     <string name="settings_category_composer">メッセージエディタ</string>
     <string name="settings_preferences">環境設定</string>
-    <string name="settings_secure_backup_enter_to_setup">この端末を設定</string>
+    <string name="settings_secure_backup_enter_to_setup">この端末で設定</string>
     <string name="settings_secure_backup_reset">セキュアバックアップをリセット</string>
     <string name="settings_secure_backup_setup">セキュアバックアップを設定</string>
     <string name="settings_secure_backup_manage">管理</string>
@@ -1220,9 +1220,9 @@
     <string name="room_permissions_remove_messages_sent_by_others">他の人から送信されたメッセージの削除</string>
     <string name="room_permissions_ban_users">ユーザーのブロック</string>
     <string name="room_permissions_remove_users">ユーザーの除去</string>
-    <string name="room_permissions_change_settings">設定を変更</string>
-    <string name="room_permissions_invite_users">招待されたユーザー</string>
-    <string name="room_permissions_send_messages">メッセージを送る</string>
+    <string name="room_permissions_change_settings">設定の変更</string>
+    <string name="room_permissions_invite_users">ユーザーの招待</string>
+    <string name="room_permissions_send_messages">メッセージの送信</string>
     <string name="room_permissions_default_role">デフォルトルール</string>
     <string name="room_permissions_notice_read_only">ルームに関する変更を行うために必要な役割を更新する権限がありません</string>
     <string name="room_permissions_notice">ルームに関する変更を行うために必要な役割を選択</string>
@@ -1409,9 +1409,9 @@
     </plurals>
     <string name="room_displayname_4_members">%1$sと%2$sと%3$sと%4$s</string>
     <string name="room_displayname_3_members">%1$sと%2$sと%3$s</string>
-    <string name="notice_power_level_diff">%1$sを%2$sから%3$sへ</string>
-    <string name="notice_power_level_changed">%2$sが%1$sの権限を変更しました。</string>
-    <string name="notice_power_level_changed_by_you">%1$sの権限を変更しました。</string>
+    <string name="notice_power_level_diff">%1$sの権限レベルを%2$sから%3$sへ変更しました。</string>
+    <string name="notice_power_level_changed">%1$sが</string>
+    <string name="notice_power_level_changed_by_you">あなたは</string>
     <string name="power_level_custom_no_value">カスタム</string>
     <string name="power_level_custom">カスタム (%1$d)</string>
     <string name="power_level_default">デフォルト</string>
@@ -1462,7 +1462,7 @@
     <string name="settings_show_join_leave_messages_summary">招待、削除、ブロックは影響を受けません。</string>
     <string name="settings_show_room_member_state_events_summary">招待/参加/退出/削除/禁止イベントや、アバター/表示名の変更などを含む。</string>
     <string name="settings_show_join_leave_messages">参加・退出イベントを表示</string>
-    <string name="settings_chat_effects_description">Use /confettiコマンドを使用するか、❄️または🎉を含むメッセージを送信します</string>
+    <string name="settings_chat_effects_description">/confettiコマンドを使用するか、❄️または🎉を含むメッセージを送信</string>
     <string name="settings_chat_effects_title">チャットでエフェクトを表示</string>
     <string name="settings_show_room_member_state_events">ルームのメンバーのイベントを表示</string>
     <string name="settings_inline_url_preview_summary">ホームサーバーがこの機能をサポートしている場合は、チャット内のリンクをプレビューします。</string>
@@ -1620,7 +1620,7 @@
         <item quantity="other">%d個のキーが含まれたバックアップを復元しました。</item>
     </plurals>
     <string name="keys_backup_restore_success_title">バックアップが復元されました %s！</string>
-    <string name="keys_backup_recovery_code_error_decrypt">このリカバリーキーではバックアップを復号できませんでした。正しいリカバリーキーを入力したことを確認してください。</string>
+    <string name="keys_backup_recovery_code_error_decrypt">このリカバリーキーではバックアップを復号化できませんでした。正しいリカバリーキーを入力したことを確認してください。</string>
     <string name="keys_backup_recovery_code_empty_error_message">リカバリーキーを入力してください</string>
     <string name="keys_backup_unlock_button">履歴をアンロック</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">鍵をインポートしています…</string>
@@ -2370,7 +2370,7 @@
     <string name="command_description_nick_for_room">このルームにおいてのみ表示名を変更します</string>
     <string name="command_description_unignore_user">ユーザーの無視を解除し、これからのメッセージを表示します</string>
     <string name="bootstrap_enter_recovery">続行するには%sを入力してください</string>
-    <string name="backup_recovery_passphrase">リカバリーパスフレーズ</string>
+    <string name="backup_recovery_passphrase">復旧用のパスフレーズ</string>
     <string name="bootstrap_invalid_recovery_key">有効なリカバリーキーではありません</string>
     <string name="recovery_key_empty_error_message">リカバリーキーを入力してください</string>
     <string name="poll_type_title">投票の種類</string>
@@ -2410,7 +2410,7 @@
     <string name="direct_room_created_summary_item">%sが参加しました。</string>
     <string name="encryption_unknown_algorithm_tile_description">このルームで使用されている暗号化はサポートされていません</string>
     <string name="encryption_misconfigured">暗号化が正しく設定されていません</string>
-    <string name="settings_text_message_sent">%sにテキストメッセージを送信しました。メッセージに含まれた確認コードを入力してください。</string>
+    <string name="settings_text_message_sent">%sにテキストメッセージを送信しました。メッセージにある確認コードを入力してください。</string>
     <string name="settings_discovery_no_terms">選択したIDサーバーには利用規約がありません。サービス提供者を信頼している場合にのみ続行してください</string>
     <string name="settings_discovery_disconnect_with_bound_pid">現在IDサーバー %1$s でメールアドレスや電話番号を共有しています。共有を停止するには %2$s に再接続する必要があります。</string>
     <string name="room_created_summary_item_by_you">ルームを作成し設定しました。</string>
@@ -2450,7 +2450,7 @@
     <string name="content_reported_content">このコンテンツが報告されています。
 \n
 \nこのユーザーのコンテンツをこれ以上見たくなければ、ユーザーを無視してそのメッセージを非表示にできます。</string>
-    <string name="uploads_files_subtitle">%1$s%2$s</string>
+    <string name="uploads_files_subtitle">%1$sにより%2$sに</string>
     <string name="create_poll_question_hint">質問あるいはトピック</string>
     <string name="create_poll_question_title">投票の質問あるいはトピック</string>
     <string name="help_space_members">スペースのメンバーが非公開のルームを発見できるよう手伝う</string>
@@ -2615,7 +2615,7 @@
         <item quantity="other">元の大きさのまま動画を送信</item>
     </plurals>
     <string name="no_connectivity_to_the_server_indicator">サーバーとの接続が失われました</string>
-    <string name="verification_cannot_access_other_session">リカバリーパスフレーズか、リカバリーキーを使用</string>
+    <string name="verification_cannot_access_other_session">復旧用のパスフレーズか、リカバリーキーを使用</string>
     <string name="new_signin">新しいサインイン</string>
     <string name="initialize_cross_signing">クロス署名を開始</string>
     <string name="not_trusted">信頼されていません</string>
@@ -2629,7 +2629,7 @@
     <string name="login_msisdn_error_not_international">国際電話番号は「+」から始まる必要があります</string>
     <string name="login_msisdn_confirm_notice">コードを%1$sに送信しました。以下に入力して認証してください。</string>
     <string name="login_reset_password_error_not_found">このメールアドレスはどのアカウントにも属していません</string>
-    <string name="login_reset_password_warning_content">パスワードの変更はすべてのセッションでエンドツーエンド暗号鍵をリセットし、暗号化されたメッセージ履歴が読めなくなります。パスワードを再設定する前に、暗号鍵のバックアップを設定するか他のセッションからエクスポートしてください。</string>
+    <string name="login_reset_password_warning_content">パスワードを変更すると、すべてのセッションでのエンドツーエンド暗号鍵がリセットされ、暗号化されたメッセージ履歴が読めなくなります。パスワードを再設定する前に、暗号鍵のバックアップを設定するか、他のセッションからエクスポートしておいてください。</string>
     <string name="login_reset_password_notice">パスワードの再設定を確認するために認証メールを送信しました。</string>
     <string name="login_login_with_email_error">このメールアドレスはどのアカウントにも属していません。</string>
     <string name="login_registration_not_supported">このアプリではこのホームサーバーにアカウントを作成できません。
@@ -2644,4 +2644,55 @@
     <string name="login_server_url_form_modular_notice">利用したいModular Elementまたはサーバーのアドレスを入力してください</string>
     <string name="ftue_auth_use_case_skip">迷っていますか？%sしてもいいです</string>
     <string name="ftue_auth_use_case_subtitle">みんなと繋がる手助けをいたします。</string>
+    <string name="user_code_my_code">自分のコード</string>
+    <plurals name="invitations_sent_to_one_and_more_users">
+        <item quantity="other">招待を%1$sと他%2$d人に送信しました</item>
+    </plurals>
+    <string name="invitation_sent_to_one_user">招待を%1$sに送信しました</string>
+    <string name="invitations_sent_to_two_users">招待を%1$sと%2$sに送信しました</string>
+    <string name="not_a_valid_qr_code">正しいMatrixのQRコードではありません</string>
+    <string name="add_space">スペースを追加</string>
+    <string name="event_status_delete_all_failed_dialog_message">このルームの全ての未送信のメッセージを削除してよろしいですか？</string>
+    <string name="event_status_cancel_sending_dialog_message">メッセージの送信をキャンセルしますか？</string>
+    <string name="command_description_leave_room">IDを指定してルームから退出（指定しない場合は現在のルームから退出）</string>
+    <string name="command_description_join_space">IDを指定してスペースに参加</string>
+    <string name="dev_tools_menu_name">開発者ツール</string>
+    <string name="a11y_rule_notify_silent">音を出さずに通知</string>
+    <string name="a11y_rule_notify_noisy">音を出して通知</string>
+    <string name="a11y_trust_level_default">既定の信頼レベル</string>
+    <string name="a11y_error_some_message_not_sent">いくつかのメッセージは送信されませんでした</string>
+    <string name="warning_unsaved_change">保存されていない変更があります。変更を破棄しますか？</string>
+    <string name="warning_room_not_created_yet">このルームはまだ作成されていません。キャンセルしますか？</string>
+    <string name="share_by_text">テキストメッセージで共有</string>
+    <string name="settings_security_application_protection_screen_title">保護を設定</string>
+    <string name="invite_just_to_this_room">このルームのみ</string>
+    <string name="space_type_public_desc">誰でも参加可能。コミュニティーに最適</string>
+    <string name="create_spaces_join_info_help">既存のスペースに参加するには、招待が必要です。</string>
+    <string name="create_spaces_you_can_change_later">これは後から変更できます</string>
+    <string name="call_tile_connection_failed">接続できませんでした</string>
+    <string name="warning_unsaved_change_discard">変更を破棄</string>
+    <string name="universal_link_malformed">このリンクは不正な形式です</string>
+    <string name="qr_code_not_scanned">QRコードがスキャンされていません！</string>
+    <string name="settings_security_pin_code_notifications_title">内容を通知に表示</string>
+    <string name="alert_push_are_disabled_title">プッシュ通知は無効になっています</string>
+    <string name="failed_to_unban">ユーザーのブロックを解除できませんでした</string>
+    <string name="three_pid_revoke_invite_dialog_content">%1$sへの招待を取り消しますか？</string>
+    <string name="loading_contact_book">連絡先を取得しています…</string>
+    <string name="search_in_my_contacts">連絡先を検索</string>
+    <string name="phone_book_title">電話帳</string>
+    <string name="disclaimer_title">RiotはElementになりました！</string>
+    <string name="notice_crypto_unable_to_decrypt_final">このメッセージにアクセスできません</string>
+    <string name="room_settings_set_avatar">アバターを設定</string>
+    <string name="identity_server_set_alternative_notice_no_default">IDサーバーのURLを入力</string>
+    <string name="a11y_unmute_microphone">マイクのミュートを解除</string>
+    <string name="a11y_mute_microphone">マイクをミュート</string>
+    <string name="identity_server_set_default_submit">%1$sを使用</string>
+    <string name="power_level_edit_title">役割を設定</string>
+    <string name="bottom_sheet_setup_secure_backup_submit">設定</string>
+    <string name="save_your_security_key_title">セキュリティーキーを保存</string>
+    <string name="bottom_sheet_setup_secure_backup_security_key_title">セキュリティーキーを使用</string>
+    <string name="a11y_start_camera">カメラを開始</string>
+    <string name="a11y_stop_camera">カメラを停止</string>
+    <string name="bottom_sheet_save_your_recovery_key_title">セキュリティーキーを保存</string>
+    <string name="your_recovery_key">リカバリーキー</string>
 </resources>
