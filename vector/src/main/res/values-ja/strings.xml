@@ -1020,7 +1020,7 @@
         <item quantity="other">%d 件の有効なセッション</item>
     </plurals>
     <string name="crosssigning_verify_this_session">このログインを検証</string>
-    <string name="a11y_qr_code_for_verification">QR コード</string>
+    <string name="a11y_qr_code_for_verification">QRコード</string>
     <string name="qr_code_scanned_by_other_yes">はい</string>
     <string name="qr_code_scanned_by_other_no">いいえ</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">機内モードが有効です</string>
@@ -1070,7 +1070,7 @@
     <string name="message_ignore_user">ユーザーを無視</string>
     <string name="enter_secret_storage_passphrase_warning">警告:</string>
     <plurals name="send_images_with_original_size">
-        <item quantity="other">元の大きさのまま画像を送信する</item>
+        <item quantity="other">元の大きさのまま画像を送信</item>
     </plurals>
     <string name="cannot_call_yourself">自分自身には通話できません</string>
     <string name="settings_send_markdown">マークダウン書式</string>
@@ -1168,7 +1168,7 @@
     <string name="labs_swipe_to_reply_in_timeline">タイムラインでのスワイプによる返信を有効にする</string>
     <string name="settings_labs_show_hidden_events_in_timeline">タイムラインで非表示のイベントを表示</string>
     <string name="user_code_scan">QRコードをスキャン</string>
-    <string name="a13n_qr_code_description">QR コード画像</string>
+    <string name="a13n_qr_code_description">QRコード画像</string>
     <string name="qr_code">QR コード</string>
     <string name="add_by_qr_code">QR コードによる追加</string>
     <string name="user_code_share">コードを共有</string>
@@ -1632,9 +1632,9 @@
     <string name="keys_backup_restore_with_key_helper">リカバリーキーを喪失しましたか？　設定で新しいリカバリーキーを設定できます。</string>
     <string name="keys_backup_restore_setup_recovery_key">メッセージの復元</string>
     <string name="keys_backup_restore_is_getting_backup_version">バックアップのバージョンを取得しています…</string>
-    <string name="keys_backup_restore_with_passphrase">暗号化されたメッセージ履歴のロックを解除するには、復元パスフレーズを使用してください</string>
-    <string name="keys_backup_restore_with_passphrase_helper_with_link">復元パスフレーズをご存知でなければ、%sができます。</string>
-    <string name="keys_backup_restore_with_recovery_key">リカバリーキーを使用して暗号化されたメッセージ履歴をアンロックします</string>
+    <string name="keys_backup_restore_with_passphrase">暗号化されたメッセージ履歴のロックを解除するには、復旧用のパスフレーズを使用してください</string>
+    <string name="keys_backup_restore_with_passphrase_helper_with_link">復旧用のパスフレーズが分からなければ、%sできます。</string>
+    <string name="keys_backup_restore_with_recovery_key">リカバリーキーを使用して暗号化されたメッセージ履歴をアンロックする</string>
     <string name="keys_backup_restore_key_enter_hint">リカバリーキーを入力</string>
     <string name="keys_backup_restore_use_recovery_key">リカバリーキーを使用</string>
     <string name="keys_backup_setup_skip_msg">ログアウトしたりこの端末を失くしたりすればメッセージへのアクセスを失う可能性があります。</string>
@@ -1653,7 +1653,7 @@
     <string name="recovery_key_export_saved">リカバリーキーが保存されました。</string>
     <string name="recovery_key_export_saved_as_warning">リカバリーキーが%sに保存されました。
 \n
-\n注意: アプリケーションを削除した場合、ファイルは削除される可能性があります。</string>
+\n注意: アプリケーションを削除した場合、リカバリーキーが削除される可能性があります。</string>
     <string name="keys_backup_setup_step3_copy_button_title">リカバリーキーを保存</string>
     <string name="keys_backup_setup_step3_button_title_no_passphrase">コピーをしました</string>
     <string name="keys_backup_setup_step3_text_line2_no_passphrase">リカバリーキーはパスワードマネージャー（もしくは金庫）のような、非常に安全な場所で保管してください</string>
@@ -2600,4 +2600,32 @@
     <string name="this_space_has_no_rooms_admin">非公開で招待が必要なルームは表示されていません。</string>
     <string name="a11y_poll_winner_option">勝者</string>
     <string name="login_set_msisdn_notice">電話番号を設定します。オプションで知人に見つけてもらえるようにできます。</string>
+    <string name="message_key">メッセージキー</string>
+    <string name="recovery_passphrase">復旧用のパスフレーズ</string>
+    <string name="room_member_override_nick_color">ニックネームの色を変更</string>
+    <string name="verify_by_emoji_description">上記のコードをスキャンできなければ、絵文字の並び方を比較して検証してください。</string>
+    <string name="login_reset_password_cancel_confirmation_content">パスワードは変更されていません。
+\n
+\n変更作業を中止しますか？</string>
+    <string name="login_reset_password_mail_confirmation_notice">確認メールが%1$sに送信されました。</string>
+    <string name="login_reset_password_mail_confirmation_title">メールボックスを確認してください</string>
+    <string name="login_reset_password_success_submit">サインインに戻る</string>
+    <string name="send_images_and_video_with_original_size">元の大きさのままメディアファイルを送信</string>
+    <plurals name="send_videos_with_original_size">
+        <item quantity="other">元の大きさのまま動画を送信</item>
+    </plurals>
+    <string name="no_connectivity_to_the_server_indicator">サーバーとの接続が失われました</string>
+    <string name="verification_cannot_access_other_session">リカバリーパスフレーズか、リカバリーキーを使用</string>
+    <string name="new_signin">新しいサインイン</string>
+    <string name="initialize_cross_signing">クロス署名を開始</string>
+    <string name="not_trusted">信頼されていません</string>
+    <string name="complete_security">セキュリティーを確認</string>
+    <string name="verification_request">検証リクエスト</string>
+    <string name="verification_request_other_cancelled">%sがキャンセルしました</string>
+    <string name="seen_by">閲覧済：</string>
+    <string name="verification_profile_verify">検証</string>
+    <string name="does_not_look_like_valid_email">正しくないメールアドレスのようです</string>
+    <string name="login_set_msisdn_notice2">国際電話番号の形式を使用してください。</string>
+    <string name="login_msisdn_error_not_international">国際電話番号は「+」から始まる必要があります</string>
+    <string name="login_msisdn_confirm_notice">コードを%1$sに送信しました。以下に入力して認証してください。</string>
 </resources>
