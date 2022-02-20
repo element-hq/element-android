@@ -798,7 +798,7 @@
     </plurals>
     <string name="widget_integration_missing_parameter">必要な変数が見つかりません。</string>
     <string name="widget_integration_invalid_parameter">変数が無効です。</string>
-    <string name="settings_labs_keyboard_options_to_send_message">メッセージを送信するには、キーボードのエンターキーを使用してください</string>
+    <string name="settings_labs_keyboard_options_to_send_message">メッセージを送信するには、キーボードのエンターキーを押してください</string>
     <string name="settings_labs_enable_send_voice">ボイスメッセージを送信</string>
     <string name="command_description_emote">動作を表示</string>
     <string name="command_description_ban_user">指定したIDのユーザーをブロック</string>
@@ -1017,7 +1017,7 @@
     <string name="settings_active_sessions_manage">セッションの管理</string>
     <string name="settings_active_sessions_signout_device">このセッションからログアウト</string>
     <plurals name="settings_active_sessions_count">
-        <item quantity="other">%d 件の有効なセッション</item>
+        <item quantity="other">%d件のアクティブなセッション</item>
     </plurals>
     <string name="crosssigning_verify_this_session">このログインを検証</string>
     <string name="a11y_qr_code_for_verification">QRコード</string>
@@ -1670,7 +1670,7 @@
 \n
 \n暗号鍵を失わないように保護されたバックアップをしてください。</string>
     <string name="keys_backup_setup_step1_advanced">（高度）</string>
-    <string name="keys_backup_setup_step1_title">暗号されたメッセージを絶対に失わないために</string>
+    <string name="keys_backup_setup_step1_title">暗号化されたメッセージを決して失わないために</string>
     <string name="keys_backup_no_session_error">利用可能なMatrixセッションがありません</string>
     <string name="template_keys_backup_passphrase_not_empty_error_message">${app_name}によるリカバリーキーの生成を望む場合、パスフレーズを削除してください。</string>
     <string name="markdown_has_been_disabled">マークダウンが無効です。</string>
@@ -1685,7 +1685,7 @@
 \nセッション名：%1$s
 \n最後のオンライン時刻：%2$s
 \n新たにログインして新しいセッションを開始しなかった場合、この要求を無視してください。</string>
-    <string name="key_share_request">暗号鍵共有要請</string>
+    <string name="key_share_request">鍵の共有リクエスト</string>
     <string name="settings_labs_native_camera_summary">カスタムカメラ画面の代わりにシステムカメラを使用します。</string>
     <string name="room_no_active_widgets">使用中のウィジェットがありません</string>
     <string name="room_manage_integrations">インテグレーションを管理</string>
