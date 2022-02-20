@@ -2760,4 +2760,7 @@
     <string name="identity_server_user_consent_not_provided">ユーザーによる同意は与えられていません。</string>
     <string name="identity_server_set_alternative_notice">代わりに、他のIDサーバーのURLを入力できます</string>
     <string name="bottom_sheet_setup_secure_backup_subtitle">サーバー上の暗号化キーをバックアップすることにより、暗号化されたメッセージとデータへのアクセスが失われるのを防ぎます。</string>
+    <string name="bootstrap_cancel_text">今キャンセルしてログインにアクセスできなくなると、暗号化されたメッセージとデータが失われる可能性があります。
+\n
+\nまた、設定からバックアップの設定や鍵の管理ができます。</string>
 </resources>
