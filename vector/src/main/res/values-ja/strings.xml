@@ -1927,9 +1927,9 @@
     <string name="autodiscover_well_known_autofill_dialog_title">サーバーオプションをおまかせする</string>
     <string name="autodiscover_invalid_response">無効なホームサーバーディスカバリーレスポンス</string>
     <string name="keys_backup_banner_update_line1">新しいメッセージの暗号キー</string>
-    <string name="keys_backup_banner_recover_line1">暗号化されたメッセージを失うことはありません</string>
+    <string name="keys_backup_banner_recover_line1">暗号鍵を絶対に喪失しないために</string>
     <string name="secure_backup_banner_setup_line1">セキュアバックアップ</string>
-    <string name="keys_backup_banner_setup_line1">暗号化されたメッセージを失いません</string>
+    <string name="keys_backup_banner_setup_line1">暗号鍵を決して喪失しないために</string>
     <string name="keys_backup_get_trust_error">バックアップ (%s) のtrust infoの取得に失敗しました。</string>
     <string name="keys_backup_no_keysbackup_sdk_error">セッションの暗号化が有効になっていません</string>
     <string name="room_widget_permission_shared_info_title">これを使用するとデータを%sと共有します。</string>
