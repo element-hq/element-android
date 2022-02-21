@@ -301,7 +301,13 @@ internal class DefaultTimeline(private val roomId: String,
         Timber.v("Post snapshot of ${snapshot.size} events")
         withContext(coroutineDispatchers.main) {
             listeners.forEach {
-                tryOrNull { it.onTimelineUpdated(snapshot) }
+                if (initialEventId != null && isFromThreadTimeline && snapshot.firstOrNull { it.eventId == initialEventId } == null) {
+                    // We are in a thread timeline with a permalink, post update timeline only when the appropriate message have been found
+                    tryOrNull { it.onTimelineUpdated(arrayListOf()) }
+                } else {
+                    // In all the other cases update timeline as expected
+                    tryOrNull { it.onTimelineUpdated(snapshot) }
+                }
             }
         }
     }

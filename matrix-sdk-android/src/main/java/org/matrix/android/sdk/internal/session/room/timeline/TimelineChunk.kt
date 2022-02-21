@@ -171,11 +171,12 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
      * always fetch results, while we want our data to be up to dated.
      */
     suspend fun loadMoreThread(count: Int, direction: Timeline.Direction): LoadMoreResult {
+        val rootThreadEventId = timelineSettings.rootThreadEventId ?: return LoadMoreResult.FAILURE
         return if (direction == Timeline.Direction.BACKWARDS) {
             try {
                 fetchThreadTimelineTask.execute(FetchThreadTimelineTask.Params(
                         roomId,
-                        timelineSettings.rootThreadEventId!!,
+                        rootThreadEventId,
                         chunkEntity.prevToken,
                         count
                 )).toLoadMoreResult()
