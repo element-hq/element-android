@@ -1234,6 +1234,7 @@ class TimelineFragment @Inject constructor(
     override fun onResume() {
         super.onResume()
         notificationDrawerManager.setCurrentRoom(timelineArgs.roomId)
+        // TODO should we handle it in HomeActivity as well? => see how we open dm from create Message button
         roomDetailPendingActionStore.data?.let { handlePendingAction(it) }
         roomDetailPendingActionStore.data = null
 
