@@ -21,7 +21,7 @@ import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_MEGOLM
 import org.matrix.android.sdk.internal.crypto.store.db.model.CryptoRoomEntityFields
 import org.matrix.android.sdk.internal.util.database.RealmMigrator
 
-// Version 14L Update the way we remember key sharing
+// Version 15L adds wasEncryptedOnce field to CryptoRoomEntity
 class MigrateCryptoTo015(realm: DynamicRealm) : RealmMigrator(realm, 15) {
 
     override fun doMigrate(realm: DynamicRealm) {
