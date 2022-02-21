@@ -192,12 +192,14 @@ abstract class SyncService : Service() {
         }
     }
 
+    abstract fun provideMatrix(): Matrix
+
     private fun initialize(intent: Intent?): Boolean {
         if (intent == null) {
             Timber.d("## Sync: initialize intent is null")
             return false
         }
-        val matrix = Matrix.getInstance(applicationContext)
+        val matrix = provideMatrix()
         val safeSessionId = intent.getStringExtra(EXTRA_SESSION_ID) ?: return false
         syncTimeoutSeconds = intent.getIntExtra(EXTRA_TIMEOUT_SECONDS, getDefaultSyncTimeoutSeconds())
         syncDelaySeconds = intent.getIntExtra(EXTRA_DELAY_SECONDS, getDefaultSyncDelaySeconds())

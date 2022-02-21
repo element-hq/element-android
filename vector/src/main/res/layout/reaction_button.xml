@@ -3,11 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="26dp"
+    android:layout_height="wrap_content"
     android:background="@drawable/reaction_rounded_rect_shape"
     android:clipChildren="false"
     android:gravity="center"
-    android:minWidth="44dp"
     tools:parentTag="android.widget.LinearLayout">
 
     <!--<View-->
@@ -20,12 +19,10 @@
         android:id="@+id/reactionText"
         style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
-        android:layout_height="20dp"
-        android:layout_marginStart="6dp"
+        android:layout_height="wrap_content"
         android:ellipsize="middle"
         android:gravity="center"
         android:maxEms="10"
-        android:minWidth="20dp"
         android:singleLine="true"
         android:textColor="@color/emoji_color"
         tools:text="* Party Parrot Again * 👀" />
@@ -36,7 +33,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
-        android:layout_marginEnd="8dp"
         android:gravity="center"
         android:maxLines="1"
         android:textColor="?vctr_content_secondary"

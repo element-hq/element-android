@@ -2248,7 +2248,7 @@
     <string name="settings_secure_backup_setup">Beveiligde back-up instellen</string>
     <string name="settings_show_emoji_keyboard_summary">Voeg een knop toe aan de invoerveld om het emoji-toetsenbord te openen</string>
     <string name="settings_show_emoji_keyboard">Emoji-toetsenbord weergeven</string>
-    <string name="settings_show_room_member_state_events_summary">Inclusief uitnodiging/deelnemen/links/kick/ban gebeurtenissen en wijzigingen van avatar/weergavenaam.</string>
+    <string name="settings_show_room_member_state_events_summary">Inclusief uitnodiging/deelnemen/links/verwijder/ban gebeurtenissen en wijzigingen van avatar/weergavenaam.</string>
     <string name="settings_chat_effects_description">Gebruik /confetti commando of stuur een bericht met ❄️ of 🎉</string>
     <string name="settings_chat_effects_title">Toon chateffecten</string>
     <string name="settings_show_room_member_state_events">Toon kamer deelnemers event status</string>
@@ -2916,7 +2916,7 @@
         <item quantity="other">Eindresultaat gebaseerd op %1$d stemmen</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
-        <item quantity="one">Geen stemmen uitgebracht</item>
+        <item quantity="one">%1$d uitgebrachte stem. Stem om de resultaten te zien</item>
         <item quantity="other">%1$d stemmen uitgebracht. Stem om de resultaten te zien</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_voted">
@@ -3062,6 +3062,39 @@
     <string name="command_description_create_space">Maak een Space</string>
     <string name="room_member_override_nick_color">Bijnaam kleur overschrijven</string>
     <string name="login_splash_already_have_account">Ik heb al een account</string>
-    <string name="ftue_auth_carousel_3_title">Maak contact met iedereen.</string>
+    <string name="ftue_auth_carousel_3_title">Veilig berichtenverkeer.</string>
     <string name="ftue_auth_carousel_2_title">U heeft de controle.</string>
+    <string name="tooltip_attachment_location">Deel locatie</string>
+    <string name="labs_render_locations_in_timeline">Gebruikerslocaties in de tijdlijn weergeven</string>
+    <string name="settings_enable_location_sharing_summary">Eenmaal ingeschakeld, kun je je locatie naar elke kamer sturen</string>
+    <string name="settings_enable_location_sharing">Locatie delen inschakelen</string>
+    <string name="location_share_external">Open met</string>
+    <string name="template_location_not_available_dialog_content">${app_name} kan geen toegang krijgen tot uw locatie. Probeer het later opnieuw.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} heeft geen toegang tot uw locatie</string>
+    <string name="location_share">Deel locatie</string>
+    <string name="a11y_location_share_icon">Deel locatie</string>
+    <string name="location_activity_title_preview">Locatie</string>
+    <string name="location_activity_title_static_sharing">Deel locatie</string>
+    <string name="closed_poll_option_description">Resultaten worden pas onthuld als je de poll beëindigt</string>
+    <string name="closed_poll_option_title">Gesloten poll</string>
+    <string name="open_poll_option_description">Kiezers zien resultaten zodra ze hebben gestemd</string>
+    <string name="open_poll_option_title">Poll openen</string>
+    <string name="poll_type_title">Poll type</string>
+    <string name="edit_poll_button">POLL BEWERKEN</string>
+    <string name="edit_poll_title">Poll bewerken</string>
+    <string name="poll_no_votes_cast">Geen stemmen uitgebracht</string>
+    <string name="a11y_trust_level_misconfigured">Verkeerd geconfigureerd vertrouwensniveau</string>
+    <string name="encryption_misconfigured">Versleuteling is verkeerd geconfigureerd</string>
+    <string name="room_profile_section_restore_security">Versleuteling herstellen</string>
+    <string name="contact_admin_to_restore_encryption">Neem contact op met een beheerder om de versleuteling in een geldige staat te herstellen.</string>
+    <string name="encryption_has_been_misconfigured">Versleuteling is verkeerd geconfigureerd.</string>
+    <string name="sent_location">Hun locatie gedeeld</string>
+    <string name="login_splash_create_account">Account aanmaken</string>
+    <string name="ftue_auth_carousel_title_messaging">Berichten voor uw team.</string>
+    <string name="ftue_auth_carousel_body_encrypted">End-to-end versleuteld en geen telefoonnummer vereist. Geen advertenties of dataverzameling.</string>
+    <string name="ftue_auth_carousel_body_control">Kies waar je gesprekken worden bewaard, zodat u controle en onafhankelijkheid heeft. Verbonden via Matrix.</string>
+    <string name="ftue_auth_carousel_body_secure">Veilige en onafhankelijke communicatie die u dezelfde mate van privacy geeft als een persoonlijk gesprek in uw eigen huis.</string>
+    <string name="attachment_type_location">Locatie</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">De versleuteling is verkeerd geconfigureerd, zodat u geen berichten kunt verzenden. Klik om instellingen te openen.</string>
+    <string name="room_unsupported_e2e_algorithm">De versleuteling is verkeerd geconfigureerd, zodat u geen berichten kunt verzenden. Neem contact op met een beheerder om de versleuteling in een geldige staat te herstellen.</string>
 </resources>

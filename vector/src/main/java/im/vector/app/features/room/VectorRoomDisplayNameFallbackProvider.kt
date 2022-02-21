@@ -19,8 +19,9 @@ package im.vector.app.features.room
 import android.content.Context
 import im.vector.app.R
 import org.matrix.android.sdk.api.RoomDisplayNameFallbackProvider
+import javax.inject.Inject
 
-class VectorRoomDisplayNameFallbackProvider(
+class VectorRoomDisplayNameFallbackProvider @Inject constructor(
         private val context: Context
 ) : RoomDisplayNameFallbackProvider {
 

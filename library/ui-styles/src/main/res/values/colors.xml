@@ -58,9 +58,9 @@
 
     <!-- Other colors, which are not in the palette -->
     <attr name="vctr_unread_room_badge" format="color" />
-    <color name="vctr_unread_room_badge_light">#FF61708B</color>
-    <color name="vctr_unread_room_badge_dark">#FF61708B</color>
-    <color name="vctr_unread_room_badge_black">#FF61708B</color>
+    <color name="vctr_unread_room_badge_light">@color/palette_gray_200</color>
+    <color name="vctr_unread_room_badge_dark">@color/palette_gray_250</color>
+    <color name="vctr_unread_room_badge_black">@color/palette_gray_250</color>
 
     <attr name="vctr_fab_label_bg" format="color" />
     <color name="vctr_fab_label_bg_light">@android:color/white</color>

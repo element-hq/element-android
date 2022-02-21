@@ -251,6 +251,7 @@ class RoomPreviewViewModel @AssistedInject constructor(
                 analyticsTracker.capture(JoinedRoom(
                         // Always false in this case (?)
                         isDM = false,
+                        isSpace = false,
                         roomSize = state.numJoinMembers.toAnalyticsRoomSize()
                 ))
                 // We do not update the joiningRoomsIds here, because, the room is not joined yet regarding the sync data.

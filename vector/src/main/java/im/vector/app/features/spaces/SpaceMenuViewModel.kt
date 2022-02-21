@@ -131,7 +131,7 @@ class SpaceMenuViewModel @AssistedInject constructor(
         session.coroutineScope.launch {
             try {
                 if (state.leaveMode == SpaceMenuState.LeaveMode.LEAVE_NONE) {
-                    session.getRoom(initialState.spaceId)?.leave(null)
+                    session.spaceService().leaveSpace(initialState.spaceId)
                 } else if (state.leaveMode == SpaceMenuState.LeaveMode.LEAVE_ALL) {
                     // need to find all child rooms that i have joined
 
@@ -143,13 +143,13 @@ class SpaceMenuViewModel @AssistedInject constructor(
                             }
                     ).forEach {
                         try {
-                            session.getRoom(it.roomId)?.leave(null)
+                            session.spaceService().leaveSpace(it.roomId)
                         } catch (failure: Throwable) {
                             // silently ignore?
                             Timber.e(failure, "Fail to leave sub rooms/spaces")
                         }
                     }
-                    session.getRoom(initialState.spaceId)?.leave(null)
+                    session.spaceService().leaveSpace(initialState.spaceId)
                 }
 
                 // We observe the membership and to dismiss when we have remote echo of leaving

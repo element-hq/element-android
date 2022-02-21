@@ -19,7 +19,7 @@ package im.vector.app.features.settings
 import android.os.Bundle
 import im.vector.app.R
 import im.vector.app.core.preference.VectorPreference
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import javax.inject.Inject
 
 class VectorSettingsRootFragment @Inject constructor() : VectorSettingsBaseFragment() {
@@ -29,7 +29,7 @@ class VectorSettingsRootFragment @Inject constructor() : VectorSettingsBaseFragm
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        analyticsScreenName = Screen.ScreenName.Settings
+        analyticsScreenName = MobileScreen.ScreenName.Settings
     }
 
     override fun bindPref() {

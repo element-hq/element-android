@@ -25,7 +25,7 @@ import im.vector.app.core.preference.KeywordPreference
 import im.vector.app.core.preference.VectorCheckboxPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -45,7 +45,7 @@ class VectorSettingsKeywordAndMentionsNotificationPreferenceFragment :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        analyticsScreenName = Screen.ScreenName.SettingsMentionsAndKeywords
+        analyticsScreenName = MobileScreen.ScreenName.SettingsMentionsAndKeywords
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

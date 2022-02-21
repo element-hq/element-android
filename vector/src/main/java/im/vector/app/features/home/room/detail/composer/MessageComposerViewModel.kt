@@ -440,7 +440,7 @@ class MessageComposerViewModel @AssistedInject constructor(
                         is ParsedCommand.LeaveRoom                         -> {
                             viewModelScope.launch(Dispatchers.IO) {
                                 try {
-                                    session.getRoom(slashCommandResult.roomId)?.leave(null)
+                                    session.leaveRoom(slashCommandResult.roomId)
                                     popDraft()
                                     _viewEvents.post(MessageComposerViewEvents.SlashCommandResultOk())
                                 } catch (failure: Throwable) {
@@ -683,7 +683,9 @@ class MessageComposerViewModel @AssistedInject constructor(
                         ?.roomId
                         ?.let { session.getRoom(it) }
             }
-                    ?.leave(reason = null)
+                    ?.let {
+                        session.leaveRoom(it.roomId)
+                    }
         }
     }
 

@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isGone
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -53,7 +54,10 @@ class LocationSharingFragment @Inject constructor(
 
         mapView = WeakReference(views.mapView)
         views.mapView.onCreate(savedInstanceState)
-        views.mapView.initialize(urlMapProvider.mapUrl)
+
+        lifecycleScope.launchWhenCreated {
+            views.mapView.initialize(urlMapProvider.getMapUrl())
+        }
 
         views.shareLocationContainer.debouncedClicks {
             viewModel.handle(LocationSharingAction.OnShareLocation)
