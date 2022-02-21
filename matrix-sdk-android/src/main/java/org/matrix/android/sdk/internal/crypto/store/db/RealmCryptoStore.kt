@@ -631,13 +631,27 @@ internal class RealmCryptoStore @Inject constructor(
 
     override fun storeRoomAlgorithm(roomId: String, algorithm: String?) {
         doRealmTransaction(realmConfiguration) {
-            CryptoRoomEntity.getOrCreate(it, roomId).algorithm = algorithm
+            CryptoRoomEntity.getOrCreate(it, roomId).let { entity ->
+                entity.algorithm = algorithm
+                // store anyway the new algorithm, but mark the room
+                // as having been encrypted once whatever, this can never
+                // go back to false
+                if (algorithm == MXCRYPTO_ALGORITHM_MEGOLM) {
+                    entity.wasEncryptedOnce = true
+                }
+            }
         }
     }
 
     override fun getRoomAlgorithm(roomId: String): String? {
         return doWithRealm(realmConfiguration) {
             CryptoRoomEntity.getById(it, roomId)?.algorithm
+        }
+    }
+
+    override fun roomWasOnceEncrypted(roomId: String): Boolean {
+        return doWithRealm(realmConfiguration) {
+            CryptoRoomEntity.getById(it, roomId)?.wasEncryptedOnce ?: false
         }
     }
 
