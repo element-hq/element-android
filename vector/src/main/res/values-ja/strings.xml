@@ -2804,4 +2804,5 @@
     <string name="verification_scan_self_emoji_subtitle">絵文字を比較して検証</string>
     <string name="verification_scan_emoji_subtitle">対面でない場合は、代わりに絵文字を比較してください</string>
     <string name="settings_server_upload_size_content">あなたのホームサーバーは、最大%sのサイズの添付ファイルを受け付けています。</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">新しいパスワードを確認するには下記のリンクを開いてください。リンク先のリンクにアクセスしてから、この下をクリックしてください。</string>
 </resources>
