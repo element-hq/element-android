@@ -7,7 +7,7 @@
 .idea/inspectionProfiles
 .idea/*.xml
 .DS_Store
-**/build/
+**/build
 /benchmark-out
 /captures
 .externalNativeBuild
