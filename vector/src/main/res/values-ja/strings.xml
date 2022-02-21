@@ -42,7 +42,7 @@
     <string name="notice_voip_finished">VoIP会議が終了しました</string>
     <string name="notice_avatar_changed_too">（アバターも変更されました）</string>
     <string name="notice_room_name_removed">%1$sがルーム名を削除しました</string>
-    <string name="notice_room_topic_removed">%1$sがルームのトピックを削除しました</string>
+    <string name="notice_room_topic_removed">%1$sがルームの説明を削除しました</string>
     <string name="notice_profile_change_redacted">%1$sがプロフィール %2$s を更新しました</string>
     <string name="notice_room_third_party_invite">%1$sが%2$sにルームへの招待を送りました</string>
     <string name="notice_room_third_party_registered_invite">%1$sが%2$sの招待を受け入れました</string>
@@ -808,8 +808,8 @@
     <string name="command_description_invite_user">指定したユーザーを現在のルームに招待</string>
     <string name="command_description_join_room">指定されたアドレスのルームに参加</string>
     <string name="command_description_part_room">ルームを退室</string>
-    <string name="command_description_topic">ルームのテーマを設定</string>
-    <string name="command_description_remove_user">指定したIDのユーザーとの接続を切断</string>
+    <string name="command_description_topic">ルームの説明を設定</string>
+    <string name="command_description_remove_user">指定したIDのユーザーをこのルームから追放</string>
     <string name="command_description_nick">表示するニックネームを変更</string>
     <string name="command_description_markdown">Markdown書式の入/切</string>
     <string name="command_description_clear_scalar_token">Matrixアプリの管理を修正するには</string>
@@ -1028,7 +1028,7 @@
     <string name="settings_account_data">アカウントデータ</string>
     <string name="message_action_item_redact">削除…</string>
     <string name="delete_event_dialog_title">削除の確認</string>
-    <string name="delete_event_dialog_content">このイベントを削除してよろしいですか？ルーム名やトピックの変更を削除すると、変更が元に戻る点にご注意ください。</string>
+    <string name="delete_event_dialog_content">このイベントを削除してよろしいですか？ルーム名や説明の変更を削除すると、変更が取り消されますのでご注意ください。</string>
     <string name="encryption_enabled">暗号化は有効です</string>
     <string name="encryption_enabled_tile_description">このルーム内でのメッセージはエンドツーエンド暗号化されます。詳細の確認や検証はユーザーのプロフィールをご確認ください。</string>
     <string name="encryption_not_enabled">暗号化が有効になっていません</string>
@@ -1444,7 +1444,7 @@
     <string name="notice_event_redacted">メッセージが削除されました</string>
     <string name="notice_room_avatar_removed_by_you">ルームのアバターを削除しました</string>
     <string name="notice_room_avatar_removed">%1$sがルームのアバターを削除しました</string>
-    <string name="notice_room_topic_removed_by_you">ルームのトピックを削除しました</string>
+    <string name="notice_room_topic_removed_by_you">ルームの説明を削除しました</string>
     <string name="notice_room_name_removed_by_you">ルーム名を削除しました</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">許可を与える</string>
     <string name="template_startup_notification_fdroid_battery_optim_message">${app_name}は、確実に通知を受け取るために、影響の少ないバックグラウンド接続を維持する必要があります。
@@ -1852,7 +1852,7 @@
 \n%s</string>
     <string name="create_room_settings_section">ルームの設定</string>
     <string name="create_room_topic_hint">トピック</string>
-    <string name="create_room_topic_section">ルームトピック(オプション)</string>
+    <string name="create_room_topic_section">ルームの説明（任意）</string>
     <string name="create_room_name_section">ルーム名</string>
     <string name="room_preview_no_preview_join">このルームはプレビューできません。参加しますか？</string>
     <string name="room_preview_not_found">現在、このルームにはアクセスできません。
@@ -2365,9 +2365,9 @@
     <string name="command_not_supported_in_threads">%sとのコマンドは認識されていますが、スレッドではサポートされていません。</string>
     <string name="room_settings_space_access_public_description">誰でもスペースを発見し参加できます</string>
     <string name="preference_root_legals">法的情報</string>
-    <string name="command_description_whois">ユーザーに関する情報を表示します</string>
-    <string name="command_description_avatar_for_room">このルームにおいてのみアバターを変更します</string>
-    <string name="command_description_nick_for_room">このルームにおいてのみ表示名を変更します</string>
+    <string name="command_description_whois">ユーザーに関する情報を表示</string>
+    <string name="command_description_avatar_for_room">このルームにおいてのみアバターを変更</string>
+    <string name="command_description_nick_for_room">このルームにおいてのみ表示名を変更</string>
     <string name="command_description_unignore_user">ユーザーの無視を解除し、以後のメッセージを表示します</string>
     <string name="bootstrap_enter_recovery">続行するには%sを入力してください</string>
     <string name="backup_recovery_passphrase">復旧用のパスフレーズ</string>
