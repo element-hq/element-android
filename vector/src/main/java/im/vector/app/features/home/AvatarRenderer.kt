@@ -26,6 +26,7 @@ import androidx.core.graphics.drawable.toBitmap
 import com.amulyakhare.textdrawable.TextDrawable
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.Transformation
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -157,23 +158,39 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
     fun shortcutDrawable(glideRequests: GlideRequests, matrixItem: MatrixItem, iconSize: Int): Bitmap {
         return glideRequests
                 .asBitmap()
-                .let {
-                    val resolvedUrl = resolvedUrl(matrixItem.avatarUrl)
-                    if (resolvedUrl != null) {
-                        it.load(resolvedUrl)
-                    } else {
-                        val avatarColor = matrixItemColorProvider.getColor(matrixItem)
-                        it.load(TextDrawable.builder()
-                                .beginConfig()
-                                .bold()
-                                .endConfig()
-                                .buildRect(matrixItem.firstLetterOfDisplayName(), avatarColor)
-                                .toBitmap(width = iconSize, height = iconSize))
-                    }
-                }
+                .avatarOrText(matrixItem, iconSize)
                 .apply(RequestOptions.centerCropTransform())
                 .submit(iconSize, iconSize)
                 .get()
+    }
+
+    @AnyThread
+    @Throws
+    fun adaptiveShortcutDrawable(glideRequests: GlideRequests, matrixItem: MatrixItem, iconSize: Int, adaptiveIconSize: Int, adaptiveIconOuterSides: Float): Bitmap {
+        return glideRequests
+                .asBitmap()
+                .avatarOrText(matrixItem, iconSize)
+                .transform(CenterCrop(), AdaptiveIconTransformation(adaptiveIconSize, adaptiveIconOuterSides))
+                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                .submit(adaptiveIconSize, adaptiveIconSize)
+                .get()
+    }
+
+    private fun GlideRequest<Bitmap>.avatarOrText(matrixItem: MatrixItem, iconSize: Int): GlideRequest<Bitmap> {
+        return this.let {
+            val resolvedUrl = resolvedUrl(matrixItem.avatarUrl)
+            if (resolvedUrl != null) {
+                it.load(resolvedUrl)
+            } else {
+                val avatarColor = matrixItemColorProvider.getColor(matrixItem)
+                it.load(TextDrawable.builder()
+                        .beginConfig()
+                        .bold()
+                        .endConfig()
+                        .buildRect(matrixItem.firstLetterOfDisplayName(), avatarColor)
+                        .toBitmap(width = iconSize, height = iconSize))
+            }
+        }
     }
 
     @UiThread
