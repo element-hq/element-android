@@ -56,7 +56,7 @@ class SoftLogoutViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<SoftLogoutViewModel, SoftLogoutViewState> by hiltMavericksViewModelFactory() {
 
-        override fun initialState(viewModelContext: ViewModelContext): SoftLogoutViewState? {
+        override fun initialState(viewModelContext: ViewModelContext): SoftLogoutViewState {
             val sessionHolder = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java)
                     .activeSessionHolder()
 
@@ -72,7 +72,13 @@ class SoftLogoutViewModel @AssistedInject constructor(
                         hasUnsavedKeys = session.hasUnsavedKeys()
                 )
             } else {
-                null
+                SoftLogoutViewState(
+                        homeServerUrl = "",
+                        userId = "",
+                        deviceId = "",
+                        userDisplayName = "",
+                        hasUnsavedKeys = false
+                )
             }
         }
     }
