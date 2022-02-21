@@ -1,0 +1,1 @@
+Exclude all build output directories from git source control.
