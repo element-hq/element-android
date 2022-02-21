@@ -31,7 +31,7 @@ class AdaptiveIconTransformation(private val adaptiveIconSize: Int, private val 
 
     override fun updateDiskCacheKey(messageDigest: MessageDigest) {
         messageDigest.update(ID_BYTES)
-        messageDigest.update(ByteBuffer.allocate(4).putInt(adaptiveIconSize).putFloat(adaptiveIconOuterSides).array())
+        messageDigest.update(ByteBuffer.allocate(8).putInt(adaptiveIconSize).putFloat(adaptiveIconOuterSides).array())
     }
 
     override fun transform(pool: BitmapPool, toTransform: Bitmap, outWidth: Int, outHeight: Int): Bitmap {

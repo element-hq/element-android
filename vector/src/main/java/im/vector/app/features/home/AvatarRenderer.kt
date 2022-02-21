@@ -33,6 +33,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.DrawableImageViewTarget
 import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.signature.ObjectKey
 import im.vector.app.core.contacts.MappedContact
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.glide.AvatarPlaceholder
@@ -171,8 +172,9 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
                 .asBitmap()
                 .avatarOrText(matrixItem, iconSize)
                 .transform(CenterCrop(), AdaptiveIconTransformation(adaptiveIconSize, adaptiveIconOuterSides))
+                .signature(ObjectKey("adaptive-icon"))
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .submit(adaptiveIconSize, adaptiveIconSize)
+                .submit(iconSize, iconSize)
                 .get()
     }
 
