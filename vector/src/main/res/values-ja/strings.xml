@@ -1943,7 +1943,7 @@
     <string name="allow_space_member_to_find_and_access">スペースのメンバーに発見とアクセスを許可します。</string>
     <string name="room_create_member_of_space_name_can_join">スペース %s のメンバーが検索、プレビュー、参加できます。</string>
     <string name="room_settings_room_access_private_invite_only_title">非公開（招待のみ）</string>
-    <string name="settings_default_media_source">デフォルトのメディアソース</string>
+    <string name="settings_default_media_source">規定メディアソース</string>
     <string name="settings_default_compression">規定圧縮率</string>
     <string name="settings_room_upgrades">ルームのアップグレード</string>
     <string name="settings_messages_by_bot">ボットによるメッセージ</string>
