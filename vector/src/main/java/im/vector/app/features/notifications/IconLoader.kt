@@ -31,11 +31,6 @@ import javax.inject.Singleton
 class IconLoader @Inject constructor(private val context: Context) {
 
     /**
-     * Avatar Url -> IconCompat
-     */
-    private val cache = HashMap<String, IconCompat?>()
-
-    /**
      * Get icon of a user.
      * If already in cache, use it, else load it and call IconLoaderListener.onIconsLoaded() when ready
      * Before Android P, this does nothing because the icon won't be used
@@ -46,9 +41,7 @@ class IconLoader @Inject constructor(private val context: Context) {
             return null
         }
 
-        return cache.getOrPut(path) {
-            loadUserIcon(path)
-        }
+        return loadUserIcon(path)
     }
 
     @WorkerThread

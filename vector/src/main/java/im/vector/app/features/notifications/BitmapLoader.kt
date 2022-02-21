@@ -29,11 +29,6 @@ import javax.inject.Singleton
 class BitmapLoader @Inject constructor(private val context: Context) {
 
     /**
-     * Avatar Url -> Bitmap
-     */
-    private val cache = HashMap<String, Bitmap?>()
-
-    /**
      * Get icon of a room.
      * If already in cache, use it, else load it and call BitmapLoaderListener.onBitmapsLoaded() when ready
      */
@@ -42,10 +37,7 @@ class BitmapLoader @Inject constructor(private val context: Context) {
         if (path == null) {
             return null
         }
-
-        return cache.getOrPut(path) {
-            loadRoomBitmap(path)
-        }
+        return loadRoomBitmap(path)
     }
 
     @WorkerThread
