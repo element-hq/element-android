@@ -21,12 +21,16 @@ import android.graphics.Bitmap
 import androidx.annotation.WorkerThread
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
+import com.bumptech.glide.signature.ObjectKey
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class BitmapLoader @Inject constructor(private val context: Context) {
+
+    private val iconWidth = context.resources.getDimensionPixelSize(android.R.dimen.notification_large_icon_width)
+    private val iconHeight = context.resources.getDimensionPixelSize(android.R.dimen.notification_large_icon_height)
 
     /**
      * Get icon of a room.
@@ -47,8 +51,10 @@ class BitmapLoader @Inject constructor(private val context: Context) {
                 Glide.with(context)
                         .asBitmap()
                         .load(path)
+                        .fitCenter()
                         .format(DecodeFormat.PREFER_ARGB_8888)
-                        .submit()
+                        .signature(ObjectKey("room-icon-notification"))
+                        .submit(iconWidth, iconHeight)
                         .get()
             } catch (e: Exception) {
                 Timber.e(e, "decodeFile failed")
