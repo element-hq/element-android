@@ -382,7 +382,7 @@ Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yan
     <string name="ssl_logout_account">Keluar</string>
     <string name="ssl_remain_offline">Abaikan</string>
     <string name="ssl_fingerprint_hash">Sidik jari (%s):</string>
-    <string name="ssl_could_not_verify">Tidak dapat memastikan identitas remote server.</string>
+    <string name="ssl_could_not_verify">Tidak dapat memastikan identitas server jarak jauh.</string>
     <string name="ssl_cert_not_trust">Ini dapat terjadi ketika seseorang sedang mensabotase arus data Anda, atau perangkat Anda tidak percaya terhadap sertifikat remote server.</string>
     <string name="ssl_cert_new_account_expl">Apabila administrator server telah menyatakan ini memang akan terjadi, pastikan sidik jari berikut cocok dengan sidik jari yang mereka sediakan.</string>
     <string name="ssl_unexpected_existing_expl">Sertifikat ini tidak lagi sesuai dengan yang dipercayai oleh perangkat Anda sebelumnya. Ini SANGAT JANGGAL. Kami rekomendasikan Anda untuk TIDAK MENERIMA sertifikat baru ini.</string>
@@ -634,7 +634,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_settings_labs_warning_message">Ini adalah fitur uji coba dan mungkin rusak tanpa terduga. Hati-hati menggunakannya.</string>
     <string name="room_settings_labs_end_to_end">Enkripsi Ujung-ke-Ujung</string>
     <string name="room_settings_labs_end_to_end_is_active">Enkripsi Ujung-ke-Ujung aktif</string>
-    <string name="room_settings_labs_end_to_end_warnings">Anda perlu keluar dulu untuk mengaktifkan enkripsi.</string>
+    <string name="room_settings_labs_end_to_end_warnings">Anda perlu keluar terlebih dahulu untuk mengaktifkan enkripsi.</string>
     <string name="room_settings_never_send_to_unverified_devices_title">Enkripsi ke perangkat terverifikasi saja</string>
     <string name="room_settings_never_send_to_unverified_devices_summary">Jangan mengirim pesan terenkripsi ke perangkat yang belum diverifikasi di ruangan ini dengan perangkat ini.</string>
     <string name="room_settings_addresses_no_local_addresses">Ruangan ini tidak punya alamat lokal</string>
@@ -1462,7 +1462,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Perubahan siapa yang dapat membaca riwayat hanya akan berlaku untuk pesan berikutnya di ruangan ini. Visibilitas riwayat yang ada tidak akan berubah.</string>
     <string name="room_settings_room_notifications_account_settings">Pengaturan akun</string>
     <string name="room_settings_room_notifications_manage_notifications">Anda dapat mengelola notifikasi di %1$s.</string>
-    <string name="room_settings_room_notifications_encryption_notice">Harap dicatat bahwa sebutan &amp; pemberitahuan keyword tidak tersedia di ruangan terenkripsi di ponsel.</string>
+    <string name="room_settings_room_notifications_encryption_notice">Harap dicatat bahwa pemberitahuan sebutan &amp; kata kunci tidak tersedia di ruangan terenkripsi di ponsel.</string>
     <string name="room_settings_room_notifications_notify_me">Beritahu saya untuk</string>
     <string name="settings_play_shutter_sound">Putar suara rana</string>
     <string name="media_source_choose">Pilih</string>
@@ -1825,7 +1825,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \n%s</string>
     <string name="sas_cancelled_dialog_title">Permintaan Dibatalkan</string>
     <string name="sas_verification_request_notification_channel_title">Kunci Verifikasi</string>
-    <string name="sas_legacy_verification_button_title">Gunakan verifikasi legacy.</string>
+    <string name="sas_legacy_verification_button_title">Gunakan verifikasi lama.</string>
     <string name="sas_verifying_keys">Tidak ada yang muncul\? Belum semua client mendukung verifikasi interaktif. Gunakan verifikasi legacy.</string>
     <string name="sas_got_it">Saya mengerti</string>
     <string name="sas_verified_successful_description">Pesan aman dengan pengguna ini dienkripsi ujung-ke-ujung dan tidak dapat dibaca oleh pihak ketiga.</string>
@@ -2324,7 +2324,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="call_jitsi_started">Panggilan grup dimulai</string>
     <string name="error_failed_to_join_room">Maaf, sebuah kesalahan terjadi saat bergabung: %s</string>
     <string name="room_upgrade_to_recommended_version">Tingkatkan ke versi ruangan yang disarankan</string>
-    <string name="room_using_unstable_room_version">Kamar ini menjalankan versi %s, yang ditandai oleh homeserver ini sebagai tidak stabil.</string>
+    <string name="room_using_unstable_room_version">Ruangan ini menjalankan versi %s, yang ditandai oleh homeserver ini sebagai tidak stabil.</string>
     <string name="allow_anyone_in_room_to_access">Izinkan siapa saja di %s untuk mencari dan mengakses. Anda dapat memilih space yang lain juga.</string>
     <string name="upgrade_room_no_power_to_manage">Anda membutuhkan izin untuk meningkatkan sebuah ruangan</string>
     <string name="upgrade_room_update_parent_space">Otomatis memperbarui induk space</string>
@@ -2375,7 +2375,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="leave_all_rooms_and_spaces">Tinggalkan semua ruangan dan space</string>
     <string name="space_leave_prompt_msg_as_admin">Anda adalah admin satu-satunya di space ini. Meninggalkannya berarti siapa saja tidak akan mempunyai kontrol atas space-nya.</string>
     <string name="space_leave_prompt_msg_private">Anda tidak akan dapat bergabung lagi kecuali jika Anda diundang lagi.</string>
-    <string name="space_leave_prompt_msg_only_you">Anda hanya salah satu orang di sini. Jika Anda tinggalkan, siapa saja tidak dapat bergabung di masa depan, termasuk Anda.</string>
+    <string name="space_leave_prompt_msg_only_you">Anda orang satu-satunya di sini. Jika Anda tinggalkan, siapa saja tidak dapat bergabung di masa depan, termasuk Anda.</string>
     <string name="space_leave_prompt_msg_with_name">Apakah Anda yakin untuk meninggalkan %s\?</string>
     <string name="leave_space">Tinggalkan Space</string>
     <string name="space_add_child_title">Tambahkan ruangan</string>
@@ -2693,9 +2693,9 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="use_file">Gunakan File</string>
     <string name="bootstrap_enter_recovery">Masukkan %s Anda untuk melanjutkan</string>
     <string name="security_prompt_text">Verifikasi diri Anda dan lainnya untuk tetap membuat pesan Anda aman</string>
-    <string name="setup_cross_signing">Aktifkan Tanda Tangan Silang</string>
+    <string name="setup_cross_signing">Aktifkan Penandatanganan Silang</string>
     <string name="upgrade_security">Peningkatan enkripsi tersedia</string>
-    <string name="room_message_placeholder">Pesan…</string>
+    <string name="room_message_placeholder">Kirim pesan…</string>
     <string name="auth_invalid_login_deactivated_account">Akun ini telah dinonaktifkan.</string>
     <string name="auth_invalid_login_param_space_in_password">Nama pengguna dan/atau kata sandi salah. Kata sandi dimulai atau berakhir dengan spasi, mohon dicek.</string>
     <string name="command_description_plain">Mengirim pesan sebagai teks biasa, tanpa mengimpretasikannya sebagai markdown</string>
