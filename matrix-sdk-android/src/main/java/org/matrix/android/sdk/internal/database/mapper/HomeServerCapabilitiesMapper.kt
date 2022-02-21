@@ -42,7 +42,7 @@ internal object HomeServerCapabilitiesMapper {
                 lastVersionIdentityServerSupported = entity.lastVersionIdentityServerSupported,
                 defaultIdentityServerUrl = entity.defaultIdentityServerUrl,
                 roomVersions = mapRoomVersion(entity.roomVersionsJson),
-                canUseThreading = false // entity.canUseThreading
+                canUseThreading = entity.canUseThreading
         )
     }
 

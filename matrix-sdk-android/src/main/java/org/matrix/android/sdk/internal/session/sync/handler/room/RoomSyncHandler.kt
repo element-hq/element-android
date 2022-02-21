@@ -64,7 +64,6 @@ import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.clearWith
 import org.matrix.android.sdk.internal.session.StreamEventsManager
 import org.matrix.android.sdk.internal.session.events.getFixedRoomMemberContent
-import org.matrix.android.sdk.internal.session.homeserver.DefaultHomeServerCapabilitiesService
 import org.matrix.android.sdk.internal.session.initsync.ProgressReporter
 import org.matrix.android.sdk.internal.session.initsync.mapWithProgress
 import org.matrix.android.sdk.internal.session.initsync.reportSubtask
@@ -425,8 +424,8 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
                     optimizedThreadSummaryMap[it] = eventEntity
                     // Add the same thread timeline event to Thread Chunk
                     addToThreadChunkIfNeeded(realm, roomId, it, timelineEventAdded, roomEntity)
-                    // Add thread list if needed
-                    if(homeServerCapabilitiesService.getHomeServerCapabilities().canUseThreading) {
+                    if (homeServerCapabilitiesService.getHomeServerCapabilities().canUseThreading) {
+                        // Update thread summaries only if homeserver supports threading
                         ThreadSummaryEntity.createOrUpdate(
                                 threadSummaryType = ThreadSummaryUpdateType.ADD,
                                 realm = realm,
