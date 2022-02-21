@@ -3136,7 +3136,7 @@
     <string name="location_activity_title_static_sharing">Sdílet polohu</string>
     <string name="closed_poll_option_description">Výsledky se zobrazí až po ukončení hlasování</string>
     <string name="closed_poll_option_title">Uzavřené hlasování</string>
-    <string name="open_poll_option_description">Hlasující vidí výsledky ihned po hlasování</string>
+    <string name="open_poll_option_description">Hlasující uvidí výsledky ihned po hlasování</string>
     <string name="open_poll_option_title">Otevřené hlasování</string>
     <string name="poll_type_title">Typ hlasování</string>
     <string name="edit_poll_button">UPRAVIT HLASOVÁNÍ</string>
