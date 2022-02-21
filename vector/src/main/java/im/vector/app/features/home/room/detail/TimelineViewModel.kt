@@ -156,9 +156,9 @@ class TimelineViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<TimelineViewModel, RoomDetailViewState> by hiltMavericksViewModelFactory() {
         const val PAGINATION_COUNT = 50
+
         // The larger the number the faster the results, COUNT=200 for 500 thread messages its x4 faster than COUNT=50
         const val PAGINATION_COUNT_THREADS_PERMALINK = 200
-
     }
 
     init {
