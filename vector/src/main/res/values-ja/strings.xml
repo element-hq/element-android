@@ -276,7 +276,7 @@
     <string name="settings_logged_in">ログイン中のアカウント</string>
     <string name="settings_select_language">言語を選択</string>
     <string name="settings_interface_language">言語</string>
-    <string name="settings_user_interface">端末操作表示</string>
+    <string name="settings_user_interface">インターフェース</string>
     <string name="account_email_validation_title">認証を確認中</string>
     <string name="account_email_validation_message">電子メールを確認して、本文中のURLをクリックしてください。 完了したら「続ける」をクリックしてください。</string>
     <string name="account_email_already_used_error">このメールアドレスは既に使われています。</string>
@@ -398,7 +398,7 @@
     <string name="auth_reset_password_message">パスワードを再設定するには、アカウントに登録されているメールアドレスを入力してください：</string>
     <string name="auth_reset_password_missing_email">アカウントに登録されたメールアドレスの入力が必要です。</string>
     <string name="auth_reset_password_missing_password">新しいパスワードの入力が必要です。</string>
-    <string name="auth_reset_password_email_validation_message">%sへ電子メールが送信されました。リンクをたどったら以下をクリックしてください。</string>
+    <string name="auth_reset_password_email_validation_message">%sへ電子メールが送信されました。リンクにアクセスしてから、以下をクリックしてください。</string>
     <string name="auth_reset_password_error_unauthorized">メールアドレスの確認に失敗しました：電子メールのリンクをクリックしたことを確認してください</string>
     <string name="auth_reset_password_success_message">パスワードがリセットされました。
 \n
@@ -560,7 +560,7 @@
     <string name="title_activity_bug_report">不具合の報告</string>
     <string name="read_receipts_list">開封確認メッセージのリスト</string>
     <string name="media_slider_saved_message">ダウンロードフォルダーに保存しますか？</string>
-    <string name="room_preview_unlinked_email_warning">この招待は、このアカウントに関連付けられていない%sに送信されました。
+    <string name="room_preview_unlinked_email_warning">この招待は、このアカウントに登録されていない%sに送信されました。
 \n別のアカウントでログインするか、このメールを自分のアカウントに追加してください。</string>
     <string name="room_preview_try_join_an_unknown_room">%sにアクセスしようとしています。ディスカッションに参加しますか？</string>
     <string name="room_preview_try_join_an_unknown_room_default">ルーム</string>
@@ -604,7 +604,7 @@
     <string name="settings_pin_unread_messages">未読のあるルームを固定</string>
     <string name="settings_analytics">分析</string>
     <string name="settings_data_save_mode">データ節約モード</string>
-    <string name="account_email_validation_error">メールアドレスを認証できません。メールを確認して、そこに記載してあるリンクをクリックしてください。その後、「続ける」をクリックしてください。</string>
+    <string name="account_email_validation_error">メールアドレスを認証できません。メールを確認して、記載されているリンクをクリックしてください。その後、「続ける」をクリックしてください。</string>
     <string name="settings_delete_notification_targets_confirmation">この通知の対象を削除してよろしいですか？</string>
     <string name="settings_delete_threepid_confirmation">%1$s %2$sを削除してよろしいですか？</string>
     <string name="settings_phone_number_code">コード</string>
@@ -774,12 +774,12 @@
     <string name="settings_deactivate_account_section">アカウントを停止</string>
     <string name="settings_deactivate_my_account">自分のアカウントを停止</string>
     <string name="startup_notification_privacy_title">通知のプライバシー</string>
-    <string name="template_startup_notification_privacy_message">${app_name}は通知を安全で内密に扱うため、バックグラウンドで動作できます。これによりバッテリー使用に影響が出ることがあります。</string>
+    <string name="template_startup_notification_privacy_message">${app_name}はバックグラウンドで動作し、通知を安全で内密に扱います。これによりバッテリー使用に影響が出ることがあります。</string>
     <string name="startup_notification_privacy_button_grant">許可を与える</string>
     <string name="startup_notification_privacy_button_other">他のオプションを選択</string>
-    <string name="settings_opt_in_of_analytics">解析データを送信</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name}はアプリを改善するため、匿名の解析データを収集します。</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">${app_name}を改善するのを助けるため、解析を許可してください。</string>
+    <string name="settings_opt_in_of_analytics">分析データを送信</string>
+    <string name="template_settings_opt_in_of_analytics_summary">${app_name}はアプリを改善するため、匿名の分析データを収集します。</string>
+    <string name="template_settings_opt_in_of_analytics_prompt">分析を有効にして、${app_name}の改善を手伝ってくれませんか？</string>
     <string name="settings_opt_in_of_analytics_ok">はい、手伝いたいです！</string>
     <string name="settings_without_flair">あなたは現在どのコミュニティーのメンバーでもありません。</string>
     <string name="lock_screen_hint">ここに入力…</string>
@@ -1081,7 +1081,7 @@
     <string name="settings_emails_empty">あなたのアカウントに追加されたメールアドレスはありません</string>
     <string name="settings_phone_number_empty">あなたのアカウントに追加された電話番号はありません</string>
     <string name="settings_phone_numbers">電話番号</string>
-    <string name="settings_emails_and_phone_numbers_summary">あなたの Matrix アカウントに関連付けられたメールアドレスと電話番号を管理</string>
+    <string name="settings_emails_and_phone_numbers_summary">あなたのMatrixアカウントに登録されたメールアドレスと電話番号を管理</string>
     <string name="settings_emails_and_phone_numbers_title">メールアドレスと電話番号</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">有効化</string>
     <string name="template_settings_troubleshoot_test_device_settings_failed">このセッションで通知が無効化されています。
@@ -1178,10 +1178,10 @@
     <string name="invalid_qr_code_uri">無効なQRコード（無効なURI）！</string>
     <string name="passwords_do_not_match">パスワードが一致しません</string>
     <string name="account_email_error">メールアドレスの確認中にエラーが発生しました。</string>
-    <string name="disabled_integration_dialog_content">これを行うには設定からインテグレーションを許可を有効にしてください。</string>
+    <string name="disabled_integration_dialog_content">これを行うには設定から「インテグレーションを許可」を有効にしてください。</string>
     <string name="disabled_integration_dialog_title">インテグレーションが無効になっています</string>
     <string name="settings_integration_manager">インテグレーションマネージャー</string>
-    <string name="settings_integration_allow">インテグレーションを許可</string>
+    <string name="settings_integration_allow">インテグレーション（統合）を許可</string>
     <string name="settings_data_save_mode_summary">データ節約モードでは、特定のフィルターを適用することで、プレゼンスの更新やタイピングの通知がフィルタリングされます。</string>
     <string name="settings_troubleshoot_test_fcm_success">FCMトークンが正常に取得されました:
 \n%1$s</string>
@@ -1448,14 +1448,14 @@
     <string name="notice_room_name_removed_by_you">ルーム名を削除しました</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">許可を与える</string>
     <string name="template_startup_notification_fdroid_battery_optim_message">${app_name}は、信頼できる通知を受け取るために、影響の少ないバックグラウンド接続を維持する必要があります。
-\n次の画面で、${app_name}を常にバックグラウンドで実行することを許可するように求められます。承認してください。</string>
+\n次の画面で、${app_name}を常にバックグラウンドで実行することを許可するように求められますので、承認してください。</string>
     <string name="startup_notification_fdroid_battery_optim_title">バックグラウンド接続</string>
     <string name="settings_discovery_manage">ディスカバリー設定を管理します。</string>
     <string name="settings_discovery_category">ディスカバリー（発見）</string>
     <string name="reset_secure_backup_warning">これにより、現在のキーまたはフレーズが置き換えられます。</string>
     <string name="reset_secure_backup_title">新しいセキュリティーキーを生成するか、既存のバックアップに新しいセキュリティーフレーズを設定します。</string>
-    <string name="settings_secure_backup_section_info">サーバー上の暗号鍵をバックアップすることにより、暗号化されたメッセージとデータへのアクセスが失われるのを防ぎます。</string>
-    <string name="settings_show_emoji_keyboard_summary">メッセージ作成画面に絵文字キーボードを開くボタンを追加</string>
+    <string name="settings_secure_backup_section_info">サーバー上の暗号鍵をバックアップすることにより、暗号化されたメッセージとデータへのアクセスが失われるのを予防します。</string>
+    <string name="settings_show_emoji_keyboard_summary">メッセージ作成画面に絵文字キーボードを開くためのボタンを追加</string>
     <string name="settings_show_emoji_keyboard">絵文字キーボードを表示</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">アバターと表示名の変更を含む。</string>
     <string name="settings_show_avatar_display_name_changes_messages">アカウントのイベントを表示</string>
@@ -2312,9 +2312,9 @@
     <string name="labs_render_locations_in_timeline">ユーザーのロケーションをタイムラインに表示</string>
     <string name="settings_enable_location_sharing_summary">一度有効にすると、ロケーションはどのルームにも送れるようになります</string>
     <string name="legals_third_party_notices">サードパーティー製ライブラリー</string>
-    <string name="analytics_opt_in_list_item_3">いつでも設定から無効にできます</string>
-    <string name="analytics_opt_in_list_item_2">私たちは情報を第三者と共有することは<b>ありません</b></string>
-    <string name="analytics_opt_in_list_item_1">私たちはアカウントのデータを記録したり分析したりすることは<b>ありません</b></string>
+    <string name="analytics_opt_in_list_item_3">これはいつでも設定から無効にできます</string>
+    <string name="analytics_opt_in_list_item_2">私たちは、情報を第三者と共有することは<b>ありません</b></string>
+    <string name="analytics_opt_in_list_item_1">私たちは、アカウントのデータを記録したり分析したりすることは<b>ありません</b></string>
     <string name="analytics_opt_in_title">Elementの改善を手伝う</string>
     <string name="room_join_rules_public_by_you">リンクを知っている人がアクセスできるようにこのルームを設定しました。</string>
     <string name="no_ignored_users">どのユーザーも無視していません</string>
@@ -2628,7 +2628,7 @@
     <string name="login_set_msisdn_notice2">国際電話番号の形式を使用してください。</string>
     <string name="login_msisdn_error_not_international">国際電話番号は「+」から始まる必要があります</string>
     <string name="login_msisdn_confirm_notice">コードを%1$sに送信しました。以下に入力して認証してください。</string>
-    <string name="login_reset_password_error_not_found">このメールアドレスはどのアカウントにも属していません</string>
+    <string name="login_reset_password_error_not_found">このメールアドレスはどのアカウントにも登録されていません</string>
     <string name="login_reset_password_warning_content">パスワードを変更すると、すべてのセッションでのエンドツーエンド暗号鍵がリセットされ、暗号化されたメッセージ履歴が読めなくなります。パスワードを再設定する前に、鍵のバックアップを設定するか、他のセッションから鍵をエクスポートしておいてください。</string>
     <string name="login_reset_password_notice">パスワードの再設定を確認するために認証メールを送信しました。</string>
     <string name="login_login_with_email_error">このメールアドレスはどのアカウントにも属していません。</string>
@@ -2696,7 +2696,7 @@
     <string name="bottom_sheet_save_your_recovery_key_title">セキュリティーキーを保存</string>
     <string name="your_recovery_key">リカバリーキー</string>
     <string name="sent_location">位置を共有しました</string>
-    <string name="sent_a_reaction">%sとリアクションしました</string>
+    <string name="sent_a_reaction">%sでリアクションしました</string>
     <string name="sent_verification_conclusion">検証終了</string>
     <string name="verification_conclusion_compromised">次のいずれかのセキュリティが破られている可能性があります。
 \n
@@ -2710,7 +2710,7 @@
     <string name="verify_user_sas_emoji_help_text">次の絵文字が相手の画面にも同じ順番で現れるのを確認し、このユーザーを検証してください。</string>
     <string name="verification_conclusion_warning">信頼できないサインイン</string>
     <string name="create_room_alias_invalid">使用できない文字が含まれています</string>
-    <string name="analytics_opt_in_content">Elementの改善と課題抽出のために、匿名の使用分析データを収集させてくださいませんか？複数の端末での使用を解析するために、あなたの全端末共通のランダムな識別子を生成します。
+    <string name="analytics_opt_in_content">Elementの改善と課題抽出のために、匿名の使用分析データを収集させてくださいませんか？複数の端末での使用を分析するために、あなたの全端末共通のランダムな識別子を生成します。
 \n
 \n%sで利用規約を閲覧できます。</string>
     <string name="autocomplete_limited_results">最初の検索結果のみ表示中。文字をもっと入力してください…</string>
@@ -2804,7 +2804,7 @@
     <string name="verification_scan_self_emoji_subtitle">絵文字を比較して検証</string>
     <string name="verification_scan_emoji_subtitle">対面でない場合は、代わりに絵文字を比較してください</string>
     <string name="settings_server_upload_size_content">あなたのホームサーバーは、最大%sのサイズの添付ファイルを受け付けています。</string>
-    <string name="login_reset_password_mail_confirmation_notice_2">新しいパスワードを確認するには下記のリンクを開いてください。リンク先のリンクにアクセスしてから、この下をクリックしてください。</string>
+    <string name="login_reset_password_mail_confirmation_notice_2">新しいパスワードを確認するには下記のリンクを開いてください。リンクにアクセスしてから、以下をクリックしてください。</string>
     <string name="settings_security_pin_code_summary">PINコードを再設定するには「PINコードを忘れた」をタップしてログアウトし、その後再設定してください。</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
         <item quantity="other">いま検証できる%d個の端末を表示</item>
