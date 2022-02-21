@@ -1944,7 +1944,7 @@
     <string name="room_create_member_of_space_name_can_join">スペース %s のメンバーが検索、プレビュー、参加できます。</string>
     <string name="room_settings_room_access_private_invite_only_title">非公開（招待のみ）</string>
     <string name="settings_default_media_source">規定メディアソース</string>
-    <string name="settings_default_compression">規定圧縮率</string>
+    <string name="settings_default_compression">既定の圧縮率</string>
     <string name="settings_room_upgrades">ルームのアップグレード</string>
     <string name="settings_messages_by_bot">ボットによるメッセージ</string>
     <string name="settings_room_invitations">ルームへの招待</string>
