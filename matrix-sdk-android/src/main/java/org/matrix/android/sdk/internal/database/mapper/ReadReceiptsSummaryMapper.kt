@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.database.mapper
 import org.matrix.android.sdk.api.session.room.model.ReadReceipt
 import org.matrix.android.sdk.internal.database.RealmSessionProvider
 import org.matrix.android.sdk.internal.database.model.ReadReceiptsSummaryEntity
-import org.matrix.android.sdk.internal.database.model.UserEntity
+import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.database.query.where
 import javax.inject.Inject
 
@@ -29,14 +29,12 @@ internal class ReadReceiptsSummaryMapper @Inject constructor(private val realmSe
         if (readReceiptsSummaryEntity == null) {
             return emptyList()
         }
-        return realmSessionProvider.withRealm { realm ->
-            val readReceipts = readReceiptsSummaryEntity.readReceipts
-            readReceipts
-                    .mapNotNull {
-                        val user = UserEntity.where(realm, it.userId).findFirst()
-                                ?: return@mapNotNull null
-                        ReadReceipt(user.asDomain(), it.originServerTs.toLong())
-                    }
-        }
+        val readReceipts = readReceiptsSummaryEntity.readReceipts
+        return readReceipts
+                .mapNotNull {
+                    val roomMember = RoomMemberSummaryEntity.where(readReceiptsSummaryEntity.realm, roomId = it.roomId, userId = it.userId).findFirst()
+                            ?: return@mapNotNull null
+                    ReadReceipt(roomMember.asDomain(), it.originServerTs.toLong())
+                }
     }
 }
