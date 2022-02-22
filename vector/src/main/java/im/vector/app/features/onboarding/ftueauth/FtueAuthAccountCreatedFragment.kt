@@ -42,8 +42,8 @@ class FtueAuthAccountCreatedFragment @Inject constructor(
 
     private fun setupViews() {
         views.accountCreatedSubtitle.text = getString(R.string.ftue_account_created_subtitle, activeSessionHolder.getActiveSession().myUserId)
-        views.accountCreatedPersonalize.setOnClickListener { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnPersonalizeProfile)) }
-        views.accountCreatedTakeMeHome.setOnClickListener { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome)) }
+        views.accountCreatedPersonalize.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnPersonalizeProfile)) }
+        views.accountCreatedTakeMeHome.debouncedClicks { viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome)) }
     }
 
     override fun resetViewModel() {
