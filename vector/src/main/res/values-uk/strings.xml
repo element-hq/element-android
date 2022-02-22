@@ -3048,7 +3048,7 @@
     <string name="create_spaces_room_public_header">Що ви бажаєте обговорювати в %s\?</string>
     <string name="create_spaces_details_private_header">Додайте деталі, щоб люди впізнавали ваш простір. Ви зможете будь-коли редагувати це.</string>
     <string name="create_spaces_details_public_header">Додайте деталі, щоб ваш простір виділявся. Ви зможете будь-коли редагувати це.</string>
-    <string name="create_spaces_make_sure_access">Надайте потрібним людям доступ до %s. Ви зможете додати інших згодом.</string>
+    <string name="create_spaces_make_sure_access">Надайте потрібним людям доступ до %s.</string>
     <plurals name="entries">
         <item quantity="one">%d елемент</item>
         <item quantity="few">%d елементи</item>
@@ -3224,4 +3224,20 @@
     <string name="action_thread_copy_link_to_thread">Копіювати лінк треду</string>
     <string name="action_thread_view_in_room">Переглянути у кімнаті</string>
     <string name="action_view_threads">Переглянути треди</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d зміна ACL сервера</item>
+        <item quantity="few">%d зміни ACL сервера</item>
+        <item quantity="many">%d змін ACL сервера</item>
+        <item quantity="other">%d змін ACL сервера</item>
+    </plurals>
+    <string name="room_message_autocomplete_notification">Сповіщення кімнати</string>
+    <string name="room_message_autocomplete_users">Користувачі</string>
+    <string name="room_message_notify_everyone">Сповістити всю кімнату</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">І ще %1$d</item>
+        <item quantity="few">І ще %1$d</item>
+        <item quantity="many">І ще %1$d</item>
+        <item quantity="other">І ще %1$d</item>
+    </plurals>
+    <string name="message_reaction_show_less">Згорнути</string>
 </resources>
