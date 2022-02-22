@@ -97,7 +97,7 @@
         android:layout_width="0dp"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:visibility="invisible"
+        tools:visibility="visible"
         android:layout_height="20dp"/>
 
     <im.vector.app.core.ui.views.NotificationAreaView
@@ -107,7 +107,8 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible"/>
 
     <ViewStub
         android:id="@+id/failedMessagesWarningStub"

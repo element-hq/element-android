@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.api.session.room.sender
 
-import org.matrix.android.sdk.api.util.MatrixItem
 import org.matrix.android.sdk.internal.util.replaceSpaceChars
 
 data class SenderInfo(
@@ -36,5 +35,3 @@ data class SenderInfo(
             else                                      -> "$displayName ($userId)"
         }
 }
-
-fun SenderInfo.toMatrixItem() = MatrixItem.UserItem(userId, displayName, avatarUrl)

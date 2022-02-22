@@ -43,9 +43,9 @@ class TypingMessageView @JvmOverloads constructor(
         views = TypingMessageLayoutBinding.bind(this)
     }
 
-    fun render(typingUsers: List<SenderInfo>, avatarRender: AvatarRenderer) {
+    fun render(typingUsers: List<SenderInfo>, avatarRenderer: AvatarRenderer) {
         views.usersName.text = typingHelper.getNotificationTypingMessage(typingUsers)
-        views.avatars.render(typingUsers, avatarRender)
+        views.avatars.render(typingUsers, avatarRenderer)
     }
 
     override fun onDetachedFromWindow() {

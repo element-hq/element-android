@@ -38,7 +38,7 @@ class TypingMessageAvatar @JvmOverloads constructor(
         const val OVERLAP_FACT0R = -3 // =~ 30% to left
     }
 
-    fun render(typingUsers: List<SenderInfo>, avatarRender: AvatarRenderer) {
+    fun render(typingUsers: List<SenderInfo>, avatarRenderer: AvatarRenderer) {
         removeAllViews()
         for ((index, value) in typingUsers.withIndex()) {
             val avatar = ImageView(context)
@@ -48,7 +48,7 @@ class TypingMessageAvatar @JvmOverloads constructor(
             layoutParams.width = DimensionConverter(resources).dpToPx(AVATAR_SIZE_DP)
             layoutParams.height = DimensionConverter(resources).dpToPx(AVATAR_SIZE_DP)
             avatar.layoutParams = layoutParams
-            avatarRender.render(value.toMatrixItem(), avatar)
+            avatarRenderer.render(value.toMatrixItem(), avatar)
             addView(avatar)
         }
     }

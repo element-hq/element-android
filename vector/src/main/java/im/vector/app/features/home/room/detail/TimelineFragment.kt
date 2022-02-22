@@ -1608,9 +1608,9 @@ class TimelineFragment @Inject constructor(
     private fun renderTypingMessageNotification(roomSummary: RoomSummary?, state: RoomDetailViewState) {
         if (!isThreadTimeLine() && roomSummary != null) {
             views.typingMessageView.isInvisible = state.typingUsers.isNullOrEmpty()
-            state.typingUsers?.let { senders ->
-                views.typingMessageView.render(senders.take(MAX_TYPING_MESSAGE_USERS_COUNT), avatarRenderer)
-            }
+            state.typingUsers
+                    ?.take(MAX_TYPING_MESSAGE_USERS_COUNT)
+                    ?.let { senders -> views.typingMessageView.render(senders, avatarRenderer) }
         } else {
             views.typingMessageView.isInvisible = true
         }
