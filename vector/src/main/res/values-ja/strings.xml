@@ -2778,10 +2778,10 @@
     <string name="create_poll_empty_question_error">質問は空にできません</string>
     <string name="direct_room_profile_encrypted_subtitle">ここで送受信されるメッセージはエンドツーエンド暗号化されています。
 \n
-\nメッセージは安全に保護されており、メッセージのロックを解除するための固有の鍵は、あなたと受信者だけが持っています。</string>
+\nメッセージは安全に保護されており、メッセージのロックを解除できる固有の鍵を持っているのはあなたと受信者だけです。</string>
     <string name="room_profile_encrypted_subtitle">この部屋のメッセージはエンドツーエンド暗号化されています。
 \n
-\nメッセージは安全に保護されており、メッセージのロックを解除するための固有の鍵を持っているのはあなたと受信者だけです。</string>
+\nメッセージは安全に保護されており、メッセージのロックを解除できる固有の鍵を持っているのはあなたと受信者だけです。</string>
     <string name="dev_tools_form_hint_state_key">ステートキー</string>
     <string name="save_recovery_key_chooser_hint">リカバリーキーを以下に保存</string>
     <string name="crypto_error_withheld_generic">送信者が意図的に鍵を送信しなかったため、このメッセージにアクセスすることができません</string>
@@ -2818,5 +2818,7 @@
     <string name="verification_request_alert_description">セキュリティーを高めるために、自分と相手の端末でコードが一致していることを確認して、%sを検証しましょう。
 \n
 \n対面で行うのが最もセキュアです。</string>
-    <string name="encryption_has_been_misconfigured">暗号化が正しく設定されていません。</string>
+    <string name="encryption_has_been_misconfigured">暗号化の設定が正しくありません。</string>
+    <string name="room_profile_section_restore_security">暗号化を復元する</string>
+    <string name="contact_admin_to_restore_encryption">暗号化を有効な状態に取り戻すために、管理者に連絡してください。</string>
 </resources>
