@@ -143,7 +143,6 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.ResetPasswordMailConfirmed -> handleResetPasswordMailConfirmed()
             is OnboardingAction.RegisterAction             -> handleRegisterAction(action)
             is OnboardingAction.ResetAction                -> handleResetAction(action)
-            is OnboardingAction.SetupSsoForSessionRecovery -> handleSetupSsoForSessionRecovery(action)
             is OnboardingAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
             OnboardingAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
             is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
@@ -246,18 +245,6 @@ class OnboardingViewModel @AssistedInject constructor(
                 }
                         ?.let { onSessionCreated(it) }
             }
-        }
-    }
-
-    private fun handleSetupSsoForSessionRecovery(action: OnboardingAction.SetupSsoForSessionRecovery) {
-        setState {
-            copy(
-                    signMode = SignMode.SignIn,
-                    loginMode = LoginMode.Sso(action.ssoIdentityProviders),
-                    homeServerUrlFromUser = action.homeServerUrl,
-                    homeServerUrl = action.homeServerUrl,
-                    deviceId = action.deviceId
-            )
         }
     }
 
