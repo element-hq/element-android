@@ -89,6 +89,6 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         matrix_access_token: ${{ secrets.ELEMENT_ANDROID_NOTIFICATION_ACCESS_TOKEN }}
-        matrix_rooms_id: ${{ secrets.ELEMENT_ANDROID_INTERNAL_ROOM_ID }}
+        matrix_room_id: ${{ secrets.ELEMENT_ANDROID_INTERNAL_ROOM_ID }}
         html_template: "CI Sanity test {{ job_statuses.integration-tests.status }} at {{ job_statuses.integration-tests.completed_at }} <a href=\"{{ job_statuses.integration-tests.html_url }}\">[details]</a>"
         text_template: "Sanity test {{ job_statuses.integration-tests.status }}"
