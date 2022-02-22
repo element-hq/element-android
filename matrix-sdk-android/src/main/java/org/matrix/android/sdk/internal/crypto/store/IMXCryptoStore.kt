@@ -240,6 +240,14 @@ internal interface IMXCryptoStore {
      */
     fun getRoomAlgorithm(roomId: String): String?
 
+    /**
+     * This is a bit different than isRoomEncrypted
+     * A room is encrypted when there is a m.room.encryption state event in the room (malformed/invalid or not)
+     * But the crypto layer has additional guaranty to ensure that encryption would never been reverted
+     * It's defensive coding out of precaution (if ever state is reset)
+     */
+    fun roomWasOnceEncrypted(roomId: String): Boolean
+
     fun shouldEncryptForInvitedMembers(roomId: String): Boolean
 
     fun setShouldEncryptForInvitedMembers(roomId: String, shouldEncryptForInvitedMembers: Boolean)

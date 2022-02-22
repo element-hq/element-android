@@ -3524,12 +3524,13 @@
     <string name="add_space">Add Space</string>
     <string name="your_public_space">Your public space</string>
     <string name="your_private_space">Your private space</string>
+    <!-- TODO TO BE REMOVED -->
     <string name="create_spaces_type_header">Spaces are a new way to group rooms and people</string>
     <string name="create_spaces_choose_type_label">What type of space do you want to create?</string>
     <string name="create_spaces_you_can_change_later">You can change this later</string>
     <string name="create_spaces_join_info_help">To join an existing space, you need an invite.</string>
     <string name="create_spaces_who_are_you_working_with">Who are you working with?</string>
-    <string name="create_spaces_make_sure_access">Make sure the right people have access to %s. You can change this later.</string>
+    <string name="create_spaces_make_sure_access">Make sure the right people have access to %s.</string>
     <string name="create_spaces_just_me">Just me</string>
     <string name="create_spaces_organise_rooms">A private space to organise your rooms</string>
     <string name="create_spaces_me_and_teammates">Me and teammates</string>

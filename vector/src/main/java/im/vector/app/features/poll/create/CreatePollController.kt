@@ -54,7 +54,6 @@ class CreatePollController @Inject constructor(
             title(host.stringProvider.getString(R.string.poll_type_title).toEpoxyCharSequence())
         }
 
-        /*
         pollTypeSelectionItem {
             id("poll_type_selection")
             pollType(currentState.pollType)
@@ -68,7 +67,6 @@ class CreatePollController @Inject constructor(
                 )
             }
         }
-         */
 
         genericItem {
             id("question_title")
