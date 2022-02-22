@@ -2811,11 +2811,6 @@
     <string name="link_this_email_settings_link">將此電子郵件與您的帳號連結</string>
     <string name="this_invite_to_this_space_was_sent">此空間的邀請已傳送給與您的帳號無關的 %s</string>
     <string name="this_invite_to_this_room_was_sent">此聊天室的邀請已傳送給與您的帳號無關的 %s</string>
-    <string name="to_help_space_members_find_and_join">要協助空間成員尋找並加入私人聊天室，請點擊大頭照進入該聊天是的設定中。</string>
-    <string name="help_space_members">協助空間成員尋找私人聊天室</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">這讓聊天室可以輕鬆地對空間維持隱密，同時讓空間中的夥伴找到並加入它們。空間中的所有新的聊天室都將提供此選項。</string>
-    <string name="help_people_in_spaces_find_and_join">協助空間內的夥伴自己尋找私人聊天室，不需要手動邀請所有人。</string>
-    <string name="new_let_people_in_spaces_find_and_join">新功能：讓空間中的人尋找並加入私人聊天室</string>
     <string name="call_jitsi_started">群組通話開始</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">您所在的所有聊天室都會顯示在 Home 中。</string>
     <string name="preference_show_all_rooms_in_home">顯示 Home 中的所有聊天室</string>

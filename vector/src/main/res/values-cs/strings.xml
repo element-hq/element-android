@@ -2917,11 +2917,6 @@
     <string name="link_this_email_settings_link">Propojte tento e-mail se svým účtem</string>
     <string name="this_invite_to_this_room_was_sent">Pozvánka do této místnosti byla odeslána na adresu %s, která není spojena s vaším účtem</string>
     <string name="this_invite_to_this_space_was_sent">Pozvánka do tohoto prostoru byla odeslána na adresu %s, která není spojena s vaším účtem</string>
-    <string name="to_help_space_members_find_and_join">Chcete-li členům prostoru pomoci najít soukromou místnost a připojit se k ní, přejděte do nastavení dané místnosti klepnutím na avatar.</string>
-    <string name="help_space_members">Pomozte členům prostoru najít soukromé místnosti</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Díky tomu mohou místnosti zůstat soukromé a zároveň je mohou lidé v prostoru najít a připojit se k nim. Všechny nové místnosti v prostoru budou mít tuto možnost k dispozici.</string>
-    <string name="help_people_in_spaces_find_and_join">Pomozte lidem v prostorech, aby sami našli soukromé místnosti a připojili se k nim, není třeba všechny zvát ručně.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Novinka: Nechat lidi v prostorech vyhledat a připojit se k soukromým místnostem</string>
     <string name="call_jitsi_started">Skupinový hovor zahájen</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Všechny místnosti, ve kterých se nacházíte, se zobrazí v Úvodu.</string>
     <string name="preference_show_all_rooms_in_home">Zobrazit všechny místnosti v Úvodu</string>

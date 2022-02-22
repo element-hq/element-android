@@ -2860,12 +2860,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="link_this_email_with_your_account">%s a Beállításokba a közvetlen meghívások fogadásához az Elemenetben.</string>
     <string name="this_invite_to_this_space_was_sent">Ehhez a térhez a meghívó ide lett elküldve: %s, ami nincs összefüggésben a fiókoddal</string>
     <string name="this_invite_to_this_room_was_sent">Ehhez a szobához a meghívó ide lett elküldve: %s, ami nincs összefüggésben a fiókoddal</string>
-    <string name="to_help_space_members_find_and_join">A Tér tagságnak privát szoba megtalálásában és belépésben való segítséghez menj a szoba beállításaiba a profilképre való koppintással.</string>
     <string name="link_this_email_settings_link">Ennek az e-mailnek a fiókhoz való kötése</string>
-    <string name="help_space_members">Segíts a tér tagságának privát szobák megtalálásában</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">A szobák egyszerűbben maradhatnak privátok a téren kívül, amíg a tér tagsága megtalálhatja és beléphet oda. Minden új szoba a téren rendelkezik ezzel a beállítási lehetőséggel.</string>
-    <string name="help_people_in_spaces_find_and_join">Segíts a téren az embereknek privát szobák megtalálásába és a belépésben, nem szükséges a személyes meghívó.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Új: Engedd az embereknek a privát szobák megtalálását és a belépést</string>
     <string name="call_jitsi_started">Csoportos hívás elkezdődött</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Minden szoba amibe beléptél megjelenik a Kezdő téren.</string>
     <string name="preference_show_all_rooms_in_home">Minden szoba megjelenítése a Kezdő téren</string>

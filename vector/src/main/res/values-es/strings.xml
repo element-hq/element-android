@@ -2938,11 +2938,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="link_this_email_settings_link">Vincula este correo electrónico con tu cuenta</string>
     <string name="this_invite_to_this_space_was_sent">Esta invitación a este espacio se envió a %s que no está asociado con su cuenta</string>
     <string name="this_invite_to_this_room_was_sent">Esta invitación a esta sala se envió a %s que no está asociado con su cuenta</string>
-    <string name="to_help_space_members_find_and_join">Para ayudar a los miembros del espacio a encontrar y unirse a una sala privada, vaya a la configuración de esa sala tocando el avatar.</string>
-    <string name="help_space_members">Ayuda a los miembros del espacio a encontrar salas privadas</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Esto facilita que las habitaciones se mantengan privadas de un espacio, al tiempo que permite que las personas en el espacio las encuentren y se unan. Todas las habitaciones nuevas de un espacio tendrán esta opción disponible.</string>
-    <string name="help_people_in_spaces_find_and_join">Ayude a las personas en los espacios a encontrar y unirse a salas privadas por sí mismas, sin necesidad de invitar a todos manualmente.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Nuevo: Permita que las personas en los espacios encuentren y se unan a salas privadas</string>
     <string name="upgrade_room_for_restricted_note">Tenga en cuenta que la mejora creará una nueva versión de la habitación. Todos los mensajes actuales permanecerán en esta sala archivada.</string>
     <string name="upgrade_room_for_restricted_no_param">Cualquiera en un espacio para padres podrá encontrar y unirse a esta sala, sin necesidad de invitar a todos manualmente. Podrás cambiar esto en la configuración de la habitación en cualquier momento.</string>
     <string name="upgrade_room_for_restricted">Cualquiera en %s podrá encontrar y unirse a esta sala, sin necesidad de invitar a todos manualmente. Podrás cambiar esto en la configuración de la habitación en cualquier momento.</string>

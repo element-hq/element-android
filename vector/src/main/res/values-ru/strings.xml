@@ -2950,11 +2950,6 @@
     <string name="link_this_email_settings_link">Свяжите этот адрес электронной почты с вашей учетной записью</string>
     <string name="this_invite_to_this_room_was_sent">Приглашение в эту комнату было отправлено на %s, который не связан с вашей учетной записью</string>
     <string name="this_invite_to_this_space_was_sent">Приглашение в это пространство было отправлено на %s, который не связан с вашей учетной записью</string>
-    <string name="to_help_space_members_find_and_join">Чтобы помочь участникам пространства найти и присоединиться к частной комнате, перейдите в настройки этой комнаты, нажав на ее аватар.</string>
-    <string name="help_space_members">Помогите участникам пространства в поиске частных комнат</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Это позволяет комнатам оставаться приватными для пространства, в то же время позволяя людям в пространстве находить их и присоединяться к ним. Все новые комнаты в пространстве будут иметь эту возможность.</string>
-    <string name="help_people_in_spaces_find_and_join">Помогите людям в пространствах самим находить и присоединяться к приватным комнатам, без необходимости вручную приглашать всех.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Новое: Позволяет людям в пространствах находить и присоединяться к приватным комнатам</string>
     <string name="call_jitsi_started">Начался групповой вызов</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Все комнаты, в которых вы находитесь, будут отображаться в Начале.</string>
     <string name="preference_show_all_rooms_in_home">Показать все комнаты в Начале</string>

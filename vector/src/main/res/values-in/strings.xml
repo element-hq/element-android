@@ -2300,9 +2300,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="login_reset_password_email_hint">Email</string>
     <string name="login_reset_password_submit">Lanjut</string>
     <string name="login_reset_password_notice">Email verifikasi akan dikirim ke kotak masuk Anda untuk mengkonfirmasi pengaturan kata sandi baru Anda.</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Ini membuatnya mudah untuk ruangan tetap privat di ruangan, sambil membiarkan orang-orang di space dapat menemukan dan bergabung ke ruangannya. Semua ruangan baru di space akan memiliki opsi ini.</string>
-    <string name="help_people_in_spaces_find_and_join">Bantu orang-orang di space untuk menemukan dan bergabung ruangan privat sendiri, tidak perlu mengundang semua secara manual.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Baru: Izinkan orang-orang di space untuk menemukan dan bergabung ruangan privat</string>
     <string name="upgrade_room_for_restricted_note">Dicatat bahwa meningkatkan akan membuat versi baru dari ruangannya. Semua pesan saat ini akan tetap di ruangan yang diarsip.</string>
     <string name="upgrade_room_for_restricted_no_param">Siapa saja di induk ruangan dapat menemukan dan bergabung ke ruangan ini — tidak perlu mengundang semua secara manual. Anda dapat mengubahnya di pengaturan ruangan kapan saja.</string>
     <string name="upgrade_room_for_restricted">Siapa saja di %s dapat menemukan dan bergabung ke ruangan ini — tidak perlu mengundang semua secara manual. Anda dapat mengubahnya di pengaturan ruangan kapan saja.</string>
@@ -2627,8 +2624,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="link_this_email_settings_link">Tautkan email ini ke akun Anda</string>
     <string name="this_invite_to_this_space_was_sent">Undangan space ini telah dikirim ke %s yang tidak diasosiasikan dengan akun Anda</string>
     <string name="this_invite_to_this_room_was_sent">Undangan ruangan ini telah dikirim ke %s yang tidak diasosiasikan dengan akun Anda</string>
-    <string name="to_help_space_members_find_and_join">Untuk membantu anggota space menemukan dan bergabung ke ruangan privat, pergilah ke pengaturan ruangannya dengan mengetuk pada avatarnya.</string>
-    <string name="help_space_members">Bantu anggota space untuk menemukan ruangan privat</string>
     <string name="external_link_confirmation_title">Periksa ulang tautan ini</string>
     <string name="error_empty_field_choose_password">Mohon pilih sebuah kata sandi.</string>
     <string name="error_empty_field_choose_user_name">Mohon pilih sebuah nama pengguna.</string>

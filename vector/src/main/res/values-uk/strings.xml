@@ -2163,7 +2163,6 @@
     <string name="a11y_video">Відео</string>
     <string name="a11y_unsent_draft">має не надіслану чернетку</string>
     <string name="a11y_error_some_message_not_sent">Деякі повідомлення не було надіслано</string>
-    <string name="to_help_space_members_find_and_join">Щоб допомогти учасникам простору знайти та приєднатися до приватної кімнати, перейдіть до її налаштувань, торкнувшись аватара.</string>
     <string name="a11y_delete_avatar">Видалити аватар</string>
     <string name="room_settings_set_avatar">Установити аватар</string>
     <string name="a11y_change_avatar">Змінити аватар</string>
@@ -2982,8 +2981,6 @@
 \n - Домашній сервер, до якого під\'єднаний користувач, якого ви перевірили
 \n - Ваше інтернет-з\'єднання або інтернет-з\'єднання вашого користувача
 \n - Ваш пристрій або пристрій іншого користувача</string>
-    <string name="help_space_members">Допоможіть учасникам простору знаходити приватні кімнати</string>
-    <string name="new_let_people_in_spaces_find_and_join">Нове: Дозволити людям у просторах знаходити та приєднуватися до приватних кімнат</string>
     <string name="invite_just_to_this_room">Лише в цю кімнату</string>
     <string name="invite_to_space_with_name_desc">Вони зможуть переглядати %s</string>
     <string name="invite_by_username_or_mail">Запрошення за іменем користувача або е-поштою</string>
@@ -3018,8 +3015,6 @@
 \nСпробуйте згодом або запитайте адміністратора кімнати, чи є у вас доступ.</string>
     <string name="this_invite_to_this_space_was_sent">Це запрошення до простору надіслане %s, не пов\'язаній із вашим обліковим записом</string>
     <string name="this_invite_to_this_room_was_sent">Це запрошення до кімнати надіслане %s, не пов\'язаній із вашим обліковим записом</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Кімнати можуть лишатися закритими для людей ззовні простору, водночас люди в просторі можуть знаходити їх і приєднуватися. Всі нові кімнати в просторі матимуть цю опцію.</string>
-    <string name="help_people_in_spaces_find_and_join">Допомагає людям у просторах знаходити закриті кімнати й приєднуватися самостійно, без потреби вручну запрошувати всіх.</string>
     <string name="upgrade_room_for_restricted_note">Зауважте, що поліпшення створить нову версію кімнати. Всі наявні повідомлення залишаться в цій архівованій кімнаті.</string>
     <string name="upgrade_room_for_restricted_no_param">Будь-хто в батьківському просторі зможемо знайти кімнату й долучитись — нема потреба вручну запрошувати всіх. Можна змінити це в налаштуваннях кімнати будь-коли.</string>
     <string name="upgrade_room_for_restricted">Будь-хто в %s зможе знайти кімнату й долучитись — нема потреби вручну запрошувати всіх. Можна змінити це в налаштуваннях кімнати будь-коли.</string>

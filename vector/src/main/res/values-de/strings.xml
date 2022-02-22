@@ -2895,7 +2895,6 @@
     <string name="settings_notification_your_keywords">Deine Schlüsselwörter</string>
     <string name="link_this_email_settings_link">Verknüpfe diese E-Mail-Adresse mit deinem Konto</string>
     <string name="this_invite_to_this_room_was_sent">Die Einladung zu diesem Raum wurde an %s gesendet, welche nicht mit deinem Konto verknüpft ist</string>
-    <string name="help_space_members">Hilf Space-Mitgliedern private Räume zu finden</string>
     <string name="settings_mentions_and_keywords_encryption_notice">Auf deinem Mobilgerät wirst du keine Benachrichtigungen für Erwähnungen und Schlüsselwörter in verschlüsselten Räumen erhalten.</string>
     <string name="space_add_existing_spaces">Existierende Spaces hinzufügen</string>
     <string name="space_add_existing_rooms_only">Existierende Räume hinzufügen</string>
@@ -3014,10 +3013,6 @@
     <string name="labs_enable_latex_maths">LaTeX-Mathematik aktivieren</string>
     <string name="link_this_email_with_your_account">%s in den Einstellungen, um Einladungen direkt in Element zu erhalten.</string>
     <string name="this_invite_to_this_space_was_sent">Diese Einladung zu diesem Raum wurde an %s gesendet, der nicht mit deinem Konto verbunden ist</string>
-    <string name="to_help_space_members_find_and_join">Um Spacemitgliedern zu helfen, einen privaten Raum zu finden und ihm beizutreten, gehe zu den Einstellungen des Raums, indem du auf den Avatar tippst.</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Dies macht es für Räume einfach, privat in einem Space zu bleiben, während die Leute im Space diese finden und ihnen beitreten können. Alle neuen Räume in einem Raum haben diese Option zur Verfügung.</string>
-    <string name="help_people_in_spaces_find_and_join">Hilf Personen in Spaces, private Räume selbst zu finden und ihnen beizutreten, damit du nicht alle einzeln einladen musst.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Neu: Personen in Spaces können private Räume finden und ihnen beitreten</string>
     <string name="labs_auto_report_uisi_desc">Das System sendet automatisch Protokolle, wenn ein Fehler bei der Entschlüsselung auftritt</string>
     <string name="labs_auto_report_uisi">Entschlüsselungsfehler automatisch melden.</string>
     <string name="discovery_section">Auffindbarkeit (%s)</string>

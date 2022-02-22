@@ -3687,17 +3687,6 @@
 
     <string name="upgrade_room_for_restricted_note">Please note upgrading will make a new version of the room. All current messages will stay in this archived room.</string>
 
-    <!-- TODO TO BE REMOVED -->
-    <string name="new_let_people_in_spaces_find_and_join">New: Let people in spaces find and join private rooms</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="help_people_in_spaces_find_and_join">Help people in spaces to find and join private rooms themselves, no need to manually invite everyone.</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">This makes it easy for rooms to stay private to a space, while letting people in the space find and join them. All new rooms in a space will have this option available.</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="help_space_members">Help space members find private rooms</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="to_help_space_members_find_and_join">To help space members find and join a private room, go to that room’s settings by tapping on the avatar.</string>
-
     <!-- %s will be replaced by an email at runtime -->
     <string name="this_invite_to_this_room_was_sent">This invite to this room was sent to %s which is not associated with your account</string>
     <!-- %s will be replaced by an email at runtime -->

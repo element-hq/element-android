@@ -2865,11 +2865,6 @@
     <string name="link_this_email_settings_link">Seo see e-posti aadress oma kasutajakontoga</string>
     <string name="this_invite_to_this_space_was_sent">See kutse siia kogukonnakeskusesse saadeti aadressile %s, mis ei ole seotud sinu kontoga</string>
     <string name="this_invite_to_this_room_was_sent">See kutse siia jututuppa saadeti aadressile %s, mis ei ole seotud sinu kontoga</string>
-    <string name="to_help_space_members_find_and_join">Selleks, et kogukonnakeskuse liikmed saaks privaatseid jututube leida ning nendega liituda ava tunnuspildile klõpsides jututoa seadistused.</string>
-    <string name="help_space_members">Aita kogukonnakeskuse liitmetel leida privaatseid jututube</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">See muudab lihtsaks, et jututoad jääksid kogukonnakeskuse piires privaatseks, kuid lasevad kogukonnakeskuses viibivatel inimestel need üles leida ja nendega liituda. Kõik kogukonnakeskuse uued jututoad on selle võimalusega.</string>
-    <string name="help_people_in_spaces_find_and_join">Aita kogukonnakeskuse liikmetel endil leida privaatseid jututube ning nendega liituda nii et sa ei pea kõigile eraldi kutset saatma.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Uus funktsionaalsus: Võimalda kogukonnakeskuse liikmetel leida privaatseid jututube ning nendega liituda</string>
     <string name="call_jitsi_started">Rühmakõne algas</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Kõik sinu jututoad on nähtavad avalehel.</string>
     <string name="preference_show_all_rooms_in_home">Näita kõiki jututubasid avalehel</string>

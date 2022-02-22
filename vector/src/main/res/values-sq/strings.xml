@@ -2854,11 +2854,6 @@
     <string name="link_this_email_settings_link">Lidheni këtë email me llogarinë tuaj</string>
     <string name="this_invite_to_this_space_was_sent">Kjo ftesë për te kjo hapësirë u dërgua te %s që s’është i përshoqëruar me llogarinë tuaj</string>
     <string name="this_invite_to_this_room_was_sent">Kjo ftesë për te kjo dhomë qe dërguar për %s që s’është i përshoqëruar me llogarinë tuaj</string>
-    <string name="to_help_space_members_find_and_join">Për t’i ndihmuar anëtarët të gjejnë dhe hyjnë në një dhomë private, kaloni te rregullimet e asaj dhome duke prekur mbi avatarin.</string>
-    <string name="help_space_members">Ndihmoni anëtarë hapësirash të gjejnë dhoma private</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Kjo e bën të lehtë mbajtjen private të dhomave në një hapësirë, ndërkohë që u lejon njerëzve në hapësirë të gjejnë dhe hyjnë në të tilla. Krejt dhomat e reja në një hapësirë do ta ofrojnë këtë mundësi.</string>
-    <string name="help_people_in_spaces_find_and_join">Ndihmojini njerëzit në hapësira të gjejnë dhe hyjnë vetë në dhoma private, pa pasur nevojë për ftesë dorazi të gjithkujt.</string>
-    <string name="new_let_people_in_spaces_find_and_join">E re: Lejoni persona në hapësira të gjejnë dhe hyjnë në dhoma private</string>
     <string name="call_jitsi_started">U fillua thirrje grupi</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Krejt dhomat ku gjendeni do të shfaqen te Home.</string>
     <string name="preference_show_all_rooms_in_home">Shfaq krejt dhomat te Home</string>

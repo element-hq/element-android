@@ -2854,11 +2854,6 @@
     <string name="link_this_email_settings_link">Collega questa email con il tuo account</string>
     <string name="this_invite_to_this_space_was_sent">Questo invito per questo spazio è stato inviato a %s, la quale non è associata al tuo account</string>
     <string name="this_invite_to_this_room_was_sent">Questo invito per questa stanza è stato inviato a %s, la quale non è associata al tuo account</string>
-    <string name="to_help_space_members_find_and_join">Per aiutare i membri dello spazio a trovare ed entrare in una stanza privata, vai nelle impostazioni di quella stanza toccando il suo avatar.</string>
-    <string name="help_space_members">Aiuta i membri dello spazio a trovare stanze private</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Ciò rende facile mantenere private le stanze in uno spazio, mentre le persone potranno trovarle ed unirsi. Tutte le stanze nuove in uno spazio avranno questa opzione disponibile.</string>
-    <string name="help_people_in_spaces_find_and_join">Aiuta le persone negli spazi a trovare ed entrare nelle stanze private da sole, non c\'è bisogno di invitarle a mano.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Novità: consenti alle persone negli spazi di trovare ed entrare nelle stanze private</string>
     <string name="call_jitsi_started">Chiamata di gruppo iniziata</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Tutte le stanze in cui sei appariranno nella pagina principale.</string>
     <string name="preference_show_all_rooms_in_home">Mostra tutte le stanze nella pagina principale</string>

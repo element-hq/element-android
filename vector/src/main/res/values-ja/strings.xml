@@ -2453,7 +2453,6 @@
     <string name="uploads_files_subtitle">%1$sにより%2$sに</string>
     <string name="create_poll_question_hint">質問あるいはトピック</string>
     <string name="create_poll_question_title">投票の質問あるいはトピック</string>
-    <string name="help_space_members">スペースのメンバーが非公開のルームを発見できるよう手伝う</string>
     <string name="it_may_take_some_time">少々お待ちください。少し時間がかかるかもしれません。</string>
     <string name="settings_server_room_versions">ルームのバージョン 👓</string>
     <string name="settings_server_room_version_unstable">不安定</string>
@@ -2519,7 +2518,6 @@
     <string name="room_created_summary_no_topic_creation_text">%sして、このルームを皆に紹介しましょう。</string>
     <string name="user_code_info_text">このコードを皆と共有し、スキャンして追加してもらい、会話を始めましょう。</string>
     <string name="create_spaces_make_sure_access">正当な参加者が%sにアクセスできることを確認してください。これは後から変更できます。</string>
-    <string name="new_let_people_in_spaces_find_and_join">新規：スペースの参加者が非公開のルームを検索し、参加できるようになりました</string>
     <string name="add_people">参加者を追加</string>
     <plurals name="space_people_you_know">
         <item quantity="other">%d人の知り合いがすでに参加しています</item>

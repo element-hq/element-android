@@ -2405,8 +2405,6 @@
     <string name="room_permissions_notice">Vyberte role potrebné na zmenu rôznych častí miestnosti</string>
     <string name="call_ended_invite_timeout_title">Žiadna odpoveď</string>
     <string name="call_held_by_you">Podržali ste hovor</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Vďaka tomu môžu miestnosti zostať súkromné a zároveň ich môžu ľudia v priestore nájsť a pripojiť sa k nim. Túto možnosť budú mať k dispozícii všetky nové miestnosti v priestore.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Nové: Umožnite ľuďom v priestoroch nájsť a pripojiť sa k súkromným miestnostiam</string>
     <string name="allow_anyone_in_room_to_access">Umožniť komukoľvek v %s nájsť a získať prístup. Môžete vybrať aj iné priestory.</string>
     <string name="upgrade_room_update_parent_space">Automaticky aktualizovať nadradený priestor</string>
     <string name="teammate_spaces_might_not_join">Momentálne sa ľudia nemusia môcť pripojiť k súkromným miestnostiam, ktoré ste vytvorili.
@@ -2508,9 +2506,6 @@
     <string name="this_is_the_beginning_of_dm">Toto je začiatok histórie vašich priamych správ s %s.</string>
     <string name="this_is_the_beginning_of_room_no_name">Toto je začiatok tejto konverzácie.</string>
     <string name="this_is_the_beginning_of_room">Toto je začiatok miestnosti %s.</string>
-    <string name="to_help_space_members_find_and_join">Ak chcete pomôcť členom priestoru nájsť súkromnú miestnosť a pripojiť sa k nej, prejdite do nastavení danej miestnosti ťuknutím na obrázok.</string>
-    <string name="help_space_members">Pomôcť členom priestoru nájsť súkromné miestnosti</string>
-    <string name="help_people_in_spaces_find_and_join">Pomôžte ľuďom v priestoroch, aby sami našli súkromné miestnosti a pripojili sa k nim, aby nebolo potrebné každého ručne pozývať.</string>
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Nepoznáte svoju prístupovú frázu pre zálohovanie kľúčov, môžete %s.</string>
     <string name="verify_user_sas_emoji_help_text">Overte tohto používateľa potvrdením, že sa na jeho obrazovke zobrazujú nasledujúce jedinečné emotikony v rovnakom poradí.</string>
     <string name="settings_developer_mode_show_info_on_screen_summary">Zobrazenie niektorých užitočných informácií na pomoc pri ladení aplikácie</string>

@@ -2864,11 +2864,6 @@
     <string name="link_this_email_settings_link">Länka den här e-postadressen med ditt konto</string>
     <string name="this_invite_to_this_space_was_sent">Denna inbjudan till det här utrymmet skickades till %s, vilket inte är associerat med ditt konto</string>
     <string name="this_invite_to_this_room_was_sent">Denna inbjudan till det här rummet skickades till %s, vilket inte är associerat med ditt konto</string>
-    <string name="to_help_space_members_find_and_join">För att hjälpa utrymmesmedlemmar att hitta och gå med i ett privat rum, gå till rummets inställningar genom att trycka på avataren.</string>
-    <string name="help_space_members">Hjälp utrymmesmedlemmar att hitta privata rum</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Detta gör det enklare för rum att hållas privata till ett utrymme, medans personer i utrymmet kan hitta och gå med i dem. Alla nya rum i ett utrymme kommer ha det här alternativet tillgängligt.</string>
-    <string name="help_people_in_spaces_find_and_join">Hjälp personer i utrymmen att hitta och gå med i privata rum själva, utan behov av att manuellt bjuda in alla.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Nytt: Låt personer i utrymmen hitta och gå med i privata rum</string>
     <string name="call_jitsi_started">Gruppsamtal påbörjat</string>
     <string name="preference_show_all_rooms_in_home">Visa alla rum i Hem</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Alla rum du är i kommer att visas i Hem.</string>

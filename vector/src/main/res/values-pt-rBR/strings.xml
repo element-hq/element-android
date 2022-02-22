@@ -2864,11 +2864,6 @@
     <string name="link_this_email_settings_link">Linkar este email com sua conta</string>
     <string name="this_invite_to_this_space_was_sent">Este convite para este espaço foi enviado para %s que não está associado com sua conta</string>
     <string name="this_invite_to_this_room_was_sent">Este convite para esta sala foi enviado para %s que não está associado com sua conta</string>
-    <string name="to_help_space_members_find_and_join">Para ajudar membros de espaço encontrarem e se juntarem uma sala privada, vá para as configurações dessa sala ao tocar no avatar.</string>
-    <string name="help_space_members">Ajude membros de espaço encontrarem salas privadas</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Isto facilita salas ficarem privadas a um espaço, enquanto deixa pessoas no espaço encontrarem e se juntarem a elas. Todas as salas novas em um espaço vão ter esta opção disponível.</string>
-    <string name="help_people_in_spaces_find_and_join">Ajude pessoas em espaços a elas mesmas encontrarem e se juntarem a salas privadas, sem necessidade de manualmente convidar todo mundo.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Novo: Deixe pessoas em espaços encontrarem e se juntarem a salas privadas</string>
     <string name="call_jitsi_started">Chamada de grupo começada</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Todas as salas em que você está vão ser mostradas em Home.</string>
     <string name="preference_show_all_rooms_in_home">Mostrar todas as salas em Home</string>

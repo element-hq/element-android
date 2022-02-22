@@ -2813,11 +2813,6 @@
     <string name="link_this_email_settings_link">将此邮箱与您的账户相链接</string>
     <string name="this_invite_to_this_space_was_sent">加入这个空间的邀请被发送至 %s，此邮箱未与您的账户相关联</string>
     <string name="this_invite_to_this_room_was_sent">加入这个聊天室的邀请被发送至 %s，此邮箱未与您的账户相关联</string>
-    <string name="to_help_space_members_find_and_join">要帮助空间成员找到并加入一个私人聊天室，只需点击头像进入聊天室设置。</string>
-    <string name="help_space_members">帮助空间成员找到私人聊天室</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">这使聊天室很容易在空间中保持私密性，同时让空间中的人们找到并加入它们。空间中的所有新聊天室都有这个选项。</string>
-    <string name="help_people_in_spaces_find_and_join">帮助空间里的人们自己找到和加入私人房间，不需要手动邀请每个人。</string>
-    <string name="new_let_people_in_spaces_find_and_join">新：让人们在空间中找到并加入私人聊天室</string>
     <string name="call_jitsi_started">群通话已启动</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">你所在的全部聊天室将显示在主页上。</string>
     <string name="preference_show_all_rooms_in_home">在主页上显示所有聊天室</string>

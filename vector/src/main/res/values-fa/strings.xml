@@ -2863,11 +2863,6 @@
     <string name="link_this_email_settings_link">این رایانامه را به حسابتان پیوند دهید</string>
     <string name="this_invite_to_this_space_was_sent">این دعوت به این فضا به %s فرستاده شده که با حسابتان در ارتباط نیست</string>
     <string name="this_invite_to_this_room_was_sent">این دعوت به این اتاق به %s فرستاده شده که با حسابتان در ارتباط نیست</string>
-    <string name="to_help_space_members_find_and_join">برای کمک به اعضای فضا برای یافتن و پیوستن به یک اتاق خصوصی، با زدن روی چهرک، به تنظیمات اتاق بروید.</string>
-    <string name="help_space_members">کمک به اعضای فضا برای یافتن اتاق‌های خصوصی</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">این کار، خصوصی ماندن اتاق‌ها در فضا را، در عین اجازه به افراد داخل فضا برای یافتن و پیوستن، آسان می‌کند. تمامی اتاق‌های جدید در یک فضا، این گزینه را موجود دارند.</string>
-    <string name="help_people_in_spaces_find_and_join">به افراد کمک‌کنید خودشان اتاق‌های خصوصی را یافته و بپیوندند. نیازی به دعوت دستی همه نیست.</string>
-    <string name="new_let_people_in_spaces_find_and_join">جدید: بکذارید افراد در فضا، اتاق‌های خصوصی را یافته و بپیوندند</string>
     <string name="call_jitsi_started">تماس گروهی آغاز شد</string>
     <string name="upgrade_public_room_from_to">این اتاق را از %1$s به %2$s ارتقا خواهید داد.</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">تمام اتاق‌هایی که‌در آن‌هایید، در خانه نشان داده خواهند شد.</string>

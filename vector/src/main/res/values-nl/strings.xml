@@ -2875,11 +2875,6 @@
     <string name="create_spaces_loading_message">Space aanmaken…</string>
     <string name="activity_create_space_title">Aanmaken een space</string>
     <string name="dev_tools_event_content_hint">Gebeurtenis inhoud</string>
-    <string name="to_help_space_members_find_and_join">Om leden van een kamer te helpen een privékamer te vinden en eraan deel te nemen, gat u naar de instellingen van die kamer door op de avatar te tikken.</string>
-    <string name="help_space_members">Help leden van een space privékamers te vinden</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Dit maakt het gemakkelijk voor kamers om privé te blijven voor een ruimte, terwijl mensen in de kamer ze kunnen vinden en erbij kunnen voegen. Alle nieuwe kamers in een kamer hebben deze optie beschikbaar.</string>
-    <string name="help_people_in_spaces_find_and_join">Help mensen in kamers om zelf privékamers te vinden en eraan deel te nemen, het is niet nodig om iedereen handmatig uit te nodigen.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Nieuw: laat mensen in kamers, privékamers zoeken en er lid van worden</string>
     <string name="upgrade_room_for_restricted_note">Houd er rekening mee dat bij het upgraden een nieuwe versie van de kamer wordt gemaakt. Alle huidige berichten blijven in deze gearchiveerde kamer.</string>
     <string name="upgrade_room_for_restricted_no_param">Iedereen in een ouderkamer kan deze kamer vinden en er lid van worden. Het is niet nodig om iedereen handmatig uit te nodigen. U kunt dit op elk moment wijzigen in de kamer instellingen.</string>
     <string name="allow_anyone_in_room_to_access">Sta iedereen in %s toe om te zoeken en toegang te krijgen. U kunt ook andere kamers selecteren.</string>
