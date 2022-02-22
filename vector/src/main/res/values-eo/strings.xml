@@ -1862,7 +1862,6 @@
         <item quantity="one">%1$s ĉambro trovita por %2$s</item>
         <item quantity="other">%1$s ĉambroj trovitaj por %2$s</item>
     </plurals>
-    <string name="search_is_not_supported_in_e2e_room">Serĉado en ĉifritaj ĉambroj ankoraŭ en estas subtenata.</string>
     <string name="search_banned_user_hint">Filtri forbaritajn uzantojn</string>
     <string name="ssl_only_accept">Akceptu la atestilon nur se administranto de la servilo publikigis fingrospuron akordan kun tiu ĉi-supre.</string>
     <string name="ssl_expected_existing_expl">La atestilo ŝanĝiĝis de antaŭe fidata al alia, nefidata. Eble la servilo renovigis sian atestilon. Kontaktu la administranton de la servilo por ricevi la ĝustan fingrospuron.</string>
@@ -2695,7 +2694,6 @@
     <string name="create_spaces_join_info_help">Por aliĝi al jam ekzistanta aro, vi bezonos inviton.</string>
     <string name="create_spaces_you_can_change_later">Vi povos ŝanĝi ĉi tion poste</string>
     <string name="create_spaces_choose_type_label">Kian aron volas vi krei\?</string>
-    <string name="create_spaces_type_header">Aroj estas nova maniero grupigi ĉambrojn kaj personojn</string>
     <string name="your_private_space">Via privata aro</string>
     <string name="your_public_space">Via publika aro</string>
     <string name="add_space">Aldoni aron</string>

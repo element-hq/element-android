@@ -1018,7 +1018,6 @@
         <item quantity="other">%1$s rom funnet for %2$s</item>
     </plurals>
     <string name="directory_search_results_title">Bla gjennom katalogen</string>
-    <string name="search_is_not_supported_in_e2e_room">Søking i krypterte rom støttes ikke ennå.</string>
     <string name="tab_title_search_people">FOLK</string>
     <string name="room_event_action_report_prompt_reason">Årsak til å rapportere dette innholdet</string>
     <string name="malformed_id">Misdannet ID. Bør være en e-postadresse eller en Matrix ID som \'@localpart: domain\'</string>

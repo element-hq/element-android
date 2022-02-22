@@ -1225,9 +1225,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="keys_backup_info_title_signature">Aláírás</string>
     <string name="keys_backup_settings_untrusted_backup">A Kulcs Mentés munkamenetben való felhasználáshoz, állítsd vissza jelmondattal vagy Visszaállítási Kulccsal.</string>
     <string name="new_recovery_method_popup_title">Új Kulcs Mentés</string>
-    <string name="new_recovery_method_popup_description">Új biztonságos üzenet kulcs mentés észlelve.
-
-Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó próbál hozzáférni a fiókodhoz. Azonnal cseréld le a felhasználói fiókod jelszavát és állítsál be új visszaállítási metódust a Beállításokban.</string>
+    <string name="new_recovery_method_popup_description">Egy új biztonságos kulcs mentés észlelve. Ha nem te állítottad be a visszaállítási módot, akkor egy támadó próbál hozzáférni a fiókodhoz. Azonnal cseréld le a felhasználói fiókod jelszavát és állíts be új visszaállítási módot a Beállításokban.</string>
     <string name="new_recovery_method_popup_was_me">Én voltam</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Visszaállítási kulcs kiszámítása…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Kulcsok letöltése…</string>
@@ -2383,7 +2381,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="settings_troubleshoot_test_push_loop_title">Push tesztelése</string>
     <string name="error_threepid_auth_failed">Ellenőrizd, hogy rákattintottál arra a hivatkozásra amit e-mailben küldtünk neked.</string>
     <string name="settings_remove_three_pid_confirmation_content">%s törlése\?</string>
-    <string name="search_is_not_supported_in_e2e_room">Titkosított szobákban való keresés egyelőre nem támogatott.</string>
     <string name="search_banned_user_hint">Kitiltott felhasználók szűrése</string>
     <string name="room_permissions_change_topic">Téma megváltoztatása</string>
     <string name="room_permissions_upgrade_the_room">Szoba fejlesztése</string>
@@ -2508,7 +2505,6 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="create_spaces_join_info_help">Létező térbe való belépéshez meghívó szükséges.</string>
     <string name="create_spaces_you_can_change_later">Ezt később meg lehet változtatni</string>
     <string name="create_spaces_choose_type_label">Milyen típusú teret szeretnél készíteni\?</string>
-    <string name="create_spaces_type_header">A Terek használata egy új lehetőség a szobák és felhasználók csoportosítására</string>
     <string name="your_private_space">Privát tér</string>
     <string name="your_public_space">Nyilvános tér</string>
     <string name="add_space">Tér hozzáadása</string>
@@ -2656,7 +2652,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \n
 \nAz üzeneteidet zárolással vannak biztosítva és csak neked és a címzetteknek van meg a kulcs hozzá.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Itt az üzenetek nincsenek végponttól végpontig titkosítva.</string>
-    <string name="sent_verification_conclusion">Azonosítás eredménye</string>
+    <string name="sent_verification_conclusion">Hitelesítés eredménye</string>
     <string name="sent_a_poll">Szavazás</string>
     <string name="create_room_in_progress">Szoba létrehozása…</string>
     <string name="create_room_alias_invalid">Néhány karakter nem engedélyezett</string>
@@ -2860,15 +2856,10 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="voice_message_slide_to_cancel">Elhúzás a megszakításhoz</string>
     <string name="a11y_start_voice_message">Hang üzenet felvétele</string>
     <string name="allow_anyone_in_room_to_access">%s tér tagság megtalálhatja és hozzáférhet. Más tereket is beállíthatsz.</string>
-    <string name="link_this_email_with_your_account">%s a Beállításokba a közvetlen meghívások fogadásához az Elemenetben.</string>
+    <string name="template_link_this_email_with_your_account">%s a Beállításokba a közvetlen meghívások fogadásához az ${app_name}.</string>
     <string name="this_invite_to_this_space_was_sent">Ehhez a térhez a meghívó ide lett elküldve: %s, ami nincs összefüggésben a fiókoddal</string>
     <string name="this_invite_to_this_room_was_sent">Ehhez a szobához a meghívó ide lett elküldve: %s, ami nincs összefüggésben a fiókoddal</string>
-    <string name="to_help_space_members_find_and_join">A Tér tagságnak privát szoba megtalálásában és belépésben való segítséghez menj a szoba beállításaiba a profilképre való koppintással.</string>
     <string name="link_this_email_settings_link">Ennek az e-mailnek a fiókhoz való kötése</string>
-    <string name="help_space_members">Segíts a tér tagságának privát szobák megtalálásában</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">A szobák egyszerűbben maradhatnak privátok a téren kívül, amíg a tér tagsága megtalálhatja és beléphet oda. Minden új szoba a téren rendelkezik ezzel a beállítási lehetőséggel.</string>
-    <string name="help_people_in_spaces_find_and_join">Segíts a téren az embereknek privát szobák megtalálásába és a belépésben, nem szükséges a személyes meghívó.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Új: Engedd az embereknek a privát szobák megtalálását és a belépést</string>
     <string name="call_jitsi_started">Csoportos hívás elkezdődött</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Minden szoba amibe beléptél megjelenik a Kezdő téren.</string>
     <string name="preference_show_all_rooms_in_home">Minden szoba megjelenítése a Kezdő téren</string>
@@ -3028,7 +3019,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     </plurals>
     <string name="preference_system_settings">Rendszerbeállítások</string>
     <string name="preference_versions">Verziók</string>
-    <string name="preference_help_summary">Segítség az Element használatában</string>
+    <string name="template_preference_help_summary">Segítség az ${app_name} használatában</string>
     <string name="preference_help_title">Segítség és támogatás</string>
     <string name="preference_help">Segítség</string>
     <string name="legals_no_policy_provided">Ez a szerver nem adott meg szabályzatot.</string>
@@ -3040,16 +3031,16 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="analytics_opt_in_list_item_2"><b>Nem</b> osztjuk meg az információt harmadik féllel</string>
     <string name="analytics_opt_in_list_item_1"><b>Nem</b> küldünk és nem profilozunk semmilyen fiók adatot</string>
     <string name="analytics_opt_in_content_link">itt</string>
-    <string name="analytics_opt_in_content">Segíts észrevennünk a hibákat, és jobbá tenni az Element-et a névtelen használati adatok küldése által. Ahhoz, hogy megértsük, hogyan használnak a felhasználók egyszerre több eszközt, egy véletlenszerű azonosítót generálunk, ami az eszközeid között meg lesz osztva.
+    <string name="template_analytics_opt_in_content">Segíts észrevennünk a hibákat, és jobbá tenni az ${app_name}-et a névtelen használati adatok küldése által. Ahhoz, hogy megértsük, hogyan használnak a felhasználók egyszerre több eszközt, egy véletlenszerű azonosítót generálunk, ami az eszközeid között meg lesz osztva.
 \n
 \nElolvashatod a feltételeinket %s.</string>
-    <string name="analytics_opt_in_title">Segíts az Element-et jobbá tenni</string>
+    <string name="template_analytics_opt_in_title">Segíts az ${app_name}-et jobbá tenni</string>
     <string name="a11y_poll_winner_option">nyerő válasz</string>
     <string name="preference_root_legals">Jogi dolgok</string>
     <string name="restart_the_application_to_apply_changes">A változások életbelépéséhez indítsd újra az alkalmazást.</string>
     <string name="labs_enable_latex_maths">LaTeX matematikai szintaxis engedélyezése</string>
     <string name="room_error_access_unauthorized">Nem léphetsz be ebbe a szobába</string>
-    <string name="ftue_auth_carousel_1_title">Az ön beszélgetései csak az öné.</string>
+    <string name="ftue_auth_carousel_secure_title">Az ön beszélgetései csak az öné.</string>
     <string name="labs_auto_report_uisi_desc">Titkosítás visszafejtési hiba esemény alkalmával a rendszer automatikusan elküldi a logokat</string>
     <string name="labs_auto_report_uisi">Titkosítás visszafejtési hibák automatikus jelentése.</string>
     <string name="tooltip_attachment_poll">Szavazás létrehozása</string>
@@ -3060,16 +3051,15 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="tooltip_attachment_photo">Kamera megnyitása</string>
     <string name="room_member_override_nick_color">Becenév színének megváltoztatása</string>
     <string name="login_splash_already_have_account">Már van fiókom</string>
-    <string name="ftue_auth_carousel_4_title">Rázd fel a csoportjaidat.</string>
-    <string name="ftue_auth_carousel_3_title">Biztonságos üzenetküldés.</string>
-    <string name="ftue_auth_carousel_2_title">Te irányítasz.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Biztonságos üzenetküldés.</string>
+    <string name="ftue_auth_carousel_control_title">Te irányítasz.</string>
     <string name="tooltip_attachment_location">Tartózkodási hely megosztása</string>
     <string name="labs_render_locations_in_timeline">A felhasználó földrajzi helyzetének megjelenítése az idővonalon</string>
     <string name="settings_enable_location_sharing_summary">A beállítás után bármelyik szobában megoszthatod a földrajzi helyzetedet</string>
     <string name="settings_enable_location_sharing">Földrajzi hely megosztás engedélyezése</string>
     <string name="location_share_external">Megnyitás ezzel</string>
-    <string name="template_location_not_available_dialog_content">${app_name} nem fér hozzá a helyadatodhoz. Próbáld újra később.</string>
-    <string name="template_location_not_available_dialog_title">${app_name} nem fér hozzá a földrajzi helyzetedhez</string>
+    <string name="template_location_not_available_dialog_content">Az ${app_name} nem fér hozzá a tartózkodási helyedhez. Próbáld újra később.</string>
+    <string name="template_location_not_available_dialog_title">Az ${app_name} nem tudott hozzáférni a tartózkodási helyedhez</string>
     <string name="location_share">Tartózkodási hely megosztása</string>
     <string name="a11y_location_share_icon">Tartózkodási hely megosztása</string>
     <string name="location_activity_title_preview">Földrajzi helyzet</string>
@@ -3089,11 +3079,44 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="encryption_has_been_misconfigured">A titkosítás beállítása hibás.</string>
     <string name="sent_location">A földrajzi helyzetüket megosztották</string>
     <string name="login_splash_create_account">Fiók létrehozása</string>
-    <string name="ftue_auth_carousel_title_messaging">Üzenetküldés a csoportodnak.</string>
-    <string name="ftue_auth_carousel_body_encrypted">Telefonszám nélkül végpontok között titkosított. Reklámok és adatbányászat nélkül.</string>
-    <string name="ftue_auth_carousel_body_control">Válaszd meg hol legyenek a beszélgetéseid tárolva, visszaadja az irányítást és függetlenné tesz. Csatlakozva a Matrixhoz.</string>
-    <string name="ftue_auth_carousel_body_secure">Biztonságos és független kommunikáció ami olyan biztonságos mintha valakivel négyszemközt beszélgetnél a házadban.</string>
+    <string name="ftue_auth_carousel_workplace_title">Üzenetküldés a csoportodnak.</string>
+    <string name="ftue_auth_carousel_encrypted_body">Telefonszám nélkül végpontok között titkosított. Reklámok és adatbányászat nélkül.</string>
+    <string name="ftue_auth_carousel_control_body">Válaszd meg hol legyenek a beszélgetéseid tárolva, visszaadja az irányítást és függetlenné tesz. Csatlakozva a Matrixhoz.</string>
+    <string name="ftue_auth_carousel_secure_body">Biztonságos és független kommunikáció ami olyan biztonságos mintha valakivel négyszemközt beszélgetnél a házadban.</string>
     <string name="attachment_type_location">Földrajzi helyzet</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">A titkosítás beállítása hibás így nem lehet üzenetet küldeni. Kattints a beállításokért.</string>
     <string name="room_unsupported_e2e_algorithm">A titkosítás beállítása hibás így nem lehet üzenetet küldeni. Kérjük vedd fel a kapcsolatot az adminisztrátorral a titkosítás helyreállításához.</string>
+    <string name="message_bubbles">Üzenet buborékok megjelenítése</string>
+    <string name="location_timeline_failed_to_load_map">Térkép betöltése sikertelen</string>
+    <string name="a11y_static_map_image">Térkép</string>
+    <string name="labs_enable_thread_messages_desc">Figyelem: az alkalmazás újraindul</string>
+    <string name="labs_enable_thread_messages">Üzenetszálak engedélyezése</string>
+    <string name="ftue_auth_use_case_connect_to_server">Szerverhez csatlakozás</string>
+    <string name="ftue_auth_use_case_join_existing_server">Csatlakoznál egy már meglévő szerverhez\?</string>
+    <string name="ftue_auth_use_case_skip_partial">kérdés kihagyása</string>
+    <string name="ftue_auth_use_case_skip">Még nem vagy biztos\? Tudhatsz ilyent: %s</string>
+    <string name="ftue_auth_use_case_option_three">Közösségek</string>
+    <string name="ftue_auth_use_case_option_two">Csoportok</string>
+    <string name="ftue_auth_use_case_option_one">Barátok és család</string>
+    <string name="ftue_auth_use_case_subtitle">Segítünk a kapcsolatteremtésben.</string>
+    <string name="ftue_auth_use_case_title">Kivel beszélgetnék leginkább\?</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">Már nézed ezt az üzenetszálat!</string>
+    <string name="view_in_room">Megjelenítés szobában</string>
+    <string name="reply_in_thread">Válasz az üzenetszálban</string>
+    <string name="command_not_supported_in_threads">„%s” parancs ismert, de üzenetszálban nem támogatott.</string>
+    <string name="search_thread_from_a_thread">Az üzenetszálból</string>
+    <string name="thread_list_empty_notice">Tipp: Koppints hosszan az üzenetre és használd ezt: %s.</string>
+    <string name="thread_list_empty_subtitle">Az üzenetszálak segítenek a különböző témájú beszélgetések figyelemmel kísérésében.</string>
+    <string name="thread_list_empty_title">Beszélgetések üzenetszálakba való rendezése</string>
+    <string name="thread_list_modal_my_threads_subtitle">Minden üzenetszál megjelenítése ahol szerepel</string>
+    <string name="thread_list_modal_my_threads_title">Üzenetszálaim</string>
+    <string name="thread_list_modal_all_threads_subtitle">A szobában lévő összes szál mutatása</string>
+    <string name="thread_list_modal_all_threads_title">Minden üzenetszál</string>
+    <string name="thread_list_modal_title">Szűrés</string>
+    <string name="thread_list_title">Üzenetszálak</string>
+    <string name="thread_timeline_title">Üzenetszál</string>
+    <string name="room_threads_filter">Üzenetszálak szűrése a szobában</string>
+    <string name="action_thread_copy_link_to_thread">Üzenetszálra mutató hivatkozás másolása</string>
+    <string name="action_thread_view_in_room">Megjelenítés szobában</string>
+    <string name="action_view_threads">Üzenetszálak megtekintése</string>
 </resources>

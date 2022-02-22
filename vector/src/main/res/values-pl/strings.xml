@@ -2187,7 +2187,6 @@
     <string name="settings_emails_empty">Żaden adres e-mail nie został dodany do Twojego konta</string>
     <string name="settings_emails">Adres e-mail</string>
     <string name="settings_phone_number_empty">Nie dodano żadnego numeru telefonu do Twojego konta</string>
-    <string name="search_is_not_supported_in_e2e_room">Wyszukiwanie w pokojach stosujących szyfrowanie nie jest obecnie wspierane.</string>
     <string name="search_banned_user_hint">Filtruj zbanowanych użytkowników</string>
     <string name="room_participants_unban_prompt_msg">Odbanowanie użytkownika pozwoli mu na ponowne dołączenie do pokoju.</string>
     <string name="room_participants_ban_title">Zbanuj użytkownika</string>
@@ -2425,7 +2424,7 @@
     <string name="room_settings_access_rules_pref_dialog_title">Kto powinien mieć dostęp \?</string>
     <string name="room_settings_room_notifications_account_settings">Ustawienia konta</string>
     <string name="room_settings_room_notifications_manage_notifications">Możesz zarządzać notyfikacjami w %1$s.</string>
-    <string name="room_settings_room_notifications_encryption_notice">Proszę zwrócić uwagę, że notyfikacje o wzmiankach i słowach kluczowych nie są dostępne w zaszyfrowanych pokojach na urządzeniach mobilnych.</string>
+    <string name="room_settings_room_notifications_encryption_notice">Proszę zwrócić uwagę, że powiadomienia o wzmiankach i słowach kluczowych nie są dostępne w zaszyfrowanych pokojach na urządzeniach mobilnych.</string>
     <string name="room_settings_room_notifications_notify_me">Powiadamiaj mnie o</string>
     <string name="settings_secure_backup_reset">Zresetuj bezpieczną kopię zapasową</string>
     <string name="settings_secure_backup_setup">Skonfiguruj bezpieczną kopię zapasową</string>
@@ -2440,7 +2439,7 @@
     <string name="settings_notification_emails_category">Powiadomienie email</string>
     <string name="room_settings_none">Żadne</string>
     <string name="room_settings_mention_and_keyword_only">Tylko wzmianki i słowa kluczowe</string>
-    <string name="notification_listening_for_notifications">Oczekiwanie na notyfikacje</string>
+    <string name="notification_listening_for_notifications">Oczekiwanie na powiadomienia</string>
     <string name="notice_room_canonical_alias_no_change">%1$s zmienił(a) adresy tego pokoju.</string>
     <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Zmieniłeś(aś) głowny i alternatywny adres tego pokoju.</string>
     <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s zmienił(a) główny i alternatywny adres tego pokoju.</string>
@@ -2478,7 +2477,7 @@
     <string name="notice_room_server_acl_updated_was_banned">• Serwery pasujące do %s zostały usunięte z listy zablokowanych.</string>
     <string name="notice_room_server_acl_updated_banned">• Serwery pasujące do %s są teraz zablokowane.</string>
     <string name="room_displayname_3_members">%1$s, %2$s i %3$s</string>
-    <string name="link_this_email_with_your_account">%s w Ustawieniach, aby otrzymywać zaproszenia bezpośrednio w Elememencie.</string>
+    <string name="template_link_this_email_with_your_account">%s w Ustawieniach, aby otrzymywać zaproszenia bezpośrednio w ${app_name}.</string>
     <string name="room_permissions_change_topic">Zmiana tematu</string>
     <string name="room_permissions_upgrade_the_space">Aktualizacja Przestrzeni</string>
     <string name="room_permissions_upgrade_the_room">Aktualizacja pokoju</string>
@@ -2725,7 +2724,6 @@
     <string name="create_spaces_join_info_help">Aby dołączyć do istniejącej przestrzeni, potrzebujesz zaproszenia.</string>
     <string name="create_spaces_you_can_change_later">Możesz zmienić to później</string>
     <string name="create_spaces_choose_type_label">Jaki rodzaj przestrzeni chcesz stworzyć\?</string>
-    <string name="create_spaces_type_header">Przestrzenie są nowym sposobem na organizację pokojów i osób</string>
     <string name="event_status_sent_message">Wiadomość wysłana</string>
     <string name="initial_sync_start_downloading">Wstępna synchronizacja:
 \nPobieranie danych…</string>
@@ -3045,10 +3043,10 @@
     <string name="analytics_opt_in_list_item_2"><b>Nie udostępniamy</b> informacji podmiotom trzecim</string>
     <string name="analytics_opt_in_list_item_1"><b> Nie zbieramy i nie profilujemy </b> danych użytkownika</string>
     <string name="analytics_opt_in_content_link">tutaj</string>
-    <string name="analytics_opt_in_content">Pomóż nam znaleźć błędy i ulepszyć Element poprzez udostępnianie anonimowych danych użytkowania. Aby lepiej zrozumieć jak użytkownicy wykorzystują wiele urządzeń wygenerujemy losowy identyfikator dzielony pomiędzy Twoimi urządzeniami.
+    <string name="template_analytics_opt_in_content">Pomóż nam znaleźć błędy i ulepszyć ${app_name} poprzez udostępnianie anonimowych danych użytkowania. Aby lepiej zrozumieć jak użytkownicy wykorzystują wiele urządzeń wygenerujemy losowy identyfikator dzielony pomiędzy Twoimi urządzeniami.
 \n
 \nWięcej informacji %s.</string>
-    <string name="analytics_opt_in_title">Pomóż usprawnić Element</string>
+    <string name="template_analytics_opt_in_title">Pomóż usprawnić ${app_name}</string>
     <string name="action_not_now">Nie teraz</string>
     <string name="action_enable">Włącz</string>
     <plurals name="notice_room_aliases_removed_by_you">
@@ -3059,11 +3057,11 @@
     </plurals>
     <string name="room_member_override_nick_color">Nadpisz kolor nicku</string>
     <string name="login_splash_already_have_account">Posiadam już konto</string>
-    <string name="ftue_auth_carousel_3_title">Połącz się z każdym.</string>
-    <string name="ftue_auth_carousel_2_title">Ty jesteś w kontroli.</string>
-    <string name="ftue_auth_carousel_1_title">Przejmij swoje konwersacje.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Połącz się z każdym.</string>
+    <string name="ftue_auth_carousel_control_title">Ty jesteś w kontroli.</string>
+    <string name="ftue_auth_carousel_secure_title">Przejmij swoje konwersacje.</string>
     <string name="identity_server_consent_dialog_content_3">By odkryć istniejące kontakty, musisz najpierw przesłać swoje dane kontaktowe (adresy e-mail i numer telefonu) do serwera tożsamości. Przed wysłaniem Twoje dane zostaną zaszyfrowane w celu zachowania prywatności.</string>
-    <string name="preference_help_summary">Uzyskaj pomoc w korzystaniu z Element</string>
+    <string name="template_preference_help_summary">Uzyskaj pomoc w korzystaniu z ${app_name}</string>
     <string name="room_error_access_unauthorized">Nie masz uprawnień by dołączyć do tego pokoju</string>
     <string name="dev_tools_form_hint_type">Typ</string>
     <string name="a11y_presence_offline">Niedostępny</string>
@@ -3072,8 +3070,8 @@
     <plurals name="call_one_active_and_other_paused">
         <item quantity="one">Jedno aktywne połączenie (%1$s) - Jedno wstrzymane połączenie</item>
         <item quantity="few">Jedno aktywne połączenie (%1$s) - Kilka wstrzymanych połączeń</item>
-        <item quantity="many"></item>
-        <item quantity="other"></item>
+        <item quantity="many"/>
+        <item quantity="other"/>
     </plurals>
     <string name="discovery_section">Odkrywanie (%s)</string>
     <string name="finish_setting_up_discovery">Dokończ konfigurację odkrywania.</string>

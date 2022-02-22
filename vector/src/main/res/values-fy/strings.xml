@@ -1402,7 +1402,6 @@
         <item quantity="other">%d keamers</item>
     </plurals>
     <string name="directory_search_results_title">Katalogus trochblêdzje</string>
-    <string name="search_is_not_supported_in_e2e_room">Sykjen yn fersifere keamers wurdt op dit stuit net stipe.</string>
     <string name="tab_title_search_files">BESTANNEN</string>
     <string name="tab_title_search_people">PERSOANEN</string>
     <string name="tab_title_search_messages">BERJOCHTEN</string>

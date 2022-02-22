@@ -62,14 +62,14 @@
     <string name="notice_event_redacted_with_reason">Mensaje eliminado [motivo: %1$s]</string>
     <string name="notice_event_redacted_by_with_reason">Mensaje eliminado por %1$s [motivo: %2$s]</string>
     <string name="notice_room_third_party_revoked_invite">%1$s ha revocado la invitación a unirse a la sala para %2$s</string>
-    <string name="initial_sync_start_importing_account">Sincronización Inicial
+    <string name="initial_sync_start_importing_account">Sincronización inicial
 \nImportando cuenta…</string>
-    <string name="initial_sync_start_importing_account_rooms">Sincronización Inicial:
-\nImportando Salas</string>
-    <string name="initial_sync_start_importing_account_groups">Sincronización Inicial:
-\nImportando Comunidades</string>
-    <string name="initial_sync_start_importing_account_data">Sincronización Inicial:
-\nImportando Datos de la Cuenta</string>
+    <string name="initial_sync_start_importing_account_rooms">Sincronización inicial:
+\nImportando salas</string>
+    <string name="initial_sync_start_importing_account_groups">Sincronización inicial:
+\nImportando comunidades</string>
+    <string name="initial_sync_start_importing_account_data">Sincronización inicial:
+\nImportando datos de la cuenta</string>
     <string name="event_status_sending_message">Enviando mensaje…</string>
     <string name="clear_timeline_send_queue">Borrar cola de envío</string>
     <string name="notice_room_invite_with_reason">%1$s ha invitado a %2$s. Razón: %3$s</string>
@@ -82,14 +82,15 @@
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s ha aceptado la invitación para %2$s. Razón: %3$s</string>
     <string name="notice_room_canonical_alias_unset">%1$s ha eliminado la dirección principal para esta sala.</string>
     <string name="notice_room_update">%s ha actualizado la sala.</string>
-    <string name="initial_sync_start_importing_account_crypto">Sincronización Inicial:
+    <string name="initial_sync_start_importing_account_crypto">Sincronización inicial:
 \nImportando criptografía</string>
     <string name="initial_sync_start_importing_account_joined_rooms">Sincronización Inicial:
-\nImportando Salas a las que te has unido</string>
+\nCargando tus conversaciones
+\nEsto puede tomar un tiempo si te has unido a muchas salas</string>
     <string name="initial_sync_start_importing_account_invited_rooms">Sincronización Inicial:
-\nImportando Salas a las que has sido invitada</string>
-    <string name="initial_sync_start_importing_account_left_rooms">Sincronización Inicial:
-\nImportando Salas Abandonadas</string>
+\nImportando salas a las que te han invitado</string>
+    <string name="initial_sync_start_importing_account_left_rooms">Sincronización inicial:
+\nImportando salas abandonadas</string>
     <string name="notice_room_invite_no_invitee_with_reason">Invitación de %1$s. Razón: %2$s</string>
     <string name="notice_room_unban_with_reason">%1$s ha desbaneado a %2$s. Razón: %3$s</string>
     <string name="notice_room_third_party_invite_with_reason">%1$s envió una invitación a %2$s para que se una a la sala. Razón: %3$s</string>
@@ -504,7 +505,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="room_participants_header_devices">SESIONES</string>
     <string name="room_participants_action_invite">Invitar</string>
     <string name="room_participants_action_leave">Salir de esta sala</string>
-    <string name="room_participants_action_ban">Vetar</string>
+    <string name="room_participants_action_ban">Banear</string>
     <string name="room_participants_action_unban">Quitar Veto</string>
     <string name="room_participants_action_set_default_power_level">Restablecer a usuario normal</string>
     <string name="room_participants_action_set_moderator">Convertir a moderador</string>
@@ -848,7 +849,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="start_voice_call_prompt_msg">¿Seguro que quieres iniciar una llamada de voz?</string>
     <string name="start_video_call_prompt_msg">¿Seguro que quieres iniciar una llamada de vídeo?</string>
     <string name="groups_list">Lista de Grupos</string>
-    <string name="room_participants_ban_prompt_msg">El usuario baneado lo echará de esta sala y evitará que se unan nuevamente.</string>
+    <string name="room_participants_ban_prompt_msg">Vetar un usuario lo echará de esta sala y evitará que se una nuevamente.</string>
     <string name="room_settings_all_messages_noisy">Todos los mensajes (ruidoso)</string>
     <string name="room_settings_all_messages">Todos los mensajes</string>
     <string name="room_settings_mention_only">Solo menciones</string>
@@ -1185,7 +1186,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="settings_show_read_receipts">Mostrar recibos de lectura</string>
     <string name="settings_show_read_receipts_summary">Hacer click en los recibos de lectura para mostrar una lista detallada.</string>
     <string name="settings_show_join_leave_messages">Mostrar notificaciones de entrada y salida</string>
-    <string name="settings_show_join_leave_messages_summary">Invitaciones, expulsiones y prohibiciones no se ven afectadas.</string>
+    <string name="settings_show_join_leave_messages_summary">Invitaciones, expulsiones y vetos no se ven afectadas.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Mostrar notificaciones de la cuenta</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Incluye cambios en el avatar y en el nombre.</string>
     <string name="settings_send_message_with_enter">Enviar mensaje con intro</string>
@@ -2357,7 +2358,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="settings_troubleshoot_test_push_loop_success">La aplicación está recibiendo PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">La aplicación está esperando al PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_title">Probar Push</string>
-    <string name="search_is_not_supported_in_e2e_room">Todavía no se puede hacer búsquedas en salas cifradas.</string>
     <string name="search_banned_user_hint">Filtrar usuarios excluidos</string>
     <string name="send_bug_report_include_key_share_history">Enviar la historia de peticiones de claves compartidas</string>
     <string name="no_more_results">No hay más resultados</string>
@@ -2413,7 +2413,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
         <item quantity="one">%d invitación</item>
         <item quantity="other">%d invitaciones</item>
     </plurals>
-    <string name="settings_show_room_member_state_events_summary">Incluye invitar/unirse/expulsar/prohibir/mostrar cambios de nombre.</string>
+    <string name="settings_show_room_member_state_events_summary">Incluye los eventos de invitar/unirse/abandonar/eliminar/vetar y los cambios de avatar/nombre.</string>
     <string name="settings_show_room_member_state_events">Mostrar eventos de los miembros de la sala</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">¡La notificación ha sido cliqueada!</string>
     <string name="system_theme">Tema del sistema</string>
@@ -2498,7 +2498,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="add_space">Añade un Espacio</string>
     <string name="command_description_create_space">Crea un Espacio</string>
     <string name="activity_create_space_title">Crear un espacio</string>
-    <string name="create_spaces_type_header">Los Espacios son una nueva forma de agrupar salas y personas</string>
     <string name="initial_sync_start_server_computing">Sincronización inicial:
 \nEsperando respuesta del servidor…</string>
     <string name="a11y_error_message_not_sent">El mensaje no se pudo enviar por un error</string>
@@ -2921,7 +2920,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="space_settings_permissions_subtitle">Vea y actualice los roles necesarios para cambiar varias partes del espacio.</string>
     <string name="space_settings_permissions_title">Permisos de espacio</string>
     <string name="space_participants_unban_prompt_msg">Quitar la prohibición al usuario le permitirá unirse al espacio nuevamente.</string>
-    <string name="space_participants_ban_prompt_msg">La prohibición del usuario lo expulsara de este espacio y evitará que se una nuevamente.</string>
+    <string name="space_participants_ban_prompt_msg">Vetar un usuario lo expulsará de este espacio y evitará que se una nuevamente.</string>
     <string name="space_participants_remove_prompt_msg">Patear al usuario lo eliminará de este espacio.
 \n
 \nPara evitar que se unan nuevamente, debe prohibirlos.</string>
@@ -2934,15 +2933,10 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="call_ringing">Llamada sonando…</string>
     <string name="spaces">Espacios</string>
     <string name="learn_more">Aprende más</string>
-    <string name="link_this_email_with_your_account">%s en Configuración para recibir invitaciones directamente en Element.</string>
+    <string name="template_link_this_email_with_your_account">%s en Configuración para recibir invitaciones directamente en ${app_name}.</string>
     <string name="link_this_email_settings_link">Vincula este correo electrónico con tu cuenta</string>
     <string name="this_invite_to_this_space_was_sent">Esta invitación a este espacio se envió a %s que no está asociado con su cuenta</string>
     <string name="this_invite_to_this_room_was_sent">Esta invitación a esta sala se envió a %s que no está asociado con su cuenta</string>
-    <string name="to_help_space_members_find_and_join">Para ayudar a los miembros del espacio a encontrar y unirse a una sala privada, vaya a la configuración de esa sala tocando el avatar.</string>
-    <string name="help_space_members">Ayuda a los miembros del espacio a encontrar salas privadas</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Esto facilita que las habitaciones se mantengan privadas de un espacio, al tiempo que permite que las personas en el espacio las encuentren y se unan. Todas las habitaciones nuevas de un espacio tendrán esta opción disponible.</string>
-    <string name="help_people_in_spaces_find_and_join">Ayude a las personas en los espacios a encontrar y unirse a salas privadas por sí mismas, sin necesidad de invitar a todos manualmente.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Nuevo: Permita que las personas en los espacios encuentren y se unan a salas privadas</string>
     <string name="upgrade_room_for_restricted_note">Tenga en cuenta que la mejora creará una nueva versión de la habitación. Todos los mensajes actuales permanecerán en esta sala archivada.</string>
     <string name="upgrade_room_for_restricted_no_param">Cualquiera en un espacio para padres podrá encontrar y unirse a esta sala, sin necesidad de invitar a todos manualmente. Podrás cambiar esto en la configuración de la habitación en cualquier momento.</string>
     <string name="upgrade_room_for_restricted">Cualquiera en %s podrá encontrar y unirse a esta sala, sin necesidad de invitar a todos manualmente. Podrás cambiar esto en la configuración de la habitación en cualquier momento.</string>
@@ -2970,4 +2964,26 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="all_rooms_youre_in_will_be_shown_in_home">Todas las salas en las que se encuentra se mostraran en inicio.</string>
     <string name="preference_show_all_rooms_in_home">Mostrar todas las salas en inicio</string>
     <string name="space_add_space_to_any_space_you_manage">Agregar un espacio a cualquier espacio que administre.</string>
+    <string name="space_add_existing_spaces">Añadir espacios existentes</string>
+    <string name="shortcut_disabled_reason_sign_out">¡Se ha cerrado la sesión!</string>
+    <string name="shortcut_disabled_reason_room_left">¡Se ha abandonado la sala!</string>
+    <string name="thread_list_empty_notice">Consejo: Pulse prolongadamente un mensaje y use \"%s\" .</string>
+    <string name="thread_list_empty_title">Mantén las conversaciones organizadas con hilos</string>
+    <string name="thread_list_modal_my_threads_subtitle">Muestra todos los hilos en que has participado</string>
+    <string name="thread_list_modal_my_threads_title">Mis Hilos</string>
+    <string name="thread_list_modal_all_threads_subtitle">Muestra todos los hilos de la sala actual</string>
+    <string name="thread_list_modal_all_threads_title">Todos los Hilos</string>
+    <string name="thread_list_title">Hilos</string>
+    <string name="thread_timeline_title">Hilo</string>
+    <string name="room_threads_filter">Filtrar Hilos en la sala</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">El cifrado está mal configurado por lo que no puedes enviar mensajes. Haz clic para abrir los ajustes.</string>
+    <string name="room_unsupported_e2e_algorithm">El cifrado está mal configurado, por lo que no puedes enviar mensajes. Por favor, contacta un administrador para que restablezca el cifrado a un estado válido.</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">Elegir servidor doméstico</string>
+    <string name="login_error_homeserver_from_url_not_found">No se puede acceder al servidor con la URL %s. Por favor revisa el enlace o elige otro servidor manualmente.</string>
+    <string name="action_not_now">Ahora no</string>
+    <string name="action_view_threads">Ver Hilos</string>
+    <string name="notification_listening_for_notifications">Captando notificaciones</string>
+    <string name="action_thread_view_in_room">Ver en la sala</string>
+    <string name="action_enable">Habilitar</string>
+    <string name="room_error_access_unauthorized">No estás autorizado a unirte a esta sala</string>
 </resources>

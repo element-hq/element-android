@@ -124,7 +124,7 @@ abstract class AbsBaseMessageItem<H : AbsBaseMessageItem.Holder> : BaseEventItem
                     showReactionsTextView.onClick { reactionsSummary.onShowLessClicked() }
                 } else {
                     val moreCount = reactions.count() - MAX_REACTIONS_TO_SHOW
-                    showReactionsTextView.text = holder.view.resources.getString(R.string.message_reaction_show_more, moreCount)
+                    showReactionsTextView.text = holder.view.resources.getQuantityString(R.plurals.message_reaction_show_more, moreCount, moreCount)
                     showReactionsTextView.onClick { reactionsSummary.onShowMoreClicked() }
                 }
                 holder.reactionsContainer.addView(showReactionsTextView)

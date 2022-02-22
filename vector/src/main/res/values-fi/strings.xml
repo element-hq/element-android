@@ -2236,7 +2236,6 @@
     <string name="create_spaces_join_info_help">Tarvitset kutsun liittyäksesi olemassa olevaan avaruuteen.</string>
     <string name="create_spaces_you_can_change_later">Voit muuttaa tämän myöhemmin</string>
     <string name="create_spaces_choose_type_label">Minkä tyyppisen avaruuden haluat luoda\?</string>
-    <string name="create_spaces_type_header">Avaruudet ovat uusi tapa ryhmitellä huoneita ja ihmisiä</string>
     <string name="your_private_space">Yksityinen avaruutesi</string>
     <string name="your_public_space">Julkinen avaruutesi</string>
     <string name="add_space">Lisää avaruus</string>
@@ -2518,7 +2517,6 @@
     <string name="settings_remove_three_pid_confirmation_content">Poistetaanko %s\?</string>
     <string name="room_settings_none">Ei mitään</string>
     <string name="room_settings_mention_and_keyword_only">Vain maininnat ja avainsanat</string>
-    <string name="search_is_not_supported_in_e2e_room">Hakeminen salatuista huoneista ei ole vielä tuettu.</string>
     <string name="room_permissions_change_space_name">Vaihda avaruuden nimeä</string>
     <string name="room_permissions_enable_space_encryption">Ota avaruuden salaus käyttöön</string>
     <string name="space_settings_permissions_title">Avaruuden käyttöoikeudet</string>

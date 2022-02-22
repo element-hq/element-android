@@ -1325,7 +1325,6 @@
     <string name="settings_emails_empty">Hesabınıza e-posta adresi eklenmemiş</string>
     <string name="settings_emails">E-posta hesapları</string>
     <string name="settings_phone_number_empty">Hesabınıza hiçbir telefon numarası eklenmedi</string>
-    <string name="search_is_not_supported_in_e2e_room">Şifreli odalarda arama yapmak henüz desteklenmiyor.</string>
     <string name="search_banned_user_hint">Banlanan kullanıcıları filtrele</string>
     <string name="room_permissions_change_topic">Konuyu değiştir</string>
     <string name="room_permissions_upgrade_the_room">Odayı geliştir</string>
@@ -2075,10 +2074,10 @@
     <string name="analytics_opt_in_list_item_2">Bilgileri üçüncü taraflarla <b>paylaşmayız</b></string>
     <string name="analytics_opt_in_list_item_1">Herhangi bir hesap verisini <b>kaydetmiyoruz</b></string>
     <string name="analytics_opt_in_content_link">burada</string>
-    <string name="analytics_opt_in_content">Anonim kullanım verilerini paylaşarak sorunları belirlememize ve Element\'i iyileştirmemize yardımcı olun. İnsanların birden fazla cihazı nasıl kullandığını anlamak için, cihazlarınız tarafından paylaşılan rastgele bir tanımlayıcı oluşturacağız.
+    <string name="template_analytics_opt_in_content">Anonim kullanım verilerini paylaşarak sorunları belirlememize ve ${app_name}\'i iyileştirmemize yardımcı olun. İnsanların birden fazla cihazı nasıl kullandığını anlamak için, cihazlarınız tarafından paylaşılan rastgele bir tanımlayıcı oluşturacağız.
 \n
 \n Tüm şartlarımızı %s okuyabilirsiniz.</string>
-    <string name="analytics_opt_in_title">Öğeyi iyileştirmeye yardımcı olun</string>
+    <string name="template_analytics_opt_in_title">Öğeyi iyileştirmeye yardımcı olun</string>
     <string name="settings_mentions_and_keywords_encryption_notice">Mobil cihazlarda şifreli odalarda bahsedilenler ve anahtar kelimeler için bildirim almayacaksınız.</string>
     <string name="settings_room_upgrades">Oda yükseltmeleri</string>
     <string name="settings_messages_by_bot">Bot tarafından gönderilen mesajlar</string>
@@ -2219,14 +2218,13 @@
     <string name="login_social_continue_with">%s ile devam et</string>
     <string name="login_splash_already_have_account">zaten bir hesabım var</string>
     <string name="login_splash_create_account">Hesap oluştur</string>
-    <string name="ftue_auth_carousel_title_messaging">Ekibiniz için mesajlaşma.</string>
-    <string name="ftue_auth_carousel_body_encrypted">Uçtan uca şifrelenir ve telefon numarası gerekmez. Reklam veya veri madenciliği yok.</string>
-    <string name="ftue_auth_carousel_body_control">Size kontrol ve bağımsızlık vererek konuşmalarınızın nerede tutulacağını seçin. Matrix ile bağlandı.</string>
-    <string name="ftue_auth_carousel_body_secure">Size kendi evinizde yüz yüze görüşmeyle aynı düzeyde mahremiyet sağlayan güvenli ve bağımsız iletişim.</string>
-    <string name="ftue_auth_carousel_4_title">Takımların gevşekliğini kesin.</string>
-    <string name="ftue_auth_carousel_3_title">Güvenli mesajlaşma.</string>
-    <string name="ftue_auth_carousel_2_title">Kontrol sende.</string>
-    <string name="ftue_auth_carousel_1_title">Konuşmalarınıza sahip çıkın.</string>
+    <string name="ftue_auth_carousel_workplace_title">Ekibiniz için mesajlaşma.</string>
+    <string name="ftue_auth_carousel_encrypted_body">Uçtan uca şifrelenir ve telefon numarası gerekmez. Reklam veya veri madenciliği yok.</string>
+    <string name="ftue_auth_carousel_control_body">Size kontrol ve bağımsızlık vererek konuşmalarınızın nerede tutulacağını seçin. Matrix ile bağlandı.</string>
+    <string name="ftue_auth_carousel_secure_body">Size kendi evinizde yüz yüze görüşmeyle aynı düzeyde mahremiyet sağlayan güvenli ve bağımsız iletişim.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Güvenli mesajlaşma.</string>
+    <string name="ftue_auth_carousel_control_title">Kontrol sende.</string>
+    <string name="ftue_auth_carousel_secure_title">Konuşmalarınıza sahip çıkın.</string>
     <string name="direct_room_join_rules_invite_by_you">Bu daveti yalnızca siz yaptınız.</string>
     <string name="direct_room_join_rules_invite">%1$s bu daveti yalnızca yaptı.</string>
     <string name="room_join_rules_invite">%1$s odayı yalnızca davet etti.</string>
@@ -2308,7 +2306,7 @@
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Kayıt belirteci</string>
     <string name="preference_system_settings">Sistem ayarları</string>
     <string name="preference_versions">Sürümler</string>
-    <string name="preference_help_summary">Element\'i kullanma konusunda yardım alın</string>
+    <string name="template_preference_help_summary">${app_name}\'i kullanma konusunda yardım alın</string>
     <string name="preference_help_title">Yardım ve Destek</string>
     <string name="preference_help">Yardım</string>
     <string name="preference_root_legals">Yasal</string>
@@ -2322,4 +2320,68 @@
     <string name="command_description_nick_for_room">Yalnızca geçerli odadaki görünen takma adınızı değiştirir</string>
     <string name="command_description_room_name">Oda adını ayarlar</string>
     <string name="command_description_unignore_user">Bir kullanıcıyı görmezden gelmeyi durdurur, mesajlarını ileriye doğru gösterir</string>
+    <string name="join_anyway">Yine de Katıl</string>
+    <string name="join_space">Alana Katıl</string>
+    <string name="create_space">Alan Oluştur</string>
+    <string name="skip_for_now">Şimdilik atla</string>
+    <string name="invite_just_to_this_room">Sadece bu odaya</string>
+    <string name="invite_by_link">Link paylaş</string>
+    <string name="invite_by_username_or_mail">Kullanıcı adı veya mail ile davet et</string>
+    <string name="invite_by_username">Kullanıcı adı ile davet et</string>
+    <string name="invite_by_email">Mail ile davet et</string>
+    <string name="invite_to_space">%syi davet et</string>
+    <string name="invite_people_menu">İnsanları davet et</string>
+    <string name="invite_people_to_your_space">Alanınıza insanları davet edin</string>
+    <string name="create_space_topic_hint">Açıklama</string>
+    <string name="create_spaces_loading_message">Alan Oluşturuluyor…</string>
+    <string name="create_spaces_default_public_random_room_name">Rastgele</string>
+    <string name="create_spaces_default_public_room_name">Genel</string>
+    <string name="create_spaces_invite_public_header">Takım arkadaşların kimler\?</string>
+    <string name="activity_create_space_title">Alan oluştur</string>
+    <string name="space_type_private_desc">Yalnızca davet edin, kendiniz veya ekipleriniz için en iyisi</string>
+    <string name="space_type_private">Özel</string>
+    <string name="space_type_public_desc">Herkese açık, topluluklar için en iyisi</string>
+    <string name="space_type_public">Halka açık</string>
+    <string name="create_spaces_me_and_teammates">Ben ve takım arkadaşlarım</string>
+    <string name="create_spaces_just_me">Yalnızca ben</string>
+    <string name="create_spaces_who_are_you_working_with">Kiminle çalışıyorsun\?</string>
+    <string name="tooltip_attachment_location">Konum paylaş</string>
+    <string name="room_profile_encrypted_subtitle">Bu odadaki mesajlar uçtan uca şifrelenir.
+\n
+\nMesajlarınız şifrelerle korunur ve yalnızca siz ve alıcı, mesajların kilidini açmak için benzersiz anahtarlara sahip olursunuz.</string>
+    <string name="direct_room_profile_not_encrypted_subtitle">Buradaki mesajlar uçtan uca şifrelenmez.</string>
+    <string name="room_profile_not_encrypted_subtitle">Bu odadaki mesajlar uçtan uca şifrelenmez.</string>
+    <string name="verification_request_alert_description">Ekstra güvenlik için, her iki cihazınızda da tek seferlik bir kodu kontrol ederek %s\'yi doğrulayın.
+\n
+\nMaksimum güvenlik için bunu bizzat yapın.</string>
+    <string name="verification_request_waiting_for">%s bekleniyor…</string>
+    <string name="verification_verified_user">%s doğrulandı</string>
+    <string name="verification_verify_user">%s\'yi doğrula</string>
+    <string name="a13n_qr_code_description">QR kod resmi</string>
+    <string name="verify_by_emoji_description">Yukarıdaki kodu tarayamıyorsanız, kısa, benzersiz bir emoji seçimini karşılaştırarak doğrulayın.</string>
+    <string name="verify_by_emoji_title">Emojiyi doğrula</string>
+    <string name="verification_no_scan_emoji_title">Emojileri karşılaştırarak doğrulayın</string>
+    <string name="ftue_auth_use_case_connect_to_server">Sunucuya bağlan</string>
+    <string name="ftue_auth_use_case_join_existing_server">Mevcut bir sunucuya katılmak mı istiyorsun\?</string>
+    <string name="ftue_auth_use_case_skip_partial">bu soruyu atla</string>
+    <string name="ftue_auth_use_case_skip">Henüz emin değil misin\? %s yapabilirsin</string>
+    <string name="ftue_auth_use_case_option_three">Topluluklar</string>
+    <string name="ftue_auth_use_case_option_two">Takımlar</string>
+    <string name="ftue_auth_use_case_option_one">Arkadaşlar ve aile</string>
+    <string name="ftue_auth_use_case_subtitle">Bağlanmanıza yardımcı olacağız.</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">Bu konuyu zaten görüntülüyorsun!</string>
+    <string name="view_in_room">Odada Görüntüle</string>
+    <string name="search_thread_from_a_thread">Bir Konudan</string>
+    <string name="thread_list_empty_notice">İpucu: Bir mesaja uzun dokunun ve “%s” kullanın.</string>
+    <string name="thread_list_modal_my_threads_subtitle">Katıldığın tüm konuları göster</string>
+    <string name="thread_list_modal_my_threads_title">Konularım</string>
+    <string name="thread_list_modal_all_threads_subtitle">Geçerli odadaki tüm konuları göster</string>
+    <string name="thread_list_modal_all_threads_title">Tüm Konular</string>
+    <string name="thread_list_modal_title">Filtre</string>
+    <string name="thread_list_title">Konular</string>
+    <string name="thread_timeline_title">Konu</string>
+    <string name="room_threads_filter">Odadaki Konuları Filtrele</string>
+    <string name="action_thread_copy_link_to_thread">Konu bağlantısını kopyala</string>
+    <string name="action_thread_view_in_room">Odada görüntüle</string>
+    <string name="action_view_threads">Konuları Görüntüle</string>
 </resources>

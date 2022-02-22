@@ -2456,7 +2456,6 @@
     <string name="settings_troubleshoot_test_push_loop_success">Aplikace přijímá PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Aplikace čeká na PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_title">Testovat push</string>
-    <string name="search_is_not_supported_in_e2e_room">Prohledávání šifrovaných místností ještě není podporováno.</string>
     <string name="search_banned_user_hint">Filtrovat vykázané uživatele</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">Nemáte oprávnění k zahájení hovoru</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Nemáte oprávnění k zahájení konferenčního hovoru</string>
@@ -2700,7 +2699,6 @@
     <string name="create_spaces_room_private_header">Na jakých tématech pracujete\?</string>
     <string name="create_spaces_room_public_header_desc">Založíme pro ně místnosti. Můžete přidat další později.</string>
     <string name="create_spaces_details_private_header">Doplňte nějaké podrobnosti, aby jej lidé mohli identifikovat. Můžete je kdykoli změnit.</string>
-    <string name="create_spaces_type_header">Prostory jsou nový způsob organizace místností a lidí</string>
     <string name="spaces_header">Prostory</string>
     <string name="you_are_invited">Jste zváni</string>
     <string name="spaces_beta_welcome_to_spaces">Vítejte v prostorech!</string>
@@ -2914,15 +2912,10 @@
     <string name="settings_notification_other">Další</string>
     <string name="settings_notification_mentions_and_keywords">Zmínky a klíčová slova</string>
     <string name="settings_notification_default">Výchozí oznámení</string>
-    <string name="link_this_email_with_your_account">%s v Nastavení pro příjem pozvánek přímo v Elementu.</string>
+    <string name="template_link_this_email_with_your_account">%s v Nastavení pro příjem pozvánek přímo v ${app_name}u.</string>
     <string name="link_this_email_settings_link">Propojte tento e-mail se svým účtem</string>
     <string name="this_invite_to_this_room_was_sent">Pozvánka do této místnosti byla odeslána na adresu %s, která není spojena s vaším účtem</string>
     <string name="this_invite_to_this_space_was_sent">Pozvánka do tohoto prostoru byla odeslána na adresu %s, která není spojena s vaším účtem</string>
-    <string name="to_help_space_members_find_and_join">Chcete-li členům prostoru pomoci najít soukromou místnost a připojit se k ní, přejděte do nastavení dané místnosti klepnutím na avatar.</string>
-    <string name="help_space_members">Pomozte členům prostoru najít soukromé místnosti</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Díky tomu mohou místnosti zůstat soukromé a zároveň je mohou lidé v prostoru najít a připojit se k nim. Všechny nové místnosti v prostoru budou mít tuto možnost k dispozici.</string>
-    <string name="help_people_in_spaces_find_and_join">Pomozte lidem v prostorech, aby sami našli soukromé místnosti a připojili se k nim, není třeba všechny zvát ručně.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Novinka: Nechat lidi v prostorech vyhledat a připojit se k soukromým místnostem</string>
     <string name="call_jitsi_started">Skupinový hovor zahájen</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Všechny místnosti, ve kterých se nacházíte, se zobrazí v Úvodu.</string>
     <string name="preference_show_all_rooms_in_home">Zobrazit všechny místnosti v Úvodu</string>
@@ -3088,7 +3081,7 @@
     </plurals>
     <string name="preference_system_settings">Systémová nastavení</string>
     <string name="preference_versions">Verze</string>
-    <string name="preference_help_summary">Získejte pomoc při používání Elementu</string>
+    <string name="template_preference_help_summary">Získejte pomoc při používání ${app_name}u</string>
     <string name="preference_help_title">Nápověda a podpora</string>
     <string name="preference_help">Nápověda</string>
     <string name="preference_root_legals">Právní dokumenty</string>
@@ -3101,10 +3094,10 @@
     <string name="analytics_opt_in_list_item_2"><b>Nesdílíme</b> informace s třetími stranami</string>
     <string name="analytics_opt_in_list_item_1"><b>Nezaznamenáváme ani neprofilujeme</b> žádné údaje o účtu</string>
     <string name="analytics_opt_in_content_link">zde</string>
-    <string name="analytics_opt_in_content">Pomozte nám identifikovat problémy a vylepšit Element sdílením anonymních údajů o používání. Abychom pochopili, jak lidé používají více zařízení, vygenerujeme náhodný identifikátor sdílený vašimi zařízeními.
+    <string name="template_analytics_opt_in_content">Pomozte nám identifikovat problémy a vylepšit ${app_name} sdílením anonymních údajů o používání. Abychom pochopili, jak lidé používají více zařízení, vygenerujeme náhodný identifikátor sdílený vašimi zařízeními.
 \n
 \nMůžete si přečíst všechny naše podmínky %s.</string>
-    <string name="analytics_opt_in_title">Pomozte vylepšit Element</string>
+    <string name="template_analytics_opt_in_title">Pomozte vylepšit ${app_name}</string>
     <string name="action_enable">Povolit</string>
     <string name="restart_the_application_to_apply_changes">Restartujte aplikaci, aby se změna projevila.</string>
     <string name="labs_enable_latex_maths">Povolit matematické výrazy LaTeXu</string>
@@ -3119,10 +3112,9 @@
     <string name="labs_auto_report_uisi">Automaticky nahlašovat chyby dešifrování.</string>
     <string name="room_member_override_nick_color">Přepsat barvu přezdívky</string>
     <string name="login_splash_already_have_account">Již mám účet</string>
-    <string name="ftue_auth_carousel_4_title">Zlepšete týmovou komunikaci.</string>
-    <string name="ftue_auth_carousel_3_title">Bezpečené zasílání zpráv.</string>
-    <string name="ftue_auth_carousel_2_title">Máte vše pod kontrolou.</string>
-    <string name="ftue_auth_carousel_1_title">Vlastněte své konverzace.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Bezpečené zasílání zpráv.</string>
+    <string name="ftue_auth_carousel_control_title">Máte vše pod kontrolou.</string>
+    <string name="ftue_auth_carousel_secure_title">Vlastněte své konverzace.</string>
     <string name="tooltip_attachment_location">Sdílet polohu</string>
     <string name="labs_render_locations_in_timeline">Zobrazit polohy uživatele na časové ose</string>
     <string name="settings_enable_location_sharing_summary">Po zapnutí budete moci odeslat svou polohu do libovolné místnosti</string>
@@ -3136,7 +3128,7 @@
     <string name="location_activity_title_static_sharing">Sdílet polohu</string>
     <string name="closed_poll_option_description">Výsledky se zobrazí až po ukončení hlasování</string>
     <string name="closed_poll_option_title">Uzavřené hlasování</string>
-    <string name="open_poll_option_description">Hlasující vidí výsledky ihned po hlasování</string>
+    <string name="open_poll_option_description">Hlasující uvidí výsledky ihned po hlasování</string>
     <string name="open_poll_option_title">Otevřené hlasování</string>
     <string name="poll_type_title">Typ hlasování</string>
     <string name="edit_poll_button">UPRAVIT HLASOVÁNÍ</string>
@@ -3150,10 +3142,43 @@
     <string name="encryption_has_been_misconfigured">Šifrování bylo špatně nakonfigurováno.</string>
     <string name="sent_location">Sdíleli svou polohu</string>
     <string name="login_splash_create_account">Vytvořit účet</string>
-    <string name="ftue_auth_carousel_title_messaging">Zasílání zpráv pro váš tým.</string>
-    <string name="ftue_auth_carousel_body_encrypted">Koncové šifrování bez potřeby telefonního čísla. Žádné reklamy ani vytěžování dat.</string>
-    <string name="ftue_auth_carousel_body_control">Můžete si vybrat, kde budou vaše konverzace uloženy, a získat tak kontrolu a nezávislost. Připojeno přes Matrix.</string>
-    <string name="ftue_auth_carousel_body_secure">Bezpečná a nezávislá komunikace, která vám poskytne stejnou úroveň soukromí jako osobní rozhovor u vás doma.</string>
+    <string name="ftue_auth_carousel_workplace_title">Zasílání zpráv pro váš tým.</string>
+    <string name="ftue_auth_carousel_encrypted_body">Koncové šifrování bez potřeby telefonního čísla. Žádné reklamy ani vytěžování dat.</string>
+    <string name="ftue_auth_carousel_control_body">Můžete si vybrat, kde budou vaše konverzace uloženy, a získat tak kontrolu a nezávislost. Připojeno přes Matrix.</string>
+    <string name="ftue_auth_carousel_secure_body">Bezpečná a nezávislá komunikace, která vám poskytne stejnou úroveň soukromí jako osobní rozhovor u vás doma.</string>
     <string name="attachment_type_location">Poloha</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Šifrování bylo špatně nakonfigurováno, takže nelze odesílat zprávy. Kliknutím otevřete nastavení.</string>
+    <string name="message_bubbles">Zobrazit bubliny zpráv</string>
+    <string name="location_timeline_failed_to_load_map">Nepodařilo se načíst mapu</string>
+    <string name="a11y_static_map_image">Mapa</string>
+    <string name="labs_enable_thread_messages_desc">Poznámka: aplikace bude restartována</string>
+    <string name="labs_enable_thread_messages">Povolit zprávy ve vláknech</string>
+    <string name="ftue_auth_use_case_connect_to_server">Připojit se k serveru</string>
+    <string name="ftue_auth_use_case_join_existing_server">Chcete se připojit k existujícímu serveru\?</string>
+    <string name="ftue_auth_use_case_skip_partial">přeskočit tuto otázku</string>
+    <string name="ftue_auth_use_case_skip">Ještě si nejste jisti\? Můžete %s</string>
+    <string name="ftue_auth_use_case_option_three">Komunity</string>
+    <string name="ftue_auth_use_case_option_two">Týmy</string>
+    <string name="ftue_auth_use_case_option_one">Přátelé a rodina</string>
+    <string name="ftue_auth_use_case_subtitle">Pomůžeme vám se připojit.</string>
+    <string name="ftue_auth_use_case_title">S kým si budete povídat nejčastěji\?</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">Již si prohlížíte toto vlákno!</string>
+    <string name="view_in_room">Prohlédnout v místnosti</string>
+    <string name="reply_in_thread">Odpovědět ve vlákně</string>
+    <string name="command_not_supported_in_threads">Příkaz „%s“ je rozpoznán, ale není podporován ve vláknech.</string>
+    <string name="search_thread_from_a_thread">Z vlákna</string>
+    <string name="thread_list_empty_notice">Tip: Dlouze klepněte na zprávu a použijte „%s“.</string>
+    <string name="thread_list_empty_subtitle">Vlákna pomáhají udržovat konverzace k tématu a snadno je sledovat.</string>
+    <string name="thread_list_empty_title">Udržujte diskuse organizované pomocí vláken</string>
+    <string name="thread_list_modal_my_threads_subtitle">Zobrazí všechna vlákna, kterých jste se zúčastnili</string>
+    <string name="thread_list_modal_my_threads_title">Moje vlákna</string>
+    <string name="thread_list_modal_all_threads_subtitle">Zobrazí všechna vlákna z aktuální místnosti</string>
+    <string name="thread_list_modal_all_threads_title">Všechna vlákna</string>
+    <string name="thread_list_modal_title">Filtr</string>
+    <string name="thread_list_title">Vlákna</string>
+    <string name="thread_timeline_title">Vlákno</string>
+    <string name="room_threads_filter">Filtrovat vlákna v místnosti</string>
+    <string name="action_thread_copy_link_to_thread">Kopírovat odkaz na vlákno</string>
+    <string name="action_thread_view_in_room">Prohlédnout v místnosti</string>
+    <string name="action_view_threads">Zobrazit vlákna</string>
 </resources>
