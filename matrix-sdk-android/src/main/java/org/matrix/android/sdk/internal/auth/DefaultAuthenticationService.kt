@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.auth
 import android.net.Uri
 import dagger.Lazy
 import okhttp3.OkHttpClient
-import org.matrix.android.sdk.api.MatrixConfiguration
 import org.matrix.android.sdk.api.MatrixPatterns
 import org.matrix.android.sdk.api.MatrixPatterns.getDomain
 import org.matrix.android.sdk.api.auth.AuthenticationService

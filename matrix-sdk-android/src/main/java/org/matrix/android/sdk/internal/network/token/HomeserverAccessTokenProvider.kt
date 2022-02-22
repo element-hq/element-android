@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.network.token
 
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import org.matrix.android.sdk.internal.auth.data.RefreshResult
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.GlobalError
@@ -26,6 +25,7 @@ import org.matrix.android.sdk.api.failure.MatrixError.Companion.M_FORBIDDEN
 import org.matrix.android.sdk.api.failure.MatrixError.Companion.M_UNKNOWN_TOKEN
 import org.matrix.android.sdk.api.failure.isTokenUnknownError
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
+import org.matrix.android.sdk.internal.auth.data.RefreshResult
 import org.matrix.android.sdk.internal.auth.refresh.RefreshTokenTask
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver

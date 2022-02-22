@@ -34,5 +34,4 @@ internal interface RefreshTokenAPI {
     @Headers("CONNECT_TIMEOUT:60000", "READ_TIMEOUT:60000", "WRITE_TIMEOUT:60000")
     @POST(NetworkConstants.URI_API_PREFIX_PATH_V1 + "refresh")
     suspend fun refreshToken(@Body refreshParams: RefreshParams): RefreshResult
-
 }

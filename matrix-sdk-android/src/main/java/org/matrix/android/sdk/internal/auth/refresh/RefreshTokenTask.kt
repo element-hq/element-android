@@ -16,10 +16,9 @@
 
 package org.matrix.android.sdk.internal.auth.refresh
 
-import org.matrix.android.sdk.internal.auth.data.RefreshResult
-import org.matrix.android.sdk.internal.auth.AuthAPI
 import org.matrix.android.sdk.internal.auth.RefreshTokenAPI
 import org.matrix.android.sdk.internal.auth.data.RefreshParams
+import org.matrix.android.sdk.internal.auth.data.RefreshResult
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
 import javax.inject.Inject
