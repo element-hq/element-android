@@ -3027,7 +3027,7 @@
     </plurals>
     <string name="preference_system_settings">Systeminställningar</string>
     <string name="preference_versions">Versioner</string>
-    <string name="preference_help_summary">Få hjälp med att använda Element</string>
+    <string name="template_preference_help_summary">Få hjälp med att använda ${app_name}</string>
     <string name="preference_help_title">Hjälp och support</string>
     <string name="preference_help">Hjälp</string>
     <string name="preference_root_legals">Legalt</string>

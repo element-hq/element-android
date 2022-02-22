@@ -3012,7 +3012,7 @@
     </plurals>
     <string name="preference_system_settings">Impostazioni di sistema</string>
     <string name="preference_versions">Versioni</string>
-    <string name="preference_help_summary">Ricevi aiuto nell\'uso di Element</string>
+    <string name="template_preference_help_summary">Ricevi aiuto nell\'uso di ${app_name}</string>
     <string name="preference_help_title">Aiuto e supporto</string>
     <string name="preference_help">Aiuto</string>
     <string name="preference_root_legals">Informazioni legali</string>

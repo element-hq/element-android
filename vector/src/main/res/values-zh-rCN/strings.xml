@@ -2963,7 +2963,7 @@
     </plurals>
     <string name="preference_system_settings">系统设置</string>
     <string name="preference_versions">版本</string>
-    <string name="preference_help_summary">获取使用 Element 的帮助</string>
+    <string name="template_preference_help_summary">获取使用 ${app_name} 的帮助</string>
     <string name="preference_help_title">帮助和支持</string>
     <string name="preference_help">帮助</string>
     <string name="preference_root_legals">法律</string>

@@ -2306,7 +2306,7 @@
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Kayıt belirteci</string>
     <string name="preference_system_settings">Sistem ayarları</string>
     <string name="preference_versions">Sürümler</string>
-    <string name="preference_help_summary">Element\'i kullanma konusunda yardım alın</string>
+    <string name="template_preference_help_summary">${app_name}\'i kullanma konusunda yardım alın</string>
     <string name="preference_help_title">Yardım ve Destek</string>
     <string name="preference_help">Yardım</string>
     <string name="preference_root_legals">Yasal</string>

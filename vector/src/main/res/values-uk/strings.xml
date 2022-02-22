@@ -3124,7 +3124,7 @@
     </plurals>
     <string name="preference_system_settings">Системні налаштування</string>
     <string name="preference_versions">Версії</string>
-    <string name="preference_help_summary">Отримати допомогу в використанні Element</string>
+    <string name="template_preference_help_summary">Отримати допомогу в використанні ${app_name}</string>
     <string name="preference_help_title">Довідка й підтримка</string>
     <string name="preference_help">Довідка</string>
     <string name="preference_root_legals">Правові положення</string>

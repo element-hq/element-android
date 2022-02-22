@@ -3160,7 +3160,7 @@
     <string name="settings_discovery_consent_notice_off_2">Ваши контакты приватны. Чтобы обнаружить пользователей из ваших контактов, нам необходимо ваше разрешение на отправку контактной информации на ваш сервер обнаружения.</string>
     <string name="preference_system_settings">Системные настройки</string>
     <string name="preference_versions">Версии</string>
-    <string name="preference_help_summary">Получите помощь в использовании Element</string>
+    <string name="template_preference_help_summary">Получите помощь в использовании ${app_name}</string>
     <string name="preference_help_title">Помощь и поддержка</string>
     <string name="preference_help">Помощь</string>
     <string name="preference_root_legals">Правовые положения</string>

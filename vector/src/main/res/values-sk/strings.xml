@@ -2508,7 +2508,7 @@
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Nepoznáte svoju prístupovú frázu pre zálohovanie kľúčov, môžete %s.</string>
     <string name="verify_user_sas_emoji_help_text">Overte tohto používateľa potvrdením, že sa na jeho obrazovke zobrazujú nasledujúce jedinečné emotikony v rovnakom poradí.</string>
     <string name="settings_developer_mode_show_info_on_screen_summary">Zobrazenie niektorých užitočných informácií na pomoc pri ladení aplikácie</string>
-    <string name="preference_help_summary">Získajte pomoc s používaním aplikácie Element</string>
+    <string name="template_preference_help_summary">Získajte pomoc s používaním aplikácie ${app_name}</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Všetky miestnosti, v ktorých sa nachádzate, sa zobrazia v časti Domov.</string>
     <string name="preference_show_all_rooms_in_home">Zobraziť všetky miestnosti v časti Domov</string>
     <string name="settings_troubleshoot_title">Riešenie problémov</string>

@@ -3025,7 +3025,7 @@
     </plurals>
     <string name="preference_system_settings">تنظیمات سامانه</string>
     <string name="preference_versions">نگارش‌ها</string>
-    <string name="preference_help_summary">کمک در استفاده از المنت</string>
+    <string name="template_preference_help_summary">کمک در استفاده از المنت</string>
     <string name="preference_help_title">کمک و پشتیانی</string>
     <string name="preference_help">کمک</string>
     <string name="preference_root_legals">موارد حقوقی</string>

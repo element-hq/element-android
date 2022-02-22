@@ -3019,7 +3019,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     </plurals>
     <string name="preference_system_settings">Rendszerbeállítások</string>
     <string name="preference_versions">Verziók</string>
-    <string name="preference_help_summary">Segítség az Element használatában</string>
+    <string name="template_preference_help_summary">Segítség az ${app_name} használatában</string>
     <string name="preference_help_title">Segítség és támogatás</string>
     <string name="preference_help">Segítség</string>
     <string name="legals_no_policy_provided">Ez a szerver nem adott meg szabályzatot.</string>

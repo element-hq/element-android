@@ -2967,7 +2967,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     </plurals>
     <string name="preference_system_settings">Pengaturan sistem</string>
     <string name="preference_versions">Versi</string>
-    <string name="preference_help_summary">Dapatkan bantuan dalam menggunakan Element</string>
+    <string name="template_preference_help_summary">Dapatkan bantuan dalam menggunakan ${app_name}</string>
     <string name="preference_help_title">Bantuan dan dukungan</string>
     <string name="preference_help">Bantuan</string>
     <string name="preference_root_legals">Hukum</string>

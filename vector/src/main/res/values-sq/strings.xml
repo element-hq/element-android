@@ -3006,7 +3006,7 @@
     <string name="attachment_type_poll">Pyetësor</string>
     <string name="preference_system_settings">Rregullime sistemi</string>
     <string name="preference_versions">Versione</string>
-    <string name="preference_help_summary">Merrni ndihmë për përdorimin e Element-it</string>
+    <string name="template_preference_help_summary">Merrni ndihmë për përdorimin e ${app_name}-it</string>
     <string name="preference_help_title">Ndihmë dhe asistencë</string>
     <string name="preference_help">Ndihmë</string>
     <string name="preference_root_legals">Ligjore</string>

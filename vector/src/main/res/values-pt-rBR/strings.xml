@@ -3021,7 +3021,7 @@
         <item quantity="other">%1$d votos</item>
     </plurals>
     <string name="preference_versions">Versões</string>
-    <string name="preference_help_summary">Conseguir ajuda com uso de Element</string>
+    <string name="template_preference_help_summary">Conseguir ajuda com uso de ${app_name}</string>
     <string name="preference_root_legals">Jurídicos</string>
     <string name="legals_no_policy_provided">Este servidor não provê nenhuma política.</string>
     <string name="legals_third_party_notices">Bibliotecas de terceiros</string>

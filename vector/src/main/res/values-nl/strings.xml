@@ -2126,7 +2126,7 @@
     <string name="send_suggestion">Doe een suggestie</string>
     <string name="preference_system_settings">Systeem instellingen</string>
     <string name="preference_versions">Versies</string>
-    <string name="preference_help_summary">Hulp bij het gebruik van Element</string>
+    <string name="template_preference_help_summary">Hulp bij het gebruik van ${app_name}</string>
     <string name="preference_help_title">Hulp en ondersteuning</string>
     <string name="preference_help">Hulp</string>
     <string name="preference_root_legals">Juridisch</string>

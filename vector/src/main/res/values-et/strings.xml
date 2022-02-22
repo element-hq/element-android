@@ -3021,7 +3021,7 @@
     </plurals>
     <string name="preference_system_settings">Süsteemiseadistused</string>
     <string name="preference_versions">Versioonid</string>
-    <string name="preference_help_summary">Element\'i kasutamiseks vajalik abiteave</string>
+    <string name="template_preference_help_summary">${app_name}\'i kasutamiseks vajalik abiteave</string>
     <string name="preference_help_title">Abiteave ja kasutajatugi</string>
     <string name="preference_help">Abiteave</string>
     <string name="preference_root_legals">Juriidiline teave</string>

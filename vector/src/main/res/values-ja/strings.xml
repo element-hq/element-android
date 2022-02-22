@@ -2508,7 +2508,7 @@
     <string name="ftue_auth_carousel_secure_body">お宅での対面会話と同じぐらいのプライバシーを提供する、セキュアで独立したコミュニケーション。</string>
     <string name="ftue_auth_carousel_encrypted_title">セキュアメッセージング</string>
     <string name="ftue_auth_carousel_control_title">管理権を握るのは、あなたです。</string>
-    <string name="preference_help_summary">Elementの使用に関するヘルプ</string>
+    <string name="template_preference_help_summary">${app_name}の使用に関するヘルプ</string>
     <string name="labs_allow_extended_logging_summary">詳細なログは、イライラシェイクでログを送信する際に、より多くのログを提供することで、開発者にとっての助けになります。有効にした場合でも、メッセージの内容やその他のプライベートな情報は記録されません。</string>
     <string name="upgrade_room_warning">ルームのアップグレードは高度な作業であり、不具合や欠けている機能、セキュリティー上の脆弱性がある場合に推奨されます。
 \nアップグレードは通常、ルームがサーバー上で処理される仕方にだけ影響します。</string>

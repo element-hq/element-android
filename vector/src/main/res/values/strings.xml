@@ -2296,8 +2296,7 @@
 
     <string name="preference_help">Help</string>
     <string name="preference_help_title">Help and support</string>
-    <!-- TODO Create a template -->
-    <string name="preference_help_summary">Get help with using Element</string>
+    <string name="template_preference_help_summary">Get help with using ${app_name}</string>
     <string name="preference_versions">Versions</string>
     <string name="preference_system_settings">System settings</string>
 

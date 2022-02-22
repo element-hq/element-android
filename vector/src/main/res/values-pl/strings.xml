@@ -3061,7 +3061,7 @@
     <string name="ftue_auth_carousel_control_title">Ty jesteś w kontroli.</string>
     <string name="ftue_auth_carousel_secure_title">Przejmij swoje konwersacje.</string>
     <string name="identity_server_consent_dialog_content_3">By odkryć istniejące kontakty, musisz najpierw przesłać swoje dane kontaktowe (adresy e-mail i numer telefonu) do serwera tożsamości. Przed wysłaniem Twoje dane zostaną zaszyfrowane w celu zachowania prywatności.</string>
-    <string name="preference_help_summary">Uzyskaj pomoc w korzystaniu z Element</string>
+    <string name="template_preference_help_summary">Uzyskaj pomoc w korzystaniu z ${app_name}</string>
     <string name="room_error_access_unauthorized">Nie masz uprawnień by dołączyć do tego pokoju</string>
     <string name="dev_tools_form_hint_type">Typ</string>
     <string name="a11y_presence_offline">Niedostępny</string>

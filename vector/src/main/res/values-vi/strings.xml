@@ -2962,7 +2962,7 @@
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Token đăng ký</string>
     <string name="preference_system_settings">Cài đặt hệ thống</string>
     <string name="preference_versions">Phiên bản</string>
-    <string name="preference_help_summary">Nhận trợ giúp về việc sử dụng Element</string>
+    <string name="template_preference_help_summary">Nhận trợ giúp về việc sử dụng ${app_name}</string>
     <string name="preference_help_title">Trợ giúp và hỗ trợ</string>
     <string name="preference_help">Trợ giúp</string>
     <string name="preference_root_legals">Pháp lý</string>

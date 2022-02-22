@@ -2985,7 +2985,7 @@
     <string name="settings_discovery_show_identity_server_policy_title">Bedingungen des Identitätsservers anzeigen</string>
     <string name="preference_system_settings">Systemeinstellungen</string>
     <string name="preference_versions">Versionen</string>
-    <string name="preference_help_summary">Erhalte Hilfe bei der Bedienung von Element</string>
+    <string name="template_preference_help_summary">Erhalte Hilfe bei der Bedienung von ${app_name}</string>
     <string name="preference_help_title">Hilfe und Unterstützung</string>
     <string name="preference_help">Hilfe</string>
     <string name="preference_root_legals">Rechtliches</string>
