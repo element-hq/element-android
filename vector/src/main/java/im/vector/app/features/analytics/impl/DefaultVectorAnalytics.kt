@@ -16,17 +16,18 @@
 
 package im.vector.app.features.analytics.impl
 
-import android.content.Context
+import com.posthog.android.Options
 import com.posthog.android.PostHog
 import com.posthog.android.Properties
-import im.vector.app.BuildConfig
-import im.vector.app.config.analyticsConfig
+import im.vector.app.core.di.NamedGlobalScope
+import im.vector.app.features.analytics.AnalyticsConfig
 import im.vector.app.features.analytics.VectorAnalytics
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.log.analyticsTag
+import im.vector.app.features.analytics.plan.UserProperties
 import im.vector.app.features.analytics.store.AnalyticsStore
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -34,16 +35,34 @@ import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
+private val REUSE_EXISTING_ID: String? = null
+private val IGNORED_OPTIONS: Options? = null
+
 @Singleton
 class DefaultVectorAnalytics @Inject constructor(
-        private val context: Context,
-        private val analyticsStore: AnalyticsStore
+        postHogFactory: PostHogFactory,
+        analyticsConfig: AnalyticsConfig,
+        private val analyticsStore: AnalyticsStore,
+        private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,
+        @NamedGlobalScope private val globalScope: CoroutineScope
 ) : VectorAnalytics {
-    private var posthog: PostHog? = null
+
+    private val posthog: PostHog? = when {
+        analyticsConfig.isEnabled -> postHogFactory.createPosthog()
+        else                      -> {
+            Timber.tag(analyticsTag.value).w("Analytics is disabled")
+            null
+        }
+    }
 
     // Cache for the store values
     private var userConsent: Boolean? = null
     private var analyticsId: String? = null
+
+    override fun init() {
+        observeUserConsent()
+        observeAnalyticsId()
+    }
 
     override fun getUserConsent(): Flow<Boolean> {
         return analyticsStore.userConsentFlow
@@ -77,13 +96,6 @@ class DefaultVectorAnalytics @Inject constructor(
         setAnalyticsId("")
     }
 
-    override fun init() {
-        observeUserConsent()
-        observeAnalyticsId()
-        createAnalyticsClient()
-    }
-
-    @Suppress("EXPERIMENTAL_API_USAGE")
     private fun observeAnalyticsId() {
         getAnalyticsId()
                 .onEach { id ->
@@ -91,21 +103,20 @@ class DefaultVectorAnalytics @Inject constructor(
                     analyticsId = id
                     identifyPostHog()
                 }
-                .launchIn(GlobalScope)
+                .launchIn(globalScope)
     }
 
-    private fun identifyPostHog() {
+    private suspend fun identifyPostHog() {
         val id = analyticsId ?: return
         if (id.isEmpty()) {
             Timber.tag(analyticsTag.value).d("reset")
             posthog?.reset()
         } else {
             Timber.tag(analyticsTag.value).d("identify")
-            posthog?.identify(id)
+            posthog?.identify(id, lateInitUserPropertiesFactory.createUserProperties()?.getProperties()?.toPostHogUserProperties(), IGNORED_OPTIONS)
         }
     }
 
-    @Suppress("EXPERIMENTAL_API_USAGE")
     private fun observeUserConsent() {
         getUserConsent()
                 .onEach { consent ->
@@ -113,47 +124,11 @@ class DefaultVectorAnalytics @Inject constructor(
                     userConsent = consent
                     optOutPostHog()
                 }
-                .launchIn(GlobalScope)
+                .launchIn(globalScope)
     }
 
     private fun optOutPostHog() {
         userConsent?.let { posthog?.optOut(!it) }
-    }
-
-    private fun createAnalyticsClient() {
-        Timber.tag(analyticsTag.value).d("createAnalyticsClient()")
-
-        if (analyticsConfig.isEnabled.not()) {
-            Timber.tag(analyticsTag.value).w("Analytics is disabled")
-            return
-        }
-
-        posthog = PostHog.Builder(context, analyticsConfig.postHogApiKey, analyticsConfig.postHogHost)
-                // Record certain application events automatically! (off/false by default)
-                // .captureApplicationLifecycleEvents()
-                // Record screen views automatically! (off/false by default)
-                // .recordScreenViews()
-                // Capture deep links as part of the screen call. (off by default)
-                // .captureDeepLinks()
-                // Maximum number of events to keep in queue before flushing (default 20)
-                // .flushQueueSize(20)
-                // Max delay before flushing the queue (30 seconds)
-                // .flushInterval(30, TimeUnit.SECONDS)
-                // Enable or disable collection of ANDROID_ID (true)
-                .collectDeviceId(false)
-                .logLevel(getLogLevel())
-                .build()
-
-        optOutPostHog()
-        identifyPostHog()
-    }
-
-    private fun getLogLevel(): PostHog.LogLevel {
-        return if (BuildConfig.DEBUG) {
-            PostHog.LogLevel.DEBUG
-        } else {
-            PostHog.LogLevel.INFO
-        }
     }
 
     override fun capture(event: VectorAnalyticsEvent) {
@@ -170,11 +145,25 @@ class DefaultVectorAnalytics @Inject constructor(
                 ?.screen(screen.getName(), screen.getProperties()?.toPostHogProperties())
     }
 
-    private fun Map<String, Any>?.toPostHogProperties(): Properties? {
+    override fun updateUserProperties(userProperties: UserProperties) {
+        posthog?.identify(REUSE_EXISTING_ID, userProperties.getProperties()?.toPostHogUserProperties(), IGNORED_OPTIONS)
+    }
+
+    private fun Map<String, Any?>?.toPostHogProperties(): Properties? {
         if (this == null) return null
 
         return Properties().apply {
             putAll(this@toPostHogProperties)
+        }
+    }
+
+    /**
+     * We avoid sending nulls as part of the UserProperties as this will reset the values across all devices
+     * The UserProperties event has nullable properties to allow for clients to opt in
+     */
+    private fun Map<String, Any?>.toPostHogUserProperties(): Properties {
+        return Properties().apply {
+            putAll(this@toPostHogUserProperties.filter { it.value != null })
         }
     }
 }

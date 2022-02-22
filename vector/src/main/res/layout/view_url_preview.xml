@@ -1,77 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/informationUrlPreviewContainer"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:parentTag="com.google.android.material.card.MaterialCardView">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minWidth="208dp"
         android:orientation="vertical">
 
+        <!--Image dimensions will be overrode by ImageContentRenderer -->
         <ImageView
             android:id="@+id/url_preview_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintHeight_max="208dp"
+            android:scaleType="centerCrop"
+            android:importantForAccessibility="no"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:src="@tools:sample/backgrounds/scenic" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/url_preview_start_guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:adjustViewBounds="true"
-            android:importantForAccessibility="no"
-            android:maxHeight="200dp"
-            android:scaleType="fitXY"
-            tools:src="@tools:sample/backgrounds/scenic" />
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="8dp" />
 
         <TextView
             android:id="@+id/url_preview_site"
             style="@style/Widget.Vector.TextView.Caption"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="6dp"
             android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:maxLines="1"
             android:singleLine="true"
+            app:layout_constraintEnd_toStartOf="@id/url_preview_close"
             android:textColor="?vctr_content_secondary"
+            app:layout_constraintStart_toStartOf="@id/url_preview_start_guideline"
+            app:layout_constraintTop_toBottomOf="@id/url_preview_image"
+            app:layout_goneMarginTop="12dp"
             tools:text="BBC News" />
 
         <TextView
             android:id="@+id/url_preview_title"
             style="@style/Widget.Vector.TextView.Body.Medium"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="@dimen/layout_touch_size"
+            android:layout_marginEnd="8dp"
             android:ellipsize="end"
             android:maxLines="2"
             android:textColor="?vctr_content_primary"
             android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/url_preview_close"
+            app:layout_constraintStart_toStartOf="@id/url_preview_start_guideline"
+            app:layout_constraintTop_toBottomOf="@id/url_preview_site"
+            app:layout_goneMarginTop="12dp"
             tools:text="Jo Malone denounces her former brand's John Boyega decision" />
 
         <TextView
             android:id="@+id/url_preview_description"
             style="@style/Widget.Vector.TextView.Body"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:ellipsize="end"
             android:textColor="?vctr_content_secondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/url_preview_start_guideline"
+            app:layout_constraintTop_toBottomOf="@id/url_preview_title"
             tools:text="The British perfumer says removing actor John Boyega from his own advert was “utterly despicable”." />
 
-    </LinearLayout>
+        <ImageView
+            android:id="@+id/url_preview_close"
+            android:layout_width="@dimen/layout_touch_size"
+            android:layout_height="@dimen/layout_touch_size"
+            android:layout_gravity="top|end"
+            android:contentDescription="@string/action_close"
+            android:scaleType="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_close_with_circular_bg"
+            tools:ignore="MissingPrefix" />
 
-    <ImageView
-        android:id="@+id/url_preview_close"
-        android:layout_width="@dimen/layout_touch_size"
-        android:layout_height="@dimen/layout_touch_size"
-        android:layout_gravity="top|end"
-        android:contentDescription="@string/action_close"
-        android:scaleType="center"
-        android:src="@drawable/ic_close_with_circular_bg"
-        tools:ignore="MissingPrefix" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </merge>

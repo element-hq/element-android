@@ -19,11 +19,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.zhuinden.monarchy.Monarchy
 import org.matrix.android.sdk.api.pushrules.Action
+import org.matrix.android.sdk.api.pushrules.ConditionResolver
 import org.matrix.android.sdk.api.pushrules.PushEvents
 import org.matrix.android.sdk.api.pushrules.PushRuleService
 import org.matrix.android.sdk.api.pushrules.RuleKind
 import org.matrix.android.sdk.api.pushrules.RuleScope
 import org.matrix.android.sdk.api.pushrules.RuleSetKey
+import org.matrix.android.sdk.api.pushrules.SenderNotificationPermissionCondition
 import org.matrix.android.sdk.api.pushrules.getActions
 import org.matrix.android.sdk.api.pushrules.rest.PushRule
 import org.matrix.android.sdk.api.pushrules.rest.RuleSet
@@ -53,6 +55,7 @@ internal class DefaultPushRuleService @Inject constructor(
         private val removePushRuleTask: RemovePushRuleTask,
         private val pushRuleFinder: PushRuleFinder,
         private val taskExecutor: TaskExecutor,
+        private val conditionResolver: ConditionResolver,
         @SessionDatabase private val monarchy: Monarchy
 ) : PushRuleService {
 
@@ -141,6 +144,10 @@ internal class DefaultPushRuleService @Inject constructor(
         val rules = getPushRules(RuleScope.GLOBAL).getAllRules()
 
         return pushRuleFinder.fulfilledBingRule(event, rules)?.getActions().orEmpty()
+    }
+
+    override fun resolveSenderNotificationPermissionCondition(event: Event, condition: SenderNotificationPermissionCondition): Boolean {
+        return conditionResolver.resolveSenderNotificationPermissionCondition(event, condition)
     }
 
     override fun getKeywords(): LiveData<Set<String>> {

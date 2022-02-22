@@ -1674,7 +1674,7 @@
     <string name="settings_vibrate_on_mention">لرزیدن گوشی در هنگام ذکر یک کاربر</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">شامل تغییرات نام نمایشی و چهرک.</string>
     <string name="settings_show_avatar_display_name_changes_messages">نمایش پیام‌های مربوط به حساب کاربری</string>
-    <string name="settings_show_join_leave_messages_summary">دعوت‌ها و حذف توسط مدیر به هر صورت نمایش داده می‌شوند.</string>
+    <string name="settings_show_join_leave_messages_summary">دعوت‌ها، برداشتن‌ها و انسدادها تأثیر نمی‌پذیرند.</string>
     <string name="settings_show_join_leave_messages">نمایش پیام‌های پیوستن و ترک اتاق</string>
     <string name="settings_inline_url_preview_summary">پیش‌نمایشی از آدرس‌های URL در پیام‌ها نمایش داده شود.</string>
     <string name="settings_set_workmanager_delay_summary">%s
@@ -1732,7 +1732,6 @@
     <string name="settings_emails_empty">هیچ رایانامه‌ای به حسابتان افزوده نشده</string>
     <string name="settings_emails">نشانی‌های رایانامه</string>
     <string name="settings_phone_number_empty">هیچ شماره تلفنی به حسابتان افزوده نشده</string>
-    <string name="search_is_not_supported_in_e2e_room">قابلیت جستجو در اتاق‌های رمزشده هنوز پیاده‌سازی نشده است.</string>
     <string name="search_no_results">نتیجه‌ای در پی نداشت</string>
     <string name="search_banned_user_hint">فیلترکردن کاربران مسدود شده</string>
     <string name="room_event_action_cancel_download">لغو دانلود</string>
@@ -2704,7 +2703,6 @@
     <string name="create_spaces_join_info_help">برای پیوستن به یک فضای موجود، نیاز به دعوت دارید.</string>
     <string name="create_spaces_you_can_change_later">می‌توانید بعداً این را تغییر دهید</string>
     <string name="create_spaces_choose_type_label">می‌خواهید چه نوع فضایی ایجاد کنید؟</string>
-    <string name="create_spaces_type_header">فضاها راهی جدید برای گروه‌بندی اتاق‌ها و افراد است</string>
     <string name="your_private_space">فضای خصوصیتان</string>
     <string name="your_public_space">فضا عمومیتان</string>
     <string name="add_space">افزودن فضا</string>
@@ -2860,15 +2858,10 @@
     <string name="settings_notification_other">دیگر</string>
     <string name="settings_notification_mentions_and_keywords">اشاره‌ها و کلیدواژگان</string>
     <string name="settings_notification_default">آگاهی‌های پیش‌گزیده</string>
-    <string name="link_this_email_with_your_account">%s در تنظیمات برای دریافت مستقیم دعوت‌ها در المنت.</string>
+    <string name="template_link_this_email_with_your_account">%s در تنظیمات برای دریافت مستقیم دعوت‌ها در المنت.</string>
     <string name="link_this_email_settings_link">این رایانامه را به حسابتان پیوند دهید</string>
     <string name="this_invite_to_this_space_was_sent">این دعوت به این فضا به %s فرستاده شده که با حسابتان در ارتباط نیست</string>
     <string name="this_invite_to_this_room_was_sent">این دعوت به این اتاق به %s فرستاده شده که با حسابتان در ارتباط نیست</string>
-    <string name="to_help_space_members_find_and_join">برای کمک به اعضای فضا برای یافتن و پیوستن به یک اتاق خصوصی، با زدن روی چهرک، به تنظیمات اتاق بروید.</string>
-    <string name="help_space_members">کمک به اعضای فضا برای یافتن اتاق‌های خصوصی</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">این کار، خصوصی ماندن اتاق‌ها در فضا را، در عین اجازه به افراد داخل فضا برای یافتن و پیوستن، آسان می‌کند. تمامی اتاق‌های جدید در یک فضا، این گزینه را موجود دارند.</string>
-    <string name="help_people_in_spaces_find_and_join">به افراد کمک‌کنید خودشان اتاق‌های خصوصی را یافته و بپیوندند. نیازی به دعوت دستی همه نیست.</string>
-    <string name="new_let_people_in_spaces_find_and_join">جدید: بکذارید افراد در فضا، اتاق‌های خصوصی را یافته و بپیوندند</string>
     <string name="call_jitsi_started">تماس گروهی آغاز شد</string>
     <string name="upgrade_public_room_from_to">این اتاق را از %1$s به %2$s ارتقا خواهید داد.</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">تمام اتاق‌هایی که‌در آن‌هایید، در خانه نشان داده خواهند شد.</string>
@@ -3002,7 +2995,7 @@
     <string name="identity_server_consent_dialog_content_question">با فرستادن این اطّلاعات موافقید؟</string>
     <string name="action_not_now">اکنون نه</string>
     <string name="identity_server_consent_dialog_content_3">برای کشف آشنایان موجود، لازم است اطلاعات آشنایان (رایانامه‌ها و شماره تلفن‌ها) را به کارساز هویتتان بفرستید. برای محرمانگیتان، داده‌هایتان را پیش از فرستادن، در هم می‌ریزیم.</string>
-    <string name="analytics_opt_in_content">با هم‌رسانی داده‌ّای استفادهٔ ناشناس، در تشخیص مشکل‌ها و بهبود المنت یاریمان کنید. برای درک چگونگی استفادهٔ مردم از چندین افزاره، شناسه‌ای کاتوره‌ای بین افزاره‌هایتان هم‌رسانی خواهیم کرد.
+    <string name="template_analytics_opt_in_content">با هم‌رسانی داده‌ّای استفادهٔ ناشناس، در تشخیص مشکل‌ها و بهبود المنت یاریمان کنید. برای درک چگونگی استفادهٔ مردم از چندین افزاره، شناسه‌ای کاتوره‌ای بین افزاره‌هایتان هم‌رسانی خواهیم کرد.
 \n
 \nمی‌توانید از %s قوانینمان را بخوانید.</string>
     <string name="delete_poll_dialog_content">مطمئنید که می خواهید این نظرسنجی را بردارید؟ پس از این کار، قادر به بازگردانیش نیستید.</string>
@@ -3019,7 +3012,7 @@
         <item quantity="other">نتیجهٔ نهایی بر مبنای %1$d رأی</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
-        <item quantity="one">رأیی داده نشده</item>
+        <item quantity="one">۱ رأی داده شده. برای دیدن نتیجه، رأی دهید</item>
         <item quantity="other">%1$d رأی داده شده. برای دیدن نتیجه، رأی دهید</item>
     </plurals>
     <plurals name="poll_total_vote_count_before_ended_and_voted">
@@ -3032,7 +3025,7 @@
     </plurals>
     <string name="preference_system_settings">تنظیمات سامانه</string>
     <string name="preference_versions">نگارش‌ها</string>
-    <string name="preference_help_summary">کمک در استفاده از المنت</string>
+    <string name="template_preference_help_summary">کمک در استفاده از المنت</string>
     <string name="preference_help_title">کمک و پشتیانی</string>
     <string name="preference_help">کمک</string>
     <string name="preference_root_legals">موارد حقوقی</string>
@@ -3045,7 +3038,7 @@
     <string name="analytics_opt_in_list_item_2">ما اطّلاعات را با سوم‌شخص‌ها هم‌رسانی <b>نمی‌کنیم</b></string>
     <string name="analytics_opt_in_list_item_1">ما هیچ دادهٔ حسابی را ذخیره یا نمایه <b>نمی‌کنیم</b></string>
     <string name="analytics_opt_in_content_link">این‌جا</string>
-    <string name="analytics_opt_in_title">کمک به بهبود المنت</string>
+    <string name="template_analytics_opt_in_title">کمک به بهبود المنت</string>
     <string name="action_enable">به کار انداختن</string>
     <string name="restart_the_application_to_apply_changes">برای اثربخشی تغییر، برنامه را دوباره اجرا کنید.</string>
     <string name="labs_enable_latex_maths">به کار انداختن ریاضیات لاتک</string>
@@ -3059,9 +3052,9 @@
     <string name="labs_auto_report_uisi_desc">سامانه‌تان هنگام‌ مواجهه با خطای ناتوانی در رمزگشایی، گزارش‌ها را به صورت خودکار خواهد فرستاد</string>
     <string name="labs_auto_report_uisi">گزارش خودکار خطاهای رمزگشایی.</string>
     <string name="login_splash_already_have_account">از پیش حساب دارم</string>
-    <string name="ftue_auth_carousel_3_title">پیام‌رسانی امن.</string>
-    <string name="ftue_auth_carousel_2_title">شما کنترل می‌کنید.</string>
-    <string name="ftue_auth_carousel_1_title">صاحب گفت‌وگوهایتان باشید.</string>
+    <string name="ftue_auth_carousel_encrypted_title">پیام‌رسانی امن.</string>
+    <string name="ftue_auth_carousel_control_title">شما کنترل می‌کنید.</string>
+    <string name="ftue_auth_carousel_secure_title">صاحب گفت‌وگوهایتان باشید.</string>
     <string name="tooltip_attachment_location">هم‌رسانی مکان</string>
     <string name="settings_enable_location_sharing">به کار انداختن هم‌رسانی مکان</string>
     <string name="location_share_external">گشودن با</string>
@@ -3078,6 +3071,55 @@
     <string name="room_profile_section_restore_security">بازیابی رمزنگاری</string>
     <string name="sent_location">مکانش را هم‌رسانی کرد</string>
     <string name="login_splash_create_account">ایجاد حساب</string>
-    <string name="ftue_auth_carousel_title_messaging">پیام‌رسانی برای گروهتان.</string>
+    <string name="ftue_auth_carousel_workplace_title">پیام‌رسانی برای گروهتان.</string>
     <string name="attachment_type_location">مکان</string>
+    <string name="labs_render_locations_in_timeline">پرداخت مکان‌های کاربری در خط زمانی</string>
+    <string name="settings_enable_location_sharing_summary">پس از به کار افتادن، قادر خواهید بد مکانتان را به هر اتاقی بفرستید</string>
+    <string name="template_location_not_available_dialog_content">${app_name} نتوانست به مکانتان دست یابد. لطفاً بعداً دوباره تلاش کنید.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} نتوانست به مکانتان دست یابد</string>
+    <string name="closed_poll_option_description">نتایج تنها هنگامی که نظرسنجی را پایان دهید آشکار می‌شوند</string>
+    <string name="open_poll_option_description">رأی دهندگان به محض دادن رأی، نتایج را می‌بینند</string>
+    <string name="a11y_trust_level_misconfigured">سطح اطمنیان بد پیکربندی شده</string>
+    <string name="encryption_misconfigured">رمزنگاری بد پیکربندی شده</string>
+    <string name="room_member_override_nick_color">پایمالی رنگ نام مستعار</string>
+    <string name="contact_admin_to_restore_encryption">لطفاً برای بازگردانی رمزنگاری به یه وضعیتی معتبر، با مدیری تماس بگیرید.</string>
+    <string name="encryption_has_been_misconfigured">رمزنگاری بد پیکربندی شده.</string>
+    <string name="ftue_auth_carousel_encrypted_body">رمزنگاشتهٔ سرتاسری و بدون نیاز به شماره تلفن. بدون تبلیغات یا داده‌کاوی.</string>
+    <string name="ftue_auth_carousel_control_body">مکان نگه‌داری گفت‌وگوهایتان را برگزینید که به شما کنترل و استقلال می‌هد. وصل شده با ماتریکس.</string>
+    <string name="ftue_auth_carousel_secure_body">ارتباطات امن و مستقل که به شما همان سطح محرمانگی گفت‌وگوی رودررو در خانهٔ خودتان را می‌دهد.</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">از آن‌جا که رمزنگاری بد پیکربندی شده، نمی‌توانید پیام بفرستید. برای گشودن تنظیمات، بزنید.</string>
+    <string name="room_unsupported_e2e_algorithm">از آن‌جا که رمزنگاری بد پیکربندی شده، نمی‌توانید پیام بفرستید. لطفاً برای بازگردانی رمزنگاری به یه وضعیت معتبر، با مدیری تماس بگیرید.</string>
+    <string name="message_bubbles">نمایش حباب‌های پیام</string>
+    <string name="location_timeline_failed_to_load_map">شکست در بار کردن نقشه</string>
+    <string name="a11y_static_map_image">نقشه</string>
+    <string name="labs_enable_thread_messages_desc">نکته: کاره دوباره آغاز خواهد شد</string>
+    <string name="labs_enable_thread_messages">به کار انداختن ویام‌های رشته‌ای</string>
+    <string name="ftue_auth_use_case_connect_to_server">وصل شدن به کارساز</string>
+    <string name="ftue_auth_use_case_join_existing_server">دنبال پیوستن به کارسازهای موجودید؟</string>
+    <string name="ftue_auth_use_case_skip_partial">از این پرسش بگذرید</string>
+    <string name="ftue_auth_use_case_skip">هنوز اطمینان ندارید؟ می‌توانید %s</string>
+    <string name="ftue_auth_use_case_option_three">اجتماع‌ها</string>
+    <string name="ftue_auth_use_case_option_two">گروه‌ها</string>
+    <string name="ftue_auth_use_case_option_one">دوستان و خانواده</string>
+    <string name="ftue_auth_use_case_subtitle">کمکتان می‌کنیم وصل بمانید.</string>
+    <string name="ftue_auth_use_case_title">بیش‌تر با چه‌کسی گپ می‌زنید؟</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">هم‌اکنون دارید این رشته را می‌بینید!</string>
+    <string name="view_in_room">دیدن در اتاق</string>
+    <string name="reply_in_thread">پاسخ در رشته</string>
+    <string name="command_not_supported_in_threads">دستور «%s» شناخته شده است ولی در رشته‌ها پشتیبانی نمی‌شود.</string>
+    <string name="search_thread_from_a_thread">از یک رشته</string>
+    <string name="thread_list_empty_notice">ایما: روی پیام نگه داشته و از «%s» استفاده کنید.</string>
+    <string name="thread_list_empty_subtitle">رشته‌ها در روی موضوع نگه داشت گفت‌وگوها و آسانی ردیابیشان کمک می‌کنند.</string>
+    <string name="thread_list_empty_title">ساماندهی شده نگه داشتن گفت‌وگوها با رشته‌ها</string>
+    <string name="thread_list_modal_my_threads_subtitle">نمایش تمامی رشته‌ّایی که در آن مشارکت داشته‌اید</string>
+    <string name="thread_list_modal_my_threads_title">رشته‌هایم</string>
+    <string name="thread_list_modal_all_threads_subtitle">نمایش تمامی رشته‌ها از اتاق جاری</string>
+    <string name="thread_list_modal_all_threads_title">تمامی رشته‌ها</string>
+    <string name="thread_list_modal_title">پالایش</string>
+    <string name="thread_list_title">رشته‌ها</string>
+    <string name="thread_timeline_title">رشته</string>
+    <string name="room_threads_filter">پالایش رشته‌ها در اتاق</string>
+    <string name="action_thread_copy_link_to_thread">رونوشت از پیوند به رشته</string>
+    <string name="action_thread_view_in_room">دیدن در اتاق</string>
+    <string name="action_view_threads">دیدن رشته‌ها</string>
 </resources>

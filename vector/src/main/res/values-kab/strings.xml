@@ -2273,7 +2273,6 @@
     <string name="no_permissions_to_start_webrtc_call">Ur tesɛiḍ ara tasiregt ad tebduḍ asiwel deg texxamt-a</string>
     <string name="sent_a_reaction">Issedmer s: %s</string>
     <string name="settings_troubleshoot_test_push_loop_title">Sekyed Push</string>
-    <string name="search_is_not_supported_in_e2e_room">Anadi deg texxamin yettwawgelhen ur yettusefrak ara akka tura.</string>
     <string name="search_banned_user_hint">Sizdeg iseqdacen yettwagedlen</string>
     <string name="permissions_denied_add_contact">Mudd tisirag i unekcum ɣer yinermisen-inek;inem.</string>
     <string name="permissions_denied_qr_code">I usmiḍen n tengalt QR, tesriḍ ad tsirgeḍ anekcum ɣer tkamiṛat.</string>

@@ -1,0 +1,2 @@
+Bu sürümdeki ana değişiklikler: Ayarlarda kimlik sunucusu politika(lar)ını görünür yapın. Android Auto desteğini geçici olarak kaldırın.
+Tam değişiklik günlüğü: https://github.com/vector-im/element-android/releases/tag/v1.3.3

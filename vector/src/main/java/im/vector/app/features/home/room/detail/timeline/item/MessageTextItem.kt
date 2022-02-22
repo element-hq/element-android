@@ -80,6 +80,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
             safePreviewUrlRetriever.addListener(attributes.informationData.eventId, previewUrlViewUpdater)
         }
         holder.previewUrlView.delegate = previewUrlCallback
+        holder.previewUrlView.renderMessageLayout(attributes.informationData.messageLayout)
 
         if (useBigFont) {
             holder.messageView.textSize = 44F
@@ -121,7 +122,7 @@ abstract class MessageTextItem : AbsMessageItem<MessageTextItem.Holder>() {
         previewUrlRetriever?.removeListener(attributes.informationData.eventId, previewUrlViewUpdater)
     }
 
-    override fun getViewType() = STUB_ID
+    override fun getViewStubId() = STUB_ID
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val messageView by bind<AppCompatTextView>(R.id.messageTextView)

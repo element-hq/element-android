@@ -57,11 +57,6 @@
     <attr name="vctr_list_separator_on_surface" format="color" />
 
     <!-- Other colors, which are not in the palette -->
-    <attr name="vctr_unread_room_badge" format="color" />
-    <color name="vctr_unread_room_badge_light">#FF61708B</color>
-    <color name="vctr_unread_room_badge_dark">#FF61708B</color>
-    <color name="vctr_unread_room_badge_black">#FF61708B</color>
-
     <attr name="vctr_fab_label_bg" format="color" />
     <color name="vctr_fab_label_bg_light">@android:color/white</color>
     <color name="vctr_fab_label_bg_dark">#FF181B21</color>
@@ -137,4 +132,5 @@
     <attr name="vctr_presence_indicator_offline" format="color" />
     <color name="vctr_presence_indicator_offline_light">@color/palette_gray_100</color>
     <color name="vctr_presence_indicator_offline_dark">@color/palette_gray_450</color>
+
 </resources>

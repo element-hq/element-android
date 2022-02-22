@@ -21,25 +21,43 @@ import androidx.recyclerview.widget.RecyclerView
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import im.vector.app.R
 import im.vector.app.features.autocomplete.AutocompleteClickListener
 import im.vector.app.features.autocomplete.RecyclerViewPresenter
+import org.matrix.android.sdk.api.pushrules.SenderNotificationPermissionCondition
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
+import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.room.members.RoomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.members.roomMemberQueryParams
 import org.matrix.android.sdk.api.session.room.model.Membership
+import org.matrix.android.sdk.api.session.room.model.PowerLevelsContent
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
+import org.matrix.android.sdk.api.util.MatrixItem
 
 class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
                                                               @Assisted val roomId: String,
-                                                              session: Session,
+                                                              private val session: Session,
                                                               private val controller: AutocompleteMemberController
-) : RecyclerViewPresenter<RoomMemberSummary>(context), AutocompleteClickListener<RoomMemberSummary> {
+) : RecyclerViewPresenter<AutocompleteMemberItem>(context), AutocompleteClickListener<AutocompleteMemberItem> {
+
+    /* ==========================================================================================
+     * Fields
+     * ========================================================================================== */
 
     private val room by lazy { session.getRoom(roomId)!! }
+
+    /* ==========================================================================================
+     * Init
+     * ========================================================================================== */
 
     init {
         controller.listener = this
     }
+
+    /* ==========================================================================================
+     * Public api
+     * ========================================================================================== */
 
     fun clear() {
         controller.listener = null
@@ -50,29 +68,100 @@ class AutocompleteMemberPresenter @AssistedInject constructor(context: Context,
         fun create(roomId: String): AutocompleteMemberPresenter
     }
 
+    /* ==========================================================================================
+     * Specialization
+     * ========================================================================================== */
+
     override fun instantiateAdapter(): RecyclerView.Adapter<*> {
         return controller.adapter
     }
 
-    override fun onItemClick(t: RoomMemberSummary) {
+    override fun onItemClick(t: AutocompleteMemberItem) {
         dispatchClick(t)
     }
 
     override fun onQuery(query: CharSequence?) {
-        val queryParams = roomMemberQueryParams {
-            displayName = if (query.isNullOrBlank()) {
-                QueryStringValue.IsNotEmpty
-            } else {
-                QueryStringValue.Contains(query.toString(), QueryStringValue.Case.INSENSITIVE)
+        val queryParams = createQueryParams(query)
+        val membersHeader = createMembersHeader()
+        val members = createMemberItems(queryParams)
+        val everyone = createEveryoneItem(query)
+        // add headers only when user can notify everyone
+        val canAddHeaders = canNotifyEveryone()
+
+        val items = mutableListOf<AutocompleteMemberItem>().apply {
+            if (members.isNotEmpty()) {
+                if (canAddHeaders) {
+                    add(membersHeader)
+                }
+                addAll(members)
             }
-            memberships = listOf(Membership.JOIN)
-            excludeSelf = true
+            everyone?.let {
+                val everyoneHeader = createEveryoneHeader()
+                add(everyoneHeader)
+                add(it)
+            }
         }
-        val members = room.getRoomMembers(queryParams)
-                .asSequence()
-                .sortedBy { it.displayName }
-                .disambiguate()
-        controller.setData(members.toList())
+
+        controller.setData(items)
+    }
+
+    /* ==========================================================================================
+     * Helper methods
+     * ========================================================================================== */
+
+    private fun createQueryParams(query: CharSequence?) = roomMemberQueryParams {
+        displayName = if (query.isNullOrBlank()) {
+            QueryStringValue.IsNotEmpty
+        } else {
+            QueryStringValue.Contains(query.toString(), QueryStringValue.Case.INSENSITIVE)
+        }
+        memberships = listOf(Membership.JOIN)
+        excludeSelf = true
+    }
+
+    private fun createMembersHeader() =
+            AutocompleteMemberItem.Header(
+                    ID_HEADER_MEMBERS,
+                    context.getString(R.string.room_message_autocomplete_users)
+            )
+
+    private fun createMemberItems(queryParams: RoomMemberQueryParams) =
+            room.getRoomMembers(queryParams)
+                    .asSequence()
+                    .sortedBy { it.displayName }
+                    .disambiguate()
+                    .map { AutocompleteMemberItem.RoomMember(it) }
+                    .toList()
+
+    private fun createEveryoneHeader() =
+            AutocompleteMemberItem.Header(
+                    ID_HEADER_EVERYONE,
+                    context.getString(R.string.room_message_autocomplete_notification)
+            )
+
+    private fun createEveryoneItem(query: CharSequence?) =
+            room.roomSummary()
+                    ?.takeIf { canNotifyEveryone() }
+                    ?.takeIf { query.isNullOrBlank() || MatrixItem.NOTIFY_EVERYONE.startsWith("@$query") }
+                    ?.let {
+                        AutocompleteMemberItem.Everyone(it)
+                    }
+
+    private fun canNotifyEveryone() = session.resolveSenderNotificationPermissionCondition(
+            Event(
+                    senderId = session.myUserId,
+                    roomId = roomId
+            ),
+            SenderNotificationPermissionCondition(PowerLevelsContent.NOTIFICATIONS_ROOM_KEY)
+    )
+
+    /* ==========================================================================================
+     * Const
+     * ========================================================================================== */
+
+    companion object {
+        private const val ID_HEADER_MEMBERS = "ID_HEADER_MEMBERS"
+        private const val ID_HEADER_EVERYONE = "ID_HEADER_EVERYONE"
     }
 }
 

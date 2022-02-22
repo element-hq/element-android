@@ -1,9 +1,41 @@
-### Pull Request Checklist
+<!-- Please read [CONTRIBUTING.md](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md) before submitting your pull request -->
+ 
+## Type of change
 
-<!--
- Please read [CONTRIBUTING.md](https://github.com/vector-im/element-android/blob/develop/CONTRIBUTING.md) before submitting your pull request
- Depending on the Pull Request content, it can be acceptable if some of the following checkboxes stay unchecked.
- -->
+- [ ] Feature
+- [ ] Bugfix
+- [ ] Technical
+- [ ] Other :
+
+## Content
+
+<!-- Describe shortly what has been changed -->
+
+## Motivation and context
+
+<!-- Provide link to the corresponding issue if applicable or explain the context -->
+
+## Screenshots / GIFs
+
+<!-- Only if UI have been changed -->
+
+## Tests
+
+<!-- Explain how you tested your development -->
+
+- Step 1
+- Step 2
+- Step ...
+
+## Tested devices
+
+- [ ] Physical
+- [ ] Emulator
+- OS version(s):
+
+## Checklist
+
+<!-- Depending on the Pull Request content, it can be acceptable if some of the following checkboxes stay unchecked. -->
 
 - [ ] Changes has been tested on an Android device or Android emulator with API 21
 - [ ] UI change has been tested on both light and dark themes

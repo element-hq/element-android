@@ -16,7 +16,6 @@
 
 package im.vector.app.features.notifications
 
-import android.content.Context
 import android.graphics.Bitmap
 import androidx.core.app.NotificationCompat
 import androidx.core.app.Person
@@ -28,11 +27,9 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class RoomGroupMessageCreator @Inject constructor(
-        private val iconLoader: IconLoader,
-        private val bitmapLoader: BitmapLoader,
+        private val bitmapLoader: NotificationBitmapLoader,
         private val stringProvider: StringProvider,
-        private val notificationUtils: NotificationUtils,
-        private val appContext: Context
+        private val notificationUtils: NotificationUtils
 ) {
 
     fun createRoomMessage(events: List<NotifiableMessageEvent>, roomId: String, userDisplayName: String, userAvatarUrl: String?): RoomNotification.Message {
@@ -41,7 +38,7 @@ class RoomGroupMessageCreator @Inject constructor(
         val roomIsGroup = !firstKnownRoomEvent.roomIsDirect
         val style = NotificationCompat.MessagingStyle(Person.Builder()
                 .setName(userDisplayName)
-                .setIcon(iconLoader.getUserIcon(userAvatarUrl))
+                .setIcon(bitmapLoader.getUserIcon(userAvatarUrl))
                 .setKey(firstKnownRoomEvent.matrixID)
                 .build()
         ).also {
@@ -92,7 +89,7 @@ class RoomGroupMessageCreator @Inject constructor(
             } else {
                 Person.Builder()
                         .setName(event.senderName)
-                        .setIcon(iconLoader.getUserIcon(event.senderAvatarPath))
+                        .setIcon(bitmapLoader.getUserIcon(event.senderAvatarPath))
                         .setKey(event.senderId)
                         .build()
             }

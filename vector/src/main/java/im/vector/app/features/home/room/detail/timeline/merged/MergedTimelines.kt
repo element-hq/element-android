@@ -110,7 +110,7 @@ class MergedTimelines(
         secondaryTimeline.removeAllListeners()
     }
 
-    override fun start() {
+    override fun start(rootThreadEventId: String?) {
         mainTimeline.start()
         secondaryTimeline.start()
     }

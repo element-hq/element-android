@@ -36,6 +36,12 @@ allprojects {
     apply plugin: "org.jlleitschuh.gradle.ktlint"
 
     repositories {
+        mavenCentral {
+            content {
+                groups.mavenCentral.regex.each { includeGroupByRegex it }
+                groups.mavenCentral.group.each { includeGroup it }
+            }
+        }
         maven {
             url 'https://jitpack.io'
             content {
@@ -57,12 +63,6 @@ allprojects {
             content {
                 groups.google.regex.each { includeGroupByRegex it }
                 groups.google.group.each { includeGroup it }
-            }
-        }
-        mavenCentral {
-            content {
-                groups.mavenCentral.regex.each { includeGroupByRegex it }
-                groups.mavenCentral.group.each { includeGroup it }
             }
         }
         //noinspection JcenterRepositoryObsolete
@@ -142,6 +142,11 @@ project(":diff-match-patch") {
     sonarqube {
         skipProject = true
     }
+}
+
+// Global configurations across all modules
+ext {
+    isThreadingEnabled = true
 }
 
 //project(":matrix-sdk-android") {

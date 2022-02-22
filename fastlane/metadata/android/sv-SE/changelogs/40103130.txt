@@ -1,0 +1,2 @@
+Huvudsakliga ändringar i den här versionen: Första ändringen på introduktionsskärmar, inklusive opt-in för statistik. Stöd för händelser med matte tillagd i experiment.
+Full ändringslogg: https://github.com/vector-im/element-android/releases/tag/v1.3.13

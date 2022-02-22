@@ -104,7 +104,7 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
                 setState { copy(joinActionState = Loading()) }
                 session.coroutineScope.launch(Dispatchers.IO) {
                     try {
-                        session.getRoom(initialState.spaceId)?.join()
+                        session.spaceService().joinSpace(initialState.spaceId)
                         setState { copy(joinActionState = Success(Unit)) }
                     } catch (failure: Throwable) {
                         setState { copy(joinActionState = Fail(failure)) }
@@ -116,7 +116,7 @@ class SpaceInviteBottomSheetViewModel @AssistedInject constructor(
                 setState { copy(rejectActionState = Loading()) }
                 session.coroutineScope.launch(Dispatchers.IO) {
                     try {
-                        session.getRoom(initialState.spaceId)?.leave()
+                        session.spaceService().leaveSpace(initialState.spaceId)
                         setState { copy(rejectActionState = Success(Unit)) }
                     } catch (failure: Throwable) {
                         setState { copy(rejectActionState = Fail(failure)) }

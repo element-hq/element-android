@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail
 import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.Uninitialized
+import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.initsync.SyncStatusService
@@ -26,6 +27,7 @@ import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.RoomMemberSummary
 import org.matrix.android.sdk.api.session.room.model.RoomSummary
 import org.matrix.android.sdk.api.session.sync.SyncState
+import org.matrix.android.sdk.api.session.threads.ThreadNotificationBadgeState
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import org.matrix.android.sdk.api.session.widgets.model.WidgetType
 
@@ -47,6 +49,7 @@ data class JitsiState(
 data class RoomDetailViewState(
         val roomId: String,
         val eventId: String?,
+        val isInviteAlreadyAccepted: Boolean,
         val myRoomMember: Async<RoomMemberSummary> = Uninitialized,
         val asyncInviter: Async<RoomMemberSummary> = Uninitialized,
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
@@ -67,22 +70,30 @@ data class RoomDetailViewState(
         val isAllowedToSetupEncryption: Boolean = true,
         val hasFailedSending: Boolean = false,
         val jitsiState: JitsiState = JitsiState(),
-        val switchToParentSpace: Boolean = false
+        val switchToParentSpace: Boolean = false,
+        val rootThreadEventId: String? = null,
+        val threadNotificationBadgeState: ThreadNotificationBadgeState = ThreadNotificationBadgeState()
 ) : MavericksState {
 
-    constructor(args: RoomDetailArgs) : this(
+    constructor(args: TimelineArgs) : this(
             roomId = args.roomId,
             eventId = args.eventId,
+            isInviteAlreadyAccepted = args.isInviteAlreadyAccepted,
             // Also highlight the target event, if any
             highlightedEventId = args.eventId,
-            switchToParentSpace = args.switchToParentSpace
+            switchToParentSpace = args.switchToParentSpace,
+            rootThreadEventId = args.threadTimelineArgs?.rootThreadEventId
     )
 
     fun isWebRTCCallOptionAvailable() = (asyncRoomSummary.invoke()?.joinedMembersCount ?: 0) <= 2
+
+    fun isSearchAvailable() = asyncRoomSummary()?.isEncrypted == false
 
     // This checks directly on the active room widgets.
     // It can differs for a short period of time on the JitsiState as its computed async.
     fun hasActiveJitsiWidget() = activeRoomWidgets()?.any { it.type == WidgetType.Jitsi && it.isActive }.orFalse()
 
     fun isDm() = asyncRoomSummary()?.isDirect == true
+
+    fun isThreadTimeline() = rootThreadEventId != null
 }

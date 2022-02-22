@@ -68,11 +68,13 @@ import javax.inject.Singleton
  */
 @Singleton
 class BugReporter @Inject constructor(
+        private val context: Context,
         private val activeSessionHolder: ActiveSessionHolder,
         private val versionProvider: VersionProvider,
         private val vectorPreferences: VectorPreferences,
         private val vectorFileLogger: VectorFileLogger,
-        private val systemLocaleProvider: SystemLocaleProvider
+        private val systemLocaleProvider: SystemLocaleProvider,
+        private val matrix: Matrix
 ) {
     var inMultiWindowMode = false
 
@@ -153,7 +155,6 @@ class BugReporter @Inject constructor(
     /**
      * Send a bug report.
      *
-     * @param context           the application context
      * @param reportType        The report type (bug, suggestion, feedback)
      * @param withDevicesLogs   true to include the device log
      * @param withCrashLogs     true to include the crash logs
@@ -163,8 +164,7 @@ class BugReporter @Inject constructor(
      * @param listener          the listener
      */
     @SuppressLint("StaticFieldLeak")
-    fun sendBugReport(context: Context,
-                      reportType: ReportType,
+    fun sendBugReport(reportType: ReportType,
                       withDevicesLogs: Boolean,
                       withCrashLogs: Boolean,
                       withKeyRequestHistory: Boolean,
@@ -182,7 +182,7 @@ class BugReporter @Inject constructor(
             var reportURL: String? = null
             withContext(Dispatchers.IO) {
                 var bugDescription = theBugDescription
-                val crashCallStack = getCrashDescription(context)
+                val crashCallStack = getCrashDescription()
 
                 if (null != crashCallStack) {
                     bugDescription += "\n\n\n\n--------------------------------- crash call stack ---------------------------------\n"
@@ -203,7 +203,7 @@ class BugReporter @Inject constructor(
                 }
 
                 if (!mIsCancelled && (withCrashLogs || withDevicesLogs)) {
-                    val gzippedLogcat = saveLogCat(context, false)
+                    val gzippedLogcat = saveLogCat(false)
 
                     if (null != gzippedLogcat) {
                         if (gzippedFiles.size == 0) {
@@ -213,7 +213,7 @@ class BugReporter @Inject constructor(
                         }
                     }
 
-                    val crashDescription = getCrashFile(context)
+                    val crashDescription = getCrashFile()
                     if (crashDescription.exists()) {
                         val compressedCrashDescription = compressFile(crashDescription)
 
@@ -265,8 +265,8 @@ class BugReporter @Inject constructor(
                     // build the multi part request
                     val builder = BugReporterMultipartBody.Builder()
                             .addFormDataPart("text", text)
-                            .addFormDataPart("app", rageShakeAppNameForReport(context, reportType))
-                            .addFormDataPart("user_agent", Matrix.getInstance(context).getUserAgent())
+                            .addFormDataPart("app", rageShakeAppNameForReport(reportType))
+                            .addFormDataPart("user_agent", matrix.getUserAgent())
                             .addFormDataPart("user_id", userId)
                             .addFormDataPart("can_contact", canContact.toString())
                             .addFormDataPart("device_id", deviceId)
@@ -352,9 +352,9 @@ class BugReporter @Inject constructor(
                         }
                     }
 
-                    if (getCrashFile(context).exists()) {
+                    if (getCrashFile().exists()) {
                         builder.addFormDataPart("label", "crash")
-                        deleteCrashFile(context)
+                        deleteCrashFile()
                     }
 
                     val requestBody = builder.build()
@@ -487,20 +487,16 @@ class BugReporter @Inject constructor(
         activity.startActivity(BugReportActivity.intent(activity, reportType))
     }
 
-    private fun rageShakeAppNameForReport(context: Context, reportType: ReportType): String {
+    private fun rageShakeAppNameForReport(reportType: ReportType): String {
         // As per https://github.com/matrix-org/rageshake
         // app: Identifier for the application (eg 'riot-web').
         // Should correspond to a mapping configured in the configuration file for github issue reporting to work.
         // (see R.string.bug_report_url for configured RS server)
-        return when (reportType) {
+        return context.getString(when (reportType) {
             ReportType.AUTO_UISI_SENDER,
-            ReportType.AUTO_UISI -> {
-                context.getString(R.string.bug_report_auto_uisi_app_name)
-            }
-            else                 -> {
-               context.getString(R.string.bug_report_app_name)
-            }
-        }
+            ReportType.AUTO_UISI -> R.string.bug_report_auto_uisi_app_name
+            else                 -> R.string.bug_report_app_name
+        })
     }
 // ==============================================================================================================
 // crash report management
@@ -509,20 +505,17 @@ class BugReporter @Inject constructor(
     /**
      * Provides the crash file
      *
-     * @param context the context
      * @return the crash file
      */
-    private fun getCrashFile(context: Context): File {
+    private fun getCrashFile(): File {
         return File(context.cacheDir.absolutePath, CRASH_FILENAME)
     }
 
     /**
      * Remove the crash file
-     *
-     * @param context
      */
-    fun deleteCrashFile(context: Context) {
-        val crashFile = getCrashFile(context)
+    fun deleteCrashFile() {
+        val crashFile = getCrashFile()
 
         if (crashFile.exists()) {
             crashFile.delete()
@@ -535,11 +528,10 @@ class BugReporter @Inject constructor(
     /**
      * Save the crash report
      *
-     * @param context          the context
      * @param crashDescription teh crash description
      */
-    fun saveCrashReport(context: Context, crashDescription: String) {
-        val crashFile = getCrashFile(context)
+    fun saveCrashReport(crashDescription: String) {
+        val crashFile = getCrashFile()
 
         if (crashFile.exists()) {
             crashFile.delete()
@@ -557,11 +549,10 @@ class BugReporter @Inject constructor(
     /**
      * Read the crash description file and return its content.
      *
-     * @param context teh context
      * @return the crash description
      */
-    private fun getCrashDescription(context: Context): String? {
-        val crashFile = getCrashFile(context)
+    private fun getCrashDescription(): String? {
+        val crashFile = getCrashFile()
 
         if (crashFile.exists()) {
             try {
@@ -650,11 +641,10 @@ class BugReporter @Inject constructor(
     /**
      * Save the logcat
      *
-     * @param context       the context
      * @param isErrorLogcat true to save the error logcat
      * @return the file if the operation succeeds
      */
-    private fun saveLogCat(context: Context, isErrorLogcat: Boolean): File? {
+    private fun saveLogCat(isErrorLogcat: Boolean): File? {
         val logCatErrFile = File(context.cacheDir.absolutePath, if (isErrorLogcat) LOG_CAT_ERROR_FILENAME else LOG_CAT_FILENAME)
 
         if (logCatErrFile.exists()) {

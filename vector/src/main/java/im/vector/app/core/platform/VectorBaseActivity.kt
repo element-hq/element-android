@@ -67,8 +67,7 @@ import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.AnalyticsTracker
-import im.vector.app.features.analytics.plan.Screen
-import im.vector.app.features.analytics.screen.ScreenEvent
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.consent.ConsentNotGivenHelper
 import im.vector.app.features.navigation.Navigator
@@ -97,8 +96,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
      * Analytics
      * ========================================================================================== */
 
-    protected var analyticsScreenName: Screen.ScreenName? = null
-    private var screenEvent: ScreenEvent? = null
+    protected var analyticsScreenName: MobileScreen.ScreenName? = null
 
     protected lateinit var analyticsTracker: AnalyticsTracker
 
@@ -337,7 +335,9 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     override fun onResume() {
         super.onResume()
         Timber.i("onResume Activity ${javaClass.simpleName}")
-        screenEvent = analyticsScreenName?.let { ScreenEvent(it) }
+        analyticsScreenName?.let {
+            analyticsTracker.screen(MobileScreen(screenName = it))
+        }
         configurationViewModel.onActivityResumed()
 
         if (this !is BugReportActivity && vectorPreferences.useRageshake()) {
@@ -376,7 +376,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
 
     override fun onPause() {
         super.onPause()
-        screenEvent?.send(analyticsTracker, analyticsScreenName)
         Timber.i("onPause Activity ${javaClass.simpleName}")
 
         rageShake.stop()

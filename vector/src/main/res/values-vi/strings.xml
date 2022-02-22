@@ -1430,7 +1430,6 @@
         <item quantity="other">%d phòng</item>
     </plurals>
     <string name="directory_search_results_title">Duyệt danh mục phòng</string>
-    <string name="search_is_not_supported_in_e2e_room">Tìm kiếm trong phòng mã hóa chưa được hỗ trợ.</string>
     <string name="tab_title_search_files">FILES</string>
     <string name="tab_title_search_people">NGƯỜI</string>
     <string name="tab_title_search_messages">TIN NHẮN</string>
@@ -1705,15 +1704,10 @@
     <string name="create_poll_question_hint">Câu hỏi hoặc chủ đề</string>
     <string name="create_poll_question_title">Câu hỏi hoặc chủ đề thăm dò ý kiến</string>
     <string name="create_poll_title">Tạo Cuộc thăm dò ý kiến</string>
-    <string name="link_this_email_with_your_account">%s trong Cài đặt để nhận lời mời trực tiếp trong Element.</string>
+    <string name="template_link_this_email_with_your_account">%s trong Cài đặt để nhận lời mời trực tiếp trong ${app_name}.</string>
     <string name="link_this_email_settings_link">Liên kết email này với tài khoản của bạn</string>
     <string name="this_invite_to_this_space_was_sent">Lời mời này đến Space này đã được gửi đến %s không được liên kết với tài khoản của bạn</string>
     <string name="this_invite_to_this_room_was_sent">Lời mời này đến phòng này đã được gửi đến %s không được liên kết với tài khoản của bạn</string>
-    <string name="to_help_space_members_find_and_join">Để giúp các thành viên Space tìm và tham gia một phòng riêng, hãy vào cài đặt của căn phòng đó bằng cách nhấn vào hình đại diện.</string>
-    <string name="help_space_members">Giúp các thành viên Space tìm phòng riêng</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Điều này giúp các phòng dễ dàng giữ riêng tư cho một Space, đồng thời cho phép mọi người trong Space tìm và tham gia cùng họ. Tất cả các phòng mới trong một Space sẽ có tùy chọn này có sẵn.</string>
-    <string name="help_people_in_spaces_find_and_join">Giúp mọi người trong Space tự tìm và tham gia phòng riêng, không cần phải tự mời mọi người.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Mới: Cho phép mọi người trong Space tìm và tham gia phòng riêng</string>
     <string name="upgrade_room_for_restricted_note">Xin lưu ý nâng cấp sẽ tạo ra một phiên bản mới của căn phòng. Tất cả các tin nhắn hiện tại sẽ ở trong phòng lưu trữ này.</string>
     <string name="upgrade_room_for_restricted_no_param">Bất cứ ai trong Space cha mẹ sẽ có thể tìm và tham gia căn phòng này - không cần phải mời mọi người theo cách thủ công. Bạn sẽ có thể thay đổi điều này trong cài đặt phòng bất cứ lúc nào.</string>
     <string name="upgrade_room_for_restricted">Bất kỳ ai trong %s sẽ có thể tìm và tham gia phòng này - không cần phải mời mọi người theo cách thủ công. Bạn sẽ có thể thay đổi điều này trong cài đặt phòng bất cứ lúc nào.</string>
@@ -1838,7 +1832,6 @@
     <string name="create_spaces_join_info_help">Để tham gia một Space hiện có, bạn cần một lời mời.</string>
     <string name="create_spaces_you_can_change_later">Bạn có thể thay đổi điều này sau</string>
     <string name="create_spaces_choose_type_label">Bạn muốn tạo ra loại Space nào\?</string>
-    <string name="create_spaces_type_header">Space là một cách mới để nhóm phòng và con người</string>
     <string name="your_private_space">Space riêng tư của bạn</string>
     <string name="your_public_space">Space công cộng của bạn</string>
     <string name="add_space">Thêm Space</string>
@@ -2918,10 +2911,10 @@
     <string name="analytics_opt_in_list_item_2">Chúng tôi <b>không </b> chia sẻ thông tin với bên thứ ba</string>
     <string name="analytics_opt_in_list_item_1">Chúng tôi <b>không</b> ghi âm hoặc tạo hồ sơ bất kỳ dữ liệu tài khoản nào</string>
     <string name="analytics_opt_in_content_link">ở đây</string>
-    <string name="analytics_opt_in_content">Giúp chúng tôi xác định các vấn đề và cải thiện Element bằng cách chia sẻ dữ liệu sử dụng ẩn danh. Để hiểu cách mọi người sử dụng nhiều thiết bị, chúng tôi sẽ tạo ra một mã định danh ngẫu nhiên, được chia sẻ bởi các thiết bị của bạn.
+    <string name="template_analytics_opt_in_content">Giúp chúng tôi xác định các vấn đề và cải thiện ${app_name} bằng cách chia sẻ dữ liệu sử dụng ẩn danh. Để hiểu cách mọi người sử dụng nhiều thiết bị, chúng tôi sẽ tạo ra một mã định danh ngẫu nhiên, được chia sẻ bởi các thiết bị của bạn.
 \n
 \nBạn có thể đọc tất cả các thuật ngữ của chúng tôi %s.</string>
-    <string name="analytics_opt_in_title">Giúp cải thiện Element</string>
+    <string name="template_analytics_opt_in_title">Giúp cải thiện ${app_name}</string>
     <string name="shortcut_disabled_reason_sign_out">Thiết bị đã bị đăng xuất!</string>
     <string name="shortcut_disabled_reason_room_left">Căn phòng đã bị bỏ lại!</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Chọn homeerver</string>
@@ -2969,7 +2962,7 @@
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Token đăng ký</string>
     <string name="preference_system_settings">Cài đặt hệ thống</string>
     <string name="preference_versions">Phiên bản</string>
-    <string name="preference_help_summary">Nhận trợ giúp về việc sử dụng Element</string>
+    <string name="template_preference_help_summary">Nhận trợ giúp về việc sử dụng ${app_name}</string>
     <string name="preference_help_title">Trợ giúp và hỗ trợ</string>
     <string name="preference_help">Trợ giúp</string>
     <string name="preference_root_legals">Pháp lý</string>

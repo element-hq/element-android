@@ -25,6 +25,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.core.util.Pair
 import im.vector.app.features.crypto.recover.SetupMode
 import im.vector.app.features.displayname.getBestName
+import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import im.vector.app.features.location.LocationData
 import im.vector.app.features.location.LocationSharingMode
 import im.vector.app.features.login.LoginConfig
@@ -49,7 +50,7 @@ interface Navigator {
 
     fun softLogout(context: Context)
 
-    fun openRoom(context: Context, roomId: String, eventId: String? = null, buildTask: Boolean = false)
+    fun openRoom(context: Context, roomId: String, eventId: String? = null, buildTask: Boolean = false, isInviteAlreadyAccepted: Boolean = false)
 
     sealed class PostSwitchSpaceAction {
         object None : PostSwitchSpaceAction()
@@ -145,7 +146,7 @@ interface Navigator {
                         inMemory: List<AttachmentData> = emptyList(),
                         options: ((MutableList<Pair<View, String>>) -> Unit)?)
 
-    fun openSearch(context: Context, roomId: String)
+    fun openSearch(context: Context, roomId: String, roomDisplayName: String?, roomAvatarUrl: String?)
 
     fun openDevTools(context: Context, roomId: String)
 
@@ -161,5 +162,9 @@ interface Navigator {
                             roomId: String,
                             mode: LocationSharingMode,
                             initialLocationData: LocationData?,
-                            locationOwnerId: String)
+                            locationOwnerId: String?)
+
+    fun openThread(context: Context, threadTimelineArgs: ThreadTimelineArgs, eventIdToNavigate: String? = null)
+
+    fun openThreadList(context: Context, threadTimelineArgs: ThreadTimelineArgs)
 }

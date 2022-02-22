@@ -256,7 +256,7 @@ class SpaceListViewModel @AssistedInject constructor(@Assisted initialState: Spa
     private fun handleLeaveSpace(action: SpaceListAction.LeaveSpace) {
         viewModelScope.launch {
             tryOrNull("Failed to leave space ${action.spaceSummary.roomId}") {
-                session.spaceService().getSpace(action.spaceSummary.roomId)?.leave(null)
+                session.spaceService().leaveSpace(action.spaceSummary.roomId)
             }
         }
     }

@@ -35,7 +35,19 @@ sealed class MatrixItem(
     data class UserItem(override val id: String,
                         override val displayName: String? = null,
                         override val avatarUrl: String? = null) :
-        MatrixItem(id, displayName?.removeSuffix(ircPattern), avatarUrl) {
+            MatrixItem(id, displayName?.removeSuffix(IRC_PATTERN), avatarUrl) {
+        init {
+            if (BuildConfig.DEBUG) checkId()
+        }
+
+        override fun updateAvatar(newAvatar: String?) = copy(avatarUrl = newAvatar)
+    }
+
+    data class EveryoneInRoomItem(override val id: String,
+                                  override val displayName: String = NOTIFY_EVERYONE,
+                                  override val avatarUrl: String? = null,
+                                  val roomDisplayName: String? = null) :
+            MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -46,7 +58,7 @@ sealed class MatrixItem(
     data class EventItem(override val id: String,
                          override val displayName: String? = null,
                          override val avatarUrl: String? = null) :
-        MatrixItem(id, displayName, avatarUrl) {
+            MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -57,7 +69,7 @@ sealed class MatrixItem(
     data class RoomItem(override val id: String,
                         override val displayName: String? = null,
                         override val avatarUrl: String? = null) :
-        MatrixItem(id, displayName, avatarUrl) {
+            MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -68,7 +80,7 @@ sealed class MatrixItem(
     data class SpaceItem(override val id: String,
                          override val displayName: String? = null,
                          override val avatarUrl: String? = null) :
-        MatrixItem(id, displayName, avatarUrl) {
+            MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -79,7 +91,7 @@ sealed class MatrixItem(
     data class RoomAliasItem(override val id: String,
                              override val displayName: String? = null,
                              override val avatarUrl: String? = null) :
-        MatrixItem(id, displayName, avatarUrl) {
+            MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -90,7 +102,7 @@ sealed class MatrixItem(
     data class GroupItem(override val id: String,
                          override val displayName: String? = null,
                          override val avatarUrl: String? = null) :
-        MatrixItem(id, displayName, avatarUrl) {
+            MatrixItem(id, displayName, avatarUrl) {
         init {
             if (BuildConfig.DEBUG) checkId()
         }
@@ -109,16 +121,22 @@ sealed class MatrixItem(
     /**
      * Return the prefix as defined in the matrix spec (and not extracted from the id)
      */
-    fun getIdPrefix() = when (this) {
-        is UserItem      -> '@'
-        is EventItem     -> '$'
+    private fun getIdPrefix() = when (this) {
+        is UserItem           -> '@'
+        is EventItem          -> '$'
         is SpaceItem,
-        is RoomItem      -> '!'
-        is RoomAliasItem -> '#'
-        is GroupItem     -> '+'
+        is RoomItem,
+        is EveryoneInRoomItem -> '!'
+        is RoomAliasItem      -> '#'
+        is GroupItem          -> '+'
     }
 
     fun firstLetterOfDisplayName(): String {
+        val displayName = when (this) {
+            // use the room display name for the notify everyone item
+            is EveryoneInRoomItem -> roomDisplayName
+            else                  -> displayName
+        }
         return (displayName?.takeIf { it.isNotBlank() } ?: id)
                 .let { dn ->
                     var startIndex = 0
@@ -151,7 +169,8 @@ sealed class MatrixItem(
     }
 
     companion object {
-        private const val ircPattern = " (IRC)"
+        private const val IRC_PATTERN = " (IRC)"
+        const val NOTIFY_EVERYONE = "@room"
     }
 }
 
@@ -170,6 +189,8 @@ fun RoomSummary.toMatrixItem() = if (roomType == RoomType.SPACE) {
 }
 
 fun RoomSummary.toRoomAliasMatrixItem() = MatrixItem.RoomAliasItem(canonicalAlias ?: roomId, displayName, avatarUrl)
+
+fun RoomSummary.toEveryoneInRoomMatrixItem() = MatrixItem.EveryoneInRoomItem(id = roomId, avatarUrl = avatarUrl, roomDisplayName = displayName)
 
 // If no name is available, use room alias as Riot-Web does
 fun PublicRoom.toMatrixItem() = MatrixItem.RoomItem(roomId, name ?: getPrimaryAlias() ?: "", avatarUrl)

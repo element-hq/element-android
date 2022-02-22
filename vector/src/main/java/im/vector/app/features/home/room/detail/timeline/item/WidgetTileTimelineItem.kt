@@ -41,7 +41,7 @@ abstract class WidgetTileTimelineItem : AbsBaseMessageItem<WidgetTileTimelineIte
     @EpoxyAttribute
     lateinit var attributes: Attributes
 
-    override fun getViewType() = STUB_ID
+    override fun getViewStubId() = STUB_ID
 
     @SuppressLint("SetTextI18n")
     override fun bind(holder: Holder) {

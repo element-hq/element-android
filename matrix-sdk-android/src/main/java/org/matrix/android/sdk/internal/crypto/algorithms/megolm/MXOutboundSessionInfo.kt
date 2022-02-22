@@ -35,7 +35,7 @@ internal class MXOutboundSessionInfo(
         val sessionLifetime = System.currentTimeMillis() - creationTime
 
         if (useCount >= rotationPeriodMsgs || sessionLifetime >= rotationPeriodMs) {
-            Timber.v("## needsRotation() : Rotating megolm session after " + useCount + ", " + sessionLifetime + "ms")
+            Timber.v("## needsRotation() : Rotating megolm session after $useCount, ${sessionLifetime}ms")
             needsRotation = true
         }
 

@@ -16,20 +16,32 @@
 
 package im.vector.app.features.location
 
-import android.content.res.Resources
 import im.vector.app.BuildConfig
-import im.vector.app.R
+import im.vector.app.core.resources.LocaleProvider
+import im.vector.app.core.resources.isRTL
+import im.vector.app.features.raw.wellknown.getElementWellknown
+import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.raw.RawService
+import org.matrix.android.sdk.api.session.Session
 import javax.inject.Inject
 
 class UrlMapProvider @Inject constructor(
-        private val resources: Resources
+        private val localeProvider: LocaleProvider,
+        private val session: Session,
+        private val rawService: RawService
 ) {
     private val keyParam = "?key=${BuildConfig.mapTilerKey}"
 
-    // This is static so no need for a fun
-    val mapUrl = buildString {
+    private val fallbackMapUrl = buildString {
         append(MAP_BASE_URL)
         append(keyParam)
+    }
+
+    suspend fun getMapUrl(): String {
+        val upstreamMapUrl = tryOrNull { rawService.getElementWellknown(session.sessionParams) }
+                ?.mapTileServerConfig
+                ?.mapStyleUrl
+        return upstreamMapUrl ?: fallbackMapUrl
     }
 
     fun buildStaticMapUrl(locationData: LocationData,
@@ -49,7 +61,7 @@ class UrlMapProvider @Inject constructor(
             append(height)
             append(".png")
             append(keyParam)
-            if (!resources.getBoolean(R.bool.is_rtl)) {
+            if (!localeProvider.isRTL()) {
                 // On LTR languages we want the legal mentions to be displayed on the bottom left of the image
                 append("&attribution=bottomleft")
             }

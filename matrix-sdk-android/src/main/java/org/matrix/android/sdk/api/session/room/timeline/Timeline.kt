@@ -43,7 +43,7 @@ interface Timeline {
     /**
      * This must be called before any other method after creating the timeline. It ensures the underlying database is open
      */
-    fun start()
+    fun start(rootThreadEventId: String? = null)
 
     /**
      * This must be called when you don't need the timeline. It ensures the underlying database get closed.

@@ -60,8 +60,6 @@ class RoomDetailRobot {
         pressBack()
         clickMenu(R.id.video_call)
         pressBack()
-        clickMenu(R.id.search)
-        pressBack()
     }
 
     fun crawlMessage(message: String) {

@@ -48,8 +48,7 @@ import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
-import im.vector.app.features.analytics.plan.Screen
-import im.vector.app.features.analytics.screen.ScreenEvent
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.navigation.Navigator
@@ -66,7 +65,6 @@ import im.vector.app.features.rageshake.ReportType
 import im.vector.app.features.rageshake.VectorUncaughtExceptionHandler
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsActivity
-import im.vector.app.features.spaces.RestrictedPromoBottomSheet
 import im.vector.app.features.spaces.SpaceCreationActivity
 import im.vector.app.features.spaces.SpacePreviewActivity
 import im.vector.app.features.spaces.SpaceSettingsMenuBottomSheet
@@ -111,7 +109,6 @@ class HomeActivity :
     private val userColorAccountDataViewModel: UserColorAccountDataViewModel by viewModel()
 
     private val serverBackupStatusViewModel: ServerBackupStatusViewModel by viewModel()
-    private val promoteRestrictedViewModel: PromoteRestrictedViewModel by viewModel()
 
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorUncaughtExceptionHandler: VectorUncaughtExceptionHandler
@@ -165,14 +162,8 @@ class HomeActivity :
     }
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
-        private var drawerScreenEvent: ScreenEvent? = null
         override fun onDrawerOpened(drawerView: View) {
-            drawerScreenEvent = ScreenEvent(Screen.ScreenName.MobileSidebar)
-        }
-
-        override fun onDrawerClosed(drawerView: View) {
-            drawerScreenEvent?.send(analyticsTracker)
-            drawerScreenEvent = null
+            analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.Sidebar))
         }
 
         override fun onDrawerStateChanged(newState: Int) {
@@ -186,7 +177,7 @@ class HomeActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        analyticsScreenName = Screen.ScreenName.Home
+        analyticsScreenName = MobileScreen.ScreenName.Home
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
         FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager, vectorPreferences.areNotificationEnabledForDevice())
         sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
@@ -266,21 +257,6 @@ class HomeActivity :
         homeActivityViewModel.onEach { renderState(it) }
 
         shortcutsHandler.observeRoomsAndBuildShortcuts(lifecycleScope)
-
-        if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
-            promoteRestrictedViewModel.onEach {
-                if (it.activeSpaceSummary != null && !it.activeSpaceSummary.isPublic &&
-                        it.activeSpaceSummary.otherMemberIds.isNotEmpty()) {
-                    // It's a private space with some members show this once
-                    if (it.canUserManageSpace && !popupAlertManager.hasAlertsToShow()) {
-                        if (!vectorPreferences.didPromoteNewRestrictedFeature()) {
-                            vectorPreferences.setDidPromoteNewRestrictedFeature()
-                            RestrictedPromoBottomSheet().show(supportFragmentManager, "RestrictedPromoBottomSheet")
-                        }
-                    }
-                }
-            }
-        }
 
         if (isFirstCreation()) {
             handleIntent(intent)
@@ -473,14 +449,14 @@ class HomeActivity :
     override fun onResume() {
         super.onResume()
 
-        if (vectorUncaughtExceptionHandler.didAppCrash(this)) {
-            vectorUncaughtExceptionHandler.clearAppCrashStatus(this)
+        if (vectorUncaughtExceptionHandler.didAppCrash()) {
+            vectorUncaughtExceptionHandler.clearAppCrashStatus()
 
             MaterialAlertDialogBuilder(this)
                     .setMessage(R.string.send_bug_report_app_crashed)
                     .setCancelable(false)
                     .setPositiveButton(R.string.yes) { _, _ -> bugReporter.openBugReportScreen(this) }
-                    .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile(this) }
+                    .setNegativeButton(R.string.no) { _, _ -> bugReporter.deleteCrashFile() }
                     .show()
         } else {
             showDisclaimerDialog(this)
@@ -550,7 +526,7 @@ class HomeActivity :
         return true
     }
 
-    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?): Boolean {
+    override fun navToRoom(roomId: String?, eventId: String?, deepLink: Uri?, rootThreadEventId: String?): Boolean {
         if (roomId == null) return false
         MatrixToBottomSheet.withLink(deepLink.toString())
                 .show(supportFragmentManager, "HA#MatrixToBottomSheet")

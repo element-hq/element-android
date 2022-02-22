@@ -2399,7 +2399,6 @@
     <string name="settings_troubleshoot_test_push_loop_success">Rakendus võtab vastu tõuketeavitust</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Rakendus ootab tõuketeavitust</string>
     <string name="settings_troubleshoot_test_push_loop_title">Tõuketeavituse test</string>
-    <string name="search_is_not_supported_in_e2e_room">Otsing krüptitud jututubades ei ole veel toetatud.</string>
     <string name="search_banned_user_hint">Otsi suhtluskeelu saanud kasutajaid</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">Sul ei ole õigusi siin jututoas helistamiseks</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Sul ei ole piisavalt õigusi, et selles jututoas alustada konverentsikõnet</string>
@@ -2651,7 +2650,7 @@
     <string name="space_add_existing_rooms">Lisa olemasolevaid jututubasid ja kogukonnakeskuseid</string>
     <string name="leave_space">Lahku kogukonnakeskusest</string>
     <string name="space_add_child_title">Lisa jututuba</string>
-    <string name="space_explore_activity_title">Uuri jututubasid</string>
+    <string name="space_explore_activity_title">Tutvu jututubadega</string>
     <plurals name="space_people_you_know">
         <item quantity="one">%d sinu tuttav on juba liitunud</item>
         <item quantity="other">%d sinu tuttavat on juba liitunud</item>
@@ -2700,7 +2699,6 @@
     <string name="create_spaces_join_info_help">Olemasoleva kogukonnakeskusega liitumiseks vajad sa kutset.</string>
     <string name="create_spaces_you_can_change_later">Sa võid seda hiljem muuta</string>
     <string name="create_spaces_choose_type_label">Missugust kogukonnakeskust sooviksid sa luua\?</string>
-    <string name="create_spaces_type_header">Kogukonnakeskused on uus viis jututubade ja inimeste ühendamiseks</string>
     <string name="your_private_space">Sinu privaatne kogukonnakeskus</string>
     <string name="your_public_space">Sinu avalik kogukonnakeskus</string>
     <string name="add_space">Lisa kogukonnakeskus</string>
@@ -2862,15 +2860,10 @@
     <string name="upgrade_room_for_restricted_no_param">Kõik hõlmava kogukonna liikmed saavad antud jututuba leida ja sellega liituda - sa ei pea kedagi ükshaaval kutsuma. Neid jututoa seadistusi saad igal hetkel muuta.</string>
     <string name="upgrade_room_for_restricted">Kõik %s jututoa liikmed saavad antud jututuba leida ja sellega liituda - sa ei pea kedagi ükshaaval kutsuma. Neid jututoa seadistusi saad igal hetkel muuta.</string>
     <string name="call_tap_to_return">%1$s - tagasipöördumiseks klõpsi</string>
-    <string name="link_this_email_with_your_account">%s ja saa kutsed otse Element\'i.</string>
+    <string name="template_link_this_email_with_your_account">%s ja saa kutsed otse ${app_name}\'i.</string>
     <string name="link_this_email_settings_link">Seo see e-posti aadress oma kasutajakontoga</string>
     <string name="this_invite_to_this_space_was_sent">See kutse siia kogukonnakeskusesse saadeti aadressile %s, mis ei ole seotud sinu kontoga</string>
     <string name="this_invite_to_this_room_was_sent">See kutse siia jututuppa saadeti aadressile %s, mis ei ole seotud sinu kontoga</string>
-    <string name="to_help_space_members_find_and_join">Selleks, et kogukonnakeskuse liikmed saaks privaatseid jututube leida ning nendega liituda ava tunnuspildile klõpsides jututoa seadistused.</string>
-    <string name="help_space_members">Aita kogukonnakeskuse liitmetel leida privaatseid jututube</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">See muudab lihtsaks, et jututoad jääksid kogukonnakeskuse piires privaatseks, kuid lasevad kogukonnakeskuses viibivatel inimestel need üles leida ja nendega liituda. Kõik kogukonnakeskuse uued jututoad on selle võimalusega.</string>
-    <string name="help_people_in_spaces_find_and_join">Aita kogukonnakeskuse liikmetel endil leida privaatseid jututube ning nendega liituda nii et sa ei pea kõigile eraldi kutset saatma.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Uus funktsionaalsus: Võimalda kogukonnakeskuse liikmetel leida privaatseid jututube ning nendega liituda</string>
     <string name="call_jitsi_started">Rühmakõne algas</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Kõik sinu jututoad on nähtavad avalehel.</string>
     <string name="preference_show_all_rooms_in_home">Näita kõiki jututubasid avalehel</string>
@@ -3028,7 +3021,7 @@
     </plurals>
     <string name="preference_system_settings">Süsteemiseadistused</string>
     <string name="preference_versions">Versioonid</string>
-    <string name="preference_help_summary">Element\'i kasutamiseks vajalik abiteave</string>
+    <string name="template_preference_help_summary">${app_name}\'i kasutamiseks vajalik abiteave</string>
     <string name="preference_help_title">Abiteave ja kasutajatugi</string>
     <string name="preference_help">Abiteave</string>
     <string name="preference_root_legals">Juriidiline teave</string>
@@ -3041,10 +3034,10 @@
     <string name="analytics_opt_in_list_item_2">Meie <b>ei</b> jaga teavet kolmandate osapooltega</string>
     <string name="analytics_opt_in_list_item_1">Meie <b>ei</b> salvesta ega profileeri sinu kasutajakonto andmeid</string>
     <string name="analytics_opt_in_content_link">siit</string>
-    <string name="analytics_opt_in_content">Võimalike vigade leidmiseks ja Element\'i arendamiseks jaga meiega anonüümseid andmeid. Selleks, et mõistaksime, kuidas kasutajad erinevaid seadmeid pruugivad me loome sinu seadmetele ühise juhusliku tunnuse.
+    <string name="template_analytics_opt_in_content">Võimalike vigade leidmiseks ja ${app_name}\'i arendamiseks jaga meiega anonüümseid andmeid. Selleks, et mõistaksime, kuidas kasutajad erinevaid seadmeid pruugivad me loome sinu seadmetele ühise juhusliku tunnuse.
 \n
 \nMeie kasutustingimused leiad siit - %s.</string>
-    <string name="analytics_opt_in_title">Aita Element\'i arendamisel</string>
+    <string name="template_analytics_opt_in_title">Aita ${app_name}\'i arendamisel</string>
     <string name="action_enable">Võta kasutusele</string>
     <string name="restart_the_application_to_apply_changes">Muudatuste jõustamiseks käivita rakendus uuesti.</string>
     <string name="labs_enable_latex_maths">Kasuta LaTeX-vorminduses matemaatika märgistust</string>
@@ -3060,10 +3053,9 @@
     <string name="labs_auto_report_uisi">Automaatselt teata dekrüptimise vigadest.</string>
     <string name="room_member_override_nick_color">Asenda hüüdnime värvid</string>
     <string name="login_splash_already_have_account">Mul on kasutajakonto juba olemas</string>
-    <string name="ftue_auth_carousel_4_title">Lase tiimidel vabalt tegutseda.</string>
-    <string name="ftue_auth_carousel_3_title">Turvaline sõnumivahetus.</string>
-    <string name="ftue_auth_carousel_2_title">Sul on kontroll oma andmete üle.</string>
-    <string name="ftue_auth_carousel_1_title">Vestlused, mida sa tegelikult ka omad.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Turvaline sõnumivahetus.</string>
+    <string name="ftue_auth_carousel_control_title">Sul on kontroll oma andmete üle.</string>
+    <string name="ftue_auth_carousel_secure_title">Vestlused, mida sa tegelikult ka omad.</string>
     <string name="tooltip_attachment_location">Jaga asukohta</string>
     <string name="labs_render_locations_in_timeline">Kuva ajajoonel kasutaja asukohti</string>
     <string name="settings_enable_location_sharing_summary">Kui see seadistus on kasutusel, siis sa saad oma asukohta jagada igas jututoas</string>
@@ -3090,11 +3082,44 @@
     <string name="encryption_has_been_misconfigured">Krüptimise seadistustes on viga.</string>
     <string name="sent_location">Jagas oma asukohta</string>
     <string name="login_splash_create_account">Loo kasutajakonto</string>
-    <string name="ftue_auth_carousel_title_messaging">Sõnumisuhtlus sinu tiimi või kogukonna jaoks.</string>
-    <string name="ftue_auth_carousel_body_encrypted">Tagatud on andmete läbiv krüptimine ning oma telefoninumbrit ei pea sa jagama. Pole reklaame ega sinu andmete kogumist.</string>
-    <string name="ftue_auth_carousel_body_control">Sa ise valid serveri, kus sinu vestlusi hoitakse ning sellega tagadki kontrolli oma andmete üle. Lahendus põhineb Matrix\'i võrgul.</string>
-    <string name="ftue_auth_carousel_body_secure">Turvaline ja sõltumatu suhtluslahendus, mis tagab sama privaatsuse, kui omavaheline vestlus sinu kodus.</string>
+    <string name="ftue_auth_carousel_workplace_title">Sõnumisuhtlus sinu tiimi või kogukonna jaoks.</string>
+    <string name="ftue_auth_carousel_encrypted_body">Tagatud on andmete läbiv krüptimine ning oma telefoninumbrit ei pea sa jagama. Pole reklaame ega sinu andmete kogumist.</string>
+    <string name="ftue_auth_carousel_control_body">Sa ise valid serveri, kus sinu vestlusi hoitakse ning sellega tagadki kontrolli oma andmete üle. Lahendus põhineb Matrix\'i võrgul.</string>
+    <string name="ftue_auth_carousel_secure_body">Turvaline ja sõltumatu suhtluslahendus, mis tagab sama privaatsuse, kui omavaheline vestlus sinu kodus.</string>
     <string name="attachment_type_location">Asukoht</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Krüptimise seadistustes on viga ja sa ei saa sõnumeid saata. Seadistuste avamiseks klõpsi siin.</string>
     <string name="room_unsupported_e2e_algorithm">Krüptimise seadistustes on viga ja sa ei saa sõnumeid saata. Kui soovid krüptimist töökorda saada, siis võta ühendust serveri haldajaga.</string>
+    <string name="ftue_auth_use_case_subtitle">Me aitame sind Matrix\'i võrgu kasutamisel.</string>
+    <string name="ftue_auth_use_case_connect_to_server">Alusta koduserveri kasutamist</string>
+    <string name="labs_enable_thread_messages">Võta jutulõngad kasutusele</string>
+    <string name="labs_enable_thread_messages_desc">Märkus: palun käivita rakendus uuesti</string>
+    <string name="location_timeline_failed_to_load_map">Kaardi laadimine ei õnnestunud</string>
+    <string name="a11y_static_map_image">Kaart</string>
+    <string name="message_bubbles">Näita jutumulle</string>
+    <string name="ftue_auth_use_case_join_existing_server">Tahad kasutada mõnda olemasolevat koduserverit\?</string>
+    <string name="ftue_auth_use_case_skip_partial">jätta selle küsimuse vahele</string>
+    <string name="ftue_auth_use_case_skip">Sa pole veel otsustanud\? Sa võid %s</string>
+    <string name="ftue_auth_use_case_option_two">Töökaaslased</string>
+    <string name="ftue_auth_use_case_option_three">Kogukonnad</string>
+    <string name="ftue_auth_use_case_option_one">Perekond ja sõbrad</string>
+    <string name="ftue_auth_use_case_title">Kellega sa kõige rohkem vestled\?</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">Sa juba vaatad seda jutulõnga!</string>
+    <string name="view_in_room">Vaata jututoas</string>
+    <string name="reply_in_thread">Vasta jutulõngas</string>
+    <string name="command_not_supported_in_threads">„%s“ käsk on küll arusaadav, kuid ei ole jutulõngas kasutatav.</string>
+    <string name="search_thread_from_a_thread">Jutulõngast</string>
+    <string name="thread_list_empty_notice">Soovitus: Vajuta sõnumil pikalt ning vali „%s“.</string>
+    <string name="thread_list_empty_subtitle">Jutulõngad aitavad hoida vestlused teemakohastena ning mugavalt loetavatena.</string>
+    <string name="thread_list_empty_title">Halda vestlusi jutulõngadena</string>
+    <string name="thread_list_modal_my_threads_subtitle">Näitab kõiki jutulõngasid, kus sa oled osalenud</string>
+    <string name="thread_list_modal_my_threads_title">Minu jutulõngad</string>
+    <string name="thread_list_modal_all_threads_subtitle">Näitab kõiki praeguse jututoa jutulõngasid</string>
+    <string name="thread_list_modal_all_threads_title">Kõik jutulõngad</string>
+    <string name="thread_list_modal_title">Filtreeri</string>
+    <string name="thread_list_title">Jutulõngad</string>
+    <string name="thread_timeline_title">Jutulõng</string>
+    <string name="room_threads_filter">Sirvi jutulõngasid</string>
+    <string name="action_thread_copy_link_to_thread">Kopeeri jutulõnga link</string>
+    <string name="action_thread_view_in_room">Vaata jututoas</string>
+    <string name="action_view_threads">Vaata jutulõngana</string>
 </resources>

@@ -173,7 +173,6 @@
     <plurals name="directory_search_rooms">
         <item quantity="other">%d ห้อง</item>
     </plurals>
-    <string name="search_is_not_supported_in_e2e_room">ยังไม่รองรับการค้นหาในห้องที่เข้ารหัส</string>
     <string name="tab_title_search_files">ไฟล์</string>
     <string name="tab_title_search_people">ผู้คน</string>
     <string name="tab_title_search_messages">ข้อความ</string>

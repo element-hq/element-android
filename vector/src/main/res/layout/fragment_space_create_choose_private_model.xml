@@ -13,7 +13,7 @@
 
         <TextView
             android:id="@+id/headerText"
-            style="@style/Widget.Vector.TextView.HeadlineMedium"
+            style="@style/Widget.Vector.TextView.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -53,11 +53,22 @@
             android:layout_marginBottom="16dp"
             app:icon="@drawable/ic_member_small"
             app:iconTint="?vctr_content_secondary"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/changeLaterText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:subTitle="@string/create_spaces_private_teammates"
             app:title="@string/create_spaces_me_and_teammates" />
+
+        <TextView
+            android:id="@+id/changeLaterText"
+            style="@style/Widget.Vector.TextView.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"
+            android:text="@string/create_spaces_you_can_change_later"
+            android:textColor="?vctr_content_secondary"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

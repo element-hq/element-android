@@ -54,13 +54,14 @@ import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.databinding.ActivityCallBinding
 import im.vector.app.features.call.dialpad.CallDialPadBottomSheet
 import im.vector.app.features.call.dialpad.DialPadFragment
+import im.vector.app.features.call.transfer.CallTransferActivity
 import im.vector.app.features.call.utils.EglUtils
 import im.vector.app.features.call.webrtc.WebRtcCall
 import im.vector.app.features.call.webrtc.WebRtcCallManager
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.RoomDetailActivity
-import im.vector.app.features.home.room.detail.RoomDetailArgs
+import im.vector.app.features.home.room.detail.arguments.TimelineArgs
 import io.github.hyuwah.draggableviewlib.DraggableView
 import io.github.hyuwah.draggableviewlib.setupDraggable
 import kotlinx.parcelize.Parcelize
@@ -165,6 +166,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 ?.let {
                     callViewModel.handle(VectorCallViewActions.SwitchCall(it))
                 }
+        this.intent = intent
     }
 
     override fun getMenuRes() = R.menu.vector_call
@@ -522,14 +524,21 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
                 val callId = withState(callViewModel) { it.callId }
                 navigator.openCallTransfer(this, callTransferActivityResultLauncher, callId)
             }
+            is VectorCallViewEvents.FailToTransfer         -> showSnackbar(getString(R.string.call_transfer_failure))
             null                                           -> {
             }
         }
     }
 
     private val callTransferActivityResultLauncher = registerStartForActivityResult { activityResult ->
-        if (activityResult.resultCode == Activity.RESULT_CANCELED) {
-            callViewModel.handle(VectorCallViewActions.CallTransferSelectionCancelled)
+        when (activityResult.resultCode) {
+            Activity.RESULT_CANCELED -> {
+                callViewModel.handle(VectorCallViewActions.CallTransferSelectionCancelled)
+            }
+            Activity.RESULT_OK       -> {
+                CallTransferActivity.getCallTransferResult(activityResult.data)
+                        ?.let { callViewModel.handle(VectorCallViewActions.CallTransferSelectionResult(it)) }
+            }
         }
     }
 
@@ -571,7 +580,7 @@ class VectorCallActivity : VectorBaseActivity<ActivityCallBinding>(), CallContro
 
     private fun returnToChat() {
         val roomId = withState(callViewModel) { it.roomId }
-        val args = RoomDetailArgs(roomId)
+        val args = TimelineArgs(roomId)
         val intent = RoomDetailActivity.newIntent(this, args).apply {
             flags = FLAG_ACTIVITY_CLEAR_TOP
         }

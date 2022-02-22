@@ -7,7 +7,6 @@
         <!-- Only setting the items we need to override to get the background to be pure black, otherwise inheriting -->
 
         <!-- other colors -->
-        <item name="vctr_unread_room_badge">@color/vctr_unread_room_badge_black</item>
         <item name="vctr_fab_label_bg">@color/vctr_fab_label_bg_black</item>
         <item name="vctr_fab_label_stroke">@color/vctr_fab_label_stroke_black</item>
         <item name="vctr_fab_label_color">@color/vctr_fab_label_color_black</item>
