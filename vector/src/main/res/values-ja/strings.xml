@@ -1409,8 +1409,6 @@
     <string name="room_displayname_4_members">%1$s、%2$s、%3$sと%4$s</string>
     <string name="room_displayname_3_members">%1$s、%2$sと%3$s</string>
     <string name="notice_power_level_diff">%1$sの権限レベルを%2$sから%3$sへ変更しました。</string>
-    <string name="notice_power_level_changed">%1$sが</string>
-    <string name="notice_power_level_changed_by_you">あなたは</string>
     <string name="power_level_custom_no_value">カスタム</string>
     <string name="power_level_custom">カスタム (%1$d)</string>
     <string name="power_level_default">デフォルト</string>
@@ -2842,7 +2840,7 @@
     <string name="new_session">新しいログイン。あなたですか？</string>
     <string name="template_login_default_session_public_name">${app_name} Android</string>
     <string name="event_redacted_by_admin_reason_with_reason">部屋の管理者によって削除されています、理由：%1$s</string>
-    <string name="event_redacted_by_user_reason_with_reason">ユーザーによって削除されています、理由：</string>
+    <string name="event_redacted_by_user_reason_with_reason">ユーザーによって削除されています、理由：%1$s</string>
     <string name="delete_event_dialog_reason_hint">削除した理由</string>
     <string name="share_confirm_room">この添付ファイルを%1$sに送信しますか？</string>
     <string name="enter_secret_storage_passphrase_warning_text">秘密ストレージは信頼されている端末でのみアクセスしましょう</string>
