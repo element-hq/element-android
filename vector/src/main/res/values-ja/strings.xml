@@ -2779,9 +2779,9 @@
     <string name="direct_room_profile_encrypted_subtitle">ここで送受信されるメッセージはエンドツーエンド暗号化されています。
 \n
 \nメッセージは安全に保護されており、メッセージのロックを解除するための固有の鍵は、あなたと受信者だけが持っています。</string>
-    <string name="room_profile_encrypted_subtitle">このルームのメッセージはエンドツーエンド暗号化されています。
+    <string name="room_profile_encrypted_subtitle">この部屋のメッセージはエンドツーエンド暗号化されています。
 \n
-\nメッセージは安全に保護されており、メッセージのロックを解除するための固有の鍵は、あなたと受信者だけが持っています。</string>
+\nメッセージは安全に保護されており、メッセージのロックを解除するための固有の鍵を持っているのはあなたと受信者だけです。</string>
     <string name="dev_tools_form_hint_state_key">ステートキー</string>
     <string name="save_recovery_key_chooser_hint">リカバリーキーを以下に保存</string>
     <string name="crypto_error_withheld_generic">送信者が意図的に鍵を送信しなかったため、このメッセージにアクセスすることができません</string>
@@ -2815,7 +2815,7 @@
     <string name="confirm_your_identity">暗号化されたメッセージにアクセスするには、あなたの他のセッションからログインを検証し、本人確認を行う必要があります。</string>
     <string name="disclaimer_positive_button">詳しく知る</string>
     <string name="verification_request_notice">セキュリティーを確保するために、使い捨てコードをチェックして、%sを検証してください。</string>
-    <string name="verification_request_alert_description">よりセキュリティーを確保するために、両方の端末で使い捨てコードをチェックして、%sを検証してください。
+    <string name="verification_request_alert_description">セキュリティーを高めるために、自分と相手の端末でコードが一致していることを確認して、%sを検証しましょう。
 \n
-\n最大限のセキュリティーを確保するために、ご自身の目で直接確かめて行ってください。</string>
+\n対面で行うのが最もセキュアです。</string>
 </resources>
