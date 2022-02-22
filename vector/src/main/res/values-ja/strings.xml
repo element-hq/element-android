@@ -1579,7 +1579,7 @@
     <string name="account_phone_number_error">電話番号の認証中にエラーが発生しました。</string>
     <string name="invite_by_link">リンクを共有</string>
     <string name="invite_to_space_with_name">%sに招待</string>
-    <string name="invite_by_email">Eメールで招待</string>
+    <string name="invite_by_email">電子メールで招待</string>
     <string name="create_space_topic_hint">詳細</string>
     <string name="invite_people_menu">連絡先を招待</string>
     <string name="join_anyway">無視して参加</string>
