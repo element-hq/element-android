@@ -23,7 +23,7 @@ import io.realm.annotations.LinkingObjects
 import org.matrix.android.sdk.internal.database.model.EventEntity
 import org.matrix.android.sdk.internal.database.model.RoomEntity
 
-internal open class ThreadSummaryEntity(@Index var rootThreadEventId: String = "",
+internal open class ThreadSummaryEntity(@Index var rootThreadEventId: String? = "",
                                         var rootThreadEventEntity: EventEntity? = null,
                                         var latestThreadEventEntity: EventEntity? = null,
                                         var rootThreadSenderName: String? = null,

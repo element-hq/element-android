@@ -28,7 +28,7 @@ internal class ThreadSummaryMapper @Inject constructor() {
                 roomId = threadSummary.room?.firstOrNull()?.roomId.orEmpty(),
                 rootEvent = threadSummary.rootThreadEventEntity?.asDomain(),
                 latestEvent = threadSummary.latestThreadEventEntity?.asDomain(),
-                rootEventId = threadSummary.rootThreadEventId,
+                rootEventId = threadSummary.rootThreadEventId.orEmpty(),
                 rootThreadSenderInfo = SenderInfo(
                         userId = threadSummary.rootThreadEventEntity?.sender ?: "",
                         displayName = threadSummary.rootThreadSenderName,
