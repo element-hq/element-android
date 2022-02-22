@@ -53,7 +53,7 @@ data class QrScannerArgs(
         @StringRes val titleRes: Int
 ) : Parcelable
 
-open class QrCodeScannerFragment @Inject constructor() : VectorBaseFragment<FragmentQrCodeScannerBinding>(), ZXingScannerView.ResultHandler {
+class QrCodeScannerFragment @Inject constructor() : VectorBaseFragment<FragmentQrCodeScannerBinding>(), ZXingScannerView.ResultHandler {
 
     private val qrViewModel: QrCodeScannerViewModel by activityViewModel()
     private val scannerArgs: QrScannerArgs by args()
