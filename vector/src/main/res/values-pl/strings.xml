@@ -2425,7 +2425,7 @@
     <string name="room_settings_access_rules_pref_dialog_title">Kto powinien mieć dostęp \?</string>
     <string name="room_settings_room_notifications_account_settings">Ustawienia konta</string>
     <string name="room_settings_room_notifications_manage_notifications">Możesz zarządzać notyfikacjami w %1$s.</string>
-    <string name="room_settings_room_notifications_encryption_notice">Proszę zwrócić uwagę, że notyfikacje o wzmiankach i słowach kluczowych nie są dostępne w zaszyfrowanych pokojach na urządzeniach mobilnych.</string>
+    <string name="room_settings_room_notifications_encryption_notice">Proszę zwrócić uwagę, że powiadomienia o wzmiankach i słowach kluczowych nie są dostępne w zaszyfrowanych pokojach na urządzeniach mobilnych.</string>
     <string name="room_settings_room_notifications_notify_me">Powiadamiaj mnie o</string>
     <string name="settings_secure_backup_reset">Zresetuj bezpieczną kopię zapasową</string>
     <string name="settings_secure_backup_setup">Skonfiguruj bezpieczną kopię zapasową</string>
@@ -2440,7 +2440,7 @@
     <string name="settings_notification_emails_category">Powiadomienie email</string>
     <string name="room_settings_none">Żadne</string>
     <string name="room_settings_mention_and_keyword_only">Tylko wzmianki i słowa kluczowe</string>
-    <string name="notification_listening_for_notifications">Oczekiwanie na notyfikacje</string>
+    <string name="notification_listening_for_notifications">Oczekiwanie na powiadomienia</string>
     <string name="notice_room_canonical_alias_no_change">%1$s zmienił(a) adresy tego pokoju.</string>
     <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">Zmieniłeś(aś) głowny i alternatywny adres tego pokoju.</string>
     <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s zmienił(a) główny i alternatywny adres tego pokoju.</string>
@@ -3072,8 +3072,8 @@
     <plurals name="call_one_active_and_other_paused">
         <item quantity="one">Jedno aktywne połączenie (%1$s) - Jedno wstrzymane połączenie</item>
         <item quantity="few">Jedno aktywne połączenie (%1$s) - Kilka wstrzymanych połączeń</item>
-        <item quantity="many"></item>
-        <item quantity="other"></item>
+        <item quantity="many"/>
+        <item quantity="other"/>
     </plurals>
     <string name="discovery_section">Odkrywanie (%s)</string>
     <string name="finish_setting_up_discovery">Dokończ konfigurację odkrywania.</string>

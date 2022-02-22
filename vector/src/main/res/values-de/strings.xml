@@ -154,7 +154,7 @@
     <string name="notice_widget_modified">%1$s hat das %2$s Widget modifiziert</string>
     <string name="notice_widget_modified_by_you">Du hast das %1$s Widget modifiziert</string>
     <string name="power_level_admin">Admin</string>
-    <string name="power_level_moderator">Moderator</string>
+    <string name="power_level_moderator">Moderation</string>
     <string name="power_level_default">Standard</string>
     <string name="power_level_custom">Benutzerdefiniert (%1$d)</string>
     <string name="power_level_custom_no_value">Benutzerdefiniert</string>
@@ -505,8 +505,8 @@
     <string name="room_participants_action_ban">Verbannen</string>
     <string name="room_participants_action_unban">Verbannung aufheben</string>
     <string name="room_participants_action_set_default_power_level">Zum normalen Benutzer herabstufen</string>
-    <string name="room_participants_action_set_moderator">Zum Moderator machen</string>
-    <string name="room_participants_action_set_admin">Zum Admin machen</string>
+    <string name="room_participants_action_set_moderator">Moderationsrechte vergeben</string>
+    <string name="room_participants_action_set_admin">Administrationsrechte vergeben</string>
     <string name="room_participants_action_ignore">Blockieren</string>
     <string name="room_participants_action_unignore">Alle Nachrichten dieses Nutzers anzeigen</string>
     <string name="room_participants_invite_search_another_user">Nutzer-ID, Name oder E-Mail-Adresse</string>
@@ -845,11 +845,11 @@
     <string name="start_voice_call_prompt_msg">Sicher, dass du einen Sprachanruf starten möchtest\?</string>
     <string name="start_video_call_prompt_msg">Sicher, dass du einen Videoanruf starten möchtest\?</string>
     <string name="groups_list">Gruppenliste</string>
-    <string name="room_participants_ban_prompt_msg">Ein Bann schließt die Person aus dem Raum aus und verhindert einen erneuten Beitritt.</string>
+    <string name="room_participants_ban_prompt_msg">Die Verbannung einer Person entfernt sie aus diesem Raum und hindert sie am erneuten Beitritt.</string>
     <string name="room_settings_all_messages_noisy">Alle Nachrichten (laut)</string>
     <string name="room_settings_all_messages">Alle Nachrichten</string>
     <string name="room_settings_mention_only">Nur Erwähnungen</string>
-    <string name="room_settings_mute">Stumm</string>
+    <string name="room_settings_mute">Stummschalten</string>
     <string name="settings_inline_url_preview">URL-Vorschau im Chat</string>
     <string name="settings_vibrate_on_mention">Vibriere beim Erwähnen eines Nutzers</string>
     <string name="room_settings_room_notifications_title">Benachrichtigungen</string>
@@ -1076,7 +1076,7 @@
     <string name="settings_send_markdown_summary">Formatiere Nachrichten mittels Markdown-Syntax, bevor sie gesendet werden. Dies erlaubt erweiterte Formatierungen wie Sternchen (*), um kursiven Text anzuzeigen.</string>
     <string name="settings_show_read_receipts">Lesebestätigungen zeigen</string>
     <string name="settings_show_read_receipts_summary">Klicke auf die Lesebestätigungen für eine detailliertere Liste.</string>
-    <string name="settings_show_join_leave_messages_summary">Einladungen, Kicks und Banns werden weiterhin angezeigt.</string>
+    <string name="settings_show_join_leave_messages_summary">Einladungen, Entfernungen und Verbannungen bleiben sichtbar.</string>
     <string name="settings_password">Passwort</string>
     <string name="settings_labs_native_camera_summary">Starte die System-Kamera anstelle der angepassten Kamera.</string>
     <string name="settings_labs_enable_send_voice_summary">Diese Option erfordert eine externe Anwendung um Sprachnachrichten aufzuzeichnen.</string>
@@ -1672,7 +1672,7 @@
     <string name="login_splash_text3">Erweitere &amp; individualisiere dein Benutzererlebnis</string>
     <string name="login_connect_to">Mit %1$s verbinden</string>
     <string name="login_connect_to_modular">Mit Element Matrix Services verbinden</string>
-    <string name="login_connect_to_a_custom_server">Mit einem benutzerdefinierten Server verbinden</string>
+    <string name="login_connect_to_a_custom_server">Mit einem individuellen Server verbinden</string>
     <string name="login_signin_to">Bei %1$s anmelden</string>
     <string name="login_signup">Registrieren</string>
     <string name="login_signin">Anmelden</string>
@@ -1864,7 +1864,7 @@
     <string name="room_profile_section_more_leave">Raum verlassen</string>
     <string name="room_profile_leaving_room">Verlasse den Raum…</string>
     <string name="room_member_power_level_admins">Administratoren</string>
-    <string name="room_member_power_level_moderators">Moderatoren</string>
+    <string name="room_member_power_level_moderators">Moderationen</string>
     <string name="room_member_power_level_custom">Benutzerdefiniert</string>
     <string name="room_member_power_level_invites">Eingeladen</string>
     <string name="room_member_power_level_users">Nutzer</string>
@@ -2273,7 +2273,7 @@
     <string name="three_pid_revoke_invite_dialog_title">Einladung zurücknehmen</string>
     <string name="three_pid_revoke_invite_dialog_content">Einladung zu %1$s zurücknehmen\?</string>
     <string name="member_banned_by">Gebannt von %1$s</string>
-    <string name="failed_to_unban">Aufheben des Banns fehlgeschlagen</string>
+    <string name="failed_to_unban">Aufhebung der Verbannung fehlgeschlagen</string>
     <string name="alert_push_are_disabled_title">Push-Benachrichtigungen sind deaktiviert</string>
     <string name="alert_push_are_disabled_description">Gehe zu deinen Einstellungen um Push-Benachrichtigungen zu aktivieren</string>
     <string name="create_pin_title">Nutze eine PIN für mehr Sicherheit</string>
@@ -2337,7 +2337,7 @@
         <item quantity="other">%d Sekunden</item>
     </plurals>
     <string name="settings_show_room_member_state_events">Status-Ereignisse der Raummitglieder zeigen</string>
-    <string name="settings_show_room_member_state_events_summary">Bezieht Einladungs-/Beitritts-/Verlassen-/Entfernen-/Verbannen-Ereignisse und Avatar-/Anzeigenamen-Wechsel mit ein.</string>
+    <string name="settings_show_room_member_state_events_summary">Bezieht Einladungs-/Beitritts-/Verlassen-/Entfernungs-/Verbannungs-Ereignisse und Wechsel des Avatar/Anzeigenamen mit ein.</string>
     <string name="sent_a_poll">Umfrage</string>
     <string name="sent_a_reaction">Reagierte mit: %s</string>
     <string name="universal_link_malformed">Der Link war fehlerhaft</string>
@@ -2900,8 +2900,8 @@
     <string name="settings_mentions_and_keywords_encryption_notice">Auf deinem Mobilgerät wirst du keine Benachrichtigungen für Erwähnungen und Schlüsselwörter in verschlüsselten Räumen erhalten.</string>
     <string name="space_add_existing_spaces">Existierende Spaces hinzufügen</string>
     <string name="space_add_existing_rooms_only">Existierende Räume hinzufügen</string>
-    <string name="leave_specific_ones">Ausgewählte Räume oder Spaces verlassen…</string>
-    <string name="dont_leave_any">Keine Räume und Spaces verlassen</string>
+    <string name="leave_specific_ones">Ausgewählte Räume oder Subspaces verlassen…</string>
+    <string name="dont_leave_any">Keine Räume und Subspaces verlassen</string>
     <string name="you_will_leave_all_in">Du wirst alle Räume und Spaces in %s verlassen.</string>
     <string name="leave_all_rooms_and_spaces">Alle Räume und Spaces verlassen</string>
     <string name="space_leave_prompt_msg_with_name">Willst du %s wirklich verlassen\?</string>
@@ -2926,7 +2926,7 @@
     <string name="space_permissions_notice_read_only">Du hast nicht die Berechtigung, Rollenrechte zu bearbeiten</string>
     <string name="space_settings_permissions_title">Space-Berechtigungen</string>
     <string name="space_participants_unban_prompt_msg">Wenn du die Person entbannst, kann sie wieder beitreten.</string>
-    <string name="space_participants_ban_prompt_msg">Wenn du eine Person bannst, kann sie nicht erneut beitreten.</string>
+    <string name="space_participants_ban_prompt_msg">Die Verbannung einer Person entfernt sie aus diesem Space und hindert sie am erneuten Beitritt.</string>
     <string name="space_participants_remove_prompt_msg">Kicken entfernt die Person aus dem Space
 \n
 \nUm sie für immer zu entfernen, solltest du sie bannen.</string>
@@ -3026,7 +3026,7 @@
     <string name="finish_setting_up_discovery">Schließe die Konfiguration des Auffindbarkeitsdienstes ab.</string>
     <string name="create_space_identity_server_info_none">Du verwendest derzeit keinen Identitätsserver. Um Teammitglieder einzuladen und für sie auffindbar zu sein, müssen du einen solchen Server konfigurieren.</string>
     <string name="login_splash_already_have_account">Ich habe schon ein Konto</string>
-    <string name="ftue_auth_carousel_3_title">Vernetz dich mit jedem.</string>
+    <string name="ftue_auth_carousel_3_title">Sichere Nachrichtenübertragung.</string>
     <string name="ftue_auth_carousel_1_title">Besitze deine Konversationen.</string>
     <string name="identity_server_consent_dialog_neutral_policy">Richtlinie</string>
     <string name="identity_server_consent_dialog_content_3">Um bestehende Kontakte ermitteln zu können, müsst du Kontaktinformationen (E-Mails und Telefonnummern) an Ihren Identitätsserver senden. Wir verschlüsseln deine Daten vor dem Senden, um den Datenschutz zu gewährleisten.</string>
@@ -3091,4 +3091,37 @@
     <string name="labs_render_locations_in_timeline">Geteilte Standorte anzeigen</string>
     <string name="settings_enable_location_sharing_summary">Sobald aktiviert, kannst du deinen Standort in jeden Raum senden</string>
     <string name="sent_location">Hat den Standort geteilt</string>
+    <string name="labs_enable_thread_messages">Threads aktivieren</string>
+    <string name="ftue_auth_use_case_connect_to_server">Mit Server verbinden</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">Du schaust dir diesen Thread schon an!</string>
+    <string name="view_in_room">Im Raum anzeigen</string>
+    <string name="command_not_supported_in_threads">Der Befehl „%s“ wird erkannt, ist in Threads aber nicht unterstützt.</string>
+    <string name="thread_list_empty_notice">Tipp: Drücke lange auf eine Nachricht und wähle “%s”.</string>
+    <string name="thread_list_empty_title">Organisiere Diskussionen mit Threads</string>
+    <string name="room_threads_filter">Threads im Raum filtern</string>
+    <string name="ftue_auth_use_case_join_existing_server">Möchtest du einem existierenden Server beitreten\?</string>
+    <string name="ftue_auth_use_case_option_three">Communities</string>
+    <string name="ftue_auth_use_case_option_two">Teams</string>
+    <string name="ftue_auth_use_case_subtitle">Wir helfen dir, in Verbindung zu kommen.</string>
+    <string name="ftue_auth_use_case_title">Mit wem wirst du am meisten chatten\?</string>
+    <string name="action_thread_copy_link_to_thread">Link zu Thread kopieren</string>
+    <string name="action_view_threads">Threads anzeigen</string>
+    <string name="message_bubbles">Nachrichtenblasen anzeigen</string>
+    <string name="location_timeline_failed_to_load_map">Laden der Karte fehlgeschlagen</string>
+    <string name="a11y_static_map_image">Karte</string>
+    <string name="labs_enable_thread_messages_desc">Hinweis: App wird neugestartet</string>
+    <string name="ftue_auth_use_case_skip_partial">diese Frage überspringen</string>
+    <string name="ftue_auth_use_case_skip">Noch nicht sicher\? Du kannst %s</string>
+    <string name="ftue_auth_use_case_option_one">Freundschaften und Familie</string>
+    <string name="reply_in_thread">In Thread antworten</string>
+    <string name="search_thread_from_a_thread">Aus einem Thread</string>
+    <string name="thread_list_modal_title">Filter</string>
+    <string name="action_thread_view_in_room">Im Raum anzeigen</string>
+    <string name="thread_list_empty_subtitle">Threads helfen dabei, dass deine Konversationen beim Thema und leicht nachverfolgbar bleiben.</string>
+    <string name="thread_list_modal_my_threads_subtitle">Zeigt alle Threads, an denen du teilgenommen hast</string>
+    <string name="thread_list_modal_all_threads_subtitle">Zeigt alle Threads des aktuellen Raums</string>
+    <string name="thread_list_modal_all_threads_title">Alle Threads</string>
+    <string name="thread_list_modal_my_threads_title">Meine Threads</string>
+    <string name="thread_list_title">Threads</string>
+    <string name="thread_timeline_title">Thread</string>
 </resources>
