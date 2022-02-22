@@ -2352,7 +2352,6 @@
     <string name="settings_troubleshoot_test_push_loop_success">應用程式正在接收 PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">應用程式正在等待 PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_title">測試推播</string>
-    <string name="search_is_not_supported_in_e2e_room">目前尚不支援在已加密的聊天室中搜尋。</string>
     <string name="search_banned_user_hint">過濾被封鎖的使用者</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">您沒有開始通話的權限</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">您沒有開始會議通話的權限</string>
@@ -2995,7 +2994,6 @@
     <string name="labs_auto_report_uisi">自動回報解密錯誤。</string>
     <string name="room_member_override_nick_color">覆寫暱稱色彩</string>
     <string name="login_splash_already_have_account">我已有一個帳號</string>
-    <string name="ftue_auth_carousel_4_title">減少團隊的懈怠。</string>
     <string name="ftue_auth_carousel_3_title">安全傳送訊息。</string>
     <string name="ftue_auth_carousel_2_title">您已掌控了您的資料。</string>
     <string name="ftue_auth_carousel_1_title">擁有您的對話。</string>

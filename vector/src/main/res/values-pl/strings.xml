@@ -2187,7 +2187,6 @@
     <string name="settings_emails_empty">Żaden adres e-mail nie został dodany do Twojego konta</string>
     <string name="settings_emails">Adres e-mail</string>
     <string name="settings_phone_number_empty">Nie dodano żadnego numeru telefonu do Twojego konta</string>
-    <string name="search_is_not_supported_in_e2e_room">Wyszukiwanie w pokojach stosujących szyfrowanie nie jest obecnie wspierane.</string>
     <string name="search_banned_user_hint">Filtruj zbanowanych użytkowników</string>
     <string name="room_participants_unban_prompt_msg">Odbanowanie użytkownika pozwoli mu na ponowne dołączenie do pokoju.</string>
     <string name="room_participants_ban_title">Zbanuj użytkownika</string>

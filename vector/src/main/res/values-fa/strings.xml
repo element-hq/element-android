@@ -1732,7 +1732,6 @@
     <string name="settings_emails_empty">هیچ رایانامه‌ای به حسابتان افزوده نشده</string>
     <string name="settings_emails">نشانی‌های رایانامه</string>
     <string name="settings_phone_number_empty">هیچ شماره تلفنی به حسابتان افزوده نشده</string>
-    <string name="search_is_not_supported_in_e2e_room">قابلیت جستجو در اتاق‌های رمزشده هنوز پیاده‌سازی نشده است.</string>
     <string name="search_no_results">نتیجه‌ای در پی نداشت</string>
     <string name="search_banned_user_hint">فیلترکردن کاربران مسدود شده</string>
     <string name="room_event_action_cancel_download">لغو دانلود</string>
@@ -3074,7 +3073,6 @@
     <string name="login_splash_create_account">ایجاد حساب</string>
     <string name="ftue_auth_carousel_title_messaging">پیام‌رسانی برای گروهتان.</string>
     <string name="attachment_type_location">مکان</string>
-    <string name="ftue_auth_carousel_4_title">قطع اسلک از تیم‌ها.</string>
     <string name="labs_render_locations_in_timeline">پرداخت مکان‌های کاربری در خط زمانی</string>
     <string name="settings_enable_location_sharing_summary">پس از به کار افتادن، قادر خواهید بد مکانتان را به هر اتاقی بفرستید</string>
     <string name="template_location_not_available_dialog_content">${app_name} نتوانست به مکانتان دست یابد. لطفاً بعداً دوباره تلاش کنید.</string>

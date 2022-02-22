@@ -2339,7 +2339,6 @@
     <string name="settings_emails_empty">Aucune adresse e-mail n’a été ajoutée à votre compte</string>
     <string name="settings_emails">Adresses e-mail</string>
     <string name="settings_phone_number_empty">Aucun numéro de téléphone n’a été ajouté à votre compte</string>
-    <string name="search_is_not_supported_in_e2e_room">La recherche dans les salons chiffrés n\'est pas encore prise en charge.</string>
     <string name="search_banned_user_hint">Filtrer les utilisateurs exclus</string>
     <string name="room_participants_action_unignore_prompt_msg">Ne plus ignorer cet utilisateur aura pour effet de ré-afficher ses messages.</string>
     <string name="room_participants_remove_prompt_msg">expulser un utilisateur le supprimera de ce salon.
@@ -3054,7 +3053,6 @@
     <string name="labs_auto_report_uisi">Signalement automatique des erreurs de déchiffrement.</string>
     <string name="room_member_override_nick_color">Outrepasser la couleur du pseudo</string>
     <string name="login_splash_already_have_account">J’ai déjà un compte</string>
-    <string name="ftue_auth_carousel_4_title">Être vicTeams, ce n’est pas Slack vous voulez.</string>
     <string name="ftue_auth_carousel_3_title">Messagerie sécurisée.</string>
     <string name="ftue_auth_carousel_2_title">Vous êtes aux commandes.</string>
     <string name="ftue_auth_carousel_1_title">Contrôlez vos conversations.</string>

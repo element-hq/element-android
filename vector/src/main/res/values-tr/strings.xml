@@ -1325,7 +1325,6 @@
     <string name="settings_emails_empty">Hesabınıza e-posta adresi eklenmemiş</string>
     <string name="settings_emails">E-posta hesapları</string>
     <string name="settings_phone_number_empty">Hesabınıza hiçbir telefon numarası eklenmedi</string>
-    <string name="search_is_not_supported_in_e2e_room">Şifreli odalarda arama yapmak henüz desteklenmiyor.</string>
     <string name="search_banned_user_hint">Banlanan kullanıcıları filtrele</string>
     <string name="room_permissions_change_topic">Konuyu değiştir</string>
     <string name="room_permissions_upgrade_the_room">Odayı geliştir</string>
@@ -2223,7 +2222,6 @@
     <string name="ftue_auth_carousel_body_encrypted">Uçtan uca şifrelenir ve telefon numarası gerekmez. Reklam veya veri madenciliği yok.</string>
     <string name="ftue_auth_carousel_body_control">Size kontrol ve bağımsızlık vererek konuşmalarınızın nerede tutulacağını seçin. Matrix ile bağlandı.</string>
     <string name="ftue_auth_carousel_body_secure">Size kendi evinizde yüz yüze görüşmeyle aynı düzeyde mahremiyet sağlayan güvenli ve bağımsız iletişim.</string>
-    <string name="ftue_auth_carousel_4_title">Takımların gevşekliğini kesin.</string>
     <string name="ftue_auth_carousel_3_title">Güvenli mesajlaşma.</string>
     <string name="ftue_auth_carousel_2_title">Kontrol sende.</string>
     <string name="ftue_auth_carousel_1_title">Konuşmalarınıza sahip çıkın.</string>

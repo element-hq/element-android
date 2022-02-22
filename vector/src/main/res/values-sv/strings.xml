@@ -2399,7 +2399,6 @@
     <string name="settings_troubleshoot_test_push_loop_success">Appen tar emot PUSH:en</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Appen väntar på PUSH:en</string>
     <string name="settings_troubleshoot_test_push_loop_title">Testa push</string>
-    <string name="search_is_not_supported_in_e2e_room">Sökning i krypterade rum stöds inte än.</string>
     <string name="search_banned_user_hint">Filtrera bannade användare</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">Du är inte behörig att starta ett samtal</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Du är inte behörig att starta ett gruppsamtal</string>

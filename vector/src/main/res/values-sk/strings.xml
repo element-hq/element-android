@@ -2397,7 +2397,6 @@
     <string name="error_threepid_auth_failed">Uistite sa, že ste klikli na odkaz v e-maile, ktorý sme vám poslali.</string>
     <string name="settings_emails_empty">Do vášho účtu nebol pridaný žiadny e-mail</string>
     <string name="settings_phone_number_empty">Do vášho účtu nebolo pridané žiadne telefónne číslo</string>
-    <string name="search_is_not_supported_in_e2e_room">Vyhľadávanie v zašifrovaných miestnostiach zatiaľ nie je podporované.</string>
     <string name="room_permissions_send_m_room_server_acl_events">Poslať udalosti m.room.server_acl</string>
     <string name="room_permissions_change_main_address_for_the_room">Zmeniť hlavnú adresu miestnosti</string>
     <string name="room_permissions_remove_messages_sent_by_others">Odstrániť správy odoslané inými osobami</string>

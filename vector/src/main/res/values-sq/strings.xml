@@ -2387,7 +2387,6 @@
     <string name="settings_troubleshoot_test_push_loop_failed">S’u arrit të merrej push. Zgjidhje mund të jetë riinstalimi i aplikacionit.</string>
     <string name="settings_troubleshoot_test_push_loop_success">Aplikacioni po merr PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Aplikacioni po pret për PUSH-in</string>
-    <string name="search_is_not_supported_in_e2e_room">Kërkimi në dhoma të fshehtëzuara nuk mbulohet ende.</string>
     <string name="search_banned_user_hint">Filtro përdorues të dëbuar</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">S’keni leje të nisni një thirrje</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">S’keni leje të nisni një thirrje konferencë</string>

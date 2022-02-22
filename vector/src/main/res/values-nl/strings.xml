@@ -2286,7 +2286,6 @@
     <string name="shortcut_disabled_reason_sign_out">De sessie is afgemeld!</string>
     <string name="shortcut_disabled_reason_room_left">De kamer is verlaten!</string>
     <string name="room_settings_mention_and_keyword_only">Alleen vermeldingen en trefwoorden</string>
-    <string name="search_is_not_supported_in_e2e_room">Zoeken in versleutelde kamers wordt nog niet ondersteund.</string>
     <string name="search_banned_user_hint">Filter verbannen gebruikers</string>
     <string name="room_permissions_change_topic">Verander onderwerp</string>
     <string name="room_permissions_upgrade_the_space">Space upgraden</string>
@@ -2869,7 +2868,6 @@
     <string name="login_reset_password_success_notice">Je wachtwoord is gereset.</string>
     <string name="login_reset_password_mail_confirmation_submit">Ik heb mijn e-mailadres geverifieerd</string>
     <string name="login_reset_password_mail_confirmation_notice_2">Tik op de link om uw nieuwe wachtwoord te bevestigen. Klik hieronder als u de link hebt gevolgd die erin staat.</string>
-    <string name="ftue_auth_carousel_4_title">Geef je teams meer ruimte.</string>
     <string name="ftue_auth_carousel_1_title">Word eigenaar van uw gesprekken.</string>
     <string name="create_space">Space aanmaken</string>
     <string name="create_spaces_loading_message">Space aanmaken…</string>

@@ -1204,7 +1204,6 @@
     <string name="settings_remove_three_pid_confirmation_content">%sを削除しますか？</string>
     <string name="settings_add_3pid_authentication_needed">認証が必要です</string>
     <string name="settings_add_3pid_confirm_password_title">パスワードを確認</string>
-    <string name="search_is_not_supported_in_e2e_room">暗号化されたルームでの検索は、まだサポートされていません。</string>
     <string name="search_banned_user_hint">ブロックされたユーザーを絞り込む</string>
     <string name="room_permissions_change_topic">トピックを変更</string>
     <string name="room_permissions_upgrade_the_room">ルームをアップグレード</string>
@@ -2507,7 +2506,6 @@
     <string name="ftue_auth_carousel_body_encrypted">エンドツーエンドで暗号化され、電話番号不要。広告やデータマイニング無し。</string>
     <string name="ftue_auth_carousel_body_control">会話の保存先を自分で決められ、自分で管理できる独立したコミュニケーション。Matrixをもとに。</string>
     <string name="ftue_auth_carousel_body_secure">お宅での対面会話と同じぐらいのプライバシーを提供する、セキュアで独立したコミュニケーション。</string>
-    <string name="ftue_auth_carousel_4_title">チームワークを効率よくしましょう。</string>
     <string name="ftue_auth_carousel_3_title">セキュアメッセージング</string>
     <string name="ftue_auth_carousel_2_title">管理権を握るのは、あなたです。</string>
     <string name="preference_help_summary">Elementの使用に関するヘルプ</string>

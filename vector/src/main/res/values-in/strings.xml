@@ -985,7 +985,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="template_settings_add_3pid_flow_not_supported">Anda tidak dapat melakukan ini dari ponsel ${app_name}</string>
     <string name="settings_add_3pid_confirm_password_title">Konfirmasi kata sandi Anda</string>
     <string name="settings_phone_number_empty">Tidak ada nomor telepon yang ditambahkan ke akun Anda</string>
-    <string name="search_is_not_supported_in_e2e_room">Pencarian di ruangan terenkripsi belum didukung.</string>
     <string name="search_banned_user_hint">Saring pengguna yang dicekal</string>
     <string name="room_permissions_change_topic">Mengubah topik</string>
     <string name="room_permissions_upgrade_the_room">Meng-upgrade ruangan ini</string>
@@ -2999,7 +2998,6 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="labs_auto_report_uisi">Laporkan Kesalahan Dekripsi Secara Otomatis.</string>
     <string name="room_member_override_nick_color">Ubah warna nama tampilan</string>
     <string name="login_splash_already_have_account">Saya sudah punya akun</string>
-    <string name="ftue_auth_carousel_4_title">Bebaskan.</string>
     <string name="ftue_auth_carousel_3_title">Perpesanan yang aman.</string>
     <string name="ftue_auth_carousel_2_title">Anda dalam kendali.</string>
     <string name="ftue_auth_carousel_1_title">Miliki percakapan Anda.</string>

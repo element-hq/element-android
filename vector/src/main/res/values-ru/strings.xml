@@ -2457,7 +2457,6 @@
         <item quantity="many">%d приглашений</item>
         <item quantity="other">%d приглашений</item>
     </plurals>
-    <string name="search_is_not_supported_in_e2e_room">Поиск в зашифрованных комнатах пока не поддерживается.</string>
     <string name="search_banned_user_hint">Фильтр заблокированных пользователей</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">У вас нет разрешения на запуск звонка</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">У вас нет разрешения на запуск конференции</string>
@@ -3148,7 +3147,6 @@
     <string name="ftue_auth_carousel_body_encrypted">Сквозное шифрование не требующее номера телефона. Нет рекламы или сбора данных.</string>
     <string name="ftue_auth_carousel_body_control">Выбор где хранятся ваши разговоры дает вам власть и независимость. Подключено с помощью Matrix.</string>
     <string name="ftue_auth_carousel_body_secure">Безопасное и независимое общение, обеспечивающее вам такой же уровень конфиденциальности, как при личном общении в вашем собственном доме.</string>
-    <string name="ftue_auth_carousel_4_title">Удалите шлак из команд.</string>
     <string name="ftue_auth_carousel_3_title">Безопасный обмен сообщениями.</string>
     <string name="ftue_auth_carousel_2_title">Ваше управление.</string>
     <string name="ftue_auth_carousel_1_title">Ваши собственные разговоры.</string>

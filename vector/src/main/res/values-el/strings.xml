@@ -593,7 +593,6 @@
     <string name="room_details_settings">Ρυθμίσεις</string>
     <string name="room_details_title">Λεπτομέρειες Δωματίου</string>
     <string name="room_details_people_invited_group_name">ΚΑΛΕΣΜΕΝΟΣ/Η</string>
-    <string name="search_is_not_supported_in_e2e_room">Η αναζήτηση σε κρυπτογραφημένα δωμάτια δεν υποστηρίζεται ακόμα.</string>
     <string name="tab_title_search_files">ΑΡΧΕΙΑ</string>
     <string name="tab_title_search_messages">ΜΗΝΥΜΑΤΑ</string>
     <string name="tab_title_search_rooms">ΔΩΜΑΤΙΑ</string>

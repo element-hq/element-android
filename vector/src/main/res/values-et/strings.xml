@@ -2399,7 +2399,6 @@
     <string name="settings_troubleshoot_test_push_loop_success">Rakendus võtab vastu tõuketeavitust</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Rakendus ootab tõuketeavitust</string>
     <string name="settings_troubleshoot_test_push_loop_title">Tõuketeavituse test</string>
-    <string name="search_is_not_supported_in_e2e_room">Otsing krüptitud jututubades ei ole veel toetatud.</string>
     <string name="search_banned_user_hint">Otsi suhtluskeelu saanud kasutajaid</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">Sul ei ole õigusi siin jututoas helistamiseks</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Sul ei ole piisavalt õigusi, et selles jututoas alustada konverentsikõnet</string>
@@ -3054,7 +3053,6 @@
     <string name="labs_auto_report_uisi">Automaatselt teata dekrüptimise vigadest.</string>
     <string name="room_member_override_nick_color">Asenda hüüdnime värvid</string>
     <string name="login_splash_already_have_account">Mul on kasutajakonto juba olemas</string>
-    <string name="ftue_auth_carousel_4_title">Lase tiimidel vabalt tegutseda.</string>
     <string name="ftue_auth_carousel_3_title">Turvaline sõnumivahetus.</string>
     <string name="ftue_auth_carousel_2_title">Sul on kontroll oma andmete üle.</string>
     <string name="ftue_auth_carousel_1_title">Vestlused, mida sa tegelikult ka omad.</string>

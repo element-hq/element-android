@@ -1464,7 +1464,6 @@
 \n
 \nVols iniciar sessió utilitzant un client web\?</string>
     <string name="template_settings_add_3pid_flow_not_supported">No pots fer això des d\'${app_name} per a mòbils</string>
-    <string name="search_is_not_supported_in_e2e_room">La cerca en sales xifrades encara no està disponible.</string>
     <string name="warning_room_not_created_yet">La sala encara no s\'ha acabat de crear. Vols cancel·lar la seva creació\?</string>
     <string name="room_error_not_found">No s\'ha trobat aquesta sala. Assegura\'t que existeixi.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Mostra detalls com per exemple noms de sala i contingut dels missatges.</string>

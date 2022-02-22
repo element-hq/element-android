@@ -2358,7 +2358,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="settings_troubleshoot_test_push_loop_success">La aplicación está recibiendo PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">La aplicación está esperando al PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_title">Probar Push</string>
-    <string name="search_is_not_supported_in_e2e_room">Todavía no se puede hacer búsquedas en salas cifradas.</string>
     <string name="search_banned_user_hint">Filtrar usuarios excluidos</string>
     <string name="send_bug_report_include_key_share_history">Enviar la historia de peticiones de claves compartidas</string>
     <string name="no_more_results">No hay más resultados</string>
