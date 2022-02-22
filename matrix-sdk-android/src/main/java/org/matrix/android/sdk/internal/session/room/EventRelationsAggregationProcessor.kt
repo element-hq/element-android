@@ -197,15 +197,15 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                             handleReaction(realm, event, roomId, isLocalEcho)
                         }
                     }
-                    // TODO is that ok??
+                    // HandleInitialAggregatedRelations should also be applied in encrypted messages with annotations
 //                    else if (event.unsignedData?.relations?.annotations != null) {
 //                        Timber.v("###REACTION e2e Aggregation in room $roomId for event ${event.eventId}")
 //                        handleInitialAggregatedRelations(realm, event, roomId, event.unsignedData.relations.annotations)
-// //                        EventAnnotationsSummaryEntity.where(realm, roomId, event.eventId ?: "").findFirst()
-// //                                ?.let {
-// //                                    TimelineEventEntity.where(realm, roomId = roomId, eventId = event.eventId ?: "").findAll()
-// //                                            ?.forEach { tet -> tet.annotations = it }
-// //                                }
+//                         EventAnnotationsSummaryEntity.where(realm, roomId, event.eventId ?: "").findFirst()
+//                                 ?.let {
+//                                     TimelineEventEntity.where(realm, roomId = roomId, eventId = event.eventId ?: "").findAll()
+//                                             ?.forEach { tet -> tet.annotations = it }
+//                                 }
 //                    }
                 }
                 EventType.REDACTION            -> {

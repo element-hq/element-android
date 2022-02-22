@@ -56,17 +56,9 @@ internal fun ThreadSummaryEntity.updateThreadSummary(
         roomMemberContentsByUser: HashMap<String, RoomMemberContent?>) {
     updateThreadSummaryRootEvent(rootThreadEventEntity, roomMemberContentsByUser)
     updateThreadSummaryLatestEvent(latestThreadEventEntity, roomMemberContentsByUser)
-
-    // Update latest event
-//    latestThreadEventEntity?.toTimelineEventEntity(roomMemberContentsByUser)?.let {
-//        Timber.i("###THREADS FetchThreadSummariesTask ThreadSummaryEntity updated latest event:${it.eventId} !")
-//        this.eventEntity?.threadSummaryLatestMessage = it
-//    }
-
-    // Update number of threads
     this.isUserParticipating = isUserParticipating
     numberOfThreads?.let {
-        // Update only when there is an actual value
+        // Update number of threads only when there is an actual value
         this.numberOfThreads = it
     }
 }
