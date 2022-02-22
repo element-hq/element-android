@@ -457,7 +457,6 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
         if (insertions.isNotEmpty() || modifications.isNotEmpty()) {
             onBuiltEvents(true)
         }
-
     }
 
     private fun getNextDisplayIndex(direction: Timeline.Direction): Int? {

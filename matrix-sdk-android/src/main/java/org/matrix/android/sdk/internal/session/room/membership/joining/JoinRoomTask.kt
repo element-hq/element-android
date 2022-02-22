@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.room.membership.joining
 
-import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.session.events.model.toContent
@@ -90,7 +89,7 @@ internal class DefaultJoinRoomTask @Inject constructor(
         } catch (exception: TimeoutCancellationException) {
             throw JoinRoomFailure.JoinedWithTimeout
         }
-        awaitTransaction(realmConfiguration){
+        awaitTransaction(realmConfiguration) {
             RoomSummaryEntity.where(it, roomId).findFirst()?.lastActivityTime = System.currentTimeMillis()
         }
         setReadMarkers(roomId)

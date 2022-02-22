@@ -17,7 +17,6 @@
 package org.matrix.android.sdk.internal.session.room.create
 
 import com.zhuinden.monarchy.Monarchy
-import io.realm.Realm
 import io.realm.RealmConfiguration
 import kotlinx.coroutines.TimeoutCancellationException
 import org.matrix.android.sdk.api.failure.Failure
@@ -106,7 +105,7 @@ internal class DefaultCreateRoomTask @Inject constructor(
             throw CreateRoomFailure.CreatedWithTimeout(roomId)
         }
 
-        awaitTransaction(realmConfiguration){
+        awaitTransaction(realmConfiguration) {
             RoomSummaryEntity.where(it, roomId).findFirst()?.lastActivityTime = System.currentTimeMillis()
         }
 
