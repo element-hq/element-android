@@ -57,17 +57,17 @@ class FtueAuthChooseProfilePictureFragment @Inject constructor(
         views.profilePictureToolbar.setNavigationOnClickListener {
             viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnBack))
         }
-        views.changeProfilePictureButton.setOnClickListener {
+        views.changeProfilePictureButton.debouncedClicks {
             galleryOrCameraDialogHelper.show()
         }
 
-        views.profilePictureSubmit.setOnClickListener {
+        views.profilePictureSubmit.debouncedClicks {
             withState(viewModel) {
                 viewModel.handle(OnboardingAction.SaveSelectedProfilePicture)
             }
         }
 
-        views.profilePictureSkip.setOnClickListener { viewModel.handle(OnboardingAction.UpdateProfilePictureSkipped) }
+        views.profilePictureSkip.debouncedClicks { viewModel.handle(OnboardingAction.UpdateProfilePictureSkipped) }
     }
 
     override fun updateWithState(state: OnboardingViewState) {
