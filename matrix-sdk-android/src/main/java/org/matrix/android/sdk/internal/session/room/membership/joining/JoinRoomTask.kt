@@ -24,6 +24,7 @@ import org.matrix.android.sdk.api.session.room.failure.JoinRoomFailure
 import org.matrix.android.sdk.api.session.room.members.ChangeMembershipState
 import org.matrix.android.sdk.api.session.room.model.Membership
 import org.matrix.android.sdk.internal.database.awaitNotEmptyResult
+import org.matrix.android.sdk.internal.database.awaitTransaction
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntity
 import org.matrix.android.sdk.internal.database.model.RoomSummaryEntityFields
 import org.matrix.android.sdk.internal.database.query.where
@@ -89,11 +90,9 @@ internal class DefaultJoinRoomTask @Inject constructor(
         } catch (exception: TimeoutCancellationException) {
             throw JoinRoomFailure.JoinedWithTimeout
         }
-
-        Realm.getInstance(realmConfiguration).executeTransactionAsync {
+        awaitTransaction(realmConfiguration){
             RoomSummaryEntity.where(it, roomId).findFirst()?.lastActivityTime = System.currentTimeMillis()
         }
-
         setReadMarkers(roomId)
     }
 
