@@ -68,7 +68,6 @@ import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.MobileScreen
-import im.vector.app.features.analytics.screen.ScreenEvent
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.consent.ConsentNotGivenHelper
 import im.vector.app.features.navigation.Navigator
@@ -337,7 +336,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         super.onResume()
         Timber.i("onResume Activity ${javaClass.simpleName}")
         analyticsScreenName?.let {
-            ScreenEvent(it).send(analyticsTracker)
+            analyticsTracker.screen(MobileScreen(screenName = it))
         }
         configurationViewModel.onActivityResumed()
 

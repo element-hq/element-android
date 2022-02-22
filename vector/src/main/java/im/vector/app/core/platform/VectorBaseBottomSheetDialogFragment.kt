@@ -39,7 +39,6 @@ import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.MobileScreen
-import im.vector.app.features.analytics.screen.ScreenEvent
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.view.clicks
@@ -139,7 +138,7 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
         super.onResume()
         Timber.i("onResume BottomSheet ${javaClass.simpleName}")
         analyticsScreenName?.let {
-            ScreenEvent(it).send(analyticsTracker)
+            analyticsTracker.screen(MobileScreen(screenName = it))
         }
     }
 

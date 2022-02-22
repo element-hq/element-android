@@ -45,7 +45,6 @@ import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.utils.ToolbarConfig
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.MobileScreen
-import im.vector.app.features.analytics.screen.ScreenEvent
 import im.vector.app.features.navigation.Navigator
 import im.vector.lib.ui.styles.dialogs.MaterialProgressDialog
 import kotlinx.coroutines.flow.launchIn
@@ -145,7 +144,7 @@ abstract class VectorBaseFragment<VB : ViewBinding> : Fragment(), MavericksView 
         super.onResume()
         Timber.i("onResume Fragment ${javaClass.simpleName}")
         analyticsScreenName?.let {
-            ScreenEvent(it).send(analyticsTracker)
+            analyticsTracker.screen(MobileScreen(screenName = it))
         }
     }
 

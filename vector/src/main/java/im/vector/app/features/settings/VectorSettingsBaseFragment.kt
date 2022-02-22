@@ -31,7 +31,6 @@ import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.MobileScreen
-import im.vector.app.features.analytics.screen.ScreenEvent
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.Session
@@ -91,7 +90,7 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), Maverick
         super.onResume()
         Timber.i("onResume Fragment ${javaClass.simpleName}")
         analyticsScreenName?.let {
-            ScreenEvent(it).send(analyticsTracker)
+            analyticsTracker.screen(MobileScreen(screenName = it))
         }
         vectorActivity.supportActionBar?.setTitle(titleRes)
         // find the view from parent activity

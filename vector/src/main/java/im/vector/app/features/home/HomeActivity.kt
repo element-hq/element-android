@@ -49,7 +49,6 @@ import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
 import im.vector.app.features.analytics.plan.MobileScreen
-import im.vector.app.features.analytics.screen.ScreenEvent
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
 import im.vector.app.features.navigation.Navigator
@@ -164,7 +163,7 @@ class HomeActivity :
 
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         override fun onDrawerOpened(drawerView: View) {
-            ScreenEvent(MobileScreen.ScreenName.Sidebar).send(analyticsTracker)
+            analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.Sidebar))
         }
 
         override fun onDrawerStateChanged(newState: Int) {
