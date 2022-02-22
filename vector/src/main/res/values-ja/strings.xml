@@ -278,7 +278,7 @@
     <string name="settings_interface_language">言語</string>
     <string name="settings_user_interface">インターフェース</string>
     <string name="account_email_validation_title">認証を確認中</string>
-    <string name="account_email_validation_message">電子メールを確認して、本文中のURLをクリックしてください。 完了したら「続行する」をクリックしてください。</string>
+    <string name="account_email_validation_message">電子メールを確認して、本文中のURLをクリックしてください。完了したら「続行する」をクリックしてください。</string>
     <string name="account_email_already_used_error">このメールアドレスは既に使われています。</string>
     <string name="settings_password_updated">あなたのパスワードは更新されました</string>
     <string name="settings_select_country">国を選択</string>
@@ -1875,7 +1875,7 @@
     <string name="room_list_rooms_empty_title">ルーム</string>
     <string name="room_list_people_empty_title">会話</string>
     <string name="room_list_catchup_welcome_body">ここで未読メッセージに追いつく</string>
-    <string name="room_list_catchup_welcome_title">ホームへようこそ!</string>
+    <string name="room_list_catchup_welcome_title">ホームにようこそ！</string>
     <string name="room_list_catchup_empty_body">未読メッセージはありません</string>
     <string name="room_list_catchup_empty_title">未読はありません！</string>
     <string name="sas_incoming_request_notif_content">%sがセッションの検証を要求しています</string>
@@ -2819,6 +2819,6 @@
 \n
 \n対面で行うのが最もセキュアです。</string>
     <string name="encryption_has_been_misconfigured">暗号化の設定が正しくありません。</string>
-    <string name="room_profile_section_restore_security">暗号化を復元する</string>
+    <string name="room_profile_section_restore_security">暗号化を復元</string>
     <string name="contact_admin_to_restore_encryption">暗号化を有効な状態に取り戻すために、管理者に連絡してください。</string>
 </resources>
