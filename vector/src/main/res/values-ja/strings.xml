@@ -2814,17 +2814,17 @@
     <string name="confirm_your_identity_quad_s">暗号化されたメッセージにアクセスするには、ログインを検証し、本人確認を行う必要があります。</string>
     <string name="confirm_your_identity">暗号化されたメッセージにアクセスするには、あなたの他のセッションからログインを検証し、本人確認を行う必要があります。</string>
     <string name="disclaimer_positive_button">詳しく知る</string>
-    <string name="verification_request_notice">セキュリティー高めるために、使い捨てコードが一致しているのを確認して、%sを検証しましょう。</string>
+    <string name="verification_request_notice">セキュリティーを高めるために、使い捨てコードが一致しているのを確認して、%sを検証しましょう。</string>
     <string name="verification_request_alert_description">セキュリティーを高めるために、自分と相手の端末でコードが一致していることを確認して、%sを検証しましょう。
 \n
 \n対面で行うのが最もセキュアです。</string>
     <string name="encryption_has_been_misconfigured">暗号化の設定が正しくありません。</string>
     <string name="room_profile_section_restore_security">暗号化を復元</string>
     <string name="contact_admin_to_restore_encryption">暗号化を有効な状態に取り戻すために、管理者に連絡してください。</string>
-    <string name="verification_conclusion_ok_notice">このユーザーとのメッセージがエンドツーエンド暗号化されており、第三者には読めません。</string>
+    <string name="verification_conclusion_ok_notice">このユーザーとのメッセージはエンドツーエンド暗号化されており、第三者には読めません。</string>
     <string name="verification_code_notice">このコードを相手の画面に現れているコードと比較してください。</string>
     <string name="verification_emoji_notice">絵文字を比較して、同じ順番に現れているのを確認してください。</string>
-    <string name="verification_request_start_notice">対面で行うか、他の信頼できる通信媒体を利用するのが最もセキュアです。</string>
+    <string name="verification_request_start_notice">セキュリティーを高めるために、対面で行うか、他の信頼できる通信手段を利用しましょう。</string>
     <string name="command_description_rainbow_emote">選択されたエモートを虹色にして送信します</string>
     <string name="command_description_rainbow">選択されたテキストを虹色にして送信します</string>
     <string name="template_rendering_event_error_exception">${app_name}がID%1$sのイベントを処理中にエラーが発生しました</string>
