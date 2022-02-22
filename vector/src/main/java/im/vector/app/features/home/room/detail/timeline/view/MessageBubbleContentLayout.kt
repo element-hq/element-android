@@ -70,7 +70,8 @@ class MessageBubbleContentLayout @JvmOverloads constructor(context: Context, att
             if (textLineCount == 1 && contentContainerView.measuredWidth + timeViewMeasuredWidthWithMargins < maxContentWidth) {
                 width = contentContainerView.measuredWidth + timeViewMeasuredWidthWithMargins
                 height = contentContainerView.measuredHeight
-            } else if (textLineCount > 1 && lastLineWidth + timeViewMeasuredWidthWithMargins < contentContainerView.measuredWidth - contentContainerView.paddingEnd) {
+            } else if (textLineCount > 1 && lastLineWidth + timeViewMeasuredWidthWithMargins
+                    < contentContainerView.measuredWidth - contentContainerView.paddingEnd) {
                 width = contentContainerView.measuredWidth
                 height = contentContainerView.measuredHeight
             } else {
@@ -89,7 +90,7 @@ class MessageBubbleContentLayout @JvmOverloads constructor(context: Context, att
             val parentTop: Int = paddingTop
             val parentBottom: Int = bottom - top - paddingBottom
             if (localeLayoutDirection == LAYOUT_DIRECTION_RTL) {
-                val contentLeft  = parentRight - contentContainerView.measuredWidth - contentContainerView.marginEnd
+                val contentLeft = parentRight - contentContainerView.measuredWidth - contentContainerView.marginEnd
                 contentContainerView.layout(
                         contentLeft,
                         parentTop + contentContainerView.marginTop,
@@ -120,67 +121,4 @@ class MessageBubbleContentLayout @JvmOverloads constructor(context: Context, att
             super.onLayout(changed, left, top, right, bottom)
         }
     }
-
-    /*
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val widthConstraints = paddingStart + paddingEnd
-        val heightConstraints = paddingTop + paddingBottom
-
-        val measuredWidth = MeasureSpec.getSize(widthMeasureSpec)
-        val width: Int
-        val height: Int
-
-        val maxAvailableWidth = min(measuredWidth, maxWidth)
-        measureChild(timeView, widthMeasureSpec, heightMeasureSpec)
-
-        val messageTextView = this.messageTextView
-        if (messageTextView != null) {
-            val newWidthMeasureSpec = MeasureSpec.makeMeasureSpec(maxAvailableWidth, MeasureSpec.AT_MOST)
-            measureChild(contentContainerView, newWidthMeasureSpec, heightMeasureSpec)
-            val textLineCount = messageTextView.lineCount
-            val lastLineWidth = if (textLineCount != 0) messageTextView.layout.getLineWidth(textLineCount - 1) else 0f
-            if (textLineCount == 1 && contentContainerView.measuredWidth + widthConstraints + timeViewMeasuredWidthWithMargins < measuredWidth) {
-                width = contentContainerView.measuredWidth + timeViewMeasuredWidthWithMargins + widthConstraints
-                height = contentContainerView.measuredHeight + heightConstraints
-            } else if (textLineCount > 1 && lastLineWidth + widthConstraints + timeViewMeasuredWidthWithMargins < contentContainerView.measuredWidth - contentContainerView.paddingEnd) {
-                width = contentContainerView.measuredWidth + widthConstraints
-                height = contentContainerView.measuredHeight + heightConstraints
-            } else {
-                width = contentContainerView.measuredWidth + widthConstraints
-                height = contentContainerView.measuredHeight + heightConstraints + timeView.measuredHeight
-            }
-        } else {
-            if (contentOverlayView.isVisible) {
-                val newWidthMeasureSpec = MeasureSpec.makeMeasureSpec(maxAvailableWidth, MeasureSpec.AT_MOST)
-                measureChild(contentContainerView, newWidthMeasureSpec, heightMeasureSpec)
-                val overlayWidthSpec = MeasureSpec.makeMeasureSpec(contentContainerView.measuredWidth, MeasureSpec.EXACTLY)
-                val overlayHeightSpec = MeasureSpec.makeMeasureSpec(contentContainerView.measuredHeight, MeasureSpec.EXACTLY)
-                contentOverlayView.measure(overlayWidthSpec, overlayHeightSpec)
-                width = contentContainerView.measuredWidth
-                height = contentContainerView.measuredHeight
-            } else {
-                val newWidthMeasureSpec = MeasureSpec.makeMeasureSpec(maxAvailableWidth, MeasureSpec.AT_MOST)
-                measureChild(contentContainerView, newWidthMeasureSpec, heightMeasureSpec)
-                width = contentContainerView.measuredWidth
-                height = contentContainerView.measuredHeight + timeView.measuredHeight
-            }
-        }
-        setMeasuredDimension(width, height)
-    }
-
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        val parentLeft: Int = paddingLeft
-        val parentRight: Int = right - left - paddingRight
-        val parentTop: Int = paddingTop
-        val parentBottom: Int = bottom - top - paddingBottom
-        val contentRight = parentLeft + contentContainerView.measuredWidth
-        val contentBottom = parentTop + contentContainerView.measuredHeight
-        contentContainerView.layout(parentLeft, parentTop, contentRight, contentBottom)
-        if (contentOverlayView.isVisible) {
-            contentOverlayView.layout(parentLeft, parentTop, contentRight, contentBottom)
-        }
-        timeView.layout(parentRight - timeView.measuredWidth - timeViewMargins, parentBottom - timeView.measuredHeight - timeViewMargins, parentRight, parentBottom)
-    }
-
-     */
 }
