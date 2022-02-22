@@ -23,18 +23,23 @@ import org.matrix.android.sdk.internal.database.model.RoomMemberSummaryEntity
 import org.matrix.android.sdk.internal.database.query.where
 import javax.inject.Inject
 
-internal class ReadReceiptsSummaryMapper @Inject constructor(private val realmSessionProvider: RealmSessionProvider) {
+internal class ReadReceiptsSummaryMapper @Inject constructor(
+        private val realmSessionProvider: RealmSessionProvider
+) {
 
     fun map(readReceiptsSummaryEntity: ReadReceiptsSummaryEntity?): List<ReadReceipt> {
         if (readReceiptsSummaryEntity == null) {
             return emptyList()
         }
         val readReceipts = readReceiptsSummaryEntity.readReceipts
-        return readReceipts
-                .mapNotNull {
-                    val roomMember = RoomMemberSummaryEntity.where(readReceiptsSummaryEntity.realm, roomId = it.roomId, userId = it.userId).findFirst()
-                            ?: return@mapNotNull null
-                    ReadReceipt(roomMember.asDomain(), it.originServerTs.toLong())
-                }
+
+        return realmSessionProvider.withRealm { realm ->
+            readReceipts
+                    .mapNotNull {
+                        val roomMember = RoomMemberSummaryEntity.where(realm, roomId = it.roomId, userId = it.userId).findFirst()
+                                ?: return@mapNotNull null
+                        ReadReceipt(roomMember.asDomain(), it.originServerTs.toLong())
+                    }
+        }
     }
 }
