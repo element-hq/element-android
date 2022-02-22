@@ -1225,9 +1225,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="keys_backup_info_title_signature">Aláírás</string>
     <string name="keys_backup_settings_untrusted_backup">A Kulcs Mentés munkamenetben való felhasználáshoz, állítsd vissza jelmondattal vagy Visszaállítási Kulccsal.</string>
     <string name="new_recovery_method_popup_title">Új Kulcs Mentés</string>
-    <string name="new_recovery_method_popup_description">Új biztonságos üzenet kulcs mentés észlelve.
-
-Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó próbál hozzáférni a fiókodhoz. Azonnal cseréld le a felhasználói fiókod jelszavát és állítsál be új visszaállítási metódust a Beállításokban.</string>
+    <string name="new_recovery_method_popup_description">Egy új biztonságos kulcs mentés észlelve. Ha nem te állítottad be a visszaállítási módot, akkor egy támadó próbál hozzáférni a fiókodhoz. Azonnal cseréld le a felhasználói fiókod jelszavát és állíts be új visszaállítási módot a Beállításokban.</string>
     <string name="new_recovery_method_popup_was_me">Én voltam</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Visszaállítási kulcs kiszámítása…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Kulcsok letöltése…</string>
@@ -2656,7 +2654,7 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
 \n
 \nAz üzeneteidet zárolással vannak biztosítva és csak neked és a címzetteknek van meg a kulcs hozzá.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Itt az üzenetek nincsenek végponttól végpontig titkosítva.</string>
-    <string name="sent_verification_conclusion">Azonosítás eredménye</string>
+    <string name="sent_verification_conclusion">Hitelesítés eredménye</string>
     <string name="sent_a_poll">Szavazás</string>
     <string name="create_room_in_progress">Szoba létrehozása…</string>
     <string name="create_room_alias_invalid">Néhány karakter nem engedélyezett</string>
@@ -3068,8 +3066,8 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="settings_enable_location_sharing_summary">A beállítás után bármelyik szobában megoszthatod a földrajzi helyzetedet</string>
     <string name="settings_enable_location_sharing">Földrajzi hely megosztás engedélyezése</string>
     <string name="location_share_external">Megnyitás ezzel</string>
-    <string name="template_location_not_available_dialog_content">${app_name} nem fér hozzá a helyadatodhoz. Próbáld újra később.</string>
-    <string name="template_location_not_available_dialog_title">${app_name} nem fér hozzá a földrajzi helyzetedhez</string>
+    <string name="template_location_not_available_dialog_content">Az ${app_name} nem fér hozzá a tartózkodási helyedhez. Próbáld újra később.</string>
+    <string name="template_location_not_available_dialog_title">Az ${app_name} nem tudott hozzáférni a tartózkodási helyedhez</string>
     <string name="location_share">Tartózkodási hely megosztása</string>
     <string name="a11y_location_share_icon">Tartózkodási hely megosztása</string>
     <string name="location_activity_title_preview">Földrajzi helyzet</string>
@@ -3096,4 +3094,37 @@ Ha nem te állítottad be a visszaállítási metódust, akkor egy támadó pró
     <string name="attachment_type_location">Földrajzi helyzet</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">A titkosítás beállítása hibás így nem lehet üzenetet küldeni. Kattints a beállításokért.</string>
     <string name="room_unsupported_e2e_algorithm">A titkosítás beállítása hibás így nem lehet üzenetet küldeni. Kérjük vedd fel a kapcsolatot az adminisztrátorral a titkosítás helyreállításához.</string>
+    <string name="message_bubbles">Üzenet buborékok megjelenítése</string>
+    <string name="location_timeline_failed_to_load_map">Térkép betöltése sikertelen</string>
+    <string name="a11y_static_map_image">Térkép</string>
+    <string name="labs_enable_thread_messages_desc">Figyelem: az alkalmazás újraindul</string>
+    <string name="labs_enable_thread_messages">Üzenetszálak engedélyezése</string>
+    <string name="ftue_auth_use_case_connect_to_server">Szerverhez csatlakozás</string>
+    <string name="ftue_auth_use_case_join_existing_server">Csatlakoznál egy már meglévő szerverhez\?</string>
+    <string name="ftue_auth_use_case_skip_partial">kérdés kihagyása</string>
+    <string name="ftue_auth_use_case_skip">Még nem vagy biztos\? Tudhatsz ilyent: %s</string>
+    <string name="ftue_auth_use_case_option_three">Közösségek</string>
+    <string name="ftue_auth_use_case_option_two">Csoportok</string>
+    <string name="ftue_auth_use_case_option_one">Barátok és család</string>
+    <string name="ftue_auth_use_case_subtitle">Segítünk a kapcsolatteremtésben.</string>
+    <string name="ftue_auth_use_case_title">Kivel beszélgetnék leginkább\?</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">Már nézed ezt az üzenetszálat!</string>
+    <string name="view_in_room">Megjelenítés szobában</string>
+    <string name="reply_in_thread">Válasz az üzenetszálban</string>
+    <string name="command_not_supported_in_threads">„%s” parancs ismert, de üzenetszálban nem támogatott.</string>
+    <string name="search_thread_from_a_thread">Az üzenetszálból</string>
+    <string name="thread_list_empty_notice">Tipp: Koppints hosszan az üzenetre és használd ezt: %s.</string>
+    <string name="thread_list_empty_subtitle">Az üzenetszálak segítenek a különböző témájú beszélgetések figyelemmel kísérésében.</string>
+    <string name="thread_list_empty_title">Beszélgetések üzenetszálakba való rendezése</string>
+    <string name="thread_list_modal_my_threads_subtitle">Minden üzenetszál megjelenítése ahol szerepel</string>
+    <string name="thread_list_modal_my_threads_title">Üzenetszálaim</string>
+    <string name="thread_list_modal_all_threads_subtitle">A szobában lévő összes szál mutatása</string>
+    <string name="thread_list_modal_all_threads_title">Minden üzenetszál</string>
+    <string name="thread_list_modal_title">Szűrés</string>
+    <string name="thread_list_title">Üzenetszálak</string>
+    <string name="thread_timeline_title">Üzenetszál</string>
+    <string name="room_threads_filter">Üzenetszálak szűrése a szobában</string>
+    <string name="action_thread_copy_link_to_thread">Üzenetszálra mutató hivatkozás másolása</string>
+    <string name="action_thread_view_in_room">Megjelenítés szobában</string>
+    <string name="action_view_threads">Üzenetszálak megtekintése</string>
 </resources>

@@ -1502,4 +1502,22 @@
     <string name="notice_direct_room_created">%1$s가 새로운 토론을 생성함</string>
     <string name="notice_direct_room_created_by_you">새로운 토론을 생성함</string>
     <string name="notice_room_created_by_you">새로운 방을 생성함</string>
+    <string name="notice_display_name_set_by_you">표시 이름을 %1$s(으)로 변경했습니다</string>
+    <string name="notice_avatar_url_changed_by_you">아바타를 변경했습니다</string>
+    <string name="notice_room_withdraw_by_you">%1$s님의 초대를 취소했습니다</string>
+    <string name="notice_room_ban_by_you">%1$s을 출입 금지했습니다</string>
+    <string name="notice_room_unban_by_you">%1$s님의 출입 금지를 풀었습니다</string>
+    <string name="notice_room_remove_by_you">%1$s님을 추방했습니다</string>
+    <string name="notice_room_reject_by_you">초대를 거부했습니다</string>
+    <string name="notice_direct_room_leave_by_you">방을 떠났습니다</string>
+    <string name="notice_direct_room_leave">%1$s님이 방을 떠났습니다</string>
+    <string name="notice_room_leave_by_you">방을 떠났습니다</string>
+    <string name="notice_direct_room_join_by_you">참가했습니다</string>
+    <string name="notice_direct_room_join">%1$s님이 참가했습니다</string>
+    <string name="notice_room_join_by_you">방에 참가했습니다</string>
+    <string name="notice_room_invite_by_you">%1$s님을 초대했습니다</string>
+    <string name="notice_room_created">%1$s님이 새로운 방을 생성함</string>
+    <string name="notice_room_invite_no_invitee_by_you">내가 보낸 초대</string>
+    <string name="summary_you_sent_sticker">스티커를 보냈습니다.</string>
+    <string name="summary_you_sent_image">사진을 보냈습니다.</string>
 </resources>

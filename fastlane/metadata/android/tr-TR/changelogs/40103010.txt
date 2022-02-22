@@ -1,0 +1,2 @@
+Bu sürümdeki ana değişiklikler: Spaces kullanarak odalarınızı düzenleyin! v1.3.1, v1.3.0'da meydana gelen bir kilitlenme düzeltildi.
+Tam değişiklik günlüğü: https://github.com/vector-im/element-android/releases/tag/v1.3.1

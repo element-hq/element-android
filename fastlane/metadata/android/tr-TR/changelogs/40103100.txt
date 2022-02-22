@@ -1,0 +1,2 @@
+Bu sürümdeki ana değişiklikler: Anketler için destek ekleyin (laboratuarlarda). Yeni URL önizleme tasarımı.
+Tam değişiklik listesi: https://github.com/vector-im/element-android/releases/tag/v1.3.10

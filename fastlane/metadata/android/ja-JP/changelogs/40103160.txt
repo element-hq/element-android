@@ -1,0 +1,2 @@
+このバージョンの主な変更点：ルームへのロケーションの送信。投票機能の変更。
+更新履歴：https://github.com/vector-im/element-android/releases/tag/v1.3.16
