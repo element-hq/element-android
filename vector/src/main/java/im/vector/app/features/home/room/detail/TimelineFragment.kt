@@ -1234,7 +1234,6 @@ class TimelineFragment @Inject constructor(
     override fun onResume() {
         super.onResume()
         notificationDrawerManager.setCurrentRoom(timelineArgs.roomId)
-        // TODO should we handle it in HomeActivity as well? => see how we open dm from create Message button
         roomDetailPendingActionStore.data?.let { handlePendingAction(it) }
         roomDetailPendingActionStore.data = null
 
@@ -1248,8 +1247,6 @@ class TimelineFragment @Inject constructor(
                 timelineViewModel.handle(RoomDetailAction.JumpToReadReceipt(roomDetailPendingAction.userId))
             is RoomDetailPendingAction.MentionUser       ->
                 insertUserDisplayNameInTextEditor(roomDetailPendingAction.userId)
-            is RoomDetailPendingAction.OpenOrCreateDm    ->
-                timelineViewModel.handle(RoomDetailAction.OpenOrCreateDm(roomDetailPendingAction.userId))
             is RoomDetailPendingAction.OpenRoom          ->
                 handleOpenRoom(RoomDetailViewEvents.OpenRoom(roomDetailPendingAction.roomId, roomDetailPendingAction.closeCurrentRoom))
         }.exhaustive
