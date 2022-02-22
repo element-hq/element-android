@@ -2858,7 +2858,7 @@
     <string name="settings_notification_other">دیگر</string>
     <string name="settings_notification_mentions_and_keywords">اشاره‌ها و کلیدواژگان</string>
     <string name="settings_notification_default">آگاهی‌های پیش‌گزیده</string>
-    <string name="link_this_email_with_your_account">%s در تنظیمات برای دریافت مستقیم دعوت‌ها در المنت.</string>
+    <string name="template_link_this_email_with_your_account">%s در تنظیمات برای دریافت مستقیم دعوت‌ها در المنت.</string>
     <string name="link_this_email_settings_link">این رایانامه را به حسابتان پیوند دهید</string>
     <string name="this_invite_to_this_space_was_sent">این دعوت به این فضا به %s فرستاده شده که با حسابتان در ارتباط نیست</string>
     <string name="this_invite_to_this_room_was_sent">این دعوت به این اتاق به %s فرستاده شده که با حسابتان در ارتباط نیست</string>

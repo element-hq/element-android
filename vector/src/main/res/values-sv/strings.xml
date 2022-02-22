@@ -2859,7 +2859,7 @@
     <string name="hs_client_url">Hemserver-API-URL</string>
     <string name="missing_permissions_title">Saknar behörighet</string>
     <string name="denied_permission_voice_message">För att skicka röstmeddelanden, vänligen ge mikrofonåtkomst.</string>
-    <string name="link_this_email_with_your_account">%s i inställningar för att ta emot inbjudningar direkt i Element.</string>
+    <string name="template_link_this_email_with_your_account">%s i inställningar för att ta emot inbjudningar direkt i ${app_name}.</string>
     <string name="link_this_email_settings_link">Länka den här e-postadressen med ditt konto</string>
     <string name="this_invite_to_this_space_was_sent">Denna inbjudan till det här utrymmet skickades till %s, vilket inte är associerat med ditt konto</string>
     <string name="this_invite_to_this_room_was_sent">Denna inbjudan till det här rummet skickades till %s, vilket inte är associerat med ditt konto</string>

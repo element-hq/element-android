@@ -2945,7 +2945,7 @@
     <string name="settings_notification_mentions_and_keywords">Упоминания и ключевые слова</string>
     <string name="settings_notification_default">Уведомления по умолчанию</string>
     <string name="denied_permission_voice_message">Чтобы отправлять голосовые сообщения, предоставьте разрешение на Микрофон.</string>
-    <string name="link_this_email_with_your_account">%s в настройках, чтобы получать приглашения непосредственно в Element.</string>
+    <string name="template_link_this_email_with_your_account">%s в настройках, чтобы получать приглашения непосредственно в ${app_name}.</string>
     <string name="link_this_email_settings_link">Свяжите этот адрес электронной почты с вашей учетной записью</string>
     <string name="this_invite_to_this_room_was_sent">Приглашение в эту комнату было отправлено на %s, который не связан с вашей учетной записью</string>
     <string name="this_invite_to_this_space_was_sent">Приглашение в это пространство было отправлено на %s, который не связан с вашей учетной записью</string>

@@ -2477,7 +2477,7 @@
     <string name="notice_room_server_acl_updated_was_banned">• Serwery pasujące do %s zostały usunięte z listy zablokowanych.</string>
     <string name="notice_room_server_acl_updated_banned">• Serwery pasujące do %s są teraz zablokowane.</string>
     <string name="room_displayname_3_members">%1$s, %2$s i %3$s</string>
-    <string name="link_this_email_with_your_account">%s w Ustawieniach, aby otrzymywać zaproszenia bezpośrednio w Elememencie.</string>
+    <string name="template_link_this_email_with_your_account">%s w Ustawieniach, aby otrzymywać zaproszenia bezpośrednio w ${app_name}.</string>
     <string name="room_permissions_change_topic">Zmiana tematu</string>
     <string name="room_permissions_upgrade_the_space">Aktualizacja Przestrzeni</string>
     <string name="room_permissions_upgrade_the_room">Aktualizacja pokoju</string>

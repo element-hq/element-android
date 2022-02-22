@@ -1704,7 +1704,7 @@
     <string name="create_poll_question_hint">Câu hỏi hoặc chủ đề</string>
     <string name="create_poll_question_title">Câu hỏi hoặc chủ đề thăm dò ý kiến</string>
     <string name="create_poll_title">Tạo Cuộc thăm dò ý kiến</string>
-    <string name="link_this_email_with_your_account">%s trong Cài đặt để nhận lời mời trực tiếp trong Element.</string>
+    <string name="template_link_this_email_with_your_account">%s trong Cài đặt để nhận lời mời trực tiếp trong ${app_name}.</string>
     <string name="link_this_email_settings_link">Liên kết email này với tài khoản của bạn</string>
     <string name="this_invite_to_this_space_was_sent">Lời mời này đến Space này đã được gửi đến %s không được liên kết với tài khoản của bạn</string>
     <string name="this_invite_to_this_room_was_sent">Lời mời này đến phòng này đã được gửi đến %s không được liên kết với tài khoản của bạn</string>

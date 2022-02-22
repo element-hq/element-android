@@ -2808,7 +2808,7 @@
     <string name="settings_notification_default">默认通知</string>
     <string name="call_tile_video_active">活跃视频通话</string>
     <string name="call_tile_voice_active">活跃语音通话</string>
-    <string name="link_this_email_with_your_account">在 Element 中直接接收邀请的设置 %s。</string>
+    <string name="template_link_this_email_with_your_account">在 ${app_name} 中直接接收邀请的设置 %s。</string>
     <string name="link_this_email_settings_link">将此邮箱与您的账户相链接</string>
     <string name="this_invite_to_this_space_was_sent">加入这个空间的邀请被发送至 %s，此邮箱未与您的账户相关联</string>
     <string name="this_invite_to_this_room_was_sent">加入这个聊天室的邀请被发送至 %s，此邮箱未与您的账户相关联</string>

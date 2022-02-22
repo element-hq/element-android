@@ -2860,7 +2860,7 @@
     <string name="upgrade_room_for_restricted_no_param">Kõik hõlmava kogukonna liikmed saavad antud jututuba leida ja sellega liituda - sa ei pea kedagi ükshaaval kutsuma. Neid jututoa seadistusi saad igal hetkel muuta.</string>
     <string name="upgrade_room_for_restricted">Kõik %s jututoa liikmed saavad antud jututuba leida ja sellega liituda - sa ei pea kedagi ükshaaval kutsuma. Neid jututoa seadistusi saad igal hetkel muuta.</string>
     <string name="call_tap_to_return">%1$s - tagasipöördumiseks klõpsi</string>
-    <string name="link_this_email_with_your_account">%s ja saa kutsed otse Element\'i.</string>
+    <string name="template_link_this_email_with_your_account">%s ja saa kutsed otse ${app_name}\'i.</string>
     <string name="link_this_email_settings_link">Seo see e-posti aadress oma kasutajakontoga</string>
     <string name="this_invite_to_this_space_was_sent">See kutse siia kogukonnakeskusesse saadeti aadressile %s, mis ei ole seotud sinu kontoga</string>
     <string name="this_invite_to_this_room_was_sent">See kutse siia jututuppa saadeti aadressile %s, mis ei ole seotud sinu kontoga</string>

@@ -2806,7 +2806,7 @@
     <string name="settings_notification_other">其他</string>
     <string name="settings_notification_mentions_and_keywords">提及與關鍵字</string>
     <string name="settings_notification_default">預設通知</string>
-    <string name="link_this_email_with_your_account">設定中的 %s 可直接在 Element 中接收邀請。</string>
+    <string name="template_link_this_email_with_your_account">設定中的 %s 可直接在 ${app_name} 中接收邀請。</string>
     <string name="link_this_email_settings_link">將此電子郵件與您的帳號連結</string>
     <string name="this_invite_to_this_space_was_sent">此空間的邀請已傳送給與您的帳號無關的 %s</string>
     <string name="this_invite_to_this_room_was_sent">此聊天室的邀請已傳送給與您的帳號無關的 %s</string>

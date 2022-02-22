@@ -2619,7 +2619,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="space_add_space_to_any_space_you_manage">Tambahkan sebuah space ke space apa saja yang Anda dapat kelola.</string>
     <string name="create_space_error_empty_field_space_name">Beri nama untuk melanjutkan.</string>
     <string name="create_pin_confirm_failure">Gagal untuk memvalidasi PIN, mohon ketuk yang baru.</string>
-    <string name="link_this_email_with_your_account">%s di Pengaturan untuk menerima undangan secara langsung di Element.</string>
+    <string name="template_link_this_email_with_your_account">%s di Pengaturan untuk menerima undangan secara langsung di ${app_name}.</string>
     <string name="link_this_email_settings_link">Tautkan email ini ke akun Anda</string>
     <string name="this_invite_to_this_space_was_sent">Undangan space ini telah dikirim ke %s yang tidak diasosiasikan dengan akun Anda</string>
     <string name="this_invite_to_this_room_was_sent">Undangan ruangan ini telah dikirim ke %s yang tidak diasosiasikan dengan akun Anda</string>

@@ -2856,7 +2856,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="voice_message_slide_to_cancel">Elhúzás a megszakításhoz</string>
     <string name="a11y_start_voice_message">Hang üzenet felvétele</string>
     <string name="allow_anyone_in_room_to_access">%s tér tagság megtalálhatja és hozzáférhet. Más tereket is beállíthatsz.</string>
-    <string name="link_this_email_with_your_account">%s a Beállításokba a közvetlen meghívások fogadásához az Elemenetben.</string>
+    <string name="template_link_this_email_with_your_account">%s a Beállításokba a közvetlen meghívások fogadásához az ${app_name}.</string>
     <string name="this_invite_to_this_space_was_sent">Ehhez a térhez a meghívó ide lett elküldve: %s, ami nincs összefüggésben a fiókoddal</string>
     <string name="this_invite_to_this_room_was_sent">Ehhez a szobához a meghívó ide lett elküldve: %s, ami nincs összefüggésben a fiókoddal</string>
     <string name="link_this_email_settings_link">Ennek az e-mailnek a fiókhoz való kötése</string>

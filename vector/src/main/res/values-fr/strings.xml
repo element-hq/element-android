@@ -2860,7 +2860,7 @@
     <string name="settings_notification_other">Autre</string>
     <string name="settings_notification_mentions_and_keywords">Mentions et mots-clés</string>
     <string name="settings_notification_default">Notifications par défaut</string>
-    <string name="link_this_email_with_your_account">%s dans les paramètres pour recevoir les invitations directement dans Element.</string>
+    <string name="template_link_this_email_with_your_account">%s dans les paramètres pour recevoir les invitations directement dans ${app_name}.</string>
     <string name="link_this_email_settings_link">Lier cet e-mail à votre compte</string>
     <string name="this_invite_to_this_space_was_sent">Cette invitation à cette espace a été envoyée à %s qui n’est pas associé à votre compte</string>
     <string name="this_invite_to_this_room_was_sent">Cette invitation à ce salon a été envoyée à %s qui n’est pas associé à votre compte</string>

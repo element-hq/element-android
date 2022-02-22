@@ -2933,7 +2933,7 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="call_ringing">Llamada sonando…</string>
     <string name="spaces">Espacios</string>
     <string name="learn_more">Aprende más</string>
-    <string name="link_this_email_with_your_account">%s en Configuración para recibir invitaciones directamente en Element.</string>
+    <string name="template_link_this_email_with_your_account">%s en Configuración para recibir invitaciones directamente en ${app_name}.</string>
     <string name="link_this_email_settings_link">Vincula este correo electrónico con tu cuenta</string>
     <string name="this_invite_to_this_space_was_sent">Esta invitación a este espacio se envió a %s que no está asociado con su cuenta</string>
     <string name="this_invite_to_this_room_was_sent">Esta invitación a esta sala se envió a %s que no está asociado con su cuenta</string>

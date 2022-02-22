@@ -2859,7 +2859,7 @@
     <string name="settings_notification_other">Outras</string>
     <string name="settings_notification_mentions_and_keywords">Menções e Palavrachaves</string>
     <string name="settings_notification_default">Notificações Default</string>
-    <string name="link_this_email_with_your_account">%s em Configurações para receber convites diretamente em Element.</string>
+    <string name="template_link_this_email_with_your_account">%s em Configurações para receber convites diretamente em ${app_name}.</string>
     <string name="link_this_email_settings_link">Linkar este email com sua conta</string>
     <string name="this_invite_to_this_space_was_sent">Este convite para este espaço foi enviado para %s que não está associado com sua conta</string>
     <string name="this_invite_to_this_room_was_sent">Este convite para esta sala foi enviado para %s que não está associado com sua conta</string>

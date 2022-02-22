@@ -2463,7 +2463,7 @@
     <string name="a13n_qr_code_description">Obrázok QR kódu</string>
     <string name="a11y_create_direct_message_by_qr_code">Vytvorte novú priamu konverzáciu naskenovaním QR kódu</string>
     <string name="add_by_qr_code">Pridať pomocou QR kódu</string>
-    <string name="link_this_email_with_your_account">%s v Nastaveniach na prijímanie pozvánok priamo v Elemente.</string>
+    <string name="template_link_this_email_with_your_account">%s v Nastaveniach na prijímanie pozvánok priamo v ${app_name}e.</string>
     <string name="this_invite_to_this_space_was_sent">Táto pozvánka do tohto priestoru bola odoslaná na adresu %s, ktorá nie je spojená s vaším účtom</string>
     <string name="this_invite_to_this_room_was_sent">Táto pozvánka do tejto miestnosti bola odoslaná na adresu %s, ktorá nie je spojená s vaším účtom</string>
     <string name="upgrade_room_for_restricted_no_param">Každý, kto sa nachádza v nadradenom priestore, bude môcť túto miestnosť nájsť a pripojiť sa k nej - nie je potrebné každého ručne pozývať. V nastaveniach miestnosti to budete môcť kedykoľvek zmeniť.</string>

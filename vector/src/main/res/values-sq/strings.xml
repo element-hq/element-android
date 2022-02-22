@@ -2849,7 +2849,7 @@
     <string name="settings_notification_other">Tjetër</string>
     <string name="settings_notification_mentions_and_keywords">Përmendje dhe Fjalëkyçe</string>
     <string name="settings_notification_default">Njoftime Parazgjedhje</string>
-    <string name="link_this_email_with_your_account">%s te Rregullimet, që të merrni ftesa drejt e në Element.</string>
+    <string name="template_link_this_email_with_your_account">%s te Rregullimet, që të merrni ftesa drejt e në ${app_name}.</string>
     <string name="link_this_email_settings_link">Lidheni këtë email me llogarinë tuaj</string>
     <string name="this_invite_to_this_space_was_sent">Kjo ftesë për te kjo hapësirë u dërgua te %s që s’është i përshoqëruar me llogarinë tuaj</string>
     <string name="this_invite_to_this_room_was_sent">Kjo ftesë për te kjo dhomë qe dërguar për %s që s’është i përshoqëruar me llogarinë tuaj</string>

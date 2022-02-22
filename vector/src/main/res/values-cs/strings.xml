@@ -2912,7 +2912,7 @@
     <string name="settings_notification_other">Další</string>
     <string name="settings_notification_mentions_and_keywords">Zmínky a klíčová slova</string>
     <string name="settings_notification_default">Výchozí oznámení</string>
-    <string name="link_this_email_with_your_account">%s v Nastavení pro příjem pozvánek přímo v Elementu.</string>
+    <string name="template_link_this_email_with_your_account">%s v Nastavení pro příjem pozvánek přímo v ${app_name}u.</string>
     <string name="link_this_email_settings_link">Propojte tento e-mail se svým účtem</string>
     <string name="this_invite_to_this_room_was_sent">Pozvánka do této místnosti byla odeslána na adresu %s, která není spojena s vaším účtem</string>
     <string name="this_invite_to_this_space_was_sent">Pozvánka do tohoto prostoru byla odeslána na adresu %s, která není spojena s vaším účtem</string>
