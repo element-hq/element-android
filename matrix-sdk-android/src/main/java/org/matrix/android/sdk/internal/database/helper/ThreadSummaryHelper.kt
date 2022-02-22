@@ -275,7 +275,11 @@ private fun createEventEntity(roomId: String, event: Event, realm: Realm): Event
  * Create an EventEntity for the latest thread event or get an existing one. Also update the user room member
  * state
  */
-private fun createLatestEventEntity(roomId: String, rootThreadEvent: Event, roomMemberContentsByUser: HashMap<String, RoomMemberContent?>, realm: Realm): EventEntity? {
+private fun createLatestEventEntity(
+        roomId: String,
+        rootThreadEvent: Event,
+        roomMemberContentsByUser: HashMap<String, RoomMemberContent?>,
+        realm: Realm): EventEntity? {
     return getLatestEvent(rootThreadEvent)?.let {
         it.senderId?.let { senderId ->
             roomMemberContentsByUser.addSenderState(realm, roomId, senderId)
