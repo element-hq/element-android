@@ -2556,7 +2556,6 @@
     <string name="looking_for_someone_not_in_space">正在寻找不在 %s 中的人？</string>
     <string name="user_invites_you">%s 邀请了你</string>
     <string name="you_are_invited">你被邀请</string>
-    <string name="create_spaces_type_header">空间是一种将聊天室和人们进行分组的新方式</string>
     <string name="spaces_beta_welcome_to_spaces_desc">空间是一种将聊天室和人们进行重新分组的新方式。</string>
     <string name="spaces_beta_welcome_to_spaces">欢迎来到空间！</string>
     <string name="space_add_rooms">添加聊天室</string>

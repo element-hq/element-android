@@ -2700,7 +2700,6 @@
     <string name="create_spaces_join_info_help">Olemasoleva kogukonnakeskusega liitumiseks vajad sa kutset.</string>
     <string name="create_spaces_you_can_change_later">Sa võid seda hiljem muuta</string>
     <string name="create_spaces_choose_type_label">Missugust kogukonnakeskust sooviksid sa luua\?</string>
-    <string name="create_spaces_type_header">Kogukonnakeskused on uus viis jututubade ja inimeste ühendamiseks</string>
     <string name="your_private_space">Sinu privaatne kogukonnakeskus</string>
     <string name="your_public_space">Sinu avalik kogukonnakeskus</string>
     <string name="add_space">Lisa kogukonnakeskus</string>

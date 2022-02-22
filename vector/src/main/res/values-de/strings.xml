@@ -2692,7 +2692,6 @@
     <string name="create_spaces_me_and_teammates">Meine Teamkameraden und ich</string>
     <string name="create_spaces_organise_rooms">Ein privater Space um deine Räume zu organisieren</string>
     <string name="create_spaces_join_info_help">Um einem bereits existierenden Space beizutreten, benötigst du eine Einladung.</string>
-    <string name="create_spaces_type_header">Wir haben Spaces entwickelt, damit ihr eure Räume besser organisieren könnt</string>
     <string name="your_private_space">Dein privater Space</string>
     <string name="your_public_space">Dein öffentlicher Space</string>
     <string name="command_description_join_space">Betrete einen Space mit der angegebenen ID</string>

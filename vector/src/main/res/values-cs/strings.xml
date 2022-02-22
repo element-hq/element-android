@@ -2700,7 +2700,6 @@
     <string name="create_spaces_room_private_header">Na jakých tématech pracujete\?</string>
     <string name="create_spaces_room_public_header_desc">Založíme pro ně místnosti. Můžete přidat další později.</string>
     <string name="create_spaces_details_private_header">Doplňte nějaké podrobnosti, aby jej lidé mohli identifikovat. Můžete je kdykoli změnit.</string>
-    <string name="create_spaces_type_header">Prostory jsou nový způsob organizace místností a lidí</string>
     <string name="spaces_header">Prostory</string>
     <string name="you_are_invited">Jste zváni</string>
     <string name="spaces_beta_welcome_to_spaces">Vítejte v prostorech!</string>

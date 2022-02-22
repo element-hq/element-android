@@ -3524,8 +3524,6 @@
     <string name="add_space">Add Space</string>
     <string name="your_public_space">Your public space</string>
     <string name="your_private_space">Your private space</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="create_spaces_type_header">Spaces are a new way to group rooms and people</string>
     <string name="create_spaces_choose_type_label">What type of space do you want to create?</string>
     <string name="create_spaces_you_can_change_later">You can change this later</string>
     <string name="create_spaces_join_info_help">To join an existing space, you need an invite.</string>

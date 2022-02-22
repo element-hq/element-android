@@ -2024,7 +2024,6 @@
     <string name="secure_backup_setup">Налаштувати безпечне резервне копіювання</string>
     <string name="bottom_sheet_setup_secure_backup_title">Безпечне резервне копіювання</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Простори — це новий спосіб згуртувати кімнати та людей.</string>
-    <string name="create_spaces_type_header">Простори — це новий спосіб згуртувати кімнати та людей</string>
     <string name="give_feedback">Надіслати відгук</string>
     <string name="you_may_contact_me">Можете зв’язатися зі мною, якщо у вас виникнуть додаткові запитання</string>
     <string name="space_type_private_desc">Лише запрошені, найкраще для себе та команд</string>

@@ -2689,7 +2689,6 @@
     <string name="create_spaces_join_info_help">Që të hyni në një hapësirë ekzistuese, ju duhet një ftesë.</string>
     <string name="create_spaces_you_can_change_later">Këtë mund ta ndryshoni më vonë</string>
     <string name="create_spaces_choose_type_label">Ç’lloj hapësire doni të krijoni\?</string>
-    <string name="create_spaces_type_header">Hapësirat janë një mënyrë e re për të grupuar dhoma dhe persona</string>
     <string name="your_private_space">Hapësira juaj private</string>
     <string name="your_public_space">Hapësira juaj publike</string>
     <string name="add_space">Shtoni Hapësirë</string>

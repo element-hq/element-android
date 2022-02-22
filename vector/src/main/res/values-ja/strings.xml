@@ -2521,7 +2521,6 @@
     <string name="create_spaces_make_sure_access">正当な参加者が%sにアクセスできることを確認してください。これは後から変更できます。</string>
     <string name="new_let_people_in_spaces_find_and_join">新規：スペースの参加者が非公開のルームを検索し、参加できるようになりました</string>
     <string name="add_people">参加者を追加</string>
-    <string name="create_spaces_type_header">スペースは、ルームや連絡先をグループ化する新しい方法です</string>
     <plurals name="space_people_you_know">
         <item quantity="other">%d人の知り合いがすでに参加しています</item>
     </plurals>

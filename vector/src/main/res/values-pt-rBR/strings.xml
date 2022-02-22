@@ -2755,7 +2755,6 @@
     <string name="create_spaces_join_info_help">Para se juntar a um espaço existente, você precisa de um convite.</string>
     <string name="create_spaces_you_can_change_later">Você pode mudar isto mais tarde</string>
     <string name="create_spaces_choose_type_label">Que tipo de espaço você quer criar\?</string>
-    <string name="create_spaces_type_header">Espaços são uma nova forma de agrupar salas e pessoas</string>
     <string name="your_private_space">Seu espaço privado</string>
     <string name="your_public_space">Seu espaço público</string>
     <string name="add_space">Adicionar Espaço</string>

@@ -2648,7 +2648,6 @@
     <string name="event_status_sent_message">Message envoyé</string>
     <string name="create_spaces_you_can_change_later">Vous pouvez changer ceci plus tard</string>
     <string name="create_spaces_choose_type_label">Quel type d’espace voulez-vous créer \?</string>
-    <string name="create_spaces_type_header">Les espaces sont un nouveau moyen de regrouper les salons et les personnes</string>
     <string name="your_private_space">Votre espace privé</string>
     <string name="your_public_space">Votre espace public</string>
     <string name="add_space">Ajouter un espace</string>

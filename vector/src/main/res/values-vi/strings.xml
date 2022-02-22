@@ -1838,7 +1838,6 @@
     <string name="create_spaces_join_info_help">Để tham gia một Space hiện có, bạn cần một lời mời.</string>
     <string name="create_spaces_you_can_change_later">Bạn có thể thay đổi điều này sau</string>
     <string name="create_spaces_choose_type_label">Bạn muốn tạo ra loại Space nào\?</string>
-    <string name="create_spaces_type_header">Space là một cách mới để nhóm phòng và con người</string>
     <string name="your_private_space">Space riêng tư của bạn</string>
     <string name="your_public_space">Space công cộng của bạn</string>
     <string name="add_space">Thêm Space</string>

@@ -2690,7 +2690,6 @@
     <string name="create_spaces_join_info_help">Per unirti ad uno Spazio già esistente, ti serve un invito.</string>
     <string name="create_spaces_you_can_change_later">Puoi cambiarlo in seguito</string>
     <string name="create_spaces_choose_type_label">Che tipo di Spazio vuoi creare\?</string>
-    <string name="create_spaces_type_header">Gli Spazi sono un nuovo modo di raggruppare stanze e contatti</string>
     <string name="your_private_space">Il tuo Spazio privato</string>
     <string name="your_public_space">Il tuo Spazio pubblico</string>
     <string name="add_space">Aggiungi Spazio</string>

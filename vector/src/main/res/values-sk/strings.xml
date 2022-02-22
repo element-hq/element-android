@@ -2586,7 +2586,6 @@
     <string name="create_spaces_join_info_help">Ak sa chcete pripojiť k existujúcemu priestoru, potrebujete pozvánku.</string>
     <string name="create_spaces_you_can_change_later">Neskôr to môžete zmeniť</string>
     <string name="create_spaces_choose_type_label">Aký typ priestoru chcete vytvoriť\?</string>
-    <string name="create_spaces_type_header">Priestory sú novým spôsobom spájania miestností a ľudí</string>
     <string name="auth_invalid_login_param_space_in_password">Nesprávne používateľské meno a/alebo heslo. Zadané heslo začína alebo končí medzerami, skontrolujte ho.</string>
     <string name="send_feedback_space_info">Používate beta verziu Priestorov. Vaša spätná väzba pomôže pri tvorbe ďalších verzií. Vaša platforma a používateľské meno budú zaznamenané, aby sme mohli čo najlepšie využiť vašu spätnú väzbu.</string>
     <string name="other_spaces_or_rooms_you_might_not_know">Ďalšie priestory alebo miestnosti, o ktorých možno neviete</string>

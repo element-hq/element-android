@@ -2499,7 +2499,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="add_space">Añade un Espacio</string>
     <string name="command_description_create_space">Crea un Espacio</string>
     <string name="activity_create_space_title">Crear un espacio</string>
-    <string name="create_spaces_type_header">Los Espacios son una nueva forma de agrupar salas y personas</string>
     <string name="initial_sync_start_server_computing">Sincronización inicial:
 \nEsperando respuesta del servidor…</string>
     <string name="a11y_error_message_not_sent">El mensaje no se pudo enviar por un error</string>
