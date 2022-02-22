@@ -251,6 +251,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         val msgType = messageContent?.msgType
 
         return arrayListOf<EventSharedAction>().apply {
+            // TODO need to check all possible items and confirm order
             when {
                 timelineEvent.root.sendState.hasFailed()         -> {
                     addActionsForFailedState(timelineEvent, actionPermissions, messageContent, msgType)

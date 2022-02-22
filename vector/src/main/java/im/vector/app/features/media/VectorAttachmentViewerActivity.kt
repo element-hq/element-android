@@ -249,7 +249,10 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
         handle(AttachmentCommands.SeekTo(percent))
     }
 
+    // TODO add save feature for image => check it works for video as well,
+    //  check if it is already possible to save from menu with long press on video
     override fun onShareTapped() {
+        // TODO move the retrieve of the file into ViewModel and use a ViewEvent to call shareMedia
         lifecycleScope.launch(Dispatchers.IO) {
             val file = currentSourceProvider?.getFileForSharing(currentPosition) ?: return@launch
 
