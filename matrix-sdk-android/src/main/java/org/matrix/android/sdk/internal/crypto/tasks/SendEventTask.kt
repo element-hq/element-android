@@ -65,7 +65,6 @@ internal class DefaultSendEventTask @Inject constructor(
                 Timber.d("Event: $it just sent in ${params.event.roomId}")
             }
         } catch (e: Throwable) {
-//            localEchoRepository.updateSendState(params.event.eventId!!, SendState.UNDELIVERED)
             throw e
         }
     }

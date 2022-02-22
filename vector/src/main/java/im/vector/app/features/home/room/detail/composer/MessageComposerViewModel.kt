@@ -42,6 +42,7 @@ import im.vector.app.features.voice.VoicePlayerHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.content.ContentAttachmentData
@@ -62,6 +63,7 @@ import org.matrix.android.sdk.api.session.room.timeline.getLastMessageContent
 import org.matrix.android.sdk.api.session.room.timeline.getRelationContent
 import org.matrix.android.sdk.api.session.room.timeline.getTextEditableContent
 import org.matrix.android.sdk.api.session.space.CreateSpaceParams
+import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.flow.flow
 import org.matrix.android.sdk.flow.unwrap
 import timber.log.Timber
@@ -199,12 +201,10 @@ class MessageComposerViewModel @AssistedInject constructor(
                                 room.replyInThread(
                                         rootThreadEventId = state.rootThreadEventId,
                                         replyInThreadText = action.text,
-                                        autoMarkdown = action.autoMarkdown)
+                                        autoMarkdown = action.autoMarkdown)?.let { handleSendMessageException(it) }
                             } else {
-                                room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown)
+                                handleSendMessageException(room.sendTextMessage(action.text, autoMarkdown = action.autoMarkdown))
                             }
-
-                            _viewEvents.post(MessageComposerViewEvents.MessageSent)
                             popDraft()
                         }
                         is ParsedCommand.ErrorSyntax                       -> {
@@ -531,6 +531,24 @@ class MessageComposerViewModel @AssistedInject constructor(
                     // do nothing
                 }
             }.exhaustive
+        }
+    }
+
+    private fun handleSendMessageException(cancelable: Cancelable) {
+        if (cancelable is Cancelable.Exception) {
+            when (cancelable.exception) {
+                is Failure.ServerError       -> {
+                    _viewEvents.post(MessageComposerViewEvents.MessageUnsentException(R.string.error_unsent_message_server_content, R.string.error_unsent_message_server_title))
+                }
+                is Failure.NetworkConnection -> {
+                    _viewEvents.post(MessageComposerViewEvents.MessageUnsentException(R.string.error_unsent_message_network_content, R.string.error_unsent_message_network_title))
+                }
+                else                         -> {
+                    _viewEvents.post(MessageComposerViewEvents.MessageUnsentException(R.string.error_unsent_message_unknown_content, R.string.error_unsent_message_unknown_title))
+                }
+            }
+        } else {
+            _viewEvents.post(MessageComposerViewEvents.MessageSent)
         }
     }
 

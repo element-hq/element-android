@@ -38,7 +38,11 @@ internal abstract class QueuedTask(
     suspend fun execute() {
         if (!isCancelled()) {
             Timber.v("Execute: $this start")
-            doExecute()
+            try {
+                doExecute()
+            } catch (exception: Throwable) {
+                throw exception
+            }
             Timber.v("Execute: $this finish")
         }
     }

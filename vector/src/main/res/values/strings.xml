@@ -3790,4 +3790,12 @@
     <string name="room_message_notify_everyone">Notify the whole room</string>
     <string name="room_message_autocomplete_users">Users</string>
     <string name="room_message_autocomplete_notification">Room notification</string>
+
+    <string name="error_unsent_message_network_content">Check your connection. Messages will send automatically when reconnected.</string>
+    <string name="error_unsent_message_network_title">Some messages not sent</string>
+    <string name="error_unsent_message_server_content">There was a problem sending your message. Please try again.</string>
+    <string name="error_unsent_message_server_title">Message not sent</string>
+    <string name="error_unsent_message_unknown_content">Please try again.</string>
+    <string name="error_unsent_message_unknown_title">You message was not sent</string>
+
 </resources>

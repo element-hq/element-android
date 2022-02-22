@@ -28,6 +28,8 @@ interface Cancelable {
     fun cancel() {
         // no-op
     }
+
+    data class Exception(val exception: Throwable) : Cancelable
 }
 
 object NoOpCancellable : Cancelable

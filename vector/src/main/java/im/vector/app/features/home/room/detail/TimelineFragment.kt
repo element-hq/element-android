@@ -1670,9 +1670,16 @@ class TimelineFragment @Inject constructor(
             is MessageComposerViewEvents.SlashCommandNotSupportedInThreads -> {
                 displayCommandError(getString(R.string.command_not_supported_in_threads, sendMessageResult.command.command))
             }
+            is MessageComposerViewEvents.MessageUnsentException            -> {
+                showUnsentMessageNotification(sendMessageResult.messageRes, sendMessageResult.titleRes)
+            }
         } // .exhaustive
 
         lockSendButton = false
+    }
+
+    private fun showUnsentMessageNotification(messageRes: Int, titleRes: Int) {
+        notificationUtils.displayUnsentMessageException(messageRes, titleRes)
     }
 
     private fun displayCommandError(message: String) {

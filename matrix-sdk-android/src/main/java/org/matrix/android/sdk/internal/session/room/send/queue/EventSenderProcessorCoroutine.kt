@@ -20,6 +20,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.failure.Failure
@@ -33,7 +34,6 @@ import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.task.CoroutineSequencer
 import org.matrix.android.sdk.internal.task.SemaphoreCoroutineSequencer
 import org.matrix.android.sdk.internal.task.TaskExecutor
-import org.matrix.android.sdk.internal.util.toCancelable
 import timber.log.Timber
 import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
@@ -116,13 +116,20 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
             SemaphoreCoroutineSequencer()
         }
         Timber.v("## post $task")
-        return taskExecutor.executorScope
-                .launchWith(sequencer) {
+        var cancelable: Cancelable = Cancelable.Exception(UnknownError())
+
+        runBlocking {
+            sequencer.post {
+                try {
                     executeTask(task)
-                }.toCancelable()
-                .also {
-                    cancelableBag[task.taskIdentifier] = it
+                } catch (exception: Throwable) {
+                    cancelable = Cancelable.Exception(exception)
                 }
+            }
+        }
+
+        cancelable.also { cancelableBag[task.taskIdentifier] = it }
+        return cancelable
     }
 
     override fun cancel(eventId: String, roomId: String) {
@@ -162,6 +169,7 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
                     task.onTaskFailed()
                 }
             }
+            throw exception
         }
         markAsFinished(task)
     }

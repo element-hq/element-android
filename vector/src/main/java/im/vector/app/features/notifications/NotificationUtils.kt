@@ -922,6 +922,23 @@ class NotificationUtils @Inject constructor(private val context: Context,
         }
     }
 
+    fun displayUnsentMessageException(messageRes: Int, titleRes: Int) {
+        notificationManager.notify(
+                "UNSENT_MESSAGE",
+                666,
+                NotificationCompat.Builder(context, NOISY_NOTIFICATION_CHANNEL_ID)
+                        .setStyle(NotificationCompat.BigTextStyle())
+                        .setContentTitle(stringProvider.getString(titleRes))
+                        .setContentText(stringProvider.getString(messageRes))
+                        .setSmallIcon(R.drawable.ic_status_bar)
+                        .setLargeIcon(getBitmap(context, R.drawable.element_logo_green))
+                        .setColor(ContextCompat.getColor(context, R.color.notification_accent_color))
+                        .setPriority(NotificationCompat.PRIORITY_MAX)
+                        .setCategory(NotificationCompat.CATEGORY_ERROR)
+                        .setAutoCancel(true)
+                        .build())
+    }
+
     fun displayDiagnosticNotification() {
         val testActionIntent = Intent(context, TestNotificationReceiver::class.java)
         testActionIntent.action = DIAGNOSTIC_ACTION
