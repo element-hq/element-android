@@ -79,3 +79,16 @@ jobs:
           path: |
             emulator.log
             failure_screenshots/
+
+  notify:
+    runs-on: ubuntu-latest
+    needs: integration-tests
+    if: always()
+    steps:
+    - uses: michaelkaye/matrix-hookshot-action@v0.1.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        matrix_access_token: ${{ secrets.ELEMENT_ANDROID_NOTIFICATION_ACCESS_TOKEN }}
+        matrix_rooms_id: ${{ secrets.ELEMENT_ANDROID_INTERNAL_ROOM_ID }}
+        html_template: "CI Sanity test {{ job_statuses.integration-tests.status }} at {{ job_statuses.integration-tests.completed_at }} <a href=\"{{ job_statuses.integration-tests.html_url }}\">[details]</a>"
+        text_template: "Sanity test {{ job_statuses.integration-tests.status }}"
