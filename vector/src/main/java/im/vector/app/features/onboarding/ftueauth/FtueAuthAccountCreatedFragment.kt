@@ -52,6 +52,6 @@ class FtueAuthAccountCreatedFragment @Inject constructor(
 
     override fun onBackPressed(toolbarButton: Boolean): Boolean {
         viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome))
-        return false
+        return true
     }
 }
