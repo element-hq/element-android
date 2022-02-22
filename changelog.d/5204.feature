@@ -1,1 +1,0 @@
-Improve UI of reactions in timeline, including quick add reaction.

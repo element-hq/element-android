@@ -1,1 +1,0 @@
-Support creating disclosed polls
