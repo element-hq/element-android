@@ -2803,7 +2803,7 @@
     <string name="verification_no_scan_emoji_title">絵文字を比較して検証</string>
     <string name="verification_scan_self_emoji_subtitle">絵文字を比較して検証</string>
     <string name="verification_scan_emoji_subtitle">対面でない場合は、代わりに絵文字を比較してください</string>
-    <string name="settings_server_upload_size_content">あなたのホームサーバーは、最大%sのサイズの添付ファイルを受け付けています。</string>
+    <string name="settings_server_upload_size_content">あなたのホームサーバーで許容されている添付ファイルの最大サイズは%sです。</string>
     <string name="login_reset_password_mail_confirmation_notice_2">新しいパスワードを確認するには下記のリンクを開いてください。リンクにアクセスしてから、以下をクリックしてください。</string>
     <string name="settings_security_pin_code_summary">PINコードを再設定するには「PINコードを忘れた」をタップしてログアウトし、その後再設定してください。</string>
     <plurals name="secure_backup_reset_devices_you_can_verify">
@@ -2831,4 +2831,39 @@
     <string name="template_rendering_event_error_type_of_message_not_handled">${app_name}は%1$sという種類のメッセージに対応していません</string>
     <string name="template_rendering_event_error_type_of_event_not_handled">${app_name}は%1$sという種類のイベントに対応していません</string>
     <string name="room_member_jump_to_read_receipt">既読通知へ移動</string>
+    <string name="keep_it_safe">大切に保護しましょう</string>
+    <string name="bootstrap_finish_title">完了！</string>
+    <string name="bootstrap_dont_reuse_pwd">アカウントパスワードと違うものにしてください。</string>
+    <string name="bootstrap_info_confirm_text">確認のため、%sをもう一度入力してください。</string>
+    <string name="enter_account_password">続行するには%sを入力してください。</string>
+    <string name="confirm_recovery_passphrase">%sを確認</string>
+    <string name="set_recovery_passphrase">%sを設定</string>
+    <string name="verification_cancelled">検証を中止しました</string>
+    <string name="verify_cancel_other">今中止すれば、%1$s（%2$s）の検証をしません。検証は相手のユーザープロフィールからもう一度開始できます。</string>
+    <string name="verify_cancel_self_verification_from_trusted">中止すれば、新しい端末では暗号化されたメッセージが読めないし他のユーザーに信頼されません</string>
+    <string name="verify_cancel_self_verification_from_untrusted">中止すれば、この端末では暗号化されたメッセージが読めないし他のユーザーに信頼されません</string>
+    <string name="verify_new_session_was_not_me">自分ではない</string>
+    <string name="verify_new_session_notice">新しいセッションを検証して、暗号化されたメッセージにアクセスできるようにしましょう。</string>
+    <string name="new_session_review">タップして確認及び検証</string>
+    <string name="new_session">新しいログイン。あなたですか？</string>
+    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="event_redacted_by_admin_reason_with_reason">部屋の管理者によって削除されています、理由：%1$s</string>
+    <string name="event_redacted_by_user_reason_with_reason">ユーザーによって削除されています、理由：</string>
+    <string name="delete_event_dialog_reason_hint">削除した理由</string>
+    <string name="share_confirm_room">この添付ファイルを%1$sに送信しますか？</string>
+    <string name="enter_secret_storage_passphrase_warning_text">秘密ストレージは信頼されている端末でのみアクセスしましょう</string>
+    <string name="enter_secret_storage_passphrase">秘密ストレージのパスフレーズを入力してください</string>
+    <string name="verification_use_passphrase">既存のセッションにアクセスできない場合</string>
+    <string name="command_description_poll">シンプルなアンケートを作ります</string>
+    <string name="delete_account_data_warning">%1$sというタイプのアカウントデータを削除しますか？
+\n
+\n予期せぬトラブルを起こす可能性があるので注意してください。</string>
+    <string name="verification_profile_device_new_signing">%1$s（%2$s）が新しいセッションでサインインしました：</string>
+    <string name="verification_profile_device_verified_because">このセッションは%1$s（%2$s）によって検証されているので、メッセージのセキュリティは信頼できます。</string>
+    <string name="verification_open_other_to_verify">既存のセッションでこのセッションを検証して、暗号化されたメッセージへアクセスできるようにしましょう。</string>
+    <string name="crosssigning_other_user_not_trust">他のユーザーに信頼されない可能性があります</string>
+    <string name="settings_active_sessions_verified_device_desc">あなたはこのセッションを検証しているので、メッセージのセキュリティは信頼できます。</string>
+    <string name="settings_failed_to_get_crypto_device_info">利用可能な暗号情報がありません</string>
+    <string name="settings_server_default_room_version">既定のバージョン</string>
+    <string name="settings_hs_admin_e2e_disabled">非公開部屋とダイレクトメッセージにおけるエンドツーエンド暗号化はあなたのサーバーの管理者によって既定として無効にされています。</string>
 </resources>
