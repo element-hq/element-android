@@ -88,7 +88,8 @@ jobs:
     - uses: michaelkaye/matrix-hookshot-action@v0.2.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        matrix_access_token_DONOTUSE: ${{ secrets.ELEMENT_ANDROID_NOTIFICATION_ACCESS_TOKEN }}
-        matrix_room_id_DONOTUSE: ${{ secrets.ELEMENT_ANDROID_INTERNAL_ROOM_ID }}
+        matrix_access_token: ${{ secrets.ELEMENT_ANDROID_NOTIFICATION_ACCESS_TOKEN }}
+        matrix_room_id: ${{ secrets.ELEMENT_ANDROID_INTERNAL_ROOM_ID }}
         html_template: "CI Sanity test {{ job_statuses.integration-tests.status }} at {{ job_statuses.integration-tests.completed_at }} <a href=\"{{ job_statuses.integration-tests.html_url }}\">[details]</a>"
-        text_template: "Sanity test {{ job_statuses.integration-tests.status }}"
+        text_template: "Sanity test run: {{#each job_statuses }}{{#with this }}{{#if completed }}  {{name}} {{conclusion}} at {{completed_at}} {{html_url}}{{/if}}{{/with}}{{/each}}"
+        html_template: "CI Sanity test run results: {{#each job_statuses }}{{#with this }}{{#if completed }}  {{name}} {{conclusion}} at {{completed_at}} <a href=\"{{html_url}}\">[details]</a>{{/if}}{{/with}}{{/each}}"
