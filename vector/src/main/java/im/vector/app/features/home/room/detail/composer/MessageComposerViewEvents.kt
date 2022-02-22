@@ -29,7 +29,7 @@ sealed class MessageComposerViewEvents : VectorViewEvents {
     abstract class SendMessageResult : MessageComposerViewEvents()
 
     object MessageSent : SendMessageResult()
-    data class MessageUnsentException(val messageRes: Int, val titleRes: Int) : SendMessageResult()
+    data class UnsentException(val messageRes: Int, val titleRes: Int) : SendMessageResult()
     data class JoinRoomCommandSuccess(val roomId: String) : SendMessageResult()
     class SlashCommandError(val command: Command) : SendMessageResult()
     class SlashCommandUnknown(val command: String) : SendMessageResult()

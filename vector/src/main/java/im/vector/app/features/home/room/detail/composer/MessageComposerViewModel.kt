@@ -538,13 +538,19 @@ class MessageComposerViewModel @AssistedInject constructor(
         if (cancelable is Cancelable.Exception) {
             when (cancelable.exception) {
                 is Failure.ServerError       -> {
-                    _viewEvents.post(MessageComposerViewEvents.MessageUnsentException(R.string.error_unsent_message_server_content, R.string.error_unsent_message_server_title))
+                    _viewEvents.post(
+                            MessageComposerViewEvents
+                                    .UnsentException(R.string.error_unsent_message_server_content, R.string.error_unsent_message_server_title))
                 }
                 is Failure.NetworkConnection -> {
-                    _viewEvents.post(MessageComposerViewEvents.MessageUnsentException(R.string.error_unsent_message_network_content, R.string.error_unsent_message_network_title))
+                    _viewEvents.post(
+                            MessageComposerViewEvents
+                                    .UnsentException(R.string.error_unsent_message_network_content, R.string.error_unsent_message_network_title))
                 }
                 else                         -> {
-                    _viewEvents.post(MessageComposerViewEvents.MessageUnsentException(R.string.error_unsent_message_unknown_content, R.string.error_unsent_message_unknown_title))
+                    _viewEvents.post(
+                            MessageComposerViewEvents
+                                    .UnsentException(R.string.error_unsent_message_unknown_content, R.string.error_unsent_message_unknown_title))
                 }
             }
         } else {
