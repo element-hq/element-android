@@ -2628,7 +2628,7 @@
     <string name="analytics_opt_in_content">Pomôžte nám identifikovať problémy a zlepšiť Element zdieľaním anonymných údajov o používaní. Aby sme pochopili, ako ľudia používajú viacero zariadení, vygenerujeme náhodný identifikátor, ktorý zdieľajú vaše zariadenia.
 \n
 \nMôžete si prečítať všetky naše podmienky %s.</string>
-    <string name="analytics_opt_in_title">Pomôžte zlepšiť Element</string>
+    <string name="template_analytics_opt_in_title">Pomôžte zlepšiť ${app_name}</string>
     <string name="call_tap_to_return">%1$s Ťuknite pre návrat</string>
     <string name="call_one_active">Aktívny hovor (%1$s) ·</string>
     <plurals name="call_active_status">

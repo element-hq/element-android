@@ -2991,7 +2991,7 @@
     <string name="preference_root_legals">Rechtliches</string>
     <string name="decide_which_spaces_can_access">Entscheide, welche Spaces Zugriff auf den Raum haben sollen. Die Mitglieder der Spaces können diesen Räumen beitreten.</string>
     <string name="analytics_opt_in_content_link">hier</string>
-    <string name="analytics_opt_in_title">Hilf mit, Element zu verbessern</string>
+    <string name="template_analytics_opt_in_title">Hilf mit, ${app_name} zu verbessern</string>
     <string name="action_enable">Aktivieren</string>
     <string name="room_member_override_nick_color">Farbe des Nicknamens ändern</string>
     <string name="ftue_auth_carousel_control_title">Du hast die volle Kontrolle.</string>

@@ -3038,7 +3038,7 @@
     <string name="analytics_opt_in_list_item_2">ما اطّلاعات را با سوم‌شخص‌ها هم‌رسانی <b>نمی‌کنیم</b></string>
     <string name="analytics_opt_in_list_item_1">ما هیچ دادهٔ حسابی را ذخیره یا نمایه <b>نمی‌کنیم</b></string>
     <string name="analytics_opt_in_content_link">این‌جا</string>
-    <string name="analytics_opt_in_title">کمک به بهبود المنت</string>
+    <string name="template_analytics_opt_in_title">کمک به بهبود المنت</string>
     <string name="action_enable">به کار انداختن</string>
     <string name="restart_the_application_to_apply_changes">برای اثربخشی تغییر، برنامه را دوباره اجرا کنید.</string>
     <string name="labs_enable_latex_maths">به کار انداختن ریاضیات لاتک</string>

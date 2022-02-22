@@ -3002,7 +3002,7 @@
     <string name="analytics_opt_in_content">Hjälp oss att identifiera problem och förbättra Element genom att dela anonym användningsdata. För att förstå hur personer använder multipla enheter så generar vi en slumpmässig identifierare som delas mellan dina enheter.
 \n
 \nDu kan läsa alla våra villkor %s.</string>
-    <string name="analytics_opt_in_title">Hjälp att förbättra Element</string>
+    <string name="template_analytics_opt_in_title">Hjälp att förbättra ${app_name}</string>
     <string name="action_enable">Aktivera</string>
     <string name="delete_poll_dialog_content">Är du säker på att du vill ta bort den här omröstningen\? Du kommer inte kunna få tillbaka den när den har tagits bort.</string>
     <string name="delete_poll_dialog_title">Ta bort omröstning</string>

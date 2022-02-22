@@ -2914,7 +2914,7 @@
     <string name="analytics_opt_in_content">Giúp chúng tôi xác định các vấn đề và cải thiện Element bằng cách chia sẻ dữ liệu sử dụng ẩn danh. Để hiểu cách mọi người sử dụng nhiều thiết bị, chúng tôi sẽ tạo ra một mã định danh ngẫu nhiên, được chia sẻ bởi các thiết bị của bạn.
 \n
 \nBạn có thể đọc tất cả các thuật ngữ của chúng tôi %s.</string>
-    <string name="analytics_opt_in_title">Giúp cải thiện Element</string>
+    <string name="template_analytics_opt_in_title">Giúp cải thiện ${app_name}</string>
     <string name="shortcut_disabled_reason_sign_out">Thiết bị đã bị đăng xuất!</string>
     <string name="shortcut_disabled_reason_room_left">Căn phòng đã bị bỏ lại!</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Chọn homeerver</string>

@@ -3097,7 +3097,7 @@
     <string name="analytics_opt_in_content">Pomozte nám identifikovat problémy a vylepšit Element sdílením anonymních údajů o používání. Abychom pochopili, jak lidé používají více zařízení, vygenerujeme náhodný identifikátor sdílený vašimi zařízeními.
 \n
 \nMůžete si přečíst všechny naše podmínky %s.</string>
-    <string name="analytics_opt_in_title">Pomozte vylepšit Element</string>
+    <string name="template_analytics_opt_in_title">Pomozte vylepšit ${app_name}</string>
     <string name="action_enable">Povolit</string>
     <string name="restart_the_application_to_apply_changes">Restartujte aplikaci, aby se změna projevila.</string>
     <string name="labs_enable_latex_maths">Povolit matematické výrazy LaTeXu</string>

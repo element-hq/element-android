@@ -3046,7 +3046,7 @@
     <string name="analytics_opt_in_content">Pomóż nam znaleźć błędy i ulepszyć Element poprzez udostępnianie anonimowych danych użytkowania. Aby lepiej zrozumieć jak użytkownicy wykorzystują wiele urządzeń wygenerujemy losowy identyfikator dzielony pomiędzy Twoimi urządzeniami.
 \n
 \nWięcej informacji %s.</string>
-    <string name="analytics_opt_in_title">Pomóż usprawnić Element</string>
+    <string name="template_analytics_opt_in_title">Pomóż usprawnić ${app_name}</string>
     <string name="action_not_now">Nie teraz</string>
     <string name="action_enable">Włącz</string>
     <plurals name="notice_room_aliases_removed_by_you">

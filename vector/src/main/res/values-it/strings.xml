@@ -3028,7 +3028,7 @@
     <string name="analytics_opt_in_content">Aiutaci a identificare problemi e a migliorare Element condividendo dati di utilizzo anonimi. Per capire come le persone usano diversi dispositivi, genereremo un identificativo casuale, condiviso dai tuoi dispositivi.
 \n
 \nPuoi leggere i nostri termini di servizio %s.</string>
-    <string name="analytics_opt_in_title">Aiuta a migliorare Element</string>
+    <string name="template_analytics_opt_in_title">Aiuta a migliorare ${app_name}</string>
     <string name="action_enable">Attiva</string>
     <string name="restart_the_application_to_apply_changes">Riavvia l\'applicazione per applicare le modifiche.</string>
     <string name="labs_enable_latex_maths">Attiva la matematica LaTeX</string>

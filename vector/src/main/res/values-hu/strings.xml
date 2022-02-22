@@ -3034,7 +3034,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="analytics_opt_in_content">Segíts észrevennünk a hibákat, és jobbá tenni az Element-et a névtelen használati adatok küldése által. Ahhoz, hogy megértsük, hogyan használnak a felhasználók egyszerre több eszközt, egy véletlenszerű azonosítót generálunk, ami az eszközeid között meg lesz osztva.
 \n
 \nElolvashatod a feltételeinket %s.</string>
-    <string name="analytics_opt_in_title">Segíts az Element-et jobbá tenni</string>
+    <string name="template_analytics_opt_in_title">Segíts az ${app_name}-et jobbá tenni</string>
     <string name="a11y_poll_winner_option">nyerő válasz</string>
     <string name="preference_root_legals">Jogi dolgok</string>
     <string name="restart_the_application_to_apply_changes">A változások életbelépéséhez indítsd újra az alkalmazást.</string>

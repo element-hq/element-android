@@ -2239,7 +2239,7 @@
     <string name="analytics_opt_in_content">Help ons problemen te identificeren en Element te verbeteren door anonieme gebruiksgegevens te delen. Om inzicht te krijgen in hoe mensen meerdere apparaten gebruiken, genereren we een willekeurige identificatie die door uw apparaten wordt gedeeld.
 \n
 \nU kunt al onze voorwaarden %s lezen.</string>
-    <string name="analytics_opt_in_title">Help Element verbeteren</string>
+    <string name="template_analytics_opt_in_title">Help ${app_name} verbeteren</string>
     <string name="reset_secure_backup_warning">Dit zal uw huidige sleutel of zin vervangen.</string>
     <string name="reset_secure_backup_title">Genereer een nieuwe beveiligingssleutel of stel een nieuwe beveiligingszin in voor uw bestaande back-up.</string>
     <string name="settings_secure_backup_section_info">Bescherm uzelf tegen verlies van toegang tot versleutelde berichten en gegevens door een back-up te maken van versleutelingssleutels op uw server.</string>

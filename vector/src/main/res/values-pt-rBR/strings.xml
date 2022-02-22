@@ -3032,7 +3032,7 @@
     <string name="analytics_opt_in_content">Ajude-nos a identificar problemas e melhorar Element ao compartilhar dados de uso anônimos. Para entender como pessoas usam seus múltiplos dispositivos, nós vamos gerar um identificador aleatório, compartilhado por seus dispositivos.
 \n
 \nVocê pode ler todos os nossos termos %s.</string>
-    <string name="analytics_opt_in_title">Ajude a melhorar Element</string>
+    <string name="template_analytics_opt_in_title">Ajude a melhorar ${app_name}</string>
     <string name="preference_system_settings">Configurações de sistema</string>
     <string name="preference_help_title">Ajuda e suporte</string>
     <string name="preference_help">Ajuda</string>

@@ -2979,7 +2979,7 @@
     <string name="analytics_opt_in_content">透過分享匿名使用資料協助我們找出問題並改善 Element。為了了解人們如何使用多裝置，我們將會產生隨機識別字串，在您的裝置間共享。
 \n
 \n您可以閱讀我們的條款 %s。</string>
-    <string name="analytics_opt_in_title">協助改善 Element</string>
+    <string name="template_analytics_opt_in_title">協助改善 ${app_name}</string>
     <string name="action_enable">啟用</string>
     <string name="restart_the_application_to_apply_changes">重新啟動應用程式以讓變更生效。</string>
     <string name="labs_enable_latex_maths">啟用 LaTeX 數學</string>

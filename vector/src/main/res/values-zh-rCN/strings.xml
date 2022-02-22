@@ -2979,6 +2979,6 @@
     <string name="analytics_opt_in_content">通过共享匿名使用数据，帮助我们识别问题并改进 Element。为了理解人们如何使用多台设备，我们将生成一个随机标识符，由您的设备共享。
 \n
 \n你可以阅读我们所有的条款 %s。</string>
-    <string name="analytics_opt_in_title">帮助改进 Element</string>
+    <string name="template_analytics_opt_in_title">帮助改进 ${app_name}</string>
     <string name="action_enable">启用</string>
 </resources>

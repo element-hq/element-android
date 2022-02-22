@@ -3039,7 +3039,7 @@
     <string name="analytics_opt_in_content">Aidez nous à identifier les problèmes et améliorer Element en envoyant des rapports d’usage anonymes. Pour comprendre de quelle manière les gens utilisent Element sur plusieurs appareils, nous créeront un identifiant aléatoire commun à tous vos appareils.
 \n
 \nVous pouvez lire toutes les conditions %s.</string>
-    <string name="analytics_opt_in_title">Aider à améliorer Element</string>
+    <string name="template_analytics_opt_in_title">Aider à améliorer ${app_name}</string>
     <string name="action_enable">Activer</string>
     <string name="tooltip_attachment_poll">Créer un sondage</string>
     <string name="tooltip_attachment_contact">Ouvrir les contacts</string>

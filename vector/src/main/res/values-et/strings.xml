@@ -3037,7 +3037,7 @@
     <string name="analytics_opt_in_content">Võimalike vigade leidmiseks ja Element\'i arendamiseks jaga meiega anonüümseid andmeid. Selleks, et mõistaksime, kuidas kasutajad erinevaid seadmeid pruugivad me loome sinu seadmetele ühise juhusliku tunnuse.
 \n
 \nMeie kasutustingimused leiad siit - %s.</string>
-    <string name="analytics_opt_in_title">Aita Element\'i arendamisel</string>
+    <string name="template_analytics_opt_in_title">Aita ${app_name}\'i arendamisel</string>
     <string name="action_enable">Võta kasutusele</string>
     <string name="restart_the_application_to_apply_changes">Muudatuste jõustamiseks käivita rakendus uuesti.</string>
     <string name="labs_enable_latex_maths">Kasuta LaTeX-vorminduses matemaatika märgistust</string>

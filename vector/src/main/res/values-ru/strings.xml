@@ -3176,7 +3176,7 @@
     <string name="analytics_opt_in_content">Помогите нам выявить проблемы и улучшить Element, поделившись анонимными данными об использовании. Чтобы понять, как люди используют несколько устройств, мы сгенерируем случайный идентификатор, общий для всех ваших устройств.
 \n
 \nВы можете ознакомиться со всеми нашими условиями %s.</string>
-    <string name="analytics_opt_in_title">Помогите улучшить Element</string>
+    <string name="template_analytics_opt_in_title">Помогите улучшить ${app_name}</string>
     <string name="shortcut_disabled_reason_sign_out">Сессия завершена!</string>
     <string name="shortcut_disabled_reason_room_left">Комната покинута!</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Шифрование неправильно настроено, поэтому вы не можете отправлять сообщения. Нажмите, чтобы открыть настройки.</string>

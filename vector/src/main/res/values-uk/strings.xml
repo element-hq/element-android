@@ -3140,7 +3140,7 @@
     <string name="analytics_opt_in_content">Допомагайте нам визначати проблеми й удосконалювати Element, надсилаючи анонімні дані про використання. Щоб розуміти, як люди використовують кілька пристроїв, ми створимо спільний для ваших пристроїв випадковий ідентифікатор.
 \n
 \nМожете прочитати всі наші умови %s.</string>
-    <string name="analytics_opt_in_title">Допоможіть покращити Element</string>
+    <string name="template_analytics_opt_in_title">Допоможіть покращити ${app_name}</string>
     <string name="action_enable">Увімкнути</string>
     <string name="restart_the_application_to_apply_changes">Перезапустіть застосунок, щоб зміни набули чинності.</string>
     <string name="labs_enable_latex_maths">Увімкнути підтримку LaTeX</string>

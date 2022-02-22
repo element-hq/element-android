@@ -2314,7 +2314,7 @@
     <string name="analytics_opt_in_list_item_3">これはいつでも設定から無効にできます</string>
     <string name="analytics_opt_in_list_item_2">私たちは、情報を第三者と共有することは<b>ありません</b></string>
     <string name="analytics_opt_in_list_item_1">私たちは、アカウントのデータを記録したり分析したりすることは<b>ありません</b></string>
-    <string name="analytics_opt_in_title">Elementの改善を手伝う</string>
+    <string name="template_analytics_opt_in_title">${app_name}の改善を手伝う</string>
     <string name="room_join_rules_public_by_you">このルームを「リンクを知っている人が参加可能」に設定しました。</string>
     <string name="no_ignored_users">どのユーザーも無視していません</string>
     <string name="reaction_search_type_hint">キーワードを入力するとリアクションを検索できます。</string>

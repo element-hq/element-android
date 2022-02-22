@@ -1386,8 +1386,7 @@
     <string name="template_settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Yes, I want to help!</string>
 
-    <!-- TODO Create a template -->
-    <string name="analytics_opt_in_title">Help improve Element</string>
+    <string name="template_analytics_opt_in_title">Help improve ${app_name}</string>
     <!-- TODO Create a template -->
     <!-- The template will be replaced by the value of the resource analytics_opt_in_content_link -->
     <string name="analytics_opt_in_content">Help us identify issues and improve Element by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.\n\nYou can read all our terms %s.</string>
