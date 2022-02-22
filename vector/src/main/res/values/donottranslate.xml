@@ -18,8 +18,8 @@
     <string name="cut_the_slack_from_teams" translatable="false">Cut the slack from teams.</string>
 
     <!--  WIP -->
-    <string name="ftue_account_created_personalize" translatable="false">Personalise profile</string>
+    <string name="ftue_account_created_personalize" translatable="false">Personalize profile</string>
     <string name="ftue_account_created_take_me_home" translatable="false">Take me home</string>
     <string name="ftue_account_created_congratulations_title" translatable="false">Congratulations!</string>
-    <string name="ftue_account_created_subtitle" translatable="false">Your account %s has been created</string>
+    <string name="ftue_account_created_subtitle" translatable="false">Your account %s has been created.</string>
 </resources>
