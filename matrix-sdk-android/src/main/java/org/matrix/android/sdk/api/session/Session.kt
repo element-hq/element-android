@@ -295,6 +295,11 @@ interface Session :
         fun onNewInvitedRoom(session: Session, roomId: String) = Unit
 
         /**
+         * Called after sync and provide number of spaces user joined to track in analytics
+         */
+        fun onJoinedSpaceCounted(session: Session, numSpaces: Int) = Unit
+
+        /**
          * Possible cases:
          * - The access token is not valid anymore,
          * - a M_CONSENT_NOT_GIVEN error has been received from the homeserver

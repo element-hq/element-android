@@ -22,6 +22,7 @@ import im.vector.app.core.extensions.postLiveEvent
 import im.vector.app.core.utils.LiveEvent
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toListOfPerformanceTimer
+import im.vector.app.features.analytics.plan.UserProperties
 import im.vector.app.features.call.vectorCallService
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.launch
@@ -36,6 +37,8 @@ class SessionListener @Inject constructor(
         private val analyticsTracker: AnalyticsTracker
 ) : Session.Listener {
 
+    private var joinedSpacesNumber: Int? = null
+
     private val _globalErrorLiveData = MutableLiveData<LiveEvent<GlobalError>>()
     val globalErrorLiveData: LiveData<LiveEvent<GlobalError>>
         get() = _globalErrorLiveData
@@ -47,6 +50,13 @@ class SessionListener @Inject constructor(
     override fun onNewInvitedRoom(session: Session, roomId: String) {
         session.coroutineScope.launch {
             session.vectorCallService.userMapper.onNewInvitedRoom(roomId)
+        }
+    }
+
+    override fun onJoinedSpaceCounted(session: Session, numSpaces: Int) {
+        if (joinedSpacesNumber != numSpaces) {
+            joinedSpacesNumber = numSpaces
+            analyticsTracker.updateUserProperties(UserProperties(numSpaces = numSpaces))
         }
     }
 
