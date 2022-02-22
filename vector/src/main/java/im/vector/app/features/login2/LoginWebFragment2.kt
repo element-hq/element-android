@@ -56,8 +56,6 @@ class LoginWebFragment2 @Inject constructor(
         return FragmentLoginWebBinding.inflate(inflater, container, false)
     }
 
-    // TODO I noticed in the Git history this variable was a local variable inside notifyViewModel method
-    // TODO was there any reason ? To be able to create this ViewModel we must be sure we will have a valid session
     private val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
 
     private var isWebViewLoaded = false
@@ -84,7 +82,7 @@ class LoginWebFragment2 @Inject constructor(
     private fun setupTitle(state: LoginViewState2) {
         toolbar?.title = when (state.signMode) {
             SignMode2.SignIn -> getString(R.string.login_signin)
-            else            -> getString(R.string.login_signup)
+            else             -> getString(R.string.login_signup)
         }
     }
 
