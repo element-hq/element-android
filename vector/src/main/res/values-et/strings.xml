@@ -3034,7 +3034,7 @@
     <string name="analytics_opt_in_list_item_2">Meie <b>ei</b> jaga teavet kolmandate osapooltega</string>
     <string name="analytics_opt_in_list_item_1">Meie <b>ei</b> salvesta ega profileeri sinu kasutajakonto andmeid</string>
     <string name="analytics_opt_in_content_link">siit</string>
-    <string name="analytics_opt_in_content">Võimalike vigade leidmiseks ja Element\'i arendamiseks jaga meiega anonüümseid andmeid. Selleks, et mõistaksime, kuidas kasutajad erinevaid seadmeid pruugivad me loome sinu seadmetele ühise juhusliku tunnuse.
+    <string name="template_analytics_opt_in_content">Võimalike vigade leidmiseks ja ${app_name}\'i arendamiseks jaga meiega anonüümseid andmeid. Selleks, et mõistaksime, kuidas kasutajad erinevaid seadmeid pruugivad me loome sinu seadmetele ühise juhusliku tunnuse.
 \n
 \nMeie kasutustingimused leiad siit - %s.</string>
     <string name="template_analytics_opt_in_title">Aita ${app_name}\'i arendamisel</string>

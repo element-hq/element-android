@@ -3025,7 +3025,7 @@
     <string name="analytics_opt_in_list_item_2"><b>Non</b> condividiamo informazioni con terze parti</string>
     <string name="analytics_opt_in_list_item_1"><b>Non</b> registriamo o profiliamo alcun dato dell\'account</string>
     <string name="analytics_opt_in_content_link">qui</string>
-    <string name="analytics_opt_in_content">Aiutaci a identificare problemi e a migliorare Element condividendo dati di utilizzo anonimi. Per capire come le persone usano diversi dispositivi, genereremo un identificativo casuale, condiviso dai tuoi dispositivi.
+    <string name="template_analytics_opt_in_content">Aiutaci a identificare problemi e a migliorare ${app_name} condividendo dati di utilizzo anonimi. Per capire come le persone usano diversi dispositivi, genereremo un identificativo casuale, condiviso dai tuoi dispositivi.
 \n
 \nPuoi leggere i nostri termini di servizio %s.</string>
     <string name="template_analytics_opt_in_title">Aiuta a migliorare ${app_name}</string>

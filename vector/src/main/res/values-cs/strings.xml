@@ -3094,7 +3094,7 @@
     <string name="analytics_opt_in_list_item_2"><b>Nesdílíme</b> informace s třetími stranami</string>
     <string name="analytics_opt_in_list_item_1"><b>Nezaznamenáváme ani neprofilujeme</b> žádné údaje o účtu</string>
     <string name="analytics_opt_in_content_link">zde</string>
-    <string name="analytics_opt_in_content">Pomozte nám identifikovat problémy a vylepšit Element sdílením anonymních údajů o používání. Abychom pochopili, jak lidé používají více zařízení, vygenerujeme náhodný identifikátor sdílený vašimi zařízeními.
+    <string name="template_analytics_opt_in_content">Pomozte nám identifikovat problémy a vylepšit ${app_name} sdílením anonymních údajů o používání. Abychom pochopili, jak lidé používají více zařízení, vygenerujeme náhodný identifikátor sdílený vašimi zařízeními.
 \n
 \nMůžete si přečíst všechny naše podmínky %s.</string>
     <string name="template_analytics_opt_in_title">Pomozte vylepšit ${app_name}</string>

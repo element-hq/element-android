@@ -2704,7 +2704,7 @@
     <string name="verify_user_sas_emoji_help_text">次の絵文字が相手の画面にも同じ順番で現れるのを確認し、このユーザーを検証してください。</string>
     <string name="verification_conclusion_warning">信頼できないサインイン</string>
     <string name="create_room_alias_invalid">使用できない文字が含まれています</string>
-    <string name="analytics_opt_in_content">Elementの改善と課題抽出のために、匿名の使用状況データの送信をお願いします。複数の端末での使用を分析するために、あなたの全端末共通のランダムな識別子を生成します。
+    <string name="template_analytics_opt_in_content">${app_name}の改善と課題抽出のために、匿名の使用状況データの送信をお願いします。複数の端末での使用を分析するために、あなたの全端末共通のランダムな識別子を生成します。
 \n
 \n%sで利用規約を閲覧できます。</string>
     <string name="autocomplete_limited_results">最初の検索結果のみ表示しています。文字をもっと入力してください…</string>

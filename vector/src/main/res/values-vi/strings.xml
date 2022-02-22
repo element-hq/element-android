@@ -2911,7 +2911,7 @@
     <string name="analytics_opt_in_list_item_2">Chúng tôi <b>không </b> chia sẻ thông tin với bên thứ ba</string>
     <string name="analytics_opt_in_list_item_1">Chúng tôi <b>không</b> ghi âm hoặc tạo hồ sơ bất kỳ dữ liệu tài khoản nào</string>
     <string name="analytics_opt_in_content_link">ở đây</string>
-    <string name="analytics_opt_in_content">Giúp chúng tôi xác định các vấn đề và cải thiện Element bằng cách chia sẻ dữ liệu sử dụng ẩn danh. Để hiểu cách mọi người sử dụng nhiều thiết bị, chúng tôi sẽ tạo ra một mã định danh ngẫu nhiên, được chia sẻ bởi các thiết bị của bạn.
+    <string name="template_analytics_opt_in_content">Giúp chúng tôi xác định các vấn đề và cải thiện ${app_name} bằng cách chia sẻ dữ liệu sử dụng ẩn danh. Để hiểu cách mọi người sử dụng nhiều thiết bị, chúng tôi sẽ tạo ra một mã định danh ngẫu nhiên, được chia sẻ bởi các thiết bị của bạn.
 \n
 \nBạn có thể đọc tất cả các thuật ngữ của chúng tôi %s.</string>
     <string name="template_analytics_opt_in_title">Giúp cải thiện ${app_name}</string>

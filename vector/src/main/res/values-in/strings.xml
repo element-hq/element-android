@@ -2980,7 +2980,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="analytics_opt_in_list_item_2">Kami <b>tidak</b> membagikan informasi ini dengan pihak ketiga</string>
     <string name="analytics_opt_in_list_item_1">Kami <b>tidak</b> merekam atau memprofil data akun apapun</string>
     <string name="analytics_opt_in_content_link">di sini</string>
-    <string name="analytics_opt_in_content">Bantu kami mengidentifikasi masalah-masalah dan membuat Element lebih baik dengan membagikan data penggunaan anonim. Untuk memahami bagaimana orang-orang menggunakan beberapa perangkat-perangkat, kami akan membuat pengenal acak, yang dibagikan oleh perangkat Anda.
+    <string name="template_analytics_opt_in_content">Bantu kami mengidentifikasi masalah-masalah dan membuat ${app_name} lebih baik dengan membagikan data penggunaan anonim. Untuk memahami bagaimana orang-orang menggunakan beberapa perangkat-perangkat, kami akan membuat pengenal acak, yang dibagikan oleh perangkat Anda.
 \n
 \nAnda dapat membaca semua kebijakan kami %s.</string>
     <string name="template_analytics_opt_in_title">Bantu buat ${app_name} lebih baik</string>

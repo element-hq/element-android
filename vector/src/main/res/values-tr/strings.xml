@@ -2074,7 +2074,7 @@
     <string name="analytics_opt_in_list_item_2">Bilgileri üçüncü taraflarla <b>paylaşmayız</b></string>
     <string name="analytics_opt_in_list_item_1">Herhangi bir hesap verisini <b>kaydetmiyoruz</b></string>
     <string name="analytics_opt_in_content_link">burada</string>
-    <string name="analytics_opt_in_content">Anonim kullanım verilerini paylaşarak sorunları belirlememize ve Element\'i iyileştirmemize yardımcı olun. İnsanların birden fazla cihazı nasıl kullandığını anlamak için, cihazlarınız tarafından paylaşılan rastgele bir tanımlayıcı oluşturacağız.
+    <string name="template_analytics_opt_in_content">Anonim kullanım verilerini paylaşarak sorunları belirlememize ve ${app_name}\'i iyileştirmemize yardımcı olun. İnsanların birden fazla cihazı nasıl kullandığını anlamak için, cihazlarınız tarafından paylaşılan rastgele bir tanımlayıcı oluşturacağız.
 \n
 \n Tüm şartlarımızı %s okuyabilirsiniz.</string>
     <string name="template_analytics_opt_in_title">Öğeyi iyileştirmeye yardımcı olun</string>

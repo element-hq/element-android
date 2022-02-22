@@ -2236,7 +2236,7 @@
     <string name="analytics_opt_in_list_item_2">We delen <b>geen</b> informatie met derden</string>
     <string name="analytics_opt_in_list_item_1">We registreren of profileren <b>geen</b> accountgegevens</string>
     <string name="analytics_opt_in_content_link">hier</string>
-    <string name="analytics_opt_in_content">Help ons problemen te identificeren en Element te verbeteren door anonieme gebruiksgegevens te delen. Om inzicht te krijgen in hoe mensen meerdere apparaten gebruiken, genereren we een willekeurige identificatie die door uw apparaten wordt gedeeld.
+    <string name="template_analytics_opt_in_content">Help ons problemen te identificeren en ${app_name} te verbeteren door anonieme gebruiksgegevens te delen. Om inzicht te krijgen in hoe mensen meerdere apparaten gebruiken, genereren we een willekeurige identificatie die door uw apparaten wordt gedeeld.
 \n
 \nU kunt al onze voorwaarden %s lezen.</string>
     <string name="template_analytics_opt_in_title">Help ${app_name} verbeteren</string>

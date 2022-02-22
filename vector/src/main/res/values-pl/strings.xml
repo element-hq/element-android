@@ -3043,7 +3043,7 @@
     <string name="analytics_opt_in_list_item_2"><b>Nie udostępniamy</b> informacji podmiotom trzecim</string>
     <string name="analytics_opt_in_list_item_1"><b> Nie zbieramy i nie profilujemy </b> danych użytkownika</string>
     <string name="analytics_opt_in_content_link">tutaj</string>
-    <string name="analytics_opt_in_content">Pomóż nam znaleźć błędy i ulepszyć Element poprzez udostępnianie anonimowych danych użytkowania. Aby lepiej zrozumieć jak użytkownicy wykorzystują wiele urządzeń wygenerujemy losowy identyfikator dzielony pomiędzy Twoimi urządzeniami.
+    <string name="template_analytics_opt_in_content">Pomóż nam znaleźć błędy i ulepszyć ${app_name} poprzez udostępnianie anonimowych danych użytkowania. Aby lepiej zrozumieć jak użytkownicy wykorzystują wiele urządzeń wygenerujemy losowy identyfikator dzielony pomiędzy Twoimi urządzeniami.
 \n
 \nWięcej informacji %s.</string>
     <string name="template_analytics_opt_in_title">Pomóż usprawnić ${app_name}</string>

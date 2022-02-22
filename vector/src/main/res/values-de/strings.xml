@@ -2975,7 +2975,7 @@
     <string name="analytics_opt_in_list_item_3">Du kannst dies jederzeit in den Einstellungen deaktivieren</string>
     <string name="analytics_opt_in_list_item_2">Wir teilen <b>keine</b> Informationen mit Drittpersonen</string>
     <string name="analytics_opt_in_list_item_1">Wir erfassen und analysieren <b>keine</b> Accountdaten</string>
-    <string name="analytics_opt_in_content">Hilf uns dabei Probleme zu identifizieren und Element zu verbessern, indem du anonyme Nutzungsdaten teilst. Um zu verstehen, wie Personen mehrere Geräte benutzen, werden wir eine zufällige Kennung generieren, die zwischen deinen Geräten geteilt wird.
+    <string name="template_analytics_opt_in_content">Hilf uns dabei Probleme zu identifizieren und ${app_name} zu verbessern, indem du anonyme Nutzungsdaten teilst. Um zu verstehen, wie Personen mehrere Geräte benutzen, werden wir eine zufällige Kennung generieren, die zwischen deinen Geräten geteilt wird.
 \n
 \n%s kannst du alle unsere Bedingungen lesen.</string>
     <string name="create_spaces_invite_public_header_desc">Stelle sicher, dass die richtigen Personen Zugriff auf %s haben. Du kannst jederzeit weitere Personen einladen.</string>

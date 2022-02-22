@@ -2999,7 +2999,7 @@
     <string name="analytics_opt_in_list_item_2">Vi delar <b>inte</b> information med tredje parter</string>
     <string name="analytics_opt_in_list_item_1">Vi spelar <b>inte</b> in eller profilerar någon kontodata</string>
     <string name="analytics_opt_in_content_link">här</string>
-    <string name="analytics_opt_in_content">Hjälp oss att identifiera problem och förbättra Element genom att dela anonym användningsdata. För att förstå hur personer använder multipla enheter så generar vi en slumpmässig identifierare som delas mellan dina enheter.
+    <string name="template_analytics_opt_in_content">Hjälp oss att identifiera problem och förbättra ${app_name} genom att dela anonym användningsdata. För att förstå hur personer använder multipla enheter så generar vi en slumpmässig identifierare som delas mellan dina enheter.
 \n
 \nDu kan läsa alla våra villkor %s.</string>
     <string name="template_analytics_opt_in_title">Hjälp att förbättra ${app_name}</string>

@@ -3019,7 +3019,7 @@
     <string name="analytics_opt_in_list_item_2"><b>Nuk</b> u japin hollësi palëve të treta</string>
     <string name="analytics_opt_in_list_item_1"><b>Nuk</b> regjistrojmë ose profilizojmë ndonjë të dhënë llogarie</string>
     <string name="analytics_opt_in_content_link">këtu</string>
-    <string name="analytics_opt_in_content">Ndihmonani të identifikojmë probleme dhe të përmirësojmë Element-in, duke ndarë me ne të dhëna anonime përdorimi. Për të kuptuar se si i përdorin njerëzit disa pajisje njëherësh, do të prodhojmë një identifikues kuturu, të përbashkët për pajisjet tuaja.
+    <string name="template_analytics_opt_in_content">Ndihmonani të identifikojmë probleme dhe të përmirësojmë ${app_name}-in, duke ndarë me ne të dhëna anonime përdorimi. Për të kuptuar se si i përdorin njerëzit disa pajisje njëherësh, do të prodhojmë një identifikues kuturu, të përbashkët për pajisjet tuaja.
 \n
 \nMund të lexoni krejt kushtet tona %s.</string>
     <string name="template_analytics_opt_in_title">Ndihmoni të përmirësohet ${app_name}-in</string>

@@ -2976,7 +2976,7 @@
     <string name="analytics_opt_in_list_item_3">你可以随时在设置中关闭它</string>
     <string name="analytics_opt_in_list_item_2">我们<b>不</b>与第三方共享信息</string>
     <string name="analytics_opt_in_content_link">此处</string>
-    <string name="analytics_opt_in_content">通过共享匿名使用数据，帮助我们识别问题并改进 Element。为了理解人们如何使用多台设备，我们将生成一个随机标识符，由您的设备共享。
+    <string name="template_analytics_opt_in_content">通过共享匿名使用数据，帮助我们识别问题并改进 ${app_name}。为了理解人们如何使用多台设备，我们将生成一个随机标识符，由您的设备共享。
 \n
 \n你可以阅读我们所有的条款 %s。</string>
     <string name="template_analytics_opt_in_title">帮助改进 ${app_name}</string>

@@ -2976,7 +2976,7 @@
     <string name="analytics_opt_in_list_item_2">我們<b>不會</b>與第三方分享資訊</string>
     <string name="analytics_opt_in_list_item_1">我們<b>不會</b>記錄或分析任何帳號資料</string>
     <string name="analytics_opt_in_content_link">這裡</string>
-    <string name="analytics_opt_in_content">透過分享匿名使用資料協助我們找出問題並改善 Element。為了了解人們如何使用多裝置，我們將會產生隨機識別字串，在您的裝置間共享。
+    <string name="template_analytics_opt_in_content">透過分享匿名使用資料協助我們找出問題並改善 ${app_name}。為了了解人們如何使用多裝置，我們將會產生隨機識別字串，在您的裝置間共享。
 \n
 \n您可以閱讀我們的條款 %s。</string>
     <string name="template_analytics_opt_in_title">協助改善 ${app_name}</string>

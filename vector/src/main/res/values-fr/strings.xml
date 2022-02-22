@@ -3036,7 +3036,7 @@
     <string name="analytics_opt_in_list_item_2">Nous ne partageons <b>aucune</b> information avec des tiers</string>
     <string name="analytics_opt_in_list_item_1">Nous n’enregistrons ou ne profilons <b>aucune</b> donnée du compte</string>
     <string name="analytics_opt_in_content_link">ici</string>
-    <string name="analytics_opt_in_content">Aidez nous à identifier les problèmes et améliorer Element en envoyant des rapports d’usage anonymes. Pour comprendre de quelle manière les gens utilisent Element sur plusieurs appareils, nous créeront un identifiant aléatoire commun à tous vos appareils.
+    <string name="template_analytics_opt_in_content">Aidez nous à identifier les problèmes et améliorer ${app_name} en envoyant des rapports d’usage anonymes. Pour comprendre de quelle manière les gens utilisent Element sur plusieurs appareils, nous créeront un identifiant aléatoire commun à tous vos appareils.
 \n
 \nVous pouvez lire toutes les conditions %s.</string>
     <string name="template_analytics_opt_in_title">Aider à améliorer ${app_name}</string>
