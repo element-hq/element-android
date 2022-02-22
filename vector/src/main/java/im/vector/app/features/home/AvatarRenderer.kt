@@ -167,7 +167,10 @@ class AvatarRenderer @Inject constructor(private val activeSessionHolder: Active
 
     @AnyThread
     @Throws
-    fun adaptiveShortcutDrawable(glideRequests: GlideRequests, matrixItem: MatrixItem, iconSize: Int, adaptiveIconSize: Int, adaptiveIconOuterSides: Float): Bitmap {
+    fun adaptiveShortcutDrawable(glideRequests: GlideRequests,
+                                 matrixItem: MatrixItem, iconSize: Int,
+                                 adaptiveIconSize: Int,
+                                 adaptiveIconOuterSides: Float): Bitmap {
         return glideRequests
                 .asBitmap()
                 .avatarOrText(matrixItem, iconSize)
