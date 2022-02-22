@@ -3761,7 +3761,10 @@
     <string name="tooltip_attachment_location">Share location</string>
 
     <string name="message_reaction_show_less">Show less</string>
-    <string name="message_reaction_show_more">"%1$d more"</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">"%1$d more"</item>
+        <item quantity="other">"%1$d more"</item>
+    </plurals>
 
     <string name="room_message_notify_everyone">Notify the whole room</string>
     <string name="room_message_autocomplete_users">Users</string>
