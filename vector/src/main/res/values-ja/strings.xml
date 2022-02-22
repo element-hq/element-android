@@ -1459,7 +1459,7 @@
     <string name="settings_show_emoji_keyboard">絵文字キーボードを表示</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">アバターと表示名の変更を含む。</string>
     <string name="settings_show_avatar_display_name_changes_messages">アカウントのイベントを表示</string>
-    <string name="settings_show_join_leave_messages_summary">招待、削除、ブロックは影響を受けません。</string>
+    <string name="settings_show_join_leave_messages_summary">招待、追放、ブロックは影響を受けません。</string>
     <string name="settings_show_room_member_state_events_summary">招待/参加/退出/追放/ブロックに関するイベントや、アバター/表示名の変更などを含む。</string>
     <string name="settings_show_join_leave_messages">参加・退出イベントを表示</string>
     <string name="settings_chat_effects_description">/confettiコマンドを使用するか、❄️または🎉を含むメッセージを送信</string>
@@ -1759,7 +1759,7 @@
     <string name="room_settings_guest_access_title">ゲストの参加を許可</string>
     <string name="room_settings_room_access_title">ルームへのアクセス</string>
     <string name="room_settings_room_read_history_dialog_subtitle">履歴の閲覧権限に関する変更は、今後、このルームで表示されるメッセージにのみ適用されます。既存の履歴の見え方には影響しません。</string>
-    <string name="continue_anyway">無視して続行する</string>
+    <string name="continue_anyway">無視して続行</string>
     <string name="option_always_ask">毎回確認</string>
     <string name="spaces_invited_header">招待</string>
     <string name="suggested_header">おすすめのルーム</string>
@@ -2818,4 +2818,5 @@
     <string name="verification_request_alert_description">セキュリティーを高めるために、自分と相手の端末でコードが一致していることを確認して、%sを検証しましょう。
 \n
 \n対面で行うのが最もセキュアです。</string>
+    <string name="encryption_has_been_misconfigured">暗号化が正しく設定されていません。</string>
 </resources>
