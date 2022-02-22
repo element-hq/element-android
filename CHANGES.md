@@ -10,14 +10,12 @@ Features ✨
 
 Bugfixes 🐛
 ----------
- - Right align the notifications badge in the rooms list (and DMs) so that it's always in a consistent place on the screen. ([#4640](https://github.com/vector-im/element-android/issues/4640))
  - Remove redundant highlight on add poll option button ([#5178](https://github.com/vector-im/element-android/issues/5178))
  - Reliably display crash report prompt ([#5195](https://github.com/vector-im/element-android/issues/5195))
  - Fix for rooms with virtual rooms not showing call status events in the timeline. ([#5198](https://github.com/vector-im/element-android/issues/5198))
  - Fix for call transfer with consult failing to make outgoing consultation call. ([#5201](https://github.com/vector-im/element-android/issues/5201))
  - Fix crash during account registration when redirecting to Web View ([#5218](https://github.com/vector-im/element-android/issues/5218))
  - Analytics: Fixes missing use case identity values from within the onboarding flow ([#5234](https://github.com/vector-im/element-android/issues/5234))
- - Increments database schema to take advantage of homeserver capabilities entity migration (fixes crash in pre-release builds) ([#5243](https://github.com/vector-im/element-android/issues/5243))
  - Fixing crash when adding room by QR code after accepting the camera permission for the first time ([#5295](https://github.com/vector-im/element-android/issues/5295))
 
 SDK API changes ⚠️
@@ -28,6 +26,7 @@ SDK API changes ⚠️
 
 Other changes
 -------------
+ - Right align the notifications badge in the rooms list (and DMs) so that it's always in a consistent place on the screen. ([#4640](https://github.com/vector-im/element-android/issues/4640))
  - Collapse successive ACLs events in room timeline ([#2782](https://github.com/vector-im/element-android/issues/2782))
  - Home screen: Replacing search icon by filter icon in the top right menu ([#4643](https://github.com/vector-im/element-android/issues/4643))
  - Make Space creation screens more consistent ([#5104](https://github.com/vector-im/element-android/issues/5104))
@@ -40,6 +39,10 @@ Other changes
  - Improves bitmap memory usage by caching the shortcut images ([#5276](https://github.com/vector-im/element-android/issues/5276))
  - Changes unread marker in room list from green to grey ([#5294](https://github.com/vector-im/element-android/issues/5294))
  - Improve some internal realm usages. ([#5297](https://github.com/vector-im/element-android/issues/5297))
+
+Translations 🗣
+--------------
+ - Improved Japanese translations (special thanks to Suguru Hirahara!)
 
 
 Changes in Element v1.4.0 (2022-02-09)
