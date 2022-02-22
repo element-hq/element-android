@@ -49,6 +49,7 @@ data class JitsiState(
 data class RoomDetailViewState(
         val roomId: String,
         val eventId: String?,
+        val isInviteAlreadyAccepted: Boolean,
         val myRoomMember: Async<RoomMemberSummary> = Uninitialized,
         val asyncInviter: Async<RoomMemberSummary> = Uninitialized,
         val asyncRoomSummary: Async<RoomSummary> = Uninitialized,
@@ -77,6 +78,7 @@ data class RoomDetailViewState(
     constructor(args: TimelineArgs) : this(
             roomId = args.roomId,
             eventId = args.eventId,
+            isInviteAlreadyAccepted = args.isInviteAlreadyAccepted,
             // Also highlight the target event, if any
             highlightedEventId = args.eventId,
             switchToParentSpace = args.switchToParentSpace,

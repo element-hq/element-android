@@ -18,6 +18,7 @@ package im.vector.app.features.call
 
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.call.audio.CallAudioManager
+import im.vector.app.features.call.transfer.CallTransferResult
 
 sealed class VectorCallViewActions : VectorViewModelAction {
     object EndCall : VectorCallViewActions()
@@ -37,5 +38,6 @@ sealed class VectorCallViewActions : VectorViewModelAction {
     object ToggleHDSD : VectorCallViewActions()
     object InitiateCallTransfer : VectorCallViewActions()
     object CallTransferSelectionCancelled : VectorCallViewActions()
+    data class CallTransferSelectionResult(val callTransferResult: CallTransferResult) : VectorCallViewActions()
     object TransferCall : VectorCallViewActions()
 }

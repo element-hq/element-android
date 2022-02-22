@@ -99,12 +99,31 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
         private lateinit var instance: Matrix
         private val isInit = AtomicBoolean(false)
 
+        /**
+         * Creates a new instance of Matrix, it's recommended to manage this instance as a singleton.
+         * To make use of the built in singleton use Matrix.initialize() and/or Matrix.getInstance(context) instead
+         **/
+        fun createInstance(context: Context, matrixConfiguration: MatrixConfiguration): Matrix {
+            return Matrix(context.applicationContext, matrixConfiguration)
+        }
+
+        /**
+         * Initializes a singleton instance of Matrix for the given MatrixConfiguration
+         * This instance will be returned by Matrix.getInstance(context)
+         */
+        @Deprecated("Use Matrix.createInstance and manage the instance manually")
         fun initialize(context: Context, matrixConfiguration: MatrixConfiguration) {
             if (isInit.compareAndSet(false, true)) {
                 instance = Matrix(context.applicationContext, matrixConfiguration)
             }
         }
 
+        /**
+         * Either provides an already initialized singleton Matrix instance or queries the application context for a MatrixConfiguration.Provider
+         * to lazily create and store the instance.
+         */
+        @Suppress("deprecation") // suppressing warning as this method is unused but is still provided for SDK clients
+        @Deprecated("Use Matrix.createInstance and manage the instance manually")
         fun getInstance(context: Context): Matrix {
             if (isInit.compareAndSet(false, true)) {
                 val appContext = context.applicationContext
@@ -113,7 +132,8 @@ class Matrix private constructor(context: Context, matrixConfiguration: MatrixCo
                     instance = Matrix(appContext, matrixConfiguration)
                 } else {
                     throw IllegalStateException("Matrix is not initialized properly." +
-                            " You should call Matrix.initialize or let your application implements MatrixConfiguration.Provider.")
+                            " If you want to manage your own Matrix instance use Matrix.createInstance" +
+                            " otherwise you should call Matrix.initialize or let your application implement MatrixConfiguration.Provider.")
                 }
             }
             return instance

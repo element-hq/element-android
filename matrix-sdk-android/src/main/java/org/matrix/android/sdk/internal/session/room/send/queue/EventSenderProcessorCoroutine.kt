@@ -26,9 +26,9 @@ import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.getRetryDelay
 import org.matrix.android.sdk.api.failure.isLimitExceededError
 import org.matrix.android.sdk.api.session.Session
-import org.matrix.android.sdk.api.session.crypto.CryptoService
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.util.Cancelable
+import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.session.SessionScope
 import org.matrix.android.sdk.internal.task.CoroutineSequencer
 import org.matrix.android.sdk.internal.task.SemaphoreCoroutineSequencer
@@ -54,7 +54,7 @@ private const val MAX_RETRY_COUNT = 3
  */
 @SessionScope
 internal class EventSenderProcessorCoroutine @Inject constructor(
-        private val cryptoService: CryptoService,
+        private val cryptoStore: IMXCryptoStore,
         private val sessionParams: SessionParams,
         private val queuedTaskFactory: QueuedTaskFactory,
         private val taskExecutor: TaskExecutor,
@@ -92,7 +92,8 @@ internal class EventSenderProcessorCoroutine @Inject constructor(
     }
 
     override fun postEvent(event: Event): Cancelable {
-        return postEvent(event, event.roomId?.let { cryptoService.isRoomEncrypted(it) } ?: false)
+        val shouldEncrypt = event.roomId?.let { cryptoStore.roomWasOnceEncrypted(it) } ?: false
+        return postEvent(event, shouldEncrypt)
     }
 
     override fun postEvent(event: Event, encrypt: Boolean): Cancelable {

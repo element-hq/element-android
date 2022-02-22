@@ -46,7 +46,7 @@ import org.matrix.android.sdk.api.util.Cancelable
 import org.matrix.android.sdk.api.util.CancelableBag
 import org.matrix.android.sdk.api.util.JsonDict
 import org.matrix.android.sdk.api.util.NoOpCancellable
-import org.matrix.android.sdk.internal.crypto.CryptoSessionInfoProvider
+import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import org.matrix.android.sdk.internal.di.SessionId
 import org.matrix.android.sdk.internal.di.WorkManagerProvider
 import org.matrix.android.sdk.internal.session.content.UploadContentWorker
@@ -66,7 +66,7 @@ internal class DefaultSendService @AssistedInject constructor(
         private val workManagerProvider: WorkManagerProvider,
         @SessionId private val sessionId: String,
         private val localEchoEventFactory: LocalEchoEventFactory,
-        private val cryptoSessionInfoProvider: CryptoSessionInfoProvider,
+        private val cryptoStore: IMXCryptoStore,
         private val taskExecutor: TaskExecutor,
         private val localEchoRepository: LocalEchoRepository,
         private val eventSenderProcessor: EventSenderProcessor,
@@ -303,7 +303,7 @@ internal class DefaultSendService @AssistedInject constructor(
     private fun internalSendMedia(allLocalEchoes: List<Event>, attachment: ContentAttachmentData, compressBeforeSending: Boolean): Cancelable {
         val cancelableBag = CancelableBag()
 
-        allLocalEchoes.groupBy { cryptoSessionInfoProvider.isRoomEncrypted(it.roomId!!) }
+        allLocalEchoes.groupBy { cryptoStore.roomWasOnceEncrypted(it.roomId!!) }
                 .apply {
                     keys.forEach { isRoomEncrypted ->
                         // Should never be empty
@@ -334,7 +334,7 @@ internal class DefaultSendService @AssistedInject constructor(
     }
 
     private fun sendEvent(event: Event): Cancelable {
-        return eventSenderProcessor.postEvent(event, cryptoSessionInfoProvider.isRoomEncrypted(event.roomId!!))
+        return eventSenderProcessor.postEvent(event)
     }
 
     private fun createLocalEcho(event: Event) {

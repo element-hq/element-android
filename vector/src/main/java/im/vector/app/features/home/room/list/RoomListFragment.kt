@@ -42,7 +42,7 @@ import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.databinding.FragmentRoomListBinding
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.RoomListDisplayMode
 import im.vector.app.features.home.room.filtered.FilteredRoomFooterItem
 import im.vector.app.features.home.room.list.actions.RoomListQuickActionsBottomSheet
@@ -104,8 +104,8 @@ class RoomListFragment @Inject constructor(
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         analyticsScreenName = when (roomListParams.displayMode) {
-            RoomListDisplayMode.PEOPLE -> Screen.ScreenName.MobilePeople
-            RoomListDisplayMode.ROOMS  -> Screen.ScreenName.MobileRooms
+            RoomListDisplayMode.PEOPLE -> MobileScreen.ScreenName.People
+            RoomListDisplayMode.ROOMS  -> MobileScreen.ScreenName.Rooms
             else                       -> null
         }
     }
@@ -121,7 +121,7 @@ class RoomListFragment @Inject constructor(
             when (it) {
                 is RoomListViewEvents.Loading                   -> showLoading(it.message)
                 is RoomListViewEvents.Failure                   -> showFailure(it.throwable)
-                is RoomListViewEvents.SelectRoom                -> handleSelectRoom(it)
+                is RoomListViewEvents.SelectRoom                -> handleSelectRoom(it, it.isInviteAlreadyAccepted)
                 is RoomListViewEvents.Done                      -> Unit
                 is RoomListViewEvents.NavigateToMxToBottomSheet -> handleShowMxToLink(it.link)
             }.exhaustive
@@ -184,8 +184,8 @@ class RoomListFragment @Inject constructor(
         super.onDestroyView()
     }
 
-    private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom) {
-        navigator.openRoom(requireActivity(), event.roomSummary.roomId)
+    private fun handleSelectRoom(event: RoomListViewEvents.SelectRoom, isInviteAlreadyAccepted: Boolean) {
+        navigator.openRoom(context = requireActivity(), roomId = event.roomSummary.roomId, isInviteAlreadyAccepted = isInviteAlreadyAccepted)
     }
 
     private fun setupCreateRoomButton() {

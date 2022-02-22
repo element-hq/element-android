@@ -48,7 +48,7 @@ import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.analytics.accountdata.AnalyticsAccountDataViewModel
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.screen.ScreenEvent
 import im.vector.app.features.disclaimer.showDisclaimerDialog
 import im.vector.app.features.matrixto.MatrixToBottomSheet
@@ -165,7 +165,7 @@ class HomeActivity :
     private val drawerListener = object : DrawerLayout.SimpleDrawerListener() {
         private var drawerScreenEvent: ScreenEvent? = null
         override fun onDrawerOpened(drawerView: View) {
-            drawerScreenEvent = ScreenEvent(Screen.ScreenName.MobileSidebar)
+            drawerScreenEvent = ScreenEvent(MobileScreen.ScreenName.Sidebar)
         }
 
         override fun onDrawerClosed(drawerView: View) {
@@ -184,7 +184,7 @@ class HomeActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        analyticsScreenName = Screen.ScreenName.Home
+        analyticsScreenName = MobileScreen.ScreenName.Home
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
         FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager, vectorPreferences.areNotificationEnabledForDevice())
         sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
