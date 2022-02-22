@@ -3043,9 +3043,9 @@
     <string name="labs_auto_report_uisi">Auto-segnala errori di decifrazione.</string>
     <string name="room_member_override_nick_color">Sovrascrivi colore nick</string>
     <string name="login_splash_already_have_account">Ho già un account</string>
-    <string name="ftue_auth_carousel_3_title">Messaggistica sicura.</string>
-    <string name="ftue_auth_carousel_2_title">Tu hai il controllo.</string>
-    <string name="ftue_auth_carousel_1_title">Prendi il controllo delle tue conversazioni.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Messaggistica sicura.</string>
+    <string name="ftue_auth_carousel_control_title">Tu hai il controllo.</string>
+    <string name="ftue_auth_carousel_secure_title">Prendi il controllo delle tue conversazioni.</string>
     <string name="tooltip_attachment_location">Condividi posizione</string>
     <string name="labs_render_locations_in_timeline">Mostra le posizioni dell\'utente nella linea temporale</string>
     <string name="settings_enable_location_sharing_summary">Una volta attivata, potrai inviare la tua posizione in qualsiasi stanza</string>
@@ -3072,10 +3072,10 @@
     <string name="encryption_has_been_misconfigured">La crittografia è stata configurata male.</string>
     <string name="sent_location">Ha condiviso la sua posizione</string>
     <string name="login_splash_create_account">Crea account</string>
-    <string name="ftue_auth_carousel_title_messaging">Messaggistica per la tua squadra.</string>
-    <string name="ftue_auth_carousel_body_encrypted">Crittografia end-to-end e nessun numero di telefono richiesto. Niente pubblicità o raccolta di dati.</string>
-    <string name="ftue_auth_carousel_body_control">Scegli dove vengono tenute le tue conversazioni, dandoti controllo e indipendenza. Connesso via Matrix.</string>
-    <string name="ftue_auth_carousel_body_secure">Comunicazioni sicure e indipendenti che ti danno lo stesso livello di riservatezza di una conversazione faccia a faccia in casa tua.</string>
+    <string name="ftue_auth_carousel_workplace_title">Messaggistica per la tua squadra.</string>
+    <string name="ftue_auth_carousel_encrypted_body">Crittografia end-to-end e nessun numero di telefono richiesto. Niente pubblicità o raccolta di dati.</string>
+    <string name="ftue_auth_carousel_control_body">Scegli dove vengono tenute le tue conversazioni, dandoti controllo e indipendenza. Connesso via Matrix.</string>
+    <string name="ftue_auth_carousel_secure_body">Comunicazioni sicure e indipendenti che ti danno lo stesso livello di riservatezza di una conversazione faccia a faccia in casa tua.</string>
     <string name="attachment_type_location">Posizione</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">La crittografia è stata configurata male, perciò non puoi inviare messaggi. Clicca per aprire le impostazioni.</string>
     <string name="room_unsupported_e2e_algorithm">La crittografia è stata configurata male, perciò non puoi inviare messaggi. Contatta l\'amministratore per reimpostare la crittografia ad uno stato valido.</string>

@@ -3053,9 +3053,9 @@
     <string name="labs_auto_report_uisi">Auro Reportar Erros de Decriptação.</string>
     <string name="room_member_override_nick_color">Sobrepor cor de nick</string>
     <string name="login_splash_already_have_account">Eu já tenho uma conta</string>
-    <string name="ftue_auth_carousel_3_title">Mensageria segura.</string>
-    <string name="ftue_auth_carousel_2_title">Você está em controle.</string>
-    <string name="ftue_auth_carousel_1_title">Tenha posse de suas conversas.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Mensageria segura.</string>
+    <string name="ftue_auth_carousel_control_title">Você está em controle.</string>
+    <string name="ftue_auth_carousel_secure_title">Tenha posse de suas conversas.</string>
     <string name="tooltip_attachment_location">Compartilhar localização</string>
     <string name="labs_render_locations_in_timeline">Render localizações de usuária(o) na timeline</string>
     <string name="settings_enable_location_sharing_summary">Uma vez habilitada você vai ser capaz de enviar sua localização a qualquer sala</string>
@@ -3083,10 +3083,10 @@
     <string name="attachment_type_location">Localização</string>
     <string name="encryption_has_been_misconfigured">Encriptação tem sido malconfigurada.</string>
     <string name="login_splash_create_account">Criar conta</string>
-    <string name="ftue_auth_carousel_title_messaging">Mensageria para seu time.</string>
-    <string name="ftue_auth_carousel_body_encrypted">Encriptado ponta-a-ponta e nenhum número de telefone requerido. Sem publicidade ou datamining.</string>
-    <string name="ftue_auth_carousel_body_control">Escolha onde suas conversas são mantidas, dando-lhe controle e independência. Conectado via Matrix.</string>
-    <string name="ftue_auth_carousel_body_secure">Comunicação segura e independente que lhe dá o mesmo nível de privacidade que conversa face-a-face em sua própria casa.</string>
+    <string name="ftue_auth_carousel_workplace_title">Mensageria para seu time.</string>
+    <string name="ftue_auth_carousel_encrypted_body">Encriptado ponta-a-ponta e nenhum número de telefone requerido. Sem publicidade ou datamining.</string>
+    <string name="ftue_auth_carousel_control_body">Escolha onde suas conversas são mantidas, dando-lhe controle e independência. Conectado via Matrix.</string>
+    <string name="ftue_auth_carousel_secure_body">Comunicação segura e independente que lhe dá o mesmo nível de privacidade que conversa face-a-face em sua própria casa.</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Encriptação tem sido malconfigurada então você não pode enviar mensagens. Clique para abrir configurações.</string>
     <string name="room_unsupported_e2e_algorithm">Encriptação tem sido malconfigurada então você não pode enviar mensagens. Por favor contacte um(a) admin para restaurar encriptação a um estado válido.</string>
     <string name="message_bubbles">Mostrar Bolhas de mensagem</string>

@@ -2994,9 +2994,9 @@
     <string name="labs_auto_report_uisi">自動回報解密錯誤。</string>
     <string name="room_member_override_nick_color">覆寫暱稱色彩</string>
     <string name="login_splash_already_have_account">我已有一個帳號</string>
-    <string name="ftue_auth_carousel_3_title">安全傳送訊息。</string>
-    <string name="ftue_auth_carousel_2_title">您已掌控了您的資料。</string>
-    <string name="ftue_auth_carousel_1_title">擁有您的對話。</string>
+    <string name="ftue_auth_carousel_encrypted_title">安全傳送訊息。</string>
+    <string name="ftue_auth_carousel_control_title">您已掌控了您的資料。</string>
+    <string name="ftue_auth_carousel_secure_title">擁有您的對話。</string>
     <string name="tooltip_attachment_location">分享位置</string>
     <string name="labs_render_locations_in_timeline">在時間軸中繪製使用者位置</string>
     <string name="settings_enable_location_sharing_summary">啟用後，您就能將您的位置傳送至任何聊天室</string>
@@ -3023,10 +3023,10 @@
     <string name="encryption_has_been_misconfigured">加密設定錯誤。</string>
     <string name="sent_location">分享了他們的位置</string>
     <string name="login_splash_create_account">建立帳號</string>
-    <string name="ftue_auth_carousel_title_messaging">為您的團隊傳送訊息。</string>
-    <string name="ftue_auth_carousel_body_encrypted">端到端加密，不需要電話號碼。沒有廣告或資料挖礦。</string>
-    <string name="ftue_auth_carousel_body_control">選擇保留對話的位置，讓您擁有控制權與獨立性。透過 Matrix 連結。</string>
-    <string name="ftue_auth_carousel_body_secure">安全且獨立的通訊，為您提供與在家中進行面對面對話相同的隱私等級。</string>
+    <string name="ftue_auth_carousel_workplace_title">為您的團隊傳送訊息。</string>
+    <string name="ftue_auth_carousel_encrypted_body">端到端加密，不需要電話號碼。沒有廣告或資料挖礦。</string>
+    <string name="ftue_auth_carousel_control_body">選擇保留對話的位置，讓您擁有控制權與獨立性。透過 Matrix 連結。</string>
+    <string name="ftue_auth_carousel_secure_body">安全且獨立的通訊，為您提供與在家中進行面對面對話相同的隱私等級。</string>
     <string name="attachment_type_location">位置</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">加密設定錯誤，因此您無法傳送訊息。點擊以開啟設定。</string>
     <string name="room_unsupported_e2e_algorithm">加密設定錯誤，因此您無法傳送訊息。請聯絡管理員將加密還原至有效的狀態。</string>

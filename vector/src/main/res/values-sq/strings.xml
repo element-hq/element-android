@@ -3041,9 +3041,9 @@
     <string name="labs_auto_report_uisi">Raporto Vetvetiu Gabime Shfshehtëzimi.</string>
     <string name="room_member_override_nick_color">Anashkalo ngjyrë nofke</string>
     <string name="login_splash_already_have_account">Kam tashmë një llogari</string>
-    <string name="ftue_auth_carousel_3_title">Shkëmbim i siguruar mesazhesh.</string>
-    <string name="ftue_auth_carousel_2_title">Kontrollin e keni ju.</string>
-    <string name="ftue_auth_carousel_1_title">Jini zot i bisedave tuaja.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Shkëmbim i siguruar mesazhesh.</string>
+    <string name="ftue_auth_carousel_control_title">Kontrollin e keni ju.</string>
+    <string name="ftue_auth_carousel_secure_title">Jini zot i bisedave tuaja.</string>
     <string name="tooltip_attachment_location">Jepe vendndodhjen</string>
     <string name="settings_enable_location_sharing">Aktivizoni dhënie vendndodhjeje</string>
     <string name="location_share">Jepe vendndodhjen</string>
@@ -3056,10 +3056,10 @@
     <string name="open_poll_option_title">Anketim i hapur</string>
     <string name="poll_type_title">Lloj anketimi</string>
     <string name="login_splash_create_account">Krijoni llogari</string>
-    <string name="ftue_auth_carousel_title_messaging">Shkëmbim mesazhesh për ekipin tuaj.</string>
-    <string name="ftue_auth_carousel_body_encrypted">I fshehtëzuar skaj më skaj dhe pa u dashur numër telefoni. Pa reklama, apo shfrytëzim të dhënash.</string>
-    <string name="ftue_auth_carousel_body_control">Zgjidhni ku mbahen bisedat tuaja, duke ju dhënë kontroll dhe pavarësi. Të lidhur përmes Matrix-i.</string>
-    <string name="ftue_auth_carousel_body_secure">Komunikim i sigurt dhe i pavarur, që ju jep të njëjtën shkallë privatësie si biseda kokë më kokë, në shtëpinë tuaj.</string>
+    <string name="ftue_auth_carousel_workplace_title">Shkëmbim mesazhesh për ekipin tuaj.</string>
+    <string name="ftue_auth_carousel_encrypted_body">I fshehtëzuar skaj më skaj dhe pa u dashur numër telefoni. Pa reklama, apo shfrytëzim të dhënash.</string>
+    <string name="ftue_auth_carousel_control_body">Zgjidhni ku mbahen bisedat tuaja, duke ju dhënë kontroll dhe pavarësi. Të lidhur përmes Matrix-i.</string>
+    <string name="ftue_auth_carousel_secure_body">Komunikim i sigurt dhe i pavarur, që ju jep të njëjtën shkallë privatësie si biseda kokë më kokë, në shtëpinë tuaj.</string>
     <string name="labs_render_locations_in_timeline">Trego vendndodhje përdoruesi në rrjedhën kohore</string>
     <string name="settings_enable_location_sharing_summary">Pasi të aktivizohet, do të jeni në gjendje të dërgoni vendndodhjen tuaj në çfarëdo dhome</string>
     <string name="location_share_external">Hape me</string>

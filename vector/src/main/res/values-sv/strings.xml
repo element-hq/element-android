@@ -3052,9 +3052,9 @@
     <string name="labs_auto_report_uisi">Rapportera avkrypteringsfel automatiskt.</string>
     <string name="room_member_override_nick_color">Åsidosätt visningsnamnsfärg</string>
     <string name="login_splash_already_have_account">Jag har redan ett konto</string>
-    <string name="ftue_auth_carousel_3_title">Säkra meddelanden.</string>
-    <string name="ftue_auth_carousel_2_title">Du har kontroll.</string>
-    <string name="ftue_auth_carousel_1_title">Äg dina konversationer.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Säkra meddelanden.</string>
+    <string name="ftue_auth_carousel_control_title">Du har kontroll.</string>
+    <string name="ftue_auth_carousel_secure_title">Äg dina konversationer.</string>
     <string name="room_error_access_unauthorized">Du får inte gå med i det här rummet</string>
     <string name="tooltip_attachment_location">Dela plats</string>
     <string name="labs_render_locations_in_timeline">Visa användarplatser i tidslinjen</string>
@@ -3082,10 +3082,10 @@
     <string name="encryption_has_been_misconfigured">Kryptering har felkonfigurerats.</string>
     <string name="sent_location">Delade sin plats</string>
     <string name="login_splash_create_account">Skapa konto</string>
-    <string name="ftue_auth_carousel_title_messaging">Meddelanden för ditt team.</string>
-    <string name="ftue_auth_carousel_body_encrypted">Totalsträckskrypterad och inget telefonnummer krävs. Ingen reklam eller datainsamling.</string>
-    <string name="ftue_auth_carousel_body_control">Välj var dina konversationer lagras, vilket ger dig kontroll och självständighet. Ansluts via Matrix.</string>
-    <string name="ftue_auth_carousel_body_secure">Säker och oberoende kommunikation som ger dig samma sekretessnivå som en personlig konversation i ditt eget hem.</string>
+    <string name="ftue_auth_carousel_workplace_title">Meddelanden för ditt team.</string>
+    <string name="ftue_auth_carousel_encrypted_body">Totalsträckskrypterad och inget telefonnummer krävs. Ingen reklam eller datainsamling.</string>
+    <string name="ftue_auth_carousel_control_body">Välj var dina konversationer lagras, vilket ger dig kontroll och självständighet. Ansluts via Matrix.</string>
+    <string name="ftue_auth_carousel_secure_body">Säker och oberoende kommunikation som ger dig samma sekretessnivå som en personlig konversation i ditt eget hem.</string>
     <string name="attachment_type_location">Plats</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Kryptering har felkonfigurerats så du kan inte skicka meddelanden. Klicka för att öppna inställningar.</string>
     <string name="room_unsupported_e2e_algorithm">Kryptering har felkonfigurerats så du kan inte skicka meddelanden. Vänligen kontakta en admin för att återställa kryptering till ett giltigt tillstånd.</string>

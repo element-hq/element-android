@@ -2083,7 +2083,7 @@
     <string name="login_wait_for_email_title">Skontrolujte prosím svoj e-mail</string>
     <string name="poll_end_room_list_preview">Anketa skončila</string>
     <string name="invite_by_username">Pozvať podľa používateľského mena</string>
-    <string name="ftue_auth_carousel_1_title">Vlastnite svoje konverzácie.</string>
+    <string name="ftue_auth_carousel_secure_title">Vlastnite svoje konverzácie.</string>
     <string name="login_splash_already_have_account">Už mám účet</string>
     <string name="tooltip_attachment_file">Nahrať súbor</string>
     <string name="video_call_with_participant">Videohovor s %s</string>
@@ -2189,8 +2189,8 @@
     <string name="invite_by_username_or_mail">Pozvať pomocou používateľského mena alebo e-mailu</string>
     <string name="labs_enable_latex_maths">Povoliť matematiku LaTeX</string>
     <string name="restart_the_application_to_apply_changes">Reštartujte aplikáciu, aby sa zmena prejavila.</string>
-    <string name="ftue_auth_carousel_2_title">Vy máte všetko pod kontrolou.</string>
-    <string name="ftue_auth_carousel_3_title">Bezpečné zasielanie správ.</string>
+    <string name="ftue_auth_carousel_control_title">Vy máte všetko pod kontrolou.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Bezpečné zasielanie správ.</string>
     <string name="labs_auto_report_uisi">Automatické hlásenie chýb dešifrovania.</string>
     <string name="labs_auto_report_uisi_desc">Váš systém bude automaticky odosielať záznamy, keď sa vyskytne chyba dešifrovania</string>
     <string name="tooltip_attachment_photo">Otvoriť kameru</string>
@@ -2198,10 +2198,10 @@
     <string name="tooltip_attachment_sticker">Odoslať nálepku</string>
     <string name="tooltip_attachment_contact">Otvoriť kontakty</string>
     <string name="tooltip_attachment_poll">Vytvoriť anketu</string>
-    <string name="ftue_auth_carousel_body_secure">Bezpečná a nezávislá komunikácia, ktorá vám poskytuje rovnakú úroveň súkromia ako rozhovor zoči-voči vo vašom vlastnom dome.</string>
-    <string name="ftue_auth_carousel_body_control">Vyberte si, kde budú vaše rozhovory uložené, a získajte tak kontrolu a nezávislosť. Pripojené cez Matrix.</string>
-    <string name="ftue_auth_carousel_body_encrypted">End-to-end šifrovanie a bez potreby telefónneho čísla. Žiadne reklamy ani zneužívanie údajov.</string>
-    <string name="ftue_auth_carousel_title_messaging">Zasielanie správ pre váš tím.</string>
+    <string name="ftue_auth_carousel_secure_body">Bezpečná a nezávislá komunikácia, ktorá vám poskytuje rovnakú úroveň súkromia ako rozhovor zoči-voči vo vašom vlastnom dome.</string>
+    <string name="ftue_auth_carousel_control_body">Vyberte si, kde budú vaše rozhovory uložené, a získajte tak kontrolu a nezávislosť. Pripojené cez Matrix.</string>
+    <string name="ftue_auth_carousel_encrypted_body">End-to-end šifrovanie a bez potreby telefónneho čísla. Žiadne reklamy ani zneužívanie údajov.</string>
+    <string name="ftue_auth_carousel_workplace_title">Zasielanie správ pre váš tím.</string>
     <string name="login_splash_create_account">Vytvoriť účet</string>
     <string name="encryption_has_been_misconfigured">Šifrovanie je nesprávne nastavené.</string>
     <string name="contact_admin_to_restore_encryption">Obráťte sa na správcu, aby obnovil platný stav šifrovania.</string>

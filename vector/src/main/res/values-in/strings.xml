@@ -2998,9 +2998,9 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="labs_auto_report_uisi">Laporkan Kesalahan Dekripsi Secara Otomatis.</string>
     <string name="room_member_override_nick_color">Ubah warna nama tampilan</string>
     <string name="login_splash_already_have_account">Saya sudah punya akun</string>
-    <string name="ftue_auth_carousel_3_title">Perpesanan yang aman.</string>
-    <string name="ftue_auth_carousel_2_title">Anda dalam kendali.</string>
-    <string name="ftue_auth_carousel_1_title">Miliki percakapan Anda.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Perpesanan yang aman.</string>
+    <string name="ftue_auth_carousel_control_title">Anda dalam kendali.</string>
+    <string name="ftue_auth_carousel_secure_title">Miliki percakapan Anda.</string>
     <string name="tooltip_attachment_location">Bagikan lokasi</string>
     <string name="labs_render_locations_in_timeline">Tampilkan lokasi pengguna di linimasa</string>
     <string name="settings_enable_location_sharing_summary">Setelah diaktifkan Anda akan dapat mengirim lokasi Anda ke ruangan apa saja</string>
@@ -3027,10 +3027,10 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="encryption_has_been_misconfigured">Enkripsi telah dikonfigurasi dengan salah.</string>
     <string name="sent_location">Membagikan lokasinya</string>
     <string name="login_splash_create_account">Buat akun</string>
-    <string name="ftue_auth_carousel_title_messaging">Perpesanan untuk tim Anda.</string>
-    <string name="ftue_auth_carousel_body_encrypted">Terenkripsi secara ujung-ke-ujung dan tidak memerlukan nomor telepon. Tidak ada iklan atau penambangan data.</string>
-    <string name="ftue_auth_carousel_body_control">Anda pilih di mana percakapan Anda disimpan, memberikan Anda kendali dan kebebasan. Terhubung via Matrix.</string>
-    <string name="ftue_auth_carousel_body_secure">Komunikasi aman dan independen yang memberikan tingkat privasi yang sama seperti percakapan wajah-ke-wajah di dalam rumah Anda sendiri.</string>
+    <string name="ftue_auth_carousel_workplace_title">Perpesanan untuk tim Anda.</string>
+    <string name="ftue_auth_carousel_encrypted_body">Terenkripsi secara ujung-ke-ujung dan tidak memerlukan nomor telepon. Tidak ada iklan atau penambangan data.</string>
+    <string name="ftue_auth_carousel_control_body">Anda pilih di mana percakapan Anda disimpan, memberikan Anda kendali dan kebebasan. Terhubung via Matrix.</string>
+    <string name="ftue_auth_carousel_secure_body">Komunikasi aman dan independen yang memberikan tingkat privasi yang sama seperti percakapan wajah-ke-wajah di dalam rumah Anda sendiri.</string>
     <string name="attachment_type_location">Lokasi</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Enkripsi telah dikonfigurasi dengan salah sehingga Anda tidak dapat mengirim pesan. Klik untuk membuka pengaturan.</string>
     <string name="room_unsupported_e2e_algorithm">Enkripsi telah dikonfigurasi dengan salah sehingga Anda tidak dapat mengirim pesan. Mohon hubungi sebuah admin untuk memulihkan enkripsi ke status yang valid.</string>

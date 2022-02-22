@@ -2484,7 +2484,7 @@
     <string name="a11y_unchecked">未確認</string>
     <string name="settings_server_upload_size_unknown">制限は不明です。</string>
     <string name="settings_server_upload_size_title">サーバーのファイルアップロードの制限</string>
-    <string name="ftue_auth_carousel_1_title">自分の会話は、自分のもの。</string>
+    <string name="ftue_auth_carousel_secure_title">自分の会話は、自分のもの。</string>
     <string name="room_join_rules_invite">%1$sがこのルームを「招待者のみ参加可能」に設定しました。</string>
     <string name="command_description_spoiler">選択したメッセージをネタバレとして送信</string>
     <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} がエンドツーエンド暗号鍵をディスクに保存する許可を要求しています。
@@ -2502,12 +2502,12 @@
     <string name="command_snow">メッセージを降雪と共に送る</string>
     <string name="default_message_emote_confetti">紙吹雪🎉を送る</string>
     <string name="default_message_emote_snow">降雪❄️を送る</string>
-    <string name="ftue_auth_carousel_title_messaging">あなたのチームのメッセージングに。</string>
-    <string name="ftue_auth_carousel_body_encrypted">エンドツーエンドで暗号化され、電話番号不要。広告やデータマイニング無し。</string>
-    <string name="ftue_auth_carousel_body_control">会話の保存先を自分で決められ、自分で管理できる独立したコミュニケーション。Matrixをもとに。</string>
-    <string name="ftue_auth_carousel_body_secure">お宅での対面会話と同じぐらいのプライバシーを提供する、セキュアで独立したコミュニケーション。</string>
-    <string name="ftue_auth_carousel_3_title">セキュアメッセージング</string>
-    <string name="ftue_auth_carousel_2_title">管理権を握るのは、あなたです。</string>
+    <string name="ftue_auth_carousel_workplace_title">あなたのチームのメッセージングに。</string>
+    <string name="ftue_auth_carousel_encrypted_body">エンドツーエンドで暗号化され、電話番号不要。広告やデータマイニング無し。</string>
+    <string name="ftue_auth_carousel_control_body">会話の保存先を自分で決められ、自分で管理できる独立したコミュニケーション。Matrixをもとに。</string>
+    <string name="ftue_auth_carousel_secure_body">お宅での対面会話と同じぐらいのプライバシーを提供する、セキュアで独立したコミュニケーション。</string>
+    <string name="ftue_auth_carousel_encrypted_title">セキュアメッセージング</string>
+    <string name="ftue_auth_carousel_control_title">管理権を握るのは、あなたです。</string>
     <string name="preference_help_summary">Elementの使用に関するヘルプ</string>
     <string name="labs_allow_extended_logging_summary">詳細なログは、イライラシェイクでログを送信する際に、より多くのログを提供することで、開発者にとっての助けになります。有効にした場合でも、メッセージの内容やその他のプライベートな情報は記録されません。</string>
     <string name="upgrade_room_warning">ルームのアップグレードは高度な作業であり、不具合や欠けている機能、セキュリティー上の脆弱性がある場合に推奨されます。

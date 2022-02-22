@@ -3155,9 +3155,9 @@
     <string name="labs_auto_report_uisi">Автозвіт про помилки шифрування.</string>
     <string name="room_member_override_nick_color">Замінити колір псевдоніма</string>
     <string name="login_splash_already_have_account">Я вже маю обліковий запис</string>
-    <string name="ftue_auth_carousel_3_title">Захищене спілкування.</string>
-    <string name="ftue_auth_carousel_2_title">Ви контролюєте все.</string>
-    <string name="ftue_auth_carousel_1_title">Володійте своїми розмовами.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Захищене спілкування.</string>
+    <string name="ftue_auth_carousel_control_title">Ви контролюєте все.</string>
+    <string name="ftue_auth_carousel_secure_title">Володійте своїми розмовами.</string>
     <string name="tooltip_attachment_location">Поділитися місцеперебуванням</string>
     <string name="labs_render_locations_in_timeline">Зображувати місцеперебування користувача у стрічці</string>
     <string name="settings_enable_location_sharing_summary">Після увімкнення ви зможете надіслати своє місцеперебування до будь-якої кімнати</string>
@@ -3184,10 +3184,10 @@
     <string name="encryption_has_been_misconfigured">Шифрування неправильно налаштовано.</string>
     <string name="sent_location">Поділилися своїм місцеперебуванням</string>
     <string name="login_splash_create_account">Створити обліковий запис</string>
-    <string name="ftue_auth_carousel_title_messaging">Спілкування вашої команди.</string>
-    <string name="ftue_auth_carousel_body_encrypted">З наскрізним шифруванням і без вимоги номера телефону. Без реклами чи аналізу даних.</string>
-    <string name="ftue_auth_carousel_body_control">Оберіть де спілкуватись, що дасть вам контроль і незалежність. Під\'єднано через Matrix.</string>
-    <string name="ftue_auth_carousel_body_secure">Захищене та незалежне спілкування, яке дає вам такий самий рівень приватності, як розмова віч-на-віч у вашому власному домі.</string>
+    <string name="ftue_auth_carousel_workplace_title">Спілкування вашої команди.</string>
+    <string name="ftue_auth_carousel_encrypted_body">З наскрізним шифруванням і без вимоги номера телефону. Без реклами чи аналізу даних.</string>
+    <string name="ftue_auth_carousel_control_body">Оберіть де спілкуватись, що дасть вам контроль і незалежність. Під\'єднано через Matrix.</string>
+    <string name="ftue_auth_carousel_secure_body">Захищене та незалежне спілкування, яке дає вам такий самий рівень приватності, як розмова віч-на-віч у вашому власному домі.</string>
     <string name="attachment_type_location">Місцеперебування</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Шифрування було налаштовано неправильно, тому ви не можете надсилати повідомлення. Торкніться, щоб відкрити налаштування.</string>
     <string name="room_unsupported_e2e_algorithm">Шифрування було налаштовано неправильно, тому ви не можете надсилати повідомлення. Зверніться до адміністратора, щоб відновити роботу шифрування.</string>

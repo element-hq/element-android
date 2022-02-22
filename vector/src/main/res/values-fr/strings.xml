@@ -3053,11 +3053,11 @@
     <string name="labs_auto_report_uisi">Signalement automatique des erreurs de déchiffrement.</string>
     <string name="room_member_override_nick_color">Outrepasser la couleur du pseudo</string>
     <string name="login_splash_already_have_account">J’ai déjà un compte</string>
-    <string name="ftue_auth_carousel_3_title">Messagerie sécurisée.</string>
-    <string name="ftue_auth_carousel_2_title">Vous êtes aux commandes.</string>
-    <string name="ftue_auth_carousel_1_title">Contrôlez vos conversations.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Messagerie sécurisée.</string>
+    <string name="ftue_auth_carousel_control_title">Vous êtes aux commandes.</string>
+    <string name="ftue_auth_carousel_secure_title">Contrôlez vos conversations.</string>
     <string name="room_error_access_unauthorized">Vous n’êtes pas autorisé à rejoindre ce salon</string>
-    <string name="ftue_auth_carousel_body_control">Choisissez où vos conversations sont stockées, vous avez le contrôle et êtes indépendant. Connecté via Matrix.</string>
+    <string name="ftue_auth_carousel_control_body">Choisissez où vos conversations sont stockées, vous avez le contrôle et êtes indépendant. Connecté via Matrix.</string>
     <string name="room_unsupported_e2e_algorithm">Le chiffrement a été mal configuré ce qui vous empêche d’envoyer des messages. Veuillez contacter un administrateur pour remettre le chiffrement en état de marche.</string>
     <string name="tooltip_attachment_location">Partager la localisation</string>
     <string name="labs_render_locations_in_timeline">Afficher les localisations de l\'utilisateur dans le temps</string>
@@ -3085,9 +3085,9 @@
     <string name="encryption_has_been_misconfigured">Le chiffrement a été mal configuré.</string>
     <string name="sent_location">On partagé leur localisation</string>
     <string name="login_splash_create_account">Créer un compte</string>
-    <string name="ftue_auth_carousel_title_messaging">Messagerie pour votre équipe.</string>
-    <string name="ftue_auth_carousel_body_encrypted">Chiffré de bout en bout et aucun numéro de téléphone n\'est nécessaire. Pas de pubs ni de collecte de données.</string>
-    <string name="ftue_auth_carousel_body_secure">Communication indépendante et sécurisée qui vous donne le même niveau d\'intimité qu\'une discussion face-à-face dans votre maison.</string>
+    <string name="ftue_auth_carousel_workplace_title">Messagerie pour votre équipe.</string>
+    <string name="ftue_auth_carousel_encrypted_body">Chiffré de bout en bout et aucun numéro de téléphone n\'est nécessaire. Pas de pubs ni de collecte de données.</string>
+    <string name="ftue_auth_carousel_secure_body">Communication indépendante et sécurisée qui vous donne le même niveau d\'intimité qu\'une discussion face-à-face dans votre maison.</string>
     <string name="attachment_type_location">Localisation</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Le chiffrement a été mal configuré ce qui vous empêche d\'envoyer des messages. Cliquez pour ouvrir les paramètres.</string>
 </resources>

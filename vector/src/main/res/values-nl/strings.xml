@@ -2868,7 +2868,7 @@
     <string name="login_reset_password_success_notice">Je wachtwoord is gereset.</string>
     <string name="login_reset_password_mail_confirmation_submit">Ik heb mijn e-mailadres geverifieerd</string>
     <string name="login_reset_password_mail_confirmation_notice_2">Tik op de link om uw nieuwe wachtwoord te bevestigen. Klik hieronder als u de link hebt gevolgd die erin staat.</string>
-    <string name="ftue_auth_carousel_1_title">Word eigenaar van uw gesprekken.</string>
+    <string name="ftue_auth_carousel_secure_title">Word eigenaar van uw gesprekken.</string>
     <string name="create_space">Space aanmaken</string>
     <string name="create_spaces_loading_message">Space aanmaken…</string>
     <string name="activity_create_space_title">Aanmaken een space</string>
@@ -3054,8 +3054,8 @@
     <string name="command_description_create_space">Maak een Space</string>
     <string name="room_member_override_nick_color">Bijnaam kleur overschrijven</string>
     <string name="login_splash_already_have_account">Ik heb al een account</string>
-    <string name="ftue_auth_carousel_3_title">Veilig berichtenverkeer.</string>
-    <string name="ftue_auth_carousel_2_title">U heeft de controle.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Veilig berichtenverkeer.</string>
+    <string name="ftue_auth_carousel_control_title">U heeft de controle.</string>
     <string name="tooltip_attachment_location">Deel locatie</string>
     <string name="labs_render_locations_in_timeline">Gebruikerslocaties in de tijdlijn weergeven</string>
     <string name="settings_enable_location_sharing_summary">Eenmaal ingeschakeld, kun je je locatie naar elke kamer sturen</string>
@@ -3082,10 +3082,10 @@
     <string name="encryption_has_been_misconfigured">Versleuteling is verkeerd geconfigureerd.</string>
     <string name="sent_location">Hun locatie gedeeld</string>
     <string name="login_splash_create_account">Account aanmaken</string>
-    <string name="ftue_auth_carousel_title_messaging">Berichten voor uw team.</string>
-    <string name="ftue_auth_carousel_body_encrypted">End-to-end versleuteld en geen telefoonnummer vereist. Geen advertenties of dataverzameling.</string>
-    <string name="ftue_auth_carousel_body_control">Kies waar je gesprekken worden bewaard, zodat u controle en onafhankelijkheid heeft. Verbonden via Matrix.</string>
-    <string name="ftue_auth_carousel_body_secure">Veilige en onafhankelijke communicatie die u dezelfde mate van privacy geeft als een persoonlijk gesprek in uw eigen huis.</string>
+    <string name="ftue_auth_carousel_workplace_title">Berichten voor uw team.</string>
+    <string name="ftue_auth_carousel_encrypted_body">End-to-end versleuteld en geen telefoonnummer vereist. Geen advertenties of dataverzameling.</string>
+    <string name="ftue_auth_carousel_control_body">Kies waar je gesprekken worden bewaard, zodat u controle en onafhankelijkheid heeft. Verbonden via Matrix.</string>
+    <string name="ftue_auth_carousel_secure_body">Veilige en onafhankelijke communicatie die u dezelfde mate van privacy geeft als een persoonlijk gesprek in uw eigen huis.</string>
     <string name="attachment_type_location">Locatie</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">De versleuteling is verkeerd geconfigureerd, zodat u geen berichten kunt verzenden. Klik om instellingen te openen.</string>
     <string name="room_unsupported_e2e_algorithm">De versleuteling is verkeerd geconfigureerd, zodat u geen berichten kunt verzenden. Neem contact op met een beheerder om de versleuteling in een geldige staat te herstellen.</string>

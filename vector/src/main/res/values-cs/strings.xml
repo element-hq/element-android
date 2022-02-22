@@ -3112,9 +3112,9 @@
     <string name="labs_auto_report_uisi">Automaticky nahlašovat chyby dešifrování.</string>
     <string name="room_member_override_nick_color">Přepsat barvu přezdívky</string>
     <string name="login_splash_already_have_account">Již mám účet</string>
-    <string name="ftue_auth_carousel_3_title">Bezpečené zasílání zpráv.</string>
-    <string name="ftue_auth_carousel_2_title">Máte vše pod kontrolou.</string>
-    <string name="ftue_auth_carousel_1_title">Vlastněte své konverzace.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Bezpečené zasílání zpráv.</string>
+    <string name="ftue_auth_carousel_control_title">Máte vše pod kontrolou.</string>
+    <string name="ftue_auth_carousel_secure_title">Vlastněte své konverzace.</string>
     <string name="tooltip_attachment_location">Sdílet polohu</string>
     <string name="labs_render_locations_in_timeline">Zobrazit polohy uživatele na časové ose</string>
     <string name="settings_enable_location_sharing_summary">Po zapnutí budete moci odeslat svou polohu do libovolné místnosti</string>
@@ -3142,10 +3142,10 @@
     <string name="encryption_has_been_misconfigured">Šifrování bylo špatně nakonfigurováno.</string>
     <string name="sent_location">Sdíleli svou polohu</string>
     <string name="login_splash_create_account">Vytvořit účet</string>
-    <string name="ftue_auth_carousel_title_messaging">Zasílání zpráv pro váš tým.</string>
-    <string name="ftue_auth_carousel_body_encrypted">Koncové šifrování bez potřeby telefonního čísla. Žádné reklamy ani vytěžování dat.</string>
-    <string name="ftue_auth_carousel_body_control">Můžete si vybrat, kde budou vaše konverzace uloženy, a získat tak kontrolu a nezávislost. Připojeno přes Matrix.</string>
-    <string name="ftue_auth_carousel_body_secure">Bezpečná a nezávislá komunikace, která vám poskytne stejnou úroveň soukromí jako osobní rozhovor u vás doma.</string>
+    <string name="ftue_auth_carousel_workplace_title">Zasílání zpráv pro váš tým.</string>
+    <string name="ftue_auth_carousel_encrypted_body">Koncové šifrování bez potřeby telefonního čísla. Žádné reklamy ani vytěžování dat.</string>
+    <string name="ftue_auth_carousel_control_body">Můžete si vybrat, kde budou vaše konverzace uloženy, a získat tak kontrolu a nezávislost. Připojeno přes Matrix.</string>
+    <string name="ftue_auth_carousel_secure_body">Bezpečná a nezávislá komunikace, která vám poskytne stejnou úroveň soukromí jako osobní rozhovor u vás doma.</string>
     <string name="attachment_type_location">Poloha</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Šifrování bylo špatně nakonfigurováno, takže nelze odesílat zprávy. Kliknutím otevřete nastavení.</string>
     <string name="message_bubbles">Zobrazit bubliny zpráv</string>

@@ -3053,9 +3053,9 @@
     <string name="labs_auto_report_uisi">Automaatselt teata dekrüptimise vigadest.</string>
     <string name="room_member_override_nick_color">Asenda hüüdnime värvid</string>
     <string name="login_splash_already_have_account">Mul on kasutajakonto juba olemas</string>
-    <string name="ftue_auth_carousel_3_title">Turvaline sõnumivahetus.</string>
-    <string name="ftue_auth_carousel_2_title">Sul on kontroll oma andmete üle.</string>
-    <string name="ftue_auth_carousel_1_title">Vestlused, mida sa tegelikult ka omad.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Turvaline sõnumivahetus.</string>
+    <string name="ftue_auth_carousel_control_title">Sul on kontroll oma andmete üle.</string>
+    <string name="ftue_auth_carousel_secure_title">Vestlused, mida sa tegelikult ka omad.</string>
     <string name="tooltip_attachment_location">Jaga asukohta</string>
     <string name="labs_render_locations_in_timeline">Kuva ajajoonel kasutaja asukohti</string>
     <string name="settings_enable_location_sharing_summary">Kui see seadistus on kasutusel, siis sa saad oma asukohta jagada igas jututoas</string>
@@ -3082,10 +3082,10 @@
     <string name="encryption_has_been_misconfigured">Krüptimise seadistustes on viga.</string>
     <string name="sent_location">Jagas oma asukohta</string>
     <string name="login_splash_create_account">Loo kasutajakonto</string>
-    <string name="ftue_auth_carousel_title_messaging">Sõnumisuhtlus sinu tiimi või kogukonna jaoks.</string>
-    <string name="ftue_auth_carousel_body_encrypted">Tagatud on andmete läbiv krüptimine ning oma telefoninumbrit ei pea sa jagama. Pole reklaame ega sinu andmete kogumist.</string>
-    <string name="ftue_auth_carousel_body_control">Sa ise valid serveri, kus sinu vestlusi hoitakse ning sellega tagadki kontrolli oma andmete üle. Lahendus põhineb Matrix\'i võrgul.</string>
-    <string name="ftue_auth_carousel_body_secure">Turvaline ja sõltumatu suhtluslahendus, mis tagab sama privaatsuse, kui omavaheline vestlus sinu kodus.</string>
+    <string name="ftue_auth_carousel_workplace_title">Sõnumisuhtlus sinu tiimi või kogukonna jaoks.</string>
+    <string name="ftue_auth_carousel_encrypted_body">Tagatud on andmete läbiv krüptimine ning oma telefoninumbrit ei pea sa jagama. Pole reklaame ega sinu andmete kogumist.</string>
+    <string name="ftue_auth_carousel_control_body">Sa ise valid serveri, kus sinu vestlusi hoitakse ning sellega tagadki kontrolli oma andmete üle. Lahendus põhineb Matrix\'i võrgul.</string>
+    <string name="ftue_auth_carousel_secure_body">Turvaline ja sõltumatu suhtluslahendus, mis tagab sama privaatsuse, kui omavaheline vestlus sinu kodus.</string>
     <string name="attachment_type_location">Asukoht</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Krüptimise seadistustes on viga ja sa ei saa sõnumeid saata. Seadistuste avamiseks klõpsi siin.</string>
     <string name="room_unsupported_e2e_algorithm">Krüptimise seadistustes on viga ja sa ei saa sõnumeid saata. Kui soovid krüptimist töökorda saada, siis võta ühendust serveri haldajaga.</string>
