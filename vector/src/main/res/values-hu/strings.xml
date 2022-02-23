@@ -2499,7 +2499,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="create_spaces_me_and_teammates">Én és a csoporttársaim</string>
     <string name="create_spaces_organise_rooms">Privát tér a szobáid csoportosításához</string>
     <string name="create_spaces_just_me">Csak én</string>
-    <string name="create_spaces_make_sure_access">Ellenőrizd, hogy a megfelelő személyeknek van hozzáférése ide: %s. Később ezt megváltoztathatod.</string>
+    <string name="create_spaces_make_sure_access">Ellenőrizd, hogy a megfelelő személyeknek van hozzáférése ide: %s.</string>
     <string name="settings_security_pin_code_notifications_summary_off">Csak az olvasatlan üzenetek számát mutassa az egyszerű értesítésekben.</string>
     <string name="create_spaces_who_are_you_working_with">Kivel dolgozol együtt\?</string>
     <string name="create_spaces_join_info_help">Létező térbe való belépéshez meghívó szükséges.</string>
@@ -3119,4 +3119,16 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="action_thread_copy_link_to_thread">Üzenetszálra mutató hivatkozás másolása</string>
     <string name="action_thread_view_in_room">Megjelenítés szobában</string>
     <string name="action_view_threads">Üzenetszálak megtekintése</string>
+    <string name="room_message_autocomplete_notification">Szoba értesítések</string>
+    <string name="room_message_autocomplete_users">Felhasználók</string>
+    <string name="room_message_notify_everyone">Az egész szoba értesítése</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">%1$d darabbal több</item>
+        <item quantity="other">%1$d darabbal több</item>
+    </plurals>
+    <string name="message_reaction_show_less">Kevesebb megjelenítése</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d szerver jogosultság változott</item>
+        <item quantity="other">%d szerver jogosultság változott</item>
+    </plurals>
 </resources>
