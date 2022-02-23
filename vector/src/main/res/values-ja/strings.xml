@@ -2865,4 +2865,5 @@
     <string name="create_spaces_choose_type_label">どんなスペースを作りますか？</string>
     <string name="create_spaces_private_teammates">あなたとチームメイトの非公開のスペース</string>
     <string name="create_spaces_organise_rooms">ルームを整理するためのプライベートスペース</string>
+    <string name="this_is_the_beginning_of_room_no_name">ここが会話のスタート地点です。</string>
 </resources>
