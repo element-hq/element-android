@@ -147,7 +147,7 @@ internal class DefaultSyncTask @Inject constructor(
             }
             defaultSyncStatusService.endAll()
         } else {
-            Timber.tag(loggerTag.value).d("Start incremental sync request")
+            Timber.tag(loggerTag.value).d("Start incremental sync request with since token $token")
             defaultSyncStatusService.setStatus(SyncStatusService.Status.IncrementalSyncIdle)
             val syncResponse = try {
                 executeRequest(globalErrorReceiver) {
