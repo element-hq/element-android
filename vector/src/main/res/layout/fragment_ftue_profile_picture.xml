@@ -44,31 +44,53 @@
             android:layout_height="0dp"
             android:adjustViewBounds="true"
             android:contentDescription="@null"
+            android:foreground="@drawable/bg_rounded_button"
             android:src="@drawable/ic_user_round"
             app:layout_constraintBottom_toTopOf="@id/avatarTitleSpacing"
             app:layout_constraintEnd_toEndOf="@id/profilePictureGutterEnd"
-            app:layout_constraintHeight_percent="0.25"
+            app:layout_constraintHeight_percent="@dimen/ftue_auth_profile_picture_height"
             app:layout_constraintStart_toStartOf="@id/profilePictureGutterStart"
             app:layout_constraintTop_toBottomOf="@id/profilePictureToolbar" />
 
-        <ImageView
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/changeProfilePictureButton"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:adjustViewBounds="true"
             android:background="@drawable/bg_rounded_button"
             android:backgroundTint="?vctr_system"
-            android:contentDescription="@string/ftue_profile_picture_title"
-            android:padding="10dp"
-            android:src="@drawable/ic_camera_plain"
             app:layout_constraintBottom_toBottomOf="@id/profilePictureView"
             app:layout_constraintEnd_toEndOf="@id/profilePictureView"
-            app:layout_constraintHeight_percent="0.08"
+            app:layout_constraintHeight_percent="@dimen/ftue_auth_profile_picture_icon_height"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toStartOf="@id/profilePictureView"
             app:layout_constraintTop_toTopOf="@id/profilePictureView"
-            app:layout_constraintVertical_bias="1"
-            app:tint="?vctr_content_secondary" />
+            app:layout_constraintVertical_bias="1">
+
+            <androidx.constraintlayout.helper.widget.Flow
+                android:id="@+id/pos"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                app:layout_constraintDimensionRatio="1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/changeProfilePictureIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="@string/ftue_profile_picture_title"
+                android:src="@drawable/ic_camera_plain"
+                app:layout_constraintBottom_toBottomOf="@id/pos"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.55"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/pos"
+                app:tint="?vctr_content_secondary">
+
+            </ImageView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Space
             android:id="@+id/avatarTitleSpacing"

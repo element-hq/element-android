@@ -57,9 +57,8 @@ class FtueAuthChooseProfilePictureFragment @Inject constructor(
         views.profilePictureToolbar.setNavigationOnClickListener {
             viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnBack))
         }
-        views.changeProfilePictureButton.debouncedClicks {
-            galleryOrCameraDialogHelper.show()
-        }
+        views.changeProfilePictureButton.debouncedClicks { galleryOrCameraDialogHelper.show() }
+        views.profilePictureView.debouncedClicks { galleryOrCameraDialogHelper.show() }
 
         views.profilePictureSubmit.debouncedClicks {
             withState(viewModel) {
@@ -73,7 +72,7 @@ class FtueAuthChooseProfilePictureFragment @Inject constructor(
     override fun updateWithState(state: OnboardingViewState) {
         val hasSetPicture = state.personalizationState.selectedPictureUri != null
         views.profilePictureSubmit.isEnabled = hasSetPicture
-        views.changeProfilePictureButton.setImageResource(if (hasSetPicture) R.drawable.ic_edit else R.drawable.ic_camera_plain)
+        views.changeProfilePictureIcon.setImageResource(if (hasSetPicture) R.drawable.ic_edit else R.drawable.ic_camera_plain)
 
         val session = activeSessionHolder.getActiveSession()
         val matrixItem = MatrixItem.UserItem(
