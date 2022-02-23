@@ -16,9 +16,9 @@
 
 package im.vector.app.test.fakes
 
+import android.net.Uri
 import im.vector.app.core.extensions.vectorStore
 import im.vector.app.features.session.VectorSessionStore
-import android.net.Uri
 import im.vector.app.test.testCoroutineDispatchers
 import io.mockk.coEvery
 import io.mockk.mockk
