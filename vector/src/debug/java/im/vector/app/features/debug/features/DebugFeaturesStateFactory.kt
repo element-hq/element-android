@@ -48,6 +48,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                         label = "FTUE Use Case",
                         key = DebugFeatureKeys.onboardingUseCase,
                         factory = VectorFeatures::isOnboardingUseCaseEnabled
+                ),
+                createBooleanFeature(
+                        label = "FTUE Personalize profile",
+                        key = DebugFeatureKeys.onboardingPersonalize,
+                        factory = VectorFeatures::isOnboardingPersonalizeEnabled
                 )
         ))
     }

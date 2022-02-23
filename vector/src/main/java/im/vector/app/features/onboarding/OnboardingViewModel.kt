@@ -243,7 +243,7 @@ class OnboardingViewModel @AssistedInject constructor(
                     }
                     null
                 }
-                        ?.let { onSessionCreated(it) }
+                        ?.let { onSessionCreated(it, isAccountCreated = false) }
             }
         }
     }
@@ -301,7 +301,7 @@ class OnboardingViewModel @AssistedInject constructor(
             }
                     ?.let { data ->
                         when (data) {
-                            is RegistrationResult.Success      -> onSessionCreated(data.session)
+                            is RegistrationResult.Success      -> onSessionCreated(data.session, isAccountCreated = true)
                             is RegistrationResult.FlowResponse -> onFlowResponse(data.flowResult)
                         }
                     }
@@ -600,11 +600,11 @@ class OnboardingViewModel @AssistedInject constructor(
             }
             when (data) {
                 is WellknownResult.Prompt     ->
-                    onWellknownSuccess(action, data, homeServerConnectionConfig)
+                    directLoginOnWellknownSuccess(action, data, homeServerConnectionConfig)
                 is WellknownResult.FailPrompt ->
                     // Relax on IS discovery if homeserver is valid
                     if (data.homeServerUrl != null && data.wellKnown != null) {
-                        onWellknownSuccess(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), homeServerConnectionConfig)
+                        directLoginOnWellknownSuccess(action, WellknownResult.Prompt(data.homeServerUrl!!, null, data.wellKnown!!), homeServerConnectionConfig)
                     } else {
                         onWellKnownError()
                     }
@@ -624,9 +624,9 @@ class OnboardingViewModel @AssistedInject constructor(
         _viewEvents.post(OnboardingViewEvents.Failure(Exception(stringProvider.getString(R.string.autodiscover_well_known_error))))
     }
 
-    private suspend fun onWellknownSuccess(action: OnboardingAction.LoginOrRegister,
-                                           wellKnownPrompt: WellknownResult.Prompt,
-                                           homeServerConnectionConfig: HomeServerConnectionConfig?) {
+    private suspend fun directLoginOnWellknownSuccess(action: OnboardingAction.LoginOrRegister,
+                                                      wellKnownPrompt: WellknownResult.Prompt,
+                                                      homeServerConnectionConfig: HomeServerConnectionConfig?) {
         val alteredHomeServerConnectionConfig = homeServerConnectionConfig
                 ?.copy(
                         homeServerUriBase = Uri.parse(wellKnownPrompt.homeServerUrl),
@@ -648,7 +648,7 @@ class OnboardingViewModel @AssistedInject constructor(
             onDirectLoginError(failure)
             return
         }
-        onSessionCreated(data)
+        onSessionCreated(data, isAccountCreated = true)
     }
 
     private fun onDirectLoginError(failure: Throwable) {
@@ -706,7 +706,7 @@ class OnboardingViewModel @AssistedInject constructor(
                 }
                         ?.let {
                             reAuthHelper.data = action.password
-                            onSessionCreated(it)
+                            onSessionCreated(it, isAccountCreated = false)
                         }
             }
         }
@@ -736,8 +736,9 @@ class OnboardingViewModel @AssistedInject constructor(
         }
     }
 
-    private suspend fun onSessionCreated(session: Session) {
-        awaitState().useCase?.let { useCase ->
+    private suspend fun onSessionCreated(session: Session, isAccountCreated: Boolean) {
+        val state = awaitState()
+        state.useCase?.let { useCase ->
             session.vectorStore(applicationContext).setUseCase(useCase)
             analyticsTracker.updateUserProperties(UserProperties(ftueUseCaseSelection = useCase.toTrackingValue()))
         }
@@ -749,6 +750,11 @@ class OnboardingViewModel @AssistedInject constructor(
             copy(
                     asyncLoginAction = Success(Unit)
             )
+        }
+
+        when (isAccountCreated) {
+            true  -> _viewEvents.post(OnboardingViewEvents.OnAccountCreated)
+            false -> _viewEvents.post(OnboardingViewEvents.OnAccountSignedIn)
         }
     }
 
@@ -768,7 +774,7 @@ class OnboardingViewModel @AssistedInject constructor(
                     }
                     null
                 }
-                        ?.let { onSessionCreated(it) }
+                        ?.let { onSessionCreated(it, isAccountCreated = false) }
             }
         }
     }
