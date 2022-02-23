@@ -14,6 +14,7 @@ jobs:
   unit-tests:
     name: Run Unit Tests
     runs-on: ubuntu-latest
+    # Allow all jobs on main and develop. Just one per PR.
     concurrency:
       group: ${{ github.ref == 'refs/heads/main' && format('unit-test-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('unit-test-develop-{0}', github.sha) || format('unit-test-{0}', github.ref) }}
       cancel-in-progress: true
