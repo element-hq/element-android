@@ -48,12 +48,12 @@ class FtueAuthChooseDisplayNameFragment @Inject constructor() : AbstractFtueAuth
             }
         })
 
-        views.displayNameSubmit.setOnClickListener {
+        views.displayNameSubmit.debouncedClicks {
             val newDisplayName = views.displayNameInput.editText?.text.toString()
             viewModel.handle(OnboardingAction.UpdateDisplayName(newDisplayName))
         }
 
-        views.displayNameSkip.setOnClickListener { viewModel.handle(OnboardingAction.UpdateDisplayNameSkipped) }
+        views.displayNameSkip.debouncedClicks { viewModel.handle(OnboardingAction.UpdateDisplayNameSkipped) }
     }
 
     override fun resetViewModel() {
