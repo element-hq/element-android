@@ -20,7 +20,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.Menu
@@ -43,6 +42,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
 import im.vector.app.core.extensions.replaceFragment
+import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
 import im.vector.app.databinding.ActivityHomeBinding
@@ -516,16 +516,7 @@ class HomeActivity :
         if (views.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             views.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && supportFragmentManager.backStackEntryCount == 0) {
-                if (isTaskRoot) {
-                    super.onBackPressed()
-                } else {
-                    Timber.e("Application is potentially corrupted by an unknown activity")
-                    finishAffinity()
-                }
-            } else {
-                super.onBackPressed()
-            }
+            validateBackPressed { super.onBackPressed() }
         }
     }
 

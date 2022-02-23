@@ -17,7 +17,6 @@
 package im.vector.app.features.onboarding
 
 import android.content.Intent
-import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.ViewCompat
@@ -69,7 +68,6 @@ import im.vector.app.features.login2.terms.LoginTermsFragment2
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.extensions.tryOrNull
-import timber.log.Timber
 
 private const val FRAGMENT_REGISTRATION_STAGE_TAG = "FRAGMENT_REGISTRATION_STAGE_TAG"
 private const val FRAGMENT_LOGIN_TAG = "FRAGMENT_LOGIN_TAG"
@@ -317,19 +315,6 @@ class Login2Variant(
         intent?.data
                 ?.let { tryOrNull { it.getQueryParameter("loginToken") } }
                 ?.let { loginViewModel.handle(LoginAction2.LoginWithToken(it)) }
-    }
-
-    override fun onBackPressed() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && supportFragmentManager.backStackEntryCount == 0) {
-            if (isTaskRoot) {
-                super.onBackPressed()
-            } else {
-                Timber.e("Application is potentially corrupted by an unknown activity")
-                finishAffinity()
-            }
-        } else {
-            super.onBackPressed()
-        }
     }
 
     private fun onRegistrationStageNotSupported() {

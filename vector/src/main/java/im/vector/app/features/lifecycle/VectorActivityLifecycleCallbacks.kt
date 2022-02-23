@@ -30,6 +30,11 @@ import androidx.core.content.getSystemService
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.popup.PopupAlertManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager: PopupAlertManager) : Application.ActivityLifecycleCallbacks {
@@ -38,31 +43,30 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
      */
     private var activitiesInfo: Array<ActivityInfo> = emptyArray()
 
-    override fun onActivityPaused(activity: Activity) {
-    }
+    private val coroutineScope = CoroutineScope(SupervisorJob())
+
+    override fun onActivityPaused(activity: Activity) {}
 
     override fun onActivityResumed(activity: Activity) {
         popupAlertManager.onNewActivityDisplayed(activity)
     }
 
-    override fun onActivityStarted(activity: Activity) {
-    }
+    override fun onActivityStarted(activity: Activity) {}
 
-    override fun onActivityDestroyed(activity: Activity) {
-    }
+    override fun onActivityDestroyed(activity: Activity) {}
 
-    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-    }
+    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {}
 
-    override fun onActivityStopped(activity: Activity) {
-    }
+    override fun onActivityStopped(activity: Activity) {}
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         // restart the app if the task contains an unknown activity
-        if (isTaskCorrupted(activity)) {
-            Timber.e("Application is potentially corrupted by an unknown activity")
-            MainActivity.restartApp(activity, MainActivityArgs())
-            return
+        coroutineScope.launch {
+            if (isTaskCorrupted(activity)) {
+                Timber.e("Application is potentially corrupted by an unknown activity")
+                MainActivity.restartApp(activity, MainActivityArgs())
+                return@launch
+            }
         }
     }
 
@@ -73,7 +77,7 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
      */
     @SuppressLint("NewApi")
     @Suppress("DEPRECATION")
-    private fun isTaskCorrupted(activity: Activity): Boolean {
+    private suspend fun isTaskCorrupted(activity: Activity): Boolean = withContext(Dispatchers.Default) {
         val context = activity.applicationContext
         val packageManager: PackageManager = context.packageManager
 
@@ -84,9 +88,9 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
 
         // Get all running activities on app task
         // and compare to activities declared in manifest
-        val manager = context.getSystemService<ActivityManager>() ?: return false
+        val manager = context.getSystemService<ActivityManager>() ?: return@withContext false
 
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        return@withContext if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // Android lint may return an error on topActivity field.
             // This field was added in ActivityManager.RecentTaskInfo class since Android M (API level 23)
             // and it is inherited from TaskInfo since Android Q (API level 29).
