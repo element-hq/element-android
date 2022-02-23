@@ -30,20 +30,20 @@ import javax.inject.Inject
 class DownloadMediaUseCase @Inject constructor(
         @ApplicationContext private val appContext: Context,
         private val notificationUtils: NotificationUtils
-) {
+) : VectorInOutUseCase<File, Unit> {
 
     /* ==========================================================================================
      * Public API
      * ========================================================================================== */
 
     // TODO find a way to provide Dispatchers via Interface to be able to unit tests
-    suspend fun execute(file: File): Result<Unit> = withContext(Dispatchers.IO) {
+    override suspend fun execute(input: File): Result<Unit> = withContext(Dispatchers.IO) {
         runCatching {
             saveMedia(
                     context = appContext,
-                    file = file,
-                    title = file.name,
-                    mediaMimeType = getMimeTypeFromUri(appContext, file.toUri()),
+                    file = input,
+                    title = input.name,
+                    mediaMimeType = getMimeTypeFromUri(appContext, input.toUri()),
                     notificationUtils = notificationUtils
             )
         }

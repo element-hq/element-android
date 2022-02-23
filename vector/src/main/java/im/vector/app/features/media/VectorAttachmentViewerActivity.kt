@@ -273,7 +273,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
     //  check if it is already possible to save from menu with long press on video
     override fun onDownload() {
         // TODO
-        //  create interface for base use case
         //  create ViewModel with action downloadAction, events downloading, downloaded, error
         //  call usecase using viewModel
         //  launch coroutine in Activity using repeatOnLifeCycle extension
