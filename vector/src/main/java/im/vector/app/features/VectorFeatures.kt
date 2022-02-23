@@ -24,6 +24,7 @@ interface VectorFeatures {
     fun isOnboardingAlreadyHaveAccountSplashEnabled(): Boolean
     fun isOnboardingSplashCarouselEnabled(): Boolean
     fun isOnboardingUseCaseEnabled(): Boolean
+    fun isOnboardingPersonalizeEnabled(): Boolean
     fun isForceLoginFallbackEnabled(): Boolean
 
     enum class OnboardingVariant {
@@ -38,5 +39,6 @@ class DefaultVectorFeatures : VectorFeatures {
     override fun isOnboardingAlreadyHaveAccountSplashEnabled() = true
     override fun isOnboardingSplashCarouselEnabled() = true
     override fun isOnboardingUseCaseEnabled() = true
+    override fun isOnboardingPersonalizeEnabled() = false
     override fun isForceLoginFallbackEnabled() = false
 }
