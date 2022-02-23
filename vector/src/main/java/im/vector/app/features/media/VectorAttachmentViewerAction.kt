@@ -1,12 +1,11 @@
 /*
- * Copyright (c) 2020 New Vector Ltd
- * Copyright (C) 2018 stfalcon.com
+ * Copyright 2019 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,8 +14,11 @@
  * limitations under the License.
  */
 
-package im.vector.lib.attachmentviewer
+package im.vector.app.features.media
 
-class AttachmentViewerViewModel {
+import im.vector.app.core.platform.VectorViewModelAction
+import java.io.File
 
+sealed class VectorAttachmentViewerAction : VectorViewModelAction {
+    data class DownloadMedia(val file: File) : VectorAttachmentViewerAction()
 }
