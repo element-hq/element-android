@@ -2694,7 +2694,7 @@
     <string name="create_spaces_me_and_teammates">Mina ja minu kaasteelised</string>
     <string name="create_spaces_organise_rooms">Privaatne kogukonnakeskus jututubade koondamiseks</string>
     <string name="create_spaces_just_me">Vaid mina</string>
-    <string name="create_spaces_make_sure_access">Kontrolli, et vajalikel inimestel oleks ligipääs %s kogukonnakeskusesse. Sa võid seda hiljem muuta.</string>
+    <string name="create_spaces_make_sure_access">Kontrolli, et vajalikel inimestel oleks ligipääs %s kogukonnale.</string>
     <string name="create_spaces_who_are_you_working_with">Kellega sa koos töötad\?</string>
     <string name="create_spaces_join_info_help">Olemasoleva kogukonnakeskusega liitumiseks vajad sa kutset.</string>
     <string name="create_spaces_you_can_change_later">Sa võid seda hiljem muuta</string>
@@ -3122,4 +3122,16 @@
     <string name="action_thread_copy_link_to_thread">Kopeeri jutulõnga link</string>
     <string name="action_thread_view_in_room">Vaata jututoas</string>
     <string name="action_view_threads">Vaata jutulõngana</string>
+    <string name="room_message_autocomplete_notification">Jututoa teavitus</string>
+    <string name="room_message_autocomplete_users">Kasutajad</string>
+    <string name="room_message_notify_everyone">Teavita kogu jututuba</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">veel %1$d</item>
+        <item quantity="other">veel %1$d</item>
+    </plurals>
+    <string name="message_reaction_show_less">Näita vähem</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d serveri kasutusõiguste muudatus</item>
+        <item quantity="other">%d serveri kasutusõiguste muudatust</item>
+    </plurals>
 </resources>
