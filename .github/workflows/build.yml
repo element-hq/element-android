@@ -21,7 +21,7 @@ jobs:
     name: Build debug APKs (${{ matrix.target }})
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ format('build-debug-{0}-{1}', matrix.target, CI_GROUP_SUFFIX) }}
+      group: ${{ format('build-debug-{0}-{1}', matrix.target, env.CI_GROUP_SUFFIX) }}
       cancel-in-progress: true
     if: github.ref != 'refs/heads/main'
     strategy:
@@ -51,7 +51,7 @@ jobs:
     name: Build unsigned GPlay APKs
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ format('build-release-{0}-{1}', matrix.target, CI_GROUP_SUFFIX) }}
+      group: ${{ format('build-release-{0}-{1}', matrix.target, env.CI_GROUP_SUFFIX) }}
       cancel-in-progress: true
     if: github.ref == 'refs/heads/main'
     steps:

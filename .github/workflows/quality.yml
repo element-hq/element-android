@@ -27,7 +27,7 @@ jobs:
     name: Kotlin Linter
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ format('klint-{0}', CI_GROUP_SUFFIX) }}
+      group: ${{ format('klint-{0}', env.CI_GROUP_SUFFIX) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
@@ -99,7 +99,7 @@ jobs:
     name: Android Linter
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ format('android-lint-{0}', CI_GROUP_SUFFIX) }}
+      group: ${{ format('android-lint-{0}', env.CI_GROUP_SUFFIX) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
@@ -126,7 +126,7 @@ jobs:
     name: Lint APK (${{ matrix.target }})
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ format('apk-lint-{0}', CI_GROUP_SUFFIX) }}
+      group: ${{ format('apk-lint-{0}', env.CI_GROUP_SUFFIX) }}
       cancel-in-progress: true
     if: github.ref != 'refs/heads/main'
     strategy:

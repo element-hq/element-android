@@ -42,7 +42,7 @@ jobs:
     name: App - Build Android Tests
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ format('test-app-{0}', CI_GROUP_SUFFIX) }}
+      group: ${{ format('test-app-{0}', env.CI_GROUP_SUFFIX) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
@@ -62,7 +62,7 @@ jobs:
     name: Matrix SDK - Running Integration Tests
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ format('integration-tests-{0}', CI_GROUP_SUFFIX) }}
+      group: ${{ format('integration-tests-{0}', env.CI_GROUP_SUFFIX) }}
       cancel-in-progress: true
     strategy:
       fail-fast: false
