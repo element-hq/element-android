@@ -142,7 +142,12 @@
         <item name="vctr_keyword_style">@style/Widget.Vector.Keyword</item>
 
         <item name="vctr_toast_background">@color/vctr_toast_background_light</item>
+
+        <item name="android:actionButtonStyle">@style/Theme.Vector.ActionButton</item>
+
     </style>
+
+
 
     <style name="Theme.Vector.Light" parent="Base.Theme.Vector.Light" />
 
