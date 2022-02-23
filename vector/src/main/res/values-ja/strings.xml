@@ -2513,7 +2513,7 @@
     <string name="room_settings_enable_encryption_dialog_content">一度有効にしたルームの暗号化は無効にすることはできません。暗号化されたルームで送信されたメッセージは、サーバーからは見ることができず、そのルームのメンバーだけが見ることができます。暗号化を有効にすると、多くのボットやブリッジが正常に動作しなくなる場合があります。</string>
     <string name="room_created_summary_no_topic_creation_text">%sして、このルームを皆に紹介しましょう。</string>
     <string name="user_code_info_text">このコードを皆と共有し、スキャンして追加してもらい、会話を始めましょう。</string>
-    <string name="create_spaces_make_sure_access">正当な参加者が%sにアクセスできることを確認してください。これは後から変更できます。</string>
+    <string name="create_spaces_make_sure_access">正当な参加者が%sにアクセスできることを確認してください。</string>
     <string name="add_people">参加者を追加</string>
     <plurals name="space_people_you_know">
         <item quantity="other">%d人の知り合いがすでに参加しています</item>
@@ -2831,16 +2831,16 @@
     <string name="confirm_recovery_passphrase">%sを確認</string>
     <string name="set_recovery_passphrase">%sを設定</string>
     <string name="verification_cancelled">検証を中止しました</string>
-    <string name="verify_cancel_other">今中止すれば、%1$s（%2$s）の検証をしません。検証は相手のユーザープロフィールからもう一度開始できます。</string>
-    <string name="verify_cancel_self_verification_from_trusted">中止すれば、新しい端末では暗号化されたメッセージが読めないし他のユーザーに信頼されません</string>
+    <string name="verify_cancel_other">今中止すれば、%1$s（%2$s）を検証しません。検証は相手のユーザープロフィール画面からもう一度開始できます。</string>
+    <string name="verify_cancel_self_verification_from_trusted">中止すれば、新しい端末では暗号化されたメッセージが読めず、他のユーザーに信頼されません</string>
     <string name="verify_cancel_self_verification_from_untrusted">中止すれば、この端末では暗号化されたメッセージが読めないし他のユーザーに信頼されません</string>
     <string name="verify_new_session_was_not_me">自分ではない</string>
     <string name="verify_new_session_notice">新しいセッションを検証して、暗号化されたメッセージにアクセスできるようにしましょう。</string>
     <string name="new_session_review">タップして確認及び検証</string>
     <string name="new_session">新しいログイン。あなたですか？</string>
     <string name="template_login_default_session_public_name">${app_name} Android</string>
-    <string name="event_redacted_by_admin_reason_with_reason">部屋の管理者によって削除されています、理由：%1$s</string>
-    <string name="event_redacted_by_user_reason_with_reason">ユーザーによって削除されています、理由：%1$s</string>
+    <string name="event_redacted_by_admin_reason_with_reason">ルームの管理者によって削除されています。理由：%1$s</string>
+    <string name="event_redacted_by_user_reason_with_reason">ユーザーによって削除されています。理由：%1$s</string>
     <string name="delete_event_dialog_reason_hint">削除した理由</string>
     <string name="share_confirm_room">この添付ファイルを%1$sに送信しますか？</string>
     <string name="enter_secret_storage_passphrase_warning_text">秘密ストレージは信頼されている端末でのみアクセスしましょう</string>
@@ -2849,7 +2849,7 @@
     <string name="command_description_poll">シンプルなアンケートを作ります</string>
     <string name="delete_account_data_warning">%1$sというタイプのアカウントデータを削除しますか？
 \n
-\n予期せぬトラブルを起こす可能性があるので注意してください。</string>
+\n予期しないトラブルを起こす可能性があるので注意してください。</string>
     <string name="verification_profile_device_new_signing">%1$s（%2$s）が新しいセッションでサインインしました：</string>
     <string name="verification_profile_device_verified_because">このセッションは%1$s（%2$s）によって検証されているので、メッセージのセキュリティは信頼できます。</string>
     <string name="verification_open_other_to_verify">既存のセッションでこのセッションを検証して、暗号化されたメッセージへアクセスできるようにしましょう。</string>
@@ -2857,5 +2857,12 @@
     <string name="settings_active_sessions_verified_device_desc">あなたはこのセッションを検証しているので、メッセージのセキュリティは信頼できます。</string>
     <string name="settings_failed_to_get_crypto_device_info">利用可能な暗号情報がありません</string>
     <string name="settings_server_default_room_version">既定のバージョン</string>
-    <string name="settings_hs_admin_e2e_disabled">非公開部屋とダイレクトメッセージにおけるエンドツーエンド暗号化はあなたのサーバーの管理者によって既定として無効にされています。</string>
+    <string name="settings_hs_admin_e2e_disabled">非公開のルームとダイレクトメッセージにおけるエンドツーエンド暗号化は、あなたのサーバーの管理者により既定として無効にされています。</string>
+    <string name="delete_event_dialog_reason_checkbox">理由を含める</string>
+    <string name="notice_power_level_changed">%1$sが%2$sの権限レベルを変更しました。</string>
+    <string name="notice_power_level_changed_by_you">%1$sの権限レベルを変更しました。</string>
+    <string name="create_spaces_who_are_you_working_with">誰と使いますか？</string>
+    <string name="create_spaces_choose_type_label">どんなスペースを作りますか？</string>
+    <string name="create_spaces_private_teammates">あなたとチームメイトの非公開のスペース</string>
+    <string name="create_spaces_organise_rooms">ルームを整理するためのプライベートスペース</string>
 </resources>
