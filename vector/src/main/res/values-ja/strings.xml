@@ -1813,7 +1813,7 @@
     <string name="login_splash_text1">直接またはグループで連絡先とチャット</string>
     <string name="login_splash_title">自分の会話は、自分のものに。</string>
     <string name="auth_add_email_message_2">アカウント復旧用のメールアドレスを設定します。後からオプションで知人に見つけてもらえるようにできます。</string>
-    <string name="this_is_the_beginning_of_dm">ここがあなたと%sとのダイレクトメッセージの履歴の先頭です。</string>
+    <string name="this_is_the_beginning_of_dm">ここが%sとのダイレクトメッセージのスタート地点です。</string>
     <string name="no_message_edits_found">変更履歴はありません</string>
     <string name="message_edits">メッセージの変更履歴</string>
     <string name="downloaded_file">ファイル %1$s をダウンロードしました!</string>
@@ -2866,6 +2866,7 @@
     <string name="create_spaces_private_teammates">あなたとチームメイトの非公開のスペース</string>
     <string name="create_spaces_organise_rooms">ルームを整理するためのプライベートスペース</string>
     <string name="this_is_the_beginning_of_room_no_name">ここが会話のスタート地点です。</string>
-    <string name="this_is_the_beginning_of_room">ここが%sの先頭です。</string>
+    <string name="this_is_the_beginning_of_room">ここが%sのスタート地点です。</string>
     <string name="qr_code_scanned_verif_waiting_notice">もうすぐです！確認を待っています…</string>
+    <string name="qr_code_scanned_self_verif_notice">あと少しです！もう一方のデバイスは同じマークを表示していますか？</string>
 </resources>
