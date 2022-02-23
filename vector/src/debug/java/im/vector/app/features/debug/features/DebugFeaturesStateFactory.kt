@@ -48,6 +48,11 @@ class DebugFeaturesStateFactory @Inject constructor(
                         label = "FTUE Use Case",
                         key = DebugFeatureKeys.onboardingUseCase,
                         factory = VectorFeatures::isOnboardingUseCaseEnabled
+                ),
+                createBooleanFeature(
+                        label = "Force login fallback",
+                        key = DebugFeatureKeys.forceLoginFallback,
+                        factory = VectorFeatures::isForceLoginFallbackEnabled
                 )
         ))
     }
