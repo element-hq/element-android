@@ -17,8 +17,8 @@
 package im.vector.app.features.media
 
 interface AttachmentInteractionListener {
-    fun onDismissTapped()
-    fun onShareTapped()
+    fun onDismiss()
+    fun onShare()
     fun onPlayPause(play: Boolean)
     fun videoSeekTo(percent: Int)
 }

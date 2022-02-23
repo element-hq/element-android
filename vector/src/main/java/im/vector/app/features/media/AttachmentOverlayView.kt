@@ -49,10 +49,10 @@ class AttachmentOverlayView @JvmOverloads constructor(
         views = MergeImageAttachmentOverlayBinding.bind(this)
         setBackgroundColor(Color.TRANSPARENT)
         views.overlayBackButton.setOnClickListener {
-            interactionListener?.onDismissTapped()
+            interactionListener?.onDismiss()
         }
         views.overlayShareButton.setOnClickListener {
-            interactionListener?.onShareTapped()
+            interactionListener?.onShare()
         }
         views.overlayPlayPauseButton.setOnClickListener {
             interactionListener?.onPlayPause(!isPlaying)

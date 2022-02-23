@@ -241,7 +241,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
      * Specialization AttachmentInteractionListener
      * ========================================================================================== */
 
-    override fun onDismissTapped() {
+    override fun onDismiss() {
         animateClose()
     }
 
@@ -255,7 +255,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
 
     // TODO add save feature for image => check it works for video as well,
     //  check if it is already possible to save from menu with long press on video
-    override fun onShareTapped() {
+    override fun onShare() {
         // TODO the opening of share bottom sheet is extremely slow
         //  move the retrieve of the file into ViewModel and use a ViewEvent to call shareMedia
         lifecycleScope.launch(Dispatchers.IO) {
