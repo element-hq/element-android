@@ -62,6 +62,23 @@ class RoomDetailRobot {
         pressBack()
     }
 
+    fun replyToThread(message: String) {
+        openMessageMenu(message) {
+            replyInThread()
+        }
+        val threadMessage = "Hello universe - long message to avoid espresso tapping edited!"
+        writeTo(R.id.composerEditText, threadMessage)
+        waitUntilViewVisible(withId(R.id.sendButton))
+        clickOn(R.id.sendButton)
+    }
+
+    fun viewInRoom(message: String) {
+        openMessageMenu(message) {
+            viewInRoom()
+        }
+        waitUntilViewVisible(withId(R.id.composerEditText))
+    }
+
     fun crawlMessage(message: String) {
         // Test quick reaction
         val quickReaction = EmojiDataSource.quickEmojis[0] // 👍
@@ -110,7 +127,7 @@ class RoomDetailRobot {
         onView(withId(R.id.timelineRecyclerView))
                 .perform(
                         RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(
-                                ViewMatchers.hasDescendant(ViewMatchers.withText(message)),
+                                ViewMatchers.hasDescendant(withText(message)),
                                 ViewActions.longClick()
                         )
                 )
@@ -128,6 +145,18 @@ class RoomDetailRobot {
         waitUntilViewVisible(withId(R.id.roomProfileAvatarView))
         sleep(1000)
         block(RoomSettingsRobot())
+        pressBack()
+    }
+
+    fun openThreadSummaries() {
+        clickMenu(R.id.menu_timeline_thread_list)
+        waitUntilViewVisible(withId(R.id.threadListRecyclerView))
+    }
+
+    fun selectThreadSummariesFilter() {
+        clickMenu(R.id.menu_thread_list_filter)
+        sleep(1000)
+        clickOn(R.id.threadListModalMyThreads)
         pressBack()
     }
 }
