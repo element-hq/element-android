@@ -52,6 +52,7 @@ import im.vector.app.features.onboarding.OnboardingViewModel
 import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragment
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragmentArgument
+import im.vector.lib.core.utils.extensions.doNothing
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -109,7 +110,7 @@ class FtueAuthVariant(
     }
 
     override fun setIsLoading(isLoading: Boolean) {
-        // do nothing
+        doNothing()
     }
 
     private fun addFirstFragment() {
@@ -134,11 +135,7 @@ class FtueAuthVariant(
                         // First ask for login and password
                         // I add a tag to indicate that this fragment is a registration stage.
                         // This way it will be automatically popped in when starting the next registration stage
-                        activity.addFragmentToBackstack(views.loginFragmentContainer,
-                                FtueAuthLoginFragment::class.java,
-                                tag = FRAGMENT_REGISTRATION_STAGE_TAG,
-                                option = commonOption
-                        )
+                        openAuthLoginFragmentWithTag(FRAGMENT_REGISTRATION_STAGE_TAG)
                     }
                 }
             }
@@ -228,6 +225,19 @@ class FtueAuthVariant(
     private fun OnboardingViewEvents.RegistrationFlowResult.containsUnsupportedRegistrationFlow() =
             flowResult.missingStages.any { !it.isSupported() }
 
+    private fun onRegistrationStageNotSupported() {
+        MaterialAlertDialogBuilder(activity)
+                .setTitle(R.string.app_name)
+                .setMessage(activity.getString(R.string.login_registration_not_supported))
+                .setPositiveButton(R.string.yes) { _, _ ->
+                    activity.addFragmentToBackstack(views.loginFragmentContainer,
+                            FtueAuthWebFragment::class.java,
+                            option = commonOption)
+                }
+                .setNegativeButton(R.string.no, null)
+                .show()
+    }
+
     private fun updateWithState(viewState: OnboardingViewState) {
         if (viewState.isUserLogged()) {
             val intent = HomeActivity.newIntent(
@@ -270,27 +280,54 @@ class FtueAuthVariant(
         // state.signMode could not be ready yet. So use value from the ViewEvent
         when (OnboardingViewEvents.signMode) {
             SignMode.Unknown            -> error("Sign mode has to be set before calling this method")
-            SignMode.SignUp             -> {
-                // This is managed by the OnboardingViewEvents
-            }
-            SignMode.SignIn             -> {
-                // It depends on the LoginMode
-                when (state.loginMode) {
-                    LoginMode.Unknown,
-                    is LoginMode.Sso      -> error("Developer error")
-                    is LoginMode.SsoAndPassword,
-                    LoginMode.Password    -> activity.addFragmentToBackstack(views.loginFragmentContainer,
-                            FtueAuthLoginFragment::class.java,
-                            tag = FRAGMENT_LOGIN_TAG,
-                            option = commonOption)
-                    LoginMode.Unsupported -> onLoginModeNotSupported(state.loginModeSupportedTypes)
-                }.exhaustive
-            }
-            SignMode.SignInWithMatrixId -> activity.addFragmentToBackstack(views.loginFragmentContainer,
-                    FtueAuthLoginFragment::class.java,
-                    tag = FRAGMENT_LOGIN_TAG,
-                    option = commonOption)
+            SignMode.SignUp             -> doNothing("This is managed by the OnboardingViewEvents")
+            SignMode.SignIn             -> handleSignInSelected(state)
+            SignMode.SignInWithMatrixId -> handleSignInWithMatrixId(state)
         }.exhaustive
+    }
+
+    private fun handleSignInSelected(state: OnboardingViewState) {
+        if (vectorFeatures.isForceLoginFallbackEnabled())
+            onLoginModeNotSupported(state.loginModeSupportedTypes)
+        else
+            disambiguateLoginMode(state)
+    }
+
+    private fun disambiguateLoginMode(state: OnboardingViewState) = when (state.loginMode) {
+        LoginMode.Unknown,
+        is LoginMode.Sso      -> error("Developer error")
+        is LoginMode.SsoAndPassword,
+        LoginMode.Password    -> openAuthLoginFragmentWithTag(FRAGMENT_LOGIN_TAG)
+        LoginMode.Unsupported -> onLoginModeNotSupported(state.loginModeSupportedTypes)
+    }.exhaustive
+
+    private fun openAuthLoginFragmentWithTag(tag: String) {
+        activity.addFragmentToBackstack(views.loginFragmentContainer,
+                FtueAuthLoginFragment::class.java,
+                tag = tag,
+                option = commonOption)
+    }
+
+    private fun onLoginModeNotSupported(supportedTypes: List<String>) {
+        MaterialAlertDialogBuilder(activity)
+                .setTitle(R.string.app_name)
+                .setMessage(activity.getString(R.string.login_mode_not_supported, supportedTypes.joinToString { "'$it'" }))
+                .setPositiveButton(R.string.yes) { _, _ -> openAuthWebFragment() }
+                .setNegativeButton(R.string.no, null)
+                .show()
+    }
+
+    private fun handleSignInWithMatrixId(state: OnboardingViewState) {
+        if (vectorFeatures.isForceLoginFallbackEnabled())
+            onLoginModeNotSupported(state.loginModeSupportedTypes)
+        else
+            openAuthLoginFragmentWithTag(FRAGMENT_LOGIN_TAG)
+    }
+
+    private fun openAuthWebFragment() {
+        activity.addFragmentToBackstack(views.loginFragmentContainer,
+                FtueAuthWebFragment::class.java,
+                option = commonOption)
     }
 
     /**
@@ -300,32 +337,6 @@ class FtueAuthVariant(
         intent?.data
                 ?.let { tryOrNull { it.getQueryParameter("loginToken") } }
                 ?.let { onboardingViewModel.handle(OnboardingAction.LoginWithToken(it)) }
-    }
-
-    private fun onRegistrationStageNotSupported() {
-        MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.app_name)
-                .setMessage(activity.getString(R.string.login_registration_not_supported))
-                .setPositiveButton(R.string.yes) { _, _ ->
-                    activity.addFragmentToBackstack(views.loginFragmentContainer,
-                            FtueAuthWebFragment::class.java,
-                            option = commonOption)
-                }
-                .setNegativeButton(R.string.no, null)
-                .show()
-    }
-
-    private fun onLoginModeNotSupported(supportedTypes: List<String>) {
-        MaterialAlertDialogBuilder(activity)
-                .setTitle(R.string.app_name)
-                .setMessage(activity.getString(R.string.login_mode_not_supported, supportedTypes.joinToString { "'$it'" }))
-                .setPositiveButton(R.string.yes) { _, _ ->
-                    activity.addFragmentToBackstack(views.loginFragmentContainer,
-                            FtueAuthWebFragment::class.java,
-                            option = commonOption)
-                }
-                .setNegativeButton(R.string.no, null)
-                .show()
     }
 
     private fun handleRegistrationNavigation(flowResult: FlowResult) {
