@@ -1,3 +1,4 @@
+#no-op
 name: Integration Tests
 
 on:
