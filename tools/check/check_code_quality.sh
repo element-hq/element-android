@@ -124,7 +124,7 @@ else
   chmod u+x ${checkLongFilesScript}
 fi
 
-maxLines=2500
+maxLines=2800
 
 echo
 echo "Search for kotlin files with more than ${maxLines} lines..."
