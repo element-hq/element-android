@@ -286,10 +286,11 @@ class FtueAuthVariant(
     }
 
     private fun handleSignInSelected(state: OnboardingViewState) {
-        if (vectorFeatures.isForceLoginFallbackEnabled())
+        if (vectorFeatures.isForceLoginFallbackEnabled()) {
             onLoginModeNotSupported(state.loginModeSupportedTypes)
-        else
+        } else {
             disambiguateLoginMode(state)
+        }
     }
 
     private fun disambiguateLoginMode(state: OnboardingViewState) = when (state.loginMode) {
@@ -317,10 +318,11 @@ class FtueAuthVariant(
     }
 
     private fun handleSignInWithMatrixId(state: OnboardingViewState) {
-        if (vectorFeatures.isForceLoginFallbackEnabled())
+        if (vectorFeatures.isForceLoginFallbackEnabled()) {
             onLoginModeNotSupported(state.loginModeSupportedTypes)
-        else
+        } else {
             openAuthLoginFragmentWithTag(FRAGMENT_LOGIN_TAG)
+        }
     }
 
     private fun openAuthWebFragment() {
