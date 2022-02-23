@@ -123,8 +123,7 @@ class FtueAuthVariant(
     private fun handleOnboardingViewEvents(viewEvents: OnboardingViewEvents) {
         when (viewEvents) {
             is OnboardingViewEvents.RegistrationFlowResult                     -> {
-                // Check that all flows are supported by the application
-                if (viewEvents.flowResult.missingStages.any { !it.isSupported() }) {
+                if (registrationShouldFallback(viewEvents)) {
                     // Display a popup to propose use web fallback
                     onRegistrationStageNotSupported()
                 } else {
@@ -222,6 +221,12 @@ class FtueAuthVariant(
             }
         }.exhaustive
     }
+
+    private fun registrationShouldFallback(registrationFlowResult: OnboardingViewEvents.RegistrationFlowResult) =
+            vectorFeatures.isForceLoginFallbackEnabled() || registrationFlowResult.containsUnsupportedRegistrationFlow()
+
+    private fun OnboardingViewEvents.RegistrationFlowResult.containsUnsupportedRegistrationFlow() =
+            flowResult.missingStages.any { !it.isSupported() }
 
     private fun updateWithState(viewState: OnboardingViewState) {
         if (viewState.isUserLogged()) {
