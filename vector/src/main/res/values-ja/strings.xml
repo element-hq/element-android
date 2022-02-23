@@ -2867,7 +2867,7 @@
     <string name="create_spaces_organise_rooms">ルームを整理するためのプライベートスペース</string>
     <string name="this_is_the_beginning_of_room_no_name">ここが会話のスタート地点です。</string>
     <string name="this_is_the_beginning_of_room">ここが%sのスタート地点です。</string>
-    <string name="qr_code_scanned_verif_waiting_notice">もうすぐです！確認を待っています…</string>
+    <string name="qr_code_scanned_verif_waiting_notice">あと少しです！確認を待っています…</string>
     <string name="qr_code_scanned_self_verif_notice">あと少しです！もう一方のデバイスは同じマークを表示していますか？</string>
     <string name="qr_code_scanned_verif_waiting">%sを待っています…</string>
 </resources>
