@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- This file contains values to show or hide some settings, and default values for some settings -->
+    <!-- This file contains values to show or hide some settings, and default values for some settings
+     - boolean keys ending with "_visible" set the visibility of the setting
+     - boolean keys ending with "_default" set the default value of the setting
+     When a setting is hidden, the default value still applies
+     -->
 
     <!-- Level 0: Root -->
 
@@ -22,9 +26,7 @@
 
     <!-- Level 1: Preferences -->
 
-    <!-- If set to true, bubbles setting will be visible to the user in the preference -->
     <bool name="settings_interface_bubble_visible">true</bool>
-    <!-- If set to true, bubbles will be enabled by default -->
     <bool name="settings_interface_bubble_default">false</bool>
 
     <!-- Level 1: Voice and video -->
