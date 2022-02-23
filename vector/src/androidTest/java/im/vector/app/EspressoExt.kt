@@ -27,6 +27,9 @@ import androidx.test.espresso.IdlingResource
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.matcher.RootMatchers
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
@@ -255,6 +258,10 @@ fun clickOnAndGoBack(@StringRes name: Int, block: () -> Unit) {
     BaristaClickInteractions.clickOn(name)
     block()
     Espresso.pressBack()
+}
+
+fun clickOnSheet(id: Int) {
+    Espresso.onView(ViewMatchers.withId(id)).inRoot(RootMatchers.isDialog()).perform(ViewActions.click())
 }
 
 inline fun <reified T : VectorBaseBottomSheetDialogFragment<*>> interactWithSheet(
