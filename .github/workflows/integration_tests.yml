@@ -75,8 +75,6 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Start synapse server
         run: |
-          python3 -m venv .synapse
-          source .synapse/bin/activate
           pip install matrix-synapse
           curl https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh -o start.sh
           chmod 777 start.sh

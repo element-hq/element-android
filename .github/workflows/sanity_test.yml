@@ -37,8 +37,6 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Start synapse server
         run: |
-          python3 -m venv .synapse
-          source .synapse/bin/activate
           pip install matrix-synapse
           curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh \
             | sed s/127.0.0.1/0.0.0.0/g | sed 's/http:\/\/localhost/http:\/\/10.0.2.2/g' | bash -s -- --no-rate-limit
