@@ -332,7 +332,7 @@ android {
 }
 
 dependencies {
-
+    implementation project(":vector-config")
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")
     implementation project(":library:jsonviewer")
