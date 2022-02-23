@@ -10,19 +10,13 @@ env:
   CI_GRADLE_ARG_PROPERTIES: >
     -Porg.gradle.jvmargs=-Xmx2g
     -Porg.gradle.parallel=false
-  CI_GROUP_SUFFIX: >
-    ${{
-    github.ref == 'refs/heads/main' && format('main-{0}', github.sha) ||
-    github.ref == 'refs/heads/develop' && format('develop-{0}', github.sha) ||
-    github.ref
-    }}
 jobs:
   # Build Android Tests [Matrix SDK]
   build-android-test-matrix-sdk:
     name: Matrix SDK - Build Android Tests
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ format('test-matrix-sdk-{0}', env.CI_GROUP_SUFFIX) }}
+      group: ${{ github.ref == 'refs/heads/main' && format('test-matrix-sdk-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('test-matrix-sdk-develop-{0}', github.sha) || format('test-matrix-sdk-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
@@ -42,7 +36,7 @@ jobs:
     name: App - Build Android Tests
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ format('test-app-{0}', env.CI_GROUP_SUFFIX) }}
+      group: ${{ github.ref == 'refs/heads/main' && format('test-app-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('test-app-develop-{0}', github.sha) || format('test-app-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
@@ -62,7 +56,7 @@ jobs:
     name: Matrix SDK - Running Integration Tests
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ format('integration-tests-{0}', env.CI_GROUP_SUFFIX) }}
+      group: ${{ github.ref == 'refs/heads/main' && format('integration-tests-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('integration-tests-develop-{0}', github.sha) || format('integration-tests-{0}', github.ref) }}
       cancel-in-progress: true
     strategy:
       fail-fast: false

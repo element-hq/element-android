@@ -10,24 +10,18 @@ env:
   CI_GRADLE_ARG_PROPERTIES: >
     -Porg.gradle.jvmargs=-Xmx2g
     -Porg.gradle.parallel=false
-  CI_GROUP_SUFFIX: >
-    ${{
-    github.ref == 'refs/heads/main' && format('main-{0}', github.sha) ||
-    github.ref == 'refs/heads/develop' && format('develop-{0}', github.sha) ||
-    github.ref
-    }}
 jobs:
   debug:
     name: Build debug APKs (${{ matrix.target }})
     runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ format('build-debug-{0}-{1}', matrix.target, env.CI_GROUP_SUFFIX) }}
-      cancel-in-progress: true
     if: github.ref != 'refs/heads/main'
     strategy:
       fail-fast: false
       matrix:
         target: [ Gplay, Fdroid ]
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/develop' && format('integration-tests-develop-{0}-{1}', matrix.target, github.sha) || format('build-debug-{0}-{1}', matrix.target, github.ref)  }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -50,9 +44,6 @@ jobs:
   release:
     name: Build unsigned GPlay APKs
     runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ format('build-release-{0}-{1}', matrix.target, env.CI_GROUP_SUFFIX) }}
-      cancel-in-progress: true
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2

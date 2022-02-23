@@ -10,18 +10,12 @@ env:
   CI_GRADLE_ARG_PROPERTIES: >
     -Porg.gradle.jvmargs=-Xmx2g
     -Porg.gradle.parallel=false
-  CI_GROUP_SUFFIX: >
-    ${{
-    github.ref == 'refs/heads/main' && format('main-{0}', github.sha) ||
-    github.ref == 'refs/heads/develop' && format('develop-{0}', github.sha) ||
-    github.ref
-    }}
 jobs:
   unit-tests:
     name: Run Unit Tests
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ format('unit-tests-{0}', env.CI_GROUP_SUFFIX) }}
+      group: ${{ github.ref == 'refs/heads/main' && format('unit-test-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('unit-test-develop-{0}', github.sha) || format('unit-test-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2

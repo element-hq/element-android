@@ -5,14 +5,6 @@ on:
   push:
     branches: [ main, develop ]
 
-env:
-  CI_GROUP_SUFFIX: >
-    ${{
-    github.ref == 'refs/heads/main' && format('main-{0}', github.sha) ||
-    github.ref == 'refs/heads/develop' && format('develop-{0}', github.sha) ||
-    github.ref
-    }}
-
 jobs:
   check:
     name: Project Check Suite
@@ -27,7 +19,7 @@ jobs:
     name: Kotlin Linter
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ format('klint-{0}', env.CI_GROUP_SUFFIX) }}
+      group: ${{ github.ref == 'refs/heads/main' && format('klint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('klint-develop-{0}', github.sha) || format('klint-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
@@ -99,7 +91,7 @@ jobs:
     name: Android Linter
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ format('android-lint-{0}', env.CI_GROUP_SUFFIX) }}
+      group: ${{ github.ref == 'refs/heads/main' && format('android-lint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('android-lint-develop-{0}', github.sha) || format('android-lint-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
@@ -125,14 +117,14 @@ jobs:
   apk-lint:
     name: Lint APK (${{ matrix.target }})
     runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ format('apk-lint-{0}', env.CI_GROUP_SUFFIX) }}
-      cancel-in-progress: true
     if: github.ref != 'refs/heads/main'
     strategy:
       fail-fast: false
       matrix:
         target: [ Gplay, Fdroid ]
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/develop' && format('apk-lint-develop-{0}', github.sha) || format('apk-lint-{0}', github.ref) }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
