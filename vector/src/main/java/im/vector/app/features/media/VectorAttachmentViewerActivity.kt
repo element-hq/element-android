@@ -253,11 +253,9 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
         handle(AttachmentCommands.SeekTo(percent))
     }
 
-    // TODO add save feature for image => check it works for video as well,
-    //  check if it is already possible to save from menu with long press on video
     override fun onShare() {
-        // TODO the opening of share bottom sheet is extremely slow
-        //  move the retrieve of the file into ViewModel and use a ViewEvent to call shareMedia
+        // TODO
+        //  use repeatOnLifecycle extension
         lifecycleScope.launch(Dispatchers.IO) {
             val file = currentSourceProvider?.getFileForSharing(currentPosition) ?: return@launch
 
@@ -271,12 +269,17 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
         }
     }
 
-    // TODO create suspendable usecase: downloadMediaUseCase
-    //  create interface for base use case
-    //  create ViewModel with action downloadAction, events downloading, downloaded, error
-    //  call usecase using viewModel
-    //  launch coroutine in Activity using repeatOnLifeCycle extension
-    //  add unit tests for usecase?
+    // TODO add save feature for image => check it works for video as well,
+    //  check if it is already possible to save from menu with long press on video
+    override fun onDownload() {
+        // TODO
+        //  create interface for base use case
+        //  create ViewModel with action downloadAction, events downloading, downloaded, error
+        //  call usecase using viewModel
+        //  launch coroutine in Activity using repeatOnLifeCycle extension
+        //  add unit tests for usecase?
+        TODO("Not yet implemented")
+    }
 
     /* ==========================================================================================
      * COMPANION
