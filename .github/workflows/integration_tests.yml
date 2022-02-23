@@ -16,6 +16,11 @@ jobs:
   build-android-test-matrix-sdk:
     name: Matrix SDK - Build Android Tests
     runs-on: ubuntu-latest
+    concurrency:
+      # When running on develop, use the sha to allow all runs of this workflow to run concurrently.
+      # Otherwise only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: ${{ github.ref == 'refs/heads/develop' && format('test-matrix-sdk-develop-{0}', github.sha) || format('test-matrix-sdk-{0}', github.ref) }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -33,6 +38,11 @@ jobs:
   build-android-test-app:
     name: App - Build Android Tests
     runs-on: ubuntu-latest
+    concurrency:
+      # When running on develop, use the sha to allow all runs of this workflow to run concurrently.
+      # Otherwise only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: ${{ github.ref == 'refs/heads/develop' && format('test-app-develop-{0}', github.sha) || format('test-app-{0}', github.ref) }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -50,6 +60,11 @@ jobs:
   integration-tests:
     name: Matrix SDK - Running Integration Tests
     runs-on: ubuntu-latest
+    concurrency:
+      # When running on develop, use the sha to allow all runs of this workflow to run concurrently.
+      # Otherwise only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: ${{ github.ref == 'refs/heads/develop' && format('integration-tests-develop-{0}', github.sha) || format('integration-tests-{0}', github.ref) }}
+      cancel-in-progress: true
     strategy:
       fail-fast: false
       matrix:
