@@ -10,15 +10,16 @@ env:
   CI_GRADLE_ARG_PROPERTIES: >
     -Porg.gradle.jvmargs=-Xmx2g
     -Porg.gradle.parallel=false
-
+  CI_ANY_MAIN: ${{ github.ref  == 'refs/heads/main' && format('main-{0}', github.sha) }}
+  CI_ANY_DEVELOP: ${{ github.ref  == 'refs/heads/develop' && format('develop-{0}', github.sha) }}
+  CI_ONE_PR: ${{ format('build-debug-{0}-{1}', matrix.target, github.ref) }}
+  CI_GROUP_SUFFIX: ${{ CI_ANY_MAIN || CI_ANY_DEVELOP || CI_ONE_PR }}
 jobs:
   unit-tests:
     name: Run Unit Tests
     runs-on: ubuntu-latest
     concurrency:
-      # When running on develop, use the sha to allow all runs of this workflow to run concurrently.
-      # Otherwise only allow a single run of this workflow on each branch, automatically cancelling older runs.
-      group: ${{ github.ref == 'refs/heads/develop' && format('test-unit-develop-{0}', github.sha) || format('test-unit-{0}', github.ref) }}
+      group: ${{ format('unit-tests-{0}', CI_GROUP_SUFFIX) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
