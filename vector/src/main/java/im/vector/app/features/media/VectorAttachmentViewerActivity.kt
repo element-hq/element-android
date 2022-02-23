@@ -47,7 +47,11 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmentProvider.InteractionListener {
+class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInteractionListener {
+
+    /* ==========================================================================================
+     * Arguments
+     * ========================================================================================== */
 
     @Parcelize
     data class Args(
@@ -56,6 +60,10 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
             val sharedTransitionName: String?
     ) : Parcelable
 
+    /* ==========================================================================================
+     * Dependencies
+     * ========================================================================================== */
+
     @Inject
     lateinit var sessionHolder: ActiveSessionHolder
     @Inject
@@ -63,10 +71,17 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
     @Inject
     lateinit var imageContentRenderer: ImageContentRenderer
 
+    /* ==========================================================================================
+     * Fields
+     * ========================================================================================== */
+
     private var initialIndex = 0
     private var isAnimatingOut = false
-
     private var currentSourceProvider: BaseAttachmentProvider<*>? = null
+
+    /* ==========================================================================================
+     * Lifecycle
+     * ========================================================================================== */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -140,12 +155,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
         Timber.i("onPause Activity ${javaClass.simpleName}")
     }
 
-    private fun getOtherThemes() = ActivityOtherThemes.VectorAttachmentsPreview
-
-    override fun shouldAnimateDismiss(): Boolean {
-        return currentPosition != initialIndex
-    }
-
     override fun onBackPressed() {
         if (currentPosition == initialIndex) {
             // show back the transition view
@@ -154,6 +163,14 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
         }
         isAnimatingOut = true
         super.onBackPressed()
+    }
+
+    /* ==========================================================================================
+     * Specialization
+     * ========================================================================================== */
+
+    override fun shouldAnimateDismiss(): Boolean {
+        return currentPosition != initialIndex
     }
 
     override fun animateClose() {
@@ -166,9 +183,11 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
         ActivityCompat.finishAfterTransition(this)
     }
 
-    // ==========================================================================================
-    // PRIVATE METHODS
-    // ==========================================================================================
+    /* ==========================================================================================
+     * Private methods
+     * ========================================================================================== */
+
+    private fun getOtherThemes() = ActivityOtherThemes.VectorAttachmentsPreview
 
     /**
      * Try and add a [Transition.TransitionListener] to the entering shared element
@@ -218,24 +237,9 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
                 })
     }
 
-    companion object {
-        const val EXTRA_ARGS = "EXTRA_ARGS"
-        const val EXTRA_IMAGE_DATA = "EXTRA_IMAGE_DATA"
-        const val EXTRA_IN_MEMORY_DATA = "EXTRA_IN_MEMORY_DATA"
-
-        fun newIntent(context: Context,
-                      mediaData: AttachmentData,
-                      roomId: String?,
-                      eventId: String,
-                      inMemoryData: List<AttachmentData>,
-                      sharedTransitionName: String?) = Intent(context, VectorAttachmentViewerActivity::class.java).also {
-            it.putExtra(EXTRA_ARGS, Args(roomId, eventId, sharedTransitionName))
-            it.putExtra(EXTRA_IMAGE_DATA, mediaData)
-            if (inMemoryData.isNotEmpty()) {
-                it.putParcelableArrayListExtra(EXTRA_IN_MEMORY_DATA, ArrayList(inMemoryData))
-            }
-        }
-    }
+    /* ==========================================================================================
+     * Specialization AttachmentInteractionListener
+     * ========================================================================================== */
 
     override fun onDismissTapped() {
         animateClose()
@@ -252,7 +256,8 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
     // TODO add save feature for image => check it works for video as well,
     //  check if it is already possible to save from menu with long press on video
     override fun onShareTapped() {
-        // TODO move the retrieve of the file into ViewModel and use a ViewEvent to call shareMedia
+        // TODO the opening of share bottom sheet is extremely slow
+        //  move the retrieve of the file into ViewModel and use a ViewEvent to call shareMedia
         lifecycleScope.launch(Dispatchers.IO) {
             val file = currentSourceProvider?.getFileForSharing(currentPosition) ?: return@launch
 
@@ -262,6 +267,29 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), BaseAttachmen
                         file,
                         getMimeTypeFromUri(this@VectorAttachmentViewerActivity, file.toUri())
                 )
+            }
+        }
+    }
+
+    /* ==========================================================================================
+     * COMPANION
+     * ========================================================================================== */
+
+    companion object {
+        private const val EXTRA_ARGS = "EXTRA_ARGS"
+        private const val EXTRA_IMAGE_DATA = "EXTRA_IMAGE_DATA"
+        private const val EXTRA_IN_MEMORY_DATA = "EXTRA_IN_MEMORY_DATA"
+
+        fun newIntent(context: Context,
+                      mediaData: AttachmentData,
+                      roomId: String?,
+                      eventId: String,
+                      inMemoryData: List<AttachmentData>,
+                      sharedTransitionName: String?) = Intent(context, VectorAttachmentViewerActivity::class.java).also {
+            it.putExtra(EXTRA_ARGS, Args(roomId, eventId, sharedTransitionName))
+            it.putExtra(EXTRA_IMAGE_DATA, mediaData)
+            if (inMemoryData.isNotEmpty()) {
+                it.putParcelableArrayListExtra(EXTRA_IN_MEMORY_DATA, ArrayList(inMemoryData))
             }
         }
     }
