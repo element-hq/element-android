@@ -251,7 +251,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         val msgType = messageContent?.msgType
 
         return arrayListOf<EventSharedAction>().apply {
-            // TODO need to check all possible items and confirm order
+            // TODO need to check all possible items and confirm order changes to apply
             when {
                 timelineEvent.root.sendState.hasFailed()         -> {
                     addActionsForFailedState(timelineEvent, actionPermissions, messageContent, msgType)
@@ -569,7 +569,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         }
     }
 
-    // TODO need to add this into Viewer screen to check if it is saveable? => create extension on MessageType?
+    // TODO need to add this into Viewer screen to check if it is saveable? => create extension on MessageType or useCase?
     private fun canSave(msgType: String?): Boolean {
         return when (msgType) {
             MessageType.MSGTYPE_IMAGE,

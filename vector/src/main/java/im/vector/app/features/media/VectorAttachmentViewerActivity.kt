@@ -271,6 +271,13 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
         }
     }
 
+    // TODO create suspendable usecase: downloadMediaUseCase
+    //  create interface for base use case
+    //  create ViewModel with action downloadAction, events downloading, downloaded, error
+    //  call usecase using viewModel
+    //  launch coroutine in Activity using repeatOnLifeCycle extension
+    //  add unit tests for usecase?
+
     /* ==========================================================================================
      * COMPANION
      * ========================================================================================== */
