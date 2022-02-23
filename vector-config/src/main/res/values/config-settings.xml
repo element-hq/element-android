@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Default preference values -->
+
+    <!-- If set to true, bubbles setting will be visible to the user in the preference -->
+    <bool name="settings_interface_bubble_visible">true</bool>
+    <!-- If set to true, bubbles will be enabled by default -->
+    <bool name="settings_interface_bubble_default">false</bool>
+
+</resources>
