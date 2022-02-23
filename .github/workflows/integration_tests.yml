@@ -10,18 +10,19 @@ env:
   CI_GRADLE_ARG_PROPERTIES: >
     -Porg.gradle.jvmargs=-Xmx2g
     -Porg.gradle.parallel=false
-  CI_ANY_MAIN: ${{ github.ref  == 'refs/heads/main' && format('main-{0}', github.sha) }}
-  CI_ANY_DEVELOP: ${{ github.ref  == 'refs/heads/develop' && format('develop-{0}', github.sha) }}
-  CI_ONE_PR: ${{ format('build-debug-{0}-{1}', matrix.target, github.ref) }}
-  CI_GROUP_SUFFIX: ${{ CI_ANY_MAIN || CI_ANY_DEVELOP || CI_ONE_PR }}
-
+  CI_GROUP_SUFFIX: >
+    ${{
+    github.ref == 'refs/heads/main' && format('main-{0}', github.sha) ||
+    github.ref == 'refs/heads/develop' && format('develop-{0}', github.sha) ||
+    github.ref
+    }}
 jobs:
   # Build Android Tests [Matrix SDK]
   build-android-test-matrix-sdk:
     name: Matrix SDK - Build Android Tests
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ format('test-matrix-sdk-{0}', CI_GROUP_SUFFIX) }}
+      group: ${{ format('test-matrix-sdk-{0}', env.CI_GROUP_SUFFIX) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2

@@ -6,10 +6,12 @@ on:
     branches: [ main, develop ]
 
 env:
-  CI_ANY_MAIN: ${{ github.ref  == 'refs/heads/main' && format('main-{0}', github.sha) }}
-  CI_ANY_DEVELOP: ${{ github.ref  == 'refs/heads/develop' && format('develop-{0}', github.sha) }}
-  CI_ONE_PR: ${{ format('build-debug-{0}-{1}', matrix.target, github.ref) }}
-  CI_GROUP_SUFFIX: ${{ CI_ANY_MAIN || CI_ANY_DEVELOP || CI_ONE_PR }}
+  CI_GROUP_SUFFIX: >
+    ${{
+    github.ref == 'refs/heads/main' && format('main-{0}', github.sha) ||
+    github.ref == 'refs/heads/develop' && format('develop-{0}', github.sha) ||
+    github.ref
+    }}
 
 jobs:
   check:
