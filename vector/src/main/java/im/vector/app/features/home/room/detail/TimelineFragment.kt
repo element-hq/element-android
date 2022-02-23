@@ -21,7 +21,6 @@ import android.app.Activity
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Color
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -1616,6 +1615,7 @@ class TimelineFragment @Inject constructor(
 
     private fun renderToolbar(roomSummary: RoomSummary?) {
         if (!isThreadTimeLine()) {
+            views.includeRoomToolbar.roomToolbarSubtitleView.isVisible = false
             views.includeRoomToolbar.roomToolbarContentView.isVisible = true
             views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = false
             if (roomSummary == null) {
@@ -1624,7 +1624,6 @@ class TimelineFragment @Inject constructor(
                 views.includeRoomToolbar.roomToolbarContentView.isClickable = roomSummary.membership == Membership.JOIN
                 views.includeRoomToolbar.roomToolbarTitleView.text = roomSummary.displayName
                 avatarRenderer.render(roomSummary.toMatrixItem(), views.includeRoomToolbar.roomToolbarAvatarImageView)
-                renderSubTitle(roomSummary.topic)
                 views.includeRoomToolbar.roomToolbarDecorationImageView.render(roomSummary.roomEncryptionTrustLevel)
                 views.includeRoomToolbar.roomToolbarPresenceImageView.render(roomSummary.isDirect, roomSummary.directUserPresence)
                 views.includeRoomToolbar.roomToolbarPublicImageView.isVisible = roomSummary.isPublic && !roomSummary.isDirect
@@ -1639,14 +1638,6 @@ class TimelineFragment @Inject constructor(
                 views.includeThreadToolbar.roomToolbarThreadSubtitleTextView.text = it.displayName
             }
             views.includeThreadToolbar.roomToolbarThreadTitleTextView.text = resources.getText(R.string.thread_timeline_title)
-        }
-    }
-
-    private fun renderSubTitle(topic: String) {
-        views.includeRoomToolbar.roomToolbarSubtitleView.apply {
-            setTextOrHide(topic)
-            setTextColor(colorProvider.getColorFromAttribute(R.attr.colorPrimary))
-            setTypeface(null, Typeface.BOLD)
         }
     }
 

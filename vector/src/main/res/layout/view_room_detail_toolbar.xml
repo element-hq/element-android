@@ -36,14 +36,13 @@
         android:padding="2dp"
         android:visibility="gone"
         app:layout_constraintCircle="@id/roomToolbarAvatarImageView"
-        app:layout_constraintCircleAngle="135"
-        app:layout_constraintCircleRadius="20dp"
+        app:layout_constraintCircleAngle="0"
+        app:layout_constraintCircleRadius="0dp"
         tools:ignore="MissingConstraints"
-        tools:layout_constraintCircleRadius="8dp"
-        tools:layout_editor_absoluteX="17dp"
-        tools:layout_editor_absoluteY="365dp"
+        tools:layout_constraintCircleAngle="60"
+        tools:layout_constraintCircleRadius="18dp"
         tools:src="@drawable/ic_presence_offline"
-        tools:visibility="invisible" />
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/roomToolbarPublicImageView"
