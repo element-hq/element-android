@@ -15,6 +15,11 @@ jobs:
   debug:
     name: Build debug APKs (${{ matrix.target }})
     runs-on: ubuntu-latest
+    concurrency:
+      # When running on develop, use the sha to allow all runs of this workflow to run concurrently.
+      # Otherwise only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: ${{ github.ref == 'refs/heads/develop' && format('build-debug-develop-{0}', github.sha) || format('build-debug-{0}', github.ref) }}
+      cancel-in-progress: true
     if: github.ref != 'refs/heads/main'
     strategy:
       fail-fast: false
@@ -42,6 +47,11 @@ jobs:
   release:
     name: Build unsigned GPlay APKs
     runs-on: ubuntu-latest
+    concurrency:
+      # When running on develop, use the sha to allow all runs of this workflow to run concurrently.
+      # Otherwise only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: ${{ github.ref == 'refs/heads/develop' && format('build-release-develop-{0}', github.sha) || format('build-release-{0}', github.ref) }}
+      cancel-in-progress: true
     if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v2

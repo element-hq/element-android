@@ -15,6 +15,11 @@ jobs:
   unit-tests:
     name: Run Unit Tests
     runs-on: ubuntu-latest
+    concurrency:
+      # When running on develop, use the sha to allow all runs of this workflow to run concurrently.
+      # Otherwise only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: ${{ github.ref == 'refs/heads/develop' && format('test-unit-develop-{0}', github.sha) || format('test-unit-{0}', github.ref) }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2

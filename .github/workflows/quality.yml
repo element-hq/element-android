@@ -18,6 +18,11 @@ jobs:
   ktlint:
     name: Kotlin Linter
     runs-on: ubuntu-latest
+    concurrency:
+      # When running on develop, use the sha to allow all runs of this workflow to run concurrently.
+      # Otherwise only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: ${{ github.ref == 'refs/heads/develop' && format('ktlint-develop-{0}', github.sha) || format('ktlint-{0}', github.ref) }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
       - name: Run ktlint
@@ -87,6 +92,11 @@ jobs:
   android-lint:
     name: Android Linter
     runs-on: ubuntu-latest
+    concurrency:
+      # When running on develop, use the sha to allow all runs of this workflow to run concurrently.
+      # Otherwise only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: ${{ github.ref == 'refs/heads/develop' && format('android-lint-develop-{0}', github.sha) || format('android-lint-{0}', github.ref) }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -111,6 +121,11 @@ jobs:
   apk-lint:
     name: Lint APK (${{ matrix.target }})
     runs-on: ubuntu-latest
+    concurrency:
+      # When running on develop, use the sha to allow all runs of this workflow to run concurrently.
+      # Otherwise only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: ${{ github.ref == 'refs/heads/develop' && format('apk-lint-develop-{0}', github.sha) || format('apk-lint-{0}', github.ref) }}
+      cancel-in-progress: true
     if: github.ref != 'refs/heads/main'
     strategy:
       fail-fast: false
