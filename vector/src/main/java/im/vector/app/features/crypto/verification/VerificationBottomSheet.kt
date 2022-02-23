@@ -24,6 +24,7 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.CallSuper
 import androidx.fragment.app.Fragment
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -133,6 +134,7 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
         }
     }
 
+    @CallSuper
     override fun onCancel(dialog: DialogInterface) {
         viewModel.queryCancel()
         withState(viewModel) { state ->
@@ -365,14 +367,12 @@ class VerificationBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetV
     }
 
     private fun showCancelVerificationDialog(state: VerificationBottomSheetViewState) {
-        (activity as? VectorBaseActivity<*>)?.let { activity ->
-            VerificationCancelDialogFragment.newInstance(
-                    VerificationArgs(
-                            state.otherUserMxItem?.id ?: "",
-                            state.pendingRequest.invoke()?.transactionId ?: state.transactionId,
-                             userTrustLevel = RoomEncryptionTrustLevel.Trusted)
-            ).show(activity.supportFragmentManager, VerificationCancelDialogFragment::class.java.name)
-        }
+        VerificationCancelDialogFragment.newInstance(
+                VerificationArgs(
+                        state.otherUserMxItem?.id ?: "",
+                        state.pendingRequest.invoke()?.transactionId ?: state.transactionId,
+                        userTrustLevel = state.userTrustLevel)
+        ).show(vectorBaseActivity.supportFragmentManager, VerificationCancelDialogFragment::class.java.name)
     }
 
     companion object {

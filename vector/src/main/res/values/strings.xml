@@ -352,7 +352,7 @@
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">I don’t want my encrypted messages</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Backing up keys…</string>
     <string name="keys_backup_activate">Use Key Backup</string>
-    <string name="are_you_sure">Are you sure ?</string>
+    <string name="are_you_sure">Are you sure?</string>
     <string name="backup">Back up</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">You’ll lose access to your encrypted messages unless you back up your keys before signing out.</string>
     <string name="dialog_title_third_party_licences">Third party licences</string>
@@ -3022,8 +3022,8 @@
     <string name="verify_new_session_was_not_me">This wasn’t me</string>
     <string name="verify_new_session_compromized">Your account may be compromised</string>
 
-    <string name="verify_cancel_self_verification_from_untrusted">If you cancel, you won’t be able to read encrypted messages on this device, and other users won’t trust it</string>
-    <string name="verify_cancel_self_verification_from_trusted">If you cancel, you won’t be able to read encrypted messages on your new device, and other users won’t trust it</string>
+    <string name="verify_cancel_self_verification_from_untrusted">If you cancel, you won’t be able to read encrypted messages on this device, and other users won’t trust it.</string>
+    <string name="verify_cancel_self_verification_from_trusted">If you cancel, you won’t be able to read encrypted messages on your new device, and other users won’t trust it.</string>
     <string name="verify_cancel_other">You won’t verify %1$s (%2$s) if you cancel now. Start again in their user profile.</string>
 
     <string name="verify_not_me_self_verification">

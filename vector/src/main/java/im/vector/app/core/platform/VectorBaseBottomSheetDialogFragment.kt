@@ -110,6 +110,7 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
         resultListener?.onBottomSheetResult(bottomSheetResult, bottomSheetResultData)
     }
 
+    @CallSuper
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
         resultListener?.onBottomSheetResult(bottomSheetResult, bottomSheetResultData)

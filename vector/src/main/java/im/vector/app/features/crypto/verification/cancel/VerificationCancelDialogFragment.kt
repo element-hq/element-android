@@ -16,7 +16,9 @@
 
 package im.vector.app.features.crypto.verification.cancel
 
+import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -26,6 +28,7 @@ import im.vector.app.core.platform.VectorBaseDialogFragment
 import im.vector.app.databinding.DialogVerificationCancelBinding
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.home.AvatarRenderer
+import org.matrix.android.sdk.api.util.MatrixItem
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -52,37 +55,51 @@ class VerificationCancelDialogFragment : VectorBaseDialogFragment<DialogVerifica
         return DialogVerificationCancelBinding.inflate(inflater, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        handleSkipAction()
+    }
+
     override fun invalidate() = withState(viewModel) { state ->
         state.userMxItem?.let { matrixItem ->
 
             avatarRenderer.render(matrixItem, views.otherUserAvatarImageView)
             views.otherUserShield.render(state.userTrustLevel)
 
-            if (state.isMe) {
-                if (state.currentDeviceCanCrossSign) {
-                    views.dialogContent.text = getString(R.string.verify_cancel_self_verification_from_trusted)
-                } else {
-                    views.dialogContent.text = getString(R.string.verify_cancel_self_verification_from_untrusted)
-                }
-            } else {
-                views.dialogContent.text = getString(R.string.verify_cancel_other, matrixItem.displayName, matrixItem.id)
-            }
-
-            views.btnContinueAction.setOnClickListener {
-                VerificationBottomSheet.withArgs(
-                        roomId = state.roomId,
-                        otherUserId = state.otherUserId,
-                        transactionId = state.transactionId
-                ).show(parentFragmentManager, "REQ")
-                dismiss()
-            }
-
-            views.btnSkipAction.setOnClickListener {
-                viewModel.confirmCancel()
-                dismiss()
-            }
+            updateDialogContent(state, matrixItem)
+            handleContinueAction(state)
         }
 
         return@withState
+    }
+
+    private fun handleSkipAction() {
+        views.btnSkipAction.setOnClickListener {
+            viewModel.confirmCancel()
+            dismiss()
+        }
+    }
+
+    private fun handleContinueAction(state: VerificationCancelViewState) {
+        views.btnContinueAction.setOnClickListener {
+            VerificationBottomSheet.withArgs(
+                    roomId = state.roomId,
+                    otherUserId = state.otherUserId,
+                    transactionId = state.transactionId
+            ).show(parentFragmentManager, "REQ")
+            dismiss()
+        }
+    }
+
+    private fun updateDialogContent(state: VerificationCancelViewState, matrixItem: MatrixItem) {
+        if (state.isMe) {
+            if (state.currentDeviceCanCrossSign) {
+                views.dialogContent.text = getString(R.string.verify_cancel_self_verification_from_trusted)
+            } else {
+                views.dialogContent.text = getString(R.string.verify_cancel_self_verification_from_untrusted)
+            }
+        } else {
+            views.dialogContent.text = getString(R.string.verify_cancel_other, matrixItem.displayName, matrixItem.id)
+        }
     }
 }

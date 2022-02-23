@@ -142,16 +142,7 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                     it.deviceId != session.sessionParams.deviceId
                 }
 
-        val userTrustLevel = if (initialState.isMe) {
-            if (sasTx?.state == VerificationTxState.Verified ||
-                    qrTx?.state == VerificationTxState.Verified ||
-                    initialState.verifiedFromPrivateKeys) RoomEncryptionTrustLevel.Trusted
-            else RoomEncryptionTrustLevel.Warning
-        } else {
-            if (sasTx?.state == VerificationTxState.Verified || qrTx?.state == VerificationTxState.Verified) {
-                RoomEncryptionTrustLevel.Trusted
-            } else RoomEncryptionTrustLevel.Warning
-        }
+        val userTrustLevel = initTrustLevel(initialState, sasTx, qrTx)
 
         setState {
             copy(
@@ -177,6 +168,20 @@ class VerificationBottomSheetViewModel @AssistedInject constructor(
                             pr.transactionId ?: ""
                     )
         }
+    }
+
+    private fun initTrustLevel(initialState: VerificationBottomSheetViewState, sasTx: SasVerificationTransaction?, qrTx: QrCodeVerificationTransaction?): RoomEncryptionTrustLevel {
+        val userTrustLevel = if (initialState.isMe) {
+            if (sasTx?.state == VerificationTxState.Verified ||
+                    qrTx?.state == VerificationTxState.Verified ||
+                    initialState.verifiedFromPrivateKeys) RoomEncryptionTrustLevel.Trusted
+            else RoomEncryptionTrustLevel.Warning
+        } else {
+            if (sasTx?.state == VerificationTxState.Verified || qrTx?.state == VerificationTxState.Verified) {
+                RoomEncryptionTrustLevel.Trusted
+            } else RoomEncryptionTrustLevel.Warning
+        }
+        return userTrustLevel
     }
 
     override fun onCleared() {
