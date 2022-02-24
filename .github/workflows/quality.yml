@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     # Allow all jobs on main and develop. Just one per PR.
     concurrency:
-      group: ${{ github.ref == 'refs/heads/main' && format('klint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('klint-develop-{0}', github.sha) || format('klint-{0}', github.ref) }}
+      group: ${{ github.ref == 'refs/heads/main' && format('ktlint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('ktlint-develop-{0}', github.sha) || format('ktlint-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
