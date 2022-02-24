@@ -27,14 +27,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
-      - name: Cache pip
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip
-          restore-keys: |
-            ${{ runner.os }}-pip-
-            ${{ runner.os }}-
       - uses: actions/cache@v2
         with:
           path: |
@@ -45,9 +37,7 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Start synapse server
         run: |
-          python3 -m venv .synapse
-          source .synapse/bin/activate
-          pip install synapse matrix-synapse
+          pip install matrix-synapse
           curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh \
             | sed s/127.0.0.1/0.0.0.0/g | sed 's/http:\/\/localhost/http:\/\/10.0.2.2/g' | bash -s -- --no-rate-limit
       - uses: actions/setup-java@v2
