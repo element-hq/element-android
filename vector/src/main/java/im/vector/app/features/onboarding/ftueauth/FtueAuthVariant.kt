@@ -53,7 +53,6 @@ import im.vector.app.features.onboarding.OnboardingViewModel
 import im.vector.app.features.onboarding.OnboardingViewState
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragment
 import im.vector.app.features.onboarding.ftueauth.terms.FtueAuthTermsFragmentArgument
-import im.vector.lib.core.utils.extensions.doNothing
 import org.matrix.android.sdk.api.auth.registration.FlowResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -133,9 +132,7 @@ class FtueAuthVariant(
                 viewState.isLoading() || viewState.isAuthTaskCompleted()
             }
 
-    override fun setIsLoading(isLoading: Boolean) {
-        doNothing()
-    }
+    override fun setIsLoading(isLoading: Boolean) = Unit
 
     private fun handleOnboardingViewEvents(viewEvents: OnboardingViewEvents) {
         when (viewEvents) {
@@ -285,7 +282,7 @@ class FtueAuthVariant(
         // state.signMode could not be ready yet. So use value from the ViewEvent
         when (OnboardingViewEvents.signMode) {
             SignMode.Unknown            -> error("Sign mode has to be set before calling this method")
-            SignMode.SignUp             -> doNothing("This is managed by the OnboardingViewEvents")
+            SignMode.SignUp             -> Unit // This case is processed in handleOnboardingViewEvents
             SignMode.SignIn             -> handleSignInSelected(state)
             SignMode.SignInWithMatrixId -> handleSignInWithMatrixId(state)
         }.exhaustive
