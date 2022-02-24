@@ -50,5 +50,6 @@ class DebugPrivateSettingsFragment : VectorBaseFragment<FragmentDebugPrivateSett
 
     override fun invalidate() = withState(viewModel) {
         views.forceDialPadTabDisplay.isChecked = it.dialPadVisible
+        views.forceLoginFallback.isChecked = it.forceLoginFallback
     }
 }
