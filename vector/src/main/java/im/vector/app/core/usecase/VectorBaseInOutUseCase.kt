@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.media.domain.usecase
+package im.vector.app.core.usecase
 
-// TODO move into Core packages
-interface VectorInOutUseCase<T, R> {
+interface VectorBaseInOutUseCase<T, R> {
     suspend fun execute(input: T): Result<R>
 }
