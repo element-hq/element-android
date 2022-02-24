@@ -316,10 +316,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
 
     override fun onDownload() {
         // TODO
-        //  test snackbar error in OnCreate()
-        //  test write permission checking with Android 9
-        //  check if it is already possible to save from menu with long press on video
-        //  check if it works for video or other media type as well
         //  reorder action for a message according to issue requirements
         //  add unit tests for usecase? what is the used mock library?
         lifecycleScope.launch(Dispatchers.IO) {

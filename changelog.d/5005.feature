@@ -1,1 +1,1 @@
-Add possibility to save image in Gallery + reorder choices in message context menu
+Add possibility to save media from Gallery + reorder choices in message context menu
