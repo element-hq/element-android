@@ -129,7 +129,7 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
             // Check whether the task affinity matches with the package name
             if (!taskAffinity.isNullOrEmpty() && taskAffinity == context.packageName) {
                 // Check whether the activity is legitimate (declared in the manifest)
-                !activitiesInfo.any { it.name == activity.className }
+                activitiesInfo.none { it.name == activity.className }
             } else {
                 // The activity is considered safe when its task affinity doesn't correspond to the package name
                 false

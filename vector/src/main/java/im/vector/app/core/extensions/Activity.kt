@@ -116,6 +116,9 @@ fun AppCompatActivity.hideKeyboard() {
     currentFocus?.hideKeyboard()
 }
 
+/**
+ * The current activity must be the root of a task to call onBackPressed, otherwise finish activities with the same task affinity.
+ */
 fun AppCompatActivity.validateBackPressed(onBackPressed: () -> Unit) {
     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R && supportFragmentManager.backStackEntryCount == 0) {
         if (isTaskRoot) {
