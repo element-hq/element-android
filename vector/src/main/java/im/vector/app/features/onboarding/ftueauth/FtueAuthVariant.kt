@@ -76,6 +76,8 @@ class FtueAuthVariant(
     private val popEnterAnim = R.anim.no_anim
     private val popExitAnim = R.anim.exit_fade_out
 
+    private var isForceLoginFallbackEnabled = false
+
     private val topFragment: Fragment?
         get() = supportFragmentManager.findFragmentById(views.loginFragmentContainer.id)
 
@@ -225,7 +227,7 @@ class FtueAuthVariant(
     }
 
     private fun registrationShouldFallback(registrationFlowResult: OnboardingViewEvents.RegistrationFlowResult) =
-            vectorFeatures.isForceLoginFallbackEnabled() || registrationFlowResult.containsUnsupportedRegistrationFlow()
+            isForceLoginFallbackEnabled || registrationFlowResult.containsUnsupportedRegistrationFlow()
 
     private fun OnboardingViewEvents.RegistrationFlowResult.containsUnsupportedRegistrationFlow() =
             flowResult.missingStages.any { !it.isSupported() }
@@ -244,6 +246,8 @@ class FtueAuthVariant(
     }
 
     private fun updateWithState(viewState: OnboardingViewState) {
+        isForceLoginFallbackEnabled = viewState.isForceLoginFallbackEnabled
+
         views.loginLoading.isVisible = if (vectorFeatures.isOnboardingPersonalizeEnabled()) {
             viewState.isLoading()
         } else {
@@ -286,7 +290,7 @@ class FtueAuthVariant(
     }
 
     private fun handleSignInSelected(state: OnboardingViewState) {
-        if (vectorFeatures.isForceLoginFallbackEnabled()) {
+        if (isForceLoginFallbackEnabled) {
             onLoginModeNotSupported(state.loginModeSupportedTypes)
         } else {
             disambiguateLoginMode(state)
@@ -318,7 +322,7 @@ class FtueAuthVariant(
     }
 
     private fun handleSignInWithMatrixId(state: OnboardingViewState) {
-        if (vectorFeatures.isForceLoginFallbackEnabled()) {
+        if (isForceLoginFallbackEnabled) {
             onLoginModeNotSupported(state.loginModeSupportedTypes)
         } else {
             openAuthLoginFragmentWithTag(FRAGMENT_LOGIN_TAG)

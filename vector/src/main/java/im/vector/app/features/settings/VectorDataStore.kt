@@ -60,7 +60,6 @@ class VectorDataStore @Inject constructor(
         }
     }
 
-
     private val forceLoginFallback = booleanPreferencesKey("force_login_fallback")
 
     val forceLoginFallbackFlow: Flow<Boolean> = context.dataStore.data.map { preferences ->
