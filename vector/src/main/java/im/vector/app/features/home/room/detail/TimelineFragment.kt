@@ -2111,7 +2111,6 @@ class TimelineFragment @Inject constructor(
         }
     }
 
-    // TODO mutualize permission checking creating activity extension or delegation interface?
     private fun onSaveActionClicked(action: EventSharedAction.Save) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q &&
                 !checkPermissions(PERMISSIONS_FOR_WRITING_FILES, requireActivity(), saveActionActivityResultLauncher)) {

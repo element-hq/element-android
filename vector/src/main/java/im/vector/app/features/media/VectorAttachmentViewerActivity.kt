@@ -17,6 +17,7 @@ package im.vector.app.features.media
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
@@ -34,7 +35,13 @@ import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.intent.getMimeTypeFromUri
+import im.vector.app.core.platform.showOptimizedSnackbar
+import im.vector.app.core.utils.PERMISSIONS_FOR_WRITING_FILES
+import im.vector.app.core.utils.checkPermissions
+import im.vector.app.core.utils.onPermissionDeniedDialog
+import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.core.utils.shareMedia
 import im.vector.app.features.themes.ActivityOtherThemes
 import im.vector.app.features.themes.ThemeUtils
@@ -81,9 +88,20 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
      * ========================================================================================== */
 
     private val viewModel: VectorAttachmentViewerViewModel by viewModel()
+    private val errorFormatter by lazy(LazyThreadSafetyMode.NONE) { singletonEntryPoint().errorFormatter() }
     private var initialIndex = 0
     private var isAnimatingOut = false
     private var currentSourceProvider: BaseAttachmentProvider<*>? = null
+    private val downloadActionResultLauncher = registerForPermissionsResult { allGranted, deniedPermanently ->
+        if (allGranted) {
+            viewModel.pendingAction?.let {
+                viewModel.handle(it)
+            }
+        } else if (deniedPermanently) {
+            onPermissionDeniedDialog(R.string.denied_permission_generic)
+        }
+        viewModel.pendingAction = null
+    }
 
     /* ==========================================================================================
      * Lifecycle
@@ -254,13 +272,17 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
 
     private fun handleViewEvents(event: VectorAttachmentViewerViewEvents) {
         when (event) {
-            is VectorAttachmentViewerViewEvents.DownloadingMedia      -> Unit // TODO show loader?
-            is VectorAttachmentViewerViewEvents.ErrorDownloadingMedia -> {
-                // TODO show snackbar
-                Timber.e("failure saving file: ${event.error}")
-            }
+            is VectorAttachmentViewerViewEvents.ErrorDownloadingMedia -> showSnackBarError(event.error)
         }
     }
+
+    private fun showSnackBarError(error: Throwable) {
+        rootView.showOptimizedSnackbar(errorFormatter.toHumanReadable(error))
+    }
+
+    private fun hasWritePermission() =
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ||
+                    checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, downloadActionResultLauncher)
 
     /* ==========================================================================================
      * Specialization AttachmentInteractionListener
@@ -294,15 +316,23 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
 
     override fun onDownload() {
         // TODO
-        //  show message on error event: see TimelineFragment
-        //  check write file permissions: see TimelineFragment
-        //  should we check if media is saveable?
+        //  test snackbar error in OnCreate()
+        //  test write permission checking with Android 9
         //  check if it is already possible to save from menu with long press on video
         //  check if it works for video or other media type as well
+        //  reorder action for a message according to issue requirements
         //  add unit tests for usecase? what is the used mock library?
         lifecycleScope.launch(Dispatchers.IO) {
+            val hasWritePermission = withContext(Dispatchers.Main) {
+                hasWritePermission()
+            }
+
             val file = currentSourceProvider?.getFileForSharing(currentPosition) ?: return@launch
-            viewModel.handle(VectorAttachmentViewerAction.DownloadMedia(file))
+            if (hasWritePermission) {
+                viewModel.handle(VectorAttachmentViewerAction.DownloadMedia(file))
+            } else {
+                viewModel.pendingAction = VectorAttachmentViewerAction.DownloadMedia(file)
+            }
         }
     }
 

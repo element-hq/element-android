@@ -45,6 +45,12 @@ class VectorAttachmentViewerViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<VectorAttachmentViewerViewModel, VectorDummyViewState> by hiltMavericksViewModelFactory()
 
     /* ==========================================================================================
+     * Public Api
+     * ========================================================================================== */
+
+    var pendingAction: VectorAttachmentViewerAction? = null
+
+    /* ==========================================================================================
      * Specialization
      * ========================================================================================== */
 
@@ -60,9 +66,7 @@ class VectorAttachmentViewerViewModel @AssistedInject constructor(
 
     private fun handleDownloadAction(action: VectorAttachmentViewerAction.DownloadMedia) {
         viewModelScope.launch {
-            _viewEvents.post(VectorAttachmentViewerViewEvents.DownloadingMedia)
-
-            // Success event is handled via a notification inside use case
+            // Success event is handled via a notification inside the use case
             downloadMediaUseCase.execute(action.file)
                     .onFailure { _viewEvents.post(VectorAttachmentViewerViewEvents.ErrorDownloadingMedia(it)) }
         }
