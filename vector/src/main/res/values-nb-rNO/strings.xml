@@ -405,7 +405,7 @@
     <string name="room_settings_mention_only">Kun nevninger</string>
     <string name="settings_olm_version">olm-versjon</string>
     <string name="settings_deactivate_account_section">Deaktiver kontoen</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} samler inn anonyme statistikker for å hjelpe oss med å forbedre programmet.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} samler inn anonyme statistikker for å hjelpe oss med å forbedre programmet.</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="settings_integration_manager">Integreringsbehandler</string>
     <string name="room_settings_room_name">Rommets navn</string>
@@ -580,7 +580,7 @@
     <string name="user_directory_header">Brukerkatalog</string>
     <string name="matrix_only_filter">Bare matrix-kontakter</string>
     <string name="no_conversation_placeholder">Ingen samtaler</string>
-    <string name="template_no_contact_access_placeholder">Du ga ikke ${app_name} tilgang til dine lokale kontakter</string>
+    <string name="no_contact_access_placeholder">Du ga ikke ${app_name} tilgang til dine lokale kontakter</string>
     <string name="people_no_identity_server">Ingen identitetsserver konfigurert.</string>
     <string name="rooms_directory_header">Romkatalog</string>
     <string name="no_public_room_placeholder">Ingen offentlige rom tilgjengelig</string>
@@ -626,7 +626,7 @@
     <string name="call_failed_no_ice_title">Oppringing feilet som følge av feilkonfigurert tjener</string>
     <string name="call_failed_no_ice_use_alt">Prøv med %s</string>
     <string name="call_failed_dont_ask_again">Ikke spør meg igjen</string>
-    <string name="template_call_failed_no_connection">${app_name} samtale feilet</string>
+    <string name="call_failed_no_connection">${app_name} samtale feilet</string>
     <string name="call_select_sound_device">Velg lydenhet</string>
     <string name="sound_device_phone">Telefon</string>
     <string name="sound_device_speaker">Høytaler</string>
@@ -942,13 +942,13 @@
     <string name="settings_security_pin_code_summary">Hvis du vil tilbakestille PIN-koden, trykker du på Glemt PIN-kode for å logge av og tilbakestille.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Aktiver biometri</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Aktiver enhetsspesifikk biometri, som fingeravtrykk og ansiktsgjenkjenning.</string>
-    <string name="template_settings_security_pin_code_use_biometrics_summary_off">PIN-kode er den eneste måten å låse opp ${app_name}.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-kode er den eneste måten å låse opp ${app_name}.</string>
     <string name="settings_security_pin_code_notifications_title">Vis innhold i varsler</string>
     <string name="settings_security_pin_code_notifications_summary_on">Vis detaljer som romnavn og meldingsinnhold.</string>
     <string name="settings_security_pin_code_notifications_summary_off">Vis bare antall uleste meldinger i et enkelt varsel.</string>
     <string name="settings_security_pin_code_grace_period_title">Krev PIN etter 2 minutter</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">PIN-kode kreves etter 2 minutter uten bruk av ${app_name}.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_off">PIN-kode kreves hver gang du åpner ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">PIN-kode kreves etter 2 minutter uten bruk av ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">PIN-kode kreves hver gang du åpner ${app_name}.</string>
     <string name="settings_security_pin_code_change_pin_title">Endre PIN-kode</string>
     <string name="settings_security_pin_code_change_pin_summary">Endre din nåværende PIN-kode</string>
     <string name="auth_pin_confirm_to_disable_title">Bekreft PIN for å deaktivere PIN</string>
@@ -966,10 +966,10 @@
     <string name="settings_troubleshoot_test_push_notification_content">Du ser på varselet! Klikk på meg!</string>
     <string name="settings_troubleshoot_test_push_loop_failed">Kunne ikke motta push. Løsningen kan være å installere applikasjonen på nytt.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Legg til konto</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nDenne feilen er utenfor kontroll av ${app_name}. Det er ingen Google-konto på telefonen. Åpne kontoadministratoren og legg til en Google-konto.</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Fiks Play Services</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} bruker Google Play Services for å levere push-meldinger, men det ser ikke ut til å være konfigurert riktig:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} bruker Google Play Services for å levere push-meldinger, men det ser ikke ut til å være konfigurert riktig:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK er tilgjengelig og oppdatert.</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Sjekk innstillinger</string>
@@ -977,7 +977,7 @@
     <string name="settings_troubleshoot_test_bing_settings_failed">Noen varsler er deaktivert i dine tilpassede innstillinger.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Legg merke til at enkelte meldinger er satt til å være lydløse (gir et varsel uten lyd).</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Egendefinerte innstillinger.</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Varsler er ikke aktivert for denne økten.
+    <string name="settings_troubleshoot_test_device_settings_failed">Varsler er ikke aktivert for denne økten.
 \nKontroller ${app_name}innstillingene.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Varsler er aktivert for denne økten.</string>
     <string name="settings_troubleshoot_test_device_settings_title">Sesjonsinnstillinger.</string>
@@ -1002,7 +1002,7 @@
     <string name="settings_emails_empty">Ingen e-post er lagt til kontoen din</string>
     <string name="settings_emails">E-post adresser</string>
     <string name="settings_add_3pid_authentication_needed">Autentisering er påkrevd</string>
-    <string name="template_settings_add_3pid_flow_not_supported">Du kan ikke gjøre dette fra ${app_name} mobile</string>
+    <string name="settings_add_3pid_flow_not_supported">Du kan ikke gjøre dette fra ${app_name} mobile</string>
     <string name="settings_add_3pid_confirm_password_title">Bekreft passordet ditt</string>
     <string name="settings_app_info_link_summary">Vis applikasjonsinformasjonen i systeminnstillingene.</string>
     <string name="settings_app_info_link_title">App info</string>
@@ -1091,22 +1091,22 @@
     <string name="permissions_denied_add_contact">Tillat tillatelse til å få tilgang til kontaktene dine.</string>
     <string name="permissions_denied_qr_code">For å skanne en QR-kode, må du gi tilgang til kameraet.</string>
     <string name="permissions_action_not_performed_missing_permissions">Beklager. Handlingen ble ikke utført på grunn av manglende tillatelser</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} kan sjekke adresseboken din for å finne andre Matrix-brukere basert på e-post og telefonnummer.
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} kan sjekke adresseboken din for å finne andre Matrix-brukere basert på e-post og telefonnummer.
 \n
 \nEr du enig i å dele adresseboken for dette formålet\?</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} kan sjekke adresseboken din for å finne andre Matrix-brukere basert på e-post og telefonnummer. Hvis du godtar å dele adresseboken din for dette formålet, vennligst gi tilgang til neste popup.</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} trenger tillatelse for å få tilgang til kameraet og mikrofonen for å utføre videosamtaler.
+    <string name="permissions_rationale_msg_contacts">${app_name} kan sjekke adresseboken din for å finne andre Matrix-brukere basert på e-post og telefonnummer. Hvis du godtar å dele adresseboken din for dette formålet, vennligst gi tilgang til neste popup.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} trenger tillatelse for å få tilgang til kameraet og mikrofonen for å utføre videosamtaler.
 \n
 \nTillat tilgang til de neste popup-vinduene for å kunne ringe.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nTillat tilgang i neste popup for å kunne ringe."</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name} trenger tillatelse for å få tilgang til mikrofonen din for å utføre lydanrop.</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} trenger tillatelse for å få tilgang til mikrofonen din for å utføre lydanrop.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nTillat tilgang i neste popup for å kunne ringe."</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name} trenger tillatelse for å få tilgang til kameraet ditt for å ta bilder og videosamtaler.</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} trenger tillatelse for å få tilgang til bilde- og videobiblioteket ditt for å sende og lagre vedlegg.
+    <string name="permissions_rationale_msg_camera">${app_name} trenger tillatelse for å få tilgang til kameraet ditt for å ta bilder og videosamtaler.</string>
+    <string name="permissions_rationale_msg_storage">${app_name} trenger tillatelse for å få tilgang til bilde- og videobiblioteket ditt for å sende og lagre vedlegg.
 \n
 \nTillat tilgang i neste popup for å kunne sende filer fra telefonen din.</string>
     <string name="media_picker_cannot_record_video">Kan ikke ta opp video</string>
@@ -1128,7 +1128,7 @@
     <string name="settings_call_ringtone_title">Ringetone for innkommende samtaler</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Vil bruke %s som assistanse når hjemmeserveren din ikke tilbyr en (IP-adressen din blir delt under en samtale)</string>
     <string name="settings_call_ringtone_use_default_stun">Tillat reservehjelpsserver</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Bruk standard ${app_name}-ringetone for innkommende anrop</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Bruk standard ${app_name}-ringetone for innkommende anrop</string>
     <string name="settings_call_show_confirmation_dialog_summary">Be om bekreftelse før du starter en samtale</string>
     <string name="settings_call_show_confirmation_dialog_title">Forhindre utilsiktet samtale</string>
     <string name="room_info_room_topic">Romemne</string>
@@ -1138,7 +1138,7 @@
         <item quantity="other">%d medlemskapsendringer</item>
     </plurals>
     <string name="groups_list">Gruppeliste</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Start ${app_name} på en annen enhet som kan dekryptere meldingen, slik at den kan sende nøklene til denne økten.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Start ${app_name} på en annen enhet som kan dekryptere meldingen, slik at den kan sende nøklene til denne økten.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Forespørsel sendt</string>
     <string name="e2e_re_request_encryption_key_sent">Nøkkelforespørsel sendt.</string>
     <string name="login_error_ssl_peer_unverified">SSL Feil: Denne partnerns identitet har ikke blitt verifisert.</string>
@@ -1149,7 +1149,7 @@
     <string name="action_unpublish">Fjern publiseringen</string>
     <string name="action_add">Legg til</string>
     <string name="start_chatting">Begynn å chatte</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nDenne feilen er utenfor kontroll av ${app_name}, og ifølge Google indikerer denne feilen at enheten har for mange apper registrert hos FCM. Feilen oppstår bare i tilfeller der det er ekstremt mange apper, så det bør ikke påvirke gjennomsnittsbrukeren.</string>
     <string name="room_event_action_report_prompt_ignore_user">Vil du skjule alle meldinger fra denne brukeren\?
 \n
@@ -1337,7 +1337,7 @@
     <string name="soft_logout_clear_data_dialog_submit">Slett data</string>
     <string name="devices_other_devices">Andre økter</string>
     <string name="rageshake_detected">Riste oppdaget!</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} kan krasje oftere når en uventet feil oppstår</string>
+    <string name="settings_developer_mode_fail_fast_summary">${app_name} kan krasje oftere når en uventet feil oppstår</string>
     <string name="create_room_alias_hint">Romadresse</string>
     <string name="create_room_alias_already_in_use">Denne adressen er allerede i bruk</string>
     <string name="create_room_alias_empty">Oppgi romadresse</string>
@@ -1391,7 +1391,7 @@
     <string name="settings_account_data">Kontodata</string>
     <string name="share_confirm_room">Vil du sende dette vedlegget til %1$s\?</string>
     <string name="delete_event_dialog_reason_checkbox">Inkluder en grunn</string>
-    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="new_session">Ny pålogging. Var dette deg\?</string>
     <string name="new_session_review">Trykk for å se gjennom og bekrefte</string>
     <string name="verify_new_session_notice">Bruk denne økten til å bekrefte den nye, og gi den tilgang til krypterte meldinger.</string>
@@ -1430,7 +1430,7 @@
     <string name="upgrade_security">Krypteringsoppgradering tilgjengelig</string>
     <string name="security_prompt_text">Bekreft deg selv og andre for å sikre chattene dine</string>
     <string name="settings_security_prevent_screenshots_title">Forhindre skjermbilder av applikasjonen</string>
-    <string name="template_use_latest_app">Bruk det nyeste ${app_name} på de andre enhetene dine:</string>
+    <string name="use_latest_app">Bruk det nyeste ${app_name} på de andre enhetene dine:</string>
     <string name="bad_passphrase_key_reset_all_action">Har du glemt eller mistet alle gjenopprettingsalternativene\? Tilbakestill alt</string>
     <string name="secure_backup_reset_all">Tilbakestill alt</string>
     <string name="secure_backup_reset_all_no_other_devices">Gjør dette bare hvis du ikke har noen annen enhet du kan bekrefte denne enheten med.</string>
@@ -1446,7 +1446,7 @@
     <string name="error_empty_field_choose_user_name">Velg et brukernavn.</string>
     <string name="error_empty_field_choose_password">Velg passord.</string>
     <string name="add_people">Legg til personer</string>
-    <string name="template_invite_friends_rich_title">🔐️ Bli med meg på ${app_name}</string>
+    <string name="invite_friends_rich_title">🔐️ Bli med meg på ${app_name}</string>
     <string name="invitation_sent_to_one_user">Invitasjon sendt til %1$s</string>
     <string name="not_a_valid_qr_code">Det er ikke en gyldig QR-kode for matrix</string>
     <string name="invite_users_to_room_failure">Vi kunne ikke invitere brukere. Kontroller brukerne du vil invitere, og prøv på nytt.</string>
@@ -1456,7 +1456,7 @@
     <string name="user_code_info_text">Del denne koden med folk slik at de kan skanne den for å legge til deg og begynne å chatte.</string>
     <string name="choose_locale_loading_locales">Laster inn tilgjengelige språk…</string>
     <string name="identity_server_error_terms_not_signed">Godta først vilkårene for identitetsserveren i innstillingene.</string>
-    <string name="template_identity_server_error_bulk_sha256_not_supported">For ditt privatliv støtter ${app_name} bare sending av hash-bruker-e-post og telefonnummer.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">For ditt privatliv støtter ${app_name} bare sending av hash-bruker-e-post og telefonnummer.</string>
     <string name="power_level_edit_title">Sett rolle</string>
     <string name="a11y_open_chat">Åpne chat</string>
     <string name="add_from_phone_book">Legg til fra telefonboken min</string>
@@ -1473,10 +1473,10 @@
     <string name="call_transfer_title">Overfør</string>
     <string name="call_transfer_failure">Det oppstod en feil under overføring av samtalen</string>
     <string name="call_transfer_users_tab_title">Brukere</string>
-    <string name="template_re_authentication_default_confirm_text">${app_name} krever at du oppgir legitimasjonen din for å utføre denne handlingen.</string>
+    <string name="re_authentication_default_confirm_text">${app_name} krever at du oppgir legitimasjonen din for å utføre denne handlingen.</string>
     <string name="attachment_remaining_time_minutes">%1$dm %2$ds</string>
     <string name="startup_notification_fdroid_battery_optim_title">Bakgrunnsforbindelse</string>
-    <string name="template_startup_notification_privacy_message">${app_name} kan kjøre i bakgrunnen for å administrere varslene dine sikkert og privat. Dette kan påvirke batteriforbruket.</string>
+    <string name="startup_notification_privacy_message">${app_name} kan kjøre i bakgrunnen for å administrere varslene dine sikkert og privat. Dette kan påvirke batteriforbruket.</string>
     <string name="reset_secure_backup_warning">Dette vil erstatte din nåværende nøkkel eller frase.</string>
     <string name="reset_secure_backup_title">Generer en ny sikkerhetsnøkkel eller sett en ny sikkerhetsfrase for din eksisterende sikkerhetskopi.</string>
     <string name="settings_secure_backup_section_info">Beskytt deg mot å miste tilgang til krypterte meldinger og data ved å sikkerhetskopiere krypteringsnøkler på serveren din.</string>
@@ -1514,7 +1514,7 @@
     <string name="settings_notification_privacy_fcm">• Meldinger sendes via Firebase Cloud Messaging</string>
     <string name="settings_notification_privacy_need_permission">Appen trenger tillatelse for å kjøre i bakgrunnen</string>
     <string name="settings_troubleshoot_test_battery_failed">Hvis en bruker lar en enhet være frakoblet og stasjonær i en periode, mens skjermen er slått av, går enheten i Døsemodus. Dette forhindrer apper i å få tilgang til nettverket og avviser jobber, synkroniseringer og standardalarmer.</string>
-    <string name="template_settings_troubleshoot_test_battery_success">${app_name} påvirkes ikke av batterioptimalisering.</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name} påvirkes ikke av batterioptimalisering.</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">Meldingen er klikket!</string>
     <string name="settings_troubleshoot_test_notification_notice">Klikk på varselet. Hvis du ikke ser varselet, må du sjekke systeminnstillingene.</string>
     <string name="settings_troubleshoot_test_notification_title">Varslingsvisning</string>
@@ -1549,7 +1549,7 @@
     <string name="system_theme">System standard</string>
     <string name="search_banned_user_hint">Filtrer utestengte brukere</string>
     <string name="room_permissions_modify_widgets">Endre widgets</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">Aktiver analyse for å hjelpe med å forbedre ${app_name}.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Aktiver analyse for å hjelpe med å forbedre ${app_name}.</string>
     <string name="startup_notification_privacy_title">Varselpersonvern</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Inkluderer avatar- og visningsnavnendringer.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Vis kontohendelser</string>
@@ -1576,9 +1576,9 @@
     <string name="settings_set_sync_timeout">Tidsavbrudd for synkroniseringsforespørsel</string>
     <string name="settings_enable_background_sync">Aktiver bakgrunnssynkronisering</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Du vil ikke bli varslet om innkommende meldinger når appen er i bakgrunnen.</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} vil synkroniseres i bakgrunnen med jevne mellomrom på presis tid (konfigurerbar).
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} vil synkroniseres i bakgrunnen med jevne mellomrom på presis tid (konfigurerbar).
 \nDette vil påvirke radio og batteribruk, det vises en permanent melding om at ${app_name} lytter etter hendelser.</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} synkroniseres i bakgrunnen på en måte som bevarer enhetens begrensede ressurser (batteri).
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} synkroniseres i bakgrunnen på en måte som bevarer enhetens begrensede ressurser (batteri).
 \nAvhengig av enhetens ressurstilstand, kan synkroniseringen bli utsatt av operativsystemet.</string>
     <string name="settings_messages_in_group_chat">Msgs i gruppechatter</string>
     <string name="settings_containing_my_user_name">Msgs som inneholder brukernavnet mitt</string>

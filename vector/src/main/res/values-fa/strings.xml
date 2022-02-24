@@ -347,7 +347,7 @@
     <string name="local_address_book_header">دفترچه نشانی محلّی</string>
     <string name="user_directory_header">فهرست کاربران</string>
     <string name="matrix_only_filter">فقط آشنایان ماتریکس</string>
-    <string name="template_no_contact_access_placeholder">اجازهٔ دسترسی به آشنایان محلّیتان را به ${app_name} نداده‌اید</string>
+    <string name="no_contact_access_placeholder">اجازهٔ دسترسی به آشنایان محلّیتان را به ${app_name} نداده‌اید</string>
     <string name="no_result_placeholder">نتیجه‌ای نیست</string>
     <string name="rooms_directory_header">فهرست اتاق‌ها</string>
     <string name="no_room_placeholder">اتاقی نیست</string>
@@ -502,7 +502,7 @@
     <string name="e2e_re_request_encryption_key"><u>بازدرخواست کلیدهای رمزنگاری</u> از دیگر نشست‌هایتان.</string>
     <string name="e2e_re_request_encryption_key_sent">درخواست کلید ارسال شد.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">درخواست ارسال شد</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">لطفاً المنت را روی افزاره‌ای دیگر که می‌تواند پیام را رمزگشایی کند، اجرا کنید تا بتواند کلیدها را به این نشست بفرستد.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">لطفاً المنت را روی افزاره‌ای دیگر که می‌تواند پیام را رمزگشایی کند، اجرا کنید تا بتواند کلیدها را به این نشست بفرستد.</string>
     <string name="read_receipts_list">فهرست رسیدهای خواندن</string>
     <string name="keys_backup_setup_skip_title">آیا مطمئن هستید؟</string>
     <string name="action_disconnect">قطع اتصال</string>
@@ -541,7 +541,7 @@
     <string name="settings_app_info_link_title">اطّلاعات برنامه</string>
     <string name="settings_app_info_link_summary">نمایش اطّلاعات برنامه در تنظیمات سامانه.</string>
     <string name="settings_add_3pid_confirm_password_title">تأیید گذرواژه‌تان</string>
-    <string name="template_settings_add_3pid_flow_not_supported">نمی‌توانید با المنت همراه، این کار را بکنید</string>
+    <string name="settings_add_3pid_flow_not_supported">نمی‌توانید با المنت همراه، این کار را بکنید</string>
     <string name="settings_add_3pid_authentication_needed">نیاز به تأیید هویت است</string>
     <string name="settings_notification_advanced">تنظمیات پیش‌رفتهٔ آگاهی</string>
     <string name="settings_notification_troubleshoot">آگاهی‌های رفع‌اشکال</string>
@@ -552,7 +552,7 @@
     <string name="settings_troubleshoot_test_account_settings_failed">آگاهی‌ها برای حسابتان از کار افتاده‌اند.
 \nلطفاً تتظیمات حساب را بررسی کنید.</string>
     <string name="settings_troubleshoot_test_device_settings_success">آگاهی‌ها برای این نشست به کار افتاده‌اند.</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">آگاهی‌ها برای این نشست به کار نیفتاده‌اند.
+    <string name="settings_troubleshoot_test_device_settings_failed">آگاهی‌ها برای این نشست به کار نیفتاده‌اند.
 \nلطفاً تنظیمات المنت را بررسی کنید.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">برخی آگاهی‌ها در تنظیمات سفارشیتان از کار افتاده‌اند.</string>
     <string name="settings_troubleshoot_test_service_restart_title">شروع دوبارهٔ خودکار خدمت آگاهی</string>
@@ -683,7 +683,7 @@
     <string name="please_wait">لطفاً شکیبایی کنید…</string>
     <string name="group_all_communities">تمام اجتماع‌ها</string>
     <string name="room_preview_no_preview">این اتاق نمی‌تواند پیش‌نمایش یابد</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">پیش‌نمایش اتاق‌های قابل خواندن به صورت عمومی هنوز در ریوت‌اکس پشتیبانی نمی‌شود</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">پیش‌نمایش اتاق‌های قابل خواندن به صورت عمومی هنوز در ریوت‌اکس پشتیبانی نمی‌شود</string>
     <string name="fab_menu_create_room">اتاق‌ها</string>
     <string name="fab_menu_create_chat">پیام‌های مستقیم</string>
     <string name="create_room_title">اتاق جدید</string>
@@ -787,13 +787,13 @@
     <string name="login_error_not_json">شامل یک JSON معتبر نبود</string>
     <string name="login_error_limit_exceeded">درخواست‌های بیش از حد ارسال شده</string>
     <string name="login_error_login_email_not_yet">هنوز روی پیوند ایمیل کلیک نشده</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">استفاده از صدای زنگ پیش‌گزیدهٔ المنت برای تماس‌های ورودی</string>
+    <string name="settings_call_ringtone_use_app_ringtone">استفاده از صدای زنگ پیش‌گزیدهٔ المنت برای تماس‌های ورودی</string>
     <string name="settings_call_ringtone_title">صدای زنگ تماس ورودی</string>
     <string name="settings_call_ringtone_dialog_title">گزینش صدای زنگ برای تماس‌ها:</string>
     <string name="media_picker_both_capture_title">یک عکس یا ویدیو بگیر</string>
     <string name="media_picker_cannot_record_video">نمی‌توان ویدیو ظبط کرد</string>
     <string name="permissions_rationale_popup_title">اطلاعات</string>
-    <string name="template_permissions_rationale_msg_camera">المنت برای گرفتن عکس و تماس‌های ویدیویی نیاز به اجازه دارد.</string>
+    <string name="permissions_rationale_msg_camera">المنت برای گرفتن عکس و تماس‌های ویدیویی نیاز به اجازه دارد.</string>
     <string name="open_chat_header">گشودن سرایند</string>
     <string name="room_sync_in_progress">در حال هم‌گام‌سازی…</string>
     <string name="room_jump_to_first_unread">پرش به ناخوانده</string>
@@ -860,7 +860,7 @@
     <string name="call_notification_answer">پذیرش</string>
     <string name="call_notification_reject">رد</string>
     <string name="call_notification_hangup">قطع</string>
-    <string name="template_call_failed_no_connection">تماس المنت شکست خورد</string>
+    <string name="call_failed_no_connection">تماس المنت شکست خورد</string>
     <string name="call_select_sound_device">گزینش افزارهٔ صوتی</string>
     <string name="sound_device_phone">تلفن</string>
     <string name="sound_device_speaker">بلندگو</string>
@@ -961,14 +961,14 @@
     <string name="settings_troubleshoot_test_service_boot_success">خدمت هنگام شروع دوبارهٔ افزاره، شروع خواهد شد.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">به کار اندازی شروع هنگام راه‌اندازی</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">بررسی محدودیت‌های پس‌زمینه</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">محدودیت‌های پس‌زمینه برای المنت از کار افتاده‌اند. این آزمون باید با استفاده از دادهٔ همراه (بدون وای‌فای) اجرا شود.
+    <string name="settings_troubleshoot_test_bg_restricted_success">محدودیت‌های پس‌زمینه برای المنت از کار افتاده‌اند. این آزمون باید با استفاده از دادهٔ همراه (بدون وای‌فای) اجرا شود.
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">محدودیت‌های پس‌زمینه برای النت به کار افتاده‌اند.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">محدودیت‌های پس‌زمینه برای النت به کار افتاده‌اند.
 \nکارهایی که کاره می‌خواهد انجام دهد، هنگامی که در پس‌زمینه است به صورت تهاجمی محدود می‌شوند که می‌تواند روی آگاهی‌ها تأثیر بگذارد.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">از کار انداختن محدودیت‌ها</string>
     <string name="settings_troubleshoot_test_battery_title">بهینه‌سازی باتری</string>
-    <string name="template_settings_troubleshoot_test_battery_success">المنت تحت تأثیر بهینه‌سازی باتری نیست.</string>
+    <string name="settings_troubleshoot_test_battery_success">المنت تحت تأثیر بهینه‌سازی باتری نیست.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">نادیده‌گرفتن بهینه‌سازی</string>
     <string name="settings_notification_privacy_normal">عادی</string>
     <string name="settings_notification_privacy_reduced">محرمانگی کاهش‌یافته</string>
@@ -1336,7 +1336,7 @@
     <string name="devices_current_device">نشست جاری</string>
     <string name="autocomplete_limited_results">فقط نمایش نخستین نتایج. حرف‌های بیش‌تری بنویسید…</string>
     <string name="settings_developer_mode_fail_fast_title">شکست سریع</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">المنت ممکن است هنگام رخ دادن خطای نامنتظره،‌بیش‌تر فروبپاشد</string>
+    <string name="settings_developer_mode_fail_fast_summary">المنت ممکن است هنگام رخ دادن خطای نامنتظره،‌بیش‌تر فروبپاشد</string>
     <string name="create_room_encryption_title">به کار انداختن رمزنگاری</string>
     <string name="create_room_encryption_description">پس از به کار افتادن، رمزنگاری قابل از کار انداختن نیست.</string>
     <string name="verification_conclusion_warning">ورود نامطمئن</string>
@@ -1442,7 +1442,7 @@
     </plurals>
     <string name="delete_event_dialog_title">تأیید برداشت</string>
     <string name="delete_event_dialog_reason_checkbox">آوردن دلیل</string>
-    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="settings_key_requests">درخواست‌های کلید</string>
     <string name="e2e_use_keybackup">قفل‌گشایی از تاریخچهٔ پیام‌های رمزشده</string>
     <string name="refresh">نوسازی</string>
@@ -1476,9 +1476,9 @@
     <string name="settings_security_prevent_screenshots_title">جلوگیری از نماگرفت کاره</string>
     <string name="settings_security_prevent_screenshots_summary">به کار انداختن این انتخاب، FLAG_SECURE را به تمامی فعّالیت‌ها می‌افزاید. برای اثرگذاری تغییر، برنامه را دوباره شروع کنید.</string>
     <string name="media_file_added_to_gallery">پروندهٔ رسانه‌ای به جُنگ افزوده شد</string>
-    <string name="template_app_desktop_web">المنت وب
+    <string name="app_desktop_web">المنت وب
 \nالمنت میزکار</string>
-    <string name="template_app_ios_android">المنت آی‌اواس
+    <string name="app_ios_android">المنت آی‌اواس
 \nالمنت اندروید</string>
     <string name="use_recovery_key">استفاده از کلید بازیابی</string>
     <string name="encrypted_unverified">رمزشده به دست افزاره‌ای تأییدنشده</string>
@@ -1577,7 +1577,7 @@
     <string name="setup_cross_signing">به کار انداختن ورود چندگانه</string>
     <string name="enter_secret_storage_passphrase_or_key">برای ادامه از %1$s یا %2$sتان استفاده کنید.</string>
     <string name="command_description_discard_session_not_handled">پشتیبانی‌شده فقط در اتاق‌های رمزشده</string>
-    <string name="template_use_latest_app">از آخرین نگارش المنت روی دیگر افزاره‌تان استفاده کنید:</string>
+    <string name="use_latest_app">از آخرین نگارش المنت روی دیگر افزاره‌تان استفاده کنید:</string>
     <string name="or_other_mx_capable_client">یا دیگر کاره‌های ماتریکس دادای قابلیت ورود چندگانه</string>
     <string name="cross_signing_verify_by_text">تأیید دستی با متن</string>
     <string name="verify_this_session">تأیید ورود جدیدی که به حسابتان دسترسی دارد: %1$s</string>
@@ -1625,13 +1625,13 @@
     <string name="room_error_not_found">نمی‌توان این اتاق را یافت. مطمئن شوید وجود دارد.</string>
     <string name="error_opening_banned_room">نمی‌توان اتاقی را که از آن تحریم شده‌اید، گشود.</string>
     <string name="auth_pin_confirm_to_disable_title">برای از کار انداختن پین، تأییدش کنید</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_off">نیاز به رمز پین، هر بار که المنت را می‌گشایید.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">نیاز به رمز پین، ۲ دقیقه پس از استفاده نشدن از المنت.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">نیاز به رمز پین، هر بار که المنت را می‌گشایید.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">نیاز به رمز پین، ۲ دقیقه پس از استفاده نشدن از المنت.</string>
     <string name="settings_security_pin_code_grace_period_title">نیاز به پین پس از ۲ دقیقه</string>
     <string name="settings_security_pin_code_notifications_summary_off">فقط نمایش تعداد پیام‌های نخوانده در یک آگاهی ساده.</string>
     <string name="settings_security_pin_code_notifications_summary_on">نمایش جزییاتی چون نام اتاق‌ها و محتوای پیام.</string>
     <string name="settings_security_pin_code_notifications_title">نمایش محتوا در آگاهی‌ها</string>
-    <string name="template_settings_security_pin_code_use_biometrics_summary_off">کد پین، تنها راه قفل‌گشایی المنت است.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">کد پین، تنها راه قفل‌گشایی المنت است.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">به کار انداختن زیست‌سنجی‌های مختص افزاره، مانند اثرانگشت‌ها و تشخیص چهره.</string>
     <string name="settings_security_pin_code_use_biometrics_title">به کار انداختن زیست‌سنجی‌ها</string>
     <string name="settings_security_pin_code_summary">اگر می‌خواهید پینتان را بازنشانی کنید، فراموشی پین را برای خروج و بازنشانی بزنید.</string>
@@ -1665,7 +1665,7 @@
     <string name="action_reset">بازنشانی</string>
     <string name="startup_notification_privacy_button_other">انتخاب گزینه‌ی دیگر</string>
     <string name="startup_notification_privacy_button_grant">مجوز دادن</string>
-    <string name="template_startup_notification_privacy_message">المنت می تواند در پس‌زمینه اجرا شده تا آگاهی‌هایتان را به صورت ایمن و محرمانه مدیریت کند. ممکن است بر مصرف باتری تأثیر بگذارد.</string>
+    <string name="startup_notification_privacy_message">المنت می تواند در پس‌زمینه اجرا شده تا آگاهی‌هایتان را به صورت ایمن و محرمانه مدیریت کند. ممکن است بر مصرف باتری تأثیر بگذارد.</string>
     <string name="reset_secure_backup_warning">این کار کلید امنیتی قبلی شما را حذف می‌کند.</string>
     <string name="reset_secure_backup_title">یک کلید امنیتی جدید به صورت تصادفی ایجاد کنید یا یک عبارت امنیتی جدید برای فایل‌های پشتیبان موجود خود تنظیم کنید.</string>
     <string name="settings_send_message_with_enter_summary">دکمهٔ ورود صفحه‌کلید نرم، به جای افزودن یک شکست خط، پیام را خواهد فرستاد</string>
@@ -1679,9 +1679,9 @@
     <string name="settings_inline_url_preview_summary">پیش‌نمایشی از آدرس‌های URL در پیام‌ها نمایش داده شود.</string>
     <string name="settings_set_workmanager_delay_summary">%s
 \nبسته به شارژ دستگاه یا وضعیت دستگاه(خاموش بودن صفحه) ممکن است همگام‌سازی به تعویق بیوفتد.</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">المنت بصورت دوره‌ای و در بازه‌های قابل تنظیم در پس زمینه همگام‌سازی می شود.
+    <string name="settings_background_fdroid_sync_mode_real_time_description">المنت بصورت دوره‌ای و در بازه‌های قابل تنظیم در پس زمینه همگام‌سازی می شود.
 \nاین بر مصرف باتری شما تأثیر می‌گذارد، یک اعلان دائمی نمایش داده می‌شود که المنت برای رویدادها گوش می‌دهد.</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">المنت در پس زمینه همگام‌سازی می‌کند به گونه ای که منابع محدود دستگاه (باتری) حفظ می‌شود.
+    <string name="settings_background_fdroid_sync_mode_battery_description">المنت در پس زمینه همگام‌سازی می‌کند به گونه ای که منابع محدود دستگاه (باتری) حفظ می‌شود.
 \nبسته به شارژ گوشی شما، ممکن است همگام‌سازی توسط سیستم‌عامل به تعویق بیوفتد.</string>
     <string name="settings_turn_screen_on">روشن کردن صفحه برای ۳ ثانیه</string>
     <string name="settings_notification_privacy_message_content_not_shown">• آگاهی‌ها <b>محتوای پیام را نشان نخواهند داد</b></string>
@@ -1690,7 +1690,7 @@
     <string name="settings_notification_privacy_metadata">• آگاهی‌ها فقط دارای فراداده هستند</string>
     <string name="settings_notification_privacy_fcm">• آگاهی‌ها با پیام‌رسانی ابری Firebase فرستاده می‌شوند</string>
     <string name="settings_troubleshoot_test_battery_failed">اگر دستگاه برای مدتی از شارژر جدا باشد و از دستگاه نیز استفاده نشود، گوشی وارد حالت غیر هوشیار می‌شود. در این حالت از دسترسی برنامه‌ها به اینترنت جلوگیری می‌شود و همگام سازی و هشدارهای استاندارد آن‌ها به تعویق می‌افتد.</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">خدمت، هنگام شروع دوبارهٔ افزاره اجرا نخواهد شد. تا وقتی یک بار المنت باز نشود، آگاهی‌ها را دریافت نخواهید کرد.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">خدمت، هنگام شروع دوبارهٔ افزاره اجرا نخواهد شد. تا وقتی یک بار المنت باز نشود، آگاهی‌ها را دریافت نخواهید کرد.</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">روی آگاهی کلیک شد!</string>
     <string name="settings_troubleshoot_test_notification_notice">لطفاً روی آگاهی کلیک کنید. اگر آگاهی را نمی‌بینید، لطفاً تنظیمات سامانه را بررسی کنید.</string>
     <string name="settings_troubleshoot_test_notification_title">نمایش آگاهی</string>
@@ -1704,11 +1704,11 @@
     <string name="settings_troubleshoot_test_token_registration_success">ژتون FCM با موفقیت در کارساز خانگی ثبت شد.</string>
     <string name="settings_troubleshoot_test_token_registration_title">ثبت توکن</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">افزودن حساب کاربری</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nاین خطا خارج از مهار ${app_name} است. هیچ حساب گوگلی روی تلفن نیست. لطفاً مدیر حساب را گشوده و حساب گوگلی بیفزایید.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nاین خطا خارج از مهار ${app_name} است و ممکن است به دلایل مختلفی رخ داده باشد. ممکن است اگر بعداً دوباره تلاش کنید، کار کند. می‌توانید بررسی کنید که مصرف دادهٔ خدمات پلی گوگل در تنظیمات سامانه محدود نشده باشد یا ساعت افزاره‌تان درست باشد. همچنین ممکن است روی رام‌های سفارشی اتفاق بیفتد.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nاین خطا، خارج از مهار ${app_name} است و طبق گفتهٔ گوگل، نشانگر ثبت بیش‌از حد کاره‌ها در FCM است. خطا فقط در مواردی که تعداد خیلی زیادی کاره وجود داشته باشد رخ می‌دهد، پس کاربران معمولی نباید تحت تأثیر قرار گیرند.</string>
     <string name="settings_troubleshoot_test_fcm_failed">بازیابی توکن FCM با مشکل مواجه شد:
 \n%1$s</string>
@@ -1716,7 +1716,7 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_title">توکن Firebase</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">مشکل Google Play Services را برطرف کنید</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">المنت برای ارسال آگاهی‌ها از خدمات پلی گوگل استفاده می‌کند اما به نظر می‌رسد به درستی پیکربندی نشده است:
+    <string name="settings_troubleshoot_test_play_services_failed">المنت برای ارسال آگاهی‌ها از خدمات پلی گوگل استفاده می‌کند اما به نظر می‌رسد به درستی پیکربندی نشده است:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services در دسترس و بروز است.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">تنظیمات سفارشی بارگذاری نشد، لطفاً دوباره امتحان کنید.</string>
@@ -1771,21 +1771,21 @@
     <string name="room_preview_unlinked_email_warning">این دعوت به %s ارسال شده که ارتباطی با این حساب ندارد.
 \nممکن است بخواهید با حسابی دیگر وارد شده یا این رایانامه را به حسابتان بیفزایید.</string>
     <string name="permissions_action_not_performed_missing_permissions">متاسفانه به دلیل عدم دسترسی، درخواست شما امکان پذیر نمی باشد</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">المنت می‌تواند با دیدن دفترچه تلفن شما کاربرهای دیگر ماتریکس را بر اساس ایمبل و شماره تلفنشان پیدا کند.
+    <string name="permissions_msg_contacts_warning_other_androids">المنت می‌تواند با دیدن دفترچه تلفن شما کاربرهای دیگر ماتریکس را بر اساس ایمبل و شماره تلفنشان پیدا کند.
 \n
 \nآیا موافق با اشتراک‌گذاری دفترچه تلفنتان به این منظور هستید؟</string>
-    <string name="template_permissions_rationale_msg_contacts">المنت می‌تواند با دیدن دفترچه تلفن شما کاربرهای دیگر ماتریکس را بر اساس ایمبل و شماره تلفنشان پیدا کند. اگر مایل به اشتراک گذاری دفترچه تلفنتان به این منظور هستید لطفا در پنجره‌ی بعد اجازه‌ی این کار را بدهید.</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">المنت برای برقراری تماس تصویری نیازمند دسترسی به میکروفون و دوربین است.
+    <string name="permissions_rationale_msg_contacts">المنت می‌تواند با دیدن دفترچه تلفن شما کاربرهای دیگر ماتریکس را بر اساس ایمبل و شماره تلفنشان پیدا کند. اگر مایل به اشتراک گذاری دفترچه تلفنتان به این منظور هستید لطفا در پنجره‌ی بعد اجازه‌ی این کار را بدهید.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">المنت برای برقراری تماس تصویری نیازمند دسترسی به میکروفون و دوربین است.
 \n
 \nلطفا در پنجره های بعدی دسترسی های لازم را بدهید.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nلطفا برای برقراری تماس در پنجره بعدی دسترسی لازم را بدهید."</string>
-    <string name="template_permissions_rationale_msg_record_audio">المنت برای برقراری تماس صوتی نیازمند دسترسی به میکروفون است.</string>
+    <string name="permissions_rationale_msg_record_audio">المنت برای برقراری تماس صوتی نیازمند دسترسی به میکروفون است.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nلطفا برای برقراری تماس در پنجره بعدی دسترسی لازم را بدهید."</string>
-    <string name="template_permissions_rationale_msg_storage">المنت برای ارسال و ذخیره‌ی فایل‌ها نیاز به دسترسی به گالری شما را دارد.
+    <string name="permissions_rationale_msg_storage">المنت برای ارسال و ذخیره‌ی فایل‌ها نیاز به دسترسی به گالری شما را دارد.
 \n
 \nلطفا در پنجره‌ای که باز می‌شود این دسترسی را بدهید.</string>
     <string name="settings_call_ringtone_use_default_stun_sum">هنگامی که کارساز خانگیتان قابلیت تماس نداشته باشد، از %s استفاده خواهد شد (نشانی IPتان در طول تماس هم‌رسانی خواهد شد)</string>
@@ -1805,7 +1805,7 @@
     <string name="keys_backup_recovery_key_error_decrypt">نسخه پشتیبان با این کلید بازیابی رمزگشایی نمی‌شود: لطفاً تأیید کنید که کلید بازیابی درست را وارد کرده‌اید.</string>
     <string name="enter_secret_storage_input_key">کلید پشتیبان خود را انتخاب کنید، یا با تایپ کردن و یا کپی‌کردن، آن را وارد کنید</string>
     <string name="command_description_discard_session">نشست‌های خارجی را مجبور به ترک گروه می‌کند</string>
-    <string name="template_use_other_session_content_description">از آخرین نسخه‌ی المنت روی دستگاه‌های دیگرتان استفاده کنید: نسخه وب المنت، نسخه دسکتاپ المنت، نسخه IOS المنت و نسخه اندروید المنت</string>
+    <string name="use_other_session_content_description">از آخرین نسخه‌ی المنت روی دستگاه‌های دیگرتان استفاده کنید: نسخه وب المنت، نسخه دسکتاپ المنت، نسخه IOS المنت و نسخه اندروید المنت</string>
     <string name="change_password_summary">تنظیم گذرواژه جدید…</string>
     <string name="error_saving_media_file">فایل رسانه ذخیره نشد</string>
     <string name="error_adding_media_file_to_gallery">فایل به گالری افزوده نشد</string>
@@ -1887,9 +1887,9 @@
     <string name="command_description_rainbow">پیام را با رنگ‌بندی رنگین کمان ارسال می کند</string>
     <string name="verify_cannot_cross_sign">این نشست نمی‌تواند تائید را با نشست‌های دیگر شما به اشتراک بگذارد.
 \nتائید به صورت محلی ذخیره می‌شود و در نسخه‌ی بعدی برنامه به اشتراک گذاشته می‌شود.</string>
-    <string name="template_rendering_event_error_exception">المنت هنگام ارائه محتوای رویدادی با شناسه \'%1$s\' با مشکل روبرو شد</string>
-    <string name="template_rendering_event_error_type_of_message_not_handled">المنت پیام‌های \'%1$s\' را پشتیبانی نمی‌کند</string>
-    <string name="template_rendering_event_error_type_of_event_not_handled">المنت رویداد \'%1$s\' را پشتیبانی نمی‌کند</string>
+    <string name="rendering_event_error_exception">المنت هنگام ارائه محتوای رویدادی با شناسه \'%1$s\' با مشکل روبرو شد</string>
+    <string name="rendering_event_error_type_of_message_not_handled">المنت پیام‌های \'%1$s\' را پشتیبانی نمی‌کند</string>
+    <string name="rendering_event_error_type_of_event_not_handled">المنت رویداد \'%1$s\' را پشتیبانی نمی‌کند</string>
     <string name="verification_conclusion_compromised">ممکن است یکی از موارد زیر به خطر افتاده باشد:
 \n
 \n- سرور میزبان شما
@@ -1902,7 +1902,7 @@
     <string name="login_error_threepid_denied">دامنهٔ رایانامه‌تان مجاز به ثبت‌نام روی این کارساز نیست</string>
     <string name="command_description_shrug">¯\\\\_(ツ)_/¯ را به یک پیام متنی ساده تغییر می دهد</string>
     <string name="permalink_malformed">لینک مشکل دارد</string>
-    <string name="template_soft_logout_sso_not_same_user_error">نشست فعلی مربوط به کاربر %1$s است و شما اطلاعات حساب کاربر %2$s را ارائه داده‌اید. این مورد توسط المنت پشتیبانی نمی‌شود .
+    <string name="soft_logout_sso_not_same_user_error">نشست فعلی مربوط به کاربر %1$s است و شما اطلاعات حساب کاربر %2$s را ارائه داده‌اید. این مورد توسط المنت پشتیبانی نمی‌شود .
 \nلطفا ابتدا داده ها را پاک کنید، سپس با یک حساب دیگر وارد برنامه شوید.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">دسترسی به پیام‌های رمزشده را از دست خواهید داد مگر اینکه برای بازیابی کلیدهای رمزگذاری خود، به حساب خود وارد شوید.</string>
     <string name="soft_logout_clear_data_dialog_content">آیا تمامی اطلاعات ذخیره‌شده در این دستگاه پاک شود؟
@@ -1994,7 +1994,7 @@
     <string name="room_list_quick_actions_low_priority_remove">حذف‌کردن از اولویت پایین</string>
     <string name="room_list_quick_actions_low_priority_add">اضافه‌کردن به اولویت پایین</string>
     <string name="no_network_indicator">در حال حاضر اتصال شبکه‌ای وجود ندارد</string>
-    <string name="template_permissions_rationale_msg_keys_backup_export">المنت برای ذخیره کلیدهای رمزنگاری سرتاسر شما بر روی حافظه نیاز به مجوز دارد.
+    <string name="permissions_rationale_msg_keys_backup_export">المنت برای ذخیره کلیدهای رمزنگاری سرتاسر شما بر روی حافظه نیاز به مجوز دارد.
 \n
 \nلطفاً در پنجره بعدی اجازه دسترسی دهید تا بتوانید کلیدهای خود را به صورت دستی ذخیره کنید.</string>
     <string name="content_reported_as_inappropriate_content">این محتوا به عنوان محتوای نامناسب گزارش شده‌است.
@@ -2112,7 +2112,7 @@
     <string name="sas_verify_title">با مقایسه‌کردن یک رشته‌ی متنی کوتاه تایید کنید.</string>
     <string name="invalid_or_expired_credentials">به خاطر ورود منقضی یا نامعتبر، از حسابتان خارج شدید.</string>
     <string name="autodiscover_well_known_autofill_confirm">از پیکربندی استفاده کنید</string>
-    <string name="template_autodiscover_well_known_autofill_dialog_message">المنت یک پیکربندی اختصاصی سرور برای دامنه‌ی شناسه‌ی کاربری شما \"%1$s\" تشخیص داده است:
+    <string name="autodiscover_well_known_autofill_dialog_message">المنت یک پیکربندی اختصاصی سرور برای دامنه‌ی شناسه‌ی کاربری شما \"%1$s\" تشخیص داده است:
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_dialog_title">تکمیل خودکار گزینه‌های مربوط به سرور</string>
     <string name="keys_backup_info_title_signature">امضاء</string>
@@ -2189,7 +2189,7 @@
 \n
 \nبرای جلوگیری از گم کردن کلیدهایتان، از آن‌ها به صورت امن، پشتیبان بگیرید.</string>
     <string name="keys_backup_no_session_error">هیچ نشست ماتریکسی موجود نیست</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">اگر می خواهید المنت یک کلید بازیابی ایجاد کند، لطفاً عبارت عبور را حذف کنید.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">اگر می خواهید المنت یک کلید بازیابی ایجاد کند، لطفاً عبارت عبور را حذف کنید.</string>
     <string name="passphrase_passphrase_too_weak">عبارت عبور بیش از حد ضعیف است</string>
     <string name="passphrase_empty_error_message">لطفاً عبارت عبوری وارد کنید</string>
     <string name="passphrase_passphrase_does_not_match">عبارت عبور، مطابق نبود</string>
@@ -2329,10 +2329,10 @@
     <string name="settings_data_save_mode_summary">حالت صرفه‌جویی داده، پالایهٔ خاصی را اعمال می‌کند که در نتیجهٔ آن، به‌روزرسانی‌های حضور و آگاهی‌های نوشتن، پالوده می‌شوند.</string>
     <string name="settings_data_save_mode">حالت صرفه‌جویی در مصرف دیتا</string>
     <string name="settings_opt_in_of_analytics_ok">بله ، من می خواهم کمک کنم!</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">لطفاً برای کمک به ما در بهبود المنت، ارسال ناشناس تجزیه و تحلیل را فعال کنید.</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">المنت برای داشتن اعلان‌های قابل اعتماد نیاز به فعالیت در پس زمینه دارد.
+    <string name="settings_opt_in_of_analytics_prompt">لطفاً برای کمک به ما در بهبود المنت، ارسال ناشناس تجزیه و تحلیل را فعال کنید.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">المنت برای داشتن اعلان‌های قابل اعتماد نیاز به فعالیت در پس زمینه دارد.
 \nدر صفحه بعدی از شما خواسته می شود که المنت همیشه در پس زمینه اجرا شود ، لطفاً آن را بپذیرید.</string>
-    <string name="template_settings_opt_in_of_analytics_summary">المنت اطلاعاتی را جمع آوری می کند و با ارسال آنان به صورت ناشناس به ما امکان بهبود برنامه را می‌دهد.</string>
+    <string name="settings_opt_in_of_analytics_summary">المنت اطلاعاتی را جمع آوری می کند و با ارسال آنان به صورت ناشناس به ما امکان بهبود برنامه را می‌دهد.</string>
     <string name="settings_opt_in_of_analytics">ارسال داده های تجزیه و تحلیل</string>
     <string name="settings_analytics">تجزیه و تحلیل</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">مجوز دادن</string>
@@ -2347,7 +2347,7 @@
     <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">عبارت رمزی که فقط خودتان می‌دانید را وارد کرده و کلیدی برای پشتیبان تولید کنید.</string>
     <string name="identity_server_set_alternative_notice">به هنوتم جایگزین، می‌توانید نشامی هر کارساز هویت دیگری را وارد کنید</string>
     <string name="identity_server_set_default_notice">کارساز خانگیتان (%1$s) پیشنهاد استفاده از %2$s برای کارساز هویتتان را می‌دهد</string>
-    <string name="template_identity_server_error_bulk_sha256_not_supported">برای محرمانگیتان، المنت تنها از فرستادن شماره تلفن و رایانامه‌های کاربری در هم ریخته پشتیبانی می‌کند.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">برای محرمانگیتان، المنت تنها از فرستادن شماره تلفن و رایانامه‌های کاربری در هم ریخته پشتیبانی می‌کند.</string>
     <string name="identity_server_error_outdated_home_server">این عملیات ممکن نیست. کارساز خانگی منقضی شده است.</string>
     <string name="invite_users_to_room_failure">نتوانستیم کاربران را دعوت کنیم. لطفاً کاربرانی که می‌خواهید دعوت کنید را بررسی کرده و دوباره تلاش کنید.</string>
     <string name="create_room_dm_failure">نتوانستیم پیامتان را ایجاد کنیم. لطفاً کاربرانی که می‌خواهید دعوت کنید را بررسی کرده و دوباره تلاش کنید.</string>
@@ -2372,14 +2372,14 @@
     <string name="identity_server_user_consent_not_provided">رضایت کاربر فراهم نشده است.</string>
     <string name="identity_server_error_terms_not_signed">لطفاً نخست شرایط کارساز هویت را در تنظیمات بپذیرید.</string>
     <string name="identity_server_error_no_identity_server_configured">لطفاً نخست کارساز هویتی را پیکربندی کنید.</string>
-    <string name="template_identity_server_error_outdated_identity_server">کارساز هویت منقضی شده اسن. المنت تنها نگارش ۲ از API را پشتیبانی می‌کند.</string>
+    <string name="identity_server_error_outdated_identity_server">کارساز هویت منقضی شده اسن. المنت تنها نگارش ۲ از API را پشتیبانی می‌کند.</string>
     <string name="user_code_info_text">این رمز را افراد هم‌رسانی کرده تا بتوانند برای افزودنتان و شروع گپ، بپویندش.</string>
     <string name="user_code_my_code">رمزم</string>
     <string name="user_code_share">هم‌رسانی رمزم</string>
     <string name="user_code_scan">پویش یک رمز QR</string>
     <string name="not_a_valid_qr_code">این یک رمز QR ماتریکس معتبر نیست</string>
-    <string name="template_invite_friends_rich_title">🔐️ پیوستن به من روی المنت</string>
-    <string name="template_invite_friends_text">سلام. روی المنت باهام حرف بزن: %s</string>
+    <string name="invite_friends_rich_title">🔐️ پیوستن به من روی المنت</string>
+    <string name="invite_friends_text">سلام. روی المنت باهام حرف بزن: %s</string>
     <string name="invite_friends">دعوت دوستان</string>
     <string name="add_people">افزودن افراد</string>
     <string name="topic_prefix">"موضوع: "</string>
@@ -2500,7 +2500,7 @@
     <string name="default_message_emote_confetti">فرستادن کاغذ رنگی 🎉</string>
     <string name="default_message_emote_snow">فرستادن برف ❄️</string>
     <string name="authentication_error">تأیید هویت شکست خورد</string>
-    <string name="template_re_authentication_default_confirm_text">${app_name} برای انجام این کار، نیاز به ورود گذواژه‌‌تان دارد.</string>
+    <string name="re_authentication_default_confirm_text">${app_name} برای انجام این کار، نیاز به ورود گذواژه‌‌تان دارد.</string>
     <string name="re_authentication_activity_title">نیاز به تأیید هویت دوباره است</string>
     <string name="call_transfer_users_tab_title">کاربران</string>
     <string name="call_transfer_failure">هنگام انتقال تماس خطایی روی داد</string>
@@ -2858,7 +2858,7 @@
     <string name="settings_notification_other">دیگر</string>
     <string name="settings_notification_mentions_and_keywords">اشاره‌ها و کلیدواژگان</string>
     <string name="settings_notification_default">آگاهی‌های پیش‌گزیده</string>
-    <string name="template_link_this_email_with_your_account">%s در تنظیمات برای دریافت مستقیم دعوت‌ها در المنت.</string>
+    <string name="link_this_email_with_your_account">%s در تنظیمات برای دریافت مستقیم دعوت‌ها در المنت.</string>
     <string name="link_this_email_settings_link">این رایانامه را به حسابتان پیوند دهید</string>
     <string name="this_invite_to_this_space_was_sent">این دعوت به این فضا به %s فرستاده شده که با حسابتان در ارتباط نیست</string>
     <string name="this_invite_to_this_room_was_sent">این دعوت به این اتاق به %s فرستاده شده که با حسابتان در ارتباط نیست</string>
@@ -2995,7 +2995,7 @@
     <string name="identity_server_consent_dialog_content_question">با فرستادن این اطّلاعات موافقید؟</string>
     <string name="action_not_now">اکنون نه</string>
     <string name="identity_server_consent_dialog_content_3">برای کشف آشنایان موجود، لازم است اطلاعات آشنایان (رایانامه‌ها و شماره تلفن‌ها) را به کارساز هویتتان بفرستید. برای محرمانگیتان، داده‌هایتان را پیش از فرستادن، در هم می‌ریزیم.</string>
-    <string name="template_analytics_opt_in_content">با هم‌رسانی داده‌ّای استفادهٔ ناشناس، در تشخیص مشکل‌ها و بهبود المنت یاریمان کنید. برای درک چگونگی استفادهٔ مردم از چندین افزاره، شناسه‌ای کاتوره‌ای بین افزاره‌هایتان هم‌رسانی خواهیم کرد.
+    <string name="analytics_opt_in_content">با هم‌رسانی داده‌ّای استفادهٔ ناشناس، در تشخیص مشکل‌ها و بهبود المنت یاریمان کنید. برای درک چگونگی استفادهٔ مردم از چندین افزاره، شناسه‌ای کاتوره‌ای بین افزاره‌هایتان هم‌رسانی خواهیم کرد.
 \n
 \nمی‌توانید از %s قوانینمان را بخوانید.</string>
     <string name="delete_poll_dialog_content">مطمئنید که می خواهید این نظرسنجی را بردارید؟ پس از این کار، قادر به بازگردانیش نیستید.</string>
@@ -3025,7 +3025,7 @@
     </plurals>
     <string name="preference_system_settings">تنظیمات سامانه</string>
     <string name="preference_versions">نگارش‌ها</string>
-    <string name="template_preference_help_summary">کمک در استفاده از المنت</string>
+    <string name="preference_help_summary">کمک در استفاده از المنت</string>
     <string name="preference_help_title">کمک و پشتیانی</string>
     <string name="preference_help">کمک</string>
     <string name="preference_root_legals">موارد حقوقی</string>
@@ -3033,12 +3033,12 @@
     <string name="legals_third_party_notices">کتاب‌خانه‌های سوم شخص</string>
     <string name="legals_identity_server_title">سیاست کارساز هویتتان</string>
     <string name="legals_home_server_title">سیاست کارساز خانگیتان</string>
-    <string name="template_legals_application_title">سیاست ${app_name}</string>
+    <string name="legals_application_title">سیاست ${app_name}</string>
     <string name="analytics_opt_in_list_item_3">می‌توانید هر زمان، در تنظیمات خاموشش کنید</string>
     <string name="analytics_opt_in_list_item_2">ما اطّلاعات را با سوم‌شخص‌ها هم‌رسانی <b>نمی‌کنیم</b></string>
     <string name="analytics_opt_in_list_item_1">ما هیچ دادهٔ حسابی را ذخیره یا نمایه <b>نمی‌کنیم</b></string>
     <string name="analytics_opt_in_content_link">این‌جا</string>
-    <string name="template_analytics_opt_in_title">کمک به بهبود المنت</string>
+    <string name="analytics_opt_in_title">کمک به بهبود المنت</string>
     <string name="action_enable">به کار انداختن</string>
     <string name="restart_the_application_to_apply_changes">برای اثربخشی تغییر، برنامه را دوباره اجرا کنید.</string>
     <string name="labs_enable_latex_maths">به کار انداختن ریاضیات لاتک</string>
@@ -3075,8 +3075,8 @@
     <string name="attachment_type_location">مکان</string>
     <string name="labs_render_locations_in_timeline">پرداخت مکان‌های کاربری در خط زمانی</string>
     <string name="settings_enable_location_sharing_summary">پس از به کار افتادن، قادر خواهید بد مکانتان را به هر اتاقی بفرستید</string>
-    <string name="template_location_not_available_dialog_content">${app_name} نتوانست به مکانتان دست یابد. لطفاً بعداً دوباره تلاش کنید.</string>
-    <string name="template_location_not_available_dialog_title">${app_name} نتوانست به مکانتان دست یابد</string>
+    <string name="location_not_available_dialog_content">${app_name} نتوانست به مکانتان دست یابد. لطفاً بعداً دوباره تلاش کنید.</string>
+    <string name="location_not_available_dialog_title">${app_name} نتوانست به مکانتان دست یابد</string>
     <string name="closed_poll_option_description">نتایج تنها هنگامی که نظرسنجی را پایان دهید آشکار می‌شوند</string>
     <string name="open_poll_option_description">رأی دهندگان به محض دادن رأی، نتایج را می‌بینند</string>
     <string name="a11y_trust_level_misconfigured">سطح اطمنیان بد پیکربندی شده</string>

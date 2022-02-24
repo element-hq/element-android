@@ -173,7 +173,7 @@
     <string name="local_address_book_header">Lokale contactenlijst</string>
     <string name="matrix_only_filter">Alleen Matrix-contacten</string>
     <string name="no_conversation_placeholder">Geen gesprekken</string>
-    <string name="template_no_contact_access_placeholder">U heeft ${app_name} geen toegang tot uw lokale contacten gegeven</string>
+    <string name="no_contact_access_placeholder">U heeft ${app_name} geen toegang tot uw lokale contacten gegeven</string>
     <string name="no_result_placeholder">Geen resultaten</string>
     <string name="rooms_header">Gesprekken</string>
     <string name="rooms_directory_header">Gesprekscatalogus</string>
@@ -300,22 +300,22 @@
     <string name="media_picker_both_capture_title">Een afbeelding of video maken"</string>
     <string name="media_picker_cannot_record_video">Kan geen video opnemen"</string>
     <string name="permissions_rationale_popup_title">Informatie</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} heeft toegang nodig tot uw mediabestanden om bijlagen te verzenden en op te slaan.
+    <string name="permissions_rationale_msg_storage">${app_name} heeft toegang nodig tot uw mediabestanden om bijlagen te verzenden en op te slaan.
 \n
 \nVerleen toegang op de volgende pop-up om bestanden vanaf uw telefoon te sturen.</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name} heeft toegang nodig tot uw camera om foto’s en video-oproepen te maken.</string>
+    <string name="permissions_rationale_msg_camera">${app_name} heeft toegang nodig tot uw camera om foto’s en video-oproepen te maken.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nVerleen toegang op de volgende pop-up om de oproep te maken."</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name} heeft toegang nodig tot uw microfoon om spraakoproepen te maken.</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} heeft toegang nodig tot uw microfoon om spraakoproepen te maken.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nVerleen toegang op de volgende pop-up om de oproep te maken."</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} heeft toegang nodig tot uw camera en microfoon om video-oproepen te maken.
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} heeft toegang nodig tot uw camera en microfoon om video-oproepen te maken.
 \n
 \nVerleen toegang op de volgende pop-ups om de oproep te maken.</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} kan uw adresboek benaderen om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers. Als u het goed vindt om uw adresboek hiervoor te delen, verleen dan toegang op de volgende pop-up.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} kan uw adresboek gebruiken om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers.
+    <string name="permissions_rationale_msg_contacts">${app_name} kan uw adresboek benaderen om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers. Als u het goed vindt om uw adresboek hiervoor te delen, verleen dan toegang op de volgende pop-up.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} kan uw adresboek gebruiken om andere Matrix-gebruikers te vinden aan de hand van hun e-mailadressen en telefoonnummers.
 \n 
 \nWilt u uw adresboek hiervoor delen\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Sorry. De actie is niet toegepast vanwege ontbrekende rechten</string>
@@ -795,12 +795,12 @@
     <string name="settings_deactivate_account_section">Account deactiveren</string>
     <string name="settings_deactivate_my_account">Mijn account deactiveren</string>
     <string name="startup_notification_privacy_title">Meldingsprivacy</string>
-    <string name="template_startup_notification_privacy_message">${app_name} kan op de achtergrond werken om uw meldingen veilig en privé te beheren. Dit beïnvloedt mogelijk het accuverbruik.</string>
+    <string name="startup_notification_privacy_message">${app_name} kan op de achtergrond werken om uw meldingen veilig en privé te beheren. Dit beïnvloedt mogelijk het accuverbruik.</string>
     <string name="startup_notification_privacy_button_grant">Toestemming verlenen</string>
     <string name="startup_notification_privacy_button_other">Kies een andere optie</string>
     <string name="settings_opt_in_of_analytics">Statistische gegevens (analytics) versturen</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} verzamelt anonieme statistische gegevens (analytics) om het voor ons mogelijk te maken om de app te verbeteren.</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">Schakel statistische gegevens in om ons te helpen bij het verbeteren van ${app_name}.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} verzamelt anonieme statistische gegevens (analytics) om het voor ons mogelijk te maken om de app te verbeteren.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Schakel statistische gegevens in om ons te helpen bij het verbeteren van ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Ja, ik wil helpen!</string>
     <string name="widget_integration_missing_parameter">Er ontbreekt een vereiste parameter.</string>
     <string name="widget_integration_invalid_parameter">Er is een parameter ongeldig.</string>
@@ -821,7 +821,7 @@
     <string name="e2e_re_request_encryption_key">Beveiligingssleutels van uw sessies <u>opnieuw aanvragen</u>.</string>
     <string name="e2e_re_request_encryption_key_sent">Sleutelaanvraag verstuurd.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Aanvraag verstuurd</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Start ${app_name} op een ander apparaat dat het bericht kan ontsleutelen, zodat het de sleutels naar deze sessie kan sturen.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Start ${app_name} op een ander apparaat dat het bericht kan ontsleutelen, zodat het de sleutels naar deze sessie kan sturen.</string>
     <string name="lock_screen_hint">Typ hier…</string>
     <string name="action_clear">Wissen</string>
     <string name="option_send_voice">Spraakbericht versturen</string>
@@ -901,7 +901,7 @@
     <string name="action_accept">Aanvaarden</string>
     <string name="auth_accept_policies">Gelieve het beleid van deze thuisserver te lezen en aanvaarden:</string>
     <string name="settings_call_category">Oproepen</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Gebruik de standaardbeltoon van ${app_name} voor inkomende oproepen</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Gebruik de standaardbeltoon van ${app_name} voor inkomende oproepen</string>
     <string name="settings_call_ringtone_title">Beltoon voor inkomende oproepen</string>
     <string name="settings_call_ringtone_dialog_title">Selecteer beltoon voor oproepen:</string>
     <string name="room_participants_action_remove">Eruit sturen</string>
@@ -963,7 +963,7 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Inschakelen</string>
     <string name="settings_troubleshoot_test_device_settings_title">Sessie-instellingen.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Meldingen zijn ingeschakeld voor deze sessie.</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Meldingen zijn niet ingeschakeld voor deze sessie.
+    <string name="settings_troubleshoot_test_device_settings_failed">Meldingen zijn niet ingeschakeld voor deze sessie.
 \nGelieve de ${app_name}-instellingen te controleren.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Inschakelen</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Aangepaste instellingen.</string>
@@ -973,7 +973,7 @@
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Instellingen controleren</string>
     <string name="settings_troubleshoot_test_play_services_title">Play-diensten controleren</string>
     <string name="settings_troubleshoot_test_play_services_success">De APK van Google Play Services is beschikbaar en up-to-date.</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} maakt gebruikt van Google Play Services om pushberichten af te leveren, maar dit lijkt niet juist geconfigureerd te zijn:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} maakt gebruikt van Google Play Services om pushberichten af te leveren, maar dit lijkt niet juist geconfigureerd te zijn:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Play-diensten herstellen</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase-bewijs</string>
@@ -981,11 +981,11 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">Het FCM-bewijs is niet opgehaald:
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nDeze fout is onafhankelijk van ${app_name}. Volgens Google betekent deze fout dat het apparaat te veel apps heeft geregistreerd met FCM. De fout treedt enkel op ingeval er een enorm aantal apps is, dus zou dit de gemiddelde gebruiker niet mogen hinderen.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nDeze fout is onafhankelijk van ${app_name}. Ze kan verschillende oorzaken hebben. Misschien werkt het als u het later opnieuw probeert. U kunt ook controleren of het gegevensverbruik van Google Play Services niet wordt beperkt in de systeeminstellingen, of dat de klok van uw apparaat wel juist staat, of dat het misschien aan een aangepaste ROM ligt.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nDeze fout is onafhankelijk van ${app_name}. Er is geen Google-account verbonden met de telefoon. Open het accountbeheer en voeg er een Google-account toe.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Account toevoegen</string>
     <string name="settings_troubleshoot_test_token_registration_title">Bewijsregistratie</string>
@@ -997,17 +997,17 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Dienst is niet herstart</string>
     <string name="settings_troubleshoot_test_service_boot_title">Starten bij opstarten van apparaat</string>
     <string name="settings_troubleshoot_test_service_boot_success">De dienst zal starten wanneer het apparaat wordt herstart.</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">De dienst zal niet starten wanneer het apparaat wordt herstart en u zult geen meldingen ontvangen tot u ${app_name} hebt geopend.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">De dienst zal niet starten wanneer het apparaat wordt herstart en u zult geen meldingen ontvangen tot u ${app_name} hebt geopend.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Starten bij opstarten inschakelen</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Achtergrondbeperkingen controleren</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">Achtergrondbeperkingen zijn uitgeschakeld voor ${app_name}. Deze test dient uitgevoerd te worden met een mobiele verbinding (geen wifi).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Achtergrondbeperkingen zijn uitgeschakeld voor ${app_name}. Deze test dient uitgevoerd te worden met een mobiele verbinding (geen wifi).
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Achtergrondbeperkingen zijn ingeschakeld voor ${app_name}.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Achtergrondbeperkingen zijn ingeschakeld voor ${app_name}.
 \nAl wat de app probeert te doen zal in de achtergrond hevig beperkt worden; dit kan het correct functioneren van meldingen beïnvloeden.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Beperkingen uitschakelen</string>
     <string name="settings_troubleshoot_test_battery_title">Accuoptimalisatie</string>
-    <string name="template_settings_troubleshoot_test_battery_success">${app_name} wordt niet beperkt door accuoptimalisatie.</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name} wordt niet beperkt door accuoptimalisatie.</string>
     <string name="settings_troubleshoot_test_battery_failed">Als een gebruiker een apparaat los van de oplader een tijd laat stilliggen, met het scherm uitgeschakeld, gaat het apparaat in slaapmodus. Dit verhindert apps de toegang tot het netwerk, en stelt hun taken, synchronisaties en standaardalarmen uit.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Optimalisatie negeren</string>
     <string name="settings_notification_privacy_no_background_sync">De app heeft <b>geen</b> verbinding met de thuisserver nodig in de achtergrond, dit zou het gebruik van de batterij moeten verlagen</string>
@@ -1019,7 +1019,7 @@
     <string name="settings_send_message_with_enter">Berichten versturen met Enter</string>
     <string name="settings_send_message_with_enter_summary">De Enter-knop van het toetsenbord zal berichten versturen in plaats van een regeleinde in te voegen</string>
     <string name="startup_notification_fdroid_battery_optim_title">Achtergrondverbinding</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} heeft een achtergrondverbinding met lage impact nodig om betrouwbare meldingen te kunnen hebben.
+    <string name="startup_notification_fdroid_battery_optim_message">${app_name} heeft een achtergrondverbinding met lage impact nodig om betrouwbare meldingen te kunnen hebben.
 \nOp het volgende scherm zult u gevraagd worden om ${app_name} toestemming te verlenen om altijd in de achtergrond te kunnen draaien, gelieve deze toestemming te verlenen.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Toestemming verlenen</string>
     <string name="settings_data_save_mode_summary">Databesparingsmodus past een specifieke filter toe zodat aanwezigheidsupdates en typmeldingen weggefilterd worden.</string>
@@ -1079,7 +1079,7 @@
     <string name="passphrase_passphrase_does_not_match">Wachtwoorden komen niet overeen</string>
     <string name="passphrase_empty_error_message">Voer een wachtwoord in</string>
     <string name="passphrase_passphrase_too_weak">Wachtwoord is te zwak</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">Verwijder het wachtwoord als u wilt dat ${app_name} een herstelsleutel genereert.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Verwijder het wachtwoord als u wilt dat ${app_name} een herstelsleutel genereert.</string>
     <string name="keys_backup_no_session_error">Geen Matrix-sessie beschikbaar</string>
     <string name="keys_backup_setup_step1_title">Verlies nooit uw versleutelde berichten</string>
     <string name="keys_backup_setup_step1_description">Berichten in versleutelde gesprekken worden beveiligd met end-to-end-versleuteling. Enkel de ontvanger(s) en u hebben de sleutels om deze berichten te lezen.
@@ -1185,7 +1185,7 @@
     <string name="keys_backup_info_title_signature">Ondertekening</string>
     <string name="autodiscover_invalid_response">Ongeldig thuisserverontdekkingsantwoord</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Serveropties automatisch aanvullen</string>
-    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} heeft een aangepaste serverconfiguratie gedetecteerd voor uw gebruikers-ID-domein ‘%1$s’:
+    <string name="autodiscover_well_known_autofill_dialog_message">${app_name} heeft een aangepaste serverconfiguratie gedetecteerd voor uw gebruikers-ID-domein ‘%1$s’:
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Configuratie gebruiken</string>
     <string name="error_jitsi_not_supported_on_old_device">Sorry, vergadergesprekken met Jitsi worden nog niet ondersteund op oudere apparaten (met een Android-versie lager dan 6.0)</string>
@@ -1261,13 +1261,13 @@
     <string name="settings_call_ringtone_use_default_stun_sum">Zal %s gebruiken om te assisteren in het geval dat uw thuisserver er niet over beschikt (uw IP-adres zal tijdens een oproep gedeeld worden)</string>
     <string name="invite_no_identity_server_error">Voeg een identiteitsserver toe in de instellingen om dit te doen.</string>
     <string name="settings_add_3pid_confirm_password_title">Bevestig uw wachtwoord</string>
-    <string name="template_settings_add_3pid_flow_not_supported">U kunt dit niet doen vanaf de mobiele ${app_name}</string>
+    <string name="settings_add_3pid_flow_not_supported">U kunt dit niet doen vanaf de mobiele ${app_name}</string>
     <string name="settings_background_fdroid_sync_mode">Synchroniseren op de achtergrond</string>
     <string name="settings_background_fdroid_sync_mode_battery">Geoptimaliseerd voor batterij</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} zal op een batterijzuinige manier synchroniseren op de achtergrond.
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} zal op een batterijzuinige manier synchroniseren op de achtergrond.
 \nAfhankelijk van de staat van uw apparaat kan het besturingssysteem de synchronisatie uitstellen.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Geoptimaliseerd voor snelheid</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} zal periodiek op de achtergrond synchroniseren (configureerbaar).
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} zal periodiek op de achtergrond synchroniseren (configureerbaar).
 \nDit heeft een negatieve impact op uw batterij- en datagebruik. Er zal een melding getoond worden ter informatie.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Geen achtergrondssynchronisatie</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">U zal geen melding van berichten ontvangen als de app zich in de achtergrond bevindt.</string>
@@ -1350,7 +1350,7 @@
     <string name="please_wait">Even wachten…</string>
     <string name="group_all_communities">Alle Gemeenschappen</string>
     <string name="room_preview_no_preview">Dit gesprek kan niet worden voorvertoond</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">De voorvertoning van wereld-leesbare gesprekken zijn nog niet ondersteund in ${app_name}</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">De voorvertoning van wereld-leesbare gesprekken zijn nog niet ondersteund in ${app_name}</string>
     <string name="fab_menu_create_room">Gesprekken</string>
     <string name="fab_menu_create_chat">Directe Berichten</string>
     <string name="create_room_title">Nieuw Gesprek</string>
@@ -1892,7 +1892,7 @@
     <string name="call_select_sound_device">Geluidsapparaat Selecteren</string>
     <string name="call_failed_no_connection_description">Kan geen realtime verbinding tot stand brengen.
 \nVraag de beheerder van uw thuisserver om een TURN-server te configureren om gesprekken betrouwbaar te laten werken.</string>
-    <string name="template_call_failed_no_connection">${app_name} Oproep Mislukt</string>
+    <string name="call_failed_no_connection">${app_name} Oproep Mislukt</string>
     <string name="hs_client_url">Thuisserver API URL</string>
     <string name="send_bug_report_include_key_share_history">Sleutel deelverzoekgeschiedenis verzenden</string>
     <string name="settings_room_directory_show_all_rooms_summary">Alle gesprekken in de lijst tonen, waaronder gesprekken met expliciete inhoud.</string>
@@ -1976,7 +1976,7 @@
     <string name="room_list_quick_actions_favorite_add">Toevoegen aan favorieten</string>
     <string name="room_list_quick_actions_notifications_all_noisy">Alle berichten (luidruchtig)</string>
     <string name="no_network_indicator">Er is momenteel geen netwerkverbinding</string>
-    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} heeft toestemming nodig om uw E2E-sleutels op schijf op te slaan.
+    <string name="permissions_rationale_msg_keys_backup_export">${app_name} heeft toestemming nodig om uw E2E-sleutels op schijf op te slaan.
 \n
 \nGeef toegang in de volgende pop-up om uw sleutels handmatig te kunnen exporteren.</string>
     <string name="content_reported_as_inappropriate_content">Deze inhoud is als ongepast gerapporteerd.
@@ -2126,7 +2126,7 @@
     <string name="send_suggestion">Doe een suggestie</string>
     <string name="preference_system_settings">Systeem instellingen</string>
     <string name="preference_versions">Versies</string>
-    <string name="template_preference_help_summary">Hulp bij het gebruik van ${app_name}</string>
+    <string name="preference_help_summary">Hulp bij het gebruik van ${app_name}</string>
     <string name="preference_help_title">Hulp en ondersteuning</string>
     <string name="preference_help">Hulp</string>
     <string name="preference_root_legals">Juridisch</string>
@@ -2232,14 +2232,14 @@
     <string name="legals_no_policy_provided">Deze server biedt geen beleid.</string>
     <string name="legals_third_party_notices">Bibliotheken van derden</string>
     <string name="legals_identity_server_title">Uw identiteitsserverbeleid</string>
-    <string name="template_legals_application_title">${app_name} beleid</string>
+    <string name="legals_application_title">${app_name} beleid</string>
     <string name="analytics_opt_in_list_item_2">We delen <b>geen</b> informatie met derden</string>
     <string name="analytics_opt_in_list_item_1">We registreren of profileren <b>geen</b> accountgegevens</string>
     <string name="analytics_opt_in_content_link">hier</string>
-    <string name="template_analytics_opt_in_content">Help ons problemen te identificeren en ${app_name} te verbeteren door anonieme gebruiksgegevens te delen. Om inzicht te krijgen in hoe mensen meerdere apparaten gebruiken, genereren we een willekeurige identificatie die door uw apparaten wordt gedeeld.
+    <string name="analytics_opt_in_content">Help ons problemen te identificeren en ${app_name} te verbeteren door anonieme gebruiksgegevens te delen. Om inzicht te krijgen in hoe mensen meerdere apparaten gebruiken, genereren we een willekeurige identificatie die door uw apparaten wordt gedeeld.
 \n
 \nU kunt al onze voorwaarden %s lezen.</string>
-    <string name="template_analytics_opt_in_title">Help ${app_name} verbeteren</string>
+    <string name="analytics_opt_in_title">Help ${app_name} verbeteren</string>
     <string name="reset_secure_backup_warning">Dit zal uw huidige sleutel of zin vervangen.</string>
     <string name="reset_secure_backup_title">Genereer een nieuwe beveiligingssleutel of stel een nieuwe beveiligingszin in voor uw bestaande back-up.</string>
     <string name="settings_secure_backup_section_info">Bescherm uzelf tegen verlies van toegang tot versleutelde berichten en gegevens door een back-up te maken van versleutelingssleutels op uw server.</string>
@@ -2357,7 +2357,7 @@
     <string name="a11y_import_key_from_file">Sleutel importeren uit bestand</string>
     <string name="a11y_open_widget">Widgets openen</string>
     <string name="authentication_error">Authenticatie mislukt</string>
-    <string name="template_re_authentication_default_confirm_text">${app_name} vereist dat u uw inloggegevens invoert om deze actie uit te voeren.</string>
+    <string name="re_authentication_default_confirm_text">${app_name} vereist dat u uw inloggegevens invoert om deze actie uit te voeren.</string>
     <string name="re_authentication_activity_title">Opnieuw authenticatie nodig</string>
     <string name="call_slide_to_end_conference">Schuif om het gesprek te beëindigen</string>
     <string name="call_transfer_unknown_person">Onbekend persoon</string>
@@ -2416,13 +2416,13 @@
     <string name="auth_pin_confirm_to_disable_title">Bevestig pincode om pincode uit te schakelen</string>
     <string name="settings_security_pin_code_change_pin_summary">Wijzig uw huidige pincode</string>
     <string name="settings_security_pin_code_change_pin_title">Verander pincode</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_off">Elke keer dat u ${app_name} opent, is een pincode vereist.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">Pincode is vereist na 2 minuten ${app_name} niet te hebben gebruikt.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">Elke keer dat u ${app_name} opent, is een pincode vereist.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">Pincode is vereist na 2 minuten ${app_name} niet te hebben gebruikt.</string>
     <string name="settings_security_pin_code_grace_period_title">Pincode vereist na 2 minuten</string>
     <string name="settings_security_pin_code_notifications_summary_off">Geef alleen het aantal ongelezen berichten weer in een eenvoudige melding.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Toon details zoals kamernamen en berichtinhoud.</string>
     <string name="settings_security_pin_code_notifications_title">Inhoud in meldingen weergeven</string>
-    <string name="template_settings_security_pin_code_use_biometrics_summary_off">Pincode is de enige manier om ${app_name} te ontgrendelen.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">Pincode is de enige manier om ${app_name} te ontgrendelen.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Schakel apparaatspecifieke biometrische gegevens in, zoals vingerafdrukken en gezichtsherkenning.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Biometrische gegevens inschakelen</string>
     <string name="settings_security_pin_code_summary">Als u uw pincode opnieuw wilt instellen, tikt u op Pincode vergeten om uit te loggen en opnieuw in te stellen.</string>
@@ -2492,11 +2492,11 @@
     <string name="identity_server_user_consent_not_provided">De toestemming van de gebruiker is niet gegeven.</string>
     <string name="identity_server_error_no_current_binding_error">Er is geen huidige associatie met dit id.</string>
     <string name="identity_server_error_binding_error">De associatie heeft gefaald.</string>
-    <string name="template_identity_server_error_bulk_sha256_not_supported">Voor uw privacy ondersteunt ${app_name} alleen het verzenden van gehashte e-mailadressen en telefoonnummers van gebruikers.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Voor uw privacy ondersteunt ${app_name} alleen het verzenden van gehashte e-mailadressen en telefoonnummers van gebruikers.</string>
     <string name="identity_server_error_terms_not_signed">Accepteer eerst de voorwaarden van de identiteitsserver in de instellingen.</string>
     <string name="identity_server_error_no_identity_server_configured">Configureer eerst een identiteitsserver.</string>
     <string name="identity_server_error_outdated_home_server">Deze operatie is niet mogelijk. De thuisserver is verouderd.</string>
-    <string name="template_identity_server_error_outdated_identity_server">Deze identiteitsserver is verouderd. ${app_name} ondersteunt alleen API V2.</string>
+    <string name="identity_server_error_outdated_identity_server">Deze identiteitsserver is verouderd. ${app_name} ondersteunt alleen API V2.</string>
     <string name="disconnect_identity_server_dialog_content">Verbinding met identiteitsserver %s verbreken\?</string>
     <string name="open_terms_of">Open voorwaarden van %s</string>
     <string name="choose_locale_loading_locales">Beschikbare talen laden…</string>
@@ -2513,8 +2513,8 @@
     <string name="not_a_valid_qr_code">Het is geen geldige matrix QR-code</string>
     <string name="invitations_sent_to_two_users">Uitnodigingen verzonden naar %1$s en %2$s</string>
     <string name="invitation_sent_to_one_user">Uitnodiging verzonden naar %1$s</string>
-    <string name="template_invite_friends_rich_title">🔐️ Doe mee met ${app_name}</string>
-    <string name="template_invite_friends_text">Hé, praat met me op ${app_name}: %s</string>
+    <string name="invite_friends_rich_title">🔐️ Doe mee met ${app_name}</string>
+    <string name="invite_friends_text">Hé, praat met me op ${app_name}: %s</string>
     <string name="invite_friends">Nodig vrienden uit</string>
     <string name="add_people">Mensen toevoegen</string>
     <string name="create_room_dm_failure">We kunnen je DM niet maken. Controleer de gebruikers die u wilt uitnodigen en probeer het opnieuw.</string>
@@ -2553,13 +2553,13 @@
     <string name="enter_secret_storage_passphrase_or_key">Gebruik uw %1$s of gebruik uw %2$s om door te gaan.</string>
     <string name="command_description_discard_session_not_handled">Alleen ondersteund in versleutelde kamers</string>
     <string name="command_description_discard_session">Dwingt dat de huidige uitgaande groepssessie in een versleutelde kamer wordt weggegooid</string>
-    <string name="template_use_latest_app">Gebruik de nieuwste ${app_name} op uw andere apparaten:</string>
+    <string name="use_latest_app">Gebruik de nieuwste ${app_name} op uw andere apparaten:</string>
     <string name="or_other_mx_capable_client">of een andere Matrix client die kruislingsondetekenen ondersteunt</string>
-    <string name="template_app_ios_android">${app_name} iOS
+    <string name="app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="template_app_desktop_web">${app_name} Web
+    <string name="app_desktop_web">${app_name} Web
 \n${app_name} Desktop</string>
-    <string name="template_use_other_session_content_description">Gebruik de nieuwste ${app_name} op uw andere apparaten, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} voor Android of een andere Matrix-client die geschikt is voor kruislingsondertekenen</string>
+    <string name="use_other_session_content_description">Gebruik de nieuwste ${app_name} op uw andere apparaten, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} voor Android of een andere Matrix-client die geschikt is voor kruislingsondertekenen</string>
     <string name="change_password_summary">Stel een nieuw accountwachtwoord in…</string>
     <string name="error_saving_media_file">Kan mediabestand niet opslaan</string>
     <string name="error_adding_media_file_to_gallery">Kan geen mediabestand aan de Galerij toevoegen</string>
@@ -2654,7 +2654,7 @@
     <string name="new_session">Nieuwe login. Was u dit\?</string>
     <string name="e2e_use_keybackup">Ontgrendel de geschiedenis van versleutelde berichten</string>
     <string name="settings_export_trail">Exportcontrole</string>
-    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Sleutels zijn al up-to-date!</string>
     <string name="event_redacted_by_admin_reason_with_reason">Gebeurtenis gemodereerd door kamer beheerder, reden: %1$s</string>
     <string name="event_redacted_by_user_reason_with_reason">Gebeurtenis verwijderd door gebruiker, reden: %1$s</string>
@@ -2730,9 +2730,9 @@
     <string name="command_description_rainbow">Stuurt het gegeven bericht gekleurd als een regenboog</string>
     <string name="verify_cannot_cross_sign">Deze sessie kan deze verificatie niet delen met uw andere sessies.
 \nDe verificatie wordt lokaal opgeslagen en gedeeld in een toekomstige versie van de app.</string>
-    <string name="template_rendering_event_error_exception">${app_name} heeft een probleem ondervonden bij het weergeven van de inhoud van het gebeurtenis met id \'%1$s\'</string>
-    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} verwerkt geen bericht van het type \'%1$s\'</string>
-    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} verwerkt geen gebeurtenissen van het type \'%1$s\'</string>
+    <string name="rendering_event_error_exception">${app_name} heeft een probleem ondervonden bij het weergeven van de inhoud van het gebeurtenis met id \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">${app_name} verwerkt geen bericht van het type \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name} verwerkt geen gebeurtenissen van het type \'%1$s\'</string>
     <string name="room_member_jump_to_read_receipt">Ga naar ontvangstbewijs lezen</string>
     <string name="room_member_open_or_create_dm">Direct bericht</string>
     <string name="room_member_power_level_custom_in">Aangepast (%1$d) in %2$s</string>
@@ -2792,14 +2792,14 @@
     <string name="command_description_shrug">Voegt ¯\\_(ツ)_/¯ toe aan een bericht in platte tekst</string>
     <string name="settings_developer_mode_show_info_on_screen_summary">Toon wat nuttige informatie om te helpen bij het debuggen van de applicatie</string>
     <string name="settings_developer_mode_show_info_on_screen_title">Toon debug-informatie op het scherm</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} kan vaker crashen als er een onverwachte fout optreedt</string>
+    <string name="settings_developer_mode_fail_fast_summary">${app_name} kan vaker crashen als er een onverwachte fout optreedt</string>
     <string name="autocomplete_limited_results">Laat alleen de eerste resultaten zien, typ meer letters…</string>
     <string name="settings_rageshake_detection_threshold_summary">Schud je telefoon om de detectiedrempel te testen</string>
     <string name="settings_developer_mode_summary">De ontwikkelaarsmodus activeert verborgen functies en kan de applicatie ook minder stabiel maken. Alleen voor ontwikkelaars!</string>
     <string name="settings_show_devices_list">Bekijk al mijn sessies</string>
     <string name="bug_report_error_too_short">De beschrijving is te kort</string>
     <string name="permalink_malformed">Uw matrix.to link is onjuist opgemaakt</string>
-    <string name="template_soft_logout_sso_not_same_user_error">De huidige sessie is voor gebruiker %1$s en u geeft inloggegevens op voor gebruiker %2$s. Dit wordt niet ondersteund door ${app_name}.
+    <string name="soft_logout_sso_not_same_user_error">De huidige sessie is voor gebruiker %1$s en u geeft inloggegevens op voor gebruiker %2$s. Dit wordt niet ondersteund door ${app_name}.
 \nWis eerst de gegevens en meld u vervolgens opnieuw aan met een ander account.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">U raakt de toegang tot beveiligde berichten kwijt, tenzij u zich aanmeldt om uw versleutelingssleutels te herstellen.</string>
     <string name="soft_logout_clear_data_dialog_content">Alle gegevens wissen die momenteel op dit apparaat zijn opgeslagen\?
@@ -2934,7 +2934,7 @@
     <string name="create_poll_title">Poll maken</string>
     <string name="restart_the_application_to_apply_changes">Start de toepassing opnieuw om de wijziging door te voeren.</string>
     <string name="labs_enable_latex_maths">LaTeX wiskunde inschakelen</string>
-    <string name="template_link_this_email_with_your_account">%s in Instellingen om uitnodigingen rechtstreeks in ${app_name} te ontvangen.</string>
+    <string name="link_this_email_with_your_account">%s in Instellingen om uitnodigingen rechtstreeks in ${app_name} te ontvangen.</string>
     <string name="link_this_email_settings_link">Koppel deze e-mail aan uw account</string>
     <string name="this_invite_to_this_space_was_sent">Deze uitnodiging voor deze space is verzonden naar %s die niet is gekoppeld aan uw account</string>
     <string name="this_invite_to_this_room_was_sent">Deze uitnodiging voor deze kamer is verzonden naar %s die niet is gekoppeld aan uw account</string>
@@ -3061,8 +3061,8 @@
     <string name="settings_enable_location_sharing_summary">Eenmaal ingeschakeld, kun je je locatie naar elke kamer sturen</string>
     <string name="settings_enable_location_sharing">Locatie delen inschakelen</string>
     <string name="location_share_external">Open met</string>
-    <string name="template_location_not_available_dialog_content">${app_name} kan geen toegang krijgen tot uw locatie. Probeer het later opnieuw.</string>
-    <string name="template_location_not_available_dialog_title">${app_name} heeft geen toegang tot uw locatie</string>
+    <string name="location_not_available_dialog_content">${app_name} kan geen toegang krijgen tot uw locatie. Probeer het later opnieuw.</string>
+    <string name="location_not_available_dialog_title">${app_name} heeft geen toegang tot uw locatie</string>
     <string name="location_share">Deel locatie</string>
     <string name="a11y_location_share_icon">Deel locatie</string>
     <string name="location_activity_title_preview">Locatie</string>

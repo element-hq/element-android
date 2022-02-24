@@ -115,7 +115,7 @@
     <string name="user_directory_header">Brûkerskatalogus</string>
     <string name="matrix_only_filter">Allinnich Matrix-kontakten</string>
     <string name="no_conversation_placeholder">Gjin petearen</string>
-    <string name="template_no_contact_access_placeholder">Jo hawwe ${app_name} gjin tagong ta jo lokale kontakten jûn</string>
+    <string name="no_contact_access_placeholder">Jo hawwe ${app_name} gjin tagong ta jo lokale kontakten jûn</string>
     <string name="no_result_placeholder">Gjin resultaten</string>
     <string name="people_no_identity_server">Gjin identiteitsserver konfigurearre.</string>
     <string name="rooms_header">Petearen</string>
@@ -274,7 +274,7 @@
     <string name="room_preview_no_preview_join">Dizze keamer kin net yn it foar toand wurde. Wolle jo de keamer binnen gean\?</string>
     <string name="room_preview_not_found">Dizze keamer jout no gjin tagong.
 \nProbearje it letter nochris, of freegje in behearder om te sjen oft jo wol de nedige rjochten hawwe.</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">Ynsjoch yn wrâld-lésbere keamers wurdt noch net stipe troch ${app_name}</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Ynsjoch yn wrâld-lésbere keamers wurdt noch net stipe troch ${app_name}</string>
     <string name="room_preview_no_preview">Dizze keamer kin net yn it foar toand wurde</string>
     <string name="please_wait">Efkes wachtsje…</string>
     <string name="change_room_directory_network">Netwurk wizigje</string>
@@ -586,7 +586,7 @@
     <string name="keys_backup_setup_step1_advanced">(Avansearre)</string>
     <string name="keys_backup_setup_step1_title">Reitsje jo fersifere gegevens nea kwyt</string>
     <string name="keys_backup_no_session_error">Gjin Matrix-sesje beskikber</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">Graach de wachtwurdsin fuortsmite as jo wolle dat ${app_name} in nije werstelkaai foar jo oanmakket.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Graach de wachtwurdsin fuortsmite as jo wolle dat ${app_name} in nije werstelkaai foar jo oanmakket.</string>
     <string name="passphrase_empty_error_message">Graach in wachtwurdssin ynfiere</string>
     <string name="passphrase_passphrase_does_not_match">Wachtwurdsinnen komme net oerien</string>
     <string name="passphrase_enter_passphrase">Wachtwurdssin ynfiere</string>
@@ -1102,12 +1102,12 @@
     <string name="room_widget_permission_display_name">Jo werjeftenamme</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Befettet wizigingen yn avatar en werjeftenamme.</string>
     <string name="settings_show_room_member_state_events_summary">Befettet útnûging/meidwaan/ferlitten/fuortsmiten/ferballe-barrens en wizigingen avatar/werjeftenamme.</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} sil periodyk op de eftergrûn syngronisearje (konfigurearber).
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} sil periodyk op de eftergrûn syngronisearje (konfigurearber).
 \nDit hat in negative ynfloed op jo batterij- en datagebrûk. Der sil in melding toand wurde ta ynformaasje.</string>
     <string name="settings_messages_containing_display_name">Myn werjeftenamme</string>
     <string name="settings_containing_my_display_name">Berjochten dy’t myn werjeftenamme befetsje</string>
-    <string name="template_invite_friends_rich_title">🔐️ Doch mei my mei op ${app_name}</string>
-    <string name="template_invite_friends_text">Ah goeie, praat mei my op ${app_name}: %s</string>
+    <string name="invite_friends_rich_title">🔐️ Doch mei my mei op ${app_name}</string>
+    <string name="invite_friends_text">Ah goeie, praat mei my op ${app_name}: %s</string>
     <string name="invite_friends">Freonen útnûgje</string>
     <string name="room_settings_de_prioritize">Lege prioriteit</string>
     <string name="room_settings_favourite">Favoryt</string>
@@ -1176,7 +1176,7 @@
     <string name="settings_privacy_policy">Privacybelied</string>
     <string name="room_sliding_menu_privacy_policy">Privacybelied</string>
     <string name="create_spaces_default_public_random_room_name">Samar wat</string>
-    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="encryption_information_name">Iepenbiere namme</string>
     <string name="device_name_warning">De iepenbiere namme fan in sesje is sichtber foar minsken mei wa’t jo kommunisearje</string>
     <string name="encryption_information_device_name_with_warning">Iepenbiere namme (sichtber foar minsken mei wa’t jo kommunisearje)</string>
@@ -1187,7 +1187,7 @@
     <string name="settings_call_ringtone_title">Beltoan foar ynkommende oproppen</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Sil %s brûke om te assistearjen yn it gefal dat jo thússerver der net oer beskikt (jo IP-adres sil wylst in oprop dield wurde)</string>
     <string name="settings_call_ringtone_use_default_stun">Tebekfalopropassistinsjeserver tastean</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Brûk de standertbeltoan fan ${app_name} foar ynkommende oproppen</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Brûk de standertbeltoan fan ${app_name} foar ynkommende oproppen</string>
     <string name="settings_call_show_confirmation_dialog_summary">Befêstiging freegje foar it starten fan in oprop</string>
     <string name="settings_call_show_confirmation_dialog_title">Net bedoele oprop foarkomme</string>
     <string name="attachment_cancel_upload">Oplaad annulearje\?</string>
@@ -1217,7 +1217,7 @@
     <string name="call_select_sound_device">Lûdsapparaten selektearje</string>
     <string name="call_failed_no_connection_description">Live ferbining opsetten mislearre.
 \nFreegje de behearder fan jo thússerver om in TURN-server te konfigurearjen, sadat oproppen betrouber wurkje.</string>
-    <string name="template_call_failed_no_connection">${app_name} Oprop mislearre</string>
+    <string name="call_failed_no_connection">${app_name} Oprop mislearre</string>
     <string name="call_failed_no_ice_description">Freegje de behearder fan jo thússerver (%1$s) om in TURN-server te konfigurearjen om oproppen betrouber wurkje te litten.
 \n
 \nAs alternatyf kinne jo de publike server op %2$s brûke. Dit is minder betrouber en sil ek jo IP-addres diele mei dy server. Jo kinne dit ek konfigurearje yn de Ynstellingen.</string>
@@ -1269,22 +1269,22 @@
     <string name="permissions_denied_add_contact">Tagong jaan ta jo kontaktpersoanen.</string>
     <string name="permissions_denied_qr_code">Om de QR-koade te scannen moatte jo tagong ta de kamera jaan.</string>
     <string name="permissions_action_not_performed_missing_permissions">Sorry. De aksje is net tapast fanwegen ûntbrekkende rjochten</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} kin jo adresboek benaderje om oare Matrix-brûkers te finen oan de hân fan harren e-mailadressen en telefoannûmers.
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} kin jo adresboek benaderje om oare Matrix-brûkers te finen oan de hân fan harren e-mailadressen en telefoannûmers.
 \n
 \nWolle jo jo adresboek hjir foar diele\?</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} kin jo adresboek benaderje om oare Matrix-brûkers te finen oan de hân fan harren e-mailadressen en telefoannûmers. As jo it goed fine om jo adresboek hjirfoar te dielen, jou dan tagong op de folgjende pop-up.</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} hat tagong nedich ta jo kamera en mikrofoan om fideo-oproppen te meitsjen.
+    <string name="permissions_rationale_msg_contacts">${app_name} kin jo adresboek benaderje om oare Matrix-brûkers te finen oan de hân fan harren e-mailadressen en telefoannûmers. As jo it goed fine om jo adresboek hjirfoar te dielen, jou dan tagong op de folgjende pop-up.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} hat tagong nedich ta jo kamera en mikrofoan om fideo-oproppen te meitsjen.
 \n
 \nJou tagong op de folgjende pop-ups om de oprop te meitsjen.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nJou tagong op de folgjende pop-up om de oprop te meitsjen."</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name} hat tagong nedich ta jo mikrofoan om spraakoproppen te meitsjen.</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} hat tagong nedich ta jo mikrofoan om spraakoproppen te meitsjen.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nJou tagong op de folgjende pop-up om de oprop te meitsjen."</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name} hat tagong nedich ta jo kamera om foto’s en fideo-oproppen te meitsjen.</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} hat tagong nedich ta jo mediabestannen om bylagen te ferstjoeren en te bewarjen.
+    <string name="permissions_rationale_msg_camera">${app_name} hat tagong nedich ta jo kamera om foto’s en fideo-oproppen te meitsjen.</string>
+    <string name="permissions_rationale_msg_storage">${app_name} hat tagong nedich ta jo mediabestannen om bylagen te ferstjoeren en te bewarjen.
 \n
 \nJou tagong op de folgjende pop-up om bestannen fan jo telefoan ôf te stjoeren.</string>
     <string name="call_remove_jitsi_widget_progress">Oprop beëinigje…</string>
@@ -1318,7 +1318,7 @@
     <string name="call_ended">Oprop beëinige</string>
     <string name="call_ringing">Giet oer…</string>
     <string name="call_connecting">Oprop is oan it ferbinen…</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Start ${app_name} op in oar apparaat dat it berjocht ûntsiferje kin, sadat it de kaaien nei dizze sesje stjoere kin.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Start ${app_name} op in oar apparaat dat it berjocht ûntsiferje kin, sadat it de kaaien nei dizze sesje stjoere kin.</string>
     <string name="login_error_homeserver_from_url_not_found">Thússerver-URL %s net te berikken. Kontrolearje jo keppeling of kies hânmjittich in oare thússerver.</string>
     <string name="space_participants_ban_prompt_msg">Troch dizze brûker te ferballen, sil dy fuortsmiten wurde út dizze romte en foarkommen wurde dat dy opnij binnen komt.</string>
     <string name="room_participants_ban_prompt_msg">As in brûker ferballe wurdt, wurdt dizze út dizze keamer fuortsmiten en wurdt der foarkommen dat dy opnij lid wurdt.</string>
@@ -1383,7 +1383,7 @@
     <string name="settings_notification_mentions_and_keywords">Fermeldingen en kaaiwurden</string>
     <string name="settings_notification_by_event">Meldingsbelang op barren</string>
     <string name="settings_add_3pid_authentication_needed">Autentikaasje fereaske</string>
-    <string name="template_settings_add_3pid_flow_not_supported">Jo kinne dit net dwaan fan de mobile ${app_name} ôf</string>
+    <string name="settings_add_3pid_flow_not_supported">Jo kinne dit net dwaan fan de mobile ${app_name} ôf</string>
     <string name="room_sliding_menu_copyright">Copyright</string>
     <string name="room_sliding_menu_third_party_notices">Treddepartijfermeldingen</string>
     <string name="room_sliding_menu_term_and_conditions">Algemiene betingsten</string>

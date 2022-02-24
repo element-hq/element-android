@@ -341,7 +341,7 @@
     <string name="user_directory_header">Directorio de usuario</string>
     <string name="matrix_only_filter">Só contactos Matrix</string>
     <string name="no_conversation_placeholder">Sen conversas</string>
-    <string name="template_no_contact_access_placeholder">Non lle permitiches a ${app_name} acceder ós contactos locais</string>
+    <string name="no_contact_access_placeholder">Non lle permitiches a ${app_name} acceder ós contactos locais</string>
     <string name="no_result_placeholder">Sen resultados</string>
     <string name="rooms_header">Salas</string>
     <string name="rooms_directory_header">Directorio de salas</string>
@@ -520,7 +520,7 @@
     <string name="settings_deactivate_my_account">Desactivar a miña conta</string>
     <string name="settings_analytics">Analytics</string>
     <string name="settings_opt_in_of_analytics">Enviar datos de análises</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} recolle información analítica anónima para permitirnos mellorar o aplicativo.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} recolle información analítica anónima para permitirnos mellorar o aplicativo.</string>
     <string name="settings_opt_in_of_analytics_ok">Si, quero axudar!</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Nome</string>
@@ -715,7 +715,7 @@
     <string name="login_error_login_email_not_yet">Unha ligazón de correo na que aínda non se premeu</string>
     <string name="e2e_re_request_encryption_key"><u>Volver a pedir as chaves de cifrado</u> do outro dispositivo seu.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Petición enviada</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Inicie ${app_name} noutro dispositivo que poida descifrar esta mensaxe e que despois desde alí lle poida enviar as chaves a este dispositivo.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Inicie ${app_name} noutro dispositivo que poida descifrar esta mensaxe e que despois desde alí lle poida enviar as chaves a este dispositivo.</string>
     <plurals name="membership_changes">
         <item quantity="one">1 cambio de participantes</item>
         <item quantity="other">%d cambios de participantes</item>
@@ -798,7 +798,7 @@
     <string name="settings_notifications_targets">Obxectivos das notificacións</string>
     <string name="settings_deactivate_account_section">Desactivar conta</string>
     <string name="startup_notification_privacy_title">Segredo das notificacións</string>
-    <string name="template_startup_notification_privacy_message">${app_name} pode estar agochado e seguir traballando na xestión das notificacións dun xeito seguro e privado (inda que iso podería afectar ao uso da batería).</string>
+    <string name="startup_notification_privacy_message">${app_name} pode estar agochado e seguir traballando na xestión das notificacións dun xeito seguro e privado (inda que iso podería afectar ao uso da batería).</string>
     <string name="startup_notification_privacy_button_grant">Outorgar permisos</string>
     <string name="startup_notification_privacy_button_other">Escolla outra opción</string>
     <string name="settings_logged_in">Accedeuse como</string>

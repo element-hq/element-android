@@ -628,7 +628,7 @@
     <string name="room_settings_addresses_invalid_format_dialog_title">Ógilt snið samnefnis</string>
     <string name="directory_server_fail_to_retrieve_server">Netþjónninn gæti verið undir miklu álagi eða ekki til taks</string>
     <string name="missing_permissions_warning">Þar sem ýmsar heimildir vantar, eru sumir eiginleikar ekki tiltækir…</string>
-    <string name="template_no_contact_access_placeholder">Þú heimilaðir ${app_name} ekki aðgang að tengiliðum á tækinu</string>
+    <string name="no_contact_access_placeholder">Þú heimilaðir ${app_name} ekki aðgang að tengiliðum á tækinu</string>
     <string name="send_bug_report_rage_shake">Hristu ákveðið til að senda villutilkynningu</string>
     <string name="send_bug_report_sent">Það tókst að senda villuskýrsluna</string>
     <string name="send_bug_report_failed">Mistókst að senda villuskýrsluna (%s)</string>
@@ -646,7 +646,7 @@
     <string name="room_unknown_devices_messages_notification">Skilaboð ekki send vegna þess að vart var við óþekkt tæki. %1$s eða %2$s núna?</string>
     <string name="settings_set_sync_delay">Hlé milli tveggja samstillingarbeiðna</string>
     <string name="settings_keep_media">Halda gögnum</string>
-    <string name="template_startup_notification_privacy_message">${app_name} getur keyrt í bakgrunni og stýrt tilkynningum á öruggan hátt (getur haft áhrif á rafhlöðunotkun).</string>
+    <string name="startup_notification_privacy_message">${app_name} getur keyrt í bakgrunni og stýrt tilkynningum á öruggan hátt (getur haft áhrif á rafhlöðunotkun).</string>
     <string name="account_email_validation_message">Skoðaðu tölvupóstinn þinn og smelltu á tengilinn sem hann inniheldur. Þegar því er lokið skaltu smella á að halda áfram.</string>
     <string name="account_email_validation_error">Tókst ekki að sannreyna tölvupóstfang. Skoðaðu tölvupóstinn þinn og smelltu á tengilinn sem hann inniheldur. Þegar því er lokið skaltu smella á að halda áfram.</string>
     <string name="room_settings_room_access_entry_only_invited">Aðeins fólk sem hefur verið boðið</string>
@@ -672,24 +672,24 @@
 \nÞú hefur verið skráður út af öllum tækjum og munt ekki lengur fá ýti-tilkynningar. Til að endurvirkja tilkynningar, þarf að skrá sig aftur inn á hverju tæki fyrir sig.</string>
     <string name="login_error_unknown_token">Tiltekið aðgangsteikn þekktist ekki</string>
     <string name="call_error_user_not_responding">Ekki var svarað á fjartengda endanum.</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} þarf heimild til að nota mynda- og myndskeiðasafn svo hægt sé að senda og vista viðhengi.
+    <string name="permissions_rationale_msg_storage">${app_name} þarf heimild til að nota mynda- og myndskeiðasafn svo hægt sé að senda og vista viðhengi.
 \n
 \nLeyfðu aðgang í næsta sprettglugga til þess að geta sent skrár úr símanum.</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name} þarf heimild til að nota myndavélina svo hægt sé að taka myndir og hringja myndsímtöl.</string>
+    <string name="permissions_rationale_msg_camera">${app_name} þarf heimild til að nota myndavélina svo hægt sé að taka myndir og hringja myndsímtöl.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nLeyfðu aðgang í næsta sprettglugga til þess að geta hringt."</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name} þarf heimild til að nota hljóðnemann svo hægt sé að hringja hljóðsímtöl.</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} þarf heimild til að nota hljóðnemann svo hægt sé að hringja hljóðsímtöl.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nLeyfðu aðgang í næsta sprettglugga til þess að geta hringt."</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} þarf heimild til að nota myndavélina og hljóðnemann svo hægt sé að hringja myndsímtöl.
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} þarf heimild til að nota myndavélina og hljóðnemann svo hægt sé að hringja myndsímtöl.
 \n
 \nLeyfðu aðgang í næstu sprettgluggum til þess að geta hringt.</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} þarf heimild til að nota tengiliði í nafnaskránni svo hægt sé að finna aðra Matrix-notendur eftir tölvupóstföngum og símanúmerum þeirra.
+    <string name="permissions_rationale_msg_contacts">${app_name} þarf heimild til að nota tengiliði í nafnaskránni svo hægt sé að finna aðra Matrix-notendur eftir tölvupóstföngum og símanúmerum þeirra.
 
 Leyfðu aðgang í næsta sprettglugga til þess að finna þá notendur í nafnaskránni sem hægt er að hafa samband við úr ${app_name}.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} þarf heimild til að nota tengiliði í nafnaskránni svo hægt sé að finna aðra Matrix-notendur eftir tölvupóstföngum og símanúmerum þeirra.
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} þarf heimild til að nota tengiliði í nafnaskránni svo hægt sé að finna aðra Matrix-notendur eftir tölvupóstföngum og símanúmerum þeirra.
 \n
 \nLeyfa ${app_name} að nota tengiliðina\?</string>
     <string name="settings_deactivate_account_section">Gera notandaaðgang óvirkann</string>
@@ -713,8 +713,8 @@ Leyfðu aðgang í næsta sprettglugga til þess að finna þá notendur í nafn
     <string name="option_send_sticker">Senda límmerki</string>
     <string name="login_error_login_email_not_yet">Tölvupósttengill sem ekki er enn búið að smella á</string>
     <string name="malformed_id">Rangt formað auðkenni. Ætti að vera tölvupóstfang eða Matrix-auðkenni á borð við\'@sérheiti:lén\'</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} safnar nafnlausum greiningargögnum til að gera okkur kleift að bæta forritið.</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">Endilega virkjaðu greiningargögn til að hjálpa okkur að bæta ${app_name}.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} safnar nafnlausum greiningargögnum til að gera okkur kleift að bæta forritið.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Endilega virkjaðu greiningargögn til að hjálpa okkur að bæta ${app_name}.</string>
     <string name="room_settings_room_access_warning">Til að tengja við spjallrás verður hún að vera með vistfang.</string>
     <string name="room_preview_try_join_an_unknown_room">Þú ert að reyna að tengjast %s. Myndirðu vilja gerast meðlimur til að geta tekið þátt í samræðunni?</string>
     <string name="room_preview_room_interactions_disabled">Þetta er forskoðun á spjallrásinni. Samskipti spjallrásarinnar hafa verið gerð óvirk.</string>

@@ -337,7 +337,7 @@
     <string name="direct_chats_header">Interparoloj</string>
     <string name="local_address_book_header">Loka adresaro</string>
     <string name="no_conversation_placeholder">Neniuj interparoloj</string>
-    <string name="template_no_contact_access_placeholder">Vi ne permesis al ${app_name} aliron al viaj lokaj kontaktoj</string>
+    <string name="no_contact_access_placeholder">Vi ne permesis al ${app_name} aliron al viaj lokaj kontaktoj</string>
     <string name="no_result_placeholder">Neniuj rezultoj</string>
     <string name="people_no_identity_server">Neniu identiga servilo estas agordita.</string>
     <string name="rooms_header">Ĉambroj</string>
@@ -500,10 +500,10 @@
     <string name="settings_background_sync">Fona spegulado</string>
     <string name="settings_background_fdroid_sync_mode">Reĝimo de fona spegulado</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimumigita por baterio</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} spegulos fone, per maniero konservanta la limigitajn rimedojn de la aparato (ĉefe la baterion).
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} spegulos fone, per maniero konservanta la limigitajn rimedojn de la aparato (ĉefe la baterion).
 \nDepende de la stato de la rimedoj de via aparato, la spegulado povus esti prokrastita de la operaciumo.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimumigita por tujeco</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} spegulos fone, ripete, je preciza tempo (agordebla).
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} spegulos fone, ripete, je preciza tempo (agordebla).
 \nĈi tio influos uzadon de baterio kaj radiilo, kaj aperigos ĉiaman sciigon pri tio, ke ${app_name} aŭskultas okazojn.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Neniu fona spegulado</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Vi ne sciiĝos pri envenaj mesaĝoj dum la aplikaĵo estas fone.</string>
@@ -596,7 +596,7 @@
     <string name="e2e_re_request_encryption_key">Repeti ĉifrajn ŝlosilojn de aliaj viaj salutaĵoj.</string>
     <string name="e2e_re_request_encryption_key_sent">Peto de ŝlosilo sendiĝis.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Peto sendiĝis</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Bonvolu ruli ${app_name} sur alia aparato kiu scipovas malĉifri la mesaĝon, por ke ĝi povu sendi la ŝlosilojn al ĉi tiu salutaĵo.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Bonvolu ruli ${app_name} sur alia aparato kiu scipovas malĉifri la mesaĝon, por ke ĝi povu sendi la ŝlosilojn al ĉi tiu salutaĵo.</string>
     <string name="incoming_call">Envena voko</string>
     <string name="incoming_video_call">Envena vidvoko</string>
     <string name="incoming_voice_call">Envena voĉvoko</string>
@@ -606,22 +606,22 @@
     <string name="media_picker_both_capture_title">Foti aŭ filmi</string>
     <string name="media_picker_cannot_record_video">Ne povas filmi</string>
     <string name="permissions_rationale_popup_title">Informoj</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} bezonas permeson aliri viajn fotojn kaj filmojn, por sendi kaj konservi kunsendaĵojn.
+    <string name="permissions_rationale_msg_storage">${app_name} bezonas permeson aliri viajn fotojn kaj filmojn, por sendi kaj konservi kunsendaĵojn.
 \n
 \nBonvolu permesi aliron per la sekva ŝprucpeto, por povi sendi dosierojn el via telefono.</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name} bezonas permeson aliri vian filmilon por foti kaj vidvoki.</string>
+    <string name="permissions_rationale_msg_camera">${app_name} bezonas permeson aliri vian filmilon por foti kaj vidvoki.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nBonvolu permesi aliron per la sekva ŝprucpeto, por ebligi la vokon."</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name} bezonas permeson aliri vian mikrofonon por fari voĉvokojn.</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} bezonas permeson aliri vian mikrofonon por fari voĉvokojn.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nBonvolu permesi aliron per la sekva ŝprucpeto, por ebligi la vokon."</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} bezonas premeson aliri viajn filmilon kaj mikrofonon por fari vidvokojn.
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} bezonas premeson aliri viajn filmilon kaj mikrofonon por fari vidvokojn.
 \n 
 \nBonvolu permesi aliron per la sekva ŝprucpeto, por ebligi la vokon.</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} povas kontroli vian adresaron por trovi aliajn uzantojn de Matrix per iliaj retpoŝtadresoj kaj telefonnumeroj. Se vi konsentas kunhavi vian adresaron por tiu celo, bonvolu permesi aliron per la sekva ŝprucpeto.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} povas kontroli vian adresaron por trovi aliajn uzantojn de Matrix per iliaj retpoŝtadresoj kaj telefonnumeroj.
+    <string name="permissions_rationale_msg_contacts">${app_name} povas kontroli vian adresaron por trovi aliajn uzantojn de Matrix per iliaj retpoŝtadresoj kaj telefonnumeroj. Se vi konsentas kunhavi vian adresaron por tiu celo, bonvolu permesi aliron per la sekva ŝprucpeto.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} povas kontroli vian adresaron por trovi aliajn uzantojn de Matrix per iliaj retpoŝtadresoj kaj telefonnumeroj.
 \n
 \nĈu vi konsentas kunhavi vian adresaron por tiu celo\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Pardonu. Ago ne efektiviĝis, pro mankantaj permesoj</string>
@@ -731,9 +731,9 @@
     <string name="verify_cannot_cross_sign">Tiu ĉi salutaĵo ne povas konigi ĉi tiun kontrolon al aliaj viaj salutaĵoj.
 \nLa kontrolo konserviĝos loke kaj estos konigota de venonta versio de la aplikaĵo.</string>
     <string name="unignore">Reatenti</string>
-    <string name="template_rendering_event_error_exception">${app_name} renkontis problemon bildigante enhavon de okazo kun la identigilo «%1$s»</string>
-    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} ne traktas mesaĝojn de speco «%1$s»</string>
-    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} ne traktas okazojn de speco «%1$s»</string>
+    <string name="rendering_event_error_exception">${app_name} renkontis problemon bildigante enhavon de okazo kun la identigilo «%1$s»</string>
+    <string name="rendering_event_error_type_of_message_not_handled">${app_name} ne traktas mesaĝojn de speco «%1$s»</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name} ne traktas okazojn de speco «%1$s»</string>
     <string name="room_member_jump_to_read_receipt">Salti al legokonfirmo</string>
     <string name="room_member_power_level_custom_in">Propra (%1$d) en %2$s</string>
     <string name="room_member_power_level_default_in">Ordinara en %1$s</string>
@@ -816,7 +816,7 @@
     <string name="create_room_encryption_description">Post ŝalto, ne eblas ĉifradon malŝalti.</string>
     <string name="create_room_encryption_title">Ŝalti ĉifradon</string>
     <string name="command_description_shrug">Antaŭmetas ¯\\_(ツ)_/¯ al platteksta mesaĝo</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} povas fiaski pli ofte kiam okazas neatendita eraro</string>
+    <string name="settings_developer_mode_fail_fast_summary">${app_name} povas fiaski pli ofte kiam okazas neatendita eraro</string>
     <string name="autocomplete_limited_results">Montras nur la unuajn rezultojn; tajpu pliajn literojn…</string>
     <string name="devices_other_devices">Aliaj salutaĵoj</string>
     <string name="devices_current_device">Nuna salutaĵo</string>
@@ -831,7 +831,7 @@
     <string name="notification_initial_sync">Komenca spegulado…</string>
     <string name="bug_report_error_too_short">La priskribo estas tro mallonga</string>
     <string name="permalink_malformed">Via ligilo al matrix.to estis misformita</string>
-    <string name="template_soft_logout_sso_not_same_user_error">Ĉi tiu salutaĵo estas por uzanto %1$s kaj vi donas salutilojn por uzanto %2$s. ${app_name} ne subtenas tion.
+    <string name="soft_logout_sso_not_same_user_error">Ĉi tiu salutaĵo estas por uzanto %1$s kaj vi donas salutilojn por uzanto %2$s. ${app_name} ne subtenas tion.
 \nBonvolu unue vakigi datumojn, kaj poste saluti alian konton.</string>
     <string name="soft_logout_clear_data_dialog_submit">Vakigi datumojn</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Vi perdos aliron al sekuraj mesaĝoj, se vi ne salutos por rehavi viajn ĉifrajn ŝlosilojn.</string>
@@ -968,7 +968,7 @@
     <string name="room_list_quick_actions_notifications_all_noisy">Ĉiuj mesaĝoj (laŭte)</string>
     <string name="message_ignore_user">Malatenti uzanton</string>
     <string name="no_network_indicator">Estas neniu retkonekto nun</string>
-    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} bezonas rajton konservi viajn tutvoje ĉifrajn ŝlosilojn surdiske.
+    <string name="permissions_rationale_msg_keys_backup_export">${app_name} bezonas rajton konservi viajn tutvoje ĉifrajn ŝlosilojn surdiske.
 \n
 \nBonvolu permesi aliron per la venonta ŝprucpeto, por povi elporti viajn ŝlosilojn permane.</string>
     <string name="content_reported_as_inappropriate_content">Ĉi tiu enhavo estis raportita kiel maltaŭga.
@@ -1110,7 +1110,7 @@
     <string name="create_room_title">Nova ĉambro</string>
     <string name="fab_menu_create_chat">Individuaj ĉambroj</string>
     <string name="fab_menu_create_room">Ĉambroj</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">Antaŭrigardo al ĉambro legebla de ĉiuj ankoraŭ ne estas subtenata de ${app_name}</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Antaŭrigardo al ĉambro legebla de ĉiuj ankoraŭ ne estas subtenata de ${app_name}</string>
     <string name="room_preview_no_preview">Ne eblas antaŭrigardi ĉi tiun ĉambron</string>
     <string name="group_all_communities">Ĉiuj komunumoj</string>
     <string name="please_wait">Bonvolu atendi…</string>
@@ -1306,7 +1306,7 @@
 \nSekure savkopiu viajn ŝlosilojn por eviti ilian perdon.</string>
     <string name="keys_backup_setup_step1_title">Neniam perdu ĉifritajn mesaĝojn</string>
     <string name="keys_backup_no_session_error">Neniu salutaĵo de Matrix estas disponebla</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">Bonvolu forigi la pasfrazon se vi volas, ke ${app_name} estigu novan rehavan ŝlosilon.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Bonvolu forigi la pasfrazon se vi volas, ke ${app_name} estigu novan rehavan ŝlosilon.</string>
     <string name="passphrase_passphrase_too_weak">Pasfrazo estas tro malforta</string>
     <string name="passphrase_empty_error_message">Bonvolu enigi pasfrazon</string>
     <string name="passphrase_passphrase_does_not_match">Pasfrazo ne akordas</string>
@@ -1673,17 +1673,17 @@
     <string name="settings_data_save_mode_summary">Datumkonserva reĝimo aplikas sepecialan filtron al sciigoj pri ĉeesto kaj tajpado.</string>
     <string name="settings_data_save_mode">Datumkonserva reĝimo</string>
     <string name="settings_opt_in_of_analytics_ok">Jes, mi volas helpi!</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">Bonvolu ŝalti analizon por helpi la ni plibonigi ${app_name}.</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} kolektas sennomajn analizojn por helpi al ni plibonigi la aplikaĵon.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Bonvolu ŝalti analizon por helpi la ni plibonigi ${app_name}.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} kolektas sennomajn analizojn por helpi al ni plibonigi la aplikaĵon.</string>
     <string name="settings_opt_in_of_analytics">Sendi datumojn de analizo</string>
     <string name="settings_analytics">Analizo</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Doni permeson</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} bezonas malpezan fonan konekton por havi dependeblajn sciigojn.
+    <string name="startup_notification_fdroid_battery_optim_message">${app_name} bezonas malpezan fonan konekton por havi dependeblajn sciigojn.
 \nLa sekva ekrano petos ĉiam ruli ${app_name} fone; bonvolu akcepti.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Fona konekto</string>
     <string name="startup_notification_privacy_button_other">Elekti alian elekteblon</string>
     <string name="startup_notification_privacy_button_grant">Doni permeson</string>
-    <string name="template_startup_notification_privacy_message">${app_name} povas ruliĝi fone por mastrumi viajn sciigojn sekure kaj private. Tio povas influi uzadon de la baterio.</string>
+    <string name="startup_notification_privacy_message">${app_name} povas ruliĝi fone por mastrumi viajn sciigojn sekure kaj private. Tio povas influi uzadon de la baterio.</string>
     <string name="startup_notification_privacy_title">Privateco de sciigoj</string>
     <string name="settings_discovery_manage">Administri viajn agordojn de trovado.</string>
     <string name="settings_discovery_category">Trovado</string>
@@ -1746,17 +1746,17 @@
     <string name="settings_notification_privacy_reduced">Malplia privateco</string>
     <string name="settings_notification_privacy_normal">Normala</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Malatenti optimumigon</string>
-    <string name="template_settings_troubleshoot_test_battery_success">Optimumigo de baterio ne influas sur ${app_name}.</string>
+    <string name="settings_troubleshoot_test_battery_success">Optimumigo de baterio ne influas sur ${app_name}.</string>
     <string name="settings_troubleshoot_test_battery_title">Optimumigo de baterio</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Malŝalti limigojn</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Fonaj limigoj estas ŝaltitaj por ${app_name}.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Fonaj limigoj estas ŝaltitaj por ${app_name}.
 \nAgado de la aplikaĵo estos akre limigita dum ĝi estas fone, kaj tio povus influi sciigojn.
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">Fonaj limigoj estas malŝaltitaj por ${app_name}. Ĉi tiu testo devus esti rulata kun telefonaj datumoj (ne kun Vifio).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Fonaj limigoj estas malŝaltitaj por ${app_name}. Ĉi tiu testo devus esti rulata kun telefonaj datumoj (ne kun Vifio).
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Kontroli fonajn limigojn</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Ŝalti ekadon kune kun aparato</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">La servo ne ekos kiam la aparato reekos, kaj vi ne ricevos sciigojn ĝis vi mem ${app_name} malfermos.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">La servo ne ekos kiam la aparato reekos, kaj vi ne ricevos sciigojn ĝis vi mem ${app_name} malfermos.</string>
     <string name="settings_troubleshoot_test_service_boot_success">La servo ekos kiam la aparato reekos.</string>
     <string name="settings_troubleshoot_test_service_boot_title">Eki kune kun aparato</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Servo malsukcesis reeki</string>
@@ -1790,11 +1790,11 @@
     <string name="settings_troubleshoot_test_token_registration_success">Ĵetono de FCM sukcese registriĝis ĉe la hejmservilo.</string>
     <string name="settings_troubleshoot_test_token_registration_title">Registrado de ĵetono</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Aldoni konton</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nTiu ĉi eraro ne dependas de ${app_name}. La telefono ne havas konton de Google. Bonvolu malfermi la administrilon de kontoj kaj aldoni konton de Google.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nTiu ĉi eraro ne dependas de ${app_name}. Ĝi povas okazi pro kelkaj kialoj. Eble ĝi funkcios se vi reprovos poste. Vi ankaŭ povas kontroli, ĉu la servo de Google Play ne estas datume limigita en la sistemaj agordoj, aŭ ĉu la horloĝo de via aparato ĝuste funkcias, aŭ ĉu ĝi ne okazas sur propra ROM.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nTiu ĉi eraro ne dependas de ${app_name}, kaj laŭ Google ĝi indikas, ke la aparato havas tro multajn aplikaĵojn registritajn je FCM. La eraro nur okazas kiam multegaj aplikaĵoj estas samtempe instalitaj, kaj ne devus koncerni ordinaran uzanton.</string>
     <string name="settings_troubleshoot_test_fcm_failed">Malsukcesis akiri ĵetonon de FCM:
 \n%1$s</string>
@@ -1802,7 +1802,7 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_title">Ĵetono de Firebase</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Ripari servojn de Google Play</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} uzas la servojn de Google Play por liveri pasivajn mesaĝojn, sed ili ne ŝajnas ĝuste agorditaj:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} uzas la servojn de Google Play por liveri pasivajn mesaĝojn, sed ili ne ŝajnas ĝuste agorditaj:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_success">APK de servoj de Google Play estas ĝisdata kaj disponebla.</string>
     <string name="settings_troubleshoot_test_play_services_title">Kontrolo de servoj de Google Play</string>
@@ -1812,7 +1812,7 @@
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Rimarku, ke iuj specoj de mesaĝoj estas silentaj (sciigas sensone).</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Propraj agordoj.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Ŝalti</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Sciigoj ne estas ŝaltitaj por ĉi tiu salutaĵo.
+    <string name="settings_troubleshoot_test_device_settings_failed">Sciigoj ne estas ŝaltitaj por ĉi tiu salutaĵo.
 \nBonvolu kontroli la agordojn de ${app_name}.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Sciigoj estas ŝaltitaj por ĉi tiu salutaĵo.</string>
     <string name="settings_troubleshoot_test_device_settings_title">Agordoj de salutaĵo.</string>
@@ -1839,7 +1839,7 @@
     <string name="settings_emails_empty">Neniu retpoŝtadreso aldoniĝis al via konto</string>
     <string name="settings_emails">Retpoŝtadresoj</string>
     <string name="settings_add_3pid_authentication_needed">Necesas aŭtentikigo</string>
-    <string name="template_settings_add_3pid_flow_not_supported">Vi ne povas fari tion per ${app_name} por poŝtelefonoj</string>
+    <string name="settings_add_3pid_flow_not_supported">Vi ne povas fari tion per ${app_name} por poŝtelefonoj</string>
     <string name="settings_add_3pid_confirm_password_title">Konfirmu vian pasvorton</string>
     <string name="settings_app_info_link_summary">Montri informojn pri aplikaĵo en sistemaj agordoj.</string>
     <string name="settings_app_info_link_title">Informoj pri aplikaĵo</string>
@@ -1954,7 +1954,7 @@
     <string name="call_select_sound_device">Elekti sonaparaton</string>
     <string name="call_failed_no_connection_description">Malsukcesis fari realtempan konekton.
 \nBonvolu peti la administranton de via hejmservilo agordi TURN-servilon, por ke vokoj funkciu dependeble.</string>
-    <string name="template_call_failed_no_connection">Malsukcesis voko de ${app_name}</string>
+    <string name="call_failed_no_connection">Malsukcesis voko de ${app_name}</string>
     <string name="matrix_only_filter">Nur kontaktoj de Matrix</string>
     <string name="bottom_action_notification">Sciigoj</string>
     <string name="dialog_title_success">Sukceso</string>
@@ -1987,20 +1987,20 @@
     <string name="settings_home_display">Hejmekrano</string>
     <string name="settings_troubleshoot_test_battery_failed">Se uzanto lasas aparaton neŝargata kaj senmova por ioma tempo, kun ekrano malaktiva, la aparato eniras dorman reĝimon. Tio malhelpas aplikaĵojn aliri la reton kaj fortenas iliajn taskojn, speguladon, kaj normalajn avertojn.</string>
     <string name="room_settings_add_homescreen_shortcut">Aldoni al hejmekrano</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Uzi implicitan sonoron de ${app_name} por envenaj vokoj</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Uzi implicitan sonoron de ${app_name} por envenaj vokoj</string>
     <string name="call_switch_camera">Baskuli filmilon</string>
     <string name="auth_pin_forgot">Forgesita numero\?</string>
     <string name="universal_link_malformed">La ligilo estis misformita</string>
     <string name="room_error_not_found">Ne povas trovi ĉi tiun ĉambron. Certiĝu, ke ĝi ekzistas.</string>
     <string name="error_opening_banned_room">Ne povas malfermi ĉambron, de kiu vi forbariĝis.</string>
     <string name="auth_pin_confirm_to_disable_title">Konfirmu personan identigan numeron por malŝalti ĝin</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_off">Persona identiga numero estas postulata je ĉiu malfermo de ${app_name}.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">Persona identiga numero estas postulata post 2 minutoj de neuzado de ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">Persona identiga numero estas postulata je ĉiu malfermo de ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">Persona identiga numero estas postulata post 2 minutoj de neuzado de ${app_name}.</string>
     <string name="settings_security_pin_code_grace_period_title">Postuli personan identigan numeron post 2 minutoj</string>
     <string name="settings_security_pin_code_notifications_summary_off">Montri nur la nombron de nelegitaj mesaĝoj en simpla sciigo.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Montri detalojn kiel nomojn de ĉambroj kaj enhavon de mesaĝoj.</string>
     <string name="settings_security_pin_code_notifications_title">Montri enhavon en sciigoj</string>
-    <string name="template_settings_security_pin_code_use_biometrics_summary_off">La persona identiga numero estas la sola maniero malŝlosi ${app_name}.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">La persona identiga numero estas la sola maniero malŝlosi ${app_name}.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Ŝalti vivaĵanalizojn de la aparato, kiel ekzemple rekonadon de fingrospuroj aŭ vizaĝo.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Ŝalti vivaĵanalizojn</string>
     <string name="settings_security_pin_code_summary">Se vi volas restarigi vian personan identigan numeron, tuŝetu je «Forgesita numero» por adiaŭi kaj restarigi.</string>
@@ -2080,11 +2080,11 @@
     <string name="identity_server_set_default_submit">Uzi %1$s</string>
     <string name="identity_server_error_no_current_binding_error">Nun efektivas neniu ligo kun ĉi tiu identigilo.</string>
     <string name="identity_server_error_binding_error">Malsukcesis la ligo.</string>
-    <string name="template_identity_server_error_bulk_sha256_not_supported">Pro via privateco, ${app_name} nur subtenas sendadon de haketitaj retpoŝtadresoj kaj telefonnumeroj.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Pro via privateco, ${app_name} nur subtenas sendadon de haketitaj retpoŝtadresoj kaj telefonnumeroj.</string>
     <string name="identity_server_error_terms_not_signed">Bonvolu unue akcepti la uzokondiĉojn de la identiga servilo per la agordoj.</string>
     <string name="identity_server_error_no_identity_server_configured">Bonvolu unue agordi identigan servilon.</string>
     <string name="identity_server_error_outdated_home_server">Ĉi tiu ago ne eblas. La hejmservilo estas eksdata.</string>
-    <string name="template_identity_server_error_outdated_identity_server">Ĉi tiu identiga servilo estas eksdata. ${app_name} suportas nur version 2 de la API.</string>
+    <string name="identity_server_error_outdated_identity_server">Ĉi tiu identiga servilo estas eksdata. ${app_name} suportas nur version 2 de la API.</string>
     <string name="disconnect_identity_server_dialog_content">Ĉu malkonektiĝi de la identiga servilo %s\?</string>
     <string name="open_terms_of">Malfermi uzokondiĉojn de %s</string>
     <string name="choose_locale_loading_locales">Enlegante disponeblajn lingvojn…</string>
@@ -2120,13 +2120,13 @@
     <string name="use_recovery_key">Uzi rehavan ŝlosilon</string>
     <string name="enter_secret_storage_passphrase_or_key">Por daŭrigi, necesas via %1$s aŭ via %2$s.</string>
     <string name="command_description_discard_session_not_handled">Subtenata nur en ĉifritaj ĉambroj</string>
-    <string name="template_use_latest_app">Uzu la plej freŝan version de ${app_name} per aliaj viaj aparatoj:</string>
+    <string name="use_latest_app">Uzu la plej freŝan version de ${app_name} per aliaj viaj aparatoj:</string>
     <string name="or_other_mx_capable_client">aŭ alian klienton de Matrix kapablan je delegaj subskriboj</string>
-    <string name="template_app_ios_android">${app_name} iOS
+    <string name="app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="template_app_desktop_web">${app_name} Web (por TTT)
+    <string name="app_desktop_web">${app_name} Web (por TTT)
 \n${app_name} Desktop (por labortablo)</string>
-    <string name="template_use_other_session_content_description">Uzu la plej freŝan ${app_name} per aliaj viaj aparatoj: ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} por Android, aŭ alian klienton de Matrix kapablan je delegaj subskriboj</string>
+    <string name="use_other_session_content_description">Uzu la plej freŝan ${app_name} per aliaj viaj aparatoj: ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} por Android, aŭ alian klienton de Matrix kapablan je delegaj subskriboj</string>
     <string name="change_password_summary">Agordi novan pasvorton de konto…</string>
     <string name="error_saving_media_file">Ne povis konservi dosieron de vidaŭdaĵo</string>
     <string name="error_adding_media_file_to_gallery">Ne povis aldoni dosieron de vidaŭdaĵo al bildaro</string>
@@ -2191,7 +2191,7 @@
     <string name="refresh">Aktualigi</string>
     <string name="e2e_use_keybackup">Malŝlosi historion de ĉifritaj mesĝoj</string>
     <string name="settings_key_requests">Ŝlosilpetoj</string>
-    <string name="template_login_default_session_public_name">${app_name} por Android</string>
+    <string name="login_default_session_public_name">${app_name} por Android</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Ŝlosiloj jam estas ĝisdataj!</string>
     <string name="event_redacted_by_admin_reason_with_reason">Okazo foriĝis de administranto de la ĉambro, kialo: %1$s</string>
     <string name="event_redacted_by_user_reason_with_reason">Okazo foriĝis de uzanto, kialo: %1$s</string>
@@ -2344,7 +2344,7 @@
     <string name="create_room_topic_hint">Temo</string>
     <string name="create_room_topic_section">Temo de ĉambro (malnepra)</string>
     <string name="create_room_name_section">Nomo de ĉambro</string>
-    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} trovis propran servilan agordaron per la retnomo «%1$s» el via identigilo de uzanto:
+    <string name="autodiscover_well_known_autofill_dialog_message">${app_name} trovis propran servilan agordaron per la retnomo «%1$s» el via identigilo de uzanto:
 \n%2$s</string>
     <string name="autodiscover_invalid_response">Nevalidas hejmservil-serĉanta respondo</string>
     <string name="room_permissions_notice">Elektu la rolojn bezonatajn por ŝanĝi diversajn partojn de la ĉambro</string>
@@ -2495,8 +2495,8 @@
     <string name="user_code_share">Havigi mian kodon</string>
     <string name="user_code_scan">Skani rapidrespondan kodon (QR)</string>
     <string name="not_a_valid_qr_code">Tio ne estas valida rapidresponda kodo (QR) de Matrix</string>
-    <string name="template_invite_friends_rich_title">🔐️ Aliĝu al mi per ${app_name}</string>
-    <string name="template_invite_friends_text">Saluton, parolu kun mi per ${app_name}: %s</string>
+    <string name="invite_friends_rich_title">🔐️ Aliĝu al mi per ${app_name}</string>
+    <string name="invite_friends_text">Saluton, parolu kun mi per ${app_name}: %s</string>
     <string name="invite_friends">Inviti amikojn</string>
     <string name="add_people">Aldoni personojn</string>
     <string name="failed_to_initialize_cross_signing">Malsukcesis agordi delegajn subskribojn</string>
@@ -2616,7 +2616,7 @@
     <string name="a11y_open_widget">Malfermi fenestraĵojn</string>
     <string name="a11y_screenshot">Ekrankopio</string>
     <string name="authentication_error">Malsukcesis aŭtentikigi</string>
-    <string name="template_re_authentication_default_confirm_text">${app_name} postulas enigon de viaj salutiloj por tiu ĉi ago.</string>
+    <string name="re_authentication_default_confirm_text">${app_name} postulas enigon de viaj salutiloj por tiu ĉi ago.</string>
     <string name="error_jitsi_join_conf">Pardonu, eraris via aliĝo al la grupa voko</string>
     <string name="this_space_has_no_rooms_admin">Iuj ĉambroj povas esti kaŝitaj ĉar ili estas privataj kaj vi bezonas inviton.</string>
     <string name="this_space_has_no_rooms_not_admin">Iuj ĉambroj povas esti kaŝitaj, ĉar ili estas privataj kaj vi bezonas inviton.

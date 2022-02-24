@@ -206,7 +206,7 @@
     <string name="room_info_room_name">Όνομα δωματίου</string>
     <string name="room_info_room_topic">Θέμα δωματίου</string>
     <string name="settings_call_category">Κλήσεις</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Χρήση του προεπιλεγμένου ήχου κλήσης του ${app_name} για τις εισερχόμενες κλήσεις</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Χρήση του προεπιλεγμένου ήχου κλήσης του ${app_name} για τις εισερχόμενες κλήσεις</string>
     <string name="settings_call_ringtone_title">Ήχος εισερχομένων κλήσεων</string>
     <string name="settings_call_ringtone_dialog_title">Επιλέξτε ήχο κλήσης:</string>
     <string name="call">Κλήση</string>
@@ -232,7 +232,7 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Ενεργοποίηση</string>
     <string name="settings_troubleshoot_test_device_settings_title">Ρυθμίσεις συσκευής.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Οι ειδοποιήσεις είναι ενεργοποιημένες για αυτή την συσκευή.</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Οι ειδοποιήσεις δεν επιτρέπονται για αυτή την συσκευή.
+    <string name="settings_troubleshoot_test_device_settings_failed">Οι ειδοποιήσεις δεν επιτρέπονται για αυτή την συσκευή.
 \nΠαρακαλώ ελέγξτε τις ρυθμίσεις του ${app_name}.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Ενεργοποίηση</string>
     <string name="settings_devices_list">Συσκευές</string>
@@ -513,7 +513,7 @@
     <string name="call_select_sound_device">Αλλαγή Συσκευής Ήχου</string>
     <string name="call_failed_no_connection_description">Αποτυχία σύνδεσης σε πραγματικό χρόνο.
 \nΖητήστε από τον διαχειριστή του οικιακού σας διακομιστή να διαμορφώσει έναν διακομιστή TURN ώστε οι κλήσεις να λειτουργούν αξιόπιστα.</string>
-    <string name="template_call_failed_no_connection">Η Κλήση ${app_name} Aπέτυχε</string>
+    <string name="call_failed_no_connection">Η Κλήση ${app_name} Aπέτυχε</string>
     <string name="call_failed_dont_ask_again">Να μην ερωτηθώ ξανά</string>
     <string name="call_failed_no_ice_use_alt">Προσπαθήστε να χρησιμοποιήσετε το %s</string>
     <string name="call_failed_no_ice_description">Παρακαλώ ζητήστε απο τον διαχειριστή του ιδιέταιρου διακομιστή (%1$s) να ρυθμίσει ένα διακομιστή TURN ώστε οι κλήσεις να δουλέυουν αξιόπιστα.
@@ -544,7 +544,7 @@
     <string name="call_notification_hangup">Τέλος κλήσης</string>
     <string name="ongoing_conference_call">Τρέχουσα κλήση συνδιάσκεψης.
 \nΣυνδεθείτε με %1$s ή %2$s</string>
-    <string name="template_no_contact_access_placeholder">Δεν επιτρέψατε στο ${app_name} την πρόσβαση στις επαφές σας</string>
+    <string name="no_contact_access_placeholder">Δεν επιτρέψατε στο ${app_name} την πρόσβαση στις επαφές σας</string>
     <string name="bottom_action_notification">Ειδοποιήσεις</string>
     <string name="copied_to_clipboard">Αντιγράφηκε στο πρόχειρο</string>
     <string name="action_add">Πρόσθεση</string>

@@ -280,7 +280,7 @@
     <string name="user_directory_header">Adresár používateľov</string>
     <string name="matrix_only_filter">Len Matrix kontakty</string>
     <string name="no_conversation_placeholder">Žiadne konverzácie</string>
-    <string name="template_no_contact_access_placeholder">Aplikácii ${app_name} ste nepovolili prístup k lokálnym kontaktom</string>
+    <string name="no_contact_access_placeholder">Aplikácii ${app_name} ste nepovolili prístup k lokálnym kontaktom</string>
     <string name="no_result_placeholder">Žiadne výsledky</string>
     <string name="rooms_header">Miestnosti</string>
     <string name="rooms_directory_header">Adresár miestností</string>
@@ -409,22 +409,22 @@
     <string name="media_picker_both_capture_title">Odfotiť obrázok alebo video</string>
     <string name="media_picker_cannot_record_video">Nie je možné nahrať video</string>
     <string name="permissions_rationale_popup_title">Informácia</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} potrebuje povolenie na prístup k vašej knižnici fotografií a videí, aby mohla posielať a ukladať prílohy.
+    <string name="permissions_rationale_msg_storage">${app_name} potrebuje povolenie na prístup k vašej knižnici fotografií a videí, aby mohla posielať a ukladať prílohy.
 \n
 \nPovoľte prístup v ďalšom vyskakovacom okne, aby ste mohli odosielať súbory z telefónu.</string>
-    <string name="template_permissions_rationale_msg_camera">Aby ste mohli fotiť obrázky a videá a tiež uskutočňovať video hovory, ${app_name} potrebuje prístup k fotoaparátu.</string>
+    <string name="permissions_rationale_msg_camera">Aby ste mohli fotiť obrázky a videá a tiež uskutočňovať video hovory, ${app_name} potrebuje prístup k fotoaparátu.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nProsím, povoľte prístup na nasledujúcej obrazovke, aby ste mohli uskutočniť hovor."</string>
-    <string name="template_permissions_rationale_msg_record_audio">Aby ste mohli uskutočňovať audio hovory, ${app_name} potrebuje prístup k mikrofónu vašeho zariadenia.</string>
+    <string name="permissions_rationale_msg_record_audio">Aby ste mohli uskutočňovať audio hovory, ${app_name} potrebuje prístup k mikrofónu vašeho zariadenia.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nProsím, povoľte prístup na nasledujúcej obrazovke, aby ste mohli uskutočniť hovor."</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} potrebuje povolenie na prístup k vašej kamere a mikrofónu na uskutočňovanie videohovorov.
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} potrebuje povolenie na prístup k vašej kamere a mikrofónu na uskutočňovanie videohovorov.
 \n
 \nPovoľte prístup v ďalších vyskakovacích oknách, aby ste mohli uskutočniť hovor.</string>
-    <string name="template_permissions_rationale_msg_contacts">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, ${app_name} potrebuje prístup k vašim kontaktom. Ak si prajete zdieľať váš zoznam kontaktov za týmto účelom, prosím, povoľte prístup na nasledujúcej obrazovke.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} môže skontrolovať váš adresár a nájsť ostatných používateľov Matrixu na základe ich e-mailov a telefónnych čísel.
+    <string name="permissions_rationale_msg_contacts">Aby ste mohli na Matrixe nájsť vašich známych podľa telefónneho čísla alebo emailovej adresy, ${app_name} potrebuje prístup k vašim kontaktom. Ak si prajete zdieľať váš zoznam kontaktov za týmto účelom, prosím, povoľte prístup na nasledujúcej obrazovke.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} môže skontrolovať váš adresár a nájsť ostatných používateľov Matrixu na základe ich e-mailov a telefónnych čísel.
 \n
 \nSúhlasíte so zdieľaním svojho adresára na tento účel\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Prepáčte, akcia nebola vykonaná kvôli chýbajúcim oprávneniam</string>
@@ -899,7 +899,7 @@
     <string name="settings_notification_privacy_nosecure_message_content">• Oznámenia obsahujú <b>meta údaje aj obsah správy</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• Súčasťou oznámení <b>nebude zobrazený obsah správ</b></string>
     <string name="startup_notification_privacy_title">Súkromie oznámení</string>
-    <string name="template_startup_notification_privacy_message">${app_name} môže fungovať na pozadí aby spracovával vaše upozornenia bezpečne a v súkromí. Môže to ovplyvniť využitie batérie.</string>
+    <string name="startup_notification_privacy_message">${app_name} môže fungovať na pozadí aby spracovával vaše upozornenia bezpečne a v súkromí. Môže to ovplyvniť využitie batérie.</string>
     <string name="startup_notification_privacy_button_grant">Udeliť oprávnenie</string>
     <string name="startup_notification_privacy_button_other">Vyberte inú voľbu</string>
     <string name="title_activity_choose_sticker">Odoslať nálepku</string>
@@ -910,8 +910,8 @@
     <string name="settings_deactivate_account_section">Deaktivovať účet</string>
     <string name="settings_deactivate_my_account">Deaktivovať môj účet</string>
     <string name="settings_opt_in_of_analytics">Odosielať analytické údaje</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} zbiera anonymné analytické údaje, čo nám umožňuje aplikáciu ďalej zlepšovať.</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">Prosím povoľte odosielanie analytických údajov a pomôžte nám tak vylepšovať ${app_name}.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} zbiera anonymné analytické údaje, čo nám umožňuje aplikáciu ďalej zlepšovať.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Prosím povoľte odosielanie analytických údajov a pomôžte nám tak vylepšovať ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Áno, chcem pomôcť!</string>
     <string name="widget_integration_missing_parameter">Chýba zadanie povinného argumentu.</string>
     <string name="widget_integration_invalid_parameter">Argument nie je správny.</string>
@@ -934,7 +934,7 @@
     <string name="e2e_re_request_encryption_key_dialog_title">Žiadosť odoslaná</string>
     <string name="lock_screen_hint">Píšte sem…</string>
     <string name="e2e_re_request_encryption_key">Znovu požiadať o šifrovacie kľúče z vašich ostatných relácií.</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Spustite prosím ${názov_aplikácie} na inom zariadení, ktoré dokáže dešifrovať správu, aby mohlo poslať kľúče do tejto relácie.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Spustite prosím ${názov_aplikácie} na inom zariadení, ktoré dokáže dešifrovať správu, aby mohlo poslať kľúče do tejto relácie.</string>
     <string name="option_send_voice">Odoslať hlasovú správu</string>
     <string name="go_on_with">Pokračovať v aplikácii…</string>
     <string name="error_no_external_application_found">Nebola nájdená žiadna vhodná aplikácia na dokončenie tejto akcie.</string>
@@ -1037,7 +1037,7 @@
     <string name="action_accept">Prijať</string>
     <string name="auth_accept_policies">Prosím prečítajte si a odsúhlaste zmluvné podmienky tohoto domovského servera:</string>
     <string name="settings_call_category">Hovory</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Použiť predvolené zvonenie ${app_name} pre prichádzajúce hovory</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Použiť predvolené zvonenie ${app_name} pre prichádzajúce hovory</string>
     <string name="settings_call_ringtone_title">Zvonenie pre prichádzajúci hovor</string>
     <string name="settings_call_ringtone_dialog_title">Vyberte zvonenie pre prichádzajúce hovory:</string>
     <string name="video_call_in_progress">Prebiehajúci video hovor…</string>
@@ -1062,12 +1062,12 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Povoliť</string>
     <string name="settings_troubleshoot_test_device_settings_title">Nastavenia relácií.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Oznámenia sú povolené pre túto reláciu.</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Oznámenia nie sú povolené pre túto reláciu.
+    <string name="settings_troubleshoot_test_device_settings_failed">Oznámenia nie sú povolené pre túto reláciu.
 \nProsím, skontrolujte nastavenia ${app_name}u.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Povoliť</string>
     <string name="settings_troubleshoot_test_play_services_title">Kontrola aplikácii Služby Google Play</string>
     <string name="settings_troubleshoot_test_play_services_success">Aplikácia Služby Google Play je k dispozícii a aktualizovaná.</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} používa aplikáciu Služby Google Play na doručovanie oznámení. No zdá sa, že táto nie je správne nakonfigurovaná:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} používa aplikáciu Služby Google Play na doručovanie oznámení. No zdá sa, že táto nie je správne nakonfigurovaná:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Opraviť Služby Play</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
@@ -1084,17 +1084,17 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Službu sa nepodarilo reštartovať</string>
     <string name="settings_troubleshoot_test_service_boot_title">Spustenie po zapnutí</string>
     <string name="settings_troubleshoot_test_service_boot_success">Služba sa automaticky spustí po reštarte zariadenia.</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">Služba sa automaticky nespustí po reštarte zariadenia a nedostanete po reštarte žiadne oznámenia, kým nespustíte ${app_name} aspoň raz.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Služba sa automaticky nespustí po reštarte zariadenia a nedostanete po reštarte žiadne oznámenia, kým nespustíte ${app_name} aspoň raz.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Povoliť spustenie služby po reštarte</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Kontrola obmedzenia spustenia na pozadí</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">Obmedzenie spustenia na pozadí nie je aktívne pre ${app_name}. Tento test je potrebné spustiť cez mobilné dáta (nie cez wifi). 
+    <string name="settings_troubleshoot_test_bg_restricted_success">Obmedzenie spustenia na pozadí nie je aktívne pre ${app_name}. Tento test je potrebné spustiť cez mobilné dáta (nie cez wifi).
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Pre ${app_name} sú povolené obmedzenia na pozadí.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Pre ${app_name} sú povolené obmedzenia na pozadí.
 \nPráca, ktorú sa aplikácia pokúsi vykonať, bude agresívne obmedzená, keď je na pozadí, čo môže ovplyvniť oznámenia.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Deaktivovať obmedzenia</string>
     <string name="settings_troubleshoot_test_battery_title">Optimalizácia batérie</string>
-    <string name="template_settings_troubleshoot_test_battery_success">Chod ${app_name} nie je ovplyvnený nastavením optimalizácie batérie.</string>
+    <string name="settings_troubleshoot_test_battery_success">Chod ${app_name} nie je ovplyvnený nastavením optimalizácie batérie.</string>
     <string name="settings_troubleshoot_test_battery_failed">Ak používateľ nechá zariadenie na určitý čas odpojené od siete a nehybné s vypnutou obrazovkou, zariadenie prejde do režimu Doze. Tým sa aplikáciám zabráni v prístupe k sieti a oddialia sa ich úlohy, synchronizácia a štandardné alarmy.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorovať optimalizáciu</string>
     <string name="settings_inline_url_preview_summary">Zobraziť náhľady odkazov v konverzáciách (ak sú podporované domovským serverom).</string>
@@ -1109,7 +1109,7 @@
     <string name="settings_show_avatar_display_name_changes_messages">Zobrazovať udalosti účtu</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Zahŕňa zmeny zobrazovaného mena a obrázka v profile.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Pripojenie na pozadí</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} potrebuje na pozadí udržovať aktívne nenáročné spojenie, aby spoľahlivo fungovali oznámenia. 
+    <string name="startup_notification_fdroid_battery_optim_message">${app_name} potrebuje na pozadí udržovať aktívne nenáročné spojenie, aby spoľahlivo fungovali oznámenia.
 \nNa ďalšej obrazovke budete vyzvaní, aby ste povolili aplikácii ${názov_aplikácie}, aby sa vždy spúšťala na pozadí, prosím, prijmite.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Udeliť oprávnenie</string>
     <string name="account_email_error">Pri pokuse overiť vašu emailovú adresu sa vyskytla chyba.</string>
@@ -1152,11 +1152,11 @@
     <string name="settings_troubleshoot_test_bing_settings_failed">Niektoré oznámenia máte zakázané v rozšírených nastaveniach.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Nepodarilo sa načítať pravidlá oznámení. Prosím, skúste znovu.</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Skontrolovať nastavenia</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nNa zariadení máte množstvo aplikácií zaregistrovaných na doručovanie okamžitých oznámení cez služby Google play. Konfigurácia ${app_name} nemá vplyv na výskyt tejto chyby. Podľa Google sa môže vyskytovať len pri veľmi vysokom počte nainštalovaných aplikácií. Bežní používatelia by týmto nemali byť postihnutí.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nKonfigurácia ${app_name} nemá vplyv na zobrazenie tejto chyby. Táto chyba sa môže zobraziť z niekoľkých dôvodov. Uistite sa že máte správne nastavený systémový čas a že ste v nastaveniach systému aplikácii služby Google play neobmedzili používanie prístupu na internet. Chyba sa tiež môže zobrazovať na vlastných zostaveniach (ROM), alebo sa chyba môže samovoľne prestať zobrazovať neskôr.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nV zariadení nemáte nastavený účet Google. Prosím, pridajte si účet cez správcu účtov. Konfigurácia ${app_name} nemá vplyv na zobrazenie tejto chyby.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Pridať účet</string>
     <string name="settings_notification_privacy_no_background_sync">Aplikácia sa <b>nemusí</b> pripájať k domovskému serveru, keď beží na pozadí, čo môže predĺžiť výdrž batérie</string>
@@ -1232,7 +1232,7 @@
     <string name="action_copy">Kopírovať</string>
     <string name="dialog_title_success">Úspešné</string>
     <string name="bottom_action_notification">Oznámenia</string>
-    <string name="template_call_failed_no_connection">${app_name} hovor zlyhal</string>
+    <string name="call_failed_no_connection">${app_name} hovor zlyhal</string>
     <string name="call_failed_no_connection_description">Nepodarilo sa uskutočniť spojenie v reálnom čase.
 \nProsím, požiadajte správcu domovského servera, aby správne nastavil server turn na zaistenie čo najspoľahlivejšej prevádzky hovorov.</string>
     <string name="call_select_sound_device">Vybrať zvukové zariadenie</string>
@@ -1276,14 +1276,14 @@
     <string name="room_participants_unban_title">Povoliť používateľovi vstupovať</string>
     <string name="room_participants_unban_prompt_msg">Povolením používateľovi vstupovať zaistíte, aby sa používateľ mohol vrátiť do miestnosti.</string>
     <string name="settings_add_3pid_confirm_password_title">Potvrdiť vaše heslo</string>
-    <string name="template_settings_add_3pid_flow_not_supported">Toto nie je možné urobiť cez mobilnú aplikáciu ${app_name}</string>
+    <string name="settings_add_3pid_flow_not_supported">Toto nie je možné urobiť cez mobilnú aplikáciu ${app_name}</string>
     <string name="settings_add_3pid_authentication_needed">Je požadované overenie</string>
     <string name="settings_background_fdroid_sync_mode">Režim synchronizácie na pozadí</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimalizovaný na využívanie batérie</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} sa bude synchronizovať na pozadí s cieľom ušetriť limitované zdroje (batériu).
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} sa bude synchronizovať na pozadí s cieľom ušetriť limitované zdroje (batériu).
 \nV závislosti od kapacity prostriedkov zariadenia môže byť synchronizácia odložená operačným systémom na neskôr.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimalizovaný na používanie v reálnom čase</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} sa bude pravidelne synchronizovať na pozadí v presne stanovenom čase (nastaviteľné).
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} sa bude pravidelne synchronizovať na pozadí v presne stanovenom čase (nastaviteľné).
 \nBude to mať vplyv na používanie rádia a batérie, bude sa zobrazovať trvalé oznámenie, že ${app_name} počúva udalosti.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Žiadna synchronizácia na pozadí</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Nebudete dostávať oznámenia o prichádzajúcich správach, keď aplikácia pracuje na pozadí.</string>
@@ -1367,7 +1367,7 @@
     <string name="ignore_request_short_label">Ignorovať</string>
     <string name="passphrase_empty_error_message">Zadajte prosím prístupovú frázu</string>
     <string name="passphrase_passphrase_too_weak">Prístupová fráza je príliš slabá</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">Ak chcete, aby ${app_name} vygeneroval kľúč na obnovenie, odstráňte prístupovú frázu.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Ak chcete, aby ${app_name} vygeneroval kľúč na obnovenie, odstráňte prístupovú frázu.</string>
     <string name="keys_backup_no_session_error">Nie je dostupná žiadna relácia Matrix</string>
     <string name="keys_backup_setup_step1_title">Nikdy nepríďte o šifrované správy</string>
     <string name="keys_backup_setup_step1_description">Správy v šifrovaných miestnostiach sú zabezpečené end-to-end šifrovaním. Kľúče na čítanie týchto správ máte len vy a príjemca (príjemcovia).
@@ -1485,7 +1485,7 @@
     <string name="keys_backup_info_title_signature">Podpis</string>
     <string name="autodiscover_invalid_response">Neplatná odpoveď pri zisťovaní domovského servera</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Automaticky doplniť možnosti servera</string>
-    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} zistil vlastné nastavenie servera pre vaše ID používateľa a doménu \"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">${app_name} zistil vlastné nastavenie servera pre vaše ID používateľa a doménu \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Použiť nastavenia</string>
     <string name="invalid_or_expired_credentials">Boli ste odhlásení, pretože vaše prihlasovacie údaje vypršali alebo nie sú viac platné.</string>
@@ -1563,7 +1563,7 @@
     <string name="please_wait">Prosím čakajte…</string>
     <string name="group_all_communities">Všetky komunity</string>
     <string name="room_preview_no_preview">Nie je možné zobraziť náhľad tejto miestnosti</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">Nazeranie do verejných miestností nie je zatiaľ podporované</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Nazeranie do verejných miestností nie je zatiaľ podporované</string>
     <string name="fab_menu_create_room">Miestnosti</string>
     <string name="fab_menu_create_chat">Priame konverzácie</string>
     <string name="create_room_title">Nová miestnosť</string>
@@ -1947,7 +1947,7 @@
     <string name="settings_category_room_directory">Adresár miestností</string>
     <string name="disclaimer_positive_button">DOZVEDIEŤ SA VIAC</string>
     <string name="disclaimer_negative_button">ROZUMIEM</string>
-    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="notice_room_server_acl_updated_no_change">Žiadna zmena.</string>
     <string name="dev_tools_event_content_hint">Obsah udalosti</string>
     <string name="dev_tools_edit_content">Upraviť obsah</string>
@@ -2216,8 +2216,8 @@
     <string name="location_activity_title_preview">Poloha</string>
     <string name="a11y_location_share_icon">Zdieľať polohu</string>
     <string name="location_share">Zdieľať polohu</string>
-    <string name="template_location_not_available_dialog_title">${app_name} nemohol získať prístup k vašej polohe</string>
-    <string name="template_location_not_available_dialog_content">${app_name} nemohol získať prístup k vašej polohe. Skúste to prosím neskôr.</string>
+    <string name="location_not_available_dialog_title">${app_name} nemohol získať prístup k vašej polohe</string>
+    <string name="location_not_available_dialog_content">${app_name} nemohol získať prístup k vašej polohe. Skúste to prosím neskôr.</string>
     <string name="location_share_external">Otvoriť s</string>
     <string name="settings_enable_location_sharing">Povoliť zdieľanie polohy</string>
     <string name="settings_enable_location_sharing_summary">Po zapnutí tejto funkcie budete môcť odoslať svoju polohu do ľubovoľnej miestnosti</string>
@@ -2387,7 +2387,7 @@
     <string name="error_unauthorized">Neautorizované, chýbajúce platné poverenia na overenie</string>
     <string name="legals_identity_server_title">Pravidlá a zásady vášho servera totožností</string>
     <string name="legals_home_server_title">Pravidlá a zásady vášho domovského servera</string>
-    <string name="template_legals_application_title">${app_name} pravidlá</string>
+    <string name="legals_application_title">${app_name} pravidlá</string>
     <string name="settings_messages_by_bot">Správy od bota</string>
     <string name="settings_encrypted_group_messages">Šifrované skupinové správy</string>
     <string name="settings_encrypted_direct_messages">Šifrované priame správy</string>
@@ -2463,7 +2463,7 @@
     <string name="a13n_qr_code_description">Obrázok QR kódu</string>
     <string name="a11y_create_direct_message_by_qr_code">Vytvorte novú priamu konverzáciu naskenovaním QR kódu</string>
     <string name="add_by_qr_code">Pridať pomocou QR kódu</string>
-    <string name="template_link_this_email_with_your_account">%s v Nastaveniach na prijímanie pozvánok priamo v ${app_name}e.</string>
+    <string name="link_this_email_with_your_account">%s v Nastaveniach na prijímanie pozvánok priamo v ${app_name}e.</string>
     <string name="this_invite_to_this_space_was_sent">Táto pozvánka do tohto priestoru bola odoslaná na adresu %s, ktorá nie je spojená s vaším účtom</string>
     <string name="this_invite_to_this_room_was_sent">Táto pozvánka do tejto miestnosti bola odoslaná na adresu %s, ktorá nie je spojená s vaším účtom</string>
     <string name="upgrade_room_for_restricted_no_param">Každý, kto sa nachádza v nadradenom priestore, bude môcť túto miestnosť nájsť a pripojiť sa k nej - nie je potrebné každého ručne pozývať. V nastaveniach miestnosti to budete môcť kedykoľvek zmeniť.</string>
@@ -2482,7 +2482,7 @@
     <string name="invite_people_to_your_space">Pozvite ľudí do svojho priestoru</string>
     <string name="three_pid_revoke_invite_dialog_content">Odvolať pozvánku do %1$s\?</string>
     <string name="invite_users_to_room_failure">Používateľov sme nemohli pozvať. Skontrolujte používateľov, ktorých chcete pozvať, a skúste to znova.</string>
-    <string name="template_invite_friends_text">Ahoj, ozvi sa mi na ${app_name}: %s</string>
+    <string name="invite_friends_text">Ahoj, ozvi sa mi na ${app_name}: %s</string>
     <string name="create_room_dm_failure">Nemohli sme vytvoriť vašu priamu správu. Skontrolujte používateľov, ktorých chcete pozvať, a skúste to znova.</string>
     <string name="notice_crypto_unable_to_decrypt_friendly_desc">Kvôli end-to-end šifrovaniu sa môže stať, že budete musieť chvíľu počkať, kým vám od niekoho príde správa, pretože vám neboli správne odoslané šifrovacie kľúče.</string>
     <string name="direct_room_encryption_enabled_tile_description">Správy v tejto miestnosti sú šifrované od vás až k príjemcovi.</string>
@@ -2508,7 +2508,7 @@
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Nepoznáte svoju prístupovú frázu pre zálohovanie kľúčov, môžete %s.</string>
     <string name="verify_user_sas_emoji_help_text">Overte tohto používateľa potvrdením, že sa na jeho obrazovke zobrazujú nasledujúce jedinečné emotikony v rovnakom poradí.</string>
     <string name="settings_developer_mode_show_info_on_screen_summary">Zobrazenie niektorých užitočných informácií na pomoc pri ladení aplikácie</string>
-    <string name="template_preference_help_summary">Získajte pomoc s používaním aplikácie ${app_name}</string>
+    <string name="preference_help_summary">Získajte pomoc s používaním aplikácie ${app_name}</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Všetky miestnosti, v ktorých sa nachádzate, sa zobrazia v časti Domov.</string>
     <string name="preference_show_all_rooms_in_home">Zobraziť všetky miestnosti v časti Domov</string>
     <string name="settings_troubleshoot_title">Riešenie problémov</string>
@@ -2609,8 +2609,8 @@
 \nAk nechcete nastaviť Heslo správy, vygenerujte namiesto toho Kľúč správy.</string>
     <string name="set_recovery_passphrase">Nastaviť %s</string>
     <string name="verification_cannot_access_other_session">Použite prístupovú frázu na obnovenie alebo kľúč</string>
-    <string name="template_use_latest_app">Použite najnovšiu aplikáciu ${app_name} na svojich ostatných zariadeniach:</string>
-    <string name="template_use_other_session_content_description">Použite najnovšiu aplikáciu ${app_name} na svojich ostatných zariadeniach, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} pre Android alebo iného klienta Matrix podporujúceho krížové podpisovanie</string>
+    <string name="use_latest_app">Použite najnovšiu aplikáciu ${app_name} na svojich ostatných zariadeniach:</string>
+    <string name="use_other_session_content_description">Použite najnovšiu aplikáciu ${app_name} na svojich ostatných zariadeniach, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} pre Android alebo iného klienta Matrix podporujúceho krížové podpisovanie</string>
     <string name="verification_use_passphrase">Ak nemáte prístup k existujúcej relácii</string>
     <string name="verification_open_other_to_verify">Použite existujúcu reláciu na overenie tejto relácie, čím jej udelíte prístup k zašifrovaným správam.</string>
     <string name="analytics_opt_in_list_item_3">Túto funkciu môžete kedykoľvek vypnúť v nastaveniach</string>
@@ -2625,10 +2625,10 @@
     <string name="analytics_opt_in_list_item_1"><b>Nezaznamenávame ani neprofilujeme</b> žiadne údaje o účte</string>
     <string name="confirm_your_identity_quad_s">Potvrďte svoju totožnosť overením tohto prihlasovacieho mena, čím mu udelíte prístup k zašifrovaným správam.</string>
     <string name="confirm_your_identity">Potvrďte svoju totožnosť overením tohto prihlásenia z jednej z vašich ďalších relácií, čím jej udelíte prístup k zašifrovaným správam.</string>
-    <string name="template_analytics_opt_in_content">Pomôžte nám identifikovať problémy a zlepšiť ${app_name} zdieľaním anonymných údajov o používaní. Aby sme pochopili, ako ľudia používajú viacero zariadení, vygenerujeme náhodný identifikátor, ktorý zdieľajú vaše zariadenia.
+    <string name="analytics_opt_in_content">Pomôžte nám identifikovať problémy a zlepšiť ${app_name} zdieľaním anonymných údajov o používaní. Aby sme pochopili, ako ľudia používajú viacero zariadení, vygenerujeme náhodný identifikátor, ktorý zdieľajú vaše zariadenia.
 \n
 \nMôžete si prečítať všetky naše podmienky %s.</string>
-    <string name="template_analytics_opt_in_title">Pomôžte zlepšiť ${app_name}</string>
+    <string name="analytics_opt_in_title">Pomôžte zlepšiť ${app_name}</string>
     <string name="call_tap_to_return">%1$s Ťuknite pre návrat</string>
     <string name="call_one_active">Aktívny hovor (%1$s) ·</string>
     <plurals name="call_active_status">
@@ -2683,11 +2683,11 @@
     <string name="identity_server_set_alternative_notice">Prípadne môžete zadať akúkoľvek inú adresu URL servera totožností</string>
     <string name="identity_server_set_default_notice">Váš domovský server (%1$s) navrhuje použiť %2$s pre váš server totožností</string>
     <string name="identity_server_user_consent_not_provided">Súhlas používateľa nebol poskytnutý.</string>
-    <string name="template_identity_server_error_bulk_sha256_not_supported">Pre vaše súkromie ${app_name} podporuje iba odosielanie zahašovaných e-mailov a telefónnych čísel používateľov.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Pre vaše súkromie ${app_name} podporuje iba odosielanie zahašovaných e-mailov a telefónnych čísel používateľov.</string>
     <string name="identity_server_error_terms_not_signed">Najprv prosím prijmite podmienky servera totožností v nastaveniach.</string>
     <string name="identity_server_error_no_identity_server_configured">Najprv prosím nastavte server totožností.</string>
     <string name="identity_server_error_outdated_home_server">Táto operácia nie je možná. Domovský server je zastaraný.</string>
-    <string name="template_identity_server_error_outdated_identity_server">Tento server identity je zastaraný. ${app_name} podporuje iba API V2.</string>
+    <string name="identity_server_error_outdated_identity_server">Tento server identity je zastaraný. ${app_name} podporuje iba API V2.</string>
     <string name="disconnect_identity_server_dialog_content">Odpojiť sa od servera totožností %s\?</string>
     <string name="user_code_info_text">Zdieľajte tento kód s ľuďmi, aby si vás mohli naskenovať, pridať a začať konverzovať.</string>
     <string name="user_code_my_code">Môj kód</string>
@@ -2698,7 +2698,7 @@
     </plurals>
     <string name="invitations_sent_to_two_users">Pozvánky odoslané používateľovi %1$s a %2$s</string>
     <string name="invitation_sent_to_one_user">Pozvánka odoslaná používateľovi %1$s</string>
-    <string name="template_invite_friends_rich_title">🔐️ Pridajte sa ku mne na ${app_name}</string>
+    <string name="invite_friends_rich_title">🔐️ Pridajte sa ku mne na ${app_name}</string>
     <string name="external_link_confirmation_message">Odkaz %1$s vás presmeruje na inú stránku: %2$s.
 \n
 \nSte si istí, že chcete pokračovať\?</string>
@@ -2731,9 +2731,9 @@
     <string name="command_description_discard_session_not_handled">Podporované len v zašifrovaných miestnostiach</string>
     <string name="command_description_discard_session">Vynúti zrušenie aktuálnej relácie odchádzajúcej skupiny v zašifrovanej miestnosti</string>
     <string name="or_other_mx_capable_client">alebo iného klienta Matrix, ktorý dokáže krížovo podpisovať</string>
-    <string name="template_app_ios_android">${app_name} iOS
+    <string name="app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="template_app_desktop_web">${app_name} Web
+    <string name="app_desktop_web">${app_name} Web
 \n${app_name} Desktop</string>
     <string name="error_saving_media_file">Nepodarilo sa uložiť mediálny súbor</string>
     <string name="bootstrap_progress_checking_backup_with_info">Kontrola kľúča na zálohovanie (%s)</string>
@@ -2831,7 +2831,7 @@
     <string name="settings_rageshake_detection_threshold_summary">Zatraste telefónom a otestujte prah detekcie</string>
     <string name="settings_rageshake_detection_threshold">Prahová hodnota detekcie</string>
     <string name="permalink_malformed">Váš odkaz matrix.to bol nesprávne vytvorený</string>
-    <string name="template_soft_logout_sso_not_same_user_error">Aktuálna relácia je pre používateľa %1$s a vy ste zadali poverenia pre používateľa %2$s. Toto nie je podporované aplikáciou ${app_name}.
+    <string name="soft_logout_sso_not_same_user_error">Aktuálna relácia je pre používateľa %1$s a vy ste zadali poverenia pre používateľa %2$s. Toto nie je podporované aplikáciou ${app_name}.
 \nNajprv vymažte údaje a potom sa znovu prihláste na inom účte.</string>
     <string name="login_reset_password_on">Obnoviť heslo na %1$s</string>
     <string name="login_registration_not_supported">Aplikácia nie je schopná vytvoriť konto na tomto domovskom serveri.
@@ -2847,7 +2847,7 @@
     <string name="room_list_quick_actions_low_priority_remove">Odobrať z nízkej priority</string>
     <string name="room_list_quick_actions_low_priority_add">Pridať k nízkej priorite</string>
     <string name="no_network_indicator">Momentálne nie je k dispozícii žiadne sieťové pripojenie</string>
-    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} potrebuje povolenie na uloženie vašich šifrovacích kľúčov na disk.
+    <string name="permissions_rationale_msg_keys_backup_export">${app_name} potrebuje povolenie na uloženie vašich šifrovacích kľúčov na disk.
 \n
 \nPovoľte prístup v ďalšom kontextovom okne, aby ste mohli svoje kľúče exportovať ručne.</string>
     <string name="enter_secret_storage_passphrase_or_key">Na pokračovanie použite %1$s alebo %2$s.</string>
@@ -2887,10 +2887,10 @@
     <string name="settings_security_prevent_screenshots_title">Zabrániť snímkam obrazovky aplikácie</string>
     <string name="auth_pin_confirm_to_disable_title">Potvrďte kód PIN, ak chcete deaktivovať kód PIN</string>
     <string name="settings_security_pin_code_change_pin_summary">Zmeňte svoj aktuálny kód PIN</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_off">PIN kód sa vyžaduje pri každom otvorení aplikácie ${app_name}.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">PIN kód sa vyžaduje po 2 minútach nepoužívania ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">PIN kód sa vyžaduje pri každom otvorení aplikácie ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">PIN kód sa vyžaduje po 2 minútach nepoužívania ${app_name}.</string>
     <string name="settings_security_pin_code_grace_period_title">Vyžadovať PIN po 2 minútach</string>
-    <string name="template_settings_security_pin_code_use_biometrics_summary_off">PIN kód je jediný spôsob, ako odomknúť ${app_name}.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN kód je jediný spôsob, ako odomknúť ${app_name}.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Povoliť biometriu špecifickú pre zariadenie, ako sú odtlačky prstov a rozpoznávanie tváre.</string>
     <string name="settings_security_pin_code_summary">Ak chcete vynulovať kód PIN, ťuknite na položku Zabudnutý kód PIN, čím sa odhlásite a vynulujete ho.</string>
     <string name="auth_pin_reset_content">Ak chcete obnoviť kód PIN, musíte sa znovu prihlásiť a vytvoriť nový.</string>
@@ -2907,7 +2907,7 @@
     <string name="finish_setting_up_discovery">Dokončiť nastavenie objavovania.</string>
     <string name="settings_discovery_consent_action_give_consent">Udeliť súhlas</string>
     <string name="settings_discovery_consent_action_revoke">Odvolať môj súhlas</string>
-    <string name="template_re_authentication_default_confirm_text">${app_name} vyžaduje, aby ste na vykonanie tejto akcie zadali svoje poverenia.</string>
+    <string name="re_authentication_default_confirm_text">${app_name} vyžaduje, aby ste na vykonanie tejto akcie zadali svoje poverenia.</string>
     <string name="event_status_a11y_delete_all">Odstrániť všetky neúspešné správy</string>
     <string name="event_status_failed_messages_warning">Správy sa nepodarilo odoslať</string>
     <string name="event_status_delete_all_failed_dialog_title">Vymazať neodoslané správy</string>
@@ -3107,8 +3107,8 @@
     <string name="dev_tools_form_hint_event_content">Obsah udalosti</string>
     <string name="dev_tools_error_no_content">Žiadny obsah</string>
     <string name="dev_tools_success_event">Udalosť odoslaná!</string>
-    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} nespracováva správy typu \'%1$s\'</string>
-    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} nespracováva udalosti typu \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">${app_name} nespracováva správy typu \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name} nespracováva udalosti typu \'%1$s\'</string>
     <string name="search_hint_room_name">Hľadať názov</string>
     <string name="feedback_failed">Spätnú väzbu sa nepodarilo odoslať (%s)</string>
     <string name="settings_developer_mode_show_info_on_screen_title">Zobraziť informácie o ladení chýb na obrazovke</string>
@@ -3148,10 +3148,10 @@
     <string name="bootstrap_info_text">Zabezpečte a odomknite zašifrované správy a dôveryhodnosť pomocou %s.</string>
     <string name="event_redacted_by_user_reason_with_reason">Udalosť vymazaná používateľom, dôvod: %1$s</string>
     <string name="delete_event_dialog_reason_hint">Dôvod úpravy</string>
-    <string name="template_rendering_event_error_exception">${app_name} sa stretol s problémom pri vykresľovaní obsahu udalosti s id \'%1$s\'</string>
+    <string name="rendering_event_error_exception">${app_name} sa stretol s problémom pri vykresľovaní obsahu udalosti s id \'%1$s\'</string>
     <string name="you">Vy</string>
     <string name="sent_a_reaction">Reagoval/a s: %s</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} môže padať častejšie, keď sa vyskytne neočakávaná chyba</string>
+    <string name="settings_developer_mode_fail_fast_summary">${app_name} môže padať častejšie, keď sa vyskytne neočakávaná chyba</string>
     <string name="login_server_url_form_common_notice">Zadajte adresu servera, ktorý chcete použiť</string>
     <string name="report_content_custom">Vlastné hlásenie…</string>
     <string name="report_content_inappropriate">Je to nevhodné</string>

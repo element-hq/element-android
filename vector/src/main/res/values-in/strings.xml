@@ -135,7 +135,7 @@
     <string name="action_reject">Tolak</string>
     <string name="later">Nanti</string>
     <string name="send_anyway">Kirim Saja</string>
-    <string name="template_no_contact_access_placeholder">${app_name} belum diizinkan untuk mengakses kontak lokal</string>
+    <string name="no_contact_access_placeholder">${app_name} belum diizinkan untuk mengakses kontak lokal</string>
     <string name="send_bug_report_include_crash_logs">Kirim catat gangguan</string>
     <string name="huge">Raksasa</string>
     <string name="small">Kecil</string>
@@ -220,18 +220,18 @@
     <string name="call_error_answered_elsewhere">panggilan terjawab di tempat lain</string>
     <string name="media_picker_both_capture_title">Ambil gambar atau video</string>
     <string name="media_picker_cannot_record_video">Tidak dapat merekam video</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} membutuhkan izin untuk mengakses galeri foto dan video Anda untuk mengirim dan menyimpan lampiran.
+    <string name="permissions_rationale_msg_storage">${app_name} membutuhkan izin untuk mengakses galeri foto dan video Anda untuk mengirim dan menyimpan lampiran.
 \n
 \nHarap berikan akses pada halaman berikut ini agar berkas dapat dikirim dari ponsel Anda.</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name} membutuhkan izin Anda untuk mengakses kamera untuk mengambil gambar dan melakukan panggilan video.</string>
+    <string name="permissions_rationale_msg_camera">${app_name} membutuhkan izin Anda untuk mengakses kamera untuk mengambil gambar dan melakukan panggilan video.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nHarap berikan akses pada halaman berikut ini agar dapat melakukan panggilan."</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name} membutuhkan permisi atas akses mikrofon Anda untuk melakukan panggilan audio.</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} membutuhkan permisi atas akses mikrofon Anda untuk melakukan panggilan audio.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nHarap berikan akses pada halaman berikut ini agar dapat melakukan panggilan."</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} membutuhkan izin untuk mengakses kamera dan mikrofon Anda untuk melakukan panggilan video.
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} membutuhkan izin untuk mengakses kamera dan mikrofon Anda untuk melakukan panggilan video.
 \n
 \nHarap berikan akses pada halaman berikut ini untuk melakukan panggilan.</string>
     <string name="light_theme">Tema Terang</string>
@@ -274,16 +274,16 @@
     <string name="e2e_re_request_encryption_key"><u>Meminta ulang kunci enkripsi</u> dari perangkat Anda yang lain.</string>
     <string name="e2e_re_request_encryption_key_sent">Permintaan kunci terkirim.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Permintaan terkirim</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Jalankan ${app_name} di perangkat yang dapat mendekripsi pesan tersebut agar kunci dapat dikirim ke perangkat ini.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Jalankan ${app_name} di perangkat yang dapat mendekripsi pesan tersebut agar kunci dapat dikirim ke perangkat ini.</string>
     <string name="groups_list">Daftar Grup</string>
     <plurals name="membership_changes">
         <item quantity="other">%d perubahan keanggotaan</item>
     </plurals>
     <string name="call">Panggilan</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} memerlukan permisi untuk mengakses daftar kontak agar dapat mencari pengguna Matrix lain berdasarkan email dan nomor telepon.
+    <string name="permissions_rationale_msg_contacts">${app_name} memerlukan permisi untuk mengakses daftar kontak agar dapat mencari pengguna Matrix lain berdasarkan email dan nomor telepon.
 
 Ijinkan akses lewat halaman selanjutnya untuk menemukan pengguna ${app_name} yang terdapat di daftar kontak Anda.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} memerlukan izin untuk mengakses daftar kontak Anda untuk menemukan pengguna Matrix lain berdasarkan email dan nomor telepon mereka.
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} memerlukan izin untuk mengakses daftar kontak Anda untuk menemukan pengguna Matrix lain berdasarkan email dan nomor telepon mereka.
 \n
 \nApakah anda bersedia bila ${app_name} mengakses daftar kontak Anda\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Mohon maaf. Aksi tidak dilakukan karena izin-izin yang kurang</string>
@@ -711,13 +711,13 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_deactivate_account_section">Nonaktifkan akun</string>
     <string name="settings_deactivate_my_account">Nonaktifkan akun saya</string>
     <string name="startup_notification_privacy_title">Kerahasiaan Notifikasi</string>
-    <string name="template_startup_notification_privacy_message">${app_name} dapat beroperasi di balik layar untuk mengurus pemberitahuan Anda dengan aman dan rahasia. Ini dapat mempengaruhi masa tahan baterai.</string>
+    <string name="startup_notification_privacy_message">${app_name} dapat beroperasi di balik layar untuk mengurus pemberitahuan Anda dengan aman dan rahasia. Ini dapat mempengaruhi masa tahan baterai.</string>
     <string name="startup_notification_privacy_button_grant">Beri izin</string>
     <string name="startup_notification_privacy_button_other">Pilih opsi lain</string>
     <string name="settings_analytics">Analitik</string>
     <string name="settings_opt_in_of_analytics">Kirim data analitik</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} mengumpulkan data analitik anonim dalam upaya kami meningkatkan aplikasi.</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">Silakan aktifkan analitik untuk membantu kami meningkatkan ${app_name}.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} mengumpulkan data analitik anonim dalam upaya kami meningkatkan aplikasi.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Silakan aktifkan analitik untuk membantu kami meningkatkan ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Ya, saya ingin membantu!</string>
     <string name="settings_data_save_mode">Mode hemat data</string>
     <string name="devices_details_dialog_title">Rincian perangkat</string>
@@ -784,7 +784,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="dialog_title_error">Error</string>
     <string name="auth_accept_policies">Mohon telaah dan terima kebijakan homeserver ini:</string>
     <string name="settings_call_category">Panggilan</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Gunakan nada dering bawaan ${app_name} untuk panggilan masuk</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Gunakan nada dering bawaan ${app_name} untuk panggilan masuk</string>
     <string name="settings_call_ringtone_title">Nada dering panggilan masuk</string>
     <string name="settings_call_ringtone_dialog_title">Pilih nada dering untuk panggilan:</string>
     <string name="video_call_in_progress">Panggilan Video Sedang Berlangsung…</string>
@@ -810,12 +810,12 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_troubleshoot_test_account_settings_quickfix">Perbolehkan</string>
     <string name="settings_troubleshoot_test_device_settings_title">Pengaturan Perangkat.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Pemberitahuan diperbolehkan untuk perangkat ini.</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Notifikasi tidak diaktifkan pada sesi ini. 
+    <string name="settings_troubleshoot_test_device_settings_failed">Notifikasi tidak diaktifkan pada sesi ini.
 \nMohon periksa pengaturan ${app_name}.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Perbolehkan</string>
     <string name="settings_troubleshoot_test_play_services_title">Pemeriksaan Layanan Google Play</string>
     <string name="settings_troubleshoot_test_play_services_success">APK Layanan Google Play ditemukan dan telah diperbaharui.</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} menggunakan Layanan Google Play untuk mendorong pesan tapi tampaknya tidak diatur sebagaimana harusnya.
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} menggunakan Layanan Google Play untuk mendorong pesan tapi tampaknya tidak diatur sebagaimana harusnya.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Perbaiki Layanan Google Play</string>
     <string name="settings_troubleshoot_test_fcm_title">Token Firebase</string>
@@ -832,17 +832,17 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">Layanan tidak dapat dinyalakan kembali</string>
     <string name="settings_troubleshoot_test_service_boot_title">Mulai ketika menyalakan perangkat</string>
     <string name="settings_troubleshoot_test_service_boot_success">Layanan akan dimulai ketika perangkat dinyalakan kembali.</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">Layanan tidak akan mulai ketika perangkat dinyalakan kembali, Anda tidak akan menerima pemberitahuan hingga Anda membuka ${app_name}.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Layanan tidak akan mulai ketika perangkat dinyalakan kembali, Anda tidak akan menerima pemberitahuan hingga Anda membuka ${app_name}.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Perbolehkan memulai ketika perangkat dinyalakan</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Periksa halangan di balik layar</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">Larangan background dinonaktifkan untuk ${app_name}. Percobaan ini sebaiknya dijalankan menggunakan jaringan mobile data (bukan WIFI).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Larangan background dinonaktifkan untuk ${app_name}. Percobaan ini sebaiknya dijalankan menggunakan jaringan mobile data (bukan WIFI).
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Larangan background dinonaktifkan untuk ${app_name}.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Larangan background dinonaktifkan untuk ${app_name}.
 \nAktivitas yang dilakukan aplikasi ini akan terhalang ketika beroperasi di balik layar, dan ini dapat mempengaruhi pemunculan notifikasi.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Matikan penghalang</string>
     <string name="settings_troubleshoot_test_battery_title">Optimisasi Baterai</string>
-    <string name="template_settings_troubleshoot_test_battery_success">${app_name} tidak terpengaruh oleh Optimisasi Baterai.</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name} tidak terpengaruh oleh Optimisasi Baterai.</string>
     <string name="title_activity_keys_backup_setup">Cadangkan Kunci</string>
     <string name="title_activity_keys_backup_restore">Gunakan Cadangan Kunci</string>
     <string name="keys_backup_is_not_finished_please_wait">Pencadangan kunci belum selesai, mohon tunggu…</string>
@@ -866,11 +866,11 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Sebagian pemberitahuan dimatikan dalam aturan Anda.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Gagal memuat aturan, mohon coba lagi.</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Periksa Aturan</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nError ini di luar kendali ${app_name} dan menurut Google, error ini muncul ketika terlalu banyak aplikasi terdaftar dengan FCM pada perangkat tersebut. Error ini tidak seharusnya mempengaruhi pengguna biasa.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nError ini di luar kendali ${app_name}, dan dapat muncul karena berbagai alasan. Coba lagi nanti, atau Anda juga dapat memeriksa apabila penggunaan jaringan data Layanan Google Play tidak terhalang oleh sistem, atau waktu pada perangkat sudah benar, atau ini dapat terjadi pada ROM tidak resmi.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nError ini di luar kendali ${app_name}. Tidak terdapat akun Google pada perangkat. Mohon buka pengelola akun dan tambahkan akun Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Tambah Akun</string>
     <string name="settings_troubleshoot_test_battery_failed">Apabila perangkat tidak sedang diisi atau dipergunakan dengan layar dimatikan, perangkat masuk mode Doze. Ini akan menghalangi aplikasi mengakses jaringan dan menunda tugas, sinkronisasi, dan alarm standar.</string>
@@ -966,7 +966,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="summary_user_sent_image">%1$s mengirim sebuah gambar.</string>
     <string name="summary_message">%1$s: %2$s</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Dioptimalkan untuk real-time</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} akan mengsinkron di latar belakang dengan cara yang akan mempertahankan sumber daya (baterai) yang terbatas.
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} akan mengsinkron di latar belakang dengan cara yang akan mempertahankan sumber daya (baterai) yang terbatas.
 \nTergantung pada keadaan sumber daya perangkat Anda, sinkronisasi dapat ditangguhkan oleh operasi sistem.</string>
     <string name="settings_background_fdroid_sync_mode_battery">Dioptimalkan untuk baterai</string>
     <string name="settings_background_fdroid_sync_mode">Mode Sinkronisasi Latar Belakang</string>
@@ -982,7 +982,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="error_threepid_auth_failed">Pastikan Anda mengklik tautan di email yang telah kami kirimkan kepada Anda.</string>
     <string name="settings_remove_three_pid_confirmation_content">Hapus %s\?</string>
     <string name="settings_add_3pid_authentication_needed">Diperlukan otentikasi</string>
-    <string name="template_settings_add_3pid_flow_not_supported">Anda tidak dapat melakukan ini dari ponsel ${app_name}</string>
+    <string name="settings_add_3pid_flow_not_supported">Anda tidak dapat melakukan ini dari ponsel ${app_name}</string>
     <string name="settings_add_3pid_confirm_password_title">Konfirmasi kata sandi Anda</string>
     <string name="settings_phone_number_empty">Tidak ada nomor telepon yang ditambahkan ke akun Anda</string>
     <string name="search_banned_user_hint">Saring pengguna yang dicekal</string>
@@ -1078,7 +1078,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="call_select_sound_device">Pilih Perangkat Suara</string>
     <string name="call_failed_no_connection_description">Gagal membuat koneksi real-time.
 \nSilakan minta administrator homeserver Anda untuk mengkonfigurasi server TURN agar panggilan untuk bekerja dengan andal.</string>
-    <string name="template_call_failed_no_connection">${app_name} Panggilan Gagal</string>
+    <string name="call_failed_no_connection">${app_name} Panggilan Gagal</string>
     <string name="call_failed_dont_ask_again">Jangan tanya saya lagi</string>
     <string name="call_failed_no_ice_use_alt">Coba menggunakan %s</string>
     <string name="call_failed_no_ice_description">Silakan minta administrator homeserver Anda (%1$s) untuk mengkonfigurasi server TURN agar panggilan dapat bekerja dengan andal.
@@ -1484,7 +1484,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Berikan izin</string>
     <string name="settings_integration_allow">Izinkan integrasi</string>
     <string name="settings_data_save_mode_summary">Mode data saver menerapkan filter tertentu sehingga pembaruan kehadiran dan pemberitahuan ketikan difilter.</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} perlu menjaga koneksi latar belakang rendah agar memiliki notifikasi yang handal.
+    <string name="startup_notification_fdroid_battery_optim_message">${app_name} perlu menjaga koneksi latar belakang rendah agar memiliki notifikasi yang handal.
 \nPada layar berikutnya Anda akan diminta untuk mengizinkan ${app_name} untuk selalu berjalan di latar belakang, mohon diterima.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Koneksi Latar Belakang</string>
     <string name="reset_secure_backup_warning">Ini akan menggantikan Kunci atau Frasa Anda saat ini.</string>
@@ -1516,7 +1516,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_background_sync_update_error">Gagal memperbarui setelan.</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Anda tidak akan diberitahu tentang pesan masuk saat aplikasi berada di latar belakang.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Tidak ada sinkronisasi latar belakang</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} akan disinkronkan di latar belakang secara berkala pada waktu yang tepat (dapat dikonfigurasi).
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} akan disinkronkan di latar belakang secara berkala pada waktu yang tepat (dapat dikonfigurasi).
 \nIni akan memengaruhi penggunaan radio dan baterai, dan ada juga pemberitahuan yang ditampilkan permanen menyatakan bahwa ${app_name} sedang mendengarkan peristiwa.</string>
     <string name="settings_mentions_and_keywords_encryption_notice">Anda tidak akan mendapatkan notifikasi untuk sebutan &amp; keyword di ruangan terenkripsi di ponsel.</string>
     <string name="settings_room_upgrades">Peningkatan ruangan</string>
@@ -1634,7 +1634,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_list_quick_actions_notifications_all_noisy">Semua pesan (brisik)</string>
     <string name="message_ignore_user">Abaikan pengguna</string>
     <string name="no_network_indicator">Tidak ada koneksi jaringan sekarang</string>
-    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} memerlukan izin untuk menyimpan kunci E2E Anda di penyimpanan.
+    <string name="permissions_rationale_msg_keys_backup_export">${app_name} memerlukan izin untuk menyimpan kunci E2E Anda di penyimpanan.
 \n
 \nHarap izinkan akses pada pop-up berikutnya untuk dapat mengekspor kunci Anda secara manual.</string>
     <string name="content_reported_as_inappropriate_content">Konten ini telah dilaporkan sebagai tidak pantas.
@@ -1842,7 +1842,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="sas_verify_title">Verifikasi dengan membandingkan string teks pendek.</string>
     <string name="invalid_or_expired_credentials">Anda telah keluar karena kredensial yang tidak valid atau kedaluwarsa.</string>
     <string name="autodiscover_well_known_autofill_confirm">Gunakan Konfigurasi</string>
-    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} mendeteksi konfigurasi server khusus untuk domain userId Anda \"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">${app_name} mendeteksi konfigurasi server khusus untuk domain userId Anda \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_invalid_response">Respons penemuan homeserver tidak valid</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Opsi Server Pelengkapan Otomatis</string>
@@ -1952,7 +1952,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
 \nCadangkan kunci Anda dengan aman untuk menghindari kehilangan kunci Anda.</string>
     <string name="keys_backup_setup_step1_title">Jangan pernah kehilangan pesan terenkripsi</string>
     <string name="keys_backup_no_session_error">Tidak ada sesi Matrix yang tersedia</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">Mohon hapus frasa sandinya jika Anda ingin ${app_name} untuk membuat kunci pemulihan.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Mohon hapus frasa sandinya jika Anda ingin ${app_name} untuk membuat kunci pemulihan.</string>
     <string name="passphrase_passphrase_too_weak">Frasa sandi terlalu lemah</string>
     <string name="passphrase_empty_error_message">Mohon masukkan frasa sandi</string>
     <string name="passphrase_passphrase_does_not_match">Frasa sandi tidak cocok</string>
@@ -1990,7 +1990,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="room_preview_no_preview_join">Ruangan ini tidak dapat ditampilkan. Apakah Anda masih mau bergabung\?</string>
     <string name="room_preview_not_found">Ruangan ini tidak dapat di akses di waktu ini.
 \nCoba lagi nanti, atau tanya admin ruangan untuk memeriksa jika Anda punya akses.</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">Tampilan ruangan yang dapat dibaca oleh dunia belum didukung di ${app_name}</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Tampilan ruangan yang dapat dibaca oleh dunia belum didukung di ${app_name}</string>
     <string name="sas_view_request_action">Tampilkan permintaan</string>
     <string name="settings_info_area_show">Tampilkan area info</string>
     <string name="room_preview_no_preview">Ruangan ini tidak dapat di tampilkan</string>
@@ -2090,10 +2090,10 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="verify_cannot_cross_sign">Sesi ini tidak dapat berbagi verifikasi ini dengan sesi Anda yang lain.
 \nVerifikasi akan disimpan secara lokal dan dibagikan dalam versi aplikasi di masa depan.</string>
     <string name="unignore">Hapus pengabaian</string>
-    <string name="template_rendering_event_error_exception">${app_name} menemukan sebuah masalah ketika rendering konten dengan id \'%1$s\'</string>
+    <string name="rendering_event_error_exception">${app_name} menemukan sebuah masalah ketika rendering konten dengan id \'%1$s\'</string>
     <string name="room_member_jump_to_read_receipt">Ke laporan dibaca</string>
-    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} tidak mendukung peristiwa dengan tipe \'%1$s\'</string>
-    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} tidak mendukung peristiwa dengan tipe \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">${app_name} tidak mendukung peristiwa dengan tipe \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name} tidak mendukung peristiwa dengan tipe \'%1$s\'</string>
     <string name="room_member_open_or_create_dm">Pesan langsung</string>
     <string name="room_member_power_level_default_in">Bawaan di %1$s</string>
     <string name="room_member_power_level_custom_in">Kustom (%1$d) di %2$s</string>
@@ -2184,7 +2184,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="create_room_encryption_description">Ketika diaktifkan, enkripsi tidak dapat dinonaktifkan.</string>
     <string name="create_room_encryption_title">Aktifkan enkripsi</string>
     <string name="command_description_shrug">Menambahkan ¯\\_(ツ)_/¯ ke pesan teks biasa</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} mungkin sering crash ketika ada kesalahan yang tidak terduga</string>
+    <string name="settings_developer_mode_fail_fast_summary">${app_name} mungkin sering crash ketika ada kesalahan yang tidak terduga</string>
     <string name="settings_developer_mode_fail_fast_title">Gagal-cepat</string>
     <string name="autocomplete_limited_results">Menunjukkan hanya hasil pertama, ketik huruf lagi…</string>
     <string name="devices_other_devices">Sesi lainnya</string>
@@ -2201,7 +2201,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="notification_initial_sync">Sinkronisasi Awal…</string>
     <string name="bug_report_error_too_short">Deskripsi terlalu pendek</string>
     <string name="permalink_malformed">Tautan matrix.to Anda tidak benar</string>
-    <string name="template_soft_logout_sso_not_same_user_error">Sesi saat ini hanya untuk pengguna %1$s dan Anda memberikan kredensial untuk pengguna %2$s. Ini tidak didukung oleh ${app_name}.
+    <string name="soft_logout_sso_not_same_user_error">Sesi saat ini hanya untuk pengguna %1$s dan Anda memberikan kredensial untuk pengguna %2$s. Ini tidak didukung oleh ${app_name}.
 \nMohon bersihkan data, terus masuk lagi ke akun lainnya.</string>
     <string name="soft_logout_clear_data_dialog_submit">Bersihkan data</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Anda akan kehilangan akses ke pesan yang aman kecuali jika Anda masuk untuk memulihkan kunci enkripsi Anda.</string>
@@ -2487,13 +2487,13 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="auth_pin_confirm_to_disable_title">Konfirmasi PIN untuk menonaktifkan PIN</string>
     <string name="settings_security_pin_code_change_pin_summary">Ubah PIN sekarang</string>
     <string name="settings_security_pin_code_change_pin_title">Ubah PIN</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_off">Kode PIN dibutuhkan setiap kali Anda buka ${app_name}.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">Kode PIN dibutuhkan setelah 2 menit tidak menggunakan ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">Kode PIN dibutuhkan setiap kali Anda buka ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">Kode PIN dibutuhkan setelah 2 menit tidak menggunakan ${app_name}.</string>
     <string name="settings_security_pin_code_grace_period_title">Membutuhkan PIN setelah 2 menit</string>
     <string name="settings_security_pin_code_notifications_summary_off">Hanya tampilkan berapa pesan yang belum dibaca dalam notifikasi sederhana.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Tampilkan detail seperti nama ruangan dan konten pesan.</string>
     <string name="settings_security_pin_code_notifications_title">Tampilkan konten di notifikasi</string>
-    <string name="template_settings_security_pin_code_use_biometrics_summary_off">Kode PIN hanya cara satu-satunya untuk membuka ${app_name}.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">Kode PIN hanya cara satu-satunya untuk membuka ${app_name}.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Aktifkan biometrik spesifik perangkat, seperti sidik jari dan pengenalan wajah.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Aktifkan biometrik</string>
     <string name="settings_security_pin_code_summary">Jika Anda ingin mengatur ulang PIN Anda, ketuk Lupa PIN untuk keluar dan mengatur ulang.</string>
@@ -2584,10 +2584,10 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="identity_server_user_consent_not_provided">Izin pengguna belum diberikan.</string>
     <string name="identity_server_error_no_current_binding_error">Tidak ada asosiasi saat ini dengan pengenal ini.</string>
     <string name="identity_server_error_binding_error">Asosiasi telah gagal.</string>
-    <string name="template_identity_server_error_bulk_sha256_not_supported">Untuk pricvasi Anda, ${app_name} hanya mendukung pengiriman email pengguna yang telah di-hash dan nomor telepon.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Untuk pricvasi Anda, ${app_name} hanya mendukung pengiriman email pengguna yang telah di-hash dan nomor telepon.</string>
     <string name="identity_server_error_terms_not_signed">Mohon terima ketentuan server identitas ini di pengaturan.</string>
     <string name="identity_server_error_no_identity_server_configured">Mohon konfigurasi server identitas.</string>
-    <string name="template_identity_server_error_outdated_identity_server">Server identitas ini telah usang. ${app_name} hanya mendukung API V2.</string>
+    <string name="identity_server_error_outdated_identity_server">Server identitas ini telah usang. ${app_name} hanya mendukung API V2.</string>
     <string name="identity_server_error_outdated_home_server">Operasi ini tidak memungkinkan. Homeserver ini telah usang.</string>
     <string name="disconnect_identity_server_dialog_content">Putuskan koneksi dari server identitas %s\?</string>
     <string name="open_terms_of">Buka ketentuan %s</string>
@@ -2604,8 +2604,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="not_a_valid_qr_code">Bukan kode QR Matrix yang valid</string>
     <string name="invitations_sent_to_two_users">Undangan terkirim ke %1$s dan %2$s</string>
     <string name="invitation_sent_to_one_user">Undangan terkirim ke %1$s</string>
-    <string name="template_invite_friends_rich_title">🔐️ Bergabung dengan saya di ${app_name}</string>
-    <string name="template_invite_friends_text">Halo, bicara dengan saya di ${app_name}: %s</string>
+    <string name="invite_friends_rich_title">🔐️ Bergabung dengan saya di ${app_name}</string>
+    <string name="invite_friends_text">Halo, bicara dengan saya di ${app_name}: %s</string>
     <string name="invite_friends">Undang teman</string>
     <string name="invite_users_to_room_title">Undang Pengguna</string>
     <string name="inviting_users_to_room">Mengundang pengguna…</string>
@@ -2619,7 +2619,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="space_add_space_to_any_space_you_manage">Tambahkan sebuah space ke space apa saja yang Anda dapat kelola.</string>
     <string name="create_space_error_empty_field_space_name">Beri nama untuk melanjutkan.</string>
     <string name="create_pin_confirm_failure">Gagal untuk memvalidasi PIN, mohon ketuk yang baru.</string>
-    <string name="template_link_this_email_with_your_account">%s di Pengaturan untuk menerima undangan secara langsung di ${app_name}.</string>
+    <string name="link_this_email_with_your_account">%s di Pengaturan untuk menerima undangan secara langsung di ${app_name}.</string>
     <string name="link_this_email_settings_link">Tautkan email ini ke akun Anda</string>
     <string name="this_invite_to_this_space_was_sent">Undangan space ini telah dikirim ke %s yang tidak diasosiasikan dengan akun Anda</string>
     <string name="this_invite_to_this_room_was_sent">Undangan ruangan ini telah dikirim ke %s yang tidak diasosiasikan dengan akun Anda</string>
@@ -2654,12 +2654,12 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="use_recovery_key">Gunakan Kunci Pemulihan</string>
     <string name="command_description_discard_session_not_handled">Hanya didukung di ruangan terenkripsi</string>
     <string name="command_description_discard_session">Memaksa sesi kelompok outbound saat ini di ruangan terenkripsi untuk dihapus</string>
-    <string name="template_use_latest_app">Gunakan ${app_name} di perangkat Anda yang lain:</string>
-    <string name="template_use_other_session_content_description">Gunakan ${app_name} di perangkat Anda yang lain, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} untuk Android, atau client Matrix lainnya yang mendukung tanda tangan silang</string>
+    <string name="use_latest_app">Gunakan ${app_name} di perangkat Anda yang lain:</string>
+    <string name="use_other_session_content_description">Gunakan ${app_name} di perangkat Anda yang lain, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} untuk Android, atau client Matrix lainnya yang mendukung tanda tangan silang</string>
     <string name="or_other_mx_capable_client">atau client Matrix lainnya yang mendukung tanda tangan silang</string>
-    <string name="template_app_ios_android">${app_name} iOS
+    <string name="app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="template_app_desktop_web">${app_name} Web
+    <string name="app_desktop_web">${app_name} Web
 \n${app_name} Desktop</string>
     <string name="change_password_summary">Atur kata sandi akun baru…</string>
     <string name="error_saving_media_file">Tidak dapat menyimpan file media</string>
@@ -2773,7 +2773,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="e2e_use_keybackup">Akses riwayat pesan terenkripsi</string>
     <string name="settings_export_trail">Ekspor Audit</string>
     <string name="settings_key_requests">Permintaan Kunci</string>
-    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Kunci telah mutakhir!</string>
     <string name="event_redacted_by_admin_reason_with_reason">Peristiwa dimoderasi oleh admin ruangan, alasannya: %1$s</string>
     <string name="event_redacted_by_user_reason_with_reason">Peristiwa dihapus oleh pengguna, alasannya: %1$s</string>
@@ -2809,7 +2809,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="a11y_open_widget">Buka widget</string>
     <string name="a11y_screenshot">Tangkap layar</string>
     <string name="authentication_error">Gagal mengotentikasi</string>
-    <string name="template_re_authentication_default_confirm_text">${app_name} meminta Anda untuk memasukkan kredential untuk melakukan aksi ini.</string>
+    <string name="re_authentication_default_confirm_text">${app_name} meminta Anda untuk memasukkan kredential untuk melakukan aksi ini.</string>
     <string name="re_authentication_activity_title">Otentikasi Ulang Dibutuhkan</string>
     <string name="call_slide_to_end_conference">Geser untuk mengakhirkan panggilan</string>
     <string name="call_transfer_unknown_person">Orang tak dikenal</string>
@@ -2967,7 +2967,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     </plurals>
     <string name="preference_system_settings">Pengaturan sistem</string>
     <string name="preference_versions">Versi</string>
-    <string name="template_preference_help_summary">Dapatkan bantuan dalam menggunakan ${app_name}</string>
+    <string name="preference_help_summary">Dapatkan bantuan dalam menggunakan ${app_name}</string>
     <string name="preference_help_title">Bantuan dan dukungan</string>
     <string name="preference_help">Bantuan</string>
     <string name="preference_root_legals">Hukum</string>
@@ -2975,16 +2975,16 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="legals_third_party_notices">Perpustakaan pihak ketiga</string>
     <string name="legals_identity_server_title">Kebijakan server identitas Anda</string>
     <string name="legals_home_server_title">Kebijakan homeserver Anda</string>
-    <string name="template_legals_application_title">Kebijakan ${app_name}</string>
+    <string name="legals_application_title">Kebijakan ${app_name}</string>
     <string name="analytics_opt_in_list_item_3">Anda dapat mematikannya kapan saja di pengaturan</string>
     <string name="analytics_opt_in_list_item_2">Kami <b>tidak</b> membagikan informasi ini dengan pihak ketiga</string>
     <string name="analytics_opt_in_list_item_1">Kami <b>tidak</b> merekam atau memprofil data akun apapun</string>
     <string name="analytics_opt_in_content_link">di sini</string>
-    <string name="template_analytics_opt_in_content">Bantu kami mengidentifikasi masalah-masalah dan membuat ${app_name} lebih baik dengan membagikan data penggunaan anonim. Untuk memahami bagaimana orang-orang menggunakan beberapa perangkat-perangkat, kami akan membuat pengenal acak, yang dibagikan oleh perangkat Anda.
+    <string name="analytics_opt_in_content">Bantu kami mengidentifikasi masalah-masalah dan membuat ${app_name} lebih baik dengan membagikan data penggunaan anonim. Untuk memahami bagaimana orang-orang menggunakan beberapa perangkat-perangkat, kami akan membuat pengenal acak, yang dibagikan oleh perangkat Anda.
 \n
 \n
 \nAnda dapat membaca semua kebijakan kami %s.</string>
-    <string name="template_analytics_opt_in_title">Bantu buat ${app_name} lebih baik</string>
+    <string name="analytics_opt_in_title">Bantu buat ${app_name} lebih baik</string>
     <string name="action_enable">Aktifkan</string>
     <string name="restart_the_application_to_apply_changes">Mulai ulang aplikasi ini untuk menerapkan perubahan.</string>
     <string name="labs_enable_latex_maths">Aktifkan matematika LaTeX</string>
@@ -3007,8 +3007,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="settings_enable_location_sharing_summary">Setelah diaktifkan Anda akan dapat mengirim lokasi Anda ke ruangan apa saja</string>
     <string name="settings_enable_location_sharing">Aktifkan pembagian lokasi</string>
     <string name="location_share_external">Buka dengan</string>
-    <string name="template_location_not_available_dialog_content">${app_name} tidak dapat mengakses lokasi Anda. Silakan coba lagi nanti.</string>
-    <string name="template_location_not_available_dialog_title">${app_name} tidak dapat mengakses lokasi Anda</string>
+    <string name="location_not_available_dialog_content">${app_name} tidak dapat mengakses lokasi Anda. Silakan coba lagi nanti.</string>
+    <string name="location_not_available_dialog_title">${app_name} tidak dapat mengakses lokasi Anda</string>
     <string name="location_share">Bagikan lokasi</string>
     <string name="a11y_location_share_icon">Bagikan lokasi</string>
     <string name="location_activity_title_preview">Lokasi</string>

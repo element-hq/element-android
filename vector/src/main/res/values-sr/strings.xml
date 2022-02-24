@@ -418,7 +418,7 @@
     </plurals>
     <string name="no_public_room_placeholder">Нема доступних јавних соба</string>
     <string name="no_more_results">Нема више резултата</string>
-    <string name="template_no_contact_access_placeholder">Нисте доволили да Елемент приступи вашим контактима</string>
+    <string name="no_contact_access_placeholder">Нисте доволили да Елемент приступи вашим контактима</string>
     <string name="no_conversation_placeholder">Нема разговора</string>
     <string name="system_alerts_header">Системска упозорења</string>
     <string name="bottom_action_groups">Заједнице</string>
@@ -472,7 +472,7 @@
     <string name="settings_call_ringtone_dialog_title">Одабери мелодију за позиве:</string>
     <string name="settings_call_ringtone_title">Мелодија долазног позива</string>
     <string name="settings_call_ringtone_use_default_stun">Дозволи сервер за повратни позив</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Користити звоно од ${app_name} за долазне позиве</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Користити звоно од ${app_name} за долазне позиве</string>
     <string name="settings_call_show_confirmation_dialog_summary">Затражити потврду пре него што се започнете позив</string>
     <string name="settings_call_show_confirmation_dialog_title">Спречити случајни позив</string>
     <string name="settings_call_category">Позиви</string>
@@ -564,7 +564,7 @@
     <string name="sound_device_speaker">Звучници</string>
     <string name="sound_device_phone">Телефон</string>
     <string name="call_select_sound_device">Изаберите звучни уређај</string>
-    <string name="template_call_failed_no_connection">${app_name} Позив није успео</string>
+    <string name="call_failed_no_connection">${app_name} Позив није успео</string>
     <string name="call_failed_dont_ask_again">Не питај ме више</string>
     <string name="call_failed_no_ice_use_alt">Пробајте да користите %s</string>
     <string name="call_failed_no_ice_title">Позив није успео због погрешне конфигурације сервера</string>

@@ -335,7 +335,7 @@
     <string name="user_directory_header">使用者目錄</string>
     <string name="matrix_only_filter">僅 Matrix 聯絡人</string>
     <string name="no_conversation_placeholder">沒有對話</string>
-    <string name="template_no_contact_access_placeholder">您沒有允許 ${app_name} 存取裝置上的聯絡資訊</string>
+    <string name="no_contact_access_placeholder">您沒有允許 ${app_name} 存取裝置上的聯絡資訊</string>
     <string name="no_result_placeholder">沒有結果</string>
     <string name="rooms_header">聊天室</string>
     <string name="rooms_directory_header">聊天室目錄</string>
@@ -472,22 +472,22 @@
     <string name="media_picker_both_capture_title">拍照或錄影</string>
     <string name="media_picker_cannot_record_video">無法錄影</string>
     <string name="permissions_rationale_popup_title">資訊</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} 需要權限來存取你的照片與影片庫，以傳送及儲存附件。
+    <string name="permissions_rationale_msg_storage">${app_name} 需要權限來存取你的照片與影片庫，以傳送及儲存附件。
 \n
 \n請在下個彈跳視窗允許存取，來從手機傳送檔案。</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name} 需要權限存取您的相機，來拍照與視訊通話。</string>
+    <string name="permissions_rationale_msg_camera">${app_name} 需要權限存取您的相機，來拍照與視訊通話。</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \n為了要通話，請在下個彈跳視窗中允許存取。"</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name} 需要權限來存取麥克風，來撥打語音通話。</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} 需要權限來存取麥克風，來撥打語音通話。</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \n為了要通話，請在下個彈跳視窗中允許存取。"</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} 需要權限來存取相機及麥克風來撥打視訊通話。
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} 需要權限來存取相機及麥克風來撥打視訊通話。
 \n
 \n為了可以正常使用通話功能，請在下個彈跳視窗中允許存取。</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} 可以檢查您的電話簿並以電子郵件與電話號碼為基礎來尋找其他 Matrix 使用者。如果您同意為此用途分享您的電話簿，請在下一個彈出式視窗中允許存取權限。</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} 可以檢查您的電話簿並以電子郵件與電話號碼為基礎來尋找其他 Matrix 使用者。
+    <string name="permissions_rationale_msg_contacts">${app_name} 可以檢查您的電話簿並以電子郵件與電話號碼為基礎來尋找其他 Matrix 使用者。如果您同意為此用途分享您的電話簿，請在下一個彈出式視窗中允許存取權限。</string>
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} 可以檢查您的電話簿並以電子郵件與電話號碼為基礎來尋找其他 Matrix 使用者。
 \n
 \n您同意為此用途分享您的電話簿嗎？</string>
     <string name="permissions_action_not_performed_missing_permissions">抱歉。由於缺少權限，所以無法執行動作</string>
@@ -597,7 +597,7 @@
     <string name="e2e_re_request_encryption_key">從其他工作階段重新請求金鑰。<u>重新請求金鑰</u>。</string>
     <string name="e2e_re_request_encryption_key_sent">已發送金鑰分享請求。</string>
     <string name="e2e_re_request_encryption_key_dialog_title">已發送請求</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">請在另一個可以解密訊息的裝置上啟動 ${app_name}，以便它將金鑰發送到此工作階段。</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">請在另一個可以解密訊息的裝置上啟動 ${app_name}，以便它將金鑰發送到此工作階段。</string>
     <string name="ssl_expected_existing_expl">憑證已從以前受信任的更改為不受信任的憑證。伺服器可能已續訂其憑證。請與伺服器管理員聯繫以尋找所需的指紋。</string>
     <string name="ssl_only_accept">僅當伺服器管理員發佈的指紋與上面的指紋匹配時才接受此憑證。</string>
     <string name="room_details_title">聊天室詳情</string>
@@ -708,13 +708,13 @@
     <string name="settings_deactivate_account_section">停用帳號</string>
     <string name="settings_deactivate_my_account">停用我的帳號</string>
     <string name="startup_notification_privacy_title">通知隱私</string>
-    <string name="template_startup_notification_privacy_message">${app_name} 可以在後臺安全隱密地管理通知。這可能會影響電池的使用。</string>
+    <string name="startup_notification_privacy_message">${app_name} 可以在後臺安全隱密地管理通知。這可能會影響電池的使用。</string>
     <string name="startup_notification_privacy_button_grant">獲取權限</string>
     <string name="startup_notification_privacy_button_other">選擇其他選項</string>
     <string name="settings_analytics">傳送分析資料</string>
     <string name="settings_opt_in_of_analytics">傳送分析資料</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} 會收集匿名分析以讓我們可以改進此應用程式。</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">請允許收集匿名分析以讓我們可以改進此應用程式。</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} 會收集匿名分析以讓我們可以改進此應用程式。</string>
+    <string name="settings_opt_in_of_analytics_prompt">請允許收集匿名分析以讓我們可以改進此應用程式。</string>
     <string name="settings_opt_in_of_analytics_ok">是的，我想要協助！</string>
     <string name="settings_data_save_mode">節省流量模式</string>
     <string name="devices_details_dialog_title">工作階段資訊</string>
@@ -1064,7 +1064,7 @@
     <string name="plus_x">+%d</string>
     <string name="x_plus">%d+</string>
     <string name="settings_call_category">通話</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">為來電使用預設的 ${app_name} 鈴聲</string>
+    <string name="settings_call_ringtone_use_app_ringtone">為來電使用預設的 ${app_name} 鈴聲</string>
     <string name="settings_call_ringtone_title">來電鈴聲</string>
     <string name="settings_call_ringtone_dialog_title">選取通話鈴聲：</string>
     <string name="action_accept">接受</string>
@@ -1088,12 +1088,12 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">啟用</string>
     <string name="settings_troubleshoot_test_device_settings_title">工作階段設定。</string>
     <string name="settings_troubleshoot_test_device_settings_success">通知已為此工作階段啟用。</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">此工作階段未啟用通知。
+    <string name="settings_troubleshoot_test_device_settings_failed">此工作階段未啟用通知。
 \n請檢查 ${app_name} 設定。</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">啟用</string>
     <string name="settings_troubleshoot_test_play_services_title">Play 服務檢查</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play 服務 APK 可用且已為最新。</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} 使用 Google Play 服務來傳遞推送訊息，但它似乎並未正確設定：
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} 使用 Google Play 服務來傳遞推送訊息，但它似乎並未正確設定：
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">修復 Play 服務</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase 權杖</string>
@@ -1110,21 +1110,21 @@
     <string name="settings_troubleshoot_test_service_restart_failed">服務重新啟動失敗</string>
     <string name="settings_troubleshoot_test_service_boot_title">開機時啟動</string>
     <string name="settings_troubleshoot_test_service_boot_success">服務將會在裝置重新啟動時自行啟動。</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">服務不會在裝置重心啟動時自行啟動，您將不能在 ${app_name} 開啟前收到通知。</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">服務不會在裝置重心啟動時自行啟動，您將不能在 ${app_name} 開啟前收到通知。</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">啟用開機時啟動</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">檢查背景限制</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">背景限制已為 ${app_name} 停用。本測試應該使用行動數據執行（不是 WiFi）。
+    <string name="settings_troubleshoot_test_bg_restricted_success">背景限制已為 ${app_name} 停用。本測試應該使用行動數據執行（不是 WiFi）。
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">背景限制已為 ${app_name} 啟用。
+    <string name="settings_troubleshoot_test_bg_restricted_failed">背景限制已為 ${app_name} 啟用。
 \n應用程式要在背景執行的工作將被嚴格限制，這可能會影響通知功能。
 \n %1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">停用限制</string>
     <string name="settings_troubleshoot_test_battery_title">電池最佳化</string>
-    <string name="template_settings_troubleshoot_test_battery_success">${app_name} 不會被電池最佳化影響。</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name} 不會被電池最佳化影響。</string>
     <string name="settings_troubleshoot_test_battery_failed">如果使用者不為裝置充電，並讓其靜置一段時間，且將螢幕關閉，裝置將會進入 Doze 模式。這可能會導致應用程式無法存取網路，並延遲它們的工作、同步與標準警報。</string>
     <string name="settings_troubleshoot_test_battery_quickfix">忽略最佳化</string>
     <string name="startup_notification_fdroid_battery_optim_title">背景連線</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} 需要保持最低影響的背景連線以接收可靠的通知。
+    <string name="startup_notification_fdroid_battery_optim_message">${app_name} 需要保持最低影響的背景連線以接收可靠的通知。
 \n在下一個畫面，您必須允許 ${app_name} 總是在背景執行，請接受。</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">授予權限</string>
     <string name="account_email_error">當驗證您的電子郵件地址時遇到錯誤。</string>
@@ -1144,11 +1144,11 @@
     <string name="settings_troubleshoot_test_bing_settings_failed">有一些通知在您的自訂設定中被停用了。</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">載入自訂規則失敗，請重試。</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">檢查設定</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \n這個錯誤並非 ${app_name} 所能控制，而是與 Google 有關，這個錯誤代表裝置註冊了太多使用 FCM 的應用程式。這個錯誤只會發生在有超大量的應用程式的裝置上，所以不應該影響一般的使用者。</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \n這個錯誤並非 ${app_name} 所能控制。可能由多種原因所導致。也可能會在稍後重試時就可以運作，您也可以檢查 Google Play 服務在系統設定中有沒有被限制使用資料，或是您裝置的時鐘是否正確，或是也可能會在自訂的 ROM 上發生。</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \n這個錯誤並非 ${app_name} 所能控制。手機上沒有 Google 帳號。請開啟帳號管理員並新增一個 Google 帳號。</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">新增帳號</string>
     <string name="settings_noisy_notifications_preferences">設定吵鬧的通知</string>
@@ -1160,7 +1160,7 @@
     <string name="notification_silent">安靜</string>
     <string name="passphrase_empty_error_message">請輸入通關密語</string>
     <string name="passphrase_passphrase_too_weak">通關密語太弱了</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">如果您想要讓 ${app_name} 生成復原金鑰的話，請刪除通關密語。</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">如果您想要讓 ${app_name} 生成復原金鑰的話，請刪除通關密語。</string>
     <string name="keys_backup_no_session_error">沒有可用的 Matrix 工作階段</string>
     <string name="keys_backup_setup_step1_title">永不遺失已加密的訊息</string>
     <string name="keys_backup_setup_step1_description">在加密聊天室裡的訊息是使用端到端加密。只有您和接收者有金鑰可以閱讀這些訊息。
@@ -1287,7 +1287,7 @@
     <string name="passwords_do_not_match">密碼不符合</string>
     <string name="autodiscover_invalid_response">無效的家伺服器探索回應</string>
     <string name="autodiscover_well_known_autofill_dialog_title">自動完成伺服器選項</string>
-    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} 偵測到您的 userId 網域「%1$s」有自訂的伺服器設定：
+    <string name="autodiscover_well_known_autofill_dialog_message">${app_name} 偵測到您的 userId 網域「%1$s」有自訂的伺服器設定：
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">使用設定</string>
     <string name="notification_sync_init">正在初始化服務</string>
@@ -1400,7 +1400,7 @@
     <string name="please_wait">請稍候……</string>
     <string name="group_all_communities">所有社群</string>
     <string name="room_preview_no_preview">無法預覽此聊天室</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">${app_name} 尚不支援預覽所有人皆可讀的聊天室</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">${app_name} 尚不支援預覽所有人皆可讀的聊天室</string>
     <string name="fab_menu_create_room">聊天室</string>
     <string name="fab_menu_create_chat">直接訊息</string>
     <string name="create_room_title">新聊天室</string>
@@ -1495,10 +1495,10 @@
     <string name="invite_no_identity_server_error">在您的設定中新增一臺身份識別伺服器以執行此動作。</string>
     <string name="settings_background_fdroid_sync_mode">背景同步模式</string>
     <string name="settings_background_fdroid_sync_mode_battery">為電池最佳化</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} 將會在背景同步以節省裝置的有限資源（電池）。
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} 將會在背景同步以節省裝置的有限資源（電池）。
 \n取決於您裝置的資源狀態，作業系統可能會延遲同步。</string>
     <string name="settings_background_fdroid_sync_mode_real_time">為即時作業最佳化</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} 將會精準地定期在背景同步（可設定）。
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} 將會精準地定期在背景同步（可設定）。
 \n這會影響到網路與電池的使用，並會顯示指出 ${app_name} 正在監聽某事件的永久通知。</string>
     <string name="settings_background_fdroid_sync_mode_disabled">無背景同步</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">當應用程式在背景時，您將不會收到訊息通知。</string>
@@ -1582,12 +1582,12 @@
     <string name="content_reported_as_inappropriate_content">此內容已被回報為不合適。 
 \n 
 \n如果您不想要看到從此使用者而來的更多內容，您可以忽略他們以隱藏他們的訊息。</string>
-    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} 需要權限以在磁碟上儲存您的 E2E 金鑰。
+    <string name="permissions_rationale_msg_keys_backup_export">${app_name} 需要權限以在磁碟上儲存您的 E2E 金鑰。
 \n
 \n請在下個彈出視窗中允許存取以讓您可以手動匯出您的金鑰。</string>
     <string name="no_network_indicator">目前沒有網路連線</string>
     <string name="settings_add_3pid_confirm_password_title">確認您的密碼</string>
-    <string name="template_settings_add_3pid_flow_not_supported">您無法在行動裝置上的 ${app_name} 做這件事</string>
+    <string name="settings_add_3pid_flow_not_supported">您無法在行動裝置上的 ${app_name} 做這件事</string>
     <string name="settings_add_3pid_authentication_needed">需要驗證</string>
     <string name="settings_integrations">整合</string>
     <string name="settings_integrations_summary">使用整合管理員以管理機器人、橋接、小工具與貼紙包。
@@ -1753,7 +1753,7 @@
 \n再次登入以存取您的帳號資料與訊息。</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">除非您登入以復原您的加密金鑰，否則您將會失去對安全訊息的存取權。</string>
     <string name="soft_logout_clear_data_dialog_submit">清除資料</string>
-    <string name="template_soft_logout_sso_not_same_user_error">使用者 %1$s 目前的工作階段與您提供的使用者 %2$s 憑證。${app_name} 並不支援。
+    <string name="soft_logout_sso_not_same_user_error">使用者 %1$s 目前的工作階段與您提供的使用者 %2$s 憑證。${app_name} 並不支援。
 \n請先清除您的資料，然後再以其他帳號登入。</string>
     <string name="permalink_malformed">您的 matrix.to 連結格式錯誤</string>
     <string name="bug_report_error_too_short">描述太短了</string>
@@ -1771,7 +1771,7 @@
     <string name="devices_other_devices">其他工作階段</string>
     <string name="autocomplete_limited_results">僅顯示第一個結果，輸入更多字母……</string>
     <string name="settings_developer_mode_fail_fast_title">快速失敗</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">在發生非預期的錯誤時，${app_name} 可能更常當機</string>
+    <string name="settings_developer_mode_fail_fast_summary">在發生非預期的錯誤時，${app_name} 可能更常當機</string>
     <string name="command_description_shrug">將 ¯\\_(ツ)_/¯ 附加到純文字訊息中</string>
     <string name="create_room_encryption_title">啟用加密</string>
     <string name="create_room_encryption_description">加密一旦啟用就無法停用。</string>
@@ -1841,9 +1841,9 @@
     <string name="room_member_power_level_moderator_in">%1$s 中的板主</string>
     <string name="room_member_power_level_custom_in">%2$s 中的自訂 (%1$d)</string>
     <string name="room_member_jump_to_read_receipt">跳至讀取回條</string>
-    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} 無法處理類型為「%1$s」的事件</string>
-    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} 無法處理類型為「%1$s」的訊息</string>
-    <string name="template_rendering_event_error_exception">在彩現 id「%1$s」事件的內容時，${app_name} 遇到問題</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name} 無法處理類型為「%1$s」的事件</string>
+    <string name="rendering_event_error_type_of_message_not_handled">${app_name} 無法處理類型為「%1$s」的訊息</string>
+    <string name="rendering_event_error_exception">在彩現 id「%1$s」事件的內容時，${app_name} 遇到問題</string>
     <string name="unignore">取消忽略</string>
     <string name="verify_cannot_cross_sign">此工作階段無法與您其他的工作階段分享此驗證。
 \n驗證將會儲存在本機並在未來版本的應用程式中共享。</string>
@@ -1927,7 +1927,7 @@
     <string name="event_redacted_by_user_reason_with_reason">被使用者刪除的活動，理由：%1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">由聊天室管理員管理的活動，理由：%1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">金鑰已為最新！</string>
-    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="settings_key_requests">金鑰請求</string>
     <string name="e2e_use_keybackup">解鎖已加密的訊息歷史</string>
     <string name="refresh">重新整理</string>
@@ -2028,13 +2028,13 @@
     <string name="media_file_added_to_gallery">媒體檔案已新增至媒體庫中</string>
     <string name="error_adding_media_file_to_gallery">無法新增媒體檔案到媒體庫中</string>
     <string name="change_password_summary">設定新的帳號密碼……</string>
-    <string name="template_use_other_session_content_description">在您的其他裝置上使用最新的 ${app_name}、${app_name} Web、${app_name} 桌面版、${app_name} iOS、${app_name} for Android 或其他有交叉簽章功能的 Matrix 客戶端</string>
-    <string name="template_app_desktop_web">${app_name} Web
+    <string name="use_other_session_content_description">在您的其他裝置上使用最新的 ${app_name}、${app_name} Web、${app_name} 桌面版、${app_name} iOS、${app_name} for Android 或其他有交叉簽章功能的 Matrix 客戶端</string>
+    <string name="app_desktop_web">${app_name} Web
 \n${app_name} 桌面版</string>
-    <string name="template_app_ios_android">${app_name} iOS
+    <string name="app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
     <string name="or_other_mx_capable_client">或其他有交叉簽章功能的 Matrix 客戶端</string>
-    <string name="template_use_latest_app">在您的其他裝置上使用最新的 ${app_name}：</string>
+    <string name="use_latest_app">在您的其他裝置上使用最新的 ${app_name}：</string>
     <string name="command_description_discard_session">強制丟棄目前在加密聊天室中的外發群組工作階段</string>
     <string name="command_description_discard_session_not_handled">僅在加密聊天室中支援</string>
     <string name="enter_secret_storage_passphrase_or_key">使用您的 %1$s 或使用您的 %2$s 以繼續。</string>
@@ -2094,11 +2094,11 @@
     <string name="choose_locale_loading_locales">正在載入可用的語言……</string>
     <string name="open_terms_of">開啟 %s 的條款</string>
     <string name="disconnect_identity_server_dialog_content">從身份識別伺服器 %s 斷線？</string>
-    <string name="template_identity_server_error_outdated_identity_server">此身份識別伺服器太舊了。${app_name} 僅支援 API V2。</string>
+    <string name="identity_server_error_outdated_identity_server">此身份識別伺服器太舊了。${app_name} 僅支援 API V2。</string>
     <string name="identity_server_error_outdated_home_server">此動作是不可能的。家伺服器太舊了。</string>
     <string name="identity_server_error_no_identity_server_configured">請先設定身份識別伺服器。</string>
     <string name="identity_server_error_terms_not_signed">請先在設定中同意身份識別伺服器的條款。</string>
-    <string name="template_identity_server_error_bulk_sha256_not_supported">為了保護您的隱私，${app_name} 僅支援傳送雜湊過的使用者電子郵件與電話號碼。</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">為了保護您的隱私，${app_name} 僅支援傳送雜湊過的使用者電子郵件與電話號碼。</string>
     <string name="identity_server_error_binding_error">關聯失敗。</string>
     <string name="identity_server_error_no_current_binding_error">目前沒有此識別符的關聯。</string>
     <string name="identity_server_set_default_notice">您的家伺服器 (%1$s) 建議將 %2$s 用於您的身份識別伺服器</string>
@@ -2112,7 +2112,7 @@
     <string name="action_copy">複製</string>
     <string name="dialog_title_success">成功</string>
     <string name="bottom_action_notification">通知</string>
-    <string name="template_call_failed_no_connection">${app_name} 呼叫失敗</string>
+    <string name="call_failed_no_connection">${app_name} 呼叫失敗</string>
     <string name="call_failed_no_connection_description">建立即時連線失敗。
 \n請要求您家伺服器的管理員設定 TURN 伺服器以讓通話的運作更可靠。</string>
     <string name="call_select_sound_device">選取音效裝置</string>
@@ -2307,13 +2307,13 @@
     <string name="delete_account_data_warning">刪除類型為 %1$s 的帳號資料？
 \n
 \n小心使用，它可能會導致意料之外的行為。</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_off">每次打開 ${app_name} 時都需要 PIN 碼。</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">未使用 ${app_name} 2分鐘後，要求輸入 PIN 碼。</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">每次打開 ${app_name} 時都需要 PIN 碼。</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">未使用 ${app_name} 2分鐘後，要求輸入 PIN 碼。</string>
     <string name="settings_security_pin_code_grace_period_title">2分鐘後要求輸入 PIN 碼</string>
     <string name="settings_security_pin_code_notifications_summary_off">在簡易通知中僅顯示未讀訊息數量。</string>
     <string name="settings_security_pin_code_notifications_summary_on">顯示如聊天室名稱與訊息內容等詳細資訊。</string>
     <string name="settings_security_pin_code_notifications_title">在通知中顯示內容</string>
-    <string name="template_settings_security_pin_code_use_biometrics_summary_off">PIN 碼是解鎖 ${app_name} 的唯一方式。</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN 碼是解鎖 ${app_name} 的唯一方式。</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">啟用特定裝置的生物識別技術，如指紋與臉部辨識。</string>
     <string name="settings_security_application_protection_screen_title">設定保護</string>
     <string name="settings_security_application_protection_summary">使用 PIN 碼與生物識別技術來保護存取權。</string>
@@ -2385,8 +2385,8 @@
     <string name="user_code_share">分享我的條碼</string>
     <string name="user_code_scan">掃描 QR code</string>
     <string name="not_a_valid_qr_code">不是有效的 Matrix QR code</string>
-    <string name="template_invite_friends_rich_title">🔐️ 在 ${app_name} 上加入我</string>
-    <string name="template_invite_friends_text">嗨，和我在 ${app_name} 上聊天吧：%s</string>
+    <string name="invite_friends_rich_title">🔐️ 在 ${app_name} 上加入我</string>
+    <string name="invite_friends_text">嗨，和我在 ${app_name} 上聊天吧：%s</string>
     <string name="invite_friends">邀請朋友</string>
     <string name="topic_prefix">"主題： "</string>
     <string name="add_people">新增夥伴</string>
@@ -2499,7 +2499,7 @@
     <string name="settings_show_emoji_keyboard_summary">在訊息編輯器上新增按鈕以開啟表情符號鍵盤</string>
     <string name="settings_show_emoji_keyboard">顯示表情符號鍵盤</string>
     <string name="authentication_error">驗證失敗</string>
-    <string name="template_re_authentication_default_confirm_text">${app_name} 需要您輸入您的憑證來執行此動作。</string>
+    <string name="re_authentication_default_confirm_text">${app_name} 需要您輸入您的憑證來執行此動作。</string>
     <string name="re_authentication_activity_title">需要重新驗證</string>
     <string name="failed_to_initialize_cross_signing">未能設定交叉簽章</string>
     <string name="error_unauthorized">未授權，缺少有效的身份驗證憑證</string>
@@ -2806,7 +2806,7 @@
     <string name="settings_notification_other">其他</string>
     <string name="settings_notification_mentions_and_keywords">提及與關鍵字</string>
     <string name="settings_notification_default">預設通知</string>
-    <string name="template_link_this_email_with_your_account">設定中的 %s 可直接在 ${app_name} 中接收邀請。</string>
+    <string name="link_this_email_with_your_account">設定中的 %s 可直接在 ${app_name} 中接收邀請。</string>
     <string name="link_this_email_settings_link">將此電子郵件與您的帳號連結</string>
     <string name="this_invite_to_this_space_was_sent">此空間的邀請已傳送給與您的帳號無關的 %s</string>
     <string name="this_invite_to_this_room_was_sent">此聊天室的邀請已傳送給與您的帳號無關的 %s</string>
@@ -2963,7 +2963,7 @@
     </plurals>
     <string name="preference_system_settings">系統設定</string>
     <string name="preference_versions">版本</string>
-    <string name="template_preference_help_summary">取得關於使用 ${app_name} 的協助</string>
+    <string name="preference_help_summary">取得關於使用 ${app_name} 的協助</string>
     <string name="preference_help_title">說明與支援</string>
     <string name="preference_help">說明</string>
     <string name="preference_root_legals">法律</string>
@@ -2971,15 +2971,15 @@
     <string name="legals_third_party_notices">第三方函式庫</string>
     <string name="legals_identity_server_title">您的身份識別伺服器政策</string>
     <string name="legals_home_server_title">您的家伺服器政策</string>
-    <string name="template_legals_application_title">${app_name} 政策</string>
+    <string name="legals_application_title">${app_name} 政策</string>
     <string name="analytics_opt_in_list_item_3">您隨時可以在設定中關閉此功能</string>
     <string name="analytics_opt_in_list_item_2">我們<b>不會</b>與第三方分享資訊</string>
     <string name="analytics_opt_in_list_item_1">我們<b>不會</b>記錄或分析任何帳號資料</string>
     <string name="analytics_opt_in_content_link">這裡</string>
-    <string name="template_analytics_opt_in_content">透過分享匿名使用資料協助我們找出問題並改善 ${app_name}。為了了解人們如何使用多裝置，我們將會產生隨機識別字串，在您的裝置間共享。
+    <string name="analytics_opt_in_content">透過分享匿名使用資料協助我們找出問題並改善 ${app_name}。為了了解人們如何使用多裝置，我們將會產生隨機識別字串，在您的裝置間共享。
 \n
 \n您可以閱讀我們的條款 %s。</string>
-    <string name="template_analytics_opt_in_title">協助改善 ${app_name}</string>
+    <string name="analytics_opt_in_title">協助改善 ${app_name}</string>
     <string name="action_enable">啟用</string>
     <string name="restart_the_application_to_apply_changes">重新啟動應用程式以讓變更生效。</string>
     <string name="labs_enable_latex_maths">啟用 LaTeX 數學</string>
@@ -3002,8 +3002,8 @@
     <string name="settings_enable_location_sharing_summary">啟用後，您就能將您的位置傳送至任何聊天室</string>
     <string name="settings_enable_location_sharing">啟用位置分享</string>
     <string name="location_share_external">開啟以</string>
-    <string name="template_location_not_available_dialog_content">${app_name} 無法存取您的位置。請稍後再試。</string>
-    <string name="template_location_not_available_dialog_title">${app_name} 無法存取您的位置</string>
+    <string name="location_not_available_dialog_content">${app_name} 無法存取您的位置。請稍後再試。</string>
+    <string name="location_not_available_dialog_title">${app_name} 無法存取您的位置</string>
     <string name="location_share">分享位置</string>
     <string name="a11y_location_share_icon">分享位置</string>
     <string name="location_activity_title_preview">位置</string>

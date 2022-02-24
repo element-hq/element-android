@@ -42,7 +42,7 @@
     <string name="bottom_action_groups">ชุมชน</string>
     <string name="invitations_header">คำเชิญ</string>
     <string name="system_alerts_header">การแจ้งเตือนจากระบบ</string>
-    <string name="template_no_contact_access_placeholder">คุณไม่ได้อนุญาตให้ ${app_name} เข้าถึงรายชื่อผู้ติดต่อในเครื่อง</string>
+    <string name="no_contact_access_placeholder">คุณไม่ได้อนุญาตให้ ${app_name} เข้าถึงรายชื่อผู้ติดต่อในเครื่อง</string>
     <string name="no_result_placeholder">ไม่มีผลลัพธ์</string>
     <string name="no_room_placeholder">ไม่มีห้อง</string>
     <plurals name="public_room_nb_users">

@@ -379,7 +379,7 @@
     <string name="user_directory_header">Kasutajate kataloog</string>
     <string name="matrix_only_filter">Vaid need, kellel on Matrixi konto</string>
     <string name="no_conversation_placeholder">Vestlusi ei leidu</string>
-    <string name="template_no_contact_access_placeholder">Sa pole ${app_name}\'ile andnud ligipääsu kohalikele kontaktidele</string>
+    <string name="no_contact_access_placeholder">Sa pole ${app_name}\'ile andnud ligipääsu kohalikele kontaktidele</string>
     <string name="no_result_placeholder">Tulemusi ei ole</string>
     <string name="people_no_identity_server">Isikutuvastusserver ei ole seadistatud.</string>
     <string name="rooms_header">Jututoad</string>
@@ -514,7 +514,7 @@
     <string name="action_copy">Kopeeri</string>
     <string name="dialog_title_success">Õnnestus</string>
     <string name="bottom_action_notification">Teavitused</string>
-    <string name="template_call_failed_no_connection">Kõne ebaõnnestus</string>
+    <string name="call_failed_no_connection">Kõne ebaõnnestus</string>
     <string name="call_failed_no_connection_description">Reaalajas ühenduse loomine ei õnnestunud.
 \nPalu oma koduserveri %@ haldajat, et ta seadistaks kõnede kindlamaks toimimiseks TURN serveri.</string>
     <string name="call_select_sound_device">Vali heliseade</string>
@@ -534,7 +534,7 @@
     <string name="e2e_re_request_encryption_key">Küsi oma muudest sessioonidest krüptimisvõtmed uuesti.</string>
     <string name="e2e_re_request_encryption_key_sent">Võtmete jagamise päring on saadetud.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Päring on saadetud</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Palun käivita ${app_name} mõnes muus seadmes, mis suudab neid sõnumeid dekrüptida ja seega saata krüptovõtmeid siia sessiooni.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Palun käivita ${app_name} mõnes muus seadmes, mis suudab neid sõnumeid dekrüptida ja seega saata krüptovõtmeid siia sessiooni.</string>
     <string name="read_receipts_list">Lugemisteatiste loend</string>
     <string name="groups_list">Gruppide loend</string>
     <plurals name="membership_changes">
@@ -555,7 +555,7 @@
     <string name="room_info_room_name">Jututoa nimi</string>
     <string name="room_info_room_topic">Jututoa teema</string>
     <string name="settings_call_category">Kõned</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Kasuta saabuvate kõnede jaoks ${app_name}\'i vaikimisi helinat</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Kasuta saabuvate kõnede jaoks ${app_name}\'i vaikimisi helinat</string>
     <string name="settings_call_ringtone_use_default_stun">Kasuta kõnehõlbustusserverit</string>
     <string name="settings_call_ringtone_title">Saabuva kõne helin</string>
     <string name="settings_call_ringtone_dialog_title">Vali helin kõnede jaoks:</string>
@@ -577,18 +577,18 @@
     <string name="media_picker_both_capture_title">Tee foto või video</string>
     <string name="media_picker_cannot_record_video">Video salvestamine ei õnnestu</string>
     <string name="permissions_rationale_popup_title">Lisateave õiguste kohta</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} vajab õigusi sinu foto- ja videokataloogide lugemiseks ning manuste salvestamiseks.
+    <string name="permissions_rationale_msg_storage">${app_name} vajab õigusi sinu foto- ja videokataloogide lugemiseks ning manuste salvestamiseks.
 \n
 \nSelleks, et saaksid oma nutiseadmest faile saata palun anna järgmisel lehel vajalikud õigused.</string>
-    <string name="template_permissions_rationale_msg_camera">Fotode ja videote salvestamiseks ning videokõnede tegemiseks vajab ${app_name} õigusi kasutada sinu kaamerat.</string>
+    <string name="permissions_rationale_msg_camera">Fotode ja videote salvestamiseks ning videokõnede tegemiseks vajab ${app_name} õigusi kasutada sinu kaamerat.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nKõnede tegemiseks palun anna järgmisel lehel vajalikud õigused."</string>
-    <string name="template_permissions_rationale_msg_record_audio">Kõnede tegemiseks vajab ${app_name} õigusi kasutada sinu mikrofoni.</string>
+    <string name="permissions_rationale_msg_record_audio">Kõnede tegemiseks vajab ${app_name} õigusi kasutada sinu mikrofoni.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nKõnede tegemiseks palun anna järgmisel lehel vajalikud õigused."</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} vajab videokõnedeks õigusi sinu kaamera ja mikrofoni kasutamiseks.
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} vajab videokõnedeks õigusi sinu kaamera ja mikrofoni kasutamiseks.
 \n
 \nKõnede tegemiseks palun anna järgmisel lehel vajalikud õigused.</string>
     <string name="permissions_action_not_performed_missing_permissions">Vabandust. Kuna vastavaid õigusi ei olnud, siis toimingut ei saanud teha</string>
@@ -794,7 +794,7 @@
     <string name="please_wait">Palun oota…</string>
     <string name="group_all_communities">Kõik kogukonnad</string>
     <string name="room_preview_no_preview">Sellel jututoal puudub eelvaade</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">${app_name} ei toeta veel kõigile nähtavate jututubade eelvaadet</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">${app_name} ei toeta veel kõigile nähtavate jututubade eelvaadet</string>
     <string name="fab_menu_create_room">Jututoad</string>
     <string name="fab_menu_create_chat">Isiklikud sõnumid</string>
     <string name="create_room_title">Uus jututuba</string>
@@ -840,7 +840,7 @@
     <string name="settings_active_sessions_signout_device">Logi sellest sessioonist välja</string>
     <string name="settings_failed_to_get_crypto_device_info">Teave krüptograafia kohta puudub</string>
     <string name="settings_active_sessions_verified_device_desc">Kuna sina oled selle sessiooni verifitseerinud, siis see sessioon on krüptitud sõnumite saatmiseks usaldusväärne:</string>
-    <string name="template_identity_server_error_outdated_identity_server">See isikutuvastusserver kasutab vana API\'t. ${app_name} toetab aga vaid API versiooni 2.</string>
+    <string name="identity_server_error_outdated_identity_server">See isikutuvastusserver kasutab vana API\'t. ${app_name} toetab aga vaid API versiooni 2.</string>
     <string name="identity_server_error_outdated_home_server">See tegevus ei ole võimalik. Koduserveri versioon on liiga vana.</string>
     <plurals name="directory_search_rooms">
         <item quantity="one">%d jututuba</item>
@@ -877,7 +877,7 @@
     <string name="settings_app_info_link_title">Rakenduse teave</string>
     <string name="settings_app_info_link_summary">Näita rakenduse teavet süsteemi seadistustes.</string>
     <string name="settings_add_3pid_confirm_password_title">Kinnitage oma salasõna</string>
-    <string name="template_settings_add_3pid_flow_not_supported">Seda tegevust ei saa teha ${app_name}\'i nutirakendusest</string>
+    <string name="settings_add_3pid_flow_not_supported">Seda tegevust ei saa teha ${app_name}\'i nutirakendusest</string>
     <string name="settings_add_3pid_authentication_needed">Autentimine on nõutav</string>
     <string name="settings_notification_advanced">Teavituste lisaseadistused</string>
     <string name="settings_notification_by_event">Teavituse olulisus sündmuse alusel</string>
@@ -890,7 +890,7 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Võta kasutusele</string>
     <string name="settings_troubleshoot_test_device_settings_title">Sessiooni seadistused.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Selles sessioonis on teavitused kasutusel.</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Selles sessioonis ei ole teavitusi kasutusel.
+    <string name="settings_troubleshoot_test_device_settings_failed">Selles sessioonis ei ole teavitusi kasutusel.
 \nSeda saad muuta ${app_name}\'i seadistuses.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Võta kasutusele</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Kohandatud seadistused.</string>
@@ -1214,7 +1214,7 @@
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Palun kontrolli seadistusi</string>
     <string name="settings_troubleshoot_test_play_services_title">Goolge Play teenuste kontrollimine</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK on kättesaadav ja uuendatud.</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} kasutab Google Play teenuseid tõuketeavituste edastamiseks, kui see ei tundu olema korrektselt seadistatud:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} kasutab Google Play teenuseid tõuketeavituste edastamiseks, kui see ei tundu olema korrektselt seadistatud:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Paranda Google Play teenused</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase tunnusluba</string>
@@ -1222,11 +1222,11 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">FCM tunnusloa laadimine ei õnnestunud:
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nSee viga on väljaspool ${app_name}\'i kontrolli ning vastavalt Google infole liiga palju rakendusi kasutavad FCM\'i. Selline olukord peaks tekkima vaid siis kui kasutusel on hiidpalju selliseid rakendusi ning ei peaks mõjutama tavakasutajaid.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nSee viga on väljaspool ${app_name}\'i kontrolli ning võib juhtuda eri põhjustel. Võib-olla hilisemal proovimisel seda viga enam ei teki, kuid igaks juhuks vaata, et Google Play teenustele ei oleks süsteemi seadetes määratud andmesidepiirangut ning seadme kell on õige. Samuti võib see viga tekkida, kui sa pruugid kohandatud Androidi varianti (custom ROM).</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nSee viga on väljaspool ${app_name}\'i kontrolli. Telefoni ei ole seadistatud Google\'i kontot. Palun ava seadistustes kontohaldur ning lisa üks Google\'i konto.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Lisa Google\'i konto</string>
     <string name="settings_troubleshoot_test_token_registration_title">Tunnusloa registreerimine</string>
@@ -1238,7 +1238,7 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Teenuse uuesti käivitamine ei õnnestunud</string>
     <string name="settings_troubleshoot_test_service_boot_title">Käivita teenus seadme käivitamisel</string>
     <string name="settings_troubleshoot_test_service_boot_success">Teenus käivitatakse nutiseadme käivitamisel.</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">Seda teenust ei käivitatata nutiseadme käivitamisel. Sa ei saa teavitusi enne, kui ${app_name} on vähemalt korra avatud.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Seda teenust ei käivitatata nutiseadme käivitamisel. Sa ei saa teavitusi enne, kui ${app_name} on vähemalt korra avatud.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Käivita teenus nutiseadme käivitamisel</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Kontrolli taustapiiranguid</string>
     <plurals name="notification_unread_notified_messages_in_room_rooms">
@@ -1286,21 +1286,21 @@
     <string name="settings_labs_native_camera_summary">Käivita kohandatud vaate asemel süsteemne kaamera vaade.</string>
     <string name="settings_labs_keyboard_options_to_send_message">Kasuta reavahetuse klahvi sõnumi saatmiseks</string>
     <string name="settings_labs_enable_send_voice">Saada häälsõnumeid</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} saab kontrollida teie aadressiraamatut, et leida teisi Matrixi kasutajaid nende e-posti aadressi ja telefoninumbrite põhjal. Kui sa nõustud oma aadressiraamatut sel eesmärgil jagama, luba juurdepääs järgmisel hüpikaknal.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} saab kontrollida teie aadressiraamatut, et leida teisi Matrixi kasutajaid nende e-posti aadresside ja telefoninumbrite põhjal.
+    <string name="permissions_rationale_msg_contacts">${app_name} saab kontrollida teie aadressiraamatut, et leida teisi Matrixi kasutajaid nende e-posti aadressi ja telefoninumbrite põhjal. Kui sa nõustud oma aadressiraamatut sel eesmärgil jagama, luba juurdepääs järgmisel hüpikaknal.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} saab kontrollida teie aadressiraamatut, et leida teisi Matrixi kasutajaid nende e-posti aadresside ja telefoninumbrite põhjal.
 \n
 \nKas sa oled nõus oma aadressiraamatut sel eesmärgil jagama\?</string>
     <string name="room_event_action_report_prompt_ignore_user">Kas sa soovid peita selle kasutaja kõik sõnumid\?
 \n
 \nPane tähele, et antud toiming taaskäivitab rakenduse ja see võib võtta veidi aega.</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">Taustapiirangud on Elemendi jaoks keelatud. Seda testi tuleks läbi viia mobiilse andmeside abil (WIFI puudub).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Taustapiirangud on Elemendi jaoks keelatud. Seda testi tuleks läbi viia mobiilse andmeside abil (WIFI puudub).
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Elemendi jaoks on taustpiirangud lubatud.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Elemendi jaoks on taustpiirangud lubatud.
 \nTöö, mida rakendus proovib teha, on agressiivselt piiratud, kui see on taustal ja see võib mõjutada teavituste kättesaamist.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Keela piirangud</string>
     <string name="settings_troubleshoot_test_battery_title">Aku optimeerimine</string>
-    <string name="template_settings_troubleshoot_test_battery_success">Aku optimeerimine ei mõjuta ${app_name}.</string>
+    <string name="settings_troubleshoot_test_battery_success">Aku optimeerimine ei mõjuta ${app_name}.</string>
     <string name="settings_troubleshoot_test_battery_failed">Kui kasutaja jätab seadme mõneks ajaks vooluvõrgust välja ja ühele kohale paigale ning ekraan on välja lülitatud, lülitub seade Doze režiimi. See takistab rakendustel juurdepääsu võrgule ja lükkab edasi nende töö, sünkroonimise ja tavalised teated.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Eira optimeerimist</string>
     <string name="settings_notification_privacy_normal">Tavaline</string>
@@ -1330,10 +1330,10 @@
     <string name="settings_background_sync">Andmete sünkroniseerimine taustal</string>
     <string name="settings_background_fdroid_sync_mode">Andmete taustal sünkroniseerimise režiim</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimeeritud akukestust silmas pidades</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} sünkroniseerib taustal nii, et see arvestab seadme piiratud ressursse (aku).
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} sünkroniseerib taustal nii, et see arvestab seadme piiratud ressursse (aku).
 \nSõltuvalt seadme olekust võib operatsioonisüsteem sünkroniseerimist edasi lükata.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimeeritud reaalajas</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} sünkroniseerib sõnumeid taustal etteantud aja järel (aeg on seadistatav).
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} sünkroniseerib sõnumeid taustal etteantud aja järel (aeg on seadistatav).
 \nSee mõjutab seadme saatjat/vastuvõtjat ja akukasutust ning kuvatakse püsiteade, et ${app_name} kuulab sündmusi.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Taustasünkroonimine puudub</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Kui rakendus töötab taustal, siis sa ei saa saabunud sõnumite kohta teavitusi.</string>
@@ -1401,17 +1401,17 @@
     <string name="settings_discovery_category">Leia kasutajaid</string>
     <string name="settings_discovery_manage">Halda kasutajate otsingu seadistusi.</string>
     <string name="startup_notification_privacy_title">Teavituste privaatsus</string>
-    <string name="template_startup_notification_privacy_message">${app_name} võib taustal töötamise ajal hallata sinu teavitusi turvaliselt ja privaatselt. Aga see võib mõjutada akukasutust.</string>
+    <string name="startup_notification_privacy_message">${app_name} võib taustal töötamise ajal hallata sinu teavitusi turvaliselt ja privaatselt. Aga see võib mõjutada akukasutust.</string>
     <string name="startup_notification_privacy_button_grant">Anna õigused</string>
     <string name="startup_notification_privacy_button_other">Tee muu valik</string>
     <string name="startup_notification_fdroid_battery_optim_title">Taustaühendus</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">Selleks et teavitused toimiksid korralikult peab ${app_name} kasutama vähese kõrvalmõjuga taustaühendust.
+    <string name="startup_notification_fdroid_battery_optim_message">Selleks et teavitused toimiksid korralikult peab ${app_name} kasutama vähese kõrvalmõjuga taustaühendust.
 \nKui järgmisel lehel sinult küsitakse kas lubada, et ${app_name} töötab kogu aeg taustal, siis palun nõustu.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Anna õigused</string>
     <string name="settings_analytics">Analüütika</string>
     <string name="settings_opt_in_of_analytics">Saada arendajatele analüütikat</string>
-    <string name="template_settings_opt_in_of_analytics_summary">Võimaldamaks meil rakendust parandada kogub ${app_name} anonüümset teavet rakenduse kasutuse kohta.</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">Selleks, et saaksime ${app_name}\'i paremaks teha, palun luba analüütika.</string>
+    <string name="settings_opt_in_of_analytics_summary">Võimaldamaks meil rakendust parandada kogub ${app_name} anonüümset teavet rakenduse kasutuse kohta.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Selleks, et saaksime ${app_name}\'i paremaks teha, palun luba analüütika.</string>
     <string name="settings_opt_in_of_analytics_ok">Jah, ma soovin aidata!</string>
     <string name="settings_data_save_mode">Võrguliikluse mahu säästmise režiim</string>
     <string name="settings_data_save_mode_summary">Võrguliikluse andmemahu säästmiseks kasutatakse filtrit, mille puhul kasutajate olekuid ei uuendata ja sõnumite kirjutamise teavitusi ei laeta.</string>
@@ -1625,7 +1625,7 @@
     <string name="passphrase_passphrase_does_not_match">Paroolifraasid ei klappi mitte</string>
     <string name="passphrase_empty_error_message">Palun sisesta paroolifraas</string>
     <string name="passphrase_passphrase_too_weak">Paroolifraas on liiga nõrk</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">Kui sa soovid, et ${app_name} looks taastevõtme, siis palun kustuta paroolifraas.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Kui sa soovid, et ${app_name} looks taastevõtme, siis palun kustuta paroolifraas.</string>
     <string name="keys_backup_no_session_error">Matrix\'i sessioone ei leidu</string>
     <string name="keys_backup_setup_step1_title">Ära kunagi kaota krüptitud sõnumeid</string>
     <string name="keys_backup_setup_step1_description">Sõnumid krüptitud jututubades kasutavad läbivat krüptimist. Ainult sinul ja saaja(te)l on võtmed selliste sõnumite lugemiseks.
@@ -1710,7 +1710,7 @@
     <string name="keys_backup_info_title_signature">Allkiri</string>
     <string name="autodiscover_invalid_response">Vigane vastus koduserveri tuvastamise päringule</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Serveriseadistuste automaatne sõnalõpetus</string>
-    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} tuvastas kohandatud serveriseadistused sinu kasutajanime domeenis „%1$s“:
+    <string name="autodiscover_well_known_autofill_dialog_message">${app_name} tuvastas kohandatud serveriseadistused sinu kasutajanime domeenis „%1$s“:
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Kasuta seadistusi</string>
     <string name="invalid_or_expired_credentials">Oled kehtetu või aegunud kasutajanime või salasõna tõttu välja logitud.</string>
@@ -1882,7 +1882,7 @@
     <string name="devices_other_devices">Muud sessioonid</string>
     <string name="autocomplete_limited_results">Kuvan vaid esimesi tulemusi, kirjuta natuke pikemalt…</string>
     <string name="settings_developer_mode_fail_fast_title">Kiire lõppmäng</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">Teadmata vigade puhul võib ${app_name} sagedamini kokku joosta</string>
+    <string name="settings_developer_mode_fail_fast_summary">Teadmata vigade puhul võib ${app_name} sagedamini kokku joosta</string>
     <string name="command_description_shrug">Lisa ¯\\_(ツ)_/¯ smaili vormindamata teksti algusesse</string>
     <string name="create_room_encryption_title">Võta jututoas krüptimine kasutusele</string>
     <string name="create_room_encryption_description">Kui krüptimine on juba kasutusele võetud, siis ei saa seda enam eemaldada.</string>
@@ -1958,7 +1958,7 @@
     <string name="disconnect_identity_server_dialog_content">Kas katkestame ühenduse isikutuvastusserveriga %s\?</string>
     <string name="identity_server_error_no_identity_server_configured">Palun esmalt seadista isikutuvastusserver.</string>
     <string name="identity_server_error_terms_not_signed">Palun esmalt nõustu seadistustes isikutuvastusserveri kasutustingimustega.</string>
-    <string name="template_identity_server_error_bulk_sha256_not_supported">Sinu privaatsuse nimel saadab ${app_name} e-posti aadressid ja telefoninumbrid serverisse vaid räsituna.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Sinu privaatsuse nimel saadab ${app_name} e-posti aadressid ja telefoninumbrid serverisse vaid räsituna.</string>
     <string name="identity_server_error_binding_error">Seoste loomine ei õnnestunud.</string>
     <string name="identity_server_error_no_current_binding_error">Selle tunnusega ei ole hetkel ühtegi seost.</string>
     <string name="identity_server_set_default_notice">Sinu koduserver (%1$s) soovitab kasutada sinu isikutuvastusserverina %2$s teenust</string>
@@ -2128,7 +2128,7 @@
     <string name="content_reported_as_inappropriate_content">Haldaja sai nüüd teate, et see sisu ei ole sobilik. 
 \n 
 \nKui sa ei soovi enam näha selle kasutaja sisu, siis sa võid tema sõnumite peitmiseks kasutajat eirata.</string>
-    <string name="template_permissions_rationale_msg_keys_backup_export">Läbiva krüptograafia jaoks vajalike võtmete salvestamiseks kohalikule andmekandjale vaajab ${app_name} sinu luba.
+    <string name="permissions_rationale_msg_keys_backup_export">Läbiva krüptograafia jaoks vajalike võtmete salvestamiseks kohalikule andmekandjale vaajab ${app_name} sinu luba.
 \n
 \nSelleks et saaksid võtmed käsitsi eksportida, siis palun anna selleks järgmises vaates luba.</string>
     <string name="no_network_indicator">Hetkel puudub võrguühendus</string>
@@ -2165,7 +2165,7 @@
 \n• Sinu koduserveri haldaja on turvakaalutlustel keelanud sinu ligipääsu.</string>
     <string name="signed_out_submit">Logi uuesti sisse</string>
     <string name="soft_logout_title">Sa oled loginud välja</string>
-    <string name="template_soft_logout_sso_not_same_user_error">Praegune sessioon kuulub kasutajale %1$s, kuid sina üritad siseneda kasutaajaga %2$s. Sellist võimalust ${app_name} hetkel ei toeta.
+    <string name="soft_logout_sso_not_same_user_error">Praegune sessioon kuulub kasutajale %1$s, kuid sina üritad siseneda kasutaajaga %2$s. Sellist võimalust ${app_name} hetkel ei toeta.
 \nPalun eemalda kõik andmed ning siis logi sisse muu kontoga.</string>
     <string name="verification_conclusion_compromised">Mõni järgnevatest võib olla sattunud valedesse kätesse:
 \n 
@@ -2204,9 +2204,9 @@
     <string name="room_member_power_level_default_in">Vaikimisi õigused jututoas %1$s</string>
     <string name="room_member_power_level_custom_in">Kohandatud õigused (%1$d) jututoas %2$s</string>
     <string name="room_member_jump_to_read_receipt">Hüppa lugemisteatise juurde</string>
-    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} ei oska käsitleda %1$s-tüüpi sündmusi</string>
-    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} ei oska käsitleda %1$s-tüüpi sünumeid</string>
-    <string name="template_rendering_event_error_exception">Tekkis viga, kui ${app_name} üritas töödelda sõnumi %1$s sisu</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name} ei oska käsitleda %1$s-tüüpi sündmusi</string>
+    <string name="rendering_event_error_type_of_message_not_handled">${app_name} ei oska käsitleda %1$s-tüüpi sünumeid</string>
+    <string name="rendering_event_error_exception">Tekkis viga, kui ${app_name} üritas töödelda sõnumi %1$s sisu</string>
     <string name="call_notification_answer">Võta vastu</string>
     <string name="call_notification_reject">Keeldu</string>
     <string name="call_notification_hangup">Lõpeta kõne</string>
@@ -2246,7 +2246,7 @@
     <string name="event_redacted_by_user_reason_with_reason">Kasutaja kustutas sündmuse, põhjusena %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Jututoa haldur on sündmust modereerinud, põhjusena %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Krüptovõtmed on juba uuendatud!</string>
-    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="settings_key_requests">Päringud võtmete laadimiseks</string>
     <string name="e2e_use_keybackup">Võta krüptitud sõnumite ajalugu lukust lahti</string>
     <string name="refresh">Värskenda</string>
@@ -2304,13 +2304,13 @@
     <string name="error_adding_media_file_to_gallery">Meediafaili galeriisse lisamine ei õnnestunud</string>
     <string name="error_saving_media_file">Meediafaili salvestamine ei õnnestunud</string>
     <string name="change_password_summary">Määra kontole uus salasõna…</string>
-    <string name="template_use_other_session_content_description">Kasuta kõige uuemat ${app_name}\'i versioon mõnes muus seadmes, nagu näiteks ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} Android. Samuti sobib mõni muu Matrix\'i klient, mis oskab risttunnustamist</string>
-    <string name="template_app_desktop_web">${app_name} Web
+    <string name="use_other_session_content_description">Kasuta kõige uuemat ${app_name}\'i versioon mõnes muus seadmes, nagu näiteks ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} Android. Samuti sobib mõni muu Matrix\'i klient, mis oskab risttunnustamist</string>
+    <string name="app_desktop_web">${app_name} Web
 \n${app_name} Desktop</string>
-    <string name="template_app_ios_android">${app_name} iOS
+    <string name="app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
     <string name="or_other_mx_capable_client">või mõnda teist Matrix\'i klienti, mis oskab risttunnustamist</string>
-    <string name="template_use_latest_app">Kasuta oma muus seadmes kõige uuemat ${app_name}\'i versiooni:</string>
+    <string name="use_latest_app">Kasuta oma muus seadmes kõige uuemat ${app_name}\'i versiooni:</string>
     <string name="command_description_discard_session">Sunnib loobuma praeguse krüptitud jututoa rühmavestluse seansist</string>
     <string name="command_description_discard_session_not_handled">Funktsionaalsus on toetatud ainult krüptitud jututubades</string>
     <string name="enter_secret_storage_passphrase_or_key">Jätkamiseks kasuta kas oma %1$s või %2$s.</string>
@@ -2351,13 +2351,13 @@
     <string name="delete_account_data_warning">Kas kustutame %1$s tüüpi kasutajakonto andmed\?
 \n
 \nKuna nii mõndagi ootamatut võib juhtuda, siis kasuta seda võimalust mõningase ettevaatusega.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_off">PIN-kood on nõutav alati, kui sa ${app_name}\'i avad.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">PIN-kood on nõutav, kui sa kahe minuti jooksul pole ${app_name}\'i kasutanud.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">PIN-kood on nõutav alati, kui sa ${app_name}\'i avad.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">PIN-kood on nõutav, kui sa kahe minuti jooksul pole ${app_name}\'i kasutanud.</string>
     <string name="settings_security_pin_code_grace_period_title">Kahe minuti möödumisel küsi uuesti PIN-koodi</string>
     <string name="settings_security_pin_code_notifications_summary_off">Näita vaid napi teavitusena lugemata sõnumite arvu.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Näita täpsemat teavet nagu jututoa nimi ja sõnumi sisu.</string>
     <string name="settings_security_pin_code_notifications_title">Näita teavitustes sisu</string>
-    <string name="template_settings_security_pin_code_use_biometrics_summary_off">PIN-kood on ainus võimalus, kuidas sa saad ${app_name}\'i lukust lahti.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-kood on ainus võimalus, kuidas sa saad ${app_name}\'i lukust lahti.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Kasuta selles seadmes leiduvaid biomeetrilise tuvastuse võimalusi nagu sõrmejälgede lugejat või näotuvastust.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Kasuta biomeetrilist tuvastust</string>
     <string name="settings_security_application_protection_screen_title">Seadista</string>
@@ -2421,8 +2421,8 @@
     <string name="identity_server_consent_dialog_content">Kas selleks, et leida tuttavaid, oled sa nõus saatma oma kontaktteavet (telefoninumbreid ja/või e-posti aadresse) siin rakenduses seadistatud isikutuvastusserverile (%1$s)\?
 \n
 \nParema turvalisuse nimel me ei saada teavet mitte loetava tekstina, vaid räsina.</string>
-    <string name="template_invite_friends_rich_title">🔐️ Liitu minuga vestlusrakenduses ${app_name}</string>
-    <string name="template_invite_friends_text">Hei, palun suhtle minuga vestlusrakenduses ${app_name}: %s</string>
+    <string name="invite_friends_rich_title">🔐️ Liitu minuga vestlusrakenduses ${app_name}</string>
+    <string name="invite_friends_text">Hei, palun suhtle minuga vestlusrakenduses ${app_name}: %s</string>
     <string name="invite_friends">Kutsu sõpru</string>
     <string name="add_people">Lisa inimesi</string>
     <string name="topic_prefix">"Teema: "</string>
@@ -2545,7 +2545,7 @@
     <string name="room_participants_leave_private_warning">See ei ole avalik jututuba. Ilma kutseta sa ei saa uuesti liituda.</string>
     <string name="system_theme">Süsteemi vaikeseadistused</string>
     <string name="authentication_error">Autentimine ei õnnestunud</string>
-    <string name="template_re_authentication_default_confirm_text">Selle tegevuse jaoks palub ${app_name} sul sisestada oma kasutajanime ja salasõna.</string>
+    <string name="re_authentication_default_confirm_text">Selle tegevuse jaoks palub ${app_name} sul sisestada oma kasutajanime ja salasõna.</string>
     <string name="re_authentication_activity_title">Palun korda autentimist</string>
     <string name="failed_to_initialize_cross_signing">Risttunnustamise alustamine ei õnnestunud</string>
     <string name="error_unauthorized">Volitused puuduvad, kasutajakonto ja/või salasõna on valed</string>
@@ -2860,7 +2860,7 @@
     <string name="upgrade_room_for_restricted_no_param">Kõik hõlmava kogukonna liikmed saavad antud jututuba leida ja sellega liituda - sa ei pea kedagi ükshaaval kutsuma. Neid jututoa seadistusi saad igal hetkel muuta.</string>
     <string name="upgrade_room_for_restricted">Kõik %s jututoa liikmed saavad antud jututuba leida ja sellega liituda - sa ei pea kedagi ükshaaval kutsuma. Neid jututoa seadistusi saad igal hetkel muuta.</string>
     <string name="call_tap_to_return">%1$s - tagasipöördumiseks klõpsi</string>
-    <string name="template_link_this_email_with_your_account">%s ja saa kutsed otse ${app_name}\'i.</string>
+    <string name="link_this_email_with_your_account">%s ja saa kutsed otse ${app_name}\'i.</string>
     <string name="link_this_email_settings_link">Seo see e-posti aadress oma kasutajakontoga</string>
     <string name="this_invite_to_this_space_was_sent">See kutse siia kogukonnakeskusesse saadeti aadressile %s, mis ei ole seotud sinu kontoga</string>
     <string name="this_invite_to_this_room_was_sent">See kutse siia jututuppa saadeti aadressile %s, mis ei ole seotud sinu kontoga</string>
@@ -3021,7 +3021,7 @@
     </plurals>
     <string name="preference_system_settings">Süsteemiseadistused</string>
     <string name="preference_versions">Versioonid</string>
-    <string name="template_preference_help_summary">${app_name}\'i kasutamiseks vajalik abiteave</string>
+    <string name="preference_help_summary">${app_name}\'i kasutamiseks vajalik abiteave</string>
     <string name="preference_help_title">Abiteave ja kasutajatugi</string>
     <string name="preference_help">Abiteave</string>
     <string name="preference_root_legals">Juriidiline teave</string>
@@ -3029,15 +3029,15 @@
     <string name="legals_identity_server_title">Sinu isikutuvastusserveri kasutustingimused</string>
     <string name="legals_third_party_notices">Kolmandate osapoolte litsentsid</string>
     <string name="legals_home_server_title">Sinu koduserveri kasutustingimused</string>
-    <string name="template_legals_application_title">${app_name} kasutustingimused</string>
+    <string name="legals_application_title">${app_name} kasutustingimused</string>
     <string name="analytics_opt_in_list_item_3">Seadistustest saad alati määrata, et see funktsionaalsus pole kasutusel</string>
     <string name="analytics_opt_in_list_item_2">Meie <b>ei</b> jaga teavet kolmandate osapooltega</string>
     <string name="analytics_opt_in_list_item_1">Meie <b>ei</b> salvesta ega profileeri sinu kasutajakonto andmeid</string>
     <string name="analytics_opt_in_content_link">siit</string>
-    <string name="template_analytics_opt_in_content">Võimalike vigade leidmiseks ja ${app_name}\'i arendamiseks jaga meiega anonüümseid andmeid. Selleks, et mõistaksime, kuidas kasutajad erinevaid seadmeid pruugivad me loome sinu seadmetele ühise juhusliku tunnuse.
+    <string name="analytics_opt_in_content">Võimalike vigade leidmiseks ja ${app_name}\'i arendamiseks jaga meiega anonüümseid andmeid. Selleks, et mõistaksime, kuidas kasutajad erinevaid seadmeid pruugivad me loome sinu seadmetele ühise juhusliku tunnuse.
 \n
 \nMeie kasutustingimused leiad siit - %s.</string>
-    <string name="template_analytics_opt_in_title">Aita ${app_name}\'i arendamisel</string>
+    <string name="analytics_opt_in_title">Aita ${app_name}\'i arendamisel</string>
     <string name="action_enable">Võta kasutusele</string>
     <string name="restart_the_application_to_apply_changes">Muudatuste jõustamiseks käivita rakendus uuesti.</string>
     <string name="labs_enable_latex_maths">Kasuta LaTeX-vorminduses matemaatika märgistust</string>
@@ -3061,8 +3061,8 @@
     <string name="settings_enable_location_sharing_summary">Kui see seadistus on kasutusel, siis sa saad oma asukohta jagada igas jututoas</string>
     <string name="settings_enable_location_sharing">Luba asukohta jagada</string>
     <string name="location_share_external">Ava muu rakendusega</string>
-    <string name="template_location_not_available_dialog_content">${app_name} ei saanud asukohta tuvastada. Palun proovi hiljem uuesti.</string>
-    <string name="template_location_not_available_dialog_title">${app_name} ei saanud asukohta tuvastada</string>
+    <string name="location_not_available_dialog_content">${app_name} ei saanud asukohta tuvastada. Palun proovi hiljem uuesti.</string>
+    <string name="location_not_available_dialog_title">${app_name} ei saanud asukohta tuvastada</string>
     <string name="location_share">Jaga asukohta</string>
     <string name="a11y_location_share_icon">Jaga asukohta</string>
     <string name="location_activity_title_preview">Asukoht</string>
