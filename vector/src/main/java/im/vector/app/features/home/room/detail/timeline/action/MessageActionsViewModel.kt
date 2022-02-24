@@ -554,7 +554,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         }
     }
 
-    // TODO need to add this check into media viewer?
     private fun canShare(msgType: String?): Boolean {
         return when (msgType) {
             MessageType.MSGTYPE_TEXT,
@@ -569,7 +568,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         }
     }
 
-    // TODO need to add this into Viewer screen to check if it is saveable? => create extension on MessageType or useCase?
     private fun canSave(msgType: String?): Boolean {
         return when (msgType) {
             MessageType.MSGTYPE_IMAGE,
