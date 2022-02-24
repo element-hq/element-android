@@ -10,6 +10,7 @@ env:
   CI_GRADLE_ARG_PROPERTIES: >
     -Porg.gradle.jvmargs=-Xmx2g
     -Porg.gradle.parallel=false
+
 jobs:
   # Build Android Tests [Matrix SDK]
   build-android-test-matrix-sdk:
