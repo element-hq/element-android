@@ -45,21 +45,30 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
 
     private fun observeVectorDataStore() {
         vectorDataStore.forceDialPadDisplayFlow.setOnEach {
-            copy(
-                    dialPadVisible = it
-            )
+            copy(dialPadVisible = it)
+        }
+
+        vectorDataStore.forceLoginFallbackFlow.setOnEach {
+            copy(forceLoginFallback = false)
         }
     }
 
     override fun handle(action: DebugPrivateSettingsViewActions) {
         when (action) {
-            is DebugPrivateSettingsViewActions.SetDialPadVisibility -> handleSetDialPadVisibility(action)
+            is DebugPrivateSettingsViewActions.SetDialPadVisibility         -> handleSetDialPadVisibility(action)
+            is DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled -> handleSetForceLoginFallbackEnabled(action)
         }
     }
 
     private fun handleSetDialPadVisibility(action: DebugPrivateSettingsViewActions.SetDialPadVisibility) {
         viewModelScope.launch {
             vectorDataStore.setForceDialPadDisplay(action.force)
+        }
+    }
+
+    private fun handleSetForceLoginFallbackEnabled(action: DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled) {
+        viewModelScope.launch {
+            vectorDataStore.setForceLoginFallbackFlow(action.force)
         }
     }
 }

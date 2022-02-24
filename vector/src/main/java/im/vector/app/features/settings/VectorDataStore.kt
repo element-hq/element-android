@@ -59,4 +59,17 @@ class VectorDataStore @Inject constructor(
             settings[forceDialPadDisplay] = force
         }
     }
+
+
+    private val forceLoginFallback = booleanPreferencesKey("force_login_fallback")
+
+    val forceLoginFallbackFlow: Flow<Boolean> = context.dataStore.data.map { preferences ->
+        preferences[forceLoginFallback].orFalse()
+    }
+
+    suspend fun setForceLoginFallbackFlow(force: Boolean) {
+        context.dataStore.edit { settings ->
+            settings[forceLoginFallback] = force
+        }
+    }
 }
