@@ -4,6 +4,7 @@
 # Explicitly aims not to have any dependencies, to reduce installation load.
 # Should just be able to run in the context of your standard github runner.
 
+# Potentially rewrite as an independent action, use handlebars to template result
 import sys
 import xml.etree.ElementTree as ET
 
@@ -15,9 +16,14 @@ for xmlfile in xmlfiles:
     root = tree.getroot()
     name = root.attrib['name']
     name = root.attrib['time']
-    success = int(root.attrib['tests']) - int(root.attrib['failures']) - int(root.attrib['errors'])
-    total = int(root.attrib['tests']) - int(root.attrib['skipped'])
-    print(f"::group::{name} {success}/{total} in {time}")
+    tests = int(root.attrib['tests'])
+    passed = int(root.attrib['passed'])
+    skipped = int(root.attrib['skipped'])
+    errors = int(root.attrib['errors'])
+    failures = int(root.attrib['failures'])
+    success = tests - failures - errors - skipped
+    total = tests - skipped
+    print(f"::group::{name} {success}/{total} ({skipped} skipped) in {time}")
     
     for testcase in root:
         if testcase.tag != "testcase":
@@ -31,4 +37,7 @@ for xmlfile in xmlfiles:
         else:
             print(f"::error file={testname}::{message} in {time}s")
             print(child.text)
+    body = f"passed={passed} failures={failures} errors={errors} skipped={skipped}"
+    print(f"::set-output name={suitename}::passed={body}"
     print("::endgroup::")
+
