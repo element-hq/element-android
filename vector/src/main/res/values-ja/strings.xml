@@ -2870,4 +2870,5 @@
     <string name="qr_code_scanned_verif_waiting_notice">あと少しです！確認を待っています…</string>
     <string name="qr_code_scanned_self_verif_notice">あと少しです！もう一方のデバイスは同じマークを表示していますか？</string>
     <string name="qr_code_scanned_verif_waiting">%sを待っています…</string>
+    <string name="verification_profile_device_untrust_info">このユーザーがこのセッションを検証するまで、送受信されるメッセージには警告マークが付きます。手動で検証することも可能です。</string>
 </resources>
