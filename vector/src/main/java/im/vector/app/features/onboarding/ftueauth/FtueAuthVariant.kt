@@ -112,16 +112,29 @@ class FtueAuthVariant(
         }
     }
 
-    override fun setIsLoading(isLoading: Boolean) {
-        doNothing()
-    }
-
     private fun addFirstFragment() {
         val splashFragment = when (vectorFeatures.isOnboardingSplashCarouselEnabled()) {
             true -> FtueAuthSplashCarouselFragment::class.java
             else -> FtueAuthSplashFragment::class.java
         }
         activity.addFragment(views.loginFragmentContainer, splashFragment)
+    }
+
+    private fun updateWithState(viewState: OnboardingViewState) {
+        isForceLoginFallbackEnabled = viewState.isForceLoginFallbackEnabled
+        views.loginLoading.isVisible = shouldShowLoading(viewState)
+    }
+
+    private fun shouldShowLoading(viewState: OnboardingViewState) =
+            if (vectorFeatures.isOnboardingPersonalizeEnabled()) {
+                viewState.isLoading()
+            } else {
+                // Keep loading when during success because of the delay when switching to the next Activity
+                viewState.isLoading() || viewState.isAuthTaskCompleted()
+            }
+
+    override fun setIsLoading(isLoading: Boolean) {
+        doNothing()
     }
 
     private fun handleOnboardingViewEvents(viewEvents: OnboardingViewEvents) {
@@ -243,17 +256,6 @@ class FtueAuthVariant(
                 }
                 .setNegativeButton(R.string.no, null)
                 .show()
-    }
-
-    private fun updateWithState(viewState: OnboardingViewState) {
-        isForceLoginFallbackEnabled = viewState.isForceLoginFallbackEnabled
-
-        views.loginLoading.isVisible = if (vectorFeatures.isOnboardingPersonalizeEnabled()) {
-            viewState.isLoading()
-        } else {
-            // Keep loading when during success because of the delay when switching to the next Activity
-            viewState.isLoading() || viewState.isAuthTaskCompleted()
-        }
     }
 
     private fun onWebLoginError(onWebLoginError: OnboardingViewEvents.OnWebLoginError) {
