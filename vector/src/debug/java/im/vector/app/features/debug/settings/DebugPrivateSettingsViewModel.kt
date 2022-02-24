@@ -49,7 +49,7 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
         }
 
         vectorDataStore.forceLoginFallbackFlow.setOnEach {
-            copy(forceLoginFallback = false)
+            copy(forceLoginFallback = it)
         }
     }
 
