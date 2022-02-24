@@ -1401,7 +1401,7 @@
     <string name="initial_sync_start_downloading">初期同期：
 \nデータをダウンロードしています…</string>
     <string name="initial_sync_start_server_computing">初期同期：
-\nサーバーからの応答を待っています…</string>
+\nサーバーからの応答を待機しています…</string>
     <string name="room_displayname_empty_room_was">空のルーム（%sでした）</string>
     <plurals name="room_displayname_four_and_more_members">
         <item quantity="other">%1$s、%2$s、%3$sと他%4$d人</item>
@@ -1486,7 +1486,7 @@
 \n%1$s</string>
     <string name="template_settings_troubleshoot_test_service_boot_failed">端末を再起動してもサービスは開始しません。${app_name}を一度開くまで通知は届きません。</string>
     <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">［%1$s］
-\nこのエラーは${app_name}の管理外です。 これはいくつかの理由で発生する可能性があります。 後で再試行すればうまくいくかもしれません。システム設定でGoogle Playサービスのデータ使用量が制限されていないか、端末の時刻が正しいかどうかを確認してください。カスタムROMで生じることもあります。</string>
+\nこのエラーは${app_name}の管理外です。 これはいくつかの理由で発生する可能性があります。 後で再試行するとうまくいくかもしれません。システム設定でGoogle Playサービスのデータ使用量が制限されていないか、端末の時刻が正しいかどうかを確認してください。カスタムROMで生じることもあります。</string>
     <string name="template_settings_add_3pid_flow_not_supported">${app_name}モバイルからこれを行うことはできません</string>
     <string name="template_settings_troubleshoot_test_battery_success">${app_name}はバッテリー最適化の影響を受けません。</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">制限を無効にする</string>
@@ -1499,9 +1499,9 @@
     <string name="settings_troubleshoot_test_notification_notice">通知をクリックしてください。 通知が表示されない場合は、システム設定を確認してください。</string>
     <string name="settings_troubleshoot_test_notification_title">通知を表示</string>
     <string name="settings_troubleshoot_test_push_notification_content">通知を表示しています。 クリックしてください！</string>
-    <string name="settings_troubleshoot_test_push_loop_failed">プッシュ通知の受信に失敗しました。 アプリケーションを再インストールすれば解決するかもしれません。</string>
+    <string name="settings_troubleshoot_test_push_loop_failed">プッシュ通知の受信に失敗しました。 アプリケーションを再インストールすると解決するかもしれません。</string>
     <string name="settings_troubleshoot_test_push_loop_success">アプリケーションはプッシュ通知を受信しています</string>
-    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">アプリケーションはプッシュ通知を待っています</string>
+    <string name="settings_troubleshoot_test_push_loop_waiting_for_push">アプリケーションはプッシュ通知を待機しています</string>
     <string name="settings_troubleshoot_test_push_loop_title">プッシュ通知のテスト</string>
     <string name="settings_troubleshoot_test_token_registration_failed">FCMトークンのホームサーバーへの登録に失敗しました:
 \n%1$s</string>
@@ -1906,7 +1906,7 @@
     <string name="sas_got_it">了解</string>
     <string name="sas_verified_successful_description">このユーザーとのメッセージはエンドツーエンドで暗号化され、第三者が読むことはできません。</string>
     <string name="sas_verified">完了しました!</string>
-    <string name="sas_waiting_for_partner">相手が確認するのを待っています…</string>
+    <string name="sas_waiting_for_partner">相手が確認するのを待機しています…</string>
     <string name="sas_view_request_action">リクエストを見る</string>
     <string name="sas_incoming_verification_request_dialog">検証リクエストを受信しました。</string>
     <string name="sas_decimal_description">相手の画面に次の番号が表示されていることを確認して、このセッションを検証</string>
@@ -2831,9 +2831,9 @@
     <string name="confirm_recovery_passphrase">%sを確認</string>
     <string name="set_recovery_passphrase">%sを設定</string>
     <string name="verification_cancelled">検証を中止しました</string>
-    <string name="verify_cancel_other">今中止すれば、%1$s（%2$s）を検証しません。検証は相手のユーザープロフィール画面からもう一度開始できます。</string>
-    <string name="verify_cancel_self_verification_from_trusted">中止すれば、新しい端末では暗号化されたメッセージが読めず、他のユーザーに信頼されません</string>
-    <string name="verify_cancel_self_verification_from_untrusted">中止すれば、この端末では暗号化されたメッセージが読めないし他のユーザーに信頼されません</string>
+    <string name="verify_cancel_other">今中止すると、%1$s（%2$s）を検証しません。検証は相手のユーザープロフィール画面からもう一度開始できます。</string>
+    <string name="verify_cancel_self_verification_from_trusted">中止すると、新しい端末では暗号化されたメッセージが読めず、他のユーザーに信頼されません</string>
+    <string name="verify_cancel_self_verification_from_untrusted">中止すると、この端末では暗号化されたメッセージが読めず、他のユーザーに信頼されません</string>
     <string name="verify_new_session_was_not_me">自分ではない</string>
     <string name="verify_new_session_notice">新しいセッションを検証して、暗号化されたメッセージにアクセスできるようにしましょう。</string>
     <string name="new_session_review">タップして確認及び検証</string>
@@ -2867,8 +2867,39 @@
     <string name="create_spaces_organise_rooms">ルームを整理するためのプライベートスペース</string>
     <string name="this_is_the_beginning_of_room_no_name">ここが会話のスタート地点です。</string>
     <string name="this_is_the_beginning_of_room">ここが%sのスタート地点です。</string>
-    <string name="qr_code_scanned_verif_waiting_notice">あと少しです！確認を待っています…</string>
+    <string name="qr_code_scanned_verif_waiting_notice">あと少しです！確認を待機しています…</string>
     <string name="qr_code_scanned_self_verif_notice">あと少しです！もう一方のデバイスは同じマークを表示していますか？</string>
-    <string name="qr_code_scanned_verif_waiting">%sを待っています…</string>
+    <string name="qr_code_scanned_verif_waiting">%sを待機しています…</string>
     <string name="verification_profile_device_untrust_info">このユーザーがこのセッションを検証するまで、送受信されるメッセージには警告マークが付きます。手動で検証することも可能です。</string>
+    <string name="room_member_profile_failed_to_get_devices">セッションの取得に失敗しました</string>
+    <string name="create_spaces_invite_public_header">チームメイトは誰ですか？</string>
+    <string name="invite_to_space_with_name_desc">%sを探索できるようになります</string>
+    <string name="share_space_link_message">私のスペース %1$s %2$s に参加してください</string>
+    <string name="skip_for_now">スキップ</string>
+    <string name="room_message_autocomplete_notification">ルームの通知</string>
+    <string name="create_space_identity_server_info_none">現在、IDサーバーを使用していません。あなたの知っているチームメイトを発見したり、そのチームメイトから発見されるようにするには、以下でIDサーバーを設定してください。</string>
+    <string name="finish_setting_up_discovery">ディスカバリーの設定を終了します。</string>
+    <string name="space_leave_prompt_msg_only_you">ここの参加者はあなただけです。退出すると、今後あなたを含めて誰も参加できなくなります。</string>
+    <string name="space_leave_prompt_msg_private">再び招待されない限り、再参加することはできません。</string>
+    <string name="space_leave_prompt_msg_as_admin">あなたはこのスペースの唯一の管理者です。退出すると、誰もそれをコントロールすることができなくなります。</string>
+    <string name="unnamed_room">名前のないルーム</string>
+    <string name="room_using_unstable_room_version">このルームはホームサーバーが不安定と判断したルームバージョン%sで動作しています。</string>
+    <string name="error_failed_to_join_room">申し訳ありませんが、%sに参加する途中で問題が発生しました</string>
+    <string name="this_invite_to_this_room_was_sent">このルームへの招待が、アカウントに関連付けられていないメールアドレス %s に送られました</string>
+    <string name="poll_no_votes_cast">投票がありません</string>
+    <string name="room_message_notify_everyone">ルーム全体に通知</string>
+    <string name="room_message_autocomplete_users">ユーザー</string>
+    <string name="discovery_section">ディスカバリー（%s）</string>
+    <string name="call_transfer_unknown_person">不明な人間</string>
+    <string name="disclaimer_negative_button">了解</string>
+    <string name="dev_tools_event_content_hint">イベントの内容</string>
+    <string name="dev_tools_error_malformed_event">不正な形式のイベント</string>
+    <string name="dev_tools_error_no_content">内容がありません</string>
+    <string name="dev_tools_form_hint_event_content">イベントの内容</string>
+    <string name="dev_tools_edit_content">内容を編集</string>
+    <string name="re_authentication_activity_title">再認証が必要です</string>
+    <string name="secure_backup_reset_all">全てリセット</string>
+    <string name="contacts_book_title">連絡先</string>
+    <string name="crypto_utd">復号化できません</string>
+    <string name="bootstrap_save_key_description">%2$sを忘れた場合、この%1$sをセーフティーネットとして使用してください。</string>
 </resources>
