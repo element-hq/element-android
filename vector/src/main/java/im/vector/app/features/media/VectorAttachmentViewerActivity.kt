@@ -269,8 +269,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
         }
     }
 
-    // TODO add save feature for image => check it works for video as well,
-    //  check if it is already possible to save from menu with long press on video
     override fun onDownload() {
         // TODO
         //  call usecase using viewModel into handle method
@@ -279,6 +277,8 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
         //  show message on error event: see TimelineFragment
         //  check write file permissions: see TimelineFragment
         //  should we check if media is saveable?
+        //  check if it is already possible to save from menu with long press on video
+        //  check if it works for video or other media type as well
         //  add unit tests for usecase?
         TODO("Not yet implemented")
     }

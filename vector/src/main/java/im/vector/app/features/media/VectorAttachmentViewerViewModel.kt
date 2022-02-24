@@ -23,9 +23,12 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.platform.VectorDummyViewState
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.media.domain.usecase.DownloadMediaUseCase
+import kotlinx.coroutines.launch
 
 class VectorAttachmentViewerViewModel @AssistedInject constructor(
-        @Assisted initialState: VectorDummyViewState
+        @Assisted initialState: VectorDummyViewState,
+        private val downloadMediaUseCase: DownloadMediaUseCase
 ) : VectorViewModel<VectorDummyViewState, VectorAttachmentViewerAction, VectorAttachmentViewerViewEvents>(initialState) {
 
     /* ==========================================================================================
@@ -42,6 +45,22 @@ class VectorAttachmentViewerViewModel @AssistedInject constructor(
      * ========================================================================================== */
 
     override fun handle(action: VectorAttachmentViewerAction) {
-        TODO("Not yet implemented")
+        when (action) {
+            is VectorAttachmentViewerAction.DownloadMedia -> handleDownloadAction(action)
+        }
+    }
+
+    /* ==========================================================================================
+     * Private methods
+     * ========================================================================================== */
+
+    private fun handleDownloadAction(action: VectorAttachmentViewerAction.DownloadMedia) {
+        viewModelScope.launch {
+            _viewEvents.post(VectorAttachmentViewerViewEvents.DownloadingMedia)
+
+            // Success event is handled via a notification inside use case
+            downloadMediaUseCase.execute(action.file)
+                    .onFailure { _viewEvents.post(VectorAttachmentViewerViewEvents.ErrorDownloadingMedia) }
+        }
     }
 }
