@@ -302,7 +302,7 @@ class FtueAuthVariant(
         is LoginMode.SsoAndPassword,
         LoginMode.Password    -> openAuthLoginFragmentWithTag(FRAGMENT_LOGIN_TAG)
         LoginMode.Unsupported -> onLoginModeNotSupported(state.loginModeSupportedTypes)
-    }.exhaustive
+    }
 
     private fun openAuthLoginFragmentWithTag(tag: String) {
         activity.addFragmentToBackstack(views.loginFragmentContainer,
