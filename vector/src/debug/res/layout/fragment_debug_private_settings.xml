@@ -31,6 +31,24 @@
                 android:layout_height="wrap_content"
                 android:text="Force login and registration fallback" />
 
+            <im.vector.app.features.debug.settings.OverrideDropdownView
+                android:id="@+id/forceChangeDisplayNameCapability"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="4dp" />
+
+            <im.vector.app.features.debug.settings.OverrideDropdownView
+                android:id="@+id/forceChangeAvatarCapability"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="4dp" />
+
         </LinearLayout>
 
     </ScrollView>
