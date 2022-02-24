@@ -15,9 +15,8 @@ for xmlfile in xmlfiles:
     
     root = tree.getroot()
     name = root.attrib['name']
-    name = root.attrib['time']
+    time = root.attrib['time']
     tests = int(root.attrib['tests'])
-    passed = int(root.attrib['passed'])
     skipped = int(root.attrib['skipped'])
     errors = int(root.attrib['errors'])
     failures = int(root.attrib['failures'])
@@ -37,7 +36,7 @@ for xmlfile in xmlfiles:
         else:
             print(f"::error file={testname}::{message} in {time}s")
             print(child.text)
-    body = f"passed={passed} failures={failures} errors={errors} skipped={skipped}"
-    print(f"::set-output name={suitename}::passed={body}")
+    body = f"passed={success} failures={failures} errors={errors} skipped={skipped}"
+    print(f"::set-output name={suitename}::={body}")
     print("::endgroup::")
 
