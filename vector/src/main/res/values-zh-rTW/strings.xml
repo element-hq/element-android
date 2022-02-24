@@ -2644,7 +2644,7 @@
     <string name="create_spaces_me_and_teammates">我與隊友</string>
     <string name="create_spaces_organise_rooms">用來整理您聊天室的私人空間</string>
     <string name="create_spaces_just_me">只有我</string>
-    <string name="create_spaces_make_sure_access">確定合適的人有權存取 %s。您可以在稍後變更。</string>
+    <string name="create_spaces_make_sure_access">確定合適的人有權存取 %s。</string>
     <string name="create_spaces_who_are_you_working_with">您與誰一起工作？</string>
     <string name="create_spaces_join_info_help">要加入既有的空間，您需要邀請。</string>
     <string name="create_spaces_you_can_change_later">您可以稍後再更改</string>
@@ -3063,4 +3063,14 @@
     <string name="action_thread_copy_link_to_thread">複製連結至討論串</string>
     <string name="action_thread_view_in_room">在聊天室中檢視</string>
     <string name="action_view_threads">檢視討論串</string>
+    <string name="room_message_autocomplete_notification">聊天室通知</string>
+    <string name="room_message_autocomplete_users">使用者</string>
+    <string name="room_message_notify_everyone">通知整個聊天室</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="other">%1$d 更多</item>
+    </plurals>
+    <string name="message_reaction_show_less">顯示較少</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="other">%d 伺服器 ACL 變更</item>
+    </plurals>
 </resources>
