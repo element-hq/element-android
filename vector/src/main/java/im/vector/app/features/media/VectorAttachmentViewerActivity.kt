@@ -30,6 +30,7 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.transition.Transition
+import com.airbnb.mvrx.viewModel
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
@@ -66,8 +67,10 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
 
     @Inject
     lateinit var sessionHolder: ActiveSessionHolder
+
     @Inject
     lateinit var dataSourceFactory: AttachmentProviderFactory
+
     @Inject
     lateinit var imageContentRenderer: ImageContentRenderer
 
@@ -75,6 +78,7 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
      * Fields
      * ========================================================================================== */
 
+    private val viewModel: VectorAttachmentViewerViewModel by viewModel()
     private var initialIndex = 0
     private var isAnimatingOut = false
     private var currentSourceProvider: BaseAttachmentProvider<*>? = null
@@ -254,8 +258,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
     }
 
     override fun onShare() {
-        // TODO
-        //  use repeatOnLifecycle extension
         lifecycleScope.launch(Dispatchers.IO) {
             val file = currentSourceProvider?.getFileForSharing(currentPosition) ?: return@launch
 
@@ -271,16 +273,17 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
 
     override fun onDownload() {
         // TODO
-        //  call usecase using viewModel into handle method
-        //  launch coroutine in Activity using repeatOnLifeCycle extension
-        //  call ViewModel.handle inside this method
+        //  handle viewEvents
         //  show message on error event: see TimelineFragment
         //  check write file permissions: see TimelineFragment
         //  should we check if media is saveable?
         //  check if it is already possible to save from menu with long press on video
         //  check if it works for video or other media type as well
         //  add unit tests for usecase?
-        TODO("Not yet implemented")
+        lifecycleScope.launch(Dispatchers.IO) {
+            val file = currentSourceProvider?.getFileForSharing(currentPosition) ?: return@launch
+            viewModel.handle(VectorAttachmentViewerAction.DownloadMedia(file))
+        }
     }
 
     /* ==========================================================================================
