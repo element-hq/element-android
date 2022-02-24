@@ -271,7 +271,7 @@ class BugReporter @Inject constructor(
                             .addFormDataPart("can_contact", canContact.toString())
                             .addFormDataPart("device_id", deviceId)
                             .addFormDataPart("version", versionProvider.getVersion(longFormat = true, useBuildNumber = false))
-                            .addFormDataPart("branch_name", context.getString(R.string.git_branch_name))
+                            .addFormDataPart("branch_name", BuildConfig.GIT_BRANCH_NAME)
                             .addFormDataPart("matrix_sdk_version", Matrix.getSdkVersion())
                             .addFormDataPart("olm_version", olmVersion)
                             .addFormDataPart("device", Build.MODEL.trim())
@@ -289,7 +289,7 @@ class BugReporter @Inject constructor(
                                 }
                             }
 
-                    val buildNumber = context.getString(R.string.build_number)
+                    val buildNumber = BuildConfig.BUILD_NUMBER
                     if (buildNumber.isNotEmpty() && buildNumber != "0") {
                         builder.addFormDataPart("build_number", buildNumber)
                     }
@@ -329,7 +329,7 @@ class BugReporter @Inject constructor(
                     // add some github labels
                     builder.addFormDataPart("label", BuildConfig.VERSION_NAME)
                     builder.addFormDataPart("label", BuildConfig.FLAVOR_DESCRIPTION)
-                    builder.addFormDataPart("label", context.getString(R.string.git_branch_name))
+                    builder.addFormDataPart("label", BuildConfig.GIT_BRANCH_NAME)
 
                     // Special for Element
                     builder.addFormDataPart("label", "[Element]")
