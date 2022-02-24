@@ -10,7 +10,7 @@ env:
   CI_GRADLE_ARG_PROPERTIES: >
     -Porg.gradle.jvmargs=-Xmx2g
     -Porg.gradle.parallel=false
-
+    -PallWarningsAsErrors=false
 jobs:
   # Build Android Tests [Matrix SDK]
   build-android-test-matrix-sdk:
@@ -27,7 +27,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Build Android Tests for matrix-sdk-android
-        run: ./gradlew clean matrix-sdk-android:assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES --stacktrace -PallWarningsAsErrors=false
+        run: ./gradlew clean matrix-sdk-android:assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES --stacktrace
 
   # Build Android Tests [Matrix APP]
   build-android-test-app:
@@ -44,7 +44,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Build Android Tests for vector
-        run: ./gradlew clean vector:assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES --stacktrace -PallWarningsAsErrors=false
+        run: ./gradlew clean vector:assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES --stacktrace
 
  # Run Android Tests
   integration-tests:
@@ -81,7 +81,6 @@ jobs:
           ./start.sh --no-rate-limit
 # package: org.matrix.android.sdk.session
       - name: Run integration tests for  Matrix SDK [org.matrix.android.sdk.session] API[${{ matrix.api-level }}]
-        continue-on-error: true
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
@@ -90,16 +89,16 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822
-          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.session' matrix-sdk-android:connectedDebugAndroidTest
+          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.session' matrix-sdk-android:connectedDebugAndroidTest
       - name: Read Results [org.matrix.android.sdk.session]
-        continue-on-error: true
+        if: always()
         id: get-comment-body-session
         run: |
           body="$(cat ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml | grep "<testsuite" | sed "s@.*tests=\(.*\)time=.*@\1@")"
           echo "::set-output name=session::passed=$body"
 # package: org.matrix.android.sdk.account
       - name: Run integration tests for  Matrix SDK [org.matrix.android.sdk.account] API[${{ matrix.api-level }}]
-        continue-on-error: true
+        if: always()
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
@@ -110,14 +109,14 @@ jobs:
           emulator-build: 7425822
           script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.account' matrix-sdk-android:connectedDebugAndroidTest
       - name: Read Results [org.matrix.android.sdk.account]
-        continue-on-error: true
+        if: always()
         id: get-comment-body-account
         run: |
           body="$(cat ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml | grep "<testsuite" | sed "s@.*tests=\(.*\)time=.*@\1@")"
           echo "::set-output name=account::passed=$body"
 # package: org.matrix.android.sdk.internal
       - name: Run integration tests for Matrix SDK [org.matrix.android.sdk.internal] API[${{ matrix.api-level }}]
-        continue-on-error: true
+        if: always()
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
@@ -128,14 +127,14 @@ jobs:
           emulator-build: 7425822
           script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.internal' matrix-sdk-android:connectedDebugAndroidTest
       - name: Read Results [org.matrix.android.sdk.internal]
-        continue-on-error: true
+        if: always()
         id: get-comment-body-internal
         run: |
           body="$(cat ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml | grep "<testsuite" | sed "s@.*tests=\(.*\)time=.*@\1@")"
           echo "::set-output name=internal::passed=$body"
 # package: org.matrix.android.sdk.ordering
       - name: Run integration tests for Matrix SDK [org.matrix.android.sdk.ordering] API[${{ matrix.api-level }}]
-        continue-on-error: true
+        if: always()
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
@@ -146,14 +145,14 @@ jobs:
           emulator-build: 7425822
           script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.ordering' matrix-sdk-android:connectedDebugAndroidTest
       - name: Read Results [org.matrix.android.sdk.ordering]
-        continue-on-error: true
+        if: always()
         id: get-comment-body-ordering
         run: |
           body="$(cat ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml | grep "<testsuite" | sed "s@.*tests=\(.*\)time=.*@\1@")"
           echo "::set-output name=ordering::passed=$body"
 # package: class PermalinkParserTest
       - name: Run integration tests for Matrix SDK class [org.matrix.android.sdk.PermalinkParserTest] API[${{ matrix.api-level }}]
-        continue-on-error: true
+        if: always()
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
@@ -164,13 +163,13 @@ jobs:
           emulator-build: 7425822
           script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.class='org.matrix.android.sdk.PermalinkParserTest' matrix-sdk-android:connectedDebugAndroidTest
       - name: Read Results [org.matrix.android.sd.PermalinkParserTest]
-        continue-on-error: true
+        if: always()
         id: get-comment-body-permalink
         run: |
           body="$(cat ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml | grep "<testsuite" | sed "s@.*tests=\(.*\)time=.*@\1@")"
           echo "::set-output name=permalink::passed=$body"
       - name: Find Comment
-        if: github.event_name == 'pull_request'
+        if: always() && github.event_name == 'pull_request'
         uses: peter-evans/find-comment@v1
         id: fc
         with:
@@ -178,7 +177,7 @@ jobs:
           comment-author: 'github-actions[bot]'
           body-includes: Integration Tests Results
       - name: Publish results to PR
-        if: github.event_name == 'pull_request'
+        if: always() && github.event_name == 'pull_request'
         uses: peter-evans/create-or-update-comment@v1
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
