@@ -2684,7 +2684,7 @@
     <string name="create_spaces_me_and_teammates">Io e i miei compagni</string>
     <string name="create_spaces_organise_rooms">Uno Spazio privato per organizzare le tue stanze</string>
     <string name="create_spaces_just_me">Solo io</string>
-    <string name="create_spaces_make_sure_access">Assicurati che le persone giuste abbiano accesso a %s. Puoi cambiarlo in seguito.</string>
+    <string name="create_spaces_make_sure_access">Assicurati che le persone giuste abbiano accesso a %s.</string>
     <string name="create_spaces_who_are_you_working_with">Con chi stai lavorando\?</string>
     <string name="create_spaces_join_info_help">Per unirti ad uno Spazio già esistente, ti serve un invito.</string>
     <string name="create_spaces_you_can_change_later">Puoi cambiarlo in seguito</string>
@@ -3112,4 +3112,16 @@
     <string name="action_thread_copy_link_to_thread">Copia link nella conversazione</string>
     <string name="action_thread_view_in_room">Vedi nella stanza</string>
     <string name="action_view_threads">Vedi conversazioni</string>
+    <string name="room_message_autocomplete_notification">Notifica della stanza</string>
+    <string name="room_message_autocomplete_users">Utenti</string>
+    <string name="room_message_notify_everyone">Notifica l\'intera stanza</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">%1$d altro</item>
+        <item quantity="other">%1$d altri</item>
+    </plurals>
+    <string name="message_reaction_show_less">Mostra meno</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d modifica delle ACL del server</item>
+        <item quantity="other">%d modifiche delle ACL del server</item>
+    </plurals>
 </resources>

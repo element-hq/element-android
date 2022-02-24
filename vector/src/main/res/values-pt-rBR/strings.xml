@@ -405,7 +405,7 @@
     <string name="auth_home_server">Servidorcasa:</string>
     <string name="auth_identity_server">Servidor de identidade:</string>
     <string name="auth_reset_password_next_step_button">Eu tenho verificado meu endereço de email</string>
-    <string name="auth_reset_password_message">Para resetar sua senha, digite o endereço de email vinculado a sua conta:</string>
+    <string name="auth_reset_password_message">Para resettar sua senha, entre o endereço de email linkado a sua conta:</string>
     <string name="auth_reset_password_missing_email">O endereço de email linkado a sua conta deve ser entrado.</string>
     <string name="auth_reset_password_missing_password">Uma nova senha deve ser entrada.</string>
     <string name="auth_reset_password_email_validation_message">Um email tem sido enviado para %s. Uma vez que tenha seguido o link que ele contém, clique abaixo.</string>
@@ -508,7 +508,7 @@
     <string name="room_participants_action_leave">Sair desta sala</string>
     <string name="room_participants_action_ban">Banir</string>
     <string name="room_participants_action_unban">Desbanir</string>
-    <string name="room_participants_action_set_default_power_level">Resetar a usuária(o) normal</string>
+    <string name="room_participants_action_set_default_power_level">Resettar a usuária(o) normal</string>
     <string name="room_participants_action_set_moderator">Fazer moderador(a)</string>
     <string name="room_participants_action_set_admin">Fazer admin</string>
     <string name="room_participants_action_ignore">Ignorar</string>
@@ -678,7 +678,7 @@
     <string name="room_settings_category_access_visibility_title">Acesso e visibilidade</string>
     <string name="room_settings_directory_visibility">Listar esta sala em diretório de salas</string>
     <string name="room_settings_room_access_rules_pref_title">Acesso a Sala</string>
-    <string name="room_settings_room_read_history_rules_pref_title">Legibilidade do Histórico da Sala</string>
+    <string name="room_settings_room_read_history_rules_pref_title">Legibilidade de Histórico de Sala</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Quem pode ler o histórico\?</string>
     <string name="room_settings_room_access_rules_pref_dialog_title">Quem pode acessar esta sala?</string>
     <string name="room_settings_read_history_entry_anyone">Qualquer pessoa</string>
@@ -828,7 +828,7 @@
     <string name="settings_notification_ringtone">Som de notificação</string>
     <string name="settings_containing_my_display_name">Mnsgns contendo meu nome de exibição</string>
     <string name="settings_containing_my_user_name">Mnsgns contendo meu nome de usuária(o)</string>
-    <string name="settings_inline_url_preview">Pré-visualização de URL em linha</string>
+    <string name="settings_inline_url_preview">Previsualização de URL emlinha</string>
     <string name="settings_12_24_timestamps">Mostrar timestamps em formato de 12 horas</string>
     <string name="settings_vibrate_on_mention">Vibrar ao mencionar um/uma usuário(a)</string>
     <string name="settings_analytics">Analítica</string>
@@ -1294,7 +1294,7 @@
     <string name="settings_secure_backup_section_title">Backup Seguro</string>
     <string name="settings_secure_backup_manage">Gerenciar</string>
     <string name="settings_secure_backup_setup">Configurar Backup Seguro</string>
-    <string name="settings_secure_backup_reset">Resetar Backup Seguro</string>
+    <string name="settings_secure_backup_reset">Resettar Backup Seguro</string>
     <string name="settings_secure_backup_enter_to_setup">Configurar neste dispositivo</string>
     <string name="settings_secure_backup_section_info">Salvaguardar-se contra perda de acesso a mensagens &amp; dados encriptados ao fazer backup de chaves de encriptação em seu servidor.</string>
     <string name="reset_secure_backup_title">Gere uma nova Chave de Segurança ou defina uma nova Frase de Segurança para seu backup existente.</string>
@@ -1540,7 +1540,7 @@
     <string name="sas_error_m_user_error">Correspondência errada de usuária(o)</string>
     <string name="sas_error_unknown">Erro Desconhecido</string>
     <string name="identity_server_not_defined">Você não está usando nenhum servidor de identidade</string>
-    <string name="identity_server_not_defined_for_password_reset">Nenhum servidor de identidade está configurado, ele é requerido para resetar sua senha.</string>
+    <string name="identity_server_not_defined_for_password_reset">Nenhum servidor de identidade está configurado, ele é requerido para resettar sua senha.</string>
     <string name="error_user_already_logged_in">Parece que você está tentando se conectar a um outro servidorcasa. Você quer fazer signout\?</string>
     <string name="edit">Editar</string>
     <string name="reply">Responder</string>
@@ -1783,13 +1783,13 @@
 \n
 \nVocê quer fazer signup usando um cliente web\?</string>
     <string name="login_login_with_email_error">Este email não está associado com nenhuma conta.</string>
-    <string name="login_reset_password_on">Resetar senha em %1$s</string>
+    <string name="login_reset_password_on">Resettar senha em %1$s</string>
     <string name="login_reset_password_notice">Um email de verificação vai ser enviado para sua inbox para confirmar definição de sua nova senha.</string>
     <string name="login_reset_password_submit">Próximo</string>
     <string name="login_reset_password_email_hint">Email</string>
     <string name="login_reset_password_password_hint">Nova senha</string>
     <string name="login_reset_password_warning_title">Aviso!</string>
-    <string name="login_reset_password_warning_content">Mudar sua senha vai resetar quaisquer chaves de encriptação ponta-a-ponta em todas as suas sessões, tornando histórico de chat encriptado ilegível. Configure Backup de Chave ou exporte suas chaves de sala de uma outra sessão antes de resetar sua senha.</string>
+    <string name="login_reset_password_warning_content">Mudar sua senha vai resettar quaisquer chaves de encriptação ponta-a-ponta em todas as suas sessões, fazendo histórico de chat encriptado ilegível. Configure Backup de Chave ou exporte suas chaves de sala de uma outra sessão antes de resettar sua senha.</string>
     <string name="login_reset_password_warning_submit">Continuar</string>
     <string name="login_reset_password_error_not_found">Este email não está linkado a nenhuma conta</string>
     <string name="login_reset_password_mail_confirmation_title">Cheque sua inbox</string>
@@ -2032,7 +2032,7 @@
     <string name="verification_profile_device_new_signing">%1$s (%2$s) fez signin usando uma nova sessão:</string>
     <string name="verification_profile_device_untrust_info">Até que esta(e) usuária(o) confie nesta sessão, mensagens enviadas para e desde ela são etiquetadas com avisos. Alternativamente, você pode verificá-la manualmente.</string>
     <string name="initialize_cross_signing">Inicializar AssinaturaCruzada</string>
-    <string name="reset_cross_signing">Resetar Chaves</string>
+    <string name="reset_cross_signing">Resettar Chaves</string>
     <string name="a11y_qr_code_for_verification">QR code</string>
     <string name="qr_code_scanned_by_other_notice">Quase lá! %s está mostrando um tick (✓)\?</string>
     <string name="qr_code_scanned_by_other_yes">Sim</string>
@@ -2287,11 +2287,11 @@
     <string name="create_pin_confirm_failure">Falha para validar PIN, por favor toque um novo.</string>
     <string name="auth_pin_title">Entre seu PIN</string>
     <string name="auth_pin_forgot">Esqueceu PIN\?</string>
-    <string name="auth_pin_reset_title">Resetar PIN</string>
+    <string name="auth_pin_reset_title">Resettar PIN</string>
     <string name="auth_pin_new_pin_action">Novo PIN</string>
-    <string name="auth_pin_reset_content">Para resetar seu PIN, você vai precisar refazer login e criar um novo.</string>
+    <string name="auth_pin_reset_content">Para resettar seu PIN, você vai precisar refazer login e criar um novo.</string>
     <string name="settings_security_pin_code_title">Habilitar PIN</string>
-    <string name="settings_security_pin_code_summary">Se você quer resetar seu PIN, toque em Esqueceu PIN para fazer logout e resetá-lo.</string>
+    <string name="settings_security_pin_code_summary">Se você quer resettar seu PIN, toque em Esqueceu PIN para fazer logout e resettá-lo.</string>
     <string name="auth_pin_confirm_to_disable_title">Confirmar PIN para desabilitar PIN</string>
     <string name="settings_call_show_confirmation_dialog_title">Prevenir chamada acidental</string>
     <string name="settings_call_show_confirmation_dialog_summary">Pedir por confirmação antes de começar uma chamada</string>
@@ -2370,7 +2370,7 @@
     <string name="secure_backup_reset_no_history">Você vai recomeçar com nada de histórico, mensagens, dispositivos confiados ou usuárias(os) confiadas(os)</string>
     <string name="secure_backup_reset_if_you_reset_all">Se você resetar tudo</string>
     <string name="secure_backup_reset_all_no_other_devices">Somente faça isto se você não tem nenhum outro dispositivo com o qual você pode verificar este dispositivo.</string>
-    <string name="secure_backup_reset_all">Resetar tudo</string>
+    <string name="secure_backup_reset_all">Resettar tudo</string>
     <string name="bad_passphrase_key_reset_all_action">Esqueceu ou perdeu todas as opções de recuperação\? Resette tudo</string>
     <string name="direct_room_created_summary_item_by_you">Você juntou-se.</string>
     <string name="direct_room_encryption_enabled_tile_description">Mensagens nesta sala são encriptadas ponta-a-ponta.</string>
@@ -2393,7 +2393,7 @@
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">O aplicativo está esperando pelo PUSH</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">Você não tem permissão para começar uma chamada</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Você não tem permissão para começar uma chamada de conferência</string>
-    <string name="action_reset">Resetar</string>
+    <string name="action_reset">Resettar</string>
     <string name="direct_room_join_rules_invite">%1$s fez isto somente convite.</string>
     <string name="direct_room_join_rules_invite_by_you">Você fez isto somente convite.</string>
     <string name="direct_room_created_summary_item">%s juntou-se.</string>
@@ -2749,7 +2749,7 @@
     <string name="create_spaces_me_and_teammates">Eu e minhas/meus colegas de equipe</string>
     <string name="create_spaces_organise_rooms">Um espaço privado para organizar suas salas</string>
     <string name="create_spaces_just_me">Só eu</string>
-    <string name="create_spaces_make_sure_access">Assegure-se que as pessoas certas têm acesso a %s. Você pode mudar isto mais tarde.</string>
+    <string name="create_spaces_make_sure_access">Assegure-se que as pessoas certas têm acesso a %s.</string>
     <string name="create_spaces_who_are_you_working_with">Com quem você está trabalhando\?</string>
     <string name="create_spaces_join_info_help">Para se juntar a um espaço existente, você precisa de um convite.</string>
     <string name="create_spaces_you_can_change_later">Você pode mudar isto mais tarde</string>
@@ -3043,7 +3043,7 @@
     <string name="restart_the_application_to_apply_changes">Recomece o aplicativo para a mudançar tomar efeito.</string>
     <string name="labs_enable_latex_maths">Habilitar matemática LaTeX</string>
     <string name="room_error_access_unauthorized">Você não é permitida(o) a juntar-se a esta sala</string>
-    <string name="tooltip_attachment_poll">Criar enquete</string>
+    <string name="tooltip_attachment_poll">Criar sondagem</string>
     <string name="tooltip_attachment_contact">Abrir contatos</string>
     <string name="tooltip_attachment_sticker">Enviar sticker</string>
     <string name="tooltip_attachment_file">Fazer upload de arquivo</string>
@@ -3122,4 +3122,16 @@
     <string name="action_thread_copy_link_to_thread">Copiar link para thread</string>
     <string name="action_thread_view_in_room">Visualizar em sala</string>
     <string name="action_view_threads">Visualizar Threads</string>
+    <string name="room_message_autocomplete_notification">Notificação de sala</string>
+    <string name="room_message_autocomplete_users">Usuárias(os)</string>
+    <string name="room_message_notify_everyone">Notificar a sala toda</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">%1$d mais</item>
+        <item quantity="other">%1$d mais</item>
+    </plurals>
+    <string name="message_reaction_show_less">Mostrar menos</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d mudança de ACLs de servidor</item>
+        <item quantity="other">%d mudanças de ACLs de servidor</item>
+    </plurals>
 </resources>

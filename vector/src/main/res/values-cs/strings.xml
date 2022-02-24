@@ -2746,7 +2746,7 @@
     <string name="create_spaces_me_and_teammates">Já a kolegové</string>
     <string name="create_spaces_organise_rooms">Privátní prostor k organizaci Vašich místností</string>
     <string name="create_spaces_just_me">Jen já</string>
-    <string name="create_spaces_make_sure_access">Ujistěte se, že ti správní lidé mají přístup do %s. Můžete změnit později.</string>
+    <string name="create_spaces_make_sure_access">Ujistěte se, že ti správní lidé mají přístup do %s.</string>
     <string name="create_spaces_who_are_you_working_with">S kým pracujete\?</string>
     <string name="create_spaces_join_info_help">Ke vstupu do existujícího prostoru potřebujete pozvání.</string>
     <string name="create_spaces_you_can_change_later">Můžete změnit později</string>
@@ -3181,4 +3181,18 @@
     <string name="action_thread_copy_link_to_thread">Kopírovat odkaz na vlákno</string>
     <string name="action_thread_view_in_room">Prohlédnout v místnosti</string>
     <string name="action_view_threads">Zobrazit vlákna</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d změna ACL serveru</item>
+        <item quantity="few">%d změny ACL serveru</item>
+        <item quantity="other">%d změn ACL serveru</item>
+    </plurals>
+    <string name="room_message_autocomplete_notification">Oznámení místnosti</string>
+    <string name="room_message_autocomplete_users">Uživatelé</string>
+    <string name="room_message_notify_everyone">Upozornit celou místnost</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">%1$d další</item>
+        <item quantity="few">%1$d další</item>
+        <item quantity="other">%1$d dalších</item>
+    </plurals>
+    <string name="message_reaction_show_less">Zobrazit méně</string>
 </resources>

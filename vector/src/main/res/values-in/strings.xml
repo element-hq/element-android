@@ -2426,7 +2426,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="create_spaces_me_and_teammates">Saya dan tim saya</string>
     <string name="create_spaces_organise_rooms">Space yang privat untuk mengorganisir ruangan Anda</string>
     <string name="create_spaces_just_me">Saya saja</string>
-    <string name="create_spaces_make_sure_access">Pastikan orang yang tepat memiliki akses ke %s. Anda dapat mengubahnya nanti.</string>
+    <string name="create_spaces_make_sure_access">Pastikan orang yang tepat memiliki akses ke %s.</string>
     <string name="create_spaces_who_are_you_working_with">Dengan siapa Anda bekerja\?</string>
     <string name="create_spaces_join_info_help">Untuk bergabung ke space yang sudah ada, Anda membutuhkan undangan ke space itu.</string>
     <string name="create_spaces_you_can_change_later">Anda dapat mengubahnya nanti</string>
@@ -2982,6 +2982,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="analytics_opt_in_content_link">di sini</string>
     <string name="template_analytics_opt_in_content">Bantu kami mengidentifikasi masalah-masalah dan membuat ${app_name} lebih baik dengan membagikan data penggunaan anonim. Untuk memahami bagaimana orang-orang menggunakan beberapa perangkat-perangkat, kami akan membuat pengenal acak, yang dibagikan oleh perangkat Anda.
 \n
+\n
 \nAnda dapat membaca semua kebijakan kami %s.</string>
     <string name="template_analytics_opt_in_title">Bantu buat ${app_name} lebih baik</string>
     <string name="action_enable">Aktifkan</string>
@@ -3067,4 +3068,14 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.</string>
     <string name="action_thread_copy_link_to_thread">Salin tautan ke utasan</string>
     <string name="action_thread_view_in_room">Tampilkan di ruangan</string>
     <string name="action_view_threads">Tampilkan Utasan</string>
+    <string name="room_message_autocomplete_notification">Notifikasi ruangan</string>
+    <string name="room_message_autocomplete_users">Pengguna</string>
+    <string name="room_message_notify_everyone">Beritahu seluruh ruangan</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="other">%1$d lagi</item>
+    </plurals>
+    <string name="message_reaction_show_less">Tampilkan lebih sedikit</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="other">%d perubahan ACL server</item>
+    </plurals>
 </resources>
