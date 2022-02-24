@@ -1590,7 +1590,6 @@
 \nAutorisez l’accès dans le prochaine fenêtre pour pouvoir exporter vos clés manuellement.</string>
     <string name="no_network_indicator">Il n’y a aucune connexion au réseau pour le moment</string>
     <string name="settings_add_3pid_confirm_password_title">Confirmez votre mot de passe</string>
-    <string name="settings_add_3pid_flow_not_supported">Vous ne pouvez pas faire cela depuis Element mobile</string>
     <string name="settings_add_3pid_authentication_needed">Une authentification est nécessaire</string>
     <string name="settings_integrations">Intégrations</string>
     <string name="settings_integrations_summary">Utilisez un gestionnaire d’intégrations pour gérer les robots, les passerelles, les widgets et les jeux d’autocollants.

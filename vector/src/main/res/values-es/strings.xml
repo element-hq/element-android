@@ -1452,7 +1452,6 @@ Por favor permite el acceso en la próxima ventana emergente para descubrir usua
     <string name="call_failed_dont_ask_again">No volver a preguntar</string>
     <string name="invite_no_identity_server_error">Para hacer esto, vaya a las opciones y añada un servidor de identidad.</string>
     <string name="settings_add_3pid_confirm_password_title">Confirme su contraseña</string>
-    <string name="settings_add_3pid_flow_not_supported">Eso no se puede hacer en Element para móvil</string>
     <string name="settings_add_3pid_authentication_needed">Se necesita autenticación</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimizado para batería</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimizado para operar en tiempo real</string>
