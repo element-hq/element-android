@@ -17,10 +17,12 @@
 
 package im.vector.app.features.media
 
+import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorDummyViewState
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.media.domain.usecase.DownloadMediaUseCase
@@ -39,6 +41,8 @@ class VectorAttachmentViewerViewModel @AssistedInject constructor(
     interface Factory : MavericksAssistedViewModelFactory<VectorAttachmentViewerViewModel, VectorDummyViewState> {
         override fun create(initialState: VectorDummyViewState): VectorAttachmentViewerViewModel
     }
+
+    companion object : MavericksViewModelFactory<VectorAttachmentViewerViewModel, VectorDummyViewState> by hiltMavericksViewModelFactory()
 
     /* ==========================================================================================
      * Specialization
@@ -60,7 +64,7 @@ class VectorAttachmentViewerViewModel @AssistedInject constructor(
 
             // Success event is handled via a notification inside use case
             downloadMediaUseCase.execute(action.file)
-                    .onFailure { _viewEvents.post(VectorAttachmentViewerViewEvents.ErrorDownloadingMedia) }
+                    .onFailure { _viewEvents.post(VectorAttachmentViewerViewEvents.ErrorDownloadingMedia(it)) }
         }
     }
 }

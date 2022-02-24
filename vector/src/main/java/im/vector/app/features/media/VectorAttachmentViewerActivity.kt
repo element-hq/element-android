@@ -41,6 +41,8 @@ import im.vector.app.features.themes.ThemeUtils
 import im.vector.lib.attachmentviewer.AttachmentCommands
 import im.vector.lib.attachmentviewer.AttachmentViewerActivity
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
@@ -147,6 +149,8 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
 
         window.statusBarColor = ContextCompat.getColor(this, R.color.black_alpha)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.black_alpha)
+
+        observeViewEvents()
     }
 
     override fun onResume() {
@@ -241,6 +245,23 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
                 })
     }
 
+    private fun observeViewEvents() {
+        viewModel.viewEvents
+                .stream()
+                .onEach(::handleViewEvents)
+                .launchIn(lifecycleScope)
+    }
+
+    private fun handleViewEvents(event: VectorAttachmentViewerViewEvents) {
+        when (event) {
+            is VectorAttachmentViewerViewEvents.DownloadingMedia      -> Unit // TODO show loader?
+            is VectorAttachmentViewerViewEvents.ErrorDownloadingMedia -> {
+                // TODO show snackbar
+                Timber.e("failure saving file: ${event.error}")
+            }
+        }
+    }
+
     /* ==========================================================================================
      * Specialization AttachmentInteractionListener
      * ========================================================================================== */
@@ -273,13 +294,12 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
 
     override fun onDownload() {
         // TODO
-        //  handle viewEvents
         //  show message on error event: see TimelineFragment
         //  check write file permissions: see TimelineFragment
         //  should we check if media is saveable?
         //  check if it is already possible to save from menu with long press on video
         //  check if it works for video or other media type as well
-        //  add unit tests for usecase?
+        //  add unit tests for usecase? what is the used mock library?
         lifecycleScope.launch(Dispatchers.IO) {
             val file = currentSourceProvider?.getFileForSharing(currentPosition) ?: return@launch
             viewModel.handle(VectorAttachmentViewerAction.DownloadMedia(file))

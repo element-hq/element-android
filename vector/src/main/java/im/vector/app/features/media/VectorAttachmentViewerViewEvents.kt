@@ -20,5 +20,5 @@ import im.vector.app.core.platform.VectorViewEvents
 
 sealed class VectorAttachmentViewerViewEvents : VectorViewEvents {
     object DownloadingMedia : VectorAttachmentViewerViewEvents()
-    object ErrorDownloadingMedia : VectorAttachmentViewerViewEvents()
+    data class ErrorDownloadingMedia(val error: Throwable) : VectorAttachmentViewerViewEvents()
 }
