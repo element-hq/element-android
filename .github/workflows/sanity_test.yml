@@ -19,6 +19,7 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [ 28 ]
+    # No concurrency required, runs every time on a schedule.
     steps:
       - uses: actions/checkout@v2
         with:

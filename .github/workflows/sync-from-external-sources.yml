@@ -9,6 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     # Skip in forks
     if: github.repository == 'vector-im/element-android'
+    # No concurrency required, runs every time on a schedule.
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
@@ -43,6 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     # Skip in forks
     if: github.repository == 'vector-im/element-android'
+    # No concurrency required, runs every time on a schedule.
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
@@ -76,6 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     # Skip in forks
     if: github.repository == 'vector-im/element-android'
+    # No concurrency required, runs every time on a schedule.
     steps:
       - uses: actions/checkout@v2
       - name: Run analytics import script
