@@ -7,8 +7,8 @@
 # Potentially rewrite as an independent action, use handlebars to template result
 import sys
 import xml.etree.ElementTree as ET
-
-xmlfiles= sys.argv[1:]
+suitename = sys.argv[1]
+xmlfiles = sys.argv[2:]
 
 for xmlfile in xmlfiles:
     tree = ET.parse(xmlfile)

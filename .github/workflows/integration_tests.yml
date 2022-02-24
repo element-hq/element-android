@@ -93,7 +93,7 @@ jobs:
       - name: Read Results [org.matrix.android.sdk.session]
         if: always()
         id: get-comment-body-session
-        run: python3 tools/ci/render_xml_output.py session ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml
+        run: python3 ./tools/ci/render_test_output.py session ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml
       - name: Run integration tests for  Matrix SDK [org.matrix.android.sdk.account] API[${{ matrix.api-level }}]
         if: always()
         uses: reactivecircus/android-emulator-runner@v2
@@ -108,7 +108,7 @@ jobs:
       - name: Read Results [org.matrix.android.sdk.account]
         if: always()
         id: get-comment-body-account
-        run: python3 tools/ci/render_xml_output.py account ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml
+        run: python3 ./tools/ci/render_test_output.py account ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml
 # package: org.matrix.android.sdk.internal
       - name: Run integration tests for Matrix SDK [org.matrix.android.sdk.internal] API[${{ matrix.api-level }}]
         if: always()
@@ -124,7 +124,7 @@ jobs:
       - name: Read Results [org.matrix.android.sdk.internal]
         if: always()
         id: get-comment-body-internal
-        run: python3 tools/ci/render_xml_output.py internal ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml
+        run: python3 ./tools/ci/render_test_output.py internal ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml
 # package: org.matrix.android.sdk.ordering
       - name: Run integration tests for Matrix SDK [org.matrix.android.sdk.ordering] API[${{ matrix.api-level }}]
         if: always()
@@ -140,9 +140,7 @@ jobs:
       - name: Read Results [org.matrix.android.sdk.ordering]
         if: always()
         id: get-comment-body-ordering
-        run: |
-          body="$(cat ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml | grep "<testsuite" | sed "s@.*tests=\(.*\)time=.*@\1@")"
-          echo "::set-output name=ordering::passed=$body"
+        run: python3 ./tools/ci/render_test_output.py ordering ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml
 # package: class PermalinkParserTest
       - name: Run integration tests for Matrix SDK class [org.matrix.android.sdk.PermalinkParserTest] API[${{ matrix.api-level }}]
         if: always()
@@ -158,9 +156,8 @@ jobs:
       - name: Read Results [org.matrix.android.sdk.PermalinkParserTest]
         if: always()
         id: get-comment-body-permalink
-        run: |
-          body="$(cat ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml | grep "<testsuite" | sed "s@.*tests=\(.*\)time=.*@\1@")"
-          echo "::set-output name=permalink::passed=$body"
+        run: python3 ./tools/ci/render_test_output.py permalink ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml
+# package: class PermalinkParserTest
       - name: Find Comment
         if: always() && github.event_name == 'pull_request'
         uses: peter-evans/find-comment@v1
