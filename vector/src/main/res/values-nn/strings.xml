@@ -148,7 +148,7 @@
     <string name="user_directory_header">Brukarkatalog</string>
     <string name="matrix_only_filter">Berre Matrix-kontaktar</string>
     <string name="no_conversation_placeholder">Ingen samtalar</string>
-    <string name="template_no_contact_access_placeholder">Du gav ikkje ${app_name} tilgang til dei lokale kontaktane dine</string>
+    <string name="no_contact_access_placeholder">Du gav ikkje ${app_name} tilgang til dei lokale kontaktane dine</string>
     <string name="no_result_placeholder">Ingen treff</string>
     <string name="rooms_header">Rom</string>
     <string name="rooms_directory_header">Romkatalog</string>
@@ -262,7 +262,7 @@
     <string name="e2e_re_request_encryption_key"><u>Etterspør på nytt krypteringsnøkklar</u> frå dei andre einingane dine.</string>
     <string name="e2e_re_request_encryption_key_sent">Nøkkelførespurnaden er sendt.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Førespurnaden er send</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Start ${app_name} på ein annan eining som kan dekryptere meldingen, slik at den kan sende nøkklane til denne sesjonen</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Start ${app_name} på ein annan eining som kan dekryptere meldingen, slik at den kan sende nøkklane til denne sesjonen</string>
     <string name="read_receipts_list">Les kvitteringsliste</string>
     <string name="groups_list">Gruppeliste</string>
     <plurals name="membership_changes">
@@ -297,23 +297,23 @@
     <string name="media_picker_both_capture_title">Ta bilete eller video</string>
     <string name="media_picker_cannot_record_video">Kan ikkje spela inn video</string>
     <string name="permissions_rationale_popup_title">Info</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} treng tilgang til bilete- og videobiblioteket for å senda og lagra vedlegg.
+    <string name="permissions_rationale_msg_storage">${app_name} treng tilgang til bilete- og videobiblioteket for å senda og lagra vedlegg.
 \n 
 \nGje tilgang i sprettvindauget som kjem for å senda filer frå mobilen.</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name} treng tilgang til kameraet ditt for å ta bilete og videosamtalar.</string>
+    <string name="permissions_rationale_msg_camera">${app_name} treng tilgang til kameraet ditt for å ta bilete og videosamtalar.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nVer venleg og gje tilgang på sprettvindauget som kjem for å starta samtalen."</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name} treng tilgang til mikrofonen din for å utføra talesamtalar.</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} treng tilgang til mikrofonen din for å utføra talesamtalar.</string>
     <string name="call_error_ice_failed">Mediaforbindelsen feila</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nGjer vel og gje tilgang på sprettvindauget som kjem for å utføra samtalen."</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} treng tilgang til kameraet og mikrofonen din for å utføra videosamtalar.
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} treng tilgang til kameraet og mikrofonen din for å utføra videosamtalar.
 \n
 \nGjer vel og gjev tilgang på sprettvindauget som kjem for å utføra samtalen.</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} treng tilgang til kontaktliste for å finna andre Matrix-brukarar basert på e-post og telefonnummer. Viss du samtykker til å dele kontaktlista, ver venleg å tillat tilgang på sprettvindauget som kjem på neste skjermbilete.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} treng tilgang til kontaktliste for å finna andre Matrix-brukarar basert på e-post og telefonnummer.
+    <string name="permissions_rationale_msg_contacts">${app_name} treng tilgang til kontaktliste for å finna andre Matrix-brukarar basert på e-post og telefonnummer. Viss du samtykker til å dele kontaktlista, ver venleg å tillat tilgang på sprettvindauget som kjem på neste skjermbilete.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} treng tilgang til kontaktliste for å finna andre Matrix-brukarar basert på e-post og telefonnummer.
 \n
 \nSamtykker du til å dele adresseboka for dette føremålet \?</string>
     <string name="permissions_action_not_performed_missing_permissions">Beklagar. Grunna manglande tilgangar, vart ikkje handlinga utført</string>
@@ -525,13 +525,13 @@
     <string name="settings_deactivate_account_section">Deaktiver konto</string>
     <string name="settings_deactivate_my_account">Deaktiver kontoen min</string>
     <string name="startup_notification_privacy_title">Personvern ved varslingar</string>
-    <string name="template_startup_notification_privacy_message">${app_name} kan køyra i bakgrunnen for å sikkert og privat halda styr på varsla dine (dette kan påverka batteribruk).</string>
+    <string name="startup_notification_privacy_message">${app_name} kan køyra i bakgrunnen for å sikkert og privat halda styr på varsla dine (dette kan påverka batteribruk).</string>
     <string name="startup_notification_privacy_button_grant">Gje tillating</string>
     <string name="startup_notification_privacy_button_other">vel noko anna</string>
     <string name="settings_analytics">Statistikk</string>
     <string name="settings_opt_in_of_analytics">Send statistikkdata</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} samlar anonym statistikk inn for å forbetra applikasjonen.</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">Ver venleg og skru statistikkinnsamling på for å hjelpa oss med å forbetra ${app_name}.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} samlar anonym statistikk inn for å forbetra applikasjonen.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Ver venleg og skru statistikkinnsamling på for å hjelpa oss med å forbetra ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Ja, eg vil hjelpa til!</string>
     <string name="settings_data_save_mode">Datasparingsmodus</string>
     <string name="devices_details_dialog_title">Informasjon om sesjon</string>
@@ -852,7 +852,7 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="auth_accept_policies">Venligast sjå over og godta retningslinjene til heimtenaren:</string>
     <string name="login_error_unknown_host">Det gjeng ikkje å nå URL-en, gjer vel og sjå til honom</string>
     <string name="settings_call_category">Oppringingar</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Bruk standard ${app_name}-ringetone for innkommande samtalar</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Bruk standard ${app_name}-ringetone for innkommande samtalar</string>
     <string name="settings_call_ringtone_title">Ringetone for innkommande samtalar</string>
     <string name="settings_call_ringtone_dialog_title">Vel ringetone for samtalar:</string>
     <string name="video_call_in_progress">Ein videosamtale pågår…</string>
@@ -879,7 +879,7 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="settings_troubleshoot_test_account_settings_quickfix">Skru på</string>
     <string name="settings_troubleshoot_test_device_settings_title">Sesjonsinnstillingar.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Varslingar er aktivert for denne sesjonen.</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Varslingar er deaktivert for denne sesjonen.
+    <string name="settings_troubleshoot_test_device_settings_failed">Varslingar er deaktivert for denne sesjonen.
 \nSjekk ${app_name}-innstillingane.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Skru på</string>
     <string name="notification_sync_init">setter opp tenesta</string>
@@ -922,7 +922,7 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="invite_no_identity_server_error">Legg til ein identitetstenar i innstillingane for å utføre denne handlinga.</string>
     <string name="room_sliding_menu_version_x">Versjon %s</string>
     <string name="settings_add_3pid_confirm_password_title">Stadfest ditt passord</string>
-    <string name="template_settings_add_3pid_flow_not_supported">Denne handlinga kan ikkje utførast frå ${app_name} på mobil</string>
+    <string name="settings_add_3pid_flow_not_supported">Denne handlinga kan ikkje utførast frå ${app_name} på mobil</string>
     <string name="settings_add_3pid_authentication_needed">Authentisering er påkrevd</string>
     <string name="settings_integrations">Integrasjonar</string>
     <string name="settings_integrations_summary">Bruk ein integrasjonshandterar (Integration Manager) for å handtere botar, bruer, tillegg og klistermerkepakker. 
@@ -987,7 +987,7 @@ Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine t
     <string name="sound_device_wireless_headset">Trådlaus hovudtelefon</string>
     <string name="sound_device_speaker">Høgtalar</string>
     <string name="call_select_sound_device">Vel eining for lyd</string>
-    <string name="template_call_failed_no_connection">${app_name}-samtalen feila</string>
+    <string name="call_failed_no_connection">${app_name}-samtalen feila</string>
     <string name="no_more_results">Ingen fleire resultat</string>
     <string name="dialog_title_success">Suksess</string>
     <string name="action_add">Legg til</string>

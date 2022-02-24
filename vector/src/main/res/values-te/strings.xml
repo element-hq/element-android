@@ -115,7 +115,7 @@
     <string name="local_address_book_header">స్థానిక చిరునామా పుస్తకం</string>
     <string name="matrix_only_filter">మ్యాట్రిక్స్ పరిచయాలు మాత్రమే</string>
     <string name="no_conversation_placeholder">సంభాషణలు లేవు</string>
-    <string name="template_no_contact_access_placeholder">మీరు మీ స్థానిక పరిచయాలను యాక్సెస్ చేయడానికి రియోట్ను అనుమతించలేదు</string>
+    <string name="no_contact_access_placeholder">మీరు మీ స్థానిక పరిచయాలను యాక్సెస్ చేయడానికి రియోట్ను అనుమతించలేదు</string>
     <string name="no_result_placeholder">ఫలితాలు లేవు</string>
 
     <string name="rooms_header">గదులు</string>
@@ -243,8 +243,8 @@
     <string name="media_picker_cannot_record_video">వీడియో రికార్డ్ చేయలేరు</string>
 
     <string name="permissions_rationale_popup_title">సమాచారం</string>
-    <string name="template_permissions_rationale_msg_camera">చిత్రాలను మరియు వీడియో కాల్లను తీయడానికి మీ కెమెరాను ప్రాప్తి చేయడానికి ${app_name}కు అనుమతి అవసరం.</string>
-    <string name="template_permissions_rationale_msg_record_audio">ఆడియో కాల్లను చేయడానికి మీ మైక్రోఫోన్ను ప్రాప్యత చేయడానికి ${app_name}కు అనుమతి అవసరం.</string>
+    <string name="permissions_rationale_msg_camera">చిత్రాలను మరియు వీడియో కాల్లను తీయడానికి మీ కెమెరాను ప్రాప్తి చేయడానికి ${app_name}కు అనుమతి అవసరం.</string>
+    <string name="permissions_rationale_msg_record_audio">ఆడియో కాల్లను చేయడానికి మీ మైక్రోఫోన్ను ప్రాప్యత చేయడానికి ${app_name}కు అనుమతి అవసరం.</string>
     <string name="permissions_action_not_performed_missing_permissions">క్షమించాలి… ఆమోదించని అనుమతుల కారణంగా చర్య చేయలేదు</string>
 
     <string name="media_slider_saved">దాయబడినది</string>
@@ -534,7 +534,7 @@
     <string name="login_error_login_email_not_yet">ఇంకా నొక్కని ఇ-తపాలా లింగక</string>
 
     <string name="call_error_camera_init_failed">కెమెరాను ప్రారంభించడం సాధ్యపడదు</string>
-    <string name="template_permissions_rationale_msg_storage">అటాచ్మెంట్లు పంపడానికి మరియు సేవ్ చేయడానికి మీ ఫోటో మరియు వీడియో లైబ్రరీని ప్రాప్తి చేయడానికి కలతకు అనుమతి అవసరం.
+    <string name="permissions_rationale_msg_storage">అటాచ్మెంట్లు పంపడానికి మరియు సేవ్ చేయడానికి మీ ఫోటో మరియు వీడియో లైబ్రరీని ప్రాప్తి చేయడానికి కలతకు అనుమతి అవసరం.
 \n
 \nదయచేసి మీ ఫోన్ నుండి ఫైల్లను పంపగల తదుపరి పాప్-అప్లో ప్రాప్యతను అనుమతించండి.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
@@ -543,7 +543,7 @@
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nదయచేసి కాల్ చేయడానికి వీలుగా తదుపరి పాప్-అప్లో ప్రాప్యతను అనుమతించండి."</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">"మీ కెమెరాను మరియు మీ శబ్ద ప్రసారిణి సాంగత్యం చేయడానికి రియోట్కు అనుమతి అవసరం.
+    <string name="permissions_rationale_msg_camera_and_audio">"మీ కెమెరాను మరియు మీ శబ్ద ప్రసారిణి సాంగత్యం చేయడానికి రియోట్కు అనుమతి అవసరం.
 \n
 \nదయచేసి   పిలుపు చేయడానికి వీలుగా తదుపరి పాప్-అప్ల్లో ప్రాప్యతను అనుమతించండి."</string>
     <string name="action_preview">ప్రత్యేక ప్రదర్శన</string>

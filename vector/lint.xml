@@ -75,14 +75,6 @@
     <issue id="Typos" severity="error" />
     <issue id="TypographyDashes" severity="error" />
 
-    <!-- Ignore lint issue in generated resource file from templates.
-     https://github.com/LikeTheSalad/android-string-reference generates string from the default language
-     if the translation is missing, and it can lead to typos. Lint should only check the string from the
-     original file, so with id starting by `template_`. -->
-    <issue id="all">
-        <ignore path="**/generated/resolved/**/resolved.xml" />
-    </issue>
-
     <!-- DI -->
     <issue id="JvmStaticProvidesInObjectDetector" severity="error" />
 </lint>

@@ -345,7 +345,7 @@
     <string name="local_address_book_header">Локальные контакты</string>
     <string name="matrix_only_filter">Только Matrix контакты</string>
     <string name="no_conversation_placeholder">Нет диалогов</string>
-    <string name="template_no_contact_access_placeholder">Вы не дали доступ ${app_name} к внутренним контактам</string>
+    <string name="no_contact_access_placeholder">Вы не дали доступ ${app_name} к внутренним контактам</string>
     <string name="no_result_placeholder">Нет результатов</string>
     <string name="rooms_header">Комнаты</string>
     <string name="rooms_directory_header">Каталог комнат</string>
@@ -474,18 +474,18 @@
     <string name="media_picker_both_capture_title">Снять фото или видео"</string>
     <string name="media_picker_cannot_record_video">Не удалось записать видео"</string>
     <string name="permissions_rationale_popup_title">Информация</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} нуждается в разрешении на доступ к вашей фото-и видеотеке для отправки и сохранения вложений.
+    <string name="permissions_rationale_msg_storage">${app_name} нуждается в разрешении на доступ к вашей фото-и видеотеке для отправки и сохранения вложений.
 \n
 \nПожалуйста, разрешите доступ в следующем всплывающем окне, чтобы иметь возможность отправлять файлы с вашего устройства.</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name} необходимы разрешения на доступ к вашей камере, чтобы делать фото и совершать видеозвонки.</string>
+    <string name="permissions_rationale_msg_camera">${app_name} необходимы разрешения на доступ к вашей камере, чтобы делать фото и совершать видеозвонки.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nПожалуйста разрешите доступ в следующем окне, чтобы иметь возможность совершать звонки.</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name} необходимы разрешения на доступ к микрофону, чтобы выполнять звонки.</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} необходимы разрешения на доступ к микрофону, чтобы выполнять звонки.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nПожалуйста разрешите доступ в следующем окне, чтобы иметь возможность совершать звонки.</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} необходимы разрешения на доступ к камере и микрофону для видеовызовов.
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} необходимы разрешения на доступ к камере и микрофону для видеовызовов.
 \n
 \nПожалуйста дайте разрешение в следующем окне для звонка.</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} может проверить вашу адресную книгу, чтобы найти других пользователей Matrix по их электронной почте и номерам телефонов. Если вы согласны поделиться своей адресной книгой для этой цели, пожалуйста, откройте доступ на следующем всплывающем окне.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} может проверить Вашу адресную книгу, чтобы найти других пользователей сети по email или телефонному номеру.
+    <string name="permissions_rationale_msg_contacts">${app_name} может проверить вашу адресную книгу, чтобы найти других пользователей Matrix по их электронной почте и номерам телефонов. Если вы согласны поделиться своей адресной книгой для этой цели, пожалуйста, откройте доступ на следующем всплывающем окне.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} может проверить Вашу адресную книгу, чтобы найти других пользователей сети по email или телефонному номеру.
 \n
 \nСогласны ли вы поделиться своей адресной книгой для этой цели\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Извините. Действие не выполнено из-за отсутствия на него разрешений</string>
@@ -976,7 +976,7 @@
     <string name="settings_notification_privacy_nosecure_message_content">• Уведомления содержат <b>метаданные и данные сообщения</b></string>
     <string name="settings_notification_privacy_message_content_not_shown">• Уведомления <b>не будут показывать содержимое сообщения</b></string>
     <string name="startup_notification_privacy_title">Конфиденциальность уведомлений</string>
-    <string name="template_startup_notification_privacy_message">${app_name} может работать в фоновом режиме для управления конфиденциальностью и безопасностью ваших уведомлений. Это может повлиять на время работы от батареи.</string>
+    <string name="startup_notification_privacy_message">${app_name} может работать в фоновом режиме для управления конфиденциальностью и безопасностью ваших уведомлений. Это может повлиять на время работы от батареи.</string>
     <string name="startup_notification_privacy_button_grant">Предоставить разрешение</string>
     <string name="startup_notification_privacy_button_other">Выбрать другой вариант</string>
     <string name="settings_notification_privacy_reduced">Ограниченная конфиденциальность</string>
@@ -989,8 +989,8 @@
     <string name="settings_deactivate_account_section">Деактивация аккаунта</string>
     <string name="settings_deactivate_my_account">Деактивировать мой аккаунт</string>
     <string name="settings_opt_in_of_analytics">Отправка аналитических данных</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} собирает анонимную аналитику для улучшения приложения.</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">Пожалуйста, включите аналитику, чтобы помочь нам улучшить ${app_name}.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} собирает анонимную аналитику для улучшения приложения.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Пожалуйста, включите аналитику, чтобы помочь нам улучшить ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Да, я хочу помочь!</string>
     <string name="widget_integration_missing_parameter">Обязательный параметр отсутствует.</string>
     <string name="widget_integration_invalid_parameter">Параметр недействителен.</string>
@@ -1012,7 +1012,7 @@
     <string name="e2e_re_request_encryption_key">Перезапросить ключи шифрования у других ваших сессий.</string>
     <string name="e2e_re_request_encryption_key_sent">Отправлен запрос ключа.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Запрос отправлен</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Запустите ${app_name} на другом устройстве, которое может расшифровать сообщение, для отправки ключа на эту сессию.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Запустите ${app_name} на другом устройстве, которое может расшифровать сообщение, для отправки ключа на эту сессию.</string>
     <string name="lock_screen_hint">Введите здесь…</string>
     <string name="option_send_voice">Отправить голосовое сообщение</string>
     <string name="go_on_with">продолжить с…</string>
@@ -1115,7 +1115,7 @@
     <string name="settings_password">Пароль</string>
     <string name="auth_accept_policies">Пожалуйста, ознакомьтесь и примите правила этого домашнего сервера:</string>
     <string name="settings_call_category">Вызовы</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Использовать стандартную мелодию ${app_name} для входящих звонков</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Использовать стандартную мелодию ${app_name} для входящих звонков</string>
     <string name="settings_call_ringtone_title">Мелодия входящего вызова</string>
     <string name="settings_call_ringtone_dialog_title">Выберите мелодию звонка:</string>
     <string name="video_call_in_progress">Идёт видеозвонок …</string>
@@ -1155,12 +1155,12 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Включить</string>
     <string name="settings_troubleshoot_test_device_settings_title">Настройки сессии.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Уведомления включены для этой сессии.</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Уведомления не включено для этой сессии.
+    <string name="settings_troubleshoot_test_device_settings_failed">Уведомления не включено для этой сессии.
 \nПожалуйста, проверьте настройки ${app_name}.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Включить</string>
     <string name="settings_troubleshoot_test_play_services_title">Проверка сервисов Play</string>
     <string name="settings_troubleshoot_test_play_services_success">APK Google Play сервисов доступен и обновлён.</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} использует сервисы Google Play для доставки push-сообщений, но не похоже что он настроен правильно:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} использует сервисы Google Play для доставки push-сообщений, но не похоже что он настроен правильно:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Исправить сервисы Play</string>
     <string name="settings_troubleshoot_test_fcm_title">Токен Firebase</string>
@@ -1177,17 +1177,17 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Не удалось перезапустить службу</string>
     <string name="settings_troubleshoot_test_service_boot_title">Запуск при загрузке</string>
     <string name="settings_troubleshoot_test_service_boot_success">Служба будет запущена после перезапуска устройства.</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">При перезагрузке устройства служба не будет запущена , вы не будете получать уведомления, пока ${app_name} не будет открыт один раз.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">При перезагрузке устройства служба не будет запущена , вы не будете получать уведомления, пока ${app_name} не будет открыт один раз.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Включить запуск при загрузке</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Проверьте фоновые ограничения</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">Фоновые ограничения отключены для ${app_name}. Этот тест должен быть запущен с использованием мобильных данных (без WIFI).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Фоновые ограничения отключены для ${app_name}. Этот тест должен быть запущен с использованием мобильных данных (без WIFI).
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Фоновые ограничения включены для ${app_name}.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Фоновые ограничения включены для ${app_name}.
 \nРабота приложения будет жестко ограничена, пока оно находится в фоновом режиме, и это может повлиять на уведомления. 
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Отключить ограничения</string>
     <string name="settings_troubleshoot_test_battery_title">Оптимизация батареи</string>
-    <string name="template_settings_troubleshoot_test_battery_success">Оптимизация батареи не влияет на ${app_name}.</string>
+    <string name="settings_troubleshoot_test_battery_success">Оптимизация батареи не влияет на ${app_name}.</string>
     <string name="settings_troubleshoot_test_battery_failed">Если пользователь оставляет устройство в отключенном от сети и в неподвижном состоянии в течение некоторого времени при выключенном экране, устройство переходит в режим Doze. Это предотвращает доступ приложений к сети и откладывает выполнение заданий, синхронизацию и передачу стандартных аварийных сигналов.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Игнорировать оптимизацию</string>
     <string name="settings_inline_url_preview_summary">Предпросмотр ссылок в чате, когда ваш домашний сервер поддерживает эту функцию.</string>
@@ -1198,7 +1198,7 @@
     <string name="settings_show_join_leave_messages">Показывать события о вступлении/выходе</string>
     <string name="settings_show_avatar_display_name_changes_messages">Показывать события аккаунта</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Включает изменения аватара и отображаемого имени.</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">Необходимо минимизировать влияние на фоновое соединение для надёжности уведомлений.
+    <string name="startup_notification_fdroid_battery_optim_message">Необходимо минимизировать влияние на фоновое соединение для надёжности уведомлений.
 \nНа следующем экране вам будет предложено разрешить ${app_name} всегда работать в фоновом режиме, пожалуйста, согласитесь.</string>
     <string name="settings_labs_native_camera_summary">Использовать системную камеру вместо камеры Element.</string>
     <string name="settings_info_area_show">Показать информацию</string>
@@ -1230,7 +1230,7 @@
     <string name="notification_silent">Беззвучный</string>
     <string name="passphrase_empty_error_message">Пожалуйста, введите парольную фразу</string>
     <string name="passphrase_passphrase_too_weak">Парольная фраза слишком простая</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">Пожалуйста, удалите парольную фразу, если хотите, чтобы ${app_name} сгенерировал ключ восстановления.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Пожалуйста, удалите парольную фразу, если хотите, чтобы ${app_name} сгенерировал ключ восстановления.</string>
     <string name="keys_backup_no_session_error">Matrix сессия недоступна</string>
     <string name="keys_backup_setup_step1_title">Никогда не теряйте зашифрованных сообщений</string>
     <string name="keys_backup_setup_step1_description">Сообщения в зашифрованных комнатах защищены сквозным шифрованием. Ключи для прочтения этих сообщений есть только у вас и получателя(ей).
@@ -1297,11 +1297,11 @@
     <string name="recovery_key_export_saved_as_warning">Ключ восстановления был сохранен в \'%s\'. 
 \n
 \nПредупреждение: этот файл может быть удален при удалении приложения.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nЭта ошибка вне контроля ${app_name}. На телефоне нет учетной записи Google. Пожалуйста, добавьте аккаунт Google.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nЭта ошибка вне контроля ${app_name}. Причины могут быть разными. Возможно, это будет работать, если вы повторите попытку позже, вы также можете проверить, что службы Google Play не ограничены в использовании данных в настройках системы, или что часы вашего устройства установлены правильно, или это может произойти на модифицированных прошивках.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nЭта ошибка вне контроля ${app_name}, и, по словам Google, эта ошибка означает, что на устройстве слишком много приложений, зарегистрированных в FCM. Ошибка возникает только в тех случаях, когда существует огромное количество приложений, поэтому она не должна влиять на обычного пользователя.</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Ваши зашифрованные сообщения будут потеряны, если выйдете сейчас</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Выполняется резервное копирование ключа. Если выйти сейчас, Вы потеряете доступ к Вашим зашифрованным сообщениям.</string>
@@ -1413,7 +1413,7 @@
     <string name="ignore_request_short_label">Игнорировать</string>
     <string name="autodiscover_invalid_response">Ошибка отклика сервера</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Дополнить параметры сервера</string>
-    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} обнаружил пользовательскую конфигурацию сервера для вашего userID домена\"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">${app_name} обнаружил пользовательскую конфигурацию сервера для вашего userID домена\"%1$s\":
 \n%2$s</string>
     <string name="sas_verify_title">Проверьте, сравнив короткую текстовую строку.</string>
     <string name="sas_security_advise">Для обеспечения максимальной безопасности мы рекомендуем делать это лично или использовать другие надежные средства связи.</string>
@@ -1527,7 +1527,7 @@
     <string name="send_suggestion_sent">Спасибо, предложение было успешно отправлено</string>
     <string name="send_suggestion_failed">Не удалось отправить предложение (%s)</string>
     <string name="settings_labs_show_hidden_events_in_timeline">Показать скрытые события в ленте сообщений</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">Предварительный просмотр открытой комнаты в ${app_name} пока не поддерживается</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Предварительный просмотр открытой комнаты в ${app_name} пока не поддерживается</string>
     <string name="bottom_action_people_x">Диалоги</string>
     <string name="send_file_step_idle">Ждите…</string>
     <string name="send_file_step_encrypting_thumbnail">Шифрование миниатюры…</string>
@@ -1589,9 +1589,9 @@
     <string name="settings_call_ringtone_use_default_stun_sum">Будет использовать %s в качестве помощника, если ваш домашний сервер не предлагает его (ваш IP-адрес будет доступен во время разговора)</string>
     <string name="invite_no_identity_server_error">Добавьте сервер обнаружения в свои настройки, чтобы выполнить это действие.</string>
     <string name="settings_background_fdroid_sync_mode">Режим фоновой синхронизации</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} будет синхронизироваться в фоновом режиме таким образом, чтобы сохранить ограниченные ресурсы устройства (батарея).
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} будет синхронизироваться в фоновом режиме таким образом, чтобы сохранить ограниченные ресурсы устройства (батарея).
 \nВ зависимости от состояния ресурса вашего устройства, синхронизация может быть отложена операционной системой.</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} будет синхронизироваться в фоновом режиме периодически в точное время (настраивается).
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} будет синхронизироваться в фоновом режиме периодически в точное время (настраивается).
 \nЭто повлияет на использование радио и батареи, появится постоянное уведомление о том, что ${app_name} прислушивается к событиям.</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Вы не будете уведомлены о входящих сообщениях, когда приложение находится в фоновом режиме.</string>
     <string name="settings_set_workmanager_delay_summary">%s
@@ -1638,7 +1638,7 @@
     <string name="room_widget_open_in_browser">Открыть в браузере</string>
     <string name="room_widget_permission_widget_id">ID виджета</string>
     <string name="room_widget_resource_grant_permission">Позволить</string>
-    <string name="template_settings_add_3pid_flow_not_supported">Вы это не можете делать на мобильном ${app_name}</string>
+    <string name="settings_add_3pid_flow_not_supported">Вы это не можете делать на мобильном ${app_name}</string>
     <string name="room_widget_permission_added_by">Этот виджет был добавлен:</string>
     <string name="room_widget_permission_theme">Ваша тема</string>
     <string name="room_widget_permission_room_id">ID комнаты</string>
@@ -1802,7 +1802,7 @@
 \nВойдите заново, чтобы получить доступ к данным своей учётной записи и сообщениям.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Вы потеряете доступ к защищённым сообщениям, если не войдёте в систему для восстановления ключей шифрования.</string>
     <string name="soft_logout_clear_data_dialog_submit">Очистить данные</string>
-    <string name="template_soft_logout_sso_not_same_user_error">Текущая сессия предназначена для пользователя %1$s, а вы предоставляете учётные данные для пользователя %2$s. Это не поддерживается в ${app_name}.
+    <string name="soft_logout_sso_not_same_user_error">Текущая сессия предназначена для пользователя %1$s, а вы предоставляете учётные данные для пользователя %2$s. Это не поддерживается в ${app_name}.
 \nПожалуйста, сначала очистите данные, а затем снова войдите под другим аккаунтом.</string>
     <string name="permalink_malformed">Ваша ссылка на matrix.to была испорчена</string>
     <string name="bug_report_error_too_short">Описание слишком короткое</string>
@@ -1907,7 +1907,7 @@
     <string name="a11y_close_keys_backup_banner">Закрыть окно резервного копирования ключей</string>
     <string name="one_user_read">%s прочитано</string>
     <string name="error_handling_incoming_share">Не удалось обработать данные</string>
-    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} требуются права для сохранения ваших ключей сквозного шифрования на диск.
+    <string name="permissions_rationale_msg_keys_backup_export">${app_name} требуются права для сохранения ваших ключей сквозного шифрования на диск.
 \n
 \nПожалуйста, разрешите доступ в следующем всплывающем окне, чтобы экспортировать ключи вручную.</string>
     <string name="no_network_indicator">Сейчас нет подключения к сети</string>
@@ -1916,7 +1916,7 @@
     <string name="action_copy">Копировать</string>
     <string name="dialog_title_success">Удачно</string>
     <string name="bottom_action_notification">Уведомления</string>
-    <string name="template_call_failed_no_connection">Звонок не состоялся</string>
+    <string name="call_failed_no_connection">Звонок не состоялся</string>
     <string name="call_failed_no_connection_description">Не удалось установить соединение реального времени.
 \nПопросите администратора вашего сервера настроить сервер TURN, чтобы звонки работали надёжно.</string>
     <string name="call_select_sound_device">Выберите звуковое устройство</string>
@@ -2015,7 +2015,7 @@
     <string name="rageshake_detected">Обнаружено потрясение!</string>
     <string name="autocomplete_limited_results">Показываем только первые результаты, наберите больше букв…</string>
     <string name="settings_developer_mode_fail_fast_title">Раннее падение</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} может падать чаще, когда происходит непредвиденная ошибка</string>
+    <string name="settings_developer_mode_fail_fast_summary">${app_name} может падать чаще, когда происходит непредвиденная ошибка</string>
     <string name="command_description_shrug">Добавляет смайл ¯\\_(ツ)_/¯ в начало сообщения</string>
     <string name="create_room_encryption_description">После включения шифрования его нельзя отключить.</string>
     <string name="login_error_threepid_denied">Ваш почтовый домен не имеет права регистрироваться на этом сервере</string>
@@ -2071,9 +2071,9 @@
     <string name="room_member_power_level_default_in">По умолчанию в %1$s</string>
     <string name="room_member_power_level_custom_in">Пользовательский (%1$d) в %2$s</string>
     <string name="room_member_jump_to_read_receipt">Перейти к последнему прочтённому им сообщению</string>
-    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} не обрабатывает события типа \'%1$s\'</string>
-    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} не обрабатывает сообщения типа \'%1$s\'</string>
-    <string name="template_rendering_event_error_exception">${app_name} столкнулся с проблемой при отображении содержимого события с идентификатором \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name} не обрабатывает события типа \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">${app_name} не обрабатывает сообщения типа \'%1$s\'</string>
+    <string name="rendering_event_error_exception">${app_name} столкнулся с проблемой при отображении содержимого события с идентификатором \'%1$s\'</string>
     <string name="unignore">Перестать игнорировать</string>
     <string name="verify_cannot_cross_sign">Эта сессия не может поделиться подтверждением с другими сессиями.
 \nПодтверждение будет сохранено локально и отправится в будущей версии приложения.</string>
@@ -2129,8 +2129,8 @@
     <string name="settings_messages_at_room">Сообщения, содержащие @room</string>
     <string name="settings_troubleshoot_title">Отладка</string>
     <string name="settings_notification_advanced_summary">Настройки важности уведомлений для событий</string>
-    <string name="template_use_other_session_content_description">Используйте последнюю версию ${app_name} на других ваших устройствах, веб-клиент ${app_name}, ${app_name} для ПК, ${app_name} для iOS, ${app_name} для Android или другой клиент Matrix, поддерживающий перекрестную подпись</string>
-    <string name="template_use_latest_app">Используйте последнюю версию ${app_name} на других ваших устройствах:</string>
+    <string name="use_other_session_content_description">Используйте последнюю версию ${app_name} на других ваших устройствах, веб-клиент ${app_name}, ${app_name} для ПК, ${app_name} для iOS, ${app_name} для Android или другой клиент Matrix, поддерживающий перекрестную подпись</string>
+    <string name="use_latest_app">Используйте последнюю версию ${app_name} на других ваших устройствах:</string>
     <string name="verify_this_session">Подтвердите новую сессию вашей учетной записи: %1$s</string>
     <string name="settings_setup_secure_backup">Настроить безопасное резервное копирование</string>
     <string name="bottom_sheet_setup_secure_backup_title">Безопасное резервное копирование</string>
@@ -2173,7 +2173,7 @@
     <string name="event_redacted_by_user_reason_with_reason">Событие удалено пользователем, Причина: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Событие модерируется администратором комнаты, Причина: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Ключи успешно обновлены!</string>
-    <string name="template_login_default_session_public_name">${app_name} для Android</string>
+    <string name="login_default_session_public_name">${app_name} для Android</string>
     <string name="refresh">Обновить</string>
     <string name="new_session">Новый вход в вашу учётную запись. Это были Вы\?</string>
     <string name="new_session_review">Нажмите, чтобы просмотреть и проверить</string>
@@ -2246,9 +2246,9 @@
     <string name="media_file_added_to_gallery">Медиафайл добавлен в галерею</string>
     <string name="error_adding_media_file_to_gallery">Не удалось добавить медиафайл в галерею</string>
     <string name="error_saving_media_file">Не удалось сохранить медиафайл</string>
-    <string name="template_app_desktop_web">Веб-${app_name}
+    <string name="app_desktop_web">Веб-${app_name}
 \n${app_name} для ПК</string>
-    <string name="template_app_ios_android">${app_name} для iOS
+    <string name="app_ios_android">${app_name} для iOS
 \n${app_name} для Android</string>
     <string name="or_other_mx_capable_client">или другой клиент Matrix поддерживающий перекрестную подпись</string>
     <string name="command_description_discard_session">Принудительно отбрасывает текущую групповую сессию для отправки сообщений в зашифрованную комнату</string>
@@ -2285,11 +2285,11 @@
     <string name="choose_locale_loading_locales">Загрузка доступных языков…</string>
     <string name="open_terms_of">Посмотреть условия %s</string>
     <string name="disconnect_identity_server_dialog_content">Отключиться от сервера идентификации %s\?</string>
-    <string name="template_identity_server_error_outdated_identity_server">Этот сервер идентификации устарел. ${app_name} поддерживает только API V2.</string>
+    <string name="identity_server_error_outdated_identity_server">Этот сервер идентификации устарел. ${app_name} поддерживает только API V2.</string>
     <string name="identity_server_error_outdated_home_server">Эта операция невозможна. Домашний сервер устарел.</string>
     <string name="identity_server_error_no_identity_server_configured">Пожалуйста, настройте сначала сервер идентификации.</string>
     <string name="identity_server_error_terms_not_signed">Пожалуйста, примите сначала условия сервера идентификации в настройках.</string>
-    <string name="template_identity_server_error_bulk_sha256_not_supported">Для вашей приватности, ${app_name} поддерживает отправку адреса электронной почты и номера телефона только в хэшированном виде.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Для вашей приватности, ${app_name} поддерживает отправку адреса электронной почты и номера телефона только в хэшированном виде.</string>
     <string name="identity_server_error_binding_error">Привязка не удалась.</string>
     <string name="identity_server_error_no_current_binding_error">Текущая взаимосвязь с этим идентификатором отсутствует.</string>
     <string name="identity_server_set_default_notice">Ваш домашний сервер (%1$s) предлагает использовать %2$s для вашего сервера обнаружения</string>
@@ -2419,13 +2419,13 @@
     <string name="delete_account_data_warning">Удалить данные учетной записи типа %1$s\?
 \n
 \nИспользуйте с осторожностью, это может привести к неожиданному поведению.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_off">ПИН-код потребуется каждый раз, когда вы откроете ${app_name}.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">ПИН-код потребуется через 2 минуты неиспользования ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">ПИН-код потребуется каждый раз, когда вы откроете ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">ПИН-код потребуется через 2 минуты неиспользования ${app_name}.</string>
     <string name="settings_security_pin_code_grace_period_title">Требовать PIN-код через 2 минуты</string>
     <string name="settings_security_pin_code_notifications_summary_off">Отображать только количество непрочитанных сообщений в простом уведомлении.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Показывать подробности, такие как названия комнат и содержание сообщений.</string>
     <string name="settings_security_pin_code_notifications_title">Показывать содержимое в уведомлениях</string>
-    <string name="template_settings_security_pin_code_use_biometrics_summary_off">PIN-код - единственный способ разблокировать ${app_name}.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-код - единственный способ разблокировать ${app_name}.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Включить биометрические данные устройства, такие как отпечатки пальцев и распознавание лиц.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Включить биометрию</string>
     <string name="settings_security_application_protection_screen_title">Настроить защиту</string>
@@ -2503,8 +2503,8 @@
     <string name="user_code_share">Поделиться моим кодом</string>
     <string name="user_code_scan">Сканировать QR-код</string>
     <string name="not_a_valid_qr_code">Это недействительный QR-код matrix</string>
-    <string name="template_invite_friends_rich_title">🔐️ Присоединяйтесь ко мне в ${app_name}</string>
-    <string name="template_invite_friends_text">Привет, поговори со мной в ${app_name}: %s</string>
+    <string name="invite_friends_rich_title">🔐️ Присоединяйтесь ко мне в ${app_name}</string>
+    <string name="invite_friends_text">Привет, поговори со мной в ${app_name}: %s</string>
     <string name="invite_friends">Пригласить друзей</string>
     <string name="add_people">Добавить людей</string>
     <string name="topic_prefix">"Тема: "</string>
@@ -2617,7 +2617,7 @@
     <string name="room_participants_leave_private_warning">Эта комната не публичная. Вы не сможете повторно присоединиться без приглашения.</string>
     <string name="system_theme">Системная тема</string>
     <string name="authentication_error">Не удалось пройти аутентификацию</string>
-    <string name="template_re_authentication_default_confirm_text">${app_name} требует от вас ввести свои учетные данные для выполнения этого действия.</string>
+    <string name="re_authentication_default_confirm_text">${app_name} требует от вас ввести свои учетные данные для выполнения этого действия.</string>
     <string name="re_authentication_activity_title">Требуется повторная аутентификация</string>
     <string name="failed_to_initialize_cross_signing">Не удалось настроить перекрестную подпись</string>
     <string name="call_only_active">Активный звонок (%1$s)</string>
@@ -2945,7 +2945,7 @@
     <string name="settings_notification_mentions_and_keywords">Упоминания и ключевые слова</string>
     <string name="settings_notification_default">Уведомления по умолчанию</string>
     <string name="denied_permission_voice_message">Чтобы отправлять голосовые сообщения, предоставьте разрешение на Микрофон.</string>
-    <string name="template_link_this_email_with_your_account">%s в настройках, чтобы получать приглашения непосредственно в ${app_name}.</string>
+    <string name="link_this_email_with_your_account">%s в настройках, чтобы получать приглашения непосредственно в ${app_name}.</string>
     <string name="link_this_email_settings_link">Свяжите этот адрес электронной почты с вашей учетной записью</string>
     <string name="this_invite_to_this_room_was_sent">Приглашение в эту комнату было отправлено на %s, который не связан с вашей учетной записью</string>
     <string name="this_invite_to_this_space_was_sent">Приглашение в это пространство было отправлено на %s, который не связан с вашей учетной записью</string>
@@ -3068,8 +3068,8 @@
     <string name="settings_enable_location_sharing_summary">После включения вы сможете отправить свое местоположение в любую комнату</string>
     <string name="settings_enable_location_sharing">Включить отправку местоположения</string>
     <string name="location_share_external">Открыть с помощью</string>
-    <string name="template_location_not_available_dialog_content">${app_name} не смог получить доступ к вашему местоположению. Пожалуйста, повторите попытку позже.</string>
-    <string name="template_location_not_available_dialog_title">${app_name} не смог получить доступ к вашему местоположению</string>
+    <string name="location_not_available_dialog_content">${app_name} не смог получить доступ к вашему местоположению. Пожалуйста, повторите попытку позже.</string>
+    <string name="location_not_available_dialog_title">${app_name} не смог получить доступ к вашему местоположению</string>
     <string name="location_share">Поделиться местоположением</string>
     <string name="a11y_location_share_icon">Поделиться местоположением</string>
     <string name="location_activity_title_preview">Местоположение</string>
@@ -3160,7 +3160,7 @@
     <string name="settings_discovery_consent_notice_off_2">Ваши контакты приватны. Чтобы обнаружить пользователей из ваших контактов, нам необходимо ваше разрешение на отправку контактной информации на ваш сервер обнаружения.</string>
     <string name="preference_system_settings">Системные настройки</string>
     <string name="preference_versions">Версии</string>
-    <string name="template_preference_help_summary">Получите помощь в использовании ${app_name}</string>
+    <string name="preference_help_summary">Получите помощь в использовании ${app_name}</string>
     <string name="preference_help_title">Помощь и поддержка</string>
     <string name="preference_help">Помощь</string>
     <string name="preference_root_legals">Правовые положения</string>
@@ -3168,15 +3168,15 @@
     <string name="legals_third_party_notices">Сторонние библиотеки</string>
     <string name="legals_identity_server_title">Политика вашего сервера опознавания</string>
     <string name="legals_home_server_title">Политика вашего домашнего сервера</string>
-    <string name="template_legals_application_title">Политика ${app_name}</string>
+    <string name="legals_application_title">Политика ${app_name}</string>
     <string name="analytics_opt_in_list_item_3">Вы можете отключить это в любое время в настройках</string>
     <string name="analytics_opt_in_list_item_2">Мы <b>не</b> передаем информацию третьим лицам</string>
     <string name="analytics_opt_in_list_item_1">Мы <b>не</b> записываем и <b>не</b> профилируем любые данные учетной записи</string>
     <string name="analytics_opt_in_content_link">тут</string>
-    <string name="template_analytics_opt_in_content">Помогите нам выявить проблемы и улучшить ${app_name}, поделившись анонимными данными об использовании. Чтобы понять, как люди используют несколько устройств, мы сгенерируем случайный идентификатор, общий для всех ваших устройств.
+    <string name="analytics_opt_in_content">Помогите нам выявить проблемы и улучшить ${app_name}, поделившись анонимными данными об использовании. Чтобы понять, как люди используют несколько устройств, мы сгенерируем случайный идентификатор, общий для всех ваших устройств.
 \n
 \nВы можете ознакомиться со всеми нашими условиями %s.</string>
-    <string name="template_analytics_opt_in_title">Помогите улучшить ${app_name}</string>
+    <string name="analytics_opt_in_title">Помогите улучшить ${app_name}</string>
     <string name="shortcut_disabled_reason_sign_out">Сессия завершена!</string>
     <string name="shortcut_disabled_reason_room_left">Комната покинута!</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Шифрование неправильно настроено, поэтому вы не можете отправлять сообщения. Нажмите, чтобы открыть настройки.</string>

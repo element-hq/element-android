@@ -304,7 +304,7 @@
     <string name="local_address_book_header">Vietējā adrešu grāmata</string>
     <string name="matrix_only_filter">Vienīgi Matrix kontakti</string>
     <string name="no_conversation_placeholder">Nav sarunu</string>
-    <string name="template_no_contact_access_placeholder">Tu neesi atļāvis/usi ${app_name} piekļūt taviem vietējiem kontaktiem</string>
+    <string name="no_contact_access_placeholder">Tu neesi atļāvis/usi ${app_name} piekļūt taviem vietējiem kontaktiem</string>
     <string name="no_result_placeholder">Nav rezultātu</string>
     <string name="rooms_header">Istabas</string>
     <string name="rooms_directory_header">Istabu katalogs</string>
@@ -457,24 +457,24 @@
     <string name="media_picker_both_capture_title">Uzņemt foto vai video</string>
     <string name="media_picker_cannot_record_video">Neizdodas ierakstīt video</string>
     <string name="permissions_rationale_popup_title">Element informācija</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} nepieciešama atļauja piekļūt jūsu fotoattēlu un video bibliotēkai, lai nosūtītu un saglabātu pielikumus.
+    <string name="permissions_rationale_msg_storage">${app_name} nepieciešama atļauja piekļūt jūsu fotoattēlu un video bibliotēkai, lai nosūtītu un saglabātu pielikumus.
 \n
 \nLūdzu, atļaujiet piekļuvi nākamajā uznirstošajā logā, lai varētu nosūtīt failus no sava tālruņa.</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name}-am nepieciešama atļauja piekļūt kamerai, lai uzņemtu foto un nodrošinātu video zvanus.</string>
+    <string name="permissions_rationale_msg_camera">${app_name}-am nepieciešama atļauja piekļūt kamerai, lai uzņemtu foto un nodrošinātu video zvanus.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nLūdzu dot piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespēja veikt zvanus."</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name}-am nepieciešama atļauja piekļūt mikrofonam, lai nodrošinātu audio zvanus.</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name}-am nepieciešama atļauja piekļūt mikrofonam, lai nodrošinātu audio zvanus.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nLūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespēja veikt zvanus."</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} nepieciešama atļauja piekļūt kamerai un mikrofonam, lai veiktu videozvanus.
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} nepieciešama atļauja piekļūt kamerai un mikrofonam, lai veiktu videozvanus.
 \n
 \nLūdzu, dodiet piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespēja veikt zvanus.</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name}-am nepieciešama atļauja piekļūt kontaktiem, lai varētu atrast citus lietotājus tīklā pēc to epasta adreses vai tālruņa #.
+    <string name="permissions_rationale_msg_contacts">${app_name}-am nepieciešama atļauja piekļūt kontaktiem, lai varētu atrast citus lietotājus tīklā pēc to epasta adreses vai tālruņa #.
 
 Lūdzu dod piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespēja atrast Tavus kontaktus, kuri ir sasniedzami ${app_name}ā.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} var pārbaudīt jūsu adrešu grāmatu, lai atrastu citus Matrix lietotājus pāc viņu epasta adresēm un tālruņa numuriem.
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} var pārbaudīt jūsu adrešu grāmatu, lai atrastu citus Matrix lietotājus pāc viņu epasta adresēm un tālruņa numuriem.
 \n
 \nVai piekrītat koplietot savu adrešu grāmatu šim nolūkam\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Atvaino… Darbība nav veikta dēļ nepietiekamām piekļuves atļaujām</string>
@@ -1140,7 +1140,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_emails_empty">Jūsu kontam nav pievienota neviena epasta adrese</string>
     <string name="settings_emails">Epasta adreses</string>
     <string name="settings_add_3pid_authentication_needed">Nepieciešama autentifikācija</string>
-    <string name="template_settings_add_3pid_flow_not_supported">Jūs nevarat to izdarīt ar ${app_name} mobile</string>
+    <string name="settings_add_3pid_flow_not_supported">Jūs nevarat to izdarīt ar ${app_name} mobile</string>
     <string name="settings_add_3pid_confirm_password_title">Apstipriniet paroli</string>
     <string name="settings_phone_number_empty">Jūsu kontam nav pievienots neviens tālruņa numurs</string>
     <string name="room_sliding_menu_version_x">Versija %s</string>
@@ -1469,8 +1469,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="secure_backup_reset_all">Pilna atiestatīšana</string>
     <string name="bad_passphrase_key_reset_all_action">Aizmirsāt vai pazaudējāt visas atkopšanās iespējas\? Atiestatiet visu</string>
     <string name="enter_secret_storage_passphrase_or_key">Izmantojiet savu %1$s vai savu %2$s, lai turpinātu.</string>
-    <string name="template_use_latest_app">Izmantojiet jaunāko ${app_name} citās savās ierīcēs:</string>
-    <string name="template_use_other_session_content_description">Izmantojiet jaunāko ${app_name} citās savās ierīcēs, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} Android, vai kādu citu Matrix lietotni ar cross-signing atbalstu</string>
+    <string name="use_latest_app">Izmantojiet jaunāko ${app_name} citās savās ierīcēs:</string>
+    <string name="use_other_session_content_description">Izmantojiet jaunāko ${app_name} citās savās ierīcēs, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} Android, vai kādu citu Matrix lietotni ar cross-signing atbalstu</string>
     <string name="change_password_summary">Iestatiet jaunu konta paroli…</string>
     <string name="this_is_the_beginning_of_dm">Šis ir sākums jūsu tiešās sarakstes vēsturei ar %s.</string>
     <string name="this_is_the_beginning_of_room_no_name">Šis ir šīs sarakstes pats sākums.</string>
@@ -1837,7 +1837,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_troubleshoot_test_fcm_failed">FCM žetons netika saņemts:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_token_registration_title">Žetona Reģistrācija</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} izmanto Google Play pakalpojumus, lai nodrošinātu ziņu pakalpojumu, bet tas nešķiet pareizi konfigurēts:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} izmanto Google Play pakalpojumus, lai nodrošinātu ziņu pakalpojumu, bet tas nešķiet pareizi konfigurēts:
 \n%1$s</string>
     <string name="no_sticker_application_dialog_content">Jums pašlaik nav iespējotas uzlīmes.
 \n
@@ -1864,11 +1864,11 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_troubleshoot_test_notification_title">Notifikāciju Displejs</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Servisu APK ir pieejams un atjaunināts.</string>
     <string name="search_banned_user_hint">Filtrēt aizliegtos lietotājus</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Lūdzu palaidiet ${app_name} citā ierīcē, kas var atšifrēt ziņu, lai tā varētu nosūtīt šīs sesijas atslēgas.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Lūdzu palaidiet ${app_name} citā ierīcē, kas var atšifrēt ziņu, lai tā varētu nosūtīt šīs sesijas atslēgas.</string>
     <string name="error_unauthorized">Neautorizēts, trūkstošas autentifikācijas apliecības</string>
     <string name="error_no_external_application_found">Atvainojiet, nav atrasta ārēja aplikācija, lai pabeigtu šo darbību.</string>
     <string name="go_on_with">turpināt ar…</string>
-    <string name="template_call_failed_no_connection">${app_name} Zvans Neizdevās</string>
+    <string name="call_failed_no_connection">${app_name} Zvans Neizdevās</string>
     <string name="call_failed_dont_ask_again">Nejautāt man atkal</string>
     <string name="call_failed_no_ice_use_alt">Mēģiniet izmantot %s</string>
     <string name="send_bug_report_include_key_share_history">Sūtīt atslēgu dalības vēsturi</string>
@@ -2003,15 +2003,15 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="room_alias_published_alias_add_manually">Publicēt jaunu adresi manuāli</string>
     <string name="room_alias_published_alias_main">Šī ir galvenā adrese</string>
     <string name="settings_without_flair">Jūs pašlaik neesat kādas kopienas dalībnieks.</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">Lūdzu, ieslēdziet analītiku, lai palīdzētu mums uzlabot ${app_name}.</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} apkopo anonīmu analītiku, lai ļautu mums uzlabot aplikāciju.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Lūdzu, ieslēdziet analītiku, lai palīdzētu mums uzlabot ${app_name}.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} apkopo anonīmu analītiku, lai ļautu mums uzlabot aplikāciju.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Iedot atļauju</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} ir nepieciešams fona savienojums, lai spētu laicīgi piegādāt notifikācijas.
+    <string name="startup_notification_fdroid_battery_optim_message">${app_name} ir nepieciešams fona savienojums, lai spētu laicīgi piegādāt notifikācijas.
 \nNākamajā ekrānā tiks piedāvāts atļaut ${app_name}, lai vienmēr darbotos fonā, lūdzu piekrītat.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Fona savienojums</string>
     <string name="startup_notification_privacy_button_other">Izvēlaties citu opciju</string>
     <string name="startup_notification_privacy_button_grant">Dot atļauju</string>
-    <string name="template_startup_notification_privacy_message">${app_name} var darboties fonā, lai droši un privāti pārvaldītu jūsu paziņojumus. Tas var ietekmēt akumulatora izmantošanu.</string>
+    <string name="startup_notification_privacy_message">${app_name} var darboties fonā, lai droši un privāti pārvaldītu jūsu paziņojumus. Tas var ietekmēt akumulatora izmantošanu.</string>
     <string name="startup_notification_privacy_title">Notifikāciju Privātums</string>
     <string name="reset_secure_backup_warning">Šis aizvietos jūsu esošo Atslēgu vai Frāzi.</string>
     <string name="reset_secure_backup_title">Izveidot jaunu Drošības Atslēgu vai iestatīt jaunu Drošības Frāzi jūsu esošajam dublējumam.</string>
@@ -2041,12 +2041,12 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Salabot Play Servisus</string>
     <string name="error_threepid_auth_failed">Pārliecinieties, ka esat nospiedis uz saites e-pasta ziņojumā, ko esam nosūtījuši jums.</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimizēts akumulatoram</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} sinhronizēsies fonā, tā lai ietaupītu telefona bateriju.
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} sinhronizēsies fonā, tā lai ietaupītu telefona bateriju.
 \nAtkarībā no ierīces baterijas stāvokļa, sinhronizāciju var atcelt operētājsistēma.</string>
     <string name="settings_notification_privacy_need_permission">Aplikācijai vajag atļauju, lai strādātu fonā</string>
     <string name="settings_notification_privacy_reduced">Samazināts privātums</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorēt optimizāciju</string>
-    <string name="template_settings_troubleshoot_test_battery_success">${app_name} neietekmē akumulatora optimizācija.</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name} neietekmē akumulatora optimizācija.</string>
     <string name="settings_troubleshoot_test_battery_title">Akumulatora Optimizācija</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Ieslēgt Aplikācijas palaišanu kopā ar telefonu</string>
     <string name="settings_troubleshoot_test_play_services_title">Play Servisu Pārbaude</string>
@@ -2055,7 +2055,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Daži paziņojumi ir izslēgti jūsu pielāgotos iestatījumos.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Ievērojiet, ka daži ziņojumi ir iestatīti kā klusi (paziņojumi pienāks bez skaņas).</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Pielāgoti Iestatījumi.</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Paziņojumi nav ieslēgti šai sesijai.
+    <string name="settings_troubleshoot_test_device_settings_failed">Paziņojumi nav ieslēgti šai sesijai.
 \nLūdzu, pārbaudiet ${app_name} iestatījumus.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Paziņojumi ir ieslēgti šai sesijai.</string>
     <string name="settings_troubleshoot_test_device_settings_title">Sesijas Iestatījumi.</string>
@@ -2084,7 +2084,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_call_ringtone_title">Ienākoša zvana signāls</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Izmantos %s kā rezervi, kad jūsu mājasservers nepiedāvā vienu (jūsu IP adrese tiks dalīta sarunas laikā)</string>
     <string name="settings_call_ringtone_use_default_stun">Atļaut rezerves zvanu palīdzības serveri</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Izmantot noklusējuma $ {app_name} zvana signālu ienākošajiem zvaniem</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Izmantot noklusējuma $ {app_name} zvana signālu ienākošajiem zvaniem</string>
     <string name="settings_call_show_confirmation_dialog_summary">Pirms zvana uzsākšanas lūgt apstiprinājumu</string>
     <string name="settings_call_show_confirmation_dialog_title">Novērst nejaušu zvanu</string>
     <string name="login_error_ssl_handshake">Jūsu ierīce izmanto novecojušu TLS drošības protokolu, jūsu drošībai jūs nevarēsiet savienoties</string>
@@ -2128,7 +2128,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="set_recovery_passphrase">Iestatīt kā %s</string>
     <string name="recovery_passphrase">Atjaunošanas Frāze</string>
     <string name="e2e_use_keybackup">Atbloķēt šifrēto ziņu vēsturi</string>
-    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Atslēgas jau ir atjauninātas!</string>
     <string name="event_redacted_by_admin_reason_with_reason">Pasākumu moderē telpas administrators, iemesls: %1$s</string>
     <string name="event_redacted_by_user_reason_with_reason">Lietotājs izdzēsa notikumu, iemesls: %1$s</string>
@@ -2288,11 +2288,11 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_discovery_manage">Pārvaldiet atklāšanas iestatījumus.</string>
     <string name="settings_discovery_category">Atklāšana</string>
     <string name="settings_preview_media_before_sending">Priekšskatīt failu pirms nosūtīšanas</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} sinhronizēsies fonā periodiski, precīzi, noteiktā laikā (konfigurējams).
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} sinhronizēsies fonā periodiski, precīzi, noteiktā laikā (konfigurējams).
 \nTas ietekmēs radio un akumulatora izmantošanu, tiks parādīts pastāvīgs paziņojums par to, ka ${app_name} klausās notikumus.</string>
     <string name="settings_notification_privacy_fcm">• Paziņojumi tiek nosūtīti, izmantojot Firebase Cloud Messaging</string>
     <string name="settings_troubleshoot_test_battery_failed">Ja lietotājs kādu laiku atstāj ierīci atvienotu no tīkla un nekustīgu, ar izslēgtu ekrānu, ierīcē tiek ieslēgts dīkstāves režīms. Tas neļauj lietotnēm piekļūt tīklam un atliek to darbu izpildi, sinhronizāciju un standarta trauksmes signālus.</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">Pakalpojums nesāksies, kad ierīce tiks restartēta, jūs nesaņemsiet paziņojumus, kamēr vismaz vienreiz nebūsiet atvēris ${app_name}.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Pakalpojums nesāksies, kad ierīce tiks restartēta, jūs nesaņemsiet paziņojumus, kamēr vismaz vienreiz nebūsiet atvēris ${app_name}.</string>
     <string name="settings_troubleshoot_test_notification_notice">Lūdzu, noklikšķiniet uz paziņojuma. Ja paziņojums nav redzams, pārbaudiet sistēmas iestatījumus.</string>
     <plurals name="room_details_selected">
         <item quantity="zero">%d izvēlēti</item>
@@ -2437,7 +2437,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="identity_server_set_alternative_notice">Varat arī ievadīt jebkuru citu identitātes servera URL.</string>
     <string name="identity_server_set_default_submit">Izmantot %1$s</string>
     <string name="identity_server_set_default_notice">Jūsu mājasserveris (%1$s) ierosina identitātes serverim izmantot %2$s</string>
-    <string name="template_identity_server_error_bulk_sha256_not_supported">Jūsu privātuma dēļ ${app_name} atbalsta tikai šifrētu lietotāja e-pasta vēstules un tālruņa numura nosūtīšanu.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Jūsu privātuma dēļ ${app_name} atbalsta tikai šifrētu lietotāja e-pasta vēstules un tālruņa numura nosūtīšanu.</string>
     <string name="identity_server_error_terms_not_signed">Vispirms iestatījumos pieņemiet identitātes servera noteikumus.</string>
     <string name="identity_server_error_no_identity_server_configured">Vispirms konfigurējiet identitātes serveri.</string>
     <string name="identity_server_error_outdated_home_server">Šī darbība nav iespējama. Mājasserveris ir novecojis.</string>
@@ -2445,8 +2445,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="choose_locale_other_locales_title">Citas pieejamās valodas</string>
     <string name="choose_locale_current_locale_title">Pašreizējā valoda</string>
     <string name="invitations_sent_to_two_users">Uzaicinājumi nosūtīti uz %1$s un %2$s</string>
-    <string name="template_invite_friends_rich_title">🔐️ Pievienojies ${app_name}</string>
-    <string name="template_invite_friends_text">Sazinieties ar mani izmantojot ${app_name}: %s</string>
+    <string name="invite_friends_rich_title">🔐️ Pievienojies ${app_name}</string>
+    <string name="invite_friends_text">Sazinieties ar mani izmantojot ${app_name}: %s</string>
     <string name="error_empty_field_choose_password">Lūdzu, izvēlieties paroli.</string>
     <string name="error_empty_field_choose_user_name">Lūdzu, izvēlieties lietotājvārdu.</string>
     <string name="error_saving_media_file">Nevarēja saglabāt multivides failu</string>
@@ -2542,9 +2542,9 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_category_timeline">Hronoloģija</string>
     <string name="verify_cannot_cross_sign">Šī sesija nevar kopīgot šo verifikāciju ar citām sesijām.
 \nVerifikācija tiks saglabāta lokāli un kopīgota kādā no nākamajām lietotnes versijām.</string>
-    <string name="template_rendering_event_error_exception">${app_name} saskārās ar problēmu, atveidojot notikuma ar id \'%1$s\' saturu</string>
-    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} neapstrādā \'%1$s\' tipa ziņojumu</string>
-    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} neapstrādā \'%1$s\' tipa notikumus</string>
+    <string name="rendering_event_error_exception">${app_name} saskārās ar problēmu, atveidojot notikuma ar id \'%1$s\' saturu</string>
+    <string name="rendering_event_error_type_of_message_not_handled">${app_name} neapstrādā \'%1$s\' tipa ziņojumu</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name} neapstrādā \'%1$s\' tipa notikumus</string>
     <string name="verification_scan_self_emoji_subtitle">Tā vietā pārbaudiet, salīdzinot emocijzīmes</string>
     <string name="verification_scan_with_this_device">Noskenēt ar šo ierīci</string>
     <string name="verification_scan_self_notice">Noskenējiet kodu ar citu ierīci vai pārslēdziet un skenējiet ar šo ierīci</string>
@@ -2557,8 +2557,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="command_description_lenny">Pievieno ( ͡° ͜ʖ ͡°) parasta teksta ziņai</string>
     <string name="settings_developer_mode_show_info_on_screen_summary">Rādīt kādu noderīgu informāciju, lai palīdzētu atkļūdošanas programmā</string>
     <string name="settings_developer_mode_show_info_on_screen_title">Parādīt atkļūdošanas informāciju ekrānā</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} var biežāk avarēt, ja rodas neparedzēta kļūda</string>
-    <string name="template_soft_logout_sso_not_same_user_error">Pašreizējā sesija ir lietotājam %1$s, un jūs sniedzat lietotāja %2$s akreditācijas datus. To neatbalsta ${app_name}.
+    <string name="settings_developer_mode_fail_fast_summary">${app_name} var biežāk avarēt, ja rodas neparedzēta kļūda</string>
+    <string name="soft_logout_sso_not_same_user_error">Pašreizējā sesija ir lietotājam %1$s, un jūs sniedzat lietotāja %2$s akreditācijas datus. To neatbalsta ${app_name}.
 \nLūdzu, vispirms notīriet datus un pēc tam pierakstieties vēlreiz, izmantojot citu kontu.</string>
     <string name="soft_logout_clear_data_dialog_content">Izdzēst visus šajā ierīcē pašlaik saglabātos datus\?
 \nPierakstieties vēlreiz, lai piekļūtu konta datiem un ziņojumiem.</string>
@@ -2576,7 +2576,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
 \n• Jūsu servera administrators ir anulējis jūsu piekļuvi drošības apsvērumu dēļ.</string>
     <string name="does_not_look_like_valid_email">Neizskatās pēc derīgas e-pasta adreses</string>
     <string name="command_description_spoiler">Nosūta doto ziņojumu kā pārsteigumu</string>
-    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} nepieciešama atļauja, lai saglabātu jūsu šifrēšanas atslēgas diskā.
+    <string name="permissions_rationale_msg_keys_backup_export">${app_name} nepieciešama atļauja, lai saglabātu jūsu šifrēšanas atslēgas diskā.
 \n
 \nLūdzu, nākamajā uznirstošajā logā atļaujiet piekļuvi, lai varētu eksportēt atslēgas manuāli.</string>
     <string name="uploads_files_subtitle">%1$s pie %2$s</string>
@@ -2627,7 +2627,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_push_gateway_no_pushers">Nav reģistrētu Palaišanas vārtu</string>
     <string name="settings_push_rules_no_rules">Nav iestatīti Palaišanas Noteikumi</string>
     <string name="settings_push_rules">Palaišanas Noteikumi</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">Lasāmo telpu priekšskatījums vēl nav atbalstīts ${app_name}</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Lasāmo telpu priekšskatījums vēl nav atbalstīts ${app_name}</string>
     <string name="create_new_space">Radīt jaunu Telpu</string>
     <string name="error_user_already_logged_in">Izskatās, ka mēģināt izveidot savienojumu ar citu mājasserveri. Vai vēlaties izrakstīties\?</string>
     <string name="identity_server_not_defined_for_password_reset">Identitātes serveris nav konfigurēts, tas ir nepieciešams, lai atiestatītu paroli.</string>
@@ -2648,7 +2648,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_messages_direct_messages">Tiešās ziņas</string>
     <string name="sas_verifying_keys">Nekas neparādās\? Vēl ne visi klienti atbalsta interaktīvu verifikāciju. Izmantojiet veco verifikāciju.</string>
     <string name="settings_messages_containing_username">Mans lietotājvārds</string>
-    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} atklāja pielāgotu servera konfigurāciju jūsu lietotāja ID domēnam \"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">${app_name} atklāja pielāgotu servera konfigurāciju jūsu lietotāja ID domēnam \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Automātiskās servera pabeigšanas opcijas</string>
     <string name="autodiscover_invalid_response">Nederīga mājasservera atbilde</string>
@@ -2663,7 +2663,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="keys_backup_setup_backup_started_message">Tagad jūsu šifrēšanas atslēgas fona režīmā tiek dublētas mājasserverī. Sākotnējā dublēšana var aizņemt vairākas minūtes.</string>
     <string name="keys_backup_setup_step3_generating_key_status">Atjaunošanas atslēgas ģenerēšana, izmantojot paroli, šis process var aizņemt vairākas sekundes.</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Izskatās, ka jums jau ir izveidots atslēgas dublējums no citas sesijas. Vai vēlaties to aizstāt ar izveidoto\?</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">Lūdzu, dzēsiet parolesfrāzi, ja vēlaties, lai ${app_name} ģenerētu atkopšanas atslēgu.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Lūdzu, dzēsiet parolesfrāzi, ja vēlaties, lai ${app_name} ģenerētu atkopšanas atslēgu.</string>
     <string name="no_valid_google_play_services_apk">Nav atrasts derīgs Google Play Services APK. Paziņojumi var nedarboties pareizi.</string>
     <string name="error_lazy_loading_not_supported_by_home_server">Jūsu mājasserveris vēl neatbalsta fona istabas lietotāju ielādēšanu. Izmēģiniet vēlāk.</string>
     <string name="markdown_has_been_disabled">Marķēšana ir izslēgta.</string>
@@ -2676,20 +2676,20 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_notification_privacy_message_content_not_shown">• Paziņojumos <b>nebūs redzams ziņas saturs</b></string>
     <string name="settings_notification_privacy_secure_message_content">• Paziņojuma saturs ir <b>nosūtīts tieši no Matrix mājasservera</b></string>
     <string name="settings_notification_privacy_no_background_sync">Lietotnēm <b>nav</b> fona režīmā jāizveido savienojums ar mājasserveri, un tas samazinātu akumulatora enerģijas patēriņu</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Fona ierobežojumi ir ieslēgti lietotnei ${app_name}.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Fona ierobežojumi ir ieslēgti lietotnei ${app_name}.
 \nDarbs, ko lietotne mēģina veikt, tiks agresīvi ierobežots, kamēr tā atrodas fonā, un tas var ietekmēt paziņojumus.
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">Fona ierobežojumi ir izslēgti priekš ${app_name}. Šis tests jāveic, izmantojot mobilos datus (bez WIFI).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Fona ierobežojumi ir izslēgti priekš ${app_name}. Šis tests jāveic, izmantojot mobilos datus (bez WIFI).
 \n%1$s</string>
     <string name="settings_troubleshoot_test_push_loop_failed">Neizdevās saņemt palaišanu. Iespējams, vajag pārielādēt lietotni.</string>
     <string name="settings_troubleshoot_test_push_loop_success">Lietotne saņem Palaišanu</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">Lietotne gaida Palaišanu</string>
     <string name="settings_troubleshoot_test_push_loop_title">Testa Palaišana</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nŠī kļūda ir ārpus ${app_name} kontroles. Tālrunī nav Google konta. Lūdzu, atveriet kontu pārvaldnieku un pievienojiet Google kontu.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nŠī kļūda ir ārpus ${app_name} kontroles. Tā var rasties vairāku iemeslu dēļ. Iespējams, tā darbosies, ja vēlāk mēģināsiet vēlreiz, varat arī pārbaudīt, vai sistēmas iestatījumos nav ierobežota Google Play pakalpojuma datu izmantošana, vai ierīces pulkstenis ir pareizs, vai arī tā var notikt uz atsevišķām sistēmām.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nŠī kļūda nav kontrolējama ar ${app_name}, un saskaņā ar Google datiem šī kļūda norāda, ka ierīcē ir pārāk daudz lietotņu, kas reģistrētas FCM. Kļūda rodas tikai gadījumos, kad ir ārkārtīgi liels lietotņu skaits, tāpēc šim nevajadzētu ietekmēt parastu lietotāju.</string>
     <string name="settings_troubleshoot_diagnostic_running_status">Izpilda… (%1$d of %2$d)</string>
     <string name="settings_notification_keyword_contains_invalid_character">Atslēgvārds nevar saturēt \'%s\'</string>

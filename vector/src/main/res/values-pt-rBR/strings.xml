@@ -329,7 +329,7 @@
     <string name="local_address_book_header">Agenda de endereços local</string>
     <string name="matrix_only_filter">Contatos de Matrix somente</string>
     <string name="no_conversation_placeholder">Nenhuma conversa</string>
-    <string name="template_no_contact_access_placeholder">Você não permitiu que ${app_name} acesse seus contatos locais</string>
+    <string name="no_contact_access_placeholder">Você não permitiu que ${app_name} acesse seus contatos locais</string>
     <string name="no_result_placeholder">Nenhum resultado</string>
     <string name="rooms_header">Salas</string>
     <string name="rooms_directory_header">Diretório de salas</string>
@@ -456,22 +456,22 @@
     <string name="media_picker_both_capture_title">Tirar uma foto ou um vídeo</string>
     <string name="media_picker_cannot_record_video">Não é possível gravar vídeo</string>
     <string name="permissions_rationale_popup_title">Informação</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} precisa de permissão para acessar sua biblioteca de fotos e vídeos para enviar e salvar anexos.
+    <string name="permissions_rationale_msg_storage">${app_name} precisa de permissão para acessar sua biblioteca de fotos e vídeos para enviar e salvar anexos.
 \n
 \nPor favor permita acesso no próximo pop-up para ser capaz de enviar arquivos do seu celular.</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name} precisa de permissão para acessar sua câmera para tirar fotos e chamadas de vídeo.</string>
+    <string name="permissions_rationale_msg_camera">${app_name} precisa de permissão para acessar sua câmera para tirar fotos e chamadas de vídeo.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nPor favor permita acesso no próximo pop-up para ser capaz de fazer a chamada."</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name} precisa de permissão para acessar seu microfone para performar chamadas de áudio.</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} precisa de permissão para acessar seu microfone para performar chamadas de áudio.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nPor favor permita acesso no próximo pop-up para ser capaz de fazer a chamada."</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} precisa de permissão para acessar sua câmera e seu microfone para performar chamadas de vídeo.
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} precisa de permissão para acessar sua câmera e seu microfone para performar chamadas de vídeo.
 \n
 \nPor favor permita acesso no próximo pop-up para ser capaz de fazer a chamada.</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} pode checar seu livro de endereços para achar outras(os) usuárias(os) de Matrix baseado em seus email e números de telefone. Se você concorda em compartilhar seu livro de endereços para este propósito, por favor permita acesso no próximo pop-up.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} pode checar seu livro de endereços para encontrar outras(os) usuásias(os) de Matrix baseado em seus emails e números de telefone.
+    <string name="permissions_rationale_msg_contacts">${app_name} pode checar seu livro de endereços para achar outras(os) usuárias(os) de Matrix baseado em seus email e números de telefone. Se você concorda em compartilhar seu livro de endereços para este propósito, por favor permita acesso no próximo pop-up.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} pode checar seu livro de endereços para encontrar outras(os) usuásias(os) de Matrix baseado em seus emails e números de telefone.
 \n
 \nVocê concorda em compartilhar seu livro de endereços para este propósito\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Desculpe. Ação não performada, devido a permissões faltando</string>
@@ -955,7 +955,7 @@
     <string name="e2e_re_request_encryption_key">Re-requisitar chaves de encriptação de suas outras sessões.</string>
     <string name="e2e_re_request_encryption_key_sent">Requisição de chave enviada.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Requisição enviada</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Por favor lance ${app_name} num outro dispositivo que possa decriptar a mensagem para que ele possa enviar as chaves para esta sessão.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Por favor lance ${app_name} num outro dispositivo que possa decriptar a mensagem para que ele possa enviar as chaves para esta sessão.</string>
     <plurals name="format_time_s">
         <item quantity="one">%ds</item>
         <item quantity="other">%ds</item>
@@ -993,12 +993,12 @@
     <string name="settings_deactivate_account_section">Desativar conta</string>
     <string name="settings_deactivate_my_account">Desativar minha conta</string>
     <string name="startup_notification_privacy_title">Privacidade de Notificação</string>
-    <string name="template_startup_notification_privacy_message">${app_name} pode rodar no background para gerenciar suas notificações seguramente e privadamente. Isto pode afetar uso de bateria.</string>
+    <string name="startup_notification_privacy_message">${app_name} pode rodar no background para gerenciar suas notificações seguramente e privadamente. Isto pode afetar uso de bateria.</string>
     <string name="startup_notification_privacy_button_grant">Conceder permissão</string>
     <string name="startup_notification_privacy_button_other">Escolher uma outra opção</string>
     <string name="settings_opt_in_of_analytics">Enviar dados de analítica</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} coleta analítica anônima para nos permitir melhorar o aplicativo.</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">Por favor habilite analítica para nos ajudar a melhorar ${app_name}.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} coleta analítica anônima para nos permitir melhorar o aplicativo.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Por favor habilite analítica para nos ajudar a melhorar ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Sim, eu quero ajudar!</string>
     <string name="settings_without_flair">Você não é atualmente um membro de quaisquer comunidades.</string>
     <string name="lock_screen_hint">Digite aqui…</string>
@@ -1057,7 +1057,7 @@
     <string name="dialog_title_error">Erro</string>
     <string name="auth_accept_policies">Por favor revise e aceite as políticas deste servidorcasa:</string>
     <string name="settings_call_category">Chamadas</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Usar toque default de ${app_name} para chamadas entrantes</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Usar toque default de ${app_name} para chamadas entrantes</string>
     <string name="settings_call_ringtone_title">Toque de chamada entrante</string>
     <string name="settings_call_ringtone_dialog_title">Selecionar toque para chamadas:</string>
     <string name="reason_hint">Razão</string>
@@ -1082,12 +1082,12 @@
     <string name="settings_troubleshoot_test_device_settings_title">Configurações de Sessão.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Notificações estão habilitadas para esta sessão.</string>
     <string name="room_participants_action_remove">Expulsar</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Notificações não estão habilitadas para esta sessão.
+    <string name="settings_troubleshoot_test_device_settings_failed">Notificações não estão habilitadas para esta sessão.
 \nPor favor cheque as configurações de ${app_name}.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Habilitar</string>
     <string name="settings_troubleshoot_test_play_services_title">Checagem de Play Services</string>
     <string name="settings_troubleshoot_test_play_services_success">APK de Google Play Services está disponível e atualizado.</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} usa Google Play Services para entregar mensagens push mas não parece estar configurado corretamente:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} usa Google Play Services para entregar mensagens push mas não parece estar configurado corretamente:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Consertar Play Services</string>
     <string name="settings_troubleshoot_test_fcm_title">Token de Firebase</string>
@@ -1104,11 +1104,11 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Serviço falhou para recomeçar</string>
     <string name="settings_troubleshoot_test_service_boot_title">Começar em boot</string>
     <string name="settings_troubleshoot_test_service_boot_success">Serviço vai começar quando o dispositivo for reiniciado.</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">O serviço não vai começar quando o dispositivo for recomeçado, você não vai receber notificações até que ${app_name} tenha sido aberto uma vez.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">O serviço não vai começar quando o dispositivo for recomeçado, você não vai receber notificações até que ${app_name} tenha sido aberto uma vez.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Habilitar Começar em boot</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Checar restrições de background</string>
     <string name="settings_troubleshoot_test_battery_title">Otimização de Bateria</string>
-    <string name="template_settings_troubleshoot_test_battery_success">${app_name} não é afetado por Otimização de Bateria.</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name} não é afetado por Otimização de Bateria.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Auto-Reinício de Serviço de Notificações</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Desabilitar restrições</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorar Otimização</string>
@@ -1122,11 +1122,11 @@
     <string name="settings_show_avatar_display_name_changes_messages">Mostrar eventos de conta</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Inclui mudanças de avatar e nome de exibição.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Conexão no Background</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} precisa manter uma conexão no background de baixo impacto a fim de ter notificações confiáveis.
+    <string name="startup_notification_fdroid_battery_optim_message">${app_name} precisa manter uma conexão no background de baixo impacto a fim de ter notificações confiáveis.
 \nNa próxima tela você vai ser instigado a permitir ${app_name} sempre rodar em background, por favor aceite.</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">Restrições de background estão desabilitadas para ${app_name}. Este teste devia ser rodado usando dados móveis (sem Wi-Fi).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Restrições de background estão desabilitadas para ${app_name}. Este teste devia ser rodado usando dados móveis (sem Wi-Fi).
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Restrições de background estão habilitadas para ${app_name}.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Restrições de background estão habilitadas para ${app_name}.
 \nTrabalho que o app tenta fazer vai ser agressivamente restringido enquando ele está no background, e isto poderia afetar notificações.
 \n%1$s</string>
     <string name="settings_send_markdown">Formatação markdown</string>
@@ -1185,16 +1185,16 @@
     <string name="settings_troubleshoot_test_bing_settings_failed">Algumas notificações estão desabilitadas em suas configurações personalizadas.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Falha para carregar regras personalizadas, por favor retente.</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Checar Configurações</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nEste erro está fora de controle de ${app_name} e de acordo com Google, este erro indica que o dispositivo tem apps demais registrados com FCM. O erro somente ocorre em casos onde há números extremos de apps, então isso não devia afetar a/o usuária(o) média(o).</string>
     <string name="action_ignore">Ignorar</string>
     <string name="auth_login_sso">Fazer sign-in com sign-on único</string>
     <string name="login_error_unknown_host">Este URL não é alcançável, por favor cheque-o</string>
     <string name="login_error_ssl_handshake">Seu dispositivo está usando um protocolo de segurança TLS desatualizado, vulnerável a ataque, para sua segurança você não vai ser capaz de se conectar</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nEste erro está fora de controle de ${app_name}. Isto pode ocorrer por várias razões. Talvez vai funcionar se você retentar mais tarde, você também pode checar que Google Play Service não está restrito em uso de dados nas configurações de sistema, ou que o relógio do seu dispositivo está correto, ou ele pode acontecem em ROM personalizada.</string>
     <string name="notification_sync_init">Inicializando serviço</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nEste erro está fora de controle de ${app_name}. Não há uma conta de Google no celular. Por favor abra o gerenciador de contas e adicione uma conta de Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Adicionar Conta</string>
     <string name="settings_noisy_notifications_preferences">Configurar Notificações Barulhentas</string>
@@ -1223,7 +1223,7 @@
 \nAlternativamente, você pode tentar usar o servidor público em %2$s, mas isto não vai ser tão confiável, e vai compartilhar seu endereço de IP com esse servidor. Você também pode gerenciar isto em Configurações.</string>
     <string name="call_failed_no_ice_use_alt">Tentar usar %s</string>
     <string name="call_failed_dont_ask_again">Não me pergunte de novo</string>
-    <string name="template_call_failed_no_connection">Chamada ${app_name} Falhou</string>
+    <string name="call_failed_no_connection">Chamada ${app_name} Falhou</string>
     <string name="call_failed_no_connection_description">Falha para estabelecer conexão em tempo real.
 \nPor favor peça ao/à administrador(a) de seu servidorcasa para configurar um servidor TURN a fim que chamadas funcionem confiavelmente.</string>
     <string name="call_select_sound_device">Selecionar Dispositivo de Som</string>
@@ -1271,15 +1271,15 @@
     <string name="room_participants_unban_title">Desbanir usuária(o)</string>
     <string name="room_participants_unban_prompt_msg">Desbanir usuária(o) vai permitir-lhe se juntar à sala de novo.</string>
     <string name="settings_add_3pid_confirm_password_title">Confirme sua senha</string>
-    <string name="template_settings_add_3pid_flow_not_supported">Você não pode fazer isto desde ${app_name} mobile</string>
+    <string name="settings_add_3pid_flow_not_supported">Você não pode fazer isto desde ${app_name} mobile</string>
     <string name="settings_add_3pid_authentication_needed">Autenticação é requerida</string>
     <string name="settings_notification_privacy_no_background_sync">O app <b>não</b> precisa de se conectar ao servidorcasa no background, isto deveria reduzir uso de bateria</string>
     <string name="settings_background_fdroid_sync_mode">Modo Sinc no Background</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimizado para bateria</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} vai sincar em background de maneira que preserva recursos limitados do dispositivo (bateria).
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} vai sincar em background de maneira que preserva recursos limitados do dispositivo (bateria).
 \nDependendo do estado de recurso de seu dispositivo, a sinc pode ser adiada pelo sistema operacional.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimizado para tempo real</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} vai sincar em background periodicamente em tempo preciso (configurável).
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} vai sincar em background periodicamente em tempo preciso (configurável).
 \nIsto vai impactar uso de rádio e bateria, vai ter uma notificação permanente exibida declarando que ${app_name} está à escuta por eventos.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Sem sinc em background</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Você não vai ser notificada(o) sobre mensagens entrantes quando o app está em background.</string>
@@ -1384,7 +1384,7 @@
     <string name="error_empty_field_enter_user_name">Por favor entre um nome de usuária(o).</string>
     <string name="passphrase_empty_error_message">Por favor entre sua frasepasse</string>
     <string name="passphrase_passphrase_too_weak">Frasepasse é fraca demais</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">Por favor delete a frasepasse se quiser que ${app_name} gere uma chave de recuperação.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Por favor delete a frasepasse se quiser que ${app_name} gere uma chave de recuperação.</string>
     <string name="keys_backup_no_session_error">Nenhuma sessão Matrix disponível</string>
     <string name="keys_backup_setup_step1_title">Nunca perca mensagens encriptadas</string>
     <string name="keys_backup_setup_step1_description">Mensagens em salas encriptadas são asseguradas com encriptação ponta-a-ponta. Somente você e a(s)/o(s) recipiente(s) têm as chaves para ler estas mensagens.
@@ -1498,7 +1498,7 @@
     <string name="keys_backup_info_title_algorithm">Algoritmo</string>
     <string name="autodiscover_invalid_response">Resposta de descoberta de servidorcasa inválida</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Autocompletar Opções de Servidor</string>
-    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} detectou uma configuração de servidor personalizada para seu domínio de userId \"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">${app_name} detectou uma configuração de servidor personalizada para seu domínio de userId \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Usar Config</string>
     <string name="invalid_or_expired_credentials">Você tem sido feito logout devido a credenciais inválidas ou expiradas.</string>
@@ -1576,7 +1576,7 @@
     <string name="please_wait">Por favor espere…</string>
     <string name="group_all_communities">Todas as Comunidades</string>
     <string name="room_preview_no_preview">Esta sala não pode ser previsualizada</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">A previsualização de sala legível pelo mundo não é suportada ainda em ${app_name}</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">A previsualização de sala legível pelo mundo não é suportada ainda em ${app_name}</string>
     <string name="fab_menu_create_room">Salas</string>
     <string name="fab_menu_create_chat">Mensagens Diretas</string>
     <string name="create_room_title">Nova Sala</string>
@@ -1724,7 +1724,7 @@
     <string name="content_reported_as_inappropriate_content">Este conteúdo foi reportado como inapropriado.
 \n
 \nSe você não quer ver mais nada de conteúdo desta(e) usuária(o), você pode ignorá-la(o) para esconder mensagens dela(e).</string>
-    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} precisa de permissão para salvar suas chaves E2E em disco.
+    <string name="permissions_rationale_msg_keys_backup_export">${app_name} precisa de permissão para salvar suas chaves E2E em disco.
 \n
 \nPor favor permita acesso no próximo pop-up para ser capaz de exportar suas chaves manualmente.</string>
     <string name="no_network_indicator">Não há nenhuma conexão de rede no momento</string>
@@ -1881,7 +1881,7 @@
 \nFaça signin de novo para acessar os dados e mensagens de sua conta.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Você vai perder acesso a mensagens seguras a menos que você faça signin para recuperar suas chaves de encriptação.</string>
     <string name="soft_logout_clear_data_dialog_submit">Limpar dados</string>
-    <string name="template_soft_logout_sso_not_same_user_error">A sessão atual é para usuária(o) %1$s e você provê credenciais para usuária(o) %2$s. Isto não é suportado por ${app_name}.
+    <string name="soft_logout_sso_not_same_user_error">A sessão atual é para usuária(o) %1$s e você provê credenciais para usuária(o) %2$s. Isto não é suportado por ${app_name}.
 \nPor favor primeiro limpe dados, então faça signin de novo em uma outra conta.</string>
     <string name="permalink_malformed">Seu link matrix.to foi malformado</string>
     <string name="bug_report_error_too_short">A descrição é curta demais</string>
@@ -1899,7 +1899,7 @@
     <string name="devices_other_devices">Outras sessões</string>
     <string name="autocomplete_limited_results">Mostrando somente os primeiros resultados, digite mais letras…</string>
     <string name="settings_developer_mode_fail_fast_title">Rápida-falha</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} pode crashar com mais frequência quando um erro inesperado ocorre</string>
+    <string name="settings_developer_mode_fail_fast_summary">${app_name} pode crashar com mais frequência quando um erro inesperado ocorre</string>
     <string name="command_description_shrug">Prepende ¯\\_(ツ)_/¯ a uma mensagem de texto puro</string>
     <string name="create_room_encryption_title">Habilitar encriptação</string>
     <string name="create_room_encryption_description">Uma vez habilitada, encriptação não poder ser desabilitada.</string>
@@ -1973,9 +1973,9 @@
     <string name="room_member_power_level_default_in">Default em %1$s</string>
     <string name="room_member_power_level_custom_in">Personalizado (%1$d) em %2$s</string>
     <string name="room_member_jump_to_read_receipt">Pular para recibo de leitura</string>
-    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} não lida com eventos de tipo \'%1$s\'</string>
-    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} não lida com mensagens de tipo \'%1$s\'</string>
-    <string name="template_rendering_event_error_exception">${app_name} encontrou um problema ao render conteúdo de evento com id \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name} não lida com eventos de tipo \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">${app_name} não lida com mensagens de tipo \'%1$s\'</string>
+    <string name="rendering_event_error_exception">${app_name} encontrou um problema ao render conteúdo de evento com id \'%1$s\'</string>
     <string name="unignore">Designorar</string>
     <string name="verify_cannot_cross_sign">Esta sessão é incapaz de compartilhar essa verificação com suas outras sessões.
 \nA confirmação vai ser salvada localmente e compartilhada numa versão futura do app.</string>
@@ -2062,7 +2062,7 @@
     <string name="event_redacted_by_user_reason_with_reason">Evento deletado por usuária(o), razão: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Evento moderado por admin de sala, razão: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Chaves já estão atualizadas!</string>
-    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="settings_key_requests">Requisições de Chave</string>
     <string name="e2e_use_keybackup">Destrancar histórico de mensagens encriptadas</string>
     <string name="refresh">Recarregar</string>
@@ -2171,13 +2171,13 @@
     <string name="error_adding_media_file_to_gallery">Não foi possível adicionar arquivo de mídia à Galeria</string>
     <string name="error_saving_media_file">Não foi possível salvar arquivo de mídia</string>
     <string name="change_password_summary">Definir uma nova senha de conta…</string>
-    <string name="template_use_other_session_content_description">Use o ${app_name} mais recente em seus outros dispositivos, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} para Android, ou um outro cliente Matrix capaz de assinatura cruzada</string>
-    <string name="template_app_desktop_web">${app_name} Web
+    <string name="use_other_session_content_description">Use o ${app_name} mais recente em seus outros dispositivos, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} para Android, ou um outro cliente Matrix capaz de assinatura cruzada</string>
+    <string name="app_desktop_web">${app_name} Web
 \n${app_name} Desktop</string>
-    <string name="template_app_ios_android">${app_name} iOS
+    <string name="app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
     <string name="or_other_mx_capable_client">ou um outro cliente Matrix capaz de assinatura cruzada</string>
-    <string name="template_use_latest_app">Use o ${app_name} mais recente em seus outros dispositivos:</string>
+    <string name="use_latest_app">Use o ${app_name} mais recente em seus outros dispositivos:</string>
     <string name="command_description_discard_session">Força a atual sessão de grupo de saída em uma sala encriptada a ser descartada</string>
     <string name="command_description_discard_session_not_handled">Somente suportado em salas encriptadas</string>
     <string name="enter_secret_storage_passphrase_or_key">Use sua %1$s ou %2$s para continuar.</string>
@@ -2218,11 +2218,11 @@
     <string name="choose_locale_loading_locales">Carregando línguas disponíveis…</string>
     <string name="open_terms_of">Abrir termos de %s</string>
     <string name="disconnect_identity_server_dialog_content">Desconectar-se do servidor de identidade %s\?</string>
-    <string name="template_identity_server_error_outdated_identity_server">Este servidor de identidade está desatualizado. ${app_name} suporta somente API V2.</string>
+    <string name="identity_server_error_outdated_identity_server">Este servidor de identidade está desatualizado. ${app_name} suporta somente API V2.</string>
     <string name="identity_server_error_outdated_home_server">Esta operação não é possível. O servidorcasa está desatualizado.</string>
     <string name="identity_server_error_no_identity_server_configured">Por favor primeiro configure um servidor de identidade.</string>
     <string name="identity_server_error_terms_not_signed">Por favor primeiro aceite os termos do servidor de identidade nas configurações.</string>
-    <string name="template_identity_server_error_bulk_sha256_not_supported">Para sua privacidade, ${app_name} somente suporta enviar emails e números de telefone de usuária(o) hashados.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Para sua privacidade, ${app_name} somente suporta enviar emails e números de telefone de usuária(o) hashados.</string>
     <string name="identity_server_error_binding_error">A associação tem falhado.</string>
     <string name="identity_server_error_no_current_binding_error">Não há nenhuma associação atual com este identificador.</string>
     <string name="identity_server_set_default_notice">Seu servidorcasa (%1$s) propõe usar %2$s para seu servidor de identidade</string>
@@ -2351,13 +2351,13 @@
     <string name="delete_account_data_warning">Deletar os dados de conta de tipo %1$s\?
 \n
 \nUse com caução, pode levar a comportamento inesperado.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_off">Código PIN é requerido toda vez que você abre ${app_name}.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">Código PIN é requerido depois de 2 minutos de não usar ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">Código PIN é requerido toda vez que você abre ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">Código PIN é requerido depois de 2 minutos de não usar ${app_name}.</string>
     <string name="settings_security_pin_code_grace_period_title">Requerer PIN depois de 2 minutos</string>
     <string name="settings_security_pin_code_notifications_summary_off">Somente mostrar número de mensagens não-lidas em uma notificação simples.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Mostrar detalhes como nomes de salas e conteúdo de mensagens.</string>
     <string name="settings_security_pin_code_notifications_title">Mostrar conteúdo em notificações</string>
-    <string name="template_settings_security_pin_code_use_biometrics_summary_off">Código PIN é a única maneira de destrancar ${app_name}.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">Código PIN é a única maneira de destrancar ${app_name}.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Habilitar biometria específica de dispositivo, como impressões digitais e reconhecimento de face.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Habilitar biometria</string>
     <string name="settings_security_application_protection_screen_title">Configurar a proteção</string>
@@ -2436,8 +2436,8 @@
     <string name="user_code_share">Compartilhar meu código</string>
     <string name="user_code_scan">Scannar um QR code</string>
     <string name="not_a_valid_qr_code">Não é um QR code matrix válido</string>
-    <string name="template_invite_friends_rich_title">🔐️ Junte-se a mim em ${app_name}</string>
-    <string name="template_invite_friends_text">Hey, fale comigo em ${app_name}: %s</string>
+    <string name="invite_friends_rich_title">🔐️ Junte-se a mim em ${app_name}</string>
+    <string name="invite_friends_text">Hey, fale comigo em ${app_name}: %s</string>
     <string name="invite_friends">Convidar amigas(os)</string>
     <string name="add_people">Adicionar pessoas</string>
     <string name="topic_prefix">"Tópico: "</string>
@@ -2545,7 +2545,7 @@
     <string name="room_participants_leave_private_warning">Esta sala não é pública. Você não vai ser capaz de se rejuntar sem um convite.</string>
     <string name="system_theme">Default de Sistema</string>
     <string name="authentication_error">Falha para autenticar</string>
-    <string name="template_re_authentication_default_confirm_text">${app_name} requer que você entre suas credenciais para performar esta ação.</string>
+    <string name="re_authentication_default_confirm_text">${app_name} requer que você entre suas credenciais para performar esta ação.</string>
     <string name="re_authentication_activity_title">Re-Autenticação Necessitada</string>
     <string name="error_unauthorized">Não autorizada(o), credenciais de autenticação válidas faltando</string>
     <string name="call_transfer_users_tab_title">Usuárias(os)</string>
@@ -2859,7 +2859,7 @@
     <string name="settings_notification_other">Outras</string>
     <string name="settings_notification_mentions_and_keywords">Menções e Palavrachaves</string>
     <string name="settings_notification_default">Notificações Default</string>
-    <string name="template_link_this_email_with_your_account">%s em Configurações para receber convites diretamente em ${app_name}.</string>
+    <string name="link_this_email_with_your_account">%s em Configurações para receber convites diretamente em ${app_name}.</string>
     <string name="link_this_email_settings_link">Linkar este email com sua conta</string>
     <string name="this_invite_to_this_space_was_sent">Este convite para este espaço foi enviado para %s que não está associado com sua conta</string>
     <string name="this_invite_to_this_room_was_sent">Este convite para esta sala foi enviado para %s que não está associado com sua conta</string>
@@ -3021,18 +3021,18 @@
         <item quantity="other">%1$d votos</item>
     </plurals>
     <string name="preference_versions">Versões</string>
-    <string name="template_preference_help_summary">Conseguir ajuda com uso de ${app_name}</string>
+    <string name="preference_help_summary">Conseguir ajuda com uso de ${app_name}</string>
     <string name="preference_root_legals">Jurídicos</string>
     <string name="legals_no_policy_provided">Este servidor não provê nenhuma política.</string>
     <string name="legals_third_party_notices">Bibliotecas de terceiros</string>
     <string name="legals_identity_server_title">A política de seu servidor de identidade</string>
     <string name="legals_home_server_title">A política de seu servidorcasa</string>
-    <string name="template_legals_application_title">Política de ${app_name}</string>
+    <string name="legals_application_title">Política de ${app_name}</string>
     <string name="analytics_opt_in_list_item_1">Nós <b>não</b> gravamos ou perfilamos quaisquer dados de conta</string>
-    <string name="template_analytics_opt_in_content">Ajude-nos a identificar problemas e melhorar ${app_name} ao compartilhar dados de uso anônimos. Para entender como pessoas usam seus múltiplos dispositivos, nós vamos gerar um identificador aleatório, compartilhado por seus dispositivos.
+    <string name="analytics_opt_in_content">Ajude-nos a identificar problemas e melhorar ${app_name} ao compartilhar dados de uso anônimos. Para entender como pessoas usam seus múltiplos dispositivos, nós vamos gerar um identificador aleatório, compartilhado por seus dispositivos.
 \n
 \nVocê pode ler todos os nossos termos %s.</string>
-    <string name="template_analytics_opt_in_title">Ajude a melhorar ${app_name}</string>
+    <string name="analytics_opt_in_title">Ajude a melhorar ${app_name}</string>
     <string name="preference_system_settings">Configurações de sistema</string>
     <string name="preference_help_title">Ajuda e suporte</string>
     <string name="preference_help">Ajuda</string>
@@ -3061,8 +3061,8 @@
     <string name="settings_enable_location_sharing_summary">Uma vez habilitada você vai ser capaz de enviar sua localização a qualquer sala</string>
     <string name="settings_enable_location_sharing">Habilitar compartilhamento de localização</string>
     <string name="location_share_external">Abrir com</string>
-    <string name="template_location_not_available_dialog_content">${app_name} não pôde acessar sua localização. Por favor tente de novo mais tarde.</string>
-    <string name="template_location_not_available_dialog_title">${app_name} não pôde acessar sua localização</string>
+    <string name="location_not_available_dialog_content">${app_name} não pôde acessar sua localização. Por favor tente de novo mais tarde.</string>
+    <string name="location_not_available_dialog_title">${app_name} não pôde acessar sua localização</string>
     <string name="location_share">Compartilhar localização</string>
     <string name="a11y_location_share_icon">Compartilhar localização</string>
     <string name="location_activity_title_preview">Localização</string>

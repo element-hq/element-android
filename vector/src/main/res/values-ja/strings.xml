@@ -353,7 +353,7 @@
     <string name="start_video_call">ビデオ通話を開始</string>
     <string name="option_take_photo_video">写真または動画を撮影</string>
     <string name="auth_send_reset_email">再設定用のメールを送信</string>
-    <string name="template_permissions_rationale_msg_camera">写真撮影やビデオ通話には、${app_name}端末のカメラの使用を許可する必要があります。</string>
+    <string name="permissions_rationale_msg_camera">写真撮影やビデオ通話には、${app_name}端末のカメラの使用を許可する必要があります。</string>
     <string name="cannot_start_call">通話を開始できませんでした。後ほど試してください</string>
     <string name="missing_permissions_warning">権限がないため、一部の機能を利用できない可能性があります…</string>
     <string name="missing_permissions_to_start_conf_call">このルームで会議を開始するためには招待の権限が必要です</string>
@@ -361,7 +361,7 @@
     <string name="action_sign_out">サインアウト</string>
     <string name="bottom_action_home">ホーム</string>
     <string name="no_conversation_placeholder">会話なし</string>
-    <string name="template_no_contact_access_placeholder">端末の電話帳を${app_name}アプリが読み取ることは許可されていません</string>
+    <string name="no_contact_access_placeholder">端末の電話帳を${app_name}アプリが読み取ることは許可されていません</string>
     <string name="no_result_placeholder">結果がありません</string>
     <string name="rooms_header">ルーム</string>
     <string name="rooms_directory_header">ルームディレクトリ</string>
@@ -499,21 +499,21 @@
     <string name="matrix_only_filter">Matrixの連絡先のみ</string>
     <string name="call_error_user_not_responding">通信先が通話の受取に失敗しました。</string>
     <string name="permissions_rationale_popup_title">情報</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name}は、添付ファイルを送信および保存するために、写真とビデオライブラリにアクセスするための許可を必要としています。
+    <string name="permissions_rationale_msg_storage">${app_name}は、添付ファイルを送信および保存するために、写真とビデオライブラリにアクセスするための許可を必要としています。
 \n
 \n端末からファイルを送信できるようにするには、次のポップアップでアクセスを許可してください。</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \n通話をするためには、次のポップアップでアクセスを許可してください。"</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name}は、音声通話を実行するためにマイクへアクセスするための許可を必要としています。</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name}は、音声通話を実行するためにマイクへアクセスするための許可を必要としています。</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \n通話をするためには、次のポップアップでアクセスを許可してください。"</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name}はビデオ通話を行うためにカメラとマイクにアクセスする許可を必要としています。
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name}はビデオ通話を行うためにカメラとマイクにアクセスする許可を必要としています。
 \n
 \n通話をするためには、次のポップアップでアクセスを許可してください。</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name}では、あなたの端末の電話帳のメールアドレスや電話番号をもとに、他のユーザーを検索することができます。${app_name}による電話帳の検索を許可する場合は、次のポップアップでアクセスを許可してください。</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name}はあなたの電話帳のメールアドレスや電話番号をもとに他のユーザーを見つけることができます。
+    <string name="permissions_rationale_msg_contacts">${app_name}では、あなたの端末の電話帳のメールアドレスや電話番号をもとに、他のユーザーを検索することができます。${app_name}による電話帳の検索を許可する場合は、次のポップアップでアクセスを許可してください。</string>
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name}はあなたの電話帳のメールアドレスや電話番号をもとに他のユーザーを見つけることができます。
 \n
 \nこのアプリがあなたの電話帳へアクセスすることを許可しますか？</string>
     <string name="permissions_action_not_performed_missing_permissions">申し訳ありません。権限がないために操作が実行されませんでした</string>
@@ -742,7 +742,7 @@
     <string name="e2e_re_request_encryption_key">あなたの他のセッションに暗号鍵を再要求する。</string>
     <string name="e2e_re_request_encryption_key_sent">鍵のリクエストが送信されました。</string>
     <string name="e2e_re_request_encryption_key_dialog_title">要求が送信されました</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">鍵をこのセッションに送信できるように、メッセージを復号化できる他の端末で${app_name}を起動してください。</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">鍵をこのセッションに送信できるように、メッセージを復号化できる他の端末で${app_name}を起動してください。</string>
     <plurals name="format_time_s">
         <item quantity="other">%d秒</item>
     </plurals>
@@ -774,12 +774,12 @@
     <string name="settings_deactivate_account_section">アカウントを停止</string>
     <string name="settings_deactivate_my_account">自分のアカウントを停止</string>
     <string name="startup_notification_privacy_title">通知のプライバシー</string>
-    <string name="template_startup_notification_privacy_message">${app_name}はバックグラウンドで動作し、通知を安全で内密に扱います。これによりバッテリー使用に影響が出ることがあります。</string>
+    <string name="startup_notification_privacy_message">${app_name}はバックグラウンドで動作し、通知を安全で内密に扱います。これによりバッテリー使用に影響が出ることがあります。</string>
     <string name="startup_notification_privacy_button_grant">許可を与える</string>
     <string name="startup_notification_privacy_button_other">他のオプションを選択</string>
     <string name="settings_opt_in_of_analytics">分析データを送信</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name}はアプリを改善するため、匿名の分析データを収集します。</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">分析を有効にして、${app_name}の改善を手伝ってくれませんか？</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name}はアプリを改善するため、匿名の分析データを収集します。</string>
+    <string name="settings_opt_in_of_analytics_prompt">分析を有効にして、${app_name}の改善を手伝ってくれませんか？</string>
     <string name="settings_opt_in_of_analytics_ok">はい、手伝いたいです！</string>
     <string name="settings_without_flair">あなたは現在どのコミュニティーのメンバーでもありません。</string>
     <string name="lock_screen_hint">ここに入力…</string>
@@ -869,7 +869,7 @@
     <string name="action_accept">承諾</string>
     <string name="auth_accept_policies">このホームサーバーの方針を確認し承諾してください：</string>
     <string name="settings_call_category">通話設定画面</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">着信に${app_name}の既定の着信音を使用</string>
+    <string name="settings_call_ringtone_use_app_ringtone">着信に${app_name}の既定の着信音を使用</string>
     <string name="settings_call_ringtone_title">着信音</string>
     <string name="settings_call_ringtone_dialog_title">着信音を選んでください:</string>
     <string name="room_participants_action_remove">会話から追放</string>
@@ -1084,7 +1084,7 @@
     <string name="settings_emails_and_phone_numbers_summary">あなたのMatrixアカウントに登録されたメールアドレスと電話番号を管理</string>
     <string name="settings_emails_and_phone_numbers_title">メールアドレスと電話番号</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">有効化</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">このセッションで通知が無効化されています。
+    <string name="settings_troubleshoot_test_device_settings_failed">このセッションで通知が無効化されています。
 \n${app_name} の設定をご確認ください。</string>
     <string name="settings_troubleshoot_test_device_settings_success">このセッションで通知は有効化されています。</string>
     <string name="settings_troubleshoot_test_device_settings_title">セッションの設定。</string>
@@ -1172,7 +1172,7 @@
     <string name="qr_code">QRコード</string>
     <string name="add_by_qr_code">QRコードによる追加</string>
     <string name="user_code_share">コードを共有</string>
-    <string name="template_invite_friends_text">${app_name} で会話しましょう：%s</string>
+    <string name="invite_friends_text">${app_name} で会話しましょう：%s</string>
     <string name="invite_friends">友達を招待</string>
     <string name="direct_room_user_list_known_title">既知のユーザー</string>
     <string name="invalid_qr_code_uri">無効なQRコード（無効なURI）！</string>
@@ -1263,7 +1263,7 @@
     <string name="video_call_in_progress">ビデオ通話が行われています…</string>
     <string name="settings_call_ringtone_use_default_stun">フォールバックコールアシストサーバーを許可</string>
     <string name="error_unauthorized">有効な認証情報がないため、権限がありません</string>
-    <string name="template_call_failed_no_connection">${app_name} 呼び出し失敗</string>
+    <string name="call_failed_no_connection">${app_name} 呼び出し失敗</string>
     <string name="call_failed_no_ice_description">確実に通話できるようにするためには、ホームサーバー（%1$s）の管理者にTURNサーバーの設定を依頼してください。
 \n
 \n代わりに、%2$sのパブリックサーバーを使用することもできますが、信頼性は低く、あなたのIPアドレスがそのサーバーと共有されてしまいます。これは設定から管理することができます。</string>
@@ -1444,7 +1444,7 @@
     <string name="notice_room_topic_removed_by_you">ルームの説明を削除しました</string>
     <string name="notice_room_name_removed_by_you">ルーム名を削除しました</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">許可を与える</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name}は、確実に通知を受け取るために、影響の少ないバックグラウンド接続を維持する必要があります。
+    <string name="startup_notification_fdroid_battery_optim_message">${app_name}は、確実に通知を受け取るために、影響の少ないバックグラウンド接続を維持する必要があります。
 \n次の画面で、${app_name}を常にバックグラウンドで実行することを許可するように求められますので、承認してください。</string>
     <string name="startup_notification_fdroid_battery_optim_title">バックグラウンド接続</string>
     <string name="settings_discovery_manage">ディスカバリー設定を管理します。</string>
@@ -1468,9 +1468,9 @@
     <string name="settings_background_sync_update_error">設定の更新に失敗しました。</string>
     <string name="settings_integrations">インテグレーション（統合）</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">アプリがバックグラウンドにある場合、着信メッセージは通知されません。</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name}は正確な時間に定期的にバックグラウンドで同期します（構成可能）。
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name}は正確な時間に定期的にバックグラウンドで同期します（構成可能）。
 \nこれは無線とバッテリーの使用量に影響し、$ {app_name}がイベントを待機していることを示す永続的な通知が表示されます。</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name}は、端末の限られたリソース（バッテリーの残量）を維持する方法でバックグラウンド同期をします。
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name}は、端末の限られたリソース（バッテリーの残量）を維持する方法でバックグラウンド同期をします。
 \n端末の状態によっては、OSによって同期が延期される場合があります。</string>
     <string name="settings_system_preferences_summary">LEDの色、振動、音を選択してください…</string>
     <string name="settings_silent_notifications_preferences">通知（サイレント）を設定</string>
@@ -1479,16 +1479,16 @@
     <string name="settings_notification_privacy_no_background_sync">アプリはバックグラウンドでホームサーバーに接続する<b>必要がない</b>ためバッテリー使用量を減らすことができます</string>
     <string name="settings_troubleshoot_test_battery_quickfix">最適化を無視</string>
     <string name="settings_troubleshoot_test_battery_failed">画面をオフにした状態で端末のプラグを抜いて一定時間静止したままにすると、端末は機内モードになります。 これにより、アプリがネットワークにアクセスできなくなり、ジョブ、同期、および標準のアラームが防止されます。</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">${app_name}のバックグラウンド制限が有効になっています。
+    <string name="settings_troubleshoot_test_bg_restricted_failed">${app_name}のバックグラウンド制限が有効になっています。
 \nアプリがバックグラウンドで実行しようとする作業が積極的に制限されるため、通知に影響を与える可能性があります。
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">${app_name}のバックグラウンド制限が無効になっています。 このテストは、モバイル（WIFIでない）を使用して実行する必要があります。
+    <string name="settings_troubleshoot_test_bg_restricted_success">${app_name}のバックグラウンド制限が無効になっています。 このテストは、モバイル（WIFIでない）を使用して実行する必要があります。
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">端末を再起動してもサービスは開始しません。${app_name}を一度開くまで通知は届きません。</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">［%1$s］
+    <string name="settings_troubleshoot_test_service_boot_failed">端末を再起動してもサービスは開始しません。${app_name}を一度開くまで通知は届きません。</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">［%1$s］
 \nこのエラーは${app_name}の管理外です。 これはいくつかの理由で発生する可能性があります。 後で再試行するとうまくいくかもしれません。システム設定でGoogle Playサービスのデータ使用量が制限されていないか、端末の時刻が正しいかどうかを確認してください。カスタムROMで生じることもあります。</string>
-    <string name="template_settings_add_3pid_flow_not_supported">${app_name}モバイルからこれを行うことはできません</string>
-    <string name="template_settings_troubleshoot_test_battery_success">${app_name}はバッテリー最適化の影響を受けません。</string>
+    <string name="settings_add_3pid_flow_not_supported">${app_name}モバイルからこれを行うことはできません</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name}はバッテリー最適化の影響を受けません。</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">制限を無効にする</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">起動時の開始を有効にする</string>
     <string name="settings_troubleshoot_test_service_boot_success">端末を再起動するとサービスが開始します。</string>
@@ -1508,11 +1508,11 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCMトークンのホームサーバーへの登録が成功しました。</string>
     <string name="settings_troubleshoot_test_token_registration_title">トークンの登録</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">アカウントを追加</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nこのエラーは${app_name}の管理外です。このスマートフォンにはGoogleアカウントが登録されていません。アカウントマネージャーを開いて、Googleアカウントを追加してください。</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">［%1$s］
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">［%1$s］
 \nこのエラーは${app_name}の管理外です。Googleによると、このエラーは、FCMに登録されている端末上のアプリの数が多すぎることを示唆しています。 このエラーは、アプリの数が極端に多い場合にのみ発生するため、平均的なユーザーには影響しません。</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name}はGoogle Playサービスを使用してプッシュメッセージを配信していますが、正しく設定されていないようです:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name}はGoogle Playサービスを使用してプッシュメッセージを配信していますが、正しく設定されていないようです:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">FCMトークンの取得に失敗しました:
 \n%1$s</string>
@@ -1669,7 +1669,7 @@
     <string name="keys_backup_setup_step1_advanced">（高度）</string>
     <string name="keys_backup_setup_step1_title">暗号化されたメッセージを決して失わないために</string>
     <string name="keys_backup_no_session_error">利用可能なMatrixセッションがありません</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">${app_name}によるリカバリーキーの生成を望む場合、パスフレーズを削除してください。</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">${app_name}によるリカバリーキーの生成を望む場合、パスフレーズを削除してください。</string>
     <string name="markdown_has_been_disabled">マークダウンが無効です。</string>
     <string name="markdown_has_been_enabled">マークダウンが有効です。</string>
     <string name="command_problem_with_parameters">”%s”とのコマンドはいくつかのパラメータが欠けているか不正です。</string>
@@ -1854,7 +1854,7 @@
     <string name="room_preview_no_preview_join">このルームはプレビューできません。参加しますか？</string>
     <string name="room_preview_not_found">現在、このルームにはアクセスできません。
 \n後でもう一度やり直すか、ルームの管理者にアクセス権があるかどうかを確認するよう依頼してください。</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">${app_name}では、誰でも読めるルームのプレビューがまだサポートされていません</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">${app_name}では、誰でも読めるルームのプレビューがまだサポートされていません</string>
     <string name="room_preview_no_preview">このルームはプレビューできません</string>
     <string name="please_wait">お待ち下さい…</string>
     <string name="error_no_network">ネットワークがありません。インターネット接続を確認してください。</string>
@@ -1919,7 +1919,7 @@
     <string name="sas_verify_title">短い文字列を比較して検証します。</string>
     <string name="invalid_or_expired_credentials">認証情報が不正または期限切れのため、ログアウトしました。</string>
     <string name="autodiscover_well_known_autofill_confirm">構成を使用</string>
-    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name}がuserIdドメイン\"%1$s\"のカスタムサーバー構成を検出しました。
+    <string name="autodiscover_well_known_autofill_dialog_message">${app_name}がuserIdドメイン\"%1$s\"のカスタムサーバー構成を検出しました。
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_dialog_title">サーバーオプションをおまかせする</string>
     <string name="autodiscover_invalid_response">無効なホームサーバーディスカバリーレスポンス</string>
@@ -2066,7 +2066,7 @@
     <string name="content_reported_title">コンテンツが報告されました</string>
     <string name="preference_help_title">ヘルプとサポート</string>
     <string name="preference_help">ヘルプ</string>
-    <string name="template_legals_application_title">${app_name}のポリシー</string>
+    <string name="legals_application_title">${app_name}のポリシー</string>
     <string name="analytics_opt_in_content_link">ここ</string>
     <string name="settings_notification_new_keyword">キーワードを追加</string>
     <string name="thread_list_modal_my_threads_title">自分のスレッド</string>
@@ -2258,8 +2258,8 @@
     <string name="send_attachment">添付ファイルを送信</string>
     <string name="labs_allow_extended_logging">詳細なログを有効にする。</string>
     <string name="settings_agree_to_terms">メールアドレスか電話番号でアカウントを見つけてもらえるようにするには、IDサーバー（%s）の利用規約への同意が必要です。</string>
-    <string name="template_location_not_available_dialog_title">${app_name}は位置情報にアクセスできませんでした</string>
-    <string name="template_location_not_available_dialog_content">${app_name}は位置情報にアクセスできませんでした。後でもう一度やり直してください。</string>
+    <string name="location_not_available_dialog_title">${app_name}は位置情報にアクセスできませんでした</string>
+    <string name="location_not_available_dialog_content">${app_name}は位置情報にアクセスできませんでした。後でもう一度やり直してください。</string>
     <string name="voice_message_reply_content">音声メッセージ（%1$s）</string>
     <string name="room_upgrade_to_recommended_version">推奨のルームバージョンへとアップグレード</string>
     <string name="a11y_start_voice_message">音声メッセージを録音</string>
@@ -2312,7 +2312,7 @@
     <string name="analytics_opt_in_list_item_3">これはいつでも設定から無効にできます</string>
     <string name="analytics_opt_in_list_item_2">私たちは、情報を第三者と共有することは<b>ありません</b></string>
     <string name="analytics_opt_in_list_item_1">私たちは、アカウントのデータを記録したり分析したりすることは<b>ありません</b></string>
-    <string name="template_analytics_opt_in_title">${app_name}の改善を手伝う</string>
+    <string name="analytics_opt_in_title">${app_name}の改善を手伝う</string>
     <string name="room_join_rules_public_by_you">このルームを「リンクを知っている人が参加可能」に設定しました。</string>
     <string name="no_ignored_users">どのユーザーも無視していません</string>
     <string name="reaction_search_type_hint">キーワードを入力するとリアクションを検索できます。</string>
@@ -2346,7 +2346,7 @@
     <string name="rageshake_detected">シェイクを検出しました！</string>
     <string name="settings_rageshake_detection_threshold_summary">電話を振って、しきい値を試してください</string>
     <string name="settings_rageshake_detection_threshold">検出のしきい値</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">予期しないエラーが生じた際に、${app_name}はより頻繁にクラッシュする可能性があります</string>
+    <string name="settings_developer_mode_fail_fast_summary">予期しないエラーが生じた際に、${app_name}はより頻繁にクラッシュする可能性があります</string>
     <string name="settings_developer_mode_fail_fast_title">素早くクラッシュ</string>
     <string name="settings_developer_mode_summary">開発者モードは隠された機能を有効にするため、アプリケーションが不安定になる恐れがあります。開発者向けです！</string>
     <string name="labs_auto_report_uisi_desc">復号エラーが生じた際に、自動的にログを送信</string>
@@ -2379,9 +2379,9 @@
     <string name="location_share_external">以下で開く</string>
     <string name="upgrade_security">暗号化のアップグレードが利用可能です</string>
     <string name="bootstrap_progress_generating_ssss_recovery">SSSSキーをリカバリーキーから生成しています</string>
-    <string name="template_app_ios_android">${app_name} iOS
+    <string name="app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="template_app_desktop_web">${app_name}ウェブ版
+    <string name="app_desktop_web">${app_name}ウェブ版
 \n${app_name}デスクトップ版</string>
     <string name="enter_secret_storage_input_key">リカバリーキーを選択、直接入力、あるいはクリップボードからペースト</string>
     <string name="use_recovery_key">リカバリーキーを使用</string>
@@ -2485,7 +2485,7 @@
     <string name="ftue_auth_carousel_secure_title">自分の会話は、自分のもの。</string>
     <string name="room_join_rules_invite">%1$sがこのルームを「招待者のみ参加可能」に設定しました。</string>
     <string name="command_description_spoiler">選択したメッセージをネタバレとして送信</string>
-    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} がエンドツーエンド暗号鍵をディスクに保存する許可を要求しています。
+    <string name="permissions_rationale_msg_keys_backup_export">${app_name} がエンドツーエンド暗号鍵をディスクに保存する許可を要求しています。
 \n
 \n鍵を手動でエクスポートできるように、次のポップアップでアクセスを許可してください。</string>
     <string name="room_join_rules_public">%1$sはこのルームを「リンクを知っている人が参加可能」に設定しました。</string>
@@ -2506,7 +2506,7 @@
     <string name="ftue_auth_carousel_secure_body">お宅での対面会話と同じぐらいのプライバシーを提供する、セキュアで独立したコミュニケーション。</string>
     <string name="ftue_auth_carousel_encrypted_title">セキュアメッセージング</string>
     <string name="ftue_auth_carousel_control_title">管理権を握るのは、あなたです。</string>
-    <string name="template_preference_help_summary">${app_name}の使用に関するヘルプ</string>
+    <string name="preference_help_summary">${app_name}の使用に関するヘルプ</string>
     <string name="labs_allow_extended_logging_summary">詳細なログは、イライラシェイクでログを送信する際に、より多くのログを提供することで、開発者にとっての助けになります。有効にした場合でも、メッセージの内容やその他のプライベートな情報は記録されません。</string>
     <string name="upgrade_room_warning">ルームのアップグレードは高度な作業であり、不具合や欠けている機能、セキュリティー上の脆弱性がある場合に推奨されます。
 \nアップグレードは通常、ルームがサーバー上で処理される仕方にだけ影響します。</string>
@@ -2702,7 +2702,7 @@
     <string name="verify_user_sas_emoji_help_text">次の絵文字が相手の画面にも同じ順番で現れるのを確認し、このユーザーを検証してください。</string>
     <string name="verification_conclusion_warning">信頼できないサインイン</string>
     <string name="create_room_alias_invalid">使用できない文字が含まれています</string>
-    <string name="template_analytics_opt_in_content">${app_name}の改善と課題抽出のために、匿名の使用状況データの送信をお願いします。複数の端末での使用を分析するために、あなたの全端末共通のランダムな識別子を生成します。
+    <string name="analytics_opt_in_content">${app_name}の改善と課題抽出のために、匿名の使用状況データの送信をお願いします。複数の端末での使用を分析するために、あなたの全端末共通のランダムな識別子を生成します。
 \n
 \n%sで利用規約を閲覧できます。</string>
     <string name="autocomplete_limited_results">最初の検索結果のみ表示しています。文字をもっと入力してください…</string>
@@ -2712,7 +2712,7 @@
 \nこの端末での使用を終了、または他のアカウントにサインインしたい場合、このデータをクリアしてください。</string>
     <string name="soft_logout_clear_data_dialog_content">この端末に現在保存されている全てのデータをクリアしますか？
 \nアカウントデータとメッセージにアクセスするにはもう一度サインインしてください。</string>
-    <string name="template_soft_logout_sso_not_same_user_error">現在のセッションはユーザー %1$s のものですが、あなたが提供している認証情報はユーザー %2$s のものです。この操作は${app_name}ではサポートされていません。
+    <string name="soft_logout_sso_not_same_user_error">現在のセッションはユーザー %1$s のものですが、あなたが提供している認証情報はユーザー %2$s のものです。この操作は${app_name}ではサポートされていません。
 \nまずデータをクリアし、その後、別のアカウントにサインインしてください。</string>
     <string name="soft_logout_signin_e2e_warning_notice">暗号化されたメッセージがどの端末でも読めるように、サインインしてこの端末にのみ保存されている暗号鍵を取り戻してください。</string>
     <string name="soft_logout_signin_notice">あなたのホームサーバー（%1$s）の管理者があなたを%2$sのアカウントからサインアウトしました（%3$s）。</string>
@@ -2746,7 +2746,7 @@
     <string name="bottom_sheet_setup_secure_backup_title">セキュアバックアップ</string>
     <string name="settings_setup_secure_backup">セキュアバックアップを設定</string>
     <string name="a11y_open_chat">会話を開く</string>
-    <string name="template_identity_server_error_outdated_identity_server">このIDサーバーは最新のバージョンではありません。${app_name}はAPIのバージョン2のみをサポートしています。</string>
+    <string name="identity_server_error_outdated_identity_server">このIDサーバーは最新のバージョンではありません。${app_name}はAPIのバージョン2のみをサポートしています。</string>
     <string name="invite_users_to_room_failure">ユーザーを招待できませんでした。招待したいユーザーを確認して、もう一度試してください。</string>
     <string name="open_terms_of">%sの利用規約を開く</string>
     <string name="identity_server_user_consent_not_provided">ユーザーによる同意は与えられていません。</string>
@@ -2801,7 +2801,7 @@
     <plurals name="secure_backup_reset_devices_you_can_verify">
         <item quantity="other">いま検証できる%d個の端末を表示</item>
     </plurals>
-    <string name="template_re_authentication_default_confirm_text">この操作を実行するには ${app_name}に認証情報を入力する必要があります。</string>
+    <string name="re_authentication_default_confirm_text">この操作を実行するには ${app_name}に認証情報を入力する必要があります。</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">あなただけが知っている秘密のパスワードを入力してください。バックアップ用にセキュリティーキーを生成します。</string>
     <string name="confirm_your_identity_quad_s">暗号化されたメッセージにアクセスするには、ログインを検証し、本人確認を行う必要があります。</string>
     <string name="confirm_your_identity">暗号化されたメッセージにアクセスするには、あなたの他のセッションからログインを検証し、本人確認を行う必要があります。</string>
@@ -2819,9 +2819,9 @@
     <string name="verification_request_start_notice">セキュリティーを高めるために、対面で行うか、他の信頼できる通信手段を利用しましょう。</string>
     <string name="command_description_rainbow_emote">選択されたエモートを虹色にして送信します</string>
     <string name="command_description_rainbow">選択されたテキストを虹色にして送信します</string>
-    <string name="template_rendering_event_error_exception">${app_name}がID%1$sのイベントを処理中にエラーが発生しました</string>
-    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name}は%1$sという種類のメッセージに対応していません</string>
-    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name}は%1$sという種類のイベントに対応していません</string>
+    <string name="rendering_event_error_exception">${app_name}がID%1$sのイベントを処理中にエラーが発生しました</string>
+    <string name="rendering_event_error_type_of_message_not_handled">${app_name}は%1$sという種類のメッセージに対応していません</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name}は%1$sという種類のイベントに対応していません</string>
     <string name="room_member_jump_to_read_receipt">既読通知へ移動</string>
     <string name="keep_it_safe">大切に保護しましょう</string>
     <string name="bootstrap_finish_title">完了！</string>
@@ -2838,7 +2838,7 @@
     <string name="verify_new_session_notice">新しいセッションを検証して、暗号化されたメッセージにアクセスできるようにしましょう。</string>
     <string name="new_session_review">タップして確認及び検証</string>
     <string name="new_session">新しいログイン。あなたですか？</string>
-    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="event_redacted_by_admin_reason_with_reason">ルームの管理者によって削除されています。理由：%1$s</string>
     <string name="event_redacted_by_user_reason_with_reason">ユーザーによって削除されています。理由：%1$s</string>
     <string name="delete_event_dialog_reason_hint">削除した理由</string>

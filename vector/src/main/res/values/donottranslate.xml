@@ -12,7 +12,7 @@
     <string name="matrix_room_alias_prefix" translatable="false">#</string>
 
     <!-- Temporary string -->
-    <string name="template_not_implemented" translatable="false">Not implemented yet in ${app_name}</string>
+    <string name="not_implemented" translatable="false">Not implemented yet in ${app_name}</string>
 
     <!-- onboarding english only word play -->
     <string name="cut_the_slack_from_teams" translatable="false">Cut the slack from teams.</string>

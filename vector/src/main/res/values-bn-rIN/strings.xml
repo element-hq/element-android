@@ -309,7 +309,7 @@
     <string name="user_directory_header">ব্যবহারকারী ডিরেক্টরি</string>
     <string name="matrix_only_filter">শুধুমাত্র ম্যাট্রিক্সের যোগাযোগগুলি</string>
     <string name="no_conversation_placeholder">"কথাবার্তা নেই "</string>
-    <string name="template_no_contact_access_placeholder">আপনি রায়টকে আপনার স্থানীয় পরিচিতি অ্যাক্সেস করার অনুমতি দেয় নি</string>
+    <string name="no_contact_access_placeholder">আপনি রায়টকে আপনার স্থানীয় পরিচিতি অ্যাক্সেস করার অনুমতি দেয় নি</string>
     <string name="no_result_placeholder">কোন ফলাফল নেই</string>
 
     <string name="rooms_header">রুমগুলি</string>
@@ -449,7 +449,7 @@
     <string name="e2e_re_request_encryption_key_sent">চাবির অনুরোধ পাঠানো।</string>
 
     <string name="e2e_re_request_encryption_key_dialog_title">অনুরোধ পাঠানো</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">দয়া করে শুরু করুন ${app_name} অন্য সেশান যেটা পারে বর্ণনা করতে বার্তা কে সুতরাং এটা পারে পাঠাতে চাবিগুলো কে যন্ত্র তে.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">দয়া করে শুরু করুন ${app_name} অন্য সেশান যেটা পারে বর্ণনা করতে বার্তা কে সুতরাং এটা পারে পাঠাতে চাবিগুলো কে যন্ত্র তে.</string>
 
     <string name="read_receipts_list">পড়ো প্রাপ্তিগুলি সারি</string>
 
@@ -478,7 +478,7 @@
     <string name="room_info_room_topic">ঘরএর বিষয়</string>
 
     <string name="settings_call_category">ডাকা</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">ব্যবহার করছেন অনুপস্থিত ${app_name} রিংটোন আগামী ডাক এর জন্য</string>
+    <string name="settings_call_ringtone_use_app_ringtone">ব্যবহার করছেন অনুপস্থিত ${app_name} রিংটোন আগামী ডাক এর জন্য</string>
     <string name="settings_call_ringtone_title">আসা কল এর রিংটোন</string>
     <string name="settings_call_ringtone_dialog_title">নির্বাচন করুন রিংটোন কল আর জন্য:</string>
 
@@ -502,22 +502,22 @@
     <string name="media_picker_cannot_record_video">পারছেন না দৃশ্য নথি করতে</string>
 
     <string name="permissions_rationale_popup_title">তথা</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} এর প্রয়াজন অনুমতি নিতে আপনার ছবি এবং দৃশ্য রেকর্ড কে গ্রন্থাগার থেকে পাঠিয়ে জমার জায়গায় সংযুক্ত করতে।
+    <string name="permissions_rationale_msg_storage">${app_name} এর প্রয়াজন অনুমতি নিতে আপনার ছবি এবং দৃশ্য রেকর্ড কে গ্রন্থাগার থেকে পাঠিয়ে জমার জায়গায় সংযুক্ত করতে।
 \nদেয়া করে অনুমতি দিন প্রবেশ করতে পরের pop-up কে যেটা সক্ষম আপনার নথি কে আপনার ফোন থেকে পাঠাতে।</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name} এর প্রয়োজন অনুমতি নিয়ে প্রবেশে করতে আপনার ছবি তোলার যন্ত্র থেকে ছবি নিতে এবং দৃষ্টি রেকর্ড ডাকতে।</string>
+    <string name="permissions_rationale_msg_camera">${app_name} এর প্রয়োজন অনুমতি নিয়ে প্রবেশে করতে আপনার ছবি তোলার যন্ত্র থেকে ছবি নিতে এবং দৃষ্টি রেকর্ড ডাকতে।</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nদয়াকরে অনুমতি দিন প্রবেশ করাতে পরের পপ -আপ কে যেটা ডাকতে সক্ষম।"</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name} এর প্রয়োজন অনুমতি নিয়ে প্রবেশ করতে আপনার মাইক্রোফোন আর মাধ্যমে শোনার কালএর সঞ্চালনা করতে।</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} এর প্রয়োজন অনুমতি নিয়ে প্রবেশ করতে আপনার মাইক্রোফোন আর মাধ্যমে শোনার কালএর সঞ্চালনা করতে।</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nদেয়া করে অনুমতিদিন প্রবেশ করতে পরের pop-up এ যেটা কল করতে সক্ষম।"</string>
     <string name="notification_sync_init">সেবা আরম্ভ করা হচ্ছে</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">ভিডিও কল সম্পাদনের জন্য ${app_name} আপনার ক্যামেরা এবং আপনার মাইক্রোফোন অ্যাক্সেস করার অনুমতির প্রয়োজন।
+    <string name="permissions_rationale_msg_camera_and_audio">ভিডিও কল সম্পাদনের জন্য ${app_name} আপনার ক্যামেরা এবং আপনার মাইক্রোফোন অ্যাক্সেস করার অনুমতির প্রয়োজন।
 \n
 \nকল করতে সক্ষম হতে পরবর্তী পপ আপ অ্যাক্সেস অনুমতি দিন।</string>
-    <string name="template_permissions_rationale_msg_contacts">রায়ট অন্যান্য ম্যাট্রিক্স ব্যবহারকারীদের তাদের ইমেল এবং ফোন নম্বরগুলির উপর ভিত্তি করে আপনার ঠিকানা বইটি চেক করতে পারে। আপনি যদি এই উদ্দেশ্যে আপনার ঠিকানা বইটি ভাগ করে নিতে সম্মত হন তবে দয়া করে পরবর্তী পপ-আপটিতে অ্যাক্সেসের অনুমতি দিন।</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">রায়ট অন্যান্য ম্যাট্রিক্স ব্যবহারকারীদের তাদের ইমেল এবং ফোন নম্বরগুলির উপর ভিত্তি করে আপনার ঠিকানা বইটি চেক করতে পারে।
+    <string name="permissions_rationale_msg_contacts">রায়ট অন্যান্য ম্যাট্রিক্স ব্যবহারকারীদের তাদের ইমেল এবং ফোন নম্বরগুলির উপর ভিত্তি করে আপনার ঠিকানা বইটি চেক করতে পারে। আপনি যদি এই উদ্দেশ্যে আপনার ঠিকানা বইটি ভাগ করে নিতে সম্মত হন তবে দয়া করে পরবর্তী পপ-আপটিতে অ্যাক্সেসের অনুমতি দিন।</string>
+    <string name="permissions_msg_contacts_warning_other_androids">রায়ট অন্যান্য ম্যাট্রিক্স ব্যবহারকারীদের তাদের ইমেল এবং ফোন নম্বরগুলির উপর ভিত্তি করে আপনার ঠিকানা বইটি চেক করতে পারে।
 \n
 \nআপনি এই উদ্দেশ্যে আপনার ঠিকানা বই ভাগ করতে সম্মত হন\?</string>
 
@@ -737,7 +737,7 @@
 
     <string name="settings_troubleshoot_test_device_settings_title">সেশান সেটিংস।</string>
     <string name="settings_troubleshoot_test_device_settings_success">বিজ্ঞপ্তি এই সেশানের জন্য সক্রিয় করা হয়েছে।</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">বিজ্ঞপ্তি এই সেশানের জন্য অনুমতি দেওয়া হয় নি।
+    <string name="settings_troubleshoot_test_device_settings_failed">বিজ্ঞপ্তি এই সেশানের জন্য অনুমতি দেওয়া হয় নি।
 \n${app_name} এর সেটিংস যাচাই করুন।</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">সক্ষম</string>
 
@@ -749,7 +749,7 @@
 
     <string name="settings_troubleshoot_test_play_services_title">Play Services পরীক্ষা</string>
     <string name="settings_troubleshoot_test_play_services_success">গুগল প্লে সার্ভিসেস APK পাওয়া গেছে এবং আপ টু ডেট রয়েছে।</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} পুশ বার্তার প্রদানের জন্য Google Play পরিষেবাদি ব্যবহার করে কিন্তু এটি সঠিকভাবে কনফিগার করা বলে মনে হচ্ছে না:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} পুশ বার্তার প্রদানের জন্য Google Play পরিষেবাদি ব্যবহার করে কিন্তু এটি সঠিকভাবে কনফিগার করা বলে মনে হচ্ছে না:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Play Services ঠিক করুন</string>
 
@@ -758,11 +758,11 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">FCM টোকেন উদ্ধার করতে ব্যর্থ হয়েছে:
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nএই ত্রুটিটি ${app_name} এর নিয়ন্ত্রণের বাইরে এবং Google এর মতে, এই ত্রুটিটি ইঙ্গিত করে যে ডিভাইসটিতে FCM এর সাথে নিবন্ধিত অনেকগুলি অ্যাপ্লিকেশন রয়েছে। ত্রুটিগুলি কেবলমাত্র অ্যাপ্লিকেশনের চরম সংখ্যাগুলিতে ঘটে থাকে, তাই এটি গড় ব্যবহারকারীকে প্রভাবিত করবে না।</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nএই ত্রুটি ${app_name} এর নিয়ন্ত্রণের বাইরে। এটা বিভিন্ন কারণে ঘটতে পারে। আপনি পরে পুনরায় চেষ্টা করলে হয়তো এটি কাজ করবে, আপনি এটিও পরীক্ষা করতে পারেন যে Google Play পরিষেবাটি সিস্টেম সেটিংসে ডেটা ব্যবহারের ক্ষেত্রে সীমাবদ্ধ নয়, অথবা আপনার ডিভাইসের ঘড়ি সঠিক, বা এটি কাস্টম রমতে ঘটতে পারে।</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nএই ত্রুটি ${app_name} এর নিয়ন্ত্রণের বাইরে। ফোনে কোন গুগল একাউন্ট নেই। অ্যাকাউন্ট ম্যানেজার খুলুন এবং একটি গুগল একাউন্ট যোগ করুন।</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">একাউন্ট যোগ করুন</string>
 
@@ -777,19 +777,19 @@
 
     <string name="settings_troubleshoot_test_service_boot_title">বুট করার সময় শুরু</string>
     <string name="settings_troubleshoot_test_service_boot_success">ডিভাইসটি পুনরায় চালু হলে পরিষেবা শুরু হবে।</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">ডিভাইসটি পুনরায় চালু হওয়ার সময় পরিষেবাটি শুরু হবে না, আপনি একবার ${app_name} টি খোলা না হওয়া পর্যন্ত বিজ্ঞপ্তি পাবেন না।</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">ডিভাইসটি পুনরায় চালু হওয়ার সময় পরিষেবাটি শুরু হবে না, আপনি একবার ${app_name} টি খোলা না হওয়া পর্যন্ত বিজ্ঞপ্তি পাবেন না।</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">বুট থেকে শুরু করা সক্রিয় করুন</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">ব্যাকগ্রাউন্ড এর সীমাবদ্ধতা চেক করুন</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">ব্যাকগ্রউন্ডের সীমাবদ্ধতা ${app_name} এর জন্য নিষ্ক্রিয় করা হয়েছে। এই পরীক্ষা মোবাইল ডেটা ব্যবহার করে চালানো উচিত (ওয়াইফাই না)।
+    <string name="settings_troubleshoot_test_bg_restricted_success">ব্যাকগ্রউন্ডের সীমাবদ্ধতা ${app_name} এর জন্য নিষ্ক্রিয় করা হয়েছে। এই পরীক্ষা মোবাইল ডেটা ব্যবহার করে চালানো উচিত (ওয়াইফাই না)।
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">ব্যাকগ্রউন্ডের সীমাবদ্ধতা রিমোট এর জন্য সক্রিয় করা হয়েছে।
+    <string name="settings_troubleshoot_test_bg_restricted_failed">ব্যাকগ্রউন্ডের সীমাবদ্ধতা রিমোট এর জন্য সক্রিয় করা হয়েছে।
 \nঅ্যাপ্লিকেশন যেটি করার চেষ্টা করে সেটি ব্যাকগ্রাউন্ডে থাকা অবস্থায় আক্রমনাত্মকভাবে সীমিত হবে এবং এটি বিজ্ঞপ্তিগুলিতে প্রভাবিত হতে পারে।
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">সীমাবদ্ধগুলি নিষ্ক্রিয়</string>
 
     <string name="settings_troubleshoot_test_battery_title">ব্যাটারি অপ্টিমাইজেশান</string>
-    <string name="template_settings_troubleshoot_test_battery_success">${app_name} ব্যাটারি অপ্টিমাইজেশান দ্বারা প্রভাবিত হয় না।</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name} ব্যাটারি অপ্টিমাইজেশান দ্বারা প্রভাবিত হয় না।</string>
     <string name="settings_troubleshoot_test_battery_failed">যদি কোনও ব্যবহারকারী কোনও ডিভাইসটিকে নির্দিষ্ট সময়ের জন্য আনপ্লাগ এবং স্থিতিশীল রাখে তবে স্ক্রীন বন্ধের সাথে ডিভাইসটি ডোজ মোডে প্রবেশ করে। এটি অ্যাপ্লিকেশানগুলিকে নেটওয়ার্ক অ্যাক্সেস করতে বাধা দেয় এবং তাদের কাজ, সিঙ্ক এবং মান অ্যালার্মগুলি স্থগিত করে।</string>
     <string name="settings_troubleshoot_test_battery_quickfix">"অপ্টিমাইজেশান অবহেলা "</string>
 
@@ -917,19 +917,19 @@
     <string name="settings_deactivate_my_account">আমার একাউন্ট নিষ্ক্রিয় করুন</string>
 
     <string name="startup_notification_privacy_title">বিজ্ঞপ্তি\'র গোপনীয়তা</string>
-    <string name="template_startup_notification_privacy_message">সুরক্ষিতভাবে এবং ব্যক্তিগতভাবে আপনার বিজ্ঞপ্তি পরিচালনা করতে ${app_name} পটভূমিতে চালাতে পারে। এই ব্যাটারি ব্যবহার প্রভাবিত হতে পারে।</string>
+    <string name="startup_notification_privacy_message">সুরক্ষিতভাবে এবং ব্যক্তিগতভাবে আপনার বিজ্ঞপ্তি পরিচালনা করতে ${app_name} পটভূমিতে চালাতে পারে। এই ব্যাটারি ব্যবহার প্রভাবিত হতে পারে।</string>
     <string name="startup_notification_privacy_button_grant">অনুমতি প্রদান করুন</string>
     <string name="startup_notification_privacy_button_other">অন্য বিকল্প চয়ন করুন</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">পটভূমি সংযোগ</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">নির্ভরযোগ্য বিজ্ঞপ্তি পেতে ${app_name} কম প্রভাব ব্যাকগ্রাউন্ড সংযোগ রাখা প্রয়োজন।
+    <string name="startup_notification_fdroid_battery_optim_message">নির্ভরযোগ্য বিজ্ঞপ্তি পেতে ${app_name} কম প্রভাব ব্যাকগ্রাউন্ড সংযোগ রাখা প্রয়োজন।
 \nপরবর্তী স্ক্রিনে আপনাকে দাঙ্গাটি সর্বদা ব্যাকগ্রাউন্ডে চালানোর অনুমতি দেওয়া হবে, দয়া করে স্বীকার করুন।</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">অনুমতি প্রদান করুন</string>
 
     <string name="settings_analytics">বৈশ্লেষিক ন্যায়</string>
     <string name="settings_opt_in_of_analytics">বিশ্লেষণ তথ্য পাঠান</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} আমাদের অ্যাপ্লিকেশন উন্নত করার অনুমতি দেওয়ার জন্য বেনামী বিশ্লেষণ সংগ্রহ করে।</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">আমাদের ${app_name} উন্নত করতে সাহায্য করার জন্য বিশ্লেষণ সক্রিয় করুন।</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} আমাদের অ্যাপ্লিকেশন উন্নত করার অনুমতি দেওয়ার জন্য বেনামী বিশ্লেষণ সংগ্রহ করে।</string>
+    <string name="settings_opt_in_of_analytics_prompt">আমাদের ${app_name} উন্নত করতে সাহায্য করার জন্য বিশ্লেষণ সক্রিয় করুন।</string>
     <string name="settings_opt_in_of_analytics_ok">হ্যাঁ, আমি সাহায্য করতে চাই!</string>
 
     <string name="settings_data_save_mode">ডেটা সংরক্ষণ মোড</string>
@@ -1269,10 +1269,10 @@
 
     <string name="settings_background_fdroid_sync_mode">পটভূমি সিঙ্ক মোড (পরীক্ষামূলক)</string>
     <string name="settings_background_fdroid_sync_mode_battery">ব্যাটারির জন্য অনুকূলিত</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">রায়ট এমনভাবে পটভূমিতে সিঙ্ক হবে যা ডিভাইসের সীমিত সংস্থান (ব্যাটারি) সংরক্ষণ করে।
+    <string name="settings_background_fdroid_sync_mode_battery_description">রায়ট এমনভাবে পটভূমিতে সিঙ্ক হবে যা ডিভাইসের সীমিত সংস্থান (ব্যাটারি) সংরক্ষণ করে।
 \nআপনার ডিভাইস রিসোর্স স্থিতির উপর নির্ভর করে সিঙ্কটি অপারেটিং সিস্টেম দ্বারা পিছিয়ে যেতে পারে।</string>
     <string name="settings_background_fdroid_sync_mode_real_time">রিয়েল টাইম জন্য অনুকূলিত</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">রায়ট নির্দিষ্ট সময়ে সময়ে পটভূমিতে সিঙ্ক হবে (কনফিগারযোগ্য)।
+    <string name="settings_background_fdroid_sync_mode_real_time_description">রায়ট নির্দিষ্ট সময়ে সময়ে পটভূমিতে সিঙ্ক হবে (কনফিগারযোগ্য)।
 \nএটি রেডিও এবং ব্যাটারির ব্যবহারকে প্রভাবিত করবে, রায়ট ইভেন্টগুলি শুনছে বলে জানিয়ে একটি স্থায়ী বিজ্ঞপ্তি প্রদর্শিত হবে।</string>
     <string name="settings_background_fdroid_sync_mode_disabled">কোনও পটভূমি সিঙ্ক না</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">অ্যাপটি ব্যাকগ্রাউন্ডে থাকা অবস্থায় আপনাকে আগত বার্তাগুলি সম্পর্কে অবহিত করা হবে না।</string>
@@ -1416,7 +1416,7 @@
     <string name="dialog_title_success">সাফল্য</string>
 
     <string name="bottom_action_notification">বিজ্ঞপ্তিগুলি</string>
-    <string name="template_call_failed_no_connection">এলিমেন্ট কল ব্যর্থ</string>
+    <string name="call_failed_no_connection">এলিমেন্ট কল ব্যর্থ</string>
     <string name="call_failed_no_connection_description">রিয়েল টাইম সংযোগ স্থাপন করতে ব্যর্থ।
 \nকলগুলি নির্ভরযোগ্যতার সাথে কাজ করার জন্য দয়া করে আপনার হোমসার্ভারের প্রশাসককে একটি টার্ন সার্ভার কনফিগার করতে বলুন।</string>
 
@@ -1513,7 +1513,7 @@
     <string name="passphrase_empty_error_message">দয়া করে একটি পাসফ্রেজ লিখুন</string>
     <string name="passphrase_passphrase_too_weak">পাসফ্রেজটি খুব দুর্বল</string>
 
-    <string name="template_keys_backup_passphrase_not_empty_error_message">আপনি যদি এলিমেন্টটি পুনরুদ্ধার কী তৈরি করতে চান তবে দয়া করে পাসফ্রেজটি মুছুন।</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">আপনি যদি এলিমেন্টটি পুনরুদ্ধার কী তৈরি করতে চান তবে দয়া করে পাসফ্রেজটি মুছুন।</string>
     <string name="keys_backup_no_session_error">কোনও ম্যাট্রিক্স সেশন উপলব্ধ নেই</string>
 
     <string name="keys_backup_setup_step1_title">এনক্রিপ্ট করা বার্তাগুলি কখনই হারাবেন না</string>

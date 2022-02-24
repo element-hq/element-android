@@ -337,7 +337,7 @@
     <string name="user_directory_header">Directori d\'usuari</string>
     <string name="matrix_only_filter">Només contactes de Matrix</string>
     <string name="no_conversation_placeholder">No hi ha xats</string>
-    <string name="template_no_contact_access_placeholder">No has donat permís a ${app_name} perquè pugui accedir als teus contactes locals</string>
+    <string name="no_contact_access_placeholder">No has donat permís a ${app_name} perquè pugui accedir als teus contactes locals</string>
     <string name="no_result_placeholder">Sense resultats</string>
     <string name="rooms_header">Sales</string>
     <string name="rooms_directory_header">Directori de sala</string>
@@ -473,22 +473,22 @@
     <string name="media_picker_both_capture_title">Fes una foto o un vídeo"</string>
     <string name="media_picker_cannot_record_video">No es poden gravar vídeos"</string>
     <string name="permissions_rationale_popup_title">Informació</string>
-    <string name="template_permissions_rationale_msg_storage">Per poder enviar i desar fitxers adjunts, ${app_name} necessita permís per accedir a la galeria de fotos i vídeos.
+    <string name="permissions_rationale_msg_storage">Per poder enviar i desar fitxers adjunts, ${app_name} necessita permís per accedir a la galeria de fotos i vídeos.
 \n
 \nPermet-li l\'accés en la següent finestra emergent per poder enviar fitxers des del mòbil.</string>
-    <string name="template_permissions_rationale_msg_camera">Per poder fer fotos i videotrucades, ${app_name} necessita permís per accedir a la càmera.</string>
+    <string name="permissions_rationale_msg_camera">Per poder fer fotos i videotrucades, ${app_name} necessita permís per accedir a la càmera.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nPermet-li l\'accés en la següent finestra emergent per tal de poder fer la trucada."</string>
-    <string name="template_permissions_rationale_msg_record_audio">Per tal de fer trucades de veu, ${app_name} necessita permís per accedir al micròfon.</string>
+    <string name="permissions_rationale_msg_record_audio">Per tal de fer trucades de veu, ${app_name} necessita permís per accedir al micròfon.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nPermet-li l\'accés en la següent finestra emergent per tal de poder fer la trucada."</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">Per tal de fer videotrucades, ${app_name} necessita permís per accedir a la càmera i al micròfon.
+    <string name="permissions_rationale_msg_camera_and_audio">Per tal de fer videotrucades, ${app_name} necessita permís per accedir a la càmera i al micròfon.
 \n
 \nPermet-li l\'accés en la següent finestra emergent per tal de poder fer la trucada.</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} pot revisar la teva llista de contactes per tal de trobar altres usuaris de Matrix basant-se en les seves adreces de correu i números de telèfon. Si acceptes compartir la teva llista de contactes amb aquesta finalitat, permet l\'accés en la següent finestra emergent.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">Per tal de trobar altres usuaris de Matrix a partir dels seus correus o dels seus números de telèfon, ${app_name} necessita permís d\'accés a la llista de contactes.
+    <string name="permissions_rationale_msg_contacts">${app_name} pot revisar la teva llista de contactes per tal de trobar altres usuaris de Matrix basant-se en les seves adreces de correu i números de telèfon. Si acceptes compartir la teva llista de contactes amb aquesta finalitat, permet l\'accés en la següent finestra emergent.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Per tal de trobar altres usuaris de Matrix a partir dels seus correus o dels seus números de telèfon, ${app_name} necessita permís d\'accés a la llista de contactes.
 \n
 \nPermets que ${app_name} accedeixi als teus contactes amb aquesta finalitat\?</string>
     <string name="permissions_action_not_performed_missing_permissions">No s\'ha realitzat l\'acció per falta de permisos</string>
@@ -938,7 +938,7 @@
     <string name="e2e_re_request_encryption_key">Tornar a demanar les claus de xifrat de les teves altres sessions.</string>
     <string name="e2e_re_request_encryption_key_sent">Petició de clau enviada.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Sol·licitud enviada</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Si us plau, obre ${app_name} a un altre dispositiu que pugui desxifrar el missatge de manera que pugui enviar les claus a aquesta sessió.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Si us plau, obre ${app_name} a un altre dispositiu que pugui desxifrar el missatge de manera que pugui enviar les claus a aquesta sessió.</string>
     <string name="settings_notification_privacy_normal">Normal</string>
     <string name="missing_permissions_error">No es pot dur a terme aquesta acció per falta de permisos.</string>
     <string name="dialog_title_error">Error</string>
@@ -987,12 +987,12 @@
     <string name="settings_deactivate_account_section">Desactivar el compte</string>
     <string name="settings_deactivate_my_account">Desactivar el meu compte</string>
     <string name="startup_notification_privacy_title">Notificació de privacitat</string>
-    <string name="template_startup_notification_privacy_message">El ${app_name} pot funcionar en segon pla per gestionar les vostres notificacions de forma segura i privada. Això podria afectar el consum de bateria.</string>
+    <string name="startup_notification_privacy_message">El ${app_name} pot funcionar en segon pla per gestionar les vostres notificacions de forma segura i privada. Això podria afectar el consum de bateria.</string>
     <string name="startup_notification_privacy_button_grant">Concedir permís</string>
     <string name="startup_notification_privacy_button_other">Escolliu una altra opció</string>
     <string name="settings_opt_in_of_analytics">Envia dades d\'anàlisi</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} recopila dades d\'anàlisi anònimes per tal de permetre millorar l\'aplicació.</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">Si us plau, activa les dades d\'anàlisi per ajudar-nos a millorar ${app_name}.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} recopila dades d\'anàlisi anònimes per tal de permetre millorar l\'aplicació.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Si us plau, activa les dades d\'anàlisi per ajudar-nos a millorar ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Sí, vull ajudar!</string>
     <string name="settings_without_flair">Ara mateix no ets membre de cap comunitat.</string>
     <string name="encryption_export_notice">Crea una frase per xifrar les claus exportades. Hauràs d\'introduir la mateixa frase per poder importar les claus.</string>
@@ -1058,7 +1058,7 @@
     <string name="merged_events_collapse">plega</string>
     <string name="action_accept">Accepta</string>
     <string name="settings_call_category">Trucada</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Utilitza el to de trucada d\'${app_name} predeterminat per trucades entrants</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Utilitza el to de trucada d\'${app_name} predeterminat per trucades entrants</string>
     <string name="settings_call_ringtone_title">To de trucada entrant</string>
     <string name="settings_call_ringtone_dialog_title">Tria el to per les trucades:</string>
     <string name="room_participants_action_remove">Expulsa</string>
@@ -1094,11 +1094,11 @@
     <string name="settings_troubleshoot_test_service_boot_title">Inicia\'l a l\'arrencada</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Inhabilita les restriccions</string>
     <string name="settings_troubleshoot_test_battery_title">Optimització de bateria</string>
-    <string name="template_settings_troubleshoot_test_battery_success">El ${app_name} no està afectat per l\'optimització de bateria.</string>
+    <string name="settings_troubleshoot_test_battery_success">El ${app_name} no està afectat per l\'optimització de bateria.</string>
     <string name="settings_show_join_leave_messages">Mostra els esdeveniments d\'unió i sortida</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Inclou els canvis d\'icona i d\'àlies.</string>
     <string name="startup_notification_fdroid_battery_optim_title">Connexió al rerefons</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">Per poder obtenir notificacions fiables, ${app_name} necessita mantenir una connexió en segon pla de baixa incidència.
+    <string name="startup_notification_fdroid_battery_optim_message">Per poder obtenir notificacions fiables, ${app_name} necessita mantenir una connexió en segon pla de baixa incidència.
 \nA la pantalla següent se\'t demanarà que permetis a ${app_name} executar-se sempre en segon pla, si us plau, accepta-ho.</string>
     <string name="settings_password">Contrasenya</string>
     <string name="account_additional_info">Informació addicional: %s</string>
@@ -1124,7 +1124,7 @@
     <string name="settings_notification_troubleshoot">Diagnostica les notificacions</string>
     <string name="settings_troubleshoot_diagnostic">Diagnòstic de la resolució de problemes</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Ha fallat una o més proves, envia un informe d\'errors per ajudar-nos a investigar-ho.</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Les notificacions per aquesta sessió no estan activades.
+    <string name="settings_troubleshoot_test_device_settings_failed">Les notificacions per aquesta sessió no estan activades.
 \nComprova la configuració d\'${app_name}.</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Configuració personalitzada.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Tingues en compte que alguns tipus de missatge estan configurats per ser silenciosos (es produirà una notificació sense so).</string>
@@ -1133,14 +1133,14 @@
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Comprova la configuració</string>
     <string name="settings_troubleshoot_test_play_services_title">Comprovació dels serveis de Play</string>
     <string name="settings_troubleshoot_test_play_services_success">L\'APK dels Serveis de Google Play està disponible i està actualitzada.</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} utilitza els serveis de Google Play per lliurar missatges però sembla que no està configurat correctament:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} utilitza els serveis de Google Play per lliurar missatges però sembla que no està configurat correctament:
 \n %1$s</string>
     <string name="settings_troubleshoot_test_fcm_title">Token de Firebase</string>
     <string name="settings_troubleshoot_test_fcm_success">Token FCM obtingut correctament:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">No s\'ha pogut obtenir el token FCM:
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nAquest error està fora del control d\'${app_name} i, segons Google, aquest error indica que aquest dispositiu té massa aplicacions registrades amb FCM. L\'error només ocorre en casos en què hi ha un nombre extrem d\'aplicacions i, per tant, no hauria d\'afectar els usuari normals.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Afegeix un compte</string>
     <string name="settings_troubleshoot_test_token_registration_title">Registre de token</string>
@@ -1151,7 +1151,7 @@
     <string name="settings_troubleshoot_test_service_restart_success">El servei s\'ha parat i tornat a iniciar automàticament.</string>
     <string name="settings_troubleshoot_test_service_restart_failed">No s\'ha pogut iniciar el servei</string>
     <string name="settings_troubleshoot_test_service_boot_success">El servei s\'iniciarà quan es reiniciï el dispositiu.</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">El servei no s\'iniciarà quan el dispositiu es reiniciï, per tant, no rebràs notificacions fins que ${app_name} no s\'hagi obert per primera vegada.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">El servei no s\'iniciarà quan el dispositiu es reiniciï, per tant, no rebràs notificacions fins que ${app_name} no s\'hagi obert per primera vegada.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Habilita l\'inici durant l\'arrencada</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Comprova les restriccions del rerefons</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignora l\'optimització</string>
@@ -1172,7 +1172,7 @@
     <string name="notification_silent">Silenciós</string>
     <string name="passphrase_empty_error_message">Introduïu una frase de pas</string>
     <string name="passphrase_passphrase_too_weak">La frase de pas és massa feble</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">Suprimiu la frase si vols que ${app_name} generi una clau de recuperació.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Suprimiu la frase si vols que ${app_name} generi una clau de recuperació.</string>
     <string name="keys_backup_no_session_error">No hi ha cap sessió de Matrix disponible</string>
     <string name="keys_backup_setup_step1_title">No perdeu mai els missatges xifrats</string>
     <string name="keys_backup_setup_step1_description">Els missatges en sales xifrades estan protegits amb xifrat d\'extrem a extrem. Només tu i el/s destinatari/s teniu les claus per poder llegir aquests missatges.
@@ -1200,13 +1200,13 @@
     <string name="keys_backup_restore_key_enter_hint">Introdueix la clau de recuperació</string>
     <string name="keys_backup_restore_setup_recovery_key">Recuperació de missatges</string>
     <string name="keys_backup_restore_with_key_helper">Has perdut la clau de recuperació\? Pots configurar-ne una de nova a la configuració.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nAquest error està fora del control d\'${app_name}. Pot ser causat per diferents motius. És possible que torni a funcionar més endavant. També pots comprovar, a la configuració del sistema, que els Serveis de Google Play no tinguin cap restricció de dades o que l\'hora del dispositiu sigui la correcta. També pot passar si tens una ROM personalitzada.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nAquest error està fora del control d\'${app_name}. No hi ha cap compte de Google al telèfon. Vés a la configuració de comptes i afegeix un compte de Google.</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">Les restriccions en segon pla per a ${app_name} estan desactivades. Aquesta prova s\'hauria de fer emprant dades mòbils (sense WiFi).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Les restriccions en segon pla per a ${app_name} estan desactivades. Aquesta prova s\'hauria de fer emprant dades mòbils (sense WiFi).
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Les restriccions en segon pla per a ${app_name} estan activades.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Les restriccions en segon pla per a ${app_name} estan activades.
 \nLes tasques que l\'aplicació intenta fer en segon pla estaran força restringides, això pot afectar a les notificacions.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_battery_failed">Si un usuari deixa un dispositiu amb la pantalla apagada, desendollat i quiet durant un període de temps, el dispositiu entra en el mode repòs. Això impedeix que les aplicacions accedeixin a la xarxa i n\'ajorna les seves tasques, sincronitzacions i alarmes estàndard.</string>
@@ -1359,7 +1359,7 @@
     <string name="keys_backup_setup_override_stop">Aturar</string>
     <string name="keys_backup_settings_checking_backup_state">Comprovant l\'estat de la còpia de seguretat</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Opcions de compleció automàtica del servidor</string>
-    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} ha detectat una configuració de servidor personalitzada pel teu domini d\'ID d\'usuari \"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">${app_name} ha detectat una configuració de servidor personalitzada pel teu domini d\'ID d\'usuari \"%1$s\":
 \n%2$s</string>
     <string name="invalid_or_expired_credentials">Se t\'ha desconnectat a causa de credencials incorrectes o caducades.</string>
     <string name="sas_verify_title">Verificar comparant una cadena de text curta.</string>
@@ -1430,7 +1430,7 @@
     <string name="please_wait">Espereu, si us plau…</string>
     <string name="group_all_communities">Totes les comunitats</string>
     <string name="room_preview_no_preview">Aquesta sala no es pot pre-visualitzar</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">${app_name} encara no admet la pre-visualització de les sales llegibles per tothom</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">${app_name} encara no admet la pre-visualització de les sales llegibles per tothom</string>
     <string name="fab_menu_create_room">Sales</string>
     <string name="fab_menu_create_chat">Xats personals</string>
     <string name="create_room_title">Sala nova</string>
@@ -1453,7 +1453,7 @@
     <string name="room_participants_remove_reason">Motiu de l\'expulsió</string>
     <string name="room_participants_remove_title">Expulsa usuari</string>
     <string name="login_signin_sso">Continua amb SSO</string>
-    <string name="template_identity_server_error_bulk_sha256_not_supported">Per a la teva pròpia privadesa, ${app_name} només admet l\'enviament del \"hash\" de correus electrònics i números de telèfon.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Per a la teva pròpia privadesa, ${app_name} només admet l\'enviament del \"hash\" de correus electrònics i números de telèfon.</string>
     <string name="command_description_discard_session_not_handled">Només admès en sales xifrades</string>
     <string name="encryption_unknown_algorithm_tile_description">El xifrat que utilitza aquesta sala no és compatible</string>
     <string name="auth_flow_not_supported">No pots fer això des del mòbil</string>
@@ -1463,7 +1463,7 @@
     <string name="login_mode_not_supported">L\'aplicació no ha pogut iniciar sessió en aquest servidor. El servidor és compatible amb el/s següent/s tipus d\'inici de sessió: %1$s.
 \n
 \nVols iniciar sessió utilitzant un client web\?</string>
-    <string name="template_settings_add_3pid_flow_not_supported">No pots fer això des d\'${app_name} per a mòbils</string>
+    <string name="settings_add_3pid_flow_not_supported">No pots fer això des d\'${app_name} per a mòbils</string>
     <string name="warning_room_not_created_yet">La sala encara no s\'ha acabat de crear. Vols cancel·lar la seva creació\?</string>
     <string name="room_error_not_found">No s\'ha trobat aquesta sala. Assegura\'t que existeixi.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Mostra detalls com per exemple noms de sala i contingut dels missatges.</string>
@@ -1552,7 +1552,7 @@
     <string name="room_participants_action_cancel_invite">Cancel·la invitació</string>
     <string name="return_to_call">Torna a la trucada</string>
     <string name="login_error_ssl_other">Error SSL.</string>
-    <string name="template_call_failed_no_connection">La trucada d\'${app_name} ha fallat</string>
+    <string name="call_failed_no_connection">La trucada d\'${app_name} ha fallat</string>
     <string name="login_reset_password_on">Restableix la contrasenya a %1$s</string>
     <string name="login_login_with_email_error">Aquest correu electrònic no està associat amb cap compte.</string>
     <string name="login_registration_disabled">Ho sentim, aquest servidor no accepta comptes nous.</string>
@@ -1732,10 +1732,10 @@
     <string name="settings_background_sync_update_error">No s\'ha pogut actualitzar la configuració.</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">No se\'t notificarà de missatges entrants quan l\'aplicació es trobi en segon pla.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Sense sincronització en segon pla</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} farà la sincronització en segon pla periòdicament en instants de temps precisos (configurable).
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} farà la sincronització en segon pla periòdicament en instants de temps precisos (configurable).
 \nAixò tindrà un impacte en l\'ús de la ràdio i la bateria, es mostrarà una notificació permanent informant de que ${app_name} està a l\'espera d\'esdeveniments.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimitzat per a temps real</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} farà la sincronització en segon pla de manera que es preservin els recursos limitats del dispositiu (bateria).
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} farà la sincronització en segon pla de manera que es preservin els recursos limitats del dispositiu (bateria).
 \nEn funció de l\'estat dels recursos del dispositiu, pot ser que el sistema operatiu endarrereixi la sincronització.</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimitzat per a la bateria</string>
     <string name="settings_background_fdroid_sync_mode">Mode de sincronització en segon pla</string>
@@ -1922,9 +1922,9 @@
     <string name="auth_invalid_login_param_space_in_password">Usuari i/o contrasenya incorrectes. La contrasenya introduïda comença o acaba amb espais, comprova-la.</string>
     <string name="auth_invalid_login_deactivated_account">Aquest compte ha estat desactivat.</string>
     <string name="attachment_viewer_item_x_of_y">%1$d de %2$d</string>
-    <string name="template_app_ios_android">${app_name} iOS
+    <string name="app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="template_app_desktop_web">${app_name} Web
+    <string name="app_desktop_web">${app_name} Web
 \n${app_name} per a escriptori</string>
     <string name="add_people">Afegeix gent</string>
     <string name="add_members_to_room">Afegeix membres</string>
@@ -1936,7 +1936,7 @@
     <string name="a11y_qr_code_for_verification">Codi QR</string>
     <string name="a11y_open_chat">Obre el xat</string>
     <string name="a11y_mute_microphone">Silencia el micròfon</string>
-    <string name="template_settings_security_pin_code_use_biometrics_summary_off">El codi PIN és l\'única manera de desbloquejar ${app_name}.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">El codi PIN és l\'única manera de desbloquejar ${app_name}.</string>
     <string name="or_other_mx_capable_client">o un altre client Matrix compatible amb la signatura creuada</string>
     <string name="encryption_information_dg_xsigning_disabled">La signatura creuada no està activada</string>
     <string name="encryption_information_dg_xsigning_not_trusted">La signatura creuada està activada
@@ -1952,7 +1952,7 @@
     <string name="room_permissions_send_m_room_server_acl_events">Enviar esdeveniments m.room.server_acl</string>
     <string name="room_permissions_change_permissions">Canviar els permisos</string>
     <string name="room_permissions_change_room_name">Canviar el nom de la sala</string>
-    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} necessita permís per poder desar les claus E2E al disc.
+    <string name="permissions_rationale_msg_keys_backup_export">${app_name} necessita permís per poder desar les claus E2E al disc.
 \n
 \nPermet-li l\'accés en la següent finestra emergent per poder exportar les claus manualment.</string>
     <string name="no_network_indicator">Ara mateix no hi ha cap connexió</string>
@@ -1996,8 +1996,8 @@
     <string name="auth_pin_confirm_to_disable_title">Confirma el PIN per poder desactivar el PIN</string>
     <string name="settings_security_pin_code_change_pin_summary">Canvia el teu PIN actual</string>
     <string name="settings_security_pin_code_change_pin_title">Canvia el PIN</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_off">Codi PIN necessari cada vegada que obres ${app_name}.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">Codi PIN necessari al cap de 2 minuts sense utilitzar ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">Codi PIN necessari cada vegada que obres ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">Codi PIN necessari al cap de 2 minuts sense utilitzar ${app_name}.</string>
     <string name="settings_security_pin_code_grace_period_title">Demana el PIN al cap de 2 minuts</string>
     <string name="settings_security_pin_code_notifications_summary_off">Mostra, només, el nombre de missatges no llegits en les notificacions simples.</string>
     <string name="settings_security_pin_code_notifications_title">Mostra el contingut de les notificacions</string>
@@ -2078,7 +2078,7 @@
     <string name="start_chatting">Comença a xatejar</string>
     <string name="system_theme">Predeterminat pel sistema</string>
     <string name="enter_secret_storage_passphrase_or_key">Utilitza la %1$s o la %2$s per a continuar.</string>
-    <string name="template_use_latest_app">Utilitza l\'última versió d\'${app_name} als teus altres dispositius:</string>
+    <string name="use_latest_app">Utilitza l\'última versió d\'${app_name} als teus altres dispositius:</string>
     <string name="soft_logout_signin_notice">L\'administrador del servidor local (%1$s) ha tancat la teva sessió del compte %2$s (%3$s).</string>
     <plurals name="fallback_users_read">
         <item quantity="one">%d usuari ho ha llegit</item>
@@ -2146,7 +2146,7 @@
     <string name="new_session_review">Clica per revisar i verificar</string>
     <string name="new_session">Nou inici de sessió. Has estat tu\?</string>
     <string name="refresh">Actualitza</string>
-    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Les claus ja estan actualitzades!</string>
     <string name="event_redacted_by_user_reason_with_reason">Esdeveniment eliminat per un usuari, motiu: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Esdeveniment moderat per un administrador de sala, motiu: %1$s</string>
@@ -2180,7 +2180,7 @@
     <string name="create_room_alias_hint">Adreça de la sala</string>
     <string name="create_room_encryption_title">Activa el xifrat</string>
     <string name="command_description_shrug">Afegeix ¯\\_(ツ)_/¯ a l\'inici d\'un missatge de text pla</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">Pot ser que ${app_name} falli més sovint quan es produeixi un error inesperat</string>
+    <string name="settings_developer_mode_fail_fast_summary">Pot ser que ${app_name} falli més sovint quan es produeixi un error inesperat</string>
     <string name="devices_other_devices">Altres sessions</string>
     <string name="devices_current_device">Sessió actual</string>
     <string name="settings">Configuració</string>
@@ -2268,8 +2268,8 @@
     <string name="settings_troubleshoot_test_notification_title">Visualització de notificació</string>
     <string name="this_is_the_beginning_of_room">Inici de %s.</string>
     <string name="invite_friends">Convida amics</string>
-    <string name="template_invite_friends_text">Ei, parla amb mi des d\'${app_name}: %s</string>
-    <string name="template_invite_friends_rich_title">🔐️ Uneix-te a ${app_name}</string>
+    <string name="invite_friends_text">Ei, parla amb mi des d\'${app_name}: %s</string>
+    <string name="invite_friends_rich_title">🔐️ Uneix-te a ${app_name}</string>
     <string name="user_code_info_text">Comparteix aquest codi amb la gent perquè puguin escanejar-lo, afegir-te i començar a xatejar amb tu.</string>
     <string name="identity_server_user_consent_not_provided">L\'usuari no s\'ha acceptat el consentiment.</string>
     <string name="command_confetti">Envia el missatge proporcionat amb confetis</string>
@@ -2307,7 +2307,7 @@
     <string name="login_server_text">Com els correus electrònics, els comptes pertanyen a una entitat però els pots fer servir per parlar amb tothom</string>
     <string name="create_room_disable_federation_description">Potser ho hauries d\'activar si la sala només s\'utilitzarà per la interacció de grups interns dins el teu servidor local. Això no es podrà canviar més tard.</string>
     <string name="create_room_disable_federation_title">Bloqueja qualsevol persona que no formi part de %s perquè mai pugui unir-se a la sala</string>
-    <string name="template_soft_logout_sso_not_same_user_error">La sessió actual és de l\'usuari %1$s i has introduït les credencials de l\'usuari %2$s. Això no es pot fer amb ${app_name}.
+    <string name="soft_logout_sso_not_same_user_error">La sessió actual és de l\'usuari %1$s i has introduït les credencials de l\'usuari %2$s. Això no es pot fer amb ${app_name}.
 \nPrimer esborra les dades i després torna a iniciar sessió amb l\'altre compte.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Perdràs l\'accés als missatges protegits tret de que iniciïs sessió i obtinguis les teves claus de xifrat.</string>
     <string name="soft_logout_clear_data_notice">Atenció: les teves dades personals (incloses les claus de xifrat) encara estan desades en aquest dispositiu.
@@ -2392,9 +2392,9 @@
     <string name="complete_security">Completa la seguretat</string>
     <string name="crosssigning_other_user_not_trust">Pot ser que altres usuaris no hi confiïn</string>
     <string name="unignore">Deixa d\'ignorar</string>
-    <string name="template_rendering_event_error_exception">${app_name} ha trobat un problema al renderitzar el contingut de l\'esdeveniment amb ID \'%1$s\'</string>
-    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} no gestiona els missatges de tipus \'%1$s\'</string>
-    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} no gestiona els esdeveniments de tipus \'%1$s\'</string>
+    <string name="rendering_event_error_exception">${app_name} ha trobat un problema al renderitzar el contingut de l\'esdeveniment amb ID \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">${app_name} no gestiona els missatges de tipus \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name} no gestiona els esdeveniments de tipus \'%1$s\'</string>
     <string name="room_profile_leaving_room">Marxant de la sala…</string>
     <string name="direct_room_profile_section_more_leave">Marxa</string>
     <string name="room_profile_section_more_leave">Marxa de la sala</string>
@@ -2469,7 +2469,7 @@
 \nSegur que vols continuar\?</string>
     <string name="external_link_confirmation_title">Comprova aquest enllaç</string>
     <string name="mark_as_verified">Marca-ho com a segur</string>
-    <string name="template_use_other_session_content_description">Utilitza l\'última versió d\'${app_name} als teus altres dispositius, ${app_name} Web, ${app_name} per escriptori, ${app_name} iOS, ${app_name} per Android, o algun altre client de Matrix que admeti signatura creuada</string>
+    <string name="use_other_session_content_description">Utilitza l\'última versió d\'${app_name} als teus altres dispositius, ${app_name} Web, ${app_name} per escriptori, ${app_name} iOS, ${app_name} per Android, o algun altre client de Matrix que admeti signatura creuada</string>
     <string name="bootstrap_progress_storing_in_sss">Desant secret de clau de còpia de seguretat a SSSS</string>
     <string name="security_prompt_text">Verifica\'t a tu i als altres per mantenir els teus xats segurs</string>
     <string name="command_description_plain">Envia un missatge com a text pla, sense tenir en compte la formatació markdown</string>
@@ -2497,7 +2497,7 @@
     </plurals>
     <string name="secure_backup_reset_if_you_reset_all">Si ho restableixes tot</string>
     <string name="secure_backup_reset_all_no_other_devices">Fes això només si no tens cap altre dispositiu per poder verificar-ne aquest.</string>
-    <string name="template_re_authentication_default_confirm_text">${app_name} necessita que introdueixis les teves credencials per poder realitzar aquesta acció.</string>
+    <string name="re_authentication_default_confirm_text">${app_name} necessita que introdueixis les teves credencials per poder realitzar aquesta acció.</string>
     <string name="re_authentication_activity_title">Re-autenticació necessària</string>
     <string name="contacts_book_title">Llista de contactes</string>
     <string name="empty_phone_book">La teva agenda està buida</string>
@@ -2518,7 +2518,7 @@
     <string name="identity_server_error_binding_error">L\'associació ha fallat.</string>
     <string name="identity_server_error_no_identity_server_configured">Primer configura un servidor d\'identitat.</string>
     <string name="identity_server_error_outdated_home_server">No es pot realitzar aquesta operació. El servidor local no està actualitzat.</string>
-    <string name="template_identity_server_error_outdated_identity_server">Aquest servidor d\'identitat no està actualitzat. ${app_name} només és compatible amb l\'API V2.</string>
+    <string name="identity_server_error_outdated_identity_server">Aquest servidor d\'identitat no està actualitzat. ${app_name} només és compatible amb l\'API V2.</string>
     <string name="disconnect_identity_server_dialog_content">Vols desconnectar-te del servidor d\'identitat %s\?</string>
     <string name="choose_locale_loading_locales">Carregant idiomes disponibles…</string>
     <string name="choose_locale_other_locales_title">Altres idiomes disponibles</string>

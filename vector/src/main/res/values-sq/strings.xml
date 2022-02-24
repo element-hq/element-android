@@ -862,7 +862,7 @@
     <string name="ongoing_conference_call_video">Video</string>
     <string name="missing_permissions_to_start_conf_call">Ju duhen leje për ftesa, që të nisni një konferencë në këtë dhomë</string>
     <string name="bottom_action_favourites">Të parapëlqyer</string>
-    <string name="template_no_contact_access_placeholder">S’e lejuat ${app_name}-in të hyjë në kontaktet tuaja vendore</string>
+    <string name="no_contact_access_placeholder">S’e lejuat ${app_name}-in të hyjë në kontaktet tuaja vendore</string>
     <string name="send_bug_report_description">Ju lutemi, përshkruajeni të metën. Ç’po bënit? Ç’prisnit të ndodhte? Ç’ndodhi në fakt?</string>
     <string name="send_bug_report_alert_message">Duket se po përplasni telefonin nga inati. Do të donit të hapej skena për njoftim të metash?</string>
     <string name="send_bug_report_app_crashed">Herën e fundit aplikacioni u vithis. Do të donit të hapej skena e raportimit të vithisjeve?</string>
@@ -877,7 +877,7 @@
     <string name="auth_reset_password_success_message">Fjalëkalimi juaj u ricaktua.
 \n
 \nËshtë bërë dalja juaj nga llogaria në krejt sesionet dhe s’do të merrni më njoftime push. Për riaktivizim të njoftimeve, ribëni hyrjen në çdo pajisje.</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Ju lutemi, niseni ${app_name}-in në një tjetër pajisje që mund të shfshehtëzojë mesazhin, që kështu të mund të dërgojë kyçet te ky sesion.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Ju lutemi, niseni ${app_name}-in në një tjetër pajisje që mund të shfshehtëzojë mesazhin, që kështu të mund të dërgojë kyçet te ky sesion.</string>
     <string name="call_error_ice_failed">Lidhja e Medias Dështoi</string>
     <string name="media_picker_cannot_record_video">S’regjistrohet dot video</string>
     <string name="room_preview_unlinked_email_warning">Kjo ftesë i qe dërguar %s, që s’është i përshoqëruar me këtë llogari.
@@ -945,22 +945,22 @@
     <string name="call_connected">U bë lidhja e thirrjes</string>
     <string name="call_connecting">Po bëhet lidhja e thirrjes…</string>
     <string name="call_error_user_not_responding">Ana e largët dështoi të përgjigjet.</string>
-    <string name="template_permissions_rationale_msg_storage">Për të dërguar dhe ruajtur bashkëngjitje, ${app_name}-i lyp leje të përdorë mediatekën tuaj.
+    <string name="permissions_rationale_msg_storage">Për të dërguar dhe ruajtur bashkëngjitje, ${app_name}-i lyp leje të përdorë mediatekën tuaj.
 \n
 \nJu lutemi, lejoni përdorimin, që nga flluska pasuese, që të jetë në gjendje të dërgojë kartela që nga telefoni juaj.</string>
-    <string name="template_permissions_rationale_msg_camera">Për të bërë foto dhe thirrje video, ${app_name}-i lyp leje të përdorë kamerën tuaj.</string>
+    <string name="permissions_rationale_msg_camera">Për të bërë foto dhe thirrje video, ${app_name}-i lyp leje të përdorë kamerën tuaj.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nJu lutemi, lejoni përdorimin, që nga flluska pasuese, që të jetë në gjendje të bëjë thirrjen."</string>
-    <string name="template_permissions_rationale_msg_record_audio">Për të kryer thirrje audio, ${app_name}-i lyp leje të përdorë mikrofonin tuaj.</string>
+    <string name="permissions_rationale_msg_record_audio">Për të kryer thirrje audio, ${app_name}-i lyp leje të përdorë mikrofonin tuaj.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nJu lutemi, lejoni përdorimin, që nga flluska pasuese, që të jetë në gjendje të bëjë thirrjen."</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">Për të kryer thirrje video, ${app_name}-i lyp leje të përdorë kamerën dhe mikrofonin tuaj.
+    <string name="permissions_rationale_msg_camera_and_audio">Për të kryer thirrje video, ${app_name}-i lyp leje të përdorë kamerën dhe mikrofonin tuaj.
 \n
 \nJu lutemi, lejoni përdorimin, që nga flluskat pasuese, që të jetë në gjendje të bëjë thirrjen.</string>
-    <string name="template_permissions_rationale_msg_contacts">Për të gjetur përdorues të tjerë Matrix, bazuar në email-et apo numrat e tyre të telefonit, ${app_name}-i mund të kërkojë në librin tuaj të adresave. Nëse jeni dakord të lejohet hyrja në librin tuaj të adresave për këtë qëllim, ju lutemi, lejojeni hyrjen gjatë flluskës pasuese.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">Për të gjetur përdorues të tjerë Matrix, bazuar në email-et apo numrat e tyre të telefonit, ${app_name}-i mund të kërkojë në librin tuaj të adresave.
+    <string name="permissions_rationale_msg_contacts">Për të gjetur përdorues të tjerë Matrix, bazuar në email-et apo numrat e tyre të telefonit, ${app_name}-i mund të kërkojë në librin tuaj të adresave. Nëse jeni dakord të lejohet hyrja në librin tuaj të adresave për këtë qëllim, ju lutemi, lejojeni hyrjen gjatë flluskës pasuese.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">Për të gjetur përdorues të tjerë Matrix, bazuar në email-et apo numrat e tyre të telefonit, ${app_name}-i mund të kërkojë në librin tuaj të adresave.
 \n 
 \nJeni dakord të lejohet hyrja në librin tuaj të adresave për këtë qëllim\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Na ndjeni. Veprimi nuk u krye, për shkak lejesh që mungojnë</string>
@@ -1049,9 +1049,9 @@
     <string name="settings_send_typing_notifs_summary">Lejojuni përdoruesve të tjerë të dinë se po shtypni.</string>
     <string name="settings_send_markdown_summary">Formatojini mesazhet duke përdorur sintaksën Markdown përpara se të dërgohen. Kjo lejon formatim të thelluar, f.v., përdorimi i yllthit për ta shfaqur tekstin me të pjerrëta.</string>
     <string name="settings_show_join_leave_messages_summary">Nuk prek ftesat, heqjet dhe dëbimet.</string>
-    <string name="template_startup_notification_privacy_message">${app_name}-i mund të xhirojë në prapaskenë që të administrojë njoftimet tuaja në rrugë të sigurt dhe privatisht. Kjo mund të ndikojë në harxhimin e baterisë.</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name}-i grumbullon të dhëna analitike anonime që të na lejojë ta përmirësojmë aplikacionin.</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">Ju lutemi, aktivizoni analizat që të na ndihmoni të përmirësojmë ${app_name}-in.</string>
+    <string name="startup_notification_privacy_message">${app_name}-i mund të xhirojë në prapaskenë që të administrojë njoftimet tuaja në rrugë të sigurt dhe privatisht. Kjo mund të ndikojë në harxhimin e baterisë.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name}-i grumbullon të dhëna analitike anonime që të na lejojë ta përmirësojmë aplikacionin.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Ju lutemi, aktivizoni analizat që të na ndihmoni të përmirësojmë ${app_name}-in.</string>
     <string name="settings_unignore_user">Të shfaqen krejt mesazhet prej %s\?
 \n
 \nKini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të hajë ca kohë.</string>
@@ -1078,7 +1078,7 @@
     <string name="option_send_sticker">Dërgoni një ngjitës</string>
     <string name="go_on_with">vazhdoni me…</string>
     <string name="settings_call_category">Thirrje</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Për thirrje ardhëse përdor zilen parazgjedhje të ${app_name}-it</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Për thirrje ardhëse përdor zilen parazgjedhje të ${app_name}-it</string>
     <string name="settings_call_ringtone_title">Zile thirrjesh ardhëse</string>
     <string name="settings_call_ringtone_dialog_title">Përzgjidhni zile për thirrjet:</string>
     <string name="room_settings_no_flair">Kjo dhomë nuk shfaq simbole për ndonjë bashkësi</string>
@@ -1106,12 +1106,12 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Aktivizoje</string>
     <string name="settings_troubleshoot_test_device_settings_title">Rregullime Sesioni.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Njoftimet janë të aktivizuara për këtë sesion.</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Nuk janë aktivizuar njoftimet për këtë sesion.
+    <string name="settings_troubleshoot_test_device_settings_failed">Nuk janë aktivizuar njoftimet për këtë sesion.
 \nJu lutemi, kontrolloni rregullimet e ${app_name}-it.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Aktivizoje</string>
     <string name="settings_troubleshoot_test_play_services_title">Kontroll pë Play Services</string>
     <string name="settings_troubleshoot_test_play_services_success">APK-ja për Google Play Services është e pranishme dhe e përditësuar.</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name}-i përdor Google Play Services për të dorëzuar mesazhe push, por s’duket të jetë formësuar saktë:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name}-i përdor Google Play Services për të dorëzuar mesazhe push, por s’duket të jetë formësuar saktë:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Ndreqni Play Services</string>
     <string name="settings_troubleshoot_test_fcm_title">Token Firebase</string>
@@ -1128,21 +1128,21 @@
     <string name="settings_troubleshoot_test_service_restart_failed">S’u arrit të rinisej shërbimi</string>
     <string name="settings_troubleshoot_test_service_boot_title">Nise gjatë nisjes së sistemit</string>
     <string name="settings_troubleshoot_test_service_boot_success">Shërbimi do të niset kur të riniset pajisja.</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">Shërbimi s’do të niset kur të riniset pajisja, s’do të merrni njoftime derisa ${app_name}-i të jetë hapur një herë.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Shërbimi s’do të niset kur të riniset pajisja, s’do të merrni njoftime derisa ${app_name}-i të jetë hapur një herë.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Aktivizo Nisje gjatë nisjes së sistemit</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Kontrollo kufizime prapaskene</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">Kufizimet për në prapaskenë janë të çaktivizuar për ${app_name}-in. Ky test duhet të xhirojë duke përdorur të dhëna rrjeti celular (jo WIFI).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Kufizimet për në prapaskenë janë të çaktivizuar për ${app_name}-in. Ky test duhet të xhirojë duke përdorur të dhëna rrjeti celular (jo WIFI).
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Kufizimet për në prapaskenë janë të aktivizuara për ${app_name}-in.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Kufizimet për në prapaskenë janë të aktivizuara për ${app_name}-in.
 \nPuna që aplikacioni rreket të bëjë do të kufizohet në mënyrë agresive, teksa gjendet në prapaskenë, dhe kjo mund të prekë njoftimet.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Çaktivizoji kufizimet</string>
     <string name="settings_troubleshoot_test_battery_title">Optimizim Baterie</string>
-    <string name="template_settings_troubleshoot_test_battery_success">${app_name}-i nuk preket nga Optimizime Baterie.</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name}-i nuk preket nga Optimizime Baterie.</string>
     <string name="settings_troubleshoot_test_battery_failed">Nëse një përdorues e lë një pajisje jo në prizë dhe të palëvizshme për një periudhë, me ekranin të fikur, pajisja kalon nën mënyrën Dremitje. Kjo u parandalon aplikimeve të hyjnë në rrjet dhe shtyn për më vonë punët e tyre, njëkohësimet dhe alarmet standarde.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Shpërfille Optimizimin</string>
     <string name="startup_notification_fdroid_battery_optim_title">Lidhje Në Prapaskenë</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">Për t’ju dhënë njoftime të qëndrueshme, ${app_name}-i lyp të mbajë në prapaskenë një lidhje me pak ndikim.
+    <string name="startup_notification_fdroid_battery_optim_message">Për t’ju dhënë njoftime të qëndrueshme, ${app_name}-i lyp të mbajë në prapaskenë një lidhje me pak ndikim.
 \nNë skenën pasuese do t’ju kërkohet të lejoni ${app_name}-in të xhirojë në prapaskenë, ju lutemi, pranojeni.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Akordojini leje</string>
     <string name="account_email_error">Ndodhi një gabim teksa verifikohej adresa juaj email.</string>
@@ -1162,11 +1162,11 @@
     <string name="settings_troubleshoot_test_bing_settings_failed">Disa njoftime janë të çaktivizuara te rregullimet tuaja vetjake.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">S’u arrit të ngarkohen rregulla vetjakë, ju lutemi, riprovoni.</string>
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Kontrolloni Rregullimet</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nKy gabim është jashtë kontrollit të ${app_name}-it dhe, sipas Google-it, ky gabim është shenjë se pajisja ka shumë aplikacione të regjistruar me FCM. Gabimi ndodh vetëm në raste kur ka një numër të skajshëm aplikacionesh, ndaj nuk duhet të prekë përdoruesin mesatar.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nKy gabim është jashtë kontrollit të ${app_name}-it. Mund të ndodhë për disa arsye. Ndoshta do të funksionojë, nëse riprovoni më vonë, mund të kontrolloni edhe nëse për Google Play Service s’ka kufizime lidhur me përdorimin e të dhënave, te rregullimet e sistemit, ose se ora e pajisjes suaj është e saktë, ose mund të ndodhë në ROM të përshtatur.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nKy gabim është jashtë kontrollit të ${app_name}-it. S’ka llogari Google te telefoni. Ju lutemi, hapni përgjegjësin e llogarive dhe shtoni një llogari Google.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Shtoni Llogari</string>
     <string name="settings_noisy_notifications_preferences">Formësoni Njoftime të Zhurmshme</string>
@@ -1178,7 +1178,7 @@
     <string name="notification_silent">Të heshtur</string>
     <string name="passphrase_empty_error_message">Ju lutemi, jepni një frazëkalim</string>
     <string name="passphrase_passphrase_too_weak">Frazëkalimi është shumë i dobët</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">Ju lutemi, fshini frazëkalimin, nëse doni që ${app_name}-i të prodhojë një kyç rimarrjesh.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Ju lutemi, fshini frazëkalimin, nëse doni që ${app_name}-i të prodhojë një kyç rimarrjesh.</string>
     <string name="keys_backup_no_session_error">S’ka sesione Matrix të gatshëm</string>
     <string name="keys_backup_setup_step1_title">Mos humbni kurrë mesazhe të fshehtëzuar</string>
     <string name="keys_backup_setup_step1_description">Mesazhet në dhoma të fshehtëzuara sigurohen me fshehtëzim skaj-më-skaj. Vetëm ju dhe marrësi(t) keni kyçet për leximin e këtyre mesazheve.
@@ -1308,7 +1308,7 @@
     <string name="new_recovery_method_popup_was_me">Unë qeshë</string>
     <string name="autodiscover_invalid_response">Përgjigje e pavlefshme zbulimi shërbyesi Home</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Mundësi Vetëplotësimi Shërbyesi</string>
-    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name}-i pikasi një formësim shërbyesi të përshtatur për përkatësinë tuaj userId \"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">${app_name}-i pikasi një formësim shërbyesi të përshtatur për përkatësinë tuaj userId \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Përdor Formësim</string>
     <string name="notification_sync_init">Po gatitet shërbimi</string>
@@ -1422,7 +1422,7 @@
     <string name="please_wait">Ju lutemi, pritni…</string>
     <string name="group_all_communities">Krejt Bashkësitë</string>
     <string name="room_preview_no_preview">Kjo dhomë s’mund të parashihet</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">Paraparja e dhomave të lexueshme nga bota nuk mbulohet ende në ${app_name}</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Paraparja e dhomave të lexueshme nga bota nuk mbulohet ende në ${app_name}</string>
     <string name="fab_menu_create_room">Dhoma</string>
     <string name="fab_menu_create_chat">Mesazhe të Drejtpërdrejtë</string>
     <string name="create_room_title">Dhomë e Re</string>
@@ -1514,10 +1514,10 @@
     <string name="invite_no_identity_server_error">Që të kryhet ky veprim, shtoni një shërbyes identitetesh, që nga rregullimet tuaja.</string>
     <string name="settings_background_fdroid_sync_mode">Mënyrë Njëkohësimi Në Prapaskenë</string>
     <string name="settings_background_fdroid_sync_mode_battery">E optimizuar për baterinë</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name}-i do të bëjë njëkohësim në prapaskenë, në një mënyrë që kursen burimet e kufizuara të pajisjes (baterinë).
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name}-i do të bëjë njëkohësim në prapaskenë, në një mënyrë që kursen burimet e kufizuara të pajisjes (baterinë).
 \nNë varësi të gjendjes së burimeve tuaja, njëkohësimi mund të shtyhet për më vonë nga sistemi operativ.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">I optimizuar për kohë të njëmendtë</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name}0-i do të bëjë njëkohësim në prapaskenë periodikisht në një kohë të caktuar (e formësueshme).
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name}0-i do të bëjë njëkohësim në prapaskenë periodikisht në një kohë të caktuar (e formësueshme).
 \nKjo do të ketë ndikim mbi përdorimin e baterisë dhe të transmetimit, do të shfaqet një njoftim i pandërprerë që pohon se ${app_name}-i po përgjon për akte.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Pa njëkohësim në prapraskenë</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">S’do të njoftoheni për mesazhe ardhës, kur aplikacioni gjendet në prapaskenë.</string>
@@ -1601,12 +1601,12 @@
     <string name="content_reported_as_inappropriate_content">Kjo lëndë është raportuar si e papërshtatshme. 
 \n 
 \nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta shpërfillni, që të fshihen mesazhet e tij.</string>
-    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name}-i lyp leje për të ruajtur kyçet tuaj E2E në disk.
+    <string name="permissions_rationale_msg_keys_backup_export">${app_name}-i lyp leje për të ruajtur kyçet tuaj E2E në disk.
 \n
 \nJu lutemi, lejoni, te flluska pasuese, hyrje për të qenë e mundur të eksportohen kyçet tuaj dorazi.</string>
     <string name="no_network_indicator">Tani për tani s’la lidhje rrjeti</string>
     <string name="settings_add_3pid_confirm_password_title">Ripohoni fjalëkalimin tuaj</string>
-    <string name="template_settings_add_3pid_flow_not_supported">Këtë s’e bëni dot që nga ${app_name} për celular</string>
+    <string name="settings_add_3pid_flow_not_supported">Këtë s’e bëni dot që nga ${app_name} për celular</string>
     <string name="settings_add_3pid_authentication_needed">Lypset mirëfilltësim</string>
     <string name="settings_integrations">Integrime</string>
     <string name="settings_integrations_summary">Përdorni një përgjegjës integrimesh që të administroni robotë, ura, widget-e dhe paketa ngjitësish.
@@ -1774,7 +1774,7 @@
 \nQë të mund të hyni te të dhëna të llogarisë tuaj dhe te mesazhe, bëni sërish hyrjen.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Do të humbni hyrje te mesazhe të sigurt, veç në hyfshi për të rimarrë kyçet tuaj të fshehtëzimit.</string>
     <string name="soft_logout_clear_data_dialog_submit">Spastro të dhënat</string>
-    <string name="template_soft_logout_sso_not_same_user_error">Sesioni i tanishëm është për përdoruesin %1$s dhe ju jepni kredenciale për përdoruesin %2$s. Kjo nuk mbulohet nga ${app_name}.
+    <string name="soft_logout_sso_not_same_user_error">Sesioni i tanishëm është për përdoruesin %1$s dhe ju jepni kredenciale për përdoruesin %2$s. Kjo nuk mbulohet nga ${app_name}.
 \nJu lutemi, së pari spastroni të dhëna, mandej hyni sërish në një tjetër llogari.</string>
     <string name="permalink_malformed">Lidhja juaj matrix.to është e keqformuar</string>
     <string name="bug_report_error_too_short">Përshkrimi është shumë i shkurtër</string>
@@ -1793,7 +1793,7 @@
     <string name="devices_current_device">Sesioni i tanishëm</string>
     <string name="devices_other_devices">Shfaq sesione të tjera</string>
     <string name="autocomplete_limited_results">Po shfaqen vetëm përfundimet e para, shtypni më shumë shkronja…</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} mund të vithiset më shpesh, kur ndodh një gabim i papritur</string>
+    <string name="settings_developer_mode_fail_fast_summary">${app_name} mund të vithiset më shpesh, kur ndodh një gabim i papritur</string>
     <string name="settings_call_ringtone_use_default_stun">Lejoni shërbyes rrugëzgjidhje asistimi thirrjesh</string>
     <string name="command_description_shrug">Parashtoji ¯\\_(ツ)_/¯ një mesazhi tekst të thjeshtë</string>
     <string name="create_room_encryption_title">Aktivizoni fshehtëzim</string>
@@ -1907,9 +1907,9 @@
     <string name="verification_request_alert_description">Për siguri ekstra, verifikojeni %s duke parë kontrolluar në të dy pajisjet tuaja një kod njëpërdorimsh.
 \n
 \nPër sigurinë maksimale, bëjeni këtë ju vetë.</string>
-    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} nuk trajton akte të llojit \'%1$s\'</string>
-    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} nuk trajton mesazhe të llojit \'%1$s\'</string>
-    <string name="template_rendering_event_error_exception">${app_name} ndeshi një problem kur vizatohej lëndë e aktit me ID \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name} nuk trajton akte të llojit \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">${app_name} nuk trajton mesazhe të llojit \'%1$s\'</string>
+    <string name="rendering_event_error_exception">${app_name} ndeshi një problem kur vizatohej lëndë e aktit me ID \'%1$s\'</string>
     <string name="verify_cannot_cross_sign">Ky sesion s’është në gjendje të ndajë këtë verifikim me sesionet tuaj të tjerë.
 \nVerifikimi do të ruhet lokalisht dhe do të ndahet nën një version të ardhshëm të aplikacionit.</string>
     <string name="verification_request_notice">Për të qenë i sigurt, verifikoni %s duke kontrolluar një kod njëpërdorimsh.</string>
@@ -1953,7 +1953,7 @@
     <string name="event_redacted_by_user_reason_with_reason">Veprimtari e fshirë nga përdorues, arsye: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Veprimtari e moderuar nga përgjegjësi i dhomës, arsye: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Kyçet janë tashmë të përditësuar!</string>
-    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="settings_key_requests">Kërkesa Kyçi</string>
     <string name="e2e_use_keybackup">Shkyçni historik mesazhesh të fshehtëzuar</string>
     <string name="refresh">Rifreskoje</string>
@@ -2054,13 +2054,13 @@
     <string name="media_file_added_to_gallery">Te Galeria u shtua kartelë media</string>
     <string name="error_adding_media_file_to_gallery">S’u shtua dot kartelë media te Galeria</string>
     <string name="change_password_summary">Caktoni një fjalëkalim të ri llogarie…</string>
-    <string name="template_use_other_session_content_description">Përdorni ${app_name}-in më të ri në pajisjet tuaja të tjera, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} për Android, ose një tjetër klient Matrix të aftë për &lt;em&gt;cross-signing&lt;/em</string>
-    <string name="template_app_desktop_web">${app_name} Web
+    <string name="use_other_session_content_description">Përdorni ${app_name}-in më të ri në pajisjet tuaja të tjera, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} për Android, ose një tjetër klient Matrix të aftë për &lt;em&gt;cross-signing&lt;/em</string>
+    <string name="app_desktop_web">${app_name} Web
 \n${app_name} Desktop</string>
-    <string name="template_app_ios_android">${app_name} iOS
+    <string name="app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
     <string name="or_other_mx_capable_client">ose një tjetër klient Matrix i aftë për &lt;em&gt;cross-signing&lt;/em</string>
-    <string name="template_use_latest_app">Përdorni ${app_name}-in më të ri në pajisjet tuaja të tjera:</string>
+    <string name="use_latest_app">Përdorni ${app_name}-in më të ri në pajisjet tuaja të tjera:</string>
     <string name="command_description_discard_session_not_handled">Mbulohet vetëm për dhoma të fshehtëzuara</string>
     <string name="enter_secret_storage_passphrase_or_key">Përdorni %1$s tuaj ose përdorni %2$s tuaj që të vazhdohet.</string>
     <string name="use_recovery_key">Përdorni Kyçin Rimarrjesh</string>
@@ -2120,7 +2120,7 @@
     <string name="choose_locale_other_locales_title">Gjuhë të tjera të gatshme</string>
     <string name="choose_locale_loading_locales">Po ngarkohen gjuhë të gatshme…</string>
     <string name="disconnect_identity_server_dialog_content">Të bëhet shkëputja prej shërbyesit tuaj të identitetit %s\?</string>
-    <string name="template_identity_server_error_outdated_identity_server">Ky shërbyes identitetesh është i vjetruar. ${app_name} mbulon vetëm API V2.</string>
+    <string name="identity_server_error_outdated_identity_server">Ky shërbyes identitetesh është i vjetruar. ${app_name} mbulon vetëm API V2.</string>
     <string name="identity_server_error_outdated_home_server">Ky veprim s’është i mundshëm. Shërbyesi Home është i vjetruar.</string>
     <string name="identity_server_error_no_identity_server_configured">Ju lutemi, së pari formësoni një shërbyes identitetesh.</string>
     <string name="identity_server_error_terms_not_signed">Ju lutemi, së pari pranoni te rregullimet termat e shërbyesit të identiteteve.</string>
@@ -2151,7 +2151,7 @@
     <string name="action_copy">Kopjoje</string>
     <string name="dialog_title_success">Sukses</string>
     <string name="bottom_action_notification">Njoftime</string>
-    <string name="template_call_failed_no_connection">Thirrja ${app_name} Dështoi</string>
+    <string name="call_failed_no_connection">Thirrja ${app_name} Dështoi</string>
     <string name="call_failed_no_connection_description">S’u arrit të vendosej lidhje e atypëratyshme.
 \nQë thirrjet të punojnë mirë, ju lutemi, kërkojini përgjegjësit të shërbyesit tuaj Home të formësojë një shërbyes TURN.</string>
     <string name="call_select_sound_device">Përzgjidhni Pajisje Zëri</string>
@@ -2266,7 +2266,7 @@
     <string name="auth_invalid_login_deactivated_account">Kjo llogari është çaktivizuar.</string>
     <string name="error_saving_media_file">S’u ruajt dot kartelë media</string>
     <string name="confirm_your_identity_quad_s">Ripohoni identitetin tuaj duke verifikuar këto kredenciale hyrjeje, duke i akorduar hyrje te mesazhe të fshehtëzuar.</string>
-    <string name="template_identity_server_error_bulk_sha256_not_supported">Për privatësinë tuaj, ${app_name}-i mbulon vetëm dërgim email-esh dhe numrash telefoni përdoruesi të koduar.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Për privatësinë tuaj, ${app_name}-i mbulon vetëm dërgim email-esh dhe numrash telefoni përdoruesi të koduar.</string>
     <string name="power_level_edit_title">Caktoni rol</string>
     <string name="power_level_title">Rol</string>
     <string name="a11y_open_chat">Hapni fjalosje</string>
@@ -2339,13 +2339,13 @@
     <string name="error_opening_banned_room">S’mund të hapet një dhomë prej të cilës jeni dëbuar.</string>
     <string name="room_error_not_found">S’gjendet dot kjo dhomë. Sigurohuni që ekziston.</string>
     <string name="universal_link_malformed">Lidhja qe e keqformësuar</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_off">Kodi PIN kërkohet doemos sa herë që hapni ${app_name}-in.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">Kodi PIN kërkohet doemos pas 2 minutash mospërdorimi të ${app_name}-it.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">Kodi PIN kërkohet doemos sa herë që hapni ${app_name}-in.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">Kodi PIN kërkohet doemos pas 2 minutash mospërdorimi të ${app_name}-it.</string>
     <string name="settings_security_pin_code_grace_period_title">Kërkoje doemos PIN-in pas 2 minutash</string>
     <string name="settings_security_pin_code_notifications_summary_off">Shfaq vetëm numrin e mesazheve të palexuar, në një njoftim të thjeshtë.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Shfaq hollësi, të tilla si emra dhomash dhe lëndë mesazhesh.</string>
     <string name="settings_security_pin_code_notifications_title">Shfaq lëndë në njoftime</string>
-    <string name="template_settings_security_pin_code_use_biometrics_summary_off">Kodi PIN është rruga e vetme për të shkyçur ${app_name}-in.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">Kodi PIN është rruga e vetme për të shkyçur ${app_name}-in.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Aktivizoni të dhëna biometrike specifike për pajisjen, bie fjala, shenja gishtash dhe njohje fytyre.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Aktivizo të dhëna biometrike</string>
     <string name="settings_security_application_protection_screen_title">Formësoni mbrojtjen</string>
@@ -2418,8 +2418,8 @@
     <string name="user_code_share">Ndaje kodin tim me të tjerët</string>
     <string name="user_code_scan">Skanoni një kod QR</string>
     <string name="not_a_valid_qr_code">S’është kod QR Matrix i vlefshëm</string>
-    <string name="template_invite_friends_rich_title">Takohuni me mua në ${app_name}</string>
-    <string name="template_invite_friends_text">Hej, bisedoni me mua në ${app_name}: %s</string>
+    <string name="invite_friends_rich_title">Takohuni me mua në ${app_name}</string>
+    <string name="invite_friends_text">Hej, bisedoni me mua në ${app_name}: %s</string>
     <string name="invite_friends">Ftoni shokë</string>
     <string name="add_people">Shtoni persona</string>
     <string name="topic_prefix">"Temë: "</string>
@@ -2495,7 +2495,7 @@
     <string name="action_unpublish">Hiqi botimin</string>
     <string name="action_add">Shto</string>
     <string name="authentication_error">S’u arrit të bëhej mirëfilltësimi</string>
-    <string name="template_re_authentication_default_confirm_text">Që të kryejë këtë veprim, ${app_name}-i lyp dhënien prej jush të kredencialeve tuaja.</string>
+    <string name="re_authentication_default_confirm_text">Që të kryejë këtë veprim, ${app_name}-i lyp dhënien prej jush të kredencialeve tuaja.</string>
     <string name="re_authentication_activity_title">Lypset Rimirëfilltësim</string>
     <string name="call_transfer_users_tab_title">Përdorues</string>
     <string name="call_transfer_failure">Ndodhi një gabim teksa shpërngulej thirrja</string>
@@ -2849,7 +2849,7 @@
     <string name="settings_notification_other">Tjetër</string>
     <string name="settings_notification_mentions_and_keywords">Përmendje dhe Fjalëkyçe</string>
     <string name="settings_notification_default">Njoftime Parazgjedhje</string>
-    <string name="template_link_this_email_with_your_account">%s te Rregullimet, që të merrni ftesa drejt e në ${app_name}.</string>
+    <string name="link_this_email_with_your_account">%s te Rregullimet, që të merrni ftesa drejt e në ${app_name}.</string>
     <string name="link_this_email_settings_link">Lidheni këtë email me llogarinë tuaj</string>
     <string name="this_invite_to_this_space_was_sent">Kjo ftesë për te kjo hapësirë u dërgua te %s që s’është i përshoqëruar me llogarinë tuaj</string>
     <string name="this_invite_to_this_room_was_sent">Kjo ftesë për te kjo dhomë qe dërguar për %s që s’është i përshoqëruar me llogarinë tuaj</string>
@@ -3006,7 +3006,7 @@
     <string name="attachment_type_poll">Pyetësor</string>
     <string name="preference_system_settings">Rregullime sistemi</string>
     <string name="preference_versions">Versione</string>
-    <string name="template_preference_help_summary">Merrni ndihmë për përdorimin e ${app_name}-it</string>
+    <string name="preference_help_summary">Merrni ndihmë për përdorimin e ${app_name}-it</string>
     <string name="preference_help_title">Ndihmë dhe asistencë</string>
     <string name="preference_help">Ndihmë</string>
     <string name="preference_root_legals">Ligjore</string>
@@ -3014,15 +3014,15 @@
     <string name="legals_third_party_notices">Biblioteka prej palësh të treta</string>
     <string name="legals_identity_server_title">Rregulla të shërbyesit tuaj të identiteteve</string>
     <string name="legals_home_server_title">Rregulla të shërbyesit tuaj Home</string>
-    <string name="template_legals_application_title">Rregulla për ${app_name}</string>
+    <string name="legals_application_title">Rregulla për ${app_name}</string>
     <string name="analytics_opt_in_list_item_3">Këtë mund të çaktivizoni në çfarëdo kohe, që nga rregullimet</string>
     <string name="analytics_opt_in_list_item_2"><b>Nuk</b> u japin hollësi palëve të treta</string>
     <string name="analytics_opt_in_list_item_1"><b>Nuk</b> regjistrojmë ose profilizojmë ndonjë të dhënë llogarie</string>
     <string name="analytics_opt_in_content_link">këtu</string>
-    <string name="template_analytics_opt_in_content">Ndihmonani të identifikojmë probleme dhe të përmirësojmë ${app_name}-in, duke ndarë me ne të dhëna anonime përdorimi. Për të kuptuar se si i përdorin njerëzit disa pajisje njëherësh, do të prodhojmë një identifikues kuturu, të përbashkët për pajisjet tuaja.
+    <string name="analytics_opt_in_content">Ndihmonani të identifikojmë probleme dhe të përmirësojmë ${app_name}-in, duke ndarë me ne të dhëna anonime përdorimi. Për të kuptuar se si i përdorin njerëzit disa pajisje njëherësh, do të prodhojmë një identifikues kuturu, të përbashkët për pajisjet tuaja.
 \n
 \nMund të lexoni krejt kushtet tona %s.</string>
-    <string name="template_analytics_opt_in_title">Ndihmoni të përmirësohet ${app_name}-in</string>
+    <string name="analytics_opt_in_title">Ndihmoni të përmirësohet ${app_name}-in</string>
     <string name="action_enable">Aktivizoje</string>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
         <item quantity="one">%1$d votë e hedhur. Votoni, që të shihni përfundimet</item>
@@ -3063,8 +3063,8 @@
     <string name="labs_render_locations_in_timeline">Trego vendndodhje përdoruesi në rrjedhën kohore</string>
     <string name="settings_enable_location_sharing_summary">Pasi të aktivizohet, do të jeni në gjendje të dërgoni vendndodhjen tuaj në çfarëdo dhome</string>
     <string name="location_share_external">Hape me</string>
-    <string name="template_location_not_available_dialog_content">${app_name} s’njohu dot vendndodhjen tuaj. Ju lutemi, riprovoni më vonë.</string>
-    <string name="template_location_not_available_dialog_title">${app_name} s’mësoi dot vendndodhjen tuaj</string>
+    <string name="location_not_available_dialog_content">${app_name} s’njohu dot vendndodhjen tuaj. Ju lutemi, riprovoni më vonë.</string>
+    <string name="location_not_available_dialog_title">${app_name} s’mësoi dot vendndodhjen tuaj</string>
     <string name="edit_poll_button">PËRPUNONI ANKETIMIN</string>
     <string name="edit_poll_title">Përpunoni anketimin</string>
     <string name="poll_no_votes_cast">S’janë hedhur vota</string>

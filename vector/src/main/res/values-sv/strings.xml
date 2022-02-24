@@ -378,7 +378,7 @@
     <string name="user_directory_header">Användarkatalog</string>
     <string name="matrix_only_filter">Bara Matrix-kontakter</string>
     <string name="no_conversation_placeholder">Inga konversationer</string>
-    <string name="template_no_contact_access_placeholder">Du gav inte ${app_name} tillgång till dina lokala kontakter</string>
+    <string name="no_contact_access_placeholder">Du gav inte ${app_name} tillgång till dina lokala kontakter</string>
     <string name="no_result_placeholder">Inga resultat</string>
     <string name="people_no_identity_server">Ingen identitetsserver konfigurerad.</string>
     <string name="rooms_header">Rum</string>
@@ -513,7 +513,7 @@
     <string name="e2e_re_request_encryption_key">Efterfråga krypteringsnycklarna igen från dina andra sessioner.</string>
     <string name="e2e_re_request_encryption_key_sent">Nyckelförfrågan har skickats.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Förfrågan har skickats</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Vänligen öppna ${app_name} på en annan enhet som kan dekryptera meddelandet så att den kan skicka nycklarna till den här sessionen.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Vänligen öppna ${app_name} på en annan enhet som kan dekryptera meddelandet så att den kan skicka nycklarna till den här sessionen.</string>
     <string name="read_receipts_list">Läsindikationslista</string>
     <string name="groups_list">Grupplista</string>
     <plurals name="membership_changes">
@@ -534,7 +534,7 @@
     <string name="room_info_room_name">Rumsnamn</string>
     <string name="room_info_room_topic">Rumsämne</string>
     <string name="settings_call_category">Samtal</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Använd förvald ${app_name}-ringsignal för inkommande samtal</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Använd förvald ${app_name}-ringsignal för inkommande samtal</string>
     <string name="settings_call_ringtone_use_default_stun">Tillåt reservassistansserver för samtal</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Kommer att använda %s som reserv när din hemserver inte erbjuder en (din IP-adress kommer att delas under samtalet)</string>
     <string name="settings_call_ringtone_title">Ringsignal för inkommande samtal</string>
@@ -556,22 +556,22 @@
     <string name="media_picker_both_capture_title">Ta en bild eller en video</string>
     <string name="media_picker_cannot_record_video">Kan inte spela in video</string>
     <string name="permissions_rationale_popup_title">Information</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} behöver tillstånd att komma åt ditt foto- och videobibliotek för att skicka och spara bilagor.
+    <string name="permissions_rationale_msg_storage">${app_name} behöver tillstånd att komma åt ditt foto- och videobibliotek för att skicka och spara bilagor.
 \n 
 \nVänligen ge tillstånd i nästa popup för att kunna skicka filer från din telefon.</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name} behöver tillstånd att komma åt din kamera för att kunna ta bilder och hålla videosamtal.</string>
+    <string name="permissions_rationale_msg_camera">${app_name} behöver tillstånd att komma åt din kamera för att kunna ta bilder och hålla videosamtal.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nVänligen ge åtkomst i nästa popup för att kunna utföra samtalet."</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name} behöver tillstånd att komma åt din mikrofon för hålla röstsamtal.</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} behöver tillstånd att komma åt din mikrofon för hålla röstsamtal.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nVänligen ge åtkomst i nästa popup för att kunna utföra samtalet."</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} behöver tillstånd att komma åt din kamera och mikrofon för att kunna utföra videosamtal.
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} behöver tillstånd att komma åt din kamera och mikrofon för att kunna utföra videosamtal.
 \n 
 \nVänligen ge tillstånd i nästa popup för att kunna utföra samtalet.</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} kan kolla i din adressbok för att hitta andra Matrixanvändare baserat på deras e-postadresser och telefonnummer. Om du går med på att dela din adressbok för detta ändamål, vänligen ge tillstånd i nästa popup.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} kan kolla i din adressbok för att hitta andra Matrixanvändare baserat på deras e-postadresser och telefonnummer.
+    <string name="permissions_rationale_msg_contacts">${app_name} kan kolla i din adressbok för att hitta andra Matrixanvändare baserat på deras e-postadresser och telefonnummer. Om du går med på att dela din adressbok för detta ändamål, vänligen ge tillstånd i nästa popup.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} kan kolla i din adressbok för att hitta andra Matrixanvändare baserat på deras e-postadresser och telefonnummer.
 \n
 \nVill du dela din adressbok för detta ändamål\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Tyvärr. Handlingen utfördes inte på grund av saknade rättigheter</string>
@@ -791,13 +791,13 @@
     <string name="settings_troubleshoot_test_account_settings_failed">Aviseringar är inaktiverade för ditt konto.
 \nVänligen kolla kontoinställningarna.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Aviseringar är aktiverade för den här sessionen.</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Aviseringar är inaktiverade för den här sessionen.
+    <string name="settings_troubleshoot_test_device_settings_failed">Aviseringar är inaktiverade för den här sessionen.
 \nVänligen kolla ${app_name}inställningarna.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Observera att vissa meddelandetyper är satta till tyst (kommer att producera aviseringar utan ljud).</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Vissa aviseringar är inaktiverade i dina anpassade inställningar.</string>
     <string name="settings_troubleshoot_test_service_restart_title">Automatisk omstart av aviseringstjänsten</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">Tjänsten kommer inte att starta när enheten startas om, så du kommer inte att få aviseringar förrens ${app_name} har öppnats en gång.</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Bakgrundsbegränsningar är aktiverade för ${app_name}.
+    <string name="settings_troubleshoot_test_service_boot_failed">Tjänsten kommer inte att starta när enheten startas om, så du kommer inte att få aviseringar förrens ${app_name} har öppnats en gång.</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Bakgrundsbegränsningar är aktiverade för ${app_name}.
 \nSaker som appen försöker göra kommer att kraftigt begränsas när appen är bakgrunden, och detta kan påverka aviseringar.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_battery_failed">Om en användare lämnar sin enhet urkopplad och stilla en längre tid, med skärmen av, så går enheten in i Doze-läget. Detta hindrar appar från att komma åt nätverket och skjuter upp deras uppgifter, synkroniseringar och standardlarm.</string>
@@ -816,7 +816,7 @@
     <string name="settings_containing_my_user_name">Meddelanden innehållande mitt användarnamn</string>
     <string name="settings_messages_in_one_to_one">Meddelanden i direktchattar</string>
     <string name="settings_messages_in_group_chat">Meddelanden i gruppchattar</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} kommer att synka i bakgrunden periodiskt vid precisa tider (konfigurerbart).
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} kommer att synka i bakgrunden periodiskt vid precisa tider (konfigurerbart).
 \nDetta kommer att påverka data- och batterianvändning, och det kommer att visas en permanent avisering som säger att ${app_name} lyssnar efter händelser.</string>
     <string name="settings_version">Version</string>
     <string name="settings_olm_version">olm-version</string>
@@ -837,8 +837,8 @@
     <string name="settings_discovery_category">Upptäckbarhet</string>
     <string name="settings_discovery_manage">Hantera dina upptäckbarhetsinställningar.</string>
     <string name="startup_notification_privacy_title">Aviseringssekretess</string>
-    <string name="template_startup_notification_privacy_message">${app_name} kan köra i bakgrunden för att hantera dina aviseringar säkert och privat. Detta kan påverka batteritiden.</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} behöver hålla en bakgrundsanslutning med låg påverkan för att ha pålitliga aviseringar.
+    <string name="startup_notification_privacy_message">${app_name} kan köra i bakgrunden för att hantera dina aviseringar säkert och privat. Detta kan påverka batteritiden.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">${app_name} behöver hålla en bakgrundsanslutning med låg påverkan för att ha pålitliga aviseringar.
 \nPå nästa skärm kommer du att frågas om du vill tillåta att ${app_name} alltid körs i bakgrunden, vänligen acceptera.</string>
     <string name="settings_logged_in">Inloggad som</string>
     <string name="settings_home_server">Hemserver</string>
@@ -980,7 +980,7 @@
 \nLogga in igen för att komma åt din kontodata och dina meddelanden.</string>
     <string name="settings_advanced_settings">Avancerade inställningar</string>
     <string name="autocomplete_limited_results">Visar endast de första resultaten, skriv mer…</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} kan krascha mer när ett oväntat fel inträffar</string>
+    <string name="settings_developer_mode_fail_fast_summary">${app_name} kan krascha mer när ett oväntat fel inträffar</string>
     <string name="create_room_encryption_description">Efter aktivering så kan kryptering inte avaktiveras.</string>
     <string name="login_error_threepid_denied">Din e-postdomän är inte auktoriserad för att registrera på den här servern</string>
     <string name="room_profile_not_encrypted_subtitle">Meddelanden i det här rummet är inte totalsträckskrypterade.</string>
@@ -1029,7 +1029,7 @@
     </plurals>
     <string name="invite_users_to_room_failure">Vi kunde inte bjuda in användarna. Vänligen kolla användarna du vill bjuda in och försök igen.</string>
     <string name="disconnect_identity_server_dialog_content">Koppla bort från identitetsservern %s\?</string>
-    <string name="template_identity_server_error_outdated_identity_server">Den här identitetsservern är utdaterat. ${app_name} stöder endast API V2.</string>
+    <string name="identity_server_error_outdated_identity_server">Den här identitetsservern är utdaterat. ${app_name} stöder endast API V2.</string>
     <string name="identity_server_error_no_identity_server_configured">Vänligen konfigurera en identitetsserver.</string>
     <string name="identity_server_error_terms_not_signed">Vänligen acceptera först identitetsserverns användarvillkor i inställningarna.</string>
     <string name="identity_server_set_default_notice">Din hemserver (%1$s) föreslår att du använder %2$s som din identitetsserver</string>
@@ -1165,7 +1165,7 @@
     <string name="sent_an_audio_file">Ljud</string>
     <string name="sent_a_file">Fil</string>
     <string name="send_a_sticker">Dekal</string>
-    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} hanterar inte meddelanden av typen \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">${app_name} hanterar inte meddelanden av typen \'%1$s\'</string>
     <string name="command_description_rainbow">Skickar det valda meddelandet I regnbågsfärger</string>
     <string name="settings_category_composer">Meddelanderedigering</string>
     <string name="message_key">Meddelandenyckel</string>
@@ -1202,7 +1202,7 @@
     <string name="cannot_call_yourself_with_invite">Du kan inte ringa ett samtal till dig själv, vänta tills deltagare accepterar inbjudan</string>
     <string name="failed_to_add_widget">Misslyckades att lägga till widget</string>
     <string name="failed_to_remove_widget">Misslyckades att ta bort widget</string>
-    <string name="template_call_failed_no_connection">${app_name}samtal misslyckades</string>
+    <string name="call_failed_no_connection">${app_name}samtal misslyckades</string>
     <string name="call_failed_no_connection_description">Misslyckades att upprätta en realtidsuppkoppling.
 \nVänligen be administratören för din hemserver att konfigurera en TURN-server för att samtal ska fungera pålitligt.</string>
     <string name="call_select_sound_device">Välj ljudenhet</string>
@@ -1297,7 +1297,7 @@
     <string name="room_sliding_menu_copyright">Upphovsrätt</string>
     <string name="room_sliding_menu_privacy_policy">Integritetspolicy</string>
     <string name="settings_phone_number">Telefon</string>
-    <string name="template_settings_add_3pid_flow_not_supported">Du kan inte göra detta från ${app_name} på mobilen</string>
+    <string name="settings_add_3pid_flow_not_supported">Du kan inte göra detta från ${app_name} på mobilen</string>
     <string name="settings_add_3pid_authentication_needed">Autentisering krävs</string>
     <string name="settings_troubleshoot_diagnostic">Diagnostik för felsökning</string>
     <string name="settings_troubleshoot_diagnostic_run_button_title">Kör tester</string>
@@ -1307,7 +1307,7 @@
     <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Misslyckades att ladda anpassade regler, vänligen försök igen.</string>
     <string name="settings_troubleshoot_test_play_services_title">Kolla Play-tjänster</string>
     <string name="settings_troubleshoot_test_play_services_success">APK:n Google Play-tjänster är tillgänglig och uppdaterad.</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} använder Google Play-tjänster för att skicka pushmeddelanden, men den verkar inte vara korrekt konfigurerad:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} använder Google Play-tjänster för att skicka pushmeddelanden, men den verkar inte vara korrekt konfigurerad:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Fixa Play-tjänster</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase-token</string>
@@ -1315,11 +1315,11 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">Misslyckades att hämta FCM-token:
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \nDet här felet är ur ${app_name}s kontroll, och enligt Google indikerar det här felet att den här enheten har för många appar registrerade med FCM. Felet händer endast i fall då extremt många appar är installerade, så det bör inte påverka normala användare.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nDet här felet är ur ${app_name}s kontroll. Det kan hända av flera anledningar. Det kanske funkar om du försöker igen senare, du kan kolla så att Google Play-tjänster inte är databegränsad i systeminställningarna, eller att enhetens klocka går rätt, eller så kan det hända på en alternativ ROM.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nDet här felet är ur ${app_name}s kontroll. Det finns inget Google-konto på telefonen. Vänligen öppna kontohanteraren och lägg till ett Google-konto.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Lägg till konto</string>
     <string name="settings_troubleshoot_test_token_registration_title">Token-registrering</string>
@@ -1332,11 +1332,11 @@
     <string name="settings_troubleshoot_test_service_boot_success">Tjänsten kommer att startas när enheten startas om.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Aktivera start på boot</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Kolla bakgrundsrestriktioner</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">Bakgrundsrestriktioner är inaktiverade för ${app_name}. Detta test bör köras med mobildata (inte Wi-Fi).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Bakgrundsrestriktioner är inaktiverade för ${app_name}. Detta test bör köras med mobildata (inte Wi-Fi).
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Inaktivera restriktioner</string>
     <string name="settings_troubleshoot_test_battery_title">Batterioptimering</string>
-    <string name="template_settings_troubleshoot_test_battery_success">${app_name} påverkas inte av batterioptimering.</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name} påverkas inte av batterioptimering.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorera optimering</string>
     <string name="settings_notification_privacy_reduced">Reducerad sekretess</string>
     <string name="settings_notification_privacy_need_permission">Den här appen behöver behörighet att köra i bakgrunden</string>
@@ -1461,7 +1461,7 @@
         <item quantity="one">%1$s, %2$s och %3$d annan har läst</item>
         <item quantity="other">%1$s, %2$s och %3$d andra har läst</item>
     </plurals>
-    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} behöver behörighet för att spara dina nycklar för totalsträckskryptering i lagringen.
+    <string name="permissions_rationale_msg_keys_backup_export">${app_name} behöver behörighet för att spara dina nycklar för totalsträckskryptering i lagringen.
 \n
 \nVänligen ge tillstånd i nästa popup för att kunna manuellt exportera dina nycklar.</string>
     <string name="no_ignored_users">Du ignorerar inga användare</string>
@@ -1477,7 +1477,7 @@
     <string name="soft_logout_clear_data_notice">Varning: Din personliga data (inklusive krypteringsnycklar) lagras fortfarande på den här enheten.
 \n
 \nRensa den om du inte ska använda den här enheten längre, eller vill logga in på ett annat konto.</string>
-    <string name="template_soft_logout_sso_not_same_user_error">Den nuvarande sessionen är för användaren %1$s och du försedde uppgifter för användaren %2$s. Detta stöds inte av ${app_name}.
+    <string name="soft_logout_sso_not_same_user_error">Den nuvarande sessionen är för användaren %1$s och du försedde uppgifter för användaren %2$s. Detta stöds inte av ${app_name}.
 \nVänligen rensa först data, och logga sen in på ett annat konto.</string>
     <string name="settings_show_devices_list">Se alla mina sessioner</string>
     <string name="settings_developer_mode">Utvecklarläge</string>
@@ -1547,16 +1547,16 @@
     <string name="bootstrap_migration_backup_recovery_key">Återställningsnyckel för säkerhetskopiering</string>
     <string name="settings_security_prevent_screenshots_title">Förhindra skärmdumpar av appen</string>
     <string name="settings_security_prevent_screenshots_summary">Att aktivera den här inställningen lägger till FLAG_SECURE till alla aktiviteter. Starta om appen för att inställningen ska få effekt.</string>
-    <string name="template_use_other_session_content_description">Använd senaste ${app_name} på dina andra enheter; ${app_name} Web, ${app_name} iOS, ${app_name} för Android, eller annan Matrixklient som stöder korssignering</string>
+    <string name="use_other_session_content_description">Använd senaste ${app_name} på dina andra enheter; ${app_name} Web, ${app_name} iOS, ${app_name} för Android, eller annan Matrixklient som stöder korssignering</string>
     <string name="or_other_mx_capable_client">eller en annan Matrixklient som städer korssignering</string>
-    <string name="template_use_latest_app">Använd senaste ${app_name} på dina andra enheter:</string>
+    <string name="use_latest_app">Använd senaste ${app_name} på dina andra enheter:</string>
     <string name="command_description_discard_session">Tvingar den nuvarande utgående gruppsessionen i ett krypterat rum att kasseras</string>
     <string name="keys_backup_recovery_key_error_decrypt">Säkerhetskopian kunde inte avkrypteras med den här återställningsnyckeln: vänligen verifiera att du skrev in rätt återställningsnyckel.</string>
     <string name="settings_setup_secure_backup">Sätt upp säker säkerhetskopiering</string>
     <string name="bottom_sheet_setup_secure_backup_title">Säker säkerhetskopiering</string>
     <string name="bottom_sheet_setup_secure_backup_submit">Sätt upp</string>
     <string name="bottom_sheet_setup_secure_backup_security_phrase_subtitle">Skriv in en hemlig fras endast du känner till, och generera en nyckel för säkerhetskopiering.</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} kommer att synka i bakgrunden på ett sätt som sparar på enhetens begränsade resurser (batteri).
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} kommer att synka i bakgrunden på ett sätt som sparar på enhetens begränsade resurser (batteri).
 \nBeroende på din enhets resurser, så kan synkroniseringen bli uppskjuten av operativsystemet.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimerad för realtid</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Ingen bakgrundssynk</string>
@@ -1587,8 +1587,8 @@
     <string name="startup_notification_fdroid_battery_optim_button_grant">Ge behörighet</string>
     <string name="settings_analytics">Statistik</string>
     <string name="settings_opt_in_of_analytics">Skicka statistikdata</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} samlar in anonym statistik för att låta oss förbättra appen.</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">Vänligen aktivera statistik för att hjälpa oss att förbättra ${app_name}.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} samlar in anonym statistik för att låta oss förbättra appen.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Vänligen aktivera statistik för att hjälpa oss att förbättra ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Ja, jag vill hjälpa till!</string>
     <string name="settings_data_save_mode">Databesparingsläge</string>
     <string name="devices_details_id_title">ID</string>
@@ -1827,7 +1827,7 @@
     <string name="passphrase_passphrase_does_not_match">Lösenfrasen matchar inte</string>
     <string name="passphrase_empty_error_message">Vänligen skriv en lösenfras</string>
     <string name="passphrase_passphrase_too_weak">Lösenfrasen är för svag</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">Vänligen radera lösenfrasen om du vill att ${app_name} ska generera en återställningsnyckel.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Vänligen radera lösenfrasen om du vill att ${app_name} ska generera en återställningsnyckel.</string>
     <string name="keys_backup_setup_step2_button_title">Sätt lösenfras</string>
     <string name="keys_backup_setup_creating_backup">Skapar säkerhetskopia</string>
     <string name="keys_backup_setup_step3_success_title">Framgång !</string>
@@ -1870,7 +1870,7 @@
     </plurals>
     <string name="keys_backup_info_title_signature">Signatur</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Autokomplettera serveralternativ</string>
-    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} detekterade en anpassad serverkonfiguration för din användar-ID-domän \"%1$s\":
+    <string name="autodiscover_well_known_autofill_dialog_message">${app_name} detekterade en anpassad serverkonfiguration för din användar-ID-domän \"%1$s\":
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Använd konfig</string>
     <string name="sas_verify_title">Verifiera genom att jämföra en kort textsträng.</string>
@@ -1920,7 +1920,7 @@
     <string name="action_change">Ändra</string>
     <string name="please_wait">Vänligen vänta…</string>
     <string name="room_preview_no_preview">Det här rummet kan inte förhandsgranskas</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">Förhandsgranskning av världsläsbara rum stöds inte än av ${app_name}</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">Förhandsgranskning av världsläsbara rum stöds inte än av ${app_name}</string>
     <string name="create_room_title">Nytt rum</string>
     <string name="create_room_action_create">SKAPA</string>
     <string name="create_room_name_hint">Namn</string>
@@ -2137,8 +2137,8 @@
     <string name="room_member_power_level_default_in">Standardbehörig i %1$s</string>
     <string name="room_member_power_level_custom_in">Anpassad (%1$d) i %2$s</string>
     <string name="room_member_jump_to_read_receipt">Hoppa till läskvitto</string>
-    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} hanterar inte händelser av typen \'%1$s\'</string>
-    <string name="template_rendering_event_error_exception">${app_name} stötte på ett fel vid rendering av innehållet i händelsen med id \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name} hanterar inte händelser av typen \'%1$s\'</string>
+    <string name="rendering_event_error_exception">${app_name} stötte på ett fel vid rendering av innehållet i händelsen med id \'%1$s\'</string>
     <string name="unignore">Avignorera</string>
     <string name="command_description_rainbow_emote">Skickar den givna emoten i regnbågsfärg</string>
     <string name="call_notification_answer">Godkänn</string>
@@ -2185,7 +2185,7 @@
     <string name="event_redacted_by_user_reason_with_reason">Händelsen raderades av användaren, anledning: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Händelsen modererades av rumsadministratören. Anledning: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Nycklarna är redan uppdaterade!</string>
-    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="refresh">Ladda om</string>
     <string name="new_session">Ny inloggning. Var det du\?</string>
     <string name="new_session_review">Tryck för att granska och verifiera</string>
@@ -2237,9 +2237,9 @@
     <string name="bootstrap_progress_generating_ssss_recovery">Generar SSSS-nyckel baserat på återställningsnyckel</string>
     <string name="bootstrap_progress_storing_in_sss">Lagrar hemlighet för nyckelsäkerhetskopiering i SSSS</string>
     <string name="new_session_review_with_info">%1$s (%2$s)</string>
-    <string name="template_app_desktop_web">${app_name} Webb
+    <string name="app_desktop_web">${app_name} Webb
 \n${app_name} Skrivbord</string>
-    <string name="template_app_ios_android">${app_name} iOS
+    <string name="app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
     <string name="enter_secret_storage_passphrase_or_key">Använd din %1$s eller %2$s för att fortsätta.</string>
     <string name="use_recovery_key">Använd återställningsnyckel</string>
@@ -2264,7 +2264,7 @@
     <string name="invitations_sent_to_two_users">Inbjudan skickad till %1$s och %2$s</string>
     <string name="open_terms_of">Öppna villkor för %s</string>
     <string name="identity_server_error_outdated_home_server">Den här operationen är inte möjlig. Hemservern är utdaterad.</string>
-    <string name="template_identity_server_error_bulk_sha256_not_supported">För ditt privatlivs skull stöder ${app_name} bara att skicka hashade e-postadresser och telefonnummer.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">För ditt privatlivs skull stöder ${app_name} bara att skicka hashade e-postadresser och telefonnummer.</string>
     <string name="identity_server_error_binding_error">Associationen har misslyckats.</string>
     <string name="identity_server_error_no_current_binding_error">Det finns ingen nuvarande association med den här identifieraren.</string>
     <string name="identity_server_set_default_submit">Använd %1$s</string>
@@ -2352,13 +2352,13 @@
 \n
 \nAnvänd varsamt, det kan leda till oväntat beteende.</string>
     <string name="secure_backup_reset_no_history">så kommer du att börja om utan historik, meddelanden, betrodda enheter eller betrodda användare</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_off">PIN-kod krävs varje gång du öppnar ${app_name}.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">PIN-kod krävs efter att du inte har använt ${app_name} på 2 minuter.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">PIN-kod krävs varje gång du öppnar ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">PIN-kod krävs efter att du inte har använt ${app_name} på 2 minuter.</string>
     <string name="settings_security_pin_code_grace_period_title">Kräv PIN-kod efter 2 minuter</string>
     <string name="settings_security_pin_code_notifications_summary_off">Visa bara antal olästa meddelanden i en enkel avisering.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Visa detaljer som rumsnamn och meddelandeinnehåll.</string>
     <string name="settings_security_pin_code_notifications_title">Visa innehåll i aviseringar</string>
-    <string name="template_settings_security_pin_code_use_biometrics_summary_off">PIN-kod är det enda sättet att låsa upp ${app_name}.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-kod är det enda sättet att låsa upp ${app_name}.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Aktivera enhetsspecifik biometri, som fingeravtryck och ansiktsigenkänning.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Aktivera biometri</string>
     <string name="settings_security_application_protection_screen_title">Ställ in skydd</string>
@@ -2438,8 +2438,8 @@
     <string name="user_code_share">Dela min kod</string>
     <string name="user_code_scan">Skanna en QR-kod</string>
     <string name="not_a_valid_qr_code">Det är inte en giltig Matrix-QR-kod</string>
-    <string name="template_invite_friends_rich_title">🔐️ Gå med mig i ${app_name}</string>
-    <string name="template_invite_friends_text">Hallå, prata med mig i ${app_name}: %s</string>
+    <string name="invite_friends_rich_title">🔐️ Gå med mig i ${app_name}</string>
+    <string name="invite_friends_text">Hallå, prata med mig i ${app_name}: %s</string>
     <string name="invite_friends">Bjud in vänner</string>
     <string name="add_people">Lägg till personer</string>
     <string name="topic_prefix">"Ämne: "</string>
@@ -2545,7 +2545,7 @@
     <string name="room_participants_leave_private_warning">Det är rummet är inte offentligt. Du kommer inte kunna gå med igen utan en inbjudan.</string>
     <string name="system_theme">Systemets förval</string>
     <string name="authentication_error">Misslyckades att autentisera</string>
-    <string name="template_re_authentication_default_confirm_text">${app_name} kräver att du anger dina autentiseringsuppgifter innan du gör det här.</string>
+    <string name="re_authentication_default_confirm_text">${app_name} kräver att du anger dina autentiseringsuppgifter innan du gör det här.</string>
     <string name="re_authentication_activity_title">Omautentisering krävs</string>
     <string name="failed_to_initialize_cross_signing">Mislyckades att ställa in korssignering</string>
     <string name="error_unauthorized">Obehörig, saknar giltiga autentiseringsuppgifter</string>
@@ -2859,7 +2859,7 @@
     <string name="hs_client_url">Hemserver-API-URL</string>
     <string name="missing_permissions_title">Saknar behörighet</string>
     <string name="denied_permission_voice_message">För att skicka röstmeddelanden, vänligen ge mikrofonåtkomst.</string>
-    <string name="template_link_this_email_with_your_account">%s i inställningar för att ta emot inbjudningar direkt i ${app_name}.</string>
+    <string name="link_this_email_with_your_account">%s i inställningar för att ta emot inbjudningar direkt i ${app_name}.</string>
     <string name="link_this_email_settings_link">Länka den här e-postadressen med ditt konto</string>
     <string name="this_invite_to_this_space_was_sent">Denna inbjudan till det här utrymmet skickades till %s, vilket inte är associerat med ditt konto</string>
     <string name="this_invite_to_this_room_was_sent">Denna inbjudan till det här rummet skickades till %s, vilket inte är associerat med ditt konto</string>
@@ -2999,10 +2999,10 @@
     <string name="analytics_opt_in_list_item_2">Vi delar <b>inte</b> information med tredje parter</string>
     <string name="analytics_opt_in_list_item_1">Vi spelar <b>inte</b> in eller profilerar någon kontodata</string>
     <string name="analytics_opt_in_content_link">här</string>
-    <string name="template_analytics_opt_in_content">Hjälp oss att identifiera problem och förbättra ${app_name} genom att dela anonym användningsdata. För att förstå hur personer använder multipla enheter så generar vi en slumpmässig identifierare som delas mellan dina enheter.
+    <string name="analytics_opt_in_content">Hjälp oss att identifiera problem och förbättra ${app_name} genom att dela anonym användningsdata. För att förstå hur personer använder multipla enheter så generar vi en slumpmässig identifierare som delas mellan dina enheter.
 \n
 \nDu kan läsa alla våra villkor %s.</string>
-    <string name="template_analytics_opt_in_title">Hjälp att förbättra ${app_name}</string>
+    <string name="analytics_opt_in_title">Hjälp att förbättra ${app_name}</string>
     <string name="action_enable">Aktivera</string>
     <string name="delete_poll_dialog_content">Är du säker på att du vill ta bort den här omröstningen\? Du kommer inte kunna få tillbaka den när den har tagits bort.</string>
     <string name="delete_poll_dialog_title">Ta bort omröstning</string>
@@ -3027,14 +3027,14 @@
     </plurals>
     <string name="preference_system_settings">Systeminställningar</string>
     <string name="preference_versions">Versioner</string>
-    <string name="template_preference_help_summary">Få hjälp med att använda ${app_name}</string>
+    <string name="preference_help_summary">Få hjälp med att använda ${app_name}</string>
     <string name="preference_help_title">Hjälp och support</string>
     <string name="preference_help">Hjälp</string>
     <string name="preference_root_legals">Legalt</string>
     <string name="legals_no_policy_provided">Den här servern förser ingen policy.</string>
     <string name="legals_third_party_notices">Tredjepartsbibliotek</string>
     <string name="legals_identity_server_title">Din identitetsservers policy</string>
-    <string name="template_legals_application_title">${app_name}s policy</string>
+    <string name="legals_application_title">${app_name}s policy</string>
     <string name="legals_home_server_title">Din hemservers policy</string>
     <plurals name="poll_total_vote_count_before_ended_and_not_voted">
         <item quantity="one">%1$d röst avgiven. Rösta för att se resultatet</item>
@@ -3061,8 +3061,8 @@
     <string name="settings_enable_location_sharing_summary">När det har aktiverats så kan du skicka din plats till vilket rum som helst</string>
     <string name="settings_enable_location_sharing">Aktivera platsdelning</string>
     <string name="location_share_external">Öppna med</string>
-    <string name="template_location_not_available_dialog_content">${app_name} kunde inte komma åt din plats. Försök igen senare.</string>
-    <string name="template_location_not_available_dialog_title">${app_name} kunde inte komma åt din plats</string>
+    <string name="location_not_available_dialog_content">${app_name} kunde inte komma åt din plats. Försök igen senare.</string>
+    <string name="location_not_available_dialog_title">${app_name} kunde inte komma åt din plats</string>
     <string name="location_share">Dela plats</string>
     <string name="a11y_location_share_icon">Dela plats</string>
     <string name="location_activity_title_preview">Plats</string>

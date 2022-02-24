@@ -14,7 +14,7 @@
     <string name="settings_background_fdroid_sync_mode_battery">Optimised for battery</string>
     <string name="settings_background_sync">Background synchronisation</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignore Optimisation</string>
-    <string name="template_settings_troubleshoot_test_battery_success">${app_name} is not affected by Battery Optimisation.</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name} is not affected by Battery Optimisation.</string>
     <string name="settings_troubleshoot_test_battery_title">Battery Optimisation</string>
     <string name="room_settings_de_prioritize">De-prioritise</string>
     <string name="call_error_camera_init_failed">Cannot initialise the camera</string>

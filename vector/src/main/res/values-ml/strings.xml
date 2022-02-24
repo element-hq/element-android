@@ -19,7 +19,7 @@
     <string name="invite_friends">സുഹൃത്തുക്കളെ ക്ഷണിക്കുക</string>
     <string name="user_code_share">എന്റെ കോഡ് പങ്കിടുക</string>
     <string name="user_code_my_code">എന്റെ കോഡ്</string>
-    <string name="template_invite_friends_rich_title">🔐️ ${app_name}-ൽ എന്നോടൊപ്പം ചേരുക</string>
+    <string name="invite_friends_rich_title">🔐️ ${app_name}-ൽ എന്നോടൊപ്പം ചേരുക</string>
     <string name="identity_server_set_alternative_submit">സമർപ്പിക്കൂ</string>
     <string name="a11y_open_chat">ചാറ്റ് തുറക്കുക</string>
     <string name="a11y_stop_camera">ക്യാമറ നിർത്തുക</string>
@@ -232,7 +232,7 @@
     <string name="auth_password_placeholder">രഹസ്യവാക്ക്</string>
     <string name="auth_user_id_placeholder">ഇമെയിൽ അല്ലെങ്കിൽ ഉപയോക്തൃനാമം</string>
     <string name="go_on_with">തുടരുക…</string>
-    <string name="template_call_failed_no_connection">${app_name} കോൾ പരാജയപ്പെട്ടു</string>
+    <string name="call_failed_no_connection">${app_name} കോൾ പരാജയപ്പെട്ടു</string>
     <string name="option_send_voice">ശബ്ദം അയയ്ക്കൂ</string>
     <string name="hs_url">ഹോം സെർവർ URL</string>
     <string name="no_public_room_placeholder">പൊതു മുറിക‍ൾ ഒന്നും ലഭ്യമല്ല</string>

@@ -513,7 +513,7 @@
     <string name="matrix_only_filter">Matrix contacts only</string>
     <string name="no_conversation_placeholder">No conversations</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_no_contact_access_placeholder">You didn’t allow ${app_name} to access your local contacts</string>
+    <string name="no_contact_access_placeholder">You didn’t allow ${app_name} to access your local contacts</string>
     <string name="no_result_placeholder">No results</string>
     <string name="no_more_results">No more results</string>
     <string name="people_no_identity_server">No identity server configured.</string>
@@ -585,7 +585,7 @@
     <string name="call_failed_dont_ask_again">Do not ask me again</string>
 
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_call_failed_no_connection">${app_name} Call Failed</string>
+    <string name="call_failed_no_connection">${app_name} Call Failed</string>
     <string name="call_failed_no_connection_description">Failed to establish real time connection.\nPlease ask the administrator of your homeserver to configure a TURN server in order for calls to work reliably.</string>
 
     <string name="call_select_sound_device">Select Sound Device</string>
@@ -700,7 +700,7 @@
 
     <string name="e2e_re_request_encryption_key_dialog_title">Request sent</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Please launch ${app_name} on another device that can decrypt the message so it can send the keys to this session.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Please launch ${app_name} on another device that can decrypt the message so it can send the keys to this session.</string>
 
     <!-- read receipts list Screen -->
     <string name="read_receipts_list">Read Receipts List</string>
@@ -742,7 +742,7 @@
     <string name="settings_call_show_confirmation_dialog_title">Prevent accidental call</string>
     <string name="settings_call_show_confirmation_dialog_summary">Ask for confirmation before starting a call</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_call_ringtone_use_app_ringtone">Use default ${app_name} ringtone for incoming calls</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Use default ${app_name} ringtone for incoming calls</string>
     <string name="settings_call_ringtone_use_default_stun">Allow fallback call assist server</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Will use "%s" as assist when your homeserver does not offer one (your IP address will be shared during a call)</string>
     <string name="settings_call_ringtone_title">Incoming call ringtone</string>
@@ -794,19 +794,19 @@
     <!-- permissions Android M -->
     <string name="permissions_rationale_popup_title">Information</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_permissions_rationale_msg_storage">${app_name} needs permission to access your photo and video library to send and save attachments.\n\nPlease allow access on the next pop-up to be able to send files from your phone.</string>
+    <string name="permissions_rationale_msg_storage">${app_name} needs permission to access your photo and video library to send and save attachments.\n\nPlease allow access on the next pop-up to be able to send files from your phone.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_permissions_rationale_msg_camera">${app_name} needs permission to access your camera to take pictures and video calls.</string>
+    <string name="permissions_rationale_msg_camera">${app_name} needs permission to access your camera to take pictures and video calls.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_permissions_rationale_msg_record_audio">${app_name} needs permission to access your microphone to perform audio calls.</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} needs permission to access your microphone to perform audio calls.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPlease allow access on the next pop-up to be able to make the call.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} needs permission to access your camera and your microphone to perform video calls.\n\nPlease allow access on the next pop-ups to be able to make the call.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_permissions_rationale_msg_contacts">${app_name} can check your address book to find other Matrix users based on their email and phone numbers. If you agree to share your address book for this purpose, please allow access on the next pop-up.</string>
+    <string name="permissions_rationale_msg_contacts">${app_name} can check your address book to find other Matrix users based on their email and phone numbers. If you agree to share your address book for this purpose, please allow access on the next pop-up.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} can check your address book to find other Matrix users based on their email and phone numbers.\n\nDo you agree to share your address book for this purpose?</string>
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} can check your address book to find other Matrix users based on their email and phone numbers.\n\nDo you agree to share your address book for this purpose?</string>
 
     <string name="permissions_action_not_performed_missing_permissions">Sorry. Action not performed, due to missing permissions</string>
     <string name="permissions_denied_qr_code">To scan a QR code, you need to allow camera access.</string>
@@ -1123,7 +1123,7 @@
     <string name="settings_app_info_link_summary">Show the application info in the system settings.</string>
     <string name="settings_add_3pid_confirm_password_title">Confirm your password</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_add_3pid_flow_not_supported">You can\'t do this from ${app_name} mobile</string>
+    <string name="settings_add_3pid_flow_not_supported">You can\'t do this from ${app_name} mobile</string>
     <string name="settings_add_3pid_authentication_needed">Authentication is required</string>
 
     <string name="settings_emails">Email addresses</string>
@@ -1173,7 +1173,7 @@
     <string name="settings_troubleshoot_test_device_settings_title">Session Settings.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Notifications are enabled for this session.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Notifications are not enabled for this session.\nPlease check the ${app_name} settings.</string>
+    <string name="settings_troubleshoot_test_device_settings_failed">Notifications are not enabled for this session.\nPlease check the ${app_name} settings.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Enable</string>
 
     <string name="settings_troubleshoot_test_bing_settings_title">Custom Settings.</string>
@@ -1185,18 +1185,18 @@
     <string name="settings_troubleshoot_test_play_services_title">Play Services Check</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK is available and up-to-date.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} uses Google Play Services to deliver push messages but it doesn’t seem to be configured correctly:\n%1$s</string>
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} uses Google Play Services to deliver push messages but it doesn’t seem to be configured correctly:\n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Fix Play Services</string>
 
     <string name="settings_troubleshoot_test_fcm_title">Firebase Token</string>
     <string name="settings_troubleshoot_test_fcm_success">FCM token successfully retrieved:\n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">Failed to retrieved FCM token:\n%1$s</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]\nThis error is out of control of ${app_name} and according to Google, this error indicates that the device has too many apps registered with FCM. The error only occurs in cases where there are extreme numbers of apps, so it should not affect the average user.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]\nThis error is out of control of ${app_name} and according to Google, this error indicates that the device has too many apps registered with FCM. The error only occurs in cases where there are extreme numbers of apps, so it should not affect the average user.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]\nThis error is out of control of ${app_name}. It can occur for several reasons. Maybe it will work if you retry later, you can also check that Google Play Service is not restricted in data usage in the system settings, or that your device clock is correct, or it can happen on custom ROM.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]\nThis error is out of control of ${app_name}. It can occur for several reasons. Maybe it will work if you retry later, you can also check that Google Play Service is not restricted in data usage in the system settings, or that your device clock is correct, or it can happen on custom ROM.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]\nThis error is out of control of ${app_name}. There is no Google account on the phone. Please open the account manager and add a Google account.</string>
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]\nThis error is out of control of ${app_name}. There is no Google account on the phone. Please open the account manager and add a Google account.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Add Account</string>
 
     <string name="settings_troubleshoot_test_token_registration_title">Token Registration</string>
@@ -1219,19 +1219,19 @@
     <string name="settings_troubleshoot_test_service_boot_title">Start on boot</string>
     <string name="settings_troubleshoot_test_service_boot_success">Service will start when the device is restarted.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_troubleshoot_test_service_boot_failed">The service will not start when the device is restarted, you will not receive notifications until ${app_name} has been opened once.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">The service will not start when the device is restarted, you will not receive notifications until ${app_name} has been opened once.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Enable Start on boot</string>
 
     <string name="settings_troubleshoot_test_bg_restricted_title">Check background restrictions</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">Background restrictions are disabled for ${app_name}. This test should be run using mobile data (no WIFI).\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_success">Background restrictions are disabled for ${app_name}. This test should be run using mobile data (no WIFI).\n%1$s</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Background restrictions are enabled for ${app_name}.\nWork that the app tries to do will be aggressively restricted while it is in the background, and this could affect notifications.\n%1$s</string>
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Background restrictions are enabled for ${app_name}.\nWork that the app tries to do will be aggressively restricted while it is in the background, and this could affect notifications.\n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Disable restrictions</string>
 
     <string name="settings_troubleshoot_test_battery_title">Battery Optimization</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_troubleshoot_test_battery_success">${app_name} is not affected by Battery Optimization.</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name} is not affected by Battery Optimization.</string>
     <string name="settings_troubleshoot_test_battery_failed">If a user leaves a device unplugged and stationary for a period of time, with the screen off, the device enters Doze mode. This prevents apps from accessing the network and defers their jobs, syncs, and standard alarms. </string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignore Optimization</string>
 
@@ -1283,10 +1283,10 @@
     <string name="settings_background_fdroid_sync_mode">Background Sync Mode</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimized for battery</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} will sync in background in way that preserves the device’s limited resources (battery).\nDepending on your device resource state, the sync may be deferred by the operating system.</string>
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} will sync in background in way that preserves the device’s limited resources (battery).\nDepending on your device resource state, the sync may be deferred by the operating system.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimized for real time</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} will sync in background periodically at precise time (configurable).\nThis will impact radio and battery usage, there will be a permanent notification displayed stating that ${app_name} is listening for events.</string>
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} will sync in background periodically at precise time (configurable).\nThis will impact radio and battery usage, there will be a permanent notification displayed stating that ${app_name} is listening for events.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">No background sync</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">You will not be notified of incoming messages when the app is in background.</string>
     <string name="settings_background_sync_update_error">Failed to update settings.</string>
@@ -1370,27 +1370,27 @@
     <string name="settings_discovery_manage">Manage your discovery settings.</string>
     <string name="startup_notification_privacy_title">Notification Privacy</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_startup_notification_privacy_message">${app_name} can run in the background to manage your notifications securely and privately. This might affect battery usage.</string>
+    <string name="startup_notification_privacy_message">${app_name} can run in the background to manage your notifications securely and privately. This might affect battery usage.</string>
     <string name="startup_notification_privacy_button_grant">Grant permission</string>
     <string name="startup_notification_privacy_button_other">Choose another option</string>
 
     <string name="startup_notification_fdroid_battery_optim_title">Background Connection</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} needs to keep a low impact background connection in order to have reliable notifications.\nOn the next screen you will be prompted to allow ${app_name} to always run in background, please accept.</string>
+    <string name="startup_notification_fdroid_battery_optim_message">${app_name} needs to keep a low impact background connection in order to have reliable notifications.\nOn the next screen you will be prompted to allow ${app_name} to always run in background, please accept.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Grant permission</string>
 
     <!-- analytics -->
     <string name="settings_analytics">Analytics</string>
     <string name="settings_opt_in_of_analytics">Send analytics data</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} collects anonymous analytics to allow us to improve the application.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} collects anonymous analytics to allow us to improve the application.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve ${app_name}.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Yes, I want to help!</string>
 
-    <string name="template_analytics_opt_in_title">Help improve ${app_name}</string>
+    <string name="analytics_opt_in_title">Help improve ${app_name}</string>
     <!-- The template will be replaced by the value of the resource analytics_opt_in_content_link -->
-    <string name="template_analytics_opt_in_content">Help us identify issues and improve ${app_name} by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.\n\nYou can read all our terms %s.</string>
+    <string name="analytics_opt_in_content">Help us identify issues and improve ${app_name} by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.\n\nYou can read all our terms %s.</string>
     <string name="analytics_opt_in_content_link">here</string>
     <string name="analytics_opt_in_list_item_1">We <b>don\'t</b> record or profile any account data</string>
     <string name="analytics_opt_in_list_item_2">We <b>don\'t</b> share information with third parties</string>
@@ -1416,7 +1416,7 @@
     <string name="settings_integration_allow">Allow integrations</string>
     <string name="settings_integration_manager">Integration manager</string>
 
-    <string name="template_legals_application_title">${app_name} policy</string>
+    <string name="legals_application_title">${app_name} policy</string>
     <string name="legals_home_server_title">Your homeserver policy</string>
     <string name="legals_identity_server_title">Your identity server policy</string>
     <string name="legals_third_party_notices">Third party libraries</string>
@@ -2004,7 +2004,7 @@
     <!-- Key Backup -->
 
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_keys_backup_passphrase_not_empty_error_message">Please delete the passphrase if you want ${app_name} to generate a recovery key.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Please delete the passphrase if you want ${app_name} to generate a recovery key.</string>
     <string name="keys_backup_no_session_error">No Matrix session available</string>
 
     <string name="keys_backup_setup_step1_title">Never lose encrypted messages</string>
@@ -2147,7 +2147,7 @@
     <string name="autodiscover_invalid_response">Invalid homeserver discovery response</string>
     <string name="autodiscover_well_known_autofill_dialog_title">"Autocomplete Server Options</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} detected a custom server configuration for your userId domain \"%1$s\":\n%2$s</string>
+    <string name="autodiscover_well_known_autofill_dialog_message">${app_name} detected a custom server configuration for your userId domain \"%1$s\":\n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Use Config</string>
 
     <string name="invalid_or_expired_credentials">You have been logged out due to invalid or expired credentials.</string>
@@ -2244,7 +2244,7 @@
 
     <string name="room_preview_no_preview">"This room can't be previewed"</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_room_preview_world_readable_room_not_supported_yet">The preview of world-readable room is not supported yet in ${app_name}</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">The preview of world-readable room is not supported yet in ${app_name}</string>
     <string name="room_preview_not_found">This room is not accessible at this time.\nTry again later, or ask a room admin to check if you have access.</string>
     <string name="room_preview_no_preview_join">"This room can't be previewed. Do you want to join it?"</string>
     <string name="fab_menu_create_room">"Rooms"</string>
@@ -2298,7 +2298,7 @@
 
     <string name="preference_help">Help</string>
     <string name="preference_help_title">Help and support</string>
-    <string name="template_preference_help_summary">Get help with using ${app_name}</string>
+    <string name="preference_help_summary">Get help with using ${app_name}</string>
     <string name="preference_versions">Versions</string>
     <string name="preference_system_settings">System settings</string>
 
@@ -2503,7 +2503,7 @@
     <string name="content_reported_as_inappropriate_content">"This content was reported as inappropriate.\n\nIf you don't want to see any more content from this user, you can ignore them to hide their messages."</string>
 
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} needs permission to save your E2E keys on disk.\n\nPlease allow access on the next pop-up to be able to export your keys manually.</string>
+    <string name="permissions_rationale_msg_keys_backup_export">${app_name} needs permission to save your E2E keys on disk.\n\nPlease allow access on the next pop-up to be able to export your keys manually.</string>
 
     <string name="no_network_indicator">There is no network connection right now</string>
 
@@ -2550,7 +2550,7 @@
     <string name="ftue_auth_carousel_control_body">Choose where your conversations are kept, giving you control and independence. Connected via Matrix.</string>
     <string name="ftue_auth_carousel_encrypted_body">End-to-end encrypted and no phone number required. No ads or datamining.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_ftue_auth_carousel_workplace_body" translatable="false">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
+    <string name="ftue_auth_carousel_workplace_body" translatable="false">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
 
     <string name="ftue_auth_use_case_title">Who will you chat to the most?</string>
     <string name="ftue_auth_use_case_subtitle">We\'ll help you get connected.</string>
@@ -2722,7 +2722,7 @@
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">You’ll lose access to secure messages unless you sign in to recover your encryption keys.</string>
     <string name="soft_logout_clear_data_dialog_submit">Clear data</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_soft_logout_sso_not_same_user_error">The current session is for user %1$s and you provide credentials for user %2$s. This is not supported by ${app_name}.\nPlease first clear data, then sign in again on another account.</string>
+    <string name="soft_logout_sso_not_same_user_error">The current session is for user %1$s and you provide credentials for user %2$s. This is not supported by ${app_name}.\nPlease first clear data, then sign in again on another account.</string>
 
     <string name="permalink_malformed">Your matrix.to link was malformed</string>
     <string name="bug_report_error_too_short">The description is too short</string>
@@ -2745,7 +2745,7 @@
 
     <string name="settings_developer_mode_fail_fast_title">Fail-fast</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} may crash more often when an unexpected error occurs</string>
+    <string name="settings_developer_mode_fail_fast_summary">${app_name} may crash more often when an unexpected error occurs</string>
 
     <string name="settings_developer_mode_show_info_on_screen_title">Show debug info on screen</string>
     <string name="settings_developer_mode_show_info_on_screen_summary">Show some useful info to help debugging the application</string>
@@ -2866,11 +2866,11 @@
     <string name="room_member_jump_to_read_receipt">Jump to read receipt</string>
 
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} does not handle events of type \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name} does not handle events of type \'%1$s\'</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} does not handle message of type \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">${app_name} does not handle message of type \'%1$s\'</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_rendering_event_error_exception">${app_name} encountered an issue when rendering content of event with id \'%1$s\'</string>
+    <string name="rendering_event_error_exception">${app_name} encountered an issue when rendering content of event with id \'%1$s\'</string>
 
     <string name="unignore">Unignore</string>
 
@@ -3009,7 +3009,7 @@
     <string name="keys_backup_restore_success_title_already_up_to_date">Keys are already up to date!</string>
 
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
 
     <string name="settings_key_requests">Key Requests</string>
     <string name="settings_export_trail">Export Audit</string>
@@ -3166,14 +3166,14 @@
     <string name="change_password_summary">Set a new account password…</string>
 
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_use_other_session_content_description">Use the latest ${app_name} on your other devices, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} for Android, or another cross-signing capable Matrix client</string>
+    <string name="use_other_session_content_description">Use the latest ${app_name} on your other devices, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} for Android, or another cross-signing capable Matrix client</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_app_desktop_web">${app_name} Web\n${app_name} Desktop</string>
+    <string name="app_desktop_web">${app_name} Web\n${app_name} Desktop</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_app_ios_android">${app_name} iOS\n${app_name} Android</string>
+    <string name="app_ios_android">${app_name} iOS\n${app_name} Android</string>
     <string name="or_other_mx_capable_client">or another cross-signing capable Matrix client</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_use_latest_app">Use the latest ${app_name} on your other devices:</string>
+    <string name="use_latest_app">Use the latest ${app_name} on your other devices:</string>
     <string name="command_description_discard_session">Forces the current outbound group session in an encrypted room to be discarded</string>
     <string name="command_description_discard_session_not_handled">Only supported in encrypted rooms</string>
     <!-- first will be replaced by recovery_passphrase, second will be replaced by recovery_key-->
@@ -3229,9 +3229,9 @@
     <string name="invite_users_to_room_title">Invite Users</string>
     <string name="invite_friends">Invite friends</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_invite_friends_text">Hey, talk to me on ${app_name}: %s</string>
+    <string name="invite_friends_text">Hey, talk to me on ${app_name}: %s</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_invite_friends_rich_title">🔐️ Join me on ${app_name}</string>
+    <string name="invite_friends_rich_title">🔐️ Join me on ${app_name}</string>
     <string name="invitation_sent_to_one_user">Invitation sent to %1$s</string>
     <string name="invitations_sent_to_two_users">Invitations sent to %1$s and %2$s</string>
     <string name="not_a_valid_qr_code">"It's not a valid matrix QR code"</string>
@@ -3253,12 +3253,12 @@
     <string name="open_terms_of">Open terms of %s</string>
     <string name="disconnect_identity_server_dialog_content">Disconnect from the identity server %s?</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_identity_server_error_outdated_identity_server">This identity server is outdated. ${app_name} support only API V2.</string>
+    <string name="identity_server_error_outdated_identity_server">This identity server is outdated. ${app_name} support only API V2.</string>
     <string name="identity_server_error_outdated_home_server">This operation is not possible. The homeserver is outdated.</string>
     <string name="identity_server_error_no_identity_server_configured">Please first configure an identity server.</string>
     <string name="identity_server_error_terms_not_signed">Please first accepts the terms of the identity server in the settings.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_identity_server_error_bulk_sha256_not_supported">For your privacy, ${app_name} only supports sending hashed user emails and phone number.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">For your privacy, ${app_name} only supports sending hashed user emails and phone number.</string>
     <string name="identity_server_error_binding_error">The association has failed.</string>
     <string name="identity_server_error_no_current_binding_error">There is no current association with this identifier.</string>
     <string name="identity_server_user_consent_not_provided">The user consent has not been provided.</string>
@@ -3363,15 +3363,15 @@
     <string name="settings_security_pin_code_use_biometrics_title">Enable biometrics</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Enable device specific biometrics, like fingerprints and face recognition.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_security_pin_code_use_biometrics_summary_off">PIN code is the only way to unlock ${app_name}.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN code is the only way to unlock ${app_name}.</string>
     <string name="settings_security_pin_code_notifications_title">Show content in notifications</string>
     <string name="settings_security_pin_code_notifications_summary_on">Show details like room names and message content.</string>
     <string name="settings_security_pin_code_notifications_summary_off">Only display number of unread messages in a simple notification.</string>
     <string name="settings_security_pin_code_grace_period_title">Require PIN after 2 minutes</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_security_pin_code_grace_period_summary_on">PIN code is required after 2 minutes of not using ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">PIN code is required after 2 minutes of not using ${app_name}.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_settings_security_pin_code_grace_period_summary_off">PIN code is required every time you open ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">PIN code is required every time you open ${app_name}.</string>
     <string name="settings_security_pin_code_change_pin_title">Change PIN</string>
     <string name="settings_security_pin_code_change_pin_summary">Change your current PIN</string>
     <string name="auth_pin_confirm_to_disable_title">Confirm PIN to disable PIN</string>
@@ -3447,7 +3447,7 @@
 
     <string name="re_authentication_activity_title">Re-Authentication Needed</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_re_authentication_default_confirm_text">${app_name} requires you to enter your credentials to perform this action.</string>
+    <string name="re_authentication_default_confirm_text">${app_name} requires you to enter your credentials to perform this action.</string>
     <string name="authentication_error">Failed to authenticate</string>
 
     <string name="a11y_screenshot">Screenshot</string>
@@ -3686,7 +3686,7 @@
 
     <string name="link_this_email_settings_link">Link this email with your account</string>
     <!-- %s will be replaced by the value of link_this_email_settings_link and styled as a link -->
-    <string name="template_link_this_email_with_your_account">%s in Settings to receive invites directly in ${app_name}.</string>
+    <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in ${app_name}.</string>
 
     <string name="labs_enable_latex_maths">Enable LaTeX mathematics</string>
     <string name="restart_the_application_to_apply_changes">Restart the application for the change to take effect.</string>
@@ -3744,8 +3744,8 @@
     <string name="a11y_location_share_icon">Share location</string>
     <string name="a11y_static_map_image">Map</string>
     <string name="location_share">Share location</string>
-    <string name="template_location_not_available_dialog_title">${app_name} could not access your location</string>
-    <string name="template_location_not_available_dialog_content">${app_name} could not access your location. Please try again later.</string>
+    <string name="location_not_available_dialog_title">${app_name} could not access your location</string>
+    <string name="location_not_available_dialog_content">${app_name} could not access your location. Please try again later.</string>
     <string name="location_share_external">Open with</string>
     <string name="settings_enable_location_sharing">Enable location sharing</string>
     <string name="settings_enable_location_sharing_summary">Once enabled you will be able to send your location to any room</string>

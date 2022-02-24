@@ -269,7 +269,7 @@
     <string name="local_address_book_header">Paikalliset yhteystiedot</string>
     <string name="matrix_only_filter">Ainoastaan Matrix-yhteyshenkilöt</string>
     <string name="no_conversation_placeholder">Ei keskusteluita</string>
-    <string name="template_no_contact_access_placeholder">Et ole sallinut ${app_name}ille pääsyä paikallisiin yhteystietoihisi</string>
+    <string name="no_contact_access_placeholder">Et ole sallinut ${app_name}ille pääsyä paikallisiin yhteystietoihisi</string>
     <string name="no_result_placeholder">Ei tuloksia</string>
     <string name="rooms_header">Huoneet</string>
     <string name="rooms_directory_header">Huoneluettelo</string>
@@ -392,20 +392,20 @@
     <string name="media_picker_both_capture_title">Ota kuva tai video"</string>
     <string name="media_picker_cannot_record_video">Videointi epäonnistui</string>
     <string name="permissions_rationale_popup_title">Huomio</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} tarvitsee käyttöluvan mediagalleriaasi lähettäkseen liitteitä.\n\nSalli tiedostojen käyttö seuraavalla näytöllä liittääksesi kuvia ja muita tiedostoja viesteihin.</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name} tarvitsee käyttöluvan kameraan ottaakseen kuvia ja suorittakseen videopuheluita.</string>
+    <string name="permissions_rationale_msg_storage">${app_name} tarvitsee käyttöluvan mediagalleriaasi lähettäkseen liitteitä.\n\nSalli tiedostojen käyttö seuraavalla näytöllä liittääksesi kuvia ja muita tiedostoja viesteihin.</string>
+    <string name="permissions_rationale_msg_camera">${app_name} tarvitsee käyttöluvan kameraan ottaakseen kuvia ja suorittakseen videopuheluita.</string>
     <string name="permissions_rationale_msg_camera_explanation">"
 \n
 \nSoittaaksesi videopuhelun, salli seuraavassa ponnahdusikkunassa sovelluksen käyttää kameraa."</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name} tarvitsee käyttöluvan mikrofoniin suorittakseen puheluita.</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} tarvitsee käyttöluvan mikrofoniin suorittakseen puheluita.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">"
 \n
 \nSoittaaksesi äänipuhelun, salli seuraavassa ponnahdusikkunassa sovelluksen käyttää mikrofonia."</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} tarvitsee käyttöluvan kameraan ja mikrofoniin suorittakseen videopuheluita.
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} tarvitsee käyttöluvan kameraan ja mikrofoniin suorittakseen videopuheluita.
 \n
 \nSalli mikrofonin ja kameran käyttö seuraavilla näytöillä aloittaaksesi tämän puhelun.</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} voi tarkistaa yhteystietosi löytääkseen muita Matrixin käyttäjiä sähköpostiosoitteiden ja puhelinnumeroiden perusteella. Jos suostut jakamaan yhteystietosi tätä tarkoitusta varten, salli yhteystietojen käyttö seuraavassa ponnahdusikkunassa.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} pystyy käyttämään yhteystietojasi, etsiäkseen muita Matrix-käyttäjiä sähköpostiosoitteiden sekä puhelinnumeroiden perusteella.
+    <string name="permissions_rationale_msg_contacts">${app_name} voi tarkistaa yhteystietosi löytääkseen muita Matrixin käyttäjiä sähköpostiosoitteiden ja puhelinnumeroiden perusteella. Jos suostut jakamaan yhteystietosi tätä tarkoitusta varten, salli yhteystietojen käyttö seuraavassa ponnahdusikkunassa.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} pystyy käyttämään yhteystietojasi, etsiäkseen muita Matrix-käyttäjiä sähköpostiosoitteiden sekä puhelinnumeroiden perusteella.
 \n
 \nSaako ${app_name} käyttää yhteystietojasi tätä varten\?</string>
     <string name="permissions_action_not_performed_missing_permissions">Toimenpide epäonnistui puuttuvien käyttölupien takia</string>
@@ -875,12 +875,12 @@
     <string name="e2e_re_request_encryption_key"><u>Pyydä salausavaimia uudelleen</u> muista istunnoistasi.</string>
     <string name="e2e_re_request_encryption_key_sent">Avainpyyntö lähetetty.</string>
     <string name="e2e_re_request_encryption_key_dialog_title">Pyyntö lähetetty</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Käynnistä ${app_name} toisella laitteella, joka voi purkaa viestin, jotta se voi lähettää avaimet tähän istuntoon.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Käynnistä ${app_name} toisella laitteella, joka voi purkaa viestin, jotta se voi lähettää avaimet tähän istuntoon.</string>
     <plurals name="membership_changes">
         <item quantity="one">yksi jäsenyysmuutos</item>
         <item quantity="other">%d jäsenyysmuutosta</item>
     </plurals>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Käytä ${app_name}in oletussoittoääntä saapuville puheluille</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Käytä ${app_name}in oletussoittoääntä saapuville puheluille</string>
     <string name="settings_call_ringtone_title">Saapuvien puheluiden soittoääni</string>
     <string name="video_call_in_progress">Videopuhelu menossa…</string>
     <string name="list_members">Käyttäjälista</string>
@@ -957,7 +957,7 @@
     <string name="settings_troubleshoot_test_account_settings_quickfix">Ota käyttöön</string>
     <string name="settings_troubleshoot_test_device_settings_title">Istunnon asetukset.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Ilmoitukset ovat käytössä tässä istunnossa.</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Ilmoitukset eivät ole käytössä tässä istunnossa.
+    <string name="settings_troubleshoot_test_device_settings_failed">Ilmoitukset eivät ole käytössä tässä istunnossa.
 \nTarkista ${app_name}in asetukset.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Ota käyttöön</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Mukautetut asetukset.</string>
@@ -967,7 +967,7 @@
     <string name="settings_troubleshoot_test_bing_settings_quickfix">Tarkista asetukset</string>
     <string name="settings_troubleshoot_test_play_services_title">Play Services -palvelun tarkistus</string>
     <string name="settings_troubleshoot_test_play_services_success">Google Play Services APK on saatavilla ja ajan tasalla.</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} käyttää Google Play Services -palvelua ilmoitusten välittämiseen, mutta se ei näytä olevan määritetty oikein:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} käyttää Google Play Services -palvelua ilmoitusten välittämiseen, mutta se ei näytä olevan määritetty oikein:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Korjaa Play Services -palvelu</string>
     <string name="settings_troubleshoot_test_fcm_title">Firebase-tunniste</string>
@@ -975,11 +975,11 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_failed">FCM-tunnisteen haku epäonnistui: 
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s]
 \n${app_name} ei voi vaikuttaa tähän virheeseen, ja Googlen mukaan tämä virhe tarkoittaa, että tällä laitteella on liikaa FCM:ään rekisteröityjä sovelluksia. Tämä virhe ilmenee vain tapauksissa, joissa on erittäin paljon FCM:ään rekisteröityjä sovelluksia asennettuna, joten tätä ei pitäisi tapahtua normaalisti.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s]
 \nTämä virhe ei ole ${app_name}in ratkaistavissa. Se voi johtua useasta eri syystä. Ehkä tämä toimii, jos yrität myöhemmin. Voit myös tarkistaa, että Google Play Services -palvelu ei ole rajoitettuna järjestelmäasetuksissa, ja että laitteesi kello on oikein. Tämä voi tapahtua myös mukautetun käyttöjärjestelmän kanssa.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s]
 \nTämä virhe ei ole ${app_name}in ratkaistavissa. Tässä puhelimessa ei ole Google-tiliä. Lisää laitteeseesi Google-tili tätä toimintoa varten.</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Lisää tili</string>
     <string name="settings_troubleshoot_test_token_registration_title">Tunnisteen rekisteröinti</string>
@@ -991,17 +991,17 @@
     <string name="settings_troubleshoot_test_service_restart_failed">Palvelun uudelleenkäynnistäminen epäonnistui</string>
     <string name="settings_troubleshoot_test_service_boot_title">Käynnistä laitteen käynnistyessä</string>
     <string name="settings_troubleshoot_test_service_boot_success">Palvelu käynnistetään, kun laite käynnistetään uudelleen.</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">Palvelua ei käynnistetä laitteen uudelleenkäynnistyksen yhteydessä. Et tule saamaan ilmoituksia ennen kuin ${app_name} on käynnistetty uudelleen.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Palvelua ei käynnistetä laitteen uudelleenkäynnistyksen yhteydessä. Et tule saamaan ilmoituksia ennen kuin ${app_name} on käynnistetty uudelleen.</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Ota käyttöön automaattinen käynnistys</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Tarkista taustapalveluiden rajoitukset</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">Taustapalveluiden rajoitukset ovat pois käytöstä. Tämä testi tulee ajaa mobiilidatayhteydellä (ilman wlania).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Taustapalveluiden rajoitukset ovat pois käytöstä. Tämä testi tulee ajaa mobiilidatayhteydellä (ilman wlania).
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Taustapalveluiden rajoitukset ovat käytössä.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Taustapalveluiden rajoitukset ovat käytössä.
 \nTyötä, jota ${app_name} yrittää tehdä, rajoitetaan aggressiivisesti, kun se on taustalla, mikä saattaa vaikuttaa ilmoituksiin.
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Poista rajoitukset</string>
     <string name="settings_troubleshoot_test_battery_title">Akunkäytön optimointi</string>
-    <string name="template_settings_troubleshoot_test_battery_success">Akunkäytön optimointi ei vaikuta ${app_name}in toimintaan.</string>
+    <string name="settings_troubleshoot_test_battery_success">Akunkäytön optimointi ei vaikuta ${app_name}in toimintaan.</string>
     <string name="settings_troubleshoot_test_battery_failed">Jos käyttäjä jättää laitteen paikalleen ilman latausjohtoa niin, että näyttö on pois päältä, laite siirtyy torkkutilaan. Tämä estää sovelluksia käyttämästä verkkoyhteyksiä ja lykkää niiden töitä, synkronointeja ja perushälytyksiä.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Jätä optimointi huomiotta</string>
     <string name="settings_notification_privacy_normal">Normaali</string>
@@ -1024,15 +1024,15 @@
     <string name="settings_show_join_leave_messages_summary">Ei vaikuta kutsuihin, poistamisiin ja porttikieltoihin.</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Sisältää hahmokuvat ja näyttönimien vaihdot.</string>
     <string name="startup_notification_privacy_title">Ilmoitusten yksityisyys</string>
-    <string name="template_startup_notification_privacy_message">${app_name} voi ajaa itseään taustalla hallitakseen sinulle näytettäviä ilmoituksia turvallisesti ja yksityisesti. Tämä voi vaikuttaa akunkäyttöön.</string>
+    <string name="startup_notification_privacy_message">${app_name} voi ajaa itseään taustalla hallitakseen sinulle näytettäviä ilmoituksia turvallisesti ja yksityisesti. Tämä voi vaikuttaa akunkäyttöön.</string>
     <string name="startup_notification_privacy_button_grant">Anna oikeus</string>
     <string name="startup_notification_privacy_button_other">Valitse toinen vaihtoehto</string>
     <string name="startup_notification_fdroid_battery_optim_title">Taustayhteys</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name}in tarvitsee käyttää taustayhteyttä, jotta se voi näyttää luotettavia ilmoituksia.
+    <string name="startup_notification_fdroid_battery_optim_message">${app_name}in tarvitsee käyttää taustayhteyttä, jotta se voi näyttää luotettavia ilmoituksia.
 \nSeuraavalla ruudulla sinulta kysytään lupaa, jotta ${app_name} voi pitää itsensä käynnissä taustalla.</string>
     <string name="startup_notification_fdroid_battery_optim_button_grant">Anna oikeus</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} kerää anonyymiä analytiikkaa sovelluksen parantamiseksi.</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">Otathan analytiikan käyttöön ${app_name}in parantamiseksi.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} kerää anonyymiä analytiikkaa sovelluksen parantamiseksi.</string>
+    <string name="settings_opt_in_of_analytics_prompt">Otathan analytiikan käyttöön ${app_name}in parantamiseksi.</string>
     <string name="settings_opt_in_of_analytics_ok">Kyllä, haluan auttaa!</string>
     <string name="settings_data_save_mode_summary">Datansäästötila ottaa käyttöön erityisen suodattimen, joka poistaa paikallaoloilmoitukset ja kirjoittamisen ilmoitukset.</string>
     <string name="account_email_error">Sähköpostiasi varmennettaessa tapahtui virhe.</string>
@@ -1131,7 +1131,7 @@
     <string name="passphrase_passphrase_does_not_match">Salalause ei täsmää</string>
     <string name="passphrase_empty_error_message">Syötä salalause</string>
     <string name="passphrase_passphrase_too_weak">Salalause on liian heikko</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">Poista salalause, jos haluat ${app_name} generoivan palautusavaimen.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Poista salalause, jos haluat ${app_name} generoivan palautusavaimen.</string>
     <string name="keys_backup_no_session_error">Matrix-istuntoa ei ole saatavilla</string>
     <string name="keys_backup_setup_step1_title">Älä koskaan menetä salattuja viestejä</string>
     <string name="keys_backup_setup_step1_description">Salatuissa huoneissa viestit ovat suojattuna osapuolten välisellä salauksella. Vain sinä ja vastaanottaja(t) omistavat avaimet näiden viestien lukemiseen.
@@ -1247,7 +1247,7 @@
 \nJos et asettanut uutta palautustapaa, hyökkääjä saattaa yrittää päästä käsiksi tiliisi. Vaihda tilisi salasana ja aseta uusi palautustapa asetuksissa välittömästi.</string>
     <string name="autodiscover_invalid_response">Epäkelpo kotipalvelimen löytövastaus</string>
     <string name="autodiscover_well_known_autofill_dialog_title">Automaattitäydennyksen palvelinasetukset</string>
-    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} löysi mukautetun palvelinasetuksen userId:si domainille ”%1$s”:
+    <string name="autodiscover_well_known_autofill_dialog_message">${app_name} löysi mukautetun palvelinasetuksen userId:si domainille ”%1$s”:
 \n%2$s</string>
     <string name="autodiscover_well_known_autofill_confirm">Käytä asetuksia</string>
     <string name="notification_sync_init">Alustetaan palvelua</string>
@@ -1324,7 +1324,7 @@
     <string name="please_wait">Odota…</string>
     <string name="group_all_communities">Kaikki yhteisöt</string>
     <string name="room_preview_no_preview">Tätä huonetta ei voi esikatsella</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">${app_name} ei vielä tue täysin julkisen huoneen esikatselua</string>
+    <string name="room_preview_world_readable_room_not_supported_yet">${app_name} ei vielä tue täysin julkisen huoneen esikatselua</string>
     <string name="fab_menu_create_room">Huoneet</string>
     <string name="fab_menu_create_chat">Yksityisviestit</string>
     <string name="create_room_title">Uusi huone</string>
@@ -1469,10 +1469,10 @@
     <string name="call_failed_no_ice_use_alt">Kokeile käyttää palvelinta %s</string>
     <string name="settings_call_ringtone_use_default_stun_sum">Käyttää palvelinta %s apupalvelimena, jos kotipalvelimesi ei tarjoa sellaista (IP-osoitteesi näkyy palvelimelle puhelun aikana)</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimoitu akunkestoa varten</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} synkronoi taustalla laitteen rajallisia resursseja (akkua) säästäen.
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} synkronoi taustalla laitteen rajallisia resursseja (akkua) säästäen.
 \nLaitteesi resurssien tilasta riippuen käyttöjärjestelmä saattaa lykätä synkronointia.</string>
     <string name="settings_background_fdroid_sync_mode_real_time">Optimoitu reaaliaikaa varten</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} synkronoi taustalla täsmällisin aikavälein (säädettävä).
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} synkronoi taustalla täsmällisin aikavälein (säädettävä).
 \nTämä vaikuttaa radion ja akun käyttöön. Näet pysyvän ilmoituksen, joka kertoo, että ${app_name} kuuntelee tapahtumia.</string>
     <string name="message_edits">Viestimuokkaukset</string>
     <string name="terms_description_for_identity_server">Ole löydettävissä</string>
@@ -1575,7 +1575,7 @@
     <string name="content_reported_as_inappropriate_content">Tämä sisältö on ilmiannettu epäsopivana. 
 \n 
 \nJos et halua nähdä enempää sisältöä tältä käyttäjältä, voit estää hänet piilottaaksesi hänen viestit.</string>
-    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} tarvitsee oikeuden tallentaakseen osapuolten välisen salauksen avaimesi talteen.
+    <string name="permissions_rationale_msg_keys_backup_export">${app_name} tarvitsee oikeuden tallentaakseen osapuolten välisen salauksen avaimesi talteen.
 \n
 \nSalli pääsy tiedostoihin seuraavassa ponnahdusikkunassa, jotta voit viedä avaimesi käsin.</string>
     <string name="login_error_no_homeserver_found">Tämä ei ole kelvollinen Matrix-palvelimen osoite</string>
@@ -1709,7 +1709,7 @@
 \nKirjaudu sisään päästäksesi käsiksi tunnuksesi tietoihin ja viesteihin.</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Menetät pääsyn salattuihin viesteihisi ellet kirjaudu sisään palauttaaksesi salausavaimesi.</string>
     <string name="soft_logout_clear_data_dialog_submit">Poista tiedot</string>
-    <string name="template_soft_logout_sso_not_same_user_error">Nykyinen istunto on käyttäjälle %1$s, ja yritit kirjautuas isään käyttäjälle %2$s. ${app_name} ei tue tätä.
+    <string name="soft_logout_sso_not_same_user_error">Nykyinen istunto on käyttäjälle %1$s, ja yritit kirjautuas isään käyttäjälle %2$s. ${app_name} ei tue tätä.
 \nPoista ensin tietosi ja kirjaudu sen jälkeen toisella tunnuksella. Voit vaihtoehtoisesti käyttää ${app_name}in selainversiota.</string>
     <string name="permalink_malformed">matrix.to-linkkisi oli epämuodostunut</string>
     <string name="bug_report_error_too_short">Kuvaus on liian lyhyt</string>
@@ -1751,7 +1751,7 @@
     <string name="settings_rageshake_detection_threshold_summary">Ravista puhelintasi testataksesi tunnistusrajan</string>
     <string name="rageshake_detected">Ravistus tunnistettu!</string>
     <string name="autocomplete_limited_results">Näytetään vain ensimmäiset tulokset, kirjoita lisää kirjaimia…</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} voi kaatuilla tavallista useammin odottamattomien virheiden vuoksi</string>
+    <string name="settings_developer_mode_fail_fast_summary">${app_name} voi kaatuilla tavallista useammin odottamattomien virheiden vuoksi</string>
     <string name="command_description_shrug">Lisää ¯\\_(ツ)_/¯ tavallisen viestin alkuun</string>
     <string name="login_error_threepid_denied">Käyttämäsi sähköpostipalvelun ei ole sallittu rekisteröityä tälle palvelimelle</string>
     <string name="verification_sas_match">Täsmäävät</string>
@@ -1801,9 +1801,9 @@
     <string name="room_member_power_level_admin_in">Ylläpitäjä %1$s:ssä</string>
     <string name="room_member_power_level_moderator_in">Valvoja %1$s:ssä</string>
     <string name="room_member_jump_to_read_receipt">Siirry lukukuittaukseen</string>
-    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} ei osaa käsitellä tapahtumia joiden tyyppi on \'%1$s\'</string>
-    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} ei osaa käsitellä viestejä joiden tyyppi on \'%1$s\'</string>
-    <string name="template_rendering_event_error_exception">${app_name} ei osannut piirtää tapahtuman jonka tunniste on \'%1$s\' sisältöä</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name} ei osaa käsitellä tapahtumia joiden tyyppi on \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_message_not_handled">${app_name} ei osaa käsitellä viestejä joiden tyyppi on \'%1$s\'</string>
+    <string name="rendering_event_error_exception">${app_name} ei osannut piirtää tapahtuman jonka tunniste on \'%1$s\' sisältöä</string>
     <string name="room_list_sharing_header_recent_rooms">Viimeaikaiset huoneet</string>
     <string name="room_list_sharing_header_other_rooms">Muut huoneet</string>
     <string name="command_description_rainbow">Lähettää annetun viestin väritettynä sateenkaaren väreillä</string>
@@ -1865,7 +1865,7 @@
     <string name="event_redacted_by_user_reason_with_reason">Käyttäjä poistanut tapahtuman, syynä: %1$s</string>
     <string name="event_redacted_by_admin_reason_with_reason">Tapahtuma moderoitu huoneen ylläpitäjän toimesta, syynä: %1$s</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Avaimet ovat jo ajan tasalla!</string>
-    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="settings_key_requests">Avainpyynnöt</string>
     <string name="refresh">Päivitä</string>
     <string name="new_session">Uusi kirjautuminen. Olitko se sinä\?</string>
@@ -1944,7 +1944,7 @@
     <string name="sound_device_speaker">Kaiutin</string>
     <string name="sound_device_phone">Puhelin</string>
     <string name="call_select_sound_device">Valitse äänilaite</string>
-    <string name="template_call_failed_no_connection">${app_name}-puhelu epäonnistui</string>
+    <string name="call_failed_no_connection">${app_name}-puhelu epäonnistui</string>
     <string name="send_bug_report_include_key_share_history">Lähetä avaimen jakopyyntöjen historia</string>
     <string name="no_more_results">Ei enempää tuloksia</string>
     <string name="bottom_action_notification">Ilmoitukset</string>
@@ -2270,7 +2270,7 @@
     <string name="a11y_import_key_from_file">Tuo avain tiedostosta</string>
     <string name="a11y_screenshot">Kuvakaappaus</string>
     <string name="authentication_error">Tunnistautuminen epäonnistui</string>
-    <string name="template_re_authentication_default_confirm_text">${app_name} vaatii tämän toimenpiteen suorittamiseksi, että annat kirjautumistietosi.</string>
+    <string name="re_authentication_default_confirm_text">${app_name} vaatii tämän toimenpiteen suorittamiseksi, että annat kirjautumistietosi.</string>
     <string name="re_authentication_activity_title">Tunnistautuminen uudelleen vaaditaan</string>
     <string name="call_slide_to_end_conference">Liu\'uta lopettaaksesi puhelun</string>
     <string name="call_transfer_unknown_person">Tuntematon henkilö</string>
@@ -2318,13 +2318,13 @@
     <string name="auth_pin_confirm_to_disable_title">Vahvista PIN-koodi poistaaksesi PIN-koodin käytöstä</string>
     <string name="settings_security_pin_code_change_pin_summary">Vaihda nykyinen PIN-koodisi</string>
     <string name="settings_security_pin_code_change_pin_title">Vaihda PIN-koodi</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_off">PIN-koodi vaaditaan joka kerta, kun avaat sovelluksen ${app_name}.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">PIN-koodi vaaditaan, kun sovellusta ${app_name} ei ole käytetty 2 minuuttiin.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">PIN-koodi vaaditaan joka kerta, kun avaat sovelluksen ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">PIN-koodi vaaditaan, kun sovellusta ${app_name} ei ole käytetty 2 minuuttiin.</string>
     <string name="settings_security_pin_code_grace_period_title">Vaadi PIN-koodi 2 minuutin jälkeen</string>
     <string name="settings_security_pin_code_notifications_summary_off">Näytä vain lukemattomien viestien määrä yksinkertaisessa ilmoituksessa.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Näytä tiedot kuten huoneiden nimet ja viestien sisältö.</string>
     <string name="settings_security_pin_code_notifications_title">Näytä sisältö ilmoituksissa</string>
-    <string name="template_settings_security_pin_code_use_biometrics_summary_off">PIN-koodi on ainoa tapa avata sovelluksen ${app_name} lukitus.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">PIN-koodi on ainoa tapa avata sovelluksen ${app_name} lukitus.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Ota biometriikka käyttöön</string>
     <string name="settings_security_pin_code_title">Ota PIN-koodi käyttöön</string>
     <string name="settings_security_application_protection_summary">Suojaa pääsy käyttäen PIN-koodia ja biometriikkaa.</string>
@@ -2368,7 +2368,7 @@
     <string name="identity_server_error_terms_not_signed">Hyväksy ensin identiteettipalvelimen ehdot asetusten kautta.</string>
     <string name="identity_server_error_no_identity_server_configured">Määritä ensin identiteettipalvelin.</string>
     <string name="identity_server_error_outdated_home_server">Tämä toiminto ei ole mahdollinen. Kotipalvelin on vanhentunut.</string>
-    <string name="template_identity_server_error_outdated_identity_server">Tämä identiteettipalvelin on vanhentunut. ${app_name} tukee vain API V2:ta.</string>
+    <string name="identity_server_error_outdated_identity_server">Tämä identiteettipalvelin on vanhentunut. ${app_name} tukee vain API V2:ta.</string>
     <string name="disconnect_identity_server_dialog_content">Katkaistaanko yhteys identiteettipalvelimeen %s\?</string>
     <string name="choose_locale_loading_locales">Ladataan käytettävissä olevia kieliä…</string>
     <string name="user_code_my_code">Oma koodi</string>

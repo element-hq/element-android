@@ -140,7 +140,7 @@
     <string name="local_address_book_header">Libreta local de direcciones</string>
     <string name="matrix_only_filter">Solamente contactos Matrix</string>
     <string name="no_conversation_placeholder">Sin conversaciones</string>
-    <string name="template_no_contact_access_placeholder">No ha permitido a ${app_name} acceder a sus contactos locales</string>
+    <string name="no_contact_access_placeholder">No ha permitido a ${app_name} acceder a sus contactos locales</string>
     <string name="no_result_placeholder">Sin resultados</string>
     <string name="rooms_header">Salas</string>
     <string name="rooms_directory_header">Directorio de salas</string>
@@ -263,14 +263,14 @@
     <string name="media_picker_both_capture_title">Tomar una foto o grabar un video"</string>
     <string name="media_picker_cannot_record_video">No pudo grabar video"</string>
     <string name="permissions_rationale_popup_title">Información</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} necesita tu permiso para entrar en tu almacenaje de fotos y videos para enviar y guardar archivos.\n\nPor favor permite el acceso en el siguiente mensaje para poder enviar archivos desde su dispostivo.</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name} necesita tu permiso para usar tu cámara para tomar fotos y hacer llamadas de video.</string>
+    <string name="permissions_rationale_msg_storage">${app_name} necesita tu permiso para entrar en tu almacenaje de fotos y videos para enviar y guardar archivos.\n\nPor favor permite el acceso en el siguiente mensaje para poder enviar archivos desde su dispostivo.</string>
+    <string name="permissions_rationale_msg_camera">${app_name} necesita tu permiso para usar tu cámara para tomar fotos y hacer llamadas de video.</string>
     <string name="permissions_rationale_msg_camera_explanation">\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name} necesita tu permiso para usar tu micrófono para hacer llamadas de voz.</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} necesita tu permiso para usar tu micrófono para hacer llamadas de voz.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} necesita tu permiso para usar su cámara y micrófono para hacer llamadas de video.\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} necesita tu permiso para leer tus contactos y directorio para encontrar a otros usuarios por sus correos electrónicos y números telefónicos.\n\nPor favor permite el acceso en el siguiente mensaje para encontrar usuarios de ${app_name} en su directorio.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} necesita tu permiso para leer los contactos de tu directorio para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} necesita tu permiso para usar su cámara y micrófono para hacer llamadas de video.\n\nPor favor permite el acceso en el siguiente mensaje para poder hacer la llamada.</string>
+    <string name="permissions_rationale_msg_contacts">${app_name} necesita tu permiso para leer tus contactos y directorio para encontrar a otros usuarios por sus correos electrónicos y números telefónicos.\n\nPor favor permite el acceso en el siguiente mensaje para encontrar usuarios de ${app_name} en su directorio.</string>
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} necesita tu permiso para leer los contactos de tu directorio para encontrar otros usuarios de Matrix por sus correos electrónicos y números telefónicos.
 
 ¿Permitir el acceso a ${app_name} para leer tus contactos ?</string>
     <string name="permissions_action_not_performed_missing_permissions">Perdón. Operación no realizada debido a permisos faltantes</string>
@@ -650,7 +650,7 @@ Dispositivos desconocidos:</string>
     <string name="call_anyway">Llamar de todos modos</string>
     <string name="title_activity_verify_device">Verificar dispositivo</string>
     <string name="settings_call_category">Llamadas</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Usar el tono de llamada normal de ${app_name} para llamadas entrantes</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Usar el tono de llamada normal de ${app_name} para llamadas entrantes</string>
     <string name="settings_call_ringtone_title">Tono para llamadas entrantes</string>
     <string name="settings_call_ringtone_dialog_title">Elegir sonido de llamadas:</string>
     <string name="reason_hint">Razón</string>

@@ -126,7 +126,7 @@
     <string name="user_directory_header">Bruger katalog</string>
     <string name="matrix_only_filter">Kun Matrix kontakter</string>
     <string name="no_conversation_placeholder">Ingen samtaler</string>
-    <string name="template_no_contact_access_placeholder">Du gav ikke ${app_name} tilladelse til at se dine lokale kontakter</string>
+    <string name="no_contact_access_placeholder">Du gav ikke ${app_name} tilladelse til at se dine lokale kontakter</string>
     <string name="no_result_placeholder">Ingen resultater</string>
     <string name="rooms_header">Rum</string>
     <string name="rooms_directory_header">Rum katalog</string>
@@ -257,23 +257,23 @@ Du er blevet logget ud af alle enheder og vil ikke længere modtage pushnotifika
     <string name="media_picker_both_capture_title">Tag et billede eller optag en video</string>
     <string name="media_picker_cannot_record_video">Kan ikke optage video</string>
     <string name="permissions_rationale_popup_title">Information</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} skal bruge tilladelse til at tilgå dit billed- og videoarkiv for at sende og gemme vedhæftninger.
+    <string name="permissions_rationale_msg_storage">${app_name} skal bruge tilladelse til at tilgå dit billed- og videoarkiv for at sende og gemme vedhæftninger.
 Giv venligst tilladelse ved næste pop-up for at kunne sende filer fra din telefon.</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name} skal bruge tilladelse til at bruge dit kamera for at billeder og lave videoopkald.</string>
+    <string name="permissions_rationale_msg_camera">${app_name} skal bruge tilladelse til at bruge dit kamera for at billeder og lave videoopkald.</string>
     <string name="permissions_rationale_msg_camera_explanation">
 
 Giv venligst tilladelse ved næste pop-up for at kunne lave opkald.</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name} skal bruge tilladelse til at bruge din mikrofon for at lave lydopkald.</string>
+    <string name="permissions_rationale_msg_record_audio">${app_name} skal bruge tilladelse til at bruge din mikrofon for at lave lydopkald.</string>
     <string name="permissions_rationale_msg_record_audio_explanation">
 
 Giv venligst tilladelse ved næste pop-up for at kunne lave opkaldet.</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} skal bruge tilladelse til at bruge dit kamera og din mikrofon for at lave videoopkald.
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} skal bruge tilladelse til at bruge dit kamera og din mikrofon for at lave videoopkald.
 
 Giv venligst tilladelse ved næste pop-up for at lave opkaldet.</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} skal bruge adgang til dine kontakter for at finde andre Matrix brugere ud fra deres email og telefonnumre.
+    <string name="permissions_rationale_msg_contacts">${app_name} skal bruge adgang til dine kontakter for at finde andre Matrix brugere ud fra deres email og telefonnumre.
 
 Giv venligst tilladelse ved næste pop-up for at finde kontakter der er på ${app_name}.</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} skal bruge adgang til dine kontakter for at finde andre Matrix brugere ud fra deres email og telefonnumre.
+    <string name="permissions_msg_contacts_warning_other_androids">${app_name} skal bruge adgang til dine kontakter for at finde andre Matrix brugere ud fra deres email og telefonnumre.
 
 Vil du give ${app_name} adgang til dine kontakter?</string>
     <string name="permissions_action_not_performed_missing_permissions">Beklager… Handlingen blev ikke udført fordi der mangler tilladelser</string>
