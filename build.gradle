@@ -138,7 +138,7 @@ project(":vector") {
     }
 }
 
-project(":diff-match-patch") {
+project(":library:diff-match-patch") {
     sonarqube {
         skipProject = true
     }

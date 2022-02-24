@@ -2384,7 +2384,6 @@
     <string name="settings_troubleshoot_test_push_loop_failed">Ricezione push fallita. La soluzione può essere di reinstallare l\'applicazione.</string>
     <string name="settings_troubleshoot_test_push_loop_success">L\'applicazione sta ricevendo il PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_title">Prova push</string>
-    <string name="search_is_not_supported_in_e2e_room">La ricerca in stanze cifrate non è ancora supportata.</string>
     <string name="search_banned_user_hint">Filtra utenti banditi</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">Non hai il permesso di avviare una chiamata</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Non hai il permesso di avviare una chiamata di gruppo</string>
@@ -2690,7 +2689,6 @@
     <string name="create_spaces_join_info_help">Per unirti ad uno Spazio già esistente, ti serve un invito.</string>
     <string name="create_spaces_you_can_change_later">Puoi cambiarlo in seguito</string>
     <string name="create_spaces_choose_type_label">Che tipo di Spazio vuoi creare\?</string>
-    <string name="create_spaces_type_header">Gli Spazi sono un nuovo modo di raggruppare stanze e contatti</string>
     <string name="your_private_space">Il tuo Spazio privato</string>
     <string name="your_public_space">Il tuo Spazio pubblico</string>
     <string name="add_space">Aggiungi Spazio</string>
@@ -2851,15 +2849,10 @@
     <string name="settings_notification_other">Altro</string>
     <string name="settings_notification_mentions_and_keywords">Menzioni e parole chiave</string>
     <string name="settings_notification_default">Notifiche predefinite</string>
-    <string name="link_this_email_with_your_account">%s nella impostazioni per ricevere inviti direttamente in Element.</string>
+    <string name="template_link_this_email_with_your_account">%s nella impostazioni per ricevere inviti direttamente in ${app_name}.</string>
     <string name="link_this_email_settings_link">Collega questa email con il tuo account</string>
     <string name="this_invite_to_this_space_was_sent">Questo invito per questo spazio è stato inviato a %s, la quale non è associata al tuo account</string>
     <string name="this_invite_to_this_room_was_sent">Questo invito per questa stanza è stato inviato a %s, la quale non è associata al tuo account</string>
-    <string name="to_help_space_members_find_and_join">Per aiutare i membri dello spazio a trovare ed entrare in una stanza privata, vai nelle impostazioni di quella stanza toccando il suo avatar.</string>
-    <string name="help_space_members">Aiuta i membri dello spazio a trovare stanze private</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Ciò rende facile mantenere private le stanze in uno spazio, mentre le persone potranno trovarle ed unirsi. Tutte le stanze nuove in uno spazio avranno questa opzione disponibile.</string>
-    <string name="help_people_in_spaces_find_and_join">Aiuta le persone negli spazi a trovare ed entrare nelle stanze private da sole, non c\'è bisogno di invitarle a mano.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Novità: consenti alle persone negli spazi di trovare ed entrare nelle stanze private</string>
     <string name="call_jitsi_started">Chiamata di gruppo iniziata</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">Tutte le stanze in cui sei appariranno nella pagina principale.</string>
     <string name="preference_show_all_rooms_in_home">Mostra tutte le stanze nella pagina principale</string>
@@ -3019,7 +3012,7 @@
     </plurals>
     <string name="preference_system_settings">Impostazioni di sistema</string>
     <string name="preference_versions">Versioni</string>
-    <string name="preference_help_summary">Ricevi aiuto nell\'uso di Element</string>
+    <string name="template_preference_help_summary">Ricevi aiuto nell\'uso di ${app_name}</string>
     <string name="preference_help_title">Aiuto e supporto</string>
     <string name="preference_help">Aiuto</string>
     <string name="preference_root_legals">Informazioni legali</string>
@@ -3032,10 +3025,10 @@
     <string name="analytics_opt_in_list_item_2"><b>Non</b> condividiamo informazioni con terze parti</string>
     <string name="analytics_opt_in_list_item_1"><b>Non</b> registriamo o profiliamo alcun dato dell\'account</string>
     <string name="analytics_opt_in_content_link">qui</string>
-    <string name="analytics_opt_in_content">Aiutaci a identificare problemi e a migliorare Element condividendo dati di utilizzo anonimi. Per capire come le persone usano diversi dispositivi, genereremo un identificativo casuale, condiviso dai tuoi dispositivi.
+    <string name="template_analytics_opt_in_content">Aiutaci a identificare problemi e a migliorare ${app_name} condividendo dati di utilizzo anonimi. Per capire come le persone usano diversi dispositivi, genereremo un identificativo casuale, condiviso dai tuoi dispositivi.
 \n
 \nPuoi leggere i nostri termini di servizio %s.</string>
-    <string name="analytics_opt_in_title">Aiuta a migliorare Element</string>
+    <string name="template_analytics_opt_in_title">Aiuta a migliorare ${app_name}</string>
     <string name="action_enable">Attiva</string>
     <string name="restart_the_application_to_apply_changes">Riavvia l\'applicazione per applicare le modifiche.</string>
     <string name="labs_enable_latex_maths">Attiva la matematica LaTeX</string>
@@ -3050,10 +3043,9 @@
     <string name="labs_auto_report_uisi">Auto-segnala errori di decifrazione.</string>
     <string name="room_member_override_nick_color">Sovrascrivi colore nick</string>
     <string name="login_splash_already_have_account">Ho già un account</string>
-    <string name="ftue_auth_carousel_4_title">Riduci il carico ai team.</string>
-    <string name="ftue_auth_carousel_3_title">Messaggistica sicura.</string>
-    <string name="ftue_auth_carousel_2_title">Tu hai il controllo.</string>
-    <string name="ftue_auth_carousel_1_title">Prendi il controllo delle tue conversazioni.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Messaggistica sicura.</string>
+    <string name="ftue_auth_carousel_control_title">Tu hai il controllo.</string>
+    <string name="ftue_auth_carousel_secure_title">Prendi il controllo delle tue conversazioni.</string>
     <string name="tooltip_attachment_location">Condividi posizione</string>
     <string name="labs_render_locations_in_timeline">Mostra le posizioni dell\'utente nella linea temporale</string>
     <string name="settings_enable_location_sharing_summary">Una volta attivata, potrai inviare la tua posizione in qualsiasi stanza</string>
@@ -3080,11 +3072,44 @@
     <string name="encryption_has_been_misconfigured">La crittografia è stata configurata male.</string>
     <string name="sent_location">Ha condiviso la sua posizione</string>
     <string name="login_splash_create_account">Crea account</string>
-    <string name="ftue_auth_carousel_title_messaging">Messaggistica per la tua squadra.</string>
-    <string name="ftue_auth_carousel_body_encrypted">Crittografia end-to-end e nessun numero di telefono richiesto. Niente pubblicità o raccolta di dati.</string>
-    <string name="ftue_auth_carousel_body_control">Scegli dove vengono tenute le tue conversazioni, dandoti controllo e indipendenza. Connesso via Matrix.</string>
-    <string name="ftue_auth_carousel_body_secure">Comunicazioni sicure e indipendenti che ti danno lo stesso livello di riservatezza di una conversazione faccia a faccia in casa tua.</string>
+    <string name="ftue_auth_carousel_workplace_title">Messaggistica per la tua squadra.</string>
+    <string name="ftue_auth_carousel_encrypted_body">Crittografia end-to-end e nessun numero di telefono richiesto. Niente pubblicità o raccolta di dati.</string>
+    <string name="ftue_auth_carousel_control_body">Scegli dove vengono tenute le tue conversazioni, dandoti controllo e indipendenza. Connesso via Matrix.</string>
+    <string name="ftue_auth_carousel_secure_body">Comunicazioni sicure e indipendenti che ti danno lo stesso livello di riservatezza di una conversazione faccia a faccia in casa tua.</string>
     <string name="attachment_type_location">Posizione</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">La crittografia è stata configurata male, perciò non puoi inviare messaggi. Clicca per aprire le impostazioni.</string>
     <string name="room_unsupported_e2e_algorithm">La crittografia è stata configurata male, perciò non puoi inviare messaggi. Contatta l\'amministratore per reimpostare la crittografia ad uno stato valido.</string>
+    <string name="message_bubbles">Mostra bolle di messaggi</string>
+    <string name="location_timeline_failed_to_load_map">Caricamento mappa fallito</string>
+    <string name="a11y_static_map_image">Mappa</string>
+    <string name="labs_enable_thread_messages_desc">Nota: l\'app verrà riavviata</string>
+    <string name="labs_enable_thread_messages">Attiva messaggi in conversazioni</string>
+    <string name="ftue_auth_use_case_connect_to_server">Connetti al server</string>
+    <string name="ftue_auth_use_case_join_existing_server">Vuoi unirti ad un server esistente\?</string>
+    <string name="ftue_auth_use_case_skip_partial">saltare questa domanda</string>
+    <string name="ftue_auth_use_case_skip">Ancora non lo sai\? Puoi %s</string>
+    <string name="ftue_auth_use_case_option_three">Comunità</string>
+    <string name="ftue_auth_use_case_option_two">Squadre</string>
+    <string name="ftue_auth_use_case_option_one">Amici e famiglia</string>
+    <string name="ftue_auth_use_case_subtitle">Vi aiuteremo a connettervi.</string>
+    <string name="ftue_auth_use_case_title">Con chi parlerai di più\?</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">Stai già visualizzando questa conversazione!</string>
+    <string name="view_in_room">Vedi nella stanza</string>
+    <string name="reply_in_thread">Rispondi nella conversazione</string>
+    <string name="command_not_supported_in_threads">Il comando \"%s\" è riconosciuto ma non supportato nelle conversazioni.</string>
+    <string name="search_thread_from_a_thread">Da una conversazione</string>
+    <string name="thread_list_empty_notice">Consiglio: tieni premuto un messaggio ed usa “%s”.</string>
+    <string name="thread_list_empty_subtitle">Le conversazioni ti aiutano a tenere le tue discussioni in tema e rintracciabili.</string>
+    <string name="thread_list_empty_title">Tieni le discussioni organizzate con gli argomenti</string>
+    <string name="thread_list_modal_my_threads_subtitle">Mostra tutte le conversazioni a cui hai partecipato</string>
+    <string name="thread_list_modal_my_threads_title">Le mie conversazioni</string>
+    <string name="thread_list_modal_all_threads_subtitle">Mostra tutte le conversazioni dalla stanza attuale</string>
+    <string name="thread_list_modal_all_threads_title">Tutte le conversazioni</string>
+    <string name="thread_list_modal_title">Filtra</string>
+    <string name="thread_list_title">Conversazioni</string>
+    <string name="thread_timeline_title">Conversazione</string>
+    <string name="room_threads_filter">Filtra conversazioni nella stanza</string>
+    <string name="action_thread_copy_link_to_thread">Copia link nella conversazione</string>
+    <string name="action_thread_view_in_room">Vedi nella stanza</string>
+    <string name="action_view_threads">Vedi conversazioni</string>
 </resources>

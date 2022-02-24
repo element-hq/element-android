@@ -1144,7 +1144,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="settings_add_3pid_confirm_password_title">Apstipriniet paroli</string>
     <string name="settings_phone_number_empty">Jūsu kontam nav pievienots neviens tālruņa numurs</string>
     <string name="room_sliding_menu_version_x">Versija %s</string>
-    <string name="search_is_not_supported_in_e2e_room">Meklēšana šifrētās istabās pagaidām netiek atbalstīta.</string>
     <string name="room_permissions_change_topic">Mainīt tematu</string>
     <string name="room_permissions_change_permissions">Mainīt atļaujas</string>
     <string name="room_permissions_change_room_name">Nomainīt istabas nosaukumu</string>
@@ -2358,7 +2357,6 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.</string>
     <string name="create_spaces_join_info_help">Lai pievienotos esošai Telpai, ir nepieciešams ielūgums.</string>
     <string name="create_spaces_you_can_change_later">To var mainīt vēlāk</string>
     <string name="create_spaces_choose_type_label">Kādu Telpu vēlaties izveidot\?</string>
-    <string name="create_spaces_type_header">Telpas ir jauns veids, kā grupēt istabas un cilvēkus</string>
     <string name="your_private_space">Jūsu privātā Telpa</string>
     <string name="your_public_space">Jūsu publiskā Telpa</string>
     <string name="add_space">Pievienot Telpu</string>

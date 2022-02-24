@@ -126,8 +126,8 @@
     <plurals name="public_room_nb_users">
         <item quantity="one">משתמש %d</item>
         <item quantity="two">%d משתמשים</item>
-        <item quantity="many">מעט</item>
-        <item quantity="other">אחר</item>
+        <item quantity="many">%d משתמשים</item>
+        <item quantity="other">%d משתמש</item>
     </plurals>
     <string name="no_public_room_placeholder">אין חדרים ציבורים</string>
     <string name="no_room_placeholder">אין חדרים</string>
@@ -158,7 +158,7 @@
     <string name="start_voice_call">התחל שיחה קולית</string>
     <string name="start_new_chat">התחל צ\'אט חדש</string>
     <string name="search">חיפוש</string>
-    <string name="identity_url">קישור לשרת הזיהוי</string>
+    <string name="identity_url">קישור שרת הזהות</string>
     <string name="hs_url">קישור לשרת הבית</string>
     <string name="logout">יציאה</string>
     <string name="login">כניסה</string>
@@ -216,7 +216,7 @@
     <string name="auth_identity_server">שרת זיהוי:</string>
     <string name="auth_home_server">שרת הבית:</string>
     <string name="auth_username_in_use">שם משתמש כבר נמצא בשימוש</string>
-    <string name="auth_recaptcha_message">שרת בית זה רוצה לוודא שאתה לא רובוט</string>
+    <string name="auth_recaptcha_message">שרת הבית רוצה לוודא שאתה לא רובוט</string>
     <string name="auth_threepid_warning_message">הרשמה באמצעות דוא\"ל ומספר טלפון בבת אחת עדיין אינה נתמכת עד להתקנת ה- API. רק מספר הטלפון ייקח בחשבון.
 \n
 \nתוכל להוסיף את הדוא\"ל שלך לפרופיל שלך בהגדרות.</string>
@@ -293,7 +293,7 @@
     <string name="room_preview_unlinked_email_warning">הזמנה זו נשלחה אל%s, שאינה משויכת לחשבון זה.
 \nייתכן שתרצה להתחבר עם חשבון אחר, או להוסיף דוא\"ל זה לחשבונך.</string>
     <string name="room_preview_invitation_format">הוזמנת להצטרף לחדר זה על ידי%s</string>
-    <string name="room_jump_to_first_unread">קפיצה להודעה הראשונה שלא נקראה.</string>
+    <string name="room_jump_to_first_unread">עבור להודעה שלא נקראה</string>
     <string name="room_sync_in_progress">מסנכרן…</string>
     <string name="open_chat_header">פתח כותרת</string>
     <string name="list_members">חברי רשימה</string>
@@ -348,7 +348,7 @@
     <string name="call">שִׂיחָה</string>
     <string name="settings_call_ringtone_dialog_title">בחר רינגטון לשיחות:</string>
     <string name="settings_call_ringtone_title">רינגטון שיחה נכנסת</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">ישתמש ב-%s כסיוע כאשר השרת הביתי שלך אינו מציע כזה (כתובת ה- IP שלך תשותף במהלך שיחה)</string>
+    <string name="settings_call_ringtone_use_default_stun_sum">ישתמש ב-%s כסיוע כאשר השרת הבית שלך אינו מציע כזה (כתובת ה- IP שלך תשותף במהלך שיחה)</string>
     <string name="settings_call_ringtone_use_default_stun">אפשר שרת עזרה לשיחות</string>
     <string name="template_settings_call_ringtone_use_app_ringtone">השתמש ברינגטון ברירת המחדל של אלמנט לשיחות נכנסות</string>
     <string name="settings_call_show_confirmation_dialog_summary">בקש אישור לפני שמתחילים בשיחה</string>
@@ -368,10 +368,10 @@
     <string name="compression_opt_list_original">מקור</string>
     <string name="compression_options">שלח כ</string>
     <plurals name="membership_changes">
-        <item quantity="one">שינוי בפרט חברות</item>
-        <item quantity="two">שינוי בפרטי חברות</item>
-        <item quantity="many">שינוי בפרטי חברות</item>
-        <item quantity="other">שינוי בפרטי חברות</item>
+        <item quantity="one">%d שינוי בפרט חברות</item>
+        <item quantity="two">%d שינוי בפרטי חברות</item>
+        <item quantity="many">%d שינוי בפרטי חברות</item>
+        <item quantity="other">%d שינוי בפרטי חברות</item>
     </plurals>
     <string name="groups_list">רשימת קבוצות</string>
     <string name="read_receipts_list">קרא את רשימת הקבלות</string>
@@ -510,6 +510,7 @@
     <string name="room_event_action_cancel_download">בטל הורדה</string>
     <string name="room_event_action_cancel_upload">בטל העלאה</string>
     <string name="room_event_action_report_prompt_ignore_user">האם ברצונך להסתיר את כל ההודעות ממשתמש זה\?
+\n
 \nשים לב שפעולה זו תפעיל מחדש את האפליקציה והיא עשויה להימשך זמן מה.</string>
     <string name="room_event_action_report_prompt_reason">סיבה לדיווח על תוכן זה</string>
     <string name="room_details_people_present_group_name">הצטרף</string>
@@ -537,12 +538,12 @@
     <string name="ssl_do_not_trust">אל תתן אמון</string>
     <string name="ssl_trust">אמון</string>
     <plurals name="room_new_messages_notification">
-        <item quantity="one">הודעה חדשה</item>
-        <item quantity="two">הודעות חדשות</item>
-        <item quantity="many">הודעות חדשות</item>
-        <item quantity="other">הודעות חדשות</item>
+        <item quantity="one">%d הודעה חדשה</item>
+        <item quantity="two">d% הודעות חדשות</item>
+        <item quantity="many">%d הודעות חדשות</item>
+        <item quantity="other">%d הודעות חדשות</item>
     </plurals>
-    <string name="room_do_not_have_permission_to_post">אין לך הרשאה לפרסם בחדר זה</string>
+    <string name="room_do_not_have_permission_to_post">אין לך הרשאה לפרסם בחדר זה.</string>
     <string name="room_message_file_not_found">הקובץ לא נמצא</string>
     <string name="room_delete_unsent_messages">מחק הודעות שלא נשלחו</string>
     <string name="room_resend_unsent_messages">שלח שוב הודעות שלא נשלחו</string>
@@ -565,7 +566,7 @@
     <string name="room_participants_invite_prompt_msg">האם אתה בטוח שברצונך להזמין את%s לצ\'אט זה\?</string>
     <string name="reason_hint">סיבה</string>
     <string name="room_participants_unban_prompt_msg">הסרת נידוי ממשתמש יאפשר לו להצטרף שוב לחדר.</string>
-    <string name="room_participants_ban_prompt_msg">איסור על המשתמש יבעט בהם מחדר זה וימנע מהם להצטרף שוב.</string>
+    <string name="room_participants_ban_prompt_msg">חסימת משתמש תסיר אותם מהחדר הזה ותמנע ממנו להצטרף שוב.</string>
     <string name="room_participants_unban_title">הסר נידוי ממשתמש</string>
     <string name="room_participants_ban_reason">סיבות לנידוי</string>
     <string name="room_participants_ban_title">נדה משתמש</string>
@@ -678,7 +679,6 @@
         <item quantity="other">%d חדרים</item>
     </plurals>
     <string name="directory_search_results_title">חפש בתיקיות</string>
-    <string name="search_is_not_supported_in_e2e_room">עדיין אין תמיכה בחיפוש בחדרים מוצפנים.</string>
     <string name="tab_title_search_files">קבצים</string>
     <string name="tab_title_search_people">אנשים</string>
     <string name="tab_title_search_messages">הודעות</string>
@@ -710,16 +710,16 @@
     </plurals>
     <string name="room_title_one_member">חבר אחד</string>
     <plurals name="room_title_members">
-        <item quantity="one">חבר</item>
-        <item quantity="two">חברים</item>
-        <item quantity="many">חברים</item>
-        <item quantity="other">חברים</item>
+        <item quantity="one">%d חבר</item>
+        <item quantity="two">%d חברים</item>
+        <item quantity="many">%d חברים</item>
+        <item quantity="other">%d חברים</item>
     </plurals>
     <plurals name="room_header_active_members_count">
-        <item quantity="one">חבר פעיל</item>
-        <item quantity="two">חברים פעילים</item>
-        <item quantity="many">חברים פעילים</item>
-        <item quantity="other">חברים פעילים</item>
+        <item quantity="one">%d חבר פעיל</item>
+        <item quantity="two">%d חברים פעילים</item>
+        <item quantity="many">%d חברים פעילים</item>
+        <item quantity="other">%d חברים פעילים</item>
     </plurals>
     <string name="room_creation_add_member">הוסף חבר</string>
     <string name="start_verification">התחל אימות</string>
@@ -2408,4 +2408,360 @@
     <string name="summary_user_sent_sticker">%1$s שלח מדבקה.</string>
     <string name="summary_user_sent_image">%1$s שלח תמונה‮.</string>
     <string name="summary_message">%1$s: %2$s</string>
+    <string name="notice_room_visibility_invited">כל חברי החדר, מהנקודה בה הם הוזמנו.</string>
+    <string name="notice_made_future_direct_room_visibility_by_you">את/ה הפכת הודעות עתידיות לגלויות בפני %1$s</string>
+    <string name="notice_made_future_direct_room_visibility">%1$s הפך הודעות עתידיות לגלויות בפני %2$s</string>
+    <string name="notice_room_ban_with_reason_by_you">חסמת את %1$s. סיבה: %2$s</string>
+    <string name="notice_room_ban_with_reason">%1$s חסם את %2$s. סיבה: %3$s</string>
+    <string name="notice_room_unban_with_reason_by_you">ביטלת את החסימה של %1$s. סיבה: %2$s</string>
+    <string name="notice_room_unban_with_reason">%1$s ביטל החסימה של %2$s. סיבה: %3$s</string>
+    <string name="notice_room_remove_with_reason_by_you">הסרת את %1$s. סיבה: %2$s</string>
+    <string name="notice_room_remove_with_reason">%1$s הסיר את %2$s. סיבה: %3$s</string>
+    <string name="notice_room_reject_with_reason_by_you">דחית את ההזמנה. סיבה: %1$s</string>
+    <string name="notice_room_reject_with_reason">%1$s דחה את ההזמנה. סיבה: %2$s</string>
+    <string name="notice_direct_room_leave_with_reason_by_you">עזבת. סיבה: %1$s</string>
+    <string name="notice_direct_room_leave_with_reason">%1$s עזב. סיבה: %2$s</string>
+    <string name="notice_room_leave_with_reason_by_you">יצאת מהחדר. סיבה: %1$s</string>
+    <string name="notice_room_leave_with_reason">%1$s עזבו את החדר. סיבה: %2$s</string>
+    <string name="notice_direct_room_join_with_reason_by_you">הצטרפת. סיבה: %1$s</string>
+    <string name="notice_direct_room_join_with_reason">%1$s הצטרף. סיבה: %2$s</string>
+    <string name="notice_room_join_with_reason_by_you">הצטרפת לחדר. סיבה: %1$s</string>
+    <string name="notice_room_join_with_reason">%1$s הצטרף לחדר. סיבה: %2$s</string>
+    <string name="notice_room_invite_you_with_reason">%1$s הזמין אותך. סיבה: %2$s</string>
+    <string name="notice_room_invite_with_reason_by_you">הזמנת את %1$s. סיבה: %2$s</string>
+    <string name="notice_end_to_end_unknown_algorithm">%1$s הפעיל הצפנה מקצה לקצה (אלגוריתם לא מזוהה %2$s).</string>
+    <string name="notice_end_to_end_unknown_algorithm_by_you">הפעלת הצפנה מקצה לקצה (אלגוריתם לא מזוהה %1$s).</string>
+    <string name="notice_room_invite_with_reason">%1$s הזמין את %2$s. סיבה: %3$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason_by_you">ההזמנה שלך. סיבה: %1$s</string>
+    <string name="notice_room_invite_no_invitee_with_reason">ההזמנה של %1$s. סיבה: %2$s</string>
+    <string name="clear_timeline_send_queue">נקה את תור השליחה</string>
+    <string name="event_status_sending_message">הודעה נשלחת…</string>
+    <string name="event_status_sent_message">הודעה נשלחה</string>
+    <string name="initial_sync_start_importing_account_data">סנכרון ראשוני:
+\nייבוא נתוני חשבון</string>
+    <string name="initial_sync_start_importing_account_groups">סנכרון ראשוני:
+\nייבוא קהילות</string>
+    <string name="initial_sync_start_importing_account_left_rooms">סנכרון ראשוני:
+\nייבוא חדרים עזובים</string>
+    <string name="initial_sync_start_importing_account_invited_rooms">סנכרון ראשוני:
+\nייבוא חדרים מוזמנים</string>
+    <string name="initial_sync_start_importing_account_joined_rooms">סנכרון ראשוני:
+\nטוען את השיחות שלך
+\nאם הצטרפת להרבה חדרים, זה עשוי לקחת זמן מה</string>
+    <string name="initial_sync_start_importing_account_rooms">סנכרון ראשוני:
+\nייבוא חדרים</string>
+    <string name="initial_sync_start_importing_account_crypto">סנכרון ראשוני:
+\nייבוא קריפטו</string>
+    <string name="initial_sync_start_importing_account">סנכרון ראשוני:
+\nמייבא חשבון…</string>
+    <string name="initial_sync_start_downloading">סנכרון ראשוני:
+\nמוריד נתונים…</string>
+    <string name="initial_sync_start_server_computing">סנכרון ראשוני:
+\nממתין לתגובת השרת…</string>
+    <string name="room_displayname_empty_room_was">חדר ריק (היה %s)</string>
+    <string name="room_displayname_empty_room">חדר ריק</string>
+    <plurals name="room_displayname_three_and_more_members">
+        <item quantity="one">%1$s ועוד אחד</item>
+        <item quantity="two">%1$s ו-%2$d אחרים</item>
+        <item quantity="many">%1$s ו-%2$d אחרים</item>
+        <item quantity="other">%1$s ו-%2$d אחר</item>
+    </plurals>
+    <plurals name="room_displayname_four_and_more_members">
+        <item quantity="one">%1$s, %2$s, %3$s ו-%4$d אחר</item>
+        <item quantity="two">%1$s, %2$s, %3$s ו-%4$d אחרים</item>
+        <item quantity="many">%1$s, %2$s, %3$s ו-%4$d אחרים</item>
+        <item quantity="other">%1$s, %2$s, %3$s ו-%4$d אחר</item>
+    </plurals>
+    <string name="room_displayname_4_members">%3$s, %2$s, %1$s ו-%4$s</string>
+    <string name="room_displayname_3_members">%2$s, %1$s ו-%3$s</string>
+    <string name="room_displayname_two_members">%1$s ו-%2$s</string>
+    <string name="room_displayname_room_invite">הזמנה לחדר</string>
+    <string name="room_displayname_invite_from">הזמן מ-%s</string>
+    <string name="medium_phone_number">מספר טלפון</string>
+    <string name="medium_email">כתובת דוא\"ל</string>
+    <string name="room_error_access_unauthorized">אינך רשאי להצטרף לחדר זה</string>
+    <string name="room_error_join_failed_empty_room">כרגע לא ניתן להצטרף מחדש לחדר ריק.</string>
+    <string name="matrix_error">שגיאת מטריקס</string>
+    <string name="network_error">שגיאת רשת</string>
+    <string name="message_failed_to_upload">העלאת התמונה נכשלה</string>
+    <string name="unable_to_send_message">לא ניתן לשלוח הודעה</string>
+    <string name="could_not_redact">לא ניתן היה לתקן</string>
+    <string name="notice_crypto_error_unknown_inbound_session_id">מכשיר השולח לא שלח לנו את המפתחות להודעה זו.</string>
+    <string name="notice_crypto_unable_to_decrypt">** לא ניתן לפענח: %s **</string>
+    <string name="notice_power_level_diff">%1$s מ-%2$s עד %3$s</string>
+    <string name="notice_power_level_changed">%1$s שינה את רמת העוצמה של %2$s.</string>
+    <string name="notice_power_level_changed_by_you">שינית את רמת העוצמה של %1$s.</string>
+    <string name="power_level_custom_no_value">מותאם אישית</string>
+    <string name="power_level_custom">מותאם אישית (%1$d)</string>
+    <string name="power_level_default">ברירת מחדל</string>
+    <string name="power_level_moderator">מַנחֶה</string>
+    <string name="power_level_admin">מנהל מערכת</string>
+    <string name="notice_widget_jitsi_modified_by_you">שינית ועידת וידאו</string>
+    <string name="notice_widget_jitsi_modified">ועידת וידאו השתנתה ע\"י %1$s</string>
+    <string name="notice_widget_jitsi_removed_by_you">סיימת ועידת וידאו</string>
+    <string name="notice_widget_jitsi_removed">ועידת וידאו הסתיימה ע\"י %1$s</string>
+    <string name="notice_widget_jitsi_added_by_you">התחלת ועידת וידאו</string>
+    <string name="notice_widget_jitsi_added">ועידת וידאו התחילה על ידי %1$s</string>
+    <string name="notice_widget_modified_by_you">שינית את הווידג\'ט %1$s</string>
+    <string name="notice_widget_modified">%1$s שינה את %2$s ווידג\'ט</string>
+    <string name="notice_widget_removed_by_you">הסרת את ווידג\'ט %1$s</string>
+    <string name="notice_widget_removed">%1$s הסיר את %2$s ווידג\'ט</string>
+    <string name="notice_widget_added_by_you">הוספת ווידג\'ט %1$s</string>
+    <string name="notice_widget_added">%1$s הוסיף את%2$s ווידג\'ט</string>
+    <string name="notice_room_third_party_registered_invite_by_you">קיבלת את ההזמנה עבור %1$s</string>
+    <string name="notice_room_third_party_registered_invite">%1$s קיבל את ההזמנה עבור %2$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite_by_you">ביטלת את ההזמנה עבור %1$s</string>
+    <string name="notice_direct_room_third_party_revoked_invite">%1$s ביטל/ה את ההזמנה עבור %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_by_you">ביטלת את ההזמנה של %1$s להצטרף לחדר</string>
+    <string name="notice_room_third_party_revoked_invite">%1$s ביטל/ה את ההזמנה של %2$s להצטרף לחדר</string>
+    <string name="notice_direct_room_third_party_invite_by_you">הזמנת את %1$s</string>
+    <string name="notice_direct_room_third_party_invite">%1$s הזמין את %2$s</string>
+    <string name="notice_room_third_party_invite_by_you">שלחת הזמנה אל %1$s להצטרף לחדר</string>
+    <string name="notice_room_third_party_invite">%1$s שלח הזמנה אל %2$s להצטרף לחדר</string>
+    <string name="notice_profile_change_redacted_by_you">עדכנת את הפרופיל שלך %1$s</string>
+    <string name="notice_profile_change_redacted">%1$s עדכן את הפרופיל שלו %2$s</string>
+    <string name="notice_event_redacted_by_with_reason">הודעה הוסרה על ידי %1$s [סיבה: %2$s]</string>
+    <string name="notice_event_redacted_with_reason">ההודעה הוסרה [סיבה: %1$s]</string>
+    <string name="notice_event_redacted_by">ההודעה הוסרה על ידי %1$s</string>
+    <string name="notice_event_redacted">ההודעה הוסרה</string>
+    <string name="notice_room_avatar_removed_by_you">הסרת את דמות החדר</string>
+    <string name="notice_room_avatar_removed">%1$s הסיר את דמות החדר</string>
+    <string name="notice_room_topic_removed_by_you">הסרת את נושא החדר</string>
+    <string name="notice_room_topic_removed">%1$s הסיר את נושא החדר</string>
+    <string name="notice_room_name_removed_by_you">הסרת את שם החדר</string>
+    <string name="notice_room_name_removed">%1$s הסיר את שם החדר</string>
+    <string name="notice_avatar_changed_too">(גם האווטאר השתנה)</string>
+    <string name="notice_voip_finished">ועידת VoIP הסתיימה</string>
+    <string name="notice_voip_started">ועידת VoIP החלה</string>
+    <string name="notice_requested_voip_conference_by_you">ביקשת ועידת VoIP</string>
+    <string name="notice_requested_voip_conference">%1$s ביקש ועידת VoIP</string>
+    <string name="notice_room_server_acl_allow_is_empty">🎉 כל השרתים אסורים להשתתף! לא ניתן עוד להשתמש בחדר זה.</string>
+    <string name="notice_room_server_acl_updated_no_change">ללא שינוי.</string>
+    <string name="notice_room_server_acl_updated_allowed">• שרתים התואמים ל-%s מורשים כעת.</string>
+    <string name="notice_room_server_acl_updated_was_allowed">• שרתים התואמים ל-%s הוסרו מרשימת המורשים.</string>
+    <string name="notice_room_server_acl_updated_was_banned">• שרתים התואמים ל-%s הוסרו מרשימת החסומים.</string>
+    <string name="notice_room_server_acl_updated_banned">• שרתים התואמים ל-%s נאסרו כעת.</string>
+    <string name="notice_room_server_acl_updated_title_by_you">שינית את רשימות ה-ACL של השרת עבור החדר הזה.</string>
+    <string name="notice_room_server_acl_updated_title">%s שינה את רשימות ה-ACL של השרת עבור החדר הזה.</string>
+    <string name="notice_room_server_acl_set_allowed">• מותרים שרתים התואמים ל-%s.</string>
+    <string name="notice_room_server_acl_set_banned">• שרתים התואמים %s אסורים.</string>
+    <string name="notice_room_server_acl_set_title_by_you">אתה מגדיר את ה-ACL של השרת עבור החדר הזה.</string>
+    <string name="notice_room_server_acl_set_title">%s הגדר את ה-ACL של השרת עבור החדר הזה.</string>
+    <string name="notice_direct_room_update_by_you">שדרגת כאן.</string>
+    <string name="notice_direct_room_update">%s שודרג כאן.</string>
+    <string name="notice_room_update_by_you">שדרגת את החדר הזה.</string>
+    <string name="notice_room_update">%s שדרג את החדר הזה.</string>
+    <string name="notice_end_to_end_by_you">הפעלת הצפנה מקצה לקצה (%1$s)</string>
+    <string name="notice_end_to_end">%1$s הפעילה הצפנה מקצה לקצה (%2$s)</string>
+    <string name="notice_room_visibility_unknown">לא ידוע (%s).</string>
+    <string name="notice_room_visibility_world_readable">כל אחד.</string>
+    <string name="notice_room_visibility_shared">כל חברי החדר.</string>
+    <string name="notice_room_visibility_joined">כל חברי החדר, מהנקודה בה הצטרפו.</string>
+    <string name="a11y_static_map_image">מפה</string>
+    <string name="a11y_location_share_icon">שתף מיקום</string>
+    <string name="location_activity_title_preview">מיקום</string>
+    <string name="location_activity_title_static_sharing">שתף מיקום</string>
+    <string name="closed_poll_option_description">התוצאות נחשפות רק לאחר מסיום הסקר</string>
+    <string name="closed_poll_option_title">סקר סגור</string>
+    <string name="open_poll_option_description">מצביעים רואים את התוצאות לאחר ההצבעה</string>
+    <string name="open_poll_option_title">פתח סקר</string>
+    <string name="poll_type_title">סוג סקר</string>
+    <string name="edit_poll_button">ערוך סקר</string>
+    <string name="edit_poll_title">ערוך סקר</string>
+    <string name="delete_poll_dialog_content">האם את/ה בטוח שברצונך להסיר את הסקר\? לא ניתן לשחזור לאחר הסרה.</string>
+    <string name="delete_poll_dialog_title">הסר סקר</string>
+    <string name="poll_end_room_list_preview">הסקר הסתיים</string>
+    <string name="poll_response_room_list_preview">נא הצביעו</string>
+    <string name="tooltip_attachment_location">שתף מיקום</string>
+    <string name="tooltip_attachment_poll">צור סקר</string>
+    <string name="tooltip_attachment_contact">פתח אנשי קשר</string>
+    <string name="tooltip_attachment_sticker">שלח סטיקר</string>
+    <string name="tooltip_attachment_file">העלה קובץ</string>
+    <string name="tooltip_attachment_gallery">שלח תמונות וסרטונים</string>
+    <string name="tooltip_attachment_photo">פתח מצלמה</string>
+    <string name="message_bubbles">הצג בועות הודעה</string>
+    <string name="location_timeline_failed_to_load_map">טעינת המפה נכשלה</string>
+    <string name="labs_render_locations_in_timeline">מיפוי מיקומי משתמשים בציר הזמן</string>
+    <string name="settings_enable_location_sharing_summary">לאחר ההפעלה, תוכל לשלוח את המיקום שלך לכל חדר</string>
+    <string name="settings_enable_location_sharing">אפשר שיתוף מיקום</string>
+    <string name="location_share_external">לפתוח בעזרת</string>
+    <string name="template_location_not_available_dialog_content">${app_name} לא הצליח לגשת למיקום שלך. בבקשה נסה שוב מאוחר יותר.</string>
+    <string name="template_location_not_available_dialog_title">${app_name} לא הצליח לגשת למיקום שלך</string>
+    <string name="location_share">שתף מיקום</string>
+    <string name="settings_notification_emails_enable_for_email">אפשר התראת דוא\"ל עבור %s</string>
+    <string name="settings_notification_keyword_contains_invalid_character">מילות מפתח לא יכולות להכיל \'%s\'</string>
+    <string name="settings_notification_keyword_contains_dot">מילות מפתח אינן יכולות להתחיל ב-\'.\'</string>
+    <string name="settings_notification_new_keyword">הוסף מילת מפתח חדשה</string>
+    <string name="settings_notification_your_keywords">מילות המפתח שלך</string>
+    <string name="settings_notification_notify_me_for">הודע לי עבור</string>
+    <string name="settings_notification_other">אחר</string>
+    <string name="settings_notification_mentions_and_keywords">אזכורים ומילות מפתח</string>
+    <string name="settings_notification_default">התראת ברירת מחדל</string>
+    <string name="settings_notification_emails_no_emails">כדי לקבל אימייל עם התראה, אנא שיוך דוא\"ל לחשבון Matrix שלך</string>
+    <string name="settings_notification_emails_category">הודעה באימייל</string>
+    <string name="shortcut_disabled_reason_sign_out">הסשן יצא מהחשבון!</string>
+    <string name="shortcut_disabled_reason_room_left">החדר הוצא!</string>
+    <string name="room_settings_none">אף אחד</string>
+    <string name="room_settings_mention_and_keyword_only">אזכורים ומילות מפתח בלבד</string>
+    <string name="search_thread_from_a_thread">מתוך שרשור</string>
+    <string name="thread_list_empty_notice">טיפ: הקש ארוכות על הודעה והשתמש ב-\"%s\".</string>
+    <string name="thread_list_empty_subtitle">שרשורים עוזרים לשמור על השיחות שלך בנושא וקל למעקב.</string>
+    <string name="thread_list_empty_title">שמור על דיונים מאורגנים באמצעות שרשורים</string>
+    <string name="thread_list_modal_my_threads_subtitle">מציג את כל השרשורים שבהם השתתפת</string>
+    <string name="thread_list_modal_my_threads_title">השרשורים שלי</string>
+    <string name="thread_list_modal_all_threads_subtitle">הצג את כל השרשורים בחדר זה</string>
+    <string name="thread_list_modal_all_threads_title">כל השרשורים</string>
+    <string name="thread_list_modal_title">מסנן</string>
+    <string name="thread_list_title">שרשורים</string>
+    <string name="thread_timeline_title">שרשורים</string>
+    <string name="room_threads_filter">סנן שרשורים בחדר</string>
+    <string name="room_permissions_upgrade_the_space">שדרג המרחב</string>
+    <string name="room_permissions_change_space_name">שנה את שם המרחב</string>
+    <string name="room_permissions_enable_space_encryption">אפשר הצפנת מרחב</string>
+    <string name="room_permissions_change_main_address_for_the_space">שנה את הכתובת הראשית של המרחב</string>
+    <string name="room_permissions_change_space_avatar">שנה את דמות המרחב</string>
+    <string name="space_permissions_notice_read_only">אין לך הרשאה לעדכן את התפקידים הנדרשים כדי לשנות חלקים שונים במרחב הזה</string>
+    <string name="space_permissions_notice">בחר את התפקידים הדרושים כדי לשנות חלקים שונים במרחב הזה</string>
+    <string name="space_settings_permissions_title">הרשאות אזור</string>
+    <string name="space_settings_permissions_subtitle">הצג ועדכן את התפקידים הנדרשים לשינוי חלקים שונים של האזור.</string>
+    <string name="room_unsupported_e2e_algorithm_as_admin">ההצפנה הוגדרה בצורה שגויה כך שאינך יכול לשלוח הודעות. לחץ כדי לפתוח את ההגדרות.</string>
+    <string name="room_unsupported_e2e_algorithm">ההצפנה הוגדרה בצורה שגויה כך שאינך יכול לשלוח הודעות. אנא צור קשר עם מנהל מערכת כדי לשחזר את ההצפנה למצב חוקי.</string>
+    <string name="space_participants_unban_prompt_msg">ביטול החסימה של המשתמש יאפשר לו להצטרף שוב למרחב.</string>
+    <string name="space_participants_ban_prompt_msg">חסימת משתמש תסיר אותם מהמרחב הזה ותמנע ממנו להצטרף שוב.</string>
+    <string name="space_participants_remove_prompt_msg">המשתמש יוסר מהמרחב הזה.
+\n
+\nכדי למנוע מהם להצטרף שוב, עליך לחסום אותם במקום זאת.</string>
+    <string name="continue_anyway">המשך בכל זאת</string>
+    <string name="call_remove_jitsi_widget_progress">מסיים שיחה…</string>
+    <string name="call_ended_invite_timeout_title">אין מענה</string>
+    <string name="call_ended_user_busy_description">המשתמש אליו התקשרת עסוק.</string>
+    <string name="call_ended_user_busy_title">מנוי תפוס</string>
+    <string name="call_held_by_you">החזקת השיחה</string>
+    <string name="call_held_by_user">%s החזיק את השיחה</string>
+    <string name="call_hold_action">להחזיק</string>
+    <string name="call_resume_action">לְהַמשִׁיך</string>
+    <string name="audio_call_with_participant">שיחת שמע עם %s</string>
+    <string name="video_call_with_participant">שיחת וידאו עם %s</string>
+    <plurals name="missed_video_call">
+        <item quantity="one">שיחת וידאו שלא נענתה</item>
+        <item quantity="two">%d שיחות וידאו שלא נענו</item>
+        <item quantity="many">%d שיחות וידאו שלא נענו</item>
+        <item quantity="other">שיחת וידאו שלא נענתה</item>
+    </plurals>
+    <plurals name="missed_audio_call">
+        <item quantity="one">שיחה שלא נענתה</item>
+        <item quantity="two">"%d שיחות  שלא נענו"</item>
+        <item quantity="many">"%d שיחות  שלא נענו"</item>
+        <item quantity="other">שיחה שלא נענתה</item>
+    </plurals>
+    <string name="call_ringing">צלצול שיחה…</string>
+    <string name="error_unauthorized">לא מורשה, חסרים אישורי אימות חוקיים</string>
+    <string name="login_error_homeserver_from_url_not_found_enter_manual">בחר שרת בית</string>
+    <string name="login_error_homeserver_from_url_not_found">לא ניתן להגיע לשרת ביתי בכתובת ה- %s. אנא בדוק את הקישור שלך או בחר שרת ביתי באופן ידני.</string>
+    <string name="use_as_default_and_do_not_ask_again">השתמש כברירת מחדל ואל תשאל שוב</string>
+    <string name="option_always_ask">תמיד תשאל</string>
+    <string name="hs_client_url">כתובת ה-API של שרת הבית</string>
+    <string name="spaces_header">רווחים</string>
+    <string name="spaces_invited_header">מזמין</string>
+    <string name="settings_room_directory_show_all_rooms_summary">הצג את כל החדרים בספריית החדרים, כולל חדרים עם תוכן מפורש.</string>
+    <string name="settings_room_directory_show_all_rooms">הצג חדרים עם תוכן מפורש</string>
+    <string name="settings_category_room_directory">ספריית חדרים</string>
+    <string name="suggested_header">חדרים מוצעים</string>
+    <string name="dialog_edit_hint">ערך חדש</string>
+    <string name="action_thread_copy_link_to_thread">העתק קישור לשרשור</string>
+    <string name="action_thread_view_in_room">צפיה בחדר</string>
+    <string name="action_not_now">לא כעת</string>
+    <string name="action_enable">אפשר</string>
+    <string name="action_return">חזור</string>
+    <string name="action_switch">החלף</string>
+    <string name="action_view_threads">הצג שרשורים</string>
+    <string name="missing_permissions_title">חסרות הרשאות</string>
+    <string name="denied_permission_voice_message">כדי לשלוח הודעות קוליות, אנא הענק הרשאה למיקרופון.</string>
+    <string name="denied_permission_camera">כדי לבצע פעולה זו, אנא הענק למצלמה הרשאה מהגדרות המערכת.</string>
+    <string name="denied_permission_generic">חסרות חלק מההרשאות לביצוע פעולה זו, אנא הענק את ההרשאות מהגדרות המערכת.</string>
+    <string name="spaces">רווחים</string>
+    <string name="learn_more">למד עוד</string>
+    <string name="notification_listening_for_notifications">מאזין להתראות</string>
+    <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• שרתים התואמים את כתובות ה-IP נאסרו כעת.</string>
+    <string name="notice_room_server_acl_updated_ip_literals_allowed">• כעת מותרים שרתים התואמים את כתובות ה-IP.</string>
+    <string name="notice_room_server_acl_set_ip_literals_not_allowed">• שרתים התואמים את כתובות ה-IP אסורות.</string>
+    <string name="notice_room_server_acl_set_ip_literals_allowed">• מותר להשתמש בשרתים התואמים את כתובות ה-IP.</string>
+    <string name="notice_end_to_end_ok_by_you">הפעלת הצפנה מקצה לקצה.</string>
+    <string name="notice_end_to_end_ok">%1$s הפעיל/ה הצפנה מקצה לקצה.</string>
+    <string name="notice_direct_room_guest_access_forbidden_by_you">מנעת מאורחים להצטרף לחדר.</string>
+    <string name="notice_direct_room_guest_access_forbidden">%1$s מנע מאורחים להצטרף לחדר.</string>
+    <string name="notice_room_guest_access_forbidden_by_you">מנעת מאורחים להצטרף לחדר.</string>
+    <string name="notice_room_guest_access_forbidden">%1$s מנע מאורחים להצטרף לחדר.</string>
+    <string name="notice_direct_room_guest_access_can_join_by_you">אפשרת לאורחים להצטרף לכאן.</string>
+    <string name="notice_direct_room_guest_access_can_join">%1$s איפשר לאורחים להצטרף לכאן.</string>
+    <string name="notice_room_guest_access_can_join_by_you">אפשרת לאורחים להצטרף לחדר.</string>
+    <string name="notice_room_guest_access_can_join">%1$s אפשר/ה לאורחים להצטרף לחדר.</string>
+    <string name="notice_room_canonical_alias_no_change_by_you">שינית את הכתובות של החדר הזה.</string>
+    <string name="notice_room_canonical_alias_no_change">%1$s שינה את הכתובות של החדר הזה.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed_by_you">שינית את הכתובת הראשית והחלופית לחדר הזה.</string>
+    <string name="notice_room_canonical_alias_main_and_alternative_changed">%1$s שינה את הכתובת הראשית והאלטרנטיבית של החדר הזה.</string>
+    <string name="notice_room_canonical_alias_alternative_changed_by_you">שינית את הכתובות החלופיות של החדר הזה.</string>
+    <string name="notice_room_canonical_alias_alternative_changed">%1$s שינה את הכתובות החלופיות עבור החדר הזה.</string>
+    <plurals name="notice_room_canonical_alias_alternative_removed_by_you">
+        <item quantity="one">הסרת את הכתובת החלופית %1$s עבור החדר הזה.</item>
+        <item quantity="two">הסרת את הכתובות החלופיות %1$s עבור החדר הזה.</item>
+        <item quantity="many">הסרת את הכתובות החלופיות %1$s עבור החדר הזה.</item>
+        <item quantity="other">הסרת את הכתובת החלופית %1$s עבור החדר הזה.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_removed">
+        <item quantity="one">%1$s הסיר את הכתובת החלופית %2$s עבור החדר הזה.</item>
+        <item quantity="two">%1$s הסיר את הכתובות החלופיות %2$s עבור החדר הזה.</item>
+        <item quantity="many">%1$s הסיר את הכתובות החלופיות %2$s עבור החדר הזה.</item>
+        <item quantity="other">%1$s הסיר את הכתובת החלופית %2$s עבור החדר הזה.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added_by_you">
+        <item quantity="one">הוספת את הכתובת החלופית %1$s לחדר הזה.</item>
+        <item quantity="two">הוספת את הכתובות החלופיות %1$s לחדר הזה.</item>
+        <item quantity="many">הוספת את הכתובות החלופיות %1$s לחדר הזה.</item>
+        <item quantity="other">הוספת את הכתובת החלופית %1$s לחדר הזה.</item>
+    </plurals>
+    <plurals name="notice_room_canonical_alias_alternative_added">
+        <item quantity="one">%1$s הוסיף את הכתובת החלופית %2$s לחדר הזה.</item>
+        <item quantity="two">%1$s הוסיף את הכתובות החלופיות %2$s לחדר הזה.</item>
+        <item quantity="many">%1$s הוסיף את הכתובות החלופיות %2$s לחדר הזה.</item>
+        <item quantity="other">%1$s הוסיף את הכתובת החלופית %2$s לחדר הזה.</item>
+    </plurals>
+    <string name="notice_room_canonical_alias_unset_by_you">הסרת את הכתובת הראשית של החדר הזה.</string>
+    <string name="notice_room_canonical_alias_unset">%1$s הסיר את הכתובת הראשית של החדר הזה.</string>
+    <string name="notice_room_canonical_alias_set_by_you">הגדרת הכתובת הראשית של חדר זה ל-%1$s.</string>
+    <string name="notice_room_canonical_alias_set">%1$s הגדיר את הכתובת הראשית של החדר הזה ל-%2$s.</string>
+    <string name="notice_room_aliases_added_and_removed_by_you">הוספת את %1$s והסרת את %2$s ככתובות לחדר הזה.</string>
+    <string name="notice_room_aliases_added_and_removed">%1$s הוסיף את %2$s והסיר את %3$s ככתובות לחדר הזה.</string>
+    <plurals name="notice_room_aliases_removed_by_you">
+        <item quantity="one">הסרת את %1$s ככתובת לחדר הזה.</item>
+        <item quantity="two">הסרת את %1$s ככתובות לחדר הזה.</item>
+        <item quantity="many">הסרת את %1$s ככתובות לחדר הזה.</item>
+        <item quantity="other">הסרת את %1$s ככתובת לחדר הזה.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_removed">
+        <item quantity="one">%1$s הסיר את %2$s ככתובת לחדר הזה.</item>
+        <item quantity="two">%1$s הסיר את %2$s ככתובות עבור החדר הזה.</item>
+        <item quantity="many">%1$s הסיר את %2$s ככתובות עבור החדר הזה.</item>
+        <item quantity="other">%1$s הסיר את %2$s ככתובת עבור החדר הזה.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added_by_you">
+        <item quantity="one">הוספת את %1$s ככתובת לחדר הזה.</item>
+        <item quantity="two">הוספת את %1$s ככתובות לחדר הזה.</item>
+        <item quantity="many">הוספת את %1$s ככתובות לחדר הזה.</item>
+        <item quantity="other">הוספת את %1$s ככתובת לחדר הזה.</item>
+    </plurals>
+    <plurals name="notice_room_aliases_added">
+        <item quantity="one">%1$s הוסיף את %2$s ככתובת לחדר הזה.</item>
+        <item quantity="two">%1$s הוסיפו את %2$s ככתובות לחדר הזה.</item>
+        <item quantity="many">%1$s הוסיפו את %2$s ככתובות לחדר הזה.</item>
+        <item quantity="other">%1$s הוסיפו את %2$s ככתובות לחדר הזה.</item>
+    </plurals>
+    <string name="notice_room_withdraw_with_reason_by_you">משכת את ההזמנה של %1$s. סיבה: %2$s</string>
+    <string name="notice_room_withdraw_with_reason">%1$s משך את ההזמנה של %2$s. סיבה: %3$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason_by_you">קיבלת את ההזמנה עבור %1$s. סיבה: %2$s</string>
+    <string name="notice_room_third_party_registered_invite_with_reason">%1$s קיבל את ההזמנה עבור %2$s. סיבה: %3$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">ביטלת את ההזמנה של %1$s להצטרף לחדר. סיבה: %2$s</string>
+    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s ביטל את ההזמנה של %2$s להצטרף לחדר. סיבה: %3$s</string>
+    <string name="notice_room_third_party_invite_with_reason_by_you">שלחת הזמנה אל %1$s להצטרף לחדר. סיבה: %2$s</string>
+    <string name="notice_room_third_party_invite_with_reason">%1$s שלח הזמנה אל %2$s להצטרף לחדר. סיבה: %3$s</string>
 </resources>

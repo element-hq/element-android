@@ -2307,7 +2307,6 @@
     <string name="settings_troubleshoot_test_push_loop_success">应用正在接受推送</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">应用正在等待推送</string>
     <string name="settings_troubleshoot_test_push_loop_title">测试推送</string>
-    <string name="search_is_not_supported_in_e2e_room">尚不支持在加密聊天室中搜索。</string>
     <string name="search_banned_user_hint">过滤被封禁的用户</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">你没有权限发起通话</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">你没有权限发起会议通话</string>
@@ -2556,7 +2555,6 @@
     <string name="looking_for_someone_not_in_space">正在寻找不在 %s 中的人？</string>
     <string name="user_invites_you">%s 邀请了你</string>
     <string name="you_are_invited">你被邀请</string>
-    <string name="create_spaces_type_header">空间是一种将聊天室和人们进行分组的新方式</string>
     <string name="spaces_beta_welcome_to_spaces_desc">空间是一种将聊天室和人们进行重新分组的新方式。</string>
     <string name="spaces_beta_welcome_to_spaces">欢迎来到空间！</string>
     <string name="space_add_rooms">添加聊天室</string>
@@ -2810,15 +2808,10 @@
     <string name="settings_notification_default">默认通知</string>
     <string name="call_tile_video_active">活跃视频通话</string>
     <string name="call_tile_voice_active">活跃语音通话</string>
-    <string name="link_this_email_with_your_account">在 Element 中直接接收邀请的设置 %s。</string>
+    <string name="template_link_this_email_with_your_account">在 ${app_name} 中直接接收邀请的设置 %s。</string>
     <string name="link_this_email_settings_link">将此邮箱与您的账户相链接</string>
     <string name="this_invite_to_this_space_was_sent">加入这个空间的邀请被发送至 %s，此邮箱未与您的账户相关联</string>
     <string name="this_invite_to_this_room_was_sent">加入这个聊天室的邀请被发送至 %s，此邮箱未与您的账户相关联</string>
-    <string name="to_help_space_members_find_and_join">要帮助空间成员找到并加入一个私人聊天室，只需点击头像进入聊天室设置。</string>
-    <string name="help_space_members">帮助空间成员找到私人聊天室</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">这使聊天室很容易在空间中保持私密性，同时让空间中的人们找到并加入它们。空间中的所有新聊天室都有这个选项。</string>
-    <string name="help_people_in_spaces_find_and_join">帮助空间里的人们自己找到和加入私人房间，不需要手动邀请每个人。</string>
-    <string name="new_let_people_in_spaces_find_and_join">新：让人们在空间中找到并加入私人聊天室</string>
     <string name="call_jitsi_started">群通话已启动</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">你所在的全部聊天室将显示在主页上。</string>
     <string name="preference_show_all_rooms_in_home">在主页上显示所有聊天室</string>
@@ -2970,7 +2963,7 @@
     </plurals>
     <string name="preference_system_settings">系统设置</string>
     <string name="preference_versions">版本</string>
-    <string name="preference_help_summary">获取使用 Element 的帮助</string>
+    <string name="template_preference_help_summary">获取使用 ${app_name} 的帮助</string>
     <string name="preference_help_title">帮助和支持</string>
     <string name="preference_help">帮助</string>
     <string name="preference_root_legals">法律</string>
@@ -2983,9 +2976,9 @@
     <string name="analytics_opt_in_list_item_3">你可以随时在设置中关闭它</string>
     <string name="analytics_opt_in_list_item_2">我们<b>不</b>与第三方共享信息</string>
     <string name="analytics_opt_in_content_link">此处</string>
-    <string name="analytics_opt_in_content">通过共享匿名使用数据，帮助我们识别问题并改进 Element。为了理解人们如何使用多台设备，我们将生成一个随机标识符，由您的设备共享。
+    <string name="template_analytics_opt_in_content">通过共享匿名使用数据，帮助我们识别问题并改进 ${app_name}。为了理解人们如何使用多台设备，我们将生成一个随机标识符，由您的设备共享。
 \n
 \n你可以阅读我们所有的条款 %s。</string>
-    <string name="analytics_opt_in_title">帮助改进 Element</string>
+    <string name="template_analytics_opt_in_title">帮助改进 ${app_name}</string>
     <string name="action_enable">启用</string>
 </resources>

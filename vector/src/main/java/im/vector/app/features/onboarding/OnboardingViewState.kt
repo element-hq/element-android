@@ -70,12 +70,10 @@ data class OnboardingViewState(
                 asyncHomeServerLoginFlowRequest is Loading ||
                 asyncResetPassword is Loading ||
                 asyncResetMailConfirmed is Loading ||
-                asyncRegistration is Loading ||
-                // Keep loading when it is success because of the delay to switch to the next Activity
-                asyncLoginAction is Success
+                asyncRegistration is Loading
     }
 
-    fun isUserLogged(): Boolean {
+    fun isAuthTaskCompleted(): Boolean {
         return asyncLoginAction is Success
     }
 }

@@ -41,7 +41,6 @@ import im.vector.app.R
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.plan.MobileScreen
-import im.vector.app.features.analytics.screen.ScreenEvent
 import im.vector.app.features.themes.ThemeUtils
 
 class DialPadFragment : Fragment(), TextWatcher {
@@ -66,15 +65,9 @@ class DialPadFragment : Fragment(), TextWatcher {
         analyticsTracker = singletonEntryPoint.analyticsTracker()
     }
 
-    private var screenEvent: ScreenEvent? = null
     override fun onResume() {
         super.onResume()
-        screenEvent = ScreenEvent(MobileScreen.ScreenName.Dialpad)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        screenEvent?.send(analyticsTracker)
+        analyticsTracker.screen(MobileScreen(screenName = MobileScreen.ScreenName.Dialpad))
     }
 
     override fun onCreateView(

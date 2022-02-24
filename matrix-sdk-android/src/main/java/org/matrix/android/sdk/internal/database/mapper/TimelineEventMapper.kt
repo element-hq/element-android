@@ -49,7 +49,7 @@ internal class TimelineEventMapper @Inject constructor(private val readReceiptsS
                 ownedByThreadChunk = timelineEventEntity.ownedByThreadChunk,
                 readReceipts = readReceipts
                         ?.distinctBy {
-                            it.user
+                            it.roomMember
                         }?.sortedByDescending {
                             it.originServerTs
                         }.orEmpty()

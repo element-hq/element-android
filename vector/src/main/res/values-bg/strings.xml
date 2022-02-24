@@ -2010,7 +2010,6 @@
     <string name="settings_emails_empty">Не е добавен имейл адрес в профила ви</string>
     <string name="settings_emails">Имейл адрес</string>
     <string name="settings_phone_number_empty">Не е добавен телефонен номер в профила ви</string>
-    <string name="search_is_not_supported_in_e2e_room">Търсенето в шифровани стаи все още не се поддържа.</string>
     <string name="search_banned_user_hint">Филтрирай блокираните потребители</string>
     <string name="room_participants_unban_prompt_msg">Премахването на блокирането ще позволи на потребителя пак да влезе в стаята.</string>
     <string name="room_participants_unban_title">Премахване на блокиране</string>

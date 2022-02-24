@@ -956,6 +956,8 @@
     <string name="room_one_user_is_typing">%s is typing…</string>
     <string name="room_two_users_are_typing">%1$s &#038; %2$s are typing…</string>
     <string name="room_many_users_are_typing">%1$s &#038; %2$s &#038; others are typing…</string>
+    <string name="room_notification_two_users_are_typing">%1$s and %2$s</string>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s and others</string>
     <string name="room_message_placeholder_encrypted">Send an encrypted message…</string>
     <string name="room_message_placeholder_not_encrypted">Send a message (unencrypted)…</string>
     <string name="room_message_placeholder_reply_to_encrypted">Send an encrypted reply…</string>
@@ -1068,8 +1070,6 @@
     <string name="tab_title_search_messages">MESSAGES</string>
     <string name="tab_title_search_people">PEOPLE</string>
     <string name="tab_title_search_files">FILES</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="search_is_not_supported_in_e2e_room">Searching in encrypted rooms is not supported yet.</string>
 
     <!-- Directory -->
     <string name="directory_search_results_title">Browse directory</string>
@@ -1388,11 +1388,9 @@
     <string name="template_settings_opt_in_of_analytics_prompt">Please enable analytics to help us improve ${app_name}.</string>
     <string name="settings_opt_in_of_analytics_ok">Yes, I want to help!</string>
 
-    <!-- TODO Create a template -->
-    <string name="analytics_opt_in_title">Help improve Element</string>
-    <!-- TODO Create a template -->
+    <string name="template_analytics_opt_in_title">Help improve ${app_name}</string>
     <!-- The template will be replaced by the value of the resource analytics_opt_in_content_link -->
-    <string name="analytics_opt_in_content">Help us identify issues and improve Element by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.\n\nYou can read all our terms %s.</string>
+    <string name="template_analytics_opt_in_content">Help us identify issues and improve ${app_name} by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.\n\nYou can read all our terms %s.</string>
     <string name="analytics_opt_in_content_link">here</string>
     <string name="analytics_opt_in_list_item_1">We <b>don\'t</b> record or profile any account data</string>
     <string name="analytics_opt_in_list_item_2">We <b>don\'t</b> share information with third parties</string>
@@ -2300,8 +2298,7 @@
 
     <string name="preference_help">Help</string>
     <string name="preference_help_title">Help and support</string>
-    <!-- TODO Create a template -->
-    <string name="preference_help_summary">Get help with using Element</string>
+    <string name="template_preference_help_summary">Get help with using ${app_name}</string>
     <string name="preference_versions">Versions</string>
     <string name="preference_system_settings">System settings</string>
 
@@ -2544,21 +2541,16 @@
     <string name="timeline_unread_messages">Unread messages</string>
 
     <!--  Onboarding -->
-    <!-- TODO Replace _\d to secure, control, encrypted and messaging -->
-    <string name="ftue_auth_carousel_1_title">Own your conversations.</string>
-    <string name="ftue_auth_carousel_2_title">You\'re in control.</string>
-    <string name="ftue_auth_carousel_3_title">Secure messaging.</string>
-    <!-- TODO Remove -->
-    <string name="ftue_auth_carousel_4_title">Cut the slack from teams.</string>
+    <string name="ftue_auth_carousel_secure_title">Own your conversations.</string>
+    <string name="ftue_auth_carousel_control_title">You\'re in control.</string>
+    <string name="ftue_auth_carousel_encrypted_title">Secure messaging.</string>
+    <string name="ftue_auth_carousel_workplace_title">Messaging for your team.</string>
 
-    <!-- TODO _body should be the suffix -->
-    <string name="ftue_auth_carousel_body_secure">Secure and independent communication that gives you the same level of privacy as a face-to-face conversation in your own home.</string>
-    <string name="ftue_auth_carousel_body_control">Choose where your conversations are kept, giving you control and independence. Connected via Matrix.</string>
-    <string name="ftue_auth_carousel_body_encrypted">End-to-end encrypted and no phone number required. No ads or datamining.</string>
-    <!-- TODO Rename to ftue_auth_carousel_4_title and move the string with the 3 other titles -->
-    <string name="ftue_auth_carousel_title_messaging">Messaging for your team.</string>
+    <string name="ftue_auth_carousel_secure_body">Secure and independent communication that gives you the same level of privacy as a face-to-face conversation in your own home.</string>
+    <string name="ftue_auth_carousel_control_body">Choose where your conversations are kept, giving you control and independence. Connected via Matrix.</string>
+    <string name="ftue_auth_carousel_encrypted_body">End-to-end encrypted and no phone number required. No ads or datamining.</string>
     <!-- Note to translators: the translation MUST contain the string "${app_name}", which will be replaced by the application name -->
-    <string name="template_ftue_auth_carousel_body_workplace" translatable="false">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
+    <string name="template_ftue_auth_carousel_workplace_body" translatable="false">${app_name} is also great for the workplace. It’s trusted by the world’s most secure organisations.</string>
 
     <string name="ftue_auth_use_case_title">Who will you chat to the most?</string>
     <string name="ftue_auth_use_case_subtitle">We\'ll help you get connected.</string>
@@ -3524,8 +3516,6 @@
     <string name="add_space">Add Space</string>
     <string name="your_public_space">Your public space</string>
     <string name="your_private_space">Your private space</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="create_spaces_type_header">Spaces are a new way to group rooms and people</string>
     <string name="create_spaces_choose_type_label">What type of space do you want to create?</string>
     <string name="create_spaces_you_can_change_later">You can change this later</string>
     <string name="create_spaces_join_info_help">To join an existing space, you need an invite.</string>
@@ -3689,26 +3679,14 @@
 
     <string name="upgrade_room_for_restricted_note">Please note upgrading will make a new version of the room. All current messages will stay in this archived room.</string>
 
-    <!-- TODO TO BE REMOVED -->
-    <string name="new_let_people_in_spaces_find_and_join">New: Let people in spaces find and join private rooms</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="help_people_in_spaces_find_and_join">Help people in spaces to find and join private rooms themselves, no need to manually invite everyone.</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">This makes it easy for rooms to stay private to a space, while letting people in the space find and join them. All new rooms in a space will have this option available.</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="help_space_members">Help space members find private rooms</string>
-    <!-- TODO TO BE REMOVED -->
-    <string name="to_help_space_members_find_and_join">To help space members find and join a private room, go to that room’s settings by tapping on the avatar.</string>
-
     <!-- %s will be replaced by an email at runtime -->
     <string name="this_invite_to_this_room_was_sent">This invite to this room was sent to %s which is not associated with your account</string>
     <!-- %s will be replaced by an email at runtime -->
     <string name="this_invite_to_this_space_was_sent">This invite to this space was sent to %s which is not associated with your account</string>
 
     <string name="link_this_email_settings_link">Link this email with your account</string>
-    <!-- TODO Create a template -->
     <!-- %s will be replaced by the value of link_this_email_settings_link and styled as a link -->
-    <string name="link_this_email_with_your_account">%s in Settings to receive invites directly in Element.</string>
+    <string name="template_link_this_email_with_your_account">%s in Settings to receive invites directly in ${app_name}.</string>
 
     <string name="labs_enable_latex_maths">Enable LaTeX mathematics</string>
     <string name="restart_the_application_to_apply_changes">Restart the application for the change to take effect.</string>
@@ -3785,7 +3763,10 @@
     <string name="tooltip_attachment_location">Share location</string>
 
     <string name="message_reaction_show_less">Show less</string>
-    <string name="message_reaction_show_more">"%1$d more"</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">"%1$d more"</item>
+        <item quantity="other">"%1$d more"</item>
+    </plurals>
 
     <string name="room_message_notify_everyone">Notify the whole room</string>
     <string name="room_message_autocomplete_users">Users</string>

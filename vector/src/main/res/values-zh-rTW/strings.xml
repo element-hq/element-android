@@ -2352,7 +2352,6 @@
     <string name="settings_troubleshoot_test_push_loop_success">應用程式正在接收 PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">應用程式正在等待 PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_title">測試推播</string>
-    <string name="search_is_not_supported_in_e2e_room">目前尚不支援在已加密的聊天室中搜尋。</string>
     <string name="search_banned_user_hint">過濾被封鎖的使用者</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">您沒有開始通話的權限</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">您沒有開始會議通話的權限</string>
@@ -2650,7 +2649,6 @@
     <string name="create_spaces_join_info_help">要加入既有的空間，您需要邀請。</string>
     <string name="create_spaces_you_can_change_later">您可以稍後再更改</string>
     <string name="create_spaces_choose_type_label">您想要建立哪種類型的空間？</string>
-    <string name="create_spaces_type_header">空間是一種將聊天室與人們分組的新方式</string>
     <string name="your_private_space">您的私人空間</string>
     <string name="your_public_space">您的公開空間</string>
     <string name="add_space">新增空間</string>
@@ -2808,15 +2806,10 @@
     <string name="settings_notification_other">其他</string>
     <string name="settings_notification_mentions_and_keywords">提及與關鍵字</string>
     <string name="settings_notification_default">預設通知</string>
-    <string name="link_this_email_with_your_account">設定中的 %s 可直接在 Element 中接收邀請。</string>
+    <string name="template_link_this_email_with_your_account">設定中的 %s 可直接在 ${app_name} 中接收邀請。</string>
     <string name="link_this_email_settings_link">將此電子郵件與您的帳號連結</string>
     <string name="this_invite_to_this_space_was_sent">此空間的邀請已傳送給與您的帳號無關的 %s</string>
     <string name="this_invite_to_this_room_was_sent">此聊天室的邀請已傳送給與您的帳號無關的 %s</string>
-    <string name="to_help_space_members_find_and_join">要協助空間成員尋找並加入私人聊天室，請點擊大頭照進入該聊天是的設定中。</string>
-    <string name="help_space_members">協助空間成員尋找私人聊天室</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">這讓聊天室可以輕鬆地對空間維持隱密，同時讓空間中的夥伴找到並加入它們。空間中的所有新的聊天室都將提供此選項。</string>
-    <string name="help_people_in_spaces_find_and_join">協助空間內的夥伴自己尋找私人聊天室，不需要手動邀請所有人。</string>
-    <string name="new_let_people_in_spaces_find_and_join">新功能：讓空間中的人尋找並加入私人聊天室</string>
     <string name="call_jitsi_started">群組通話開始</string>
     <string name="all_rooms_youre_in_will_be_shown_in_home">您所在的所有聊天室都會顯示在 Home 中。</string>
     <string name="preference_show_all_rooms_in_home">顯示 Home 中的所有聊天室</string>
@@ -2970,7 +2963,7 @@
     </plurals>
     <string name="preference_system_settings">系統設定</string>
     <string name="preference_versions">版本</string>
-    <string name="preference_help_summary">取得關於使用 Element 的協助</string>
+    <string name="template_preference_help_summary">取得關於使用 ${app_name} 的協助</string>
     <string name="preference_help_title">說明與支援</string>
     <string name="preference_help">說明</string>
     <string name="preference_root_legals">法律</string>
@@ -2983,10 +2976,10 @@
     <string name="analytics_opt_in_list_item_2">我們<b>不會</b>與第三方分享資訊</string>
     <string name="analytics_opt_in_list_item_1">我們<b>不會</b>記錄或分析任何帳號資料</string>
     <string name="analytics_opt_in_content_link">這裡</string>
-    <string name="analytics_opt_in_content">透過分享匿名使用資料協助我們找出問題並改善 Element。為了了解人們如何使用多裝置，我們將會產生隨機識別字串，在您的裝置間共享。
+    <string name="template_analytics_opt_in_content">透過分享匿名使用資料協助我們找出問題並改善 ${app_name}。為了了解人們如何使用多裝置，我們將會產生隨機識別字串，在您的裝置間共享。
 \n
 \n您可以閱讀我們的條款 %s。</string>
-    <string name="analytics_opt_in_title">協助改善 Element</string>
+    <string name="template_analytics_opt_in_title">協助改善 ${app_name}</string>
     <string name="action_enable">啟用</string>
     <string name="restart_the_application_to_apply_changes">重新啟動應用程式以讓變更生效。</string>
     <string name="labs_enable_latex_maths">啟用 LaTeX 數學</string>
@@ -3001,10 +2994,9 @@
     <string name="labs_auto_report_uisi">自動回報解密錯誤。</string>
     <string name="room_member_override_nick_color">覆寫暱稱色彩</string>
     <string name="login_splash_already_have_account">我已有一個帳號</string>
-    <string name="ftue_auth_carousel_4_title">減少團隊的懈怠。</string>
-    <string name="ftue_auth_carousel_3_title">安全傳送訊息。</string>
-    <string name="ftue_auth_carousel_2_title">您已掌控了您的資料。</string>
-    <string name="ftue_auth_carousel_1_title">擁有您的對話。</string>
+    <string name="ftue_auth_carousel_encrypted_title">安全傳送訊息。</string>
+    <string name="ftue_auth_carousel_control_title">您已掌控了您的資料。</string>
+    <string name="ftue_auth_carousel_secure_title">擁有您的對話。</string>
     <string name="tooltip_attachment_location">分享位置</string>
     <string name="labs_render_locations_in_timeline">在時間軸中繪製使用者位置</string>
     <string name="settings_enable_location_sharing_summary">啟用後，您就能將您的位置傳送至任何聊天室</string>
@@ -3031,11 +3023,44 @@
     <string name="encryption_has_been_misconfigured">加密設定錯誤。</string>
     <string name="sent_location">分享了他們的位置</string>
     <string name="login_splash_create_account">建立帳號</string>
-    <string name="ftue_auth_carousel_title_messaging">為您的團隊傳送訊息。</string>
-    <string name="ftue_auth_carousel_body_encrypted">端到端加密，不需要電話號碼。沒有廣告或資料挖礦。</string>
-    <string name="ftue_auth_carousel_body_control">選擇保留對話的位置，讓您擁有控制權與獨立性。透過 Matrix 連結。</string>
-    <string name="ftue_auth_carousel_body_secure">安全且獨立的通訊，為您提供與在家中進行面對面對話相同的隱私等級。</string>
+    <string name="ftue_auth_carousel_workplace_title">為您的團隊傳送訊息。</string>
+    <string name="ftue_auth_carousel_encrypted_body">端到端加密，不需要電話號碼。沒有廣告或資料挖礦。</string>
+    <string name="ftue_auth_carousel_control_body">選擇保留對話的位置，讓您擁有控制權與獨立性。透過 Matrix 連結。</string>
+    <string name="ftue_auth_carousel_secure_body">安全且獨立的通訊，為您提供與在家中進行面對面對話相同的隱私等級。</string>
     <string name="attachment_type_location">位置</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">加密設定錯誤，因此您無法傳送訊息。點擊以開啟設定。</string>
     <string name="room_unsupported_e2e_algorithm">加密設定錯誤，因此您無法傳送訊息。請聯絡管理員將加密還原至有效的狀態。</string>
+    <string name="message_bubbles">顯示訊息泡泡</string>
+    <string name="location_timeline_failed_to_load_map">載入地圖失敗</string>
+    <string name="a11y_static_map_image">地圖</string>
+    <string name="labs_enable_thread_messages_desc">注意：應用程式將會重新啟動</string>
+    <string name="labs_enable_thread_messages">啟用討論串訊息</string>
+    <string name="ftue_auth_use_case_connect_to_server">連線至伺服器</string>
+    <string name="ftue_auth_use_case_join_existing_server">想要加入現有的伺服器？</string>
+    <string name="ftue_auth_use_case_skip_partial">略過此問題</string>
+    <string name="ftue_auth_use_case_skip">還不確定？您可以 %s</string>
+    <string name="ftue_auth_use_case_option_three">社群</string>
+    <string name="ftue_auth_use_case_option_two">團隊</string>
+    <string name="ftue_auth_use_case_option_one">朋友與家人</string>
+    <string name="ftue_auth_use_case_subtitle">我們將會協助您建立聯繫。</string>
+    <string name="ftue_auth_use_case_title">您與誰聊最多？</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">您已經在檢視此討論串了！</string>
+    <string name="view_in_room">在聊天室中檢視</string>
+    <string name="reply_in_thread">在討論串中回覆</string>
+    <string name="command_not_supported_in_threads">可識別指令「%s」，但在討論串中不支援。</string>
+    <string name="search_thread_from_a_thread">來自討論串</string>
+    <string name="thread_list_empty_notice">秘訣：長按訊息並使用「%s」。</string>
+    <string name="thread_list_empty_subtitle">討論串可以協助您的對話不離題且易於追蹤。</string>
+    <string name="thread_list_empty_title">使用討論串來讓討論保持有條不紊</string>
+    <string name="thread_list_modal_my_threads_subtitle">顯示您參與的所有討論串</string>
+    <string name="thread_list_modal_my_threads_title">我的討論串</string>
+    <string name="thread_list_modal_all_threads_subtitle">從目前的聊天室顯示所有討論串</string>
+    <string name="thread_list_modal_all_threads_title">所有討論串</string>
+    <string name="thread_list_modal_title">過濾</string>
+    <string name="thread_list_title">討論串</string>
+    <string name="thread_timeline_title">討論串</string>
+    <string name="room_threads_filter">過濾聊天室中的討論串</string>
+    <string name="action_thread_copy_link_to_thread">複製連結至討論串</string>
+    <string name="action_thread_view_in_room">在聊天室中檢視</string>
+    <string name="action_view_threads">檢視討論串</string>
 </resources>

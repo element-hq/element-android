@@ -1,1 +1,0 @@
-Open the room when user accepts an invite from the room list

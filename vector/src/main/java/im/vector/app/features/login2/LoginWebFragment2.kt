@@ -56,7 +56,7 @@ class LoginWebFragment2 @Inject constructor(
         return FragmentLoginWebBinding.inflate(inflater, container, false)
     }
 
-    val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
+    private val softLogoutViewModel: SoftLogoutViewModel by activityViewModel()
 
     private var isWebViewLoaded = false
     private var isForSessionRecovery = false
@@ -82,7 +82,7 @@ class LoginWebFragment2 @Inject constructor(
     private fun setupTitle(state: LoginViewState2) {
         toolbar?.title = when (state.signMode) {
             SignMode2.SignIn -> getString(R.string.login_signin)
-            else            -> getString(R.string.login_signup)
+            else             -> getString(R.string.login_signup)
         }
     }
 

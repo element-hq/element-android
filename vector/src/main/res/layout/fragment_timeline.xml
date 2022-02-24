@@ -17,8 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
-            android:visibility="gone"
-            tools:visibility="gone" />
+            android:visibility="gone"/>
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/roomToolbar"
@@ -87,8 +86,19 @@
         app:closeIcon="@drawable/ic_close_24dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/removeJitsiWidgetView"
-        tools:visibility="visible" />
+        app:layout_constraintTop_toBottomOf="@id/removeJitsiWidgetView"/>
+
+    <im.vector.app.core.ui.views.TypingMessageView
+        android:id="@+id/typingMessageView"
+        app:layout_constraintBottom_toTopOf="@id/composerLayout"
+        app:layout_constraintTop_toBottomOf="@id/timelineRecyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="0dp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        tools:visibility="visible"
+        android:layout_height="20dp"/>
 
     <im.vector.app.core.ui.views.NotificationAreaView
         android:id="@+id/notificationAreaView"
@@ -97,7 +107,8 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible"/>
 
     <ViewStub
         android:id="@+id/failedMessagesWarningStub"
@@ -119,8 +130,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:visibility="visible" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
         android:id="@+id/voiceMessageRecorderView"

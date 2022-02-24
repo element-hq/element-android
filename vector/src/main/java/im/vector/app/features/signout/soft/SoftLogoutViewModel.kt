@@ -16,7 +16,6 @@
 
 package im.vector.app.features.signout.soft
 
-import com.airbnb.mvrx.ActivityViewModelContext
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
@@ -26,8 +25,10 @@ import com.airbnb.mvrx.ViewModelContext
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import dagger.hilt.EntryPoints
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.di.MavericksAssistedViewModelFactory
+import im.vector.app.core.di.SingletonEntryPoint
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.hasUnsavedKeys
 import im.vector.app.core.platform.VectorViewModel
@@ -55,16 +56,30 @@ class SoftLogoutViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<SoftLogoutViewModel, SoftLogoutViewState> by hiltMavericksViewModelFactory() {
 
-        override fun initialState(viewModelContext: ViewModelContext): SoftLogoutViewState? {
-            val activity: SoftLogoutActivity = (viewModelContext as ActivityViewModelContext).activity()
-            val userId = activity.session.myUserId
-            return SoftLogoutViewState(
-                    homeServerUrl = activity.session.sessionParams.homeServerUrl,
-                    userId = userId,
-                    deviceId = activity.session.sessionParams.deviceId ?: "",
-                    userDisplayName = activity.session.getUser(userId)?.displayName ?: userId,
-                    hasUnsavedKeys = activity.session.hasUnsavedKeys()
-            )
+        override fun initialState(viewModelContext: ViewModelContext): SoftLogoutViewState {
+            val sessionHolder = EntryPoints.get(viewModelContext.app(), SingletonEntryPoint::class.java)
+                    .activeSessionHolder()
+
+            return if (sessionHolder.hasActiveSession()) {
+                val session = sessionHolder.getActiveSession()
+                val userId = session.myUserId
+
+                SoftLogoutViewState(
+                        homeServerUrl = session.sessionParams.homeServerUrl,
+                        userId = userId,
+                        deviceId = session.sessionParams.deviceId.orEmpty(),
+                        userDisplayName = session.getUser(userId)?.displayName ?: userId,
+                        hasUnsavedKeys = session.hasUnsavedKeys()
+                )
+            } else {
+                SoftLogoutViewState(
+                        homeServerUrl = "",
+                        userId = "",
+                        deviceId = "",
+                        userDisplayName = "",
+                        hasUnsavedKeys = false
+                )
+            }
         }
     }
 

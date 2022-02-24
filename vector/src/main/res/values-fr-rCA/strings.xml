@@ -1443,7 +1443,6 @@
     <string name="room_settings_all_messages_noisy">Notification sonore pour chaque message</string>
     <string name="directory_searching_title">Recherche dans le répertoire…</string>
     <string name="directory_search_results_title">Parcourir le répertoire</string>
-    <string name="search_is_not_supported_in_e2e_room">La recherche dans les salons chiffrés n\'est pas encore prise en charge.</string>
     <string name="tab_title_search_files">FICHIERS</string>
     <string name="tab_title_search_people">PARTICIPANTS</string>
     <string name="tab_title_search_messages">MESSAGES</string>
@@ -2661,7 +2660,6 @@
     <string name="create_spaces_join_info_help">Pour rejoindre un espace existant, il vous faut une invitation.</string>
     <string name="create_spaces_you_can_change_later">Vous pouvez changer ceci plus tard</string>
     <string name="create_spaces_choose_type_label">Quel type d’espace voulez-vous créer\?</string>
-    <string name="create_spaces_type_header">Les espaces sont un nouveau moyen de regrouper les salons et les personnes</string>
     <string name="your_private_space">Votre espace privé</string>
     <string name="your_public_space">Votre espace public</string>
     <string name="add_space">Ajouter un espace</string>
