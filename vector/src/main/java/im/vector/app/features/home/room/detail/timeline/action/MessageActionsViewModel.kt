@@ -251,8 +251,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
         val msgType = messageContent?.msgType
 
         return arrayListOf<EventSharedAction>().apply {
-            // TODO need to check all possible items and confirm order changes to apply
-            //  reorder actions according to issue requirements: check if same order in Web
             when {
                 timelineEvent.root.sendState.hasFailed()         -> {
                     addActionsForFailedState(timelineEvent, actionPermissions, messageContent, msgType)
@@ -345,24 +343,6 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.Edit(eventId, timelineEvent.root.getClearType()))
             }
 
-            if (canRedact(timelineEvent, actionPermissions)) {
-                if (timelineEvent.root.getClearType() == EventType.POLL_START) {
-                    add(EventSharedAction.Redact(
-                            eventId,
-                            askForReason = informationData.senderId != session.myUserId,
-                            dialogTitleRes = R.string.delete_poll_dialog_title,
-                            dialogDescriptionRes = R.string.delete_poll_dialog_content
-                    ))
-                } else {
-                    add(EventSharedAction.Redact(
-                            eventId,
-                            askForReason = informationData.senderId != session.myUserId,
-                            dialogTitleRes = R.string.delete_event_dialog_title,
-                            dialogDescriptionRes = R.string.delete_event_dialog_content
-                    ))
-                }
-            }
-
             if (canCopy(msgType)) {
                 // TODO copy images? html? see ClipBoard
                 add(EventSharedAction.Copy(messageContent!!.body))
@@ -384,12 +364,30 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                 add(EventSharedAction.ViewEditHistory(informationData))
             }
 
+            if (canSave(msgType) && messageContent is MessageWithAttachmentContent) {
+                add(EventSharedAction.Save(timelineEvent.eventId, messageContent))
+            }
+
             if (canShare(msgType)) {
                 add(EventSharedAction.Share(timelineEvent.eventId, messageContent!!))
             }
 
-            if (canSave(msgType) && messageContent is MessageWithAttachmentContent) {
-                add(EventSharedAction.Save(timelineEvent.eventId, messageContent))
+            if (canRedact(timelineEvent, actionPermissions)) {
+                if (timelineEvent.root.getClearType() == EventType.POLL_START) {
+                    add(EventSharedAction.Redact(
+                            eventId,
+                            askForReason = informationData.senderId != session.myUserId,
+                            dialogTitleRes = R.string.delete_poll_dialog_title,
+                            dialogDescriptionRes = R.string.delete_poll_dialog_content
+                    ))
+                } else {
+                    add(EventSharedAction.Redact(
+                            eventId,
+                            askForReason = informationData.senderId != session.myUserId,
+                            dialogTitleRes = R.string.delete_event_dialog_title,
+                            dialogDescriptionRes = R.string.delete_event_dialog_content
+                    ))
+                }
             }
         }
 
