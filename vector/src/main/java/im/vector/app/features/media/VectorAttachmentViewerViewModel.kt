@@ -26,10 +26,13 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.VectorDummyViewState
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.media.domain.usecase.DownloadMediaUseCase
+import im.vector.app.features.session.coroutineScope
 import kotlinx.coroutines.launch
+import org.matrix.android.sdk.api.session.Session
 
 class VectorAttachmentViewerViewModel @AssistedInject constructor(
         @Assisted initialState: VectorDummyViewState,
+        private val session: Session,
         private val downloadMediaUseCase: DownloadMediaUseCase
 ) : VectorViewModel<VectorDummyViewState, VectorAttachmentViewerAction, VectorAttachmentViewerViewEvents>(initialState) {
 
@@ -65,7 +68,8 @@ class VectorAttachmentViewerViewModel @AssistedInject constructor(
      * ========================================================================================== */
 
     private fun handleDownloadAction(action: VectorAttachmentViewerAction.DownloadMedia) {
-        viewModelScope.launch {
+        // launch in the coroutine scope session to avoid binding the coroutine to the lifecycle of the VM
+        session.coroutineScope.launch {
             // Success event is handled via a notification inside the use case
             downloadMediaUseCase.execute(action.file)
                     .onFailure { _viewEvents.post(VectorAttachmentViewerViewEvents.ErrorDownloadingMedia(it)) }
