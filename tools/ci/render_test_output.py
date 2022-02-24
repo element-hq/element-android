@@ -38,6 +38,6 @@ for xmlfile in xmlfiles:
             print(f"::error file={testname}::{message} in {time}s")
             print(child.text)
     body = f"passed={passed} failures={failures} errors={errors} skipped={skipped}"
-    print(f"::set-output name={suitename}::passed={body}"
+    print(f"::set-output name={suitename}::passed={body}")
     print("::endgroup::")
 
