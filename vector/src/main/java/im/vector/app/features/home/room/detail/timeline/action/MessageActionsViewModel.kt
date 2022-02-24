@@ -252,6 +252,7 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
 
         return arrayListOf<EventSharedAction>().apply {
             // TODO need to check all possible items and confirm order changes to apply
+            //  reorder actions according to issue requirements: check if same order in Web
             when {
                 timelineEvent.root.sendState.hasFailed()         -> {
                     addActionsForFailedState(timelineEvent, actionPermissions, messageContent, msgType)

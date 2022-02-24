@@ -315,9 +315,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
     }
 
     override fun onDownload() {
-        // TODO
-        //  reorder action for a message according to issue requirements
-        //  add unit tests for usecase? what is the used mock library?
         lifecycleScope.launch(Dispatchers.IO) {
             val hasWritePermission = withContext(Dispatchers.Main) {
                 hasWritePermission()
