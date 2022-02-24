@@ -1625,7 +1625,7 @@
     <string name="keys_backup_restoring_computing_key_waiting_message">リカバリーキーを計算しています…</string>
     <string name="keys_backup_restoring_waiting_message">バックアップを復元しています：</string>
     <string name="network_error_please_check_and_retry">ネットワークエラー：接続を確認して再試行してください。</string>
-    <string name="keys_backup_passphrase_error_decrypt">このパスフレーズではバックアップを復号化できませんでした。正しいリカバリーパスフレーズを入力したことを確認してください。</string>
+    <string name="keys_backup_passphrase_error_decrypt">このパスフレーズではバックアップを復号化できませんでした。正しい復旧用のパスフレーズを入力したことを確認してください。</string>
     <string name="keys_backup_restore_with_key_helper">リカバリーキーを喪失しましたか？　設定で新しいリカバリーキーを設定できます。</string>
     <string name="keys_backup_restore_setup_recovery_key">メッセージの復旧</string>
     <string name="keys_backup_restore_is_getting_backup_version">バックアップのバージョンを取得しています…</string>
@@ -2902,4 +2902,5 @@
     <string name="contacts_book_title">連絡先</string>
     <string name="crypto_utd">復号化できません</string>
     <string name="bootstrap_save_key_description">%2$sを忘れた場合、この%1$sをセーフティーネットとして使用してください。</string>
+    <string name="verify_cancelled_notice">検証がキャンセルされました。再び検証を開始することができます。</string>
 </resources>
