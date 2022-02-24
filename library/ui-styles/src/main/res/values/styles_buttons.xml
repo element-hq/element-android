@@ -15,22 +15,24 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
-    <style name="Widget.Vector.Button.Destructive" parent="BottomSheetButtonTextColor">
+    <style name="Widget.Vector.Button.Destructive">
         <item name="android:minWidth">94dp</item>
         <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayDestructive</item>
     </style>
 
     <style name="VectorMaterialThemeOverlayDestructive">
         <item name="colorPrimary">?colorError</item>
+        <item name="colorOnPrimary">@color/palette_white</item>
     </style>
 
-    <style name="Widget.Vector.Button.Positive" parent="BottomSheetButtonTextColor">
+    <style name="Widget.Vector.Button.Positive">
         <item name="android:minWidth">94dp</item>
         <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayPositive</item>
     </style>
 
     <style name="VectorMaterialThemeOverlayPositive">
         <!-- Keep default colors from the theme -->
+        <item name="colorOnPrimary">@color/palette_white</item>
     </style>
 
     <style name="Widget.Vector.Button.Unelevated" parent="Widget.MaterialComponents.Button.UnelevatedButton">

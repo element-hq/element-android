@@ -61,10 +61,6 @@ class RoomWidgetPermissionBottomSheet :
         views.widgetPermissionContinue.debouncedClicks { doAccept() }
     }
 
-    override fun doCancel(dialog: DialogInterface) {
-        doDecline()
-    }
-
     override fun invalidate() = withState(viewModel) { state ->
         super.invalidate()
         val permissionData = state.permissionData() ?: return@withState
@@ -107,6 +103,7 @@ class RoomWidgetPermissionBottomSheet :
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
+        doDecline()
         viewModel.handle(RoomWidgetPermissionActions.DoClose)
     }
 
