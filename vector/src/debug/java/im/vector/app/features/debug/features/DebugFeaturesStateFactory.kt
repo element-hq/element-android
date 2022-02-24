@@ -54,11 +54,6 @@ class DebugFeaturesStateFactory @Inject constructor(
                         key = DebugFeatureKeys.onboardingPersonalize,
                         factory = VectorFeatures::isOnboardingPersonalizeEnabled
                 ),
-                createBooleanFeature(
-                        label = "Force login fallback",
-                        key = DebugFeatureKeys.forceLoginFallback,
-                        factory = VectorFeatures::isForceLoginFallbackEnabled
-                )
         ))
     }
 

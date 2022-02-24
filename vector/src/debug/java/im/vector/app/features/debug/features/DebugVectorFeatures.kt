@@ -54,8 +54,6 @@ class DebugVectorFeatures(
     override fun isOnboardingPersonalizeEnabled(): Boolean = read(DebugFeatureKeys.onboardingPersonalize)
             ?: vectorFeatures.isOnboardingPersonalizeEnabled()
 
-    override fun isForceLoginFallbackEnabled(): Boolean = read(DebugFeatureKeys.forceLoginFallback) ?: vectorFeatures.isForceLoginFallbackEnabled()
-
     fun <T> override(value: T?, key: Preferences.Key<T>) = updatePreferences {
         if (value == null) {
             it.remove(key)
@@ -108,5 +106,4 @@ object DebugFeatureKeys {
     val onboardingSplashCarousel = booleanPreferencesKey("onboarding-splash-carousel")
     val onboardingUseCase = booleanPreferencesKey("onbboarding-splash-carousel")
     val onboardingPersonalize = booleanPreferencesKey("onbboarding-personalize")
-    val forceLoginFallback = booleanPreferencesKey("force-login-fallback")
 }
