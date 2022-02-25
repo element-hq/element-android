@@ -18,6 +18,5 @@ package im.vector.app.test.fakes
 
 import im.vector.app.features.DefaultVectorOverrides
 import im.vector.app.features.VectorOverrides
-import io.mockk.mockk
 
 class FakeVectorOverrides : VectorOverrides by DefaultVectorOverrides()

@@ -43,7 +43,7 @@ class OverrideDropdownView @JvmOverloads constructor(
         optionsSpinner = findViewById(R.id.feature_options)
     }
 
-    fun <T: OverrideOption> bind(feature: OverrideDropdown<T>, listener: Listener<T>) {
+    fun <T : OverrideOption> bind(feature: OverrideDropdown<T>, listener: Listener<T>) {
         labelView.text = feature.label
 
         optionsSpinner.apply {
@@ -75,7 +75,7 @@ class OverrideDropdownView @JvmOverloads constructor(
         fun onOverrideSelected(option: T?)
     }
 
-    data class OverrideDropdown<T: OverrideOption>(
+    data class OverrideDropdown<T : OverrideOption>(
             val label: String,
             val options: List<T>,
             val activeOption: T?,

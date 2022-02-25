@@ -424,5 +424,4 @@ class FtueAuthVariant(
                 option = commonOption
         )
     }
-
 }

@@ -768,7 +768,7 @@ class OnboardingViewModel @AssistedInject constructor(
         when (isAccountCreated) {
             true  -> {
                 val homeServerCapabilities = session.getHomeServerCapabilities()
-                val capabilityOverrides = vectorOverrides.forceHomeserverCapabilities()?.firstOrNull()
+                val capabilityOverrides = vectorOverrides.forceHomeserverCapabilities?.firstOrNull()
                 val personalizationState = state.personalizationState.copy(
                         supportsChangingDisplayName = capabilityOverrides?.canChangeDisplayName ?: homeServerCapabilities.canChangeDisplayName,
                         supportsChangingProfilePicture = capabilityOverrides?.canChangeAvatar ?: homeServerCapabilities.canChangeAvatar
@@ -934,7 +934,9 @@ class OnboardingViewModel @AssistedInject constructor(
             when {
                 it.supportsChangingDisplayName    -> _viewEvents.post(OnboardingViewEvents.OnChooseDisplayName)
                 it.supportsChangingProfilePicture -> _viewEvents.post(OnboardingViewEvents.OnChooseDisplayName)
-                else                              -> throw IllegalStateException("It should not be possible to personalize without supporting display name or avatar changing")
+                else                              -> {
+                    throw IllegalStateException("It should not be possible to personalize without supporting display name or avatar changing")
+                }
             }
         }
     }
