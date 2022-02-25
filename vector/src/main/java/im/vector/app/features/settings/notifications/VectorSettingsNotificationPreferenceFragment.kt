@@ -38,6 +38,7 @@ import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.core.utils.combineLatest
 import im.vector.app.core.utils.isIgnoringBatteryOptimizations
@@ -49,7 +50,6 @@ import im.vector.app.features.settings.BackgroundSyncModeChooserDialog
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.features.settings.VectorSettingsBaseFragment
 import im.vector.app.features.settings.VectorSettingsFragmentInteractionListener
-import im.vector.app.push.fcm.FcmHelper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -58,6 +58,7 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.pushrules.RuleKind
+import timber.log.Timber
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
@@ -97,16 +98,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)?.let {
             it.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
-                if (isChecked) {
-                    FcmHelper.getFcmToken(requireContext())?.let {
-                        pushManager.registerPusherWithFcmKey(it)
-                    }
-                } else {
-                    FcmHelper.getFcmToken(requireContext())?.let {
-                        pushManager.unregisterPusher(it)
-                        session.pushersService().refreshPushers()
-                    }
-                }
+                updateEnabledForDevice(isChecked)
             }
         }
 
@@ -222,7 +214,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         }
 
         findPreference<VectorPreferenceCategory>(VectorPreferences.SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY)?.let {
-            it.isVisible = !FcmHelper.isPushSupported()
+            it.isVisible = UnifiedPushHelper.isBackgroundSync(requireContext())
         }
 
         val backgroundSyncEnabled = vectorPreferences.isBackgroundSyncEnabled()
@@ -331,7 +323,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
     private fun refreshPref() {
         // This pref may have change from troubleshoot pref fragment
-        if (!FcmHelper.isPushSupported()) {
+        if (UnifiedPushHelper.isBackgroundSync(requireContext())) {
             findPreference<VectorSwitchPreference>(VectorPreferences.SETTINGS_START_ON_BOOT_PREFERENCE_KEY)
                     ?.isChecked = vectorPreferences.autoStartOnBoot()
         }
@@ -360,6 +352,26 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             }
             else                                                       -> {
                 return super.onPreferenceTreeClick(preference)
+            }
+        }
+    }
+
+    private suspend fun updateEnabledForDevice(enabled: Boolean) {
+        if (enabled) {
+            UnifiedPushHelper.register(requireContext())
+        } else {
+            UnifiedPushHelper.getEndpointOrToken(requireContext())?.let {
+                try {
+                    pushManager.unregisterPusher(it)
+                } catch (e: Exception) {
+                    Timber.d("Probably unregistering a non existant pusher")
+                }
+                try {
+                    UnifiedPushHelper.unregister(requireContext())
+                } catch (e: Exception) {
+                    Timber.d("Probably unregistering to a non-saved distributor")
+                }
+                session.pushersService().refreshPushers()
             }
         }
     }

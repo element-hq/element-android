@@ -3038,4 +3038,8 @@
     <!-- Screen sharing -->
     <string name="screen_sharing_notification_title">${app_name} Screen Sharing</string>
     <string name="screen_sharing_notification_description">Screen sharing is in progress</string>
+
+    <string name="unifiedpush_getdistributors_dialog_title">Choose how to receive notifications</string>
+    <string name="unifiedpush_getdistributors_dialog_fcm_fallback">Google Services</string>
+    <string name="unifiedpush_getdistributors_dialog_background_sync">Background synchronization</string>
 </resources>

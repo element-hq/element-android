@@ -44,6 +44,7 @@ import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.pushers.PushersManager
+import im.vector.app.core.pushers.UnifiedPushHelper
 import im.vector.app.databinding.ActivityHomeBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
@@ -181,7 +182,15 @@ class HomeActivity :
         super.onCreate(savedInstanceState)
         analyticsScreenName = MobileScreen.ScreenName.Home
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
-        FcmHelper.ensureFcmTokenIsRetrieved(this, pushManager, vectorPreferences.areNotificationEnabledForDevice())
+        UnifiedPushHelper.register(this, onDoneRunnable = {
+            if (UnifiedPushHelper.isEmbeddedDistributor(this)) {
+                FcmHelper.ensureFcmTokenIsRetrieved(
+                        this,
+                        pushManager,
+                        vectorPreferences.areNotificationEnabledForDevice()
+                )
+            }
+        })
         sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {

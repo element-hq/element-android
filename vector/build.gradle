@@ -268,6 +268,7 @@ android {
             buildConfigField "boolean", "ALLOW_FCM_USE", "true"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"G\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"GooglePlay\""
+            buildConfigField "boolean", "ALLOW_EXTERNAL_UNIFIEDPUSH_DISTRIB", "true"
         }
 
         fdroid {
@@ -279,6 +280,7 @@ android {
             buildConfigField "boolean", "ALLOW_FCM_USE", "false"
             buildConfigField "String", "SHORT_FLAVOR_DESCRIPTION", "\"F\""
             buildConfigField "String", "FLAVOR_DESCRIPTION", "\"FDroid\""
+            buildConfigField "boolean", "ALLOW_EXTERNAL_UNIFIEDPUSH_DISTRIB", "true"
         }
     }
 
@@ -334,6 +336,7 @@ dependencies {
     implementation project(":library:multipicker")
     implementation 'androidx.multidex:multidex:2.0.1'
 
+    implementation libs.jetbrains.kotlinReflect
     implementation libs.jetbrains.coroutinesCore
     implementation libs.jetbrains.coroutinesAndroid
 
@@ -350,6 +353,7 @@ dependencies {
     implementation "com.gabrielittner.threetenbp:lazythreetenbp:0.9.0"
 
     implementation libs.squareup.moshi
+    implementation libs.squareup.moshiKt
     kapt libs.squareup.moshiKotlin
 
     // Lifecycle
@@ -453,8 +457,10 @@ dependencies {
     // Analytics
     implementation 'com.posthog.android:posthog:1.1.2'
 
-    // gplay flavor only
-    gplayImplementation('com.google.firebase:firebase-messaging:23.0.0') {
+    // UnifiedPush
+    implementation 'com.github.UnifiedPush:android-connector:2.0.0-beta2'
+    // UnifiedPush gplay flavor only
+    gplayImplementation('com.github.UnifiedPush:android-embedded_fcm_distributor:a0056aa939') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'

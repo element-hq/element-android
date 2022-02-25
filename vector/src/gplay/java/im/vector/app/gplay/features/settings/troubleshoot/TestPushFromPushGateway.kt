@@ -48,12 +48,12 @@ class TestPushFromPushGateway @Inject constructor(private val context: FragmentA
 
     override fun perform(activityResultLauncher: ActivityResultLauncher<Intent>) {
         pushReceived = false
-        val fcmToken = FcmHelper.getFcmToken(context) ?: run {
+        FcmHelper.getFcmToken(context) ?: run {
             status = TestStatus.FAILED
             return
         }
         action = activeSessionHolder.getActiveSession().coroutineScope.launch {
-            val result = runCatching { pushersManager.testPush(fcmToken) }
+            val result = runCatching { pushersManager.testPush(context) }
 
             withContext(Dispatchers.Main) {
                 status = result

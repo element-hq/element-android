@@ -95,9 +95,9 @@ object FcmHelper {
      * it doesn't, display a dialog that allows users to download the APK from
      * the Google Play Store or enable it in the device's system settings.
      */
-    private fun checkPlayServices(activity: Activity): Boolean {
+    fun checkPlayServices(context: Context): Boolean {
         val apiAvailability = GoogleApiAvailability.getInstance()
-        val resultCode = apiAvailability.isGooglePlayServicesAvailable(activity)
+        val resultCode = apiAvailability.isGooglePlayServicesAvailable(context)
         return resultCode == ConnectionResult.SUCCESS
     }
 

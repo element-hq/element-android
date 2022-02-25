@@ -40,6 +40,7 @@ ext.libs = [
 
         ],
         jetbrains   : [
+                'kotlinReflect'           : "org.jetbrains.kotlin:kotlin-reflect:$kotlin",
                 'coroutinesCore'          : "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutines",
                 'coroutinesAndroid'       : "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinCoroutines",
                 'coroutinesTest'          : "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinCoroutines"
@@ -82,6 +83,7 @@ ext.libs = [
         ],
         squareup    : [
                 'moshi'                  : "com.squareup.moshi:moshi-adapters:$moshi",
+                'moshiKt'                : "com.squareup.moshi:moshi-kotlin:$moshi",
                 'moshiKotlin'            : "com.squareup.moshi:moshi-kotlin-codegen:$moshi",
                 'retrofit'               : "com.squareup.retrofit2:retrofit:$retrofit",
                 'retrofitMoshi'          : "com.squareup.retrofit2:converter-moshi:$retrofit"
