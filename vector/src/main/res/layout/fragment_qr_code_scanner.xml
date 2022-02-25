@@ -46,7 +46,7 @@
 
     <Button
         android:id="@+id/userCodeOpenGalleryButton"
-        style="@style/Widget.MaterialComponents.Button.Icon"
+        style="@style/Widget.Material3.Button.Icon"
         android:layout_width="34dp"
         android:layout_height="34dp"
         android:layout_marginTop="2dp"

@@ -29,7 +29,7 @@
     </style>
 
     <!-- Buttons -->
-    <style name="Widget.Vector.Button.TextButton.Dialog" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+    <style name="Widget.Vector.Button.TextButton.Dialog" parent="Widget.Material3.Button.TextButton.Dialog">
         <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
     </style>
 

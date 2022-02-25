@@ -3,7 +3,7 @@
 
     <attr name="vctr_jump_to_unread_style" format="reference" />
 
-    <style name="Widget.Vector.JumpToUnread.Base" parent="Widget.MaterialComponents.Chip.Action">
+    <style name="Widget.Vector.JumpToUnread.Base" parent="Widget.Material3.Chip.Assist">
         <item name="android:textAppearance">@style/TextAppearance.Vector.Body.Medium</item>
         <item name="chipEndPadding">12dp</item>
         <item name="chipIconSize">24dp</item>

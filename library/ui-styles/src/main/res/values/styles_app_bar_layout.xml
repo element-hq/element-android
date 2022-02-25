@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Widget.Vector.AppBarLayout" parent="Widget.MaterialComponents.AppBarLayout.Primary">
+    <style name="Widget.Vector.AppBarLayout" parent="Widget.Material3.AppBarLayout">
         <item name="android:background">?vctr_toolbar_background</item>
         <item name="elevation">4dp</item>
     </style>

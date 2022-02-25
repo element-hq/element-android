@@ -2,7 +2,7 @@
 <resources>
 
     <!-- Default style for TextInputLayout -->
-    <style name="Widget.Vector.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox" />
+    <style name="Widget.Vector.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox" />
 
     <style name="Widget.Vector.TextInputLayout.Password">
         <item name="endIconMode">password_toggle</item>
