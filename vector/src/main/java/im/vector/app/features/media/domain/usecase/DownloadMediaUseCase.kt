@@ -20,7 +20,6 @@ import android.content.Context
 import androidx.core.net.toUri
 import dagger.hilt.android.qualifiers.ApplicationContext
 import im.vector.app.core.intent.getMimeTypeFromUri
-import im.vector.app.core.usecase.VectorBaseInOutUseCase
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.features.notifications.NotificationUtils
 import kotlinx.coroutines.withContext
@@ -32,14 +31,10 @@ class DownloadMediaUseCase @Inject constructor(
         @ApplicationContext private val appContext: Context,
         private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val notificationUtils: NotificationUtils
-) : VectorBaseInOutUseCase<File, Unit> {
+) {
 
-    // TODO
-    //  what about UseCase Interface enforcing single type input? => no interface
-    //  add unit tests
-    //  PR to template structure of a class for discussion
-
-    override suspend fun execute(input: File): Result<Unit> = withContext(coroutineDispatchers.io) {
+    // TODO add unit tests: https://github.com/vector-im/element-android/tree/develop/vector/src/test/java/im/vector/app/test
+    suspend fun execute(input: File): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
             saveMedia(
                     context = appContext,
