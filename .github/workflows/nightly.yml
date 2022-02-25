@@ -1,21 +1,25 @@
-name: Integration Tests
+name: Nightly Tests
 
 on:
-  pull_request: { }
   push:
-    branches: [ main, develop ]
+    branches: [ release/* ]
+  schedule:
+    # At 20:00 every day UTC
+    - cron: '0 20 * * *'
+  workflow_dispatch:
 
 # Enrich gradle.properties for CI/CD
 env:
   CI_GRADLE_ARG_PROPERTIES: >
-    -Porg.gradle.jvmargs=-Xmx2g
+    -Porg.gradle.jvmargs=-Xmx4g
     -Porg.gradle.parallel=false
     -PallWarningsAsErrors=false
+
 jobs:
   # Build Android Tests [Matrix SDK]
   build-android-test-matrix-sdk:
     name: Matrix SDK - Build Android Tests
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -32,7 +36,7 @@ jobs:
   # Build Android Tests [Matrix APP]
   build-android-test-app:
     name: App - Build Android Tests
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -49,7 +53,7 @@ jobs:
  # Run Android Tests
   integration-tests:
     name: Matrix SDK - Running Integration Tests
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     strategy:
       fail-fast: false
       matrix:
@@ -181,9 +185,75 @@ jobs:
             - `[org.matrix.android.sdk.ordering]`<br>${{ steps.get-comment-body-ordering.outputs.ordering }}
             - `[org.matrix.android.sdk.PermalinkParserTest]`<br>${{ steps.get-comment-body-permalink.outputs.permalink }}
           edit-mode: replace
-## Useful commands
-#          script: ./integration_tests_script.sh
-#          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.session' matrix-sdk-android:connectedDebugAndroidTest --info
-#          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES matrix-sdk-android:connectedAndroidTest --info
-#          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedCheck --stacktrace
-#          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES -Pandroid.testInstrumentationRunnerArguments.class=org.matrix.android.sdk.session.room.timeline.ChunkEntityTest matrix-sdk-android:connectedAndroidTest --info
+
+  ui-tests:
+    name: UI Tests (Synapse)
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        api-level: [ 28 ]
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: develop
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - name: Start synapse server
+        run: |
+          pip install matrix-synapse
+          curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh \
+            | sed s/127.0.0.1/0.0.0.0/g | sed 's/http:\/\/localhost/http:\/\/10.0.2.2/g' | bash -s -- --no-rate-limit
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+      - name: Run sanity tests on API ${{ matrix.api-level }}
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          arch: x86
+          profile: Nexus 5X
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          emulator-build: 7425822  # workaround to emulator bug: https://github.com/ReactiveCircus/android-emulator-runner/issues/160
+          script: |
+            adb root
+            adb logcat -c
+            touch emulator.log
+            chmod 777 emulator.log
+            adb logcat >> emulator.log &
+            ./gradlew $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false connectedGplayDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.class=im.vector.app.ui.UiAllScreensSanityTest || (adb pull storage/emulated/0/Pictures/failure_screenshots && exit 1 )
+      - name: Upload Test Report Log
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: sanity-error-results
+          path: |
+            emulator.log
+            failure_screenshots/
+
+  notify:
+    runs-on: ubuntu-latest
+    needs:
+    - integration-tests
+    - ui-tests
+    if: always()
+    steps:
+    - uses: michaelkaye/matrix-hookshot-action@v0.2.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        matrix_access_token: ${{ secrets.ELEMENT_ANDROID_NOTIFICATION_ACCESS_TOKEN }}
+        matrix_room_id: ${{ secrets.ELEMENT_ANDROID_INTERNAL_ROOM_ID }}
+        text_template: "Nightly test run: {{#each job_statuses }}{{#with this }}{{#if completed }}  {{name}} {{conclusion}} at {{completed_at}}, {{/if}}{{/with}}{{/each}}"
+        html_template: "Nightly test run results: {{#each job_statuses }}{{#with this }}{{#if completed }}<br />{{name}} {{conclusion}} at {{completed_at}} <a href=\"{{html_url}}\">[details]</a>{{/if}}{{/with}}{{/each}}"
