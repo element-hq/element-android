@@ -169,7 +169,7 @@ const val POP_BACK_STACK_EXCLUSIVE = 0
 
 fun Fragment.queryExportKeys(userId: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-    val appName = getString(R.string.app_name)
+    val appName = getString(R.string.app_name).replace(" ", "-")
 
     selectTxtFileToWrite(
             activity = requireActivity(),
@@ -181,7 +181,7 @@ fun Fragment.queryExportKeys(userId: String, activityResultLauncher: ActivityRes
 
 fun Activity.queryExportKeys(userId: String, activityResultLauncher: ActivityResultLauncher<Intent>) {
     val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-    val appName = getString(R.string.app_name)
+    val appName = getString(R.string.app_name).replace(" ", "-")
 
     selectTxtFileToWrite(
             activity = this,
