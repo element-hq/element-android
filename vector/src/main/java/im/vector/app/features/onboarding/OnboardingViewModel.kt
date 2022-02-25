@@ -81,7 +81,6 @@ class OnboardingViewModel @AssistedInject constructor(
         private val stringProvider: StringProvider,
         private val homeServerHistoryService: HomeServerHistoryService,
         private val vectorFeatures: VectorFeatures,
-        private val vectorOverrides: VectorOverrides,
         private val analyticsTracker: AnalyticsTracker,
         private val uriFilenameResolver: UriFilenameResolver,
         private val vectorOverrides: VectorOverrides
@@ -158,12 +157,13 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.ResetAction                -> handleResetAction(action)
             is OnboardingAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
             OnboardingAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
-            is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
             is OnboardingAction.UpdateDisplayName          -> updateDisplayName(action.displayName)
-            OnboardingAction.UpdateDisplayNameSkipped      -> _viewEvents.post(OnboardingViewEvents.OnDisplayNameSkipped)
+            OnboardingAction.UpdateDisplayNameSkipped      -> handleDisplayNameStepComplete()
             OnboardingAction.UpdateProfilePictureSkipped   -> _viewEvents.post(OnboardingViewEvents.OnPersonalizationComplete)
+            OnboardingAction.PersonalizeProfile            -> handlePersonalizeProfile()
             is OnboardingAction.ProfilePictureSelected     -> handleProfilePictureSelected(action)
             OnboardingAction.SaveSelectedProfilePicture    -> updateProfilePicture()
+            is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
         }.exhaustive
     }
 
@@ -921,10 +921,29 @@ class OnboardingViewModel @AssistedInject constructor(
                             personalizationState = personalizationState.copy(displayName = displayName)
                     )
                 }
-                _viewEvents.post(OnboardingViewEvents.OnDisplayNameUpdated)
+                handleDisplayNameStepComplete()
             } catch (error: Throwable) {
                 setState { copy(asyncDisplayName = Fail(error)) }
                 _viewEvents.post(OnboardingViewEvents.Failure(error))
+            }
+        }
+    }
+
+    private fun handlePersonalizeProfile() {
+        withPersonalisationState {
+            when {
+                it.supportsChangingDisplayName    -> _viewEvents.post(OnboardingViewEvents.OnChooseDisplayName)
+                it.supportsChangingProfilePicture -> _viewEvents.post(OnboardingViewEvents.OnChooseDisplayName)
+                else                              -> throw IllegalStateException("It should not be possible to personalize without supporting display name or avatar changing")
+            }
+        }
+    }
+
+    private fun handleDisplayNameStepComplete() {
+        withPersonalisationState {
+            when {
+                it.supportsChangingProfilePicture -> _viewEvents.post(OnboardingViewEvents.OnChooseProfilePicture)
+                else                              -> _viewEvents.post(OnboardingViewEvents.OnPersonalizationComplete)
             }
         }
     }
@@ -933,6 +952,10 @@ class OnboardingViewModel @AssistedInject constructor(
         setState {
             copy(personalizationState = personalizationState.copy(selectedPictureUri = action.uri))
         }
+    }
+
+    private fun withPersonalisationState(block: (PersonalizationState) -> Unit) {
+        withState { block(it.personalizationState) }
     }
 
     private fun updateProfilePicture() {

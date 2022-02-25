@@ -232,10 +232,9 @@ class FtueAuthVariant(
             }
             is OnboardingViewEvents.OnAccountCreated                           -> onAccountCreated()
             OnboardingViewEvents.OnAccountSignedIn                             -> onAccountSignedIn()
-            OnboardingViewEvents.OnPersonalizeProfile                          -> onPersonalizeProfile()
+            OnboardingViewEvents.OnChooseDisplayName                           -> onChooseDisplayName()
             OnboardingViewEvents.OnTakeMeHome                                  -> navigateToHome(createdAccount = true)
-            OnboardingViewEvents.OnDisplayNameUpdated                          -> onDisplayNameUpdated()
-            OnboardingViewEvents.OnDisplayNameSkipped                          -> onDisplayNameUpdated()
+            OnboardingViewEvents.OnChooseProfilePicture                        -> onChooseProfilePicture()
             OnboardingViewEvents.OnPersonalizationComplete                     -> navigateToHome(createdAccount = true)
             OnboardingViewEvents.OnBack                                        -> activity.popBackstack()
         }.exhaustive
@@ -412,14 +411,14 @@ class FtueAuthVariant(
         activity.finish()
     }
 
-    private fun onPersonalizeProfile() {
+    private fun onChooseDisplayName() {
         activity.addFragmentToBackstack(views.loginFragmentContainer,
                 FtueAuthChooseDisplayNameFragment::class.java,
                 option = commonOption
         )
     }
 
-    private fun onDisplayNameUpdated() {
+    private fun onChooseProfilePicture() {
         activity.addFragmentToBackstack(views.loginFragmentContainer,
                 FtueAuthChooseProfilePictureFragment::class.java,
                 option = commonOption

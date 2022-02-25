@@ -36,7 +36,6 @@ import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fakes.FakeUri
 import im.vector.app.test.fakes.FakeUriFilenameResolver
 import im.vector.app.test.fakes.FakeVectorFeatures
-import im.vector.app.test.fakes.FakeVectorOverrides
 import im.vector.app.test.test
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
@@ -111,21 +110,31 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `when handling display name update then updates upstream user display name`() = runBlockingTest {
+    fun `given changing profile picture is supported when updating display name then updates upstream user display name and moves to choose profile picture`() = runBlockingTest {
+        val personalisedInitialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingProfilePicture = true))
+        viewModel = createViewModel(personalisedInitialState)
         val test = viewModel.test(this)
 
         viewModel.handle(OnboardingAction.UpdateDisplayName(A_DISPLAY_NAME))
 
         test
-                .assertStates(
-                        initialState,
-                        initialState.copy(asyncDisplayName = Loading()),
-                        initialState.copy(
-                                asyncDisplayName = Success(Unit),
-                                personalizationState = initialState.personalizationState.copy(displayName = A_DISPLAY_NAME)
-                        )
-                )
-                .assertEvents(OnboardingViewEvents.OnDisplayNameUpdated)
+                .assertStates(expectedSuccessfulDisplayNameUpdateStates(personalisedInitialState))
+                .assertEvents(OnboardingViewEvents.OnChooseProfilePicture)
+                .finish()
+        fakeSession.fakeProfileService.verifyUpdatedName(fakeSession.myUserId, A_DISPLAY_NAME)
+    }
+
+    @Test
+    fun `given changing profile picture is not supported when updating display name then updates upstream user display name and completes personalization`() = runBlockingTest {
+        val personalisedInitialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingProfilePicture = false))
+        viewModel = createViewModel(personalisedInitialState)
+        val test = viewModel.test(this)
+
+        viewModel.handle(OnboardingAction.UpdateDisplayName(A_DISPLAY_NAME))
+
+        test
+                .assertStates(expectedSuccessfulDisplayNameUpdateStates(personalisedInitialState))
+                .assertEvents(OnboardingViewEvents.OnPersonalizationComplete)
                 .finish()
         fakeSession.fakeProfileService.verifyUpdatedName(fakeSession.myUserId, A_DISPLAY_NAME)
     }
@@ -227,7 +236,6 @@ class OnboardingViewModelTest {
                 FakeStringProvider().instance,
                 FakeHomeServerHistoryService(),
                 FakeVectorFeatures(),
-                FakeVectorOverrides(),
                 FakeAnalyticsTracker(),
                 fakeUriFilenameResolver.instance,
                 DefaultVectorOverrides()
@@ -258,5 +266,16 @@ class OnboardingViewModelTest {
         fakeAuthenticationService.givenRegistrationWizard(registrationWizard)
         fakeAuthenticationService.expectReset()
         fakeSession.expectStartsSyncing()
+    }
+
+    private fun expectedSuccessfulDisplayNameUpdateStates(personalisedInitialState: OnboardingViewState): List<OnboardingViewState> {
+        return listOf(
+                personalisedInitialState,
+                personalisedInitialState.copy(asyncDisplayName = Loading()),
+                personalisedInitialState.copy(
+                        asyncDisplayName = Success(Unit),
+                        personalizationState = personalisedInitialState.personalizationState.copy(displayName = A_DISPLAY_NAME)
+                )
+        )
     }
 }
