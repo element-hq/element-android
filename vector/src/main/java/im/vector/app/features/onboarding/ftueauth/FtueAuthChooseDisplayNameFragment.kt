@@ -21,6 +21,7 @@ import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import com.google.android.material.textfield.TextInputLayout
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.databinding.FragmentFtueDisplayNameBinding
@@ -47,13 +48,26 @@ class FtueAuthChooseDisplayNameFragment @Inject constructor() : AbstractFtueAuth
                 views.displayNameSubmit.isEnabled = newContent.isNotEmpty()
             }
         })
+        views.displayNameInput.editText?.setOnEditorActionListener { _, actionId, _ ->
+            when (actionId) {
+                EditorInfo.IME_ACTION_DONE -> {
+                    updateDisplayName()
+                    true
+                }
+                else                       -> false
+            }
+        }
 
         views.displayNameSubmit.debouncedClicks {
-            val newDisplayName = views.displayNameInput.editText?.text.toString()
-            viewModel.handle(OnboardingAction.UpdateDisplayName(newDisplayName))
+            updateDisplayName()
         }
 
         views.displayNameSkip.debouncedClicks { viewModel.handle(OnboardingAction.UpdateDisplayNameSkipped) }
+    }
+
+    private fun updateDisplayName() {
+        val newDisplayName = views.displayNameInput.editText?.text.toString()
+        viewModel.handle(OnboardingAction.UpdateDisplayName(newDisplayName))
     }
 
     override fun resetViewModel() {
