@@ -35,10 +35,6 @@ class VectorAttachmentViewerViewModel @AssistedInject constructor(
         private val downloadMediaUseCase: DownloadMediaUseCase
 ) : VectorViewModel<VectorDummyViewState, VectorAttachmentViewerAction, VectorAttachmentViewerViewEvents>(initialState) {
 
-    /* ==========================================================================================
-     * Factory
-     * ========================================================================================== */
-
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<VectorAttachmentViewerViewModel, VectorDummyViewState> {
         override fun create(initialState: VectorDummyViewState): VectorAttachmentViewerViewModel
@@ -46,25 +42,13 @@ class VectorAttachmentViewerViewModel @AssistedInject constructor(
 
     companion object : MavericksViewModelFactory<VectorAttachmentViewerViewModel, VectorDummyViewState> by hiltMavericksViewModelFactory()
 
-    /* ==========================================================================================
-     * Public Api
-     * ========================================================================================== */
-
     var pendingAction: VectorAttachmentViewerAction? = null
-
-    /* ==========================================================================================
-     * Specialization
-     * ========================================================================================== */
 
     override fun handle(action: VectorAttachmentViewerAction) {
         when (action) {
             is VectorAttachmentViewerAction.DownloadMedia -> handleDownloadAction(action)
         }
     }
-
-    /* ==========================================================================================
-     * Private methods
-     * ========================================================================================== */
 
     private fun handleDownloadAction(action: VectorAttachmentViewerAction.DownloadMedia) {
         // launch in the coroutine scope session to avoid binding the coroutine to the lifecycle of the VM

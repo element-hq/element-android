@@ -59,20 +59,12 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInteractionListener {
 
-    /* ==========================================================================================
-     * Arguments
-     * ========================================================================================== */
-
     @Parcelize
     data class Args(
             val roomId: String?,
             val eventId: String,
             val sharedTransitionName: String?
     ) : Parcelable
-
-    /* ==========================================================================================
-     * Dependencies
-     * ========================================================================================== */
 
     @Inject
     lateinit var sessionHolder: ActiveSessionHolder
@@ -82,10 +74,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
 
     @Inject
     lateinit var imageContentRenderer: ImageContentRenderer
-
-    /* ==========================================================================================
-     * Fields
-     * ========================================================================================== */
 
     private val viewModel: VectorAttachmentViewerViewModel by viewModel()
     private val errorFormatter by lazy(LazyThreadSafetyMode.NONE) { singletonEntryPoint().errorFormatter() }
@@ -102,10 +90,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
         }
         viewModel.pendingAction = null
     }
-
-    /* ==========================================================================================
-     * Lifecycle
-     * ========================================================================================== */
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -191,10 +175,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
         super.onBackPressed()
     }
 
-    /* ==========================================================================================
-     * Specialization
-     * ========================================================================================== */
-
     override fun shouldAnimateDismiss(): Boolean {
         return currentPosition != initialIndex
     }
@@ -208,10 +188,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
         isAnimatingOut = true
         ActivityCompat.finishAfterTransition(this)
     }
-
-    /* ==========================================================================================
-     * Private methods
-     * ========================================================================================== */
 
     private fun getOtherThemes() = ActivityOtherThemes.VectorAttachmentsPreview
 
@@ -284,10 +260,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ||
                     checkPermissions(PERMISSIONS_FOR_WRITING_FILES, this, downloadActionResultLauncher)
 
-    /* ==========================================================================================
-     * Specialization AttachmentInteractionListener
-     * ========================================================================================== */
-
     override fun onDismiss() {
         animateClose()
     }
@@ -328,10 +300,6 @@ class VectorAttachmentViewerActivity : AttachmentViewerActivity(), AttachmentInt
             }
         }
     }
-
-    /* ==========================================================================================
-     * COMPANION
-     * ========================================================================================== */
 
     companion object {
         private const val EXTRA_ARGS = "EXTRA_ARGS"

@@ -30,19 +30,11 @@ class AttachmentOverlayView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), AttachmentEventListener {
 
-    /* ==========================================================================================
-     * Fields
-     * ========================================================================================== */
-
     var interactionListener: AttachmentInteractionListener? = null
     val views: MergeImageAttachmentOverlayBinding
 
     private var isPlaying = false
     private var suspendSeekBarUpdate = false
-
-    /* ==========================================================================================
-     * Init
-     * ========================================================================================== */
 
     init {
         inflate(context, R.layout.merge_image_attachment_overlay, this)
@@ -78,18 +70,10 @@ class AttachmentOverlayView @JvmOverloads constructor(
         })
     }
 
-    /* ==========================================================================================
-     * Public API
-     * ========================================================================================== */
-
     fun updateWith(counter: String, senderInfo: String) {
         views.overlayCounterText.text = counter
         views.overlayInfoText.text = senderInfo
     }
-
-    /* ==========================================================================================
-     * Specialization
-     * ========================================================================================== */
 
     override fun onEvent(event: AttachmentEvents) {
         when (event) {

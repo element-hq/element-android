@@ -23,22 +23,23 @@ import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.usecase.VectorBaseInOutUseCase
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.features.notifications.NotificationUtils
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import java.io.File
 import javax.inject.Inject
 
 class DownloadMediaUseCase @Inject constructor(
         @ApplicationContext private val appContext: Context,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val notificationUtils: NotificationUtils
 ) : VectorBaseInOutUseCase<File, Unit> {
 
-    /* ==========================================================================================
-     * Public API
-     * ========================================================================================== */
+    // TODO
+    //  what about UseCase Interface enforcing single type input? => no interface
+    //  add unit tests
+    //  PR to template structure of a class for discussion
 
-    // TODO declare Dispatcher via an Interface provider to be able to unit tests
-    override suspend fun execute(input: File): Result<Unit> = withContext(Dispatchers.IO) {
+    override suspend fun execute(input: File): Result<Unit> = withContext(coroutineDispatchers.io) {
         runCatching {
             saveMedia(
                     context = appContext,
