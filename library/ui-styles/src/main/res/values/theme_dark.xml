@@ -3,7 +3,7 @@
 
     <!-- DARK THEME COLORS -->
 
-    <style name="Base.Theme.Vector.Dark" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="Base.Theme.Vector.Dark" parent="Theme.Material3.Dark.NoActionBar">
         <!-- Element attribute for palette -->
         <!-- content colors -->
         <item name="vctr_content_primary">@color/element_content_primary_dark</item>

@@ -5,7 +5,7 @@
         <item name="android:visibility">visible</item>
     </style>
 
-    <style name="Theme.Debug.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="Theme.Debug.Light" parent="Theme.Material3.Light.NoActionBar">
         <!-- Keep all default value -->
     </style>
 
@@ -33,7 +33,7 @@
         <item name="android:textColorLink">#000FFF</item>
     </style>
 
-    <style name="Theme.Debug.Dark" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="Theme.Debug.Dark" parent="Theme.Material3.Dark.NoActionBar">
         <!-- Keep all default value -->
     </style>
 
