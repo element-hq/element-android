@@ -410,6 +410,17 @@
             </intent-filter>
         </receiver>
 
+        <!-- UnifiedPush -->
+        <receiver android:exported="true"  android:enabled="true"  android:name=".core.pushers.VectorMessagingReceiver">
+            <intent-filter>
+                <action android:name="org.unifiedpush.android.connector.MESSAGE"/>
+                <action android:name="org.unifiedpush.android.connector.UNREGISTERED"/>
+                <action android:name="org.unifiedpush.android.connector.NEW_ENDPOINT"/>
+                <action android:name="org.unifiedpush.android.connector.REGISTRATION_FAILED"/>
+                <action android:name="org.unifiedpush.android.connector.REGISTRATION_REFUSED"/>
+            </intent-filter>
+        </receiver>
+
         <!-- Providers -->
 
         <!-- Remove WorkManagerInitializer Provider because we are using on-demand initialization of WorkManager-->

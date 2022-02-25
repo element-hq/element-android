@@ -12,6 +12,7 @@ ext.groups = [
                         'com.github.vector-im',
                         'com.github.yalantis',
                         'com.github.Zhuinden',
+                        'com.github.UnifiedPush',
                 ]
         ],
         jitsi       : [

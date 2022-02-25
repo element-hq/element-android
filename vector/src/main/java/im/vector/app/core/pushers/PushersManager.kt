@@ -16,6 +16,7 @@
 
 package im.vector.app.core.pushers
 
+import android.content.Context
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.resources.AppNameProvider
@@ -34,13 +35,13 @@ class PushersManager @Inject constructor(
         private val stringProvider: StringProvider,
         private val appNameProvider: AppNameProvider
 ) {
-    suspend fun testPush(pushKey: String) {
+    suspend fun testPush(context: Context) {
         val currentSession = activeSessionHolder.getActiveSession()
 
         currentSession.pushersService().testPush(
-                stringProvider.getString(R.string.pusher_http_url),
+                UnifiedPushHelper.getPushGateway(context),
                 stringProvider.getString(R.string.pusher_app_id),
-                pushKey,
+                UnifiedPushHelper.getEndpointOrToken(context) ?: "",
                 TEST_EVENT_ID
         )
     }
@@ -50,19 +51,38 @@ class PushersManager @Inject constructor(
         return currentSession.pushersService().enqueueAddHttpPusher(createHttpPusher(pushKey))
     }
 
+    fun enqueueRegisterPusher(
+            pushKey: String,
+            gateway: String
+    ): UUID {
+        val currentSession = activeSessionHolder.getActiveSession()
+        return currentSession.pushersService().enqueueAddHttpPusher(createHttpPusher(pushKey, gateway))
+    }
+
     suspend fun registerPusherWithFcmKey(pushKey: String) {
         val currentSession = activeSessionHolder.getActiveSession()
         currentSession.pushersService().addHttpPusher(createHttpPusher(pushKey))
     }
 
-    private fun createHttpPusher(pushKey: String) = HttpPusher(
+    suspend fun registerPusher(
+            pushKey: String,
+            gateway: String
+    ) {
+        val currentSession = activeSessionHolder.getActiveSession()
+        currentSession.pushersService().addHttpPusher(createHttpPusher(pushKey, gateway))
+    }
+
+    private fun createHttpPusher(
+            pushKey: String,
+            gateway: String = stringProvider.getString(R.string.pusher_http_url)
+    ) = HttpPusher(
             pushKey,
             stringProvider.getString(R.string.pusher_app_id),
             profileTag = DEFAULT_PUSHER_FILE_TAG + "_" + abs(activeSessionHolder.getActiveSession().myUserId.hashCode()),
             localeProvider.current().language,
             appNameProvider.getAppName(),
             activeSessionHolder.getActiveSession().sessionParams.deviceId ?: "MOBILE",
-            stringProvider.getString(R.string.pusher_http_url),
+            gateway,
             append = false,
             withEventIdOnly = true
     )
