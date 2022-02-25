@@ -20,6 +20,7 @@ import android.net.Uri
 import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.DefaultVectorOverrides
 import im.vector.app.features.login.ReAuthHelper
@@ -29,20 +30,27 @@ import im.vector.app.test.fakes.FakeAuthenticationService
 import im.vector.app.test.fakes.FakeContext
 import im.vector.app.test.fakes.FakeHomeServerConnectionConfigFactory
 import im.vector.app.test.fakes.FakeHomeServerHistoryService
+import im.vector.app.test.fakes.FakeRegistrationWizard
 import im.vector.app.test.fakes.FakeSession
 import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fakes.FakeUri
 import im.vector.app.test.fakes.FakeUriFilenameResolver
 import im.vector.app.test.fakes.FakeVectorFeatures
+import im.vector.app.test.fakes.FakeVectorOverrides
 import im.vector.app.test.test
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 
 private const val A_DISPLAY_NAME = "a display name"
 private const val A_PICTURE_FILENAME = "a-picture.png"
 private val AN_ERROR = RuntimeException("an error!")
+private val AN_UNSUPPORTED_PERSONALISATION_STATE = PersonalizationState(
+        supportsChangingDisplayName = false,
+        supportsChangingProfilePicture = false
+)
 
 class OnboardingViewModelTest {
 
@@ -55,6 +63,7 @@ class OnboardingViewModelTest {
     private val fakeSession = FakeSession()
     private val fakeUriFilenameResolver = FakeUriFilenameResolver()
     private val fakeActiveSessionHolder = FakeActiveSessionHolder(fakeSession)
+    private val fakeAuthenticationService = FakeAuthenticationService()
 
     lateinit var viewModel: OnboardingViewModel
 
@@ -71,6 +80,33 @@ class OnboardingViewModelTest {
 
         test
                 .assertEvents(OnboardingViewEvents.OnTakeMeHome)
+                .finish()
+    }
+
+    @Test
+    fun `given homeserver does not support personalisation when registering account then updates state and emits account created event`() = runBlockingTest {
+        fakeSession.fakeHomeServerCapabilitiesService.givenCapabilities(HomeServerCapabilities(canChangeDisplayName = false, canChangeAvatar = false))
+        givenSuccessfullyCreatesAccount()
+        val test = viewModel.test(this)
+
+        viewModel.handle(OnboardingAction.RegisterDummy)
+
+        test
+                .assertStates(
+                        initialState,
+                        initialState.copy(asyncRegistration = Loading()),
+                        initialState.copy(
+                                asyncLoginAction = Success(Unit),
+                                asyncRegistration = Loading(),
+                                personalizationState = AN_UNSUPPORTED_PERSONALISATION_STATE
+                        ),
+                        initialState.copy(
+                                asyncLoginAction = Success(Unit),
+                                asyncRegistration = Uninitialized,
+                                personalizationState = AN_UNSUPPORTED_PERSONALISATION_STATE
+                        )
+                )
+                .assertEvents(OnboardingViewEvents.OnAccountCreated)
                 .finish()
     }
 
@@ -184,13 +220,14 @@ class OnboardingViewModelTest {
         return OnboardingViewModel(
                 state,
                 fakeContext.instance,
-                FakeAuthenticationService(),
+                fakeAuthenticationService,
                 fakeActiveSessionHolder.instance,
                 FakeHomeServerConnectionConfigFactory().instance,
                 ReAuthHelper(),
                 FakeStringProvider().instance,
                 FakeHomeServerHistoryService(),
                 FakeVectorFeatures(),
+                FakeVectorOverrides(),
                 FakeAnalyticsTracker(),
                 fakeUriFilenameResolver.instance,
                 DefaultVectorOverrides()
@@ -214,4 +251,12 @@ class OnboardingViewModelTest {
             state.copy(asyncProfilePicture = Loading()),
             state.copy(asyncProfilePicture = Fail(cause))
     )
+
+    private fun givenSuccessfullyCreatesAccount() {
+        fakeActiveSessionHolder.expectSetsActiveSession(fakeSession)
+        val registrationWizard = FakeRegistrationWizard().also { it.givenSuccessfulDummy(fakeSession) }
+        fakeAuthenticationService.givenRegistrationWizard(registrationWizard)
+        fakeAuthenticationService.expectReset()
+        fakeSession.expectStartsSyncing()
+    }
 }
