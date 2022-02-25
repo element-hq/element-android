@@ -933,7 +933,7 @@ class OnboardingViewModel @AssistedInject constructor(
         withPersonalisationState {
             when {
                 it.supportsChangingDisplayName    -> _viewEvents.post(OnboardingViewEvents.OnChooseDisplayName)
-                it.supportsChangingProfilePicture -> _viewEvents.post(OnboardingViewEvents.OnChooseDisplayName)
+                it.supportsChangingProfilePicture -> _viewEvents.post(OnboardingViewEvents.OnChooseProfilePicture)
                 else                              -> {
                     throw IllegalStateException("It should not be possible to personalize without supporting display name or avatar changing")
                 }

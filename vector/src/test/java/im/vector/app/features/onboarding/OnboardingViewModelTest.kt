@@ -83,6 +83,32 @@ class OnboardingViewModelTest {
     }
 
     @Test
+    fun `given supports changing display name when handling PersonalizeProfile then emits contents choose display name`() = runBlockingTest {
+        val initialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingDisplayName = true, supportsChangingProfilePicture = false))
+        viewModel = createViewModel(initialState)
+        val test = viewModel.test(this)
+
+        viewModel.handle(OnboardingAction.PersonalizeProfile)
+
+        test
+                .assertEvents(OnboardingViewEvents.OnChooseDisplayName)
+                .finish()
+    }
+
+    @Test
+    fun `given only supports changing profile picture when handling PersonalizeProfile then emits contents choose profile picture`() = runBlockingTest {
+        val initialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingDisplayName = false, supportsChangingProfilePicture = true))
+        viewModel = createViewModel(initialState)
+        val test = viewModel.test(this)
+
+        viewModel.handle(OnboardingAction.PersonalizeProfile)
+
+        test
+                .assertEvents(OnboardingViewEvents.OnChooseProfilePicture)
+                .finish()
+    }
+
+    @Test
     fun `given homeserver does not support personalisation when registering account then updates state and emits account created event`() = runBlockingTest {
         fakeSession.fakeHomeServerCapabilitiesService.givenCapabilities(HomeServerCapabilities(canChangeDisplayName = false, canChangeAvatar = false))
         givenSuccessfullyCreatesAccount()
