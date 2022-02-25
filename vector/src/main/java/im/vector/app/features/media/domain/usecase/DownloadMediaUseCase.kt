@@ -23,18 +23,17 @@ import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.features.notifications.NotificationUtils
 import kotlinx.coroutines.withContext
-import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
+import org.matrix.android.sdk.api.session.Session
 import java.io.File
 import javax.inject.Inject
 
 class DownloadMediaUseCase @Inject constructor(
         @ApplicationContext private val appContext: Context,
-        private val coroutineDispatchers: MatrixCoroutineDispatchers,
+        private val session: Session,
         private val notificationUtils: NotificationUtils
 ) {
 
-    // TODO add unit tests: https://github.com/vector-im/element-android/tree/develop/vector/src/test/java/im/vector/app/test
-    suspend fun execute(input: File): Result<Unit> = withContext(coroutineDispatchers.io) {
+    suspend fun execute(input: File): Result<Unit> = withContext(session.coroutineDispatchers.io) {
         runCatching {
             saveMedia(
                     context = appContext,
