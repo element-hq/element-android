@@ -39,7 +39,6 @@
     <string name="room_displayname_room_invite">Pozvanie do miestnosti</string>
     <string name="room_displayname_two_members">%1$s a %2$s</string>
     <string name="room_displayname_empty_room">Prázdna miestnosť</string>
-
     <string name="notice_room_update">%s aktualizoval/a túto miestnosť.</string>
     <string name="initial_sync_start_importing_account">Úvodná synchronizácia:
 \nPrebieha import účtu…</string>
@@ -197,7 +196,6 @@
     <string name="action_delete">Vymazať</string>
     <string name="action_rename">Premenovať</string>
     <string name="report_content">Nahlásiť obsah</string>
-
     <string name="or">alebo</string>
     <string name="action_invite">Pozvať</string>
     <string name="action_sign_out">Odhlásiť sa</string>
@@ -220,7 +218,6 @@
     <string name="matrix_only_filter">Len Matrix kontakty</string>
     <string name="no_result_placeholder">Žiadne výsledky</string>
     <string name="rooms_header">Miestnosti</string>
-
     <string name="send_bug_report_include_logs">Odoslať záznamy</string>
     <string name="send_bug_report_include_crash_logs">Odoslať záznamy o zlyhaní</string>
     <string name="send_bug_report_include_screenshot">Odoslať snímku obrazovky</string>
@@ -248,11 +245,9 @@
     <string name="auth_invalid_email">Zdá sa, že toto nie je platná emailová adresa</string>
     <string name="auth_email_already_defined">Táto emailová adresa sa už používa.</string>
     <string name="auth_forgot_password">Zabudli ste heslo?</string>
-
     <string name="auth_recaptcha_message">Tento domovský server by sa rád uistil, že nieste robot</string>
     <string name="auth_reset_password_missing_email">Musíte zadať emailovú adresu prepojenú s vašim účtom.</string>
     <string name="auth_reset_password_error_unauthorized">Nepodarilo sa overiť emailovú adresu: Uistite sa, že ste správne klikli na odkaz v emailovej správe</string>
-
     <string name="login_error_invalid_home_server">Zadajte platnú adresu URL</string>
     <string name="login_error_bad_json">Chybné údaje vo formáte JSON</string>
     <string name="login_error_not_json">Neplatné údaje vo formáte JSON</string>
@@ -269,14 +264,10 @@
     <string name="call_in_progress">Prebiehajúci hovor…</string>
     <string name="call_error_user_not_responding">Vzdialenej strane sa nepodarilo prijať hovor.</string>
     <string name="permissions_rationale_popup_title">Informácia</string>
-
-
     <string name="permissions_rationale_msg_record_audio">Aby ste mohli uskutočňovať audio hovory, ${app_name} potrebuje prístup k mikrofónu vašeho zariadenia.</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} potrebuje povolenie na prístup k vašej kamere a mikrofónu na uskutočňovanie videohovorov.
 \n
 \nPovoľte prístup v ďalších vyskakovacích oknách, aby ste mohli uskutočniť hovor.</string>
-
     <string name="yes">ÁNO</string>
     <string name="no">NIE</string>
     <string name="_continue">Pokračovať</string>
@@ -284,7 +275,6 @@
     <string name="action_join">Vstúpiť</string>
     <string name="action_reject">Odmietnuť</string>
     <string name="room_jump_to_first_unread">Preskočiť na neprečítanú správu</string>
-
     <string name="room_participants_leave_prompt_title">Opustiť miestnosť</string>
     <string name="room_participants_leave_prompt_msg">Ste si istí, že chcete opustiť miestnosť?</string>
     <string name="room_participants_header_direct_chats">PRIAME KONVERZÁCIE</string>
@@ -311,7 +301,6 @@
     <string name="ssl_unexpected_existing_expl">Certifikát sa zmenil na iný, ktorému tento telefón dôveroval. Toto je VEĽMI NEZVYČAJNÉ. Odporúča sa, aby ste tento nový certifikát NEPRIJALI.</string>
     <string name="ssl_expected_existing_expl">Certifikát sa zmenil z predtým dôveryhodného na nedôveryhodný. Server mohol obnoviť svoj certifikát. Obráťte sa na správcu servera, aby vám poskytol očakávaný odtlačok.</string>
     <string name="ssl_only_accept">Dôverujte certifikátu len v prípade, že správca servera zverejnil odtlačok zhodný s odtlačkom zobrazeným vyššie.</string>
-
     <string name="search_hint">Hľadať</string>
     <string name="search_members_hint">Filtrovať členov v miestnosti</string>
     <string name="search_no_results">Žiadne výsledky</string>
@@ -364,7 +353,6 @@
     <string name="devices_details_device_name">Aktualizovať verejné meno</string>
     <string name="devices_details_last_seen_title">Naposledy videné</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-
     <string name="devices_delete_dialog_title">Overenie</string>
     <string name="settings_logged_in">Prihlásený ako</string>
     <string name="settings_home_server">Domovský server</string>
@@ -402,7 +390,6 @@
     <string name="room_settings_labs_warning_message">Tieto funkcie sú experimentálne a môžu sa nečakane pokaziť. Pri používaní buďte opatrní.</string>
     <string name="room_settings_set_main_address">Nastaviť ako hlavnú adresu</string>
     <string name="room_settings_unset_main_address">Zrušiť nastavenie ako hlavnej adresy</string>
-
     <string name="settings_theme">Vzhľad</string>
     <string name="encryption_information_decryption_error">Chyba dešifrovania</string>
     <string name="encryption_information_device_name">Verejné meno</string>
@@ -414,7 +401,6 @@
     <string name="encryption_export_export">Exportovať</string>
     <string name="passphrase_enter_passphrase">Zadajte prístupovú frázu</string>
     <string name="passphrase_confirm_passphrase">Potvrďte prístupovú frázu</string>
-
     <string name="encryption_import_e2e_room_keys">Importovať šifrovacie kľúče miestnosti</string>
     <string name="encryption_import_room_keys">Importovať kľúče miestnosti</string>
     <string name="encryption_import_room_keys_summary">Importovať kľúče z lokálneho súboru</string>
@@ -426,7 +412,6 @@
     <string name="encryption_information_verify">Overiť</string>
     <string name="encryption_information_verify_device_warning">Ak chcete overiť, či táto relácia je skutočne dôveryhodná, kontaktujte jeho vlastníka iným spôsobom (napr. osobne alebo cez telefón) a opýtajte sa ho, či kľúč, ktorý má zobrazený v Nastaveniach, sa zhoduje s kľúčom zobrazeným nižšie:</string>
     <string name="encryption_information_verify_device_warning2">Ak sa kľúče zhodujú, stlačte tlačidlo Overiť nižšie. Ak sa nezhodujú, niekto ďalší odpočúva toto zariadenie a mali by ste ho pridať na čiernu listinu.</string>
-
     <string name="select_room_directory">Vyberte adresár miestností</string>
     <string name="directory_server_placeholder">Názov servera</string>
     <string name="directory_server_all_rooms_on_server">Všetky miestnosti na serveri %s</string>
@@ -488,7 +473,6 @@
         <item quantity="other">%d zmien členstva</item>
     </plurals>
     <string name="list_members">Zobraziť členov</string>
-
     <plurals name="room_title_members">
         <item quantity="one">1 člen</item>
         <item quantity="few">%d členovia</item>
@@ -499,14 +483,11 @@
         <item quantity="few">%d nové správy</item>
         <item quantity="other">%d nových správ</item>
     </plurals>
-
-
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">1 neprečítaná správa</item>
         <item quantity="few">%d neprečítané správy</item>
         <item quantity="other">%d neprečítaných správ</item>
     </plurals>
-
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">1 miestnosť</item>
         <item quantity="few">%d miestnosti</item>
@@ -546,10 +527,6 @@
     <string name="error_no_external_application_found">Nebola nájdená žiadna vhodná aplikácia na dokončenie tejto akcie.</string>
     <string name="error_empty_field_your_password">Prosím, vložte svoje heslo.</string>
     <string name="send_bug_report_description_in_english">Ak je to možné, prosím popis napíšte v angličtine.</string>
-
-
-
-
     <plurals name="room_details_selected">
         <item quantity="one">1 vybratý</item>
         <item quantity="few">%d vybratí</item>
@@ -569,8 +546,6 @@
     <string name="command_description_nick">Mení vaše zobrazované meno / prezývku</string>
     <string name="command_description_markdown">Zapnutie/vypnutie formátovanie textu markdown</string>
     <string name="command_description_clear_scalar_token">Užitočné na opravu spravovania Matrix aplikácií</string>
-
-
     <string name="room_tombstone_versioned_description">Táto miestnosť bola nahradená inou a nie je viac aktívna.</string>
     <string name="room_tombstone_continuation_link">Konverzácia pokračuje tu</string>
     <string name="room_tombstone_continuation_description">Táto miestnosť je pokračovaním predchádzajúcej konverzácii</string>
@@ -662,7 +637,6 @@
     <string name="settings_show_join_leave_messages_summary">Pozvania, odstránenia a zákazy nie sú ovplyvnené.</string>
     <string name="settings_show_avatar_display_name_changes_messages">Zobrazovať udalosti účtu</string>
     <string name="settings_show_avatar_display_name_changes_messages_summary">Zahŕňa zmeny zobrazovaného mena a obrázka v profile.</string>
-
     <string name="settings_password">Heslo</string>
     <string name="settings_labs_native_camera_summary">Spustiť predvolený fotoaparát v systéme namiesto zobrazenia vlastnej vstavanej obrazovky.</string>
     <string name="command_problem_with_parameters">Príkaz \"%s\" vyžaduje viac argumentov, alebo nie sú všetky zadané správne.</string>
@@ -735,7 +709,6 @@
     <string name="action_revoke">Zrušiť</string>
     <string name="action_disconnect">Odpojiť sa</string>
     <string name="action_decline">Odmietnuť</string>
-
     <string name="login_error_no_homeserver_found">Toto nie je platná adresa Matrix serveru</string>
     <string name="login_error_homeserver_not_found">Domovský server je nedostupný na tejto URL adrese, preverte to prosím</string>
     <string name="room_member_profile_sessions_section_title">Relácie</string>
@@ -799,7 +772,6 @@
 \nBude to mať vplyv na používanie rádia a batérie, bude sa zobrazovať trvalé oznámenie, že ${app_name} počúva udalosti.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Žiadna synchronizácia na pozadí</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Nebudete dostávať oznámenia o prichádzajúcich správach, keď aplikácia pracuje na pozadí.</string>
-
     <string name="settings_integrations">Integrácie</string>
     <string name="settings_integrations_summary">Použite správcu integrácií na nastavenie botov, premostení, widgetov a balíčkov s nálepkami.
 \nSprávcovia integrácie dostávajú konfiguračné údaje a môžu vo vašom mene upravovať widgety, posielať pozvánky do miestnosti a nastavovať úrovne oprávnení.</string>
@@ -897,7 +869,6 @@
     <string name="keys_backup_setup_step3_copy_button_title">Uložiť kľúč obnovenia</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Zdieľať</string>
     <string name="keys_backup_setup_step3_save_button_title">Uložiť ako súbor</string>
-
     <string name="recovery_key_export_saved">Kľúč obnovenia bol uložený.</string>
     <string name="keys_backup_setup_override_backup_prompt_tile">Záloha už existuje na vašom domovskom serveri</string>
     <string name="keys_backup_setup_override_backup_prompt_description">Zdá sa, že ste si už zálohovanie kľúčov nastavili z inej relácie. Chcete ho nahradiť zálohou, ktorú vytvárate teraz\?</string>
@@ -953,7 +924,6 @@
     <string name="keys_backup_settings_checking_backup_state">Zisťovanie stavu zálohovania</string>
     <string name="keys_backup_settings_delete_confirm_title">Vymazať zálohu</string>
     <string name="keys_backup_settings_delete_confirm_message">Vymazať vaše zálohované šifrovacie kľúče z domovského servera\? Na čítanie histórie zašifrovaných správ už nebudete môcť použiť kľúč na obnovenie.</string>
-
     <string name="secure_backup_banner_setup_line1">Bezpečné zálohovanie</string>
     <string name="secure_backup_banner_setup_line2">Zabezpečte sa proti strate šifrovaných správ a údajov</string>
     <string name="keys_backup_banner_recover_line1">Nikdy neprídete o šifrované správy</string>
@@ -971,11 +941,8 @@
     <string name="keys_backup_info_title_version">Verzia</string>
     <string name="keys_backup_info_title_algorithm">Algoritmus</string>
     <string name="keys_backup_info_title_signature">Podpis</string>
-
     <string name="sas_verified">Overené!</string>
     <string name="sas_got_it">Rozumiem</string>
-
-
     <string name="sas_incoming_request_notif_title">Žiadosť o overenie</string>
     <string name="sas_incoming_request_notif_content">%s chce overiť vašu reláciu</string>
     <string name="sas_error_unknown">Neznáma chyba</string>
@@ -1381,7 +1348,6 @@
     <string name="room_list_quick_actions_room_settings">Nastavenia miestnosti</string>
     <string name="room_settings_room_version_title">Verzia miestnosti</string>
     <string name="dialog_edit_hint">Nová hodnota</string>
-
     <string name="call_dial_pad_title">Číselník</string>
     <string name="call_tile_call_back">Zavolať späť</string>
     <string name="login_clear_homeserver_history">Vyčistiť históriu</string>
@@ -1680,7 +1646,6 @@
     <string name="a11y_create_menu_open">Otvoriť ponuku vytvorenia miestnosti</string>
     <string name="error_network_timeout">Zdá sa, že serveru trvá príliš dlho, kým odpovie, čo môže byť spôsobené buď zlým pripojením, alebo chybou servera. Skúste to o chvíľu znova.</string>
     <string name="identity_server_consent_dialog_content_question">Súhlasíte so zaslaním týchto informácií\?</string>
-
     <string name="room_member_jump_to_read_receipt">Preskočiť na potvrdenie o prečítaní</string>
     <string name="room_member_power_level_custom_in">Vlastné (%1$d) v %2$s</string>
     <string name="room_member_power_level_default_in">Predvolené v %1$s</string>
@@ -1783,7 +1748,6 @@
     <string name="call_ended_invite_timeout_title">Žiadna odpoveď</string>
     <string name="call_held_by_you">Podržali ste hovor</string>
     <string name="upgrade_room_update_parent_space">Automaticky aktualizovať nadradený priestor</string>
-
     <string name="this_space_has_no_rooms_admin">Niektoré miestnosti môžu byť skryté, pretože sú súkromné a potrebujete pozvánku.</string>
     <string name="this_space_has_no_rooms">Tento priestor nemá žiadne miestnosti</string>
     <string name="spaces_no_server_support_description">Pre viac informácií sa obráťte na správcu domovského servera</string>
@@ -1906,7 +1870,6 @@
     <string name="settings_notification_mentions_and_keywords">Zmienky a kľúčové slová</string>
     <string name="room_settings_mention_and_keyword_only">Iba zmienky a kľúčové slová</string>
     <string name="login_msisdn_error_not_international">Medzinárodné telefónne čísla musia začínať znakom \"+\"</string>
-
     <string name="identity_server_consent_dialog_content_3">Ak chcete zistiť existujúce kontakty, potrebujete odoslať kontaktné informácie (e-maily a telefónne čísla) na server totožností. Pred odoslaním vaše údaje zahašujeme kvôli ochrane osobných údajov.</string>
     <string name="identity_server_consent_dialog_title_2">Odoslať e-maily a telefónne čísla na %s</string>
     <string name="settings_discovery_consent_notice_on">Dali ste súhlas na odosielanie e-mailov a telefónnych čísel na tento server totožností na objavenie ďalších používateľov z vašich kontaktov.</string>
@@ -1965,7 +1928,6 @@
 \n
 \nZastaviť proces zmeny hesla\?</string>
     <string name="bad_passphrase_key_reset_all_action">Zabudli ste alebo ste stratili všetky možnosti obnovy\? Obnovte všetko</string>
-
     <string name="verification_cannot_access_other_session">Použite prístupovú frázu na obnovenie alebo kľúč</string>
     <string name="use_latest_app">Použite najnovšiu aplikáciu ${app_name} na svojich ostatných zariadeniach:</string>
     <string name="use_other_session_content_description">Použite najnovšiu aplikáciu ${app_name} na svojich ostatných zariadeniach, ${app_name} Web, ${app_name} Desktop, ${app_name} iOS, ${app_name} pre Android alebo iného klienta Matrix podporujúceho krížové podpisovanie</string>
@@ -1994,7 +1956,6 @@
         <item quantity="few">%1$d aktívne hovory ·</item>
         <item quantity="other">%1$d aktívnych hovorov ·</item>
     </plurals>
-
     <string name="call_only_active">Prebiehajúci hovor (%1$s)</string>
     <string name="call_dial_pad_lookup_error">Pri vyhľadávaní telefónneho čísla došlo k chybe</string>
     <string name="call_tile_no_answer">Žiadna odpoveď</string>
@@ -2164,7 +2125,6 @@
     <string name="verify_cannot_cross_sign">Táto relácia nemôže zdieľať toto overenie s vašimi ostatnými reláciami.
 \nOverenie bude uložené lokálne a zdieľané v budúcej verzii aplikácie.</string>
     <string name="room_profile_section_admin">Akcie správcu</string>
-
     <string name="autocomplete_limited_results">Zobrazujú sa len prvé výsledky, zadajte ďalšie písmená…</string>
     <string name="settings_rageshake_detection_threshold_summary">Zatraste telefónom a otestujte prah detekcie</string>
     <string name="settings_rageshake_detection_threshold">Prahová hodnota detekcie</string>
@@ -2184,7 +2144,6 @@
     <string name="reaction_search_type_hint">Zadajte kľúčové slová pre vyhľadanie reakcie.</string>
     <string name="room_list_quick_actions_low_priority_remove">Odobrať z nízkej priority</string>
     <string name="room_list_quick_actions_low_priority_add">Pridať k nízkej priorite</string>
-
     <string name="enter_secret_storage_passphrase_or_key">Na pokračovanie použite %1$s alebo %2$s.</string>
     <string name="bootstrap_migration_enter_backup_password">Ak chcete pokračovať, zadajte prístupovú frázu pre zálohovanie kľúčov.</string>
     <string name="bootstrap_progress_generating_ssss_with_info">Generovanie kľúča SSSS z prístupovej frázy %s</string>
@@ -2476,4 +2435,6 @@
         <item quantity="few">%d zmeny ACL servera</item>
         <item quantity="other">%d zmien ACL servera</item>
     </plurals>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s a ďalší</string>
+    <string name="room_notification_two_users_are_typing">%1$s a %2$s</string>
 </resources>
