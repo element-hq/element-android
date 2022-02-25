@@ -34,7 +34,7 @@
     </style>
 
     <style name="Widget.Vector.Button.TextButton.Dialog.Destructive">
-        <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayDestructive</item>
+        <item name="dynamicColorThemeOverlay">@style/VectorMaterialThemeOverlayDestructive</item>
     </style>
 
 </resources>
