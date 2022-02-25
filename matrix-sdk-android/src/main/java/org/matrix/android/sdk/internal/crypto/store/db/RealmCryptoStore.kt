@@ -125,7 +125,7 @@ internal class RealmCryptoStore @Inject constructor(
     private var olmAccount: OlmAccount? = null
 
     // Cache for OlmSession, to release them properly
-    private val olmSessionsToRelease = HashMap<String, OlmSessionWrapper>()
+//    private val olmSessionsToRelease = HashMap<String, OlmSessionWrapper>()
 
     // Cache for InboundGroupSession, to release them properly
     private val inboundGroupSessionToRelease = HashMap<String, OlmInboundGroupSessionWrapper2>()
@@ -212,11 +212,6 @@ internal class RealmCryptoStore @Inject constructor(
             // Wait 1 minute max
             monarchyWriteAsyncExecutor.awaitTermination(1, TimeUnit.MINUTES)
         }
-
-        olmSessionsToRelease.forEach {
-            it.value.olmSession.releaseSession()
-        }
-        olmSessionsToRelease.clear()
 
         inboundGroupSessionToRelease.forEach {
             it.value.olmInboundGroupSession?.releaseSession()
@@ -680,13 +675,6 @@ internal class RealmCryptoStore @Inject constructor(
         if (sessionIdentifier != null) {
             val key = OlmSessionEntity.createPrimaryKey(sessionIdentifier, deviceKey)
 
-            // Release memory of previously known session, if it is not the same one
-            if (olmSessionsToRelease[key]?.olmSession != olmSessionWrapper.olmSession) {
-                olmSessionsToRelease[key]?.olmSession?.releaseSession()
-            }
-
-            olmSessionsToRelease[key] = olmSessionWrapper
-
             doRealmTransaction(realmConfiguration) {
                 val realmOlmSession = OlmSessionEntity().apply {
                     primaryKey = key
@@ -703,23 +691,18 @@ internal class RealmCryptoStore @Inject constructor(
 
     override fun getDeviceSession(sessionId: String, deviceKey: String): OlmSessionWrapper? {
         val key = OlmSessionEntity.createPrimaryKey(sessionId, deviceKey)
-
-        // If not in cache (or not found), try to read it from realm
-        if (olmSessionsToRelease[key] == null) {
-            doRealmQueryAndCopy(realmConfiguration) {
-                it.where<OlmSessionEntity>()
-                        .equalTo(OlmSessionEntityFields.PRIMARY_KEY, key)
-                        .findFirst()
-            }
-                    ?.let {
-                        val olmSession = it.getOlmSession()
-                        if (olmSession != null && it.sessionId != null) {
-                            olmSessionsToRelease[key] = OlmSessionWrapper(olmSession, it.lastReceivedMessageTs)
-                        }
-                    }
+        return doRealmQueryAndCopy(realmConfiguration) {
+            it.where<OlmSessionEntity>()
+                    .equalTo(OlmSessionEntityFields.PRIMARY_KEY, key)
+                    .findFirst()
         }
-
-        return olmSessionsToRelease[key]
+                ?.let {
+                    val olmSession = it.getOlmSession()
+                    if (olmSession != null && it.sessionId != null) {
+                        return@let OlmSessionWrapper(olmSession, it.lastReceivedMessageTs)
+                    }
+                    null
+                }
     }
 
     override fun getLastUsedSessionId(deviceKey: String): String? {

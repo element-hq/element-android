@@ -47,6 +47,7 @@ internal class MXOlmDevice @Inject constructor(
          * The store where crypto data is saved.
          */
         private val store: IMXCryptoStore,
+        private val olmSessionStore: OlmSessionStore,
         private val inboundGroupSessionStore: InboundGroupSessionStore
 ) {
 
@@ -190,6 +191,7 @@ internal class MXOlmDevice @Inject constructor(
             it.groupSession.releaseSession()
         }
         outboundGroupSessionCache.clear()
+        olmSessionStore.clear()
     }
 
     /**
@@ -257,7 +259,8 @@ internal class MXOlmDevice @Inject constructor(
             // this session
             olmSessionWrapper.onMessageReceived()
 
-            store.storeSession(olmSessionWrapper, theirIdentityKey)
+            olmSessionStore.storeSession(olmSessionWrapper, theirIdentityKey)
+//            store.storeSession(olmSessionWrapper, theirIdentityKey)
 
             val sessionIdentifier = olmSession.sessionIdentifier()
 
@@ -324,7 +327,7 @@ internal class MXOlmDevice @Inject constructor(
                 // This counts as a received message: set last received message time to now
                 olmSessionWrapper.onMessageReceived()
 
-                store.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
+                olmSessionStore.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
             } catch (e: Exception) {
                 Timber.e(e, "## createInboundSession() : decryptMessage failed")
             }
@@ -357,8 +360,8 @@ internal class MXOlmDevice @Inject constructor(
      * @param theirDeviceIdentityKey the Curve25519 identity key for the remote device.
      * @return a list of known session ids for the device.
      */
-    fun getSessionIds(theirDeviceIdentityKey: String): List<String>? {
-        return store.getDeviceSessionIds(theirDeviceIdentityKey)
+    fun getSessionIds(theirDeviceIdentityKey: String): List<String> {
+        return olmSessionStore.getDeviceSessionIds(theirDeviceIdentityKey)
     }
 
     /**
@@ -368,7 +371,7 @@ internal class MXOlmDevice @Inject constructor(
      * @return the session id, or null if no established session.
      */
     fun getSessionId(theirDeviceIdentityKey: String): String? {
-        return store.getLastUsedSessionId(theirDeviceIdentityKey)
+        return olmSessionStore.getLastUsedSessionId(theirDeviceIdentityKey)
     }
 
     /**
@@ -390,7 +393,8 @@ internal class MXOlmDevice @Inject constructor(
                 // Timber.v("## encryptMessage() : payloadString: " + payloadString);
 
                 olmMessage = olmSessionWrapper.olmSession.encryptMessage(payloadString)
-                store.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
+//                store.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
+                olmSessionStore.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
                 res = HashMap()
 
                 res["body"] = olmMessage.mCipherText
@@ -427,7 +431,8 @@ internal class MXOlmDevice @Inject constructor(
             try {
                 payloadString = olmSessionWrapper.olmSession.decryptMessage(olmMessage)
                 olmSessionWrapper.onMessageReceived()
-                store.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
+                olmSessionStore.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
+//                store.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
             } catch (e: Exception) {
                 Timber.e(e, "## decryptMessage() : decryptMessage failed")
             }
@@ -819,7 +824,8 @@ internal class MXOlmDevice @Inject constructor(
     private fun getSessionForDevice(theirDeviceIdentityKey: String, sessionId: String): OlmSessionWrapper? {
         // sanity check
         return if (theirDeviceIdentityKey.isEmpty() || sessionId.isEmpty()) null else {
-            store.getDeviceSession(sessionId, theirDeviceIdentityKey)
+            olmSessionStore.getDeviceSession(sessionId, theirDeviceIdentityKey)
+//            store.getDeviceSession(sessionId, theirDeviceIdentityKey)
         }
     }
 
