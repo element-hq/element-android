@@ -13,6 +13,11 @@
     <color name="element_link_light">@color/palette_links</color>
     <color name="element_link_dark">@color/palette_links</color>
 
+    <color name="element_container_light">@color/palette_element_green_primary_container_light</color>
+    <color name="element_container_dark">@color/palette_element_green_primary_container_dark</color>
+    <color name="element_on_container_light">@color/palette_element_green_on_primary_container_light</color>
+    <color name="element_on_container_dark">@color/palette_element_green_on_primary_container_dark</color>
+
     <!-- attr for content colors -->
     <attr name="vctr_content_primary" format="color" />
     <attr name="vctr_content_secondary" format="color" />

@@ -20,6 +20,12 @@
     <color name="palette_prune">#5C56F5</color>
     <color name="palette_links">#0086E6</color>
 
+    <!-- TODO: Replace with designer choice -->
+    <color name="palette_element_green_primary_container_light">#dbfff5</color>
+    <color name="palette_element_green_on_primary_container_light">#00201a</color>
+    <color name="palette_element_green_primary_container_dark">#005145</color>
+    <color name="palette_element_green_on_primary_container_dark">#77f8df</color>
+
     <!-- For light themes -->
     <color name="palette_gray_25">#F4F6FA</color>
     <color name="palette_gray_50">#E3E8F0</color>

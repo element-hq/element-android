@@ -63,6 +63,10 @@
         <item name="colorOnError">@color/palette_white</item>
         <item name="colorSurface">@color/element_system_light</item>
         <item name="colorOnSurface">?vctr_content_primary</item>
+        <item name="colorPrimaryContainer">@color/palette_element_green_primary_container_light</item>
+        <item name="colorOnPrimaryContainer">@color/palette_element_green_on_primary_container_light</item>
+        <item name="colorSecondaryContainer">@color/palette_element_green_primary_container_light</item>
+        <item name="colorOnSecondaryContainer">@color/palette_element_green_on_primary_container_light</item>
         <item name="android:colorBackground">@color/element_background_light</item>
         <item name="colorOnBackground">?vctr_content_primary</item>
 
