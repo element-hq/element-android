@@ -77,6 +77,11 @@
             android:summary="@string/settings_system_preferences_summary"
             android:title="@string/settings_call_notifications_preferences" />
 
+        <im.vector.app.core.preference.VectorPreference
+            android:persistent="false"
+            android:key="SETTINGS_UNIFIED_PUSH_RE_REGISTER_KEY"
+            android:title="@string/settings_unifiedpush_reregister" />
+
     </im.vector.app.core.preference.VectorPreferenceCategory>
 
     <im.vector.app.core.preference.VectorPreferenceCategory

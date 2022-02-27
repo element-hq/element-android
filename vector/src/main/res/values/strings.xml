@@ -3042,4 +3042,5 @@
     <string name="unifiedpush_getdistributors_dialog_title">Choose how to receive notifications</string>
     <string name="unifiedpush_getdistributors_dialog_fcm_fallback">Google Services</string>
     <string name="unifiedpush_getdistributors_dialog_background_sync">Background synchronization</string>
+    <string name="settings_unifiedpush_reregister">Notification method</string>
 </resources>

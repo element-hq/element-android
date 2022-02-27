@@ -30,6 +30,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
+import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.extensions.registerStartForActivityResult
@@ -58,7 +59,6 @@ import org.matrix.android.sdk.api.session.identity.ThreePid
 import org.matrix.android.sdk.api.session.pushers.Pusher
 import org.matrix.android.sdk.api.session.pushrules.RuleIds
 import org.matrix.android.sdk.api.session.pushrules.RuleKind
-import timber.log.Timber
 import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
@@ -98,7 +98,16 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
 
         findPreference<SwitchPreference>(VectorPreferences.SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY)?.let {
             it.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
-                updateEnabledForDevice(isChecked)
+                if (isChecked) {
+                    UnifiedPushHelper.register(requireContext())
+                } else {
+                    UnifiedPushHelper.unregister(
+                            requireContext(),
+                            pushManager,
+                            vectorPreferences
+                    )
+                    session.pushersService().refreshPushers()
+                }
             }
         }
 
@@ -137,6 +146,22 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                     refreshBackgroundSyncPrefs()
                 }
                 true
+            }
+        }
+
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_UNIFIED_PUSH_RE_REGISTER_KEY)?.let {
+            if (BuildConfig.ALLOW_EXTERNAL_UNIFIEDPUSH_DISTRIB) {
+                it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    UnifiedPushHelper.register(
+                            requireContext(),
+                            force = true,
+                            pushManager
+                    )
+                    true
+                }
+                session.pushersService().refreshPushers()
+            } else {
+                it.isVisible = false
             }
         }
 
@@ -352,26 +377,6 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             }
             else                                                       -> {
                 return super.onPreferenceTreeClick(preference)
-            }
-        }
-    }
-
-    private suspend fun updateEnabledForDevice(enabled: Boolean) {
-        if (enabled) {
-            UnifiedPushHelper.register(requireContext())
-        } else {
-            UnifiedPushHelper.getEndpointOrToken(requireContext())?.let {
-                try {
-                    pushManager.unregisterPusher(it)
-                } catch (e: Exception) {
-                    Timber.d("Probably unregistering a non existant pusher")
-                }
-                try {
-                    UnifiedPushHelper.unregister(requireContext())
-                } catch (e: Exception) {
-                    Timber.d("Probably unregistering to a non-saved distributor")
-                }
-                session.pushersService().refreshPushers()
             }
         }
     }

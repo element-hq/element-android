@@ -24,7 +24,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
+import im.vector.app.features.settings.BackgroundSyncMode
+import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.push.fcm.FcmHelper
+import kotlinx.coroutines.runBlocking
 import org.unifiedpush.android.connector.UnifiedPush
 import timber.log.Timber
 import java.net.URI
@@ -81,7 +84,10 @@ object UnifiedPushHelper {
         }
     }
 
-    fun register(context: Context, force: Boolean = false, onDoneRunnable: Runnable? = null) {
+    fun register(context: Context,
+                 force: Boolean = false,
+                 pushersManager: PushersManager? = null,
+                 onDoneRunnable: Runnable? = null) {
         if (!BuildConfig.ALLOW_EXTERNAL_UNIFIEDPUSH_DISTRIB) {
             up.saveDistributor(context, context.packageName)
             up.registerApp(context)
@@ -90,14 +96,21 @@ object UnifiedPushHelper {
         }
         if (force) {
             // Un-register first
+            runBlocking {
+                pushersManager?.unregisterPusher(getEndpointOrToken(context) ?: "")
+            }
             up.unregisterApp(context)
             storeUpEndpoint(context, null)
             storePushGateway(context, null)
-        } else if (up.getDistributor(context).isNotEmpty()) {
+        }
+        if (up.getDistributor(context).isNotEmpty()) {
             up.registerApp(context)
             onDoneRunnable?.run()
             return
         }
+
+        // By default, use internal solution (fcm/background sync)
+        up.saveDistributor(context, context.packageName)
         val distributors = up.getDistributors(context).toMutableList()
 
         val internalDistributorName = if (!FcmHelper.isPushSupported()) {
@@ -148,7 +161,20 @@ object UnifiedPushHelper {
         }
     }
 
-    fun unregister(context: Context) {
+    fun unregister(
+            context: Context,
+            pushersManager: PushersManager? = null,
+            vectorPreferences: VectorPreferences? = null
+    ) {
+        val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
+        vectorPreferences?.setFdroidSyncBackgroundMode(mode)
+        runBlocking {
+            try {
+                pushersManager?.unregisterPusher(getEndpointOrToken(context) ?: "")
+            } catch (e: Exception) {
+                Timber.d("Probably unregistering a non existant pusher")
+            }
+        }
         up.unregisterApp(context)
     }
 
