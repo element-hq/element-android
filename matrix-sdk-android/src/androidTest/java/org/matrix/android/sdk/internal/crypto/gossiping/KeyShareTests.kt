@@ -97,7 +97,9 @@ class KeyShareTests : InstrumentedTest {
         assert(receivedEvent!!.isEncrypted())
 
         try {
-            aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
+            commonTestHelper.runBlockingTest {
+                aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
+            }
             fail("should fail")
         } catch (failure: Throwable) {
         }
@@ -152,7 +154,9 @@ class KeyShareTests : InstrumentedTest {
         }
 
         try {
-            aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
+            commonTestHelper.runBlockingTest {
+                aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
+            }
             fail("should fail")
         } catch (failure: Throwable) {
         }
@@ -189,7 +193,9 @@ class KeyShareTests : InstrumentedTest {
         }
 
         try {
-            aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
+            commonTestHelper.runBlockingTest {
+                aliceSession2.cryptoService().decryptEvent(receivedEvent.root, "foo")
+            }
         } catch (failure: Throwable) {
             fail("should have been able to decrypt")
         }
@@ -384,7 +390,11 @@ class KeyShareTests : InstrumentedTest {
         val roomRoomBobPov = aliceSession.getRoom(roomId)
         val beforeJoin = roomRoomBobPov!!.getTimelineEvent(secondEventId)
 
-        var dRes = tryOrNull { bobSession.cryptoService().decryptEvent(beforeJoin!!.root, "") }
+        var dRes = tryOrNull {
+            commonTestHelper.runBlockingTest {
+                bobSession.cryptoService().decryptEvent(beforeJoin!!.root, "")
+            }
+        }
 
         assert(dRes == null)
 
@@ -395,7 +405,11 @@ class KeyShareTests : InstrumentedTest {
         Thread.sleep(3_000)
 
         // With the bug the first session would have improperly reshare that key :/
-        dRes = tryOrNull { bobSession.cryptoService().decryptEvent(beforeJoin.root, "") }
+        dRes = tryOrNull {
+            commonTestHelper.runBlockingTest {
+                bobSession.cryptoService().decryptEvent(beforeJoin.root, "")
+            }
+        }
         Log.d("#TEST", "KS: sgould not decrypt that ${beforeJoin.root.getClearContent().toModel<MessageContent>()?.body}")
         assert(dRes?.clearEvent == null)
     }

@@ -227,8 +227,10 @@ class UnwedgingTest : InstrumentedTest {
         testHelper.waitWithLatch {
             testHelper.retryPeriodicallyWithLatch(it) {
                 // we should get back the key and be able to decrypt
-                val result = tryOrNull {
-                    bobSession.cryptoService().decryptEvent(messagesReceivedByBob[0].root, "")
+                val result = testHelper.runBlockingTest {
+                    tryOrNull {
+                        bobSession.cryptoService().decryptEvent(messagesReceivedByBob[0].root, "")
+                    }
                 }
                 Timber.i("## CRYPTO | testUnwedging: decrypt result  ${result?.clearEvent}")
                 result != null
