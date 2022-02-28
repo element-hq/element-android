@@ -182,7 +182,7 @@ class HomeActivity :
         super.onCreate(savedInstanceState)
         analyticsScreenName = MobileScreen.ScreenName.Home
         supportFragmentManager.registerFragmentLifecycleCallbacks(fragmentLifecycleCallbacks, false)
-        UnifiedPushHelper.register(this, onDoneRunnable = {
+        UnifiedPushHelper.register(this) {
             if (UnifiedPushHelper.isEmbeddedDistributor(this)) {
                 FcmHelper.ensureFcmTokenIsRetrieved(
                         this,
@@ -190,7 +190,7 @@ class HomeActivity :
                         vectorPreferences.areNotificationEnabledForDevice()
                 )
             }
-        })
+        }
         sharedActionViewModel = viewModelProvider.get(HomeSharedActionViewModel::class.java)
         views.drawerLayout.addDrawerListener(drawerListener)
         if (isFirstCreation()) {

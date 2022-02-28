@@ -63,7 +63,7 @@ import javax.inject.Inject
 
 // Referenced in vector_settings_preferences_root.xml
 class VectorSettingsNotificationPreferenceFragment @Inject constructor(
-        private val pushManager: PushersManager,
+        private val pushersManager: PushersManager,
         private val activeSessionHolder: ActiveSessionHolder,
         private val vectorPreferences: VectorPreferences,
         private val guardServiceStarter: GuardServiceStarter
@@ -103,7 +103,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                 } else {
                     UnifiedPushHelper.unregister(
                             requireContext(),
-                            pushManager,
+                            pushersManager,
                             vectorPreferences
                     )
                     session.pushersService().refreshPushers()
@@ -152,14 +152,16 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_UNIFIED_PUSH_RE_REGISTER_KEY)?.let {
             if (BuildConfig.ALLOW_EXTERNAL_UNIFIEDPUSH_DISTRIB) {
                 it.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                    UnifiedPushHelper.register(
+                    UnifiedPushHelper.reRegister(
                             requireContext(),
-                            force = true,
-                            pushManager
-                    )
+                            pushersManager,
+                            vectorPreferences
+                    ) {
+                        session.pushersService().refreshPushers()
+                        refreshBackgroundSyncPrefs()
+                    }
                     true
                 }
-                session.pushersService().refreshPushers()
             } else {
                 it.isVisible = false
             }
@@ -199,9 +201,9 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                     pref.isChecked = isEnabled
                     pref.setTransactionalSwitchChangeListener(lifecycleScope) { isChecked ->
                         if (isChecked) {
-                            pushManager.registerEmailForPush(emailPid.email)
+                            pushersManager.registerEmailForPush(emailPid.email)
                         } else {
-                            pushManager.unregisterEmailPusher(emailPid.email)
+                            pushersManager.unregisterEmailPusher(emailPid.email)
                         }
                     }
                     category.addPreference(pref)

@@ -849,6 +849,10 @@
     <string name="settings_troubleshoot_test_token_registration_success">FCM token successfully registered to homeserver.</string>
     <string name="settings_troubleshoot_test_token_registration_failed">Failed to register FCM token to homeserver:\n%1$s</string>
 
+    <string name="settings_troubleshoot_test_endpoint_registration_title">Endpoint Registration</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_success">Endpoint successfully registered to homeserver.</string>
+    <string name="settings_troubleshoot_test_endpoint_registration_failed">Failed to register endpoint token to homeserver:\n%1$s</string>
+
     <string name="settings_troubleshoot_test_push_loop_title">Test Push</string>
     <string name="settings_troubleshoot_test_push_loop_waiting_for_push">The application is waiting for the PUSH</string>
     <string name="settings_troubleshoot_test_push_loop_success">The application is receiving PUSH</string>
@@ -1656,6 +1660,8 @@
     <string name="preference_system_settings">System settings</string>
 
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Register token</string>
+
+    <string name="settings_troubleshoot_test_endpoint_registration_quick_fix">Reset notification method</string>
 
     <string name="send_suggestion">Make a suggestion</string>
     <string name="send_suggestion_content">Please write your suggestion below.</string>
@@ -3040,7 +3046,18 @@
     <string name="screen_sharing_notification_description">Screen sharing is in progress</string>
 
     <string name="unifiedpush_getdistributors_dialog_title">Choose how to receive notifications</string>
-    <string name="unifiedpush_getdistributors_dialog_fcm_fallback">Google Services</string>
-    <string name="unifiedpush_getdistributors_dialog_background_sync">Background synchronization</string>
+    <string name="unifiedpush_distributor_fcm_fallback">Google Services</string>
+    <string name="unifiedpush_distributor_background_sync">Background synchronization</string>
     <string name="settings_unifiedpush_reregister">Notification method</string>
+    <string name="settings_troubleshoot_test_distributors_title">Available methods</string>
+    <string name="settings_troubleshoot_test_distributors_gplay">No other method than Google Play Service found.</string>
+    <string name="settings_troubleshoot_test_distributors_fdroid">No other method than background synchronization found.</string>
+    <string name="settings_troubleshoot_test_distributors_many">Found %d methods.</string>
+    <string name="settings_troubleshoot_test_current_distributor_title">Method</string>
+    <string name="settings_troubleshoot_test_current_distributor">Currently using %s.</string>
+    <string name="settings_troubleshoot_test_current_endpoint_title">Endpoint</string>
+    <string name="settings_troubleshoot_test_current_endpoint_success">Current endpoint: %s</string>
+    <string name="settings_troubleshoot_test_current_endpoint_failed">Cannot find the endpoint.</string>
+    <string name="settings_troubleshoot_test_current_gateway_title">Gateway</string>
+    <string name="settings_troubleshoot_test_current_gateway">Current gateway: %s</string>
 </resources>

@@ -39,7 +39,7 @@ class PushersManager @Inject constructor(
         val currentSession = activeSessionHolder.getActiveSession()
 
         currentSession.pushersService().testPush(
-                UnifiedPushHelper.getPushGateway(context),
+                UnifiedPushHelper.getPushGateway(context)!!,
                 stringProvider.getString(R.string.pusher_app_id),
                 UnifiedPushHelper.getEndpointOrToken(context) ?: "",
                 TEST_EVENT_ID
