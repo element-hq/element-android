@@ -20,6 +20,10 @@ jobs:
       fail-fast: false
       matrix:
         target: [ Gplay, Fdroid ]
+    # Allow all jobs on develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/develop' && format('integration-tests-develop-{0}-{1}', matrix.target, github.sha) || format('build-debug-{0}-{1}', matrix.target, github.ref)  }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -43,6 +47,7 @@ jobs:
     name: Build unsigned GPlay APKs
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    # Only runs on main, no concurrency.
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2

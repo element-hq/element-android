@@ -20,6 +20,7 @@ jobs:
   build-android-test-matrix-sdk:
     name: Matrix SDK - Build Android Tests
     runs-on: macos-latest
+    # No concurrency required, runs every time on a schedule.
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -37,6 +38,7 @@ jobs:
   build-android-test-app:
     name: App - Build Android Tests
     runs-on: macos-latest
+    # No concurrency required, runs every time on a schedule.
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -50,7 +52,7 @@ jobs:
       - name: Build Android Tests for vector
         run: ./gradlew clean vector:assembleAndroidTest $CI_GRADLE_ARG_PROPERTIES --stacktrace
 
- # Run Android Tests
+  # Run Android Tests
   integration-tests:
     name: Matrix SDK - Running Integration Tests
     runs-on: macos-latest
@@ -58,6 +60,7 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [ 28 ]
+    # No concurrency required, runs every time on a schedule.
     steps:
       - uses: actions/checkout@v2
       - uses: gradle/wrapper-validation-action@v1
@@ -83,7 +86,7 @@ jobs:
           curl https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh -o start.sh
           chmod 777 start.sh
           ./start.sh --no-rate-limit
-# package: org.matrix.android.sdk.session
+      # package: org.matrix.android.sdk.session
       - name: Run integration tests for  Matrix SDK [org.matrix.android.sdk.session] API[${{ matrix.api-level }}]
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -113,7 +116,7 @@ jobs:
         if: always()
         id: get-comment-body-account
         run: python3 ./tools/ci/render_test_output.py account ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml
-# package: org.matrix.android.sdk.internal
+      # package: org.matrix.android.sdk.internal
       - name: Run integration tests for Matrix SDK [org.matrix.android.sdk.internal] API[${{ matrix.api-level }}]
         if: always()
         uses: reactivecircus/android-emulator-runner@v2
@@ -129,7 +132,7 @@ jobs:
         if: always()
         id: get-comment-body-internal
         run: python3 ./tools/ci/render_test_output.py internal ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml
-# package: org.matrix.android.sdk.ordering
+      # package: org.matrix.android.sdk.ordering
       - name: Run integration tests for Matrix SDK [org.matrix.android.sdk.ordering] API[${{ matrix.api-level }}]
         if: always()
         uses: reactivecircus/android-emulator-runner@v2
@@ -145,7 +148,7 @@ jobs:
         if: always()
         id: get-comment-body-ordering
         run: python3 ./tools/ci/render_test_output.py ordering ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml
-# package: class PermalinkParserTest
+      # package: class PermalinkParserTest
       - name: Run integration tests for Matrix SDK class [org.matrix.android.sdk.PermalinkParserTest] API[${{ matrix.api-level }}]
         if: always()
         uses: reactivecircus/android-emulator-runner@v2
@@ -161,7 +164,7 @@ jobs:
         if: always()
         id: get-comment-body-permalink
         run: python3 ./tools/ci/render_test_output.py permalink ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml
-# package: class PermalinkParserTest
+      # package: class PermalinkParserTest
       - name: Find Comment
         if: always() && github.event_name == 'pull_request'
         uses: peter-evans/find-comment@v1
@@ -193,6 +196,7 @@ jobs:
       fail-fast: false
       matrix:
         api-level: [ 28 ]
+    # No concurrency required, runs every time on a schedule.
     steps:
       - uses: actions/checkout@v2
         with:
@@ -246,14 +250,15 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     needs:
-    - integration-tests
-    - ui-tests
+      - integration-tests
+      - ui-tests
     if: always()
+    # No concurrency required, runs every time on a schedule.
     steps:
-    - uses: michaelkaye/matrix-hookshot-action@v0.2.0
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        matrix_access_token: ${{ secrets.ELEMENT_ANDROID_NOTIFICATION_ACCESS_TOKEN }}
-        matrix_room_id: ${{ secrets.ELEMENT_ANDROID_INTERNAL_ROOM_ID }}
-        text_template: "Nightly test run: {{#each job_statuses }}{{#with this }}{{#if completed }}  {{name}} {{conclusion}} at {{completed_at}}, {{/if}}{{/with}}{{/each}}"
-        html_template: "Nightly test run results: {{#each job_statuses }}{{#with this }}{{#if completed }}<br />{{name}} {{conclusion}} at {{completed_at}} <a href=\"{{html_url}}\">[details]</a>{{/if}}{{/with}}{{/each}}"
+      - uses: michaelkaye/matrix-hookshot-action@v0.2.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          matrix_access_token: ${{ secrets.ELEMENT_ANDROID_NOTIFICATION_ACCESS_TOKEN }}
+          matrix_room_id: ${{ secrets.ELEMENT_ANDROID_INTERNAL_ROOM_ID }}
+          text_template: "Nightly test run: {{#each job_statuses }}{{#with this }}{{#if completed }}  {{name}} {{conclusion}} at {{completed_at}}, {{/if}}{{/with}}{{/each}}"
+          html_template: "Nightly test run results: {{#each job_statuses }}{{#with this }}{{#if completed }}<br />{{name}} {{conclusion}} at {{completed_at}} <a href=\"{{html_url}}\">[details]</a>{{/if}}{{/with}}{{/each}}"
