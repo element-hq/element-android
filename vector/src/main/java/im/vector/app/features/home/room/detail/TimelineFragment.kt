@@ -68,6 +68,7 @@ import com.airbnb.mvrx.withState
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.vanniktech.emoji.EmojiPopup
 import im.vector.app.R
+import im.vector.app.core.animations.play
 import im.vector.app.core.dialogs.ConfirmationDialogBuilder
 import im.vector.app.core.dialogs.GalleryOrCameraDialogHelper
 import im.vector.app.core.epoxy.LayoutManagerStateRestorer
@@ -203,8 +204,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import nl.dionsegijn.konfetti.models.Shape
-import nl.dionsegijn.konfetti.models.Size
 import org.billcarsonfr.jsonviewer.JSonViewerDialog
 import org.commonmark.parser.Parser
 import org.matrix.android.sdk.api.session.Session
@@ -562,16 +561,7 @@ class TimelineFragment @Inject constructor(
         when (chatEffect) {
             ChatEffect.CONFETTI -> {
                 views.viewKonfetti.isVisible = true
-                views.viewKonfetti.build()
-                        .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
-                        .setDirection(0.0, 359.0)
-                        .setSpeed(2f, 5f)
-                        .setFadeOutEnabled(true)
-                        .setTimeToLive(2000L)
-                        .addShapes(Shape.Square, Shape.Circle)
-                        .addSizes(Size(12))
-                        .setPosition(-50f, views.viewKonfetti.width + 50f, -50f, -50f)
-                        .streamFor(150, 3000L)
+                views.viewKonfetti.play()
             }
             ChatEffect.SNOWFALL -> {
                 views.viewSnowFall.isVisible = true

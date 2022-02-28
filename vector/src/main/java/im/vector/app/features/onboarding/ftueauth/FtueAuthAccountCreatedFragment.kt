@@ -22,6 +22,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import im.vector.app.R
+import im.vector.app.core.animations.play
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.databinding.FragmentFtueAccountCreatedBinding
 import im.vector.app.features.onboarding.OnboardingAction
@@ -32,6 +33,8 @@ import javax.inject.Inject
 class FtueAuthAccountCreatedFragment @Inject constructor(
         private val activeSessionHolder: ActiveSessionHolder
 ) : AbstractFtueAuthFragment<FragmentFtueAccountCreatedBinding>() {
+
+    private var hasPlayedConfetti = false
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentFtueAccountCreatedBinding {
         return FragmentFtueAccountCreatedBinding.inflate(inflater, container, false)
@@ -53,6 +56,12 @@ class FtueAuthAccountCreatedFragment @Inject constructor(
         val canPersonalize = state.personalizationState.supportsPersonalization()
         views.personalizeButtonGroup.isVisible = canPersonalize
         views.takeMeHomeButtonGroup.isVisible = !canPersonalize
+
+        if (!hasPlayedConfetti && !canPersonalize) {
+            hasPlayedConfetti = true
+            views.viewKonfetti.isVisible = true
+            views.viewKonfetti.play()
+        }
     }
 
     override fun resetViewModel() {
