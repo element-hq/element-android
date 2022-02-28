@@ -53,11 +53,11 @@
         <item name="vctr_list_separator_on_surface">?vctr_system</item>
 
         <!-- Material color -->
-        <item name="colorPrimary">@color/element_alert_dark</item>
-        <item name="colorPrimaryVariant">@color/element_alert_dark</item>
+        <item name="colorPrimary">@color/element_accent_dark</item>
+        <item name="colorPrimaryVariant">@color/element_accent_dark</item>
         <item name="colorOnPrimary">@android:color/white</item>
-        <item name="colorSecondary">@color/element_alert_dark</item>
-        <item name="colorSecondaryVariant">@color/element_alert_dark</item>
+        <item name="colorSecondary">@color/element_accent_dark</item>
+        <item name="colorSecondaryVariant">@color/element_accent_dark</item>
         <item name="colorOnSecondary">@android:color/white</item>
         <item name="colorError">@color/element_alert_dark</item>
         <item name="colorOnError">@color/palette_white</item>
