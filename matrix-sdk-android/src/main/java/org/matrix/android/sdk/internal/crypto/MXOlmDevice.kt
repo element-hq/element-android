@@ -16,8 +16,10 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.util.JSON_DICT_PARAMETERIZED_TYPE
 import org.matrix.android.sdk.api.util.JsonDict
@@ -42,6 +44,8 @@ import timber.log.Timber
 import java.net.URLEncoder
 import javax.inject.Inject
 
+private val loggerTag = LoggerTag("MXOlmDevice", LoggerTag.CRYPTO)
+
 // The libolm wrapper.
 @SessionScope
 internal class MXOlmDevice @Inject constructor(
@@ -53,6 +57,7 @@ internal class MXOlmDevice @Inject constructor(
         private val inboundGroupSessionStore: InboundGroupSessionStore
 ) {
 
+    val mutex = Mutex()
     /**
      * @return the Curve25519 key for the account.
      */
@@ -96,26 +101,26 @@ internal class MXOlmDevice @Inject constructor(
         try {
             store.getOrCreateOlmAccount()
         } catch (e: Exception) {
-            Timber.e(e, "MXOlmDevice : cannot initialize olmAccount")
+            Timber.tag(loggerTag.value).e(e, "MXOlmDevice : cannot initialize olmAccount")
         }
 
         try {
             olmUtility = OlmUtility()
         } catch (e: Exception) {
-            Timber.e(e, "## MXOlmDevice : OlmUtility failed with error")
+            Timber.tag(loggerTag.value).e(e, "## MXOlmDevice : OlmUtility failed with error")
             olmUtility = null
         }
 
         try {
             deviceCurve25519Key = doWithOlmAccount { it.identityKeys()[OlmAccount.JSON_KEY_IDENTITY_KEY] }
         } catch (e: Exception) {
-            Timber.e(e, "## MXOlmDevice : cannot find ${OlmAccount.JSON_KEY_IDENTITY_KEY} with error")
+            Timber.tag(loggerTag.value).e(e, "## MXOlmDevice : cannot find ${OlmAccount.JSON_KEY_IDENTITY_KEY} with error")
         }
 
         try {
             deviceEd25519Key = doWithOlmAccount { it.identityKeys()[OlmAccount.JSON_KEY_FINGER_PRINT_KEY] }
         } catch (e: Exception) {
-            Timber.e(e, "## MXOlmDevice : cannot find ${OlmAccount.JSON_KEY_FINGER_PRINT_KEY} with error")
+            Timber.tag(loggerTag.value).e(e, "## MXOlmDevice : cannot find ${OlmAccount.JSON_KEY_FINGER_PRINT_KEY} with error")
         }
     }
 
@@ -126,7 +131,7 @@ internal class MXOlmDevice @Inject constructor(
         try {
             return doWithOlmAccount { it.oneTimeKeys() }
         } catch (e: Exception) {
-            Timber.e(e, "## getOneTimeKeys() : failed")
+            Timber.tag(loggerTag.value).e(e, "## getOneTimeKeys() : failed")
         }
 
         return null
@@ -159,7 +164,7 @@ internal class MXOlmDevice @Inject constructor(
         try {
             return doWithOlmAccount { it.fallbackKey() }
         } catch (e: Exception) {
-            Timber.e("## getFallbackKey() : failed")
+            Timber.tag(loggerTag.value).e("## getFallbackKey() : failed")
         }
         return null
     }
@@ -179,7 +184,7 @@ internal class MXOlmDevice @Inject constructor(
                 return true
             }
         } catch (e: Exception) {
-            Timber.e("## generateFallbackKey() : failed")
+            Timber.tag(loggerTag.value).e("## generateFallbackKey() : failed")
         }
         return false
     }
@@ -195,7 +200,7 @@ internal class MXOlmDevice @Inject constructor(
                 store.saveOlmAccount()
             }
         } catch (e: Exception) {
-            Timber.e("## forgetFallbackKey() : failed")
+            Timber.tag(loggerTag.value).e("## forgetFallbackKey() : failed")
         }
     }
 
@@ -222,7 +227,7 @@ internal class MXOlmDevice @Inject constructor(
         try {
             return doWithOlmAccount { it.signMessage(message) }
         } catch (e: Exception) {
-            Timber.e(e, "## signMessage() : failed")
+            Timber.tag(loggerTag.value).e(e, "## signMessage() : failed")
         }
 
         return null
@@ -238,7 +243,7 @@ internal class MXOlmDevice @Inject constructor(
                 store.saveOlmAccount()
             }
         } catch (e: Exception) {
-            Timber.e(e, "## markKeysAsPublished() : failed")
+            Timber.tag(loggerTag.value).e(e, "## markKeysAsPublished() : failed")
         }
     }
 
@@ -254,7 +259,7 @@ internal class MXOlmDevice @Inject constructor(
                 store.saveOlmAccount()
             }
         } catch (e: Exception) {
-            Timber.e(e, "## generateOneTimeKeys() : failed")
+            Timber.tag(loggerTag.value).e(e, "## generateOneTimeKeys() : failed")
         }
     }
 
@@ -267,7 +272,7 @@ internal class MXOlmDevice @Inject constructor(
      * @return the session id for the outbound session.
      */
     fun createOutboundSession(theirIdentityKey: String, theirOneTimeKey: String): String? {
-        Timber.v("## createOutboundSession() ; theirIdentityKey $theirIdentityKey theirOneTimeKey $theirOneTimeKey")
+        Timber.tag(loggerTag.value).d("## createOutboundSession() ; theirIdentityKey $theirIdentityKey theirOneTimeKey $theirOneTimeKey")
         var olmSession: OlmSession? = null
 
         try {
@@ -288,10 +293,10 @@ internal class MXOlmDevice @Inject constructor(
 
             val sessionIdentifier = olmSession.sessionIdentifier()
 
-            Timber.v("## createOutboundSession() ;  olmSession.sessionIdentifier: $sessionIdentifier")
+            Timber.tag(loggerTag.value).v("## createOutboundSession() ;  olmSession.sessionIdentifier: $sessionIdentifier")
             return sessionIdentifier
         } catch (e: Exception) {
-            Timber.e(e, "## createOutboundSession() failed")
+            Timber.tag(loggerTag.value).e(e, "## createOutboundSession() failed")
 
             olmSession?.releaseSession()
         }
@@ -308,7 +313,7 @@ internal class MXOlmDevice @Inject constructor(
      * @return {{payload: string, session_id: string}} decrypted payload, and session id of new session.
      */
     fun createInboundSession(theirDeviceIdentityKey: String, messageType: Int, ciphertext: String): Map<String, String>? {
-        Timber.v("## createInboundSession() : theirIdentityKey: $theirDeviceIdentityKey")
+        Timber.tag(loggerTag.value).d("## createInboundSession() : theirIdentityKey: $theirDeviceIdentityKey")
 
         var olmSession: OlmSession? = null
 
@@ -319,11 +324,11 @@ internal class MXOlmDevice @Inject constructor(
                     olmSession.initInboundSessionFrom(olmAccount, theirDeviceIdentityKey, ciphertext)
                 }
             } catch (e: Exception) {
-                Timber.e(e, "## createInboundSession() : the session creation failed")
+                Timber.tag(loggerTag.value).e(e, "## createInboundSession() : the session creation failed")
                 return null
             }
 
-            Timber.v("## createInboundSession() : sessionId: ${olmSession.sessionIdentifier()}")
+            Timber.tag(loggerTag.value).v("## createInboundSession() : sessionId: ${olmSession.sessionIdentifier()}")
 
             try {
                 doWithOlmAccount { olmAccount ->
@@ -331,15 +336,15 @@ internal class MXOlmDevice @Inject constructor(
                     store.saveOlmAccount()
                 }
             } catch (e: Exception) {
-                Timber.e(e, "## createInboundSession() : removeOneTimeKeys failed")
+                Timber.tag(loggerTag.value).e(e, "## createInboundSession() : removeOneTimeKeys failed")
             }
 
-            Timber.v("## createInboundSession() : ciphertext: $ciphertext")
+            Timber.tag(loggerTag.value).v("## createInboundSession() : ciphertext: $ciphertext")
             try {
                 val sha256 = olmUtility!!.sha256(URLEncoder.encode(ciphertext, "utf-8"))
-                Timber.v("## createInboundSession() :ciphertext: SHA256: $sha256")
+                Timber.tag(loggerTag.value).v("## createInboundSession() :ciphertext: SHA256: $sha256")
             } catch (e: Exception) {
-                Timber.e(e, "## createInboundSession() :ciphertext: cannot encode ciphertext")
+                Timber.tag(loggerTag.value).e(e, "## createInboundSession() :ciphertext: cannot encode ciphertext")
             }
 
             val olmMessage = OlmMessage()
@@ -357,7 +362,7 @@ internal class MXOlmDevice @Inject constructor(
 
                 olmSessionStore.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
             } catch (e: Exception) {
-                Timber.e(e, "## createInboundSession() : decryptMessage failed")
+                Timber.tag(loggerTag.value).e(e, "## createInboundSession() : decryptMessage failed")
             }
 
             val res = HashMap<String, String>()
@@ -374,7 +379,7 @@ internal class MXOlmDevice @Inject constructor(
 
             return res
         } catch (e: Exception) {
-            Timber.e(e, "## createInboundSession() : OlmSession creation failed")
+            Timber.tag(loggerTag.value).e(e, "## createInboundSession() : OlmSession creation failed")
 
             olmSession?.releaseSession()
         }
@@ -415,7 +420,7 @@ internal class MXOlmDevice @Inject constructor(
 
         if (olmSessionWrapper != null) {
             try {
-                Timber.v("## encryptMessage() : olmSession.sessionIdentifier: $sessionId")
+                Timber.tag(loggerTag.value).v("## encryptMessage() : olmSession.sessionIdentifier: $sessionId")
 
                 val olmMessage = olmSessionWrapper.mutex.withLock {
                     olmSessionWrapper.olmSession.encryptMessage(payloadString)
@@ -427,11 +432,11 @@ internal class MXOlmDevice @Inject constructor(
                     olmSessionStore.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
                 }
             } catch (e: Throwable) {
-                Timber.e(e, "## encryptMessage() : failed to encrypt olm with device|session:$theirDeviceIdentityKey|$sessionId")
+                Timber.tag(loggerTag.value).e(e, "## encryptMessage() : failed to encrypt olm with device|session:$theirDeviceIdentityKey|$sessionId")
                 return null
             }
         } else {
-            Timber.e("## encryptMessage() : Failed to encrypt unknown session $sessionId")
+            Timber.tag(loggerTag.value).e("## encryptMessage() : Failed to encrypt unknown session $sessionId")
             return null
         }
     }
@@ -445,6 +450,7 @@ internal class MXOlmDevice @Inject constructor(
      * @param sessionId              the id of the active session.
      * @return the decrypted payload.
      */
+    @kotlin.jvm.Throws
     suspend fun decryptMessage(ciphertext: String, messageType: Int, sessionId: String, theirDeviceIdentityKey: String): String? {
         var payloadString: String? = null
 
@@ -455,18 +461,13 @@ internal class MXOlmDevice @Inject constructor(
             olmMessage.mCipherText = ciphertext
             olmMessage.mType = messageType.toLong()
 
-            try {
-                payloadString =
-                        olmSessionWrapper.mutex.withLock {
-                            olmSessionWrapper.olmSession.decryptMessage(olmMessage).also {
-                                olmSessionWrapper.onMessageReceived()
-                            }
+            payloadString =
+                    olmSessionWrapper.mutex.withLock {
+                        olmSessionWrapper.olmSession.decryptMessage(olmMessage).also {
+                            olmSessionWrapper.onMessageReceived()
                         }
-                olmSessionStore.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
-//                store.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
-            } catch (e: Exception) {
-                Timber.e(e, "## decryptMessage() : decryptMessage failed")
-            }
+                    }
+            olmSessionStore.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
         }
 
         return payloadString
@@ -505,7 +506,7 @@ internal class MXOlmDevice @Inject constructor(
             store.storeCurrentOutboundGroupSessionForRoom(roomId, session)
             return session.sessionIdentifier()
         } catch (e: Exception) {
-            Timber.e(e, "createOutboundGroupSession")
+            Timber.tag(loggerTag.value).e(e, "createOutboundGroupSession")
 
             session?.releaseSession()
         }
@@ -557,7 +558,7 @@ internal class MXOlmDevice @Inject constructor(
             try {
                 return outboundGroupSessionCache[sessionId]!!.groupSession.sessionKey()
             } catch (e: Exception) {
-                Timber.e(e, "## getSessionKey() : failed")
+                Timber.tag(loggerTag.value).e(e, "## getSessionKey() : failed")
             }
         }
         return null
@@ -587,7 +588,7 @@ internal class MXOlmDevice @Inject constructor(
             try {
                 return outboundGroupSessionCache[sessionId]!!.groupSession.encryptMessage(payloadString)
             } catch (e: Throwable) {
-                Timber.e(e, "## encryptGroupMessage() : failed")
+                Timber.tag(loggerTag.value).e(e, "## encryptGroupMessage() : failed")
             }
         }
         return null
@@ -619,46 +620,46 @@ internal class MXOlmDevice @Inject constructor(
         val existingSession = existingSessionHolder?.wrapper
         // If we have an existing one we should check if the new one is not better
         if (existingSession != null) {
-            Timber.d("## addInboundGroupSession() check if known session is better than candidate session")
+            Timber.tag(loggerTag.value).d("## addInboundGroupSession() check if known session is better than candidate session")
             try {
                 val existingFirstKnown = existingSession.firstKnownIndex ?: return false.also {
                     // This is quite unexpected, could throw if native was released?
-                    Timber.e("## addInboundGroupSession() null firstKnownIndex on existing session")
+                    Timber.tag(loggerTag.value).e("## addInboundGroupSession() null firstKnownIndex on existing session")
                     candidateSession.olmInboundGroupSession?.releaseSession()
                     // Probably should discard it?
                 }
                 val newKnownFirstIndex = candidateSession.firstKnownIndex
                 // If our existing session is better we keep it
                 if (newKnownFirstIndex != null && existingFirstKnown <= newKnownFirstIndex) {
-                    Timber.d("## addInboundGroupSession() : ignore session our is better $senderKey/$sessionId")
+                    Timber.tag(loggerTag.value).d("## addInboundGroupSession() : ignore session our is better $senderKey/$sessionId")
                     candidateSession.olmInboundGroupSession?.releaseSession()
                     return false
                 }
             } catch (failure: Throwable) {
-                Timber.e("## addInboundGroupSession() Failed to add inbound: ${failure.localizedMessage}")
+                Timber.tag(loggerTag.value).e("## addInboundGroupSession() Failed to add inbound: ${failure.localizedMessage}")
                 candidateSession.olmInboundGroupSession?.releaseSession()
                 return false
             }
         }
 
-        Timber.d("## addInboundGroupSession() : Candidate session should be added $senderKey/$sessionId")
+        Timber.tag(loggerTag.value).d("## addInboundGroupSession() : Candidate session should be added $senderKey/$sessionId")
 
         // sanity check on the new session
         val candidateOlmInboundSession = candidateSession.olmInboundGroupSession
         if (null == candidateOlmInboundSession) {
-            Timber.e("## addInboundGroupSession : invalid session <null>")
+            Timber.tag(loggerTag.value).e("## addInboundGroupSession : invalid session <null>")
             return false
         }
 
         try {
             if (candidateOlmInboundSession.sessionIdentifier() != sessionId) {
-                Timber.e("## addInboundGroupSession : ERROR: Mismatched group session ID from senderKey: $senderKey")
+                Timber.tag(loggerTag.value).e("## addInboundGroupSession : ERROR: Mismatched group session ID from senderKey: $senderKey")
                 candidateOlmInboundSession.releaseSession()
                 return false
             }
         } catch (e: Throwable) {
             candidateOlmInboundSession.releaseSession()
-            Timber.e(e, "## addInboundGroupSession : sessionIdentifier() failed")
+            Timber.tag(loggerTag.value).e(e, "## addInboundGroupSession : sessionIdentifier() failed")
             return false
         }
 
@@ -695,24 +696,24 @@ internal class MXOlmDevice @Inject constructor(
             try {
                 candidateSessionToImport = OlmInboundGroupSessionWrapper2(megolmSessionData)
             } catch (e: Exception) {
-                Timber.e(e, "## importInboundGroupSession() : Update for megolm session $senderKey/$sessionId")
+                Timber.tag(loggerTag.value).e(e, "## importInboundGroupSession() : Update for megolm session $senderKey/$sessionId")
             }
 
             // sanity check
             if (candidateSessionToImport?.olmInboundGroupSession == null) {
-                Timber.e("## importInboundGroupSession : invalid session")
+                Timber.tag(loggerTag.value).e("## importInboundGroupSession : invalid session")
                 continue
             }
 
             val candidateOlmInboundGroupSession = candidateSessionToImport.olmInboundGroupSession
             try {
                 if (candidateOlmInboundGroupSession?.sessionIdentifier() != sessionId) {
-                    Timber.e("## importInboundGroupSession : ERROR: Mismatched group session ID from senderKey: $senderKey")
+                    Timber.tag(loggerTag.value).e("## importInboundGroupSession : ERROR: Mismatched group session ID from senderKey: $senderKey")
                     candidateOlmInboundGroupSession?.releaseSession()
                     continue
                 }
             } catch (e: Exception) {
-                Timber.e(e, "## importInboundGroupSession : sessionIdentifier() failed")
+                Timber.tag(loggerTag.value).e(e, "## importInboundGroupSession : sessionIdentifier() failed")
                 candidateOlmInboundGroupSession?.releaseSession()
                 continue
             }
@@ -722,17 +723,17 @@ internal class MXOlmDevice @Inject constructor(
 
             if (existingSession == null) {
                 // Session does not already exist, add it
-                Timber.d("## importInboundGroupSession() : importing new megolm session $senderKey/$sessionId")
+                Timber.tag(loggerTag.value).d("## importInboundGroupSession() : importing new megolm session $senderKey/$sessionId")
                 sessions.add(candidateSessionToImport)
             } else {
-                Timber.e("## importInboundGroupSession() : Update for megolm session $senderKey/$sessionId")
+                Timber.tag(loggerTag.value).e("## importInboundGroupSession() : Update for megolm session $senderKey/$sessionId")
                 val existingFirstKnown = tryOrNull { existingSession.firstKnownIndex }
                 val candidateFirstKnownIndex = tryOrNull { candidateSessionToImport.firstKnownIndex }
 
                 if (existingFirstKnown == null || candidateFirstKnownIndex == null) {
                     // should not happen?
                     candidateSessionToImport.olmInboundGroupSession?.releaseSession()
-                    Timber.w("## importInboundGroupSession() : Can't check session null index $existingFirstKnown/$candidateFirstKnownIndex")
+                    Timber.tag(loggerTag.value).w("## importInboundGroupSession() : Can't check session null index $existingFirstKnown/$candidateFirstKnownIndex")
                 } else {
                     if (existingFirstKnown <= candidateSessionToImport.firstKnownIndex!!) {
                         // Ignore this, keep existing
@@ -779,7 +780,7 @@ internal class MXOlmDevice @Inject constructor(
                     inboundGroupSession.decryptMessage(body)
                 }
             } catch (e: OlmException) {
-                Timber.e(e, "## decryptGroupMessage () : decryptMessage failed")
+                Timber.tag(loggerTag.value).e(e, "## decryptGroupMessage () : decryptMessage failed")
                 throw MXCryptoError.OlmError(e)
             }
 
@@ -790,7 +791,7 @@ internal class MXOlmDevice @Inject constructor(
 
                 if (timelineSet.contains(messageIndexKey)) {
                     val reason = String.format(MXCryptoError.DUPLICATE_MESSAGE_INDEX_REASON, decryptResult.mIndex)
-                    Timber.e("## decryptGroupMessage() : $reason")
+                    Timber.tag(loggerTag.value).e("## decryptGroupMessage() : $reason")
                     throw MXCryptoError.Base(MXCryptoError.ErrorType.DUPLICATED_MESSAGE_INDEX, reason)
                 }
 
@@ -803,7 +804,7 @@ internal class MXOlmDevice @Inject constructor(
                 val payloadString = convertFromUTF8(decryptResult.mDecryptedMessage)
                 adapter.fromJson(payloadString)
             } catch (e: Exception) {
-                Timber.e("## decryptGroupMessage() : fails to parse the payload")
+                Timber.tag(loggerTag.value).e("## decryptGroupMessage() : fails to parse the payload")
                 throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_DECRYPTED_FORMAT, MXCryptoError.BAD_DECRYPTED_FORMAT_TEXT_REASON)
             }
 
@@ -815,7 +816,7 @@ internal class MXOlmDevice @Inject constructor(
             )
         } else {
             val reason = String.format(MXCryptoError.INBOUND_SESSION_MISMATCH_ROOM_ID_REASON, roomId, wrapper.roomId)
-            Timber.e("## decryptGroupMessage() : $reason")
+            Timber.tag(loggerTag.value).e("## decryptGroupMessage() : $reason")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.INBOUND_SESSION_MISMATCH_ROOM_ID, reason)
         }
     }
@@ -894,13 +895,13 @@ internal class MXOlmDevice @Inject constructor(
             // the HS pretending a message was targeting a different room.
             if (roomId != session.roomId) {
                 val errorDescription = String.format(MXCryptoError.INBOUND_SESSION_MISMATCH_ROOM_ID_REASON, roomId, session.roomId)
-                Timber.e("## getInboundGroupSession() : $errorDescription")
+                Timber.tag(loggerTag.value).e("## getInboundGroupSession() : $errorDescription")
                 throw MXCryptoError.Base(MXCryptoError.ErrorType.INBOUND_SESSION_MISMATCH_ROOM_ID, errorDescription)
             } else {
                 return holder
             }
         } else {
-            Timber.w("## getInboundGroupSession() : Cannot retrieve inbound group session $sessionId")
+            Timber.tag(loggerTag.value).w("## getInboundGroupSession() : Cannot retrieve inbound group session $sessionId")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID, MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_REASON)
         }
     }

@@ -89,7 +89,7 @@ internal class MXMegolmEncryption(
         Timber.tag(loggerTag.value).v("encryptEventContent : getDevicesInRoom")
         val devices = getDevicesInRoom(userIds)
         Timber.tag(loggerTag.value).d("encrypt event in room=$roomId - devices count in room ${devices.allowedDevices.toDebugCount()}")
-        Timber.tag(loggerTag.value).v("encryptEventContent ${System.currentTimeMillis() - ts}: getDevicesInRoom ${devices.allowedDevices.map}")
+        Timber.tag(loggerTag.value).v("encryptEventContent ${System.currentTimeMillis() - ts}: getDevicesInRoom ${devices.allowedDevices.toDebugString()}")
         val outboundSession = ensureOutboundSession(devices.allowedDevices)
 
         return encryptContent(outboundSession, eventType, eventContent)
@@ -143,8 +143,9 @@ internal class MXMegolmEncryption(
         Timber.tag(loggerTag.value).v("prepareNewSessionInRoom() ")
         val sessionId = olmDevice.createOutboundGroupSessionForRoom(roomId)
 
-        val keysClaimedMap = HashMap<String, String>()
-        keysClaimedMap["ed25519"] = olmDevice.deviceEd25519Key!!
+        val keysClaimedMap = mapOf(
+                "ed25519" to olmDevice.deviceEd25519Key!!
+        )
 
         olmDevice.addInboundGroupSession(sessionId!!, olmDevice.getSessionKey(sessionId)!!, roomId, olmDevice.deviceCurve25519Key!!,
                 emptyList(), keysClaimedMap, false)
@@ -308,7 +309,7 @@ internal class MXMegolmEncryption(
                 Timber.tag(loggerTag.value).i("shareUserDevicesKey() : sendToDevice succeeds after ${System.currentTimeMillis() - t0} ms")
             } catch (failure: Throwable) {
                 // What to do here...
-                Timber.tag(loggerTag.value).e("shareUserDevicesKey() : Failed to share session <${session.sessionId}> with $devicesByUser ")
+                Timber.tag(loggerTag.value).e("shareUserDevicesKey() : Failed to share session <${session.sessionId}> with ${devicesByUser.entries.map { "${it.key} (${it.value.map { it.deviceId }})" }} ")
             }
         } else {
             Timber.tag(loggerTag.value).i("shareUserDevicesKey() : no need to share key")
@@ -349,7 +350,7 @@ internal class MXMegolmEncryption(
         try {
             sendToDeviceTask.execute(params)
         } catch (failure: Throwable) {
-            Timber.tag(loggerTag.value).e("notifyKeyWithHeld() : Failed to notify withheld key for $targets session: $sessionId ")
+            Timber.tag(loggerTag.value).e("notifyKeyWithHeld() : Failed to notify withheld key for ${targets.map { "${it.userId}|${it.deviceId}" }} session: $sessionId ")
         }
     }
 
