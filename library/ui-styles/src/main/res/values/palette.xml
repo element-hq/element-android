@@ -23,7 +23,7 @@
     <!-- TODO: Replace with designer choice -->
     <color name="palette_element_green_primary_container_light">#dbfff5</color>
     <color name="palette_element_green_on_primary_container_light">#00201a</color>
-    <color name="palette_element_green_primary_container_dark">#FF5145</color>
+    <color name="palette_element_green_primary_container_dark">#005145</color>
     <color name="palette_element_green_on_primary_container_dark">#77f8df</color>
 
     <!-- For light themes -->
