@@ -23,6 +23,7 @@ import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.core.intent.getMimeTypeFromUri
 import im.vector.app.core.utils.saveMedia
 import im.vector.app.features.notifications.NotificationUtils
+import im.vector.app.test.fakes.FakeFile
 import im.vector.app.test.fakes.FakeSession
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -42,7 +43,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.io.File
 
 class DownloadMediaUseCaseTest {
 
@@ -57,6 +57,8 @@ class DownloadMediaUseCaseTest {
     @MockK
     lateinit var notificationUtils: NotificationUtils
 
+    private val file = FakeFile()
+
     @OverrideMockKs
     lateinit var downloadMediaUseCase: DownloadMediaUseCase
 
@@ -65,72 +67,69 @@ class DownloadMediaUseCaseTest {
         MockKAnnotations.init(this)
         mockkStatic("im.vector.app.core.utils.ExternalApplicationsUtilKt")
         mockkStatic("im.vector.app.core.intent.VectorMimeTypeKt")
-        mockkStatic(Uri::class)
     }
 
     @After
     fun tearDown() {
         unmockkStatic("im.vector.app.core.utils.ExternalApplicationsUtilKt")
         unmockkStatic("im.vector.app.core.intent.VectorMimeTypeKt")
-        unmockkStatic(Uri::class)
+        file.tearDown()
     }
 
     @Test
     fun `given a file when calling execute then save the file in local with success`() = runBlockingTest {
         // Given
-        val file = mockk<File>()
         val uri = mockk<Uri>()
         val mimeType = "mimeType"
-        val name = "name"
-        every { file.name } returns name
-        every { file.toUri() } returns uri
+        val name = "filename"
         every { getMimeTypeFromUri(appContext, uri) } returns mimeType
+        file.givenName(name)
+        file.givenUri(uri)
         coEvery { saveMedia(any(), any(), any(), any(), any()) } just runs
 
         // When
-        val result = downloadMediaUseCase.execute(file)
+        val result = downloadMediaUseCase.execute(file.instance)
 
         // Then
         assert(result.isSuccess)
         verifyAll {
-            file.name
-            file.toUri()
+            file.instance.name
+            file.instance.toUri()
         }
         verify {
             getMimeTypeFromUri(appContext, uri)
         }
         coVerify {
-            saveMedia(appContext, file, name, mimeType, notificationUtils)
+            saveMedia(appContext, file.instance, name, mimeType, notificationUtils)
         }
     }
 
     @Test
     fun `given a file when calling execute then save the file in local with error`() = runBlockingTest {
         // Given
-        val file = mockk<File>()
         val uri = mockk<Uri>()
         val mimeType = "mimeType"
-        val name = "name"
+        val name = "filename"
         val error = Throwable()
-        every { file.name } returns name
-        every { file.toUri() } returns uri
+        file.givenName(name)
+        file.givenUri(uri)
         every { getMimeTypeFromUri(appContext, uri) } returns mimeType
         coEvery { saveMedia(any(), any(), any(), any(), any()) } throws error
 
         // When
-        val result = downloadMediaUseCase.execute(file)
+        val result = downloadMediaUseCase.execute(file.instance)
 
         // Then
         assert(result.isFailure && result.exceptionOrNull() == error)
         verifyAll {
-            file.name
-            file.toUri()
+            file.instance.name
+            file.instance.toUri()
         }
         verify {
             getMimeTypeFromUri(appContext, uri)
         }
         coVerify {
-            saveMedia(appContext, file, name, mimeType, notificationUtils)
+            saveMedia(appContext, file.instance, name, mimeType, notificationUtils)
         }
     }
 }
