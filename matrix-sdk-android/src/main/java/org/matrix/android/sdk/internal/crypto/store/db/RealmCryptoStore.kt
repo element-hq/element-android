@@ -246,6 +246,7 @@ internal class RealmCryptoStore @Inject constructor(
         return olmAccount!!
     }
 
+    @Synchronized
     override fun getOrCreateOlmAccount(): OlmAccount {
         doRealmTransaction(realmConfiguration) {
             val metaData = it.where<CryptoMetadataEntity>().findFirst()

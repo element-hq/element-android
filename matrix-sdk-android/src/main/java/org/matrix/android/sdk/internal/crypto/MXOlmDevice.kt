@@ -106,13 +106,13 @@ internal class MXOlmDevice @Inject constructor(
         }
 
         try {
-            deviceCurve25519Key = store.getOlmAccount().identityKeys()[OlmAccount.JSON_KEY_IDENTITY_KEY]
+            deviceCurve25519Key = doWithOlmAccount { it.identityKeys()[OlmAccount.JSON_KEY_IDENTITY_KEY] }
         } catch (e: Exception) {
             Timber.e(e, "## MXOlmDevice : cannot find ${OlmAccount.JSON_KEY_IDENTITY_KEY} with error")
         }
 
         try {
-            deviceEd25519Key = store.getOlmAccount().identityKeys()[OlmAccount.JSON_KEY_FINGER_PRINT_KEY]
+            deviceEd25519Key = doWithOlmAccount { it.identityKeys()[OlmAccount.JSON_KEY_FINGER_PRINT_KEY] }
         } catch (e: Exception) {
             Timber.e(e, "## MXOlmDevice : cannot find ${OlmAccount.JSON_KEY_FINGER_PRINT_KEY} with error")
         }
@@ -123,7 +123,7 @@ internal class MXOlmDevice @Inject constructor(
      */
     fun getOneTimeKeys(): Map<String, Map<String, String>>? {
         try {
-            return store.getOlmAccount().oneTimeKeys()
+            return doWithOlmAccount { it.oneTimeKeys() }
         } catch (e: Exception) {
             Timber.e(e, "## getOneTimeKeys() : failed")
         }
@@ -135,7 +135,18 @@ internal class MXOlmDevice @Inject constructor(
      * @return The maximum number of one-time keys the olm account can store.
      */
     fun getMaxNumberOfOneTimeKeys(): Long {
-        return store.getOlmAccount().maxOneTimeKeys()
+        return doWithOlmAccount { it.maxOneTimeKeys() }
+    }
+
+    /**
+     * Olm account access should be synchronized
+     */
+    private fun <T> doWithOlmAccount(block: (OlmAccount) -> T): T {
+        return store.getOlmAccount().let { olmAccount ->
+            synchronized(olmAccount) {
+                block.invoke(olmAccount)
+            }
+        }
     }
 
     /**
@@ -145,7 +156,7 @@ internal class MXOlmDevice @Inject constructor(
      */
     fun getFallbackKey(): MutableMap<String, MutableMap<String, String>>? {
         try {
-            return store.getOlmAccount().fallbackKey()
+            return doWithOlmAccount { it.fallbackKey() }
         } catch (e: Exception) {
             Timber.e("## getFallbackKey() : failed")
         }
@@ -160,8 +171,10 @@ internal class MXOlmDevice @Inject constructor(
     fun generateFallbackKeyIfNeeded(): Boolean {
         try {
             if (!hasUnpublishedFallbackKey()) {
-                store.getOlmAccount().generateFallbackKey()
-                store.saveOlmAccount()
+                doWithOlmAccount {
+                    it.generateFallbackKey()
+                    store.saveOlmAccount()
+                }
                 return true
             }
         } catch (e: Exception) {
@@ -176,8 +189,10 @@ internal class MXOlmDevice @Inject constructor(
 
     fun forgetFallbackKey() {
         try {
-            store.getOlmAccount().forgetFallbackKey()
-            store.saveOlmAccount()
+            doWithOlmAccount {
+                it.forgetFallbackKey()
+                store.saveOlmAccount()
+            }
         } catch (e: Exception) {
             Timber.e("## forgetFallbackKey() : failed")
         }
@@ -203,7 +218,7 @@ internal class MXOlmDevice @Inject constructor(
      */
     fun signMessage(message: String): String? {
         try {
-            return store.getOlmAccount().signMessage(message)
+            return doWithOlmAccount { it.signMessage(message) }
         } catch (e: Exception) {
             Timber.e(e, "## signMessage() : failed")
         }
@@ -216,8 +231,10 @@ internal class MXOlmDevice @Inject constructor(
      */
     fun markKeysAsPublished() {
         try {
-            store.getOlmAccount().markOneTimeKeysAsPublished()
-            store.saveOlmAccount()
+            doWithOlmAccount {
+                it.markOneTimeKeysAsPublished()
+                store.saveOlmAccount()
+            }
         } catch (e: Exception) {
             Timber.e(e, "## markKeysAsPublished() : failed")
         }
@@ -230,8 +247,10 @@ internal class MXOlmDevice @Inject constructor(
      */
     fun generateOneTimeKeys(numKeys: Int) {
         try {
-            store.getOlmAccount().generateOneTimeKeys(numKeys)
-            store.saveOlmAccount()
+            doWithOlmAccount {
+                it.generateOneTimeKeys(numKeys)
+                store.saveOlmAccount()
+            }
         } catch (e: Exception) {
             Timber.e(e, "## generateOneTimeKeys() : failed")
         }
@@ -251,7 +270,9 @@ internal class MXOlmDevice @Inject constructor(
 
         try {
             olmSession = OlmSession()
-            olmSession.initOutboundSession(store.getOlmAccount(), theirIdentityKey, theirOneTimeKey)
+            doWithOlmAccount { olmAccount ->
+                olmSession.initOutboundSession(olmAccount, theirIdentityKey, theirOneTimeKey)
+            }
 
             val olmSessionWrapper = OlmSessionWrapper(olmSession, 0)
 
@@ -292,7 +313,9 @@ internal class MXOlmDevice @Inject constructor(
         try {
             try {
                 olmSession = OlmSession()
-                olmSession.initInboundSessionFrom(store.getOlmAccount(), theirDeviceIdentityKey, ciphertext)
+                doWithOlmAccount { olmAccount ->
+                    olmSession.initInboundSessionFrom(olmAccount, theirDeviceIdentityKey, ciphertext)
+                }
             } catch (e: Exception) {
                 Timber.e(e, "## createInboundSession() : the session creation failed")
                 return null
@@ -301,8 +324,10 @@ internal class MXOlmDevice @Inject constructor(
             Timber.v("## createInboundSession() : sessionId: ${olmSession.sessionIdentifier()}")
 
             try {
-                store.getOlmAccount().removeOneTimeKeys(olmSession)
-                store.saveOlmAccount()
+                doWithOlmAccount { olmAccount ->
+                    olmAccount.removeOneTimeKeys(olmSession)
+                    store.saveOlmAccount()
+                }
             } catch (e: Exception) {
                 Timber.e(e, "## createInboundSession() : removeOneTimeKeys failed")
             }
