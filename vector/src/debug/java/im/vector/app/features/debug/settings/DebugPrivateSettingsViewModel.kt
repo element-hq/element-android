@@ -60,7 +60,7 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
             val activeAvatarOption = BooleanHomeserverCapabilitiesOverride.from(it.canChangeAvatar)
             copy(homeserverCapabilityOverrides = homeserverCapabilityOverrides.copy(
                     displayName = homeserverCapabilityOverrides.displayName.copy(activeOption = activeDisplayNameOption),
-                    avatar = homeserverCapabilityOverrides.displayName.copy(activeOption = activeAvatarOption),
+                    avatar = homeserverCapabilityOverrides.avatar.copy(activeOption = activeAvatarOption),
             ))
         }
     }
