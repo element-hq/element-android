@@ -25,6 +25,9 @@ import dagger.assisted.AssistedInject
 import im.vector.app.core.platform.EmptyAction
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.extensions.toAnalyticsInteraction
+import im.vector.app.features.analytics.plan.Interaction
 import im.vector.app.features.home.room.threads.list.views.ThreadListFragment
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -34,6 +37,7 @@ import org.matrix.android.sdk.api.session.threads.ThreadTimelineEvent
 import org.matrix.android.sdk.flow.flow
 
 class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState: ThreadListViewState,
+                                                      private val analyticsTracker: AnalyticsTracker,
                                                       private val session: Session) :
         VectorViewModel<ThreadListViewState, EmptyAction, EmptyViewEvents>(initialState) {
 
@@ -113,9 +117,10 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
         }
     }
 
-    fun canHomeserverUseThreading() =  session.getHomeServerCapabilities().canUseThreading
+    fun canHomeserverUseThreading() = session.getHomeServerCapabilities().canUseThreading
 
     fun applyFiltering(shouldFilterThreads: Boolean) {
+        analyticsTracker.capture(Interaction.Name.MobileThreadListFilterItem.toAnalyticsInteraction())
         setState {
             copy(shouldFilterThreads = shouldFilterThreads)
         }

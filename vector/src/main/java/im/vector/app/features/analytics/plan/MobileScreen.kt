@@ -226,6 +226,11 @@ data class MobileScreen(
         SwitchDirectory,
 
         /**
+         * Screen that displays list of threads for a room
+         */
+        ThreadList,
+
+        /**
          * A screen that shows information about a room member.
          */
         User,
