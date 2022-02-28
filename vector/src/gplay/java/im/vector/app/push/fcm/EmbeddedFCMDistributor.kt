@@ -19,7 +19,7 @@ package im.vector.app.push.fcm
 import android.content.Context
 import org.unifiedpush.android.embedded_fcm_distributor.EmbeddedDistributorReceiver
 
-class EmbeddedFCMDistributor: EmbeddedDistributorReceiver() {
+class EmbeddedFCMDistributor : EmbeddedDistributorReceiver() {
     override fun getEndpoint(context: Context, token: String, instance: String): String {
         // Here token is the FCM Token, used by the gateway (sygnal)
         return token

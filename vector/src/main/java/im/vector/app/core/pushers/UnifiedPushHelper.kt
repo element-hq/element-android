@@ -132,8 +132,8 @@ object UnifiedPushHelper {
             context.getString(R.string.unifiedpush_distributor_background_sync)
         }
 
-        if (distributors.size == 1
-                && !force){
+        if (distributors.size == 1 &&
+                !force) {
             up.saveDistributor(context, distributors.first())
             up.registerApp(context)
             onDoneRunnable?.run()
@@ -239,14 +239,14 @@ object UnifiedPushHelper {
         } as String
     }
 
-    fun isEmbeddedDistributor(context: Context) : Boolean {
-        return ( up.getDistributor(context) == context.packageName
-                && FcmHelper.isPushSupported())
+    fun isEmbeddedDistributor(context: Context): Boolean {
+        return (up.getDistributor(context) == context.packageName &&
+                FcmHelper.isPushSupported())
     }
 
-    fun isBackgroundSync(context: Context) : Boolean {
-        return ( up.getDistributor(context) == context.packageName
-                && !FcmHelper.isPushSupported())
+    fun isBackgroundSync(context: Context): Boolean {
+        return (up.getDistributor(context) == context.packageName &&
+                !FcmHelper.isPushSupported())
     }
 
     fun getPrivacyFriendlyUpEndpoint(context: Context): String? {
