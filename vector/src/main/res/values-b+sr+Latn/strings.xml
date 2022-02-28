@@ -5,29 +5,20 @@
     <string name="dark_theme">Tamna Tema</string>
     <string name="black_theme">Crna Tema</string>
 
-    <string name="notification_sync_init">Inicijalizacija servisa</string>
-    <string name="notification_sync_in_progress">Sinhronizacija u toku…</string>
     <string name="notification_noisy_notifications">Bučna obaveštenja</string>
     <string name="notification_silent_notifications">Tiha obaveštenja</string>
 
-    <string name="title_activity_home">Poruke</string>
-    <string name="title_activity_room">Soba</string>
     <string name="title_activity_settings">Podešavanja</string>
-    <string name="title_activity_member_details">Podaci o članu</string>
-    <string name="title_activity_historical">Istorijski</string>
     <string name="title_activity_bug_report">Prijava bug-a</string>
     <string name="title_activity_choose_sticker">Pošalji nalepnicu</string>
     <string name="title_activity_keys_backup_setup">Rezervna kopija ključeva</string>
     <string name="title_activity_keys_backup_restore">Koristi rezervnu kopiju ključeva</string>
-    <string name="title_activity_verify_device">Verifikuj uređaj</string>
 
-    <string name="keys_backup_is_not_finished_please_wait">Kreiranje rezervne kopije ključeva se nije završilo, molim sačekajte…</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Izgubićete vaše šifrovane poruke ukoliko se sada odjavite</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Kreiranje rezervne kopije ključeva je u toku. Ako se odjavite sada, izgubićete pristup vašim šifrovanim porukama.</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">Sigurnosna kopija ključeva bi trebalo da bude aktivna na svim vašim uređajima kako bi izbegli gubitak pristupa vašim šifrovanim porukama.</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Ne želim moje šifrovane poruke</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Pravljenje rezervne kopije ključeva u toku…</string>
-    <string name="keys_backup_activate">Koristi rezervnu kopiju ključeva</string>
     <string name="are_you_sure">Da li ste sigurni\?</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Izgubićete pristup vašim šifrovanim porukama ukoliko ne napravite rezervu kopiju ključeva pre nego što se odjavite.</string>
 
@@ -37,51 +28,29 @@
     <string name="action_cancel">Otkaži</string>
     <string name="action_save">Sačuvaj</string>
     <string name="action_leave">Napusti</string>
-    <string name="action_stay">Ostani</string>
     <string name="action_send">Pošalji</string>
-    <string name="action_resend">Pošalji ponovo</string>
-    <string name="action_redact">Ukloni</string>
     <string name="action_share">Podeli</string>
     <string name="later">Kasnije</string>
-    <string name="action_forward">Prosledi</string>
     <string name="action_delete">Obriši</string>
     <string name="action_rename">Preimenuj</string>
-    <string name="ongoing_conference_call">Konferencijski poziv u toku.
-\nPriključi se kao %1$s ili %2$s</string>
-    <string name="ongoing_conference_call_voice">Glas</string>
-    <string name="ongoing_conference_call_video">Video</string>
-    <string name="cannot_start_call">Nemoguća uspostava poziva, molim probajte kasnije</string>
-    <string name="missing_permissions_warning">Neke opcije mogu nedostajati usled manjka dozvola…</string>
-    <string name="missing_permissions_error">Ova akcija nije moguća zbog nedosatka dozvola.</string>
-    <string name="missing_permissions_to_start_conf_call">Treba vam dozvola da pozovete kako bi započeli konferencijski poziv u ovoj sobi</string>
-    <string name="missing_permissions_title_to_start_conf_call">Nemoguća uspostava poziva</string>
-    <string name="device_information">Informacije o uređaju</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Konferencijski pozivi nisu podržani u šifrovanim sobama</string>
-    <string name="call_anyway">Ipak zovi</string>
-    <string name="send_anyway">Ipak pošalji</string>
+
     <string name="or">ili</string>
     <string name="action_invite">Pošalji pozivnicu</string>
     <string name="action_accept">Prihvati</string>
     <string name="action_skip">Preskoči</string>
     <string name="done">Gotovo</string>
-    <string name="action_abort">Obustavi</string>
     <string name="action_ignore">Ignoriši</string>
-    <string name="action_review">Pregledaj</string>
     <string name="action_decline">Odbaci</string>
 
-    <string name="action_exit">Izađi</string>
-    <string name="actions">Akcije</string>
     <string name="action_sign_out">Odjavi se</string>
     <string name="action_sign_out_confirmation_simple">Da li ste sigurni da želite da se odjavite\?</string>
     <string name="action_voice_call">Glasovni poziv</string>
     <string name="action_video_call">Video poziv</string>
-    <string name="action_global_search">Globalna pretraga</string>
     <string name="action_mark_all_as_read">Označi sve kao pročitano</string>
     <string name="action_quick_reply">Brzi odgovor</string>
     <string name="action_mark_room_read">Označi kao pročitano</string>
     <string name="action_open">Otvori</string>
     <string name="action_close">Zatvori</string>
-    <string name="action_disable">Onemogući</string>
 
     <string name="dialog_title_confirmation">Potvrda</string>
     <string name="dialog_title_warning">Upozorenje</string>
@@ -91,26 +60,16 @@
     <string name="bottom_action_rooms">Sobe</string>
     <string name="invitations_header">Pozivnice</string>
     <string name="low_priority_header">Nizak prioritet</string>
-    <string name="local_address_book_header">Lokalni adresar</string>
-    <string name="user_directory_header">Lista korisnika</string>
     <string name="matrix_only_filter">Samo Matrix kontakti</string>
     <string name="rooms_header">Sobe</string>
-    <string name="rooms_directory_header">Lista soba</string>
-    <string name="no_room_placeholder">Nema soba</string>
-    <string name="no_public_room_placeholder">Nema javnih soba</string>
-    <string name="no_group_placeholder">Nema grupa</string>
 
     <string name="send_bug_report_description_in_english">Ako je moguće, molim opišite na engleskom.</string>
     <string name="send_bug_report_placeholder">Opišite vaš problem ovde</string>
     <string name="username">Korisničko ime</string>
-    <string name="create_account">Napravi nalog</string>
-    <string name="login">Prijavi se</string>
     <string name="logout">Odjavi se</string>
-    <string name="start_new_chat">Započni novo ćaskanje</string>
     <string name="start_voice_call">Započni glasovni poziv</string>
     <string name="start_video_call">Započni video poziv</string>
 
-    <string name="call_failed_dont_ask_again">Ne pitaj ponovo</string>
 
     <string name="option_send_sticker">Pošalji nalepnicu</string>
     <string name="option_take_photo_video">Napravi fotografiju ili video snimak</string>
@@ -118,76 +77,38 @@
     <string name="option_take_video">Napravi video snimak</string>
 
     <string name="auth_login">Prijavi se</string>
-    <string name="auth_register">Napravi nalog</string>
-    <string name="auth_skip">Preskoči</string>
-    <string name="auth_password_placeholder">Lozinka</string>
-    <string name="auth_new_password_placeholder">Nova lozinka</string>
-    <string name="auth_user_name_placeholder">Korisničko ime</string>
-    <string name="auth_phone_number_placeholder">Broj telefona</string>
-    <string name="auth_opt_phone_number_placeholder">Broj telefona (opciono)</string>
-    <string name="auth_repeat_password_placeholder">Ponovi lozinku</string>
-    <string name="auth_repeat_new_password_placeholder">Potvrdite vašu novu lozinku</string>
     <string name="auth_invalid_login_param">Pogrešno korisničko ime i/ili lozinka</string>
-    <string name="action_clear">Obriši</string>
     <string name="view_source">Vidi izvor</string>
     <string name="report_content">Prijavi sadržaj</string>
     <string name="send_bug_report_progress">Napredak (%s%%)</string>
 
-    <string name="send_files_in">Pošalji u</string>
     <string name="join_room">Priključi se sobi</string>
     <string name="search">Pretraži</string>
 
     <string name="option_send_files">Pošalji datoteke</string>
-    <string name="auth_email_placeholder">Adresa elektronske pošte</string>
-    <string name="auth_opt_email_placeholder">Adresa elektronske pošte (opciono)</string>
-    <string name="auth_invalid_password">Lozinka je prekratka (minimum 6)</string>
-    <string name="auth_missing_password">Lozinka nedostaje</string>
     <string name="auth_invalid_email">Ovo ne izgleda kao validna adresa elektronske pošte</string>
-    <string name="auth_invalid_phone">Ovo ne izgleda kao validan broj telefona</string>
     <string name="auth_email_already_defined">Ova adresa elektronske pošte je već definisana.</string>
-    <string name="auth_missing_email">Adresa elektronske pošte nedostaje</string>
-    <string name="auth_missing_phone">Broj telefona nedostaje</string>
-    <string name="auth_missing_email_or_phone">Nedostaje adresa elektronske pošte ili broj telefona</string>
-    <string name="auth_password_dont_match">Lozinke nisu iste</string>
     <string name="auth_forgot_password">Zaboravili ste lozinku\?</string>
-    <string name="auth_use_server_options">Koristi prilagođene opcije servera (napredno)</string>
-    <string name="auth_email_validation_message">Molim proverite vašu elektronsku poštu kako bi nastavili registraciju</string>
-    <string name="auth_username_in_use">Korisničko ime je već u upotrebi</string>
-    <string name="auth_reset_password_next_step_button">Verifikovao sam adresu elektronske pošte</string>
-    <string name="auth_reset_password_message">Kako bi resetovali vašu lozinku, unesite adresu elektronske pošte povezanu sa vašim nalogom:</string>
     <string name="auth_reset_password_missing_email">Morate uneti adresu elektronske pošte povezane sa vašim nalogom.</string>
-    <string name="auth_reset_password_missing_password">Morate uneti novu lozinku.</string>
 
     <string name="login_error_limit_exceeded">Poslato je previše zahteva</string>
-    <string name="login_error_user_in_use">Ovo korisničko ime je već korišćeno</string>
-    <string name="login_error_login_email_not_yet">Link u elektronskoj pošti još uvek nije kliknut</string>
 
-    <string name="e2e_re_request_encryption_key_sent">Zahtev za ključ poslat.</string>
 
-    <string name="e2e_re_request_encryption_key_dialog_title">Zahtev poslat</string>
-    <string name="compression_options">Pošalji kao</string>
     <string name="compression_opt_list_original">Original</string>
     <string name="compression_opt_list_large">Veliko</string>
     <string name="compression_opt_list_medium">Srednje</string>
     <string name="compression_opt_list_small">Malo</string>
 
-    <string name="yesterday">Juče</string>
-    <string name="today">Danas</string>
 
-    <string name="room_info_room_name">Ime sobe</string>
-    <string name="room_info_room_topic">Tema sobe</string>
 
     <string name="settings_call_category">Pozivi</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Koristi podrazumevani ${app_name} zvuk zvona za dolazeće pozive</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Koristi podrazumevani ${app_name} zvuk zvona za dolazeće pozive</string>
     <string name="settings_call_ringtone_title">Zvuk zvona dolazećeg poziva</string>
     <string name="settings_call_ringtone_dialog_title">Izaberite zvuk zvona za pozive:</string>
 
     <string name="call">Poziv</string>
-    <string name="call_connected">Poziv uspostavljen</string>
     <string name="call_connecting">Poziv se uspostavlja…</string>
     <string name="call_ended">Poziv završen</string>
-    <string name="call_ring">Pozivam…</string>
-    <string name="incoming_call">Dolazeći poziv</string>
     <string name="incoming_video_call">Dolazeći video poziv</string>
     <string name="incoming_voice_call">Dolazeći glasovni poziv</string>
     <string name="call_in_progress">Poziv u toku…</string>
@@ -196,26 +117,16 @@
     <string name="room_participants_action_remove">Izbaci</string>
     <string name="room_participants_action_mention">Pomeni</string>
 
-    <string name="settings_troubleshoot_test_service_restart_title">Servis obaveštenja, automatsko ponovno pokretanje</string>
-    <string name="settings_troubleshoot_test_service_restart_success">Servis je eliminisan i pokrenut ponovo automatski.</string>
-    <string name="settings_troubleshoot_test_service_restart_failed">Servis nije uspeo da se ponovo pokrene</string>
 
     <string name="settings_troubleshoot_test_service_boot_success">Servis će se početi sa radom prilikom ponovnog pokretanja uređaja.</string>
     <string name="settings_troubleshoot_test_battery_title">Optimizacija potrošnje baterije</string>
-    <string name="template_settings_troubleshoot_test_battery_success">Optimizacija potrošnje baterije ne utiče na ${app_name}.</string>
+    <string name="settings_troubleshoot_test_battery_success">Optimizacija potrošnje baterije ne utiče na ${app_name}.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignoriši optimizacije</string>
 
-    <string name="settings_notification_privacy_normal">Normalno</string>
-    <string name="settings_notification_privacy_reduced">Smanjena privatnost</string>
-    <string name="settings_notification_privacy_need_permission">Aplikaciji treba dozvola za rad u pozadini</string>
-    <string name="settings_notification_privacy_metadata">• Obaveštenja sadrže samo meta podatke</string>
-    <string name="settings_notification_privacy_nosecure_message_content">• Obaveštenja sadrže <b>meta podatke i poruku</b></string>
-    <string name="settings_notification_privacy_message_content_not_shown">"•  Obaveštenja "<b>neće prikazivati sadržaj poruke</b></string>
 
     <string name="settings_notification_ringtone">Zvuk obaveštenja</string>
     <string name="settings_enable_all_notif">Omogući obaveštenja za ovaj nalog</string>
     <string name="settings_enable_this_device">Omogući obaveštenja za ovaj uređaj</string>
-    <string name="settings_turn_screen_on">Upali ekran na 3 sekunde</string>
     <string name="settings_noisy_notifications_preferences">Podesi bučna obaveštenja</string>
     <string name="settings_call_notifications_preferences">Podesi obaveštenja o pozivima</string>
     <string name="settings_silent_notifications_preferences">Podesi tiha obaveštenja</string>
@@ -239,7 +150,6 @@
     <string name="settings_contacts_app_permission">Dozvola za kontakte</string>
     <string name="settings_contacts_phonebook_country">Zemlja telefonskog imenika</string>
     <string name="settings_home_display">Glavni prikaz</string>
-    <string name="settings_devices_list">Uređaji</string>
     <string name="settings_send_typing_notifs">Šalji obaveštenja o pisanju</string>
     <string name="settings_send_typing_notifs_summary">Dozvoli da drugi korisnici znaju da pisete.</string>
     <string name="settings_show_read_receipts">Prikaži obaveštenja o pročitanim porukama</string>
@@ -256,56 +166,30 @@
     <string name="settings_deactivate_my_account">Deaktiviraj moj nalog</string>
     <string name="settings_discovery_category">Pronalaženje</string>
     <string name="settings_discovery_manage">Upravljajte vašim podešavanjima za pronalaženje.</string>
-    <string name="startup_notification_privacy_title">Privatnost obaveštenja</string>
-    <string name="template_startup_notification_privacy_message">${app_name} može da radi u pozadini kako bi upravljao vašim obaveštenjima sigurno i privatno. Ovo može da utiče na potrošnju baterije.</string>
-    <string name="startup_notification_privacy_button_grant">Dozvoli</string>
-    <string name="startup_notification_privacy_button_other">Izaberi drugu opciju</string>
 
-    <string name="startup_notification_fdroid_battery_optim_title">Pozadinska veza</string>
-    <string name="settings_opt_in_of_analytics_ok">Da, želim da pomognem!</string>
 
-    <string name="settings_data_save_mode">Režim uštede podataka</string>
-    <string name="settings_data_save_mode_summary">Režim uštede podataka primenjuje poseban filter tako da se obaveštenja o prisutnosti i pisanju filtriraju.</string>
 
-    <string name="devices_details_dialog_title">Podaci o uređaju</string>
     <string name="devices_details_id_title">ID</string>
     <string name="devices_details_name_title">Javno ime</string>
     <string name="devices_details_device_name">Promeni javno ime</string>
     <string name="devices_details_last_seen_title">Poslednji put viđen</string>
-    <string name="devices_delete_dialog_text">Ova operacija zahteva dodatnu autentifikaciju.
-\nMolim unesite vašu lozinku, kako bi nastavili.</string>
+
     <string name="devices_delete_dialog_title">Autentifikacija</string>
-    <string name="devices_delete_pswd">Lozinka:</string>
-    <string name="devices_delete_submit_button_label">Pošalji</string>
 
     <string name="settings_logged_in">Prijavljen kao</string>
     <string name="settings_interface_language">Jezik</string>
     <string name="settings_select_language">Izaberi jezik</string>
 
-    <string name="account_email_validation_title">Čeka se verifikacija</string>
     <string name="account_email_validation_message">Molim proverite vašu elektronsku poštu i kliknite na link u njoj. Kad ovo uradite, kliknite na nastavi.</string>
     <string name="settings_password">Lozinka</string>
     <string name="settings_change_password">Promeni lozinku</string>
     <string name="settings_old_password">Trenutna lozinka</string>
     <string name="settings_new_password">Nova lozinka</string>
-    <string name="settings_confirm_password">Potvrdite novu lozinku</string>
-    <string name="settings_change_password_submit">Promeni lozinku</string>
     <string name="settings_fail_to_update_password">Promena lozinke nije uspela</string>
     <string name="settings_fail_to_update_password_invalid_current_password">Lozinka nije tačna</string>
     <string name="settings_password_updated">Vaša lozinka je promenjena</string>
     <string name="settings_select_country">Izaberi zemlju</string>
 
-    <string name="settings_phone_number_country_label">Zemlja</string>
-    <string name="settings_phone_number_country_error">Molim izaberite zemlju</string>
-    <string name="settings_phone_number_label">Broj telefona</string>
-    <string name="settings_phone_number_error">Pogrešan broj telefona za izabranu zemlju</string>
-    <string name="settings_phone_number_verification">Verifikacija putem telefona</string>
-    <string name="settings_phone_number_verification_instruction">Poslali smo vam SMS sa aktivacionim kodom. Molimo unesite ovaj kod ispod.</string>
-    <string name="settings_phone_number_verification_error_empty_code">Unesi aktivacioni kod</string>
-    <string name="settings_phone_number_verification_error">Desila se greška prilikom validacije vašeg broja telefona</string>
-    <string name="settings_phone_number_code">Kod</string>
-    <string name="account_phone_number_error">Desila se greška prilikom verifikacije vašeg broja telefona.</string>
-    <string name="account_additional_info">Dodatne informacije: %s</string>
 
     <string name="compression_opt_list_choose">Izaberi</string>
     <string name="media_source_choose">Izaberi</string>
@@ -314,58 +198,36 @@
     <string name="media_saving_period_1_month">1 mesec</string>
     <string name="media_saving_period_forever">Zauvek</string>
 
-    <string name="room_settings_tag_pref_entry_favourite">Omiljeno</string>
-    <string name="room_settings_tag_pref_entry_low_priority">Nizak prioritet</string>
-    <string name="room_settings_tag_pref_entry_none">Ništa</string>
 
-    <string name="room_settings_room_access_rules_pref_title">Pristup sobi</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Ko može čitati istoriju\?</string>
-    <string name="room_settings_room_access_rules_pref_dialog_title">Ko može pristupiti ovoj sobi\?</string>
 
     <string name="room_settings_read_history_entry_anyone">BIlo ko</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Samo članovi (od trenutka kad je ova opcija izabrana)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Samo članovi (od trenutka kad su pozvani)</string>
     <string name="room_settings_read_history_entry_members_only_joined">Samo članovi (od trenutka kad su se pridružili)</string>
 
-    <string name="room_settings_room_access_entry_only_invited">Samo ljudi koji su pozvani</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Bilo ko, ko zna link sobe, sem gostiju</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Bilo ko, ko zna link sobe, uključujući goste</string>
 
     <string name="room_settings_banned_users_title">Izbačeni korisnici</string>
 
     <string name="room_settings_category_advanced_title">Napredno</string>
     <string name="room_settings_room_internal_id">Interni ID ove sobe</string>
-    <string name="room_settings_addresses_pref_title">Adrese</string>
     <string name="room_settings_labs_pref_title">Laboratorije</string>
     <string name="room_settings_labs_warning_message">Ovo su eksperimentalne karakteristike koje se mogu pokvariti na neočekivane načine. Koristiti sa pažnjom.</string>
-    <string name="room_settings_addresses_add_new_address">Nova adresa (npr. #foo:matrix.org)</string>
 
-    <string name="encryption_information_algorithm">Algoritam</string>
-    <string name="encryption_information_session_id">ID sesije</string>
     <string name="encryption_information_decryption_error">Greška prilikom dešifrovanja</string>
 
-    <string name="encryption_information_sender_device_information">Informacije o uređaju pošiljaoca</string>
     <string name="encryption_information_device_name">Javno ime</string>
-    <string name="encryption_information_verification">Verifikacija</string>
     <string name="encryption_import_room_keys">Uvezi ključeve za sobu</string>
     <string name="encryption_import_room_keys_summary">Uvezi ključeve iz datoteke</string>
     <string name="encryption_import_import">Uvezi</string>
     <string name="encryption_never_send_to_unverified_devices_title">Šifruj samo ka verifikovanim uređajima</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Nikad ne šalji šifrovane poruke ka neverifikovanim uređajima sa ovog uređaja.</string>
     <string name="encryption_information_verified">Verifikovan</string>
-    <string name="encryption_information_blocked">Na crnoj listi</string>
 
-    <string name="encryption_information_unknown_device">nepoznat uređaj</string>
     <string name="encryption_information_unknown_ip">nepoznata IP adresa</string>
-    <string name="encryption_information_none">ništa</string>
 
     <string name="encryption_information_verify">Verifikuj</string>
-    <string name="encryption_information_unverify">Ukloni verifikaciju</string>
-    <string name="encryption_information_block">Stavi na crnu listu</string>
-    <string name="encryption_information_unblock">Ukloni sa crne liste</string>
 
-    <string name="encryption_information_verify_device">Verifikuj uređaj</string>
-    <string name="unknown_devices_alert_title">Soba sadrži nepoznate uređaje</string>
     <string name="notification_unknown_room_name">Soba</string>
     <string name="notification_new_messages">Nove poruke</string>
     <string name="notification_new_invitation">Nova pozivnica</string>
@@ -386,6 +248,4 @@
     <string name="widget_integration_missing_user_id">Nedostajući user_id u zahtevu.</string>
     <string name="widget_integration_room_not_visible">Soba %s nije vidljiva.</string>
     <string name="widget_integration_missing_parameter">Nedostaje parametar koji je obavezan.</string>
-    <string name="widget_integration_invalid_parameter">Parametar nije ispravan.</string>
-    <string name="settings_labs_enable_send_voice">Šalji glasovne poruke</string>
 </resources>

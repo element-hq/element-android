@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -29,17 +28,14 @@
 
     <TextView
         android:id="@+id/reactionCount"
-        style="@style/Widget.Vector.TextView.Micro"
+        style="@style/Widget.Vector.TextView.Caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="2dp"
+        android:layout_marginStart="4dp"
         android:gravity="center"
         android:maxLines="1"
         android:textColor="?vctr_content_secondary"
         android:textStyle="bold"
-        app:autoSizeMaxTextSize="14sp"
-        app:autoSizeMinTextSize="8sp"
-        app:autoSizeTextType="uniform"
         tools:text="13450" />
 
 </merge>

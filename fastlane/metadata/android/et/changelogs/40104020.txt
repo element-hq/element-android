@@ -1,0 +1,2 @@
+Põhilised muutused selles versioonis: @jututuba tugi, mitteavalikud küsitlused ning pisiparandused.
+Kogu ingliskeelne muudatuste logi: https://github.com/vector-im/element-android/releases/tag/v1.4.2

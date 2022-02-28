@@ -1,1 +1,0 @@
-Increments database schema to take advantage of homeserver capabilities entity migration (fixes crash in pre-release builds)

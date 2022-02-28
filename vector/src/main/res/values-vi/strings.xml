@@ -8,36 +8,19 @@
     <string name="send_bug_report">Báo lỗi</string>
     <string name="send_bug_report_include_screenshot">Gửi ảnh chụp màn hình</string>
     <string name="send_bug_report_include_key_share_history">Gửi lịch sử yêu cầu chia sẻ khóa</string>
-    <string name="no_group_placeholder">Không có nhóm</string>
     <string name="groups_header">Cộng đồng</string>
-    <string name="groups_invite_header">Mời</string>
-    <plurals name="public_room_nb_users">
-        <item quantity="other">%d người dùng</item>
-    </plurals>
-    <string name="no_room_placeholder">Không có phòng</string>
-    <string name="rooms_directory_header">Danh sách phòng</string>
+
     <string name="rooms_header">Phòng</string>
     <string name="no_more_results">Không còn kết quả nào nữa</string>
-    <string name="home_filter_placeholder_favorites">Lọc danh sách yêu thích</string>
     <string name="action_ignore">Bỏ qua</string>
-    <string name="conference_call_in_progress">Đã có một cuộc hội thoại đang diễn ra!</string>
     <string name="no_result_placeholder">Không có kết quả nào</string>
-    <string name="template_no_contact_access_placeholder">Bạn chưa cho phép ${app_name} truy cập danh bạ của bạn</string>
-    <string name="no_conversation_placeholder">Không có cuộc trò chuyện nào</string>
     <string name="matrix_only_filter">Chỉ những liên hệ Matrix</string>
-    <string name="user_directory_header">Danh sách người dùng</string>
-    <string name="local_address_book_header">Sổ địa chỉ địa phương</string>
     <string name="direct_chats_header">Cuộc trò chuyện</string>
     <string name="system_alerts_header">Cảnh báo hệ thống</string>
     <string name="low_priority_header">Ưu tiên thấp</string>
     <string name="invitations_header">Lời mời</string>
-    <string name="home_filter_placeholder_groups">Lọc tên cộng đồng</string>
-    <string name="home_filter_placeholder_rooms">Lọc tên phòng</string>
-    <string name="home_filter_placeholder_people">Lọc người</string>
     <string name="dialog_title_confirmation">Xác nhận</string>
-    <string name="action_disable">Tắt</string>
     <string name="home_filter_placeholder_home">Lọc tên phòng</string>
-    <string name="bottom_action_groups">Cộng đồng</string>
     <string name="bottom_action_rooms">Phòng</string>
     <string name="bottom_action_people">Người</string>
     <string name="bottom_action_favourites">Yêu thích</string>
@@ -53,52 +36,33 @@
     <string name="action_mark_room_read">Đánh dấu đã đọc</string>
     <string name="action_quick_reply">Trả lời nhanh</string>
     <string name="action_mark_all_as_read">Đánh dấu tất cả đã đọc</string>
-    <string name="action_global_search">Tìm kiếm trong toàn bộ</string>
     <string name="action_video_call">Cuộc gọi bằng video</string>
     <string name="action_voice_call">Cuộc gọi bằng giọng nói</string>
     <string name="action_sign_out_confirmation_simple">Bạn có chắc mình muốn đăng xuất không\?</string>
     <string name="action_sign_out">Đăng xuất</string>
-    <string name="actions">Hành động</string>
-    <string name="action_exit">Thoát</string>
     <string name="call_notification_hangup">Cúp máy</string>
     <string name="call_notification_reject">Từ chối</string>
     <string name="call_notification_answer">Đồng ý</string>
     <string name="action_decline">Từ chối</string>
-    <string name="action_abort">Huỷ bỏ</string>
     <string name="action_skip">Bỏ qua</string>
-    <string name="offline">Ngoại tuyến</string>
     <string name="or">hoặc</string>
-    <string name="call_anyway">Vẫn gọi</string>
     <string name="cannot_call_yourself_with_invite">Bạn không thể gọi chính mình, hãy chờ người tham gia khác chấp nhận lời mời</string>
-    <string name="missing_permissions_title_to_start_conf_call">Không thể bắt đầu cuộc gọi</string>
     <string name="audio_meeting">Bắt đầu cuộc họp âm thanh</string>
     <string name="done">Xong</string>
     <string name="action_accept">Đồng ý</string>
     <string name="action_invite">Mời</string>
-    <string name="send_anyway">Vẫn gửi</string>
-    <string name="room_no_conference_call_in_encrypted_rooms">Gọi hội thoại không được hỗ trợ trong phòng chat được mã hoá</string>
-    <string name="device_information">Thông tin phiên</string>
     <string name="cannot_call_yourself">Bạn không thể gọi chính mình</string>
     <string name="audio_video_meeting_description">Các cuộc họp sử dụng các chính sách về quyền và bảo mật của Jitsi. Tất cả mọi người hiện trong phòng sẽ thấy một lời mời tham gia khi cuộc họp của bạn đang diễn ra.</string>
     <string name="video_meeting">Bắt đầu một cuộc gặp qua video</string>
-    <string name="missing_permissions_to_start_conf_call">Bạn cần quyền mời để bắt đầu cuộc hội thoại trong phòng này</string>
     <string name="no_permissions_to_start_webrtc_call_in_direct_room">Bạn không có quyền bắt đầu cuộc gọi</string>
     <string name="no_permissions_to_start_webrtc_call">Bạn không có quyền bắt đầu cuộc gọi trong phòng này</string>
     <string name="no_permissions_to_start_conf_call_in_direct_room">Bạn không có quyền bắt đầu cuộc gọi hội thoại</string>
     <string name="no_permissions_to_start_conf_call">Bạn không có quyền bắt đầu cuộc gọi hội thoại trong phòng này</string>
-    <string name="missing_permissions_error">Do bị thiếu một số quyền, hành động này không thể thực hiện.</string>
-    <string name="missing_permissions_warning">Do không có một số quyền, một số tính năng có thể không hoạt động…</string>
-    <string name="cannot_start_call">Không thể bắt đầu cuộc gọi, vui lòng thử lại sau</string>
-    <string name="ongoing_conference_call_video">Video</string>
-    <string name="ongoing_conference_call_voice">Giọng nói</string>
-    <string name="ongoing_conference_call">Có cuộc gọi đến.
-\nTham gia với tư cách %1$s hoặc %2$s</string>
+
     <string name="start_chatting">Bắt đầu trò chuyện</string>
     <string name="action_reset">Cài lại</string>
     <string name="action_dismiss">Bỏ</string>
-    <string name="action_pause">Tạm dừng</string>
     <string name="action_play">Chạy</string>
-    <string name="active_call">Cuộc gọi đang hoạt động</string>
     <string name="report_content">Báo cáo nội dung</string>
     <string name="action_disconnect">Ngắt kết nối</string>
     <string name="action_revoke">Rút lại</string>
@@ -108,86 +72,40 @@
     <string name="view_decrypted_source">Xem nguồn đã được giải mã</string>
     <string name="view_source">Xem nguồn</string>
     <string name="permalink">Đường dẫn</string>
-    <string name="action_forward">Chuyển tiếp</string>
     <string name="later">Để sau</string>
-    <string name="action_clear">Xoá</string>
-    <string name="action_speak">Nói</string>
     <string name="action_share">Chia sẻ</string>
     <string name="action_download">Tải xuống</string>
     <string name="action_quote">Trích</string>
-    <string name="action_redact">Xoá</string>
-    <string name="action_resend">Gửi lại</string>
     <string name="action_send">Gửi</string>
-    <string name="action_stay">Ở lại</string>
     <string name="action_leave">Thoát</string>
     <string name="action_save">Lưu</string>
     <string name="action_cancel">Huỷ</string>
     <string name="ok">OK</string>
     <string name="loading">Đang tải…</string>
-    <string name="dialog_title_third_party_licences">Giấy phép bên thứ ba</string>
     <string name="sign_out_bottom_sheet_will_lose_secure_messages">Bạn sẽ mất các tin nhắn được mã hoá trừ khi bạn sao lưu khoá trước khi đăng xuất.</string>
     <string name="backup">Sao lưu</string>
     <string name="are_you_sure">Bạn có chắc không\?</string>
-    <string name="keys_backup_activate">Sử dụng Sao lưu Khoá</string>
     <string name="sign_out_bottom_sheet_backing_up_keys">Đang sao lưu khoá…</string>
     <string name="sign_out_bottom_sheet_dont_want_secure_messages">Tôi không muốn các tin nhắn của tôi được mã hoá</string>
     <string name="sign_out_bottom_sheet_warning_backup_not_active">Sao lưu Khoá Bảo mật nên được kích hoạt trên tất cả các phiên để tránh mất các tin nhắn được mã hoá.</string>
     <string name="sign_out_bottom_sheet_warning_backing_up">Đang sao lưu khoá. Nếu bạn đăng xuất bây giờ bạn sẽ không thể xem các tin nhắn được mã hoá.</string>
     <string name="sign_out_bottom_sheet_warning_no_backup">Bạn sẽ mất các tin nhắn được mã hoá nếu bạn đăng xuất ngay bây giờ</string>
-    <string name="keys_backup_is_not_finished_please_wait">Quá trình sao lưu khoá chưa hoàn thành, vui lòng chờ…</string>
-    <string name="title_activity_verify_device">Xác nhận phiên hoạt động</string>
     <string name="title_activity_keys_backup_restore">Sử dụng Sao lưu Khóa</string>
     <string name="title_activity_keys_backup_setup">Sao lưu khóa</string>
     <string name="title_activity_choose_sticker">Gửi nhãn dán</string>
-    <string name="title_activity_group_details">Chi tiết về cộng đồng</string>
     <string name="title_activity_bug_report">Báo lỗi</string>
-    <string name="title_activity_historical">Lịch sử</string>
-    <string name="title_activity_member_details">Chi tiết các thành viên</string>
     <string name="title_activity_settings">Cài đặt</string>
-    <string name="title_activity_room">Phòng chat</string>
-    <string name="title_activity_home">Tin nhắn</string>
     <string name="notification_noisy_notifications">Thông báo có âm thanh</string>
     <string name="notification_silent_notifications">Thông báo yên lặng</string>
     <string name="notification_listening_for_events">Theo dõi sự kiện</string>
-    <string name="notification_sync_in_progress">Đang đồng bộ hóa…</string>
-    <string name="notification_sync_init">Đang khởi tạo dịch vụ</string>
     <string name="black_theme">Chủ đề đen</string>
     <string name="dark_theme">Chủ đề tối</string>
     <string name="light_theme">Chủ đề sáng</string>
-    <string name="auth_email_validation_message">Vui lòng kiểm tra email của bạn để tiếp tục quá trình đăng ký</string>
     <string name="auth_forgot_password">Quên mật khẩu\?</string>
-    <string name="auth_password_dont_match">Mật khẩu không trùng khớp</string>
-    <string name="auth_invalid_token">Token không hợp lệ</string>
-    <string name="auth_missing_email_or_phone">Thiếu địa chỉ email hoặc số điện thoại</string>
-    <string name="auth_missing_phone">Thiếu số điện thoại</string>
-    <string name="auth_missing_email">Thiếu địa chỉ email</string>
-    <string name="auth_invalid_phone">Đấy không giống một số điện thoại hợp lệ</string>
     <string name="auth_invalid_email">Đấy không giống một địa chỉ email hợp lệ</string>
-    <string name="auth_missing_password">Không có mật khẩu</string>
-    <string name="auth_invalid_password">Mật khẩu quá ngắn (ít nhất 6 ký tự)</string>
-    <string name="auth_invalid_user_name">Tên người dùng chỉ có thể bao gồm chữ cái, số, dấu chấm, dấu gạch nối và dấu gạch dưới</string>
     <string name="auth_invalid_login_param">Tên người dùng hoặc mật khẩu không đúng</string>
-    <string name="auth_repeat_new_password_placeholder">Xác nhận mật khẩu mới</string>
-    <string name="auth_repeat_password_placeholder">Nhập lại mật khẩu</string>
-    <string name="auth_email_placeholder">Địa chỉ email</string>
-    <string name="auth_opt_phone_number_placeholder">Số điện thoại (không bắt buộc)</string>
-    <string name="auth_phone_number_placeholder">Số điện thoại</string>
-    <string name="auth_opt_email_placeholder">Địa chỉ email (tùy chọn)</string>
-    <string name="auth_add_email_and_phone_message_2">Đặt một email để khôi phục tài khoản. Email và số điện thoại có thể dùng để những người biết bạn tìm thấy bạn.</string>
-    <string name="auth_add_email_phone_message_2">Đặt một email để khôi phục tài khoản. Email và số điện thoại có thể dùng để những người biết bạn tìm thấy bạn.</string>
-    <string name="auth_add_phone_message_2">Đặt một số điện thoại để khôi phục tài khoản và có thể dùng để những người biết bạn tìm thấy bạn.</string>
-    <string name="auth_add_email_message_2">Đặt một email để khôi phục tài khoản và có thể dùng để những người biết bạn tìm thấy bạn.</string>
-    <string name="auth_user_name_placeholder">Tên</string>
-    <string name="auth_new_password_placeholder">Mật khẩu mới</string>
-    <string name="auth_password_placeholder">Mật khẩu</string>
-    <string name="auth_user_id_placeholder">Email hoặc tên người dùng</string>
-    <string name="auth_return_to_login">Quay về màn hình đăng nhập</string>
-    <string name="auth_send_reset_email">Gửi email để đặt lại</string>
-    <string name="auth_skip">Bỏ qua</string>
-    <string name="auth_register">Tạo tài khoản</string>
     <string name="auth_login">Đăng nhập</string>
     <string name="error_no_external_application_found">Xin lỗi, không có ứng dụng nào được tìm thấy có thể hoàn thành hành động này.</string>
-    <string name="go_on_with">tiếp tục với…</string>
     <string name="no_sticker_application_dialog_content">Hiện tại bạn không có bộ nhãn dán nào được kích hoạt cả.
 \n
 \nBạn có muốn thêm không\?</string>
@@ -206,76 +124,40 @@
     <string name="sound_device_speaker">Loa</string>
     <string name="sound_device_phone">Điện thoại</string>
     <string name="call_select_sound_device">Chọn thiết bị âm thanh</string>
-    <string name="template_call_failed_no_connection">Cuộc gọi ${app_name} thất bại</string>
-    <string name="call_failed_dont_ask_again">Đừng hỏi lại tôi</string>
-    <string name="call_failed_no_ice_use_alt">Hãy thử dùng %s</string>
-    <string name="call_failed_no_ice_description">Vui lòng yêu cầu quản trị viên của máy chủ nhà của bạn (%1$s) thiết lập một máy chủ TURN để các cuộc gọi có thể hoạt động một cách đáng tin cậy.
-\n
-\nBạn cũng có thể thử dùng máy chủ công cộng ở %2$s, nhưng cách này sẽ không đáng tin cậy bằng, và địa chỉ IP của bạn sẽ được chia sẻ đến máy chủ đó. Bạn cũng có thể quản lý việc này trong Cài đặt.</string>
-    <string name="call_failed_no_ice_title">Cuộc gọi thất bại do thiết lập máy chủ sai</string>
+    <string name="call_failed_no_connection">Cuộc gọi ${app_name} thất bại</string>
+
     <string name="start_video_call_prompt_msg">Bạn có chắc bạn muốn bắt đầu một cuộc gọi video\?</string>
     <string name="start_voice_call_prompt_msg">Bạn có chắc bạn muốn bắt đầu một cuộc gọi bằng giọng nói\?</string>
-    <string name="start_new_chat_prompt_msg">Bạn có chắc bạn muốn bắt đầu một cuộc trò chuyện mới với %s\?</string>
     <string name="option_send_voice">Gửi giọng nói</string>
     <string name="start_video_call">Bắt đầu cuộc gọi video</string>
     <string name="start_voice_call">Bắt đầu cuộc gọi bằng giọng nói</string>
-    <string name="start_new_chat">Bắt đầu cuộc trò chuyện mới</string>
     <string name="search">Tìm</string>
-    <string name="identity_url">URL máy chủ định danh</string>
     <string name="logout">Đăng xuất</string>
-    <string name="login">Đăng nhập</string>
-    <string name="create_account">Tạo tài khoản</string>
     <string name="username">Tên người dùng</string>
     <string name="join_room">Vào phòng</string>
-    <string name="read_receipt">Đã đọc</string>
     <string name="send_bug_report_failed">Gửi báo cáo lỗi thất bại (%s)</string>
     <string name="send_bug_report_sent">Bản báo cáo lỗi đã được gửi thành công</string>
-    <string name="login_error_user_in_use">Tên người dùng này đã được người khác sử dụng</string>
     <string name="login_error_bad_json">JSON không hợp lệ</string>
-    <string name="login_error_forbidden">Tên/mật khẩu sai</string>
-    <string name="login_error_ssl_handshake">Thiết bị của bạn đang dùng một giao thức TLS lỗi thời, dễ bị tấn công, vì lý do bảo mật, bạn sẽ không thể kết nối</string>
     <string name="login_error_ssl_other">Lỗi SSL.</string>
     <string name="login_error_ssl_peer_unverified">Lỗi SSL: danh tính của đối tác chưa được kiểm chứng.</string>
     <string name="login_error_no_homeserver_found">Đây không phải là một địa chỉ máy chủ Matrix hợp lệ</string>
-    <string name="login_error_unknown_host">Không kết nối được với địa chỉ này, vui lòng kiểm tra lại</string>
-    <string name="login_error_unable_register">Không thể tạo tài khoản mới</string>
-    <string name="login_error_registration_network_error">Không thể tạo tài khoản mới: Lỗi mạng</string>
-    <string name="login_error_unable_login">Không thể đăng nhập</string>
-    <string name="login_error_network_error">Không thể đăng nhập: Lỗi mạng</string>
-    <string name="login_error_must_start_http">URL phải bắt đầu với http[s]://</string>
-    <string name="auth_reset_password_next_step_button">Tôi đã xác nhận địa chỉ email này</string>
-    <string name="auth_identity_server">Máy chủ định danh:</string>
-    <string name="auth_home_server">Máy chủ chính:</string>
     <string name="call_failed_no_connection_description">Thiết lập kết nối thời gian thực thất bại.
 \nXin vui lòng yêu cầu quản trị viên máy chủ nhà của bạn thiết lập máy chủ TURN để có thể gọi điện bình thường.</string>
-    <string name="bottom_action_home">Trang chủ</string>
     <string name="call_connecting">Cuộc gọi đang được kết nối…</string>
-    <string name="call_connected">Cuộc gọi đã được kết nối</string>
     <string name="call">Gọi</string>
     <string name="settings_call_ringtone_dialog_title">Chọn nhạc chuông:</string>
     <string name="settings_call_ringtone_title">Nhạc chuông cho cuộc gọi đến</string>
-    <string name="template_settings_call_ringtone_use_app_ringtone">Dùng nhạc chuông mặc định cho cuộc gọi đến</string>
+    <string name="settings_call_ringtone_use_app_ringtone">Dùng nhạc chuông mặc định cho cuộc gọi đến</string>
     <string name="settings_call_show_confirmation_dialog_summary">Yêu cầu xác nhận trước khi gọi</string>
     <string name="settings_call_show_confirmation_dialog_title">Tránh gọi nhầm</string>
-    <string name="room_info_room_topic">Chủ đề của phòng</string>
-    <string name="room_info_room_name">Tên phòng</string>
-    <string name="today">Hôm nay</string>
-    <string name="conference_call_warning_title">Chú ý!</string>
     <string name="ignore_request_short_label">Kệ</string>
-    <string name="ignore_request">Bỏ qua đề xuất này</string>
     <string name="share_without_verifying_short_label">Chia sẻ</string>
-    <string name="share_without_verifying">Chia sẻ, không kiểm chứng</string>
-    <string name="start_verification_short_label">Kiểm chứng</string>
     <string name="start_verification">Bắt đầu kiểm chứng</string>
-    <string name="people_no_identity_server">Máy chủ định danh chưa được cài đặt.</string>
     <string name="send_bug_report_app_crashed">Chương trình đã gặp sự cố lần trước. Bạn có muốn mở trang tường thuật sự cố không\?</string>
     <string name="send_bug_report_progress">Tiến độ (%s%%)</string>
     <string name="send_bug_report_include_crash_logs">Gửi nhật ký dừng đột ngột</string>
     <string name="send_bug_report_include_logs">Gửi nhật ký</string>
     <string name="auth_submit">Gửi</string>
-    <string name="startup_notification_fdroid_battery_optim_title">Kết nối trong nền</string>
-    <string name="startup_notification_privacy_button_other">Chọn tuỳ chọn khác</string>
-    <string name="startup_notification_privacy_button_grant">Cấp quyền</string>
     <string name="settings_discovery_manage">Quản lý cài đặt khám phá của bạn.</string>
     <string name="settings_discovery_category">Khám phá</string>
     <string name="settings_deactivate_my_account">Vô hiệu hoá tài khoản của tôi</string>
@@ -284,7 +166,7 @@
     <string name="notice_room_server_acl_updated_allowed">• Những máy chủ khớp với %s bây giờ sẽ được cho phép.</string>
     <string name="notice_room_server_acl_updated_was_banned">• Những máy chủ khớp với %s đã được xoá khỏi danh sách cấm.</string>
     <string name="notice_room_server_acl_updated_banned">• Những máy chủ khớp với %s bây giờ sẽ bị cấm.</string>
-    <string name="template_re_authentication_default_confirm_text">${app_name} yêu cầu bạn nhập thông tin của bạn để thực hiện hành động này.</string>
+    <string name="re_authentication_default_confirm_text">${app_name} yêu cầu bạn nhập thông tin của bạn để thực hiện hành động này.</string>
     <string name="re_authentication_activity_title">Cần xác thực lại</string>
     <string name="call_transfer_users_tab_title">Người dùng</string>
     <string name="call_transfer_failure">Đã xảy ra lỗi khi đang chuyển cuộc gọi</string>
@@ -319,14 +201,10 @@
     <string name="event_status_a11y_sending">Đang gửi</string>
     <string name="medium_phone_number">Số điện thoại</string>
     <string name="medium_email">Địa chỉ email</string>
-    <string name="room_error_join_failed_empty_room">Hiện tại chưa thể tham gia lại phòng trống.</string>
     <string name="matrix_error">Lỗi Matrix</string>
     <string name="notice_power_level_changed">%1$s đã thay đổi cấp độ quyền lực của %2$s.</string>
     <string name="notice_power_level_changed_by_you">Bạn đã thay đổi cấp độ quyền lực của %1$s.</string>
-    <string name="network_error">Lỗi mạng</string>
-    <string name="message_failed_to_upload">Tải hình ảnh lên thất bại</string>
     <string name="unable_to_send_message">Không thể gửi tin nhắn</string>
-    <string name="could_not_redact">Không thể rút lại</string>
     <string name="notice_crypto_error_unknown_inbound_session_id">Thiết bị của người gửi chưa gửi cho chúng tôi mã khoá cho tin nhắn này.</string>
     <string name="notice_crypto_unable_to_decrypt">** Không thể giải mã: %s **</string>
     <string name="notice_power_level_diff">%1$s từ %2$s thành %3$s</string>
@@ -335,12 +213,6 @@
     <string name="power_level_default">Mặc định</string>
     <string name="power_level_moderator">Người điều hành</string>
     <string name="power_level_admin">Quản trị viên</string>
-    <string name="notice_widget_jitsi_modified_by_you">Bạn đã sửa đổi buổi hội thảo video</string>
-    <string name="notice_widget_jitsi_modified">Buổi hội thảo video đã được %1$s sửa đổi</string>
-    <string name="notice_widget_jitsi_removed_by_you">Bạn đã kết thúc buổi hội thảo video</string>
-    <string name="notice_widget_jitsi_removed">Buổi hội thảo video đã được %1$s kết thúc</string>
-    <string name="notice_widget_jitsi_added_by_you">Bạn đã bắt đầu buổi hội thảo video</string>
-    <string name="notice_widget_jitsi_added">Buổi hội thảo video đã được %1$s bắt đầu</string>
     <string name="notice_widget_modified_by_you">Bạn đã sửa đổi %1$s tiện ích</string>
     <string name="notice_widget_modified">%1$s đã sửa đổi %2$s tiện ích</string>
     <string name="notice_widget_removed_by_you">Bạn đã xoá %1$s tiện ích</string>
@@ -357,10 +229,6 @@
     <string name="notice_direct_room_third_party_invite">%1$s đã mời %2$s</string>
     <string name="notice_room_third_party_invite_by_you">Bạn đã gửi lời mời đến %1$s để tham gia phòng</string>
     <string name="notice_room_third_party_invite">%1$s đã gửi lời mời đến %2$s để tham gia phòng</string>
-    <string name="notice_event_redacted_by_with_reason">Tin nhắn đã bị %1$s xoá [lý do: %2$s]</string>
-    <string name="notice_event_redacted_with_reason">Tin nhắn đã bị xoá [lý do: %1$s]</string>
-    <string name="notice_event_redacted_by">Tin nhắn đã bị %1$s xoá</string>
-    <string name="notice_event_redacted">Tin nhắn đã bị xoá</string>
     <string name="notice_room_avatar_removed_by_you">Bạn đã xoá ảnh đại diện của phòng</string>
     <string name="notice_room_avatar_removed">%1$s đã xoá ảnh đại diện của phòng</string>
     <string name="notice_room_topic_removed_by_you">Bạn đã xoá chủ đề của phòng</string>
@@ -368,10 +236,6 @@
     <string name="notice_room_name_removed_by_you">Bạn đã xoá tên phòng</string>
     <string name="notice_room_name_removed">%1$s đã xoá tên phòng</string>
     <string name="notice_avatar_changed_too">(ảnh đại diện cũng được thay đổi)</string>
-    <string name="notice_voip_finished">Buổi hội thảo VoIP đã hoàn thành</string>
-    <string name="notice_voip_started">Buổi hội thảo VoIP đã bắt đầu</string>
-    <string name="notice_requested_voip_conference_by_you">Bạn đã yêu cầu một buổi hội thảo VoIP</string>
-    <string name="notice_requested_voip_conference">%1$s đã yêu cầu một buổi hội thảo VoIP</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉 Tất cả máy chủ bị cấm không được tham gia! Phòng này không thể được sử dụng nữa.</string>
     <string name="notice_room_server_acl_updated_no_change">Không có thay đổi.</string>
     <string name="notice_room_server_acl_updated_title_by_you">Bạn đã thay đổi ACL máy chủ cho phòng này.</string>
@@ -384,9 +248,6 @@
     <string name="notice_direct_room_update">%s đã nâng cấp ở đây.</string>
     <string name="notice_room_update_by_you">Bạn đã nâng cấp phòng này.</string>
     <string name="notice_room_update">%s đã nâng cấp phòng này.</string>
-    <string name="notice_end_to_end_by_you">Bạn đã bật mã hoá đầu cuối (%1$s)</string>
-    <string name="notice_end_to_end">%1$s đã bật mã hoá đầu cuối (%2$s)</string>
-    <string name="notice_room_visibility_unknown">không xác định (%s).</string>
     <string name="notice_room_visibility_world_readable">bất kỳ ai.</string>
     <string name="notice_room_visibility_shared">tất cả thành viên phòng.</string>
     <string name="notice_room_visibility_joined">tất cả thành viên phòng, từ lúc họ tham gia.</string>
@@ -450,13 +311,6 @@
     <string name="notice_room_created">%1$s đã tạo phòng</string>
     <string name="notice_room_invite_no_invitee_by_you">Lời mời của bạn</string>
     <string name="notice_room_invite_no_invitee">Lời mời của %s</string>
-    <string name="summary_you_sent_sticker">Bạn đã gửi một sticker.</string>
-    <string name="summary_user_sent_sticker">%1$s đã gửi một sticker.</string>
-    <string name="summary_you_sent_image">Bạn đã gửi một hình ảnh.</string>
-    <string name="summary_user_sent_image">%1$s đã gửi một hình ảnh.</string>
-    <string name="summary_message">%1$s: %2$s</string>
-    <string name="notice_profile_change_redacted_by_you">Bạn đã cập nhật hồ sơ của bạn %1$s</string>
-    <string name="notice_profile_change_redacted">%1$s đã cập nhật hồ sơ của họ %2$s</string>
     <string name="invite_just_to_this_room_desc">Họ sẽ không ở trong %s</string>
     <string name="invite_just_to_this_room">Chỉ vào phòng này</string>
     <string name="invite_to_space_with_name_desc">Họ sẽ có thể khám phá %s</string>
@@ -474,39 +328,25 @@
     <string name="crypto_error_withheld_unverified">Bạn không thể truy cập tin nhắn này vì phiên làm việc của bạn không được người gửi tin cậy</string>
     <string name="crypto_error_withheld_blacklisted">Bạn không thể truy cập tin nhắn này vì bạn đã bị người gửi chặn</string>
     <string name="notice_crypto_unable_to_decrypt_friendly_desc">Bởi vì mã hoá đầu cuối, bạn có thể sẽ cần đợi tin nhắn của một ai đó đến nơi vì các mã khoá mã hoá đã không được gửi đến bạn một cách đúng.</string>
-    <string name="crypto_utd">Không thể giải mã</string>
     <string name="notice_crypto_unable_to_decrypt_friendly">Đang đợi tin nhắn này, việc này có thể mất một lúc</string>
     <string name="notice_room_leave_with_reason_by_you">Bạn đã rời phòng. Lý do: %1$s</string>
     <string name="notice_room_leave_with_reason">%1$s đã rời phòng. Lý do: %2$s</string>
-    <string name="auth_reset_password_email_validation_message">Một email đã được gửi đến %s. Khi bạn đã đi theo liên kết mà email đó chứa, hãy nhấn ở dưới.</string>
-    <string name="auth_reset_password_missing_password">Mật khẩu mới phải được nhập.</string>
     <string name="auth_reset_password_missing_email">Địa chỉ email được liên kết đến tài khoản của bạn phải được nhập.</string>
-    <string name="auth_reset_password_message">Để đặt lại mật khẩu, hãy nhập địa chỉ email được liên kết đến tài khoản của bạn:</string>
-    <string name="auth_username_in_use">Tên người dùng đã được sử dụng</string>
     <string name="auth_recaptcha_message">Máy chủ nhà này muốn chắc chắn bạn không phải rô bốt</string>
-    <string name="auth_threepid_warning_message">Việc đăng ký bằng cả email và số điện thoại ngay một lúc chưa được hỗ trợ cho đến khi api có tồn tại. Chỉ có số điện thoại sẽ được tính đến.
-\n
-\nBạn có thể thêm email vào hồ sơ của bạn trong cài đặt.</string>
-    <string name="auth_use_server_options">Sử dụng tuỳ chọn máy chủ tuỳ chỉnh (nâng cao)</string>
+
     <string name="auth_msisdn_already_defined">Số điện thoại này đã được định nghĩa rồi.</string>
     <string name="auth_email_already_defined">Địa chỉ email này đã được định nghĩa rồi.</string>
     <string name="auth_login_sso">Đăng nhập bằng đăng nhập một lần</string>
     <string name="use_as_default_and_do_not_ask_again">Sử dụng làm mặc định và không hỏi lại</string>
     <string name="option_always_ask">Luôn hỏi</string>
-    <string name="send_files_in">Gửi vào</string>
     <string name="send_bug_report_logs_description">Để chẩn đoán vấn đề, nhật ký từ ứng dụng này sẽ được gửi cùng với báo cáo lỗi này. Báo cáo lỗi này, bao gồm cả nhật ký và ảnh chụp màn hình, sẽ không thể được nhìn thấy công khai. Nếu bạn muốn chỉ gửi văn bản ở trên, hãy vui lòng bỏ đánh dấu:</string>
     <string name="spaces_header">Không gian</string>
-    <string name="spaces_invited_header">Lời mời</string>
-    <string name="no_public_room_placeholder">Không có phòng công khai có sẵn</string>
     <string name="suggested_header">Phòng được đề xuất</string>
     <string name="dialog_edit_hint">Giá trị mới</string>
-    <string name="action_return">Quay lại</string>
     <string name="action_unpublish">Huỷ xuất bản</string>
     <string name="failed_to_remove_widget">Xoá tiện ích thất bại</string>
     <string name="failed_to_add_widget">Thêm tiện ích thất bại</string>
-    <string name="action_review">Xem xét</string>
     <string name="action_switch">Chuyển</string>
-    <string name="encryption_information_blocked">Đã cho vào danh sách đen</string>
     <string name="encryption_information_verified">Đã xác minh</string>
     <string name="encryption_information_not_verified">Chưa xác minh</string>
     <plurals name="encryption_import_room_keys_success">
@@ -514,159 +354,80 @@
     </plurals>
     <string name="encryption_message_recovery">Phục hồi các tin nhắn được mã hoá</string>
     <string name="encryption_exported_successfully">Xuất các mã khoá thành công</string>
-    <string name="encryption_export_saved_as">Các mã khoá phòng E2E đã được lưu ra \'%s\'.
-\n
-\nCảnh báo: tệp này có thể bị xoá nếu ứng dụng bị gỡ cài đặt.</string>
+
     <string name="encryption_export_notice">Vui lòng tạo một mật khẩu để mã hoá các mã khoá được xuất. Bạn sẽ cần nhập mật khẩu đó để có thể nhập các mã khoá đó.</string>
     <string name="encryption_export_export">Xuất</string>
     <string name="encryption_export_room_keys_summary">Xuất các mã khoá ra tệp cục bộ</string>
     <string name="encryption_export_room_keys">Xuất các mã khoá phòng</string>
     <string name="encryption_export_e2e_room_keys">Xuất các mã khoá phòng E2E</string>
-    <string name="encryption_information_ed25519_fingerprint">Mã kiểm tra Ed25519</string>
-    <string name="encryption_information_verification">Xác minh</string>
     <string name="encryption_import_import">Nhập</string>
     <string name="encryption_import_room_keys_summary">Nhập các mã khoá từ tệp cục bộ</string>
     <string name="encryption_import_room_keys">Nhập các mã khoá phòng</string>
     <string name="encryption_import_e2e_room_keys">Nhập các mã khoá phòng E2E</string>
     <string name="encryption_settings_manage_message_recovery_summary">Quản lý bản sao lưu mã khoá</string>
-    <string name="encryption_information_none">không có</string>
     <string name="encryption_information_unknown_ip">ip không xác định</string>
-    <string name="encryption_information_unknown_device">phiên làm việc không xác định</string>
-    <string name="directory_server_fail_to_retrieve_server">Máy chủ có thể là không có sẵn hoặc bị quá tải</string>
-    <string name="unknown_devices_alert_message">Phòng này chứa các phiên làm việc không xác định chưa được xác minh.
-\nĐiều này có nghĩa là không có bảo đảm rằng các phiên làm việc đó thuộc về những người dùng mà chúng nói rằng chúng thuộc về họ.
-\nChúng tôi khuyên bạn thực hiện quá trình xác minh cho mỗi phiên làm việc trước khi tiếp tục, nhưng bạn có thể gửi lại tin nhắn mà không xác minh nếu bạn muốn.
-\n
-\nCác phiên làm việc không xác định:</string>
-    <string name="unknown_devices_alert_title">Phòng chứa các phiên làm việc không xác định</string>
-    <string name="encryption_information_verify_key_match">Tôi xác minh rằng các mã khoá có trùng khớp</string>
+
     <string name="encryption_information_verify_device_warning2">Nếu chúng không khớp, sự bảo mật của việc giao tiếp của bạn có thể bị can thiệp.</string>
     <string name="encryption_information_verify_device_warning">Xác nhận bằng cách so sánh những điều sau đây với Cài đặt người dùng trong phiên làm việc kia của bạn:</string>
-    <string name="encryption_information_verify_device">Xác minh phiên làm việc</string>
-    <string name="encryption_information_unblock">Xoá khỏi danh sách đen</string>
-    <string name="encryption_information_block">Cho vào danh sách đen</string>
-    <string name="encryption_information_unverify">Huỷ xác minh</string>
     <string name="encryption_information_verify">Xác minh</string>
     <string name="hs_url">URL máy chủ nhà</string>
-    <string name="action_historical">Lịch sử</string>
     <string name="room_participants_leave_prompt_msg">Bạn có chắc bạn muốn rời khỏi phòng không\?</string>
     <string name="room_participants_leave_prompt_title">Rời khỏi phòng</string>
-    <plurals name="format_time_d">
-        <item quantity="other">%d ngày</item>
-    </plurals>
-    <plurals name="format_time_h">
-        <item quantity="other">%d tiếng</item>
-    </plurals>
-    <plurals name="format_time_m">
-        <item quantity="other">%d phút</item>
-    </plurals>
-    <plurals name="format_time_s">
-        <item quantity="other">%d giây</item>
-    </plurals>
-    <string name="room_title_one_member">1 thành viên</string>
+
+
+
+
     <plurals name="room_title_members">
         <item quantity="other">%d thành viên</item>
     </plurals>
-    <plurals name="room_header_active_members_count">
-        <item quantity="other">%d thành viên hoạt động</item>
-    </plurals>
-    <string name="room_creation_add_member">Thêm thành viên</string>
-    <string name="room_creation_title">Trò chuyện mới</string>
-    <string name="invite_no_identity_server_error">Thêm một máy chủ danh tính trong cài đặt của bạn để thực hiện hành động này.</string>
-    <string name="room_preview_room_interactions_disabled">Đây là một bản xem trước của phòng này. Các sự tương tác phòng đã bị tắt.</string>
-    <string name="room_preview_try_join_an_unknown_room_default">một phòng</string>
-    <string name="room_preview_try_join_an_unknown_room">Bạn đang cố truy cập %s. Bạn có muốn tham gia để tham dự vào cuộc thảo luận không\?</string>
-    <string name="room_preview_unlinked_email_warning">Lời mời này đã được gửi đến %s, nó không được liên kết với tài khoản này.
-\nBạn có thể muốn đăng nhập bằng một tài khoản khác, hoặc thêm email này vào tài khoản của bạn.</string>
-    <string name="room_preview_invitation_format">Bạn đã được %s mời tham gia phòng này</string>
+
+
     <string name="room_jump_to_first_unread">Nhảy đến tin nhắn chưa đọc.</string>
-    <string name="room_sync_in_progress">Đang đồng bộ…</string>
-    <string name="open_chat_header">Mở tiêu đề</string>
     <string name="list_members">Liệt kê các thành viên</string>
     <string name="action_reject">Từ chối</string>
-    <string name="action_preview">Xem trước</string>
     <string name="action_join">Tham gia</string>
     <string name="action_remove">Xoá</string>
     <string name="_continue">Tiếp tục</string>
     <string name="no">KHÔNG</string>
     <string name="yes">CÓ</string>
-    <string name="media_slider_saved_message">Lưu vào mục tải xuống\?</string>
-    <string name="media_slider_saved">Đã lưu</string>
     <string name="permissions_denied_add_contact">Cho phép quyền truy cập danh bạ của bạn.</string>
     <string name="permissions_denied_qr_code">Để quét mã QR, bạn cần cho phép quyền truy cập máy ảnh.</string>
-    <string name="permissions_action_not_performed_missing_permissions">Xin lỗi. Hành động không được thực hiện do thiếu quyền</string>
-    <string name="template_permissions_msg_contacts_warning_other_androids">${app_name} có thể kiểm tra sổ địa chỉ của bạn để tìm những người dùng Matrix khác dựa trên email và số điện thoại của họ.
-\n
-\nBạn có đồng ý chia sẻ sổ địa chỉ của bạn vì mục đích này không\?</string>
-    <string name="template_permissions_rationale_msg_contacts">${app_name} có thể kiểm tra sổ địa chỉ của bạn để tìm những người dùng Matrix khác dựa trên email và số điện thoại của họ. Nếu bạn đồng ý chia sẻ sổ địa chỉ vì mục đích này, vui lòng cho phép quyền truy cập trên cửa sổ popup tiếp theo.</string>
-    <string name="template_permissions_rationale_msg_camera_and_audio">${app_name} cần quyền truy cập máy ảnh và micro của bạn để thực hiện các cuộc gọi video.
+
+    <string name="permissions_rationale_msg_camera_and_audio">${app_name} cần quyền truy cập máy ảnh và micro của bạn để thực hiện các cuộc gọi video.
 \n
 \nVui lòng cho phép quyền truy cập trên các cửa sổ popup tiếp theo để có thể thực hiện cuộc gọi.</string>
-    <string name="permissions_rationale_msg_record_audio_explanation">"
-\n
-\nVui lòng cho phép quyền truy cập trên cửa sổ popup tiếp theo để có thể thực hiện cuộc gọi."</string>
-    <string name="template_permissions_rationale_msg_record_audio">${app_name} cần quyền truy cập micro của bạn để thực hiện các cuộc gọi âm thanh.</string>
-    <string name="permissions_rationale_msg_camera_explanation">"
-\n
-\nVui lòng cho phép quyền truy cập trên cửa sổ popup tiếp theo để có thể thực hiện cuộc gọi."</string>
-    <string name="template_permissions_rationale_msg_camera">${app_name} cần quyền truy cập máy ảnh để chụp ảnh và thực hiện các cuộc gọi video.</string>
-    <string name="template_permissions_rationale_msg_storage">${app_name} cần quyền truy cập thư viện ảnh và video của bạn để gửi và lưu các tệp đính kèm.
-\n
-\nVui lòng cho phép quyền truy cập trên cửa sổ popup tiếp theo để có thể gửi các tệp từ điện thoại của bạn.</string>
+
+    <string name="permissions_rationale_msg_record_audio">${app_name} cần quyền truy cập micro của bạn để thực hiện các cuộc gọi âm thanh.</string>
+
+
     <string name="permissions_rationale_popup_title">Thông tin</string>
-    <string name="media_picker_cannot_record_video">Không thể quay video</string>
-    <string name="media_picker_both_capture_title">Chụp ảnh hoặc quay video</string>
-    <string name="call_error_answered_elsewhere">cuộc gọi đã được trả lời ở nơi khác</string>
-    <string name="call_error_camera_init_failed">Không thể khởi tạo máy ảnh</string>
-    <string name="call_error_ice_failed">Kết nối phương tiện thất bại</string>
     <string name="call_error_user_not_responding">Bên kia không thể nhấc máy.</string>
     <string name="call_hold_action">Giữ máy</string>
     <string name="call_held_by_you">Bạn đã giữ máy</string>
     <string name="call_held_by_user">%s đã giữ máy</string>
     <string name="call_resume_action">Tiếp tục</string>
-    <string name="return_to_call">Quay về cuộc gọi</string>
-    <string name="active_call_with_duration">Cuộc gọi đang hoạt động (%s)</string>
     <string name="video_call_in_progress">Cuộc gọi video đang diễn ra…</string>
     <string name="call_in_progress">Cuộc gọi đang diễn ra…</string>
     <string name="incoming_voice_call">Cuộc gọi thoại đến</string>
     <string name="incoming_video_call">Cuộc gọi video đến</string>
-    <string name="incoming_call">Cuộc gọi đến</string>
-    <string name="call_ring">Đang gọi…</string>
     <string name="call_ended">Cuộc gọi đã kết thúc</string>
-    <string name="settings_call_ringtone_use_default_stun_sum">Sẽ sử dụng %s làm hỗ trợ khi máy chủ nhà không có một máy chủ (địa chỉ IP của bạn sẽ được chia sẻ trong cuộc gọi)</string>
-    <string name="settings_call_ringtone_use_default_stun">Cho phép máy chủ hỗ trợ cuộc gọi dự phòng</string>
     <string name="settings_call_category">Cuộc gọi</string>
-    <string name="yesterday">Hôm qua</string>
-    <string name="attachment_remaining_time_minutes">%1$d phút %2$d giây</string>
-    <string name="attachment_remaining_time_seconds">%d giây</string>
-    <string name="attachment_cancel_upload">Huỷ tải lên\?</string>
-    <string name="attachment_cancel_download">Huỷ tải xuống\?</string>
     <string name="compression_opt_list_small">Nhỏ</string>
     <string name="compression_opt_list_medium">Trung bình</string>
     <string name="compression_opt_list_large">Lớn</string>
     <string name="compression_opt_list_original">Nguyên gốc</string>
-    <string name="compression_options">Gửi dưới dạng</string>
     <plurals name="membership_changes">
         <item quantity="other">%d thay đổi thành viên</item>
     </plurals>
-    <string name="groups_list">Danh sách nhóm</string>
-    <string name="read_receipts_list">Danh sách xác nhận đã đọc</string>
-    <string name="template_e2e_re_request_encryption_key_dialog_content">Vui lòng khởi chạy ${app_name} trên một thiết bị khác mà có thể giải mã tin nhắn để nó có thể gửi các mã khoá vào phiên làm việc này.</string>
-    <string name="e2e_re_request_encryption_key_dialog_title">Đã gửi yêu cầu</string>
-    <string name="e2e_re_request_encryption_key_sent">Đã gửi yêu cầu mã khoá.</string>
+    <string name="e2e_re_request_encryption_key_dialog_content">Vui lòng khởi chạy ${app_name} trên một thiết bị khác mà có thể giải mã tin nhắn để nó có thể gửi các mã khoá vào phiên làm việc này.</string>
     <string name="e2e_re_request_encryption_key">Yêu cầu lại các mã khoá mã hoá từ các phiên làm việc khác của bạn.</string>
-    <string name="login_error_login_email_not_yet">Liên kết email mà chưa được nhấn vào</string>
     <string name="login_error_limit_exceeded">Quá nhiều yêu cầu đã được gửi</string>
     <string name="login_error_not_json">Đã không chứa JSON hợp lệ</string>
-    <string name="login_error_unknown_token">Token truy cập được chỉ định đã không được nhận ra</string>
     <string name="error_unauthorized">Không được uỷ quyền, thiếu thông tin xác thực hợp lệ</string>
     <string name="login_error_homeserver_not_found">Không thể kết nối đến máy chủ nhà tại URL này, vui lòng kiểm tra nó</string>
     <string name="login_error_invalid_home_server">Vui lòng nhập URL hợp lệ</string>
-    <string name="login_error_unable_register_mail_ownership">Không thể đăng ký: lỗi sở hữu email</string>
     <string name="auth_accept_policies">Vui lòng xem xét và chấp nhận chính sách của máy chủ nhà này:</string>
-    <string name="auth_reset_password_success_message">Mật khẩu của bạn đã được đặt lại.
-\n
-\nBạn đã bị đăng xuất ra khỏi tất cả phiên làm việc và sẽ không nhận thông báo đẩy nữa. Để bật lại thông báo, hãy đăng nhập lại trên mỗi thiết bị.</string>
+
     <string name="auth_reset_password_error_unauthorized">Xác minh địa chỉ email thất bại: hãy chắc chắn là bạn đã nhấn vào liên kết trong email</string>
     <string name="settings_room_directory_show_all_rooms_summary">Hiện tất cả phòng trong thư mục phòng, bao gồm cả các phòng có nội dung phản cảm.</string>
     <string name="settings_room_directory_show_all_rooms">Hiện các phòng có nội dung phản cảm</string>
@@ -724,10 +485,6 @@
     <string name="notice_room_withdraw_with_reason">%1$s đã rút lại lời mời của %2$s. Lý do: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">Bạn đã chấp nhận lời mời đối với %1$s. Lý do: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s đã chấp nhận lời mời đối với %2$s. Lý do: %3$s</string>
-    <string name="notice_room_third_party_revoked_invite_with_reason_by_you">Bạn đã thu hồi lời mời để %1$s tham gia phòng. Lý do: %2$s</string>
-    <string name="notice_room_third_party_revoked_invite_with_reason">%1$s đã thu hồi lời mời để %2$s tham gia phòng. Lý do: %3$s</string>
-    <string name="notice_room_third_party_invite_with_reason_by_you">Bạn đã gửi lời mời đến %1$s để tham gia phòng. Lý do: %2$s</string>
-    <string name="notice_room_third_party_invite_with_reason">%1$s đã gửi lời mời đến %2$s để tham gia phòng. Lý do: %3$s</string>
     <string name="notice_room_ban_with_reason_by_you">Bạn đã cấm %1$s. Lý do: %2$s</string>
     <string name="notice_room_ban_with_reason">%1$s đã cấm %2$s. Lý do: %3$s</string>
     <string name="notice_room_unban_with_reason_by_you">Bạn đã bỏ cấm %1$s. Lý do: %2$s</string>
@@ -747,7 +504,6 @@
     <string name="notice_room_invite_with_reason">%1$s đã mời %2$s. Lý do: %3$s</string>
     <string name="notice_room_invite_no_invitee_with_reason_by_you">Lời mời của bạn. Lý do: %1$s</string>
     <string name="notice_room_invite_no_invitee_with_reason">Lời mời của %1$s. Lý do: %2$s</string>
-    <string name="clear_timeline_send_queue">Xoá hàng chờ gửi</string>
     <string name="event_status_sending_message">Đang gửi tin nhắn…</string>
     <string name="event_status_sent_message">Đã gửi tin nhắn</string>
     <string name="initial_sync_start_importing_account_data">Đồng bộ ban đầu:
@@ -773,9 +529,7 @@
 \nĐang đợi phản hồi từ máy chủ…</string>
     <string name="room_displayname_empty_room_was">Phòng trống (đã là %s)</string>
     <string name="room_displayname_empty_room">Phòng trống</string>
-    <plurals name="room_displayname_three_and_more_members">
-        <item quantity="other">%1$s và %2$d người khác</item>
-    </plurals>
+
     <plurals name="room_displayname_four_and_more_members">
         <item quantity="other">%1$s, %2$s, %3$s và %4$d người khác</item>
     </plurals>
@@ -783,7 +537,6 @@
     <string name="room_displayname_3_members">%1$s, %2$s và %3$s</string>
     <string name="room_displayname_two_members">%1$s và %2$s</string>
     <string name="room_displayname_room_invite">Lời mời vào phòng</string>
-    <string name="room_displayname_invite_from">Lời mời từ %s</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• Những máy chủ khớp với IP bây giờ sẽ bị cấm.</string>
     <string name="notice_room_server_acl_updated_ip_literals_allowed">• Những máy chủ khớp với IP bây giờ sẽ được cho phép.</string>
     <string name="notice_room_server_acl_set_ip_literals_not_allowed">• Những máy chủ khớp với IP bị cấm.</string>
@@ -799,30 +552,14 @@
     <string name="room_participants_power_level_demote_warning_title">Giáng cấp bản thân\?</string>
     <string name="room_participants_power_level_prompt">Bạn sẽ không thể hoàn tác thay đổi này vì bạn đang thăng cấp người dùng có cùng cấp quyền như của bạn.
 \nBạn có chắc không\?</string>
-    <string name="room_participants_action_devices_list">Hiển thị danh sách phiên</string>
     <string name="room_participants_action_mention">Nhắc đến</string>
-    <string name="room_participants_invite_search_another_user">ID người dùng, Tên hoặc email</string>
-    <string name="room_participants_action_set_admin">Làm quản trị viên</string>
-    <string name="room_participants_action_set_moderator">Làm điều hành viên</string>
-    <string name="room_participants_action_set_default_power_level">Đặt lại thành người dùng bình thường</string>
     <string name="room_participants_action_remove">Đá</string>
     <string name="room_participants_action_unban">Bỏ cấm</string>
     <string name="room_participants_action_ban">Cấm</string>
-    <string name="room_participants_action_leave">Rời khỏi phòng này</string>
     <string name="room_participants_action_cancel_invite">Hủy mời</string>
     <string name="room_participants_action_invite">Mời</string>
-    <string name="room_participants_header_devices">Phiên</string>
     <string name="room_participants_header_direct_chats">Tin nhắn trực tiếp</string>
-    <string name="room_participants_header_call">Cuộc gọi</string>
-    <string name="room_participants_header_admin_tools">Những công cụ quản trị viên</string>
-    <string name="room_participants_ago">cách đây %1$s%2$s</string>
-    <string name="room_participants_now">%1$s bây giờ</string>
-    <string name="room_participants_idle">Nhàn rỗi</string>
-    <string name="room_participants_offline">Ngoại tuyến</string>
-    <string name="room_participants_online">Trực tuyến</string>
-    <string name="room_participants_create">Tạo</string>
     <string name="room_participants_leave_private_warning">Phòng này không công khai. Bạn sẽ không thể tham gia lại nếu không có lời mời.</string>
-    <string name="continue_anyway">Vẫn tiếp tục</string>
     <plurals name="missed_video_call">
         <item quantity="other">%d cuộc gọi video bị nhỡ</item>
     </plurals>
@@ -834,11 +571,8 @@
     <string name="denied_permission_voice_message">Để gửi những tin nhắn thoại, vui lòng cấp quyền Microphone.</string>
     <string name="denied_permission_camera">Để thực hiện hành động này, vui lòng cấp quyền Camera từ cài đặt hệ thống.</string>
     <string name="denied_permission_generic">Vài quyền đang thiếu để thực hiện hành vi này, vui lòng cấp quyền từ cài đặt hệ thống.</string>
-    <string name="settings_set_workmanager_delay">Tần suất đồng bộ ưu tiên</string>
     <string name="settings_set_sync_timeout">Yêu cầu đồng bộ hết thời hạn</string>
-    <string name="settings_enable_background_sync">Bật đồng bộ ngầm</string>
     <string name="settings_start_on_boot">Chạy khi khởi động</string>
-    <string name="settings_background_sync_update_error">Cập nhật thiết lập thất bại.</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Bạn sẽ không được báo tin nhắn đến khi App đang hoạt động ngầm.</string>
     <string name="settings_background_sync">Đồng bộ ngầm</string>
     <string name="settings_background_fdroid_sync_mode">Chế độ đồng bộ ngầm</string>
@@ -872,52 +606,21 @@
     <string name="settings_silent_notifications_preferences">Cấu hình thông báo im lặng</string>
     <string name="settings_call_notifications_preferences">Cấu hình thông báo cuộc gọi</string>
     <string name="settings_noisy_notifications_preferences">Cấu hình thông báo ầm ĩ</string>
-    <string name="settings_turn_screen_on">Mở màn hình trong 3 giây</string>
     <string name="settings_enable_this_device">Bật thông báo cho phiên này</string>
     <string name="settings_enable_all_notif">Bật thông báo cho tài khoản này</string>
     <string name="settings_notification_ringtone">Âm thanh thông báo</string>
-    <string name="settings_notification_privacy_message_content_not_shown">• Thông báo sẽ <b>không hiện nội dung tin nhắn</b></string>
-    <string name="settings_notification_privacy_nosecure_message_content">• Thông báo chứa <b>meta và dữ liệu nội dung tin nhắn</b></string>
-    <string name="settings_notification_privacy_secure_message_content">• Nội dung thông báo được <b>truy cập an toàn từ homeserver</b></string>
-    <string name="settings_notification_privacy_metadata">• Thông báo chỉ chứa dữ liệu meta</string>
-    <string name="settings_notification_privacy_fcm">• Thông báo được gửi qua Firebase Cloud Messaging</string>
-    <string name="settings_notification_privacy_no_background_sync">App <b>không cần</b> kết nối tới máy chủ khi đang ở background, điều này giúp giảm hao pin</string>
-    <string name="settings_notification_privacy_need_permission">App cần quyền để thực thi ở background</string>
-    <string name="settings_notification_privacy_reduced">Rút gọn Riêng tư</string>
-    <string name="settings_notification_privacy_normal">Bình thường</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Bỏ qua trình tối ưu pin</string>
-    <string name="template_settings_troubleshoot_test_battery_success">${app_name} không bị ảnh hưởng bởi Trình tối ưu pin.</string>
+    <string name="settings_troubleshoot_test_battery_success">${app_name} không bị ảnh hưởng bởi Trình tối ưu pin.</string>
     <string name="settings_troubleshoot_test_battery_title">Tối ưu pin</string>
     <string name="settings_troubleshoot_test_bg_restricted_quickfix">Hủy các giới hạn</string>
     <string name="deactivate_account_title">Hủy tài khoản</string>
     <string name="dialog_user_consent_submit">Xem lại ngay</string>
     <string name="encryption_information_device_key">Chìa khóa phiên</string>
     <string name="encryption_information_device_id">Mã phiên</string>
-    <string name="encryption_information_name">Tên công khai</string>
-    <string name="device_name_warning">Tên công khai của phiên được thấy bởi người bạn nói chuyện với</string>
-    <string name="encryption_information_device_name_with_warning">Tên công khai (người nói chuyện với bạn có thể thấy)</string>
     <string name="encryption_information_device_name">Tên công khai</string>
-    <string name="encryption_information_sender_device_information">Thông tin phiên của người gửi</string>
     <string name="encryption_information_decryption_error">Lỗi giải mã</string>
-    <string name="encryption_information_session_id">Mã phiên</string>
-    <string name="encryption_information_algorithm">Thuật toán</string>
-    <string name="encryption_information_claimed_ed25519_fingerprint_key">Chìa khóa vân tay Ed25519</string>
-    <string name="encryption_information_curve25519_identity_key">Mã định danh Curve25519</string>
-    <string name="encryption_information_user_id">Mã người dùng</string>
-    <string name="encryption_information_device_info">Thông tin sự kiện</string>
-    <string name="encryption_information_title">Thông tin mã hóa đầu cuối</string>
-    <string name="failed_to_load_timeline_position">%s đã cố tải dữ liệu ở một thời điểm cụ thể trong phòng này nhưng không thể tìm thấy.</string>
-    <string name="room_settings_no_flair">Phòng này không hiển thị ký hiệu cho bất cứ cộng đồng nào</string>
-    <string name="room_settings_addresses_add_new_address">Địa chỉ mới (ví dụ #foo:matrix.org)</string>
-    <string name="room_settings_addresses_no_local_addresses">Phòng này không có địa chỉ địa phương</string>
-    <string name="room_settings_never_send_to_unverified_devices_summary">Không bao giờ gửi các tin được mã hóa đến các phiên chưa được xác thực trong phòng này.</string>
-    <string name="room_settings_never_send_to_unverified_devices_title">Chỉ giải mã các phiên được xác thực</string>
-    <string name="room_settings_labs_end_to_end_warnings">Bạn cần đăng xuất trước khi có thể kích hoạt mã hóa đầu cuối.</string>
-    <string name="room_settings_labs_end_to_end_is_active">Mã hóa đầu cuối đang được bật</string>
-    <string name="room_settings_labs_end_to_end">Mã hoa đầu cuối</string>
     <string name="room_settings_labs_warning_message">Những chức năng này mang tính thí nghiệm có thể còn nhiều lỗi. Lưu ý khi dùng.</string>
     <string name="room_settings_labs_pref_title">Chức năng thí nghiệm</string>
-    <string name="room_settings_addresses_pref_title">Địa chỉ</string>
     <string name="room_settings_room_version_title">Phiên bản phòng</string>
     <string name="room_settings_room_internal_id">Mã nội bộ của phòng này</string>
     <string name="room_settings_category_advanced_title">Nâng cao</string>
@@ -943,10 +646,6 @@
     <string name="room_settings_room_access_private_title">Riêng tư</string>
     <string name="room_settings_room_access_entry_unknown">Thiết lập tiếp cận không được nhận dạng (%s)</string>
     <string name="room_settings_room_access_entry_knock">Bất kỳ ai cũng có thể gõ phòng, thành viên có thể chấp thuận hoặc từ chối</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_including_guest">Bất kỳ ai biết địa chỉ phòng, gồm cả khách chưa đăng nhập</string>
-    <string name="room_settings_room_access_entry_anyone_with_link_apart_guest">Bất kỳ ai biết được địa chỉ phòng, trừ khách chưa đăng nhập</string>
-    <string name="room_settings_room_access_entry_only_invited">Chỉ dành cho người được mời</string>
-    <string name="room_settings_room_access_warning">Để liên kết với phòng khác, phòng cần có địa chỉ.</string>
     <string name="room_settings_read_history_entry_members_only_joined">Chỉ dành cho thành viên (từ thời điểm tham gia)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Chỉ dành cho thành viên (từ thời điểm được mời)</string>
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Chỉ dành cho thành viên (từ thời điểm chọn thiết lập này)</string>
@@ -962,44 +661,29 @@
     <string name="room_alias_address_hint">Địa chỉ không khai mới</string>
     <string name="room_alias_address_empty">Chưa có địa chỉ công khai nào khác.</string>
     <string name="room_alias_address_empty_can_add">Chưa có địa chỉ công khai, thêm mới địa chỉ dưới đây.</string>
-    <string name="room_alias_publish">Công khai phòng chat này trong danh mục phòng %1$s\?</string>
     <string name="room_alias_delete_confirmation">Xóa địa chỉ \"%1$s\"\?</string>
     <string name="room_alias_unpublish_confirmation">Bỏ công khai địa chỉ \"%1$s\"\?</string>
     <string name="room_alias_published_alias_add_manually_submit">Công khai</string>
     <string name="room_alias_published_alias_add_manually">Công khai một địa chỉ phòng chat</string>
     <string name="room_alias_published_other">Các địa chỉ công khai khác:</string>
-    <string name="room_alias_main_address_hint">Địa chỉ chính</string>
     <string name="room_alias_published_alias_main">Đây là địa chỉ chính của phòng chat</string>
     <string name="room_alias_published_alias_subtitle">Các địa chỉ công khai có thể được sử dụng bởi bất kỳ ai để tham gia phòng chat. Để công khai một địa chỉ, phòng chat cần được thiết lập một địa chỉ địa phương trước.</string>
     <string name="room_alias_published_alias_title">Các địa chỉ công khai</string>
-    <string name="room_alias_title">Các địa chỉ Phòng</string>
     <string name="space_settings_alias_subtitle">Quản lý các địa chỉ của Không gian.</string>
     <string name="space_settings_alias_title">Địa chỉ Không gian</string>
     <string name="room_settings_alias_subtitle">Quản lý địa chỉ phòng chat này và thiết lập xem tin nhắn trong danh sách phòng.</string>
     <string name="room_settings_alias_title">Các địa chỉ phòng chat</string>
     <string name="room_settings_guest_access_title">Cho phép khách tham gia</string>
     <string name="room_settings_room_access_title">Tham gia phòng chat</string>
-    <string name="room_settings_room_access_rules_pref_dialog_title">Ai có thể tham gia phòng chat này\?</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Thay đổi ai có thể đọc lịch sử phòng chat chỉ được áp dụng đối với các tin nhắn từ thời điểm này.</string>
     <string name="room_settings_room_read_history_rules_pref_dialog_title">Ai có thể đọc lịch sử phòng chat\?</string>
     <string name="room_settings_room_read_history_rules_pref_title">Khả năng đọc lịch sử phòng chat</string>
-    <string name="room_settings_room_access_rules_pref_title">Tiếp cận phòng chat</string>
     <string name="room_settings_room_notifications_account_settings">Thiết lập tài khoản</string>
     <string name="room_settings_room_notifications_manage_notifications">Bạn có thể quản lý thông báo trong %1$s.</string>
     <string name="room_settings_room_notifications_encryption_notice">Lưu ý rằng đề cập và thông báo từ khóa không có sẵn trong các phòng chat mã hóa trên điện thoại.</string>
     <string name="room_settings_room_notifications_notify_me">Gửi thông báo tới tôi cho</string>
-    <string name="room_settings_room_notifications_title">Thông báo</string>
-    <string name="room_settings_directory_visibility">Hiện phòng này trong danh sách phòng</string>
-    <string name="room_settings_category_access_visibility_title">Tiếp cận</string>
-    <string name="room_settings_tag_pref_entry_none">Không có</string>
-    <string name="room_settings_tag_pref_entry_low_priority">Ưu tiên thấp</string>
-    <string name="room_settings_tag_pref_entry_favourite">Yêu thích</string>
-    <string name="room_settings_tag_pref_dialog_title">Được đánh thẻ:</string>
-    <string name="room_settings_room_tag">Thẻ Phòng</string>
     <string name="room_settings_topic">Chủ đề</string>
-    <string name="room_settings_room_name">Tên Phòng</string>
     <string name="spaces">Không gian</string>
-    <string name="learn_more">Xem thêm</string>
     <string name="call_remove_jitsi_widget_progress">Kết thúc cuộc gọi…</string>
     <string name="call_ended_invite_timeout_title">Không trả lời</string>
     <string name="call_ended_user_busy_description">Người dùng bạn vừa gọi đang bận.</string>
@@ -1037,10 +721,7 @@
     <string name="room_list_quick_actions_notifications_all">Tất cả tin nhắn</string>
     <string name="room_list_quick_actions_notifications_all_noisy">Tất cả tin nhắn (ầm ĩ)</string>
     <string name="message_ignore_user">Lơ người dùng</string>
-    <string name="no_network_indicator">Hiện không có kết nối mạng</string>
-    <string name="template_permissions_rationale_msg_keys_backup_export">${app_name} cần được cấp quyền để lưu khóa bảo mật E2E keys trên bộ nhớ.
-\n
-\nVui lòng cấp quyền để App có thể xuất khẩu khóa bảo mật.</string>
+
     <string name="content_reported_as_inappropriate_content">Nội dung này bị báo cáo không phù hợp.
 \n
 \nNếu bạn không muốn thấy thêm nội dung từ người dùng này, bạn có thể lơ họ để ẩn nội dung tin nhắn.</string>
@@ -1070,13 +751,11 @@
     <string name="rotate_and_crop_screen_title">Xoay chiều và cắt bớt</string>
     <string name="attachment_type_sticker">Sticker</string>
     <string name="attachment_type_gallery">Bộ sưu tập</string>
-    <string name="attachment_type_audio">Âm thành</string>
     <string name="attachment_type_camera">Máy ảnh</string>
     <string name="attachment_type_contact">Liên hệ</string>
     <string name="attachment_type_file">Tệp</string>
     <string name="attachment_type_dialog_title">Thêm hình từ</string>
     <string name="error_attachment">Lỗi xảy ra khi hiển thị tệp đính kèm.</string>
-    <string name="error_file_too_big">Tệp \'%1$s\' (%2$s) quá lớn để tải lên. Dung lượng tối đa là %3$s.</string>
     <string name="error_file_too_big_simple">Tệp quá lớn để tải lên.</string>
     <plurals name="fallback_users_read">
         <item quantity="other">%d người dùng đã đọc</item>
@@ -1087,14 +766,9 @@
     <plurals name="two_and_some_others_read">
         <item quantity="other">%1$s, %2$s và %3$d người khác đã đọc</item>
     </plurals>
-    <string name="a11y_beta">Chức năng thử nghiệm</string>
     <string name="a11y_jump_to_bottom">Nhảy xuống đáy</string>
-    <string name="a11y_hide_password">Ẩn mật khẩu</string>
-    <string name="a11y_show_password">Hiện mật khẩu</string>
     <string name="a11y_close_keys_backup_banner">Đóng banner sao lưu khóa</string>
     <string name="a11y_create_room">Tạo phòng chat mới</string>
-    <string name="a11y_create_direct_message_by_qr_code">Tạo phòng chat 1–1 bằng cách quét mã QR</string>
-    <string name="a11y_create_direct_message_by_mxid">Tạo mới phòng chat 1–1 theo ID Matrix</string>
     <string name="a11y_create_direct_message">Tạo mới phòng chat 1–1</string>
     <string name="a11y_create_menu_close">Đóng menu tạo phòng…</string>
     <string name="a11y_create_menu_open">Mở menu tạo phòng</string>
@@ -1104,22 +778,14 @@
     <string name="add_identity_server">Cấu hình máy chủ định danh</string>
     <string name="disconnect_identity_server">Ngắt kết nối máy chủ định danh</string>
     <string name="identity_server">Máy chủ định danh</string>
-    <string name="read_at">Đọc lúc</string>
     <string name="terms_description_for_integration_manager">Sử dụng Bot, cầu nối, widget hoặc sticker</string>
     <string name="terms_description_for_identity_server">Được khám phá bởi người khác</string>
-    <string name="review_terms">Xem lại Điều khoản</string>
     <string name="terms_of_service">Điều khoản Dịch vụ</string>
     <string name="message_view_edit_history">Xem lịch sử chỉnh sửa</string>
-    <string name="joining_room">Tham gia phòng…</string>
     <string name="direct_room_user_list_suggestions_title">Gợi ý</string>
-    <string name="direct_room_user_list_contacts_title">Danh bạ</string>
     <string name="direct_room_user_list_known_title">Thành viên đã biết</string>
-    <string name="direct_room_user_list_recent_title">Gần đây</string>
-    <string name="direct_room_filter_hint">Lọc theo tên đăng nhập hoặc ID…</string>
-    <string name="direct_room_start_search">Gõ phím để tìm kết quả</string>
     <string name="qr_code">Mã QR</string>
     <string name="add_by_qr_code">Thêm vào phòng bằng QR code</string>
-    <string name="add_by_matrix_id">Thêm vào phòng bằng ID</string>
     <string name="link_copied_to_clipboard">Đường link được copy</string>
     <string name="labs_swipe_to_reply_in_timeline">Bật chức năng quẹt để Trả lời</string>
     <string name="search_hint_room_name">Tìm Tên</string>
@@ -1128,23 +794,18 @@
     <string name="room_filtering_footer_create_new_direct_message">Gửi tin nhắn tới phòng 1–1</string>
     <string name="room_filtering_footer_create_new_room">Tạo phòng chat mới</string>
     <string name="room_filtering_footer_title">Không tìm thấy kết quả cần tìm\?</string>
-    <string name="direct_room_no_known_users">Không tìm thấy, sử dụng chức năng thêm thành viên bằng username.</string>
     <string name="creating_direct_room">Tạo phòng chat…</string>
-    <string name="room_list_catchup_welcome_title">Chào mừng về nhà!</string>
     <string name="room_list_catchup_empty_body">Tất cả tin nhắn đã được đọc</string>
     <string name="room_list_catchup_empty_title">Bạn đã thấy tất cả tin nhắn!</string>
     <string name="invited_by">Được mời bởi %s</string>
     <string name="send_you_invite">Lời mời đã được gửi</string>
-    <string name="room_list_empty">Tham gia phòng chat để bắt đầu sử dụng app.</string>
     <string name="global_retry">Thử lại</string>
     <string name="reply">Phản hồi</string>
     <string name="edit">Sửa</string>
-    <string name="room_settings_room_photo">Hình phòng</string>
     <string name="media_saving_period_forever">Mãi mãi</string>
     <string name="media_saving_period_1_month">1 tháng</string>
     <string name="media_saving_period_1_week">1 tuần</string>
     <string name="media_saving_period_3_days">3 ngày</string>
-    <string name="settings_without_flair">Bạn hiện không là thành viên của bất cứ cộng đồng nào.</string>
     <string name="settings_flair">Biểu tượng</string>
     <string name="settings_play_shutter_sound">Phát âm thanh shutter</string>
     <string name="media_source_choose">Chọn</string>
@@ -1152,40 +813,21 @@
     <string name="compression_opt_list_choose">Chọn</string>
     <string name="settings_default_compression">Nén dữ liệu mặc định</string>
     <string name="settings_media">Media</string>
-    <string name="account_additional_info">Thông tin bổ sung: %s</string>
-    <string name="account_phone_number_error">Lỗi xảy ra khi xác thực số điện thoại của bạn.</string>
-    <string name="settings_phone_number_code">Mã</string>
-    <string name="settings_phone_number_verification_error">Lỗi khi xác thực số điện thoại</string>
-    <string name="settings_phone_number_verification_error_empty_code">Nhập mã kích hoạt</string>
-    <string name="settings_phone_number_verification_instruction">Chúng tôi vừa gửi tin nhắn có mã kích hoạt. Vui lòng nhập mã này bên dưới.</string>
-    <string name="settings_phone_number_verification">Xác thực số điện thoại</string>
-    <string name="settings_phone_number_error">Số điện thoại không hợp lệ với quốc gia này</string>
-    <string name="settings_phone_number_label">Số điện thoại</string>
-    <string name="settings_phone_number_country_error">Vui lòng chọn quốc gia</string>
-    <string name="settings_phone_number_country_label">Quốc gia</string>
     <string name="settings_select_country">Chọn quốc gia</string>
-    <string name="settings_delete_threepid_confirmation">Bạn có chắc muốn hủy %1$s %2$s\?</string>
-    <string name="settings_delete_notification_targets_confirmation">Bạn có chắc muốn hủy bỏ mục tiêu thông báo này\?</string>
     <string name="settings_emails_and_phone_numbers_summary">Quản lý email và số điện thoại liên kết với tài khoản Matrix</string>
     <string name="settings_emails_and_phone_numbers_title">Email và số điện thoại</string>
-    <string name="passwords_do_not_match">Mật khẩu không khớp</string>
     <string name="settings_unignore_user">Hiện tất cả tin nhắn từ %s\?
 \n
 \nLưu ý rằng hành động này sẽ khởi động App và có thể mất nhiều thời gian.</string>
     <string name="settings_password_updated">Mật khẩu của bạn vừa được cập nhật</string>
     <string name="settings_fail_to_update_password_invalid_current_password">Mật khẩu này không hợp lệ</string>
     <string name="settings_fail_to_update_password">Cập nhật mật khẩu thất bại</string>
-    <string name="settings_change_password_submit">Cập nhật mật khẩu</string>
-    <string name="settings_confirm_password">Xác nhận mật khẩu mới</string>
     <string name="settings_new_password">Mật khẩu mới</string>
     <string name="settings_old_password">Mật khẩu hiện tại</string>
     <string name="settings_change_password">Đổi mật khẩu</string>
     <string name="settings_password">Mật khẩu</string>
-    <string name="account_email_error">Lỗi xảy ra khi xác thực địa chỉ email của bạn.</string>
     <string name="account_phone_number_already_used_error">Số điện thoại này đã được sử dụng.</string>
-    <string name="account_email_not_found_error">Địa chỉ email này không tìm thấy.</string>
     <string name="account_email_already_used_error">Địa chỉ Email này đã được sử dụng.</string>
-    <string name="account_email_validation_title">Chờ xác thực</string>
     <string name="settings_select_language">Chọn ngôn ngữ</string>
     <string name="settings_interface_language">Ngôn ngữ</string>
     <string name="settings_user_interface">Giao diện người dùng</string>
@@ -1196,31 +838,22 @@
     <string name="settings_identity_server">Máy chủ định danh</string>
     <string name="settings_home_server">Máy chủ</string>
     <string name="settings_logged_in">Đăng nhập tài khoản</string>
-    <string name="devices_delete_submit_button_label">Gửi</string>
-    <string name="devices_delete_pswd">Mật khẩu:</string>
     <string name="devices_delete_dialog_title">Đăng nhập</string>
-    <string name="devices_delete_dialog_text">Tác vụ này cần đăng nhập lại.
-\nNhập mật khẩu để tiếp tục.</string>
+
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
     <string name="devices_details_last_seen_title">Thấy lần cuối</string>
     <string name="devices_details_device_name">Cập nhật Tên công khai</string>
     <string name="devices_details_name_title">Tên công khai</string>
     <string name="devices_details_id_title">ID</string>
-    <string name="devices_details_dialog_title">Thông tin phiên</string>
-    <string name="settings_data_save_mode">Chế độ tiết kiệm dữ liệu</string>
-    <string name="settings_opt_in_of_analytics_ok">Có, Tôi muốn giúp!</string>
-    <string name="template_settings_opt_in_of_analytics_prompt">Cho phép lấy dữ liệu phân tích để giúp cải thiện ${app_name}.</string>
-    <string name="template_settings_opt_in_of_analytics_summary">${app_name} thu thập dữ liệu khuyết danh để giúp chúng tôi cải thiện app.</string>
+    <string name="settings_opt_in_of_analytics_summary">${app_name} thu thập dữ liệu khuyết danh để giúp chúng tôi cải thiện app.</string>
     <string name="settings_opt_in_of_analytics">Gửi dữ liệu phân tích</string>
     <string name="settings_analytics">Phân tích</string>
-    <string name="startup_notification_fdroid_battery_optim_button_grant">Cấp quyền</string>
     <string name="reset_secure_backup_warning">Điều này sẽ thay thế Chìa khóa hoặc Chuỗi ký tự hiện tại.</string>
     <string name="reset_secure_backup_title">Tạo Chìa khóa An toàn mới hoặc đặt Chuỗi từ An toàn để bảo vệ sao lưu hiện hữu.</string>
     <string name="settings_secure_backup_section_info">Sao lưu các chìa khóa giải mã trên server của bạn để đảm bảo không mất dữ liệu và tin nhắn mã hóa.</string>
     <string name="settings_secure_backup_enter_to_setup">Thiết lập trên thiết bị này</string>
     <string name="settings_secure_backup_reset">Đặt lại sao lưu an toàn</string>
     <string name="settings_secure_backup_setup">Thiết lập sao lưu an toàn</string>
-    <string name="settings_secure_backup_manage">Quản lý</string>
     <string name="settings_secure_backup_section_title">Sao lưu an toàn</string>
     <string name="settings_show_emoji_keyboard_summary">Thêm nút trên dãy phím soạn tin để bật bàn phím emoji</string>
     <string name="settings_show_emoji_keyboard">Hiện bàn phím emoji</string>
@@ -1232,10 +865,8 @@
     <string name="settings_show_avatar_display_name_changes_messages">Hiện các sự kiện của tài khoản</string>
     <string name="settings_show_join_leave_messages_summary">Sự kiện mời, loại hoặc cấm thành viên không bị ảnh hưởng.</string>
     <string name="settings_show_join_leave_messages">Hiện sự kiện tham gia hoặc rời phòng</string>
-    <string name="settings_show_room_member_state_events_summary">Bao gồm sự kiện mời/tham gia/rời/loại thành viên/cấm thành viên và thay đổi tên/avatar.</string>
     <string name="settings_chat_effects_description">Gõ lệnh /confetti hoặc gửi tin chứa ❄️ hoặc 🎉</string>
     <string name="settings_chat_effects_title">Hiện hiệu ứng chat</string>
-    <string name="settings_show_room_member_state_events">Hiện trạng thái hoạt động của thành viên phòng</string>
     <string name="settings_show_read_receipts_summary">Chạm vào thông báo tin đã đọc để xem chi tiết.</string>
     <string name="settings_show_read_receipts">Hiện thông báo tin đã đọc</string>
     <string name="settings_12_24_timestamps">Hiện dấu thời gian theo chuẩn 12-giờ</string>
@@ -1246,7 +877,6 @@
     <string name="settings_send_typing_notifs">Gửi thông báo đang gõ tin nhắn</string>
     <string name="settings_inline_url_preview_summary">Xem trước trang web trong phòng chat nếu máy chủ bật hỗ trợ chức năng này.</string>
     <string name="settings_inline_url_preview">Xem trước URL</string>
-    <string name="settings_devices_list">Phiên làm việc</string>
     <string name="settings_pin_unread_messages">Ghim phòng có tin nhắn chưa đọc</string>
     <string name="settings_pin_missed_notifications">Ghim phòng có thông báo nhỡ</string>
     <string name="settings_home_display">Màn hình home</string>
@@ -1275,8 +905,7 @@
         <item quantity="other">%d giây</item>
     </plurals>
     <string name="settings_set_sync_delay">Thời gian chờ giữa 2 lần đồng bộ</string>
-    <string name="settings_set_workmanager_delay_summary">%s
-\nTiến trình đồng bộ có thể bị gián đoạn tùy thuộc vào lượng pin và trạng thái hoạt động của thiết bị.</string>
+
     <string name="login_validation_code_is_not_correct">Mã nhập vào không hợp lệ. Vui lòng kiểm tra.</string>
     <string name="login_wait_for_email_notice">Chúng tôi vừa gửi email tới %1$s.
 \nClick vào đường link trong email để tiếp tục quá trình tạo tài khoản.</string>
@@ -1359,7 +988,7 @@
     <string name="login_server_text">Giống như email, tài khoản cần có nhà riêng, dù bạn có thể nói chuyện với bất kỳ ai</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Thiết lập tùy chỉnh.</string>
     <string name="settings_troubleshoot_test_device_settings_quickfix">Khả dụng</string>
-    <string name="template_settings_troubleshoot_test_device_settings_failed">Thông báo không được bật cho phiên này.
+    <string name="settings_troubleshoot_test_device_settings_failed">Thông báo không được bật cho phiên này.
 \nVui lòng kiểm tra trong thiết lập ứng dụng ${app_name}.</string>
     <string name="settings_troubleshoot_test_device_settings_success">Thông báo được bật cho phiên này.</string>
     <string name="settings_troubleshoot_test_device_settings_title">Thiết lập phiên.</string>
@@ -1374,7 +1003,6 @@
     <string name="settings_troubleshoot_test_system_settings_success">Thông báo được bật trong thiết lập hệ thống.</string>
     <string name="settings_troubleshoot_test_system_settings_title">Thiết lập hệ thống.</string>
     <string name="settings_notification_troubleshoot">Xử lý lỗi thông báo</string>
-    <string name="settings_notification_privacy">Chính sách riêng tư của thông báo</string>
     <string name="settings_notification_keyword_contains_invalid_character">Từ khóa không được chứa \'%s\'</string>
     <string name="settings_notification_keyword_contains_dot">Từ khóa không được bắt đầu với \'.\'</string>
     <string name="settings_notification_new_keyword">Thêm mới từ khóa</string>
@@ -1390,70 +1018,27 @@
     <string name="settings_phone_numbers">Số điện thoại</string>
     <string name="settings_emails_empty">Không có địa chỉ email nào trong tài khoản của bạn</string>
     <string name="settings_emails">Địa chỉ email</string>
-    <string name="settings_add_3pid_authentication_needed">Yêu cầu đăng nhập</string>
-    <string name="template_settings_add_3pid_flow_not_supported">Bạn không thể làm việc này từ ứng dụng ${app_name}</string>
-    <string name="settings_add_3pid_confirm_password_title">Xác nhận mật khẩu</string>
     <string name="settings_app_info_link_summary">Hiển thị thông tin ứng dụng trong thiết lập hệ thống.</string>
     <string name="settings_app_info_link_title">Thông tin ứng dụng</string>
     <string name="settings_add_phone_number">Thêm số điện thoại</string>
     <string name="settings_phone_number_empty">Chưa có số điện thoại trong tài khoản của bạn</string>
-    <string name="settings_phone_number">Điện thoại</string>
     <string name="settings_add_email_address">Thêm địa chỉ email</string>
-    <string name="settings_email_address">Email</string>
     <string name="settings_display_name">Tên hiển thị</string>
     <string name="settings_profile_picture">Hình đại diện</string>
-    <string name="room_sliding_menu_privacy_policy">Chính sách riêng tư</string>
-    <string name="room_sliding_menu_copyright">Bản quyền</string>
-    <string name="room_sliding_menu_third_party_notices">Lưu ý bên thứ ba</string>
-    <string name="room_sliding_menu_term_and_conditions">Điều khoản sử dụng</string>
-    <string name="room_sliding_menu_version_x">Phiên bản %s</string>
-    <string name="room_sliding_menu_version">Phiên bản</string>
-    <string name="room_sliding_menu_settings">Thiết lập</string>
-    <string name="room_sliding_menu_messages">Tin nhắn</string>
     <string name="room_settings_add_homescreen_shortcut">Thêm vào màn hình Home</string>
-    <string name="room_settings_forget">Quên</string>
-    <string name="room_settings_leave_conversation">Rời Hội thoại</string>
-    <string name="room_settings_direct_chat">Chat trực tiếp</string>
-    <string name="room_settings_de_prioritize">Đặt ưu tiên thấp</string>
-    <string name="room_settings_favourite">Yêu thích</string>
     <string name="room_settings_none">Không</string>
     <string name="room_settings_mention_and_keyword_only">Được đề cập và đúng từ khóa</string>
-    <string name="room_settings_mute">Im lặng</string>
-    <string name="room_settings_mention_only">Được đề cập tới</string>
     <string name="room_settings_all_messages">Tất cả tin</string>
-    <string name="room_settings_all_messages_noisy">Tất cả tin (ầm ĩ)</string>
-    <string name="directory_searching_title">Tìm trong danh mục…</string>
-    <plurals name="directory_search_rooms_for">
-        <item quantity="other">tìm thấy %1$s phòng cho %2$s</item>
-    </plurals>
-    <plurals name="directory_search_rooms">
-        <item quantity="other">%d phòng</item>
-    </plurals>
-    <string name="directory_search_results_title">Duyệt danh mục phòng</string>
-    <string name="search_is_not_supported_in_e2e_room">Tìm kiếm trong phòng mã hóa chưa được hỗ trợ.</string>
-    <string name="tab_title_search_files">FILES</string>
-    <string name="tab_title_search_people">NGƯỜI</string>
-    <string name="tab_title_search_messages">TIN NHẮN</string>
-    <string name="tab_title_search_rooms">PHÒNG</string>
+
+
     <string name="search_no_results">Không có kết quả</string>
     <string name="search_banned_user_hint">Lọc người dùng bị cấm</string>
     <string name="search_members_hint">Lọc thành viên phòng</string>
     <string name="search_hint">Tìm kiếm</string>
-    <string name="room_event_action_cancel_download">Hủy tải xuống</string>
-    <string name="room_event_action_cancel_upload">Hủy tải lên</string>
-    <string name="room_event_action_report_prompt_ignore_user">Bạn có muốn ẩn tất cả tin nhắn từ người dùng này\?
-\n
-\nLưu ý hành động này sẽ khởi động lại app và có thể tốn thời gian.</string>
-    <string name="room_event_action_report_prompt_reason">Lý do báo cáo nội dung này</string>
-    <string name="room_details_people_present_group_name">GIA NHẬP</string>
-    <string name="room_details_people_invited_group_name">ĐƯỢC MỜI</string>
+
     <plurals name="room_details_selected">
         <item quantity="other">%d được chọn</item>
     </plurals>
-    <string name="room_details_settings">Thiết lập</string>
-    <string name="room_details_files">Files</string>
-    <string name="room_details_people">Người</string>
-    <string name="room_details_title">Chi tiết Phòng</string>
     <string name="room_permissions_change_topic">Thay đổi chủ đề</string>
     <string name="room_permissions_upgrade_the_room">Nâng cấp phòng</string>
     <string name="room_permissions_send_m_room_server_acl_events">Gửi sự kiện m.room.server_acl</string>
@@ -1486,34 +1071,9 @@
         <item quantity="other">%d tin nhắn mới</item>
     </plurals>
     <string name="room_do_not_have_permission_to_post">Bạn không có quyền để đăng vào phòng này.</string>
-    <string name="room_message_file_not_found">Không tìm thấy tệp</string>
-    <string name="room_delete_unsent_messages">Xóa tin nhắn chưa gửi</string>
-    <string name="room_resend_unsent_messages">Gửi lại tin nhắn chưa gửi</string>
-    <string name="room_prompt_cancel">Hủy tất cả</string>
-    <string name="room_prompt_resend">Gửi lại tất cả</string>
-    <string name="room_unknown_devices_messages_notification">Tin nhắn không được gửi do có phiên làm việc không xác định. %1$s hoặc %2$s ngay\?</string>
-    <string name="room_unsent_messages_notification">Tin nhắn không được gửi. %1$s hoặc %2$s ngay\?</string>
-    <string name="room_offline_notification">Kết nối đến máy chủ đã bị mất.</string>
-    <string name="room_message_placeholder_reply_to_not_encrypted">Gửi câu trả lời (không mã hóa)…</string>
-    <string name="room_message_placeholder_reply_to_encrypted">Gửi câu trả lời mã hóa…</string>
-    <string name="room_message_placeholder_not_encrypted">Gửi tin nhắn (không mã hóa)…</string>
-    <string name="room_message_placeholder_encrypted">Gửi tin nhắn mã hóa…</string>
     <string name="room_many_users_are_typing">%1$s &amp; %2$s &amp; những người khác đang gõ…</string>
     <string name="room_two_users_are_typing">%1$s &amp; %2$s đang gõ…</string>
     <string name="room_one_user_is_typing">%s đang gõ…</string>
-    <string name="room_menu_search">Tìm kiếm</string>
-    <string name="people_search_invite_by_id_dialog_hint">Email hoặc ID Matrix</string>
-    <string name="people_search_invite_by_id_dialog_description">Vui lòng nhập một hoặc nhiều địa chỉ email hoặc ID Matrix</string>
-    <string name="people_search_invite_by_id_dialog_title">Mời người dùng theo ID</string>
-    <string name="people_search_filter_text">Chỉ người dùng Matrix</string>
-    <string name="people_search_user_directory">THƯ MỤC NGƯỜI DÙNG (%s)</string>
-    <string name="people_search_local_contacts">LIÊN HỆ CỤC BỘ (%d)</string>
-    <string name="people_search_invite_by_id"><u>Mời theo ID</u></string>
-    <string name="room_participants_invite_join_names_combined">%1$s %2$s</string>
-    <string name="room_participants_invite_join_names_and">%1$s và %2$s</string>
-    <string name="room_participants_invite_join_names">"%1$s, "</string>
-    <string name="room_participants_invite_prompt_msg">Bạn có chắc bạn muốn mời %s vào cuộc trò chuyện này không\?</string>
-    <string name="reason_hint">Lý do</string>
     <string name="room_participants_unban_prompt_msg">Việc hủy cấm người dùng sẽ cho phép họ tham gia lại phòng.</string>
     <string name="room_participants_ban_prompt_msg">Việc cấm người dùng sẽ đá họ ra khỏi phòng này và ngăn họ tham gia lại.</string>
     <string name="room_participants_unban_title">Hủy cấm người dùng</string>
@@ -1534,33 +1094,25 @@
     <string name="room_settings_space_access_public_description">Ai có thể tìm và tham gia không gian</string>
     <string name="room_settings_space_access_title">Truy cập không gian</string>
     <string name="room_settings_access_rules_pref_dialog_title">Ai có quyền truy cập\?</string>
-    <string name="account_email_validation_error">Không thể hoàn thành xác nhận email. Vui lòng kiểm tra email của bạn và bấm vào đường liên kết trong đó. Một khi đã xong, bấm tiếp tục.</string>
     <string name="account_email_validation_message">Vui lòng kiểm tra email và bấm vào liên kết trong đó. Một khi xong, bấm tiếp tục.</string>
-    <string name="settings_data_save_mode_summary">Chế độ tiết kiệm dữ liệu sẽ dừng việc đưa ra các thông báo đang có mặt và đang gõ.</string>
-    <string name="template_startup_notification_fdroid_battery_optim_message">${app_name} cần phải giữ kết nối mạng liên tục dưới nền để đạt hiệu quả thông báo cao nhất:
-\nỞ màn hình tiếp theo ban sẽ được hỏi để cho phép ${app_name} hoạt động liên tục dưới nền, hãy nhấn cho phép.</string>
-    <string name="template_startup_notification_privacy_message">${app_name} sẽ chạy dưới nền để quản lý các thông báo của bạn một cách chính xác và riêng tư. Điều này sẽ có thể ảnh hưởng đến thời lượng pin.</string>
-    <string name="startup_notification_privacy_title">Thông báo riêng tư</string>
+
     <string name="settings_integrations_summary">Sử dụng trình quản lý chung để quản lý bot, các cầu nối, widget và các gói nhãn dán.
 \nTrình quản lý chung sẽ nhận được dữ liệu hiệu chỉnh, và sẽ có thể điều chỉnh các widget, gửi lời mời vào phòng và thiết lập các mốc quyền lợi theo ý bạn.</string>
-    <string name="template_settings_background_fdroid_sync_mode_real_time_description">${app_name} sẽ đồng bộ hóa dưới nền trong một khoảng thời gian nhất định (có thể điều chỉnh thời gian).
+    <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} sẽ đồng bộ hóa dưới nền trong một khoảng thời gian nhất định (có thể điều chỉnh thời gian).
 \nViệc này sẽ làm ảnh hưởng tới khả năng thu phát và sử dụng pin, sẽ xuất hiện một thông báo cho biết lúc nào ${app_name} đang hoạt động.</string>
-    <string name="template_settings_background_fdroid_sync_mode_battery_description">${app_name} sẽ đồng bộ dưới nền và sẽ sử dụng các tài nguyên như pin một cách tiết kiệm.
+    <string name="settings_background_fdroid_sync_mode_battery_description">${app_name} sẽ đồng bộ dưới nền và sẽ sử dụng các tài nguyên như pin một cách tiết kiệm.
 \nTùy vào các tài nguyên có sẵn trên thiết bị, việc đồng bộ hóa có thể sẽ bị ngăn cản bởi hệ điều hành.</string>
     <string name="settings_troubleshoot_test_battery_failed">Nếu người dùng để thiết bị đã tháo sạc và đang chờ trong khoảng thời gian, với màn hình tắt, thiết bị sẽ khởi động chế độ Doze. Việc này ngăn cản các ứng dụng sử dụng mạng và dừng lại các hoạt động đồng bộ hóa, kể cả các báo thức.</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_failed">Giới hạn dưới nền đã được bật cho ${app_name}.
+    <string name="settings_troubleshoot_test_bg_restricted_failed">Giới hạn dưới nền đã được bật cho ${app_name}.
 \nCác hoạt động của ứng dụng sẽ bị giới hạn nặng nề khi chạy dưới nền, điều này có thể ảnh hưởng đến cách thông báo của ứng dụng.
 \n%1$s</string>
-    <string name="template_settings_troubleshoot_test_bg_restricted_success">Các giới hạn dưới nền đã được tắt cho ${app_name}. Bài kiểm tra này sẽ được chạy khi sử dụng dữ liệu di động (không Wi-Fi).
+    <string name="settings_troubleshoot_test_bg_restricted_success">Các giới hạn dưới nền đã được tắt cho ${app_name}. Bài kiểm tra này sẽ được chạy khi sử dụng dữ liệu di động (không Wi-Fi).
 \n%1$s</string>
     <string name="settings_troubleshoot_test_bg_restricted_title">Kiểm tra giới hạn dưới nền</string>
     <string name="settings_troubleshoot_test_service_boot_quickfix">Bật khởi động cùng hệ thống</string>
-    <string name="template_settings_troubleshoot_test_service_boot_failed">Dịch vụ sẽ không khởi động sau khi thiết bị đã khởi động lại, bạn sẽ không nhận được bất kỳ thông báo nào cho tới khi ${app_name} được mở một lần.</string>
+    <string name="settings_troubleshoot_test_service_boot_failed">Dịch vụ sẽ không khởi động sau khi thiết bị đã khởi động lại, bạn sẽ không nhận được bất kỳ thông báo nào cho tới khi ${app_name} được mở một lần.</string>
     <string name="settings_troubleshoot_test_service_boot_success">Dịch vụ sẽ bắt đầu ngay khi thiết bị được khởi động lại.</string>
     <string name="settings_troubleshoot_test_service_boot_title">Khởi động cùng hệ thống</string>
-    <string name="settings_troubleshoot_test_service_restart_failed">Dịch vụ không thể khởi động</string>
-    <string name="settings_troubleshoot_test_service_restart_success">Dịch vụ đã bị đóng và tự động khởi động lại.</string>
-    <string name="settings_troubleshoot_test_service_restart_title">Tụ động khởi động lại dịch vụ thông báo</string>
     <string name="settings_troubleshoot_test_notification_notification_clicked">Thông báo đã được bấm!</string>
     <string name="settings_troubleshoot_test_notification_notice">Hãy bấm vào thông báo. Nếu bạn không thấy bất kỳ thông báo nào, vui lòng kiểm tra cài đặt hệ thống.</string>
     <string name="settings_troubleshoot_test_notification_title">Hiển thị thông báo</string>
@@ -1574,11 +1126,11 @@
     <string name="settings_troubleshoot_test_token_registration_success">Đăng ký token FCM thành công tới máy chủ.</string>
     <string name="settings_troubleshoot_test_token_registration_title">Đăng ký token</string>
     <string name="settings_troubleshoot_test_fcm_failed_account_missing_quick_fix">Thêm tài khoản</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_account_missing">[%1$s
+    <string name="settings_troubleshoot_test_fcm_failed_account_missing">[%1$s
 \nLỗi này đã vượt khỏi tầm kiểm soát của ${app_name}. Không phát hiện thấy tài khoản Google trên thiết bị. Vui lòng thêm một tài khoản.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s
+    <string name="settings_troubleshoot_test_fcm_failed_service_not_available">[%1$s
 \nLỗi này đã vượt ra khỏi tầm kiểm soát của ${app_name}. Nó có thể xảy ra vì vài lý do. Có thể nó sẽ hoạt động nếu bạn thử lại sau, bạn cũng có thể kiểm rằng các dịch vụ của Google Play không bị giới hạn quyền sử dụng data trong cài đặt hệ thống, hoặc đồng hồ trên thiết bị của bạn bị sai, hoặc là do bản ROM custom của bạn.</string>
-    <string name="template_settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s
+    <string name="settings_troubleshoot_test_fcm_failed_too_many_registration">[%1$s
 \nLỗi này đã vượt ra khỏi tầm kiểm soát của ${app_name} và theo như Google thông báo, lỗi này chỉ ra rằng thiết bị đã có quá nhiều ứng dụng được đăng ký với FCM. Lỗi này chỉ xảy ra khi có quá nhiều ứng dụng hoạt động, vì vậy có thể sẽ không ảnh hưởng đến trải nghiệm người dùng cơ bản.</string>
     <string name="settings_troubleshoot_test_fcm_failed">Lấy token FCM thất bại:
 \n%1$s</string>
@@ -1586,12 +1138,10 @@
 \n%1$s</string>
     <string name="settings_troubleshoot_test_fcm_title">Token Firebase</string>
     <string name="settings_troubleshoot_test_play_services_quickfix">Sửa dịch vụ của Google Play</string>
-    <string name="template_settings_troubleshoot_test_play_services_failed">${app_name} sử dụng Dịch vụ của Google Play nhằm đưa ra cái thông báo đẩy nhưng có vẻ nó đã không được căn chỉnh đúng cách:
+    <string name="settings_troubleshoot_test_play_services_failed">${app_name} sử dụng Dịch vụ của Google Play nhằm đưa ra cái thông báo đẩy nhưng có vẻ nó đã không được căn chỉnh đúng cách:
 \n%1$s</string>
     <string name="settings_troubleshoot_test_play_services_success">Dịch vụ của Google Play APK đang hoạt động và đã được nâng cấp lên phiên bản mới nhất.</string>
     <string name="settings_troubleshoot_test_play_services_title">Kiểm tra dịch vụ của Google Play</string>
-    <string name="settings_troubleshoot_test_bing_settings_quickfix">Kiểm tra các cài đặt</string>
-    <string name="settings_troubleshoot_test_bing_settings_failed_to_load_rules">Không thể thiết lập các thay đổi nâng cao, vui lòng thử lại.</string>
     <string name="settings_troubleshoot_test_bing_settings_failed">Bạn đã tắt một vài thông báo trong cài đặt nâng cao.</string>
     <string name="settings_troubleshoot_test_bing_settings_success_with_warn">Một vài thông báo tin nhắn đã được thiết lập thành im lặng (sẽ thông báo nhưng không có âm thanh).</string>
     <string name="settings_troubleshoot_diagnostic_failure_status_no_quickfix">Một hoặc nhiều phép thử đã thất bại, vui lòng gửi một bản báo cáo lỗi để giúp chúng tôi điều tra.</string>
@@ -1603,7 +1153,6 @@
     <string name="settings_notification_emails_enable_for_email">Bật thông báo qua email cho %s</string>
     <string name="settings_notification_emails_no_emails">Để được nhận thông báo qua email, hãy liên kết một địa chỉ mail với tài khoản Matrix của bạn</string>
     <string name="settings_notification_emails_category">Thông báo qua email</string>
-    <string name="malformed_id">ID không hợp lệ. ID hợp lệ có thể là một địa chỉ email hoặc một ID Matrix như \'@localpart:domain\'</string>
     <string name="room_permissions_upgrade_the_space">Nâng cấp không gian</string>
     <string name="room_permissions_change_space_name">Thay đổi tên không gian</string>
     <string name="room_permissions_enable_space_encryption">Bật mã hóa không gian</string>
@@ -1624,13 +1173,7 @@
     <string name="space_participants_remove_prompt_msg">hành động của bạn sẽ xóa họ khỏi không gian này.
 \n
 \nTrong trường hợp không muốn họ quay lại, bạn nên cấm họ tham gia lần nữa.</string>
-    <string name="room_settings_addresses_invalid_format_dialog_body">\'%s\' không phải là định dạng phù hợp</string>
-    <string name="room_settings_addresses_invalid_format_dialog_title">Định dạng không phù hợp</string>
-    <string name="room_settings_invalid_group_format_dialog_body">\'%s\' không phải là một ID cộng đồng hợp lệ</string>
-    <string name="room_settings_invalid_group_format_dialog_title">ID cộng đồng không hợp lệ</string>
-    <plurals name="call_only_paused">
-        <item quantity="other">%1$d cuộc gọi bị tạm dừng</item>
-    </plurals>
+
     <plurals name="entries">
         <item quantity="other">%d mục</item>
     </plurals>
@@ -1661,12 +1204,8 @@
     <plurals name="keys_backup_restore_success_description_part1">
         <item quantity="other">Đã khôi phục bản sao lưu với % d chìa khóa.</item>
     </plurals>
-    <plurals name="group_rooms">
-        <item quantity="other">%d phòng</item>
-    </plurals>
-    <plurals name="group_members">
-        <item quantity="other">%d thành viên</item>
-    </plurals>
+
+
     <plurals name="active_widgets">
         <item quantity="other">%d widget hoạt động</item>
     </plurals>
@@ -1682,9 +1221,7 @@
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="other">%d phòng</item>
     </plurals>
-    <plurals name="notification_unread_notified_messages_in_room_msgs">
-        <item quantity="other">%d tin nhắn được thông báo chưa đọc</item>
-    </plurals>
+
     <plurals name="notification_unread_notified_messages">
         <item quantity="other">%d tin nhắn được thông báo chưa đọc</item>
     </plurals>
@@ -1705,15 +1242,10 @@
     <string name="create_poll_question_hint">Câu hỏi hoặc chủ đề</string>
     <string name="create_poll_question_title">Câu hỏi hoặc chủ đề thăm dò ý kiến</string>
     <string name="create_poll_title">Tạo Cuộc thăm dò ý kiến</string>
-    <string name="link_this_email_with_your_account">%s trong Cài đặt để nhận lời mời trực tiếp trong Element.</string>
+    <string name="link_this_email_with_your_account">%s trong Cài đặt để nhận lời mời trực tiếp trong ${app_name}.</string>
     <string name="link_this_email_settings_link">Liên kết email này với tài khoản của bạn</string>
     <string name="this_invite_to_this_space_was_sent">Lời mời này đến Space này đã được gửi đến %s không được liên kết với tài khoản của bạn</string>
     <string name="this_invite_to_this_room_was_sent">Lời mời này đến phòng này đã được gửi đến %s không được liên kết với tài khoản của bạn</string>
-    <string name="to_help_space_members_find_and_join">Để giúp các thành viên Space tìm và tham gia một phòng riêng, hãy vào cài đặt của căn phòng đó bằng cách nhấn vào hình đại diện.</string>
-    <string name="help_space_members">Giúp các thành viên Space tìm phòng riêng</string>
-    <string name="this_makes_it_easy_for_rooms_to_stay_private_to_a_space">Điều này giúp các phòng dễ dàng giữ riêng tư cho một Space, đồng thời cho phép mọi người trong Space tìm và tham gia cùng họ. Tất cả các phòng mới trong một Space sẽ có tùy chọn này có sẵn.</string>
-    <string name="help_people_in_spaces_find_and_join">Giúp mọi người trong Space tự tìm và tham gia phòng riêng, không cần phải tự mời mọi người.</string>
-    <string name="new_let_people_in_spaces_find_and_join">Mới: Cho phép mọi người trong Space tìm và tham gia phòng riêng</string>
     <string name="upgrade_room_for_restricted_note">Xin lưu ý nâng cấp sẽ tạo ra một phiên bản mới của căn phòng. Tất cả các tin nhắn hiện tại sẽ ở trong phòng lưu trữ này.</string>
     <string name="upgrade_room_for_restricted_no_param">Bất cứ ai trong Space cha mẹ sẽ có thể tìm và tham gia căn phòng này - không cần phải mời mọi người theo cách thủ công. Bạn sẽ có thể thay đổi điều này trong cài đặt phòng bất cứ lúc nào.</string>
     <string name="upgrade_room_for_restricted">Bất kỳ ai trong %s sẽ có thể tìm và tham gia phòng này - không cần phải mời mọi người theo cách thủ công. Bạn sẽ có thể thay đổi điều này trong cài đặt phòng bất cứ lúc nào.</string>
@@ -1721,7 +1253,6 @@
     <string name="error_voice_message_cannot_reply_or_edit">Không thể trả lời hoặc chỉnh sửa trong khi tin nhắn thoại đang hoạt động</string>
     <string name="error_voice_message_unable_to_record">Không thể ghi âm một tin nhắn thoại</string>
     <string name="error_voice_message_unable_to_play">Không thể phát tin nhắn thoại này</string>
-    <string name="labs_use_voice_message">Bật tin nhắn thoại</string>
     <string name="voice_message_tap_to_stop_toast">Nhấn vào bản ghi âm của bạn để dừng hoặc nghe</string>
     <string name="voice_message_n_seconds_warning_toast">%1$d còn lại</string>
     <string name="voice_message_release_to_send_toast">Giữ để ghi âm, bỏ ra để gửi</string>
@@ -1730,14 +1261,11 @@
     <string name="a11y_stop_voice_message">Dừng ghi âm</string>
     <string name="a11y_pause_voice_message">Tạm dừng Tin nhắn Thoại</string>
     <string name="a11y_play_voice_message">Phát Tin nhắn Thoại</string>
-    <string name="a11y_lock_voice_message">Khóa Tin nhắn Thoại</string>
     <string name="voice_message_slide_to_cancel">Vuốt để hủy</string>
     <string name="a11y_start_voice_message">Ghi âm tin nhắn thoại</string>
-    <string name="call_jitsi_started">Cuộc gọi nhóm bắt đầu</string>
     <string name="error_failed_to_join_room">Xin lỗi, lỗi đã xảy ra trong khi cố gắng gia nhập: %s</string>
     <string name="room_upgrade_to_recommended_version">Nâng cấp lên phiên bản phòng được đề xuất</string>
     <string name="room_using_unstable_room_version">Phòng này đang chạy phiên bản phòng %s, mà homeerver này đã đánh dấu là không ổn định.</string>
-    <string name="allow_anyone_in_room_to_access">Cho phép bất kỳ ai trong %s tìm và truy nhập. Bạn cũng có thể chọn các Space khác.</string>
     <string name="upgrade_room_no_power_to_manage">Bạn cần sự cho phép để nâng cấp một phòng</string>
     <string name="upgrade_room_update_parent_space">Tự động cập nhật Space cha mẹ</string>
     <string name="upgrade_room_auto_invite">Tự động mời người dùng</string>
@@ -1750,10 +1278,7 @@
     <string name="upgrade">Nâng cấp</string>
     <string name="it_may_take_some_time">Hãy kiên nhẫn, có thể mất một thời gian.</string>
     <string name="joining_replacement_room">Tham gia phòng thay thế</string>
-    <string name="teammate_spaces_might_not_join">Hiện tại mọi người có thể không thể tham gia bất kỳ phòng riêng nào bạn làm.
-\n
-\nChúng tôi sẽ cải thiện điều này như một phần của bản beta, nhưng chỉ muốn cho bạn biết.</string>
-    <string name="teammate_spaces_arent_quite_ready">Space đồng đội chưa hoàn toàn sẵn sàng nhưng bạn vẫn có thể thử chúng</string>
+
     <string name="unnamed_room">Phòng không tên</string>
     <string name="this_space_has_no_rooms_admin">Một số phòng có thể bị ẩn vì chúng riêng tư và bạn cần một lời mời.</string>
     <string name="this_space_has_no_rooms_not_admin">Một số phòng có thể bị ẩn vì chúng riêng tư và bạn cần một lời mời.
@@ -1769,14 +1294,11 @@
     <string name="space_mark_as_not_suggested">Đánh dấu như không đề xuất</string>
     <string name="space_mark_as_suggested">Đánh dấu như đề xuất</string>
     <string name="space_suggested">Đề nghị</string>
-    <string name="make_this_space_public">Công khai Space này</string>
     <string name="space_settings_manage_rooms">Quản lý phòng</string>
     <string name="looking_for_someone_not_in_space">Tìm kiếm một người không có trong %s\?</string>
     <string name="user_invites_you">%s mời bạn</string>
     <string name="you_are_invited">Bạn được mời</string>
     <string name="spaces_beta_welcome_to_spaces_desc">Space là một cách mới để nhóm phòng và con người.</string>
-    <string name="spaces_beta_welcome_to_spaces">Chào mừng đến Space!</string>
-    <string name="space_add_rooms">Thêm phòng</string>
     <string name="space_add_space_to_any_space_you_manage">Thêm một Space vào bất kỳ Space nào bạn quản lý.</string>
     <string name="space_add_existing_spaces">Thêm Space hiện có</string>
     <string name="space_add_existing_rooms_only">Thêm các phòng hiện có</string>
@@ -1784,7 +1306,6 @@
     <string name="pick_tings_to_leave">Chọn những thứ để rời khỏi</string>
     <string name="leave_specific_ones">Để lại các phòng và Space cụ thể…</string>
     <string name="dont_leave_any">Không rời bất kỳ phòng và Space nào</string>
-    <string name="you_will_leave_all_in">Bạn sẽ để tất cả các phòng và Space trong %s.</string>
     <string name="leave_all_rooms_and_spaces">Rời khỏi tất cả phòng và Space</string>
     <string name="space_leave_prompt_msg_as_admin">Bạn là quản trị viên duy nhất của không gian này. Rời khỏi nó sẽ có nghĩa là không ai có quyền kiểm soát nó.</string>
     <string name="space_leave_prompt_msg_private">Bạn sẽ không thể tham gia lại trừ khi bạn được mời lại.</string>
@@ -1793,8 +1314,6 @@
     <string name="leave_space">Rời khỏi Space</string>
     <string name="space_add_child_title">Thêm phòng</string>
     <string name="space_explore_activity_title">Khám phá phòng</string>
-    <string name="suggested_rooms_pills_on_empty_header">Chào mừng bạn đến với %1$s, %2$s.</string>
-    <string name="suggested_rooms_pills_on_empty_text">Bạn vẫn chưa ở trong phòng. Dưới đây là một số phòng được đề xuất, nhưng bạn có thể thấy nhiều hơn với đáy nút màu xanh lá cây bên phải.</string>
     <string name="discovery_section">Khám phá (%s)</string>
     <string name="finish_setup">Hoàn tất cài đặt</string>
     <string name="discovery_invite">Mời qua email, tìm liên hệ và hơn thế nữa…</string>
@@ -1805,7 +1324,6 @@
     <string name="skip_for_now">Bỏ qua ngay bây giờ</string>
     <string name="share_space_link_message">Gia nhập Space của tôi %1$s %2$s</string>
     <string name="invite_by_username_or_mail">Mời theo tên người dùng hoặc thư</string>
-    <string name="invite_by_username">Mời theo tên người dùng</string>
     <string name="invite_by_email">Mời qua email</string>
     <string name="invite_people_to_your_space_desc">Chỉ có anh lúc này thôi. %s sẽ còn tốt hơn với những người khác.</string>
     <string name="invite_to_space">Mời đến %s</string>
@@ -1838,7 +1356,6 @@
     <string name="create_spaces_join_info_help">Để tham gia một Space hiện có, bạn cần một lời mời.</string>
     <string name="create_spaces_you_can_change_later">Bạn có thể thay đổi điều này sau</string>
     <string name="create_spaces_choose_type_label">Bạn muốn tạo ra loại Space nào\?</string>
-    <string name="create_spaces_type_header">Space là một cách mới để nhóm phòng và con người</string>
     <string name="your_private_space">Space riêng tư của bạn</string>
     <string name="your_public_space">Space công cộng của bạn</string>
     <string name="add_space">Thêm Space</string>
@@ -1865,7 +1382,6 @@
     <string name="a11y_presence_unavailable">Không có sẵn</string>
     <string name="a11y_presence_offline">Ngoại tuyến</string>
     <string name="a11y_presence_online">Trực tuyến</string>
-    <string name="a11y_public_space">Space công cộng</string>
     <string name="a11y_public_room">Phòng công cộng</string>
     <string name="a11y_unchecked">Không kiểm tra</string>
     <string name="a11y_checked">Kiểm tra</string>
@@ -1880,7 +1396,6 @@
     <string name="call_tap_to_return">%1$s nhấp nhẹ để trả về</string>
     <string name="call_one_active">Cuộc gọi đang hoạt động (%1$s) ·</string>
     <string name="call_only_active">Cuộc gọi hiện hoạt động (%1$s)</string>
-    <string name="matrix_to_card_title">Liên kết Matrix</string>
     <string name="warning_unsaved_change_discard">Loại bỏ các thay đổi</string>
     <string name="warning_unsaved_change">Có những thay đổi chưa được lưu. Loại bỏ các thay đổi\?</string>
     <string name="warning_room_not_created_yet">Phòng vẫn chưa được tạo ra. Hủy bỏ việc tạo phòng\?</string>
@@ -1891,16 +1406,15 @@
     <string name="share_by_text">Chia sẻ theo văn bản</string>
     <string name="room_error_not_found">Không thể tìm thấy phòng này. Hãy chắc chắn rằng nó tồn tại.</string>
     <string name="error_opening_banned_room">Không thể mở phòng nơi bạn bị cấm.</string>
-    <string name="auth_pin_confirm_to_disable_title">Xác nhận mã PIN để vô hiệu hóa MÃ PIN</string>
     <string name="settings_security_pin_code_change_pin_summary">Thay đổi mã PIN hiện tại của bạn</string>
     <string name="settings_security_pin_code_change_pin_title">Thay đổi mã PIN</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_off">Mã PIN được yêu cầu mỗi khi bạn mở ${app_name}.</string>
-    <string name="template_settings_security_pin_code_grace_period_summary_on">Mã PIN được yêu cầu sau 2 phút không sử dụng ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_off">Mã PIN được yêu cầu mỗi khi bạn mở ${app_name}.</string>
+    <string name="settings_security_pin_code_grace_period_summary_on">Mã PIN được yêu cầu sau 2 phút không sử dụng ${app_name}.</string>
     <string name="settings_security_pin_code_grace_period_title">Yêu cầu mã PIN sau 2 phút</string>
     <string name="settings_security_pin_code_notifications_summary_off">Chỉ hiển thị số lượng tin nhắn chưa đọc trong một thông báo đơn giản.</string>
     <string name="settings_security_pin_code_notifications_summary_on">Hiển thị chi tiết như tên phòng và nội dung tin nhắn.</string>
     <string name="settings_security_pin_code_notifications_title">Hiện nội dung trong thông báo</string>
-    <string name="template_settings_security_pin_code_use_biometrics_summary_off">Mã PIN là cách duy nhất để mở khóa ${app_name}.</string>
+    <string name="settings_security_pin_code_use_biometrics_summary_off">Mã PIN là cách duy nhất để mở khóa ${app_name}.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">Bật sinh trắc học cụ thể của thiết bị, như dấu vân tay và nhận dạng khuôn mặt.</string>
     <string name="settings_security_pin_code_use_biometrics_title">Bật sinh trắc học</string>
     <string name="settings_security_pin_code_summary">Nếu bạn muốn đặt lại mã PIN của mình, hãy nhấp vào quên mã PIN để đăng nhập và đặt lại.</string>
@@ -1928,18 +1442,12 @@
     <string name="contacts_book_title">Sổ danh bạ</string>
     <string name="empty_contact_book">Sổ danh bạ của bạn trống</string>
     <string name="loading_contact_book">Lấy lại danh bạ của bạn…</string>
-    <string name="search_in_my_contacts">Tìm kiếm trong danh bạ của tôi</string>
-    <string name="phone_book_title">Danh bạ điện thoại</string>
-    <string name="empty_phone_book">Danh bạ điện thoại của bạn trống rỗng</string>
-    <string name="add_from_phone_book">Thêm từ danh bạ điện thoại của tôi</string>
     <string name="save_recovery_key_chooser_hint">Lưu khóa khôi phục trong</string>
     <string name="notice_crypto_unable_to_decrypt_final">Bạn không thể truy nhập tin nhắn này</string>
     <string name="room_settings_set_avatar">Đặt avatar</string>
     <string name="room_settings_save_success">Bạn đã thay đổi cài đặt phòng thành công</string>
     <string name="room_settings_topic_hint">Chủ đề</string>
     <string name="room_settings_name_hint">Tên phòng</string>
-    <string name="save_your_security_key_notice">Lưu trữ Khóa bảo mật của bạn ở nơi an toàn, như trình quản lý mật khẩu hoặc két sắt.</string>
-    <string name="save_your_security_key_title">Lưu Khóa Bảo mật của bạn</string>
     <string name="set_a_security_phrase_again_notice">Nhập lại Cụm từ Bảo mật của bạn để xác nhận.</string>
     <string name="set_a_security_phrase_hint">Cụm từ Bảo mật</string>
     <string name="set_a_security_phrase_notice">Nhập cụm từ bảo mật chỉ bạn biết, được sử dụng để bảo mật bí mật trên máy chủ của bạn.</string>
@@ -1953,7 +1461,6 @@
     <string name="bottom_sheet_setup_secure_backup_submit">Cài đặt</string>
     <string name="bottom_sheet_setup_secure_backup_subtitle">Bảo vệ chống mất quyền truy cập vào các tin nhắn và dữ liệu được mã hóa bằng cách sao lưu các khóa mã hóa trên máy chủ của bạn.</string>
     <string name="bottom_sheet_setup_secure_backup_title">Bảo mật sao lưu</string>
-    <string name="settings_setup_secure_backup">Thiết lập Sao lưu Bảo mật</string>
     <string name="a11y_start_camera">Khởi động máy ảnh</string>
     <string name="a11y_stop_camera">Dừng máy ảnh</string>
     <string name="a11y_unmute_microphone">Bật tiếng micrô</string>
@@ -1969,11 +1476,11 @@
     <string name="identity_server_user_consent_not_provided">Sự đồng ý của người dùng chưa được cung cấp.</string>
     <string name="identity_server_error_no_current_binding_error">Không có mối liên hệ hiện tại với mã định danh này.</string>
     <string name="identity_server_error_binding_error">Sự kết hợp đã thất bại.</string>
-    <string name="template_identity_server_error_bulk_sha256_not_supported">Đối với quyền riêng tư của bạn, ${app_name} chỉ hỗ trợ gửi email và số điện thoại của người dùng băm.</string>
+    <string name="identity_server_error_bulk_sha256_not_supported">Đối với quyền riêng tư của bạn, ${app_name} chỉ hỗ trợ gửi email và số điện thoại của người dùng băm.</string>
     <string name="identity_server_error_terms_not_signed">Trước tiên, vui lòng chấp nhận các điều khoản của máy chủ nhận dạng trong cài đặt.</string>
     <string name="identity_server_error_no_identity_server_configured">Trước tiên, vui lòng cấu hình máy chủ nhận dạng.</string>
     <string name="identity_server_error_outdated_home_server">Hoạt động này là không thể. Homeerver đã lỗi thời.</string>
-    <string name="template_identity_server_error_outdated_identity_server">Máy chủ nhận dạng này đã lỗi thời. ${app_name} chỉ hỗ trợ API V2.</string>
+    <string name="identity_server_error_outdated_identity_server">Máy chủ nhận dạng này đã lỗi thời. ${app_name} chỉ hỗ trợ API V2.</string>
     <string name="disconnect_identity_server_dialog_content">Ngắt kết nối khỏi máy chủ nhận dạng %s\?</string>
     <string name="open_terms_of">Mở các điều khoản của %s</string>
     <string name="choose_locale_loading_locales">Tải các ngôn ngữ có sẵn…</string>
@@ -1987,8 +1494,8 @@
     <string name="not_a_valid_qr_code">Nó không phải là mã QR Matrix hợp lệ</string>
     <string name="invitations_sent_to_two_users">Lời mời được gửi đến %1$s và %2$s</string>
     <string name="invitation_sent_to_one_user">Lời mời được gửi đến %1$s</string>
-    <string name="template_invite_friends_rich_title">🔐️ Tham gia với tôi trên ${app_name}</string>
-    <string name="template_invite_friends_text">Hey, nói chuyện với tôi trên ${app_name}: %s</string>
+    <string name="invite_friends_rich_title">🔐️ Tham gia với tôi trên ${app_name}</string>
+    <string name="invite_friends_text">Hey, nói chuyện với tôi trên ${app_name}: %s</string>
     <string name="invite_friends">Mời bạn bè</string>
     <string name="invite_users_to_room_title">Mời Người dùng</string>
     <string name="inviting_users_to_room">Mời người dùng…</string>
@@ -2003,7 +1510,6 @@
     <string name="error_empty_field_choose_password">Vui lòng chọn mật khẩu.</string>
     <string name="error_empty_field_choose_user_name">Vui lòng chọn tên người dùng.</string>
     <string name="failed_to_initialize_cross_signing">Thất bại trong việc thiết lập Xác thực chéo</string>
-    <string name="mark_as_verified">Đánh dấu là Đáng tin cậy</string>
     <string name="confirm_your_identity_quad_s">Xác nhận danh tính của bạn bằng cách xác minh đăng nhập này, cấp cho nó quyền truy cập vào các tin nhắn được mã hóa.</string>
     <string name="confirm_your_identity">Xác nhận danh tính của bạn bằng cách xác minh đăng nhập này từ một trong các phiên khác của bạn, cấp cho nó quyền truy cập vào các tin nhắn được mã hóa.</string>
     <string name="cross_signing_verify_by_emoji">Xác minh tương tác bằng Emoji</string>
@@ -2024,30 +1530,26 @@
     <string name="secure_backup_reset_all">Đặt lại mọi thứ</string>
     <string name="bad_passphrase_key_reset_all_action">Quên hoặc mất tất cả các tùy chọn phục hồi\? Đặt lại mọi thứ</string>
     <string name="failed_to_access_secure_storage">Không truy nhập được dung lượng lưu trữ an toàn</string>
-    <string name="keys_backup_recovery_key_error_decrypt">Sao lưu không thể giải mã được với Khóa Khôi phục này: vui lòng xác minh rằng bạn đã nhập Khóa Khôi phục chính xác.</string>
     <string name="enter_secret_storage_input_key">Chọn Khóa Khôi phục của bạn hoặc nhập nó theo cách thủ công bằng cách nhập hoặc dán từ bảng tạm của bạn</string>
     <string name="use_recovery_key">Sử dụng Khóa Khôi phục</string>
     <string name="enter_secret_storage_passphrase_or_key">Dùng %1$s của bạn hoặc dùng %2$s của bạn để tiếp tục.</string>
     <string name="command_description_discard_session_not_handled">Chỉ được hỗ trợ trong các phòng được mã hóa</string>
     <string name="command_description_discard_session">Buộc nhóm phiên hướng ra hiện tại trong một căn phòng được mã hóa phải bị loại bỏ</string>
-    <string name="template_use_latest_app">Sử dụng ${app_name mới nhất} trên các thiết bị khác của bạn:</string>
+    <string name="use_latest_app">Sử dụng ${app_name mới nhất} trên các thiết bị khác của bạn:</string>
     <string name="or_other_mx_capable_client">hoặc một máy khách Matrix có khả năng xác thực chéo khác</string>
-    <string name="template_app_ios_android">${app_name} iOS
+    <string name="app_ios_android">${app_name} iOS
 \n${app_name} Android</string>
-    <string name="template_app_desktop_web">${app_name} Web
+    <string name="app_desktop_web">${app_name} Web
 \n${app_name} Desktop</string>
-    <string name="template_use_other_session_content_description">Sử dụng ${app_name} mới nhất trên các thiết bị khác của bạn, Web ${app_name}, Máy tính để bàn ${app_name}, ${app_name} iOS, ${app_name} cho Android hoặc một máy khách Matrix có khả năng xác thực chéo khác</string>
+    <string name="use_other_session_content_description">Sử dụng ${app_name} mới nhất trên các thiết bị khác của bạn, Web ${app_name}, Máy tính để bàn ${app_name}, ${app_name} iOS, ${app_name} cho Android hoặc một máy khách Matrix có khả năng xác thực chéo khác</string>
     <string name="change_password_summary">Đặt mật khẩu tài khoản mới…</string>
     <string name="error_saving_media_file">Không thể lưu tệp Media</string>
-    <string name="error_adding_media_file_to_gallery">Không thể thêm tệp Media vào Bộ sưu tập</string>
-    <string name="media_file_added_to_gallery">Tệp Media được thêm vào Bộ sưu tập</string>
     <string name="settings_security_prevent_screenshots_summary">Bật thiết đặt này thêm FLAG_SECURE cho tất cả các Hoạt động. Khởi động lại ứng dụng để thay đổi có hiệu lực.</string>
     <string name="settings_security_prevent_screenshots_title">Ngăn ảnh chụp màn hình của ứng dụng</string>
     <string name="bootstrap_migration_backup_recovery_key">Khóa khôi phục Sao lưu Chính</string>
     <string name="bootstrap_migration_with_passphrase_helper_with_link">Không biết cụm mật khẩu Sao lưu Khóa của bạn, bạn có thể %s.</string>
     <string name="bootstrap_migration_use_recovery_key">sử dụng khóa khôi phục Sao lưu Khóa của bạn</string>
     <string name="bootstrap_migration_enter_backup_password">Nhập chìa khóa Cụm mật khẩu Sao lưu của bạn để tiếp tục.</string>
-    <string name="new_session_review_with_info">%1$s (%2$s)</string>
     <string name="bootstrap_progress_storing_in_sss">Lưu trữ bí mật khóa sao lưu trong SSSS</string>
     <string name="bootstrap_progress_generating_ssss_recovery">Tạo khóa SSSS từ khóa phục hồi</string>
     <string name="bootstrap_progress_generating_ssss_with_info">Tạo khóa SSSS từ cụm mật khẩu (%s)</string>
@@ -2057,18 +1559,14 @@
     <string name="bootstrap_progress_checking_backup">Kiểm tra Khóa sao lưu</string>
     <string name="recovery_key_empty_error_message">Vui lòng nhập khóa khôi phục</string>
     <string name="bootstrap_invalid_recovery_key">Nó không phải là một khóa phục hồi hợp lệ</string>
-    <string name="backup_recovery_passphrase">Cụm mật khẩu phục hồi</string>
-    <string name="enter_backup_passphrase">Nhập %s</string>
     <string name="use_file">Sử dụng Tệp</string>
     <string name="bootstrap_enter_recovery">Nhập %s của bạn để tiếp tục</string>
     <string name="security_prompt_text">Xác minh bản thân và người khác để giữ an toàn cho cuộc trò chuyện của bạn</string>
-    <string name="setup_cross_signing">Bật xác thực chéo</string>
     <string name="upgrade_security">Nâng cấp mã hóa có sẵn</string>
     <string name="room_message_placeholder">Tin nhắn…</string>
     <string name="auth_invalid_login_deactivated_account">Tài khoản này đã bị vô hiệu hóa.</string>
     <string name="auth_invalid_login_param_space_in_password">Tên người dùng và/hoặc mật khẩu không chính xác. Mật khẩu đã nhập bắt đầu hoặc kết thúc bằng không gian, vui lòng kiểm tra.</string>
     <string name="command_description_plain">Gửi tin nhắn dưới dạng văn bản thuần túy, không sử dụng định dạng Markdown</string>
-    <string name="settings_notification_advanced_summary">Đặt tầm quan trọng thông báo theo sự kiện</string>
     <string name="settings_troubleshoot_title">Khắc phục</string>
     <string name="settings_notification_configuration">Cấu hình thông báo</string>
     <string name="error_failed_to_import_keys">Thất bại trong việc nhập khóa</string>
@@ -2095,9 +1593,7 @@
     <plurals name="call_active_status">
         <item quantity="other">%1$d cuộc gọi đang hoạt động ·</item>
     </plurals>
-    <plurals name="call_one_active_and_other_paused">
-        <item quantity="other">1 cuộc gọi đang hoạt động (%1$s) · %2$d cuộc gọi bị tạm dừng</item>
-    </plurals>
+
     <string name="qr_code_scanned_self_verif_notice">Gần xong! Thiết bị khác có hiển thị dấu tick không\?</string>
     <string name="topic_prefix">"Chủ đề: "</string>
     <string name="add_a_topic_link_text">Thêm chủ đề</string>
@@ -2117,11 +1613,7 @@
     <string name="bootstrap_cancel_text">Nếu bạn hủy ngay bây giờ, bạn có thể mất tin nhắn và dữ liệu được mã hóa nếu bạn mất quyền truy cập vào thông tin đăng nhập của mình.
 \n
 \nBạn cũng có thể thiết lập Sao lưu Bảo mật và quản lý khóa của mình trong Cài đặt.</string>
-    <string name="bootstrap_skip_text_no_gen_key">Thiết lập Cụm mật khẩu Phục hồi cho phép bạn bảo mật và mở khóa tin nhắn và tin cậy được mã hóa.</string>
-    <string name="bootstrap_skip_text">Thiết lập Cụm mật khẩu Phục hồi cho phép bạn bảo mật và mở khóa tin nhắn và tin cậy được mã hóa.
-\n
-\nNếu bạn không muốn đặt Mật khẩu Tin nhắn, hãy tạo Khóa Tin nhắn thay thế.</string>
-    <string name="auth_flow_not_supported">Bạn không thể làm điều đó từ điện thoại di động</string>
+
     <string name="bootstrap_crosssigning_save_cloud">Sao chép nó vào bộ nhớ đám mây cá nhân của bạn</string>
     <string name="bootstrap_crosssigning_save_usb">Lưu nó trên khóa USB hoặc ổ đĩa sao lưu</string>
     <string name="bootstrap_crosssigning_print_it">In nó và lưu trữ nó ở đâu đó an toàn</string>
@@ -2158,21 +1650,17 @@
     <string name="room_settings_enable_encryption_dialog_submit">Bật mã hóa</string>
     <string name="room_settings_enable_encryption_dialog_content">Sau khi được bật, mã hóa cho một căn phòng không thể bị vô hiệu hóa. Tin nhắn được gửi trong một căn phòng được mã hóa không thể được nhìn thấy bởi máy chủ, chỉ bởi những người tham gia của căn phòng. Cho phép mã hóa có thể ngăn nhiều bot và cầu hoạt động chính xác.</string>
     <string name="room_settings_enable_encryption_dialog_title">Bật mã hóa\?</string>
-    <string name="room_settings_enable_encryption_warning">Sau khi được bật, mã hóa không thể bị vô hiệu hóa.</string>
     <string name="room_settings_enable_encryption_no_permission">Bạn không có quyền bật mã hóa trong phòng này.</string>
     <string name="room_settings_enable_encryption">Bật mã hóa đầu cuối…</string>
     <string name="settings_category_composer">Trình soạn thảo tin nhắn</string>
     <string name="settings_category_timeline">Dòng thời gian</string>
     <string name="command_description_rainbow_emote">Gửi emote đã cho màu cầu vồng</string>
     <string name="command_description_rainbow">Gửi tin nhắn đã cho có màu cầu vồng</string>
-    <string name="room_list_sharing_header_other_rooms">Các phòng khác</string>
-    <string name="room_list_sharing_header_recent_rooms">Các phòng gần đây</string>
     <string name="verify_cannot_cross_sign">Phiên này không thể chia sẻ xác minh này với các phiên khác của bạn.
 \nViệc xác minh sẽ được lưu cục bộ và chia sẻ trong phiên bản tương lai của ứng dụng.</string>
     <string name="unignore">Hủy bỏ qua</string>
-    <string name="template_rendering_event_error_exception">${app_name} gặp sự cố khi hiển thị nội dung sự kiện với id \'%1$s\'</string>
-    <string name="template_rendering_event_error_type_of_message_not_handled">${app_name} không xử lý tin nhắn kiểu \'%1$s\'</string>
-    <string name="template_rendering_event_error_type_of_event_not_handled">${app_name} không xử lý các sự kiện thuộc loại \'%1$s\'</string>
+    <string name="rendering_event_error_exception">${app_name} gặp sự cố khi hiển thị nội dung sự kiện với id \'%1$s\'</string>
+    <string name="rendering_event_error_type_of_event_not_handled">${app_name} không xử lý các sự kiện thuộc loại \'%1$s\'</string>
     <string name="room_member_jump_to_read_receipt">Nhảy để đọc biên nhận</string>
     <string name="room_member_open_or_create_dm">Tin nhắn trực tiếp</string>
     <string name="room_member_power_level_custom_in">Tùy chỉnh (%1$d) trong %2$s</string>
@@ -2203,15 +1691,10 @@
 \nTin nhắn của bạn được bảo mật bằng khóa và chỉ có bạn và người nhận có các khóa duy nhất để mở khóa chúng.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">Tin nhắn ở đây không được mã hóa đầu cuối.</string>
     <string name="room_profile_not_encrypted_subtitle">Tin nhắn trong phòng này không được mã hóa đầu cuối.</string>
-    <string name="verification_request_alert_description">Để bảo mật thêm, hãy xác minh %s bằng cách kiểm tra mã một lần trên cả hai thiết bị của bạn.
-\n
-\nĐể bảo mật tối đa, hãy làm điều này trực tiếp.</string>
+
     <string name="verification_request_waiting_for">Đang chờ %s…</string>
     <string name="verification_verified_user">Đã xác minh %s</string>
     <string name="verification_verify_user">Xác minh %s</string>
-    <string name="a13n_qr_code_description">Hình ảnh mã QR</string>
-    <string name="verify_by_emoji_description">Nếu bạn không thể quét mã ở trên, hãy xác minh bằng cách so sánh một lựa chọn biểu tượng cảm xúc ngắn, duy nhất.</string>
-    <string name="verify_by_emoji_title">Xác minh bằng biểu tưởng cảm xúc</string>
     <string name="verification_no_scan_emoji_title">Xác minh bằng cách so sánh biểu tượng cảm xúc</string>
     <string name="verification_scan_self_emoji_subtitle">Thay vào đó, xác minh bằng cách so sánh biểu tượng cảm xúc</string>
     <string name="verification_scan_emoji_subtitle">Nếu bạn không trực tiếp, hãy so sánh biểu tượng cảm xúc thay thế</string>
@@ -2220,8 +1703,6 @@
     <string name="verification_scan_their_code">Quét mã của họ</string>
     <string name="verification_scan_self_notice">Quét mã bằng thiết bị khác của bạn hoặc chuyển đổi và quét bằng thiết bị này</string>
     <string name="verification_scan_notice">Quét mã bằng thiết bị của người dùng khác để xác minh lẫn nhau một cách an toàn</string>
-    <string name="you">Bạn</string>
-    <string name="verification_verify_device_manually">Xác minh thủ công</string>
     <string name="verification_verify_device">Xác minh phiên này</string>
     <string name="verification_request">Yêu cầu xác minh</string>
     <string name="verification_sent">Xác minh đã gửi</string>
@@ -2246,9 +1727,6 @@
 \n - Kết nối internet của bạn hoặc của người dùng khác
 \n - Thiết bị của bạn hoặc thiết bị của người dùng khác</string>
     <string name="verification_conclusion_not_secure">Không bảo mật</string>
-    <string name="verification_green_shield">Tìm kiếm lá chắn màu xanh lá cây để đảm bảo người dùng được tin tưởng. Tin tưởng tất cả người dùng trong một căn phòng để đảm bảo phòng được an toàn.</string>
-    <string name="verify_user_sas_emoji_security_tip">Để bảo mật cuối cùng, hãy sử dụng một phương tiện giao tiếp đáng tin cậy khác hoặc làm điều này trực tiếp.</string>
-    <string name="verify_user_sas_emoji_help_text">Xác minh người dùng này bằng cách xác nhận biểu tượng cảm xúc duy nhất sau đây xuất hiện trên màn hình của họ, theo cùng một thứ tự.</string>
     <string name="verification_sas_do_not_match">Chúng không phù hợp</string>
     <string name="verification_sas_match">Chúng phù hợp</string>
     <string name="verification_conclusion_warning">Đăng nhập không tin cậy</string>
@@ -2259,7 +1737,6 @@
     <string name="create_room_alias_empty">Vui lòng cung cấp địa chỉ phòng</string>
     <string name="create_room_alias_already_in_use">Địa chỉ này đã được sử dụng</string>
     <string name="create_space_alias_hint">Địa chỉ Space</string>
-    <string name="create_room_alias_hint">Địa chỉ phòng</string>
     <string name="create_room_disable_federation_description">Bạn có thể bật điều này nếu phòng sẽ chỉ được sử dụng để cộng tác với các nhóm nội bộ trên nhà của bạn. Điều này không thể thay đổi sau này.</string>
     <string name="create_room_disable_federation_title">Chặn bất kỳ ai không thuộc %s tham gia phòng này</string>
     <string name="hide_advanced">Ẩn nâng cao</string>
@@ -2270,7 +1747,7 @@
     <string name="command_description_shrug">Thêm ¯\\_(ツ)_/¯ vào một tin nhắn văn bản thuần túy</string>
     <string name="settings_developer_mode_show_info_on_screen_summary">Hiển thị một số thông tin hữu ích để giúp gỡ lỗi ứng dụng</string>
     <string name="settings_developer_mode_show_info_on_screen_title">Hiện thông tin debug trên màn hình</string>
-    <string name="template_settings_developer_mode_fail_fast_summary">${app_name} có thể gặp sự cố thường xuyên hơn khi một lỗi bất ngờ xảy ra</string>
+    <string name="settings_developer_mode_fail_fast_summary">${app_name} có thể gặp sự cố thường xuyên hơn khi một lỗi bất ngờ xảy ra</string>
     <string name="settings_developer_mode_fail_fast_title">Thất bại nhanh</string>
     <string name="autocomplete_limited_results">Chỉ hiển thị kết quả đầu tiên, nhập thêm chữ cái</string>
     <string name="devices_other_devices">Các phiên khác</string>
@@ -2283,13 +1760,11 @@
     <string name="settings_developer_mode_summary">Chế độ nhà phát triển kích hoạt các tính năng ẩn và cũng có thể làm cho ứng dụng kém ổn định hơn. Chỉ dành cho các nhà phát triển!</string>
     <string name="settings_developer_mode">Chế độ nhà phát triển</string>
     <string name="settings_advanced_settings">Cài đặt nâng cao</string>
-    <string name="settings_show_devices_list">Xem tất cả các phiên của tôi</string>
     <string name="notification_initial_sync">Đồng bộ ban đầu…</string>
     <string name="bug_report_error_too_short">Mô tả quá ngắn</string>
     <string name="permalink_malformed">Liên kết matrix.to của bạn bị dị hỏng</string>
-    <string name="template_soft_logout_sso_not_same_user_error">Phiên hiện tại dành cho người dùng %1$s và bạn cung cấp thông tin đăng nhập cho người dùng %2$s. Điều này không được hỗ trợ bởi ${app_name}.
+    <string name="soft_logout_sso_not_same_user_error">Phiên hiện tại dành cho người dùng %1$s và bạn cung cấp thông tin đăng nhập cho người dùng %2$s. Điều này không được hỗ trợ bởi ${app_name}.
 \nTrước tiên, hãy xóa dữ liệu, sau đó đăng nhập lại trên tài khoản khác.</string>
-    <string name="soft_logout_clear_data_dialog_submit">Xóa dữ liệu</string>
     <string name="soft_logout_clear_data_dialog_e2e_warning_content">Bạn sẽ mất quyền truy cập vào các tin nhắn an toàn trừ khi bạn đăng nhập để khôi phục khóa mã hóa của mình.</string>
     <string name="soft_logout_clear_data_dialog_content">Xóa tất cả dữ liệu hiện đang được lưu trữ trên thiết bị này\?
 \nĐăng nhập lại để truy cập dữ liệu tài khoản và tin nhắn của bạn.</string>
@@ -2322,9 +1797,7 @@
     <string name="login_signin_matrix_id_notice">Nếu bạn thiết lập tài khoản trên homeerver, hãy sử dụng Matrix ID của bạn (ví dụ: @user:domain.com) và mật khẩu bên dưới.</string>
     <string name="login_signin_matrix_id_title">Đăng nhập bằng Matrix ID</string>
     <string name="login_connect_using_matrix_id_submit">Đăng nhập bằng Matrix ID</string>
-    <string name="login_connect_using_matrix_id_notice">Ngoài ra, nếu bạn đã có tài khoản và bạn biết mã định danh Ma trận và mật khẩu của mình, bạn có thể sử dụng phương pháp này:</string>
     <string name="login_error_outdated_homeserver_warning_content">Homeerver này đang chạy một phiên bản cũ. Yêu cầu người quản trị homeerver của bạn nâng cấp. Bạn có thể tiếp tục, nhưng một số tính năng có thể không hoạt động chính xác.</string>
-    <string name="login_error_outdated_homeserver_content">Homeerver này đang chạy một phiên bản quá cũ để kết nối. Yêu cầu người quản trị homeerver của bạn nâng cấp.</string>
     <string name="login_error_outdated_homeserver_title">Homeerver lỗi thời</string>
     <string name="does_not_look_like_valid_email">Không giống như một địa chỉ email hợp lệ</string>
     <string name="login_registration_not_supported">Ứng dụng không thể tạo tài khoản trên homeerver này.
@@ -2351,7 +1824,6 @@
     <string name="settings_text_message_sent_wrong_code">Mã xác minh không chính xác.</string>
     <string name="call_dial_pad_lookup_error">Có lỗi tra cứu số điện thoại</string>
     <string name="call_dial_pad_title">Bàn phím số</string>
-    <string name="call_tile_connection_failed">Kết nối thất bại</string>
     <string name="call_tile_no_answer">Không trả lời</string>
     <string name="call_tile_video_missed">Cuộc gọi video bị bỏ lỡ</string>
     <string name="call_tile_voice_missed">Cuộc gọi thoại nhỡ</string>
@@ -2367,10 +1839,6 @@
     <string name="call_tile_ended">Cuộc gọi này đã kết thúc</string>
     <string name="call_tile_other_declined">%1$s đã từ chối cuộc gọi này</string>
     <string name="call_tile_you_declined_this_call">Bạn đã từ chối cuộc gọi này.</string>
-    <string name="call_tile_you_declined">Bạn đã từ chối cuộc gọi này %s</string>
-    <string name="call_tile_in_call">Hiện tại bạn đang ở trong cuộc gọi này</string>
-    <string name="call_tile_other_started_call">%1$s bắt đầu cuộc gọi</string>
-    <string name="call_tile_you_started_call">Bạn bắt đầu một cuộc gọi</string>
     <string name="settings_text_message_sent_hint">Mã</string>
     <string name="settings_text_message_sent">Thư văn bản đã được gửi đến %s. Vui lòng nhập mã xác minh mà nó chứa.</string>
     <string name="settings_discovery_no_terms">Máy chủ xác thực bạn đã chọn không có bất kỳ điều khoản dịch vụ nào. Chỉ tiếp tục nếu bạn tin tưởng chủ sở hữu dịch vụ</string>
@@ -2378,24 +1846,16 @@
     <string name="settings_discovery_please_enter_server">Vui lòng nhập url máy chủ xác thực</string>
     <string name="settings_discovery_bad_identity_server">Không thể kết nối với máy chủ xác thực</string>
     <string name="settings_discovery_enter_identity_server">Nhập URL máy chủ xác thực</string>
-    <string name="identity_server_consent_dialog_neutral_policy">Chính sách</string>
     <string name="identity_server_consent_dialog_content_question">Bạn có đồng ý gửi thông tin này không\?</string>
     <string name="identity_server_consent_dialog_content_3">Để khám phá các liên hệ hiện có, bạn cần gửi thông tin liên hệ (email và số điện thoại) đến máy chủ nhận dạng của mình. Chúng tôi băm dữ liệu của bạn trước khi gửi cho quyền riêng tư.</string>
-    <string name="identity_server_consent_dialog_content_2">Để khám phá các liên hệ hiện có, bạn cần gửi thông tin liên hệ đến máy chủ xác thực của mình.
-\n
-\nChúng tôi băm dữ liệu của bạn trước khi gửi cho quyền riêng tư. Bạn có đồng ý gửi thông tin này không\?</string>
-    <string name="identity_server_consent_dialog_content">Để khám phá các liên hệ hiện có mà bạn biết, bạn có chấp nhận gửi dữ liệu liên hệ (số điện thoại và/hoặc email) đến máy chủ xác thực được cấu hình (%1$s)\?
-\n
-\nĐể có thêm quyền riêng tư, dữ liệu được gửi sẽ được băm trước khi được gửi.</string>
+
+
     <string name="identity_server_consent_dialog_title_2">Gửi email và số điện thoại đến %s</string>
-    <string name="identity_server_consent_dialog_title">Gửi email và số điện thoại</string>
     <string name="settings_discovery_consent_action_give_consent">Đồng ý</string>
     <string name="settings_discovery_consent_action_revoke">Thu hồi sự đồng ý của tôi</string>
     <string name="settings_discovery_consent_notice_off_2">Các liên hệ của bạn là riêng tư. Để khám phá người dùng từ danh bạ của bạn, chúng tôi cần sự cho phép của bạn để gửi thông tin liên hệ đến máy chủ xác thực của bạn.</string>
-    <string name="settings_discovery_consent_notice_off">Bạn đã không đồng ý gửi email và số điện thoại đến máy chủ xác thực này để khám phá những người dùng khác từ danh bạ của bạn.</string>
     <string name="settings_discovery_consent_notice_on">Bạn đã đồng ý gửi email và số điện thoại đến máy chủ xác thực này để khám phá những người dùng khác từ danh bạ của bạn.</string>
     <string name="settings_discovery_consent_title">Gửi email và số điện thoại</string>
-    <string name="settings_discovery_mail_pending">Đang chờ</string>
     <string name="settings_discovery_confirm_mail_not_clicked">Chúng tôi đã gửi cho bạn một email xác nhận đến %s, trước tiên vui lòng kiểm tra email của bạn và nhấp vào liên kết xác nhận</string>
     <string name="settings_discovery_confirm_mail">Chúng tôi đã gửi cho bạn một email xác nhận đến %s, kiểm tra email của bạn và nhấp vào liên kết xác nhận</string>
     <string name="settings_discovery_msisdn_title">Số điện thoại có thể khám phá</string>
@@ -2405,11 +1865,9 @@
     <string name="settings_push_gateway_no_pushers">Không có cổng Push đã đăng ký</string>
     <string name="settings_push_rules_no_rules">Không có quy tắc Push nào được xác định</string>
     <string name="settings_push_rules">Quy tắc Push</string>
-    <string name="settings_expert">Chuyên gia</string>
     <string name="settings_security_and_privacy">Bảo mật &amp; Quyền riêng tư</string>
     <string name="settings_preferences">Tuỳ biến</string>
     <string name="settings_general_title">Tổng quát</string>
-    <string name="quick_reactions">Phản ứng nhanh</string>
     <string name="navigate_to_room_when_already_in_the_room">Bạn đang xem phòng này rồi!</string>
     <string name="settings_other_third_party_notices">Thông báo của bên thứ ba khác</string>
     <string name="settings_sdk_version">Phiên bản Matrix SDK</string>
@@ -2419,8 +1877,6 @@
     <string name="create_room_federation_error">Căn phòng đã được tạo ra, nhưng một số lời mời đã không được gửi vì lý do sau:
 \n
 \n%s</string>
-    <string name="create_room_directory_description">Công khai phòng này trong thư mục phòng</string>
-    <string name="create_room_directory_title">Thư mục phòng</string>
     <string name="create_room_public_description">Bất cứ ai cũng có thể tham gia vào căn phòng này.</string>
     <string name="create_room_public_title">Công cộng</string>
     <string name="create_room_settings_section">Cài đặt phòng</string>
@@ -2429,13 +1885,11 @@
     <string name="create_room_name_hint">Tên</string>
     <string name="create_room_name_section">Tên phòng</string>
     <string name="create_room_action_create">TẠO</string>
-    <string name="create_room_title">Phòng mới</string>
     <string name="fab_menu_create_chat">Tin nhắn trực tiếp</string>
     <string name="fab_menu_create_room">Phòng</string>
     <string name="room_preview_no_preview_join">Căn phòng này không thể xem trước được. Bạn có muốn tham gia nó không\?</string>
     <string name="room_preview_not_found">Căn phòng này không thể truy cập vào thời điểm này.
 \nHãy thử lại sau, hoặc yêu cầu quản trị viên phòng kiểm tra xem bạn có quyền truy cập hay không.</string>
-    <string name="template_room_preview_world_readable_room_not_supported_yet">Bản xem trước của phòng có thể đọc được trên thế giới vẫn chưa được hỗ trợ bằng ${app_name}</string>
     <string name="room_preview_no_preview">Phòng này không thể được xem trước</string>
     <string name="group_all_communities">Tất cả Community</string>
     <string name="please_wait">Vui lòng chờ…</string>
@@ -2445,7 +1899,6 @@
     <string name="create_new_space">Tạo Space mới</string>
     <string name="create_new_room">Tạo phòng mới</string>
     <string name="malformed_message">Sự kiện bị hỏng, không thể hiển thị</string>
-    <string name="last_edited_info_message">Lần cuối được sửa bởi %1$s trên %2$s</string>
     <string name="event_redacted_by_admin_reason">Sự kiện được vận hành bởi người quản trị phòng</string>
     <string name="event_redacted_by_user_reason">Sự kiện bị xóa bởi người dùng</string>
     <string name="settings_show_redacted_summary">Hiển thị người gửi các tin nhắn đã xóa</string>
@@ -2454,59 +1907,21 @@
     <string name="reactions">Phản ứng</string>
     <string name="message_view_reaction">Xem phản ứng</string>
     <string name="message_add_reaction">Thêm phản ứng</string>
-    <string name="action_like">Thích</string>
     <string name="action_agree">Đồng ý</string>
     <string name="title_activity_emoji_reaction_picker">Phản ứng</string>
     <string name="room_list_rooms_empty_title">Phòng</string>
     <string name="room_list_people_empty_body">Các cuộc hội thoại tin nhắn trực tiếp của bạn sẽ được hiển thị tại đây. Nhấp vào dấu + dưới cùng bên phải để bắt đầu.</string>
     <string name="room_list_people_empty_title">Các cuộc hội thoại</string>
-    <string name="room_list_catchup_welcome_body">Bắt kịp các tin nhắn chưa đọc tại đây</string>
     <string name="error_user_already_logged_in">Có vẻ như bạn đang cố gắng kết nối với một homeserver khác. Bạn có muốn đăng xuất không\?</string>
-    <string name="identity_server_not_defined_for_password_reset">Không có máy chủ xác thực nào được cấu hình, cần thiết để đặt lại mật khẩu của bạn.</string>
     <string name="identity_server_not_defined">Bạn không sử dụng bất kỳ máy chủ xác thực nào</string>
     <string name="sas_error_unknown">Lỗi không xác định</string>
-    <string name="sas_error_m_user_error">Người dùng không khớp</string>
-    <string name="sas_error_m_key_mismatch">Khóa không khớp</string>
-    <string name="sas_error_m_invalid_message">Một tin nhắn không hợp lệ đã được nhận</string>
-    <string name="sas_error_m_unexpected_message">Phiên đã nhận được một tin nhắn bất ngờ</string>
-    <string name="sas_error_m_mismatched_sas">SAS không khớp</string>
-    <string name="sas_error_m_mismatched_commitment">Sự cam kết băm không khớp</string>
-    <string name="sas_error_m_unknown_method">Phiên không thể đồng ý về một sự thỏa thuận khóa, phương pháp băm, MAC hoặc SAS</string>
-    <string name="sas_error_m_unknown_transaction">Phiên họp không biết về giao dịch đó</string>
-    <string name="sas_error_m_timeout">Quá trình xác minh đã hết thời gian</string>
-    <string name="sas_error_m_user">Người dùng đã hủy xác minh</string>
     <string name="sas_incoming_request_notif_content">%s muốn xác minh phiên của bạn</string>
     <string name="sas_incoming_request_notif_title">Yêu cầu xác minh</string>
-    <string name="sas_verification_request_notification_channel">Xác minh Phiên Tương tác</string>
-    <string name="sas_cancelled_by_me">Việc xác minh bị hủy bỏ.
-\nLý do: %s</string>
-    <string name="sas_cancelled_by_other">Bên kia đã hủy bỏ việc xác minh.
-\n%s</string>
-    <string name="sas_cancelled_dialog_title">Yêu cầu bị hủy</string>
-    <string name="sas_verification_request_notification_channel_title">Xác minh Khóa</string>
-    <string name="sas_legacy_verification_button_title">Sử dụng xác minh kế thừa.</string>
-    <string name="sas_verifying_keys">Không có gì xuất hiện\? Không phải tất cả ứng dụng đầu cuối đều hỗ trợ xác minh tương tác. Sử dụng xác minh kế thừa.</string>
+
+
     <string name="sas_got_it">Đã nhận được</string>
-    <string name="sas_verified_successful_description">Tin nhắn an toàn với người dùng này được mã hóa đầu cuối và không thể được các bên thứ ba đọc.</string>
-    <string name="sas_verified_successful">Bạn đã xác minh thành công phiên này.</string>
     <string name="sas_verified">Đã xác minh!</string>
-    <string name="sas_waiting_for_partner">Chờ đối tác xác nhận…</string>
-    <string name="sas_view_request_action">Xem yêu cầu</string>
-    <string name="sas_incoming_verification_request_dialog">Bạn đã nhận được yêu cầu xác minh đến.</string>
-    <string name="sas_decimal_description">Xác minh phiên này bằng cách xác nhận các số sau đây xuất hiện trên màn hình của đối tác</string>
-    <string name="sas_emoji_description">Xác minh phiên này bằng cách xác nhận biểu tượng cảm xúc sau đây xuất hiện trên màn hình của đối tác</string>
-    <string name="sas_incoming_request_description_2">Xác minh phiên này sẽ đánh dấu nó là đáng tin cậy và cũng đánh dấu phiên của bạn là đáng tin cậy cho đối tác.</string>
-    <string name="sas_incoming_request_description">Xác minh phiên này để đánh dấu nó là đáng tin cậy. Các phiên tin cậy của các đối tác giúp bạn yên tâm hơn khi sử dụng các tin nhắn được mã hóa đầu cuối.</string>
-    <string name="sas_incoming_request_title">Yêu cầu xác minh đến</string>
-    <string name="sas_verify_start_button_title">Bắt đầu Xác minh</string>
-    <string name="sas_security_advise">Để bảo mật tối đa, chúng tôi khuyên bạn nên làm điều này trực tiếp hoặc sử dụng một phương tiện liên lạc đáng tin cậy khác.</string>
-    <string name="sas_verify_title">Xác minh bằng cách so sánh một chuỗi văn bản ngắn.</string>
-    <string name="invalid_or_expired_credentials">Bạn đã bị đăng xuất do mật khẩu không hợp lệ hoặc hết hạn.</string>
-    <string name="autodiscover_well_known_autofill_confirm">Sử dụng cấu hình</string>
-    <string name="template_autodiscover_well_known_autofill_dialog_message">${app_name} đã phát hiện cấu hình máy chủ tùy chỉnh cho tên miền userId của bạn \"%1$s\":
-\n%2$s</string>
-    <string name="autodiscover_well_known_autofill_dialog_title">Tự động hoàn tất các tùy chọn máy chủ</string>
-    <string name="autodiscover_invalid_response">Phản hồi khám phá homeserver không hợp lệ</string>
+
     <string name="keys_backup_info_title_signature">Chữ ký</string>
     <string name="keys_backup_info_title_algorithm">Thuật toán</string>
     <string name="keys_backup_info_title_version">Phiên bản</string>
@@ -2519,20 +1934,12 @@
     <string name="keys_backup_banner_recover_line1">Không bao giờ mất tin nhắn được mã hóa</string>
     <string name="secure_backup_banner_setup_line2">Bảo vệ chống mất quyền truy cập vào tin nhắn và dữ liệu được mã hóa</string>
     <string name="secure_backup_banner_setup_line1">Sao lưu An toàn</string>
-    <string name="keys_backup_banner_setup_line2">Bắt đầu sử dụng Khóa Sao lưu</string>
-    <string name="keys_backup_banner_setup_line1">Không bao giờ mất tin nhắn được mã hóa</string>
-    <string name="new_recovery_method_popup_was_me">Đó là tôi.</string>
-    <string name="new_recovery_method_popup_description">Một bản sao lưu khóa thư bảo mật mới đã được phát hiện.
-\n
-\nNếu bạn không thiết lập phương pháp khôi phục mới, kẻ tấn công có thể đang cố gắng truy cập tài khoản của bạn. Thay đổi mật khẩu tài khoản của bạn và đặt phương pháp khôi phục mới ngay lập tức trong Cài đặt.</string>
-    <string name="new_recovery_method_popup_title">Sao lưu Khóa Mới</string>
+
     <string name="keys_backup_settings_delete_confirm_message">Xóa khóa mã hóa đã sao lưu của bạn khỏi máy chủ\? Bạn sẽ không còn có thể sử dụng khóa khôi phục của mình để đọc lịch sử tin nhắn được mã hóa.</string>
     <string name="keys_backup_settings_delete_confirm_title">Xóa Sao lưu</string>
     <string name="keys_backup_settings_checking_backup_state">Kiểm tra trạng thái sao lưu</string>
-    <string name="keys_backup_settings_delete_backup_error">Thất bại trong việc xóa sao lưu (%s)</string>
     <string name="keys_backup_settings_deleting_backup">Đang xóa bản sao lưu…</string>
     <string name="keys_backup_settings_untrusted_backup">Để sử dụng Sao lưu Chính trong phiên này, hãy khôi phục bằng cụm mật khẩu hoặc khóa khôi phục của bạn ngay bây giờ.</string>
-    <string name="keys_backup_get_trust_error">Thất bại trong việc nhận thông tin tin cậy để sao lưu (%s).</string>
     <string name="keys_backup_settings_invalid_signature_from_unverified_device">Sao lưu có chữ ký không hợp lệ từ phiên chưa được xác minh %s</string>
     <string name="keys_backup_settings_invalid_signature_from_verified_device">Sao lưu có chữ ký không hợp lệ từ phiên đã xác minh %s</string>
     <string name="keys_backup_settings_valid_signature_from_unverified_device">Sao lưu có chữ ký hợp lệ từ phiên chưa được xác minh %s</string>
@@ -2544,7 +1951,6 @@
     <string name="keys_backup_settings_status_ok">Key Backup đã được thiết lập chính xác cho phiên này.</string>
     <string name="keys_backup_settings_delete_backup_button">Xóa Sao lưu</string>
     <string name="keys_backup_settings_restore_backup_button">Khôi phục từ Sao lưu</string>
-    <string name="keys_backup_no_keysbackup_sdk_error">Mã hóa phiên không được kích hoạt</string>
     <string name="keys_backup_get_version_error">Thất bại trong việc nhận được phiên bản khóa khôi phục mới nhất (%s).</string>
     <string name="keys_backup_restore_success_title">Sao lưu đã khôi phục %s !</string>
     <string name="keys_backup_recovery_code_error_decrypt">Sao lưu không thể được giải mã bằng khóa khôi phục này: vui lòng xác minh rằng bạn đã nhập khóa khôi phục chính xác.</string>
@@ -2554,10 +1960,8 @@
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Đang tải xuống các khóa…</string>
     <string name="keys_backup_restoring_computing_key_waiting_message">Đang tính toán khóa khôi phục…</string>
     <string name="keys_backup_restoring_waiting_message">Khôi phục sao lưu:</string>
-    <string name="network_error_please_check_and_retry">Lỗi mạng: vui lòng kiểm tra kết nối của bạn và thử lại .</string>
     <string name="keys_backup_passphrase_error_decrypt">Sao lưu không thể được giải mã bằng cụm mật khẩu này: vui lòng xác minh rằng bạn đã nhập cụm mật khẩu phục hồi chính xác.</string>
     <string name="keys_backup_restore_with_key_helper">Mất chìa khóa phục hồi\? Bạn có thể thiết lập một cái mới trong cài đặt.</string>
-    <string name="keys_backup_restore_setup_recovery_key">Khôi phục tin nhắn</string>
     <string name="keys_backup_restore_key_enter_hint">Nhập Khóa Khôi phục</string>
     <string name="keys_backup_restore_with_recovery_key">Sử dụng Khóa Khôi phục của bạn để mở khóa lịch sử tin nhắn được mã hóa của bạn</string>
     <string name="keys_backup_restore_with_passphrase_helper_with_link">Không biết cụm mật khẩu phục hồi của bạn, bạn có thể %s.</string>
@@ -2566,8 +1970,6 @@
     <string name="keys_backup_restore_is_getting_backup_version">Đang tìm phiên bản sao lưu…</string>
     <string name="keys_backup_setup_skip_msg">Bạn có thể mất quyền truy cập vào tin nhắn của mình nếu bạn đăng xuất hoặc mất thiết bị này.</string>
     <string name="keys_backup_setup_skip_title">Bạn có chắc không\?</string>
-    <string name="keys_backup_setup_backup_started_message">Khóa mã hóa của bạn hiện đang được sao lưu trong nền cho homeerver của bạn. Việc sao lưu ban đầu có thể mất vài phút.</string>
-    <string name="keys_backup_setup_backup_started_title">Bắt đầu Sao lưu</string>
     <string name="unexpected_error">Lỗi bất ngờ</string>
     <string name="recovery_key">Khóa Khôi phục</string>
     <string name="keys_backup_setup_step3_generating_key_status">Tạo Khóa Phục hồi bằng cách sử dụng cụm mật khẩu, quá trình này có thể mất vài giây.</string>
@@ -2578,9 +1980,7 @@
     <string name="keys_backup_setup_override_backup_prompt_description">Có vẻ như bạn đã thiết lập bản sao lưu khóa từ một phiên khác. Bạn có muốn thay thế nó bằng cái mà bạn đang tạo ra không\?</string>
     <string name="keys_backup_setup_override_backup_prompt_tile">Một bản sao lưu đã tồn tại trên homeerver của bạn</string>
     <string name="recovery_key_export_saved">Khóa phục hồi đã được lưu.</string>
-    <string name="recovery_key_export_saved_as_warning">Khóa khôi phục đã được lưu thành \'%s\'.
-\n
-\nCảnh báo: tệp này có thể bị xóa nếu ứng dụng được gỡ cài đặt.</string>
+
     <string name="keys_backup_setup_step3_save_button_title">Lưu dưới dạng Tệp</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Chia sẻ</string>
     <string name="keys_backup_setup_step3_copy_button_title">Lưu Khóa Khôi phục</string>
@@ -2611,22 +2011,14 @@
     <string name="bootstrap_crosssigning_progress_default_key">Xác định khóa mặc định SSSS</string>
     <string name="bootstrap_crosssigning_progress_pbkdf2">Tạo khóa an toàn từ cụm mật khẩu</string>
     <string name="bootstrap_crosssigning_progress_initializing">Công khai hóa các chìa khóa nhận dạng đã tạo</string>
-    <string name="bootstrap_save_key_description">Sử dụng %1$s này làm mạng lưới an toàn trong trường hợp bạn quên %2$s của mình.</string>
     <string name="finish">Kết thúc</string>
     <string name="keep_it_safe">Giữ an toàn</string>
     <string name="bootstrap_finish_title">Bạn đã hoàn tất!</string>
-    <string name="your_recovery_key">Khóa phục hồi của bạn</string>
     <string name="bootstrap_loading_title">Cài lập phục hồi.</string>
     <string name="bootstrap_loading_text">Việc này có thể mất vài giây, xin hãy kiên nhẫn.</string>
     <string name="bootstrap_info_text_2">Nhập cụm từ bảo mật chỉ bạn biết, được sử dụng để bảo mật bí mật trên máy chủ của bạn.</string>
     <string name="bootstrap_dont_reuse_pwd">Không sử dụng mật khẩu tài khoản của bạn.</string>
-    <string name="bootstrap_info_confirm_text">Nhập lại %s của bạn để xác nhận.</string>
-    <string name="bootstrap_info_text">Bảo mật &amp; mở khóa tin nhắn mã hóa và tin cậy bằng %s.</string>
     <string name="enter_account_password">Nhập %s của bạn để tiếp tục.</string>
-    <string name="confirm_recovery_passphrase">Xác nhận %s</string>
-    <string name="generate_message_key">Tạo chía khóa tin nhắn</string>
-    <string name="set_recovery_passphrase">Đặt %s</string>
-    <string name="account_password">Mật khẩu tài khoản</string>
     <string name="message_key">Chìa khóa tin nhắn</string>
     <string name="recovery_passphrase">Cụm mật khẩu phục hồi</string>
     <string name="verification_cancelled">Xác minh bị hủy bỏ</string>
@@ -2645,13 +2037,12 @@
     <string name="verify_new_session_compromized">Tài khoản của bạn có thể bị xâm phạm</string>
     <string name="verify_new_session_was_not_me">Đây không phải là tôi.</string>
     <string name="verify_new_session_notice">Sử dụng phiên này để xác minh phiên mới của bạn, cấp cho nó quyền truy cập vào các tin nhắn được mã hóa.</string>
-    <string name="new_session_review">Nhấp để xem xét và xác minh</string>
     <string name="new_session">Đăng nhập mới. Đây có phải là bạn không\?</string>
     <string name="refresh">Làm tươi</string>
     <string name="e2e_use_keybackup">Mở khóa lịch sử tin nhắn được mã hóa</string>
     <string name="settings_export_trail">Kiểm toán Xuất</string>
     <string name="settings_key_requests">Yêu cầu chìa khóa</string>
-    <string name="template_login_default_session_public_name">${app_name} Android</string>
+    <string name="login_default_session_public_name">${app_name} Android</string>
     <string name="keys_backup_restore_success_title_already_up_to_date">Chìa khóa đã được cập nhật!</string>
     <string name="event_redacted_by_admin_reason_with_reason">Sự kiện được kiểm duyệt bởi người quản trị phòng, lý do: %1$s</string>
     <string name="event_redacted_by_user_reason_with_reason">Sự kiện bị người dùng xóa, lý do: %1$s</string>
@@ -2662,14 +2053,9 @@
     <string name="send_images_and_video_with_original_size">Gửi media với kích thước ban đầu</string>
     <string name="share_confirm_room">Bạn có muốn gửi phần đính kèm này đến %1$s không\?</string>
     <string name="message_action_item_redact">Xóa…</string>
-    <string name="enter_secret_storage_passphrase_warning_text">Bạn chỉ nên truy cập lưu trữ bí mật từ một thiết bị đáng tin cậy</string>
-    <string name="enter_secret_storage_passphrase_warning">Cảnh báo:</string>
-    <string name="enter_secret_storage_passphrase">Nhập cụm mật khẩu lưu trữ bí mật</string>
     <string name="enter_secret_storage_invalid">Không thể tìm thấy bí mật trong kho</string>
-    <string name="new_signin">Đăng nhập mới</string>
     <string name="verification_use_passphrase">Nếu bạn không thể truy nhập phiên hiện có</string>
     <string name="verification_cannot_access_other_session">Sử dụng Cụm mật khẩu hoặc Khóa phục hồi</string>
-    <string name="command_description_poll">Tạo một cuộc thăm dò ý kiến đơn giản</string>
     <string name="delete_account_data_warning">Xóa dữ liệu tài khoản của loại %1$s\?
 \n
 \nSử dụng một cách thận trọng, nó có thể dẫn đến hành vi bất ngờ.</string>
@@ -2694,8 +2080,6 @@
     <string name="verification_profile_verified">Đã xác minh</string>
     <string name="verification_profile_verify">Xác minh</string>
     <string name="verification_open_other_to_verify">Sử dụng phiên hiện có để xác minh phiên này, cấp cho nó quyền truy cập vào các thư được mã hóa.</string>
-    <string name="complete_security">Bảo mật hoàn toàn</string>
-    <string name="crosssigning_other_user_not_trust">Những người dùng khác có thể không tin tưởng nó.</string>
     <string name="crosssigning_verify_this_session">Xác minh đăng nhập này</string>
     <string name="settings_active_sessions_unverified_device_desc">Xác minh phiên này để đánh dấu nó là đáng tin cậy và cấp cho nó quyền truy cập vào các thư được mã hóa. Nếu bạn không đăng nhập vào phiên này, tài khoản của bạn có thể bị xâm phạm:</string>
     <string name="settings_active_sessions_verified_device_desc">Phiên này được tin cậy để nhắn tin an toàn vì bạn đã xác minh nó:</string>
@@ -2704,8 +2088,7 @@
     <string name="settings_server_room_version_stable">ổn định</string>
     <string name="settings_server_default_room_version">Phiên bản Mặc định</string>
     <string name="settings_server_room_versions">Phiên bản phòng 👓</string>
-    <string name="keys_backup_no_session_error">Không có phiên Matrix sẵn dùng</string>
-    <string name="template_keys_backup_passphrase_not_empty_error_message">Vui lòng xóa cụm mật khẩu nếu bạn muốn ${app_name} để tạo khóa khôi phục.</string>
+    <string name="keys_backup_passphrase_not_empty_error_message">Vui lòng xóa cụm mật khẩu nếu bạn muốn ${app_name} để tạo khóa khôi phục.</string>
     <string name="passphrase_passphrase_too_weak">Cụm mật khẩu quá yếu</string>
     <string name="passphrase_empty_error_message">Vui lòng nhập cụm mật khẩu</string>
     <string name="passphrase_passphrase_does_not_match">Cụm mật khẩu không khớp</string>
@@ -2714,19 +2097,10 @@
     <string name="passphrase_create_passphrase">Tạo cụm mật khẩu</string>
     <string name="no_valid_google_play_services_apk">Không tìm thấy APK Google Play Services hợp lệ. Thông báo có thể không hoạt động bình thường.</string>
     <string name="x_plus">%d+</string>
-    <string name="plus_x">+%d</string>
     <string name="generic_label_and_value">%1$s: %2$s</string>
-    <string name="generic_label">%1$s:</string>
-    <string name="show_info_area_only_errors">Chỉ dành cho lỗi</string>
-    <string name="show_info_area_messages_and_errors">Đối với tin nhắn và lỗi</string>
-    <string name="show_info_area_always">Luôn luôn</string>
-    <string name="settings_info_area_show">Hiện vùng thông tin</string>
     <string name="merged_events_collapse">thu hẹp</string>
     <string name="merged_events_expand">mở rộng</string>
     <string name="unknown_error">Xin lỗi, một lỗi đã xảy ra</string>
-    <string name="error_lazy_loading_not_supported_by_home_server">Homeerver của bạn chưa hỗ trợ tải chậm các thành viên phòng. Hãy thử sau.</string>
-    <string name="settings_lazy_loading_description">Tăng hiệu suất bằng cách chỉ tải các thành viên phòng ở trong lần xem đầu tiên.</string>
-    <string name="settings_lazy_loading_title">Tải chậm các phòng và thành viên</string>
     <string name="resource_limit_hard_contact">Vui lòng %s để tiếp tục sử dụng dịch vụ này.</string>
     <string name="resource_limit_soft_contact">Vui lòng %s để tăng giới hạn này.</string>
     <string name="resource_limit_hard_mau">Homeerver này đã đạt đến giới hạn người dùng hoạt động hàng tháng.</string>
@@ -2734,8 +2108,6 @@
     <string name="resource_limit_hard_default">Homeserver này đã vượt quá một trong những giới hạn tài nguyên của nó.</string>
     <string name="resource_limit_soft_default">Homeerver này đã vượt quá một trong những giới hạn tài nguyên của nó vì vậy <b>một số người dùng sẽ không thể đăng nhập</b>.</string>
     <string name="resource_limit_contact_admin">liên hệ với người quản trị dịch vụ của bạn</string>
-    <string name="resource_limit_contact_action">Liên hệ quản trị viên</string>
-    <string name="resource_limit_exceeded_title">Vượt quá giới hạn tài nguyên</string>
     <string name="room_tombstone_predecessor_link">Bấm vào đây để xem tin nhắn cũ hơn</string>
     <string name="room_tombstone_continuation_description">Phòng này là sự tiếp nối của một cuộc trò chuyện khác.</string>
     <string name="room_tombstone_continuation_link">Cuộc trò chuyện tiếp tục ở đây</string>
@@ -2743,7 +2115,6 @@
     <string name="error_empty_field_your_password">Vui lòng nhập mật khẩu của bạn.</string>
     <string name="error_empty_field_enter_user_name">Vui lòng nhập tên người dùng.</string>
     <string name="deactivate_account_submit">Hủy kích hoạt Tài khoản</string>
-    <string name="deactivate_account_prompt_password">Để tiếp tục, vui lòng nhập mật khẩu của bạn:</string>
     <string name="deactivate_account_delete_checkbox">Vui lòng quên tất cả các tin nhắn tôi đã gửi khi tài khoản của tôi bị vô hiệu hóa (Cảnh báo: điều này sẽ khiến người dùng trong tương lai thấy chế độ xem cuộc hội thoại không đầy đủ)</string>
     <string name="deactivate_account_content">Điều này sẽ làm cho tài khoản của bạn vĩnh viễn không thể sử dụng được. Bạn sẽ không thể đăng nhập và không ai có thể đăng ký lại cùng một ID người dùng. Điều này sẽ khiến tài khoản của bạn rời khỏi tất cả các phòng mà nó đang tham gia và nó sẽ xóa chi tiết tài khoản của bạn khỏi máy chủ nhận dạng của bạn. <b>Điều này là không thể đảo ngược</b>.
 \n
@@ -2752,28 +2123,12 @@
 \nKhả năng hiển thị tin nhắn trong Matrix tương tự như email. Chúng tôi quên tin nhắn của bạn có nghĩa là tin nhắn bạn đã gửi sẽ không được chia sẻ với bất kỳ người dùng mới hoặc chưa đăng ký nào, nhưng người dùng đã đăng ký đã có quyền truy cập vào các tin nhắn này vẫn sẽ có quyền truy cập vào bản sao của họ.</string>
     <string name="dialog_user_consent_content">Để tiếp tục sử dụng homeserver %1$s, bạn phải xem xét và đồng ý với các điều khoản và điều kiện.</string>
     <string name="avatar">Avatar</string>
-    <string name="notice_avatar">Chú ý avatar</string>
-    <string name="receipt_avatar">Nhận avatar</string>
-    <string name="forget_room">Quên phòng</string>
-    <string name="rejoin">Tham gia lại</string>
     <string name="reason_colon">Lý do: %1$s</string>
     <string name="has_been_banned">Bạn đã bị cấm từ %1$s bởi %2$s</string>
     <string name="has_been_removed">Bạn đã bị đá từ %1$s bởi %2$s</string>
-    <string name="group_no_long_description">Quản trị viên Community đã không cung cấp mô tả cho cộng đồng này.</string>
-    <string name="filter_group_rooms">Lọc nhóm phòng</string>
-    <string name="filter_group_members">Lọc thành viên nhóm</string>
     <string name="invited">Đã mời</string>
-    <string name="joined">Đã tham gia</string>
     <string name="rooms">Phòng</string>
-    <string name="no_users_placeholder">Không có người dùng</string>
-    <string name="group_details_rooms">Phòng</string>
-    <string name="group_details_people">Danh bạ</string>
     <string name="group_details_home">Trang chủ</string>
-    <string name="community_id_hint">Ví dụ</string>
-    <string name="community_id">ID Community</string>
-    <string name="community_name_hint">Ví dụ</string>
-    <string name="community_name">Tên Community</string>
-    <string name="create_community">Tạo Community</string>
     <string name="create">Tạo</string>
     <string name="encrypted_message">Tin nhắn được mã hóa</string>
     <string name="notification_noisy">Ồn ào</string>
@@ -2804,7 +2159,6 @@
     <string name="command_problem_with_parameters">Lệnh \"%s\" cần nhiều tham số hơn hoặc một số tham số không chính xác.</string>
     <string name="unrecognized_command">Lệnh không được nhận ra: %s</string>
     <string name="command_error">Lỗi lệnh</string>
-    <string name="conference_call_warning_message">Kêu gọi hội nghị đang được phát triển và có thể không đáng tin cậy.</string>
     <string name="key_share_request">Yêu cầu Chia sẻ Khóa</string>
     <string name="your_unverified_device_requesting_with_info">Một phiên chưa được xác minh đang yêu cầu khóa mã hóa.
 \nTên phiên: %1$s
@@ -2817,16 +2171,11 @@
 \nNếu bạn không đăng nhập vào phiên khác, hãy bỏ qua yêu cầu này.</string>
     <string name="you_added_a_new_device">Bạn đã thêm phiên mới \'%s\', nó đang yêu cầu các khóa mã hóa.</string>
     <string name="widget_integration_review_terms">Để tiếp tục, bạn cần phải chấp nhận các điều khoản của dịch vụ này.</string>
-    <string name="settings_labs_enable_send_voice_summary">Tùy chọn này yêu cầu một ứng dụng của bên thứ ba để ghi lại các tin nhắn.</string>
-    <string name="settings_labs_enable_send_voice">Gửi tin nhắn thoại</string>
-    <string name="settings_labs_keyboard_options_to_send_message">Sử dụng phím Enter của bàn phím để gửi tin nhắn</string>
     <string name="settings_labs_native_camera_summary">Khởi động camera hệ thống thay vì màn hình camera tùy chỉnh.</string>
     <string name="settings_labs_native_camera">Sử dụng máy ảnh gốc</string>
     <string name="room_no_active_widgets">Không có widget hoạt động</string>
     <string name="room_manage_integrations">Quản lý Tích hợp</string>
     <string name="room_add_matrix_apps">Thêm ứng dụng Matrix</string>
-    <string name="integration_manager_not_configured">Không có trình quản lý tích hợp nào được cấu hình.</string>
-    <string name="widget_integration_invalid_parameter">Một tham số không hợp lệ</string>
     <string name="widget_integration_missing_parameter">Một tham số cần thiết bị thiếu.</string>
     <string name="widget_integration_room_not_visible">Phòng %s không hiển thị.</string>
     <string name="widget_integration_missing_user_id">Thiếu user_id trong yêu cầu</string>
@@ -2862,9 +2211,6 @@
     <string name="active_widgets_title">Widget đang hoạt động</string>
     <string name="active_widget_view_action">XEM</string>
     <string name="widget_delete_message_confirmation">Bạn có chắc chắn muốn xóa widget khỏi căn phòng này không\?</string>
-    <string name="settings_labs_create_conference_with_jitsi">Tạo cuộc gọi hội nghị với jitsi</string>
-    <string name="widget_creation_failure">Tạo widget đã thất bại</string>
-    <string name="widget_no_power_to_manage">Bạn cần sự cho phép để quản lý các widget trong phòng này</string>
     <string name="huge">Khổng lồ</string>
     <string name="largest">Lớn nhất</string>
     <string name="larger">Lớn hơn</string>
@@ -2873,7 +2219,6 @@
     <string name="small">Nhỏ</string>
     <string name="tiny">Bé tí</string>
     <string name="font_size">Cỡ chữ</string>
-    <string name="historical_placeholder">Tìm kiếm lịch sử</string>
     <string name="notification_ticker_text_group">%1$s: %2$s %3$s</string>
     <string name="notification_ticker_text_dm">%1$s: %2$s</string>
     <string name="notification_inline_reply_failed">** Gửi thất bại - vui lòng mở phòng</string>
@@ -2885,7 +2230,6 @@
     <string name="notification_unread_notified_messages_and_invitation">%1$s và %2$s</string>
     <string name="notification_unread_notified_messages_in_room_and_invitation">%1$s trong %2$s và %3$s</string>
     <string name="notification_unread_notified_messages_in_room">%1$s trong %2$s</string>
-    <string name="lock_screen_hint">Gõ vào đây…</string>
     <string name="directory_add_a_new_server_error_already_added">Máy chủ này đã có trong danh sách</string>
     <string name="directory_add_a_new_server_error">Không thể tìm thấy máy chủ này hoặc danh sách phòng của nó</string>
     <string name="directory_add_a_new_server_prompt">Nhập tên của một máy chủ mới mà bạn muốn khám phá.</string>
@@ -2894,34 +2238,24 @@
     <string name="directory_server_native_rooms">Tất cả các phòng %s gốc</string>
     <string name="directory_server_all_rooms_on_server">Tất cả các phòng trên %s server</string>
     <string name="directory_server_placeholder">Tên máy chủ</string>
-    <string name="directory_server_type_homeserver">Nhập homeserver để liệt kê các phòng công cộng từ</string>
     <string name="select_room_directory">Chọn thư mục phòng</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Không bao giờ gửi tin nhắn được mã hóa đến các phiên chưa được xác minh từ phiên này.</string>
     <string name="encryption_never_send_to_unverified_devices_title">Chỉ mã hóa cho các phiên đã xác minh</string>
-    <string name="directory_title">Thư mục</string>
-    <string name="room_settings_addresses_e2e_encryption_warning">Bật mã hóa (cảnh báo: không thể bị vô hiệu hóa trở lại!)</string>
-    <string name="room_settings_addresses_e2e_disabled">Mã hóa bị vô hiệu hóa trong phòng này.</string>
-    <string name="room_settings_addresses_e2e_enabled">Mã hóa được kích hoạt trong phòng này.</string>
-    <string name="room_settings_copy_room_address">Sao chép Địa chỉ Phòng</string>
-    <string name="room_settings_copy_room_id">Sao chép ID Phòng</string>
     <string name="room_settings_unset_main_address">Bỏ đặt làm địa chỉ chính</string>
     <string name="room_settings_set_main_address">Đặt làm địa chỉ chính</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_title">Cảnh báo địa chỉ chính</string>
-    <string name="room_settings_addresses_disable_main_address_prompt_msg">Bạn sẽ không có địa chỉ chính được chỉ định cho căn phòng này.</string>
-    <string name="room_settings_add_new_group">ID cộng đồng mới (ví dụ : +foo:matrix.org)</string>
     <string name="legals_no_policy_provided">Máy chủ này không cung cấp bất kỳ chính sách nào.</string>
     <string name="legals_third_party_notices">Thư viện bên thứ ba</string>
     <string name="legals_identity_server_title">Chính sách máy chủ xác thực của bạn</string>
     <string name="legals_home_server_title">Chính sách homeerver của bạn</string>
-    <string name="template_legals_application_title">Chính sách ${app_name}</string>
+    <string name="legals_application_title">Chính sách ${app_name}</string>
     <string name="analytics_opt_in_list_item_3">Bạn có thể tắt tính năng này bất cứ lúc nào trong cài đặt</string>
     <string name="analytics_opt_in_list_item_2">Chúng tôi <b>không </b> chia sẻ thông tin với bên thứ ba</string>
     <string name="analytics_opt_in_list_item_1">Chúng tôi <b>không</b> ghi âm hoặc tạo hồ sơ bất kỳ dữ liệu tài khoản nào</string>
     <string name="analytics_opt_in_content_link">ở đây</string>
-    <string name="analytics_opt_in_content">Giúp chúng tôi xác định các vấn đề và cải thiện Element bằng cách chia sẻ dữ liệu sử dụng ẩn danh. Để hiểu cách mọi người sử dụng nhiều thiết bị, chúng tôi sẽ tạo ra một mã định danh ngẫu nhiên, được chia sẻ bởi các thiết bị của bạn.
+    <string name="analytics_opt_in_content">Giúp chúng tôi xác định các vấn đề và cải thiện ${app_name} bằng cách chia sẻ dữ liệu sử dụng ẩn danh. Để hiểu cách mọi người sử dụng nhiều thiết bị, chúng tôi sẽ tạo ra một mã định danh ngẫu nhiên, được chia sẻ bởi các thiết bị của bạn.
 \n
 \nBạn có thể đọc tất cả các thuật ngữ của chúng tôi %s.</string>
-    <string name="analytics_opt_in_title">Giúp cải thiện Element</string>
+    <string name="analytics_opt_in_title">Giúp cải thiện ${app_name}</string>
     <string name="shortcut_disabled_reason_sign_out">Thiết bị đã bị đăng xuất!</string>
     <string name="shortcut_disabled_reason_room_left">Căn phòng đã bị bỏ lại!</string>
     <string name="login_error_homeserver_from_url_not_found_enter_manual">Chọn homeerver</string>
@@ -2943,7 +2277,6 @@
     <string name="message_edits">Sửa tin nhắn</string>
     <string name="edited_suffix">(đã sửa)</string>
     <string name="downloaded_file">Tệp %1$s đã được tải xuống!</string>
-    <string name="downloading_file">Đang tải xuống tệp %1$s…</string>
     <string name="send_file_step_compressing_video">Nén video %d%%</string>
     <string name="send_file_step_compressing_image">Nén hình ảnh…</string>
     <string name="send_file_step_sending_file">Tệp Đang gửi (%1$s / %2$s)</string>
@@ -2969,7 +2302,7 @@
     <string name="settings_troubleshoot_test_token_registration_quick_fix">Token đăng ký</string>
     <string name="preference_system_settings">Cài đặt hệ thống</string>
     <string name="preference_versions">Phiên bản</string>
-    <string name="preference_help_summary">Nhận trợ giúp về việc sử dụng Element</string>
+    <string name="preference_help_summary">Nhận trợ giúp về việc sử dụng ${app_name}</string>
     <string name="preference_help_title">Trợ giúp và hỗ trợ</string>
     <string name="preference_help">Trợ giúp</string>
     <string name="preference_root_legals">Pháp lý</string>

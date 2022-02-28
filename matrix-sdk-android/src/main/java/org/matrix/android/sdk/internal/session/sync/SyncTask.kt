@@ -147,7 +147,7 @@ internal class DefaultSyncTask @Inject constructor(
             }
             defaultSyncStatusService.endAll()
         } else {
-            Timber.tag(loggerTag.value).d("Start incremental sync request")
+            Timber.tag(loggerTag.value).d("Start incremental sync request with since token $token")
             defaultSyncStatusService.setStatus(SyncStatusService.Status.IncrementalSyncIdle)
             val syncResponse = try {
                 executeRequest(globalErrorReceiver) {
@@ -163,7 +163,10 @@ internal class DefaultSyncTask @Inject constructor(
             }
             val nbRooms = syncResponse.rooms?.invite.orEmpty().size + syncResponse.rooms?.join.orEmpty().size + syncResponse.rooms?.leave.orEmpty().size
             val nbToDevice = syncResponse.toDevice?.events.orEmpty().size
-            Timber.tag(loggerTag.value).d("Incremental sync request parsing, $nbRooms room(s) $nbToDevice toDevice(s)")
+            val nextBatch = syncResponse.nextBatch
+            Timber.tag(loggerTag.value).d(
+                "Incremental sync request parsing, $nbRooms room(s) $nbToDevice toDevice(s). Got nextBatch: $nextBatch"
+            )
             defaultSyncStatusService.setStatus(SyncStatusService.Status.IncrementalSyncParsing(
                     rooms = nbRooms,
                     toDevice = nbToDevice

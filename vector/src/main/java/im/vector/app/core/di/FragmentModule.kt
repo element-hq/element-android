@@ -97,6 +97,7 @@ import im.vector.app.features.login2.created.AccountCreatedFragment
 import im.vector.app.features.login2.terms.LoginTermsFragment2
 import im.vector.app.features.matrixto.MatrixToRoomSpaceFragment
 import im.vector.app.features.matrixto.MatrixToUserFragment
+import im.vector.app.features.onboarding.ftueauth.FtueAuthAccountCreatedFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthCaptchaFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthGenericTextInputFormFragment
 import im.vector.app.features.onboarding.ftueauth.FtueAuthLoginFragment
@@ -472,6 +473,11 @@ interface FragmentModule {
     @IntoMap
     @FragmentKey(FtueAuthTermsFragment::class)
     fun bindFtueAuthTermsFragment(fragment: FtueAuthTermsFragment): Fragment
+
+    @Binds
+    @IntoMap
+    @FragmentKey(FtueAuthAccountCreatedFragment::class)
+    fun bindFtueAuthAccountCreatedFragment(fragment: FtueAuthAccountCreatedFragment): Fragment
 
     @Binds
     @IntoMap

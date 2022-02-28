@@ -32,6 +32,7 @@ import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ScreenOrientationLocker
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityLoginBinding
@@ -220,22 +221,20 @@ class FtueAuthVariant(
                         FtueAuthUseCaseFragment::class.java,
                         option = commonOption)
             }
+            OnboardingViewEvents.OnAccountCreated                              -> onAccountCreated()
+            OnboardingViewEvents.OnAccountSignedIn                             -> onAccountSignedIn()
+            OnboardingViewEvents.OnPersonalizeProfile                          -> TODO()
+            OnboardingViewEvents.OnTakeMeHome                                  -> navigateToHome(createdAccount = true)
         }.exhaustive
     }
 
     private fun updateWithState(viewState: OnboardingViewState) {
-        if (viewState.isUserLogged()) {
-            val intent = HomeActivity.newIntent(
-                    activity,
-                    accountCreation = viewState.signMode == SignMode.SignUp
-            )
-            activity.startActivity(intent)
-            activity.finish()
-            return
+        views.loginLoading.isVisible = if (vectorFeatures.isOnboardingPersonalizeEnabled()) {
+            viewState.isLoading()
+        } else {
+            // Keep loading when during success because of the delay when switching to the next Activity
+            viewState.isLoading() || viewState.isAuthTaskCompleted()
         }
-
-        // Loading
-        views.loginLoading.isVisible = viewState.isLoading()
     }
 
     private fun onWebLoginError(onWebLoginError: OnboardingViewEvents.OnWebLoginError) {
@@ -367,5 +366,27 @@ class FtueAuthVariant(
                     option = commonOption)
             else               -> Unit // Should not happen
         }
+    }
+
+    private fun onAccountSignedIn() {
+        navigateToHome(createdAccount = false)
+    }
+
+    private fun onAccountCreated() {
+        if (vectorFeatures.isOnboardingPersonalizeEnabled()) {
+            activity.supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            activity.replaceFragment(
+                    views.loginFragmentContainer,
+                    FtueAuthAccountCreatedFragment::class.java,
+            )
+        } else {
+            navigateToHome(createdAccount = true)
+        }
+    }
+
+    private fun navigateToHome(createdAccount: Boolean) {
+        val intent = HomeActivity.newIntent(activity, accountCreation = createdAccount)
+        activity.startActivity(intent)
+        activity.finish()
     }
 }
