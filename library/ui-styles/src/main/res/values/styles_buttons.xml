@@ -24,6 +24,29 @@
         <item name="colorPrimary">?colorError</item>
     </style>
 
+    <style name="Widget.Vector.Button.Icon">
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="backgroundTint">?colorSurface</item>
+        <item name="iconGravity">textStart</item>
+        <item name="iconPadding">0dp</item>
+        <item name="iconSize">20dp</item>
+    </style>
+
+    <style name="Widget.Vector.Button.Icon.Primary">
+        <item name="android:elevation">0dp</item>
+        <item name="cornerRadius">17dp</item>
+        <item name="iconTint">?colorPrimary</item>
+    </style>
+
+    <style name="Widget.Vector.Button.Icon.Secondary">
+        <item name="android:elevation">2dp</item>
+        <item name="cornerRadius">30dp</item>
+        <item name="iconTint">?vctr_content_primary</item>
+    </style>
+
     <style name="Widget.Vector.Button.Positive">
         <item name="android:minWidth">94dp</item>
         <item name="dynamicColorThemeOverlay">@style/VectorMaterialThemeOverlayPositive</item>
