@@ -45,7 +45,7 @@ internal class OlmSessionStore @Inject constructor(private val store: IMXCryptoS
     @Synchronized
     fun storeSession(olmSessionWrapper: OlmSessionWrapper, deviceKey: String) {
         // This could be a newly created session or one that was just created
-        // Anyhow we should persist ratchet state for futur app lifecycle
+        // Anyhow we should persist ratchet state for future app lifecycle
         addNewSessionInCache(olmSessionWrapper, deviceKey)
         store.storeSession(olmSessionWrapper, deviceKey)
     }

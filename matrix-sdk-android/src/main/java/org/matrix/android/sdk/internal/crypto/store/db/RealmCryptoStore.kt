@@ -104,7 +104,6 @@ import timber.log.Timber
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.collections.set
 
 @SessionScope
 internal class RealmCryptoStore @Inject constructor(
@@ -123,12 +122,6 @@ internal class RealmCryptoStore @Inject constructor(
 
     // The olm account
     private var olmAccount: OlmAccount? = null
-
-    // Cache for OlmSession, to release them properly
-//    private val olmSessionsToRelease = HashMap<String, OlmSessionWrapper>()
-
-    // Cache for InboundGroupSession, to release them properly
-    private val inboundGroupSessionToRelease = HashMap<String, OlmInboundGroupSessionWrapper2>()
 
     private val newSessionListeners = ArrayList<NewSessionListener>()
 
@@ -212,11 +205,6 @@ internal class RealmCryptoStore @Inject constructor(
             // Wait 1 minute max
             monarchyWriteAsyncExecutor.awaitTermination(1, TimeUnit.MINUTES)
         }
-
-        inboundGroupSessionToRelease.forEach {
-            it.value.olmInboundGroupSession?.releaseSession()
-        }
-        inboundGroupSessionToRelease.clear()
 
         olmAccount?.releaseAccount()
 
@@ -745,13 +733,6 @@ internal class RealmCryptoStore @Inject constructor(
                 if (sessionIdentifier != null) {
                     val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionIdentifier, session.senderKey)
 
-                    // Release memory of previously known session, if it is not the same one
-                    if (inboundGroupSessionToRelease[key] != session) {
-                        inboundGroupSessionToRelease[key]?.olmInboundGroupSession?.releaseSession()
-                    }
-
-                    inboundGroupSessionToRelease[key] = session
-
                     val realmOlmInboundGroupSession = OlmInboundGroupSessionEntity().apply {
                         primaryKey = key
                         sessionId = sessionIdentifier
@@ -768,20 +749,12 @@ internal class RealmCryptoStore @Inject constructor(
     override fun getInboundGroupSession(sessionId: String, senderKey: String): OlmInboundGroupSessionWrapper2? {
         val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionId, senderKey)
 
-        // If not in cache (or not found), try to read it from realm
-        if (inboundGroupSessionToRelease[key] == null) {
-            doWithRealm(realmConfiguration) {
-                it.where<OlmInboundGroupSessionEntity>()
-                        .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
-                        .findFirst()
-                        ?.getInboundGroupSession()
-            }
-                    ?.let {
-                        inboundGroupSessionToRelease[key] = it
-                    }
+        return doWithRealm(realmConfiguration) {
+            it.where<OlmInboundGroupSessionEntity>()
+                    .equalTo(OlmInboundGroupSessionEntityFields.PRIMARY_KEY, key)
+                    .findFirst()
+                    ?.getInboundGroupSession()
         }
-
-        return inboundGroupSessionToRelease[key]
     }
 
     override fun getCurrentOutboundGroupSessionForRoom(roomId: String): OutboundGroupSessionWrapper? {
@@ -836,10 +809,6 @@ internal class RealmCryptoStore @Inject constructor(
 
     override fun removeInboundGroupSession(sessionId: String, senderKey: String) {
         val key = OlmInboundGroupSessionEntity.createPrimaryKey(sessionId, senderKey)
-
-        // Release memory of previously known session
-        inboundGroupSessionToRelease[key]?.olmInboundGroupSession?.releaseSession()
-        inboundGroupSessionToRelease.remove(key)
 
         doRealmTransaction(realmConfiguration) {
             it.where<OlmInboundGroupSessionEntity>()

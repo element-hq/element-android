@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 import dagger.Lazy
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.withLock
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
@@ -79,7 +80,7 @@ internal class MXMegolmDecryption(private val userId: String,
     }
 
     @Throws(MXCryptoError::class)
-    private fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): MXEventDecryptionResult {
+    private suspend fun decryptEvent(event: Event, timeline: String, requestKeysOnFail: Boolean): MXEventDecryptionResult {
         Timber.tag(loggerTag.value).v("decryptEvent ${event.eventId}, requestKeysOnFail:$requestKeysOnFail")
         if (event.roomId.isNullOrBlank()) {
             throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_FIELDS, MXCryptoError.MISSING_FIELDS_REASON)
@@ -345,7 +346,23 @@ internal class MXMegolmDecryption(private val userId: String,
             return
         }
         val userId = request.userId ?: return
+
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
+
+            val body = request.requestBody
+            val sessionHolder = try {
+                olmDevice.getInboundGroupSession(body.sessionId, body.senderKey, body.roomId)
+            } catch (failure: Throwable) {
+                Timber.tag(loggerTag.value).e(failure, "shareKeysWithDevice: failed to get session for request $body")
+                return@launch
+            }
+
+            val export = sessionHolder.mutex.withLock {
+                sessionHolder.wrapper.exportKeys()
+            } ?: return@launch Unit.also {
+                Timber.tag(loggerTag.value).e("shareKeysWithDevice: failed to export group session ${body.sessionId}")
+            }
+
             runCatching { deviceListManager.downloadKeys(listOf(userId), false) }
                     .mapCatching {
                         val deviceId = request.deviceId
@@ -355,7 +372,6 @@ internal class MXMegolmDecryption(private val userId: String,
                         } else {
                             val devicesByUser = mapOf(userId to listOf(deviceInfo))
                             val usersDeviceMap = ensureOlmSessionsForDevicesAction.handle(devicesByUser)
-                            val body = request.requestBody
                             val olmSessionResult = usersDeviceMap.getObject(userId, deviceId)
                             if (olmSessionResult?.sessionId == null) {
                                 // no session with this device, probably because there
@@ -365,19 +381,10 @@ internal class MXMegolmDecryption(private val userId: String,
                             }
                             Timber.tag(loggerTag.value).i("shareKeysWithDevice() : sharing session ${body.sessionId} with device $userId:$deviceId")
 
-                            val payloadJson = mutableMapOf<String, Any>("type" to EventType.FORWARDED_ROOM_KEY)
-                            runCatching { olmDevice.getInboundGroupSession(body.sessionId, body.senderKey, body.roomId) }
-                                    .fold(
-                                            {
-                                                // TODO
-                                                payloadJson["content"] = it.exportKeys() ?: ""
-                                            },
-                                            {
-                                                // TODO
-                                                Timber.tag(loggerTag.value).e(it, "shareKeysWithDevice: failed to get session for request $body")
-                                            }
-
-                                    )
+                            val payloadJson = mapOf(
+                                    "type" to EventType.FORWARDED_ROOM_KEY,
+                                    "content" to export
+                            )
 
                             val encodedPayload = messageEncrypter.encryptMessage(payloadJson, listOf(deviceInfo))
                             val sendToDeviceMap = MXUsersDevicesMap<Any>()
