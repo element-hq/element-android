@@ -417,7 +417,6 @@ class TimelineViewModel @AssistedInject constructor(
             is RoomDetailAction.RemoveWidget                     -> handleDeleteWidget(action.widgetId)
             is RoomDetailAction.EnsureNativeWidgetAllowed        -> handleCheckWidgetAllowed(action)
             is RoomDetailAction.CancelSend                       -> handleCancel(action)
-            is RoomDetailAction.OpenOrCreateDm                   -> handleOpenOrCreateDm(action)
             is RoomDetailAction.JumpToReadReceipt                -> handleJumpToReadReceipt(action)
             RoomDetailAction.QuickActionInvitePeople             -> handleInvitePeople()
             RoomDetailAction.QuickActionSetAvatar                -> handleQuickSetAvatar()
@@ -495,20 +494,6 @@ class TimelineViewModel @AssistedInject constructor(
 
     private fun handleQuickSetAvatar() {
         _viewEvents.post(RoomDetailViewEvents.OpenSetRoomAvatarDialog)
-    }
-
-    private fun handleOpenOrCreateDm(action: RoomDetailAction.OpenOrCreateDm) {
-        viewModelScope.launch {
-            val roomId = try {
-                directRoomHelper.ensureDMExists(action.userId)
-            } catch (failure: Throwable) {
-                _viewEvents.post(RoomDetailViewEvents.ActionFailure(action, failure))
-                return@launch
-            }
-            if (roomId != initialState.roomId) {
-                _viewEvents.post(RoomDetailViewEvents.OpenRoom(roomId = roomId))
-            }
-        }
     }
 
     private fun handleJumpToReadReceipt(action: RoomDetailAction.JumpToReadReceipt) {
@@ -810,7 +795,7 @@ class TimelineViewModel @AssistedInject constructor(
         notificationDrawerManager.updateEvents { it.clearMemberShipNotificationForRoom(initialState.roomId) }
         viewModelScope.launch {
             try {
-               session.leaveRoom(room.roomId)
+                session.leaveRoom(room.roomId)
             } catch (throwable: Throwable) {
                 _viewEvents.post(RoomDetailViewEvents.Failure(throwable, showInDialog = true))
             }
