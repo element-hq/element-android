@@ -32,6 +32,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.BuildConfig
 import im.vector.app.core.di.ActiveSessionHolder
 import im.vector.app.core.network.WifiDetector
+import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.features.badge.BadgeProxy
 import im.vector.app.features.notifications.NotifiableEventResolver
 import im.vector.app.features.notifications.NotificationDrawerManager
@@ -78,11 +79,12 @@ private val loggerTag = LoggerTag("Push", LoggerTag.SYNC)
 class VectorMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var notificationDrawerManager: NotificationDrawerManager
     @Inject lateinit var notifiableEventResolver: NotifiableEventResolver
-    @Inject lateinit var pusherManager: PushersManager
+    @Inject lateinit var pushersManager: PushersManager
     @Inject lateinit var activeSessionHolder: ActiveSessionHolder
     @Inject lateinit var vectorPreferences: VectorPreferences
     @Inject lateinit var vectorDataStore: VectorDataStore
     @Inject lateinit var wifiDetector: WifiDetector
+    @Inject lateinit var guardServiceStarter: GuardServiceStarter
 
     private val coroutineScope = CoroutineScope(SupervisorJob())
 
@@ -161,26 +163,31 @@ class VectorMessagingReceiver : MessagingReceiver() {
                     || UnifiedPushHelper.getPushGateway(context) != gateway) {
                 UnifiedPushHelper.storePushGateway(context, gateway)
                 UnifiedPushHelper.storeUpEndpoint(context, endpoint)
-                pusherManager.enqueueRegisterPusher(endpoint, gateway)
+                pushersManager.enqueueRegisterPusher(endpoint, gateway)
             } else {
                 Timber.tag(loggerTag.value).i("onNewEndpoint: skipped")
             }
         }
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_DISABLED
         vectorPreferences.setFdroidSyncBackgroundMode(mode)
+        guardServiceStarter.stop()
     }
 
     override fun onRegistrationFailed(context: Context, instance: String) {
         Toast.makeText(context, "Push service registration failed", Toast.LENGTH_SHORT).show()
+        val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
+        vectorPreferences.setFdroidSyncBackgroundMode(mode)
+        guardServiceStarter.start()
     }
 
     override fun onUnregistered(context: Context, instance: String) {
         Timber.tag(loggerTag.value).d("Unifiedpush: Unregistered")
         val mode = BackgroundSyncMode.FDROID_BACKGROUND_SYNC_MODE_FOR_REALTIME
         vectorPreferences.setFdroidSyncBackgroundMode(mode)
+        guardServiceStarter.start()
         runBlocking {
             try {
-                pusherManager.unregisterPusher(UnifiedPushHelper.getEndpointOrToken(context) ?: "")
+                pushersManager.unregisterPusher(UnifiedPushHelper.getEndpointOrToken(context) ?: "")
             } catch (e: Exception) {
                 Timber.tag(loggerTag.value).d("Probably unregistering a non existant pusher")
             }

@@ -66,8 +66,8 @@ object UnifiedPushHelper {
      *
      * @return the Push Gateway or null if not defined
      */
-    fun getPushGateway(context: Context): String {
-        return DefaultSharedPreferences.getInstance(context).getString(PREFS_PUSH_GATEWAY, null)!!
+    fun getPushGateway(context: Context): String? {
+        return DefaultSharedPreferences.getInstance(context).getString(PREFS_PUSH_GATEWAY, null)
     }
 
     /**
@@ -84,9 +84,27 @@ object UnifiedPushHelper {
         }
     }
 
-    fun register(context: Context,
+    fun register(context: Context, onDoneRunnable: Runnable? = null) {
+        gRegister(context,
+                onDoneRunnable = onDoneRunnable)
+    }
+
+    fun reRegister(context: Context,
+                   pushersManager: PushersManager,
+                   vectorPreferences: VectorPreferences,
+                   onDoneRunnable: Runnable? = null) {
+        gRegister(context,
+                force = true,
+                pushersManager = pushersManager,
+                vectorPreferences = vectorPreferences,
+                onDoneRunnable = onDoneRunnable
+        )
+    }
+
+    private fun gRegister(context: Context,
                  force: Boolean = false,
                  pushersManager: PushersManager? = null,
+                 vectorPreferences: VectorPreferences? = null,
                  onDoneRunnable: Runnable? = null) {
         if (!BuildConfig.ALLOW_EXTERNAL_UNIFIEDPUSH_DISTRIB) {
             up.saveDistributor(context, context.packageName)
@@ -96,12 +114,7 @@ object UnifiedPushHelper {
         }
         if (force) {
             // Un-register first
-            runBlocking {
-                pushersManager?.unregisterPusher(getEndpointOrToken(context) ?: "")
-            }
-            up.unregisterApp(context)
-            storeUpEndpoint(context, null)
-            storePushGateway(context, null)
+            unregister(context, pushersManager, vectorPreferences)
         }
         if (up.getDistributor(context).isNotEmpty()) {
             up.registerApp(context)
@@ -113,12 +126,10 @@ object UnifiedPushHelper {
         up.saveDistributor(context, context.packageName)
         val distributors = up.getDistributors(context).toMutableList()
 
-        val internalDistributorName = if (!FcmHelper.isPushSupported()) {
-            // Adding packageName for background sync
-            distributors.add(context.packageName)
-            context.getString(R.string.unifiedpush_getdistributors_dialog_background_sync)
+        val internalDistributorName = if (FcmHelper.isPushSupported()) {
+            context.getString(R.string.unifiedpush_distributor_fcm_fallback)
         } else {
-            context.getString(R.string.unifiedpush_getdistributors_dialog_fcm_fallback)
+            context.getString(R.string.unifiedpush_distributor_background_sync)
         }
 
         if (distributors.size == 1
@@ -175,6 +186,8 @@ object UnifiedPushHelper {
                 Timber.d("Probably unregistering a non existant pusher")
             }
         }
+        storeUpEndpoint(context, null)
+        storePushGateway(context, null)
         up.unregisterApp(context)
     }
 
@@ -183,7 +196,10 @@ object UnifiedPushHelper {
         // register app_id type upfcm on sygnal
         // the pushkey if FCM key
         if (up.getDistributor(context) == context.packageName) {
-            return context.getString(R.string.pusher_http_url)
+            context.getString(R.string.pusher_http_url).let {
+                storePushGateway(context, it)
+                return it
+            }
         }
         // else, unifiedpush, and pushkey is an endpoint
         val default = context.getString(R.string.default_push_gateway_http_url)
@@ -197,11 +213,30 @@ object UnifiedPushHelper {
              * return custom
              */
         }
+        storePushGateway(context, default)
         return default
     }
 
-    fun distributorExists(context: Context): Boolean {
-        return up.getDistributor(context).isNotEmpty()
+    fun getExternalDistributors(context: Context): List<String> {
+        val distributors =  up.getDistributors(context).toMutableList()
+        distributors.remove(context.packageName)
+        return distributors
+    }
+
+    fun getCurrentDistributorName(context: Context): String {
+        if (isEmbeddedDistributor(context)) {
+            return context.getString(R.string.unifiedpush_distributor_fcm_fallback)
+        }
+        if (isBackgroundSync(context)) {
+            return context.getString(R.string.unifiedpush_distributor_background_sync)
+        }
+        val distributor = up.getDistributor(context)
+        return try {
+            val ai = context.packageManager.getApplicationInfo(distributor, 0)
+            context.packageManager.getApplicationLabel(ai)
+        } catch (e: PackageManager.NameNotFoundException) {
+            distributor
+        } as String
     }
 
     fun isEmbeddedDistributor(context: Context) : Boolean {
@@ -222,7 +257,7 @@ object UnifiedPushHelper {
         }
         return try {
             val parsed = URL(endpoint)
-            "${parsed.protocol}://${parsed.host}"
+            "${parsed.protocol}://${parsed.host}/***"
         } catch (e: Exception) {
             Timber.e("Error parsing unifiedpush endpoint: $e")
             null
