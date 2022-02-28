@@ -60,13 +60,11 @@
         <item name="colorSecondaryVariant">@color/element_alert_dark</item>
         <item name="colorOnSecondary">@android:color/white</item>
         <item name="colorError">@color/element_alert_dark</item>
-        <item name="colorOnError">@color/element_alert_dark</item>
-        <item name="colorSurface">@color/element_alert_dark</item>
-        <item name="colorOnSurface">@color/element_alert_dark</item>
-        <item name="colorPrimaryContainer">@color/element_alert_dark</item>
-        <item name="colorOnPrimaryContainer">@color/element_alert_dark</item>
-        <item name="android:colorBackground">@color/element_alert_dark</item>
-        <item name="colorOnBackground">@color/element_alert_dark</item>
+        <item name="colorOnError">@color/palette_white</item>
+        <item name="colorSurface">@color/element_system_dark</item>
+        <item name="colorOnSurface">?vctr_content_primary</item>
+        <item name="android:colorBackground">@color/element_background_dark</item>
+        <item name="colorOnBackground">?vctr_content_primary</item>
 
         <!--Material type attributes-->
         <item name="textAppearanceButton">@style/TextAppearance.Vector.Button</item>
