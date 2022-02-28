@@ -348,7 +348,6 @@ internal class MXMegolmDecryption(private val userId: String,
         val userId = request.userId ?: return
 
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-
             val body = request.requestBody
             val sessionHolder = try {
                 olmDevice.getInboundGroupSession(body.sessionId, body.senderKey, body.roomId)

@@ -309,7 +309,7 @@ internal class MXMegolmEncryption(
                 Timber.tag(loggerTag.value).i("shareUserDevicesKey() : sendToDevice succeeds after ${System.currentTimeMillis() - t0} ms")
             } catch (failure: Throwable) {
                 // What to do here...
-                Timber.tag(loggerTag.value).e("shareUserDevicesKey() : Failed to share session <${session.sessionId}> with ${devicesByUser.entries.map { "${it.key} (${it.value.map { it.deviceId }})" }} ")
+                Timber.tag(loggerTag.value).e("shareUserDevicesKey() : Failed to share <${session.sessionId}>")
             }
         } else {
             Timber.tag(loggerTag.value).i("shareUserDevicesKey() : no need to share key")
@@ -350,7 +350,8 @@ internal class MXMegolmEncryption(
         try {
             sendToDeviceTask.execute(params)
         } catch (failure: Throwable) {
-            Timber.tag(loggerTag.value).e("notifyKeyWithHeld() : Failed to notify withheld key for ${targets.map { "${it.userId}|${it.deviceId}" }} session: $sessionId ")
+            Timber.tag(loggerTag.value)
+                    .e("notifyKeyWithHeld() :$sessionId Failed to send withheld  ${targets.map { "${it.userId}|${it.deviceId}" }}")
         }
     }
 
@@ -481,7 +482,7 @@ internal class MXMegolmEncryption(
         val export = sessionHolder.mutex.withLock {
             sessionHolder.wrapper.exportKeys()
         } ?: return false.also {
-            Timber.tag(loggerTag.value).e("shareKeysWithDevice: failed to export group session ${groupSessionId}")
+            Timber.tag(loggerTag.value).e("shareKeysWithDevice: failed to export group session $groupSessionId")
         }
 
         val payloadJson = mapOf(

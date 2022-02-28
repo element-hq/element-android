@@ -35,7 +35,6 @@ data class InboundGroupSessionHolder(
         val mutex: Mutex = Mutex()
 )
 
-
 private val loggerTag = LoggerTag("InboundGroupSessionStore", LoggerTag.CRYPTO)
 
 /**

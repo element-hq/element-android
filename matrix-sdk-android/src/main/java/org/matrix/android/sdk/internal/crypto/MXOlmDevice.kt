@@ -58,6 +58,7 @@ internal class MXOlmDevice @Inject constructor(
 ) {
 
     val mutex = Mutex()
+
     /**
      * @return the Curve25519 key for the account.
      */
@@ -733,14 +734,20 @@ internal class MXOlmDevice @Inject constructor(
                 if (existingFirstKnown == null || candidateFirstKnownIndex == null) {
                     // should not happen?
                     candidateSessionToImport.olmInboundGroupSession?.releaseSession()
-                    Timber.tag(loggerTag.value).w("## importInboundGroupSession() : Can't check session null index $existingFirstKnown/$candidateFirstKnownIndex")
+                    Timber.tag(loggerTag.value)
+                            .w("## importInboundGroupSession() : Can't check session null index $existingFirstKnown/$candidateFirstKnownIndex")
                 } else {
                     if (existingFirstKnown <= candidateSessionToImport.firstKnownIndex!!) {
                         // Ignore this, keep existing
                         candidateOlmInboundGroupSession.releaseSession()
                     } else {
                         // update cache with better session
-                        inboundGroupSessionStore.replaceGroupSession(existingSessionHolder, InboundGroupSessionHolder(candidateSessionToImport), sessionId, senderKey)
+                        inboundGroupSessionStore.replaceGroupSession(
+                                existingSessionHolder,
+                                InboundGroupSessionHolder(candidateSessionToImport),
+                                sessionId,
+                                senderKey
+                        )
                         sessions.add(candidateSessionToImport)
                     }
                 }

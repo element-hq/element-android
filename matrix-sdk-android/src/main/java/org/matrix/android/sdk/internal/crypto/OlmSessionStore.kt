@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 New Vector Ltd
+ * Copyright 2022 The Matrix.org Foundation C.I.C.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ private val loggerTag = LoggerTag("OlmSessionStore", LoggerTag.CRYPTO)
  * Access is synchronized for thread safety
  */
 internal class OlmSessionStore @Inject constructor(private val store: IMXCryptoStore) {
-    /*
-    * map of device key to list of olm sessions (it is possible to have several active sessions with a device)
+    /**
+     * map of device key to list of olm sessions (it is possible to have several active sessions with a device)
      */
     private val olmSessions = HashMap<String, MutableList<OlmSessionWrapper>>()
 

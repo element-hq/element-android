@@ -32,7 +32,6 @@ import org.matrix.android.sdk.internal.di.MoshiProvider
 import org.matrix.android.sdk.internal.util.convertFromUTF8
 import timber.log.Timber
 
-
 private val loggerTag = LoggerTag("MXOlmDecryption", LoggerTag.CRYPTO)
 internal class MXOlmDecryption(
         // The olm device interface
@@ -120,19 +119,22 @@ internal class MXOlmDecryption(
         }
 
         if (olmPayloadContent.sender.isNullOrBlank()) {
-            Timber.tag(loggerTag.value).e("## decryptEvent() : Olm event (id=${event.eventId}) contains no 'sender' property; cannot prevent unknown-key attack")
+            Timber.tag(loggerTag.value)
+                    .e("## decryptEvent() : Olm event (id=${event.eventId}) contains no 'sender' property; cannot prevent unknown-key attack")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.MISSING_PROPERTY,
                     String.format(MXCryptoError.ERROR_MISSING_PROPERTY_REASON, "sender"))
         }
 
         if (olmPayloadContent.sender != event.senderId) {
-            Timber.tag(loggerTag.value).e("Event ${event.eventId}: original sender ${olmPayloadContent.sender} does not match reported sender ${event.senderId}")
+            Timber.tag(loggerTag.value)
+                    .e("Event ${event.eventId}:  sender ${olmPayloadContent.sender} does not match reported sender ${event.senderId}")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.FORWARDED_MESSAGE,
                     String.format(MXCryptoError.FORWARDED_MESSAGE_REASON, olmPayloadContent.sender))
         }
 
         if (olmPayloadContent.roomId != event.roomId) {
-            Timber.tag(loggerTag.value).e("## decryptEvent() : Event ${event.eventId}: original room ${olmPayloadContent.roomId} does not match reported room ${event.roomId}")
+            Timber.tag(loggerTag.value)
+                    .e("## decryptEvent() : Event ${event.eventId}:  room ${olmPayloadContent.roomId} does not match reported room ${event.roomId}")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ROOM,
                     String.format(MXCryptoError.BAD_ROOM_REASON, olmPayloadContent.roomId))
         }
