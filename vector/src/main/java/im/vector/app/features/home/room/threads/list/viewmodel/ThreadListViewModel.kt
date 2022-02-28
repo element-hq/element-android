@@ -54,8 +54,7 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
     }
 
     init {
-        observeThreads()
-        fetchThreadList()
+        fetchAndObserveThreads()
     }
 
     override fun handle(action: EmptyAction) {}
@@ -64,9 +63,12 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
      * Observing thread list with respect to homeserver
      * capabilities
      */
-    private fun observeThreads() {
+    private fun fetchAndObserveThreads() {
         when (session.getHomeServerCapabilities().canUseThreading) {
-            true  -> observeThreadSummaries()
+            true  -> {
+                fetchThreadList()
+                observeThreadSummaries()
+            }
             false -> observeThreadsList()
         }
     }
