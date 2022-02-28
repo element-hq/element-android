@@ -68,7 +68,7 @@ class CreatePollViewModel @AssistedInject constructor(
     }
 
     private fun initializeEditedPoll(eventId: String) {
-        val event = room.getTimeLineEvent(eventId) ?: return
+        val event = room.getTimelineEvent(eventId) ?: return
         val content = event.getLastMessageContent() as? MessagePollContent ?: return
 
         val pollType = content.pollCreationInfo?.kind ?: PollType.DISCLOSED
@@ -115,7 +115,7 @@ class CreatePollViewModel @AssistedInject constructor(
     }
 
     private fun sendEditedPoll(editedEventId: String, pollType: PollType, question: String, options: List<String>) {
-        val editedEvent = room.getTimeLineEvent(editedEventId) ?: return
+        val editedEvent = room.getTimelineEvent(editedEventId) ?: return
         room.editPoll(editedEvent, pollType, question, options)
     }
 

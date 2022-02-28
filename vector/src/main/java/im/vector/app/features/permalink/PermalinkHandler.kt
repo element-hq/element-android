@@ -89,7 +89,7 @@ class PermalinkHandler @Inject constructor(private val activeSessionHolder: Acti
 
                 val rootThreadEventId = permalinkData.eventId?.let { eventId ->
                     val room = roomId?.let { session?.getRoom(it) }
-                    room?.getTimeLineEvent(eventId)?.root?.getRootThreadEventId()
+                    room?.getTimelineEvent(eventId)?.root?.getRootThreadEventId()
                 }
                 openRoom(
                         navigationInterceptor,
