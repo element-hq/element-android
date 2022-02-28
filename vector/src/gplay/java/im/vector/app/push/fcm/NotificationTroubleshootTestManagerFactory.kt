@@ -25,11 +25,11 @@ import im.vector.app.features.settings.troubleshoot.TestCurrentUnifiedPushDistri
 import im.vector.app.features.settings.troubleshoot.TestDeviceSettings
 import im.vector.app.features.settings.troubleshoot.TestEndpointAsTokenRegistration
 import im.vector.app.features.settings.troubleshoot.TestNotification
+import im.vector.app.features.settings.troubleshoot.TestPushFromPushGateway
 import im.vector.app.features.settings.troubleshoot.TestPushRulesSettings
 import im.vector.app.features.settings.troubleshoot.TestSystemSettings
 import im.vector.app.features.settings.troubleshoot.TestUnifiedPushEndpoint
 import im.vector.app.features.settings.troubleshoot.TestUnifiedPushGateway
-import im.vector.app.features.settings.troubleshoot.TestPushFromPushGateway
 import im.vector.app.gplay.features.settings.troubleshoot.TestFirebaseToken
 import im.vector.app.gplay.features.settings.troubleshoot.TestPlayServices
 import im.vector.app.gplay.features.settings.troubleshoot.TestTokenRegistration
@@ -66,7 +66,6 @@ class NotificationTroubleshootTestManagerFactory @Inject constructor(
             mgr.addTest(testPlayServices)
             mgr.addTest(testFirebaseToken)
             mgr.addTest(testTokenRegistration)
-
         } else {
             mgr.addTest(testUnifiedPushGateway)
             mgr.addTest(testUnifiedPushEndpoint)

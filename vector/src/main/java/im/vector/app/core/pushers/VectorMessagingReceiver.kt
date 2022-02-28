@@ -159,8 +159,8 @@ class VectorMessagingReceiver : MessagingReceiver() {
             val gateway = UnifiedPushHelper.customOrDefaultGateway(context, endpoint)
             // If the endpoint has changed
             // or the gateway has changed
-            if (UnifiedPushHelper.getEndpointOrToken(context) != endpoint
-                    || UnifiedPushHelper.getPushGateway(context) != gateway) {
+            if (UnifiedPushHelper.getEndpointOrToken(context) != endpoint ||
+                    UnifiedPushHelper.getPushGateway(context) != gateway) {
                 UnifiedPushHelper.storePushGateway(context, gateway)
                 UnifiedPushHelper.storeUpEndpoint(context, endpoint)
                 pushersManager.enqueueRegisterPusher(endpoint, gateway)
