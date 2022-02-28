@@ -42,7 +42,7 @@ internal class MessageEncrypter @Inject constructor(
      * @param deviceInfos   list of device infos to encrypt for.
      * @return the content for an m.room.encrypted event.
      */
-    fun encryptMessage(payloadFields: Content, deviceInfos: List<CryptoDeviceInfo>): EncryptedMessage {
+    suspend fun encryptMessage(payloadFields: Content, deviceInfos: List<CryptoDeviceInfo>): EncryptedMessage {
         val deviceInfoParticipantKey = deviceInfos.associateBy { it.identityKey()!! }
 
         val payloadJson = payloadFields.toMutableMap()

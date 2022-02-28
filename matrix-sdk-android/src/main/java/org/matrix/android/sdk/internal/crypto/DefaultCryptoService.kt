@@ -723,7 +723,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @return the MXEventDecryptionResult data, or throw in case of error
      */
     @Throws(MXCryptoError::class)
-    override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+    override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         return internalDecryptEvent(event, timeline)
     }
 
@@ -746,7 +746,7 @@ internal class DefaultCryptoService @Inject constructor(
      * @return the MXEventDecryptionResult data, or null in case of error
      */
     @Throws(MXCryptoError::class)
-    private fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+    private suspend fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         return eventDecryptor.decryptEvent(event, timeline)
     }
 

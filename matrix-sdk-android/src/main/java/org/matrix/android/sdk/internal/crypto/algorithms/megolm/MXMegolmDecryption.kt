@@ -71,7 +71,7 @@ internal class MXMegolmDecryption(private val userId: String,
 //    private var pendingEvents: MutableMap<String /* senderKey|sessionId */, MutableMap<String /* timelineId */, MutableList<Event>>> = HashMap()
 
     @Throws(MXCryptoError::class)
-    override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+    override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         // If cross signing is enabled, we don't send request until the keys are trusted
         // There could be a race effect here when xsigning is enabled, we should ensure that keys was downloaded once
         val requestOnFail = cryptoStore.getMyCrossSigningInfo()?.isTrusted() == true

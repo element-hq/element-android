@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import kotlinx.coroutines.sync.withLock
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.util.JSON_DICT_PARAMETERIZED_TYPE
 import org.matrix.android.sdk.api.util.JsonDict
@@ -382,31 +383,30 @@ internal class MXOlmDevice @Inject constructor(
      * @param payloadString          the payload to be encrypted and sent
      * @return the cipher text
      */
-    fun encryptMessage(theirDeviceIdentityKey: String, sessionId: String, payloadString: String): Map<String, Any>? {
-        var res: MutableMap<String, Any>? = null
-        val olmMessage: OlmMessage
+    suspend fun encryptMessage(theirDeviceIdentityKey: String, sessionId: String, payloadString: String): Map<String, Any>? {
         val olmSessionWrapper = getSessionForDevice(theirDeviceIdentityKey, sessionId)
 
         if (olmSessionWrapper != null) {
             try {
                 Timber.v("## encryptMessage() : olmSession.sessionIdentifier: $sessionId")
-                // Timber.v("## encryptMessage() : payloadString: " + payloadString);
 
-                olmMessage = olmSessionWrapper.olmSession.encryptMessage(payloadString)
-//                store.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
-                olmSessionStore.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
-                res = HashMap()
-
-                res["body"] = olmMessage.mCipherText
-                res["type"] = olmMessage.mType
-            } catch (e: Exception) {
-                Timber.e(e, "## encryptMessage() : failed")
+                val olmMessage = olmSessionWrapper.mutex.withLock {
+                    olmSessionWrapper.olmSession.encryptMessage(payloadString)
+                }
+                return mapOf(
+                        "body" to olmMessage.mCipherText,
+                        "type" to olmMessage.mType,
+                ).also {
+                    olmSessionStore.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
+                }
+            } catch (e: Throwable) {
+                Timber.e(e, "## encryptMessage() : failed to encrypt olm with device|session:$theirDeviceIdentityKey|$sessionId")
+                return null
             }
         } else {
             Timber.e("## encryptMessage() : Failed to encrypt unknown session $sessionId")
+            return null
         }
-
-        return res
     }
 
     /**
@@ -418,7 +418,7 @@ internal class MXOlmDevice @Inject constructor(
      * @param sessionId              the id of the active session.
      * @return the decrypted payload.
      */
-    fun decryptMessage(ciphertext: String, messageType: Int, sessionId: String, theirDeviceIdentityKey: String): String? {
+    suspend fun decryptMessage(ciphertext: String, messageType: Int, sessionId: String, theirDeviceIdentityKey: String): String? {
         var payloadString: String? = null
 
         val olmSessionWrapper = getSessionForDevice(theirDeviceIdentityKey, sessionId)
@@ -429,8 +429,12 @@ internal class MXOlmDevice @Inject constructor(
             olmMessage.mType = messageType.toLong()
 
             try {
-                payloadString = olmSessionWrapper.olmSession.decryptMessage(olmMessage)
-                olmSessionWrapper.onMessageReceived()
+                payloadString =
+                        olmSessionWrapper.mutex.withLock {
+                            olmSessionWrapper.olmSession.decryptMessage(olmMessage).also {
+                                olmSessionWrapper.onMessageReceived()
+                            }
+                        }
                 olmSessionStore.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
 //                store.storeSession(olmSessionWrapper, theirDeviceIdentityKey)
             } catch (e: Exception) {

@@ -38,7 +38,7 @@ internal class MXOlmDecryption(
     IMXDecrypting {
 
     @Throws(MXCryptoError::class)
-    override fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+    override suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         val olmEventContent = event.content.toModel<OlmEventContent>() ?: run {
             Timber.e("## decryptEvent() : bad event format")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_EVENT_FORMAT,
@@ -153,7 +153,7 @@ internal class MXOlmDecryption(
      * @param message                message object, with 'type' and 'body' fields.
      * @return payload, if decrypted successfully.
      */
-    private fun decryptMessage(message: JsonDict, theirDeviceIdentityKey: String): String? {
+    private suspend fun decryptMessage(message: JsonDict, theirDeviceIdentityKey: String): String? {
         val sessionIds = olmDevice.getSessionIds(theirDeviceIdentityKey)
 
         val messageBody = message["body"] as? String ?: return null

@@ -16,17 +16,20 @@
 
 package org.matrix.android.sdk.internal.crypto
 
-import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.internal.crypto.model.OlmSessionWrapper
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
+import org.matrix.olm.OlmSession
+import timber.log.Timber
 import javax.inject.Inject
+
+private val loggerTag = LoggerTag("OlmSessionStore", LoggerTag.CRYPTO)
 
 /**
  * Keep the used olm session in memory and load them from the data layer when needed
  * Access is synchronized for thread safety
  */
 internal class OlmSessionStore @Inject constructor(private val store: IMXCryptoStore) {
-
     /*
     * map of device key to list of olm sessions (it is possible to have several active sessions with a device)
      */
@@ -66,7 +69,7 @@ internal class OlmSessionStore @Inject constructor(private val store: IMXCryptoS
                 .toMutableList()
         // Do we have some in cache not yet persisted?
         olmSessions.getOrPut(deviceKey) { mutableListOf() }.forEach { cached ->
-            tryOrNull("Olm session was released") { cached.olmSession.sessionIdentifier() }?.let { cachedSessionId ->
+            getSafeSessionIdentifier(cached.olmSession)?.let { cachedSessionId ->
                 if (!persistedKnownSessions.contains(cachedSessionId)) {
                     persistedKnownSessions.add(cachedSessionId)
                 }
@@ -131,14 +134,23 @@ internal class OlmSessionStore @Inject constructor(private val store: IMXCryptoS
 
     private fun getSessionInCache(sessionId: String, deviceKey: String): OlmSessionWrapper? {
         return olmSessions[deviceKey]?.firstOrNull {
-            it.olmSession.isReleased && it.olmSession.sessionIdentifier() == sessionId
+            getSafeSessionIdentifier(it.olmSession) == sessionId
+        }
+    }
+
+    private fun getSafeSessionIdentifier(session: OlmSession): String? {
+        return try {
+            session.sessionIdentifier()
+        } catch (throwable: Throwable) {
+            Timber.tag(loggerTag.value).w("Failed to load sessionId from loaded olm session")
+            null
         }
     }
 
     private fun addNewSessionInCache(session: OlmSessionWrapper, deviceKey: String) {
-        val sessionId = tryOrNull { session.olmSession.sessionIdentifier() } ?: return
+        val sessionId = getSafeSessionIdentifier(session.olmSession) ?: return
         olmSessions.getOrPut(deviceKey) { mutableListOf() }.let {
-            val existing = it.firstOrNull { tryOrNull { it.olmSession.sessionIdentifier() } == sessionId }
+            val existing = it.firstOrNull { getSafeSessionIdentifier(it.olmSession) == sessionId }
             it.add(session)
             // remove and release if was there but with different instance
             if (existing != null && existing.olmSession != session.olmSession) {

@@ -63,7 +63,7 @@ internal class EventDecryptor @Inject constructor(
      * @return the MXEventDecryptionResult data, or throw in case of error
      */
     @Throws(MXCryptoError::class)
-    fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+    suspend fun decryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         return internalDecryptEvent(event, timeline)
     }
 
@@ -91,7 +91,7 @@ internal class EventDecryptor @Inject constructor(
      * @return the MXEventDecryptionResult data, or null in case of error
      */
     @Throws(MXCryptoError::class)
-    private fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
+    private suspend fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         val eventContent = event.content
         if (eventContent == null) {
             Timber.e("## CRYPTO | decryptEvent : empty event content")
