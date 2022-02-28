@@ -17,6 +17,7 @@
 package org.matrix.android.sdk.internal.crypto
 
 import kotlinx.coroutines.sync.withLock
+import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.util.JSON_DICT_PARAMETERIZED_TYPE
 import org.matrix.android.sdk.api.util.JsonDict
@@ -612,52 +613,63 @@ internal class MXOlmDevice @Inject constructor(
                                forwardingCurve25519KeyChain: List<String>,
                                keysClaimed: Map<String, String>,
                                exportFormat: Boolean): Boolean {
-        val session = OlmInboundGroupSessionWrapper2(sessionKey, exportFormat)
-        runCatching { getInboundGroupSession(sessionId, senderKey, roomId) }
-                .fold(
-                        {
-                            // If we already have this session, consider updating it
-                            Timber.e("## addInboundGroupSession() : Update for megolm session $senderKey/$sessionId")
+        val candidateSession = OlmInboundGroupSessionWrapper2(sessionKey, exportFormat)
+        val existingSession = tryOrNull { getInboundGroupSession(sessionId, senderKey, roomId) }
+        // If we have an existing one we should check if the new one is not better
+        if (existingSession != null) {
+            Timber.d("## addInboundGroupSession() check if known session is better than candidate session")
+            try {
+                val existingFirstKnown = existingSession.firstKnownIndex ?: return false.also {
+                    // This is quite unexpected, could throw if native was released?
+                    Timber.e("## addInboundGroupSession() null firstKnownIndex on existing session")
+                    candidateSession.olmInboundGroupSession?.releaseSession()
+                    // Probably should discard it?
+                }
+                val newKnownFirstIndex = candidateSession.firstKnownIndex
+                // If our existing session is better we keep it
+                if (newKnownFirstIndex != null && existingFirstKnown <= newKnownFirstIndex) {
+                    Timber.d("## addInboundGroupSession() : ignore session our is better $senderKey/$sessionId")
+                    candidateSession.olmInboundGroupSession?.releaseSession()
+                    return false
+                }
+            } catch (failure: Throwable) {
+                Timber.e("## addInboundGroupSession() Failed to add inbound: ${failure.localizedMessage}")
+                candidateSession.olmInboundGroupSession?.releaseSession()
+                return false
+            }
+        }
 
-                            val existingFirstKnown = it.firstKnownIndex!!
-                            val newKnownFirstIndex = session.firstKnownIndex
+        Timber.d("## addInboundGroupSession() : Candidate session should be added $senderKey/$sessionId")
 
-                            // If our existing session is better we keep it
-                            if (newKnownFirstIndex != null && existingFirstKnown <= newKnownFirstIndex) {
-                                session.olmInboundGroupSession?.releaseSession()
-                                return false
-                            }
-                        },
-                        {
-                            // Nothing to do in case of error
-                        }
-                )
-
-        // sanity check
-        if (null == session.olmInboundGroupSession) {
-            Timber.e("## addInboundGroupSession : invalid session")
+        // sanity check on the new session
+        val candidateOlmInboundSession = candidateSession.olmInboundGroupSession
+        if (null == candidateOlmInboundSession) {
+            Timber.e("## addInboundGroupSession : invalid session <null>")
             return false
         }
 
         try {
-            if (session.olmInboundGroupSession!!.sessionIdentifier() != sessionId) {
+            if (candidateOlmInboundSession.sessionIdentifier() != sessionId) {
                 Timber.e("## addInboundGroupSession : ERROR: Mismatched group session ID from senderKey: $senderKey")
-                session.olmInboundGroupSession!!.releaseSession()
+                candidateOlmInboundSession.releaseSession()
                 return false
             }
-        } catch (e: Exception) {
-            session.olmInboundGroupSession?.releaseSession()
+        } catch (e: Throwable) {
+            candidateOlmInboundSession.releaseSession()
             Timber.e(e, "## addInboundGroupSession : sessionIdentifier() failed")
             return false
         }
 
-        session.senderKey = senderKey
-        session.roomId = roomId
-        session.keysClaimed = keysClaimed
-        session.forwardingCurve25519KeyChain = forwardingCurve25519KeyChain
+        candidateSession.senderKey = senderKey
+        candidateSession.roomId = roomId
+        candidateSession.keysClaimed = keysClaimed
+        candidateSession.forwardingCurve25519KeyChain = forwardingCurve25519KeyChain
 
-        inboundGroupSessionStore.storeInBoundGroupSession(session, sessionId, senderKey)
-//        store.storeInboundGroupSessions(listOf(session))
+        if (existingSession != null) {
+            inboundGroupSessionStore.replaceGroupSession(existingSession, candidateSession, sessionId, senderKey)
+        } else {
+            inboundGroupSessionStore.storeInBoundGroupSession(candidateSession, sessionId, senderKey)
+        }
 
         return true
     }
@@ -672,57 +684,63 @@ internal class MXOlmDevice @Inject constructor(
         val sessions = ArrayList<OlmInboundGroupSessionWrapper2>(megolmSessionsData.size)
 
         for (megolmSessionData in megolmSessionsData) {
-            val sessionId = megolmSessionData.sessionId
-            val senderKey = megolmSessionData.senderKey
+            val sessionId = megolmSessionData.sessionId ?: continue
+            val senderKey = megolmSessionData.senderKey ?: continue
             val roomId = megolmSessionData.roomId
 
-            var session: OlmInboundGroupSessionWrapper2? = null
+            var candidateSessionToImport: OlmInboundGroupSessionWrapper2? = null
 
             try {
-                session = OlmInboundGroupSessionWrapper2(megolmSessionData)
+                candidateSessionToImport = OlmInboundGroupSessionWrapper2(megolmSessionData)
             } catch (e: Exception) {
                 Timber.e(e, "## importInboundGroupSession() : Update for megolm session $senderKey/$sessionId")
             }
 
             // sanity check
-            if (session?.olmInboundGroupSession == null) {
+            if (candidateSessionToImport?.olmInboundGroupSession == null) {
                 Timber.e("## importInboundGroupSession : invalid session")
                 continue
             }
 
+            val candidateOlmInboundGroupSession = candidateSessionToImport.olmInboundGroupSession
             try {
-                if (session.olmInboundGroupSession?.sessionIdentifier() != sessionId) {
+                if (candidateOlmInboundGroupSession?.sessionIdentifier() != sessionId) {
                     Timber.e("## importInboundGroupSession : ERROR: Mismatched group session ID from senderKey: $senderKey")
-                    if (session.olmInboundGroupSession != null) session.olmInboundGroupSession!!.releaseSession()
+                    candidateOlmInboundGroupSession?.releaseSession()
                     continue
                 }
             } catch (e: Exception) {
                 Timber.e(e, "## importInboundGroupSession : sessionIdentifier() failed")
-                session.olmInboundGroupSession!!.releaseSession()
+                candidateOlmInboundGroupSession?.releaseSession()
                 continue
             }
 
-            runCatching { getInboundGroupSession(sessionId, senderKey, roomId) }
-                    .fold(
-                            {
-                                // If we already have this session, consider updating it
-                                Timber.e("## importInboundGroupSession() : Update for megolm session $senderKey/$sessionId")
+            val existingSession = tryOrNull { getInboundGroupSession(sessionId, senderKey, roomId) }
 
-                                // For now we just ignore updates. TODO: implement something here
-                                if (it.firstKnownIndex!! <= session.firstKnownIndex!!) {
-                                    // Ignore this, keep existing
-                                    session.olmInboundGroupSession!!.releaseSession()
-                                } else {
-                                    sessions.add(session)
-                                }
-                                Unit
-                            },
-                            {
-                                // Session does not already exist, add it
-                                sessions.add(session)
-                            }
+            if (existingSession == null) {
+                // Session does not already exist, add it
+                Timber.d("## importInboundGroupSession() : importing new megolm session $senderKey/$sessionId")
+                sessions.add(candidateSessionToImport)
+            } else {
+                Timber.e("## importInboundGroupSession() : Update for megolm session $senderKey/$sessionId")
+                val existingFirstKnown = tryOrNull { existingSession.firstKnownIndex }
+                val candidateFirstKnownIndex = tryOrNull { candidateSessionToImport.firstKnownIndex }
 
-                    )
+                if (existingFirstKnown == null || candidateFirstKnownIndex == null) {
+                    // should not happen?
+                    candidateSessionToImport.olmInboundGroupSession?.releaseSession()
+                    Timber.w("## importInboundGroupSession() : Can't check session null index $existingFirstKnown/$candidateFirstKnownIndex")
+                } else {
+                    if (existingFirstKnown <= candidateSessionToImport.firstKnownIndex!!) {
+                        // Ignore this, keep existing
+                        candidateOlmInboundGroupSession.releaseSession()
+                    } else {
+                        // update cache with better session
+                        inboundGroupSessionStore.replaceGroupSession(existingSession, candidateSessionToImport, sessionId, senderKey)
+                        sessions.add(candidateSessionToImport)
+                    }
+                }
+            }
         }
 
         store.storeInboundGroupSessions(sessions)

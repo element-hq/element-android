@@ -71,7 +71,21 @@ internal class InboundGroupSessionStore @Inject constructor(
     }
 
     @Synchronized
+    fun replaceGroupSession(old: OlmInboundGroupSessionWrapper2, new: OlmInboundGroupSessionWrapper2, sessionId: String, senderKey: String) {
+        Timber.v("## Replacing outdated session ${old.roomId}-${old.senderKey}")
+        dirtySession.remove(old)
+        store.removeInboundGroupSession(sessionId, senderKey)
+        sessionCache.remove(CacheKey(sessionId, senderKey))
+
+        internalStoreGroupSession(new, sessionId, senderKey)
+    }
+
+    @Synchronized
     fun storeInBoundGroupSession(wrapper: OlmInboundGroupSessionWrapper2, sessionId: String, senderKey: String) {
+        internalStoreGroupSession(wrapper, sessionId, senderKey)
+    }
+
+    private fun internalStoreGroupSession(wrapper: OlmInboundGroupSessionWrapper2, sessionId: String, senderKey: String) {
         Timber.v("## Inbound: getInboundGroupSession mark as dirty ${wrapper.roomId}-${wrapper.senderKey}")
         // We want to batch this a bit for performances
         dirtySession.add(wrapper)
