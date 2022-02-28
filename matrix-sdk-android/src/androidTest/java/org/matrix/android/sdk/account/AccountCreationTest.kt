@@ -24,6 +24,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.junit.FixMethodOrder
@@ -123,24 +124,9 @@ class AccountCreationTest : InstrumentedTest {
 
         val eventList = listOf(eventBobPOV, secondEventBobPOV, thirdEventBobPOV, forthEventBobPOV)
 
-//        commonTestHelper.runBlockingTest {
-//            val export = bobSession.cryptoService().exportRoomKeys("foo")
-
-//        }
         val atomicAsError = AtomicBoolean()
         val deff = mutableListOf<Deferred<Any>>()
-//        for (i in 1..100) {
-//            GlobalScope.launch {
-//                val index = Random.nextInt(eventList.size)
-//                try {
-//                    val event = eventList[index]
-//                    bobSession.cryptoService().decryptEvent(event.root, "")
-//                    Log.d("#TEST", "Decrypt Success $index :${Thread.currentThread().name}")
-//                } catch (failure: Throwable) {
-//                    Log.d("#TEST", "Failed to decrypt $index  :$failure")
-//                }
-//            }
-//        }
+
         val cryptoService = bobSession.cryptoService()
 
         coroutineScope.launch {
@@ -164,27 +150,6 @@ class AccountCreationTest : InstrumentedTest {
                     deff.add(it)
                 }
             }
-//            coroutineScope.async {
-//                val index = Random.nextInt(eventList.size)
-//                try {
-//                    val event = eventList[index]
-//                    cryptoService.decryptEvent(event.root, "")
-//                    for (other in eventList.indices) {
-//                        if (other != index) {
-//                            cryptoService.decryptEventAsync(eventList[other].root, "", object : MatrixCallback<MXEventDecryptionResult> {
-//                                override fun onFailure(failure: Throwable) {
-//                                    Log.e("#TEST", "Failed to decrypt $spawn/$index  :$failure")
-//                                }
-//                            })
-//                        }
-//                    }
-//                    Log.d("#TEST", "[$spawn] Decrypt Success $index :${Thread.currentThread().name}")
-//                } catch (failure: Throwable) {
-//                    Log.e("#TEST", "Failed to decrypt $spawn/$index  :$failure")
-//                }
-//            }.let {
-//                deff.add(it)
-//            }
         }
 
         coroutineScope.launch {
@@ -198,20 +163,15 @@ class AccountCreationTest : InstrumentedTest {
             deff.awaitAll()
             delay(10_000)
             assert(!atomicAsError.get())
-            // There should be no errors?
-//            deff.map { it.await() }.forEach {
-//                it.fold({
-//                    Log.d("#TEST", "Decrypt Success :${it}")
-//                }, {
-//                    Log.d("#TEST", "Failed to decrypt :$it")
-//                })
-//                val hasFailure = deff.any { it.await().exceptionOrNull() != null }
-//                assert(!hasFailure)
-//            }
-
-            commonTestHelper.signOutAndClose(aliceSession)
-            commonTestHelper.signOutAndClose(bobSession)
-            commonTestHelper.signOutAndClose(bobSession2)
+            // There should be no errors
         }
+
+
+
+        coroutineScope.cancel()
+
+        commonTestHelper.signOutAndClose(aliceSession)
+        commonTestHelper.signOutAndClose(bobSession)
+        commonTestHelper.signOutAndClose(bobSession2)
     }
 }
