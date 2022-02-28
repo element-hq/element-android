@@ -156,14 +156,15 @@ class VectorMessagingReceiver : MessagingReceiver() {
     override fun onNewEndpoint(context: Context, endpoint: String, instance: String) {
         Timber.tag(loggerTag.value).i("onNewEndpoint: adding $endpoint")
         if (vectorPreferences.areNotificationEnabledForDevice() && activeSessionHolder.hasActiveSession()) {
-            val gateway = UnifiedPushHelper.customOrDefaultGateway(context, endpoint)
             // If the endpoint has changed
             // or the gateway has changed
-            if (UnifiedPushHelper.getEndpointOrToken(context) != endpoint ||
-                    UnifiedPushHelper.getPushGateway(context) != gateway) {
-                UnifiedPushHelper.storePushGateway(context, gateway)
+            if (UnifiedPushHelper.getEndpointOrToken(context) != endpoint) {
                 UnifiedPushHelper.storeUpEndpoint(context, endpoint)
-                pushersManager.enqueueRegisterPusher(endpoint, gateway)
+                UnifiedPushHelper.storeCustomOrDefaultGateway(context, endpoint) {
+                    UnifiedPushHelper.getPushGateway(context)?.let {
+                        pushersManager.enqueueRegisterPusher(endpoint, it)
+                    }
+                }
             } else {
                 Timber.tag(loggerTag.value).i("onNewEndpoint: skipped")
             }
