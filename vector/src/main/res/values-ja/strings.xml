@@ -2322,4 +2322,5 @@
 \n検証は端末に保存され、新しいバージョンのアプリで共有されます。</string>
     <string name="room_notification_more_than_two_users_are_typing">%1$s、%2$s他</string>
     <string name="room_notification_two_users_are_typing">%1$sと%2$s</string>
+    <string name="security_prompt_text">自分と相手を認証してチャットを安全に保ちます</string>
 </resources>
