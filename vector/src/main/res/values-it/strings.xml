@@ -39,7 +39,6 @@
     <string name="room_displayname_room_invite">Invito nella stanza</string>
     <string name="room_displayname_two_members">%1$s e %2$s</string>
     <string name="room_displayname_empty_room">Stanza vuota</string>
-
     <string name="initial_sync_start_importing_account">Sincronizzazione iniziale:
 \nImportazione account…</string>
     <string name="initial_sync_start_importing_account_crypto">Sincronizzazione iniziale:
@@ -241,7 +240,6 @@
     <string name="action_delete">Elimina</string>
     <string name="action_rename">Rinomina</string>
     <string name="report_content">Segnala contenuto</string>
-
     <string name="or">o</string>
     <string name="action_invite">Invita</string>
     <string name="action_sign_out">Disconnetti</string>
@@ -264,7 +262,6 @@
     <string name="matrix_only_filter">Mostra solo i contatti Matrix</string>
     <string name="no_result_placeholder">Nessun risultato</string>
     <string name="rooms_header">Stanze</string>
-
     <string name="send_bug_report_include_logs">Invia i registri</string>
     <string name="send_bug_report_include_crash_logs">Invia i registri di crash</string>
     <string name="send_bug_report_include_screenshot">Invia schermata</string>
@@ -295,11 +292,9 @@
     <string name="auth_invalid_email">Questo indirizzo email non sembra corretto</string>
     <string name="auth_email_already_defined">L\'indirizzo email è già stato impostato.</string>
     <string name="auth_forgot_password">Hai dimenticato la password\?</string>
-
     <string name="auth_recaptcha_message">Questo homeserver vuole assicurarsi che tu non sia un robot</string>
     <string name="auth_reset_password_missing_email">Va inserito l\'indirizzo email associato al tuo account.</string>
     <string name="auth_reset_password_error_unauthorized">La verifica del tuo indirizzo email è fallita: assicurati di aver cliccato sul link contenuto nella mail</string>
-
     <string name="login_error_invalid_home_server">Inserisci un URL valido</string>
     <string name="login_error_bad_json">JSON malformato</string>
     <string name="login_error_not_json">Non conteneva un JSON valido</string>
@@ -315,14 +310,10 @@
     <string name="call_in_progress">Chiamata in corso…</string>
     <string name="call_error_user_not_responding">Ricezione fallita da parte del destinatario.</string>
     <string name="permissions_rationale_popup_title">Informazione</string>
-
-
     <string name="permissions_rationale_msg_record_audio">${app_name} deve essere autorizzato ad accedere al microfono e poter così fare chiamate audio.</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} deve essere autorizzato ad accedere a fotocamera e microfono per poter fare chiamate video.
 \n
 \nNel prossimo pop-up concedi le autorizzazioni per poter fare la chiamata.</string>
-
     <string name="yes">SÌ</string>
     <string name="no">NO</string>
     <string name="_continue">Continua</string>
@@ -330,7 +321,6 @@
     <string name="action_join">Entra</string>
     <string name="action_reject">Rifiuta</string>
     <string name="room_jump_to_first_unread">Vai ai non letti</string>
-
     <string name="room_participants_leave_prompt_title">Esci dalla stanza</string>
     <string name="room_participants_leave_prompt_msg">Sei sicuro di voler uscire dalla stanza?</string>
     <string name="room_participants_header_direct_chats">CHAT DIRETTE</string>
@@ -357,7 +347,6 @@
     <string name="ssl_unexpected_existing_expl">Il certificato è diverso da quello precedentemente contrassegnato sul tuo telefono come \"affidabile\". Questa cosa è MOLTO INSOLITA. Si raccomanda di NON ACCETTARE questo nuovo certificato.</string>
     <string name="ssl_expected_existing_expl">Il certificato del server è cambiato: quello precedente era stato contrassegnato come affidabile ma quello attuale no. Può darsi che il certificato precedente sia scaduto e sia stato semplicemente sostituito con uno nuovo. Contatta l\'amministratore del server per verificare l\'impronta digitale in uso.</string>
     <string name="ssl_only_accept">Contrassegna il certificato come affidabile solo se l\'mpronta digitale comunicata dall\'amministratore del server corrisponde a quella qua sopra.</string>
-
     <string name="search_hint">Cerca</string>
     <string name="search_members_hint">Cerca tra i membri della stanza</string>
     <string name="search_no_results">Nessun risultato</string>
@@ -443,7 +432,6 @@
     <string name="room_settings_labs_warning_message">Queste sono caratteristiche sperimentali che potrebbero dare risultati inattesi. Usali con cautela.</string>
     <string name="room_settings_set_main_address">Imposta come indirizzo principale</string>
     <string name="room_settings_unset_main_address">Non usare più come indirizzo principale</string>
-
     <string name="settings_theme">Tema</string>
     <string name="encryption_information_decryption_error">Errore di decriptazione</string>
     <string name="encryption_information_device_name">Nome pubblico</string>
@@ -455,7 +443,6 @@
     <string name="encryption_export_export">Esporta</string>
     <string name="passphrase_enter_passphrase">Inserisci la Passphrase</string>
     <string name="passphrase_confirm_passphrase">Conferma la Passphrase</string>
-
     <string name="encryption_import_e2e_room_keys">Importa le chiavi di crittografia E2E della stanza</string>
     <string name="encryption_import_room_keys">Importa le chiavi della stanza</string>
     <string name="encryption_import_room_keys_summary">Importa le chiavi da un file locale</string>
@@ -467,7 +454,6 @@
     <string name="encryption_information_verify">Conferma</string>
     <string name="encryption_information_verify_device_warning">Conferma confrontando la seguente con le impostazioni utente della tua altra sessione:</string>
     <string name="encryption_information_verify_device_warning2">Se non corrispondono, la sicurezza delle tue comunicazioni potrebbe essere compromessa.</string>
-
     <string name="select_room_directory">Scegli un elenco di stanze</string>
     <string name="directory_server_placeholder">Nome del server</string>
     <string name="directory_server_all_rooms_on_server">Tutte le stanze sull\'Home Server %s</string>
@@ -509,7 +495,6 @@
     <string name="start_voice_call_prompt_msg">Sicuro di voler fare una chiamata audio\?</string>
     <string name="start_video_call_prompt_msg">Sicuro di voler fare una videochiamata\?</string>
     <string name="list_members">Elenco dei membri</string>
-
     <plurals name="room_title_members">
         <item quantity="one">%d utente</item>
         <item quantity="other">%d utenti</item>
@@ -519,8 +504,6 @@
         <item quantity="one">%d nuovo messaggio</item>
         <item quantity="other">%d nuovi messaggi</item>
     </plurals>
-
-
     <string name="room_settings_all_messages">Tutti i messaggi</string>
     <string name="room_settings_add_homescreen_shortcut">Aggiungi alla schermata iniziale</string>
     <string name="settings_inline_url_preview">Anteprima degli URL</string>
@@ -530,7 +513,6 @@
         <item quantity="one">%d messaggio notificato non letto</item>
         <item quantity="other">%d messaggi notificati non letti</item>
     </plurals>
-
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d stanza</item>
         <item quantity="other">%d stanze</item>
@@ -608,16 +590,10 @@
     <string name="room_tombstone_continuation_link">La conversazione continua qui</string>
     <string name="room_tombstone_continuation_description">Questa stanza contiene una conversazione cominciata altrove</string>
     <string name="room_tombstone_predecessor_link">Clicca qui per vedere i messaggi precedenti</string>
-
-
-
-
     <plurals name="room_details_selected">
         <item quantity="one">%d selezionato</item>
         <item quantity="other">%d selezionati</item>
     </plurals>
-
-
     <string name="system_alerts_header">Avvisi di sistema</string>
     <string name="resource_limit_contact_admin">contatta l\'amministratore del servizio</string>
     <string name="resource_limit_soft_default">L\'Home Server ha superato uno dei limiti delle risorse, pertanto <b>alcuni utenti non potranno accedere</b>.</string>
@@ -708,7 +684,6 @@
     <string name="settings_troubleshoot_test_battery_success">${app_name} non è influenzato dall\'ottimizzazione della batteria.</string>
     <string name="settings_troubleshoot_test_battery_failed">Se si lascia un dispositivo scollegato, fermo e con lo schermo spento, dopo un certo tempo questo entra in modalità Doze. Ciò impedisce alle App di accedere alla rete e ritarda le attività, le sincronizzazioni e la ricezione dei normali allarmi.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignora l\'ottimizzazione</string>
-
     <string name="no_valid_google_play_services_apk">Non è stato trovato nessun APK Google Play Services valido. Le notifiche non funzioneranno correttamente.</string>
     <string name="video_call_in_progress">Chiamata video in corso…</string>
     <string name="title_activity_keys_backup_setup">Backup delle chiavi</string>
@@ -778,7 +753,6 @@
     <string name="keys_backup_setup_step3_copy_button_title">Salva il codice di recupero</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Condividi</string>
     <string name="keys_backup_setup_step3_save_button_title">Salva come file</string>
-
     <string name="keys_backup_setup_step3_please_make_copy">Si prega di farne una copia</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Condividi il codice di recupero con…</string>
     <string name="keys_backup_setup_step3_generating_key_status">Generazione del codice di recupero basato sulla Passphrase. Questo processo può durare alcuni secondi.</string>
@@ -826,7 +800,6 @@
     <string name="keys_backup_settings_deleting_backup">Eliminazione Backup…</string>
     <string name="keys_backup_settings_delete_confirm_title">Elimina Backup</string>
     <string name="keys_backup_settings_delete_confirm_message">Eliminare il Backup delle chiavi crittografiche dall\'Home Server\? Non potrai più usare il codice di recupero per leggere i messaggi cifrati.</string>
-
     <string name="keys_backup_banner_recover_line1">Non perdere mai i messaggi cifrati</string>
     <string name="keys_backup_banner_recover_line2">Usa il Backup delle chiavi</string>
     <string name="keys_backup_banner_update_line1">Nuove chiavi per messaggi sicuri</string>
@@ -840,7 +813,6 @@
     <string name="keys_backup_info_title_version">Versione</string>
     <string name="keys_backup_info_title_algorithm">Algoritmo</string>
     <string name="keys_backup_info_title_signature">Firma</string>
-
     <string name="settings_media">Multimedia</string>
     <string name="settings_default_compression">Compressione predefinita</string>
     <string name="compression_opt_list_choose">Scegli</string>
@@ -874,8 +846,6 @@
     <string name="ignore_request_short_label">Ignora</string>
     <string name="sas_verified">Verificato!</string>
     <string name="sas_got_it">Capito</string>
-
-
     <string name="sas_incoming_request_notif_title">Richiesta di verifica</string>
     <string name="sas_incoming_request_notif_content">%s vuole verificare la tua sessione</string>
     <string name="sas_error_unknown">Errore sconosciuto</string>
@@ -972,7 +942,6 @@
     <string name="none">Nessuno</string>
     <string name="action_revoke">Revoca</string>
     <string name="action_disconnect">Disconnetti</string>
-
     <string name="login_error_homeserver_not_found">Non è stato trovato alcun Home Server seguendo questo URL. Per favore, controllalo</string>
     <string name="settings_background_fdroid_sync_mode">Modalità sync in background</string>
     <string name="settings_background_fdroid_sync_mode_battery">Ottimizzato per la batteria</string>
@@ -983,7 +952,6 @@
 \nCiò avrà un certo impatto sulla quantità di dati e batteria utilizzati. Una notifica sempre accesa comunicherà che ${app_name} è attivo.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Nessuna sincronizzazione in background</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Quando l\'App è in background non ti verranno notificati i messaggi in arrivo.</string>
-
     <string name="settings_discovery_category">Farsi trovare</string>
     <string name="settings_discovery_manage">Gestisci le impostazioni per farsi trovare.</string>
     <string name="identity_server_not_defined">Non stai usando alcun server di identità</string>
@@ -1053,7 +1021,6 @@
     <string name="content_reported_as_inappropriate_content">Questo contenuto è stato segnalato come inappropriato.
 \n
 \nSe non vuoi più vedere i contenuti di questo utente puoi ignorarlo. Ciò nasconderà i suoi messaggi dalla tua vista.</string>
-
     <string name="settings_integrations">Integrazioni</string>
     <string name="settings_integrations_summary">Usa un gestore di integrazioni per gestire bot, bridge, widget e pacchetti di sticker.
 \nI gestori di integrazioni possono ricevere dati di configurazione, modificare widget, mandare inviti alle stanze e modificare permessi a tuo nome.</string>
@@ -1264,7 +1231,6 @@
     <string name="verification_verify_user">Verifica %s</string>
     <string name="verification_verified_user">%s verificato</string>
     <string name="verification_request_waiting_for">In attesa di %s…</string>
-
     <string name="room_profile_not_encrypted_subtitle">I messaggi in questa stanza non sono cifrati E2E.</string>
     <string name="room_profile_encrypted_subtitle">I messaggi in questa stanza sono cifrati E2E.
 \n
@@ -1410,7 +1376,6 @@
     <string name="bootstrap_crosssigning_print_it">Stampala e conservala in un posto sicuro</string>
     <string name="bootstrap_crosssigning_save_usb">Salvala in una penna USB o disco di backup</string>
     <string name="bootstrap_crosssigning_save_cloud">Copiala sul Cloud</string>
-
     <string name="encryption_enabled">Crittografia attiva</string>
     <string name="encryption_enabled_tile_description">I messaggi in questa stanza sono crittografati E2E. Maggiori info e verifica degli utenti nel loro profilo.</string>
     <string name="encryption_not_enabled">Crittografia non attiva</string>
@@ -1813,7 +1778,6 @@
     <string name="hide_advanced">Nascondi avanzate</string>
     <string name="show_advanced">Mostra avanzate</string>
     <string name="attachment_viewer_item_x_of_y">%1$d di %2$d</string>
-
     <string name="settings_discovery_consent_action_give_consent">Dai il consenso</string>
     <string name="settings_discovery_consent_action_revoke">Revoca il mio consenso</string>
     <string name="settings_discovery_consent_notice_on">Hai acconsentito ad inviare email e numeri di telefono a questo server d\'identità per poter rintracciare altri utenti tra i tuoi contatti.</string>
@@ -1902,8 +1866,6 @@
     <string name="call_transfer_title">Trasferisci</string>
     <string name="call_transfer_connect_action">Connetti</string>
     <string name="call_transfer_consult_first">Prima consulta</string>
-
-
     <string name="call_only_active">Chiamata attiva (%1$s)</string>
     <string name="call_dial_pad_lookup_error">Si è verificato un errore cercando il numero di telefono</string>
     <string name="call_dial_pad_title">Tastierino numerico</string>
@@ -2102,7 +2064,6 @@
     <string name="directory_add_a_new_server_prompt">Inserisci il nome di un nuovo server che vuoi esplorare.</string>
     <string name="directory_add_a_new_server">Aggiungi un nuovo server</string>
     <string name="directory_your_server">Il tuo server</string>
-
     <string name="error_failed_to_join_room">Spiacenti, si è verificato un errore tentando di entrare: %s</string>
     <string name="create_space_alias_hint">Indirizzo dello spazio</string>
     <string name="space_settings_alias_subtitle">Vedi e gestisci gli indirizzi di questo spazio.</string>
@@ -2303,7 +2264,6 @@
     <string name="create_poll_question_title">Domanda o argomento del sondaggio</string>
     <string name="create_poll_title">Crea sondaggio</string>
     <string name="attachment_type_poll">Sondaggio</string>
-
     <string name="identity_server_consent_dialog_title_2">Invia email e numeri di telefono a %s</string>
     <string name="settings_discovery_consent_notice_off_2">I tuoi contatti sono privati. Per trovare utenti dai tuoi contatti, ci serve l\'autorizzazione per inviare le informazioni dei contatti al tuo server d\'identità.</string>
     <string name="shortcut_disabled_reason_sign_out">La sessione è stata disconnessa!</string>
@@ -2448,4 +2408,6 @@
         <item quantity="one">%d modifica delle ACL del server</item>
         <item quantity="other">%d modifiche delle ACL del server</item>
     </plurals>
+    <string name="room_notification_two_users_are_typing">%1$s e %2$s</string>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s e altri</string>
 </resources>
