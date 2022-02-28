@@ -47,6 +47,7 @@ import org.matrix.android.sdk.internal.crypto.keysbackup.model.MegolmBackupCreat
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersion
 import org.matrix.android.sdk.internal.crypto.keysbackup.model.rest.KeysVersionResult
 import org.matrix.android.sdk.internal.crypto.model.ImportRoomKeysResult
+import org.matrix.android.sdk.internal.crypto.model.event.EncryptedEventContent
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
@@ -184,72 +185,6 @@ class E2eeSanityTests : InstrumentedTest {
         cryptoTestData.cleanUp(testHelper)
     }
 
-    private fun sendMessageInRoom(aliceRoomPOV: Room, text: String): String? {
-        aliceRoomPOV.sendTextMessage(text)
-        var sentEventId: String? = null
-        testHelper.waitWithLatch(4 * 60_000) {
-            val timeline = aliceRoomPOV.createTimeline(null, TimelineSettings(60))
-            timeline.start()
-
-            testHelper.retryPeriodicallyWithLatch(it) {
-                val decryptedMsg = timeline.getSnapshot()
-                        .filter { it.root.getClearType() == EventType.MESSAGE }
-                        .also {
-                            Log.v("#E2E TEST", "Timeline snapshot is ${it.map { "${it.root.type}|${it.root.sendState}" }.joinToString(",", "[", "]")}")
-                        }
-                        .filter { it.root.sendState == SendState.SYNCED }
-                        .firstOrNull { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(text) == true }
-                sentEventId = decryptedMsg?.eventId
-                decryptedMsg != null
-            }
-
-            timeline.dispose()
-        }
-        return sentEventId
-    }
-
-    private fun ensureMembersHaveJoined(aliceSession: Session, otherAccounts: List<Session>, e2eRoomID: String) {
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                otherAccounts.map {
-                    aliceSession.getRoomMember(it.myUserId, e2eRoomID)?.membership
-                }.all {
-                    it == Membership.JOIN
-                }
-            }
-        }
-    }
-
-    private fun waitForAndAcceptInviteInRoom(otherSession: Session, e2eRoomID: String) {
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                val roomSummary = otherSession.getRoomSummary(e2eRoomID)
-                (roomSummary != null && roomSummary.membership == Membership.INVITE).also {
-                    if (it) {
-                        Log.v("#E2E TEST", "${otherSession.myUserId} can see the invite from alice")
-                    }
-                }
-            }
-        }
-
-        testHelper.runBlockingTest(60_000) {
-            Log.v("#E2E TEST", "${otherSession.myUserId} tries to join room $e2eRoomID")
-            try {
-                otherSession.joinRoom(e2eRoomID)
-            } catch (ex: JoinRoomFailure.JoinedWithTimeout) {
-                // it's ok we will wait after
-            }
-        }
-
-        Log.v("#E2E TEST", "${otherSession.myUserId} waiting for join echo ...")
-        testHelper.waitWithLatch {
-            testHelper.retryPeriodicallyWithLatch(it) {
-                val roomSummary = otherSession.getRoomSummary(e2eRoomID)
-                roomSummary != null && roomSummary.membership == Membership.JOIN
-            }
-        }
-    }
-
     /**
      * Quick test for basic keybackup
      * 1. Create e2e between Alice and Bob
@@ -373,32 +308,8 @@ class E2eeSanityTests : InstrumentedTest {
 
         // ensure bob can now decrypt
         ensureCanDecrypt(sentEventIds, newBobSession, e2eRoomID, messagesText)
-    }
 
-    private fun ensureCanDecrypt(sentEventIds: MutableList<String>, session: Session, e2eRoomID: String, messagesText: List<String>) {
-        sentEventIds.forEachIndexed { index, sentEventId ->
-            testHelper.waitWithLatch { latch ->
-                testHelper.retryPeriodicallyWithLatch(latch) {
-                    val event = session.getRoom(e2eRoomID)!!.getTimeLineEvent(sentEventId)!!.root
-                    testHelper.runBlockingTest {
-                        try {
-                            session.cryptoService().decryptEvent(event, "").let { result ->
-                                event.mxDecryptionResult = OlmDecryptionResult(
-                                        payload = result.clearEvent,
-                                        senderKey = result.senderCurve25519Key,
-                                        keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
-                                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
-                                )
-                            }
-                        } catch (error: MXCryptoError) {
-                            // nop
-                        }
-                    }
-                    event.getClearType() == EventType.MESSAGE &&
-                            messagesText[index] == event.getClearContent()?.toModel<MessageContent>()?.body
-                }
-            }
-        }
+        testHelper.signOutAndClose(newBobSession)
     }
 
     /**
@@ -469,7 +380,6 @@ class E2eeSanityTests : InstrumentedTest {
         bobSession.cryptoService().verificationService().markedLocallyAsManuallyVerified(newBobSession.myUserId, newBobSession.sessionParams.deviceId!!)
         newBobSession.cryptoService().verificationService().markedLocallyAsManuallyVerified(bobSession.myUserId, bobSession.sessionParams.deviceId!!)
 
-
         // now let new session re-request
         sentEventIds.forEach { sentEventId ->
             val event = newBobSession.getRoom(e2eRoomID)!!.getTimeLineEvent(sentEventId)!!.root
@@ -483,9 +393,229 @@ class E2eeSanityTests : InstrumentedTest {
 
         ensureCanDecrypt(sentEventIds, newBobSession, e2eRoomID, messagesText)
 
+        cryptoTestData.cleanUp(testHelper)
+        testHelper.signOutAndClose(newBobSession)
     }
 
-    private fun ensureIsDecrypted(sentEventIds: MutableList<String>, session: Session, e2eRoomID: String) {
+    /**
+     * Test that if a better key is forwared (lower index, it is then used)
+     */
+    @Test
+    fun testForwardBetterKey() {
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(true)
+        val aliceSession = cryptoTestData.firstSession
+        val bobSessionWithBetterKey = cryptoTestData.secondSession!!
+        val e2eRoomID = cryptoTestData.roomId
+
+        val aliceRoomPOV = aliceSession.getRoom(e2eRoomID)!!
+
+        cryptoTestHelper.initializeCrossSigning(bobSessionWithBetterKey)
+
+        // let's send a few message to bob
+        var firstEventId: String
+        val firstMessage = "1. Hello"
+
+        Log.v("#E2E TEST", "Alice sends some messages")
+        firstMessage.let { text ->
+            firstEventId = sendMessageInRoom(aliceRoomPOV, text)!!
+
+            testHelper.waitWithLatch { latch ->
+                testHelper.retryPeriodicallyWithLatch(latch) {
+                    val timeLineEvent = bobSessionWithBetterKey.getRoom(e2eRoomID)?.getTimeLineEvent(firstEventId)
+                    timeLineEvent != null &&
+                            timeLineEvent.isEncrypted() &&
+                            timeLineEvent.root.getClearType() == EventType.MESSAGE
+                }
+            }
+        }
+
+        // Ensure bob can decrypt
+        ensureIsDecrypted(listOf(firstEventId), bobSessionWithBetterKey, e2eRoomID)
+
+        // Let's add a new unverified session from bob
+        val newBobSession = testHelper.logIntoAccount(bobSessionWithBetterKey.myUserId, SessionTestParams(true))
+
+        // check that new bob can't currently decrypt
+        Log.v("#E2E TEST", "check that new bob can't currently decrypt")
+        ensureCannotDecrypt(listOf(firstEventId), newBobSession, e2eRoomID, MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID)
+
+        // Now let alice send a new message. this time the new bob session will be able to decrypt
+        var secondEventId: String
+        val secondMessage = "2. New Device?"
+
+        Log.v("#E2E TEST", "Alice sends some messages")
+        secondMessage.let { text ->
+            secondEventId = sendMessageInRoom(aliceRoomPOV, text)!!
+
+            testHelper.waitWithLatch { latch ->
+                testHelper.retryPeriodicallyWithLatch(latch) {
+                    val timeLineEvent = newBobSession.getRoom(e2eRoomID)?.getTimeLineEvent(secondEventId)
+                    timeLineEvent != null &&
+                            timeLineEvent.isEncrypted() &&
+                            timeLineEvent.root.getClearType() == EventType.MESSAGE
+                }
+            }
+        }
+
+        // check that both messages have same sessionId (it's just that we don't have index 0)
+        val firstEventNewBobPov = newBobSession.getRoom(e2eRoomID)?.getTimeLineEvent(firstEventId)
+        val secondEventNewBobPov = newBobSession.getRoom(e2eRoomID)?.getTimeLineEvent(secondEventId)
+
+        val firstSessionId = firstEventNewBobPov!!.root.content.toModel<EncryptedEventContent>()!!.sessionId!!
+        val secondSessionId = secondEventNewBobPov!!.root.content.toModel<EncryptedEventContent>()!!.sessionId!!
+
+        Assert.assertTrue("Should be the same session id", firstSessionId == secondSessionId)
+
+        // Confirm we can decrypt one but not the other
+        testHelper.runBlockingTest {
+            try {
+                newBobSession.cryptoService().decryptEvent(firstEventNewBobPov.root, "")
+                fail("Should not be able to decrypt event")
+            } catch (error: MXCryptoError) {
+                val errorType = (error as? MXCryptoError.Base)?.errorType
+                assertEquals(MXCryptoError.ErrorType.UNKNOWN_MESSAGE_INDEX, errorType)
+            }
+        }
+
+        testHelper.runBlockingTest {
+            try {
+                newBobSession.cryptoService().decryptEvent(secondEventNewBobPov.root, "")
+            } catch (error: MXCryptoError) {
+                fail("Should be able to decrypt event")
+            }
+        }
+
+        // Now let's verify bobs session, and re-request keys
+        bobSessionWithBetterKey.cryptoService()
+                .verificationService()
+                .markedLocallyAsManuallyVerified(newBobSession.myUserId, newBobSession.sessionParams.deviceId!!)
+
+        newBobSession.cryptoService()
+                .verificationService()
+                .markedLocallyAsManuallyVerified(bobSessionWithBetterKey.myUserId, bobSessionWithBetterKey.sessionParams.deviceId!!)
+
+        // now let new session request
+        newBobSession.cryptoService().requestRoomKeyForEvent(firstEventNewBobPov.root)
+
+        // wait a bit
+        testHelper.runBlockingTest {
+            delay(10_000)
+        }
+
+        // old session should have shared the key at earliest known index now
+        // we should be able to decrypt both
+        testHelper.runBlockingTest {
+            try {
+                newBobSession.cryptoService().decryptEvent(firstEventNewBobPov.root, "")
+            } catch (error: MXCryptoError) {
+                fail("Should be able to decrypt first event now $error")
+            }
+        }
+        testHelper.runBlockingTest {
+            try {
+                newBobSession.cryptoService().decryptEvent(secondEventNewBobPov.root, "")
+            } catch (error: MXCryptoError) {
+                fail("Should be able to decrypt event $error")
+            }
+        }
+
+        cryptoTestData.cleanUp(testHelper)
+        testHelper.signOutAndClose(newBobSession)
+    }
+
+    private fun sendMessageInRoom(aliceRoomPOV: Room, text: String): String? {
+        aliceRoomPOV.sendTextMessage(text)
+        var sentEventId: String? = null
+        testHelper.waitWithLatch(4 * 60_000) {
+            val timeline = aliceRoomPOV.createTimeline(null, TimelineSettings(60))
+            timeline.start()
+
+            testHelper.retryPeriodicallyWithLatch(it) {
+                val decryptedMsg = timeline.getSnapshot()
+                        .filter { it.root.getClearType() == EventType.MESSAGE }
+                        .also {
+                            Log.v("#E2E TEST", "Timeline snapshot is ${it.map { "${it.root.type}|${it.root.sendState}" }.joinToString(",", "[", "]")}")
+                        }
+                        .filter { it.root.sendState == SendState.SYNCED }
+                        .firstOrNull { it.root.getClearContent().toModel<MessageContent>()?.body?.startsWith(text) == true }
+                sentEventId = decryptedMsg?.eventId
+                decryptedMsg != null
+            }
+
+            timeline.dispose()
+        }
+        return sentEventId
+    }
+
+    private fun ensureMembersHaveJoined(aliceSession: Session, otherAccounts: List<Session>, e2eRoomID: String) {
+        testHelper.waitWithLatch {
+            testHelper.retryPeriodicallyWithLatch(it) {
+                otherAccounts.map {
+                    aliceSession.getRoomMember(it.myUserId, e2eRoomID)?.membership
+                }.all {
+                    it == Membership.JOIN
+                }
+            }
+        }
+    }
+
+    private fun waitForAndAcceptInviteInRoom(otherSession: Session, e2eRoomID: String) {
+        testHelper.waitWithLatch {
+            testHelper.retryPeriodicallyWithLatch(it) {
+                val roomSummary = otherSession.getRoomSummary(e2eRoomID)
+                (roomSummary != null && roomSummary.membership == Membership.INVITE).also {
+                    if (it) {
+                        Log.v("#E2E TEST", "${otherSession.myUserId} can see the invite from alice")
+                    }
+                }
+            }
+        }
+
+        testHelper.runBlockingTest(60_000) {
+            Log.v("#E2E TEST", "${otherSession.myUserId} tries to join room $e2eRoomID")
+            try {
+                otherSession.joinRoom(e2eRoomID)
+            } catch (ex: JoinRoomFailure.JoinedWithTimeout) {
+                // it's ok we will wait after
+            }
+        }
+
+        Log.v("#E2E TEST", "${otherSession.myUserId} waiting for join echo ...")
+        testHelper.waitWithLatch {
+            testHelper.retryPeriodicallyWithLatch(it) {
+                val roomSummary = otherSession.getRoomSummary(e2eRoomID)
+                roomSummary != null && roomSummary.membership == Membership.JOIN
+            }
+        }
+    }
+
+    private fun ensureCanDecrypt(sentEventIds: MutableList<String>, session: Session, e2eRoomID: String, messagesText: List<String>) {
+        sentEventIds.forEachIndexed { index, sentEventId ->
+            testHelper.waitWithLatch { latch ->
+                testHelper.retryPeriodicallyWithLatch(latch) {
+                    val event = session.getRoom(e2eRoomID)!!.getTimeLineEvent(sentEventId)!!.root
+                    testHelper.runBlockingTest {
+                        try {
+                            session.cryptoService().decryptEvent(event, "").let { result ->
+                                event.mxDecryptionResult = OlmDecryptionResult(
+                                        payload = result.clearEvent,
+                                        senderKey = result.senderCurve25519Key,
+                                        keysClaimed = result.claimedEd25519Key?.let { mapOf("ed25519" to it) },
+                                        forwardingCurve25519KeyChain = result.forwardingCurve25519KeyChain
+                                )
+                            }
+                        } catch (error: MXCryptoError) {
+                            // nop
+                        }
+                    }
+                    event.getClearType() == EventType.MESSAGE &&
+                            messagesText[index] == event.getClearContent()?.toModel<MessageContent>()?.body
+                }
+            }
+        }
+    }
+
+    private fun ensureIsDecrypted(sentEventIds: List<String>, session: Session, e2eRoomID: String) {
         testHelper.waitWithLatch { latch ->
             sentEventIds.forEach { sentEventId ->
                 testHelper.retryPeriodicallyWithLatch(latch) {
@@ -498,7 +628,7 @@ class E2eeSanityTests : InstrumentedTest {
         }
     }
 
-    private fun ensureCannotDecrypt(sentEventIds: MutableList<String>, newBobSession: Session, e2eRoomID: String, expectedError: MXCryptoError.ErrorType?) {
+    private fun ensureCannotDecrypt(sentEventIds: List<String>, newBobSession: Session, e2eRoomID: String, expectedError: MXCryptoError.ErrorType?) {
         sentEventIds.forEach { sentEventId ->
             val event = newBobSession.getRoom(e2eRoomID)!!.getTimeLineEvent(sentEventId)!!.root
             testHelper.runBlockingTest {
