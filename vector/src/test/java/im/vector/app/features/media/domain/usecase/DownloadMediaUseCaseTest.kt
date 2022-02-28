@@ -77,7 +77,7 @@ class DownloadMediaUseCaseTest {
 
     @Test
     fun `given a file when calling execute then save the file in local with success`() = runBlockingTest {
-        //Given
+        // Given
         val file = mockk<File>()
         val uri = mockk<Uri>()
         val mimeType = "mimeType"
@@ -87,10 +87,10 @@ class DownloadMediaUseCaseTest {
         every { getMimeTypeFromUri(appContext, uri) } returns mimeType
         coEvery { saveMedia(any(), any(), any(), any(), any()) } just runs
 
-        //When
+        // When
         val result = downloadMediaUseCase.execute(file)
 
-        //Then
+        // Then
         assert(result.isSuccess)
         verifyAll {
             file.name
@@ -106,7 +106,7 @@ class DownloadMediaUseCaseTest {
 
     @Test
     fun `given a file when calling execute then save the file in local with error`() = runBlockingTest {
-        //Given
+        // Given
         val file = mockk<File>()
         val uri = mockk<Uri>()
         val mimeType = "mimeType"
@@ -117,10 +117,10 @@ class DownloadMediaUseCaseTest {
         every { getMimeTypeFromUri(appContext, uri) } returns mimeType
         coEvery { saveMedia(any(), any(), any(), any(), any()) } throws error
 
-        //When
+        // When
         val result = downloadMediaUseCase.execute(file)
 
-        //Then
+        // Then
         assert(result.isFailure && result.exceptionOrNull() == error)
         verifyAll {
             file.name
