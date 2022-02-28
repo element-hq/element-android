@@ -21,16 +21,23 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.edit
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.squareup.moshi.JsonClass
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import im.vector.app.BuildConfig
 import im.vector.app.R
 import im.vector.app.core.di.DefaultSharedPreferences
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.VectorPreferences
 import im.vector.app.push.fcm.FcmHelper
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import org.unifiedpush.android.connector.UnifiedPush
 import timber.log.Timber
-import java.net.URI
 import java.net.URL
 
 object UnifiedPushHelper {
@@ -77,7 +84,7 @@ object UnifiedPushHelper {
      * @param context android context
      * @param gateway the push gateway to store
      */
-    fun storePushGateway(context: Context,
+    private fun storePushGateway(context: Context,
                          gateway: String?) {
         DefaultSharedPreferences.getInstance(context).edit {
             putString(PREFS_PUSH_GATEWAY, gateway)
@@ -191,30 +198,63 @@ object UnifiedPushHelper {
         up.unregisterApp(context)
     }
 
-    fun customOrDefaultGateway(context: Context, endpoint: String?): String {
+    @JsonClass(generateAdapter = true)
+    internal data class DiscoveryResponse(
+            val unifiedpush: DiscoveryUnifiedPush = DiscoveryUnifiedPush()
+    )
+
+    @JsonClass(generateAdapter = true)
+    internal data class DiscoveryUnifiedPush(
+            val gateway: String = ""
+    )
+
+    fun storeCustomOrDefaultGateway(
+            context: Context,
+            endpoint: String,
+            onDoneRunnable: Runnable? = null) {
         // if we use the embedded distributor,
         // register app_id type upfcm on sygnal
         // the pushkey if FCM key
         if (up.getDistributor(context) == context.packageName) {
             context.getString(R.string.pusher_http_url).let {
                 storePushGateway(context, it)
-                return it
+                onDoneRunnable?.run()
+                return
             }
         }
         // else, unifiedpush, and pushkey is an endpoint
-        val default = context.getString(R.string.default_push_gateway_http_url)
-        endpoint?.let {
-            val uri = URI(it)
-            val custom = "${it.split(uri.rawPath)[0]}/_matrix/push/v1/notify"
-            Timber.i("Testing $custom")
-            /**
-             * TODO:
-             * if GET custom returns """{"unifiedpush":{"gateway":"matrix"}}"""
-             * return custom
-             */
+        val gateway = context.getString(R.string.default_push_gateway_http_url)
+        val parsed = URL(endpoint)
+        val custom = "${parsed.protocol}://${parsed.host}/_matrix/push/v1/notify"
+        Timber.i("Testing $custom")
+        val thread = CoroutineScope(SupervisorJob()).launch {
+            try {
+                val moshi: Moshi = Moshi.Builder()
+                        .add(KotlinJsonAdapterFactory())
+                        .build()
+                val client = OkHttpClient()
+                val request = Request.Builder()
+                        .url(custom)
+                        .build()
+                    val sResponse = client.newCall(request).execute()
+                            .body?.string() ?: ""
+                    moshi.adapter(DiscoveryResponse::class.java)
+                            .fromJson(sResponse)?.let { response ->
+                                if (response.unifiedpush.gateway == "matrix") {
+                                    Timber.d("Using custom gateway")
+                                    storePushGateway(context, custom)
+                                    onDoneRunnable?.run()
+                                    return@launch
+                                }
+                            }
+            } catch (e: Exception) {
+                Timber.d("Cannot try custom gateway: $e")
+            }
+            storePushGateway(context, gateway)
+            onDoneRunnable?.run()
+            return@launch
         }
-        storePushGateway(context, default)
-        return default
+        thread.start()
     }
 
     fun getExternalDistributors(context: Context): List<String> {
