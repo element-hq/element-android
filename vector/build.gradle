@@ -458,9 +458,9 @@ dependencies {
     implementation 'com.posthog.android:posthog:1.1.2'
 
     // UnifiedPush
-    implementation 'com.github.UnifiedPush:android-connector:2.0.0-beta2'
+    implementation 'com.github.UnifiedPush:android-connector:2.0.0'
     // UnifiedPush gplay flavor only
-    gplayImplementation('com.github.UnifiedPush:android-embedded_fcm_distributor:a0056aa939') {
+    gplayImplementation('com.github.UnifiedPush:android-embedded_fcm_distributor:2.0.0') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
         exclude group: 'com.google.firebase', module: 'firebase-analytics'
         exclude group: 'com.google.firebase', module: 'firebase-measurement-connector'
