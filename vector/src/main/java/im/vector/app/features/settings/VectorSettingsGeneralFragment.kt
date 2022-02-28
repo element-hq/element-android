@@ -49,6 +49,7 @@ import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.getSizeOfFiles
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogChangePasswordBinding
+import im.vector.app.databinding.DialogPreferenceEditTextBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.discovery.DiscoverySettingsFragment
@@ -73,9 +74,7 @@ import javax.inject.Inject
 
 class VectorSettingsGeneralFragment @Inject constructor(
         colorProvider: ColorProvider
-) :
-        VectorSettingsBaseFragment(),
-        GalleryOrCameraDialogHelper.Listener {
+) : VectorSettingsBaseFragment(), GalleryOrCameraDialogHelper.Listener {
 
     override var titleRes = R.string.settings_general_title
     override val preferenceXmlRes = R.xml.vector_settings_general
@@ -161,11 +160,16 @@ class VectorSettingsGeneralFragment @Inject constructor(
 
         // Display name
         mDisplayNamePreference.let {
-            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
-                newValue
-                        ?.let { value -> (value as? String)?.trim() }
-                        ?.let { value -> onDisplayNameChanged(value) }
-                false
+            activity?.let { activity ->
+                val view: ViewGroup = activity.layoutInflater.inflate(R.layout.dialog_preference_edit_text, null) as ViewGroup
+                val views = DialogPreferenceEditTextBinding.bind(view)
+                val editText = views.edit
+                val dialog = MaterialAlertDialogBuilder(activity)
+                        .setView(view)
+                        .setPositiveButton(R.string.ok) { _, _ -> onDisplayNameChanged(editText.text.toString().trim()) }
+                        .setNegativeButton(R.string.action_cancel, null)
+                        .setOnDismissListener { view.hideKeyboard() }
+                        .create()
             }
         }
 
