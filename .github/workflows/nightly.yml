@@ -77,7 +77,7 @@ jobs:
           distribution: 'adopt'
           java-version: 11
       - name: Set up Python 3.8
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.8
       - uses: actions/cache@v2
@@ -210,7 +210,7 @@ jobs:
         with:
           ref: develop
       - name: Set up Python 3.8
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.8
       - uses: actions/cache@v2
