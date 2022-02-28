@@ -12,6 +12,8 @@
     -->
 
     <style name="TextAppearance.Vector.Title" parent="TextAppearance.Material3.DisplayMedium">
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">@dimen/text_size_title</item>
         <item name="android:textColor">?vctr_content_primary</item>
     </style>
@@ -44,6 +46,8 @@
 
     <!-- Note: this is the default text appearance for all the TextViews -->
     <style name="TextAppearance.Vector.Body" parent="TextAppearance.Material3.BodyLarge">
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">@dimen/text_size_body</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:textColor">?vctr_content_primary</item>
@@ -59,17 +63,23 @@
     </style>
 
     <style name="TextAppearance.Vector.Caption" parent="TextAppearance.Material3.BodySmall">
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">@dimen/text_size_caption</item>
         <item name="android:letterSpacing">0</item>
         <item name="android:textColor">?vctr_content_secondary</item>
     </style>
 
     <style name="TextAppearance.Vector.Micro" parent="TextAppearance.Material3.BodySmall">
+        <item name="fontFamily">sans-serif</item>
+        <item name="android:fontFamily">sans-serif</item>
         <item name="android:textSize">@dimen/text_size_micro</item>
         <item name="android:letterSpacing">0</item>
     </style>
 
     <style name="TextAppearance.Vector.Button" parent="TextAppearance.Material3.LabelLarge">
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textSize">@dimen/text_size_button</item>
         <item name="android:letterSpacing">0.02</item>
     </style>
