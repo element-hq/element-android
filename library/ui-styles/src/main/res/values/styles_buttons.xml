@@ -76,10 +76,14 @@
 
     <style name="Widget.Vector.Button.Text" parent="Widget.Material3.Button.TextButton">
         <item name="colorControlHighlight">?colorSecondary</item>
-        <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayPositive</item>
+        <item name="materialThemeOverlay">@style/VectorMaterialThemeOverlayText</item>
         <item name="android:textAppearance">@style/TextAppearance.Vector.Button</item>
         <item name="cornerRadius">8dp</item>
         <item name="lineHeight">24sp</item>
+    </style>
+
+    <style name="VectorMaterialThemeOverlayText" parent="ThemeOverlay.Material3.Button.TextButton">
+        <!-- Keep default colors from the theme -->
     </style>
 
     <style name="Widget.Vector.Button.Text.OnPrimary">
