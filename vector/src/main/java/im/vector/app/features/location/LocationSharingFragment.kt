@@ -59,6 +59,8 @@ class LocationSharingFragment @Inject constructor(
             views.mapView.initialize(urlMapProvider.getMapUrl())
         }
 
+        // TODO change the options dynamically depending on the current chosen location
+        views.shareLocationContainer.setOptions(LocationSharingOption.PINNED)
         views.shareLocationContainer.debouncedClicks {
             viewModel.handle(LocationSharingAction.OnShareLocation)
         }

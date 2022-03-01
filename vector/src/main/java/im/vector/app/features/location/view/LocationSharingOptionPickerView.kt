@@ -20,7 +20,9 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.isVisible
 import im.vector.app.databinding.ViewLocationSharingOptionPickerBinding
+import im.vector.app.features.location.LocationSharingOption
 
 /**
  * Custom view to display the location sharing option picker.
@@ -29,15 +31,12 @@ class LocationSharingOptionPickerView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    /*private val binding = */
-    init {
-        ViewLocationSharingOptionPickerBinding.inflate(
-                LayoutInflater.from(context),
-                this
-        )
-    }
+    private val binding = ViewLocationSharingOptionPickerBinding.inflate(
+            LayoutInflater.from(context),
+            this
+    )
 
-    /*fun setOptions(vararg options: LocationSharingOption) {
-        // TODO show only the options passed in argument
-    }*/
+    fun setOptions(vararg options: LocationSharingOption) {
+        binding.locationSharingOptionPinned.isVisible = options.contains(LocationSharingOption.PINNED)
+    }
 }
