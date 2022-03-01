@@ -14,7 +14,6 @@ env:
     -Porg.gradle.jvmargs=-Xmx4g
     -Porg.gradle.parallel=false
     -PallWarningsAsErrors=false
-
 jobs:
   # Build Android Tests [Matrix SDK]
   build-android-test-matrix-sdk:
@@ -263,8 +262,6 @@ jobs:
     # No concurrency required, runs every time on a schedule.
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: develop
       - name: Set up Python 3.8
         uses: actions/setup-python@v3
         with:
@@ -311,12 +308,39 @@ jobs:
             emulator.log
             failure_screenshots/
 
+  sonarqube:
+    runs-on: macos-latest
+    if: always()
+    needs:
+      - integration-tests
+      - ui-tests
+#      - unit-tests  TODO: code coverage from here too
+      - build-android-test-matrix-sdk 
+      - build-android-test-app
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
+        env:
+          - SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
 # Notify the channel about scheduled runs, do not notify for manually triggered runs
   notify:
     runs-on: ubuntu-latest
     needs:
       - integration-tests
       - ui-tests
+#      - unit-tests
+      - build-android-test-matrix-sdk 
+      - build-android-test-app
+      - sonarqube
     if: always() && github.event_name != 'workflow_dispatch'
     # No concurrency required, runs every time on a schedule.
     steps:
