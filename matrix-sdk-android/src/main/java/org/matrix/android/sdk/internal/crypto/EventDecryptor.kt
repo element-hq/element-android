@@ -149,7 +149,7 @@ internal class EventDecryptor @Inject constructor(
         // handle wedged devices
         // Some olm decryption have failed and some device are wedged
         // we should force start a new session for those
-        Timber.tag(loggerTag.value).d("Unwedging:  ${wedgedDevices.size} are wedged")
+        Timber.tag(loggerTag.value).v("Unwedging:  ${wedgedDevices.size} are wedged")
         // get the one that should be retried according to rate limit
         val now = System.currentTimeMillis()
         val toUnwedge = wedgedDevices.filter {
@@ -164,7 +164,7 @@ internal class EventDecryptor @Inject constructor(
         }
 
         if (toUnwedge.isEmpty()) {
-            Timber.tag(loggerTag.value).d("Nothing to unwedge")
+            Timber.tag(loggerTag.value).v("Nothing to unwedge")
             return
         }
         Timber.tag(loggerTag.value).d("Unwedging, trying to create new session for ${toUnwedge.size} devices")

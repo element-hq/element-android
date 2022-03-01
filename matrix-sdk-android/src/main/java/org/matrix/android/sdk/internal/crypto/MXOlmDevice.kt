@@ -909,7 +909,7 @@ internal class MXOlmDevice @Inject constructor(
                 return holder
             }
         } else {
-            Timber.tag(loggerTag.value).w("## getInboundGroupSession() : Cannot retrieve inbound group session $sessionId")
+            Timber.tag(loggerTag.value).w("## getInboundGroupSession() : UISI $sessionId")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID, MXCryptoError.UNKNOWN_INBOUND_SESSION_ID_REASON)
         }
     }
