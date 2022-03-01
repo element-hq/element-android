@@ -51,7 +51,7 @@ abstract class DebugMaterialThemeActivity : AppCompatActivity() {
         }
 
         views.debugShowDialog.setOnClickListener {
-            showTestDialog(0)
+            showTestDialog(R.style.ThemeOverlay_Vector_MaterialAlertDialog)
         }
 
         views.debugShowDialogDestructive.setOnClickListener {

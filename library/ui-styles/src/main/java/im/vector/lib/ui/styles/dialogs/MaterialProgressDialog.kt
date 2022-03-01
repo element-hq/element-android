@@ -29,7 +29,7 @@ class MaterialProgressDialog(val context: Context) {
         val views = DialogProgressMaterialBinding.bind(view)
         views.message.text = message
 
-        return MaterialAlertDialogBuilder(context)
+        return MaterialAlertDialogBuilder(context, R.style.ThemeOverlay_Vector_MaterialAlertDialog)
                 .setCancelable(cancellable)
                 .setView(view)
                 .show()

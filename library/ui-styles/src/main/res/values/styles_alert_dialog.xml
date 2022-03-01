@@ -9,11 +9,11 @@
         <item name="buttonBarNeutralButtonStyle">@style/Widget.Vector.Button.TextButton.Dialog</item>
     </style>
 
-    <style name="ThemeOverlay.Vector.MaterialAlertDialog.Destructive">
+    <style name="ThemeOverlay.Vector.MaterialAlertDialog.Destructive" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="buttonBarPositiveButtonStyle">@style/Widget.Vector.Button.TextButton.Dialog.Destructive</item>
     </style>
 
-    <style name="ThemeOverlay.Vector.MaterialAlertDialog.NegativeDestructive">
+    <style name="ThemeOverlay.Vector.MaterialAlertDialog.NegativeDestructive" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="buttonBarNegativeButtonStyle">@style/Widget.Vector.Button.TextButton.Dialog.Destructive</item>
     </style>
 
