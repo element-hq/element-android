@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto
 
+import androidx.annotation.VisibleForTesting
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -923,5 +924,10 @@ internal class MXOlmDevice @Inject constructor(
      */
     fun hasInboundSessionKeys(roomId: String, senderKey: String, sessionId: String): Boolean {
         return runCatching { getInboundGroupSession(sessionId, senderKey, roomId) }.isSuccess
+    }
+
+    @VisibleForTesting
+    fun clearOlmSessionCache() {
+        olmSessionStore.clear()
     }
 }

@@ -1372,6 +1372,9 @@ internal class DefaultCryptoService @Inject constructor(
     @VisibleForTesting
     val cryptoStoreForTesting = cryptoStore
 
+    @VisibleForTesting
+    val olmDeviceForTest = olmDevice
+
     companion object {
         const val CRYPTO_MIN_FORCE_SESSION_PERIOD_MILLIS = 3_600_000 // one hour
     }

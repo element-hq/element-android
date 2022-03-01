@@ -195,8 +195,7 @@ internal class EventDecryptor @Inject constructor(
                                     val sessionToUse = ensureOlmSessionsForDevicesAction.handle(deviceList, true)
                                     Timber.tag(loggerTag.value).d("Unwedging, found ${sessionToUse.map.size} to send dummy to")
 
-                                    // Now send a blank message on that session so the other side knows about it.
-                                    // (The keyshare request is sent in the clear so that won't do)
+                                    // Now send a dummy message on that session so the other side knows about it.
                                     val payloadJson = mapOf(
                                             "type" to EventType.DUMMY
                                     )
