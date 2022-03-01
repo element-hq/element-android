@@ -92,7 +92,7 @@ class KeyShareTests : InstrumentedTest {
 
         val roomSecondSessionPOV = aliceSession2.getRoom(roomId)
 
-        val receivedEvent = roomSecondSessionPOV?.getTimeLineEvent(sentEventId)
+        val receivedEvent = roomSecondSessionPOV?.getTimelineEvent(sentEventId)
         assertNotNull(receivedEvent)
         assert(receivedEvent!!.isEncrypted())
 
@@ -382,7 +382,7 @@ class KeyShareTests : InstrumentedTest {
         commonTestHelper.sendTextMessage(roomAlicePov, "After", 1)
 
         val roomRoomBobPov = aliceSession.getRoom(roomId)
-        val beforeJoin = roomRoomBobPov!!.getTimeLineEvent(secondEventId)
+        val beforeJoin = roomRoomBobPov!!.getTimelineEvent(secondEventId)
 
         var dRes = tryOrNull { bobSession.cryptoService().decryptEvent(beforeJoin!!.root, "") }
 

@@ -49,14 +49,7 @@ abstract class BaseAttachmentProvider<Type>(
         private val stringProvider: StringProvider
 ) : AttachmentSourceProvider {
 
-    interface InteractionListener {
-        fun onDismissTapped()
-        fun onShareTapped()
-        fun onPlayPause(play: Boolean)
-        fun videoSeekTo(percent: Int)
-    }
-
-    var interactionListener: InteractionListener? = null
+    var interactionListener: AttachmentInteractionListener? = null
 
     private var overlayView: AttachmentOverlayView? = null
 
@@ -68,18 +61,7 @@ abstract class BaseAttachmentProvider<Type>(
         if (position == -1) return null
         if (overlayView == null) {
             overlayView = AttachmentOverlayView(context)
-            overlayView?.onBack = {
-                interactionListener?.onDismissTapped()
-            }
-            overlayView?.onShareCallback = {
-                interactionListener?.onShareTapped()
-            }
-            overlayView?.onPlayPause = { play ->
-                interactionListener?.onPlayPause(play)
-            }
-            overlayView?.videoSeekTo = { percent ->
-                interactionListener?.videoSeekTo(percent)
-            }
+            overlayView?.interactionListener = interactionListener
         }
 
         val timelineEvent = getTimelineEventAtPosition(position)

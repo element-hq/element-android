@@ -65,7 +65,7 @@ class NotifiableEventResolver @Inject constructor(
         if (event.getClearType() == EventType.STATE_ROOM_MEMBER) {
             return resolveStateRoomEvent(event, session, canBeReplaced = false, isNoisy = isNoisy)
         }
-        val timelineEvent = session.getRoom(roomID)?.getTimeLineEvent(eventId) ?: return null
+        val timelineEvent = session.getRoom(roomID)?.getTimelineEvent(eventId) ?: return null
         return when (event.getClearType()) {
             EventType.MESSAGE,
             EventType.ENCRYPTED -> {

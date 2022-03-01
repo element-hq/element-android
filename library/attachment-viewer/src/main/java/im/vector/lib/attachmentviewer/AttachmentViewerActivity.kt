@@ -45,6 +45,8 @@ import kotlin.math.abs
 
 abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventListener {
 
+    protected val rootView: View
+        get() = views.rootContainer
     protected val pager2: ViewPager2
         get() = views.attachmentPager
     protected val imageTransitionView: ImageView
@@ -298,10 +300,11 @@ abstract class AttachmentViewerActivity : AppCompatActivity(), AttachmentEventLi
 
     private fun createSwipeToDismissHandler(): SwipeToDismissHandler =
             SwipeToDismissHandler(
-            swipeView = views.dismissContainer,
-            shouldAnimateDismiss = { shouldAnimateDismiss() },
-            onDismiss = { animateClose() },
-            onSwipeViewMove = ::handleSwipeViewMove)
+                    swipeView = views.dismissContainer,
+                    shouldAnimateDismiss = { shouldAnimateDismiss() },
+                    onDismiss = { animateClose() },
+                    onSwipeViewMove = ::handleSwipeViewMove
+            )
 
     private fun createSwipeDirectionDetector() =
             SwipeDirectionDetector(this) { swipeDirection = it }

@@ -53,7 +53,7 @@ class DebugFeaturesStateFactory @Inject constructor(
                         label = "FTUE Personalize profile",
                         key = DebugFeatureKeys.onboardingPersonalize,
                         factory = VectorFeatures::isOnboardingPersonalizeEnabled
-                )
+                ),
         ))
     }
 

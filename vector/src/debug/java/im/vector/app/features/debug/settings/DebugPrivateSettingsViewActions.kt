@@ -20,4 +20,5 @@ import im.vector.app.core.platform.VectorViewModelAction
 
 sealed class DebugPrivateSettingsViewActions : VectorViewModelAction {
     data class SetDialPadVisibility(val force: Boolean) : DebugPrivateSettingsViewActions()
+    data class SetForceLoginFallbackEnabled(val force: Boolean) : DebugPrivateSettingsViewActions()
 }

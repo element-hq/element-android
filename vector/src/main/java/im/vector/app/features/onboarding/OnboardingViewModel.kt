@@ -46,6 +46,7 @@ import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
+import im.vector.app.features.settings.VectorDataStore
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.MatrixPatterns.getDomain
@@ -78,7 +79,8 @@ class OnboardingViewModel @AssistedInject constructor(
         private val stringProvider: StringProvider,
         private val homeServerHistoryService: HomeServerHistoryService,
         private val vectorFeatures: VectorFeatures,
-        private val analyticsTracker: AnalyticsTracker
+        private val analyticsTracker: AnalyticsTracker,
+        private val vectorDataStore: VectorDataStore,
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
     @AssistedFactory
@@ -90,11 +92,18 @@ class OnboardingViewModel @AssistedInject constructor(
 
     init {
         getKnownCustomHomeServersUrls()
+        observeDataStore()
     }
 
     private fun getKnownCustomHomeServersUrls() {
         setState {
             copy(knownCustomHomeServersUrls = homeServerHistoryService.getKnownServersUrls())
+        }
+    }
+
+    private fun observeDataStore() = viewModelScope.launch {
+        vectorDataStore.forceLoginFallbackFlow.setOnEach { isForceLoginFallbackEnabled ->
+            copy(isForceLoginFallbackEnabled = isForceLoginFallbackEnabled)
         }
     }
 

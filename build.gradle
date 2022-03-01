@@ -144,11 +144,6 @@ project(":library:diff-match-patch") {
     }
 }
 
-// Global configurations across all modules
-ext {
-    isThreadingEnabled = true
-}
-
 //project(":matrix-sdk-android") {
 //    sonarqube {
 //        properties {

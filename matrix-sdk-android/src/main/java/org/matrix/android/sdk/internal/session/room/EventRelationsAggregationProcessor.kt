@@ -513,7 +513,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
 
     private fun getPollEvent(roomId: String, eventId: String): TimelineEvent? {
         val session = sessionManager.getSessionComponent(sessionId)?.session()
-        return session?.getRoom(roomId)?.getTimeLineEvent(eventId) ?: return null.also {
+        return session?.getRoom(roomId)?.getTimelineEvent(eventId) ?: return null.also {
             Timber.v("## POLL target poll event $eventId not found in room $roomId")
         }
     }
