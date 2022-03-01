@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.crypto.algorithms.megolm
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
@@ -305,7 +306,9 @@ internal class MXMegolmEncryption(
             Timber.tag(loggerTag.value).d("sending to device room key for ${session.sessionId} to ${contentMap.toDebugString()}")
             val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, contentMap)
             try {
-                sendToDeviceTask.execute(sendToDeviceParams)
+                withContext(coroutineDispatchers.io) {
+                    sendToDeviceTask.execute(sendToDeviceParams)
+                }
                 Timber.tag(loggerTag.value).i("shareUserDevicesKey() : sendToDevice succeeds after ${System.currentTimeMillis() - t0} ms")
             } catch (failure: Throwable) {
                 // What to do here...
@@ -348,7 +351,9 @@ internal class MXMegolmEncryption(
                 }
         )
         try {
-            sendToDeviceTask.execute(params)
+            withContext(coroutineDispatchers.io) {
+                sendToDeviceTask.execute(params)
+            }
         } catch (failure: Throwable) {
             Timber.tag(loggerTag.value)
                     .e("notifyKeyWithHeld() :$sessionId Failed to send withheld  ${targets.map { "${it.userId}|${it.deviceId}" }}")

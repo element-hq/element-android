@@ -16,6 +16,8 @@
 
 package org.matrix.android.sdk.internal.crypto.actions
 
+import kotlinx.coroutines.withContext
+import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
 import org.matrix.android.sdk.internal.crypto.model.CryptoDeviceInfo
@@ -34,6 +36,7 @@ private val loggerTag = LoggerTag("EnsureOlmSessionsForDevicesAction", LoggerTag
 @SessionScope
 internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
         private val olmDevice: MXOlmDevice,
+        private val coroutineDispatchers: MatrixCoroutineDispatchers,
         private val oneTimeKeysForUsersDeviceTask: ClaimOneTimeKeysForUsersDeviceTask) {
 
     /**
@@ -84,7 +87,9 @@ internal class EnsureOlmSessionsForDevicesAction @Inject constructor(
 
         // Let's now claim one time keys
         val claimParams = ClaimOneTimeKeysForUsersDeviceTask.Params(usersDevicesToClaim)
-        val oneTimeKeys = oneTimeKeysForUsersDeviceTask.executeRetry(claimParams, ONE_TIME_KEYS_RETRY_COUNT)
+        val oneTimeKeys = withContext(coroutineDispatchers.io) {
+            oneTimeKeysForUsersDeviceTask.executeRetry(claimParams, ONE_TIME_KEYS_RETRY_COUNT)
+        }
 
         // let now start olm session using the new otks
         devicesToCreateSessionWith.forEach { deviceInfo ->

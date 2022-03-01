@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.crypto
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.matrix.android.sdk.api.MatrixCallback
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.logger.LoggerTag
@@ -172,7 +173,9 @@ internal class EventDecryptor @Inject constructor(
                 .chunked(100) // safer to chunk if we ever have lots of wedged devices
                 .forEach { wedgedList ->
                     // lets download keys if needed
-                    deviceListManager.downloadKeys(wedgedList.map { it.userId }, false)
+                    withContext(coroutineDispatchers.io) {
+                        deviceListManager.downloadKeys(wedgedList.map { it.userId }, false)
+                    }
 
                     // find the matching devices
                     wedgedList.groupBy { it.userId }
@@ -209,7 +212,9 @@ internal class EventDecryptor @Inject constructor(
 
                                     // now let's send that
                                     val sendToDeviceParams = SendToDeviceTask.Params(EventType.ENCRYPTED, sendToDeviceMap)
-                                    sendToDeviceTask.executeRetry(sendToDeviceParams, remainingRetry = SEND_TO_DEVICE_RETRY_COUNT)
+                                    withContext(coroutineDispatchers.io) {
+                                        sendToDeviceTask.executeRetry(sendToDeviceParams, remainingRetry = SEND_TO_DEVICE_RETRY_COUNT)
+                                    }
                                 } catch (failure: Throwable) {
                                     deviceList.flatMap { it.value }.joinToString { it.shortDebugString() }.let {
                                         Timber.tag(loggerTag.value).e(failure, "## Failed to unwedge devices: $it}")
