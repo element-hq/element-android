@@ -88,7 +88,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
         findPreference<UserAvatarPreference>(VectorPreferences.SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY)!!
     }
     private val mDisplayNamePreference by lazy {
-        findPreference<EditTextPreference>("SETTINGS_DISPLAY_NAME_PREFERENCE_KEY")!!
+        findPreference<VectorPreference>("SETTINGS_DISPLAY_NAME_PREFERENCE_KEY")!!
     }
     private val mPasswordPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)!!
@@ -140,12 +140,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                 .unwrap()
                 .map { it.displayName ?: "" }
                 .distinctUntilChanged()
-                .onEach { displayName ->
-                    mDisplayNamePreference.let {
-                        it.summary = displayName
-                        it.text = displayName
-                    }
-                }
+                .onEach { displayName -> mDisplayNamePreference.summary = displayName }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
@@ -159,18 +154,21 @@ class VectorSettingsGeneralFragment @Inject constructor(
         }
 
         // Display name
-        mDisplayNamePreference.let {
+        mDisplayNamePreference.summary = mDisplayNamePreference.key
+        mDisplayNamePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             activity?.let { activity ->
                 val view: ViewGroup = activity.layoutInflater.inflate(R.layout.dialog_preference_edit_text, null) as ViewGroup
                 val views = DialogPreferenceEditTextBinding.bind(view)
                 val editText = views.edit
-                val dialog = MaterialAlertDialogBuilder(activity)
+                val dialog = MaterialAlertDialogBuilder(activity, R.style.ThemeOverlay_Vector_MaterialAlertDialog)
                         .setView(view)
                         .setPositiveButton(R.string.ok) { _, _ -> onDisplayNameChanged(editText.text.toString().trim()) }
                         .setNegativeButton(R.string.action_cancel, null)
                         .setOnDismissListener { view.hideKeyboard() }
                         .create()
+                        .show()
             }
+            false
         }
 
         // Password
@@ -473,7 +471,6 @@ class VectorSettingsGeneralFragment @Inject constructor(
                         {
                             // refresh the settings value
                             mDisplayNamePreference.summary = value
-                            mDisplayNamePreference.text = value
                             onCommonDone(null)
                         },
                         {
