@@ -25,26 +25,26 @@ import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 
-sealed class OnboardingAction : VectorViewModelAction {
-    data class OnGetStarted(val resetLoginConfig: Boolean, val onboardingFlow: OnboardingFlow) : OnboardingAction()
-    data class OnIAlreadyHaveAnAccount(val resetLoginConfig: Boolean, val onboardingFlow: OnboardingFlow) : OnboardingAction()
+sealed interface OnboardingAction : VectorViewModelAction {
+    data class OnGetStarted(val resetLoginConfig: Boolean, val onboardingFlow: OnboardingFlow) : OnboardingAction
+    data class OnIAlreadyHaveAnAccount(val resetLoginConfig: Boolean, val onboardingFlow: OnboardingFlow) : OnboardingAction
 
-    data class UpdateServerType(val serverType: ServerType) : OnboardingAction()
-    data class UpdateHomeServer(val homeServerUrl: String) : OnboardingAction()
-    data class UpdateUseCase(val useCase: FtueUseCase) : OnboardingAction()
-    object ResetUseCase : OnboardingAction()
-    data class UpdateSignMode(val signMode: SignMode) : OnboardingAction()
-    data class LoginWithToken(val loginToken: String) : OnboardingAction()
-    data class WebLoginSuccess(val credentials: Credentials) : OnboardingAction()
-    data class InitWith(val loginConfig: LoginConfig?) : OnboardingAction()
-    data class ResetPassword(val email: String, val newPassword: String) : OnboardingAction()
-    object ResetPasswordMailConfirmed : OnboardingAction()
+    data class UpdateServerType(val serverType: ServerType) : OnboardingAction
+    data class UpdateHomeServer(val homeServerUrl: String) : OnboardingAction
+    data class UpdateUseCase(val useCase: FtueUseCase) : OnboardingAction
+    object ResetUseCase : OnboardingAction
+    data class UpdateSignMode(val signMode: SignMode) : OnboardingAction
+    data class LoginWithToken(val loginToken: String) : OnboardingAction
+    data class WebLoginSuccess(val credentials: Credentials) : OnboardingAction
+    data class InitWith(val loginConfig: LoginConfig?) : OnboardingAction
+    data class ResetPassword(val email: String, val newPassword: String) : OnboardingAction
+    object ResetPasswordMailConfirmed : OnboardingAction
 
     // Login or Register, depending on the signMode
-    data class LoginOrRegister(val username: String, val password: String, val initialDeviceName: String) : OnboardingAction()
+    data class LoginOrRegister(val username: String, val password: String, val initialDeviceName: String) : OnboardingAction
 
     // Register actions
-    open class RegisterAction : OnboardingAction()
+    open class RegisterAction : OnboardingAction
 
     data class AddThreePid(val threePid: RegisterThreePid) : RegisterAction()
     object SendAgainThreePid : RegisterAction()
@@ -60,7 +60,7 @@ sealed class OnboardingAction : VectorViewModelAction {
     object RegisterDummy : RegisterAction()
 
     // Reset actions
-    open class ResetAction : OnboardingAction()
+    open class ResetAction : OnboardingAction
 
     object ResetHomeServerType : ResetAction()
     object ResetHomeServerUrl : ResetAction()
@@ -69,16 +69,16 @@ sealed class OnboardingAction : VectorViewModelAction {
     object ResetResetPassword : ResetAction()
 
     // Homeserver history
-    object ClearHomeServerHistory : OnboardingAction()
+    object ClearHomeServerHistory : OnboardingAction
 
-    data class PostViewEvent(val viewEvent: OnboardingViewEvents) : OnboardingAction()
+    data class PostViewEvent(val viewEvent: OnboardingViewEvents) : OnboardingAction
 
-    data class UserAcceptCertificate(val fingerprint: Fingerprint) : OnboardingAction()
+    data class UserAcceptCertificate(val fingerprint: Fingerprint) : OnboardingAction
 
-    object PersonalizeProfile : OnboardingAction()
-    data class UpdateDisplayName(val displayName: String) : OnboardingAction()
-    object UpdateDisplayNameSkipped : OnboardingAction()
-    data class ProfilePictureSelected(val uri: Uri) : OnboardingAction()
-    object SaveSelectedProfilePicture : OnboardingAction()
-    object UpdateProfilePictureSkipped : OnboardingAction()
+    object PersonalizeProfile : OnboardingAction
+    data class UpdateDisplayName(val displayName: String) : OnboardingAction
+    object UpdateDisplayNameSkipped : OnboardingAction
+    data class ProfilePictureSelected(val uri: Uri) : OnboardingAction
+    object SaveSelectedProfilePicture : OnboardingAction
+    object UpdateProfilePictureSkipped : OnboardingAction
 }
