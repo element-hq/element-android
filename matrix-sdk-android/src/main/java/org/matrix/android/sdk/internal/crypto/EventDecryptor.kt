@@ -104,20 +104,20 @@ internal class EventDecryptor @Inject constructor(
     private suspend fun internalDecryptEvent(event: Event, timeline: String): MXEventDecryptionResult {
         val eventContent = event.content
         if (eventContent == null) {
-            Timber.e("decryptEvent : empty event content")
+            Timber.tag(loggerTag.value).e("decryptEvent : empty event content")
             throw MXCryptoError.Base(MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE, MXCryptoError.BAD_ENCRYPTED_MESSAGE_REASON)
         } else {
             val algorithm = eventContent["algorithm"]?.toString()
             val alg = roomDecryptorProvider.getOrCreateRoomDecryptor(event.roomId, algorithm)
             if (alg == null) {
                 val reason = String.format(MXCryptoError.UNABLE_TO_DECRYPT_REASON, event.eventId, algorithm)
-                Timber.e("decryptEvent() : $reason")
+                Timber.tag(loggerTag.value).e("decryptEvent() : $reason")
                 throw MXCryptoError.Base(MXCryptoError.ErrorType.UNABLE_TO_DECRYPT, reason)
             } else {
                 try {
                     return alg.decryptEvent(event, timeline)
                 } catch (mxCryptoError: MXCryptoError) {
-                    Timber.d("internalDecryptEvent : Failed to decrypt ${event.eventId} reason: $mxCryptoError")
+                    Timber.tag(loggerTag.value).d("internalDecryptEvent : Failed to decrypt ${event.eventId} reason: $mxCryptoError")
                     if (algorithm == MXCRYPTO_ALGORITHM_OLM) {
                         if (mxCryptoError is MXCryptoError.Base &&
                                 mxCryptoError.errorType == MXCryptoError.ErrorType.BAD_ENCRYPTED_MESSAGE) {
