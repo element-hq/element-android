@@ -658,7 +658,7 @@
     <string name="action_ignore">Ignorovať</string>
     <string name="action_sign_out_confirmation_simple">Ste si istí, že sa chcete odhlásiť\?</string>
     <string name="action_mark_room_read">Označiť ako prečítané</string>
-    <string name="auth_login_sso">Prihlásiť sa použitím jediného prihlásenia</string>
+    <string name="auth_login_sso">Prihlásiť sa použitím jednotného prihlásenia SSO</string>
     <string name="settings_notification_advanced">Pokročilé nastavenia oznámení</string>
     <string name="settings_notification_by_event">Dôležitosť oznámení pre udalosti</string>
     <string name="settings_troubleshoot_test_bing_settings_title">Vlastné nastavenia.</string>
@@ -1650,8 +1650,8 @@
     <string name="room_member_power_level_custom_in">Vlastné (%1$d) v %2$s</string>
     <string name="room_member_power_level_default_in">Predvolené v %1$s</string>
     <string name="verification_no_scan_emoji_title">Overiť porovnaním emotikonov</string>
-    <string name="verification_scan_self_emoji_subtitle">Namiesto toho overte porovnaním emoji</string>
-    <string name="verification_scan_emoji_subtitle">Ak nie ste osobne, porovnajte namiesto toho emoji</string>
+    <string name="verification_scan_self_emoji_subtitle">Namiesto toho overte porovnaním emotikonov</string>
+    <string name="verification_scan_emoji_subtitle">Ak nie ste osobne, porovnajte namiesto toho emotikony</string>
     <string name="verification_scan_with_this_device">Skenovať pomocou tohto zariadenia</string>
     <string name="verification_scan_self_notice">Naskenujte kód pomocou iného zariadenia alebo prepnite a skenujte pomocou tohto zariadenia</string>
     <string name="verification_scan_notice">Naskenujte kód pomocou zariadenia druhého používateľa, aby ste sa navzájom bezpečne overili</string>
@@ -2017,7 +2017,7 @@
     <string name="error_empty_field_choose_password">Vyberte si prosím heslo.</string>
     <string name="error_empty_field_choose_user_name">Vyberte si prosím používateľské meno.</string>
     <string name="failed_to_initialize_cross_signing">Nepodarilo sa nastaviť krížové podpisovanie</string>
-    <string name="cross_signing_verify_by_emoji">Interaktívne overte pomocou emoji</string>
+    <string name="cross_signing_verify_by_emoji">Interaktívne overte pomocou emotikonov</string>
     <string name="cross_signing_verify_by_text">Manuálne overte pomocou textu</string>
     <string name="verify_this_session">Overte nové prihlásenie s prístupom k vášmu účtu: %1$s</string>
     <string name="verify_other_sessions">Overte všetky vaše relácie, aby ste si boli istý, že sú vaše správy a účet bezpečné</string>
@@ -2115,7 +2115,7 @@
     <string name="encryption_information_dg_xsigning_disabled">Krížové podpisovanie nie je povolené</string>
     <string name="verification_conclusion_ok_self_notice">Vaša nová relácia je teraz overená. Má prístup k vašim šifrovaným správam a ostatní používatelia ju uvidia ako dôveryhodnú.</string>
     <string name="verification_code_notice">Porovnajte kód s kódom zobrazeným na obrazovke druhého používateľa.</string>
-    <string name="verification_emoji_notice">Porovnajte jedinečné emoji a uistite sa, že sú zobrazené v rovnakom poradí.</string>
+    <string name="verification_emoji_notice">Porovnajte jedinečné emotikony a uistite sa, že sú zobrazené v rovnakom poradí.</string>
     <string name="verification_request_start_notice">Aby ste si boli istý, urobte to osobne alebo použite iný dôveryhodný spôsob komunikácie.</string>
     <string name="verification_request_notice">Ak chcete byť v bezpečí, overte %s pomocou jednorazového kódu.</string>
     <string name="room_settings_enable_encryption_dialog_content">Po zapnutí šifrovania pre miestnosť ho už nemožno vypnúť. Správy odoslané v zašifrovanej miestnosti nemôže vidieť server, iba účastníci miestnosti. Zapnutie šifrovania môže zabrániť správnemu fungovaniu mnohých botov a premostení.</string>
@@ -2324,8 +2324,8 @@
     <string name="room_settings_access_rules_pref_dialog_title">Kto má prístup\?</string>
     <string name="room_settings_room_read_history_dialog_subtitle">Zmeny týkajúce sa toho, kto môže čítať históriu, sa budú vzťahovať len na budúce správy v tejto miestnosti. Viditeľnosť existujúcej histórie zostane nezmenená.</string>
     <string name="legals_no_policy_provided">Tento server neposkytuje žiadne zásady a pravidlá.</string>
-    <string name="settings_show_emoji_keyboard_summary">Pridať tlačidlo do editora správ na otvorenie klávesnice emodži</string>
-    <string name="settings_show_emoji_keyboard">Zobraziť klávesnicu emodži</string>
+    <string name="settings_show_emoji_keyboard_summary">Pridať tlačidlo do editora správ na otvorenie klávesnice emotikonov</string>
+    <string name="settings_show_emoji_keyboard">Zobraziť klávesnicu emotikonov</string>
     <string name="settings_chat_effects_description">Použite príkaz /confetti alebo pošlite správu obsahujúcu ❄️ alebo 🎉</string>
     <string name="settings_chat_effects_title">Zobraziť efekty konverzácie</string>
     <string name="shortcut_disabled_reason_sign_out">Relácia bola odhlásená!</string>
@@ -2437,4 +2437,6 @@
     </plurals>
     <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s a ďalší</string>
     <string name="room_notification_two_users_are_typing">%1$s a %2$s</string>
+    <string name="login_signin_sso">Pokračovať pomocou jednotného prihlásenia SSO</string>
+    <string name="login_social_sso">jednotné prihlásenie SSO</string>
 </resources>
