@@ -82,7 +82,7 @@
     <im.vector.app.core.preference.VectorPreferenceCategory
         android:key="SETTINGS_BACKGROUND_SYNC_PREFERENCE_KEY"
         android:title="@string/settings_background_sync"
-        app:isPreferenceVisible="false">
+        app:isPreferenceVisible="true"> <!-- TODO: Reset to false -->
 
         <im.vector.app.core.preference.VectorPreference
             android:key="SETTINGS_FDROID_BACKGROUND_SYNC_MODE"
