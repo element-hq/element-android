@@ -87,7 +87,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
         findPreference<UserAvatarPreference>(VectorPreferences.SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY)!!
     }
     private val mDisplayNamePreference by lazy {
-        findPreference<VectorPreference>("SETTINGS_DISPLAY_NAME_PREFERENCE_KEY")!!
+        findPreference<VectorPreference>(VectorPreferences.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY)!!
     }
     private val mPasswordPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)!!
