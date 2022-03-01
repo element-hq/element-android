@@ -19,7 +19,7 @@
 
     <!-- Toolbar for settings Activity -->
     <style name="Widget.Vector.Toolbar.Settings">
-        <item name="contentInsetStartWithNavigation">16dp</item>
+        <item name="contentInsetStartWithNavigation">72dp</item>
     </style>
 
     <!-- Toolbar text style -->
