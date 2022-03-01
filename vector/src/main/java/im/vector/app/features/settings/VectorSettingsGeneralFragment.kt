@@ -251,7 +251,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                     Glide.get(requireContext()).clearMemory()
                     session.fileService().clearCache()
 
-                    var newSize: Int
+                    var newSize: Long
 
                     withContext(Dispatchers.IO) {
                         // On BG thread
@@ -261,7 +261,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                         newSize += session.fileService().getCacheSize()
                     }
 
-                    it.summary = TextUtils.formatFileSize(requireContext(), newSize.toLong())
+                    it.summary = TextUtils.formatFileSize(requireContext(), newSize)
 
                     hideLoadingView()
                 }
