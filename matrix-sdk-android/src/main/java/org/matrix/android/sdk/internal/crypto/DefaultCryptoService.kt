@@ -434,6 +434,14 @@ internal class DefaultCryptoService @Inject constructor(
                     val currentCount = syncResponse.deviceOneTimeKeysCount.signedCurve25519 ?: 0
                     oneTimeKeysUploader.updateOneTimeKeyCount(currentCount)
                 }
+
+                // unwedge if needed
+                try {
+                    eventDecryptor.unwedgeDevicesIfNeeded()
+                } catch (failure: Throwable) {
+                    Timber.tag(loggerTag.value).w("unwedgeDevicesIfNeeded failed")
+                }
+
                 // There is a limit of to_device events returned per sync.
                 // If we are in a case of such limited to_device sync we can't try to generate/upload
                 // new otk now, because there might be some pending olm pre-key to_device messages that would fail if we rotate

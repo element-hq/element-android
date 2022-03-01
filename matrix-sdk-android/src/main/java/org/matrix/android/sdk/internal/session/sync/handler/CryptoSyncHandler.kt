@@ -93,7 +93,9 @@ internal class CryptoSyncHandler @Inject constructor(private val cryptoService: 
                 )
                 return true
             } else {
-                // should not happen
+                // Could happen for to device events
+                // None of the known session could decrypt the message
+                // In this case unwedging process might have been started (rate limited)
                 Timber.e("## CRYPTO | ERROR NULL DECRYPTION RESULT from ${event.senderId}")
             }
         }
