@@ -172,13 +172,14 @@ internal class EventDecryptor @Inject constructor(
         toUnwedge
                 .chunked(100) // safer to chunk if we ever have lots of wedged devices
                 .forEach { wedgedList ->
+                    val groupedByUserId = wedgedList.groupBy { it.userId }
                     // lets download keys if needed
                     withContext(coroutineDispatchers.io) {
-                        deviceListManager.downloadKeys(wedgedList.map { it.userId }, false)
+                        deviceListManager.downloadKeys(groupedByUserId.keys.toList(), false)
                     }
 
                     // find the matching devices
-                    wedgedList.groupBy { it.userId }
+                    groupedByUserId
                             .map { groupedByUser ->
                                 val userId = groupedByUser.key
                                 val wedgeSenderKeysForUser = groupedByUser.value.map { it.senderKey }
