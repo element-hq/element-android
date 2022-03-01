@@ -60,8 +60,9 @@ class LocationSharingFragment @Inject constructor(
         }
 
         // TODO change the options dynamically depending on the current chosen location
-        views.shareLocationContainer.setOptions(LocationSharingOption.PINNED)
-        views.shareLocationContainer.debouncedClicks {
+        //  set correct click listener on each option
+        views.shareLocationOptionsPicker.setOptions(LocationSharingOption.PINNED)
+        views.shareLocationOptionsPicker.debouncedClicks {
             viewModel.handle(LocationSharingAction.OnShareLocation)
         }
 

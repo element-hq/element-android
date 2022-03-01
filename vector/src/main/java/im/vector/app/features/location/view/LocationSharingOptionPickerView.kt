@@ -37,6 +37,11 @@ class LocationSharingOptionPickerView @JvmOverloads constructor(
     )
 
     fun setOptions(vararg options: LocationSharingOption) {
-        binding.locationSharingOptionPinned.isVisible = options.contains(LocationSharingOption.PINNED)
+        binding.locationSharingOptionUserCurrentLocation.isVisible =
+                options.contains(LocationSharingOption.USER_CURRENT)
+        binding.locationSharingOptionUserLiveLocation.isVisible =
+                options.contains(LocationSharingOption.USER_LIVE)
+        binding.locationSharingOptionPinned.isVisible =
+                options.contains(LocationSharingOption.PINNED)
     }
 }

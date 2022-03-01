@@ -6,17 +6,49 @@
     android:layout_height="wrap_content"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
+    <!-- TODO add strings and correct icons -->
+    <!-- TODO add dividers -->
+
     <im.vector.app.features.location.view.LocationSharingOptionView
         android:id="@+id/locationSharingOptionPinned"
-        android:layout_height="wrap_content"
         android:layout_width="0dp"
+        android:layout_height="wrap_content"
         app:icon="@drawable/ic_attachment_location_white"
         app:iconBackground="@drawable/circle"
         app:iconBackgroundTint="?colorPrimary"
         app:iconDescription="@string/a11y_location_share_icon"
+        app:layout_constraintBottom_toTopOf="@id/locationSharingOptionUserCurrentLocation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:title="@string/location_share" />
+
+    <im.vector.app.features.location.view.LocationSharingOptionView
+        android:id="@+id/locationSharingOptionUserCurrentLocation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_attachment_location_white"
+        app:iconBackground="@drawable/circle"
+        app:iconBackgroundTint="?colorPrimary"
+        app:iconDescription="@string/a11y_location_share_icon"
+        app:layout_constraintBottom_toTopOf="@id/locationSharingOptionUserLiveLocation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locationSharingOptionPinned"
+        app:title="@string/location_share" />
+
+    <im.vector.app.features.location.view.LocationSharingOptionView
+        android:id="@+id/locationSharingOptionUserLiveLocation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/ic_attachment_location_white"
+        app:iconBackground="@drawable/circle"
+        app:iconBackgroundTint="?colorPrimary"
+        app:iconDescription="@string/a11y_location_share_icon"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/locationSharingOptionUserCurrentLocation"
         app:title="@string/location_share" />
 
 </merge>

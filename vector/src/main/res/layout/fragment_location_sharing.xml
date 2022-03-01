@@ -9,13 +9,13 @@
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/shareLocationContainer"
+        app:layout_constraintBottom_toTopOf="@id/shareLocationOptionsPicker"
         app:layout_constraintTop_toTopOf="parent"
         app:mapbox_renderTextureMode="true"
         tools:background="#4F00" />
 
     <im.vector.app.features.location.view.LocationSharingOptionPickerView
-        android:id="@+id/shareLocationContainer"
+        android:id="@+id/shareLocationOptionsPicker"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -27,8 +27,8 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginEnd="@dimen/layout_horizontal_margin"
-        app:layout_constraintBottom_toBottomOf="@id/shareLocationContainer"
-        app:layout_constraintEnd_toEndOf="@id/shareLocationContainer"
-        app:layout_constraintTop_toTopOf="@id/shareLocationContainer" />
+        android:layout_marginBottom="@dimen/layout_vertical_margin"
+        app:layout_constraintBottom_toBottomOf="@id/shareLocationOptionsPicker"
+        app:layout_constraintEnd_toEndOf="@id/shareLocationOptionsPicker" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
