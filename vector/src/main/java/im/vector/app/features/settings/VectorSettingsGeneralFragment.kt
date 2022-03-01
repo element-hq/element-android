@@ -275,7 +275,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
         val views = DialogPreferenceEditTextBinding.bind(view)
         val editText = views.edit
         editText.setText(mDisplayNamePreference.summary)
-        val dialog = MaterialAlertDialogBuilder(activity, R.style.ThemeOverlay_Vector_MaterialAlertDialog)
+        MaterialAlertDialogBuilder(activity, R.style.ThemeOverlay_Vector_MaterialAlertDialog)
                 .setTitle(R.string.settings_display_name)
                 .setView(view)
                 .setPositiveButton(R.string.ok) { _, _ -> onDisplayNameChanged(editText.text.toString().trim()) }

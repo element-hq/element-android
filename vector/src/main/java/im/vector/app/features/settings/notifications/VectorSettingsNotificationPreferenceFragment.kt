@@ -146,7 +146,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             val editText = views.edit
             editText.inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL
             editText.setText(summary)
-            val dialog = MaterialAlertDialogBuilder(activity, R.style.ThemeOverlay_Vector_MaterialAlertDialog)
+            MaterialAlertDialogBuilder(activity, R.style.ThemeOverlay_Vector_MaterialAlertDialog)
                     .setTitle(R.string.settings_display_name)
                     .setView(view)
                     .setPositiveButton(R.string.ok) { _, _ -> onChanged(editText.text.toString().trim()) }
