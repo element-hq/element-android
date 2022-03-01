@@ -154,6 +154,7 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
                     .setOnDismissListener { view.hideKeyboard() }
                     .create()
                     .show()
+            editText.setSelection(summary.lastIndex)
         }
         return true
     }

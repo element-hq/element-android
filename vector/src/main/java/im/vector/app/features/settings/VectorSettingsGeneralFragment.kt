@@ -283,6 +283,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                 .setOnDismissListener { view.hideKeyboard() }
                 .create()
                 .show()
+        editText.setSelection(mDisplayNamePreference.summary.lastIndex)
     }
 
     override fun onResume() {
