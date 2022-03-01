@@ -103,6 +103,7 @@
     <style name="Widget.Vector.Button.Text.Alerter">
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="VectorMaterialThemeOverlayOnPrimary" parent="ThemeOverlay.Material3.Button">
