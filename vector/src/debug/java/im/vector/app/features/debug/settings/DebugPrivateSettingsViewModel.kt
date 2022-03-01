@@ -44,12 +44,12 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
     }
 
     private fun observeVectorDataStore() {
-        debugVectorOverrides.forceDialPad().setOnEach {
+        debugVectorOverrides.forceDialPad.setOnEach {
             copy(
                     dialPadVisible = it
             )
         }
-        debugVectorOverrides.forceLoginFallback().setOnEach {
+        debugVectorOverrides.forceLoginFallback.setOnEach {
             copy(forceLoginFallback = it)
         }
     }

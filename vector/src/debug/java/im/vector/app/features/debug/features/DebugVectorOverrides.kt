@@ -23,36 +23,32 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import im.vector.app.features.VectorOverrides
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.matrix.android.sdk.api.extensions.orFalse
 
 private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "vector_overrides")
-private val forceDialPadDisplay = booleanPreferencesKey("force_dial_pad_display")
-private val forceLoginFallback = booleanPreferencesKey("force_login_fallback")
+private val keyForceDialPadDisplay = booleanPreferencesKey("force_dial_pad_display")
+private val keyForceLoginFallback = booleanPreferencesKey("force_login_fallback")
 
 class DebugVectorOverrides(private val context: Context) : VectorOverrides {
 
-    override fun forceDialPad() = forceDialPadDisplayFlow
-    override fun forceLoginFallback() = forceLoginFallbackFlow
+    override val forceDialPad = context.dataStore.data.map { preferences ->
+        preferences[keyForceDialPadDisplay].orFalse()
+    }
+
+    override val forceLoginFallback = context.dataStore.data.map { preferences ->
+        preferences[keyForceLoginFallback].orFalse()
+    }
 
     suspend fun setForceDialPadDisplay(force: Boolean) {
         context.dataStore.edit { settings ->
-            settings[forceDialPadDisplay] = force
+            settings[keyForceDialPadDisplay] = force
         }
-    }
-
-    private val forceDialPadDisplayFlow: Flow<Boolean> = context.dataStore.data.map { preferences ->
-        preferences[forceDialPadDisplay].orFalse()
     }
 
     suspend fun setForceLoginFallback(force: Boolean) {
         context.dataStore.edit { settings ->
-            settings[forceLoginFallback] = force
+            settings[keyForceLoginFallback] = force
         }
-    }
-
-    private val forceLoginFallbackFlow: Flow<Boolean> = context.dataStore.data.map { preferences ->
-        preferences[forceLoginFallback].orFalse()
     }
 }

@@ -104,7 +104,7 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun observeDataStore() = viewModelScope.launch {
-        vectorOverrides.forceLoginFallback().setOnEach { isForceLoginFallbackEnabled ->
+        vectorOverrides.forceLoginFallback.setOnEach { isForceLoginFallbackEnabled ->
             copy(isForceLoginFallbackEnabled = isForceLoginFallbackEnabled)
         }
     }

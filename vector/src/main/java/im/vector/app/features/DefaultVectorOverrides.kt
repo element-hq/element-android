@@ -20,11 +20,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 interface VectorOverrides {
-    fun forceDialPad(): Flow<Boolean>
-    fun forceLoginFallback(): Flow<Boolean>
+    val forceDialPad: Flow<Boolean>
+    val forceLoginFallback: Flow<Boolean>
 }
 
 class DefaultVectorOverrides : VectorOverrides {
-    override fun forceDialPad() = flowOf(false)
-    override fun forceLoginFallback() = flowOf(false)
+    override val forceDialPad = flowOf(false)
+    override val forceLoginFallback = flowOf(false)
 }

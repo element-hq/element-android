@@ -108,7 +108,7 @@ class HomeDetailViewModel @AssistedInject constructor(
                     pushCounter = nbOfPush
             )
         }
-        vectorOverrides.forceDialPad().setOnEach { force ->
+        vectorOverrides.forceDialPad.setOnEach { force ->
             copy(
                     forceDialPadTab = force
             )
