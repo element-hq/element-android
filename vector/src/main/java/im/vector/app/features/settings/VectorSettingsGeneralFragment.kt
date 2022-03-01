@@ -27,7 +27,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
@@ -154,20 +153,8 @@ class VectorSettingsGeneralFragment @Inject constructor(
         }
 
         // Display name
-        mDisplayNamePreference.summary = mDisplayNamePreference.key
         mDisplayNamePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            activity?.let { activity ->
-                val view: ViewGroup = activity.layoutInflater.inflate(R.layout.dialog_preference_edit_text, null) as ViewGroup
-                val views = DialogPreferenceEditTextBinding.bind(view)
-                val editText = views.edit
-                val dialog = MaterialAlertDialogBuilder(activity, R.style.ThemeOverlay_Vector_MaterialAlertDialog)
-                        .setView(view)
-                        .setPositiveButton(R.string.ok) { _, _ -> onDisplayNameChanged(editText.text.toString().trim()) }
-                        .setNegativeButton(R.string.action_cancel, null)
-                        .setOnDismissListener { view.hideKeyboard() }
-                        .create()
-                        .show()
-            }
+            showChangeDisplayNameDialog()
             false
         }
 
@@ -281,6 +268,21 @@ class VectorSettingsGeneralFragment @Inject constructor(
 
             false
         }
+    }
+
+    private fun showChangeDisplayNameDialog() = activity?.let { activity ->
+        val view: ViewGroup = activity.layoutInflater.inflate(R.layout.dialog_preference_edit_text, null) as ViewGroup
+        val views = DialogPreferenceEditTextBinding.bind(view)
+        val editText = views.edit
+        editText.setText(mDisplayNamePreference.summary)
+        val dialog = MaterialAlertDialogBuilder(activity, R.style.ThemeOverlay_Vector_MaterialAlertDialog)
+                .setTitle(R.string.settings_display_name)
+                .setView(view)
+                .setPositiveButton(R.string.ok) { _, _ -> onDisplayNameChanged(editText.text.toString().trim()) }
+                .setNegativeButton(R.string.action_cancel, null)
+                .setOnDismissListener { view.hideKeyboard() }
+                .create()
+                .show()
     }
 
     override fun onResume() {
