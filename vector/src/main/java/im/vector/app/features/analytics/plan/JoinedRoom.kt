@@ -45,6 +45,11 @@ data class JoinedRoom(
 
     enum class Trigger {
         /**
+         * Room joined via an invite.
+         */
+        Invite,
+
+        /**
          * Room joined via a push/desktop notification.
          */
         Notification,
@@ -53,6 +58,16 @@ data class JoinedRoom(
          * Room joined via the public rooms directory.
          */
         RoomDirectory,
+
+        /**
+         * Room joined via its preview.
+         */
+        RoomPreview,
+
+        /**
+         * Room joined via the /join slash command.
+         */
+        SlashCommand,
 
         /**
          * Room joined via the space hierarchy view.
