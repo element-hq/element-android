@@ -3,6 +3,16 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'realm-android'
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = '0.8.7'
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+    jacoco.excludes = ['jdk.internal.*']
+}
 
 buildscript {
     repositories {
@@ -54,6 +64,7 @@ android {
             buildConfigField "boolean", "LOG_PRIVATE_DATA", project.property("vector.debugPrivateData")
             // Set to BODY instead of NONE to enable logging
             buildConfigField "okhttp3.logging.HttpLoggingInterceptor.Level", "OKHTTP_LOGGING_LEVEL", "okhttp3.logging.HttpLoggingInterceptor.Level." + project.property("vector.httpLogLevel")
+            testCoverageEnabled true
         }
 
         release {
@@ -195,4 +206,5 @@ dependencies {
     androidTestImplementation libs.tests.timberJunitRule
 
     androidTestUtil libs.androidx.orchestrator
+
 }
