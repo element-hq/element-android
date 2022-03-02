@@ -37,11 +37,15 @@ class LocationSharingOptionPickerView @JvmOverloads constructor(
     )
 
     fun setOptions(vararg options: LocationSharingOption) {
-        binding.locationSharingOptionUserCurrentLocation.isVisible =
-                options.contains(LocationSharingOption.USER_CURRENT)
-        binding.locationSharingOptionUserLiveLocation.isVisible =
-                options.contains(LocationSharingOption.USER_LIVE)
-        binding.locationSharingOptionPinned.isVisible =
-                options.contains(LocationSharingOption.PINNED)
+        val optionsNumber = options.toSet().size
+        val isPinnedVisible = options.contains(LocationSharingOption.PINNED)
+        val isUserCurrentVisible = options.contains(LocationSharingOption.USER_CURRENT)
+        val isUserLiveVisible = options.contains(LocationSharingOption.USER_LIVE)
+
+        binding.locationSharingOptionPinned.isVisible = isPinnedVisible
+        binding.locationSharingOptionsDivider1.isVisible = isPinnedVisible && optionsNumber > 1
+        binding.locationSharingOptionUserCurrentLocation.isVisible = isUserCurrentVisible
+        binding.locationSharingOptionsDivider2.isVisible = isUserCurrentVisible && isUserLiveVisible
+        binding.locationSharingOptionUserLiveLocation.isVisible = isUserLiveVisible
     }
 }

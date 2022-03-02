@@ -18,6 +18,7 @@ package im.vector.app.features.location.view
 
 import android.content.Context
 import android.content.res.TypedArray
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -55,6 +56,14 @@ class LocationSharingOptionView @JvmOverloads constructor(
                 recycle()
             }
         }
+    }
+
+    fun setIcon(icon: Drawable) {
+        binding.shareLocationOptionIcon.setImageDrawable(icon)
+    }
+
+    fun setIconBackground(bkg: Drawable) {
+        binding.shareLocationOptionIcon.background = bkg
     }
 
     private fun applyRipple() {
