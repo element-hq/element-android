@@ -319,6 +319,10 @@ jobs:
       - build-android-test-app
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
       - uses: actions/cache@v2
         with:
           path: |
