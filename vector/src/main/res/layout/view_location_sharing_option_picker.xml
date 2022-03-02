@@ -6,9 +6,6 @@
     android:layout_height="wrap_content"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
-    <!-- TODO add strings and correct icons -->
-    <!-- TODO add dividers -->
-
     <im.vector.app.features.location.view.LocationSharingOptionView
         android:id="@+id/locationSharingOptionPinned"
         android:layout_width="0dp"
@@ -65,7 +62,7 @@
         android:layout_height="wrap_content"
         app:icon="@drawable/ic_attachment_location_live_white"
         app:iconBackground="@drawable/circle"
-        app:iconBackgroundTint="?colorPrimary"
+        app:iconBackgroundTint="?vctr_live_location"
         app:iconDescription="@string/a11y_location_share_option_user_live_icon"
         app:iconPadding="3dp"
         app:layout_constraintBottom_toBottomOf="parent"

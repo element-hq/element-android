@@ -146,6 +146,8 @@
 
         <item name="android:actionButtonStyle">@style/Widget.Vector.ActionButton</item>
 
+        <!-- Location sharing -->
+        <item name="vctr_live_location">@color/vctr_live_location_dark</item>
     </style>
 
     <style name="Theme.Vector.Light" parent="Base.Theme.Vector.Light" />
