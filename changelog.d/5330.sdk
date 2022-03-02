@@ -1,0 +1,1 @@
+Change name of getTimeLineEvent and getTimeLineEventLive methods to getTimelineEvent and getTimelineEventLive.

@@ -143,7 +143,7 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleEnterEditMode(action: MessageComposerAction.EnterEditMode) {
-        room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
+        room.getTimelineEvent(action.eventId)?.let { timelineEvent ->
             setState { copy(sendMode = SendMode.Edit(timelineEvent, timelineEvent.getTextEditableContent())) }
         }
     }
@@ -175,13 +175,13 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleEnterQuoteMode(action: MessageComposerAction.EnterQuoteMode) {
-        room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
+        room.getTimelineEvent(action.eventId)?.let { timelineEvent ->
             setState { copy(sendMode = SendMode.Quote(timelineEvent, action.text)) }
         }
     }
 
     private fun handleEnterReplyMode(action: MessageComposerAction.EnterReplyMode) {
-        room.getTimeLineEvent(action.eventId)?.let { timelineEvent ->
+        room.getTimelineEvent(action.eventId)?.let { timelineEvent ->
             setState { copy(sendMode = SendMode.Reply(timelineEvent, action.text)) }
         }
     }
@@ -479,7 +479,7 @@ class MessageComposerViewModel @AssistedInject constructor(
 
                     if (inReplyTo != null) {
                         // TODO check if same content?
-                        room.getTimeLineEvent(inReplyTo)?.let {
+                        room.getTimelineEvent(inReplyTo)?.let {
                             room.editReply(state.sendMode.timelineEvent, it, action.text.toString())
                         }
                     } else {
@@ -555,17 +555,17 @@ class MessageComposerViewModel @AssistedInject constructor(
                     sendMode = when (currentDraft) {
                         is UserDraft.Regular -> SendMode.Regular(currentDraft.content, false)
                         is UserDraft.Quote   -> {
-                            room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
+                            room.getTimelineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
                                 SendMode.Quote(timelineEvent, currentDraft.content)
                             }
                         }
                         is UserDraft.Reply   -> {
-                            room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
+                            room.getTimelineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
                                 SendMode.Reply(timelineEvent, currentDraft.content)
                             }
                         }
                         is UserDraft.Edit    -> {
-                            room.getTimeLineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
+                            room.getTimelineEvent(currentDraft.linkedEventId)?.let { timelineEvent ->
                                 SendMode.Edit(timelineEvent, currentDraft.content)
                             }
                         }
