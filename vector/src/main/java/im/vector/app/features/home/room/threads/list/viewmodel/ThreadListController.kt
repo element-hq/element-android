@@ -17,11 +17,11 @@
 package im.vector.app.features.home.room.threads.list.viewmodel
 
 import com.airbnb.epoxy.EpoxyController
-import im.vector.app.R
 import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.app.features.home.room.detail.timeline.format.DisplayableEventFormatter
 import im.vector.app.features.home.room.threads.list.model.threadListItem
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.room.threads.model.ThreadSummary
@@ -35,6 +35,7 @@ class ThreadListController @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val stringProvider: StringProvider,
         private val dateFormatter: VectorDateFormatter,
+        private val displayableEventFormatter: DisplayableEventFormatter,
         private val session: Session
 ) : EpoxyController() {
 
@@ -70,9 +71,18 @@ class ThreadListController @Inject constructor(
                 }
                 ?.forEach { threadSummary ->
                     val date = dateFormatter.format(threadSummary.latestEvent?.originServerTs, DateFormatKind.ROOM_LIST)
-                    val decryptionErrorMessage = stringProvider.getString(R.string.encrypted_message)
-                    val rootThreadEdition = threadSummary.threadEditions.rootThreadEdition
-                    val latestThreadEdition = threadSummary.threadEditions.latestThreadEdition
+                    val lastMessageFormatted =  threadSummary.let {
+                        displayableEventFormatter.formatThreadSummary(
+                                event = it.latestEvent,
+                                latestEdition = it.threadEditions.latestThreadEdition
+                        ).toString()
+                    }
+                    val rootMessageFormatted =  threadSummary.let {
+                        displayableEventFormatter.formatThreadSummary(
+                                event = it.rootEvent,
+                                latestEdition = it.threadEditions.rootThreadEdition
+                        ).toString()
+                    }
                     threadListItem {
                         id(threadSummary.rootEvent?.eventId)
                         avatarRenderer(host.avatarRenderer)
@@ -82,8 +92,8 @@ class ThreadListController @Inject constructor(
                         rootMessageDeleted(threadSummary.rootEvent?.isRedacted() ?: false)
                         // TODO refactor notifications that with the new thread summary
                         threadNotificationState(threadSummary.rootEvent?.threadDetails?.threadNotificationState ?: ThreadNotificationState.NO_NEW_MESSAGE)
-                        rootMessage(rootThreadEdition ?: threadSummary.rootEvent?.getDecryptedTextSummary() ?: decryptionErrorMessage)
-                        lastMessage(latestThreadEdition ?: threadSummary.latestEvent?.getDecryptedTextSummary() ?: decryptionErrorMessage)
+                        rootMessage(rootMessageFormatted)
+                        lastMessage(lastMessageFormatted)
                         lastMessageCounter(threadSummary.numberOfThreads.toString())
                         lastMessageMatrixItem(threadSummary.latestThreadSenderInfo.toMatrixItemOrNull())
                         itemClickListener {
@@ -112,8 +122,18 @@ class ThreadListController @Inject constructor(
                 }
                 ?.forEach { timelineEvent ->
                     val date = dateFormatter.format(timelineEvent.root.threadDetails?.lastMessageTimestamp, DateFormatKind.ROOM_LIST)
-                    val decryptionErrorMessage = stringProvider.getString(R.string.encrypted_message)
                     val lastRootThreadEdition = timelineEvent.root.threadDetails?.lastRootThreadEdition
+                    val lastMessageFormatted =  timelineEvent.root.threadDetails?.threadSummaryLatestEvent.let {
+                        displayableEventFormatter.formatThreadSummary(
+                                event = it,
+                        ).toString()
+                    }
+                    val rootMessageFormatted =  timelineEvent.root.let {
+                        displayableEventFormatter.formatThreadSummary(
+                                event = it,
+                                latestEdition = lastRootThreadEdition
+                        ).toString()
+                    }
                     threadListItem {
                         id(timelineEvent.eventId)
                         avatarRenderer(host.avatarRenderer)
@@ -122,8 +142,8 @@ class ThreadListController @Inject constructor(
                         date(date)
                         rootMessageDeleted(timelineEvent.root.isRedacted())
                         threadNotificationState(timelineEvent.root.threadDetails?.threadNotificationState ?: ThreadNotificationState.NO_NEW_MESSAGE)
-                        rootMessage(lastRootThreadEdition ?: timelineEvent.root.getDecryptedTextSummary() ?: decryptionErrorMessage)
-                        lastMessage(timelineEvent.root.threadDetails?.threadSummaryLatestTextMessage ?: decryptionErrorMessage)
+                        rootMessage(rootMessageFormatted)
+                        lastMessage(lastMessageFormatted)
                         lastMessageCounter(timelineEvent.root.threadDetails?.numberOfThreads.toString())
                         lastMessageMatrixItem(timelineEvent.root.threadDetails?.threadSummarySenderInfo?.toMatrixItem())
                         itemClickListener {
