@@ -84,10 +84,10 @@ But comment in PR from the community are always appreciated!
 
 ### What to have in mind when reviewing a PR
 
-1- User experience: is the UX and UI correct? You will probably be the second person to test the new thing, the first one is the developer.
-2- Developer experience: does the code looks nice and decoupled? No big functions, etc.
-3- Code maintenance. A bit similar to point 2. Tricky code must be documented for instance
-4- Fork consideration. Is configuration of forks will be easy? Some documentation may help in some cases.
+1. User experience: is the UX and UI correct? You will probably be the second person to test the new thing, the first one is the developer.
+2. Developer experience: does the code looks nice and decoupled? No big functions, etc.
+3. Code maintenance. A bit similar to point 2. Tricky code must be documented for instance
+4. Fork consideration. Is configuration of forks will be easy? Some documentation may help in some cases.
 
 ### Rules
 
@@ -99,17 +99,17 @@ PR description should follow the PR template, and at least provide some context 
 
 ##### File change
 
-1- Code should follow the guidelines
-2- Code should be formatted correctly
-3- XML attribute must be sorted
-4- New code is added at the correct location
-5- New classes are added to the correct location
-6- Naming is correct. Naming is really important, it's considered part of the documentation
-7- Architecture is followed. For instance, the logic is in the ViewModel and not in the Fragment
-8- There is at least one file for the changelog. Exception if the PR fixes something which has not been released yet.
-9- PR includes test. allScreensTest when applicable, and unit tests
-10- Avoid over complicating things. Keep it simple (KISS)!
-11- PR contains only the expected change. Sometimes, the diff is showing changes that are already on develop. This is not good, submitter has to fix that up.
+1. Code should follow the guidelines
+2. Code should be formatted correctly
+3. XML attribute must be sorted
+4. New code is added at the correct location
+5. New classes are added to the correct location
+6. Naming is correct. Naming is really important, it's considered part of the documentation
+7. Architecture is followed. For instance, the logic is in the ViewModel and not in the Fragment
+8. There is at least one file for the changelog. Exception if the PR fixes something which has not been released yet.
+9. PR includes test. allScreensTest when applicable, and unit tests
+10. Avoid over complicating things. Keep it simple (KISS)!
+11. PR contains only the expected change. Sometimes, the diff is showing changes that are already on develop. This is not good, submitter has to fix that up.
 
 ##### Check the commit
 
@@ -123,9 +123,9 @@ Commit like "Code review fixes" is good when reviewing the PR, since new changes
 
 ##### Check the substance
 
-1- Test the changes!
-2- Test the nominal case and the edge cases
-3- Run the sanity test for critical PR
+1. Test the changes!
+2. Test the nominal case and the edge cases
+3. Run the sanity test for critical PR
 
 ##### Make a dedicated meeting to review the PR
 
