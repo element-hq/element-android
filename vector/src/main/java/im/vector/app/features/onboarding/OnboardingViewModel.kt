@@ -37,6 +37,7 @@ import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.utils.ensureTrailingSlash
 import im.vector.app.features.VectorFeatures
+import im.vector.app.features.VectorOverrides
 import im.vector.app.features.analytics.AnalyticsTracker
 import im.vector.app.features.analytics.extensions.toTrackingValue
 import im.vector.app.features.analytics.plan.UserProperties
@@ -81,6 +82,7 @@ class OnboardingViewModel @AssistedInject constructor(
         private val vectorFeatures: VectorFeatures,
         private val analyticsTracker: AnalyticsTracker,
         private val vectorDataStore: VectorDataStore,
+        private val vectorOverrides: VectorOverrides
 ) : VectorViewModel<OnboardingViewState, OnboardingAction, OnboardingViewEvents>(initialState) {
 
     @AssistedFactory
@@ -102,7 +104,7 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun observeDataStore() = viewModelScope.launch {
-        vectorDataStore.forceLoginFallbackFlow.setOnEach { isForceLoginFallbackEnabled ->
+        vectorOverrides.forceLoginFallback.setOnEach { isForceLoginFallbackEnabled ->
             copy(isForceLoginFallbackEnabled = isForceLoginFallbackEnabled)
         }
     }
