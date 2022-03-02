@@ -276,9 +276,14 @@ class OnboardingViewModel @AssistedInject constructor(
             kotlin.runCatching { registrationActionHandler.handleRegisterAction(registrationWizard, action) }
                     .fold(
                             onSuccess = {
-                                when (it) {
-                                    is RegistrationResult.Success      -> onSessionCreated(it.session, isAccountCreated = true)
-                                    is RegistrationResult.FlowResponse -> onFlowResponse(it.flowResult)
+                                when {
+                                    action.ignoresResult() -> {
+                                        // do nothing
+                                    }
+                                    else                   -> when (it) {
+                                        is RegistrationResult.Success      -> onSessionCreated(it.session, isAccountCreated = true)
+                                        is RegistrationResult.FlowResponse -> onFlowResponse(it.flowResult)
+                                    }
                                 }
                             },
                             onFailure = {

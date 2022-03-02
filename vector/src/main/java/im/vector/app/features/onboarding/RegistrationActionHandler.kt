@@ -55,6 +55,12 @@ sealed interface RegisterAction {
     object RegisterDummy : RegisterAction
 }
 
+fun RegisterAction.ignoresResult() = when (this) {
+    is RegisterAction.AddThreePid       -> true
+    is RegisterAction.SendAgainThreePid -> true
+    else                                -> false
+}
+
 fun RegisterAction.hasLoadingState() = when (this) {
     is RegisterAction.CheckIfEmailHasBeenValidated -> false
     else                                           -> true
