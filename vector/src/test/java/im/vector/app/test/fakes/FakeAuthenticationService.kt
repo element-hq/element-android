@@ -23,8 +23,13 @@ import org.matrix.android.sdk.api.auth.AuthenticationService
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
 
 class FakeAuthenticationService : AuthenticationService by mockk() {
+
     fun givenRegistrationWizard(registrationWizard: RegistrationWizard) {
         every { getRegistrationWizard() } returns registrationWizard
+    }
+
+    fun givenRegistrationStarted(started: Boolean) {
+        every { isRegistrationStarted } returns started
     }
 
     fun expectReset() {

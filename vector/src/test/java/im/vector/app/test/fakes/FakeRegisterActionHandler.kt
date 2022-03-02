@@ -16,23 +16,28 @@
 
 package im.vector.app.test.fakes
 
+import im.vector.app.features.onboarding.RegisterAction
+import im.vector.app.features.onboarding.RegistrationActionHandler
 import io.mockk.coEvery
 import io.mockk.mockk
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.auth.registration.RegistrationWizard
-import org.matrix.android.sdk.api.session.Session
 
-class FakeRegistrationWizard : RegistrationWizard by mockk() {
+class FakeRegisterActionHandler {
 
-    fun givenSuccessfulDummy(session: Session) {
-        givenSuccessFor(session) { dummy() }
+    val instance = mockk<RegistrationActionHandler>()
+
+    fun givenResultFor(wizard: RegistrationWizard, action: RegisterAction, result: RegistrationResult) {
+        coEvery { instance.handleRegisterAction(wizard, action) } answers {
+            it.invocation.args.first()
+            result
+        }
     }
 
-    fun givenSuccessFor(result: Session, expect: suspend RegistrationWizard.() -> RegistrationResult) {
-        coEvery { expect(this@FakeRegistrationWizard) } returns RegistrationResult.Success(result)
-    }
-
-    fun givenSuccessfulAcceptTerms(session: Session) {
-        coEvery { acceptTerms() } returns RegistrationResult.Success(session)
+    fun givenResultsFor(wizard: RegistrationWizard, result: List<Pair<RegisterAction, RegistrationResult>>) {
+        coEvery { instance.handleRegisterAction(wizard, any()) } answers {
+            val actionArg = it.invocation.args[1] as RegisterAction
+            result.first { it.first == actionArg }.second
+        }
     }
 }

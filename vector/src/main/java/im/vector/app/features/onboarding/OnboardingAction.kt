@@ -22,7 +22,6 @@ import im.vector.app.features.login.LoginConfig
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import org.matrix.android.sdk.api.auth.data.Credentials
-import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 
 sealed interface OnboardingAction : VectorViewModelAction {
@@ -42,22 +41,9 @@ sealed interface OnboardingAction : VectorViewModelAction {
 
     // Login or Register, depending on the signMode
     data class LoginOrRegister(val username: String, val password: String, val initialDeviceName: String) : OnboardingAction
+    object StopEmailValidationCheck : OnboardingAction
 
-    // Register actions
-    open class RegisterAction : OnboardingAction
-
-    data class AddThreePid(val threePid: RegisterThreePid) : RegisterAction()
-    object SendAgainThreePid : RegisterAction()
-
-    // TODO Confirm Email (from link in the email, open in the phone, intercepted by the app)
-    data class ValidateThreePid(val code: String) : RegisterAction()
-
-    data class CheckIfEmailHasBeenValidated(val delayMillis: Long) : RegisterAction()
-    object StopEmailValidationCheck : RegisterAction()
-
-    data class CaptchaDone(val captchaResponse: String) : RegisterAction()
-    object AcceptTerms : RegisterAction()
-    object RegisterDummy : RegisterAction()
+    data class PostRegisterAction(val registerAction: RegisterAction) : OnboardingAction
 
     // Reset actions
     open class ResetAction : OnboardingAction
