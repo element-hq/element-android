@@ -11,7 +11,7 @@ jacoco {
 
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
-    jacoco.excludes = ['jdk.internal.*']
+    jacoco.excludes = ['jdk.internal.*','kotlin.*','kotlinx.*']
 }
 
 buildscript {
