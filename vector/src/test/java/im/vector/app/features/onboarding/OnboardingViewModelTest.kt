@@ -50,10 +50,6 @@ import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
 private const val A_DISPLAY_NAME = "a display name"
 private const val A_PICTURE_FILENAME = "a-picture.png"
 private val AN_ERROR = RuntimeException("an error!")
-private val AN_UNSUPPORTED_PERSONALISATION_STATE = PersonalizationState(
-        supportsChangingDisplayName = false,
-        supportsChangingProfilePicture = false
-)
 private val A_LOADABLE_REGISTER_ACTION = RegisterAction.StartRegistration
 
 class OnboardingViewModelTest {
@@ -78,7 +74,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `when handling PostViewEvent then emits contents as view event`() = runBlockingTest {
+    fun `when handling PostViewEvent, then emits contents as view event`() = runBlockingTest {
         val test = viewModel.test(this)
 
         viewModel.handle(OnboardingAction.PostViewEvent(OnboardingViewEvents.OnTakeMeHome))
@@ -89,7 +85,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given supports changing display name when handling PersonalizeProfile then emits contents choose display name`() = runBlockingTest {
+    fun `given supports changing display name, when handling PersonalizeProfile, then emits contents choose display name`() = runBlockingTest {
         val initialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingDisplayName = true, supportsChangingProfilePicture = false))
         viewModel = createViewModel(initialState)
         val test = viewModel.test(this)
@@ -102,7 +98,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given only supports changing profile picture when handling PersonalizeProfile then emits contents choose profile picture`() = runBlockingTest {
+    fun `given only supports changing profile picture, when handling PersonalizeProfile, then emits contents choose profile picture`() = runBlockingTest {
         val initialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingDisplayName = false, supportsChangingProfilePicture = true))
         viewModel = createViewModel(initialState)
         val test = viewModel.test(this)
@@ -115,7 +111,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given register action requires more steps when handling action then posts next steps`() = runBlockingTest {
+    fun `given register action requires more steps, when handling action, then posts next steps`() = runBlockingTest {
         val test = viewModel.test(this)
         val flowResult = FlowResult(missingStages = listOf(Stage.Email(true)), completedStages = listOf(Stage.Email(true)))
         givenRegistrationResultFor(A_LOADABLE_REGISTER_ACTION, RegistrationResult.FlowResponse(flowResult))
@@ -133,7 +129,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given registration has started and has dummy step to do when handling action then ignores other steps and executes dummy`() = runBlockingTest {
+    fun `given registration has started and has dummy step to do, when handling action, then ignores other steps and executes dummy`() = runBlockingTest {
         val test = viewModel.test(this)
 
         val homeServerCapabilities = HomeServerCapabilities(canChangeDisplayName = true, canChangeAvatar = true)
@@ -160,7 +156,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given homeserver does not support personalisation when registering account then updates state and emits account created event`() = runBlockingTest {
+    fun `given homeserver does not support personalisation, when registering account, then updates state and emits account created event`() = runBlockingTest {
         val homeServerCapabilities = HomeServerCapabilities(canChangeDisplayName = false, canChangeAvatar = false)
         fakeSession.fakeHomeServerCapabilitiesService.givenCapabilities(homeServerCapabilities)
         givenRegistrationResultFor(A_LOADABLE_REGISTER_ACTION, RegistrationResult.Success(fakeSession))
@@ -181,7 +177,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given changing profile picture is supported when updating display name then updates upstream user display name and moves to choose profile picture`() = runBlockingTest {
+    fun `given changing profile picture is supported, when updating display name, then updates upstream user display name and moves to choose profile picture`() = runBlockingTest {
         val personalisedInitialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingProfilePicture = true))
         viewModel = createViewModel(personalisedInitialState)
         val test = viewModel.test(this)
@@ -196,7 +192,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given changing profile picture is not supported when updating display name then updates upstream user display name and completes personalization`() = runBlockingTest {
+    fun `given changing profile picture is not supported, when updating display name, then updates upstream user display name and completes personalization`() = runBlockingTest {
         val personalisedInitialState = initialState.copy(personalizationState = PersonalizationState(supportsChangingProfilePicture = false))
         viewModel = createViewModel(personalisedInitialState)
         val test = viewModel.test(this)
@@ -211,7 +207,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given upstream failure when handling display name update then emits failure event`() = runBlockingTest {
+    fun `given upstream failure, when handling display name update, then emits failure event`() = runBlockingTest {
         val test = viewModel.test(this)
         fakeSession.fakeProfileService.givenSetDisplayNameErrors(AN_ERROR)
 
@@ -228,7 +224,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `when handling profile picture selected then updates selected picture state`() = runBlockingTest {
+    fun `when handling profile picture selected, then updates selected picture state`() = runBlockingTest {
         val test = viewModel.test(this)
 
         viewModel.handle(OnboardingAction.ProfilePictureSelected(fakeUri.instance))
@@ -243,7 +239,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given a selected picture when handling save selected profile picture then updates upstream avatar and completes personalization`() = runBlockingTest {
+    fun `given a selected picture, when handling save selected profile picture, then updates upstream avatar and completes personalization`() = runBlockingTest {
         val initialStateWithPicture = givenPictureSelected(fakeUri.instance, A_PICTURE_FILENAME)
         viewModel = createViewModel(initialStateWithPicture)
         val test = viewModel.test(this)
@@ -258,7 +254,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given upstream update avatar fails when saving selected profile picture then emits failure event`() = runBlockingTest {
+    fun `given upstream update avatar fails, when saving selected profile picture, then emits failure event`() = runBlockingTest {
         fakeSession.fakeProfileService.givenUpdateAvatarErrors(AN_ERROR)
         val initialStateWithPicture = givenPictureSelected(fakeUri.instance, A_PICTURE_FILENAME)
         viewModel = createViewModel(initialStateWithPicture)
@@ -273,7 +269,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given no selected picture when saving selected profile picture then emits failure event`() = runBlockingTest {
+    fun `given no selected picture, when saving selected profile picture, then emits failure event`() = runBlockingTest {
         val test = viewModel.test(this)
 
         viewModel.handle(OnboardingAction.SaveSelectedProfilePicture)
@@ -285,7 +281,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `when handling profile picture skipped then completes personalization`() = runBlockingTest {
+    fun `when handling profile skipped, then completes personalization`() = runBlockingTest {
         val test = viewModel.test(this)
 
         viewModel.handle(OnboardingAction.UpdateProfilePictureSkipped)
