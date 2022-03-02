@@ -4,6 +4,7 @@
         <attr name="icon" format="reference" />
         <attr name="iconBackground" format="reference" />
         <attr name="iconBackgroundTint" format="color" />
+        <attr name="iconPadding" format="dimension" />
         <attr name="iconDescription" format="string" />
         <attr name="title" format="string" />
     </declare-styleable>

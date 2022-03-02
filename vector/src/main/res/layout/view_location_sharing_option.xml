@@ -26,9 +26,9 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:contentDescription="@string/a11y_location_share_icon"
-        android:padding="10dp"
         tools:background="@drawable/circle"
         tools:backgroundTint="?colorPrimary"
+        tools:padding="10dp"
         tools:src="@drawable/ic_attachment_location_white" />
 
     <TextView

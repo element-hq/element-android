@@ -24,6 +24,7 @@ import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.view.setPadding
 import im.vector.app.R
 import im.vector.app.databinding.ViewLocationSharingOptionBinding
 
@@ -76,6 +77,10 @@ class LocationSharingOptionView @JvmOverloads constructor(
                 R.styleable.LocationSharingOptionView_iconBackgroundTint,
                 ContextCompat.getColor(context, android.R.color.transparent)
         )
+        val padding = typedArray.getDimensionPixelOffset(
+                R.styleable.LocationSharingOptionView_iconPadding,
+                context.resources.getDimensionPixelOffset(R.dimen.location_sharing_option_default_padding)
+        )
         val description = typedArray.getString(R.styleable.LocationSharingOptionView_iconDescription)
 
         binding.shareLocationOptionIcon.setImageDrawable(icon)
@@ -85,6 +90,7 @@ class LocationSharingOptionView @JvmOverloads constructor(
             backgroundDrawable
         } ?: background
         binding.shareLocationOptionIcon.background = bkg
+        binding.shareLocationOptionIcon.setPadding(padding)
         binding.shareLocationOptionIcon.contentDescription = description
     }
 
