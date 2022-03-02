@@ -92,10 +92,14 @@ static def getFdroidVersionSuffix() {
 }
 
 static def getTaskAffinitySuffix() {
-    String charset = (('A'..'Z') + ('0'..'9') + ('a'..'z')).join()
-    return new Random().with {
-        (1..8).collect { charset[nextInt(charset.length())] }.join()
-    }
+    String alphaCharset = (('A'..'Z') + ('a'..'z')).join()
+    String alphaNumCharset = (('A'..'Z') + ('0'..'9') + ('a'..'z')).join()
+    Random rnd = new Random()
+
+    return alphaCharset[rnd.nextInt(alphaCharset.length())] +
+            rnd.with {
+                (1..7).collect { alphaNumCharset[nextInt(alphaNumCharset.length())] }.join()
+            }
 }
 
 project.android.buildTypes.all { buildType ->
