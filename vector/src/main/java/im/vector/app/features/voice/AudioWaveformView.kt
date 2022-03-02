@@ -194,6 +194,6 @@ class AudioWaveformView @JvmOverloads constructor(
     }
 
     companion object {
-        private const val MAX_FFT = 32760f
+        const val MAX_FFT = 32760
     }
 }
