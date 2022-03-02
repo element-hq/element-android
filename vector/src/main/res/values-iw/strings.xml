@@ -2061,4 +2061,10 @@
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s קיבל את ההזמנה עבור %2$s. סיבה: %3$s</string>
     <string name="sent_location">שיתפו את מיקומם</string>
     <string name="attachment_type_location">מיקום</string>
+    <string name="room_message_autocomplete_users">משתמשים</string>
+    <string name="message_reaction_show_less">הצג פחות</string>
+    <string name="ftue_auth_use_case_skip_partial">דלג על השאלה</string>
+    <string name="login_splash_already_have_account">יש לי כבר חשבון</string>
+    <string name="login_splash_create_account">צור חשבון</string>
+    <string name="ftue_auth_carousel_encrypted_title">תקשורת מאובטחת.</string>
 </resources>
