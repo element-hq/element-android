@@ -59,12 +59,7 @@ class LocationSharingFragment @Inject constructor(
             views.mapView.initialize(urlMapProvider.getMapUrl())
         }
 
-        // TODO change the options dynamically depending on the current chosen location
-        //  set correct click listener on each option
-        views.shareLocationOptionsPicker.setOptions(LocationSharingOption.PINNED)
-        views.shareLocationOptionsPicker.debouncedClicks {
-            viewModel.handle(LocationSharingAction.OnShareLocation)
-        }
+        initOptionsPicker()
 
         viewModel.observeViewEvents {
             when (it) {
@@ -110,6 +105,11 @@ class LocationSharingFragment @Inject constructor(
         super.onDestroy()
     }
 
+    override fun invalidate() = withState(viewModel) { state ->
+        views.mapView.render(state.toMapState())
+        views.shareLocationGpsLoading.isGone = state.lastKnownLocation != null
+    }
+
     private fun handleLocationNotAvailableError() {
         MaterialAlertDialogBuilder(requireActivity())
                 .setTitle(R.string.location_not_available_dialog_title)
@@ -121,8 +121,19 @@ class LocationSharingFragment @Inject constructor(
                 .show()
     }
 
-    override fun invalidate() = withState(viewModel) { state ->
-        views.mapView.render(state.toMapState())
-        views.shareLocationGpsLoading.isGone = state.lastKnownLocation != null
+    private fun initOptionsPicker() {
+        // TODO
+        //  set avatar and user color for the current user location option
+        //  change the options dynamically depending on the current chosen location
+        views.shareLocationOptionsPicker.setOptions(LocationSharingOption.PINNED)
+        views.shareLocationOptionsPicker.optionPinned.debouncedClicks {
+            viewModel.handle(LocationSharingAction.OnShareLocation)
+        }
+        views.shareLocationOptionsPicker.optionUserCurrent.debouncedClicks {
+            // TODO
+        }
+        views.shareLocationOptionsPicker.optionUserLive.debouncedClicks {
+            // TODO
+        }
     }
 }

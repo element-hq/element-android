@@ -42,7 +42,6 @@ class LocationSharingOptionView @JvmOverloads constructor(
     )
 
     init {
-        applyRipple()
         context.theme.obtainStyledAttributes(
                 attrs,
                 R.styleable.LocationSharingOptionView,
@@ -64,19 +63,6 @@ class LocationSharingOptionView @JvmOverloads constructor(
 
     fun setIconBackground(bkg: Drawable) {
         binding.shareLocationOptionIcon.background = bkg
-    }
-
-    private fun applyRipple() {
-        val outValue = TypedValue()
-        context.theme.resolveAttribute(
-                android.R.attr.selectableItemBackground,
-                outValue,
-                true
-        )
-        binding.root.background = ContextCompat.getDrawable(
-                context,
-                outValue.resourceId
-        )
     }
 
     private fun setIcon(typedArray: TypedArray) {

@@ -19,6 +19,7 @@ package im.vector.app.features.location.view
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import im.vector.app.databinding.ViewLocationSharingOptionPickerBinding
@@ -31,6 +32,21 @@ class LocationSharingOptionPickerView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
+    val optionPinned: LocationSharingOptionView
+        get() = binding.locationSharingOptionPinned
+
+    val optionUserCurrent: LocationSharingOptionView
+        get() = binding.locationSharingOptionUserCurrent
+
+    val optionUserLive: LocationSharingOptionView
+        get() = binding.locationSharingOptionUserLive
+
+    private val divider1: View
+        get() = binding.locationSharingOptionsDivider1
+
+    private val divider2: View
+        get() = binding.locationSharingOptionsDivider2
+
     private val binding = ViewLocationSharingOptionPickerBinding.inflate(
             LayoutInflater.from(context),
             this
@@ -42,10 +58,10 @@ class LocationSharingOptionPickerView @JvmOverloads constructor(
         val isUserCurrentVisible = options.contains(LocationSharingOption.USER_CURRENT)
         val isUserLiveVisible = options.contains(LocationSharingOption.USER_LIVE)
 
-        binding.locationSharingOptionPinned.isVisible = isPinnedVisible
-        binding.locationSharingOptionsDivider1.isVisible = isPinnedVisible && optionsNumber > 1
-        binding.locationSharingOptionUserCurrentLocation.isVisible = isUserCurrentVisible
-        binding.locationSharingOptionsDivider2.isVisible = isUserCurrentVisible && isUserLiveVisible
-        binding.locationSharingOptionUserLiveLocation.isVisible = isUserLiveVisible
+        optionPinned.isVisible = isPinnedVisible
+        divider1.isVisible = isPinnedVisible && optionsNumber > 1
+        optionUserCurrent.isVisible = isUserCurrentVisible
+        divider2.isVisible = isUserCurrentVisible && isUserLiveVisible
+        optionUserLive.isVisible = isUserLiveVisible
     }
 }
