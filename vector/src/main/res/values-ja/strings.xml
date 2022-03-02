@@ -1974,7 +1974,7 @@
     <string name="login_msisdn_error_not_international">国際電話番号は「+」から始まる必要があります</string>
     <string name="login_msisdn_confirm_notice">コードを%1$sに送信しました。以下に入力して認証してください。</string>
     <string name="login_reset_password_error_not_found">このメールアドレスはどのアカウントにも登録されていません</string>
-    <string name="login_reset_password_warning_content">パスワードを変更すると、すべてのセッションでのエンドツーエンド暗号鍵がリセットされ、暗号化されたメッセージ履歴が読めなくなります。パスワードを再設定する前に、鍵のバックアップを設定するか、他のセッションから鍵をエクスポートしておいてください。</string>
+    <string name="login_reset_password_warning_content">パスワードを変更すると、全てのセッションでのエンドツーエンド暗号鍵がリセットされ、暗号化されたメッセージ履歴が読めなくなります。パスワードを再設定する前に、鍵のバックアップを設定するか、他のセッションからルームの鍵をエクスポートしておいてください。</string>
     <string name="login_reset_password_notice">パスワードの再設定を確認するために認証メールを送信します。</string>
     <string name="login_login_with_email_error">このメールアドレスはどのアカウントにも属していません。</string>
     <string name="login_registration_not_supported">このアプリではこのホームサーバーにアカウントを作成できません。
@@ -2322,7 +2322,7 @@
 \n検証は端末に保存され、新しいバージョンのアプリで共有されます。</string>
     <string name="room_notification_more_than_two_users_are_typing">%1$s、%2$s他</string>
     <string name="room_notification_two_users_are_typing">%1$sと%2$s</string>
-    <string name="security_prompt_text">自分と相手を認証してチャットを安全に保ちます</string>
+    <string name="security_prompt_text">自分と相手を認証して、チャットを安全に保ちましょう</string>
     <string name="bootstrap_info_text_2">あなたしか知らないセキュリティーフレーズを入力してください。サーバーで機密情報を保護するために使用します。</string>
     <string name="settings_export_trail">監査結果をエクスポート</string>
     <string name="enter_secret_storage_invalid">ストレージから機密情報を発見できません</string>
@@ -2335,4 +2335,9 @@
     <string name="verify_new_session_compromized">アカウントのセキュリティーが破られている可能性があります</string>
     <string name="command_description_add_to_space">選択したスペースに追加</string>
     <string name="use_latest_app">最新の${app_name}は他のデバイスでも使用できます：</string>
+    <string name="call_tile_voice_call_has_ended">音声通話が終了しました・%1$s</string>
+    <string name="call_tile_video_call_has_ended">ビデオ通話が終了しました・%1$s</string>
+    <string name="discovery_invite">メールアドレスで招待したり、連絡先を検索したりできます…</string>
+    <string name="bootstrap_progress_storing_in_sss">鍵のバックアップの機密情報をSSSSに保存しています</string>
+    <string name="set_a_security_phrase_notice">あなたしか知らないセキュリティーフレーズを入力してください。サーバーで機密情報を保護するために使用します。</string>
 </resources>
