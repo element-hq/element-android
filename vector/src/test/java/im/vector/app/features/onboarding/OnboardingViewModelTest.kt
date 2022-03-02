@@ -37,6 +37,7 @@ import im.vector.app.test.fakes.FakeUri
 import im.vector.app.test.fakes.FakeUriFilenameResolver
 import im.vector.app.test.fakes.FakeVectorFeatures
 import im.vector.app.test.fakes.FakeVectorOverrides
+import im.vector.app.test.fixtures.aHomeServerCapabilities
 import im.vector.app.test.test
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
@@ -51,6 +52,7 @@ private const val A_DISPLAY_NAME = "a display name"
 private const val A_PICTURE_FILENAME = "a-picture.png"
 private val AN_ERROR = RuntimeException("an error!")
 private val A_LOADABLE_REGISTER_ACTION = RegisterAction.StartRegistration
+private val A_HOMESERVER_CAPABILITIES = aHomeServerCapabilities(canChangeDisplayName = true, canChangeAvatar = true)
 
 class OnboardingViewModelTest {
 
@@ -129,17 +131,10 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `given registration has started and has dummy step to do, when handling action, then ignores other steps and executes dummy`() = runBlockingTest {
+    fun `when registering account, then updates state and emits account created event`() = runBlockingTest {
+        givenRegistrationResultFor(A_LOADABLE_REGISTER_ACTION, RegistrationResult.Success(fakeSession))
+        givenSuccessfullyCreatesAccount(A_HOMESERVER_CAPABILITIES)
         val test = viewModel.test(this)
-
-        val homeServerCapabilities = HomeServerCapabilities(canChangeDisplayName = true, canChangeAvatar = true)
-        fakeSession.fakeHomeServerCapabilitiesService.givenCapabilities(homeServerCapabilities)
-        val flowResult = FlowResult(missingStages = listOf(Stage.Dummy(mandatory = true), Stage.Email(true)), completedStages = emptyList())
-        givenRegistrationResultsFor(listOf(
-                A_LOADABLE_REGISTER_ACTION to RegistrationResult.FlowResponse(flowResult),
-                RegisterAction.RegisterDummy to RegistrationResult.Success(fakeSession)
-        ))
-        givenSuccessfullyCreatesAccount()
 
         viewModel.handle(OnboardingAction.PostRegisterAction(A_LOADABLE_REGISTER_ACTION))
 
@@ -147,20 +142,16 @@ class OnboardingViewModelTest {
                 .assertStatesWithPrevious(
                         initialState,
                         { copy(asyncRegistration = Loading()) },
-                        { copy(asyncLoginAction = Success(Unit), personalizationState = homeServerCapabilities.toPersonalisationState()) },
-                        { copy(asyncRegistration = Uninitialized) },
-
-                        )
+                        { copy(asyncLoginAction = Success(Unit), personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) },
+                        { copy(asyncLoginAction = Success(Unit), asyncRegistration = Uninitialized) }
+                )
                 .assertEvents(OnboardingViewEvents.OnAccountCreated)
                 .finish()
     }
 
     @Test
-    fun `given homeserver does not support personalisation, when registering account, then updates state and emits account created event`() = runBlockingTest {
-        val homeServerCapabilities = HomeServerCapabilities(canChangeDisplayName = false, canChangeAvatar = false)
-        fakeSession.fakeHomeServerCapabilitiesService.givenCapabilities(homeServerCapabilities)
-        givenRegistrationResultFor(A_LOADABLE_REGISTER_ACTION, RegistrationResult.Success(fakeSession))
-        givenSuccessfullyCreatesAccount()
+    fun `given registration has started and has dummy step to do, when handling action, then ignores other steps and executes dummy`() = runBlockingTest {
+        givenSuccessfulRegistrationForStartAndDummySteps(missingStages = listOf(Stage.Dummy(mandatory = true)))
         val test = viewModel.test(this)
 
         viewModel.handle(OnboardingAction.PostRegisterAction(A_LOADABLE_REGISTER_ACTION))
@@ -169,8 +160,8 @@ class OnboardingViewModelTest {
                 .assertStatesWithPrevious(
                         initialState,
                         { copy(asyncRegistration = Loading()) },
-                        { copy(asyncLoginAction = Success(Unit), personalizationState = homeServerCapabilities.toPersonalisationState()) },
-                        { copy(asyncLoginAction = Success(Unit), asyncRegistration = Uninitialized) }
+                        { copy(asyncLoginAction = Success(Unit), personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) },
+                        { copy(asyncRegistration = Uninitialized) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountCreated)
                 .finish()
@@ -339,7 +330,17 @@ class OnboardingViewModelTest {
         )
     }
 
-    private fun givenSuccessfullyCreatesAccount() {
+    private fun givenSuccessfulRegistrationForStartAndDummySteps(missingStages: List<Stage>) {
+        val flowResult = FlowResult(missingStages = missingStages, completedStages = emptyList())
+        givenRegistrationResultsFor(listOf(
+                A_LOADABLE_REGISTER_ACTION to RegistrationResult.FlowResponse(flowResult),
+                RegisterAction.RegisterDummy to RegistrationResult.Success(fakeSession)
+        ))
+        givenSuccessfullyCreatesAccount(A_HOMESERVER_CAPABILITIES)
+    }
+
+    private fun givenSuccessfullyCreatesAccount(homeServerCapabilities: HomeServerCapabilities) {
+        fakeSession.fakeHomeServerCapabilitiesService.givenCapabilities(homeServerCapabilities)
         fakeActiveSessionHolder.expectSetsActiveSession(fakeSession)
         fakeAuthenticationService.expectReset()
         fakeSession.expectStartsSyncing()
