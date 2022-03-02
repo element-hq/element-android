@@ -32,6 +32,7 @@ import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentLocationSharingBinding
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
+import im.vector.app.features.location.option.LocationSharingOption
 import org.matrix.android.sdk.api.util.MatrixItem
 import java.lang.ref.WeakReference
 import javax.inject.Inject

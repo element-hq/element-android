@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.location.view
+package im.vector.app.features.location.option
 
 import android.content.Context
 import android.content.res.TypedArray

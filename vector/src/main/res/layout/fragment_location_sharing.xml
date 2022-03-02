@@ -14,7 +14,7 @@
         app:mapbox_renderTextureMode="true"
         tools:background="#4F00" />
 
-    <im.vector.app.features.location.view.LocationSharingOptionPickerView
+    <im.vector.app.features.location.option.LocationSharingOptionPickerView
         android:id="@+id/shareLocationOptionsPicker"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

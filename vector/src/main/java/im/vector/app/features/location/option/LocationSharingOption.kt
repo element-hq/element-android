@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package im.vector.app.features.location
+package im.vector.app.features.location.option
 
 enum class LocationSharingOption {
     USER_CURRENT, // current user's location

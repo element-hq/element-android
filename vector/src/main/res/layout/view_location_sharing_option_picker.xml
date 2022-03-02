@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
 
-    <im.vector.app.features.location.view.LocationSharingOptionView
+    <im.vector.app.features.location.option.LocationSharingOptionView
         android:id="@+id/locationSharingOptionPinned"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -32,7 +32,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/locationSharingOptionPinned" />
 
-    <im.vector.app.features.location.view.LocationSharingOptionView
+    <im.vector.app.features.location.option.LocationSharingOptionView
         android:id="@+id/locationSharingOptionUserCurrent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/locationSharingOptionUserCurrent" />
 
-    <im.vector.app.features.location.view.LocationSharingOptionView
+    <im.vector.app.features.location.option.LocationSharingOptionView
         android:id="@+id/locationSharingOptionUserLive"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
