@@ -18,10 +18,10 @@ package im.vector.app.features.location.view
 
 import android.content.Context
 import android.content.res.TypedArray
-import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.LayoutInflater
+import android.widget.ImageView
+import androidx.annotation.ColorInt
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -35,6 +35,9 @@ import im.vector.app.databinding.ViewLocationSharingOptionBinding
 class LocationSharingOptionView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
+
+    val iconView: ImageView
+        get() = binding.shareLocationOptionIcon
 
     private val binding = ViewLocationSharingOptionBinding.inflate(
             LayoutInflater.from(context),
@@ -57,11 +60,12 @@ class LocationSharingOptionView @JvmOverloads constructor(
         }
     }
 
-    fun setIcon(icon: Drawable) {
-        binding.shareLocationOptionIcon.setImageDrawable(icon)
-    }
-
-    fun setIconBackground(bkg: Drawable) {
+    fun setIconBackgroundTint(@ColorInt color: Int) {
+        val bkg = binding.shareLocationOptionIcon.background?.let {
+            val backgroundDrawable = DrawableCompat.wrap(binding.shareLocationOptionIcon.background)
+            DrawableCompat.setTint(backgroundDrawable, color)
+            backgroundDrawable
+        }
         binding.shareLocationOptionIcon.background = bkg
     }
 
@@ -78,15 +82,15 @@ class LocationSharingOptionView @JvmOverloads constructor(
         )
         val description = typedArray.getString(R.styleable.LocationSharingOptionView_iconDescription)
 
-        binding.shareLocationOptionIcon.setImageDrawable(icon)
+        iconView.setImageDrawable(icon)
         val bkg = background?.let {
             val backgroundDrawable = DrawableCompat.wrap(it)
             DrawableCompat.setTint(backgroundDrawable, backgroundTint)
             backgroundDrawable
-        } ?: background
-        binding.shareLocationOptionIcon.background = bkg
-        binding.shareLocationOptionIcon.setPadding(padding)
-        binding.shareLocationOptionIcon.contentDescription = description
+        }
+        iconView.background = bkg
+        iconView.setPadding(padding)
+        iconView.contentDescription = description
     }
 
     private fun setTitle(typedArray: TypedArray) {

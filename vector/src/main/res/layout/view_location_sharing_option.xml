@@ -29,7 +29,7 @@
         android:contentDescription="@string/a11y_location_share_icon"
         tools:background="@drawable/circle"
         tools:backgroundTint="?colorPrimary"
-        tools:padding="10dp"
+        tools:padding="11dp"
         tools:src="@drawable/ic_attachment_location_white" />
 
     <TextView
