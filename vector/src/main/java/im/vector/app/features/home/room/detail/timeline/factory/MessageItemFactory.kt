@@ -73,6 +73,7 @@ import im.vector.app.features.location.toLocationData
 import im.vector.app.features.media.ImageContentRenderer
 import im.vector.app.features.media.VideoContentRenderer
 import im.vector.app.features.settings.VectorPreferences
+import im.vector.app.features.voice.AudioWaveformView
 import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.MatrixUrls.isMxcUrl
@@ -688,8 +689,7 @@ class MessageItemFactory @Inject constructor(
         return this
                 ?.filterNotNull()
                 ?.map {
-                    // Value comes from AudioRecordView.maxReportableAmp, and 1024 is the max value in the Matrix spec
-                    it * 22760 / 1024
+                    it * AudioWaveformView.MAX_FFT / 1024
                 }
     }
 

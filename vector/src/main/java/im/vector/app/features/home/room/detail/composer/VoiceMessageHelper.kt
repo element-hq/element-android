@@ -221,7 +221,9 @@ class VoiceMessageHelper @Inject constructor(
     private fun onPlaybackTick(id: String) {
         if (mediaPlayer?.isPlaying.orFalse()) {
             val currentPosition = mediaPlayer?.currentPosition ?: 0
-            playbackTracker.updateCurrentPlaybackTime(id, currentPosition)
+            val totalDuration = mediaPlayer?.duration ?: 0
+            val percentage = currentPosition.toFloat() / totalDuration
+            playbackTracker.updateCurrentPlaybackTime(id, currentPosition, percentage)
         } else {
             playbackTracker.stopPlayback(id)
             stopPlaybackTicker()

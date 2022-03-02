@@ -26,7 +26,6 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import com.airbnb.epoxy.EpoxyAttribute
 import com.airbnb.epoxy.EpoxyModelClass
-import com.visualizer.amplitude.AudioRecordView
 import im.vector.app.R
 import im.vector.app.core.epoxy.ClickListener
 import im.vector.app.features.home.room.detail.timeline.helper.ContentDownloadStateTrackerBinder
@@ -34,6 +33,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.ContentUploadStat
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import im.vector.app.features.home.room.detail.timeline.style.TimelineMessageLayout
 import im.vector.app.features.themes.ThemeUtils
+import im.vector.app.features.voice.AudioWaveformView
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
@@ -78,11 +78,15 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
 
         holder.voicePlaybackWaveform.setOnLongClickListener(attributes.itemLongClickListener)
 
+        val waveformColorIdle = ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_quaternary)
+        val waveformColorPlayed = ThemeUtils.getColor(holder.view.context, R.attr.vctr_content_secondary)
+
         holder.voicePlaybackWaveform.post {
-            holder.voicePlaybackWaveform.recreate()
+            holder.voicePlaybackWaveform.clear()
             waveform.forEach { amplitude ->
-                holder.voicePlaybackWaveform.update(amplitude)
+                holder.voicePlaybackWaveform.add(AudioWaveformView.FFT(amplitude.toFloat(), waveformColorIdle))
             }
+            holder.voicePlaybackWaveform.summarize()
         }
 
         val backgroundTint = if (attributes.informationData.messageLayout is TimelineMessageLayout.Bubble) {
@@ -93,33 +97,39 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
         holder.voicePlaybackLayout.backgroundTintList = ColorStateList.valueOf(backgroundTint)
         holder.voicePlaybackControlButton.setOnClickListener { playbackControlButtonClickListener?.invoke(it) }
 
-        voiceMessagePlaybackTracker.track(attributes.informationData.eventId, object : VoiceMessagePlaybackTracker.Listener {
-            override fun onUpdate(state: VoiceMessagePlaybackTracker.Listener.State) {
-                when (state) {
-                    is VoiceMessagePlaybackTracker.Listener.State.Idle    -> renderIdleState(holder)
-                    is VoiceMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state)
-                    is VoiceMessagePlaybackTracker.Listener.State.Paused  -> renderPausedState(holder, state)
+        // Don't track and don't try to update UI before view is present
+        holder.view.post {
+            voiceMessagePlaybackTracker.track(attributes.informationData.eventId, object : VoiceMessagePlaybackTracker.Listener {
+                override fun onUpdate(state: VoiceMessagePlaybackTracker.Listener.State) {
+                    when (state) {
+                        is VoiceMessagePlaybackTracker.Listener.State.Idle    -> renderIdleState(holder, waveformColorIdle, waveformColorPlayed)
+                        is VoiceMessagePlaybackTracker.Listener.State.Playing -> renderPlayingState(holder, state, waveformColorIdle, waveformColorPlayed)
+                        is VoiceMessagePlaybackTracker.Listener.State.Paused  -> renderPausedState(holder, state, waveformColorIdle, waveformColorPlayed)
+                    }
                 }
-            }
-        })
+            })
+        }
     }
 
-    private fun renderIdleState(holder: Holder) {
+    private fun renderIdleState(holder: Holder, idleColor: Int, playedColor: Int) {
         holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
         holder.voicePlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_play_voice_message)
         holder.voicePlaybackTime.text = formatPlaybackTime(duration)
+        holder.voicePlaybackWaveform.updateColors(0f, playedColor, idleColor)
     }
 
-    private fun renderPlayingState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Playing) {
+    private fun renderPlayingState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Playing, idleColor: Int, playedColor: Int) {
         holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_pause)
         holder.voicePlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_pause_voice_message)
         holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
+        holder.voicePlaybackWaveform.updateColors(state.percentage, playedColor, idleColor)
     }
 
-    private fun renderPausedState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Paused) {
+    private fun renderPausedState(holder: Holder, state: VoiceMessagePlaybackTracker.Listener.State.Paused, idleColor: Int, playedColor: Int) {
         holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
         holder.voicePlaybackControlButton.contentDescription = holder.view.context.getString(R.string.a11y_play_voice_message)
         holder.voicePlaybackTime.text = formatPlaybackTime(state.playbackTime)
+        holder.voicePlaybackWaveform.updateColors(state.percentage, playedColor, idleColor)
     }
 
     private fun formatPlaybackTime(time: Int) = DateUtils.formatElapsedTime((time / 1000).toLong())
@@ -138,7 +148,7 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
         val voiceLayout by bind<ViewGroup>(R.id.voiceLayout)
         val voicePlaybackControlButton by bind<ImageButton>(R.id.voicePlaybackControlButton)
         val voicePlaybackTime by bind<TextView>(R.id.voicePlaybackTime)
-        val voicePlaybackWaveform by bind<AudioRecordView>(R.id.voicePlaybackWaveform)
+        val voicePlaybackWaveform by bind<AudioWaveformView>(R.id.voicePlaybackWaveform)
         val progressLayout by bind<ViewGroup>(R.id.messageFileUploadProgressLayout)
     }
 

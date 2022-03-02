@@ -27,7 +27,6 @@ import androidx.core.view.doOnLayout
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
-import com.visualizer.amplitude.AudioRecordView
 import im.vector.app.R
 import im.vector.app.core.extensions.setAttributeBackground
 import im.vector.app.core.extensions.setAttributeTintedBackground
@@ -37,6 +36,8 @@ import im.vector.app.databinding.ViewVoiceMessageRecorderBinding
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.DraggingState
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView.RecordingUiState
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
+import im.vector.app.features.themes.ThemeUtils
+import im.vector.app.features.voice.AudioWaveformView
 
 class VoiceMessageViews(
         private val resources: Resources,
@@ -284,7 +285,7 @@ class VoiceMessageViews(
         hideRecordingViews(RecordingUiState.Idle)
         views.voiceMessageMicButton.isVisible = true
         views.voiceMessageSendButton.isVisible = false
-        views.voicePlaybackWaveform.post { views.voicePlaybackWaveform.recreate() }
+        views.voicePlaybackWaveform.post { views.voicePlaybackWaveform.clear() }
     }
 
     fun renderPlaying(state: VoiceMessagePlaybackTracker.Listener.State.Playing) {
@@ -292,11 +293,15 @@ class VoiceMessageViews(
         views.voicePlaybackControlButton.contentDescription = resources.getString(R.string.a11y_pause_voice_message)
         val formattedTimerText = DateUtils.formatElapsedTime((state.playbackTime / 1000).toLong())
         views.voicePlaybackTime.text = formattedTimerText
+        val waveformColorIdle = ThemeUtils.getColor(views.voicePlaybackWaveform.context, R.attr.vctr_content_quaternary)
+        val waveformColorPlayed = ThemeUtils.getColor(views.voicePlaybackWaveform.context, R.attr.vctr_content_secondary)
+        views.voicePlaybackWaveform.updateColors(state.percentage, waveformColorPlayed, waveformColorIdle)
     }
 
     fun renderIdle() {
         views.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)
         views.voicePlaybackControlButton.contentDescription = resources.getString(R.string.a11y_play_voice_message)
+        views.voicePlaybackWaveform.summarize()
     }
 
     fun renderToast(message: String) {
@@ -327,8 +332,9 @@ class VoiceMessageViews(
 
     fun renderRecordingWaveform(amplitudeList: Array<Int>) {
         views.voicePlaybackWaveform.doOnLayout { waveFormView ->
+            val waveformColor = ThemeUtils.getColor(waveFormView.context, R.attr.vctr_content_secondary)
             amplitudeList.iterator().forEach {
-                (waveFormView as AudioRecordView).update(it)
+                (waveFormView as AudioWaveformView).add(AudioWaveformView.FFT(it.toFloat(), waveformColor))
             }
         }
     }
