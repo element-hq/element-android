@@ -32,6 +32,7 @@ data class OnboardingViewState(
         val asyncResetPassword: Async<Unit> = Uninitialized,
         val asyncResetMailConfirmed: Async<Unit> = Uninitialized,
         val asyncRegistration: Async<Unit> = Uninitialized,
+        val asyncDisplayName: Async<Unit> = Uninitialized,
 
         @PersistState
         val onboardingFlow: OnboardingFlow? = null,
@@ -71,7 +72,8 @@ data class OnboardingViewState(
                 asyncHomeServerLoginFlowRequest is Loading ||
                 asyncResetPassword is Loading ||
                 asyncResetMailConfirmed is Loading ||
-                asyncRegistration is Loading
+                asyncRegistration is Loading ||
+                asyncDisplayName is Loading
     }
 
     fun isAuthTaskCompleted(): Boolean {

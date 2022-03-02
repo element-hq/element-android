@@ -231,8 +231,10 @@ class FtueAuthVariant(
             }
             OnboardingViewEvents.OnAccountCreated                              -> onAccountCreated()
             OnboardingViewEvents.OnAccountSignedIn                             -> onAccountSignedIn()
-            OnboardingViewEvents.OnPersonalizeProfile                          -> TODO()
+            OnboardingViewEvents.OnPersonalizeProfile                          -> onPersonalizeProfile()
             OnboardingViewEvents.OnTakeMeHome                                  -> navigateToHome(createdAccount = true)
+            OnboardingViewEvents.OnDisplayNameUpdated                          -> onDisplayNameUpdated()
+            OnboardingViewEvents.OnDisplayNameSkipped                          -> onDisplayNameUpdated()
         }.exhaustive
     }
 
@@ -409,5 +411,17 @@ class FtueAuthVariant(
         val intent = HomeActivity.newIntent(activity, accountCreation = createdAccount)
         activity.startActivity(intent)
         activity.finish()
+    }
+
+    private fun onPersonalizeProfile() {
+        activity.addFragmentToBackstack(views.loginFragmentContainer,
+                FtueAuthChooseDisplayNameFragment::class.java,
+                option = commonOption
+        )
+    }
+
+    private fun onDisplayNameUpdated() {
+        // TODO go to the real profile picture fragment
+        navigateToHome(createdAccount = true)
     }
 }

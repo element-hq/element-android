@@ -157,6 +157,8 @@ class OnboardingViewModel @AssistedInject constructor(
             is OnboardingAction.UserAcceptCertificate      -> handleUserAcceptCertificate(action)
             OnboardingAction.ClearHomeServerHistory        -> handleClearHomeServerHistory()
             is OnboardingAction.PostViewEvent              -> _viewEvents.post(action.viewEvent)
+            is OnboardingAction.UpdateDisplayName          -> updateDisplayName(action.displayName)
+            OnboardingAction.UpdateDisplayNameSkipped      -> _viewEvents.post(OnboardingViewEvents.OnDisplayNameSkipped)
         }.exhaustive
     }
 
@@ -891,6 +893,21 @@ class OnboardingViewModel @AssistedInject constructor(
 
     fun getFallbackUrl(forSignIn: Boolean, deviceId: String?): String? {
         return authenticationService.getFallbackUrl(forSignIn, deviceId)
+    }
+
+    private fun updateDisplayName(displayName: String) {
+        setState { copy(asyncDisplayName = Loading()) }
+        viewModelScope.launch {
+            val activeSession = activeSessionHolder.getActiveSession()
+            try {
+                activeSession.setDisplayName(activeSession.myUserId, displayName)
+                setState { copy(asyncDisplayName = Success(Unit)) }
+                _viewEvents.post(OnboardingViewEvents.OnDisplayNameUpdated)
+            } catch (error: Throwable) {
+                setState { copy(asyncDisplayName = Fail(error)) }
+                _viewEvents.post(OnboardingViewEvents.Failure(error))
+            }
+        }
     }
 }
 
