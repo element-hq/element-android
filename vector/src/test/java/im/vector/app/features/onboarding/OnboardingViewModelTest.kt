@@ -53,9 +53,11 @@ private const val A_DISPLAY_NAME = "a display name"
 private const val A_PICTURE_FILENAME = "a-picture.png"
 private val AN_ERROR = RuntimeException("an error!")
 private val A_LOADABLE_REGISTER_ACTION = RegisterAction.StartRegistration
+private val A_NON_LOADABLE_REGISTER_ACTION = RegisterAction.CheckIfEmailHasBeenValidated(delayMillis = -1L)
 private val A_RESULT_IGNORED_REGISTER_ACTION = RegisterAction.AddThreePid(RegisterThreePid.Email("an email"))
 private val A_HOMESERVER_CAPABILITIES = aHomeServerCapabilities(canChangeDisplayName = true, canChangeAvatar = true)
 private val AN_IGNORED_FLOW_RESULT = FlowResult(missingStages = emptyList(), completedStages = emptyList())
+private val ANY_CONTINUING_REGISTRATION_RESULT = RegistrationResult.FlowResponse(AN_IGNORED_FLOW_RESULT)
 
 class OnboardingViewModelTest {
 
@@ -118,8 +120,7 @@ class OnboardingViewModelTest {
     @Test
     fun `given register action requires more steps, when handling action, then posts next steps`() = runBlockingTest {
         val test = viewModel.test(this)
-        val flowResult = FlowResult(missingStages = listOf(Stage.Email(true)), completedStages = listOf(Stage.Email(true)))
-        givenRegistrationResultFor(A_LOADABLE_REGISTER_ACTION, RegistrationResult.FlowResponse(flowResult))
+        givenRegistrationResultFor(A_LOADABLE_REGISTER_ACTION, ANY_CONTINUING_REGISTRATION_RESULT)
 
         viewModel.handle(OnboardingAction.PostRegisterAction(A_LOADABLE_REGISTER_ACTION))
 
@@ -129,7 +130,20 @@ class OnboardingViewModelTest {
                         { copy(asyncRegistration = Loading()) },
                         { copy(asyncRegistration = Uninitialized) }
                 )
-                .assertEvents(OnboardingViewEvents.RegistrationFlowResult(flowResult, isRegistrationStarted = true))
+                .assertEvents(OnboardingViewEvents.RegistrationFlowResult(ANY_CONTINUING_REGISTRATION_RESULT.flowResult, isRegistrationStarted = true))
+                .finish()
+    }
+
+    @Test
+    fun `given register action is non loadable, when handling action, then posts next steps without loading`() = runBlockingTest {
+        val test = viewModel.test(this)
+        givenRegistrationResultFor(A_NON_LOADABLE_REGISTER_ACTION, ANY_CONTINUING_REGISTRATION_RESULT)
+
+        viewModel.handle(OnboardingAction.PostRegisterAction(A_NON_LOADABLE_REGISTER_ACTION))
+
+        test
+                .assertState(initialState)
+                .assertEvents(OnboardingViewEvents.RegistrationFlowResult(ANY_CONTINUING_REGISTRATION_RESULT.flowResult, isRegistrationStarted = true))
                 .finish()
     }
 
