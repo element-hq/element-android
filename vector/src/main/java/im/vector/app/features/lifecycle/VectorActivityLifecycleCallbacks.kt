@@ -61,7 +61,24 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
         // restart the app if the task contains an unknown activity
         coroutineScope.launch {
-            if (isTaskCorrupted(activity)) {
+            val isTaskCorrupted = try {
+                isTaskCorrupted(activity)
+            } catch (failure: Throwable) {
+                when (failure) {
+                    // The task was not found. We can ignore it.
+                    is IllegalArgumentException             -> {
+                        Timber.e("The task was not found: ${failure.localizedMessage}")
+                        false
+                    }
+                    is PackageManager.NameNotFoundException -> {
+                        Timber.e("Package manager error: ${failure.localizedMessage}")
+                        true
+                    }
+                    else                                    -> throw failure
+                }
+            }
+
+            if (isTaskCorrupted) {
                 Timber.e("Application is potentially corrupted by an unknown activity")
                 MainActivity.restartApp(activity, MainActivityArgs())
                 return@launch
@@ -80,49 +97,38 @@ class VectorActivityLifecycleCallbacks constructor(private val popupAlertManager
         val context = activity.applicationContext
         val packageManager: PackageManager = context.packageManager
 
-        try {
-            // Get all activities from app manifest
-            if (activitiesInfo.isEmpty()) {
-                activitiesInfo = packageManager.getPackageInfo(context.packageName, PackageManager.GET_ACTIVITIES).activities
-            }
+        // Get all activities from app manifest
+        if (activitiesInfo.isEmpty()) {
+            activitiesInfo = packageManager.getPackageInfo(context.packageName, PackageManager.GET_ACTIVITIES).activities
+        }
 
-            // Get all running activities on app task
-            // and compare to activities declared in manifest
-            val manager = context.getSystemService<ActivityManager>() ?: return@withContext false
+        // Get all running activities on app task
+        // and compare to activities declared in manifest
+        val manager = context.getSystemService<ActivityManager>() ?: return@withContext false
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                // Android lint may return an error on topActivity field.
-                // This field was added in ActivityManager.RecentTaskInfo class since Android M (API level 23)
-                // and it is inherited from TaskInfo since Android Q (API level 29).
-                // API 23 changes : https://developer.android.com/sdk/api_diff/23/changes/android.app.ActivityManager.RecentTaskInfo
-                // API 29 changes : https://developer.android.com/sdk/api_diff/29/changes/android.app.ActivityManager.RecentTaskInfo
-                try {
-                    manager.appTasks.any { appTask ->
-                        appTask.taskInfo.topActivity?.let { isPotentialMaliciousActivity(it) } ?: false
-                    }
-                } catch (e: IllegalArgumentException) {
-                    // The task was not found. We can ignore it.
-                    Timber.e("The task was not found: ${e.localizedMessage}")
-                    false
-                }
-            } else {
-                // Android lint may return an error on topActivity field.
-                // This was present in ActivityManager.RunningTaskInfo class since API level 1!
-                // and it is inherited from TaskInfo since Android Q (API level 29).
-                // API 29 changes : https://developer.android.com/sdk/api_diff/29/changes/android.app.ActivityManager.RunningTaskInfo
-                manager.getRunningTasks(10).any { runningTaskInfo ->
-                    runningTaskInfo.topActivity?.let {
-                        // Check whether the activity task affinity matches with app task affinity.
-                        // The activity is considered safe when its task affinity doesn't correspond to app task affinity.
-                        if (packageManager.getActivityInfo(it, 0).taskAffinity == context.applicationInfo.taskAffinity) {
-                            isPotentialMaliciousActivity(it)
-                        } else false
-                    } ?: false
-                }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Android lint may return an error on topActivity field.
+            // This field was added in ActivityManager.RecentTaskInfo class since Android M (API level 23)
+            // and it is inherited from TaskInfo since Android Q (API level 29).
+            // API 23 changes : https://developer.android.com/sdk/api_diff/23/changes/android.app.ActivityManager.RecentTaskInfo
+            // API 29 changes : https://developer.android.com/sdk/api_diff/29/changes/android.app.ActivityManager.RecentTaskInfo
+            manager.appTasks.any { appTask ->
+                appTask.taskInfo.topActivity?.let { isPotentialMaliciousActivity(it) } ?: false
             }
-        } catch (e: PackageManager.NameNotFoundException) {
-            Timber.e("Error ${e.message}")
-            true
+        } else {
+            // Android lint may return an error on topActivity field.
+            // This was present in ActivityManager.RunningTaskInfo class since API level 1!
+            // and it is inherited from TaskInfo since Android Q (API level 29).
+            // API 29 changes : https://developer.android.com/sdk/api_diff/29/changes/android.app.ActivityManager.RunningTaskInfo
+            manager.getRunningTasks(10).any { runningTaskInfo ->
+                runningTaskInfo.topActivity?.let {
+                    // Check whether the activity task affinity matches with app task affinity.
+                    // The activity is considered safe when its task affinity doesn't correspond to app task affinity.
+                    if (packageManager.getActivityInfo(it, 0).taskAffinity == context.applicationInfo.taskAffinity) {
+                        isPotentialMaliciousActivity(it)
+                    } else false
+                } ?: false
+            }
         }
     }
 
