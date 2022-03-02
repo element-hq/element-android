@@ -60,7 +60,7 @@ data class MainActivityArgs(
         val clearCredentials: Boolean = false,
         val isUserLoggedOut: Boolean = false,
         val isAccountDeactivated: Boolean = false,
-        val isSoftLogout: Boolean = false
+        val isSoftLogout: Boolean = true
 ) : Parcelable
 
 /**
@@ -135,7 +135,7 @@ class MainActivity : VectorBaseActivity<ActivityMainBinding>(), UnlockedActivity
                 clearCredentials = argsFromIntent?.clearCredentials ?: false,
                 isUserLoggedOut = argsFromIntent?.isUserLoggedOut ?: false,
                 isAccountDeactivated = argsFromIntent?.isAccountDeactivated ?: false,
-                isSoftLogout = argsFromIntent?.isSoftLogout ?: false
+                isSoftLogout = argsFromIntent?.isSoftLogout ?: true
         )
     }
 
