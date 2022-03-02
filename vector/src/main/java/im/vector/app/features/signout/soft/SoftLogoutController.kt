@@ -34,6 +34,7 @@ import im.vector.app.features.signout.soft.epoxy.loginRedButtonItem
 import im.vector.app.features.signout.soft.epoxy.loginTextItem
 import im.vector.app.features.signout.soft.epoxy.loginTitleItem
 import im.vector.app.features.signout.soft.epoxy.loginTitleSmallItem
+import timber.log.Timber
 import javax.inject.Inject
 
 class SoftLogoutController @Inject constructor(
@@ -102,6 +103,8 @@ class SoftLogoutController @Inject constructor(
                 }
             }
             is Success    -> {
+                val loginMode = state.asyncHomeServerLoginFlowRequest.invoke()
+                Timber.i("Login Mode: $loginMode")
                 when (state.asyncHomeServerLoginFlowRequest.invoke()) {
                     LoginMode.Password          -> {
                         loginPasswordFormItem {
@@ -123,6 +126,11 @@ class SoftLogoutController @Inject constructor(
                         }
                     }
                     is LoginMode.SsoAndPassword -> {
+                        loginCenterButtonItem {
+                            id("sso")
+                            text(host.stringProvider.getString(R.string.login_signin_sso))
+                            listener { host.listener?.signinFallbackSubmit() }
+                        }
                     }
                     LoginMode.Unsupported       -> {
                         loginCenterButtonItem {
