@@ -27,6 +27,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.SwitchPreference
@@ -41,6 +42,7 @@ import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.preference.UserAvatarPreference
+import im.vector.app.core.preference.VectorEditTextPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.core.resources.ColorProvider
@@ -48,7 +50,6 @@ import im.vector.app.core.utils.TextUtils
 import im.vector.app.core.utils.getSizeOfFiles
 import im.vector.app.core.utils.toast
 import im.vector.app.databinding.DialogChangePasswordBinding
-import im.vector.app.databinding.DialogPreferenceEditTextBinding
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
 import im.vector.app.features.discovery.DiscoverySettingsFragment
@@ -87,7 +88,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
         findPreference<UserAvatarPreference>(VectorPreferences.SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY)!!
     }
     private val mDisplayNamePreference by lazy {
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY)!!
+        findPreference<VectorEditTextPreference>(VectorPreferences.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY)!!
     }
     private val mPasswordPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)!!
@@ -139,7 +140,12 @@ class VectorSettingsGeneralFragment @Inject constructor(
                 .unwrap()
                 .map { it.displayName ?: "" }
                 .distinctUntilChanged()
-                .onEach { displayName -> mDisplayNamePreference.summary = displayName }
+                .onEach { displayName ->
+                    mDisplayNamePreference.let {
+                        it.summary = displayName
+                        it.text = displayName
+                    }
+                }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
@@ -153,9 +159,13 @@ class VectorSettingsGeneralFragment @Inject constructor(
         }
 
         // Display name
-        mDisplayNamePreference.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            showChangeDisplayNameDialog()
-            false
+        mDisplayNamePreference.let {
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                newValue
+                        ?.let { value -> (value as? String)?.trim() }
+                        ?.let { value -> onDisplayNameChanged(value) }
+                false
+            }
         }
 
         // Password
@@ -268,22 +278,6 @@ class VectorSettingsGeneralFragment @Inject constructor(
 
             false
         }
-    }
-
-    private fun showChangeDisplayNameDialog() = activity?.let { activity ->
-        val view: ViewGroup = activity.layoutInflater.inflate(R.layout.dialog_preference_edit_text, null) as ViewGroup
-        val views = DialogPreferenceEditTextBinding.bind(view)
-        val editText = views.edit
-        editText.setText(mDisplayNamePreference.summary)
-        MaterialAlertDialogBuilder(activity, R.style.ThemeOverlay_Vector_MaterialAlertDialog)
-                .setTitle(R.string.settings_display_name)
-                .setView(view)
-                .setPositiveButton(R.string.ok) { _, _ -> onDisplayNameChanged(editText.text.toString().trim()) }
-                .setNegativeButton(R.string.action_cancel, null)
-                .setOnDismissListener { view.hideKeyboard() }
-                .create()
-                .show()
-        editText.setSelection(mDisplayNamePreference.summary.lastIndex)
     }
 
     override fun onResume() {
@@ -474,6 +468,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                         {
                             // refresh the settings value
                             mDisplayNamePreference.summary = value
+                            mDisplayNamePreference.text = value
                             onCommonDone(null)
                         },
                         {

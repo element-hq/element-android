@@ -11,7 +11,7 @@
             android:key="SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY"
             android:title="@string/settings_profile_picture" />
 
-        <im.vector.app.core.preference.VectorPreference
+        <im.vector.app.core.preference.VectorEditTextPreference
             android:key="SETTINGS_DISPLAY_NAME_PREFERENCE_KEY"
             android:persistent="false"
             android:title="@string/settings_display_name" />

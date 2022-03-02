@@ -22,8 +22,6 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Parcelable
-import android.text.InputType
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.distinctUntilChanged
@@ -31,11 +29,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.map
 import androidx.preference.Preference
 import androidx.preference.SwitchPreference
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.di.ActiveSessionHolder
-import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.registerStartForActivityResult
+import im.vector.app.core.preference.VectorEditTextPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorPreferenceCategory
 import im.vector.app.core.preference.VectorSwitchPreference
@@ -43,7 +40,6 @@ import im.vector.app.core.pushers.PushersManager
 import im.vector.app.core.services.GuardServiceStarter
 import im.vector.app.core.utils.isIgnoringBatteryOptimizations
 import im.vector.app.core.utils.requestDisablingBatteryOptimization
-import im.vector.app.databinding.DialogPreferenceEditTextBinding
 import im.vector.app.features.notifications.NotificationUtils
 import im.vector.app.features.settings.BackgroundSyncMode
 import im.vector.app.features.settings.BackgroundSyncModeChooserDialog
@@ -119,56 +115,36 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
             }
         }
 
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY)?.let {
-            // it.isEnabled = vectorPreferences.isBackgroundSyncEnabled() TODO: Revert
-            it.isEnabled = true
+        findPreference<VectorEditTextPreference>(VectorPreferences.SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY)?.let {
+            it.isEnabled = vectorPreferences.isBackgroundSyncEnabled()
             it.summary = secondsToText(vectorPreferences.backgroundSyncTimeOut())
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ -> it.showEditTextPrefDialog(::onSetSyncTimeoutChanged) }
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                if (newValue is String) {
+                    val syncTimeout = tryOrNull { Integer.parseInt(newValue) } ?: BackgroundSyncMode.DEFAULT_SYNC_TIMEOUT_SECONDS
+                    vectorPreferences.setBackgroundSyncTimeout(maxOf(0, syncTimeout))
+                    refreshBackgroundSyncPrefs()
+                }
+                true
+            }
         }
 
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY)?.let {
-            // it.isEnabled = vectorPreferences.isBackgroundSyncEnabled() TODO: Revert
-            it.isEnabled = true
+        findPreference<VectorEditTextPreference>(VectorPreferences.SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY)?.let {
+            it.isEnabled = vectorPreferences.isBackgroundSyncEnabled()
             it.summary = secondsToText(vectorPreferences.backgroundSyncDelay())
-            it.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ -> it.showEditTextPrefDialog(::onSetSyncDelayChanged) }
+            it.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+                if (newValue is String) {
+                    val syncDelay = tryOrNull { Integer.parseInt(newValue) } ?: BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS
+                    vectorPreferences.setBackgroundSyncDelay(maxOf(0, syncDelay))
+                    refreshBackgroundSyncPrefs()
+                }
+                true
+            }
         }
 
         bindEmailNotifications()
         refreshBackgroundSyncPrefs()
 
         handleSystemPreference()
-    }
-
-    private fun Preference.showEditTextPrefDialog(onChanged: (String) -> Unit): Boolean {
-        activity?.let { activity ->
-            val view: ViewGroup = activity.layoutInflater.inflate(R.layout.dialog_preference_edit_text, null) as ViewGroup
-            val views = DialogPreferenceEditTextBinding.bind(view)
-            val editText = views.edit
-            editText.inputType = InputType.TYPE_NUMBER_FLAG_DECIMAL
-            editText.setText(summary)
-            MaterialAlertDialogBuilder(activity, R.style.ThemeOverlay_Vector_MaterialAlertDialog)
-                    .setTitle(R.string.settings_display_name)
-                    .setView(view)
-                    .setPositiveButton(R.string.ok) { _, _ -> onChanged(editText.text.toString().trim()) }
-                    .setNegativeButton(R.string.action_cancel, null)
-                    .setOnDismissListener { view.hideKeyboard() }
-                    .create()
-                    .show()
-            editText.setSelection(summary.lastIndex)
-        }
-        return true
-    }
-
-    private fun onSetSyncTimeoutChanged(syncDelay: String) {
-        val syncTimeout = tryOrNull { Integer.parseInt(syncDelay) } ?: BackgroundSyncMode.DEFAULT_SYNC_TIMEOUT_SECONDS
-        vectorPreferences.setBackgroundSyncTimeout(maxOf(0, syncTimeout))
-        refreshBackgroundSyncPrefs()
-    }
-
-    private fun onSetSyncDelayChanged(syncTimeout: String) {
-        val syncDelay = tryOrNull { Integer.parseInt(syncTimeout) } ?: BackgroundSyncMode.DEFAULT_SYNC_DELAY_SECONDS
-        vectorPreferences.setBackgroundSyncDelay(maxOf(0, syncDelay))
-        refreshBackgroundSyncPrefs()
     }
 
     private fun bindEmailNotifications() {
@@ -243,14 +219,12 @@ class VectorSettingsNotificationPreferenceFragment @Inject constructor(
         }
 
         val backgroundSyncEnabled = vectorPreferences.isBackgroundSyncEnabled()
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY)?.let {
-            // it.isEnabled = backgroundSyncEnabled TODO: Revert
-            it.isEnabled = true
+        findPreference<VectorEditTextPreference>(VectorPreferences.SETTINGS_SET_SYNC_TIMEOUT_PREFERENCE_KEY)?.let {
+            it.isEnabled = backgroundSyncEnabled
             it.summary = secondsToText(vectorPreferences.backgroundSyncTimeOut())
         }
-        findPreference<VectorPreference>(VectorPreferences.SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY)?.let {
-            // it.isEnabled = backgroundSyncEnabled TODO: Revert
-            it.isEnabled = true
+        findPreference<VectorEditTextPreference>(VectorPreferences.SETTINGS_SET_SYNC_DELAY_PREFERENCE_KEY)?.let {
+            it.isEnabled = backgroundSyncEnabled
             it.summary = secondsToText(vectorPreferences.backgroundSyncDelay())
         }
         when {
