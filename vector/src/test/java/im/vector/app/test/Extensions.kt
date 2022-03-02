@@ -56,6 +56,10 @@ class ViewModelTest<S, VE>(
     }
 
     fun assertStatesWithPrevious(initial: S, vararg expected: S.() -> S): ViewModelTest<S, VE> {
+        return assertStatesWithPrevious(initial, expected.toList())
+    }
+
+    fun assertStatesWithPrevious(initial: S, expected: List<S.() -> S>): ViewModelTest<S, VE> {
         val reducedExpectedStates = expected.fold(mutableListOf(initial)) { acc, curr ->
             val next = curr.invoke(acc.last())
             acc.add(next)

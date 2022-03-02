@@ -196,7 +196,7 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.UpdateDisplayName(A_DISPLAY_NAME))
 
         test
-                .assertStates(expectedSuccessfulDisplayNameUpdateStates(personalisedInitialState))
+                .assertStatesWithPrevious(personalisedInitialState, expectedSuccessfulDisplayNameUpdateStates())
                 .assertEvents(OnboardingViewEvents.OnChooseProfilePicture)
                 .finish()
         fakeSession.fakeProfileService.verifyUpdatedName(fakeSession.myUserId, A_DISPLAY_NAME)
@@ -211,7 +211,7 @@ class OnboardingViewModelTest {
         viewModel.handle(OnboardingAction.UpdateDisplayName(A_DISPLAY_NAME))
 
         test
-                .assertStates(expectedSuccessfulDisplayNameUpdateStates(personalisedInitialState))
+                .assertStatesWithPrevious(personalisedInitialState, expectedSuccessfulDisplayNameUpdateStates())
                 .assertEvents(OnboardingViewEvents.OnPersonalizationComplete)
                 .finish()
         fakeSession.fakeProfileService.verifyUpdatedName(fakeSession.myUserId, A_DISPLAY_NAME)
@@ -339,14 +339,10 @@ class OnboardingViewModelTest {
             state.copy(asyncProfilePicture = Fail(cause))
     )
 
-    private fun expectedSuccessfulDisplayNameUpdateStates(personalisedInitialState: OnboardingViewState): List<OnboardingViewState> {
+    private fun expectedSuccessfulDisplayNameUpdateStates(): List<OnboardingViewState.() -> OnboardingViewState> {
         return listOf(
-                personalisedInitialState,
-                personalisedInitialState.copy(asyncDisplayName = Loading()),
-                personalisedInitialState.copy(
-                        asyncDisplayName = Success(Unit),
-                        personalizationState = personalisedInitialState.personalizationState.copy(displayName = A_DISPLAY_NAME)
-                )
+                { copy(asyncDisplayName = Loading()) },
+                { copy(asyncDisplayName = Success(Unit), personalizationState = personalizationState.copy(displayName = A_DISPLAY_NAME)) }
         )
     }
 
