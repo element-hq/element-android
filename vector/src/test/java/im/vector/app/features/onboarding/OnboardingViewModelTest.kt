@@ -20,6 +20,7 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.test.MvRxTestRule
+import im.vector.app.features.DefaultVectorOverrides
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeAnalyticsTracker
@@ -110,7 +111,8 @@ class OnboardingViewModelTest {
                 FakeStringProvider().instance,
                 FakeHomeServerHistoryService(),
                 FakeVectorFeatures(),
-                FakeAnalyticsTracker()
+                FakeAnalyticsTracker(),
+                DefaultVectorOverrides(),
         )
     }
 }
