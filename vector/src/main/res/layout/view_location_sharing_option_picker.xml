@@ -16,12 +16,12 @@
         app:icon="@drawable/ic_attachment_location_white"
         app:iconBackground="@drawable/circle"
         app:iconBackgroundTint="?colorPrimary"
-        app:iconDescription="@string/a11y_location_share_icon"
+        app:iconDescription="@string/a11y_location_share_option_pinned_icon"
         app:layout_constraintBottom_toTopOf="@id/locationSharingOptionUserCurrentLocation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/location_share" />
+        app:title="@string/location_share_option_pinned" />
 
     <im.vector.app.features.location.view.LocationSharingOptionView
         android:id="@+id/locationSharingOptionUserCurrentLocation"
@@ -30,12 +30,12 @@
         app:icon="@drawable/ic_attachment_location_white"
         app:iconBackground="@drawable/circle"
         app:iconBackgroundTint="?colorPrimary"
-        app:iconDescription="@string/a11y_location_share_icon"
+        app:iconDescription="@string/a11y_location_share_option_user_current_icon"
         app:layout_constraintBottom_toTopOf="@id/locationSharingOptionUserLiveLocation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/locationSharingOptionPinned"
-        app:title="@string/location_share" />
+        app:title="@string/location_share_option_user_current" />
 
     <im.vector.app.features.location.view.LocationSharingOptionView
         android:id="@+id/locationSharingOptionUserLiveLocation"
@@ -44,12 +44,12 @@
         app:icon="@drawable/ic_attachment_location_live_white"
         app:iconBackground="@drawable/circle"
         app:iconBackgroundTint="?colorPrimary"
-        app:iconDescription="@string/a11y_location_share_icon"
+        app:iconDescription="@string/a11y_location_share_option_user_live_icon"
         app:iconPadding="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/locationSharingOptionUserCurrentLocation"
-        app:title="@string/location_share" />
+        app:title="@string/location_share_option_user_live" />
 
 </merge>
