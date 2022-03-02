@@ -44,6 +44,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.matrix.android.sdk.api.auth.registration.FlowResult
+import org.matrix.android.sdk.api.auth.registration.RegisterThreePid
 import org.matrix.android.sdk.api.auth.registration.RegistrationResult
 import org.matrix.android.sdk.api.auth.registration.Stage
 import org.matrix.android.sdk.api.session.homeserver.HomeServerCapabilities
@@ -52,7 +53,9 @@ private const val A_DISPLAY_NAME = "a display name"
 private const val A_PICTURE_FILENAME = "a-picture.png"
 private val AN_ERROR = RuntimeException("an error!")
 private val A_LOADABLE_REGISTER_ACTION = RegisterAction.StartRegistration
+private val A_RESULT_IGNORED_REGISTER_ACTION = RegisterAction.AddThreePid(RegisterThreePid.Email("an email"))
 private val A_HOMESERVER_CAPABILITIES = aHomeServerCapabilities(canChangeDisplayName = true, canChangeAvatar = true)
+private val AN_IGNORED_FLOW_RESULT = FlowResult(missingStages = emptyList(), completedStages = emptyList())
 
 class OnboardingViewModelTest {
 
@@ -127,6 +130,23 @@ class OnboardingViewModelTest {
                         { copy(asyncRegistration = Uninitialized) }
                 )
                 .assertEvents(OnboardingViewEvents.RegistrationFlowResult(flowResult, isRegistrationStarted = true))
+                .finish()
+    }
+
+    @Test
+    fun `given register action ignores result, when handling action, then does nothing on success`() = runBlockingTest {
+        val test = viewModel.test(this)
+        givenRegistrationResultFor(A_RESULT_IGNORED_REGISTER_ACTION, RegistrationResult.FlowResponse(AN_IGNORED_FLOW_RESULT))
+
+        viewModel.handle(OnboardingAction.PostRegisterAction(A_RESULT_IGNORED_REGISTER_ACTION))
+
+        test
+                .assertStatesWithPrevious(
+                        initialState,
+                        { copy(asyncRegistration = Loading()) },
+                        { copy(asyncRegistration = Uninitialized) }
+                )
+                .assertNoEvents()
                 .finish()
     }
 
