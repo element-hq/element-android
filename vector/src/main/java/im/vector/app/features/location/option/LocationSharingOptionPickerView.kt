@@ -18,10 +18,13 @@ package im.vector.app.features.location.option
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import im.vector.app.R
 import im.vector.app.databinding.ViewLocationSharingOptionPickerBinding
 
 /**
@@ -51,6 +54,10 @@ class LocationSharingOptionPickerView @JvmOverloads constructor(
             this
     )
 
+    init {
+        applyBackground()
+    }
+
     fun setOptions(vararg options: LocationSharingOption) {
         val optionsNumber = options.toSet().size
         val isPinnedVisible = options.contains(LocationSharingOption.PINNED)
@@ -62,5 +69,18 @@ class LocationSharingOptionPickerView @JvmOverloads constructor(
         optionUserCurrent.isVisible = isUserCurrentVisible
         divider2.isVisible = isUserCurrentVisible && isUserLiveVisible
         optionUserLive.isVisible = isUserLiveVisible
+    }
+
+    private fun applyBackground() {
+        val outValue = TypedValue()
+        context.theme.resolveAttribute(
+                R.attr.colorSurface,
+                outValue,
+                true
+        )
+        binding.root.background = ContextCompat.getDrawable(
+                context,
+                outValue.resourceId
+        )
     }
 }
