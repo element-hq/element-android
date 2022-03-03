@@ -105,6 +105,16 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+def launchTask = getGradle()
+        .getStartParameter()
+        .getTaskRequests()
+        .toString()
+        .toLowerCase()
+
+if (launchTask.contains("codeCoverageReport".toLowerCase())) {
+    apply from: 'coverage.gradle'
+}
+
 apply plugin: 'org.sonarqube'
 
 // To run a sonar analysis:

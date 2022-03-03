@@ -150,6 +150,7 @@ ext.groups = [
                         'org.ec4j.core',
                         'org.glassfish.jaxb',
                         'org.hamcrest',
+                        'org.jacoco',
                         'org.jetbrains',
                         'org.jetbrains.intellij.deps',
                         'org.jetbrains.kotlin',
