@@ -14,20 +14,12 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.auth.db.migration
+package org.matrix.android.sdk.test.fakes.api
 
-import org.junit.Test
-import org.matrix.android.sdk.test.fakes.internal.auth.db.migration.Fake005MigrationRealm
+import io.mockk.mockk
+import org.matrix.android.sdk.api.session.Session
 
-class MigrateAuthTo005Test {
+class FakeSession {
 
-    private val fakeRealm = Fake005MigrationRealm()
-    private val migrator = MigrateAuthTo005(fakeRealm.instance)
-
-    @Test
-    fun `when doMigrate, then LoginType field added`() {
-        migrator.doMigrate(fakeRealm.instance)
-
-        fakeRealm.verifyLoginTypeAdded()
-    }
+    val instance: Session = mockk()
 }

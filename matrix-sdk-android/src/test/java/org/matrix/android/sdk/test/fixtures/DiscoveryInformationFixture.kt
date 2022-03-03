@@ -14,20 +14,17 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.auth.db.migration
+package org.matrix.android.sdk.test.fixtures
 
-import org.junit.Test
-import org.matrix.android.sdk.test.fakes.internal.auth.db.migration.Fake005MigrationRealm
+import org.matrix.android.sdk.api.auth.data.DiscoveryInformation
+import org.matrix.android.sdk.api.auth.data.WellKnownBaseConfig
 
-class MigrateAuthTo005Test {
-
-    private val fakeRealm = Fake005MigrationRealm()
-    private val migrator = MigrateAuthTo005(fakeRealm.instance)
-
-    @Test
-    fun `when doMigrate, then LoginType field added`() {
-        migrator.doMigrate(fakeRealm.instance)
-
-        fakeRealm.verifyLoginTypeAdded()
-    }
+object DiscoveryInformationFixture {
+    fun aDiscoveryInformation(
+            homeServer: WellKnownBaseConfig? = null,
+            identityServer: WellKnownBaseConfig? = null,
+    ) = DiscoveryInformation(
+            homeServer,
+            identityServer
+    )
 }

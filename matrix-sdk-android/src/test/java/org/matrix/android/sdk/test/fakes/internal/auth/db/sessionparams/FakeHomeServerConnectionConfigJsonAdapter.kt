@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.test.fakes.auth.db.sessionparams
+package org.matrix.android.sdk.test.fakes.internal.auth.db.sessionparams
 
 import com.squareup.moshi.JsonAdapter
 import io.mockk.every
 import io.mockk.mockk
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
-import org.matrix.android.sdk.test.fakes.auth.db.sessionparams.FakeSessionParamsMapperMoshi.Companion.sessionParams
-import org.matrix.android.sdk.test.fakes.auth.db.sessionparams.FakeSessionParamsMapperMoshi.Companion.sessionParamsEntity
+import org.matrix.android.sdk.test.fakes.internal.auth.db.sessionparams.FakeSessionParamsMapperMoshi.Companion.sessionParams
+import org.matrix.android.sdk.test.fakes.internal.auth.db.sessionparams.FakeSessionParamsMapperMoshi.Companion.sessionParamsEntity
 
 internal class FakeHomeServerConnectionConfigJsonAdapter {
 

@@ -1,0 +1,72 @@
+/*
+ * Copyright (c) 2022 New Vector Ltd
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.matrix.android.sdk.internal.auth
+
+import android.net.Uri
+import org.amshove.kluent.shouldBeEqualTo
+import org.matrix.android.sdk.api.auth.data.DiscoveryInformation
+import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
+import org.matrix.android.sdk.api.auth.data.SessionParams
+import org.matrix.android.sdk.internal.auth.login.LoginType
+import org.matrix.android.sdk.test.fixtures.CredentialsFixture
+import org.matrix.android.sdk.test.fixtures.DiscoveryInformationFixture
+import org.matrix.android.sdk.test.fixtures.WellKnownBaseConfigFixture
+
+abstract class DefaultSessionParamsCreatorTestBase {
+
+    protected val discoveryWithHomeServer = DiscoveryInformationFixture.aDiscoveryInformation(homeServer = WellKnownBaseConfigFixture.aWellKnownBaseConfig("http://homeserver_url/"))
+    private val discoveryWithIdentityServer = DiscoveryInformationFixture.aDiscoveryInformation(identityServer = WellKnownBaseConfigFixture.aWellKnownBaseConfig("http://identity_server_url/"))
+    protected val credentials = CredentialsFixture.aCredentials()
+    protected val credentialsWithHomeServer = CredentialsFixture.aCredentials(discoveryInformation = discoveryWithHomeServer)
+    protected val credentialsWithIdentityServer = CredentialsFixture.aCredentials(discoveryInformation = discoveryWithIdentityServer)
+    protected val homeServerConnectionConfig = HomeServerConnectionConfig.Builder().build()
+
+    protected fun assertExpectedSessionParams(sessionParams: SessionParams) {
+        sessionParams shouldBeEqualTo SessionParams(
+                credentials = credentials,
+                homeServerConnectionConfig = homeServerConnectionConfig,
+                isTokenValid = true,
+                loginType = LoginType.UNKNOWN,
+        )
+    }
+
+    protected fun assertExpectedSessionParamsWithHomeServer(sessionParams: SessionParams) {
+        sessionParams shouldBeEqualTo SessionParams(
+                credentials = credentialsWithHomeServer,
+                homeServerConnectionConfig = homeServerConnectionConfig.copy(homeServerUriBase = discoveryWithHomeServer.getHomeServerUri()),
+                isTokenValid = true,
+                loginType = LoginType.UNKNOWN,
+        )
+    }
+
+    protected fun assertExpectedSessionParamsWithIdentityServer(sessionParams: SessionParams) {
+        sessionParams shouldBeEqualTo SessionParams(
+                credentials = credentialsWithHomeServer,
+                homeServerConnectionConfig = homeServerConnectionConfig.copy(identityServerUri = discoveryWithIdentityServer.getIdentityServerUri()),
+                isTokenValid = true,
+                loginType = LoginType.UNKNOWN,
+        )
+    }
+
+    private fun DiscoveryInformation.getIdentityServerUri() = identityServer?.baseURL?.convertToUri()!!
+
+    protected fun DiscoveryInformation.getHomeServerUri() = homeServer?.baseURL?.convertToUri()!!
+
+    private fun String.convertToUri() = trim { it == '/' }
+            .takeIf { it.isNotBlank() }
+            .let { Uri.parse(it) }
+}

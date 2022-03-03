@@ -17,11 +17,11 @@
 package org.matrix.android.sdk.internal.auth.db
 
 import org.junit.Test
-import org.matrix.android.sdk.test.fakes.auth.db.sessionparams.FakeSessionParamsMapperMoshi
-import org.matrix.android.sdk.test.fakes.auth.db.sessionparams.FakeSessionParamsMapperMoshi.Companion.nullSessionParams
-import org.matrix.android.sdk.test.fakes.auth.db.sessionparams.FakeSessionParamsMapperMoshi.Companion.nullSessionParamsEntity
-import org.matrix.android.sdk.test.fakes.auth.db.sessionparams.FakeSessionParamsMapperMoshi.Companion.sessionParams
-import org.matrix.android.sdk.test.fakes.auth.db.sessionparams.FakeSessionParamsMapperMoshi.Companion.sessionParamsEntity
+import org.matrix.android.sdk.test.fakes.internal.auth.db.sessionparams.FakeSessionParamsMapperMoshi
+import org.matrix.android.sdk.test.fakes.internal.auth.db.sessionparams.FakeSessionParamsMapperMoshi.Companion.nullSessionParams
+import org.matrix.android.sdk.test.fakes.internal.auth.db.sessionparams.FakeSessionParamsMapperMoshi.Companion.nullSessionParamsEntity
+import org.matrix.android.sdk.test.fakes.internal.auth.db.sessionparams.FakeSessionParamsMapperMoshi.Companion.sessionParams
+import org.matrix.android.sdk.test.fakes.internal.auth.db.sessionparams.FakeSessionParamsMapperMoshi.Companion.sessionParamsEntity
 
 class SessionParamsMapperTest {
 

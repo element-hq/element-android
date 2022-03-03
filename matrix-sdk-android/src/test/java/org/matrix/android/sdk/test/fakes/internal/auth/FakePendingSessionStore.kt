@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.internal.auth.db.migration
+package org.matrix.android.sdk.test.fakes.internal.auth
 
-import org.junit.Test
-import org.matrix.android.sdk.test.fakes.internal.auth.db.migration.Fake005MigrationRealm
+import io.mockk.coJustRun
+import io.mockk.coVerify
+import io.mockk.mockk
+import org.matrix.android.sdk.internal.auth.PendingSessionStore
 
-class MigrateAuthTo005Test {
+internal class FakePendingSessionStore {
 
-    private val fakeRealm = Fake005MigrationRealm()
-    private val migrator = MigrateAuthTo005(fakeRealm.instance)
+    val instance: PendingSessionStore = mockk()
 
-    @Test
-    fun `when doMigrate, then LoginType field added`() {
-        migrator.doMigrate(fakeRealm.instance)
+    init {
+        coJustRun { instance.delete() }
+    }
 
-        fakeRealm.verifyLoginTypeAdded()
+    fun verifyPendingSessionDataCleared() {
+        coVerify { instance.delete() }
     }
 }
