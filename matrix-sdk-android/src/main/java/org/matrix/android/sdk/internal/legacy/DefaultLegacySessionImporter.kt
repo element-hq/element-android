@@ -27,6 +27,7 @@ import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.auth.data.WellKnownBaseConfig
 import org.matrix.android.sdk.api.legacy.LegacySessionImporter
 import org.matrix.android.sdk.internal.auth.SessionParamsStore
+import org.matrix.android.sdk.internal.auth.login.LoginType
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreMigration
 import org.matrix.android.sdk.internal.crypto.store.db.RealmCryptoStoreModule
 import org.matrix.android.sdk.internal.database.RealmKeysUtils
@@ -145,7 +146,8 @@ internal class DefaultLegacySessionImporter @Inject constructor(
                         forceUsageTlsVersions = legacyConfig.forceUsageOfTlsVersions()
                 ),
                 // If token is not valid, this boolean will be updated later
-                isTokenValid = true
+                isTokenValid = true,
+                loginType = LoginType.UNKNOWN,
         )
 
         Timber.d("Migration: save session")
