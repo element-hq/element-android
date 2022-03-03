@@ -10,16 +10,16 @@
         android:id="@+id/locationSharingOptionPinned"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:icon="@drawable/ic_attachment_location_white"
-        app:iconPadding="11dp"
-        app:iconBackground="@drawable/circle"
-        app:iconBackgroundTint="?colorPrimary"
-        app:iconDescription="@string/a11y_location_share_option_pinned_icon"
         app:layout_constraintBottom_toTopOf="@id/locationSharingOptionUserCurrent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/location_share_option_pinned" />
+        app:locShareIcon="@drawable/ic_attachment_location_white"
+        app:locShareIconBackground="@drawable/circle"
+        app:locShareIconBackgroundTint="?colorPrimary"
+        app:locShareIconDescription="@string/a11y_location_share_option_pinned_icon"
+        app:locShareIconPadding="11dp"
+        app:locShareTitle="@string/location_share_option_pinned" />
 
     <View
         android:id="@+id/locationSharingOptionsDivider1"
@@ -36,15 +36,15 @@
         android:id="@+id/locationSharingOptionUserCurrent"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:iconBackground="@drawable/circle"
-        app:iconBackgroundTint="?colorPrimary"
-        app:iconDescription="@string/a11y_location_share_option_user_current_icon"
-        app:iconPadding="3dp"
         app:layout_constraintBottom_toTopOf="@id/locationSharingOptionUserLive"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/locationSharingOptionPinned"
-        app:title="@string/location_share_option_user_current" />
+        app:locShareIconBackground="@drawable/circle"
+        app:locShareIconBackgroundTint="?colorPrimary"
+        app:locShareIconDescription="@string/a11y_location_share_option_user_current_icon"
+        app:locShareIconPadding="3dp"
+        app:locShareTitle="@string/location_share_option_user_current" />
 
     <View
         android:id="@+id/locationSharingOptionsDivider2"
@@ -61,15 +61,15 @@
         android:id="@+id/locationSharingOptionUserLive"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:icon="@drawable/ic_attachment_location_live_white"
-        app:iconBackground="@drawable/circle"
-        app:iconBackgroundTint="?vctr_live_location"
-        app:iconDescription="@string/a11y_location_share_option_user_live_icon"
-        app:iconPadding="3dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/locationSharingOptionUserCurrent"
-        app:title="@string/location_share_option_user_live" />
+        app:locShareIcon="@drawable/ic_attachment_location_live_white"
+        app:locShareIconBackground="@drawable/circle"
+        app:locShareIconBackgroundTint="?vctr_live_location"
+        app:locShareIconDescription="@string/a11y_location_share_option_user_live_icon"
+        app:locShareIconPadding="3dp"
+        app:locShareTitle="@string/location_share_option_user_live" />
 
 </merge>

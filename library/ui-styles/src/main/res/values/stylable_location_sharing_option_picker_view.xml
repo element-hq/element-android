@@ -2,12 +2,12 @@
 <resources>
 
     <declare-styleable name="LocationSharingOptionView">
-        <attr name="icon" format="reference" />
-        <attr name="iconBackground" format="reference" />
-        <attr name="iconBackgroundTint" format="color" />
-        <attr name="iconPadding" format="dimension" />
-        <attr name="iconDescription" format="string" />
-        <attr name="title" format="string" />
+        <attr name="locShareIcon" format="reference" />
+        <attr name="locShareIconBackground" format="reference" />
+        <attr name="locShareIconBackgroundTint" format="color" />
+        <attr name="locShareIconPadding" format="dimension" />
+        <attr name="locShareIconDescription" format="string" />
+        <attr name="locShareTitle" format="string" />
     </declare-styleable>
 
 </resources>

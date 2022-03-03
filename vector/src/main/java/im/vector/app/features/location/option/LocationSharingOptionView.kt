@@ -65,17 +65,17 @@ class LocationSharingOptionView @JvmOverloads constructor(
     }
 
     private fun setIcon(typedArray: TypedArray) {
-        val icon = typedArray.getDrawable(R.styleable.LocationSharingOptionView_icon)
-        val background = typedArray.getDrawable(R.styleable.LocationSharingOptionView_iconBackground)
+        val icon = typedArray.getDrawable(R.styleable.LocationSharingOptionView_locShareIcon)
+        val background = typedArray.getDrawable(R.styleable.LocationSharingOptionView_locShareIconBackground)
         val backgroundTint = typedArray.getColor(
-                R.styleable.LocationSharingOptionView_iconBackgroundTint,
+                R.styleable.LocationSharingOptionView_locShareIconBackgroundTint,
                 ContextCompat.getColor(context, android.R.color.transparent)
         )
         val padding = typedArray.getDimensionPixelOffset(
-                R.styleable.LocationSharingOptionView_iconPadding,
+                R.styleable.LocationSharingOptionView_locShareIconPadding,
                 context.resources.getDimensionPixelOffset(R.dimen.location_sharing_option_default_padding)
         )
-        val description = typedArray.getString(R.styleable.LocationSharingOptionView_iconDescription)
+        val description = typedArray.getString(R.styleable.LocationSharingOptionView_locShareIconDescription)
 
         iconView.setImageDrawable(icon)
         iconView.background = background
@@ -85,7 +85,7 @@ class LocationSharingOptionView @JvmOverloads constructor(
     }
 
     private fun setTitle(typedArray: TypedArray) {
-        val title = typedArray.getString(R.styleable.LocationSharingOptionView_title)
+        val title = typedArray.getString(R.styleable.LocationSharingOptionView_locShareTitle)
         binding.shareLocationOptionTitle.text = title
     }
 }
