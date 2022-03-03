@@ -66,12 +66,9 @@ internal class RealmSendingEventsDataSource(
 
     private fun updateFrozenResults(sendingEvents: RealmList<TimelineEventEntity>?) {
         // Makes sure to close the previous frozen realm
-        // TODO find a better way to avoid thread timeline crash:
-        //  - Make RealmSendingEventsDataSource Singleton
-        //  - Do not initialize RealmSendingEventsDataSource when we are in a thread timeline while
-        //    we already have an instance from the main timeline
-        //  - Close Main timeline before Opening a thread timeline
-        // frozenSendingTimelineEvents?.realm?.close()
+        if (frozenSendingTimelineEvents?.isValid == true) {
+            frozenSendingTimelineEvents?.realm?.close()
+        }
         frozenSendingTimelineEvents = sendingEvents?.freeze()
     }
 
@@ -79,13 +76,15 @@ internal class RealmSendingEventsDataSource(
         val builtSendingEvents = mutableListOf<TimelineEvent>()
         uiEchoManager.getInMemorySendingEvents()
                 .addWithUiEcho(builtSendingEvents)
-        frozenSendingTimelineEvents
-                ?.filter { timelineEvent ->
-                    builtSendingEvents.none { it.eventId == timelineEvent.eventId }
-                }
-                ?.map {
-                    timelineEventMapper.map(it)
-                }?.addWithUiEcho(builtSendingEvents)
+        if (frozenSendingTimelineEvents?.isValid == true) {
+            frozenSendingTimelineEvents
+                    ?.filter { timelineEvent ->
+                        builtSendingEvents.none { it.eventId == timelineEvent.eventId }
+                    }
+                    ?.map {
+                        timelineEventMapper.map(it)
+                    }?.addWithUiEcho(builtSendingEvents)
+        }
 
         return builtSendingEvents
     }
