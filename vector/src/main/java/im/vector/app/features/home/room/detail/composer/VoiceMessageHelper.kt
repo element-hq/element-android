@@ -174,6 +174,14 @@ class VoiceMessageHelper @Inject constructor(
         stopPlaybackTicker()
     }
 
+    fun movePlaybackTo(id: String, toMillisecond: Int, totalDuration: Int) {
+        val percentage = toMillisecond.toFloat() / totalDuration
+        playbackTracker.updateCurrentPlaybackTime(id, toMillisecond, percentage)
+
+        stopPlayback()
+        playbackTracker.pausePlayback(id)
+    }
+
     private fun startRecordingAmplitudes() {
         amplitudeTicker?.stop()
         amplitudeTicker = CountUpTimer(50).apply {

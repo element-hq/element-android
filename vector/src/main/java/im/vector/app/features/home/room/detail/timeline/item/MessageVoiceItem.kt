@@ -19,6 +19,7 @@ package im.vector.app.features.home.room.detail.timeline.item
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.text.format.DateUtils
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
@@ -37,6 +38,11 @@ import im.vector.app.features.voice.AudioWaveformView
 
 @EpoxyModelClass(layout = R.layout.item_timeline_event_base)
 abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
+
+    interface WaveformTouchListener {
+        fun onWaveformTouchedUp(percentage: Float)
+        fun onWaveformMovedTo(percentage: Float)
+    }
 
     @EpoxyAttribute
     var mxcUrl: String = ""
@@ -61,6 +67,9 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
 
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
     var playbackControlButtonClickListener: ClickListener? = null
+
+    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
+    var waveformTouchListener: WaveformTouchListener? = null
 
     @EpoxyAttribute
     lateinit var voiceMessagePlaybackTracker: VoiceMessagePlaybackTracker
@@ -87,6 +96,20 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
                 holder.voicePlaybackWaveform.add(AudioWaveformView.FFT(amplitude.toFloat(), waveformColorIdle))
             }
             holder.voicePlaybackWaveform.summarize()
+
+            holder.voicePlaybackWaveform.setOnTouchListener { view, motionEvent ->
+                when (motionEvent.action) {
+                    MotionEvent.ACTION_UP   -> {
+                        val percentage = getTouchedPositionPercentage(motionEvent, view)
+                        waveformTouchListener?.onWaveformTouchedUp(percentage)
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        val percentage = getTouchedPositionPercentage(motionEvent, view)
+                        waveformTouchListener?.onWaveformMovedTo(percentage)
+                    }
+                }
+                true
+            }
         }
 
         val backgroundTint = if (attributes.informationData.messageLayout is TimelineMessageLayout.Bubble) {
@@ -110,6 +133,8 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
             })
         }
     }
+
+    private fun getTouchedPositionPercentage(motionEvent: MotionEvent, view: View) = motionEvent.x / view.width
 
     private fun renderIdleState(holder: Holder, idleColor: Int, playedColor: Int) {
         holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)

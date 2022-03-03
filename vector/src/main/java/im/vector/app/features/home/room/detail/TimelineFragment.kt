@@ -2051,6 +2051,14 @@ class TimelineFragment @Inject constructor(
         messageComposerViewModel.handle(MessageComposerAction.PlayOrPauseVoicePlayback(eventId, messageAudioContent))
     }
 
+    override fun onVoiceWaveformTouchedUp(eventId: String, messageAudioContent: MessageAudioContent, percentage: Float) {
+        messageComposerViewModel.handle(MessageComposerAction.VoiceWaveformTouchedUp(eventId, messageAudioContent, percentage))
+    }
+
+    override fun onVoiceWaveformMovedTo(eventId: String, messageAudioContent: MessageAudioContent, percentage: Float) {
+        messageComposerViewModel.handle(MessageComposerAction.VoiceWaveformMovedTo(eventId, messageAudioContent, percentage))
+    }
+
     private fun onShareActionClicked(action: EventSharedAction.Share) {
         when (action.messageContent) {
             is MessageTextContent           -> shareText(requireContext(), action.messageContent.body)

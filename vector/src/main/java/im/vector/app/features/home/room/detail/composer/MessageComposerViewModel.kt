@@ -108,7 +108,9 @@ class MessageComposerViewModel @AssistedInject constructor(
             is MessageComposerAction.EndAllVoiceActions             -> handleEndAllVoiceActions(action.deleteRecord)
             is MessageComposerAction.InitializeVoiceRecorder        -> handleInitializeVoiceRecorder(action.attachmentData)
             is MessageComposerAction.OnEntersBackground             -> handleEntersBackground(action.composerText)
-        }
+            is MessageComposerAction.VoiceWaveformTouchedUp         -> handleVoiceWaveformTouchedUp(action)
+            is MessageComposerAction.VoiceWaveformMovedTo           -> handleVoiceWaveformMovedTo(action)
+        }.exhaustive
     }
 
     private fun handleOnVoiceRecordingUiStateChanged(action: MessageComposerAction.OnVoiceRecordingUiStateChanged) = setState {
@@ -859,6 +861,18 @@ class MessageComposerViewModel @AssistedInject constructor(
 
     private fun handlePauseRecordingVoiceMessage() {
         voiceMessageHelper.pauseRecording()
+    }
+
+    private fun handleVoiceWaveformTouchedUp(action: MessageComposerAction.VoiceWaveformTouchedUp) {
+        val duration = (action.messageAudioContent.audioInfo?.duration ?: 0)
+        val toMillisecond = (action.percentage * duration).toInt()
+        voiceMessageHelper.movePlaybackTo(action.eventId, toMillisecond, duration)
+    }
+
+    private fun handleVoiceWaveformMovedTo(action: MessageComposerAction.VoiceWaveformMovedTo) {
+        val duration = (action.messageAudioContent.audioInfo?.duration ?: 0)
+        val toMillisecond = (action.percentage * duration).toInt()
+        voiceMessageHelper.movePlaybackTo(action.eventId, toMillisecond, duration)
     }
 
     private fun handleEntersBackground(composerText: String) {

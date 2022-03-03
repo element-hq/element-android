@@ -138,6 +138,8 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
         fun getPreviewUrlRetriever(): PreviewUrlRetriever
 
         fun onVoiceControlButtonClicked(eventId: String, messageAudioContent: MessageAudioContent)
+        fun onVoiceWaveformTouchedUp(eventId: String, messageAudioContent: MessageAudioContent, percentage: Float)
+        fun onVoiceWaveformMovedTo(eventId: String, messageAudioContent: MessageAudioContent, percentage: Float)
     }
 
     interface ReactionPillCallback {

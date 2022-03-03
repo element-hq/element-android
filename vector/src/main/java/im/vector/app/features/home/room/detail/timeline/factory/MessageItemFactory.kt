@@ -357,11 +357,22 @@ class MessageItemFactory @Inject constructor(
             }
         }
 
+        val waveformTouchListener: MessageVoiceItem.WaveformTouchListener = object : MessageVoiceItem.WaveformTouchListener {
+            override fun onWaveformTouchedUp(percentage: Float) {
+                params.callback?.onVoiceWaveformTouchedUp(informationData.eventId, messageContent, percentage)
+            }
+
+            override fun onWaveformMovedTo(percentage: Float) {
+                params.callback?.onVoiceWaveformMovedTo(informationData.eventId, messageContent, percentage)
+            }
+        }
+
         return MessageVoiceItem_()
                 .attributes(attributes)
                 .duration(messageContent.audioWaveformInfo?.duration ?: 0)
                 .waveform(messageContent.audioWaveformInfo?.waveform?.toFft().orEmpty())
                 .playbackControlButtonClickListener(playbackControlButtonClickListener)
+                .waveformTouchListener(waveformTouchListener)
                 .voiceMessagePlaybackTracker(voiceMessagePlaybackTracker)
                 .izLocalFile(localFilesHelper.isLocalFile(fileUrl))
                 .izDownloaded(session.fileService().isFileInCache(
