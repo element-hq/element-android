@@ -66,7 +66,12 @@ internal class RealmSendingEventsDataSource(
 
     private fun updateFrozenResults(sendingEvents: RealmList<TimelineEventEntity>?) {
         // Makes sure to close the previous frozen realm
-        frozenSendingTimelineEvents?.realm?.close()
+        // TODO find a better way to avoid thread timeline crash:
+        //  - Make RealmSendingEventsDataSource Singleton
+        //  - Do not initialize RealmSendingEventsDataSource when we are in a thread timeline while
+        //    we already have an instance from the main timeline
+        //  - Close Main timeline before Opening a thread timeline
+        // frozenSendingTimelineEvents?.realm?.close()
         frozenSendingTimelineEvents = sendingEvents?.freeze()
     }
 
