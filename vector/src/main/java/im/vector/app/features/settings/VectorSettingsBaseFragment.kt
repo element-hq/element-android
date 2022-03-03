@@ -20,17 +20,35 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.CallSuper
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceFragmentCompat
+import com.airbnb.mvrx.MavericksView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.toast
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.MobileScreen
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.session.Session
+import reactivecircus.flowbinding.android.view.clicks
 import timber.log.Timber
 
-abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat() {
+abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat(), MavericksView {
+    /* ==========================================================================================
+     * Analytics
+     * ========================================================================================== */
+
+    protected var analyticsScreenName: MobileScreen.ScreenName? = null
+
+    protected lateinit var analyticsTracker: AnalyticsTracker
+
+    /* ==========================================================================================
+     * Activity
+     * ========================================================================================== */
 
     val vectorActivity: VectorBaseActivity<*> by lazy {
         activity as VectorBaseActivity<*>
@@ -41,6 +59,16 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat() {
     // members
     protected lateinit var session: Session
     protected lateinit var errorFormatter: ErrorFormatter
+
+    /* ==========================================================================================
+     * Views
+     * ========================================================================================== */
+
+    protected fun View.debouncedClicks(onClicked: () -> Unit) {
+        clicks()
+                .onEach { onClicked() }
+                .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
 
     abstract val preferenceXmlRes: Int
 
@@ -55,11 +83,15 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat() {
         super.onAttach(context)
         session = singletonEntryPoint.activeSessionHolder().getActiveSession()
         errorFormatter = singletonEntryPoint.errorFormatter()
+        analyticsTracker = singletonEntryPoint.analyticsTracker()
     }
 
     override fun onResume() {
         super.onResume()
         Timber.i("onResume Fragment ${javaClass.simpleName}")
+        analyticsScreenName?.let {
+            analyticsTracker.screen(MobileScreen(screenName = it))
+        }
         vectorActivity.supportActionBar?.setTitle(titleRes)
         // find the view from parent activity
         mLoadingView = vectorActivity.findViewById(R.id.vector_settings_spinner_views)
@@ -144,5 +176,9 @@ abstract class VectorSettingsBaseFragment : PreferenceFragmentCompat() {
                 .setMessage(errorMessage)
                 .setPositiveButton(R.string.ok, null)
                 .show()
+    }
+
+    override fun invalidate() {
+        // No op by default
     }
 }

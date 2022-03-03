@@ -18,29 +18,17 @@ package org.matrix.android.sdk.api.session.room.model.message
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import org.matrix.android.sdk.internal.crypto.model.rest.EncryptedFileInfo
 
 @JsonClass(generateAdapter = true)
 data class LocationInfo(
         /**
-         * The URL to the thumbnail of the file. Only present if the thumbnail is unencrypted.
+         * Required. RFC5870 formatted geo uri 'geo:latitude,longitude;uncertainty' like 'geo:40.05,29.24;30' representing this location.
          */
-        @Json(name = "thumbnail_url") val thumbnailUrl: String? = null,
+        @Json(name = "uri") val geoUri: String? = null,
 
         /**
-         * Metadata about the image referred to in thumbnail_url.
+         * Required. A description of the location e.g. 'Big Ben, London, UK', or some kind
+         * of content description for accessibility e.g. 'location attachment'.
          */
-        @Json(name = "thumbnail_info") val thumbnailInfo: ThumbnailInfo? = null,
-
-        /**
-         * Information on the encrypted thumbnail file, as specified in End-to-end encryption. Only present if the thumbnail is encrypted.
-         */
-        @Json(name = "thumbnail_file") val thumbnailFile: EncryptedFileInfo? = null
+        @Json(name = "description") val description: String? = null
 )
-
-/**
- * Get the url of the encrypted thumbnail or of the thumbnail
- */
-fun LocationInfo.getThumbnailUrl(): String? {
-        return thumbnailFile?.url ?: thumbnailUrl
-}

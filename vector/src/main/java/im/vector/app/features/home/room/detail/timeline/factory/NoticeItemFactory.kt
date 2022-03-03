@@ -22,6 +22,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.AvatarSizeProvide
 import im.vector.app.features.home.room.detail.timeline.helper.MessageInformationDataFactory
 import im.vector.app.features.home.room.detail.timeline.item.NoticeItem
 import im.vector.app.features.home.room.detail.timeline.item.NoticeItem_
+import im.vector.lib.core.utils.epoxy.charsequence.EpoxyCharSequence
 import org.matrix.android.sdk.api.extensions.orFalse
 import javax.inject.Inject
 
@@ -37,7 +38,7 @@ class NoticeItemFactory @Inject constructor(private val eventFormatter: NoticeEv
         val attributes = NoticeItem.Attributes(
                 avatarRenderer = avatarRenderer,
                 informationData = informationData,
-                noticeText = formattedText,
+                noticeText = EpoxyCharSequence(formattedText),
                 itemLongClickListener = { view ->
                     params.callback?.onEventLongClicked(informationData, null, view) ?: false
                 },

@@ -43,10 +43,6 @@ class UploadsFileController @Inject constructor(
 
     private var idx = 0
 
-    init {
-        setData(null)
-    }
-
     override fun buildModels(data: RoomUploadsViewState?) {
         data ?: return
         val host = this

@@ -22,11 +22,9 @@ import android.content.Intent
 import androidx.core.view.isVisible
 import com.airbnb.mvrx.Mavericks
 import com.airbnb.mvrx.viewModel
-import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivityWidgetBinding
 import im.vector.app.features.widgets.permissions.RoomWidgetPermissionBottomSheet
@@ -36,11 +34,9 @@ import org.matrix.android.sdk.api.session.events.model.Content
 import java.io.Serializable
 
 @AndroidEntryPoint
-class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
-        ToolbarConfigurable {
+class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>() {
 
     companion object {
-
         private const val WIDGET_FRAGMENT_TAG = "WIDGET_FRAGMENT_TAG"
         private const val WIDGET_PERMISSION_FRAGMENT_TAG = "WIDGET_PERMISSION_FRAGMENT_TAG"
         private const val EXTRA_RESULT = "EXTRA_RESULT"
@@ -56,7 +52,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
             return intent.extras?.getSerializable(EXTRA_RESULT) as? Content
         }
 
-        fun createResultIntent(content: Content): Intent {
+        private fun createResultIntent(content: Content): Intent {
             return Intent().apply {
                 putExtra(EXTRA_RESULT, content as Serializable)
             }
@@ -78,7 +74,8 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
             finish()
             return
         }
-        configure(views.toolbar)
+        setupToolbar(views.toolbar)
+                .allowBack()
         views.toolbar.isVisible = widgetArgs.kind.nameRes != 0
         viewModel.observeViewEvents {
             when (it) {
@@ -108,7 +105,7 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
                 }
                 WidgetStatus.WIDGET_ALLOWED     -> {
                     if (supportFragmentManager.findFragmentByTag(WIDGET_FRAGMENT_TAG) == null) {
-                        addFragment(R.id.fragmentContainer, WidgetFragment::class.java, widgetArgs, WIDGET_FRAGMENT_TAG)
+                        addFragment(views.fragmentContainer, WidgetFragment::class.java, widgetArgs, WIDGET_FRAGMENT_TAG)
                     }
                 }
             }
@@ -129,9 +126,5 @@ class WidgetActivity : VectorBaseActivity<ActivityWidgetBinding>(),
             setResult(Activity.RESULT_OK, intent)
         }
         finish()
-    }
-
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
     }
 }

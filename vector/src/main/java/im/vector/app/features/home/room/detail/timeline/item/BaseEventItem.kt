@@ -26,7 +26,6 @@ import im.vector.app.R
 import im.vector.app.core.epoxy.VectorEpoxyHolder
 import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.platform.CheckableView
-import im.vector.app.core.utils.DimensionConverter
 
 /**
  * Children must override getViewType()
@@ -40,24 +39,24 @@ abstract class BaseEventItem<H : BaseEventItem.BaseHolder> : VectorEpoxyModel<H>
     @EpoxyAttribute
     open var leftGuideline: Int = 0
 
-    @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash)
-    lateinit var dimensionConverter: DimensionConverter
+    final override fun getViewType(): Int {
+        // This makes sure we have a unique integer for the combination of layout and ViewStubId.
+        val pairingResult = pairingFunction(layout.toLong(), getViewStubId().toLong())
+        return (pairingResult - Int.MAX_VALUE).toInt()
+    }
 
-    protected var ignoreSendStatusVisibility = false
+    abstract fun getViewStubId(): Int
+
+    // Szudzik function
+    private fun pairingFunction(a: Long, b: Long): Long {
+        return if (a >= b) a * a + a + b else a + b * b
+    }
 
     @CallSuper
     override fun bind(holder: H) {
         super.bind(holder)
         holder.leftGuideline.updateLayoutParams<RelativeLayout.LayoutParams> {
             this.marginStart = leftGuideline
-        }
-        // Ignore visibility of the send status icon?
-        holder.contentContainer.updateLayoutParams<RelativeLayout.LayoutParams> {
-            if (ignoreSendStatusVisibility) {
-                addRule(RelativeLayout.ALIGN_PARENT_END)
-            } else {
-                removeRule(RelativeLayout.ALIGN_PARENT_END)
-            }
         }
         holder.checkableBackground.isChecked = highlighted
     }

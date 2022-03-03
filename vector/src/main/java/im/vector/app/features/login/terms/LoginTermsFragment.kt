@@ -73,7 +73,7 @@ class LoginTermsFragment @Inject constructor(
     }
 
     private fun setupViews() {
-        views.loginTermsSubmit.setOnClickListener { submit() }
+        views.loginTermsSubmit.debouncedClicks { submit() }
     }
 
     override fun onDestroyView() {

@@ -78,6 +78,7 @@ import org.matrix.android.sdk.internal.di.DeviceId
 import org.matrix.android.sdk.internal.di.UserId
 import org.matrix.android.sdk.internal.extensions.foldToCallback
 import org.matrix.android.sdk.internal.session.SessionScope
+import org.matrix.android.sdk.internal.session.StreamEventsManager
 import org.matrix.android.sdk.internal.session.room.membership.LoadRoomMembersTask
 import org.matrix.android.sdk.internal.task.TaskExecutor
 import org.matrix.android.sdk.internal.task.TaskThread
@@ -136,13 +137,15 @@ internal class DefaultCryptoService @Inject constructor(
         private val verificationService: RustVerificationService,
         private val keysBackupService: RustKeyBackupService,
         private val megolmSessionImportManager: MegolmSessionImportManager,
-        private val olmMachineProvider: OlmMachineProvider
+        private val olmMachineProvider: OlmMachineProvider,
+        private val liveEventManager: dagger.Lazy<StreamEventsManager>
 ) : CryptoService {
 
     private val isStarting = AtomicBoolean(false)
     private val isStarted = AtomicBoolean(false)
 
     private val olmMachine by lazy { olmMachineProvider.olmMachine }
+
 
     // The verification service.
 //    private var verificationService: RustVerificationService? = null
@@ -155,7 +158,7 @@ internal class DefaultCryptoService @Inject constructor(
     private val roomKeyShareLocks: ConcurrentHashMap<String, Mutex> = ConcurrentHashMap()
 
     fun onStateEvent(roomId: String, event: Event) {
-        when (event.getClearType()) {
+        when (event.type) {
             EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
             EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
             EventType.STATE_ROOM_HISTORY_VISIBILITY -> onRoomHistoryVisibilityEvent(roomId, event)
@@ -163,6 +166,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     fun onLiveEvent(roomId: String, event: Event) {
+        if(event.isStateEvent()){
         when (event.getClearType()) {
             EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
             EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)
@@ -170,6 +174,7 @@ internal class DefaultCryptoService @Inject constructor(
             else                                    -> cryptoCoroutineScope.launch {
                 this@DefaultCryptoService.verificationService.onEvent(event)
             }
+        }
         }
     }
 
@@ -463,12 +468,13 @@ internal class DefaultCryptoService @Inject constructor(
             return false
         }
 
+        // TODO CHECK WITH VALERE
+        cryptoStore.storeRoomAlgorithm(roomId, algorithm)
+
         if (algorithm != MXCRYPTO_ALGORITHM_MEGOLM) {
-            Timber.tag(loggerTag.value).e("## CRYPTO | setEncryptionInRoom() : Unable to encrypt room $roomId with $algorithm")
+            Timber.tag(loggerTag.value).e("## CRYPTO | setEncryptionInRoom() : Unable to encrypt room $roomId with $algorithm")
             return false
         }
-
-        cryptoStore.storeRoomAlgorithm(roomId, algorithm)
 
         // if encryption was not previously enabled in this room, we will have been
         // ignoring new device events for these users so far. We may well have
@@ -668,6 +674,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     private fun onRoomHistoryVisibilityEvent(roomId: String, event: Event) {
+        if (!event.isStateEvent()) return
         val eventContent = event.content.toModel<RoomHistoryVisibilityContent>()
         eventContent?.historyVisibility?.let {
             cryptoStore.setShouldEncryptForInvitedMembers(roomId, it != RoomHistoryVisibility.JOINED)
@@ -718,6 +725,7 @@ internal class DefaultCryptoService @Inject constructor(
                         this.verificationService.onEvent(event)
                     }
                 }
+                liveEventManager.get().dispatchOnLiveToDevice(event)
             }
         }
     }

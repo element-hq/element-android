@@ -41,18 +41,18 @@
 
                     <TextView
                         android:id="@+id/roomPreviewNoPreviewToolbarTitle"
-                        style="@style/Widget.Vector.TextView.HeadlineMedium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:ellipsize="end"
                         android:maxLines="1"
+                        android:textAppearance="@style/TextAppearance.Vector.Widget.ActionBarTitle"
                         android:textColor="?vctr_content_primary"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toEndOf="@+id/spacePreviewToolbarAvatar"
+                        app:layout_constraintStart_toEndOf="@id/spacePreviewToolbarAvatar"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="@sample/users.json/data/displayName" />
 
@@ -82,7 +82,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spacePreviewPeekingProgress"
+            app:layout_constraintTop_toBottomOf="@id/spacePreviewPeekingProgress"
             tools:listitem="@layout/item_space_subspace" />
 
         <View
@@ -106,7 +106,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_weight="1"
-                android:text="@string/decline" />
+                android:text="@string/action_decline" />
 
             <Button
                 android:id="@+id/spacePreviewAcceptInviteButton"
@@ -114,7 +114,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/accept" />
+                android:text="@string/action_accept" />
 
         </LinearLayout>
 

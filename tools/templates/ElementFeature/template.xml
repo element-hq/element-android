@@ -105,8 +105,6 @@
         suggest="${underscoreToCamelCase(classToResource(fragmentClass))}ViewEvents"
 	    default="MainViewEvents"
 	    help="The name of the view events to create" />
-
-
 		
     <parameter
         id="packageName"

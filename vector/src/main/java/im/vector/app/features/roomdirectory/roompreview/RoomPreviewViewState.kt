@@ -33,6 +33,7 @@ data class RoomPreviewViewState(
 
         val roomName: String? = null,
         val roomTopic: String? = null,
+        val numJoinMembers: Int? = null,
         val avatarUrl: String? = null,
 
         val shouldPeekFromServer: Boolean = false,
@@ -56,6 +57,7 @@ data class RoomPreviewViewState(
             homeServers = args.homeServers,
             roomName = args.roomName,
             roomTopic = args.topic,
+            numJoinMembers = args.numJoinedMembers,
             avatarUrl = args.avatarUrl,
             shouldPeekFromServer = args.peekFromServer,
             fromEmailInvite = args.fromEmailInvite,
@@ -64,6 +66,6 @@ data class RoomPreviewViewState(
 
     fun matrixItem(): MatrixItem {
         return if (roomType == RoomType.SPACE) MatrixItem.SpaceItem(roomId, roomName ?: roomAlias, avatarUrl)
-            else MatrixItem.RoomItem(roomId, roomName ?: roomAlias, avatarUrl)
+        else MatrixItem.RoomItem(roomId, roomName ?: roomAlias, avatarUrl)
     }
 }

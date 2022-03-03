@@ -27,6 +27,9 @@ import androidx.test.espresso.IdlingResource
 import androidx.test.espresso.PerformException
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
+import androidx.test.espresso.action.ViewActions
+import androidx.test.espresso.matcher.RootMatchers
+import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.util.HumanReadables
 import androidx.test.espresso.util.TreeIterables
@@ -160,43 +163,53 @@ fun initialSyncIdlingResource(session: Session): IdlingResource {
 }
 
 fun activityIdlingResource(activityClass: Class<*>): IdlingResource {
+    val lifecycleMonitor = ActivityLifecycleMonitorRegistry.getInstance()
+
     val res = object : IdlingResource, ActivityLifecycleCallback {
         private var callback: IdlingResource.ResourceCallback? = null
+        private var resumedActivity: Activity? = null
+        private val uniqTS = System.currentTimeMillis()
 
-        var hasResumed = false
-        private var currentActivity: Activity? = null
-
-        val uniqTS = System.currentTimeMillis()
         override fun getName() = "activityIdlingResource_${activityClass.name}_$uniqTS"
 
         override fun isIdleNow(): Boolean {
-            val currentActivity = currentActivity ?: ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).elementAtOrNull(0)
+            val activity = resumedActivity ?: ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).firstOrNull {
+                activityClass == it.javaClass
+            }
 
-            val isIdle = hasResumed || currentActivity?.javaClass?.let { activityClass.isAssignableFrom(it) } ?: false
-            println("*** [$name] isIdleNow activityIdlingResource $currentActivity  isIdle:$isIdle")
+            val isIdle = activity != null
+            if (isIdle) {
+                unregister()
+            }
             return isIdle
         }
 
         override fun registerIdleTransitionCallback(callback: IdlingResource.ResourceCallback?) {
             println("*** [$name]  registerIdleTransitionCallback $callback")
             this.callback = callback
-            // if (hasResumed) callback?.onTransitionToIdle()
         }
 
         override fun onActivityLifecycleChanged(activity: Activity?, stage: Stage?) {
-            println("*** [$name]  onActivityLifecycleChanged $activity  $stage")
-            currentActivity = ActivityLifecycleMonitorRegistry.getInstance().getActivitiesInStage(Stage.RESUMED).elementAtOrNull(0)
-            val isIdle = currentActivity?.javaClass?.let { activityClass.isAssignableFrom(it) } ?: false
-            println("*** [$name]  onActivityLifecycleChanged $currentActivity  isIdle:$isIdle")
-            if (isIdle) {
-                hasResumed = true
-                println("*** [$name]  onActivityLifecycleChanged callback: $callback")
-                callback?.onTransitionToIdle()
-                ActivityLifecycleMonitorRegistry.getInstance().removeLifecycleCallback(this)
+            if (activityClass == activity?.javaClass) {
+                when (stage) {
+                    Stage.RESUMED -> {
+                        unregister()
+                        resumedActivity = activity
+                        println("*** [$name]  onActivityLifecycleChanged callback: $callback")
+                        callback?.onTransitionToIdle()
+                    }
+                    else -> {
+                        // do nothing, we're blocking until the activity resumes
+                    }
+                }
             }
         }
+
+        private fun unregister() {
+            lifecycleMonitor.removeLifecycleCallback(this)
+        }
     }
-    ActivityLifecycleMonitorRegistry.getInstance().addLifecycleCallback(res)
+    lifecycleMonitor.addLifecycleCallback(res)
     return res
 }
 
@@ -245,6 +258,10 @@ fun clickOnAndGoBack(@StringRes name: Int, block: () -> Unit) {
     BaristaClickInteractions.clickOn(name)
     block()
     Espresso.pressBack()
+}
+
+fun clickOnSheet(id: Int) {
+    Espresso.onView(ViewMatchers.withId(id)).inRoot(RootMatchers.isDialog()).perform(ViewActions.click())
 }
 
 inline fun <reified T : VectorBaseBottomSheetDialogFragment<*>> interactWithSheet(

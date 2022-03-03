@@ -174,8 +174,8 @@ class RoomDevToolViewModel @AssistedInject constructor(
                         ?: throw IllegalArgumentException(stringProvider.getString(R.string.dev_tools_error_no_content))
 
                 room.sendStateEvent(
-                        state.selectedEvent?.type ?: "",
-                        state.selectedEvent?.stateKey,
+                        state.selectedEvent?.type.orEmpty(),
+                        state.selectedEvent?.stateKey.orEmpty(),
                         json
 
                 )
@@ -213,7 +213,7 @@ class RoomDevToolViewModel @AssistedInject constructor(
                 if (isState) {
                     room.sendStateEvent(
                             eventType,
-                            state.sendEventDraft.stateKey,
+                            state.sendEventDraft.stateKey.orEmpty(),
                             json
                     )
                 } else {

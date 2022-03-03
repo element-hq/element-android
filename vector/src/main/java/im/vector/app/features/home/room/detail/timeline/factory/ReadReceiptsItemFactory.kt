@@ -26,13 +26,17 @@ import javax.inject.Inject
 
 class ReadReceiptsItemFactory @Inject constructor(private val avatarRenderer: AvatarRenderer) {
 
-    fun create(eventId: String, readReceipts: List<ReadReceipt>, callback: TimelineEventController.Callback?): ReadReceiptsItem? {
+    fun create(
+            eventId: String,
+            readReceipts: List<ReadReceipt>,
+            callback: TimelineEventController.Callback?,
+            isFromThreadTimeLine: Boolean): ReadReceiptsItem? {
         if (readReceipts.isEmpty()) {
             return null
         }
         val readReceiptsData = readReceipts
                 .map {
-                    ReadReceiptData(it.user.userId, it.user.avatarUrl, it.user.displayName, it.originServerTs)
+                    ReadReceiptData(it.roomMember.userId, it.roomMember.avatarUrl, it.roomMember.displayName, it.originServerTs)
                 }
                 .toList()
 
@@ -41,6 +45,7 @@ class ReadReceiptsItemFactory @Inject constructor(private val avatarRenderer: Av
                 .eventId(eventId)
                 .readReceipts(readReceiptsData)
                 .avatarRenderer(avatarRenderer)
+                .shouldHideReadReceipts(isFromThreadTimeLine)
                 .clickListener {
                     callback?.onReadReceiptsClicked(readReceiptsData)
                 }

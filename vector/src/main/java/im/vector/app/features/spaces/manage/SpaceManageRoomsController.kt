@@ -27,6 +27,7 @@ import im.vector.app.core.error.ErrorFormatter
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.session.room.model.SpaceChildInfo
 import org.matrix.android.sdk.api.util.toMatrixItem
 import javax.inject.Inject
@@ -74,7 +75,7 @@ class SpaceManageRoomsController @Inject constructor(
         if (filteredResult.isEmpty()) {
             genericFooterItem {
                 id("empty_result")
-                text(host.stringProvider.getString(R.string.no_result_placeholder))
+                text(host.stringProvider.getString(R.string.no_result_placeholder).toEpoxyCharSequence())
             }
         } else {
             filteredResult.forEach { childInfo ->

@@ -21,6 +21,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.room.detail.timeline.item.RoomCreateItem_
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.events.model.toModel
@@ -34,7 +35,7 @@ class RoomCreateItemFactory @Inject constructor(private val stringProvider: Stri
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
         val event = params.event
-        val createRoomContent = event.root.getClearContent().toModel<RoomCreateContent>() ?: return null
+        val createRoomContent = event.root.content.toModel<RoomCreateContent>() ?: return null
         val predecessorId = createRoomContent.predecessor?.roomId ?: return defaultRendering(params)
         val roomLink = session.permalinkService().createRoomPermalink(predecessorId) ?: return null
         val text = span {
@@ -46,7 +47,7 @@ class RoomCreateItemFactory @Inject constructor(private val stringProvider: Stri
             }
         }
         return RoomCreateItem_()
-                .text(text)
+                .text(text.toEpoxyCharSequence())
     }
 
     private fun defaultRendering(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {

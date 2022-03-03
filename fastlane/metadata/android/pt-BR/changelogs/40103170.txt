@@ -1,0 +1,2 @@
+Principais mudanças nesta versão: envie sua localização para qualquer sala. Editar sondagem.
+Changelog completo: https://github.com/vector-im/element-android/releases/tag/v1.3.17

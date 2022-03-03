@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:viewBindingIgnore="true">
 
     <CheckBox
         android:id="@+id/term_accept_checkbox"
@@ -37,8 +38,8 @@
         android:paddingEnd="8dp"
         android:textColor="?vctr_content_secondary"
         app:layout_constraintEnd_toStartOf="@id/term_policy_arrow"
-        app:layout_constraintStart_toStartOf="@+id/term_name"
-        app:layout_constraintTop_toBottomOf="@+id/term_name"
+        app:layout_constraintStart_toStartOf="@id/term_name"
+        app:layout_constraintTop_toBottomOf="@id/term_name"
         tools:text="Use bots, bridges, widget and sticker packs." />
 
     <!-- Do not use drawableEnd on the TextView because of RTL support -->

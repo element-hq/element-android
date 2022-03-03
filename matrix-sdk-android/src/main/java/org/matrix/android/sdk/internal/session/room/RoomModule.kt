@@ -19,6 +19,9 @@ package org.matrix.android.sdk.internal.session.room
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import org.commonmark.Extension
+import org.commonmark.ext.maths.MathsExtension
+import org.commonmark.node.BlockQuote
 import org.commonmark.parser.Parser
 import org.commonmark.renderer.html.HtmlRenderer
 import org.matrix.android.sdk.api.session.file.FileService
@@ -74,6 +77,8 @@ import org.matrix.android.sdk.internal.session.room.relation.DefaultUpdateQuickR
 import org.matrix.android.sdk.internal.session.room.relation.FetchEditHistoryTask
 import org.matrix.android.sdk.internal.session.room.relation.FindReactionEventForUndoTask
 import org.matrix.android.sdk.internal.session.room.relation.UpdateQuickReactionTask
+import org.matrix.android.sdk.internal.session.room.relation.threads.DefaultFetchThreadTimelineTask
+import org.matrix.android.sdk.internal.session.room.relation.threads.FetchThreadTimelineTask
 import org.matrix.android.sdk.internal.session.room.reporting.DefaultReportContentTask
 import org.matrix.android.sdk.internal.session.room.reporting.ReportContentTask
 import org.matrix.android.sdk.internal.session.room.state.DefaultSendStateTask
@@ -98,12 +103,29 @@ import org.matrix.android.sdk.internal.session.room.version.DefaultRoomVersionUp
 import org.matrix.android.sdk.internal.session.room.version.RoomVersionUpgradeTask
 import org.matrix.android.sdk.internal.session.space.DefaultSpaceService
 import retrofit2.Retrofit
+import javax.inject.Qualifier
+
+/**
+ * Used to inject the simple commonmark Parser
+ */
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class SimpleCommonmarkParser
+
+/**
+ * Used to inject the advanced commonmark Parser
+ */
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+internal annotation class AdvancedCommonmarkParser
 
 @Module
 internal abstract class RoomModule {
 
     @Module
     companion object {
+        private val extensions: List<Extension> = listOf(MathsExtension.create())
+
         @Provides
         @JvmStatic
         @SessionScope
@@ -119,9 +141,21 @@ internal abstract class RoomModule {
         }
 
         @Provides
+        @AdvancedCommonmarkParser
         @JvmStatic
-        fun providesParser(): Parser {
-            return Parser.builder().build()
+        fun providesAdvancedParser(): Parser {
+            return Parser.builder().extensions(extensions).build()
+        }
+
+        @Provides
+        @SimpleCommonmarkParser
+        @JvmStatic
+        fun providesSimpleParser(): Parser {
+            // The simple parser disables all blocks but quotes.
+            // Inline parsing(bold, italic, etc) is also enabled and is not easy to disable in commonmark currently.
+            return Parser.builder()
+                    .enabledBlockTypes(setOf(BlockQuote::class.java))
+                    .build()
         }
 
         @Provides
@@ -129,6 +163,7 @@ internal abstract class RoomModule {
         fun providesHtmlRenderer(): HtmlRenderer {
             return HtmlRenderer
                     .builder()
+                    .extensions(extensions)
                     .softbreak("<br />")
                     .build()
         }
@@ -256,4 +291,7 @@ internal abstract class RoomModule {
 
     @Binds
     abstract fun bindGetRoomSummaryTask(task: DefaultGetRoomSummaryTask): GetRoomSummaryTask
+
+    @Binds
+    abstract fun bindFetchThreadTimelineTask(task: DefaultFetchThreadTimelineTask): FetchThreadTimelineTask
 }

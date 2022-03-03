@@ -251,7 +251,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                     Glide.get(requireContext()).clearMemory()
                     session.fileService().clearCache()
 
-                    var newSize: Int
+                    var newSize: Long
 
                     withContext(Dispatchers.IO) {
                         // On BG thread
@@ -261,7 +261,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                         newSize += session.fileService().getCacheSize()
                     }
 
-                    it.summary = TextUtils.formatFileSize(requireContext(), newSize.toLong())
+                    it.summary = TextUtils.formatFileSize(requireContext(), newSize)
 
                     hideLoadingView()
                 }
@@ -371,7 +371,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                     .setView(view)
                     .setCancelable(false)
                     .setPositiveButton(R.string.settings_change_password, null)
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(R.string.action_cancel, null)
                     .setOnDismissListener {
                         view.hideKeyboard()
                     }
@@ -418,7 +418,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
                     }
                 }
 
-                updateButton.setOnClickListener {
+                updateButton.debouncedClicks {
                     // Hide passwords during processing
                     views.changePasswordOldPwdText.hidePassword()
                     views.changePasswordNewPwdText.hidePassword()

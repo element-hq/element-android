@@ -86,19 +86,19 @@
 
                     <TextView
                         android:id="@+id/groupToolbarTitleView"
-                        style="@style/Widget.Vector.TextView.HeadlineMedium"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
                         android:gravity="start"
                         android:maxLines="1"
+                        android:textAppearance="@style/TextAppearance.Vector.Widget.ActionBarTitle"
                         android:textColor="?vctr_content_primary"
                         android:textStyle="bold"
                         tools:text="@tools:sample/lorem/random" />
 
                     <TextView
                         android:id="@+id/groupToolbarSpaceTitleView"
-                        style="@style/Widget.Vector.TextView.Subtitle"
+                        style="@style/TextAppearance.Vector.Widget.ActionBarSubTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -123,7 +123,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+        app:layout_constraintTop_toBottomOf="@id/appBarLayout" />
 
     <im.vector.app.core.ui.views.KeysBackupBanner
         android:id="@+id/homeKeysBackupBanner"
@@ -141,8 +141,8 @@
         android:id="@+id/roomListContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
-        app:layout_constraintTop_toBottomOf="@+id/homeKeysBackupBanner" />
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        app:layout_constraintTop_toBottomOf="@id/homeKeysBackupBanner" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"

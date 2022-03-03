@@ -24,4 +24,9 @@
 # Extension:xml
 
 ### Use style="@style/Widget.Vector.TextView.*" instead of textSize attribute
-android:textSize===9
+android:textSize===11
+
+### Use `@id` and not `@+id` when referencing ids in layouts
+layout_(.*)="@\+id
+accessibilityTraversal(.*)="@\+id
+toolbarId="@\+id

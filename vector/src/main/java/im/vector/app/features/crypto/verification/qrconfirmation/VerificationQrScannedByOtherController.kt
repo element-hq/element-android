@@ -26,6 +26,7 @@ import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationA
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationBigImageItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.displayname.getBestName
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.crypto.RoomEncryptionTrustLevel
 import javax.inject.Inject
 
@@ -51,10 +52,10 @@ class VerificationQrScannedByOtherController @Inject constructor(
             id("notice")
             apply {
                 if (state.isMe) {
-                    notice(host.stringProvider.getString(R.string.qr_code_scanned_self_verif_notice))
+                    notice(host.stringProvider.getString(R.string.qr_code_scanned_self_verif_notice).toEpoxyCharSequence())
                 } else {
                     val name = state.otherUserMxItem?.getBestName() ?: ""
-                    notice(host.stringProvider.getString(R.string.qr_code_scanned_by_other_notice, name))
+                    notice(host.stringProvider.getString(R.string.qr_code_scanned_by_other_notice, name).toEpoxyCharSequence())
                 }
             }
         }

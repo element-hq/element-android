@@ -4,13 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:addStatesFromChildren="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/messageTextView"
         style="@style/Widget.Vector.TextView.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textAlignment="viewStart"
         android:textColor="?vctr_content_primary"
         tools:text="@sample/messages.json/data/message" />
 
@@ -20,7 +22,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="4dp"
-        android:foreground="?attr/selectableItemBackground"
         android:visibility="gone"
         tools:visibility="visible" />
 

@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         tools:layout_gravity="center_horizontal"
-        tools:text="@string/join" />
+        tools:text="@string/action_join" />
 
     <Button
         android:id="@+id/buttonStateButtonBig"
@@ -22,7 +22,7 @@
         android:minWidth="120dp"
         tools:layout_gravity="center_horizontal"
         tools:layout_marginTop="40dp"
-        tools:text="@string/join" />
+        tools:text="@string/action_join" />
 
     <ProgressBar
         android:id="@+id/buttonStateLoading"

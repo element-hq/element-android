@@ -22,6 +22,7 @@ import im.vector.app.core.date.DateFormatKind
 import im.vector.app.core.date.VectorDateFormatter
 import im.vector.app.core.ui.list.GenericItem_
 import im.vector.app.core.utils.createUIHandler
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.internal.crypto.IncomingRoomKeyRequest
 import javax.inject.Inject
@@ -45,7 +46,7 @@ class IncomingKeyRequestPagedController @Inject constructor(
 
         return GenericItem_().apply {
             id(roomKeyRequest.requestId)
-            title(roomKeyRequest.requestId)
+            title(roomKeyRequest.requestId?.toEpoxyCharSequence())
             description(
                     span {
                         span("From: ") {
@@ -65,7 +66,7 @@ class IncomingKeyRequestPagedController @Inject constructor(
                             textStyle = "bold"
                         }
                         +roomKeyRequest.state.name
-                    }
+                    }.toEpoxyCharSequence()
             )
         }
     }

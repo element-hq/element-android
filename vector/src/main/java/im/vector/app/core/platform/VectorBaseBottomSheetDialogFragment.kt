@@ -34,9 +34,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.EntryPointAccessors
 import im.vector.app.core.di.ActivityEntryPoint
+import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
-import im.vector.app.core.flow.throttleFirst
 import im.vector.app.core.utils.DimensionConverter
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.MobileScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.view.clicks
@@ -46,6 +48,13 @@ import timber.log.Timber
  * Add Mavericks capabilities, handle DI and bindings.
  */
 abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomSheetDialogFragment(), MavericksView {
+    /* ==========================================================================================
+     * Analytics
+     * ========================================================================================== */
+
+    protected var analyticsScreenName: MobileScreen.ScreenName? = null
+
+    protected lateinit var analyticsTracker: AnalyticsTracker
 
     /* ==========================================================================================
      * View
@@ -120,12 +129,17 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
     override fun onAttach(context: Context) {
         val activityEntryPoint = EntryPointAccessors.fromActivity(vectorBaseActivity, ActivityEntryPoint::class.java)
         viewModelFactory = activityEntryPoint.viewModelFactory()
+        val singletonEntryPoint = context.singletonEntryPoint()
+        analyticsTracker = singletonEntryPoint.analyticsTracker()
         super.onAttach(context)
     }
 
     override fun onResume() {
         super.onResume()
         Timber.i("onResume BottomSheet ${javaClass.simpleName}")
+        analyticsScreenName?.let {
+            analyticsTracker.screen(MobileScreen(screenName = it))
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -168,7 +182,6 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .throttleFirst(300)
                 .onEach { onClicked() }
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }

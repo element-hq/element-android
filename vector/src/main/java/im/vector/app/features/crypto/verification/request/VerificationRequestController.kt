@@ -32,6 +32,7 @@ import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationA
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationWaitingItem
 import im.vector.app.features.displayname.getBestName
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class VerificationRequestController @Inject constructor(
@@ -57,7 +58,7 @@ class VerificationRequestController @Inject constructor(
             if (state.hasAnyOtherSession) {
                 bottomSheetVerificationNoticeItem {
                     id("notice")
-                    notice(host.stringProvider.getString(R.string.verification_open_other_to_verify))
+                    notice(host.stringProvider.getString(R.string.verification_open_other_to_verify).toEpoxyCharSequence())
                 }
 
                 bottomSheetSelfWaitItem {
@@ -92,7 +93,7 @@ class VerificationRequestController @Inject constructor(
 
             bottomSheetVerificationActionItem {
                 id("skip")
-                title(host.stringProvider.getString(R.string.skip))
+                title(host.stringProvider.getString(R.string.action_skip))
                 titleColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
                 iconRes(R.drawable.ic_arrow_right)
                 iconColor(host.colorProvider.getColorFromAttribute(R.attr.colorError))
@@ -112,7 +113,7 @@ class VerificationRequestController @Inject constructor(
 
             bottomSheetVerificationNoticeItem {
                 id("notice")
-                notice(styledText)
+                notice(styledText.toEpoxyCharSequence())
             }
 
             bottomSheetDividerItem {

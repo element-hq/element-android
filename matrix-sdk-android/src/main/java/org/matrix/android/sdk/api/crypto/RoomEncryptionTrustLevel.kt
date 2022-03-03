@@ -27,5 +27,8 @@ enum class RoomEncryptionTrustLevel {
     Warning,
 
     // All devices in the room are verified -> the app should display a green shield
-    Trusted
+    Trusted,
+
+    // e2e is active but with an unsupported algorithm
+    E2EWithUnsupportedAlgorithm
 }

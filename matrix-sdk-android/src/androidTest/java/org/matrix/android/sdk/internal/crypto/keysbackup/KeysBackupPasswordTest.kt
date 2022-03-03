@@ -22,6 +22,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.FixMethodOrder
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.MethodSorters
@@ -31,6 +32,7 @@ import org.matrix.android.sdk.common.assertByteArrayNotEqual
 import org.matrix.olm.OlmManager
 import org.matrix.olm.OlmPkDecryption
 
+@Ignore("Ignored in order to speed up test run time")
 @RunWith(AndroidJUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
 class KeysBackupPasswordTest : InstrumentedTest {

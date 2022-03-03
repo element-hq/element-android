@@ -62,10 +62,12 @@ import im.vector.app.core.extensions.restart
 import im.vector.app.core.extensions.setTextOrHide
 import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
-import im.vector.app.core.flow.throttleFirst
+import im.vector.app.core.utils.ToolbarConfig
 import im.vector.app.core.utils.toast
 import im.vector.app.features.MainActivity
 import im.vector.app.features.MainActivityArgs
+import im.vector.app.features.analytics.AnalyticsTracker
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.configuration.VectorConfiguration
 import im.vector.app.features.consent.ConsentNotGivenHelper
 import im.vector.app.features.navigation.Navigator
@@ -91,6 +93,14 @@ import javax.inject.Inject
 
 abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), MavericksView {
     /* ==========================================================================================
+     * Analytics
+     * ========================================================================================== */
+
+    protected var analyticsScreenName: MobileScreen.ScreenName? = null
+
+    protected lateinit var analyticsTracker: AnalyticsTracker
+
+    /* ==========================================================================================
      * View
      * ========================================================================================== */
 
@@ -105,7 +115,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     protected val viewModelProvider
         get() = ViewModelProvider(this, viewModelFactory)
 
-    protected fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
+    fun <T : VectorViewEvents> VectorViewModel<*, *, T>.observeViewEvents(observer: (T) -> Unit) {
         viewEvents
                 .stream()
                 .onEach {
@@ -115,13 +125,14 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
                 .launchIn(lifecycleScope)
     }
 
+    var toolbar: ToolbarConfig? = null
+
     /* ==========================================================================================
      * Views
      * ========================================================================================== */
 
     protected fun View.debouncedClicks(onClicked: () -> Unit) {
         clicks()
-                .throttleFirst(300)
                 .onEach { onClicked() }
                 .launchIn(lifecycleScope)
     }
@@ -189,6 +200,7 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         configurationViewModel = viewModelProvider.get(ConfigurationViewModel::class.java)
         bugReporter = singletonEntryPoint.bugReporter()
         pinLocker = singletonEntryPoint.pinLocker()
+        analyticsTracker = singletonEntryPoint.analyticsTracker()
         navigator = singletonEntryPoint.navigator()
         activeSessionHolder = singletonEntryPoint.activeSessionHolder()
         vectorPreferences = singletonEntryPoint.vectorPreferences()
@@ -323,7 +335,9 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
     override fun onResume() {
         super.onResume()
         Timber.i("onResume Activity ${javaClass.simpleName}")
-
+        analyticsScreenName?.let {
+            analyticsTracker.screen(MobileScreen(screenName = it))
+        }
         configurationViewModel.onActivityResumed()
 
         if (this !is BugReportActivity && vectorPreferences.useRageshake()) {
@@ -496,18 +510,6 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
      */
     protected fun isFirstCreation() = savedInstanceState == null
 
-    /**
-     * Configure the Toolbar, with default back button.
-     */
-    protected fun configureToolbar(toolbar: MaterialToolbar, displayBack: Boolean = true) {
-        setSupportActionBar(toolbar)
-        supportActionBar?.let {
-            it.setDisplayShowHomeEnabled(displayBack)
-            it.setDisplayHomeAsUpEnabled(displayBack)
-            it.title = null
-        }
-    }
-
     // ==============================================================================================
     // Handle loading view (also called waiting view or spinner view)
     // ==============================================================================================
@@ -616,5 +618,14 @@ abstract class VectorBaseActivity<VB : ViewBinding> : AppCompatActivity(), Maver
         } else {
             toast(getString(R.string.not_implemented))
         }
+    }
+
+    /**
+     * Sets toolbar as actionBar
+     *
+     * @return Instance of [ToolbarConfig] with set of helper methods to configure toolbar
+     * */
+    fun setupToolbar(toolbar: MaterialToolbar) = ToolbarConfig(this, toolbar).also {
+        this.toolbar = it.setup()
     }
 }

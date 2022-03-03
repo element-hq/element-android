@@ -33,5 +33,8 @@ class SettingsSecurityRobot {
         clickOnPreference(R.string.encryption_export_e2e_room_keys)
         pressBack()
          */
+
+        clickOnPreference(R.string.settings_opt_in_of_analytics)
+        Espresso.pressBack()
     }
 }

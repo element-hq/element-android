@@ -21,15 +21,16 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import androidx.core.content.FileProvider
 import im.vector.app.BuildConfig
-import im.vector.app.core.utils.CountUpTimer
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
 import im.vector.app.features.voice.VoiceFailure
 import im.vector.app.features.voice.VoiceRecorder
 import im.vector.app.features.voice.VoiceRecorderProvider
+import im.vector.lib.core.utils.timer.CountUpTimer
 import im.vector.lib.multipicker.entity.MultiPickerAudioType
 import im.vector.lib.multipicker.utils.toMultiPickerAudioType
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import timber.log.Timber
 import java.io.File
 import java.io.FileInputStream
@@ -52,13 +53,22 @@ class VoiceMessageHelper @Inject constructor(
     private var amplitudeTicker: CountUpTimer? = null
     private var playbackTicker: CountUpTimer? = null
 
-    fun startRecording() {
+    fun initializeRecorder(attachmentData: ContentAttachmentData) {
+        voiceRecorder.initializeRecord(attachmentData)
+        amplitudeList.clear()
+        attachmentData.waveform?.let {
+            amplitudeList.addAll(it)
+            playbackTracker.updateCurrentRecording(VoiceMessagePlaybackTracker.RECORDING_ID, amplitudeList)
+        }
+    }
+
+    fun startRecording(roomId: String) {
         stopPlayback()
         playbackTracker.makeAllPlaybacksIdle()
         amplitudeList.clear()
 
         try {
-            voiceRecorder.startRecord()
+            voiceRecorder.startRecord(roomId)
         } catch (failure: Throwable) {
             Timber.e(failure, "Unable to start recording")
             throw VoiceFailure.UnableToRecord(failure)
@@ -66,19 +76,24 @@ class VoiceMessageHelper @Inject constructor(
         startRecordingAmplitudes()
     }
 
-    fun stopRecording(): MultiPickerAudioType? {
+    fun stopRecording(convertForSending: Boolean): MultiPickerAudioType? {
         tryOrNull("Cannot stop media recording amplitude") {
             stopRecordingAmplitudes()
         }
         val voiceMessageFile = tryOrNull("Cannot stop media recorder!") {
             voiceRecorder.stopRecord()
-            voiceRecorder.getVoiceMessageFile()
+            if (convertForSending) {
+                voiceRecorder.getVoiceMessageFile()
+            } else {
+                voiceRecorder.getCurrentRecord()
+            }
         }
 
         try {
             voiceMessageFile?.let {
                 val outputFileUri = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".fileProvider", it, "Voice message.${it.extension}")
-                return outputFileUri.toMultiPickerAudioType(context)
+                return outputFileUri
+                        .toMultiPickerAudioType(context)
                         ?.apply {
                             waveform = if (amplitudeList.size < 50) {
                                 amplitudeList
@@ -218,12 +233,16 @@ class VoiceMessageHelper @Inject constructor(
         playbackTicker = null
     }
 
-    fun stopAllVoiceActions(deleteRecord: Boolean = true) {
-        stopRecording()
+    fun clearTracker() {
+        playbackTracker.clear()
+    }
+
+    fun stopAllVoiceActions(deleteRecord: Boolean = true): MultiPickerAudioType? {
+        val audioType = stopRecording(convertForSending = false)
         stopPlayback()
         if (deleteRecord) {
             deleteRecording()
         }
-        playbackTracker.clear()
+        return audioType
     }
 }

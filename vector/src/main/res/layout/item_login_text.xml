@@ -10,4 +10,5 @@
     android:paddingStart="36dp"
     android:paddingEnd="36dp"
     android:textColor="?vctr_content_secondary"
-    tools:text="Login Title" />
+    tools:text="Login Title"
+    tools:viewBindingIgnore="true" />

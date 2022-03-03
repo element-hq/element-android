@@ -22,6 +22,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.features.form.formEditTextItem
 import im.vector.app.features.form.formMultiLineEditTextItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class RoomDevToolSendFormController @Inject constructor(
@@ -36,7 +37,7 @@ class RoomDevToolSendFormController @Inject constructor(
 
         genericFooterItem {
             id("topSpace")
-            text("")
+            text("".toEpoxyCharSequence())
         }
         formEditTextItem {
             id("event_type")

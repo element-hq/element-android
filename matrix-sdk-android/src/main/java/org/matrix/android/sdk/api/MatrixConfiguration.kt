@@ -66,6 +66,7 @@ data class MatrixConfiguration(
     /**
      * Can be implemented by your Application class.
      */
+    @Deprecated("Use Matrix.createInstance and manage the instance manually instead of Matrix.getInstance")
     interface Provider {
         fun providesMatrixConfiguration(): MatrixConfiguration
     }

@@ -54,8 +54,7 @@ internal class RoomAccountDataDataSource @Inject constructor(@SessionDatabase pr
      */
     fun getAccountDataEvents(roomId: String?, types: Set<String>): List<RoomAccountDataEvent> {
         return realmSessionProvider.withRealm { realm ->
-            val roomEntity = buildRoomQuery(realm, roomId, types).findFirst() ?: return@withRealm emptyList()
-            roomEntity.accountDataEvents(types)
+            buildRoomQuery(realm, roomId, types).findAll().flatMap { it.accountDataEvents(types) }
         }
     }
 

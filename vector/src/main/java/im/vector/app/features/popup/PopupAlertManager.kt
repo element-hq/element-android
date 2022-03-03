@@ -25,6 +25,7 @@ import com.tapadoo.alerter.Alerter
 import im.vector.app.R
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.utils.isAnimationDisabled
+import im.vector.app.features.analytics.ui.consent.AnalyticsOptInActivity
 import im.vector.app.features.pin.PinActivity
 import im.vector.app.features.signout.hard.SignedOutActivity
 import im.vector.app.features.themes.ThemeUtils
@@ -104,7 +105,7 @@ class PopupAlertManager @Inject constructor() {
         // we want to remove existing popup on previous activity and display it on new one
         if (currentAlerter != null) {
             weakCurrentActivity?.get()?.let {
-                Alerter.clearCurrent(it, null)
+                Alerter.clearCurrent(it, null, null)
                 if (currentAlerter?.isLight == false) {
                     setLightStatusBar()
                 }
@@ -300,6 +301,7 @@ class PopupAlertManager @Inject constructor() {
         return alert != null &&
                 activity !is PinActivity &&
                 activity !is SignedOutActivity &&
+                activity !is AnalyticsOptInActivity &&
                 activity is VectorBaseActivity<*> &&
                 alert.shouldBeDisplayedIn.invoke(activity)
     }

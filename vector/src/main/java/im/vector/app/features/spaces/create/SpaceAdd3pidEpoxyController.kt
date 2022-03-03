@@ -27,6 +27,7 @@ import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericFooterItem
 import im.vector.app.core.ui.list.genericPillItem
 import im.vector.app.features.form.formEditTextItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class SpaceAdd3pidEpoxyController @Inject constructor(
@@ -42,12 +43,12 @@ class SpaceAdd3pidEpoxyController @Inject constructor(
         genericFooterItem {
             id("info_help_header")
             style(ItemStyle.TITLE)
-            text(host.stringProvider.getString(R.string.create_spaces_invite_public_header))
+            text(host.stringProvider.getString(R.string.create_spaces_invite_public_header).toEpoxyCharSequence())
             textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_primary))
         }
         genericFooterItem {
             id("info_help_desc")
-            text(host.stringProvider.getString(R.string.create_spaces_invite_public_header_desc, data.name ?: ""))
+            text(host.stringProvider.getString(R.string.create_spaces_invite_public_header_desc, data.name ?: "").toEpoxyCharSequence())
             textColor(host.colorProvider.getColorFromAttribute(R.attr.vctr_content_secondary))
         }
 
@@ -57,7 +58,7 @@ class SpaceAdd3pidEpoxyController @Inject constructor(
             genericPillItem {
                 id("no_IDS")
                 imageRes(R.drawable.ic_baseline_perm_contact_calendar_24)
-                text(host.stringProvider.getString(R.string.create_space_identity_server_info_none))
+                text(host.stringProvider.getString(R.string.create_space_identity_server_info_none).toEpoxyCharSequence())
             }
             genericButtonItem {
                 id("Discover_Settings")

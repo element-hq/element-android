@@ -42,6 +42,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     object MarkAllAsRead : RoomDetailAction()
     data class DownloadOrOpen(val eventId: String, val senderId: String?, val messageFileContent: MessageWithAttachmentContent) : RoomDetailAction()
     object JoinAndOpenReplacementRoom : RoomDetailAction()
+    object OnClickMisconfiguredEncryption : RoomDetailAction()
     object AcceptInvite : RoomDetailAction()
     object RejectInvite : RoomDetailAction()
 
@@ -52,7 +53,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class RemoveFailedEcho(val eventId: String) : RoomDetailAction()
     data class CancelSend(val eventId: String, val force: Boolean) : RoomDetailAction()
 
-    data class ReplyToOptions(val eventId: String, val optionIndex: Int, val optionValue: String) : RoomDetailAction()
+    data class VoteToPoll(val eventId: String, val optionKey: String) : RoomDetailAction()
 
     data class ReportContent(
             val eventId: String,
@@ -88,9 +89,9 @@ sealed class RoomDetailAction : VectorViewModelAction {
     data class EnsureNativeWidgetAllowed(val widget: Widget,
                                          val userJustAccepted: Boolean,
                                          val grantedEvents: RoomDetailViewEvents) : RoomDetailAction()
+
     data class UpdateJoinJitsiCallStatus(val conferenceEvent: ConferenceEvent) : RoomDetailAction()
 
-    data class OpenOrCreateDm(val userId: String) : RoomDetailAction()
     data class JumpToReadReceipt(val userId: String) : RoomDetailAction()
     object QuickActionInvitePeople : RoomDetailAction()
     object QuickActionSetAvatar : RoomDetailAction()
@@ -107,4 +108,7 @@ sealed class RoomDetailAction : VectorViewModelAction {
     object RemoveAllFailedMessages : RoomDetailAction()
 
     data class RoomUpgradeSuccess(val replacementRoomId: String) : RoomDetailAction()
+
+    // Poll
+    data class EndPoll(val eventId: String) : RoomDetailAction()
 }

@@ -30,7 +30,6 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
-import im.vector.app.core.utils.ensureProtocol
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -39,7 +38,6 @@ import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.api.session.identity.IdentityServiceListener
 import org.matrix.android.sdk.api.session.identity.SharedState
 import org.matrix.android.sdk.api.session.identity.ThreePid
-import org.matrix.android.sdk.api.session.terms.TermsService
 import org.matrix.android.sdk.flow.flow
 
 class DiscoverySettingsViewModel @AssistedInject constructor(
@@ -56,7 +54,6 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     companion object : MavericksViewModelFactory<DiscoverySettingsViewModel, DiscoverySettingsState> by hiltMavericksViewModelFactory()
 
     private val identityService = session.identityService()
-    private val termsService: TermsService = session
 
     private val identityServerManagerListener = object : IdentityServiceListener {
         override fun onIdentityServerChange() = withState { state ->
@@ -81,7 +78,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
     init {
         setState {
             copy(
-                    identityServer = Success(identityService.getCurrentIdentityServerUrl()?.let { IdentityServerWithTerms(it, emptyList()) }),
+                    identityServer = Success(identityService.getCurrentIdentityServerUrl()?.let { ServerAndPolicies(it, emptyList()) }),
                     userConsent = identityService.getUserConsent()
             )
         }
@@ -154,7 +151,7 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
                 val data = session.identityService().setNewIdentityServer(action.url)
                 setState {
                     copy(
-                            identityServer = Success(IdentityServerWithTerms(data, emptyList())),
+                            identityServer = Success(ServerAndPolicies(data, emptyList())),
                             userConsent = false
                     )
                 }
@@ -397,29 +394,14 @@ class DiscoverySettingsViewModel @AssistedInject constructor(
             }
         }
         viewModelScope.launch {
-            runCatching { fetchIdentityServerWithTerms() }.fold(
+            runCatching { session.fetchIdentityServerWithTerms(stringProvider.getString(R.string.resources_language)) }.fold(
                     onSuccess = { setState { copy(identityServer = Success(it)) } },
                     onFailure = { _viewEvents.post(DiscoverySettingsViewEvents.Failure(it)) }
             )
         }
     }
 
-    private suspend fun fetchIdentityServerWithTerms(): IdentityServerWithTerms? {
-        val identityServerUrl = identityService.getCurrentIdentityServerUrl()
-        return identityServerUrl?.let {
-            val terms = termsService.getTerms(TermsService.ServiceType.IdentityService, identityServerUrl.ensureProtocol())
-                    .serverResponse
-                    .getLocalizedTerms(stringProvider.getString(R.string.resources_language))
-            val policyUrls = terms.mapNotNull {
-                val name = it.localizedName ?: it.policyName
-                val url = it.localizedUrl
-                if (name == null || url == null) {
-                    null
-                } else {
-                    IdentityServerPolicy(name = name, url = url)
-                }
-            }
-            IdentityServerWithTerms(identityServerUrl, policyUrls)
-        }
+    private suspend fun fetchIdentityServerWithTerms(): ServerAndPolicies? {
+        return session.fetchIdentityServerWithTerms(stringProvider.getString(R.string.resources_language))
     }
 }

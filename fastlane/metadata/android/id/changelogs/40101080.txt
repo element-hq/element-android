@@ -1,2 +1,2 @@
 Perubahan utama dalam versi ini: perbaikan untuk Spaces.
-Changelog lanjutan: https://github.com/vector-im/element-android/releases/tag/v1.1.8
+Catatan perubahan lanjutan: https://github.com/vector-im/element-android/releases/tag/v1.1.8

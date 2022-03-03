@@ -39,18 +39,18 @@
 
                     <TextView
                         android:id="@+id/roomPreviewNoPreviewToolbarTitle"
-                        style="@style/Widget.Vector.TextView.HeadlineMedium"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginEnd="8dp"
                         android:ellipsize="end"
                         android:maxLines="1"
+                        android:textAppearance="@style/TextAppearance.Vector.Widget.ActionBarTitle"
                         android:textColor="?vctr_content_primary"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toEndOf="@+id/roomPreviewNoPreviewToolbarAvatar"
+                        app:layout_constraintStart_toEndOf="@id/roomPreviewNoPreviewToolbarAvatar"
                         app:layout_constraintTop_toTopOf="parent"
                         tools:text="@sample/users.json/data/displayName" />
 
@@ -139,7 +139,7 @@
                     android:layout_marginTop="@dimen/layout_vertical_margin"
                     android:layout_marginBottom="@dimen/layout_vertical_margin"
                     android:minWidth="120dp"
-                    app:bsv_button_text="@string/join"
+                    app:bsv_button_text="@string/action_join"
                     app:bsv_loaded_image_src="@drawable/ic_tick"
                     app:bsv_use_flat_button="false" />
 

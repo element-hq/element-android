@@ -16,22 +16,29 @@
 package im.vector.app.features.home.room.detail.timeline.helper
 
 import im.vector.app.EmojiCompatFontProvider
+import im.vector.app.R
+import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.resources.UserPreferencesProvider
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.home.room.detail.timeline.MessageColorProvider
 import im.vector.app.features.home.room.detail.timeline.TimelineEventController
 import im.vector.app.features.home.room.detail.timeline.item.AbsMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.MessageInformationData
+import org.matrix.android.sdk.api.session.threads.ThreadDetails
 import javax.inject.Inject
 
 class MessageItemAttributesFactory @Inject constructor(
         private val avatarRenderer: AvatarRenderer,
         private val messageColorProvider: MessageColorProvider,
         private val avatarSizeProvider: AvatarSizeProvider,
+        private val stringProvider: StringProvider,
+        private val preferencesProvider: UserPreferencesProvider,
         private val emojiCompatFontProvider: EmojiCompatFontProvider) {
 
     fun create(messageContent: Any?,
                informationData: MessageInformationData,
-               callback: TimelineEventController.Callback?): AbsMessageItem.Attributes {
+               callback: TimelineEventController.Callback?,
+               threadDetails: ThreadDetails? = null): AbsMessageItem.Attributes {
         return AbsMessageItem.Attributes(
                 avatarSize = avatarSizeProvider.avatarSize,
                 informationData = informationData,
@@ -41,15 +48,19 @@ class MessageItemAttributesFactory @Inject constructor(
                     callback?.onEventLongClicked(informationData, messageContent, view) ?: false
                 },
                 itemClickListener = { view ->
-                    callback?.onEventCellClicked(informationData, messageContent, view)
+                    callback?.onEventCellClicked(informationData, messageContent, view, threadDetails?.isRootThread ?: false)
                 },
                 memberClickListener = {
                     callback?.onMemberNameClicked(informationData)
                 },
                 reactionPillCallback = callback,
                 avatarCallback = callback,
+                threadCallback = callback,
                 readReceiptsCallback = callback,
-                emojiTypeFace = emojiCompatFontProvider.typeface
+                emojiTypeFace = emojiCompatFontProvider.typeface,
+                decryptionErrorMessage = stringProvider.getString(R.string.encrypted_message),
+                threadDetails = threadDetails,
+                areThreadMessagesEnabled = preferencesProvider.areThreadMessagesEnabled()
         )
     }
 }

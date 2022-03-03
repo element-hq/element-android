@@ -37,8 +37,6 @@ import org.matrix.android.sdk.internal.query.QueryStringValueProcessor
 import org.matrix.android.sdk.internal.query.process
 import org.matrix.android.sdk.internal.session.room.membership.admin.MembershipAdminTask
 import org.matrix.android.sdk.internal.session.room.membership.joining.InviteTask
-import org.matrix.android.sdk.internal.session.room.membership.joining.JoinRoomTask
-import org.matrix.android.sdk.internal.session.room.membership.leaving.LeaveRoomTask
 import org.matrix.android.sdk.internal.session.room.membership.threepid.InviteThreePidTask
 import org.matrix.android.sdk.internal.util.fetchCopied
 
@@ -48,8 +46,6 @@ internal class DefaultMembershipService @AssistedInject constructor(
         private val loadRoomMembersTask: LoadRoomMembersTask,
         private val inviteTask: InviteTask,
         private val inviteThreePidTask: InviteThreePidTask,
-        private val joinTask: JoinRoomTask,
-        private val leaveRoomTask: LeaveRoomTask,
         private val membershipAdminTask: MembershipAdminTask,
         @UserId
         private val userId: String,
@@ -125,7 +121,7 @@ internal class DefaultMembershipService @AssistedInject constructor(
         membershipAdminTask.execute(params)
     }
 
-    override suspend fun kick(userId: String, reason: String?) {
+    override suspend fun remove(userId: String, reason: String?) {
         val params = MembershipAdminTask.Params(MembershipAdminTask.Type.KICK, roomId, userId, reason)
         membershipAdminTask.execute(params)
     }
@@ -138,15 +134,5 @@ internal class DefaultMembershipService @AssistedInject constructor(
     override suspend fun invite3pid(threePid: ThreePid) {
         val params = InviteThreePidTask.Params(roomId, threePid)
         return inviteThreePidTask.execute(params)
-    }
-
-    override suspend fun join(reason: String?, viaServers: List<String>) {
-        val params = JoinRoomTask.Params(roomId, reason, viaServers)
-        joinTask.execute(params)
-    }
-
-    override suspend fun leave(reason: String?) {
-        val params = LeaveRoomTask.Params(roomId, reason)
-        leaveRoomTask.execute(params)
     }
 }

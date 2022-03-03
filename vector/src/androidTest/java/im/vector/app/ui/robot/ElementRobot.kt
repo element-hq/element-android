@@ -32,17 +32,24 @@ import im.vector.app.espresso.tools.waitUntilDialogVisible
 import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.features.createdirect.CreateDirectRoomActivity
 import im.vector.app.features.home.HomeActivity
-import im.vector.app.features.login.LoginActivity
+import im.vector.app.features.onboarding.OnboardingActivity
 import im.vector.app.initialSyncIdlingResource
 import im.vector.app.ui.robot.settings.SettingsRobot
+import im.vector.app.ui.robot.space.SpaceRobot
 import im.vector.app.withIdlingResource
 import timber.log.Timber
 
 class ElementRobot {
 
+    fun onboarding(block: OnboardingRobot.() -> Unit) {
+        block(OnboardingRobot())
+    }
+
     fun signUp(userId: String) {
         val onboardingRobot = OnboardingRobot()
         onboardingRobot.createAccount(userId = userId)
+        val analyticsRobot = AnalyticsRobot()
+        analyticsRobot.optOut()
         waitForHome()
     }
 
@@ -121,8 +128,8 @@ class ElementRobot {
             clickDialogPositiveButton()
         }
 
-        waitUntilActivityVisible<LoginActivity> {
-            assertDisplayed(R.id.loginSplashLogo)
+        waitUntilActivityVisible<OnboardingActivity> {
+            assertDisplayed(R.id.loginSplashSubmit)
         }
     }
 
@@ -134,12 +141,16 @@ class ElementRobot {
             activity.runOnUiThread { popup.performClick() }
 
             waitUntilViewVisible(withId(R.id.bottomSheetFragmentContainer))
-            waitUntilViewVisible(ViewMatchers.withText(R.string.skip))
-            clickOn(R.string.skip)
+            waitUntilViewVisible(ViewMatchers.withText(R.string.action_skip))
+            clickOn(R.string.action_skip)
             assertDisplayed(R.string.are_you_sure)
-            clickOn(R.string.skip)
+            clickOn(R.string.action_skip)
             waitUntilViewVisible(withId(R.id.bottomSheetFragmentContainer))
-        }.onFailure { Timber.w("Verification popup missing", it) }
+        }.onFailure { Timber.w(it, "Verification popup missing") }
+    }
+
+    fun space(block: SpaceRobot.() -> Unit) {
+        block(SpaceRobot())
     }
 }
 

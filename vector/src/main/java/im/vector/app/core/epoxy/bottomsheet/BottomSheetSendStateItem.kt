@@ -36,7 +36,7 @@ abstract class BottomSheetSendStateItem : VectorEpoxyModel<BottomSheetSendStateI
     var showProgress: Boolean = false
 
     @EpoxyAttribute
-    lateinit var text: CharSequence
+    lateinit var text: String
 
     @EpoxyAttribute
     @DrawableRes

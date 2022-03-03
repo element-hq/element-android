@@ -22,6 +22,7 @@ import im.vector.app.core.resources.ColorProvider
 import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericButtonItem
 import im.vector.app.core.ui.list.genericFooterItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.session.widgets.model.Widget
 import javax.inject.Inject
 
@@ -40,7 +41,7 @@ class RoomWidgetsController @Inject constructor(
         if (widgets.isEmpty()) {
             genericFooterItem {
                 id("empty")
-                text(host.stringProvider.getString(R.string.room_no_active_widgets))
+                text(host.stringProvider.getString(R.string.room_no_active_widgets).toEpoxyCharSequence())
             }
         } else {
             widgets.forEach { widget ->

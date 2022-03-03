@@ -70,7 +70,8 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
         } else {
             when (typeToPrune) {
                 EventType.ENCRYPTED,
-                EventType.MESSAGE -> {
+                EventType.MESSAGE,
+                EventType.POLL_START -> {
                     Timber.d("REDACTION for message ${eventToPrune.eventId}")
                     val unsignedData = EventMapper.map(eventToPrune).unsignedData
                             ?: UnsignedData(null, null)
@@ -82,7 +83,9 @@ internal class RedactionEventProcessor @Inject constructor() : EventInsertLivePr
 //                    }
 
                     val modified = unsignedData.copy(redactedEvent = redactionEvent)
-                    eventToPrune.content = ContentMapper.map(emptyMap())
+                    // I Commented the line below, it should not be empty while we lose all the previous info about
+                    // the redacted event
+//                    eventToPrune.content = ContentMapper.map(emptyMap())
                     eventToPrune.unsignedData = MoshiProvider.providesMoshi().adapter(UnsignedData::class.java).toJson(modified)
                     eventToPrune.decryptionResultJson = null
                     eventToPrune.decryptionErrorCode = null

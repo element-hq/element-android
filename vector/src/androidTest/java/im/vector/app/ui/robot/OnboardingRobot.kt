@@ -18,6 +18,7 @@ package im.vector.app.ui.robot
 
 import androidx.test.espresso.Espresso.closeSoftKeyboard
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.matcher.ViewMatchers.isRoot
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import com.adevinta.android.barista.assertion.BaristaEnabledAssertions.assertDisabled
@@ -30,6 +31,27 @@ import im.vector.app.espresso.tools.waitUntilViewVisible
 import im.vector.app.waitForView
 
 class OnboardingRobot {
+
+    fun crawl() {
+        waitUntilViewVisible(withId(R.id.loginSplashSubmit))
+        crawlGetStarted()
+        crawlAlreadyHaveAccount()
+    }
+
+    private fun crawlGetStarted() {
+        clickOn(R.id.loginSplashSubmit)
+        assertDisplayed(R.id.useCaseHeaderTitle, R.string.ftue_auth_use_case_title)
+        clickOn(R.id.useCaseOptionOne)
+        OnboardingServersRobot().crawlSignUp()
+        pressBack()
+        pressBack()
+    }
+
+    private fun crawlAlreadyHaveAccount() {
+        clickOn(R.id.loginSplashAlreadyHaveAccount)
+        OnboardingServersRobot().crawlSignIn()
+        pressBack()
+    }
 
     fun createAccount(userId: String, password: String = "password", homeServerUrl: String = "http://10.0.2.2:8080") {
         initSession(true, userId, password, homeServerUrl)
@@ -44,8 +66,13 @@ class OnboardingRobot {
                             password: String,
                             homeServerUrl: String) {
         waitUntilViewVisible(withId(R.id.loginSplashSubmit))
-        assertDisplayed(R.id.loginSplashSubmit, R.string.login_splash_submit)
-        clickOn(R.id.loginSplashSubmit)
+        assertDisplayed(R.id.loginSplashSubmit, R.string.login_splash_create_account)
+        if (createAccount) {
+            clickOn(R.id.loginSplashSubmit)
+            clickOn(R.id.useCaseOptionOne)
+        } else {
+            clickOn(R.id.loginSplashAlreadyHaveAccount)
+        }
         assertDisplayed(R.id.loginServerTitle, R.string.login_server_title)
         // Chose custom server
         clickOn(R.id.loginServerChoiceOther)
@@ -54,17 +81,7 @@ class OnboardingRobot {
         assertEnabled(R.id.loginServerUrlFormSubmit)
         closeSoftKeyboard()
         clickOn(R.id.loginServerUrlFormSubmit)
-        onView(isRoot()).perform(waitForView(withId(R.id.loginSignupSigninSubmit)))
-
-        if (createAccount) {
-            // Click on the signup button
-            assertDisplayed(R.id.loginSignupSigninSubmit)
-            clickOn(R.id.loginSignupSigninSubmit)
-        } else {
-            // Click on the signin button
-            assertDisplayed(R.id.loginSignupSigninSignIn)
-            clickOn(R.id.loginSignupSigninSignIn)
-        }
+        onView(isRoot()).perform(waitForView(withId(R.id.loginField)))
 
         // Ensure password flow supported
         assertDisplayed(R.id.loginField)

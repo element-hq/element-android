@@ -37,13 +37,17 @@ import im.vector.app.core.extensions.trackItemsVisibilityChange
 import im.vector.app.core.platform.StateView
 import im.vector.app.core.platform.VectorBaseFragment
 import im.vector.app.databinding.FragmentSearchBinding
+import im.vector.app.features.home.room.threads.arguments.ThreadTimelineArgs
 import kotlinx.parcelize.Parcelize
 import org.matrix.android.sdk.api.session.events.model.Event
+import org.matrix.android.sdk.api.session.events.model.getRootThreadEventId
 import javax.inject.Inject
 
 @Parcelize
 data class SearchArgs(
-        val roomId: String
+        val roomId: String,
+        val roomDisplayName: String?,
+        val roomAvatarUrl: String?
 ) : Parcelable
 
 class SearchFragment @Inject constructor(
@@ -111,10 +115,25 @@ class SearchFragment @Inject constructor(
         searchViewModel.handle(SearchAction.Retry)
     }
 
-    override fun onItemClicked(event: Event) {
-        event.roomId?.let {
-            navigator.openRoom(requireContext(), it, event.eventId)
-        }
+    override fun onItemClicked(event: Event) =
+            navigateToEvent(event)
+
+    /**
+     * Navigate and highlight the event. If this is a thread event,
+     * user will be redirected to the appropriate thread room
+     * @param event the event to navigate and highlight
+     */
+    private fun navigateToEvent(event: Event) {
+        val roomId = event.roomId ?: return
+        event.getRootThreadEventId()?.let {
+            val threadTimelineArgs = ThreadTimelineArgs(
+                    roomId = roomId,
+                    displayName = fragmentArgs.roomDisplayName,
+                    avatarUrl = fragmentArgs.roomAvatarUrl,
+                    roomEncryptionTrustLevel = null,
+                    rootThreadEventId = it)
+            navigator.openThread(requireContext(), threadTimelineArgs, event.eventId)
+        } ?: navigator.openRoom(requireContext(), roomId, event.eventId)
     }
 
     override fun loadMore() {

@@ -19,11 +19,8 @@ package im.vector.app.features.roomdirectory.roompreview
 import android.content.Context
 import android.content.Intent
 import android.os.Parcelable
-import com.google.android.material.appbar.MaterialToolbar
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
-import im.vector.app.core.platform.ToolbarConfigurable
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySimpleBinding
 import im.vector.app.features.roomdirectory.RoomDirectoryData
@@ -41,6 +38,7 @@ data class RoomPreviewData(
         val roomAlias: String? = null,
         val roomType: String? = null,
         val topic: String? = null,
+        val numJoinedMembers: Int? = null,
         val worldReadable: Boolean = false,
         val avatarUrl: String? = null,
         val homeServers: List<String> = emptyList(),
@@ -53,7 +51,7 @@ data class RoomPreviewData(
 }
 
 @AndroidEntryPoint
-class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), ToolbarConfigurable {
+class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>() {
 
     companion object {
         private const val ARG = "ARG"
@@ -70,6 +68,7 @@ class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), Toolbar
                     roomName = publicRoom.name,
                     roomAlias = publicRoom.getPrimaryAlias(),
                     topic = publicRoom.topic,
+                    numJoinedMembers = publicRoom.numJoinedMembers,
                     worldReadable = publicRoom.worldReadable,
                     avatarUrl = publicRoom.avatarUrl,
                     homeServers = listOfNotNull(roomDirectoryData.homeServer)
@@ -82,10 +81,6 @@ class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), Toolbar
 
     override fun getCoordinatorLayout() = views.coordinatorLayout
 
-    override fun configure(toolbar: MaterialToolbar) {
-        configureToolbar(toolbar)
-    }
-
     override fun initUiAndData() {
         if (isFirstCreation()) {
             val args = intent.getParcelableExtra<RoomPreviewData>(ARG)
@@ -94,9 +89,9 @@ class RoomPreviewActivity : VectorBaseActivity<ActivitySimpleBinding>(), Toolbar
                 // TODO Room preview: Note: M does not recommend to use /events anymore, so for now we just display the room preview
                 // TODO the same way if it was not world readable
                 Timber.d("just display the room preview the same way if it was not world readable")
-                addFragment(R.id.simpleFragmentContainer, RoomPreviewNoPreviewFragment::class.java, args)
+                addFragment(views.simpleFragmentContainer, RoomPreviewNoPreviewFragment::class.java, args)
             } else {
-                addFragment(R.id.simpleFragmentContainer, RoomPreviewNoPreviewFragment::class.java, args)
+                addFragment(views.simpleFragmentContainer, RoomPreviewNoPreviewFragment::class.java, args)
             }
         }
     }

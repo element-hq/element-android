@@ -34,7 +34,7 @@ import org.matrix.android.sdk.api.util.MatrixItem
 abstract class DisplayReadReceiptItem : EpoxyModelWithHolder<DisplayReadReceiptItem.Holder>() {
 
     @EpoxyAttribute lateinit var matrixItem: MatrixItem
-    @EpoxyAttribute var timestamp: CharSequence? = null
+    @EpoxyAttribute var timestamp: String? = null
     @EpoxyAttribute lateinit var avatarRenderer: AvatarRenderer
     @EpoxyAttribute(EpoxyAttribute.Option.DoNotHash) var userClicked: ClickListener? = null
 

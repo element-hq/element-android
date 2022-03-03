@@ -24,6 +24,7 @@ import com.airbnb.mvrx.withState
 import im.vector.app.R
 import im.vector.app.core.extensions.toReducedUrl
 import im.vector.app.databinding.FragmentLoginSsoOnly2Binding
+import im.vector.app.features.login.SSORedirectRouterActivity
 import javax.inject.Inject
 
 /**
@@ -51,7 +52,7 @@ class LoginSsoOnlyFragment2 @Inject constructor() : AbstractSSOLoginFragment2<Fr
 
     private fun submit() = withState(loginViewModel) { state ->
         loginViewModel.getSsoUrl(
-                redirectUrl = LoginActivity2.VECTOR_REDIRECT_URL,
+                redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
                 deviceId = state.deviceId,
                 providerId = null
         )

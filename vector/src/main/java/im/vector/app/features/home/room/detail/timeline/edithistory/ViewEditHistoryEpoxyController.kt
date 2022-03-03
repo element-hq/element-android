@@ -30,6 +30,7 @@ import im.vector.app.core.ui.list.genericHeaderItem
 import im.vector.app.core.ui.list.genericItem
 import im.vector.app.core.ui.list.genericLoaderItem
 import im.vector.app.features.html.EventHtmlRenderer
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import name.fraser.neil.plaintext.diff_match_patch
 import org.matrix.android.sdk.api.session.events.model.Event
@@ -61,7 +62,7 @@ class ViewEditHistoryEpoxyController @Inject constructor(
             is Fail       -> {
                 genericFooterItem {
                     id("failure")
-                    text(host.stringProvider.getString(R.string.unknown_error))
+                    text(host.stringProvider.getString(R.string.unknown_error).toEpoxyCharSequence())
                 }
             }
             is Success    -> {
@@ -75,7 +76,7 @@ class ViewEditHistoryEpoxyController @Inject constructor(
         if (sourceEvents.isEmpty()) {
             genericItem {
                 id("footer")
-                title(host.stringProvider.getString(R.string.no_message_edits_found))
+                title(host.stringProvider.getString(R.string.no_message_edits_found).toEpoxyCharSequence())
             }
         } else {
             var lastDate: Calendar? = null
@@ -133,8 +134,8 @@ class ViewEditHistoryEpoxyController @Inject constructor(
                 }
                 genericItem {
                     id(timelineEvent.eventId)
-                    title(host.dateFormatter.format(timelineEvent.originServerTs, DateFormatKind.EDIT_HISTORY_ROW))
-                    description(spannedDiff ?: body)
+                    title(host.dateFormatter.format(timelineEvent.originServerTs, DateFormatKind.EDIT_HISTORY_ROW).toEpoxyCharSequence())
+                    description((spannedDiff ?: body).toEpoxyCharSequence())
                 }
             }
         }

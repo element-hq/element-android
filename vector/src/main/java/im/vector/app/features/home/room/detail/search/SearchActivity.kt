@@ -22,7 +22,6 @@ import android.os.Bundle
 import androidx.appcompat.widget.SearchView
 import com.airbnb.mvrx.Mavericks
 import dagger.hilt.android.AndroidEntryPoint
-import im.vector.app.R
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.databinding.ActivitySearchBinding
@@ -41,13 +40,14 @@ class SearchActivity : VectorBaseActivity<ActivitySearchBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        configureToolbar(views.searchToolbar)
+        setupToolbar(views.searchToolbar)
+                .allowBack()
     }
 
     override fun initUiAndData() {
         if (isFirstCreation()) {
             val fragmentArgs: SearchArgs = intent?.extras?.getParcelable(Mavericks.KEY_ARG) ?: return
-            addFragment(R.id.searchFragmentContainer, SearchFragment::class.java, fragmentArgs, FRAGMENT_TAG)
+            addFragment(views.searchFragmentContainer, SearchFragment::class.java, fragmentArgs, FRAGMENT_TAG)
         }
         views.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {

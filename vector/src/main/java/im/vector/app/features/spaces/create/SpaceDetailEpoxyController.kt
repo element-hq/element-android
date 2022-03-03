@@ -27,6 +27,7 @@ import im.vector.app.features.form.formEditableSquareAvatarItem
 import im.vector.app.features.form.formMultiLineEditTextItem
 import im.vector.app.features.home.AvatarRenderer
 import im.vector.app.features.roomdirectory.createroom.RoomAliasErrorFormatter
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import org.matrix.android.sdk.api.MatrixConstants
 import org.matrix.android.sdk.api.session.room.alias.RoomAliasError
 import org.matrix.android.sdk.api.util.MatrixItem
@@ -61,7 +62,7 @@ class SpaceDetailEpoxyController @Inject constructor(
                         host.stringProvider.getString(R.string.create_spaces_details_public_header)
                     } else {
                         host.stringProvider.getString(R.string.create_spaces_details_private_header)
-                    }
+                    }.toEpoxyCharSequence()
             )
         }
 

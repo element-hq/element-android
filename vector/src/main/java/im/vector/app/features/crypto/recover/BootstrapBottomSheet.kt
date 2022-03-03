@@ -119,7 +119,7 @@ class BootstrapBottomSheet : VectorBaseBottomSheetDialogFragment<BottomSheetBoot
                 .setTitle(R.string.are_you_sure)
                 .setMessage(R.string.bootstrap_cancel_text)
                 .setPositiveButton(R.string._continue, null)
-                .setNegativeButton(R.string.skip) { _, _ ->
+                .setNegativeButton(R.string.action_skip) { _, _ ->
                     bottomSheetResult = ResultListener.RESULT_CANCEL
                     dismiss()
                 }

@@ -23,4 +23,8 @@ sealed class CreateDirectRoomAction : VectorViewModelAction {
     data class CreateRoomAndInviteSelectedUsers(
             val selections: Set<PendingSelection>
     ) : CreateDirectRoomAction()
+
+    data class QrScannedAction(
+            val result: String
+    ) : CreateDirectRoomAction()
 }

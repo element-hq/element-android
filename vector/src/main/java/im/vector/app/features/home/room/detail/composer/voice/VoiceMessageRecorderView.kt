@@ -26,10 +26,10 @@ import im.vector.app.R
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.hardware.vibrate
 import im.vector.app.core.time.Clock
-import im.vector.app.core.utils.CountUpTimer
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.databinding.ViewVoiceMessageRecorderBinding
 import im.vector.app.features.home.room.detail.timeline.helper.VoiceMessagePlaybackTracker
+import im.vector.lib.core.utils.timer.CountUpTimer
 import javax.inject.Inject
 import kotlin.math.floor
 
@@ -93,7 +93,14 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
 
             override fun onSendVoiceMessage() = callback.onSendVoiceMessage()
             override fun onDeleteVoiceMessage() = callback.onDeleteVoiceMessage()
-            override fun onWaveformClicked() = callback.onRecordingWaveformClicked()
+            override fun onWaveformClicked() {
+                when (lastKnownState) {
+                    RecordingUiState.Draft  -> callback.onVoicePlaybackButtonClicked()
+                    is RecordingUiState.Recording,
+                    is RecordingUiState.Locked -> callback.onRecordingWaveformClicked()
+                }
+            }
+
             override fun onVoicePlaybackButtonClicked() = callback.onVoicePlaybackButtonClicked()
             override fun onMicButtonDrag(nextDragStateCreator: (DraggingState) -> DraggingState) {
                 onDrag(dragState, newDragState = nextDragStateCreator(dragState))
@@ -112,20 +119,16 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     fun render(recordingState: RecordingUiState) {
         if (lastKnownState == recordingState) return
         when (recordingState) {
-            RecordingUiState.None       -> {
+            RecordingUiState.Idle      -> {
                 reset()
             }
-            is RecordingUiState.Started -> {
+            is RecordingUiState.Recording -> {
                 startRecordingTicker(startFromLocked = false, startAt = recordingState.recordingStartTimestamp)
                 voiceMessageViews.renderToast(context.getString(R.string.voice_message_release_to_send_toast))
                 voiceMessageViews.showRecordingViews()
                 dragState = DraggingState.Ready
             }
-            RecordingUiState.Cancelled  -> {
-                reset()
-                vibrate(context)
-            }
-            is RecordingUiState.Locked  -> {
+            is RecordingUiState.Locked    -> {
                 if (lastKnownState == null) {
                     startRecordingTicker(startFromLocked = true, startAt = recordingState.recordingStartTimestamp)
                 }
@@ -134,9 +137,9 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
                     voiceMessageViews.showRecordingLockedViews(recordingState)
                 }, 500)
             }
-            RecordingUiState.Playback   -> {
+            RecordingUiState.Draft   -> {
                 stopRecordingTicker()
-                voiceMessageViews.showPlaybackViews()
+                voiceMessageViews.showDraftViews()
             }
         }
         lastKnownState = recordingState
@@ -220,11 +223,10 @@ class VoiceMessageRecorderView @JvmOverloads constructor(
     }
 
     sealed interface RecordingUiState {
-        object None : RecordingUiState
-        data class Started(val recordingStartTimestamp: Long) : RecordingUiState
-        object Cancelled : RecordingUiState
+        object Idle : RecordingUiState
+        data class Recording(val recordingStartTimestamp: Long) : RecordingUiState
         data class Locked(val recordingStartTimestamp: Long) : RecordingUiState
-        object Playback : RecordingUiState
+        object Draft : RecordingUiState
     }
 
     sealed interface DraggingState {

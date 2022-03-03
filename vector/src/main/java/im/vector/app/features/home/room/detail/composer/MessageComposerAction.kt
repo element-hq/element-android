@@ -18,10 +18,10 @@ package im.vector.app.features.home.room.detail.composer
 
 import im.vector.app.core.platform.VectorViewModelAction
 import im.vector.app.features.home.room.detail.composer.voice.VoiceMessageRecorderView
+import org.matrix.android.sdk.api.session.content.ContentAttachmentData
 import org.matrix.android.sdk.api.session.room.model.message.MessageAudioContent
 
 sealed class MessageComposerAction : VectorViewModelAction {
-    data class SaveDraft(val draft: String) : MessageComposerAction()
     data class SendMessage(val text: CharSequence, val autoMarkdown: Boolean) : MessageComposerAction()
     data class EnterEditMode(val eventId: String, val text: String) : MessageComposerAction()
     data class EnterQuoteMode(val eventId: String, val text: String) : MessageComposerAction()
@@ -29,11 +29,13 @@ sealed class MessageComposerAction : VectorViewModelAction {
     data class EnterRegularMode(val text: String, val fromSharing: Boolean) : MessageComposerAction()
     data class UserIsTyping(val isTyping: Boolean) : MessageComposerAction()
     data class OnTextChanged(val text: CharSequence) : MessageComposerAction()
+    data class OnEntersBackground(val composerText: String) : MessageComposerAction()
 
     // Voice Message
+    data class InitializeVoiceRecorder(val attachmentData: ContentAttachmentData) : MessageComposerAction()
     data class OnVoiceRecordingUiStateChanged(val uiState: VoiceMessageRecorderView.RecordingUiState) : MessageComposerAction()
     object StartRecordingVoiceMessage : MessageComposerAction()
-    data class EndRecordingVoiceMessage(val isCancelled: Boolean) : MessageComposerAction()
+    data class EndRecordingVoiceMessage(val isCancelled: Boolean, val rootThreadEventId: String?) : MessageComposerAction()
     object PauseRecordingVoiceMessage : MessageComposerAction()
     data class PlayOrPauseVoicePlayback(val eventId: String, val messageAudioContent: MessageAudioContent) : MessageComposerAction()
     object PlayOrPauseRecordingPlayback : MessageComposerAction()

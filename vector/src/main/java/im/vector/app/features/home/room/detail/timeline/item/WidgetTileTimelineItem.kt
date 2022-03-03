@@ -41,7 +41,7 @@ abstract class WidgetTileTimelineItem : AbsBaseMessageItem<WidgetTileTimelineIte
     @EpoxyAttribute
     lateinit var attributes: Attributes
 
-    override fun getViewType() = STUB_ID
+    override fun getViewStubId() = STUB_ID
 
     @SuppressLint("SetTextI18n")
     override fun bind(holder: Holder) {
@@ -73,7 +73,7 @@ abstract class WidgetTileTimelineItem : AbsBaseMessageItem<WidgetTileTimelineIte
      * This class holds all the common attributes for timeline items.
      */
     data class Attributes(
-            val title: CharSequence,
+            val title: String,
             @DrawableRes
             val drawableStart: Int,
             override val informationData: MessageInformationData,

@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.session.room.timeline
 
+import androidx.test.filters.LargeTest
 import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeTrue
 import org.junit.FixMethodOrder
@@ -38,16 +39,17 @@ import java.util.concurrent.CountDownLatch
 
 @RunWith(JUnit4::class)
 @FixMethodOrder(MethodSorters.JVM)
+@LargeTest
 class TimelinePreviousLastForwardTest : InstrumentedTest {
-
-    private val commonTestHelper = CommonTestHelper(context())
-    private val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
 
     /**
      * This test ensure that if we have a chunk in the timeline which is due to a sync, and we click to permalink, we will be able to go back to the live
      */
+
     @Test
     fun previousLastForwardTest() {
+        val commonTestHelper = CommonTestHelper(context())
+        val cryptoTestHelper = CryptoTestHelper(commonTestHelper)
         val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoom(false)
 
         val aliceSession = cryptoTestData.firstSession
@@ -168,10 +170,8 @@ class TimelinePreviousLastForwardTest : InstrumentedTest {
 
             bobTimeline.addListener(eventsListener)
 
-            // Restart the timeline to the first sent event, and paginate in both direction
+            // Restart the timeline to the first sent event
             bobTimeline.restartWithEventId(firstMessageFromAliceId)
-            bobTimeline.paginate(Timeline.Direction.BACKWARDS, 50)
-            bobTimeline.paginate(Timeline.Direction.FORWARDS, 50)
 
             commonTestHelper.await(lock)
             bobTimeline.removeAllListeners()

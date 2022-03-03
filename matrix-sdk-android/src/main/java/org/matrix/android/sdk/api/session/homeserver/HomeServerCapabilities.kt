@@ -22,6 +22,18 @@ data class HomeServerCapabilities(
          */
         val canChangePassword: Boolean = true,
         /**
+         * True if it is possible to change the display name of the account.
+         */
+        val canChangeDisplayName: Boolean = true,
+        /**
+         * True if it is possible to change the avatar of the account.
+         */
+        val canChangeAvatar: Boolean = true,
+        /**
+         * True if it is possible to change the 3pid associations of the account.
+         */
+        val canChange3pid: Boolean = true,
+        /**
          * Max size of file which can be uploaded to the homeserver in bytes. [MAX_UPLOAD_FILE_SIZE_UNKNOWN] if unknown or not retrieved yet
          */
         val maxUploadFileSize: Long = MAX_UPLOAD_FILE_SIZE_UNKNOWN,
@@ -76,6 +88,7 @@ data class HomeServerCapabilities(
             }
         }
     }
+
     fun isFeatureSupported(feature: String, byRoomVersion: String): Boolean {
         if (roomVersions?.capabilities == null) return false
         val info = roomVersions.capabilities[feature] ?: return false

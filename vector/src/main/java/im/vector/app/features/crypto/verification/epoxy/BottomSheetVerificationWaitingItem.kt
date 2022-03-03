@@ -30,7 +30,7 @@ import im.vector.app.core.epoxy.VectorEpoxyModel
 abstract class BottomSheetVerificationWaitingItem : VectorEpoxyModel<BottomSheetVerificationWaitingItem.Holder>() {
 
     @EpoxyAttribute
-    var title: CharSequence = ""
+    var title: String = ""
 
     override fun bind(holder: Holder) {
         super.bind(holder)

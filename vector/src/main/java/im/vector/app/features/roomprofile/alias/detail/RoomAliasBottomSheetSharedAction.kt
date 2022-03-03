@@ -28,7 +28,7 @@ sealed class RoomAliasBottomSheetSharedAction(
     VectorSharedAction {
 
     data class ShareAlias(val matrixTo: String) : RoomAliasBottomSheetSharedAction(
-            R.string.share,
+            R.string.action_share,
             R.drawable.ic_material_share
     )
 
@@ -41,7 +41,7 @@ sealed class RoomAliasBottomSheetSharedAction(
     )
 
     data class DeleteAlias(val alias: String) : RoomAliasBottomSheetSharedAction(
-            R.string.delete,
+            R.string.action_delete,
             R.drawable.ic_trash_24,
             true
     )

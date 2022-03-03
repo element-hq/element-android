@@ -56,6 +56,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
 
         val allEvents = (newJoinEvents + inviteEvents).filter { event ->
             when (event.type) {
+                EventType.POLL_START,
                 EventType.MESSAGE,
                 EventType.REDACTION,
                 EventType.ENCRYPTED,
@@ -73,6 +74,7 @@ internal class DefaultProcessEventForPushTask @Inject constructor(
                 event to it
             }
         }
+        Timber.d("[PushRules] matched ${matchedEvents.size} out of ${allEvents.size}")
 
         val allRedactedEvents = params.syncResponse.join
                 .asSequence()

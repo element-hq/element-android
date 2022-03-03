@@ -24,6 +24,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationActionItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationNoticeItem
 import im.vector.app.features.crypto.verification.epoxy.bottomSheetVerificationQrCodeItem
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import javax.inject.Inject
 
 class VerificationChooseMethodController @Inject constructor(
@@ -60,7 +61,7 @@ class VerificationChooseMethodController @Inject constructor(
 
             bottomSheetVerificationNoticeItem {
                 id("notice")
-                notice(scanCodeInstructions)
+                notice(scanCodeInstructions.toEpoxyCharSequence())
             }
 
             if (state.otherCanScanQrCode && !state.qrCodeText.isNullOrBlank()) {

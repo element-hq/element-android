@@ -35,6 +35,7 @@ import org.matrix.android.sdk.api.session.room.send.DraftService
 import org.matrix.android.sdk.api.session.room.send.SendService
 import org.matrix.android.sdk.api.session.room.state.StateService
 import org.matrix.android.sdk.api.session.room.tags.TagsService
+import org.matrix.android.sdk.api.session.room.threads.ThreadsService
 import org.matrix.android.sdk.api.session.room.timeline.TimelineService
 import org.matrix.android.sdk.api.session.room.typing.TypingService
 import org.matrix.android.sdk.api.session.room.uploads.UploadsService
@@ -54,6 +55,7 @@ import java.security.InvalidParameterException
 internal class DefaultRoom(override val roomId: String,
                            private val roomSummaryDataSource: RoomSummaryDataSource,
                            private val timelineService: TimelineService,
+                           private val threadsService: ThreadsService,
                            private val sendService: SendService,
                            private val draftService: DraftService,
                            private val stateService: StateService,
@@ -77,6 +79,7 @@ internal class DefaultRoom(override val roomId: String,
 ) :
         Room,
         TimelineService by timelineService,
+        ThreadsService by threadsService,
         SendService by sendService,
         DraftService by draftService,
         StateService by stateService,
@@ -119,18 +122,18 @@ internal class DefaultRoom(override val roomId: String,
         }
     }
 
-    override suspend fun enableEncryption(algorithm: String) {
+    override suspend fun enableEncryption(algorithm: String, force: Boolean) {
         when {
-            isEncrypted()                          -> {
+            (!force && isEncrypted() && encryptionAlgorithm() == MXCRYPTO_ALGORITHM_MEGOLM) -> {
                 throw IllegalStateException("Encryption is already enabled for this room")
             }
-            algorithm != MXCRYPTO_ALGORITHM_MEGOLM -> {
+            (!force && algorithm != MXCRYPTO_ALGORITHM_MEGOLM)                              -> {
                 throw InvalidParameterException("Only MXCRYPTO_ALGORITHM_MEGOLM algorithm is supported")
             }
-            else                                   -> {
+            else                                                                            -> {
                 val params = SendStateTask.Params(
                         roomId = roomId,
-                        stateKey = null,
+                        stateKey = "",
                         eventType = EventType.STATE_ROOM_ENCRYPTION,
                         body = mapOf(
                                 "algorithm" to algorithm

@@ -30,8 +30,12 @@ import org.matrix.android.sdk.internal.crypto.MegolmSessionData
 import java.util.concurrent.CountDownLatch
 
 class KeysBackupTestHelper(
-        private val mTestHelper: CommonTestHelper,
-        private val mCryptoTestHelper: CryptoTestHelper) {
+        private val testHelper: CommonTestHelper,
+        private val cryptoTestHelper: CryptoTestHelper) {
+
+    fun waitForKeybackUpBatching() {
+        Thread.sleep(400)
+    }
 
     /**
      * Common initial condition
@@ -41,7 +45,9 @@ class KeysBackupTestHelper(
      * @param password optional password
      */
     fun createKeysBackupScenarioWithPassword(password: String?): KeysBackupScenarioData {
-        val cryptoTestData = mCryptoTestHelper.doE2ETestWithAliceAndBobInARoomWithEncryptedMessages()
+        val cryptoTestData = cryptoTestHelper.doE2ETestWithAliceAndBobInARoomWithEncryptedMessages()
+
+        waitForKeybackUpBatching()
 
 //        val cryptoStore = (cryptoTestData.firstSession.cryptoService().keysBackupService() as DefaultKeysBackupService).store
         val keysBackup = cryptoTestData.firstSession.cryptoService().keysBackupService()
@@ -55,7 +61,7 @@ class KeysBackupTestHelper(
 
 //        var lastProgress = 0
 //        var lastTotal = 0
-//        mTestHelper.doSync<Unit> {
+//        testHelper.doSync<Unit> {
 //            keysBackup.backupAllGroupSessions(object : ProgressListener {
 //                override fun onProgress(progress: Int, total: Int) {
 //                    lastProgress = progress
@@ -64,12 +70,12 @@ class KeysBackupTestHelper(
 //            }, it)
 //        }
 
-        mTestHelper.runBlockingTest {
+        testHelper.runBlockingTest {
             keysBackup.checkAndStartKeysBackup()
             delay(1000)
         }
-        mTestHelper.waitWithLatch {
-            mTestHelper.retryPeriodicallyWithLatch(it) {
+        testHelper.waitWithLatch {
+            testHelper.retryPeriodicallyWithLatch(it) {
                 keysBackup.state == KeysBackupState.ReadyToBackUp
             }
         }
@@ -79,7 +85,7 @@ class KeysBackupTestHelper(
         val aliceUserId = cryptoTestData.firstSession.myUserId
 
         // - Log Alice on a new device
-        val aliceSession2 = mTestHelper.logIntoAccount(aliceUserId, KeysBackupTestConstants.defaultSessionParamsWithInitialSync)
+        val aliceSession2 = testHelper.logIntoAccount(aliceUserId, KeysBackupTestConstants.defaultSessionParamsWithInitialSync)
 
         // Test check: aliceSession2 has no keys at login
         Assert.assertEquals(0, aliceSession2.cryptoService().inboundGroupSessionsCount(false))
@@ -99,7 +105,7 @@ class KeysBackupTestHelper(
                                        password: String? = null): PrepareKeysBackupDataResult {
         val stateObserver = StateObserver(keysBackup)
 
-        val megolmBackupCreationInfo = mTestHelper.runBlockingTest {
+        val megolmBackupCreationInfo = testHelper.runBlockingTest {
             keysBackup.prepareKeysBackupVersion(password)
         }
 
@@ -108,7 +114,7 @@ class KeysBackupTestHelper(
         Assert.assertFalse(keysBackup.isEnabled)
 
         // Create the version
-        val keysVersion = mTestHelper.runBlockingTest {
+        val keysVersion = testHelper.runBlockingTest {
             keysBackup.createKeysBackupVersion(megolmBackupCreationInfo)
         }
 
@@ -143,7 +149,7 @@ class KeysBackupTestHelper(
             }
         })
 
-        mTestHelper.await(latch)
+        testHelper.await(latch)
     }
 
     fun assertKeysEquals(keys1: MegolmSessionData?, keys2: MegolmSessionData?) {

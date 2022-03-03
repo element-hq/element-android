@@ -31,6 +31,7 @@ import im.vector.app.core.resources.StringProvider
 import im.vector.app.core.ui.list.genericPillItem
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
+import im.vector.lib.core.utils.epoxy.charsequence.toEpoxyCharSequence
 import me.gujun.android.span.span
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.identity.IdentityServiceError
@@ -154,7 +155,7 @@ class UserListController @Inject constructor(private val session: Session,
                                             textStyle = "bold"
                                             textColor = host.colorProvider.getColorFromAttribute(R.attr.colorPrimary)
                                         }
-                                    }
+                                    }.toEpoxyCharSequence()
                             )
                             itemClickAction {
                                 host.callback?.giveIdentityServerConsent()
@@ -182,7 +183,7 @@ class UserListController @Inject constructor(private val session: Session,
                                             textStyle = "bold"
                                             textColor = host.colorProvider.getColorFromAttribute(R.attr.colorPrimary)
                                         }
-                                    }
+                                    }.toEpoxyCharSequence()
                             )
                             itemClickAction {
                                 host.callback?.onSetupDiscovery()

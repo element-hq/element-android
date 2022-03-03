@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:colorBackground"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:viewBindingIgnore="true">
 
     <TextView
         android:id="@+id/itemErrorRetryText"
@@ -25,7 +26,6 @@
         android:text="@string/global_retry"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/itemErrorRetryText" />
-
+        app:layout_constraintTop_toBottomOf="@id/itemErrorRetryText" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

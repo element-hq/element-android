@@ -5,7 +5,7 @@ apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'placeholder-resolver'
+apply plugin: 'com.likethesalad.stem'
 apply plugin: 'dagger.hilt.android.plugin'
 
 kapt {
@@ -14,8 +14,11 @@ kapt {
 
 // Note: 2 digits max for each value
 ext.versionMajor = 1
-ext.versionMinor = 3
-ext.versionPatch = 9
+ext.versionMinor = 4
+// Note: even values are reserved for regular release, odd values for hotfix release.
+// When creating a hotfix, you should decrease the value, since the current value
+// is the value for the next regular release.
+ext.versionPatch = 4
 
 static def getGitTimestamp() {
     def cmd = 'git show -s --format=%ct'
@@ -128,28 +131,15 @@ android {
         // Required for sonar analysis
         versionName "${versionMajor}.${versionMinor}.${versionPatch}-sonar"
 
+        // Generate a random app task affinity
+        manifestPlaceholders = [appTaskAffinitySuffix:"H_${gitRevision()}"]
+
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
-        resValue "string", "git_revision", "\"${gitRevision()}\""
-
         buildConfigField "String", "GIT_REVISION_DATE", "\"${gitRevisionDate()}\""
-        resValue "string", "git_revision_date", "\"${gitRevisionDate()}\""
-
         buildConfigField "String", "GIT_BRANCH_NAME", "\"${gitBranchName()}\""
-        resValue "string", "git_branch_name", "\"${gitBranchName()}\""
-
         buildConfigField "String", "BUILD_NUMBER", "\"${buildNumber}\""
-        resValue "string", "build_number", "\"${buildNumber}\""
 
-        // The two booleans must not have the same value. We need two values for the manifest
-        // LoginFlowV2 is disabled to be merged on develop (changelog: Improve login/register flow (#1410, #2585, #3172))
-        resValue "bool", "useLoginV1", "true"
-        resValue "bool", "useLoginV2", "false"
-
-        // NotificationSettingsV2 is disabled. To be released in conjunction with iOS/Web
-        def useNotificationSettingsV2 = true
-        buildConfigField "Boolean", "USE_NOTIFICATION_SETTINGS_V2", "${useNotificationSettingsV2}"
-        resValue "bool", "useNotificationSettingsV1", "${!useNotificationSettingsV2}"
-        resValue "bool", "useNotificationSettingsV2", "${useNotificationSettingsV2}"
+        buildConfigField "im.vector.app.features.VectorFeatures.OnboardingVariant", "ONBOARDING_VARIANT", "im.vector.app.features.VectorFeatures.OnboardingVariant.FTUE_AUTH"
 
         buildConfigField "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy", "outboundSessionKeySharingStrategy", "im.vector.app.features.crypto.keysrequest.OutboundSessionKeySharingStrategy.WhenTyping"
 
@@ -158,6 +148,9 @@ android {
         //  If set, MSC3086 asserted identity messages sent on VoIP calls will cause the call to appear in the room corresponding to the asserted identity.
         //  This *must* only be set in trusted environments.
         buildConfigField "Boolean", "handleCallAssertedIdentityEvents", "false"
+
+        buildConfigField "Boolean", "enableLocationSharing", "true"
+        buildConfigField "String", "mapTilerKey", "\"fU3vlMsMn4Jb6dnEIFsx\""
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -211,15 +204,20 @@ android {
         animationsDisabled = true
 
         // Comment to run on Android 12
-        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+//        execution 'ANDROIDX_TEST_ORCHESTRATOR'
     }
-
     signingConfigs {
         debug {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
             storeFile file('./signature/debug.keystore')
             storePassword 'android'
+        }
+        release {
+            keyAlias project.property("signing.element.keyId")
+            keyPassword project.property("signing.element.keyPassword")
+            storeFile file(project.property("signing.element.storePath"))
+            storePassword project.property("signing.element.storePassword")
         }
     }
 
@@ -228,7 +226,6 @@ android {
             applicationIdSuffix ".debug"
             resValue "string", "app_name", "Corroded Element dbg"
 
-            resValue "bool", "debug_mode", "true"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             // Set to true if you want to enable strict mode in debug
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
@@ -239,7 +236,6 @@ android {
         release {
             resValue "string", "app_name", "Corroded Element"
 
-            resValue "bool", "debug_mode", "false"
             buildConfigField "boolean", "LOW_PRIVACY_LOG_ENABLE", "false"
             buildConfigField "boolean", "ENABLE_STRICT_MODE_LOGS", "false"
 
@@ -251,6 +247,7 @@ android {
                 optimizeCode true
                 proguardFiles 'proguard-rules.pro'
             }
+            // signingConfig signingConfigs.release
         }
     }
 
@@ -325,19 +322,16 @@ android {
     }
 }
 
-configurations {
-    // videocache includes a sl4j logger which causes mockk to attempt to call the static android Log
-    testImplementation.exclude group: 'org.slf4j', module: 'slf4j-android'
-}
-
 dependencies {
-
+    implementation project(":vector-config")
     implementation project(":matrix-sdk-android")
     implementation project(":matrix-sdk-android-flow")
-    implementation project(":diff-match-patch")
-    implementation project(":multipicker")
-    implementation project(":attachment-viewer")
+    implementation project(":library:jsonviewer")
     implementation project(":library:ui-styles")
+    implementation project(":library:core-utils")
+    implementation project(":library:attachment-viewer")
+    implementation project(":library:diff-match-patch")
+    implementation project(":library:multipicker")
     implementation 'androidx.multidex:multidex:2.0.1'
 
     implementation libs.jetbrains.coroutinesCore
@@ -373,7 +367,7 @@ dependencies {
     implementation 'com.facebook.stetho:stetho:1.6.0'
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.38'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.44'
 
     // FlowBinding
     implementation libs.github.flowBinding
@@ -403,10 +397,12 @@ dependencies {
     implementation libs.google.material
     implementation 'me.gujun.android:span:1.7'
     implementation libs.markwon.core
+    implementation libs.markwon.extLatex
+    implementation libs.markwon.inlineParser
     implementation libs.markwon.html
     implementation 'com.googlecode.htmlcompressor:htmlcompressor:1.5.2'
     implementation 'me.saket:better-link-movement-method:2.2.0'
-    implementation 'com.google.android:flexbox:2.0.1'
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
     implementation libs.androidx.autoFill
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.vector-im:PFLockScreen-Android:1.0.0-beta12'
@@ -423,7 +419,7 @@ dependencies {
     implementation 'com.arthenica:ffmpeg-kit-audio:4.5.LTS'
 
     // Alerter
-    implementation 'com.tapadoo.android:alerter:7.0.1'
+    implementation 'com.github.tapadoo:alerter:7.2.4'
 
     implementation 'com.otaliastudios:autocomplete:1.1.0'
 
@@ -441,8 +437,7 @@ dependencies {
 
     implementation libs.github.glide
     kapt libs.github.glideCompiler
-    implementation 'com.danikula:videocache:2.7.1'
-    implementation 'com.github.yalantis:ucrop:2.2.7'
+    implementation 'com.github.yalantis:ucrop:2.2.8'
 
     // Badge for compatibility
     implementation 'me.leolin:ShortcutBadger:1.1.22@aar'
@@ -454,6 +449,9 @@ dependencies {
     implementation libs.dagger.hilt
     kapt libs.dagger.hiltCompiler
 
+    // Analytics
+    implementation 'com.posthog.android:posthog:1.1.2'
+
     // gplay flavor only
     gplayImplementation('com.google.firebase:firebase-messaging:23.0.0') {
         exclude group: 'com.google.firebase', module: 'firebase-core'
@@ -464,8 +462,7 @@ dependencies {
     // OSS License, gplay flavor only
     gplayImplementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
 
-    implementation "androidx.emoji:emoji-appcompat:1.1.0"
-    implementation('com.github.BillCarsonFr:JsonViewer:0.7')
+    implementation "androidx.emoji2:emoji2:1.0.1"
 
     // WebRTC
     // org.webrtc:google-webrtc is for development purposes only
@@ -497,6 +494,10 @@ dependencies {
         exclude group: 'org.json', module: 'json' //provided by Android natively
     }
     implementation 'commons-codec:commons-codec:1.15'
+
+    // MapTiler
+    implementation 'org.maplibre.gl:android-sdk:9.5.2'
+    implementation 'org.maplibre.gl:android-plugin-annotation-v9:1.0.0'
 
 
     // TESTS

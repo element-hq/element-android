@@ -51,14 +51,15 @@ internal abstract class RawModule {
         @Provides
         @GlobalDatabase
         @MatrixScope
-        fun providesRealmConfiguration(realmKeysUtils: RealmKeysUtils): RealmConfiguration {
+        fun providesRealmConfiguration(realmKeysUtils: RealmKeysUtils,
+                                       globalRealmMigration: GlobalRealmMigration): RealmConfiguration {
             return RealmConfiguration.Builder()
                     .apply {
                         realmKeysUtils.configureEncryption(this, DB_ALIAS)
                     }
                     .name("matrix-sdk-global.realm")
-                    .schemaVersion(GlobalRealmMigration.SCHEMA_VERSION)
-                    .migration(GlobalRealmMigration)
+                    .schemaVersion(globalRealmMigration.schemaVersion)
+                    .migration(globalRealmMigration)
                     .allowWritesOnUiThread(true)
                     .modules(GlobalRealmModule())
                     .build()

@@ -57,7 +57,7 @@ class CallService : VectorService() {
     private val knownCalls = mutableMapOf<String, CallInformation>()
     private val connectedCallIds = mutableSetOf<String>()
 
-    lateinit var notificationManager: NotificationManagerCompat
+    private lateinit var notificationManager: NotificationManagerCompat
     @Inject lateinit var notificationUtils: NotificationUtils
     @Inject lateinit var callManager: WebRtcCallManager
     @Inject lateinit var avatarRenderer: AvatarRenderer
@@ -84,7 +84,7 @@ class CallService : VectorService() {
         super.onCreate()
         notificationManager = NotificationManagerCompat.from(this)
         callRingPlayerIncoming = CallRingPlayerIncoming(applicationContext, notificationUtils)
-        callRingPlayerOutgoing = CallRingPlayerOutgoing(applicationContext)
+        callRingPlayerOutgoing = CallRingPlayerOutgoing(applicationContext, callManager)
     }
 
     override fun onDestroy() {
@@ -124,13 +124,6 @@ class CallService : VectorService() {
                 callRingPlayerIncoming?.stop()
                 callRingPlayerOutgoing?.stop()
                 displayCallInProgressNotification(intent)
-            }
-            ACTION_CALL_CONNECTING       -> {
-                // lower notification priority
-                displayCallInProgressNotification(intent)
-                // stop ringing
-                callRingPlayerIncoming?.stop()
-                callRingPlayerOutgoing?.stop()
             }
             ACTION_CALL_TERMINATED       -> {
                 handleCallTerminated(intent)
@@ -320,12 +313,8 @@ class CallService : VectorService() {
 
         private const val ACTION_INCOMING_RINGING_CALL = "im.vector.app.core.services.CallService.ACTION_INCOMING_RINGING_CALL"
         private const val ACTION_OUTGOING_RINGING_CALL = "im.vector.app.core.services.CallService.ACTION_OUTGOING_RINGING_CALL"
-        private const val ACTION_CALL_CONNECTING = "im.vector.app.core.services.CallService.ACTION_CALL_CONNECTING"
         private const val ACTION_ONGOING_CALL = "im.vector.app.core.services.CallService.ACTION_ONGOING_CALL"
         private const val ACTION_CALL_TERMINATED = "im.vector.app.core.services.CallService.ACTION_CALL_TERMINATED"
-        private const val ACTION_NO_ACTIVE_CALL = "im.vector.app.core.services.CallService.NO_ACTIVE_CALL"
-//        private const val ACTION_ACTIVITY_VISIBLE = "im.vector.app.core.services.CallService.ACTION_ACTIVITY_VISIBLE"
-//        private const val ACTION_STOP_RINGING = "im.vector.app.core.services.CallService.ACTION_STOP_RINGING"
 
         private const val EXTRA_CALL_ID = "EXTRA_CALL_ID"
         private const val EXTRA_IS_IN_BG = "EXTRA_IS_IN_BG"
@@ -351,7 +340,6 @@ class CallService : VectorService() {
                         action = ACTION_OUTGOING_RINGING_CALL
                         putExtra(EXTRA_CALL_ID, callId)
                     }
-
             ContextCompat.startForegroundService(context, intent)
         }
 
@@ -362,11 +350,13 @@ class CallService : VectorService() {
                         action = ACTION_ONGOING_CALL
                         putExtra(EXTRA_CALL_ID, callId)
                     }
-
             ContextCompat.startForegroundService(context, intent)
         }
 
-        fun onCallTerminated(context: Context, callId: String, endCallReason: EndCallReason, rejected: Boolean) {
+        fun onCallTerminated(context: Context,
+                             callId: String,
+                             endCallReason: EndCallReason,
+                             rejected: Boolean) {
             val intent = Intent(context, CallService::class.java)
                     .apply {
                         action = ACTION_CALL_TERMINATED
