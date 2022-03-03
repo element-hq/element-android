@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <declare-styleable name="LocationSharingOptionView">
         <attr name="icon" format="reference" />
         <attr name="iconBackground" format="reference" />
@@ -8,4 +9,5 @@
         <attr name="iconDescription" format="string" />
         <attr name="title" format="string" />
     </declare-styleable>
+
 </resources>
