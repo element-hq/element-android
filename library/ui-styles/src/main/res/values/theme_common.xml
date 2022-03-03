@@ -25,10 +25,4 @@
         <item name="android:backgroundDimEnabled">false</item>
     </style>
 
-    <style name="Theme.Vector.ActionButton" parent="@android:style/Widget.ActionButton">
-        <item name="android:paddingStart">5dp</item>
-        <item name="android:paddingEnd">5dp</item>
-        <item name="android:minWidth">0dp</item>
-    </style>
-
 </resources>

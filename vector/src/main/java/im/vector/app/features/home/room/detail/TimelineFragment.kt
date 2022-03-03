@@ -1615,7 +1615,6 @@ class TimelineFragment @Inject constructor(
 
     private fun renderToolbar(roomSummary: RoomSummary?) {
         if (!isThreadTimeLine()) {
-            views.includeRoomToolbar.roomToolbarSubtitleView.isVisible = false
             views.includeRoomToolbar.roomToolbarContentView.isVisible = true
             views.includeThreadToolbar.roomToolbarThreadConstraintLayout.isVisible = false
             if (roomSummary == null) {

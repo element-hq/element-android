@@ -142,7 +142,7 @@
 
         <item name="vctr_toast_background">@color/vctr_toast_background_dark</item>
 
-        <item name="android:actionButtonStyle">@style/Theme.Vector.ActionButton</item>
+        <item name="android:actionButtonStyle">@style/Widget.Vector.ActionButton</item>
 
     </style>
 
