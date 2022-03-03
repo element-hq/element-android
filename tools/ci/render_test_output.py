@@ -13,7 +13,6 @@ print("::group::Arguments")
 print(f"{sys.argv}") 
 print("::endgroup::")
 for xmlfile in xmlfiles:
-    print(f"Handling: {xmlfile}") 
     tree = ET.parse(xmlfile)
     
     root = tree.getroot()
