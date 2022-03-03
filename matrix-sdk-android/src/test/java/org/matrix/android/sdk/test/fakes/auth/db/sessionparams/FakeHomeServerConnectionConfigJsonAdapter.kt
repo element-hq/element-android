@@ -41,7 +41,7 @@ internal class FakeHomeServerConnectionConfigJsonAdapter {
     }
 
     companion object {
-        val homeServerConnectionConfig: HomeServerConnectionConfig = mockk()
+        val homeServerConnectionConfig = HomeServerConnectionConfig.Builder().build()
         const val HOME_SERVER_CONNECTION_CONFIG_JSON = "home_server_connection_config_json"
     }
 }

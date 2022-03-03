@@ -20,18 +20,21 @@ import com.squareup.moshi.JsonAdapter
 import io.mockk.every
 import io.mockk.mockk
 import org.matrix.android.sdk.api.auth.data.Credentials
+import org.matrix.android.sdk.test.fakes.auth.db.sessionparams.FakeSessionParamsMapperMoshi.Companion.sessionParams
+import org.matrix.android.sdk.test.fakes.auth.db.sessionparams.FakeSessionParamsMapperMoshi.Companion.sessionParamsEntity
+import org.matrix.android.sdk.test.fixtures.CredentialsFixture.aCredentials
 
 internal class FakeCredentialsJsonAdapter {
 
     val instance: JsonAdapter<Credentials> = mockk()
 
     init {
-        every { instance.fromJson(FakeSessionParamsMapperMoshi.sessionParamsEntity.credentialsJson) } returns credentials
-        every { instance.toJson(FakeSessionParamsMapperMoshi.sessionParams.credentials) } returns CREDENTIALS_JSON
+        every { instance.fromJson(sessionParamsEntity.credentialsJson) } returns credentials
+        every { instance.toJson(sessionParams.credentials) } returns CREDENTIALS_JSON
     }
 
     fun givenNullDeserialization() {
-        every { instance.fromJson(FakeSessionParamsMapperMoshi.sessionParamsEntity.credentialsJson) } returns null
+        every { instance.fromJson(sessionParamsEntity.credentialsJson) } returns null
     }
 
     fun givenNullSerialization() {
@@ -39,7 +42,7 @@ internal class FakeCredentialsJsonAdapter {
     }
 
     companion object {
-        val credentials: Credentials = mockk()
+        val credentials = aCredentials()
         const val CREDENTIALS_JSON = "credentials_json"
     }
 }
