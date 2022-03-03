@@ -333,7 +333,7 @@ jobs:
             ${{ runner.os }}-gradle-
       - run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          ORG_GRADLE_PROJECT_SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
 # Notify the channel about scheduled runs, do not notify for manually triggered runs
   notify:
