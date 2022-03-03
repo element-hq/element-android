@@ -16,7 +16,6 @@
 
 package org.matrix.android.sdk.internal.session.room.create
 
-import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType

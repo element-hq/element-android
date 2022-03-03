@@ -42,8 +42,8 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
                                                                private val stateEventDataSource: StateEventDataSource,
                                                                private val sendStateTask: SendStateTask,
                                                                private val fileUploader: FileUploader,
-                                                               private val viaParameterFinder: ViaParameterFinder,
-                                                               ) : StateService {
+                                                               private val viaParameterFinder: ViaParameterFinder
+) : StateService {
 
     @AssistedFactory
     interface Factory {
