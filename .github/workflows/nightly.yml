@@ -316,7 +316,7 @@ jobs:
         with: 
           distribution: 'adopt'
           java-version: '11'
-      - uses: action/cache@v2
+      - uses: actions/cache@v2
         with:
           path: |
             ~/.gradle/caches
