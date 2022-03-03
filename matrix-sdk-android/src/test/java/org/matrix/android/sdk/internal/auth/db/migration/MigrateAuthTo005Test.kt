@@ -17,7 +17,7 @@
 package org.matrix.android.sdk.internal.auth.db.migration
 
 import org.junit.Test
-import org.matrix.android.sdk.test.fakes.Fake005MigrationRealm
+import org.matrix.android.sdk.test.fakes.auth.db.migration.Fake005MigrationRealm
 
 class MigrateAuthTo005Test {
 

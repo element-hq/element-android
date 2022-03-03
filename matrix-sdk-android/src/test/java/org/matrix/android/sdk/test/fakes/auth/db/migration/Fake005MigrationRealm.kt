@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.test.fakes
+package org.matrix.android.sdk.test.fakes.auth.db.migration
 
 import io.mockk.every
 import io.mockk.mockk

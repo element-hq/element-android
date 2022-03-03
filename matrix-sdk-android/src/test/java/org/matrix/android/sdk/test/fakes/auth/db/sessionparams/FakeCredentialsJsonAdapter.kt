@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.test.fakes.sessionparams
+package org.matrix.android.sdk.test.fakes.auth.db.sessionparams
 
 import com.squareup.moshi.JsonAdapter
 import io.mockk.every
