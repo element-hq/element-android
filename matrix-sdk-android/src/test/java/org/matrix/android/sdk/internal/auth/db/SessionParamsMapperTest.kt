@@ -16,14 +16,12 @@
 
 package org.matrix.android.sdk.internal.auth.db
 
-import io.mockk.every
-import org.amshove.kluent.shouldBeNull
 import org.junit.Test
-import org.matrix.android.sdk.test.fakes.FakeSessionParamsMapperMoshi
-import org.matrix.android.sdk.test.fakes.FakeSessionParamsMapperMoshi.Companion.nullSessionParams
-import org.matrix.android.sdk.test.fakes.FakeSessionParamsMapperMoshi.Companion.nullSessionParamsEntity
-import org.matrix.android.sdk.test.fakes.FakeSessionParamsMapperMoshi.Companion.sessionParams
-import org.matrix.android.sdk.test.fakes.FakeSessionParamsMapperMoshi.Companion.sessionParamsEntity
+import org.matrix.android.sdk.test.fakes.sessionparams.FakeSessionParamsMapperMoshi
+import org.matrix.android.sdk.test.fakes.sessionparams.FakeSessionParamsMapperMoshi.Companion.nullSessionParams
+import org.matrix.android.sdk.test.fakes.sessionparams.FakeSessionParamsMapperMoshi.Companion.nullSessionParamsEntity
+import org.matrix.android.sdk.test.fakes.sessionparams.FakeSessionParamsMapperMoshi.Companion.sessionParams
+import org.matrix.android.sdk.test.fakes.sessionparams.FakeSessionParamsMapperMoshi.Companion.sessionParamsEntity
 
 class SessionParamsMapperTest {
 
@@ -47,8 +45,8 @@ class SessionParamsMapperTest {
     }
 
     @Test
-    fun `given null credentials, when mapping entity, then return null`() {
-        fakeMoshi.givenCredentialsFromJsonIsNull()
+    fun `given null credentials json deserialization, when mapping entity, then return null`() {
+        fakeMoshi.credentialsJsonAdapter.givenNullDeserialization()
 
         val output = sessionParamsMapper.map(sessionParamsEntity)
 
@@ -56,8 +54,8 @@ class SessionParamsMapperTest {
     }
 
     @Test
-    fun `given null homeServerConnectionConfig, when mapping entity, then return null`() {
-        fakeMoshi.givenHomeServerConnectionConfigFromJsonIsNull()
+    fun `given null homeServerConnectionConfig json deserialization, when mapping entity, then return null`() {
+        fakeMoshi.homeServerConnectionConfigAdapter.givenNullDeserialization()
 
         val output = sessionParamsMapper.map(sessionParamsEntity)
 
@@ -81,8 +79,8 @@ class SessionParamsMapperTest {
     }
 
     @Test
-    fun `given null credentials json, when mapping sessionParams, then return null`() {
-        fakeMoshi.givenCredentialsToJsonIsNull()
+    fun `given null credentials json serialization, when mapping sessionParams, then return null`() {
+        fakeMoshi.credentialsJsonAdapter.givenNullSerialization()
 
         val output = sessionParamsMapper.map(sessionParams)
 
@@ -90,8 +88,8 @@ class SessionParamsMapperTest {
     }
 
     @Test
-    fun `given null homeServerConnectionConfig json, when mapping sessionParams, then return null`() {
-        fakeMoshi.givenHomeServerConnectionConfigToJsonIsNull()
+    fun `given null homeServerConnectionConfig json serialization, when mapping sessionParams, then return null`() {
+        fakeMoshi.homeServerConnectionConfigAdapter.givenNullSerialization()
 
         val output = sessionParamsMapper.map(sessionParams)
 

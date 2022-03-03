@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package org.matrix.android.sdk.test.fakes
+package org.matrix.android.sdk.test.fakes.sessionparams
 
-import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import io.mockk.every
 import io.mockk.mockk
@@ -28,46 +27,22 @@ import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.auth.data.sessionId
 import org.matrix.android.sdk.internal.auth.db.SessionParamsEntity
 import org.matrix.android.sdk.internal.auth.login.LoginType
+import org.matrix.android.sdk.test.fakes.sessionparams.FakeCredentialsJsonAdapter.Companion.CREDENTIALS_JSON
+import org.matrix.android.sdk.test.fakes.sessionparams.FakeCredentialsJsonAdapter.Companion.credentials
+import org.matrix.android.sdk.test.fakes.sessionparams.FakeHomeServerConnectionConfigJsonAdapter.Companion.HOME_SERVER_CONNECTION_CONFIG_JSON
+import org.matrix.android.sdk.test.fakes.sessionparams.FakeHomeServerConnectionConfigJsonAdapter.Companion.homeServerConnectionConfig
 import org.matrix.android.sdk.test.fixtures.SessionParamsEntityFixture.aSessionParamsEntity
 import org.matrix.android.sdk.test.fixtures.SessionParamsFixture.aSessionParams
 
 internal class FakeSessionParamsMapperMoshi {
 
     val instance: Moshi = mockk()
-    private val credentialsAdapter: JsonAdapter<Credentials> = mockk()
-    private val homeServerConnectionConfigAdapter: JsonAdapter<HomeServerConnectionConfig> = mockk()
+    val credentialsJsonAdapter = FakeCredentialsJsonAdapter()
+    val homeServerConnectionConfigAdapter = FakeHomeServerConnectionConfigJsonAdapter()
 
     init {
-       stubAdapters()
-       stubJsonConversions()
-    }
-
-    private fun stubAdapters() {
-        every { instance.adapter(Credentials::class.java) } returns credentialsAdapter
-        every { instance.adapter(HomeServerConnectionConfig::class.java) } returns homeServerConnectionConfigAdapter
-    }
-
-    private fun stubJsonConversions() {
-        every { credentialsAdapter.fromJson(sessionParamsEntity.credentialsJson) } returns credentials
-        every { homeServerConnectionConfigAdapter.fromJson(sessionParamsEntity.homeServerConnectionConfigJson) } returns homeServerConnectionConfig
-        every { credentialsAdapter.toJson(sessionParams.credentials) } returns CREDENTIALS_JSON
-        every { homeServerConnectionConfigAdapter.toJson(sessionParams.homeServerConnectionConfig) } returns HOME_SERVER_CONNECTION_CONFIG_JSON
-    }
-
-    fun givenCredentialsFromJsonIsNull() {
-        every { credentialsAdapter.fromJson(sessionParamsEntity.credentialsJson) } returns null
-    }
-
-    fun givenHomeServerConnectionConfigFromJsonIsNull() {
-        every { homeServerConnectionConfigAdapter.fromJson(sessionParamsEntity.homeServerConnectionConfigJson) } returns null
-    }
-
-    fun givenCredentialsToJsonIsNull() {
-        every { credentialsAdapter.toJson(credentials) } returns null
-    }
-
-    fun givenHomeServerConnectionConfigToJsonIsNull() {
-        every { homeServerConnectionConfigAdapter.toJson(homeServerConnectionConfig) } returns null
+        every { instance.adapter(Credentials::class.java) } returns credentialsJsonAdapter.instance
+        every { instance.adapter(HomeServerConnectionConfig::class.java) } returns homeServerConnectionConfigAdapter.instance
     }
 
     fun assertSessionParamsWasMappedSuccessfully(sessionParams: SessionParams?) {
@@ -103,10 +78,5 @@ internal class FakeSessionParamsMapperMoshi {
         val sessionParamsEntity = aSessionParamsEntity()
         val nullSessionParams: SessionParams? = null
         val nullSessionParamsEntity: SessionParamsEntity? = null
-
-        private val credentials: Credentials = mockk()
-        private val homeServerConnectionConfig: HomeServerConnectionConfig = mockk()
-        private const val CREDENTIALS_JSON = "credentials_json"
-        private const val HOME_SERVER_CONNECTION_CONFIG_JSON = "home_server_connection_config_json"
     }
 }
