@@ -7,11 +7,30 @@ apply plugin: 'jacoco'
 
 jacoco {
     toolVersion = '0.8.7'
+    reportsDirectory = layout.buildDirectory.dir('build/reports/jacoco')
 }
 
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
     jacoco.excludes = ['jdk.internal.*','kotlin.*','kotlinx.*']
+}
+
+task jacocoTestReport(type: JacocoReport) {
+
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def fileFilter = ['**/R.class', '**/R$*.class', '**/BuildConfig.*', '**/Manifest*.*', '**/*Test*.*', 'android/**/*.*']
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/classes/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories.setFrom(files([mainSrc]))
+    classDirectories.setFrom(files([debugTree]))
+    executionData.setFrom(fileTree(dir: "${buildDir}", includes: [
+            "jacoco/testReleaseUnitTest.exec",
+    ]))
 }
 
 buildscript {
