@@ -17,7 +17,18 @@
 package im.vector.app.features.location.option
 
 enum class LocationSharingOption {
-    USER_CURRENT, // current user's location
-    USER_LIVE,    // user's location during a certain amount of time
-    PINNED        // static location pinned by the user
+    /**
+     * Current user's location.
+     */
+    USER_CURRENT,
+
+    /**
+     * User's location during a certain amount of time.
+     */
+    USER_LIVE,
+
+    /**
+     * Static location pinned by the user.
+     */
+    PINNED
 }
