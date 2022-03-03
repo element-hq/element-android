@@ -115,7 +115,7 @@ internal class CreateRoomBodyBuilder @Inject constructor(
     private suspend fun buildAvatarEvent(params: CreateRoomParams): Event? {
         return params.avatarUri?.let { avatarUri ->
             // First upload the image, ignoring any error
-            tryOrNull("Failed to load image") {
+            tryOrNull("Failed to upload image") {
                 withContext(coroutineDispatchers.io) {
                     fileUploader.uploadFromUri(
                             uri = avatarUri,
