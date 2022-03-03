@@ -43,7 +43,7 @@
         app:layout_constraintBottom_toTopOf="@id/locationSharingOptionUserLive"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locationSharingOptionPinned"
+        app:layout_constraintTop_toBottomOf="@id/locationSharingOptionPinned"
         app:title="@string/location_share_option_user_current" />
 
     <View
