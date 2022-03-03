@@ -32,6 +32,7 @@ import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.mvrx.runCatchingToAsync
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.features.createdirect.DirectRoomHelper
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.room.detail.timeline.helper.MatrixItemColorProvider
 import im.vector.app.features.powerlevel.PowerLevelsFlowFactory
@@ -66,6 +67,7 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
         @Assisted private val initialState: RoomMemberProfileViewState,
         private val stringProvider: StringProvider,
         private val matrixItemColorProvider: MatrixItemColorProvider,
+        private val directRoomHelper: DirectRoomHelper,
         private val session: Session
 ) : VectorViewModel<RoomMemberProfileViewState, RoomMemberProfileAction, RoomMemberProfileViewEvents>(initialState) {
 
@@ -167,7 +169,23 @@ class RoomMemberProfileViewModel @AssistedInject constructor(
             is RoomMemberProfileAction.KickUser               -> handleKickAction(action)
             RoomMemberProfileAction.InviteUser                -> handleInviteAction()
             is RoomMemberProfileAction.SetUserColorOverride   -> handleSetUserColorOverride(action)
+            is RoomMemberProfileAction.OpenOrCreateDm         -> handleOpenOrCreateDm(action)
         }.exhaustive
+    }
+
+    private fun handleOpenOrCreateDm(action: RoomMemberProfileAction.OpenOrCreateDm) {
+        viewModelScope.launch {
+            _viewEvents.post(RoomMemberProfileViewEvents.Loading())
+            val roomId = try {
+                directRoomHelper.ensureDMExists(action.userId)
+            } catch (failure: Throwable) {
+                _viewEvents.post(RoomMemberProfileViewEvents.Failure(failure))
+                return@launch
+            }
+            if (roomId != initialState.roomId) {
+                _viewEvents.post(RoomMemberProfileViewEvents.OpenRoom(roomId = roomId))
+            }
+        }
     }
 
     private fun handleSetUserColorOverride(action: RoomMemberProfileAction.SetUserColorOverride) {

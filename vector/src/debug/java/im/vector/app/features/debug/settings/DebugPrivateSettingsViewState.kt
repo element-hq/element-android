@@ -19,5 +19,6 @@ package im.vector.app.features.debug.settings
 import com.airbnb.mvrx.MavericksState
 
 data class DebugPrivateSettingsViewState(
-        val dialPadVisible: Boolean = false
+        val dialPadVisible: Boolean = false,
+        val forceLoginFallback: Boolean = false,
 ) : MavericksState

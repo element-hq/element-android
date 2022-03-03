@@ -41,6 +41,16 @@ data class Interaction(
 
     enum class Name {
         /**
+         * User tapped on Add to Home button on Room Details screen.
+         */
+        MobileRoomAddHome,
+
+        /**
+         * User tapped on Leave Room button on Room Details screen.
+         */
+        MobileRoomLeave,
+
+        /**
          * User tapped the already selected space from the space list.
          */
         SpacePanelSelectedSpace,
@@ -52,8 +62,8 @@ data class Interaction(
         SpacePanelSwitchSpace,
 
         /**
-         * User clicked the create room button in the + context menu of the room
-         * list header in Element Web/Desktop.
+         * User clicked the create room button in the add existing room to space
+         * dialog in Element Web/Desktop.
          */
         WebAddExistingToSpaceDialogCreateRoomButton,
 
@@ -154,6 +164,12 @@ data class Interaction(
         WebRoomListHeaderPlusMenuCreateRoomItem,
 
         /**
+         * User clicked the explore rooms button in the + context menu of the
+         * room list header in Element Web/Desktop.
+         */
+        WebRoomListHeaderPlusMenuExploreRoomsItem,
+
+        /**
          * User adjusted their favourites using the context menu on a room tile
          * in the room list in Element Web/Desktop.
          */
@@ -190,6 +206,12 @@ data class Interaction(
         WebRoomListRoomsSublistPlusMenuCreateRoomItem,
 
         /**
+         * User clicked the explore rooms button in the + context menu of the
+         * rooms sublist in  Element Web/Desktop.
+         */
+        WebRoomListRoomsSublistPlusMenuExploreRoomsItem,
+
+        /**
          * User interacted with leave action in the general tab of the room
          * settings dialog in Element Web/Desktop.
          */
@@ -214,14 +236,26 @@ data class Interaction(
         WebSettingsSidebarTabSpacesCheckbox,
 
         /**
-         * User clicked the create room button in the + context menu of the room
-         * list header in Element Web/Desktop.
+         * User clicked the explore rooms button in the context menu of a space
+         * in Element Web/Desktop.
+         */
+        WebSpaceContextMenuExploreRoomsItem,
+
+        /**
+         * User clicked the home button in the context menu of a space in
+         * Element Web/Desktop.
+         */
+        WebSpaceContextMenuHomeItem,
+
+        /**
+         * User clicked the new room button in the context menu of a space in
+         * Element Web/Desktop.
          */
         WebSpaceContextMenuNewRoomItem,
 
         /**
-         * User clicked the create room button in the + context menu of the room
-         * list header in Element Web/Desktop.
+         * User clicked the new room button in the context menu on the space
+         * home in Element Web/Desktop.
          */
         WebSpaceHomeCreateRoomButton,
 

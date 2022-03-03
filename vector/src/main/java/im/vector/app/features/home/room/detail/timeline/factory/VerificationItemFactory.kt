@@ -65,7 +65,7 @@ class VerificationItemFactory @Inject constructor(
                 ?: return ignoredConclusion(params)
 
         // If we cannot find the referenced request we do not display the done event
-        val refEvent = session.getRoom(event.root.roomId ?: "")?.getTimeLineEvent(refEventId)
+        val refEvent = session.getRoom(event.root.roomId ?: "")?.getTimelineEvent(refEventId)
                 ?: return ignoredConclusion(params)
 
         // If it's not a request ignore this event

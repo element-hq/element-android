@@ -20,6 +20,7 @@ import android.content.SharedPreferences
 import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.annotation.BoolRes
 import androidx.core.content.edit
 import com.squareup.seismic.ShakeDetector
 import im.vector.app.BuildConfig
@@ -299,6 +300,8 @@ class VectorPreferences @Inject constructor(private val context: Context) {
             }
         }
     }
+
+    private fun getDefault(@BoolRes resId: Int) = context.resources.getBoolean(resId)
 
     fun areNotificationEnabledForDevice(): Boolean {
         return defaultPrefs.getBoolean(SETTINGS_ENABLE_THIS_DEVICE_PREFERENCE_KEY, true)
@@ -856,7 +859,7 @@ class VectorPreferences @Inject constructor(private val context: Context) {
      * @return true to show timeline message in bubble.
      */
     fun useMessageBubblesLayout(): Boolean {
-        return defaultPrefs.getBoolean(SETTINGS_INTERFACE_BUBBLE_KEY, false)
+        return defaultPrefs.getBoolean(SETTINGS_INTERFACE_BUBBLE_KEY, getDefault(R.bool.settings_interface_bubble_default))
     }
 
     /**

@@ -81,7 +81,7 @@ class DataAttachmentRoomProvider(
 
     override fun getTimelineEventAtPosition(position: Int): TimelineEvent? {
         val item = getItem(position)
-        return room?.getTimeLineEvent(item.eventId)
+        return room?.getTimelineEvent(item.eventId)
     }
 
     override suspend fun getFileForSharing(position: Int): File? {

@@ -26,6 +26,7 @@ import org.matrix.android.sdk.api.session.Session
 
 class FakeSession(
         val fakeCryptoService: FakeCryptoService = FakeCryptoService(),
+        val fakeProfileService: FakeProfileService = FakeProfileService(),
         val fakeSharedSecretStorageService: FakeSharedSecretStorageService = FakeSharedSecretStorageService()
 ) : Session by mockk(relaxed = true) {
 
@@ -36,6 +37,7 @@ class FakeSession(
     override fun cryptoService() = fakeCryptoService
     override val sharedSecretStorageService = fakeSharedSecretStorageService
     override val coroutineDispatchers = testCoroutineDispatchers
+    override suspend fun setDisplayName(userId: String, newDisplayName: String) = fakeProfileService.setDisplayName(userId, newDisplayName)
 
     fun givenVectorStore(vectorSessionStore: VectorSessionStore) {
         coEvery {

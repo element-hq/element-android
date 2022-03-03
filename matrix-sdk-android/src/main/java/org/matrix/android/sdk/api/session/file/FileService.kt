@@ -117,5 +117,5 @@ interface FileService {
     /**
      * Get size of cached files
      */
-    fun getCacheSize(): Int
+    fun getCacheSize(): Long
 }

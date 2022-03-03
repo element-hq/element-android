@@ -24,12 +24,12 @@ import im.vector.app.core.di.MavericksAssistedViewModelFactory
 import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.platform.EmptyViewEvents
 import im.vector.app.core.platform.VectorViewModel
-import im.vector.app.features.settings.VectorDataStore
+import im.vector.app.features.debug.features.DebugVectorOverrides
 import kotlinx.coroutines.launch
 
 class DebugPrivateSettingsViewModel @AssistedInject constructor(
         @Assisted initialState: DebugPrivateSettingsViewState,
-        private val vectorDataStore: VectorDataStore
+        private val debugVectorOverrides: DebugVectorOverrides
 ) : VectorViewModel<DebugPrivateSettingsViewState, DebugPrivateSettingsViewActions, EmptyViewEvents>(initialState) {
 
     @AssistedFactory
@@ -44,22 +44,32 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
     }
 
     private fun observeVectorDataStore() {
-        vectorDataStore.forceDialPadDisplayFlow.setOnEach {
+        debugVectorOverrides.forceDialPad.setOnEach {
             copy(
                     dialPadVisible = it
             )
+        }
+        debugVectorOverrides.forceLoginFallback.setOnEach {
+            copy(forceLoginFallback = it)
         }
     }
 
     override fun handle(action: DebugPrivateSettingsViewActions) {
         when (action) {
-            is DebugPrivateSettingsViewActions.SetDialPadVisibility -> handleSetDialPadVisibility(action)
+            is DebugPrivateSettingsViewActions.SetDialPadVisibility         -> handleSetDialPadVisibility(action)
+            is DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled -> handleSetForceLoginFallbackEnabled(action)
         }
     }
 
     private fun handleSetDialPadVisibility(action: DebugPrivateSettingsViewActions.SetDialPadVisibility) {
         viewModelScope.launch {
-            vectorDataStore.setForceDialPadDisplay(action.force)
+            debugVectorOverrides.setForceDialPadDisplay(action.force)
+        }
+    }
+
+    private fun handleSetForceLoginFallbackEnabled(action: DebugPrivateSettingsViewActions.SetForceLoginFallbackEnabled) {
+        viewModelScope.launch {
+            debugVectorOverrides.setForceLoginFallback(action.force)
         }
     }
 }
