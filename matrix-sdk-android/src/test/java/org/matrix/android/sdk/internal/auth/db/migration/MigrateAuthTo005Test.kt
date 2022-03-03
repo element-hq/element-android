@@ -26,7 +26,6 @@ class MigrateAuthTo005Test {
 
     @Test
     fun `when doMigrate, then LoginType field added`() {
-
         migrator.doMigrate(fakeRealm.instance)
 
         fakeRealm.verifyLoginTypeAdded()

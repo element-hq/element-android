@@ -30,15 +30,13 @@ class SessionParamsMapperTest {
 
     @Test
     fun `when mapping entity, then map as SessionParams`() {
-
         val output = sessionParamsMapper.map(sessionParamsEntity)
 
         fakeMoshi.assertSessionParamsWasMappedSuccessfully(output)
     }
 
     @Test
-    fun `given null input, when mapping entity, then return null`() {
-
+    fun `when mapping null entity, then return null`() {
         val output = sessionParamsMapper.map(nullSessionParamsEntity)
 
         fakeMoshi.assertSessionParamsIsNull(output)
@@ -64,15 +62,13 @@ class SessionParamsMapperTest {
 
     @Test
     fun `when mapping sessionParams, then map as SessionParamsEntity`() {
-
         val output = sessionParamsMapper.map(sessionParams)
 
         fakeMoshi.assertSessionParamsEntityWasMappedSuccessfully(output)
     }
 
     @Test
-    fun `given null input, when mapping sessionParams, then return null`() {
-
+    fun `when mapping null sessionParams, then return null`() {
         val output = sessionParamsMapper.map(nullSessionParams)
 
         fakeMoshi.assertSessionParamsEntityWasMappedSuccessfully(output)
