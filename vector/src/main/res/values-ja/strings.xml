@@ -1489,8 +1489,8 @@
     <string name="a11y_image">画像</string>
     <string name="a11y_screenshot">スクリーンショット</string>
     <string name="call_transfer_connect_action">接続</string>
-    <string name="attachment_type_poll">投票</string>
-    <string name="sent_a_poll">投票</string>
+    <string name="attachment_type_poll">アンケート</string>
+    <string name="sent_a_poll">アンケート</string>
     <string name="settings_text_message_sent_hint">コード</string>
     <string name="power_level_title">役割</string>
     <string name="identity_server_set_alternative_submit">送信</string>
@@ -1515,9 +1515,9 @@
     <string name="login_reset_password_warning_title">警告！</string>
     <string name="attachment_type_location">位置情報</string>
     <string name="uploads_media_title">メディア</string>
-    <string name="poll_end_room_list_preview">投票終了</string>
-    <string name="end_poll_confirmation_title">投票を終了しますか？</string>
-    <string name="delete_poll_dialog_title">投票を削除</string>
+    <string name="poll_end_room_list_preview">アンケート終了</string>
+    <string name="end_poll_confirmation_title">アンケートを終了しますか？</string>
+    <string name="delete_poll_dialog_title">アンケートを削除</string>
     <string name="create_space">スペースを作成</string>
     <string name="join_space">スペースに参加</string>
     <string name="leave_space">スペースを退出</string>
@@ -1531,10 +1531,10 @@
     <string name="upgrade_private_room">非公開のルームをアップグレード</string>
     <string name="a11y_pause_voice_message">音声メッセージを一時停止</string>
     <string name="link_this_email_settings_link">このメールアドレスをアカウントにリンク</string>
-    <string name="edit_poll_title">投票を編集</string>
+    <string name="edit_poll_title">アンケートを編集</string>
     <string name="a11y_static_map_image">地図</string>
-    <string name="end_poll_confirmation_approve_button">投票を終了</string>
-    <string name="poll_end_action">投票を終了</string>
+    <string name="end_poll_confirmation_approve_button">アンケートを終了</string>
+    <string name="poll_end_action">アンケートを終了</string>
     <string name="create_poll_options_hint">選択肢%1$d</string>
     <string name="create_poll_options_title">選択肢を作成</string>
     <string name="location_activity_title_preview">位置情報</string>
@@ -1549,7 +1549,7 @@
     <string name="tooltip_attachment_file">ファイルをアップロード</string>
     <string name="tooltip_attachment_contact">連絡先を開く</string>
     <string name="tooltip_attachment_sticker">ステッカーを送信</string>
-    <string name="tooltip_attachment_poll">投票を作成</string>
+    <string name="tooltip_attachment_poll">アンケートを作成</string>
     <string name="tooltip_attachment_location">位置情報を共有</string>
     <string name="space_permissions_notice_read_only">スペースに関する変更を行うために必要な役割を更新する権限がありません</string>
     <string name="space_permissions_notice">スペースに関する変更を行うために必要な役割を選択</string>
@@ -1587,8 +1587,8 @@
     <string name="room_permissions_enable_space_encryption">ルームの暗号化の有効化</string>
     <string name="room_permissions_change_main_address_for_the_space">スペースのメインアドレスの変更</string>
     <string name="room_permissions_change_space_avatar">スペースのアバターの変更</string>
-    <string name="create_poll_title">投票を作成</string>
-    <string name="create_poll_button">投票を作成</string>
+    <string name="create_poll_title">アンケートを作成</string>
+    <string name="create_poll_button">アンケートを作成</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">暗号化が正しく設定されていないため、メッセージを送ることができません。クリックして設定を開いてください。</string>
     <string name="room_unsupported_e2e_algorithm">暗号化が正しく設定されていないため、メッセージを送ることができません。管理者に連絡して、暗号化を正しい状態に復元してください。</string>
     <string name="attachment_viewer_item_x_of_y">%2$dの%1$d</string>
@@ -1741,12 +1741,12 @@
     <string name="bootstrap_enter_recovery">続行するには%sを入力してください</string>
     <string name="bootstrap_invalid_recovery_key">有効なリカバリーキーではありません</string>
     <string name="recovery_key_empty_error_message">リカバリーキーを入力してください</string>
-    <string name="poll_type_title">投票の種類</string>
-    <string name="open_poll_option_title">実施中の投票</string>
+    <string name="poll_type_title">アンケートの種類</string>
+    <string name="open_poll_option_title">投票の際に結果を公開</string>
     <string name="poll_response_room_list_preview">投票する</string>
     <string name="open_poll_option_description">投票した人には、投票の際に即座に結果が表示されます</string>
-    <string name="closed_poll_option_title">終了した投票</string>
-    <string name="closed_poll_option_description">結果は投票を終了した後でのみ明らかにされます</string>
+    <string name="closed_poll_option_title">アンケートの終了後に結果を公開</string>
+    <string name="closed_poll_option_description">結果はアンケートを終了した後でのみ明らかにされます</string>
     <string name="location_share_external">以下で開く</string>
     <string name="upgrade_security">暗号化のアップグレードが利用可能です</string>
     <string name="bootstrap_progress_generating_ssss_recovery">SSSSキーをリカバリーキーから生成しています</string>
@@ -1762,7 +1762,7 @@
     <plurals name="poll_option_vote_count">
         <item quantity="other">%1$d個の投票</item>
     </plurals>
-    <string name="end_poll_confirmation_description">投票を締め切り、投票の最終結果を表示します。</string>
+    <string name="end_poll_confirmation_description">アンケートを締め切り、最終結果を表示します。</string>
     <string name="space_type_private_desc">招待者のみ参加可能。個人やチームに最適</string>
     <string name="activity_create_space_title">スペースを作成</string>
     <string name="invite_people_to_your_space">連絡先をスペースに招待</string>
@@ -1789,7 +1789,7 @@
     <string name="a11y_recording_voice_message">音声メッセージを録音しています</string>
     <string name="a11y_delete_recorded_voice_message">録音を削除</string>
     <string name="error_voice_message_cannot_reply_or_edit">音声メッセージがアクティブの間は返信や編集はできません</string>
-    <string name="delete_poll_dialog_content">この投票を削除してよろしいですか？一度削除すると復元することはできません。</string>
+    <string name="delete_poll_dialog_content">このアンケートを削除してよろしいですか？一度削除すると復元することはできません。</string>
     <string name="error_handling_incoming_share">共有データの取り扱いに失敗しました</string>
     <string name="rotate_and_crop_screen_title">回転とクロップ</string>
     <string name="space_explore_activity_title">ルームを探索</string>
@@ -1815,7 +1815,7 @@
 \nこのユーザーのコンテンツをこれ以上見たくなければ、ユーザーを無視してそのメッセージを非表示にできます。</string>
     <string name="uploads_files_subtitle">%1$sにより%2$sに</string>
     <string name="create_poll_question_hint">質問あるいはトピック</string>
-    <string name="create_poll_question_title">投票の質問あるいはトピック</string>
+    <string name="create_poll_question_title">アンケートの質問あるいはトピック</string>
     <string name="it_may_take_some_time">少々お待ちください。少し時間がかかるかもしれません。</string>
     <string name="settings_server_room_versions">ルームのバージョン 👓</string>
     <string name="settings_server_room_version_unstable">不安定</string>
