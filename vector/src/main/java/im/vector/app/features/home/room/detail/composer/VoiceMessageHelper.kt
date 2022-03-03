@@ -132,9 +132,11 @@ class VoiceMessageHelper @Inject constructor(
     }
 
     fun startOrPausePlayback(id: String, file: File) {
-        stopPlayback()
+        val playbackState = playbackTracker.getPlaybackState(id)
+        mediaPlayer?.stop()
+        stopPlaybackTicker()
         stopRecordingAmplitudes()
-        if (playbackTracker.getPlaybackState(id) is VoiceMessagePlaybackTracker.Listener.State.Playing) {
+        if (playbackState is VoiceMessagePlaybackTracker.Listener.State.Playing) {
             playbackTracker.pausePlayback(id)
         } else {
             startPlayback(id, file)
