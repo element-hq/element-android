@@ -21,8 +21,6 @@ import androidx.lifecycle.LiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.withContext
-import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.query.QueryStringValue
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -40,13 +38,13 @@ import org.matrix.android.sdk.api.util.Optional
 import org.matrix.android.sdk.internal.session.content.FileUploader
 import org.matrix.android.sdk.internal.session.permalinks.ViaParameterFinder
 
-internal class DefaultStateService @AssistedInject constructor(@Assisted private val roomId: String,
-                                                               private val stateEventDataSource: StateEventDataSource,
-                                                               private val sendStateTask: SendStateTask,
-                                                               private val fileUploader: FileUploader,
-                                                               private val viaParameterFinder: ViaParameterFinder,
-                                                               private val coroutineDispatchers: MatrixCoroutineDispatchers,
-                                                               ) : StateService {
+internal class DefaultStateService @AssistedInject constructor(
+        @Assisted private val roomId: String,
+        private val stateEventDataSource: StateEventDataSource,
+        private val sendStateTask: SendStateTask,
+        private val fileUploader: FileUploader,
+        private val viaParameterFinder: ViaParameterFinder,
+) : StateService {
 
     @AssistedFactory
     interface Factory {
@@ -158,14 +156,12 @@ internal class DefaultStateService @AssistedInject constructor(@Assisted private
     }
 
     override suspend fun updateAvatar(avatarUri: Uri, fileName: String) {
-        withContext(coroutineDispatchers.io) {
-            val response = fileUploader.uploadFromUri(avatarUri, fileName, MimeTypes.Jpeg)
-            sendStateEvent(
-                    eventType = EventType.STATE_ROOM_AVATAR,
-                    body = mapOf("url" to response.contentUri),
-                    stateKey = ""
-            )
-        }
+        val response = fileUploader.uploadFromUri(avatarUri, fileName, MimeTypes.Jpeg)
+        sendStateEvent(
+                eventType = EventType.STATE_ROOM_AVATAR,
+                body = mapOf("url" to response.contentUri),
+                stateKey = ""
+        )
     }
 
     override suspend fun deleteAvatar() {
