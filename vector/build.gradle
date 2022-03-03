@@ -91,15 +91,9 @@ static def getFdroidVersionSuffix() {
     }
 }
 
-static def getTaskAffinitySuffix() {
-    String alphaCharset = (('A'..'Z') + ('a'..'z')).join()
-    String alphaNumCharset = (('A'..'Z') + ('0'..'9') + ('a'..'z')).join()
-    Random rnd = new Random()
-
-    return alphaCharset[rnd.nextInt(alphaCharset.length())] +
-            rnd.with {
-                (1..7).collect { alphaNumCharset[nextInt(alphaNumCharset.length())] }.join()
-            }
+static def generateTaskAffinitySuffix() {
+    String charset = (('A'..'Z') + ('a'..'z')).join()
+    return new Random().with { (1..8).collect { charset[nextInt(charset.length())] }.join() }
 }
 
 project.android.buildTypes.all { buildType ->
@@ -143,7 +137,7 @@ android {
         versionName "${versionMajor}.${versionMinor}.${versionPatch}-sonar"
 
         // Generate a random app task affinity
-        manifestPlaceholders = [appTaskAffinity:"${applicationId}.${getTaskAffinitySuffix()}"]
+        manifestPlaceholders = [appTaskAffinitySuffix:"${generateTaskAffinitySuffix()}"]
 
         buildConfigField "String", "GIT_REVISION", "\"${gitRevision()}\""
         resValue "string", "git_revision", "\"${gitRevision()}\""
