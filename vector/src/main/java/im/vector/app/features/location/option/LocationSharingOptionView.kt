@@ -24,9 +24,9 @@ import android.widget.ImageView
 import androidx.annotation.ColorInt
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.view.setPadding
 import im.vector.app.R
+import im.vector.app.core.extensions.tintBackground
 import im.vector.app.databinding.ViewLocationSharingOptionBinding
 
 /**
@@ -61,12 +61,7 @@ class LocationSharingOptionView @JvmOverloads constructor(
     }
 
     fun setIconBackgroundTint(@ColorInt color: Int) {
-        val bkg = binding.shareLocationOptionIcon.background?.let {
-            val backgroundDrawable = DrawableCompat.wrap(binding.shareLocationOptionIcon.background)
-            DrawableCompat.setTint(backgroundDrawable, color)
-            backgroundDrawable
-        }
-        binding.shareLocationOptionIcon.background = bkg
+        binding.shareLocationOptionIcon.tintBackground(color)
     }
 
     private fun setIcon(typedArray: TypedArray) {
@@ -83,12 +78,8 @@ class LocationSharingOptionView @JvmOverloads constructor(
         val description = typedArray.getString(R.styleable.LocationSharingOptionView_iconDescription)
 
         iconView.setImageDrawable(icon)
-        val bkg = background?.let {
-            val backgroundDrawable = DrawableCompat.wrap(it)
-            DrawableCompat.setTint(backgroundDrawable, backgroundTint)
-            backgroundDrawable
-        }
-        iconView.background = bkg
+        iconView.background = background
+        iconView.tintBackground(backgroundTint)
         iconView.setPadding(padding)
         iconView.contentDescription = description
     }
