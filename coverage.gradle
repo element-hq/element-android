@@ -1,29 +1,4 @@
-def excludes = [
-        // DI graph
-        '**/*Module.*',
-        '**/*Module*.*',
-
-        // Android composables
-        '**/*Screen*',
-        '**/components/*',
-        '**/*Compose*.*',
-
-        // Android framework
-        '**/*Activity*',
-        '**/*AndroidService*',
-        '**/*Application*',
-
-        // Generated
-        '**/*serializer*',
-        '**/*Serializer*',
-        "**/*request/*Companion*.*",
-        '**/*QueriesImpl*',
-        '**/*Db*',
-        '**/Select*',
-
-        // Tmp until serializationx can ignore generated
-        '**/Api*',
-]
+def excludes = [ ]
 
 def initializeReport(report, projects, classExcludes) {
     projects.each { project -> project.apply plugin: 'jacoco' }
