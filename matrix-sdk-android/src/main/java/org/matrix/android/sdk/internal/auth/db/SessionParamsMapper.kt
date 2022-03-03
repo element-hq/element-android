@@ -21,6 +21,7 @@ import org.matrix.android.sdk.api.auth.data.Credentials
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.api.auth.data.sessionId
+import org.matrix.android.sdk.internal.auth.login.LoginType
 import javax.inject.Inject
 
 internal class SessionParamsMapper @Inject constructor(moshi: Moshi) {
@@ -37,7 +38,7 @@ internal class SessionParamsMapper @Inject constructor(moshi: Moshi) {
         if (credentials == null || homeServerConnectionConfig == null) {
             return null
         }
-        return SessionParams(credentials, homeServerConnectionConfig, entity.isTokenValid)
+        return SessionParams(credentials, homeServerConnectionConfig, entity.isTokenValid, LoginType.fromValue(entity.loginType))
     }
 
     fun map(sessionParams: SessionParams?): SessionParamsEntity? {
@@ -54,6 +55,8 @@ internal class SessionParamsMapper @Inject constructor(moshi: Moshi) {
                 sessionParams.userId,
                 credentialsJson,
                 homeServerConnectionConfigJson,
-                sessionParams.isTokenValid)
+                sessionParams.isTokenValid,
+                sessionParams.loginType.value,
+        )
     }
 }
