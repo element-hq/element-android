@@ -133,7 +133,7 @@ class LocationSharingFragment @Inject constructor(
     private fun initOptionsPicker() {
         // TODO
         //  change the options dynamically depending on the current chosen location
-        views.shareLocationOptionsPicker.setOptions(LocationSharingOption.USER_CURRENT)
+        views.shareLocationOptionsPicker.setOptions(LocationSharingOption.USER_CURRENT, LocationSharingOption.USER_LIVE)
         views.shareLocationOptionsPicker.optionPinned.debouncedClicks {
             viewModel.handle(LocationSharingAction.OnShareLocation)
         }

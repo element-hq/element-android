@@ -26,7 +26,7 @@
         android:id="@+id/shareLocationOptionIcon"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:contentDescription="@string/a11y_location_share_icon"
+        android:contentDescription="@string/a11y_location_share_option_pinned_icon"
         tools:background="@drawable/circle"
         tools:backgroundTint="?colorPrimary"
         tools:padding="11dp"
@@ -38,6 +38,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="?vctr_content_primary"
-        tools:text="@string/location_share" />
+        tools:text="@string/location_share_option_pinned" />
 
 </merge>
