@@ -58,7 +58,7 @@ class LocationSharingOptionPickerView @JvmOverloads constructor(
         applyBackground()
     }
 
-    fun setOptions(vararg options: LocationSharingOption) {
+    fun render(vararg options: LocationSharingOption) {
         val optionsNumber = options.toSet().size
         val isPinnedVisible = options.contains(LocationSharingOption.PINNED)
         val isUserCurrentVisible = options.contains(LocationSharingOption.USER_CURRENT)
