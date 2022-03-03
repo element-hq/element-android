@@ -169,7 +169,7 @@ internal class TimelineChunk(private val chunkEntity: ChunkEntity,
      * This function will fetch more live thread timeline events using the /relations api. It will
      * always fetch results, while we want our data to be up to dated.
      */
-    suspend fun loadMoreThread(count: Int, direction: Timeline.Direction): LoadMoreResult {
+    suspend fun loadMoreThread(count: Int, direction: Timeline.Direction = Timeline.Direction.BACKWARDS): LoadMoreResult {
         val rootThreadEventId = timelineSettings.rootThreadEventId ?: return LoadMoreResult.FAILURE
         return if (direction == Timeline.Direction.BACKWARDS) {
             try {
