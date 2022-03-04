@@ -36,7 +36,7 @@ internal class OlmSessionStore @Inject constructor(private val store: IMXCryptoS
     private val olmSessions = HashMap<String, MutableList<OlmSessionWrapper>>()
 
     /**
-     * Store a session between the logged-in user and another device.
+     * Store a session between our own device and another device.
      * This will be called after creation but also after any use of the ratchet
      * in order to persist the correct state for next run
      * @param olmSessionWrapper   the end-to-end session.
