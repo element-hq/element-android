@@ -331,7 +331,7 @@ jobs:
         with:
           name: codecov-xml
           path: |
-            build/jacoco/*.xml
+            build/reports/jacoco/allCodeCoverageReport/allCodeCoverageReport.xml
 
   sonarqube:
     runs-on: macos-latest
@@ -354,7 +354,8 @@ jobs:
             ${{ runner.os }}-gradle-
       - uses: actions/download-artifact@v3
         with:
-          artifact: codecov-xml # will restore to build/ as a local run would do
+          name: codecov-xml # will restore to build/reports/jacoco/allCodeCoverageReport/allCodeCoverageReport.xml by default
+      - run: ls -R build/reports # temporary check to see if the report is actually downloading correctly.
       - run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
         env:
           ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
