@@ -64,7 +64,7 @@ internal class DefaultRegistrationWizard(
 
     override suspend fun getRegistrationFlow(): RegistrationResult {
         val params = RegistrationParams()
-        return performRegistrationRequest(params, LoginType.UNSUPPORTED)
+        return performRegistrationRequest(params, LoginType.PASSWORD)
     }
 
     override suspend fun createAccount(userName: String?,
@@ -87,7 +87,7 @@ internal class DefaultRegistrationWizard(
                 ?: throw IllegalStateException("developer error, call createAccount() method first")
 
         val params = RegistrationParams(auth = AuthParams.createForCaptcha(safeSession, response))
-        return performRegistrationRequest(params, LoginType.UNSUPPORTED)
+        return performRegistrationRequest(params, LoginType.PASSWORD)
     }
 
     override suspend fun acceptTerms(): RegistrationResult {
@@ -95,7 +95,7 @@ internal class DefaultRegistrationWizard(
                 ?: throw IllegalStateException("developer error, call createAccount() method first")
 
         val params = RegistrationParams(auth = AuthParams(type = LoginFlowTypes.TERMS, session = safeSession))
-        return performRegistrationRequest(params, LoginType.UNSUPPORTED)
+        return performRegistrationRequest(params, LoginType.PASSWORD)
     }
 
     override suspend fun addThreePid(threePid: RegisterThreePid): RegistrationResult {
@@ -145,14 +145,14 @@ internal class DefaultRegistrationWizard(
                 .also { pendingSessionStore.savePendingSessionData(it) }
 
         // and send the sid a first time
-        return performRegistrationRequest(params, LoginType.UNSUPPORTED)
+        return performRegistrationRequest(params, LoginType.PASSWORD)
     }
 
     override suspend fun checkIfEmailHasBeenValidated(delayMillis: Long): RegistrationResult {
         val safeParam = pendingSessionData.currentThreePidData?.registrationParams
                 ?: throw IllegalStateException("developer error, no pending three pid")
 
-        return performRegistrationRequest(safeParam, LoginType.UNSUPPORTED, delayMillis)
+        return performRegistrationRequest(safeParam, LoginType.PASSWORD, delayMillis)
     }
 
     override suspend fun handleValidateThreePid(code: String): RegistrationResult {
@@ -173,7 +173,7 @@ internal class DefaultRegistrationWizard(
         if (validationResponse.isSuccess()) {
             // The entered code is correct
             // Same than validate email
-            return performRegistrationRequest(registrationParams, LoginType.UNSUPPORTED, 3_000)
+            return performRegistrationRequest(registrationParams, LoginType.PASSWORD, 3_000)
         } else {
             // The code is not correct
             throw Failure.SuccessError
@@ -185,7 +185,7 @@ internal class DefaultRegistrationWizard(
                 ?: throw IllegalStateException("developer error, call createAccount() method first")
 
         val params = RegistrationParams(auth = AuthParams(type = LoginFlowTypes.DUMMY, session = safeSession))
-        return performRegistrationRequest(params, LoginType.UNSUPPORTED)
+        return performRegistrationRequest(params, LoginType.PASSWORD)
     }
 
     private suspend fun performRegistrationRequest(

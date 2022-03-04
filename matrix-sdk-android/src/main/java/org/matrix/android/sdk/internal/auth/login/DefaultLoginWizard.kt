@@ -90,7 +90,7 @@ internal class DefaultLoginWizard(
             authAPI.login(loginParams)
         }
 
-        return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig, LoginType.UNSUPPORTED)
+        return sessionCreator.createSession(credentials, pendingSessionData.homeServerConnectionConfig, LoginType.SSO)
     }
 
     override suspend fun loginCustom(data: JsonDict): Session {
