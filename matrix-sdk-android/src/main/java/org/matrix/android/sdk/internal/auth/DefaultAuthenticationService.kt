@@ -38,6 +38,7 @@ import org.matrix.android.sdk.internal.auth.data.WebClientConfig
 import org.matrix.android.sdk.internal.auth.db.PendingSessionData
 import org.matrix.android.sdk.internal.auth.login.DefaultLoginWizard
 import org.matrix.android.sdk.internal.auth.login.DirectLoginTask
+import org.matrix.android.sdk.internal.auth.login.LoginType
 import org.matrix.android.sdk.internal.auth.registration.DefaultRegistrationWizard
 import org.matrix.android.sdk.internal.auth.version.Versions
 import org.matrix.android.sdk.internal.auth.version.isLoginAndRegistrationSupportedBySdk
@@ -370,7 +371,7 @@ internal class DefaultAuthenticationService @Inject constructor(
 
     override suspend fun createSessionFromSso(homeServerConnectionConfig: HomeServerConnectionConfig,
                                               credentials: Credentials): Session {
-        return sessionCreator.createSession(credentials, homeServerConnectionConfig)
+        return sessionCreator.createSession(credentials, homeServerConnectionConfig, LoginType.SSO)
     }
 
     override suspend fun getWellKnownData(matrixId: String,
