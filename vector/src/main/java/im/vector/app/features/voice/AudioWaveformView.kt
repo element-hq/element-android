@@ -129,6 +129,7 @@ class AudioWaveformView @JvmOverloads constructor(
     }
 
     private fun List<FFT>.summarize(target: Int): List<FFT> {
+        flow = Flow.LTR
         val result = mutableListOf<FFT>()
         if (size <= target) {
             result.addAll(this)
