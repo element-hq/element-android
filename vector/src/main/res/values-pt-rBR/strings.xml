@@ -1414,7 +1414,7 @@
     <string name="qr_code_scanned_by_other_notice">Quase lá! %s está mostrando um tick (✓)\?</string>
     <string name="qr_code_scanned_by_other_yes">Sim</string>
     <string name="qr_code_scanned_by_other_no">Não</string>
-    <string name="no_connectivity_to_the_server_indicator">Conectividade ao servidor tem sido perdida</string>
+    <string name="no_connectivity_to_the_server_indicator">A conexão com o servidor foi perdida</string>
     <string name="no_connectivity_to_the_server_indicator_airplane">Modo avião está ligado</string>
     <string name="settings_dev_tools">Ferramentas Dev</string>
     <string name="settings_account_data">Dados de Conta</string>
@@ -2107,7 +2107,7 @@
         <item quantity="other">%d chamadas de vídeo perdidas</item>
     </plurals>
     <plurals name="missed_audio_call">
-        <item quantity="one">Chamadad de áudio perdida</item>
+        <item quantity="one">Chamada de áudio perdida</item>
         <item quantity="other">%d chamadas de áudio perdidas</item>
     </plurals>
     <string name="upgrade_room_for_restricted_note">Por favor note que fazer upgrade vai fazer uma nova versão da sala. Todas as mensagens atuais vão permanecer nesta sala arquivada.</string>
