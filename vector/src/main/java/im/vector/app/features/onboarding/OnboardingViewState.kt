@@ -22,7 +22,6 @@ import com.airbnb.mvrx.Async
 import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.PersistState
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ServerType
@@ -82,10 +81,6 @@ data class OnboardingViewState(
                 asyncRegistration is Loading ||
                 asyncDisplayName is Loading ||
                 asyncProfilePicture is Loading
-    }
-
-    fun isAuthTaskCompleted(): Boolean {
-        return asyncLoginAction is Success
     }
 }
 

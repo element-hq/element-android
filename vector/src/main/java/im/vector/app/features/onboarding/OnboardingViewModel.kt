@@ -767,12 +767,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
         when (isAccountCreated) {
             true  -> {
-                val homeServerCapabilities = session.getHomeServerCapabilities()
-                val capabilityOverrides = vectorOverrides.forceHomeserverCapabilities?.firstOrNull()
-                val personalizationState = state.personalizationState.copy(
-                        supportsChangingDisplayName = capabilityOverrides?.canChangeDisplayName ?: homeServerCapabilities.canChangeDisplayName,
-                        supportsChangingProfilePicture = capabilityOverrides?.canChangeAvatar ?: homeServerCapabilities.canChangeAvatar
-                )
+                val personalizationState = createPersonalizationState(session, state)
                 setState {
                     copy(asyncLoginAction = Success(Unit), personalizationState = personalizationState)
                 }
@@ -782,6 +777,20 @@ class OnboardingViewModel @AssistedInject constructor(
                 setState { copy(asyncLoginAction = Success(Unit)) }
                 _viewEvents.post(OnboardingViewEvents.OnAccountSignedIn)
             }
+        }
+    }
+
+    private suspend fun createPersonalizationState(session: Session, state: OnboardingViewState): PersonalizationState {
+        return when {
+            vectorFeatures.isOnboardingPersonalizeEnabled() -> {
+                val homeServerCapabilities = session.getHomeServerCapabilities()
+                val capabilityOverrides = vectorOverrides.forceHomeserverCapabilities?.firstOrNull()
+                state.personalizationState.copy(
+                        supportsChangingDisplayName = capabilityOverrides?.canChangeDisplayName ?: homeServerCapabilities.canChangeDisplayName,
+                        supportsChangingProfilePicture = capabilityOverrides?.canChangeAvatar ?: homeServerCapabilities.canChangeAvatar
+                )
+            }
+            else                                            -> state.personalizationState
         }
     }
 

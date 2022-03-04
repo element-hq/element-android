@@ -122,16 +122,8 @@ class FtueAuthVariant(
 
     private fun updateWithState(viewState: OnboardingViewState) {
         isForceLoginFallbackEnabled = viewState.isForceLoginFallbackEnabled
-        views.loginLoading.isVisible = shouldShowLoading(viewState)
+        views.loginLoading.isVisible = viewState.isLoading()
     }
-
-    private fun shouldShowLoading(viewState: OnboardingViewState) =
-            if (vectorFeatures.isOnboardingPersonalizeEnabled()) {
-                viewState.isLoading()
-            } else {
-                // Keep loading when during success because of the delay when switching to the next Activity
-                viewState.isLoading() || viewState.isAuthTaskCompleted()
-            }
 
     override fun setIsLoading(isLoading: Boolean) = Unit
 
