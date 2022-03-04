@@ -51,7 +51,7 @@ internal class OlmSessionStore @Inject constructor(private val store: IMXCryptoS
     }
 
     /**
-     * Retrieve the end-to-end session ids between the logged-in user and another
+     * Get all the Olm Sessions we are sharing with the given user
      * device.
      *
      * @param deviceKey the public key of the other device.
