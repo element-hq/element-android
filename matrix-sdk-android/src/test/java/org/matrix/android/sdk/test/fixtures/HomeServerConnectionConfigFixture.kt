@@ -24,8 +24,8 @@ import org.matrix.android.sdk.internal.network.ssl.Fingerprint
 
 object HomeServerConnectionConfigFixture {
     fun aHomeServerConnectionConfig(
-            homeServerUri: Uri = Uri.EMPTY,
-            homeServerUriBase: Uri = Uri.EMPTY,
+            homeServerUri: Uri = Uri.parse("aUri"),
+            homeServerUriBase: Uri = homeServerUri,
             identityServerUri: Uri? = null,
             antiVirusServerUri: Uri? = null,
             allowedFingerprints: List<Fingerprint> = emptyList(),
