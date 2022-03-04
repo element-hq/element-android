@@ -77,7 +77,7 @@ allprojects {
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         // Warnings are potential errors, so stop ignoring them
         // You can override by passing `-PallWarningsAsErrors=false` in the command line
-        kotlinOptions.allWarningsAsErrors = project.getProperties().getOrDefault("allWarningsAsErrors", "true").toBoolean()
+        kotlinOptions.allWarningsAsErrors = false//project.getProperties().getOrDefault("allWarningsAsErrors", "true").toBoolean()
     }
 
     // Fix "Java heap space" issue
