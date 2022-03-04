@@ -637,7 +637,7 @@ class E2eeSanityTests : InstrumentedTest {
                 } catch (error: MXCryptoError) {
                     val errorType = (error as? MXCryptoError.Base)?.errorType
                     if (expectedError == null) {
-                        Assert.assertTrue(errorType != null)
+                        Assert.assertNotNull(errorType)
                     } else {
                         assertEquals(expectedError, errorType, "Message expected to be UISI")
                     }

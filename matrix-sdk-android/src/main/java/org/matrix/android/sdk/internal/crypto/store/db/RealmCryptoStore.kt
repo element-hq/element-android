@@ -230,8 +230,15 @@ internal class RealmCryptoStore @Inject constructor(
         }
     }
 
-    override fun getOlmAccount(): OlmAccount {
-        return olmAccount!!
+    /**
+     * Olm account access should be synchronized
+     */
+    override fun <T> doWithOlmAccount(block: (OlmAccount) -> T): T {
+        return olmAccount!!.let { olmAccount ->
+            synchronized(olmAccount) {
+                block.invoke(olmAccount)
+            }
+        }
     }
 
     @Synchronized

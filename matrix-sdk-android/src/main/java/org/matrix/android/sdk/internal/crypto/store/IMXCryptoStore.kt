@@ -54,7 +54,7 @@ internal interface IMXCryptoStore {
     /**
      * @return the olm account
      */
-    fun getOlmAccount(): OlmAccount
+    fun <T> doWithOlmAccount(block: (OlmAccount) -> T): T
 
     fun getOrCreateOlmAccount(): OlmAccount
 

@@ -28,7 +28,8 @@ data class OlmSessionWrapper(
         // Timestamp at which the session last received a message.
         var lastReceivedMessageTs: Long = 0,
 
-        var mutex: Mutex = Mutex()) {
+        val mutex: Mutex = Mutex()
+) {
 
     /**
      * Notify that a message has been received on this olm session so that it updates `lastReceivedMessageTs`
