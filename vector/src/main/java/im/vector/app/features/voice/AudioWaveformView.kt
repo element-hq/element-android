@@ -164,9 +164,10 @@ class AudioWaveformView @JvmOverloads constructor(
 
     private fun drawBars(canvas: Canvas) {
         var currentX = horizontalPadding
-        visibleBarHeights.forEach {
+        val flowableBarHeights = if (flow == Flow.LTR) visibleBarHeights else visibleBarHeights.reversed()
+
+        flowableBarHeights.forEach {
             barPaint.color = it.color
-            // TODO. Support flow
             when (alignment) {
                 Alignment.BOTTOM -> {
                     val startY = height - verticalPadding
