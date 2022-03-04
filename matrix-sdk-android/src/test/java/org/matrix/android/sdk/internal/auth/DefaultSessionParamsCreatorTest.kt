@@ -47,7 +47,7 @@ class DefaultSessionParamsCreatorTest : DefaultSessionParamsCreatorTestBase() {
     @Test
     fun `given credentials homeServerUri is equal to homeServerConnectionConfig, when create, then do not validate`() = runBlockingTest {
         val homeServerConnectionConfigWithCredentialsUri = homeServerConnectionConfig.copy(homeServerUriBase = discoveryWithHomeServer.getHomeServerUri())
-        val output = sessionParamsCreator.create(credentialsWithHomeServer, homeServerConnectionConfigWithCredentialsUri , LoginType.UNKNOWN)
+        val output = sessionParamsCreator.create(credentialsWithHomeServer, homeServerConnectionConfigWithCredentialsUri, LoginType.UNKNOWN)
 
         fakeIsValidClientServerApiTask.verifyNoExecution()
         assertExpectedSessionParamsWithHomeServer(output)

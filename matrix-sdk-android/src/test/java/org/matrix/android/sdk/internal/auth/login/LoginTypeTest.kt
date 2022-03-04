@@ -35,8 +35,9 @@ class LoginTypeTest {
         val types = LoginType.values()
 
         types.forEach { type ->
-            if (type != LoginType.UNKNOWN)
+            if (type != LoginType.UNKNOWN) {
                 LoginType.fromValue(type.value) shouldNotBeEqualTo LoginType.UNKNOWN
+            }
         }
     }
 }
