@@ -48,18 +48,36 @@ class MapTilerMapView @JvmOverloads constructor(
     /**
      * For location fragments
      */
-    fun initialize(url: String) {
+    fun initialize(url: String, locationTargetChangeListener: LocationTargetChangeListener? = null) {
         Timber.d("## Location: initialize")
         getMapAsync { map ->
-            map.setStyle(url) { style ->
-                mapRefs = MapRefs(
-                        map,
-                        SymbolManager(this, map, style),
-                        style
-                )
-                pendingState?.let { render(it) }
-                pendingState = null
-            }
+            initMapStyle(map, url)
+            notifyLocationOfMapCenter(locationTargetChangeListener)
+            listenCameraMove(map, locationTargetChangeListener)
+        }
+    }
+
+    private fun initMapStyle(map: MapboxMap, url: String) {
+        map.setStyle(url) { style ->
+            mapRefs = MapRefs(
+                    map,
+                    SymbolManager(this, map, style),
+                    style
+            )
+            pendingState?.let { render(it) }
+            pendingState = null
+        }
+    }
+
+    private fun listenCameraMove(map: MapboxMap, locationTargetChangeListener: LocationTargetChangeListener?) {
+        map.addOnCameraMoveListener {
+            notifyLocationOfMapCenter(locationTargetChangeListener)
+        }
+    }
+
+    private fun notifyLocationOfMapCenter(locationTargetChangeListener: LocationTargetChangeListener?) {
+        getLocationOfMapCenter()?.let { target ->
+            locationTargetChangeListener?.onLocationTargetChange(target)
         }
     }
 

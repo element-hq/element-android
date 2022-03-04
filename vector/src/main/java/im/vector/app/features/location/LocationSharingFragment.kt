@@ -45,7 +45,7 @@ class LocationSharingFragment @Inject constructor(
         private val urlMapProvider: UrlMapProvider,
         private val avatarRenderer: AvatarRenderer,
         private val matrixItemColorProvider: MatrixItemColorProvider
-) : VectorBaseFragment<FragmentLocationSharingBinding>() {
+) : VectorBaseFragment<FragmentLocationSharingBinding>(), LocationTargetChangeListener {
 
     private val viewModel: LocationSharingViewModel by fragmentViewModel()
 
@@ -66,7 +66,10 @@ class LocationSharingFragment @Inject constructor(
         views.mapView.onCreate(savedInstanceState)
 
         lifecycleScope.launchWhenCreated {
-            views.mapView.initialize(urlMapProvider.getMapUrl())
+            views.mapView.initialize(
+                    url = urlMapProvider.getMapUrl(),
+                    locationTargetChangeListener = this@LocationSharingFragment
+            )
         }
 
         initOptionsPicker()
@@ -115,6 +118,10 @@ class LocationSharingFragment @Inject constructor(
         super.onDestroy()
     }
 
+    override fun onLocationTargetChange(target: LocationData) {
+        viewModel.handle(LocationSharingAction.LocationTargetChangeAction(target))
+    }
+
     override fun invalidate() = withState(viewModel) { state ->
         updateMap(state)
         updateUserAvatar(state.userItem)
@@ -138,17 +145,18 @@ class LocationSharingFragment @Inject constructor(
 
     private fun initOptionsPicker() {
         // TODO
-        //  move pin creation into the Fragment
-        //  create a useCase to compare pinnedLocation and userLocation
+        //  create a useCase to compare 2 locations
+        //  update options menu dynamically
         //  change the pin dynamically depending on the current chosen location: cf. LocationPinProvider
+        //  move pin creation into the Fragment? => need to ask other's opinions
         //  reset map to user location when clicking on reset icon
         //  need changes in the event sent when this is a pin drop location?
         //  need changes in the parsing of events when receiving pin drop location?: should it be shown with user avatar or with pin?
         // set no option at start
         views.shareLocationOptionsPicker.render()
         views.shareLocationOptionsPicker.optionPinned.debouncedClicks {
-            val selectedLocation = views.mapView.getLocationOfMapCenter()
-            viewModel.handle(LocationSharingAction.PinnedLocationSharingAction(selectedLocation))
+            val targetLocation = views.mapView.getLocationOfMapCenter()
+            viewModel.handle(LocationSharingAction.PinnedLocationSharingAction(targetLocation))
         }
         views.shareLocationOptionsPicker.optionUserCurrent.debouncedClicks {
             viewModel.handle(LocationSharingAction.CurrentUserLocationSharingAction)
@@ -160,9 +168,7 @@ class LocationSharingFragment @Inject constructor(
 
     private fun updateMap(state: LocationSharingViewState) {
         // first, update the options view
-        // TODO compute distance between userLocation and location at center of map
-        val isUserLocation = true
-        if (isUserLocation) {
+        if (state.areTargetAndUserLocationEqual) {
             // TODO activate USER_LIVE option when implemented
             views.shareLocationOptionsPicker.render(
                     LocationSharingOption.USER_CURRENT

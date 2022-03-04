@@ -25,17 +25,30 @@ import im.vector.app.core.di.hiltMavericksViewModelFactory
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorViewModel
 import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvider
+import im.vector.app.features.location.domain.usecase.CompareLocationsUseCase
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.sample
+import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.toMatrixItem
+
+private const val TARGET_LOCATION_CHANGE_SAMPLING_PERIOD_IN_MS = 100L
 
 class LocationSharingViewModel @AssistedInject constructor(
         @Assisted private val initialState: LocationSharingViewState,
         private val locationTracker: LocationTracker,
         private val locationPinProvider: LocationPinProvider,
-        private val session: Session
+        private val session: Session,
+        private val compareLocationsUseCase: CompareLocationsUseCase
 ) : VectorViewModel<LocationSharingViewState, LocationSharingAction, LocationSharingViewEvents>(initialState), LocationTracker.Callback {
 
     private val room = session.getRoom(initialState.roomId)!!
+
+    private val locationTargetFlow = MutableSharedFlow<LocationData>()
 
     @AssistedFactory
     interface Factory : MavericksAssistedViewModelFactory<LocationSharingViewModel, LocationSharingViewState> {
@@ -48,6 +61,7 @@ class LocationSharingViewModel @AssistedInject constructor(
         locationTracker.start(this)
         setUserItem()
         createPin()
+        compareTargetAndUserLocation()
     }
 
     private fun setUserItem() {
@@ -64,6 +78,21 @@ class LocationSharingViewModel @AssistedInject constructor(
         }
     }
 
+    private fun compareTargetAndUserLocation() {
+        locationTargetFlow
+                .sample(TARGET_LOCATION_CHANGE_SAMPLING_PERIOD_IN_MS)
+                .map { compareTargetLocation(it) }
+                .distinctUntilChanged()
+                .onEach { setState { copy(areTargetAndUserLocationEqual = it) } }
+                .launchIn(viewModelScope)
+    }
+
+    private suspend fun compareTargetLocation(targetLocation: LocationData): Boolean {
+        return awaitState().lastKnownUserLocation
+                ?.let { userLocation -> compareLocationsUseCase.execute(userLocation, targetLocation) }
+                ?: false
+    }
+
     override fun onCleared() {
         super.onCleared()
         locationTracker.stop()
@@ -73,6 +102,7 @@ class LocationSharingViewModel @AssistedInject constructor(
         when (action) {
             LocationSharingAction.CurrentUserLocationSharingAction -> handleCurrentUserLocationSharingAction()
             is LocationSharingAction.PinnedLocationSharingAction   -> handlePinnedLocationSharingAction(action)
+            is LocationSharingAction.LocationTargetChangeAction    -> handleLocationTargetChangeAction(action)
         }.exhaustive
     }
 
@@ -95,6 +125,12 @@ class LocationSharingViewModel @AssistedInject constructor(
             _viewEvents.post(LocationSharingViewEvents.Close)
         } ?: run {
             _viewEvents.post(LocationSharingViewEvents.LocationNotAvailableError)
+        }
+    }
+
+    private fun handleLocationTargetChangeAction(action: LocationSharingAction.LocationTargetChangeAction) {
+        viewModelScope.launch {
+            locationTargetFlow.emit(action.locationData)
         }
     }
 
