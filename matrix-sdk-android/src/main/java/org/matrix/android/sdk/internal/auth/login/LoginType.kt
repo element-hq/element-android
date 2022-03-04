@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.auth.login
 enum class LoginType(val value: String) {
     PASSWORD("password"),
     SSO("sso"),
+    UNSUPPORTED("unsupported"),
     UNKNOWN("unknown");
 
     companion object {
@@ -26,6 +27,7 @@ enum class LoginType(val value: String) {
         fun fromValue(value: String) = when (value) {
             PASSWORD.value -> PASSWORD
             SSO.value -> SSO
+            UNSUPPORTED.value -> UNSUPPORTED
             else -> UNKNOWN
         }
     }
