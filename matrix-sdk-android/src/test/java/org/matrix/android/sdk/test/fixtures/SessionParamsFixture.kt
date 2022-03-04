@@ -21,12 +21,11 @@ import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.internal.auth.login.LoginType
 import org.matrix.android.sdk.test.fixtures.CredentialsFixture.aCredentials
-import org.matrix.android.sdk.test.fixtures.HomeServerConnectionConfigFixture.aHomeServerConnectionConfig
 
 object SessionParamsFixture {
     fun aSessionParams(
             credentials: Credentials = aCredentials(),
-            homeServerConnectionConfig: HomeServerConnectionConfig = aHomeServerConnectionConfig(),
+            homeServerConnectionConfig: HomeServerConnectionConfig = HomeServerConnectionConfig.Builder().withHomeServerUri("homeserver").build(),
             isTokenValid: Boolean = false,
             loginType: LoginType = LoginType.UNKNOWN,
     ) = SessionParams(
