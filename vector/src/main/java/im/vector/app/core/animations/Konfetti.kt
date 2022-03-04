@@ -16,14 +16,27 @@
 
 package im.vector.app.core.animations
 
-import android.graphics.Color
+import android.content.Context
+import androidx.annotation.ColorInt
+import androidx.core.content.ContextCompat
+import im.vector.app.R
 import nl.dionsegijn.konfetti.KonfettiView
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 
 fun KonfettiView.play() {
+    val confettiColors = listOf(
+            R.color.palette_azure,
+            R.color.palette_grape,
+            R.color.palette_verde,
+            R.color.palette_polly,
+            R.color.palette_melon,
+            R.color.palette_aqua,
+            R.color.palette_prune,
+            R.color.palette_kiwi
+    )
     build()
-            .addColors(Color.YELLOW, Color.GREEN, Color.MAGENTA)
+            .addColors(confettiColors.toColorInt(context))
             .setDirection(0.0, 359.0)
             .setSpeed(2f, 5f)
             .setFadeOutEnabled(true)
@@ -33,3 +46,6 @@ fun KonfettiView.play() {
             .setPosition(-50f, width + 50f, -50f, -50f)
             .streamFor(150, 3000L)
 }
+
+@ColorInt
+private fun List<Int>.toColorInt(context: Context) = map { ContextCompat.getColor(context, it) }
