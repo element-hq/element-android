@@ -94,7 +94,6 @@
         style="@style/Widget.Vector.Button.Login"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="?colorSecondary"
         android:text="@string/ftue_personalize_lets_go"
         android:textAllCaps="true"
         app:layout_constraintBottom_toTopOf="@id/personalizationCompleteSpace5"
