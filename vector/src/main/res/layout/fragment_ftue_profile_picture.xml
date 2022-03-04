@@ -86,9 +86,7 @@
                 app:layout_constraintHeight_percent="0.55"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@id/pos"
-                app:tint="?vctr_content_secondary">
-
-            </ImageView>
+                app:tint="?vctr_content_secondary" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
