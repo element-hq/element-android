@@ -354,8 +354,9 @@ jobs:
             ${{ runner.os }}-gradle-
       - uses: actions/download-artifact@v3
         with:
-          name: codecov-xml # will restore to build/reports/jacoco/allCodeCoverageReport/allCodeCoverageReport.xml by default
-      - run: ls -R build/reports # temporary check to see if the report is actually downloading correctly.
+          name: codecov-xml # will restore to codecov-xml/allCodeCoverageReport.xml by default; we restore to the same location in following tasks
+      - run: mkdir -P build/reports/jacoco/allCodeCoverageReport/
+      - run: mv codecov-xml/allCodeCoverageReport.xml build/reports/jacoco/allCodeCoverageReport/
       - run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
         env:
           ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
