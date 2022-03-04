@@ -71,12 +71,22 @@ class LocationSharingViewModel @AssistedInject constructor(
 
     override fun handle(action: LocationSharingAction) {
         when (action) {
-            LocationSharingAction.OnShareLocation -> handleShareLocation()
+            LocationSharingAction.CurrentUserLocationSharingAction -> handleCurrentUserLocationSharingAction()
+            is LocationSharingAction.PinnedLocationSharingAction   -> handlePinnedLocationSharingAction(action)
         }.exhaustive
     }
 
-    private fun handleShareLocation() = withState { state ->
-        state.lastKnownUserLocation?.let { location ->
+    private fun handleCurrentUserLocationSharingAction() = withState { state ->
+        shareLocation(state.lastKnownUserLocation)
+    }
+
+    private fun handlePinnedLocationSharingAction(action: LocationSharingAction.PinnedLocationSharingAction) {
+        // TODO check if we can use the same api than for user location?
+        shareLocation(action.locationData)
+    }
+
+    private fun shareLocation(locationData: LocationData?) {
+        locationData?.let { location ->
             room.sendLocation(
                     latitude = location.latitude,
                     longitude = location.longitude,

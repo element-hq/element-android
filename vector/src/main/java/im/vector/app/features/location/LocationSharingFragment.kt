@@ -118,7 +118,7 @@ class LocationSharingFragment @Inject constructor(
     override fun invalidate() = withState(viewModel) { state ->
         updateMap(state)
         updateUserAvatar(state.userItem)
-        if(!hasUpdatedPin && state.pinDrawable != null) {
+        if (!hasUpdatedPin && state.pinDrawable != null) {
             hasUpdatedPin = true
             updateStaticPin(state.pinDrawable)
         }
@@ -147,10 +147,11 @@ class LocationSharingFragment @Inject constructor(
         // set no option at start
         views.shareLocationOptionsPicker.render()
         views.shareLocationOptionsPicker.optionPinned.debouncedClicks {
-            // TODO
+            val selectedLocation = views.mapView.getLocationOfMapCenter()
+            viewModel.handle(LocationSharingAction.PinnedLocationSharingAction(selectedLocation))
         }
         views.shareLocationOptionsPicker.optionUserCurrent.debouncedClicks {
-            viewModel.handle(LocationSharingAction.OnShareLocation)
+            viewModel.handle(LocationSharingAction.CurrentUserLocationSharingAction)
         }
         views.shareLocationOptionsPicker.optionUserLive.debouncedClicks {
             // TODO
