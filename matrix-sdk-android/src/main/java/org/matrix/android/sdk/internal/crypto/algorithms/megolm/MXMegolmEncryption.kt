@@ -471,9 +471,8 @@ internal class MXMegolmEncryption(
         }
         val olmSessionResult = usersDeviceMap?.getObject(userId, deviceId)
         if (olmSessionResult?.sessionId == null) {
-            return false.also {
-                Timber.tag(loggerTag.value).w("reshareKey: no session with this device, probably because there were no one-time keys")
-            }
+            Timber.tag(loggerTag.value).w("reshareKey: no session with this device, probably because there were no one-time keys")
+            return false
         }
         Timber.tag(loggerTag.value).i(" reshareKey: $groupSessionId:$chainIndex with device $userId:$deviceId using session ${olmSessionResult.sessionId}")
 

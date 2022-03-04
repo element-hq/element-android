@@ -51,18 +51,13 @@ internal class OlmSessionStore @Inject constructor(private val store: IMXCryptoS
     }
 
     /**
-     * Get all the Olm Sessions we are sharing with the given user
-     * device.
+     * Get all the Olm Sessions we are sharing with the given device.
      *
      * @param deviceKey the public key of the other device.
      * @return A set of sessionId, or empty if device is not known
      */
     @Synchronized
     fun getDeviceSessionIds(deviceKey: String): List<String> {
-        return internalGetAllSessions(deviceKey)
-    }
-
-    private fun internalGetAllSessions(deviceKey: String): MutableList<String> {
         // we need to get the persisted ids first
         val persistedKnownSessions = store.getDeviceSessionIds(deviceKey)
                 .orEmpty()
@@ -79,12 +74,12 @@ internal class OlmSessionStore @Inject constructor(private val store: IMXCryptoS
     }
 
     /**
-     * Retrieve an end-to-end session between the logged-in user and another
+     * Retrieve an end-to-end session between our own device and another
      * device.
      *
      * @param sessionId the session Id.
      * @param deviceKey the public key of the other device.
-     * @return The Base64 end-to-end session, or null if not found
+     * @return the session wrapper if found
      */
     @Synchronized
     fun getDeviceSession(sessionId: String, deviceKey: String): OlmSessionWrapper? {

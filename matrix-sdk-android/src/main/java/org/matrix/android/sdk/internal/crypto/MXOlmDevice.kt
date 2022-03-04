@@ -280,7 +280,6 @@ internal class MXOlmDevice @Inject constructor(
             olmSessionWrapper.onMessageReceived()
 
             olmSessionStore.storeSession(olmSessionWrapper, theirIdentityKey)
-//            store.storeSession(olmSessionWrapper, theirIdentityKey)
 
             val sessionIdentifier = olmSession.sessionIdentifier()
 
@@ -866,7 +865,6 @@ internal class MXOlmDevice @Inject constructor(
         // sanity check
         return if (theirDeviceIdentityKey.isEmpty() || sessionId.isEmpty()) null else {
             olmSessionStore.getDeviceSession(sessionId, theirDeviceIdentityKey)
-//            store.getDeviceSession(sessionId, theirDeviceIdentityKey)
         }
     }
 
