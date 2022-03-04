@@ -43,29 +43,12 @@ def collectProjects(predicate) {
     return subprojects.findAll { it.buildFile.isFile() && predicate(it) }
 }
 
-//task unitCodeCoverageReport(type: JacocoReport) {
-//    outputs.upToDateWhen { false }
-//    rootProject.apply plugin: 'jacoco'
-//    def excludedProjects = [
-//            'olm-stub',
-//            'test-harness'
-//    ]
-//    def projects = collectProjects { !excludedProjects.contains(it.name) }
-//    dependsOn { ["app:assembleDebug"] + projects*.test }
-//    initializeReport(it, projects, excludes)
-//}
-//
-//task harnessCodeCoverageReport(type: JacocoReport) {
-//    outputs.upToDateWhen { false }
-//    rootProject.apply plugin: 'jacoco'
-//    def projects = collectProjects { true }
-//    dependsOn { ["app:assembleDebug", project(":test-harness").test] }
-//    initializeReport(it, projects, excludes)
-//}
-
 task allCodeCoverageReport(type: JacocoReport) {
     outputs.upToDateWhen { false }
     rootProject.apply plugin: 'jacoco'
+    // to limit projects in a specific report, add
+    // def excludedProjects = [ ... ]
+    // def projects = collectProjects { !excludedProjects.contains(it.name) }
     def projects = collectProjects { true }
     dependsOn { projects*.test }
     initializeReport(it, projects, excludes)
