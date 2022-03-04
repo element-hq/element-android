@@ -355,7 +355,7 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: codecov-xml # will restore to codecov-xml/allCodeCoverageReport.xml by default; we restore to the same location in following tasks
-      - run: mkdir -P build/reports/jacoco/allCodeCoverageReport/
+      - run: mkdir -p build/reports/jacoco/allCodeCoverageReport/
       - run: mv codecov-xml/allCodeCoverageReport.xml build/reports/jacoco/allCodeCoverageReport/
       - run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
         env:
