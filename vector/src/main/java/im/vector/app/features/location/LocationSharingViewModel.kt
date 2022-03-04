@@ -76,7 +76,7 @@ class LocationSharingViewModel @AssistedInject constructor(
     }
 
     private fun handleShareLocation() = withState { state ->
-        state.lastKnownLocation?.let { location ->
+        state.lastKnownUserLocation?.let { location ->
             room.sendLocation(
                     latitude = location.latitude,
                     longitude = location.longitude,
@@ -90,7 +90,7 @@ class LocationSharingViewModel @AssistedInject constructor(
 
     override fun onLocationUpdate(locationData: LocationData) {
         setState {
-            copy(lastKnownLocation = locationData)
+            copy(lastKnownUserLocation = locationData)
         }
     }
 

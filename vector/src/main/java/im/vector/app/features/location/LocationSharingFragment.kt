@@ -16,6 +16,7 @@
 
 package im.vector.app.features.location
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -52,6 +53,7 @@ class LocationSharingFragment @Inject constructor(
     private var mapView: WeakReference<MapView>? = null
 
     private var hasRenderedUserAvatar = false
+    private var hasUpdatedPin = false
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLocationSharingBinding {
         return FragmentLocationSharingBinding.inflate(inflater, container, false)
@@ -116,7 +118,11 @@ class LocationSharingFragment @Inject constructor(
     override fun invalidate() = withState(viewModel) { state ->
         updateMap(state)
         updateUserAvatar(state.userItem)
-        views.shareLocationGpsLoading.isGone = state.lastKnownLocation != null
+        if(!hasUpdatedPin && state.pinDrawable != null) {
+            hasUpdatedPin = true
+            updateStaticPin(state.pinDrawable)
+        }
+        views.shareLocationGpsLoading.isGone = state.lastKnownUserLocation != null
     }
 
     private fun handleLocationNotAvailableError() {
@@ -132,10 +138,14 @@ class LocationSharingFragment @Inject constructor(
 
     private fun initOptionsPicker() {
         // TODO
+        //  move pin creation into the Fragment
+        //  create a useCase to compare pinnedLocation and userLocation
         //  change the pin dynamically depending on the current chosen location: cf. LocationPinProvider
-        //  make the pin stay at the center of the map: selected location is the center of the map
+        //  reset map to user location when clicking on reset icon
         //  need changes in the event sent when this is a pin drop location?
         //  need changes in the parsing of events when receiving pin drop location?: should it be shown with user avatar or with pin?
+        // set no option at start
+        views.shareLocationOptionsPicker.render()
         views.shareLocationOptionsPicker.optionPinned.debouncedClicks {
             // TODO
         }
@@ -148,8 +158,10 @@ class LocationSharingFragment @Inject constructor(
     }
 
     private fun updateMap(state: LocationSharingViewState) {
-        // first update the options view
-        if (state.isUserLocation) {
+        // first, update the options view
+        // TODO compute distance between userLocation and location at center of map
+        val isUserLocation = true
+        if (isUserLocation) {
             // TODO activate USER_LIVE option when implemented
             views.shareLocationOptionsPicker.render(
                     LocationSharingOption.USER_CURRENT
@@ -159,10 +171,13 @@ class LocationSharingFragment @Inject constructor(
                     LocationSharingOption.PINNED
             )
         }
-        val mapState = state
-                .toMapState()
-                .copy(logoMarginBottom = views.shareLocationOptionsPicker.height)
-        views.mapView.render(mapState)
+        // then, update the map using the height of the options view after it has been rendered
+        views.shareLocationOptionsPicker.post {
+            val mapState = state
+                    .toMapState()
+                    .copy(logoMarginBottom = views.shareLocationOptionsPicker.height)
+            views.mapView.render(mapState)
+        }
     }
 
     private fun updateUserAvatar(userItem: MatrixItem.UserItem?) {
@@ -173,5 +188,9 @@ class LocationSharingFragment @Inject constructor(
                     val tintColor = matrixItemColorProvider.getColor(it)
                     views.shareLocationOptionsPicker.optionUserCurrent.setIconBackgroundTint(tintColor)
                 }
+    }
+
+    private fun updateStaticPin(drawable: Drawable) {
+        views.shareLocationPin.setImageDrawable(drawable)
     }
 }

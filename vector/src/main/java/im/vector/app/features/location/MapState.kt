@@ -21,7 +21,7 @@ import androidx.annotation.Px
 
 data class MapState(
         val zoomOnlyOnce: Boolean,
-        val pinLocationData: LocationData? = null,
+        val userLocationData: LocationData? = null,
         val pinId: String,
         val pinDrawable: Drawable? = null,
         @Px val logoMarginBottom: Int = 0

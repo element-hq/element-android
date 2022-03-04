@@ -10,11 +10,29 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:mapbox_renderTextureMode="true"
         tools:background="#4F00" />
+
+    <ImageView
+        android:id="@+id/shareLocationPin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/a11y_location_share_pin_on_map"
+        app:layout_constraintBottom_toTopOf="@id/shareLocationMapCenter"
+        app:layout_constraintEnd_toEndOf="@id/mapView"
+        app:layout_constraintStart_toStartOf="@id/mapView" />
+
+    <ViewStub
+        android:id="@+id/shareLocationMapCenter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/mapView"
+        app:layout_constraintEnd_toEndOf="@id/mapView"
+        app:layout_constraintStart_toStartOf="@id/mapView"
+        app:layout_constraintTop_toTopOf="@id/mapView" />
 
     <im.vector.app.features.location.option.LocationSharingOptionPickerView
         android:id="@+id/shareLocationOptionsPicker"

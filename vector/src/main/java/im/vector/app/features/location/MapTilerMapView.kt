@@ -70,6 +70,9 @@ class MapTilerMapView @JvmOverloads constructor(
 
         safeMapRefs.map.uiSettings.setLogoMargins(0, 0, 0, state.logoMarginBottom)
 
+        // TODO display a dot pin for userLocation instead of pinDrawable
+        // TODO add reset to user location button
+        // TODO check conflict of rendering with preview location in timeline
         state.pinDrawable?.let { pinDrawable ->
             if (!safeMapRefs.style.isFullyLoaded ||
                     safeMapRefs.style.getImage(state.pinId) == null) {
@@ -77,7 +80,7 @@ class MapTilerMapView @JvmOverloads constructor(
             }
         }
 
-        state.pinLocationData?.let { locationData ->
+        state.userLocationData?.let { locationData ->
             if (!initZoomDone || !state.zoomOnlyOnce) {
                 zoomToLocation(locationData.latitude, locationData.longitude)
                 initZoomDone = true
@@ -100,4 +103,13 @@ class MapTilerMapView @JvmOverloads constructor(
                 .zoom(INITIAL_MAP_ZOOM_IN_PREVIEW)
                 .build()
     }
+
+    fun getLocationOfMapCenter(): LocationData? =
+            mapRefs?.map?.cameraPosition?.target?.let { target ->
+                LocationData(
+                        latitude = target.latitude,
+                        longitude = target.longitude,
+                        uncertainty = null
+                )
+            }
 }

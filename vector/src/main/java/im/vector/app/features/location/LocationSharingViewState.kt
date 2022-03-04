@@ -30,9 +30,9 @@ enum class LocationSharingMode(@StringRes val titleRes: Int) {
 data class LocationSharingViewState(
         val roomId: String,
         val mode: LocationSharingMode,
-        val isUserLocation: Boolean = false,
         val userItem: MatrixItem.UserItem? = null,
-        val lastKnownLocation: LocationData? = null,
+        val lastKnownUserLocation: LocationData? = null,
+        // TODO move pin drawable creation into the view?
         val pinDrawable: Drawable? = null
 ) : MavericksState {
 
@@ -44,7 +44,7 @@ data class LocationSharingViewState(
 
 fun LocationSharingViewState.toMapState() = MapState(
         zoomOnlyOnce = true,
-        pinLocationData = lastKnownLocation,
+        userLocationData = lastKnownUserLocation,
         pinId = DEFAULT_PIN_ID,
         pinDrawable = pinDrawable
 )
