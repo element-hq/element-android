@@ -35,7 +35,7 @@ class FakeSession(
         mockkStatic("im.vector.app.core.extensions.SessionKt")
     }
 
-    override val myUserId: String = "a-user-id"
+    override val myUserId: String = "@fake:server.fake"
 
     override fun cryptoService() = fakeCryptoService
     override val sharedSecretStorageService = fakeSharedSecretStorageService
