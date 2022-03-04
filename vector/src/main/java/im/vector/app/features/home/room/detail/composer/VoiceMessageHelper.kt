@@ -171,13 +171,13 @@ class VoiceMessageHelper @Inject constructor(
     }
 
     fun stopPlayback() {
-        playbackTracker.stopPlayback(VoiceMessagePlaybackTracker.RECORDING_ID)
+        playbackTracker.pausePlayback(VoiceMessagePlaybackTracker.RECORDING_ID)
         mediaPlayer?.stop()
         stopPlaybackTicker()
     }
 
-    fun movePlaybackTo(id: String, toMillisecond: Int, totalDuration: Int) {
-        val percentage = toMillisecond.toFloat() / totalDuration
+    fun movePlaybackTo(id: String, percentage: Float, totalDuration: Int) {
+        val toMillisecond = (totalDuration * percentage).toInt()
         playbackTracker.updateCurrentPlaybackTime(id, toMillisecond, percentage)
 
         stopPlayback()

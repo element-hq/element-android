@@ -359,11 +359,13 @@ class MessageItemFactory @Inject constructor(
 
         val waveformTouchListener: MessageVoiceItem.WaveformTouchListener = object : MessageVoiceItem.WaveformTouchListener {
             override fun onWaveformTouchedUp(percentage: Float) {
-                params.callback?.onVoiceWaveformTouchedUp(informationData.eventId, messageContent, percentage)
+                val duration = messageContent.audioInfo?.duration ?: 0
+                params.callback?.onVoiceWaveformTouchedUp(informationData.eventId, duration, percentage)
             }
 
             override fun onWaveformMovedTo(percentage: Float) {
-                params.callback?.onVoiceWaveformMovedTo(informationData.eventId, messageContent, percentage)
+                val duration = messageContent.audioInfo?.duration ?: 0
+                params.callback?.onVoiceWaveformMovedTo(informationData.eventId, duration, percentage)
             }
         }
 

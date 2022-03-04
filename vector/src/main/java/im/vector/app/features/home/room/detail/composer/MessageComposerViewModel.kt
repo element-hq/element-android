@@ -864,15 +864,11 @@ class MessageComposerViewModel @AssistedInject constructor(
     }
 
     private fun handleVoiceWaveformTouchedUp(action: MessageComposerAction.VoiceWaveformTouchedUp) {
-        val duration = (action.messageAudioContent.audioInfo?.duration ?: 0)
-        val toMillisecond = (action.percentage * duration).toInt()
-        voiceMessageHelper.movePlaybackTo(action.eventId, toMillisecond, duration)
+        voiceMessageHelper.movePlaybackTo(action.eventId, action.percentage, action.duration)
     }
 
     private fun handleVoiceWaveformMovedTo(action: MessageComposerAction.VoiceWaveformMovedTo) {
-        val duration = (action.messageAudioContent.audioInfo?.duration ?: 0)
-        val toMillisecond = (action.percentage * duration).toInt()
-        voiceMessageHelper.movePlaybackTo(action.eventId, toMillisecond, duration)
+        voiceMessageHelper.movePlaybackTo(action.eventId, action.percentage, action.duration)
     }
 
     private fun handleEntersBackground(composerText: String) {

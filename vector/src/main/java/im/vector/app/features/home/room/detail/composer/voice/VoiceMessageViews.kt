@@ -60,8 +60,21 @@ class VoiceMessageViews(
             actions.onDeleteVoiceMessage()
         }
 
-        views.voicePlaybackWaveform.setOnClickListener {
-            actions.onWaveformClicked()
+        views.voicePlaybackWaveform.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    actions.onWaveformClicked()
+                }
+                MotionEvent.ACTION_UP   -> {
+                    val percentage = getTouchedPositionPercentage(motionEvent, view)
+                    actions.onVoiceWaveformTouchedUp(percentage)
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val percentage = getTouchedPositionPercentage(motionEvent, view)
+                    actions.onVoiceWaveformMoved(percentage)
+                }
+            }
+            true
         }
 
         views.voicePlaybackControlButton.setOnClickListener {
@@ -69,6 +82,8 @@ class VoiceMessageViews(
         }
         observeMicButton(actions)
     }
+
+    private fun getTouchedPositionPercentage(motionEvent: MotionEvent, view: View) = motionEvent.x / view.width
 
     @SuppressLint("ClickableViewAccessibility")
     private fun observeMicButton(actions: Actions) {
@@ -332,7 +347,7 @@ class VoiceMessageViews(
 
     fun renderRecordingWaveform(amplitudeList: Array<Int>) {
         views.voicePlaybackWaveform.doOnLayout { waveFormView ->
-            val waveformColor = ThemeUtils.getColor(waveFormView.context, R.attr.vctr_content_secondary)
+            val waveformColor = ThemeUtils.getColor(waveFormView.context, R.attr.vctr_content_quaternary)
             amplitudeList.iterator().forEach {
                 (waveFormView as AudioWaveformView).add(AudioWaveformView.FFT(it.toFloat(), waveformColor))
             }
@@ -355,5 +370,7 @@ class VoiceMessageViews(
         fun onDeleteVoiceMessage()
         fun onWaveformClicked()
         fun onVoicePlaybackButtonClicked()
+        fun onVoiceWaveformTouchedUp(percentage: Float)
+        fun onVoiceWaveformMoved(percentage: Float)
     }
 }
