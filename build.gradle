@@ -109,7 +109,7 @@ apply plugin: 'org.sonarqube'
 
 // To run a sonar analysis:
 // Run './gradlew sonarqube -Dsonar.login=<REPLACE_WITH_SONAR_KEY>'
-// The SONAR_KEY is stored in passbolt
+// The SONAR_KEY is stored in passbolt as Token Sonar Cloud Bma
 
 sonarqube {
     properties {
