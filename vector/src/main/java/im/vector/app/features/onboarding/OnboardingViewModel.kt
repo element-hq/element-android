@@ -373,7 +373,7 @@ class OnboardingViewModel @AssistedInject constructor(
         }
 
         when (action.signMode) {
-            SignMode.SignUp             -> handleRegisterAction(RegisterAction.RegisterDummy)
+            SignMode.SignUp             -> handleRegisterAction(RegisterAction.StartRegistration)
             SignMode.SignIn             -> startAuthenticationFlow()
             SignMode.SignInWithMatrixId -> _viewEvents.post(OnboardingViewEvents.OnSignModeSelected(SignMode.SignInWithMatrixId))
             SignMode.Unknown            -> Unit

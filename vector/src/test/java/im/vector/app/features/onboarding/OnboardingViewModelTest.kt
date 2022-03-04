@@ -23,6 +23,7 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.login.ReAuthHelper
+import im.vector.app.features.login.SignMode
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeAnalyticsTracker
 import im.vector.app.test.fakes.FakeAuthenticationService
@@ -114,6 +115,24 @@ class OnboardingViewModelTest {
 
         test
                 .assertEvents(OnboardingViewEvents.OnChooseProfilePicture)
+                .finish()
+    }
+
+    @Test
+    fun `when handling SignUp then sets sign mode to sign up and starts registration`() = runBlockingTest {
+        givenRegistrationResultFor(RegisterAction.StartRegistration, ANY_CONTINUING_REGISTRATION_RESULT)
+        val test = viewModel.test(this)
+
+        viewModel.handle(OnboardingAction.UpdateSignMode(SignMode.SignUp))
+
+        test
+                .assertStatesWithPrevious(
+                        initialState,
+                        { copy(signMode = SignMode.SignUp) },
+                        { copy(asyncRegistration = Loading()) },
+                        { copy(asyncRegistration = Uninitialized) }
+                )
+                .assertEvents(OnboardingViewEvents.RegistrationFlowResult(ANY_CONTINUING_REGISTRATION_RESULT.flowResult, isRegistrationStarted = true))
                 .finish()
     }
 
