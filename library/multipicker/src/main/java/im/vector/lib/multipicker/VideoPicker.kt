@@ -30,7 +30,7 @@ class VideoPicker : Picker<MultiPickerVideoType>() {
      * Call this function from onActivityResult(int, int, Intent).
      * Returns selected video files or empty list if user did not select any files.
      */
-    override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerVideoType> {
+    override suspend fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerVideoType> {
         return getSelectedUriList(data).mapNotNull { selectedUri ->
             selectedUri.toMultiPickerVideoType(context)
         }

@@ -40,7 +40,7 @@ class FilePicker : Picker<MultiPickerBaseType>() {
      * Call this function from onActivityResult(int, int, Intent).
      * Returns selected files or empty list if user did not select any files.
      */
-    override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerBaseType> {
+    override suspend fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerBaseType> {
         return getSelectedUriList(data).mapNotNull { selectedUri ->
             val type = context.contentResolver.getType(selectedUri)
 

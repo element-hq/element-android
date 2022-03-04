@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.airbnb.mvrx.activityViewModel
 import com.airbnb.mvrx.args
 import com.google.zxing.BarcodeFormat
@@ -42,6 +43,7 @@ import im.vector.app.databinding.FragmentQrCodeScannerBinding
 import im.vector.app.features.usercode.QRCodeBitmapDecodeHelper
 import im.vector.lib.multipicker.MultiPicker
 import im.vector.lib.multipicker.utils.ImageUtils
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import org.matrix.android.sdk.api.extensions.tryOrNull
@@ -72,19 +74,21 @@ class QrCodeScannerFragment @Inject constructor() : VectorBaseFragment<FragmentQ
 
     private val pickImageActivityResultLauncher = registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
-            MultiPicker
-                    .get(MultiPicker.IMAGE)
-                    .getSelectedFiles(requireActivity(), activityResult.data)
-                    .firstOrNull()
-                    ?.contentUri
-                    ?.let { uri ->
-                        // try to see if it is a valid matrix code
-                        val bitmap = ImageUtils.getBitmap(requireContext(), uri)
-                                ?: return@let Unit.also {
-                                    Toast.makeText(requireContext(), getString(R.string.qr_code_not_scanned), Toast.LENGTH_SHORT).show()
-                                }
-                        handleResult(tryOrNull { QRCodeBitmapDecodeHelper.decodeQRFromBitmap(bitmap) })
-                    }
+            lifecycleScope.launch {
+                MultiPicker
+                        .get(MultiPicker.IMAGE)
+                        .getSelectedFiles(requireActivity(), activityResult.data)
+                        .firstOrNull()
+                        ?.contentUri
+                        ?.let { uri ->
+                            // try to see if it is a valid matrix code
+                            val bitmap = ImageUtils.getBitmap(requireContext(), uri)
+                                    ?: return@let Unit.also {
+                                        Toast.makeText(requireContext(), getString(R.string.qr_code_not_scanned), Toast.LENGTH_SHORT).show()
+                                    }
+                            handleResult(tryOrNull { QRCodeBitmapDecodeHelper.decodeQRFromBitmap(bitmap) })
+                        }
+            }
         }
     }
 

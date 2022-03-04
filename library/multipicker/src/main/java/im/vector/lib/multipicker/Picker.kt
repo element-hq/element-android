@@ -34,13 +34,13 @@ abstract class Picker<T> {
      * Call this function from onActivityResult(int, int, Intent).
      * @return selected files or empty list if user did not select any files.
      */
-    abstract fun getSelectedFiles(context: Context, data: Intent?): List<T>
+    abstract suspend fun getSelectedFiles(context: Context, data: Intent?): List<T>
 
     /**
      * Use this function to retrieve files which are shared from another application or internally
      * by using android.intent.action.SEND or android.intent.action.SEND_MULTIPLE actions.
      */
-    fun getIncomingFiles(context: Context, data: Intent?): List<T> {
+    suspend fun getIncomingFiles(context: Context, data: Intent?): List<T> {
         if (data == null) return emptyList()
 
         val uriList = mutableListOf<Uri>()

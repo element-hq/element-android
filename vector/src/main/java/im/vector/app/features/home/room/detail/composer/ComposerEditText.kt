@@ -41,7 +41,7 @@ class ComposerEditText @JvmOverloads constructor(
 ) : AppCompatEditText(context, attrs, defStyleAttr) {
 
     interface Callback {
-        fun onRichContentSelected(contentUri: Uri): Boolean
+        fun onRichContentSelected(contentUri: Uri)
         fun onTextChanged(text: CharSequence)
     }
 

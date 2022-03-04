@@ -53,7 +53,7 @@ class CameraPicker {
      * or result code is not Activity.RESULT_OK
      * or user cancelled the operation.
      */
-    fun getTakenPhoto(context: Context, photoUri: Uri): MultiPickerImageType? {
+    suspend fun getTakenPhoto(context: Context, photoUri: Uri): MultiPickerImageType? {
         return photoUri.toMultiPickerImageType(context)
     }
 

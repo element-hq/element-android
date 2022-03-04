@@ -26,7 +26,7 @@ import im.vector.lib.multipicker.entity.MultiPickerAudioType
 import im.vector.lib.multipicker.entity.MultiPickerImageType
 import im.vector.lib.multipicker.entity.MultiPickerVideoType
 
-internal fun Uri.toMultiPickerImageType(context: Context): MultiPickerImageType? {
+internal suspend fun Uri.toMultiPickerImageType(context: Context): MultiPickerImageType? {
     val projection = arrayOf(
             MediaStore.Images.Media.DISPLAY_NAME,
             MediaStore.Images.Media.SIZE

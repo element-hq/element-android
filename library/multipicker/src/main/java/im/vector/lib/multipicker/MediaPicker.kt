@@ -32,7 +32,7 @@ class MediaPicker : Picker<MultiPickerBaseMediaType>() {
      * Call this function from onActivityResult(int, int, Intent).
      * Returns selected image/video files or empty list if user did not select any files.
      */
-    override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerBaseMediaType> {
+    override suspend fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerBaseMediaType> {
         return getSelectedUriList(data).mapNotNull { selectedUri ->
             val mimeType = context.contentResolver.getType(selectedUri)
 

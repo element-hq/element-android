@@ -65,8 +65,8 @@ class MessageComposerView @JvmOverloads constructor(
         collapse(false)
 
         views.composerEditText.callback = object : ComposerEditText.Callback {
-            override fun onRichContentSelected(contentUri: Uri): Boolean {
-                return callback?.onRichContentSelected(contentUri) ?: false
+            override fun onRichContentSelected(contentUri: Uri) {
+                callback?.onRichContentSelected(contentUri)
             }
 
             override fun onTextChanged(text: CharSequence) {

@@ -1266,25 +1266,33 @@ class TimelineFragment @Inject constructor(
 
     private val attachmentFileActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
-            attachmentsHelper.onFileResult(it.data)
+            lifecycleScope.launch {
+                attachmentsHelper.onFileResult(it.data)
+            }
         }
     }
 
     private val attachmentContactActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
-            attachmentsHelper.onContactResult(it.data)
+            lifecycleScope.launch {
+                attachmentsHelper.onContactResult(it.data)
+            }
         }
     }
 
     private val attachmentMediaActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
-            attachmentsHelper.onMediaResult(it.data)
+            lifecycleScope.launch {
+                attachmentsHelper.onMediaResult(it.data)
+            }
         }
     }
 
     private val attachmentCameraActivityResultLauncher = registerStartForActivityResult {
         if (it.resultCode == Activity.RESULT_OK) {
-            attachmentsHelper.onCameraResult()
+            lifecycleScope.launch {
+                attachmentsHelper.onCameraResult()
+            }
         }
     }
 
@@ -1487,8 +1495,10 @@ class TimelineFragment @Inject constructor(
                 messageComposerViewModel.handle(MessageComposerAction.EnterRegularMode(views.composerLayout.text.toString(), false))
             }
 
-            override fun onRichContentSelected(contentUri: Uri): Boolean {
-                return sendUri(contentUri)
+            override fun onRichContentSelected(contentUri: Uri) {
+                lifecycleScope.launch {
+                    sendUri(contentUri)
+                }
             }
 
             override fun onTextChanged(text: CharSequence) {
@@ -1533,13 +1543,12 @@ class TimelineFragment @Inject constructor(
                 .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
-    private fun sendUri(uri: Uri): Boolean {
+    private suspend fun sendUri(uri: Uri) {
         val shareIntent = Intent(Intent.ACTION_SEND, uri)
         val isHandled = attachmentsHelper.handleShareIntent(requireContext(), shareIntent)
         if (!isHandled) {
             Toast.makeText(requireContext(), R.string.error_handling_incoming_share, Toast.LENGTH_SHORT).show()
         }
-        return isHandled
     }
 
     override fun invalidate() = withState(timelineViewModel, messageComposerViewModel) { mainState, messageComposerState ->

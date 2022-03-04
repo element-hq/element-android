@@ -121,7 +121,7 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
     /**
      * This methods aims to handle the result data.
      */
-    fun onFileResult(data: Intent?) {
+    suspend fun onFileResult(data: Intent?) {
         callback.onContentAttachmentsReady(
                 MultiPicker.get(MultiPicker.FILE)
                         .getSelectedFiles(context, data)
@@ -129,7 +129,7 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
         )
     }
 
-    fun onAudioResult(data: Intent?) {
+    suspend fun onAudioResult(data: Intent?) {
         callback.onContentAttachmentsReady(
                 MultiPicker.get(MultiPicker.AUDIO)
                         .getSelectedFiles(context, data)
@@ -137,7 +137,7 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
         )
     }
 
-    fun onContactResult(data: Intent?) {
+    suspend fun onContactResult(data: Intent?) {
         MultiPicker.get(MultiPicker.CONTACT)
                 .getSelectedFiles(context, data)
                 .firstOrNull()
@@ -147,7 +147,7 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
                 }
     }
 
-    fun onMediaResult(data: Intent?) {
+    suspend fun onMediaResult(data: Intent?) {
         callback.onContentAttachmentsReady(
                 MultiPicker.get(MultiPicker.MEDIA)
                         .getSelectedFiles(context, data)
@@ -155,7 +155,7 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
         )
     }
 
-    fun onCameraResult() {
+    suspend fun onCameraResult() {
         captureUri?.let { captureUri ->
             MultiPicker.get(MultiPicker.CAMERA)
                     .getTakenPhoto(context, captureUri)
@@ -179,7 +179,7 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
         }
     }
 
-    fun onVideoResult(data: Intent?) {
+    suspend fun onVideoResult(data: Intent?) {
         callback.onContentAttachmentsReady(
                 MultiPicker.get(MultiPicker.VIDEO)
                         .getSelectedFiles(context, data)
@@ -192,7 +192,7 @@ class AttachmentsHelper(val context: Context, val callback: Callback) : Restorab
      *
      * @return true if it can handle the intent data, false otherwise
      */
-    fun handleShareIntent(context: Context, intent: Intent): Boolean {
+    suspend fun handleShareIntent(context: Context, intent: Intent): Boolean {
         val type = intent.resolveType(context) ?: return false
         if (type.startsWith("image")) {
             callback.onContentAttachmentsReady(

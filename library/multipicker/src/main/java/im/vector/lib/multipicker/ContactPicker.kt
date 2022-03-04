@@ -34,7 +34,7 @@ class ContactPicker : Picker<MultiPickerContactType>() {
      * Call this function from onActivityResult(int, int, Intent).
      * Returns selected contact or empty list if user did not select any contacts.
      */
-    override fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerContactType> {
+    override suspend fun getSelectedFiles(context: Context, data: Intent?): List<MultiPickerContactType> {
         val contactList = mutableListOf<MultiPickerContactType>()
 
         data?.data?.let { selectedUri ->

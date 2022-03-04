@@ -20,6 +20,7 @@ import android.app.Activity
 import android.net.Uri
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.yalantis.ucrop.UCrop
 import im.vector.app.R
@@ -34,6 +35,7 @@ import im.vector.app.core.utils.registerForPermissionsResult
 import im.vector.app.features.media.createUCropWithDefaultSettings
 import im.vector.lib.multipicker.MultiPicker
 import im.vector.lib.multipicker.entity.MultiPickerImageType
+import kotlinx.coroutines.launch
 import java.io.File
 
 /**
@@ -67,20 +69,24 @@ class GalleryOrCameraDialogHelper(
     private val takePhotoActivityResultLauncher = fragment.registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
             avatarCameraUri?.let { uri ->
-                MultiPicker.get(MultiPicker.CAMERA)
-                        .getTakenPhoto(activity, uri)
-                        ?.let { startUCrop(it) }
+                fragment.lifecycleScope.launch {
+                    MultiPicker.get(MultiPicker.CAMERA)
+                            .getTakenPhoto(activity, uri)
+                            ?.let { startUCrop(it) }
+                }
             }
         }
     }
 
     private val pickImageActivityResultLauncher = fragment.registerStartForActivityResult { activityResult ->
         if (activityResult.resultCode == Activity.RESULT_OK) {
-            MultiPicker
-                    .get(MultiPicker.IMAGE)
-                    .getSelectedFiles(activity, activityResult.data)
-                    .firstOrNull()
-                    ?.let { startUCrop(it) }
+            fragment.lifecycleScope.launch {
+                MultiPicker
+                        .get(MultiPicker.IMAGE)
+                        .getSelectedFiles(activity, activityResult.data)
+                        .firstOrNull()
+                        ?.let { startUCrop(it) }
+            }
         }
     }
 
