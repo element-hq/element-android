@@ -37,7 +37,7 @@ internal class OlmSessionStore @Inject constructor(private val store: IMXCryptoS
 
     /**
      * Store a session between our own device and another device.
-     * This will be called after creation but also after any use of the ratchet
+     * This will be called after the session has been created but also every time it has been used
      * in order to persist the correct state for next run
      * @param olmSessionWrapper   the end-to-end session.
      * @param deviceKey the public key of the other device.
