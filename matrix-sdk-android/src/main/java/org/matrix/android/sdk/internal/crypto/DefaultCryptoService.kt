@@ -146,7 +146,6 @@ internal class DefaultCryptoService @Inject constructor(
 
     private val olmMachine by lazy { olmMachineProvider.olmMachine }
 
-
     // The verification service.
 //    private var verificationService: RustVerificationService? = null
 
@@ -166,7 +165,7 @@ internal class DefaultCryptoService @Inject constructor(
     }
 
     fun onLiveEvent(roomId: String, event: Event) {
-        if(event.isStateEvent()){
+        if (event.isStateEvent()) {
         when (event.getClearType()) {
             EventType.STATE_ROOM_ENCRYPTION         -> onRoomEncryptionEvent(roomId, event)
             EventType.STATE_ROOM_MEMBER             -> onRoomMembershipEvent(roomId, event)

@@ -372,22 +372,22 @@ internal class RustKeyBackupService @Inject constructor(
         }
     }
 
-    override suspend fun onSecretKeyGossip(curveKeyBase64: String) {
+    override suspend fun onSecretKeyGossip(secret: String) {
         Timber.i("## CrossSigning - onSecretKeyGossip")
         withContext(coroutineDispatchers.crypto) {
             try {
                 val version = sender.getKeyBackupVersion()
 
                 if (version != null) {
-                    val key = BackupRecoveryKey.fromBase64(curveKeyBase64)
+                    val key = BackupRecoveryKey.fromBase64(secret)
                     if (isValidRecoveryKey(key, version)) {
                         trustKeysBackupVersion(version, true)
                         // we don't want to wait for that
                         importScope.launch {
                             try {
                                 val importResult = restoreBackup(version, key, null, null, null)
-
-                                Timber.i("onSecretKeyGossip: Recovered keys ${importResult.successfullyNumberOfImportedKeys} out of ${importResult.totalNumberOfKeys}")
+                                val recoveredKeys = importResult.successfullyNumberOfImportedKeys
+                                Timber.i("onSecretKeyGossip: Recovered keys $recoveredKeys out of ${importResult.totalNumberOfKeys}")
                             } catch (failure: Throwable) {
                                 // fail silently..
                                 Timber.e(failure, "onSecretKeyGossip: Failed to import keys from backup")
@@ -514,7 +514,8 @@ internal class RustKeyBackupService @Inject constructor(
                     .flatten()
 
             withContext(Dispatchers.Main) {
-                stepProgressListener?.onStepProgress(StepProgressListener.Step.DecryptingKey(data.roomIdToRoomKeysBackupData.size, data.roomIdToRoomKeysBackupData.size))
+                val stepProgress = StepProgressListener.Step.DecryptingKey(data.roomIdToRoomKeysBackupData.size, data.roomIdToRoomKeysBackupData.size)
+                stepProgressListener?.onStepProgress(stepProgress)
             }
 
             Timber.v("restoreKeysWithRecoveryKey: Decrypted ${sessionsData.size} keys out" +
@@ -532,7 +533,8 @@ internal class RustKeyBackupService @Inject constructor(
                 object : ProgressListener {
                     override fun onProgress(progress: Int, total: Int) {
                         cryptoCoroutineScope.launch(Dispatchers.Main) {
-                            stepProgressListener.onStepProgress(StepProgressListener.Step.ImportingKey(progress, total))
+                            val stepProgress = StepProgressListener.Step.ImportingKey(progress, total)
+                            stepProgressListener.onStepProgress(stepProgress)
                         }
                     }
                 }
