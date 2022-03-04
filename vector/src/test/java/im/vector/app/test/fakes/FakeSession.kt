@@ -16,16 +16,34 @@
 
 package im.vector.app.test.fakes
 
+import im.vector.app.core.extensions.vectorStore
+import im.vector.app.features.session.VectorSessionStore
 import im.vector.app.test.testCoroutineDispatchers
+import io.mockk.coEvery
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import org.matrix.android.sdk.api.session.Session
 
 class FakeSession(
         val fakeCryptoService: FakeCryptoService = FakeCryptoService(),
+        val fakeProfileService: FakeProfileService = FakeProfileService(),
         val fakeSharedSecretStorageService: FakeSharedSecretStorageService = FakeSharedSecretStorageService()
 ) : Session by mockk(relaxed = true) {
+
+    init {
+        mockkStatic("im.vector.app.core.extensions.SessionKt")
+    }
 
     override fun cryptoService() = fakeCryptoService
     override val sharedSecretStorageService = fakeSharedSecretStorageService
     override val coroutineDispatchers = testCoroutineDispatchers
+    override suspend fun setDisplayName(userId: String, newDisplayName: String) = fakeProfileService.setDisplayName(userId, newDisplayName)
+
+    fun givenVectorStore(vectorSessionStore: VectorSessionStore) {
+        coEvery {
+            this@FakeSession.vectorStore(any())
+        } coAnswers {
+            vectorSessionStore
+        }
+    }
 }

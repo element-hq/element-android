@@ -53,10 +53,10 @@ data class QrScannerArgs(
         @StringRes val titleRes: Int
 ) : Parcelable
 
-open class QrCodeScannerFragment @Inject constructor() : VectorBaseFragment<FragmentQrCodeScannerBinding>(), ZXingScannerView.ResultHandler {
+class QrCodeScannerFragment @Inject constructor() : VectorBaseFragment<FragmentQrCodeScannerBinding>(), ZXingScannerView.ResultHandler {
 
     private val qrViewModel: QrCodeScannerViewModel by activityViewModel()
-    private val scannerArgs: QrScannerArgs? by args()
+    private val scannerArgs: QrScannerArgs by args()
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentQrCodeScannerBinding {
         return FragmentQrCodeScannerBinding.inflate(inflater, container, false)
@@ -93,13 +93,13 @@ open class QrCodeScannerFragment @Inject constructor() : VectorBaseFragment<Frag
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val title = scannerArgs?.titleRes?.let { getString(it) }
+        val title = scannerArgs.titleRes.let { getString(it) }
 
         setupToolbar(views.qrScannerToolbar)
                 .setTitle(title)
                 .allowBack(useCross = true)
 
-        scannerArgs?.showExtraButtons?.let { showButtons ->
+        scannerArgs.showExtraButtons.let { showButtons ->
             views.userCodeMyCodeButton.isVisible = showButtons
             views.userCodeOpenGalleryButton.isVisible = showButtons
 

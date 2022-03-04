@@ -61,6 +61,7 @@ import im.vector.app.features.home.room.detail.timeline.item.RedactedMessageItem
 import im.vector.app.features.home.room.detail.timeline.item.RedactedMessageItem_
 import im.vector.app.features.home.room.detail.timeline.item.VerificationRequestItem
 import im.vector.app.features.home.room.detail.timeline.item.VerificationRequestItem_
+import im.vector.app.features.home.room.detail.timeline.render.EventTextRenderer
 import im.vector.app.features.home.room.detail.timeline.tools.createLinkMovementMethod
 import im.vector.app.features.home.room.detail.timeline.tools.linkify
 import im.vector.app.features.html.EventHtmlRenderer
@@ -113,6 +114,7 @@ class MessageItemFactory @Inject constructor(
         private val timelineMediaSizeProvider: TimelineMediaSizeProvider,
         private val htmlRenderer: Lazy<EventHtmlRenderer>,
         private val htmlCompressor: VectorHtmlCompressor,
+        private val textRendererFactory: EventTextRenderer.Factory,
         private val stringProvider: StringProvider,
         private val imageContentRenderer: ImageContentRenderer,
         private val messageInformationDataFactory: MessageInformationDataFactory,
@@ -137,6 +139,10 @@ class MessageItemFactory @Inject constructor(
 
     private val pillsPostProcessor by lazy {
         pillsPostProcessorFactory.create(roomId)
+    }
+
+    private val textRenderer by lazy {
+        textRendererFactory.create(roomId)
     }
 
     fun create(params: TimelineItemFactoryParams): VectorEpoxyModel<*>? {
@@ -563,8 +569,9 @@ class MessageItemFactory @Inject constructor(
                                      highlight: Boolean,
                                      callback: TimelineEventController.Callback?,
                                      attributes: AbsMessageItem.Attributes): MessageTextItem? {
-        val bindingOptions = spanUtils.getBindingOptions(body)
-        val linkifiedBody = body.linkify(callback)
+        val renderedBody = textRenderer.render(body)
+        val bindingOptions = spanUtils.getBindingOptions(renderedBody)
+        val linkifiedBody = renderedBody.linkify(callback)
 
         return MessageTextItem_()
                 .message(

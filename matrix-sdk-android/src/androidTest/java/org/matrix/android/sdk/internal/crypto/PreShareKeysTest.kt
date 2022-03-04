@@ -95,7 +95,7 @@ class PreShareKeysTest : InstrumentedTest {
         assertEquals(megolmSessionId, sentEvent.root.content.toModel<EncryptedEventContent>()?.sessionId, "Unexpected megolm session")
         testHelper.waitWithLatch { latch ->
             testHelper.retryPeriodicallyWithLatch(latch) {
-                bobSession.getRoom(e2eRoomID)?.getTimeLineEvent(sentEvent.eventId)?.root?.getClearType() == EventType.MESSAGE
+                bobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEvent.eventId)?.root?.getClearType() == EventType.MESSAGE
             }
         }
 

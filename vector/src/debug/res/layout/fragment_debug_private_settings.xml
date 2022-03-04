@@ -25,6 +25,12 @@
                 android:layout_height="wrap_content"
                 android:text="Force DialPad tab display" />
 
+            <CheckBox
+                android:id="@+id/forceLoginFallback"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Force login and registration fallback" />
+
         </LinearLayout>
 
     </ScrollView>

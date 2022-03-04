@@ -19,8 +19,8 @@ buildscript {
         classpath libs.gradle.hiltPlugin
         classpath 'com.google.gms:google-services:4.3.10'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
-        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.4'
-        classpath "com.likethesalad.android:string-reference:1.2.2"
+        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
+        classpath "com.likethesalad.android:stem-plugin:2.0.0"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -109,7 +109,7 @@ apply plugin: 'org.sonarqube'
 
 // To run a sonar analysis:
 // Run './gradlew sonarqube -Dsonar.login=<REPLACE_WITH_SONAR_KEY>'
-// The SONAR_KEY is stored in passbolt
+// The SONAR_KEY is stored in passbolt as Token Sonar Cloud Bma
 
 sonarqube {
     properties {
@@ -138,15 +138,10 @@ project(":vector") {
     }
 }
 
-project(":diff-match-patch") {
+project(":library:diff-match-patch") {
     sonarqube {
         skipProject = true
     }
-}
-
-// Global configurations across all modules
-ext {
-    isThreadingEnabled = true
 }
 
 //project(":matrix-sdk-android") {

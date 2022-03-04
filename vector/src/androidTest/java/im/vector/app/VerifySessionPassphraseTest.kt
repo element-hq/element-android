@@ -34,6 +34,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import im.vector.app.core.resources.StringProvider
+import im.vector.app.core.utils.getMatrixInstance
 import im.vector.app.features.MainActivity
 import im.vector.app.features.crypto.quads.SharedSecureStorageActivity
 import im.vector.app.features.crypto.recover.BootstrapCrossSigningTask
@@ -45,7 +46,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.matrix.android.sdk.api.Matrix
 import org.matrix.android.sdk.api.auth.UIABaseAuth
 import org.matrix.android.sdk.api.auth.UserInteractiveAuthInterceptor
 import org.matrix.android.sdk.api.auth.UserPasswordAuth
@@ -67,7 +67,7 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
     @Before
     fun createSessionWithCrossSigningAnd4S() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
-        val matrix = Matrix.getInstance(context)
+        val matrix = getMatrixInstance()
         val userName = "foobar_${System.currentTimeMillis()}"
         existingSession = createAccountAndSync(matrix, userName, password, true)
         doSync<Unit> {
@@ -90,7 +90,7 @@ class VerifySessionPassphraseTest : VerificationTestBase() {
 
         runBlocking {
             task.execute(Params(
-                    userInteractiveAuthInterceptor =  object : UserInteractiveAuthInterceptor {
+                    userInteractiveAuthInterceptor = object : UserInteractiveAuthInterceptor {
                         override fun performStage(flowResponse: RegistrationFlowResponse, errCode: String?, promise: Continuation<UIABaseAuth>) {
                             promise.resume(
                                     UserPasswordAuth(

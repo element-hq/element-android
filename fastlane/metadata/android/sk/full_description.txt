@@ -1,4 +1,4 @@
-Element je zabezpečený messenger a zároveň aplikácia na tímovú spoluprácu, ktorá je ideálna na skupinové konverzácie pri práci na diaľku. Táto komunikačná aplikácia využíva end-to-end šifrovanie na poskytovanie výkonných videokonferencií, zdieľania súborov a hlasových hovorov.
+Element je bezpečný messenger a zároveň aplikácia na tímovú spoluprácu, ktorá je ideálna na skupinové konverzácie pri práci na diaľku. Táto komunikačná aplikácia využíva end-to-end šifrovanie na poskytovanie výkonných videokonferencií, zdieľania súborov a hlasových hovorov.
 
 <b>Funkcie aplikácie Element zahŕňajú:</b>
 - Pokročilé nástroje na online komunikáciu
@@ -11,14 +11,15 @@ Element je zabezpečený messenger a zároveň aplikácia na tímovú spoluprác
 Element sa úplne líši od ostatných aplikácií na zasielanie správ a spoluprácu. Funguje na Matrixe, otvorenej sieti na bezpečné posielanie správ a decentralizovanú komunikáciu. Umožňuje vlastný hosting, aby používatelia získali maximálne vlastníctvo a kontrolu nad svojimi údajmi a správami.
 
 <b>Súkromie a šifrovanie správ</b>
-Element vás chráni pred nežiaducimi reklamami, ťažbou údajov a tzv. walled gardens. Zabezpečuje tiež všetky vaše údaje, video a hlasovú komunikáciu jeden na jedného prostredníctvom end-to-end šifrovania a overovania zariadení krížovým podpisovaním
+Element vás chráni pred nežiaducimi reklamami, ťažbou údajov a tzv. walled gardens. Zabezpečuje tiež všetky vaše údaje, video a hlasovú komunikáciu jeden na jedného prostredníctvom end-to-end šifrovania a overovania zariadení krížovým podpisovaním.
+
 Element vám poskytuje kontrolu nad vaším súkromím a zároveň vám umožňuje bezpečne komunikovať s kýmkoľvek v sieti Matrix alebo s inými nástrojmi na podnikovú spoluprácu vďaka integrácii s aplikáciami, ako je napríklad Slack.
 
-<b>Element môže byť na vašom vlastnom serveri</b>.
+<b>Element môže byť na vašom vlastnom serveri</b>
 Aby ste mali väčšiu kontrolu nad svojimi citlivými údajmi a konverzáciami, Element môže byť na vašom vlastnom serveri alebo si môžete vybrať ľubovoľný hosting založený na systéme Matrix - štandarde pre decentralizovanú komunikáciu s otvoreným zdrojovým kódom. Element vám poskytuje súkromie, súlad s bezpečnostnými predpismi a flexibilitu integrácie.
 
 <b>Vlastnite svoje údaje</b>
-Vy rozhodujete o tom, kde budú vaše údaje a správy uložené. Bez rizika ťažby údajov alebo prístupu tretích strán.
+Vy rozhodujete o tom, kde budú vaše údaje a správy uložené. Bez rizika získavania údajov alebo prístupu tretích strán.
 
 Element vám dáva kontrolu rôznymi spôsobmi:
 1. Získajte bezplatné konto na verejnom serveri matrix.org, ktorý hostia vývojári Matrixu, alebo si vyberte z tisícov verejných serverov, ktoré hostia dobrovoľníci.
@@ -32,10 +33,10 @@ Môžete komunikovať s kýmkoľvek v sieti Matrix, či už používa aplikáciu
 Skutočné end-to-end šifrovanie (správy môžu dešifrovať len účastníci konverzácie) a krížové overovanie zariadení.
 
 <b>Kompletná komunikácia a integrácia</b>
-Správy, hlasové a video hovory, zdieľanie súborov, zdieľanie obrazovky a celý rad integrácií, botov a widgetov. Vytvárajte miestnosti, komunity, zostaňte v kontakte a vybavujte veci.
+Správy, hlasové a video hovory, zdieľanie súborov, zdieľanie obrazovky a celý rad integrácií, botov a widgetov. Vytvárajte miestnosti, komunity, zostaňte v kontakte a vybavte veci.
 
 <b>Nadviažte tam, kde ste skončili</b>
 Buďte v kontakte, nech ste kdekoľvek, vďaka plne synchronizovanej histórii správ vo všetkých zariadeniach a na webe na adrese https://app.element.io.
 
 <b>Otvorený zdroj</b>
-Element Android je projekt s otvoreným zdrojovým kódom, ktorého hostiteľom je GitHub. Nahlasujte chyby a/alebo prispievajte k jeho vývoju na adrese https://github.com/vector-im/element-android.
+Element Android je projekt s otvoreným zdrojovým kódom, ktorého hostiteľom je GitHub. Nahláste prosím chyby a/alebo prispejte k jeho vývoju na https://github.com/vector-im/element-android

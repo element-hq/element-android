@@ -26,8 +26,6 @@ interface Space {
 
     val spaceId: String
 
-    suspend fun leave(reason: String? = null)
-
     /**
      * A current snapshot of [RoomSummary] associated with the space
      */

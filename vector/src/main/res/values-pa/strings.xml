@@ -7,12 +7,6 @@
     <string name="notice_direct_room_third_party_invite">%1$s ਨੇ %2$s ਨੂੰ ਸੱਦਾ ਘੱਲਿਆ</string>
     <string name="notice_room_third_party_invite_by_you">ਤੁਸੀਂ %1$s ਨੂੰ ਥਾਂ ਵਿੱਚ ਜੁੜਨ ਦਾ ਸੱਦਾ ਘੱਲਿਆ</string>
     <string name="notice_room_third_party_invite">%1$s ਨੇ %2$s ਨੂੰ ਥਾਂ ਵਿੱਚ ਜੁੜਨ ਦਾ ਸੱਦਾ ਘੱਲਿਆ</string>
-    <string name="notice_profile_change_redacted_by_you">ਤੁਸੀਂ ਆਪਣੀ ਪ੍ਰੋਫ਼ਾਈਲ ਅੱਪਡੇਟ ਕੀਤੀ %1$s</string>
-    <string name="notice_profile_change_redacted">%1$s ਨੇ ਆਪਣੀ ਪ੍ਰੋਫ਼ਾਈਲ ਅੱਪਡੇਟ ਕੀਤੀ %2$s</string>
-    <string name="notice_event_redacted_by_with_reason">%1$s ਵੱਲੋਂ ਸੁਨੇਹਾ ਹਟਾਇਆ ਗਿਆ [ਕਾਰਨ: %2$s]</string>
-    <string name="notice_event_redacted_with_reason">ਸੁਨੇਹਾ ਹਟਾਇਆ ਗਿਆ [ਕਾਰਨ: %1$s]</string>
-    <string name="notice_event_redacted_by">%1$s ਵਲੋਂ ਸੁਨੇਹਾ ਹਟਾਇਆ ਗਿਆ</string>
-    <string name="notice_event_redacted">ਸੁਨੇਹਾ ਹਟਾਇਆ ਗਿਆ</string>
     <string name="notice_room_avatar_removed_by_you">ਤੁਸੀਂ ਥਾਂ ਦਾ ਅਵਤਾਰ ਹਟਾਇਆ</string>
     <string name="notice_room_avatar_removed">%1$s ਨੇ ਥਾਂ ਦਾ ਅਵਤਾਰ ਹਟਾਇਆ</string>
     <string name="notice_room_topic_removed_by_you">ਤੁਸੀਂ ਥਾਂ ਦਾ ਵਿਸ਼ਾ ਹਟਾਇਆ</string>
@@ -20,10 +14,6 @@
     <string name="notice_room_name_removed_by_you">ਤੁਸੀਂ ਥਾਂ ਦਾ ਨਾਮ ਹਟਾਇਆ</string>
     <string name="notice_room_name_removed">%1$s ਨੂੰ ਥਾਂ ਦੇ ਨਾਮ ਵਿੱਚੋਂ ਹਟਾਇਆ ਗਿਆ</string>
     <string name="notice_avatar_changed_too">(ਅਵਤਾਰ ਵੀ ਬਦਲਿਆ ਗਿਆ)</string>
-    <string name="notice_voip_finished">VoIP ਕਾਨਫ਼ਰੰਸ ਮੁਕੰਮਲ</string>
-    <string name="notice_voip_started">VoIP ਕਾਨਫ਼ਰੰਸ ਚਾਲੂ</string>
-    <string name="notice_requested_voip_conference_by_you">ਤੁਸੀਂ ਇੱਕ VoIP ਕਾਨਫ਼ਰੰਸ ਦੀ ਬੇਨਤੀ ਕੀਤੀ</string>
-    <string name="notice_requested_voip_conference">%1$s ਨੇ ਇੱਕ VoIP ਕਾਨਫ਼ਰੰਸ ਦੀ ਬੇਨਤੀ ਕੀਤੀ</string>
     <string name="notice_room_server_acl_allow_is_empty">🎉 ਸਾਰੇ ਸਰਵਰਾਂ ਦੇ ਭਾਗ ਲੈਣ ਤੇ ਪਬੰਦੀ ਲਗਾ ਦਿੱਤੀ ਹੈ। ਇਹ ਥਾਂ ਹੁਣ ਵਰਤਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ।</string>
     <string name="notice_room_server_acl_updated_no_change">ਕੋਈ ਬਦਲਾਅ ਨਹੀਂ।</string>
     <string name="notice_room_server_acl_updated_ip_literals_not_allowed">• IP literals ਨਾਲ ਮੇਲ ਖਾਂਦੇ ਸਰਵਰ ਹੁਣ ਪਬੰਦੀਸ਼ੁਦਾ ਹਨ।</string>
@@ -44,9 +34,6 @@
     <string name="notice_direct_room_update">%s ਨੇ ਇੱਥੇ ਅੱਪਗ੍ਰੇਡ ਕੀਤਾ।</string>
     <string name="notice_room_update_by_you">ਤੁਸੀਂ ਇਸ ਥਾਂ ਨੂੰ ਅੱਪਗ੍ਰੇਡ ਕੀਤਾ।</string>
     <string name="notice_room_update">%s ਨੇ ਇਸ ਥਾਂ ਨੂੰ ਅੱਪਗ੍ਰੇਡ ਕੀਤਾ।</string>
-    <string name="notice_end_to_end_by_you">ਤੁਸੀਂ ਅੰਤ-ਤੋਂ-ਅੰਤ ਇਨਕ੍ਰਿਪਸ਼ਨ ਚਾਲੂ ਕੀਤੀ(%1$s)</string>
-    <string name="notice_end_to_end">%1$s ਨੇ ਅੰਤ-ਤੋਂ-ਅੰਤ ਇਨਕ੍ਰਿਪਸ਼ਨ ਚਾਲੂ ਕੀਤੀ(%2$s)</string>
-    <string name="notice_room_visibility_unknown">ਅਗਿਆਤ (%s)।</string>
     <string name="notice_room_visibility_world_readable">ਕੋਈ ਵੀ।</string>
     <string name="notice_room_visibility_shared">ਥਾਂ ਦੇ ਸਾਰੇ ਜੀ।</string>
     <string name="notice_room_visibility_joined">ਥਾਂ ਦੇ ਸਾਰੇ ਜੀ, ਜਦੋਂ ਤੋਂ ਉਹ ਜੁੜੇ ਹਨ।</string>
@@ -106,8 +93,4 @@
     <string name="notice_room_created">%1$s ਨੇ ਇੱਕ ਥਾਂ ਬਣਾਈ ਹੈ</string>
     <string name="notice_room_invite_no_invitee_by_you">ਤੁਹਾਡਾ ਸੱਦਾ</string>
     <string name="notice_room_invite_no_invitee">%s ਵੱਲੋਂ ਸੱਦਾ</string>
-    <string name="summary_you_sent_sticker">ਤੁਸੀਂ ਇੱਕ ਸਟੀਕਰ ਘੱਲਿਆ ਹੈ।</string>
-    <string name="summary_user_sent_sticker">%1$s ਨੇ ਇੱਕ ਸਟੀਕਰ ਘੱਲਿਆ ਹੈ।</string>
-    <string name="summary_you_sent_image">ਤੁਸੀਂ ਇੱਕ ਤਸਵੀਰ ਘੱਲੀ ਹੈ।</string>
-    <string name="summary_user_sent_image">%1$s ਨੇ ਇੱਕ ਤਸਵੀਰ ਘੱਲੀ ਹੈ।</string>
 </resources>

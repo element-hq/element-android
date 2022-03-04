@@ -1,0 +1,2 @@
+Bu sürümdeki ana değişiklikler: Doğrudan Mesaj odası için Durum desteği ekleyin (not: durum devre dışı açık matrix.org ). Android Auto desteğini tekrar ekleyin.
+Tam değişiklik listesi: https://github.com/vector-im/element-android/releases/tag/v1.3.4

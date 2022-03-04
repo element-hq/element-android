@@ -47,7 +47,7 @@ import im.vector.app.databinding.DialogBaseEditTextBinding
 import im.vector.app.databinding.DialogShareQrCodeBinding
 import im.vector.app.databinding.FragmentMatrixProfileBinding
 import im.vector.app.databinding.ViewStubRoomMemberProfileHeaderBinding
-import im.vector.app.features.analytics.plan.Screen
+import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.crypto.verification.VerificationBottomSheet
 import im.vector.app.features.displayname.getBestName
 import im.vector.app.features.home.AvatarRenderer
@@ -91,7 +91,7 @@ class RoomMemberProfileFragment @Inject constructor(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        analyticsScreenName = Screen.ScreenName.User
+        analyticsScreenName = MobileScreen.ScreenName.User
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -127,6 +127,7 @@ class RoomMemberProfileFragment @Inject constructor(
                 is RoomMemberProfileViewEvents.ShareRoomMemberProfile      -> handleShareRoomMemberProfile(it.permalink)
                 is RoomMemberProfileViewEvents.ShowPowerLevelValidation    -> handleShowPowerLevelAdminWarning(it)
                 is RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning -> handleShowPowerLevelDemoteWarning(it)
+                is RoomMemberProfileViewEvents.OpenRoom                    -> handleOpenRoom(it)
                 is RoomMemberProfileViewEvents.OnKickActionSuccess         -> Unit
                 is RoomMemberProfileViewEvents.OnSetPowerLevelSuccess      -> Unit
                 is RoomMemberProfileViewEvents.OnBanActionSuccess          -> Unit
@@ -140,6 +141,10 @@ class RoomMemberProfileFragment @Inject constructor(
     private fun setupLongClicks() {
         headerViews.memberProfileNameView.copyOnLongClick()
         headerViews.memberProfileIdView.copyOnLongClick()
+    }
+
+    private fun handleOpenRoom(event: RoomMemberProfileViewEvents.OpenRoom) {
+        navigator.openRoom(requireContext(), event.roomId, null)
     }
 
     private fun handleShowPowerLevelDemoteWarning(event: RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning) {
@@ -297,8 +302,7 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     override fun onOpenDmClicked() {
-        roomDetailPendingActionStore.data = RoomDetailPendingAction.OpenOrCreateDm(fragmentArgs.userId)
-        vectorBaseActivity.finish()
+        viewModel.handle(RoomMemberProfileAction.OpenOrCreateDm(fragmentArgs.userId))
     }
 
     override fun onJumpToReadReceiptClicked() {

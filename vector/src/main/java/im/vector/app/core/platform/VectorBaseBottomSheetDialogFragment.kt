@@ -38,8 +38,7 @@ import im.vector.app.core.extensions.singletonEntryPoint
 import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.utils.DimensionConverter
 import im.vector.app.features.analytics.AnalyticsTracker
-import im.vector.app.features.analytics.plan.Screen
-import im.vector.app.features.analytics.screen.ScreenEvent
+import im.vector.app.features.analytics.plan.MobileScreen
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import reactivecircus.flowbinding.android.view.clicks
@@ -53,8 +52,7 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
      * Analytics
      * ========================================================================================== */
 
-    protected var analyticsScreenName: Screen.ScreenName? = null
-    private var screenEvent: ScreenEvent? = null
+    protected var analyticsScreenName: MobileScreen.ScreenName? = null
 
     protected lateinit var analyticsTracker: AnalyticsTracker
 
@@ -139,12 +137,9 @@ abstract class VectorBaseBottomSheetDialogFragment<VB : ViewBinding> : BottomShe
     override fun onResume() {
         super.onResume()
         Timber.i("onResume BottomSheet ${javaClass.simpleName}")
-        screenEvent = analyticsScreenName?.let { ScreenEvent(it) }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        screenEvent?.send(analyticsTracker)
+        analyticsScreenName?.let {
+            analyticsTracker.screen(MobileScreen(screenName = it))
+        }
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

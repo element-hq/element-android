@@ -32,6 +32,7 @@ data class OnboardingViewState(
         val asyncResetPassword: Async<Unit> = Uninitialized,
         val asyncResetMailConfirmed: Async<Unit> = Uninitialized,
         val asyncRegistration: Async<Unit> = Uninitialized,
+        val asyncDisplayName: Async<Unit> = Uninitialized,
 
         @PersistState
         val onboardingFlow: OnboardingFlow? = null,
@@ -62,7 +63,8 @@ data class OnboardingViewState(
         // Supported types for the login. We cannot use a sealed class for LoginType because it is not serializable
         @PersistState
         val loginModeSupportedTypes: List<String> = emptyList(),
-        val knownCustomHomeServersUrls: List<String> = emptyList()
+        val knownCustomHomeServersUrls: List<String> = emptyList(),
+        val isForceLoginFallbackEnabled: Boolean = false,
 ) : MavericksState {
 
     fun isLoading(): Boolean {
@@ -71,11 +73,10 @@ data class OnboardingViewState(
                 asyncResetPassword is Loading ||
                 asyncResetMailConfirmed is Loading ||
                 asyncRegistration is Loading ||
-                // Keep loading when it is success because of the delay to switch to the next Activity
-                asyncLoginAction is Success
+                asyncDisplayName is Loading
     }
 
-    fun isUserLogged(): Boolean {
+    fun isAuthTaskCompleted(): Boolean {
         return asyncLoginAction is Success
     }
 }
