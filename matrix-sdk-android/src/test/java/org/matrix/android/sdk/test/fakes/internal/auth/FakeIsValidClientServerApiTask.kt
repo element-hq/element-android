@@ -31,6 +31,10 @@ internal class FakeIsValidClientServerApiTask {
 
     val instance: IsValidClientServerApiTask = mockk()
 
+    fun givenValidationFails() {
+        coEvery { instance.execute(any()) } returns false
+    }
+
     fun verifyExecutionWithConfig(config: HomeServerConnectionConfig) {
         coVerify { instance.execute(Params(config)) }
     }

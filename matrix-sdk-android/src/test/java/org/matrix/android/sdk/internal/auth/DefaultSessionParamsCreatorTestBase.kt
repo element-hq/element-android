@@ -21,18 +21,18 @@ import org.amshove.kluent.shouldBeEqualTo
 import org.matrix.android.sdk.api.auth.data.DiscoveryInformation
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.internal.auth.login.LoginType
-import org.matrix.android.sdk.test.fixtures.CredentialsFixture
-import org.matrix.android.sdk.test.fixtures.DiscoveryInformationFixture
+import org.matrix.android.sdk.test.fixtures.CredentialsFixture.aCredentials
+import org.matrix.android.sdk.test.fixtures.DiscoveryInformationFixture.aDiscoveryInformation
 import org.matrix.android.sdk.test.fixtures.HomeServerConnectionConfigFixture.aHomeServerConnectionConfig
-import org.matrix.android.sdk.test.fixtures.WellKnownBaseConfigFixture
+import org.matrix.android.sdk.test.fixtures.WellKnownBaseConfigFixture.aWellKnownBaseConfig
 
 abstract class DefaultSessionParamsCreatorTestBase {
 
-    protected val discoveryWithHomeServer = DiscoveryInformationFixture.aDiscoveryInformation(homeServer = WellKnownBaseConfigFixture.aWellKnownBaseConfig("http://homeserver_url/"))
-    private val discoveryWithIdentityServer = DiscoveryInformationFixture.aDiscoveryInformation(identityServer = WellKnownBaseConfigFixture.aWellKnownBaseConfig("http://identity_server_url/"))
-    protected val credentials = CredentialsFixture.aCredentials()
-    protected val credentialsWithHomeServer = CredentialsFixture.aCredentials(discoveryInformation = discoveryWithHomeServer)
-    protected val credentialsWithIdentityServer = CredentialsFixture.aCredentials(discoveryInformation = discoveryWithIdentityServer)
+    protected val discoveryWithHomeServer = aDiscoveryInformation(homeServer = aWellKnownBaseConfig("http://homeserver_url/"))
+    private val discoveryWithIdentityServer = aDiscoveryInformation(identityServer = aWellKnownBaseConfig("http://identity_server_url/"))
+    protected val credentials = aCredentials()
+    protected val credentialsWithHomeServer = aCredentials(discoveryInformation = discoveryWithHomeServer)
+    protected val credentialsWithIdentityServer = aCredentials(discoveryInformation = discoveryWithIdentityServer)
     protected val homeServerConnectionConfig = aHomeServerConnectionConfig()
 
     protected fun assertExpectedSessionParams(sessionParams: SessionParams) {
