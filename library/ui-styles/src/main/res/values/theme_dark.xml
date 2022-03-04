@@ -141,6 +141,9 @@
         <item name="vctr_keyword_style">@style/Widget.Vector.Keyword</item>
 
         <item name="vctr_toast_background">@color/vctr_toast_background_dark</item>
+
+        <item name="android:actionButtonStyle">@style/Widget.Vector.ActionButton</item>
+
     </style>
 
     <style name="Theme.Vector.Dark" parent="Base.Theme.Vector.Dark" />
