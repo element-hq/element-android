@@ -22,6 +22,7 @@ import io.mockk.mockk
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.test.fakes.internal.auth.db.sessionparams.FakeSessionParamsMapperMoshi.Companion.sessionParams
 import org.matrix.android.sdk.test.fakes.internal.auth.db.sessionparams.FakeSessionParamsMapperMoshi.Companion.sessionParamsEntity
+import org.matrix.android.sdk.test.fixtures.HomeServerConnectionConfigFixture.aHomeServerConnectionConfig
 
 internal class FakeHomeServerConnectionConfigJsonAdapter {
 
@@ -41,7 +42,7 @@ internal class FakeHomeServerConnectionConfigJsonAdapter {
     }
 
     companion object {
-        val homeServerConnectionConfig = HomeServerConnectionConfig.Builder().build()
+        val homeServerConnectionConfig = aHomeServerConnectionConfig()
         const val HOME_SERVER_CONNECTION_CONFIG_JSON = "home_server_connection_config_json"
     }
 }

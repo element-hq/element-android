@@ -19,13 +19,13 @@ package org.matrix.android.sdk.internal.auth
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
-import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.internal.auth.login.LoginType
 import org.matrix.android.sdk.test.fakes.internal.FakeSessionManager
 import org.matrix.android.sdk.test.fakes.internal.auth.FakePendingSessionStore
 import org.matrix.android.sdk.test.fakes.internal.auth.FakeSessionParamsCreator
 import org.matrix.android.sdk.test.fakes.internal.auth.FakeSessionParamsStore
 import org.matrix.android.sdk.test.fixtures.CredentialsFixture.aCredentials
+import org.matrix.android.sdk.test.fixtures.HomeServerConnectionConfigFixture.aHomeServerConnectionConfig
 import org.matrix.android.sdk.test.fixtures.SessionParamsFixture.aSessionParams
 
 @ExperimentalCoroutinesApi
@@ -56,6 +56,6 @@ class DefaultSessionCreatorTest {
     companion object {
         private val sessionParams = aSessionParams()
         private val credentials = aCredentials()
-        private val homeServerConnectionConfig = HomeServerConnectionConfig.Builder().build()
+        private val homeServerConnectionConfig = aHomeServerConnectionConfig()
     }
 }

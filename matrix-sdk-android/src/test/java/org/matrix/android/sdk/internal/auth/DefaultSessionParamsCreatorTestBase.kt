@@ -19,11 +19,11 @@ package org.matrix.android.sdk.internal.auth
 import android.net.Uri
 import org.amshove.kluent.shouldBeEqualTo
 import org.matrix.android.sdk.api.auth.data.DiscoveryInformation
-import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.api.auth.data.SessionParams
 import org.matrix.android.sdk.internal.auth.login.LoginType
 import org.matrix.android.sdk.test.fixtures.CredentialsFixture
 import org.matrix.android.sdk.test.fixtures.DiscoveryInformationFixture
+import org.matrix.android.sdk.test.fixtures.HomeServerConnectionConfigFixture.aHomeServerConnectionConfig
 import org.matrix.android.sdk.test.fixtures.WellKnownBaseConfigFixture
 
 abstract class DefaultSessionParamsCreatorTestBase {
@@ -33,7 +33,7 @@ abstract class DefaultSessionParamsCreatorTestBase {
     protected val credentials = CredentialsFixture.aCredentials()
     protected val credentialsWithHomeServer = CredentialsFixture.aCredentials(discoveryInformation = discoveryWithHomeServer)
     protected val credentialsWithIdentityServer = CredentialsFixture.aCredentials(discoveryInformation = discoveryWithIdentityServer)
-    protected val homeServerConnectionConfig = HomeServerConnectionConfig.Builder().build()
+    protected val homeServerConnectionConfig = aHomeServerConnectionConfig()
 
     protected fun assertExpectedSessionParams(sessionParams: SessionParams) {
         sessionParams shouldBeEqualTo SessionParams(
