@@ -114,9 +114,9 @@ class LocationSharingFragment @Inject constructor(
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        views.mapView.render(state.toMapState())
-        views.shareLocationGpsLoading.isGone = state.lastKnownLocation != null
+        updateMap(state)
         updateUserAvatar(state.userItem)
+        views.shareLocationGpsLoading.isGone = state.lastKnownLocation != null
     }
 
     private fun handleLocationNotAvailableError() {
@@ -132,8 +132,10 @@ class LocationSharingFragment @Inject constructor(
 
     private fun initOptionsPicker() {
         // TODO
-        //  change the options dynamically depending on the current chosen location
-        views.shareLocationOptionsPicker.render(LocationSharingOption.USER_CURRENT)
+        //  change the pin dynamically depending on the current chosen location: cf. LocationPinProvider
+        //  make the pin stay at the center of the map: selected location is the center of the map
+        //  need changes in the event sent when this is a pin drop location?
+        //  need changes in the parsing of events when receiving pin drop location?: should it be shown with user avatar or with pin?
         views.shareLocationOptionsPicker.optionPinned.debouncedClicks {
             // TODO
         }
@@ -143,6 +145,24 @@ class LocationSharingFragment @Inject constructor(
         views.shareLocationOptionsPicker.optionUserLive.debouncedClicks {
             // TODO
         }
+    }
+
+    private fun updateMap(state: LocationSharingViewState) {
+        // first update the options view
+        if (state.isUserLocation) {
+            // TODO activate USER_LIVE option when implemented
+            views.shareLocationOptionsPicker.render(
+                    LocationSharingOption.USER_CURRENT
+            )
+        } else {
+            views.shareLocationOptionsPicker.render(
+                    LocationSharingOption.PINNED
+            )
+        }
+        val mapState = state
+                .toMapState()
+                .copy(logoMarginBottom = views.shareLocationOptionsPicker.height)
+        views.mapView.render(mapState)
     }
 
     private fun updateUserAvatar(userItem: MatrixItem.UserItem?) {

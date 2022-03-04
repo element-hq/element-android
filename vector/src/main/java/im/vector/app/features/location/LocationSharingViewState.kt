@@ -30,6 +30,7 @@ enum class LocationSharingMode(@StringRes val titleRes: Int) {
 data class LocationSharingViewState(
         val roomId: String,
         val mode: LocationSharingMode,
+        val isUserLocation: Boolean = false,
         val userItem: MatrixItem.UserItem? = null,
         val lastKnownLocation: LocationData? = null,
         val pinDrawable: Drawable? = null

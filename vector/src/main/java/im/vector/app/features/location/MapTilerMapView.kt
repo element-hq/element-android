@@ -68,6 +68,8 @@ class MapTilerMapView @JvmOverloads constructor(
             pendingState = state
         }
 
+        safeMapRefs.map.uiSettings.setLogoMargins(0, 0, 0, state.logoMarginBottom)
+
         state.pinDrawable?.let { pinDrawable ->
             if (!safeMapRefs.style.isFullyLoaded ||
                     safeMapRefs.style.getImage(state.pinId) == null) {

@@ -17,10 +17,12 @@
 package im.vector.app.features.location
 
 import android.graphics.drawable.Drawable
+import androidx.annotation.Px
 
 data class MapState(
         val zoomOnlyOnce: Boolean,
         val pinLocationData: LocationData? = null,
         val pinId: String,
-        val pinDrawable: Drawable? = null
+        val pinDrawable: Drawable? = null,
+        @Px val logoMarginBottom: Int = 0
 )

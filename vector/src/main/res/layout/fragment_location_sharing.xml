@@ -7,10 +7,12 @@
 
     <im.vector.app.features.location.MapTilerMapView
         android:id="@+id/mapView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/shareLocationOptionsPicker"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:mapbox_renderTextureMode="true"
         tools:background="#4F00" />
 
