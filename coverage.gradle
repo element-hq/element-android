@@ -22,7 +22,7 @@ def initializeReport(report, projects, classExcludes) {
                     androidSourceDirs.add("${project.projectDir}/src/main/java")
                     break
                 case { project.plugins.hasPlugin("com.android.library") }:
-                    androidClassDirs.add("${project.buildDir}/tmp/kotlin-classes/release")
+                    androidClassDirs.add("${project.buildDir}/tmp/kotlin-classes/debug")
                     androidSourceDirs.add("${project.projectDir}/src/main/kotlin")
                     androidSourceDirs.add("${project.projectDir}/src/main/java")
                     break
