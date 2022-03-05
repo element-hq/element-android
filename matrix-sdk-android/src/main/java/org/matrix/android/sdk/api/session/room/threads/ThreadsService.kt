@@ -42,7 +42,7 @@ interface ThreadsService {
      * message edition for that thread
      * @return the enhanced [List] with edited updates
      */
-    fun enhanceWithEditions(threads: List<ThreadSummary>): List<ThreadSummary>
+    fun enhanceThreadWithEditions(threads: List<ThreadSummary>): List<ThreadSummary>
 
     /**
      * Fetch all thread replies for the specified thread using the /relations api

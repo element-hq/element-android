@@ -80,7 +80,7 @@ class ThreadListViewModel @AssistedInject constructor(@Assisted val initialState
     private fun observeThreadSummaries() {
         room?.flow()
                 ?.liveThreadSummaries()
-                ?.map { room.enhanceWithEditions(it) }
+                ?.map { room.enhanceThreadWithEditions(it) }
                 ?.flowOn(room.coroutineDispatchers.io)
                 ?.execute { asyncThreads ->
                     copy(threadSummaryList = asyncThreads)
