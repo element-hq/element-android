@@ -123,7 +123,8 @@ internal class DefaultGetHomeServerCapabilitiesTask @Inject constructor(
                 homeServerCapabilitiesEntity.roomVersionsJson = capabilities?.roomVersions?.let {
                     MoshiProvider.providesMoshi().adapter(RoomVersions::class.java).toJson(it)
                 }
-                homeServerCapabilitiesEntity.canUseThreading = capabilities?.threads?.enabled.orFalse() || getVersionResult?.doesServerSupportThreads().orFalse()
+                homeServerCapabilitiesEntity.canUseThreading =
+                        capabilities?.threads?.enabled.orFalse() || getVersionResult?.doesServerSupportThreads().orFalse()
             }
 
             if (getMediaConfigResult != null) {
