@@ -29,6 +29,7 @@ class MigrateAuthTo005(realm: DynamicRealm) : RealmMigrator(realm, 5) {
 
         realm.schema.get("SessionParamsEntity")
                 ?.addField(SessionParamsEntityFields.LOGIN_TYPE, String::class.java)
+                ?.setRequired(SessionParamsEntityFields.LOGIN_TYPE, true)
                 ?.transform { it.set(SessionParamsEntityFields.LOGIN_TYPE, LoginType.UNKNOWN.value) }
     }
 }
