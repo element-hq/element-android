@@ -1562,7 +1562,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="room_settings_save_success">Szoba beállításainak módosítása sikeres</string>
     <string name="notice_crypto_unable_to_decrypt_final">Nem érheted el ezt az üzenetet</string>
     <string name="notice_crypto_unable_to_decrypt_friendly">Várakozás erre az üzenetre, ez eltarthat egy darabig</string>
-    <string name="notice_crypto_unable_to_decrypt_friendly_desc">A végpontok közötti titkosítás miatt lehet hogy várnod kell, hogy valaki üzenet megérkezzen, mert a titkosítási kulcsok nem lettek megfelelően elküldve neked.</string>
+    <string name="notice_crypto_unable_to_decrypt_friendly_desc">A végpontok közötti titkosítás miatt lehet hogy várnod kell, hogy valaki üzenetét el tudd olvasni, mert a titkosítási kulcsok nem lettek megfelelően elküldve neked.</string>
     <string name="crypto_error_withheld_blacklisted">Nem érheted el ezt az üzenetet, mert a küldő letiltott</string>
     <string name="crypto_error_withheld_unverified">Nem érheted el ezt az üzenetet, mert a feladó nem bízik a munkamenetedben</string>
     <string name="crypto_error_withheld_generic">Nem érheted el ezt az üzenetet, mert a feladó szándékosan nem küldte el a kulcsokat</string>
@@ -1829,7 +1829,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="create_spaces_me_and_teammates">Én és a csoporttársaim</string>
     <string name="create_spaces_organise_rooms">Privát tér a szobáid csoportosításához</string>
     <string name="create_spaces_just_me">Csak én</string>
-    <string name="create_spaces_make_sure_access">Ellenőrizd, hogy a megfelelő személyeknek van hozzáférése ide: %s.</string>
+    <string name="create_spaces_make_sure_access">Ellenőrizd, hogy a megfelelő személyeknek van hozzáférésük ehhez: %s.</string>
     <string name="settings_security_pin_code_notifications_summary_off">Csak az olvasatlan üzenetek számát mutassa az egyszerű értesítésekben.</string>
     <string name="create_spaces_who_are_you_working_with">Kivel dolgozol együtt\?</string>
     <string name="create_spaces_join_info_help">Létező térbe való belépéshez meghívó szükséges.</string>
@@ -2376,25 +2376,25 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
     <string name="location_timeline_failed_to_load_map">Térkép betöltése sikertelen</string>
     <string name="a11y_static_map_image">Térkép</string>
     <string name="labs_enable_thread_messages_desc">Figyelem: az alkalmazás újraindul</string>
-    <string name="labs_enable_thread_messages">Üzenetszálak engedélyezése</string>
+    <string name="labs_enable_thread_messages">Üzenetszálak bekapcsolása</string>
     <string name="ftue_auth_use_case_connect_to_server">Szerverhez csatlakozás</string>
-    <string name="ftue_auth_use_case_join_existing_server">Csatlakoznál egy már meglévő szerverhez\?</string>
-    <string name="ftue_auth_use_case_skip_partial">kérdés kihagyása</string>
-    <string name="ftue_auth_use_case_skip">Még nem vagy biztos\? Tudhatsz ilyent: %s</string>
+    <string name="ftue_auth_use_case_join_existing_server">Csatlakoznál egy meglévő szerverhez\?</string>
+    <string name="ftue_auth_use_case_skip_partial">Kihagyhatod ezt a kérdést.</string>
+    <string name="ftue_auth_use_case_skip">Még nem tudod\? %s</string>
     <string name="ftue_auth_use_case_option_three">Közösségek</string>
     <string name="ftue_auth_use_case_option_two">Csoportok</string>
     <string name="ftue_auth_use_case_option_one">Barátok és család</string>
     <string name="ftue_auth_use_case_subtitle">Segítünk a kapcsolatteremtésben.</string>
-    <string name="ftue_auth_use_case_title">Kivel beszélgetnék leginkább\?</string>
-    <string name="navigate_to_thread_when_already_in_the_thread">Már nézed ezt az üzenetszálat!</string>
+    <string name="ftue_auth_use_case_title">Kikkel fogsz legtöbbet beszélgetni\?</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">Jelenleg ezt az üzenetszálat olvasod!</string>
     <string name="view_in_room">Megjelenítés szobában</string>
-    <string name="reply_in_thread">Válasz az üzenetszálban</string>
+    <string name="reply_in_thread">Válasz üzenetszálban</string>
     <string name="command_not_supported_in_threads">„%s” parancs ismert, de üzenetszálban nem támogatott.</string>
-    <string name="search_thread_from_a_thread">Az üzenetszálból</string>
-    <string name="thread_list_empty_notice">Tipp: Koppints hosszan az üzenetre és használd ezt: %s.</string>
+    <string name="search_thread_from_a_thread">Egy üzenetszálból</string>
+    <string name="thread_list_empty_notice">Tipp: Koppints hosszan az üzenetre és használd a \"%s\" opciót.</string>
     <string name="thread_list_empty_subtitle">Az üzenetszálak segítenek a különböző témájú beszélgetések figyelemmel kísérésében.</string>
-    <string name="thread_list_empty_title">Beszélgetések üzenetszálakba való rendezése</string>
-    <string name="thread_list_modal_my_threads_subtitle">Minden üzenetszál megjelenítése ahol szerepel</string>
+    <string name="thread_list_empty_title">Beszélgetések üzenetszálakba rendezése</string>
+    <string name="thread_list_modal_my_threads_subtitle">Minden üzenetszál megjelenítése, ahová üzenetet küldtél</string>
     <string name="thread_list_modal_my_threads_title">Üzenetszálaim</string>
     <string name="thread_list_modal_all_threads_subtitle">A szobában lévő összes szál mutatása</string>
     <string name="thread_list_modal_all_threads_title">Minden üzenetszál</string>
@@ -2417,6 +2417,6 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
         <item quantity="one">%d szerver jogosultság változott</item>
         <item quantity="other">%d szerver jogosultság változott</item>
     </plurals>
-    <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s és még mások</string>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s és mások</string>
     <string name="room_notification_two_users_are_typing">%1$s és %2$s</string>
 </resources>
