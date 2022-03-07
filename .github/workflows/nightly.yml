@@ -14,7 +14,6 @@ env:
     -Porg.gradle.jvmargs=-Xmx4g
     -Porg.gradle.parallel=false
     -PallWarningsAsErrors=false
-
 jobs:
   # Build Android Tests [Matrix SDK]
   build-android-test-matrix-sdk:
@@ -104,11 +103,20 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822
-          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.session' matrix-sdk-android:connectedDebugAndroidTest
+          script: |
+            adb root
+            adb logcat -c
+            touch emulator-session.log
+            chmod 777 emulator-session.log
+            adb logcat >> emulator-session.log &
+            ./gradlew $CI_GRADLE_ARG_PROPERTIES -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.session' matrix-sdk-android:connectedDebugAndroidTest
       - name: Read Results [org.matrix.android.sdk.session]
         if: always()
         id: get-comment-body-session
         run: python3 ./tools/ci/render_test_output.py session ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml
+      - name: Remove adb logcat
+        if: always()
+        run: pkill -9 adb
       - name: Run integration tests for  Matrix SDK [org.matrix.android.sdk.account] API[${{ matrix.api-level }}]
         if: always()
         uses: reactivecircus/android-emulator-runner@v2
@@ -119,11 +127,20 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822
-          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.account' matrix-sdk-android:connectedDebugAndroidTest
+          script: |
+            adb root
+            adb logcat -c
+            touch emulator-account.log
+            chmod 777 emulator-account.log
+            adb logcat >> emulator-account.log &
+            ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.account' matrix-sdk-android:connectedDebugAndroidTest
       - name: Read Results [org.matrix.android.sdk.account]
         if: always()
         id: get-comment-body-account
         run: python3 ./tools/ci/render_test_output.py account ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml
+      - name: Remove adb logcat
+        if: always()
+        run: pkill -9 adb
       # package: org.matrix.android.sdk.internal
       - name: Run integration tests for Matrix SDK [org.matrix.android.sdk.internal] API[${{ matrix.api-level }}]
         if: always()
@@ -135,11 +152,20 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822
-          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.internal' matrix-sdk-android:connectedDebugAndroidTest
+          script: |
+            adb root
+            adb logcat -c
+            touch emulator-internal.log
+            chmod 777 emulator-internal.log
+            adb logcat >> emulator-internal.log &
+            ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.internal' matrix-sdk-android:connectedDebugAndroidTest
       - name: Read Results [org.matrix.android.sdk.internal]
         if: always()
         id: get-comment-body-internal
         run: python3 ./tools/ci/render_test_output.py internal ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml
+      - name: Remove adb logcat
+        if: always()
+        run: pkill -9 adb
       # package: org.matrix.android.sdk.ordering
       - name: Run integration tests for Matrix SDK [org.matrix.android.sdk.ordering] API[${{ matrix.api-level }}]
         if: always()
@@ -151,11 +177,20 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822
-          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.ordering' matrix-sdk-android:connectedDebugAndroidTest
+          script: |
+            adb root
+            adb logcat -c
+            touch emulator-ordering.log
+            chmod 777 emulator-ordering.log
+            adb logcat >> emulator-ordering.log &
+            ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.package='org.matrix.android.sdk.ordering' matrix-sdk-android:connectedDebugAndroidTest
       - name: Read Results [org.matrix.android.sdk.ordering]
         if: always()
         id: get-comment-body-ordering
         run: python3 ./tools/ci/render_test_output.py ordering ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml
+      - name: Remove adb logcat
+        if: always()
+        run: pkill -9 adb
       # package: class PermalinkParserTest
       - name: Run integration tests for Matrix SDK class [org.matrix.android.sdk.PermalinkParserTest] API[${{ matrix.api-level }}]
         if: always()
@@ -167,11 +202,20 @@ jobs:
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           emulator-build: 7425822
-          script: ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.class='org.matrix.android.sdk.PermalinkParserTest' matrix-sdk-android:connectedDebugAndroidTest
+          script: |
+            adb root
+            adb logcat -c
+            touch emulator-permalink.log
+            chmod 777 emulator-permalink.log
+            adb logcat >> emulator-permalink.log &
+            ./gradlew $CI_GRADLE_ARG_PROPERTIES  -Pandroid.testInstrumentationRunnerArguments.class='org.matrix.android.sdk.PermalinkParserTest' matrix-sdk-android:connectedDebugAndroidTest
       - name: Read Results [org.matrix.android.sdk.PermalinkParserTest]
         if: always()
         id: get-comment-body-permalink
         run: python3 ./tools/ci/render_test_output.py permalink ./matrix-sdk-android/build/outputs/androidTest-results/connected/*.xml
+      - name: Remove adb logcat
+        if: always()
+        run: pkill -9 adb
       # package: class PermalinkParserTest
       - name: Find Comment
         if: always() && github.event_name == 'pull_request'
@@ -196,6 +240,17 @@ jobs:
             - `[org.matrix.android.sdk.ordering]`<br>${{ steps.get-comment-body-ordering.outputs.ordering }}
             - `[org.matrix.android.sdk.PermalinkParserTest]`<br>${{ steps.get-comment-body-permalink.outputs.permalink }}
           edit-mode: replace
+      - name: Upload Test Report Log
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: integrationtest-error-results
+          path: |
+            emulator-permalink.log
+            emulator-internal.log
+            emulator-ordering.log
+            emulator-account.log
+            emulator-session.log
 
   ui-tests:
     name: UI Tests (Synapse)
@@ -207,8 +262,6 @@ jobs:
     # No concurrency required, runs every time on a schedule.
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: develop
       - name: Set up Python 3.8
         uses: actions/setup-python@v3
         with:
@@ -250,10 +303,37 @@ jobs:
         uses: actions/upload-artifact@v2
         if: always()
         with:
-          name: sanity-error-results
+          name: uitest-error-results
           path: |
             emulator.log
             failure_screenshots/
+
+  sonarqube:
+    runs-on: macos-latest
+    if: always()
+    needs:
+      - integration-tests
+      - ui-tests
+#      - unit-tests  TODO: code coverage from here too
+      - build-android-test-matrix-sdk 
+      - build-android-test-app
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
+        env:
+          ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
 
 # Notify the channel about scheduled runs, do not notify for manually triggered runs
   notify:
@@ -261,6 +341,10 @@ jobs:
     needs:
       - integration-tests
       - ui-tests
+#      - unit-tests
+      - build-android-test-matrix-sdk 
+      - build-android-test-app
+      - sonarqube
     if: always() && github.event_name != 'workflow_dispatch'
     # No concurrency required, runs every time on a schedule.
     steps:

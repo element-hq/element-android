@@ -31,6 +31,9 @@ jobs:
             ${{ runner.os }}-gradle-
       - name: Run unit tests
         run: ./gradlew clean test $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false --stacktrace
+      - name: Format unit test results
+        if: always()
+        run: python3 ./tools/ci/render_test_output.py unit ./**/build/test-results/**/*.xml
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always() &&

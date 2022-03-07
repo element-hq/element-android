@@ -19,7 +19,7 @@ buildscript {
         classpath libs.gradle.hiltPlugin
         classpath 'com.google.gms:google-services:4.3.10'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
-        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.4'
+        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
         classpath "com.likethesalad.android:stem-plugin:2.0.0"
 
         // NOTE: Do not place your application dependencies here; they belong
@@ -109,7 +109,7 @@ apply plugin: 'org.sonarqube'
 
 // To run a sonar analysis:
 // Run './gradlew sonarqube -Dsonar.login=<REPLACE_WITH_SONAR_KEY>'
-// The SONAR_KEY is stored in passbolt
+// The SONAR_KEY is stored in passbolt as Token Sonar Cloud Bma
 
 sonarqube {
     properties {
