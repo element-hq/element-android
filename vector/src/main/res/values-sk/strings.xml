@@ -2423,7 +2423,7 @@
     <string name="event_redacted_by_user_reason_with_reason">Udalosť vymazaná používateľom, dôvod: %1$s</string>
     <string name="delete_event_dialog_reason_hint">Dôvod úpravy</string>
     <string name="rendering_event_error_exception">${app_name} sa stretol s problémom pri vykresľovaní obsahu udalosti s id \'%1$s\'</string>
-    <string name="sent_a_reaction">Reagoval/a s: %s</string>
+    <string name="sent_a_reaction">Reagoval/a: %s</string>
     <string name="settings_developer_mode_fail_fast_summary">${app_name} môže padať častejšie, keď sa vyskytne neočakávaná chyba</string>
     <string name="login_server_url_form_common_notice">Zadajte adresu servera, ktorý chcete použiť</string>
     <string name="report_content_custom">Vlastné hlásenie…</string>
@@ -2445,4 +2445,11 @@
     <string name="a11y_checked">Zaškrtnuté</string>
     <string name="a11y_unsent_draft">Rozpísaná správa</string>
     <string name="a11y_open_drawer">Otvoriť navigačnú ponuku</string>
+    <string name="seen_by">Videli</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">%1$d ďalšia</item>
+        <item quantity="few">%1$d ďalšie</item>
+        <item quantity="other">%1$d ďalších</item>
+    </plurals>
+    <string name="login_server_url_form_modular_notice">Zadajte URL adresu servera Modular Element alebo adresu servera, ktorý si želáte použiť</string>
 </resources>
