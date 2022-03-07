@@ -252,7 +252,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                 // It depends on the LoginMode
                 when (state.loginMode) {
                     LoginMode.Unknown,
-                    is LoginMode.Sso      -> error("Developer error")
+                    is LoginMode.Sso,
                     is LoginMode.SsoAndPassword,
                     LoginMode.Password    -> addFragmentToBackstack(views.loginFragmentContainer,
                             LoginFragment::class.java,
