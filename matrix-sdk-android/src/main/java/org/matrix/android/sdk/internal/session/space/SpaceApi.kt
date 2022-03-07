@@ -31,7 +31,7 @@ internal interface SpaceApi {
      * @param from: Optional. Pagination token given to retrieve the next set of rooms.
      * Note that if a pagination token is provided, then the parameters given for suggested_only and max_depth must be the same.
      */
-    @GET(NetworkConstants.URI_API_PREFIX_PATH_UNSTABLE + "org.matrix.msc2946/rooms/{roomId}/hierarchy")
+    @GET(NetworkConstants.URI_API_PREFIX_PATH_ + "rooms/{roomID}/hierarchy")
     suspend fun getSpaceHierarchy(
             @Path("roomId") spaceId: String,
             @Query("suggested_only") suggestedOnly: Boolean?,
