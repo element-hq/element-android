@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 New Vector Ltd
+ * Copyright (c) 2022 New Vector Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package im.vector.lib.multipicker.utils
+package im.vector.app.test.fakes
 
+import android.content.ContentResolver
 import android.database.Cursor
-import androidx.core.database.getStringOrNull
+import android.net.Uri
+import io.mockk.every
+import io.mockk.mockk
 
-fun Cursor.getColumnIndexOrNull(column: String): Int? {
-    return getColumnIndex(column).takeIf { it != -1 }
-}
+class FakeContentResolver {
 
-fun Cursor.readStringColumnOrNull(column: String): String? {
-    return getColumnIndexOrNull(column)?.let { getStringOrNull(it) }
+    val instance = mockk<ContentResolver>()
+
+    fun givenUriResult(uri: Uri, cursor: Cursor?) {
+        every { instance.query(uri, null, null, null, null) } returns cursor
+    }
 }

@@ -32,6 +32,7 @@ import im.vector.app.core.extensions.POP_BACK_STACK_EXCLUSIVE
 import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
+import im.vector.app.core.extensions.popBackstack
 import im.vector.app.core.extensions.replaceFragment
 import im.vector.app.core.platform.ScreenOrientationLocker
 import im.vector.app.core.platform.VectorBaseActivity
@@ -235,6 +236,8 @@ class FtueAuthVariant(
             OnboardingViewEvents.OnTakeMeHome                                  -> navigateToHome(createdAccount = true)
             OnboardingViewEvents.OnDisplayNameUpdated                          -> onDisplayNameUpdated()
             OnboardingViewEvents.OnDisplayNameSkipped                          -> onDisplayNameUpdated()
+            OnboardingViewEvents.OnPersonalizationComplete                     -> navigateToHome(createdAccount = true)
+            OnboardingViewEvents.OnBack                                        -> activity.popBackstack()
         }.exhaustive
     }
 
@@ -421,7 +424,9 @@ class FtueAuthVariant(
     }
 
     private fun onDisplayNameUpdated() {
-        // TODO go to the real profile picture fragment
-        navigateToHome(createdAccount = true)
+        activity.addFragmentToBackstack(views.loginFragmentContainer,
+                FtueAuthChooseProfilePictureFragment::class.java,
+                option = commonOption
+        )
     }
 }

@@ -67,4 +67,7 @@
 
     <item name="ftue_auth_carousel_item_spacing" format="float" type="dimen">0.01</item>
     <item name="ftue_auth_carousel_item_image_height" format="float" type="dimen">0.35</item>
+
+    <item name="ftue_auth_profile_picture_height" format="float" type="dimen">0.15</item>
+    <item name="ftue_auth_profile_picture_icon_height" format="float" type="dimen">0.05</item>
 </resources>
