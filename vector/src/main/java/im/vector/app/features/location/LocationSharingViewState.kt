@@ -31,8 +31,7 @@ data class LocationSharingViewState(
         val roomId: String,
         val mode: LocationSharingMode,
         val userItem: MatrixItem.UserItem? = null,
-        // TODO declare as nullable when we cannot compare?
-        val areTargetAndUserLocationEqual: Boolean = true,
+        val areTargetAndUserLocationEqual: Boolean? = null,
         val lastKnownUserLocation: LocationData? = null,
         // TODO move pin drawable creation into the view?
         val pinDrawable: Drawable? = null

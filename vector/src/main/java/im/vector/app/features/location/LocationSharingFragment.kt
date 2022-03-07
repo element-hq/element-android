@@ -147,7 +147,6 @@ class LocationSharingFragment @Inject constructor(
         // TODO
         //  create a useCase to compare 2 locations
         //  update options menu dynamically
-        //  change the pin dynamically depending on the current chosen location: cf. LocationPinProvider
         //  move pin creation into the Fragment? => need to ask other's opinions
         //  reset map to user location when clicking on reset icon
         //  need changes in the event sent when this is a pin drop location?
@@ -168,15 +167,15 @@ class LocationSharingFragment @Inject constructor(
 
     private fun updateMap(state: LocationSharingViewState) {
         // first, update the options view
-        if (state.areTargetAndUserLocationEqual) {
+        when (state.areTargetAndUserLocationEqual) {
             // TODO activate USER_LIVE option when implemented
-            views.shareLocationOptionsPicker.render(
+            true  -> views.shareLocationOptionsPicker.render(
                     LocationSharingOption.USER_CURRENT
             )
-        } else {
-            views.shareLocationOptionsPicker.render(
+            false -> views.shareLocationOptionsPicker.render(
                     LocationSharingOption.PINNED
             )
+            else  -> views.shareLocationOptionsPicker.render()
         }
         // then, update the map using the height of the options view after it has been rendered
         views.shareLocationOptionsPicker.post {

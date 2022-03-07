@@ -83,14 +83,14 @@ class LocationSharingViewModel @AssistedInject constructor(
                 .sample(TARGET_LOCATION_CHANGE_SAMPLING_PERIOD_IN_MS)
                 .map { compareTargetLocation(it) }
                 .distinctUntilChanged()
+                // TODO change the pin dynamically depending on the current chosen location: cf. LocationPinProvider
                 .onEach { setState { copy(areTargetAndUserLocationEqual = it) } }
                 .launchIn(viewModelScope)
     }
 
-    private suspend fun compareTargetLocation(targetLocation: LocationData): Boolean {
+    private suspend fun compareTargetLocation(targetLocation: LocationData): Boolean? {
         return awaitState().lastKnownUserLocation
                 ?.let { userLocation -> compareLocationsUseCase.execute(userLocation, targetLocation) }
-                ?: false
     }
 
     override fun onCleared() {
