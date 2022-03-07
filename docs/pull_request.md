@@ -28,6 +28,8 @@ Draft PR can also be created when it depends on other un-merged PR.
 
 In any case, it is better to explicitly declare in the description why the PR is a draft PR.
 
+Also, draft PR should not stay indefinitely in this state. It may be removed if it is the case and the submitter does not update it after a few days.
+
 ##### Assigned to reviewer?
 
 For the moment we do not directly assign PR to ask for a review. In the future we could have some automation to do that. Anyway the core team should have a look to every PR, even when not digging into details. More reviewers, more eyes on the code change, more valuable feedback!
@@ -48,7 +50,7 @@ Each PR should focus on a single task. If other issues may be fixed when working
 
 It will have the advantage to be reviewed and merged faster, and not interfere with the main PR.
 
-It's also applicable for code rework. Sometimes, it is more efficient to extract that work to a dedicated PR, and rebase your branch once this "rework" PR has been merged.
+It's also applicable for code rework, or code formatting. Sometimes, it is more efficient to extract that work to a dedicated PR, and rebase your branch once this "rework" PR has been merged.
 
 #### Bots
 
@@ -69,12 +71,12 @@ For some reason dependabot sometimes does not upgrade some dependencies. In this
 
 ##### Gradle wrapper
 
-`Update Gradle Wrapper` is a tool which can create PR tu upgrade our gradle.properties file.
+`Update Gradle Wrapper` is a tool which can create PR to upgrade our gradle.properties file.
 Review such PR is the same recipe than for PR from Dependabot
 
 ##### Sync analytics plan
 
-This tools import any update in the analytics plan. See instruction in the PR itself to handle it.
+This tools imports any update in the analytics plan. See instruction in the PR itself to handle it.
 More info can be found in the file [analytics.md]
 
 ## Reviewing PR
@@ -91,6 +93,7 @@ But comment in PR from the community are always appreciated!
 3. Code maintenance. A bit similar to point 2. Tricky code must be documented for instance
 4. Fork consideration. Will configuration of forks be easy? Some documentation may help in some cases.
 5. We are building long term products. "Quick and dirty" code must be avoided.
+6. The PR includes new tests for the added code, updated test for the existing code
 
 ### Rules
 
@@ -113,10 +116,13 @@ PR description should follow the PR template, and at least provide some context 
 9. PR includes tests. allScreensTest when applicable, and unit tests
 10. Avoid over complicating things. Keep it simple (KISS)!
 11. PR contains only the expected change. Sometimes, the diff is showing changes that are already on `develop`. This is not good, submitter has to fix that up.
+12. Changelog content should target their audience: `.sdk` extension are mainly targeted for developers, other extensions are targeted for users and forks maintainers. It should generally describe visual change rather than give technical details.
 
 ##### Check the commit
 
-Commit message must be short, one line and valuable. "WIP" is not a good commit message.
+Commit message must be short, one line and valuable. "WIP" is not a good commit message. Commit message can contain issue number, starting with `#`. GitHub will add some link between the issue and such commit, which can be useful. It's possible to change a commit message at any time (may require a force push).
+
+Commit messages can contain extra lines with more details, links, etc. But keep in mind that those lines are quite less visible than the first line.
 
 Also commit history should be nice. Having commits like "Adding temporary code" then later "Removing temporary code" is not good. The branch has to be rebased and those commit have to be dropped.
 
@@ -132,7 +138,7 @@ Commit like "Code review fixes" is good when reviewing the PR, since new changes
 
 ##### Make a dedicated meeting to review the PR
 
-Some times, big PR can be hard to review. Setting up a call with the PR submitter can faster the communication, rather than putting comment and questions as GitHub comment. It has the inconvenient to not make it public.
+Sometimes a big PR can be hard to review. Setting up a call with the PR submitter can speed up the communication, rather than putting comments and questions in GitHub comments. It has the inconvenience of making the discussion non-public, consider including a summary of the main points of the "offline" conversation in the PR.
 
 ### What happen to the issue(s)?
 
@@ -164,6 +170,13 @@ PR can also be merged by the reviewer, to reduce the time the PR is open. But on
 Dangerous PR should not be merged just before a release. Dangerous PR are PR that could break the app. Update of Realm library, rework in the chunk of Events management in the SDK, etc.
 
 We prefer to merge such PR after a release so that it can be tested during several days by the team before behind included in a release candidate.
+
+### Resolve conversation
+
+Generally we do not close conversation added during PR review and update by clicking on "Resolve conversation"
+If the submitter or the reviewer do so, it will more difficult for further readers to see again the content. They will have to open the conversation to see it again. it's a waste of time.
+
+When remarks are handled, a small comment like "done" is enough, commit hash can also be added to the conversation.
 
 ## Responsibility
 
