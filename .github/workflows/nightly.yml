@@ -308,15 +308,36 @@ jobs:
             emulator.log
             failure_screenshots/
 
+  codecov-units:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with: 
+          distribution: 'adopt'
+          java-version: '11'
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+      - run: ./gradlew allCodeCoverageReport $CI_GRADLE_ARG_PROPERTIES
+      - name: Upload Codecov data
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: codecov-xml
+          path: |
+            build/reports/jacoco/allCodeCoverageReport/allCodeCoverageReport.xml
+
   sonarqube:
     runs-on: macos-latest
     if: always()
     needs:
-      - integration-tests
-      - ui-tests
-#      - unit-tests  TODO: code coverage from here too
-      - build-android-test-matrix-sdk 
-      - build-android-test-app
+      - codecov-units
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v2
@@ -331,6 +352,11 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
+      - uses: actions/download-artifact@v3
+        with:
+          name: codecov-xml # will restore to allCodeCoverageReport.xml by default; we restore to the same location in following tasks
+      - run: mkdir -p build/reports/jacoco/allCodeCoverageReport/
+      - run: mv allCodeCoverageReport.xml build/reports/jacoco/allCodeCoverageReport/
       - run: ./gradlew sonarqube $CI_GRADLE_ARG_PROPERTIES
         env:
           ORG_GRADLE_PROJECT_SONAR_LOGIN: ${{ secrets.SONAR_TOKEN }}
