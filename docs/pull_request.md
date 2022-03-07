@@ -30,7 +30,7 @@ In any case, it is better to explicitly declare in the description why the PR is
 
 ##### Assigned to reviewer?
 
-For the moment we do not directly assign PR to ask for a review. In the future we could have some automation to do that. Anyway the core team should have a look to every PR, even when not digging into details. More reviewers, more eys on the code change, more valuable feedback!
+For the moment we do not directly assign PR to ask for a review. In the future we could have some automation to do that. Anyway the core team should have a look to every PR, even when not digging into details. More reviewers, more eyes on the code change, more valuable feedback!
 
 ##### When create split PR?
 
@@ -85,7 +85,7 @@ But comment in PR from the community are always appreciated!
 ### What to have in mind when reviewing a PR
 
 1. User experience: is the UX and UI correct? You will probably be the second person to test the new thing, the first one is the developer.
-2. Developer experience: does the code looks nice and decoupled? No big functions, etc.
+2. Developer experience: does the code look nice and decoupled? No big functions, etc.
 3. Code maintenance. A bit similar to point 2. Tricky code must be documented for instance
 4. Fork consideration. Is configuration of forks will be easy? Some documentation may help in some cases.
 
@@ -107,7 +107,7 @@ PR description should follow the PR template, and at least provide some context 
 6. Naming is correct. Naming is really important, it's considered part of the documentation
 7. Architecture is followed. For instance, the logic is in the ViewModel and not in the Fragment
 8. There is at least one file for the changelog. Exception if the PR fixes something which has not been released yet.
-9. PR includes test. allScreensTest when applicable, and unit tests
+9. PR includes tests. allScreensTest when applicable, and unit tests
 10. Avoid over complicating things. Keep it simple (KISS)!
 11. PR contains only the expected change. Sometimes, the diff is showing changes that are already on develop. This is not good, submitter has to fix that up.
 
@@ -117,7 +117,7 @@ Commit message must be short, one line and valuable. "WIP" is not a good commit 
 
 Also commit history should be nice. Having commits like "Adding temporary code" then later "Removing temporary code" is not good. The branch has to be rebased and those commit have to be dropped.
 
-PR merger could decide to squash and merge if commit history is not code.
+PR merger could decide to squash and merge if commit history is not good.
 
 Commit like "Code review fixes" is good when reviewing the PR, since new changes can be reviewed easily, but is less valuable when looking at git history. I have no good solution to avoid this.
 
@@ -143,7 +143,7 @@ Note that you have to repeat the keyword in case of a list of issue
 > Closes #1, Closes #2, etc.
 
 When PR will be merged, such referenced issue will be automatically closed.
-It up to the person who has merged the PR to go to the (closed) issue(s) and to add a comment to inform in which version the issue fix will be available. Use the current version of develop branch.
+It is up to the person who has merged the PR to go to the (closed) issue(s) and to add a comment to inform in which version the issue fix will be available. Use the current version of develop branch.
 
 > Closed in Element Android v1.x.y
 
