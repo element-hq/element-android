@@ -16,7 +16,7 @@ Basically every one who wants to contribute to the project! But there are some r
 
 #### Humans
 
-Developers who are employed (or paid) by Element can directly clone the project and push their branches and create PR.
+People with write access to the project can directly clone the project, push their branches and create PR.
 
 External contributors must first fork the project and create PR to the mainline from there.
 
@@ -34,7 +34,7 @@ For the moment we do not directly assign PR to ask for a review. In the future w
 
 ##### When create split PR?
 
-To implement big new feature, it may be efficient to split the work into several smaller and scoped PRs. They will be easier to review, and they can be merged on develop faster.
+To implement big new feature, it may be efficient to split the work into several smaller and scoped PRs. They will be easier to review, and they can be merged on `develop` faster.
 
 Big PR can take time, and there is a risk of future merge conflict.
 
@@ -42,11 +42,13 @@ Feature flag can be used to avoid half implemented feature to be available in th
 
 That said, splitting into several PRs should not have the side effect to have more review to do, for instance if some code is added, then finally removed.
 
-##### Avoid unrelated fixing other issue in a big PR
+##### Avoid fixing other unrelated issue in a big PR
 
 Each PR should focus on a single task. If other issues may be fixed when working in the area of it, it's preferable to open a dedicated PR.
 
-It will have the advantage to be reviewed and merged faster.
+It will have the advantage to be reviewed and merged faster, and not interfere with the main PR.
+
+It's also applicable for code rework. Sometimes, it is more efficient to extract that work to a dedicated PR, and rebase your branch once this "rework" PR has been merged.
 
 #### Bots
 
@@ -85,9 +87,10 @@ But comment in PR from the community are always appreciated!
 ### What to have in mind when reviewing a PR
 
 1. User experience: is the UX and UI correct? You will probably be the second person to test the new thing, the first one is the developer.
-2. Developer experience: does the code look nice and decoupled? No big functions, etc.
+2. Developer experience: does the code look nice and decoupled? No big functions, new classes added to the right module, etc.
 3. Code maintenance. A bit similar to point 2. Tricky code must be documented for instance
-4. Fork consideration. Is configuration of forks will be easy? Some documentation may help in some cases.
+4. Fork consideration. Will configuration of forks be easy? Some documentation may help in some cases.
+5. We are building long term products. "Quick and dirty" code must be avoided.
 
 ### Rules
 
@@ -109,7 +112,7 @@ PR description should follow the PR template, and at least provide some context 
 8. There is at least one file for the changelog. Exception if the PR fixes something which has not been released yet.
 9. PR includes tests. allScreensTest when applicable, and unit tests
 10. Avoid over complicating things. Keep it simple (KISS)!
-11. PR contains only the expected change. Sometimes, the diff is showing changes that are already on develop. This is not good, submitter has to fix that up.
+11. PR contains only the expected change. Sometimes, the diff is showing changes that are already on `develop`. This is not good, submitter has to fix that up.
 
 ##### Check the commit
 
@@ -119,7 +122,7 @@ Also commit history should be nice. Having commits like "Adding temporary code" 
 
 PR merger could decide to squash and merge if commit history is not good.
 
-Commit like "Code review fixes" is good when reviewing the PR, since new changes can be reviewed easily, but is less valuable when looking at git history. I have no good solution to avoid this.
+Commit like "Code review fixes" is good when reviewing the PR, since new changes can be reviewed easily, but is less valuable when looking at git history. To avoid this, PR submitter should always push new commits after a review (no commit amend with force push), and when the PR is approved decide to interactive rebase the PR to improve the git history and reduce noise.
 
 ##### Check the substance
 
@@ -143,16 +146,27 @@ Note that you have to repeat the keyword in case of a list of issue
 > Closes #1, Closes #2, etc.
 
 When PR will be merged, such referenced issue will be automatically closed.
-It is up to the person who has merged the PR to go to the (closed) issue(s) and to add a comment to inform in which version the issue fix will be available. Use the current version of develop branch.
+It is up to the person who has merged the PR to go to the (closed) issue(s) and to add a comment to inform in which version the issue fix will be available. Use the current version of `develop` branch.
 
 > Closed in Element Android v1.x.y
 
 ### Merge conflict
 
-It's up to the submitter to handle merge conflict. Sometimes, they can be fixed directly from GitHub, sometimes this is not possible. The branch can be rebased on develop, or develop can be merged on the branch, it's up to the submitter to decide what is best.
+It's up to the submitter to handle merge conflict. Sometimes, they can be fixed directly from GitHub, sometimes this is not possible. The branch can be rebased on `develop`, or the `develop` branch can be merged on the branch, it's up to the submitter to decide what is best.
+Keep in mind that Github Actions are not run in case of conflict.
 
 ### When and who can merge PR
 
 PR can be merged by the submitter, if and only if at least one approval from another developer is done. Approval from all people added as reviewer is also a good thing to have. Approval from design team may be mandatory, but is not sufficient to merge a PR.
 
+PR can also be merged by the reviewer, to reduce the time the PR is open. But only if the PR is not in draft and the change are quite small, or behind a feature flag.
+
 Dangerous PR should not be merged just before a release. Dangerous PR are PR that could break the app. Update of Realm library, rework in the chunk of Events management in the SDK, etc.
+
+We prefer to merge such PR after a release so that it can be tested during several days by the team before behind included in a release candidate.
+
+## Responsibility
+
+PR submitter is responsible of the incoming change. PR reviewers who approved the PR take a part of responsibility on the code which will land to develop, and then be used by our users, and the user of our forks.
+
+That said, bug may still be merged on `develop`, this is still acceptable of course. In this case, please make sure an issue is created and correctly labelled. Ideally, such issues should be fixed before the next release candidate, i.e. with a higher priority. But as we release the application every 10 working days, it can be hard to fix every bugs. That's why PR should be fully tested and reviewed before being merge and we should never comment code review remark with "will be handled later", or similar comments.
