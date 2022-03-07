@@ -40,14 +40,16 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:adjustViewBounds="true"
+        android:background="@drawable/circle"
+        android:backgroundTint="@color/element_background_light"
         android:importantForAccessibility="no"
-        android:src="@drawable/ic_user_round"
+        android:src="@drawable/ic_user_fg"
         app:layout_constraintBottom_toTopOf="@id/accountCreatedSpace2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintHeight_percent="0.12"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/accountCreatedSpace1"
-        app:tint="@color/element_background_light" />
+        app:tint="?colorSecondary" />
 
     <Space
         android:id="@+id/accountCreatedSpace2"

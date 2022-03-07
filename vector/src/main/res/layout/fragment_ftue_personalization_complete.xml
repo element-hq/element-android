@@ -38,13 +38,16 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:adjustViewBounds="true"
+        android:background="@drawable/circle"
+        android:backgroundTint="?colorSecondary"
         android:importantForAccessibility="no"
         android:src="@drawable/ic_celebration"
         app:layout_constraintBottom_toTopOf="@id/personalizationCompleteSpace2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="0.15"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/personalizationCompleteSpace1" />
+        app:layout_constraintTop_toBottomOf="@id/personalizationCompleteSpace1"
+        app:tint="@color/palette_white" />
 
     <Space
         android:id="@+id/personalizationCompleteSpace2"
