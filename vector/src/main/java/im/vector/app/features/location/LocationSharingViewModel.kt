@@ -16,6 +16,7 @@
 
 package im.vector.app.features.location
 
+import android.graphics.drawable.Drawable
 import com.airbnb.mvrx.MavericksViewModelFactory
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -60,7 +61,7 @@ class LocationSharingViewModel @AssistedInject constructor(
     init {
         locationTracker.start(this)
         setUserItem()
-        createPin()
+        updatePin()
         compareTargetAndUserLocation()
     }
 
@@ -68,13 +69,23 @@ class LocationSharingViewModel @AssistedInject constructor(
         setState { copy(userItem = session.getUser(session.myUserId)?.toMatrixItem()) }
     }
 
-    private fun createPin() {
-        locationPinProvider.create(session.myUserId) {
-            setState {
-                copy(
-                        pinDrawable = it
-                )
+    private fun updatePin(isUserPin: Boolean? = true) {
+        if (isUserPin == true) {
+            locationPinProvider.create(userId = session.myUserId) {
+                updatePinDrawableInState(it)
             }
+        } else {
+            locationPinProvider.create(userId = null) {
+                updatePinDrawableInState(it)
+            }
+        }
+    }
+
+    private fun updatePinDrawableInState(drawable: Drawable) {
+        setState {
+            copy(
+                    locationTargetDrawable = drawable
+            )
         }
     }
 
@@ -83,8 +94,8 @@ class LocationSharingViewModel @AssistedInject constructor(
                 .sample(TARGET_LOCATION_CHANGE_SAMPLING_PERIOD_IN_MS)
                 .map { compareTargetLocation(it) }
                 .distinctUntilChanged()
-                // TODO change the pin dynamically depending on the current chosen location: cf. LocationPinProvider
                 .onEach { setState { copy(areTargetAndUserLocationEqual = it) } }
+                .onEach { updatePin(isUserPin = it) }
                 .launchIn(viewModelScope)
     }
 

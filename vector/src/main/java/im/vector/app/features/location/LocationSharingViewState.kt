@@ -33,8 +33,7 @@ data class LocationSharingViewState(
         val userItem: MatrixItem.UserItem? = null,
         val areTargetAndUserLocationEqual: Boolean? = null,
         val lastKnownUserLocation: LocationData? = null,
-        // TODO move pin drawable creation into the view?
-        val pinDrawable: Drawable? = null
+        val locationTargetDrawable: Drawable? = null
 ) : MavericksState {
 
     constructor(locationSharingArgs: LocationSharingArgs) : this(
@@ -47,5 +46,5 @@ fun LocationSharingViewState.toMapState() = MapState(
         zoomOnlyOnce = true,
         userLocationData = lastKnownUserLocation,
         pinId = DEFAULT_PIN_ID,
-        pinDrawable = pinDrawable
+        pinDrawable = locationTargetDrawable
 )

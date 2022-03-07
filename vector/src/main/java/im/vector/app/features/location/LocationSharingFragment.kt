@@ -53,7 +53,6 @@ class LocationSharingFragment @Inject constructor(
     private var mapView: WeakReference<MapView>? = null
 
     private var hasRenderedUserAvatar = false
-    private var hasUpdatedPin = false
 
     override fun getBinding(inflater: LayoutInflater, container: ViewGroup?): FragmentLocationSharingBinding {
         return FragmentLocationSharingBinding.inflate(inflater, container, false)
@@ -125,9 +124,8 @@ class LocationSharingFragment @Inject constructor(
     override fun invalidate() = withState(viewModel) { state ->
         updateMap(state)
         updateUserAvatar(state.userItem)
-        if (!hasUpdatedPin && state.pinDrawable != null) {
-            hasUpdatedPin = true
-            updateStaticPin(state.pinDrawable)
+        if (state.locationTargetDrawable != null) {
+            updateLocationTargetPin(state.locationTargetDrawable)
         }
         views.shareLocationGpsLoading.isGone = state.lastKnownUserLocation != null
     }
@@ -145,10 +143,8 @@ class LocationSharingFragment @Inject constructor(
 
     private fun initOptionsPicker() {
         // TODO
-        //  create a useCase to compare 2 locations
-        //  update options menu dynamically
-        //  move pin creation into the Fragment? => need to ask other's opinions
         //  reset map to user location when clicking on reset icon
+        //  unit tests
         //  need changes in the event sent when this is a pin drop location?
         //  need changes in the parsing of events when receiving pin drop location?: should it be shown with user avatar or with pin?
         // set no option at start
@@ -196,7 +192,7 @@ class LocationSharingFragment @Inject constructor(
                 }
     }
 
-    private fun updateStaticPin(drawable: Drawable) {
+    private fun updateLocationTargetPin(drawable: Drawable) {
         views.shareLocationPin.setImageDrawable(drawable)
     }
 }
