@@ -83,7 +83,7 @@ class VoiceMessageViews(
         observeMicButton(actions)
     }
 
-    private fun getTouchedPositionPercentage(motionEvent: MotionEvent, view: View) = motionEvent.x / view.width
+    private fun getTouchedPositionPercentage(motionEvent: MotionEvent, view: View) = (motionEvent.x / view.width).coerceIn(0f, 1f)
 
     @SuppressLint("ClickableViewAccessibility")
     private fun observeMicButton(actions: Actions) {

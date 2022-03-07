@@ -134,7 +134,7 @@ abstract class MessageVoiceItem : AbsMessageItem<MessageVoiceItem.Holder>() {
         }
     }
 
-    private fun getTouchedPositionPercentage(motionEvent: MotionEvent, view: View) = motionEvent.x / view.width
+    private fun getTouchedPositionPercentage(motionEvent: MotionEvent, view: View) = (motionEvent.x / view.width).coerceIn(0f, 1f)
 
     private fun renderIdleState(holder: Holder, idleColor: Int, playedColor: Int) {
         holder.voicePlaybackControlButton.setImageResource(R.drawable.ic_play_pause_play)

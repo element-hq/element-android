@@ -709,6 +709,7 @@ class MessageItemFactory @Inject constructor(
         return this
                 ?.filterNotNull()
                 ?.map {
+                    // Value comes from AudioWaveformView.MAX_FFT, and 1024 is the max value in the Matrix spec
                     it * AudioWaveformView.MAX_FFT / 1024
                 }
     }
