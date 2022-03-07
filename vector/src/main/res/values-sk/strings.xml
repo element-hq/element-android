@@ -2439,7 +2439,7 @@
     <string name="room_notification_two_users_are_typing">%1$s a %2$s</string>
     <string name="login_signin_sso">Pokračovať pomocou jednotného prihlásenia SSO</string>
     <string name="login_social_sso">jednotné prihlásenie SSO</string>
-    <string name="a11y_close_keys_backup_banner">Zatvoriť výzvu zálohovanie kľúčov</string>
+    <string name="a11y_close_keys_backup_banner">Zatvoriť výzvu na zálohovanie kľúčov</string>
     <string name="a11y_poll_winner_option">Výťazná odpoveď</string>
     <string name="a11y_unchecked">Nezaškrtnuté</string>
     <string name="a11y_checked">Zaškrtnuté</string>
