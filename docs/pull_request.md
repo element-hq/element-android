@@ -112,11 +112,10 @@ PR description should follow the PR template, and at least provide some context 
 5. New classes are added to the correct location
 6. Naming is correct. Naming is really important, it's considered part of the documentation
 7. Architecture is followed. For instance, the logic is in the ViewModel and not in the Fragment
-8. There is at least one file for the changelog. Exception if the PR fixes something which has not been released yet.
+8. There is at least one file for the changelog. Exception if the PR fixes something which has not been released yet. Changelog content should target their audience: `.sdk` extension are mainly targeted for developers, other extensions are targeted for users and forks maintainers. It should generally describe visual change rather than give technical details. More details can be found [here](../CONTRIBUTING.md#changelog).
 9. PR includes tests. allScreensTest when applicable, and unit tests
 10. Avoid over complicating things. Keep it simple (KISS)!
 11. PR contains only the expected change. Sometimes, the diff is showing changes that are already on `develop`. This is not good, submitter has to fix that up.
-12. Changelog content should target their audience: `.sdk` extension are mainly targeted for developers, other extensions are targeted for users and forks maintainers. It should generally describe visual change rather than give technical details.
 
 ##### Check the commit
 
