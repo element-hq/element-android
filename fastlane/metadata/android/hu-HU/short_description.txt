@@ -1,1 +1,1 @@
-Csoportos üzenetküldő - titkosított üzenetek, videó hívások
+Csoportos üzenetküldő - titkosított üzenetek és videó hívások
