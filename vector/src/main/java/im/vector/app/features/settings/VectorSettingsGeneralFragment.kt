@@ -42,7 +42,6 @@ import im.vector.app.core.extensions.toMvRxBundle
 import im.vector.app.core.intent.getFilenameFromUri
 import im.vector.app.core.platform.SimpleTextWatcher
 import im.vector.app.core.preference.UserAvatarPreference
-import im.vector.app.core.preference.VectorEditTextPreference
 import im.vector.app.core.preference.VectorPreference
 import im.vector.app.core.preference.VectorSwitchPreference
 import im.vector.app.core.resources.ColorProvider
@@ -88,7 +87,7 @@ class VectorSettingsGeneralFragment @Inject constructor(
         findPreference<UserAvatarPreference>(VectorPreferences.SETTINGS_PROFILE_PICTURE_PREFERENCE_KEY)!!
     }
     private val mDisplayNamePreference by lazy {
-        findPreference<VectorEditTextPreference>(VectorPreferences.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY)!!
+        findPreference<EditTextPreference>(VectorPreferences.SETTINGS_DISPLAY_NAME_PREFERENCE_KEY)!!
     }
     private val mPasswordPreference by lazy {
         findPreference<VectorPreference>(VectorPreferences.SETTINGS_CHANGE_PASSWORD_PREFERENCE_KEY)!!
