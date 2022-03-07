@@ -46,5 +46,6 @@ fun LocationSharingViewState.toMapState() = MapState(
         zoomOnlyOnce = true,
         userLocationData = lastKnownUserLocation,
         pinId = DEFAULT_PIN_ID,
-        pinDrawable = locationTargetDrawable
+        pinDrawable = null,
+        showPin = areTargetAndUserLocationEqual == false
 )

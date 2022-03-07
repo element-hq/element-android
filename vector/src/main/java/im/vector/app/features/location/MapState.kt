@@ -24,5 +24,6 @@ data class MapState(
         val userLocationData: LocationData? = null,
         val pinId: String,
         val pinDrawable: Drawable? = null,
+        val showPin: Boolean = true,
         @Px val logoMarginBottom: Int = 0
 )

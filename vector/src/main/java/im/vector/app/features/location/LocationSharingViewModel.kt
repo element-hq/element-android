@@ -146,6 +146,7 @@ class LocationSharingViewModel @AssistedInject constructor(
     }
 
     override fun onLocationUpdate(locationData: LocationData) {
+        // TODO compare location with lastTargetLocation => need to save info into the ViewState
         setState {
             copy(lastKnownUserLocation = locationData)
         }

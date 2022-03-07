@@ -18,6 +18,7 @@ package im.vector.app.features.location
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.core.content.ContextCompat
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapView
@@ -26,6 +27,7 @@ import com.mapbox.mapboxsdk.maps.Style
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolManager
 import com.mapbox.mapboxsdk.plugins.annotation.SymbolOptions
 import com.mapbox.mapboxsdk.style.layers.Property
+import im.vector.app.R
 import timber.log.Timber
 
 class MapTilerMapView @JvmOverloads constructor(
@@ -42,6 +44,9 @@ class MapTilerMapView @JvmOverloads constructor(
             val style: Style
     )
 
+    private val userLocationDrawable by lazy {
+        ContextCompat.getDrawable(context, R.drawable.ic_location_user)
+    }
     private var mapRefs: MapRefs? = null
     private var initZoomDone = false
 
@@ -88,13 +93,13 @@ class MapTilerMapView @JvmOverloads constructor(
 
         safeMapRefs.map.uiSettings.setLogoMargins(0, 0, 0, state.logoMarginBottom)
 
-        // TODO display a dot pin for userLocation instead of pinDrawable
         // TODO add reset to user location button
         // TODO check conflict of rendering with preview location in timeline
-        state.pinDrawable?.let { pinDrawable ->
+        val pinDrawable = state.pinDrawable ?: userLocationDrawable
+        pinDrawable?.let { drawable ->
             if (!safeMapRefs.style.isFullyLoaded ||
                     safeMapRefs.style.getImage(state.pinId) == null) {
-                safeMapRefs.style.addImage(state.pinId, pinDrawable)
+                safeMapRefs.style.addImage(state.pinId, drawable)
             }
         }
 
@@ -105,12 +110,14 @@ class MapTilerMapView @JvmOverloads constructor(
             }
 
             safeMapRefs.symbolManager.deleteAll()
-            safeMapRefs.symbolManager.create(
-                    SymbolOptions()
-                            .withLatLng(LatLng(locationData.latitude, locationData.longitude))
-                            .withIconImage(state.pinId)
-                            .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
-            )
+            if(pinDrawable != null && state.showPin) {
+                safeMapRefs.symbolManager.create(
+                        SymbolOptions()
+                                .withLatLng(LatLng(locationData.latitude, locationData.longitude))
+                                .withIconImage(state.pinId)
+                                .withIconAnchor(Property.ICON_ANCHOR_BOTTOM)
+                )
+            }
         }
     }
 
