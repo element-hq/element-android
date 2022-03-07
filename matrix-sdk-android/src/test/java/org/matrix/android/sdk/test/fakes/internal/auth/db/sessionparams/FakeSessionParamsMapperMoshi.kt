@@ -16,9 +16,11 @@
 
 package org.matrix.android.sdk.test.fakes.internal.auth.db.sessionparams
 
+import android.net.Uri
 import com.squareup.moshi.Moshi
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeNull
 import org.matrix.android.sdk.api.auth.data.Credentials
@@ -41,6 +43,8 @@ internal class FakeSessionParamsMapperMoshi {
     val homeServerConnectionConfigAdapter = FakeHomeServerConnectionConfigJsonAdapter()
 
     init {
+        mockkStatic(Uri::class)
+        every { Uri.parse(any()) } returns mockk()
         every { instance.adapter(Credentials::class.java) } returns credentialsJsonAdapter.instance
         every { instance.adapter(HomeServerConnectionConfig::class.java) } returns homeServerConnectionConfigAdapter.instance
     }

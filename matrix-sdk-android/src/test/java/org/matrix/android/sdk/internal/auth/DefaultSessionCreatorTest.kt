@@ -16,8 +16,13 @@
 
 package org.matrix.android.sdk.internal.auth
 
+import android.net.Uri
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.mockkStatic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.junit.Before
 import org.junit.Test
 import org.matrix.android.sdk.api.auth.data.HomeServerConnectionConfig
 import org.matrix.android.sdk.internal.auth.login.LoginType
@@ -42,6 +47,12 @@ class DefaultSessionCreatorTest {
             fakePendingSessionStore.instance,
             fakeSessionParamsCreator.instance,
     )
+
+    @Before
+    fun setup() {
+        mockkStatic(Uri::class)
+        every { Uri.parse(any()) } returns mockk()
+    }
 
     @Test
     fun `when createSession, then session created`() = runBlockingTest {
