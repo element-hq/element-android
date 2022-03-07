@@ -35,6 +35,7 @@ class Fake005MigrationRealm {
         every { instance.schema } returns schema
         every { schema.get("SessionParamsEntity") } returns objectSchema
         every { objectSchema.addField(any(), any()) } returns objectSchema
+        every { objectSchema.setRequired(any(), any()) } returns objectSchema
         every { objectSchema.transform(any()) } returns objectSchema
     }
 
@@ -46,6 +47,7 @@ class Fake005MigrationRealm {
         verifyOrder {
             objectSchema["SessionParamsEntity"]
             objectSchema.addField(SessionParamsEntityFields.LOGIN_TYPE, String::class.java)
+            objectSchema.setRequired(SessionParamsEntityFields.LOGIN_TYPE, true)
             objectSchema.transform(any())
         }
     }
