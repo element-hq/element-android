@@ -15,6 +15,11 @@
     <issue id="IconExpectedSize" severity="error" />
     <issue id="LocaleFolder" severity="error" />
 
+    <issue id="TooManyViews" severity="warning">
+        <!-- Ignore TooManyViews in debug build type -->
+        <ignore path="**/src/debug/**" />
+    </issue>
+
     <!-- String resource has to be used, for the rest we can ignore for now
     TODO: stop ignoring warning at all those locations -->
     <issue id="UnusedResources" severity="error">
