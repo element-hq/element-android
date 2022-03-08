@@ -121,7 +121,7 @@ class FtueAuthVariant(
 
     private fun updateWithState(viewState: OnboardingViewState) {
         isForceLoginFallbackEnabled = viewState.isForceLoginFallbackEnabled
-        views.loginLoading.isVisible = viewState.isLoading || viewState.legacyIsLoading()
+        views.loginLoading.isVisible = viewState.isLoading
     }
 
     override fun setIsLoading(isLoading: Boolean) = Unit

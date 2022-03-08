@@ -18,20 +18,14 @@ package im.vector.app.features.onboarding
 
 import android.net.Uri
 import android.os.Parcelable
-import com.airbnb.mvrx.Async
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksState
 import com.airbnb.mvrx.PersistState
-import com.airbnb.mvrx.Uninitialized
 import im.vector.app.features.login.LoginMode
 import im.vector.app.features.login.ServerType
 import im.vector.app.features.login.SignMode
 import kotlinx.parcelize.Parcelize
 
 data class OnboardingViewState(
-        val asyncHomeServerLoginFlowRequest: Async<Unit> = Uninitialized,
-        val asyncResetPassword: Async<Unit> = Uninitialized,
-        val asyncResetMailConfirmed: Async<Unit> = Uninitialized,
         val isLoading: Boolean = false,
 
         @PersistState
@@ -68,14 +62,7 @@ data class OnboardingViewState(
 
         @PersistState
         val personalizationState: PersonalizationState = PersonalizationState()
-) : MavericksState {
-
-    fun legacyIsLoading(): Boolean {
-        return asyncHomeServerLoginFlowRequest is Loading ||
-                asyncResetPassword is Loading ||
-                asyncResetMailConfirmed is Loading
-    }
-}
+) : MavericksState
 
 enum class OnboardingFlow {
     SignIn,

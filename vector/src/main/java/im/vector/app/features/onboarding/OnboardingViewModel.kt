@@ -18,11 +18,7 @@ package im.vector.app.features.onboarding
 
 import android.content.Context
 import android.net.Uri
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.MavericksViewModelFactory
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -249,8 +245,8 @@ class OnboardingViewModel @AssistedInject constructor(
                     val result = safeLoginWizard.loginWithToken(action.loginToken)
                     onSessionCreated(result, isAccountCreated = false)
                 } catch (failure: Throwable) {
-                    _viewEvents.post(OnboardingViewEvents.Failure(failure))
                     setState { copy(isLoading = false) }
+                    _viewEvents.post(OnboardingViewEvents.Failure(failure))
                 }
             }
         }
@@ -310,7 +306,7 @@ class OnboardingViewModel @AssistedInject constructor(
                     authenticationService.reset()
                     setState {
                         copy(
-                                asyncHomeServerLoginFlowRequest = Uninitialized,
+                                isLoading = false,
                                 homeServerUrlFromUser = null,
                                 homeServerUrl = null,
                                 loginMode = LoginMode.Unknown,
@@ -323,7 +319,7 @@ class OnboardingViewModel @AssistedInject constructor(
             OnboardingAction.ResetSignMode       -> {
                 setState {
                     copy(
-                            asyncHomeServerLoginFlowRequest = Uninitialized,
+                            isLoading = false,
                             signMode = SignMode.Unknown,
                             loginMode = LoginMode.Unknown,
                             loginModeSupportedTypes = emptyList()
@@ -339,8 +335,7 @@ class OnboardingViewModel @AssistedInject constructor(
             OnboardingAction.ResetResetPassword  -> {
                 setState {
                     copy(
-                            asyncResetPassword = Uninitialized,
-                            asyncResetMailConfirmed = Uninitialized,
+                            isLoading = false,
                             resetPasswordEmail = null
                     )
                 }
@@ -409,35 +404,23 @@ class OnboardingViewModel @AssistedInject constructor(
         val safeLoginWizard = loginWizard
 
         if (safeLoginWizard == null) {
-            setState {
-                copy(
-                        asyncResetPassword = Fail(Throwable("Bad configuration")),
-                        asyncResetMailConfirmed = Uninitialized
-                )
-            }
+            setState { copy(isLoading = false) }
+            _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Bad configuration")))
         } else {
-            setState {
-                copy(
-                        asyncResetPassword = Loading(),
-                        asyncResetMailConfirmed = Uninitialized
-                )
-            }
+            setState { copy(isLoading = true) }
 
             currentJob = viewModelScope.launch {
                 try {
                     safeLoginWizard.resetPassword(action.email, action.newPassword)
                 } catch (failure: Throwable) {
-                    setState {
-                        copy(
-                                asyncResetPassword = Fail(failure)
-                        )
-                    }
+                    setState { copy(isLoading = false) }
+                    _viewEvents.post(OnboardingViewEvents.Failure(failure))
                     return@launch
                 }
 
                 setState {
                     copy(
-                            asyncResetPassword = Success(Unit),
+                            isLoading = false,
                             resetPasswordEmail = action.email
                     )
                 }
@@ -451,34 +434,22 @@ class OnboardingViewModel @AssistedInject constructor(
         val safeLoginWizard = loginWizard
 
         if (safeLoginWizard == null) {
-            setState {
-                copy(
-                        asyncResetPassword = Uninitialized,
-                        asyncResetMailConfirmed = Fail(Throwable("Bad configuration"))
-                )
-            }
+            setState { copy(isLoading = false) }
+            _viewEvents.post(OnboardingViewEvents.Failure(Throwable("Bad configuration")))
         } else {
-            setState {
-                copy(
-                        asyncResetPassword = Uninitialized,
-                        asyncResetMailConfirmed = Loading()
-                )
-            }
+            setState { copy(isLoading = false) }
 
             currentJob = viewModelScope.launch {
                 try {
                     safeLoginWizard.resetPasswordMailConfirmed()
                 } catch (failure: Throwable) {
-                    setState {
-                        copy(
-                                asyncResetMailConfirmed = Fail(failure)
-                        )
-                    }
+                    setState { copy(isLoading = false) }
+                    _viewEvents.post(OnboardingViewEvents.Failure(failure))
                     return@launch
                 }
                 setState {
                     copy(
-                            asyncResetMailConfirmed = Success(Unit),
+                            isLoading = false,
                             resetPasswordEmail = null
                     )
                 }
@@ -560,9 +531,9 @@ class OnboardingViewModel @AssistedInject constructor(
         when (failure) {
             is MatrixIdFailure.InvalidMatrixId,
             is Failure.UnrecognizedCertificateFailure -> {
+                setState { copy(isLoading = false) }
                 // Display this error in a dialog
                 _viewEvents.post(OnboardingViewEvents.Failure(failure))
-                setState { copy(isLoading = false) }
             }
             else                                      -> {
                 setState { copy(isLoading = false) }
@@ -589,6 +560,7 @@ class OnboardingViewModel @AssistedInject constructor(
                     onSessionCreated(result, isAccountCreated = false)
                 } catch (failure: Throwable) {
                     setState { copy(isLoading = false) }
+                    _viewEvents.post(OnboardingViewEvents.Failure(failure))
                 }
             }
         }
@@ -692,7 +664,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
             setState {
                 copy(
-                        asyncHomeServerLoginFlowRequest = Loading(),
+                        isLoading = true,
                         // If user has entered https://matrix.org, ensure that server type is ServerType.MatrixOrg
                         // It is also useful to set the value again in the case of a certificate error on matrix.org
                         serverType = if (homeServerConnectionConfig.homeServerUri.toString() == matrixOrgUrl) {
@@ -706,14 +678,14 @@ class OnboardingViewModel @AssistedInject constructor(
             val data = try {
                 authenticationService.getLoginFlow(homeServerConnectionConfig)
             } catch (failure: Throwable) {
-                _viewEvents.post(OnboardingViewEvents.Failure(failure))
                 setState {
                     copy(
-                            asyncHomeServerLoginFlowRequest = Uninitialized,
+                            isLoading = false,
                             // If we were trying to retrieve matrix.org login flow, also reset the serverType
                             serverType = if (serverType == ServerType.MatrixOrg) ServerType.Unknown else serverType
                     )
                 }
+                _viewEvents.post(OnboardingViewEvents.Failure(failure))
                 null
             }
 
@@ -734,7 +706,7 @@ class OnboardingViewModel @AssistedInject constructor(
 
             setState {
                 copy(
-                        asyncHomeServerLoginFlowRequest = Uninitialized,
+                        isLoading = false,
                         homeServerUrlFromUser = homeServerConnectionConfig.homeServerUri.toString(),
                         homeServerUrl = data.homeServerUrl,
                         loginMode = loginMode,
