@@ -828,20 +828,20 @@ class OnboardingViewModel @AssistedInject constructor(
     }
 
     private fun updateDisplayName(displayName: String) {
-        setState { copy(asyncDisplayName = Loading()) }
+        setState { copy(isLoading = true) }
         viewModelScope.launch {
             val activeSession = activeSessionHolder.getActiveSession()
             try {
                 activeSession.setDisplayName(activeSession.myUserId, displayName)
                 setState {
                     copy(
-                            asyncDisplayName = Success(Unit),
+                            isLoading = false,
                             personalizationState = personalizationState.copy(displayName = displayName)
                     )
                 }
                 handleDisplayNameStepComplete()
             } catch (error: Throwable) {
-                setState { copy(asyncDisplayName = Fail(error)) }
+                setState { copy(isLoading = false) }
                 _viewEvents.post(OnboardingViewEvents.Failure(error))
             }
         }
@@ -883,7 +883,7 @@ class OnboardingViewModel @AssistedInject constructor(
             when (val pictureUri = state.personalizationState.selectedPictureUri) {
                 null -> _viewEvents.post(OnboardingViewEvents.Failure(NullPointerException("picture uri is missing from state")))
                 else -> {
-                    setState { copy(asyncProfilePicture = Loading()) }
+                    setState { copy(isLoading = true) }
                     viewModelScope.launch {
                         val activeSession = activeSessionHolder.getActiveSession()
                         try {
@@ -894,12 +894,12 @@ class OnboardingViewModel @AssistedInject constructor(
                             )
                             setState {
                                 copy(
-                                        asyncProfilePicture = Success(Unit),
+                                        isLoading = false,
                                 )
                             }
                             onProfilePictureSaved()
                         } catch (error: Throwable) {
-                            setState { copy(asyncProfilePicture = Fail(error)) }
+                            setState { copy(isLoading = false) }
                             _viewEvents.post(OnboardingViewEvents.Failure(error))
                         }
                     }

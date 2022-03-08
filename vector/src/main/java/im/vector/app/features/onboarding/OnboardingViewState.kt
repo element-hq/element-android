@@ -34,8 +34,7 @@ data class OnboardingViewState(
         val asyncResetPassword: Async<Unit> = Uninitialized,
         val asyncResetMailConfirmed: Async<Unit> = Uninitialized,
         val asyncRegistration: Async<Unit> = Uninitialized,
-        val asyncDisplayName: Async<Unit> = Uninitialized,
-        val asyncProfilePicture: Async<Unit> = Uninitialized,
+        val isLoading: Boolean = false,
 
         @PersistState
         val onboardingFlow: OnboardingFlow? = null,
@@ -73,14 +72,12 @@ data class OnboardingViewState(
         val personalizationState: PersonalizationState = PersonalizationState()
 ) : MavericksState {
 
-    fun isLoading(): Boolean {
+    fun legacyIsLoading(): Boolean {
         return asyncLoginAction is Loading ||
                 asyncHomeServerLoginFlowRequest is Loading ||
                 asyncResetPassword is Loading ||
                 asyncResetMailConfirmed is Loading ||
-                asyncRegistration is Loading ||
-                asyncDisplayName is Loading ||
-                asyncProfilePicture is Loading
+                asyncRegistration is Loading
     }
 }
 
