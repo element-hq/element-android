@@ -51,6 +51,8 @@ internal class DefaultResolveSpaceInfoTask @Inject constructor(
     private suspend fun getSpaceHierarchy() = try {
         getStableSpaceHierarchy()
     } catch (e: Throwable) {
+        Timber.w("Stable space hierarchy failed: ${e.message}")
+        e.printStackTrace()
         getUnstableSpaceHierarchy()
     }
 
