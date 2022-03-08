@@ -171,6 +171,8 @@ Dangerous PR should not be merged just before a release. Dangerous PR are PR tha
 
 We prefer to merge such PR after a release so that it can be tested during several days by the team before behind included in a release candidate.
 
+PR from bots will always be merged by the reviewer, right after approving the changes, or in case of critical changes, right after a release.
+
 ### Resolve conversation
 
 Generally we do not close conversation added during PR review and update by clicking on "Resolve conversation"
