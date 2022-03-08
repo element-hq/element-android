@@ -30,7 +30,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Run unit tests
-        run: ./gradlew clean test $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false --stacktrace
+        run: ./gradlew clean test $CI_GRADLE_ARG_PROPERTIES --stacktrace
       - name: Format unit test results
         if: always()
         run: python3 ./tools/ci/render_test_output.py unit ./**/build/test-results/**/*.xml

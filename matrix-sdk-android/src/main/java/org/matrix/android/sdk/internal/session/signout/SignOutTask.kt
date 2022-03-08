@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.signout
 
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
+import org.matrix.android.sdk.api.session.identity.IdentityServiceError
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.session.cleanup.CleanupSession
@@ -65,7 +66,13 @@ internal class DefaultSignOutTask @Inject constructor(
 
         // Logout from identity server if any
         runCatching { identityDisconnectTask.execute(Unit) }
-                .onFailure { Timber.w(it, "Unable to disconnect identity server") }
+                .onFailure {
+                    if (it is IdentityServiceError.NoIdentityServerConfigured) {
+                        Timber.i("No identity server configured to disconnect")
+                    } else {
+                        Timber.w(it, "Unable to disconnect identity server")
+                    }
+                }
 
         Timber.d("SignOut: cleanup session...")
         cleanupSession.cleanup()
