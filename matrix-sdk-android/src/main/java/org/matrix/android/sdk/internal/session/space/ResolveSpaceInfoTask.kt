@@ -48,7 +48,7 @@ internal class DefaultResolveSpaceInfoTask @Inject constructor(
 
     private suspend fun getSpaceHierarchy() = try {
         getStableSpaceHierarchy()
-    } catch (e: HttpException) {
+    } catch (e: Throwable) {
         getUnstableSpaceHierarchy()
     }
 
