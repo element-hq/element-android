@@ -17,6 +17,7 @@
 package im.vector.app.features.location
 
 import android.content.Context
+import android.content.res.TypedArray
 import android.util.AttributeSet
 import android.view.Gravity
 import android.widget.ImageView
@@ -55,21 +56,38 @@ class MapTilerMapView @JvmOverloads constructor(
     val locateBtn by lazy { createLocateBtn() }
     private var mapRefs: MapRefs? = null
     private var initZoomDone = false
+    private var showLocationBtn = false
+
+    init {
+        context.theme.obtainStyledAttributes(
+                attrs,
+                R.styleable.MapTilerMapView,
+                0,
+                0
+        ).run {
+            try {
+                setLocateBtnVisibility(this)
+            } finally {
+                recycle()
+            }
+        }
+    }
+
+    private fun setLocateBtnVisibility(typedArray: TypedArray) {
+        showLocationBtn = typedArray.getBoolean(R.styleable.MapTilerMapView_showLocateButton, false)
+    }
 
     /**
      * For location fragments
      */
     fun initialize(
             url: String,
-            showLocateBtn: Boolean = false, // TODO transform into xml attribute
             locationTargetChangeListener: LocationTargetChangeListener? = null
     ) {
         Timber.d("## Location: initialize")
         getMapAsync { map ->
             initMapStyle(map, url)
-            if (showLocateBtn) {
-                showLocateBtn(map)
-            }
+            initLocateBtn(map)
             notifyLocationOfMapCenter(locationTargetChangeListener)
             listenCameraMove(map, locationTargetChangeListener)
         }
@@ -87,15 +105,10 @@ class MapTilerMapView @JvmOverloads constructor(
         }
     }
 
-    private fun listenCameraMove(map: MapboxMap, locationTargetChangeListener: LocationTargetChangeListener?) {
-        map.addOnCameraMoveListener {
-            notifyLocationOfMapCenter(locationTargetChangeListener)
-        }
-    }
-
-    private fun notifyLocationOfMapCenter(locationTargetChangeListener: LocationTargetChangeListener?) {
-        getLocationOfMapCenter()?.let { target ->
-            locationTargetChangeListener?.onLocationTargetChange(target)
+    private fun initLocateBtn(map: MapboxMap) {
+        if (showLocationBtn) {
+            addView(locateBtn)
+            adjustCompassBtn(map)
         }
     }
 
@@ -114,12 +127,23 @@ class MapTilerMapView @JvmOverloads constructor(
                 }
             }
 
-    private fun showLocateBtn(map: MapboxMap) {
-        addView(locateBtn)
+    private fun adjustCompassBtn(map: MapboxMap) {
         locateBtn.post {
             val marginTop = locateBtn.height + locateBtn.marginTop + locateBtn.marginBottom
             val marginRight = context.resources.getDimensionPixelOffset(R.dimen.location_sharing_compass_btn_margin_horizontal)
             map.uiSettings.setCompassMargins(0, marginTop, marginRight, 0)
+        }
+    }
+
+    private fun listenCameraMove(map: MapboxMap, locationTargetChangeListener: LocationTargetChangeListener?) {
+        map.addOnCameraMoveListener {
+            notifyLocationOfMapCenter(locationTargetChangeListener)
+        }
+    }
+
+    private fun notifyLocationOfMapCenter(locationTargetChangeListener: LocationTargetChangeListener?) {
+        getLocationOfMapCenter()?.let { target ->
+            locationTargetChangeListener?.onLocationTargetChange(target)
         }
     }
 

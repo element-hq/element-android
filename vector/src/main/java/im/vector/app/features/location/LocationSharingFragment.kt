@@ -67,7 +67,6 @@ class LocationSharingFragment @Inject constructor(
         lifecycleScope.launchWhenCreated {
             views.mapView.initialize(
                     url = urlMapProvider.getMapUrl(),
-                    showLocateBtn = true,
                     locationTargetChangeListener = this@LocationSharingFragment
             )
         }
