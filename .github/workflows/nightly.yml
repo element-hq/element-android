@@ -250,7 +250,7 @@ jobs:
     if: always() && github.event_name != 'workflow_dispatch'
     # No concurrency required, runs every time on a schedule.
     steps:
-      -suses: michaelkaye/matrix-hookshot-action@v0.3.0
+      - uses: michaelkaye/matrix-hookshot-action@v0.3.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           matrix_access_token: ${{ secrets.ELEMENT_ANDROID_NOTIFICATION_ACCESS_TOKEN }}
