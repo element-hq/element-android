@@ -29,6 +29,7 @@ import im.vector.app.features.home.room.detail.timeline.helper.LocationPinProvid
 import im.vector.app.features.location.domain.usecase.CompareLocationsUseCase
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -156,9 +157,14 @@ class LocationSharingViewModel @AssistedInject constructor(
     }
 
     override fun onLocationUpdate(locationData: LocationData) {
-        // TODO compare location with lastTargetLocation => need to save info into the ViewState
         setState {
             copy(lastKnownUserLocation = locationData)
+        }
+        viewModelScope.launch {
+            // recompute location comparison using last received target location
+            locationTargetFlow.lastOrNull()?.let {
+                locationTargetFlow.emit(it)
+            }
         }
     }
 
