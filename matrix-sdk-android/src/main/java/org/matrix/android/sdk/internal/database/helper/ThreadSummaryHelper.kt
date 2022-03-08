@@ -260,7 +260,7 @@ private fun HashMap<String, RoomMemberContent?>.addSenderState(realm: Realm, roo
  */
 private fun createEventEntity(roomId: String, event: Event, realm: Realm): EventEntity {
     val ageLocalTs = event.unsignedData?.age?.let { System.currentTimeMillis() - it }
-    return event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.INCREMENTAL_SYNC)
+    return event.toEntity(roomId, SendState.SYNCED, ageLocalTs).copyToRealmOrIgnore(realm, EventInsertType.PAGINATION)
 }
 
 /**
