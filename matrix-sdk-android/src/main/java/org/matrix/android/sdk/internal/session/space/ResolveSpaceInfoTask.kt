@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.space
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
+import timber.log.Timber
 import javax.inject.Inject
 
 internal interface ResolveSpaceInfoTask : Task<ResolveSpaceInfoTask.Params, SpacesResponse> {
@@ -38,12 +39,17 @@ internal class DefaultResolveSpaceInfoTask @Inject constructor(
 ) : ResolveSpaceInfoTask {
     override suspend fun execute(params: ResolveSpaceInfoTask.Params): SpacesResponse {
         return executeRequest(globalErrorReceiver) {
-            spaceApi.getSpaceHierarchy(
-                    spaceId = params.spaceId,
-                    suggestedOnly = params.suggestedOnly,
-                    limit = params.limit,
-                    maxDepth = params.maxDepth,
-                    from = params.from)
+            try {
+                throw RuntimeException("Test space task exception")
+            } catch (e: Throwable) {
+                Timber.i("Test fall back api")
+                spaceApi.getSpaceHierarchy(
+                        spaceId = params.spaceId,
+                        suggestedOnly = params.suggestedOnly,
+                        limit = params.limit,
+                        maxDepth = params.maxDepth,
+                        from = params.from)
+            }
         }
     }
 }
