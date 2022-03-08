@@ -128,8 +128,8 @@ class OnboardingViewModelTest {
                 .assertStatesChanges(
                         initialState,
                         { copy(signMode = SignMode.SignUp) },
-                        { copy(asyncRegistration = Loading()) },
-                        { copy(asyncRegistration = Uninitialized) }
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
                 )
                 .assertEvents(OnboardingViewEvents.RegistrationFlowResult(ANY_CONTINUING_REGISTRATION_RESULT.flowResult, isRegistrationStarted = true))
                 .finish()
@@ -145,8 +145,8 @@ class OnboardingViewModelTest {
         test
                 .assertStatesChanges(
                         initialState,
-                        { copy(asyncRegistration = Loading()) },
-                        { copy(asyncRegistration = Uninitialized) }
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
                 )
                 .assertEvents(OnboardingViewEvents.RegistrationFlowResult(ANY_CONTINUING_REGISTRATION_RESULT.flowResult, isRegistrationStarted = true))
                 .finish()
@@ -175,8 +175,8 @@ class OnboardingViewModelTest {
         test
                 .assertStatesChanges(
                         initialState,
-                        { copy(asyncRegistration = Loading()) },
-                        { copy(asyncRegistration = Uninitialized) }
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false) }
                 )
                 .assertNoEvents()
                 .finish()
@@ -193,9 +193,8 @@ class OnboardingViewModelTest {
         test
                 .assertStatesChanges(
                         initialState,
-                        { copy(asyncRegistration = Loading()) },
-                        { copy(asyncLoginAction = Success(Unit), personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) },
-                        { copy(asyncLoginAction = Success(Unit), asyncRegistration = Uninitialized) }
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountCreated)
                 .finish()
@@ -211,9 +210,8 @@ class OnboardingViewModelTest {
         test
                 .assertStatesChanges(
                         initialState,
-                        { copy(asyncRegistration = Loading()) },
-                        { copy(asyncLoginAction = Success(Unit), personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) },
-                        { copy(asyncRegistration = Uninitialized) }
+                        { copy(isLoading = true) },
+                        { copy(isLoading = false, personalizationState = A_HOMESERVER_CAPABILITIES.toPersonalisationState()) }
                 )
                 .assertEvents(OnboardingViewEvents.OnAccountCreated)
                 .finish()

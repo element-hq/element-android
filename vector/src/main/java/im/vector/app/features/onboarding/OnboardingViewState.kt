@@ -29,11 +29,9 @@ import im.vector.app.features.login.SignMode
 import kotlinx.parcelize.Parcelize
 
 data class OnboardingViewState(
-        val asyncLoginAction: Async<Unit> = Uninitialized,
         val asyncHomeServerLoginFlowRequest: Async<Unit> = Uninitialized,
         val asyncResetPassword: Async<Unit> = Uninitialized,
         val asyncResetMailConfirmed: Async<Unit> = Uninitialized,
-        val asyncRegistration: Async<Unit> = Uninitialized,
         val isLoading: Boolean = false,
 
         @PersistState
@@ -73,11 +71,9 @@ data class OnboardingViewState(
 ) : MavericksState {
 
     fun legacyIsLoading(): Boolean {
-        return asyncLoginAction is Loading ||
-                asyncHomeServerLoginFlowRequest is Loading ||
+        return asyncHomeServerLoginFlowRequest is Loading ||
                 asyncResetPassword is Loading ||
-                asyncResetMailConfirmed is Loading ||
-                asyncRegistration is Loading
+                asyncResetMailConfirmed is Loading
     }
 }
 

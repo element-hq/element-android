@@ -26,8 +26,6 @@ import androidx.autofill.HintConstants
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import com.airbnb.mvrx.Fail
-import com.airbnb.mvrx.Loading
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
@@ -73,6 +71,33 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel.viewEvents
+                .stream()
+                .onEach {
+                    when (it) {
+                        is OnboardingViewEvents.Failure -> {
+                            if (it.throwable is Failure.ServerError &&
+                                    it.throwable.error.code == MatrixError.M_FORBIDDEN &&
+                                    it.throwable.error.message.isEmpty()) {
+                                // Login with email, but email unknown
+                                views.loginFieldTil.error = getString(R.string.login_login_with_email_error)
+                            } else {
+                                // Trick to display the error without text.
+                                views.loginFieldTil.error = " "
+                                if (it.throwable.isInvalidPassword() && spaceInPassword()) {
+                                    views.passwordFieldTil.error = getString(R.string.auth_invalid_login_param_space_in_password)
+                                } else {
+                                    views.passwordFieldTil.error = errorFormatter.toHumanReadable(it.throwable)
+                                }
+                            }
+                        }
+                        else                            -> {
+                            // do nothing
+                        }
+                    }
+                }
+                .launchIn(lifecycleScope)
 
         setupSubmitButton()
         setupForgottenPasswordButton()
@@ -274,39 +299,9 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
         setupSocialLoginButtons(state)
         setupButtons(state)
 
-        when (state.asyncLoginAction) {
-            is Loading -> {
-                // Ensure password is hidden
-                views.passwordField.hidePassword()
-            }
-            is Fail    -> {
-                val error = state.asyncLoginAction.error
-                if (error is Failure.ServerError &&
-                        error.error.code == MatrixError.M_FORBIDDEN &&
-                        error.error.message.isEmpty()) {
-                    // Login with email, but email unknown
-                    views.loginFieldTil.error = getString(R.string.login_login_with_email_error)
-                } else {
-                    // Trick to display the error without text.
-                    views.loginFieldTil.error = " "
-                    if (error.isInvalidPassword() && spaceInPassword()) {
-                        views.passwordFieldTil.error = getString(R.string.auth_invalid_login_param_space_in_password)
-                    } else {
-                        views.passwordFieldTil.error = errorFormatter.toHumanReadable(error)
-                    }
-                }
-            }
-            // Success is handled by the LoginActivity
-            else       -> Unit
-        }
-
-        when (state.asyncRegistration) {
-            is Loading -> {
-                // Ensure password is hidden
-                views.passwordField.hidePassword()
-            }
-            // Success is handled by the LoginActivity
-            else       -> Unit
+        if (state.isLoading) {
+            // Ensure password is hidden
+            views.passwordField.hidePassword()
         }
     }
 
