@@ -18,13 +18,9 @@ package org.matrix.android.sdk.test.fakes
 
 import io.mockk.coEvery
 import io.mockk.mockk
-import okhttp3.ResponseBody.Companion.toResponseBody
 import org.matrix.android.sdk.internal.session.space.SpaceApi
-import org.matrix.android.sdk.internal.session.space.SpacesResponse
 import org.matrix.android.sdk.test.fixtures.ResolveSpaceInfoTaskParamsFixture
 import org.matrix.android.sdk.test.fixtures.SpacesResponseFixture
-import retrofit2.HttpException
-import retrofit2.Response
 
 internal class FakeSpaceApi {
 
@@ -37,8 +33,7 @@ internal class FakeSpaceApi {
     }
 
     fun givenStableEndpointFails() {
-        val errorResponse = Response.error<SpacesResponse>(500, "".toResponseBody())
-        coEvery { instance.getSpaceHierarchy(params.spaceId, params.suggestedOnly, params.limit, params.maxDepth, params.from) } throws HttpException(errorResponse)
+        coEvery { instance.getSpaceHierarchy(params.spaceId, params.suggestedOnly, params.limit, params.maxDepth, params.from) } throws Exception()
     }
 
     fun givenUnstableEndpointWorks() {
