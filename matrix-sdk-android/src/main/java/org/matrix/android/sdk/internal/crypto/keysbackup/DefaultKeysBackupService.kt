@@ -679,7 +679,7 @@ internal class DefaultKeysBackupService @Inject constructor(
                     Timber.e("restoreKeysWithRecoveryKey: Invalid recovery key. Error")
                     throw InvalidParameterException("Invalid recovery key")
                 }
-                
+
                 // Save for next time and for gossiping
                 // Save now as it's valid, don't wait for the import as it could take long.
                 saveBackupRecoveryKey(recoveryKey, keysVersionResult.version)
