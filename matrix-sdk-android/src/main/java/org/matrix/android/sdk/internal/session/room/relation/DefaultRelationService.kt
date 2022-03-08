@@ -172,7 +172,7 @@ internal class DefaultRelationService @AssistedInject constructor(
                     replyText = replyInThreadText,
                     autoMarkdown = autoMarkdown,
                     rootThreadEventId = rootThreadEventId,
-                    showInThread = false
+                    showInThread = true
             )
                     ?.also {
                         saveLocalEcho(it)
