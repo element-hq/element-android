@@ -2930,6 +2930,7 @@
     <!-- TODO delete -->
     <string name="location_share" tools:ignore="UnusedResources">Share location</string>
     <string name="a11y_location_share_pin_on_map">Pin of selected location on map</string>
+    <string name="a11y_location_share_locate_btn">Zoom to current location</string>
     <string name="location_share_option_user_current">Share my current location</string>
     <string name="a11y_location_share_option_user_current_icon">Share my current location</string>
     <string name="location_share_option_user_live">Share live location</string>

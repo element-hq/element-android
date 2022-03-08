@@ -67,10 +67,12 @@ class LocationSharingFragment @Inject constructor(
         lifecycleScope.launchWhenCreated {
             views.mapView.initialize(
                     url = urlMapProvider.getMapUrl(),
+                    showLocateBtn = true,
                     locationTargetChangeListener = this@LocationSharingFragment
             )
         }
 
+        initLocateBtn()
         initOptionsPicker()
 
         viewModel.observeViewEvents {
@@ -141,12 +143,18 @@ class LocationSharingFragment @Inject constructor(
                 .show()
     }
 
+    private fun initLocateBtn() {
+        views.mapView.locateBtn.setOnClickListener {
+            // TODO retrieve user location and zoom to this location
+        }
+    }
+
     private fun initOptionsPicker() {
         // TODO
         //  reset map to user location when clicking on reset icon
+        //  changes in the event sent when this is a pinned location
+        //  changes in the parsing of events when receiving pinned location: since we may present a different UI
         //  unit tests
-        //  need changes in the event sent when this is a pin drop location?
-        //  need changes in the parsing of events when receiving pin drop location?: should it be shown with user avatar or with pin?
         // set no option at start
         views.shareLocationOptionsPicker.render()
         views.shareLocationOptionsPicker.optionPinned.debouncedClicks {

@@ -18,7 +18,12 @@ package im.vector.app.features.location
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.Gravity
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.core.view.marginBottom
+import androidx.core.view.marginTop
+import androidx.core.view.updateLayoutParams
 import com.mapbox.mapboxsdk.camera.CameraPosition
 import com.mapbox.mapboxsdk.geometry.LatLng
 import com.mapbox.mapboxsdk.maps.MapView
@@ -47,16 +52,24 @@ class MapTilerMapView @JvmOverloads constructor(
     private val userLocationDrawable by lazy {
         ContextCompat.getDrawable(context, R.drawable.ic_location_user)
     }
+    val locateBtn by lazy { createLocateBtn() }
     private var mapRefs: MapRefs? = null
     private var initZoomDone = false
 
     /**
      * For location fragments
      */
-    fun initialize(url: String, locationTargetChangeListener: LocationTargetChangeListener? = null) {
+    fun initialize(
+            url: String,
+            showLocateBtn: Boolean = false, // TODO transform into xml attribute
+            locationTargetChangeListener: LocationTargetChangeListener? = null
+    ) {
         Timber.d("## Location: initialize")
         getMapAsync { map ->
             initMapStyle(map, url)
+            if (showLocateBtn) {
+                showLocateBtn(map)
+            }
             notifyLocationOfMapCenter(locationTargetChangeListener)
             listenCameraMove(map, locationTargetChangeListener)
         }
@@ -86,6 +99,30 @@ class MapTilerMapView @JvmOverloads constructor(
         }
     }
 
+    private fun createLocateBtn(): ImageView =
+            ImageView(context).apply {
+                setImageDrawable(ContextCompat.getDrawable(context, R.drawable.btn_locate))
+                contentDescription = context.getString(R.string.a11y_location_share_locate_btn)
+                layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+                updateLayoutParams<MarginLayoutParams> {
+                    val marginHorizontal = context.resources.getDimensionPixelOffset(R.dimen.location_sharing_locate_btn_margin_horizontal)
+                    val marginVertical = context.resources.getDimensionPixelOffset(R.dimen.location_sharing_locate_btn_margin_vertical)
+                    setMargins(marginHorizontal, marginVertical, marginHorizontal, marginVertical)
+                }
+                updateLayoutParams<LayoutParams> {
+                    gravity = Gravity.TOP or Gravity.END
+                }
+            }
+
+    private fun showLocateBtn(map: MapboxMap) {
+        addView(locateBtn)
+        locateBtn.post {
+            val marginTop = locateBtn.height + locateBtn.marginTop + locateBtn.marginBottom
+            val marginRight = context.resources.getDimensionPixelOffset(R.dimen.location_sharing_compass_btn_margin_horizontal)
+            map.uiSettings.setCompassMargins(0, marginTop, marginRight, 0)
+        }
+    }
+
     fun render(state: MapState) {
         val safeMapRefs = mapRefs ?: return Unit.also {
             pendingState = state
@@ -93,7 +130,6 @@ class MapTilerMapView @JvmOverloads constructor(
 
         safeMapRefs.map.uiSettings.setLogoMargins(0, 0, 0, state.logoMarginBottom)
 
-        // TODO add reset to user location button
         // TODO check conflict of rendering with preview location in timeline
         val pinDrawable = state.pinDrawable ?: userLocationDrawable
         pinDrawable?.let { drawable ->
@@ -110,7 +146,7 @@ class MapTilerMapView @JvmOverloads constructor(
             }
 
             safeMapRefs.symbolManager.deleteAll()
-            if(pinDrawable != null && state.showPin) {
+            if (pinDrawable != null && state.showPin) {
                 safeMapRefs.symbolManager.create(
                         SymbolOptions()
                                 .withLatLng(LatLng(locationData.latitude, locationData.longitude))

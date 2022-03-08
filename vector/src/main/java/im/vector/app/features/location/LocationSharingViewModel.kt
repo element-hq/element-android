@@ -37,6 +37,9 @@ import kotlinx.coroutines.launch
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.util.toMatrixItem
 
+/**
+ * Sampling period to compare target location and user location.
+ */
 private const val TARGET_LOCATION_CHANGE_SAMPLING_PERIOD_IN_MS = 100L
 
 class LocationSharingViewModel @AssistedInject constructor(
@@ -122,7 +125,7 @@ class LocationSharingViewModel @AssistedInject constructor(
     }
 
     private fun handlePinnedLocationSharingAction(action: LocationSharingAction.PinnedLocationSharingAction) {
-        // TODO check if we can use the same api than for user location?
+        // TODO confirm how to differentiate the user location and pinned location events?
         shareLocation(action.locationData)
     }
 
