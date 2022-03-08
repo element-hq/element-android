@@ -78,6 +78,7 @@ class LocationSharingFragment @Inject constructor(
             when (it) {
                 LocationSharingViewEvents.LocationNotAvailableError -> handleLocationNotAvailableError()
                 LocationSharingViewEvents.Close                     -> activity?.finish()
+                is LocationSharingViewEvents.ZoomToUserLocation     -> handleZoomToUserLocationEvent(it)
             }.exhaustive
         }
     }
@@ -144,13 +145,16 @@ class LocationSharingFragment @Inject constructor(
 
     private fun initLocateBtn() {
         views.mapView.locateBtn.setOnClickListener {
-            // TODO retrieve user location and zoom to this location
+            viewModel.handle(LocationSharingAction.ZoomToUserLocationAction)
         }
+    }
+
+    private fun handleZoomToUserLocationEvent(event: LocationSharingViewEvents.ZoomToUserLocation) {
+        views.mapView.zoomToLocation(event.userLocation.latitude, event.userLocation.longitude)
     }
 
     private fun initOptionsPicker() {
         // TODO
-        //  reset map to user location when clicking on reset icon
         //  changes in the event sent when this is a pinned location
         //  changes in the parsing of events when receiving pinned location: since we may present a different UI
         //  unit tests

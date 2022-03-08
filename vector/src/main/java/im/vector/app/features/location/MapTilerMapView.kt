@@ -154,7 +154,6 @@ class MapTilerMapView @JvmOverloads constructor(
 
         safeMapRefs.map.uiSettings.setLogoMargins(0, 0, 0, state.logoMarginBottom)
 
-        // TODO check conflict of rendering with preview location in timeline
         val pinDrawable = state.pinDrawable ?: userLocationDrawable
         pinDrawable?.let { drawable ->
             if (!safeMapRefs.style.isFullyLoaded ||
@@ -181,7 +180,7 @@ class MapTilerMapView @JvmOverloads constructor(
         }
     }
 
-    private fun zoomToLocation(latitude: Double, longitude: Double) {
+    fun zoomToLocation(latitude: Double, longitude: Double) {
         Timber.d("## Location: zoomToLocation")
         mapRefs?.map?.cameraPosition = CameraPosition.Builder()
                 .target(LatLng(latitude, longitude))

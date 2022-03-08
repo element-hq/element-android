@@ -117,6 +117,7 @@ class LocationSharingViewModel @AssistedInject constructor(
             LocationSharingAction.CurrentUserLocationSharingAction -> handleCurrentUserLocationSharingAction()
             is LocationSharingAction.PinnedLocationSharingAction   -> handlePinnedLocationSharingAction(action)
             is LocationSharingAction.LocationTargetChangeAction    -> handleLocationTargetChangeAction(action)
+            LocationSharingAction.ZoomToUserLocationAction         -> handleZoomToUserLocationAction()
         }.exhaustive
     }
 
@@ -145,6 +146,12 @@ class LocationSharingViewModel @AssistedInject constructor(
     private fun handleLocationTargetChangeAction(action: LocationSharingAction.LocationTargetChangeAction) {
         viewModelScope.launch {
             locationTargetFlow.emit(action.locationData)
+        }
+    }
+
+    private fun handleZoomToUserLocationAction() = withState { state ->
+        state.lastKnownUserLocation?.let { location ->
+            _viewEvents.post(LocationSharingViewEvents.ZoomToUserLocation(location))
         }
     }
 

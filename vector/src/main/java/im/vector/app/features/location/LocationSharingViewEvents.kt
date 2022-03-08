@@ -21,4 +21,5 @@ import im.vector.app.core.platform.VectorViewEvents
 sealed class LocationSharingViewEvents : VectorViewEvents {
     object Close : LocationSharingViewEvents()
     object LocationNotAvailableError : LocationSharingViewEvents()
+    data class ZoomToUserLocation(val userLocation: LocationData) : LocationSharingViewEvents()
 }
