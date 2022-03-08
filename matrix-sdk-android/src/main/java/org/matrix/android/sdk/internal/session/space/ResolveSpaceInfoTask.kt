@@ -19,7 +19,7 @@ package org.matrix.android.sdk.internal.session.space
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import timber.log.Timber
+import retrofit2.HttpException
 import javax.inject.Inject
 
 internal interface ResolveSpaceInfoTask : Task<ResolveSpaceInfoTask.Params, SpacesResponse> {
@@ -29,7 +29,6 @@ internal interface ResolveSpaceInfoTask : Task<ResolveSpaceInfoTask.Params, Spac
             val maxDepth: Int?,
             val from: String?,
             val suggestedOnly: Boolean?
-//            val autoJoinOnly: Boolean?
     )
 }
 
@@ -37,19 +36,35 @@ internal class DefaultResolveSpaceInfoTask @Inject constructor(
         private val spaceApi: SpaceApi,
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : ResolveSpaceInfoTask {
+
+    private lateinit var params: ResolveSpaceInfoTask.Params
+
     override suspend fun execute(params: ResolveSpaceInfoTask.Params): SpacesResponse {
         return executeRequest(globalErrorReceiver) {
-            try {
-                throw RuntimeException("Test space task exception")
-            } catch (e: Throwable) {
-                Timber.i("Test fall back api")
-                spaceApi.getSpaceHierarchy(
-                        spaceId = params.spaceId,
-                        suggestedOnly = params.suggestedOnly,
-                        limit = params.limit,
-                        maxDepth = params.maxDepth,
-                        from = params.from)
-            }
+            this.params = params
+            getSpaceHierarchy()
         }
     }
+
+    private suspend fun getSpaceHierarchy() = try {
+        getStableSpaceHierarchy()
+    } catch (e: HttpException) {
+        getUnstableSpaceHierarchy()
+    }
+
+    private suspend fun getStableSpaceHierarchy() =
+            spaceApi.getSpaceHierarchy(
+                    spaceId = params.spaceId,
+                    suggestedOnly = params.suggestedOnly,
+                    limit = params.limit,
+                    maxDepth = params.maxDepth,
+                    from = params.from)
+
+    private suspend fun getUnstableSpaceHierarchy() =
+            spaceApi.getSpaceHierarchyUnstable(
+                    spaceId = params.spaceId,
+                    suggestedOnly = params.suggestedOnly,
+                    limit = params.limit,
+                    maxDepth = params.maxDepth,
+                    from = params.from)
 }
