@@ -44,8 +44,8 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
     @EpoxyAttribute
     var totalVotesText: String? = null
 
-   @EpoxyAttribute
-   var edited: Boolean = false
+    @EpoxyAttribute
+    var edited: Boolean = false
 
     @EpoxyAttribute
     lateinit var optionViewStates: List<PollOptionViewState>
@@ -54,7 +54,6 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
 
     override fun bind(holder: Holder) {
         super.bind(holder)
-        val relatedEventId = eventId ?: return
 
         renderSendState(holder.view, holder.questionTextView)
 
@@ -73,12 +72,20 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
         optionViewStates.forEachIndexed { index, optionViewState ->
             views.getOrNull(index)?.let {
                 it.render(optionViewState)
-                it.setOnClickListener {
-                    callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, optionViewState.optionId))
-                }
+                it.setOnClickListener { onPollItemClick(optionViewState) }
             }
         }
     }
+
+    private fun onPollItemClick(optionViewState: PollOptionViewState) {
+        val relatedEventId = eventId
+
+        if (isPollActive(optionViewState) && relatedEventId != null) {
+            callback?.onTimelineItemAction(RoomDetailAction.VoteToPoll(relatedEventId, optionViewState.optionId))
+        }
+    }
+
+    private fun isPollActive(optionViewState: PollOptionViewState) = optionViewState !is PollOptionViewState.PollEnded
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val questionTextView by bind<TextView>(R.id.questionTextView)
