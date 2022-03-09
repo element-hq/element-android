@@ -379,4 +379,4 @@ jobs:
           matrix_access_token: ${{ secrets.ELEMENT_ANDROID_NOTIFICATION_ACCESS_TOKEN }}
           matrix_room_id: ${{ secrets.ELEMENT_ANDROID_INTERNAL_ROOM_ID }}
           text_template: "Nightly test run: {{#each job_statuses }}{{#with this }}{{#if completed }}  {{name}} {{conclusion}} at {{completed_at}}, {{/if}}{{/with}}{{/each}}"
-          html_template: "Nightly test run results: {{#each job_statuses }}{{#with this }}{{#if completed }}<br />{{name}} {{conclusion}} at {{completed_at}} <a href=\"{{html_url}}\">[details]</a>{{/if}}{{/with}}{{/each}}"
+          html_template: "Nightly test run results: {{#each job_statuses }}{{#with this }}{{#if completed }}<br />{{icon conclusion}} {{name}} <font color='{{color conclusion}}'>{{conclusion}} at {{completed_at}} <a href=\"{{html_url}}\">[details]</a></font>{{/if}}{{/with}}{{/each}}"
