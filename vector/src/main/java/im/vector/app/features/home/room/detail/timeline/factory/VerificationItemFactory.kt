@@ -71,10 +71,10 @@ class VerificationItemFactory @Inject constructor(
         // If it's not a request ignore this event
         // if (refEvent.root.getClearContent().toModel<MessageVerificationRequestContent>() == null) return ignoredConclusion(event, highlight, callback)
 
-        val referenceInformationData = messageInformationDataFactory.create(TimelineItemFactoryParams(refEvent))
+        val referenceInformationData = messageInformationDataFactory.create(TimelineItemFactoryParams(event = refEvent))
 
         val informationData = messageInformationDataFactory.create(params)
-        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback)
+        val attributes = messageItemAttributesFactory.create(null, informationData, params.callback, params.reactionsSummaryEvents)
 
         when (event.root.getClearType()) {
             EventType.KEY_VERIFICATION_CANCEL -> {
@@ -100,7 +100,8 @@ class VerificationItemFactory @Inject constructor(
                                                 itemClickListener = attributes.itemClickListener,
                                                 itemLongClickListener = attributes.itemLongClickListener,
                                                 reactionPillCallback = attributes.reactionPillCallback,
-                                                readReceiptsCallback = attributes.readReceiptsCallback
+                                                readReceiptsCallback = attributes.readReceiptsCallback,
+                                                reactionsSummaryEvents = attributes.reactionsSummaryEvents
                                         )
                                 )
                                 .highlighted(params.isHighlighted)
@@ -133,7 +134,8 @@ class VerificationItemFactory @Inject constructor(
                                         itemClickListener = attributes.itemClickListener,
                                         itemLongClickListener = attributes.itemLongClickListener,
                                         reactionPillCallback = attributes.reactionPillCallback,
-                                        readReceiptsCallback = attributes.readReceiptsCallback
+                                        readReceiptsCallback = attributes.readReceiptsCallback,
+                                        reactionsSummaryEvents = attributes.reactionsSummaryEvents
                                 )
                         )
                         .highlighted(params.isHighlighted)

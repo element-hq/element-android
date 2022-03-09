@@ -154,6 +154,7 @@ abstract class VerificationRequestItem : AbsBaseMessageItem<VerificationRequestI
             override val reactionPillCallback: TimelineEventController.ReactionPillCallback? = null,
 //            val avatarCallback: TimelineEventController.AvatarCallback? = null,
             override val readReceiptsCallback: TimelineEventController.ReadReceiptsCallback? = null,
-            val emojiTypeFace: Typeface? = null
+            override val reactionsSummaryEvents: ReactionsSummaryEvents? = null,
+            val emojiTypeFace: Typeface? = null,
     ) : AbsBaseMessageItem.Attributes
 }
