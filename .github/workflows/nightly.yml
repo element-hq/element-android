@@ -20,7 +20,7 @@ jobs:
     runs-on: macos-latest
     # No concurrency required, runs every time on a schedule.
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
@@ -42,7 +42,7 @@ jobs:
     runs-on: macos-latest
     # No concurrency required, runs every time on a schedule.
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
@@ -68,7 +68,7 @@ jobs:
         api-level: [ 28 ]
     # No concurrency required, runs every time on a schedule.
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: gradle/wrapper-validation-action@v1
       - uses: actions/setup-java@v2
         with:
@@ -260,7 +260,7 @@ jobs:
         api-level: [ 28 ]
     # No concurrency required, runs every time on a schedule.
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up Python 3.8
         uses: actions/setup-python@v3
         with:
@@ -310,7 +310,7 @@ jobs:
   codecov-units:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-java@v2
         with: 
           distribution: 'adopt'
@@ -338,7 +338,7 @@ jobs:
     needs:
       - codecov-units
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
