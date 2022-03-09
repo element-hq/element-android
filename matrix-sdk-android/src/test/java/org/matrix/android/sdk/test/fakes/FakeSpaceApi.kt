@@ -19,24 +19,23 @@ package org.matrix.android.sdk.test.fakes
 import io.mockk.coEvery
 import io.mockk.mockk
 import org.matrix.android.sdk.internal.session.space.SpaceApi
+import org.matrix.android.sdk.internal.session.space.SpacesResponse
 import org.matrix.android.sdk.test.fixtures.ResolveSpaceInfoTaskParamsFixture
-import org.matrix.android.sdk.test.fixtures.SpacesResponseFixture
 
 internal class FakeSpaceApi {
 
     val instance: SpaceApi = mockk()
     val params = ResolveSpaceInfoTaskParamsFixture.aResolveSpaceInfoTaskParams()
-    val response = SpacesResponseFixture.aSpacesResponse()
 
-    fun givenStableEndpointWorks() {
+    fun givenStableEndpointReturns(response: SpacesResponse) {
         coEvery { instance.getSpaceHierarchy(params.spaceId, params.suggestedOnly, params.limit, params.maxDepth, params.from) } returns response
     }
 
-    fun givenStableEndpointFails() {
-        coEvery { instance.getSpaceHierarchy(params.spaceId, params.suggestedOnly, params.limit, params.maxDepth, params.from) } throws Exception()
+    fun givenStableEndpointThrows(throwable: Throwable) {
+        coEvery { instance.getSpaceHierarchy(params.spaceId, params.suggestedOnly, params.limit, params.maxDepth, params.from) } throws throwable
     }
 
-    fun givenUnstableEndpointWorks() {
+    fun givenUnstableEndpointReturns(response: SpacesResponse) {
         coEvery { instance.getSpaceHierarchyUnstable(params.spaceId, params.suggestedOnly, params.limit, params.maxDepth, params.from) } returns response
     }
 }

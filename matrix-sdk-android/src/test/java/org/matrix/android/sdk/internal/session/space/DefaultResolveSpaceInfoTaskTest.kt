@@ -18,13 +18,17 @@ package org.matrix.android.sdk.internal.session.space
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
 import org.matrix.android.sdk.test.fakes.FakeGlobalErrorReceiver
 import org.matrix.android.sdk.test.fakes.FakeSpaceApi
+import org.matrix.android.sdk.test.fixtures.SpacesResponseFixture.aSpacesResponse
+import retrofit2.HttpException
+import retrofit2.Response
 
 @ExperimentalCoroutinesApi
-class DefaultResolveSpaceInfoTaskTest {
+internal class DefaultResolveSpaceInfoTaskTest {
 
     private val spaceApi = FakeSpaceApi()
     private val globalErrorReceiver = FakeGlobalErrorReceiver()
@@ -32,20 +36,25 @@ class DefaultResolveSpaceInfoTaskTest {
 
     @Test
     fun `given stable endpoint works, when execute, then return stable api data`() = runBlockingTest {
-        spaceApi.givenStableEndpointWorks()
+        spaceApi.givenStableEndpointReturns(response)
 
         val result = resolveSpaceInfoTask.execute(spaceApi.params)
 
-        result shouldBeEqualTo spaceApi.response
+        result shouldBeEqualTo response
     }
 
     @Test
     fun `given stable endpoint fails, when execute, then fallback to unstable endpoint`() = runBlockingTest {
-        spaceApi.givenStableEndpointFails()
-        spaceApi.givenUnstableEndpointWorks()
+        spaceApi.givenStableEndpointThrows(httpException)
+        spaceApi.givenUnstableEndpointReturns(response)
 
         val result = resolveSpaceInfoTask.execute(spaceApi.params)
 
-        result shouldBeEqualTo spaceApi.response
+        result shouldBeEqualTo response
+    }
+
+    companion object {
+        private val response = aSpacesResponse()
+        private val httpException = HttpException(Response.error<SpacesResponse>(500, "".toResponseBody()))
     }
 }
