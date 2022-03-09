@@ -58,11 +58,14 @@ data class ReferencesInfoData(
 data class ReactionsSummaryData(
         /*List of reactions (emoji,count,isSelected)*/
         val reactions: List<ReactionInfoData>? = null,
-        val showAll: Boolean = false,
+        val showAll: Boolean = false
+) : Parcelable
+
+data class ReactionsSummaryEvents(
         val onShowMoreClicked: () -> Unit,
         val onShowLessClicked: () -> Unit,
         val onAddMoreClicked: () -> Unit
-) : Parcelable
+)
 
 @Parcelize
 data class ReactionInfoData(
