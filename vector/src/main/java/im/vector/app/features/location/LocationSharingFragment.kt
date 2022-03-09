@@ -154,8 +154,6 @@ class LocationSharingFragment @Inject constructor(
     }
 
     private fun initOptionsPicker() {
-        // TODO
-        //  unit tests
         // set no option at start
         views.shareLocationOptionsPicker.render()
         views.shareLocationOptionsPicker.optionPinned.debouncedClicks {

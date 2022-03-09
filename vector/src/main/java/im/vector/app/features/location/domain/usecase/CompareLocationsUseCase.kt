@@ -34,7 +34,6 @@ class CompareLocationsUseCase @Inject constructor(
         private val session: Session
 ) {
 
-    // TODO unit test
     /**
      * Compare the 2 given locations.
      * @return true when they are really close and could be considered as the same location, false otherwise
