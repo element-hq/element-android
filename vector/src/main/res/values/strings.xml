@@ -597,7 +597,7 @@
     <string name="_continue">Continue</string>
 
     <!-- Room -->
-    <string name="list_members">List members</string>
+    <string name="list_members">Members</string>
     <string name="room_jump_to_first_unread">Jump to unread</string>
 
     <!-- Chat creation -->
@@ -2781,7 +2781,7 @@
 
     <string name="space_explore_activity_title">Explore rooms</string>
     <string name="space_add_child_title">Add rooms</string>
-    <string name="leave_space">Leave Space</string>
+    <string name="leave_space">Leave</string>
     <string name="space_leave_prompt_msg_with_name">Are you sure you want to leave %s?</string>
     <string name="space_leave_prompt_msg_only_you">You are the only person here. If you leave, no one will be able to join in the future, including you.</string>
     <string name="space_leave_prompt_msg_private">You won\'t be able to rejoin unless you are re-invited.</string>
