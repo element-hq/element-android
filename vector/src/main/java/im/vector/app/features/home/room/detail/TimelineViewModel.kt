@@ -1120,6 +1120,11 @@ class TimelineViewModel @AssistedInject constructor(
                 } else {
                     UnreadState.Unknown
                 }
+        // If the read marker is at the bottom-most event, this doesn't mean we read all, in case we just haven't loaded more events.
+        // Avoid incorrectly returning HasNoUnread in this case.
+        if (firstDisplayableEventIndex == 0 && timeline.hasMoreToLoad(Timeline.Direction.FORWARDS)) {
+            return UnreadState.Unknown
+        }
         for (i in (firstDisplayableEventIndex - 1) downTo 0) {
             val timelineEvent = events.getOrNull(i) ?: return UnreadState.Unknown
             val eventId = timelineEvent.root.eventId ?: return UnreadState.Unknown
