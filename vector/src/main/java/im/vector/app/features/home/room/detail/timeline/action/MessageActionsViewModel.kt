@@ -211,8 +211,8 @@ class MessageActionsViewModel @AssistedInject constructor(@Assisted
                         noticeEventFormatter.format(timelineEvent, room?.roomSummary()?.isDirect.orFalse())
                     }
                     in EventType.POLL_START -> {
-                        timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)?.getBestPollCreationInfo()?.question?.getBestQuestion()
-                                ?: ""
+                        timelineEvent.root.getClearContent().toModel<MessagePollContent>(catchError = true)
+                                ?.getBestPollCreationInfo()?.question?.getBestQuestion() ?: ""
                     }
                     else                    -> null
                 }
