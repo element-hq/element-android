@@ -1,1 +1,0 @@
-Improves settings error dialog messaging when changing avatar or display name fails
