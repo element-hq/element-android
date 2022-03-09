@@ -20,6 +20,7 @@ import android.graphics.drawable.Drawable
 import androidx.annotation.StringRes
 import com.airbnb.mvrx.MavericksState
 import im.vector.app.R
+import org.matrix.android.sdk.api.util.MatrixItem
 
 enum class LocationSharingMode(@StringRes val titleRes: Int) {
     STATIC_SHARING(R.string.location_activity_title_static_sharing),
@@ -29,6 +30,7 @@ enum class LocationSharingMode(@StringRes val titleRes: Int) {
 data class LocationSharingViewState(
         val roomId: String,
         val mode: LocationSharingMode,
+        val userItem: MatrixItem.UserItem? = null,
         val lastKnownLocation: LocationData? = null,
         val pinDrawable: Drawable? = null
 ) : MavericksState {

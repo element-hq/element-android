@@ -70,4 +70,7 @@
 
     <item name="ftue_auth_profile_picture_height" format="float" type="dimen">0.15</item>
     <item name="ftue_auth_profile_picture_icon_height" format="float" type="dimen">0.05</item>
+
+    <!--  Location sharing   -->
+    <dimen name="location_sharing_option_default_padding">10dp</dimen>
 </resources>
