@@ -21,6 +21,15 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = false)
 enum class LocationAssetType {
+    /**
+     *
+     **/
     @Json(name = "m.self")
-    SELF
+    SELF,
+
+    /**
+     *
+     **/
+    @Json(name = "m.pin")
+    PIN
 }

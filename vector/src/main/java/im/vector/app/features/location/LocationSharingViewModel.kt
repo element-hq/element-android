@@ -123,20 +123,20 @@ class LocationSharingViewModel @AssistedInject constructor(
     }
 
     private fun handleCurrentUserLocationSharingAction() = withState { state ->
-        shareLocation(state.lastKnownUserLocation)
+        shareLocation(state.lastKnownUserLocation, isUserLocation = true)
     }
 
     private fun handlePinnedLocationSharingAction(action: LocationSharingAction.PinnedLocationSharingAction) {
-        // TODO confirm how to differentiate the user location and pinned location events?
-        shareLocation(action.locationData)
+        shareLocation(action.locationData, isUserLocation = false)
     }
 
-    private fun shareLocation(locationData: LocationData?) {
+    private fun shareLocation(locationData: LocationData?, isUserLocation: Boolean) {
         locationData?.let { location ->
             room.sendLocation(
                     latitude = location.latitude,
                     longitude = location.longitude,
-                    uncertainty = location.uncertainty
+                    uncertainty = location.uncertainty,
+                    isUserLocation = isUserLocation
             )
             _viewEvents.post(LocationSharingViewEvents.Close)
         } ?: run {

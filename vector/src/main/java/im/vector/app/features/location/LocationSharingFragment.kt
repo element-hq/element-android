@@ -155,8 +155,6 @@ class LocationSharingFragment @Inject constructor(
 
     private fun initOptionsPicker() {
         // TODO
-        //  changes in the event sent when this is a pinned location
-        //  changes in the parsing of events when receiving pinned location: since we may present a different UI
         //  unit tests
         // set no option at start
         views.shareLocationOptionsPicker.render()

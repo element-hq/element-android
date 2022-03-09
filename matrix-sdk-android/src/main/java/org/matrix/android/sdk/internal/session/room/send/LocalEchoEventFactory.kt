@@ -227,13 +227,15 @@ internal class LocalEchoEventFactory @Inject constructor(
     fun createLocationEvent(roomId: String,
                             latitude: Double,
                             longitude: Double,
-                            uncertainty: Double?): Event {
+                            uncertainty: Double?,
+                            isUserLocation: Boolean): Event {
         val geoUri = buildGeoUri(latitude, longitude, uncertainty)
+        val assetType = if (isUserLocation) LocationAssetType.SELF else LocationAssetType.PIN
         val content = MessageLocationContent(
                 geoUri = geoUri,
                 body = geoUri,
                 unstableLocationInfo = LocationInfo(geoUri = geoUri, description = geoUri),
-                unstableLocationAsset = LocationAsset(type = LocationAssetType.SELF),
+                unstableLocationAsset = LocationAsset(type = assetType),
                 unstableTs = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis()),
                 unstableText = geoUri
         )
