@@ -37,6 +37,7 @@ import im.vector.app.core.extensions.addFragment
 import im.vector.app.core.extensions.addFragmentToBackstack
 import im.vector.app.core.extensions.exhaustive
 import im.vector.app.core.platform.VectorBaseActivity
+import im.vector.app.core.utils.openUrlInChromeCustomTab
 import im.vector.app.databinding.ActivityLoginBinding
 import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.home.HomeActivity
@@ -252,7 +253,7 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                 // It depends on the LoginMode
                 when (state.loginMode) {
                     LoginMode.Unknown,
-                    is LoginMode.Sso,
+                    is LoginMode.Sso -> launchSsoFlow()
                     is LoginMode.SsoAndPassword,
                     LoginMode.Password    -> addFragmentToBackstack(views.loginFragmentContainer,
                             LoginFragment::class.java,
@@ -266,6 +267,16 @@ open class LoginActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
                     tag = FRAGMENT_LOGIN_TAG,
                     option = commonOption)
         }.exhaustive
+    }
+
+    private fun launchSsoFlow() = withState(loginViewModel) { state ->
+        loginViewModel.getSsoUrl(
+                redirectUrl = SSORedirectRouterActivity.VECTOR_REDIRECT_URL,
+                deviceId = state.deviceId,
+                providerId = null,
+        )?.let { ssoUrl ->
+            openUrlInChromeCustomTab(this, null, ssoUrl)
+        }
     }
 
     /**
