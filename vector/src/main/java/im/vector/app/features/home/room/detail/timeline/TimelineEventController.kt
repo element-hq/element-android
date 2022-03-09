@@ -419,7 +419,7 @@ class TimelineEventController @Inject constructor(private val dateFormatter: Vec
                         eventsGroup = timelineEventsGroup,
                         reactionsSummaryEvents = ReactionsSummaryEvents(
                                 onAddMoreClicked = { reactionListFactory.onAddMoreClicked(callback, event) },
-                               onShowLessClicked =  { reactionListFactory.onShowLessClicked(event.eventId) },
+                                onShowLessClicked = { reactionListFactory.onShowLessClicked(event.eventId) },
                                 onShowMoreClicked = { reactionListFactory.onShowMoreClicked(event.eventId) }
                         )
                 )
