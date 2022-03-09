@@ -172,30 +172,31 @@ internal class DefaultSpaceService @Inject constructor(
             spaceRootResponse: SpaceChildSummaryResponse?,
             knownStateList: List<Event>?,
     ) = this?.filterIdIsNot(spaceId)
-            ?.toSpaceChildInfoList(spaceRootResponse, knownStateList)
+            ?.toSpaceChildInfoList(spaceId, spaceRootResponse, knownStateList)
             .orEmpty()
 
     private fun List<SpaceChildSummaryResponse>.filterIdIsNot(spaceId: String) = filter { it.roomId != spaceId }
 
     private fun List<SpaceChildSummaryResponse>.toSpaceChildInfoList(
+            spaceId: String,
             rootRoomResponse: SpaceChildSummaryResponse?,
             knownStateList: List<Event>?,
     ) = flatMap { spaceChildSummary ->
         (rootRoomResponse?.childrenState ?: knownStateList)
                 ?.filter { it.isChildOf(spaceChildSummary) }
-                ?.mapNotNull { childStateEvent -> childStateEvent.toSpaceChildInfo(spaceChildSummary) }
+                ?.mapNotNull { childStateEvent -> childStateEvent.toSpaceChildInfo(spaceId, spaceChildSummary) }
                 .orEmpty()
     }
 
     private fun Event.isChildOf(space: SpaceChildSummaryResponse) = stateKey == space.roomId && type == EventType.STATE_SPACE_CHILD
 
-    private fun Event.toSpaceChildInfo(summary: SpaceChildSummaryResponse) = content.toModel<SpaceChildContent>()?.let { content ->
-        createSpaceChildInfo(summary, this, content)
+    private fun Event.toSpaceChildInfo(spaceId: String, summary: SpaceChildSummaryResponse) = content.toModel<SpaceChildContent>()?.let { content ->
+        createSpaceChildInfo(spaceId, summary, content)
     }
 
     private fun createSpaceChildInfo(
+            spaceId: String,
             summary: SpaceChildSummaryResponse,
-            stateEvent: Event,
             content: SpaceChildContent
     ) = SpaceChildInfo(
             childRoomId = summary.roomId,
@@ -207,7 +208,7 @@ internal class DefaultSpaceService @Inject constructor(
             order = content.order,
             viaServers = content.via.orEmpty(),
             activeMemberCount = summary.numJoinedMembers,
-            parentRoomId = stateEvent.roomId,
+            parentRoomId = spaceId,
             suggested = content.suggested,
             canonicalAlias = summary.canonicalAlias,
             aliases = summary.aliases,
