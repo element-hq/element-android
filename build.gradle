@@ -19,8 +19,8 @@ buildscript {
         classpath libs.gradle.hiltPlugin
         classpath 'com.google.gms:google-services:4.3.10'
         classpath 'org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:3.3'
-        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.4'
-        classpath "com.likethesalad.android:string-reference:1.2.2"
+        classpath 'com.google.android.gms:oss-licenses-plugin:0.10.5'
+        classpath "com.likethesalad.android:stem-plugin:2.0.0"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -105,11 +105,21 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+def launchTask = getGradle()
+        .getStartParameter()
+        .getTaskRequests()
+        .toString()
+        .toLowerCase()
+
+if (launchTask.contains("codeCoverageReport".toLowerCase())) {
+    apply from: 'coverage.gradle'
+}
+
 apply plugin: 'org.sonarqube'
 
 // To run a sonar analysis:
 // Run './gradlew sonarqube -Dsonar.login=<REPLACE_WITH_SONAR_KEY>'
-// The SONAR_KEY is stored in passbolt
+// The SONAR_KEY is stored in passbolt as Token Sonar Cloud Bma
 
 sonarqube {
     properties {
@@ -119,10 +129,12 @@ sonarqube {
         property "sonar.projectVersion", project(":vector").android.defaultConfig.versionName
         property "sonar.sourceEncoding", "UTF-8"
         property "sonar.links.homepage", "https://github.com/vector-im/element-android/"
-        property "sonar.links.ci", "https://buildkite.com/matrix-dot-org/element-android"
+        property "sonar.links.ci", "https://github.com/vector-im/element-android/actions"
         property "sonar.links.scm", "https://github.com/vector-im/element-android/"
         property "sonar.links.issue", "https://github.com/vector-im/element-android/issues"
         property "sonar.organization", "new_vector_ltd_organization"
+        property "sonar.java.coveragePlugin", "jacoco"
+        property "sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/allCodeCoverageReport/allCodeCoverageReport.xml"
         property "sonar.login", project.hasProperty("SONAR_LOGIN") ? SONAR_LOGIN : "invalid"
     }
 }
@@ -138,15 +150,10 @@ project(":vector") {
     }
 }
 
-project(":diff-match-patch") {
+project(":library:diff-match-patch") {
     sonarqube {
         skipProject = true
     }
-}
-
-// Global configurations across all modules
-ext {
-    isThreadingEnabled = true
 }
 
 //project(":matrix-sdk-android") {

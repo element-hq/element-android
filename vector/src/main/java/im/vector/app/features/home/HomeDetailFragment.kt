@@ -457,7 +457,7 @@ class HomeDetailFragment @Inject constructor(
         backgroundColor = if (highlight) {
             ThemeUtils.getColor(requireContext(), R.attr.colorError)
         } else {
-            ThemeUtils.getColor(requireContext(), R.attr.vctr_content_secondary)
+            ThemeUtils.getColor(requireContext(), R.attr.vctr_unread_background)
         }
     }
 

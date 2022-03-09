@@ -43,7 +43,7 @@ class SharedSecureStorageViewModelTest {
     val mvrxTestRule = MvRxTestRule()
 
     private val stringProvider = FakeStringProvider()
-    private val session = FakeSession()
+    private val fakeSession = FakeSession()
     val args = SharedSecureStorageActivity.Args(keyId = null, emptyList(), "alias")
 
     @Test
@@ -102,10 +102,16 @@ class SharedSecureStorageViewModelTest {
             viewModel.handle(SharedSecureStorageAction.UseKey)
 
             test
-                    .assertState(aViewState(
-                            hasPassphrase = true,
-                            step = SharedSecureStorageViewState.Step.EnterKey
-                    ))
+                    .assertStates(
+                            aViewState(
+                                    hasPassphrase = true,
+                                    step = SharedSecureStorageViewState.Step.EnterPassphrase
+                            ),
+                            aViewState(
+                                    hasPassphrase = true,
+                                    step = SharedSecureStorageViewState.Step.EnterKey
+                            )
+                    )
                     .finish()
         }
     }
@@ -121,10 +127,20 @@ class SharedSecureStorageViewModelTest {
             viewModel.handle(SharedSecureStorageAction.Back)
 
             test
-                    .assertState(aViewState(
-                    hasPassphrase = true,
-                    step = SharedSecureStorageViewState.Step.EnterPassphrase
-            ))
+                    .assertStates(
+                            aViewState(
+                                    hasPassphrase = true,
+                                    step = SharedSecureStorageViewState.Step.EnterPassphrase
+                            ),
+                            aViewState(
+                                    hasPassphrase = true,
+                                    step = SharedSecureStorageViewState.Step.EnterKey
+                            ),
+                            aViewState(
+                                    hasPassphrase = true,
+                                    step = SharedSecureStorageViewState.Step.EnterPassphrase
+                            )
+                    )
                     .finish()
         }
     }
@@ -148,7 +164,7 @@ class SharedSecureStorageViewModelTest {
         return SharedSecureStorageViewModel(
                 SharedSecureStorageViewState(args),
                 stringProvider.instance,
-                session
+                fakeSession
         )
     }
 
@@ -159,15 +175,15 @@ class SharedSecureStorageViewModelTest {
             step = step,
             activeDeviceCount = 0,
             showResetAllAction = false,
-            userId = ""
+            userId = fakeSession.myUserId
     )
 
     private fun givenKey(keyInfo: KeyInfo) {
         givenHasAccessToSecrets()
-        session.fakeSharedSecretStorageService._defaultKey = KeyInfoResult.Success(keyInfo)
+        fakeSession.fakeSharedSecretStorageService._defaultKey = KeyInfoResult.Success(keyInfo)
     }
 
     private fun givenHasAccessToSecrets() {
-        session.fakeSharedSecretStorageService.integrityResult = IntegrityResult.Success(passphraseBased = IGNORED_PASSPHRASE_INTEGRITY)
+        fakeSession.fakeSharedSecretStorageService.integrityResult = IntegrityResult.Success(passphraseBased = IGNORED_PASSPHRASE_INTEGRITY)
     }
 }

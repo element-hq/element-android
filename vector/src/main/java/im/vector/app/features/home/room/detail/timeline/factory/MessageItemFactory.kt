@@ -155,7 +155,7 @@ class MessageItemFactory @Inject constructor(
 
         if (event.root.isRedacted()) {
             // message is redacted
-            val attributes = messageItemAttributesFactory.create(null, informationData, callback, threadDetails)
+            val attributes = messageItemAttributesFactory.create(null, informationData, callback, params.reactionsSummaryEvents)
             return buildRedactedItem(attributes, highlight)
         }
 
@@ -177,7 +177,7 @@ class MessageItemFactory @Inject constructor(
         }
 
         // always hide summary when we are on thread timeline
-        val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback, threadDetails)
+        val attributes = messageItemAttributesFactory.create(messageContent, informationData, callback, params.reactionsSummaryEvents, threadDetails)
 
 //        val all = event.root.toContent()
 //        val ev = all.toModel<Event>()
@@ -413,7 +413,8 @@ class MessageItemFactory @Inject constructor(
                                 itemClickListener = attributes.itemClickListener,
                                 reactionPillCallback = attributes.reactionPillCallback,
                                 readReceiptsCallback = attributes.readReceiptsCallback,
-                                emojiTypeFace = attributes.emojiTypeFace
+                                emojiTypeFace = attributes.emojiTypeFace,
+                                reactionsSummaryEvents = attributes.reactionsSummaryEvents
                         )
                 )
                 .callback(callback)

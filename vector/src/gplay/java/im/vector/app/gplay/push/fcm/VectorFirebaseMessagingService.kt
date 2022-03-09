@@ -213,7 +213,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
             try {
                 val session = activeSessionHolder.getSafeActiveSession() ?: return false
                 val room = session.getRoom(roomId) ?: return false
-                return room.getTimeLineEvent(eventId) != null
+                return room.getTimelineEvent(eventId) != null
             } catch (e: Exception) {
                 Timber.tag(loggerTag.value).e(e, "## isEventAlreadyKnown() : failed to check if the event was already defined")
             }

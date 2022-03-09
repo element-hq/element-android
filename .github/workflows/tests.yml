@@ -15,6 +15,10 @@ jobs:
   unit-tests:
     name: Run Unit Tests
     runs-on: ubuntu-latest
+    # Allow all jobs on main and develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && format('unit-tests-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('unit-tests-develop-{0}', github.sha) || format('unit-tests-{0}', github.ref) }}
+      cancel-in-progress: true
     steps:
       - uses: actions/checkout@v2
       - uses: actions/cache@v2
@@ -26,7 +30,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Run unit tests
-        run: ./gradlew clean test $CI_GRADLE_ARG_PROPERTIES -PallWarningsAsErrors=false --stacktrace
+        run: ./gradlew clean test $CI_GRADLE_ARG_PROPERTIES --stacktrace
+      - name: Format unit test results
+        if: always()
+        run: python3 ./tools/ci/render_test_output.py unit ./**/build/test-results/**/*.xml
       - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         if: always() &&

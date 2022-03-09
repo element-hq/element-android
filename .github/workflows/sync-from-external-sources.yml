@@ -9,20 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     # Skip in forks
     if: github.repository == 'vector-im/element-android'
+    # No concurrency required, runs every time on a schedule.
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.8
-      - name: Cache pip
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip
-          restore-keys: |
-            ${{ runner.os }}-pip-
-            ${{ runner.os }}-
       - name: Install Prerequisite dependencies
         run: |
           pip install BeautifulSoup4
@@ -43,20 +36,13 @@ jobs:
     runs-on: ubuntu-latest
     # Skip in forks
     if: github.repository == 'vector-im/element-android'
+    # No concurrency required, runs every time on a schedule.
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v3
         with:
           python-version: 3.8
-      - name: Cache pip
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip
-          restore-keys: |
-            ${{ runner.os }}-pip-
-            ${{ runner.os }}-
       - name: Install Prerequisite dependencies
         run: |
           pip install requests
@@ -76,6 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     # Skip in forks
     if: github.repository == 'vector-im/element-android'
+    # No concurrency required, runs every time on a schedule.
     steps:
       - uses: actions/checkout@v2
       - name: Run analytics import script

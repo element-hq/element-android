@@ -12,8 +12,26 @@
     <string name="matrix_room_alias_prefix" translatable="false">#</string>
 
     <!-- Temporary string -->
-    <string name="template_not_implemented" translatable="false">Not implemented yet in ${app_name}</string>
+    <string name="not_implemented" translatable="false">Not implemented yet in ${app_name}</string>
 
     <!-- onboarding english only word play -->
     <string name="cut_the_slack_from_teams" translatable="false">Cut the slack from teams.</string>
+
+    <!--  WIP -->
+    <string name="ftue_account_created_personalize" translatable="false">Personalize profile</string>
+    <string name="ftue_account_created_take_me_home" translatable="false">Take me home</string>
+    <string name="ftue_account_created_congratulations_title" translatable="false">Congratulations!</string>
+    <string name="ftue_account_created_subtitle" translatable="false">Your account %s has been created.</string>
+
+    <string name="ftue_display_name_title" translatable="false">Choose a display name</string>
+    <string name="ftue_display_name_subtitle" translatable="false">This will be shown when you send messages.</string>
+    <string name="ftue_display_name_entry_title" translatable="false">Display Name</string>
+    <string name="ftue_display_name_entry_footer" translatable="false">You can change this later</string>
+
+    <string name="ftue_profile_picture_title" translatable="false">Add a profile picture</string>
+    <string name="ftue_profile_picture_subtitle" translatable="false">You can change this anytime.</string>
+
+
+    <string name="ftue_personalize_submit" translatable="false">Save and continue</string>
+    <string name="ftue_personalize_skip_this_step" translatable="false">Skip this step</string>
 </resources>

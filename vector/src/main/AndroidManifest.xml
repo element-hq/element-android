@@ -84,6 +84,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Vector.Light"
+        android:taskAffinity="${applicationId}.${appTaskAffinitySuffix}"
         tools:replace="android:allowBackup">
 
         <!-- No limit for screen ratio: avoid black strips -->
@@ -294,7 +295,7 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTask"
             android:supportsPictureInPicture="true"
-            android:taskAffinity=".features.call.VectorCallActivity" />
+            android:taskAffinity=".features.call.VectorCallActivity.${appTaskAffinitySuffix}" />
         <!-- PIP Support https://developer.android.com/guide/topics/ui/picture-in-picture -->
         <activity
             android:name=".features.call.conference.VectorJitsiActivity"

@@ -111,7 +111,9 @@ class EncryptedItemFactory @Inject constructor(private val messageInformationDat
                         messageContent = event.root.content.toModel<EncryptedEventContent>(),
                         informationData = informationData,
                         callback = params.callback,
-                        threadDetails = threadDetails)
+                        threadDetails = threadDetails,
+                        reactionsSummaryEvents = params.reactionsSummaryEvents
+                )
                 return MessageTextItem_()
                         .layout(informationData.messageLayout.layoutRes)
                         .leftGuideline(avatarSizeProvider.leftGuideline)

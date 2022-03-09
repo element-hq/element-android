@@ -31,15 +31,13 @@ android {
         // that the app's state is completely cleared between tests.
         testInstrumentationRunnerArguments clearPackageData: 'true'
 
-        buildConfigField "String", "SDK_VERSION", "\"1.4.2\""
+        buildConfigField "String", "SDK_VERSION", "\"1.4.4\""
 
         buildConfigField "String", "GIT_SDK_REVISION", "\"${gitRevision()}\""
         resValue "string", "git_sdk_revision", "\"${gitRevision()}\""
         resValue "string", "git_sdk_revision_unix_date", "\"${gitRevisionUnixDate()}\""
         resValue "string", "git_sdk_revision_date", "\"${gitRevisionDate()}\""
 
-        // Indicates whether or not threading support is enabled
-        buildConfigField "Boolean", "THREADING_ENABLED", "${isThreadingEnabled}"
         defaultConfig {
             consumerProguardFiles 'proguard-rules.pro'
         }
@@ -169,7 +167,7 @@ dependencies {
     implementation libs.apache.commonsImaging
 
     // Phone number https://github.com/google/libphonenumber
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.43'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.12.44'
 
     testImplementation libs.tests.junit
     testImplementation 'org.robolectric:robolectric:4.7.3'

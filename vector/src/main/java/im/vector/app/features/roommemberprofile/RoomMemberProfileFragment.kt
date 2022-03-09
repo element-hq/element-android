@@ -127,6 +127,7 @@ class RoomMemberProfileFragment @Inject constructor(
                 is RoomMemberProfileViewEvents.ShareRoomMemberProfile      -> handleShareRoomMemberProfile(it.permalink)
                 is RoomMemberProfileViewEvents.ShowPowerLevelValidation    -> handleShowPowerLevelAdminWarning(it)
                 is RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning -> handleShowPowerLevelDemoteWarning(it)
+                is RoomMemberProfileViewEvents.OpenRoom                    -> handleOpenRoom(it)
                 is RoomMemberProfileViewEvents.OnKickActionSuccess         -> Unit
                 is RoomMemberProfileViewEvents.OnSetPowerLevelSuccess      -> Unit
                 is RoomMemberProfileViewEvents.OnBanActionSuccess          -> Unit
@@ -140,6 +141,10 @@ class RoomMemberProfileFragment @Inject constructor(
     private fun setupLongClicks() {
         headerViews.memberProfileNameView.copyOnLongClick()
         headerViews.memberProfileIdView.copyOnLongClick()
+    }
+
+    private fun handleOpenRoom(event: RoomMemberProfileViewEvents.OpenRoom) {
+        navigator.openRoom(requireContext(), event.roomId, null)
     }
 
     private fun handleShowPowerLevelDemoteWarning(event: RoomMemberProfileViewEvents.ShowPowerLevelDemoteWarning) {
@@ -297,8 +302,7 @@ class RoomMemberProfileFragment @Inject constructor(
     }
 
     override fun onOpenDmClicked() {
-        roomDetailPendingActionStore.data = RoomDetailPendingAction.OpenOrCreateDm(fragmentArgs.userId)
-        vectorBaseActivity.finish()
+        viewModel.handle(RoomMemberProfileAction.OpenOrCreateDm(fragmentArgs.userId))
     }
 
     override fun onJumpToReadReceiptClicked() {

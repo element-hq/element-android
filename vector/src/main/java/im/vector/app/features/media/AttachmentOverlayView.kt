@@ -30,35 +30,33 @@ class AttachmentOverlayView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), AttachmentEventListener {
 
-    var onShareCallback: (() -> Unit)? = null
-    var onBack: (() -> Unit)? = null
-    var onPlayPause: ((play: Boolean) -> Unit)? = null
-    var videoSeekTo: ((progress: Int) -> Unit)? = null
-
+    var interactionListener: AttachmentInteractionListener? = null
     val views: MergeImageAttachmentOverlayBinding
 
-    var isPlaying = false
-
-    var suspendSeekBarUpdate = false
+    private var isPlaying = false
+    private var suspendSeekBarUpdate = false
 
     init {
         inflate(context, R.layout.merge_image_attachment_overlay, this)
         views = MergeImageAttachmentOverlayBinding.bind(this)
         setBackgroundColor(Color.TRANSPARENT)
         views.overlayBackButton.setOnClickListener {
-            onBack?.invoke()
+            interactionListener?.onDismiss()
         }
         views.overlayShareButton.setOnClickListener {
-            onShareCallback?.invoke()
+            interactionListener?.onShare()
+        }
+        views.overlayDownloadButton.setOnClickListener {
+            interactionListener?.onDownload()
         }
         views.overlayPlayPauseButton.setOnClickListener {
-            onPlayPause?.invoke(!isPlaying)
+            interactionListener?.onPlayPause(!isPlaying)
         }
 
         views.overlaySeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
-                    videoSeekTo?.invoke(progress)
+                    interactionListener?.videoSeekTo(progress)
                 }
             }
 

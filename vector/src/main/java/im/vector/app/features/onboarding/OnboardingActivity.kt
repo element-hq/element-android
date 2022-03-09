@@ -21,6 +21,7 @@ import android.content.Intent
 import android.net.Uri
 import dagger.hilt.android.AndroidEntryPoint
 import im.vector.app.core.extensions.lazyViewModel
+import im.vector.app.core.extensions.validateBackPressed
 import im.vector.app.core.platform.VectorBaseActivity
 import im.vector.app.core.platform.lifecycleAwareLazy
 import im.vector.app.databinding.ActivityLoginBinding
@@ -44,6 +45,10 @@ class OnboardingActivity : VectorBaseActivity<ActivityLoginBinding>(), UnlockedA
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         onboardingVariant.onNewIntent(intent)
+    }
+
+    override fun onBackPressed() {
+        validateBackPressed { super.onBackPressed() }
     }
 
     override fun initUiAndData() {

@@ -184,7 +184,8 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
             val emojiTypeFace: Typeface? = null,
             val decryptionErrorMessage: String? = null,
             val threadDetails: ThreadDetails? = null,
-            val areThreadMessagesEnabled: Boolean = false
+            val areThreadMessagesEnabled: Boolean = false,
+            override val reactionsSummaryEvents: ReactionsSummaryEvents? = null,
     ) : AbsBaseMessageItem.Attributes {
 
         // Have to override as it's used to diff epoxy items
