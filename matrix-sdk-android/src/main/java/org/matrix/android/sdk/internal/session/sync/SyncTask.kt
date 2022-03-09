@@ -18,7 +18,6 @@ package org.matrix.android.sdk.internal.session.sync
 
 import android.os.SystemClock
 import okhttp3.ResponseBody
-import org.matrix.android.sdk.api.failure.GlobalError
 import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.Session
 import org.matrix.android.sdk.api.session.initsync.InitSyncStep
@@ -152,7 +151,6 @@ internal class DefaultSyncTask @Inject constructor(
             defaultSyncStatusService.setStatus(SyncStatusService.Status.IncrementalSyncIdle)
             val syncResponse = try {
                 executeRequest(globalErrorReceiver) {
-                    globalErrorReceiver.handleGlobalError(GlobalError.InvalidToken(softLogout = true))
                     syncAPI.sync(
                             params = requestParams,
                             readTimeOut = readTimeOut

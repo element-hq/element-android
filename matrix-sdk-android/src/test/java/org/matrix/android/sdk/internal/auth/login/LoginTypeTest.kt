@@ -30,7 +30,7 @@ class LoginTypeTest {
         LoginType.fromValue(LoginType.UNKNOWN.value) shouldBeEqualTo LoginType.UNKNOWN
     }
 
-    @Test // This test failing means an existing type has not been correctly added to fromValue
+    @Test // The failure of this test means that an existing type has not been correctly added to fromValue
     fun `given non-unknown type value, when getting type fromValue, then type is not UNKNOWN`() {
         val types = LoginType.values()
 
