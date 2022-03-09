@@ -19,7 +19,6 @@ package org.matrix.android.sdk.internal.session.space
 import org.matrix.android.sdk.internal.network.GlobalErrorReceiver
 import org.matrix.android.sdk.internal.network.executeRequest
 import org.matrix.android.sdk.internal.task.Task
-import timber.log.Timber
 import javax.inject.Inject
 
 internal interface ResolveSpaceInfoTask : Task<ResolveSpaceInfoTask.Params, SpacesResponse> {
@@ -39,20 +38,14 @@ internal class DefaultResolveSpaceInfoTask @Inject constructor(
 
     private lateinit var params: ResolveSpaceInfoTask.Params
 
-    override suspend fun execute(params: ResolveSpaceInfoTask.Params): SpacesResponse {
-        val result = executeRequest(globalErrorReceiver) {
-            this.params = params
-            getSpaceHierarchy()
-        }
-        Timber.w("Space Info result: $result")
-        return result
+    override suspend fun execute(params: ResolveSpaceInfoTask.Params) = executeRequest(globalErrorReceiver) {
+        this.params = params
+        getSpaceHierarchy()
     }
 
     private suspend fun getSpaceHierarchy() = try {
         getStableSpaceHierarchy()
     } catch (e: Throwable) {
-        Timber.w("Stable space hierarchy failed: ${e.message}")
-        e.printStackTrace()
         getUnstableSpaceHierarchy()
     }
 
@@ -62,9 +55,7 @@ internal class DefaultResolveSpaceInfoTask @Inject constructor(
                     suggestedOnly = params.suggestedOnly,
                     limit = params.limit,
                     maxDepth = params.maxDepth,
-                    from = params.from).also {
-                        Timber.w("Spaces response stable: $it")
-            }
+                    from = params.from)
 
     private suspend fun getUnstableSpaceHierarchy() =
             spaceApi.getSpaceHierarchyUnstable(
@@ -72,7 +63,5 @@ internal class DefaultResolveSpaceInfoTask @Inject constructor(
                     suggestedOnly = params.suggestedOnly,
                     limit = params.limit,
                     maxDepth = params.maxDepth,
-                    from = params.from).also {
-                Timber.w("Spaces response unstable: $it")
-            }
+                    from = params.from)
 }
