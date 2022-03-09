@@ -308,6 +308,7 @@ jobs:
             failure_screenshots/
 
   codecov-units:
+    name: Unit tests with codecoverage
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -333,6 +334,7 @@ jobs:
             build/reports/jacoco/allCodeCoverageReport/allCodeCoverageReport.xml
 
   sonarqube:
+    name: Sonarqube upload
     runs-on: macos-latest
     if: always()
     needs:
@@ -362,6 +364,7 @@ jobs:
 
 # Notify the channel about scheduled runs, do not notify for manually triggered runs
   notify:
+    name: Notify matrix
     runs-on: ubuntu-latest
     needs:
       - integration-tests
