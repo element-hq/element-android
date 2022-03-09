@@ -30,9 +30,30 @@ In any case, it is better to explicitly declare in the description why the PR is
 
 Also, draft PR should not stay indefinitely in this state. It may be removed if it is the case and the submitter does not update it after a few days.
 
-##### Assigned to reviewer?
+##### PR Review Assignment
 
-For the moment we do not directly assign PR to ask for a review. In the future we could have some automation to do that. Anyway the core team should have a look to every PR, even when not digging into details. More reviewers, more eyes on the code change, more valuable feedback!
+We use automatic assignment for PR reviews. A PR is automatically routed by GitHub to a team member using the round robin algorithm. The process is the following:
+
+- The PR creator assigns the [element-android](https://github.com/orgs/vector-im/teams/element-android) team as a reviewer. They can skip this process and assign directly a specific member if they think they should take a look at it.
+- GitHub automatically assigns one reviewer. If the chosen reviewer is not available (holiday, etc.), remove them and manually add another reviewer.
+- The reviewer gets a notification to make the review: they review the code following the good practice (see the rest of this document).
+- After making their own review, if they feel not confident enough, they can ask another person for a full review, or they can tag someone within a PR comment to check specific lines.
+
+For PRs coming from the community, the issue wrangler can assign either the team [element-android](https://github.com/orgs/vector-im/teams/element-android) or any member directly.
+
+##### PR review time
+
+As a PR submitter, you deserve a quick review. As a reviewer, you should do your best to unblock others.
+
+Some tips to achieve it:
+
+- Set up your GH notifications correctly
+- Check your pulls page: [https://github.com/pulls](https://github.com/pulls)
+- Check your pending assigned PRs before starting or resuming your day to day tasks
+
+It is hard to define a deadline for a review. It depends on the PR size and the complexity. Let's start with a goal of 24h (working day!) for a PR smaller than 500 lines. If bigger, the submitter and the reviewer should discuss.
+
+After this time, the submitter can ping the reviewer to get a status of the review.
 
 ##### When create split PR?
 
