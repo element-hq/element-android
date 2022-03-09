@@ -59,6 +59,13 @@
         tools:ignore="MissingConstraints"
         tools:visibility="invisible" />
 
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/imageGroupBarrier"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="end"
+        app:constraint_referenced_ids="roomToolbarDecorationImageView,roomToolbarAvatarImageView,roomToolbarPresenceImageView,roomToolbarPublicImageView" />
+
     <TextView
         android:id="@+id/roomToolbarTitleView"
         android:layout_width="0dp"
@@ -72,7 +79,7 @@
         app:layout_constraintBottom_toBottomOf="@id/roomToolbarAvatarImageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@id/roomToolbarDecorationImageView"
+        app:layout_constraintStart_toEndOf="@id/imageGroupBarrier"
         app:layout_constraintTop_toTopOf="@id/roomToolbarAvatarImageView"
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_goneMarginStart="7dp"
