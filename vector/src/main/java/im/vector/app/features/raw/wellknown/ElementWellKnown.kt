@@ -41,12 +41,9 @@ data class ElementWellKnown(
         val unstableMapTileServerConfig: MapTileServerConfig? = null,
 
         @Json(name = "m.tile_server")
-        val stableMapTileServerConfig: MapTileServerConfig? = null
+        val mapTileServerConfig: MapTileServerConfig? = null
 ) {
-
-    @Transient
-    var mapTileServerConfig: MapTileServerConfig? = null
-    get() = stableMapTileServerConfig ?: unstableMapTileServerConfig
+    fun getBestMapTileServerConfig() = mapTileServerConfig ?: unstableMapTileServerConfig
 }
 
 @JsonClass(generateAdapter = true)
