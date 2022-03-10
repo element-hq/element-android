@@ -60,13 +60,13 @@ class PollAggregationTest : InstrumentedTest {
         val aliceTimeline = roomFromAlicePOV.createTimeline(null, TimelineSettings(30))
         aliceTimeline.start()
 
-        val TOTAL_TEST_COUNT = 1
+        val TOTAL_TEST_COUNT = 2
         val lock = CountDownLatch(TOTAL_TEST_COUNT)
 
         val aliceEventsListener = object : Timeline.Listener {
             override fun onTimelineUpdated(snapshot: List<TimelineEvent>) {
                 snapshot.firstOrNull { it.root.getClearType() == EventType.POLL_START }?.let { pollEvent ->
-                    //val pollEventId = pollEvent.eventId
+                    val pollEventId = pollEvent.eventId
                     val pollContent = pollEvent.root.content?.toModel<MessagePollContent>()
                     val pollSummary = pollEvent.annotations?.pollResponseSummary
 
@@ -76,12 +76,17 @@ class PollAggregationTest : InstrumentedTest {
                     }
 
                     when (lock.count.toInt()) {
-                        TOTAL_TEST_COUNT -> {
+                        TOTAL_TEST_COUNT     -> {
                             // Poll has just been created.
                             testInitialPollConditions(pollContent, pollSummary)
                             lock.countDown()
+                            roomFromBobPOV.voteToPoll(pollEventId, pollContent.pollCreationInfo?.answers?.firstOrNull()?.id ?: "")
                         }
-                        else             -> {
+                        TOTAL_TEST_COUNT - 1 -> {
+                            testBobVotesOption1(pollContent, pollSummary)
+                            lock.countDown()
+                        }
+                        else                 -> {
                             fail("Lock count ${lock.count} didn't handled.")
                         }
                     }
@@ -110,6 +115,23 @@ class PollAggregationTest : InstrumentedTest {
             answers.size shouldBeEqualTo pollOptions.size
             answers.map { it.answer } shouldContainAll pollOptions
         }
+    }
+
+    private fun testBobVotesOption1(pollContent: MessagePollContent, pollSummary: PollResponseAggregatedSummary?) {
+        if (pollSummary == null) {
+            fail("Poll summary shouldn't be null when someone votes")
+            return
+        }
+        val answerId = pollContent.pollCreationInfo?.answers?.first()?.id
+        // Check if the intended vote is in poll summary
+        pollSummary.aggregatedContent?.let { aggregatedContent ->
+            aggregatedContent.totalVotes shouldBeEqualTo 1
+            aggregatedContent.votes?.size shouldBeEqualTo 1
+            aggregatedContent.votesSummary?.size shouldBeEqualTo 1
+            aggregatedContent.votes?.first()?.option shouldBeEqualTo answerId
+            aggregatedContent.votesSummary?.get(answerId)?.total shouldBeEqualTo 1
+            aggregatedContent.votesSummary?.get(answerId)?.percentage shouldBeEqualTo 1.0
+        } ?: run { fail("Aggregated poll content shouldn't be null after someone votes") }
     }
 
     companion object {
