@@ -1,0 +1,2 @@
+このバージョンの主な変更点：登録時の表示に関する変更（Analyticsへのオプトインなど）。数学に関するイベントをラボに追加。
+更新履歴：https://github.com/vector-im/element-android/releases/tag/v1.3.13

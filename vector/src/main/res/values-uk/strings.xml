@@ -39,7 +39,6 @@
     <string name="matrix_error">Помилка Matrix</string>
     <string name="medium_email">Адреса електронної пошти</string>
     <string name="medium_phone_number">Номер телефону</string>
-
     <string name="notice_room_update">%s оновлює цю кімнату.</string>
     <string name="initial_sync_start_importing_account_data">Початкове налаштування:
 \nІмпортування даних облікового запису</string>
@@ -164,7 +163,6 @@
     <string name="action_delete">Видалити</string>
     <string name="action_rename">Перейменувати</string>
     <string name="report_content">Поскаржитись на вміст</string>
-
     <string name="or">або</string>
     <string name="action_invite">Запрошення</string>
     <string name="action_sign_out">Вийти з облікового запису</string>
@@ -187,7 +185,6 @@
     <string name="matrix_only_filter">Лише Matrix-контакти</string>
     <string name="no_result_placeholder">Немає результатів</string>
     <string name="rooms_header">Кімнати</string>
-
     <string name="send_bug_report_include_logs">Надіслати журнали</string>
     <string name="send_bug_report_include_crash_logs">Надіслати журнали помилок</string>
     <string name="send_bug_report_include_screenshot">Надіслати знімок екрана</string>
@@ -235,7 +232,6 @@
     <string name="permissions_rationale_popup_title">Інформація</string>
     <string name="permissions_rationale_msg_record_audio">Для здійснення аудіодзвінків потрібен доступ до мікрофону.</string>
     <string name="permissions_rationale_msg_camera_and_audio">Для здійснення відеодзвінків потрібен доступ до камери та мікрофону.\n\nБудь ласка, надайте його у наступних виринаючих вікнах, щоб мати змогу їх здійснити.</string>
-
     <string name="yes">ТАК</string>
     <string name="no">НІ</string>
     <string name="_continue">Продовжити</string>
@@ -269,7 +265,6 @@
     <string name="ssl_unexpected_existing_expl">Сертифікат почав відрізнятися від того, якому довіряв ваш телефон. Це ДУЖЕ НЕЗВИЧНО. Наполегливо радимо НЕ ПРИЙМАТИ цей новий сертифікат.</string>
     <string name="ssl_expected_existing_expl">Сертифікат змінився з довіреного на недовірений. Сервер міг оновити свій сертифікат. Зв\'яжіться з адміністратором сервера, щоб отримати дійсний відбиток.</string>
     <string name="ssl_only_accept">Приймайте сертифікат лише у випадку збігу відбитку вище з відбитком, оприлюдненим адміністратором сервера.</string>
-
     <string name="search_hint">Пошук</string>
     <string name="search_members_hint">Фільтр переліку користувачів</string>
     <string name="search_no_results">Тут порожньо</string>
@@ -370,7 +365,6 @@
     <string name="encryption_export_export">Експорт</string>
     <string name="passphrase_enter_passphrase">Введіть парольну фразу</string>
     <string name="passphrase_confirm_passphrase">Підтвердіть парольну фразу</string>
-
     <string name="encryption_import_e2e_room_keys">Імпортувати E2E ключі кімнати</string>
     <string name="encryption_import_room_keys">Імпортувати ключі кімнати</string>
     <string name="encryption_import_room_keys_summary">Імпортувати ключі з локального файлу</string>
@@ -382,7 +376,6 @@
     <string name="encryption_information_verify">Звірити</string>
     <string name="encryption_information_verify_device_warning">Підтвердьте, порівнявши вказане за допомогою налаштувань користувача в іншому сеансі:</string>
     <string name="encryption_information_verify_device_warning2">Якщо вони відрізняються, безпека вашого зв\'язку може бути під загрозою.</string>
-
     <string name="select_room_directory">Вибір каталогу кімнат</string>
     <string name="directory_server_placeholder">Ім\'я сервера</string>
     <string name="directory_server_all_rooms_on_server">Всі кімнати на сервері %s</string>
@@ -439,7 +432,6 @@
     <string name="no_sticker_application_dialog_content">У вас поки що не має наліпок.
 \n
 \nДодати зараз\?</string>
-
     <plurals name="room_title_members">
         <item quantity="one">%d учасник</item>
         <item quantity="few">%d учасники</item>
@@ -466,18 +458,12 @@
     <string name="dialog_title_error">Помилка</string>
     <string name="system_alerts_header">Системні сповіщення</string>
     <string name="send_bug_report_description_in_english">Якщо можливо, будь ласка, напишіть опис англійською.</string>
-
-
-
-
     <plurals name="room_details_selected">
         <item quantity="one">%d вибрано</item>
         <item quantity="few">%d вибрано</item>
         <item quantity="many">%d вибрано</item>
         <item quantity="other">%d вибрано</item>
     </plurals>
-
-
     <string name="settings_inline_url_preview">Попередній перегляд посилань</string>
     <string name="settings_preview_media_before_sending">Попередній перегляд медіа перед надсиланням</string>
     <string name="settings_opt_in_of_analytics_summary">${app_name} збирає анонімну аналітику, щоб ми могли вдосконалювати цей додаток.</string>
@@ -490,7 +476,6 @@
         <item quantity="many">%d непрочитаних сповіщень</item>
         <item quantity="other"/>
     </plurals>
-
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d кімната</item>
         <item quantity="few">%d кімнати</item>
@@ -522,8 +507,6 @@
     <string name="group_details_home">Домівка</string>
     <string name="rooms">Кімнати</string>
     <string name="invited">Запрошено</string>
-
-
     <string name="has_been_removed">%2$s вилучає вас із %1$s</string>
     <string name="has_been_banned">%2$s блокує вас у %1$s</string>
     <string name="reason_colon">Причина: %1$s</string>
@@ -753,7 +736,6 @@
     <string name="call_failed_no_connection_description">Не вдалося встановити зв’язок у режимі реального часу.
 \nПопросіть адміністратора вашого домашнього сервера налаштувати сервер TURN для надійної роботи викликів.</string>
     <string name="call_failed_no_connection">${app_name} не вдалося здійснити виклик</string>
-
     <string name="no_more_results">Більше немає результатів</string>
     <string name="action_unpublish">Відкликати публікування</string>
     <string name="action_add">Додати</string>
@@ -784,7 +766,6 @@
     <string name="keys_backup_setup_override_backup_prompt_description">Схоже у вас вже є резервна копія ключа налаштування з іншого сеансу. Хочете замінити його тим, який ви створюєте\?</string>
     <string name="keys_backup_setup_override_backup_prompt_tile">Резервна копія вже існує на вашому homeserver</string>
     <string name="recovery_key_export_saved">Ключ відновлення збережено.</string>
-
     <string name="keys_backup_setup_step3_save_button_title">Зберегти як файл</string>
     <string name="keys_backup_setup_step3_share_recovery_file">Поділитися</string>
     <string name="keys_backup_setup_step3_copy_button_title">Зберегти ключ відновлення</string>
@@ -932,7 +913,6 @@
     <string name="disabled_integration_dialog_title">Інтеграцію вимкнено</string>
     <string name="settings_integration_manager">Керування інтеграцією</string>
     <string name="settings_integration_allow">Дозволити інтеграції</string>
-
     <string name="reset_secure_backup_warning">Це замінить ваш поточний ключ або фразу.</string>
     <string name="reset_secure_backup_title">Створіть новий ключ безпеки або встановіть нову фразу безпеки для наявної резервної копії.</string>
     <string name="settings_secure_backup_section_info">Захистіться від втрати доступу до зашифрованих повідомлень і даних створенням резервної копії ключів шифрування на своєму сервері.</string>
@@ -950,7 +930,6 @@
         <item quantity="many">%d секунд</item>
         <item quantity="other">%d секунд</item>
     </plurals>
-
     <string name="settings_background_fdroid_sync_mode_disabled_description">Ви не отримуватимете сповіщення про вхідні повідомлення, коли програма перебуває у фоновому режимі.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Немає фонової синхронізації</string>
     <string name="settings_background_fdroid_sync_mode_real_time_description">${app_name} періодично синхронізуватиметься у фоновому режимі в певний час (налаштовується).
@@ -1273,9 +1252,7 @@
     <string name="call_held_by_you">Ви утримали виклик</string>
     <string name="call_held_by_user">%s утримали виклик</string>
     <string name="call_hold_action">Утримати</string>
-
     <string name="call_only_active">Активний виклик (%1$s)</string>
-
     <string name="change_room_directory_network">Змінити мережу</string>
     <string name="action_change">Змінити</string>
     <string name="alert_push_are_disabled_title">Push-сповіщення вимкнено</string>
@@ -1372,7 +1349,6 @@
     <string name="settings_discovery_please_enter_server">Зазначте адресу сервера ідентифікації</string>
     <string name="settings_discovery_bad_identity_server">Неможливо під\'єднатись до сервера ідентифікації</string>
     <string name="settings_discovery_enter_identity_server">Зазначте адресу сервера ідентифікації</string>
-
     <string name="global_retry">Повторити</string>
     <string name="settings_discovery_disconnect_identity_server_info">Від\'єднання від вашого сервера ідентифікації означатиме, що ви не будете виявними для інших користувачів та не зможете запрошувати інших через електронну пошту або номер телефону.</string>
     <string name="settings_discovery_identity_server_info_none">Ви наразі не використовуєте жодного сервера ідентифікації. Для того, щоб виявляти інших та бути виявним для знайомих вам наявних контактів, налаштуйте такий сервер нижче.</string>
@@ -1786,8 +1762,6 @@
     <string name="sas_incoming_request_notif_content">%s хоче звірити ваш сеанс</string>
     <string name="sas_incoming_request_notif_title">Запит перевірки</string>
     <string name="verification_request">Запит перевірки</string>
-
-
     <string name="sas_got_it">Зрозуміло</string>
     <string name="keys_backup_info_keys_all_backup_up">Резервні копії всіх ключів створено</string>
     <string name="keys_backup_banner_in_progress">Резервне копіювання ключів. Це може тривати кілька хвилин…</string>
@@ -1823,14 +1797,12 @@
     <string name="message_view_reaction">Перегляд реакцій</string>
     <string name="room_list_rooms_empty_body">Тут буде показано ваші кімнати. Натисніть + унизу праворуч, щоб знайти наявні або створити власні.</string>
     <string name="error_user_already_logged_in">Схоже, ви намагаєтесь під\'єднатися до іншого домашнього сервера. Бажаєте вийти\?</string>
-
     <plurals name="keys_backup_info_keys_backing_up">
         <item quantity="one">Резервне копіювання %d ключа…</item>
         <item quantity="few">Резервне копіювання %d ключів…</item>
         <item quantity="many">Резервне копіювання %d ключів…</item>
         <item quantity="other">Резервне копіювання %d ключів…</item>
     </plurals>
-
     <string name="space_add_existing_rooms">Додати наявну кімнату до простору</string>
     <string name="activity_create_space_title">Створити простір</string>
     <string name="create_spaces_just_me">Лише я</string>
@@ -1844,7 +1816,6 @@
     <string name="call_dial_pad_lookup_error">Сталася помилка пошуку номера телефона</string>
     <string name="call_tile_you_declined_this_call">Ви відхилили цей виклик</string>
     <string name="empty_contact_book">Ваша книга контактів порожня</string>
-
     <string name="a11y_close_keys_backup_banner">Закрити нагадування про резервне копіювання ключів</string>
     <string name="error_network_timeout">Схоже, що відповідь сервера надто тривала, це може бути спричинено або поганим з’єднанням, або помилкою сервера. Повторіть спробу через деякий час.</string>
     <string name="error_terms_not_accepted">Повторіть спробу, коли погодитесь з умовами свого домашнього сервера.</string>
@@ -2285,7 +2256,6 @@
 \n
 \nБажаєте зайти через вебклієнт\?</string>
     <string name="identity_server_consent_dialog_content_3">Щоб знайти наявні контакти, надішліть дані контактів (е-пошти й номери телефонів) серверу ідентифікації. Ми хешуємо ваші дані перед надсиланням для приватності.</string>
-
     <string name="settings_discovery_consent_notice_off_2">Ваші контакти приватні. Щоб дізнаватись про користувачів, відповідних вашим контактам, дозвольте нам надсилати дані ваших контактів серверу ідентифікації.</string>
     <string name="identity_server_consent_dialog_title_2">Надіслати електронні адреси та номери телефонів %s</string>
     <string name="shortcut_disabled_reason_sign_out">Сеанс завершено!</string>
@@ -2337,7 +2307,6 @@
     <string name="room_using_unstable_room_version">Кімната — версії %s, яку домашній сервер позначив нестабільною.</string>
     <string name="upgrade_room_warning">Поліпшення кімнати — серйозна операція. Її зазвичай радять, коли кімната нестабільна через вади, брак функціоналу чи вразливості безпеки.
 \nЗазвичай це впливає лише на деталі опрацювання кімнати сервером.</string>
-
     <string name="this_space_has_no_rooms_admin">Деяких кімнат може бути не видно, бо вони закриті й потребують запрошення.</string>
     <string name="this_space_has_no_rooms_not_admin">Деяких кімнат може бути не видно, бо вони закриті й потребують запрошення.
 \nУ вас нема дозволу додавати кімнати.</string>
@@ -2382,14 +2351,12 @@
     <string name="bootstrap_cancel_text">Якщо скасуєте це й загубите пристрій, то втратите зашифровані повідомлення й дані.
 \n
 \nВвімкнути захищене резервне копіювання й керувати своїми ключами можна в налаштуваннях.</string>
-
     <string name="verify_cancel_other">Скасування залишить %1$s (%2$s) без звірки. У їхньому користувацькому профілі можна почати заново.</string>
     <string name="verify_new_session_notice">Звірте цим сеансом свій новий. Це надасть йому доступ до зашифрованих повідомлень.</string>
     <string name="verification_profile_device_untrust_info">Надіслані цьому сеансу й цим сеансом повідомлення позначатимуться застереженнями, поки цей користувач йому не довірить. Або ви можете власноруч звірити сеанс.</string>
     <string name="room_settings_enable_encryption_dialog_content">Якщо ви увімкнете шифрування для кімнати, його неможливо буде вимкнути. Надіслані у зашифровану кімнату повідомлення будуть прочитними тільки для учасників кімнати, натомість для сервера вони будуть непрочитними. Увімкнення шифрування може унеможливити роботу ботів та мостів.</string>
     <string name="verify_cannot_cross_sign">Не вдалося поширити звірку цього сеансу з вашими іншими.
 \nЗвірка збережеться локально, її поширить майбутня версія застосунку.</string>
-
     <string name="create_room_disable_federation_description">Можете ввімкнути це, якщо в кімнаті співпрацюватимуть лише внутрішні команди на вашому домашньому сервері. Цього більше не можна буде змінити.</string>
     <string name="soft_logout_sso_not_same_user_error">Цей сеанс — користувача %1$s, а ви надаєте облікові дані користувача %2$s. Це не підтримується в ${app_name}.
 \nБудь ласка, спершу очистіть дані, а тоді ввійдіть в інший обліковий запис.</string>
@@ -2542,4 +2509,6 @@
         <item quantity="other">І ще %1$d</item>
     </plurals>
     <string name="message_reaction_show_less">Згорнути</string>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s та інші</string>
+    <string name="room_notification_two_users_are_typing">%1$s і %2$s</string>
 </resources>

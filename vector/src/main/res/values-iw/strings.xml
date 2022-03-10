@@ -82,7 +82,6 @@
     <string name="black_theme">ערכת נושא שחורה</string>
     <string name="dark_theme">ערכת נושא כהה</string>
     <string name="light_theme">ערכת נושא בהירה</string>
-
     <string name="rooms_header">חדרים</string>
     <string name="matrix_only_filter">אנשי קשר מטריקס בלבד</string>
     <string name="direct_chats_header">שיחות</string>
@@ -125,11 +124,9 @@
     <string name="login_error_no_homeserver_found">זו אינה כתובת שרת מטריקס חוקית</string>
     <string name="login_error_invalid_home_server">אנא הכנס כתובת תקינה</string>
     <string name="auth_accept_policies">אנא עיין וקבל את המדיניות של שרת בית זה:</string>
-
     <string name="auth_reset_password_error_unauthorized">אימות כתובת הדוא\"ל נכשל: ודא שלחצת על הקישור בדוא\"ל</string>
     <string name="auth_reset_password_missing_email">יש להזין את כתובת הדוא\"ל המקושרת לחשבונך.</string>
     <string name="auth_recaptcha_message">שרת הבית רוצה לוודא שאתה לא רובוט</string>
-
     <string name="auth_forgot_password">שכחת סיסמה\?</string>
     <string name="auth_msisdn_already_defined">מספר הטלפון הזה כבר קיים ומעודכן במערכת.</string>
     <string name="auth_email_already_defined">כתובת הדוא\"ל הזו כבר קיימת ומוגדרת במערכת.</string>
@@ -162,7 +159,6 @@
     <string name="call_failed_no_connection">שיחת האלמנט נכשלה</string>
     <string name="start_video_call_prompt_msg">האם אתה בטוח שברצונך להתחיל שיחת וידאו\?</string>
     <string name="start_voice_call_prompt_msg">האם אתה בטוח שברצונך להתחיל שיחה קולית\?</string>
-
     <string name="room_jump_to_first_unread">עבור להודעה שלא נקראה</string>
     <string name="list_members">חברי רשימה</string>
     <string name="action_reject">דחייה</string>
@@ -173,14 +169,10 @@
     <string name="yes">כן</string>
     <string name="permissions_denied_add_contact">אפשר הרשאה לגשת לאנשי הקשר שלך.</string>
     <string name="permissions_denied_qr_code">כדי לסרוק קוד QR, עליך לאפשר גישה למצלמה.</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">אלמנט זקוק להרשאה כדי לגשת למצלמה ולמיקרופון שלך כדי לבצע שיחות וידאו.
 \n
 \nאנא אפשר גישה בחלונות הקופצים הבאים כדי להיות מסוגל לבצע את השיחה.</string>
-
     <string name="permissions_rationale_msg_record_audio">אלמנט זקוק להרשאה כדי לגשת למיקרופון שלך כדי לבצע שיחות שמע.</string>
-
-
     <string name="permissions_rationale_popup_title">מידע</string>
     <string name="call_error_user_not_responding">הצד המרוחק לא הצליח להרים.</string>
     <string name="video_call_in_progress">שיחת וידאו מתבצעת …</string>
@@ -235,7 +227,6 @@
         <item quantity="other">%d שניות</item>
     </plurals>
     <string name="settings_set_sync_delay">עיכוב בין כל סינכרון</string>
-
     <string name="settings_set_sync_timeout">פסק-זמן לבקשה לסנכרון</string>
     <string name="settings_start_on_boot">החל באתחול</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">לא תקבל הודעה על הודעות נכנסות כאשר האפליקציה ברקע.</string>
@@ -310,7 +301,6 @@
     <string name="search_banned_user_hint">סנן משתמשים מודרים</string>
     <string name="search_members_hint">סנן חברים מהחדר</string>
     <string name="search_hint">חפש</string>
-
     <plurals name="room_details_selected">
         <item quantity="one">%d נבחר</item>
         <item quantity="two">%d נבחרים</item>
@@ -410,20 +400,14 @@
     <string name="settings_profile_picture">תמונת פרופיל</string>
     <string name="room_settings_add_homescreen_shortcut">הוסף למסך הבית</string>
     <string name="room_settings_all_messages">כל ההודעות</string>
-
     <string name="room_participants_leave_prompt_msg">האם ברצונך לעזוב את החדר\?</string>
     <string name="room_participants_leave_prompt_title">עזוב חדר</string>
-
-
-
-
     <plurals name="room_title_members">
         <item quantity="one">%d חבר</item>
         <item quantity="two">%d חברים</item>
         <item quantity="many">%d חברים</item>
         <item quantity="other">%d חברים</item>
     </plurals>
-
     <string name="start_verification">התחל אימות</string>
     <string name="your_unverified_device_requesting_with_info">מושב לא מאומת מבקש מפתחות הצפנה.
 \nשם מושב: %1$s
@@ -523,7 +507,6 @@
         <item quantity="many">%d חדרים מועטים</item>
         <item quantity="other">%d חדרים אחרים</item>
     </plurals>
-
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">הודעת התראה %d שלא נקראה</item>
         <item quantity="two">%d הודעות התראה שלא נקראו</item>
@@ -534,7 +517,6 @@
     <string name="directory_server_all_rooms_on_server">כל החדרים בשרת %s</string>
     <string name="directory_server_placeholder">כתובת אתר של שרת בית</string>
     <string name="select_room_directory">בחר מדריך חדרים</string>
-
     <string name="encryption_information_verify_device_warning2">אם הם לא תואמים, אבטחת התקשורת שלך עלולה להיפגע.</string>
     <string name="encryption_information_verify_device_warning">אשרו על ידי השוואה בין הדברים הבאים להגדרות המשתמש בפגישה האחרת שלכם:</string>
     <string name="encryption_information_verify">אמת</string>
@@ -556,7 +538,6 @@
     <string name="encryption_settings_manage_message_recovery_summary">נהל גיבוי מפתח</string>
     <string name="encryption_message_recovery">שחזור הודעות מוצפנות</string>
     <string name="encryption_exported_successfully">מפתחות יוצאו בהצלחה</string>
-
     <string name="encryption_export_notice">אנא צור משפט סיסמה להצפנת המפתחות המיוצאים. יהיה עליך להזין את אותו ביטוי סיסמה כדי שתוכל לייבא את המפתחות.</string>
     <string name="encryption_export_export">יצא</string>
     <string name="encryption_export_room_keys_summary">יצא מפתחות לקובץ מקומי</string>
@@ -567,7 +548,6 @@
     <string name="encryption_information_device_name">שם ציבורי</string>
     <string name="encryption_information_decryption_error">שגיאת פענוח</string>
     <string name="settings_theme">ערכת נושא</string>
-
     <string name="room_settings_unset_main_address">ביטול ההגדרה ככתובת הראשית</string>
     <string name="room_settings_set_main_address">הגדר ככתובת ראשית</string>
     <string name="room_settings_labs_warning_message">אלה תכונות ניסיוניות שעשויות להישבר בדרכים לא צפויות. השתמש בזהירות.</string>
@@ -690,8 +670,6 @@
     <string name="reason_colon">סיבה: %1$s</string>
     <string name="has_been_banned">חסום על ידי %2$s מ- %1$s</string>
     <string name="has_been_removed">אתה נבעט מ- %1$s על ידי %2$s</string>
-
-
     <string name="invited">הוזמנו</string>
     <string name="rooms">חדרים</string>
     <string name="group_details_home">בית</string>
@@ -748,7 +726,6 @@
     <string name="keys_backup_banner_recover_line1">לעולם אל תאבד הודעות מוצפנות</string>
     <string name="secure_backup_banner_setup_line2">להגן מפני אובדן גישה להודעות ונתונים מוצפנים</string>
     <string name="secure_backup_banner_setup_line1">גיבוי מאובטח</string>
-
     <string name="keys_backup_settings_delete_confirm_message">מחק גיבוי למחוק את מפתחות ההצפנה המגובים שלך מהשרת\? לא תוכל עוד להשתמש במפתח השחזור שלך כדי לקרוא את היסטוריית ההודעות המוצפנת.</string>
     <string name="keys_backup_settings_delete_confirm_title">מחק את הגיבוי</string>
     <string name="keys_backup_settings_checking_backup_state">בודק מצב גיבוי</string>
@@ -794,7 +771,6 @@
     <string name="keys_backup_setup_override_backup_prompt_description">נראה שכבר יש לך גיבוי מפתח הגדרה מהפעלה אחרת. האם אתה רוצה להחליף אותו לזה שאתה יוצר\?</string>
     <string name="keys_backup_setup_override_backup_prompt_tile">גיבוי כבר קיים בשרת הבית שלך</string>
     <string name="recovery_key_export_saved">מפתח השחזור נשמר.</string>
-
     <string name="keys_backup_setup_step3_save_button_title">שמירת קובץ בשם</string>
     <string name="keys_backup_setup_step3_share_recovery_file">שיתוף</string>
     <string name="keys_backup_setup_step3_copy_button_title">שמור מפתח שחזור</string>
@@ -998,7 +974,6 @@
     <string name="room_list_quick_actions_notifications_all">כל ההודעות</string>
     <string name="room_list_quick_actions_notifications_all_noisy">כל ההודעות (רועשות)</string>
     <string name="message_ignore_user">התעלם ממשתמש זה</string>
-
     <string name="content_reported_as_inappropriate_content">תוכן זה דווח כבלתי הולם.
 \n
 \nאם אינך רוצה לראות תוכן נוסף ממשתמש זה, תוכל להתעלם ממנו כדי להסתיר את ההודעות שלו.</string>
@@ -1058,7 +1033,6 @@
     <string name="settings_discovery_please_enter_server">אנא הזן את כתובת ה- URL של שרת הזהות</string>
     <string name="settings_discovery_bad_identity_server">לא ניתן היה להתחבר לשרת זהות</string>
     <string name="settings_discovery_enter_identity_server">הזן כתובת אתר של שרת זהות</string>
-
     <string name="settings_discovery_consent_action_give_consent">תן הסכמה</string>
     <string name="settings_discovery_consent_action_revoke">בטל את הסכמתי</string>
     <string name="settings_discovery_consent_notice_on">נתת את הסכמתך לשלוח מיילים ומספרי טלפון לשרת זהות זה כדי לגלות משתמשים אחרים מאנשי הקשר שלך.</string>
@@ -1157,7 +1131,6 @@
 \nההודעות שלך מאובטחות במנעולים ורק לך ולמקבל יש את המפתחות הייחודיים לפתיחתם.</string>
     <string name="direct_room_profile_not_encrypted_subtitle">ההודעות כאן אינן מוצפנות מקצה לקצה.</string>
     <string name="room_profile_not_encrypted_subtitle">הודעות בחדר זה אינן מוצפנות מקצה לקצה.</string>
-
     <string name="verification_request_waiting_for">ממתין ל- %s…</string>
     <string name="verification_verified_user">%s מאומת</string>
     <string name="verification_verify_user">אמת. את %s</string>
@@ -1219,11 +1192,8 @@
     <string name="sas_error_unknown">שגיאה לא ידועה</string>
     <string name="sas_incoming_request_notif_content">%s רוצה לאמת את ההפעלה שלך</string>
     <string name="sas_incoming_request_notif_title">בקשת אימות</string>
-
-
     <string name="sas_got_it">הבנתי</string>
     <string name="sas_verified">מאומת!</string>
-
     <string name="keys_backup_info_title_signature">חתימה</string>
     <string name="keys_backup_info_title_algorithm">אלגוריתם</string>
     <string name="keys_backup_info_title_version">גירסה</string>
@@ -1253,7 +1223,6 @@
     <string name="settings_security_pin_code_notifications_title">הצג תוכן בהתראות</string>
     <string name="settings_security_pin_code_use_biometrics_summary_off">קוד PIN הוא הדרך היחידה לפתוח את Element.</string>
     <string name="settings_security_pin_code_use_biometrics_summary_on">אפשר ביומטריה ספציפית למכשירים, כמו טביעות אצבע וזיהוי פנים.</string>
-
     <string name="settings_secure_backup_section_title">גיבוי מאובטח</string>
     <string name="settings_show_emoji_keyboard_summary">הוסף לחצן במלחין ההודעות כדי לפתוח מקלדת אימוג\'י</string>
     <string name="settings_show_emoji_keyboard">הצג מקלדת אימוג\'י</string>
@@ -1284,11 +1253,9 @@
     <string name="room_settings_permissions_subtitle">צפה ועדכן את התפקידים הנדרשים לשינוי חלקים שונים בחדר.</string>
     <string name="room_settings_permissions_title">הרשאות חדרים</string>
     <string name="room_participants_leave_private_warning">חדר זה אינו ציבורי. לא תוכל להצטרף שוב ללא הזמנה.</string>
-
     <string name="send_bug_report_progress">(%%%s)התקדמות</string>
     <string name="bottom_action_people">אנשים</string>
     <string name="bottom_action_favourites">מועדפים</string>
-
     <string name="system_theme">ברירת מחדל מערכת</string>
     <string name="room_member_jump_to_read_receipt">קפצו לקבלת קריאה</string>
     <string name="room_member_open_or_create_dm">הודעה ישירה</string>
@@ -1370,7 +1337,6 @@
     <string name="settings_home_server">שרת ביתי</string>
     <string name="settings_logged_in">מחובר כ</string>
     <string name="devices_delete_dialog_title">הזדהות</string>
-
     <string name="devices_details_last_seen_title">נראה לאחרונה</string>
     <string name="devices_details_device_name">עדכן שם ציבורי</string>
     <string name="devices_details_name_title">שם ציבורי</string>
@@ -1378,7 +1344,6 @@
     <string name="settings_opt_in_of_analytics_summary">אלמנט אוסף ניתוח אנונימי כדי לאפשר לנו לשפר את היישום.</string>
     <string name="settings_opt_in_of_analytics">שלח נתוני ניתוח</string>
     <string name="settings_analytics">ניתוח נתונים</string>
-
     <string name="settings_discovery_manage">נהל את הגדרות הגילוי שלך.</string>
     <string name="settings_discovery_category">תַגלִית</string>
     <string name="settings_deactivate_my_account">הפוך את המשתמש שלי ללא פעיל</string>
@@ -1568,7 +1533,6 @@
     <string name="bootstrap_cancel_text">אם תבטל עכשיו, אתה עלול לאבד הודעות ונתונים מוצפנים אם תאבד את הגישה לכניסות שלך.
 \n
 \nאתה יכול גם להגדיר גיבוי מאובטח ולנהל את המפתחות שלך בהגדרות.</string>
-
     <string name="bootstrap_crosssigning_save_cloud">העתק אותו לאחסון הענן האישי שלך</string>
     <string name="bootstrap_crosssigning_save_usb">שמור אותו במפתח USB או בכונן גיבוי</string>
     <string name="bootstrap_crosssigning_print_it">הדפיסו ואחסנו במקום בטוח</string>
@@ -1731,55 +1695,55 @@
     <string name="notice_ended_call_by_you">סיימת את השיחה.</string>
     <string name="notice_ended_call">%s סיים את השיחה.</string>
     <string name="notice_answered_call_by_you">ענית לשיחה.</string>
-    <string name="notice_answered_call">%s שנה לשיחה.</string>
+    <string name="notice_answered_call">%s ענה לשיחה.</string>
     <string name="notice_call_candidates_by_you">שלחת מידע לביצוע שיחה.</string>
     <string name="notice_call_candidates">%s שלח מידע לביצוע שיחה.</string>
     <string name="notice_placed_voice_call_by_you">ביצעת שיחת אודיו.</string>
-    <string name="notice_placed_voice_call">%s ביצע שיחת אודיו.</string>
+    <string name="notice_placed_voice_call">%s ביצע/ה שיחה קולית.</string>
     <string name="notice_placed_video_call_by_you">ביצעת שיחת וידאו.</string>
-    <string name="notice_placed_video_call">%s ביצע שיחת וידאו .</string>
+    <string name="notice_placed_video_call">%s ביצע/ה שיחת וידאו.</string>
     <string name="notice_room_name_changed_by_you">שינית את שם החדר ל: %1$s</string>
     <string name="notice_room_name_changed">%1$s שינה את שם החדר ל: %2$s</string>
-    <string name="notice_room_avatar_changed_by_you">שינית את דמות החדר</string>
-    <string name="notice_room_avatar_changed">%1$s שינה את דמות החדר</string>
-    <string name="notice_room_topic_changed_by_you">שינית את השם ל: %1$s</string>
+    <string name="notice_room_avatar_changed_by_you">שינית את תמונת החדר</string>
+    <string name="notice_room_avatar_changed">%1$s שינה את תמונת החדר</string>
+    <string name="notice_room_topic_changed_by_you">שינית את הנושא ל: %1$s</string>
     <string name="notice_room_topic_changed">%1$s שינה את הנושא ל: %2$s</string>
-    <string name="notice_display_name_removed_by_you">ביטלתם את שם התצוגה שלכם (שם קודם %1$s)</string>
+    <string name="notice_display_name_removed_by_you">הסרת את שם התצוגה שלך (הוא היה %1$s)</string>
     <string name="notice_display_name_removed">%1$sהורידו את שם התצוגה שלהם (היה קודם %2$s)</string>
     <string name="notice_display_name_changed_from_by_you">שינית את שמך מ %1$s ל %2$s</string>
     <string name="notice_display_name_changed_from">%1$s שינו את שמותיהם מ %2$s ל %3$s</string>
     <string name="notice_display_name_set_by_you">שינית את שמך ל %1$s</string>
     <string name="notice_display_name_set">%1$s שינה את שמו ל %2$s</string>
-    <string name="notice_avatar_url_changed_by_you">שינית את דמותך באפליקציה</string>
-    <string name="notice_avatar_url_changed">%1$s שינה את דמותו</string>
+    <string name="notice_avatar_url_changed_by_you">שינית תמונת פרופיל</string>
+    <string name="notice_avatar_url_changed">%1$s שינה תמונת פרופיל</string>
     <string name="notice_room_withdraw_by_you">משכת את הזמנתו של %1$s\'s</string>
-    <string name="notice_room_withdraw">%1$s משך את הזמנתו של %2$s\'s</string>
+    <string name="notice_room_withdraw">%1$s ביטל/ה את ההזמנה של %2$s\'s</string>
     <string name="notice_room_ban_by_you">חסמת את %1$s</string>
-    <string name="notice_room_ban">%1$s חסם את%2$s</string>
-    <string name="notice_room_unban_by_you">חסמת את %1$s</string>
-    <string name="notice_room_unban">%1$s הסיר מחסימה את %2$s</string>
+    <string name="notice_room_ban">%1$s חסם/ה את %2$s</string>
+    <string name="notice_room_unban_by_you">הסרת את החסימה של %1$s</string>
+    <string name="notice_room_unban">%1$s הסיר/ה מחסימה את %2$s</string>
     <string name="notice_room_remove_by_you">הרחקת את %1$s</string>
-    <string name="notice_room_remove">%1$s הרחיק את%2$s</string>
+    <string name="notice_room_remove">%1$s הרחיק/ה את %2$s</string>
     <string name="notice_room_reject_by_you">דחית את ההזמנה</string>
     <string name="notice_room_reject">%1$s דחה את ההזמנה</string>
     <string name="notice_direct_room_leave_by_you">עזבת את החדר</string>
-    <string name="notice_direct_room_leave">%1$s עזב את החדר</string>
+    <string name="notice_direct_room_leave">%1$s עזב/ה את החדר</string>
     <string name="notice_room_leave_by_you">עזבת את החדר</string>
-    <string name="notice_room_leave">%1$s עזב את החדר</string>
+    <string name="notice_room_leave">%1$s עזב/ה את החדר</string>
     <string name="notice_direct_room_join_by_you">הצטרפת</string>
-    <string name="notice_direct_room_join">%1$s הצטרף</string>
+    <string name="notice_direct_room_join">%1$s הצטרף/ה</string>
     <string name="notice_room_join_by_you">הצטרפת לחדר</string>
-    <string name="notice_room_join">%1$s הצטרף לחדר</string>
-    <string name="notice_room_invite_you">%1$s הזמין אותך</string>
+    <string name="notice_room_join">%1$s הצטרף/ה לחדר</string>
+    <string name="notice_room_invite_you">%1$s הזמין/ה אותך</string>
     <string name="notice_room_invite_by_you">הזמנת את %1$s</string>
-    <string name="notice_room_invite">%1$s הזמין %2$s</string>
+    <string name="notice_room_invite">%1$s הזמין/ה את %2$s</string>
     <string name="notice_direct_room_created_by_you">יצרת את הדיון</string>
-    <string name="notice_direct_room_created">%1$s יצר את הדיון</string>
+    <string name="notice_direct_room_created">%1$s יצר/ה את הדיון</string>
     <string name="notice_room_created_by_you">יצרת את החדר</string>
-    <string name="notice_room_created">%1$s יצר את החדר</string>
+    <string name="notice_room_created">%1$s יצר/ה את החדר</string>
     <string name="notice_room_invite_no_invitee_by_you">הזמנתך</string>
-    <string name="notice_room_invite_no_invitee">%s הזמנה</string>
-    <string name="notice_room_visibility_invited">כל חברי החדר, מהנקודה בה הם הוזמנו.</string>
+    <string name="notice_room_invite_no_invitee">ההזמנה של %s</string>
+    <string name="notice_room_visibility_invited">כל חברי החדר, מהרגע שבו הוזמנו.</string>
     <string name="notice_made_future_direct_room_visibility_by_you">את/ה הפכת הודעות עתידיות לגלויות בפני %1$s</string>
     <string name="notice_made_future_direct_room_visibility">%1$s הפך הודעות עתידיות לגלויות בפני %2$s</string>
     <string name="notice_room_ban_with_reason_by_you">חסמת את %1$s. סיבה: %2$s</string>
@@ -1830,7 +1794,6 @@
 \nממתין לתגובת השרת…</string>
     <string name="room_displayname_empty_room_was">חדר ריק (היה %s)</string>
     <string name="room_displayname_empty_room">חדר ריק</string>
-
     <plurals name="room_displayname_four_and_more_members">
         <item quantity="one">%1$s, %2$s, %3$s ו-%4$d אחר</item>
         <item quantity="two">%1$s, %2$s, %3$s ו-%4$d אחרים</item>
@@ -1894,10 +1857,10 @@
     <string name="notice_direct_room_update_by_you">שדרגת כאן.</string>
     <string name="notice_direct_room_update">%s שודרג כאן.</string>
     <string name="notice_room_update_by_you">שדרגת את החדר הזה.</string>
-    <string name="notice_room_update">%s שדרג את החדר הזה.</string>
+    <string name="notice_room_update">%s שידרג/ה חדר זה.</string>
     <string name="notice_room_visibility_world_readable">כל אחד.</string>
     <string name="notice_room_visibility_shared">כל חברי החדר.</string>
-    <string name="notice_room_visibility_joined">כל חברי החדר, מהנקודה בה הצטרפו.</string>
+    <string name="notice_room_visibility_joined">כל חברי החדר, מהרגע שבו הצטרפו.</string>
     <string name="a11y_static_map_image">מפה</string>
     <string name="a11y_location_share_icon">שתף מיקום</string>
     <string name="location_activity_title_preview">מיקום</string>
@@ -1924,8 +1887,8 @@
     <string name="labs_render_locations_in_timeline">מיפוי מיקומי משתמשים בציר הזמן</string>
     <string name="settings_enable_location_sharing_summary">לאחר ההפעלה, תוכל לשלוח את המיקום שלך לכל חדר</string>
     <string name="settings_enable_location_sharing">אפשר שיתוף מיקום</string>
-    <string name="location_share_external">לפתוח בעזרת</string>
-    <string name="location_not_available_dialog_content">${app_name} לא הצליח לגשת למיקום שלך. בבקשה נסה שוב מאוחר יותר.</string>
+    <string name="location_share_external">פתח באמצעות</string>
+    <string name="location_not_available_dialog_content">${app_name} לא הצליח לגשת למיקום שלך. אנא נסה שוב מאוחר יותר.</string>
     <string name="location_not_available_dialog_title">${app_name} לא הצליח לגשת למיקום שלך</string>
     <string name="location_share">שתף מיקום</string>
     <string name="settings_notification_emails_enable_for_email">אפשר התראת דוא\"ל עבור %s</string>
@@ -2096,4 +2059,120 @@
     <string name="notice_room_withdraw_with_reason">%1$s משך את ההזמנה של %2$s. סיבה: %3$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason_by_you">קיבלת את ההזמנה עבור %1$s. סיבה: %2$s</string>
     <string name="notice_room_third_party_registered_invite_with_reason">%1$s קיבל את ההזמנה עבור %2$s. סיבה: %3$s</string>
+    <string name="sent_location">שיתפו את מיקומם</string>
+    <string name="attachment_type_location">מיקום</string>
+    <string name="room_message_autocomplete_users">משתמשים</string>
+    <string name="message_reaction_show_less">הצג פחות</string>
+    <string name="ftue_auth_use_case_skip_partial">דלג על השאלה</string>
+    <string name="login_splash_already_have_account">יש לי כבר חשבון</string>
+    <string name="login_splash_create_account">צור חשבון</string>
+    <string name="ftue_auth_carousel_encrypted_title">תקשורת מאובטחת.</string>
+    <string name="a11y_close_emoji_picker">סגור את קוֹטֵף האמוג\'י</string>
+    <string name="a11y_open_emoji_picker">פתח את קוֹטֵף האמוג\'י</string>
+    <string name="a11y_trust_level_trusted">רמת האמון אמינה</string>
+    <string name="a11y_trust_level_warning">אזהרה רמת האמון</string>
+    <string name="a11y_trust_level_default">ברירת המחדל של רמת האמון</string>
+    <string name="a11y_selected">נבחר</string>
+    <string name="a11y_video">וידאו</string>
+    <string name="a11y_unsent_draft">יש טיוטה שלא נשלחה</string>
+    <string name="a11y_error_some_message_not_sent">חלק מההודעות לא נשלחו</string>
+    <string name="a11y_delete_avatar">מחיקת אווטאר</string>
+    <string name="a11y_change_avatar">החלף אווטאר</string>
+    <string name="a11y_image">תמונה</string>
+    <string name="a11y_import_key_from_file">ייבוא מפתחות מהקובץ</string>
+    <string name="a11y_open_widget">פתח יישומונים</string>
+    <string name="a11y_screenshot">צילום מסך</string>
+    <string name="authentication_error">האימות נכשלה</string>
+    <string name="re_authentication_default_confirm_text">${app_name} כדי לבצע פעולה זו נדורש להזין את פרטי התחברות שלך.</string>
+    <string name="re_authentication_activity_title">יש צורך באימות מחדש</string>
+    <string name="call_slide_to_end_conference">החלק כדי לסיים את השיחה</string>
+    <string name="call_transfer_unknown_person">אדם לא ידוע</string>
+    <string name="call_transfer_transfer_to_title">העבר אל %1$s</string>
+    <string name="call_transfer_consulting_with">התייעצות עם %1$s</string>
+    <string name="call_transfer_users_tab_title">משתמשים</string>
+    <string name="call_transfer_failure">אירעה שגיאה בהעברת השיחה</string>
+    <string name="call_transfer_title">הַעֲבִר</string>
+    <string name="call_transfer_connect_action">התחבר</string>
+    <string name="call_transfer_consult_first">התייעץ קודם</string>
+    <string name="call_tap_to_return">%1$s הקש לחזרה</string>
+    <string name="call_one_active">שיחה פעילה (%1$s) ·</string>
+    <plurals name="call_active_status">
+        <item quantity="one">שיחה פעילה ·</item>
+        <item quantity="two">%1$d שיחות פעילות ·</item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="call_only_active">שיחה פעילה (%1$s)</string>
+    <string name="call_dial_pad_lookup_error">אירעה שגיאה בחיפוש מספר הטלפון</string>
+    <string name="call_dial_pad_title">לוח חיוג</string>
+    <string name="call_tile_no_answer">אין מענה</string>
+    <string name="call_tile_video_missed">שיחה וידאו שלא נענתה</string>
+    <string name="call_tile_voice_missed">שיחה קולית שלא נענתה</string>
+    <string name="call_tile_voice_declined">השיחה קולית נדחתה</string>
+    <string name="call_tile_video_declined">שיחת וידאו נדחתה</string>
+    <string name="call_tile_video_call_has_ended">שיחת הווידאו הסתיימה • %1$s</string>
+    <string name="call_tile_voice_call_has_ended">השיחה הקולית הסתיימה • %1$s</string>
+    <string name="call_tile_voice_active">שיחת קולית פעילה</string>
+    <string name="call_tile_video_active">שיחת וידאו פעילה</string>
+    <string name="call_tile_video_incoming">שיחה וידאו נכנסת</string>
+    <string name="call_tile_voice_incoming">שיחה קולית נכנסת</string>
+    <string name="call_tile_call_back">שיחה חוזרת</string>
+    <string name="call_tile_ended">השיחה הזו הסתיימה</string>
+    <string name="call_tile_other_declined">%1$s דחה את השיחה הזו</string>
+    <string name="call_tile_you_declined_this_call">דחית את השיחה הזו</string>
+    <string name="room_message_autocomplete_notification">התראת חדר</string>
+    <string name="room_message_notify_everyone">להודיע לכל החדר</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">%1$d יותר</item>
+        <item quantity="two"></item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s ואחרים</string>
+    <string name="room_notification_two_users_are_typing">%1$s ו %2$s</string>
+    <plurals name="notice_room_server_acl_changes">
+        <item quantity="one">%d שינוי ברשימות ACL בשרתים</item>
+        <item quantity="two"></item>
+        <item quantity="many"></item>
+        <item quantity="other"></item>
+    </plurals>
+    <string name="space_settings_manage_rooms">נהל חדרים</string>
+    <string name="decide_who_can_find_and_join">החלט מי יכול לראות ולהצטרף לחדר זה.</string>
+    <string name="tap_to_edit_spaces">הקש כדי לערוך מרחבים</string>
+    <string name="search_hint_room_name">חפש שם</string>
+    <string name="user_directory_search_hint_2">חפש באמצאות שם, כינוי או מייל</string>
+    <string name="send_file_step_compressing_video">דוחס וידאו %d%%</string>
+    <string name="send_file_step_compressing_image">דוחס תמונה …</string>
+    <string name="give_feedback">תן משוב</string>
+    <string name="feedback_failed">שליחת המשוב נכשלה (%s)</string>
+    <string name="feedback_sent">תודה, המשוב שלך נשלח בהצלחה</string>
+    <string name="you_may_contact_me">אתה יכול לצור איתי קשר במידה ויהיו לך שאלות המשך</string>
+    <string name="send_feedback_space_info">הינך משתמש בגירסת נסיון של מרחבים. המשוב שלך ישמש לעידכון גהגרסאות הבאות. פרטי המערכת ושם המשתמש ירשמו כדי שנוכל להשתמש במשוב שלך בצורה מיטבית.</string>
+    <string name="feedback">משוב</string>
+    <string name="end_poll_confirmation_approve_button">סוף המשאל</string>
+    <string name="end_poll_confirmation_description">פעולה זו תעצור את האפשרות להצביע ותציג את תוצאות המשאל.</string>
+    <string name="end_poll_confirmation_title">סוף המשאל\?</string>
+    <string name="a11y_poll_winner_option">אפשרות הזוכה</string>
+    <string name="poll_end_action">סוף המשאל</string>
+    <string name="create_poll_empty_question_error">שאלה לא יכולה להיות ריקה</string>
+    <string name="create_poll_button">צור משאל</string>
+    <string name="create_poll_add_option">הוסף אפשרות</string>
+    <string name="create_poll_options_hint">אפשרות %1$d</string>
+    <string name="create_poll_options_title">צור אפשריות</string>
+    <string name="create_poll_question_hint">שאלה או נושא</string>
+    <string name="create_poll_question_title">שאלה או נושא המשאל</string>
+    <string name="create_poll_title">צור משאל</string>
+    <string name="restart_the_application_to_apply_changes">אתחל את הישומון כדי שהשינויים יכנסו לתוקף.</string>
+    <string name="join_anyway">הצטרף בכל מקרה</string>
+    <string name="join_space">הצטרף למרחב</string>
+    <string name="create_space">צור מרחב</string>
+    <string name="skip_for_now">דלג כרגע</string>
+    <string name="share_space_link_message">הצטרף למרחב שלי %1$s%2$s</string>
+    <string name="settings_encrypted_group_messages">הודעות קבוצה מוצפנות</string>
+    <string name="settings_messages_direct_messages">הודעות ישירות</string>
+    <string name="settings_room_upgrades">שידרוגי חדר</string>
+    <string name="settings_messages_containing_display_name">השם המוצג שלי</string>
+    <string name="settings_messages_containing_username">שם המשתמש שלי</string>
+    <string name="settings_room_invitations">הזמנות לחדר</string>
+    <string name="settings_messages_containing_keywords">מילות מפתח</string>
 </resources>

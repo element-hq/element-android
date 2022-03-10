@@ -9,11 +9,10 @@ import sys
 import xml.etree.ElementTree as ET
 suitename = sys.argv[1]
 xmlfiles = sys.argv[2:]
-
-print(f"Arguments: {sys.argv}") 
-
+print("::group::Arguments")
+print(f"{sys.argv}") 
+print("::endgroup::")
 for xmlfile in xmlfiles:
-    print(f"Handling: {xmlfile}") 
     tree = ET.parse(xmlfile)
     
     root = tree.getroot()

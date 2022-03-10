@@ -39,7 +39,6 @@
     <string name="room_displayname_room_invite">Invitation au salon</string>
     <string name="room_displayname_empty_room">Salon vide</string>
     <string name="room_displayname_two_members">%1$s et %2$s</string>
-
     <string name="initial_sync_start_importing_account">Synchronisation initiale :
 \nImportation du compte…</string>
     <string name="initial_sync_start_importing_account_crypto">Synchronisation initiale :
@@ -217,7 +216,6 @@
     <string name="action_delete">Supprimer</string>
     <string name="action_rename">Renommer</string>
     <string name="report_content">Signaler le contenu</string>
-
     <string name="or">ou</string>
     <string name="action_invite">Inviter</string>
     <string name="action_sign_out">Se déconnecter</string>
@@ -368,7 +366,6 @@
     <string name="directory_server_placeholder">Nom du serveur d’accueil</string>
     <string name="directory_server_all_rooms_on_server">Tous les salons sur le serveur %s</string>
     <string name="directory_server_native_rooms">Tous les salons natifs sur %s</string>
-
     <string name="send_bug_report_description">Veuillez décrire l’erreur. Qu’avez-vous fait \? Quel était le comportement attendu \? Que s’est-il réellement passé \?</string>
     <string name="send_bug_report_logs_description">Afin de diagnostiquer les problèmes, les journaux de ce client seront envoyés avec ce rapport d’erreur. Ce rapport d’erreur, y compris les journaux et la capture d’écran, ne seront pas visibles publiquement. Si vous préférez envoyer le texte ci-dessus uniquement, veuillez décocher :</string>
     <string name="send_bug_report_alert_message">Vous semblez secouer le téléphone avec agacement. Souhaitez-vous ouvrir soumettre un rapport d’anomalie \?</string>
@@ -377,26 +374,19 @@
     <string name="send_bug_report_failed">L’envoi du rapport d’anomalie a échoué (%s)</string>
     <string name="auth_invalid_email">Ceci ne ressemble pas à une adresse e-mail valide</string>
     <string name="auth_email_already_defined">Cette adresse e-mail est déjà utilisée.</string>
-
     <string name="auth_recaptcha_message">Ce serveur d’accueil souhaite s’assurer que vous n’êtes pas un robot</string>
     <string name="auth_reset_password_missing_email">L’adresse e-mail liée à votre compte doit être saisie.</string>
     <string name="auth_reset_password_error_unauthorized">Impossible de vérifier l’adresse e-mail : assurez-vous d’avoir cliqué sur le lien dans l’e-mail</string>
-
     <string name="login_error_limit_exceeded">Trop de requêtes ont été envoyées</string>
     <string name="action_leave">Quitter</string>
     <string name="action_quote">Citer</string>
     <string name="call_error_user_not_responding">Le correspondant n’a pas décroché.</string>
     <string name="permissions_rationale_popup_title">Information</string>
-
-
     <string name="permissions_rationale_msg_record_audio">${app_name} a besoin d’accéder à votre microphone pour passer des appels audio.</string>
-
     <string name="permissions_rationale_msg_camera_and_audio">${app_name} a besoin d’accéder à votre appareil photo et à votre microphone pour passer des appels vidéo.
 \n
 \nVeuillez autoriser l’accès dans les prochaines fenêtres pour pouvoir effectuer l’appel.</string>
-
     <string name="room_jump_to_first_unread">Aller au premier message non lu</string>
-
     <string name="room_participants_leave_prompt_msg">Voulez-vous vraiment quitter le salon \?</string>
     <string name="room_participants_action_ignore">Ignorer</string>
     <string name="room_participants_action_unignore">Afficher tous les messages de cet utilisateur</string>
@@ -413,11 +403,9 @@
     <string name="ssl_unexpected_existing_expl">Le certificat n’est plus celui qui a été approuvé par votre téléphone. Ce comportement est INATTENDU. Il est recommandé de ne PAS ACCEPTER ce nouveau certificat.</string>
     <string name="ssl_expected_existing_expl">Le certificat n’est plus celui qui a été approuvé par votre téléphone. Le serveur a peut-être renouvelé son certificat. Contactez l’administrateur du serveur pour lui demander l’empreinte de son certificat.</string>
     <string name="ssl_only_accept">Acceptez le certificat uniquement si l’administrateur du serveur a publié une empreinte correspondant à celle ci-dessus.</string>
-
     <string name="settings_invited_to_room">Quand je suis invité sur un salon</string>
     <string name="settings_user_settings">Paramètres utilisateur</string>
     <string name="devices_details_last_seen_format">%1$s @ %2$s</string>
-
     <string name="account_email_validation_message">Vérifiez votre e-mail et cliquez sur le lien qu’il contient. Une fois cela fait, cliquez sur continuer.</string>
     <string name="settings_unignore_user">Afficher tous les messages de %s \?
 \n
@@ -426,14 +414,11 @@
     <string name="room_settings_read_history_entry_members_only_option_time_shared">Uniquement les membres (à partir de l’activation de cette option)</string>
     <string name="room_settings_read_history_entry_members_only_invited">Uniquement les membres (depuis leur invitation)</string>
     <string name="room_settings_labs_warning_message">Ce sont des fonctionnalités expérimentales qui peuvent se comporter de façon inattendue. À utiliser avec précaution.</string>
-
     <string name="encryption_export_room_keys_summary">Exporter les clés vers un fichier local</string>
-
     <string name="encryption_import_room_keys_summary">Importer les clés à partir d’un fichier local</string>
     <string name="encryption_never_send_to_unverified_devices_summary">Ne jamais envoyer de messages chiffrés aux sessions non vérifiées depuis cette session.</string>
     <string name="encryption_information_verify_device_warning">Confirmez en comparant les informations suivantes avec les paramètres utilisateur dans votre autre session :</string>
     <string name="encryption_information_verify_device_warning2">Si elles ne correspondent pas, la sécurité de votre communication est peut-être compromise.</string>
-
     <string name="settings_user_interface">Interface utilisateur</string>
     <string name="settings_interface_language">Langue</string>
     <string name="settings_select_language">Choisissez une langue</string>
@@ -508,7 +493,6 @@
     <string name="reason_colon">Motif : %1$s</string>
     <string name="settings_flair">Badge</string>
     <string name="send_bug_report_rage_shake">Secouer avec agacement pour signaler une anomalie</string>
-
     <plurals name="room_title_members">
         <item quantity="one">%d membre</item>
         <item quantity="other">%d membres</item>
@@ -518,13 +502,10 @@
         <item quantity="other">%d nouveaux messages</item>
     </plurals>
     <string name="list_members">Liste les membres</string>
-
-
     <plurals name="notification_unread_notified_messages">
         <item quantity="one">%d message notifié non lu</item>
         <item quantity="other">%d messages notifiés non lus</item>
     </plurals>
-
     <plurals name="notification_unread_notified_messages_in_room_rooms">
         <item quantity="one">%d salon</item>
         <item quantity="other">%d salons</item>
@@ -584,16 +565,10 @@
     <string name="room_tombstone_continuation_link">La conversation continue ici</string>
     <string name="room_tombstone_continuation_description">Ce salon est la suite d’une autre conversation</string>
     <string name="room_tombstone_predecessor_link">Cliquer ici pour voir les anciens messages</string>
-
-
-
-
     <plurals name="room_details_selected">
         <item quantity="one">%d sélectionné</item>
         <item quantity="other">%d sélectionnés</item>
     </plurals>
-
-
     <string name="system_alerts_header">Alertes système</string>
     <string name="resource_limit_contact_admin">contacter l’administrateur de votre service</string>
     <string name="resource_limit_soft_default">Ce serveur d’accueil a dépassé une de ses limites de ressources donc <b>certains utilisateurs ne pourront pas se connecter</b>.</string>
@@ -685,7 +660,6 @@
     <string name="settings_troubleshoot_test_battery_success">${app_name} n’est pas affecté par l’optimisation de la batterie.</string>
     <string name="settings_troubleshoot_test_battery_failed">Si un utilisateur laisse un appareil débranché et immobile pour une longue durée, avec l’écran éteint, l’appareil entre en mode veille.. Cela empêche les applications d’accéder au réseau et reporte leurs tâches, synchronisations et alarmes standard.</string>
     <string name="settings_troubleshoot_test_battery_quickfix">Ignorer l’optimisation</string>
-
     <string name="no_valid_google_play_services_apk">Aucun APK des services Google Play valide n’a été trouvé. Les notifications peuvent ne pas fonctionner correctement.</string>
     <string name="video_call_in_progress">Appel vidéo en cours…</string>
     <string name="title_activity_keys_backup_setup">Sauvegarde de clé</string>
@@ -722,7 +696,6 @@
     <string name="keys_backup_setup_step3_button_title">Terminé</string>
     <string name="keys_backup_setup_step3_copy_button_title">Sauvegarder la clé de récupération</string>
     <string name="keys_backup_setup_step3_save_button_title">Enregistrer dans un fichier</string>
-
     <string name="keys_backup_setup_step3_please_make_copy">Veuillez en faire une copie</string>
     <string name="keys_backup_setup_step3_share_intent_chooser_title">Partager la clé de récupération avec…</string>
     <string name="keys_backup_setup_step3_generating_key_status">Génération de la clé de récupération utilisant la phrase secrète. Cette opération peut prendre plusieurs secondes.</string>
@@ -808,7 +781,6 @@
     <string name="keys_backup_info_title_algorithm">Algorithme</string>
     <string name="keys_backup_info_title_signature">Signature</string>
     <string name="keys_backup_settings_untrusted_backup">Pour utiliser la sauvegarde de clés sur cette session, faites une restauration avec votre phrase secrète ou votre clé de récupération.</string>
-
     <string name="keys_backup_restoring_computing_key_waiting_message">Traitement de la clé de récupération…</string>
     <string name="keys_backup_restoring_downloading_backup_waiting_message">Téléchargement des clés…</string>
     <string name="keys_backup_restoring_importing_keys_waiting_message">Importation des clés…</string>
@@ -817,7 +789,6 @@
     <string name="settings_send_message_with_enter">Envoyer le message avec Entrée</string>
     <string name="settings_send_message_with_enter_summary">Le bouton Entrée sur le clavier logiciel enverra le message au lieu d’aller à la ligne</string>
     <string name="settings_fail_to_update_password_invalid_current_password">Le mot de passe n’est pas valide</string>
-
     <string name="settings_media">Média</string>
     <string name="settings_default_compression">Compression par défaut</string>
     <string name="compression_opt_list_choose">Choisir</string>
@@ -854,8 +825,6 @@
     <string name="ignore_request_short_label">Ignorer</string>
     <string name="sas_verified">Vérifié !</string>
     <string name="sas_got_it">Compris</string>
-
-
     <string name="sas_incoming_request_notif_title">Demande de vérification</string>
     <string name="sas_incoming_request_notif_content">%s veut vérifier votre session</string>
     <string name="sas_error_unknown">Erreur inconnue</string>
@@ -952,7 +921,6 @@
     <string name="none">Aucun</string>
     <string name="action_revoke">Révoquer</string>
     <string name="action_disconnect">Déconnecter</string>
-
     <string name="login_error_homeserver_not_found">Impossible de joindre le serveur d’accueil à cette URL, veuillez la vérifier</string>
     <string name="settings_background_fdroid_sync_mode">Mode de synchronisation en arrière-plan</string>
     <string name="settings_background_fdroid_sync_mode_battery">Optimisé pour préserver la batterie</string>
@@ -963,7 +931,6 @@
 \nCela aura un impact sur l’utilisation des données mobiles et de la batterie, une notification permanente sera affichée indiquant que ${app_name} est à l’écoute des évènements.</string>
     <string name="settings_background_fdroid_sync_mode_disabled">Aucune synchronisation en arrière-plan</string>
     <string name="settings_background_fdroid_sync_mode_disabled_description">Vous ne serez pas notifié des messages entrants quand l’application est en arrière-plan.</string>
-
     <string name="settings_discovery_category">Découverte</string>
     <string name="settings_discovery_manage">Gérer vos paramètres de découverte.</string>
     <string name="identity_server_not_defined">Vous n’utilisez aucun serveur d’identité</string>
@@ -1033,7 +1000,6 @@
     <string name="content_reported_as_inappropriate_content">Ce contenu a été signalé comme inapproprié.
 \n
 \nSi vous ne voulez plus voir de contenu de cet utilisateur, vous pouvez l’ignorer pour masquer ses messages.</string>
-
     <string name="settings_integrations">Intégrations</string>
     <string name="settings_integrations_summary">Utilisez un gestionnaire d’intégrations pour gérer les robots, les passerelles, les widgets et les jeux d’autocollants.
 \nLes gestionnaires d’intégrations reçoivent des données de configuration et peuvent modifier des widgets, envoyer des invitations de salon et définir des rangs à votre place.</string>
@@ -1249,7 +1215,6 @@
     <string name="verification_verify_user">Vérifier %s</string>
     <string name="verification_verified_user">%s a été vérifié</string>
     <string name="verification_request_waiting_for">Nous attendons %s…</string>
-
     <string name="room_profile_not_encrypted_subtitle">Les messages dans ce salon ne sont pas chiffrés de bout en bout.</string>
     <string name="room_profile_encrypted_subtitle">Les messages dans ce salon sont chiffrés de bout en bout.
 \n
@@ -1395,7 +1360,6 @@
     <string name="bootstrap_crosssigning_print_it">Imprimez-le et conservez-le en lieu sûr</string>
     <string name="bootstrap_crosssigning_save_usb">Sauvegardez-le sur une clé USB ou un disque de sauvegarde</string>
     <string name="bootstrap_crosssigning_save_cloud">Copiez-le sur votre stockage dans le cloud personnel</string>
-
     <string name="encryption_enabled">Chiffrement activé</string>
     <string name="encryption_enabled_tile_description">Les messages de ce salon sont chiffrés de bout en bout. Apprenez-en plus et vérifiez les utilisateurs sur leur profil.</string>
     <string name="encryption_not_enabled">Chiffrement désactivé</string>
@@ -1779,7 +1743,6 @@
     <string name="create_room_alias_empty">Veuillez fournir une adresse de salon</string>
     <string name="create_room_alias_already_in_use">Cette adresse est déjà utilisée</string>
     <string name="attachment_viewer_item_x_of_y">%1$d de %2$d</string>
-
     <string name="settings_discovery_consent_action_give_consent">Autoriser</string>
     <string name="settings_discovery_consent_action_revoke">Révoquer mon autorisation</string>
     <string name="settings_discovery_consent_notice_on">Vous avez donné votre autorisation pour envoyer des e-mails et des numéros de téléphone à ce serveur d’identité pour découvrir d\'autres utilisateurs à partir de vos contacts.</string>
@@ -1858,8 +1821,6 @@
     <string name="call_transfer_title">Transférer</string>
     <string name="call_transfer_connect_action">Rejoindre</string>
     <string name="call_transfer_consult_first">Consulter d’abord</string>
-
-
     <string name="call_only_active">Appel en cours (%1$s)</string>
     <string name="call_dial_pad_lookup_error">Il y a eu une erreur lors de la recherche du numéro de téléphone</string>
     <string name="call_dial_pad_title">Pavé de numérotation</string>
@@ -2060,7 +2021,7 @@
     <string name="create_spaces_me_and_teammates">Moi et mon équipe</string>
     <string name="create_spaces_organise_rooms">Un espace privé pour organiser vos salons</string>
     <string name="create_spaces_just_me">Seulement moi</string>
-    <string name="create_spaces_make_sure_access">Assurez-vous que les accès à %s sont accordés aux bonnes personnes. Vous pourrez changer ceci plus tard.</string>
+    <string name="create_spaces_make_sure_access">Assurez-vous que les bonnes personnes ont accès à %s.</string>
     <string name="create_spaces_who_are_you_working_with">Avec qui travaillez-vous \?</string>
     <string name="create_spaces_join_info_help">Pour rejoindre un espace existant, il vous faut une invitation.</string>
     <string name="error_file_too_big_simple">Le fichier est trop volumineux pour être envoyé.</string>
@@ -2112,7 +2073,6 @@
     <string name="directory_add_a_new_server">Ajouter un nouveau serveur</string>
     <string name="directory_your_server">Votre serveur</string>
     <string name="call_transfer_consulting_with">Consultation de %1$s</string>
-
     <string name="error_failed_to_join_room">Désolé, une erreur est survenue en essayant de rejoindre %s</string>
     <string name="create_space_alias_hint">Adresse de l’espace</string>
     <string name="space_settings_alias_subtitle">Afficher et gérer les adresses de cet espace.</string>
@@ -2313,7 +2273,6 @@
     <string name="create_poll_question_title">Question ou sujet du sondage</string>
     <string name="create_poll_title">Créer un sondage</string>
     <string name="attachment_type_poll">Sondage</string>
-
     <string name="identity_server_consent_dialog_title_2">Envoyer des courriels et des numéros de téléphone à %s</string>
     <string name="settings_discovery_consent_notice_off_2">Vos contacts sont personnels et privés. Pour découvrir des utilisateurs à partir de vos contacts, nous avons besoin de votre permission pour envoyer les informations des contacts à votre serveur d’identité.</string>
     <string name="shortcut_disabled_reason_sign_out">La session a été déconnectée !</string>
@@ -2413,4 +2372,47 @@
     <string name="ftue_auth_carousel_secure_body">Communication indépendante et sécurisée qui vous donne le même niveau d\'intimité qu\'une discussion face-à-face dans votre maison.</string>
     <string name="attachment_type_location">Localisation</string>
     <string name="room_unsupported_e2e_algorithm_as_admin">Le chiffrement a été mal configuré ce qui vous empêche d\'envoyer des messages. Cliquez pour ouvrir les paramètres.</string>
+    <string name="room_message_autocomplete_notification">Notification du salon</string>
+    <string name="room_message_autocomplete_users">Utilisateurs</string>
+    <string name="room_message_notify_everyone">Notifier tout le salon</string>
+    <plurals name="message_reaction_show_more">
+        <item quantity="one">%1$d de plus</item>
+        <item quantity="other">%1$d de plus</item>
+    </plurals>
+    <string name="message_reaction_show_less">Réduire</string>
+    <string name="message_bubbles">Afficher les messages en bulles</string>
+    <string name="location_timeline_failed_to_load_map">Impossible de charger la carte</string>
+    <string name="a11y_static_map_image">Carte</string>
+    <string name="labs_enable_thread_messages_desc">Note : l’application sera redémarrée</string>
+    <string name="labs_enable_thread_messages">Activer les messages en fils de discussion</string>
+    <string name="ftue_auth_use_case_connect_to_server">Se connecter au serveur</string>
+    <string name="ftue_auth_use_case_join_existing_server">Vous cherchez à joindre un serveur existant \?</string>
+    <string name="ftue_auth_use_case_skip_partial">passer cette question</string>
+    <string name="ftue_auth_use_case_skip">Pas encore sûr \? Vous pouvez %s</string>
+    <string name="ftue_auth_use_case_option_three">Communautés</string>
+    <string name="ftue_auth_use_case_option_two">Équipes</string>
+    <string name="ftue_auth_use_case_option_one">Famille et amis</string>
+    <string name="ftue_auth_use_case_subtitle">Nous allons vous aider à vous connecter.</string>
+    <string name="ftue_auth_use_case_title">À qui allez-vous le plus parler \?</string>
+    <string name="navigate_to_thread_when_already_in_the_thread">Vous êtes déjà en train de voir ce fil de discussion !</string>
+    <string name="view_in_room">Voir dans le salon</string>
+    <string name="reply_in_thread">Répondre dans le fil de discussion</string>
+    <string name="command_not_supported_in_threads">La commande « %s » est connue mais non supportée dans les fils de discussion.</string>
+    <string name="search_thread_from_a_thread">Depuis un fil de discussion</string>
+    <string name="thread_list_empty_notice">Indice : Appui long sur un message puis « %s ».</string>
+    <string name="thread_list_empty_subtitle">Les fils de discussion vous permettent de centrer vos conversations sur un sujet, et de les suivre facilement.</string>
+    <string name="thread_list_empty_title">Gardez vos conversations organisées avec les fils de discussion</string>
+    <string name="thread_list_modal_my_threads_subtitle">Affiche tous les fils de discussion auxquels vous avez participé</string>
+    <string name="thread_list_modal_my_threads_title">Mes fils de discussion</string>
+    <string name="thread_list_modal_all_threads_subtitle">Affiche tous les fils de discussion du salon actuel</string>
+    <string name="thread_list_modal_all_threads_title">Tous les fils de discussion</string>
+    <string name="thread_list_modal_title">Filtrer</string>
+    <string name="thread_list_title">Fils de discussion</string>
+    <string name="thread_timeline_title">Fil de discussion</string>
+    <string name="room_threads_filter">Filtrer les fils de discussion du salon</string>
+    <string name="room_notification_more_than_two_users_are_typing">%1$s, %2$s et d’autres</string>
+    <string name="room_notification_two_users_are_typing">%1$s et %2$s</string>
+    <string name="action_thread_copy_link_to_thread">Copier le lien du fil de discussion</string>
+    <string name="action_thread_view_in_room">Voir dans le salon</string>
+    <string name="action_view_threads">Voir les fils de discussions</string>
 </resources>

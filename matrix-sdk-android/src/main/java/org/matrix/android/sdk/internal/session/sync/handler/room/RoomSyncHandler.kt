@@ -19,6 +19,7 @@ package org.matrix.android.sdk.internal.session.sync.handler.room
 import dagger.Lazy
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.session.crypto.MXCryptoError
 import org.matrix.android.sdk.api.session.events.model.Event
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -386,7 +387,9 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
             val isInitialSync = insertType == EventInsertType.INITIAL_SYNC
 
             if (event.isEncrypted() && !isInitialSync) {
-                decryptIfNeeded(event, roomId)
+                runBlocking {
+                    decryptIfNeeded(event, roomId)
+                }
             }
             var contentToInject: String? = null
             if (!isInitialSync) {
@@ -501,7 +504,7 @@ internal class RoomSyncHandler @Inject constructor(private val readReceiptHandle
         }
     }
 
-    private fun decryptIfNeeded(event: Event, roomId: String) {
+    private suspend fun decryptIfNeeded(event: Event, roomId: String) {
         try {
             // Event from sync does not have roomId, so add it to the event first
             val result = cryptoService.decryptEvent(event.copy(roomId = roomId), "")

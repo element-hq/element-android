@@ -56,6 +56,12 @@
     <!-- Used for item separators in list, on surface -->
     <attr name="vctr_list_separator_on_surface" format="color" />
 
+    <!-- Background color used for:
+          - unread badge background for a room item in the room list
+          - start unread indicator for a room item in the room list
+          - Background for unread badge background in the bottom navigation -->
+    <attr name="vctr_unread_background" format="color" />
+
     <!-- Other colors, which are not in the palette -->
     <attr name="vctr_fab_label_bg" format="color" />
     <color name="vctr_fab_label_bg_light">@android:color/white</color>
@@ -133,4 +139,8 @@
     <color name="vctr_presence_indicator_offline_light">@color/palette_gray_100</color>
     <color name="vctr_presence_indicator_offline_dark">@color/palette_gray_450</color>
 
+    <!-- Location sharing colors -->
+    <attr name="vctr_live_location" format="color" />
+    <color name="vctr_live_location_light">@color/palette_prune</color>
+    <color name="vctr_live_location_dark">@color/palette_prune</color>
 </resources>

@@ -214,7 +214,7 @@ internal class DefaultFetchThreadTimelineTask @Inject constructor(
     /**
      * Invoke the event decryption mechanism for a specific event
      */
-    private fun decryptIfNeeded(event: Event, roomId: String) {
+    private suspend fun decryptIfNeeded(event: Event, roomId: String) {
         try {
             // Event from sync does not have roomId, so add it to the event first
             val result = cryptoService.decryptEvent(event.copy(roomId = roomId), "")

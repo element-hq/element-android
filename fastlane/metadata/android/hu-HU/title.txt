@@ -1,1 +1,1 @@
-Element
+Element - Biztonságos üzenetküldő
