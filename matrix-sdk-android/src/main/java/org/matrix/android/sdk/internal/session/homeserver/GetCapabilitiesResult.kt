@@ -70,8 +70,7 @@ internal data class Capabilities(
          * Capability to indicate if the server supports MSC3440 Threading
          * True if the user can use m.thread relation, false otherwise
          */
-//        @Json(name = "m.thread")
-        @Json(name = "io.element.thread")
+        @Json(name = "m.thread")
         val threads: BooleanCapability? = null
 )
 

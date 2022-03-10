@@ -52,6 +52,7 @@ private const val FEATURE_REQUIRE_IDENTITY_SERVER = "m.require_identity_server"
 private const val FEATURE_ID_ACCESS_TOKEN = "m.id_access_token"
 private const val FEATURE_SEPARATE_ADD_AND_BIND = "m.separate_add_and_bind"
 private const val FEATURE_THREADS_MSC3440 = "org.matrix.msc3440"
+private const val FEATURE_THREADS_MSC3440_STABLE = "org.matrix.msc3440.stable"
 
 /**
  * Return true if the SDK supports this homeserver version
@@ -74,7 +75,7 @@ internal fun Versions.isLoginAndRegistrationSupportedBySdk(): Boolean {
  */
 internal fun Versions.doesServerSupportThreads(): Boolean {
     return getMaxVersion() >= HomeServerVersion.v1_3_0 ||
-            unstableFeatures?.get(FEATURE_THREADS_MSC3440) ?: false
+            unstableFeatures?.get(FEATURE_THREADS_MSC3440_STABLE) ?: false
 }
 
 /**
