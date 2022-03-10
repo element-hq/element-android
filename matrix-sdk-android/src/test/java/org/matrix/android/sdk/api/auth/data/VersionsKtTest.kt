@@ -65,9 +65,9 @@ class VersionsKtTest {
         Versions(supportedVersions = listOf("v1.3.0")).doesServerSupportThreads() shouldBe true
         Versions(supportedVersions = listOf("v1.3.1")).doesServerSupportThreads() shouldBe true
         Versions(supportedVersions = listOf("v1.5.1")).doesServerSupportThreads() shouldBe true
-        Versions(supportedVersions = listOf("r0.6.0"), unstableFeatures = mapOf("org.matrix.msc3440" to true)).doesServerSupportThreads() shouldBe true
-        Versions(supportedVersions = listOf("v1.2.1"), unstableFeatures = mapOf("org.matrix.msc3440" to true)).doesServerSupportThreads() shouldBe true
-        Versions(supportedVersions = listOf("r0.6.0"), unstableFeatures = mapOf("org.matrix.msc3440" to false)).doesServerSupportThreads() shouldBe false
-        Versions(supportedVersions = listOf("v1.4.0"), unstableFeatures = mapOf("org.matrix.msc3440" to false)).doesServerSupportThreads() shouldBe true
+        Versions(supportedVersions = listOf("r0.6.0"), unstableFeatures = mapOf("org.matrix.msc3440.stable" to true)).doesServerSupportThreads() shouldBe true
+        Versions(supportedVersions = listOf("v1.2.1"), unstableFeatures = mapOf("org.matrix.msc3440.stable" to true)).doesServerSupportThreads() shouldBe true
+        Versions(supportedVersions = listOf("r0.6.0"), unstableFeatures = mapOf("org.matrix.msc3440.stable" to false)).doesServerSupportThreads() shouldBe false
+        Versions(supportedVersions = listOf("v1.4.0"), unstableFeatures = mapOf("org.matrix.msc3440.stable" to false)).doesServerSupportThreads() shouldBe true
     }
 }
