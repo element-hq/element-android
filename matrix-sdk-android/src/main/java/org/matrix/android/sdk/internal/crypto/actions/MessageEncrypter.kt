@@ -16,6 +16,7 @@
 
 package org.matrix.android.sdk.internal.crypto.actions
 
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.api.session.events.model.Content
 import org.matrix.android.sdk.internal.crypto.MXCRYPTO_ALGORITHM_OLM
 import org.matrix.android.sdk.internal.crypto.MXOlmDevice
@@ -27,6 +28,8 @@ import org.matrix.android.sdk.internal.util.JsonCanonicalizer
 import org.matrix.android.sdk.internal.util.convertToUTF8
 import timber.log.Timber
 import javax.inject.Inject
+
+private val loggerTag = LoggerTag("MessageEncrypter", LoggerTag.CRYPTO)
 
 internal class MessageEncrypter @Inject constructor(
         @UserId
@@ -42,7 +45,7 @@ internal class MessageEncrypter @Inject constructor(
      * @param deviceInfos   list of device infos to encrypt for.
      * @return the content for an m.room.encrypted event.
      */
-    fun encryptMessage(payloadFields: Content, deviceInfos: List<CryptoDeviceInfo>): EncryptedMessage {
+    suspend fun encryptMessage(payloadFields: Content, deviceInfos: List<CryptoDeviceInfo>): EncryptedMessage {
         val deviceInfoParticipantKey = deviceInfos.associateBy { it.identityKey()!! }
 
         val payloadJson = payloadFields.toMutableMap()
@@ -66,7 +69,7 @@ internal class MessageEncrypter @Inject constructor(
             val sessionId = olmDevice.getSessionId(deviceKey)
 
             if (!sessionId.isNullOrEmpty()) {
-                Timber.v("Using sessionid $sessionId for device $deviceKey")
+                Timber.tag(loggerTag.value).d("Using sessionid $sessionId for device $deviceKey")
 
                 payloadJson["recipient"] = deviceInfo.userId
                 payloadJson["recipient_keys"] = mapOf("ed25519" to deviceInfo.fingerprint()!!)

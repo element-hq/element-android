@@ -19,14 +19,23 @@ package org.matrix.android.sdk.internal.crypto
 import android.util.LruCache
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
 import org.matrix.android.sdk.api.MatrixCoroutineDispatchers
 import org.matrix.android.sdk.api.extensions.tryOrNull
+import org.matrix.android.sdk.api.logger.LoggerTag
 import org.matrix.android.sdk.internal.crypto.model.OlmInboundGroupSessionWrapper2
 import org.matrix.android.sdk.internal.crypto.store.IMXCryptoStore
 import timber.log.Timber
 import java.util.Timer
 import java.util.TimerTask
 import javax.inject.Inject
+
+data class InboundGroupSessionHolder(
+        val wrapper: OlmInboundGroupSessionWrapper2,
+        val mutex: Mutex = Mutex()
+)
+
+private val loggerTag = LoggerTag("InboundGroupSessionStore", LoggerTag.CRYPTO)
 
 /**
  * Allows to cache and batch store operations on inbound group session store.
@@ -42,12 +51,13 @@ internal class InboundGroupSessionStore @Inject constructor(
             val senderKey: String
     )
 
-    private val sessionCache = object : LruCache<CacheKey, OlmInboundGroupSessionWrapper2>(30) {
-        override fun entryRemoved(evicted: Boolean, key: CacheKey?, oldValue: OlmInboundGroupSessionWrapper2?, newValue: OlmInboundGroupSessionWrapper2?) {
-            if (evicted && oldValue != null) {
+    private val sessionCache = object : LruCache<CacheKey, InboundGroupSessionHolder>(100) {
+        override fun entryRemoved(evicted: Boolean, key: CacheKey?, oldValue: InboundGroupSessionHolder?, newValue: InboundGroupSessionHolder?) {
+            if (oldValue != null) {
                 cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-                    Timber.v("## Inbound: entryRemoved ${oldValue.roomId}-${oldValue.senderKey}")
-                    store.storeInboundGroupSessions(listOf(oldValue))
+                    Timber.tag(loggerTag.value).v("## Inbound: entryRemoved ${oldValue.wrapper.roomId}-${oldValue.wrapper.senderKey}")
+                    store.storeInboundGroupSessions(listOf(oldValue).map { it.wrapper })
+                    oldValue.wrapper.olmInboundGroupSession?.releaseSession()
                 }
             }
         }
@@ -59,27 +69,50 @@ internal class InboundGroupSessionStore @Inject constructor(
     private val dirtySession = mutableListOf<OlmInboundGroupSessionWrapper2>()
 
     @Synchronized
-    fun getInboundGroupSession(sessionId: String, senderKey: String): OlmInboundGroupSessionWrapper2? {
-        synchronized(sessionCache) {
-            val known = sessionCache[CacheKey(sessionId, senderKey)]
-            Timber.v("## Inbound: getInboundGroupSession in cache ${known != null}")
-            return known ?: store.getInboundGroupSession(sessionId, senderKey)?.also {
-                Timber.v("## Inbound: getInboundGroupSession cache populate ${it.roomId}")
-                sessionCache.put(CacheKey(sessionId, senderKey), it)
-            }
-        }
+    fun clear() {
+        sessionCache.evictAll()
     }
 
     @Synchronized
-    fun storeInBoundGroupSession(wrapper: OlmInboundGroupSessionWrapper2, sessionId: String, senderKey: String) {
-        Timber.v("## Inbound: getInboundGroupSession mark as dirty ${wrapper.roomId}-${wrapper.senderKey}")
+    fun getInboundGroupSession(sessionId: String, senderKey: String): InboundGroupSessionHolder? {
+            val known = sessionCache[CacheKey(sessionId, senderKey)]
+            Timber.tag(loggerTag.value).v("## Inbound: getInboundGroupSession  $sessionId in cache ${known != null}")
+            return known
+                    ?: store.getInboundGroupSession(sessionId, senderKey)?.also {
+                Timber.tag(loggerTag.value).v("## Inbound: getInboundGroupSession cache populate ${it.roomId}")
+                sessionCache.put(CacheKey(sessionId, senderKey), InboundGroupSessionHolder(it))
+            }?.let {
+                InboundGroupSessionHolder(it)
+            }
+    }
+
+    @Synchronized
+    fun replaceGroupSession(old: InboundGroupSessionHolder, new: InboundGroupSessionHolder, sessionId: String, senderKey: String) {
+        Timber.tag(loggerTag.value).v("## Replacing outdated session ${old.wrapper.roomId}-${old.wrapper.senderKey}")
+        dirtySession.remove(old.wrapper)
+        store.removeInboundGroupSession(sessionId, senderKey)
+        sessionCache.remove(CacheKey(sessionId, senderKey))
+
+        // release removed session
+        old.wrapper.olmInboundGroupSession?.releaseSession()
+
+        internalStoreGroupSession(new, sessionId, senderKey)
+    }
+
+    @Synchronized
+    fun storeInBoundGroupSession(holder: InboundGroupSessionHolder, sessionId: String, senderKey: String) {
+        internalStoreGroupSession(holder, sessionId, senderKey)
+    }
+
+    private fun internalStoreGroupSession(holder: InboundGroupSessionHolder, sessionId: String, senderKey: String) {
+        Timber.tag(loggerTag.value).v("## Inbound: getInboundGroupSession mark as dirty ${holder.wrapper.roomId}-${holder.wrapper.senderKey}")
         // We want to batch this a bit for performances
-        dirtySession.add(wrapper)
+        dirtySession.add(holder.wrapper)
 
         if (sessionCache[CacheKey(sessionId, senderKey)] == null) {
             // first time seen, put it in memory cache while waiting for batch insert
             // If it's already known, no need to update cache it's already there
-            sessionCache.put(CacheKey(sessionId, senderKey), wrapper)
+            sessionCache.put(CacheKey(sessionId, senderKey), holder)
         }
 
         timerTask?.cancel()
@@ -96,7 +129,7 @@ internal class InboundGroupSessionStore @Inject constructor(
         val toSave = mutableListOf<OlmInboundGroupSessionWrapper2>().apply { addAll(dirtySession) }
         dirtySession.clear()
         cryptoCoroutineScope.launch(coroutineDispatchers.crypto) {
-            Timber.v("## Inbound: getInboundGroupSession batching save of ${dirtySession.size}")
+            Timber.tag(loggerTag.value).v("## Inbound: getInboundGroupSession batching save of ${toSave.size}")
             tryOrNull {
                 store.storeInboundGroupSessions(toSave)
             }

@@ -18,6 +18,7 @@ package org.matrix.android.sdk.internal.session.room.summary
 
 import io.realm.Realm
 import io.realm.kotlin.createObject
+import kotlinx.coroutines.runBlocking
 import org.matrix.android.sdk.api.extensions.orFalse
 import org.matrix.android.sdk.api.extensions.tryOrNull
 import org.matrix.android.sdk.api.session.events.model.EventType
@@ -165,7 +166,9 @@ internal class RoomSummaryUpdater @Inject constructor(
             Timber.v("Should decrypt ${latestPreviewableEvent.eventId}")
             // mmm i want to decrypt now or is it ok to do it async?
             tryOrNull {
-                eventDecryptor.decryptEvent(root.asDomain(), "")
+                runBlocking {
+                    eventDecryptor.decryptEvent(root.asDomain(), "")
+                }
             }
                     ?.let { root.setDecryptionResult(it) }
         }
