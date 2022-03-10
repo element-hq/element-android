@@ -37,32 +37,31 @@ internal class DefaultResolveSpaceInfoTask @Inject constructor(
         private val globalErrorReceiver: GlobalErrorReceiver
 ) : ResolveSpaceInfoTask {
 
-    private lateinit var params: ResolveSpaceInfoTask.Params
-
     override suspend fun execute(params: ResolveSpaceInfoTask.Params) = executeRequest(globalErrorReceiver) {
-        this.params = params
-        getSpaceHierarchy()
+        getSpaceHierarchy(params)
     }
 
-    private suspend fun getSpaceHierarchy() = try {
-        getStableSpaceHierarchy()
+    private suspend fun getSpaceHierarchy(params: ResolveSpaceInfoTask.Params) = try {
+        getStableSpaceHierarchy(params)
     } catch (e: HttpException) {
-        getUnstableSpaceHierarchy()
+        getUnstableSpaceHierarchy(params)
     }
 
-    private suspend fun getStableSpaceHierarchy() =
+    private suspend fun getStableSpaceHierarchy(params: ResolveSpaceInfoTask.Params) =
             spaceApi.getSpaceHierarchy(
                     spaceId = params.spaceId,
                     suggestedOnly = params.suggestedOnly,
                     limit = params.limit,
                     maxDepth = params.maxDepth,
-                    from = params.from)
+                    from = params.from,
+            )
 
-    private suspend fun getUnstableSpaceHierarchy() =
+    private suspend fun getUnstableSpaceHierarchy(params: ResolveSpaceInfoTask.Params) =
             spaceApi.getSpaceHierarchyUnstable(
                     spaceId = params.spaceId,
                     suggestedOnly = params.suggestedOnly,
                     limit = params.limit,
                     maxDepth = params.maxDepth,
-                    from = params.from)
+                    from = params.from,
+            )
 }
