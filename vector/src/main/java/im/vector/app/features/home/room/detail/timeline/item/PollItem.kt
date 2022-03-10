@@ -85,7 +85,8 @@ abstract class PollItem : AbsMessageItem<PollItem.Holder>() {
         }
     }
 
-    private fun isPollActive(optionViewState: PollOptionViewState) = optionViewState !is PollOptionViewState.PollEnded
+    private fun isPollActive(optionViewState: PollOptionViewState) = true // TODO: Revert (true for debugging)
+//    private fun isPollActive(optionViewState: PollOptionViewState) = optionViewState !is PollOptionViewState.PollEnded
 
     class Holder : AbsMessageItem.Holder(STUB_ID) {
         val questionTextView by bind<TextView>(R.id.questionTextView)

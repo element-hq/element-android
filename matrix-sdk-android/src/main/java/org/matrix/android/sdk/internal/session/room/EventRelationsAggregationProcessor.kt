@@ -385,7 +385,7 @@ internal class EventRelationsAggregationProcessor @Inject constructor(
                 }
 
         val closedTime = existingPollSummary?.closedTime
-        if (closedTime != null && eventTimestamp > closedTime) {
+        if (closedTime != null) {
             Timber.v("## POLL is closed ignore event poll:$targetEventId, event :${event.eventId}")
             return
         }
