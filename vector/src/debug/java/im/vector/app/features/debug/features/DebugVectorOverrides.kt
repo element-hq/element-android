@@ -63,7 +63,7 @@ class DebugVectorOverrides(private val context: Context) : VectorOverrides {
         }
     }
 
-    suspend fun updateHomeserverCapabilities(block: HomeserverCapabilitiesOverride.() -> HomeserverCapabilitiesOverride) {
+    suspend fun setHomeserverCapabilities(block: HomeserverCapabilitiesOverride.() -> HomeserverCapabilitiesOverride) {
         val capabilitiesOverride = block(forceHomeserverCapabilities.firstOrNull() ?: HomeserverCapabilitiesOverride(null, null))
         context.dataStore.edit { settings ->
             when (capabilitiesOverride.canChangeDisplayName) {

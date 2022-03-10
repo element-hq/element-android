@@ -89,14 +89,14 @@ class DebugPrivateSettingsViewModel @AssistedInject constructor(
     private fun handSetDisplayNameCapabilityOverride(action: SetDisplayNameCapabilityOverride) {
         viewModelScope.launch {
             val forceDisplayName = action.option.toBoolean()
-            debugVectorOverrides.updateHomeserverCapabilities { copy(canChangeDisplayName = forceDisplayName) }
+            debugVectorOverrides.setHomeserverCapabilities { copy(canChangeDisplayName = forceDisplayName) }
         }
     }
 
     private fun handSetAvatarCapabilityOverride(action: SetAvatarCapabilityOverride) {
         viewModelScope.launch {
             val forceAvatar = action.option.toBoolean()
-            debugVectorOverrides.updateHomeserverCapabilities { copy(canChangeAvatar = forceAvatar) }
+            debugVectorOverrides.setHomeserverCapabilities { copy(canChangeAvatar = forceAvatar) }
         }
     }
 }
