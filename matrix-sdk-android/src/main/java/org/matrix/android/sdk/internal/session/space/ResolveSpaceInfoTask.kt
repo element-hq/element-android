@@ -38,16 +38,14 @@ internal class DefaultResolveSpaceInfoTask @Inject constructor(
 ) : ResolveSpaceInfoTask {
 
     override suspend fun execute(params: ResolveSpaceInfoTask.Params) = executeRequest(globalErrorReceiver) {
-        getSpaceHierarchy(params)
+        try {
+            getSpaceHierarchy(params)
+        } catch (e: HttpException) {
+            getUnstableSpaceHierarchy(params)
+        }
     }
 
-    private suspend fun getSpaceHierarchy(params: ResolveSpaceInfoTask.Params) = try {
-        getStableSpaceHierarchy(params)
-    } catch (e: HttpException) {
-        getUnstableSpaceHierarchy(params)
-    }
-
-    private suspend fun getStableSpaceHierarchy(params: ResolveSpaceInfoTask.Params) =
+    private suspend fun getSpaceHierarchy(params: ResolveSpaceInfoTask.Params) =
             spaceApi.getSpaceHierarchy(
                     spaceId = params.spaceId,
                     suggestedOnly = params.suggestedOnly,
