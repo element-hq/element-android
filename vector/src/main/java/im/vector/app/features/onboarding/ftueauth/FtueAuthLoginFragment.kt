@@ -26,6 +26,7 @@ import androidx.autofill.HintConstants
 import androidx.core.text.isDigitsOnly
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import im.vector.app.R
 import im.vector.app.core.extensions.hideKeyboard
 import im.vector.app.core.extensions.hidePassword
@@ -46,6 +47,7 @@ import kotlinx.coroutines.flow.onEach
 import org.matrix.android.sdk.api.failure.Failure
 import org.matrix.android.sdk.api.failure.MatrixError
 import org.matrix.android.sdk.api.failure.isInvalidPassword
+import org.matrix.android.sdk.api.failure.isRegistrationDisabled
 import reactivecircus.flowbinding.android.widget.textChanges
 import javax.inject.Inject
 
@@ -254,12 +256,39 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
     }
 
     override fun onError(throwable: Throwable) {
-        // Show M_WEAK_PASSWORD error in the password field
-        if (throwable is Failure.ServerError &&
-                throwable.error.code == MatrixError.M_WEAK_PASSWORD) {
-            views.passwordFieldTil.error = errorFormatter.toHumanReadable(throwable)
-        } else {
-            views.loginFieldTil.error = errorFormatter.toHumanReadable(throwable)
+        // Trick to display the error without text.
+        views.loginFieldTil.error = " "
+        when {
+            throwable is Failure.ServerError &&
+                    throwable.error.code == MatrixError.M_FORBIDDEN &&
+                    throwable.error.message.isEmpty()                                               -> {
+                // Login with email, but email unknown
+                views.loginFieldTil.error = getString(R.string.login_login_with_email_error)
+            }
+
+            throwable is Failure.ServerError && throwable.error.code == MatrixError.M_WEAK_PASSWORD -> {
+                views.passwordFieldTil.error = errorFormatter.toHumanReadable(throwable)
+            }
+
+            throwable.isInvalidPassword() && spaceInPassword()                                      -> {
+                views.passwordFieldTil.error = getString(R.string.auth_invalid_login_param_space_in_password)
+            }
+
+            throwable.isInvalidPassword()                                                           -> {
+                views.passwordFieldTil.error = errorFormatter.toHumanReadable(throwable)
+            }
+
+            throwable.isRegistrationDisabled()                                                      -> {
+                MaterialAlertDialogBuilder(requireActivity())
+                        .setTitle(R.string.dialog_title_error)
+                        .setMessage(getString(R.string.login_registration_disabled))
+                        .setPositiveButton(R.string.ok, null)
+                        .show()
+            }
+
+            else                                                                                    -> {
+                super.onError(throwable)
+            }
         }
     }
 
@@ -275,23 +304,6 @@ class FtueAuthLoginFragment @Inject constructor() : AbstractSSOFtueAuthFragment<
         if (state.isLoading) {
             // Ensure password is hidden
             views.passwordField.hidePassword()
-        }
-    }
-
-    override fun showFailure(throwable: Throwable) {
-        if (throwable is Failure.ServerError &&
-                throwable.error.code == MatrixError.M_FORBIDDEN &&
-                throwable.error.message.isEmpty()) {
-            // Login with email, but email unknown
-            views.loginFieldTil.error = getString(R.string.login_login_with_email_error)
-        } else {
-            // Trick to display the error without text.
-            views.loginFieldTil.error = " "
-            if (throwable.isInvalidPassword() && spaceInPassword()) {
-                views.passwordFieldTil.error = getString(R.string.auth_invalid_login_param_space_in_password)
-            } else {
-                views.passwordFieldTil.error = errorFormatter.toHumanReadable(throwable)
-            }
         }
     }
 

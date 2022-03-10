@@ -17,9 +17,6 @@
 package im.vector.app.features.onboarding
 
 import android.net.Uri
-import com.airbnb.mvrx.Loading
-import com.airbnb.mvrx.Success
-import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.test.MvRxTestRule
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.features.login.SignMode

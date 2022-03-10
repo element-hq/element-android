@@ -64,6 +64,11 @@ fun Throwable.isInvalidPassword(): Boolean {
             error.message == "Invalid password"
 }
 
+fun Throwable.isRegistrationDisabled(): Boolean {
+    return this is Failure.ServerError && error.code == MatrixError.M_FORBIDDEN &&
+            httpCode == HttpsURLConnection.HTTP_FORBIDDEN
+}
+
 fun Throwable.isInvalidUIAAuth(): Boolean {
     return this is Failure.ServerError &&
             error.code == MatrixError.M_FORBIDDEN &&
@@ -104,8 +109,8 @@ fun Throwable.isRegistrationAvailabilityError(): Boolean {
     return this is Failure.ServerError &&
             httpCode == HttpsURLConnection.HTTP_BAD_REQUEST && /* 400 */
             (error.code == MatrixError.M_USER_IN_USE ||
-            error.code == MatrixError.M_INVALID_USERNAME ||
-            error.code == MatrixError.M_EXCLUSIVE)
+                    error.code == MatrixError.M_INVALID_USERNAME ||
+                    error.code == MatrixError.M_EXCLUSIVE)
 }
 
 /**

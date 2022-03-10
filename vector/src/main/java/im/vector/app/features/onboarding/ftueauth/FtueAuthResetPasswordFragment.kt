@@ -54,7 +54,7 @@ class FtueAuthResetPasswordFragment @Inject constructor() : AbstractFtueAuthFrag
         setupSubmitButton()
     }
 
-    override fun showFailure(throwable: Throwable) {
+    override fun onError(throwable: Throwable) {
         views.resetPasswordEmailTil.error = errorFormatter.toHumanReadable(throwable)
     }
 

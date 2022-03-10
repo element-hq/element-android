@@ -59,7 +59,7 @@ class FtueAuthResetPasswordMailConfirmationFragment @Inject constructor() : Abst
         setupUi(state)
     }
 
-    override fun showFailure(throwable: Throwable) {
+    override fun onError(throwable: Throwable) {
         // Link in email not yet clicked ?
         val message = if (throwable.is401()) {
             getString(R.string.auth_reset_password_error_unauthorized)
