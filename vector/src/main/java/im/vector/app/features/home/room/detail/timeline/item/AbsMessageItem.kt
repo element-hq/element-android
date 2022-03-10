@@ -105,6 +105,9 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
         } else {
             holder.timeView.isVisible = false
         }
+
+        holder.additionalTopSpace.isVisible = attributes.informationData.messageLayout.addTopMargin
+
         // Render send state indicator
         holder.sendStateImageView.render(attributes.informationData.sendStateDecoration)
         holder.eventSendingIndicator.isVisible = attributes.informationData.sendStateDecoration == SendStateDecoration.SENDING_MEDIA
@@ -154,6 +157,7 @@ abstract class AbsMessageItem<H : AbsMessageItem.Holder> : AbsBaseMessageItem<H>
 
     abstract class Holder(@IdRes stubId: Int) : AbsBaseMessageItem.Holder(stubId) {
 
+        val additionalTopSpace by bind<View>(R.id.additionalTopSpace)
         val avatarImageView by bind<ImageView>(R.id.messageAvatarImageView)
         val memberNameView by bind<TextView>(R.id.messageMemberNameView)
         val timeView by bind<TextView>(R.id.messageTimeView)
