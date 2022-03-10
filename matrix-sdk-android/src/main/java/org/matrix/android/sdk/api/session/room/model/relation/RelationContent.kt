@@ -24,4 +24,5 @@ interface RelationContent {
     val eventId: String?
     val inReplyTo: ReplyToContent?
     val option: Int?
+    val isFallingBack: Boolean? // Thread fallback to differentiate replies within threads
 }

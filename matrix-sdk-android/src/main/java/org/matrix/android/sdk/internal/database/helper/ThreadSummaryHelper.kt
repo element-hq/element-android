@@ -127,7 +127,7 @@ private fun EventEntity.toTimelineEventEntity(roomMemberContentsByUser: HashMap<
     return timelineEventEntity
 }
 
-internal fun ThreadSummaryEntity.Companion.createOrUpdate(
+internal suspend fun ThreadSummaryEntity.Companion.createOrUpdate(
         threadSummaryType: ThreadSummaryUpdateType,
         realm: Realm,
         roomId: String,
@@ -204,7 +204,7 @@ internal fun ThreadSummaryEntity.Companion.createOrUpdate(
     }
 }
 
-private fun decryptIfNeeded(cryptoService: CryptoService?, eventEntity: EventEntity, roomId: String) {
+private suspend fun decryptIfNeeded(cryptoService: CryptoService?, eventEntity: EventEntity, roomId: String) {
     cryptoService ?: return
     val event = eventEntity.asDomain()
     if (event.isEncrypted() && event.mxDecryptionResult == null && event.eventId != null) {

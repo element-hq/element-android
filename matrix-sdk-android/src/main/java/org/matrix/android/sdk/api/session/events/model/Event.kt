@@ -389,7 +389,7 @@ fun Event.isReply(): Boolean {
 }
 
 fun Event.isReplyRenderedInThread(): Boolean {
-    return isReply() && getRelationContent()?.inReplyTo?.shouldRenderInThread() == true
+    return isReply() && getRelationContent()?.shouldRenderInThread() == true
 }
 
 fun Event.isThread(): Boolean = getRelationContentForType(RelationType.THREAD)?.eventId != null

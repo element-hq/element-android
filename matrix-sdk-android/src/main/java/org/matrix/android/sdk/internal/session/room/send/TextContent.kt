@@ -60,6 +60,7 @@ fun TextContent.toThreadTextContent(
             relatesTo = RelationDefaultContent(
                     type = RelationType.THREAD,
                     eventId = rootThreadEventId,
+                    isFallingBack = true,
                     inReplyTo = ReplyToContent(
                             eventId = latestThreadEventId
                     )),
