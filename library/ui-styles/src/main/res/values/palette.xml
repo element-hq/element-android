@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="UnusedResources">
 
-    <!-- Ignore the lint error UnusedResources for all the resources in this file -->
-
-    <!-- Define all the colors used across the Element Android project
-     Source: https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=1338%3A17947 -->
+    <!--
+     Define all the colors used across the Element Android project
+     Source: https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=1338%3A17947
+     Some colors are not used, but we want the palette to be complete so we ignore the lint error
+     UnusedResources for all the resources in this file
+    -->
 
     <!-- For all themes -->
     <color name="palette_azure">#368BD6</color>
