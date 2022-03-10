@@ -22,7 +22,6 @@ import com.airbnb.mvrx.Loading
 import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.airbnb.mvrx.test.MvRxTestRule
-import im.vector.app.features.DefaultVectorOverrides
 import im.vector.app.features.login.ReAuthHelper
 import im.vector.app.test.fakes.FakeActiveSessionHolder
 import im.vector.app.test.fakes.FakeAnalyticsTracker
@@ -36,6 +35,7 @@ import im.vector.app.test.fakes.FakeStringProvider
 import im.vector.app.test.fakes.FakeUri
 import im.vector.app.test.fakes.FakeUriFilenameResolver
 import im.vector.app.test.fakes.FakeVectorFeatures
+import im.vector.app.test.fakes.FakeVectorOverrides
 import im.vector.app.test.test
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Before
@@ -264,7 +264,7 @@ class OnboardingViewModelTest {
                 FakeVectorFeatures(),
                 FakeAnalyticsTracker(),
                 fakeUriFilenameResolver.instance,
-                DefaultVectorOverrides()
+                FakeVectorOverrides()
         )
     }
 
