@@ -118,6 +118,7 @@ class TimelineMessageLayoutFactory @Inject constructor(private val session: Sess
                     TimelineMessageLayout.Bubble(
                             showAvatar = showInformation && !isSentByMe,
                             showDisplayName = showInformation && !isSentByMe,
+                            addTopMargin = isFirstFromThisSender && isSentByMe,
                             isIncoming = !isSentByMe,
                             cornersRadius = cornersRadius,
                             isPseudoBubble = messageContent.isPseudoBubble(),

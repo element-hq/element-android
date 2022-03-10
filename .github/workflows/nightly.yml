@@ -87,11 +87,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Start synapse server
-        run: |
-          pip install matrix-synapse
-          curl https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh -o start.sh
-          chmod 777 start.sh
-          ./start.sh --no-rate-limit
+        uses: michaelkaye/setup-matrix-synapse@v0.3.0
+        with:
+          uploadLogs: true
+          httpPort: 8080
+          disableRateLimiting: true
       # package: org.matrix.android.sdk.session
       - name: Run integration tests for  Matrix SDK [org.matrix.android.sdk.session] API[${{ matrix.api-level }}]
         uses: reactivecircus/android-emulator-runner@v2
@@ -274,10 +274,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
       - name: Start synapse server
-        run: |
-          pip install matrix-synapse
-          curl -sL https://raw.githubusercontent.com/matrix-org/synapse/develop/demo/start.sh \
-            | sed s/127.0.0.1/0.0.0.0/g | sed 's/http:\/\/localhost/http:\/\/10.0.2.2/g' | bash -s -- --no-rate-limit
+        uses: michaelkaye/setup-matrix-synapse@v0.3.0
+        with:
+          uploadLogs: true
+          httpPort: 8080
+          disableRateLimiting: true
       - uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
