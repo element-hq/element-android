@@ -113,7 +113,7 @@
         android:id="@+id/groupTmpLeave"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:layout_marginEnd="4dp"
+        android:layout_marginEnd="10dp"
         android:background="?selectableItemBackground"
         android:clickable="true"
         android:importantForAccessibility="no"
