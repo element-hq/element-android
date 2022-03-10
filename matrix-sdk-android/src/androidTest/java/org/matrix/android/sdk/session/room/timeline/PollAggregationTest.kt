@@ -29,6 +29,7 @@ import org.matrix.android.sdk.InstrumentedTest
 import org.matrix.android.sdk.api.session.events.model.EventType
 import org.matrix.android.sdk.api.session.events.model.toModel
 import org.matrix.android.sdk.api.session.room.model.PollResponseAggregatedSummary
+import org.matrix.android.sdk.api.session.room.model.PollSummaryContent
 import org.matrix.android.sdk.api.session.room.model.message.MessagePollContent
 import org.matrix.android.sdk.api.session.room.model.message.PollType
 import org.matrix.android.sdk.api.session.room.timeline.Timeline
@@ -60,7 +61,7 @@ class PollAggregationTest : InstrumentedTest {
         val aliceTimeline = roomFromAlicePOV.createTimeline(null, TimelineSettings(30))
         aliceTimeline.start()
 
-        val TOTAL_TEST_COUNT = 2
+        val TOTAL_TEST_COUNT = 3
         val lock = CountDownLatch(TOTAL_TEST_COUNT)
 
         val aliceEventsListener = object : Timeline.Listener {
@@ -84,6 +85,11 @@ class PollAggregationTest : InstrumentedTest {
                         }
                         TOTAL_TEST_COUNT - 1 -> {
                             testBobVotesOption1(pollContent, pollSummary)
+                            lock.countDown()
+                            roomFromBobPOV.voteToPoll(pollEventId, pollContent.pollCreationInfo?.answers?.get(1)?.id ?: "")
+                        }
+                        TOTAL_TEST_COUNT - 2 -> {
+                            testBobChangesVoteToOption2(pollContent, pollSummary)
                             lock.countDown()
                         }
                         else                 -> {
@@ -125,13 +131,32 @@ class PollAggregationTest : InstrumentedTest {
         val answerId = pollContent.pollCreationInfo?.answers?.first()?.id
         // Check if the intended vote is in poll summary
         pollSummary.aggregatedContent?.let { aggregatedContent ->
-            aggregatedContent.totalVotes shouldBeEqualTo 1
-            aggregatedContent.votes?.size shouldBeEqualTo 1
-            aggregatedContent.votesSummary?.size shouldBeEqualTo 1
+            assertVoteCount(aggregatedContent, 1)
             aggregatedContent.votes?.first()?.option shouldBeEqualTo answerId
             aggregatedContent.votesSummary?.get(answerId)?.total shouldBeEqualTo 1
             aggregatedContent.votesSummary?.get(answerId)?.percentage shouldBeEqualTo 1.0
         } ?: run { fail("Aggregated poll content shouldn't be null after someone votes") }
+    }
+
+    private fun testBobChangesVoteToOption2(pollContent: MessagePollContent, pollSummary: PollResponseAggregatedSummary?) {
+        if (pollSummary == null) {
+            fail("Poll summary shouldn't be null when someone votes")
+            return
+        }
+        val answerId = pollContent.pollCreationInfo?.answers?.get(1)?.id
+        // Check if the intended vote is in poll summary
+        pollSummary.aggregatedContent?.let { aggregatedContent ->
+            assertVoteCount(aggregatedContent, 1)
+            aggregatedContent.votes?.first()?.option shouldBeEqualTo answerId
+            aggregatedContent.votesSummary?.get(answerId)?.total shouldBeEqualTo 1
+            aggregatedContent.votesSummary?.get(answerId)?.percentage shouldBeEqualTo 1.0
+        } ?: run { fail("Aggregated poll content shouldn't be null after someone votes") }
+    }
+
+    private fun assertVoteCount(aggregatedContent: PollSummaryContent, expectedVoteCount: Int) {
+        aggregatedContent.totalVotes shouldBeEqualTo expectedVoteCount
+        aggregatedContent.votes?.size shouldBeEqualTo expectedVoteCount
+        aggregatedContent.votesSummary?.size shouldBeEqualTo expectedVoteCount
     }
 
     companion object {
