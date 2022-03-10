@@ -123,7 +123,7 @@ internal class DefaultSpaceService @Inject constructor(
         val spacesResponse = getSpacesResponse(spaceId, suggestedOnly, limit, from)
         val spaceRootResponse = spacesResponse.getRoot(spaceId)
         val spaceRoot = spaceRootResponse?.toRoomSummary() ?: createBlankRoomSummary(spaceId)
-        val spaceChildren = spacesResponse.rooms.mapToSpaceChildInfoList(spaceId, spaceRootResponse, knownStateList)
+        val spaceChildren = spacesResponse.rooms.mapSpaceChildren(spaceId, spaceRootResponse, knownStateList)
 
         return SpaceHierarchyData(
                 rootSummary = spaceRoot,
@@ -167,7 +167,7 @@ internal class DefaultSpaceService @Inject constructor(
             joinRules = null
     )
 
-    private fun List<SpaceChildSummaryResponse>?.mapToSpaceChildInfoList(
+    private fun List<SpaceChildSummaryResponse>?.mapSpaceChildren(
             spaceId: String,
             spaceRootResponse: SpaceChildSummaryResponse?,
             knownStateList: List<Event>?,
