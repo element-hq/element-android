@@ -35,7 +35,6 @@
     <attr name="vctr_system" format="color" />
     <color name="element_system_light">@color/palette_gray_25</color>
     <color name="element_system_dark">@color/palette_black_950</color>
-    <color name="element_system_black">@color/palette_black_950</color>
 
     <color name="element_background_light">@color/palette_white</color>
     <color name="element_background_dark">@color/palette_black_800</color>
