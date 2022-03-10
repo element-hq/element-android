@@ -6,7 +6,7 @@
     tools:parentTag="android.widget.LinearLayout">
 
     <TextView
-        android:id="@+id/feature_label"
+        android:id="@+id/overrideLabel"
         style="@style/Widget.Vector.TextView.Subtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -17,7 +17,7 @@
         tools:text="Login version" />
 
     <androidx.appcompat.widget.AppCompatSpinner
-        android:id="@+id/feature_options"
+        android:id="@+id/overrideOptions"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1" />

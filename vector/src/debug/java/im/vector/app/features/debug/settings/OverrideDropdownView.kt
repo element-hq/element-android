@@ -19,34 +19,33 @@ package im.vector.app.features.debug.settings
 import android.content.Context
 import android.util.AttributeSet
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.appcompat.widget.AppCompatSpinner
 import im.vector.app.R
+import im.vector.app.databinding.ViewBooleanDropdownBinding
 
 class OverrideDropdownView @JvmOverloads constructor(
         context: Context,
         attrs: AttributeSet? = null
 ) : LinearLayout(context, attrs) {
 
-    private val labelView: TextView
-    private val optionsSpinner: AppCompatSpinner
+    private val binding = ViewBooleanDropdownBinding.inflate(
+            LayoutInflater.from(context),
+            this
+    )
 
     init {
         orientation = HORIZONTAL
         gravity = Gravity.CENTER_VERTICAL
-        inflate(context, R.layout.view_boolean_dropdown, this)
-        labelView = findViewById(R.id.feature_label)
-        optionsSpinner = findViewById(R.id.feature_options)
     }
 
     fun <T : OverrideOption> bind(feature: OverrideDropdown<T>, listener: Listener<T>) {
-        labelView.text = feature.label
+        binding.overrideLabel.text = feature.label
 
-        optionsSpinner.apply {
+        binding.overrideOptions.apply {
             val arrayAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_dropdown_item)
             val options = listOf("Inactive") + feature.options.map { it.label }
             arrayAdapter.addAll(options)
