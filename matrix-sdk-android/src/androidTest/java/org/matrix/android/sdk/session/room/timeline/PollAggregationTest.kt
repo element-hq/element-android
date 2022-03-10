@@ -19,6 +19,7 @@ package org.matrix.android.sdk.session.room.timeline
 import org.amshove.kluent.fail
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldContain
 import org.amshove.kluent.shouldContainAll
 import org.junit.FixMethodOrder
 import org.junit.Test
@@ -61,7 +62,7 @@ class PollAggregationTest : InstrumentedTest {
         val aliceTimeline = roomFromAlicePOV.createTimeline(null, TimelineSettings(30))
         aliceTimeline.start()
 
-        val TOTAL_TEST_COUNT = 4
+        val TOTAL_TEST_COUNT = 5
         val lock = CountDownLatch(TOTAL_TEST_COUNT)
 
         val aliceEventsListener = object : Timeline.Listener {
@@ -95,6 +96,11 @@ class PollAggregationTest : InstrumentedTest {
                         }
                         TOTAL_TEST_COUNT - 3 -> {
                             testAliceAndBobVoteToOption2(pollContent, pollSummary)
+                            lock.countDown()
+                            roomFromAlicePOV.voteToPoll(pollEventId, pollContent.pollCreationInfo?.answers?.firstOrNull()?.id ?: "")
+                        }
+                        TOTAL_TEST_COUNT - 4 -> {
+                            testAliceVotesOption1AndBobVotesOption2(pollContent, pollSummary)
                             lock.countDown()
                         }
                         else                 -> {
@@ -136,7 +142,7 @@ class PollAggregationTest : InstrumentedTest {
         val answerId = pollContent.pollCreationInfo?.answers?.first()?.id
         // Check if the intended vote is in poll summary
         pollSummary.aggregatedContent?.let { aggregatedContent ->
-            assertVoteCount(aggregatedContent, 1)
+            assertTotalVotesCount(aggregatedContent, 1)
             aggregatedContent.votes?.first()?.option shouldBeEqualTo answerId
             aggregatedContent.votesSummary?.get(answerId)?.total shouldBeEqualTo 1
             aggregatedContent.votesSummary?.get(answerId)?.percentage shouldBeEqualTo 1.0
@@ -151,7 +157,7 @@ class PollAggregationTest : InstrumentedTest {
         val answerId = pollContent.pollCreationInfo?.answers?.get(1)?.id
         // Check if the intended vote is in poll summary
         pollSummary.aggregatedContent?.let { aggregatedContent ->
-            assertVoteCount(aggregatedContent, 1)
+            assertTotalVotesCount(aggregatedContent, 1)
             aggregatedContent.votes?.first()?.option shouldBeEqualTo answerId
             aggregatedContent.votesSummary?.get(answerId)?.total shouldBeEqualTo 1
             aggregatedContent.votesSummary?.get(answerId)?.percentage shouldBeEqualTo 1.0
@@ -166,7 +172,7 @@ class PollAggregationTest : InstrumentedTest {
         val answerId = pollContent.pollCreationInfo?.answers?.get(1)?.id
         // Check if the intended votes is in poll summary
         pollSummary.aggregatedContent?.let { aggregatedContent ->
-            assertVoteCount(aggregatedContent, 2)
+            assertTotalVotesCount(aggregatedContent, 2)
             aggregatedContent.votes?.first()?.option shouldBeEqualTo answerId
             aggregatedContent.votes?.get(1)?.option shouldBeEqualTo answerId
             aggregatedContent.votesSummary?.get(answerId)?.total shouldBeEqualTo 2
@@ -174,7 +180,26 @@ class PollAggregationTest : InstrumentedTest {
         } ?: run { fail("Aggregated poll content shouldn't be null after someone votes") }
     }
 
-    private fun assertVoteCount(aggregatedContent: PollSummaryContent, expectedVoteCount: Int) {
+    private fun testAliceVotesOption1AndBobVotesOption2(pollContent: MessagePollContent, pollSummary: PollResponseAggregatedSummary?) {
+        if (pollSummary == null) {
+            fail("Poll summary shouldn't be null when someone votes")
+            return
+        }
+        val firstAnswerId = pollContent.pollCreationInfo?.answers?.firstOrNull()?.id
+        val secondAnswerId = pollContent.pollCreationInfo?.answers?.get(1)?.id
+        // Check if the intended votes is in poll summary
+        pollSummary.aggregatedContent?.let { aggregatedContent ->
+            assertTotalVotesCount(aggregatedContent, 2)
+            aggregatedContent.votes!!.map { it.option } shouldContain firstAnswerId
+            aggregatedContent.votes!!.map { it.option } shouldBeEqualTo secondAnswerId
+            aggregatedContent.votesSummary?.get(firstAnswerId)?.total shouldBeEqualTo 1
+            aggregatedContent.votesSummary?.get(secondAnswerId)?.total shouldBeEqualTo 1
+            aggregatedContent.votesSummary?.get(firstAnswerId)?.percentage shouldBeEqualTo 0.5
+            aggregatedContent.votesSummary?.get(secondAnswerId)?.percentage shouldBeEqualTo 0.5
+        } ?: run { fail("Aggregated poll content shouldn't be null after someone votes") }
+    }
+
+    private fun assertTotalVotesCount(aggregatedContent: PollSummaryContent, expectedVoteCount: Int) {
         aggregatedContent.totalVotes shouldBeEqualTo expectedVoteCount
         aggregatedContent.votes?.size shouldBeEqualTo expectedVoteCount
     }
