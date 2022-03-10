@@ -111,10 +111,10 @@ class E2eeSanityTests : InstrumentedTest {
         otherAccounts.forEach { otherSession ->
             testHelper.waitWithLatch { latch ->
                 testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timeLineEvent = otherSession.getRoom(e2eRoomID)?.getTimeLineEvent(sentEventId!!)
-                    timeLineEvent != null &&
-                            timeLineEvent.isEncrypted() &&
-                            timeLineEvent.root.getClearType() == EventType.MESSAGE
+                    val timelineEvent = otherSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId!!)
+                    timelineEvent != null &&
+                            timelineEvent.isEncrypted() &&
+                            timelineEvent.root.getClearType() == EventType.MESSAGE
                 }
             }
         }
@@ -147,12 +147,12 @@ class E2eeSanityTests : InstrumentedTest {
         newAccount.forEach { otherSession ->
             testHelper.waitWithLatch { latch ->
                 testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timeLineEvent = otherSession.getRoom(e2eRoomID)?.getTimeLineEvent(sentEventId!!).also {
+                    val timelineEvent = otherSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId!!).also {
                         Log.v("#E2E TEST", "Event seen by new user ${it?.root?.getClearType()}|${it?.root?.mCryptoError}")
                     }
-                    timeLineEvent != null &&
-                            timeLineEvent.root.getClearType() == EventType.ENCRYPTED &&
-                            timeLineEvent.root.mCryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID
+                    timelineEvent != null &&
+                            timelineEvent.root.getClearType() == EventType.ENCRYPTED &&
+                            timelineEvent.root.mCryptoError == MXCryptoError.ErrorType.UNKNOWN_INBOUND_SESSION_ID
                 }
             }
         }
@@ -167,12 +167,12 @@ class E2eeSanityTests : InstrumentedTest {
         newAccount.forEach { otherSession ->
             testHelper.waitWithLatch { latch ->
                 testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timeLineEvent = otherSession.getRoom(e2eRoomID)?.getTimeLineEvent(secondSentEventId!!).also {
+                    val timelineEvent = otherSession.getRoom(e2eRoomID)?.getTimelineEvent(secondSentEventId!!).also {
                         Log.v("#E2E TEST", "Second Event seen by new user ${it?.root?.getClearType()}|${it?.root?.mCryptoError}")
                     }
-                    timeLineEvent != null &&
-                            timeLineEvent.root.getClearType() == EventType.MESSAGE &&
-                            secondMessage.equals(timeLineEvent.root.getClearContent().toModel<MessageContent>()?.body)
+                    timelineEvent != null &&
+                            timelineEvent.root.getClearType() == EventType.MESSAGE &&
+                            secondMessage.equals(timelineEvent.root.getClearContent().toModel<MessageContent>()?.body)
                 }
             }
         }
@@ -230,10 +230,10 @@ class E2eeSanityTests : InstrumentedTest {
 
             testHelper.waitWithLatch { latch ->
                 testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timeLineEvent = bobSession.getRoom(e2eRoomID)?.getTimeLineEvent(sentEventId)
-                    timeLineEvent != null &&
-                            timeLineEvent.isEncrypted() &&
-                            timeLineEvent.root.getClearType() == EventType.MESSAGE
+                    val timelineEvent = bobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId)
+                    timelineEvent != null &&
+                            timelineEvent.isEncrypted() &&
+                            timelineEvent.root.getClearType() == EventType.MESSAGE
                 }
             }
             // we want more so let's discard the session
@@ -277,11 +277,11 @@ class E2eeSanityTests : InstrumentedTest {
         sentEventIds.forEach { sentEventId ->
             testHelper.waitWithLatch { latch ->
                 testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timeLineEvent = newBobSession.getRoom(e2eRoomID)?.getTimeLineEvent(sentEventId)?.also {
+                    val timelineEvent = newBobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId)?.also {
                         Log.v("#E2E TEST", "Event seen by new user ${it.root.getClearType()}|${it.root.mCryptoError}")
                     }
-                    timeLineEvent != null &&
-                            timeLineEvent.root.getClearType() == EventType.ENCRYPTED
+                    timelineEvent != null &&
+                            timelineEvent.root.getClearType() == EventType.ENCRYPTED
                 }
             }
         }
@@ -339,10 +339,10 @@ class E2eeSanityTests : InstrumentedTest {
 
             testHelper.waitWithLatch { latch ->
                 testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timeLineEvent = bobSession.getRoom(e2eRoomID)?.getTimeLineEvent(sentEventId)
-                    timeLineEvent != null &&
-                            timeLineEvent.isEncrypted() &&
-                            timeLineEvent.root.getClearType() == EventType.MESSAGE
+                    val timelineEvent = bobSession.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId)
+                    timelineEvent != null &&
+                            timelineEvent.isEncrypted() &&
+                            timelineEvent.root.getClearType() == EventType.MESSAGE
                 }
             }
         }
@@ -362,7 +362,7 @@ class E2eeSanityTests : InstrumentedTest {
 
         // Try to request
         sentEventIds.forEach { sentEventId ->
-            val event = newBobSession.getRoom(e2eRoomID)!!.getTimeLineEvent(sentEventId)!!.root
+            val event = newBobSession.getRoom(e2eRoomID)!!.getTimelineEvent(sentEventId)!!.root
             newBobSession.cryptoService().requestRoomKeyForEvent(event)
         }
 
@@ -381,7 +381,7 @@ class E2eeSanityTests : InstrumentedTest {
 
         // now let new session re-request
         sentEventIds.forEach { sentEventId ->
-            val event = newBobSession.getRoom(e2eRoomID)!!.getTimeLineEvent(sentEventId)!!.root
+            val event = newBobSession.getRoom(e2eRoomID)!!.getTimelineEvent(sentEventId)!!.root
             newBobSession.cryptoService().reRequestRoomKeyForEvent(event)
         }
 
@@ -420,10 +420,10 @@ class E2eeSanityTests : InstrumentedTest {
 
             testHelper.waitWithLatch { latch ->
                 testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timeLineEvent = bobSessionWithBetterKey.getRoom(e2eRoomID)?.getTimeLineEvent(firstEventId)
-                    timeLineEvent != null &&
-                            timeLineEvent.isEncrypted() &&
-                            timeLineEvent.root.getClearType() == EventType.MESSAGE
+                    val timelineEvent = bobSessionWithBetterKey.getRoom(e2eRoomID)?.getTimelineEvent(firstEventId)
+                    timelineEvent != null &&
+                            timelineEvent.isEncrypted() &&
+                            timelineEvent.root.getClearType() == EventType.MESSAGE
                 }
             }
         }
@@ -448,17 +448,17 @@ class E2eeSanityTests : InstrumentedTest {
 
             testHelper.waitWithLatch { latch ->
                 testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timeLineEvent = newBobSession.getRoom(e2eRoomID)?.getTimeLineEvent(secondEventId)
-                    timeLineEvent != null &&
-                            timeLineEvent.isEncrypted() &&
-                            timeLineEvent.root.getClearType() == EventType.MESSAGE
+                    val timelineEvent = newBobSession.getRoom(e2eRoomID)?.getTimelineEvent(secondEventId)
+                    timelineEvent != null &&
+                            timelineEvent.isEncrypted() &&
+                            timelineEvent.root.getClearType() == EventType.MESSAGE
                 }
             }
         }
 
         // check that both messages have same sessionId (it's just that we don't have index 0)
-        val firstEventNewBobPov = newBobSession.getRoom(e2eRoomID)?.getTimeLineEvent(firstEventId)
-        val secondEventNewBobPov = newBobSession.getRoom(e2eRoomID)?.getTimeLineEvent(secondEventId)
+        val firstEventNewBobPov = newBobSession.getRoom(e2eRoomID)?.getTimelineEvent(firstEventId)
+        val secondEventNewBobPov = newBobSession.getRoom(e2eRoomID)?.getTimelineEvent(secondEventId)
 
         val firstSessionId = firstEventNewBobPov!!.root.content.toModel<EncryptedEventContent>()!!.sessionId!!
         val secondSessionId = secondEventNewBobPov!!.root.content.toModel<EncryptedEventContent>()!!.sessionId!!
@@ -592,7 +592,7 @@ class E2eeSanityTests : InstrumentedTest {
         sentEventIds.forEachIndexed { index, sentEventId ->
             testHelper.waitWithLatch { latch ->
                 testHelper.retryPeriodicallyWithLatch(latch) {
-                    val event = session.getRoom(e2eRoomID)!!.getTimeLineEvent(sentEventId)!!.root
+                    val event = session.getRoom(e2eRoomID)!!.getTimelineEvent(sentEventId)!!.root
                     testHelper.runBlockingTest {
                         try {
                             session.cryptoService().decryptEvent(event, "").let { result ->
@@ -618,10 +618,10 @@ class E2eeSanityTests : InstrumentedTest {
         testHelper.waitWithLatch { latch ->
             sentEventIds.forEach { sentEventId ->
                 testHelper.retryPeriodicallyWithLatch(latch) {
-                    val timeLineEvent = session.getRoom(e2eRoomID)?.getTimeLineEvent(sentEventId)
-                    timeLineEvent != null &&
-                            timeLineEvent.isEncrypted() &&
-                            timeLineEvent.root.getClearType() == EventType.MESSAGE
+                    val timelineEvent = session.getRoom(e2eRoomID)?.getTimelineEvent(sentEventId)
+                    timelineEvent != null &&
+                            timelineEvent.isEncrypted() &&
+                            timelineEvent.root.getClearType() == EventType.MESSAGE
                 }
             }
         }
@@ -629,7 +629,7 @@ class E2eeSanityTests : InstrumentedTest {
 
     private fun ensureCannotDecrypt(sentEventIds: List<String>, newBobSession: Session, e2eRoomID: String, expectedError: MXCryptoError.ErrorType?) {
         sentEventIds.forEach { sentEventId ->
-            val event = newBobSession.getRoom(e2eRoomID)!!.getTimeLineEvent(sentEventId)!!.root
+            val event = newBobSession.getRoom(e2eRoomID)!!.getTimelineEvent(sentEventId)!!.root
             testHelper.runBlockingTest {
                 try {
                     newBobSession.cryptoService().decryptEvent(event, "")
